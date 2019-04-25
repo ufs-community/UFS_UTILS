@@ -40,7 +40,7 @@ fi
 cd ${pwd}/../fix                ||exit 8
 for dir in fix_am fix_fv3 fix_orog fix_fv3_gmted2010 ; do
     [[ -d $dir ]] && rm -rf $dir
+    $LINK $FIX_DIR/$dir  .
 done
-$LINK $FIX_DIR/* .
 
 exit 0
