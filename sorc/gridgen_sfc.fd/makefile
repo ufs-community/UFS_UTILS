@@ -2,7 +2,7 @@ SHELL=	/bin/sh
 
 include $(ESMFMKFILE)
 
-CMD= gridgen_sfc.fv3.exe
+CMD= gridgen_sfc.fv3
 
 OBJS = driver.o \
        model_grid.o \
@@ -15,7 +15,6 @@ OBJS = driver.o \
 
 $(CMD):	$(OBJS)
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -o $(CMD) $(OBJS) $(ESMF_F90LINKPATHS) $(ESMF_F90LINKRPATHS) $(ESMF_F90ESMFLINKLIBS) -g -traceback
-	mv $(CMD) ../../exec
 
 interp.o:  source_grid.o model_grid.o utils.o interp.F90
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -c interp.F90
@@ -41,5 +40,7 @@ output.o: program_setup.o model_grid.o source_grid.o utils.o  output.f90
 driver.o: model_grid.o source_grid.o program_setup.o utils.o driver.F90
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -c driver.F90
 
+install:
+	mv $(CMD) ../../exec
 clean:
 	rm -f *.o *.mod ${CMD} ../../exec/${CMD}
