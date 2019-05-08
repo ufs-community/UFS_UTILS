@@ -53,6 +53,7 @@ if [ $machine = WCOSS_C ]; then
  set -x
  export NODES=1
  export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"
+ export APRUN_SFC="aprun -j 1 -n 6 -N 6"
  export KMP_AFFINITY=disabled
  export home_dir=$LS_SUBCWD/..
  export topo=/gpfs/hps3/emc/global/noscrub/emc.glopara/git/fv3gfs/fix/fix_orog
@@ -67,6 +68,7 @@ elif [ $machine = THEIA ]; then
  module load netcdf/4.3.0
  module list
  export APRUN=time
+ export APRUN_SFC="mpirun -np 6"
  export home_dir=$SLURM_SUBMIT_DIR/..
  export topo=/scratch4/NCEPDEV/global/save/glopara/git/fv3gfs/fix/fix_orog
  export TMPDIR=/scratch3/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
@@ -471,5 +473,28 @@ else  # not a regional grid.
 fi
 
 cp $grid_dir/C${res}_mosaic.nc $out_dir/C${res}_mosaic.nc
+
+#------------------------------------------------
+# Create surface static fields.
+#------------------------------------------------
+
+export WORK_DIR=$TMPDIR/sfcfields
+export SAVE_DIR=$out_dir/fix_sfc
+export BASE_DIR=$home_dir
+export FIX_FV3=$out_dir
+
+if [ $gtype = regional ]; then
+ export HALO=$halop1
+ export regional=YES
+ ln -fs $out_dir/C${res}_grid.tile${tile}.halo${HALO}.nc $out_dir/C${res}_grid.tile${tile}.nc
+ ln -fs $out_dir/C${res}_oro_data.tile${tile}.halo${HALO}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
+fi
+
+$script_dir/gridgen_sfc.ksh
+
+if [ $gtype = regional ]; then
+  rm -f $out_dir/C${res}_grid.tile${tile}.nc
+  rm -f $out_dir/C${res}_oro_data.tile${tile}.nc
+fi
 
 exit
