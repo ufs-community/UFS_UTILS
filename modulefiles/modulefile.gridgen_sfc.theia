@@ -9,4 +9,4 @@ module use /scratch4/NCEPDEV/nems/noscrub/emc.nemspara/soft/modulefiles
 module load esmf/7.1.0r
 
 export FCOMP=mpiifort
-export FFLAGS="-O0 -g -traceback -r8 -i4 -convert big_endian -check bounds -warn unused"
+export FFLAGS="-O3 -fp-model=precise -g -traceback -r8 -i4 -convert big_endian"

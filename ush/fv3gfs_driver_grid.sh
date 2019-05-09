@@ -53,11 +53,11 @@ if [ $machine = WCOSS_C ]; then
  set -x
  export NODES=1
  export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"
- export APRUN_SFC="aprun -j 1 -n 6 -N 6"
+ export APRUN_SFC="aprun -j 1 -n 12 -N 12"
  export KMP_AFFINITY=disabled
  export home_dir=$LS_SUBCWD/..
  export topo=/gpfs/hps3/emc/global/noscrub/emc.glopara/git/fv3gfs/fix/fix_orog
- export TMPDIR=/gpfs/hps3/ptmp/$LOGNAME/fv3_grid.$gtype
+ export TMPDIR=/gpfs/hps3/stmp/$LOGNAME/fv3_grid.$gtype
 elif [ $machine = THEIA ]; then
  . /apps/lmod/lmod/init/sh
  set +x
@@ -80,7 +80,7 @@ export script_dir=$home_dir/ush
 export exec_dir=$home_dir/exec
 
 #export out_dir=$home_dir/fix/C${res}
-export out_dir=/gpfs/hps3/ptmp/$LOGNAME/fv3_grid/fix/C${res}
+export out_dir=/gpfs/hps3/stmp/$LOGNAME/C${res}
 mkdir -p $out_dir $TMPDIR
 cd $TMPDIR ||exit 8
 
@@ -472,11 +472,16 @@ else  # not a regional grid.
 
 fi
 
-cp $grid_dir/C${res}_mosaic.nc $out_dir/C${res}_mosaic.nc
+cp $grid_dir/C${res}_*mosaic.nc $out_dir
 
-#------------------------------------------------
-# Create surface static fields.
-#------------------------------------------------
+#------------------------------------------------------------------------------------
+# Create surface static fields (vegetation type, soil type, etc.
+#
+# For global grids with a nest, the program is run twice.  First
+# to create the fields for the six global tiles.  Then to create
+# the fields on the high-res nest.  This is done because the
+# ESMF libraries can not interpolate to seven tiles at once.
+#------------------------------------------------------------------------------------
 
 export WORK_DIR=$TMPDIR/sfcfields
 export SAVE_DIR=$out_dir/fix_sfc
@@ -484,10 +489,12 @@ export BASE_DIR=$home_dir
 export FIX_FV3=$out_dir
 
 if [ $gtype = regional ]; then
- export HALO=$halop1
- export regional=YES
- ln -fs $out_dir/C${res}_grid.tile${tile}.halo${HALO}.nc $out_dir/C${res}_grid.tile${tile}.nc
- ln -fs $out_dir/C${res}_oro_data.tile${tile}.halo${HALO}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
+  export HALO=$halop1
+  ln -fs $out_dir/C${res}_grid.tile${tile}.halo${HALO}.nc $out_dir/C${res}_grid.tile${tile}.nc
+  ln -fs $out_dir/C${res}_oro_data.tile${tile}.halo${HALO}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
+  export GRIDTYPE=regional
+elif [ $gtype = nest ]; then
+  export mosaic_file=$out_dir/C${res}_coarse_mosaic.nc
 fi
 
 $script_dir/gridgen_sfc.ksh
@@ -495,6 +502,12 @@ $script_dir/gridgen_sfc.ksh
 if [ $gtype = regional ]; then
   rm -f $out_dir/C${res}_grid.tile${tile}.nc
   rm -f $out_dir/C${res}_oro_data.tile${tile}.nc
+fi
+
+if [ $gtype = nest ]; then
+  export mosaic_file=$out_dir/C${res}_nested_mosaic.nc
+  export GRIDTYPE=nest
+  $script_dir/gridgen_sfc.ksh
 fi
 
 exit

@@ -13,4 +13,4 @@ module use /gpfs/hps3/emc/nems/noscrub/emc.nemspara/soft/modulefiles
 module load esmf/7.1.0r
 
 export FCOMP=ftn
-export FFLAGS="-O0 -g -r8 -i4 -convert big_endian -check bounds -craype-verbose"
+export FFLAGS="-O3 -fp-model=precise -g -r8 -i4 -convert big_endian -craype-verbose"

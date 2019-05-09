@@ -16,25 +16,23 @@ WORK_DIR=${WORK_DIR:-/scratch3/NCEPDEV/stmp1/$LOGNAME/gridgen_sfc.C${res}}
 SAVE_DIR=${SAVE_DIR:-$WORK_DIR}
 BASE_DIR=${BASE_DIR:-/scratch4/NCEPDEV/global/save/glopara/svn/fv3gfs}
 EXEC_DIR=${EXEC_DIR:-$BASE_DIR/exec}
-regional=${regional:-NO}
+GRIDTYPE=${GRIDTYPE:-NULL}
 FIX_FV3=${FIX_FV3:-/scratch4/NCEPDEV/global/save/glopara/svn/fv3gfs/fix_fv3/C$res}
 mosaic_file=${mosaic_file:-$FIX_FV3/C${res}_mosaic.nc}
 HALO=${HALO:-0}
 
 if [ ! -d $SAVE_DIR ]; then
   mkdir -p $SAVE_DIR
-else
-  rm -f $SAVE_DIR/*
 fi
 
 rm -fr $WORK_DIR
 mkdir -p $WORK_DIR
 cd $WORK_DIR
 
-if [[ $regional == "NO" ]]; then
-  the_orog_files='"C'${res}'_oro_data.tile1.nc","C'${res}'_oro_data.tile2.nc","C'${res}'_oro_data.tile3.nc","C'${res}'_oro_data.tile4.nc","C'${res}'_oro_data.tile5.nc","C'${res}'_oro_data.tile6.nc"'
-else
+if [[ $GRIDTYPE == "nest" ]] || [[ $GRIDTYPE == "regional" ]]; then
   the_orog_files='"C'${res}'_oro_data.tile7.nc"'
+else
+  the_orog_files='"C'${res}'_oro_data.tile1.nc","C'${res}'_oro_data.tile2.nc","C'${res}'_oro_data.tile3.nc","C'${res}'_oro_data.tile4.nc","C'${res}'_oro_data.tile5.nc","C'${res}'_oro_data.tile6.nc"'
 fi
 
 if [[ $machine == "theia" ]]; then
@@ -79,7 +77,7 @@ fi
 rc=$?
 
 if [[ $rc == 0 ]]; then
-  if [[ $regional == "NO" ]]; then
+  if [[ $GRIDTYPE != "regional" ]]; then
     for files in *.nc
     do
       if [[ -f $files ]]; then

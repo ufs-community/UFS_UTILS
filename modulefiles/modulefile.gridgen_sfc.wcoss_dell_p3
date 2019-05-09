@@ -8,4 +8,4 @@ module load NetCDF/4.5.0
 module load ESMF/7_1_0r
 
 export FCOMP=mpif90
-export FFLAGS="-O0 -g -traceback -r8 -i4 -convert big_endian -check bounds -warn unused"
+export FFLAGS="-O3 -fp-model=precise -g -traceback -r8 -i4 -convert big_endian"
