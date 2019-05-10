@@ -53,6 +53,8 @@
  integer                           :: ierr
 
  real                              :: default_value
+ real(esmf_kind_r8)                :: field_save(idim,jdim)
+ integer                           :: repl_nearby, repl_default
 
 !-----------------------------------------------------------------------
 ! Set default value.
@@ -74,7 +76,7 @@
      default_value = 30.0
    case (65) ! snow liq equivalent
      default_value = 0.0
-   case (66) ! snow depth
+   case (66) ! snow depth (mm)
      default_value = 0.0
    case (83) ! z0 (cm)
      default_value = 0.01
@@ -99,10 +101,17 @@
 ! Perform search and replace.
 !-----------------------------------------------------------------------
 
+ field_save = field
+ repl_nearby = 0
+ repl_default = 0
+!$OMP PARALLEL DO DEFAULT(NONE), &
+!$OMP SHARED(IDIM,JDIM,MASK,FIELD_SAVE,FIELD,TILE,LATITUDE,DEFAULT_VALUE,FIELD_NUM,REPL_NEARBY,REPL_DEFAULT), &
+!$OMP PRIVATE(I,J,KRAD,ISTART,IEND,JSTART,JEND,II,JJ)
+
  J_LOOP : do j = 1, jdim
    I_LOOP : do i = 1, idim
 
-     if (mask(i,j) == 1 .and. field(i,j) < -9999.0) then
+     if (mask(i,j) == 1 .and. field_save(i,j) < -9999.0) then
 
        KRAD_LOOP : do krad = 1, 100
 
@@ -124,9 +133,10 @@
              if (jj < 1 .or. jj > jdim) cycle JJ_LOOP
              if (ii < 1 .or. ii > idim) cycle II_LOOP
 
-               if (mask(ii,jj) == 1  .and. field(ii,jj) > -9999.0) then
-                 field(i,j) = field(ii,jj)
-                 write(6,100) field_num,tile,i,j,ii,jj,field(i,j)
+               if (mask(ii,jj) == 1  .and. field_save(ii,jj) > -9999.0) then
+                 field(i,j) = field_save(ii,jj)
+!                write(6,100) tile,i,j,ii,jj,field(i,j)
+                 repl_nearby = repl_nearby + 1
                  cycle I_LOOP
                endif
 
@@ -139,18 +149,27 @@
 
        if (field_num == 11) then
          call sst_guess(latitude(i,j), field(i,j))
+       elseif (field_num == 91) then  ! sea ice fract
+         if (abs(latitude(i,j)) > 55.0) then
+           field(i,j) = default_value
+         else
+           field(i,j) = 0.0
+         endif
        else
          field(i,j) = default_value  ! Search failed.  Use default value.
        endif
 
-       write(6,101) field_num,tile,i,j,field(i,j)
+       !write(6,101) field_num,tile,i,j,field(i,j)
+       repl_default = repl_default + 1
 
      endif
    enddo I_LOOP
  enddo J_LOOP
-
- 100 format(1x,"- MISSING POINT VAR:  ",i3," TILE: ",i2," I/J: ",i5,i5," SET TO VALUE AT: ",i5,i5,". NEW VALUE IS: ",f8.3)
- 101 format(1x,"- MISSING POINT VAR:  ",i3," TILE: ",i2," I/J: ",i5,i5," SET TO DEFAULT VALUE OF: ",f8.3)
+!$OMP END PARALLEL DO
+ print*, "- TOTAL POINTS FOR VAR ", field_num, " REPLACED BY NEARBY VALUES: ", repl_nearby
+ print*, "- TOTAL POINTS FOR VAR ", field_num, " REPLACED BY DEFAULT VALUE: ", repl_default
+ !100 format(1x,"- MISSING POINT VAR:  ",i3," TILE: ",i2," I/J: ",i5,i5," SET TO VALUE AT: ",i5,i5,". NEW VALUE IS: ",f8.3)
+ !101 format(1x,"- MISSING POINT VAR:  ",i3," TILE: ",i2," I/J: ",i5,i5," SET TO DEFAULT VALUE OF: ",f8.3)
 
  end subroutine search
 

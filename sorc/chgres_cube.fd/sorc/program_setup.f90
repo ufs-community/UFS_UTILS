@@ -42,22 +42,28 @@
 !                                 applied (regional target grids).
 ! input_type                      Input data type: "restart" for fv3
 !                                 tiled restart files; "history" for fv3
-!                                 fv3 tiled history files; "gaussian"
-!                                 for fv3 gaussian nemsio files.
+!                                 tiled history files; "gaussian"
+!                                 for fv3 gaussian nemsio files;
+!                                 "gfs_gaussian" for spectral gfs gaussian
+!                                 nemsio files.
 ! max_tracers                     Maximum number of atmospheric tracers
 !                                 processed
 ! maxsmc_input/target             Maximum soil moisture content input/
 !                                 target grids
 ! mosaic_file_input_grid          Input grid mosaic file.  Not used
-!                                 with gaussian input type.
+!                                 with "gaussian" or "gfs_gaussian"
+!                                 input type.
 ! mosaic_file_target_grid         Target grid mosaic file
+! nst_files_input_grid            File name of input nst data.  Only
+!                                 used for input_type "gfs_gaussian".
 ! num_tracers                     Number of atmospheric tracers to
 !                                 be processed.
 ! orog_dir_input_grid             Directory containing the input grid
-!                                 orography files.  Not used for gaussian
-!                                 input type.
+!                                 orography files.  Not used for "gaussian"
+!                                 or "gfs_gaussian" input types.
 ! orog_files_input_grid           Input grid orography files.  Not used
-!                                 for gaussian input type.
+!                                 for "gaussian" or "gfs_gaussian"
+!                                 input types.
 ! orog_dir_target_grid            Directory containing the target grid
 !                                 orography files.
 ! orog_files_target_grid          Target grid orography files.
@@ -94,10 +100,11 @@
  character(len=500), public      :: atm_core_files_input_grid(7) = "NULL"
  character(len=500), public      :: atm_tracer_files_input_grid(6) = "NULL"
  character(len=500), public      :: data_dir_input_grid = "NULL"
- character(len=500), public      :: varmap_tables_dir = "../../parm/varmap_tables"
+ character(len=500), public      :: varmap_tables_dir = "parm/varmap_tables"
  character(len=500), public      :: fix_dir_target_grid = "NULL"
  character(len=500), public      :: mosaic_file_input_grid = "NULL"
  character(len=500), public      :: mosaic_file_target_grid = "NULL"
+ character(len=500), public      :: nst_files_input_grid = "NULL"
  character(len=500), public      :: grib2_file_input_grid = "NULL"
  character(len=500), public      :: geogrid_file_input_grid="NULL"
  character(len=500), public      :: orog_dir_input_grid = "NULL"
@@ -169,6 +176,7 @@
                    mosaic_file_input_grid,  &
                    orog_dir_input_grid,     &
                    orog_files_input_grid,   &
+                   nst_files_input_grid,    &
                    sfc_files_input_grid,    &
                    atm_files_input_grid,    &
                    atm_core_files_input_grid,    &
@@ -204,8 +212,6 @@
  is = index(mosaic_file_target_grid, "/", .true.)
  ie = index(mosaic_file_target_grid, "_mosaic")
 
- print*, "mosaic file = ", mosaic_file_target_grid
- print*, "IS, IE = ", is, ie
  if (is == 0 .or. ie == 0) then
    call error_handler("CANT DETERMINE CRES FROM MOSAIC FILE.", 1)
  endif
@@ -239,6 +245,27 @@
    print*,"- WILL PROCESS TRACER ", trim(tracers(is))
  enddo
 
+!-------------------------------------------------------------------------
+! Ensure program recognizes the input data type.  
+!-------------------------------------------------------------------------
+
+ select case (trim(input_type))
+   case ("restart")
+     print*,'- INPUT DATA FROM FV3 TILED RESTART FILES.'
+   case ("history")
+     print*,'- INPUT DATA FROM FV3 TILED HISTORY FILES.'
+   case ("gaussian")
+     print*,'- INPUT DATA FROM FV3 GAUSSIAN NEMSIO FILE.'
+   case ("gfs_gaussian")
+     print*,'- INPUT DATA FROM SPECTRAL GFS GAUSSIAN NEMSIO FILE.'
+   case ("gfs_spectral")
+     print*,'- INPUT DATA FROM SPECTRAL GFS SIGIO/SFCIO FILE.'
+   case ("grib2")
+     print*,'- INPUT DATA FROM A GRIB2 FILE'
+   case default
+     call error_handler("UNRECOGNIZED INPUT DATA TYPE.", 1)
+ end select
+
  return
 
  end subroutine read_setup_namelist
@@ -253,7 +280,7 @@ subroutine read_varmap
  varmap_table_file = trim(base_install_dir) // "/" // trim(varmap_tables_dir) // "/" &
                     // trim(phys_suite) // "phys_var_map.txt"
  
- print*
+
  print*,"OPEN VARIABLE MAPPING FILE: ", trim(varmap_table_file)
  open(14, file=trim(varmap_table_file), form='formatted', iostat=istat)
  if (istat /= 0) then
@@ -344,12 +371,22 @@ end subroutine get_var_cond
  real, parameter           :: smlow_statsgo = 0.5
  real, parameter           :: smhigh_statsgo = 6.0
 
+! zobler soil type used by spectral gfs prior to June 2017.
+ integer, parameter        :: num_zobler = 9
+ real, parameter           :: smlow_zobler = 0.5
+ real, parameter           :: smhigh_zobler = 6.0
+
  integer                   :: num_soil_cats
 
  real                      :: bb_statsgo(num_statsgo)
  real                      :: maxsmc_statsgo(num_statsgo)
  real                      :: satdk_statsgo(num_statsgo)
  real                      :: satpsi_statsgo(num_statsgo)
+
+ real                      :: bb_zobler(num_zobler)
+ real                      :: maxsmc_zobler(num_zobler)
+ real                      :: satdk_zobler(num_zobler)
+ real                      :: satpsi_zobler(num_zobler)
 
  real, allocatable         :: bb(:)
  real                      :: smlow, smhigh
@@ -375,9 +412,30 @@ end subroutine get_var_cond
               0.1349, 0.6166, 0.2630, 0.0977, 0.3236, 0.4677, &
               0.3548, -9.99,  0.0350, 0.0363/
 
-! input grid
+ data bb_zobler /4.26,  8.72, 11.55,  4.74, 10.73,  8.17, &
+                 6.77,  5.25,  4.26/
 
- num_soil_cats = num_statsgo
+ data maxsmc_zobler /0.421, 0.464, 0.468, 0.434, 0.406, 0.465, &
+                     0.404, 0.439, 0.421/
+
+ data satdk_zobler /1.41e-5, 0.20e-5, 0.10e-5, 0.52e-5, 0.72e-5, &
+                    0.25e-5, 0.45e-5, 0.34e-5, 1.41e-5/
+
+ data satpsi_zobler /0.040, 0.620, 0.470, 0.140, 0.100, 0.260,  &
+                     0.140, 0.360, 0.040/
+
+!-------------------------------------------------------------------------
+! Compute soil parameters for the input grid.
+!-------------------------------------------------------------------------
+
+ select case (trim(input_type))
+   case ("gfs_spectral")
+     print*,'- INPUT GRID USED ZOBLER SOIL TYPES.'
+     num_soil_cats = num_zobler
+   case default
+     print*,'- INPUT GRID USED STATSGO SOIL TYPES.'
+     num_soil_cats = num_statsgo
+ end select
 
  allocate(maxsmc_input(num_soil_cats))
  allocate(wltsmc_input(num_soil_cats))
@@ -389,12 +447,22 @@ end subroutine get_var_cond
  allocate(satdw(num_soil_cats))
  allocate(f11(num_soil_cats))
 
- smlow  = smlow_statsgo
- smhigh = smhigh_statsgo
- maxsmc_input = maxsmc_statsgo
- bb     = bb_statsgo
- satdk  = satdk_statsgo
- satpsi = satpsi_statsgo
+ select case (trim(input_type))
+   case ("gfs_spectral")
+     smlow  = smlow_zobler
+     smhigh = smhigh_zobler
+     maxsmc_input = maxsmc_zobler
+     bb     = bb_zobler
+     satdk  = satdk_zobler
+     satpsi = satpsi_zobler
+   case default
+     smlow  = smlow_statsgo
+     smhigh = smhigh_statsgo
+     maxsmc_input = maxsmc_statsgo
+     bb     = bb_statsgo
+     satdk  = satdk_statsgo
+     satpsi = satpsi_statsgo
+ end select
 
  call calc_soil_params(num_soil_cats, smlow, smhigh, satdk, maxsmc_input, &
                        bb, satpsi, satdw, f11, refsmc_input, drysmc_input, wltsmc_input)
@@ -402,8 +470,13 @@ end subroutine get_var_cond
  deallocate(bb, satdk, satpsi, satdw, f11)
 
  if (localpet == 0) print*,'maxsmc input grid ',maxsmc_input
+ if (localpet == 0) print*,'wltsmc input grid ',wltsmc_input
 
-! target grid
+!-------------------------------------------------------------------------
+! Compute soil parameters for the target grid.
+!-------------------------------------------------------------------------
+
+ print*,'- TARGET GRID USEING STATSGO SOIL TYPES.'
 
  num_soil_cats = num_statsgo
 
@@ -430,6 +503,7 @@ end subroutine get_var_cond
  deallocate(satdk, satdw, f11)
 
  if (localpet == 0) print*,'maxsmc target grid ',maxsmc_target
+ if (localpet == 0) print*,'wltsmc input grid ',wltsmc_target
 
  end subroutine calc_soil_params_driver
 

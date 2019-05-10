@@ -4,7 +4,8 @@
 ! Program CHGRES
 !
 ! Abstract: Initialize an FV3 run using history or restart data from
-!   another FV3 run.  Converts atmospheric, surface and nst data.
+!   another FV3 run, or the NEMS version of the spectral GFS.  
+!   Converts atmospheric, surface and nst data.
 !
 !-------------------------------------------------------------------------
 

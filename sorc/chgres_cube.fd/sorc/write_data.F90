@@ -68,7 +68,7 @@
  call netcdf_err(error, 'end meta define for file='//trim(outfile) )
 
  error = nf90_put_var( ncid, id_ntrac, num_tracers)
- call netcdf_err(error, 'write var ntrac for file='//trim(outfile) )
+ call netcdf_err(error, 'wrivte var ntrac for file='//trim(outfile) )
 
  allocate(tmp(levp1_target, nvcoord_target))
  tmp(1:levp1_target,:) = vcoord_target(levp1_target:1:-1,:)
@@ -454,6 +454,10 @@
 !--- define global attributes
    if (trim(input_type) == "gaussian") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
+   elseif (trim(input_type) == "gfs_gaussian") then
+     error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS GAUSSIAN NEMSIO FILE')
+   elseif (trim(input_type) == "gfs_spectral") then
+     error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS SIGIO FILE')
    elseif (trim(input_type) == "history") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED HISTORY FILE')
    elseif (trim(input_type) == "restart") then
@@ -1125,6 +1129,10 @@
 !--- define global attributes
    if (trim(input_type) == "gaussian") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
+   elseif (trim(input_type) == "gfs_gaussian") then
+     error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS GAUSSIAN NEMSIO FILE')
+   elseif (trim(input_type) == "gfs_spectral") then
+     error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS SIGIO FILE')
    elseif (trim(input_type) == "history") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED HISTORY FILE')
    elseif (trim(input_type) == "restart") then
@@ -2667,7 +2675,6 @@
  integer                        :: id_stc, id_smc, id_slc
  integer                        :: i_target_out, j_target_out
  integer                        :: istart, iend, jstart, jend
- integer                        :: loc
 
  integer(esmf_kind_i8), allocatable :: idata_one_tile(:,:)
 

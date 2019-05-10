@@ -27,7 +27,6 @@
  private
 
 ! noah land ice option is applied at these vegetation types.
- integer, parameter                 :: veg_type_landice_input = 15
  integer, parameter                 :: veg_type_landice_target = 15
 
 ! surface fields (not including nst)
@@ -118,11 +117,10 @@
  use input_data, only                : cleanup_input_sfc_data, &
                                        cleanup_input_nst_data, &
                                        read_input_sfc_data, &
-                                       read_input_nst_data, lsoil_input
+                                       read_input_nst_data
 
  use program_setup, only             : calc_soil_params_driver, &
-                                       convert_nst, phys_suite, read_from_input, &
-                                       input_type
+                                       convert_nst, input_type
 
  use static_data, only               : get_static_fields, &
                                        cleanup_static_fields
@@ -130,7 +128,6 @@
  implicit none
 
  integer, intent(in)                :: localpet
- 
 
 !-----------------------------------------------------------------------
 ! Compute soil-based parameters.
@@ -149,18 +146,18 @@
 !-----------------------------------------------------------------------
 
  call read_input_sfc_data(localpet)
- 
-!-----------------------------------------------------------------------
-! Adjust soil levels of input grid
-!-----------------------------------------------------------------------
-
- call adjust_soil_levels
 
 !-----------------------------------------------------------------------
 ! Read nst data on input grid.
 !-----------------------------------------------------------------------
 
  if (convert_nst) call read_input_nst_data(localpet)
+ 
+!-----------------------------------------------------------------------
+! Adjust soil levels of input grid !! not implemented yet
+!-----------------------------------------------------------------------
+
+ call adjust_soil_levels
 
 !-----------------------------------------------------------------------
 ! Create surface field objects for target grid.
@@ -191,7 +188,6 @@
 ! Rescale soil moisture for changes in soil type between the input and target grids.
 !---------------------------------------------------------------------------------------------
 
- 
  call rescale_soil_moisture
 
 !---------------------------------------------------------------------------------------------
@@ -230,7 +226,7 @@
 ! Write data to file.
 !---------------------------------------------------------------------------------------------
 
- if (trim(input_type) == "grib2") then
+ if(trim(input_type) == "grib2") then
    call write_fv3_sfc_grib2data_netcdf(localpet)
  else
    call write_fv3_sfc_data_netcdf(localpet)
@@ -257,7 +253,7 @@
  subroutine interp(localpet)
 
  use esmf
-
+ 
  use input_data, only                : canopy_mc_input_grid,  &
                                        f10m_input_grid,  &
                                        ffmm_input_grid,  &
@@ -295,7 +291,8 @@
                                        xtts_input_grid, &
                                        xzts_input_grid, &
                                        z_c_input_grid, &
-                                       zm_input_grid, terrain_input_grid
+                                       zm_input_grid, terrain_input_grid, &
+                                       veg_type_landice_input
 
  use model_grid, only                : input_grid, target_grid, &
                                        i_target, j_target, &
@@ -303,7 +300,8 @@
                                        num_tiles_target_grid, &
                                        landmask_target_grid, &
                                        seamask_target_grid,  &
-                                       latitude_target_grid
+                                       latitude_target_grid, &
+                                       input_grid_type
 
  use program_setup, only             : convert_nst
 
@@ -377,6 +375,7 @@
  type(esmf_routehandle)             :: regrid_nonland
  type(esmf_routehandle)             :: regrid_seaice
  type(esmf_routehandle)             :: regrid_water
+ 
 
 !-----------------------------------------------------------------------
 ! Interpolate fieids that do not require 'masked' interpolation.
@@ -527,9 +526,11 @@
 ! Interpolate.
 !-----------------------------------------------------------------------
 
- !method=ESMF_REGRIDMETHOD_CONSERVE
- method = ESMF_REGRIDMETHOD_BILINEAR
-
+ if (trim(input_grid_type) == "latlon") then
+    method=ESMF_REGRIDMETHOD_CONSERVE
+ else
+    method=ESMF_REGRIDMETHOD_BILINEAR
+ endif
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for sea ice fraction."
@@ -580,21 +581,33 @@
                                ! which will be replaced in routine
                                ! "search".
  enddo
-
- do tile = 1, num_tiles_target_grid
-
-   print*,"- CALL FieldGather FOR TARGET GRID SEAICE FRACTION TILE: ", tile
-   call ESMF_FieldGather(seaice_fract_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+                     
+ if (localpet == 0) then
+   allocate(latitude_one_tile(i_target,j_target))
+ else
+   allocate(latitude_one_tile(0,0))
+ endif
+ 
+ do tile = 1, num_tiles_target_grid  
+    
+    print*,"- CALL FieldGather FOR TARGET GRID SEAICE FRACTION TILE: ", tile
+    call ESMF_FieldGather(seaice_fract_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGather", rc)
-
+      
    print*,"- CALL FieldGather FOR TARGET GRID MASK TILE: ", tile
    call ESMF_FieldGather(seamask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGather", rc)
 
+   print*,"- CALL FieldGather FOR TARGET LATITUDE TILE: ", tile
+   call ESMF_FieldGather(latitude_target_grid, latitude_one_tile, rootPet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", rc)
+
    if (localpet == 0) then
-     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 91)
+     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 91, &
+                 latitude=latitude_one_tile)
    endif
 
    print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
@@ -622,6 +635,8 @@
       call error_handler("IN FieldScatter", rc)
 
  enddo
+ 
+ deallocate(latitude_one_tile)
 
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_nonland, rc=rc)
@@ -651,7 +666,7 @@
 
  method=ESMF_REGRIDMETHOD_NEAREST_STOD
  isrctermprocessing = 1
-
+ 
  print*,"- CALL FieldRegridStore for 3d seaice fields."
  call ESMF_FieldRegridStore(soil_temp_input_grid, &
                             soil_temp_target_grid, &
@@ -659,7 +674,7 @@
                             dstmaskvalues=(/0/), &
                             polemethod=ESMF_POLEMETHOD_NONE, &
                             srctermprocessing=isrctermprocessing, &
-                            unmappedaction=ESMF_UNMAPPEDACTION_ignore, &
+                            unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
                             normtype=ESMF_NORMTYPE_FRACAREA, &
                             routehandle=regrid_seaice, &
                             regridmethod=method, &
@@ -708,9 +723,6 @@
                     farrayPtr=snow_depth_target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
-
-  print*, "MIN, MAX SNWDPH AFTER SEA ICE REGRID = ", &
-            minval(snow_depth_target_ptr), maxval(snow_depth_target_ptr)
 
  print*,"- CALL Field_Regrid for snow liq equiv."
  call ESMF_FieldRegrid(snow_liq_equiv_input_grid, &
@@ -782,12 +794,7 @@
 
    if (localpet == 0) then
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 66)
-     
-     print*, "MIN, MAX SNWDPH AFTER SEA ICE INTERP AND SEARCH = ", &
-            minval(data_one_tile), maxval(data_one_tile)
    endif
-   
-   
 
    print*,"- CALL FieldScatter FOR TARGET GRID SNOW DEPTH TILE: ", tile
    call ESMF_FieldScatter(snow_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
@@ -857,8 +864,11 @@
  mask_target_ptr = 0
  where (landmask_target_ptr == 0) mask_target_ptr = 1
 
- !method=ESMF_REGRIDMETHOD_CONSERVE
- method = ESMF_REGRIDMETHOD_BILINEAR
+  if (trim(input_grid_type) == "latlon") then
+    method=ESMF_REGRIDMETHOD_CONSERVE
+ else
+    method=ESMF_REGRIDMETHOD_BILINEAR
+ endif
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for water fields."
@@ -883,6 +893,8 @@
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldRegrid", rc)
+    
+
 
  print*,"- CALL FieldGet FOR TARGET skin temperature."
  call ESMF_FieldGet(skin_temp_target_grid, &
@@ -903,34 +915,6 @@
                     farrayPtr=z0_target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
-    
- print*,"- CALL Field_Regrid for snow depth over water."
- call ESMF_FieldRegrid(snow_depth_input_grid, &
-                       snow_depth_target_grid, &
-                       routehandle=regrid_water, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL FieldGet FOR TARGET snow depth."
- call ESMF_FieldGet(snow_depth_target_grid, &
-                    farrayPtr=snow_depth_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-    call error_handler("IN FieldGet", rc)
-    
- print*,"- CALL Field_Regrid for snow liq equiv."
- call ESMF_FieldRegrid(snow_liq_equiv_input_grid, &
-                       snow_liq_equiv_target_grid, &
-                       routehandle=regrid_water, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL FieldGet FOR TARGET grid snow liq equiv."
- call ESMF_FieldGet(snow_liq_equiv_target_grid, &
-                    farrayPtr=snow_liq_equiv_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-    call error_handler("IN FieldGet", rc)
 
  l = lbound(unmapped_ptr)
  u = ubound(unmapped_ptr)
@@ -938,9 +922,7 @@
  do ij = l(1), u(1)
    call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
    skin_temp_target_ptr(i,j) = -9999.9 
-   z0_target_ptr(i,j)        = -9999.9
-   snow_depth_target_ptr(i,j) = -9999.9 
-   snow_liq_equiv_target_ptr(i,j) = -9999.9
+   z0_target_ptr(i,j)        = -9999.9 
  enddo
 
  if (convert_nst) then
@@ -1239,7 +1221,7 @@
    call ESMF_FieldGather(skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGather", rc)
-
+      
    print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
    call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
@@ -1276,38 +1258,6 @@
 
    print*,"- CALL FieldScatter FOR TARGET GRID Z0: ", tile
    call ESMF_FieldScatter(z0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldScatter", rc)
-      
-  ! snow depth
-
-   print*,"- CALL FieldGather FOR TARGET GRID SNOW DEPTH TILE: ", tile
-   call ESMF_FieldGather(snow_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldGather", rc)
-
-   if (localpet == 0) then
-     call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 83)
-   endif
-
-   print*,"- CALL FieldScatter FOR TARGET GRID SNOW DEPTH: ", tile
-   call ESMF_FieldScatter(snow_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldScatter", rc)
-  
-  ! snow liquid eqivalent
-
-   print*,"- CALL FieldGather FOR TARGET GRID SNOW LIQUID EQUIVALENT TILE: ", tile
-   call ESMF_FieldGather(snow_liq_equiv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldGather", rc)
-
-   if (localpet == 0) then
-     call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 83)
-   endif
-
-   print*,"- CALL FieldScatter FOR TARGET GRID SNOW LIQUID EQUIVALENT: ", tile
-   call ESMF_FieldScatter(snow_liq_equiv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldScatter", rc)
 
@@ -1625,8 +1575,11 @@
  mask_target_ptr = 0
  where (landmask_target_ptr == 1) mask_target_ptr = 1
 
- !method=ESMF_REGRIDMETHOD_CONSERVE
- method = ESMF_REGRIDMETHOD_BILINEAR
+  if (trim(input_grid_type) == "latlon") then
+    method=ESMF_REGRIDMETHOD_CONSERVE
+ else
+    method=ESMF_REGRIDMETHOD_BILINEAR
+ endif
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for land fields."
@@ -1654,8 +1607,6 @@
                        rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldRegrid", rc)
-    
- 
 
  print*,"- CALL Field_Regrid for snow liq equiv over land."
  call ESMF_FieldRegrid(snow_liq_equiv_input_grid, &
@@ -1679,9 +1630,6 @@
                    farrayPtr=snow_depth_target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
-  
-  print*, "MIN, MAX SNWDPH AFTER LAND REGRID  = ", &
-            minval(snow_depth_target_ptr), maxval(snow_depth_target_ptr)
 
  print*,"- CALL FieldGet FOR TARGET snow liq equiv."
  call ESMF_FieldGet(snow_liq_equiv_target_grid, &
@@ -1722,8 +1670,6 @@
      land_target_one_tile = 0
      where(mask_target_one_tile == 1) land_target_one_tile = 1
      call search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 66)
-     print*, "MIN, MAX SNWDPH AFTER LAND SEARCH  = ", &
-            minval(data_one_tile), maxval(data_one_tile)
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SNOW DEPTH: ", tile
@@ -1776,6 +1722,8 @@
                     farrayPtr=veg_type_input_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
+
+ print*,'land ice check ',veg_type_landice_input
 
  mask_input_ptr = 0
  where (nint(veg_type_input_ptr) == veg_type_landice_input) mask_input_ptr = 1
@@ -2103,12 +2051,7 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
-     print*, "MAX VAL SOIL TYPE = ", maxval(data_one_tile)
-     if (maxval(data_one_tile) > 0) then
-        call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
-     else 
-        where(data_one_tile < 0) data_one_tile= -9999.9_esmf_kind_r8
-     endif
+     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
    endif
 
    print*,"- CALL FieldScatter FOR SOIL TYPE FROM INPUT GRID, TILE: ", tile
@@ -2556,10 +2499,10 @@
 !---------------------------------------------------------------------------------------------
 ! Rescale soil moisture at points where the soil type between the input and output
 ! grids is different.  Caution, this logic assumes the input and target grids use the same
-! soil type dataset. Skips if input soil type doesn't exist at this point.
+! soil type dataset.
 !---------------------------------------------------------------------------------------------
 
-        if (soilt_target /= soilt_input .and. soilt_input > 0) then
+        if (soilt_target /= soilt_input) then
 
 !---------------------------------------------------------------------------------------------
 ! Rescale top layer.  First, determine direct evaporation part:
@@ -2712,7 +2655,7 @@
  enddo
 
  end subroutine adjust_soilt_for_terrain
- 
+  
 !---------------------------------------------------------------------------------------------
 ! Adjust soil levels of the input grid if there's a mismatch between input and
 ! target grids.
@@ -2721,15 +2664,9 @@
  subroutine adjust_soil_levels
  use model_grid, only       : lsoil_target
  use input_data, only       : lsoil_input
- use program_setup, only    : phys_suite
  implicit none
  character(len=1000)      :: msg
  integer                  :: rc
- 
- !Set lsoil_target 
- if (trim(phys_suite) == "RAP" .OR. trim(phys_suite) == "GSD") then
-   lsoil_target = 9
- endif
 
  if (lsoil_input /= lsoil_target) then
   rc = -1
@@ -2744,6 +2681,7 @@
  !! converting from 9 --> 4 levels and another for 4 --> 9 levels. 
  
  end subroutine adjust_soil_levels
+
 
 !---------------------------------------------------------------------------------------------
 ! Set roughness at land and sea ice.
@@ -3317,7 +3255,6 @@
  subroutine create_surface_esmf_fields
 
  use model_grid, only         : target_grid, lsoil_target
- use program_setup, only      : phys_suite
 
  implicit none
 
