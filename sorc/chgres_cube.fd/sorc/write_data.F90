@@ -462,6 +462,8 @@
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED HISTORY FILE')
    elseif (trim(input_type) == "restart") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED RESTART FILE')
+   elseif (trim(input_type) == "grib2") then
+     error = nf90_put_att(ncid, nf90_global, 'source', 'GRIB2 FILE')
    endif
 
    error = nf90_enddef(ncid, header_buffer_val,4,0,4)
@@ -1103,7 +1105,11 @@
  HEADER : if (localpet < num_tiles_target_grid) then
 
    tile = localpet + 1
-   WRITE(OUTFILE, '(A, I1, A)'), 'out.atm.tile', tile, '.nc'
+   if (regional > 0) then
+       outfile = "out.atm.tile7.nc"
+     else
+       WRITE(OUTFILE, '(A, I1, A)'), 'out.atm.tile', tile, '.nc'
+     endif
 
 !--- open the file
    error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
@@ -1137,6 +1143,8 @@
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED HISTORY FILE')
    elseif (trim(input_type) == "restart") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED RESTART FILE')
+   elseif (trim(input_type) == "grib2") then
+     error = nf90_put_att(ncid, nf90_global, 'source', 'GRIB2 FILE')
    endif
 
 !--- define field
@@ -2731,7 +2739,11 @@
 
    LOCAL_PET : if (localpet == 0) then
 
-     WRITE(OUTFILE, '(A, I1, A)'), 'out.sfc.tile', tile, '.nc'
+     if (regional > 0) then
+       outfile = "out.sfc.tile7.nc"
+     else
+       WRITE(OUTFILE, '(A, I1, A)'), 'out.sfc.tile', tile, '.nc'
+     endif
 
 !--- open the file
      error = nf90_create(outfile, NF90_NETCDF4, & !& !IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
