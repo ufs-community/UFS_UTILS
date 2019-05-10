@@ -1,0 +1,23 @@
+# Takes lots of memory.  Use two nodes - six tasks per node.
+
+&config
+ fix_dir_target_grid="/scratch/ywang/fix/George.Gayno4larissa/C768"
+ mosaic_file_target_grid="/oldscratch/larissa.reames/runfv3/fix_C768/C768_mosaic.nc"
+ orog_dir_target_grid="/oldscratch/larissa.reames/runfv3/fix_C768"
+ orog_files_target_grid="C768_oro_data.tile7.nc"
+ vcoord_file_target_grid="/oldscratch/ywang/external/fix_am/global_hyblev.l64.txt"
+ base_install_dir="/home/larissa.reames/fv3-new.write/chgres_cube"
+ wgrib2_path="/home/larissa.reames/tmp/wgrib2-2/grib2/wgrib2/wgrib2"
+ data_dir_input_grid="/oldscratch/larissa.reames/runfv3/20190308_rap"
+ grib2_file_input_grid="wrfnat_rr_12.grib2"
+ cycle_mon=3
+ cycle_day=8
+ cycle_hour=0
+ convert_atm=.true.
+ convert_sfc=.false.
+ convert_nst=.false.
+ regional=1
+ input_type="grib2"
+ external_model="RAP"
+ phys_suite="GSD"
+/
