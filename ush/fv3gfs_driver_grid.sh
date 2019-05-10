@@ -17,7 +17,7 @@
 ##SBATCH --open-mode=truncate
 ##SBATCH -o log.fv3_grid_driver
 ##SBATCH -e log.fv3_grid_driver
-##SBATCH --nodes=1
+##SBATCH --nodes=1 --ntasks-per-node=12
 ##SBATCH -q debug
 ##SBATCH -t 0:30:00
 
@@ -68,7 +68,7 @@ elif [ $machine = THEIA ]; then
  module load netcdf/4.3.0
  module list
  export APRUN=time
- export APRUN_SFC="mpirun -np 6"
+ export APRUN_SFC=srun
  export home_dir=$SLURM_SUBMIT_DIR/..
  export topo=/scratch4/NCEPDEV/global/save/glopara/git/fv3gfs/fix/fix_orog
  export TMPDIR=/scratch3/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
@@ -78,9 +78,9 @@ fi
 
 export script_dir=$home_dir/ush
 export exec_dir=$home_dir/exec
-
-#export out_dir=$home_dir/fix/C${res}
 export out_dir=/gpfs/hps3/stmp/$LOGNAME/C${res}
+
+rm -fr $TMPDIR
 mkdir -p $out_dir $TMPDIR
 cd $TMPDIR ||exit 8
 
@@ -487,6 +487,7 @@ export WORK_DIR=$TMPDIR/sfcfields
 export SAVE_DIR=$out_dir/fix_sfc
 export BASE_DIR=$home_dir
 export FIX_FV3=$out_dir
+export input_sfc_climo_dir=$home_dir/fix/fix_sfc_climo
 
 if [ $gtype = regional ]; then
   export HALO=$halop1
