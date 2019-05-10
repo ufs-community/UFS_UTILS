@@ -97,12 +97,12 @@ echo " .... Building fre-nctools .... "
 }
 
 #------------------------------------
-# build gridgen_sfc
+# build sfc_climo_gen
 #------------------------------------
 
-$Build_gridgen_sfc && {
-echo " .... Building gridgen_sfc .... "
-./build_gridgen_sfc.sh > $logs_dir/build_gridgen_sfc.log 2>&1
+$Build_sfc_climo_gen && {
+echo " .... Building sfc_climo_gen .... "
+./build_sfc_climo_gen.sh > $logs_dir/build_sfc_climo_gen.log 2>&1
 }
 
 echo;echo " .... Build system finished .... "

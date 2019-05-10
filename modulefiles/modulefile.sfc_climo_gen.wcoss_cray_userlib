@@ -1,5 +1,5 @@
 #%Module#####################################################
-## Module file for gridgen_sfc
+## Module file for sfc_climo_gen
 #############################################################
 
 module load PrgEnv-intel/5.2.56
@@ -9,7 +9,9 @@ module load cray-mpich/7.2.0
 module load craype-haswell
 module load cray-netcdf
 
-module use /gpfs/hps3/emc/nems/noscrub/emc.nemspara/soft/modulefiles
+module unuse /gpfs/hps/nco/ops/nwprod/lib/modulefiles
+module use -a $MOD_PATH
+
 module load esmf/7.1.0r
 
 export FCOMP=ftn

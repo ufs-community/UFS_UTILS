@@ -35,7 +35,7 @@ ulimit -s unlimited
 
 export USER=$LOGNAME 
 export res=96              # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
-export gtype=uniform       # grid type: uniform, stretch, nest or regional
+export gtype=nest       # grid type: uniform, stretch, nest or regional
 
 #----------------------------------------------------------------
 # The orography code runs with threads.  On Cray, the code is
@@ -475,7 +475,7 @@ fi
 cp $grid_dir/C${res}_*mosaic.nc $out_dir
 
 #------------------------------------------------------------------------------------
-# Create surface static fields (vegetation type, soil type, etc.
+# Create surface static fields - vegetation type, soil type, etc.
 #
 # For global grids with a nest, the program is run twice.  First
 # to create the fields for the six global tiles.  Then to create
@@ -498,17 +498,31 @@ elif [ $gtype = nest ]; then
   export mosaic_file=$out_dir/C${res}_coarse_mosaic.nc
 fi
 
-$script_dir/gridgen_sfc.ksh
+$script_dir/sfc_climo_gen.ksh
+err=$?
+if [ $err != 0 ]; then
+  echo error in sfc_climo_gen
+  exit $err
+fi
 
 if [ $gtype = regional ]; then
   rm -f $out_dir/C${res}_grid.tile${tile}.nc
   rm -f $out_dir/C${res}_oro_data.tile${tile}.nc
 fi
 
+#------------------------------------
+# Run for the global nest - tile 7.
+#------------------------------------
+
 if [ $gtype = nest ]; then
   export mosaic_file=$out_dir/C${res}_nested_mosaic.nc
   export GRIDTYPE=nest
-  $script_dir/gridgen_sfc.ksh
+  $script_dir/sfc_climo_gen.ksh
+  err=$?
+  if [ $err != 0 ]; then
+    echo error in sfc_climo_gen
+    exit $err
+  fi
 fi
 
 exit

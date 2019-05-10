@@ -1,9 +1,29 @@
 #!/bin/ksh
 
-#-----------------------------------------------------------
-# MUST BE RUN WITH A MULTIPLE OF SIX MPI TASKS.  
-# For regional grids, use any number of tasks.
-#-----------------------------------------------------------
+#-------------------------------------------------------------------------
+# Run sfc_climo_gen program to create surface fixed fields,
+# such as vegetation type.
+#
+# Stand-alone regional grids may be run with any number of
+# tasks.  All other configurations must be run with a
+# MULTIPLE OF SIX MPI TASKS. 
+#
+# Some variable definitions:
+#
+# BASE_DIR                      Location of your repository.
+# input_sfc_climo_dir           Location of raw input surface climo data
+# EXEC_DIR                      Location of program executable
+# FIX_DIR                       Location of 'grid' and 'orog' files
+# GRIDTYPE                      Flag to invoke logic for global nests
+#                               and regional grids.  Valid values are
+#                               'nest' and 'regional'.
+# HALO                          Number of halo row/cols to remove
+#                               for regional grid.
+# mosaic_file                   Path/name of mosaic file.
+# res                           Resolution of cubed-sphere grid
+# SAVE_DIR                      Directory where output is saved
+# WORK_DIR                      Temporary working directory
+#-------------------------------------------------------------------------
 
 set -x
 
@@ -11,12 +31,12 @@ ulimit -s unlimited
 ulimit -a
 
 res=${res:-96}
-WORK_DIR=${WORK_DIR:-/scratch3/NCEPDEV/stmp1/$LOGNAME/gridgen_sfc.C${res}}
+WORK_DIR=${WORK_DIR:-/scratch3/NCEPDEV/stmp1/$LOGNAME/sfc_climo_gen.C${res}}
 SAVE_DIR=${SAVE_DIR:-$WORK_DIR}
-BASE_DIR=${BASE_DIR:-/scratch4/NCEPDEV/global/save/glopara/svn/fv3gfs}
+BASE_DIR=${BASE_DIR:?}
 EXEC_DIR=${EXEC_DIR:-$BASE_DIR/exec}
 GRIDTYPE=${GRIDTYPE:-NULL}
-FIX_FV3=${FIX_FV3:-/scratch4/NCEPDEV/global/save/glopara/svn/fv3gfs/fix_fv3/C$res}
+FIX_FV3=${FIX_FV3:-/scratch4/NCEPDEV/global/save/glopara/git/fv3gfs/fix/fix_fv3_gmted2010/C${res}}
 input_sfc_climo_dir=${input_sfc_climo_dir:?}
 mosaic_file=${mosaic_file:-$FIX_FV3/C${res}_mosaic.nc}
 HALO=${HALO:-0}
@@ -28,6 +48,10 @@ fi
 rm -fr $WORK_DIR
 mkdir -p $WORK_DIR
 cd $WORK_DIR
+
+#----------------------------------------------------------------------------------
+# The stand-alone regional and global nest are assumed to be tile 7.
+#----------------------------------------------------------------------------------
 
 if [[ $GRIDTYPE == "nest" ]] || [[ $GRIDTYPE == "regional" ]]; then
   the_orog_files='"C'${res}'_oro_data.tile7.nc"'
@@ -56,7 +80,7 @@ vegetation_greenness_method="bilinear"
 EOF
 
 APRUN_SFC=${APRUN_SFC:-"aprun -j 1 -n 6 -N 6"}
-$APRUN_SFC $EXEC_DIR/gridgen_sfc.fv3
+$APRUN_SFC $EXEC_DIR/sfc_climo_gen
 
 rc=$?
 

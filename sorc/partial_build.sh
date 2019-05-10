@@ -5,7 +5,7 @@
                        "Build_chgres" "Build_cycle" \
                        "Build_sfcanl_nsttfchg" \
                        "Build_orog" "Build_tropcy" \
-                       "Build_nctools" "Build_gridgen_sfc" \
+                       "Build_nctools" "Build_sfc_climo_gen" \
                        "Build_emcsfc")
 
 #

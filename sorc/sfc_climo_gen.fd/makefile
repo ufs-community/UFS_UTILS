@@ -2,7 +2,7 @@ SHELL=	/bin/sh
 
 include $(ESMFMKFILE)
 
-CMD= gridgen_sfc.fv3
+CMD= sfc_climo_gen
 
 OBJS = driver.o \
        model_grid.o \

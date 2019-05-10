@@ -12,22 +12,22 @@ fi
 module purge
 USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}
 if [ $USE_PREINST_LIBS = true ]; then
-  source ../modulefiles/modulefile.gridgen_sfc.${target}             > /dev/null 2>&1
+  source ../modulefiles/modulefile.sfc_climo_gen.${target}             > /dev/null 2>&1
 else
   export MOD_PATH=${cwd}/lib/modulefiles
   if [ $target = wcoss_cray ]; then
-    source ../modulefiles/modulefile.gridgen_sfc.${target}_userlib   > /dev/null 2>&1
+    source ../modulefiles/modulefile.sfc_climo_gen.${target}_userlib   > /dev/null 2>&1
   else
-    source ../modulefiles/modulefile.gridgen_sfc.${target}           > /dev/null 2>&1
+    source ../modulefiles/modulefile.sfc_climo_gen.${target}           > /dev/null 2>&1
   fi
 fi
 
 module list
 
-cd ./gridgen_sfc.fd
+cd ./sfc_climo_gen.fd
 
 make clean
 make
 make install
 
-echo; echo DONE BUILDING gridgen_sfc
+echo; echo DONE BUILDING sfc_climo_gen

@@ -3,9 +3,6 @@
 !-------------------------------------------------------------------------
 !  program documentation block
 !
-! Program: gridgen_sfc
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
 ! Abstract: Reads static surface data on a global lat/lon grid,
 !   interpolates the data to the fv3 model grid, and outputs the
 !   result in netcdf format.
@@ -18,7 +15,7 @@
 !   1) Model mosaic file (netcdf)
 !   2) Model orography files (netcdf)
 !   3) Model grid files (netcdf)
-!   4) Source data file on global lat/lon grid (flat binary)
+!   4) Source data file on global lat/lon grid (netcdf)
 !
 ! Outputs surface data on the model tiles in netcdf format.
 !-------------------------------------------------------------------------
