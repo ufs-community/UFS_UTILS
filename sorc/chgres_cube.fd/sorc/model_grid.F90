@@ -62,14 +62,18 @@
  private
 
  character(len=5), allocatable, public  :: tiles_target_grid(:)
+ character(len=500), public							:: inv_file
 
- integer, parameter, public             :: lsoil_target = 4 ! # soil layers
+ ! Made lsoil_target non-parameter to allow for RAP land surface initiation
+ integer, public             						:: lsoil_target = 4 ! # soil layers 
+ 
  integer, public                        :: i_input, j_input
  integer, public                        :: ip1_input, jp1_input
  integer, public                        :: i_target, j_target
  integer, public                        :: ip1_target, jp1_target
  integer, public                        :: num_tiles_input_grid
  integer, public                        :: num_tiles_target_grid
+ integer, public												:: file_is_converted = 0
 
  type(esmf_grid),  public               :: input_grid
  type(esmf_grid),  public               :: target_grid
@@ -96,14 +100,14 @@
  public :: cleanup_input_target_grid_data
 
  contains
+ 
 
 !--------------------------------------------------------------------------
 ! Set up the esmf grid object for the input grid.  If the input
 ! source is tiled fv3 restart or history data, the grid is created
 ! by reading the mosaic and grid files.  If the input source is
-! fv3 global gaussian nemsio, spectral gfs global gaussian nemsio, or
-! spectral gfs global gaussian sigio/sfcio, the grid is setup by  
-! computing lat/lons using the sp library.
+! fv3 global gaussian, the grid is setup by getting lat/lons from
+! sp library.
 !--------------------------------------------------------------------------
 
  subroutine define_input_grid(localpet, npets)
@@ -114,10 +118,10 @@
 
  integer, intent(in)          :: localpet, npets
 
- if (trim(input_type) == "gaussian" .or. &
-     trim(input_type) == "gfs_gaussian" .or. &
-     trim(input_type) == "gfs_spectral") then
+ if (trim(input_type) == "gaussian") then
    call define_input_grid_gaussian(localpet, npets)
+ elseif (trim(input_type) == "grib2") then
+   call define_input_grid_grib2(localpet,npets)
  else
    call define_input_grid_mosaic(localpet, npets)
  endif
@@ -125,13 +129,7 @@
  end subroutine define_input_grid
 
 !--------------------------------------------------------------------------
-! Define grid object for input data on global gaussian grids.
-! Recognized file formats: 
-!
-!  - fv3gfs nemsio
-!  - spectral gfs nemsio (starting July 19, 2017)
-!  - spectral gfs sigio  (prior to July 19, 2017)
-!  - spectral gfs sfcio  (prior to July 19, 2017)
+! Define grid object for gaussian grid.
 !--------------------------------------------------------------------------
 
  subroutine define_input_grid_gaussian(localpet, npets)
@@ -141,11 +139,8 @@
  use program_setup, only       : data_dir_input_grid, &
                                  atm_files_input_grid, &
                                  sfc_files_input_grid, &
-                                 input_type, &
-                                 convert_atm, convert_sfc
-
- use sfcio_module
- use sigio_module
+                                 convert_atm, convert_sfc, &
+                                 external_model
 
  implicit none
 
@@ -154,8 +149,6 @@
  character(len=250)               :: the_file
 
  integer                          :: i, j, rc, clb(2), cub(2)
- integer(sfcio_intkind)           :: rc2
- integer(sigio_intkind)           :: rc3
 
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
@@ -166,12 +159,12 @@
 
  type(nemsio_gfile)               :: gfile
  type(esmf_polekind_flag)         :: polekindflag(2)
- type(sfcio_head)                 :: sfchead
- type(sigio_head)                 :: sighead
 
  print*,"- DEFINE INPUT GRID OBJECT FOR GAUSSIAN DATA."
 
  num_tiles_input_grid = 1
+
+ call nemsio_init(iret=rc)
 
  if (convert_sfc) then
    the_file=trim(data_dir_input_grid) // "/" // trim(sfc_files_input_grid(1))
@@ -179,44 +172,15 @@
    the_file=trim(data_dir_input_grid) // "/" // trim(atm_files_input_grid(1))
  endif
 
- if (trim(input_type) == "gfs_spectral") then  ! sigio/sfcio format, used by
-                                               ! spectral gfs prior to 7/19/2017.
+ print*,"- OPEN AND READ ", trim(the_file)
+ call nemsio_open(gfile, the_file, "read", iret=rc)
+ if (rc /= 0) call error_handler("OPENING FILE", rc)
 
-   if (convert_sfc) then   ! sfcio format
-     print*,"- OPEN AND READ ", trim(the_file)
-     call sfcio_sropen(21, trim(the_file), rc2)
-     if (rc2 /= 0) call error_handler("OPENING FILE", rc2)
-     call sfcio_srhead(21, sfchead, rc2)
-     if (rc2 /= 0) call error_handler("READING FILE", rc2)
-     call sfcio_sclose(21, rc2)
-     i_input = sfchead%lonb
-     j_input = sfchead%latb
-   elseif (convert_atm) then ! sigio format
-     print*,"- OPEN AND READ ", trim(the_file)
-     call sigio_sropen(21, trim(the_file), rc3)
-     if (rc3 /= 0) call error_handler("OPENING FILE", rc3)
-     call sigio_srhead(21, sighead, rc3)
-     if (rc3 /= 0) call error_handler("READING FILE", rc3)
-     call sigio_sclose(21, rc3)
-     i_input = sighead%lonb
-     j_input = sighead%latb
-   endif
+ call nemsio_getfilehead(gfile, iret=rc, dimx=i_input, dimy=j_input)
+ if (rc /= 0) call error_handler("READING FILE", rc)
 
- else ! nemsio format
-
-   call nemsio_init(iret=rc)
-
-   print*,"- OPEN AND READ ", trim(the_file)
-   call nemsio_open(gfile, the_file, "read", iret=rc)
-   if (rc /= 0) call error_handler("OPENING FILE", rc)
-
-   call nemsio_getfilehead(gfile, iret=rc, dimx=i_input, dimy=j_input)
-   if (rc /= 0) call error_handler("READING FILE", rc)
-
-   call nemsio_close(gfile)
+ call nemsio_close(gfile)
  
- endif
-
  ip1_input = i_input + 1
  jp1_input = j_input + 1
 
@@ -360,6 +324,302 @@
  deallocate(latitude,longitude)
 
  end subroutine define_input_grid_gaussian
+ 
+ subroutine define_input_grid_grib2(localpet, npets)
+
+
+ use netcdf
+ use wgrib2api
+ use program_setup, only       : grib2_file_input_grid, data_dir_input_grid, &
+ 																	external_model, wgrib2_path
+ implicit none
+ 
+ include 'mpif.h'
+
+ character(len=500)           :: the_file, metadata, temp_file
+
+ integer, intent(in)          :: localpet, npets
+
+ integer                      :: error, extra, i, j, ii, jj, clb(2), cub(2) !, decomptile(2)
+ !integer, allocatable         :: decomptile(:,:)
+
+ !integer(esmf_kind_i8), allocatable    :: landmask_one_tile(:,:) !allocated but not used
+
+ real(esmf_kind_r4), allocatable       :: latitude_one_tile(:,:)
+ real(esmf_kind_r8), allocatable       :: latitude_s(:,:)
+ real(esmf_kind_r8), allocatable       :: latitude_w(:,:)
+ real(esmf_kind_r4), allocatable       :: longitude_one_tile(:,:)
+ real(esmf_kind_r8), allocatable       :: longitude_s(:,:)
+ real(esmf_kind_r8), allocatable       :: longitude_w(:,:)
+ real(esmf_kind_r8)										 :: lat_target(i_target,j_target), &
+ 																					lon_target(i_target,j_target)
+ real(esmf_kind_r8)               		 :: deltalon
+ integer 															 :: nlat, nlon, min_lat, min_lon, max_lat, max_lon 
+ real(esmf_kind_r8), pointer					 :: lat_src_ptr(:,:), lon_src_ptr(:,:), &
+	 																				lat_target_ptr(:,:), lon_target_ptr(:,:)
+ 
+ type(esmf_polekind_flag)         :: polekindflag(2)
+ character(len=1000)            :: cmdline_msg, temp_msg, min_latc, min_lonc, nlatc,nlonc
+ character(len=10)							:: temp_num
+
+ num_tiles_input_grid = 1
+
+ inv_file = trim(data_dir_input_grid) // "/" // "chgres.inv"
+ the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
+ temp_file = "./test.grib2"
+  
+ call ESMF_FieldGather(latitude_target_grid, lat_target, rootPet=0, tile=1, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", error)
+ call ESMF_FieldGather(longitude_target_grid, lon_target, rootPet=0, tile=1, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", error)
+
+ if (localpet==0) then
+ 		! Check for the grid template number to see if wgrib2 can access the lat/lon arrays
+ 		cmdline_msg = trim(wgrib2_path)//" "//trim(the_file)//" -d 1 -Sec3 &> temp.out"
+ 		call system(cmdline_msg)
+ 		open(4,file="temp.out")
+ 		read(4,"(A)") temp_msg
+ 		close(4)
+ 		i = index(temp_msg, "Template=") + len("Template=")
+ 		j = index(temp_msg," opt arg")
+ 		temp_num=temp_msg(i:j-1)
+		
+		! Wgrib2 can't properly read the lat/lon arrays of data on NCEP rotated lat/lon 
+		! grids, so interpolate to a new regular lat/lon grid. Note that this will make it 
+		! difficult to know if our input grid is too small because there will be points of 
+		! data on the input grid even where actual data doesn't exist. Future interpolation 
+		! routines set to error when no input data exists for an output point won't fail as
+		! they should.
+		
+		if (trim(temp_num)=="3.32769") then !!if (trim(external_model) == "RAP" .or. trim(external_model) == "NAM") then
+			
+			! Read in these fields so we can make sure our interpolated grid is just large
+			! enough for the output grid. 
+			
+			min_lat = floor(minval(lat_target))-1
+			print*, min_lat
+			max_lat = ceiling(maxval(lat_target))+1
+			print*, max_lat
+			nlat = ceiling((max_lat - min_lat)/0.1/10.0)*10.0
+			print*, nlat
+			write(min_latc,"(I4)") min_lat
+			write(nlatc,"(I4)") nlat
+			
+			min_lon = floor(minval(lon_target))-1
+			max_lon = ceiling(maxval(lon_target))+1
+			nlon = ceiling((max_lon - min_lon)/0.1/10.0)*10.0
+			print*, nlon
+			write(min_lonc,"(I4)") min_lon
+			write(nlonc,"(I4)") nlon
+			
+			
+			PRINT*, "CONVERTING DATA TO REGULAR LAT/LON GRID"
+			cmdline_msg=trim(wgrib2_path)//" "//trim(the_file)//" -set_bitmap 1 -set_grib_type c3 &
+						 -new_grid_winds grid -new_grid_interpolation neighbor -new_grid latlon "// &
+						 trim(adjustl(min_lonc))//":"//trim(adjustl(nlonc))//":0.10 "// &
+						 trim(adjustl(min_latc))//":"//trim(adjustl(nlatc))//":0.10  "// &
+						 trim(temp_file)//" &> wgrb.out"
+			print*, trim(cmdline_msg)
+			CALL execute_command_line(trim(cmdline_msg))
+			
+			file_is_converted = 1
+			
+			print*, "on localpet=0"
+			print*, the_file
+			print*, file_is_converted
+
+   endif
+ endif
+ 
+ call MPI_Barrier(MPI_COMM_WORLD,error)
+ !call MPI_BCAST(the_file,12,MPI_CHARACTER,0,MPI_COMM_WORLD,error)
+ call MPI_BCAST(file_is_converted,1,MPI_INTEGER,0,MPI_COMM_WORLD,error)
+ if (file_is_converted) then
+   the_file=temp_file
+ endif
+ print*, the_file
+ print*, file_is_converted
+ !if (trim(external_model)=="RAP" .or. trim(external_model) == "NAM") the_file=temp_file
+ 
+	
+	
+	print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
+	error=grb2_mk_inv(the_file,inv_file)
+	if (error /=0) call error_handler("OPENING GRIB2 FILE",error)
+	
+	error = grb2_inq(the_file,inv_file,':PRES:','surface',nx=i_input, ny=j_input, & 
+					lat=latitude_one_tile, lon=longitude_one_tile, desc=metadata)
+
+ print*,"- I/J DIMENSIONS OF THE INPUT GRID TILES ", i_input, j_input
+
+ ip1_input = i_input + 1
+ jp1_input = j_input + 1
+
+ if (mod(npets,num_tiles_input_grid) /= 0) then
+   call error_handler("MUST RUN WITH A TASK COUNT THAT IS A MULTIPLE OF 6.", 1)
+ endif
+
+!-----------------------------------------------------------------------
+! Create ESMF grid object for the model grid.
+!-----------------------------------------------------------------------
+
+ extra = npets / num_tiles_input_grid
+
+ !allocate(decomptile(2,num_tiles_input_grid))
+
+ !decomptile(:,1) = (/1,extra/)
+ !decomptile = (/extra,extra/)
+
+ if (trim(external_model) == "GFS") then
+  polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
+ 	print*,"- CALL GridCreate1PeriDim FOR INPUT GRID."
+	 input_grid = ESMF_GridCreate1PeriDim(minIndex=(/1,1/), &
+																			maxIndex=(/i_input,j_input/), &
+																			polekindflag=polekindflag, &
+																			periodicDim=1, &
+																			poleDim=2,  &
+																			coordSys=ESMF_COORDSYS_SPH_DEG, &
+																			regDecomp=(/1,npets/),  &
+																			indexflag=ESMF_INDEX_GLOBAL, rc=error)
+	 if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+		 call error_handler("IN GridCreate1PeriDim", error)
+	else
+	 print*,"- CALL GridCreateNoPeriDim FOR INPUT MODEL GRID"
+	 input_grid = ESMF_GridCreateNoPeriDim(maxIndex=(/i_input,j_input/), & !regDecomp=decomptile, &
+																		indexflag=ESMF_INDEX_GLOBAL, &
+																		rc=error)
+	 if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN GridCreateNoPeriDim", error)
+  endif
+
+!-----------------------------------------------------------------------
+! Read the mask and lat/lons.
+!-----------------------------------------------------------------------
+
+ print*,"- CALL FieldCreate FOR INPUT GRID LATITUDE."
+ latitude_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="input_grid_latitude", &
+                                   rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldCreate", error)
+
+ print*,"- CALL FieldCreate FOR INPUT GRID LONGITUDE."
+ longitude_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="input_grid_longitude", &
+                                   rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldCreate", error)
+    
+ print*,"- CALL FieldScatter FOR INPUT GRID LATITUDE. "
+ call ESMF_FieldScatter(latitude_input_grid, real(latitude_one_tile,esmf_kind_r8), rootpet=0, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+	 call error_handler("IN FieldScatter", error)
+	 
+ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
+ call ESMF_FieldScatter(longitude_input_grid, real(longitude_one_tile,esmf_kind_r8), rootpet=0, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+	 call error_handler("IN FieldScatter", error)
+  
+    
+ print*,"- CALL GridAddCoord FOR INPUT GRID."
+ call ESMF_GridAddCoord(input_grid, &
+                        staggerloc=ESMF_STAGGERLOC_CENTER, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN GridAddCoord", error)
+
+ print*,"- CALL GridGetCoord FOR INPUT GRID X-COORD."
+ nullify(lon_src_ptr)
+ call ESMF_GridGetCoord(input_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CENTER, &
+                        coordDim=1, &
+                        farrayPtr=lon_src_ptr, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN GridGetCoord", error)
+
+ print*,"- CALL GridGetCoord FOR INPUT GRID Y-COORD."
+ nullify(lat_src_ptr)
+ call ESMF_GridGetCoord(input_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CENTER, &
+                        coordDim=2, &
+                        computationalLBound=clb, &
+                        computationalUBound=cub, &
+                        farrayPtr=lat_src_ptr, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN GridGetCoord", error)
+   
+  do j = clb(2),cub(2)
+    do i = clb(1), cub(1)
+    	!print *, i,j
+    	!print *, longitude_one_tile(i,j)
+  		lon_src_ptr(i,j)=real(longitude_one_tile(i,j),esmf_kind_r8)
+  		if (lon_src_ptr(i,j) > 360.0_esmf_kind_r8 .and. trim(external_model) == "GFS") &
+  				 lon_src_ptr(i,j) = lon_src_ptr(i,j) - 360.0_esmf_kind_r8
+  		lat_src_ptr(i,j)=real(latitude_one_tile(i,j),esmf_kind_r8)
+  	enddo
+  enddo
+  
+  if(trim(external_model) == "GFS") then
+  	deltalon = 360.0_esmf_kind_r8 / real(i_input,kind=esmf_kind_r8)
+		print*,"- CALL GridAddCoord FOR INPUT GRID."
+	 call ESMF_GridAddCoord(input_grid, &
+													staggerloc=ESMF_STAGGERLOC_CORNER, rc=error)
+	 if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+			call error_handler("IN GridAddCoord", error)
+
+	 print*,"- CALL GridGetCoord FOR INPUT GRID X-COORD."
+	 nullify(lon_src_ptr)
+	 call ESMF_GridGetCoord(input_grid, &
+													staggerLoc=ESMF_STAGGERLOC_CORNER, &
+													coordDim=1, &
+													farrayPtr=lon_src_ptr, rc=error)
+	 if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+			call error_handler("IN GridGetCoord", error)
+
+	 print*,"- CALL GridGetCoord FOR INPUT GRID Y-COORD."
+	 nullify(lat_src_ptr)
+	 call ESMF_GridGetCoord(input_grid, &
+													staggerLoc=ESMF_STAGGERLOC_CORNER, &
+													coordDim=2, &
+													computationalLBound=clb, &
+													computationalUBound=cub, &
+													farrayPtr=lat_src_ptr, rc=error)
+	 if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+			call error_handler("IN GridGetCoord", error)
+
+	 print*,'bounds for corners ',localpet,clb(1),cub(1),clb(2),cub(2)
+
+	 do j = clb(2), cub(2)
+		 do i = clb(1), cub(1)
+			 lon_src_ptr(i,j) = longitude_one_tile(i,1) - (0.5_esmf_kind_r8*deltalon)
+			 if (lon_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_src_ptr(i,j) = lon_src_ptr(i,j) - 360.0_esmf_kind_r8
+			 if (j == 1) then 
+				 lat_src_ptr(i,j) = 90.0_esmf_kind_r8
+				 cycle
+			 endif
+			 if (j == jp1_input) then
+				 lat_src_ptr(i,j) = -90.0_esmf_kind_r8
+				 cycle
+			 endif
+			 lat_src_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude_one_tile(i,j-1)+ latitude_one_tile(i,j))
+		 enddo
+	 enddo
+  endif
+  nullify(lon_src_ptr)
+  nullify(lat_src_ptr)
+
+ deallocate(longitude_one_tile)
+ 
+ deallocate(latitude_one_tile)
+ 
+ !deallocate(landmask_one_tile)
+
+ end subroutine define_input_grid_grib2
 
  subroutine define_input_grid_mosaic(localpet, npets)
 
@@ -980,7 +1240,42 @@
  error = nf90_close(ncid)
 
  end subroutine get_model_latlons
+ 
+!-----------------------------------------------------------------------
+! Get lat/lon of grid cell corners for non-EQ lat/lon grids
+!-----------------------------------------------------------------------
 
+! subroutine get_cell_corners( latitude, latitude_s, latitude_w, &
+!                              longitude, longitude_s, longitude_w,)
+! 	implicit none
+
+
+! 	real(esmf_kind_r8), intent(in)   	:: latitude(i_input,j_input)
+! 	real(esmf_kind_r8), intent(out)   :: latitude_s(i_input, jp1_input)
+! 	real(esmf_kind_r8), intent(out)   :: latitude_w(ip1_input, j_input)
+! 	real(esmf_kind_r8), intent(in)   	:: longitude(i_tile, j_tile)
+! 	real(esmf_kind_r8), intent(out)   :: longitude_s(i_input, jp1_input)
+! 	real(esmf_kind_r8), intent(out)   :: longitude_w(ip1_input, j_input)
+
+! 	real(esmf_kind_r8)   							:: lat, lon
+ 
+! 	real(esmf_kind_r8), parameter			:: pi = 3.14159265359
+
+!  integer														:: i, j
+!  do j = 1,j_input
+!  	do i = 1, i_input
+!			lat = latitude(i,j)  * ( pi / 180.0smf_kind_r8 )
+!			lon = longitude(i,j) * ( pi / 180.0smf_kind_r8 )  
+!			!d = distance;
+!			!R = EARTHS_RADIUS_IN_METERS;
+!			!brng = bearingInDegrees * ( Math.PI / 180 );
+!			!lat2 = Math.asin( Math.sin( lat1 ) * Math.cos( d / R ) + Math.cos( lat1 ) * Math.sin( d / R ) * Math.cos( brng ) );
+!			!lon2 = lon1 + Math.atan2( Math.sin( brng ) * Math.sin( d / R ) * Math.cos( lat1 ), Math.cos( d / R ) - Math.sin( lat1 ) * Math.sin( lat2 ) );
+!		enddo
+!	enddo
+
+! end subroutine get_cell_corners
+ 
 !-----------------------------------------------------------------------
 ! Read the model land mask and terrain for a single tile.
 !-----------------------------------------------------------------------

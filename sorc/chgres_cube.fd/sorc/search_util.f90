@@ -53,7 +53,6 @@
  integer                           :: ierr
 
  real                              :: default_value
- real(esmf_kind_r8)                :: field_save(idim,jdim)
 
 !-----------------------------------------------------------------------
 ! Set default value.
@@ -100,16 +99,10 @@
 ! Perform search and replace.
 !-----------------------------------------------------------------------
 
- field_save = field
-
-!$OMP PARALLEL DO DEFAULT(NONE), &
-!$OMP SHARED(IDIM,JDIM,MASK,FIELD_SAVE,FIELD,TILE,LATITUDE,DEFAULT_VALUE,FIELD_NUM), &
-!$OMP PRIVATE(I,J,KRAD,ISTART,IEND,JSTART,JEND,II,JJ)
-
  J_LOOP : do j = 1, jdim
    I_LOOP : do i = 1, idim
 
-     if (mask(i,j) == 1 .and. field_save(i,j) < -9999.0) then
+     if (mask(i,j) == 1 .and. field(i,j) < -9999.0) then
 
        KRAD_LOOP : do krad = 1, 100
 
@@ -131,9 +124,9 @@
              if (jj < 1 .or. jj > jdim) cycle JJ_LOOP
              if (ii < 1 .or. ii > idim) cycle II_LOOP
 
-               if (mask(ii,jj) == 1  .and. field_save(ii,jj) > -9999.0) then
-                 field(i,j) = field_save(ii,jj)
-!                write(6,100) tile,i,j,ii,jj,field(i,j)
+               if (mask(ii,jj) == 1  .and. field(ii,jj) > -9999.0) then
+                 field(i,j) = field(ii,jj)
+                 write(6,100) field_num,tile,i,j,ii,jj,field(i,j)
                  cycle I_LOOP
                endif
 
@@ -146,25 +139,18 @@
 
        if (field_num == 11) then
          call sst_guess(latitude(i,j), field(i,j))
-       elseif (field_num == 91) then  ! sea ice fract
-         if (abs(latitude(i,j)) > 55.0) then
-           field(i,j) = default_value
-         else
-           field(i,j) = 0.0
-         endif
        else
          field(i,j) = default_value  ! Search failed.  Use default value.
        endif
 
-       write(6,101) tile,i,j,field(i,j)
+       write(6,101) field_num,tile,i,j,field(i,j)
 
      endif
    enddo I_LOOP
  enddo J_LOOP
-!$OMP END PARALLEL DO
 
- 100 format(1x,"- MISSING POINT TILE: ",i2," I/J: ",i5,i5," SET TO VALUE AT: ",i5,i5,". NEW VALUE IS: ",f8.3)
- 101 format(1x,"- MISSING POINT TILE: ",i2," I/J: ",i5,i5," SET TO DEFAULT VALUE OF: ",f8.3)
+ 100 format(1x,"- MISSING POINT VAR:  ",i3," TILE: ",i2," I/J: ",i5,i5," SET TO VALUE AT: ",i5,i5,". NEW VALUE IS: ",f8.3)
+ 101 format(1x,"- MISSING POINT VAR:  ",i3," TILE: ",i2," I/J: ",i5,i5," SET TO DEFAULT VALUE OF: ",f8.3)
 
  end subroutine search
 

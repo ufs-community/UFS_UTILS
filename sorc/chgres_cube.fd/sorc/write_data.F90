@@ -454,10 +454,6 @@
 !--- define global attributes
    if (trim(input_type) == "gaussian") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
-   elseif (trim(input_type) == "gfs_gaussian") then
-     error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS GAUSSIAN NEMSIO FILE')
-   elseif (trim(input_type) == "gfs_spectral") then
-     error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS SIGIO FILE')
    elseif (trim(input_type) == "history") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED HISTORY FILE')
    elseif (trim(input_type) == "restart") then
@@ -1129,10 +1125,6 @@
 !--- define global attributes
    if (trim(input_type) == "gaussian") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
-   elseif (trim(input_type) == "gfs_gaussian") then
-     error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS GAUSSIAN NEMSIO FILE')
-   elseif (trim(input_type) == "gfs_spectral") then
-     error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS SIGIO FILE')
    elseif (trim(input_type) == "history") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED HISTORY FILE')
    elseif (trim(input_type) == "restart") then
@@ -1159,6 +1151,7 @@
    error = nf90_def_var(ncid, 'delp', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_delp)
    call netcdf_err(error, 'WRITING DELP' )
    do n = 1, num_tracers
+     print *, n, tracers(n)
      error = nf90_def_var(ncid, tracers(n), NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_tracers(n))
      call netcdf_err(error, 'WRITING TRACERS' )
    enddo
@@ -2600,3 +2593,897 @@
  return
 
  end subroutine write_fv3_sfc_data_netcdf
+ 
+ !-------------------------------------------------------------------------------
+!-------------------------------------------------------------------------------
+
+ subroutine write_fv3_sfc_grib2data_netcdf(localpet)
+
+ use esmf
+ use netcdf
+
+ use model_grid, only            : num_tiles_target_grid, &
+                                   landmask_target_grid, &
+                                   i_target, j_target, lsoil_target
+
+ use program_setup, only         : halo=>halo_bndy
+
+ use surface, only               : canopy_mc_target_grid,  &
+                                   f10m_target_grid, &
+                                   ffmm_target_grid, &
+                                   q2m_target_grid,   &
+                                   seaice_depth_target_grid, &
+                                   seaice_fract_target_grid, &
+                                   seaice_skin_temp_target_grid, &
+                                   skin_temp_target_grid, &
+                                   soil_temp_target_grid, &
+                                   soilm_liq_target_grid, &
+                                   soilm_tot_target_grid, &
+                                   srflag_target_grid, &
+                                   snow_liq_equiv_target_grid, &
+                                   snow_depth_target_grid, &
+                                   t2m_target_grid,   &
+                                   tprcp_target_grid, &
+                                   ustar_target_grid, &
+                                   z0_target_grid
+
+
+ use static_data, only           : alvsf_target_grid,   &
+                                   alnsf_target_grid,   &
+                                   alvwf_target_grid,   &
+                                   alnwf_target_grid,   &
+                                   facsf_target_grid, &
+                                   facwf_target_grid, &
+                                   max_veg_greenness_target_grid, &
+                                   min_veg_greenness_target_grid, &
+                                   mxsno_albedo_target_grid, &
+                                   slope_type_target_grid, &
+                                   soil_type_target_grid,  &
+                                   substrate_temp_target_grid,  &
+                                   veg_greenness_target_grid, &
+                                   veg_type_target_grid
+
+ implicit none
+
+ integer, intent(in)            :: localpet
+ character(len=128)             :: outfile
+
+ integer                        :: fsize=65536, initial = 0
+ integer                        :: header_buffer_val = 16384
+ integer                        :: dim_x, dim_y, dim_lsoil, dim_time
+ integer                        :: error, i, ncid, tile
+ integer                        :: id_x, id_y, id_lsoil
+ integer                        :: id_slmsk, id_time
+ integer                        :: id_tsea, id_sheleg, id_tg3
+ integer                        :: id_zorl, id_alvsf, id_alvwf
+ integer                        :: id_alnsf, id_alnwf, id_vfrac
+ integer                        :: id_canopy, id_f10m, id_t2m
+ integer                        :: id_q2m, id_vtype, id_stype
+ integer                        :: id_facsf, id_facwf, id_uustar
+ integer                        :: id_ffmm, id_ffhh, id_hice
+ integer                        :: id_fice, id_tisfc, id_tprcp
+ integer                        :: id_srflag, id_snwdph, id_shdmin
+ integer                        :: id_shdmax, id_slope, id_snoalb
+ integer                        :: id_stc, id_smc, id_slc
+ integer                        :: i_target_out, j_target_out
+ integer                        :: istart, iend, jstart, jend
+ integer                        :: loc
+
+ integer(esmf_kind_i8), allocatable :: idata_one_tile(:,:)
+
+ real(kind=4), allocatable       :: lsoil_data(:), x_data(:), y_data(:)
+ real(kind=8), allocatable       :: dum2d(:,:), dum3d(:,:,:)
+ real(kind=4)                    :: times
+ real(esmf_kind_r8), allocatable :: data_one_tile(:,:)
+ real(esmf_kind_r8), allocatable :: data_one_tile_3d(:,:,:)
+
+! Remove any halo region.
+
+ i_target_out = i_target-(2*halo)
+ j_target_out = j_target-(2*halo)
+ 
+ istart = halo + 1
+ jstart = halo + 1
+ iend   = i_target - halo
+ jend   = j_target - halo
+
+ allocate(lsoil_data(lsoil_target))
+ do i = 1, lsoil_target
+   lsoil_data(i) = float(i)
+ enddo
+
+ allocate(x_data(i_target_out))
+ do i = 1, i_target_out
+   x_data(i) = float(i)
+ enddo
+
+ allocate(y_data(j_target_out))
+ do i = 1, j_target_out
+   y_data(i) = float(i)
+ enddo
+
+
+ print*,'- WRITE FV3 SURFACE DATA TO NETCDF FILE'
+
+
+ if (localpet == 0) then
+   allocate(data_one_tile(i_target,j_target))
+   allocate(data_one_tile_3d(i_target,j_target,lsoil_target))
+   allocate(idata_one_tile(i_target,j_target))
+   allocate(dum2d(i_target_out,j_target_out))
+   allocate(dum3d(i_target_out,j_target_out,lsoil_target))
+ else
+   allocate(data_one_tile(0,0))
+   allocate(data_one_tile_3d(0,0,0))
+   allocate(idata_one_tile(0,0))
+   allocate(dum2d(0,0))
+   allocate(dum3d(0,0,0))
+ endif
+
+ TILE_LOOP : do tile = 1, num_tiles_target_grid
+
+   LOCAL_PET : if (localpet == 0) then
+
+     WRITE(OUTFILE, '(A, I1, A)'), 'out.sfc.tile', tile, '.nc'
+
+!--- open the file
+     error = nf90_create(outfile, NF90_NETCDF4, & !& !IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
+                         ncid, initialsize=initial, chunksize=fsize)
+     call netcdf_err(error, 'CREATING FILE='//trim(outfile) )
+
+!--- define dimensions
+     error = nf90_def_dim(ncid, 'xaxis_1', i_target_out, dim_x)
+     call netcdf_err(error, 'DEFINING XAXIS DIMENSION' )
+     error = nf90_def_dim(ncid, 'yaxis_1', j_target_out, dim_y)
+     call netcdf_err(error, 'DEFINING YAXIS DIMENSION' )
+     error = nf90_def_dim(ncid, 'zaxis_1', lsoil_target, dim_lsoil)
+     call netcdf_err(error, 'DEFINING ZAXIS DIMENSION' )
+     error = nf90_def_dim(ncid, 'Time', 1, dim_time)
+     call netcdf_err(error, 'DEFINING TIME DIMENSION' )
+
+ !--- define fields
+     error = nf90_def_var(ncid, 'xaxis_1', NF90_FLOAT, (/dim_x/), id_x)
+     call netcdf_err(error, 'DEFINING XAXIS_1 FIELD' )
+     error = nf90_put_att(ncid, id_x, "long_name", "xaxis_1")
+     call netcdf_err(error, 'DEFINING XAXIS_1 LONG NAME' )
+     error = nf90_put_att(ncid, id_x, "units", "none")
+     call netcdf_err(error, 'DEFINING XAXIS_1 UNITS' )
+     error = nf90_put_att(ncid, id_x, "cartesian_axis", "X")
+     call netcdf_err(error, 'WRITING XAXIS_1 FIELD' )
+
+     error = nf90_def_var(ncid, 'yaxis_1', NF90_FLOAT, (/dim_y/), id_y)
+     call netcdf_err(error, 'DEFINING YAXIS_1 FIELD' )
+     error = nf90_put_att(ncid, id_y, "long_name", "yaxis_1")
+     call netcdf_err(error, 'DEFINING YAXIS_1 LONG NAME' )
+     error = nf90_put_att(ncid, id_y, "units", "none")
+     call netcdf_err(error, 'DEFINING YAXIS_1 UNITS' )
+     error = nf90_put_att(ncid, id_y, "cartesian_axis", "Y")
+     call netcdf_err(error, 'WRITING YAXIS_1 FIELD' )
+
+     error = nf90_def_var(ncid, 'zaxis_1', NF90_FLOAT, (/dim_lsoil/), id_lsoil)
+     call netcdf_err(error, 'DEFINING ZAXIS_1 FIELD' )
+     error = nf90_put_att(ncid, id_lsoil, "long_name", "zaxis_1")
+     call netcdf_err(error, 'DEFINING ZAXIS_1 LONG NAME' )
+     error = nf90_put_att(ncid, id_lsoil, "units", "none")
+     call netcdf_err(error, 'DEFINING ZAXIS_1 UNITS' )
+     error = nf90_put_att(ncid, id_lsoil, "cartesian_axis", "Z")
+     call netcdf_err(error, 'WRITING ZAXIS_1 FIELD' )
+
+     error = nf90_def_var(ncid, 'Time', NF90_FLOAT, dim_time, id_time)
+     call netcdf_err(error, 'DEFINING TIME FIELD' )
+     error = nf90_put_att(ncid, id_time, "long_name", "Time")
+     call netcdf_err(error, 'DEFINING TIME LONG NAME' )
+     error = nf90_put_att(ncid, id_time, "units", "time level")
+     call netcdf_err(error, 'DEFINING TIME UNITS' )
+     error = nf90_put_att(ncid, id_time, "cartesian_axis", "T")
+     call netcdf_err(error, 'WRITING TIME FIELD' )
+     
+     error = nf90_enddef(ncid, header_buffer_val,4,0,4)
+     call netcdf_err(error, 'DEFINING HEADER' )
+
+   endif LOCAL_PET ! is localpet 0?
+
+    ! LANDMASK
+     
+     
+     print*,"- CALL FieldGather FOR TARGET GRID LANDMASK FOR TILE: ", tile
+     call ESMF_FieldGather(landmask_target_grid, idata_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+     
+       error = nf90_def_var(ncid, 'slmsk', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_slmsk)
+       call netcdf_err(error, 'DEFINING SLMSK' )
+       error = nf90_put_att(ncid, id_slmsk, "long_name", "slmsk")
+       call netcdf_err(error, 'DEFINING SLMSK LONG NAME' )
+       error = nf90_put_att(ncid, id_slmsk, "units", "none")
+       call netcdf_err(error, 'DEFINING SLMSK UNITS' )
+       
+       dum2d(:,:) = float(idata_one_tile(istart:iend, jstart:jend))
+       error = nf90_put_var( ncid, id_slmsk, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING LANDMASK RECORD' )
+     endif
+
+     ! SKIN TEMP
+     
+     
+     print*,"- CALL FieldGather FOR TARGET GRID SKIN TEMP FOR TILE: ", tile
+     call ESMF_FieldGather(skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+     
+       error = nf90_def_var(ncid, 'tsea', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tsea)
+       call netcdf_err(error, 'DEFINING TSEA' )
+       error = nf90_put_att(ncid, id_tsea, "long_name", "tsea")
+       call netcdf_err(error, 'DEFINING TSEA LONG NAME' )
+       error = nf90_put_att(ncid, id_tsea, "units", "none")
+       call netcdf_err(error, 'DEFINING TSEA UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_tsea, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING TSEA RECORD' )
+     endif
+     
+     
+     ! SNOW LIQUID EQUIVALENT
+     
+     print*,"- CALL FieldGather FOR TARGET GRID SNOW LIQ EQUIV FOR TILE: ", tile
+     call ESMF_FieldGather(snow_liq_equiv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'sheleg', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_sheleg)
+       call netcdf_err(error, 'DEFINING SHELEG' )
+       error = nf90_put_att(ncid, id_sheleg, "long_name", "sheleg")
+       call netcdf_err(error, 'DEFINING SHELEG LONG NAME' )
+       error = nf90_put_att(ncid, id_sheleg, "units", "none")
+       call netcdf_err(error, 'DEFINING SHELEG UNITS' )
+       
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_sheleg, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING SNOW LIQ EQUIV RECORD' )
+     endif
+     
+     ! SUBSTRATE TEMP
+     
+     print*,"- CALL FieldGather FOR TARGET GRID SUBSTRATE TEMPERATURE FOR TILE: ", tile
+     call ESMF_FieldGather(substrate_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+     
+       error = nf90_def_var(ncid, 'tg3', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tg3)
+       call netcdf_err(error, 'DEFINING TG3' )
+       error = nf90_put_att(ncid, id_tg3, "long_name", "tg3")
+       call netcdf_err(error, 'DEFINING TG3 LONG NAME' )
+       error = nf90_put_att(ncid, id_tg3, "units", "none")
+       call netcdf_err(error, 'DEFINING TG3 UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_tg3, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING SUBSTRATE TEMPERATURE RECORD' )
+     endif
+ 
+     ! Z0
+     
+     print*,"- CALL FieldGather FOR TARGET GRID Z0 FOR TILE: ", tile
+     call ESMF_FieldGather(z0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'zorl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl)
+       call netcdf_err(error, 'DEFINING ZORL' )
+       error = nf90_put_att(ncid, id_zorl, "long_name", "zorl")
+       call netcdf_err(error, 'DEFINING ZORL LONG NAME' )
+       error = nf90_put_att(ncid, id_zorl, "units", "none")
+       call netcdf_err(error, 'DEFINING ZORL UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_zorl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING Z0 RECORD' )
+     endif
+     
+     ! ALVSF
+     
+     print*,"- CALL FieldGather FOR TARGET GRID ALVSF FOR TILE: ", tile
+     call ESMF_FieldGather(alvsf_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'alvsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alvsf)
+       call netcdf_err(error, 'DEFINING ALVSF' )
+       error = nf90_put_att(ncid, id_alvsf, "long_name", "alvsf")
+       call netcdf_err(error, 'DEFINING ALVSF LONG NAME' )
+       error = nf90_put_att(ncid, id_alvsf, "units", "none")
+       call netcdf_err(error, 'DEFINING ALVSF UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_alvsf, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING ALVSF RECORD' )
+     endif
+
+     !ALVWF
+     
+     print*,"- CALL FieldGather FOR TARGET GRID ALVWF FOR TILE: ", tile
+     call ESMF_FieldGather(alvwf_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'alvwf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alvwf)
+       call netcdf_err(error, 'DEFINING ALVWF' )
+       error = nf90_put_att(ncid, id_alvwf, "long_name", "alvwf")
+       call netcdf_err(error, 'DEFINING ALVWF LONG NAME' )
+       error = nf90_put_att(ncid, id_alvwf, "units", "none")
+       call netcdf_err(error, 'DEFINING ALVWF UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_alvwf, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING ALVWF RECORD' )
+     endif
+
+     !ALNSF
+     
+     print*,"- CALL FieldGather FOR TARGET GRID ALNSF FOR TILE: ", tile
+     call ESMF_FieldGather(alnsf_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'alnsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alnsf)
+       call netcdf_err(error, 'DEFINING ALNSF' )
+       error = nf90_put_att(ncid, id_alnsf, "long_name", "alnsf")
+       call netcdf_err(error, 'DEFINING ALNSF LONG NAME' )
+       error = nf90_put_att(ncid, id_alnsf, "units", "none")
+       call netcdf_err(error, 'DEFINING ALNSF UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_alnsf, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING ALNSF RECORD' )
+     endif
+
+     !ALNWF
+     
+     print*,"- CALL FieldGather FOR TARGET GRID ALNWF FOR TILE: ", tile
+     call ESMF_FieldGather(alnwf_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'alnwf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alnwf)
+       call netcdf_err(error, 'DEFINING ALNWF' )
+       error = nf90_put_att(ncid, id_alnwf, "long_name", "alnwf")
+       call netcdf_err(error, 'DEFINING ALNWF LONG NAME' )
+       error = nf90_put_att(ncid, id_alnwf, "units", "none")
+       call netcdf_err(error, 'DEFINING ALNWF UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_alnwf, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING ALNWF RECORD' )
+     endif
+
+     !FACSF
+     
+     print*,"- CALL FieldGather FOR TARGET GRID FACSF FOR TILE: ", tile
+     call ESMF_FieldGather(facsf_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'facsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_facsf)
+       call netcdf_err(error, 'DEFINING FACSF' )
+       error = nf90_put_att(ncid, id_facsf, "long_name", "facsf")
+       call netcdf_err(error, 'DEFINING FACSF LONG NAME' )
+       error = nf90_put_att(ncid, id_facsf, "units", "none")
+       call netcdf_err(error, 'DEFINING FACSF UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_facsf, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING FACSF RECORD' )
+     endif
+
+     !FACWF
+     
+      print*,"- CALL FieldGather FOR TARGET GRID FACWF FOR TILE: ", tile
+     call ESMF_FieldGather(facwf_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'facwf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_facwf)
+       call netcdf_err(error, 'DEFINING FACWF' )
+       error = nf90_put_att(ncid, id_facwf, "long_name", "facwf")
+       call netcdf_err(error, 'DEFINING FACWF LONG NAME' )
+       error = nf90_put_att(ncid, id_facwf, "units", "none")
+       call netcdf_err(error, 'DEFINING FACWF UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_facwf, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING FACWF RECORD' )
+     endif
+
+     ! VEGETATION FRACTION
+     
+     print*,"- CALL FieldGather FOR TARGET GRID VEGETATION GREENNESS FOR TILE: ", tile
+     call ESMF_FieldGather(veg_greenness_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'vfrac', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_vfrac)
+       call netcdf_err(error, 'DEFINING VFRAC' )
+       error = nf90_put_att(ncid, id_vfrac, "long_name", "vfrac")
+       call netcdf_err(error, 'DEFINING VFRAC LONG NAME' )
+       error = nf90_put_att(ncid, id_vfrac, "units", "none")
+       call netcdf_err(error, 'DEFINING VFRAC UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_vfrac, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING VEGETATION GREENNESS RECORD' )
+     endif
+
+     ! T2M     
+     
+     print*,"- CALL FieldGather FOR TARGET GRID T2M FOR TILE: ", tile
+     call ESMF_FieldGather(t2m_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 't2m', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_t2m)
+       call netcdf_err(error, 'DEFINING T2M' )
+       error = nf90_put_att(ncid, id_t2m, "long_name", "t2m")
+       call netcdf_err(error, 'DEFINING T2M LONG NAME' )
+       error = nf90_put_att(ncid, id_t2m, "units", "none")
+     call netcdf_err(error, 'DEFINING T2M UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_t2m, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING T2M RECORD' )
+     endif
+
+     ! Q2M
+     
+     print*,"- CALL FieldGather FOR TARGET GRID Q2M FOR TILE: ", tile
+     call ESMF_FieldGather(q2m_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'q2m', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_q2m)
+       call netcdf_err(error, 'DEFINING Q2M' )
+       error = nf90_put_att(ncid, id_q2m, "long_name", "q2m")
+       call netcdf_err(error, 'DEFINING Q2M LONG NAME' )
+       error = nf90_put_att(ncid, id_q2m, "units", "none")
+       call netcdf_err(error, 'DEFINING Q2M UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_q2m, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING Q2M RECORD' )
+     endif
+
+     ! VEGETATION TYPE
+     
+     print*,"- CALL FieldGather FOR TARGET GRID VEGETATION TYPE FOR TILE: ", tile
+     call ESMF_FieldGather(veg_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'vtype', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_vtype)
+       call netcdf_err(error, 'DEFINING VTYPE' )
+       error = nf90_put_att(ncid, id_vtype, "long_name", "vtype")
+       call netcdf_err(error, 'DEFINING VTYPE LONG NAME' )
+       error = nf90_put_att(ncid, id_vtype, "units", "none")
+       call netcdf_err(error, 'DEFINING VTYPE UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_vtype, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING VEGETATION TYPE RECORD' )
+     endif
+
+     ! SOIL TYPE
+     
+     print*,"- CALL FieldGather FOR TARGET GRID SOIL TYPE FOR TILE: ", tile
+     call ESMF_FieldGather(soil_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'stype', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_stype)
+       call netcdf_err(error, 'DEFINING STYPE' )
+       error = nf90_put_att(ncid, id_stype, "long_name", "stype")
+       call netcdf_err(error, 'DEFINING STYPE LONG NAME' )
+       error = nf90_put_att(ncid, id_stype, "units", "none")
+       call netcdf_err(error, 'DEFINING STYPE UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_stype, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING SOIL TYPE RECORD' )
+     endif
+     
+     ! SRFLAG
+
+     print*,"- CALL FieldGather FOR TARGET GRID SRFLAG FOR TILE: ", tile
+     call ESMF_FieldGather(srflag_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then     
+       error = nf90_def_var(ncid, 'srflag', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_srflag)
+       call netcdf_err(error, 'DEFINING SRFLAG' )
+       error = nf90_put_att(ncid, id_srflag, "long_name", "srflag")
+       call netcdf_err(error, 'DEFINING SRFLAG LONG NAME' )
+       error = nf90_put_att(ncid, id_srflag, "units", "none")
+       call netcdf_err(error, 'DEFINING SRFLAG UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_srflag, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING SRFLAG RECORD' )
+     endif
+
+     ! SNOW DEPTH
+     print*,"- CALL FieldGather FOR TARGET GRID SNOW DEPTH FOR TILE: ", tile
+     call ESMF_FieldGather(snow_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'snwdph', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_snwdph)
+       call netcdf_err(error, 'DEFINING SNWDPH' )
+       error = nf90_put_att(ncid, id_snwdph, "long_name", "snwdph")
+       call netcdf_err(error, 'DEFINING SNWDPH LONG NAME' )
+       error = nf90_put_att(ncid, id_snwdph, "units", "none")
+       call netcdf_err(error, 'DEFINING SNWDPH UNITS' )
+     
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_snwdph, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING SNWDPH RECORD' )
+     endif
+     
+     
+     ! MIN VEGETATION FRACTION
+     
+     print*,"- CALL FieldGather FOR TARGET GRID MIN VEGETATION GREENNESS FOR TILE: ", tile
+     call ESMF_FieldGather(min_veg_greenness_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'shdmin', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_shdmin)
+       call netcdf_err(error, 'DEFINING SHDMIN' )
+       error = nf90_put_att(ncid, id_shdmin, "long_name", "shdmin")
+       call netcdf_err(error, 'DEFINING SHDMIN LONG NAME' )
+       error = nf90_put_att(ncid, id_shdmin, "units", "none")
+     call netcdf_err(error, 'DEFINING SHDMIN UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_shdmin, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING MIN VEGETATION GREENNESS RECORD' )
+     endif
+
+     ! MAX VEGETATION FRACTION
+     
+     print*,"- CALL FieldGather FOR TARGET GRID MAX VEGETATION GREENNESS FOR TILE: ", tile
+     call ESMF_FieldGather(max_veg_greenness_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'shdmax', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_shdmax)
+       call netcdf_err(error, 'DEFINING SHDMAX' )
+       error = nf90_put_att(ncid, id_shdmax, "long_name", "shdmax")
+       call netcdf_err(error, 'DEFINING SHDMAX LONG NAME' )
+       error = nf90_put_att(ncid, id_shdmax, "units", "none")
+       call netcdf_err(error, 'DEFINING SHDMAX UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_shdmax, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING MAX VEGETATION GREENNESS RECORD' )
+     endif
+
+     ! SLOPE TYPE
+     
+     print*,"- CALL FieldGather FOR TARGET GRID SLOPE TYPE FOR TILE: ", tile
+     call ESMF_FieldGather(slope_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'slope', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_slope)
+       call netcdf_err(error, 'DEFINING SLOPE' )
+       error = nf90_put_att(ncid, id_slope, "long_name", "slope")
+       call netcdf_err(error, 'DEFINING SLOPE LONG NAME' )
+       error = nf90_put_att(ncid, id_slope, "units", "none")
+       call netcdf_err(error, 'DEFINING SLOPE UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_slope, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING SLOPE RECORD' )
+     endif
+
+     ! MAX SNOW ALBEDO
+     
+     print*,"- CALL FieldGather FOR TARGET GRID MAX SNOW ALBEDO FOR TILE: ", tile
+     call ESMF_FieldGather(mxsno_albedo_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'snoalb', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_snoalb)
+       call netcdf_err(error, 'DEFINING SNOALB' )
+       error = nf90_put_att(ncid, id_snoalb, "long_name", "snoalb")
+       call netcdf_err(error, 'DEFINING SNOALB LONG NAME' )
+       error = nf90_put_att(ncid, id_snoalb, "units", "none")
+       call netcdf_err(error, 'DEFINING SNOALB UNITS' )
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_snoalb, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING MAX SNOW ALBEDO RECORD' )
+     endif
+     
+     ! SOIL TEMPERATURE
+     
+     print*,"- CALL FieldGather FOR TARGET GRID SOIL TEMPERATURE FOR TILE: ", tile
+     call ESMF_FieldGather(soil_temp_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'stc', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_stc)
+       call netcdf_err(error, 'DEFINING STC' )
+       error = nf90_put_att(ncid, id_stc, "long_name", "stc")
+       call netcdf_err(error, 'DEFINING STC LONG NAME' )
+       error = nf90_put_att(ncid, id_stc, "units", "none")
+       call netcdf_err(error, 'DEFINING STC UNITS' )
+       dum3d(:,:,:) = data_one_tile_3d(istart:iend, jstart:jend,:)
+       error = nf90_put_var( ncid, id_stc, dum3d, start=(/1,1,1,1/), count=(/i_target_out,j_target_out,lsoil_target,1/))
+       call netcdf_err(error, 'WRITING SOIL TEMP RECORD' )
+     endif
+
+     ! TOTAL SOIL MOISTURE
+     print*,"- CALL FieldGather FOR TARGET GRID TOTAL SOIL MOISTURE FOR TILE: ", tile
+     call ESMF_FieldGather(soilm_tot_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       error = nf90_def_var(ncid, 'smc', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_smc)
+       call netcdf_err(error, 'DEFINING SMC' )
+       error = nf90_put_att(ncid, id_smc, "long_name", "smc")
+       call netcdf_err(error, 'DEFINING SMC LONG NAME' )
+       error = nf90_put_att(ncid, id_smc, "units", "none")
+       call netcdf_err(error, 'DEFINING SMC UNITS' )
+     
+       dum3d(:,:,:) = data_one_tile_3d(istart:iend, jstart:jend,:)
+       error = nf90_put_var( ncid, id_smc, dum3d, start=(/1,1,1,1/), count=(/i_target_out,j_target_out,lsoil_target,1/))
+       call netcdf_err(error, 'WRITING TOTAL SOIL MOISTURE RECORD' )
+     endif
+
+     ! LIQUID SOIL MOSTURE
+     
+     print*,"- CALL FieldGather FOR TARGET GRID LIQUID SOIL MOISTURE FOR TILE: ", tile
+     call ESMF_FieldGather(soilm_liq_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+     
+       error = nf90_def_var(ncid, 'slc', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_slc)
+       call netcdf_err(error, 'DEFINING SLC' )
+       error = nf90_put_att(ncid, id_slc, "long_name", "slc")
+       call netcdf_err(error, 'DEFINING SLC LONG NAME' )
+       error = nf90_put_att(ncid, id_slc, "units", "none")
+       call netcdf_err(error, 'DEFINING SLC UNITS' )
+       dum3d(:,:,:) = data_one_tile_3d(istart:iend, jstart:jend,:)
+       error = nf90_put_var( ncid, id_slc, dum3d, start=(/1,1,1,1/), count=(/i_target_out,j_target_out,lsoil_target,1/))
+       call netcdf_err(error, 'WRITING LIQUID SOIL MOISTURE RECORD' )
+     endif
+     
+     ! -----------------------------------------------------------------------------------
+     ! These variables might not have been read in, so check read_from_file for each. 
+     ! If they weren't don't create the variable in the file. Allow all of these to not
+     ! be written for now. Need to check if any of these *must* be present to make them
+     ! auto error if they weren't read from file
+     ! -----------------------------------------------------------------------------------
+     
+     ! CANOPY MC
+     
+     print*,"- CALL FieldGather FOR TARGET GRID CANOPY MOISTURE CONTENT FOR TILE: ", tile
+     call ESMF_FieldGather(canopy_mc_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+
+       ! if the data is all missing, then it was never read in from file, and so don't write
+       if (dum2d(1,1) > -9999.0) then
+         error = nf90_def_var(ncid, 'canopy', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_canopy)
+         call netcdf_err(error, 'DEFINING CANOPY' )
+         error = nf90_put_att(ncid, id_canopy, "long_name", "canopy")
+         call netcdf_err(error, 'DEFINING CANOPY LONG NAME' )
+         error = nf90_put_att(ncid, id_canopy, "units", "none")
+         call netcdf_err(error, 'DEFINING CANOPY UNITS' )
+
+        error = nf90_put_var( ncid, id_canopy, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+        call netcdf_err(error, 'WRITING CANOPY MC RECORD' )
+
+       endif
+     endif
+
+     ! F10m
+     
+     print*,"- CALL FieldGather FOR TARGET GRID F10M FOR TILE: ", tile
+     call ESMF_FieldGather(f10m_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+
+       if (dum2d(1,1) > -9999.0) then
+         error = nf90_def_var(ncid, 'f10m', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_f10m)
+         call netcdf_err(error, 'DEFINING F10M' )
+         error = nf90_put_att(ncid, id_f10m, "long_name", "f10m")
+         call netcdf_err(error, 'DEFINING F10M LONG NAME' )
+         error = nf90_put_att(ncid, id_f10m, "units", "none")
+         call netcdf_err(error, 'DEFINING F10M UNITS' )
+
+         error = nf90_put_var( ncid, id_f10m, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+         call netcdf_err(error, 'WRITING F10M RECORD' )
+       endif
+     endif
+       
+    print*,"- CALL FieldGather FOR TARGET GRID FFMM FOR TILE: ", tile
+    call ESMF_FieldGather(ffmm_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+      if (dum2d(1,1) > -9999.0) then
+        error = nf90_def_var(ncid, 'ffmm', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_ffmm)
+        call netcdf_err(error, 'DEFINING FFMM' )
+        error = nf90_put_att(ncid, id_ffmm, "long_name", "ffmm")
+        call netcdf_err(error, 'DEFINING FFMM LONG NAME' )
+        error = nf90_put_att(ncid, id_ffmm, "units", "none")
+        call netcdf_err(error, 'DEFINING FFMM UNITS' )
+
+        error = nf90_def_var(ncid, 'ffhh', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_ffhh)
+        call netcdf_err(error, 'DEFINING FFHH' )
+        error = nf90_put_att(ncid, id_ffhh, "long_name", "ffhh")
+        call netcdf_err(error, 'DEFINING FFHH LONG NAME' )
+        error = nf90_put_att(ncid, id_ffhh, "units", "none")
+        call netcdf_err(error, 'DEFINING FFHH UNITS' )
+        dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+      
+        error = nf90_put_var( ncid, id_ffmm, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+        call netcdf_err(error, 'WRITING FFMM RECORD' )
+        dum2d = 0.0
+        error = nf90_put_var( ncid, id_ffhh, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+        call netcdf_err(error, 'WRITING FFHH RECORD' )
+      endif
+    endif
+
+    print*,"- CALL FieldGather FOR TARGET GRID TPRCP FOR TILE: ", tile
+     call ESMF_FieldGather(tprcp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+      if (dum2d(1,1) > -9999.0) then
+        error = nf90_def_var(ncid, 'tprcp', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tprcp)
+        call netcdf_err(error, 'DEFINING TPRCP' )
+        error = nf90_put_att(ncid, id_tprcp, "long_name", "tprcp")
+        call netcdf_err(error, 'DEFINING TPRCP LONG NAME' )
+        error = nf90_put_att(ncid, id_tprcp, "units", "none")
+        call netcdf_err(error, 'DEFINING TPRCP UNITS' )
+      
+        dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+        error = nf90_put_var( ncid, id_tprcp, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+        call netcdf_err(error, 'WRITING TPRCP RECORD' )
+      endif
+    endif
+
+    if (localpet == 0) then
+       error = nf90_put_var( ncid, id_lsoil, lsoil_data)
+       call netcdf_err(error, 'WRITING ZAXIS RECORD' )
+       error = nf90_put_var( ncid, id_x, x_data)
+       call netcdf_err(error, 'WRITING XAXIS RECORD' )
+       error = nf90_put_var( ncid, id_y, y_data)
+       call netcdf_err(error, 'WRITING YAXIS RECORD' )
+       times = 1.0
+       error = nf90_put_var( ncid, id_time, times)
+       call netcdf_err(error, 'WRITING TIME RECORD' )
+     endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID USTAR FOR TILE: ", tile
+   call ESMF_FieldGather(ustar_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", error)
+
+    if (localpet == 0) then
+      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+      if (dum2d(1,1) > -9999.0) then
+        error = nf90_def_var(ncid, 'uustar', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_uustar)
+        call netcdf_err(error, 'DEFINING UUSTAR' )
+        error = nf90_put_att(ncid, id_uustar, "long_name", "uustar")
+        call netcdf_err(error, 'DEFINING UUSTAR LONG NAME' )
+        error = nf90_put_att(ncid, id_uustar, "units", "none")
+        call netcdf_err(error, 'DEFINING UUSTAR UNITS' )
+   
+        dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+        error = nf90_put_var( ncid, id_uustar, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+        call netcdf_err(error, 'WRITING USTAR RECORD' )
+      endif
+   endif
+
+   
+
+   print*,"- CALL FieldGather FOR TARGET GRID SEA ICE FRACTION FOR TILE: ", tile
+   call ESMF_FieldGather(seaice_fract_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+      if (dum2d(1,1) > -9999.0) then
+        error = nf90_def_var(ncid, 'fice', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_fice)
+        call netcdf_err(error, 'DEFINING FICE' )
+        error = nf90_put_att(ncid, id_fice, "long_name", "fice")
+        call netcdf_err(error, 'DEFINING FICE LONG NAME' )
+        error = nf90_put_att(ncid, id_fice, "units", "none")
+        call netcdf_err(error, 'DEFINING FICE UNITS' )
+   
+        dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+        error = nf90_put_var( ncid, id_fice, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+        call netcdf_err(error, 'WRITING FICE RECORD' )
+      endif
+   endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID SEA ICE DEPTH FOR TILE: ", tile
+   call ESMF_FieldGather(seaice_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+      if (dum2d(1,1) > -9999.0) then
+        error = nf90_def_var(ncid, 'hice', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_hice)
+        call netcdf_err(error, 'DEFINING HICE' )
+        error = nf90_put_att(ncid, id_hice, "long_name", "hice")
+        call netcdf_err(error, 'DEFINING HICE LONG NAME' )
+        error = nf90_put_att(ncid, id_hice, "units", "none")
+        call netcdf_err(error, 'DEFINING HICE UNITS' )
+
+        dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+        error = nf90_put_var( ncid, id_hice, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+        call netcdf_err(error, 'WRITING HICE RECORD' )
+      endif
+   endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID SEA ICE SKIN TEMP FOR TILE: ", tile
+   call ESMF_FieldGather(seaice_skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+      if (dum2d(1,1) > -9999.0) then   
+        error = nf90_def_var(ncid, 'tisfc', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tisfc)
+        call netcdf_err(error, 'DEFINING TISFC' )
+        error = nf90_put_att(ncid, id_tisfc, "long_name", "tisfc")
+        call netcdf_err(error, 'DEFINING TISFC LONG NAME' )
+        error = nf90_put_att(ncid, id_tisfc, "units", "none")
+        call netcdf_err(error, 'DEFINING TISFC UNITS' )
+
+        dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+        error = nf90_put_var( ncid, id_tisfc, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+        call netcdf_err(error, 'WRITING TISFC RECORD' )
+      endif
+   endif
+
+!-------------------------------------------------------------------------------
+! close file
+!-------------------------------------------------------------------------------
+
+   error = nf90_close(ncid)
+
+ enddo TILE_LOOP
+
+ deallocate(lsoil_data, x_data, y_data)
+ deallocate(data_one_tile, data_one_tile_3d, idata_one_tile, dum2d, dum3d)
+
+ return
+
+ end subroutine write_fv3_sfc_grib2data_netcdf

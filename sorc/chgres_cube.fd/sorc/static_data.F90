@@ -142,6 +142,7 @@
 
  do tile = 1, num_tiles_target_grid
    if (localpet == 0) then
+   		print*, tile
      call read_static_file('soil_type', i_target, j_target, tile, data_one_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID SOIL TYPE."
@@ -422,6 +423,7 @@
  print*,'- FILE CONTAINS ', num_times, ' TIME RECORDS.'
 
  allocate(dummy(i_target,j_target,num_times))
+
  error=nf90_inq_varid(ncid, field, id_var)
  call netcdf_err(error, 'READING FIELD ID' )
  error=nf90_get_var(ncid, id_var, dummy)
