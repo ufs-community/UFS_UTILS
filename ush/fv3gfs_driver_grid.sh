@@ -35,7 +35,7 @@ ulimit -s unlimited
 
 export USER=$LOGNAME 
 export res=96              # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
-export gtype=nest       # grid type: uniform, stretch, nest or regional
+export gtype=uniform       # grid type: uniform, stretch, nest or regional
 
 #----------------------------------------------------------------
 # The orography code runs with threads.  On Cray, the code is
@@ -421,25 +421,8 @@ elif [ $gtype = regional ]; then
   echo $npts_cgx $npts_cgy $halop1 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog
   echo $npts_cgx $npts_cgy $halop1 \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid
 
-  if [ $machine = WCOSS_C ]; then
-    $APRUN $exec_dir/shave.x <input.shave.orog
-    $APRUN $exec_dir/shave.x <input.shave.grid
-  elif [ $machine = THEIA ]; then
-    time $exec_dir/shave.x <input.shave.orog
-    time $exec_dir/shave.x <input.shave.grid
-  fi
- 
-  echo "Grid and orography files are now prepared for regional grid"
-
-fi # if check on type of grid
-
-#----------------------------------------------------------------------------------
-# Copy grid and orography files to output directory.
-#----------------------------------------------------------------------------------
-
-echo "Copy grid and orography files to output directory"
-
-if [ $gtype = regional ]; then
+  $APRUN $exec_dir/shave.x <input.shave.orog
+  $APRUN $exec_dir/shave.x <input.shave.grid
 
   cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo${halop1}.nc
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halop1}.nc
@@ -448,20 +431,35 @@ if [ $gtype = regional ]; then
 #
   echo $npts_cgx $npts_cgy $halo \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo$halo
   echo $npts_cgx $npts_cgy $halo \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo$halo
-  if [ $machine = WCOSS_C ]; then
-    $APRUN $exec_dir/shave.x <input.shave.orog.halo$halo
-    $APRUN $exec_dir/shave.x <input.shave.grid.halo$halo
-  elif [ $machine = THEIA ]; then
-    time $exec_dir/shave.x <input.shave.orog.halo$halo
-    time $exec_dir/shave.x <input.shave.grid.halo$halo
-  fi
-#
-# copy the shaved files with the halo of 3 required for the model run
-#
- cp $filter_dir/oro.C${res}.tile${tile}.shave.nc $out_dir/C${res}_oro_data.tile${tile}.halo${halo}.nc
- cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halo}.nc
 
-else  # not a regional grid.
+  $APRUN $exec_dir/shave.x <input.shave.orog.halo$halo
+  $APRUN $exec_dir/shave.x <input.shave.grid.halo$halo
+ 
+  cp $filter_dir/oro.C${res}.tile${tile}.shave.nc $out_dir/C${res}_oro_data.tile${tile}.halo${halo}.nc
+  cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halo}.nc
+#
+# Now shave the orography file and then the grid file with a halo of 0. This is handy for running chgres.
+#
+  echo $npts_cgx $npts_cgy 0 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo0
+  echo $npts_cgx $npts_cgy 0 \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo0
+
+  $APRUN $exec_dir/shave.x <input.shave.orog.halo0
+  $APRUN $exec_dir/shave.x <input.shave.grid.halo0
+
+  cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo0.nc
+  cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo0.nc
+ 
+  echo "Grid and orography files are now prepared for regional grid"
+
+fi # if check on type of grid
+
+#----------------------------------------------------------------------------------
+# For non-regional grids, copy grid and orography files to output directory.
+#----------------------------------------------------------------------------------
+
+if [ $gtype != regional ]; then
+
+  echo "Copy grid and orography files to output directory"
 
   tile=1
   while [ $tile -le $ntiles ]; do
@@ -471,6 +469,10 @@ else  # not a regional grid.
   done
 
 fi
+
+#----------------------------------------------------------------------------------
+# Copy mosaic file(s) to output directory.
+#----------------------------------------------------------------------------------
 
 cp $grid_dir/C${res}_*mosaic.nc $out_dir
 
