@@ -3,9 +3,9 @@
 #
  declare -a Build_prg=("Build_nems_util" \
                        "Build_chgres" "Build_cycle" \
-                       "Build_sfcanl_nsttfchg" \
-                       "Build_orog" "Build_tropcy" \
-                       "Build_nctools" \
+                       "Build_nst_tf_chg" \
+                       "Build_orog" "Build_gettrk" \
+                       "Build_nctools" "Build_chgres_cube" \
                        "Build_emcsfc")
 
 #
@@ -155,7 +155,7 @@
 #
 # set default values for partial build
 #
-   parse_cfg 1 "config=fv3gfs_build.cfg" ${Build_prg[@]}
+   parse_cfg 1 "config=ufs_build.cfg" ${Build_prg[@]}
  else
 
 #

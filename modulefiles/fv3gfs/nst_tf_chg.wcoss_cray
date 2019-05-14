@@ -15,6 +15,8 @@ module load craype-haswell
 module load nemsio-intel/2.2.3
 module load w3nco-intel/2.0.6
 module load bacio-intel/2.0.2
-module load sp-intel/2.0.2
 
 export FCOMP=ftn
+export FFLAGS="-O3 -fp-model precise -g -r8 -i4"
+# for debugging
+#export FFLAGS="-g -r8 -i4 -warn unused -check bounds"
