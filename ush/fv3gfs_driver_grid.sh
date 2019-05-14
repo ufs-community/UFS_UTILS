@@ -50,9 +50,8 @@ if [ $machine = WCOSS_C ]; then
   set -x
   export NODES=1
   export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"
-  export APRUN_SFC="aprun -j 1 -n 12 -N 12"
+  export APRUN_SFC="aprun -j 1 -n 24 -N 24"
   export home_dir=$LS_SUBCWD/..
-  export topo=/gpfs/hps3/emc/global/noscrub/emc.glopara/git/fv3gfs/fix/fix_orog
   export TMPDIR=/gpfs/hps3/stmp/$LOGNAME/fv3_grid.$gtype
   export out_dir=/gpfs/hps3/stmp/$LOGNAME/C${res}
 #  On Cray, the orography code is optimized for six threads.
@@ -72,7 +71,6 @@ elif [ $machine = THEIA ]; then
   export APRUN=time
   export APRUN_SFC=srun
   export home_dir=$SLURM_SUBMIT_DIR/..
-  export topo=/scratch4/NCEPDEV/global/save/glopara/git/fv3gfs/fix/fix_orog
   export TMPDIR=/scratch3/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
   export out_dir=/scratch3/NCEPDEV/stmp1/$LOGNAME/C${res}
   export OMP_NUM_THREADS=24
@@ -82,6 +80,7 @@ fi
 
 export script_dir=$home_dir/ush
 export exec_dir=$home_dir/exec
+export topo=$home_dir/fix/fix_orog
 
 rm -fr $TMPDIR
 mkdir -p $out_dir $TMPDIR
