@@ -2,7 +2,7 @@ SHELL=	/bin/sh
 
 include $(ESMFMKFILE)
 
-CMD= global_chgres.exe
+CMD= chgres_cube.exe
 
 OBJS = chgres.o \
        atmosphere.o \
@@ -58,4 +58,7 @@ static_data.o: model_grid.o program_setup.o static_data.F90
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -c static_data.F90
 
 clean:
-	rm -f *.o *.mod ${CMD} ../exec/${CMD}
+	rm -f *.o *.mod ${CMD} ../../exec/${CMD}
+
+install:
+	mv $(CMD) ../../exec

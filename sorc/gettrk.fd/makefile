@@ -1,14 +1,5 @@
 SHELL=  /bin/sh
-ISIZE = 4
-RSIZE = 8
-FCOMP=  ifort -nofree
-CCOMP=  icc
-##INC = /contrib/nceplibs/nwprod/lib/incmod/g2_d
-# LIBS=   -L/nwprod/lib -lw3emc_d -lw3nco_d -lbacio_4
-##LIBS=   -L/contrib/nceplibs/nwprod/lib -lw3emc_d -lw3nco_d -lg2_d -lbacio_4 -ljasper -lpng -lz
 LDFLAGS= 
-FFLAGS= -O2 -fpe0 -I $(INC)   -i$(ISIZE) -r$(RSIZE)
-CFLAGS= -O2
 
 gettrk:      gettrk_main.f gettrk_modules.o module_waitfor.o cwaitfor.o
 	@echo " "
@@ -35,7 +26,7 @@ gettrk_modules.o:    gettrk_modules.f
 CMD =   gettrk
 
 clean:
-	-rm -f  *.o  *.mod
+	-rm -f  *.o  *.mod $(CMD)
 
 install:
 	mv $(CMD) ../../exec/$(CMD)
