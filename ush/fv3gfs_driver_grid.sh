@@ -3,6 +3,19 @@
 # Note: the sfc_climo_gen program only runs with an
 # mpi task count that is a multiple of six.
 
+#---- WCOSS DELL JOBCARD
+#---- Submit script as "cat $script | bsub"
+##BSUB -oo log.grid.%J
+##BSUB -eo log.grid.%J
+##BSUB -q debug
+##BSUB -P FV3GFS-T2O
+##BSUB -J grid_fv3
+##BSUB -W 0:30
+##BSUB -x                 # run not shared
+##BSUB -n 24              # total tasks
+##BSUB -R span[ptile=24]   # tasks per node
+##BSUB -R affinity[core(1):distribute=balance]
+
 #---- WCOSS_CRAY JOBCARD
 #---- Submit script as "cat $script | bsub"
 #BSUB -L /bin/sh
@@ -28,11 +41,8 @@
 
 set -ax
 
-#machine=THEIA
+#machine=THEIA   # THEIA, WCOSS_DELL_P3 or WCOSS_C
 export machine=${machine:-WCOSS_C}
-
-ulimit -a
-ulimit -s unlimited
 
 #-----------------------------
 # Makes FV3 cubed-sphere grid
@@ -59,6 +69,25 @@ if [ $machine = WCOSS_C ]; then
   export OMP_NUM_THREADS=6
   export OMP_STACKSIZE=2048m
   export KMP_AFFINITY=disabled
+elif [ $machine = WCOSS_DELL_P3 ]; then
+# On dell, load the EnvVar module before setting any environment variables.
+  set +x
+  module purge
+  module load EnvVars/1.0.2
+  module load lsf/10.1
+  module load ips/18.0.1.163
+  module load impi/18.0.1
+  module load NetCDF/4.5.0
+  module load HDF5-serial/1.10.1
+  module list
+  set -x
+  export APRUN=time
+  export APRUN_SFC="mpirun -l"
+  export home_dir=$LS_SUBCWD/..
+  export TMPDIR=/gpfs/dell1/stmp/$LOGNAME/fv3_grid.$gtype
+  export out_dir=/gpfs/dell1/stmp/$LOGNAME/C${res}
+  export OMP_NUM_THREADS=24 # orog code worked best with 24 threads.
+  export OMP_STACKSIZE=2048m
 elif [ $machine = THEIA ]; then
   . /apps/lmod/lmod/init/sh
   set +x
@@ -76,11 +105,17 @@ elif [ $machine = THEIA ]; then
   export OMP_NUM_THREADS=24
   export OMP_STACKSIZE=2048m
   set -x
+else
+  echo $machine not supported.  Exiting.
+  exit 1
 fi
 
 export script_dir=$home_dir/ush
 export exec_dir=$home_dir/exec
 export topo=$home_dir/fix/fix_orog
+
+ulimit -a
+ulimit -s unlimited
 
 rm -fr $TMPDIR
 mkdir -p $out_dir $TMPDIR
@@ -182,7 +217,7 @@ if [ $gtype = uniform ];  then
     echo "$script_dir/fv3gfs_make_orog.sh $res 5 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
     rm $TMPDIR/orog.file1
-  elif [ $machine = THEIA ]; then
+  elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
     for tile in 1 2 3 4 5 6 ; do
       echo
       echo "............ execute fv3gfs_make_orog.sh for tile $tile .................."
@@ -239,7 +274,7 @@ elif [ $gtype = stretch ]; then
     echo "$script_dir/fv3gfs_make_orog.sh $res 6 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
     rm $TMPDIR/orog.file1
-  elif [ $machine = THEIA ]; then
+  elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
     for tile in 1 2 3 4 5 6 ; do
       echo
       echo "............ execute fv3gfs_make_orog.sh for tile $tile .................."
@@ -297,7 +332,7 @@ elif [ $gtype = nest ]; then
     echo "$script_dir/fv3gfs_make_orog.sh $res 7 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
     rm $TMPDIR/orog.file1
-  elif [ $machine = THEIA ]; then
+  elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
     for tile in 1 2 3 4 5 6 7; do
       echo
       echo "............ execute fv3gfs_make_orog.sh for tile $tile .................."
@@ -395,7 +430,7 @@ elif [ $gtype = regional ]; then
     echo "$script_dir/fv3gfs_make_orog.sh $res 7 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
     rm $TMPDIR/orog.file1
-  elif [ $machine = THEIA ]; then
+  elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
     echo
     echo "............ execute fv3gfs_make_orog.sh for tile $tile .................."
     $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
