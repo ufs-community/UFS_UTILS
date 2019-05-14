@@ -1,5 +1,10 @@
 #!/bin/sh
-#----WCOSS_CRAY JOBCARD
+
+# Note: the sfc_climo_gen program only runs with an
+# mpi task count that is a multiple of six.
+
+#---- WCOSS_CRAY JOBCARD
+#---- Submit script as "cat $script | bsub"
 #BSUB -L /bin/sh
 #BSUB -P FV3GFS-T2O
 #BSUB -oo log.grid.%J
@@ -17,9 +22,9 @@
 ##SBATCH --open-mode=truncate
 ##SBATCH -o log.fv3_grid_driver
 ##SBATCH -e log.fv3_grid_driver
-##SBATCH --nodes=1 --ntasks-per-node=12
+##SBATCH --nodes=1 --ntasks-per-node=24
 ##SBATCH -q debug
-##SBATCH -t 0:30:00
+##SBATCH -t 00:30
 
 set -ax
 
@@ -37,48 +42,46 @@ export USER=$LOGNAME
 export res=96              # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
 export gtype=uniform       # grid type: uniform, stretch, nest or regional
 
-#----------------------------------------------------------------
-# The orography code runs with threads.  On Cray, the code is
-# optimized for six threads.  Do not change.
-#----------------------------------------------------------------
-
-export OMP_NUM_THREADS=6
-export OMP_STACKSIZE=2048m
-
 if [ $machine = WCOSS_C ]; then
- set +x
- . $MODULESHOME/init/sh
- module load PrgEnv-intel cfp-intel-sandybridge/1.1.0
- module list
- set -x
- export NODES=1
- export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"
- export APRUN_SFC="aprun -j 1 -n 12 -N 12"
- export KMP_AFFINITY=disabled
- export home_dir=$LS_SUBCWD/..
- export topo=/gpfs/hps3/emc/global/noscrub/emc.glopara/git/fv3gfs/fix/fix_orog
- export TMPDIR=/gpfs/hps3/stmp/$LOGNAME/fv3_grid.$gtype
+  set +x
+  . $MODULESHOME/init/sh
+  module load PrgEnv-intel cfp-intel-sandybridge/1.1.0
+  module list
+  set -x
+  export NODES=1
+  export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"
+  export APRUN_SFC="aprun -j 1 -n 12 -N 12"
+  export home_dir=$LS_SUBCWD/..
+  export topo=/gpfs/hps3/emc/global/noscrub/emc.glopara/git/fv3gfs/fix/fix_orog
+  export TMPDIR=/gpfs/hps3/stmp/$LOGNAME/fv3_grid.$gtype
+  export out_dir=/gpfs/hps3/stmp/$LOGNAME/C${res}
+#  On Cray, the orography code is optimized for six threads.
+#  Do not change.
+  export OMP_NUM_THREADS=6
+  export OMP_STACKSIZE=2048m
+  export KMP_AFFINITY=disabled
 elif [ $machine = THEIA ]; then
- . /apps/lmod/lmod/init/sh
- set +x
- module purge
- module load intel/16.1.150
- module load impi
- module load hdf5/1.8.14
- module load netcdf/4.3.0
- module list
- export APRUN=time
- export APRUN_SFC=srun
- export home_dir=$SLURM_SUBMIT_DIR/..
- export topo=/scratch4/NCEPDEV/global/save/glopara/git/fv3gfs/fix/fix_orog
- export TMPDIR=/scratch3/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
- set -x
+  . /apps/lmod/lmod/init/sh
+  set +x
+  module purge
+  module load intel/16.1.150
+  module load impi
+  module load hdf5/1.8.14
+  module load netcdf/4.3.0
+  module list
+  export APRUN=time
+  export APRUN_SFC=srun
+  export home_dir=$SLURM_SUBMIT_DIR/..
+  export topo=/scratch4/NCEPDEV/global/save/glopara/git/fv3gfs/fix/fix_orog
+  export TMPDIR=/scratch3/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
+  export out_dir=/scratch3/NCEPDEV/stmp1/$LOGNAME/C${res}
+  export OMP_NUM_THREADS=24
+  export OMP_STACKSIZE=2048m
+  set -x
 fi
-#----------------------------------------------------------------
 
 export script_dir=$home_dir/ush
 export exec_dir=$home_dir/exec
-export out_dir=/gpfs/hps3/stmp/$LOGNAME/C${res}
 
 rm -fr $TMPDIR
 mkdir -p $out_dir $TMPDIR
