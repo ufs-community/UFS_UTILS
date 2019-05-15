@@ -1,7 +1,7 @@
 #!/bin/ksh
 set -ex
 
-#--make symbolic links for EMC installation and hardcopies for NCO delivery
+#--Make symbolic links to 'fixed' directories.
 
 RUN_ENVIR=${1}
 machine=${2}

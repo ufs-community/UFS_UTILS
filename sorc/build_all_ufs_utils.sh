@@ -30,7 +30,7 @@ fi
 # INCLUDE PARTIAL BUILD 
 #------------------------------------
 
-. ./partial_build.sh
+. ./partial_ufs_build.sh
 
 #------------------------------------
 # build NEMS util
@@ -49,11 +49,19 @@ echo " .... Building chgres .... "
 }
 
 #------------------------------------
-# build sfcanl_nsttfchg 
+# build chgres_cube
 #------------------------------------
-$Build_sfcanl_nsttfchg && {
+$Build_chgres_cube && {
+echo " .... Building chgres_cube .... "
+./build_chgres_cube.sh > $logs_dir/build_chgres_cube.log 2>&1
+}
+
+#------------------------------------
+# build nst_tf_chg 
+#------------------------------------
+$Build_nst_tf_chg && {
 echo " .... Building nst_tf_chg .... "
-./build_sfcanl_nsttfchg.sh > $logs_dir/build_sfcanl_nsttfchg.log 2>&1
+./build_nst_tf_chg.sh > $logs_dir/build_nst_tf_chg.log 2>&1
 }
 
 #------------------------------------
@@ -73,11 +81,11 @@ echo " .... Building cycle .... "
 }
 
 #------------------------------------
-# build tropcy_NEMS
+# build gettrk
 #------------------------------------
-$Build_tropcy && {
-echo " .... Building tropcy_NEMS .... "
-./build_tropcy_NEMS.sh > $logs_dir/build_tropcy_NEMS.log 2>&1
+$Build_gettrk && {
+echo " .... Building gettrk .... "
+./build_gettrk.sh > $logs_dir/build_gettrk.log 2>&1
 }
 
 #------------------------------------
