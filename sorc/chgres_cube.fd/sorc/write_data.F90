@@ -1028,7 +1028,8 @@
  use netcdf
 
  use program_setup, only           : halo=>halo_bndy, &
-                                     input_type, tracers, num_tracers
+                                     input_type, tracers, num_tracers, &
+                                     regional
 
  use atmosphere, only              : lev_target, &
                                      levp1_target, &
@@ -2622,7 +2623,7 @@
                                    landmask_target_grid, &
                                    i_target, j_target, lsoil_target
 
- use program_setup, only         : halo=>halo_bndy
+ use program_setup, only         : halo=>halo_bndy, regional
 
  use surface, only               : canopy_mc_target_grid,  &
                                    f10m_target_grid, &

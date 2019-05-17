@@ -300,8 +300,7 @@
                                        num_tiles_target_grid, &
                                        landmask_target_grid, &
                                        seamask_target_grid,  &
-                                       latitude_target_grid, &
-                                       input_grid_type
+                                       latitude_target_grid
 
  use program_setup, only             : convert_nst
 
@@ -526,11 +525,9 @@
 ! Interpolate.
 !-----------------------------------------------------------------------
 
- if (trim(input_grid_type) == "latlon") then
-    method=ESMF_REGRIDMETHOD_CONSERVE
- else
-    method=ESMF_REGRIDMETHOD_BILINEAR
- endif
+
+ method=ESMF_REGRIDMETHOD_CONSERVE
+
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for sea ice fraction."
@@ -864,11 +861,8 @@
  mask_target_ptr = 0
  where (landmask_target_ptr == 0) mask_target_ptr = 1
 
-  if (trim(input_grid_type) == "latlon") then
     method=ESMF_REGRIDMETHOD_CONSERVE
- else
-    method=ESMF_REGRIDMETHOD_BILINEAR
- endif
+
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for water fields."
@@ -1575,11 +1569,9 @@
  mask_target_ptr = 0
  where (landmask_target_ptr == 1) mask_target_ptr = 1
 
-  if (trim(input_grid_type) == "latlon") then
+
     method=ESMF_REGRIDMETHOD_CONSERVE
- else
-    method=ESMF_REGRIDMETHOD_BILINEAR
- endif
+
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for land fields."

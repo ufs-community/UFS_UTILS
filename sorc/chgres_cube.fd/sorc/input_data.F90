@@ -2773,8 +2773,8 @@
                                           qptr(:,:,:), wptr(:,:,:)
                                           
  real(esmf_kind_r4)                     :: value
- real(esmf_kind_r8)										 :: pt
- real(esmf_kind_r8), parameter				 :: p0 = 100000.0
+ real(esmf_kind_r8)                    :: pt
+ real(esmf_kind_r8), parameter         :: p0 = 100000.0
  
  type(atmdata), allocatable   :: atm(:)
  
@@ -2823,7 +2823,7 @@
       lev_input=iret
     endif
  !endif
- 		print*, "lev_input = ", lev_input
+    print*, "lev_input = ", lev_input
     allocate(slevs(lev_input))
     allocate(rlevs(lev_input))
     levp1_input = lev_input + 1
@@ -2840,9 +2840,9 @@
       read(metadata(j:k),*) rlevs(i)
     
       slevs(i) = metadata(j-1:k)
-    	
+      
       if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
-			if (localpet==0) print*, "LEVEL = ", slevs
+      if (localpet==0) print*, "LEVEL = ", slevs
     enddo
 
    allocate(vcoord(levp1_input,2))
@@ -4370,7 +4370,7 @@ if (localpet == 0) then
  real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:)
  real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:)
  
- integer(esmf_kind_i4), allocatable 			:: dummy2di(:,:), slmsk_save(:,:)
+ integer(esmf_kind_i4), allocatable       :: dummy2di(:,:), slmsk_save(:,:)
  
 
  the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
@@ -4485,10 +4485,10 @@ if (localpet == 0) then
    
    do j = 1, j_input
      do i = 1, i_input
-			 if(dummy2d(i,j) < 0.5) dummy2d(i,j)=0.0_esmf_kind_r4
-			 if(slmsk_save(i,j) > 0.15) dummy2d(i,j) = 2.0_esmf_kind_r4
-		 enddo
-	 enddo
+       if(dummy2d(i,j) < 0.5) dummy2d(i,j)=0.0_esmf_kind_r4
+       if(slmsk_save(i,j) > 0.15) dummy2d(i,j) = 2.0_esmf_kind_r4
+     enddo
+   enddo
    slmsk_save = dummy2d
   
    print*,'landmask ',maxval(dummy2di),minval(dummy2di)
@@ -4522,9 +4522,9 @@ if (localpet == 0) then
    endif
    do j = 1, j_input
      do i = 1, i_input
-			 if(slmsk_save(i,j) < 0.5) dummy2d(i,j) = 0.0_esmf_kind_r4
-		 enddo
-	 enddo
+       if(slmsk_save(i,j) < 0.5) dummy2d(i,j) = 0.0_esmf_kind_r4
+     enddo
+   enddo
    print*,'weasd ',maxval(dummy2d),minval(dummy2d)
  endif
 
@@ -4927,9 +4927,9 @@ if (localpet == 0) then
    do k=1,lsoil_input
      do j = 1, j_input
        do i = 1, i_input
-				 if (slmsk_save(i,j) < 0.5 ) dummy3d(i,j,k) = tsk_save(i,j)
-			 enddo
-		 enddo
+         if (slmsk_save(i,j) < 0.5 ) dummy3d(i,j,k) = tsk_save(i,j)
+       enddo
+     enddo
    enddo
    print*,'soilt ',maxval(dummy3d),minval(dummy3d)
  endif
