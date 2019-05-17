@@ -7,9 +7,9 @@ if [ $nargv -ne 3 -a $nargv -ne 6 -a $nargv -ne 12 ]; then
    echo "Usage for regular cubic sphere grid: "
    echo "  $0 resolution out_dir script_dir"
    echo "Usage for Stretched grid: "
-   echo "  $0 resolution out_dir stetch_fac target_lon target_lat script_dir"
+   echo "  $0 resolution out_dir stretch_fac target_lon target_lat script_dir"
    echo "Usage for Nested grid: "
-   echo "  $0 resolution out_dir stetch_fac target_lon target_lat refine_ratio istart_nest jstart_nest iend_nest jend_nest halo script_dir"
+   echo "  $0 resolution out_dir stretch_fac target_lon target_lat refine_ratio istart_nest jstart_nest iend_nest jend_nest halo script_dir"
    exit 1
 fi
 
@@ -41,7 +41,8 @@ elif  [ $nargv -eq 6 ]; then
     echo "executable does not exist"
     exit 1 
   fi
-  $APRUN $executable --grid_type gnomonic_ed --nlon $nx --grid_name C${res}_grid --do_schmidt --stretch_factor ${stretch_fac} --target_lon ${target_lon} --target_lat ${target_lat} 
+  $APRUN $executable --grid_type gnomonic_ed --nlon $nx --grid_name C${res}_grid \
+                     --do_schmidt --stretch_factor ${stretch_fac} --target_lon ${target_lon} --target_lat ${target_lat} 
 
 elif  [ $nargv -eq 12 ]; then
   export stretch_fac=$3
@@ -64,8 +65,10 @@ elif  [ $nargv -eq 12 ]; then
     echo "executable does not exist"
     exit 1 
   fi
-  $APRUN $executable --grid_type gnomonic_ed --nlon $nx --grid_name C${res}_grid --do_schmidt --stretch_factor ${stretch_fac} --target_lon ${target_lon} --target_lat ${target_lat} \
-     --nest_grid --parent_tile 6 --refine_ratio $refine_ratio --istart_nest $istart_nest --jstart_nest $jstart_nest --iend_nest $iend_nest --jend_nest $jend_nest --halo $halo --great_circle_algorithm
+  $APRUN $executable --grid_type gnomonic_ed --nlon $nx --grid_name C${res}_grid \
+                     --do_schmidt --stretch_factor ${stretch_fac} --target_lon ${target_lon} --target_lat ${target_lat} \
+                     --nest_grid --parent_tile 6 --refine_ratio $refine_ratio --istart_nest $istart_nest --jstart_nest $jstart_nest \
+                     --iend_nest $iend_nest --jend_nest $jend_nest --halo $halo --great_circle_algorithm
 
 fi
 
@@ -82,12 +85,15 @@ if [ ! -s $executable ]; then
 fi
 
 if [ $ntiles -eq 6 ]; then
-  $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc
+  $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic \
+         --tile_file C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc
 
 elif [ $ntiles -eq 7 ]; then
-  $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc,C${res}_grid.tile7.nc    
+  $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic \
+         --tile_file C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc,C${res}_grid.tile7.nc    
 
-  $APRUN $executable --num_tiles 6 --dir $outdir --mosaic C${res}_coarse_mosaic --tile_file C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc
+  $APRUN $executable --num_tiles 6 --dir $outdir --mosaic C${res}_coarse_mosaic \
+         --tile_file C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc
 
   $APRUN $executable --num_tiles 1 --dir $outdir --mosaic C${res}_nested_mosaic --tile_file C${res}_grid.tile7.nc 
 #

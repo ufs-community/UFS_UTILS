@@ -1,32 +1,75 @@
 #!/bin/sh
-
-# Note: the sfc_climo_gen program only runs with an
-# mpi task count that is a multiple of six.
+#
+#-----------------------------------------------------------------------
+# Driver script to create a cubic-sphere based model grid.
+#
+# Supports the following grids:
+#   1) global uniform
+#   2) global stretched
+#   3) global stretched with nest
+#   4) stand-alone regional
+#
+# Produces the following files (netcdf, each tile in separate file):
+#   1) 'mosaic' and 'grid' files containing lat/lon and other
+#      records that describe the model grid.
+#   2) 'oro' files containing land mask, terrain and gravity
+#      wave drag fields.
+#   3) surface climo fields, such as soil type, vegetation
+#      greenness and albedo.
+#
+# Note: The sfc_climo_gen program only runs with an
+#       mpi task count that is a multiple of six.  This is
+#       an ESMF library requirement.
+#
+# To run, do the following:
+#   1) Uncomment workload management directives for your machine.
+#      Script runs on Theia, WCOSS-Cray and WCOSS-Dell.
+#   2) Set "machine" - choices are "THEIA", "WCOSS_C"
+#      and "WCOSS_DELL_P3".
+#   3) Set "C" resolution, "res" - Example: res=96.
+#   4) Set grid type ("gtype").  Valid choices are
+#         "uniform"  - global uniform grid
+#         "stretch"  - global stretched grid
+#         "nest"     - global stretched grid with nest
+#         "regional" - stand-alone regional grid
+#   5) For "stretch" and "nest" grids, set the stretching factor -
+#       "stretch_fac", and center lat/lon of highest resolution
+#      tile - "target_lat" and "target_lon".
+#   6) For "nest" grids, set the refinement ratio - "refine_ratio", 
+#      the starting/ending i/j index location within the parent
+#      tile - "istart_nest", "jstart_nest", "iend_nest", "jend_nest"
+#   7) For "regional" grids, set the "halo".  Default is three
+#      rows/columns.
+#   8) Submit script.  On Theia: "sbatch $script".  On Cray and Dell:
+#      "cat $script | bsub".
+#   9) All files will be placed in "out_dir".
+#   
+#-----------------------------------------------------------------------
 
 #---- WCOSS DELL JOBCARD
 #---- Submit script as "cat $script | bsub"
-##BSUB -oo log.grid.%J
-##BSUB -eo log.grid.%J
-##BSUB -q debug
-##BSUB -P FV3GFS-T2O
-##BSUB -J grid_fv3
-##BSUB -W 0:30
-##BSUB -x                 # run not shared
-##BSUB -n 24              # total tasks
-##BSUB -R span[ptile=24]   # tasks per node
-##BSUB -R affinity[core(1):distribute=balance]
+#BSUB -oo log.grid.%J
+#BSUB -eo log.grid.%J
+#BSUB -q debug
+#BSUB -P FV3GFS-T2O
+#BSUB -J grid_fv3
+#BSUB -W 0:30
+#BSUB -x                 # run not shared
+#BSUB -n 24              # total tasks
+#BSUB -R span[ptile=24]   # tasks per node
+#BSUB -R affinity[core(1):distribute=balance]
 
 #---- WCOSS_CRAY JOBCARD
 #---- Submit script as "cat $script | bsub"
-#BSUB -L /bin/sh
-#BSUB -P FV3GFS-T2O
-#BSUB -oo log.grid.%J
-#BSUB -eo log.grid.%J
-#BSUB -J grid_fv3
-#BSUB -q debug
-#BSUB -M 2400
-#BSUB -W 00:30
-#BSUB -extsched 'CRAYLINUX[]'
+##BSUB -L /bin/sh
+##BSUB -P FV3GFS-T2O
+##BSUB -oo log.grid.%J
+##BSUB -eo log.grid.%J
+##BSUB -J grid_fv3
+##BSUB -q debug
+##BSUB -M 2400
+##BSUB -W 00:30
+##BSUB -extsched 'CRAYLINUX[]'
 
 #---- THEIA JOBCARD
 #---- Submit script as 'sbatch $script'
@@ -41,16 +84,44 @@
 
 set -ax
 
-#machine=THEIA   # THEIA, WCOSS_DELL_P3 or WCOSS_C
+machine=WCOSS_DELL_P3   # THEIA, WCOSS_DELL_P3 or WCOSS_C
 export machine=${machine:-WCOSS_C}
 
-#-----------------------------
+#----------------------------------------------------------------------------------
 # Makes FV3 cubed-sphere grid
-#-----------------------------
+#----------------------------------------------------------------------------------
 
-export USER=$LOGNAME 
 export res=96              # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
-export gtype=uniform       # grid type: uniform, stretch, nest or regional
+export gtype=regional       # grid type: uniform, stretch, nest or regional
+
+if [ $gtype = uniform ];  then
+  echo "Creating uniform ICs"
+elif [ $gtype = stretch ]; then
+  stretch_fac=1.5       # Stretching factor for the grid
+  target_lon=-97.5      # Center longitude of the highest resolution tile
+  target_lat=35.5       # Center latitude of the highest resolution tile
+  title=c${res}s        # Identifier based on refined location
+  echo "Creating stretched grid"
+elif [ $gtype = nest ] || [ $gtype = regional ]; then
+  stretch_fac=1.5       # Stretching factor for the grid
+  target_lon=-97.5      # Center longitude of the highest resolution tile
+  target_lat=35.5       # Center latitude of the highest resolution tile
+  refine_ratio=3        # The refinement ratio
+  istart_nest=27        # Starting i-direction index of nest grid in parent tile supergrid
+  jstart_nest=37        # Starting j-direction index of nest grid in parent tile supergrid
+  iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
+  jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
+  halo=3                # Halo size. Regional grids only.
+  title=c${res}s        # Identifier based on nest location
+  if [ $gtype = nest ];then
+   echo "Creating global nested grid"
+  else
+   echo "Creating regional grid"
+  fi
+else
+  echo "Error: please specify grid type with 'gtype' as uniform, stretch, nest or regional"
+  exit 9
+fi
 
 if [ $machine = WCOSS_C ]; then
   set +x
@@ -121,59 +192,29 @@ rm -fr $TMPDIR
 mkdir -p $out_dir $TMPDIR
 cd $TMPDIR ||exit 8
 
-#----------------------------------------------------------------
-if [ $gtype = uniform ];  then
-  echo "creating uniform ICs"
-elif [ $gtype = stretch ]; then
-  export stetch_fac=1.5   # Stretching factor for the grid
-  export target_lon=-97.5 # center longitude of the highest resolution tile
-  export target_lat=35.5  # center latitude of the highest resolution tile
-  export title=c96s		  # identifier based on refined location
-  echo "creating stretched grid"
-elif [ $gtype = nest ] || [ $gtype = regional ]; then
-  export stetch_fac=1.5  	 # Stretching factor for the grid
-  export target_lon=-97.5   	 # center longitude of the highest resolution tile
-  export target_lat=35.5 	 # center latitude of the highest resolution tile
-  export refine_ratio=3 	 # Specify the refinement ratio for nest grid
-  export istart_nest=27    	 # Specify the starting i-direction index of nest grid in parent tile supergrid(Fortran index)
-  export jstart_nest=37    	 # Specify the starting j-direction index of nest grid in parent tile supergrid(Fortran index)
-  export iend_nest=166    	 # Specify the ending i-direction index of nest grid in parent tile supergrid(Fortran index)
-  export jend_nest=164    	 # Specify the ending j-direction index of nest grid in parent tile supergrid(Fortran index)
-  export halo=3  	 # halo size to be used in the atmosphere cubic sphere model. It only needs to be specified when --nest_grid is set
-  export title=c96s	 # identifier based on nest location
-  if [ $gtype = nest ];then
-   echo "creating nested grid"
-  else
-   echo "creating regional grid"
-  fi
-else
-  echo "Error: please specify grid type with 'gtype' as uniform, stretch, nest or regional"
-  exit 9
-fi
-
 #----------------------------------------------------------------------------------------
 # filter_topo parameters. C192->50km, C384->25km, C768->13km, C1152->8.5km, C3072->3.2km
 #----------------------------------------------------------------------------------------
 
 if [ $res -eq 48 ]; then 
- export cd4=0.12;  export max_slope=0.12; export n_del2_weak=4;   export peak_fac=1.1  
+  cd4=0.12;  max_slope=0.12; n_del2_weak=4; peak_fac=1.1  
 elif [ $res -eq 96 ]; then 
- export cd4=0.12;  export max_slope=0.12; export n_del2_weak=8;   export peak_fac=1.1  
+  cd4=0.12;  max_slope=0.12; n_del2_weak=8; peak_fac=1.1  
 elif [ $res -eq 128 ]; then
- export cd4=0.13;  export max_slope=0.12; export n_del2_weak=8;   export peak_fac=1.1
+  cd4=0.13;  max_slope=0.12; n_del2_weak=8;  peak_fac=1.1
 elif [ $res -eq 192 ]; then 
- export cd4=0.15;  export max_slope=0.12; export n_del2_weak=12;  export peak_fac=1.05  
+  cd4=0.15;  max_slope=0.12; n_del2_weak=12; peak_fac=1.05  
 elif [ $res -eq 384 ]; then 
- export cd4=0.15;  export max_slope=0.12; export n_del2_weak=12;  export peak_fac=1.0  
+  cd4=0.15;  max_slope=0.12; n_del2_weak=12; peak_fac=1.0  
 elif [ $res -eq 768 ]; then 
- export cd4=0.15;  export max_slope=0.12; export n_del2_weak=16;   export peak_fac=1.0  
+  cd4=0.15;  max_slope=0.12; n_del2_weak=16; peak_fac=1.0  
 elif [ $res -eq 1152 ]; then 
- export cd4=0.15;  export max_slope=0.16; export n_del2_weak=20;   export peak_fac=1.0  
+  cd4=0.15;  max_slope=0.16; n_del2_weak=20; peak_fac=1.0  
 elif [ $res -eq 3072 ]; then 
- export cd4=0.15;  export max_slope=0.30; export n_del2_weak=24;   export peak_fac=1.0  
+  cd4=0.15;  max_slope=0.30; n_del2_weak=24; peak_fac=1.0  
 else
  echo "grid C$res not supported, exit"
- exit
+ exit 2
 fi
 
 #----------------------------------------------------------------------------------
@@ -187,10 +228,10 @@ fi
 if [ $gtype = uniform ];  then
 
   export ntiles=6
-  export name=C${res}
-  export grid_dir=$TMPDIR/$name/grid
-  export orog_dir=$TMPDIR/$name/orog
-  export filter_dir=$TMPDIR/$name/filter_topo
+  name=C${res}
+  grid_dir=$TMPDIR/$name/grid
+  orog_dir=$TMPDIR/$name/orog
+  filter_dir=$TMPDIR/$name/filter_topo
   rm -rf $TMPDIR/$name                  
   mkdir -p $grid_dir $orog_dir $filter_dir
 
@@ -243,17 +284,17 @@ if [ $gtype = uniform ];  then
 elif [ $gtype = stretch ]; then
 
   export ntiles=6
-  export rn=$( echo "$stetch_fac * 10" | bc | cut -c1-2 )
-  export name=C${res}r${rn}_${title}
-  export grid_dir=$TMPDIR/${name}/grid
-  export orog_dir=$TMPDIR/$name/orog
-  export filter_dir=$TMPDIR/${name}/filter_topo
+  rn=$( echo "$stretch_fac * 10" | bc | cut -c1-2 )
+  name=C${res}r${rn}_${title}
+  grid_dir=$TMPDIR/${name}/grid
+  orog_dir=$TMPDIR/$name/orog
+  filter_dir=$TMPDIR/${name}/filter_topo
   rm -rf $TMPDIR/$name                  
   mkdir -p $grid_dir $orog_dir $filter_dir
 
   echo 
   echo "............ execute fv3gfs_make_grid.sh ................."
-  $script_dir/fv3gfs_make_grid.sh $res $grid_dir $stetch_fac $target_lon $target_lat $script_dir
+  $script_dir/fv3gfs_make_grid.sh $res $grid_dir $stretch_fac $target_lon $target_lat $script_dir
   err=$?
   if [ $err != 0 ]; then
     exit $err
@@ -300,17 +341,17 @@ elif [ $gtype = stretch ]; then
 elif [ $gtype = nest ]; then
 
   export ntiles=7
-  export rn=$( echo "$stetch_fac * 10" | bc | cut -c1-2 )
-  export name=C${res}r${rn}n${refine_ratio}_${title}
-  export grid_dir=$TMPDIR/${name}/grid
-  export orog_dir=$TMPDIR/$name/orog
-  export filter_dir=$orog_dir   # nested grid topography will be filtered online
+  rn=$( echo "$stretch_fac * 10" | bc | cut -c1-2 )
+  name=C${res}r${rn}n${refine_ratio}_${title}
+  grid_dir=$TMPDIR/${name}/grid
+  orog_dir=$TMPDIR/$name/orog
+  filter_dir=$orog_dir   # nested grid topography will be filtered online
   rm -rf $TMPDIR/$name                  
   mkdir -p $grid_dir $orog_dir $filter_dir
 
   echo 
   echo "............ execute fv3gfs_make_grid.sh ................."
-  $script_dir/fv3gfs_make_grid.sh $res $grid_dir $stetch_fac $target_lon $target_lat $refine_ratio $istart_nest $jstart_nest $iend_nest $jend_nest $halo $script_dir
+  $script_dir/fv3gfs_make_grid.sh $res $grid_dir $stretch_fac $target_lon $target_lat $refine_ratio $istart_nest $jstart_nest $iend_nest $jend_nest $halo $script_dir
   err=$?
   if [ $err != 0 ]; then
     exit $err
@@ -353,7 +394,7 @@ elif [ $gtype = regional ]; then
 #----------------------------------------------------------------------------------
  
   export ntiles=1
-  export halop1=4 #we need a halo of 4 for the boundary data
+  halop1=$(( halo + 1 ))
   tile=7
   set +x # don't echo all the computation to figure out how many points to add/subtract from start/end nest values
  
@@ -402,17 +443,17 @@ elif [ $gtype = regional ]; then
  
   export ntiles=1
   tile=7
-  export rn=$( echo "$stetch_fac * 10" | bc | cut -c1-2 )
-  export name=C${res}r${rn}n${refine_ratio}_${title}
-  export grid_dir=$TMPDIR/${name}/grid
-  export orog_dir=$TMPDIR/$name/orog
-  export filter_dir=$orog_dir   # nested grid topography will be filtered online
+  rn=$( echo "$stretch_fac * 10" | bc | cut -c1-2 )
+  name=C${res}r${rn}n${refine_ratio}_${title}
+  grid_dir=$TMPDIR/${name}/grid
+  orog_dir=$TMPDIR/$name/orog
+  filter_dir=$orog_dir   # nested grid topography will be filtered online
   rm -rf $TMPDIR/$name
   mkdir -p $grid_dir $orog_dir $filter_dir
 
   echo
   echo "............ execute fv3gfs_make_grid.sh ................."
-  $script_dir/fv3gfs_make_grid.sh $res $grid_dir $stetch_fac $target_lon $target_lat $refine_ratio \
+  $script_dir/fv3gfs_make_grid.sh $res $grid_dir $stretch_fac $target_lon $target_lat $refine_ratio \
     $istart_nest_halo $jstart_nest_halo $iend_nest_halo $jend_nest_halo $halo $script_dir
   err=$?
   if [ $err != 0 ]; then
