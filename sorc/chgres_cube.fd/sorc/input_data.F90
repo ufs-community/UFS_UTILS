@@ -108,7 +108,7 @@
  integer, public                 :: P_QC, P_QNC,P_QI,  &  ! Use for keeping track of tracer
                                     P_QNI, P_QR, P_QNR, & ! locations in tracer fields for
                                     P_QNWFA, P_QV         ! use in creating # concentrations 
-
+ character(len=50), allocatable         :: slevs(:)
 ! Fields associated with the nst model.
 
  type(esmf_field), public        :: c_d_input_grid
@@ -2740,6 +2740,7 @@
  
  use grib2_util, only                   : read_vcoord, iso2sig, rh2spfh, convert_omega
  use model_grid, only                   : file_is_converted
+
  implicit none
 
  integer, intent(in)                   :: localpet
@@ -2753,7 +2754,6 @@
                                           tracers_input_grib(ntrac_max), tmpstr, & 
                                           method, tracers_input_vmap(ntrac_max), &
                                           tracers_default(ntrac_max)
- character(len=50), allocatable         :: slevs(:)
  character (len=500)                    :: metadata
 
  integer                               :: i, j, k, n, lvl_str_space_len
@@ -2768,7 +2768,8 @@
  real(esmf_kind_r8), allocatable       :: vcoord(:,:)
  real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
- real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:)
+ real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
+                                          u_tmp_3d(:,:,:), v_tmp_3d(:,:,:)
  real(esmf_kind_r8), pointer           :: presptr(:,:,:), psptr(:,:),tptr(:,:,:), &
                                           qptr(:,:,:), wptr(:,:,:)
                                           
@@ -3064,55 +3065,21 @@
       call error_handler("IN FieldScatter", rc)
 
  enddo
-
+ 
  if (localpet == 0) then
-   print*,"- READ U-WINDS."
-   vname = "u"
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                         loc=varnum)
-   vname = ":UGRD:"
-   do vlev = 1, lev_input
-     iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
-     if (iret <= 0) then
-        call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
-        if (iret==1) then ! missing_var_method == skip 
-
-          call error_handler("READING IN U AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
-                        "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
-        endif
-     endif
-     print*,'ugrd ',vlev, maxval(dummy2d),minval(dummy2d)
-     dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-   enddo
+   call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d) 
+ else
+   allocate(u_tmp_3d(0,0,0))
+   allocate(v_tmp_3d(0,0,0))
  endif
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT U-WIND."
- call ESMF_FieldScatter(u_input_grid, dummy3d, rootpet=0, rc=rc)
+ call ESMF_FieldScatter(u_input_grid, u_tmp_3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldScatter", rc)
 
- if (localpet == 0) then
-   print*,"- READ V-WINDS."
-   vname = "v"
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                         loc=varnum)
-   vname = ":VGRD:"
-   do vlev = 1, lev_input
-     iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
-     if (iret <= 0) then
-      call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
-      if (iret==1) then ! missing_var_method == skip 
-        call error_handler("READING IN V AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
-                        "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
-      endif
-     endif
-     print*,'vgrd ',vlev, maxval(dummy2d),minval(dummy2d)
-     dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-   enddo
- endif
-
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT V-WIND."
- call ESMF_FieldScatter(v_input_grid, dummy3d, rootpet=0, rc=rc)
+ call ESMF_FieldScatter(v_input_grid, v_tmp_3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldScatter", rc)
     
@@ -5615,6 +5582,92 @@ if (localpet == 0) then
  call ESMF_FieldDestroy(v_input_grid, rc=rc)
 
  end subroutine convert_winds
+
+!---------------------------------------------------------------------------
+! Read winds from a grib2 file
+!---------------------------------------------------------------------------
+
+ subroutine read_winds(file,inv,u,v)
+ 
+ use wgrib2api
+ use netcdf
+ use program_setup, only      : get_var_cond, base_install_dir
+ use model_grid, only         : input_grid_type
+ implicit none
+ 
+ character(len=250), intent(in)          :: file, inv
+ real(esmf_kind_r8), intent(inout), allocatable :: u(:,:,:),v(:,:,:)
+ 
+ real(esmf_kind_r4), dimension(i_input,j_input)  :: alpha
+ real(esmf_kind_r4), allocatable			   :: u_tmp(:,:), v_tmp(:,:)
+ real(esmf_kind_r4)                      :: value_u, value_v
+ 
+ integer                                 :: varnum_u, varnum_v, ncid, vlev, id_var, & 
+ 																						error, iret
+ 
+ character(len=20)						           :: vname
+ character(len=50)                       :: method_u, method_v
+ character(len=250)											 :: file_coord
+ 
+ allocate(u(i_input,j_input,lev_input))
+ allocate(v(i_input,j_input,lev_input))
+ 
+ file_coord = trim(base_install_dir)//"/fix/fix_chgres/latlon_grid3.32769.nc" 
+
+ vname = "u"
+ call get_var_cond(vname,this_miss_var_method=method_u, this_miss_var_value=value_u, &
+                       loc=varnum_u)
+ vname = "v"
+ call get_var_cond(vname,this_miss_var_method=method_v, this_miss_var_value=value_v, &
+                       loc=varnum_v)
+                       
+ if (trim(input_grid_type)=="rotated_latlon") then                     
+   print*,"- READ ROTATION ANGLE"
+   print*, trim(file_coord)
+   error=nf90_open(trim(file_coord),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening nc file' )
+   error=nf90_inq_varid(ncid, 'gridrot', id_var)
+   call netcdf_err(error, 'reading field id' )
+   error=nf90_get_var(ncid, id_var, alpha)
+   call netcdf_err(error, 'reading field' )
+   error = nf90_close(ncid)
+ endif
+ 
+ do vlev = 1, lev_input
+ 
+   vname = ":UGRD:"
+   iret = grb2_inq(file,inv,vname,slevs(vlev),data2=u_tmp)
+   if (iret <= 0) then
+      call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
+      if (iret==1) then ! missing_var_method == skip
+        call error_handler("READING IN U AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+      endif
+   endif
+   
+   vname = ":VGRD:"
+   iret = grb2_inq(file,inv,vname,slevs(vlev),data2=v_tmp)
+   if (iret <= 0) then
+      call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
+      if (iret==1) then ! missing_var_method == skip 
+        call error_handler("READING IN V AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
+                        "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+      endif
+    endif
+    
+    if (trim(input_grid_type)=="rotated_latlon") then   
+      u(:,:,vlev) = real(u_tmp * cos(alpha) - v_tmp * sin(alpha), esmf_kind_r8)
+      v(:,:,vlev) = real(v_tmp * cos(alpha) + u_tmp * sin(alpha), esmf_kind_r8)
+    else
+      u(:,:,vlev) = u_tmp
+      v(:,:,vlev) = v_tmp
+    endif
+    
+    print*, 'max, min U ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
+    print*, 'max, min V ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
+ enddo
+
+end subroutine read_winds
 
 subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
   
