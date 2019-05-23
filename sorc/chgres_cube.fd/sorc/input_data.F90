@@ -2158,7 +2158,7 @@
  call ESMF_FieldDestroy(dpres_input_grid, rc=rc)
 
  end subroutine read_input_atm_history_file
-
+ 
 !---------------------------------------------------------------------------
 ! Read input grid surface data from a spectral gfs gaussian sfcio file.
 ! Prior to July 19, 2017.
@@ -2796,13 +2796,14 @@
  !endif
 
  print*,"- READ ATMOS DATA FROM GRIB2 FILE: ", trim(the_file)
+ print*,"- USE INVENTORY FILE ", inv_file
 
  print*,"- OPEN FILE."
  inquire(file=the_file,exist=iret)
  if (iret == 0) call error_handler("OPENING GRIB2 ATM FILE.", iret)
 
    !print*,"- READ VERTICAL LEVELS."
-   iret = grb2_inq(the_file,inv_file,":UGRD:","hybrid level:")
+   iret = grb2_inq(the_file,inv_file,":UGRD:"," hybrid level:")
    !if (iret < 0) call error_handler("COUNTING VERTICAL LEVELS.", iret)
   
     if (iret <= 0) then
@@ -3031,7 +3032,7 @@
        
       if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
-        if (iret==1) then ! missing_var_method == skip 
+        if (iret==1) then ! missing_var_method == skip or no entry
           if (trim(vname)==":SPFH:" .or. trim(vname) == ":RH:" .or.  &
               trim(vname) == ":O3MR:") then
             call error_handler("READING IN "//trim(vname)//" AT LEVEL "//trim(slevs(vlev))&
@@ -3066,12 +3067,7 @@
 
  enddo
  
- if (localpet == 0) then
-   call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d) 
- else
-   allocate(u_tmp_3d(0,0,0))
-   allocate(v_tmp_3d(0,0,0))
- endif
+ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet) 
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT U-WIND."
  call ESMF_FieldScatter(u_input_grid, u_tmp_3d, rootpet=0, rc=rc)
@@ -4317,7 +4313,7 @@ if (localpet == 0) then
 
   use wgrib2api
   use netcdf
-  use model_grid, only                  : file_is_converted
+
   implicit none
 
  integer, intent(in)                   :: localpet
@@ -4669,7 +4665,7 @@ if (localpet == 0) then
  !I haven't seen any grib files with icetk I don't think
  if (localpet == 0) then
    print*,"- READ SEAICE DEPTH."
-   vname="icetk"
+   vname="hice"
    slev=":surface:" 
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                          loc=varnum)                 
@@ -4685,7 +4681,7 @@ if (localpet == 0) then
       endif
     endif
    dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'icetk ',maxval(dummy2d),minval(dummy2d)
+   print*,'hice ',maxval(dummy2d),minval(dummy2d)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SEAICE DEPTH."
@@ -4850,14 +4846,16 @@ if (localpet == 0) then
     endif
    dummy2d_8= real(dummy2d,esmf_kind_r8)
    print*,'sfcr ',maxval(dummy2d),minval(dummy2d)
-   deallocate(dummy2d)
+   
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID Z0."
  call ESMF_FieldScatter(z0_input_grid,dummy2d_8, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldScatter", rc)
-
+    
+ deallocate(dummy2d)
+ 
  if (localpet == 0) then
    print*,"- READ LIQUID SOIL MOISTURE."
    vname = "soill"
@@ -4909,10 +4907,7 @@ if (localpet == 0) then
  deallocate(dummy3d)
  deallocate(dummy2d_8)
  
- if (localpet==0 .and. file_is_converted) call system("rm "//trim(the_file)) 
- 
  end subroutine read_input_sfc_grib2_file
-
 
 !---------------------------------------------------------------------------
 ! Read nst data from tiled history or restart files.
@@ -5587,30 +5582,38 @@ if (localpet == 0) then
 ! Read winds from a grib2 file
 !---------------------------------------------------------------------------
 
- subroutine read_winds(file,inv,u,v)
+ subroutine read_winds(file,inv,u,v,localpet)
  
  use wgrib2api
  use netcdf
- use program_setup, only      : get_var_cond, base_install_dir
+ use program_setup, only      : get_var_cond, base_install_dir, wgrib2_path
  use model_grid, only         : input_grid_type
  implicit none
  
  character(len=250), intent(in)          :: file, inv
+ integer, intent(in)                     :: localpet
  real(esmf_kind_r8), intent(inout), allocatable :: u(:,:,:),v(:,:,:)
  
  real(esmf_kind_r4), dimension(i_input,j_input)  :: alpha
- real(esmf_kind_r4), allocatable			   :: u_tmp(:,:), v_tmp(:,:)
- real(esmf_kind_r4)                      :: value_u, value_v
+ real(esmf_kind_r8), dimension(i_input,j_input)  :: lon
+ real(esmf_kind_r4), allocatable         :: u_tmp(:,:), v_tmp(:,:)
+ real(esmf_kind_r4)                      :: value_u, value_v, lov
  
  integer                                 :: varnum_u, varnum_v, ncid, vlev, id_var, & 
- 																						error, iret
+                                            error, iret, i
  
- character(len=20)						           :: vname
+ character(len=20)                       :: vname
  character(len=50)                       :: method_u, method_v
- character(len=250)											 :: file_coord
+ character(len=250)                      :: file_coord, cmdline_msg
+ character(len=10000)                    :: temp_msg
  
- allocate(u(i_input,j_input,lev_input))
- allocate(v(i_input,j_input,lev_input))
+ if (localpet==0) then
+   allocate(u(i_input,j_input,lev_input))
+   allocate(v(i_input,j_input,lev_input))
+ else
+   allocate(u(0,0,0))
+   allocate(v(0,0,0))
+ endif
  
  file_coord = trim(base_install_dir)//"/fix/fix_chgres/latlon_grid3.32769.nc" 
 
@@ -5621,53 +5624,105 @@ if (localpet == 0) then
  call get_var_cond(vname,this_miss_var_method=method_v, this_miss_var_value=value_v, &
                        loc=varnum_v)
                        
- if (trim(input_grid_type)=="rotated_latlon") then                     
-   print*,"- READ ROTATION ANGLE"
-   print*, trim(file_coord)
-   error=nf90_open(trim(file_coord),nf90_nowrite,ncid)
-   call netcdf_err(error, 'opening nc file' )
-   error=nf90_inq_varid(ncid, 'gridrot', id_var)
-   call netcdf_err(error, 'reading field id' )
-   error=nf90_get_var(ncid, id_var, alpha)
-   call netcdf_err(error, 'reading field' )
-   error = nf90_close(ncid)
+ if (trim(input_grid_type)=="rotated_latlon") then  
+   if (localpet==0) then                   
+     print*,"- READ ROTATION ANGLE"
+     print*, trim(file_coord)
+     error=nf90_open(trim(file_coord),nf90_nowrite,ncid)
+     call netcdf_err(error, 'opening nc file' )
+     error=nf90_inq_varid(ncid, 'gridrot', id_var)
+     call netcdf_err(error, 'reading field id' )
+     error=nf90_get_var(ncid, id_var, alpha)
+     call netcdf_err(error, 'reading field' )
+     error = nf90_close(ncid)
+   endif
+ elseif (trim(input_grid_type) == "lambert") then
+ 
+   print*,"- CALL FieldGather FOR INPUT GRID LONGITUDE"
+   call ESMF_FieldGather(longitude_input_grid, lon, rootPet=0, tile=1, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+        
+   if (localpet==0) then
+     cmdline_msg = trim(wgrib2_path)//" "//trim(file)//" -d 1 -grid &> temp.out"
+     call system(cmdline_msg)
+     open(4,file="temp2.out")
+     do i = 1,3
+      read(4,"(A)") temp_msg
+     enddo
+     close(4)
+     i = index(temp_msg, "LoV ") + len("LoV ")
+
+     read(temp_msg(i:i+10),*) lov
+   
+      print*, "- CALL GRIDROT"    
+      call gridrot(lov,lon,alpha)
+   endif
  endif
  
- do vlev = 1, lev_input
+ if (localpet==0) then
+   do vlev = 1, lev_input
  
-   vname = ":UGRD:"
-   iret = grb2_inq(file,inv,vname,slevs(vlev),data2=u_tmp)
-   if (iret <= 0) then
-      call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
-      if (iret==1) then ! missing_var_method == skip
-        call error_handler("READING IN U AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
-                      "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
-      endif
-   endif
-   
-   vname = ":VGRD:"
-   iret = grb2_inq(file,inv,vname,slevs(vlev),data2=v_tmp)
-   if (iret <= 0) then
-      call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
-      if (iret==1) then ! missing_var_method == skip 
-        call error_handler("READING IN V AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
+     vname = ":UGRD:"
+     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=u_tmp)
+     if (iret <= 0) then
+        call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
+        if (iret==1) then ! missing_var_method == skip
+          call error_handler("READING IN U AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
                         "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+        endif
+     endif
+   
+     vname = ":VGRD:"
+     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=v_tmp)
+     if (iret <= 0) then
+        call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
+        if (iret==1) then ! missing_var_method == skip 
+          call error_handler("READING IN V AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
+                          "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+        endif
       endif
-    endif
     
-    if (trim(input_grid_type)=="rotated_latlon") then   
-      u(:,:,vlev) = real(u_tmp * cos(alpha) - v_tmp * sin(alpha), esmf_kind_r8)
-      v(:,:,vlev) = real(v_tmp * cos(alpha) + u_tmp * sin(alpha), esmf_kind_r8)
-    else
-      u(:,:,vlev) = u_tmp
-      v(:,:,vlev) = v_tmp
-    endif
+      if (trim(input_grid_type) == "latlon") then
+        u(:,:,vlev) = u_tmp
+        v(:,:,vlev) = v_tmp
+      else 
+        u(:,:,vlev) = real(u_tmp * cos(alpha) - v_tmp * sin(alpha), esmf_kind_r8)
+        v(:,:,vlev) = real(v_tmp * cos(alpha) + u_tmp * sin(alpha), esmf_kind_r8)
+      endif
     
-    print*, 'max, min U ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
-    print*, 'max, min V ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
- enddo
+      print*, 'max, min U ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
+      print*, 'max, min V ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
+    enddo
+ endif
 
 end subroutine read_winds
+
+!---------------------------------------------------------------------------
+! Compute grid rotation angle for non-latlon grids
+!---------------------------------------------------------------------------
+
+subroutine gridrot(lov,lon,rot)
+
+  use model_grid, only                : i_input,j_input
+  implicit none
+  
+  
+  real(esmf_kind_r4), intent(in)      :: lov
+  real(esmf_kind_r4), intent(inout)   :: rot(i_input,j_input)
+  real(esmf_kind_r8), intent(in)      :: lon(i_input,j_input)
+  
+  real(esmf_kind_r4)                  :: trot(i_input,j_input), trot_tmp(i_input,j_input)
+  real(esmf_kind_r4)                  :: pior = 3.14159265359/180.0_esmf_kind_r4
+  
+  trot_tmp = real(lon,esmf_kind_r4)-lov
+  trot = trot_tmp
+  where(trot_tmp > 180.0) trot = trot-360.0_esmf_kind_r4
+  where(trot_tmp < -180.0) trot = trot-360.0_esmf_kind_r4
+  
+  rot = trot * pior
+
+end subroutine gridrot
 
 subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
   
@@ -5720,7 +5775,7 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
   
  end subroutine read_grib_soil
 
-subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var)
+subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
 
   use, intrinsic :: ieee_arithmetic
 
@@ -5728,6 +5783,8 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var)
   
   real(esmf_kind_r4), intent(in)    :: value
   real(esmf_kind_r4), intent(inout), optional :: var(:,:)
+  real(esmf_kind_r8), intent(inout), optional :: var8(:,:)
+  real(esmf_kind_r8), intent(inout), optional  :: var3d(:,:,:)
   
   character(len=20), intent(in)     :: vname, lev, method
   
@@ -5751,10 +5808,14 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var)
     print*, "WARNING: ,", trim(vname), " NOT AVILABLE AT LEVEL ", trim(lev), &
            ". SETTING EQUAL TO FILL VALUE OF ", value
     if(present(var)) var(:,:) = value
+    if(present(var8)) var8(:,:) = value
+    if(present(var3d)) var3d(:,:,:) = value
   elseif (trim(method) == "set_to_NaN") then
     print*, "WARNING: ,", trim(vname), " NOT AVILABLE AT LEVEL ", trim(lev), &
            ". SETTING EQUAL TO NaNs"
     if(present(var)) var(:,:) = ieee_value(var,IEEE_QUIET_NAN)
+    if(present(var8)) var8(:,:) = ieee_value(var8,IEEE_QUIET_NAN)
+    if(present(var3d)) var3d(:,:,:) = ieee_value(var3d,IEEE_QUIET_NAN)
   elseif (trim(method) == "stop") then
     call error_handler("READING "//trim(vname)// " at level "//lev//". TO MAKE THIS NON- &
                         FATAL, CHANGE STOP TO SKIP FOR THIS VARIABLE IN YOUR VARMAP &
