@@ -4408,6 +4408,7 @@ if (localpet == 0) then
  else
    allocate(dummy3d(0,0,0))
    allocate(dummy2d_8(0,0))
+   allocate(dummy2d(0,0))
 
  endif
  
