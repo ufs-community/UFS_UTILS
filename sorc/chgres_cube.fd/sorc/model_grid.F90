@@ -429,8 +429,11 @@
 
 
   ! Check for the grid template number to see if wgrib2 can access the lat/lon arrays
-  cmdline_msg = trim(wgrib2_path)//" "//trim(the_file)//" -d 1 -Sec3 &> temp.out"
-  call system(cmdline_msg)
+  if (localpet==0) then
+    cmdline_msg = trim(wgrib2_path)//" "//trim(the_file)//" -d 1 -Sec3 &> temp.out"
+    call system(cmdline_msg)
+  endif
+  call MPI_BARRIER(MPI_COMM_WORLD, error)
   open(4,file="temp.out")
   read(4,"(A)") temp_msg
   close(4)
