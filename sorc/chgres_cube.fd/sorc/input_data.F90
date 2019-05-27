@@ -4874,9 +4874,9 @@ if (localpet == 0) then
  if (localpet == 0) then
    print*,"- READ TOTAL SOIL MOISTURE."
    vname = "soilw"
-   vname_file = "var2_2_1_7_0_192"  !Some files don't recognize this as soilw, so use
-                                    ! the var number instead
-   call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
+   !vname_file = "var2_2_1_7_0_192"  !Some files don't recognize this as soilw, so use
+   vname_file = "var2_2_1_"         ! the var number instead
+   call read_grib_soil(the_file,inv_file,vname,"_0_192:",vname_file,dummy3d,rc)
    print*,'soilm ',maxval(dummy3d),minval(dummy3d)
  endif
 
