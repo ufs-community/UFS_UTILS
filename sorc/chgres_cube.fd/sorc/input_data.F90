@@ -4876,7 +4876,7 @@ if (localpet == 0) then
    vname = "soilw"
    !vname_file = "var2_2_1_7_0_192"  !Some files don't recognize this as soilw, so use
    vname_file = "var2_2_1_"         ! the var number instead
-   call read_grib_soil(the_file,inv_file,vname,"_0_192:",vname_file,dummy3d,rc)
+   call read_grib_soil(the_file,inv_file,vname,,vname_file,dummy3d,rc)
    print*,'soilm ',maxval(dummy3d),minval(dummy3d)
  endif
 
@@ -5759,7 +5759,11 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                          loc=varnum)
   do i = 1,lsoil_input
-    rc = grb2_inq(the_file,inv_file,vname_file,slevs(i),data2=dummy2d)
+    if vname_file="var2_2_1_" then
+      rc = grb2_inq(the_file,inv_file,vname_file,"_0_192:",slevs(i),data2=dummy2d)
+    else
+      rc = grb2_inq(the_file,inv_file,vname_file,slevs(i),data2=dummy2d)
+    endif
     if (rc <= 0) then
       call handle_grib_error(vname_file, slevs(i),method,value,varnum,rc, var=dummy2d)
       if (rc==1 .and. trim(vname) /= "soill") then 
