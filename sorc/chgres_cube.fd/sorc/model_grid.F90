@@ -660,7 +660,7 @@
          print*, "DX = ", dx
        endif
        call MPI_BARRIER(MPI_COMM_WORLD,error)
-       call MPI_BCAST(dx,1,MPI_INTEGER,0,MPI_COMM_WORLD,error)
+       call MPI_BCAST(dx,1,MPI_REAL8,0,MPI_COMM_WORLD,error)
        
        call get_cell_corners(real(latitude_one_tile,esmf_kind_r8), &
                             real(longitude_one_tile, esmf_kind_r8), &
@@ -1354,45 +1354,63 @@
 
   integer                           :: i, j
 
-  d = sqrt(dx**2.0_esmf_kind_r8/2.0_esmf_kind_r8)
+  d = sqrt((dx**2.0_esmf_kind_r8)/2.0_esmf_kind_r8)
+  print*, "cell side = ", dx
+  print*, "distance to corner = ", d
 
-  do j = clb(2),cub(2)-1
-   do i = clb(1), cub(1)-1
-     lat1 = latitude(i,j)  * ( pi / 180.0_esmf_kind_r8 )
+  do j = clb(2),cub(2)
+   do i = clb(1), cub(1)
+   
+		 if (j == jp1_input .and. i == ip1_input) then
+       lat1 = latitude(i_input,j_input)  * ( pi / 180.0_esmf_kind_r8 )
+       lon1 = longitude(i_input,j_input) * ( pi / 180.0_esmf_kind_r8 )
+			 brng = 315.0_esmf_kind_r8 * pi / 180.0_esmf_kind_r8
+			 lat2 = asin( sin( lat1 ) * cos( d / R ) + cos( lat1 ) * sin( d / R ) * cos( brng ) );
+			 lon2= lon1 + atan2( sin( brng ) * sin( d / R ) * cos( lat1 ), cos( d / R ) - sin( lat1 ) * sin( lat2 ) );
+			 latitude_sw(ip1_input,jp1_input) = lat2 * 180.0_esmf_kind_r8 / pi
+			 longitude_sw(ip1_input,jp1_input) = lon2 * 180.0_esmf_kind_r8 / pi
+			 cycle
+		 endif
+		 
+     if (i == ip1_input) then
+       brng = 225.0_esmf_kind_r8 * pi / 180.0_esmf_kind_r8
+       lat1 = latitude(i_input,j)  * ( pi / 180.0_esmf_kind_r8 )
+       lon1 = longitude(i_input,j) * ( pi / 180.0_esmf_kind_r8 )
+       lat2 = asin( sin( lat1 ) * cos( d / R ) + cos( lat1 ) * sin( d / R ) * cos( brng ) );
+       lon2= lon1 + atan2( sin( brng ) * sin( d / R ) * cos( lat1 ), cos( d / R ) - sin( lat1 ) * sin( lat2 ) );
+       latitude_sw(ip1_input,j) = lat2 * 180.0_esmf_kind_r8 / pi
+       longitude_sw(ip1_input,j) = lon2 * 180.0_esmf_kind_r8 / pi
+       cycle
+     endif
+
+     if (j == jp1_input) then
+       brng = 45.0_esmf_kind_r8 * pi / 180.0_esmf_kind_r8
+       lat1 = latitude(i,j_input)  * ( pi / 180.0_esmf_kind_r8 )
+       lon1 = longitude(i,j_input) * ( pi / 180.0_esmf_kind_r8 )
+       lat2 = asin( sin( lat1 ) * cos( d / R ) + cos( lat1 ) * sin( d / R ) * cos( brng ) );
+       lon2= lon1 + atan2( sin( brng ) * sin( d / R ) * cos( lat1 ), cos( d / R ) - sin( lat1 ) * sin( lat2 ) );
+       latitude_sw(i,jp1_input) = lat2 * 180.0_esmf_kind_r8 / pi
+       longitude_sw(i,jp1_input) = lon2 * 180.0_esmf_kind_r8 / pi
+       print*, "jp1_input point ", i, jp1_input, latitude_sw(i,jp1_input), longitude_sw(i,jp1_input)
+       cycle
+     endif
+
+		 lat1 = latitude(i,j)  * ( pi / 180.0_esmf_kind_r8 )
      lon1 = longitude(i,j) * ( pi / 180.0_esmf_kind_r8 )
-
+     
      brng = bearingInDegrees * ( pi / 180.0_esmf_kind_r8 );
      lat2 = asin( sin( lat1 ) * cos( d / R ) + cos( lat1 ) * sin( d / R ) * cos( brng ) );
      lon2= lon1 + atan2( sin( brng ) * sin( d / R ) * cos( lat1 ), cos( d / R ) - sin( lat1 ) * sin( lat2 ) );
 
      latitude_sw(i,j) = lat2 * 180.0_esmf_kind_r8 / pi
      longitude_sw(i,j) = lon2 * 180.0_esmf_kind_r8 / pi
-
-     if (i == i_input) then
-       brng = 225.0_esmf_kind_r8 * pi / 180.0_esmf_kind_r8
-       lat2 = asin( sin( lat1 ) * cos( d / R ) + cos( lat1 ) * sin( d / R ) * cos( brng ) );
-       lon2= lon1 + atan2( sin( brng ) * sin( d / R ) * cos( lat1 ), cos( d / R ) - sin( lat1 ) * sin( lat2 ) );
-       latitude_sw(ip1_input,j) = lat2 * 180.0_esmf_kind_r8 / pi
-       longitude_sw(ip1_input,j) = lon2 * 180.0_esmf_kind_r8 / pi
-     endif
-
-     if (j == j_input) then
-       brng = 45.0_esmf_kind_r8 * pi / 180.0_esmf_kind_r8
-       lat2 = asin( sin( lat1 ) * cos( d / R ) + cos( lat1 ) * sin( d / R ) * cos( brng ) );
-       lon2= lon1 + atan2( sin( brng ) * sin( d / R ) * cos( lat1 ), cos( d / R ) - sin( lat1 ) * sin( lat2 ) );
-       latitude_sw(i,jp1_input) = lat2 * 180.0_esmf_kind_r8 / pi
-       longitude_sw(i,jp1_input) = lon2 * 180.0_esmf_kind_r8 / pi
-     endif
+     
+     if (j == j_input) print*, "j_input point ", i, j_input, latitude(i,j), longitude(i,j) &
+     						, latitude_sw(i,j_input), longitude_sw(i,j_input)
    enddo
  enddo
 
- if (cub(2) == jp1_input .and. cub(1) == ip1_input) then
-   brng = 315.0_esmf_kind_r8 * pi / 180.0_esmf_kind_r8
-   lat2 = asin( sin( lat1 ) * cos( d / R ) + cos( lat1 ) * sin( d / R ) * cos( brng ) );
-   lon2= lon1 + atan2( sin( brng ) * sin( d / R ) * cos( lat1 ), cos( d / R ) - sin( lat1 ) * sin( lat2 ) );
-   latitude_sw(ip1_input,jp1_input) = lat2 * 180.0_esmf_kind_r8 / pi
-   longitude_sw(ip1_input,jp1_input) = lon2 * 180.0_esmf_kind_r8 / pi
- endif
+ 
 
  end subroutine get_cell_corners
  

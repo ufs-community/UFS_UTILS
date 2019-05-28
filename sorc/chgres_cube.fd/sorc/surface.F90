@@ -2476,6 +2476,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
 
+ ! If soil type didn't exist in the input data, skip this routine 
+ if (minval(soil_type_input_ptr) < -999.9_esmf_kind_r8) return
+ 
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
 
