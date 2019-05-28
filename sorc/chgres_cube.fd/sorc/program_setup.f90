@@ -287,8 +287,12 @@ subroutine read_varmap
    call error_handler("OPENING VARIABLE MAPPING FILE", istat)
  endif
 
- read(14, *, iostat=istat) nvars
+ read(14, *, iostat=istat) nvars, num_tracers
  if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
+ print*, 'NUMBER OF TRACERS FROM VARMAP FILE = ', num_tracers
+ read(14, *, iostat=istat) tracers_input(1:num_tracers)
+ if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
+ print*, 'TRACERS FROM VARMAP FILE = ', tracers_input(1:num_tracers)
 
 
  allocate(chgres_var_names(nvars))

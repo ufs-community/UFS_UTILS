@@ -1,4 +1,5 @@
-    26
+    26  10
+sphum, liq_wat, o3mr, ice_wat, rainwat, snowwat, graupel, ice_nc, rain_nc, water_nc, liq_aero, ice_aero, sgs_tke
 dzdt                dzdt      set_to_fill   0
 delta_p             delp      skip          0
 sphum               sphum     set_to_fill   1E-7

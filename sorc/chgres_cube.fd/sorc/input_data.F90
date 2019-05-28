@@ -2741,6 +2741,7 @@
  use grib2_util, only                   : read_vcoord, iso2sig, rh2spfh, convert_omega
  use model_grid, only                   : file_is_converted
 
+
  implicit none
 
  integer, intent(in)                   :: localpet
@@ -2751,14 +2752,15 @@
  character(len=20)                     :: vlevtyp, vname, lvl_str,lvl_str_space, &
                                           trac_names_grib(ntrac_max), & 
                                           trac_names_vmap(ntrac_max), &
-                                          tracers_input_grib(ntrac_max), tmpstr, & 
-                                          method, tracers_input_vmap(ntrac_max), &
+                                          tracers_input_grib(num_tracers), tmpstr, & 
+                                          method, tracers_input_vmap(num_tracers), &
                                           tracers_default(ntrac_max)
  character (len=500)                    :: metadata
 
  integer                               :: i, j, k, n, lvl_str_space_len
  integer                               :: rc, clb(3), cub(3)
  integer                               :: vlev, iret,varnum
+
  
  
  logical                                :: conv_omega=.false., &
@@ -2778,6 +2780,8 @@
  real(esmf_kind_r8), parameter         :: p0 = 100000.0
  
  type(atmdata), allocatable   :: atm(:)
+ 
+
  
  tracers(:) = "NULL"
  trac_names_grib = (/":SPFH:",":CLWMR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
@@ -2878,36 +2882,18 @@
    endif
 
   print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
-  num_tracers = 0
+  !um_tracers = 0
   !tracers_input(:)=""
-  do n = 1, ntrac_max
-   vname = trac_names_vmap(n)
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                       this_field_var_name=tmpstr,loc=varnum)
-   vname = trim(trac_names_grib(n))  
-   iret = grb2_inq(the_file,inv_file,vname,trim(lvl_str))
-   if (iret <= 0) then
-     call handle_grib_error(vname, lvl_str ,method,value,varnum,iret)
-     if (iret == 0) then
-       num_tracers = num_tracers + 1
-       tracers_input_grib(num_tracers)=trac_names_grib(n)
-       tracers_input_vmap(num_tracers)=trac_names_vmap(n)
-       if (trim(tmpstr) == 'NULL') then
-         tracers(num_tracers) = tracers_default(n)
-       else
-         tracers(num_tracers) = tmpstr
-       endif
-     endif
-   else
-     num_tracers = num_tracers + 1
-     tracers_input_grib(num_tracers)=trac_names_grib(n)
-     tracers_input_vmap(num_tracers)=trac_names_vmap(n)
-     if (trim(tmpstr) == 'NULL') then
-       tracers(num_tracers) = tracers_default(n)
-     else
-       tracers(num_tracers) = tmpstr
-     endif
-   endif
+  do n = 1, num_tracers
+
+   vname = tracers_input(n)
+
+   i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
+
+	 tracers_input_grib(n)=trac_names_grib(i)
+	 tracers_input_vmap(n)=trac_names_vmap(i)
+	 tracers(n)=tracers_default(n)
+
  enddo
  allocate(atm(num_tracers+4))
  if (localpet==0) print*, "NUMBER OF TRACERS IN FILE = ", num_tracers
