@@ -1355,8 +1355,7 @@
   integer                           :: i, j
 
   d = sqrt((dx**2.0_esmf_kind_r8)/2.0_esmf_kind_r8)
-  print*, "cell side = ", dx
-  print*, "distance to corner = ", d
+
 
   do j = clb(2),cub(2)
    do i = clb(1), cub(1)
@@ -1391,7 +1390,6 @@
        lon2= lon1 + atan2( sin( brng ) * sin( d / R ) * cos( lat1 ), cos( d / R ) - sin( lat1 ) * sin( lat2 ) );
        latitude_sw(i,jp1_input) = lat2 * 180.0_esmf_kind_r8 / pi
        longitude_sw(i,jp1_input) = lon2 * 180.0_esmf_kind_r8 / pi
-       print*, "jp1_input point ", i, jp1_input, latitude_sw(i,jp1_input), longitude_sw(i,jp1_input)
        cycle
      endif
 
@@ -1405,8 +1403,6 @@
      latitude_sw(i,j) = lat2 * 180.0_esmf_kind_r8 / pi
      longitude_sw(i,j) = lon2 * 180.0_esmf_kind_r8 / pi
      
-     if (j == j_input) print*, "j_input point ", i, j_input, latitude(i,j), longitude(i,j) &
-     						, latitude_sw(i,j_input), longitude_sw(i,j_input)
    enddo
  enddo
 

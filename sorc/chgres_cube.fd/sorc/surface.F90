@@ -2042,7 +2042,7 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGather", rc)
 
-   if (localpet == 0) then
+   if (localpet == 0 .and. maxval(data_one_tile) > 0.0) then
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
    endif
 
