@@ -189,7 +189,7 @@
  if (localpet == 0) then
 
 !--- open the file
-   error = nf90_create("./gfs.bndy.nc", IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
+   error = nf90_create("./gfs_bndy.nc", IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
                      ncid, initialsize=initial, chunksize=fsize)
    call netcdf_err(error, 'CREATING BNDY FILE' )
 
