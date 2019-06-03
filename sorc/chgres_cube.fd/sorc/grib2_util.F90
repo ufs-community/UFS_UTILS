@@ -105,6 +105,7 @@ subroutine iso2sig(pi,sigma,lev_input,levp1_input,psptr,atm,clb,cub,nvars,iret)
   integer                                   :: nvars
 
  
+  print*, "in iso2sig"
   call p2hyo(pi,atm,psptr,100000.0,sigma(2:levp1_input,1),sigma(2:levp1_input,2), &
               lev_input,clb,cub,nvars,msg,4,iret)
   if (iret /= 0) call error_handler(" CONVERTING TO SIGMA COORDINATES. ONE OR BOTH PRESSURE &
@@ -157,7 +158,7 @@ end subroutine iso2sig
       integer                   :: iflag, klevo, nvars
       
       real          :: po(lev_input)
-      
+      print*, "in p2hyo"
       iflag = 0
 !                                                 ! ? input asending order     
       iret   = 0
@@ -203,7 +204,7 @@ subroutine p2hyb(pi,xi,psfc,p0,hyao,hybo,po,lev_input,clb,cub,nvar,iflag, kflag,
   real        :: pimin, pimax, pomin, pomax, dxdp
   real, allocatable :: xo(:,:,:,:)
 
-
+  print*, "in p2hyb"
   dims = shape(xi(1)%var)
   allocate(xo(dims(1),dims(2),dims(3),nvar+1))
 
