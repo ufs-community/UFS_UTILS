@@ -80,7 +80,7 @@
 ##SBATCH -e log.fv3_grid_driver
 ##SBATCH --nodes=1 --ntasks-per-node=24
 ##SBATCH -q debug
-##SBATCH -t 00:30
+##SBATCH -t 00:30:00
 
 set -ax
 
