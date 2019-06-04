@@ -4668,7 +4668,7 @@ if (localpet == 0) then
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = -9999.9_esmf_kind_r4
+        dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     endif
    dummy2d_8= real(dummy2d,esmf_kind_r8)
@@ -4695,7 +4695,7 @@ if (localpet == 0) then
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = -9999.9_esmf_kind_r4
+        dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     endif
    dummy2d_8= real(dummy2d,esmf_kind_r8)
@@ -4721,7 +4721,7 @@ if (localpet == 0) then
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = -9999.9_esmf_kind_r4
+        dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     endif
    dummy2d_8= real(dummy2d,esmf_kind_r8)
@@ -4748,7 +4748,7 @@ if (localpet == 0) then
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL "//&
                    "REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = -9999.9_esmf_kind_r4
+        dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     endif
    dummy2d_8= real(dummy2d,esmf_kind_r8)
@@ -4775,7 +4775,7 @@ if (localpet == 0) then
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = -9999.9_esmf_kind_r4
+        dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     endif
    dummy2d_8= real(dummy2d,esmf_kind_r8)
@@ -4802,7 +4802,7 @@ if (localpet == 0) then
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = -9999.9_esmf_kind_r4
+        dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     endif
    dummy2d_8= real(dummy2d,esmf_kind_r8)
@@ -4829,7 +4829,7 @@ if (localpet == 0) then
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = -9999.9_esmf_kind_r4
+        dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     else
       ! Grib files have z0 (m), but fv3 expects z0(cm)
