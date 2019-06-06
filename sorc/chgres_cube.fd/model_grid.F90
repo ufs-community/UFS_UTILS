@@ -1112,7 +1112,7 @@
  real(esmf_kind_r8), allocatable       :: longitude_w_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: terrain_one_tile(:,:)
 
- if(trim(phys_suite)=="GSD") lsoil_target=9
+ !if(trim(phys_suite)=="GSD") lsoil_target=9
 
  print*,'- OPEN TARGET GRID MOSAIC FILE: ',trim(mosaic_file_target_grid)
  error=nf90_open(trim(mosaic_file_target_grid),nf90_nowrite,ncid)

@@ -774,6 +774,7 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
+      if (count(landmask_target_ptr == 2) == 0) data_one_tile(:,:) =0.0_esmf_kind_r8
      where(mask_target_one_tile == 1) mask_target_one_tile = 0
      where(mask_target_one_tile == 2) mask_target_one_tile = 1
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 92)
@@ -2658,12 +2659,87 @@
  
  subroutine adjust_soil_levels
  use model_grid, only       : lsoil_target
- use input_data, only       : lsoil_input
+ use input_data, only       : lsoil_input, soil_temp_input_grid, &
+                              soilm_liq_input_grid, soilm_tot_input_grid
  implicit none
  character(len=1000)      :: msg
- integer                  :: rc
-
- if (lsoil_input /= lsoil_target) then
+ integer                  :: rc, i, j, clb(2), cub(2)
+ real(esmf_kind_r8), pointer :: st_target_ptr(:,:,:), &
+ 	                              sl_target_ptr(:,:,:), &
+ 	                              sm_target_ptr(:,:,:), &
+ 	                              st_input_ptr(:,:,:), &
+ 	                              sl_input_ptr(:,:,:), &
+ 	                              sm_input_ptr(:,:,:)
+ real(esmf_kind_r8)          :: tmp
+ if (lsoil_input == 9) then
+ 
+   call ESMF_FieldGet(soil_temp_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=st_target_ptr, rc=rc)
+   call ESMF_FieldGet(soilm_liq_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=sl_target_ptr, rc=rc)
+   call ESMF_FieldGet(soilm_tot_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=sm_target_ptr, rc=rc)
+   call ESMF_FieldGet(soil_temp_input_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=st_input_ptr, rc=rc)
+   call ESMF_FieldGet(soilm_liq_input_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=sl_input_ptr, rc=rc)
+   call ESMF_FieldGet(soilm_tot_input_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=sm_input_ptr, rc=rc)                                                   
+   ! Convert obs at edges to layer obs
+   
+   do j=clb(2),cub(2)
+     do i=clb(1),cub(1)
+			 sm_target_ptr(i,j,1)= (sm_input_ptr(i,j,1) + sm_input_ptr(i,j,2))/2.0 * 0.1 + &
+                                        (sm_input_ptr(i,j,2) + sm_input_ptr(i,j,3))/2.0 * 0.3 + &
+                                        (sm_input_ptr(i,j,3) + sm_input_ptr(i,j,4))/2.0 * 0.6
+       tmp = (sm_input_ptr(i,j,6) - sm_input_ptr(i,j,5)) / 30.0 * 10.0 + sm_input_ptr(i,j,5) !Linear approx. of 40 cm obs
+       sm_target_ptr(i,j,2)= (sm_input_ptr(i,j,4) + sm_input_ptr(i,j,5)) / 2.0 * 0.75 + &
+                                        (sm_input_ptr(i,j,5) + tmp) / 2.0 * 0.25
+       sm_target_ptr(i,j,3)= (tmp + sm_input_ptr(i,j,6)) /2.0 * (1.0/3.0) + &
+                                        (sm_input_ptr(i,j,6) + sm_input_ptr(i,j,7)) / 2.0 * (2.0/3.0)
+       tmp = (sm_input_ptr(i,j,9) - sm_input_ptr(i,j,9)) / 140.0 * 40.0 + sm_input_ptr(i,j,8) !Linear approx of 200 cm obs
+       sm_target_ptr(i,j,4)= (sm_input_ptr(i,j,7) + sm_input_ptr(i,j,8)) / 2.0 * 0.6 + &
+                                        (sm_input_ptr(i,j,8) + tmp) / 2.0 * 0.4
+        
+       sl_target_ptr(i,j,1)= (sl_input_ptr(i,j,1) + sl_input_ptr(i,j,2))/2.0 * 0.1 + &
+                                        (sl_input_ptr(i,j,2) + sl_input_ptr(i,j,3))/2.0 * 0.3 + &
+                                        (sl_input_ptr(i,j,3) + sl_input_ptr(i,j,4))/2.0 * 0.6
+       tmp = (sl_input_ptr(i,j,6) - sl_input_ptr(i,j,5)) / 30.0 * 10.0 + sl_input_ptr(i,j,5) !Linear approx. of 40 cm obs
+       sl_target_ptr(i,j,2)= (sl_input_ptr(i,j,4) + sl_input_ptr(i,j,5)) / 2.0 * 0.75 + &
+                                        (sl_input_ptr(i,j,5) + tmp) / 2.0 * 0.25
+       sl_target_ptr(i,j,3)= (tmp + sl_input_ptr(i,j,6)) /2.0 * (1.0/3.0) + &
+                                        (sl_input_ptr(i,j,6) + sl_input_ptr(i,j,7)) / 2.0 * (2.0/3.0)
+       tmp = (sl_input_ptr(i,j,9) - sl_input_ptr(i,j,9)) / 140.0 * 40.0 + sl_input_ptr(i,j,8) !Linear approx of 200 cm obs
+       sl_target_ptr(i,j,4)= (sl_input_ptr(i,j,7) + sl_input_ptr(i,j,8)) / 2.0 * 0.6 + &
+                                        (sl_input_ptr(i,j,8) + tmp) / 2.0 * 0.4
+                                        
+       st_target_ptr(i,j,1)= (st_input_ptr(i,j,1) + st_input_ptr(i,j,2))/2.0 * 0.1 + &
+                                        (st_input_ptr(i,j,2) + st_input_ptr(i,j,3))/2.0 * 0.3 + &
+                                        (st_input_ptr(i,j,3) + st_input_ptr(i,j,4))/2.0 * 0.6
+       tmp = (st_input_ptr(i,j,6) - st_input_ptr(i,j,5)) / 30.0 * 10.0 + st_input_ptr(i,j,5) !Linear approx. of 40 cm obs
+       st_target_ptr(i,j,2)= (st_input_ptr(i,j,4) + st_input_ptr(i,j,5)) / 2.0 * 0.75 + &
+                                        (st_input_ptr(i,j,5) + tmp) / 2.0 * 0.25
+       st_target_ptr(i,j,3)= (tmp + st_input_ptr(i,j,6)) /2.0 * (1.0/3.0) + &
+                                        (st_input_ptr(i,j,6) + st_input_ptr(i,j,7)) / 2.0 * (2.0/3.0)
+       tmp = (st_input_ptr(i,j,9) - st_input_ptr(i,j,9)) / 140.0 * 40.0 + st_input_ptr(i,j,8) !Linear approx of 200 cm obs
+       st_target_ptr(i,j,4)= (st_input_ptr(i,j,7) + st_input_ptr(i,j,8)) / 2.0 * 0.6 + &
+                                        (st_input_ptr(i,j,8) + tmp) / 2.0 * 0.4
+     enddo
+  enddo                                                                                                    
+ 
+ elseif (lsoil_input /= lsoil_target) then
   rc = -1
   
   write(msg,'("NUMBER OF SOIL LEVELS IN INPUT (",I2,") and OUPUT &
