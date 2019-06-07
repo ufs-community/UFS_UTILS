@@ -1088,7 +1088,8 @@
  use netcdf
  use program_setup, only       : mosaic_file_target_grid, &
                                  orog_dir_target_grid,    &
-                                 orog_files_target_grid, phys_suite
+                                 orog_files_target_grid, phys_suite, &
+                                 numsoil_out
 
  implicit none
 
@@ -1112,7 +1113,7 @@
  real(esmf_kind_r8), allocatable       :: longitude_w_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: terrain_one_tile(:,:)
 
- !if(trim(phys_suite)=="GSD") lsoil_target=9
+ lsoil_target = numsoil_out
 
  print*,'- OPEN TARGET GRID MOSAIC FILE: ',trim(mosaic_file_target_grid)
  error=nf90_open(trim(mosaic_file_target_grid),nf90_nowrite,ncid)

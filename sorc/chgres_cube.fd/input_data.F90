@@ -48,7 +48,8 @@
                                     ip1_input, jp1_input,  &
                                     num_tiles_input_grid, &
                                     latitude_input_grid, &
-                                    longitude_input_grid, inv_file
+                                    longitude_input_grid, inv_file, &
+                                    lsoil_target
 
  use atmdata_type
 
