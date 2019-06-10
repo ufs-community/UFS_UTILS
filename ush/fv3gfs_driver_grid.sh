@@ -48,16 +48,16 @@
 
 #---- WCOSS DELL JOBCARD
 #---- Submit script as "cat $script | bsub"
-#BSUB -oo log.grid.%J
-#BSUB -eo log.grid.%J
-#BSUB -q debug
-#BSUB -P FV3GFS-T2O
-#BSUB -J grid_fv3
-#BSUB -W 0:30
-#BSUB -x                 # run not shared
-#BSUB -n 24              # total tasks
-#BSUB -R span[ptile=24]   # tasks per node
-#BSUB -R affinity[core(1):distribute=balance]
+##BSUB -oo log.grid.%J
+##BSUB -eo log.grid.%J
+##BSUB -q debug
+##BSUB -P FV3GFS-T2O
+##BSUB -J grid_fv3
+##BSUB -W 0:30
+##BSUB -x                 # run not shared
+##BSUB -n 24              # total tasks
+##BSUB -R span[ptile=24]   # tasks per node
+##BSUB -R affinity[core(1):distribute=balance]
 
 #---- WCOSS_CRAY JOBCARD
 #---- Submit script as "cat $script | bsub"
@@ -73,18 +73,18 @@
 
 #---- THEIA JOBCARD
 #---- Submit script as 'sbatch $script'
-##SBATCH -J fv3_grid_driver
-##SBATCH -A fv3-cpu
-##SBATCH --open-mode=truncate
-##SBATCH -o log.fv3_grid_driver
-##SBATCH -e log.fv3_grid_driver
-##SBATCH --nodes=1 --ntasks-per-node=24
-##SBATCH -q debug
-##SBATCH -t 00:30:00
+#SBATCH -J fv3_grid_driver
+#SBATCH -A fv3-cpu
+#SBATCH --open-mode=truncate
+#SBATCH -o log.fv3_grid_driver
+#SBATCH -e log.fv3_grid_driver
+#SBATCH --nodes=1 --ntasks-per-node=24
+#SBATCH -q debug
+#SBATCH -t 00:30:00
 
 set -ax
 
-machine=WCOSS_DELL_P3   # THEIA, WCOSS_DELL_P3 or WCOSS_C
+machine=THEIA   # THEIA, WCOSS_DELL_P3 or WCOSS_C
 export machine=${machine:-WCOSS_C}
 
 #----------------------------------------------------------------------------------
@@ -92,27 +92,27 @@ export machine=${machine:-WCOSS_C}
 #----------------------------------------------------------------------------------
 
 export res=96              # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
-export gtype=regional       # grid type: uniform, stretch, nest or regional
+export gtype=stretch      # grid type: uniform, stretch, nest or regional
 
 if [ $gtype = uniform ];  then
   echo "Creating uniform ICs"
 elif [ $gtype = stretch ]; then
-  stretch_fac=1.5       # Stretching factor for the grid
-  target_lon=-97.5      # Center longitude of the highest resolution tile
-  target_lat=35.5       # Center latitude of the highest resolution tile
-  title=c${res}s        # Identifier based on refined location
+  export stretch_fac=1.5       # Stretching factor for the grid
+  export target_lon=-97.5      # Center longitude of the highest resolution tile
+  export target_lat=35.5       # Center latitude of the highest resolution tile
+  title=c${res}s               # Identifier based on refined location
   echo "Creating stretched grid"
 elif [ $gtype = nest ] || [ $gtype = regional ]; then
-  stretch_fac=1.5       # Stretching factor for the grid
-  target_lon=-97.5      # Center longitude of the highest resolution tile
-  target_lat=35.5       # Center latitude of the highest resolution tile
-  refine_ratio=3        # The refinement ratio
-  istart_nest=27        # Starting i-direction index of nest grid in parent tile supergrid
-  jstart_nest=37        # Starting j-direction index of nest grid in parent tile supergrid
-  iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
-  jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
-  halo=3                # Halo size. Regional grids only.
-  title=c${res}s        # Identifier based on nest location
+  export stretch_fac=1.5       # Stretching factor for the grid
+  export target_lon=-97.5      # Center longitude of the highest resolution tile
+  export target_lat=35.5       # Center latitude of the highest resolution tile
+  export refine_ratio=3        # The refinement ratio
+  export istart_nest=27        # Starting i-direction index of nest grid in parent tile supergrid
+  export jstart_nest=37        # Starting j-direction index of nest grid in parent tile supergrid
+  export iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
+  export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
+  export halo=3                # Halo size. Regional grids only.
+  title=c${res}s               # Identifier based on nest location
   if [ $gtype = nest ];then
    echo "Creating global nested grid"
   else
@@ -168,6 +168,7 @@ elif [ $machine = THEIA ]; then
   module load hdf5/1.8.14
   module load netcdf/4.3.0
   module list
+  set -x
   export APRUN=time
   export APRUN_SFC=srun
   export home_dir=$SLURM_SUBMIT_DIR/..
@@ -175,9 +176,8 @@ elif [ $machine = THEIA ]; then
   export out_dir=/scratch3/NCEPDEV/stmp1/$LOGNAME/C${res}
   export OMP_NUM_THREADS=24
   export OMP_STACKSIZE=2048m
-  set -x
 else
-  echo $machine not supported.  Exiting.
+  echo FATAL ERROR. $machine not supported.  Exiting.
   exit 1
 fi
 
@@ -235,9 +235,12 @@ if [ $gtype = uniform ];  then
   rm -rf $TMPDIR/$name                  
   mkdir -p $grid_dir $orog_dir $filter_dir
 
+  set +x
   echo 
-  echo "............ execute fv3gfs_make_grid.sh ................."
-  $script_dir/fv3gfs_make_grid.sh $res $grid_dir $script_dir
+  echo "............ Execute fv3gfs_make_grid.sh ................."
+  echo 
+  set -x
+  $script_dir/fv3gfs_make_grid.sh $grid_dir
   err=$?
   if [ $err != 0 ]; then
     exit $err
@@ -260,16 +263,22 @@ if [ $gtype = uniform ];  then
     rm $TMPDIR/orog.file1
   elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
     for tile in 1 2 3 4 5 6 ; do
+      set +x
       echo
-      echo "............ execute fv3gfs_make_orog.sh for tile $tile .................."
+      echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
+      echo
+      set -x
       $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
     done
   fi
 
+  set +x
   echo "End uniform orography generation at `date`"
  
   echo 
-  echo "............ execute fv3gfs_filter_topo.sh .............."
+  echo "............ Execute fv3gfs_filter_topo.sh .............."
+  echo
+  set -x
   $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir $gtype
   err=$?
   if [ $err != 0 ]; then
@@ -292,9 +301,12 @@ elif [ $gtype = stretch ]; then
   rm -rf $TMPDIR/$name                  
   mkdir -p $grid_dir $orog_dir $filter_dir
 
+  set +x
   echo 
-  echo "............ execute fv3gfs_make_grid.sh ................."
-  $script_dir/fv3gfs_make_grid.sh $res $grid_dir $stretch_fac $target_lon $target_lat $script_dir
+  echo "............ Execute fv3gfs_make_grid.sh ................."
+  echo
+  set -x
+  $script_dir/fv3gfs_make_grid.sh $grid_dir
   err=$?
   if [ $err != 0 ]; then
     exit $err
@@ -317,16 +329,22 @@ elif [ $gtype = stretch ]; then
     rm $TMPDIR/orog.file1
   elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
     for tile in 1 2 3 4 5 6 ; do
+      set +x
       echo
-      echo "............ execute fv3gfs_make_orog.sh for tile $tile .................."
+      echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
+      echo
+      set -x
       $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
     done
   fi
 
+  set +x
   echo "End stretch orography generation at `date`"
  
   echo 
-  echo "............ execute fv3gfs_filter_topo.sh .............."
+  echo "............ Execute fv3gfs_filter_topo.sh .............."
+  echo
+  set -x
   $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir $gtype
   err=$?
   if [ $err != 0 ]; then
@@ -349,9 +367,12 @@ elif [ $gtype = nest ]; then
   rm -rf $TMPDIR/$name                  
   mkdir -p $grid_dir $orog_dir $filter_dir
 
+  set +x
   echo 
-  echo "............ execute fv3gfs_make_grid.sh ................."
-  $script_dir/fv3gfs_make_grid.sh $res $grid_dir $stretch_fac $target_lon $target_lat $refine_ratio $istart_nest $jstart_nest $iend_nest $jend_nest $halo $script_dir
+  echo "............ Execute fv3gfs_make_grid.sh ................."
+  echo
+  set -x
+  $script_dir/fv3gfs_make_grid.sh $grid_dir $istart_nest $jstart_nest $iend_nest $jend_nest
   err=$?
   if [ $err != 0 ]; then
     exit $err
@@ -375,8 +396,11 @@ elif [ $gtype = nest ]; then
     rm $TMPDIR/orog.file1
   elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
     for tile in 1 2 3 4 5 6 7; do
+      set +x
       echo
-      echo "............ execute fv3gfs_make_orog.sh for tile $tile .................."
+      echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
+      echo
+      set -x
       $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
     done
   fi
@@ -451,10 +475,12 @@ elif [ $gtype = regional ]; then
   rm -rf $TMPDIR/$name
   mkdir -p $grid_dir $orog_dir $filter_dir
 
+  set +x
   echo
-  echo "............ execute fv3gfs_make_grid.sh ................."
-  $script_dir/fv3gfs_make_grid.sh $res $grid_dir $stretch_fac $target_lon $target_lat $refine_ratio \
-    $istart_nest_halo $jstart_nest_halo $iend_nest_halo $jend_nest_halo $halo $script_dir
+  echo "............ Execute fv3gfs_make_grid.sh ................."
+  echo
+  set -x
+  $script_dir/fv3gfs_make_grid.sh $grid_dir $istart_nest_halo $jstart_nest_halo $iend_nest_halo $jend_nest_halo
   err=$?
   if [ $err != 0 ]; then
     exit $err
@@ -472,20 +498,29 @@ elif [ $gtype = regional ]; then
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
     rm $TMPDIR/orog.file1
   elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
+    set +x
     echo
-    echo "............ execute fv3gfs_make_orog.sh for tile $tile .................."
+    echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
+    echo
+    set -x
     $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
   fi
 
+  set +x
   echo
-  echo "............ execute fv3gfs_filter_topo.sh .............."
+  echo "............ Execute fv3gfs_filter_topo.sh .............."
+  echo
+  set -x
   $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir $gtype
   err=$?
   if [ $err != 0 ]; then
     exit $err
   fi
+  set +x
   echo
-  echo "............ execute shave to reduce grid and orography files to required compute size .............."
+  echo "............ Execute shave to reduce grid and orography files to required compute size .............."
+  echo
+  set -x
   cd $filter_dir
 
 #----------------------------------------------------------------------------------
@@ -590,9 +625,9 @@ if [ $gtype = regional ]; then
   rm -f $out_dir/C${res}_oro_data.tile${tile}.nc
 fi
 
-#------------------------------------
+#------------------------------------------------------------------------------------
 # Run for the global nest - tile 7.
-#------------------------------------
+#------------------------------------------------------------------------------------
 
 if [ $gtype = nest ]; then
   export mosaic_file=$out_dir/C${res}_nested_mosaic.nc
