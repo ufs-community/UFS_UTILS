@@ -9,7 +9,9 @@ module load ics/16.0.3
 module load w3nco/v2.0.6
 module load bacio/v2.0.2
 module load nemsio/v2.2.3
-module load sp/v2.0.2
 module load NetCDF/4.2/serial
 
 export FCOMP=ifort
+export FFLAGS="-O3 -fp-model precise -g -r8 -i4"
+# for debugging
+#export FFLAGS="-g -r8 -i4 -warn unused -check bounds"

@@ -9,14 +9,17 @@
 #BSUB -M 2400
 #BSUB -W 00:30
 #BSUB -extsched 'CRAYLINUX[]'
-#----THEIA JOBCARD
-#PBS -N fv3_grid_driver
-#PBS -A fv3-cpu
-#PBS -o log.grid.$PBS_JOBID
-#PBS -e log.grid.$PBS_JOBID
-#PBS -l nodes=1:ppn=24
-#PBS -q debug
-#PBS -l walltime=00:30:00
+
+#---- THEIA JOBCARD
+#---- Submit script as 'sbatch $script'
+##SBATCH -J fv3_grid_driver
+##SBATCH -A fv3-cpu
+##SBATCH --open-mode=truncate
+##SBATCH -o log.fv3_grid_driver
+##SBATCH -e log.fv3_grid_driver
+##SBATCH --nodes=1
+##SBATCH -q debug
+##SBATCH -t 0:30:00
 
 set -ax
 
@@ -64,7 +67,7 @@ elif [ $machine = THEIA ]; then
  module load netcdf/4.3.0
  module list
  export APRUN=time
- export home_dir=$PBS_O_WORKDIR/..
+ export home_dir=$SLURM_SUBMIT_DIR/..
  export topo=/scratch4/NCEPDEV/global/save/glopara/git/fv3gfs/fix/fix_orog
  export TMPDIR=/scratch3/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
  set -x

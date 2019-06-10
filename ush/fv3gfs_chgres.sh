@@ -21,14 +21,16 @@
 ##BSUB -W 10:00
 ##BSUB -extsched 'CRAYLINUX[]'
 
-#----THEIA JOBCARD
-##PBS -N fv3_chgres_driver
-##PBS -A fv3-cpu
-##PBS -o log.chgres
-##PBS -e log.chgres
-##PBS -l nodes=1:ppn=24
-##PBS -q batch
-##PBS -l walltime=06:00:00
+#---- THEIA JOBCARD
+#---- Submit as: sbatch $script
+##SBATCH -J fv3_chgres_driver
+##SBATCH -A fv3-cpu
+##SBATCH --open-mode=truncate
+##SBATCH -o log.chgres
+##SBATCH -e log.chgres
+##SBATCH --nodes=1
+##SBATCH -q batch
+##SBATCH -t 02:00:00
 set -x
 
 #-------------------------------------------------------------------------------------------------
@@ -49,8 +51,8 @@ elif [ $machine = WCOSS_DELL_P3 ]; then
  export PTMP="/gpfs/dell2/ptmp/$USER"
  export zero_bias_dir=/gpfs/hps3/emc/global/noscrub/emc.glopara/ICS/bias_zero
 elif [ $machine = THEIA ]; then
- export HOMEgfs=/scratch4/NCEPDEV/global/save/$USER/git/fv3gfs/master
- export PTMP="/scratch4/NCEPDEV/stmp4/$USER"
+ export HOMEgfs=$SLURM_SUBMIT_DIR/..
+ export PTMP="/scratch3/NCEPDEV/stmp1/$USER"
  export zero_bias_dir=/scratch4/NCEPDEV/global/save/Fanglin.Yang/git/bias_zero
 else 
  echo "Please define HOMEgfs and PTMP for your machine. exit"
@@ -125,10 +127,10 @@ elif [ $machine = THEIA ]; then
  export APRUNC=time
  export APRUNTF=time
  export OMP_NUM_THREADS_CH=24
- export SUB=/home/Fanglin.Yang/bin/sub_theia
+ export SUB=/home/Fanglin.Yang/bin/sub_slurm
  export ACCOUNT=fv3-cpu
  export QUEUE=batch
- export QUEUE_TRANS=service
+ export QUEUE_TRANS=batch
 else
  echo "$machine not supported, exit"
  exit
