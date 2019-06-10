@@ -43,6 +43,7 @@ subroutine read_vcoord(isnative,vcoordi,vcoordo,lev_input,levp1_input,pt,metadat
   integer :: k, idate(3)
   character (len=1000)											:: fname_coord
   character (len=20)												:: lev_type
+  real(esmf_kind_r8)                        :: sigma, sigflat
 
   !desc: D=YYYYMMDDHHmmss:RH:xxx mb:etc
   read(metadata(3:6),'(I4)') idate(1)
@@ -50,6 +51,7 @@ subroutine read_vcoord(isnative,vcoordi,vcoordo,lev_input,levp1_input,pt,metadat
   read(metadata(9:10),'(I2)') idate(3)
 
   vcoordo(:,:) = 0.0
+  sigflat = 0.1
   if (isnative) then 
     if ((trim(external_model) .eq. 'HRRR' .or. trim(external_model) .eq. 'RAP') & 
         .and. lev_input == 50) then 
@@ -81,8 +83,24 @@ subroutine read_vcoord(isnative,vcoordi,vcoordo,lev_input,levp1_input,pt,metadat
 			read(14, *, iostat=iret) vcoordo(k,1), vcoordo(k,2)
 		enddo    
   else ! create sigma from isobaric levels
-      vcoordo(2:levp1_input,2) = vcoordi / 100000.0
-      vcoordo(1,2) = 0.0
+		!vcoordo(2:levp1_input,2) = vcoordi / 100000.0
+		
+		!vcoordo(1,2) = 0.0
+		
+		! convert isobaric to hybrid levels
+		do k=2,levp1_input
+
+			sigma = vcoordi(k-1)/100000.0
+
+			if (sigma .le. sigflat) then
+				vcoordo(k,1)=sigma
+				vcoordo(k,2)=0
+			else
+				vcoordo(k,1)=sigflat*(1-sigma)/(1-sigflat)
+				vcoordo(k,2)=(sigma-sigflat)/(1-sigflat)
+			end if
+
+		end do
   endif ! end native vs. non-native check
   iret=0
 

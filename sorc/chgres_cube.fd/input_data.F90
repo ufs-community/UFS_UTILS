@@ -2858,7 +2858,8 @@
    call read_vcoord(isnative,rlevs,vcoord,lev_input,levp1_input,pt,metadata,iret)
    if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
    
-   !if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
+   if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
+   if (localpet==0) print*, "VCOORD(:,2) = ", vcoord(:,2)
  
    if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
    iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
@@ -3225,13 +3226,21 @@ if (localpet == 0) then
  if (localpet == 0) then
    print*,'psfc is ',clb(1),clb(2),psptr(clb(1),clb(2))
    if (isnative) then
-     print*,'pres is ',clb(1),clb(2),presptr(clb(1),clb(2),:)
+     print*,'pres is ',cub(1),cub(2),presptr(cub(1),cub(2),:) 
+     
+     print*,'pres check 1',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2),1)), &
+              minval(presptr(clb(1):cub(1),clb(2):cub(2),1))
+     print*,'pres check lev',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2), &
+            lev_input)),minval(presptr(clb(1):cub(1),clb(2):cub(2),lev_input))
    else
-     print*,'pres is ',clb(1),clb(2),atm(1)%var(clb(1),clb(2),:)
+     print*,'pres is ',cub(1),cub(2),atm(1)%var(cub(1),cub(2),:)
+     print*,'pres check 1',localpet,maxval(atm(1)%var(clb(1):cub(1),clb(2):cub(2),1)), &
+              minval(atm(1)%var(clb(1):cub(1),clb(2):cub(2),1))
+     print*,'pres check lev',localpet,maxval(atm(1)%var(clb(1):cub(1),clb(2):cub(2), &
+            lev_input)),minval(atm(1)%var(clb(1):cub(1),clb(2):cub(2),lev_input))
    endif
 
-  print*,'pres check 1',localpet,maxval(presptr(:,:,1)),minval(presptr(:,:,1))
-  print*,'pres check lev',localpet,maxval(presptr(:,:,lev_input)),minval(presptr(:,:,lev_input))
+ 
  endif
  
 !---------------------------------------------------------------------------

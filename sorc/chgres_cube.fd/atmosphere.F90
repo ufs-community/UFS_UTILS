@@ -955,10 +955,12 @@
                     farrayPtr=tptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
-
+    
+ if(localpet==0) then
+   print*,'temp ',tptr(clb(1),clb(2),:)
+ endif
 ! Find specific humidity in the array of tracer fields.
 
- print*, "Tracer names are: ", tracers
  do ii = 1, num_tracers
    if (trim(tracers(ii)) == "sphum") exit
  enddo
@@ -968,6 +970,10 @@
                     farrayPtr=qptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
+    
+  if(localpet==0) then
+   print*,'q ',qptr(clb(1),clb(2),:)
+ endif
 
  print*,"- CALL FieldGet FOR SURFACE PRESSURE BEFORE ADJUSTMENT"
  call ESMF_FieldGet(ps_b4adj_target_grid, &
@@ -1064,6 +1070,7 @@
 ! Compute surface pressure over the top.
 !-----------------------------------------------------------------------------------
 
+
  if(ls.gt.0) then
    k=cub(3)
    gamma=0
@@ -1121,11 +1128,6 @@
  if (istat /= 0) then
    call error_handler("READING VERTICAL COORD FILE", istat)
  endif
-
- print*
- do k = 1, levp1_target
-   print*,'VCOORD FOR LEV ', k, 'IS: ', vcoord_target(k,:)
- enddo
 
  close(14)
 
