@@ -2858,8 +2858,7 @@
    call read_vcoord(isnative,rlevs,vcoord,lev_input,levp1_input,pt,metadata,iret)
    if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
    
-   if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
-   if (localpet==0) print*, "VCOORD(:,2) = ", vcoord(:,2)
+   !if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
  
    if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
    iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
