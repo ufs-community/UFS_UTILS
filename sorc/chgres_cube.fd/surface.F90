@@ -2698,7 +2698,7 @@
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 1) then
      terrain_diff = abs(terrain_input_ptr(i,j) - terrain_target_ptr(i,j))
-     if (terrain_diff > 100.0) then
+     if (terrain_diff > 100.0 .and. terrain_input_ptr(i,j) /=-99999.9_esmf_kind_r8) then
        do k = clb(3), cub(3)
          soil_temp_target_ptr(i,j,k) = soil_temp_target_ptr(i,j,k) + &
               ((terrain_input_ptr(i,j) - terrain_target_ptr(i,j)) * lapse_rate)
