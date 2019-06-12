@@ -145,6 +145,9 @@
  logical, public                 :: convert_sfc = .false.
  logical, public                 :: replace_o3mr = .true.
  logical, public                 :: replace_clwmr = .true.
+ logical, public                 :: replace_vgtyp = .true.
+ logical, public                 :: replace_sotyp = .true.
+ logical, public                 :: replace_vgfrc = .true.
 
  real, allocatable, public       :: drysmc_input(:), drysmc_target(:)
  real, allocatable, public       :: maxsmc_input(:), maxsmc_target(:)
@@ -192,6 +195,7 @@
                    regional, input_type, external_model, &
                    atm_weight_file, tracers, &
                    tracers_input, replace_o3mr, &
+                   replace_vgtyp, replace_sotyp, replace_vgfrc, &
                    replace_clwmr, phys_suite, wgrib2_path, &
                    halo_bndy, halo_blend, numsoil_out
 

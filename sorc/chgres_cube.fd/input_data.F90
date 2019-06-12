@@ -102,6 +102,7 @@
  type(esmf_field), public        :: ustar_input_grid        ! fric velocity
  type(esmf_field), public        :: veg_type_input_grid     ! vegetation type
  type(esmf_field), public        :: z0_input_grid           ! roughness length
+ type(esmf_field), public        :: veg_greenness_input_grid ! vegetation fraction
 
  integer,  public                :: lsoil_input=4  ! # of soil layers,
                                                    ! # LJR: turn off hard wiring, but 
@@ -448,6 +449,13 @@
 
  print*,"- CALL FieldCreate FOR INPUT SOIL TYPE."
  soil_type_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR INPUT SOIL TYPE."
+ veg_greenness_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
@@ -4445,16 +4453,16 @@ if (localpet == 0) then
    print*,"- READ LANDSEA MASK."
    rc = grb2_inq(the_file, inv_file, ':LAND:',':surface:', data2=dummy2d)
    if (rc /= 1) call error_handler("READING LANDSEA MASK.", rc)
-   
+   print*,'landmask ',maxval(dummy2d),minval(dummy2d)
    do j = 1, j_input
      do i = 1, i_input
-       if(dummy2d(i,j) < 0.5) dummy2d(i,j)=0.0_esmf_kind_r4
-       if(slmsk_save(i,j) > 0.15) dummy2d(i,j) = 2.0_esmf_kind_r4
+       if(dummy2d(i,j) < 0.5_esmf_kind_r4) dummy2d(i,j)=0.0_esmf_kind_r4
+       if(slmsk_save(i,j) > 0.15_esmf_kind_r4) dummy2d(i,j) = 2.0_esmf_kind_r4
      enddo
    enddo
    slmsk_save = dummy2d
   
-   print*,'landmask ',maxval(dummy2di),minval(dummy2di)
+   print*,'landmask ',maxval(dummy2d),minval(dummy2d)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
@@ -4612,10 +4620,10 @@ if (localpet == 0) then
    !Note: sometimes the grib files don't have this one named. Searching for this string
    !      ensures that the data is found when it exists
                  
-   vname="var_2-0-4_l1"   
-   rc= grb2_inq(the_file, inv_file, vname,slev,' hour fcst:', data2=dummy2d)
+   vname="var2_2"   
+   rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,' hour fcst:', data2=dummy2d)
    if (rc <= 0) then
-      rc= grb2_inq(the_file, inv_file, vname,slev,':anl:', data2=dummy2d)
+      rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
       
       call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
       if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
@@ -4645,14 +4653,15 @@ if (localpet == 0) then
       if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL USE CLIMATOLOGY. "//&
                    "CHANGE SETTING IN VARMAP TABLE IF THIS IS NOT DESIRABLE."
+        dummy2d(:,:)=0.0
       endif
     endif
    
-   print*,'vtype ',maxval(dummy2d),minval(dummy2d)
+   print*,'vfrac ',maxval(dummy2d),minval(dummy2d)
  endif
  
   print*,"- CALL FieldScatter FOR INPUT GRID VEG TYPE."
-  call ESMF_FieldScatter(veg_type_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0, rc=rc)
+  call ESMF_FieldScatter(veg_greenness_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldScatter", rc)
 

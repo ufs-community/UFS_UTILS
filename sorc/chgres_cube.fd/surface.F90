@@ -292,7 +292,8 @@
                                        xzts_input_grid, &
                                        z_c_input_grid, &
                                        zm_input_grid, terrain_input_grid, &
-                                       veg_type_landice_input
+                                       veg_type_landice_input, &
+                                       veg_greenness_input_grid
 
  use model_grid, only                : input_grid, target_grid, &
                                        i_target, j_target, &
@@ -300,11 +301,13 @@
                                        num_tiles_target_grid, &
                                        landmask_target_grid, &
                                        seamask_target_grid,  &
-                                       latitude_target_grid
+                                       latitude_target_grid, i_input, j_input
 
- use program_setup, only             : convert_nst
+ use program_setup, only             : convert_nst, replace_vgtyp, replace_sotyp, &
+                                       replace_vgfrc
 
- use static_data, only               : veg_type_target_grid
+ use static_data, only               : veg_type_target_grid, soil_type_target_grid, &
+                                       veg_greenness_target_grid
 
  use search_util
 
@@ -330,6 +333,7 @@
  real(esmf_kind_r8), allocatable    :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable    :: data_one_tile_3d(:,:,:)
  real(esmf_kind_r8), allocatable    :: latitude_one_tile(:,:)
+ real(esmf_kind_r8), allocatable    :: data_one_tile_input(:,:)
  real(esmf_kind_r8), pointer        :: canopy_mc_target_ptr(:,:)
  real(esmf_kind_r8), pointer        :: c_d_target_ptr(:,:)
  real(esmf_kind_r8), pointer        :: c_0_target_ptr(:,:)
@@ -368,6 +372,7 @@
 
  type(esmf_regridmethod_flag)       :: method
  type(esmf_routehandle)             :: regrid_bl_no_mask
+ type(esmf_routehandle)             :: regrid_ns_no_mask
  type(esmf_routehandle)             :: regrid_all_land
  type(esmf_routehandle)             :: regrid_land
  type(esmf_routehandle)             :: regrid_landice
@@ -375,9 +380,60 @@
  type(esmf_routehandle)             :: regrid_seaice
  type(esmf_routehandle)             :: regrid_water
  
+ 
+ !-----------------------------------------------------------------------
+ ! Interpolate land surface fields if chosen in namelist
+ !-----------------------------------------------------------------------
+ if(.not. all((/replace_vgtyp, replace_vgfrc, replace_sotyp/))) then
+  
 
+   method=ESMF_REGRIDMETHOD_NEAREST_STOD
+
+   isrctermprocessing = 1
+
+   print*,"- CALL FieldRegridStore FOR NON-MASKED BILINEAR INTERPOLATION."
+   call ESMF_FieldRegridStore(veg_type_input_grid, &
+                              veg_type_target_grid, &
+                              polemethod=ESMF_POLEMETHOD_NONE, &
+                              srctermprocessing=isrctermprocessing, &
+                              routehandle=regrid_ns_no_mask, &
+                              regridmethod=method, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldRegridStore", rc)
+ endif
+
+ if (.not. replace_vgtyp) then
+   print*,"- CALL Field_Regrid VEG TYPE."
+   call ESMF_FieldRegrid(veg_type_input_grid, &
+                         veg_type_target_grid, &
+                         routehandle=regrid_ns_no_mask, &
+                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldRegrid", rc)
+ endif
+ 
+ if (.not. replace_sotyp) then
+   print*,"- CALL Field_Regrid SOIL TYPE."
+   call ESMF_FieldRegrid(soil_type_input_grid, &
+                         soil_type_target_grid, &
+                         routehandle=regrid_ns_no_mask, &
+                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldRegrid", rc)
+ endif
+
+ if (.not. replace_vgfrc) then
+   print*,"- CALL Field_Regrid VEG GREENNESS."
+   call ESMF_FieldRegrid(veg_greenness_input_grid, &
+                         veg_greenness_target_grid, &
+                         routehandle=regrid_ns_no_mask, &
+                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldRegrid", rc)
+ endif 
+ 
 !-----------------------------------------------------------------------
-! Interpolate fieids that do not require 'masked' interpolation.
+! Interpolate fields that do not require 'masked' interpolation.
 !-----------------------------------------------------------------------
 
  method=ESMF_REGRIDMETHOD_BILINEAR
@@ -525,7 +581,6 @@
 ! Interpolate.
 !-----------------------------------------------------------------------
 
-
  method=ESMF_REGRIDMETHOD_CONSERVE
 
  isrctermprocessing = 1
@@ -557,6 +612,7 @@
    allocate(data_one_tile(i_target,j_target))
    allocate(data_one_tile_3d(i_target,j_target,lsoil_target))
    allocate(mask_target_one_tile(i_target,j_target))
+   allocate(data_one_tile_input(i_input,j_input))
  else
    allocate(data_one_tile(0,0))
    allocate(data_one_tile_3d(0,0,0))
@@ -589,6 +645,11 @@
     
     print*,"- CALL FieldGather FOR TARGET GRID SEAICE FRACTION TILE: ", tile
     call ESMF_FieldGather(seaice_fract_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", rc)
+      
+   print*,"- CALL FieldGather FOR TARGET GRID SEAICE FRACTION TILE: ", tile
+    call ESMF_FieldGather(seaice_fract_input_grid, data_one_tile_input, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGather", rc)
       
@@ -2666,7 +2727,7 @@
  character(len=1000)      :: msg
  integer                  :: rc
  real(esmf_kind_r8)          :: tmp(i_input,j_input), &
-																data_one_tile(i_input,j_input,lsoil_input), &
+                                data_one_tile(i_input,j_input,lsoil_input), &
                                 tmp3d(i_input,j_input,lsoil_target)
  if (lsoil_input /= lsoil_target .or. (lsoil_input == 9 .and. lsoil_target == 4)) then
  
@@ -2676,23 +2737,23 @@
       
    call ESMF_FieldDestroy(soil_temp_input_grid,rc=rc)
    soil_temp_input_grid = ESMF_FieldCreate(input_grid, &
-												 typekind=ESMF_TYPEKIND_R8, &
-												 staggerloc=ESMF_STAGGERLOC_CENTER, &
-												 ungriddedLBound=(/1/), &
-												 ungriddedUBound=(/lsoil_target/), rc=rc)
-                    										 
+                         typekind=ESMF_TYPEKIND_R8, &
+                         staggerloc=ESMF_STAGGERLOC_CENTER, &
+                         ungriddedLBound=(/1/), &
+                         ungriddedUBound=(/lsoil_target/), rc=rc)
+                                         
    if(localpet==0)then
-			tmp3d(:,:,1)= (data_one_tile(:,:,1) + data_one_tile(:,:,2))/2.0 * 0.1 + &
-																			(data_one_tile(:,:,2) + data_one_tile(:,:,3))/2.0 * 0.3 + &
-																			(data_one_tile(:,:,3) + data_one_tile(:,:,4))/2.0 * 0.6
-			tmp = (data_one_tile(:,:,6) - data_one_tile(:,:,5)) / 30.0 * 10.0 + data_one_tile(:,:,5) !Linear approx. of 40 cm obs
-			tmp3d(:,:,2)= (data_one_tile(:,:,4) + data_one_tile(:,:,5)) / 2.0 * 0.75 + &
-																			(data_one_tile(:,:,5) + tmp) / 2.0 * 0.25
-			tmp3d(:,:,3)= (tmp + data_one_tile(:,:,6)) /2.0 * (1.0/3.0) + &
-																			(data_one_tile(:,:,6) + data_one_tile(:,:,7)) / 2.0 * (2.0/3.0)
-			tmp = (data_one_tile(:,:,9) - data_one_tile(:,:,9)) / 140.0 * 40.0 + data_one_tile(:,:,8) !Linear approx of 200 cm obs
-			tmp3d(:,:,4)= (data_one_tile(:,:,7) + data_one_tile(:,:,8)) / 2.0 * 0.6 + &
-																			(data_one_tile(:,:,8) + tmp) / 2.0 * 0.4
+      tmp3d(:,:,1)= (data_one_tile(:,:,1) + data_one_tile(:,:,2))/2.0 * 0.1 + &
+                                      (data_one_tile(:,:,2) + data_one_tile(:,:,3))/2.0 * 0.3 + &
+                                      (data_one_tile(:,:,3) + data_one_tile(:,:,4))/2.0 * 0.6
+      tmp = (data_one_tile(:,:,6) - data_one_tile(:,:,5)) / 30.0 * 10.0 + data_one_tile(:,:,5) !Linear approx. of 40 cm obs
+      tmp3d(:,:,2)= (data_one_tile(:,:,4) + data_one_tile(:,:,5)) / 2.0 * 0.75 + &
+                                      (data_one_tile(:,:,5) + tmp) / 2.0 * 0.25
+      tmp3d(:,:,3)= (tmp + data_one_tile(:,:,6)) /2.0 * (1.0/3.0) + &
+                                      (data_one_tile(:,:,6) + data_one_tile(:,:,7)) / 2.0 * (2.0/3.0)
+      tmp = (data_one_tile(:,:,9) - data_one_tile(:,:,9)) / 140.0 * 40.0 + data_one_tile(:,:,8) !Linear approx of 200 cm obs
+      tmp3d(:,:,4)= (data_one_tile(:,:,7) + data_one_tile(:,:,8)) / 2.0 * 0.6 + &
+                                      (data_one_tile(:,:,8) + tmp) / 2.0 * 0.4
    endif
   
    call ESMF_FieldScatter(soil_temp_input_grid, tmp3d, rootpet=0, rc=rc)
@@ -2705,23 +2766,23 @@
       
    call ESMF_FieldDestroy(soilm_tot_input_grid,rc=rc)
    soilm_tot_input_grid = ESMF_FieldCreate(input_grid, &
-												 typekind=ESMF_TYPEKIND_R8, &
-												 staggerloc=ESMF_STAGGERLOC_CENTER, &
-												 ungriddedLBound=(/1/), &
-												 ungriddedUBound=(/lsoil_target/), rc=rc)
-                    										 
+                         typekind=ESMF_TYPEKIND_R8, &
+                         staggerloc=ESMF_STAGGERLOC_CENTER, &
+                         ungriddedLBound=(/1/), &
+                         ungriddedUBound=(/lsoil_target/), rc=rc)
+                                         
   if(localpet==0) then
-			tmp3d(:,:,1)= (data_one_tile(:,:,1) + data_one_tile(:,:,2))/2.0 * 0.1 + &
-																			(data_one_tile(:,:,2) + data_one_tile(:,:,3))/2.0 * 0.3 + &
-																			(data_one_tile(:,:,3) + data_one_tile(:,:,4))/2.0 * 0.6
-			tmp = (data_one_tile(:,:,6) - data_one_tile(:,:,5)) / 30.0 * 10.0 + data_one_tile(:,:,5) !Linear approx. of 40 cm obs
-			tmp3d(:,:,2)= (data_one_tile(:,:,4) + data_one_tile(:,:,5)) / 2.0 * 0.75 + &
-																			(data_one_tile(:,:,5) + tmp) / 2.0 * 0.25
-			tmp3d(:,:,3)= (tmp + data_one_tile(:,:,6)) /2.0 * (1.0/3.0) + &
-																			(data_one_tile(:,:,6) + data_one_tile(:,:,7)) / 2.0 * (2.0/3.0)
-			tmp = (data_one_tile(:,:,9) - data_one_tile(:,:,9)) / 140.0 * 40.0 + data_one_tile(:,:,8) !Linear approx of 200 cm obs
-			tmp3d(:,:,4)= (data_one_tile(:,:,7) + data_one_tile(:,:,8)) / 2.0 * 0.6 + &
-																			(data_one_tile(:,:,8) + tmp) / 2.0 * 0.4
+      tmp3d(:,:,1)= (data_one_tile(:,:,1) + data_one_tile(:,:,2))/2.0 * 0.1 + &
+                                      (data_one_tile(:,:,2) + data_one_tile(:,:,3))/2.0 * 0.3 + &
+                                      (data_one_tile(:,:,3) + data_one_tile(:,:,4))/2.0 * 0.6
+      tmp = (data_one_tile(:,:,6) - data_one_tile(:,:,5)) / 30.0 * 10.0 + data_one_tile(:,:,5) !Linear approx. of 40 cm obs
+      tmp3d(:,:,2)= (data_one_tile(:,:,4) + data_one_tile(:,:,5)) / 2.0 * 0.75 + &
+                                      (data_one_tile(:,:,5) + tmp) / 2.0 * 0.25
+      tmp3d(:,:,3)= (tmp + data_one_tile(:,:,6)) /2.0 * (1.0/3.0) + &
+                                      (data_one_tile(:,:,6) + data_one_tile(:,:,7)) / 2.0 * (2.0/3.0)
+      tmp = (data_one_tile(:,:,9) - data_one_tile(:,:,9)) / 140.0 * 40.0 + data_one_tile(:,:,8) !Linear approx of 200 cm obs
+      tmp3d(:,:,4)= (data_one_tile(:,:,7) + data_one_tile(:,:,8)) / 2.0 * 0.6 + &
+                                      (data_one_tile(:,:,8) + tmp) / 2.0 * 0.4
    endif
   
    call ESMF_FieldScatter(soilm_tot_input_grid, tmp3d, rootpet=0, rc=rc)
@@ -2734,22 +2795,22 @@
       
    call ESMF_FieldDestroy(soilm_liq_input_grid,rc=rc)
    soilm_liq_input_grid = ESMF_FieldCreate(input_grid, &
-												 typekind=ESMF_TYPEKIND_R8, &
-												 staggerloc=ESMF_STAGGERLOC_CENTER, &
-												 ungriddedLBound=(/1/), &
-												 ungriddedUBound=(/lsoil_target/), rc=rc)
-	if(localpet==0) then
-			tmp3d(:,:,1)= (data_one_tile(:,:,1) + data_one_tile(:,:,2))/2.0 * 0.1 + &
-																			(data_one_tile(:,:,2) + data_one_tile(:,:,3))/2.0 * 0.3 + &
-																			(data_one_tile(:,:,3) + data_one_tile(:,:,4))/2.0 * 0.6
-			tmp = (data_one_tile(:,:,6) - data_one_tile(:,:,5)) / 30.0 * 10.0 + data_one_tile(:,:,5) !Linear approx. of 40 cm obs
-			tmp3d(:,:,2)= (data_one_tile(:,:,4) + data_one_tile(:,:,5)) / 2.0 * 0.75 + &
-																			(data_one_tile(:,:,5) + tmp) / 2.0 * 0.25
-			tmp3d(:,:,3)= (tmp + data_one_tile(:,:,6)) /2.0 * (1.0/3.0) + &
-																			(data_one_tile(:,:,6) + data_one_tile(:,:,7)) / 2.0 * (2.0/3.0)
-			tmp = (data_one_tile(:,:,9) - data_one_tile(:,:,9)) / 140.0 * 40.0 + data_one_tile(:,:,8) !Linear approx of 200 cm obs
-			tmp3d(:,:,4)= (data_one_tile(:,:,7) + data_one_tile(:,:,8)) / 2.0 * 0.6 + &
-																			(data_one_tile(:,:,8) + tmp) / 2.0 * 0.4
+                         typekind=ESMF_TYPEKIND_R8, &
+                         staggerloc=ESMF_STAGGERLOC_CENTER, &
+                         ungriddedLBound=(/1/), &
+                         ungriddedUBound=(/lsoil_target/), rc=rc)
+  if(localpet==0) then
+      tmp3d(:,:,1)= (data_one_tile(:,:,1) + data_one_tile(:,:,2))/2.0 * 0.1 + &
+                                      (data_one_tile(:,:,2) + data_one_tile(:,:,3))/2.0 * 0.3 + &
+                                      (data_one_tile(:,:,3) + data_one_tile(:,:,4))/2.0 * 0.6
+      tmp = (data_one_tile(:,:,6) - data_one_tile(:,:,5)) / 30.0 * 10.0 + data_one_tile(:,:,5) !Linear approx. of 40 cm obs
+      tmp3d(:,:,2)= (data_one_tile(:,:,4) + data_one_tile(:,:,5)) / 2.0 * 0.75 + &
+                                      (data_one_tile(:,:,5) + tmp) / 2.0 * 0.25
+      tmp3d(:,:,3)= (tmp + data_one_tile(:,:,6)) /2.0 * (1.0/3.0) + &
+                                      (data_one_tile(:,:,6) + data_one_tile(:,:,7)) / 2.0 * (2.0/3.0)
+      tmp = (data_one_tile(:,:,9) - data_one_tile(:,:,9)) / 140.0 * 40.0 + data_one_tile(:,:,8) !Linear approx of 200 cm obs
+      tmp3d(:,:,4)= (data_one_tile(:,:,7) + data_one_tile(:,:,8)) / 2.0 * 0.6 + &
+                                      (data_one_tile(:,:,8) + tmp) / 2.0 * 0.4
    endif
   
    call ESMF_FieldScatter(soilm_liq_input_grid, tmp3d, rootpet=0, rc=rc)
