@@ -19,7 +19,7 @@
 
  contains
 
- subroutine search (field, mask, idim, jdim, tile, field_num, latitude)
+ subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land)
 
 !-----------------------------------------------------------------------
 ! Replace undefined values on the model grid with a valid value at
@@ -44,6 +44,7 @@
  integer(esmf_kind_i8), intent(in) :: mask(idim,jdim)
 
  real(esmf_kind_r8), intent(in), optional :: latitude(idim,jdim)
+ real(esmf_kind_r8), intent(in), optional :: terrain_land(idim,jdim)
 
  real(esmf_kind_r8), intent(inout) :: field(idim,jdim)
 
@@ -90,7 +91,11 @@
      default_value = 1.0
    case (223) ! canopy moist
      default_value = 0.0
-   case (224) ! soil type, flag value to turn off soil moisture rescaling.
+   case (224) ! soil type, flag value to be replaced
+     default_value = -99999.9
+   case (225) ! vegetation type, flag value to be replaced
+     default_value = -99999.9
+   case (226) ! vegetation fraction, flag value to be replaced
      default_value = -99999.9
    case default
      print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field
@@ -105,7 +110,7 @@
  repl_nearby = 0
  repl_default = 0
 !$OMP PARALLEL DO DEFAULT(NONE), &
-!$OMP SHARED(IDIM,JDIM,MASK,FIELD_SAVE,FIELD,TILE,LATITUDE,DEFAULT_VALUE,FIELD_NUM,REPL_NEARBY,REPL_DEFAULT), &
+!$OMP SHARED(IDIM,JDIM,MASK,FIELD_SAVE,FIELD,TILE,LATITUDE,DEFAULT_VALUE,FIELD_NUM,REPL_NEARBY,REPL_DEFAULT,TERRAIN_LAND), &
 !$OMP PRIVATE(I,J,KRAD,ISTART,IEND,JSTART,JEND,II,JJ)
 
  J_LOOP : do j = 1, jdim
@@ -152,15 +157,20 @@
        elseif (field_num == 91) then  ! sea ice fract
          if (abs(latitude(i,j)) > 55.0) then
            field(i,j) = default_value
+           repl_default = repl_default + 1
          else
            field(i,j) = 0.0
+           repl_default = repl_default + 1
          endif
+       elseif (field_num == 7) then !terrain height
+         field(i,j) = terrain_land(i,j)
        else
          field(i,j) = default_value  ! Search failed.  Use default value.
+         repl_default = repl_default + 1
+       
        endif
 
        !write(6,101) field_num,tile,i,j,field(i,j)
-       repl_default = repl_default + 1
 
      endif
    enddo I_LOOP

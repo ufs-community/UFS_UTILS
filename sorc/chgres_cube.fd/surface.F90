@@ -96,6 +96,11 @@
  type(esmf_field)                   :: terrain_from_input_grid
                                        ! terrain height interpolated
                                        ! from input grid
+ type(esmf_field)                   :: terrain_from_input_grid_land
+                                       ! terrain height interpolated
+                                       ! from input grid at all land points   
+                                                                                                                
+
 
  real, parameter, private           :: blim        = 5.5
                                        ! soil 'b' parameter limit
@@ -331,6 +336,7 @@
  integer(esmf_kind_i8), pointer     :: seamask_target_ptr(:,:)
 
  real(esmf_kind_r8), allocatable    :: data_one_tile(:,:)
+ real(esmf_kind_r8), allocatable    :: data_one_tile2(:,:)
  real(esmf_kind_r8), allocatable    :: data_one_tile_3d(:,:,:)
  real(esmf_kind_r8), allocatable    :: latitude_one_tile(:,:)
  real(esmf_kind_r8), allocatable    :: data_one_tile_input(:,:)
@@ -368,69 +374,18 @@
  real(esmf_kind_r8), pointer        :: z0_target_ptr(:,:)
  real(esmf_kind_r8), pointer        :: landmask_input_ptr(:,:)
  real(esmf_kind_r8), pointer        :: veg_type_input_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: veg_greenness_target_ptr(:,:)
  real(esmf_kind_r8), allocatable    :: veg_type_target_one_tile(:,:)
 
  type(esmf_regridmethod_flag)       :: method
  type(esmf_routehandle)             :: regrid_bl_no_mask
- type(esmf_routehandle)             :: regrid_ns_no_mask
  type(esmf_routehandle)             :: regrid_all_land
  type(esmf_routehandle)             :: regrid_land
  type(esmf_routehandle)             :: regrid_landice
  type(esmf_routehandle)             :: regrid_nonland
  type(esmf_routehandle)             :: regrid_seaice
  type(esmf_routehandle)             :: regrid_water
- 
- 
- !-----------------------------------------------------------------------
- ! Interpolate land surface fields if chosen in namelist
- !-----------------------------------------------------------------------
- if(.not. all((/replace_vgtyp, replace_vgfrc, replace_sotyp/))) then
-  
 
-   method=ESMF_REGRIDMETHOD_NEAREST_STOD
-
-   isrctermprocessing = 1
-
-   print*,"- CALL FieldRegridStore FOR NON-MASKED BILINEAR INTERPOLATION."
-   call ESMF_FieldRegridStore(veg_type_input_grid, &
-                              veg_type_target_grid, &
-                              polemethod=ESMF_POLEMETHOD_NONE, &
-                              srctermprocessing=isrctermprocessing, &
-                              routehandle=regrid_ns_no_mask, &
-                              regridmethod=method, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldRegridStore", rc)
- endif
-
- if (.not. replace_vgtyp) then
-   print*,"- CALL Field_Regrid VEG TYPE."
-   call ESMF_FieldRegrid(veg_type_input_grid, &
-                         veg_type_target_grid, &
-                         routehandle=regrid_ns_no_mask, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldRegrid", rc)
- endif
- 
- if (.not. replace_sotyp) then
-   print*,"- CALL Field_Regrid SOIL TYPE."
-   call ESMF_FieldRegrid(soil_type_input_grid, &
-                         soil_type_target_grid, &
-                         routehandle=regrid_ns_no_mask, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldRegrid", rc)
- endif
-
- if (.not. replace_vgfrc) then
-   print*,"- CALL Field_Regrid VEG GREENNESS."
-   call ESMF_FieldRegrid(veg_greenness_input_grid, &
-                         veg_greenness_target_grid, &
-                         routehandle=regrid_ns_no_mask, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldRegrid", rc)
- endif 
  
 !-----------------------------------------------------------------------
 ! Interpolate fields that do not require 'masked' interpolation.
@@ -525,8 +480,6 @@
     call error_handler("IN FieldRegridRelease", rc)
 
 !-----------------------------------------------------------------------
-! Next, determine the sea ice fraction on target grid. 
-!
 ! First, set the mask on the target and input grids.
 !-----------------------------------------------------------------------
 
@@ -552,8 +505,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
 
- mask_target_ptr = seamask_target_ptr
-
  print*,"- CALL GridAddItem FOR INPUT GRID SEAMASK."
  call ESMF_GridAddItem(input_grid, &
                        itemflag=ESMF_GRIDITEM_MASK, &
@@ -573,14 +524,178 @@
                        farrayPtr=mask_input_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN GridGetItem", rc)
+    
+  if (localpet == 0) then
+   allocate(data_one_tile(i_target,j_target))
+   allocate(data_one_tile_3d(i_target,j_target,lsoil_target))
+   allocate(mask_target_one_tile(i_target,j_target))
+   allocate(data_one_tile_input(i_input,j_input))
+ else
+   allocate(data_one_tile(0,0))
+   allocate(data_one_tile_3d(0,0,0))
+   allocate(mask_target_one_tile(0,0))
+ endif
+    
+ !-----------------------------------------------------------------------
+ ! Interpolate vegetation type to target grid if chosen in namelist and terrain
+ ! for use in replacing isolated bad terrain values
+ !-----------------------------------------------------------------------
+ 
+ method=ESMF_REGRIDMETHOD_NEAREST_STOD
 
- mask_input_ptr = 1
- where (nint(landmask_input_ptr) == 1) mask_input_ptr = 0
+ isrctermprocessing = 1
+ 
+ mask_input_ptr = 0
+ where (nint(landmask_input_ptr) == 1) mask_input_ptr = 1
 
+ mask_target_ptr = 0
+ where (landmask_target_ptr == 1) mask_target_ptr = 1
+ 
+ print*,"- CALL FieldCreate FOR TERRAIN FROM INPUT GRID LAND."
+ terrain_from_input_grid_land = ESMF_FieldCreate(target_grid, &
+                                           typekind=ESMF_TYPEKIND_R8, &
+                                           staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldCreate", rc)
+ 
+ print*,"- CALL FieldRegridStore for land fields."
+ call ESMF_FieldRegridStore(terrain_input_grid, &
+														terrain_from_input_grid_land, &
+														srcmaskvalues=(/0/), &
+														dstmaskvalues=(/0/), &
+														polemethod=ESMF_POLEMETHOD_NONE, &
+														srctermprocessing=isrctermprocessing, &
+														unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
+														normtype=ESMF_NORMTYPE_FRACAREA, &
+														routehandle=regrid_all_land, &
+														regridmethod=method, &
+														unmappedDstList=unmapped_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+		call error_handler("IN FieldRegridStore", rc)
+
+ print*,"- CALL Field_Regrid TERRAIN."
+ call ESMF_FieldRegrid(terrain_input_grid, &
+											 terrain_from_input_grid_land, &
+											 routehandle=regrid_all_land, &
+											 termorderflag=ESMF_TERMORDER_SRCSEQ,  rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+		call error_handler("IN FieldRegrid", rc)
+		
+ print*,"- CALL FieldGet FOR terrain from input grid at land."
+ call ESMF_FieldGet(terrain_from_input_grid_land, &
+										farrayPtr=terrain_from_input_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+		call error_handler("IN FieldGet", rc)
+		
+ l = lbound(unmapped_ptr)
+ u = ubound(unmapped_ptr)
+
+ do ij = l(1), u(1)
+	 call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
+	 terrain_from_input_ptr(i,j) = -9999.9 
+ enddo
+  nullify(terrain_from_input_ptr)	
+  
+ do tile = 1, num_tiles_target_grid
+ 
+	 print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
+	 call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
+	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+			call error_handler("IN FieldGather", rc)
+			
+	 print*,"- CALL FieldGather FOR TERRAIN FROM INPUT GRID: ", tile
+	 call ESMF_FieldGather(terrain_from_input_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+			call error_handler("IN FieldGather", rc)
+
+	 if (localpet == 0) then
+		 allocate(land_target_one_tile(i_target,j_target))
+		 land_target_one_tile = 0
+		 where(mask_target_one_tile == 1) land_target_one_tile = 1
+		 call search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 7)
+		 deallocate(land_target_one_tile)
+	 endif
+
+	 print*,"- CALL FieldScatter FOR TERRAIN FROM INPUT GRID: ", tile
+	 call ESMF_FieldScatter(terrain_from_input_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+			call error_handler("IN FieldScatter", rc)
+ enddo
+ 
+ if(.not. replace_vgtyp) then
+  
+	 do tile = 1, num_tiles_target_grid
+		 print*,"-CALL FieldGather VEG TYPE TARGET GRID"
+		 call ESMF_FieldGather(veg_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldGather", rc)
+	
+		 data_one_tile(:,:) = 0
+	 enddo
+  
+   print*,"- CALL FieldRegrid VEG TYPE."
+   call ESMF_FieldRegrid(veg_type_input_grid, &
+                         veg_type_target_grid, &
+                         routehandle=regrid_all_land, &
+                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldRegrid", rc)
+   
+   print*,"- CALL FieldGet FOR TARGET grid veg type."
+	 call ESMF_FieldGet(veg_type_target_grid, &
+											farrayPtr=veg_type_target_ptr, rc=rc)
+	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+			call error_handler("IN FieldGet", rc)
+    		
+	 l = lbound(unmapped_ptr)
+	 u = ubound(unmapped_ptr)
+
+	 do ij = l(1), u(1)
+		 call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
+		 veg_type_target_ptr(i,j) = -9999.9 
+	 enddo
+
+	 do tile = 1, num_tiles_target_grid
+		 print*,"- CALL FieldGather FOR TARGET GRID VEG TYPE TILE: ", tile
+		 call ESMF_FieldGather(veg_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldGather", rc)
+
+		 print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
+		 call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
+		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldGather", rc)
+
+		 if (localpet == 0) then
+			 allocate(land_target_one_tile(i_target,j_target))
+			 land_target_one_tile = 0
+			 where(mask_target_one_tile == 1) land_target_one_tile = 1
+			 call search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 225)
+			 deallocate(land_target_one_tile)
+		 endif
+
+		 print*,"- CALL FieldScatter FOR TARGET GRID VEG TYPE: ", tile
+		 call ESMF_FieldScatter(veg_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldScatter", rc)
+	 enddo
+	 nullify(veg_type_target_ptr)	
+ endif
+ print*,"- CALL FieldRegridRelease."
+ call ESMF_FieldRegridRelease(routehandle=regrid_all_land, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+		call error_handler("IN FieldRegridRelease", rc)
+		
 !-----------------------------------------------------------------------
+! Next, determine the sea ice fraction on target grid.  
 ! Interpolate.
 !-----------------------------------------------------------------------
 
+ mask_input_ptr = 1
+ where (nint(landmask_input_ptr) == 1) mask_input_ptr = 0
+ 
+ mask_target_ptr = seamask_target_ptr
+ 
  method=ESMF_REGRIDMETHOD_CONSERVE
 
  isrctermprocessing = 1
@@ -607,17 +722,6 @@
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldRegrid", rc)
-
- if (localpet == 0) then
-   allocate(data_one_tile(i_target,j_target))
-   allocate(data_one_tile_3d(i_target,j_target,lsoil_target))
-   allocate(mask_target_one_tile(i_target,j_target))
-   allocate(data_one_tile_input(i_input,j_input))
- else
-   allocate(data_one_tile(0,0))
-   allocate(data_one_tile_3d(0,0,0))
-   allocate(mask_target_one_tile(0,0))
- endif
 
  print*,"- CALL FieldGet FOR TARGET grid sea ice fraction."
  call ESMF_FieldGet(seaice_fract_target_grid, &
@@ -1867,9 +1971,11 @@
  if (localpet == 0) then
    allocate (veg_type_target_one_tile(i_target,j_target))
    allocate (land_target_one_tile(i_target,j_target))
+   allocate (data_one_tile2(i_target,j_target))
  else
    allocate (veg_type_target_one_tile(0,0))
    allocate (land_target_one_tile(0,0))
+   allocate (data_one_tile2(0,0))
  endif
 
  do tile = 1, num_tiles_target_grid
@@ -1899,9 +2005,14 @@
    call ESMF_FieldGather(terrain_from_input_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGather", rc)
+   
+   print*,"- CALL FieldGather FOR TERRAIN FROM INPUT GRID LAND, TILE: ", tile
+   call ESMF_FieldGather(terrain_from_input_grid_land, data_one_tile2, rootPet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
-     call search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 7)
+     call search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 7, terrain_land=data_one_tile2)
    endif
 
    print*,"- CALL FieldScatter FOR TERRAIN FROM INPUT GRID, TILE: ", tile
@@ -2009,6 +2120,14 @@
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldRegrid", rc)
+    
+  print*,"- CALL Field_Regrid for veg greenness over land."
+ call ESMF_FieldRegrid(veg_greenness_input_grid, &
+                       veg_greenness_target_grid, &
+                       routehandle=regrid_land, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldRegrid", rc)
 
  print*,"- CALL FieldGet FOR TARGET grid total soil moisture over land."
  call ESMF_FieldGet(soilm_tot_target_grid, &
@@ -2039,6 +2158,13 @@
                     farrayPtr=soil_type_from_input_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
+    
+ print*,"- CALL FieldGet FOR TARGET veg greenness."
+ call ESMF_FieldGet(veg_greenness_target_grid, &
+                    farrayPtr=veg_greenness_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
+    
 
  l = lbound(unmapped_ptr)
  u = ubound(unmapped_ptr)
@@ -2049,7 +2175,8 @@
    soil_temp_target_ptr(i,j,:) = -9999.9 
    skin_temp_target_ptr(i,j) = -9999.9 
    terrain_from_input_ptr(i,j) = -9999.9 
-   soil_type_from_input_ptr(i,j) = -9999.9 
+   soil_type_from_input_ptr(i,j) = -9999.9
+   veg_greenness_target_ptr(i,j) = -9999.9  
  enddo
 
  if (localpet == 0) then
@@ -2078,6 +2205,10 @@
    if (localpet == 0) then
      where(nint(veg_type_target_one_tile) == veg_type_landice_target) mask_target_one_tile = 0
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 7)
+     
+	 	 !where(data_one_tile < -9999.0) data_one_tile = data_one_tile2
+	 	 print*, "after search and where replace, min max target soil = ", minval(data_one_tile), maxval(data_one_tile)
+   
    endif
 
    print*,"- CALL FieldScatter FOR TERRAIN FROM INPUT GRID, TILE: ", tile
@@ -2107,11 +2238,37 @@
    if (localpet == 0 .and. maxval(data_one_tile) > 0.0) then
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
    endif
+   
+   if (.not. replace_sotyp) then
+     print*,"- CALL FieldScatter FOR SOIL TYPE FROM INPUT GRID, TILE: ", tile
+		 call ESMF_FieldScatter(soil_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldScatter", rc)
+	 endif
+   
+	 print*,"- CALL FieldScatter FOR SOIL TYPE TARGET GRID, TILE: ", tile
+	 call ESMF_FieldScatter(soil_type_from_input_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+			call error_handler("IN FieldScatter", rc)
+			
+   if (.not. replace_vgfrc) then
+   
+		 print*,"- CALL FieldGather FOR TARGET GRID VEG GREENNESS, TILE: ", tile
+		 call ESMF_FieldGather(veg_greenness_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldGather", rc)
 
-   print*,"- CALL FieldScatter FOR SOIL TYPE FROM INPUT GRID, TILE: ", tile
-   call ESMF_FieldScatter(soil_type_from_input_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldScatter", rc)
+		 if (localpet == 0 .and. maxval(data_one_tile) > 0.0) then
+			 call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 226)
+		 endif
+		 
+     print*,"- CALL FieldScatter FOR VEG GREENNESS TARGET GRID, TILE: ", tile
+		 call ESMF_FieldScatter(veg_greenness_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldScatter", rc)
+	 endif
+
+  deallocate(data_one_tile2)
 
    print*,"- CALL FieldGather FOR TARGET GRID TOTAL SOIL MOISTURE, TILE: ", tile
    call ESMF_FieldGather(soilm_tot_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=rc)
@@ -2539,7 +2696,7 @@
     call error_handler("IN FieldGet", rc)
 
  ! If soil type didn't exist in the input data, skip this routine 
- if (minval(soil_type_input_ptr) < -999.9_esmf_kind_r8) return
+ if (maxval(soil_type_input_ptr) < -999.9_esmf_kind_r8) return
  
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
@@ -2698,7 +2855,7 @@
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 1) then
      terrain_diff = abs(terrain_input_ptr(i,j) - terrain_target_ptr(i,j))
-     if (terrain_diff > 100.0 .and. terrain_input_ptr(i,j) /=-99999.9_esmf_kind_r8) then
+     if (terrain_diff > 100.0) then
        do k = clb(3), cub(3)
          soil_temp_target_ptr(i,j,k) = soil_temp_target_ptr(i,j,k) + &
               ((terrain_input_ptr(i,j) - terrain_target_ptr(i,j)) * lapse_rate)
