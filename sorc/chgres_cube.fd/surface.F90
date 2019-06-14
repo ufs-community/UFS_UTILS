@@ -2259,7 +2259,7 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGather", rc)
       
-   if (.not. replace_sotype) then
+   if (.not. replace_sotyp) then
      print*,"- CALL FieldGather FOR SOIL TYPE CLIMO TARGET GRID, TILE: ", tile
 		 call ESMF_FieldGather(soil_type_climo_target_grid, data_one_tile2, rootPet=0, tile=tile, rc=rc)
 		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
