@@ -19,7 +19,7 @@
 
  contains
 
- subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land)
+ subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)
 
 !-----------------------------------------------------------------------
 ! Replace undefined values on the model grid with a valid value at
@@ -45,6 +45,7 @@
 
  real(esmf_kind_r8), intent(in), optional :: latitude(idim,jdim)
  real(esmf_kind_r8), intent(in), optional :: terrain_land(idim,jdim)
+ real(esmf_kind_r8), intent(in), optional :: soilt_climo(idim,jdim)
 
  real(esmf_kind_r8), intent(inout) :: field(idim,jdim)
 
@@ -164,6 +165,8 @@
          endif
        elseif (field_num == 7) then !terrain height
          field(i,j) = terrain_land(i,j)
+       elseif (field_num == 224 .and. present(soilt_climo)) then !soil type
+         field(i,j) = soilt_climo(i,j)
        else
          field(i,j) = default_value  ! Search failed.  Use default value.
          repl_default = repl_default + 1

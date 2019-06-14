@@ -93,6 +93,7 @@
  type(esmf_field)                   :: soil_type_from_input_grid
                                        ! soil type interpolated from
                                        ! input grid
+ type(esmf_field)                   :: soil_type_climo_target_grid                                      
  type(esmf_field)                   :: terrain_from_input_grid
                                        ! terrain height interpolated
                                        ! from input grid
@@ -557,6 +558,15 @@
                                            staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldCreate", rc)
+
+ if(.not. replace_sotyp) then
+   print*,"- CALL FieldCreate FOR SOIL TYPE CLIMO."
+	 soil_type_climo_target_grid= ESMF_FieldCreate(target_grid, &
+																						 typekind=ESMF_TYPEKIND_R8, &
+																						 staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+			call error_handler("IN FieldCreate", rc)
+ endif
  
  print*,"- CALL FieldRegridStore for land fields."
  call ESMF_FieldRegridStore(terrain_input_grid, &
@@ -620,6 +630,20 @@
 	 call ESMF_FieldScatter(terrain_from_input_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
 	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
 			call error_handler("IN FieldScatter", rc)
+			
+	 !Save soil type to a new field if replace_sotyp is set to use input data
+	 if (.not. replace_sotyp) then
+	 
+		 print*,"- CALL FieldGather FOR SOIL TYPE TARGET GRID, TILE: ", tile
+		 call ESMF_FieldGather(soil_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldGather", rc)
+				
+			print*,"- CALL FieldScatter FOR SOIL TYPE CLIMO TARGET GRID: ", tile
+		  call ESMF_FieldScatter(soil_type_climo_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+		  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldScatter", rc)
+	  endif
  enddo
  
  if(.not. replace_vgtyp) then
@@ -2234,10 +2258,22 @@
    call ESMF_FieldGather(soil_type_from_input_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGather", rc)
+      
+   if (.not. replace_sotype) then
+     print*,"- CALL FieldGather FOR SOIL TYPE CLIMO TARGET GRID, TILE: ", tile
+		 call ESMF_FieldGather(soil_type_climo_target_grid, data_one_tile2, rootPet=0, tile=tile, rc=rc)
+		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldGather", rc)
 
-   if (localpet == 0 .and. maxval(data_one_tile) > 0.0) then
-     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
+		 if (localpet == 0 .and. maxval(data_one_tile) > 0.0) then
+			 call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224,soilt_climo=data_one_tile2)
+		 endif
+	 else
+	   if (localpet == 0 .and. maxval(data_one_tile) > 0.0) then
+			 call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
+		 endif
    endif
+   
    
    if (.not. replace_sotyp) then
      print*,"- CALL FieldScatter FOR SOIL TYPE FROM INPUT GRID, TILE: ", tile
