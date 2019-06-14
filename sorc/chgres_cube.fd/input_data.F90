@@ -4320,6 +4320,7 @@ if (localpet == 0) then
 
   use wgrib2api
   use netcdf
+  use grib2_util, only    : to_upper
 
   implicit none
 
@@ -4347,11 +4348,8 @@ if (localpet == 0) then
  !if (file_is_converted) then
  !  the_file = "./test.grib2"
  !endif
- geo_file = trim(data_dir_input_grid) // "/" // trim(geogrid_file_input_grid)
+ geo_file = trim(geogrid_file_input_grid)
  sfc_file = trim(data_dir_input_grid) // "/" // trim(sfc_files_input_grid(1))
- 
- 
- 
  
    print*,"- OPEN FILE."
    inquire(file=the_file,exist=iret)
@@ -4570,22 +4568,30 @@ if (localpet == 0) then
    slev=":surface:" 
    vname=":SOTYP:"                                     
    rc = grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-   
-   if (rc < 0 .and. trim(external_model)=='HRRR') then 
+   print*, "rc, external_model ", rc, trim(to_upper(external_model))
+   if (rc <= 0 .and. trim(to_upper(external_model))=="HRRR") then 
      ! Some HRRR files don't have dominant soil type in the output, but the geogrid files
      ! do, so this gives users the option to provide the geogrid file and use input soil
      ! type 
-     iret = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
+     print*, "OPEN GEOGRID FILE ", trim(geo_file)
+     rc = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
     
-     if (iret == 0) then
-       iret = nf90_inq_varid(ncid2d,'sct_dom',varid)
-       if (iret == 0) then
-         rc = nf90_get_var(ncid2d,varid,dummy2d,start=(/1,1,1/),count=(/i_input,j_input,1/))
+     if (rc == 0) then
+       print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
+       rc = nf90_inq_varid(ncid2d,"SCT_DOM",varid)
+       if (rc<0) print*, "ERROR FINDING SCT_DOM IN GEOGRID FILE"
+       if (rc == 0) then
+         print*, "READ SOIL TYPE FROM GEOGRID FILE "
+         rc = nf90_get_var(ncid2d,varid,dummy2d)
+         if (rc<0) print*, "ERROR READING SCT_DOM FROM FILE"
+         print*, "min max dummy2d = ", minval(dummy2d), maxval(dummy2d)
        endif
+       print*, "CLOSE GEOGRID FILE "
        iret = nf90_close(ncid2d)
      endif
    endif
-   if (rc <= 0) then
+   print*, "rc, iret = ", rc, iret
+   if (rc < 0) then
      vname = "sotyp"
      call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                          loc=varnum)  
