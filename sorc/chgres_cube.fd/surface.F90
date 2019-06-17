@@ -93,7 +93,6 @@
  type(esmf_field)                   :: soil_type_from_input_grid
                                        ! soil type interpolated from
                                        ! input grid
- type(esmf_field)                   :: soil_type_climo_target_grid                                      
  type(esmf_field)                   :: terrain_from_input_grid
                                        ! terrain height interpolated
                                        ! from input grid
@@ -310,10 +309,10 @@
                                        latitude_target_grid, i_input, j_input
 
  use program_setup, only             : convert_nst, replace_vgtyp, replace_sotyp, &
-                                       replace_vgfrc
+                                       replace_vgfrc, tg3_from_soil
 
  use static_data, only               : veg_type_target_grid, soil_type_target_grid, &
-                                       veg_greenness_target_grid
+                                       veg_greenness_target_grid, substrate_temp_target_grid
 
  use search_util
 
@@ -558,15 +557,6 @@
                                            staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldCreate", rc)
-
- if(.not. replace_sotyp) then
-   print*,"- CALL FieldCreate FOR SOIL TYPE CLIMO."
-	 soil_type_climo_target_grid= ESMF_FieldCreate(target_grid, &
-																						 typekind=ESMF_TYPEKIND_R8, &
-																						 staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
-	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-			call error_handler("IN FieldCreate", rc)
- endif
  
  print*,"- CALL FieldRegridStore for land fields."
  call ESMF_FieldRegridStore(terrain_input_grid, &
@@ -2329,6 +2319,13 @@
    call ESMF_FieldScatter(soil_temp_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldScatter", rc)
+  
+   if (tg3_from_soil) then
+     print*,"- CALL FieldScatter FOR TARGET GRID SUBSTRATE TEMPERATURE, TILE: ", tile
+		 call ESMF_FieldScatter(substrate_temp_target_grid, data_one_tile_3d(:,:,lsoil_target), rootPet=0, tile=tile, rc=rc)
+		 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+				call error_handler("IN FieldScatter", rc)
+	 endif
 
  enddo
 
