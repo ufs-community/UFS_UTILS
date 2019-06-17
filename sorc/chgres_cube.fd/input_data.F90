@@ -4633,7 +4633,7 @@ if (localpet == 0) then
                  
    vname="var2_2"   
    rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,' hour fcst:', data2=dummy2d)
-   if (rc <= 0) then
+   if (rc < 0) then
       if (.not. replace_vgtyp) then
        call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET REPLACE_VGTYP=.TRUE. . EXITING")
       else
