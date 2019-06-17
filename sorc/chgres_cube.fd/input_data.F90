@@ -4634,18 +4634,20 @@ if (localpet == 0) then
    vname="var2_2"   
    rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,' hour fcst:', data2=dummy2d)
    if (rc <= 0) then
-      if (.not. replace_vgtyp) then
-       call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET REPLACE_VGTYP=.TRUE. . EXITING")
-      else
-				rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
-			
-				call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-				if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
-					print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL USE CLIMATOLOGY. "//&
-										 "CHANGE SETTING IN VARMAP TABLE IF THIS IS NOT DESIRABLE."
-				endif
-		 endif
-    endif
+	rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
+	
+			if (rc <= 0) then
+				if (.not. replace_vgtyp) then
+					call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET REPLACE_VGTYP=.TRUE. . EXITING")
+				else
+					call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+					if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
+						print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL USE CLIMATOLOGY. "//&
+											 "CHANGE SETTING IN VARMAP TABLE IF THIS IS NOT DESIRABLE."
+					endif !skip or no entry
+				endif ! replace_vgtyp
+		  endif !not find :anl:
+    endif !not find hour fcst:
    
    print*,'vtype ',maxval(dummy2d),minval(dummy2d)
  endif
