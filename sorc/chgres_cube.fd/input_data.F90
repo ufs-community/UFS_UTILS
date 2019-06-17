@@ -4321,6 +4321,7 @@ if (localpet == 0) then
   use wgrib2api
   use netcdf
   use grib2_util, only    : to_upper
+  use program_setup, only : replace_vgtyp, replace_sotyp, replace_vgfrc
 
   implicit none
 
@@ -4592,15 +4593,19 @@ if (localpet == 0) then
    endif
    print*, "rc, iret = ", rc, iret
    if (rc < 0) then
-     vname = "sotyp"
-     call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                         loc=varnum)  
-     call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-     if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL USE CLIMATOLOGY. "//&
-                   "CHANGE SETTING IN VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = -9999.9_esmf_kind_r4
-     endif
+     if (.not. replace_sotyp) then
+       call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET REPLACE_SOTYP=.TRUE. . EXITING")
+     else
+			 vname = "sotyp"
+			 call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+													 loc=varnum)  
+			 call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+			 if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
+					print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL USE CLIMATOLOGY. "//&
+										 "CHANGE SETTING IN VARMAP TABLE IF THIS IS NOT DESIRABLE."
+					dummy2d(:,:) = -9999.9_esmf_kind_r4
+			 endif
+		 endif
    endif
    
    dummy2d_8 = real(dummy2d,esmf_kind_r8)
@@ -4629,13 +4634,17 @@ if (localpet == 0) then
    vname="var2_2"   
    rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,' hour fcst:', data2=dummy2d)
    if (rc <= 0) then
-      rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
-      
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL USE CLIMATOLOGY. "//&
-                   "CHANGE SETTING IN VARMAP TABLE IF THIS IS NOT DESIRABLE."
-      endif
+      if (.not. replace_vgtyp) then
+       call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET REPLACE_VGTYP=.TRUE. . EXITING")
+      else
+				rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
+			
+				call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+				if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
+					print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL USE CLIMATOLOGY. "//&
+										 "CHANGE SETTING IN VARMAP TABLE IF THIS IS NOT DESIRABLE."
+				endif
+		 endif
     endif
    
    print*,'vtype ',maxval(dummy2d),minval(dummy2d)
@@ -4654,13 +4663,35 @@ if (localpet == 0) then
                          loc=varnum)                 
    vname=":VFRAC:"
    rc= grb2_inq(the_file, inv_file, vname,slev,' hour fcst:', data2=dummy2d)
-   if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL USE CLIMATOLOGY. "//&
-                   "CHANGE SETTING IN VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:)=0.0
-      endif
+   if (rc <= 0 .and. trim(to_upper(external_model))=="HRRR") then 
+     print*, "OPEN GEOGRID FILE ", trim(geo_file)
+     rc = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
+    
+     if (rc == 0) then
+       print*, "INQUIRE ABOUT VEG FRACTION FROM GEOGRID FILE"
+       rc = nf90_inq_varid(ncid2d,"GREENFRAC",varid)
+       if (rc<0) print*, "ERROR FINDING GREENFRAC IN GEOGRID FILE"
+       if (rc == 0) then
+         print*, "READ VEG FRACTION FROM GEOGRID FILE "
+         rc = nf90_get_var(ncid2d,varid,dummy2d)
+         if (rc<0) print*, "ERROR READING GREENFRAC FROM FILE"
+         print*, "min max dummy2d = ", minval(dummy2d), maxval(dummy2d)
+       endif
+       print*, "CLOSE GEOGRID FILE "
+       iret = nf90_close(ncid2d)
+     endif
+   endif
+   if (rc < 0) then
+      if (.not. replace_vgfrc) then
+       call error_handler("COULD NOT FIND VEGETATION FRACTION IN FILE. PLEASE SET REPLACE_VGFRC=.TRUE. . EXITING")
+      else
+				call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+				if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
+					print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL USE CLIMATOLOGY. "//&
+										 "CHANGE SETTING IN VARMAP TABLE IF THIS IS NOT DESIRABLE."
+					dummy2d(:,:)=0.0
+				endif
+		  endif
     endif
    
    print*,'vfrac ',maxval(dummy2d),minval(dummy2d)

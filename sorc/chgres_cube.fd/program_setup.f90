@@ -148,6 +148,7 @@
  logical, public                 :: replace_vgtyp = .true.
  logical, public                 :: replace_sotyp = .true.
  logical, public                 :: replace_vgfrc = .true.
+ logical, public                 :: tg3_from_soil = .false.
 
  real, allocatable, public       :: drysmc_input(:), drysmc_target(:)
  real, allocatable, public       :: maxsmc_input(:), maxsmc_target(:)
@@ -197,7 +198,8 @@
                    tracers_input, replace_o3mr, &
                    replace_vgtyp, replace_sotyp, replace_vgfrc, &
                    replace_clwmr, phys_suite, wgrib2_path, &
-                   halo_bndy, halo_blend, numsoil_out
+                   halo_bndy, halo_blend, numsoil_out, &
+                   tg3_from_soil
 
  print*,"- READ SETUP NAMELIST"
 
