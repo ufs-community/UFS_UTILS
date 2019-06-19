@@ -165,7 +165,7 @@
                    convert_nst, convert_sfc, &
                    regional, input_type, &
                    atm_weight_file, tracers, &
-                   tracers_input
+                   tracers_input, halo_bndy, halo_blend
 
  print*,"- READ SETUP NAMELIST"
 
@@ -204,10 +204,11 @@
 !-------------------------------------------------------------------------
 
  if (regional > 0) then
-   halo_bndy = 3
-   halo_blend = 5
    print*,"- PROCESSING A REGIONAL NEST WITH A BOUNDARY HALO OF ",halo_bndy
    print*,"- PROCESSING A REGIONAL NEST WITH A BLENDING HALO OF ",halo_blend
+ else
+   halo_bndy = 0
+   halo_blend = 0
  endif
 
  num_tracers = 0

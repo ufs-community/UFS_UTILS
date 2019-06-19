@@ -4,28 +4,29 @@
 # Run test case on Theia.  MUST BE RUN WITH A 
 # MULTIPLE OF SIX MPI TASKS.  Could not get it to
 # work otherwise.
+#
+# Invoke as: sbatch $script
 #-----------------------------------------------------------
 
-#PBS -l nodes=2:ppn=6
-#PBS -l walltime=0:10:00
-#PBS -A fv3-cpu
-#PBS -q debug
-#PBS -N fv3
-#PBS -o ./log
-#PBS -e ./log
+#SBATCH --ntasks=12 --nodes=2
+#####SBATCH --ntasks=6 --nodes=1
+#SBATCH -t 0:15:00
+#SBATCH -A fv3-cpu
+#SBATCH -q debug
+#SBATCH -J fv3
+#SBATCH -o ./log
+#SBATCH -e ./log
 
 set -x
 
-np=$PBS_NP
-
 source /apps/lmod/lmod/init/ksh
 module purge
-module load intel/15.1.133
+module load intel/18.1.163
 module load impi/5.1.1.109 
 module load netcdf/4.3.0
 
-# Threads are useful when processing spectal gfs data in
-# sigio format.  Otherwise, use one thread.
+# Threads useful when ingesting spectral gfs sigio files.
+# Otherwise set to 1.
 export OMP_NUM_THREADS=1
 export OMP_STACKSIZE=1024M
 
@@ -34,20 +35,25 @@ rm -fr $WORKDIR
 mkdir -p $WORKDIR
 cd $WORKDIR
 
-#ln -fs ${PBS_O_WORKDIR}/config.C48.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C48.gaussian.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C48.gfs.gaussian.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C48.gfs.spectral.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C384.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C768.nest.atm.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C768.nest.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C768.atm.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C768.l91.atm.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C1152.l91.atm.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C96.nest.theia.nml ./fort.41
-ln -fs ${PBS_O_WORKDIR}/config.C768.stretch.theia.nml ./fort.41
-#ln -fs ${PBS_O_WORKDIR}/config.C1152.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/test.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C48.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C48.gaussian.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C48.gfs.gaussian.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C48.gfs.spectral.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C384.theia.nml ./fort.41
+ln -fs ${SLURM_SUBMIT_DIR}/config.C768.nest.atm.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C768.nest.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C768.atm.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C768.l91.atm.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C1152.l91.atm.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C96.nest.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C768.stretch.theia.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.C1152.theia.nml ./fort.41
 
-mpirun -np $np ${PBS_O_WORKDIR}/../exec/global_chgres.exe
+date
+
+srun ${SLURM_SUBMIT_DIR}/../../../exec/chgres_cube.exe
+
+date
 
 exit 0
