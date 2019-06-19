@@ -18,7 +18,8 @@
  convert_atm=.true.
  convert_sfc=.false.
  convert_nst=.false.
- regional=2
+ regional=1
+ halo_bndy=4
  tracers="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
  tracers_input="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
 /
