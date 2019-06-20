@@ -12,9 +12,15 @@ case $1 in
   "wcoss_dell_p3" )
      FCMP=ifort
      FFLAGS="-O0 ${NETCDF_FFLAGS} ${NETCDF_LDFLAGS_F}" ;;
+  "jet" )
+     FCMP=ifort
+     FFLAGS="-O0 -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf" ;;
   "theia" )
      FCMP=ifort
      FFLAGS="-O0 -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf" ;;
+  "odin" )
+     FCMP=ftn
+     FFLAGS="-O0" ;;
   *)
      echo "SHAVE UTILITY BUILD NOT TESTED ON MACHINE $1"
      exit 1 ;;
