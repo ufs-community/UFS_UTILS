@@ -81,14 +81,6 @@ echo " .... Building cycle .... "
 }
 
 #------------------------------------
-# build gettrk
-#------------------------------------
-$Build_gettrk && {
-echo " .... Building gettrk .... "
-./build_gettrk.sh > $logs_dir/build_gettrk.log 2>&1
-}
-
-#------------------------------------
 # build emcsfc
 #------------------------------------
 $Build_emcsfc && {
