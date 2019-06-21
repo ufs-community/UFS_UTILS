@@ -283,51 +283,52 @@ subroutine read_varmap
 
  integer                    :: istat, k, nvars
  character(len=500)         :: varmap_table_file
- 
- varmap_table_file = trim(base_install_dir) // "/" // trim(varmap_tables_dir) // "/" &
+
+ if (trim(input_type) == "grib2") then 
+   varmap_table_file = trim(base_install_dir) // "/" // trim(varmap_tables_dir) // "/" &
                     // trim(phys_suite) // "phys_var_map.txt"
  
 
- print*,"OPEN VARIABLE MAPPING FILE: ", trim(varmap_table_file)
- open(14, file=trim(varmap_table_file), form='formatted', iostat=istat)
- if (istat /= 0) then
-   call error_handler("OPENING VARIABLE MAPPING FILE", istat)
- endif
+   print*,"OPEN VARIABLE MAPPING FILE: ", trim(varmap_table_file)
+   open(14, file=trim(varmap_table_file), form='formatted', iostat=istat)
+   if (istat /= 0) then
+     call error_handler("OPENING VARIABLE MAPPING FILE", istat)
+   endif
 
- read(14, *, iostat=istat) nvars, num_tracers
- if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
- print*, 'NUMBER OF TRACERS FROM VARMAP FILE = ', num_tracers
- read(14, *, iostat=istat) tracers_input(1:num_tracers)
- if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
- print*, 'TRACERS FROM VARMAP FILE = ', tracers_input(1:num_tracers)
+   read(14, *, iostat=istat) nvars, num_tracers
+   if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
+   print*, 'NUMBER OF TRACERS FROM VARMAP FILE = ', num_tracers
+   read(14, *, iostat=istat) tracers_input(1:num_tracers)
+   if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
+   print*, 'TRACERS FROM VARMAP FILE = ', tracers_input(1:num_tracers)
 
 
- allocate(chgres_var_names(nvars))
- allocate(field_var_names(nvars))
- allocate(missing_var_methods(nvars))
- allocate(missing_var_values(nvars))
- allocate(read_from_input(nvars))
-
- 
- read_from_input(:) = .true.
+   allocate(chgres_var_names(nvars))
+   allocate(field_var_names(nvars))
+   allocate(missing_var_methods(nvars))
+   allocate(missing_var_values(nvars))
+   allocate(read_from_input(nvars))
 
  
- do k = 1,nvars
-  read(14, *, iostat=istat) chgres_var_names(k), field_var_names(k) , & 
+   read_from_input(:) = .true.
+
+ 
+   do k = 1,nvars
+     read(14, *, iostat=istat) chgres_var_names(k), field_var_names(k) , & 
                            missing_var_methods(k), missing_var_values(k)
- enddo
+   enddo
  
- if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
+   if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
 
 
- print*
- do k = 1, nvars
-   print*,'VAR MISSING METHOD FOR', chgres_var_names(k), 'IS: ', missing_var_methods(k)
- enddo
+   print*
+   do k = 1, nvars
+     print*,'VAR MISSING METHOD FOR', chgres_var_names(k), 'IS: ', missing_var_methods(k)
+   enddo
 
- close(14)
-
- end subroutine read_varmap
+   close(14)
+ endif
+end subroutine read_varmap
 
 ! ----------------------------------------------------------------------------------------
 ! Find conditions for handling missing variables from varmap arrays
