@@ -2,8 +2,8 @@
 ## chgres build module for Jet
 #############################################################
 
-setenv COREPATH /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
-setenv NCEPLIBS /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
+export COREPATH=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
+export NCEPLIBS=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
 module use /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib/modulefiles
 
 module load intel/15.0.3.187
