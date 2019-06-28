@@ -37,7 +37,9 @@
 #   Input script positional parameters:
 #     1             Input sigma file (SIGINP)
 #     2             Input surface file (SFCINP)
-#     3             Input nst file (NSTINP)
+#     3             Input nst file (NSTINP).  Note: fv3gfs
+#                   places nst data in the surface file.
+#                   Set NSTINP to NULL when using fv3gfs.
 #     4             Output cubed-sphere resolution (CASE)
 #     5             New number of vertical sigma levels (LEVS)
 #
