@@ -472,7 +472,7 @@
       END SUBROUTINE NEWPS 
 !-----------------------------------------------------------------------
       SUBROUTINE VINTG(IM,IX,KM1,KM2,NT,P1,U1,V1,T1,Q1,W1,P2,           &
-                       U2,V2,T2,Q2,DTDP2,W2)                            
+                       U2,V2,T2,Q2,W2)                            
 !$$$  SUBPROGRAM DOCUMENTATION BLOCK                                    
 !                                                                       
 ! SUBPROGRAM:    VINTG       VERTICALLY INTERPOLATE UPPER-AIR FIELDS    
@@ -524,7 +524,7 @@
            ,W1(IX,KM1)                                                  
       REAL P2(IX,KM2),U2(IX,KM2),V2(IX,KM2),T2(IX,KM2),Q2(IX,KM2,NT)    &
            ,W2(IX,KM2)                                                  
-      REAL,optional :: DTDP2(IX,KM2) 
+!     REAL,optional :: DTDP2(IX,KM2) 
       PARAMETER(DLTDZ=-6.5E-3*287.05/9.80665) 
       PARAMETER(DLPVDRT=-2.5E6/461.50) 
                                                                         
@@ -1162,7 +1162,7 @@
       end subroutine dothe 
 !-----------------------------------------------------------------------
       SUBROUTINE NEWPR1(IM,IX,KM,KMP,IDVC,IDVM,IDSL,NVCOORD,VCOORD,     &
-     &                  RI, CPI, NTRACM,PP,TP,QP,PS,PM,DP)
+     &                  RI, CPI, NTRACM,PP,TP,QP,PS,PM)
 !$$$  SUBPROGRAM DOCUMENTATION BLOCK                                    
 !                                                                       
 ! SUBPROGRAM:    NEWPR1      COMPUTE MODEL PRESSURES                    
@@ -1218,7 +1218,7 @@
       REAL SI(KM+1),AK(KM+1),BK(KM+1),CK(KM+1) 
       REAL VCOORD(KM+1,NVCOORD) 
       REAL PS(IX),PI(IX,KM+1),PM(IX,KM) 
-      REAL DP(IX,KM) 
+!     REAL DP(IX,KM) 
       REAL PP(IX,KMP),TP(IX,KMP),QP(IX,KMP,NTRACM) 
       REAL PO(KMP),TO(KMP),QO(KMP,ntracm) 
       REAL PN(KM ),TN(KM ),QN(KM,ntracm ), AKBKPS(KM) 
@@ -1387,11 +1387,11 @@
 !$OMP END PARALLEL DO                                                   
       ENDIF 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-      DO K=1,KM 
-        DO I=1,IM 
-          DP(I,K) = PI(I,K) - PI(I,K+1) 
-        ENDDO 
-      ENDDO 
+!     DO K=1,KM 
+!       DO I=1,IM 
+!         DP(I,K) = PI(I,K) - PI(I,K+1) 
+!       ENDDO 
+!     ENDDO 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
       END SUBROUTINE NEWPR1 
 !-----------------------------------------------------------------------
