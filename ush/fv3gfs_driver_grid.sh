@@ -19,7 +19,8 @@
 #
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
-#       an ESMF library requirement.
+#       an ESMF library requirement.  Large grids may require
+#       tasks spread across multiple nodes.
 #
 # To run, do the following:
 #   1) Uncomment workload management directives for your machine.
@@ -48,16 +49,17 @@
 
 #---- WCOSS DELL JOBCARD
 #---- Submit script as "cat $script | bsub"
-##BSUB -oo log.grid.%J
-##BSUB -eo log.grid.%J
-##BSUB -q debug
-##BSUB -P FV3GFS-T2O
-##BSUB -J grid_fv3
-##BSUB -W 0:30
-##BSUB -x                 # run not shared
-##BSUB -n 24              # total tasks
-##BSUB -R span[ptile=24]   # tasks per node
-##BSUB -R affinity[core(1):distribute=balance]
+#BSUB -oo log.grid.%J
+#BSUB -eo log.grid.%J
+#BSUB -q debug
+#BSUB -P FV3GFS-T2O
+#BSUB -J grid_fv3
+#BSUB -W 0:30
+#BSUB -x                 # run not shared
+#BSUB -n 24              # total tasks
+#BSUB -R span[ptile=24]   # tasks per node
+#BSUB -R affinity[core(1):distribute=balance]
+machine=WCOSS_DELL_P3
 
 #---- WCOSS_CRAY JOBCARD
 #---- Submit script as "cat $script | bsub"
@@ -70,29 +72,30 @@
 ##BSUB -M 2400
 ##BSUB -W 00:30
 ##BSUB -extsched 'CRAYLINUX[]'
+#machine=WCOSS_C
 
 #---- THEIA JOBCARD
 #---- Submit script as 'sbatch $script'
-#SBATCH -J fv3_grid_driver
-#SBATCH -A fv3-cpu
-#SBATCH --open-mode=truncate
-#SBATCH -o log.fv3_grid_driver
-#SBATCH -e log.fv3_grid_driver
-#SBATCH --nodes=1 --ntasks-per-node=24
-#SBATCH -q debug
-#SBATCH -t 00:30:00
+##SBATCH -J fv3_grid_driver
+##SBATCH -A fv3-cpu
+##SBATCH --open-mode=truncate
+##SBATCH -o log.fv3_grid_driver
+##SBATCH -e log.fv3_grid_driver
+##SBATCH --nodes=1 --ntasks-per-node=24
+##SBATCH -q debug
+##SBATCH -t 00:30:00
+#machine=THEIA
 
 set -ax
 
-machine=THEIA   # THEIA, WCOSS_DELL_P3 or WCOSS_C
-export machine=${machine:-WCOSS_C}
+export machine=${machine:?}
 
 #----------------------------------------------------------------------------------
 # Makes FV3 cubed-sphere grid
 #----------------------------------------------------------------------------------
 
 export res=96              # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
-export gtype=stretch      # grid type: uniform, stretch, nest or regional
+export gtype=uniform       # grid type: uniform, stretch, nest or regional
 
 if [ $gtype = uniform ];  then
   echo "Creating uniform ICs"
