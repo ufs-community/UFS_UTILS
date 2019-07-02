@@ -239,10 +239,11 @@
 !-------------------------------------------------------------------------
 
  if (regional > 0) then
-   !halo_bndy = 4
-   !halo_blend = 0
    print*,"- PROCESSING A REGIONAL NEST WITH A BOUNDARY HALO OF ",halo_bndy
    print*,"- PROCESSING A REGIONAL NEST WITH A BLENDING HALO OF ",halo_blend
+ else
+   halo_bndy = 0
+   halo_blend = 0
  endif
 
  num_tracers = 0

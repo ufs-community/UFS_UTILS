@@ -1,14 +1,51 @@
 #!/bin/sh
+
+#------------------------------------------------------------------------
+#
+# Script name: fv3gfs_chgres.sh
+#
+# Description: Creates initial conditions for coldstarting the fv3
+#              forecast model.
+#
+# How to use this script:
+#
+#  - Uncomment the job cards for your machine.  Ensure the
+#    'machine' variable is uncommented.  Ensure job cards for
+#    the other machines are prefixed by "##".  
+#  - Check the job card account.  On Theia, this is 
+#    "#SBATCH -q $account".  On WCOSS, this is "#BSUB -P $account".
+#    You may not have permissions to run under the default account.
+#  - Make sure you have linked the 'fixed' directories using
+#    sorc/link_fixdirs.sh.
+#  - Set the following shell variables:
+#      PSLOT     - Your experiment name
+#      CASE_HIGH - Deterministic resolution
+#      CASE_ENKF - Enkf resolution
+#      PTMP      - Directory were the initial condition files will be 
+#                  placed.
+#      CDUMP     - Set to 'gdas' for cycling with enkf.  Set to 'gfs'
+#                  for free forecast only.  NOTE: only the 'gfs'
+#                  cycle is supported when using fv3gfs data as
+#                  input.
+#      CDATE     - year/month/day/hour of your experiment.
+#      HOMEgfs   - Path to your checkout repository.
+#  - Start the script as follows:
+#      Theia: "sbatch fv3gfs_chgres.sh"
+#      WCOSS Dell and Cray: "cat fv3gfs_chgres.sh | bsub"
+#
+#------------------------------------------------------------------------
+
 #----WCOSS_DELL JOBCARD
 #BSUB -P FV3GFS-T2O
 #BSUB -o log.chgres.%J
 #BSUB -e log.chgres.%J
 #BSUB -J fv3_chgres
-#BSUB -q devmax
-#BSUB -M 2400
+#BSUB -q dev
+#BSUB -M 6000
 #BSUB -W 10:00
 #BSUB -R span[ptile=14]
 #BSUB -n 14
+export machine=WCOSS_DELL_P3
 
 #----WCOSS_CRAY JOBCARD
 ##BSUB -L /bin/sh
@@ -20,6 +57,7 @@
 ##BSUB -M 2400
 ##BSUB -W 10:00
 ##BSUB -extsched 'CRAYLINUX[]'
+#export machine=WCOSS_C
 
 #---- THEIA JOBCARD
 #---- Submit as: sbatch $script
@@ -31,46 +69,51 @@
 ##SBATCH --nodes=1
 ##SBATCH -q batch
 ##SBATCH -t 02:00:00
+#export machine=THEIA
+
 set -x
-
-#-------------------------------------------------------------------------------------------------
-# This script calls ./ush/global_chgres_driver.sh to create high-res and/or enkf cold 
-# start initial conditions, and stages all necessary DA files for starting a forecast-only 
-# or cycled fv3gfs experiment.
-# Fanglin Yang, 03/08/2018
-#-------------------------------------------------------------------------------------------------
-
-export machine=WCOSS_DELL_P3            ;#WCOSS_C, WCOSS_DELL_P3, THEIA
-
-if [ $machine = WCOSS_C ]; then
- export HOMEgfs=/gpfs/hps3/emc/global/noscrub/$USER/git/fv3gfs/master
- export PTMP="/gpfs/hps2/ptmp/$USER"
- export zero_bias_dir=/gpfs/hps3/emc/global/noscrub/emc.glopara/ICS/bias_zero
-elif [ $machine = WCOSS_DELL_P3 ]; then
- export HOMEgfs=/gpfs/dell2/emc/modeling/noscrub/$USER/git/fv3gfs/master
- export PTMP="/gpfs/dell2/ptmp/$USER"
- export zero_bias_dir=/gpfs/hps3/emc/global/noscrub/emc.glopara/ICS/bias_zero
-elif [ $machine = THEIA ]; then
- export HOMEgfs=$SLURM_SUBMIT_DIR/..
- export PTMP="/scratch3/NCEPDEV/stmp1/$USER"
- export zero_bias_dir=/scratch4/NCEPDEV/global/save/Fanglin.Yang/git/bias_zero
-else 
- echo "Please define HOMEgfs and PTMP for your machine. exit"
- exit
-fi
 
 export PSLOT=fv3test
 export CDUMP=gdas
 export CASE_HIGH=C768
 export CASE_ENKF=C384
-export CDATE=2018050100
+export CDATE=2019061000
 
-export NSTSMTH=YES                                  ##apply 9-point smoothing to nsst tref
+if [ $machine = WCOSS_C ]; then
+ export HOMEgfs=$LS_SUBCWD/..
+ export PTMP=${PTMP:-"/gpfs/hps2/ptmp/$USER"}
+ export zero_bias_dir=/gpfs/hps3/emc/global/noscrub/emc.glopara/ICS/bias_zero
+elif [ $machine = WCOSS_DELL_P3 ]; then
+ export HOMEgfs=$LS_SUBCWD/..
+ export PTMP=${PTMP:-"/gpfs/dell2/ptmp/$USER"}
+ export zero_bias_dir=/gpfs/hps3/emc/global/noscrub/emc.glopara/ICS/bias_zero
+elif [ $machine = THEIA ]; then
+ export HOMEgfs=$SLURM_SUBMIT_DIR/..
+ export PTMP=${PTMP:-"/scratch3/NCEPDEV/stmp1/$USER"}
+ export zero_bias_dir=/scratch4/NCEPDEV/global/save/glopara/git/bias_zero
+else 
+ echo "Please define HOMEgfs and PTMP for your machine. exit"
+ exit
+fi
+
+#-------------------------------------------------------------------------------------------------
+# Perform simple check to ensure user has HOMEgfs set correctly and has linked the 'fix'
+# directories.
+#-------------------------------------------------------------------------------------------------
+
+if [ ! -d ${HOMEgfs}/fix/fix_fv3/$CASE_HIGH ]; then
+  set +x
+  echo FATAL ERROR: CANT FIND FIX DIRECTORIES. 
+  echo ENSURE HOMEgfs PATH IS CORRECT.
+  echo YOUR HOMEgfs SETTING IS: $HOMEgfs
+  echo ALSO ENSURE sorc/link_fixdirs.sh WAS RUN.
+  exit 1
+fi
+
+export NSTSMTH=NO                                  ##apply 9-point smoothing to nsst tref
 export NST_TF_CHG=$HOMEgfs/exec/nst_tf_chg.x
 export ZERO_BIAS=YES                                ##zeroed out all bias and radsat files 
 
-#===========================================================
-#===========================================================
 
 export ymd=`echo $CDATE | cut -c 1-8`
 export cyc=`echo $CDATE | cut -c 9-10`
@@ -127,7 +170,7 @@ elif [ $machine = THEIA ]; then
  export APRUNC=time
  export APRUNTF=time
  export OMP_NUM_THREADS_CH=24
- export SUB=/home/Fanglin.Yang/bin/sub_slurm
+ export SUB=/home/glopara/bin/sub_slurm
  export ACCOUNT=fv3-cpu
  export QUEUE=batch
  export QUEUE_TRANS=batch
@@ -136,13 +179,12 @@ else
  exit
 fi
 
-
-
 #----------------------------
 #----------------------------
 #--for high-res
 #----------------------------
 #----------------------------
+
 export CASE=$CASE_HIGH
 export INIDIR=$RUNDIR/$CDUMP/$CASE
 export COMROT=$ROTDIR/${CDUMP}.$ymd/$cyc
@@ -152,111 +194,113 @@ rm -rf $INIDIR $OUTDIR $DATA
 mkdir -p $INIDIR $OUTDIR  $DATA
 cd $INIDIR ||exit 8
 
-#................................................
-if [ -s $COMROOT/gfs/prod/${CDUMP}.${ymd} ]; then
-#................................................
-   ## get operational real-time data from COMROT
+#--------------------------------------------------------------------------
+# See if requested data is in the ops directory.  If not, pull from hpss.
+#--------------------------------------------------------------------------
+
+if [ -s $COMROOT/gfs/prod/${CDUMP}.${ymd}/$cyc ]; then
+
+   if [ $CDUMP = gdas ]; then
+     set +x
+     echo GDAS CYCLE NOT SUPPORTED.
+     echo USE NEW PARALLEL VERSION OF CHGRES.
+     echo CONTACT REPOSITORY MANAGER FOR DETAILS.
+     exit
+   fi
    atm=./${CDUMP}.t${cyc}z.atmanl.nemsio
    sfc=./${CDUMP}.t${cyc}z.sfcanl.nemsio
-   nst=./${CDUMP}.t${cyc}z.nstanl.nemsio
-   biascr=./${CDUMP}.t${cyc}z.abias 
-   biascr_pc=./${CDUMP}.t${cyc}z.abias_pc
-   aircraft_t_bias=./${CDUMP}.t${cyc}z.abias_air  
-   radstat=./${CDUMP}.t${cyc}z.radstat
-   for ff in $atm $sfc $nst ; do
-     cp $COMROOT/gfs/prod/${CDUMP}.${ymd}/$ff .
+   nst=$sfc  # for fv3gfs, nst fields stored in surface file
+   for ff in $atm $sfc ; do
+     cp $COMROOT/gfs/prod/${CDUMP}.${ymd}/$cyc/$ff .
    done
-   if [ $CDUMP = gdas ]; then
-    for ff in $biascr $biascr_pc $aircraft_t_bias $radstat ; do
-      cp $COMROOT/gfs/prod/${CDUMP}.${ymd}/$ff $COMROT/.
-    done
-   fi
 
-#................................................
 else   ##get data from HPSS archive
-#................................................
 
-if [ $CDATE -lt 2014050100 ]; then
+  if [ $CDATE -lt 2014050100 ]; then
 
-   HPSSPATH=/NCEPPROD/hpssprod/runhistory/rh$yy/$yy$mm/$yy$mm$dd      ##use operational nems gfs nems gfs ics
-   nst=" "
-   if [ $CDUMP = gdas ]; then
-     tarball_high=com_gfs_prod_${CDUMP}.${CDATE}.tar
-     atm=./gdas1.t${cyc}z.sanl
-     sfc=./gdas1.t${cyc}z.sfcanl
-     biascr=./gdas1.t${cyc}z.abias
-     biascr_pc=" "
-     radstat=./gdas1.t${cyc}z.radstat
-     aircraft_t_bias=" "
-   else
-     tarball_high=com_gfs_prod_${CDUMP}.${CDATE}.anl.tar
-     atm=./gfs.t${cyc}z.sanl
-     sfc=./gfs.t${cyc}z.sfcanl
-   fi
+    HPSSPATH=/NCEPPROD/hpssprod/runhistory/rh$yy/$yy$mm/$yy$mm$dd      ##use operational nems gfs nems gfs ics
+    nst=" "
+    if [ $CDUMP = gdas ]; then
+      tarball_high=com_gfs_prod_${CDUMP}.${CDATE}.tar
+      atm=./gdas1.t${cyc}z.sanl
+      sfc=./gdas1.t${cyc}z.sfcanl
+      biascr=./gdas1.t${cyc}z.abias
+      biascr_pc=" "
+      radstat=./gdas1.t${cyc}z.radstat
+      aircraft_t_bias=" "
+    else
+      tarball_high=com_gfs_prod_${CDUMP}.${CDATE}.anl.tar
+      atm=./gfs.t${cyc}z.sanl
+      sfc=./gfs.t${cyc}z.sfcanl
+    fi
 
-elif [ $CDATE -le 2017072012 ]; then
-   if [ $CDATE -ge 2016110100 ]; then
-     oldexp=prnemsrn
-   elif [ $CDATE -ge 2016050100 ]; then
-     oldexp=pr4rn_1605
-   elif [ $CDATE -ge 2015121500 ]; then
-     oldexp=pr4rn_1512
-   elif [ $CDATE -ge 2015050200 ]; then
-     oldexp=pr4rn_1505
-   elif [ $CDATE -ge 2014073000 ]; then
-     oldexp=pr4rn_1408
-   elif [ $CDATE -ge 2014050100 ]; then
-     oldexp=pr4rn_1405
-   else
-     echo "NEMS GSM retro ICs do not exit, exit"
-     exit 1
-   fi
+  elif [ $CDATE -le 2017072012 ]; then
+    if [ $CDATE -ge 2016110100 ]; then
+      oldexp=prnemsrn
+    elif [ $CDATE -ge 2016050100 ]; then
+      oldexp=pr4rn_1605
+    elif [ $CDATE -ge 2015121500 ]; then
+      oldexp=pr4rn_1512
+    elif [ $CDATE -ge 2015050200 ]; then
+      oldexp=pr4rn_1505
+    elif [ $CDATE -ge 2014073000 ]; then
+      oldexp=pr4rn_1408
+    elif [ $CDATE -ge 2014050100 ]; then
+      oldexp=pr4rn_1405
+    else
+      echo "NEMS GSM retro ICs do not exit, exit"
+      exit 1
+    fi
 
-   HPSSPATH=/5year/NCEPDEV/emc-global/emc.glopara/WCOSS_C/$oldexp    ##use q3fy17 nems gfs parallel ics
-   tarball_high=${CDATE}${CDUMP}.tar
-   atm=gfnanl.${CDUMP}.$CDATE
-   sfc=sfnanl.${CDUMP}.$CDATE
-   nst=nsnanl.${CDUMP}.$CDATE
-   biascr=biascr.${CDUMP}.$CDATE
-   biascr_pc=biascr_pc.${CDUMP}.$CDATE
-   aircraft_t_bias=aircraft_t_bias.${CDUMP}.$CDATE
-   radstat=radstat.${CDUMP}.$CDATE
-else
-   HPSSPATH=/NCEPPROD/hpssprod/runhistory/rh$yy/$yy$mm/$yy$mm$dd      ##use operational nems gfs nems gfs ics
-   if [ $CDUMP = gfs ]; then
-     tarball_high=gpfs_hps_nco_ops_com_gfs_prod_${CDUMP}.${CDATE}.anl.tar
-   else
-     tarball_high=gpfs_hps_nco_ops_com_gfs_prod_${CDUMP}.${CDATE}.tar
-   fi
-   atm=./${CDUMP}.t${cyc}z.atmanl.nemsio
-   sfc=./${CDUMP}.t${cyc}z.sfcanl.nemsio
-   nst=./${CDUMP}.t${cyc}z.nstanl.nemsio
-   biascr=./${CDUMP}.t${cyc}z.abias 
-   biascr_pc=./${CDUMP}.t${cyc}z.abias_pc
-   aircraft_t_bias=./${CDUMP}.t${cyc}z.abias_air  
-   radstat=./${CDUMP}.t${cyc}z.radstat
-fi
+    HPSSPATH=/5year/NCEPDEV/emc-global/emc.glopara/WCOSS_C/$oldexp    ##use q3fy17 nems gfs parallel ics
+    tarball_high=${CDATE}${CDUMP}.tar
+    atm=gfnanl.${CDUMP}.$CDATE
+    sfc=sfnanl.${CDUMP}.$CDATE
+    nst=nsnanl.${CDUMP}.$CDATE
+    biascr=biascr.${CDUMP}.$CDATE
+    biascr_pc=biascr_pc.${CDUMP}.$CDATE
+    aircraft_t_bias=aircraft_t_bias.${CDUMP}.$CDATE
+    radstat=radstat.${CDUMP}.$CDATE
+  elif [[ $CDATE -le 2019061118 ]]; then
+    HPSSPATH=/NCEPPROD/hpssprod/runhistory/rh$yy/$yy$mm/$yy$mm$dd      ##use operational nems gfs nems gfs ics
+    if [ $CDUMP = gfs ]; then
+      tarball_high=gpfs_hps_nco_ops_com_gfs_prod_${CDUMP}.${CDATE}.anl.tar
+    else
+      tarball_high=gpfs_hps_nco_ops_com_gfs_prod_${CDUMP}.${CDATE}.tar
+    fi
+    atm=./${CDUMP}.t${cyc}z.atmanl.nemsio
+    sfc=./${CDUMP}.t${cyc}z.sfcanl.nemsio
+    nst=./${CDUMP}.t${cyc}z.nstanl.nemsio
+    biascr=./${CDUMP}.t${cyc}z.abias 
+    biascr_pc=./${CDUMP}.t${cyc}z.abias_pc
+    aircraft_t_bias=./${CDUMP}.t${cyc}z.abias_air  
+    radstat=./${CDUMP}.t${cyc}z.radstat
+  else  # FV3GFS starting 2019061200
+    HPSSPATH=/NCEPPROD/hpssprod/runhistory/rh$yy/$yy$mm/$yy$mm$dd
+    if [ $CDUMP = gfs ]; then
+      tarball_high=gpfs_dell1_nco_ops_com_gfs_prod_${CDUMP}.${yy}${mm}${dd}_${cyc}.${CDUMP}_nemsioa.tar
+    else
+      set +x
+      echo GDAS CYCLE NOT SUPPORTED.
+      echo USE NEW PARALLEL VERSION OF CHGRES.
+      echo CONTACT REPOSITORY MANAGER FOR DETAILS.
+      exit
+    fi
+    atm=./${CDUMP}.$yy$mm$dd/$cyc/${CDUMP}.t${cyc}z.atmanl.nemsio
+    sfc=./${CDUMP}.$yy$mm$dd/$cyc/${CDUMP}.t${cyc}z.sfcanl.nemsio
+  fi
 
 #--extract ICs from hpss
 cat > read_hpss.sh <<EOF1
 
    . $HOMEgfs/ush/load_fv3gfs_modules.sh   2>>/dev/null
 
-   #export machine=$machine
-   #if [ $machine = WCOSS_C ]; then
-   # . $MODULESHOME/init/sh                 2>>/dev/null
-   # module load hpss  2>>/dev/null
-   #elif [ $machine = WCOSS_DELL_P3 ]; then
-   # . /usrx/local/prod/lmod/lmod/init/sh   2>>/dev/null
-   # module load HPSS/5.0.2.5               2>>/dev/null
-   #elif [ $machine = THEIA ]; then
-   # source $HOMEgfs/sorc/machine-setup.sh  2>>/dev/null
-   # module use -a /scratch3/NCEPDEV/nwprod/lib/modulefiles  2>>/dev/null
-   # module load hpss                       2>>/dev/null
-   #fi
-
    cd $INIDIR
    htar -xvf  $HPSSPATH/$tarball_high $atm $sfc $nst  
+   if [[ $CDATE -ge 2019061200 ]]; then
+     ln -fs $atm .
+     ln -fs $sfc .
+   fi
    if [ $CDUMP = gdas ]; then
       cd $COMROT 
       htar -xvf  $HPSSPATH/$tarball_high $biascr $biascr_pc $aircraft_t_bias $radstat
@@ -277,7 +321,6 @@ $SUB -a $ACCOUNT -q $QUEUE_TRANS -p 1/1/S -r 1024/1/1 -t 2:00:00 -j read_hpss -o
 #................................................
 fi
 #................................................
-
 
 testfile=$INIDIR/$sfc                 
 nsleep=0; tsleep=120;  msleep=50
@@ -314,7 +357,6 @@ fi
 fi
 #------------------------------
 
-
 $HOMEgfs/ush/global_chgres_driver.sh
 if [ $? -ne 0 ] ; then
  echo "chgres for $CDUMP $CASE failed. exit"
@@ -329,7 +371,6 @@ if [ $CDUMP = "gdas" -a $ZERO_BIAS = "YES" ]; then
    done
 fi 
 
-
 [[ $CDUMP = gfs ]] && exit
 [[ $CDATE -lt 2012052100 ]] && exit  # no enkf data before this date
 
@@ -343,18 +384,6 @@ export INIDIR=$RUNDIR/$CDUMP/$CASE
 rm -rf $INIDIR; mkdir -p $INIDIR 
 cd $INIDIR ||exit 8
 
-#................................................
-if [ -s $COMROOT/gfs/prod/enkf.${ymd}/${cyc} ]; then
-#................................................
-   ## get operational real-time data from COMROT
-   for ff in ratmanl sfcanl nstanl; do
-    cp $COMROOT/gfs/prod/enkf.${ymd}/${cyc}/gdas.t${cyc}z.${ff}* .
-   done
-   testfile=$INIDIR/gdas.t${cyc}z.sfcanl.mem080.nemsio
-
-#................................................
-else   ## extract data from HPSS                      
-#................................................
 if [ $CDATE -lt 2014050100 ]; then
   HPSSPATH=/NCEPPROD/hpssprod/runhistory/rh$yy/$yy$mm/$yy$mm$dd      ##use operational nems gfs nems gfs ics
   tarball_enkf_atm=com_gfs_prod_enkf.${ymd}_${cyc}.anl.tar    
@@ -414,11 +443,6 @@ EOF
 chmod u+x read_hpss.sh
 $SUB -a $ACCOUNT -q $QUEUE_TRANS -p 1/1/S -r 1024/1/1 -t 2:00:00 -j read_hpss -o read_hpss.out $INIDIR/read_hpss.sh
 
-#................................................
-fi
-#................................................
-
-
 nsleep=0; tsleep=120;  msleep=50
 while test ! -s $testfile -a $nsleep -lt $msleep;do
   sleep $tsleep; nsleep=`expr $nsleep + 1`
@@ -469,9 +493,8 @@ else
    cp     gdas.t${cyc}z.nstanl.${mchar}.nemsio fnsti
 fi
 
-#------------------------------
 if [ $NSTSMTH = "YES" ]; then
-#------------------------------
+
 rm -f tf_chg_parm.input
 cat >tf_chg_parm.input <<EOF1
 &config
@@ -485,9 +508,8 @@ if [ $? -ne 0 ] ; then
   echo "NST_TF_CHG for $CDUMP $CASE failed. exit"
   exit 1
 fi
-#------------------------------
-fi
-#------------------------------
+
+fi # NSTSMTH IS YES
 
 $HOMEgfs/ush/global_chgres_driver.sh
 if [ $? -ne 0 ] ; then

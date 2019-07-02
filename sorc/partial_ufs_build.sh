@@ -4,7 +4,7 @@
  declare -a Build_prg=("Build_nems_util" \
                        "Build_chgres" "Build_cycle" \
                        "Build_nst_tf_chg" \
-                       "Build_orog" "Build_gettrk" \
+                       "Build_orog" \
                        "Build_nctools" "Build_chgres_cube" \
                        "Build_emcsfc")
 
