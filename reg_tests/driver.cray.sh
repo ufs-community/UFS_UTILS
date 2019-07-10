@@ -14,7 +14,7 @@ module list
 
 export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
 export HOMEufs=$PWD/..
-export OUTDIR=/gpfs/hps3/stmp/George.Gayno/chgres_reg_tests
+export OUTDIR=/gpfs/hps3/stmp/$LOGNAME/chgres_reg_tests
 
 QUEUE="debug"
 PROJECT_CODE="FV3GFS-T2O"
