@@ -2,9 +2,6 @@
 
 set -x
 
-export OMP_NUM_THREADS=1
-export OMP_STACKSIZE=1024M
-
 OUTDIR=$OUTDIR/c96_regional
 rm -fr $OUTDIR
 mkdir -p $OUTDIR
@@ -56,7 +53,7 @@ for files in *.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    nccmp -dmfqS $files $HOMEreg/baseline_data/c96_regional/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c96_regional/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
