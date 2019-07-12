@@ -71,6 +71,30 @@
  real                         :: mdl_res_input, mdl_res_output
 
 !----------------------------------------------------------------
+! Set defaults at non-water points.
+!----------------------------------------------------------------
+
+ data_output=0.0  ! zero out fields at non-water points
+ data_output(:,5)  = 30.0  ! filler value for xz at non-water points
+ data_output(:,17) = tskin_output  ! use skin temperature from the 
+                                   ! land model as fill value 
+                                   ! for tref at non-water points.
+
+!----------------------------------------------------------------
+! Only interpolate to output points that are open water.
+! Mask values are: 0-open water, 1-land, 2-sea ice.
+!----------------------------------------------------------------
+
+ count_water=0
+ do ij=1, ij_output
+   if (mask_output(ij) < 0.5) then
+     count_water=count_water+1
+   endif
+ enddo
+
+ if (count_water == 0) return
+
+!----------------------------------------------------------------
 ! Bitmap flag for input data.  All input fields will be
 ! interpolated using the same bitmap.
 !----------------------------------------------------------------
@@ -108,18 +132,6 @@
      bitmap_input(i,j,17)=.true.
    endif
  enddo
- enddo
-
-!----------------------------------------------------------------
-! Only interpolate to output points that are open water.
-! Mask values are: 0-open water, 1-land, 2-sea ice.
-!----------------------------------------------------------------
-
- count_water=0
- do ij=1, ij_output
-   if (mask_output(ij) < 0.5) then
-     count_water=count_water+1
-   endif
  enddo
 
  allocate(rlat_water(count_water))
@@ -215,12 +227,6 @@
 ! Now put the water points back into the array that holds
 ! all output grid points.
 !----------------------------------------------------------------
-
- data_output=0.0  ! zero out fields at non-water points
- data_output(:,5)  = 30.0  ! filler value for xz at non-water points
- data_output(:,17) = tskin_output  ! use skin temperature from the 
-                                   ! land model as fill value 
-                                   ! for tref at non-water points.
 
  do ij=1, count_water
    data_output(ijsav_water(ij),:)=data_water(ij,:)
