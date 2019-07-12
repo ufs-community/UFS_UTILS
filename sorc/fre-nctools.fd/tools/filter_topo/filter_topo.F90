@@ -29,17 +29,19 @@ program filter_topo
 
   logical :: zs_filter = .true. 
   logical :: zero_ocean = .true.          ! if true, no diffusive flux into water/ocean area 
+  integer :: refine_ratio = 1             ! default parent-to-nest space ratio
+  real    :: res = 48.                    ! real value of the 'c' resolution
   real    :: stretch_fac = 1.0
   logical :: nested = .false. &
             ,regional = .false.
-  integer :: grid_type = 0 ! gnomoic_ed
+  integer :: grid_type = 0 ! gnomonic_ed
   character(len=128) :: topo_file = "orog"
   character(len=128) :: topo_field = "orog_filt"
   character(len=128) :: mask_field = "slmsk"
   character(len=128) :: grid_file = "atmos_mosaic.nc"
   namelist /filter_topo_nml/ topo_file, topo_field, mask_field, grid_file, zero_ocean, &
-       zs_filter, cd4, n_del2_weak, peak_fac, max_slope, stretch_fac, nested, grid_type, &
-       regional
+       zs_filter, cd4, n_del2_weak, peak_fac, max_slope, stretch_fac, refine_ratio, res, &
+       nested, grid_type, regional
 
   integer :: stdunit = 6 
   integer :: ntiles = 0
@@ -58,6 +60,11 @@ program filter_topo
   integer           :: nx, ny, npx, npy, nx_nest, ny_nest, npx_nest, npy_nest, is_nest, ie_nest, js_nest, je_nest, isd_nest, ied_nest, jsd_nest, jed_nest
   !--- read namelist
   call read_namelist()
+
+  !--- compute filter constants for the regional resolution
+  if(regional)then
+    call compute_filter_constants
+  endif
 
   !--- read the target grid.
   call read_grid_file(regional)
@@ -552,8 +559,10 @@ contains
 
     if( ntiles == 6) then
       print*, " read_grid_file: This is a global grid."
-    elseif( ntiles == 7 )then
+    elseif( ntiles >= 6 )then
       print*, " read_grid_file: This is a nested grid."
+      print*, " filter only the globe."
+      ntiles=6
     elseif( ntiles == 1 )then
       print*, " read_grid_file: This is a standalone regional grid."
     endif
@@ -1754,5 +1763,56 @@ contains
 
   end subroutine read_namelist
 
+  !#######################################################################
+  ! compute resolution-dependent values for the filtering.
+
+  subroutine compute_filter_constants
+
+  ! set the given values for various cube resolutions (c48, c96, c192, c384, c768, c1152, c3072)
+
+  integer,parameter :: nres=7
+  integer :: index1,index2,n
+
+  real :: factor,res_regional
+
+  real,dimension(1:nres) :: cube_res=(/48.,96.,192.,384.,768.,1152.,3072./)
+
+  real,dimension(1:nres) :: n_del2_weak_vals=(/4.,8.,12.,12.,16.,20.,24./)
+  real,dimension(1:nres) :: cd4_vals        =(/0.12,0.12,0.15,0.15,0.15,0.15,0.15/)
+  real,dimension(1:nres) :: max_slope_vals  =(/0.12,0.12,0.12,0.12,0.12,0.16,0.30/)
+  real,dimension(1:nres) :: peak_fac_vals   =(/1.1,1.1,1.05,1.0,1.0,1.0,1.0/)
+  
+!------------------------------------------------------------------
+! What is the equivalent cube resolution of this regional domain
+! where res is the parent cube's resolution?
+!------------------------------------------------------------------
+
+  res_regional=res*stretch_fac*real(refine_ratio)
+
+  if(res_regional<cube_res(1))then
+    index1 = 1
+    index2 = 1
+    factor = 0.
+  elseif(res_regional>cube_res(nres))then
+    index1 = nres
+    index2 = nres
+    factor = 0.
+  else
+    do n=2,nres
+      if(res_regional<=cube_res(n))then
+        index2 = n
+        index1 = n-1
+        factor = (res_regional-cube_res(n-1))/(cube_res(n)-cube_res(n-1))
+        exit
+      endif
+    enddo
+  endif
+
+  n_del2_weak = nint(n_del2_weak_vals(index1)+factor*(n_del2_weak_vals(index2)-n_del2_weak_vals(index1)))
+  cd4 = cd4_vals(index1)+factor*(cd4_vals(index2)-cd4_vals(index1))
+  max_slope = max_slope_vals(index1)+factor*(max_slope_vals(index2)-max_slope_vals(index1))
+  peak_fac = peak_fac_vals(index1)+factor*(peak_fac_vals(index2)-peak_fac_vals(index1))
+
+  end subroutine compute_filter_constants
 
 end program filter_topo
