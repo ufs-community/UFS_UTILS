@@ -282,7 +282,7 @@ if [ $gtype = uniform ];  then
   echo "............ Execute fv3gfs_filter_topo.sh .............."
   echo
   set -x
-  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir $gtype
+  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
   err=$?
   if [ $err != 0 ]; then
     exit $err
@@ -348,7 +348,7 @@ elif [ $gtype = stretch ]; then
   echo "............ Execute fv3gfs_filter_topo.sh .............."
   echo
   set -x
-  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir $gtype
+  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
   err=$?
   if [ $err != 0 ]; then
     exit $err
@@ -514,7 +514,7 @@ elif [ $gtype = regional ]; then
   echo "............ Execute fv3gfs_filter_topo.sh .............."
   echo
   set -x
-  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir $gtype
+  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
   err=$?
   if [ $err != 0 ]; then
     exit $err
