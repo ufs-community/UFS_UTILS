@@ -1,4 +1,25 @@
-#!/bin/sh
+#!/bin/bash
+
+#-----------------------------------------------------------------------------
+#
+# Run the chgres_cube regression tests on Theia.
+#
+# Set OUTDIR to your working directory.  Set the PROJECT_CODE as
+# appropriate.  To see which projects you are authorized to use,
+# type "account_params".
+#
+# Invoke the script with no arguments.  A series of daily-
+# chained jobs will be submitted.  To check the queue, type:
+# "squeue -u USERNAME".
+#
+# The run output will be stored in $OUTDIR.  Log output from the suite
+# will be in $LOG_FILE.  Once the suite has completed, a summary is
+# placed in $SUM_FILE.
+#
+# A test fails when its output does not match the baseline files as
+# determined by the "nccmp" utility.
+#
+#-----------------------------------------------------------------------------
 
 set -x
 
@@ -9,16 +30,27 @@ module load impi/5.1.1.109
 module load netcdf/4.3.0
 module list
 
-export HOMEufs=$PWD/..
 export OUTDIR=/scratch3/NCEPDEV/stmp1/$LOGNAME/chgres_reg_tests
-export HOMEreg=/scratch4/NCEPDEV/da/noscrub/George.Gayno/reg_tests/chgres_cube
-
 PROJECT_CODE="fv3-cpu"
 QUEUE="debug"
+
+#-----------------------------------------------------------------------------
+# Should not have to change anything below here.  HOMEufs is the root
+# directory of your UFS_UTILS clone.  HOMEreg contains the input data
+# and baseline data for each test.
+#-----------------------------------------------------------------------------
+
+export HOMEufs=$PWD/..
+
+export HOMEreg=/scratch4/NCEPDEV/da/noscrub/George.Gayno/reg_tests/chgres_cube
+
 export NCCMP=/apps/nccmp/1.8.2-gcc/bin/nccmp
 
 LOG_FILE=regression.log
+
 SUM_FILE=summary.log
+
+rm -f $LOG_FILE $SUM_FILE
 
 export OMP_STACKSIZE=1024M
 
@@ -26,35 +58,63 @@ export APRUN=srun
 
 rm -fr $OUTDIR
 
+#-----------------------------------------------------------------------------
+# Initialize C96 using FV3 warm restart files.
+#-----------------------------------------------------------------------------
+
 export OMP_NUM_THREADS=1
 export INPUT_DATA=${HOMEreg}/input_data/fv3.restart
 TEST1=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.restart.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize C192 using FV3 tiled history files.
+#-----------------------------------------------------------------------------
 
 export OMP_NUM_THREADS=1
 export INPUT_DATA=${HOMEreg}/input_data/fv3.history
 TEST2=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c192.fv3.history \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c192.fv3.history.sh)
 
+#-----------------------------------------------------------------------------
+# Initialize C96 using FV3 gaussian nemsio files.
+#-----------------------------------------------------------------------------
+
 export OMP_NUM_THREADS=1
 export INPUT_DATA=${HOMEreg}/input_data/fv3.nemsio
 TEST3=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.nemsio \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./c96.fv3.nemsio.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize C96 using spectral GFS sigio/sfcio files.
+#-----------------------------------------------------------------------------
 
 export OMP_NUM_THREADS=6
 export INPUT_DATA=${HOMEreg}/input_data/gfs.sigio
 TEST4=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./c96.gfs.sigio.sh)
 
+#-----------------------------------------------------------------------------
+# Initialize C96 using spectral GFS gaussian nemsio files.
+#-----------------------------------------------------------------------------
+
 export OMP_NUM_THREADS=1
 export INPUT_DATA=${HOMEreg}/input_data/gfs.nemsio
 TEST5=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.nemsio \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST4 ./c96.gfs.nemsio.sh)
 
+#-----------------------------------------------------------------------------
+# Initialize regional C96 using FV3 gaussian nemsio files.
+#-----------------------------------------------------------------------------
+
 export OMP_NUM_THREADS=1
 export INPUT_DATA=${HOMEreg}/input_data/fv3.nemsio
 TEST6=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.regional \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST5 ./c96.regional.sh)
+
+#-----------------------------------------------------------------------------
+# Create summary log.
+#-----------------------------------------------------------------------------
 
 sbatch --ntasks=1 --mem=100M -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d afterok:$TEST6 << EOF

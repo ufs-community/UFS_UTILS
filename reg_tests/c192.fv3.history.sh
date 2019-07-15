@@ -1,4 +1,10 @@
-#!/bin/sh
+#!/bin/bash
+
+#-----------------------------------------------------------------------------
+# Invoke chgres to create C192 coldstart files using FV3 tile history files
+# as input.  The coldstart files are then compared to baseline files
+# using the 'nccmp' utility.  Run from the machine specific driver script.
+#-----------------------------------------------------------------------------
 
 set -x
 
@@ -44,6 +50,10 @@ if [ $iret -ne 0 ]; then
 fi
 
 date
+
+#-----------------------------------------------------------------------------
+# Compare output from chgres to baseline set of data.
+#-----------------------------------------------------------------------------
 
 test_failed=0
 for files in *.nc
