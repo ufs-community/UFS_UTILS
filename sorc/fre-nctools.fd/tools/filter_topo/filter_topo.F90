@@ -1787,9 +1787,7 @@ contains
 ! where res is the parent cube's resolution?
 !------------------------------------------------------------------
 
-      res_regional=res*stretch_fac*real(refine_ratio)
-      write(0,101)res_regional
-  101 format(' res_regional=',e12.5)
+  res_regional=res*stretch_fac*real(refine_ratio)
 
   if(res_regional<cube_res(1))then
     index1 = 1
@@ -1809,18 +1807,11 @@ contains
       endif
     enddo
   endif
-      write(0,10001)res,stretch_fac,refine_ratio
-10001 format(' res=',e12.5,' stretch_fac=',e12.5,' refine_ratio=',i2)
-      write(0,10002)n_del2_weak,cd4,max_slope,peak_fac
-10002 format(' before n_del2_weak=',i3,' cd4=',e12.5,' max_slope=',e12.5,' peak_fac=', e12.5)
-
   n_del2_weak = nint(n_del2_weak_vals(index1)+factor*(n_del2_weak_vals(index2)-n_del2_weak_vals(index1)))
   cd4 = cd4_vals(index1)+factor*(cd4_vals(index2)-cd4_vals(index1))
   max_slope = max_slope_vals(index1)+factor*(max_slope_vals(index2)-max_slope_vals(index1))
   peak_fac = peak_fac_vals(index1)+factor*(peak_fac_vals(index2)-peak_fac_vals(index1))
 
-      write(0,10003)n_del2_weak,cd4,max_slope,peak_fac
-10003 format(' after n_del2_weak=',i3,' cd4=',e12.5,' max_slope=',e12.5,' peak_fac=', e12.5)
   end subroutine compute_filter_constants
 
 end program filter_topo
