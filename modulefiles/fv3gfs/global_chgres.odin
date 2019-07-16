@@ -10,7 +10,7 @@
 #module load cray-netcdf
 
 # Load NCEPLIBS modules
-module use /scratch/ywang/external/modulefiles
+module use /oldscratch/ywang/external/modulefiles
 
 module load sigio/v2.0.1
 module load w3nco/v2.0.6

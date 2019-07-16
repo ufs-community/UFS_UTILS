@@ -11,7 +11,7 @@ cwd=`pwd`
 USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}
 if [ $USE_PREINST_LIBS = true ]; then
   if [ $target = odin ]; then
-    export MOD_PATH=/scratch/ywang/external/modulefiles
+    export MOD_PATH=/oldscratch/ywang/external/modulefiles
   elif [ $target = jet ]; then
     export MOD_PATH=/mnt/lfs3/projects/hfv3gfs/nwprod/lib/modulefiles
   else
