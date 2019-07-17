@@ -50,7 +50,7 @@
                                        landmask_target_grid
 
  use program_setup, only             : vcoord_file_target_grid, &
-                                       regional,                &
+                                       regional, input_type      &
                                        tracers, num_tracers,      &
                                        atm_weight_file, phys_suite
 
@@ -399,7 +399,8 @@
 !.. both).
 !-----------------------------------------------------------------------------------
 
- if (trim(phys_suite)=="RAP" .or. trim(phys_suite)=="GSD") then
+ if ((trim(phys_suite)=="RAP" .or. trim(phys_suite)=="GSD") .and. & 
+       trim(input_type)=="grib2" ) then
    call create_number_concentrations
  endif
 
