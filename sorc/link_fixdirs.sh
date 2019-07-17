@@ -43,4 +43,10 @@ for dir in fix_am fix_fv3 fix_orog fix_fv3_gmted2010 ; do
     $LINK $FIX_DIR/$dir  .
 done
 
+if [ $machine == "cray" ] || [ $machine = "dell" ]; then
+    $LINK /gpfs/dell2/emc/modeling/noscrub/George.Gayno/landutil.git/climo_fields_netcdf ./fix_sfc_climo
+elif [ $machine = "theia" ]; then
+    $LINK /scratch4/NCEPDEV/da/noscrub/George.Gayno/climo_fields_netcdf ./fix_sfc_climo
+fi
+
 exit 0
