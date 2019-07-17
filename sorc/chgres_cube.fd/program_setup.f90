@@ -121,7 +121,7 @@
  character(len=1000), public     :: wgrib2_path="wgrib2"
 
  integer, parameter, public      :: max_tracers=100
- integer, public                 :: num_tracers
+ integer, public                 :: num_tracers, num_tracers_input
  
  logical, allocatable, public    :: read_from_input(:)
  
@@ -149,6 +149,7 @@
  logical, public                 :: replace_sotyp = .true.
  logical, public                 :: replace_vgfrc = .true.
  logical, public                 :: tg3_from_soil = .false.
+
 
  real, allocatable, public       :: drysmc_input(:), drysmc_target(:)
  real, allocatable, public       :: maxsmc_input(:), maxsmc_target(:)
@@ -251,6 +252,13 @@
    if (trim(tracers(is)) == "NULL") exit
    num_tracers = num_tracers + 1
    print*,"- WILL PROCESS TRACER ", trim(tracers(is))
+ enddo
+ 
+ num_tracers_input = 0
+ do is = 1, max_tracers
+   if (trim(tracers_input(is)) == "NULL") exit
+   num_tracers_input = num_tracers_input + 1
+   print*,"- WILL PROCESS INPUT TRACER ", trim(tracers_input(is))
  enddo
 
 !-------------------------------------------------------------------------

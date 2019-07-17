@@ -39,6 +39,7 @@
                                     orog_dir_input_grid, &
                                     orog_files_input_grid, &
                                     tracers_input, num_tracers, &
+                                    num_tracers_input, &
                                     input_type, external_model, &
                                     get_var_cond, read_from_input, tracers, &
                                     convert_sfc  
@@ -559,7 +560,7 @@
  lev_input = sighead%levs
  levp1_input = lev_input + 1
 
- if (num_tracers /= sighead%ntrac) then
+ if (num_tracers_input /= sighead%ntrac) then
    call error_handler("WRONG NUMBER OF TRACERS EXPECTED.", 99)
  endif
 
@@ -600,6 +601,10 @@
  allocate(tracers_input_grid(num_tracers))
 
  do i = 1, num_tracers
+   if (trim(tracers(i)) == "spfh")    P_QV = i
+   if (trim(tracers(i)) == "clwmr")   P_QC = i
+   if (trim(tracers(i)) == "water_nc") P_QNC = i
+   
    print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
    tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -678,8 +683,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldScatter", rc)
 
- do k = 1, num_tracers
-
+ do k = 1, num_tracers_input
    if (localpet == 0) then
      call sptezm(0,sighead%jcap,4,i_input, j_input, lev_input, sigdata%q(:,:,k), dummy3d, 1)
      print*,trim(tracers_input(k)),maxval(dummy3d),minval(dummy3d)
@@ -884,7 +888,11 @@
  allocate(tracers_input_grid(num_tracers))
 
  do i = 1, num_tracers
+   
    print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
+   if (trim(tracers(i)) == "spfh")  P_QV = i
+   if (trim(tracers(i)) == "clwmr") P_QC = i
+   if (trim(tracers(i)) == "water_nc") P_QNC = i
    tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
@@ -960,7 +968,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
      call error_handler("IN FieldScatter", rc)
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
 
    if (localpet == 0) then
      print*,"- READ ", trim(tracers_input(n))
@@ -1201,7 +1209,8 @@
 
  allocate(tracers_input_grid(num_tracers))
 
- do i = 1, num_tracers
+ do i = 1, num_tracers_input
+ 
    print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
    tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -1287,7 +1296,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldScatter", rc)
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
 
    if (localpet == 0) then
      print*,"- READ ", trim(tracers_input(n))
@@ -1589,8 +1598,7 @@
 
  allocate(tracers_input_grid(num_tracers))
 
- do i = 1, num_tracers
-
+ do i = 1, num_tracers_input
    print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
    tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -1718,7 +1726,7 @@
    call netcdf_err(error, 'opening: '//trim(tilefile) )
  endif
 
- do i = 1, num_tracers
+ do i = 1, num_tracers_input
 
    if (localpet < num_tiles_input_grid) then
      error=nf90_inq_varid(ncid, tracers_input(i), id_var)
@@ -1983,7 +1991,7 @@
       call error_handler("IN FieldScatter", rc)
  enddo
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_file
 
    if (localpet < num_tiles_input_grid) then
      print*,"- READ ", trim(tracers_input(n))
@@ -2927,14 +2935,6 @@
 
  do i = 1,num_tracers
    if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
-   if (trim(tracers_input_vmap(i)) == "sphum")    P_QV = i
-   if (trim(tracers_input_vmap(i)) == "liq_wat")  P_QC = i
-   if (trim(tracers_input_vmap(i)) == "ice_wat")  P_QI = i
-   if (trim(tracers_input_vmap(i)) == "rainwat")  P_QR = i
-   if (trim(tracers_input_vmap(i)) == "ice_nc")   P_QNI = i
-   if (trim(tracers_input_vmap(i)) == "rain_nc")  P_QNR = i
-   if (trim(tracers_input_vmap(i)) == "water_nc") P_QNC = i
-   if (trim(tracers_input_vmap(i)) == "liq_aero") P_QNWFA = i
 
    tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
