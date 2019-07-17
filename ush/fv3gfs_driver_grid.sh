@@ -98,13 +98,13 @@ export res=96              # resolution of tile: 48, 96, 128, 192, 384, 768, 115
 export gtype=uniform       # grid type: uniform, stretch, nest or regional
 
 if [ $gtype = uniform ];  then
-  echo "Creating uniform ICs"
+  echo "Creating global uniform grid"
 elif [ $gtype = stretch ]; then
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile
   export target_lat=35.5       # Center latitude of the highest resolution tile
   title=c${res}s               # Identifier based on refined location
-  echo "Creating stretched grid"
+  echo "Creating global stretched grid"
 elif [ $gtype = nest ] || [ $gtype = regional ]; then
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile
@@ -221,20 +221,39 @@ else
 fi
 
 #----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
 # Make grid and orography.
 #----------------------------------------------------------------------------------
-
-#----------------------------------------------------------------------------------
-# Uniform grid.
 #----------------------------------------------------------------------------------
 
-if [ $gtype = uniform ];  then
+#----------------------------------------------------------------------------------
+# Uniform, stretch or nest grid.
+#----------------------------------------------------------------------------------
 
-  export ntiles=6
-  name=C${res}
+if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
+
+  if [ $gtype = uniform ] ; then
+    export ntiles=6
+    name=C${res}
+  elif [ $gtype = stretch ]; then
+    export ntiles=6
+    rn=$( echo "$stretch_fac * 10" | bc | cut -c1-2 )
+    name=C${res}r${rn}_${title}
+  elif [ $gtype = nest ]; then
+    export ntiles=7
+    rn=$( echo "$stretch_fac * 10" | bc | cut -c1-2 )
+    name=C${res}r${rn}n${refine_ratio}_${title}
+  fi
+
   grid_dir=$TMPDIR/$name/grid
   orog_dir=$TMPDIR/$name/orog
-  filter_dir=$TMPDIR/$name/filter_topo
+
+  if [ $gtype = nest ]; then
+    filter_dir=$orog_dir   # nested grid topography will be filtered online
+  else
+    filter_dir=$TMPDIR/$name/filter_topo
+  fi
+
   rm -rf $TMPDIR/$name                  
   mkdir -p $grid_dir $orog_dir $filter_dir
 
@@ -243,7 +262,11 @@ if [ $gtype = uniform ];  then
   echo "............ Execute fv3gfs_make_grid.sh ................."
   echo 
   set -x
-  $script_dir/fv3gfs_make_grid.sh $grid_dir
+  if [ $gtype = nest ]; then
+    $script_dir/fv3gfs_make_grid.sh $grid_dir $istart_nest $jstart_nest $iend_nest $jend_nest
+  else
+    $script_dir/fv3gfs_make_grid.sh $grid_dir
+  fi
   err=$?
   if [ $err != 0 ]; then
     exit $err
@@ -265,150 +288,53 @@ if [ $gtype = uniform ];  then
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
     rm $TMPDIR/orog.file1
   elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
-    for tile in 1 2 3 4 5 6 ; do
+    tile=1
+    while [ $tile -le $ntiles ]; do
       set +x
       echo
       echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
       echo
       set -x
       $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+      tile=$(( $tile + 1 ))
     done
   fi
 
   set +x
   echo "End uniform orography generation at `date`"
- 
-  echo 
-  echo "............ Execute fv3gfs_filter_topo.sh .............."
-  echo
   set -x
-  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
-  err=$?
-  if [ $err != 0 ]; then
-    exit $err
-  fi
-  echo "Grid and orography files are now prepared for uniform grid"
 
 #----------------------------------------------------------------------------------
-# Stretched grid.
+# Topo filtering for uniform and stretched grids only.
 #----------------------------------------------------------------------------------
 
-elif [ $gtype = stretch ]; then
-
-  export ntiles=6
-  rn=$( echo "$stretch_fac * 10" | bc | cut -c1-2 )
-  name=C${res}r${rn}_${title}
-  grid_dir=$TMPDIR/${name}/grid
-  orog_dir=$TMPDIR/$name/orog
-  filter_dir=$TMPDIR/${name}/filter_topo
-  rm -rf $TMPDIR/$name                  
-  mkdir -p $grid_dir $orog_dir $filter_dir
-
-  set +x
-  echo 
-  echo "............ Execute fv3gfs_make_grid.sh ................."
-  echo
-  set -x
-  $script_dir/fv3gfs_make_grid.sh $grid_dir
-  err=$?
-  if [ $err != 0 ]; then
-    exit $err
-  fi
+  if [ $gtype = uniform ] || [ $gtype = stretch ]; then
  
-  echo "Begin stretch orography generation at `date`"
+    set +x
+    echo 
+    echo "............ Execute fv3gfs_filter_topo.sh .............."
+    echo
+    set -x
+    $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
+    err=$?
+    if [ $err != 0 ]; then
+      exit $err
+    fi
 
-#----------------------------------------------------------------------------------
-# On WCOSS_C use cfp to run multiple tiles simulatneously for the orography
-#----------------------------------------------------------------------------------
+  fi # run topo filtering
 
-  if [ $machine = WCOSS_C ]; then
-    echo "$script_dir/fv3gfs_make_orog.sh $res 1 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 3 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 4 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 5 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 2 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 6 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
-    rm $TMPDIR/orog.file1
-  elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
-    for tile in 1 2 3 4 5 6 ; do
-      set +x
-      echo
-      echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
-      echo
-      set -x
-      $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
-    done
-  fi
+  echo "Copy grid and orography files to output directory"
 
-  set +x
-  echo "End stretch orography generation at `date`"
- 
-  echo 
-  echo "............ Execute fv3gfs_filter_topo.sh .............."
-  echo
-  set -x
-  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
-  err=$?
-  if [ $err != 0 ]; then
-    exit $err
-  fi
-  echo "Grid and orography files are now prepared for stretched grid"
+  tile=1
+  while [ $tile -le $ntiles ]; do
+    cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
+    cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}_grid.tile${tile}.nc
+    tile=`expr $tile + 1 `
+  done
 
-#----------------------------------------------------------------------------------
-# Nested grid.
-#----------------------------------------------------------------------------------
+  cp $grid_dir/C${res}_*mosaic.nc             $out_dir
 
-elif [ $gtype = nest ]; then
-
-  export ntiles=7
-  rn=$( echo "$stretch_fac * 10" | bc | cut -c1-2 )
-  name=C${res}r${rn}n${refine_ratio}_${title}
-  grid_dir=$TMPDIR/${name}/grid
-  orog_dir=$TMPDIR/$name/orog
-  filter_dir=$orog_dir   # nested grid topography will be filtered online
-  rm -rf $TMPDIR/$name                  
-  mkdir -p $grid_dir $orog_dir $filter_dir
-
-  set +x
-  echo 
-  echo "............ Execute fv3gfs_make_grid.sh ................."
-  echo
-  set -x
-  $script_dir/fv3gfs_make_grid.sh $grid_dir $istart_nest $jstart_nest $iend_nest $jend_nest
-  err=$?
-  if [ $err != 0 ]; then
-    exit $err
-  fi
-
-  echo "Begin stretch nest orography generation at `date`"
- 
-#----------------------------------------------------------------------------------
-# On WCOSS_C use cfp to run multiple tiles simulatneously for the orography
-#----------------------------------------------------------------------------------
- 
-  if [ $machine = WCOSS_C ]; then
-    echo "$script_dir/fv3gfs_make_orog.sh $res 1 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 3 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 4 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 2 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 5 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 6 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    echo "$script_dir/fv3gfs_make_orog.sh $res 7 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
-    rm $TMPDIR/orog.file1
-  elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
-    for tile in 1 2 3 4 5 6 7; do
-      set +x
-      echo
-      echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
-      echo
-      set -x
-      $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
-    done
-  fi
-
-  echo "Grid and orography files are now prepared for nested grid"
+  echo "Grid and orography files are now prepared."
 
 #----------------------------------------------------------------------------------
 # Regional grid.
@@ -542,9 +468,12 @@ elif [ $gtype = regional ]; then
 
   cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo${halop1}.nc
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halop1}.nc
-#
-# Now shave the orography file and then the grid file with a halo of 3. This is necessary for running the model.
-#
+ 
+#----------------------------------------------------------------------------------
+# Now shave the orography file and then the grid file with a halo of 3. 
+# This is necessary for running the model.
+#----------------------------------------------------------------------------------
+
   echo $npts_cgx $npts_cgy $halo \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo$halo
   echo $npts_cgx $npts_cgy $halo \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo$halo
 
@@ -553,9 +482,12 @@ elif [ $gtype = regional ]; then
  
   cp $filter_dir/oro.C${res}.tile${tile}.shave.nc $out_dir/C${res}_oro_data.tile${tile}.halo${halo}.nc
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halo}.nc
-#
-# Now shave the orography file and then the grid file with a halo of 0. This is handy for running chgres.
-#
+ 
+#----------------------------------------------------------------------------------
+# Now shave the orography file and then the grid file with a halo of 0. 
+# This is handy for running chgres.
+#----------------------------------------------------------------------------------
+
   echo $npts_cgx $npts_cgy 0 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo0
   echo $npts_cgx $npts_cgy 0 \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo0
 
@@ -565,33 +497,17 @@ elif [ $gtype = regional ]; then
   cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo0.nc
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo0.nc
  
+  cp $grid_dir/C${res}_*mosaic.nc                   $out_dir
+
   echo "Grid and orography files are now prepared for regional grid"
 
-fi # if check on type of grid
-
 #----------------------------------------------------------------------------------
-# For non-regional grids, copy grid and orography files to output directory.
+# End of block to create grid and orog files.
 #----------------------------------------------------------------------------------
-
-if [ $gtype != regional ]; then
-
-  echo "Copy grid and orography files to output directory"
-
-  tile=1
-  while [ $tile -le $ntiles ]; do
-    cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
-    cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}_grid.tile${tile}.nc
-    tile=`expr $tile + 1 `
-  done
 
 fi
 
-#----------------------------------------------------------------------------------
-# Copy mosaic file(s) to output directory.
-#----------------------------------------------------------------------------------
-
-cp $grid_dir/C${res}_*mosaic.nc $out_dir
-
+#------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------
 # Create surface static fields - vegetation type, soil type, etc.
 #
@@ -599,6 +515,7 @@ cp $grid_dir/C${res}_*mosaic.nc $out_dir
 # to create the fields for the six global tiles.  Then to create
 # the fields on the high-res nest.  This is done because the
 # ESMF libraries can not interpolate to seven tiles at once.
+#------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------
 
 export WORK_DIR=$TMPDIR/sfcfields
