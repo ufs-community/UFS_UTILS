@@ -1,0 +1,36 @@
+# Takes lots of memory.  Use two nodes - six tasks per node.
+#
+# Some notes on differences for running with grib2 data:
+# -- input_type="grib2". Required.
+# -- grib2_file_input_grid = the name of your grib2 file. Required.
+# -- base_install_dir = Location of head repository installation. Required.
+# -- wgrib2_path = the full path of your wgrib2 executable (including the final executable in the path).
+#    Optional, default = "wgrib2" 
+# -- external_model = source model of your grib2 file. Currently supports NAM and RAP on native grids
+#    as well as many others on pressure coordinate grids. Optional, default is GFS.
+# -- phys_suite = physics suite you plan to use in fv3. This controls the varmap table (/parm/varmap_tables)
+#    that's read in  and controls the handling of various fields that might be missing from your grib2 file.
+#    Optional, default is GFS.
+# -- halo_bndy, halo_blend = boundary and blending sizes from regional grid generation. Optional, default =4,0.
+&config
+ fix_dir_target_grid="/oldscratch/larissa.reames/runfv3/C768/fix_C768_CONUS"
+ mosaic_file_target_grid="/oldscratch/larissa.reames/runfv3/fix_C768_CONUS/C768/C768_mosaic.nc"
+ orog_dir_target_grid="/oldscratch/larissa.reames/runfv3/fix_C768_CONUS/C768"
+ orog_files_target_grid="C768_oro_data.tile7.nc"
+ vcoord_file_target_grid="/oldscratch/larissa.reames/chgres_cube/global_hyblev.l64.txt"
+ data_dir_input_grid="/oldscratch/larissa.reames/chgres_cube/20190717_fv3gfs_nemsio"
+ atm_files_input_grid="gfs.t00z.atmanl.nemsio"
+ cycle_mon=7
+ cycle_day=17
+ cycle_hour=0
+ convert_atm=.true.
+ convert_sfc=.false.
+ convert_nst=.false.
+ regional=1
+ halo_bndy=4
+ halo_blend=0
+ input_type="gaussian"
+ phys_suite="GSD"
+ tracers="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel","ice_nc","rain_nc","water_nc"
+ tracers_input="spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"
+/
