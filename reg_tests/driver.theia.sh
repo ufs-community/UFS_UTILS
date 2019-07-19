@@ -69,8 +69,6 @@ TEST1=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $Q
 # Initialize C192 using FV3 tiled history files.
 #-----------------------------------------------------------------------------
 
-export OMP_NUM_THREADS=1
-export INPUT_DATA=${HOMEreg}/input_data/fv3.history
 TEST2=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c192.fv3.history \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c192.fv3.history.sh)
 
