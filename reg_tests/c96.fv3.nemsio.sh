@@ -8,40 +8,26 @@
 
 set -x
 
-OUTDIR=$OUTDIR/c96_fv3_nemsio
+export DATA=$OUTDIR/c96_fv3_nemsio
 rm -fr $OUTDIR
-mkdir -p $OUTDIR
-cd $OUTDIR
 
-cat << EOF > ./fort.41
-&config
- mosaic_file_target_grid="${HOMEreg}/fix/C96/C96_mosaic.nc"
- fix_dir_target_grid="${HOMEreg}/fix/C96/fix_sfc"
- orog_dir_target_grid="${HOMEreg}/fix/C96"
- orog_files_target_grid="C96_oro_data.tile1.nc","C96_oro_data.tile2.nc","C96_oro_data.tile3.nc","C96_oro_data.tile4.nc","C96_oro_data.tile5.nc","C96_oro_data.tile6.nc"
- vcoord_file_target_grid="${HOMEufs}/fix/fix_am/global_hyblev.l64.txt"
- mosaic_file_input_grid="NULL"
- orog_dir_input_grid="NULL"
- orog_files_input_grid="NULL"
- data_dir_input_grid="${INPUT_DATA}"
- atm_files_input_grid="gfs.t12z.atmf000.nemsio"
- sfc_files_input_grid="gfs.t12z.sfcf000.nemsio"
- cycle_mon=7
- cycle_day=4
- cycle_hour=12
- convert_atm=.true.
- convert_sfc=.true.
- convert_nst=.true.
- input_type="gaussian"
- tracers="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
- tracers_input="spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"
-/
+export FIXfv3=${HOMEreg}/fix/C96
+export COMIN=${HOMEreg}/input_data/fv3.nemsio
+export ATM_FILES_INPUT=gfs.t12z.atmf000.nemsio
+export SFC_FILES_INPUT=gfs.t12z.sfcf000.nemsio
+export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
 
-EOF
+export CDATE=2019070412
 
-date
+export OMP_NUM_THREADS_CY=1
 
-$APRUN ${HOMEufs}/exec/chgres_cube.exe
+#-----------------------------------------------------------------------------
+# Invoke chgres program.
+#-----------------------------------------------------------------------------
+
+echo "Starting at: " `date`
+
+${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
@@ -49,11 +35,13 @@ if [ $iret -ne 0 ]; then
   exit $iret
 fi
 
-date
+echo "Ending at: " `date`
 
 #-----------------------------------------------------------------------------
 # Compare output from chgres to baseline set of data.
 #-----------------------------------------------------------------------------
+
+cd $DATA
 
 test_failed=0
 for files in *.nc
