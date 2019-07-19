@@ -81,7 +81,7 @@ TEST2=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $Q
 #-----------------------------------------------------------------------------
 
 TEST3=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.nemsio \
-      -o $LOG_FILE -e $LOG_FILE ./c96.fv3.nemsio.sh)
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./c96.fv3.nemsio.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using spectral GFS sigio/sfcio files.
@@ -96,8 +96,6 @@ TEST4=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $Q
 # Initialize C96 using spectral GFS gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
-export OMP_NUM_THREADS=1
-export INPUT_DATA=${HOMEreg}/input_data/gfs.nemsio
 TEST5=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.nemsio \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST4 ./c96.gfs.nemsio.sh)
 

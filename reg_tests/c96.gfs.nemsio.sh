@@ -8,41 +8,28 @@
 
 set -x
 
-OUTDIR=$OUTDIR/c96_gfs_nemsio
+export DATA=$OUTDIR/c96_gfs_nemsio
 rm -fr $OUTDIR
-mkdir -p $OUTDIR
-cd $OUTDIR
 
-cat << EOF > ./fort.41
-&config
- mosaic_file_target_grid="${HOMEreg}/fix/C96/C96_mosaic.nc"
- fix_dir_target_grid="${HOMEreg}/fix/C96/fix_sfc"
- orog_dir_target_grid="${HOMEreg}/fix/C96"
- orog_files_target_grid="C96_oro_data.tile1.nc","C96_oro_data.tile2.nc","C96_oro_data.tile3.nc","C96_oro_data.tile4.nc","C96_oro_data.tile5.nc","C96_oro_data.tile6.nc"
- vcoord_file_target_grid="${HOMEufs}/fix/fix_am/global_hyblev.l64.txt"
- mosaic_file_input_grid="NULL"
- orog_dir_input_grid="NULL"
- orog_files_input_grid="NULL"
- data_dir_input_grid="${INPUT_DATA}"
- atm_files_input_grid="gfnanl.gdas.2017071700"
- nst_files_input_grid="nsnanl.gdas.2017071700"
- sfc_files_input_grid="sfnanl.gdas.2017071700"
- cycle_mon=7
- cycle_day=17
- cycle_hour=0
- convert_atm=.true.
- convert_sfc=.true.
- convert_nst=.true.
- input_type="gfs_gaussian"
- tracers="sphum","liq_wat","o3mr"
- tracers_input="spfh","clwmr","o3mr"
-/
+export FIXfv3=${HOMEreg}/fix/C96
+export COMIN=${HOMEreg}/input_data/gfs.nemsio
+export ATM_FILES_INPUT=gfnanl.gdas.2017071700
+export SFC_FILES_INPUT=sfnanl.gdas.2017071700
+export NST_FILES_INPUT=nsnanl.gdas.2017071700
+export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
+export INPUT_TYPE="gfs_gaussian"
+export TRACERS_OUTPUT='"sphum","liq_wat","o3mr"'
+export TRACERS_INPUT='"spfh","clwmr","o3mr"'
+export CDATE=2017071700
+export OMP_NUM_THREADS_CY=1
 
-EOF
+#-----------------------------------------------------------------------------
+# Invoke chgres program.
+#-----------------------------------------------------------------------------
 
-date
+echo "Starting at: " `date`
 
-$APRUN ${HOMEufs}/exec/chgres_cube.exe
+${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
@@ -50,11 +37,13 @@ if [ $iret -ne 0 ]; then
   exit $iret
 fi
 
-date
+echo "Ending at: " `date`
 
 #-----------------------------------------------------------------------------
 # Compare output from chgres to baseline set of data.
 #-----------------------------------------------------------------------------
+
+cd $DATA
 
 test_failed=0
 for files in *.nc
