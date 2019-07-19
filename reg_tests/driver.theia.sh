@@ -47,9 +47,7 @@ export HOMEreg=/scratch4/NCEPDEV/da/noscrub/George.Gayno/reg_tests/chgres_cube
 export NCCMP=/apps/nccmp/1.8.2-gcc/bin/nccmp
 
 LOG_FILE=regression.log
-
 SUM_FILE=summary.log
-
 rm -f $LOG_FILE $SUM_FILE
 
 export OMP_STACKSIZE=1024M
@@ -87,8 +85,6 @@ TEST3=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $Q
 # Initialize C96 using spectral GFS sigio/sfcio files.
 #-----------------------------------------------------------------------------
 
-export OMP_NUM_THREADS=6
-export INPUT_DATA=${HOMEreg}/input_data/gfs.sigio
 TEST4=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./c96.gfs.sigio.sh)
 

@@ -8,41 +8,24 @@
 
 set -x
 
-OUTDIR=$OUTDIR/c96_gfs_sigio
+export DATA=$OUTDIR/c96_gfs_sigio
 rm -fr $OUTDIR
-mkdir -p $OUTDIR
-cd $OUTDIR
 
-cat << EOF > ./fort.41
-&config
- mosaic_file_target_grid="${HOMEreg}/fix/C96/C96_mosaic.nc"
- fix_dir_target_grid="${HOMEreg}/fix/C96/fix_sfc"
- orog_dir_target_grid="${HOMEreg}/fix/C96"
- orog_files_target_grid="C96_oro_data.tile1.nc","C96_oro_data.tile2.nc","C96_oro_data.tile3.nc","C96_oro_data.tile4.nc","C96_oro_data.tile5.nc","C96_oro_data.tile6.nc"
- vcoord_file_target_grid="${HOMEufs}/fix/fix_am/global_hyblev.l64.txt"
- mosaic_file_input_grid="NULL"
- orog_dir_input_grid="NULL"
- orog_files_input_grid="NULL"
- data_dir_input_grid="${INPUT_DATA}"
- atm_files_input_grid="gdas.t00z.sanl"
- nst_files_input_grid="NULL"
- sfc_files_input_grid="gdas.t00z.sfcanl"
- cycle_mon=7
- cycle_day=17
- cycle_hour=0
- convert_atm=.true.
- convert_sfc=.true.
- convert_nst=.false.
- input_type="gfs_spectral"
- tracers_input="spfh","o3mr","clwmr"
- tracers="sphum","o3mr","liq_wat"
-/
+export FIXfv3=${HOMEreg}/fix/C96
+export COMIN=${HOMEreg}/input_data/gfs.sigio
+export ATM_FILES_INPUT=gdas.t00z.sanl
+export SFC_FILES_INPUT=gdas.t00z.sfcanl
+export CONVERT_NST='.false.'
+export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
+export INPUT_TYPE="gfs_spectral"
+export TRACERS_OUTPUT='"sphum","o3mr","liq_wat"'
+export TRACERS_INPUT='"spfh","o3mr","clwmr"'
+export CDATE=2017071700
+export OMP_NUM_THREADS_CY=6
 
-EOF
+echo "Starting at: " `date`
 
-date
-
-$APRUN ${HOMEufs}/exec/chgres_cube.exe
+${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
@@ -50,11 +33,13 @@ if [ $iret -ne 0 ]; then
   exit $iret
 fi
 
-date
+echo "Ending at: " `date`
 
 #-----------------------------------------------------------------------------
 # Compare output from chgres to baseline set of data.
 #-----------------------------------------------------------------------------
+
+cd $DATA
 
 test_failed=0
 for files in *.nc
