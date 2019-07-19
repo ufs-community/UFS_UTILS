@@ -60,8 +60,6 @@ rm -fr $OUTDIR
 # Initialize C96 using FV3 warm restart files.
 #-----------------------------------------------------------------------------
 
-export OMP_NUM_THREADS=1
-export INPUT_DATA=${HOMEreg}/input_data/fv3.restart
 TEST1=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.restart.sh)
 

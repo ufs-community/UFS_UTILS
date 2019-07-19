@@ -41,8 +41,10 @@ CONVERT_SFC=${CONVERT_SFC:-.true.}
 CONVERT_NST=${CONVERT_NST:-.true.}
 TRACERS_INPUT=${TRACERS_INPUT:-'"spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"'}
 COMIN=${COMIN:-$PWD}
-ATM_FILES_INPUT=${ATM_FILES_INPUT:-gfs.t${ih}z.atmf000.nemsio}
-SFC_FILES_INPUT=${SFC_FILES_INPUT:-gfs.t${ih}z.sfcf000.nemsio}
+ATM_FILES_INPUT=${ATM_FILES_INPUT:-NULL}
+ATM_CORE_FILES_INPUT=${ATM_CORE_FILES_INPUT:-NULL}
+ATM_TRACER_FILES_INPUT=${ATM_TRACER_FILES_INPUT:-NULL}
+SFC_FILES_INPUT=${SFC_FILES_INPUT:-NULL}
 NST_FILES_INPUT=${NST_FILES_INPUT:-NULL}
 
 # Target grid stuff
@@ -83,6 +85,8 @@ cat << EOF > ./fort.41
   orog_files_input_grid="${OROG_FILES_INPUT_GRID}"
   data_dir_input_grid="${COMIN}"
   atm_files_input_grid="${ATM_FILES_INPUT}"
+  atm_core_files_input_grid="${ATM_CORE_FILES_INPUT}"
+  atm_tracer_files_input_grid="${ATM_TRACER_FILES_INPUT}"
   sfc_files_input_grid="${SFC_FILES_INPUT}"
   nst_files_input_grid="${NST_FILES_INPUT}"
   cycle_mon=$im

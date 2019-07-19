@@ -8,53 +8,48 @@
 
 set -x
 
-OUTDIR=$OUTDIR/c96_fv3_restart
-rm -fr $OUTDIR
-mkdir -p $OUTDIR
-cd $OUTDIR
+export DATA=$OUTDIR/c96_fv3_restart
+rm -fr $DATA
 
-cat << EOF > ./fort.41
-&config
- mosaic_file_target_grid="${HOMEreg}/fix/C96/C96_mosaic.nc"
- fix_dir_target_grid="${HOMEreg}/fix/C96/fix_sfc"
- orog_dir_target_grid="${HOMEreg}/fix/C96"
- orog_files_target_grid="C96_oro_data.tile1.nc","C96_oro_data.tile2.nc","C96_oro_data.tile3.nc","C96_oro_data.tile4.nc","C96_oro_data.tile5.nc","C96_oro_data.tile6.nc"
- vcoord_file_target_grid="${HOMEufs}/fix/fix_am/global_hyblev.l64.txt"
- mosaic_file_input_grid="${HOMEreg}/fix/C384/C384_mosaic.nc"
- orog_dir_input_grid="${HOMEreg}/fix/C384"
- orog_files_input_grid="C384_oro_data.tile1.nc","C384_oro_data.tile2.nc","C384_oro_data.tile3.nc","C384_oro_data.tile4.nc","C384_oro_data.tile5.nc","C384_oro_data.tile6.nc"
- data_dir_input_grid="${INPUT_DATA}"
- atm_core_files_input_grid="20190706.120000.fv_core.res.tile1.nc","20190706.120000.fv_core.res.tile2.nc","20190706.120000.fv_core.res.tile3.nc","20190706.120000.fv_core.res.tile4.nc","20190706.120000.fv_core.res.tile5.nc","20190706.120000.fv_core.res.tile6.nc","20190706.120000.fv_core.res.nc"
- atm_tracer_files_input_grid="20190706.120000.fv_tracer.res.tile1.nc","20190706.120000.fv_tracer.res.tile2.nc","20190706.120000.fv_tracer.res.tile3.nc","20190706.120000.fv_tracer.res.tile4.nc","20190706.120000.fv_tracer.res.tile5.nc","20190706.120000.fv_tracer.res.tile6.nc"
- sfc_files_input_grid="20190706.120000.sfc_data.tile1.nc","20190706.120000.sfc_data.tile2.nc","20190706.120000.sfc_data.tile3.nc","20190706.120000.sfc_data.tile4.nc","20190706.120000.sfc_data.tile5.nc","20190706.120000.sfc_data.tile6.nc"
- cycle_mon=7
- cycle_day=6
- cycle_hour=12
- convert_atm=.true.
- convert_sfc=.true.
- convert_nst=.true.
- input_type="restart"
- tracers="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
- tracers_input="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
-/
+export FIXfv3=${HOMEreg}/fix/C96
+export COMIN=${HOMEreg}/input_data/fv3.restart
+export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
+export INPUT_TYPE='restart'
+export MOSAIC_FILE_INPUT_GRID="${HOMEreg}/fix/C384/C384_mosaic.nc"
+export OROG_DIR_INPUT_GRID=${HOMEreg}/fix/C384
+export OROG_FILES_INPUT_GRID='C384_oro_data.tile1.nc","C384_oro_data.tile2.nc","C384_oro_data.tile3.nc","C384_oro_data.tile4.nc","C384_oro_data.tile5.nc","C384_oro_data.tile6.nc'
+export ATM_CORE_FILES_INPUT='20190706.120000.fv_core.res.tile1.nc","20190706.120000.fv_core.res.tile2.nc","20190706.120000.fv_core.res.tile3.nc","20190706.120000.fv_core.res.tile4.nc","20190706.120000.fv_core.res.tile5.nc","20190706.120000.fv_core.res.tile6.nc","20190706.120000.fv_core.res.nc'
+export ATM_TRACER_FILES_INPUT='20190706.120000.fv_tracer.res.tile1.nc","20190706.120000.fv_tracer.res.tile2.nc","20190706.120000.fv_tracer.res.tile3.nc","20190706.120000.fv_tracer.res.tile4.nc","20190706.120000.fv_tracer.res.tile5.nc","20190706.120000.fv_tracer.res.tile6.nc'
+export SFC_FILES_INPUT='20190706.120000.sfc_data.tile1.nc","20190706.120000.sfc_data.tile2.nc","20190706.120000.sfc_data.tile3.nc","20190706.120000.sfc_data.tile4.nc","20190706.120000.sfc_data.tile5.nc","20190706.120000.sfc_data.tile6.nc'
 
-EOF
+export TRACERS_TARGET='"sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"'
+export TRACERS_INPUT='"sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"'
 
-date
+export CDATE=2019070612
 
-$APRUN ${HOMEufs}/exec/chgres_cube.exe
+export OMP_NUM_THREADS_CY=1
+
+#-----------------------------------------------------------------------------
+# Invoke chgres program.
+#-----------------------------------------------------------------------------
+
+echo "Starting at: " `date`
+
+${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
-  echo "<<< C96 FV3 RESTART TEST FAILED. <<<"
+  echo "<<< C96 FV3 GAUSSIAN NEMSIO TEST FAILED. <<<"
   exit $iret
 fi
 
-date
+echo "Ending at: " `date`
 
 #-----------------------------------------------------------------------------
 # Compare output from chgres to baseline set of data.
 #-----------------------------------------------------------------------------
+
+cd $DATA
 
 test_failed=0
 for files in *.nc
