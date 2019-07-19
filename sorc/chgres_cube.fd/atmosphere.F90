@@ -52,8 +52,7 @@
  use program_setup, only             : vcoord_file_target_grid, &
                                        regional, input_type,      &
                                        tracers, num_tracers,      &
-                                       atm_weight_file, phys_suite, &
-                                       num_tracers_input
+                                       atm_weight_file, phys_suite
 
  implicit none
 
@@ -214,7 +213,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldRegrid", rc)
 
- do n = 1, num_tracers_input
+ do n = 1, num_tracers
    print*,"- CALL Field_Regrid FOR TRACER ", trim(tracers(n))
    call ESMF_FieldRegrid(tracers_input_grid(n), &
                          tracers_b4adj_target_grid(n), &
@@ -222,6 +221,7 @@
                          termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldRegrid", rc)
+      
  enddo
 
  print*,"- CALL Field_Regrid FOR VERTICAL VELOCITY."
