@@ -9,7 +9,7 @@
 set -x
 
 export DATA=$OUTDIR/c96_fv3_nemsio
-rm -fr $OUTDIR
+rm -fr $DATA
 
 export FIXfv3=${HOMEreg}/fix/C96
 export COMIN=${HOMEreg}/input_data/fv3.nemsio

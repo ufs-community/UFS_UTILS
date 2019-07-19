@@ -16,6 +16,8 @@ ih=$(echo $CDATE|cut -c9-10)
 CRES=${CRES:-96}
 
 REGIONAL=${REGIONAL:-0}
+HALO_BNDY=${HALO_BNDY:-0}
+HALO_BLEND=${HALO_BLEND:-0}
 
 HOMEufs=${HOMEufs:-/nwprod2/ufs_util}
 EXECufs=${EXECufs:-$HOMEufs/exec}
@@ -95,6 +97,8 @@ cat << EOF > ./fort.41
   tracers=$TRACERS_OUTPUT
   tracers_input=$TRACERS_INPUT
   regional=$REGIONAL
+  halo_bndy=$HALO_BNDY
+  halo_blend=$HALO_BLEND
  /
 EOF
 

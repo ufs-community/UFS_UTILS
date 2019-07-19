@@ -99,8 +99,6 @@ TEST5=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $Q
 # Initialize regional C96 using FV3 gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
-export OMP_NUM_THREADS=1
-export INPUT_DATA=${HOMEreg}/input_data/fv3.nemsio
 TEST6=$(sbatch --parsable --ntasks=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.regional \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST5 ./c96.regional.sh)
 
