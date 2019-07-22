@@ -8,46 +8,122 @@
 
 set -x
 
-CDATE=${CDATE:?}
+#----------------------------------------------------------------------------
+# Resolution of target grid.
+#----------------------------------------------------------------------------
 
+CRES=${CRES:-96}
+
+#----------------------------------------------------------------------------
+# Set up environment paths.
+#
+# FIXfv3 - Location of target grid orography and 'grid' files.
+# FIXsfc - Location of target grid surface climo files.
+#----------------------------------------------------------------------------
+
+ufs_ver=${ufs_ver:-v1.0.0}
+envir=${envir:-prod}
+NWROOT=${NWROOT:-/nw${envir}}
+HOMEufs=${HOMEufs:-${NWROOT}/ufs_util.${ufs_ver}}
+EXECufs=${EXECufs:-$HOMEufs/exec}
+FIXufs=${FIXufs:-$HOMEufs/fix}
+FIXfv3=${FIXfv3:-$FIXufs/fix_fv3_gmted2010/C${CRES}}
+FIXsfc=${FIXsfc:-$FIXfv3/fix_sfc}
+FIXam=${FIXam:-$FIXufs/fix_am}
+
+CDATE=${CDATE:?}
 iy=$(echo $CDATE|cut -c1-4)
 im=$(echo $CDATE|cut -c5-6)
 id=$(echo $CDATE|cut -c7-8)
 ih=$(echo $CDATE|cut -c9-10)
 
-CRES=${CRES:-96}
+#----------------------------------------------------------------------------
+# Variables for regional grids.
+#
+# REGIONAL - Set to 1 to create remove halo and create lateral boundary
+#            file.  Set to 2 for lateral boundary file only.  Set to
+#            0 for non-regional grids.
+# HALO_BNDY - Number of rows/cols for lateral boundaries.
+# HALO_BLEND - Number of rows/cols for blending zone.
+#----------------------------------------------------------------------------
 
 REGIONAL=${REGIONAL:-0}
 HALO_BNDY=${HALO_BNDY:-0}
 HALO_BLEND=${HALO_BLEND:-0}
 
-HOMEufs=${HOMEufs:-/nwprod2/ufs_util}
-EXECufs=${EXECufs:-$HOMEufs/exec}
-FIXfv3=${FIXfv3:-$HOMEufs/fix/fix_fv3_gmted2010/C${CRES}}
-FIXsfc=${FIXsfc:-$FIXfv3/fix_sfc}
-FIXam=${FIXam:-$HOMEufs/fix/fix_am}
-
-# Input grid stuff
+#----------------------------------------------------------------------------
+# INPUT_TYPE - Input data type.  'history' for tiled fv3 history files.
+#              'restart' for tiled fv3 warm restart files.  'gfs_gaussian'
+#              for spectral gfs nemsio files.  'gfs_spectral' for 
+#              for spectral gfs sigio/sfcio files.  'gaussian' for fv3
+#              gaussian nemsio files.
+#
+# MOSAIC_FILE_INPUT_GRID - Name of mosaic file for input grid.  Only used
+#                          for 'history' and 'restart' files
+#
+# OROG_DIR_INPUT_GRID - Location of orography and grid files for input grid.
+#                       Only used for 'history' and 'restart' files.
+#
+# OROG_FILES_INPUT_GRID - List of orography files for input grid.  Only
+#                         used for 'history' and 'restart' files.
+#----------------------------------------------------------------------------
 
 INPUT_TYPE=${INPUT_TYPE:-"gaussian"}
 MOSAIC_FILE_INPUT_GRID=${MOSAIC_FILE_INPUT_GRID:-NULL}
 OROG_DIR_INPUT_GRID=${OROG_DIR_INPUT_GRID:-NULL}
 OROG_FILES_INPUT_GRID=${OROG_FILES_INPUT_GRID:-NULL}
 
-# Input data stuff
+#----------------------------------------------------------------------------
+# COMIN       - Location of input data
+# CONVERT_ATM - Convert atmospheric fields when true
+# CONVERT_SFC - Convert surface fields when true
+# CONVERT_NST - Convert nst fields when true
+#----------------------------------------------------------------------------
 
 CONVERT_ATM=${CONVERT_ATM:-.true.}
 CONVERT_SFC=${CONVERT_SFC:-.true.}
 CONVERT_NST=${CONVERT_NST:-.true.}
-TRACERS_INPUT=${TRACERS_INPUT:-'"spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"'}
+
 COMIN=${COMIN:-$PWD}
+
+#----------------------------------------------------------------------------
+# ATM_FILES_INPUT - Input atmospheric data file(s).  Not used for 'restart'
+#                   files.
+#
+# ATM_CORE_FILES - Input atmospheric core files.  Used for 'restart' files.
+#                  The first six entries are the tiled files.  The seventh
+#                  is the file containing the vertical coord definition.
+#
+# ATM_TRACER_FILES_INPUT - Input atmospheric tracer files for each tile.
+#                          Used for 'restart' files only.
+#
+# SFC_FILES_INPUT - Input surface data file(s).
+#
+# NST_FILES_INPUT - Input nst data file.  'gfs_gaussian' files only.
+#
+# TRACERS_INPUT - List of input atmospheric tracer records to be processed.
+#----------------------------------------------------------------------------
+
 ATM_FILES_INPUT=${ATM_FILES_INPUT:-NULL}
 ATM_CORE_FILES_INPUT=${ATM_CORE_FILES_INPUT:-NULL}
 ATM_TRACER_FILES_INPUT=${ATM_TRACER_FILES_INPUT:-NULL}
 SFC_FILES_INPUT=${SFC_FILES_INPUT:-NULL}
 NST_FILES_INPUT=${NST_FILES_INPUT:-NULL}
+TRACERS_INPUT=${TRACERS_INPUT:-'"spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"'}
 
-# Target grid stuff
+#----------------------------------------------------------------------------
+# TRACERS_TARGET - List of output tracer records.
+#
+# VCOORD_FILE - File containing vertical coordinate defintion for target
+#               grid.
+#
+# MOSAIC FILE_TARGET_GRID - Mosaic file for target grid (include path).
+#                           The associated 'grid' files assumed to be in
+#                           FIXfv3.
+#
+# OROG_FILES_TARGET_GRID - Orography file(s) for target grid.  Assumed to
+#                          be located in FIXfv3.
+#----------------------------------------------------------------------------
 
 TRACERS_TARGET=${TRACERS_TARGET:-'"sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"'}
 

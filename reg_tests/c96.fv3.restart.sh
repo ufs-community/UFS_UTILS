@@ -17,6 +17,8 @@ export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
 export INPUT_TYPE='restart'
 export MOSAIC_FILE_INPUT_GRID="${HOMEreg}/fix/C384/C384_mosaic.nc"
 export OROG_DIR_INPUT_GRID=${HOMEreg}/fix/C384
+
+# Note: no double quotes at the beginning or end.
 export OROG_FILES_INPUT_GRID='C384_oro_data.tile1.nc","C384_oro_data.tile2.nc","C384_oro_data.tile3.nc","C384_oro_data.tile4.nc","C384_oro_data.tile5.nc","C384_oro_data.tile6.nc'
 export ATM_CORE_FILES_INPUT='20190706.120000.fv_core.res.tile1.nc","20190706.120000.fv_core.res.tile2.nc","20190706.120000.fv_core.res.tile3.nc","20190706.120000.fv_core.res.tile4.nc","20190706.120000.fv_core.res.tile5.nc","20190706.120000.fv_core.res.tile6.nc","20190706.120000.fv_core.res.nc'
 export ATM_TRACER_FILES_INPUT='20190706.120000.fv_tracer.res.tile1.nc","20190706.120000.fv_tracer.res.tile2.nc","20190706.120000.fv_tracer.res.tile3.nc","20190706.120000.fv_tracer.res.tile4.nc","20190706.120000.fv_tracer.res.tile5.nc","20190706.120000.fv_tracer.res.tile6.nc'

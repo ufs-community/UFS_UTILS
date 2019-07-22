@@ -18,6 +18,8 @@ export SFC_FILES_INPUT=sfnanl.gdas.2017071700
 export NST_FILES_INPUT=nsnanl.gdas.2017071700
 export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
 export INPUT_TYPE="gfs_gaussian"
+
+# dont start/end with double quotes.
 export TRACERS_TARGET='"sphum","liq_wat","o3mr"'
 export TRACERS_INPUT='"spfh","clwmr","o3mr"'
 export CDATE=2017071700
