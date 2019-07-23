@@ -48,6 +48,7 @@
                                        longitude_w_target_grid, &
                                        terrain_target_grid, &
                                        landmask_target_grid
+!                               , i_target, j_target
 
  use program_setup, only             : vcoord_file_target_grid, &
                                        regional, input_type,      &
@@ -142,6 +143,7 @@
 
  real(esmf_kind_r8), pointer        :: psptr(:,:)
 
+ !real(esmf_kind_r8), allocatable    :: tmp(:,:,:)
 !-----------------------------------------------------------------------------------
 ! Read atmospheric fields on the input grid.
 !-----------------------------------------------------------------------------------
@@ -214,7 +216,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldRegrid", rc)
 
- do n = 1, num_tracers_input
+ !allocate(tmp(i_target,j_target,lev_target))
+ do n = 1, num_tracers
    print*,"- CALL Field_Regrid FOR TRACER ", trim(tracers(n))
    call ESMF_FieldRegrid(tracers_input_grid(n), &
                          tracers_b4adj_target_grid(n), &
@@ -222,6 +225,8 @@
                          termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldRegrid", rc)
+   !call ESMF_FieldGather(tracers_b4adj_target_grid(n),tmp,rootPet=0, tile=1, rc=rc)
+   !if (localpet==0) print*, "min max ", trim(tracers(n)) , " = ", minval(tmp), maxval(tmp)
  enddo
 
  print*,"- CALL Field_Regrid FOR VERTICAL VELOCITY."
@@ -974,6 +979,7 @@
    if (trim(tracers(ii)) == "sphum") exit
  enddo
 
+! print*, "sphum at index ", ii
  print*,"- CALL FieldGet FOR SPECIFIC HUMIDITY"
  call ESMF_FieldGet(tracers_b4adj_target_grid(ii), &
                     farrayPtr=qptr, rc=rc)

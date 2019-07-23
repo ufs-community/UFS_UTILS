@@ -2870,7 +2870,6 @@
 
    allocate(vcoord(levp1_input,2))
    if (localpet == 0) print*,"- READ VERTICAL COORDINATE INFO."
-   if (localpet == 0) print*, metadata
    call read_vcoord(isnative,rlevs,vcoord,lev_input,levp1_input,pt,metadata,iret)
    if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
    
@@ -2904,13 +2903,12 @@
   do n = 1, num_tracers
 
    vname = tracers_input(n)
-
+   
    i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
 
    tracers_input_grib(n)=trac_names_grib(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
-   tracers(n)=tracers_default(n)
-
+   tracers(n)=tracers_default(i)
  enddo
  allocate(atm(num_tracers+4))
  if (localpet==0) print*, "NUMBER OF TRACERS IN FILE = ", num_tracers
@@ -3064,11 +3062,10 @@
      enddo
    endif
 
-   if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT ", trim(tracers_input_grib(n))
+   if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT ", trim(tracers(n))
    call ESMF_FieldScatter(tracers_input_grid(n), dummy3d, rootpet=0, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldScatter", rc)
-
  enddo
  
  call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet) 

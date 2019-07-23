@@ -291,7 +291,8 @@ subroutine read_varmap
  implicit none
 
  integer                    :: istat, k, nvars
- character(len=500)         :: varmap_table_file
+ character(len=500)         :: varmap_table_file, line
+ character(len=20),allocatable  :: var_type(:) 
 
  if (trim(input_type) == "grib2") then 
    varmap_table_file = trim(base_install_dir) // "/" // trim(varmap_tables_dir) // "/" &
@@ -304,36 +305,40 @@ subroutine read_varmap
      call error_handler("OPENING VARIABLE MAPPING FILE", istat)
    endif
 
-   read(14, *, iostat=istat) nvars, num_tracers
-   if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
-   print*, 'NUMBER OF TRACERS FROM VARMAP FILE = ', num_tracers
-   read(14, *, iostat=istat) tracers_input(1:num_tracers)
-   if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
-   print*, 'TRACERS FROM VARMAP FILE = ', tracers_input(1:num_tracers)
-
-
+   num_tracers = 0
+   nvars = 0
+   
+   !Loop over lines of file to count the number of variables
+   do 
+     read(14, '(A)', iostat=istat) line !chgres_var_names_tmp(k)!, field_var_names(k) , & 
+                          ! missing_var_methods(k), missing_var_values(k), var_type(k)                     
+     if (istat/=0) exit
+     nvars = nvars+1
+   enddo
+   
    allocate(chgres_var_names(nvars))
    allocate(field_var_names(nvars))
    allocate(missing_var_methods(nvars))
    allocate(missing_var_values(nvars))
    allocate(read_from_input(nvars))
-
- 
+   allocate(var_type(nvars))
+   
+   print*, 'Numvars = ', nvars
+   print*, "NEW!"
    read_from_input(:) = .true.
-
- 
+   rewind(14)
    do k = 1,nvars
      read(14, *, iostat=istat) chgres_var_names(k), field_var_names(k) , & 
-                           missing_var_methods(k), missing_var_values(k)
+                           missing_var_methods(k), missing_var_values(k), var_type(k) 
+     if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
+     print*, "var name = ", chgres_var_names(k)
+     if(trim(var_type(k))=='T') then
+       num_tracers = num_tracers + 1
+       tracers_input(num_tracers)=chgres_var_names(k)
+     endif
+     
    enddo
  
-   if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
-
-
-   print*
-   do k = 1, nvars
-     print*,'VAR MISSING METHOD FOR', chgres_var_names(k), 'IS: ', missing_var_methods(k)
-   enddo
 
    close(14)
  endif
