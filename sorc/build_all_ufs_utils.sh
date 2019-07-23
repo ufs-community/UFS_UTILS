@@ -105,6 +105,15 @@ echo " .... Building sfc_climo_gen .... "
 ./build_sfc_climo_gen.sh > $logs_dir/build_sfc_climo_gen.log 2>&1
 }
 
+#------------------------------------
+# build regional_grid
+#------------------------------------
+
+$Build_regional_grid && {
+echo " .... Building regional_grid .... "
+./build_regional_grid.sh > $logs_dir/build_regional_grid.log 2>&1
+}
+
 echo;echo " .... Build system finished .... "
 
 exit 0
