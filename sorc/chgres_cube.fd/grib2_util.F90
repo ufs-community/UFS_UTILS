@@ -414,5 +414,19 @@ function to_upper(strIn) result(strOut)
      end do
 
 end function to_upper
+
+function countDigit(n) result(count)
+  implicit none
+  
+  integer               :: n
+  integer               :: count
+  
+  count = 0
+  do while (n /= 0)
+    n = n / 10
+    count = count + 1
+  enddo
+  
+end function countDigit
  
  end module grib2_util

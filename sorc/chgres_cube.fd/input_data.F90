@@ -2755,7 +2755,8 @@
 
  use wgrib2api
  
- use grib2_util, only                   : read_vcoord, iso2sig, rh2spfh, convert_omega
+ use grib2_util, only                   : read_vcoord, iso2sig, rh2spfh, convert_omega, &
+                                           countDigit
  use model_grid, only                   : file_is_converted
 
 
@@ -2823,93 +2824,97 @@
  inquire(file=the_file,exist=iret)
  if (iret == 0) call error_handler("OPENING GRIB2 ATM FILE.", iret)
 
-   !print*,"- READ VERTICAL LEVELS."
-   iret = grb2_inq(the_file,inv_file,":UGRD:"," hybrid level:")
-   !if (iret < 0) call error_handler("COUNTING VERTICAL LEVELS.", iret)
-  
-    if (iret <= 0) then
-      if (localpet == 0) print*,"DATA IS ON ISOBARIC LEVELS, WILL NEED TO CONVERT AFTER READING"
-      lvl_str = "mb:" 
-      lvl_str_space = " mb:"
-      lvl_str_space_len = 4
-      isnative = 0
-      iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
-      lev_input=iret
-    else
-      if (localpet == 0) PRINT*, "DATA IS ON NATIVE SIGMA/HYBRID LEVELS"
-      lvl_str = "hybrid level:"
-      lvl_str_space = " hybrid level:"
-      lvl_str_space_len = 14
-      isnative = .true.
-      iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
-      if (iret < 0) call error_handler("READING VERTICAL LEVEL TYPE.", iret)
-      lev_input=iret
-    endif
- !endif
-    print*, "lev_input = ", lev_input
-    allocate(slevs(lev_input))
-    allocate(rlevs(lev_input))
-    levp1_input = lev_input + 1
-    
-    ! get the vertical levels, and search string by sequential reads
+ !print*,"- READ VERTICAL LEVELS."
+ iret = grb2_inq(the_file,inv_file,":UGRD:"," hybrid level:")
+ !if (iret < 0) call error_handler("COUNTING VERTICAL LEVELS.", iret)
 
-    do i = 1,lev_input
-      iret=grb2_inq(the_file,inv_file,':UGRD:',trim(lvl_str),sequential=i-1,desc=metadata)
-      if (iret.ne.1) call error_handler(" IN SEQUENTIAL FILE READ.", iret)
-    
-      j = index(metadata,':UGRD:') + len(':UGRD:')
-      k = index(metadata,trim(lvl_str_space)) + len(trim(lvl_str_space))-1
+	if (iret <= 0) then
+		if (localpet == 0) print*,"DATA IS ON ISOBARIC LEVELS, WILL NEED TO CONVERT AFTER READING"
+		lvl_str = "mb:" 
+		lvl_str_space = " mb:"
+		lvl_str_space_len = 4
+		isnative = 0
+		iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
+		lev_input=iret
+	else
+		if (localpet == 0) PRINT*, "DATA IS ON NATIVE SIGMA/HYBRID LEVELS"
+		lvl_str = "hybrid level:"
+		lvl_str_space = " hybrid level:"
+		lvl_str_space_len = 14
+		isnative = .true.
+		iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
+		if (iret < 0) call error_handler("READING VERTICAL LEVEL TYPE.", iret)
+		lev_input=iret
+	endif
+!endif
+	print*, "lev_input = ", lev_input
+	allocate(slevs(lev_input))
+	allocate(rlevs(lev_input))
+	levp1_input = lev_input + 1
+	
+	! get the vertical levels, and search string by sequential reads
 
-      read(metadata(j:k),*) rlevs(i)
-    
-      slevs(i) = metadata(j-1:k)
-      
-      if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
-      if (localpet==0) print*, "LEVEL = ", slevs(i)
-    enddo
+	do i = 1,lev_input
+		iret=grb2_inq(the_file,inv_file,':UGRD:',trim(lvl_str),sequential=i-1,desc=metadata)
+		if (iret.ne.1) call error_handler(" IN SEQUENTIAL FILE READ.", iret)
+	
+		j = index(metadata,':UGRD:') + len(':UGRD:')
+		k = index(metadata,trim(lvl_str_space)) + len(trim(lvl_str_space))-1
 
-   allocate(vcoord(levp1_input,2))
-   if (localpet == 0) print*,"- READ VERTICAL COORDINATE INFO."
-   call read_vcoord(isnative,rlevs,vcoord,lev_input,levp1_input,pt,metadata,iret)
-   if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
-   
-   !if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
+		read(metadata(j:k),*) rlevs(i)
+	
+		slevs(i) = metadata(j-1:k)
+		
+		if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
+		if (localpet==0) print*, "LEVEL = ", slevs(i)
+	enddo
+
+ allocate(vcoord(levp1_input,2))
+ if (localpet == 0) print*,"- READ VERTICAL COORDINATE INFO."
+ call read_vcoord(isnative,rlevs,vcoord,lev_input,levp1_input,pt,metadata,iret)
+ if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
  
-   if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
-   iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
+ !if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
 
-   if (iret <= 0) then
-    iret = grb2_inq(the_file,inv_file,':RH:')
-    if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
-    hasspfh = .false.
-    trac_names_grib(1)=':RH:'
-   endif
-   
-   if (localpet == 0) print*,"- FIND CICE or CIMIXR"
-   iret = grb2_inq(the_file,inv_file,':CICE:',lvl_str_space)
+ if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
+ iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
 
-   if (iret <= 0) then
-    iret = grb2_inq(the_file,inv_file,':CIMIXR:',lvl_str_space)
-    if (iret >= 1) trac_names_grib(4)=':CIMIXR:'
-    if (iret <= 0) then
-      iret = grb2_inq(the_file,inv_file,':ICMR:',lvl_str_space)
-      if (iret >= 1) trac_names_grib(4)=':ICMR:'
-    endif
-   endif
+ if (iret <= 0) then
+	iret = grb2_inq(the_file,inv_file,':RH:')
+	if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
+	hasspfh = .false.
+	trac_names_grib(1)=':RH:'
+ endif
+ 
+ if (localpet == 0) print*,"- FIND CICE or CIMIXR"
+ iret = grb2_inq(the_file,inv_file,':CICE:',lvl_str_space)
 
-  print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
-  !um_tracers = 0
-  !tracers_input(:)=""
-  do n = 1, num_tracers
+ if (iret <= 0) then
+	iret = grb2_inq(the_file,inv_file,':CIMIXR:',lvl_str_space)
+	if (iret >= 1) trac_names_grib(4)=':CIMIXR:'
+	if (iret <= 0) then
+		iret = grb2_inq(the_file,inv_file,':ICMR:',lvl_str_space)
+		if (iret >= 1) trac_names_grib(4)=':ICMR:'
+	endif
+ endif
 
-   vname = tracers_input(n)
-   
-   i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
+ print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
+ !um_tracers = 0
+ !tracers_input(:)=""
+ do n = 1, num_tracers
 
-   tracers_input_grib(n)=trac_names_grib(i)
-   tracers_input_vmap(n)=trac_names_vmap(i)
-   tracers(n)=tracers_default(i)
+	 vname = tracers_input(n)
+ 
+	 i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
+
+	 tracers_input_grib(n)=trac_names_grib(i)
+	 tracers_input_vmap(n)=trac_names_vmap(i)
+	 tracers(n)=tracers_default(i)
+	 tracers_input(n) = tracers_default(i)
  enddo
+
+ num_tracers_input = num_tracers
+ 
  allocate(atm(num_tracers+4))
  if (localpet==0) print*, "NUMBER OF TRACERS IN FILE = ", num_tracers
 

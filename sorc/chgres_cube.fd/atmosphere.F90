@@ -54,7 +54,7 @@
                                        regional, input_type,      &
                                        tracers, num_tracers,      &
                                        atm_weight_file, phys_suite, &
-                                       num_tracers_input
+                                       num_tracers_input, tracers_input
 
  implicit none
 
@@ -161,6 +161,12 @@
 !-----------------------------------------------------------------------------------
 
  call create_atm_b4adj_esmf_fields
+ 
+!-----------------------------------------------------------------------------------
+! Fix tracer values below zero
+!-----------------------------------------------------------------------------------
+
+call rem_negative_tracers(localpet)
 
 !-----------------------------------------------------------------------------------
 ! Horizontally interpolate.  If specified, use weights from file.
@@ -217,7 +223,9 @@
     call error_handler("IN FieldRegrid", rc)
 
  !allocate(tmp(i_target,j_target,lev_target))
- do n = 1, num_tracers
+ !if(localpet==0) print*, "num_tracers_input = ", num_tracers_input
+ 
+ do n = 1, num_tracers_input
    print*,"- CALL Field_Regrid FOR TRACER ", trim(tracers(n))
    call ESMF_FieldRegrid(tracers_input_grid(n), &
                          tracers_b4adj_target_grid(n), &
@@ -516,14 +524,14 @@
 
  do n = 1, num_tracers
     print*,"- CALL FieldCreate FOR TARGET GRID TRACERS ", trim(tracers(n))    
-    if (trim(tracers(n)) == "sphum")    P_QV = n
-    if (trim(tracers(n)) == "liq_wat")  P_QC = n
-    if (trim(tracers(n)) == "ice_wat")  P_QI = n
-    if (trim(tracers(n)) == "rainwat")  P_QR = n   
-    if (trim(tracers(n)) == "ice_nc")   P_QNI = n
-    if (trim(tracers(n)) == "rain_nc")  P_QNR = n
-    if (trim(tracers(n)) == "water_nc") P_QNC = n
-    if (trim(tracers(n)) == "liq_aero") P_QNWFA = n
+    if (trim(tracers(n)) == "sphum")    P_QV = n; print*, "P_QV = ", P_QV
+    if (trim(tracers(n)) == "liq_wat")  P_QC = n; print*, "P_QC = ", P_QC
+    if (trim(tracers(n)) == "ice_wat")  P_QI = n; print*, "P_QI = ", P_QI
+    if (trim(tracers(n)) == "rainwat")  P_QR = n; print*, "P_QR = ", P_QR
+    if (trim(tracers(n)) == "ice_nc")   P_QNI = n; print*, "P_QNI = ", P_QNI
+    if (trim(tracers(n)) == "rain_nc")  P_QNR = n; print*, "P_QNR = ", P_QNR
+    if (trim(tracers(n)) == "water_nc") P_QNC = n; print*, "P_QNC = ", P_QNC
+    if (trim(tracers(n)) == "liq_aero") P_QNWFA = n; print*, "P_QNWFA = ", P_QNWFA
     tracers_target_grid(n) = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
@@ -1827,21 +1835,24 @@
 		call ESMF_FieldGet(tracers_target_grid(P_QNC), farrayPtr=qncptr, rc=rc)
 	   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
 		call error_handler("IN FieldGet tracers_qnc", rc)
+		if (num_tracers == num_tracers_input + 3) qncptr(clb(1):cub(1),clb(2):cub(2),clb(3):cub(3)) = real(-1.0, esmf_kind_r8)
    endif
     
    if (P_QNI > 0) then     
 	   call ESMF_FieldGet(tracers_target_grid(P_QNI), farrayPtr=qniptr, rc=rc) 
 	   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
 		call error_handler("IN FieldGet tracers_qni", rc)
+		if (num_tracers == num_tracers_input + 3) qniptr(clb(1):cub(1),clb(2):cub(2),clb(3):cub(3)) = real(-1.0, esmf_kind_r8)
    endif
    
    if (P_QNR > 0) then    
 	   call ESMF_FieldGet(tracers_target_grid(P_QNR), farrayPtr=qnrptr, rc=rc)  
 	   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
 		call error_handler("IN FieldGet tracers_qnr", rc)
+		if (num_tracers == num_tracers_input + 3) qnrptr(clb(1):cub(1),clb(2):cub(2),clb(3):cub(3)) = real(-1.0, esmf_kind_r8)
    endif
    
-      if (P_QNWFA > 0) then    
+   if (P_QNWFA > 0) then    
 	   call ESMF_FieldGet(tracers_target_grid(P_QNWFA), farrayPtr=qnwfaptr, rc=rc)  
 	   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
 		call error_handler("IN FieldGet tracers_qnr", rc)
@@ -1860,29 +1871,32 @@
 
              if (P_QNC.gt.1 .AND. cloudptr(i,j,k).gt.0.0 .AND. qncptr(i,j,k).le.0.0) then
                 if (P_QNWFA .gt. 1) then
-                   qncptr(i,j,k) = make_DropletNumber (vaporptr(i,j,k)*temp_rho,       &
+                   qncptr(i,j,k) = make_DropletNumber (cloudptr(i,j,k)*temp_rho,       &
    &                           qnwfaptr(i,j,k)*temp_rho, real(landptr(i,j)))
                 else
-                   qncptr(i,j,k) = make_DropletNumber (vaporptr(i,j,k)*temp_rho,       &
+                   qncptr(i,j,k) = make_DropletNumber (cloudptr(i,j,k)*temp_rho,       &
    &                           0.0, real(landptr(i,j)))
                 endif
                 qncptr(i,j,k) = qncptr(i,j,k) / temp_rho
+                
              endif
-
+             if (qncptr(i,j,k) < 0) qncptr(i,j,k) = 0
              !..Produce a sensible cloud ice number concentration
 
              if (P_QNI.gt.1 .AND. iceptr(i,j,k).gt.0.0 .AND. qniptr(i,j,k).le.0.0) then
                 qniptr(i,j,k) = make_IceNumber (iceptr(i,j,k)*temp_rho, tempptr(i,j,k))
                 qniptr(i,j,k) = qniptr(i,j,k)  / temp_rho
+               
              endif
-
+             if (qniptr(i,j,k) < 0) qniptr(i,j,k) = 0
              !..Produce a sensible rain number concentration
 
              if (P_QNR.gt.1 .AND. rainptr(i,j,k).gt.0.0 .AND. qnrptr(i,j,k).le.0.0) then
                 qnrptr(i,j,k)  = make_RainNumber (rainptr(i,j,k)*temp_rho, tempptr(i,j,k))
                 qnrptr(i,j,k)  = qnrptr(i,j,k)  / temp_rho
+                
              endif
-
+             if (qnrptr(i,j,k) < 0) qnrptr(i,j,k) = 0
           enddo
 
        enddo
@@ -2044,6 +2058,34 @@ end function make_IceNumber
 
       return
  end function make_RainNumber
+ 
+ subroutine rem_negative_tracers(localpet)
+ 
+   implicit none
+   
+   integer, intent(in)         :: localpet
+   
+   integer                     :: n, rc, clb(3), cub(3)
+   
+   real(esmf_kind_r8),pointer  :: tempptr(:,:,:)
+   
+   do n = 1,num_tracers_input
+     nullify(tempptr)
+     if(localpet==0) print*, "REMOVE NEGATIVE VALUES FROM TRACER ", trim(tracers_input(n))
+     call ESMF_FieldGet(tracers_input_grid(n), &
+                        computationalLBound=clb, &
+                        computationalUBound=cub, &
+                        FarrayPtr=tempptr, rc=rc)
+	   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+         call error_handler("IN FieldGet tracer", rc)
+     if (trim(tracers_input(n))=="sphum") then
+       where(tempptr(clb(1):cub(1),clb(2):cub(2),clb(3):cub(3)) <= 0) tempptr = real(1E-7,esmf_kind_r8)
+     else
+       where(tempptr(clb(1):cub(1),clb(2):cub(2),clb(3):cub(3)) <= 0) tempptr = real(0.0,esmf_kind_r8)
+     endif
+   enddo
+   
+ end subroutine rem_negative_tracers
 
  subroutine cleanup_target_atm_b4adj_data
 
