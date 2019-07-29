@@ -6,7 +6,7 @@
                        "Build_nst_tf_chg" \
                        "Build_orog" \
                        "Build_nctools" "Build_chgres_cube" \
-                       "Build_emcsfc")
+                       "Build_sfc_climo_gen" "Build_emcsfc")
 
 #
 # function parse_cfg: read config file and retrieve the values

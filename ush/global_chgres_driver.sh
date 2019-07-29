@@ -154,6 +154,7 @@ elif [ $ictype = opsgfs ] || [ $ictype = fv3gfs ]; then   # input data is nemsio
    export nopdpvv=.true.
  else
    export nopdpvv=.false.
+   export NTRAC=7
  fi
 
  LONB_ATM=0   # not used for
