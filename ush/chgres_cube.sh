@@ -4,6 +4,8 @@
 # Script name:  chgres_cube.sh
 #
 # Abstract:  Run the chgres program to initialize an FV3 run.
+#
+# See comments for variable definitions and setup information.
 #----------------------------------------------------------------------------
 
 set -x
@@ -17,8 +19,12 @@ CRES=${CRES:-96}
 #----------------------------------------------------------------------------
 # Set up environment paths.
 #
-# FIXfv3 - Location of target grid orography and 'grid' files.
-# FIXsfc - Location of target grid surface climo files.
+# HOMEufs - Location of root ufs_utils directory.
+# EXECufs - Location of ufs_utils executable directory.
+# FIXufs  - Location of ufs_utils root fixed data directory.
+# FIXfv3  - Location of target grid orography and 'grid' files.
+# FIXsfc  - Location of target grid surface climatological files.
+# FIXam   - Location of vertical coordinate definition file for target grid.
 #----------------------------------------------------------------------------
 
 ufs_ver=${ufs_ver:-v1.0.0}
@@ -31,6 +37,10 @@ FIXfv3=${FIXfv3:-$FIXufs/fix_fv3_gmted2010/C${CRES}}
 FIXsfc=${FIXsfc:-$FIXfv3/fix_sfc}
 FIXam=${FIXam:-$FIXufs/fix_am}
 
+#----------------------------------------------------------------------------
+# CDATE - YYMMDDHH of your run.
+#----------------------------------------------------------------------------
+
 CDATE=${CDATE:?}
 iy=$(echo $CDATE|cut -c1-4)
 im=$(echo $CDATE|cut -c5-6)
@@ -38,12 +48,12 @@ id=$(echo $CDATE|cut -c7-8)
 ih=$(echo $CDATE|cut -c9-10)
 
 #----------------------------------------------------------------------------
-# Variables for regional grids.
+# Variables for stand-alone regional grids.
 #
 # REGIONAL - Set to 1 to create remove halo and create lateral boundary
 #            file.  Set to 2 for lateral boundary file only.  Set to
 #            0 for non-regional grids.
-# HALO_BNDY - Number of rows/cols for lateral boundaries.
+# HALO_BNDY  - Number of rows/cols for lateral boundaries.
 # HALO_BLEND - Number of rows/cols for blending zone.
 #----------------------------------------------------------------------------
 
@@ -58,14 +68,17 @@ HALO_BLEND=${HALO_BLEND:-0}
 #              for spectral gfs sigio/sfcio files.  'gaussian' for fv3
 #              gaussian nemsio files.
 #
-# MOSAIC_FILE_INPUT_GRID - Name of mosaic file for input grid.  Only used
-#                          for 'history' and 'restart' files
+# MOSAIC_FILE_INPUT_GRID - Path/Name of mosaic file for input grid.  Only
+#                          used for 'history' and 'restart' INPUT_TYPE.
+#                          Set to NULL otherwise.
 #
 # OROG_DIR_INPUT_GRID - Location of orography and grid files for input grid.
-#                       Only used for 'history' and 'restart' files.
+#                       Only used for 'history' and 'restart' INPUT_TYPE.
+#                       Set to NULL otherwise.
 #
 # OROG_FILES_INPUT_GRID - List of orography files for input grid.  Only
-#                         used for 'history' and 'restart' files.
+#                         used for 'history' and 'restart' INPUT_TYPE.
+#                         Set to NULL otherwise.
 #----------------------------------------------------------------------------
 
 INPUT_TYPE=${INPUT_TYPE:-"gaussian"}
@@ -88,18 +101,19 @@ COMIN=${COMIN:-$PWD}
 
 #----------------------------------------------------------------------------
 # ATM_FILES_INPUT - Input atmospheric data file(s).  Not used for 'restart'
-#                   files.
+#                   INPUT_TYPE.
 #
-# ATM_CORE_FILES - Input atmospheric core files.  Used for 'restart' files.
-#                  The first six entries are the tiled files.  The seventh
-#                  is the file containing the vertical coord definition.
+# ATM_CORE_FILES - Input atmospheric core files.  Used for 'restart' 
+#                  INPUT_TYPE only.  The first six entries are the tiled
+#                  files.  The seventh is the file containing the 
+#                  vertical coord definition.
 #
 # ATM_TRACER_FILES_INPUT - Input atmospheric tracer files for each tile.
-#                          Used for 'restart' files only.
+#                          Used for 'restart' INPUT_TYPE only.
 #
 # SFC_FILES_INPUT - Input surface data file(s).
 #
-# NST_FILES_INPUT - Input nst data file.  'gfs_gaussian' files only.
+# NST_FILES_INPUT - Input nst data file.  'gfs_gaussian' INPUT_TYPE only.
 #
 # TRACERS_INPUT - List of input atmospheric tracer records to be processed.
 #----------------------------------------------------------------------------
@@ -112,7 +126,8 @@ NST_FILES_INPUT=${NST_FILES_INPUT:-NULL}
 TRACERS_INPUT=${TRACERS_INPUT:-'"spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"'}
 
 #----------------------------------------------------------------------------
-# TRACERS_TARGET - List of output tracer records.
+# TRACERS_TARGET - List of target tracer records. Must corresponde with
+#                  with TRACERS_INPUT.
 #
 # VCOORD_FILE - File containing vertical coordinate defintion for target
 #               grid.
@@ -138,10 +153,26 @@ if [ $OROG_FILES_TARGET_GRID == NULL ]; then
   OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}'_oro_data.tile5.nc","C'${CRES}'_oro_data.tile6.nc'
 fi
 
+#----------------------------------------------------------------------------
+# APRUN - machine specific command to run program.
+# CHGRESEXEC - program executable.
+# OMP_NUM_THREADS - threads most useful for 'gfs_spectral' INPUT_TYPE.
+# DATA - working directory.
+# PGMOUT - standard output file
+# PGMERR - standard error file
+# REDOUT - standard output redirect
+# REDERR - standard error redirect
+#----------------------------------------------------------------------------
+
 APRUN=${APRUN:-time}
 CHGRESEXEC=${CHGRESEXEC:-${EXECufs}/chgres_cube.exe}
 
 export OMP_NUM_THREADS=${OMP_NUM_THREADS_CY:-1}
+
+PGMOUT=${PGMOUT:-${pgmout:-'&1'}}
+PGMERR=${PGMERR:-${pgmerr:-'&2'}}
+REDOUT=${REDOUT:-'1>'}
+REDERR=${REDERR:-'2>'}
 
 DATA=${DATA:-$PWD/chgres}
 mkdir -p $DATA
@@ -180,7 +211,7 @@ cat << EOF > ./fort.41
  /
 EOF
 
-$APRUN $CHGRESEXEC
+$APRUN $CHGRESEXEC $REDOUT$PGMOUT $REDERR$PGMERR
 
 iret=$?
 if [ $iret -ne 0 ]; then
