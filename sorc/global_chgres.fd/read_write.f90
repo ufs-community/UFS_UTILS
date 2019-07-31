@@ -429,6 +429,7 @@
 
  error = nf90_enddef(ncid, header_buffer_val, 4, 0, 4)
  call netcdf_error(error, 'DEFINING HEADER' )
+
  allocate(dum2d(lonb,latb))
 
  dum2d = reshape(sfcoutput%lons, (/lonb,latb/) )
