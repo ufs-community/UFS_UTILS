@@ -104,7 +104,6 @@ $Build_sfc_climo_gen && {
 echo " .... Building sfc_climo_gen .... "
 ./build_sfc_climo_gen.sh > $logs_dir/build_sfc_climo_gen.log 2>&1
 }
-
 #------------------------------------
 # build regional_grid
 #------------------------------------

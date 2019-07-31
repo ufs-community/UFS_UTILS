@@ -17,74 +17,20 @@
 #   3) surface climo fields, such as soil type, vegetation
 #      greenness and albedo.
 #
+# Calls the following scripts:
+#   1) fv3gfs_make_grid.sh (make 'grid' files)
+#   2) fv3gfs_maske_orog.sh (make 'oro' files)
+#   3) fv3gfs_filter_topo.sh (filter topography)
+#   4) sfc_climo_gen.sh (create surface climo fields)
+#
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
 #       an ESMF library requirement.  Large grids may require
 #       tasks spread across multiple nodes.
 #
-# To run, do the following:
-#   1) Uncomment workload management directives for your machine.
-#      Script runs on Theia, WCOSS-Cray and WCOSS-Dell.
-#   2) Set "machine" - choices are "THEIA", "WCOSS_C"
-#      and "WCOSS_DELL_P3".
-#   3) Set "C" resolution, "res" - Example: res=96.
-#   4) Set grid type ("gtype").  Valid choices are
-#         "uniform"  - global uniform grid
-#         "stretch"  - global stretched grid
-#         "nest"     - global stretched grid with nest
-#         "regional" - stand-alone regional grid
-#   5) For "stretch" and "nest" grids, set the stretching factor -
-#       "stretch_fac", and center lat/lon of highest resolution
-#      tile - "target_lat" and "target_lon".
-#   6) For "nest" grids, set the refinement ratio - "refine_ratio", 
-#      the starting/ending i/j index location within the parent
-#      tile - "istart_nest", "jstart_nest", "iend_nest", "jend_nest"
-#   7) For "regional" grids, set the "halo".  Default is three
-#      rows/columns.
-#   8) Submit script.  On Theia: "sbatch $script".  On Cray and Dell:
-#      "cat $script | bsub".
-#   9) All files will be placed in "out_dir".
-#   
+# This script is run by its machine-specific driver script in
+# ./driver_scripts.
 #-----------------------------------------------------------------------
-
-#---- WCOSS DELL JOBCARD
-#---- Submit script as "cat $script | bsub"
-#BSUB -oo log.grid.%J
-#BSUB -eo log.grid.%J
-#BSUB -q debug
-#BSUB -P FV3GFS-T2O
-#BSUB -J grid_fv3
-#BSUB -W 0:30
-#BSUB -x                 # run not shared
-#BSUB -n 24              # total tasks
-#BSUB -R span[ptile=24]   # tasks per node
-#BSUB -R affinity[core(1):distribute=balance]
-machine=WCOSS_DELL_P3
-
-#---- WCOSS_CRAY JOBCARD
-#---- Submit script as "cat $script | bsub"
-##BSUB -L /bin/sh
-##BSUB -P FV3GFS-T2O
-##BSUB -oo log.grid.%J
-##BSUB -eo log.grid.%J
-##BSUB -J grid_fv3
-##BSUB -q debug
-##BSUB -M 2400
-##BSUB -W 00:30
-##BSUB -extsched 'CRAYLINUX[]'
-#machine=WCOSS_C
-
-#---- THEIA JOBCARD
-#---- Submit script as 'sbatch $script'
-##SBATCH -J fv3_grid_driver
-##SBATCH -A fv3-cpu
-##SBATCH --open-mode=truncate
-##SBATCH -o log.fv3_grid_driver
-##SBATCH -e log.fv3_grid_driver
-##SBATCH --nodes=1 --ntasks-per-node=24
-##SBATCH -q debug
-##SBATCH -t 00:30:00
-#machine=THEIA
 
 set -ax
 
@@ -94,28 +40,28 @@ export machine=${machine:?}
 # Makes FV3 cubed-sphere grid
 #----------------------------------------------------------------------------------
 
-export res=96              # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
-export gtype=uniform       # grid type: uniform, stretch, nest or regional
+export res=${res:-96}           # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
+export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest or regional
 
 if [ $gtype = uniform ];  then
   echo "Creating global uniform grid"
 elif [ $gtype = stretch ]; then
-  export stretch_fac=1.5       # Stretching factor for the grid
-  export target_lon=-97.5      # Center longitude of the highest resolution tile
-  export target_lat=35.5       # Center latitude of the highest resolution tile
-  title=c${res}s               # Identifier based on refined location
+  export stretch_fac=${stretch_fac:-1.5}  # Stretching factor for the grid
+  export target_lon=${target_lon:--97.5}  # Center longitude of the highest resolution tile
+  export target_lat=${target_lat:-35.5}   # Center latitude of the highest resolution tile
+  title=c${res}s
   echo "Creating global stretched grid"
 elif [ $gtype = nest ] || [ $gtype = regional ]; then
-  export stretch_fac=1.5       # Stretching factor for the grid
-  export target_lon=-97.5      # Center longitude of the highest resolution tile
-  export target_lat=35.5       # Center latitude of the highest resolution tile
-  export refine_ratio=3        # The refinement ratio
-  export istart_nest=27        # Starting i-direction index of nest grid in parent tile supergrid
-  export jstart_nest=37        # Starting j-direction index of nest grid in parent tile supergrid
-  export iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
-  export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
-  export halo=3                # Halo size. Regional grids only.
-  title=c${res}s               # Identifier based on nest location
+  export stretch_fac=${stretch_fac:-1.5}  # Stretching factor for the grid
+  export target_lon=${target_lon:--97.5}  # Center longitude of the highest resolution tile
+  export target_lat=${target_lat:-35.5}   # Center latitude of the highest resolution tile
+  export refine_ratio=${refine_ratio:-3}  # The refinement ratio
+  export istart_nest=${istart_nest:-27}   # Starting i-direction index of nest grid in parent tile supergrid
+  export jstart_nest=${jstart_nest:-37}   # Starting j-direction index of nest grid in parent tile supergrid
+  export iend_nest=${iend_nest:-166}      # Ending i-direction index of nest grid in parent tile supergrid
+  export jend_nest=${jend_nest:-164}      # Ending j-direction index of nest grid in parent tile supergrid
+  export halo=${halo:-3}                  # Halo size. Regional grids only.
+  title=c${res}s
   if [ $gtype = nest ];then
    echo "Creating global nested grid"
   else
@@ -126,70 +72,13 @@ else
   exit 9
 fi
 
-if [ $machine = WCOSS_C ]; then
-  set +x
-  . $MODULESHOME/init/sh
-  module load PrgEnv-intel cfp-intel-sandybridge/1.1.0
-  module list
-  set -x
-  export NODES=1
-  export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"
-  export APRUN_SFC="aprun -j 1 -n 24 -N 24"
-  export home_dir=$LS_SUBCWD/..
-  export TMPDIR=/gpfs/hps3/stmp/$LOGNAME/fv3_grid.$gtype
-  export out_dir=/gpfs/hps3/stmp/$LOGNAME/C${res}
-#  On Cray, the orography code is optimized for six threads.
-#  Do not change.
-  export OMP_NUM_THREADS=6
-  export OMP_STACKSIZE=2048m
-  export KMP_AFFINITY=disabled
-elif [ $machine = WCOSS_DELL_P3 ]; then
-# On dell, load the EnvVar module before setting any environment variables.
-  set +x
-  module purge
-  module load EnvVars/1.0.2
-  module load lsf/10.1
-  module load ips/18.0.1.163
-  module load impi/18.0.1
-  module load NetCDF/4.5.0
-  module load HDF5-serial/1.10.1
-  module list
-  set -x
-  export APRUN=time
-  export APRUN_SFC="mpirun -l"
-  export home_dir=$LS_SUBCWD/..
-  export TMPDIR=/gpfs/dell1/stmp/$LOGNAME/fv3_grid.$gtype
-  export out_dir=/gpfs/dell1/stmp/$LOGNAME/C${res}
-  export OMP_NUM_THREADS=24 # orog code worked best with 24 threads.
-  export OMP_STACKSIZE=2048m
-elif [ $machine = THEIA ]; then
-  . /apps/lmod/lmod/init/sh
-  set +x
-  module purge
-  module load intel/16.1.150
-  module load impi
-  module load hdf5/1.8.14
-  module load netcdf/4.3.0
-  module list
-  set -x
-  export APRUN=time
-  export APRUN_SFC=srun
-  export home_dir=$SLURM_SUBMIT_DIR/..
-  export TMPDIR=/scratch3/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-  export out_dir=/scratch3/NCEPDEV/stmp1/$LOGNAME/C${res}
-  export OMP_NUM_THREADS=24
-  export OMP_STACKSIZE=2048m
-else
-  echo FATAL ERROR. $machine not supported.  Exiting.
-  exit 1
-fi
+export TMPDIR=${TMPDIR:?}
+export out_dir=${out_dir:?}
 
+export home_dir=${home_dir:-"$PWD/../"}
 export script_dir=$home_dir/ush
 export exec_dir=$home_dir/exec
 export topo=$home_dir/fix/fix_orog
-
-ulimit -a
-ulimit -s unlimited
 
 rm -fr $TMPDIR
 mkdir -p $out_dir $TMPDIR
@@ -287,7 +176,7 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
     done
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
     rm $TMPDIR/orog.file1
-  elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
+  else
     tile=1
     while [ $tile -le $ntiles ]; do
       set +x
@@ -426,7 +315,7 @@ elif [ $gtype = regional ]; then
     echo "$script_dir/fv3gfs_make_orog.sh $res 7 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
     rm $TMPDIR/orog.file1
-  elif [ $machine = THEIA ] || [ $machine = WCOSS_DELL_P3 ]; then
+  else
     set +x
     echo
     echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
@@ -533,7 +422,7 @@ elif [ $gtype = nest ]; then
   export mosaic_file=$out_dir/C${res}_coarse_mosaic.nc
 fi
 
-$script_dir/sfc_climo_gen.ksh
+$script_dir/sfc_climo_gen.sh
 err=$?
 if [ $err != 0 ]; then
   echo error in sfc_climo_gen
@@ -552,7 +441,7 @@ fi
 if [ $gtype = nest ]; then
   export mosaic_file=$out_dir/C${res}_nested_mosaic.nc
   export GRIDTYPE=nest
-  $script_dir/sfc_climo_gen.ksh
+  $script_dir/sfc_climo_gen.sh
   err=$?
   if [ $err != 0 ]; then
     echo error in sfc_climo_gen
