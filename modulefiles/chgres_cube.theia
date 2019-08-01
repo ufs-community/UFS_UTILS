@@ -1,8 +1,10 @@
 #%Module#####################################################
-## chgres build module for Theia
+## chgres_cube module file for Theia
 #############################################################
 
-module load intel/15.1.133
+module purge
+
+module load intel/18.1.163
 module load impi/5.1.1.109
 module load netcdf/4.3.0
 
@@ -10,12 +12,21 @@ module use /scratch4/NCEPDEV/nems/noscrub/emc.nemspara/soft/modulefiles
 module load esmf/8.0.0bs20
 
 module use -a /scratch3/NCEPDEV/nwprod/lib/modulefiles
-module load w3nco
-module load nemsio/v2.2.3
-module load bacio/v2.0.1
-module load sp/v2.0.2
-module load sfcio/v1.0.0
-module load sigio/v2.0.1
+module load wgrib2/2.0.8      # Library for coding and decoding data in GRIB2 format.
+module load w3nco/v2.0.6      # Library for coding and decoding data in GRIB1 format.
+module load nemsio/v2.2.3     # NEMS I/O routines.
+module load bacio/v2.0.2      # Binary I/O library.
+module load sp/v2.0.2         # Spectral transform library.
+module load sfcio/v1.0.0      # API for performing I/O on the surface restart file of the global spectral model.
+module load sigio/v2.0.1      # API for performing I/O on the sigma restart file of the global spectral model.
+#
+# The following should be (but are not) set when the command
+#
+#   module load wgrib2/2.0.8
+#
+# is issued.  I put in a theia help ticket; hopefully this will be fixed.
+#
+export WGRIB2API_LIB="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib/libwgrib2_api.a"
+export WGRIB2API_INC="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib"
+export WGRIB2_LIB="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib/libwgrib2.a"
 
-export FCOMP=mpiifort
-export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"
