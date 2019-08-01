@@ -1,18 +1,17 @@
 #!/bin/bash
 
-#BSUB -oo log.grid.%J
-#BSUB -eo log.grid.%J
-#BSUB -q debug
-#BSUB -P FV3GFS-T2O
-#BSUB -J grid_fv3
-#BSUB -W 0:30
-#BSUB -x                 # run not shared
-#BSUB -n 24              # total tasks
-#BSUB -R span[ptile=24]   # tasks per node
-#BSUB -R affinity[core(1):distribute=balance]
+#SBATCH -J fv3_grid_driver
+#SBATCH -A emcda
+#SBATCH --open-mode=truncate
+#SBATCH -o log.fv3_grid_driver
+#SBATCH -e log.fv3_grid_driver
+#SBATCH --nodes=1 --ntasks-per-node=24
+#SBATCH --partition=xjet
+#SBATCH -q windfall
+#SBATCH -t 00:10:00
 
 #-----------------------------------------------------------------------
-# Driver script to create a cubic-sphere based model grid on Dell.
+# Driver script to create a cubic-sphere based model grid on Jet.
 #
 # Produces the following files (netcdf, each tile in separate file):
 #   1) 'mosaic' and 'grid' files containing lat/lon and other
@@ -25,8 +24,8 @@
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
 #       an ESMF library requirement.  Large grids may require
-#       tasks spread across multiple nodes. The orography code
-#       benefits from threads.
+#       tasks spread across multiple nodes.  The orography
+#       code benefits from threads.
 #
 # To run, do the following:
 #
@@ -46,18 +45,20 @@
 #      rows/columns.
 #   6) Set working directory - TMPDIR - and path to the repository
 #      clone - home_dir.
-#   7) Submit script: "cat $script | bsub".
+#   7) Submit script: "sbatch $script".
 #   8) All files will be placed in "out_dir".
 #
 #-----------------------------------------------------------------------
 
+set -x
+
+. /apps/lmod/lmod/init/sh
 module purge
-module load EnvVars/1.0.2
-module load lsf/10.1
-module load ips/18.0.1.163
-module load impi/18.0.1
-module load NetCDF/4.5.0
-module load HDF5-serial/1.10.1
+module load intel/15.0.3.187
+module load impi/2018.4.274
+module load szip
+module load hdf5
+module load netcdf/4.2.1.1
 module list
 
 #-----------------------------------------------------------------------
@@ -80,29 +81,29 @@ elif [ $gtype = nest ] || [ $gtype = regional ]; then
   export jstart_nest=37        # Starting j-direction index of nest grid in parent tile supergrid
   export iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
   export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
-  export halo=3
+  export halo=3                # Lateral boundary halo
 fi
 
 #-----------------------------------------------------------------------
-# Check paths.
+# Check paths.  
 #   home_dir - location of repository.
 #   TMPDIR   - working directory.
-#   out_dir  - where files will be placed upon completion.
+#   out_dir  - where files will be placed upon completion. 
 #-----------------------------------------------------------------------
 
-export home_dir=$LS_SUBCWD/..
-export TMPDIR=/gpfs/dell1/stmp/$LOGNAME/fv3_grid.$gtype
-export out_dir=/gpfs/dell1/stmp/$LOGNAME/C${res}
+export home_dir=$SLURM_SUBMIT_DIR/..
+export TMPDIR=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/fv3_grid.$gtype
+export out_dir=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/C${res}
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
 #-----------------------------------------------------------------------
 
 export APRUN=time
-export APRUN_SFC="mpirun -l"
-export OMP_NUM_THREADS=24 # orog code worked best with 24 threads.
+export APRUN_SFC=srun
+export OMP_NUM_THREADS=24
 export OMP_STACKSIZE=2048m
-export machine=WCOSS_DELL_P3
+export machine=JET
 
 ulimit -a
 ulimit -s unlimited
