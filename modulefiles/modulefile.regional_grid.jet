@@ -1,11 +1,16 @@
 #%Module#####################################################
 ## Module file for regional_grid
 #############################################################
+
+export COREPATH=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
+export NCEPLIBS=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
+module use /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib/modulefiles
+
 module load intel/15.0.3.187
 module load impi/2018.4.274
-module load netcdf/4.2.1.1
-module load hdf5
 module load szip
+module load hdf5
+module load netcdf/4.2.1.1
 
 export FC=ifort
 export FFLAGS="-O2 -g"
