@@ -2,8 +2,6 @@
 ## Module file for sfc_climo_gen
 #############################################################
 
-export COREPATH=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
-export NCEPLIBS=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
 module use /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib/modulefiles
 
 module load intel/15.0.3.187

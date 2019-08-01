@@ -2,8 +2,6 @@
 ## chgres build module for Jet
 #############################################################
 
-export COREPATH=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
-export NCEPLIBS=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
 module use /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib/modulefiles
 
 module load intel/15.0.3.187
@@ -14,17 +12,14 @@ module load netcdf/4.2.1.1
 
 module load esmflocal/ESMF_8_0_0_beta_snapshot_21
 
-#module load g2-intel-sandybridge/3.1.0
-#module load w3emc-intel-sandybridge/2.2.0
 module load w3nco-intel-sandybridge/2.0.6
 module load sp-intel-sandybridge/2.0.2
-#module load ip-intel-sandybridge/3.0.0
-#module load bufr-intel-sandybridge/11.1.0
 module load bacio-intel-sandybridge/2.0.2
 module load sigio-intel-sandybridge/2.0.1
 module load sfcio-intel-sandybridge/1.0.0
 module load nemsio-intel-sandybridge/2.2.2
-#module load nemsiogfs-intel/2.0.1
 
 export FCOMP=mpiifort
-export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"
+export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
+#debug
+#export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"

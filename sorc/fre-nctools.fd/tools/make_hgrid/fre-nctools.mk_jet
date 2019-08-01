@@ -22,7 +22,7 @@ CFLAGS_O2:= -O2
 INCLUDES := -I${NETCDF_HOME}/include -I./ -I../shared -I../../shared/mosaic
 CLIBS     := -L${NETCDF_HOME}/lib -L${HDF5_HOME}/lib -lnetcdf -lhdf5_hl -lhdf5 -limf $(CLIBS2) $(STATIC)
 
-TARGETS  := make_hgrid
+TARGETS  := make_hgrid make_hgrid_parallel
 
 SOURCES  := make_hgrid.c create_conformal_cubic_grid.c create_gnomonic_cubic_grid.c create_grid_from_file.c create_lonlat_grid.c
 SOURCES  += mpp_domain.c mpp_io.c tool_util.c
@@ -40,8 +40,8 @@ all: $(TARGETS)
 make_hgrid: $(OBJECTS) mosaic_util.o mpp.o
 	$(CC) -o $@ $^ $(CLIBS)
 
-##make_hgrid_parallel: $(OBJECTS) mosaic_util_parallel.o mpp_parallel.o
-##	$(MPICC) -o $@ $^ $(CLIBS)
+make_hgrid_parallel: $(OBJECTS) mosaic_util_parallel.o mpp_parallel.o
+	$(MPICC) -o $@ $^ $(CLIBS)
 
 make_hgrid.o: make_hgrid.c $(HEADERS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< 

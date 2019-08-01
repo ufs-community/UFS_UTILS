@@ -23,7 +23,8 @@
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
 #       an ESMF library requirement.  Large grids may require
-#       tasks spread across multiple nodes.
+#       tasks spread across multiple nodes.  The orography code
+#       benefits from threads.
 #
 # To run, do the following:
 #
