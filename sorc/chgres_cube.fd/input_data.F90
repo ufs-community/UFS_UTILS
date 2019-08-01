@@ -4580,6 +4580,7 @@ if (localpet == 0) then
    slev=":surface:" 
    vname=":SOTYP:"                                     
    rc = grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+   !failed => rc = 0
    print*, "rc, external_model ", rc, trim(to_upper(external_model))
    if (rc <= 0 .and. trim(to_upper(external_model))=="HRRR") then 
      ! Some HRRR files don't have dominant soil type in the output, but the geogrid files
@@ -4587,14 +4588,16 @@ if (localpet == 0) then
      ! type 
      print*, "OPEN GEOGRID FILE ", trim(geo_file)
      rc = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
-    
+     ! failed => rc < 0
      if (rc == 0) then
        print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
        rc = nf90_inq_varid(ncid2d,"SCT_DOM",varid)
+       ! failed => rc < 0
        if (rc<0) print*, "ERROR FINDING SCT_DOM IN GEOGRID FILE"
        if (rc == 0) then
          print*, "READ SOIL TYPE FROM GEOGRID FILE "
          rc = nf90_get_var(ncid2d,varid,dummy2d)
+         ! failed => rc < 0
          if (rc<0) print*, "ERROR READING SCT_DOM FROM FILE"
          print*, "min max dummy2d = ", minval(dummy2d), maxval(dummy2d)
        endif
@@ -4603,7 +4606,7 @@ if (localpet == 0) then
      endif
    endif
    print*, "rc, iret = ", rc, iret
-   if (rc < 0) then
+   if (rc <= 0) then
      if (.not. replace_sotyp) then
        call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET REPLACE_SOTYP=.TRUE. . EXITING")
      else

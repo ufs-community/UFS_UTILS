@@ -2912,7 +2912,7 @@
  real(esmf_kind_r8)          :: tmp(i_input,j_input), &
                                 data_one_tile(i_input,j_input,lsoil_input), &
                                 tmp3d(i_input,j_input,lsoil_target)
- if (lsoil_input /= lsoil_target .or. (lsoil_input == 9 .and. lsoil_target == 4)) then
+ if (lsoil_input == 9 .and. lsoil_target == 4) then
  
    call ESMF_FieldGather(soil_temp_input_grid, data_one_tile, rootPet=0, tile=1, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
