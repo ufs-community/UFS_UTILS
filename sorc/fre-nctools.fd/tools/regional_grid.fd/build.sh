@@ -6,7 +6,7 @@ case $1 in
   "cray" )
      export FCMP=ftn
      export FFLAGS="-O2 -g"
-     export LIBS=blah  ;;
+     export LIBS=" "  ;;
   "wcoss" )
      export FCMP=ifort
      export FFLAGS="-O2 -g ${NETCDF_FFLAGS}"
