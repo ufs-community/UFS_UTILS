@@ -6,6 +6,7 @@ To run regression tests:
    - Theia (driver.theia.sh)
    - WCOSS-Cray (driver.cray.sh)
    - WCOSS-Dell (driver.dell.sh)
+   - Jet (driver.jet.sh)
 
 A series of daisy-chained tests will run.  A test fails 
 if the output files differ from the baseline as determined
