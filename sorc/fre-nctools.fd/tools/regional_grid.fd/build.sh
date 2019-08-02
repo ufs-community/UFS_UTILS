@@ -12,7 +12,8 @@ case $1 in
      export FFLAGS="-O2 -g ${NETCDF_FFLAGS} ${NETCDF_LDFLAGS_F}" ;;
   "wcoss_dell_p3" )
      export FCMP=ifort
-     export FFLAGS="-O2 -g ${NETCDF_FFLAGS} ${NETCDF_LDFLAGS_F}" ;;
+     export FFLAGS="-O2 -g ${NETCDF_FFLAGS}"
+     export LIBS="${NETCDF_LDFLAGS_F} ${HDF5_LDFLAGS_F}" ;;
   "jet" )
      export FCMP=ifort
      export FFLAGS="-O2 -g -I$NETCDF/include" 
