@@ -67,6 +67,13 @@ elif [ $gtype = nest ] || [ $gtype = regional ]; then
   else
    echo "Creating regional grid"
   fi
+elif [ $gtype = regional2 ]; then
+  export target_lon=${target_lon:--97.5}
+  export target_lat=${target_lat:-35.5}
+  export idim=${idim:-200}
+  export jdim=${jdim:-200}
+  export halo=${halo:-3}
+  title=jpgrid
 else
   echo "Error: please specify grid type with 'gtype' as uniform, stretch, nest or regional"
   exit 9
@@ -391,6 +398,59 @@ elif [ $gtype = regional ]; then
   echo "Grid and orography files are now prepared for regional grid"
 
 #----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
+
+elif [ $gtype = regional2 ]; then
+
+  halop1=$(( halo + 1 ))
+  tile=7
+  name=C${res}_${title}
+  grid_dir=$TMPDIR/${name}/grid
+  orog_dir=$TMPDIR/${name}/orog
+  filter_dir=$TMPDIR/${name}/filter_topo
+  rm -rf $TMPDIR/$name
+  mkdir -p $grid_dir $orog_dir $filter_dir
+
+  $script_dir/fv3gfs_make_grid.sh $grid_dir
+
+  $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+
+  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
+
+  cd $filter_dir
+
+  echo $idim $jdim $halop1 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog
+  echo $idim $jdim $halop1 \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid
+
+  $APRUN $exec_dir/shave.x <input.shave.orog
+  $APRUN $exec_dir/shave.x <input.shave.grid
+
+  cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo${halop1}.nc
+  cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halop1}.nc
+
+  echo $idim $jdim $halo \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo$halo
+  echo $idim $jdim $halo \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo$halo
+
+  $APRUN $exec_dir/shave.x <input.shave.orog.halo$halo
+  $APRUN $exec_dir/shave.x <input.shave.grid.halo$halo
+ 
+  cp $filter_dir/oro.C${res}.tile${tile}.shave.nc $out_dir/C${res}_oro_data.tile${tile}.halo${halo}.nc
+  cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halo}.nc
+
+  echo $idim $jdim 0 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo0
+  echo $idim $jdim 0 \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo0
+
+  $APRUN $exec_dir/shave.x <input.shave.orog.halo0
+  $APRUN $exec_dir/shave.x <input.shave.grid.halo0
+
+  cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo0.nc
+  cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo0.nc
+
+  cp $grid_dir/C${res}_*mosaic.nc                   $out_dir
+
+  echo "Grid and orography files are now prepared for regional grid"
+
+#----------------------------------------------------------------------------------
 # End of block to create grid and orog files.
 #----------------------------------------------------------------------------------
 
@@ -413,7 +473,7 @@ export BASE_DIR=$home_dir
 export FIX_FV3=$out_dir
 export input_sfc_climo_dir=$home_dir/fix/fix_sfc_climo
 
-if [ $gtype = regional ]; then
+if [ $gtype = regional ] || [ $gtype = regional2 ]; then
   export HALO=$halop1
   ln -fs $out_dir/C${res}_grid.tile${tile}.halo${HALO}.nc $out_dir/C${res}_grid.tile${tile}.nc
   ln -fs $out_dir/C${res}_oro_data.tile${tile}.halo${HALO}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
@@ -429,7 +489,7 @@ if [ $err != 0 ]; then
   exit $err
 fi
 
-if [ $gtype = regional ]; then
+if [ $gtype = regional ] || [ $gtype = regional2 ]; then
   rm -f $out_dir/C${res}_grid.tile${tile}.nc
   rm -f $out_dir/C${res}_oro_data.tile${tile}.nc
 fi

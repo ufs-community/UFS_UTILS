@@ -65,7 +65,7 @@ module list
 #-----------------------------------------------------------------------
 
 export res=96
-export gtype=regional  # 'uniform', 'stretch', 'nest', or 'regional'
+export gtype=regional2  # 'uniform', 'stretch', 'nest', or 'regional'
 
 if [ $gtype = stretch ]; then
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -80,6 +80,12 @@ elif [ $gtype = nest ] || [ $gtype = regional ]; then
   export jstart_nest=37        # Starting j-direction index of nest grid in parent tile supergrid
   export iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
   export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
+  export halo=3
+elif [ $gtype = regional2 ] ; then
+  export target_lon=-97.5      # Center longitude of grid
+  export target_lat=35.5       # Center latitude of grid
+  export idim=301              # Dimension of grid in 'i' direction
+  export jdim=200              # Dimension of grid in 'j' direction
   export halo=3
 fi
 

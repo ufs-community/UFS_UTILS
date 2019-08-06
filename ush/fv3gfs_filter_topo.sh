@@ -50,7 +50,7 @@ cp $orodir/${topo_file}.tile?.nc .
 cp $executable .
 
 regional=.false.
-if [ $gtype = regional ]; then
+if [ $gtype = regional ] || [ $gtype = regional2 ] ; then
   regional=.true.
 fi
 

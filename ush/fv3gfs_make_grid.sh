@@ -82,6 +82,29 @@ elif  [ $gtype = nest ] || [ $gtype = regional ] ; then
                      --do_schmidt --stretch_factor ${stretch_fac} --target_lon ${target_lon} --target_lat ${target_lat} \
                      --nest_grid --parent_tile 6 --refine_ratio $refine_ratio --istart_nest $istart_nest --jstart_nest $jstart_nest \
                      --iend_nest $iend_nest --jend_nest $jend_nest --halo $halo --great_circle_algorithm
+
+elif [ $gtype = regional2 ] ; then
+
+  (( halop2=halo+2 ))
+  (( lx=idim+halop2*2 ))
+  (( ly=jdim+halop2*2 ))
+
+  cat > ./regional_grid.nml << EOF
+    &regional_grid_nml
+      plon = ${target_lon}
+      plat = ${target_lat}
+      delx = 0.0585
+      dely = 0.0585
+      lx   = -${lx}
+      ly   = -${ly}
+      a    = 0.21423
+      k    = -0.23209
+    /
+EOF
+
+  executable=$exec_dir/regional_grid
+  $APRUN $executable
+
 fi
 
 if [ $? -ne 0 ]; then
@@ -131,6 +154,11 @@ elif [ $gtype = nest ]; then
 elif [ $gtype = regional ];then
 
   $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile7.nc
+
+elif [ $gtype = regional2 ]; then
+
+  mv regional_grid.nc C${res}_grid.tile7.nc
+  $APRUN $executable --num_tiles 1 --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile7.nc
 
 fi
 
