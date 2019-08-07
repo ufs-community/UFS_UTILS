@@ -39,7 +39,12 @@ nx=`expr $res \* 2 `
 if [ ! -s $outdir ]; then  mkdir -p $outdir ;fi
 cd $outdir
 
-executable=$exec_dir/make_hgrid
+if [ $gtype = regional2 ]; then
+  executable=$exec_dir/regional_grid
+else
+  executable=$exec_dir/make_hgrid
+fi
+
 if [ ! -s $executable ]; then
   set +x
   echo
@@ -93,16 +98,15 @@ elif [ $gtype = regional2 ] ; then
     &regional_grid_nml
       plon = ${target_lon}
       plat = ${target_lat}
-      delx = 0.0585
-      dely = 0.0585
+      delx = ${delx}
+      dely = ${dely}
       lx   = -${lx}
       ly   = -${ly}
-      a    = 0.21423
-      k    = -0.23209
+      a    = ${a_param}
+      k    = ${k_param}
     /
 EOF
 
-  executable=$exec_dir/regional_grid
   $APRUN $executable
 
 fi

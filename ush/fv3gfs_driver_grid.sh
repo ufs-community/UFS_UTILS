@@ -68,11 +68,21 @@ elif [ $gtype = nest ] || [ $gtype = regional ]; then
    echo "Creating regional grid"
   fi
 elif [ $gtype = regional2 ]; then
-  export target_lon=${target_lon:--97.5}
-  export target_lat=${target_lat:-35.5}
-  export idim=${idim:-200}
-  export jdim=${jdim:-200}
-  export halo=${halo:-3}
+  export target_lon=${target_lon:--97.5}  # Center longitude of grid
+  export target_lat=${target_lat:-35.5}   # Center latitude of grid
+  export idim=${idim:-200}                # Dimension of grid in 'i' direction
+  export jdim=${jdim:-200}                # Dimension of grid in 'j' direction
+  export delx=${delx:-0.0585}             # Grid spacing (in degrees) in the 'i' direction
+                                          # on the SUPERGRID (which has twice the resolution of
+                                          # the model grid).  The physical grid spacing in the 'i'
+                                          # direction is related to delx as follows:
+                                          #    distance = 2*delx*(circumf_Earth/360 deg)
+  export dely=${dely:-0.0585}             # Grid spacing (in degrees) in the 'j' direction.
+  export a_param=${a_param:-0.21423}      # 'a' parameter of the generalized gnomonic mapping
+                                          # centered at target_lon/lat.  See Purser office note.
+  export k_param=${k_param:--0.23209}     # 'k' parameter of the generalized gnomonic mapping
+                                          # centered at target_lon/lat.  See Purser office note.
+  export halo=${halo:-3}                  # Number of rows/cols for halo.
   title=jpgrid
 else
   echo "Error: please specify grid type with 'gtype' as uniform, stretch, nest or regional"

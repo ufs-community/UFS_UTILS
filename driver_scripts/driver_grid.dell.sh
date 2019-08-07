@@ -86,7 +86,17 @@ elif [ $gtype = regional2 ] ; then
   export target_lat=35.5       # Center latitude of grid
   export idim=301              # Dimension of grid in 'i' direction
   export jdim=200              # Dimension of grid in 'j' direction
-  export halo=3
+  export delx=0.0585           # Grid spacing (in degrees) in the 'i' direction
+                               # on the SUPERGRID (which has twice the resolution of
+                               # the model grid).  The physical grid spacing in the 'i'
+                               # direction is related to delx as follows:
+                               #    distance = 2*delx*(circumf_Earth/360 deg)
+  export dely=0.0585           # Grid spacing (in degrees) in the 'j' direction.
+  export a_param=0.21423       # 'a' parameter of the generalized gnomonic mapping
+                               # centered at target_lon/lat.  See Purser office note.
+  export k_param=-0.23209      # 'k' parameter of the generalized gnomonic mapping
+                               # centered at target_lon/lat.  See Purser office note.
+  export halo=3                # number of row/cols for halo
 fi
 
 #-----------------------------------------------------------------------
