@@ -327,7 +327,8 @@ subroutine read_varmap
  implicit none
 
  integer                    :: istat, k, nvars
- character(len=500)         :: varmap_table_file
+ character(len=500)         :: varmap_table_file, line
+ character(len=20),allocatable  :: var_type(:)
 
  if (trim(input_type) == "grib2") then 
    varmap_table_file = trim(base_install_dir) // "/" // trim(varmap_tables_dir) // "/" &
@@ -369,6 +370,7 @@ subroutine read_varmap
        num_tracers = num_tracers + 1
        tracers_input(num_tracers)=chgres_var_names(k)
      endif
+    enddo
    close(14)
  endif
 end subroutine read_varmap

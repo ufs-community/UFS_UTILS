@@ -52,7 +52,7 @@
           end if
      end do
   strIn(:) = strOut(:)
-end sunroutine to_upper
+end subroutine to_upper
 
 subroutine to_lower(strIn)
 ! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
