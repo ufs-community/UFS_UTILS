@@ -2184,7 +2184,7 @@
                                           tracers_input_grib(num_tracers), tmpstr, & 
                                           method, tracers_input_vmap(num_tracers), &
                                           tracers_default(ntrac_max), vname2
- character (len=500)                    :: metadata
+ character (len=500)                   :: metadata
 
  integer                               :: i, j, k, n, lvl_str_space_len
  integer                               :: rc, clb(3), cub(3)
@@ -2209,8 +2209,6 @@
  real(esmf_kind_r8), parameter         :: p0 = 100000.0
  
  type(atmdata), allocatable   :: atm(:)
- 
-
  
  tracers(:) = "NULL"
  trac_names_grib = (/":SPFH:",":CLWMR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
@@ -2273,12 +2271,12 @@
       k = index(metadata,trim(lvl_str_space)) + len(trim(lvl_str_space))-1
 
       read(metadata(j:k),*) rlevs(i)
-    
+
       slevs(i) = metadata(j-1:k)
-      
+		
       if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
       if (localpet==0) print*, "LEVEL = ", slevs(i)
-    enddo
+	enddo
 
    allocate(vcoord(levp1_input,2))
    if (localpet == 0) print*,"- READ VERTICAL COORDINATE INFO."
@@ -2321,7 +2319,7 @@
 
    tracers_input_grib(n)=trac_names_grib(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
-   tracers(n)=tracers_default(n)
+   tracers(n)=tracers_default(i)
 
  enddo
  allocate(atm(num_tracers+4))
@@ -2410,7 +2408,7 @@
  
  if (localpet == 0) then
    print*,"- READ TEMPERATURE."
-   vname = ":TMP:"
+   vname = ":TMP:"   
     do vlev = 1, lev_input
       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
       if (iret<=0) then 

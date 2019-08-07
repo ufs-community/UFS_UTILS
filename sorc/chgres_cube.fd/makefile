@@ -25,7 +25,7 @@ model_grid.o:  program_setup.o model_grid.F90
 
 utils.o:  utils.f90
 	$(FCOMP) $(FFLAGS) -c $(ESMF_F90COMPILEPATHS) utils.f90
-	
+
 atmdata_type.o: atmdata_type.F90
 	$(FCOMP) $(FFLAGS) -c $(ESMF_F90COMPILEPATHS) atmdata_type.F90
 

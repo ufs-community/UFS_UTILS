@@ -160,8 +160,10 @@
  contains
 
  subroutine read_setup_namelist
-
+ 
  implicit none
+ 
+ 
 
  integer                     :: is, ie, ierr
 
@@ -200,6 +202,10 @@
  read(41, nml=config, iostat=ierr)
  if (ierr /= 0) call error_handler("READING SETUP NAMELIST.", ierr)
  close (41)
+ 
+ call to_lower(input_type)
+ call to_upper(external_model)
+ call to_upper(phys_suite)
  
  orog_dir_target_grid = trim(orog_dir_target_grid) // '/'
  orog_dir_input_grid = trim(orog_dir_input_grid) // '/'
@@ -271,7 +277,47 @@
    case default
      call error_handler("UNRECOGNIZED INPUT DATA TYPE.", 1)
  end select
+ 
+!-------------------------------------------------------------------------
+! Grib2 support is currently not available for surface conversion  
+!-------------------------------------------------------------------------
 
+ if (trim(input_type) == "grib2" .and. convert_sfc) then
+   print*, "WARNING: PROCESSING OF SURFACE GRIB2 DATA IS NOT CURRENTLY SUPORTED. SETTING &
+            convert_sfc TO FALSE."
+   convert_sfc = .false.
+ endif
+ 
+!-------------------------------------------------------------------------
+! Ensure proper file variable provided for grib2 input  
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2") then
+   if (trim(grib2_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
+     call error_handler("FOR GRIB2 DATA, PLEASE PROVIDE GRIB2_FILE_INPUT_GRID")
+   endif
+ endif
+ 
+!-------------------------------------------------------------------------
+! For grib2 input, warn about possibly unsupported external model types
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2") then
+   if (.not. any((/"GFS","NAM","RAP","HRRR"/)==trim(external_model))) then
+     print*, "WARNING: KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, AND HRRR. &
+     RESULTS MAY NOT BE AS EXPECTED. "
+   endif
+ endif
+
+!-------------------------------------------------------------------------
+! For grib2 hrrr input, require input geogrid file 
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2" .and. trim(external_model)=="HRRR") then
+   if (trim(geogrid_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
+     call error_handler("FOR HRRR DATA, PLEASE PROVIDE GEOGRID_FILE_INPUT_GRID")
+   endif
+ endif
  return
 
  end subroutine read_setup_namelist
@@ -294,12 +340,16 @@ subroutine read_varmap
      call error_handler("OPENING VARIABLE MAPPING FILE", istat)
    endif
 
-   read(14, *, iostat=istat) nvars, num_tracers
-   if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
-   print*, 'NUMBER OF TRACERS FROM VARMAP FILE = ', num_tracers
-   read(14, *, iostat=istat) tracers_input(1:num_tracers)
-   if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
-   print*, 'TRACERS FROM VARMAP FILE = ', tracers_input(1:num_tracers)
+   num_tracers = 0
+   nvars = 0
+
+   !Loop over lines of file to count the number of variables
+   do
+     read(14, '(A)', iostat=istat) line !chgres_var_names_tmp(k)!, field_var_names(k) , &
+                          ! missing_var_methods(k), missing_var_values(k), var_type(k)
+     if (istat/=0) exit
+     nvars = nvars+1
+   enddo
 
 
    allocate(chgres_var_names(nvars))
@@ -307,24 +357,18 @@ subroutine read_varmap
    allocate(missing_var_methods(nvars))
    allocate(missing_var_values(nvars))
    allocate(read_from_input(nvars))
+   allocate(var_type(nvars))
 
- 
    read_from_input(:) = .true.
-
- 
-   do k = 1,nvars
-     read(14, *, iostat=istat) chgres_var_names(k), field_var_names(k) , & 
-                           missing_var_methods(k), missing_var_values(k)
-   enddo
- 
-   if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
-
-
-   print*
-   do k = 1, nvars
-     print*,'VAR MISSING METHOD FOR', chgres_var_names(k), 'IS: ', missing_var_methods(k)
-   enddo
-
+   rewind(14)
+    do k = 1,nvars
+      read(14, *, iostat=istat) chgres_var_names(k), field_var_names(k) , &
+                           missing_var_methods(k), missing_var_values(k), var_type(k)
+     if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
+     if(trim(var_type(k))=='T') then
+       num_tracers = num_tracers + 1
+       tracers_input(num_tracers)=chgres_var_names(k)
+     endif
    close(14)
  endif
 end subroutine read_varmap
