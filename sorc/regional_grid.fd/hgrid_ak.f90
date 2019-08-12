@@ -58,10 +58,13 @@ prot(:,3)=(/ clat*clon,  clat*slon,  slat/)
 prot=matmul(prot,azirot)
 mx=lx+nx ! Index of the 'right' edge of the rectangular grid
 my=ly+ny ! Index of the 'top' edge of the rectangular grid
+!This code assumes symmetry about the grid center
 do iy=ly,my
-   xm(2)=iy*dely/re
+   !xm(2)=iy*dely/re
+   xm(2)=-iy*dely/re
    do ix=lx,mx
-      xm(1)=ix*delx/re
+      !xm(1)=ix*delx/re
+      xm(1)=-ix*delx/re
       call xmtoxc_ak(a,k,xm,xc,xcd,ff)
       if(ff)return
       xcd=matmul(prot,xcd)
