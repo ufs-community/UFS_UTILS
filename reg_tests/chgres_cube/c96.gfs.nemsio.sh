@@ -3,7 +3,8 @@
 #-----------------------------------------------------------------------------
 # Invoke chgres to create C96 coldstart files using spectral GFS nemsio data
 # as input.  The coldstart files are then compared to baseline files
-# using the 'nccmp' utility.  Run from the machine specific driver script.
+# using the 'nccmp' utility.  This script is run by the machine specific
+# driver script.
 #-----------------------------------------------------------------------------
 
 set -x

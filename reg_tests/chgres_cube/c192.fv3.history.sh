@@ -1,9 +1,10 @@
 #!/bin/bash
 
 #-----------------------------------------------------------------------------
-# Invoke chgres to create C192 coldstart files using FV3 tile history files
+# Invoke chgres to create C192 coldstart files using FV3 tiled history files
 # as input.  The coldstart files are then compared to baseline files
-# using the 'nccmp' utility.  Run from the machine specific driver script.
+# using the 'nccmp' utility.  This script is run by the machine specific 
+# driver script.
 #-----------------------------------------------------------------------------
 
 set -x

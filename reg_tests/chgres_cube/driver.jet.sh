@@ -4,20 +4,21 @@
 #
 # Run the chgres_cube regression tests on JET.
 #
-# Set OUTDIR to your working directory.  Set the PROJECT_CODE as
-# appropriate.  To see which projects you are authorized to use,
+# Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
+# as appropriate.  To see which projects you are authorized to use,
 # type "account_params".
 #
 # Invoke the script with no arguments.  A series of daily-
 # chained jobs will be submitted.  To check the queue, type:
 # "squeue -u USERNAME".
 #
-# The run output will be stored in $OUTDIR.  Log output from the suite
-# will be in $LOG_FILE.  Once the suite has completed, a summary is
-# placed in $SUM_FILE.
+# The run output will be stored in OUTDIR.  Log output from the suite
+# will be in LOG_FILE.  Once the suite has completed, a summary is
+# placed in SUM_FILE.
 #
 # A test fails when its output does not match the baseline files as
-# determined by the "nccmp" utility.
+# determined by the "nccmp" utility.  The baseline files are stored in
+# HOMEreg.
 #
 #-----------------------------------------------------------------------------
 
@@ -42,7 +43,7 @@ QUEUE="windfall"
 # and baseline data for each test.
 #-----------------------------------------------------------------------------
 
-export HOMEufs=$PWD/..
+export HOMEufs=$PWD/../..
 
 export HOMEreg=/mnt/lfs3/projects/emcda/George.Gayno/reg_tests/chgres_cube
 
