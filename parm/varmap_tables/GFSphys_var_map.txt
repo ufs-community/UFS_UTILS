@@ -14,4 +14,3 @@ cnwat               cnwat     set_to_fill   0.0      S
 icetk               icetk     set_to_fill   265.0    S
 weasd               weasd     set_to_fill   0.0      S
 snod                snod      set_to_fill   0.0      S
-       	
