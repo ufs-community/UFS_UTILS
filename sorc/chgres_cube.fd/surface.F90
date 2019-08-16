@@ -181,6 +181,12 @@
 !-----------------------------------------------------------------------
 
  call interp(localpet)
+ 
+!---------------------------------------------------------------------------------------------
+! Check for points where smois is too high to be a land point at a land point
+!---------------------------------------------------------------------------------------------
+
+call check_smois_water
 
 !---------------------------------------------------------------------------------------------
 ! Adjust soil/landice column temperatures for any change in elevation between the
@@ -2472,6 +2478,138 @@
  enddo
 
  end subroutine calc_liq_soil_moisture
+
+subroutine check_smois_water
+
+use model_grid, only                 : landmask_target_grid
+
+use static_data, only                : veg_type_target_grid, veg_greenness_target_grid, &
+                                       soil_type_target_grid, max_veg_greenness_target_grid,&
+                                       min_veg_greenness_target_grid, mxsno_albedo_target_grid, &
+                                       alvsf_target_grid,alvwf_target_grid,&
+                                       alnsf_target_grid,alnwf_target_grid
+                                       
+  implicit none
+  
+  integer                            :: clb(3), cub(3), i, j, rc
+  
+  integer(esmf_kind_r8), pointer     :: landmask_ptr(:,:)        
+  
+  real(esmf_kind_r8), pointer        :: soilm_target_ptr(:,:,:), &
+                                        alvsf_target_ptr(:,:), &
+                                        alnsf_target_ptr(:,:), &
+                                        alvwf_target_ptr(:,:), &
+                                        alnwf_target_ptr(:,:), &
+                                        veg_greenness_target_ptr(:,:), &
+                                        min_veg_greenness_target_ptr(:,:), &
+                                        max_veg_greenness_target_ptr(:,:), &
+                                        canopy_mc_target_ptr(:,:), &
+                                        mxsno_albedo_target_ptr(:,:), &
+                                        soil_type_target_ptr(:,:), &
+                                        veg_type_target_ptr(:,:) 
+                                        
+  
+ print*,"- CALL FieldGet FOR TARGET GRID LAND-SEA MASK."
+ call ESMF_FieldGet(landmask_target_grid, &
+                    farrayPtr=landmask_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)    
+                                          
+ print*,"- CALL FieldGet FOR SOIL MOIS TARGET GRID."
+ call ESMF_FieldGet(soilm_tot_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=soilm_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
+    
+ print*,"- CALL FieldGet FOR TARGET GRID SOIL TYPE."
+ call ESMF_FieldGet(soil_type_target_grid, &
+                    farrayPtr=soil_type_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID VEG TYPE."
+ call ESMF_FieldGet(veg_type_target_grid, &
+                    farrayPtr=veg_type_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID ALVSF."
+ call ESMF_FieldGet(alvsf_target_grid, &
+                    farrayPtr=alvsf_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
+    
+ print*,"- CALL FieldGet FOR TARGET GRID ALNSF."
+ call ESMF_FieldGet(alnsf_target_grid, &
+                    farrayPtr=alnsf_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)  
+    
+ print*,"- CALL FieldGet FOR TARGET GRID ALVWF."
+ call ESMF_FieldGet(alvwf_target_grid, &
+                    farrayPtr=alvwf_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)    
+    
+ print*,"- CALL FieldGet FOR TARGET GRID ALNWF."
+ call ESMF_FieldGet(alnwf_target_grid, &
+                    farrayPtr=alnwf_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc) 
+    
+ print*,"- CALL FieldGet FOR TARGET GRID VEG FRAC."
+ call ESMF_FieldGet(veg_greenness_target_grid, &
+                    farrayPtr=veg_greenness_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc) 
+    
+ print*,"- CALL FieldGet FOR TARGET GRID MAX VEG FRAC."
+ call ESMF_FieldGet(max_veg_greenness_target_grid, &
+                    farrayPtr=max_veg_greenness_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID MIN VEG FRAC."
+ call ESMF_FieldGet(min_veg_greenness_target_grid, &
+                    farrayPtr=min_veg_greenness_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)                                       
+
+ print*,"- CALL FieldGet FOR TARGET GRID CANOPY MC."
+ call ESMF_FieldGet(canopy_mc_target_grid, &
+                    farrayPtr=canopy_mc_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID SNOW ALBEDO."
+ call ESMF_FieldGet(mxsno_albedo_target_grid, &
+                    farrayPtr=mxsno_albedo_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
+    
+ do i =clb(1),cub(1)
+   do j = clb(2),cub(2)
+     if (landmask_ptr(i,j)==1 .and. soilm_target_ptr(i,j,1) > 0.75) then
+       soil_type_target_ptr(i,j) = 0.0
+       veg_type_target_ptr(i,J) = 0.0
+       landmask_ptr(i,j) = 0
+       alvsf_target_ptr(i,j) = 0.06
+       alvwf_target_ptr(i,j) = 0.06
+       alnsf_target_ptr(i,j) = 0.06
+       alnwf_target_ptr(i,j) = 0.06
+       min_veg_greenness_target_ptr(i,j) = 0.0
+       max_veg_greenness_target_ptr(i,j) = 0.0
+       veg_greenness_target_ptr(i,j) = 0.0
+       mxsno_albedo_target_ptr(i,j) = 0.0
+       canopy_mc_target_ptr(i,j) = 0.0
+     endif
+   enddo
+ enddo
+
+end subroutine check_smois_water
+
 
  FUNCTION FRH2O (TKELV,SMC,SH2O,SMCMAX,BEXP,PSIS)
 !$$$  function documentation block
