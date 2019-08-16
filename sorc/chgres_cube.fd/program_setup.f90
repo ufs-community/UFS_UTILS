@@ -313,6 +313,7 @@ subroutine read_varmap
      read(14, '(A)', iostat=istat) line !chgres_var_names_tmp(k)!, field_var_names(k) , & 
                           ! missing_var_methods(k), missing_var_values(k), var_type(k)                     
      if (istat/=0) exit
+     if ( trim(line) .eq. '' ) cycle
      nvars = nvars+1
    enddo
    
@@ -323,8 +324,6 @@ subroutine read_varmap
    allocate(read_from_input(nvars))
    allocate(var_type(nvars))
    
-   print*, 'Numvars = ', nvars
-   print*, "NEW!"
    read_from_input(:) = .true.
    rewind(14)
    do k = 1,nvars
