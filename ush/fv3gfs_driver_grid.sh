@@ -19,7 +19,7 @@
 #
 # Calls the following scripts:
 #   1) fv3gfs_make_grid.sh (make 'grid' files)
-#   2) fv3gfs_maske_orog.sh (make 'oro' files)
+#   2) fv3gfs_mask_orog.sh (make 'oro' files)
 #   3) fv3gfs_filter_topo.sh (filter topography)
 #   4) sfc_climo_gen.sh (create surface climo fields)
 #
@@ -192,6 +192,10 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
       tile=$(( $tile + 1 ))
     done
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
+    err=$?
+    if [ $err != 0 ]; then
+      exit $err
+    fi
     rm $TMPDIR/orog.file1
   else
     tile=1
@@ -202,6 +206,10 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
       echo
       set -x
       $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+      err=$?
+      if [ $err != 0 ]; then
+        exit $err
+      fi
       tile=$(( $tile + 1 ))
     done
   fi
@@ -331,6 +339,7 @@ elif [ $gtype = regional ]; then
   if [ $machine = WCOSS_C ]; then
     echo "$script_dir/fv3gfs_make_orog.sh $res 7 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
+    err=$?
     rm $TMPDIR/orog.file1
   else
     set +x
@@ -339,11 +348,15 @@ elif [ $gtype = regional ]; then
     echo
     set -x
     $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+    err=$?
+  fi
+  if [ $err != 0 ]; then
+    exit $err
   fi
 
   set +x
   echo
-  echo "............ Execute fv3gfs_filter_topo.sh .............."
+  echo "............ Execute  fv3gfs_filter_topo.sh .............."
   echo
   set -x
   $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
@@ -421,11 +434,47 @@ elif [ $gtype = regional2 ]; then
   rm -rf $TMPDIR/$name
   mkdir -p $grid_dir $orog_dir $filter_dir
 
+  set +x
+  echo
+  echo "............ Execute fv3gfs_make_grid.sh ................."
+  echo
+  set -x
   $script_dir/fv3gfs_make_grid.sh $grid_dir
+  err=$?
+  if [ $err != 0 ]; then
+    exit $err
+  fi
 
-  $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+  echo "Begin orography generation at `date`"
+ 
+#----------------------------------------------------------------------------------
+# On WCOSS_C use cfp to run multiple tiles simulatneously for the orography.
+# For now we only have one tile but in the future we will have more.
+#----------------------------------------------------------------------------------
+ 
+  if [ $machine = WCOSS_C ]; then
+    echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
+    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
+    err=$?
+    rm $TMPDIR/orog.file1
+  else
+    set +x
+    echo
+    echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
+    echo
+    set -x
+    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+    err=$?
+  fi
+  if [ $err != 0 ]; then
+    exit $err
+  fi
 
   $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
+  err=$?
+  if [ $err != 0 ]; then
+    exit $err
+  fi
 
   cd $filter_dir
 
