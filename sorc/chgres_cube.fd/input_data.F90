@@ -4605,7 +4605,8 @@ if (localpet == 0) then
        iret = nf90_close(ncid2d)
      endif
    endif
-   if (rc == 0 .or. (rc < 0 .and. trim(to_upper(external_model)) == "HRRR")) then
+   
+   if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR") .or. (rc < 0 .and. trim(to_upper(external_model)) == "HRRR")) then
      if (.not. replace_sotyp) then
        call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET REPLACE_SOTYP=.TRUE. . EXITING")
      else
