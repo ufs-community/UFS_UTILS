@@ -349,6 +349,7 @@ subroutine read_varmap
      read(14, '(A)', iostat=istat) line !chgres_var_names_tmp(k)!, field_var_names(k) , &
                           ! missing_var_methods(k), missing_var_values(k), var_type(k)
      if (istat/=0) exit
+     if ( trim(line) .eq. '' ) cycle
      nvars = nvars+1
    enddo
 
