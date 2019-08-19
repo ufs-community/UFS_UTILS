@@ -2492,6 +2492,7 @@
 
  input_nml_file = "NULL"
 
+ tile_num_ch="      "
  if (tile_num < 10) then
     write(tile_num_ch, "(a4,i1)") "tile", tile_num
  else
@@ -2547,7 +2548,7 @@
                VEGFCS, VETFCS, SOTFCS, ALFFCS,                   &
                CVFCS,CVBFCS,CVTFCS,0,NLUNIT,                     &
                SZ_NML, INPUT_NML_FILE, IALB, ISOT, IVEGSRC,      &
-               TILE_NUM_CH, IINDX_OUTPUT, JINDX_OUTPUT)
+               TRIM(TILE_NUM_CH), IINDX_OUTPUT, JINDX_OUTPUT)
 !-----------------------------------------------------------------------
 ! if an array is deallocated, the rest of code knows to interpolate
 ! that field from the input grid.

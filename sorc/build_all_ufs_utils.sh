@@ -96,6 +96,15 @@ echo " .... Building fre-nctools .... "
 ./build_fre-nctools.sh > $logs_dir/build_fre-nctools.log 2>&1
 }
 
+#------------------------------------
+# build sfc_climo_gen
+#------------------------------------
+
+$Build_sfc_climo_gen && {
+echo " .... Building sfc_climo_gen .... "
+./build_sfc_climo_gen.sh > $logs_dir/build_sfc_climo_gen.log 2>&1
+}
+
 echo;echo " .... Build system finished .... "
 
 exit 0

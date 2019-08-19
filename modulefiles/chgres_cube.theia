@@ -10,7 +10,7 @@ module use /scratch4/NCEPDEV/nems/noscrub/emc.nemspara/soft/modulefiles
 module load esmf/8.0.0bs20
 
 module use -a /scratch3/NCEPDEV/nwprod/lib/modulefiles
-module load w3nco/2.0.6
+module load w3nco/v2.0.6
 module load wgrib2/2.0.8
 module load nemsio/v2.2.3
 module load bacio/v2.0.2
