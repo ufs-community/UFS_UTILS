@@ -331,7 +331,7 @@ subroutine p2hyb(pi,xi,psfc,p0,hyao,hybo,po,lev_input,clb,cub,nvar,iflag, kflag,
   
  end subroutine p2hyb
  
- subroutine rh2spfh(rh_sphum,p,tptr,lev_cur)
+ subroutine rh2spfh(rh_sphum,p,t)
     
   implicit none
   real,parameter      :: alpha=-9.477E-4 , & !K^-1,
@@ -340,19 +340,17 @@ subroutine p2hyb(pi,xi,psfc,p0,hyao,hybo,po,lev_input,clb,cub,nvar,iflag, kflag,
                          Rv=461.51, & !JKg^-1K^-1
                          esnot=611.21 !Pa
   
-  real(esmf_kind_r4), intent(inout)    :: rh_sphum(i_input,j_input)
-  real(esmf_kind_r8), intent(in)                  :: p
-  real, pointer, intent(inout)      :: tptr(:,:,:)
-  integer                           :: lev_cur
-  real, dimension(i_input,j_input)  :: es, e
-  real, pointer                     :: t(:,:)  
+  real(esmf_kind_r4), intent(inout), dimension(i_input,j_input) ::rh_sphum
+  real(esmf_kind_r8), intent(in)                  :: p, t(i_input,j_input)
 
-    
-  t => tptr(:,:,lev_cur)
+  real, dimension(i_input,j_input)  :: es, e, rh
+
+
+  rh = rh_sphum
   !print *, 'T = ', T, ' RH = ', RH, ' P = ', P
-  es = esnot * exp( Lnot/Rv * ((T-Tnot)/(T*tnot) + alpha * LOG(T/Tnot) - alpha * (T-Tnot)/ T))
+  es = esnot * exp( Lnot/Rv * ((t-Tnot)/(t*tnot) + alpha * LOG(t/Tnot) - alpha * (t-Tnot)/ t))
   !print *, 'es = ', es
-  e = rh_sphum * es / 100.0
+  e = rh * es / 100.0
   !print *, 'e = ', e
   rh_sphum = 0.622 * e / p
   !print *, 'q = ', sphum
@@ -360,7 +358,6 @@ subroutine p2hyb(pi,xi,psfc,p0,hyao,hybo,po,lev_input,clb,cub,nvar,iflag, kflag,
   !if (P .eq. 100000.0) THEN
   ! print *, 'T = ', T, ' RH = ', RH, ' P = ', P, ' es = ', es, ' e = ', e, ' q = ', sphum
   !end if
-
 
 end subroutine RH2SPFH
 

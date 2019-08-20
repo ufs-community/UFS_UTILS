@@ -2430,6 +2430,12 @@
    vname = tracers_input_vmap(n)
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                        this_field_var_name=tmpstr,loc=varnum)
+   if (n==1 .and. .not. hasspfh) then 
+        print*,"- CALL FieldGather TEMPERATURE." 
+        call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
+        if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGet", rc) 
+   endif
    if (localpet == 0) then
      vname = trim(tracers_input_grib(n))
      vname2 = "var"
@@ -2458,15 +2464,7 @@
       endif
       
       if (n==1 .and. .not. hasspfh) then 
-        nullify(tptr)
-        print*,"- CALL FieldGet TEMPERATURE." 
-        call ESMF_FieldGet(temp_input_grid, &
-                  computationalLBound=clb, &
-                  computationalUBound=cub, &
-                  farrayPtr=tptr, rc=rc)
-        if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-        call error_handler("IN FieldGet", rc) 
-        call rh2spfh(dummy2d,rlevs(vlev),tptr,vlev)
+        call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
       endif
 
        print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
