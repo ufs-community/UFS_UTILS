@@ -413,6 +413,8 @@
 	rc = grb2_inq(the_file,inv_file,':PRES:',':surface:',nx=i_input, ny=j_input, &
 				lat=lat4, lon=lon4)
 	if (rc /= 1) call error_handler("READING FILE", rc)
+	
+	print*,"- I/J DIMENSIONS OF THE INPUT GRID TILES ", i_input, j_input
 
  ip1_input = i_input + 1
  jp1_input = j_input + 1

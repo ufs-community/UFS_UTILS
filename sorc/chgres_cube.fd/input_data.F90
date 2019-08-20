@@ -2866,7 +2866,8 @@
 		slevs(i) = metadata(j-1:k)
 		
 		if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
-		if (localpet==0) print*, "LEVEL = ", slevs(i)
+	
+		if (localpet==0) print*, "LEVEL = ", rlevs(i)
 	enddo
 
  allocate(vcoord(levp1_input,2))
@@ -2874,7 +2875,8 @@
  call read_vcoord(isnative,rlevs,vcoord,lev_input,levp1_input,pt,metadata,iret)
  if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
  
- !if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
+ if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
+ if (localpet==0) print*, "VCOORD(:,2) = ", vcoord(:,2)
 
  if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
  iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
@@ -3023,6 +3025,12 @@
    vname = tracers_input_vmap(n)
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                        this_field_var_name=tmpstr,loc=varnum)
+   if (n==1 .and. .not. hasspfh) then 
+        print*,"- CALL FieldGather TEMPERATURE." 
+        call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
+        if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGet", rc) 
+   endif
    if (localpet == 0) then
      vname = trim(tracers_input_grib(n))
      vname2 = "var"
@@ -3050,21 +3058,16 @@
         endif
       endif
       
-      if (n==1 .and. .not. hasspfh) then 
-        nullify(tptr)
-        print*,"- CALL FieldGet TEMPERATURE." 
-        call ESMF_FieldGet(temp_input_grid, &
-                  computationalLBound=clb, &
-                  computationalUBound=cub, &
-                  farrayPtr=tptr, rc=rc)
-        if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-        call error_handler("IN FieldGet", rc) 
-        call rh2spfh(dummy2d,rlevs(vlev),tptr,vlev)
+      if (n==1 .and. .not. hasspfh) then
+        call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
       endif
 
        print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
        dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
      enddo
+     if(localpet==0 .and. trim(tracers_input_vmap(n))=="sphum") then
+         print*,'q ',dummy3d(1,1,:)
+     endif
    endif
 
    if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT ", trim(tracers(n))
