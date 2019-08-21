@@ -27,13 +27,21 @@ if [[ -d /lfs3 ]] ; then
     fi
     target=jet
     module purge
-     export NCEPLIBS=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
-     echo NCEPLIBS HARD SET to  $NCEPLIBS in `pwd`/module_setup.sh.inc
-     module use $NCEPLIBS/modulefiles
-elif [[ -d /scratch3 ]] ; then
-    # We are on NOAA Theia
+    module use /mnt/lfs3/projects/hfv3gfs/nwprod/lib/modulefiles
+elif [[ -d /scratch2/BMC/det ]] ; then
+    # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then
 	echo load the module command 1>&2
+        source /apps/lmod/lmod/init/$__ms_shell
+    fi
+    target=hera
+    module purge
+    module use /scratch3/NCEPDEV/nwprod/modulefiles/
+    module use /scratch3/NCEPDEV/nwprod/lib/modulefiles
+elif [[ ! -d /scratch2/BMC/det ]] ; then
+    # We are on NOAA Theia
+    if ( ! eval module help > /dev/null 2>&1 ) ; then
+        echo load the module command 1>&2
         source /apps/lmod/lmod/init/$__ms_shell
     fi
     target=theia
