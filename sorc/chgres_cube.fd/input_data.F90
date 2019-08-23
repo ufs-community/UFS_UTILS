@@ -2322,7 +2322,7 @@
    tracers(n)=tracers_default(i)
 
  enddo
- allocate(atm(num_tracers+4))
+ allocate(atm(num_tracers+5))
  if (localpet==0) print*, "NUMBER OF TRACERS IN FILE = ", num_tracers
 
  if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
@@ -2513,7 +2513,7 @@ if (localpet == 0) then
    vname = ":DZDT:"
    do vlev = 1, lev_input
      iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
-     if (iret <= 0) then
+     if (iret <= 0 ) then
        print*,"DZDT not available at level ", trim(slevs(vlev)), " so checking for VVEL"
        vname = ":VVEL:"
        iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
@@ -2522,7 +2522,7 @@ if (localpet == 0) then
        if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
         if (iret==1) then ! missing_var_method == skip 
-          exit
+          cycle
         endif
        else
         conv_omega = .true.
@@ -2600,18 +2600,24 @@ if (localpet == 0) then
                     farrayPtr=atm(4)%var, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
+  
+   if (localpet == 0) print*,"- CALL FieldGet FOR W"
+  call ESMF_FieldGet(dzdt_input_grid, &
+                    farrayPtr=atm(5)%var, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
  
   if (localpet == 0) print*,"- CALL FieldGet FOR TRACERS."
   do i=1,num_tracers
     call ESMF_FieldGet(tracers_input_grid(i), &
-                    farrayPtr=atm(i+4)%var, rc=rc)
+                    farrayPtr=atm(i+5)%var, rc=rc)
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGet", rc)
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc) 
   end do
   
-  call iso2sig(rlevs,vcoord,lev_input,levp1_input,psptr,atm,clb,cub,4+num_tracers, iret)
+  call iso2sig(rlevs,vcoord,lev_input,levp1_input,psptr,atm,clb,cub,5+num_tracers, iret)
   deallocate(vcoord)
 
  else
