@@ -151,6 +151,7 @@
  logical, public                 :: tg3_from_soil = .false.
 
 
+
  real, allocatable, public       :: drysmc_input(:), drysmc_target(:)
  real, allocatable, public       :: maxsmc_input(:), maxsmc_target(:)
  real, allocatable, public       :: refsmc_input(:), refsmc_target(:)
@@ -167,8 +168,10 @@
  contains
 
  subroutine read_setup_namelist
-
+ 
  implicit none
+ 
+ 
 
  integer                     :: is, ie, ierr
 
@@ -209,6 +212,10 @@
  read(41, nml=config, iostat=ierr)
  if (ierr /= 0) call error_handler("READING SETUP NAMELIST.", ierr)
  close (41)
+ 
+ call to_lower(input_type)
+ call to_upper(external_model)
+ call to_upper(phys_suite)
  
  orog_dir_target_grid = trim(orog_dir_target_grid) // '/'
  orog_dir_input_grid = trim(orog_dir_input_grid) // '/'
@@ -281,7 +288,47 @@
    case default
      call error_handler("UNRECOGNIZED INPUT DATA TYPE.", 1)
  end select
+ 
+!-------------------------------------------------------------------------
+! Grib2 support is currently not available for surface conversion  
+!-------------------------------------------------------------------------
 
+ if (trim(input_type) == "grib2" .and. convert_sfc) then
+   print*, "WARNING: PROCESSING OF SURFACE GRIB2 DATA IS NOT CURRENTLY SUPORTED. SETTING &
+            convert_sfc TO FALSE."
+   convert_sfc = .false.
+ endif
+ 
+!-------------------------------------------------------------------------
+! Ensure proper file variable provided for grib2 input  
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2") then
+   if (trim(grib2_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
+     call error_handler("FOR GRIB2 DATA, PLEASE PROVIDE GRIB2_FILE_INPUT_GRID")
+   endif
+ endif
+ 
+!-------------------------------------------------------------------------
+! For grib2 input, warn about possibly unsupported external model types
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2") then
+   if (.not. any((/"GFS","NAM","RAP","HRRR"/)==trim(external_model))) then
+     print*, "WARNING: KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, AND HRRR. &
+     RESULTS MAY NOT BE AS EXPECTED. "
+   endif
+ endif
+
+!-------------------------------------------------------------------------
+! For grib2 hrrr input, require input geogrid file 
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2" .and. trim(external_model)=="HRRR") then
+   if (trim(geogrid_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
+     call error_handler("FOR HRRR DATA, PLEASE PROVIDE GEOGRID_FILE_INPUT_GRID")
+   endif
+ endif
  return
 
  end subroutine read_setup_namelist
@@ -335,10 +382,7 @@ subroutine read_varmap
        num_tracers = num_tracers + 1
        tracers_input(num_tracers)=chgres_var_names(k)
      endif
-     
    enddo
- 
-
    close(14)
  endif
 end subroutine read_varmap

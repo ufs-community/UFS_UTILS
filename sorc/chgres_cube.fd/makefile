@@ -61,6 +61,7 @@ OBJS = chgres.o \
        search_util.o \
        static_data.o \
        utils.o \
+
        atmdata_type.o
 #
 # Fortran compiler and compilation flags.
@@ -103,6 +104,7 @@ atmdata_type.o: atmdata_type.F90
 
 grib2_util.o: model_grid.o program_setup.o atmdata_type.o grib2_util.F90
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -c grib2_util.F90
+
 
 program_setup.o: program_setup.f90
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -c program_setup.f90

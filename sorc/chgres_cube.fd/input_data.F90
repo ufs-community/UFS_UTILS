@@ -2176,7 +2176,7 @@
 
  end subroutine read_input_atm_history_file
  
- !---------------------------------------------------------------------------
+!---------------------------------------------------------------------------
 ! Read input grid atmospheric grib2 files.
 !---------------------------------------------------------------------------
 
@@ -2228,8 +2228,6 @@
  
  type(atmdata), allocatable   :: atm(:)
  
-
- 
  tracers(:) = "NULL"
  trac_names_grib = (/":SPFH:",":CLWMR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
                ":TCDC:", ":NCCICE:",":SPNCR:", ":NCONCD:",":PMTF:",":PMTC:",":TKE:"/)
@@ -2253,100 +2251,96 @@
  inquire(file=the_file,exist=iret)
  if (iret == 0) call error_handler("OPENING GRIB2 ATM FILE.", iret)
 
- !print*,"- READ VERTICAL LEVELS."
- iret = grb2_inq(the_file,inv_file,":UGRD:"," hybrid level:")
- !if (iret < 0) call error_handler("COUNTING VERTICAL LEVELS.", iret)
+   !print*,"- READ VERTICAL LEVELS."
+   iret = grb2_inq(the_file,inv_file,":UGRD:"," hybrid level:")
+   !if (iret < 0) call error_handler("COUNTING VERTICAL LEVELS.", iret)
+  
+    if (iret <= 0) then
+      if (localpet == 0) print*,"DATA IS ON ISOBARIC LEVELS, WILL NEED TO CONVERT AFTER READING"
+      lvl_str = "mb:" 
+      lvl_str_space = " mb:"
+      lvl_str_space_len = 4
+      isnative = 0
+      iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
+      lev_input=iret
+    else
+      if (localpet == 0) PRINT*, "DATA IS ON NATIVE SIGMA/HYBRID LEVELS"
+      lvl_str = "hybrid level:"
+      lvl_str_space = " hybrid level:"
+      lvl_str_space_len = 14
+      isnative = .true.
+      iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
+      if (iret < 0) call error_handler("READING VERTICAL LEVEL TYPE.", iret)
+      lev_input=iret
+    endif
+ !endif
+    print*, "lev_input = ", lev_input
+    allocate(slevs(lev_input))
+    allocate(rlevs(lev_input))
+    levp1_input = lev_input + 1
+    
+    ! get the vertical levels, and search string by sequential reads
 
-	if (iret <= 0) then
-		if (localpet == 0) print*,"DATA IS ON ISOBARIC LEVELS, WILL NEED TO CONVERT AFTER READING"
-		lvl_str = "mb:" 
-		lvl_str_space = " mb:"
-		lvl_str_space_len = 4
-		isnative = 0
-		iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
-		lev_input=iret
-	else
-		if (localpet == 0) PRINT*, "DATA IS ON NATIVE SIGMA/HYBRID LEVELS"
-		lvl_str = "hybrid level:"
-		lvl_str_space = " hybrid level:"
-		lvl_str_space_len = 14
-		isnative = .true.
-		iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
-		if (iret < 0) call error_handler("READING VERTICAL LEVEL TYPE.", iret)
-		lev_input=iret
-	endif
-!endif
-	print*, "lev_input = ", lev_input
-	allocate(slevs(lev_input))
-	allocate(rlevs(lev_input))
-	levp1_input = lev_input + 1
-	
-	! get the vertical levels, and search string by sequential reads
+    do i = 1,lev_input
+      iret=grb2_inq(the_file,inv_file,':UGRD:',trim(lvl_str),sequential=i-1,desc=metadata)
+      if (iret.ne.1) call error_handler(" IN SEQUENTIAL FILE READ.", iret)
+    
+      j = index(metadata,':UGRD:') + len(':UGRD:')
+      k = index(metadata,trim(lvl_str_space)) + len(trim(lvl_str_space))-1
 
-	do i = 1,lev_input
-		iret=grb2_inq(the_file,inv_file,':UGRD:',trim(lvl_str),sequential=i-1,desc=metadata)
-		if (iret.ne.1) call error_handler(" IN SEQUENTIAL FILE READ.", iret)
-	
-		j = index(metadata,':UGRD:') + len(':UGRD:')
-		k = index(metadata,trim(lvl_str_space)) + len(trim(lvl_str_space))-1
+      read(metadata(j:k),*) rlevs(i)
 
-		read(metadata(j:k),*) rlevs(i)
-	
-		slevs(i) = metadata(j-1:k)
+      slevs(i) = metadata(j-1:k)
 		
-		if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
-	
-		if (localpet==0) print*, "LEVEL = ", rlevs(i)
+      if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
+      if (localpet==0) print*, "LEVEL = ", slevs(i)
 	enddo
 
- allocate(vcoord(levp1_input,2))
- if (localpet == 0) print*,"- READ VERTICAL COORDINATE INFO."
- call read_vcoord(isnative,rlevs,vcoord,lev_input,levp1_input,pt,metadata,iret)
- if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
+   allocate(vcoord(levp1_input,2))
+   if (localpet == 0) print*,"- READ VERTICAL COORDINATE INFO."
+   if (localpet == 0) print*, metadata
+   call read_vcoord(isnative,rlevs,vcoord,lev_input,levp1_input,pt,metadata,iret)
+   if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
+   
+   !if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
  
- if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
- if (localpet==0) print*, "VCOORD(:,2) = ", vcoord(:,2)
+   if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
+   iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
 
- if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
- iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
+   if (iret <= 0) then
+    iret = grb2_inq(the_file,inv_file,':RH:')
+    if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
+    hasspfh = .false.
+    trac_names_grib(1)=':RH:'
+   endif
+   
+   if (localpet == 0) print*,"- FIND CICE or CIMIXR"
+   iret = grb2_inq(the_file,inv_file,':CICE:',lvl_str_space)
 
- if (iret <= 0) then
-	iret = grb2_inq(the_file,inv_file,':RH:')
-	if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
-	hasspfh = .false.
-	trac_names_grib(1)=':RH:'
- endif
- 
- if (localpet == 0) print*,"- FIND CICE or CIMIXR"
- iret = grb2_inq(the_file,inv_file,':CICE:',lvl_str_space)
+   if (iret <= 0) then
+    iret = grb2_inq(the_file,inv_file,':CIMIXR:',lvl_str_space)
+    if (iret >= 1) trac_names_grib(4)=':CIMIXR:'
+    if (iret <= 0) then
+      iret = grb2_inq(the_file,inv_file,':ICMR:',lvl_str_space)
+      if (iret >= 1) trac_names_grib(4)=':ICMR:'
+    endif
+   endif
 
- if (iret <= 0) then
-	iret = grb2_inq(the_file,inv_file,':CIMIXR:',lvl_str_space)
-	if (iret >= 1) trac_names_grib(4)=':CIMIXR:'
-	if (iret <= 0) then
-		iret = grb2_inq(the_file,inv_file,':ICMR:',lvl_str_space)
-		if (iret >= 1) trac_names_grib(4)=':ICMR:'
-	endif
- endif
+  print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
+  !um_tracers = 0
+  !tracers_input(:)=""
+  do n = 1, num_tracers
 
- print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
- !um_tracers = 0
- !tracers_input(:)=""
- do n = 1, num_tracers
+   vname = tracers_input(n)
 
-	 vname = tracers_input(n)
- 
-	 i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
+   i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
 
-	 tracers_input_grib(n)=trac_names_grib(i)
-	 tracers_input_vmap(n)=trac_names_vmap(i)
-	 tracers(n)=tracers_default(i)
-	 tracers_input(n) = tracers_default(i)
+   tracers_input_grib(n)=trac_names_grib(i)
+   tracers_input_vmap(n)=trac_names_vmap(i)
+   tracers(n)=tracers_default(i)
+
  enddo
-
- num_tracers_input = num_tracers
- 
- allocate(atm(num_tracers+4))
+ allocate(atm(num_tracers+5))
  if (localpet==0) print*, "NUMBER OF TRACERS IN FILE = ", num_tracers
 
  if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
@@ -2494,8 +2488,6 @@
        print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
        dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
      enddo
-     if(localpet==0 .and. trim(tracers_input_vmap(n))=="sphum") then
-         print*,'q ',dummy3d(1,1,:)
      endif
    endif
 
@@ -2548,7 +2540,7 @@ if (localpet == 0) then
        if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
         if (iret==1) then ! missing_var_method == skip 
-          exit
+          cycle
         endif
        else
         conv_omega = .true.
@@ -2626,18 +2618,24 @@ if (localpet == 0) then
                     farrayPtr=atm(4)%var, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
+  
+   if (localpet == 0) print*,"- CALL FieldGet FOR W"
+  call ESMF_FieldGet(dzdt_input_grid, &
+                    farrayPtr=atm(5)%var, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
  
   if (localpet == 0) print*,"- CALL FieldGet FOR TRACERS."
   do i=1,num_tracers
     call ESMF_FieldGet(tracers_input_grid(i), &
-                    farrayPtr=atm(i+4)%var, rc=rc)
+                    farrayPtr=atm(i+5)%var, rc=rc)
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGet", rc)
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc) 
   end do
   
-  call iso2sig(rlevs,vcoord,lev_input,levp1_input,psptr,atm,clb,cub,4+num_tracers, iret)
+  call iso2sig(rlevs,vcoord,lev_input,levp1_input,psptr,atm,clb,cub,5+num_tracers, iret)
   deallocate(vcoord)
 
  else
@@ -2739,7 +2737,6 @@ if (localpet == 0) then
  
  if (localpet == 0 .and. file_is_converted .and. .not. convert_sfc) &
       call system("rm "//trim(the_file))
-
  end subroutine read_input_atm_grib2_file
  
 !---------------------------------------------------------------------------
@@ -5566,6 +5563,126 @@ if (localpet == 0) then
  END SUBROUTINE READ_FV3_GRID_DATA_NETCDF
 
 !---------------------------------------------------------------------------
+! Read winds from a grib2 file
+!---------------------------------------------------------------------------
+
+ subroutine read_winds(file,inv,u,v,localpet)
+ 
+ use wgrib2api
+ use netcdf
+ use program_setup, only      : get_var_cond, base_install_dir, wgrib2_path
+ use model_grid, only         : input_grid_type
+ implicit none
+ 
+ character(len=250), intent(in)          :: file, inv
+ integer, intent(in)                     :: localpet
+ real(esmf_kind_r8), intent(inout), allocatable :: u(:,:,:),v(:,:,:)
+ 
+ real(esmf_kind_r4), dimension(i_input,j_input)  :: alpha
+ real(esmf_kind_r8), dimension(i_input,j_input)  :: lon
+ real(esmf_kind_r4), allocatable         :: u_tmp(:,:), v_tmp(:,:)
+ real(esmf_kind_r4)                      :: value_u, value_v, lov
+ 
+ integer                                 :: varnum_u, varnum_v, ncid, vlev, id_var, & 
+                                            error, iret, i
+ 
+ character(len=20)                       :: vname
+ character(len=50)                       :: method_u, method_v
+ character(len=250)                      :: file_coord, cmdline_msg
+ character(len=10000)                    :: temp_msg
+ 
+ if (localpet==0) then
+   allocate(u(i_input,j_input,lev_input))
+   allocate(v(i_input,j_input,lev_input))
+ else
+   allocate(u(0,0,0))
+   allocate(v(0,0,0))
+ endif
+ 
+ file_coord = trim(base_install_dir)//"/fix/fix_chgres/latlon_grid3.32769.nc" 
+
+ vname = "u"
+ call get_var_cond(vname,this_miss_var_method=method_u, this_miss_var_value=value_u, &
+                       loc=varnum_u)
+ vname = "v"
+ call get_var_cond(vname,this_miss_var_method=method_v, this_miss_var_value=value_v, &
+                       loc=varnum_v)
+                       
+ if (trim(input_grid_type)=="rotated_latlon") then  
+   if (localpet==0) then                   
+     print*,"- READ ROTATION ANGLE"
+     print*, trim(file_coord)
+     error=nf90_open(trim(file_coord),nf90_nowrite,ncid)
+     call netcdf_err(error, 'opening nc file' )
+     error=nf90_inq_varid(ncid, 'gridrot', id_var)
+     call netcdf_err(error, 'reading field id' )
+     error=nf90_get_var(ncid, id_var, alpha)
+     call netcdf_err(error, 'reading field' )
+     error = nf90_close(ncid)
+   endif
+ elseif (trim(input_grid_type) == "lambert") then
+ 
+   print*,"- CALL FieldGather FOR INPUT GRID LONGITUDE"
+   call ESMF_FieldGather(longitude_input_grid, lon, rootPet=0, tile=1, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+        call error_handler("IN FieldGather", error)
+        
+   if (localpet==0) then
+     cmdline_msg = trim(wgrib2_path)//" "//trim(file)//" -d 1 -grid &> temp.out"
+     call system(cmdline_msg)
+     open(4,file="temp2.out")
+     do i = 1,3
+      read(4,"(A)") temp_msg
+     enddo
+     close(4)
+     i = index(temp_msg, "LoV ") + len("LoV ")
+
+     read(temp_msg(i:i+10),*) lov
+   
+      print*, "- CALL GRIDROT"    
+      call gridrot(lov,lon,alpha)
+   endif
+ endif
+ 
+ if (localpet==0) then
+   do vlev = 1, lev_input
+ 
+     vname = ":UGRD:"
+     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=u_tmp)
+     if (iret <= 0) then
+        call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
+        if (iret==1) then ! missing_var_method == skip
+          call error_handler("READING IN U AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
+                        "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+        endif
+     endif
+   
+     vname = ":VGRD:"
+     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=v_tmp)
+     if (iret <= 0) then
+        call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
+        if (iret==1) then ! missing_var_method == skip 
+          call error_handler("READING IN V AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
+                          "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+        endif
+      endif
+    
+      if (trim(input_grid_type) == "latlon") then
+        u(:,:,vlev) = u_tmp
+        v(:,:,vlev) = v_tmp
+      else 
+        u(:,:,vlev) = real(u_tmp * cos(alpha) - v_tmp * sin(alpha), esmf_kind_r8)
+        v(:,:,vlev) = real(v_tmp * cos(alpha) + u_tmp * sin(alpha), esmf_kind_r8)
+      endif
+    
+      print*, 'max, min U ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
+      print*, 'max, min V ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
+    enddo
+ endif
+
+end subroutine read_winds
+
+!---------------------------------------------------------------------------
 ! Convert from 2-d to 3-d winds.
 !---------------------------------------------------------------------------
 
@@ -5644,6 +5761,81 @@ if (localpet == 0) then
  call ESMF_FieldDestroy(v_input_grid, rc=rc)
 
  end subroutine convert_winds
+ 
+ subroutine gridrot(lov,lon,rot)
+
+  use model_grid, only                : i_input,j_input
+  implicit none
+  
+  
+  real(esmf_kind_r4), intent(in)      :: lov
+  real(esmf_kind_r4), intent(inout)   :: rot(i_input,j_input)
+  real(esmf_kind_r8), intent(in)      :: lon(i_input,j_input)
+  
+  real(esmf_kind_r4)                  :: trot(i_input,j_input), trot_tmp(i_input,j_input)
+  real(esmf_kind_r4)                  :: pior = 3.14159265359/180.0_esmf_kind_r4
+  
+  trot_tmp = real(lon,esmf_kind_r4)-lov
+  trot = trot_tmp
+  where(trot_tmp > 180.0) trot = trot-360.0_esmf_kind_r4
+  where(trot_tmp < -180.0) trot = trot-360.0_esmf_kind_r4
+  
+  rot = trot * pior
+
+end subroutine gridrot
+
+subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
+
+  use, intrinsic :: ieee_arithmetic
+
+  implicit none
+  
+  real(esmf_kind_r4), intent(in)    :: value
+  real(esmf_kind_r4), intent(inout), optional :: var(:,:)
+  real(esmf_kind_r8), intent(inout), optional :: var8(:,:)
+  real(esmf_kind_r8), intent(inout), optional  :: var3d(:,:,:)
+  
+  character(len=20), intent(in)     :: vname, lev, method
+  
+  integer, intent(in)               :: varnum 
+  integer, intent(inout)            :: iret
+  
+  iret = 0
+  if (varnum == 9999) then
+    print*, "WARNING: ", trim(vname), " NOT FOUND AT LEVEL ", lev, " IN EXTERNAL FILE ", &
+            "AND NO ENTRY EXISTS IN VARMAP TABLE. VARIABLE WILL NOT BE USED."
+    iret = 1
+
+    return
+  endif
+
+  if (trim(method) == "skip" ) then
+    print*, "WARNING: SKIPPING ", trim(vname), " IN FILE"
+    read_from_input(varnum) = .false.
+    iret = 1
+  elseif (trim(method) == "set_to_fill") then
+    print*, "WARNING: ,", trim(vname), " NOT AVILABLE AT LEVEL ", trim(lev), &
+           ". SETTING EQUAL TO FILL VALUE OF ", value
+    if(present(var)) var(:,:) = value
+    if(present(var8)) var8(:,:) = value
+    if(present(var3d)) var3d(:,:,:) = value
+  elseif (trim(method) == "set_to_NaN") then
+    print*, "WARNING: ,", trim(vname), " NOT AVILABLE AT LEVEL ", trim(lev), &
+           ". SETTING EQUAL TO NaNs"
+    if(present(var)) var(:,:) = ieee_value(var,IEEE_QUIET_NAN)
+    if(present(var8)) var8(:,:) = ieee_value(var8,IEEE_QUIET_NAN)
+    if(present(var3d)) var3d(:,:,:) = ieee_value(var3d,IEEE_QUIET_NAN)
+  elseif (trim(method) == "stop") then
+    call error_handler("READING "//trim(vname)// " at level "//lev//". TO MAKE THIS NON- &
+                        FATAL, CHANGE STOP TO SKIP FOR THIS VARIABLE IN YOUR VARMAP &
+                        FILE.", iret)
+  else
+    call error_handler("ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
+                       " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN,"// &
+                       " , skip, or stop.")
+  endif
+
+end subroutine handle_grib_error
 
 !---------------------------------------------------------------------------
 ! Read winds from a grib2 file

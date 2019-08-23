@@ -48,7 +48,6 @@
                                        longitude_w_target_grid, &
                                        terrain_target_grid, &
                                        landmask_target_grid
-!                               , i_target, j_target
 
  use program_setup, only             : vcoord_file_target_grid, &
                                        regional, input_type,      &
@@ -233,8 +232,6 @@ call rem_negative_tracers(localpet)
                          termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldRegrid", rc)
-   !call ESMF_FieldGather(tracers_b4adj_target_grid(n),tmp,rootPet=0, tile=1, rc=rc)
-   !if (localpet==0) print*, "min max ", trim(tracers(n)) , " = ", minval(tmp), maxval(tmp)
  enddo
 
  print*,"- CALL Field_Regrid FOR VERTICAL VELOCITY."
@@ -524,14 +521,14 @@ call rem_negative_tracers(localpet)
 
  do n = 1, num_tracers
     print*,"- CALL FieldCreate FOR TARGET GRID TRACERS ", trim(tracers(n))    
-    if (trim(tracers(n)) == "sphum")    P_QV = n; print*, "P_QV = ", P_QV
-    if (trim(tracers(n)) == "liq_wat")  P_QC = n; print*, "P_QC = ", P_QC
-    if (trim(tracers(n)) == "ice_wat")  P_QI = n; print*, "P_QI = ", P_QI
-    if (trim(tracers(n)) == "rainwat")  P_QR = n; print*, "P_QR = ", P_QR
-    if (trim(tracers(n)) == "ice_nc")   P_QNI = n; print*, "P_QNI = ", P_QNI
-    if (trim(tracers(n)) == "rain_nc")  P_QNR = n; print*, "P_QNR = ", P_QNR
-    if (trim(tracers(n)) == "water_nc") P_QNC = n; print*, "P_QNC = ", P_QNC
-    if (trim(tracers(n)) == "liq_aero") P_QNWFA = n; print*, "P_QNWFA = ", P_QNWFA
+    if (trim(tracers(n)) == "sphum")    P_QV = n
+    if (trim(tracers(n)) == "liq_wat")  P_QC = n
+    if (trim(tracers(n)) == "ice_wat")  P_QI = n
+    if (trim(tracers(n)) == "rainwat")  P_QR = n   
+    if (trim(tracers(n)) == "ice_nc")   P_QNI = n
+    if (trim(tracers(n)) == "rain_nc")  P_QNR = n
+    if (trim(tracers(n)) == "water_nc") P_QNC = n
+    if (trim(tracers(n)) == "liq_aero") P_QNWFA = n
     tracers_target_grid(n) = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
@@ -978,9 +975,6 @@ call rem_negative_tracers(localpet)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
     
- if(localpet==0) then
-   print*,'temp ',tptr(clb(1),clb(2),:)
- endif
 ! Find specific humidity in the array of tracer fields.
 
  do ii = 1, num_tracers
@@ -994,10 +988,6 @@ call rem_negative_tracers(localpet)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
     
-  if(localpet==0) then
-   print*,'q ',qptr(clb(1),clb(2),:)
- endif
-
  print*,"- CALL FieldGet FOR SURFACE PRESSURE BEFORE ADJUSTMENT"
  call ESMF_FieldGet(ps_b4adj_target_grid, &
                     farrayPtr=psptr, rc=rc)
@@ -1299,7 +1289,6 @@ call rem_negative_tracers(localpet)
  PRINT *, "IN VINTG, CALL TERP3"
  CALL TERP3(IM,1,1,1,1,4+NT,(IM*KM1),(IM*KM2), &
             KM1,IM,IM,Z1,C1,KM2,IM,IM,Z2,C2)
- PRINT*, "IN VINTG, AFTER TERP3"
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  COPY OUTPUT WIND, TEMPERATURE, HUMIDITY AND OTHER TRACERS
 !  EXCEPT BELOW THE INPUT DOMAIN, LET TEMPERATURE INCREASE WITH A FIXED
@@ -1454,7 +1443,7 @@ call rem_negative_tracers(localpet)
 !     REAL(ESMF_KIND_R8) :: J2S 
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-!  FIND THE SURROUNDING INPUT INTERVAL FOR EACH OUTPUT POINT.         
+!  FIND THE SURROUNDING INPUT INTERVAL FOR EACH OUTPUT POINT.
       CALL RSEARCH(IM,KM1,IXZ1,KXZ1,Z1,KM2,IXZ2,KXZ2,Z2,1,IM,K1S) 
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -1894,7 +1883,6 @@ call rem_negative_tracers(localpet)
              if (P_QNR.gt.1 .AND. rainptr(i,j,k).gt.0.0 .AND. qnrptr(i,j,k).le.0.0) then
                 qnrptr(i,j,k)  = make_RainNumber (rainptr(i,j,k)*temp_rho, tempptr(i,j,k))
                 qnrptr(i,j,k)  = qnrptr(i,j,k)  / temp_rho
-                
              endif
              if (qnrptr(i,j,k) < 0) qnrptr(i,j,k) = 0
           enddo

@@ -20,4 +20,6 @@ module load sfcio-intel/1.0.0
 export ESMFMKFILE=/gpfs/hps3/emc/global/noscrub/George.Gayno/esmf/8_0_0_bs20/lib/esmf.mk
 
 export FCOMP=ftn
-export FFLAGS="-O0 -g -r8 -i4 -qopenmp -convert big_endian -check bounds -assume byterecl -warn unused"
+export FFLAGS="-O3 -fp-model precise -g -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
+# for debugging
+#export FFLAGS="-O0 -g -r8 -i4 -qopenmp -convert big_endian -check bounds -assume byterecl -warn unused"

@@ -29,4 +29,3 @@ module load sigio/v2.0.1      # API for performing I/O on the sigma restart file
 export WGRIB2API_LIB="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib/libwgrib2_api.a"
 export WGRIB2API_INC="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib"
 export WGRIB2_LIB="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib/libwgrib2.a"
-
