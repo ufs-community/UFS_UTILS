@@ -2,10 +2,10 @@
 ## Module file for orog
 #############################################################
 # Loading Intel Compiler Suite
-module unload intel
-module load intel/16.1.150
+module purge
+module load intel/18.0.5.274
 
-module load netcdf/4.3.0
+module load netcdf/4.6.1
 
 # Loading nceplibs modules
 module use -a $MOD_PATH
