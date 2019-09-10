@@ -13,7 +13,9 @@
 #
 # Designed and written by V. Balaji, Amy Langenhorst and Aleksey Yakovlev
 #
-include env.$(SITE)
+
+MPICC    := mpicc
+CC       := gcc
 
 CFLAGS   := -O3
 CFLAGS_O2:= -O2

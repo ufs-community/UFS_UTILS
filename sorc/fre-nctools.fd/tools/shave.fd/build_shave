@@ -21,6 +21,9 @@ case $1 in
   "linux.gnu" )
      FCMP=gfortran
      FFLAGS="-O3 -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -ldl -lz" ;;
+  "linux.intel" )
+     FCMP=ifort
+     FFLAGS="-O3 -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -ldl -lz" ;;
   *)
      echo "SHAVE UTILITY BUILD NOT TESTED ON MACHINE $1"
      exit 1 ;;

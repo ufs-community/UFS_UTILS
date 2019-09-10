@@ -11,7 +11,7 @@
 # Designed and written by V. Balaji, Amy Langenhorst and Aleksey Yakovlev
 #
 MPICC    := mpicc
-CC       := gcc
+CC       := icc
 
 CFLAGS   := -O3 -g
 CFLAGS_O2:= -O2 -g

@@ -63,6 +63,12 @@ elif [ $target = linux.gnu ]; then
  export FFLAGSM="-O3 -g -fbacktrace -fdefault-real-8 -fconvert=big-endian -fno-range-check ${INCS}"
  export LDFLAGSM="-fopenmp"
  export OMPFLAGM="-fopenmp"
+elif [ $target = linux.intel ]; then
+ INCS="-I${NETCDF}/include"
+ export LIBSM="${BACIO_LIB4} ${W3NCO_LIBd} ${IP_LIBd} ${SP_LIBd} -L${NETCDF}/lib -lnetcdff -lnetcdf -L${HDF5}/lib -lhdf5_fortran -lhdf5_hl -lhdf5 -ldl -lz -lm"
+ export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model source -assume byterecl ${INCS}"
+ export LDFLAGSM="-openmp -auto"
+ export OMPFLAGM="-openmp -auto"
 else
  echo machine $target not found
  exit 1

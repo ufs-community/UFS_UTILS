@@ -20,6 +20,8 @@ target=${target:-''}
 
 USERNAME=`echo $LOGNAME | awk '{ print tolower($0)'}`
 
+if [[ $target == '' ]]; then
+
 if [[ -d /lfs3 ]] ; then
     # We are on NOAA Jet
     if ( ! eval module help > /dev/null 2>&1 ) ; then
@@ -113,6 +115,8 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
     module purge
 else
     echo WARNING: UNKNOWN PLATFORM 1>&2
+fi
+
 fi
 
 unset __ms_shell
