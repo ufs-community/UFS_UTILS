@@ -36,16 +36,16 @@
 #------------------------------------------------------------------------
 
 #----WCOSS_DELL JOBCARD
-#BSUB -P FV3GFS-T2O
-#BSUB -o log.chgres.%J
-#BSUB -e log.chgres.%J
-#BSUB -J fv3_chgres
-#BSUB -q dev
-#BSUB -M 6000
-#BSUB -W 10:00
-#BSUB -R span[ptile=14]
-#BSUB -n 14
-export machine=WCOSS_DELL_P3
+##BSUB -P FV3GFS-T2O
+##BSUB -o log.chgres.%J
+##BSUB -e log.chgres.%J
+##BSUB -J fv3_chgres
+##BSUB -q dev
+##BSUB -M 6000
+##BSUB -W 10:00
+##BSUB -R span[ptile=14]
+##BSUB -n 14
+#export machine=WCOSS_DELL_P3
 
 #----WCOSS_CRAY JOBCARD
 ##BSUB -L /bin/sh
@@ -59,22 +59,22 @@ export machine=WCOSS_DELL_P3
 ##BSUB -extsched 'CRAYLINUX[]'
 #export machine=WCOSS_C
 
-#---- THEIA JOBCARD
+#---- Hera JOBCARD
 #---- Submit as: sbatch $script
-##SBATCH -J fv3_chgres_driver
-##SBATCH -A fv3-cpu
-##SBATCH --open-mode=truncate
-##SBATCH -o log.chgres
-##SBATCH -e log.chgres
-##SBATCH --nodes=1
-##SBATCH -q batch
-##SBATCH -t 02:00:00
-#export machine=THEIA
+#SBATCH -J fv3_chgres_driver
+#SBATCH -A fv3-cpu
+#SBATCH --open-mode=truncate
+#SBATCH -o log.chgres
+#SBATCH -e log.chgres
+#SBATCH --nodes=1
+#SBATCH -q batch
+#SBATCH -t 02:00:00
+export machine=HERA
 
 set -x
 
 export PSLOT=fv3test
-export CDUMP=gdas
+export CDUMP=gfs
 export CASE_HIGH=C768
 export CASE_ENKF=C384
 export CDATE=2019061000
@@ -87,9 +87,9 @@ elif [ $machine = WCOSS_DELL_P3 ]; then
  export HOMEgfs=$LS_SUBCWD/..
  export PTMP=${PTMP:-"/gpfs/dell2/ptmp/$USER"}
  export zero_bias_dir=/gpfs/hps3/emc/global/noscrub/emc.glopara/ICS/bias_zero
-elif [ $machine = THEIA ]; then
+elif [ $machine = HERA ]; then
  export HOMEgfs=$SLURM_SUBMIT_DIR/..
- export PTMP=${PTMP:-"/scratch3/NCEPDEV/stmp1/$USER"}
+ export PTMP=${PTMP:-"/scratch2/NCEPDEV/stmp1/$USER"}
  export zero_bias_dir=/scratch4/NCEPDEV/global/save/glopara/git/bias_zero
 else 
  echo "Please define HOMEgfs and PTMP for your machine. exit"
@@ -163,14 +163,11 @@ elif [ $machine = WCOSS_DELL_P3 ]; then
  export ACCOUNT=FV3GFS-T2O
  export QUEUE=dev
  export QUEUE_TRANS=dev_transfer 
-elif [ $machine = THEIA ]; then
- # source $HOMEgfs/sorc/machine-setup.sh
- # module use -a /scratch3/NCEPDEV/nwprod/lib/modulefiles
- # module load netcdf hdf5/1.8.14    2>>/dev/null
+elif [ $machine = HERA ]; then
  export APRUNC=time
  export APRUNTF=time
  export OMP_NUM_THREADS_CH=24
- export SUB=/home/glopara/bin/sub_slurm
+ export SUB=$SLURM_SUBMIT_DIR/../util/sub_slurm
  export ACCOUNT=fv3-cpu
  export QUEUE=batch
  export QUEUE_TRANS=batch
