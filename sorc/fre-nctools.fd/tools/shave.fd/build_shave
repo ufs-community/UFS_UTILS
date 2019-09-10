@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -x
+set -eux
 
 case $1 in
   "cray" )
@@ -18,6 +18,9 @@ case $1 in
   "theia" )
      FCMP=ifort
      FFLAGS="-O3 -fp-model precise -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf" ;;
+  "linux.gnu" )
+     FCMP=gfortran
+     FFLAGS="-O3 -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -ldl -lz" ;;
   *)
      echo "SHAVE UTILITY BUILD NOT TESTED ON MACHINE $1"
      exit 1 ;;
@@ -25,10 +28,10 @@ esac
 
 EXEC=../../../../exec/shave.x
 rm -f $EXEC
-$FCMP $FFLAGS -o $EXEC shave_nc.F90
+$FCMP -o $EXEC shave_nc.F90 $FFLAGS
 rc=$?
 
-if ((rc != 0)); then
+if [ $rc -ne 0 ]; then
   echo "ERROR BUILDING SHAVE UTILITY"
   exit $rc
 else

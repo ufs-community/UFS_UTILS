@@ -1,5 +1,5 @@
-SHELL	=/bin/ksh
-INCMOD	=$(INCS)             
+SHELL	=/bin/sh
+INCMOD	=$(INCS)
 LIBS    =$(LIBSM)
 
 SRCM	=chgres.f

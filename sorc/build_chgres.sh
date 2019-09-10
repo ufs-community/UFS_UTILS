@@ -30,7 +30,7 @@ cd global_chgres.fd
 export FCMP=${FCMP:-ifort}
 export FCMP95=$FCMP
 
-export FFLAGSM="-i4 -O3 -r8  -convert big_endian -fp-model precise"
+export FFLAGSM=${FFLAGSM:-"-i4 -O3 -r8 -convert big_endian -fp-model precise"}
 export RECURS=
 export LDFLAGSM=${LDFLAGSM:-"-openmp -auto"}
 export OMPFLAGM=${OMPFLAGM:-"-openmp -auto"}

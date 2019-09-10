@@ -1,16 +1,16 @@
-SHELL	=/bin/ksh
+SHELL	=/bin/sh
 LIBS    =$(LIBSM)
 
 SRCM	=mtnlm7_oclsm.f
 SRCS	=
 
 OBJS	=mtnlm7_oclsm.o netcdf_io.o
-FC	=$(FCMP)
+FC	    =$(FCMP)
 FC90    =$(FCMP95)
-LDR	=$(FCMP)
+LDR	    =$(FCMP)
 
 FFLAGS	=$(FFLAGSM)
-OMPFLAG=$(OMPFLAGM)
+OMPFLAG =$(OMPFLAGM)
 LDFLAGS	=$(LDFLAGSM)
 
 CMD	=orog.x

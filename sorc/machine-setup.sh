@@ -16,7 +16,8 @@ else
     __ms_shell=sh
 fi
 
-target=""
+target=${target:-''}
+
 USERNAME=`echo $LOGNAME | awk '{ print tolower($0)'}`
 
 if [[ -d /lfs3 ]] ; then

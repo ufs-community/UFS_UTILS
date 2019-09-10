@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -eux
 
 source ./machine-setup.sh > /dev/null 2>&1
@@ -32,12 +32,16 @@ set -x
 
 #Original setup is for cray so for now require input only on a different platform.
 
+if type module > /dev/null 2>/dev/null ; then
 set +x
 module list
 module use ../../../modulefiles/fv3gfs                  > /dev/null 2>&1
 module load fre-nctools.${target} > /dev/null 2>&1
 module list
 set -x
+else
+echo "module (Environment Modules) is not available"
+fi
 
 MPICH_UNEX_BUFFER_SIZE=256m
 MPICH_MAX_SHORT_MSG_SIZE=64000
@@ -50,7 +54,7 @@ if [ $system_site = "cray" ]; then
   NETCDF=${NETCDF_DIR}
 fi
 
-alias make="make HDF5_HOME=${HDF5}  NETCDF_HOME=${NETCDF} NC_BLKSZ=64K SITE=${system_site} -f fre-nctools.mk"
+MAKE_CMD="make HDF5_HOME=${HDF5} NETCDF_HOME=${NETCDF} NC_BLKSZ=64K SITE=${system_site} -f fre-nctools.mk"
 
 set +x
 echo "////////////////////////////////////////////////////////////////////////////////"
@@ -68,7 +72,7 @@ for freNCToolsDir in tools/make_hgrid tools/make_solo_mosaic tools/fregrid
 do
   set +x
   echo "////////////////////////////////////////////////////////////////////////////////"
-  echo "////////////////////////////////////////////////////////////////// $freNCToolsDir:t"
+  echo "////////////////////////////////////////////////////////////////// $freNCToolsDir"
   echo "////////////////////////////////////////////////////////////////////////////////"
   set -x
 
@@ -77,8 +81,8 @@ do
   targets=` grep "TARGETS  :=" fre-nctools.mk | cut -f2 -d'=' `
   echo "Making $targets"
 
-  make clean
-  make
+  $MAKE_CMD clean
+  $MAKE_CMD
 
   for Target in $targets
   do
@@ -89,7 +93,7 @@ do
       exit 1
     fi
   done
-  make clean
+  $MAKE_CMD clean
   cd $tmpDir
 done
 
