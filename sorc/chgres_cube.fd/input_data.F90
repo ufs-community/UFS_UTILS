@@ -2626,6 +2626,7 @@ if (localpet == 0) then
       end do
     end do
   end do  
+
   deallocate(vcoord)
 
  else
