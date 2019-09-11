@@ -129,10 +129,6 @@ subroutine iso2sig(pi,sigma,lev_input,levp1_input,psptr,atm,clb,cub,nvars,iret)
   if (iret /= 0) call error_handler(" CONVERTING TO SIGMA COORDINATES. ONE OR BOTH PRESSURE &
                                     &ARRAYS ARE NOT IN TOP TO BOTTOM ORDER.", iret)
   iret = 0
-
-  if((clb(1)==1 .and. clb(2)==1)) then
-     print*,'q after iso2sig ',atm(5)%var(1,1,:)
-  endif
    
 end subroutine iso2sig
 
@@ -243,11 +239,10 @@ subroutine p2hyb(pi,xi,psfc,p0,hyao,hybo,po,lev_input,clb,cub,nvar,iflag, kflag,
         po(ko) = hyao(ko)*p0 + hybo(ko)*psfc(ml,nl)
         xo(mlo,nlo,ko,1) = po(ko)     
       end do
-      
+
       pomin = po(1)
       pomax = po(lev_input)
-      
-      if (nl==1 .and. ml == 1) print*, "po = ", po
+    
 
       do ko = 1,lev_input
         xo(mlo,nlo,ko,2:nvar) = xmsg
@@ -260,11 +255,6 @@ subroutine p2hyb(pi,xi,psfc,p0,hyao,hybo,po,lev_input,clb,cub,nvar,iflag, kflag,
                                +(xi(nv)%var(ml,nl,ki+1) -xi(nv)%var(ml,nl,ki) )*    &
                                 (log(po(ko))  -log(pi(ki)))/    &
                                 (log(pi(ki+1))-log(pi(ki)))
-                if (nv == 5 .and. nl==1 .and. ml == 1) then 
-                   print*, "ml,nl, ki, ko, po(ko),pi(ki), pi(k+1), qi(ki), qi(ki+1), qo(ko) ",  &
-                    po(ko), pi(ki), pi(ki+1), ml, nl, ki, ko, xi(5)%var(ml,nl,ki), &
-                    xi(5)%var(ml,nl,ki+1), xo(mlo,nlo,ko,5) 
-                endif
               enddo 
             end if
            else
@@ -368,11 +358,6 @@ subroutine p2hyb(pi,xi,psfc,p0,hyao,hybo,po,lev_input,clb,cub,nvar,iflag, kflag,
   !if (P .eq. 100000.0) THEN
   ! print *, 'T = ', T, ' RH = ', RH, ' P = ', P, ' es = ', es, ' e = ', e, ' q = ', sphum
   !end if
-  
-  if (P .eq. 100000.0) THEN
-   print *, 'T, RH, P, es, e, q = ', t(1,1),  rh(1,1), es(1,1), e(1,1), rh_sphum(1,1)
-  end if
-
 
 end subroutine RH2SPFH
 

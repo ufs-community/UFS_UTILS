@@ -5,16 +5,19 @@ set -x
 case $1 in
   "cray" )
      FCMP=ftn
-     FFLAGS="-O0" ;;
+     FFLAGS="-O3 -fp-model precise" ;;
   "wcoss" )
      FCMP=ifort
-     FFLAGS="-O0 ${NETCDF_FFLAGS} ${NETCDF_LDFLAGS_F}" ;;
+     FFLAGS="-O3 -fp-model precise ${NETCDF_FFLAGS} ${NETCDF_LDFLAGS_F}" ;;
   "wcoss_dell_p3" )
      FCMP=ifort
-     FFLAGS="-O0 ${NETCDF_FFLAGS} ${NETCDF_LDFLAGS_F}" ;;
+     FFLAGS="-O3 -fp-model precise ${NETCDF_FFLAGS} ${NETCDF_LDFLAGS_F}" ;;
+  "jet" )
+     FCMP=ifort
+     FFLAGS="-O3 -fp-model precise -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf" ;;
   "theia" )
      FCMP=ifort
-     FFLAGS="-O0 -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf" ;;
+     FFLAGS="-O3 -fp-model precise -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf" ;;
   *)
      echo "SHAVE UTILITY BUILD NOT TESTED ON MACHINE $1"
      exit 1 ;;

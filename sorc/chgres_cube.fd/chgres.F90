@@ -14,7 +14,7 @@
  use atmosphere, only          : atmosphere_driver
 
  use program_setup, only       : read_setup_namelist, &
- 																 read_varmap, &
+                                 read_varmap, &
                                  convert_atm, &
                                  convert_sfc 
 

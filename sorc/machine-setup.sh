@@ -38,7 +38,7 @@ elif [[ -d /scratch2/BMC/det ]] ; then
     module purge
     module use /scratch3/NCEPDEV/nwprod/modulefiles/
     module use /scratch3/NCEPDEV/nwprod/lib/modulefiles
-elif [[ ! -d /scratch2/BMC/det ]] ; then
+elif [[ -d /scratch3/BMC/det ]] ; then
     # We are on NOAA Theia
     if ( ! eval module help > /dev/null 2>&1 ) ; then
         echo load the module command 1>&2
@@ -120,6 +120,8 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
     fi
     target=gaea
     module purge
+elif [[ "$(hostname)" =~ "odin" ]]; then
+    target="odin"
 else
     echo WARNING: UNKNOWN PLATFORM 1>&2
 fi

@@ -1,26 +1,43 @@
 #!/bin/ksh
 set -ax
 
-if [ $# -ne 10 ]; then
-   echo "Usage: $0 resolution grid_dir orog_dir out_dir cd4 peak_fac max_slope n_del2_weak script_dir gtype "
+if [ $# -ne 9 ]; then
+   set +x
+   echo
+   echo "FATAL ERROR: Usage: $0 resolution grid_dir orog_dir out_dir cd4 peak_fac max_slope n_del2_weak script_dir"
+   echo
+   set -x
    exit 1
 fi
+
 if [ $gtype = stretch ] || [ $gtype = regional ]; then
-stretch=$stetch_fac
+  stretch=$stretch_fac
 else
-stretch=1.0
+  stretch=1.0
 fi
+
+if [ $gtype = regional ]; then
+  refine_ratio=$refine_ratio
+else
+  refine_ratio=1
+fi
+
 export res=$1 
 export griddir=$2
 export orodir=$3
 export outdir=$4
 export script_dir=$9
 
-export executable=$exec_dir/filter_topo
+executable=$exec_dir/filter_topo
 if [ ! -s $executable ]; then
-  echo "executable does not exist"
+  set +x
+  echo
+  echo "FATAL ERROR: ${executable} does not exist"
+  echo
+  set -x
   exit 1 
 fi
+
 export mosaic_grid=C${res}_mosaic.nc
 export topo_file=oro.C${res}
 
@@ -49,16 +66,26 @@ cat > input.nml <<EOF
   n_del2_weak = $8            ! 16
   regional = $regional 
   stretch_fac = $stretch
+  refine_ratio = $refine_ratio
+  res = $res
   /
 EOF
 
 $APRUN $executable
 
 if [ $? -ne 0 ]; then
-  echo "ERROR in running filter topography for C$res "
+  set +x
+  echo
+  echo "FATAL ERROR running filter topography for C$res "
+  echo
+  set -x
   exit 1
 else
-  echo "successfully running filter topography for C$res"
+  set +x
+  echo
+  echo "Successfully ran filter topography for C$res"
+  echo
+  set -x
   exit 0
 fi
 
