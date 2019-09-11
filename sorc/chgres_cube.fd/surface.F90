@@ -510,6 +510,12 @@ call check_smois_water
                     farrayPtr=seamask_target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
+    
+ print*,"- CALL FieldGet FOR TARGET GRID LANDMASK."
+ call ESMF_FieldGet(landmask_target_grid, &
+                    farrayPtr=landmask_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)   
 
  print*,"- CALL GridAddItem FOR INPUT GRID SEAMASK."
  call ESMF_GridAddItem(input_grid, &
