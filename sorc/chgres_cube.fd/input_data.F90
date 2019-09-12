@@ -2617,7 +2617,16 @@ if (localpet == 0) then
     call error_handler("IN FieldGet", rc) 
   end do
   
-  call iso2sig(rlevs,vcoord,lev_input,levp1_input,psptr,atm,clb,cub,5+num_tracers, iret)
+  !call iso2sig(rlevs,vcoord,lev_input,levp1_input,psptr,atm,clb,cub,5+num_tracers, iret)
+  do i = clb(1),cub(1)
+    do j = clb(2),cub(2)
+      atm(1)%var(i,j,:) = rlevs(lev_input:1:-1)
+      do n = 2,num_tracers+5
+        atm(n)%var(i,j,:) = atm(n)%var(i,j,lev_input:1:-1)
+      end do
+    end do
+  end do  
+
   deallocate(vcoord)
 
  else
