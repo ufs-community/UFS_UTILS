@@ -90,7 +90,7 @@ elif [ $machine = WCOSS_DELL_P3 ]; then
 elif [ $machine = HERA ]; then
  export HOMEgfs=$SLURM_SUBMIT_DIR/..
  export PTMP=${PTMP:-"/scratch2/NCEPDEV/stmp1/$USER"}
- export zero_bias_dir=/scratch4/NCEPDEV/global/save/glopara/git/bias_zero
+ export zero_bias_dir=/scratch1/NCEPDEV/global/glopara/bias_zero
 else 
  echo "Please define HOMEgfs and PTMP for your machine. exit"
  exit
