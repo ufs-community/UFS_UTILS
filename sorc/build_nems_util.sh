@@ -22,7 +22,7 @@ if [ ! -d "../exec" ]; then
   mkdir ../exec
 fi
 
-for prog in nemsio_get.fd  nemsio_read.fd nemsio_chgdate.fd ;do
+for prog in nemsio_get.fd  nemsio_read.fd nemsio_chgdate.fd mkgfsnemsioctl.fd ;do
  cd ${cwd}/${prog}
  make -f makefile
 done
