@@ -45,17 +45,9 @@ elif [ $machine = "jet" ]; then
     FIX_DIR="/lfs3/projects/hfv3gfs/glopara/git/fv3gfs/fix"
 fi
 cd ${pwd}/../fix                ||exit 8
-for dir in fix_am fix_fv3 fix_orog fix_fv3_gmted2010 ; do
+for dir in fix_am fix_fv3 fix_orog fix_fv3_gmted2010 fix_sfc_climo; do
     [[ -d $dir ]] && rm -rf $dir
     $LINK $FIX_DIR/$dir  .
 done
-
-if [ $machine == "cray" ] || [ $machine = "dell" ]; then
-    $LINK /gpfs/dell2/emc/modeling/noscrub/George.Gayno/landutil.git/climo_fields_netcdf ./fix_sfc_climo
-elif [ $machine = "hera" ]; then
-    $LINK /scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/climo_fields_netcdf ./fix_sfc_climo
-elif [ $machine = "jet" ]; then
-    $LINK /mnt/lfs3/projects/emcda/George.Gayno/climo_fields_netcdf ./fix_sfc_climo
-fi
 
 exit 0
