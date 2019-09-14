@@ -16,6 +16,6 @@ export IP_LIBd=${NCEPLIBS}/ip/libip_v3.0.1_d.a
 export SP_LIBd=${NCEPLIBS}/sp/libsp_v2.0.2_d.a
 
 export FCOMP=mpiifort
-export FFLAGS="-O3 -fp-model source -g -traceback -r8 -i4 -openmp -convert big_endian -assume byterecl"
+export FFLAGS="-O3 -fp-model source -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
 # for debugging
-#export FFLAGS="-O0 -g -traceback -r8 -i4 -openmp -convert big_endian -check bounds -warn unused -assume byterecl"
+#export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"

@@ -32,8 +32,8 @@ export FCMP95=$FCMP
 
 export FFLAGSM=${FFLAGSM:-"-i4 -O3 -r8 -convert big_endian -fp-model precise"}
 export RECURS=
-export LDFLAGSM=${LDFLAGSM:-"-openmp -auto"}
-export OMPFLAGM=${OMPFLAGM:-"-openmp -auto"}
+export LDFLAGSM=${LDFLAGSM:-"-qopenmp -auto"}
+export OMPFLAGM=${OMPFLAGM:-"-qopenmp -auto"}
 
 export INCS="-I${SIGIO_INC4} -I${SFCIO_INC4} -I${LANDSFCUTIL_INCd} \
              -I${NEMSIO_INC} -I${NEMSIOGFS_INC} -I${GFSIO_INC4} -I${IP_INCd} ${NETCDF_INCLUDE}"
