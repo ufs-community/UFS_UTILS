@@ -1,0 +1,16 @@
+#%Module#####################################################
+## Module file for regional_grid (Hera)
+#############################################################
+module load intel/18.0.5.274
+module load impi/2018.0.4
+
+module load netcdf/4.6.1
+module load hdf5/1.10.4
+
+export FC=ifort
+export FFLAGS="-O2 -g"
+
+export NETCDF_INCLUDE="-I${NETCDF}/include"
+export NETCDF_LDFLAGS="-L${NETCDF}/lib -lnetcdf -lnetcdff"
+export HDF5_LDFLAGS="-L${HDF5}/lib -lhdf5 -lhdf5_fortran"
+

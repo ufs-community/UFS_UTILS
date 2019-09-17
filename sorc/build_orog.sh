@@ -15,7 +15,7 @@ if [ $USE_PREINST_LIBS = true ]; then
   elif [ $target = jet ]; then
     export MOD_PATH=/mnt/lfs3/projects/hfv3gfs/nwprod/lib/modulefiles
   else
-    export MOD_PATH=/scratch3/NCEPDEV/nwprod/lib/modulefiles
+    export MOD_PATH=/scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
   fi
   source ../modulefiles/fv3gfs/orog.$target             > /dev/null 2>&1
 else
@@ -49,7 +49,7 @@ elif [ $target = jet ]; then
  INCS="-I${NETCDF}/include"
  export LIBSM="${BACIO_LIB4} ${W3NCO_LIBd} ${IP_LIBd} ${SP_LIBd} -L${NETCDF}/lib -lnetcdff -lnetcdf"
  export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl ${INCS}"
-elif [ $target = theia ]; then
+elif [ $target = hera ]; then
  INCS="-I${NETCDF}/include"
  export LIBSM="${BACIO_LIB4} ${W3NCO_LIBd} ${IP_LIBd} ${SP_LIBd} -L${NETCDF}/lib -lnetcdff -lnetcdf"
  export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl ${INCS}"

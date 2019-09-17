@@ -3,13 +3,13 @@
 #############################################################
 
 # Loading Intel Compiler Suite
-module load intel/14.0.2
-module load impi/5.1.2.150
+module load intel/18.0.5.274
+module load impi/2018.0.4
 
 # Loding nceplibs modules
 module use -a $MOD_PATH
-module load w3nco/v2.0.6
-module load bacio/v2.0.1
-module load nemsio/v2.2.1
+module load w3nco/2.0.6
+module load bacio/2.0.2
+module load nemsio/2.2.3
 
 export FCMP=ifort
