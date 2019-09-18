@@ -15,7 +15,7 @@ module use "$HOMEgfs/modulefiles"
 if [[ -d /lfs3 ]] ; then
     # We are on NOAA Jet
 	module load module_base.jet 
-elif [[ `hostname -a` == *"hera.fairmont.rdhpcs.noaa.gov"* ]] ; then
+elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
 	module load module_base.hera
 elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
