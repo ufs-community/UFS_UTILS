@@ -14,9 +14,8 @@ module load sp/2.0.3
 module load sfcio/1.1.1
 module load sigio/2.1.1
 
-export NCEPLIBS=/scratch1/NCEPDEV/global/gwv/l819/lib
-module use -a $NCEPLIBS/modulefiles
-module load esmflocal/8_0_44b
+module use -a /scratch1/NCEPDEV/nems/emc.nemspara/soft/modulefiles
+module load esmf/8.0.0bs48
 
 export FCOMP=mpiifort
 export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
