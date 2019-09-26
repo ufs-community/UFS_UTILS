@@ -3931,8 +3931,8 @@ cc
       real(kind=8) dloin,dlain,rlon,rlat
 cc
       open(235, file="./fort.235", access='direct', recl=43200*21600*2)
-           read(235,rec=1)glob
-         rewind(235)
+      read(235,rec=1)glob
+      close(235)
 cc
 cc
       print*,' '
