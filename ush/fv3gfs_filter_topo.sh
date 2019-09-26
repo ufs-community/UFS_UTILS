@@ -1,5 +1,5 @@
-#!/bin/ksh
-set -ax
+#!/bin/sh
+set -eux
 
 if [ $# -ne 9 ]; then
    set +x

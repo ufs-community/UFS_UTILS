@@ -1,5 +1,5 @@
-#!/bin/ksh
-set -ax
+#!/bin/sh
+set -eux
 
 nargv=$#
 
@@ -90,20 +90,19 @@ cd $workdir
 #  cp /home/z1l/GFS_tools/orog/a_ocean_mask${lonb}x${latb}.txt  fort.25
 #  cp $MTN_SLM fort.14
 
-  cp ${indir}/thirty.second.antarctic.new.bin fort.15
-  cp ${indir}/landcover30.fixed .
+  ln -sf ${indir}/thirty.second.antarctic.new.bin fort.15
+  ln -sf ${indir}/landcover30.fixed .
 #  uncomment next line to use the old gtopo30 data.
-#   cp ${indir}/gtopo30_gg.fine.nh  fort.235
+#   ln -sf ${indir}/gtopo30_gg.fine.nh  fort.235
 #  use gmted2020 data.
-  cp ${indir}/gmted2010.30sec.int  fort.235
+  ln -sf ${indir}/gmted2010.30sec.int  fort.235
   if [ $inorogexist -eq 1 ]; then
      cp $inputorog .
-  fi   
-     
+  fi
+
   if [ $is_latlon -eq 0 ]; then
      cp ${griddir}/$OUTGRID .
   fi
-  cp $executable .
 
   echo  $mtnres $lonb $latb $jcap $NR $NF1 $NF2 $efac $blat > INPS
   echo $OUTGRID >> INPS

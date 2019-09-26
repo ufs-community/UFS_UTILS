@@ -32,7 +32,7 @@
 # ./driver_scripts.
 #-----------------------------------------------------------------------
 
-set -ax
+set -eux
 
 export machine=${machine:?}
 
