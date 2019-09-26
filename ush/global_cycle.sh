@@ -234,6 +234,7 @@ HOMEgfs=${HOMEgfs:-$BASEDIR/gfs_ver.${gfs_ver}}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 FIXfv3=${FIXfv3:-$HOMEgfs/fix/fix_fv3_gmted2010/$CASE}
 FIXam=${FIXam:-$HOMEgfs/fix/fix_am}
+FIXsst=${FIXsst:-/scratch4/NCEPDEV/da/noscrub/Xu.Li/data/rtgsst/fix}
 DATA=${DATA:-$(pwd)}
 COMIN=${COMIN:-$(pwd)}
 COMOUT=${COMOUT:-$(pwd)}
@@ -272,6 +273,7 @@ MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
 FNGLAC=${FNGLAC:-${FIXam}/global_glacier.2x2.grb}
 FNMXIC=${FNMXIC:-${FIXam}/global_maxice.2x2.grb}
 FNTSFC=${FNTSFC:-${FIXam}/RTGSST.1982.2012.monthly.clim.grb}
+FNSALC=${FNSALC:-${FIXsst}/global_salclm.t1534.3072.1536.nc}
 FNSNOC=${FNSNOC:-${FIXam}/global_snoclim.1.875.grb}
 FNZORC=${FNZORC:-igbp}
 FNALBC2=${FNALBC2:-${FIXam}/global_albedo4.1x1.grb}
@@ -286,7 +288,7 @@ FNABSC=${FNABSC:-${FIXam}/global_mxsnoalb.uariz.t$JCAP_CASE.$LONB_CASE.$LATB_CAS
 FNVMNC=${FNVMNC:-${FIXam}/global_shdmin.0.144x0.144.grb}
 FNVMXC=${FNVMXC:-${FIXam}/global_shdmax.0.144x0.144.grb}
 FNSLPC=${FNSLPC:-${FIXam}/global_slope.1x1.grb}
-FNMSKH=${FNMSKH:-${FIXam}/seaice_newland.grb}
+FNMSKH=${FNMSKH:-${FIXam}/global_slmask.t1534.3072.1536.grb}
 GSI_FILE=${GSI_FILE:-"NULL"}
 FNTSFA=${FNTSFA:-${COMIN}/${PREINP}sstgrb${SUFINP}}
 FNACNA=${FNACNA:-${COMIN}/${PREINP}engicegrb${SUFINP}}
@@ -314,6 +316,9 @@ else
 fi
 cd $DATA||exit 99
 [[ -d $COMOUT ]]||mkdir -p $COMOUT
+
+ln -fs $FNTSFC sstclm
+ln -fs $FNSALC salclm
 
 # If the appropriate resolution fix file is not present, use the highest resolution available (T1534)
 [[ ! -f $FNALBC ]] && FNALBC="$FIXam/global_snowfree_albedo.bosu.t1534.3072.1536.rg.grb"
