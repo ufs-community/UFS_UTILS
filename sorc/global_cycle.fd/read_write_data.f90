@@ -1573,7 +1573,7 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
   call baopenr(lu_sst,trim(file_sst),iret)
   if (iret /= 0 ) then
      write(6,*)'read_tf_clm_grb:  ***error*** opening sst file'
-     stop
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
   endif
 
 ! define sst variables for read
@@ -1601,14 +1601,14 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
   if (iret /= 0) then
      write(6,*)'read_tf_clm_grb:  ***error*** reading sst analysis data record'
      deallocate(lb,f)
-     stop
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
   endif
 
   if ( (nlat_sst /= mlat_sst) .or. (nlon_sst /= mlon_sst) ) then
      write(6,*)'read_rtg_org:  inconsistent dimensions.  mlat_sst,mlon_sst=',&
           mlat_sst,mlon_sst,' -versus- nlat_sst,nlon_sst=',nlat_sst,nlon_sst
      deallocate(lb,f)
-     stop
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
   endif
 
 !
@@ -1663,7 +1663,7 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
   call baclose(lu_sst,iret)
   if (iret /= 0 ) then
      write(6,*)'read_tf_clm_grb:  ***error*** close sst file'
-     stop
+     CALL MPI_ABORT(MPI_COMM_WORLD, 121)
   endif
   
 end subroutine read_tf_clim_grb
@@ -1709,7 +1709,7 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
   call baopenr(lu_sst,trim(file_sst),iret)
   if (iret /= 0 ) then
      write(6,*)'get_tf_clm_dim:  ***error*** opening sst file'
-     stop
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
   endif
 
 ! define sst variables for read
@@ -1729,7 +1729,7 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
   call baclose(lu_sst,iret)
   if (iret /= 0 ) then
      write(6,*)'get_tf_clm_dim:  ***error*** close sst file'
-     stop
+     CALL MPI_ABORT(MPI_COMM_WORLD, 121)
   endif
 end subroutine get_tf_clm_dim
 
@@ -1845,7 +1845,7 @@ subroutine nc_check(status)
 
   if(status /= nf90_noerr) then
     print *, trim(nf90_strerror(status))
-    stop "Stopped"
+    CALL MPI_ABORT(MPI_COMM_WORLD, 122)
   end if
 end subroutine nc_check
 
