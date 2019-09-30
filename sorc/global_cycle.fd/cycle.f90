@@ -565,7 +565,9 @@
  INTEGER                  :: ITILE, JTILE
  INTEGER                  :: MAX_SEARCH, J
  INTEGER                  :: IGAUSP1, JGAUSP1
- integer                  :: nintp,nset_thaw,nsearched,nfill_clim,nice,nland
+ integer                  :: nintp,nsearched,nice,nland
+ integer                  :: nfill,nfill_tice,nfill_clm
+ integer                  :: nset_thaw,nset_thaw_s,nset_thaw_i,nset_thaw_c
 
  INTEGER, ALLOCATABLE     :: ID1(:,:), ID2(:,:), JDC(:,:)
 
@@ -669,16 +671,23 @@
  PRINT*,'MAXIMUM SEARCH IS ',MAX_SEARCH, ' GAUSSIAN POINTS.'
  PRINT*
 
+!
+! Initialize variables for counts statitics to be zeros
+!
+ nintp = 0
+ nset_thaw = 0
+ nset_thaw_s = 0
+ nset_thaw_i = 0
+ nset_thaw_c = 0
+ nsearched = 0
+ nfill = 0
+ nfill_tice = 0
+ nfill_clm = 0
+ nice = 0
+ nland = 0
 !----------------------------------------------------------------------
 ! TREF INCREMENT WILL BE OUTPUT.  INITIALIZE TO ZERO.
 !----------------------------------------------------------------------
-
- nintp = 0
- nset_thaw = 0
- nsearched = 0
- nfill_clim = 0
- nice = 0
- nland = 0
 
  NSST%TFINC = 0.0
 
@@ -691,6 +700,15 @@
 !  when sea ice exists, get salinity dependent water temperature
 !
    tf_ice = tfreez(sal_clm_tile(ij)) + tzero
+!----------------------------------------------------------------------
+! SKIP LAND POINTS.  NSST NOT APPLIED AT LAND.
+!----------------------------------------------------------------------
+
+   IF (MASK_TILE == 1) THEN
+     nland = nland + 1
+     CYCLE IJ_LOOP  
+   ENDIF
+
 !
 ! these are ice points.  set tref to tf_ice and update tmpsfc.
 !
@@ -702,28 +720,27 @@
      cycle ij_loop
    endif
 
+!
+!  Get i,j index on array of (idim,jdim) from known ij
+!
+   JTILE = (IJ-1) / IDIM + 1
+   ITILE = MOD(IJ,IDIM)
+   IF (ITILE==0) ITILE = IDIM
+
 !----------------------------------------------------------------------
 ! IF THE MODEL POINT WAS ICE COVERED, BUT IS NOW OPEN WATER, SET
-! TREF TO FREEZING, XZ TO '30' AND ALL OTHER FIELDS TO ZERO.
+! TREF TO searched adjascent open water onea, if failed the search, set to
+! weighted average of tf_ice and tf_clm. For NSST vars, set xz TO '30' AND ALL OTHER FIELDS TO ZERO.
 !----------------------------------------------------------------------
 
    IF (MASK_FG_TILE == 2 .AND. MASK_TILE == 0) THEN
 !
 !    set background for the thaw (just melted water) situation
 !
-     call tf_thaw_set(nsst%tref,slmsk_fg_tile,itile,jtile,tf_ice,tf_clm_tile(ij),tf_thaw,idim,jdim)
+     call tf_thaw_set(nsst%tref,nint(slmsk_fg_tile),itile,jtile,tf_ice,tf_clm_tile(ij),tf_thaw,idim,jdim, &
+                      nset_thaw_s,nset_thaw_i,nset_thaw_c)
      call nsst_water_reset(nsst,ij,tf_thaw)
      nset_thaw = nset_thaw + 1
-     CYCLE IJ_LOOP
-   ENDIF
-
-!----------------------------------------------------------------------
-! SKIP LAND POINTS.  NSST NOT APPLIED AT LAND.
-!----------------------------------------------------------------------
-
-   IF (MASK_TILE == 1) THEN
-     nland = nland + 1
-     CYCLE IJ_LOOP  
    ENDIF
 
 !----------------------------------------------------------------------
@@ -734,11 +751,6 @@
 ! IT IS SIMPLY A FILLER VALUE.  THESE FIELDS ARE NOT USED AT
 ! OPEN WATER POINTS.
 !----------------------------------------------------------------------
-
-   JTILE = (IJ-1) / IDIM + 1
-   ITILE = MOD(IJ,IDIM)
-   IF (ITILE==0) ITILE = IDIM
-
 !----------------------------------------------------------------------
 ! SEE IF ANY OF THE NEAREST GSI POINTS MASK AREA OPEN WATER.  
 ! IF SO, APPLY NSST INCREMENT USING BILINEAR INTERPOLATION.
@@ -777,6 +789,7 @@
        WSUM  = WSUM + S2C(ITILE,JTILE,4)
      ENDIF
 
+     nintp = nintp + 1
      DTREF = DTREF / WSUM
 
      TREF_SAVE      = NSST%TREF(IJ)
@@ -875,18 +888,21 @@
 ! ELSE UPDATE TREF BASED ON THE ANNUAL SST CYCLE.
 !----------------------------------------------------------------------
 
-     PRINT*,'WARNING !!!!!! SEARCH FAILED AT TILE POINT ',ITILE,JTILE
+!    PRINT*,'WARNING !!!!!! SEARCH FAILED AT TILE POINT ',ITILE,JTILE
 
+     nfill = nfill  + 1
      IF (IS_ICE) THEN
        NSST%TREF(IJ) = tf_ice
-       PRINT*,"NEARBY ICE.  SET TREF TO FREEZING"
+!      PRINT*,"NEARBY ICE.  SET TREF TO FREEZING"
+       nfill_tice = nfill_tice + 1
      ELSE
        TREF_SAVE      = NSST%TREF(IJ)
        NSST%TREF(IJ)  = NSST%TREF(IJ) + TF_TRD_TILE(IJ)
        NSST%TREF(IJ)  = MAX(NSST%TREF(IJ), tf_ice)
        NSST%TREF(IJ)  = MIN(NSST%TREF(IJ), TMAX)
        NSST%TFINC(IJ) = NSST%TREF(IJ) - TREF_SAVE
-       PRINT*,'UPDATE TREF FROM SST CLIMO ',DTREF
+!      PRINT*,'UPDATE TREF FROM SST CLIMO ',DTREF
+       nfill_clm = nfill_clm + 1
      ENDIF
 
      CALL DTZM_POINT(NSST%XT(IJ),NSST%XZ(IJ),NSST%DT_COOL(IJ),  &
@@ -902,6 +918,14 @@
    ENDIF  ! NEARBY GAUSSIAN POINTS ARE OPEN WATER?
 
  ENDDO IJ_LOOP
+
+ write(*,'(a)') 'statistics of grids number processed for tile : '
+ write(*,'(a,I8)') ' nintp = ',nintp
+ write(*,'(a,4I8)') 'nset_thaw,nset_thaw_s,nset_thaw_i,nset_thaw_c =',nset_thaw,nset_thaw_s,nset_thaw_i,nset_thaw_c
+ write(*,'(a,I8)') ' nsearched = ',nsearched
+ write(*,'(a,3I6)') ' nfill,nfill_tice,nfill_clm = ',nfill,nfill_tice,nfill_clm
+ write(*,'(a,I8)') ' nice = ',nice
+ write(*,'(a,I8)') ' nland = ',nland
 
  DEALLOCATE(ID1, ID2, JDC, S2C)
 
@@ -1222,7 +1246,8 @@
 
  END SUBROUTINE REMAP_COEF
 
- subroutine tf_thaw_set(tf_ij,mask_ij,itile,jtile,tice,tclm,tf_thaw,nx,ny)
+ subroutine tf_thaw_set(tf_ij,mask_ij,itile,jtile,tice,tclm,tf_thaw,nx,ny, &
+                        nset_thaw_s,nset_thaw_i,nset_thaw_c)
 !
 ! set a vakue to tf background for the thaw (just melted water) situation
 !
@@ -1233,27 +1258,28 @@
 !       tice        : water temperature (calulated with a salinity formula)
 !       tclm        : SST climatology valid at the analysis time
 
- real, dimension(nx*ny), intent(in)  :: tf_ij
- real, dimension(nx*ny), intent(in)  :: mask_ij
- real,                   intent(in)  :: tice,tclm
- integer,                intent(in)  :: itile,jtile,nx,ny
- real,                   intent(out) :: tf_thaw
+ real,    dimension(nx*ny), intent(in)    :: tf_ij
+ integer, dimension(nx*ny), intent(in)    :: mask_ij
+ real,                      intent(in)    :: tice,tclm
+ integer,                   intent(in)    :: itile,jtile,nx,ny
+ real,                      intent(out)   :: tf_thaw
+ integer,                   intent(inout) :: nset_thaw_s,nset_thaw_i,nset_thaw_c
 ! Local
  real, parameter :: bmiss = -999.0
- real, dimension(nx,ny) :: tf
- real, dimension(nx,ny) :: mask
+ real,    dimension(nx,ny) :: tf
+ integer, dimension(nx,ny) :: mask
  integer :: krad,max_search,istart,iend,jstart,jend
  integer :: ii,jj,iii,jjj
  logical :: is_ice
 
- max_search = max(nx/40,4)
+ max_search = 2
 
  mask(:,:) = reshape(mask_ij,(/nx,ny/) )
  tf(:,:)   = reshape(tf_ij,(/nx,ny/) )
 
  tf_thaw = bmiss
 
- srh_loop: do krad = 1, max_search
+ do krad = 1, max_search
 
     istart = itile - krad
     iend   = itile + krad
@@ -1263,13 +1289,6 @@
     do jj = jstart, jend
        do ii = istart, iend
 
-!----------------------------------------------------------------------
-! SEE IF NEARBY POINTS ARE SEA ICE.  IF THEY ARE, AND THE SEARCH FOR
-! A GAUSSIAN GRID OPEN WATER POINT FAILS, THEN TREF WILL BE SET TO
-! FREEZING BELOW.
-!----------------------------------------------------------------------
-
-          if (krad <= 2 .and. mask(iii,jjj) == 2.0) is_ice = .true.
 
           if ((jj == jstart) .or. (jj == jend) .or.   &
               (ii == istart) .or. (ii == iend))  then
@@ -1284,22 +1303,37 @@
                    iii = ii
                 endif
 
-                if (mask(iii,jjj) == 0.0) then
+!----------------------------------------------------------------------
+! SEE IF NEARBY POINTS ARE SEA ICE.  IF THEY ARE, AND THE SEARCH FOR
+! A GAUSSIAN GRID OPEN WATER POINT FAILS, THEN TREF WILL BE SET TO
+! FREEZING BELOW.
+!----------------------------------------------------------------------
+                if (krad <= 2 .and. mask(iii,jjj) == 2) is_ice = .true.
+
+                if (mask(iii,jjj) == 0) then
                    tf_thaw = tf(iii,jjj)
-                   cycle srh_loop
+                   nset_thaw_s = nset_thaw_s + 1
+                   write(*,'(a,I4,2F9.3)') 'nset_thaw_s,tf(iii,jjj),tclm : ',nset_thaw_s,tf(iii,jjj),tclm
+                   go to 100
                 endif ! tile mask is open water
 
              endif
           endif
        enddo
     enddo
- enddo srh_loop ! krad loop
+ enddo  ! krad loop
+
+ 100 continue
 
  if ( tf_thaw == bmiss ) then
     if (is_ice) then
-       tf_thaw = tf_ice
+       tf_thaw = tice
+       nset_thaw_i = nset_thaw_i + 1
+       write(*,'(a,I4,F9.3)') 'nset_thaw_i,tf_ice : ',nset_thaw_i,tice
     else
        tf_thaw = 0.8*tice+0.2*tclm
+       nset_thaw_c = nset_thaw_c + 1
+       write(*,'(a,I4,2F9.3)') 'nset_thaw_c,tf_ice,tclm : ',nset_thaw_c,tice,tclm
     endif
  endif
 
@@ -1358,11 +1392,13 @@ subroutine get_tf_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,tf_clm,tf_trd)
  real,    dimension(nx,ny), intent(out) :: tf_trd     ! 6-hourly sst climatology tendency valid at atime (nx,ny)
  integer, intent(in) :: iy,im,id,ih,nx,ny
 ! local declare
- real,    allocatable, dimension(:,:)   :: tf_clm0    ! sst climatology at the valid time
+ real,    allocatable, dimension(:,:)   :: tf_clm0    ! sst climatology at the valid time (nxc,nyc)
+ real,    allocatable, dimension(:,:)   :: tf_trd0    ! 6-hourly sst climatology tendency valid at atime (nxc,nyc)
  real,    allocatable, dimension(:)     :: cxlats     ! latitudes of sst climatology
  real,    allocatable, dimension(:)     :: cxlons     ! longitudes of sst climatology
 
  real,    dimension(nx*ny)  :: tf_clm_ij  ! sst climatology at target grids (nx*ny)
+ real,    dimension(nx*ny)  :: tf_trd_ij  ! 6-hourly sst climatology tendency 
  real :: wei1,wei2
  integer :: nxc,nyc,mon1,mon2,i,j
  character (len=6), parameter :: fin_tf_clm='sstclm' ! sst climatology file name
@@ -1374,25 +1410,28 @@ subroutine get_tf_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,tf_clm,tf_trd)
 ! get the dimensions of the sst climatology & allocate the related arrays
 !
  call get_tf_clm_dim(fin_tf_clm,nyc,nxc)
- allocate( tf_clm0(nxc,nyc),cxlats(nyc),cxlons(nxc) )
+ allocate( tf_clm0(nxc,nyc),tf_trd0(nxc,nyc),cxlats(nyc),cxlons(nxc) )
 !
 ! get tf_clm at the analysis time from monthly climatology & cxlats, cxlons
 !
- call get_tf_clm_ta(tf_clm0,tf_trd,cxlats,cxlons,nyc,nxc,mon1,mon2,wei1,wei2)
+ call get_tf_clm_ta(tf_clm0,tf_trd0,cxlats,cxlons,nyc,nxc,mon1,mon2,wei1,wei2)
 !
 ! get tf_clm (nx by ny lat/lon) valid at atime
 !
  if ( nx == nxc .and. ny == nyc ) then
     tf_clm(:,:) = tf_clm0(:,:)
+    tf_trd(:,:) = tf_trd0(:,:)
 !   write(*,'(a,2f9.3)') 'same dimensions, tf_clm, min : ',minval(tf_clm),maxval(tf_clm)
  else
 !   write(*,'(a,4i8)') 'different dimensions,nx,ny,nxc,nyc : ',nx,ny,nxc,nyc
     call intp_tile(tf_clm0,  cxlats,  cxlons,  nyc, nxc, &
                    tf_clm_ij,xlats_ij,xlons_ij,ny,  nx)
+    call intp_tile(tf_trd0,  cxlats,  cxlons,  nyc, nxc, &
+                   tf_trd_ij,xlats_ij,xlons_ij,ny,  nx)
 !   write(*,'(a,2f9.3)') 'tf_clm0, min, max                        : ',minval(tf_clm0),maxval(tf_clm0)
-!   write(*,'(a,2f9.3)') 'done with intp_tile for tf_clm, min, max : ',minval(tf_clm_ij),maxval(tf_clm_ij)
 
     tf_clm(:,:) = reshape (tf_clm_ij, (/nx,ny/) )
+    tf_trd(:,:) = reshape (tf_trd_ij, (/nx,ny/) )
  endif
 
 end subroutine get_tf_clm
@@ -1433,6 +1472,8 @@ subroutine get_tf_clm_ta(tf_clm_ta,tf_clm_trend,xlats,xlons,nlat,nlon,mon1,mon2,
 !
    tf_clm_trend(:,:) = (tf_clm2(:,:)-tf_clm1(:,:))/120.0
 
+   write(*,'(a,2f9.3)') 'tf_clm_ta, min, max : ',minval(tf_clm_ta),maxval(tf_clm_ta)
+   write(*,'(a,2f9.3)') 'tf_clm_trend, min, max : ',minval(tf_clm_trend),maxval(tf_clm_trend)
  end subroutine get_tf_clm_ta
 
 subroutine get_sal_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,sal_clm)
@@ -1519,7 +1560,7 @@ subroutine get_sal_clm_ta(sal_clm_ta,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
 !  sal_clim at the analysis time
 !
    sal_clm_ta(:,:) = wei1*sal_clm1(:,:)+wei2*sal_clm2(:,:)
-
+   write(*,'(a,2f9.3)') 'sal_clm_ta, min, max : ',minval(sal_clm_ta),maxval(sal_clm_ta)
  end subroutine get_sal_clm_ta
 
 subroutine intp_tile(tf_lalo,dlats_lalo,dlons_lalo,jdim_lalo,idim_lalo, &
@@ -1594,7 +1635,7 @@ subroutine intp_tile(tf_lalo,dlats_lalo,dlons_lalo,jdim_lalo,idim_lalo, &
  call remap_coef( 1, idim_tile, 1, jdim_tile, idim_lalo, jdim_lalo, &
                   xlons_lalo, xlats_lalo, id1, id2, jdc, s2c, agrid )
 
- ij_loop : do ij = 1, jdim_tile*idim_tile
+ do ij = 1, jdim_tile*idim_tile
 
     jtile = (ij-1)/idim_tile + 1
     itile = mod(ij,idim_tile)
@@ -1612,8 +1653,7 @@ subroutine intp_tile(tf_lalo,dlats_lalo,dlons_lalo,jdim_lalo,idim_lalo, &
                      s2c(itile,jtile,2)*tf_lalo(ilalop1,jlalo)   + &
                      s2c(itile,jtile,3)*tf_lalo(ilalop1,jlalop1) + &
                      s2c(itile,jtile,4)*tf_lalo(ilalo,jlalop1) )/wsum
-
- enddo ij_loop
+ enddo
 
  deallocate(id1, id2, jdc, s2c)
 
