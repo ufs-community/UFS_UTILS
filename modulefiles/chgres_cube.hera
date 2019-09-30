@@ -15,7 +15,7 @@ module load sigio/2.1.0
 
 export NCEPLIBS=/scratch1/NCEPDEV/global/gwv/l819/lib
 module use -a $NCEPLIBS/modulefiles
-module load esmflocal/8_0_44b
+module load esmflocal/8_0_48b.netcdf47
 
 export FCOMP=mpiifort
 export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
