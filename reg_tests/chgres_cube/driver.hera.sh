@@ -28,7 +28,7 @@ source /apps/lmod/lmod/init/sh
 module purge
 module load intel/18.0.5.274
 module load impi/2018.0.4
-module load netcdf/4.6.1
+module load netcdf/4.7.0
 module list
 
 export OUTDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/chgres_reg_tests
