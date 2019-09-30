@@ -1542,6 +1542,8 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
 !$$$
   implicit none
 
+  include "mpif.h"
+
 ! declare passed variables and arrays
   character(*)                       , intent(in   ) :: file_sst
   integer                            , intent(in   ) :: mon,mlat_sst,mlon_sst
@@ -1689,6 +1691,8 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
 !
 !$$$
   implicit none
+
+  include "mpif.h"
 
 ! declare passed variables and arrays
   character(*)                                   , intent(in ) :: file_sst
@@ -1840,6 +1844,8 @@ end subroutine get_dim_nc
 subroutine nc_check(status)
 
   use netcdf
+
+  include "mpif.h"
 
   integer, intent ( in) :: status
 
