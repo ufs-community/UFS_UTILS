@@ -715,7 +715,6 @@
    if (mask_tile == 2) then
      nsst%tref(ij)=tf_ice      ! water part tmp set
      skint_tile(ij)=(1.0-sice_tile(ij))*nsst%tref(ij)+sice_tile(ij)*sicet_tile(ij)
-     soilt_tile(ij,:)=skint_tile(ij)       ! set soilt_tile
      nice = nice + 1
      cycle ij_loop
    endif
