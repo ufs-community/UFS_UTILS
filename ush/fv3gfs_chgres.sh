@@ -12,7 +12,7 @@
 #  - Uncomment the job cards for your machine.  Ensure the
 #    'machine' variable is uncommented.  Ensure job cards for
 #    the other machines are prefixed by "##".  
-#  - Check the job card account.  On Theia, this is 
+#  - Check the job card account.  On Hera, this is 
 #    "#SBATCH -q $account".  On WCOSS, this is "#BSUB -P $account".
 #    You may not have permissions to run under the default account.
 #  - Make sure you have linked the 'fixed' directories using
@@ -30,7 +30,7 @@
 #      CDATE     - year/month/day/hour of your experiment.
 #      HOMEgfs   - Path to your checkout repository.
 #  - Start the script as follows:
-#      Theia: "sbatch fv3gfs_chgres.sh"
+#      Hera: "sbatch fv3gfs_chgres.sh"
 #      WCOSS Dell and Cray: "cat fv3gfs_chgres.sh | bsub"
 #
 #------------------------------------------------------------------------
@@ -59,7 +59,7 @@ export machine=WCOSS_DELL_P3
 ##BSUB -extsched 'CRAYLINUX[]'
 #export machine=WCOSS_C
 
-#---- THEIA JOBCARD
+#---- Hera JOBCARD
 #---- Submit as: sbatch $script
 ##SBATCH -J fv3_chgres_driver
 ##SBATCH -A fv3-cpu
@@ -68,13 +68,13 @@ export machine=WCOSS_DELL_P3
 ##SBATCH -e log.chgres
 ##SBATCH --nodes=1
 ##SBATCH -q batch
-##SBATCH -t 02:00:00
-#export machine=THEIA
+##SBATCH -t 03:00:00
+#export machine=HERA
 
 set -x
 
 export PSLOT=fv3test
-export CDUMP=gdas
+export CDUMP=gfs
 export CASE_HIGH=C768
 export CASE_ENKF=C384
 export CDATE=2019061000
@@ -87,10 +87,10 @@ elif [ $machine = WCOSS_DELL_P3 ]; then
  export HOMEgfs=$LS_SUBCWD/..
  export PTMP=${PTMP:-"/gpfs/dell2/ptmp/$USER"}
  export zero_bias_dir=/gpfs/hps3/emc/global/noscrub/emc.glopara/ICS/bias_zero
-elif [ $machine = THEIA ]; then
+elif [ $machine = HERA ]; then
  export HOMEgfs=$SLURM_SUBMIT_DIR/..
- export PTMP=${PTMP:-"/scratch3/NCEPDEV/stmp1/$USER"}
- export zero_bias_dir=/scratch4/NCEPDEV/global/save/glopara/git/bias_zero
+ export PTMP=${PTMP:-"/scratch2/NCEPDEV/stmp1/$USER"}
+ export zero_bias_dir=/scratch1/NCEPDEV/global/glopara/bias_zero
 else 
  echo "Please define HOMEgfs and PTMP for your machine. exit"
  exit
@@ -132,45 +132,28 @@ status=$?
 [[ $status -ne 0 ]] && exit $status
 
 if [ $machine = WCOSS_C ]; then
- # . $MODULESHOME/init/sh                 2>>/dev/null
- # module load prod_util prod_envir hpss  2>>/dev/null
- # module load PrgEnv-intel               2>>/dev/null
  export KMP_AFFINITY=disabled
  export OMP_NUM_THREADS_CH=24
  export APRUNC="aprun -n 1 -N 1 -j 1 -d $OMP_NUM_THREADS_CH -cc depth"
  export APRUNTF='aprun -q -j1 -n1 -N1 -d1 -cc depth'
- export SUB=/u/emc.glopara/bin/sub_wcoss_c
+ export SUB=$LS_SUBCWD/../util/sub_wcoss_c
  export ACCOUNT=FV3GFS-T2O
  export QUEUE=dev
  export QUEUE_TRANS=dev_transfer 
 elif [ $machine = WCOSS_DELL_P3 ]; then
- # . /usrx/local/prod/lmod/lmod/init/sh   2>>/dev/null
- # module purge                           2>>/dev/null
- # module load EnvVars/1.0.2              2>>/dev/null
- # module load lsf/10.1                   2>>/dev/null
- # module load ips/18.0.1.163             2>>/dev/null
- # module load impi/18.0.1                2>>/dev/null
- # module load prod_util/1.1.0            2>>/dev/null
- # module load prod_envir/1.0.2           2>>/dev/null
- # module load HPSS/5.0.2.5               2>>/dev/null
- # module load NetCDF/4.5.0               2>>/dev/null
- # module load HDF5-serial/1.10.1         2>>/dev/null
  export OMP_NUM_THREADS_CH=14
  export KMP_AFFINITY=disabled
  export APRUNC="time"
  export APRUNTF="time"
- export SUB=/u/emc.glopara/bin/sub_wcoss_d
+ export SUB=$LS_SUBCWD/../util/sub_wcoss_d
  export ACCOUNT=FV3GFS-T2O
  export QUEUE=dev
  export QUEUE_TRANS=dev_transfer 
-elif [ $machine = THEIA ]; then
- # source $HOMEgfs/sorc/machine-setup.sh
- # module use -a /scratch3/NCEPDEV/nwprod/lib/modulefiles
- # module load netcdf hdf5/1.8.14    2>>/dev/null
+elif [ $machine = HERA ]; then
  export APRUNC=time
  export APRUNTF=time
  export OMP_NUM_THREADS_CH=24
- export SUB=/home/glopara/bin/sub_slurm
+ export SUB=$SLURM_SUBMIT_DIR/../util/sub_slurm
  export ACCOUNT=fv3-cpu
  export QUEUE=batch
  export QUEUE_TRANS=batch
@@ -420,19 +403,6 @@ fi
 cat > read_hpss.sh <<EOF
 
    . $HOMEgfs/ush/load_fv3gfs_modules.sh   2>>/dev/null
-
-   #export machine=$machine
-   #if [ $machine = WCOSS_C ]; then
-   # . $MODULESHOME/init/sh                 2>>/dev/null
-   # module load hpss  2>>/dev/null
-   #elif [ $machine = WCOSS_DELL_P3 ]; then
-   # . /usrx/local/prod/lmod/lmod/init/sh   2>>/dev/null
-   # module load HPSS/5.0.2.5               2>>/dev/null
-   #elif [ $machine = THEIA ]; then
-   # source $HOMEgfs/sorc/machine-setup.sh  2>>/dev/null
-   # module use -a /scratch3/NCEPDEV/nwprod/lib/modulefiles  2>>/dev/null
-   # module load hpss                       2>>/dev/null
-   #fi
 
    cd $INIDIR
    htar -xvf  $HPSSPATH/$tarball_enkf_atm 
