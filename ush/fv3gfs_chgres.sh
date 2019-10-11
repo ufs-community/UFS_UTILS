@@ -68,7 +68,7 @@ export machine=WCOSS_DELL_P3
 ##SBATCH -e log.chgres
 ##SBATCH --nodes=1
 ##SBATCH -q batch
-##SBATCH -t 02:00:00
+##SBATCH -t 03:00:00
 #export machine=HERA
 
 set -x

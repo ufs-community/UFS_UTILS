@@ -10,14 +10,8 @@ cwd=`pwd`
 
 USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}
 if [ $USE_PREINST_LIBS = true ]; then
-  if [ $target = odin ]; then
-    export MOD_PATH=/oldscratch/ywang/external/modulefiles
-  elif [ $target = jet ]; then
-    export MOD_PATH=/mnt/lfs3/projects/hfv3gfs/nwprod/lib/modulefiles
-  else
-    export MOD_PATH=/scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
-  fi
-  source ../modulefiles/fv3gfs/orog.$target             > /dev/null 2>&1
+  export MOD_PATH
+  source ../modulefiles/fv3gfs/orog.$target           > /dev/null 2>&1
 else
   export MOD_PATH=${cwd}/lib/modulefiles
   if [ $target = wcoss_cray ]; then
