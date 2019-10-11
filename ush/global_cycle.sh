@@ -58,9 +58,9 @@
 #     FNMXIC        Input maximum sea ice climatology GRIB file.
 #                   Defaults to ${FIXam}/global_maxice.2x2.grb
 #     FNTSFC        Input SST climatology GRIB file.
-#                   Defaults to ${FIXam}/global_salclm.t1534.3072.1536.nc
-#     FNSALC        Input Salinity climatology netcdf file.
 #                   Defaults to ${FIXam}/RTGSST.1982.2012.monthly.clim.grb
+#     FNSALC        Input Salinity climatology netcdf file.
+#                   Defaults to ${FIXam}/global_salclm.t1534.3072.1536.nc
 #     FNSNOC        Input snow climatology GRIB file.
 #                   Defaults to ${FIXam}/global_snoclim.1.875.grb
 #     FNZORC        Input roughness climatology.
