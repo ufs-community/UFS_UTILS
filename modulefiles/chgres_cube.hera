@@ -17,6 +17,11 @@ module load sigio/2.1.1
 module use -a /scratch1/NCEPDEV/nems/emc.nemspara/soft/modulefiles
 module load esmf/8.0.0bs48
 
+module load wgrib2/2.0.8
+export WGRIB2API_LIB="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib/libwgrib2_api.a"
+export WGRIB2API_INC="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib"
+export WGRIB2_LIB="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib/libwgrib2.a"
+
 export FCOMP=mpiifort
 export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
 # for debugging
