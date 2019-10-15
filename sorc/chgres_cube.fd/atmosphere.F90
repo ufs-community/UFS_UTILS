@@ -182,7 +182,7 @@
 
    call ESMF_FieldRegridStore(temp_input_grid, &
                               temp_b4adj_target_grid, &
-                              polemethod=ESMF_POLEMETHOD_NONE, &
+                              polemethod=ESMF_POLEMETHOD_ALLAVG, &
                               srctermprocessing=isrctermprocessing, &
                               extrapmethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                               routehandle=regrid_bl, &
@@ -333,7 +333,7 @@
  print*,"- CALL FieldRegridStore FOR 3D-WIND WEST EDGE."
  call ESMF_FieldRegridStore(wind_target_grid, &
                             wind_w_target_grid, &
-                            polemethod=ESMF_POLEMETHOD_NONE, &
+                            polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
                             extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             routehandle=regrid_bl, &
@@ -360,7 +360,7 @@
  print*,"- CALL FieldRegridStore FOR 3D-WIND SOUTH EDGE."
  call ESMF_FieldRegridStore(wind_target_grid, &
                             wind_s_target_grid, &
-                            polemethod=ESMF_POLEMETHOD_NONE, &
+                            polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
                             extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             routehandle=regrid_bl, &
