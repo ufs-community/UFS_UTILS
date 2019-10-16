@@ -85,7 +85,8 @@ mkdir -p $out_dir $TMPDIR
 cd $TMPDIR ||exit 8
 
 #----------------------------------------------------------------------------------------
-# filter_topo parameters. C192->50km, C384->25km, C768->13km, C1152->8.5km, C3072->3.2km
+# filter_topo parameters. C48->200km, C96->100km, C192->50km, C384->25km, C768->13km, 
+# C1152->8.5km, C1536->6.5km, C2304->4.3km, C3072->3.2km, C4608->2.1km, C6144->1.6km
 #----------------------------------------------------------------------------------------
 
 if [ $res -eq 48 ]; then 
@@ -102,8 +103,16 @@ elif [ $res -eq 768 ]; then
   cd4=0.15;  max_slope=0.12; n_del2_weak=16; peak_fac=1.0  
 elif [ $res -eq 1152 ]; then 
   cd4=0.15;  max_slope=0.16; n_del2_weak=20; peak_fac=1.0  
+elif [ $res -eq 1536 ]; then
+  cd4=0.15;  max_slope=0.24; n_del2_weak=20; peak_fac=1.0  
+elif [ $res -eq 2304 ]; then
+  cd4=0.15;  max_slope=0.27; n_del2_weak=22; peak_fac=1.0  
 elif [ $res -eq 3072 ]; then 
   cd4=0.15;  max_slope=0.30; n_del2_weak=24; peak_fac=1.0  
+elif [ $CRES -eq 4608 ]; then 
+  cd4=0.15;  max_slope=0.33; n_del2_weak=26; peak_fac=1.0  
+elif [ $CRES -eq 6144 ]; then 
+  cd4=0.15;  max_slope=0.36; n_del2_weak=28; peak_fac=1.0  
 else
  echo "grid C$res not supported, exit"
  exit 2
