@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #####################################################################################
 # orog using module compile standard
 # 10/10/2016 Fanglin.Yang@noaa.gov:    Create module load version
