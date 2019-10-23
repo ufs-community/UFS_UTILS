@@ -376,7 +376,7 @@
  print*,"- CALL FieldRegridStore FOR NON-MASKED BILINEAR INTERPOLATION."
  call ESMF_FieldRegridStore(t2m_input_grid, &
                             t2m_target_grid, &
-                            polemethod=ESMF_POLEMETHOD_NONE, &
+                            polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
                             routehandle=regrid_bl_no_mask, &
                             regridmethod=method, rc=rc)

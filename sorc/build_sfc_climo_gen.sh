@@ -12,6 +12,7 @@ fi
 module purge
 USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}
 if [ $USE_PREINST_LIBS = true ]; then
+  export MOD_PATH
   source ../modulefiles/modulefile.sfc_climo_gen.${target}             > /dev/null 2>&1
 else
   export MOD_PATH=${cwd}/lib/modulefiles
