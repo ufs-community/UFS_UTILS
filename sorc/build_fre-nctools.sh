@@ -1,7 +1,12 @@
 #!/bin/bash
 set -eux
 
-source ./machine-setup.sh > /dev/null 2>&1
+if [[ $target == "linux.gnu" || $target == "linux.intel" ]]; then
+ unset -f module
+else
+ source ./machine-setup.sh > /dev/null 2>&1
+fi
+
 system_site=$target
 if [ $system_site = "wcoss_cray" ]; then
   system_site=cray

@@ -5,7 +5,12 @@
 #####################################################################################
 set -eux
 
-source ./machine-setup.sh > /dev/null 2>&1
+if [[ $target == "linux.gnu" || $target == "linux.intel" ]]; then
+ unset -f module
+else
+ source ./machine-setup.sh > /dev/null 2>&1
+fi
+
 cwd=`pwd`
 
 USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}

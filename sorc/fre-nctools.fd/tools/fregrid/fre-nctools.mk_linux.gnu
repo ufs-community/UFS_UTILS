@@ -10,7 +10,8 @@
 # Copyright (C) NOAA Geophysical Fluid Dynamics Laboratory, 2009-2010
 # Designed and written by V. Balaji, Amy Langenhorst and Aleksey Yakovlev
 #
-MPICC    := mpicc
+
+MPICC    := mpicc -cc=gcc
 CC       := gcc
 
 CFLAGS   := -O3 -g
