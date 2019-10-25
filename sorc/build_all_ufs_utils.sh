@@ -81,14 +81,6 @@ echo " .... Building cycle .... "
 }
 
 #------------------------------------
-# build gettrk
-#------------------------------------
-$Build_gettrk && {
-echo " .... Building gettrk .... "
-./build_gettrk.sh > $logs_dir/build_gettrk.log 2>&1
-}
-
-#------------------------------------
 # build emcsfc
 #------------------------------------
 $Build_emcsfc && {
@@ -102,6 +94,15 @@ echo " .... Building emcsfc .... "
 $Build_nctools && {
 echo " .... Building fre-nctools .... "
 ./build_fre-nctools.sh > $logs_dir/build_fre-nctools.log 2>&1
+}
+
+#------------------------------------
+# build sfc_climo_gen
+#------------------------------------
+
+$Build_sfc_climo_gen && {
+echo " .... Building sfc_climo_gen .... "
+./build_sfc_climo_gen.sh > $logs_dir/build_sfc_climo_gen.log 2>&1
 }
 
 echo;echo " .... Build system finished .... "

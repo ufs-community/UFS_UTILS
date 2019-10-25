@@ -37,7 +37,9 @@
 #   Input script positional parameters:
 #     1             Input sigma file (SIGINP)
 #     2             Input surface file (SFCINP)
-#     3             Input nst file (NSTINP)
+#     3             Input nst file (NSTINP).  Note: fv3gfs
+#                   places nst data in the surface file.
+#                   Set NSTINP to NULL when using fv3gfs.
 #     4             Output cubed-sphere resolution (CASE)
 #     5             New number of vertical sigma levels (LEVS)
 #
@@ -298,7 +300,7 @@ FNVMNC=${FNVMNC:-${FIXam}/global_shdmin.0.144x0.144.grb}
 FNVMXC=${FNVMXC:-${FIXam}/global_shdmax.0.144x0.144.grb}
 FNSLPC=${FNSLPC:-${FIXam}/global_slope.1x1.grb}
 FNABSC=${FNABSC:-${FIXam}/global_snoalb.1x1.grb}
-FNMSKH=${FNMSKH:-${FIXam}/seaice_newland.grb}
+FNMSKH=${FNMSKH:-${FIXam}/global_slmask.t1534.3072.1536.grb}
 LANDICE_OPT=${LANDICE_OPT:-2}
 CLIMO_FIELDS_OPT=${CLIMO_FIELDS_OPT:-3}
 SOILTYPE_INP=${SOILTYPE_INP:-"zobler"}

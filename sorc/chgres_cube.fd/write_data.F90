@@ -110,6 +110,7 @@
                                    v_s_target_grid, &
                                    u_w_target_grid, &
                                    v_w_target_grid, &
+                                   temp_target_grid, &
                                    zh_target_grid
 
  use model_grid, only            : i_target, ip1_target, j_target, jp1_target
@@ -137,6 +138,8 @@
  integer                        :: id_i_left, id_j_left
  integer                        :: id_ps_bottom, id_ps_top
  integer                        :: id_ps_right, id_ps_left
+ integer                        :: id_t_bottom, id_t_top
+ integer                        :: id_t_right, id_t_left
  integer                        :: id_w_bottom, id_w_top
  integer                        :: id_w_right, id_w_left
  integer                        :: id_zh_bottom, id_zh_top
@@ -196,14 +199,14 @@
    error = nf90_def_dim(ncid, 'lon', i_target, dim_lon)
    call netcdf_err(error, 'defining lon dimension')
 
-   j_target2 = j_target - (2*halo)
+   j_target2 = j_target - (2*halo_bndy)
    error = nf90_def_dim(ncid, 'lat', j_target2, dim_lat)
    call netcdf_err(error, 'DEFINING LAT DIMENSION')
 
    error = nf90_def_dim(ncid, 'lonp', ip1_target, dim_lonp)
    call netcdf_err(error, 'DEFINING LONP DIMENSION')
 
-   j_target2 = jp1_target - (2*halo_p1)
+   j_target2 = j_target - (2*halo_bndy) - 1
    error = nf90_def_dim(ncid, 'latm', j_target2, dim_latm)
    call netcdf_err(error, 'DEFINING LATM DIMENSION')
 
@@ -266,6 +269,22 @@
    error = nf90_def_var(ncid, 'ps_left', NF90_FLOAT, &
                              (/dim_halo, dim_lat/), id_ps_left)
    call netcdf_err(error, 'DEFINING PS_LEFT')
+
+   error = nf90_def_var(ncid, 't_bottom', NF90_FLOAT, &
+                             (/dim_lon, dim_halo, dim_lev/), id_t_bottom)
+   call netcdf_err(error, 'DEFINING T_BOTTOM')
+
+   error = nf90_def_var(ncid, 't_top', NF90_FLOAT, &
+                             (/dim_lon, dim_halo, dim_lev/), id_t_top)
+   call netcdf_err(error, 'DEFINING T_TOP')
+
+   error = nf90_def_var(ncid, 't_right', NF90_FLOAT, &
+                             (/dim_halo, dim_lat, dim_lev/), id_t_right)
+   call netcdf_err(error, 'DEFINING T_RIGHT')
+
+   error = nf90_def_var(ncid, 't_left', NF90_FLOAT, &
+                             (/dim_halo, dim_lat, dim_lev/), id_t_left)
+   call netcdf_err(error, 'DEFINING T_LEFT')
 
    error = nf90_def_var(ncid, 'w_bottom', NF90_FLOAT, &
                              (/dim_lon, dim_halo, dim_lev/), id_w_bottom)
@@ -469,8 +488,10 @@
 
  endif
 
-! Set up bounds.  Indices are with respect to the whole grid -
-! including halo.
+!---------------------------------------------------------------------------
+! Set up bounds for mass points.  Indices are with respect to the whole
+! grid - including total halo (boundary plus blending halo).
+!---------------------------------------------------------------------------
 
  i_start_top = 1
  i_end_top   = i_target
@@ -484,18 +505,18 @@
 
  i_start_left = 1
  i_end_left   = halo
- j_start_left = halo + 1
- j_end_left   = j_target - halo
+ j_start_left = halo_bndy + 1
+ j_end_left   = j_target - halo_bndy
 
  i_start_right = i_target - halo + 1
  i_end_right   = i_target
- j_start_right = halo + 1
- j_end_right   = j_target - halo
+ j_start_right = halo_bndy + 1
+ j_end_right   = j_target - halo_bndy
 
  if (localpet == 0) then
 
-! Indices are with respect to the computational grid -
-! without lateral halo but including blending halo.
+! Indices here are with respect to the computational grid -
+! without lateral boundary halo but including blending halo.
 
    allocate(idum(i_start_top:i_end_top))
    do i = i_start_top, i_end_top
@@ -559,10 +580,10 @@
 
  if (localpet == 0) then
    allocate(data_one_tile(i_target,j_target))
-   allocate(dum2d_top(i_target,halo))
-   allocate(dum2d_bottom(i_target,halo))
-   allocate(dum2d_left(halo, j_target-2*halo))
-   allocate(dum2d_right(halo, j_target-2*halo))
+   allocate(dum2d_top(i_start_top:i_end_top, j_start_top:j_end_top))
+   allocate(dum2d_bottom(i_start_bottom:i_end_bottom, j_start_bottom:j_end_bottom))
+   allocate(dum2d_left(i_start_left:i_end_left, j_start_left:j_end_left))
+   allocate(dum2d_right(i_start_right:i_end_right, j_start_right:j_end_right))
  else
    allocate(data_one_tile(0,0))
    allocate(dum2d_top(0,0))
@@ -599,10 +620,10 @@
 
  if (localpet == 0) then
    allocate(data_one_tile_3d(i_target,j_target,levp1_target))
-   allocate(dum3d_top(i_target,halo,levp1_target))
-   allocate(dum3d_bottom(i_target,halo,levp1_target))
-   allocate(dum3d_left(halo, (j_target-2*halo), levp1_target))
-   allocate(dum3d_right(halo, (j_target-2*halo), levp1_target))
+   allocate(dum3d_top(i_start_top:i_end_top, j_start_top:j_end_top, levp1_target))
+   allocate(dum3d_bottom(i_start_bottom:i_end_bottom, j_start_bottom:j_end_bottom, levp1_target))
+   allocate(dum3d_left(i_start_left:i_end_left, j_start_left:j_end_left, levp1_target))
+   allocate(dum3d_right(i_start_right:i_end_right, j_start_right:j_end_right, levp1_target))
  else
    allocate(data_one_tile_3d(0,0,0))
    allocate(dum3d_top(0,0,0))
@@ -641,10 +662,10 @@
 
  if (localpet == 0) then
    allocate(data_one_tile_3d(i_target,j_target,lev_target))
-   allocate(dum3d_top(i_target,halo,lev_target))
-   allocate(dum3d_bottom(i_target,halo,lev_target))
-   allocate(dum3d_left(halo, (j_target-2*halo), lev_target))
-   allocate(dum3d_right(halo, (j_target-2*halo), lev_target))
+   allocate(dum3d_top(i_start_top:i_end_top, j_start_top:j_end_top, lev_target))
+   allocate(dum3d_bottom(i_start_bottom:i_end_bottom, j_start_bottom:j_end_bottom, lev_target))
+   allocate(dum3d_left(i_start_left:i_end_left, j_start_left:j_end_left, lev_target))
+   allocate(dum3d_right(i_start_right:i_end_right, j_start_right:j_end_right, lev_target))
  else
    allocate(data_one_tile_3d(0,0,0))
    allocate(dum3d_top(0,0,0))
@@ -707,9 +728,38 @@
    call netcdf_err(error, 'WRITING W RIGHT' )
  endif
 
+! Temperature
+
+ print*,"- CALL FieldGather FOR TARGET GRID TEMPERATURE FOR TILE: ", tile
+ call ESMF_FieldGather(temp_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+      call error_handler("IN FieldGather", error)
+
+ if (localpet == 0) then
+   dum3d_top(:,:,:) = data_one_tile_3d(i_start_top:i_end_top,j_start_top:j_end_top,:)
+   dum3d_top(:,:,1:lev_target) = dum3d_top(:,:,lev_target:1:-1) 
+   error = nf90_put_var( ncid, id_t_top, dum3d_top)
+   call netcdf_err(error, 'WRITING T TOP' )
+   dum3d_bottom(:,:,:) = data_one_tile_3d(i_start_bottom:i_end_bottom,j_start_bottom:j_end_bottom,:)
+   dum3d_bottom(:,:,1:lev_target) = dum3d_bottom(:,:,lev_target:1:-1) 
+   error = nf90_put_var( ncid, id_t_bottom, dum3d_bottom)
+   call netcdf_err(error, 'WRITING T BOTTOM' )
+   dum3d_left(:,:,:) = data_one_tile_3d(i_start_left:i_end_left,j_start_left:j_end_left,:)
+   dum3d_left(:,:,1:lev_target) = dum3d_left(:,:,lev_target:1:-1) 
+   error = nf90_put_var( ncid, id_t_left, dum3d_left)
+   call netcdf_err(error, 'WRITING T LEFT' )
+   dum3d_right(:,:,:) = data_one_tile_3d(i_start_right:i_end_right,j_start_right:j_end_right,:)
+   dum3d_right(:,:,1:lev_target) = dum3d_right(:,:,lev_target:1:-1) 
+   error = nf90_put_var( ncid, id_t_right, dum3d_right)
+   call netcdf_err(error, 'WRITING T RIGHT' )
+ endif
+
  deallocate(dum3d_top, dum3d_bottom, dum3d_left, dum3d_right, data_one_tile_3d)
 
-! Set up bounds for staggered 'S' winds
+!---------------------------------------------------------------------------
+! Set up bounds for 's' winds.  Indices are with respect to the whole
+! grid - including total halo (boundary plus blending halo).
+!---------------------------------------------------------------------------
 
  i_start_top = 1
  i_end_top   = i_target
@@ -723,15 +773,19 @@
 
  i_start_left = 1
  i_end_left   = halo
- j_start_left = halo_p1 + 1
- j_end_left   = jp1_target - halo_p1
+ j_start_left = halo_bndy + 2
+ j_end_left   = j_target - halo_bndy
 
  i_start_right = i_target - halo + 1
  i_end_right   = i_target
- j_start_right = halo_p1 + 1
- j_end_right   = jp1_target - halo_p1
+ j_start_right = halo_bndy + 2
+ j_end_right   = j_target - halo_bndy
 
  if (localpet == 0) then
+
+! Indices here are with respect to the computational grid -
+! without lateral boundary halo but including blending halo.
+
    allocate(idum(i_start_top:i_end_top))
    do i = i_start_top, i_end_top
      idum(i) = i - halo_bndy
@@ -794,10 +848,10 @@
 
  if (localpet == 0) then
    allocate(data_one_tile_3d(i_target,jp1_target,lev_target))
-   allocate(dum3d_top(i_target,halo_p1,lev_target))
-   allocate(dum3d_bottom(i_target,halo_p1,lev_target))
-   allocate(dum3d_left(halo, (j_end_left-j_start_left+1), lev_target))
-   allocate(dum3d_right(halo, (j_end_right-j_start_right+1), lev_target))
+   allocate(dum3d_top(i_start_top:i_end_top, j_start_top:j_end_top, lev_target))
+   allocate(dum3d_bottom(i_start_bottom:i_end_bottom, j_start_bottom:j_end_bottom, lev_target))
+   allocate(dum3d_left(i_start_left:i_end_left, j_start_left:j_end_left, lev_target))
+   allocate(dum3d_right(i_start_right:i_end_right, j_start_right:j_end_right, lev_target))
  else
    allocate(data_one_tile_3d(0,0,0))
    allocate(dum3d_top(0,0,0))
@@ -858,7 +912,10 @@
 
  deallocate(dum3d_top, dum3d_bottom, dum3d_left, dum3d_right, data_one_tile_3d)
 
-! Set up bounds for staggered 'W' winds
+!---------------------------------------------------------------------------
+! Set up bounds for 'w' winds.  Indices are with respect to the whole
+! grid - including total halo (boundary plus blending halo).
+!---------------------------------------------------------------------------
 
  i_start_top = 1
  i_end_top   = ip1_target
@@ -872,15 +929,19 @@
 
  i_start_left = 1
  i_end_left   = halo_p1
- j_start_left = halo_p1
- j_end_left   = j_target - halo
+ j_start_left = halo_bndy + 1
+ j_end_left   = j_target - halo_bndy
 
  i_start_right = ip1_target - halo_p1 + 1
  i_end_right   = ip1_target
- j_start_right = halo_p1
- j_end_right   = j_target - halo
+ j_start_right = halo_bndy + 1
+ j_end_right   = j_target - halo_bndy
 
  if (localpet == 0) then
+
+! Indices here are with respect to the computational grid -
+! without lateral boundary halo but including blending halo.
+
    allocate(idum(i_start_top:i_end_top))
    do i = i_start_top, i_end_top
      idum(i) = i - halo_bndy
@@ -943,10 +1004,10 @@
 
  if (localpet == 0) then
    allocate(data_one_tile_3d(ip1_target,j_target,lev_target))
-   allocate(dum3d_top(ip1_target,halo,lev_target))
-   allocate(dum3d_bottom(ip1_target,halo,lev_target))
-   allocate(dum3d_left(halo_p1, (j_end_left-j_start_left+1), lev_target))
-   allocate(dum3d_right(halo_p1, (j_end_right-j_start_right+1), lev_target))
+   allocate(dum3d_top(i_start_top:i_end_top, j_start_top:j_end_top, lev_target))
+   allocate(dum3d_bottom(i_start_bottom:i_end_bottom, j_start_bottom:j_end_bottom, lev_target))
+   allocate(dum3d_left(i_start_left:i_end_left, j_start_left:j_end_left, lev_target))
+   allocate(dum3d_right(i_start_right:i_end_right, j_start_right:j_end_right, lev_target))
  else
    allocate(data_one_tile_3d(0,0,0))
    allocate(dum3d_top(0,0,0))
