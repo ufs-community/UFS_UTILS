@@ -14,7 +14,7 @@
 # Designed and written by V. Balaji, Amy Langenhorst and Aleksey Yakovlev
 #
 
-MPICC    := mpicc -cc=icc
+MPICC    := mpicc
 CC       := icc
 
 CFLAGS   := -O3
