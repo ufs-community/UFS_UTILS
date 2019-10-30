@@ -13,7 +13,7 @@
 #    'machine' variable is uncommented.  Ensure job cards for
 #    the other machines are prefixed by "##".  
 #  - Check the job card account.  On Hera, this is 
-#    "#SBATCH -q $account".  On WCOSS, this is "#BSUB -P $account".
+#    "#SBATCH -A $account".  On WCOSS, this is "#BSUB -P $account".
 #    You may not have permissions to run under the default account.
 #  - Make sure you have linked the 'fixed' directories using
 #    sorc/link_fixdirs.sh.
