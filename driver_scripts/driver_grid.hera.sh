@@ -10,7 +10,7 @@
 #SBATCH -t 00:30:00
 
 #-----------------------------------------------------------------------
-# Driver script to create a cubic-sphere based model grid on Theia.
+# Driver script to create a cubic-sphere based model grid on Hera.
 #
 # Produces the following files (netcdf, each tile in separate file):
 #   1) 'mosaic' and 'grid' files containing lat/lon and other
@@ -53,10 +53,10 @@ set -x
 
 . /apps/lmod/lmod/init/sh
 module purge
-module load intel/16.1.150
-module load impi
-module load hdf5/1.8.14
-module load netcdf/4.3.0
+module load intel/18.0.5.274
+module load impi/2018.0.4
+module load hdf5/1.10.5
+module load netcdf/4.7.0
 module list
 
 #-----------------------------------------------------------------------
@@ -90,8 +90,8 @@ fi
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
-export TMPDIR=/scratch3/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export out_dir=/scratch3/NCEPDEV/stmp1/$LOGNAME/C${res}
+export TMPDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
+export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/C${res}
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
@@ -101,7 +101,7 @@ export APRUN=time
 export APRUN_SFC=srun
 export OMP_NUM_THREADS=24
 export OMP_STACKSIZE=2048m
-export machine=THEIA
+export machine=HERA
 
 ulimit -a
 ulimit -s unlimited
