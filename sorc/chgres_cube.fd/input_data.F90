@@ -2211,7 +2211,7 @@
  type(atmdata), allocatable   :: atm(:)
  
  tracers(:) = "NULL"
- trac_names_grib = (/":SPFH:",":CLMR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
+ trac_names_grib = (/":SPFH:",":CLWMR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
                ":TCDC:", ":NCCICE:",":SPNCR:", ":NCONCD:",":PMTF:",":PMTC:",":TKE:"/)
  trac_names_vmap = (/"sphum", "liq_wat","o3mr","ice_wat", &
                       "rainwat", "snowwat", "graupel", "cld_amt", "ice_nc", &
