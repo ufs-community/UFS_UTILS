@@ -2276,6 +2276,17 @@
       if (localpet==0) print*, "LEVEL = ", slevs(i)
 	enddo
 
+! Jili Dong add sort to re-order isobaric levels
+    call quicksort(rlevs,1,lev_input)
+
+    do i = 1,lev_input
+      write(slevs(i),"(I5)") int(rlevs(i)/100.0)
+      slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
+      if (localpet==0) print*, "level after sort = ",slevs(i)
+    enddo
+! Jili Dong add sort to re-order isobaric levels
+
+
    allocate(vcoord(levp1_input,2))
    if (localpet == 0) print*,"- READ VERTICAL COORDINATE INFO."
    if (localpet == 0) print*, metadata
@@ -5261,5 +5272,36 @@ end subroutine handle_grib_error
  call ESMF_FieldDestroy(terrain_input_grid, rc=rc)
 
  end subroutine cleanup_input_sfc_data
+
+! Jili Dong add sort subroutine 
+! quicksort.f -*-f90-*-
+! Author: t-nissie
+! License: GPLv3
+! Gist: https://gist.github.com/t-nissie/479f0f16966925fa29ea
+!!
+recursive subroutine quicksort(a, first, last)
+  implicit none
+  real*8  a(*), x, t
+  integer first, last
+  integer i, j
+
+  x = a( (first+last) / 2 )
+  i = first
+  j = last
+  do
+     do while (a(i) < x)
+        i=i+1
+     end do
+     do while (x < a(j))
+        j=j-1
+     end do
+     if (i >= j) exit
+     t = a(i);  a(i) = a(j);  a(j) = t
+     i=i+1
+     j=j-1
+  end do
+  if (first < i-1) call quicksort(a, first, i-1)
+  if (j+1 < last)  call quicksort(a, j+1, last)
+end subroutine quicksort
 
  end module input_data
