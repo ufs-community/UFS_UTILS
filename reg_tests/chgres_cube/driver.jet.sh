@@ -34,8 +34,8 @@ module load netcdf/4.2.1.1
 module list
 
 export OUTDIR=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/chgres_reg_tests
-PROJECT_CODE="emcda"
-QUEUE="windfall"
+PROJECT_CODE="hfv3gfs"
+QUEUE="debug"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
