@@ -765,7 +765,7 @@
  use netcdf
  use wgrib2api
  use program_setup, only       : grib2_file_input_grid, data_dir_input_grid, &
-                                  wgrib2_path, base_install_dir
+                                  wgrib2_path, fixed_files_dir_input_grid
  implicit none
  
  include 'mpif.h'
@@ -795,7 +795,7 @@
 
  inv_file = "chgres.inv"
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
- temp_file = trim(base_install_dir)//"/fix/fix_chgres/latlon_grid3.32769.nc" 
+ temp_file = trim(fixed_files_dir_input_grid)//"/latlon_grid3.32769.nc" 
   
  call ESMF_FieldGather(latitude_target_grid, lat_target, rootPet=0, tile=1, rc=error)
  if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &

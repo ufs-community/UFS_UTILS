@@ -52,8 +52,6 @@
                                     longitude_input_grid, &
                                     inv_file
 
- use atmdata_type
-
  implicit none
 
  private
@@ -2167,7 +2165,7 @@
 
  use wgrib2api
  
- use grib2_util, only                   : read_vcoord, iso2sig, rh2spfh, convert_omega
+ use grib2_util, only                   : read_vcoord, rh2spfh, convert_omega
  use model_grid, only                   : file_is_converted
 
 
@@ -2202,13 +2200,13 @@
  real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
                                           u_tmp_3d(:,:,:), v_tmp_3d(:,:,:)
  real(esmf_kind_r8), pointer           :: presptr(:,:,:), psptr(:,:),tptr(:,:,:), &
-                                          qptr(:,:,:), wptr(:,:,:)
+                                          qptr(:,:,:), wptr(:,:,:),  &
+                                          uptr(:,:,:), vptr(:,:,:)
                                           
  real(esmf_kind_r4)                     :: value
  real(esmf_kind_r8)                    :: pt
  real(esmf_kind_r8), parameter         :: p0 = 100000.0
  
- type(atmdata), allocatable   :: atm(:)
  
  tracers(:) = "NULL"
  trac_names_grib = (/":SPFH:",":CLWMR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
@@ -2322,7 +2320,6 @@
    tracers(n)=tracers_default(i)
 
  enddo
- allocate(atm(num_tracers+5))
  if (localpet==0) print*, "NUMBER OF TRACERS IN FILE = ", num_tracers
 
  if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
@@ -2575,57 +2572,66 @@ if (localpet == 0) then
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGet", rc)
       
+  nullify(psptr)
   if (localpet == 0) print*,"- CALL FieldGet FOR 3-D PRESSURE."
   call ESMF_FieldGet(pres_input_grid, &
-                    farrayPtr=atm(1)%var, rc=rc)
+                     computationalLBound=clb, &
+                     computationalUBound=cub, &
+                    farrayPtr=presptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
 
+ nullify(tptr)
   if (localpet == 0) print*,"- CALL FieldGet TEMPERATURE."  
   call ESMF_FieldGet(temp_input_grid, &
-                    computationalLBound=clb, &
-                    computationalUBound=cub, &
-                    farrayPtr=atm(2)%var, rc=rc)
+                    farrayPtr=tptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc) 
   
+ nullify(uptr)
   if (localpet == 0) print*,"- CALL FieldGet FOR U"
   call ESMF_FieldGet(u_input_grid, &
-                    farrayPtr=atm(3)%var, rc=rc)
+                    farrayPtr=uptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
     
+  nullify(vptr)
   if (localpet == 0) print*,"- CALL FieldGet FOR V"
   call ESMF_FieldGet(v_input_grid, &
-                    farrayPtr=atm(4)%var, rc=rc)
+                    farrayPtr=vptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
   
+  nullify(wptr)
    if (localpet == 0) print*,"- CALL FieldGet FOR W"
   call ESMF_FieldGet(dzdt_input_grid, &
-                    farrayPtr=atm(5)%var, rc=rc)
+                    farrayPtr=wptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
  
   if (localpet == 0) print*,"- CALL FieldGet FOR TRACERS."
-  do i=1,num_tracers
-    call ESMF_FieldGet(tracers_input_grid(i), &
-                    farrayPtr=atm(i+5)%var, rc=rc)
+  do n=1,num_tracers
+    nullify(qptr)
+    call ESMF_FieldGet(tracers_input_grid(n), &
+                    farrayPtr=qptr, rc=rc)
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGet", rc)
-    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-    call error_handler("IN FieldGet", rc) 
-  end do
-  
-  !call iso2sig(rlevs,vcoord,lev_input,levp1_input,psptr,atm,clb,cub,5+num_tracers, iret)
-  do i = clb(1),cub(1)
-    do j = clb(2),cub(2)
-      atm(1)%var(i,j,:) = rlevs(lev_input:1:-1)
-      do n = 2,num_tracers+5
-        atm(n)%var(i,j,:) = atm(n)%var(i,j,lev_input:1:-1)
+    do i = clb(1),cub(1)
+      do j = clb(2),cub(2)
+        qptr(i,j,:) = qptr(i,j,lev_input:1:-1)
       end do
     end do
-  end do  
+  end do
+  
+  do i = clb(1),cub(1)
+    do j = clb(2),cub(2)
+      presptr(i,j,:) = rlevs(lev_input:1:-1)
+      tptr(i,j,:) = tptr(i,j,lev_input:1:-1)
+      uptr(i,j,:) = uptr(i,j,lev_input:1:-1)
+      vptr(i,j,:) = vptr(i,j,lev_input:1:-1)
+      wptr(i,j,:) = wptr(i,j,lev_input:1:-1)
+    end do
+  end do
 
   deallocate(vcoord)
 
@@ -2664,22 +2670,12 @@ if (localpet == 0) then
  
  if (localpet == 0) then
    print*,'psfc is ',clb(1),clb(2),psptr(clb(1),clb(2))
-   if (isnative) then
-     print*,'pres is ',cub(1),cub(2),presptr(cub(1),cub(2),:) 
+   print*,'pres is ',cub(1),cub(2),presptr(cub(1),cub(2),:) 
      
-     print*,'pres check 1',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2),1)), &
+   print*,'pres check 1',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2),1)), &
               minval(presptr(clb(1):cub(1),clb(2):cub(2),1))
-     print*,'pres check lev',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2), &
+   print*,'pres check lev',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2), &
             lev_input)),minval(presptr(clb(1):cub(1),clb(2):cub(2),lev_input))
-   else
-     print*,'pres is ',cub(1),cub(2),atm(1)%var(cub(1),cub(2),:)
-     print*,'pres check 1',localpet,maxval(atm(1)%var(clb(1):cub(1),clb(2):cub(2),1)), &
-              minval(atm(1)%var(clb(1):cub(1),clb(2):cub(2),1))
-     print*,'pres check lev',localpet,maxval(atm(1)%var(clb(1):cub(1),clb(2):cub(2), &
-            lev_input)),minval(atm(1)%var(clb(1):cub(1),clb(2):cub(2),lev_input))
-   endif
-
- 
  endif
  
 !---------------------------------------------------------------------------
@@ -4916,7 +4912,7 @@ if (localpet == 0) then
  
  use wgrib2api
  use netcdf
- use program_setup, only      : get_var_cond, base_install_dir, wgrib2_path
+ use program_setup, only      : get_var_cond, fixed_files_dir_input_grid , wgrib2_path
  use model_grid, only         : input_grid_type
  implicit none
  
@@ -4945,7 +4941,7 @@ if (localpet == 0) then
    allocate(v(0,0,0))
  endif
  
- file_coord = trim(base_install_dir)//"/fix/fix_chgres/latlon_grid3.32769.nc" 
+ file_coord = trim(fixed_files_dir_input_grid)//"/latlon_grid3.32769.nc" 
 
  vname = "u"
  call get_var_cond(vname,this_miss_var_method=method_u, this_miss_var_value=value_u, &
