@@ -10,7 +10,7 @@ cwd=`pwd`
 
 USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}
 if [ $USE_PREINST_LIBS = true ]; then
-  export MOD_PATH=/scratch3/NCEPDEV/nwprod/lib/modulefiles
+  export MOD_PATH
   source ../modulefiles/fv3gfs/orog.$target             > /dev/null 2>&1
 else
   export MOD_PATH=${cwd}/lib/modulefiles
@@ -43,7 +43,7 @@ elif [ $target = jet ]; then
  INCS="-I${NETCDF}/include"
  export LIBSM="${BACIO_LIB4} ${W3NCO_LIBd} ${IP_LIBd} ${SP_LIBd} -L${NETCDF}/lib -lnetcdff -lnetcdf"
  export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl ${INCS}"
-elif [ $target = theia ]; then
+elif [ $target = hera ]; then
  INCS="-I${NETCDF}/include"
  export LIBSM="${BACIO_LIB4} ${W3NCO_LIBd} ${IP_LIBd} ${SP_LIBd} -L${NETCDF}/lib -lnetcdff -lnetcdf"
  export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl ${INCS}"

@@ -6,7 +6,7 @@ cwd=`pwd`
 
 USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}
 if [ $USE_PREINST_LIBS = true ]; then
-  export MOD_PATH=/scratch3/NCEPDEV/nwprod/lib/modulefiles
+  export MOD_PATH
   source ../modulefiles/module_nemsutil.$target             > /dev/null 2>&1
 else
   export MOD_PATH=${cwd}/lib/modulefiles
@@ -22,7 +22,7 @@ if [ ! -d "../exec" ]; then
   mkdir ../exec
 fi
 
-for prog in nemsio_get.fd  nemsio_cvt.fd  nemsio_read.fd nemsio_chgdate.fd ;do
+for prog in nemsio_get.fd  nemsio_read.fd nemsio_chgdate.fd mkgfsnemsioctl.fd ;do
  cd ${cwd}/${prog}
  make -f makefile
 done

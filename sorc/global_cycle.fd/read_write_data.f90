@@ -38,6 +38,8 @@
  PUBLIC :: READ_GSI_DATA
  PUBLIC :: READ_LAT_LON_OROG
  PUBLIC :: WRITE_DATA
+ public :: read_tf_clim_grb,get_tf_clm_dim
+ public :: read_salclm_gfs_nc,get_dim_nc
 
  CONTAINS
 
@@ -1499,4 +1501,358 @@
 
  END SUBROUTINE READ_DATA
  
+subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,mon)
+
+!                .      .    .                                       .
+! abstrac:    read_tf_clim_grb :  read grib1 sst analysis
+!   prgmmr: xu li            org: np23                date: 2019-03-13
+!
+! abstract: read sst analysis (grib format) and save it as expanded and transposed array
+!
+!     subroutine rdgrbsst must be compiled with the ncep w3 library
+!     and the bacio library.
+!
+!
+! program history log:
+!
+!   input argument list:
+!     file_sst - file name of grib sst file
+!     mon      - month number
+!     mlat_sst,mlon_sst
+!   output:
+!     rlats_sst
+!     rlons_sst
+!     sst
+!
+!   argument list defined by this reading:
+!     sst - sst field
+!     note: (1) the data is stored from north to south originally in grib format,
+!             but is stored from south to north with this reading routine
+!     nlat_sst  - latitudinal dimension of sst
+!     nlon_sst  - longitudinal dimension of sst
+!     xsst0 - latitude of origin
+!     ysst0 - longitude of origin
+!     dres  - lat/lon increment
+!
+!     call subs: getgbh, getgb
+!
+! attributes:
+!   language: f90
+!
+!$$$
+  implicit none
+
+  include "mpif.h"
+
+! declare passed variables and arrays
+  character(*)                       , intent(in   ) :: file_sst
+  integer                            , intent(in   ) :: mon,mlat_sst,mlon_sst
+  real, dimension(mlat_sst)          , intent(  out) :: rlats_sst
+  real, dimension(mlon_sst)          , intent(  out) :: rlons_sst
+  real, dimension(mlon_sst,mlat_sst) , intent(  out) :: sst
+
+! declare local parameters
+  integer,parameter:: lu_sst = 21   ! fortran unit number of grib sst file
+  real, parameter :: deg2rad = 3.141593/180.0
+
+! declare local variables and arrays
+  logical(1), allocatable, dimension(:)    ::  lb
+
+  integer :: nlat_sst,nlon_sst
+  integer :: iret,ni,nj
+  integer :: mscan,kb1
+  integer :: jincdir,i,iincdir,kb2,kb3,kf,kg,k,j,jf
+  integer, dimension(22):: jgds,kgds
+  integer, dimension(25):: jpds,kpds
+
+  real :: xsst0,ysst0,dres
+  real, allocatable, dimension(:) :: f
+  
+!************+******************************************************************************
+!
+! open sst analysis file (grib)
+  write(*,*) ' sstclm : ',file_sst
+  call baopenr(lu_sst,trim(file_sst),iret)
+  if (iret /= 0 ) then
+     write(6,*)'read_tf_clm_grb:  ***error*** opening sst file'
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+  endif
+
+! define sst variables for read
+  j=-1
+  jpds=-1
+  jgds=-1
+  jpds(5)=11        ! sst variable
+  jpds(6)=1         ! surface
+  jpds(9) = mon
+  call getgbh(lu_sst,0,j,jpds,jgds,kg,kf,k,kpds,kgds,iret)
+
+  nlat_sst = kgds(3)   ! number points on longitude circle (360)
+  nlon_sst = kgds(2)   ! number points on latitude circle (720)
+
+! write(*,*) 'nlat_sst, nlon_sst, mon : ',nlat_sst, nlon_sst, mon
+! write(*,*) 'mlat_sst, mlon_sst : ',mlat_sst, mlon_sst
+
+! allocate arrays
+  allocate(lb(nlat_sst*nlon_sst))
+  allocate(f(nlat_sst*nlon_sst))
+  jf=nlat_sst*nlon_sst
+
+! read in the analysis
+  call getgb(lu_sst,0,jf,j,jpds,jgds,kf,k,kpds,kgds,lb,f,iret)
+  if (iret /= 0) then
+     write(6,*)'read_tf_clm_grb:  ***error*** reading sst analysis data record'
+     deallocate(lb,f)
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+  endif
+
+  if ( (nlat_sst /= mlat_sst) .or. (nlon_sst /= mlon_sst) ) then
+     write(6,*)'read_rtg_org:  inconsistent dimensions.  mlat_sst,mlon_sst=',&
+          mlat_sst,mlon_sst,' -versus- nlat_sst,nlon_sst=',nlat_sst,nlon_sst
+     deallocate(lb,f)
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+  endif
+
+!
+! get xlats and xlons
+!
+  dres = 180.0/real(nlat_sst)
+  ysst0 = 0.5*dres-90.0
+  xsst0 = 0.5*dres
+
+! get lat_sst & lon_sst
+  do j = 1, nlat_sst
+     rlats_sst(j) = ysst0 + real(j-1)*dres
+  enddo
+
+  do i = 1, nlon_sst 
+     rlons_sst(i) = (xsst0 + real(i-1)*dres)
+  enddo
+
+! load dimensions and grid specs.  check for unusual values
+  ni=kgds(2)                ! 720 for 0.5 x 0.5
+  nj=kgds(3)                ! 360 for 0.5 x 0.5 resolution
+
+  mscan=kgds(11)
+  kb1=ibits(mscan,7,1)   ! i scan direction
+  kb2=ibits(mscan,6,1)   ! j scan direction
+  kb3=ibits(mscan,5,1)   ! (i,j) or (j,i)
+
+! get i and j scanning directions from kb1 and kb2.
+! 0 yields +1, 1 yields -1. +1 is west to east, -1 is east to west.
+  iincdir = 1-kb1*2
+
+! 0 yields -1, 1 yields +1. +1 is south to north, -1 is north to south.
+  jincdir = kb2*2 - 1
+
+! write(*,*) 'read_tf_clim_grb,iincdir,jincdir : ',iincdir,jincdir
+  do k=1,kf
+
+!    kb3 from scan mode indicates if i points are consecutive
+!    or if j points are consecutive
+     if(kb3==0)then     !  (i,j)
+        i=(ni+1)*kb1+(mod(k-1,ni)+1)*iincdir
+        j=(nj+1)*(1-kb2)+jincdir*((k-1)/ni+1)
+     else                !  (j,i)
+        j=(nj+1)*(1-kb2)+(mod(k-1,nj)+1)*jincdir
+        i=(ni+1)*kb1+iincdir*((k-1)/nj+1)
+     endif
+     sst (i,j) = f(k)
+  end do
+     
+  deallocate(lb,f)
+
+  call baclose(lu_sst,iret)
+  if (iret /= 0 ) then
+     write(6,*)'read_tf_clm_grb:  ***error*** close sst file'
+     CALL MPI_ABORT(MPI_COMM_WORLD, 121)
+  endif
+  
+end subroutine read_tf_clim_grb
+
+subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
+!                .      .    .                                       .
+! abstract:   get_tf_clm_dim :  get dimension of rtg sst climatology
+!   prgmmr: xu li            org: np23                date: 2019-03-13
+!
+!
+! program history log:
+!
+!   input argument list:
+!     file_sst - file name of grib sst file
+! output
+!     mlat_sst,mlon_sst
+!
+!     call subs: getgbh
+!
+! attributes:
+!   language: f90
+!   machine:  ibm rs/6000 sp
+!
+!$$$
+  implicit none
+
+  include "mpif.h"
+
+! declare passed variables and arrays
+  character(*)                                   , intent(in ) :: file_sst
+  integer                                        , intent(out) :: mlat_sst,mlon_sst
+
+! declare local parameters
+  integer,parameter:: lu_sst = 21   ! fortran unit number of grib sst file
+
+  integer :: iret
+  integer :: mscan,kb1
+  integer :: kf,kg,k,j
+  integer, dimension(22):: jgds,kgds
+  integer, dimension(25):: jpds,kpds
+
+!************+******************************************************************************
+!
+! open sst analysis file (grib)
+  call baopenr(lu_sst,trim(file_sst),iret)
+  if (iret /= 0 ) then
+     write(6,*)'get_tf_clm_dim:  ***error*** opening sst file'
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+  endif
+
+! define sst variables for read
+  j=-1
+  jpds=-1
+  jgds=-1
+  jpds(5)=11        ! sst variable
+  jpds(6)=1         ! surface
+  jpds(9) = 1
+  call getgbh(lu_sst,0,j,jpds,jgds,kg,kf,k,kpds,kgds,iret)
+
+  mlat_sst = kgds(3)   ! number points on longitude circle (360)
+  mlon_sst = kgds(2)   ! number points on latitude circle (720)
+
+  write(*,*) 'mlat_sst, mlon_sst : ',mlat_sst, mlon_sst
+
+  call baclose(lu_sst,iret)
+  if (iret /= 0 ) then
+     write(6,*)'get_tf_clm_dim:  ***error*** close sst file'
+     CALL MPI_ABORT(MPI_COMM_WORLD, 121)
+  endif
+end subroutine get_tf_clm_dim
+
+subroutine read_salclm_gfs_nc(filename,sal,xlats,xlons,nlat,nlon,itime)
+! abstract: read woa05 salinity monthly climatology  (netcdf)
+  use netcdf
+  implicit none
+  
+  ! This is the name of the data file we will read.
+  character (len=*),             intent(in)  :: filename
+  integer,                       intent(in)  :: nlat,nlon
+  integer,                       intent(in)  :: itime
+  real,    dimension(nlat),      intent(out) :: xlats
+  real,    dimension(nlon),      intent(out) :: xlons
+  real,    dimension(nlon,nlat), intent(out) :: sal
+! Local variables
+  integer :: ncid,ntime
+
+  integer, parameter :: ndims = 3
+  character (len = *), parameter :: lat_name = "latitude"
+  character (len = *), parameter :: lon_name = "longitude"
+  character (len = *), parameter :: t_name = "time"
+  character (len = *), parameter :: sal_name="sal"
+  integer :: no_fill,fill_value
+  integer :: time_varid,lon_varid, lat_varid, z_varid, sal_varid
+
+  ! The start and count arrays will tell the netCDF library where to read our data.
+  integer, dimension(ndims) :: start, count
+
+  character (len = *), parameter :: units = "units"
+  character (len = *), parameter :: sal_units = "psu" 
+                                  ! PSU (Practical SalinitUnit). 1 PSU = 1g/kg
+  character (len = *), parameter :: time_units = "months"
+  character (len = *), parameter :: lat_units = "degrees_north"
+  character (len = *), parameter :: lon_units = "degrees_east"
+
+  integer :: missv
+! Loop indices
+  integer :: i,j
+
+! Open the file. 
+  call nc_check( nf90_open(filename, nf90_nowrite, ncid) )
+
+! Get the varids of time, latitude, longitude & depth coordinate variables.
+  call nc_check( nf90_inq_varid(ncid, t_name,   time_varid) )
+  call nc_check( nf90_inq_varid(ncid, lat_name, lat_varid) )
+  call nc_check( nf90_inq_varid(ncid, lon_name, lon_varid) )
+
+! Read the time, latitude and longitude data.
+! call nc_check( nf90_get_var(ncid, time_varid, ntime) )
+  call nc_check( nf90_get_var(ncid, lat_varid,  xlats) )
+  call nc_check( nf90_get_var(ncid, lon_varid,  xlons) )
+
+! Get the varids of the sal netCDF variables.
+  call nc_check( nf90_inq_varid(ncid, sal_name,sal_varid) )
+
+! Read 1 record of nlat*nlon values, starting at the beginning 
+! of the record (the (1, 1, 1, rec) element in the netCDF file).
+  start = (/ 1, 1, itime /)
+  count = (/ nlon, nlat, 1 /)
+
+!  write(*,*) 'read_salclm_gfs_nc itime : ',itime
+! Read the sal data from the file, one record at a time.
+  call nc_check( nf90_get_var(ncid, sal_varid, sal, start, count) )
+
+! Close the file. This frees up any internal netCDF resources
+! associated with the file.
+  call nc_check( nf90_close(ncid) )
+
+! If we got this far, everything worked as expected. Yipee! 
+!  print *,"*** SUCCESS reading file ", filename, "!"
+
+end subroutine read_salclm_gfs_nc
+
+subroutine get_dim_nc(filename,nlat,nlon)
+! abstract: get dimensions of sal array
+  use netcdf
+  implicit none
+  
+  character (len=*), intent(in)  :: filename
+  integer,           intent(out) :: nlat,nlon
+! Local variables
+  character (len = *), parameter :: lat_name = "latitude"
+  character (len = *), parameter :: lon_name = "longitude"
+  integer :: ncid
+  integer :: LatDimID,LonDimID
+
+! Open the file. 
+  call nc_check( nf90_open(filename, nf90_nowrite, ncid) )
+
+! Get dimensions 
+  call nc_check( nf90_inq_dimid(ncid,lat_name,LatDimID) )
+  call nc_check( nf90_inq_dimid(ncid,lon_name,LonDimID) )
+  call nc_check( nf90_inquire_dimension(ncid,LatDimID,len=nlat) )
+  call nc_check( nf90_inquire_dimension(ncid,LonDimID,len=nlon) )
+
+!  write(*,'(a,1x,a6,2I8)') 'get_dim_nc, file, nlat, nlon : ',filename,nlat,nlon
+
+! Close the file. This frees up any internal netCDF resources
+! associated with the file.
+  call nc_check( nf90_close(ncid) )
+
+! If we got this far, everything worked as expected. Yipee! 
+!  print *,"*** SUCCESS get dimensions from nc file ", filename, "!"
+
+end subroutine get_dim_nc
+
+subroutine nc_check(status)
+
+  use netcdf
+
+  include "mpif.h"
+
+  integer, intent ( in) :: status
+
+  if(status /= nf90_noerr) then
+    print *, trim(nf90_strerror(status))
+    CALL MPI_ABORT(MPI_COMM_WORLD, 122)
+  end if
+end subroutine nc_check
+
  END MODULE READ_WRITE_DATA

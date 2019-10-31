@@ -50,6 +50,7 @@
  type(esmf_regridmethod_flag),intent(in) :: method
  type(esmf_field)                        :: data_field_src
  type(esmf_routehandle)                  :: regrid_data
+ type(esmf_polemethod_flag)              :: pole
  
  print*,"- CALL FieldCreate FOR SOURCE GRID DATA."
  data_field_src = ESMF_FieldCreate(grid_src, &
@@ -121,13 +122,19 @@
 
    if (record == 1) then
 
+     if (method == ESMF_REGRIDMETHOD_BILINEAR) then
+       pole = ESMF_POLEMETHOD_ALLAVG
+     else
+       pole = ESMF_POLEMETHOD_NONE
+     endif
+
      print*,"- CALL FieldRegridStore."
      nullify(unmapped_ptr)
      call ESMF_FieldRegridStore(data_field_src, &
                             data_field_mdl, &
                             srcmaskvalues=(/0/), &
                             dstmaskvalues=(/0/), &
-                            polemethod=ESMF_POLEMETHOD_NONE, &
+                            polemethod=pole, &                     
                             unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
                             normtype=ESMF_NORMTYPE_FRACAREA, &
                             srctermprocessing=isrctermprocessing, &
