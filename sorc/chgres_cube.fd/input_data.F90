@@ -2278,6 +2278,17 @@
       if (localpet==0) print*, "LEVEL = ", slevs(i)
 	enddo
 
+! Jili Dong add sort to re-order isobaric levels
+    call quicksort(rlevs,1,lev_input)
+
+    do i = 1,lev_input
+      write(slevs(i),"(I5)") int(rlevs(i)/100.0)
+      slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
+      if (localpet==0) print*, "level after sort = ",slevs(i)
+    enddo
+! Jili Dong add sort to re-order isobaric levels
+
+
    allocate(vcoord(levp1_input,2))
    if (localpet == 0) print*,"- READ VERTICAL COORDINATE INFO."
    if (localpet == 0) print*, metadata
@@ -2322,7 +2333,7 @@
    tracers(n)=tracers_default(i)
 
  enddo
- allocate(atm(num_tracers+4))
+ allocate(atm(num_tracers+5))
  if (localpet==0) print*, "NUMBER OF TRACERS IN FILE = ", num_tracers
 
  if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
@@ -2513,7 +2524,7 @@ if (localpet == 0) then
    vname = ":DZDT:"
    do vlev = 1, lev_input
      iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
-     if (iret <= 0) then
+     if (iret <= 0 ) then
        print*,"DZDT not available at level ", trim(slevs(vlev)), " so checking for VVEL"
        vname = ":VVEL:"
        iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
@@ -2522,7 +2533,7 @@ if (localpet == 0) then
        if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
         if (iret==1) then ! missing_var_method == skip 
-          exit
+          cycle
         endif
        else
         conv_omega = .true.
@@ -2600,18 +2611,33 @@ if (localpet == 0) then
                     farrayPtr=atm(4)%var, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
+  
+   if (localpet == 0) print*,"- CALL FieldGet FOR W"
+  call ESMF_FieldGet(dzdt_input_grid, &
+                    farrayPtr=atm(5)%var, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+    call error_handler("IN FieldGet", rc)
  
   if (localpet == 0) print*,"- CALL FieldGet FOR TRACERS."
   do i=1,num_tracers
     call ESMF_FieldGet(tracers_input_grid(i), &
-                    farrayPtr=atm(i+4)%var, rc=rc)
+                    farrayPtr=atm(i+5)%var, rc=rc)
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGet", rc)
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc) 
   end do
   
-  call iso2sig(rlevs,vcoord,lev_input,levp1_input,psptr,atm,clb,cub,4+num_tracers, iret)
+  !call iso2sig(rlevs,vcoord,lev_input,levp1_input,psptr,atm,clb,cub,5+num_tracers, iret)
+  do i = clb(1),cub(1)
+    do j = clb(2),cub(2)
+      atm(1)%var(i,j,:) = rlevs(lev_input:1:-1)
+      do n = 2,num_tracers+5
+        atm(n)%var(i,j,:) = atm(n)%var(i,j,lev_input:1:-1)
+      end do
+    end do
+  end do  
+
   deallocate(vcoord)
 
  else
@@ -5250,5 +5276,36 @@ end subroutine handle_grib_error
  call ESMF_FieldDestroy(terrain_input_grid, rc=rc)
 
  end subroutine cleanup_input_sfc_data
+
+! Jili Dong add sort subroutine 
+! quicksort.f -*-f90-*-
+! Author: t-nissie
+! License: GPLv3
+! Gist: https://gist.github.com/t-nissie/479f0f16966925fa29ea
+!!
+recursive subroutine quicksort(a, first, last)
+  implicit none
+  real*8  a(*), x, t
+  integer first, last
+  integer i, j
+
+  x = a( (first+last) / 2 )
+  i = first
+  j = last
+  do
+     do while (a(i) < x)
+        i=i+1
+     end do
+     do while (x < a(j))
+        j=j-1
+     end do
+     if (i >= j) exit
+     t = a(i);  a(i) = a(j);  a(j) = t
+     i=i+1
+     j=j-1
+  end do
+  if (first < i-1) call quicksort(a, first, i-1)
+  if (j+1 < last)  call quicksort(a, j+1, last)
+end subroutine quicksort
 
  end module input_data

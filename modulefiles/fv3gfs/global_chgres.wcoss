@@ -3,7 +3,7 @@
 #############################################################
 
 # Loading Intel Compiler Suite
-module load ics/14.0.1
+module load ics/15.0.6
 
 # Loading nceplibs modules
 module load sigio/v2.1.0

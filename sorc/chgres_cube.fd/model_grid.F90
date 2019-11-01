@@ -663,6 +663,7 @@
  enddo
 
  deltalon = abs(longitude(2,1)-longitude(1,1))
+ if(localpet==0) print*, "deltalon = ", deltalon
  
  print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  call ESMF_FieldScatter(longitude_input_grid, longitude, rootpet=0, rc=rc)
@@ -707,7 +708,9 @@
      lat_src_ptr(i,j) = latitude(i,j)
    enddo
  enddo
-
+ if(localpet==0) print*, "lon first = ", lon_src_ptr(1:10,1)
+ if(localpet==0) print*, "lat first = ", lat_src_ptr(1,1:10)
+ 
  print*,"- CALL GridAddCoord FOR INPUT GRID."
  call ESMF_GridAddCoord(input_grid, &
                         staggerloc=ESMF_STAGGERLOC_CORNER, rc=rc)
@@ -782,7 +785,7 @@
                                           lon_target(i_target,j_target)
                                           !lat_corners(ip1_input,jp1_input), &
                                           !lon_corners(ip1_input,jp1_input)
- real(esmf_kind_r8)                    :: deltalon, dx
+ real(esmf_kind_r8)                    :: deltalon, dx, deltalat
  integer                               :: ncid,id_var, id_dim 
  real(esmf_kind_r8), pointer           :: lat_src_ptr(:,:), lon_src_ptr(:,:)
  character(len=10000)            :: cmdline_msg, temp_msg, temp_msg2
@@ -1010,10 +1013,23 @@
      if (trim(input_grid_type) == "latlon") then
      
       deltalon = abs(longitude_one_tile(2,1)-longitude_one_tile(1,1))
+      deltalat = abs(latitude_one_tile(1,2) - latitude_one_tile(1,1))
        do j = clb(2), cub(2)
          do i = clb(1), cub(1)
-           lon_src_ptr(i,j) = longitude_one_tile(i,1) - (0.5_esmf_kind_r8*deltalon)
-           lat_src_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude_one_tile(i,j-1)+ latitude_one_tile(i,j))
+         
+           if (i == ip1_input) then
+             lon_src_ptr(i,j) = longitude_one_tile(i-1,1)+(0.5_esmf_kind_r8*deltalon)
+           else 
+             lon_src_ptr(i,j) = longitude_one_tile(i,1) - (0.5_esmf_kind_r8*deltalon)
+           endif
+           
+           if (j == jp1_input) then 
+             lat_src_ptr(i,j) = latitude_one_tile(1,j-1)+(0.5_esmf_kind_r8*deltalat)
+           else
+             lat_src_ptr(i,j) = latitude_one_tile(1,j) - (0.5_esmf_kind_r8*deltalat)
+           endif
+           
+           !lat_src_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude_one_tile(i,j-1)+ latitude_one_tile(i,j))
          enddo
        enddo
      else
