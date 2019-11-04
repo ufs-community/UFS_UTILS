@@ -9,23 +9,17 @@ module grib2_util
 ! -------------------
 ! read_vcoord           Reads vertical coordinate data
 !
-! iso2sig               Main code for conversion of isobaric to sigma coordinates
-!
-! p2hyo, p2hyb          Routines for pressure to sigma conversion; used by iso2sig 
 !--------------------------------------------------------------------------
 
 use esmf
-use netcdf
 
-use program_setup, only   : tracers_input,num_tracers, external_model, fixed_files_dir_input_grid 
+use program_setup, only   : external_model, fixed_files_dir_input_grid 
 
-use model_grid, only      : i_input,j_input, ip1_input, jp1_input
+use model_grid, only      : i_input, j_input
 
 implicit none
 
-
 contains 
-
 
 subroutine read_vcoord(isnative,vcoordi,vcoordo,lev_input,levp1_input,pt,metadata,iret)
 

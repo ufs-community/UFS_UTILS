@@ -41,8 +41,7 @@
                                     tracers_input, num_tracers, &
                                     input_type, num_tracers_input, &
                                     input_type, external_model, &
-                                    get_var_cond, read_from_input, tracers, &
-                                    convert_sfc
+                                    get_var_cond, read_from_input, tracers
 
  use model_grid, only             : input_grid,        &
                                     i_input, j_input,  &
@@ -2166,8 +2165,6 @@
  use wgrib2api
  
  use grib2_util, only                   : read_vcoord, rh2spfh, convert_omega
- use model_grid, only                   : file_is_converted
-
 
  implicit none
 
@@ -2219,10 +2216,8 @@
                       "rainwat", "snowwat", "graupel", "cld_amt", "ice_nc", &
                       "rain_nc","water_nc","liq_aero","ice_aero", &
                       "sgs_tke"/)
+
  the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
- !if (file_is_converted) then
- !  the_file = "./test.grib2"
- !endif
 
  print*,"- READ ATMOS DATA FROM GRIB2 FILE: ", trim(the_file)
  print*,"- USE INVENTORY FILE ", inv_file
@@ -2733,9 +2728,6 @@ if (localpet == 0) then
   
  endif
  
- if (localpet == 0 .and. file_is_converted .and. .not. convert_sfc) &
-      call system("rm "//trim(the_file))
-
  end subroutine read_input_atm_grib2_file
 
 !---------------------------------------------------------------------------
