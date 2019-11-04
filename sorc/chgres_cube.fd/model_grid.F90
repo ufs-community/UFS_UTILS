@@ -607,7 +607,7 @@
  num_tiles_input_grid = 1
 
 
- inv_file = trim(data_dir_input_grid) // "/" // "chgres.inv"
+ inv_file = "chgres.inv"
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
  print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
 	rc=grb2_mk_inv(the_file,inv_file)
