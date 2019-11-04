@@ -72,7 +72,6 @@
  integer, public                        :: ip1_target, jp1_target
  integer, public                        :: num_tiles_input_grid
  integer, public                        :: num_tiles_target_grid
- integer, public                        :: file_is_converted = 0
 
  type(esmf_grid),  public               :: input_grid
  type(esmf_grid),  public               :: target_grid

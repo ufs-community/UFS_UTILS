@@ -29,7 +29,7 @@ utils.o:  utils.f90
 atmdata_type.o: atmdata_type.F90
 	$(FCOMP) $(FFLAGS) -c $(ESMF_F90COMPILEPATHS) atmdata_type.F90
 
-grib2_util.o:  model_grid.o program_setup.o atmdata_type.o grib2_util.F90
+grib2_util.o:  model_grid.o program_setup.o grib2_util.F90
 	$(FCOMP) $(FFLAGS) -c $(ESMF_F90COMPILEPATHS) grib2_util.F90
 
 program_setup.o:  program_setup.f90
