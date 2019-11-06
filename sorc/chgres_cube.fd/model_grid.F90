@@ -610,12 +610,12 @@
  inv_file = "chgres.inv"
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
  print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
-	rc=grb2_mk_inv(the_file,inv_file)
-	if (rc /=0) call error_handler("OPENING GRIB2 FILE",rc)
+ rc=grb2_mk_inv(the_file,inv_file)
+ if (rc /=0) call error_handler("OPENING GRIB2 FILE",rc)
 
-	rc = grb2_inq(the_file,inv_file,':PRES:',':surface:',nx=i_input, ny=j_input, &
-				lat=lat4, lon=lon4)
-	if (rc /= 1) call error_handler("READING FILE", rc)
+ rc = grb2_inq(the_file,inv_file,':PRES:',':surface:',nx=i_input, ny=j_input, &
+    lat=lat4, lon=lon4)
+ if (rc /= 1) call error_handler("READING FILE", rc)
 
  ip1_input = i_input + 1
  jp1_input = j_input + 1

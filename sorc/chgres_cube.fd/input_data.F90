@@ -2227,7 +2227,7 @@
  if (iret == 0) call error_handler("OPENING GRIB2 ATM FILE.", iret)
 
    !print*,"- READ VERTICAL LEVELS."
-   iret = grb2_inq(the_file,inv_file,":UGRD:"," hybrid level:")
+   iret = grb2_inq(the_file,inv_file,":TMP:"," hybrid level:")
    !if (iret < 0) call error_handler("COUNTING VERTICAL LEVELS.", iret)
   
     if (iret <= 0) then
@@ -2578,7 +2578,7 @@ if (localpet == 0) then
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGet", rc)
       
-  nullify(psptr)
+  nullify(presptr)
   if (localpet == 0) print*,"- CALL FieldGet FOR 3-D PRESSURE."
   call ESMF_FieldGet(pres_input_grid, &
                      computationalLBound=clb, &
