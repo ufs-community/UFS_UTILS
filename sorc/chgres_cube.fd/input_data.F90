@@ -2174,9 +2174,14 @@
 
  character(len=300)                    :: the_file
  character(len=20)                     :: vlevtyp, vname, lvl_str,lvl_str_space, &
-                                          trac_names_grib(ntrac_max), & 
+ !                                        trac_names_grib(ntrac_max), & 
+                                          trac_names_grib_1(ntrac_max), &
+                                          trac_names_grib_2(ntrac_max), &
                                           trac_names_vmap(ntrac_max), &
-                                          tracers_input_grib(num_tracers), tmpstr, & 
+!                                         tracers_input_grib(num_tracers), 
+                                          tracers_input_grib_1(num_tracers), &
+                                          tracers_input_grib_2(num_tracers), &
+                                          tmpstr, & 
                                           method, tracers_input_vmap(num_tracers), &
                                           tracers_default(ntrac_max), vname2
  character (len=500)                   :: metadata
@@ -2206,8 +2211,14 @@
  
  
  tracers(:) = "NULL"
- trac_names_grib = (/":SPFH:",":CLWMR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
-               ":TCDC:", ":NCCICE:",":SPNCR:", ":NCONCD:",":PMTF:",":PMTC:",":TKE:"/)
+ !trac_names_grib = (/":SPFH:",":CLWMR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
+ !              ":TCDC:", ":NCCICE:",":SPNCR:", ":NCONCD:",":PMTF:",":PMTC:",":TKE:"/)
+ trac_names_grib_1 = (/":var0_2", ":var0_2",  ":var0_2",  ":var0_2",  ":var0_2",":var0_2", \
+                       ":var0_2", ":var0_2", ":var0_2", ":var0_2", ":var0_2",":var0_2", \
+                       ":var0_2", ":var0_2"/)
+ trac_names_grib_2 = (/"_1_0:",  "_1_22:",  "_14_192:",  "_1_23:",  "_1_24:","_1_25:", \
+                       "_1_32:",  "_6_1:",  "_6_29:",  "_1_100:",  "_6_28:","_13_193:", \
+                       "_13_192:", "_2_2:"/)
  trac_names_vmap = (/"sphum", "liq_wat","o3mr","ice_wat", &
                       "rainwat", "snowwat", "graupel", "cld_amt", "ice_nc", &
                       "rain_nc","water_nc","liq_aero","ice_aero", &
@@ -2227,7 +2238,8 @@
  if (iret == 0) call error_handler("OPENING GRIB2 ATM FILE.", iret)
 
    !print*,"- READ VERTICAL LEVELS."
-   iret = grb2_inq(the_file,inv_file,":TMP:"," hybrid level:")
+   !iret = grb2_inq(the_file,inv_file,":TMP:"," hybrid level:")
+   iret = grb2_inq(the_file,inv_file,":var_0_2","_0_0:"," hybrid level:")
    !if (iret < 0) call error_handler("COUNTING VERTICAL LEVELS.", iret)
   
     if (iret <= 0) then
@@ -2291,26 +2303,29 @@
    !if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
  
    if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
-   iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
+   !iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
+   iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1),lvl_str_space)
 
    if (iret <= 0) then
-    iret = grb2_inq(the_file,inv_file,':RH:')
+!    iret = grb2_inq(the_file,inv_file,':RH:')
+    iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1))
     if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
     hasspfh = .false.
-    trac_names_grib(1)=':RH:'
+    !trac_names_grib(1)=':RH:'
+    trac_names_grib_2(1)='_1_1:'
    endif
    
-   if (localpet == 0) print*,"- FIND CICE or CIMIXR"
-   iret = grb2_inq(the_file,inv_file,':CICE:',lvl_str_space)
+   !if (localpet == 0) print*,"- FIND CICE or CIMIXR"
+   !iret = grb2_inq(the_file,inv_file,':CICE:',lvl_str_space)
 
-   if (iret <= 0) then
-    iret = grb2_inq(the_file,inv_file,':CIMIXR:',lvl_str_space)
-    if (iret >= 1) trac_names_grib(4)=':CIMIXR:'
-    if (iret <= 0) then
-      iret = grb2_inq(the_file,inv_file,':ICMR:',lvl_str_space)
-      if (iret >= 1) trac_names_grib(4)=':ICMR:'
-    endif
-   endif
+   !if (iret <= 0) then
+   ! iret = grb2_inq(the_file,inv_file,':CIMIXR:',lvl_str_space)
+   ! if (iret >= 1) trac_names_grib(4)=':CIMIXR:'
+   ! if (iret <= 0) then
+   !   iret = grb2_inq(the_file,inv_file,':ICMR:',lvl_str_space)
+   !   if (iret >= 1) trac_names_grib(4)=':ICMR:'
+   ! endif
+   !endif
 
   print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
   !um_tracers = 0
@@ -2321,7 +2336,9 @@
 
    i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
 
-   tracers_input_grib(n)=trac_names_grib(i)
+   !tracers_input_grib(n)=trac_names_grib(i)
+   tracers_input_grib_1 = trac_names_grib_1(i)
+   tracers_input_grib_2 = trac_names_grib_2(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
    tracers(n)=tracers_default(i)
 
@@ -2440,15 +2457,17 @@
         call error_handler("IN FieldGet", rc) 
    endif
    if (localpet == 0) then
-     vname = trim(tracers_input_grib(n))
-     vname2 = "var"
-     if (trim(vname) == ":PMTC:") then
-       vname = "var0_"
-       vname2 = "_13_192"
-     elseif (trim(vname) == ":PMTF:") then
-       vname = "var0_"
-       vname2 = "_13_193"
-     endif
+     !vname = trim(tracers_input_grib(n))
+     !vname2 = "var"
+     vname = trim(tracers_input_grib_1(n))
+     vname2 = trim(tracers_input_grib_2(n))
+     !if (trim(vname) == ":PMTC:") then
+     !  vname = "var0_"
+     !  vname2 = "_13_192"
+     !elseif (trim(vname) == ":PMTF:") then
+     !  vname = "var0_"
+     !  vname2 = "_13_193"
+     !endif
      
      do vlev = 1, lev_input
       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),vname2,data2=dummy2d)
@@ -2456,8 +2475,10 @@
       if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
         if (iret==1) then ! missing_var_method == skip or no entry
-          if (trim(vname)==":SPFH:" .or. trim(vname) == ":RH:" .or.  &
-              trim(vname) == ":O3MR:") then
+          !if (trim(vname2)==":SPFH:" .or. trim(vname) == ":RH:" .or.  &
+          !    trim(vname2) == ":O3MR:") then
+          if (trim(vname2)=="_1_0:" .or. trim(vname2) == "_1_1:" .or.  &
+              trim(vname2) == ":14:192:") then
             call error_handler("READING IN "//trim(vname)//" AT LEVEL "//trim(slevs(vlev))&
                       //". SET A FILL VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
           else
@@ -2475,7 +2496,7 @@
      enddo
    endif
 
-   if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT ", trim(tracers_input_grib(n))
+   if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT ", trim(tracers_input_vmap(n))
    call ESMF_FieldScatter(tracers_input_grid(n), dummy3d, rootpet=0, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldScatter", rc)
@@ -2496,9 +2517,11 @@
     
 if (localpet == 0) then
    print*,"- READ SURFACE PRESSURE."
-   vname = ":PRES:"
+   !vname = ":PRES:"
+   vname = ":var0_2"
+   vname2 = "_3_0:"
    vlevtyp = ":surface:"
-   iret = grb2_inq(the_file,inv_file,vname,vlevtyp,data2=dummy2d)
+   iret = grb2_inq(the_file,inv_file,vname,vname2,vlevtyp,data2=dummy2d)
    if (iret <= 0) call error_handler("READING SURFACE PRESSURE RECORD.", iret)
    dummy2d_8 = real(dummy2d,esmf_kind_r8)
  endif
@@ -2513,13 +2536,16 @@ if (localpet == 0) then
    vname = "dzdt"
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                          loc=varnum)
-   vname = ":DZDT:"
+   !vname = ":DZDT:"
+   vname = ":var0_2"
+   vname2 = "_2_9:"
    do vlev = 1, lev_input
-     iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
+     iret = grb2_inq(the_file,inv_file,vname,vname2,slevs(vlev),data2=dummy2d)
      if (iret <= 0 ) then
        print*,"DZDT not available at level ", trim(slevs(vlev)), " so checking for VVEL"
-       vname = ":VVEL:"
-       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
+       !vname = ":VVEL:"
+       vname2 = "_2_8:"
+       iret = grb2_inq(the_file,inv_file,vname,vname2,slevs(vlev),data2=dummy2d)
        
        
        if (iret <= 0) then
@@ -2544,9 +2570,11 @@ if (localpet == 0) then
 
  if (localpet == 0) then
    print*,"- READ TERRAIN."
-    vname = ":HGT:"
+   !vname = ":HGT:"
+   vname = ":var0_2"
+    vname2 = "_3_5:"
    vlevtyp = ":surface:"
-   iret = grb2_inq(the_file,inv_file,vname,vlevtyp,data2=dummy2d)
+   iret = grb2_inq(the_file,inv_file,vname,vname2,vlevtyp,data2=dummy2d)
    if (iret <= 0) call error_handler("READING TERRAIN HEIGHT RECORD.", iret)
    dummy2d_8 = real(dummy2d,esmf_kind_r8)
  endif
@@ -4931,7 +4959,8 @@ if (localpet == 0) then
  integer                                 :: varnum_u, varnum_v, ncid, vlev, id_var, & 
                                             error, iret, i
  
- character(len=20)                       :: vname
+ !character(len=20)                       :: vname
+ character(len=20)                       :: vname,vname2
  character(len=50)                       :: method_u, method_v
  character(len=250)                      :: file_coord, cmdline_msg
  character(len=10000)                    :: temp_msg
@@ -4992,8 +5021,10 @@ if (localpet == 0) then
  if (localpet==0) then
    do vlev = 1, lev_input
  
-     vname = ":UGRD:"
-     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=u_tmp)
+     !vname = ":UGRD:"
+     vname = ":var0_2"
+     vname2 = "_2_2:"
+     iret = grb2_inq(file,inv,vname,vname2,slevs(vlev),data2=u_tmp)
      if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
         if (iret==1) then ! missing_var_method == skip
@@ -5002,8 +5033,9 @@ if (localpet == 0) then
         endif
      endif
    
-     vname = ":VGRD:"
-     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=v_tmp)
+!     vname = ":VGRD:"
+     vname2 = "_2_3:"
+     iret = grb2_inq(file,inv,vname,vname2,slevs(vlev),data2=v_tmp)
      if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
         if (iret==1) then ! missing_var_method == skip 
