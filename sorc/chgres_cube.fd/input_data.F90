@@ -2308,7 +2308,7 @@
 
    if (iret <= 0) then
 !    iret = grb2_inq(the_file,inv_file,':RH:')
-    iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1))
+    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
     if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
     hasspfh = .false.
     !trac_names_grib(1)=':RH:'
@@ -2336,8 +2336,8 @@
    i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
 
    !tracers_input_grib(n)=trac_names_grib(i)
-   tracers_input_grib_1 = trac_names_grib_1(i)
-   tracers_input_grib_2 = trac_names_grib_2(i)
+   tracers_input_grib_1(n) = trac_names_grib_1(i)
+   tracers_input_grib_2(n) = trac_names_grib_2(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
    tracers(n)=tracers_default(i)
 
