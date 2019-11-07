@@ -9,7 +9,7 @@ module grib2_util
 
 use esmf
 
-use program_setup, only   : external_model, base_install_dir
+use program_setup, only   : external_model, fixed_files_dir_input_grid 
 
 use model_grid, only      : i_input, j_input
 

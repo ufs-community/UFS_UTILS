@@ -607,15 +607,15 @@
  num_tiles_input_grid = 1
 
 
- inv_file = trim(data_dir_input_grid) // "/" // "chgres.inv"
+ inv_file = "chgres.inv"
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
  print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
-	rc=grb2_mk_inv(the_file,inv_file)
-	if (rc /=0) call error_handler("OPENING GRIB2 FILE",rc)
+ rc=grb2_mk_inv(the_file,inv_file)
+ if (rc /=0) call error_handler("OPENING GRIB2 FILE",rc)
 
-	rc = grb2_inq(the_file,inv_file,':PRES:',':surface:',nx=i_input, ny=j_input, &
-				lat=lat4, lon=lon4)
-	if (rc /= 1) call error_handler("READING FILE", rc)
+ rc = grb2_inq(the_file,inv_file,':PRES:',':surface:',nx=i_input, ny=j_input, &
+    lat=lat4, lon=lon4)
+ if (rc /= 1) call error_handler("READING FILE", rc)
 
  ip1_input = i_input + 1
  jp1_input = j_input + 1
@@ -764,7 +764,7 @@
  use netcdf
  use wgrib2api
  use program_setup, only       : grib2_file_input_grid, data_dir_input_grid, &
-                                  wgrib2_path, base_install_dir
+                                  wgrib2_path, fixed_files_dir_input_grid
  implicit none
  
  include 'mpif.h'
@@ -794,7 +794,7 @@
 
  inv_file = "chgres.inv"
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
- temp_file = trim(base_install_dir)//"/fix/fix_chgres/latlon_grid3.32769.nc" 
+ temp_file = trim(fixed_files_dir_input_grid)//"/latlon_grid3.32769.nc" 
   
  call ESMF_FieldGather(latitude_target_grid, lat_target, rootPet=0, tile=1, rc=error)
  if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
