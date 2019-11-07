@@ -32,7 +32,6 @@
                                     sfc_files_input_grid, &
                                     atm_files_input_grid, &
                                     grib2_file_input_grid, &
-                                    geogrid_file_input_grid, &
                                     atm_core_files_input_grid, &
                                     atm_tracer_files_input_grid, &
                                     convert_nst, &
@@ -2164,7 +2163,7 @@
 
  use wgrib2api
  
- use grib2_util, only                   : read_vcoord, rh2spfh, convert_omega
+ use grib2_util, only                   : rh2spfh, convert_omega
 
  implicit none
 
@@ -2189,15 +2188,12 @@
  integer                               :: i, j, k, n, lvl_str_space_len
  integer                               :: rc, clb(3), cub(3)
  integer                               :: vlev, iret,varnum
+
  integer                               :: len_str
 
- 
- 
  logical                                :: conv_omega=.false., &
-                                           isnative=.false., &
                                            hasspfh=.true.
 
- real(esmf_kind_r8), allocatable       :: vcoord(:,:)
  real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
  real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
@@ -2207,7 +2203,6 @@
                                           uptr(:,:,:), vptr(:,:,:)
                                           
  real(esmf_kind_r4)                     :: value
- real(esmf_kind_r8)                    :: pt
  real(esmf_kind_r8), parameter         :: p0 = 100000.0
  
  
@@ -2243,33 +2238,25 @@
    iret = grb2_inq(the_file,inv_file,":var_0_2","_0_0:"," hybrid level:")
    !if (iret < 0) call error_handler("COUNTING VERTICAL LEVELS.", iret)
   
-    if (iret <= 0) then
-      if (localpet == 0) print*,"DATA IS ON ISOBARIC LEVELS, WILL NEED TO CONVERT AFTER READING"
-      lvl_str = "mb:" 
-      lvl_str_space = " mb:"
-      lvl_str_space_len = 4
-      isnative = 0
-      iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
-      lev_input=iret
-    else
-      if (localpet == 0) PRINT*, "DATA IS ON NATIVE SIGMA/HYBRID LEVELS"
-      lvl_str = "hybrid level:"
-      lvl_str_space = " hybrid level:"
-      lvl_str_space_len = 14
-      isnative = .true.
-      iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
-      if (iret < 0) call error_handler("READING VERTICAL LEVEL TYPE.", iret)
-      lev_input=iret
-    endif
- !endif
-    print*, "lev_input = ", lev_input
-    allocate(slevs(lev_input))
-    allocate(rlevs(lev_input))
-    levp1_input = lev_input + 1
+ if (iret <= 0) then
+   if (localpet == 0) print*,"DATA IS ON ISOBARIC LEVELS"
+   lvl_str = "mb:" 
+   lvl_str_space = " mb:"
+   lvl_str_space_len = 4
+   iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
+   lev_input=iret
+ else
+   call error_handler("HYBRID VERTICAL COORD DATA NOT SUPPORTED", -1)
+ endif
+
+ print*, "lev_input = ", lev_input
+ allocate(slevs(lev_input))
+ allocate(rlevs(lev_input))
+ levp1_input = lev_input + 1
     
     ! get the vertical levels, and search string by sequential reads
 
-    do i = 1,lev_input
+ do i = 1,lev_input
       iret=grb2_inq(the_file,inv_file,':UGRD:',trim(lvl_str),sequential=i-1,desc=metadata)
       if (iret.ne.1) call error_handler(" IN SEQUENTIAL FILE READ.", iret)
     
@@ -2280,13 +2267,12 @@
 
       slevs(i) = metadata(j-1:k)
 		
-      if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
+      rlevs(i) = rlevs(i) * 100.0
       if (localpet==0) print*, "LEVEL = ", slevs(i)
-	enddo
+ enddo
 
 ! Jili Dong add sort to re-order isobaric levels
     call quicksort(rlevs,1,lev_input)
-
     do i = 1,lev_input
        write(slevs(i),"(F20.10)") rlevs(i)/100.0
        len_str = len_trim(slevs(i))
@@ -2306,17 +2292,16 @@
       slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
       if (localpet==0) print*, "level after sort = ",slevs(i)
     enddo
+
 ! Jili Dong add sort to re-order isobaric levels
 
-
-   allocate(vcoord(levp1_input,2))
-   if (localpet == 0) print*,"- READ VERTICAL COORDINATE INFO."
-   if (localpet == 0) print*, metadata
-   call read_vcoord(isnative,rlevs,vcoord,lev_input,levp1_input,pt,metadata,iret)
-   if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
-   
-   !if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
+ do i = 1,lev_input
+    write(slevs(i),"(I5)") int(rlevs(i)/100.0)
+    slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
+    if (localpet==0) print*, "level after sort = ",slevs(i)
+ enddo
  
+
    if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
    !iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
    iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1),lvl_str_space)
@@ -2342,10 +2327,9 @@
    ! endif
    !endif
 
-  print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
-  !um_tracers = 0
-  !tracers_input(:)=""
-  do n = 1, num_tracers
+
+ print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
+ do n = 1, num_tracers
 
    vname = tracers_input(n)
 
@@ -2358,6 +2342,7 @@
    tracers(n)=tracers_default(i)
 
  enddo
+
  if (localpet==0) print*, "NUMBER OF TRACERS IN FILE = ", num_tracers
 
  if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
@@ -2435,9 +2420,7 @@
  endif
 
 !-----------------------------------------------------------------------
-! 3-d fields in native files increment from bottom to model top.
-! That is what is expected by this program, so no need to flip indices.
-! Fields in non-native files, though, read in from top to bottom. We will
+! Fields in non-native files read in from top to bottom. We will
 ! flip indices after the data is converted to sigma coordinates.
 !-----------------------------------------------------------------------
  
@@ -2611,14 +2594,12 @@ if (localpet == 0) then
 !---------------------------------------------------------------------------
 ! Compute 3-d pressure.
 !---------------------------------------------------------------------------
- if (localpet == 0) print*,"-CONVERT DATA TO SIGMA LEVELS AND COMPUTE 3D PRESSURE"
- if (.not. isnative) then
     
-   if (localpet == 0) print*,"- CALL FieldGet FOR SURFACE PRESSURE."
-   nullify(psptr)
-   call ESMF_FieldGet(ps_input_grid, &
+ if (localpet == 0) print*,"- CALL FieldGet FOR SURFACE PRESSURE."
+ nullify(psptr)
+ call ESMF_FieldGet(ps_input_grid, &
                       farrayPtr=psptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGet", rc)
       
   nullify(presptr)
@@ -2684,39 +2665,7 @@ if (localpet == 0) then
 
   deallocate(vcoord)
 
- else
-   if (localpet == 0) print*,"- COMPUTE 3-D PRESSURE."
 
-   if (localpet == 0) print*,"- CALL FieldGet FOR 3-D PRESSURE."
-   nullify(presptr)
-   
-   call ESMF_FieldGet(pres_input_grid, &
-                      computationalLBound=clb, &
-                      computationalUBound=cub, &
-                      farrayPtr=presptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldGet", rc)
-
-   if (localpet == 0) print*,"- CALL FieldGet FOR SURFACE PRESSURE."
-   nullify(psptr)
-   call ESMF_FieldGet(ps_input_grid, &
-                      farrayPtr=psptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldGet", rc)
-
-   do i = clb(1), cub(1)
-     do j = clb(2), cub(2)
-       
-       do k = 1,lev_input
-         presptr(i,j,k) = vcoord(k,2)*(psptr(i,j)-pt) + vcoord(k,1)*(p0-pt)+pt
-       enddo
-       
-     enddo
-   enddo
-
-  deallocate(vcoord)
- endif
- 
  if (localpet == 0) then
    print*,'psfc is ',clb(1),clb(2),psptr(clb(1),clb(2))
    print*,'pres is ',cub(1),cub(2),presptr(cub(1),cub(2),:) 

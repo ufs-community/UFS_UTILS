@@ -5,10 +5,6 @@ module grib2_util
 !
 ! Abstract: Utilities for use when reading grib2 data.
 !
-! Main Subroutines:
-! -------------------
-! read_vcoord           Reads vertical coordinate data
-!
 !--------------------------------------------------------------------------
 
 use esmf
@@ -20,66 +16,6 @@ use model_grid, only      : i_input, j_input
 implicit none
 
 contains 
-
-subroutine read_vcoord(isnative,vcoordi,vcoordo,lev_input,levp1_input,pt,metadata,iret)
-
-  implicit none
-  integer, intent(in)                       :: lev_input, levp1_input
-  logical, intent(in)                       :: isnative
-  character (len=500), intent(in)           :: metadata
-  real(esmf_kind_r8), intent(in)            :: vcoordi(lev_input)
-  real(esmf_kind_r8), intent(inout), allocatable  :: vcoordo(:,:)
-  real(esmf_kind_r8), intent(out)           :: pt
-  integer, intent(out)                      :: iret
-  
-  integer :: k, idate(3)
-  character (len=1000)                      :: fname_coord
-  character (len=20)                        :: lev_type
-  real(esmf_kind_r8)                        :: sigma, sigflat
-
-  !desc: D=YYYYMMDDHHmmss:RH:xxx mb:etc
-  read(metadata(3:6),'(I4)') idate(1)
-  read(metadata(7:8),'(I2)') idate(2)
-  read(metadata(9:10),'(I2)') idate(3)
-
-  vcoordo(:,:) = 0.0
-  sigflat = 0.1
-  if (isnative) then 
-    if ((trim(external_model) .eq. 'HRRR' .or. trim(external_model) .eq. 'RAP') & 
-        .and. lev_input == 50) then 
-      if (idate(1) .le. 2018 .and. idate(2) .le. 7 .and. idate(3) .lt. 12) then !old sigma coordinates
-        lev_type = "sigma"
-      else  !new hybrid levels
-        lev_type = "hybrid"
-      endif
-    elseif (trim(external_model) .eq. 'NAM' .and. lev_input == 60) then
-      lev_type = "hybrid"
-    else  
-      iret = 1
-      call error_handler("This code only supports rap/hrrr data w/ 50 sigma/hybrid coordinate levels &
-      or NAM data with 60 hybrid coordinate levels", iret)
-    endif ! end check for mname and num levels
-    
-    fname_coord = trim(fixed_files_dir_input_grid)//"/vertical_coordinate_"// &
-    						trim(external_model)//"-"//trim(lev_type)//".txt"
-    print*, fname_coord
-    open(14, file=trim(fname_coord), form='formatted', iostat=iret)
-
-    if (iret /= 0) call error_handler("OPENING VERTICAL COORDINATE FILE", iret)
-
-
-    read(14, *, iostat=iret) pt
-    if (iret /= 0) call error_handler("READING VERTICAL COORDINATE FILE", iret)
-
-    do k = 1, levp1_input
-      read(14, *, iostat=iret) vcoordo(k,1), vcoordo(k,2)
-    enddo    
-  else ! set vcoordo=0 because won't be used
-    vcoordo(:,:) = 0.0
-  endif ! end native vs. non-native check
-  iret=0
-
-end subroutine read_vcoord
 
  subroutine rh2spfh(rh_sphum,p,t)
     
@@ -136,8 +72,6 @@ subroutine convert_omega(omega,p,t,q,clb,cub)
       enddo
     enddo
   enddo
-  
-  
 
 end subroutine convert_omega
 
