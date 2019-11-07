@@ -2189,6 +2189,7 @@
  integer                               :: i, j, k, n, lvl_str_space_len
  integer                               :: rc, clb(3), cub(3)
  integer                               :: vlev, iret,varnum
+ integer                               :: len_str
 
  
  
@@ -2211,7 +2212,7 @@
  
  
  tracers(:) = "NULL"
- !trac_names_grib = (/":SPFH:",":CLWMR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
+ !trac_names_grib = (/":SPFH:",":CLWR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
  !              ":TCDC:", ":NCCICE:",":SPNCR:", ":NCONCD:",":PMTF:",":PMTC:",":TKE:"/)
  trac_names_grib_1 = (/":var0_2", ":var0_2",  ":var0_2",  ":var0_2",  ":var0_2",":var0_2", \
                        ":var0_2", ":var0_2", ":var0_2", ":var0_2", ":var0_2",":var0_2", \
@@ -2287,7 +2288,21 @@
     call quicksort(rlevs,1,lev_input)
 
     do i = 1,lev_input
-      write(slevs(i),"(I5)") int(rlevs(i)/100.0)
+       write(slevs(i),"(F20.10)") rlevs(i)/100.0
+       len_str = len_trim(slevs(i))
+
+        do while (slevs(i)(len_str:len_str) .eq. '0')
+                slevs(i) = slevs(i)(:len_str-1)
+                len_str = len_str - 1
+        end do
+
+        if (slevs(i)(len_str:len_str) .eq. '.') then
+                slevs(i) = slevs(i)(:len_str-1)
+                len_str = len_str - 1
+        end if
+
+        slevs(i) = trim(slevs(i))
+
       slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
       if (localpet==0) print*, "level after sort = ",slevs(i)
     enddo
