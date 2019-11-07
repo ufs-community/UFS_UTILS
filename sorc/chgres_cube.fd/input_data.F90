@@ -2293,13 +2293,6 @@
 
         slevs(i) = trim(slevs(i))
 
-!      if ((rlevs(i)/100.0-int(rlevs(i)/100.0)) > 0.0) then
-!      write(slevs(i),"(F10.3)") rlevs(i)/100.0
-!        write(slevs(i),*) rlevs(i)/100.0
-!      else 
-!        write(slevs(i),"(I5)") int(rlevs(i)/100.0)
-!      end if
-
       slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
       if (localpet==0) print*, "level after sort = ",slevs(i)
     enddo
