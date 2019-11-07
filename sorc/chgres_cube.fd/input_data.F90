@@ -2663,9 +2663,6 @@ if (localpet == 0) then
     end do
   end do
 
-  deallocate(vcoord)
-
-
  if (localpet == 0) then
    print*,'psfc is ',clb(1),clb(2),psptr(clb(1),clb(2))
    print*,'pres is ',cub(1),cub(2),presptr(cub(1),cub(2),:) 
