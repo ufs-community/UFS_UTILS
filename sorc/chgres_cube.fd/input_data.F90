@@ -2295,13 +2295,6 @@
 
 ! Jili Dong add sort to re-order isobaric levels
 
- do i = 1,lev_input
-    write(slevs(i),"(I5)") int(rlevs(i)/100.0)
-    slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
-    if (localpet==0) print*, "level after sort = ",slevs(i)
- enddo
- 
-
    if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
    !iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
    iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1),lvl_str_space)
