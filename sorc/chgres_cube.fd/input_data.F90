@@ -32,7 +32,6 @@
                                     sfc_files_input_grid, &
                                     atm_files_input_grid, &
                                     grib2_file_input_grid, &
-                                    geogrid_file_input_grid, &
                                     atm_core_files_input_grid, &
                                     atm_tracer_files_input_grid, &
                                     convert_nst, &
@@ -41,8 +40,7 @@
                                     tracers_input, num_tracers, &
                                     input_type, num_tracers_input, &
                                     input_type, external_model, &
-                                    get_var_cond, read_from_input, tracers, &
-                                    convert_sfc
+                                    get_var_cond, read_from_input, tracers
 
  use model_grid, only             : input_grid,        &
                                     i_input, j_input,  &
@@ -51,8 +49,6 @@
                                     latitude_input_grid, &
                                     longitude_input_grid, &
                                     inv_file
-
- use atmdata_type
 
  implicit none
 
@@ -2167,9 +2163,7 @@
 
  use wgrib2api
  
- use grib2_util, only                   : read_vcoord, iso2sig, rh2spfh, convert_omega
- use model_grid, only                   : file_is_converted
-
+ use grib2_util, only                   : rh2spfh, convert_omega
 
  implicit none
 
@@ -2179,9 +2173,14 @@
 
  character(len=300)                    :: the_file
  character(len=20)                     :: vlevtyp, vname, lvl_str,lvl_str_space, &
-                                          trac_names_grib(ntrac_max), & 
+ !                                        trac_names_grib(ntrac_max), & 
+                                          trac_names_grib_1(ntrac_max), &
+                                          trac_names_grib_2(ntrac_max), &
                                           trac_names_vmap(ntrac_max), &
-                                          tracers_input_grib(num_tracers), tmpstr, & 
+!                                         tracers_input_grib(num_tracers), 
+                                          tracers_input_grib_1(num_tracers), &
+                                          tracers_input_grib_2(num_tracers), &
+                                          tmpstr, & 
                                           method, tracers_input_vmap(num_tracers), &
                                           tracers_default(ntrac_max), vname2
  character (len=500)                   :: metadata
@@ -2190,29 +2189,32 @@
  integer                               :: rc, clb(3), cub(3)
  integer                               :: vlev, iret,varnum
 
- 
- 
+ integer                               :: len_str
+
  logical                                :: conv_omega=.false., &
-                                           isnative=.false., &
                                            hasspfh=.true.
 
- real(esmf_kind_r8), allocatable       :: vcoord(:,:)
  real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
  real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
                                           u_tmp_3d(:,:,:), v_tmp_3d(:,:,:)
  real(esmf_kind_r8), pointer           :: presptr(:,:,:), psptr(:,:),tptr(:,:,:), &
-                                          qptr(:,:,:), wptr(:,:,:)
+                                          qptr(:,:,:), wptr(:,:,:),  &
+                                          uptr(:,:,:), vptr(:,:,:)
                                           
  real(esmf_kind_r4)                     :: value
- real(esmf_kind_r8)                    :: pt
  real(esmf_kind_r8), parameter         :: p0 = 100000.0
  
- type(atmdata), allocatable   :: atm(:)
  
  tracers(:) = "NULL"
- trac_names_grib = (/":SPFH:",":CLWMR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
-               ":TCDC:", ":NCCICE:",":SPNCR:", ":NCONCD:",":PMTF:",":PMTC:",":TKE:"/)
+ !trac_names_grib = (/":SPFH:",":CLWR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
+ !              ":TCDC:", ":NCCICE:",":SPNCR:", ":NCONCD:",":PMTF:",":PMTC:",":TKE:"/)
+ trac_names_grib_1 = (/":var0_2", ":var0_2",  ":var0_2",  ":var0_2",  ":var0_2",":var0_2", \
+                       ":var0_2", ":var0_2", ":var0_2", ":var0_2", ":var0_2",":var0_2", \
+                       ":var0_2", ":var0_2"/)
+ trac_names_grib_2 = (/"_1_0:",  "_1_22:",  "_14_192:",  "_1_23:",  "_1_24:","_1_25:", \
+                       "_1_32:",  "_6_1:",  "_6_29:",  "_1_100:",  "_6_28:","_13_193:", \
+                       "_13_192:", "_2_2:"/)
  trac_names_vmap = (/"sphum", "liq_wat","o3mr","ice_wat", &
                       "rainwat", "snowwat", "graupel", "cld_amt", "ice_nc", &
                       "rain_nc","water_nc","liq_aero","ice_aero", &
@@ -2221,10 +2223,8 @@
                       "rainwat", "snowwat", "graupel", "cld_amt", "ice_nc", &
                       "rain_nc","water_nc","liq_aero","ice_aero", &
                       "sgs_tke"/)
+
  the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
- !if (file_is_converted) then
- !  the_file = "./test.grib2"
- !endif
 
  print*,"- READ ATMOS DATA FROM GRIB2 FILE: ", trim(the_file)
  print*,"- USE INVENTORY FILE ", inv_file
@@ -2234,36 +2234,29 @@
  if (iret == 0) call error_handler("OPENING GRIB2 ATM FILE.", iret)
 
    !print*,"- READ VERTICAL LEVELS."
-   iret = grb2_inq(the_file,inv_file,":UGRD:"," hybrid level:")
+   !iret = grb2_inq(the_file,inv_file,":TMP:"," hybrid level:")
+   iret = grb2_inq(the_file,inv_file,":var_0_2","_0_0:"," hybrid level:")
    !if (iret < 0) call error_handler("COUNTING VERTICAL LEVELS.", iret)
   
-    if (iret <= 0) then
-      if (localpet == 0) print*,"DATA IS ON ISOBARIC LEVELS, WILL NEED TO CONVERT AFTER READING"
-      lvl_str = "mb:" 
-      lvl_str_space = " mb:"
-      lvl_str_space_len = 4
-      isnative = 0
-      iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
-      lev_input=iret
-    else
-      if (localpet == 0) PRINT*, "DATA IS ON NATIVE SIGMA/HYBRID LEVELS"
-      lvl_str = "hybrid level:"
-      lvl_str_space = " hybrid level:"
-      lvl_str_space_len = 14
-      isnative = .true.
-      iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
-      if (iret < 0) call error_handler("READING VERTICAL LEVEL TYPE.", iret)
-      lev_input=iret
-    endif
- !endif
-    print*, "lev_input = ", lev_input
-    allocate(slevs(lev_input))
-    allocate(rlevs(lev_input))
-    levp1_input = lev_input + 1
+ if (iret <= 0) then
+   if (localpet == 0) print*,"DATA IS ON ISOBARIC LEVELS"
+   lvl_str = "mb:" 
+   lvl_str_space = " mb:"
+   lvl_str_space_len = 4
+   iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
+   lev_input=iret
+ else
+   call error_handler("HYBRID VERTICAL COORD DATA NOT SUPPORTED", -1)
+ endif
+
+ print*, "lev_input = ", lev_input
+ allocate(slevs(lev_input))
+ allocate(rlevs(lev_input))
+ levp1_input = lev_input + 1
     
     ! get the vertical levels, and search string by sequential reads
 
-    do i = 1,lev_input
+ do i = 1,lev_input
       iret=grb2_inq(the_file,inv_file,':UGRD:',trim(lvl_str),sequential=i-1,desc=metadata)
       if (iret.ne.1) call error_handler(" IN SEQUENTIAL FILE READ.", iret)
     
@@ -2274,55 +2267,75 @@
 
       slevs(i) = metadata(j-1:k)
 		
-      if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
+      rlevs(i) = rlevs(i) * 100.0
       if (localpet==0) print*, "LEVEL = ", slevs(i)
-	enddo
+ enddo
 
-   allocate(vcoord(levp1_input,2))
-   if (localpet == 0) print*,"- READ VERTICAL COORDINATE INFO."
-   if (localpet == 0) print*, metadata
-   call read_vcoord(isnative,rlevs,vcoord,lev_input,levp1_input,pt,metadata,iret)
-   if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
-   
-   !if (localpet==0) print*, "VCOORD(:,1) = ", vcoord(:,1)
- 
+! Jili Dong add sort to re-order isobaric levels
+    call quicksort(rlevs,1,lev_input)
+    do i = 1,lev_input
+       write(slevs(i),"(F20.10)") rlevs(i)/100.0
+       len_str = len_trim(slevs(i))
+
+        do while (slevs(i)(len_str:len_str) .eq. '0')
+                slevs(i) = slevs(i)(:len_str-1)
+                len_str = len_str - 1
+        end do
+
+        if (slevs(i)(len_str:len_str) .eq. '.') then
+                slevs(i) = slevs(i)(:len_str-1)
+                len_str = len_str - 1
+        end if
+
+        slevs(i) = trim(slevs(i))
+
+      slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
+      if (localpet==0) print*, "level after sort = ",slevs(i)
+    enddo
+
+! Jili Dong add sort to re-order isobaric levels
+
    if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
-   iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
+   !iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
+   iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1),lvl_str_space)
 
    if (iret <= 0) then
-    iret = grb2_inq(the_file,inv_file,':RH:')
+!    iret = grb2_inq(the_file,inv_file,':RH:')
+    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
     if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
     hasspfh = .false.
-    trac_names_grib(1)=':RH:'
+    !trac_names_grib(1)=':RH:'
+    trac_names_grib_2(1)='_1_1:'
    endif
    
-   if (localpet == 0) print*,"- FIND CICE or CIMIXR"
-   iret = grb2_inq(the_file,inv_file,':CICE:',lvl_str_space)
+   !if (localpet == 0) print*,"- FIND CICE or CIMIXR"
+   !iret = grb2_inq(the_file,inv_file,':CICE:',lvl_str_space)
 
-   if (iret <= 0) then
-    iret = grb2_inq(the_file,inv_file,':CIMIXR:',lvl_str_space)
-    if (iret >= 1) trac_names_grib(4)=':CIMIXR:'
-    if (iret <= 0) then
-      iret = grb2_inq(the_file,inv_file,':ICMR:',lvl_str_space)
-      if (iret >= 1) trac_names_grib(4)=':ICMR:'
-    endif
-   endif
+   !if (iret <= 0) then
+   ! iret = grb2_inq(the_file,inv_file,':CIMIXR:',lvl_str_space)
+   ! if (iret >= 1) trac_names_grib(4)=':CIMIXR:'
+   ! if (iret <= 0) then
+   !   iret = grb2_inq(the_file,inv_file,':ICMR:',lvl_str_space)
+   !   if (iret >= 1) trac_names_grib(4)=':ICMR:'
+   ! endif
+   !endif
 
-  print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
-  !um_tracers = 0
-  !tracers_input(:)=""
-  do n = 1, num_tracers
+
+ print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
+ do n = 1, num_tracers
 
    vname = tracers_input(n)
 
    i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
 
-   tracers_input_grib(n)=trac_names_grib(i)
+   !tracers_input_grib(n)=trac_names_grib(i)
+   tracers_input_grib_1(n) = trac_names_grib_1(i)
+   tracers_input_grib_2(n) = trac_names_grib_2(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
    tracers(n)=tracers_default(i)
 
  enddo
- allocate(atm(num_tracers+5))
+
  if (localpet==0) print*, "NUMBER OF TRACERS IN FILE = ", num_tracers
 
  if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
@@ -2400,9 +2413,7 @@
  endif
 
 !-----------------------------------------------------------------------
-! 3-d fields in native files increment from bottom to model top.
-! That is what is expected by this program, so no need to flip indices.
-! Fields in non-native files, though, read in from top to bottom. We will
+! Fields in non-native files read in from top to bottom. We will
 ! flip indices after the data is converted to sigma coordinates.
 !-----------------------------------------------------------------------
  
@@ -2437,15 +2448,17 @@
         call error_handler("IN FieldGet", rc) 
    endif
    if (localpet == 0) then
-     vname = trim(tracers_input_grib(n))
-     vname2 = "var"
-     if (trim(vname) == ":PMTC:") then
-       vname = "var0_"
-       vname2 = "_13_192"
-     elseif (trim(vname) == ":PMTF:") then
-       vname = "var0_"
-       vname2 = "_13_193"
-     endif
+     !vname = trim(tracers_input_grib(n))
+     !vname2 = "var"
+     vname = trim(tracers_input_grib_1(n))
+     vname2 = trim(tracers_input_grib_2(n))
+     !if (trim(vname) == ":PMTC:") then
+     !  vname = "var0_"
+     !  vname2 = "_13_192"
+     !elseif (trim(vname) == ":PMTF:") then
+     !  vname = "var0_"
+     !  vname2 = "_13_193"
+     !endif
      
      do vlev = 1, lev_input
       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),vname2,data2=dummy2d)
@@ -2453,8 +2466,10 @@
       if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
         if (iret==1) then ! missing_var_method == skip or no entry
-          if (trim(vname)==":SPFH:" .or. trim(vname) == ":RH:" .or.  &
-              trim(vname) == ":O3MR:") then
+          !if (trim(vname2)==":SPFH:" .or. trim(vname) == ":RH:" .or.  &
+          !    trim(vname2) == ":O3MR:") then
+          if (trim(vname2)=="_1_0:" .or. trim(vname2) == "_1_1:" .or.  &
+              trim(vname2) == ":14:192:") then
             call error_handler("READING IN "//trim(vname)//" AT LEVEL "//trim(slevs(vlev))&
                       //". SET A FILL VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
           else
@@ -2472,7 +2487,7 @@
      enddo
    endif
 
-   if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT ", trim(tracers_input_grib(n))
+   if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT ", trim(tracers_input_vmap(n))
    call ESMF_FieldScatter(tracers_input_grid(n), dummy3d, rootpet=0, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldScatter", rc)
@@ -2493,9 +2508,11 @@
     
 if (localpet == 0) then
    print*,"- READ SURFACE PRESSURE."
-   vname = ":PRES:"
+   !vname = ":PRES:"
+   vname = ":var0_2"
+   vname2 = "_3_0:"
    vlevtyp = ":surface:"
-   iret = grb2_inq(the_file,inv_file,vname,vlevtyp,data2=dummy2d)
+   iret = grb2_inq(the_file,inv_file,vname,vname2,vlevtyp,data2=dummy2d)
    if (iret <= 0) call error_handler("READING SURFACE PRESSURE RECORD.", iret)
    dummy2d_8 = real(dummy2d,esmf_kind_r8)
  endif
@@ -2510,13 +2527,16 @@ if (localpet == 0) then
    vname = "dzdt"
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                          loc=varnum)
-   vname = ":DZDT:"
+   !vname = ":DZDT:"
+   vname = ":var0_2"
+   vname2 = "_2_9:"
    do vlev = 1, lev_input
-     iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
+     iret = grb2_inq(the_file,inv_file,vname,vname2,slevs(vlev),data2=dummy2d)
      if (iret <= 0 ) then
        print*,"DZDT not available at level ", trim(slevs(vlev)), " so checking for VVEL"
-       vname = ":VVEL:"
-       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
+       !vname = ":VVEL:"
+       vname2 = "_2_8:"
+       iret = grb2_inq(the_file,inv_file,vname,vname2,slevs(vlev),data2=dummy2d)
        
        
        if (iret <= 0) then
@@ -2541,9 +2561,11 @@ if (localpet == 0) then
 
  if (localpet == 0) then
    print*,"- READ TERRAIN."
-    vname = ":HGT:"
+   !vname = ":HGT:"
+   vname = ":var0_2"
+    vname2 = "_3_5:"
    vlevtyp = ":surface:"
-   iret = grb2_inq(the_file,inv_file,vname,vlevtyp,data2=dummy2d)
+   iret = grb2_inq(the_file,inv_file,vname,vname2,vlevtyp,data2=dummy2d)
    if (iret <= 0) call error_handler("READING TERRAIN HEIGHT RECORD.", iret)
    dummy2d_8 = real(dummy2d,esmf_kind_r8)
  endif
@@ -2565,121 +2587,83 @@ if (localpet == 0) then
 !---------------------------------------------------------------------------
 ! Compute 3-d pressure.
 !---------------------------------------------------------------------------
- if (localpet == 0) print*,"-CONVERT DATA TO SIGMA LEVELS AND COMPUTE 3D PRESSURE"
- if (.not. isnative) then
     
-   if (localpet == 0) print*,"- CALL FieldGet FOR SURFACE PRESSURE."
-   nullify(psptr)
-   call ESMF_FieldGet(ps_input_grid, &
+ if (localpet == 0) print*,"- CALL FieldGet FOR SURFACE PRESSURE."
+ nullify(psptr)
+ call ESMF_FieldGet(ps_input_grid, &
                       farrayPtr=psptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGet", rc)
       
+  nullify(presptr)
   if (localpet == 0) print*,"- CALL FieldGet FOR 3-D PRESSURE."
   call ESMF_FieldGet(pres_input_grid, &
-                    farrayPtr=atm(1)%var, rc=rc)
+                     computationalLBound=clb, &
+                     computationalUBound=cub, &
+                    farrayPtr=presptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
 
+ nullify(tptr)
   if (localpet == 0) print*,"- CALL FieldGet TEMPERATURE."  
   call ESMF_FieldGet(temp_input_grid, &
-                    computationalLBound=clb, &
-                    computationalUBound=cub, &
-                    farrayPtr=atm(2)%var, rc=rc)
+                    farrayPtr=tptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc) 
   
+ nullify(uptr)
   if (localpet == 0) print*,"- CALL FieldGet FOR U"
   call ESMF_FieldGet(u_input_grid, &
-                    farrayPtr=atm(3)%var, rc=rc)
+                    farrayPtr=uptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
     
+  nullify(vptr)
   if (localpet == 0) print*,"- CALL FieldGet FOR V"
   call ESMF_FieldGet(v_input_grid, &
-                    farrayPtr=atm(4)%var, rc=rc)
+                    farrayPtr=vptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
   
+  nullify(wptr)
    if (localpet == 0) print*,"- CALL FieldGet FOR W"
   call ESMF_FieldGet(dzdt_input_grid, &
-                    farrayPtr=atm(5)%var, rc=rc)
+                    farrayPtr=wptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
  
   if (localpet == 0) print*,"- CALL FieldGet FOR TRACERS."
-  do i=1,num_tracers
-    call ESMF_FieldGet(tracers_input_grid(i), &
-                    farrayPtr=atm(i+5)%var, rc=rc)
+  do n=1,num_tracers
+    nullify(qptr)
+    call ESMF_FieldGet(tracers_input_grid(n), &
+                    farrayPtr=qptr, rc=rc)
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGet", rc)
-    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-    call error_handler("IN FieldGet", rc) 
-  end do
-  
-  !call iso2sig(rlevs,vcoord,lev_input,levp1_input,psptr,atm,clb,cub,5+num_tracers, iret)
-  do i = clb(1),cub(1)
-    do j = clb(2),cub(2)
-      atm(1)%var(i,j,:) = rlevs(lev_input:1:-1)
-      do n = 2,num_tracers+5
-        atm(n)%var(i,j,:) = atm(n)%var(i,j,lev_input:1:-1)
+    do i = clb(1),cub(1)
+      do j = clb(2),cub(2)
+        qptr(i,j,:) = qptr(i,j,lev_input:1:-1)
       end do
     end do
-  end do  
+  end do
+  
+  do i = clb(1),cub(1)
+    do j = clb(2),cub(2)
+      presptr(i,j,:) = rlevs(lev_input:1:-1)
+      tptr(i,j,:) = tptr(i,j,lev_input:1:-1)
+      uptr(i,j,:) = uptr(i,j,lev_input:1:-1)
+      vptr(i,j,:) = vptr(i,j,lev_input:1:-1)
+      wptr(i,j,:) = wptr(i,j,lev_input:1:-1)
+    end do
+  end do
 
-  deallocate(vcoord)
-
- else
-   if (localpet == 0) print*,"- COMPUTE 3-D PRESSURE."
-
-   if (localpet == 0) print*,"- CALL FieldGet FOR 3-D PRESSURE."
-   nullify(presptr)
-   
-   call ESMF_FieldGet(pres_input_grid, &
-                      computationalLBound=clb, &
-                      computationalUBound=cub, &
-                      farrayPtr=presptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldGet", rc)
-
-   if (localpet == 0) print*,"- CALL FieldGet FOR SURFACE PRESSURE."
-   nullify(psptr)
-   call ESMF_FieldGet(ps_input_grid, &
-                      farrayPtr=psptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-      call error_handler("IN FieldGet", rc)
-
-   do i = clb(1), cub(1)
-     do j = clb(2), cub(2)
-       
-       do k = 1,lev_input
-         presptr(i,j,k) = vcoord(k,2)*(psptr(i,j)-pt) + vcoord(k,1)*(p0-pt)+pt
-       enddo
-       
-     enddo
-   enddo
-
-  deallocate(vcoord)
- endif
- 
  if (localpet == 0) then
    print*,'psfc is ',clb(1),clb(2),psptr(clb(1),clb(2))
-   if (isnative) then
-     print*,'pres is ',cub(1),cub(2),presptr(cub(1),cub(2),:) 
+   print*,'pres is ',cub(1),cub(2),presptr(cub(1),cub(2),:) 
      
-     print*,'pres check 1',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2),1)), &
+   print*,'pres check 1',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2),1)), &
               minval(presptr(clb(1):cub(1),clb(2):cub(2),1))
-     print*,'pres check lev',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2), &
+   print*,'pres check lev',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2), &
             lev_input)),minval(presptr(clb(1):cub(1),clb(2):cub(2),lev_input))
-   else
-     print*,'pres is ',cub(1),cub(2),atm(1)%var(cub(1),cub(2),:)
-     print*,'pres check 1',localpet,maxval(atm(1)%var(clb(1):cub(1),clb(2):cub(2),1)), &
-              minval(atm(1)%var(clb(1):cub(1),clb(2):cub(2),1))
-     print*,'pres check lev',localpet,maxval(atm(1)%var(clb(1):cub(1),clb(2):cub(2), &
-            lev_input)),minval(atm(1)%var(clb(1):cub(1),clb(2):cub(2),lev_input))
-   endif
-
- 
  endif
  
 !---------------------------------------------------------------------------
@@ -2726,9 +2710,6 @@ if (localpet == 0) then
   
  endif
  
- if (localpet == 0 .and. file_is_converted .and. .not. convert_sfc) &
-      call system("rm "//trim(the_file))
-
  end subroutine read_input_atm_grib2_file
 
 !---------------------------------------------------------------------------
@@ -4916,7 +4897,7 @@ if (localpet == 0) then
  
  use wgrib2api
  use netcdf
- use program_setup, only      : get_var_cond, base_install_dir, wgrib2_path
+ use program_setup, only      : get_var_cond, fixed_files_dir_input_grid , wgrib2_path
  use model_grid, only         : input_grid_type
  implicit none
  
@@ -4932,7 +4913,8 @@ if (localpet == 0) then
  integer                                 :: varnum_u, varnum_v, ncid, vlev, id_var, & 
                                             error, iret, i
  
- character(len=20)                       :: vname
+ !character(len=20)                       :: vname
+ character(len=20)                       :: vname,vname2
  character(len=50)                       :: method_u, method_v
  character(len=250)                      :: file_coord, cmdline_msg
  character(len=10000)                    :: temp_msg
@@ -4945,7 +4927,7 @@ if (localpet == 0) then
    allocate(v(0,0,0))
  endif
  
- file_coord = trim(base_install_dir)//"/fix/fix_chgres/latlon_grid3.32769.nc" 
+ file_coord = trim(fixed_files_dir_input_grid)//"/latlon_grid3.32769.nc" 
 
  vname = "u"
  call get_var_cond(vname,this_miss_var_method=method_u, this_miss_var_value=value_u, &
@@ -4993,8 +4975,10 @@ if (localpet == 0) then
  if (localpet==0) then
    do vlev = 1, lev_input
  
-     vname = ":UGRD:"
-     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=u_tmp)
+     !vname = ":UGRD:"
+     vname = ":var0_2"
+     vname2 = "_2_2:"
+     iret = grb2_inq(file,inv,vname,vname2,slevs(vlev),data2=u_tmp)
      if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
         if (iret==1) then ! missing_var_method == skip
@@ -5003,8 +4987,9 @@ if (localpet == 0) then
         endif
      endif
    
-     vname = ":VGRD:"
-     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=v_tmp)
+!     vname = ":VGRD:"
+     vname2 = "_2_3:"
+     iret = grb2_inq(file,inv,vname,vname2,slevs(vlev),data2=v_tmp)
      if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
         if (iret==1) then ! missing_var_method == skip 
@@ -5265,5 +5250,36 @@ end subroutine handle_grib_error
  call ESMF_FieldDestroy(terrain_input_grid, rc=rc)
 
  end subroutine cleanup_input_sfc_data
+
+! Jili Dong add sort subroutine 
+! quicksort.f -*-f90-*-
+! Author: t-nissie
+! License: GPLv3
+! Gist: https://gist.github.com/t-nissie/479f0f16966925fa29ea
+!!
+recursive subroutine quicksort(a, first, last)
+  implicit none
+  real*8  a(*), x, t
+  integer first, last
+  integer i, j
+
+  x = a( (first+last) / 2 )
+  i = first
+  j = last
+  do
+     do while (a(i) < x)
+        i=i+1
+     end do
+     do while (x < a(j))
+        j=j-1
+     end do
+     if (i >= j) exit
+     t = a(i);  a(i) = a(j);  a(j) = t
+     i=i+1
+     j=j-1
+  end do
+  if (first < i-1) call quicksort(a, first, i-1)
+  if (j+1 < last)  call quicksort(a, j+1, last)
+end subroutine quicksort
 
  end module input_data

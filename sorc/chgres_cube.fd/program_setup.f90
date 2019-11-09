@@ -95,12 +95,12 @@
 
  private
  
- character(len=500), public      :: base_install_dir = "NULL"
+ character(len=500), public      :: varmap_file = "NULL"
  character(len=500), public      :: atm_files_input_grid(6) = "NULL"
  character(len=500), public      :: atm_core_files_input_grid(7) = "NULL"
  character(len=500), public      :: atm_tracer_files_input_grid(6) = "NULL"
  character(len=500), public      :: data_dir_input_grid = "NULL"
- character(len=500), public      :: varmap_tables_dir = "parm/varmap_tables"
+ character(len=500), public      :: fixed_files_dir_input_grid = "NULL"
  character(len=500), public      :: fix_dir_target_grid = "NULL"
  character(len=500), public      :: mosaic_file_input_grid = "NULL"
  character(len=500), public      :: mosaic_file_target_grid = "NULL"
@@ -168,8 +168,8 @@
  integer                     :: is, ie, ierr
 
 
- namelist /config/ base_install_dir, &
-                   varmap_tables_dir, &
+ namelist /config/ varmap_file, &
+                   fixed_files_dir_input_grid, &
                    mosaic_file_target_grid, &
                    fix_dir_target_grid,     &
                    orog_dir_target_grid,    &
@@ -327,16 +327,15 @@ subroutine read_varmap
  implicit none
 
  integer                    :: istat, k, nvars
- character(len=500)         :: varmap_table_file, line
+ character(len=500)         :: line
  character(len=20),allocatable  :: var_type(:)
 
  if (trim(input_type) == "grib2") then 
-   varmap_table_file = trim(base_install_dir) // "/" // trim(varmap_tables_dir) // "/" &
-                    // trim(phys_suite) // "phys_var_map.txt"
- 
+   !varmap_table_file = trim(base_install_dir) // "/" // trim(varmap_tables_dir) // "/" &
+   !                 // trim(phys_suite) // "phys_var_map.txt"
 
-   print*,"OPEN VARIABLE MAPPING FILE: ", trim(varmap_table_file)
-   open(14, file=trim(varmap_table_file), form='formatted', iostat=istat)
+   print*,"OPEN VARIABLE MAPPING FILE: ", trim(varmap_file)
+   open(14, file=trim(varmap_file), form='formatted', iostat=istat)
    if (istat /= 0) then
      call error_handler("OPENING VARIABLE MAPPING FILE", istat)
    endif
