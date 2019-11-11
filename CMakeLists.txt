@@ -51,7 +51,7 @@ find_package( SP )
 find_package( HDF5 COMPONENTS C HL Fortran_HL )
 find_package( ESMF )
 
-#add_subdirectory(sorc/chgres_cube.fd)
+add_subdirectory(sorc/chgres_cube.fd)
 #add_subdirectory(sorc/emcsfc_ice_blend.fd)
 #add_subdirectory(sorc/emcsfc_snow2mdl.fd)
 #add_subdirectory(sorc/fre-nctools.fd)
