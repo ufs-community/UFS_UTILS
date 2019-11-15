@@ -14,7 +14,7 @@ OBJS = driver.o \
        interp.o
 
 $(CMD):	$(OBJS)
-	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -o $(CMD) $(OBJS) $(ESMF_F90LINKPATHS) $(ESMF_F90LINKRPATHS) $(ESMF_F90ESMFLINKLIBS) -g -traceback
+	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -o $(CMD) $(OBJS) $(ESMF_F90LINKPATHS) $(ESMF_F90LINKRPATHS) $(ESMF_F90ESMFLINKLIBS)
 
 interp.o:  source_grid.o model_grid.o utils.o interp.F90
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -c interp.F90

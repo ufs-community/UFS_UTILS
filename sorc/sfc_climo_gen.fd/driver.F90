@@ -43,17 +43,17 @@
 
  print*,"- INITIALIZE ESMF"
  call ESMF_Initialize(rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("INITIALIZING ESMF", rc)
 
  print*,"- CALL VMGetGlobal"
  call ESMF_VMGetGlobal(vm, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN VMGetGlobal.", rc)
 
  print*,"- CALL VMGet"
  call ESMF_VMGet(vm, localPet=localpet, petCount=npets, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN VMGet.", rc)
 
  print*,'- NPETS IS  ',npets
