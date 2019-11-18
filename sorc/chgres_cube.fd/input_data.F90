@@ -28,6 +28,7 @@
  use nemsio_module
 
  use program_setup, only          : data_dir_input_grid, &
+                                    fixed_files_dir_input_grid, &
                                     nst_files_input_grid, &
                                     sfc_files_input_grid, &
                                     atm_files_input_grid, &
@@ -100,14 +101,14 @@
  type(esmf_field), public        :: veg_type_input_grid     ! vegetation type
  type(esmf_field), public        :: z0_input_grid           ! roughness length
 
- integer, parameter, public      :: lsoil_input=4  ! # of soil layers,
+ integer, public      :: lsoil_input=4  ! # of soil layers,
                                                    ! # hardwire for now
 
  integer, public                 :: P_QC, P_QNC,P_QI,  &  ! Use for keeping track of tracer
                                     P_QNI, P_QR, P_QNR, & ! locations in tracer fields for
                                     P_QNWFA, P_QV         ! use in creating concentrations
  
- character(len=50), allocatable         :: slevs(:)                            
+ character(len=50), allocatable         :: slevs(:)                           
 
 ! Fields associated with the nst model.
 
@@ -496,6 +497,8 @@
    call read_input_sfc_gfs_gaussian_file(localpet)
  elseif (trim(input_type) == "gfs_spectral") then
    call read_input_sfc_gfs_sfcio_file(localpet)
+ elseif (trim(input_type) == "grib2") then
+   call read_input_sfc_grib2_file(localpet)
  endif
 
  end subroutine read_input_sfc_data
@@ -2265,8 +2268,7 @@
 
       read(metadata(j:k),*) rlevs(i)
 
-      slevs(i) = metadata(j-1:k)
-		
+      slevs(i) = metadata(j-1:k)	
       rlevs(i) = rlevs(i) * 100.0
       if (localpet==0) print*, "LEVEL = ", slevs(i)
  enddo
@@ -2295,20 +2297,13 @@
 
 ! Jili Dong add sort to re-order isobaric levels
 
- do i = 1,lev_input
-    write(slevs(i),"(I5)") int(rlevs(i)/100.0)
-    slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
-    if (localpet==0) print*, "level after sort = ",slevs(i)
- enddo
- 
-
    if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
    !iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
    iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1),lvl_str_space)
 
    if (iret <= 0) then
 !    iret = grb2_inq(the_file,inv_file,':RH:')
-    iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1))
+    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
     if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
     hasspfh = .false.
     !trac_names_grib(1)=':RH:'
@@ -2336,8 +2331,8 @@
    i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
 
    !tracers_input_grib(n)=trac_names_grib(i)
-   tracers_input_grib_1 = trac_names_grib_1(i)
-   tracers_input_grib_2 = trac_names_grib_2(i)
+   tracers_input_grib_1(n) = trac_names_grib_1(i)
+   tracers_input_grib_2(n) = trac_names_grib_2(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
    tracers(n)=tracers_default(i)
 
@@ -4307,6 +4302,528 @@ if (localpet == 0) then
 
  end subroutine read_input_sfc_history_file
 
+ subroutine read_input_sfc_grib2_file(localpet)
+
+   use wgrib2api
+   use netcdf
+   implicit none
+
+   integer, intent(in)                   :: localpet
+
+   character(len=250)                    :: the_file, fix_file
+   character(len=20)                     :: vname, vname_file,slev
+
+   character(len=50)                      :: method
+
+   integer                               :: rc,ncid2d, varid, varnum, iret, i, j,k
+
+   logical                               :: exist
+
+   real(esmf_kind_r4)                    :: value
+
+   real(nemsio_realkind), allocatable    :: dummy(:), dummy2d_ni(:,:)
+   real(esmf_kind_r4), allocatable       :: dummy2d(:,:),tsk_save(:,:),icec_save(:,:)
+   real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:)
+   real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:)
+   integer(esmf_kind_i4), allocatable    :: slmsk_save(:,:)
+   
+
+   the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
+
+   print*,"- OPEN FILE."
+   inquire(file=the_file,exist=exist)
+   if (.not.exist) then
+     iret = 1
+     call error_handler("OPENING GRIB2 ATM FILE.", iret)
+   end if
+
+   lsoil_input = grb2_inq(the_file, inv_file, ':TSOIL:',' below ground:')
+   print*, "- FILE HAS ", lsoil_input, " SOIL LEVELS"
+   if (lsoil_input <= 0) call error_handler("COUNTING SOIL LEVELS.", rc)
+
+   if (localpet == 0) then
+   allocate(dummy(i_input*j_input))
+   allocate(dummy2d(i_input,j_input))
+   allocate(slmsk_save(i_input,j_input))
+   allocate(tsk_save(i_input,j_input))
+   allocate(icec_save(i_input,j_input))
+   allocate(dummy2d_8(i_input,j_input))
+   allocate(dummy3d(i_input,j_input,lsoil_input))
+ else
+   allocate(dummy3d(0,0,0))
+   allocate(dummy2d_8(0,0))
+   allocate(dummy2d(0,0))
+
+ endif
+ 
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ ! These variables are always in grib files, or are required, so no need to check for them 
+ ! in the varmap table. If they can't be found in the input file, then stop the program.
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  if (localpet == 0) then
+   print*,"- READ TERRAIN."
+   rc = grb2_inq(the_file, inv_file, ':HGT:',':surface:', data2=dummy2d)
+   if (rc /= 1) call error_handler("READING TERRAIN.", rc)
+   print*,'orog ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT TERRAIN."
+ call ESMF_FieldScatter(terrain_input_grid, real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+    
+if (localpet == 0) then
+   print*,"- READ SEAICE FRACTION."
+   rc = grb2_inq(the_file, inv_file, ':ICEC:',':surface:', data2=dummy2d)
+   if (rc /= 1) call error_handler("READING SEAICE FRACTION.", rc)
+   !dummy2d = dummy2d(i_input:1:-1,j_input:1:-1)
+   print*,'icec ',maxval(dummy2d),minval(dummy2d)
+   icec_save = dummy2d
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SEAICE FRACTION."
+ call ESMF_FieldScatter(seaice_fract_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ LANDSEA MASK."
+   rc = grb2_inq(the_file, inv_file, ':LAND:',':surface:', data2=dummy2d)
+   if (rc /= 1) call error_handler("READING LANDSEA MASK.", rc)
+   print*,'landmask ',maxval(dummy2d),minval(dummy2d)
+   print*, "icec, landmask at 150, 150 = ", icec_save(150,150), dummy2d(150,150)
+   do j = 1, j_input
+     do i = 1, i_input
+       if(dummy2d(i,j) < 0.5_esmf_kind_r4) dummy2d(i,j)=0.0_esmf_kind_r4
+       if(icec_save(i,j) > 0.15_esmf_kind_r4) then 
+         !if (dummy2d(i,j) == 0.0_esmf_kind_r4) print*, "CONVERTING WATER TO LANDICE AT ", i, j
+         dummy2d(i,j) = 2.0_esmf_kind_r4
+       endif
+     enddo
+   enddo
+   print*, "icec, landmask at 150, 150 = ", icec_save(150,150), dummy2d(150,150)
+   slmsk_save = int(dummy2d,esmf_kind_i4)
+  
+   print*,'landmask ',maxval(dummy2d),minval(dummy2d)
+   print*,'slmsk_save ',maxval(slmsk_save),minval(slmsk_save)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
+ call ESMF_FieldScatter(landsea_mask_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+ 
+ 
+
+ if (localpet == 0) then
+   print*,"- READ SEAICE SKIN TEMPERATURE."
+   rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
+   if (rc /= 1) call error_handler("READING SEAICE SKIN TEMP.", rc)
+   print*,'ti ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SEAICE SKIN TEMPERATURE."
+ call ESMF_FieldScatter(seaice_skin_temp_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ SNOW LIQUID EQUIVALENT."
+   rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:',':anl:',data2=dummy2d)
+   if (rc /= 1) then 
+     rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:','hour fcst:',data2=dummy2d)
+     if (rc /= 1) call error_handler("READING SNOW LIQUID EQUIVALENT.", rc)
+   endif
+   do j = 1, j_input
+     do i = 1, i_input
+       if(slmsk_save(i,j) == 0) dummy2d(i,j) = 0.0_esmf_kind_r4
+     enddo
+   enddo
+   print*,'weasd ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
+ call ESMF_FieldScatter(snow_liq_equiv_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ SNOW DEPTH."
+   rc = grb2_inq(the_file, inv_file, ':SNOD:',':surface:', data2=dummy2d)
+   if (rc /= 1) call error_handler("READING SNOW DEPTH.", rc)
+   dummy2d = dummy2d*1000.0 ! Grib2 files have snow depth in (m), fv3 expects it in mm
+   where(slmsk_save == 0) dummy2d = 0.0_esmf_kind_r4
+   print*,'snod ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SNOW DEPTH."
+ call ESMF_FieldScatter(snow_depth_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+    
+ if (localpet == 0) then
+   print*,"- READ T2M."
+   rc = grb2_inq(the_file, inv_file, ':TMP:',':2 m above ground:',data2=dummy2d)
+   if (rc <= 0) call error_handler("READING T2M.", rc)
+
+   print*,'t2m ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID T2M."
+ call ESMF_FieldScatter(t2m_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0,rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ Q2M."
+   rc = grb2_inq(the_file, inv_file, ':SPFH:',':2 m above ground:',data2=dummy2d)
+   if (rc <=0) call error_handler("READING Q2M.", rc)
+   print*,'q2m ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID Q2M."
+ call ESMF_FieldScatter(q2m_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0,rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+    
+if (localpet == 0) then
+   print*,"- READ SKIN TEMPERATURE."
+   rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
+   if (rc <= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
+   tsk_save(:,:) = dummy2d
+   dummy2d_8 = real(dummy2d,esmf_kind_r8)
+   
+   print*,'tmp ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
+ call ESMF_FieldScatter(skin_temp_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+    
+ if (localpet == 0) dummy2d = 0.0
+ 
+ print*,"- CALL FieldScatter FOR INPUT GRID SRFLAG"
+ call ESMF_FieldScatter(srflag_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0,rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ ! KEEP THIS COMMENTED FOR NOW UNTIL WE HAVE FIXED FILES CONTAINING SOIL TYPE.
+ ! ROUTINE TO ADJUST SOIL MOISTURE FOR DIFFERENCES IN INPUT AND TARGET GRID SOIL
+ ! TYPES HAS BEEN TURNED OFF AS WELL
+ !if (localpet == 0) then
+ !  print*,"- READ SOIL TYPE."
+ !  rc = nf90_open(fix_file,NF90_NOWRITE,ncid2d)
+ !  if (rc<0) call error_handler("ERROR READING INPUT FIXED FILE",rc)
+ !  print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
+ !  rc = nf90_inq_varid(ncid2d,"SOTYP",varid)
+ !  if (rc<0) call error_handler("ERROR FINDING SOTYP IN INPUT FIXED FILE",rc)
+ !  print*, "READ SOIL TYPE FROM GEOGRID FILE "
+ !  rc = nf90_get_var(ncid2d,varid,dummy2d)
+ !  if (rc<0) call error_handler("ERROR READING SOTYP FROM FILE",rc)
+ !
+ !  dummy2d_8 = real(dummy2d,esmf_kind_r8)
+ !  print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
+ !endif
+
+ ! USE THIS FOR NOW
+ dummy2d_8 = 1.0_esmf_kind_r8
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
+ call ESMF_FieldScatter(soil_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ ! KEEP THIS COMMENTED FOR NOW UNTIL WE HAVE FIXED FILES CONTAINING VEG TYPE.
+ ! WILL HAVE TO USE ANOTHER METHOD TO DETERMINE PERMANENT LANDICE LOCATIONS
+ !if (localpet == 0) then
+ !  print*,"- READ VEG TYPE."
+ !  rc = nf90_open(fix_file,NF90_NOWRITE,ncid2d)
+ !  if (rc<0) call error_handler("ERROR READING INPUT FIXED FILE",rc)
+ !  print*, "INQUIRE ABOUT VEG TYPE FROM GEOGRID FILE"
+ !  rc = nf90_inq_varid(ncid2d,"VGTYP",varid)
+ !  if (rc<0) call error_handler("ERROR FINDING VGTYP IN INPUT FIXED FILE",rc)
+ !  print*, "READ VEG TYPE FROM GEOGRID FILE "
+ !  rc = nf90_get_var(ncid2d,varid,dummy2d)
+ !  if (rc<0) call error_handler("ERROR READING VGTYP FROM FILE",rc)
+ !  print*, "CLOSE INPUT FIX FILE "
+ !  iret = nf90_close(ncid2d)
+ !
+ !  dummy2d_8 = real(dummy2d,esmf_kind_r8)
+ !  print*,'vgtype ',maxval(dummy2d_8),minval(dummy2d_8)
+ !endif
+
+ ! USE THIS FOR NOW. Will create a proxy below using slmsk and soil moisture
+ dummy2d_8 = 1.0_esmf_kind_r8
+
+ print*,"- CALL FieldScatter FOR INPUT GRID VEG TYPE."
+ call ESMF_FieldScatter(veg_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     
+ ! Begin variables whose presence in grib2 files varies, but no climatological
+ ! data is 
+ ! available, so we have to account for values in the varmap table
+ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ 
+ if (localpet == 0) then
+   print*,"- READ SEAICE DEPTH."
+   vname="hice"
+   slev=":surface:" 
+   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+                         loc=varnum)                 
+   vname=":ICETK:"
+   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+   if (rc <= 0) then
+      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
+                   " REPLACED WITH CLIMO. SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+        dummy2d(:,:) = 0.0_esmf_kind_r4
+      endif
+    endif
+   dummy2d_8= real(dummy2d,esmf_kind_r8)
+   print*,'hice ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SEAICE DEPTH."
+ call ESMF_FieldScatter(seaice_depth_input_grid,dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+    
+ if (localpet == 0) then
+   print*,"- READ TPRCP."
+   vname="tprcp"
+   slev=":surface:" 
+   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+                         loc=varnum)  
+    vname=":TPRCP:"              
+   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+   if (rc <= 0) then
+      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
+                   " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+        dummy2d(:,:) = 0.0_esmf_kind_r4
+      endif
+    endif
+   dummy2d_8= real(dummy2d,esmf_kind_r8)
+   print*,'tprcp ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID TPRCP."
+ call ESMF_FieldScatter(tprcp_input_grid,dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+ 
+ if (localpet == 0) then
+   print*,"- READ FFMM."
+   vname="ffmm"
+   slev=":surface:" 
+   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+                         loc=varnum)  
+    vname=":FFMM:"               
+    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+    if (rc <= 0) then
+      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
+                   " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+        dummy2d(:,:) = 0.0_esmf_kind_r4
+      endif
+    endif
+   dummy2d_8= real(dummy2d,esmf_kind_r8)
+   print*,'ffmm ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID FFMM"
+ call ESMF_FieldScatter(ffmm_input_grid,dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+    
+ if (localpet == 0) then
+   print*,"- READ USTAR."
+   vname="fricv"
+   slev=":surface:" 
+   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+                         loc=varnum)  
+    vname=":FRICV:"              
+    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+    if (rc <= 0) then
+      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL "//&
+                   "REPLACED WITH CLIMO. SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+        dummy2d(:,:) = 0.0_esmf_kind_r4
+      endif
+    endif
+   dummy2d_8= real(dummy2d,esmf_kind_r8)
+   print*,'fricv ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID USTAR"
+ call ESMF_FieldScatter(ustar_input_grid,dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ F10M."
+   vname="f10m"
+   slev=":10 m above ground:" 
+   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+                         loc=varnum)  
+    vname=":F10M:"               
+    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+    if (rc <= 0) then
+      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
+                   " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+        dummy2d(:,:) = 0.0_esmf_kind_r4
+      endif
+    endif
+   dummy2d_8= real(dummy2d,esmf_kind_r8)
+   print*,'f10m ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID F10M."
+ call ESMF_FieldScatter(f10m_input_grid,dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ CANOPY MOISTURE CONTENT."
+   vname="cnwat"
+   slev=":surface:" 
+   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+                         loc=varnum)  
+    vname=":CNWAT:"              
+    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+    if (rc <= 0) then
+      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL"//&
+                   " REPLACED WITH CLIMO. SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+        dummy2d(:,:) = 0.0_esmf_kind_r4
+      endif
+    endif
+   dummy2d_8= real(dummy2d,esmf_kind_r8)
+   print*,'cnwat ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID CANOPY MOISTURE CONTENT."
+ call ESMF_FieldScatter(canopy_mc_input_grid,dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ Z0."
+   vname="sfcr"
+   slev=":surface:" 
+   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+                         loc=varnum)  
+    vname=":SFCR:"               
+    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+    if (rc <= 0) then
+      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
+                   " REPLACED WITH CLIMO. SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+        dummy2d(:,:) = 0.0_esmf_kind_r4
+      endif
+    else
+      ! Grib files have z0 (m), but fv3 expects z0(cm)
+      dummy2d(:,:) = dummy2d(:,:)*10.0
+    endif
+   dummy2d_8= real(dummy2d,esmf_kind_r8)
+   print*,'sfcr ',maxval(dummy2d),minval(dummy2d)
+   
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID Z0."
+ call ESMF_FieldScatter(z0_input_grid,dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+    
+ deallocate(dummy2d)
+ 
+ if (localpet == 0) then
+   print*,"- READ LIQUID SOIL MOISTURE."
+   vname = "soill"
+   vname_file = ":SOILL:"
+   call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc) !!! NEEDTO HANDLE 
+                                                                      !!! SOIL LEVELS
+   print*,'soill ',maxval(dummy3d),minval(dummy3d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT LIQUID SOIL MOISTURE."
+ call ESMF_FieldScatter(soilm_liq_input_grid, dummy3d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+ 
+ if (localpet == 0) then
+   print*,"- READ TOTAL SOIL MOISTURE."
+   vname = "soilw"
+   !vname_file = "var2_2_1_7_0_192"  !Some files don't recognize this as soilw,so use
+   vname_file = "var2_2_1_"         ! the var number instead
+   call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
+   print*,'soilm ',maxval(dummy3d),minval(dummy3d)
+ endif
+
+ if (localpet == 0) then
+   dummy2d_8(:,:) = 0.0_esmf_kind_r8
+   do j = 1, j_input
+       do i = 1, i_input
+         if(slmsk_save(i,j) == 1_esmf_kind_i4 .and. dummy3d(i,j,0) > 0.99) dummy2d_8(i,j) = real(veg_type_landice_input,esmf_kind_r8)
+       enddo
+   enddo
+ endif
+
+  print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
+ call ESMF_FieldScatter(veg_type_input_grid, dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ print*,"- CALL FieldScatter FOR INPUT TOTAL SOIL MOISTURE."
+ call ESMF_FieldScatter(soilm_tot_input_grid, dummy3d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ SOIL TEMPERATURE."
+   vname = "soilt"
+   vname_file = ":TSOIL:"
+   call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
+   do k=1,lsoil_input
+     do j = 1, j_input
+       do i = 1, i_input
+         if (slmsk_save(i,j) == 0_esmf_kind_i4 ) dummy3d(i,j,k) = tsk_save(i,j)
+       enddo
+     enddo
+   enddo
+   print*,'soilt ',maxval(dummy3d),minval(dummy3d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
+ call ESMF_FieldScatter(soil_temp_input_grid, dummy3d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ deallocate(dummy3d)
+ deallocate(dummy2d_8)
+ 
+ end subroutine read_input_sfc_grib2_file
+
+   
 !---------------------------------------------------------------------------
 ! Read nst data from tiled history or restart files.
 !---------------------------------------------------------------------------
@@ -5170,6 +5687,57 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
   endif
 
 end subroutine handle_grib_error
+
+subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
+  
+  use wgrib2api
+  implicit none
+  
+  
+  character(len=250), intent(in)          :: the_file, inv_file
+  character(len=20), intent(in)           :: vname,vname_file
+  
+  integer, intent(out)                    :: rc
+  
+  real(esmf_kind_r8), intent(inout)       :: dummy3d(:,:,:)
+  
+  real(esmf_kind_r4), allocatable         :: dummy2d(:,:)
+  real(esmf_kind_r4)                      :: value
+  integer                                 :: varnum,i
+  character(len=50)                       :: slevs(lsoil_input)
+  character(len=50)                       :: method
+  
+  if(lsoil_input == 4) then
+    slevs = (/character(24)::':0-0.1 m below ground:', ':0.1-0.4 m below ground:', &
+                             ':0.4-1 m below ground:', ':1-2 m below ground:'/)
+  else
+    rc = -1
+    call error_handler("reading soil levels. File must have 4 soil levels.")
+  endif
+ 
+  call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+                         loc=varnum)
+  do i = 1,lsoil_input
+    if (vname_file=="var2_2_1_") then
+      rc = grb2_inq(the_file,inv_file,vname_file,"_0_192:",slevs(i),data2=dummy2d)
+    else
+      rc = grb2_inq(the_file,inv_file,vname_file,slevs(i),data2=dummy2d)
+    endif
+    if (rc <= 0) then
+      call handle_grib_error(vname_file, slevs(i),method,value,varnum,rc,var=dummy2d)
+      if (rc==1 .and. trim(vname) /= "soill") then 
+        ! missing_var_method == skip or no entry in varmap table
+        call error_handler("READING IN "//trim(vname)//". SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",rc)
+      elseif (rc==1) then
+        dummy3d(:,:,:) = 0.0_esmf_kind_r8
+        exit
+      endif
+    endif
+    dummy3d(:,:,i) = real(dummy2d,esmf_kind_r8)
+  end do    
+  
+ end subroutine read_grib_soil
 
  subroutine cleanup_input_atm_data
 

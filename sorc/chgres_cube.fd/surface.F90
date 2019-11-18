@@ -181,8 +181,8 @@
 !---------------------------------------------------------------------------------------------
 ! Rescale soil moisture for changes in soil type between the input and target grids.
 !---------------------------------------------------------------------------------------------
-
- call rescale_soil_moisture
+!KEEP THIS TURNED OFF FOR NOW UNTIL WE HAVE FIXED FILES
+ !call rescale_soil_moisture
 
 !---------------------------------------------------------------------------------------------
 ! Compute liquid portion of total soil moisture.
@@ -292,9 +292,10 @@
                                        seamask_target_grid,  &
                                        latitude_target_grid
 
- use program_setup, only             : convert_nst
+ use program_setup, only             : convert_nst, input_type
 
- use static_data, only               : veg_type_target_grid
+ use static_data, only               : veg_type_target_grid, &
+                                       soil_type_target_grid
 
  use search_util
 
@@ -318,6 +319,7 @@
  integer(esmf_kind_i8), pointer     :: seamask_target_ptr(:,:)
 
  real(esmf_kind_r8), allocatable    :: data_one_tile(:,:)
+ real(esmf_kind_r8), allocatable    :: data_one_tile2(:,:)
  real(esmf_kind_r8), allocatable    :: data_one_tile_3d(:,:,:)
  real(esmf_kind_r8), allocatable    :: latitude_one_tile(:,:)
  real(esmf_kind_r8), pointer        :: canopy_mc_target_ptr(:,:)
@@ -513,6 +515,26 @@
 !-----------------------------------------------------------------------
 ! Interpolate.
 !-----------------------------------------------------------------------
+ if (localpet == 0) then
+   allocate(data_one_tile(i_target,j_target))
+   allocate(data_one_tile2(i_target,j_target))
+   allocate(data_one_tile_3d(i_target,j_target,lsoil_target))
+   allocate(mask_target_one_tile(i_target,j_target))
+ else
+   allocate(data_one_tile(0,0))
+   allocate(data_one_tile2(0,0))
+   allocate(data_one_tile_3d(0,0,0))
+   allocate(mask_target_one_tile(0,0))
+ endif
+
+ print*,"- CALL FieldGather FOR TARGET GRID SEAICE FRACTION TILE: ", tile
+   call ESMF_FieldGather(seaice_fract_target_grid, data_one_tile, rootPet=0,tile=1, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__))&
+      call error_handler("IN FieldGather", rc)
+
+ if (localpet==0) then 
+    print*, "before regrid, target seaice fract min,max = ", minval(data_one_tile), maxval(data_one_tile)
+ endif
 
  method=ESMF_REGRIDMETHOD_CONSERVE
 
@@ -540,16 +562,6 @@
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldRegrid", rc)
-
- if (localpet == 0) then
-   allocate(data_one_tile(i_target,j_target))
-   allocate(data_one_tile_3d(i_target,j_target,lsoil_target))
-   allocate(mask_target_one_tile(i_target,j_target))
- else
-   allocate(data_one_tile(0,0))
-   allocate(data_one_tile_3d(0,0,0))
-   allocate(mask_target_one_tile(0,0))
- endif
 
  print*,"- CALL FieldGet FOR TARGET grid sea ice fraction."
  call ESMF_FieldGet(seaice_fract_target_grid, &
@@ -591,8 +603,10 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
+     print*,'bf search, ice target(14,86) = ',data_one_tile(14,86)
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 91, &
                  latitude=latitude_one_tile)
+     print*,'af search, ice target(14,86) = ',data_one_tile(14,86)
    endif
 
    print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
@@ -600,13 +614,16 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGather", rc)
 
+   
    if (localpet == 0) then
+     print*,'bf ice repl, ice, slmsk_target(14,86) = ', data_one_tile(14,86), mask_target_one_tile(14,86)
      do j = 1, j_target
      do i = 1, i_target
        if (data_one_tile(i,j) < 0.15) data_one_tile(i,j) = 0.0
        if (data_one_tile(i,j) >= 0.15) mask_target_one_tile(i,j) = 2
      enddo
      enddo
+     print*,'af ice repl, ice, slmsk_target(14,86) = ', data_one_tile(14,86),mask_target_one_tile(14,86)
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SEAICE FRACTION TILE: ", tile
@@ -703,11 +720,20 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldRegrid", rc)
 
+ print*,"- CALL FieldGet FOR INPUT grid snow depth."
+ call ESMF_FieldGet(snow_depth_input_grid, &
+                    farrayPtr=snow_depth_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__))&
+    call error_handler("IN FieldGet", rc)
+
+
+ nullify(snow_depth_target_ptr)
  print*,"- CALL FieldGet FOR TARGET grid snow depth."
  call ESMF_FieldGet(snow_depth_target_grid, &
                     farrayPtr=snow_depth_target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN FieldGet", rc)
+
 
  print*,"- CALL Field_Regrid for snow liq equiv."
  call ESMF_FieldRegrid(snow_liq_equiv_input_grid, &
@@ -778,7 +804,9 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
+     print*, "snod target bf search ice ", data_one_tile(61,80)
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 66)
+     print*, "snod target af search ice ", data_one_tile(61,80)
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SNOW DEPTH TILE: ", tile
@@ -1641,10 +1669,12 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
+     print*, "snod input bf search land  = ",data_one_tile(61,80)
      allocate(land_target_one_tile(i_target,j_target))
      land_target_one_tile = 0
      where(mask_target_one_tile == 1) land_target_one_tile = 1
      call search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 66)
+     print*, "snod af search land  =", data_one_tile(61,80)
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SNOW DEPTH: ", tile
@@ -1966,12 +1996,17 @@
 
  do ij = l(1), u(1)
    call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
-   soilm_tot_target_ptr(i,j,:) = -9999.9 
+   soilm_tot_target_ptr(i,j,:) = -9999.9
    soil_temp_target_ptr(i,j,:) = -9999.9 
    skin_temp_target_ptr(i,j) = -9999.9 
    terrain_from_input_ptr(i,j) = -9999.9 
    soil_type_from_input_ptr(i,j) = -9999.9 
  enddo
+
+! do l = lsoil_target
+!   where (landmask_target_ptr == 1 .and. soilm_tot_target_ptr(:,:,0) > 0.5 .and. soilm_tot_target_ptr(:,:,0) < 0.99) &
+!      soilm_tot_target_ptr(:,:,l) = -9999.9
+! enddo
 
  if (localpet == 0) then
    allocate (veg_type_target_one_tile(i_target,j_target))
@@ -2025,8 +2060,17 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
       call error_handler("IN FieldGather", rc)
 
+   print*,"- CALL FieldGather FOR SOIL TYPE TARGET GRID, TILE: ", tile
+   call ESMF_FieldGather(soil_type_target_grid, data_one_tile2, rootPet=0,tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__))&
+      call error_handler("IN FieldGather", rc)
+
    if (localpet == 0) then
-     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
+     if (trim(input_type) .ne. "grib2") then
+       call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
+     else
+       data_one_tile = data_one_tile2
+     endif
    endif
 
    print*,"- CALL FieldScatter FOR SOIL TYPE FROM INPUT GRID, TILE: ", tile

@@ -279,16 +279,6 @@
  end select
  
 !-------------------------------------------------------------------------
-! Grib2 support is currently not available for surface conversion  
-!-------------------------------------------------------------------------
-
- if (trim(input_type) == "grib2" .and. convert_sfc) then
-   print*, "WARNING: PROCESSING OF SURFACE GRIB2 DATA IS NOT CURRENTLY SUPORTED. SETTING &
-            convert_sfc TO FALSE."
-   convert_sfc = .false.
- endif
- 
-!-------------------------------------------------------------------------
 ! Ensure proper file variable provided for grib2 input  
 !-------------------------------------------------------------------------
 
@@ -303,22 +293,10 @@
 !-------------------------------------------------------------------------
 
  if (trim(input_type) == "grib2") then
-   if (.not. any((/"GFS","NAM","RAP","HRRR"/)==trim(external_model))) then
-     print*, "WARNING: KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, AND HRRR. &
-     RESULTS MAY NOT BE AS EXPECTED. "
+   if (.not. any((/"GFS"/)==trim(external_model))) then
+     print*, "WARNING: KNOWN SUPPORTED external_model INPUT IS GFS ONLY.RESULTS MAY NOT BE AS EXPECTED. "
    endif
  endif
-
-!-------------------------------------------------------------------------
-! For grib2 hrrr input, require input geogrid file 
-!-------------------------------------------------------------------------
-
- if (trim(input_type) == "grib2" .and. trim(external_model)=="HRRR") then
-   if (trim(geogrid_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
-     call error_handler("FOR HRRR DATA, PLEASE PROVIDE GEOGRID_FILE_INPUT_GRID")
-   endif
- endif
- return
 
  end subroutine read_setup_namelist
 
