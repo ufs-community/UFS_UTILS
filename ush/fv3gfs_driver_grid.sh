@@ -289,7 +289,7 @@ elif [ $gtype = regional ]; then
   name=C${res}r${rn}n${refine_ratio}_${title}
   grid_dir=$TMPDIR/${name}/grid
   orog_dir=$TMPDIR/$name/orog
-  filter_dir=$orog_dir   # nested grid topography will be filtered online
+  filter_dir=$TMPDIR/$name/filter_topo
   rm -rf $TMPDIR/$name
   mkdir -p $grid_dir $orog_dir $filter_dir
 
