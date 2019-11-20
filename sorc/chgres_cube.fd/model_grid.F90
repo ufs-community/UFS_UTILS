@@ -743,11 +743,11 @@
      lon_src_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
      if (lon_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_src_ptr(i,j) = lon_src_ptr(i,j) - 360.0_esmf_kind_r8
      if (j == 1) then 
-       lat_src_ptr(i,j) = 90.0_esmf_kind_r8
+       lat_src_ptr(i,j) = -90.0_esmf_kind_r8
        cycle
      endif
      if (j == jp1_input) then
-       lat_src_ptr(i,j) = -90.0_esmf_kind_r8
+       lat_src_ptr(i,j) = +90.0_esmf_kind_r8
        cycle
      endif
      lat_src_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
