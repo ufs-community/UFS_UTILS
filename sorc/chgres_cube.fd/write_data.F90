@@ -2347,6 +2347,7 @@
 
    if (localpet == 0) then
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     dum2d = min(1.0, dum2d)
      error = nf90_put_var( ncid, id_fice, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING FICE RECORD' )
    endif
