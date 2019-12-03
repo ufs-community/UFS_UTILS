@@ -177,7 +177,7 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
 
   for(n=0; n<ntiles*nip*nip; n++) {
     /* This will result in the corner close to east coast of china */
-    if( do_schmidt == 0 && shift_fac > EPSLN4) xc[n] -= M_PI/18.;
+    if( do_schmidt == 0 && shift_fac > EPSLN4) xc[n] -= M_PI/shift_fac;
     if(xc[n] < 0.) xc[n] += 2.*M_PI;
     if(fabs(xc[n]) < EPSLN10) xc[n] = 0;
     if(fabs(yc[n]) < EPSLN10) yc[n] = 0;
