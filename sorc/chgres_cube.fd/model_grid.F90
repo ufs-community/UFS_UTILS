@@ -161,6 +161,8 @@
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
  real(esmf_kind_r8), pointer      :: lat_src_ptr(:,:)
  real(esmf_kind_r8), pointer      :: lon_src_ptr(:,:)
+ real(esmf_kind_r8), pointer      :: lat_corner_src_ptr(:,:)
+ real(esmf_kind_r8), pointer      :: lon_corner_src_ptr(:,:)
  real(esmf_kind_r8)               :: deltalon
  real(esmf_kind_r8), allocatable  :: slat(:), wlat(:)
 
@@ -320,22 +322,22 @@
     call error_handler("IN GridAddCoord", rc)
 
  print*,"- CALL GridGetCoord FOR INPUT GRID X-COORD."
- nullify(lon_src_ptr)
+ nullify(lon_corner_src_ptr)
  call ESMF_GridGetCoord(input_grid, &
                         staggerLoc=ESMF_STAGGERLOC_CORNER, &
                         coordDim=1, &
-                        farrayPtr=lon_src_ptr, rc=rc)
+                        farrayPtr=lon_corner_src_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN GridGetCoord", rc)
 
  print*,"- CALL GridGetCoord FOR INPUT GRID Y-COORD."
- nullify(lat_src_ptr)
+ nullify(lat_corner_src_ptr)
  call ESMF_GridGetCoord(input_grid, &
                         staggerLoc=ESMF_STAGGERLOC_CORNER, &
                         coordDim=2, &
                         computationalLBound=clb, &
                         computationalUBound=cub, &
-                        farrayPtr=lat_src_ptr, rc=rc)
+                        farrayPtr=lat_corner_src_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
     call error_handler("IN GridGetCoord", rc)
 
@@ -343,17 +345,17 @@
 
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     lon_src_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
-     if (lon_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_src_ptr(i,j) = lon_src_ptr(i,j) - 360.0_esmf_kind_r8
+     lon_corner_src_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
+     if (lon_corner_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_src_ptr(i,j) = lon_corner_src_ptr(i,j) - 360.0_esmf_kind_r8
      if (j == 1) then 
-       lat_src_ptr(i,j) = 90.0_esmf_kind_r8
+       lat_corner_src_ptr(i,j) = 90.0_esmf_kind_r8
        cycle
      endif
      if (j == jp1_input) then
-       lat_src_ptr(i,j) = -90.0_esmf_kind_r8
+       lat_corner_src_ptr(i,j) = -90.0_esmf_kind_r8
        cycle
      endif
-     lat_src_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
+     lat_corner_src_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
    enddo
  enddo
 
