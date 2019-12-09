@@ -4783,7 +4783,7 @@ if (localpet == 0) then
    dummy2d_8(:,:) = 0.0_esmf_kind_r8
    do j = 1, j_input
        do i = 1, i_input
-         if(slmsk_save(i,j) == 1_esmf_kind_i4 .and. dummy3d(i,j,0) > 0.99) dummy2d_8(i,j) = real(veg_type_landice_input,esmf_kind_r8)
+         if(slmsk_save(i,j) == 1_esmf_kind_i4 .and. dummy3d(i,j,1) > 0.99) dummy2d_8(i,j) = real(veg_type_landice_input,esmf_kind_r8)
        enddo
    enddo
  endif
