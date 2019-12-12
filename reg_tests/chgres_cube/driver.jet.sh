@@ -26,7 +26,7 @@ set -x
 
 source /apps/lmod/lmod/init/sh
 module purge
-module load intel/15.0.3.187
+module load intel/18.0.5.274
 module load impi/2018.4.274
 module load szip
 module load hdf5
