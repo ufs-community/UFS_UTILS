@@ -349,9 +349,9 @@ elif [ $gtype = regional ]; then
     set -x
     $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
     err=$?
-  fi
-  if [ $err != 0 ]; then
-    exit $err
+    if [ $err != 0 ]; then
+      exit $err
+    fi
   fi
 
   set +x
