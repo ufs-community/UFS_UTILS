@@ -4439,6 +4439,7 @@ if (localpet == 0) then
    do j = 1, j_input
      do i = 1, i_input
        if(slmsk_save(i,j) == 0) dummy2d(i,j) = 0.0_esmf_kind_r4
+       if(dummy2d(i,j) > 1.0E3) dummy2d(i,j) = 0.0_esmf_kind_r4
      enddo
    enddo
    print*,'weasd ',maxval(dummy2d),minval(dummy2d)
@@ -4455,6 +4456,7 @@ if (localpet == 0) then
    if (rc /= 1) call error_handler("READING SNOW DEPTH.", rc)
    dummy2d = dummy2d*1000.0 ! Grib2 files have snow depth in (m), fv3 expects it in mm
    where(slmsk_save == 0) dummy2d = 0.0_esmf_kind_r4
+   where(dummy2d > 1.0E6) dummy2d = 0.0_esmf_kind_r4
    print*,'snod ',maxval(dummy2d),minval(dummy2d)
  endif
 
