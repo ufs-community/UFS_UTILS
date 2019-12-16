@@ -4,26 +4,20 @@
 
 module load intel/18.0.5.274
 module load impi/2018.0.4
-#module use -a $MOD_PATH
-module use -a /contrib/da/spack/share/spack/modules/linux-centos7-skylake_avx512
-module load cmake/3.15.3-intel-19.0.4.243
-module load w3nco/v2.0.6-intel-19.0.4.243-impi
-module load nemsio/v2.2.3-intel-19.0.4.243-impi 
-module load nemsiogfs/v2.2.1-intel-19.0.4.243-impi
-module load ip/v3.0.0-intel-19.0.4.243
-module load g2/v3.1.0-intel-19.0.4.243
-module load landsfcutil/v2.1.0-intel-19.0.4.243
-module load bacio/v2.1.0-intel-19.0.4.243
-module load sp/v2.0.2-intel-19.0.4.243
-module load sfcio//v1.1.0-intel-19.0.4.243
-module load sigio/v2.1.0-intel-19.0.4.243-impi
-module load esmf/8.0.0b-intel-19.0.4.243-impi 
 
-#export NCEPLIBS=/scratch1/NCEPDEV/global/gwv/l819/lib
-#module use -a $NCEPLIBS/modulefiles
-#module load esmflocal/8_0_48b.netcdf47
+module use -a $MOD_PATH
+module load w3nco/2.0.6
+module load nemsio/2.2.3
+module load bacio/2.0.2
+module load sp/2.0.2
+module load sfcio/1.1.0
+module load sigio/2.1.0
 
-#export FCOMP=mpiifort
-#export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
+export NCEPLIBS=/scratch1/NCEPDEV/global/gwv/l819/lib
+module use -a $NCEPLIBS/modulefiles
+module load esmflocal/8_0_48b.netcdf47
+
+export FCOMP=mpiifort
+export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
 # for debugging
 #export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"
