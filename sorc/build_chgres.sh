@@ -6,7 +6,7 @@ cwd=`pwd`
 
 USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}
 if [ $USE_PREINST_LIBS = true ]; then
-  export MOD_PATH=/scratch3/NCEPDEV/nwprod/lib/modulefiles
+  export MOD_PATH
   source ../modulefiles/fv3gfs/global_chgres.$target             > /dev/null 2>&1
 else
   export MOD_PATH=${cwd}/lib/modulefiles
@@ -32,8 +32,8 @@ export FCMP95=$FCMP
 
 export FFLAGSM="-i4 -O3 -r8  -convert big_endian -fp-model precise"
 export RECURS=
-export LDFLAGSM=${LDFLAGSM:-"-openmp -auto"}
-export OMPFLAGM=${OMPFLAGM:-"-openmp -auto"}
+export LDFLAGSM=${LDFLAGSM:-"-qopenmp -auto"}
+export OMPFLAGM=${OMPFLAGM:-"-qopenmp -auto"}
 
 export INCS="-I${SIGIO_INC4} -I${SFCIO_INC4} -I${LANDSFCUTIL_INCd} \
              -I${NEMSIO_INC} -I${NEMSIOGFS_INC} -I${GFSIO_INC4} -I${IP_INCd} ${NETCDF_INCLUDE}"
