@@ -15,6 +15,6 @@ sfcr                zorl      set_to_fill   0.01     S
 soilw               smc       stop          0        S
 soilt               stc       stop          0        S
 cnwat               cnwat     set_to_fill   0.0      S
-icetk               icetk     set_to_fill   265.0    S
+hice                icetk     set_to_fill   1.5      S
 weasd               weasd     set_to_fill   0.0      S
 snod                snod      set_to_fill   0.0      S       	
