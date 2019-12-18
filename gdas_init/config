@@ -1,0 +1,18 @@
+EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/George.Gayno
+EXTRACT_DATA=yes
+
+yy=2019
+mm=08
+dd=20
+hh=00
+
+CRES_HIRES=C192
+CRES_ENKF=C96
+
+UFS_DIR=/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS
+
+OUTDIR=/scratch2/NCEPDEV/stmp1/George.Gayno
+
+INPUT_DIR=$EXTRACT_DIR
+
+export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR INPUT_DIR CRES_HIRES CRES_ENKF
