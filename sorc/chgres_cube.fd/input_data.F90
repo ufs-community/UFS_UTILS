@@ -4390,8 +4390,13 @@ if (localpet == 0) then
 
  if (localpet == 0) then
    print*,"- READ LANDSEA MASK."
-   rc = grb2_inq(the_file, inv_file, ':LAND:',':surface:', data2=dummy2d)
-   if (rc /= 1) call error_handler("READING LANDSEA MASK.", rc)
+   rc = grb2_inq(the_file, inv_file, ':LANDN:',':surface:', data2=dummy2d)
+
+   if (rc /= 1) then 
+     rc = grb2_inq(the_file, inv_file, ':LAND:',':surface:', data2=dummy2d)
+     if (rc /= 1) call error_handler("READING LANDSEA MASK.", rc)
+   endif
+
    print*,'landmask ',maxval(dummy2d),minval(dummy2d)
    print*, "icec, landmask at 150, 150 = ", icec_save(150,150), dummy2d(150,150)
    do j = 1, j_input
