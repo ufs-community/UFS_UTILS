@@ -1,5 +1,19 @@
+#-----------------------------------------------------------
+#
+#  1) Ensure links to the 'fixed' directories are
+#  set.  See the ./sorc/link_fixdirs.sh script for details.
+#
+#  2) Set all config varialbes:
+#
+#  3) Invoke the driver script for your machine (with no
+#     arguments).
+#
+#-----------------------------------------------------------
+
 EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/George.Gayno
 EXTRACT_DATA=yes
+
+RUN_CHGRES=yes
 
 yy=2019
 mm=08
@@ -9,10 +23,12 @@ hh=00
 CRES_HIRES=C192
 CRES_ENKF=C96
 
-UFS_DIR=/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS
+UFS_DIR=$PWD/..
 
 OUTDIR=/scratch2/NCEPDEV/stmp1/George.Gayno
 
-INPUT_DIR=$EXTRACT_DIR
+#---------------------------------------------------------
+# Dont touch anything below here.
+#---------------------------------------------------------
 
-export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR INPUT_DIR CRES_HIRES CRES_ENKF
+export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF RUN_CHGRES

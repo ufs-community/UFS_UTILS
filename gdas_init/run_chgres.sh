@@ -19,12 +19,12 @@ YMDH=${yy}${mm}${dd}.${hh}0000
 if [ ${MEMBER} == 'hires' ]; then
   CINP=C768
   CTAR=${CRES_HIRES}
-  INPUT_DATA_DIR="${INPUT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
+  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
   OUTDIR=$OUTDIR/chgres.fv3.${MEMBER}.${yy}${mm}${dd}${hh}
 else  
   CINP=C384
   CTAR=${CRES_ENKF}
-  INPUT_DATA_DIR="${INPUT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/mem${MEMBER}/RESTART"
+  INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/mem${MEMBER}/RESTART"
   OUTDIR=$OUTDIR/chgres.fv3.mem${MEMBER}.${yy}${mm}${dd}${hh}
 fi
 
