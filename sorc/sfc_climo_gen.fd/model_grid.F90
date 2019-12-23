@@ -172,7 +172,7 @@
                                   indexflag=ESMF_INDEX_GLOBAL, &
                                   tileFilePath=trim(orog_dir_mdl), &
                                   rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridCreateMosaic", rc)
 
  print*,"- CALL FieldCreate FOR DATA INTERPOLATED TO MODEL GRID."
@@ -181,7 +181,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="data on model grid", &
                                    rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR VEGETATION TYPE INTERPOLATED TO MODEL GRID."
@@ -190,7 +190,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="veg type on model grid", &
                                    rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
 !-----------------------------------------------------------------------
@@ -203,7 +203,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="model grid land mask", &
                                    rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldGet FOR MODEL GRID LANDMASK."
@@ -211,7 +211,7 @@
  call ESMF_FieldGet(mask_field_mdl, &
                     farrayPtr=mask_field_mdl_ptr,  &
                     rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  if (localpet == 0) then
@@ -227,7 +227,7 @@
    endif
    print*,"- CALL FieldScatter FOR MODEL GRID MASK. TILE IS: ", tile
    call ESMF_FieldScatter(mask_field_mdl, mask_mdl_one_tile, rootpet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
  enddo
 
@@ -238,7 +238,7 @@
                        itemflag=ESMF_GRIDITEM_MASK, &
                        staggerloc=ESMF_STAGGERLOC_CENTER, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridAddItem", rc)
 
  print*,"- CALL GridGetItem FOR MODEL GRID."
@@ -247,7 +247,7 @@
                        itemflag=ESMF_GRIDITEM_MASK, &
                        farrayPtr=mask_mdl_ptr, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetItem", rc)
 
  mask_mdl_ptr = mask_field_mdl_ptr
