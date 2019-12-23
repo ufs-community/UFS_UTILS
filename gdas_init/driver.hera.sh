@@ -9,6 +9,7 @@ module load impi/2018.0.4
 module load netcdf/4.7.0
 module load hpss
 module load prod_util
+module load nco/4.7.0
 module list
 
 PROJECT_CODE=fv3-cpu
@@ -25,6 +26,7 @@ else
 fi
 
 if [ $RUN_CHGRES == yes ]; then
+  MEMBER=hires
   sbatch --parsable --ntasks-per-node=6 --nodes=3 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER} \
       -o log.${MEMBER} -e log.${MEMBER} ${DEPEND} run_chgres.sh ${MEMBER}
 

@@ -1,16 +1,19 @@
 #-----------------------------------------------------------
 #
-#  1) Ensure links to the 'fixed' directories are
+#  1) Compile the chgres_cube program.  Invoke 
+#     ./sorc/build_chgres_cube.sh
+
+#  2) Ensure links to the 'fixed' directories are
 #  set.  See the ./sorc/link_fixdirs.sh script for details.
 #
-#  2) Set all config varialbes:
+#  3) Set all config varialbes:
 #
-#  3) Invoke the driver script for your machine (with no
+#  4) Invoke the driver script for your machine (with no
 #     arguments).
 #
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/George.Gayno
+EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/$USER/gdas.init/input
 EXTRACT_DATA=yes
 
 RUN_CHGRES=yes
@@ -25,7 +28,7 @@ CRES_ENKF=C96
 
 UFS_DIR=$PWD/..
 
-OUTDIR=/scratch2/NCEPDEV/stmp1/George.Gayno
+OUTDIR=/scratch2/NCEPDEV/stmp1/$USER/gdas.init/output
 
 #---------------------------------------------------------
 # Dont touch anything below here.
