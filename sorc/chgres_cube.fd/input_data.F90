@@ -1952,6 +1952,9 @@
 !  error=nf90_get_var(ncid, id_var, data_one_tile_3d)
 !  call netcdf_err(error, 'reading field' )
 !  data_one_tile_3d(:,:,1:lev_input) = data_one_tile_3d(:,:,lev_input:1:-1)
+
+! Using w from the tiled history files has caused problems.  
+! Set to zero.
    data_one_tile_3d = 0.0_8
  endif
 
