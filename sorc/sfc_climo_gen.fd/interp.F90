@@ -59,7 +59,7 @@
                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
                                   name="source data", &
                                   rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldGet FOR SOURCE GRID DATA."
@@ -67,7 +67,7 @@
  call ESMF_FieldGet(data_field_src, &
                     farrayPtr=data_src_ptr,  &
                     rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR MODEL GRID DATA."
@@ -77,7 +77,7 @@
                     computationalLBound=clb_mdl, &
                     computationalUBound=cub_mdl, &
                     rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  if (localpet == 0) then
@@ -115,7 +115,7 @@
 
    print*,"- CALL FieldScatter FOR SOURCE GRID DATA."
    call ESMF_FieldScatter(data_field_src, data_src_global, rootPet=0, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter.", rc)
 
    isrctermprocessing = 1
@@ -142,7 +142,7 @@
                             regridmethod=method, &
                             unmappedDstList=unmapped_ptr,  &
                             rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldRegridStore.", rc)
 
    endif
@@ -153,7 +153,7 @@
                          routehandle=regrid_data, &
                          termorderflag=ESMF_TERMORDER_SRCSEQ, &
                          rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegrid.", rc)
  
 !-----------------------------------------------------------------------
@@ -201,19 +201,19 @@
 
      print*,"- CALL FieldGather FOR MODEL GRID DATA."
      call ESMF_FieldGather(data_field_mdl, data_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather.", rc)
 
      print*,"- CALL FieldGather FOR MODEL GRID LAND MASK."
      call ESMF_FieldGather(mask_field_mdl, mask_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather.", rc)
 
      select case (trim(field_names(n)))
        case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type')
          print*,"- CALL FieldGather FOR MODEL GRID VEG TYPE."
          call ESMF_FieldGather(vegt_field_mdl, vegt_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-         if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+         if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
             call error_handler("IN FieldGather.", rc)
      end select
 
@@ -231,7 +231,7 @@
      if (field_names(n) == 'vegetation_type') then
        print*,"- CALL FieldScatter FOR MODEL GRID VEGETATION TYPE."
        call ESMF_FieldScatter(vegt_field_mdl, data_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-       if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+       if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
           call error_handler("IN FieldScatter.", rc)
      endif
 

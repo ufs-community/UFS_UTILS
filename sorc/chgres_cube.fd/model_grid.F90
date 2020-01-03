@@ -330,7 +330,7 @@ if(ESMF_logFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
                         staggerLoc=ESMF_STAGGERLOC_CORNER, &
                         coordDim=1, &
                         farrayPtr=lon_corner_src_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord", rc)
 
  print*,"- CALL GridGetCoord FOR INPUT GRID Y-COORD."
@@ -341,7 +341,7 @@ if(ESMF_logFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
                         computationalLBound=clb, &
                         computationalUBound=cub, &
                         farrayPtr=lat_corner_src_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord", rc)
 
  print*,'bounds for corners ',localpet,clb(1),cub(1),clb(2),cub(2)
