@@ -1,0 +1,8 @@
+#############################################################
+## sfc_climo_gen component - linux.intel
+#############################################################
+
+export FCOMP=mpif90
+export FFLAGS="-O3 -fp-model source -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
+# for debugging
+#export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"
