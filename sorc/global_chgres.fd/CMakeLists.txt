@@ -6,7 +6,7 @@ if(IntelComp)
     message("setting intel flags")
     set(CMAKE_Fortran_4_FLAGS "-i4 -O3 -r8  -convert big_endian -fp-model precise" CACHE INTERNAL "" )
 else()
-    message("unkown compiler!")
+    message("unknown compiler!")
     exit()
 endif()
 
