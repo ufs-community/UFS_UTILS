@@ -45,7 +45,7 @@ find_package(BACIO REQUIRED)
 find_package(NEMSIO REQUIRED)
 find_package(SIGIO REQUIRED)
 find_package(SP REQUIRED)
-find_package(ESMF REQUIRED)
+find_package(ESMF)
 
 add_subdirectory(sorc/chgres_cube.fd)
 #add_subdirectory(sorc/emcsfc_ice_blend.fd)
