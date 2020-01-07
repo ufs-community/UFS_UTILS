@@ -73,12 +73,9 @@ if [ $rc != 0 ]; then
   exit $rc
 fi
 
-# Note, model does not recognize vertical velocity when using warm restart
-# files as input to chgres.  For now, zero it out using ncap utility.
-
 for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
 do
-  ncap -s "w=w*0" out.atm.${tile}.nc ${OUTDIR}/INPUT/gfs_data.${tile}.nc
+  mv out.atm.${tile}.nc  ${OUTDIR}/INPUT/gfs_data.${tile}.nc
   mv out.sfc.${tile}.nc  ${OUTDIR}/INPUT/sfc_data.${tile}.nc 
 done
 
