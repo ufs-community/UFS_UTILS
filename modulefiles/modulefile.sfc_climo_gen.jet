@@ -4,7 +4,7 @@
 
 module use /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib/modulefiles
 
-module load intel/15.0.3.187
+module load intel/18.0.5.274
 module load impi/2018.4.274
 module load szip
 module load hdf5
