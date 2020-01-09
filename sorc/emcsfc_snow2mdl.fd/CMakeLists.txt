@@ -6,7 +6,7 @@ if(IntelComp)
     message("setting intel flags")
     set(CMAKE_Fortran_4_FLAGS "-free -g -O3 -axCORE-AVX2" CACHE INTERNAL "" )
 else()
-    message("unkown compiler!")
+    message("unknown compiler!")
     exit()
 endif()
 
