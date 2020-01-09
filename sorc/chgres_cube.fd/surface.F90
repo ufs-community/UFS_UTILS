@@ -619,8 +619,11 @@
      print*,'bf ice repl, ice, slmsk_target(14,86) = ', data_one_tile(14,86), mask_target_one_tile(14,86)
      do j = 1, j_target
      do i = 1, i_target
-       if (data_one_tile(i,j) < 0.15) data_one_tile(i,j) = 0.0
-       if (data_one_tile(i,j) >= 0.15) mask_target_one_tile(i,j) = 2
+       if (data_one_tile(i,j) > 1.0_esmf_kind_r8) then
+         data_one_tile(i,j) = 1.0_esmf_kind_r8
+       endif
+       if (data_one_tile(i,j) < 0.15_esmf_kind_r8) data_one_tile(i,j) = 0.0_esmf_kind_r8
+       if (data_one_tile(i,j) >= 0.15_esmf_kind_r8) mask_target_one_tile(i,j) = 2
      enddo
      enddo
      print*,'af ice repl, ice, slmsk_target(14,86) = ', data_one_tile(14,86),mask_target_one_tile(14,86)
