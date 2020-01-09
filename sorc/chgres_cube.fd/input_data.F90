@@ -4542,8 +4542,10 @@ if (localpet == 0) then
  !  print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
  !endif
 
- ! USE THIS FOR NOW
- dummy2d_8 = 1.0_esmf_kind_r8
+! Soil type is not available.  Set to a large negative number which
+! turns off the soil moisture rescaling.
+
+ dummy2d_8 = -999.0_esmf_kind_r8
 
  print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
  call ESMF_FieldScatter(soil_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
