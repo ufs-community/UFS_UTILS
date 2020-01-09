@@ -4,8 +4,8 @@
 
 export IP_INCd=${NCEPLIBS}/ip/include_d
 export NEMSIO_INC=${NCEPLIBS}/nemsio/include
-export SFCIO_INC4=${NCEPLIBS}/sfcio/include
-export SIGIO_INC4=${NCEPLIBS}/sigio/include
+export SFCIO_INC4=${NCEPLIBS}/sfcio/include_4
+export SIGIO_INC4=${NCEPLIBS}/sigio/include_4
 
 export BACIO_LIB4=${NCEPLIBS}/bacio/lib/libbacio_v2.1.0_4.a
 export IP_LIBd=${NCEPLIBS}/ip/lib/libip_v3.0.0_d.a
