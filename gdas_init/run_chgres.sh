@@ -83,4 +83,7 @@ cp ${RADSTAT_DATA_DIR}/* $OUTDIR
 
 rm -fr $WORKDIR
 
-exit
+set +x
+echo CHGRES COMPLETED FOR $MEMBER
+
+exit 0
