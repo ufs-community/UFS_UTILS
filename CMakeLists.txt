@@ -10,7 +10,7 @@ endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
   message("setting intel true")
   set(IntelComp true )
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU*")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU*" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang*")
   set(GNUComp true )
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "pgc*")
   set(PGIComp true )
@@ -45,7 +45,17 @@ find_package(BACIO REQUIRED)
 find_package(NEMSIO REQUIRED)
 find_package(SIGIO REQUIRED)
 find_package(SP REQUIRED)
-find_package(ESMF)
+# If UFS_UTILS is built as part of the NCEPLIBS umbrella build,
+# ESMF_INC and ESMF_LIB are set by the top-level CMakeLists.txt.
+# If UFS_UTILS is built standalone, these variables need to be
+# detected here. This logic has not yet been implemented.
+if (NOT ESMF_INC OR NOT ESMF_LIB)
+    # See the umbrella build's CMakeLists.txt file for how to
+    # obtain ESMF_INC and ESMF_LIB from ESMF's own FindESMF.cmake
+    # module. Also need to add the path to this macro to CMAKE_MODULE_PATH.
+    #find_package(ESMF)
+    message(FATAL_ERROR "Determining ESMF configuration for UFS_UTILS cmake standalone build not yet implemented")
+endif()
 
 add_subdirectory(sorc/chgres_cube.fd)
 #add_subdirectory(sorc/emcsfc_ice_blend.fd)
