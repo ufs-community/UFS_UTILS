@@ -17,8 +17,6 @@ export NCEPLIBS=/scratch1/NCEPDEV/global/gwv/l819/lib
 module use -a $NCEPLIBS/modulefiles
 module load esmflocal/8_0_48b.netcdf47
 
-module load wgrib2/2.0.8
-export WGRIB2API_LIB="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib/libwgrib2_api.a"
 export WGRIB2API_INC="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib"
 export WGRIB2_LIB="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib/libwgrib2.a"
 
