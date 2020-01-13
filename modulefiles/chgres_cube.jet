@@ -22,8 +22,6 @@ export FCOMP=mpiifort
 export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
 #debug
 #export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"
-#
-export WGRIB2API_LIB="/mnt/lfs3/projects/hwrfv3/Jili.Dong/wgrib2-2.0.8/grib2/lib/libwgrib2_api.a"
+ 
 export WGRIB2API_INC="/mnt/lfs3/projects/hwrfv3/Jili.Dong/wgrib2-2.0.8/grib2/lib"
 export WGRIB2_LIB="/mnt/lfs3/projects/hwrfv3/Jili.Dong/wgrib2-2.0.8/grib2/lib/libwgrib2.a"
-#
