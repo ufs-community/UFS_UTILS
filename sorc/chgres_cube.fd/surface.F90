@@ -181,8 +181,8 @@
 !---------------------------------------------------------------------------------------------
 ! Rescale soil moisture for changes in soil type between the input and target grids.
 !---------------------------------------------------------------------------------------------
-!KEEP THIS TURNED OFF FOR NOW UNTIL WE HAVE FIXED FILES
- !call rescale_soil_moisture
+
+ call rescale_soil_moisture
 
 !---------------------------------------------------------------------------------------------
 ! Compute liquid portion of total soil moisture.
@@ -619,8 +619,11 @@
      print*,'bf ice repl, ice, slmsk_target(14,86) = ', data_one_tile(14,86), mask_target_one_tile(14,86)
      do j = 1, j_target
      do i = 1, i_target
-       if (data_one_tile(i,j) < 0.15) data_one_tile(i,j) = 0.0
-       if (data_one_tile(i,j) >= 0.15) mask_target_one_tile(i,j) = 2
+       if (data_one_tile(i,j) > 1.0_esmf_kind_r8) then
+         data_one_tile(i,j) = 1.0_esmf_kind_r8
+       endif
+       if (data_one_tile(i,j) < 0.15_esmf_kind_r8) data_one_tile(i,j) = 0.0_esmf_kind_r8
+       if (data_one_tile(i,j) >= 0.15_esmf_kind_r8) mask_target_one_tile(i,j) = 2
      enddo
      enddo
      print*,'af ice repl, ice, slmsk_target(14,86) = ', data_one_tile(14,86),mask_target_one_tile(14,86)
@@ -2518,10 +2521,12 @@
 !---------------------------------------------------------------------------------------------
 ! Rescale soil moisture at points where the soil type between the input and output
 ! grids is different.  Caution, this logic assumes the input and target grids use the same
-! soil type dataset.
+! soil type dataset.  Some input datasets do not have soil type.  In those cases,
+! the input grid soil type is set to a large negative number so that the rescalcing
+! is NOT exercised, but the range check below IS exercised.
 !---------------------------------------------------------------------------------------------
 
-        if (soilt_target /= soilt_input) then
+        if (soilt_input > 0 .and. (soilt_target /= soilt_input)) then
 
 !---------------------------------------------------------------------------------------------
 ! Rescale top layer.  First, determine direct evaporation part:

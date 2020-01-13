@@ -34,7 +34,7 @@ module list
 
 export OUTDIR=/gpfs/hps3/stmp/$LOGNAME/chgres_reg_tests
 QUEUE="debug"
-PROJECT_CODE="FV3GFS-T2O"
+PROJECT_CODE="GFS-DEV"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
