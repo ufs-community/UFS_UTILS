@@ -28,7 +28,6 @@
  use nemsio_module
 
  use program_setup, only          : data_dir_input_grid, &
-                                    fixed_files_dir_input_grid, &
                                     nst_files_input_grid, &
                                     sfc_files_input_grid, &
                                     atm_files_input_grid, &
@@ -40,7 +39,7 @@
                                     orog_files_input_grid, &
                                     tracers_input, num_tracers, &
                                     input_type, num_tracers_input, &
-                                    input_type, external_model, &
+                                    input_type, &
                                     get_var_cond, read_from_input, tracers
 
  use model_grid, only             : input_grid,        &
@@ -4312,24 +4311,24 @@ if (localpet == 0) then
  subroutine read_input_sfc_grib2_file(localpet)
 
    use wgrib2api
-   use netcdf
+
    implicit none
 
    integer, intent(in)                   :: localpet
 
-   character(len=250)                    :: the_file, fix_file
+   character(len=250)                    :: the_file
    character(len=20)                     :: vname, vname_file,slev
 
    character(len=50)                      :: method
 
-   integer                               :: rc,ncid2d, varid, varnum, iret, i, j,k
+   integer                               :: rc, varnum, iret, i, j,k
    integer, parameter                    :: icet_default = 265.0
 
    logical                               :: exist
 
    real(esmf_kind_r4)                    :: value
 
-   real(nemsio_realkind), allocatable    :: dummy(:), dummy2d_ni(:,:)
+   real(nemsio_realkind), allocatable    :: dummy(:)
    real(esmf_kind_r4), allocatable       :: dummy2d(:,:),tsk_save(:,:),icec_save(:,:)
    real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:)
    real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:)
@@ -5441,29 +5440,23 @@ if (localpet == 0) then
  subroutine read_winds(file,inv,u,v,localpet)
  
  use wgrib2api
- use netcdf
- use program_setup, only      : get_var_cond, fixed_files_dir_input_grid , wgrib2_path
- use model_grid, only         : input_grid_type
+
+ use program_setup, only      : get_var_cond
+
  implicit none
  
  character(len=250), intent(in)          :: file, inv
  integer, intent(in)                     :: localpet
  real(esmf_kind_r8), intent(inout), allocatable :: u(:,:,:),v(:,:,:)
  
- real(esmf_kind_r4), dimension(i_input,j_input)  :: alpha
- real(esmf_kind_r8), dimension(i_input,j_input)  :: lon
  real(esmf_kind_r4), allocatable         :: u_tmp(:,:), v_tmp(:,:)
- real(esmf_kind_r4)                      :: value_u, value_v, lov
+ real(esmf_kind_r4)                      :: value_u, value_v
  
- integer                                 :: varnum_u, varnum_v, ncid, vlev, id_var, & 
-                                            error, iret, i
+ integer                                 :: varnum_u, varnum_v, vlev, iret
  
- !character(len=20)                       :: vname
  character(len=20)                       :: vname,vname2
  character(len=50)                       :: method_u, method_v
- character(len=250)                      :: file_coord, cmdline_msg
- character(len=10000)                    :: temp_msg
- 
+
  if (localpet==0) then
    allocate(u(i_input,j_input,lev_input))
    allocate(v(i_input,j_input,lev_input))
@@ -5471,8 +5464,6 @@ if (localpet == 0) then
    allocate(u(0,0,0))
    allocate(v(0,0,0))
  endif
- 
- file_coord = trim(fixed_files_dir_input_grid)//"/latlon_grid3.32769.nc" 
 
  vname = "u"
  call get_var_cond(vname,this_miss_var_method=method_u, this_miss_var_value=value_u, &
@@ -5481,42 +5472,6 @@ if (localpet == 0) then
  call get_var_cond(vname,this_miss_var_method=method_v, this_miss_var_value=value_v, &
                        loc=varnum_v)
                        
- if (trim(input_grid_type)=="rotated_latlon") then  
-   if (localpet==0) then                   
-     print*,"- READ ROTATION ANGLE"
-     print*, trim(file_coord)
-     error=nf90_open(trim(file_coord),nf90_nowrite,ncid)
-     call netcdf_err(error, 'opening nc file' )
-     error=nf90_inq_varid(ncid, 'gridrot', id_var)
-     call netcdf_err(error, 'reading field id' )
-     error=nf90_get_var(ncid, id_var, alpha)
-     call netcdf_err(error, 'reading field' )
-     error = nf90_close(ncid)
-   endif
- elseif (trim(input_grid_type) == "lambert") then
- 
-   print*,"- CALL FieldGather FOR INPUT GRID LONGITUDE"
-   call ESMF_FieldGather(longitude_input_grid, lon, rootPet=0, tile=1, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
-        call error_handler("IN FieldGather", error)
-        
-   if (localpet==0) then
-     cmdline_msg = trim(wgrib2_path)//" "//trim(file)//" -d 1 -grid &> temp.out"
-     call system(cmdline_msg)
-     open(4,file="temp2.out")
-     do i = 1,3
-      read(4,"(A)") temp_msg
-     enddo
-     close(4)
-     i = index(temp_msg, "LoV ") + len("LoV ")
-
-     read(temp_msg(i:i+10),*) lov
-   
-      print*, "- CALL GRIDROT"    
-      call gridrot(lov,lon,alpha)
-   endif
- endif
- 
  if (localpet==0) then
    do vlev = 1, lev_input
  
@@ -5543,13 +5498,8 @@ if (localpet == 0) then
         endif
       endif
     
-      if (trim(input_grid_type) == "latlon") then
         u(:,:,vlev) = u_tmp
         v(:,:,vlev) = v_tmp
-      else 
-        u(:,:,vlev) = real(u_tmp * cos(alpha) - v_tmp * sin(alpha), esmf_kind_r8)
-        v(:,:,vlev) = real(v_tmp * cos(alpha) + u_tmp * sin(alpha), esmf_kind_r8)
-      endif
     
       print*, 'max, min U ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
       print*, 'max, min V ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
