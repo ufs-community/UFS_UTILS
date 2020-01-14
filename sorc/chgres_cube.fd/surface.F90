@@ -515,6 +515,7 @@
 !-----------------------------------------------------------------------
 ! Interpolate.
 !-----------------------------------------------------------------------
+
  if (localpet == 0) then
    allocate(data_one_tile(i_target,j_target))
    allocate(data_one_tile2(i_target,j_target))
@@ -525,15 +526,6 @@
    allocate(data_one_tile2(0,0))
    allocate(data_one_tile_3d(0,0,0))
    allocate(mask_target_one_tile(0,0))
- endif
-
- print*,"- CALL FieldGather FOR TARGET GRID SEAICE FRACTION TILE: ", tile
-   call ESMF_FieldGather(seaice_fract_target_grid, data_one_tile, rootPet=0,tile=1, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-      call error_handler("IN FieldGather", rc)
-
- if (localpet==0) then 
-    print*, "before regrid, target seaice fract min,max = ", minval(data_one_tile), maxval(data_one_tile)
  endif
 
  method=ESMF_REGRIDMETHOD_CONSERVE
@@ -719,20 +711,11 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
- print*,"- CALL FieldGet FOR INPUT grid snow depth."
- call ESMF_FieldGet(snow_depth_input_grid, &
-                    farrayPtr=snow_depth_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldGet", rc)
-
-
- nullify(snow_depth_target_ptr)
  print*,"- CALL FieldGet FOR TARGET grid snow depth."
  call ESMF_FieldGet(snow_depth_target_grid, &
                     farrayPtr=snow_depth_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
-
 
  print*,"- CALL Field_Regrid for snow liq equiv."
  call ESMF_FieldRegrid(snow_liq_equiv_input_grid, &
@@ -1997,11 +1980,6 @@
    terrain_from_input_ptr(i,j) = -9999.9 
    soil_type_from_input_ptr(i,j) = -9999.9 
  enddo
-
-! do l = lsoil_target
-!   where (landmask_target_ptr == 1 .and. soilm_tot_target_ptr(:,:,0) > 0.5 .and. soilm_tot_target_ptr(:,:,0) < 0.99) &
-!      soilm_tot_target_ptr(:,:,l) = -9999.9
-! enddo
 
  if (localpet == 0) then
    allocate (veg_type_target_one_tile(i_target,j_target))

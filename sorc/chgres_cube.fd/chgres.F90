@@ -63,7 +63,7 @@
  call read_setup_namelist
  
 !-------------------------------------------------------------------------
-! Read variable mapping file
+! Read variable mapping file (used for grib2 input data only).
 !-------------------------------------------------------------------------
 
  call read_varmap
