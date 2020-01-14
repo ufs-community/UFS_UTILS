@@ -573,7 +573,12 @@
 
  end subroutine define_input_grid_mosaic
 
-  subroutine define_input_grid_gfs_grib2(localpet, npets)
+!--------------------------------------------------------------------------
+! Define grid object for GFS grib2 data.  Only works for data on
+! global lat/lon or gaussian grids.
+!--------------------------------------------------------------------------
+ 
+ subroutine define_input_grid_gfs_grib2(localpet, npets)
 
  use wgrib2api
 
@@ -588,23 +593,20 @@
 
  integer                          :: i, j, rc, clb(2), cub(2)
 
-
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
-  real(esmf_kind_r4), allocatable  :: lat4(:,:), lon4(:,:)
+ real(esmf_kind_r4), allocatable  :: lat4(:,:), lon4(:,:)
  real(esmf_kind_r8), pointer      :: lat_src_ptr(:,:)
  real(esmf_kind_r8), pointer      :: lon_src_ptr(:,:)
-  real(esmf_kind_r8)               :: deltalon
-
-
+ real(esmf_kind_r8), pointer      :: lat_corner_src_ptr(:,:)
+ real(esmf_kind_r8), pointer      :: lon_corner_src_ptr(:,:)
+ real(esmf_kind_r8)               :: deltalon
 
  type(esmf_polekind_flag)         :: polekindflag(2)
 
-
- print*,"- DEFINE INPUT GRID OBJECT FOR GAUSSIAN DATA."
+ print*,"- DEFINE INPUT GRID OBJECT FOR INPUT GRIB2 DATA."
 
  num_tiles_input_grid = 1
-
 
  inv_file = "chgres.inv"
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
@@ -614,7 +616,7 @@
 
  rc = grb2_inq(the_file,inv_file,':PRES:',':surface:',nx=i_input, ny=j_input, &
     lat=lat4, lon=lon4)
- if (rc /= 1) call error_handler("READING FILE", rc)
+ if (rc /= 1) call error_handler("READING GRIB2 FILE", rc)
 
  ip1_input = i_input + 1
  jp1_input = j_input + 1
@@ -659,6 +661,8 @@
  do i = 1, j_input
    latitude(:,i) = real(lat4(:,i),kind=esmf_kind_r8) 
  enddo
+
+ deallocate(lat4, lon4)
 
  deltalon = abs(longitude(2,1)-longitude(1,1))
  if(localpet==0) print*, "deltalon = ", deltalon
@@ -706,6 +710,7 @@
      lat_src_ptr(i,j) = latitude(i,j)
    enddo
  enddo
+
  if(localpet==0) print*, "lon first = ", lon_src_ptr(1:10,1)
  if(localpet==0) print*, "lat first = ", lat_src_ptr(1,1:10)
  
@@ -716,40 +721,38 @@
     call error_handler("IN GridAddCoord", rc)
 
  print*,"- CALL GridGetCoord FOR INPUT GRID X-COORD."
- nullify(lon_src_ptr)
+ nullify(lon_corner_src_ptr)
  call ESMF_GridGetCoord(input_grid, &
                         staggerLoc=ESMF_STAGGERLOC_CORNER, &
                         coordDim=1, &
-                        farrayPtr=lon_src_ptr, rc=rc)
+                        farrayPtr=lon_corner_src_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord", rc)
 
  print*,"- CALL GridGetCoord FOR INPUT GRID Y-COORD."
- nullify(lat_src_ptr)
+ nullify(lat_corner_src_ptr)
  call ESMF_GridGetCoord(input_grid, &
                         staggerLoc=ESMF_STAGGERLOC_CORNER, &
                         coordDim=2, &
                         computationalLBound=clb, &
                         computationalUBound=cub, &
-                        farrayPtr=lat_src_ptr, rc=rc)
+                        farrayPtr=lat_corner_src_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord", rc)
 
- print*,'bounds for corners ',localpet,clb(1),cub(1),clb(2),cub(2)
-
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     lon_src_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
-     if (lon_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_src_ptr(i,j) = lon_src_ptr(i,j) - 360.0_esmf_kind_r8
+     lon_corner_src_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
+     if (lon_corner_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_src_ptr(i,j) = lon_corner_src_ptr(i,j) - 360.0_esmf_kind_r8
      if (j == 1) then 
-       lat_src_ptr(i,j) = -90.0_esmf_kind_r8
+       lat_corner_src_ptr(i,j) = -90.0_esmf_kind_r8
        cycle
      endif
      if (j == jp1_input) then
-       lat_src_ptr(i,j) = +90.0_esmf_kind_r8
+       lat_corner_src_ptr(i,j) = +90.0_esmf_kind_r8
        cycle
      endif
-     lat_src_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
+     lat_corner_src_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
    enddo
  enddo
 

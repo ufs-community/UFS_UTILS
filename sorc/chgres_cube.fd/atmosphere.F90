@@ -44,13 +44,12 @@
                                        longitude_s_target_grid, &
                                        latitude_w_target_grid,  &
                                        longitude_w_target_grid, &
-                                       terrain_target_grid, &
-                                       landmask_target_grid
+                                       terrain_target_grid
 
  use program_setup, only             : vcoord_file_target_grid, &
-                                       regional, input_type,      &
+                                       regional, &
                                        tracers, num_tracers,      &
-                                       atm_weight_file, phys_suite
+                                       atm_weight_file
 
  implicit none
 
