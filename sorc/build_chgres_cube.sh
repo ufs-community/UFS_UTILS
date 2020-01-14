@@ -1,6 +1,8 @@
 #! /usr/bin/env bash
 set -eux
 
+target=${target:-"NULL"}
+
 if [[ $target == "linux.gnu" || $target == "linux.intel" ]]; then
  unset -f module
 else
