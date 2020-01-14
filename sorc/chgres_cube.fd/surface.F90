@@ -603,10 +603,8 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
-     print*,'bf search, ice target(14,86) = ',data_one_tile(14,86)
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 91, &
                  latitude=latitude_one_tile)
-     print*,'af search, ice target(14,86) = ',data_one_tile(14,86)
    endif
 
    print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
@@ -616,7 +614,6 @@
 
    
    if (localpet == 0) then
-     print*,'bf ice repl, ice, slmsk_target(14,86) = ', data_one_tile(14,86), mask_target_one_tile(14,86)
      do j = 1, j_target
      do i = 1, i_target
        if (data_one_tile(i,j) > 1.0_esmf_kind_r8) then
@@ -626,7 +623,6 @@
        if (data_one_tile(i,j) >= 0.15_esmf_kind_r8) mask_target_one_tile(i,j) = 2
      enddo
      enddo
-     print*,'af ice repl, ice, slmsk_target(14,86) = ', data_one_tile(14,86),mask_target_one_tile(14,86)
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SEAICE FRACTION TILE: ", tile
@@ -807,9 +803,7 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
-     print*, "snod target bf search ice ", data_one_tile(61,80)
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 66)
-     print*, "snod target af search ice ", data_one_tile(61,80)
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SNOW DEPTH TILE: ", tile
@@ -1672,12 +1666,10 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
-     print*, "snod input bf search land  = ",data_one_tile(61,80)
      allocate(land_target_one_tile(i_target,j_target))
      land_target_one_tile = 0
      where(mask_target_one_tile == 1) land_target_one_tile = 1
      call search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 66)
-     print*, "snod af search land  =", data_one_tile(61,80)
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SNOW DEPTH: ", tile

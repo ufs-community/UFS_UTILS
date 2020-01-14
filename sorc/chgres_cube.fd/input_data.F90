@@ -102,10 +102,6 @@
 
  integer, public      :: lsoil_input=4  ! # of soil layers,
                                                    ! # hardwire for now
-
- integer, public                 :: P_QC, P_QNC,P_QI,  &  ! Use for keeping track of tracer
-                                    P_QNI, P_QR, P_QNR, & ! locations in tracer fields for
-                                    P_QNWFA, P_QV         ! use in creating concentrations
  
  character(len=50), allocatable         :: slevs(:)                           
 

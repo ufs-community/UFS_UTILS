@@ -294,8 +294,6 @@ subroutine read_varmap
  character(len=20),allocatable  :: var_type(:)
 
  if (trim(input_type) == "grib2") then 
-   !varmap_table_file = trim(base_install_dir) // "/" // trim(varmap_tables_dir) // "/" &
-   !                 // trim(phys_suite) // "phys_var_map.txt"
 
    print*,"OPEN VARIABLE MAPPING FILE: ", trim(varmap_file)
    open(14, file=trim(varmap_file), form='formatted', iostat=istat)
