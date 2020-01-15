@@ -2038,6 +2038,12 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldGather", rc)
 
+!---------------------------------------------------------------------------------------
+! grib2 data does not have soil type.  Set soil type interpolated from input
+! grid to the target (model) grid soil type.  This turns off the soil moisture
+! rescaling.
+!---------------------------------------------------------------------------------------
+
    if (localpet == 0) then
      if (trim(input_type) .ne. "grib2") then
        call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
@@ -2096,7 +2102,7 @@
 
  deallocate(veg_type_target_one_tile)
 
- deallocate(data_one_tile)
+ deallocate(data_one_tile, data_one_tile2)
  deallocate(data_one_tile_3d)
  deallocate(mask_target_one_tile)
 
@@ -2496,7 +2502,7 @@
 ! is NOT exercised, but the range check below IS exercised.
 !---------------------------------------------------------------------------------------------
 
-        if (soilt_input > 0 .and. (soilt_target /= soilt_input)) then
+        if (soilt_target /= soilt_input) then
 
 !---------------------------------------------------------------------------------------------
 ! Rescale top layer.  First, determine direct evaporation part:

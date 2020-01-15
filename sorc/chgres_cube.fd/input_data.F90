@@ -4520,54 +4520,16 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
- ! KEEP THIS COMMENTED FOR NOW UNTIL WE HAVE FIXED FILES CONTAINING SOIL TYPE.
- ! ROUTINE TO ADJUST SOIL MOISTURE FOR DIFFERENCES IN INPUT AND TARGET GRID SOIL
- ! TYPES HAS BEEN TURNED OFF AS WELL
- !if (localpet == 0) then
- !  print*,"- READ SOIL TYPE."
- !  rc = nf90_open(fix_file,NF90_NOWRITE,ncid2d)
- !  if (rc<0) call error_handler("ERROR READING INPUT FIXED FILE",rc)
- !  print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
- !  rc = nf90_inq_varid(ncid2d,"SOTYP",varid)
- !  if (rc<0) call error_handler("ERROR FINDING SOTYP IN INPUT FIXED FILE",rc)
- !  print*, "READ SOIL TYPE FROM GEOGRID FILE "
- !  rc = nf90_get_var(ncid2d,varid,dummy2d)
- !  if (rc<0) call error_handler("ERROR READING SOTYP FROM FILE",rc)
- !
- !  dummy2d_8 = real(dummy2d,esmf_kind_r8)
- !  print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
- !endif
+! Soil type is not available.  Set to a large negative fill value.
 
-! Soil type is not available.  Set to a large negative number which
-! turns off the soil moisture rescaling.
-
- dummy2d_8 = -999.0_esmf_kind_r8
+ dummy2d_8 = -99999.0_esmf_kind_r8
 
  print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
  call ESMF_FieldScatter(soil_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
- ! KEEP THIS COMMENTED FOR NOW UNTIL WE HAVE FIXED FILES CONTAINING VEG TYPE.
- ! WILL HAVE TO USE ANOTHER METHOD TO DETERMINE PERMANENT LANDICE LOCATIONS
- !if (localpet == 0) then
- !  print*,"- READ VEG TYPE."
- !  rc = nf90_open(fix_file,NF90_NOWRITE,ncid2d)
- !  if (rc<0) call error_handler("ERROR READING INPUT FIXED FILE",rc)
- !  print*, "INQUIRE ABOUT VEG TYPE FROM GEOGRID FILE"
- !  rc = nf90_inq_varid(ncid2d,"VGTYP",varid)
- !  if (rc<0) call error_handler("ERROR FINDING VGTYP IN INPUT FIXED FILE",rc)
- !  print*, "READ VEG TYPE FROM GEOGRID FILE "
- !  rc = nf90_get_var(ncid2d,varid,dummy2d)
- !  if (rc<0) call error_handler("ERROR READING VGTYP FROM FILE",rc)
- !  print*, "CLOSE INPUT FIX FILE "
- !  iret = nf90_close(ncid2d)
- !
- !  dummy2d_8 = real(dummy2d,esmf_kind_r8)
- !  print*,'vgtype ',maxval(dummy2d_8),minval(dummy2d_8)
- !endif
-
- ! USE THIS FOR NOW. Will create a proxy below using slmsk and soil moisture
+ ! Vegetation type.  USE THIS FOR NOW. Will create a proxy below using slmsk and soil moisture.
  dummy2d_8 = 1.0_esmf_kind_r8
 
  print*,"- CALL FieldScatter FOR INPUT GRID VEG TYPE."
