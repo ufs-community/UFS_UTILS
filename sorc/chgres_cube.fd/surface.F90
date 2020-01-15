@@ -2497,9 +2497,7 @@
 !---------------------------------------------------------------------------------------------
 ! Rescale soil moisture at points where the soil type between the input and output
 ! grids is different.  Caution, this logic assumes the input and target grids use the same
-! soil type dataset.  Some input datasets do not have soil type.  In those cases,
-! the input grid soil type is set to a large negative number so that the rescalcing
-! is NOT exercised, but the range check below IS exercised.
+! soil type dataset.
 !---------------------------------------------------------------------------------------------
 
         if (soilt_target /= soilt_input) then
