@@ -62,7 +62,7 @@
  private
 
  character(len=5), allocatable, public  :: tiles_target_grid(:)
- character(len=500), public             :: inv_file
+ character(len=10), public              :: inv_file = "chgres.inv"
 
  integer, parameter, public             :: lsoil_target = 4 ! # soil layers
  integer, public                        :: i_input, j_input
@@ -608,7 +608,6 @@
 
  num_tiles_input_grid = 1
 
- inv_file = "chgres.inv"
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
  print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
  rc=grb2_mk_inv(the_file,inv_file)

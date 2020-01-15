@@ -29,6 +29,7 @@ contains
 
   real, dimension(i_input,j_input)  :: es, e, rh
 
+  print*,"- CONVERT RH TO SPFH AT LEVEL ", p
 
   rh = rh_sphum
   !print *, 'T = ', T, ' RH = ', RH, ' P = ', P

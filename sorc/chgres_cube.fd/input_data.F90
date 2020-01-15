@@ -2236,91 +2236,77 @@
  inquire(file=the_file,exist=lret)
  if (.not.lret) call error_handler("OPENING GRIB2 ATM FILE.", iret)
 
-   !print*,"- READ VERTICAL LEVELS."
-   !iret = grb2_inq(the_file,inv_file,":TMP:"," hybrid level:")
-   iret = grb2_inq(the_file,inv_file,":var_0_2","_0_0:"," hybrid level:")
-   !if (iret < 0) call error_handler("COUNTING VERTICAL LEVELS.", iret)
+ print*,"- READ VERTICAL COORDINATE."
+ iret = grb2_inq(the_file,inv_file,":var_0_2","_0_0:"," hybrid level:")
   
  if (iret <= 0) then
-   if (localpet == 0) print*,"DATA IS ON ISOBARIC LEVELS"
    lvl_str = "mb:" 
    lvl_str_space = " mb:"
    lvl_str_space_len = 4
    iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
    lev_input=iret
+   if (localpet == 0) print*,"- DATA IS ON ", lev_input, " ISOBARIC LEVELS."
  else
    call error_handler("HYBRID VERTICAL COORD DATA NOT SUPPORTED", -1)
  endif
 
- print*, "lev_input = ", lev_input
  allocate(slevs(lev_input))
  allocate(rlevs(lev_input))
  levp1_input = lev_input + 1
     
-    ! get the vertical levels, and search string by sequential reads
+! Get the vertical levels, and search string by sequential reads
 
  do i = 1,lev_input
-      iret=grb2_inq(the_file,inv_file,':UGRD:',trim(lvl_str),sequential=i-1,desc=metadata)
-      if (iret.ne.1) call error_handler(" IN SEQUENTIAL FILE READ.", iret)
+   iret=grb2_inq(the_file,inv_file,':UGRD:',trim(lvl_str),sequential=i-1,desc=metadata)
+   if (iret.ne.1) call error_handler(" IN SEQUENTIAL FILE READ.", iret)
     
-      j = index(metadata,':UGRD:') + len(':UGRD:')
-      k = index(metadata,trim(lvl_str_space)) + len(trim(lvl_str_space))-1
+   j = index(metadata,':UGRD:') + len(':UGRD:')
+   k = index(metadata,trim(lvl_str_space)) + len(trim(lvl_str_space))-1
 
-      read(metadata(j:k),*) rlevs(i)
+   read(metadata(j:k),*) rlevs(i)
 
-      slevs(i) = metadata(j-1:k)	
-      rlevs(i) = rlevs(i) * 100.0
-      if (localpet==0) print*, "LEVEL = ", slevs(i)
+   slevs(i) = metadata(j-1:k)	
+   rlevs(i) = rlevs(i) * 100.0
+   if (localpet==0) print*, "- LEVEL = ", slevs(i)
  enddo
 
-! Jili Dong add sort to re-order isobaric levels
-    call quicksort(rlevs,1,lev_input)
-    do i = 1,lev_input
-       write(slevs(i),"(F20.10)") rlevs(i)/100.0
-       len_str = len_trim(slevs(i))
+! Jili Dong add sort to re-order isobaric levels.
 
-        do while (slevs(i)(len_str:len_str) .eq. '0')
-                slevs(i) = slevs(i)(:len_str-1)
-                len_str = len_str - 1
-        end do
+ call quicksort(rlevs,1,lev_input)
 
-        if (slevs(i)(len_str:len_str) .eq. '.') then
-                slevs(i) = slevs(i)(:len_str-1)
-                len_str = len_str - 1
-        end if
+ do i = 1,lev_input
+   write(slevs(i),"(F20.10)") rlevs(i)/100.0
+   len_str = len_trim(slevs(i))
 
-        slevs(i) = trim(slevs(i))
+   do while (slevs(i)(len_str:len_str) .eq. '0')
+        slevs(i) = slevs(i)(:len_str-1)
+        len_str = len_str - 1
+   end do
 
-      slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
-      if (localpet==0) print*, "level after sort = ",slevs(i)
-    enddo
+   if (slevs(i)(len_str:len_str) .eq. '.') then
+     slevs(i) = slevs(i)(:len_str-1)
+     len_str = len_str - 1
+   end if
 
-   if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
-   !iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
-   iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1),lvl_str_space)
+   slevs(i) = trim(slevs(i))
 
-   if (iret <= 0) then
-!    iret = grb2_inq(the_file,inv_file,':RH:')
-    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
-    if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
-    hasspfh = .false.
-    !trac_names_grib(1)=':RH:'
-    trac_names_grib_2(1)='_1_1:'
-   endif
+   slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
+   if (localpet==0) print*, "- LEVEL AFTER SORT = ",slevs(i)
+ enddo
+
+ if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
+ iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1),lvl_str_space)
+
+ if (iret <= 0) then
+   iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
+   if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
+   hasspfh = .false.
+   trac_names_grib_2(1)='_1_1:'
+   if (localpet == 0) print*,"- FILE CONTAINS RH."
+ else
+   if (localpet == 0) print*,"- FILE CONTAINS SPFH."
+ endif
    
-   !if (localpet == 0) print*,"- FIND CICE or CIMIXR"
-   !iret = grb2_inq(the_file,inv_file,':CICE:',lvl_str_space)
-
-   !if (iret <= 0) then
-   ! iret = grb2_inq(the_file,inv_file,':CIMIXR:',lvl_str_space)
-   ! if (iret >= 1) trac_names_grib(4)=':CIMIXR:'
-   ! if (iret <= 0) then
-   !   iret = grb2_inq(the_file,inv_file,':ICMR:',lvl_str_space)
-   !   if (iret >= 1) trac_names_grib(4)=':ICMR:'
-   ! endif
-   !endif
-
-
  print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
  do n = 1, num_tracers
 
@@ -2328,7 +2314,6 @@
 
    i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
 
-   !tracers_input_grib(n)=trac_names_grib(i)
    tracers_input_grib_1(n) = trac_names_grib_1(i)
    tracers_input_grib_2(n) = trac_names_grib_2(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
@@ -2336,7 +2321,7 @@
 
  enddo
 
- if (localpet==0) print*, "NUMBER OF TRACERS IN FILE = ", num_tracers
+ if (localpet==0) print*, "- NUMBER OF TRACERS IN FILE = ", num_tracers
 
  if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
  ps_input_grid = ESMF_FieldCreate(input_grid, &
@@ -2414,7 +2399,7 @@
 
 !-----------------------------------------------------------------------
 ! Fields in non-native files read in from top to bottom. We will
-! flip indices after the data is converted to sigma coordinates.
+! flip indices later.
 !-----------------------------------------------------------------------
  
  if (localpet == 0) then
@@ -2448,17 +2433,8 @@
         call error_handler("IN FieldGet", rc) 
    endif
    if (localpet == 0) then
-     !vname = trim(tracers_input_grib(n))
-     !vname2 = "var"
      vname = trim(tracers_input_grib_1(n))
      vname2 = trim(tracers_input_grib_2(n))
-     !if (trim(vname) == ":PMTC:") then
-     !  vname = "var0_"
-     !  vname2 = "_13_192"
-     !elseif (trim(vname) == ":PMTF:") then
-     !  vname = "var0_"
-     !  vname2 = "_13_193"
-     !endif
      
      do vlev = 1, lev_input
       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),vname2,data2=dummy2d)
@@ -2466,8 +2442,6 @@
       if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
         if (iret==1) then ! missing_var_method == skip or no entry
-          !if (trim(vname2)==":SPFH:" .or. trim(vname) == ":RH:" .or.  &
-          !    trim(vname2) == ":O3MR:") then
           if (trim(vname2)=="_1_0:" .or. trim(vname2) == "_1_1:" .or.  &
               trim(vname2) == ":14:192:") then
             call error_handler("READING IN "//trim(vname)//" AT LEVEL "//trim(slevs(vlev))&
@@ -5403,7 +5377,7 @@ if (localpet == 0) then
 
  implicit none
  
- character(len=250), intent(in)          :: file, inv
+ character(len=*), intent(in)            :: file, inv
  integer, intent(in)                     :: localpet
  real(esmf_kind_r8), intent(inout), allocatable :: u(:,:,:),v(:,:,:)
  
@@ -5600,8 +5574,7 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
   use wgrib2api
   implicit none
   
-  
-  character(len=250), intent(in)          :: the_file, inv_file
+  character(len=*), intent(in)            :: the_file, inv_file
   character(len=20), intent(in)           :: vname,vname_file
   
   integer, intent(out)                    :: rc
