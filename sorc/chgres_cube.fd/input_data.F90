@@ -38,9 +38,8 @@
                                     orog_dir_input_grid, &
                                     orog_files_input_grid, &
                                     tracers_input, num_tracers, &
-                                    input_type, num_tracers_input, &
-                                    input_type, &
-                                    get_var_cond, read_from_input, tracers
+                                    input_type, tracers, &
+                                    get_var_cond, read_from_input
 
  use model_grid, only             : input_grid,        &
                                     i_input, j_input,  &
@@ -103,7 +102,7 @@
  integer, public      :: lsoil_input=4  ! # of soil layers,
                                                    ! # hardwire for now
  
- character(len=50), allocatable         :: slevs(:)                           
+ character(len=50), private, allocatable :: slevs(:)                           
 
 ! Fields associated with the nst model.
 
@@ -2178,11 +2177,9 @@
 
  character(len=300)                    :: the_file
  character(len=20)                     :: vlevtyp, vname, lvl_str,lvl_str_space, &
- !                                        trac_names_grib(ntrac_max), & 
                                           trac_names_grib_1(ntrac_max), &
                                           trac_names_grib_2(ntrac_max), &
                                           trac_names_vmap(ntrac_max), &
-!                                         tracers_input_grib(num_tracers), 
                                           tracers_input_grib_1(num_tracers), &
                                           tracers_input_grib_2(num_tracers), &
                                           tmpstr, & 
@@ -2297,8 +2294,6 @@
       slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
       if (localpet==0) print*, "level after sort = ",slevs(i)
     enddo
-
-! Jili Dong add sort to re-order isobaric levels
 
    if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
    !iret = grb2_inq(the_file,inv_file,':SPFH:',lvl_str_space)
@@ -2506,11 +2501,15 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
+ deallocate(u_tmp_3d)
+
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT V-WIND."
  call ESMF_FieldScatter(v_input_grid, v_tmp_3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
     
+ deallocate(v_tmp_3d)
+
 if (localpet == 0) then
    print*,"- READ SURFACE PRESSURE."
    !vname = ":PRES:"
@@ -5543,28 +5542,6 @@ end subroutine read_winds
 
  end subroutine convert_winds
  
- subroutine gridrot(lov,lon,rot)
-
-  use model_grid, only                : i_input,j_input
-  implicit none
-  
-  
-  real(esmf_kind_r4), intent(in)      :: lov
-  real(esmf_kind_r4), intent(inout)   :: rot(i_input,j_input)
-  real(esmf_kind_r8), intent(in)      :: lon(i_input,j_input)
-  
-  real(esmf_kind_r4)                  :: trot(i_input,j_input), trot_tmp(i_input,j_input)
-  real(esmf_kind_r4)                  :: pior = 3.14159265359/180.0_esmf_kind_r4
-  
-  trot_tmp = real(lon,esmf_kind_r4)-lov
-  trot = trot_tmp
-  where(trot_tmp > 180.0) trot = trot-360.0_esmf_kind_r4
-  where(trot_tmp < -180.0) trot = trot-360.0_esmf_kind_r4
-  
-  rot = trot * pior
-
-end subroutine gridrot
-
 subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
 
   use, intrinsic :: ieee_arithmetic
@@ -5666,7 +5643,7 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
     endif
     dummy3d(:,:,i) = real(dummy2d,esmf_kind_r8)
   end do    
-  
+
  end subroutine read_grib_soil
 
  subroutine cleanup_input_atm_data
