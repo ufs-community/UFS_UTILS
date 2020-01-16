@@ -55,10 +55,7 @@ if(NOT TARGET w3nco_d)
 endif()
 
 if(NOT TARGET bacio_4)
-  #find_package(bacio REQUIRED CONFIG)
-  if(NOT TARGET bacio_4)
-    find_package(bacio REQUIRED MODULE)
-  endif()  
+  find_package(bacio REQUIRED CONFIG)
 endif()
 
 if(NOT TARGET nemsio)
