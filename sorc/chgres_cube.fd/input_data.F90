@@ -4328,7 +4328,6 @@
 
    real(esmf_kind_r4)                    :: value
 
-   real(nemsio_realkind), allocatable    :: dummy(:)
    real(esmf_kind_r4), allocatable       :: dummy2d(:,:),tsk_save(:,:),icec_save(:,:)
    real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:)
    real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:)
@@ -4348,8 +4347,7 @@
    print*, "- FILE HAS ", lsoil_input, " SOIL LEVELS"
    if (lsoil_input <= 0) call error_handler("COUNTING SOIL LEVELS.", rc)
 
-   if (localpet == 0) then
-   allocate(dummy(i_input*j_input))
+ if (localpet == 0) then
    allocate(dummy2d(i_input,j_input))
    allocate(slmsk_save(i_input,j_input))
    allocate(tsk_save(i_input,j_input))
@@ -4368,7 +4366,7 @@
  ! in the varmap table. If they can't be found in the input file, then stop the program.
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  if (localpet == 0) then
+ if (localpet == 0) then
    print*,"- READ TERRAIN."
    rc = grb2_inq(the_file, inv_file, ':HGT:',':surface:', data2=dummy2d)
    if (rc /= 1) call error_handler("READING TERRAIN.", rc)
@@ -4394,6 +4392,12 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
+!----------------------------------------------------------------------------------
+! GFS v14 and v15.2 grib data has two land masks.  LANDN is created by
+! nearest neighbor interpolation.  LAND is created by bilinear interpolation.
+! LANDN matches the bitmap.  So use it first.  For other GFS versions, use LAND.
+!----------------------------------------------------------------------------------
+
  if (localpet == 0) then
    print*,"- READ LANDSEA MASK."
    rc = grb2_inq(the_file, inv_file, ':LANDN:',':surface:', data2=dummy2d)
@@ -4403,8 +4407,6 @@ if (localpet == 0) then
      if (rc /= 1) call error_handler("READING LANDSEA MASK.", rc)
    endif
 
-   print*,'landmask ',maxval(dummy2d),minval(dummy2d)
-   print*, "icec, landmask at 150, 150 = ", icec_save(150,150), dummy2d(150,150)
    do j = 1, j_input
      do i = 1, i_input
        if(dummy2d(i,j) < 0.5_esmf_kind_r4) dummy2d(i,j)=0.0_esmf_kind_r4
@@ -4414,19 +4416,16 @@ if (localpet == 0) then
        endif
      enddo
    enddo
-   print*, "icec, landmask at 150, 150 = ", icec_save(150,150), dummy2d(150,150)
+
    slmsk_save = int(dummy2d,esmf_kind_i4)
   
-   print*,'landmask ',maxval(dummy2d),minval(dummy2d)
-   print*,'slmsk_save ',maxval(slmsk_save),minval(slmsk_save)
+   deallocate(icec_save)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
  call ESMF_FieldScatter(landsea_mask_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
- 
- 
 
  if (localpet == 0) then
    print*,"- READ SEAICE SKIN TEMPERATURE."
@@ -4453,7 +4452,7 @@ if (localpet == 0) then
        if(dummy2d(i,j) > 1.0E3) dummy2d(i,j) = 0.0_esmf_kind_r4
      enddo
    enddo
-   print*,'weasd ',maxval(dummy2d),minval(dummy2d)
+!  print*,'weasd ',maxval(dummy2d),minval(dummy2d)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
@@ -4468,7 +4467,7 @@ if (localpet == 0) then
    dummy2d = dummy2d*1000.0 ! Grib2 files have snow depth in (m), fv3 expects it in mm
    where(slmsk_save == 0) dummy2d = 0.0_esmf_kind_r4
    where(dummy2d > 1.0E6) dummy2d = 0.0_esmf_kind_r4
-   print*,'snod ',maxval(dummy2d),minval(dummy2d)
+!  print*,'snod ',maxval(dummy2d),minval(dummy2d)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SNOW DEPTH."
@@ -4529,14 +4528,6 @@ if (localpet == 0) then
 
  print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
  call ESMF_FieldScatter(soil_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
-
- ! Vegetation type.  USE THIS FOR NOW. Will create a proxy below using slmsk and soil moisture.
- dummy2d_8 = 1.0_esmf_kind_r8
-
- print*,"- CALL FieldScatter FOR INPUT GRID VEG TYPE."
- call ESMF_FieldScatter(veg_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
@@ -4758,16 +4749,23 @@ if (localpet == 0) then
    print*,'soilm ',maxval(dummy3d),minval(dummy3d)
  endif
 
+!-----------------------------------------------------------------------
+! Vegetation type is not available.  However, it is needed to identify
+! permanent land ice points.  At land ice, the total soil moisture
+! is a flag value of '1'.  Use this flag as a temporary solution.
+!-----------------------------------------------------------------------
+
  if (localpet == 0) then
    dummy2d_8(:,:) = 0.0_esmf_kind_r8
    do j = 1, j_input
        do i = 1, i_input
-         if(slmsk_save(i,j) == 1_esmf_kind_i4 .and. dummy3d(i,j,1) > 0.99) dummy2d_8(i,j) = real(veg_type_landice_input,esmf_kind_r8)
+         if(slmsk_save(i,j) == 1_esmf_kind_i4 .and. dummy3d(i,j,1) > 0.99) &
+            dummy2d_8(i,j) = real(veg_type_landice_input,esmf_kind_r8)
        enddo
    enddo
  endif
 
-  print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
+ print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
  call ESMF_FieldScatter(veg_type_input_grid, dummy2d_8, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
@@ -4776,6 +4774,12 @@ if (localpet == 0) then
  call ESMF_FieldScatter(soilm_tot_input_grid, dummy3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
+
+!---------------------------------------------------------------------------------
+! At open water (slmsk==0), the soil temperature array is set to a filler value
+! of SST.  At sea/lake ice (slmsk==2) , it is ice column temperature.  That field
+! is not available in the GFS grib2 data, so use a default value.
+!---------------------------------------------------------------------------------
 
  if (localpet == 0) then
    print*,"- READ SOIL TEMPERATURE."
@@ -4793,6 +4797,8 @@ if (localpet == 0) then
      enddo
    enddo
    print*,'soilt ',maxval(dummy3d),minval(dummy3d)
+
+   deallocate(tsk_save, slmsk_save)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
@@ -4804,7 +4810,6 @@ if (localpet == 0) then
  deallocate(dummy2d_8)
  
  end subroutine read_input_sfc_grib2_file
-
    
 !---------------------------------------------------------------------------
 ! Read nst data from tiled history or restart files.
@@ -5541,7 +5546,9 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
   integer                                 :: varnum,i
   character(len=50)                       :: slevs(lsoil_input)
   character(len=50)                       :: method
-  
+
+  allocate(dummy2d(i_input,j_input))
+
   if(lsoil_input == 4) then
     slevs = (/character(24)::':0-0.1 m below ground:', ':0.1-0.4 m below ground:', &
                              ':0.4-1 m below ground:', ':1-2 m below ground:'/)
@@ -5569,8 +5576,11 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
         exit
       endif
     endif
+
     dummy3d(:,:,i) = real(dummy2d,esmf_kind_r8)
   end do    
+
+ deallocate(dummy2d)
 
  end subroutine read_grib_soil
 
