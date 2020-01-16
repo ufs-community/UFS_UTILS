@@ -1,5 +1,4 @@
 dzdt                dzdt      set_to_fill   0        D
-delta_p             delp      skip          0        D
 sphum               sphum     set_to_fill   1E-7     T
 liq_wat             liq_wat   set_to_fill   0        T
 o3mr                o3mr      set_to_fill   1E-7     T

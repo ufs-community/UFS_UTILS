@@ -2194,18 +2194,16 @@
  integer                               :: len_str
  logical                               :: lret
 
- logical                                :: conv_omega=.false., &
-                                           hasspfh=.true.
+ logical                               :: conv_omega=.false., &
+                                          hasspfh=.true.
 
  real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
- real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
-                                          u_tmp_3d(:,:,:), v_tmp_3d(:,:,:)
+ real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:)
  real(esmf_kind_r8), pointer           :: presptr(:,:,:), psptr(:,:),tptr(:,:,:), &
                                           qptr(:,:,:), wptr(:,:,:),  &
                                           uptr(:,:,:), vptr(:,:,:)
-                                          
- real(esmf_kind_r4)                     :: value
+ real(esmf_kind_r4)                    :: value
  real(esmf_kind_r8), parameter         :: p0 = 100000.0
  
  
@@ -2399,7 +2397,7 @@
 
 !-----------------------------------------------------------------------
 ! Fields in non-native files read in from top to bottom. We will
-! flip indices later.
+! flip indices later.  This program expects bottom to top.
 !-----------------------------------------------------------------------
  
  if (localpet == 0) then
@@ -2468,23 +2466,49 @@
 
  enddo
  
- call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet) 
+ if (localpet==0) then
+   do vlev = 1, lev_input
+ 
+     vname = ":var0_2"
+     vname2 = "_2_2:"
+     iret = grb2_inq(the_file,inv_file,vname,vname2,slevs(vlev),data2=dummy2d)
+     if (iret<=0) then 
+       call error_handler("READING UWIND AT LEVEL "//trim(slevs(vlev)),iret)
+     endif
+
+     print*, 'max, min U ', minval(dummy2d), maxval(dummy2d)
+     dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
+
+   enddo
+ endif
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT U-WIND."
- call ESMF_FieldScatter(u_input_grid, u_tmp_3d, rootpet=0, rc=rc)
+ call ESMF_FieldScatter(u_input_grid, dummy3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
- deallocate(u_tmp_3d)
+ if (localpet==0) then
+   do vlev = 1, lev_input
+ 
+     vname = ":var0_2"
+     vname2 = "_2_3:"
+     iret = grb2_inq(the_file,inv_file,vname,vname2,slevs(vlev),data2=dummy2d)
+     if (iret<=0) then 
+       call error_handler("READING VWIND AT LEVEL "//trim(slevs(vlev)),iret)
+     endif
+
+     print*, 'max, min V ', minval(dummy2d), maxval(dummy2d)
+     dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
+
+   enddo
+ endif
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT V-WIND."
- call ESMF_FieldScatter(v_input_grid, v_tmp_3d, rootpet=0, rc=rc)
+ call ESMF_FieldScatter(v_input_grid, dummy3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
-    
- deallocate(v_tmp_3d)
 
-if (localpet == 0) then
+ if (localpet == 0) then
    print*,"- READ SURFACE PRESSURE."
    !vname = ":PRES:"
    vname = ":var0_2"
@@ -2500,7 +2524,7 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
-  if (localpet == 0) then
+ if (localpet == 0) then
    print*,"- READ DZDT."
    vname = "dzdt"
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
@@ -2553,7 +2577,7 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
  
-  if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID PRESSURE."
+ if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID PRESSURE."
  pres_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
@@ -2563,7 +2587,8 @@ if (localpet == 0) then
  deallocate(dummy2d, dummy3d, dummy2d_8)
  
 !---------------------------------------------------------------------------
-! Compute 3-d pressure.
+! Flip 'z' indices to all 3-d variables.  Data is read in from model
+! top to surface.  This program expects surface to model top.
 !---------------------------------------------------------------------------
     
  if (localpet == 0) print*,"- CALL FieldGet FOR SURFACE PRESSURE."
@@ -2573,41 +2598,41 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGet", rc)
       
-  nullify(presptr)
-  if (localpet == 0) print*,"- CALL FieldGet FOR 3-D PRESSURE."
-  call ESMF_FieldGet(pres_input_grid, &
-                     computationalLBound=clb, &
-                     computationalUBound=cub, &
+ nullify(presptr)
+ if (localpet == 0) print*,"- CALL FieldGet FOR 3-D PRESSURE."
+ call ESMF_FieldGet(pres_input_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
                     farrayPtr=presptr, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  nullify(tptr)
-  if (localpet == 0) print*,"- CALL FieldGet TEMPERATURE."  
-  call ESMF_FieldGet(temp_input_grid, &
+ if (localpet == 0) print*,"- CALL FieldGet TEMPERATURE."  
+ call ESMF_FieldGet(temp_input_grid, &
                     farrayPtr=tptr, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc) 
   
  nullify(uptr)
-  if (localpet == 0) print*,"- CALL FieldGet FOR U"
-  call ESMF_FieldGet(u_input_grid, &
+ if (localpet == 0) print*,"- CALL FieldGet FOR U"
+ call ESMF_FieldGet(u_input_grid, &
                     farrayPtr=uptr, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
     
-  nullify(vptr)
-  if (localpet == 0) print*,"- CALL FieldGet FOR V"
-  call ESMF_FieldGet(v_input_grid, &
+ nullify(vptr)
+ if (localpet == 0) print*,"- CALL FieldGet FOR V"
+ call ESMF_FieldGet(v_input_grid, &
                     farrayPtr=vptr, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
   
-  nullify(wptr)
-   if (localpet == 0) print*,"- CALL FieldGet FOR W"
-  call ESMF_FieldGet(dzdt_input_grid, &
+ nullify(wptr)
+ if (localpet == 0) print*,"- CALL FieldGet FOR W"
+ call ESMF_FieldGet(dzdt_input_grid, &
                     farrayPtr=wptr, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
  
   if (localpet == 0) print*,"- CALL FieldGet FOR TRACERS."
@@ -2647,12 +2672,17 @@ if (localpet == 0) then
 !---------------------------------------------------------------------------
 ! Convert from 2-d to 3-d component winds.
 !---------------------------------------------------------------------------
+
  call convert_winds
  
 !---------------------------------------------------------------------------
 ! Convert dpdt to dzdt if needed
 !---------------------------------------------------------------------------
+
  if (conv_omega) then
+
+  if (localpet == 0)  print*,"- CONVERT FROM OMEGA TO DZDT."
+
   nullify(tptr)
   if (localpet == 0) print*,"- CALL FieldGet TEMPERATURE."  
   call ESMF_FieldGet(temp_input_grid, &
@@ -5364,81 +5394,6 @@ if (localpet == 0) then
  ERROR = NF90_CLOSE(NCID)
 
  END SUBROUTINE READ_FV3_GRID_DATA_NETCDF
-
-!---------------------------------------------------------------------------
-! Read winds from a grib2 file
-!---------------------------------------------------------------------------
-
- subroutine read_winds(file,inv,u,v,localpet)
- 
- use wgrib2api
-
- use program_setup, only      : get_var_cond
-
- implicit none
- 
- character(len=*), intent(in)            :: file, inv
- integer, intent(in)                     :: localpet
- real(esmf_kind_r8), intent(inout), allocatable :: u(:,:,:),v(:,:,:)
- 
- real(esmf_kind_r4), allocatable         :: u_tmp(:,:), v_tmp(:,:)
- real(esmf_kind_r4)                      :: value_u, value_v
- 
- integer                                 :: varnum_u, varnum_v, vlev, iret
- 
- character(len=20)                       :: vname,vname2
- character(len=50)                       :: method_u, method_v
-
- if (localpet==0) then
-   allocate(u(i_input,j_input,lev_input))
-   allocate(v(i_input,j_input,lev_input))
- else
-   allocate(u(0,0,0))
-   allocate(v(0,0,0))
- endif
-
- vname = "u"
- call get_var_cond(vname,this_miss_var_method=method_u, this_miss_var_value=value_u, &
-                       loc=varnum_u)
- vname = "v"
- call get_var_cond(vname,this_miss_var_method=method_v, this_miss_var_value=value_v, &
-                       loc=varnum_v)
-                       
- if (localpet==0) then
-   do vlev = 1, lev_input
- 
-     !vname = ":UGRD:"
-     vname = ":var0_2"
-     vname2 = "_2_2:"
-     iret = grb2_inq(file,inv,vname,vname2,slevs(vlev),data2=u_tmp)
-     if (iret <= 0) then
-        call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
-        if (iret==1) then ! missing_var_method == skip
-          call error_handler("READING IN U AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
-                        "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
-        endif
-     endif
-   
-!     vname = ":VGRD:"
-     vname2 = "_2_3:"
-     iret = grb2_inq(file,inv,vname,vname2,slevs(vlev),data2=v_tmp)
-     if (iret <= 0) then
-        call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
-        if (iret==1) then ! missing_var_method == skip 
-          call error_handler("READING IN V AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
-                          "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
-        endif
-      endif
-    
-        u(:,:,vlev) = u_tmp
-        v(:,:,vlev) = v_tmp
-    
-      print*, 'max, min U ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
-      print*, 'max, min V ', minval(u(:,:,vlev)), maxval(u(:,:,vlev))
-    enddo
- endif
-
-end subroutine read_winds
 
 !---------------------------------------------------------------------------
 ! Convert from 2-d to 3-d winds.
