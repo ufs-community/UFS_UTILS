@@ -4417,7 +4417,7 @@ if (localpet == 0) then
      enddo
    enddo
 
-   slmsk_save = int(dummy2d,esmf_kind_i4)
+   slmsk_save = nint(dummy2d)
   
    deallocate(icec_save)
  endif
@@ -4776,9 +4776,10 @@ if (localpet == 0) then
     call error_handler("IN FieldScatter", rc)
 
 !---------------------------------------------------------------------------------
-! At open water (slmsk==0), the soil temperature array is set to a filler value
-! of SST.  At sea/lake ice (slmsk==2) , it is ice column temperature.  That field
-! is not available in the GFS grib2 data, so use a default value.
+! At open water (slmsk==0), the soil temperature array is not used and set
+! to the filler value of SST.  At lake/sea ice points (slmsk=2), the soil 
+! temperature array holds ice column temperature.  That field is not available
+! in GFS grib data, so set to a default value.
 !---------------------------------------------------------------------------------
 
  if (localpet == 0) then
@@ -4790,9 +4791,7 @@ if (localpet == 0) then
      do j = 1, j_input
        do i = 1, i_input
          if (slmsk_save(i,j) == 0_esmf_kind_i4 ) dummy3d(i,j,k) = tsk_save(i,j)
-         if (slmsk_save(i,j) == 2_esmf_kind_i4 .and. .not. (dummy3d(i,j,k) <= 0.0 .and. dummy3d(i,j,k) <1000.0)) then
-           dummy3d(i,j,k) = icet_default
-         endif
+         if (slmsk_save(i,j) == 2_esmf_kind_i4 ) dummy3d(i,j,k) = icet_default
        enddo
      enddo
    enddo
