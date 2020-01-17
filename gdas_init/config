@@ -6,7 +6,7 @@
 #  2) Ensure links to the 'fixed' directories are
 #  set.  See the ./sorc/link_fixdirs.sh script for details.
 #
-#  3) Set all config varialbes:
+#  3) Set all config variables:
 #
 #  4) Invoke the driver script for your machine (with no
 #     arguments).

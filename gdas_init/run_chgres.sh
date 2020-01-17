@@ -73,6 +73,8 @@ if [ $rc != 0 ]; then
   exit $rc
 fi
 
+mv gfs_ctrl.nc ${OUTDIR}/INPUT
+
 for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
 do
   mv out.atm.${tile}.nc  ${OUTDIR}/INPUT/gfs_data.${tile}.nc

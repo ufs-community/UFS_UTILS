@@ -69,6 +69,8 @@ if [ $bundle = 'hires' ]; then
 
   rm -f ./list.hires.*
 
+  touch ./gdas.${yy}${mm}${dd}/${hh}/gdas.t${hh}z.loginc.txt
+
   set +x
   echo DATA PULL FOR $bundle DONE
 
@@ -115,6 +117,38 @@ do
   htar -xvf $directory/$file -L ./list3.${group}
   rc=$?
   [ $rc != 0 ] && exit $rc
+
+  case $bundle in
+    grp1)
+     members="mem001 mem002 mem003 mem004 mem005 mem006 mem007 mem008 mem009 mem010"
+     ;;
+    grp2)
+     members="mem011 mem012 mem013 mem014 mem015 mem016 mem017 mem018 mem019 mem020"
+     ;;
+    grp3)
+     members="mem021 mem022 mem023 mem024 mem025 mem026 mem027 mem028 mem029 mem030"
+     ;;
+    grp4)
+     members="mem031 mem032 mem033 mem034 mem035 mem036 mem037 mem038 mem039 mem040"
+     ;;
+    grp5)
+     members="mem041 mem042 mem043 mem044 mem045 mem046 mem047 mem048 mem049 mem050"
+     ;;
+    grp6)
+     members="mem051 mem052 mem053 mem054 mem055 mem056 mem057 mem058 mem059 mem060"
+     ;;
+    grp7)
+     members="mem061 mem062 mem063 mem064 mem065 mem066 mem067 mem068 mem069 mem070"
+     ;;
+    grp8)
+     members="mem071 mem072 mem073 mem074 mem075 mem076 mem077 mem078 mem079 mem080"
+     ;;
+  esac
+
+  for member in $members
+  do
+    touch ./enkfgdas.${yy}${mm}${dd}/${hh}/${member}/enkfgdas.t${hh}z.loginc.txt
+  done
 
   rm -f ./list*.${group}
 
