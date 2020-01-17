@@ -4336,11 +4336,11 @@
 
    the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
 
-   print*,"- OPEN FILE."
+   print*,"- READ SFC DATA FROM GRIB2 FILE: ", trim(the_file)
    inquire(file=the_file,exist=exist)
    if (.not.exist) then
      iret = 1
-     call error_handler("OPENING GRIB2 ATM FILE.", iret)
+     call error_handler("OPENING GRIB2 FILE.", iret)
    end if
 
    lsoil_input = grb2_inq(the_file, inv_file, ':TSOIL:',' below ground:')
@@ -4396,6 +4396,8 @@ if (localpet == 0) then
 ! GFS v14 and v15.2 grib data has two land masks.  LANDN is created by
 ! nearest neighbor interpolation.  LAND is created by bilinear interpolation.
 ! LANDN matches the bitmap.  So use it first.  For other GFS versions, use LAND.
+! Mask in grib file is '1' (land), '0' (not land).  Add sea/lake ice category
+! '2' based on ice concentration.
 !----------------------------------------------------------------------------------
 
  if (localpet == 0) then
@@ -4411,7 +4413,7 @@ if (localpet == 0) then
      do i = 1, i_input
        if(dummy2d(i,j) < 0.5_esmf_kind_r4) dummy2d(i,j)=0.0_esmf_kind_r4
        if(icec_save(i,j) > 0.15_esmf_kind_r4) then 
-         !if (dummy2d(i,j) == 0.0_esmf_kind_r4) print*, "CONVERTING WATER TO LANDICE AT ", i, j
+         !if (dummy2d(i,j) == 0.0_esmf_kind_r4) print*, "CONVERTING WATER TO SEA/LAKE ICE AT ", i, j
          dummy2d(i,j) = 2.0_esmf_kind_r4
        endif
      enddo
@@ -4439,6 +4441,12 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
+!----------------------------------------------------------------------------------
+! Read snow fields.  Zero out at non-land points and undefined points (points
+! removed using the bitmap).  Program expects depth and liquid equivalent
+! in mm.
+!----------------------------------------------------------------------------------
+
  if (localpet == 0) then
    print*,"- READ SNOW LIQUID EQUIVALENT."
    rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:',':anl:',data2=dummy2d)
@@ -4449,7 +4457,7 @@ if (localpet == 0) then
    do j = 1, j_input
      do i = 1, i_input
        if(slmsk_save(i,j) == 0) dummy2d(i,j) = 0.0_esmf_kind_r4
-       if(dummy2d(i,j) > 1.0E3) dummy2d(i,j) = 0.0_esmf_kind_r4
+       if(dummy2d(i,j) == grb2_UNDEFINED) dummy2d(i,j) = 0.0_esmf_kind_r4
      enddo
    enddo
 !  print*,'weasd ',maxval(dummy2d),minval(dummy2d)
@@ -4464,9 +4472,9 @@ if (localpet == 0) then
    print*,"- READ SNOW DEPTH."
    rc = grb2_inq(the_file, inv_file, ':SNOD:',':surface:', data2=dummy2d)
    if (rc /= 1) call error_handler("READING SNOW DEPTH.", rc)
+   where(dummy2d == grb2_UNDEFINED) dummy2d = 0.0_esmf_kind_r4
    dummy2d = dummy2d*1000.0 ! Grib2 files have snow depth in (m), fv3 expects it in mm
    where(slmsk_save == 0) dummy2d = 0.0_esmf_kind_r4
-   where(dummy2d > 1.0E6) dummy2d = 0.0_esmf_kind_r4
 !  print*,'snod ',maxval(dummy2d),minval(dummy2d)
  endif
 
