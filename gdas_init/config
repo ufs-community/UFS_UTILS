@@ -2,15 +2,38 @@
 #
 #  1) Compile the chgres_cube program.  Invoke 
 #     ./sorc/build_chgres_cube.sh
-
-#  2) Ensure links to the 'fixed' directories are
-#  set.  See the ./sorc/link_fixdirs.sh script for details.
 #
-#  3) Set all config variables:
+#  2) Ensure links to the 'fixed' directories are
+#     set.  See the ./sorc/link_fixdirs.sh script prolog
+#     for details.
+#
+#  3) Set all config variables.  See definitions 
+#     below.
 #
 #  4) Invoke the driver script for your machine (with no
 #     arguments).
 #
+# Variable definitions:
+# --------------------
+# EXTRACT_DIR - directory where data extracted from HPSS
+#               is stored.
+# EXTRACT_DATA - Set to 'yes' to extract data from HPSS.
+#                If data has been extracted and is located
+#                in EXTRACT_DIR, set to 'no'.
+# RUN_CHGRES - To run chgres, set to 'yes'.  To extract
+#              data only, set to 'no'.
+# yy/mm/dd/hh - The year/month/day/hour of your desired
+#               experiment.
+# LEVS        - Number of hybrid levels plus 1.  To
+#               run with 64 levels, set LEVS to 65.
+# CRES_HIRES  - Resolution of the hires component of
+#               your experiment.
+# CRES_ENKF   - Resolution of the enkf component of the
+#               your experiment.
+# UFS_DIR - Location of your checked out UFS_UTILS
+#           repo.
+# OUTDIR - Directory where data output from chgres is stored.
+#         
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/$USER/gdas.init/input
@@ -22,6 +45,8 @@ yy=2019
 mm=08
 dd=20
 hh=00
+
+LEVS=65
 
 CRES_HIRES=C192
 CRES_ENKF=C96
@@ -35,3 +60,4 @@ OUTDIR=/scratch2/NCEPDEV/stmp1/$USER/gdas.init/output
 #---------------------------------------------------------
 
 export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF RUN_CHGRES
+export LEVS

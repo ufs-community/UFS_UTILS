@@ -53,7 +53,7 @@ cat << EOF > fort.41
  data_dir_input_grid="${INPUT_DATA_DIR}"
  atm_core_files_input_grid="${YMDH}.fv_core.res.tile1.nc","${YMDH}.fv_core.res.tile2.nc","${YMDH}.fv_core.res.tile3.nc","${YMDH}.fv_core.res.tile4.nc","${YMDH}.fv_core.res.tile5.nc","${YMDH}.fv_core.res.tile6.nc","${YMDH}.fv_core.res.nc"
  atm_tracer_files_input_grid="${YMDH}.fv_tracer.res.tile1.nc","${YMDH}.fv_tracer.res.tile2.nc","${YMDH}.fv_tracer.res.tile3.nc","${YMDH}.fv_tracer.res.tile4.nc","${YMDH}.fv_tracer.res.tile5.nc","${YMDH}.fv_tracer.res.tile6.nc"
- vcoord_file_target_grid="${FIX_AM}/global_hyblev.l65.txt"
+ vcoord_file_target_grid="${FIX_AM}/global_hyblev.l${LEVS}.txt"
  sfc_files_input_grid="${YMDH}.sfc_data.tile1.nc","${YMDH}.sfc_data.tile2.nc","${YMDH}.sfc_data.tile3.nc","${YMDH}.sfc_data.tile4.nc","${YMDH}.sfc_data.tile5.nc","${YMDH}.sfc_data.tile6.nc"
  cycle_mon=$mm
  cycle_day=$dd
