@@ -5,9 +5,10 @@ file(GLOB EXE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.F90 ${CMAKE_CURRENT_SOURCE_DIR}/
 if(IntelComp)
     message("setting intel flags")
     set(CMAKE_Fortran_4_FLAGS " -g -O3 -axCORE-AVX2" CACHE INTERNAL "" )
+elseif(GNUComp)
+    set(CMAKE_Fortran_4_FLAGS "-ffree-form -ffree-line-length-0 -g -O3 " CACHE INTERNAL "" )
 else()
     message("unknown compiler!")
-    set(CMAKE_Fortran_4_FLAGS "-ffree-form -ffree-line-length-0 -g -O3 " CACHE INTERNAL "" )
 endif()
 
 
