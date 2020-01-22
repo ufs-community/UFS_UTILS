@@ -247,7 +247,7 @@
                                     regDecomp=(/1,npets/),  &
                                     name="source_grid", &
                                     indexflag=ESMF_INDEX_GLOBAL, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN GridCreateNoPeriDim.", rc)
 
  else
@@ -264,7 +264,7 @@
                                     regDecomp=(/1,npets/),  &
                                     name="source_grid", &
                                     indexflag=ESMF_INDEX_GLOBAL, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN GridCreate1PeriDim.", rc)
 
  endif
@@ -275,12 +275,12 @@
                                staggerloc=ESMF_STAGGERLOC_CENTER, &
                                name="source grid land mask", &
                                rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate.", rc)
 
  print*,"- CALL FieldScatter FOR SOURCE GRID MASK."
  call ESMF_FieldScatter(mask_field, mask_global, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter.", rc)
 
  print*,"- CALL GridAddItem FOR SOURCE GRID MASK."
@@ -288,7 +288,7 @@
                        itemflag=ESMF_GRIDITEM_MASK, &
                        staggerloc=ESMF_STAGGERLOC_CENTER, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridAddItem.", rc)
 
  print*,"- CALL GridGetItem FOR SOURCE GRID MASK."
@@ -299,7 +299,7 @@
                        totalLBound=clb,  &
                        totalUBound=cub, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetItem", rc)
  
  print*,"- CALL FieldGet FOR SOURCE GRID LANDMASK."
@@ -307,7 +307,7 @@
  call ESMF_FieldGet(mask_field, &
                     farrayPtr=mask_field_ptr,  &
                     rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet.", rc)
 
  do j = clb(2), cub(2)
@@ -324,7 +324,7 @@
 
  print*,"- CALL FieldDestroy FOR SOURCE GRID LAND MASK."
  call ESMF_FieldDestroy(mask_field,rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldDestroy.", rc)
 
 ! Set lat/lons of grid points
@@ -332,7 +332,7 @@
  print*,"- CALL GridAddCoord FOR SOURCE GRID CENTER LOCATION."
  call ESMF_GridAddCoord(grid_src, &
                         staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridAddCoord.", rc)
 
  print*,"- CALL GridGetCoord FOR SOURCE GRID CENTER LONGITUDE."
@@ -341,7 +341,7 @@
                         staggerLoc=ESMF_STAGGERLOC_CENTER, &
                         coordDim=1, &
                         farrayPtr=lon_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord.", rc)
 
  print*,"- CALL GridGetCoord FOR SOURCE GRID CENTER LATITUDE."
@@ -350,7 +350,7 @@
                         staggerLoc=ESMF_STAGGERLOC_CENTER, &
                         coordDim=2, &
                         farrayPtr=lat_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord.", rc)
 
  do j = clb(2), cub(2)
@@ -365,7 +365,7 @@
  call ESMF_GridAddCoord(grid_src, &
                         staggerloc=ESMF_STAGGERLOC_CORNER, &
                         rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridAddCoord.", rc)
 
  print*,"- CALL GridGetCoord FOR SOURCE GRID CORNER LONGITUDE."
@@ -375,7 +375,7 @@
                         coordDim=1, &
                         farrayPtr=lon_corner_ptr, &
                         rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord.", rc)
 
  print*,"- CALL GridGetCoord FOR SOURCE GRID CORNER LATITUDE."
@@ -387,7 +387,7 @@
                         computationalUBound=cub_corner, &
                         farrayPtr=lat_corner_ptr, &
                         rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord.", rc)
 
  do j = clb_corner(2), cub_corner(2)
