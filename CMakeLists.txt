@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.15)
 project(ufs_util VERSION 1.1.1)
 set(${PROJECT_NAME}_VERSION ${PROJECT_VERSION} CACHE INTERNAL "${PROJECT_NAME} version number")
 enable_language (Fortran)
@@ -42,32 +42,33 @@ find_package(ESMF MODULE)
 find_package(ZLIB REQUIRED)
 #find_package(LAPACK)
 
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
 if(NOT TARGET landsfcutil_4)
-  find_package(landsfcutil REQUIRED CONFIG)
+  find_package(landsfcutil REQUIRED)
 endif()
 
 if(NOT TARGET sfcio)
-  find_package(sfcio REQUIRED CONFIG)
+  find_package(sfcio REQUIRED)
 endif()
 
 if(NOT TARGET w3nco_d)
-  find_package(w3nco REQUIRED CONFIG)
+  find_package(w3nco REQUIRED)
 endif()
 
 if(NOT TARGET bacio_4)
-  find_package(bacio REQUIRED CONFIG)
+  find_package(bacio REQUIRED)
 endif()
 
 if(NOT TARGET nemsio)
-  find_package(nemsio REQUIRED CONFIG)
+  find_package(nemsio REQUIRED)
 endif()
 
 if(NOT TARGET sigio)
-  find_package(sigio REQUIRED CONFIG)
+  find_package(sigio REQUIRED)
 endif()
 
 if (NOT TARGET sp_d)
-  find_package(sp REQUIRED CONFIG)
+  find_package(sp REQUIRED)
 endif()
   
 
