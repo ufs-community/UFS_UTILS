@@ -292,9 +292,10 @@
                                        seamask_target_grid,  &
                                        latitude_target_grid
 
- use program_setup, only             : convert_nst
+ use program_setup, only             : convert_nst, input_type
 
- use static_data, only               : veg_type_target_grid
+ use static_data, only               : veg_type_target_grid, &
+                                       soil_type_target_grid
 
  use search_util
 
@@ -318,6 +319,7 @@
  integer(esmf_kind_i8), pointer     :: seamask_target_ptr(:,:)
 
  real(esmf_kind_r8), allocatable    :: data_one_tile(:,:)
+ real(esmf_kind_r8), allocatable    :: data_one_tile2(:,:)
  real(esmf_kind_r8), allocatable    :: data_one_tile_3d(:,:,:)
  real(esmf_kind_r8), allocatable    :: latitude_one_tile(:,:)
  real(esmf_kind_r8), pointer        :: canopy_mc_target_ptr(:,:)
@@ -514,6 +516,18 @@
 ! Interpolate.
 !-----------------------------------------------------------------------
 
+ if (localpet == 0) then
+   allocate(data_one_tile(i_target,j_target))
+   allocate(data_one_tile2(i_target,j_target))
+   allocate(data_one_tile_3d(i_target,j_target,lsoil_target))
+   allocate(mask_target_one_tile(i_target,j_target))
+ else
+   allocate(data_one_tile(0,0))
+   allocate(data_one_tile2(0,0))
+   allocate(data_one_tile_3d(0,0,0))
+   allocate(mask_target_one_tile(0,0))
+ endif
+
  method=ESMF_REGRIDMETHOD_CONSERVE
 
  isrctermprocessing = 1
@@ -540,16 +554,6 @@
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
-
- if (localpet == 0) then
-   allocate(data_one_tile(i_target,j_target))
-   allocate(data_one_tile_3d(i_target,j_target,lsoil_target))
-   allocate(mask_target_one_tile(i_target,j_target))
- else
-   allocate(data_one_tile(0,0))
-   allocate(data_one_tile_3d(0,0,0))
-   allocate(mask_target_one_tile(0,0))
- endif
 
  print*,"- CALL FieldGet FOR TARGET grid sea ice fraction."
  call ESMF_FieldGet(seaice_fract_target_grid, &
@@ -600,6 +604,7 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
+   
    if (localpet == 0) then
      do j = 1, j_target
      do i = 1, i_target
@@ -709,7 +714,7 @@
  print*,"- CALL FieldGet FOR TARGET grid snow depth."
  call ESMF_FieldGet(snow_depth_target_grid, &
                     farrayPtr=snow_depth_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL Field_Regrid for snow liq equiv."
@@ -1969,7 +1974,7 @@
 
  do ij = l(1), u(1)
    call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
-   soilm_tot_target_ptr(i,j,:) = -9999.9 
+   soilm_tot_target_ptr(i,j,:) = -9999.9
    soil_temp_target_ptr(i,j,:) = -9999.9 
    skin_temp_target_ptr(i,j) = -9999.9 
    terrain_from_input_ptr(i,j) = -9999.9 
@@ -2028,8 +2033,23 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
+   print*,"- CALL FieldGather FOR SOIL TYPE TARGET GRID, TILE: ", tile
+   call ESMF_FieldGather(soil_type_target_grid, data_one_tile2, rootPet=0,tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", rc)
+
+!---------------------------------------------------------------------------------------
+! grib2 data does not have soil type.  Set soil type interpolated from input
+! grid to the target (model) grid soil type.  This turns off the soil moisture
+! rescaling.
+!---------------------------------------------------------------------------------------
+
    if (localpet == 0) then
-     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
+     if (trim(input_type) .ne. "grib2") then
+       call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
+     else
+       data_one_tile = data_one_tile2
+     endif
    endif
 
    print*,"- CALL FieldScatter FOR SOIL TYPE FROM INPUT GRID, TILE: ", tile
@@ -2082,7 +2102,7 @@
 
  deallocate(veg_type_target_one_tile)
 
- deallocate(data_one_tile)
+ deallocate(data_one_tile, data_one_tile2)
  deallocate(data_one_tile_3d)
  deallocate(mask_target_one_tile)
 

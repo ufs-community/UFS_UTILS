@@ -17,6 +17,9 @@ export NCEPLIBS=/scratch1/NCEPDEV/global/gwv/l819/lib
 module use -a $NCEPLIBS/modulefiles
 module load esmflocal/8_0_48b.netcdf47
 
+export WGRIB2API_INC="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib"
+export WGRIB2_LIB="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib/libwgrib2.a"
+
 export FCOMP=mpiifort
 export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
 # for debugging
