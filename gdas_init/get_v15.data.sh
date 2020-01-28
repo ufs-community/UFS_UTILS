@@ -2,13 +2,6 @@
 
 bundle=$1
 
-if [ $yy$mm$dd$hh -lt 2019061206 ]; then
-  set +x
-  echo "ERROR: SCRIPTS DO NOT SUPPORT PRE-GFS.V15 DATA"
-  echo "CHOOSE DATE STARTING 2019061206"
-  exit 1
-fi
-
 set -x
 
 cd $EXTRACT_DIR

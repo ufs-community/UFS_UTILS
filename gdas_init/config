@@ -23,7 +23,8 @@
 # RUN_CHGRES - To run chgres, set to 'yes'.  To extract
 #              data only, set to 'no'.
 # yy/mm/dd/hh - The year/month/day/hour of your desired
-#               experiment.
+#               experiment.  Currently, does not support
+#               pre-v14 GFS data (July 19, 2017, 12z).
 # LEVS        - Number of hybrid levels plus 1.  To
 #               run with 64 levels, set LEVS to 65.
 # CRES_HIRES  - Resolution of the hires component of
@@ -42,8 +43,8 @@ EXTRACT_DATA=yes
 RUN_CHGRES=yes
 
 yy=2019
-mm=08
-dd=20
+mm=05
+dd=31
 hh=00
 
 LEVS=65
@@ -59,5 +60,14 @@ OUTDIR=/scratch2/NCEPDEV/stmp1/$USER/gdas.init/output
 # Dont touch anything below here.
 #---------------------------------------------------------
 
+gfs_ver=v15
+if [ $yy$mm$dd$hh -lt 2017071912 ]; then
+  set +x
+  echo FATAL ERROR: SCRIPTS DO NOT SUPPORT PRE-V14 GFS DATA
+  exit 2
+elif [ $yy$mm$dd$hh -lt 2019061206 ]; then
+  gfs_ver=v14
+fi
+
 export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF RUN_CHGRES
-export LEVS
+export LEVS gfs_ver

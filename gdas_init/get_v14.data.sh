@@ -1,12 +1,10 @@
 #!/bin/bash
 
 # v14 data starts July 19, 2017 at 12z
-# add a date check here.
 
 bundle=$1
 
 set -x
-
 
 if [ $bundle = 'hires' ]; then
 
@@ -86,7 +84,7 @@ while [ $MEMBER -le 80 ]; do
   MEMBER=$(( $MEMBER + 1 ))
 done
 
-rm -f gdas.*
+rm -f gdas.* list?
 
 set +x
 echo DATA PULL FOR $bundle DONE
