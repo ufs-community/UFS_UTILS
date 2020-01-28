@@ -67,11 +67,10 @@ if(NOT TARGET sigio)
   find_package(sigio REQUIRED)
 endif()
 
-if (NOT TARGET sp_d)
+if(NOT TARGET sp_d)
   find_package(sp REQUIRED)
 endif()
   
-
 add_subdirectory(sorc/chgres_cube.fd)
 #add_subdirectory(sorc/emcsfc_ice_blend.fd)
 #add_subdirectory(sorc/emcsfc_snow2mdl.fd)
