@@ -83,15 +83,17 @@ do
   mv out.sfc.${tile}.nc  ${OUTDIR}/INPUT/sfc_data.${tile}.nc 
 done
 
-cp ${RADSTAT_DATA_DIR}/*loginc* $OUTDIR
-cp ${RADSTAT_DATA_DIR}/*radstat* $OUTDIR
 if [ ${MEMBER} == 'hires' ]; then
+  cp ${RADSTAT_DATA_DIR}/*radstat* $OUTDIR
   cp ${RADSTAT_DATA_DIR}/*abias* $OUTDIR
+  touch $OUTDIR/gdas.t${hh}z.loginc.txt
+else
+  touch $OUTDIR/enkfgdas.t${hh}z.loginc.txt
 fi
 
 rm -fr $WORKDIR
 
 set +x
-echo CHGRES COMPLETED FOR $MEMBER
+echo CHGRES COMPLETED FOR MEMBER $MEMBER
 
 exit 0
