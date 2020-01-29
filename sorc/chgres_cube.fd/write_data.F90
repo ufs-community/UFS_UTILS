@@ -481,6 +481,8 @@
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED HISTORY FILE')
    elseif (trim(input_type) == "restart") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED RESTART FILE')
+   elseif (trim(input_type) == "gaussian_netcdf") then
+     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NETCDF FILE')
    endif
 
    error = nf90_enddef(ncid, header_buffer_val,4,0,4)
@@ -1190,6 +1192,8 @@
 !--- define global attributes
    if (trim(input_type) == "gaussian") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
+   elseif (trim(input_type) == "gaussian_netcdf") then
+     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NETCDF FILE')
    elseif (trim(input_type) == "gfs_gaussian") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS GAUSSIAN NEMSIO FILE')
    elseif (trim(input_type) == "gfs_spectral") then

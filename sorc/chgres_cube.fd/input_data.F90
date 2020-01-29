@@ -2826,6 +2826,7 @@
    print*,"- READ SNOW DEPTH."
    call read_fv3_grid_data_netcdf('snod', 1, i_input, j_input, &
                                    lsoil_input, sfcdata=dummy2d)
+   dummy2d = dummy2d * 1000.0  ! program expects depth in mm.
    print*,'snod ',maxval(dummy2d),minval(dummy2d)
  endif
 
