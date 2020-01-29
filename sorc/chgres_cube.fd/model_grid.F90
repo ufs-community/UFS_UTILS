@@ -117,7 +117,8 @@
 
  if (trim(input_type) == "gaussian" .or. &
      trim(input_type) == "gfs_gaussian" .or. &
-     trim(input_type) == "gfs_spectral") then
+     trim(input_type) == "gfs_spectral" .or. &
+     trim(input_type) == "gaussian_netcdf") then
    call define_input_grid_gaussian(localpet, npets)
  elseif (trim(input_type) == "grib2") then
    call define_input_grid_gfs_grib2(localpet,npets)
@@ -149,6 +150,7 @@
 
  use sfcio_module
  use sigio_module
+ use netcdf
 
  implicit none
 
@@ -156,7 +158,7 @@
 
  character(len=250)               :: the_file
 
- integer                          :: i, j, rc, clb(2), cub(2)
+ integer                          :: i, j, rc, clb(2), cub(2), ncid, id_grid
  integer(sfcio_intkind)           :: rc2
  integer(sigio_intkind)           :: rc3
 
@@ -206,6 +208,26 @@
      i_input = sighead%lonb
      j_input = sighead%latb
    endif
+
+ elseif (trim(input_type) == "gaussian_netcdf") then
+
+   print*,'- OPEN AND READ: ',trim(the_file)
+   rc=nf90_open(trim(the_file),nf90_nowrite,ncid)
+   call netcdf_err(rc, 'opening file')
+
+   print*,"- READ grid_xt"
+   rc=nf90_inq_dimid(ncid, 'grid_xt', id_grid)
+   call netcdf_err(rc, 'reading grid_xt id')
+   rc=nf90_inquire_dimension(ncid,id_grid,len=i_input)
+   call netcdf_err(rc, 'reading grid_xt')
+
+   print*,"- READ grid_yt"
+   rc=nf90_inq_dimid(ncid, 'grid_yt', id_grid)
+   call netcdf_err(rc, 'reading grid_yt id')
+   rc=nf90_inquire_dimension(ncid,id_grid,len=j_input)
+   call netcdf_err(rc, 'reading grid_yt')
+
+   rc = nf90_close(ncid)
 
  else ! nemsio format
 

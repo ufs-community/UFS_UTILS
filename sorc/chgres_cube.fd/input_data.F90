@@ -491,6 +491,8 @@
    call read_input_sfc_gfs_gaussian_file(localpet)
  elseif (trim(input_type) == "gfs_spectral") then
    call read_input_sfc_gfs_sfcio_file(localpet)
+ elseif (trim(input_type) == "gaussian_netcdf") then
+   call read_input_sfc_gfs_gaussian_netcdf_file(localpet)
  elseif (trim(input_type) == "grib2") then
    call read_input_sfc_grib2_file(localpet)
  endif
@@ -2719,6 +2721,321 @@
  endif
  
  end subroutine read_input_atm_grib2_file
+
+!---------------------------------------------------------------------------
+!---------------------------------------------------------------------------
+
+ subroutine read_input_sfc_gfs_gaussian_netcdf_file(localpet)
+
+ use netcdf
+
+ implicit none
+
+ integer, intent(in)                   :: localpet
+
+ character(len=300)                    :: the_file
+
+ integer                               :: rc
+
+ real(esmf_kind_r8), allocatable       :: dummy2d(:,:)
+ real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:)
+
+ print*,"- READ SURFACE FIELDS FROM FV3 GAUSSIAN NETCDF FILE."
+
+ if (localpet == 0) then
+   allocate(dummy3d(i_input,j_input,lsoil_input))
+   allocate(dummy2d(i_input,j_input))
+ else
+   allocate(dummy3d(0,0,0))
+   allocate(dummy2d(0,0))
+ endif
+
+ if (localpet == 0) then
+   print*,"- READ TERRAIN."
+   call read_fv3_grid_data_netcdf('orog', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+   print*,'orog ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT TERRAIN."
+ call ESMF_FieldScatter(terrain_input_grid, dummy2d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ LANDSEA MASK."
+   call read_fv3_grid_data_netcdf('land', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+   print*,'landmask ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
+ call ESMF_FieldScatter(landsea_mask_input_grid, dummy2d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+ 
+ if (localpet == 0) then
+   print*,"- READ SEAICE FRACTION."
+   call read_fv3_grid_data_netcdf('icec', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+   print*,'icec ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SEAICE FRACTION."
+ call ESMF_FieldScatter(seaice_fract_input_grid, dummy2d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ SEAICE DEPTH."
+   call read_fv3_grid_data_netcdf('icetk', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+   print*,'icetk ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SEAICE DEPTH."
+ call ESMF_FieldScatter(seaice_depth_input_grid, dummy2d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ SEAICE SKIN TEMPERATURE."
+   call read_fv3_grid_data_netcdf('tisfc', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+   print*,'ti ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SEAICE SKIN TEMPERATURE."
+ call ESMF_FieldScatter(seaice_skin_temp_input_grid, dummy2d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ SNOW LIQUID EQUIVALENT."
+   call read_fv3_grid_data_netcdf('weasd', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+   print*,'weasd ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
+ call ESMF_FieldScatter(snow_liq_equiv_input_grid, dummy2d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ SNOW DEPTH."
+   call read_fv3_grid_data_netcdf('snod', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+   print*,'snod ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SNOW DEPTH."
+ call ESMF_FieldScatter(snow_depth_input_grid, dummy2d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ VEG TYPE."
+   call read_fv3_grid_data_netcdf('vtype', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+   print*,'vtype ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID VEG TYPE."
+ call ESMF_FieldScatter(veg_type_input_grid, dummy2d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ SOIL TYPE."
+   call read_fv3_grid_data_netcdf('sotyp', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+   print*,'sotyp ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
+ call ESMF_FieldScatter(soil_type_input_grid, dummy2d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   print*,"- READ T2M."
+   call read_fv3_grid_data_netcdf('tmp2m', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+   print*,'t2m ',maxval(dummy2d),minval(dummy2d)
+ endif
+
+ print*,"- CALL FieldScatter FOR INPUT GRID T2M."
+ call ESMF_FieldScatter(t2m_input_grid, dummy2d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+  if (localpet == 0) then
+    print*,"- READ Q2M."
+    call read_fv3_grid_data_netcdf('spfh2m', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    print*,'q2m ',maxval(dummy2d),minval(dummy2d)
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT GRID Q2M."
+  call ESMF_FieldScatter(q2m_input_grid, dummy2d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+  if (localpet == 0) then
+    call read_fv3_grid_data_netcdf('tprcp', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    print*,'tprcp ',maxval(dummy2d),minval(dummy2d)
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT GRID TPRCP."
+  call ESMF_FieldScatter(tprcp_input_grid, dummy2d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+  if (localpet == 0) then
+    call read_fv3_grid_data_netcdf('f10m', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    print*,'f10m ',maxval(dummy2d),minval(dummy2d)
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT GRID F10M"
+  call ESMF_FieldScatter(f10m_input_grid, dummy2d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+  if (localpet == 0) then
+    call read_fv3_grid_data_netcdf('ffmm', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    print*,'ffmm ',maxval(dummy2d),minval(dummy2d)
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT GRID FFMM"
+  call ESMF_FieldScatter(ffmm_input_grid, dummy2d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+  if (localpet == 0) then
+    call read_fv3_grid_data_netcdf('fricv', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    print*,'fricv ',maxval(dummy2d),minval(dummy2d)
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT GRID USTAR"
+  call ESMF_FieldScatter(ustar_input_grid, dummy2d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+  if (localpet == 0) then
+    dummy2d = 0.0
+    print*,'srflag ',maxval(dummy2d),minval(dummy2d)
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT GRID SRFLAG"
+  call ESMF_FieldScatter(srflag_input_grid, dummy2d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+  if (localpet == 0) then
+    call read_fv3_grid_data_netcdf('tmpsfc', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    print*,'tmpsfc ',maxval(dummy2d),minval(dummy2d)
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
+  call ESMF_FieldScatter(skin_temp_input_grid, dummy2d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+  if (localpet == 0) then
+    call read_fv3_grid_data_netcdf('cnwat', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    print*,'cnwat ',maxval(dummy2d),minval(dummy2d)
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT GRID CANOPY MOISTURE CONTENT."
+  call ESMF_FieldScatter(canopy_mc_input_grid, dummy2d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+  if (localpet == 0) then
+    call read_fv3_grid_data_netcdf('sfcr', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    print*,'sfcr ',maxval(dummy2d),minval(dummy2d)
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT GRID Z0."
+  call ESMF_FieldScatter(z0_input_grid, dummy2d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+  if (localpet == 0) then
+    call read_fv3_grid_data_netcdf('soill1', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,1) = dummy2d
+    call read_fv3_grid_data_netcdf('soill2', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,2) = dummy2d
+    call read_fv3_grid_data_netcdf('soill3', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,3) = dummy2d
+    call read_fv3_grid_data_netcdf('soill4', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,4) = dummy2d
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT LIQUID SOIL MOISTURE."
+  call ESMF_FieldScatter(soilm_liq_input_grid, dummy3d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+! total soil moisture
+
+  if (localpet == 0) then
+    call read_fv3_grid_data_netcdf('soilw1', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,1) = dummy2d
+    call read_fv3_grid_data_netcdf('soilw2', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,2) = dummy2d
+    call read_fv3_grid_data_netcdf('soilw3', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,3) = dummy2d
+    call read_fv3_grid_data_netcdf('soilw4', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,4) = dummy2d
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT TOTAL SOIL MOISTURE."
+  call ESMF_FieldScatter(soilm_tot_input_grid, dummy3d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+! soil tempeature (ice temp at land ice points)
+
+  if (localpet == 0) then
+    call read_fv3_grid_data_netcdf('soilt1', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,1) = dummy2d
+    call read_fv3_grid_data_netcdf('soilt2', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,2) = dummy2d
+    call read_fv3_grid_data_netcdf('soilt3', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,3) = dummy2d
+    call read_fv3_grid_data_netcdf('soilt4', 1, i_input, j_input, &
+                                   lsoil_input, sfcdata=dummy2d)
+    dummy3d(:,:,4) = dummy2d
+  endif
+
+  print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
+  call ESMF_FieldScatter(soil_temp_input_grid, dummy3d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldScatter", rc)
+
+ deallocate(dummy2d, dummy3d)
+
+ end subroutine read_input_sfc_gfs_gaussian_netcdf_file
 
 !---------------------------------------------------------------------------
 ! Read input grid surface data from a spectral gfs gaussian sfcio file.

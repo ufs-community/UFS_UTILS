@@ -265,21 +265,13 @@
      print*,'- INPUT DATA FROM SPECTRAL GFS GAUSSIAN NEMSIO FILE.'
    case ("gfs_spectral")
      print*,'- INPUT DATA FROM SPECTRAL GFS SIGIO/SFCIO FILE.'
+   case ("gaussian_netcdf")
+     print*,'- INPUT DATA FROM FV3 GAUSSIAN NETCDF FILE.'
    case ("grib2")
      print*,'- INPUT DATA FROM A GRIB2 FILE'
    case default
      call error_handler("UNRECOGNIZED INPUT DATA TYPE.", 1)
  end select
- 
-!-------------------------------------------------------------------------
-! Ensure proper file variable provided for grib2 input  
-!-------------------------------------------------------------------------
-
- if (trim(input_type) == "grib2") then
-   if (trim(grib2_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
-     call error_handler("FOR GRIB2 DATA, PLEASE PROVIDE GRIB2_FILE_INPUT_GRID")
-   endif
- endif
  
  end subroutine read_setup_namelist
 
