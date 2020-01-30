@@ -11,7 +11,7 @@ endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
   set(IntelComp true )
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU*")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU*" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang*")
   set(GNUComp true )
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "pgc*")
   set(PGIComp true )
