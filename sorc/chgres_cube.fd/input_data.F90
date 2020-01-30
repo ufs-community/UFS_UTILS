@@ -1609,11 +1609,14 @@
  enddo
 
  if (localpet < num_tiles_input_grid) then
-   error=nf90_inq_varid(ncid, 'W', id_var)
-   call netcdf_err(error, 'reading field id' )
-   error=nf90_get_var(ncid, id_var, data_one_tile_3d)
-   call netcdf_err(error, 'reading field' )
-   data_one_tile_3d(:,:,1:lev_input) = data_one_tile_3d(:,:,lev_input:1:-1)
+!  error=nf90_inq_varid(ncid, 'W', id_var)
+!  call netcdf_err(error, 'reading field id' )
+!  error=nf90_get_var(ncid, id_var, data_one_tile_3d)
+!  call netcdf_err(error, 'reading field' )
+!  data_one_tile_3d(:,:,1:lev_input) = data_one_tile_3d(:,:,lev_input:1:-1)
+
+! Using 'w' from restart files has caused problems.  Set to zero.
+   data_one_tile_3d = 0.0_8
  endif
 
  do tile = 1, num_tiles_input_grid
@@ -1943,12 +1946,16 @@
  endif
 
  if (localpet < num_tiles_input_grid) then
-   print*,"- READ VERTICAL VELOCITY."
-   error=nf90_inq_varid(ncid, 'dzdt', id_var)
-   call netcdf_err(error, 'reading field id' )
-   error=nf90_get_var(ncid, id_var, data_one_tile_3d)
-   call netcdf_err(error, 'reading field' )
-   data_one_tile_3d(:,:,1:lev_input) = data_one_tile_3d(:,:,lev_input:1:-1)
+!  print*,"- READ VERTICAL VELOCITY."
+!  error=nf90_inq_varid(ncid, 'dzdt', id_var)
+!  call netcdf_err(error, 'reading field id' )
+!  error=nf90_get_var(ncid, id_var, data_one_tile_3d)
+!  call netcdf_err(error, 'reading field' )
+!  data_one_tile_3d(:,:,1:lev_input) = data_one_tile_3d(:,:,lev_input:1:-1)
+
+! Using w from the tiled history files has caused problems.  
+! Set to zero.
+   data_one_tile_3d = 0.0_8
  endif
 
  do tile = 1, num_tiles_input_grid
