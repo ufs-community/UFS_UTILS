@@ -301,10 +301,24 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
    call error_handler("IN FieldCreate", rc)
  
+!--------------------------------------------------------------------------
+! Read input grid nst data from a fv3 gaussian nemsio history file or
+! spectral GFS nemsio file.
+!--------------------------------------------------------------------------
+
  if (trim(input_type) == "gaussian" .or. trim(input_type) == "gfs_gaussian") then
-   call read_input_nst_gaussian_file(localpet)
+
+   call read_input_nst_nemsio_file(localpet)
+
+!---------------------------------------------------------------------------
+! Read nst data from these netcdf formatted fv3 files: tiled history,
+! tiled warm restart, and gaussian history.
+!---------------------------------------------------------------------------
+
  else
-   call read_input_nst_tile_file(localpet)
+
+   call read_input_nst_netcdf_file(localpet)
+
  endif
 
  end subroutine read_input_nst_data
@@ -481,20 +495,55 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
+!-------------------------------------------------------------------------------
+! Read the tiled 'warm' restart files.
+!-------------------------------------------------------------------------------
+
  if (trim(input_type) == "restart") then
+
    call read_input_sfc_restart_file(localpet)
- elseif (trim(input_type) == "history") then
-   call read_input_sfc_history_file(localpet)
+
+!-------------------------------------------------------------------------------
+! Read the tiled or gaussian history files in netcdf format.
+!-------------------------------------------------------------------------------
+
+ elseif (trim(input_type) == "history" .or. trim(input_type) ==  &
+         "gaussian_netcdf") then
+
+   call read_input_sfc_netcdf_file(localpet)
+
+!-------------------------------------------------------------------------------
+! Read the gaussian history files in nemsio format.
+!-------------------------------------------------------------------------------
+
  elseif (trim(input_type) == "gaussian") then
-   call read_input_sfc_gaussian_file(localpet)
+
+   call read_input_sfc_nemsio_file(localpet)
+
+!-------------------------------------------------------------------------------
+! Read the spectral gfs gaussian history files in nemsio format.
+!-------------------------------------------------------------------------------
+
  elseif (trim(input_type) == "gfs_gaussian") then
-   call read_input_sfc_gfs_gaussian_file(localpet)
+
+   call read_input_sfc_gfs_nemsio_file(localpet)
+
+!-------------------------------------------------------------------------------
+! Read the spectral gfs gaussian history files in sfcio format.
+!-------------------------------------------------------------------------------
+
  elseif (trim(input_type) == "gfs_spectral") then
+
    call read_input_sfc_gfs_sfcio_file(localpet)
- elseif (trim(input_type) == "gaussian_netcdf") then
-   call read_input_sfc_gfs_gaussian_netcdf_file(localpet)
+
+!-------------------------------------------------------------------------------
+! Read fv3gfs surface data in grib2 format.
+!-------------------------------------------------------------------------------
+
  elseif (trim(input_type) == "grib2") then
+
    call read_input_sfc_grib2_file(localpet)
+
  endif
 
  end subroutine read_input_sfc_data
@@ -2723,322 +2772,6 @@
  end subroutine read_input_atm_grib2_file
 
 !---------------------------------------------------------------------------
-!---------------------------------------------------------------------------
-
- subroutine read_input_sfc_gfs_gaussian_netcdf_file(localpet)
-
- use netcdf
-
- implicit none
-
- integer, intent(in)                   :: localpet
-
- character(len=300)                    :: the_file
-
- integer                               :: rc
-
- real(esmf_kind_r8), allocatable       :: dummy2d(:,:)
- real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:)
-
- print*,"- READ SURFACE FIELDS FROM FV3 GAUSSIAN NETCDF FILE."
-
- if (localpet == 0) then
-   allocate(dummy3d(i_input,j_input,lsoil_input))
-   allocate(dummy2d(i_input,j_input))
- else
-   allocate(dummy3d(0,0,0))
-   allocate(dummy2d(0,0))
- endif
-
- if (localpet == 0) then
-   print*,"- READ TERRAIN."
-   call read_fv3_grid_data_netcdf('orog', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-   print*,'orog ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT TERRAIN."
- call ESMF_FieldScatter(terrain_input_grid, dummy2d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ LANDSEA MASK."
-   call read_fv3_grid_data_netcdf('land', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-   print*,'landmask ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
- call ESMF_FieldScatter(landsea_mask_input_grid, dummy2d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldScatter", rc)
- 
- if (localpet == 0) then
-   print*,"- READ SEAICE FRACTION."
-   call read_fv3_grid_data_netcdf('icec', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-   print*,'icec ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID SEAICE FRACTION."
- call ESMF_FieldScatter(seaice_fract_input_grid, dummy2d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ SEAICE DEPTH."
-   call read_fv3_grid_data_netcdf('icetk', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-   print*,'icetk ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID SEAICE DEPTH."
- call ESMF_FieldScatter(seaice_depth_input_grid, dummy2d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ SEAICE SKIN TEMPERATURE."
-   call read_fv3_grid_data_netcdf('tisfc', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-   print*,'ti ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID SEAICE SKIN TEMPERATURE."
- call ESMF_FieldScatter(seaice_skin_temp_input_grid, dummy2d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ SNOW LIQUID EQUIVALENT."
-   call read_fv3_grid_data_netcdf('weasd', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-   print*,'weasd ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
- call ESMF_FieldScatter(snow_liq_equiv_input_grid, dummy2d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ SNOW DEPTH."
-   call read_fv3_grid_data_netcdf('snod', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-   dummy2d = dummy2d * 1000.0  ! program expects depth in mm.
-   print*,'snod ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID SNOW DEPTH."
- call ESMF_FieldScatter(snow_depth_input_grid, dummy2d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ VEG TYPE."
-   call read_fv3_grid_data_netcdf('vtype', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-   print*,'vtype ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID VEG TYPE."
- call ESMF_FieldScatter(veg_type_input_grid, dummy2d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ SOIL TYPE."
-   call read_fv3_grid_data_netcdf('sotyp', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-   print*,'sotyp ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
- call ESMF_FieldScatter(soil_type_input_grid, dummy2d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ T2M."
-   call read_fv3_grid_data_netcdf('tmp2m', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-   print*,'t2m ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID T2M."
- call ESMF_FieldScatter(t2m_input_grid, dummy2d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldScatter", rc)
-
-  if (localpet == 0) then
-    print*,"- READ Q2M."
-    call read_fv3_grid_data_netcdf('spfh2m', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    print*,'q2m ',maxval(dummy2d),minval(dummy2d)
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT GRID Q2M."
-  call ESMF_FieldScatter(q2m_input_grid, dummy2d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-  if (localpet == 0) then
-    call read_fv3_grid_data_netcdf('tprcp', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    print*,'tprcp ',maxval(dummy2d),minval(dummy2d)
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT GRID TPRCP."
-  call ESMF_FieldScatter(tprcp_input_grid, dummy2d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-  if (localpet == 0) then
-    call read_fv3_grid_data_netcdf('f10m', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    print*,'f10m ',maxval(dummy2d),minval(dummy2d)
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT GRID F10M"
-  call ESMF_FieldScatter(f10m_input_grid, dummy2d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-  if (localpet == 0) then
-    call read_fv3_grid_data_netcdf('ffmm', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    print*,'ffmm ',maxval(dummy2d),minval(dummy2d)
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT GRID FFMM"
-  call ESMF_FieldScatter(ffmm_input_grid, dummy2d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-  if (localpet == 0) then
-    call read_fv3_grid_data_netcdf('fricv', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    print*,'fricv ',maxval(dummy2d),minval(dummy2d)
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT GRID USTAR"
-  call ESMF_FieldScatter(ustar_input_grid, dummy2d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-  if (localpet == 0) then
-    dummy2d = 0.0
-    print*,'srflag ',maxval(dummy2d),minval(dummy2d)
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT GRID SRFLAG"
-  call ESMF_FieldScatter(srflag_input_grid, dummy2d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-  if (localpet == 0) then
-    call read_fv3_grid_data_netcdf('tmpsfc', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    print*,'tmpsfc ',maxval(dummy2d),minval(dummy2d)
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
-  call ESMF_FieldScatter(skin_temp_input_grid, dummy2d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-  if (localpet == 0) then
-    call read_fv3_grid_data_netcdf('cnwat', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    print*,'cnwat ',maxval(dummy2d),minval(dummy2d)
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT GRID CANOPY MOISTURE CONTENT."
-  call ESMF_FieldScatter(canopy_mc_input_grid, dummy2d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-  if (localpet == 0) then
-    call read_fv3_grid_data_netcdf('sfcr', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    print*,'sfcr ',maxval(dummy2d),minval(dummy2d)
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT GRID Z0."
-  call ESMF_FieldScatter(z0_input_grid, dummy2d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-  if (localpet == 0) then
-    call read_fv3_grid_data_netcdf('soill1', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,1) = dummy2d
-    call read_fv3_grid_data_netcdf('soill2', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,2) = dummy2d
-    call read_fv3_grid_data_netcdf('soill3', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,3) = dummy2d
-    call read_fv3_grid_data_netcdf('soill4', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,4) = dummy2d
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT LIQUID SOIL MOISTURE."
-  call ESMF_FieldScatter(soilm_liq_input_grid, dummy3d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-! total soil moisture
-
-  if (localpet == 0) then
-    call read_fv3_grid_data_netcdf('soilw1', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,1) = dummy2d
-    call read_fv3_grid_data_netcdf('soilw2', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,2) = dummy2d
-    call read_fv3_grid_data_netcdf('soilw3', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,3) = dummy2d
-    call read_fv3_grid_data_netcdf('soilw4', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,4) = dummy2d
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT TOTAL SOIL MOISTURE."
-  call ESMF_FieldScatter(soilm_tot_input_grid, dummy3d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
-! soil tempeature (ice temp at land ice points)
-
-  if (localpet == 0) then
-    call read_fv3_grid_data_netcdf('soilt1', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,1) = dummy2d
-    call read_fv3_grid_data_netcdf('soilt2', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,2) = dummy2d
-    call read_fv3_grid_data_netcdf('soilt3', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,3) = dummy2d
-    call read_fv3_grid_data_netcdf('soilt4', 1, i_input, j_input, &
-                                   lsoil_input, sfcdata=dummy2d)
-    dummy3d(:,:,4) = dummy2d
-  endif
-
-  print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
-  call ESMF_FieldScatter(soil_temp_input_grid, dummy3d, rootpet=0, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldScatter", rc)
-
- deallocate(dummy2d, dummy3d)
-
- end subroutine read_input_sfc_gfs_gaussian_netcdf_file
-
-!---------------------------------------------------------------------------
 ! Read input grid surface data from a spectral gfs gaussian sfcio file.
 ! Prior to July 19, 2017.
 !---------------------------------------------------------------------------
@@ -3265,7 +2998,7 @@
 ! Format used by gfs starting July 19, 2017.
 !---------------------------------------------------------------------------
 
- subroutine read_input_sfc_gfs_gaussian_file(localpet)
+ subroutine read_input_sfc_gfs_nemsio_file(localpet)
  
  implicit none
 
@@ -3608,13 +3341,13 @@
 
  if (localpet == 0) call nemsio_close(gfile)
 
- end subroutine read_input_sfc_gfs_gaussian_file
+ end subroutine read_input_sfc_gfs_nemsio_file
 
 !---------------------------------------------------------------------------
 ! Read input grid surface data from an fv3 gaussian history file.
 !---------------------------------------------------------------------------
 
- subroutine read_input_sfc_gaussian_file(localpet)
+ subroutine read_input_sfc_nemsio_file(localpet)
 
  implicit none
 
@@ -3957,10 +3690,10 @@
 
  if (localpet == 0) call nemsio_close(gfile)
 
- end subroutine read_input_sfc_gaussian_file
+ end subroutine read_input_sfc_nemsio_file
 
 !---------------------------------------------------------------------------
-! Read input grid surface data tiled 'restart' files.
+! Read input grid surface data tiled warm 'restart' files.
 !---------------------------------------------------------------------------
 
  subroutine read_input_sfc_restart_file(localpet)
@@ -4279,7 +4012,7 @@
 ! Read input grid surface tiled 'history' files.
 !---------------------------------------------------------------------------
 
- subroutine read_input_sfc_history_file(localpet)
+ subroutine read_input_sfc_netcdf_file(localpet)
 
  implicit none
 
@@ -4330,6 +4063,14 @@
 
  TERRAIN_LOOP: do tile = 1, num_tiles_input_grid
 
+   if (trim(input_type) == "gaussian_netcdf") then
+    if (localpet == 0) then
+      call read_fv3_grid_data_netcdf('orog', tile, idim_input, jdim_input, &
+                                   lsoil_input, sfcdata=data_one_tile)
+    endif
+
+  else
+   
    if (localpet == 0) then
      tilefile = trim(orog_dir_input_grid) // trim(orog_files_input_grid(tile))
      print*,'- OPEN OROGRAPHY FILE: ', trim(tilefile)
@@ -4341,6 +4082,8 @@
      call netcdf_err(error, 'READING OROGRAPHY RECORD.' )
      print*,'terrain check history ',tile, maxval(data_one_tile)
      error=nf90_close(ncid)
+   endif
+
    endif
 
    print*,"- CALL FieldScatter FOR INPUT TERRAIN."
@@ -4624,7 +4367,7 @@
 
  deallocate(data_one_tile, data_one_tile_3d)
 
- end subroutine read_input_sfc_history_file
+ end subroutine read_input_sfc_netcdf_file
 
  subroutine read_input_sfc_grib2_file(localpet)
 
@@ -5137,10 +4880,11 @@ if (localpet == 0) then
  end subroutine read_input_sfc_grib2_file
    
 !---------------------------------------------------------------------------
-! Read nst data from tiled history or restart files.
+! Read nst data from these netcdf formatted fv3 files: tiled history,
+! tiled warm restart, and gaussian history.
 !---------------------------------------------------------------------------
 
- subroutine read_input_nst_tile_file(localpet)
+ subroutine read_input_nst_netcdf_file(localpet)
 
  implicit none
 
@@ -5413,7 +5157,7 @@ if (localpet == 0) then
 
  deallocate(data_one_tile)
 
- end subroutine read_input_nst_tile_file
+ end subroutine read_input_nst_netcdf_file
 
 !--------------------------------------------------------------------------
 ! Read input grid nst data from fv3 gaussian nemsio history file or
@@ -5422,7 +5166,7 @@ if (localpet == 0) then
 ! single file.
 !--------------------------------------------------------------------------
 
- subroutine read_input_nst_gaussian_file(localpet)
+ subroutine read_input_nst_nemsio_file(localpet)
 
  implicit none
 
@@ -5685,7 +5429,7 @@ if (localpet == 0) then
 
  if (localpet == 0) call nemsio_close(gfile)
 
- end subroutine read_input_nst_gaussian_file
+ end subroutine read_input_nst_nemsio_file
 
  SUBROUTINE READ_FV3_GRID_DATA_NETCDF(FIELD,TILE_NUM,IMO,JMO,LMO, &
                                       SFCDATA, SFCDATA_3D)
