@@ -39,8 +39,8 @@ target_include_directories(${exe_name}
 target_link_libraries(${exe_name}
   ${NETCDF_LIBRARIES_F90} ${NETCDF_LIBRARIES}
   nemsio
-  sfcio ${MPI_Fortran_LIBRARIES}
-  sigio
+  sfcio_4 ${MPI_Fortran_LIBRARIES}
+  sigio_4
   bacio_4
   sp_d
   w3nco_d
