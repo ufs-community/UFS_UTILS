@@ -14,8 +14,9 @@
  use atmosphere, only          : atmosphere_driver
 
  use program_setup, only       : read_setup_namelist, &
+                                 read_varmap, &
                                  convert_atm, &
-                                 convert_sfc
+                                 convert_sfc 
 
  use model_grid, only          : define_target_grid,  &
                                  define_input_grid, &
@@ -60,14 +61,20 @@
 !-------------------------------------------------------------------------
 
  call read_setup_namelist
+ 
+!-------------------------------------------------------------------------
+! Read variable mapping file (used for grib2 input data only).
+!-------------------------------------------------------------------------
+
+ call read_varmap
 
 !-------------------------------------------------------------------------
 ! Create esmf grid objects for input and target grids.
 !-------------------------------------------------------------------------
 
- call define_input_grid(localpet, npets)
-
  call define_target_grid(localpet, npets)
+ 
+ call define_input_grid(localpet, npets)
 
 !-------------------------------------------------------------------------
 ! Convert atmospheric fields

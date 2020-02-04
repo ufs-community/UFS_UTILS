@@ -40,6 +40,7 @@ find_package(Jasper REQUIRED)
 find_package(PNG REQUIRED)
 find_package(ESMF MODULE REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(WGRIB2 REQUIRED)
 
 if(NOT TARGET landsfcutil_4)
   find_package(landsfcutil REQUIRED)

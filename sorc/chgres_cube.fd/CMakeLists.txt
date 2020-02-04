@@ -32,11 +32,13 @@ target_include_directories(${exe_name} PUBLIC
 
 target_include_directories(${exe_name}
   PRIVATE
+  ${WGRIB2_INCLUDES}
   ${NETCDF_INCLUDES}
   ${NETCDF_INCLUDES_F90}
   ${MPI_Fortran_INCLUDE_PATH})
 
 target_link_libraries(${exe_name}
+  ${WGRIB2_LIBRARIES}
   ${NETCDF_LIBRARIES_F90} ${NETCDF_LIBRARIES}
   nemsio
   sfcio_4 ${MPI_Fortran_LIBRARIES}

@@ -19,6 +19,9 @@ module load sfcio//v1.1.0-intel-19.0.4.243
 module load sigio/v2.1.0-intel-19.0.4.243-impi
 module load esmf/8.0.0-intel-19.0.4.243-impi
 
+export WGRIB2API_INC="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib"
+export WGRIB2_LIB="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib/libwgrib2.a"
+
 export FCOMP=mpiifort
 export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
 # for debugging
