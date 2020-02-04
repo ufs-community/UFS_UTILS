@@ -19,6 +19,9 @@ module load sfcio-intel/1.0.0
 # module load esmf/7.1.0r
 export ESMFMKFILE=/gpfs/hps3/emc/global/noscrub/George.Gayno/esmf/8_0_0_bs20/lib/esmf.mk
 
+export WGRIB2API_INC=/gpfs/hps3/emc/meso/save/Dusan.Jovic/wgrib2/include
+export WGRIB2_LIB=/gpfs/hps3/emc/meso/save/Dusan.Jovic/wgrib2/lib/libwgrib2.a
+
 export FCOMP=ftn
 export FFLAGS="-O3 -fp-model precise -g -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
 # for debugging
