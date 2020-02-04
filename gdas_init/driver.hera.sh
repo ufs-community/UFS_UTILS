@@ -65,13 +65,21 @@ fi
 
 if [ $RUN_CHGRES == yes ]; then
   MEMBER=hires
+  NODES=3
+  WALLT="0:15:00"
+  if [ $CRES_HIRES == 'C768' ] ; then
+    NODES=5
+  elif [ $CRES_HIRES == 'C1152' ] ; then
+    NODES=8
+    WALLT="0:20:00"
+  fi
   case $gfs_ver in
     v14)
-      sbatch --parsable --ntasks-per-node=6 --nodes=3 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER} \
+      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER} \
       -o log.${MEMBER} -e log.${MEMBER} ${DEPEND} run_v14.chgres.sh ${MEMBER}
       ;;
     v15)
-      sbatch --parsable --ntasks-per-node=6 --nodes=3 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER} \
+      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER} \
       -o log.${MEMBER} -e log.${MEMBER} ${DEPEND} run_v15.chgres.sh ${MEMBER}
       ;;
   esac
