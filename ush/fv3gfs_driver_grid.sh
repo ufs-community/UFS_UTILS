@@ -194,6 +194,10 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
       echo
       set -x
       $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+      err=$?
+      if [ $err != 0 ]; then
+        exit $err
+      fi
       tile=$(( $tile + 1 ))
     done
   fi
@@ -331,6 +335,10 @@ elif [ $gtype = regional ]; then
     echo
     set -x
     $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+    err=$?
+    if [ $err != 0 ]; then
+      exit $err
+    fi
   fi
 
   set +x

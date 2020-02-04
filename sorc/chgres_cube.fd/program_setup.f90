@@ -100,13 +100,11 @@
  character(len=500), public      :: atm_core_files_input_grid(7) = "NULL"
  character(len=500), public      :: atm_tracer_files_input_grid(6) = "NULL"
  character(len=500), public      :: data_dir_input_grid = "NULL"
- character(len=500), public      :: fixed_files_dir_input_grid = "NULL"
  character(len=500), public      :: fix_dir_target_grid = "NULL"
  character(len=500), public      :: mosaic_file_input_grid = "NULL"
  character(len=500), public      :: mosaic_file_target_grid = "NULL"
  character(len=500), public      :: nst_files_input_grid = "NULL"
  character(len=500), public      :: grib2_file_input_grid = "NULL"
- character(len=500), public      :: geogrid_file_input_grid="NULL"
  character(len=500), public      :: orog_dir_input_grid = "NULL"
  character(len=500), public      :: orog_files_input_grid(6) = "NULL"
  character(len=500), public      :: orog_dir_target_grid = "NULL"
@@ -116,9 +114,7 @@
  character(len=6),   public      :: cres_target_grid = "NULL"
  character(len=500), public      :: atm_weight_file="NULL"
  character(len=20),  public      :: input_type="restart"
- character(len=20),  public      :: external_model="GFS"  !Default assume gfs data
  character(len=20), public       :: phys_suite="GFS"      !Default to gfs physics suite
- character(len=1000), public     :: wgrib2_path="wgrib2"
 
  integer, parameter, public      :: max_tracers=100
  integer, public                 :: num_tracers, num_tracers_input
@@ -169,7 +165,6 @@
 
 
  namelist /config/ varmap_file, &
-                   fixed_files_dir_input_grid, &
                    mosaic_file_target_grid, &
                    fix_dir_target_grid,     &
                    orog_dir_target_grid,    &
@@ -183,16 +178,15 @@
                    atm_core_files_input_grid,    &
                    atm_tracer_files_input_grid,    &
                    grib2_file_input_grid, &
-                   geogrid_file_input_grid, &
                    data_dir_input_grid,     &
                    vcoord_file_target_grid, &
                    cycle_mon, cycle_day,    &
                    cycle_hour, convert_atm, &
                    convert_nst, convert_sfc, &
-                   regional, input_type, external_model, &
+                   regional, input_type, &
                    atm_weight_file, tracers, &
                    tracers_input,phys_suite, &
-                   wgrib2_path, halo_bndy, & 
+                   halo_bndy, & 
                    halo_blend
 
  print*,"- READ SETUP NAMELIST"
@@ -204,7 +198,6 @@
  close (41)
  
  call to_lower(input_type)
- call to_upper(external_model)
  call to_upper(phys_suite)
  
  orog_dir_target_grid = trim(orog_dir_target_grid) // '/'
@@ -279,16 +272,6 @@
  end select
  
 !-------------------------------------------------------------------------
-! Grib2 support is currently not available for surface conversion  
-!-------------------------------------------------------------------------
-
- if (trim(input_type) == "grib2" .and. convert_sfc) then
-   print*, "WARNING: PROCESSING OF SURFACE GRIB2 DATA IS NOT CURRENTLY SUPORTED. SETTING &
-            convert_sfc TO FALSE."
-   convert_sfc = .false.
- endif
- 
-!-------------------------------------------------------------------------
 ! Ensure proper file variable provided for grib2 input  
 !-------------------------------------------------------------------------
 
@@ -298,28 +281,6 @@
    endif
  endif
  
-!-------------------------------------------------------------------------
-! For grib2 input, warn about possibly unsupported external model types
-!-------------------------------------------------------------------------
-
- if (trim(input_type) == "grib2") then
-   if (.not. any((/"GFS","NAM","RAP","HRRR"/)==trim(external_model))) then
-     print*, "WARNING: KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, AND HRRR. &
-     RESULTS MAY NOT BE AS EXPECTED. "
-   endif
- endif
-
-!-------------------------------------------------------------------------
-! For grib2 hrrr input, require input geogrid file 
-!-------------------------------------------------------------------------
-
- if (trim(input_type) == "grib2" .and. trim(external_model)=="HRRR") then
-   if (trim(geogrid_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
-     call error_handler("FOR HRRR DATA, PLEASE PROVIDE GEOGRID_FILE_INPUT_GRID")
-   endif
- endif
- return
-
  end subroutine read_setup_namelist
 
 subroutine read_varmap
@@ -331,8 +292,6 @@ subroutine read_varmap
  character(len=20),allocatable  :: var_type(:)
 
  if (trim(input_type) == "grib2") then 
-   !varmap_table_file = trim(base_install_dir) // "/" // trim(varmap_tables_dir) // "/" &
-   !                 // trim(phys_suite) // "phys_var_map.txt"
 
    print*,"OPEN VARIABLE MAPPING FILE: ", trim(varmap_file)
    open(14, file=trim(varmap_file), form='formatted', iostat=istat)

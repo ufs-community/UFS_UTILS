@@ -3,11 +3,11 @@
 #############################################################
 
 # Loading Intel Compiler Suite
-module load intel/15.0.3.187
+module load intel/18.0.5.274
 
 module load w3nco/v2.0.6
 module load bacio/v2.0.2
-module load nemsio/v2.2.2
+module load nemsio/v2.2.3
 module load szip
 module load hdf5/1.8.9
 module load netcdf/4.2.1.1

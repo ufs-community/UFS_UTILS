@@ -9,8 +9,6 @@ module grib2_util
 
 use esmf
 
-use program_setup, only   : external_model, fixed_files_dir_input_grid 
-
 use model_grid, only      : i_input, j_input
 
 implicit none
@@ -31,6 +29,7 @@ contains
 
   real, dimension(i_input,j_input)  :: es, e, rh
 
+  print*,"- CONVERT RH TO SPFH AT LEVEL ", p
 
   rh = rh_sphum
   !print *, 'T = ', T, ' RH = ', RH, ' P = ', P

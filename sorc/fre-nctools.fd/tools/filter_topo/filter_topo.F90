@@ -1807,6 +1807,7 @@ contains
       endif
     enddo
   endif
+
   n_del2_weak = nint(n_del2_weak_vals(index1)+factor*(n_del2_weak_vals(index2)-n_del2_weak_vals(index1)))
   cd4 = cd4_vals(index1)+factor*(cd4_vals(index2)-cd4_vals(index1))
   max_slope = max_slope_vals(index1)+factor*(max_slope_vals(index2)-max_slope_vals(index1))
