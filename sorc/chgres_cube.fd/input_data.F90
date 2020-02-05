@@ -144,19 +144,55 @@
 
  integer, intent(in)             :: localpet
 
+!-------------------------------------------------------------------------------
+! Read the tiled 'warm' restart files.
+!-------------------------------------------------------------------------------
+
  if (trim(input_type) == "restart") then
+
    call read_input_atm_restart_file(localpet)
- elseif (trim(input_type) == "history") then
-   call read_input_atm_history_file(localpet)
- elseif (trim(input_type) == "gaussian") then  ! fv3gfs gaussian nemsio
-   call read_input_atm_gaussian_file(localpet)
- elseif (trim(input_type) == "gfs_gaussian") then ! spectral gfs gaussian 
-                                                  ! nemsio.
-   call read_input_atm_gfs_gaussian_file(localpet)
+
+!-------------------------------------------------------------------------------
+! Read the tiled or gaussian history files in netcdf format.
+!-------------------------------------------------------------------------------
+
+ elseif (trim(input_type) == "history" .or.  &
+         trim(input_type) == "gaussian_netcdf") then
+
+   call read_input_atm_netcdf_file(localpet)
+
+!-------------------------------------------------------------------------------
+! Read the gaussian history files in nemsio format.
+!-------------------------------------------------------------------------------
+
+ elseif (trim(input_type) == "gaussian_nemsio") then  ! fv3gfs gaussian nemsio
+
+   call read_input_atm_nemsio_file(localpet)
+
+!-------------------------------------------------------------------------------
+! Read the spectral gfs gaussian history files in nemsio format.
+!-------------------------------------------------------------------------------
+
+ elseif (trim(input_type) == "gfs_nemsio") then ! spectral gfs gaussian 
+                                                ! nemsio.
+   call read_input_atm_gfs_nemsio_file(localpet)
+
+!-------------------------------------------------------------------------------
+! Read the spectral gfs gaussian history files in sigio format.
+!-------------------------------------------------------------------------------
+
  elseif (trim(input_type) == "gfs_spectral") then ! spectral gfs sigio format.
-   call read_input_atm_gfs_spectral_file(localpet)
+ 
+   call read_input_atm_gfs_sigio_file(localpet)
+
+!-------------------------------------------------------------------------------
+! Read fv3gfs data in grib2 format.
+!-------------------------------------------------------------------------------
+
  elseif (trim(input_type) == "grib2") then
+
    call read_input_atm_grib2_file(localpet)
+
  endif
 
  end subroutine read_input_atm_data
@@ -306,7 +342,7 @@
 ! spectral GFS nemsio file.
 !--------------------------------------------------------------------------
 
- if (trim(input_type) == "gaussian" .or. trim(input_type) == "gfs_gaussian") then
+ if (trim(input_type) == "gaussian_nemsio" .or. trim(input_type) == "gfs_nemsio") then
 
    call read_input_nst_nemsio_file(localpet)
 
@@ -516,7 +552,7 @@
 ! Read the gaussian history files in nemsio format.
 !-------------------------------------------------------------------------------
 
- elseif (trim(input_type) == "gaussian") then
+ elseif (trim(input_type) == "gaussian_nemsio") then
 
    call read_input_sfc_nemsio_file(localpet)
 
@@ -524,7 +560,7 @@
 ! Read the spectral gfs gaussian history files in nemsio format.
 !-------------------------------------------------------------------------------
 
- elseif (trim(input_type) == "gfs_gaussian") then
+ elseif (trim(input_type) == "gfs_nemsio") then
 
    call read_input_sfc_gfs_nemsio_file(localpet)
 
@@ -553,7 +589,7 @@
 ! Used prior to July 19, 2017.
 !---------------------------------------------------------------------------
 
- subroutine read_input_atm_gfs_spectral_file(localpet)
+ subroutine read_input_atm_gfs_sigio_file(localpet)
 
  use sigio_module
 
@@ -850,14 +886,14 @@
    print*,'pres ',psptr(clb(1),clb(2)),pptr(clb(1),clb(2),:)
  endif
 
- end subroutine read_input_atm_gfs_spectral_file
+ end subroutine read_input_atm_gfs_sigio_file
 
 !---------------------------------------------------------------------------
 ! Read input atmospheric data from spectral gfs (global gaussian in
 ! nemsio format. Starting July 19, 2017).  
 !---------------------------------------------------------------------------
 
- subroutine read_input_atm_gfs_gaussian_file(localpet)
+ subroutine read_input_atm_gfs_nemsio_file(localpet)
 
  implicit none
 
@@ -1169,13 +1205,13 @@
 
  deallocate(pi)
 
- end subroutine read_input_atm_gfs_gaussian_file
+ end subroutine read_input_atm_gfs_nemsio_file
 
 !---------------------------------------------------------------------------
-! Read input grid atmospheric fv3 gaussian history files (nemsio format).
+! Read input grid atmospheric fv3 gaussian nemsio files.
 !---------------------------------------------------------------------------
 
- subroutine read_input_atm_gaussian_file(localpet)
+ subroutine read_input_atm_nemsio_file(localpet)
 
  implicit none
 
@@ -1514,10 +1550,10 @@
 
  call ESMF_FieldDestroy(dpres_input_grid, rc=rc)
 
- end subroutine read_input_atm_gaussian_file
+ end subroutine read_input_atm_nemsio_file
 
 !---------------------------------------------------------------------------
-! Read input grid fv3 atmospheric data restart files.
+! Read input grid fv3 atmospheric data 'warm' restart files.
 !
 ! Routine reads tiled files in parallel.  Tile 1 is read by 
 ! localpet 0; tile 2 by localpet 1, etc.  The number of pets
@@ -1848,15 +1884,15 @@
  end subroutine read_input_atm_restart_file
 
 !---------------------------------------------------------------------------
-! Read input grid fv3 atmospheric history files.
+! Read input grid fv3 atmospheric history files in netcdf format.
+! This includes the tiled and the gaussian netcdf versions.
 !
 ! Routine reads tiled files in parallel.  Tile 1 is read by 
 ! localpet 0; tile 2 by localpet 1, etc.  The number of pets
 ! must be equal to or greater than the number of tiled files.  
-! Logic only tested with global input data of six tiles.
 !---------------------------------------------------------------------------
 
- subroutine read_input_atm_history_file(localpet)
+ subroutine read_input_atm_netcdf_file(localpet)
 
  implicit none
 
@@ -1875,7 +1911,7 @@
  real(esmf_kind_r8), allocatable :: data_one_tile_3d(:,:,:)
  real(esmf_kind_r8), pointer     :: presptr(:,:,:), dpresptr(:,:,:)
  real(esmf_kind_r8), pointer     :: psptr(:,:)
- real(esmf_kind_r8), allocatable :: pres_interface(:)
+ real(esmf_kind_r8), allocatable :: pres_interface(:), phalf(:)
 
  print*,"- READ INPUT ATMOS DATA FROM TILED HISTORY FILES."
 
@@ -1906,6 +1942,11 @@
  call netcdf_err(error, 'reading phalf id' )
  error=nf90_inquire_dimension(ncid,id_dim,len=levp1_input)
  call netcdf_err(error, 'reading phalf value' )
+ allocate(phalf(levp1_input))
+ error=nf90_inq_varid(ncid, 'phalf', id_var)
+ call netcdf_err(error, 'getting phalf varid' )
+ error=nf90_get_var(ncid, id_var, phalf)
+ call netcdf_err(error, 'reading phalf varid' )
 
  error=nf90_get_att(ncid, nf90_global, 'ncnsto', num_tracers_file)
  call netcdf_err(error, 'reading ntracer value' )
@@ -2184,34 +2225,58 @@
 
  allocate(pres_interface(levp1_input))
 
- if (localpet == 0) then
-   print*,'dpres is ',dpresptr(1,1,:)
- endif
+!---------------------------------------------------------------------------
+! Compute 3-d pressure.
+!---------------------------------------------------------------------------
 
- do i = clb(1), cub(1)
-   do j = clb(2), cub(2)
-     pres_interface(1) = psptr(i,j)
-     do k = 2, levp1_input
-       pres_interface(k) = pres_interface(k-1) - dpresptr(i,j,k-1)
-     enddo
-     do k = 1, lev_input
-       presptr(i,j,k) = (pres_interface(k) + pres_interface(k+1)) / 2.0_8
+ if (trim(input_type) == "gaussian_netcdf") then
+
+!---------------------------------------------------------------------------
+!  When ingesting gaussian netcdf files, the mid-layer
+!  surface pressure are computed top down from delta-p
+!  The surface pressure in the file is not used.  According
+!  to Jun Wang, after the model's write component interpolates from the
+!  cubed-sphere grid to the gaussian grid, the surface pressure is
+!  no longer consistent with the delta p.
+!---------------------------------------------------------------------------
+
+   do i = clb(1), cub(1)
+     do j = clb(2), cub(2)
+       pres_interface(levp1_input) = phalf(1) * 100.0_8
+       do k = lev_input, 1, -1
+         pres_interface(k) = pres_interface(k+1) + dpresptr(i,j,k)
+       enddo
+       psptr(i,j) = pres_interface(1)
+       do k = 1, lev_input
+         presptr(i,j,k) = (pres_interface(k) + pres_interface(k+1)) / 2.0_8
+       enddo
      enddo
    enddo
- enddo
 
- if (localpet == 0) then
-   print*,'pres is ',presptr(1,1,:)
+ else   ! tiled history file in netcdf.  
+
+   do i = clb(1), cub(1)
+     do j = clb(2), cub(2)
+       pres_interface(1) = psptr(i,j)
+       do k = 2, levp1_input
+         pres_interface(k) = pres_interface(k-1) - dpresptr(i,j,k-1)
+       enddo
+       do k = 1, lev_input
+         presptr(i,j,k) = (pres_interface(k) + pres_interface(k+1)) / 2.0_8
+       enddo
+     enddo
+   enddo
+
  endif
 
- deallocate(pres_interface)
+ deallocate(pres_interface, phalf)
 
  call ESMF_FieldDestroy(dpres_input_grid, rc=rc)
 
- end subroutine read_input_atm_history_file
+ end subroutine read_input_atm_netcdf_file
  
 !---------------------------------------------------------------------------
-! Read input grid atmospheric grib2 files.
+! Read input grid atmospheric fv3gfs grib2 files.
 !---------------------------------------------------------------------------
 
  subroutine read_input_atm_grib2_file(localpet)
@@ -3344,7 +3409,7 @@
  end subroutine read_input_sfc_gfs_nemsio_file
 
 !---------------------------------------------------------------------------
-! Read input grid surface data from an fv3 gaussian history file.
+! Read input grid surface data from an fv3 gaussian nemsio file.
 !---------------------------------------------------------------------------
 
  subroutine read_input_sfc_nemsio_file(localpet)
@@ -4009,7 +4074,8 @@
  end subroutine read_input_sfc_restart_file
 
 !---------------------------------------------------------------------------
-! Read input grid surface tiled 'history' files.
+! Read input grid surface data from tiled 'history' files (netcdf) or 
+! gaussian netcdf files.
 !---------------------------------------------------------------------------
 
  subroutine read_input_sfc_netcdf_file(localpet)
@@ -4368,6 +4434,10 @@
  deallocate(data_one_tile, data_one_tile_3d)
 
  end subroutine read_input_sfc_netcdf_file
+
+!---------------------------------------------------------------------------
+! Read surface data from an fv3gfs grib2 file.
+!---------------------------------------------------------------------------
 
  subroutine read_input_sfc_grib2_file(localpet)
 
@@ -5181,8 +5251,8 @@ if (localpet == 0) then
 
  type(nemsio_gfile)                     :: gfile
 
- if (trim(input_type) == "gfs_gaussian") then ! spectral gfs nemsio in
-                                              ! separate file.
+ if (trim(input_type) == "gfs_nemsio") then ! spectral gfs nemsio in
+                                            ! separate file.
    the_file = trim(data_dir_input_grid) // "/" // trim(nst_files_input_grid)
  else
    the_file = trim(data_dir_input_grid) // "/" // trim(sfc_files_input_grid(1))

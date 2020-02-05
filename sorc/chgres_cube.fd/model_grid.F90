@@ -115,8 +115,8 @@
 
  integer, intent(in)          :: localpet, npets
 
- if (trim(input_type) == "gaussian" .or. &
-     trim(input_type) == "gfs_gaussian" .or. &
+ if (trim(input_type) == "gaussian_nemsio" .or. &
+     trim(input_type) == "gfs_nemsio" .or. &
      trim(input_type) == "gfs_spectral" .or. &
      trim(input_type) == "gaussian_netcdf") then
    call define_input_grid_gaussian(localpet, npets)

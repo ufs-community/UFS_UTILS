@@ -63,10 +63,12 @@ HALO_BLEND=${HALO_BLEND:-0}
 
 #----------------------------------------------------------------------------
 # INPUT_TYPE - Input data type.  'history' for tiled fv3 history files.
-#              'restart' for tiled fv3 warm restart files.  'gfs_gaussian'
+#              'restart' for tiled fv3 warm restart files.  'gfs_nemsio'
 #              for spectral gfs nemsio files.  'gfs_spectral' for 
-#              for spectral gfs sigio/sfcio files.  'gaussian' for fv3
-#              gaussian nemsio files.
+#              for spectral gfs sigio/sfcio files.  'gaussian_nemsio' for fv3
+#              gaussian nemsio files. 'grib2' for grib 2 gfs files.
+#              'gaussian_netcdf' for fv3 gaussian netcdf files.
+#              
 #
 # MOSAIC_FILE_INPUT_GRID - Path/Name of mosaic file for input grid.  Only
 #                          used for 'history' and 'restart' INPUT_TYPE.
@@ -81,7 +83,7 @@ HALO_BLEND=${HALO_BLEND:-0}
 #                         Set to NULL otherwise.
 #----------------------------------------------------------------------------
 
-INPUT_TYPE=${INPUT_TYPE:-"gaussian"}
+INPUT_TYPE=${INPUT_TYPE:-"gaussian_nemsio"}
 MOSAIC_FILE_INPUT_GRID=${MOSAIC_FILE_INPUT_GRID:-NULL}
 OROG_DIR_INPUT_GRID=${OROG_DIR_INPUT_GRID:-NULL}
 OROG_FILES_INPUT_GRID=${OROG_FILES_INPUT_GRID:-NULL}
@@ -101,7 +103,7 @@ COMIN=${COMIN:-$PWD}
 
 #----------------------------------------------------------------------------
 # ATM_FILES_INPUT - Input atmospheric data file(s).  Not used for 'restart'
-#                   INPUT_TYPE.
+#                   or 'grib2' INPUT_TYPE.
 #
 # ATM_CORE_FILES - Input atmospheric core files.  Used for 'restart' 
 #                  INPUT_TYPE only.  The first six entries are the tiled
@@ -111,9 +113,12 @@ COMIN=${COMIN:-$PWD}
 # ATM_TRACER_FILES_INPUT - Input atmospheric tracer files for each tile.
 #                          Used for 'restart' INPUT_TYPE only.
 #
-# SFC_FILES_INPUT - Input surface data file(s).
+# SFC_FILES_INPUT - Input surface data file(s).  Not used for 'grib2'
+#                   INPUT_TYPE.
 #
-# NST_FILES_INPUT - Input nst data file.  'gfs_gaussian' INPUT_TYPE only.
+# NST_FILES_INPUT - Input nst data file.  'gfs_nemsio' INPUT_TYPE only.
+#
+# GRIB2_FILE_INPUT - Input gfs grib2 file.  'grib2' INPUT_TYPE only.
 #
 # TRACERS_INPUT - List of input atmospheric tracer records to be processed.
 #----------------------------------------------------------------------------
@@ -123,6 +128,7 @@ ATM_CORE_FILES_INPUT=${ATM_CORE_FILES_INPUT:-NULL}
 ATM_TRACER_FILES_INPUT=${ATM_TRACER_FILES_INPUT:-NULL}
 SFC_FILES_INPUT=${SFC_FILES_INPUT:-NULL}
 NST_FILES_INPUT=${NST_FILES_INPUT:-NULL}
+GRIB2_FILE_INPUT=${GRIB2_FILE_INPUT:-NULL}
 TRACERS_INPUT=${TRACERS_INPUT:-'"spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"'}
 
 #----------------------------------------------------------------------------
@@ -196,6 +202,7 @@ cat << EOF > ./fort.41
   atm_tracer_files_input_grid="${ATM_TRACER_FILES_INPUT}"
   sfc_files_input_grid="${SFC_FILES_INPUT}"
   nst_files_input_grid="${NST_FILES_INPUT}"
+  grib2_file_input_grid="${GRIB2_FILE_INPUT}"
   cycle_mon=$im
   cycle_day=$id
   cycle_hour=$ih
