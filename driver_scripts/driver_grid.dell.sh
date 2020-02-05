@@ -3,7 +3,7 @@
 #BSUB -oo log.grid.%J
 #BSUB -eo log.grid.%J
 #BSUB -q debug
-#BSUB -P FV3GFS-T2O
+#BSUB -P GFS-DEV
 #BSUB -J grid_fv3
 #BSUB -W 0:30
 #BSUB -x                 # run not shared

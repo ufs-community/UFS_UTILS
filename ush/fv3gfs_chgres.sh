@@ -36,7 +36,7 @@
 #------------------------------------------------------------------------
 
 #----WCOSS_DELL JOBCARD
-#BSUB -P FV3GFS-T2O
+#BSUB -P GFS-DEV
 #BSUB -o log.chgres.%J
 #BSUB -e log.chgres.%J
 #BSUB -J fv3_chgres
@@ -49,7 +49,7 @@ export machine=WCOSS_DELL_P3
 
 #----WCOSS_CRAY JOBCARD
 ##BSUB -L /bin/sh
-##BSUB -P FV3GFS-T2O
+##BSUB -P GFS-DEV
 ##BSUB -oo log.chgres.%J
 ##BSUB -eo log.chgres.%J
 ##BSUB -J fv3_chgres
@@ -137,7 +137,7 @@ if [ $machine = WCOSS_C ]; then
  export APRUNC="aprun -n 1 -N 1 -j 1 -d $OMP_NUM_THREADS_CH -cc depth"
  export APRUNTF='aprun -q -j1 -n1 -N1 -d1 -cc depth'
  export SUB=$LS_SUBCWD/../util/sub_wcoss_c
- export ACCOUNT=FV3GFS-T2O
+ export ACCOUNT=GFS-DEV
  export QUEUE=dev
  export QUEUE_TRANS=dev_transfer 
 elif [ $machine = WCOSS_DELL_P3 ]; then
@@ -146,7 +146,7 @@ elif [ $machine = WCOSS_DELL_P3 ]; then
  export APRUNC="time"
  export APRUNTF="time"
  export SUB=$LS_SUBCWD/../util/sub_wcoss_d
- export ACCOUNT=FV3GFS-T2O
+ export ACCOUNT=GFS-DEV
  export QUEUE=dev
  export QUEUE_TRANS=dev_transfer 
 elif [ $machine = HERA ]; then
