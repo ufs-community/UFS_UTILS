@@ -38,14 +38,15 @@ find_package(OpenMP)
 find_package(MPI REQUIRED)
 find_package(Jasper REQUIRED)
 find_package(PNG REQUIRED)
-find_package(ESMF MODULE)
+find_package(ESMF MODULE REQUIRED)
 find_package(ZLIB REQUIRED)
+find_package(WGRIB2 REQUIRED)
 
 if(NOT TARGET landsfcutil_4)
   find_package(landsfcutil REQUIRED)
 endif()
 
-if(NOT TARGET sfcio)
+if(NOT TARGET sfcio_4)
   find_package(sfcio REQUIRED)
 endif()
 
@@ -61,7 +62,7 @@ if(NOT TARGET nemsio)
   find_package(nemsio REQUIRED)
 endif()
 
-if(NOT TARGET sigio)
+if(NOT TARGET sigio_4)
   find_package(sigio REQUIRED)
 endif()
 
