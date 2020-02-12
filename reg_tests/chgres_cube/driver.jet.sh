@@ -102,11 +102,18 @@ TEST6=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST5 ./c96.regional.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize C96 using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+TEST7=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST6 ./c96.fv3.netcdf.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST6 << EOF
+       --open-mode=append -q $QUEUE -d afterok:$TEST7 << EOF
 #!/bin/sh
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
