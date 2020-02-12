@@ -112,10 +112,19 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.regional -W  0:
         -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/c96.regional.sh"
 
 #-----------------------------------------------------------------------------
+# Initialize C96 using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+export OMP_NUM_THREADS=1
+export INPUT_DATA=${HOMEreg}/input_data/fv3.netcdf
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.fv3.netcdf -W 0:15 -x -n 12 -w 'ended(c96.regional)' \
+        -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/c96.fv3.netcdf.sh"
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "affinity[core(1)]" -R "rusage[mem=100]" -W 0:01 \
-     -w 'ended(c96.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+     -w 'ended(c96.fv3.netcdf)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
 
 exit

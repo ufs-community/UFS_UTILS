@@ -119,9 +119,19 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.regional -M 100
         -w 'ended(c96.gfs.nemsio)' "export NODES=1; $PWD/c96.regional.sh"
 
 #-----------------------------------------------------------------------------
+# Initialize C96 using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+export OMP_NUM_THREADS=1
+export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+export INPUT_DATA=${HOMEreg}/input_data/fv3.netcdf
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.fv3.netcdf -M 1000 -W 0:15 -extsched 'CRAYLINUX[]' \
+        -w 'ended(c96.regional)' "export NODES=2; $PWD/c96.fv3.netcdf.sh"
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
-bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(c96.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(c96.fv3.netcdf)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
 
 exit
