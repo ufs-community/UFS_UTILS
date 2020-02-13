@@ -70,6 +70,7 @@ else
 fi
 
 if [ $RUN_CHGRES == yes ]; then
+  export APRUN=srun
   MEMBER=hires
   NODES=3
   WALLT="0:15:00"
