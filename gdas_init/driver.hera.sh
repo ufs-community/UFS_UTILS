@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#---------------------------------------------------------------------
+# Driver script for running on Hera.
+#
+# Edit the 'config' file before running.
+#---------------------------------------------------------------------
+
 set -x
 
 source /apps/lmod/lmod/init/sh

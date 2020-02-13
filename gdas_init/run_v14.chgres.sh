@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#----------------------------------------------------------------
+# Run chgres using gfs v14 data as input.
+#----------------------------------------------------------------
+
 set -x
 
 MEMBER=$1
@@ -68,7 +72,7 @@ cat << EOF > fort.41
 /
 EOF
 
-mpirun $UFS_DIR/exec/chgres_cube.exe
+$APRUN $UFS_DIR/exec/chgres_cube.exe
 rc=$?
 
 if [ $rc != 0 ]; then
