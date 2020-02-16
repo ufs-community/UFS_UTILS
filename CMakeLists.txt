@@ -3,6 +3,8 @@ project(ufs_util VERSION 1.1.1)
 set(${PROJECT_NAME}_VERSION ${PROJECT_VERSION} CACHE INTERNAL "${PROJECT_NAME} version number")
 enable_language (Fortran)
 
+option(OPENMP "use OpenMP threading" OFF)
+
 if (NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE RELEASE CACHE STRING
     "Choose the type of build, options are: PRODUCTION Debug Release."
@@ -34,7 +36,9 @@ endif()
 
 find_package(HDF5 COMPONENTS C HL Fortran_HL REQUIRED)
 find_package(NetCDF REQUIRED)
-find_package(OpenMP)
+if(OPENMP)
+  find_package(OpenMP)
+endif()
 find_package(MPI REQUIRED)
 find_package(Jasper REQUIRED)
 find_package(PNG REQUIRED)
