@@ -927,7 +927,7 @@
         ENDIF
 
         ALLOCATE(VCOORDI(LEVSI+1,GFSHEADI%NVCOORD))
-        VCOORDI(:,:) = GFSHEADVI%VCOORD(:,:,1)
+        VCOORDI(:,:) = GFSHEADVI%VCOORD(:,1:GFSHEADI%NVCOORD,1)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  READ INPUT NEMSIO DATA ARRAY
