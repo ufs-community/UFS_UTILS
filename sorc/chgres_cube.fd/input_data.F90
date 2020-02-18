@@ -4516,6 +4516,20 @@ if (localpet == 0) then
    dummy2d_8 = real(dummy2d,esmf_kind_r8)
    
    print*,'tmp ',maxval(dummy2d),minval(dummy2d)
+   do j = 1, j_input
+     do i = 1, i_input
+       if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) < 271.2) then
+         print*,'too cool SST ',i,j,dummy2d(i,j)
+         dummy2d(i,j) = 271.2
+       endif
+       if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) > 310.) then
+         print*,'too hot SST ',i,j,dummy2d(i,j)
+         dummy2d(i,j) = 310.0
+       endif
+   enddo
+   enddo
+
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
