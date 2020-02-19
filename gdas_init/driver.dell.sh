@@ -34,6 +34,13 @@ if [ $EXTRACT_DATA == yes ]; then
   WALLT="2:00"
 
   case $gfs_ver in
+    v12 | v13 )
+      bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
+        -R "affinity[core(1)]" -M $MEM "./get_pre-v14.data.sh hires"
+      bsub -o log.data.enkf -e log.data.enkf -q $QUEUE -P $PROJECT_CODE -J get.data.enkf -W $WALLT \
+        -R "affinity[core(1)]" -M $MEM "./get_pre-v14.data.sh enkf"
+      DEPEND="-w ended(get.data.*)"
+      ;;
     v14)
       bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
         -R "affinity[core(1)]" -M $MEM "./get_v14.data.sh hires"
@@ -74,6 +81,7 @@ if [ $RUN_CHGRES == yes ]; then
   QUEUE=dev
   MEMBER=hires
   WALLT="0:15"
+  export OMP_NUM_THREADS=1
   NODES="-n 18 -R "span[ptile=9]""
   export APRUN="mpirun"
   if [ $CRES_HIRES == 'C768' ] ; then
@@ -83,6 +91,13 @@ if [ $RUN_CHGRES == yes ]; then
     WALLT="0:20"
   fi
   case $gfs_ver in
+    v12 | v13)
+      export OMP_STACKSIZE=1024M
+      export OMP_NUM_THREADS=2
+      bsub -e log.${MEMBER} -o log.${MEMBER} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER} -W $WALLT \
+        -x $NODES -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" $DEPEND \
+        "./run_pre-v14.chgres.sh ${MEMBER}"
+      ;;
     v14)
       bsub -e log.${MEMBER} -o log.${MEMBER} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER} -W $WALLT \
         -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
@@ -104,6 +119,13 @@ if [ $RUN_CHGRES == yes ]; then
       MEMBER_CH="0${MEMBER}"
     fi
     case $gfs_ver in
+      v12 | v13)
+        export OMP_STACKSIZE=1024M
+        export OMP_NUM_THREADS=2
+        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W 0:15 \
+          -x $NODES -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" $DEPEND \
+          "./run_pre-v14.chgres.sh ${MEMBER_CH}"
+        ;;
       v14)
         bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W 0:15 \
           -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \

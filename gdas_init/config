@@ -37,14 +37,14 @@
 #         
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/$USER/gdas.init/input
+EXTRACT_DIR=/gpfs/dell1/stmp/$USER/gdas.init/input
 EXTRACT_DATA=yes
 
 RUN_CHGRES=yes
 
-yy=2019
-mm=08
-dd=20
+yy=2012
+mm=05
+dd=21
 hh=00
 
 LEVS=65
@@ -54,17 +54,21 @@ CRES_ENKF=C96
 
 UFS_DIR=$PWD/..
 
-OUTDIR=/scratch2/NCEPDEV/stmp1/$USER/gdas.init/output
+OUTDIR=/gpfs/dell1/stmp/$USER/gdas.init/output
 
 #---------------------------------------------------------
 # Dont touch anything below here.
 #---------------------------------------------------------
 
 gfs_ver=v15
-if [ $yy$mm$dd$hh -lt 2017071912 ]; then
+if [ $yy$mm$dd$hh -lt 2012052100 ]; then
   set +x
-  echo FATAL ERROR: SCRIPTS DO NOT SUPPORT PRE-V14 GFS DATA
+  echo FATAL ERROR: SCRIPTS DO NOT SUPPORT OLD GFS DATA
   exit 2
+elif [ $yy$mm$dd$hh -lt 2016051000 ]; then
+  gfs_ver=v12
+elif [ $yy$mm$dd$hh -lt 2017071912 ]; then
+  gfs_ver=v13
 elif [ $yy$mm$dd$hh -lt 2019061206 ]; then
   gfs_ver=v14
 fi
