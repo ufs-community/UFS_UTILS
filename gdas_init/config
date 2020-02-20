@@ -24,7 +24,8 @@
 #              data only, set to 'no'.
 # yy/mm/dd/hh - The year/month/day/hour of your desired
 #               experiment.  Currently, does not support
-#               pre-v14 GFS data (July 19, 2017, 12z).
+#               pre-ENKF GFS data, prior to
+#               2012 May 21 00z.
 # LEVS        - Number of hybrid levels plus 1.  To
 #               run with 64 levels, set LEVS to 65.
 # CRES_HIRES  - Resolution of the hires component of
@@ -42,10 +43,10 @@ EXTRACT_DATA=yes
 
 RUN_CHGRES=yes
 
-yy=2012
-mm=05
-dd=21
-hh=00
+yy=2017
+mm=07
+dd=19
+hh=18
 
 LEVS=65
 
@@ -61,15 +62,17 @@ OUTDIR=/gpfs/dell1/stmp/$USER/gdas.init/output
 #---------------------------------------------------------
 
 gfs_ver=v15
+
+# No ENKF data prior to 2012/05/21/00z
 if [ $yy$mm$dd$hh -lt 2012052100 ]; then
   set +x
   echo FATAL ERROR: SCRIPTS DO NOT SUPPORT OLD GFS DATA
   exit 2
 elif [ $yy$mm$dd$hh -lt 2016051000 ]; then
   gfs_ver=v12
-elif [ $yy$mm$dd$hh -lt 2017071912 ]; then
+elif [ $yy$mm$dd$hh -lt 2017072000 ]; then
   gfs_ver=v13
-elif [ $yy$mm$dd$hh -lt 2019061206 ]; then
+elif [ $yy$mm$dd$hh -lt 2019061200 ]; then
   gfs_ver=v14
 fi
 
