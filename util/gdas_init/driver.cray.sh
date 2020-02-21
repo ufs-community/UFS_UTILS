@@ -118,6 +118,7 @@ if [ $RUN_CHGRES == yes ]; then
       ;;
   esac
 
+  WALLT="0:15"
   NUM_NODES=1
   export APRUN="aprun -j 1 -n 12 -N 12 -d ${OMP_NUM_THREADS} -cc depth"
   MEMBER=1
@@ -129,15 +130,15 @@ if [ $RUN_CHGRES == yes ]; then
     fi
     case $gfs_ver in
       v12 | v13)
-        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W 0:15 \
+        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W $WALLT \
           -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_pre-v14.chgres.sh ${MEMBER_CH}"
         ;;
       v14)
-        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W 0:15 \
+        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W $WALLT \
           -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v14.chgres.sh ${MEMBER_CH}"
         ;;
       v15)
-        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W 0:15 \
+        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W $WALLT \
           -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v15.chgres.sh ${MEMBER_CH}"
       ;;
     esac

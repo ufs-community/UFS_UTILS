@@ -111,6 +111,7 @@ if [ $RUN_CHGRES == yes ]; then
   esac
 
   NODES="-n 18 -R "span[ptile=9]""
+  WALLT="0:15"
   MEMBER=1
   while [ $MEMBER -le 80 ]; do
     if [ $MEMBER -lt 10 ]; then
@@ -122,17 +123,17 @@ if [ $RUN_CHGRES == yes ]; then
       v12 | v13)
         export OMP_STACKSIZE=1024M
         export OMP_NUM_THREADS=2
-        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W 0:15 \
+        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W $WALLT \
           -x $NODES -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" $DEPEND \
           "./run_pre-v14.chgres.sh ${MEMBER_CH}"
         ;;
       v14)
-        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W 0:15 \
+        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W $WALLT \
           -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
           "./run_v14.chgres.sh ${MEMBER_CH}"
         ;;
       v15)
-        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W 0:15 \
+        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W $WALLT \
           -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
           "./run_v15.chgres.sh ${MEMBER_CH}"
       ;;

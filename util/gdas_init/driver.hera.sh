@@ -105,6 +105,8 @@ if [ $RUN_CHGRES == yes ]; then
       -o log.${MEMBER} -e log.${MEMBER} ${DEPEND} run_v15.chgres.sh ${MEMBER}
       ;;
   esac
+
+  WALLT="0:15:00"
   MEMBER=1
   while [ $MEMBER -le 80 ]; do
     if [ $MEMBER -lt 10 ]; then
@@ -117,18 +119,19 @@ if [ $RUN_CHGRES == yes ]; then
         export OMP_NUM_THREADS=2
         export OMP_STACKSIZE=1024M
         sbatch --parsable --ntasks-per-node=12 --nodes=1 --cpus-per-task=$OMP_NUM_THREADS \
-         -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
+         -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
          -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_pre-v14.chgres.sh ${MEMBER_CH}
         ;;
       v14)
-        sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
+        sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
         -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v14.chgres.sh ${MEMBER_CH}
         ;;
       v15)
-        sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
+        sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
         -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v15.chgres.sh ${MEMBER_CH}
       ;;
     esac
     MEMBER=$(( $MEMBER + 1 ))
   done
+
 fi

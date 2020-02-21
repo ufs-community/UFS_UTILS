@@ -53,7 +53,7 @@ LEVS=65
 CRES_HIRES=C192
 CRES_ENKF=C96
 
-UFS_DIR=$PWD/..
+UFS_DIR=$PWD/../..
 
 OUTDIR=/gpfs/dell1/stmp/$USER/gdas.init/output
 
