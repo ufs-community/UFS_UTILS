@@ -20,18 +20,19 @@ option(OPENMP "use OpenMP threading" OFF)
 
 find_package(
   HDF5
-  COMPONENTS C HL Fortran_HL
+  COMPONENTS HL Fortran_HL
   REQUIRED)
 find_package(NetCDF REQUIRED)
-if(OPENMP)
-  find_package(OpenMP REQUIRED)
-endif()
 find_package(MPI REQUIRED)
 find_package(Jasper REQUIRED)
 find_package(PNG REQUIRED)
 find_package(ESMF MODULE REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(WGRIB2 REQUIRED)
+
+if(OPENMP)
+  find_package(OpenMP REQUIRED)
+endif()
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
 
