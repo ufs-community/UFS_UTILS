@@ -20,7 +20,7 @@ option(OPENMP "use OpenMP threading" OFF)
 
 find_package(
   HDF5
-  COMPONENTS HL Fortran_HL
+  COMPONENTS HL Fortran
   REQUIRED)
 find_package(NetCDF REQUIRED)
 find_package(MPI REQUIRED)
