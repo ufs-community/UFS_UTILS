@@ -33,6 +33,8 @@ find_package(ESMF MODULE REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(WGRIB2 REQUIRED)
 
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
+
 if(NOT TARGET landsfcutil_4)
   find_package(landsfcutil REQUIRED)
 endif()
