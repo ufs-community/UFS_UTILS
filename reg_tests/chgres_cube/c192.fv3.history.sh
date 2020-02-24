@@ -41,7 +41,7 @@ ${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
-  echo "<<< C96 FV3 GAUSSIAN NEMSIO TEST FAILED. <<<"
+  echo "<<< C192 FV3 HISTORY TEST FAILED. <<<"
   exit $iret
 fi
 
