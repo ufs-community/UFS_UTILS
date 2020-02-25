@@ -119,8 +119,6 @@ COMIN=${COMIN:-$PWD}
 #
 # NST_FILES_INPUT - Input nst data file.  'gfs_nemsio' INPUT_TYPE only.
 #
-# GRIB2_FILE_INPUT - Input gfs grib2 file.  'grib2' INPUT_TYPE only.
-#
 # GRIB2_FILE_INPUT - Input gfs grib2 data file.  Only used for 'grib2'
 #                    INPUT_TYPE.
 #
