@@ -1168,7 +1168,7 @@
  HEADER : if (localpet < num_tiles_target_grid) then
 
    tile = localpet + 1
-   WRITE(OUTFILE, '(A, I1, A)'), 'out.atm.tile', tile, '.nc'
+   WRITE(OUTFILE, '(A, I1, A)') 'out.atm.tile', tile, '.nc'
 
 !--- open the file
    error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
@@ -1642,7 +1642,7 @@
 
    LOCAL_PET : if (localpet == 0) then
 
-     WRITE(OUTFILE, '(A, I1, A)'), 'out.sfc.tile', tile, '.nc'
+     WRITE(OUTFILE, '(A, I1, A)') 'out.sfc.tile', tile, '.nc'
 
 !--- open the file
      error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &

@@ -62,13 +62,14 @@ HALO_BNDY=${HALO_BNDY:-0}
 HALO_BLEND=${HALO_BLEND:-0}
 
 #----------------------------------------------------------------------------
-# INPUT_TYPE - Input data type.  'history' for tiled fv3 history files.
-#              'restart' for tiled fv3 warm restart files.  'gfs_nemsio'
-#              for spectral gfs nemsio files.  'gfs_spectral' for 
-#              for spectral gfs sigio/sfcio files.  'gaussian_nemsio' for fv3
-#              gaussian nemsio files. 'grib2' for grib 2 gfs files.
-#              'gaussian_netcdf' for fv3 gaussian netcdf files.
-#              
+# INPUT_TYPE - Input data type:  
+#        'restart' for tiled fv3 warm restart files.  
+#        'history' for tiled fv3 history files.
+#        'gaussian_nemsio' for fv3 gaussian nemsio files.
+#        'gfs_nemsio' for spectral gfs nemsio files.
+#        'gfs_spectral' for spectral gfs sigio/sfcio files.
+#        'gaussian_netcdf' for fv3 gaussian netcdf files.
+#        'grib2' for fv3gfs grib2 files.
 #
 # MOSAIC_FILE_INPUT_GRID - Path/Name of mosaic file for input grid.  Only
 #                          used for 'history' and 'restart' INPUT_TYPE.
@@ -120,7 +121,11 @@ COMIN=${COMIN:-$PWD}
 #
 # GRIB2_FILE_INPUT - Input gfs grib2 file.  'grib2' INPUT_TYPE only.
 #
+# GRIB2_FILE_INPUT - Input gfs grib2 data file.  Only used for 'grib2'
+#                    INPUT_TYPE.
+#
 # TRACERS_INPUT - List of input atmospheric tracer records to be processed.
+#                 Not used for 'grib2' INPUT_TYPE.
 #----------------------------------------------------------------------------
 
 ATM_FILES_INPUT=${ATM_FILES_INPUT:-NULL}
@@ -132,10 +137,13 @@ GRIB2_FILE_INPUT=${GRIB2_FILE_INPUT:-NULL}
 TRACERS_INPUT=${TRACERS_INPUT:-'"spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"'}
 
 #----------------------------------------------------------------------------
-# TRACERS_TARGET - List of target tracer records. Must corresponde with
-#                  with TRACERS_INPUT.
 #
-# VCOORD_FILE - File containing vertical coordinate defintion for target
+# VARMAP_FILE - Variable mapping table.  Only used for 'grib2' INPUT_TYPE.
+#
+# TRACERS_TARGET - List of target tracer records. Must corresponde with
+#                  with TRACERS_INPUT.  Not used for 'grib2' INPUT_TYPE.
+#
+# VCOORD_FILE - File containing vertical coordinate definition for target
 #               grid.
 #
 # MOSAIC FILE_TARGET_GRID - Mosaic file for target grid (include path).
@@ -145,6 +153,8 @@ TRACERS_INPUT=${TRACERS_INPUT:-'"spfh","clwmr","o3mr","icmr","rwmr","snmr","grle
 # OROG_FILES_TARGET_GRID - Orography file(s) for target grid.  Assumed to
 #                          be located in FIXfv3.
 #----------------------------------------------------------------------------
+
+VARMAP_FILE=${VARMAP_FILE:-NULL}
 
 TRACERS_TARGET=${TRACERS_TARGET:-'"sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"'}
 
@@ -203,6 +213,7 @@ cat << EOF > ./fort.41
   sfc_files_input_grid="${SFC_FILES_INPUT}"
   nst_files_input_grid="${NST_FILES_INPUT}"
   grib2_file_input_grid="${GRIB2_FILE_INPUT}"
+  varmap_file="${VARMAP_FILE}"
   cycle_mon=$im
   cycle_day=$id
   cycle_hour=$ih

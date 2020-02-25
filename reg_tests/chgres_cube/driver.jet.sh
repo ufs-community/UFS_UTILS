@@ -109,11 +109,18 @@ TEST7=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST6 ./c96.fv3.netcdf.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize C192 using GFS GRIB2 data.
+#-----------------------------------------------------------------------------
+
+TEST8=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.gfs.grib2 \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST7 ./c192.gfs.grib2.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST7 << EOF
+       --open-mode=append -q $QUEUE -d afterok:$TEST8 << EOF
 #!/bin/sh
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
