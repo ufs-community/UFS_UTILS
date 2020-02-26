@@ -5,7 +5,7 @@ file(STRINGS "VERSION" pVersion)
 project(
   ufs_util
   VERSION ${pVersion}
-  LANGUAGES C Fortran)
+  LANGUAGES Fortran)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
 
@@ -35,8 +35,8 @@ find_package(
   HDF5
   COMPONENTS HL Fortran
   REQUIRED)
-find_package(NetCDF REQUIRED)
-find_package(MPI REQUIRED)
+find_package(NetCDF REQUIRED COMPONENTS Fortran)
+find_package(MPI REQUIRED COMPONENTS Fortran)
 find_package(Jasper REQUIRED)
 find_package(PNG REQUIRED)
 find_package(ESMF MODULE REQUIRED)
@@ -44,7 +44,7 @@ find_package(ZLIB REQUIRED)
 find_package(WGRIB2 REQUIRED)
 
 if(OPENMP)
-  find_package(OpenMP REQUIRED)
+  find_package(OpenMP REQUIRED COMPONENTS Fortran)
 endif()
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
