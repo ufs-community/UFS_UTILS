@@ -11,11 +11,11 @@ WHERE TO FIND GFS GRIB2 AND NEMSIO DATA:
 ----------------------------------------
 
 **GRIB2:**
-      * 0.25-degree data (last 10 days only) -Use the **gfs.tHHz.pgrb2.0p25.f000** file here: https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/gfs.YYYYMMDD/HH/
+      * 0.25-degree data (last 10 days only) -Use the **gfs.tHHz.pgrb2.0p25.f000** file here: https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/gfs. **YYYYMMDD/HH/**
 
-      * 0.5-degree data - Use the **gfs_4_YYYYMMDD_00HH_000.grb2** file, under **GFS Forecasts 004 (0.5-deg)** here: [NCDC - Global Forecast System](https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).  Note: Tests were not done with the AVN, MRF or analysis data.
+      * 0.5-degree data - Use the **gfs_4_YYYYMMDD_00HH_000.grb2** file, under **GFS Forecasts 004 (0.5-deg)** here: [NCDC - Global Forecast System](https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).  Note: *Tests were not done with the AVN, MRF or analysis data.*
 
-      * 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2** file, under **GFS Forecasts 003 (1-deg)** here: [NCDC - Global Forecast System](https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).  Note: Tests were not done with the AVN, MRF or analysis data.
+      * 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2** file, under **GFS Forecasts 003 (1-deg)** here: [NCDC - Global Forecast System](https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).  Note: *Tests were not done with the AVN, MRF or analysis data.*
 
 **NEMSIO**
 
@@ -96,7 +96,24 @@ When using **nemsio data** as input to chgres_cube, set namelist as follows:
 COMPILING THE PROGRAM
 ----------------------
 
-(I am not familiar with how to compile the ‘cmake’ version under the release branch.  Will need help with this section.)
+ How to build chgres_cube on Hera
+
+.. code-block:: console
+
+   module load intel impi hdf5/1.10.4 netcdf/4.7.0
+
+   module use -a /scratch1/NCEPDEV/nems/emc.nemspara/soft/modulefiles
+   module load esmf/8.0.0
+
+   git clone --recursive --branch feature/cleanup https://github.com/aerorahul/UFS_UTILS
+
+   cd UFS_UTILS
+   mkdir build && cd build
+
+   cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_PREFIX_PATH=/scratch1/BMC/gmtb/software/NCEPLIBS-ufs-v1.0.0.beta02/intel-18.0.5.274/impi-2018.0.4
+
+   make -j 8
+
 
 ----------------------
 PROGRAM INPUTS/OUTPUTS
