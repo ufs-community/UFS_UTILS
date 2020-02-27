@@ -17,6 +17,7 @@ WHERE TO FIND GFS GRIB2 AND NEMSIO DATA:
 
       * 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2** file, under **GFS Forecasts 003 (1-deg)** here: [NCDC - Global Forecast System](https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).  Note: *Tests were not done with the AVN, MRF or analysis data.*
 
+
 **NEMSIO**
 
       * T1534 gaussian (last 10 days only) - Use the **gfs.tHHz.atmanl.nemsio** (atmospheric fields) and **gfs.tHHz.sfcanl.nemsio** (surface fields) files here: https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/ **gfs.YYYYMMDD/HH/**
@@ -96,26 +97,24 @@ When using **nemsio data** as input to chgres_cube, set namelist as follows:
 COMPILING THE PROGRAM
 ----------------------
 
- How to build chgres_cube on Hera
+CHGRES_CUBE requires cmake 3.12 or higher. It can be built as part of the NCEPLIBS unified build system that includes two separate build systems -- one for the third party libraries that are needed and the other for the libraries and utilities themselves. See https://github.com/NOAA-EMC/NCEPLIBS-external/wiki for more detailed information. 
+
+If the NCEPLIBS have been installed and the user wants to compile CHGRES_CUBE again
 
 .. code-block:: console
 
-   module load intel impi hdf5/1.10.4 netcdf/4.7.0
+   make sure paths are set to hdf5, compiler, mpi and cmake  
+   In a bash environment run
+   cd /path/to/nceplibs/installed
+   source bin/setenv_nceplibs.sh (this will set all necessary environments)
+   set cmake compiler - export FC=ifort (if ifort is the compiler chosen)
+   cd to where you checked out the UFS_Utils
+   mkdir build and cd build
+   cmake .. -DCMAKE_INSTALL_PREFIX=/path/where/you/want/the/code/installed
+   make -j x (where x is a number that can be chosen to speed up the make, usually 8) 
+   make install
 
-   module use -a /scratch1/NCEPDEV/nems/emc.nemspara/soft/modulefiles
-   module load esmf/8.0.0
-
-   git clone --recursive --branch feature/cleanup https://github.com/aerorahul/UFS_UTILS
-
-   cd UFS_UTILS
-   mkdir build && cd build
-
-   cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_PREFIX_PATH=/scratch1/BMC/gmtb/software/NCEPLIBS-ufs-v1.0.0.beta02/intel-18.0.5.274/impi-2018.0.4
-
-   make -j 8
-
-
-----------------------
+-----------------------
 PROGRAM INPUTS/OUTPUTS
 ----------------------
 
