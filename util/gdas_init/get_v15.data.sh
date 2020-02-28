@@ -12,13 +12,13 @@ set -x
 
 cd $EXTRACT_DIR
 
-date10=`$NDATE -6 $yy$mm$dd$hh`
+date10_m6=`$NDATE -6 $yy$mm$dd$hh`
 
-echo $date10
-yy_m6=$(echo $date10 | cut -c1-4)
-mm_m6=$(echo $date10 | cut -c5-6)
-dd_m6=$(echo $date10 | cut -c7-8)
-hh_m6=$(echo $date10 | cut -c9-10)
+echo $date10_m6
+yy_m6=$(echo $date10_m6 | cut -c1-4)
+mm_m6=$(echo $date10_m6 | cut -c5-6)
+dd_m6=$(echo $date10_m6 | cut -c7-8)
+hh_m6=$(echo $date10_m6 | cut -c9-10)
 
 #----------------------------------------------------------------------
 # Get the hires tiled restart files.  Need to use the 6-hour forecast files from
@@ -28,9 +28,13 @@ hh_m6=$(echo $date10 | cut -c9-10)
 if [ $bundle = 'hires' ]; then
 
   directory=/NCEPPROD/hpssprod/runhistory/rh${yy_m6}/${yy_m6}${mm_m6}/${yy_m6}${mm_m6}${dd_m6}
-  file=gpfs_dell1_nco_ops_com_gfs_prod_gdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.gdas_restart.tar
+  if [ $date10_m6 -lt 2020022600 ]; then
+    file=gpfs_dell1_nco_ops_com_gfs_prod_gdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.gdas_restart.tar
+  else
+    file=com_gfs_prod_gdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.gdas_restart.tar
+  fi
 
-  rm -f ./list.hires.*
+  rm -f ./list.hires*
   touch ./list.hires3
   htar -tvf  $directory/$file > ./list.hires1
   grep ${yy}${mm}${dd}.${hh} ./list.hires1 > ./list.hires2
@@ -48,7 +52,11 @@ if [ $bundle = 'hires' ]; then
 #----------------------------------------------------------------------
 
   directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-  file=gpfs_dell1_nco_ops_com_gfs_prod_gdas.${yy}${mm}${dd}_${hh}.gdas.tar
+  if [ ${yy}${mm}${dd}${hh} -lt 2020022600 ]; then
+    file=gpfs_dell1_nco_ops_com_gfs_prod_gdas.${yy}${mm}${dd}_${hh}.gdas.tar
+  else
+    file=com_gfs_prod_gdas.${yy}${mm}${dd}_${hh}.gdas.tar
+  fi
 
   htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/gdas.t${hh}z.radstat
   rc=$?
@@ -66,12 +74,7 @@ if [ $bundle = 'hires' ]; then
   rc=$?
   [ $rc != 0 ] && exit $rc
 
-  rm -f ./list.hires.*
-
-  set +x
-  echo DATA PULL FOR $bundle DONE
-
-  exit 0
+  rm -f ./list.hires*
 
 #----------------------------------------------------------------------
 # Get the enkf tiled restart files for all members.
@@ -83,7 +86,11 @@ else
   do
 
     directory=/NCEPPROD/hpssprod/runhistory/rh${yy_m6}/${yy_m6}${mm_m6}/${yy_m6}${mm_m6}${dd_m6}
-    file=gpfs_dell1_nco_ops_com_gfs_prod_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_restart_${group}.tar
+    if [ $date10_m6 -lt 2020022600 ]; then
+      file=gpfs_dell1_nco_ops_com_gfs_prod_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_restart_${group}.tar
+    else
+      file=com_gfs_prod_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_restart_${group}.tar
+    fi
 
     rm -f ./list*.${group}
     htar -tvf  $directory/$file > ./list1.${group}
@@ -95,6 +102,7 @@ else
     htar -xvf $directory/$file  -L ./list3.${group}
     rc=$?
     [ $rc != 0 ] && exit $rc
+    rm -f ./list*.${group}
 
   done
 
