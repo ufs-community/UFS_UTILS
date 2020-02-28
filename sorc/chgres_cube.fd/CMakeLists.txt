@@ -28,8 +28,7 @@ endif()
 set(exe_name chgres_cube.exe)
 add_executable(${exe_name} ${fortran_src})
 target_include_directories(
-  ${exe_name} PRIVATE ${ESMF_INC} ${WGRIB2_INCLUDES}
-                      ${NETCDF_INCLUDES} ${NETCDF_INCLUDES_F90})
+  ${exe_name} PRIVATE ${ESMF_INC} ${WGRIB2_INCLUDES} ${NETCDF_INCLUDES})
 target_link_libraries(
   ${exe_name}
   nemsio
@@ -41,10 +40,7 @@ target_link_libraries(
   esmf
   MPI::MPI_Fortran
   ${WGRIB2_LIBRARIES}
-  ${NETCDF_LIBRARIES_F90}
-  ${NETCDF_LIBRARIES}
-  ${HDF5_Fortran_HL_LIBRARIES}
-  ${HDF5_LIBRARIES})
+  ${NETCDF_LIBRARIES})
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
 endif()

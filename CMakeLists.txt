@@ -31,16 +31,11 @@ endif()
 
 option(OPENMP "use OpenMP threading" OFF)
 
-find_package(
-  HDF5
-  COMPONENTS HL Fortran
-  REQUIRED)
-find_package(NetCDF REQUIRED COMPONENTS Fortran)
+find_package(NetCDF REQUIRED)
 find_package(MPI REQUIRED COMPONENTS Fortran)
 find_package(Jasper REQUIRED)
 find_package(PNG REQUIRED)
 find_package(ESMF MODULE REQUIRED)
-find_package(ZLIB REQUIRED)
 find_package(WGRIB2 REQUIRED)
 
 if(OPENMP)
