@@ -73,3 +73,5 @@ if(NOT TARGET sp_d)
 endif()
 
 add_subdirectory(sorc)
+
+install(FILES parm/varmap_tables/GFSphys_var_map.txt DESTINATION share)
