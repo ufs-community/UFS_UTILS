@@ -1,58 +1,48 @@
+set(fortran_src
+    atmosphere.F90
+    chgres.F90
+    grib2_util.F90
+    input_data.F90
+    model_grid.F90
+    program_setup.f90
+    search_util.f90
+    static_data.F90
+    surface.F90
+    utils.f90
+    write_data.F90)
 
-file(GLOB fortran_src
-  ${CMAKE_CURRENT_SOURCE_DIR}/*.F90
-  ${CMAKE_CURRENT_SOURCE_DIR}/*.f90
-  ${CMAKE_CURRENT_SOURCE_DIR}/*.F)
-
-if(IntelComp)
-  set(fortran_flags "-g" "-O3" "-axCORE-AVX2")
-elseif(GNUComp)
-  set(fortran_flags "-ffree-form" "-ffree-line-length-0" "-g" "-O3")
-else()
-  message("unknown compiler!")
-  exit()
+if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
+  set(CMAKE_Fortran_FLAGS "-g -traceback")
+  set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
+  set(CMAKE_Fortran_FLAGS_DEBUG
+      "-O0 -check -check noarg_temp_created -check nopointer -warn -warn noerrors -fp-stack-check -fstack-protector-all -fpe0 -debug -ftrapuv"
+  )
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
+  set(CMAKE_Fortran_FLAGS "-g -fbacktrace -ffree-form -ffree-line-length-0")
+  set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
+  set(CMAKE_Fortran_FLAGS_DEBUG
+      "-O0 -ggdb -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans -ffpe-trap=invalid,zero,overflow -fbounds-check"
+  )
 endif()
 
 set(exe_name chgres_cube.exe)
 add_executable(${exe_name} ${fortran_src})
-target_compile_options(${exe_name} PRIVATE "${fortran_flags}")
-
-target_include_directories(${exe_name} PRIVATE ${ESMF_INC}
-  ${NETCDF_INCLUDES}
-  ${MPI_Fortran_INCLUDE_PATH}
-  ${NETCDF_INCLUDES_F90})
-
-
-set(module_dir "${CMAKE_CURRENT_BINARY_DIR}/include_4")
-set_target_properties(${exe_name} PROPERTIES Fortran_MODULE_DIRECTORY ${module_dir})
-
-target_include_directories(${exe_name} PUBLIC
-  $<BUILD_INTERFACE:${module_dir}>
-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include_4>)
-
-target_include_directories(${exe_name}
-  PRIVATE
-  ${WGRIB2_INCLUDES}
-  ${NETCDF_INCLUDES}
-  ${NETCDF_INCLUDES_F90}
-  ${MPI_Fortran_INCLUDE_PATH})
-
-target_link_libraries(${exe_name}
-  ${WGRIB2_LIBRARIES}
-  ${NETCDF_LIBRARIES_F90} ${NETCDF_LIBRARIES}
+target_include_directories(
+  ${exe_name} PRIVATE ${ESMF_INC} ${WGRIB2_INCLUDES} ${NETCDF_INCLUDES})
+target_link_libraries(
+  ${exe_name}
   nemsio
-  sfcio_4 ${MPI_Fortran_LIBRARIES}
+  sfcio_4
   sigio_4
   bacio_4
   sp_d
   w3nco_d
-  ${HDF5_Fortran_HL_LIBRARIES} ${HDF5_LIBRARIES}
-  ${OpenMP_Fortran_FLAGS}
-  esmf) 
+  esmf
+  MPI::MPI_Fortran
+  ${WGRIB2_LIBRARIES}
+  ${NETCDF_LIBRARIES})
+if(OpenMP_Fortran_FOUND)
+  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
+endif()
 
-install(TARGETS ${exe_name}
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib) 
-install(DIRECTORY ${module_dir} DESTINATION include_4)
-
+install(TARGETS ${exe_name} RUNTIME DESTINATION bin)
