@@ -31,7 +31,7 @@ endif()
 
 option(OPENMP "use OpenMP threading" OFF)
 
-find_package(NetCDF REQUIRED)
+find_package(NetCDF MODULE REQUIRED)
 find_package(MPI REQUIRED COMPONENTS Fortran)
 find_package(Jasper REQUIRED)
 find_package(PNG REQUIRED)
