@@ -46,10 +46,6 @@ find_package(ESMF MODULE REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(WGRIB2 REQUIRED)
 
-if(NOT TARGET landsfcutil_4)
-  find_package(landsfcutil REQUIRED)
-endif()
-
 if(NOT TARGET sfcio_4)
   find_package(sfcio REQUIRED)
 endif()
