@@ -1,31 +1,26 @@
 cmake_minimum_required(VERSION 3.15)
-project(ufs_util VERSION 1.1.1)
-set(${PROJECT_NAME}_VERSION ${PROJECT_VERSION} CACHE INTERNAL "${PROJECT_NAME} version number")
-enable_language (Fortran)
 
-option(OPENMP "use OpenMP threading" OFF)
+file(STRINGS "VERSION" pVersion)
 
-if (NOT CMAKE_BUILD_TYPE)
-  set (CMAKE_BUILD_TYPE RELEASE CACHE STRING
-    "Choose the type of build, options are: PRODUCTION Debug Release."
-    FORCE)
+project(
+  ufs_util
+  VERSION ${pVersion}
+  LANGUAGES Fortran)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
+
+if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
+  message(STATUS "Setting build type to 'Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE
+      "Release"
+      CACHE STRING "Choose the type of build." FORCE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+                                               "MinSizeRel" "RelWithDebInfo")
 endif()
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-  set(IntelComp true )
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU*" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang*")
-  set(GNUComp true )
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "pgc*")
-  set(PGIComp true )
+if(NOT CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|GNU|Clang|AppleClang)$")
+  message(WARNING "Compiler not officially supported: ${CMAKE_Fortran_COMPILER_ID}")
 endif()
-
-STRING(COMPARE EQUAL ${CMAKE_BUILD_TYPE} "RelWithDebInfo" BUILD_RELEASE)
-if(NOT BUILD_RELEASE )
-  STRING(COMPARE EQUAL ${CMAKE_BUILD_TYPE} "RELEASE" BUILD_RELEASE)
-endif()
-STRING(COMPARE EQUAL ${CMAKE_BUILD_TYPE} "PRODUCTION" BUILD_PRODUCTION)
-STRING(COMPARE EQUAL ${CMAKE_BUILD_TYPE} "DEBUG" BUILD_DEBUG)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 if(POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
@@ -34,17 +29,20 @@ if(POLICY CMP0012)
   cmake_policy(SET CMP0012 NEW)
 endif()
 
-find_package(HDF5 COMPONENTS C HL Fortran_HL REQUIRED)
-find_package(NetCDF REQUIRED)
-if(OPENMP)
-  find_package(OpenMP)
-endif()
-find_package(MPI REQUIRED)
+option(OPENMP "use OpenMP threading" OFF)
+
+find_package(NetCDF MODULE REQUIRED)
+find_package(MPI REQUIRED COMPONENTS Fortran)
 find_package(Jasper REQUIRED)
 find_package(PNG REQUIRED)
 find_package(ESMF MODULE REQUIRED)
-find_package(ZLIB REQUIRED)
 find_package(WGRIB2 REQUIRED)
+
+if(OPENMP)
+  find_package(OpenMP REQUIRED COMPONENTS Fortran)
+endif()
+
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
 
 if(NOT TARGET landsfcutil_4)
   find_package(landsfcutil REQUIRED)
@@ -73,5 +71,7 @@ endif()
 if(NOT TARGET sp_d)
   find_package(sp REQUIRED)
 endif()
-  
-add_subdirectory(sorc/chgres_cube.fd)
+
+add_subdirectory(sorc)
+
+install(FILES parm/varmap_tables/GFSphys_var_map.txt DESTINATION share)
