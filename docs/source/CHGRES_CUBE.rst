@@ -1,7 +1,7 @@
 .. _CHGRES_CUBE:
 
 ************************
-The CHGRES_CUBE Program
+The CHGRES_CUBE program
 ************************
 
 -------------  
@@ -11,7 +11,7 @@ Introduction
 The CHGRES_CUBE program creates initial condition files to “coldstart” the forecast model.  The initial conditions are created from either Global Forecast System (GFS) gridded binary version 2 (GRIB2) or NOAA Environmental Modeling System Input/Output (NEMSIO) data.
 
 ----------------------------------------
-Where to find GFS GRIB2 and NEMSIO data: 
+Where to find GFS GRIB2 and NEMSIO data 
 ----------------------------------------
 
 **GRIB2:**
@@ -28,7 +28,7 @@ Where to find GFS GRIB2 and NEMSIO data:
 
 
 -------------------------------------------
-Initializing with GRIB2 data. Some caveats.
+Initializing with GRIB2 data - some caveats
 -------------------------------------------
  
 
@@ -114,11 +114,11 @@ If the NCEPLIBS have been installed and the user wants to compile CHGRES_CUBE ag
       * make -j x (where x is a number that can be chosen to speed up the make, usually 8) 
       * make install
 
-----------------------
-Program INPUTS/OUTPUTS
-----------------------
+--------------------------
+Program inputs and outputs
+--------------------------
 
-**INPUTS**
+**Inputs**
 
 The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/
 
@@ -156,7 +156,7 @@ The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov
 
       * Input data files.  GRIB2 or NEMSIO.  See above section for how to find this data.
 
-**OUTPUTS**
+**Outputs**
 
       * Atmospheric “coldstart” files.  NetCDF.
 	      * out.atm.tile1.nc
@@ -219,7 +219,6 @@ Note on variable names: “input” refers to the data input to the program (i.e
 ------------------------------------------
 Making changes to the CHGRES_CUBE program
 ------------------------------------------
-
 
 CHGRES_CUBE is part of the UFS_UTILS repository (https://github.com/NOAA-EMC/UFS_UTILS). When wanting to contribute to this repository developers shall follow the Gitflow software development process
 
