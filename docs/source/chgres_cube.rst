@@ -1,10 +1,10 @@
-.. _CHGRES_CUBE:
+.. _chgres_cube:
 
 ************************
 Introduction
 ************************
 
-The CHGRES_CUBE program creates initial condition files to “coldstart” the forecast model.  The initial conditions are created from either Global Forecast System (GFS) gridded binary version 2 (GRIB2) or NOAA Environmental Modeling System Input/Output (NEMSIO) data.
+The chgres_cube program creates initial condition files to “coldstart” the forecast model.  The initial conditions are created from either Global Forecast System (GFS) gridded binary version 2 (GRIB2) or NOAA Environmental Modeling System Input/Output (NEMSIO) data.
 
 ************************************************
 Where to find GFS GRIB2 and NEMSIO data
@@ -53,12 +53,12 @@ In GRIB2 files only the Tsfc is stored and that is set as foundation temperature
 Note, that neither of these two options will get rid of the underlying baked in heating/cooling in the surface temperature fields. For most cases this may not be an issue, but where it is then the user will either have to initialize the model with NEMSIO data or replace the surface temperature in the GRIB2 fields with independently obtained foundation temperature.
 
 ************************************************
-CHGRES_CUBE namelist options
+chgres_cube namelist options
 ************************************************
 
-Namelist variables with “input” in their name refer to data input to CHGRES_CUBE.  Namelist variables with “target” in their name refer to the FV3 horizontal and vertical grid (i.e., the target grid CHGRES_CUBE is mapping to).
+Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3 horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
 
-When using GRIB2 data as input to CHGRES_CUBE, set namelist as follows:
+When using GRIB2 data as input to chgres_cube, set namelist as follows:
 
       * fix_dir_target_grid - Path to the tiled FV3 surface climatological files (such as albedo).
       * mosaic_file_target_grid - Path and name of the FV3 mosaic file.
@@ -73,7 +73,7 @@ When using GRIB2 data as input to CHGRES_CUBE, set namelist as follows:
       * convert_atm - set to ‘true’ to process the atmospheric fields
       * convert_sfc - set to ‘true’ to process the surface fields
 
-When using NEMSIO data as input to CHGRES_CUBE, set namelist as follows:
+When using NEMSIO data as input to chgres_cube, set namelist as follows:
 
       * fix_dir_target_grid - Path to the tiled FV3 surface climatological files (such as albedo).
       * mosaic_file_target_grid - Path and name of the FV3 mosaic file.
@@ -95,9 +95,9 @@ When using NEMSIO data as input to CHGRES_CUBE, set namelist as follows:
 Compiling the program
 ************************
 
-CHGRES_CUBE requires cmake 3.12 or higher. It can be built as part of the NCEPLIBS unified build system that includes two separate build systems -- one for the third party libraries that are needed and the other for the libraries and utilities themselves. See https://github.com/NOAA-EMC/NCEPLIBS-external/wiki for more detailed information.
+chgres_cube requires cmake 3.12 or higher. It can be built as part of the NCEPLIBS unified build system that includes two separate build systems -- one for the third party libraries that are needed and the other for the libraries and utilities themselves. See https://github.com/NOAA-EMC/NCEPLIBS-external/wiki for more detailed information.
 
-If the NCEPLIBS have been installed and the user wants to compile CHGRES_CUBE again
+If the NCEPLIBS have been installed and the user wants to compile chgres_cube again
 
       * make sure paths are set to hdf5, compiler, mpi and cmake
       * In a bash environment run
@@ -213,10 +213,10 @@ Note on variable names: “input” refers to the data input to the program (i.e
       * search_util.f90 - searches for the nearest valid land/non-land data where the input and target fv3 land-mask differ.  Example: when the target FV3 grid depicts an island that is not resolved by the input data.  If nearby valid data is not found, a default value is used.
 
 ************************************************
-Making changes to the CHGRES_CUBE program
+Making changes to the chgres_cube program
 ************************************************
 
-CHGRES_CUBE is part of the UFS_UTILS repository (https://github.com/NOAA-EMC/UFS_UTILS). When wanting to contribute to this repository developers shall follow the Gitflow software development process
+chgres_cube is part of the UFS_UTILS repository (https://github.com/NOAA-EMC/UFS_UTILS). When wanting to contribute to this repository developers shall follow the Gitflow software development process
 
       * Developers shall create their own fork of the UFS_UTILS repository
       * Developers shall create a ‘feature’ branch off ‘develop’ in their fork for all changes.
@@ -230,7 +230,7 @@ Changes that support current or future NCEP operations will be given priority fo
 Variable Mapping (VARMAP) table
 ************************************************
 
-The VARMAP table, set in the CHGRES_CUBE namelist (variable varmap_file), controls how CHGRES_CUBE handles variables that might be missing from the GRIB2 files. Since there are so many different versions of GRIB2 files, it's often uncertain what fields are available even if you know what source model the data is coming from.  Each file contains the following:  (Note, only the GFS physics suite is currently supported.)
+The VARMAP table, set in the chgres_cube namelist (variable varmap_file), controls how chgres_cube handles variables that might be missing from the GRIB2 files. Since there are so many different versions of GRIB2 files, it's often uncertain what fields are available even if you know what source model the data is coming from.  Each file contains the following:  (Note, only the GFS physics suite is currently supported.)
 
 Column 1: Name the code searches for in the table. Do not change.  Some definitions:
 
@@ -269,7 +269,7 @@ Column 3: Behavior when the code can't find the variable in the input file. Opti
 
 Column 4: If column 3 = "set_to_fill", then this value is used to fill in all points in the input field. These values may be overwritten by the code before output depending on the variable (especially for surface variables).
 
-Column 5: Variable type descriptor. Variable names designated as tracers are used to populate the list of tracers to read from the GRIB2 file and write to output, so make sure all tracers you wish to read have an entry. Note that if you wish to add a tracer name that is not already included in the appropriate VARMAP file, this will require modification of the CHGRES_CUBE code. Valid choices are:
+Column 5: Variable type descriptor. Variable names designated as tracers are used to populate the list of tracers to read from the GRIB2 file and write to output, so make sure all tracers you wish to read have an entry. Note that if you wish to add a tracer name that is not already included in the appropriate VARMAP file, this will require modification of the chgres_cube code. Valid choices are:
 
       * “T”: 3-dimensional tracer array
       * “D”: 3-dimensional non-tracer array
