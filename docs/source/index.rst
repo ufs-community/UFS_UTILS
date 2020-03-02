@@ -10,4 +10,4 @@ chgres_cube Documentation
    :numbered:
    :maxdepth: 3
 
-   CHGRES_CUBE
+   chgres_cube
