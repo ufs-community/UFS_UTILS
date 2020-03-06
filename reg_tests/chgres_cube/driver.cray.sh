@@ -28,7 +28,7 @@ module rm intel
 module load intel/16.3.210
 module load cray-mpich/7.2.0
 module load craype-haswell
-module load cray-netcdf
+module load cray-netcdf/4.3.3.1
 module load xt-lsfhpc/9.1.3
 module list
 

@@ -5663,7 +5663,7 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
   else
     call error_handler("ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
                        " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN,"// &
-                       " , skip, or stop.")
+                       " , skip, or stop.", 1)
   endif
 
 end subroutine handle_grib_error
@@ -5693,7 +5693,7 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
                              ':0.4-1 m below ground:', ':1-2 m below ground:'/)
   else
     rc = -1
-    call error_handler("reading soil levels. File must have 4 soil levels.")
+    call error_handler("reading soil levels. File must have 4 soil levels.", rc)
   endif
  
   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
