@@ -4508,28 +4508,24 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
     
-if (localpet == 0) then
+ if (localpet == 0) then
    print*,"- READ SKIN TEMPERATURE."
    rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
    if (rc <= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
    tsk_save(:,:) = dummy2d
    dummy2d_8 = real(dummy2d,esmf_kind_r8)
-   
-   print*,'tmp ',maxval(dummy2d),minval(dummy2d)
    do j = 1, j_input
      do i = 1, i_input
        if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) < 271.2) then
-         print*,'too cool SST ',i,j,dummy2d(i,j)
+!        print*,'too cool SST ',i,j,dummy2d(i,j)
          dummy2d(i,j) = 271.2
        endif
        if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) > 310.) then
-         print*,'too hot SST ',i,j,dummy2d(i,j)
+!        print*,'too hot SST ',i,j,dummy2d(i,j)
          dummy2d(i,j) = 310.0
        endif
+     enddo
    enddo
-   enddo
-
-
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
