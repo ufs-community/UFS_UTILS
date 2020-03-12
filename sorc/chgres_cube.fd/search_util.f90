@@ -133,7 +133,7 @@
 
                if (mask(ii,jj) == 1  .and. field_save(ii,jj) > -9999.0) then
                  field(i,j) = field_save(ii,jj)
-!                write(6,100) tile,i,j,ii,jj,field(i,j)
+                write(6,100) tile,i,j,ii,jj,field(i,j)
                  cycle I_LOOP
                endif
 
