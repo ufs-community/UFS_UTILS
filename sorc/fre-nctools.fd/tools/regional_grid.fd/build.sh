@@ -19,7 +19,7 @@ case $1 in
      export FCMP=ifort
      export FFLAGS="-O2 -g -I$NETCDF/include" 
      export LIBS="-L$NETCDF/lib -lnetcdff -lnetcdf -L${HDF5}/lib -lhdf5 -lhdf5_fortran" ;;
-  "theia" )
+  "hera" )
      export FCMP=ifort
      export FFLAGS="-O2 -g -I$NETCDF/include"
      export LIBS="-L$NETCDF/lib -lnetcdff -lnetcdf -L${HDF5}/lib -lhdf5 -lhdf5_fortran" ;;
