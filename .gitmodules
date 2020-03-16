@@ -1,0 +1,4 @@
+[submodule "cmake"]
+	path = cmake
+	url = git@github.com:NOAA-EMC/CMakeModules.git
+	branch = release/public-v1
