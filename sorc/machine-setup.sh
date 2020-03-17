@@ -37,6 +37,7 @@ elif [[ -d /scratch1 ]] ; then
     target=hera
     module purge
     MOD_PATH=/scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
+    module load cmake/3.16.1
 elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
     # We are on NOAA Luna or Surge
     if ( ! eval module help > /dev/null 2>&1 ) ; then

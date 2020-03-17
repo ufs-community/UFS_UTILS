@@ -38,4 +38,5 @@ cd ../build
 echo $ESMFMKFILE
 cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_INSTALL_PREFIX=../
 make -j 8 VERBOSE=1
+make install
 exit
