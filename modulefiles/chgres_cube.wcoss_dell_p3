@@ -16,10 +16,3 @@ module use /gpfs/dell2/emc/modeling/noscrub/emc.nemspara/soft/modulefiles
 module load esmf/8.0.0
 
 export WGRIB2_ROOT=/u/Wesley.Ebisuzaki/home/grib2.v2.0.8.intel/lib
-#export WGRIB2API_INC=/u/Wesley.Ebisuzaki/home/grib2.v2.0.8.intel/lib
-#export WGRIB2_LIB=/u/Wesley.Ebisuzaki/home/grib2.v2.0.8.intel/lib/libwgrib2.a
-
-export FCOMP=mpif90
-export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
-# for debugging
-#export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"

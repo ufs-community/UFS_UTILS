@@ -29,21 +29,13 @@ if [ ! -d "../exec" ]; then
   mkdir ../exec
 fi
 
+#
+# --- Chgres part
+#
 rm -fr ../build
 mkdir ../build
 cd ../build
 echo $ESMFMKFILE
 cmake .. -DCMAKE_Fortran_COMPILER=ifort
-make
-exit
-
-#
-# --- Chgres part
-#
-cd chgres_cube.fd
-
-make clean
-make
-make install
-
+make -j 8 VERBOSE=1
 exit

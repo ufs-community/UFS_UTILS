@@ -42,6 +42,7 @@ if(NOT NETCDF)
     list(APPEND CMAKE_PREFIX_PATH $ENV{NETCDF_FORTRAN})
   endif()
 endif()
+find_package(NetCDF MODULE REQUIRED)
 
 find_package(MPI REQUIRED COMPONENTS Fortran)
 find_package(ESMF MODULE REQUIRED)
