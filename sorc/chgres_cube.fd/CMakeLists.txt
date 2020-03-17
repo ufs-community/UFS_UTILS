@@ -13,7 +13,7 @@ set(fortran_src
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "-g -traceback")
-  set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
+  set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fp-model precise -r8 -i4 -qopenmp -convert big_endian -assume byterecl")
   set(CMAKE_Fortran_FLAGS_DEBUG
       "-O0 -check -check noarg_temp_created -check nopointer -warn -warn noerrors -fp-stack-check -fstack-protector-all -fpe0 -debug -ftrapuv"
   )
@@ -45,4 +45,4 @@ if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
 endif()
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION bin)
+install(TARGETS ${exe_name} RUNTIME DESTINATION exec)
