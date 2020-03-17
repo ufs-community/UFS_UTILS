@@ -38,19 +38,13 @@ if(NOT NETCDF)
     list(APPEND CMAKE_PREFIX_PATH $ENV{NETCDF})
     set(NETCDF $ENV{NETCDF})
   endif()
-endif()
-
-find_package(MPI REQUIRED COMPONENTS Fortran)
-
-if(NOT ESMFMKFILE)
-  if(NOT DEFINED ENV{ESMFMKFILE})
-    message(FATAL_ERROR "fatal error esfm not set")
-  else()
-    list(APPEND CMAKE_PREFIX_PATH $ENV{ESMFMKFILE})
-    set(ESMFMKFILE $ENV{ESMFMKFILE})
+  if(DEFINED_ENV{NETCDF_FORTRAN})
+    list(APPEND CMAKE_PREFIX_PATH $ENV{NETCDF_FORTRAN})
   endif()
 endif()
 
+find_package(MPI REQUIRED COMPONENTS Fortran)
+find_package(ESMF MODULE REQUIRED)
 find_package(WGRIB2 REQUIRED)
 
 if(OPENMP)
@@ -60,27 +54,27 @@ endif()
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
 
 if(NOT TARGET sfcio_4)
-  set(SFCIO_LIB4 $ENV{SFCIO_LIB4})
+  find_package(sfcio REQUIRED)
 endif()
 
 if(NOT TARGET w3nco_d)
-  set(W3NCO_LIBd $ENV{W3NCO_LIBd})
+  find_package(w3nco REQUIRED)
 endif()
 
 if(NOT TARGET bacio_4)
-  set(BACIO_LIB4 $ENV{BACIO_LIB4})
+  find_package(bacio REQUIRED)
 endif()
 
 if(NOT TARGET nemsio)
-  set(NEMSIO_LIB $ENV{NEMSIO_LIB})
+  find_package(nemsio REQUIRED)
 endif()
 
 if(NOT TARGET sigio_4)
-  set(SIGIO_LIB4 $ENV{SIGIO_LIB4})
+  find_package(sigio REQUIRED)
 endif()
 
 if(NOT TARGET sp_d)
-  set(SP_LIBd $ENV{SP_LIBd})
+  find_package(sp REQUIRED)
 endif()
 
 add_subdirectory(sorc)
