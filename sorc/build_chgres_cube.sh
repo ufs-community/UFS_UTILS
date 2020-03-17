@@ -29,6 +29,14 @@ if [ ! -d "../exec" ]; then
   mkdir ../exec
 fi
 
+rm -fr ../build
+mkdir ../build
+cd ../build
+echo $ESMFMKFILE
+cmake .. -DCMAKE_Fortran_COMPILER=ifort
+make
+exit
+
 #
 # --- Chgres part
 #
