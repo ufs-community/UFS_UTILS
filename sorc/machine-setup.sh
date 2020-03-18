@@ -28,6 +28,7 @@ if [[ -d /lfs3 ]] ; then
     target=jet
     module purge
     module use /lfs3/projects/hfv3gfs/nwprod/NCEPLIBS/modulefiles
+    module load cmake/3.6.1
 elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then

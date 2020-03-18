@@ -29,7 +29,7 @@ if(POLICY CMP0012)
   cmake_policy(SET CMP0012 NEW)
 endif()
 
-option(OPENMP "use OpenMP threading" OFF)
+option(OPENMP "use OpenMP threading" ON)
 
 if(NOT NETCDF)
   if(NOT DEFINED ENV{NETCDF})

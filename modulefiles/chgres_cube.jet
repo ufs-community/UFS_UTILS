@@ -17,11 +17,6 @@ module load nemsio/v2.2.3
 
 module use /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib/modulefiles
 module load esmflocal/ESMF_8_0_0_beta_snapshot_21
-
-export FCOMP=mpiifort
-export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
-#debug
-#export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"
+export NETCDF="/apps/netcdf/4.2.1.1-intel"
  
-export WGRIB2API_INC="/mnt/lfs3/projects/hwrfv3/Jili.Dong/wgrib2-2.0.8/grib2/lib"
-export WGRIB2_LIB="/mnt/lfs3/projects/hwrfv3/Jili.Dong/wgrib2-2.0.8/grib2/lib/libwgrib2.a"
+export WGRIB2_ROOT="/mnt/lfs3/projects/hwrfv3/Jili.Dong/wgrib2-2.0.8/grib2/lib"
