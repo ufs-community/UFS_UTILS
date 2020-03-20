@@ -15,4 +15,4 @@ module load sigio/2.1.0
 module use /gpfs/dell2/emc/modeling/noscrub/emc.nemspara/soft/modulefiles
 module load esmf/8.0.0
 
-export WGRIB2_ROOT=/u/Wesley.Ebisuzaki/home/grib2.v2.0.8.intel/lib
+export WGRIB2_ROOT=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/wgrib2
