@@ -18,4 +18,4 @@ module use -a $NCEPLIBS/modulefiles
 module load esmflocal/8_0_48b.netcdf47
 export NETCDF="/apps/netcdf/4.7.0/intel/18.0.5.274"
 
-export WGRIB2_ROOT="/apps/wgrib2/2.0.8/intel/18.0.3.222/lib"
+export WGRIB2_ROOT="/scratch1/NCEPDEV/da/George.Gayno/noscrub/wgrib2"
