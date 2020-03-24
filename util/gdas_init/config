@@ -1,0 +1,80 @@
+#-----------------------------------------------------------
+#
+#  1) Compile the chgres_cube program.  Invoke 
+#     ./sorc/build_chgres_cube.sh
+#
+#  2) Ensure links to the 'fixed' directories are
+#     set.  See the ./sorc/link_fixdirs.sh script prolog
+#     for details.
+#
+#  3) Set all config variables.  See definitions 
+#     below.
+#
+#  4) Invoke the driver script for your machine (with no
+#     arguments).
+#
+# Variable definitions:
+# --------------------
+# EXTRACT_DIR - directory where data extracted from HPSS
+#               is stored.
+# EXTRACT_DATA - Set to 'yes' to extract data from HPSS.
+#                If data has been extracted and is located
+#                in EXTRACT_DIR, set to 'no'.
+# RUN_CHGRES - To run chgres, set to 'yes'.  To extract
+#              data only, set to 'no'.
+# yy/mm/dd/hh - The year/month/day/hour of your desired
+#               experiment.  Currently, does not support
+#               pre-ENKF GFS data, prior to
+#               2012 May 21 00z.
+# LEVS        - Number of hybrid levels plus 1.  To
+#               run with 64 levels, set LEVS to 65.
+# CRES_HIRES  - Resolution of the hires component of
+#               your experiment.
+# CRES_ENKF   - Resolution of the enkf component of the
+#               your experiment.
+# UFS_DIR - Location of your checked out UFS_UTILS
+#           repo.
+# OUTDIR - Directory where data output from chgres is stored.
+#         
+#-----------------------------------------------------------
+
+EXTRACT_DIR=/gpfs/dell1/stmp/$USER/gdas.init/input
+EXTRACT_DATA=yes
+
+RUN_CHGRES=yes
+
+yy=2017
+mm=07
+dd=19
+hh=18
+
+LEVS=65
+
+CRES_HIRES=C192
+CRES_ENKF=C96
+
+UFS_DIR=$PWD/../..
+
+OUTDIR=/gpfs/dell1/stmp/$USER/gdas.init/output
+
+#---------------------------------------------------------
+# Dont touch anything below here.
+#---------------------------------------------------------
+
+gfs_ver=v15
+
+# No ENKF data prior to 2012/05/21/00z
+if [ $yy$mm$dd$hh -lt 2012052100 ]; then
+  set +x
+  echo FATAL ERROR: SCRIPTS DO NOT SUPPORT OLD GFS DATA
+  exit 2
+elif [ $yy$mm$dd$hh -lt 2016051000 ]; then
+  gfs_ver=v12
+elif [ $yy$mm$dd$hh -lt 2017072000 ]; then
+  gfs_ver=v13
+elif [ $yy$mm$dd$hh -lt 2019061200 ]; then
+  gfs_ver=v14
+fi
+
+export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF RUN_CHGRES
+export LEVS gfs_ver
