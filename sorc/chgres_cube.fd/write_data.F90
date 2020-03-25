@@ -1330,6 +1330,7 @@
  if (localpet < num_tiles_target_grid) then
    dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   print*,"MIN MAX W AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_w, dum3d)
    call netcdf_err(error, 'WRITING VERTICAL VELOCITY RECORD' )
  endif
@@ -1408,6 +1409,7 @@
  if (localpet < num_tiles_target_grid) then
    dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:jp1_end,:)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   print*,"MIN MAX US AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_u_s, dum3d)
    call netcdf_err(error, 'WRITING U_S RECORD' )
  endif
@@ -1424,6 +1426,7 @@
  if (localpet < num_tiles_target_grid) then
    dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:jp1_end,:)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   print*,"MIN MAX VS AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_v_s, dum3d)
    call netcdf_err(error, 'WRITING V_S RECORD' )
  endif
@@ -1450,6 +1453,7 @@
  if (localpet < num_tiles_target_grid) then
    dum3d(:,:,:) = data_one_tile_3d(i_start:ip1_end,j_start:j_end,:)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   print*,"MIN MAX UW AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_u_w, dum3d)
    call netcdf_err(error, 'WRITING U_W RECORD' )
  endif
@@ -1466,6 +1470,7 @@
  if (localpet < num_tiles_target_grid) then
    dum3d(:,:,:) = data_one_tile_3d(i_start:ip1_end,j_start:j_end,:)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   print*,"MIN MAX VW AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_v_w, dum3d)
    call netcdf_err(error, 'WRITING V_W RECORD' )
  endif

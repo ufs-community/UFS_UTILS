@@ -105,6 +105,7 @@
  character(len=500), public      :: mosaic_file_target_grid = "NULL"
  character(len=500), public      :: nst_files_input_grid = "NULL"
  character(len=500), public      :: grib2_file_input_grid = "NULL"
+ character(len=500), public      :: geogrid_file_input_grid = "NULL"
  character(len=500), public      :: orog_dir_input_grid = "NULL"
  character(len=500), public      :: orog_files_input_grid(6) = "NULL"
  character(len=500), public      :: orog_dir_target_grid = "NULL"
@@ -115,6 +116,18 @@
  character(len=500), public      :: atm_weight_file="NULL"
  character(len=20),  public      :: input_type="restart"
  character(len=20), public       :: phys_suite="GFS"      !Default to gfs physics suite
+ character(len=20),  public      :: external_model="GFS"  !Default assume gfs data
+ 
+ 
+!!! Remove this option and assume wgrib2 is in the user's path 
+! character(len=1000), public     :: wgrib2_path="wgrib2"  !Provide option to set path to 
+!                                                          !wgrib2 executable for command 
+!                                                          !line use 
+ !!! Remote this option in favor of a direct path to the chgres fixed files directory                                                         
+ !character(len=1000), public     :: base_install_dir="."                            
+ 
+ character(len=20), public       :: fix_dir_input_grid = "NULL"                             
+                                                          
 
  integer, parameter, public      :: max_tracers=100
  integer, public                 :: num_tracers, num_tracers_input
@@ -138,7 +151,15 @@
  logical, public                 :: convert_atm = .false.
  logical, public                 :: convert_nst = .false.
  logical, public                 :: convert_sfc = .false.
-
+ 
+ ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
+ ! Default is to use climatology instead
+ logical, public                 :: vgtyp_from_climo = .true.
+ logical, public                 :: sotyp_from_climo = .true.
+ logical, public                 :: vgfrc_from_climo = .true.
+ logical, public                 :: lai_from_climo = .true.
+ logical, public                 :: tg3_from_soil = .false.
+ logical, public                 :: internal_GSD = .false.
 
  real, allocatable, public       :: drysmc_input(:), drysmc_target(:)
  real, allocatable, public       :: maxsmc_input(:), maxsmc_target(:)
@@ -178,16 +199,25 @@
                    atm_core_files_input_grid,    &
                    atm_tracer_files_input_grid,    &
                    grib2_file_input_grid, &
+                   geogrid_file_input_grid, &
                    data_dir_input_grid,     &
                    vcoord_file_target_grid, &
                    cycle_mon, cycle_day,    &
                    cycle_hour, convert_atm, &
                    convert_nst, convert_sfc, &
+                   vgtyp_from_climo, &
+                   sotyp_from_climo, &
+                   vgfrc_from_climo, &
+                   lai_from_climo, tg3_from_soil, &
+                   internal_GSD, &
                    regional, input_type, &
+                   external_model, &
                    atm_weight_file, tracers, &
                    tracers_input,phys_suite, &
                    halo_bndy, & 
-                   halo_blend
+                   halo_blend, &
+                   fix_dir_input_grid
+!                   wgrib2_path, base_install_dir
 
  print*,"- READ SETUP NAMELIST"
 
@@ -270,16 +300,56 @@
    case default
      call error_handler("UNRECOGNIZED INPUT DATA TYPE.", 1)
  end select
- 
+
 !-------------------------------------------------------------------------
 ! Ensure proper file variable provided for grib2 input  
 !-------------------------------------------------------------------------
 
  if (trim(input_type) == "grib2") then
-   if (trim(grib2_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
-     call error_handler("FOR GRIB2 DATA, PLEASE PROVIDE GRIB2_FILE_INPUT_GRID", 1)
-   endif
+	 if (trim(grib2_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
+		 call error_handler("FOR GRIB2 DATA, PLEASE PROVIDE GRIB2_FILE_INPUT_GRID", 1)
+	 endif
  endif
+
+ !-------------------------------------------------------------------------
+! For grib2 input, warn about possibly unsupported external model types
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2") then
+	 if (.not. any((/character(4)::"GFS","NAM","RAP","HRRR"/)==trim(external_model))) then
+		 print*, "WARNING: KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, AND HRRR. &
+		 RESULTS MAY NOT BE AS EXPECTED. "
+	 endif
+ endif
+
+!-------------------------------------------------------------------------
+! For grib2 hrrr input without geogrid file input, warn that soil moisture interpolation
+! will be less accurate
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2" .and. trim(external_model)=="HRRR") then
+	 if (trim(geogrid_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
+		 print*, "HRRR DATA DOES NOT CONTAIN SOIL TYPE INFORMATION. WITHOUT &
+			GEOGRID_FILE_INPUT_GRID SPECIFIED, SOIL MOISTURE INTERPOLATION MAY BE LESS &
+			ACCURATE. "
+	 endif
+ endif
+ return
+
+!------------------------------------------------------------------------------
+! For internal_GSD=.true., check that data is HRRR and warn user of specific
+! use
+!------------------------------------------------------------------------------
+ if ( internal_GSD) then
+	 if (trim(external_model) /= "HRRR") then
+		 call error_handler("internal_GSD = .true. is only valid for HRRRR input data")
+	 endif
+	 print*, "WARNING: THE internal_GSD OPTION IS INTENDED ONLY FOR INTERNAL &
+	 OPERATIONAL USE AT GSD WITH SPECIFIC HRRR FILES. UNINTENDED RESULTS ARE POSSIBLE &
+		OTHERWISE."
+ endif
+	 
+
  
  end subroutine read_setup_namelist
 
