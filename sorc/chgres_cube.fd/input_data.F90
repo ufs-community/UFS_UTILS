@@ -2210,6 +2210,7 @@
 
    if (myrank == 0) then
      dummy3dflip(:,:,1:lev_input) = dummy3dall(:,:,lev_input:1:-1)
+     where(dummy3dflip < 0.0) dummy3dflip = 0.0
    endif
 
    print*,"- CALL FieldScatter FOR INPUT GRID ", tracers_input(n)
