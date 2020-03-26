@@ -153,15 +153,18 @@
    call read_input_atm_restart_file(localpet)
 
 !-------------------------------------------------------------------------------
-! Read the tiled or gaussian history files in netcdf format.
+! Read the gaussian history files in netcdf format.
 !-------------------------------------------------------------------------------
 
-!elseif (trim(input_type) == "gaussian_netcdf") then
+ elseif (trim(input_type) == "gaussian_netcdf") then
 
-!  call read_input_atm_netcdf_file_parallel(localpet)
+   call read_input_atm_netcdf_file_parallel(localpet)
 
- elseif (trim(input_type) == "history" .or.  &
-         trim(input_type) == "gaussian_netcdf") then
+!-------------------------------------------------------------------------------
+! Read the tiled history files in netcdf format.
+!-------------------------------------------------------------------------------
+
+ elseif (trim(input_type) == "history") then
 
    call read_input_atm_netcdf_file(localpet)
 
@@ -1887,35 +1890,40 @@
 
  end subroutine read_input_atm_restart_file
 
+!---------------------------------------------------------------------------
+! Read fv3 netcdf gaussian history file.  Each task reads a horizontal
+! slice.
+!---------------------------------------------------------------------------
+
  subroutine read_input_atm_netcdf_file_parallel(localpet)
 
  implicit none
 
  include 'mpif.h'
 
- integer, intent(in)             :: localpet
+ integer, intent(in)               :: localpet
 
- character(len=500)              :: tilefile
+ character(len=500)                :: tilefile
 
- integer                         :: start(3), count(3), iscnt
- integer                         :: error, ncid, num_tracers_file
- integer                         :: id_dim, idim_input, jdim_input
- integer                         :: id_var, rc, nprocs, max_procs
- integer                         :: kdim, remainder, myrank, i, j, k, n
- integer                         :: clb(3), cub(3)
- integer, allocatable            :: kcount(:), startk(:), displ(:)
- integer, allocatable            :: ircnt(:)
+ integer                           :: start(3), count(3), iscnt
+ integer                           :: error, ncid, num_tracers_file
+ integer                           :: id_dim, idim_input, jdim_input
+ integer                           :: id_var, rc, nprocs, max_procs
+ integer                           :: kdim, remainder, myrank, i, j, k, n
+ integer                           :: clb(3), cub(3)
+ integer, allocatable              :: kcount(:), startk(:), displ(:)
+ integer, allocatable              :: ircnt(:)
 
- real(esmf_kind_r8), allocatable :: phalf(:)
- real(esmf_kind_r8), allocatable :: pres_interface(:)
- real(kind=4), allocatable               :: dummy3d(:,:,:)
+ real(esmf_kind_r8), allocatable   :: phalf(:)
+ real(esmf_kind_r8), allocatable   :: pres_interface(:)
+ real(kind=4), allocatable         :: dummy3d(:,:,:)
  real(kind=4), allocatable         :: dummy3dall(:,:,:)
- real(esmf_kind_r8), allocatable         :: dummy3dflip(:,:,:)
- real(esmf_kind_r8), allocatable         :: dummy(:,:)
- real(esmf_kind_r8), pointer     :: presptr(:,:,:), dpresptr(:,:,:)
- real(esmf_kind_r8), pointer     :: psptr(:,:)
+ real(esmf_kind_r8), allocatable   :: dummy3dflip(:,:,:)
+ real(esmf_kind_r8), allocatable   :: dummy(:,:)
+ real(esmf_kind_r8), pointer       :: presptr(:,:,:), dpresptr(:,:,:)
+ real(esmf_kind_r8), pointer       :: psptr(:,:)
 
- print*,"- got here."
+ print*,"- READ INPUT ATMOS DATA FROM GAUSSIAN NETCDF FILE."
 
  tilefile = trim(data_dir_input_grid) // "/" // trim(atm_files_input_grid(1))
  error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
@@ -1981,43 +1989,21 @@
  enddo
  kcount(max_procs-1) = kdim + remainder
 
- if (myrank==0) then
-   do k = 0, max_procs-1
-     print*,'- RANK ', k, ' WILL READ ',kcount(k), ' SLICES.'
-   enddo
- endif
-
  startk(0) = 1
  do k = 1, max_procs-1
    startk(k) = startk(k-1) + kcount(k-1)
  enddo
 
- if (myrank==0) then
-   do k = 0, max_procs-1
-     print*,'- RANK ', k, ' WILL START READING AT SLICE ', startk(k)
-   enddo
- endif
-
  ircnt(:) = idim_input * jdim_input * kcount(:)
-
- if (myrank==0) then
-   do k = 0, max_procs-1
-     print*,'- RANK ', k, ' WILL READ ', ircnt(k), ' ELEMENTS.'
-   enddo
- endif
 
  displ(0) = 0
  do k = 1, max_procs-1
    displ(k) = displ(k-1) + ircnt(k-1)
  enddo
 
- if (myrank==0) then
-   do k = 0, max_procs-1
-     print*,'- RANK ', k, ' DISPLACEMENT ', displ(k)
-   enddo
- endif
-
  iscnt=idim_input*jdim_input*kcount(myrank)
+
+! Account for case if number of tasks exceeds the number of vert levels.
 
  if (myrank <= max_procs-1) then
    allocate(dummy3d(idim_input,jdim_input,kcount(myrank)))
@@ -2112,169 +2098,148 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
-! temperature 
+! Temperature 
 
  if (myrank <= max_procs-1) then
    start = (/1,1,startk(myrank)/)
    count = (/idim_input,jdim_input,kcount(myrank)/)
-
    error=nf90_inq_varid(ncid, 'tmp', id_var)
-   call netcdf_err(error, 'reading field id' )
+   call netcdf_err(error, 'reading tmp field id' )
    error=nf90_get_var(ncid, id_var, dummy3d, start=start, count=count)
-   if (error /= 0) call mpi_abort
-
-   print*,'max/min temp ',maxval(dummy3d),minval(dummy3d)
-   print*,'column temp ',myrank, dummy3d(1,1,:)
-
+   call netcdf_err(error, 'reading tmp field' )
  endif
 
  call mpi_gatherv(dummy3d, iscnt, mpi_real, &
                   dummy3dall, ircnt, displ, mpi_real, &
                   0, mpi_comm_world, error)
- if (error /= 0) call mpi_abort
+ if (error /= 0) call error_handler("IN mpi_gatherv of temperature", error)
 
  if (myrank == 0) then
-   print*,'after gather  ', dummy3dall(1,1,:)
- endif
-
- if (myrank == 0) then
-     dummy3dflip(:,:,1:lev_input) = dummy3dall(:,:,lev_input:1:-1)
+   dummy3dflip(:,:,1:lev_input) = dummy3dall(:,:,lev_input:1:-1)
  endif
    
  print*,"- CALL FieldScatter FOR INPUT GRID TEMPERATURE "
-     call ESMF_FieldScatter(temp_input_grid, dummy3dflip, rootpet=0, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
+ call ESMF_FieldScatter(temp_input_grid, dummy3dflip, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", rc)
+
+! dpres
 
  if (myrank <= max_procs-1) then
    error=nf90_inq_varid(ncid, 'dpres', id_var)
-   call netcdf_err(error, 'reading field id' )
+   call netcdf_err(error, 'reading dpres field id' )
    error=nf90_get_var(ncid, id_var, dummy3d, start=start, count=count)
-   if (error /= 0) call mpi_abort
-   print*,'max/min dpres ',maxval(dummy3d),minval(dummy3d)
-   print*,'column dpres ',myrank, dummy3d(1,1,:)
+   call netcdf_err(error, 'reading dpres field' )
  endif
 
  call mpi_gatherv(dummy3d, iscnt, mpi_real, &
                   dummy3dall, ircnt, displ, mpi_real, &
                   0, mpi_comm_world, error)
- if (error /= 0) call mpi_abort
+ if (error /= 0) call error_handler("IN mpi_gatherv of dpres", error)
 
  if (myrank == 0) then
-   print*,'after gather  ', dummy3dall(1,1,:)
- endif
-
- if (myrank == 0) then
-     dummy3dflip(:,:,1:lev_input) = dummy3dall(:,:,lev_input:1:-1)
+   dummy3dflip(:,:,1:lev_input) = dummy3dall(:,:,lev_input:1:-1)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID DPRES "
-     call ESMF_FieldScatter(dpres_input_grid, dummy3dflip, rootpet=0, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
+ call ESMF_FieldScatter(dpres_input_grid, dummy3dflip, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", rc)
+
+! ugrd
 
  if (myrank <= max_procs-1) then
    error=nf90_inq_varid(ncid, 'ugrd', id_var)
-   call netcdf_err(error, 'reading field id' )
+   call netcdf_err(error, 'reading ugrd field id' )
    error=nf90_get_var(ncid, id_var, dummy3d, start=start, count=count)
-   if (error /= 0) call mpi_abort
-   print*,'max/min ugrd ',maxval(dummy3d),minval(dummy3d)
-   print*,'column ugrd ',myrank, dummy3d(1,1,:)
+   call netcdf_err(error, 'reading ugrd field' )
  endif
 
  call mpi_gatherv(dummy3d, iscnt, mpi_real, &
                   dummy3dall, ircnt, displ, mpi_real, &
                   0, mpi_comm_world, error)
- if (error /= 0) call mpi_abort
+ if (error /= 0) call error_handler("IN mpi_gatherv of ugrd", error)
 
  if (myrank == 0) then
-   print*,'after gather  ', dummy3dall(1,1,:)
- endif
-
- if (myrank == 0) then
-     dummy3dflip(:,:,1:lev_input) = dummy3dall(:,:,lev_input:1:-1)
+   dummy3dflip(:,:,1:lev_input) = dummy3dall(:,:,lev_input:1:-1)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID UGRD "
-     call ESMF_FieldScatter(u_input_grid, dummy3dflip, rootpet=0, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ call ESMF_FieldScatter(u_input_grid, dummy3dflip, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldScatter", rc)
+
+! vgrd
 
  if (myrank <= max_procs-1) then
    error=nf90_inq_varid(ncid, 'vgrd', id_var)
-   call netcdf_err(error, 'reading field id' )
+   call netcdf_err(error, 'reading vgrd field id' )
    error=nf90_get_var(ncid, id_var, dummy3d, start=start, count=count)
-   if (error /= 0) call mpi_abort
-   print*,'max/min vgrd ',maxval(dummy3d),minval(dummy3d)
-   print*,'column vgrd ',myrank, dummy3d(1,1,:)
+   call netcdf_err(error, 'reading vgrd field' )
  endif
 
  call mpi_gatherv(dummy3d, iscnt, mpi_real, &
                   dummy3dall, ircnt, displ, mpi_real, &
                   0, mpi_comm_world, error)
- if (error /= 0) call mpi_abort
+ if (error /= 0) call error_handler("IN mpi_gatherv of vgrd", error)
 
  if (myrank == 0) then
-   print*,'after gather  ', dummy3dall(1,1,:)
- endif
-
- if (myrank == 0) then
-     dummy3dflip(:,:,1:lev_input) = dummy3dall(:,:,lev_input:1:-1)
+   dummy3dflip(:,:,1:lev_input) = dummy3dall(:,:,lev_input:1:-1)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID VGRD "
-     call ESMF_FieldScatter(v_input_grid, dummy3dflip, rootpet=0, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ call ESMF_FieldScatter(v_input_grid, dummy3dflip, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldScatter", rc)
+
+! tracers
 
  do n = 1, num_tracers
 
- if (myrank <= max_procs-1) then
-   error=nf90_inq_varid(ncid, tracers_input(n), id_var)
-   call netcdf_err(error, 'reading field id' )
-   error=nf90_get_var(ncid, id_var, dummy3d, start=start, count=count)
-   if (error /= 0) call mpi_abort
-   print*,'max/min tracer ',n,maxval(dummy3d),minval(dummy3d)
-   print*,'column tracer ',n,myrank, dummy3d(1,1,:)
- endif
+   if (myrank <= max_procs-1) then
+     error=nf90_inq_varid(ncid, tracers_input(n), id_var)
+     call netcdf_err(error, 'reading tracer field id' )
+     error=nf90_get_var(ncid, id_var, dummy3d, start=start, count=count)
+     call netcdf_err(error, 'reading tracer field' )
+   endif
 
- call mpi_gatherv(dummy3d, iscnt, mpi_real, &
-                  dummy3dall, ircnt, displ, mpi_real, &
-                  0, mpi_comm_world, error)
- if (error /= 0) call mpi_abort
+   call mpi_gatherv(dummy3d, iscnt, mpi_real, &
+                    dummy3dall, ircnt, displ, mpi_real, &
+                    0, mpi_comm_world, error)
+   if (error /= 0) call error_handler("IN mpi_gatherv of tracer", error)
 
- if (myrank == 0) then
-   print*,'after gather  ', dummy3dall(1,1,:)
- endif
-
- if (myrank == 0) then
+   if (myrank == 0) then
      dummy3dflip(:,:,1:lev_input) = dummy3dall(:,:,lev_input:1:-1)
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID ", tracers_input(n)
-     call ESMF_FieldScatter(tracers_input_grid(n), dummy3dflip, rootpet=0, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   print*,"- CALL FieldScatter FOR INPUT GRID ", tracers_input(n)
+   call ESMF_FieldScatter(tracers_input_grid(n), dummy3dflip, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldScatter", rc)
 
  enddo
 
-! dzdt 
+! dzdt   set to zero for now.
 
  if (myrank == 0) then
-     dummy3dflip = 0.0
+   dummy3dflip = 0.0
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID DZDT"
-     call ESMF_FieldScatter(dzdt_input_grid, dummy3dflip, rootpet=0, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
+ call ESMF_FieldScatter(dzdt_input_grid, dummy3dflip, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", rc)
+ 
+ deallocate(dummy3dflip, dummy3dall, dummy3d)
+
+! terrain 
 
  if (myrank==0) then
    print*,"- READ TERRAIN."
    error=nf90_inq_varid(ncid, 'hgtsfc', id_var)
-   call netcdf_err(error, 'reading field id' )
+   call netcdf_err(error, 'reading hgtsfc field id' )
    error=nf90_get_var(ncid, id_var, dummy)
-   call netcdf_err(error, 'reading field' )
+   call netcdf_err(error, 'reading hgtsfc field' )
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID TERRAIN."
@@ -2282,18 +2247,22 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
 
+! surface pressure
+
  if (myrank==0) then
    print*,"- READ SURFACE P."
    error=nf90_inq_varid(ncid, 'pressfc', id_var)
-   call netcdf_err(error, 'reading field id' )
+   call netcdf_err(error, 'reading pressfc field id' )
    error=nf90_get_var(ncid, id_var, dummy)
-   call netcdf_err(error, 'reading field' )
+   call netcdf_err(error, 'reading pressfc field' )
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SURFACE P."
  call ESMF_FieldScatter(ps_input_grid, dummy, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
+
+ deallocate(kcount, startk, displ, ircnt, dummy)
 
 !---------------------------------------------------------------------------
 ! Convert from 2-d to 3-d cartesian winds.
@@ -2349,30 +2318,27 @@
 !  no longer consistent with the delta p.
 !---------------------------------------------------------------------------
 
-   do i = clb(1), cub(1)
-     do j = clb(2), cub(2)
-       pres_interface(levp1_input) = phalf(1) * 100.0_8
-       do k = lev_input, 1, -1
-         pres_interface(k) = pres_interface(k+1) + dpresptr(i,j,k)
-       enddo
-       psptr(i,j) = pres_interface(1)
-       do k = 1, lev_input
-         presptr(i,j,k) = (pres_interface(k) + pres_interface(k+1)) / 2.0_8
-       enddo
+ do i = clb(1), cub(1)
+   do j = clb(2), cub(2)
+     pres_interface(levp1_input) = phalf(1) * 100.0_8
+     do k = lev_input, 1, -1
+       pres_interface(k) = pres_interface(k+1) + dpresptr(i,j,k)
+     enddo
+     psptr(i,j) = pres_interface(1)
+     do k = 1, lev_input
+       presptr(i,j,k) = (pres_interface(k) + pres_interface(k+1)) / 2.0_8
      enddo
    enddo
+ enddo
 
  deallocate(pres_interface, phalf)
 
  call ESMF_FieldDestroy(dpres_input_grid, rc=rc)
- print*,'got here 2'
 
  end subroutine read_input_atm_netcdf_file_parallel
 
-
 !---------------------------------------------------------------------------
-! Read input grid fv3 atmospheric history files in netcdf format.
-! This includes the tiled and the gaussian netcdf versions.
+! Read input grid fv3 atmospheric tiled history files in netcdf format.
 !
 ! Routine reads tiled files in parallel.  Tile 1 is read by 
 ! localpet 0; tile 2 by localpet 1, etc.  The number of pets
@@ -2716,45 +2682,17 @@
 ! Compute 3-d pressure.
 !---------------------------------------------------------------------------
 
- if (trim(input_type) == "gaussian_netcdf") then
-
-!---------------------------------------------------------------------------
-!  When ingesting gaussian netcdf files, the mid-layer
-!  surface pressure are computed top down from delta-p
-!  The surface pressure in the file is not used.  According
-!  to Jun Wang, after the model's write component interpolates from the
-!  cubed-sphere grid to the gaussian grid, the surface pressure is
-!  no longer consistent with the delta p.
-!---------------------------------------------------------------------------
-
-   do i = clb(1), cub(1)
-     do j = clb(2), cub(2)
-       pres_interface(levp1_input) = phalf(1) * 100.0_8
-       do k = lev_input, 1, -1
-         pres_interface(k) = pres_interface(k+1) + dpresptr(i,j,k)
-       enddo
-       psptr(i,j) = pres_interface(1)
-       do k = 1, lev_input
-         presptr(i,j,k) = (pres_interface(k) + pres_interface(k+1)) / 2.0_8
-       enddo
+ do i = clb(1), cub(1)
+   do j = clb(2), cub(2)
+     pres_interface(1) = psptr(i,j)
+     do k = 2, levp1_input
+       pres_interface(k) = pres_interface(k-1) - dpresptr(i,j,k-1)
+     enddo
+     do k = 1, lev_input
+       presptr(i,j,k) = (pres_interface(k) + pres_interface(k+1)) / 2.0_8
      enddo
    enddo
-
- else   ! tiled history file in netcdf.  
-
-   do i = clb(1), cub(1)
-     do j = clb(2), cub(2)
-       pres_interface(1) = psptr(i,j)
-       do k = 2, levp1_input
-         pres_interface(k) = pres_interface(k-1) - dpresptr(i,j,k-1)
-       enddo
-       do k = 1, lev_input
-         presptr(i,j,k) = (pres_interface(k) + pres_interface(k+1)) / 2.0_8
-       enddo
-     enddo
-   enddo
-
- endif
+ enddo
 
  deallocate(pres_interface, phalf)
 
