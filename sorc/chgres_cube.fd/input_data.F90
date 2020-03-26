@@ -158,7 +158,7 @@
 
  elseif (trim(input_type) == "gaussian_netcdf") then
 
-   call read_input_atm_netcdf_file_parallel(localpet)
+   call read_input_atm_gaussian_netcdf_file(localpet)
 
 !-------------------------------------------------------------------------------
 ! Read the tiled history files in netcdf format.
@@ -166,7 +166,7 @@
 
  elseif (trim(input_type) == "history") then
 
-   call read_input_atm_netcdf_file(localpet)
+   call read_input_atm_tiled_netcdf_file(localpet)
 
 !-------------------------------------------------------------------------------
 ! Read the gaussian history files in nemsio format.
@@ -1895,7 +1895,7 @@
 ! slice.
 !---------------------------------------------------------------------------
 
- subroutine read_input_atm_netcdf_file_parallel(localpet)
+ subroutine read_input_atm_gaussian_netcdf_file(localpet)
 
  implicit none
 
@@ -2335,7 +2335,7 @@
 
  call ESMF_FieldDestroy(dpres_input_grid, rc=rc)
 
- end subroutine read_input_atm_netcdf_file_parallel
+ end subroutine read_input_atm_gaussian_netcdf_file
 
 !---------------------------------------------------------------------------
 ! Read input grid fv3 atmospheric tiled history files in netcdf format.
@@ -2345,7 +2345,7 @@
 ! must be equal to or greater than the number of tiled files.  
 !---------------------------------------------------------------------------
 
- subroutine read_input_atm_netcdf_file(localpet)
+ subroutine read_input_atm_tiled_netcdf_file(localpet)
 
  implicit none
 
@@ -2698,7 +2698,7 @@
 
  call ESMF_FieldDestroy(dpres_input_grid, rc=rc)
 
- end subroutine read_input_atm_netcdf_file
+ end subroutine read_input_atm_tiled_netcdf_file
  
 !---------------------------------------------------------------------------
 ! Read input grid atmospheric fv3gfs grib2 files.
