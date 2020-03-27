@@ -72,7 +72,7 @@ elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
     module use /opt/cray/ari/modulefiles
     module use /opt/modulefiles
     module load modules
-    export PATH=:/gpfs/hps3/emc/global/noscrub/George.Gayno/cmake/cmake-3.16.5/bin:$PATH
+    module load cmake/3.16.2
 
 elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
     # We are on NOAA Venus or Mars
