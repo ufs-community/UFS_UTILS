@@ -592,67 +592,25 @@
  end subroutine read_input_sfc_data
 
 !---------------------------------------------------------------------------
-! Read input atmospheric data from spectral gfs (old sigio format).
-! Used prior to July 19, 2017.
+! Create atmospheric esmf fields.
 !---------------------------------------------------------------------------
 
- subroutine read_input_atm_gfs_sigio_file(localpet)
-
- use sigio_module
-
+ subroutine init_atm_esmf_fields
+ 
  implicit none
 
- integer, intent(in)                   :: localpet
+ integer                                  :: i, rc
 
- character(len=300)                    :: the_file
+ print*,"- INITIALIZE ATMOSPHERIC ESMF FIELDS."
 
- integer(sigio_intkind)                :: iret
- integer                               :: rc, i, j, k
- integer                               :: clb(3), cub(3)
-
- real(esmf_kind_r8)                    :: ak, bk
- real(esmf_kind_r8), allocatable       :: dummy2d(:,:)
- real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:)
- real(esmf_kind_r8), allocatable       :: dummy3d2(:,:,:)
- real(esmf_kind_r8), pointer           :: pptr(:,:,:), psptr(:,:)
- real(esmf_kind_r8), allocatable       :: pi(:,:,:)
-
- type(sigio_head)                      :: sighead
- type(sigio_dbta)                      :: sigdata
-
- the_file = trim(data_dir_input_grid) // "/" // trim(atm_files_input_grid(1))
-
- print*,"- ATMOSPHERIC DATA IN SIGIO FORMAT."
- print*,"- OPEN AND READ: ", trim(the_file)
-
- call sigio_sropen(21, trim(the_file), iret)
- if (iret /= 0) then
-   rc = iret
-   call error_handler("OPENING SPECTRAL GFS SIGIO FILE.", rc)
- endif
- call sigio_srhead(21, sighead, iret)
- if (iret /= 0) then
-   rc = iret
-   call error_handler("READING SPECTRAL GFS SIGIO FILE.", rc)
- endif
-
- lev_input = sighead%levs
- levp1_input = lev_input + 1
-
- if (num_tracers /= sighead%ntrac) then
-   call error_handler("WRONG NUMBER OF TRACERS EXPECTED.", 99)
- endif
-
- if (sighead%idvt == 0 .or. sighead%idvt == 21) then
-   if (trim(tracers_input(1)) /= 'spfh'  .or.  &
-       trim(tracers_input(2)) /= 'o3mr'   .or.  &
-       trim(tracers_input(3)) /= 'clwmr') then 
-     call error_handler("TRACERS SELECTED DO NOT MATCH FILE CONTENTS.", 99)
-   endif
- else
-   print*,'- UNRECOGNIZED IDVT: ', sighead%idvt
-   call error_handler("UNRECOGNIZED IDVT", 99)
- endif
+ print*,"- CALL FieldCreate FOR INPUT GRID 3-D WIND."
+ wind_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1,1/), &
+                                   ungriddedUBound=(/lev_input,3/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
  ps_input_grid = ESMF_FieldCreate(input_grid, &
@@ -716,6 +674,86 @@
                                  ungriddedUBound=(/lev_input/), rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR INPUT GRID PRESSURE."
+ pres_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_input/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+ 
+ end subroutine init_atm_esmf_fields
+
+!---------------------------------------------------------------------------
+! Read input atmospheric data from spectral gfs (old sigio format).
+! Used prior to July 19, 2017.
+!---------------------------------------------------------------------------
+
+ subroutine read_input_atm_gfs_sigio_file(localpet)
+
+ use sigio_module
+
+ implicit none
+
+ integer, intent(in)                   :: localpet
+
+ character(len=300)                    :: the_file
+
+ integer(sigio_intkind)                :: iret
+ integer                               :: rc, i, j, k
+ integer                               :: clb(3), cub(3)
+
+ real(esmf_kind_r8)                    :: ak, bk
+ real(esmf_kind_r8), allocatable       :: dummy2d(:,:)
+ real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:)
+ real(esmf_kind_r8), allocatable       :: dummy3d2(:,:,:)
+ real(esmf_kind_r8), pointer           :: pptr(:,:,:), psptr(:,:)
+ real(esmf_kind_r8), allocatable       :: pi(:,:,:)
+
+ type(sigio_head)                      :: sighead
+ type(sigio_dbta)                      :: sigdata
+
+ the_file = trim(data_dir_input_grid) // "/" // trim(atm_files_input_grid(1))
+
+ print*,"- ATMOSPHERIC DATA IN SIGIO FORMAT."
+ print*,"- OPEN AND READ: ", trim(the_file)
+
+ call sigio_sropen(21, trim(the_file), iret)
+ if (iret /= 0) then
+   rc = iret
+   call error_handler("OPENING SPECTRAL GFS SIGIO FILE.", rc)
+ endif
+ call sigio_srhead(21, sighead, iret)
+ if (iret /= 0) then
+   rc = iret
+   call error_handler("READING SPECTRAL GFS SIGIO FILE.", rc)
+ endif
+
+ lev_input = sighead%levs
+ levp1_input = lev_input + 1
+
+ if (num_tracers /= sighead%ntrac) then
+   call error_handler("WRONG NUMBER OF TRACERS EXPECTED.", 99)
+ endif
+
+ if (sighead%idvt == 0 .or. sighead%idvt == 21) then
+   if (trim(tracers_input(1)) /= 'spfh'  .or.  &
+       trim(tracers_input(2)) /= 'o3mr'   .or.  &
+       trim(tracers_input(3)) /= 'clwmr') then 
+     call error_handler("TRACERS SELECTED DO NOT MATCH FILE CONTENTS.", 99)
+   endif
+ else
+   print*,'- UNRECOGNIZED IDVT: ', sighead%idvt
+   call error_handler("UNRECOGNIZED IDVT", 99)
+ endif
+
+!---------------------------------------------------------------------------
+! Initialize esmf atmospheric fields.
+!---------------------------------------------------------------------------
+
+ call init_atm_esmf_fields
 
  if (localpet == 0) then
    allocate(dummy2d(i_input,j_input))
@@ -831,14 +869,6 @@
 
  print*,"- COMPUTE 3-D PRESSURE."
 
- print*,"- CALL FieldCreate FOR INPUT GRID PRESSURE."
- pres_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-
  print*,"- CALL FieldGet FOR 3-D PRES."
  nullify(pptr)
  call ESMF_FieldGet(pres_input_grid, &
@@ -943,68 +973,11 @@
  call nemsio_getfilehead(gfile, iret=iret, vcoord=vcoord)
  if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
 
- print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
- ps_input_grid = ESMF_FieldCreate(input_grid, &
-                                  typekind=ESMF_TYPEKIND_R8, &
-                                  staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+!---------------------------------------------------------------------------
+! Initialize esmf atmospheric fields.
+!---------------------------------------------------------------------------
 
- print*,"- CALL FieldCreate FOR INPUT GRID TEMPERATURE."
- temp_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- allocate(tracers_input_grid(num_tracers))
-
- do i = 1, num_tracers
-   print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
-   tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldCreate", rc)
- enddo
-
- print*,"- CALL FieldCreate FOR INPUT GRID U."
- u_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID V."
- v_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID DZDT."
- dzdt_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID TERRAIN."
- terrain_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+ call init_atm_esmf_fields
 
  if (localpet == 0) then
    allocate(dummy(i_input*j_input))
@@ -1156,14 +1129,6 @@
 
  print*,"- COMPUTE 3-D PRESSURE."
 
- print*,"- CALL FieldCreate FOR INPUT GRID PRESSURE."
- pres_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-
  print*,"- CALL FieldGet FOR 3-D PRES."
  nullify(pptr)
  call ESMF_FieldGet(pres_input_grid, &
@@ -1261,52 +1226,11 @@
  call nemsio_getfilehead(gfile, iret=iret, vcoord=vcoord)
  if (iret /= 0) call error_handler("READING VERTICAL COORDINATE INFO.", iret)
 
- print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
- ps_input_grid = ESMF_FieldCreate(input_grid, &
-                                  typekind=ESMF_TYPEKIND_R8, &
-                                  staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+!---------------------------------------------------------------------------
+! Initialize esmf atmospheric fields.
+!---------------------------------------------------------------------------
 
- print*,"- CALL FieldCreate FOR INPUT GRID TEMPERATURE."
- temp_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- allocate(tracers_input_grid(num_tracers))
-
- do i = 1, num_tracers
-   print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
-   tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldCreate", rc)
- enddo
-
- print*,"- CALL FieldCreate FOR INPUT GRID U."
- u_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID V."
- v_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+ call init_atm_esmf_fields
 
  print*,"- CALL FieldCreate FOR INPUT DPRES."
  dpres_input_grid = ESMF_FieldCreate(input_grid, &
@@ -1314,22 +1238,6 @@
                                  staggerloc=ESMF_STAGGERLOC_CENTER, &
                                  ungriddedLBound=(/1/), &
                                  ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID DZDT."
- dzdt_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID TERRAIN."
- terrain_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
@@ -1490,15 +1398,6 @@
 
  print*,"- COMPUTE 3-D PRESSURE."
 
- print*,"- CALL FieldCreate FOR INPUT GRID PRESSURE."
- pres_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
  print*,"- CALL FieldGet FOR DELTA PRESSURE."
  nullify(dpresptr)
  call ESMF_FieldGet(dpres_input_grid, &
@@ -1613,41 +1512,11 @@
 
  error = nf90_close(ncid)
 
- print*,"- CALL FieldCreate FOR INPUT GRID U."
- u_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+!---------------------------------------------------------------------------
+! Initialize esmf atmospheric fields.
+!---------------------------------------------------------------------------
 
- print*,"- CALL FieldCreate FOR INPUT GRID V."
- v_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID DZDT."
- dzdt_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID TEMPERATURE."
- temp_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+ call init_atm_esmf_fields
 
  print*,"- CALL FieldCreate FOR INPUT GRID DELTA PRESSURE."
  dpres_input_grid = ESMF_FieldCreate(input_grid, &
@@ -1657,28 +1526,6 @@
                                    ungriddedUBound=(/lev_input/), rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID TERRAIN."
- terrain_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- allocate(tracers_input_grid(num_tracers))
-
- do i = 1, num_tracers
-
-   print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
-   tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldCreate", rc)
-
- enddo
 
  if (localpet < num_tiles_input_grid) then
    allocate(data_one_tile_3d(i_input,j_input,lev_input))
@@ -1830,27 +1677,11 @@
 ! Compute pressures
 !---------------------------------------------------------------------------
 
- print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
- ps_input_grid = ESMF_FieldCreate(input_grid, &
-                                  typekind=ESMF_TYPEKIND_R8, &
-                                  staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
  print*,"- CALL FieldGet FOR SURFACE PRESSURE."
  call ESMF_FieldGet(ps_input_grid, &
                     farrayPtr=psptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID PRESSURE."
- pres_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldGet FOR PRESSURE."
  call ESMF_FieldGet(pres_input_grid, &
@@ -2024,29 +1855,11 @@
   allocate(dummy(0,0))
  endif
 
- allocate(tracers_input_grid(num_tracers))
+!---------------------------------------------------------------------------
+! Initialize esmf atmospheric fields.
+!---------------------------------------------------------------------------
 
- do i = 1, num_tracers
-
-   print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
-   tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldCreate", rc)
-
- enddo
-
- print*,"- CALL FieldCreate FOR INPUT GRID DZDT."
- dzdt_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+ call init_atm_esmf_fields
 
  print*,"- CALL FieldCreate FOR INPUT GRID DELTA PRESSURE."
  dpres_input_grid = ESMF_FieldCreate(input_grid, &
@@ -2054,47 +1867,6 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID TEMPERATURE."
- temp_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID U."
- u_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID V."
- v_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
- ps_input_grid = ESMF_FieldCreate(input_grid, &
-                                  typekind=ESMF_TYPEKIND_R8, &
-                                  staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID TERRAIN."
- terrain_input_grid = ESMF_FieldCreate(input_grid, &
-                                  typekind=ESMF_TYPEKIND_R8, &
-                                  staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
@@ -2275,15 +2047,6 @@
 ! Compute pressure.
 !---------------------------------------------------------------------------
 
- print*,"- CALL FieldCreate FOR INPUT GRID PRESSURE."
- pres_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
  print*,"- CALL FieldGet FOR PRESSURE."
  call ESMF_FieldGet(pres_input_grid, &
                     computationalLBound=clb, &
@@ -2410,29 +2173,11 @@
  print*,'- FILE HAS ', num_tracers_file, ' TRACERS.'
  print*,'- WILL PROCESS ', num_tracers, ' TRACERS.'
 
- allocate(tracers_input_grid(num_tracers))
+!---------------------------------------------------------------------------
+! Initialize esmf atmospheric fields.
+!---------------------------------------------------------------------------
 
- do i = 1, num_tracers
-
-   print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
-   tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldCreate", rc)
-
- enddo
-
- print*,"- CALL FieldCreate FOR INPUT GRID DZDT."
- dzdt_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+ call init_atm_esmf_fields
 
  print*,"- CALL FieldCreate FOR INPUT GRID DELTA PRESSURE."
  dpres_input_grid = ESMF_FieldCreate(input_grid, &
@@ -2440,47 +2185,6 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID TEMPERATURE."
- temp_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID U."
- u_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID V."
- v_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
- ps_input_grid = ESMF_FieldCreate(input_grid, &
-                                  typekind=ESMF_TYPEKIND_R8, &
-                                  staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR INPUT GRID TERRAIN."
- terrain_input_grid = ESMF_FieldCreate(input_grid, &
-                                  typekind=ESMF_TYPEKIND_R8, &
-                                  staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
@@ -2647,15 +2351,6 @@
 !---------------------------------------------------------------------------
 ! Compute pressure.
 !---------------------------------------------------------------------------
-
- print*,"- CALL FieldCreate FOR INPUT GRID PRESSURE."
- pres_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldGet FOR PRESSURE."
  call ESMF_FieldGet(pres_input_grid, &
@@ -2863,69 +2558,11 @@
 
  if (localpet==0) print*, "- NUMBER OF TRACERS IN FILE = ", num_tracers
 
- if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
- ps_input_grid = ESMF_FieldCreate(input_grid, &
-                                  typekind=ESMF_TYPEKIND_R8, &
-                                  staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+!---------------------------------------------------------------------------
+! Initialize esmf atmospheric fields.
+!---------------------------------------------------------------------------
 
- if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID TEMPERATURE."
- temp_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- allocate(tracers_input_grid(num_tracers))
-
- do i = 1,num_tracers
-   if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
-
-   tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldCreate", rc)
- enddo
-
- if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID U."
- u_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID V."
- v_input_grid = ESMF_FieldCreate(input_grid, &
-                                 typekind=ESMF_TYPEKIND_R8, &
-                                 staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                 ungriddedLBound=(/1/), &
-                                 ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-    
- if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID DZDT."
- dzdt_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID TERRAIN."
- terrain_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+ call init_atm_esmf_fields
 
  if (localpet == 0) then
    allocate(dummy2d(i_input,j_input))
@@ -3118,13 +2755,6 @@
  call ESMF_FieldScatter(terrain_input_grid, dummy2d_8, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
- 
- if (localpet == 0) print*,"- CALL FieldCreate FOR INPUT GRID PRESSURE."
- pres_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_input/), rc=rc)
 
  deallocate(dummy2d, dummy3d, dummy2d_8)
  
@@ -5982,15 +5612,6 @@ if (localpet == 0) then
  real(esmf_kind_r8), pointer     :: vptr(:,:,:)
  real(esmf_kind_r8), pointer     :: latptr(:,:)
  real(esmf_kind_r8), pointer     :: lonptr(:,:)
-
- print*,"- CALL FieldCreate FOR INPUT GRID 3-D WIND."
- wind_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1,1/), &
-                                   ungriddedUBound=(/lev_input,3/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldGet FOR 3-D WIND."
  call ESMF_FieldGet(wind_input_grid, &

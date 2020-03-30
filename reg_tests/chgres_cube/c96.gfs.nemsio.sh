@@ -18,7 +18,7 @@ export ATM_FILES_INPUT=gfnanl.gdas.2017071700
 export SFC_FILES_INPUT=sfnanl.gdas.2017071700
 export NST_FILES_INPUT=nsnanl.gdas.2017071700
 export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
-export INPUT_TYPE="gfs_nemsio"
+export INPUT_TYPE="gfs_gaussian_nemsio"
 
 # dont start/end with double quotes.
 export TRACERS_TARGET='"sphum","liq_wat","o3mr"'
