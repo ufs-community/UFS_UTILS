@@ -473,7 +473,7 @@
 !--- define global attributes
    if (trim(input_type) == "gaussian_nemsio") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
-   elseif (trim(input_type) == "gfs_nemsio") then
+   elseif (trim(input_type) == "gfs_gaussian_nemsio") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS GAUSSIAN NEMSIO FILE')
    elseif (trim(input_type) == "gfs_spectral") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS SIGIO FILE')
@@ -1196,7 +1196,7 @@
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
    elseif (trim(input_type) == "gaussian_netcdf") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NETCDF FILE')
-   elseif (trim(input_type) == "gfs_nemsio") then
+   elseif (trim(input_type) == "gfs_gaussian_nemsio") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS GAUSSIAN NEMSIO FILE')
    elseif (trim(input_type) == "gfs_spectral") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS SIGIO FILE')

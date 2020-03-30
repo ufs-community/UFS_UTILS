@@ -166,7 +166,7 @@
 
  elseif (trim(input_type) == "history") then
 
-   call read_input_atm_tiled_netcdf_file(localpet)
+   call read_input_atm_tiled_history_file(localpet)
 
 !-------------------------------------------------------------------------------
 ! Read the gaussian history files in nemsio format.
@@ -174,15 +174,15 @@
 
  elseif (trim(input_type) == "gaussian_nemsio") then  ! fv3gfs gaussian nemsio
 
-   call read_input_atm_nemsio_file(localpet)
+   call read_input_atm_gaussian_nemsio_file(localpet)
 
 !-------------------------------------------------------------------------------
 ! Read the spectral gfs gaussian history files in nemsio format.
 !-------------------------------------------------------------------------------
 
- elseif (trim(input_type) == "gfs_nemsio") then ! spectral gfs gaussian 
-                                                ! nemsio.
-   call read_input_atm_gfs_nemsio_file(localpet)
+ elseif (trim(input_type) == "gfs_gaussian_nemsio") then ! spectral gfs gaussian 
+                                                         ! nemsio.
+   call read_input_atm_gfs_gaussian_nemsio_file(localpet)
 
 !-------------------------------------------------------------------------------
 ! Read the spectral gfs gaussian history files in sigio format.
@@ -349,7 +349,7 @@
 ! spectral GFS nemsio file.
 !--------------------------------------------------------------------------
 
- if (trim(input_type) == "gaussian_nemsio" .or. trim(input_type) == "gfs_nemsio") then
+ if (trim(input_type) == "gaussian_nemsio" .or. trim(input_type) == "gfs_gaussian_nemsio") then
 
    call read_input_nst_nemsio_file(localpet)
 
@@ -567,7 +567,7 @@
 ! Read the spectral gfs gaussian history files in nemsio format.
 !-------------------------------------------------------------------------------
 
- elseif (trim(input_type) == "gfs_nemsio") then
+ elseif (trim(input_type) == "gfs_gaussian_nemsio") then
 
    call read_input_sfc_gfs_nemsio_file(localpet)
 
@@ -900,7 +900,7 @@
 ! nemsio format. Starting July 19, 2017).  
 !---------------------------------------------------------------------------
 
- subroutine read_input_atm_gfs_nemsio_file(localpet)
+ subroutine read_input_atm_gfs_gaussian_nemsio_file(localpet)
 
  implicit none
 
@@ -1212,13 +1212,13 @@
 
  deallocate(pi)
 
- end subroutine read_input_atm_gfs_nemsio_file
+ end subroutine read_input_atm_gfs_gaussian_nemsio_file
 
 !---------------------------------------------------------------------------
 ! Read input grid atmospheric fv3 gaussian nemsio files.
 !---------------------------------------------------------------------------
 
- subroutine read_input_atm_nemsio_file(localpet)
+ subroutine read_input_atm_gaussian_nemsio_file(localpet)
 
  implicit none
 
@@ -1557,7 +1557,7 @@
 
  call ESMF_FieldDestroy(dpres_input_grid, rc=rc)
 
- end subroutine read_input_atm_nemsio_file
+ end subroutine read_input_atm_gaussian_nemsio_file
 
 !---------------------------------------------------------------------------
 ! Read input grid fv3 atmospheric data 'warm' restart files.
@@ -2346,7 +2346,7 @@
 ! must be equal to or greater than the number of tiled files.  
 !---------------------------------------------------------------------------
 
- subroutine read_input_atm_tiled_netcdf_file(localpet)
+ subroutine read_input_atm_tiled_history_file(localpet)
 
  implicit none
 
@@ -2699,7 +2699,7 @@
 
  call ESMF_FieldDestroy(dpres_input_grid, rc=rc)
 
- end subroutine read_input_atm_tiled_netcdf_file
+ end subroutine read_input_atm_tiled_history_file
  
 !---------------------------------------------------------------------------
 ! Read input grid atmospheric fv3gfs grib2 files.
@@ -5677,8 +5677,8 @@ if (localpet == 0) then
 
  type(nemsio_gfile)                     :: gfile
 
- if (trim(input_type) == "gfs_nemsio") then ! spectral gfs nemsio in
-                                            ! separate file.
+ if (trim(input_type) == "gfs_gaussian_nemsio") then ! spectral gfs nemsio in
+                                                     ! separate file.
    the_file = trim(data_dir_input_grid) // "/" // trim(nst_files_input_grid)
  else
    the_file = trim(data_dir_input_grid) // "/" // trim(sfc_files_input_grid(1))

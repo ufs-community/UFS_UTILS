@@ -54,8 +54,8 @@
 !                                     (netcdf).
 !                                 (3) "gaussian_nemsio" for fv3 gaussian
 !                                     nemsio files;
-!                                 (4) "gfs_nemsio" for spectral gfs gaussian
-!                                     nemsio files
+!                                 (4) "gfs_gaussian_nemsio" for spectral gfs
+!                                     gaussian nemsio files
 !                                 (5) "gfs_spectral" for spectral gfs
 !                                     gfs sigio/sfcio files.
 !                                 (6) "gaussian_netcdf" for fv3 gaussian
@@ -69,7 +69,7 @@
 !                                 "restart" or "history" input type.
 ! mosaic_file_target_grid         Target grid mosaic file
 ! nst_files_input_grid            File name of input nst data.  Only
-!                                 used for input_type "gfs_nemsio".
+!                                 used for input_type "gfs_gaussian_nemsio".
 ! num_tracers                     Number of atmospheric tracers to
 !                                 be processed.
 ! orog_dir_input_grid             Directory containing the input grid
@@ -127,7 +127,7 @@
  character(len=500), public      :: vcoord_file_target_grid = "NULL"
  character(len=6),   public      :: cres_target_grid = "NULL"
  character(len=500), public      :: atm_weight_file="NULL"
- character(len=20),  public      :: input_type="restart"
+ character(len=25),  public      :: input_type="restart"
  character(len=20), public       :: phys_suite="GFS"      !Default to gfs physics suite
 
  integer, parameter, public      :: max_tracers=100
@@ -275,7 +275,7 @@
      print*,'- INPUT DATA FROM FV3 TILED HISTORY FILES.'
    case ("gaussian_nemsio")
      print*,'- INPUT DATA FROM FV3 GAUSSIAN NEMSIO FILE.'
-   case ("gfs_nemsio")
+   case ("gfs_gaussian_nemsio")
      print*,'- INPUT DATA FROM SPECTRAL GFS GAUSSIAN NEMSIO FILE.'
    case ("gfs_spectral")
      print*,'- INPUT DATA FROM SPECTRAL GFS SIGIO/SFCIO FILE.'

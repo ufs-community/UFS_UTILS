@@ -66,10 +66,10 @@ HALO_BLEND=${HALO_BLEND:-0}
 #        'restart' for tiled fv3 warm restart files.  
 #        'history' for tiled fv3 history files.
 #        'gaussian_nemsio' for fv3 gaussian nemsio files.
-#        'gfs_nemsio' for spectral gfs nemsio files.
-#        'gfs_spectral' for spectral gfs sigio/sfcio files.
 #        'gaussian_netcdf' for fv3 gaussian netcdf files.
 #        'grib2' for fv3gfs grib2 files.
+#        'gfs_gaussain_nemsio' for spectral gfs nemsio files.
+#        'gfs_spectral' for spectral gfs sigio/sfcio files.
 #
 # MOSAIC_FILE_INPUT_GRID - Path/Name of mosaic file for input grid.  Only
 #                          used for 'history' and 'restart' INPUT_TYPE.
@@ -117,7 +117,7 @@ COMIN=${COMIN:-$PWD}
 # SFC_FILES_INPUT - Input surface data file(s).  Not used for 'grib2'
 #                   INPUT_TYPE.
 #
-# NST_FILES_INPUT - Input nst data file.  'gfs_nemsio' INPUT_TYPE only.
+# NST_FILES_INPUT - Input nst data file.  'gfs_gaussian_nemsio' INPUT_TYPE only.
 #
 # GRIB2_FILE_INPUT - Input gfs grib2 data file.  Only used for 'grib2'
 #                    INPUT_TYPE.
