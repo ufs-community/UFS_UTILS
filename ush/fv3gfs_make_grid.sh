@@ -120,6 +120,20 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+if [ $gtype = regional2 ]; then
+
+  $APRUN $exec_dir/global_equiv_resol regional_grid.nc
+  if [ $? -ne 0 ]; then
+    set +x
+    echo
+    echo "FATAL ERROR running global_equiv_resol."
+    echo
+    set -x
+    exit 2
+  fi
+fi
+
+
 #---------------------------------------------------------------------------------------
 # Create mosaic file.
 #
@@ -161,6 +175,8 @@ elif [ $gtype = regional ];then
 
 elif [ $gtype = regional2 ]; then
 
+  res=$( ncdump -h regional_grid.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
+  res=${res//$'\n'/}
   mv regional_grid.nc C${res}_grid.tile7.nc
   $APRUN $executable --num_tiles 1 --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile7.nc
 

@@ -98,7 +98,7 @@ export exec_dir=$home_dir/exec
 export topo=$home_dir/fix/fix_orog
 
 rm -fr $TMPDIR
-mkdir -p $out_dir $TMPDIR
+mkdir -p $TMPDIR
 cd $TMPDIR ||exit 8
 
 #----------------------------------------------------------------------------------------
@@ -121,7 +121,14 @@ elif [ $res -eq 1152 ]; then
   cd4=0.15;  max_slope=0.16; n_del2_weak=20; peak_fac=1.0  
 elif [ $res -eq 3072 ]; then 
   cd4=0.15;  max_slope=0.30; n_del2_weak=24; peak_fac=1.0  
+elif [ $res -eq -999 ]; then 
+ set +x
+ echo "regional grid filter parameters will be computed later?"
+ set -x
+# use the c768 values for now.
+  cd4=0.15;  max_slope=0.12; n_del2_weak=16; peak_fac=1.0  
 else
+ set +x
  echo "grid C$res not supported, exit"
  exit 2
 fi
@@ -153,6 +160,8 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
   grid_dir=$TMPDIR/$name/grid
   orog_dir=$TMPDIR/$name/orog
+  out_dir=$out_dir/C${res}
+  mkdir -p $out_dir
 
   if [ $gtype = nest ]; then
     filter_dir=$orog_dir   # nested grid topography will be filtered online
@@ -312,6 +321,8 @@ elif [ $gtype = regional ]; then
   tile=7
   rn=$( echo "$stretch_fac * 10" | bc | cut -c1-2 )
   name=C${res}r${rn}n${refine_ratio}_${title}
+  out_dir=$out_dir/C${res}
+  mkdir -p $out_dir
   grid_dir=$TMPDIR/${name}/grid
   orog_dir=$TMPDIR/$name/orog
   filter_dir=$orog_dir   # nested grid topography will be filtered online
@@ -427,7 +438,7 @@ elif [ $gtype = regional2 ]; then
 
   halop1=$(( halo + 1 ))
   tile=7
-  name=C${res}_${title}
+  name=regional
   grid_dir=$TMPDIR/${name}/grid
   orog_dir=$TMPDIR/${name}/orog
   filter_dir=$TMPDIR/${name}/filter_topo
@@ -444,6 +455,11 @@ elif [ $gtype = regional2 ]; then
   if [ $err != 0 ]; then
     exit $err
   fi
+
+  res=$( ncdump -h ${grid_dir}/C*_grid.tile7.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
+  res=${res//$'\n'/}
+  out_dir=$out_dir/C${res}
+  mkdir -p $out_dir
 
   echo "Begin orography generation at `date`"
  

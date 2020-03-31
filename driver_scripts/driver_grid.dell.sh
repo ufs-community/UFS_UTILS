@@ -64,14 +64,17 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export res=96
-export gtype=regional2  # 'uniform', 'stretch', 'nest', or 'regional'
+export gtype=regional  # 'uniform', 'stretch', 'nest', or 'regional'
 
-if [ $gtype = stretch ]; then
+if [ $gtype = uniform ]; then
+  export res=96
+elif [ $gtype = stretch ]; then
+  export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile
   export target_lat=35.5       # Center latitude of the highest resolution tile
 elif [ $gtype = nest ] || [ $gtype = regional ]; then
+  export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile
   export target_lat=35.5       # Center latitude of the highest resolution tile
@@ -82,6 +85,7 @@ elif [ $gtype = nest ] || [ $gtype = regional ]; then
   export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
   export halo=3
 elif [ $gtype = regional2 ] ; then
+  export res=-999              # equivalent res is computed.
   export target_lon=-97.5      # Center longitude of grid
   export target_lat=35.5       # Center latitude of grid
   export idim=301              # Dimension of grid in 'i' direction
@@ -108,7 +112,7 @@ fi
 
 export home_dir=$LS_SUBCWD/..
 export TMPDIR=/gpfs/dell1/stmp/$LOGNAME/fv3_grid.$gtype
-export out_dir=/gpfs/dell1/stmp/$LOGNAME/C${res}
+export out_dir=/gpfs/dell1/stmp/$LOGNAME/my_grids
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
