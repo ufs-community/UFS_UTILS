@@ -109,6 +109,10 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
     fi
     target=gaea
     module purge
+elif [[ "$(hostname)" =~ "Orion" ]]; then
+    target="orion"
+    module purge
+    MOD_PATH=/apps/contrib/NCEPLIBS/orion/modulefiles
 elif [[ "$(hostname)" =~ "odin" ]]; then
     target="odin"
 else
