@@ -61,6 +61,7 @@ rm -fr $OUTDIR
 # Initialize C96 using FV3 warm restart files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.restart.sh)
 
@@ -68,6 +69,7 @@ TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 # Initialize C192 using FV3 tiled history files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c192.fv3.history \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c192.fv3.history.sh)
 
@@ -75,6 +77,7 @@ TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 # Initialize C96 using FV3 gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.nemsio \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./c96.fv3.nemsio.sh)
 
@@ -82,7 +85,7 @@ TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 # Initialize C96 using spectral GFS sigio/sfcio files.
 #-----------------------------------------------------------------------------
 
-export OMP_NUM_THREADS=6
+export OMP_NUM_THREADS=6  # needs to match cpus-per-task
 TEST4=$(sbatch --parsable --ntasks-per-node=3 --cpus-per-task=6 --nodes=2 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./c96.gfs.sigio.sh)
 
@@ -90,6 +93,7 @@ TEST4=$(sbatch --parsable --ntasks-per-node=3 --cpus-per-task=6 --nodes=2 -t 0:1
 # Initialize C96 using spectral GFS gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST5=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.nemsio \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST4 ./c96.gfs.nemsio.sh)
 
@@ -97,6 +101,7 @@ TEST5=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 # Initialize regional C96 using FV3 gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.regional \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST5 ./c96.regional.sh)
 
@@ -104,6 +109,7 @@ TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 # Initialize global C192 using GFS GRIB2 files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST7=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.gfs.grib2 \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST6 ./c192.gfs.grib2.sh)
 
