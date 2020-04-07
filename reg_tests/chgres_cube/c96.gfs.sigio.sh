@@ -24,7 +24,7 @@ export INPUT_TYPE="gfs_spectral"
 export TRACERS_TARGET='"sphum","o3mr","liq_wat"'
 export TRACERS_INPUT='"spfh","o3mr","clwmr"'
 export CDATE=2017071700
-export OMP_NUM_THREADS_CY=6
+export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
 
 echo "Starting at: " `date`
 
@@ -32,6 +32,7 @@ ${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
+  set +x
   echo "<<< C96 GFS SIGIO TEST FAILED. <<<"
   exit $iret
 fi

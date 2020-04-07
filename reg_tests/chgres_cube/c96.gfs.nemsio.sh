@@ -24,7 +24,7 @@ export INPUT_TYPE="gfs_gaussian_nemsio"
 export TRACERS_TARGET='"sphum","liq_wat","o3mr"'
 export TRACERS_INPUT='"spfh","clwmr","o3mr"'
 export CDATE=2017071700
-export OMP_NUM_THREADS_CY=1
+export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
 
 #-----------------------------------------------------------------------------
 # Invoke chgres program.
@@ -36,6 +36,7 @@ ${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
+  set +x
   echo "<<< C96 GFS GAUSSIAN NEMSIO TEST FAILED. <<<"
   exit $iret
 fi
