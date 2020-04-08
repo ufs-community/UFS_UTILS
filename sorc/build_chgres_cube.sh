@@ -37,7 +37,7 @@ mkdir ../build
 cd ../build
 echo $ESMFMKFILE
 if [[ $target == "wcoss_cray" ]]; then
-  /u/Mark.Potts/bin/cmake .. -DCMAKE_INSTALL_PREFIX=../
+  cmake .. -DCMAKE_INSTALL_PREFIX=../
 else
   cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_INSTALL_PREFIX=../
 fi
