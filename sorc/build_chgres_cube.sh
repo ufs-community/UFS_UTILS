@@ -35,7 +35,6 @@ fi
 rm -fr ../build
 mkdir ../build
 cd ../build
-echo $ESMFMKFILE
 if [[ $target == "wcoss_cray" ]]; then
   cmake .. -DCMAKE_INSTALL_PREFIX=../
 else
