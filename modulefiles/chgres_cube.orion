@@ -1,0 +1,26 @@
+#%Module#####################################################
+## Build module for Orion
+#############################################################
+
+module load intel/2020
+module load impi/2020
+
+module use -a $MOD_PATH
+module load w3nco/2.1.0
+module load nemsio/2.3.0
+module load bacio/2.2.0
+module load sp/2.0.3
+module load sfcio/1.2.0
+module load sigio/2.2.0
+
+module use -a /apps/contrib/NCEPLIBS/lib/modulefiles
+module load esmflocal/8_0_0r
+# netcdf used by esmf.
+export NETCDF=/apps/contrib/NCEPLIBS/l.0110.2020/lib/EXTERNAL/LOCAL_EXTERN/netcdf4.4.4.1
+
+export WGRIB2_ROOT="/work/noaa/da/ggayno/save/wgrib2"
+
+export FCOMP=mpiifort
+export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
+# for debugging
+#export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"
