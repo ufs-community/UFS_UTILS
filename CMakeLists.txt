@@ -79,4 +79,8 @@ if(NOT TARGET sp_d)
   find_package(sp REQUIRED)
 endif()
 
+if(NOT TARGET ip_d)
+  find_package(ip REQUIRED)
+endif()
+
 add_subdirectory(sorc)
