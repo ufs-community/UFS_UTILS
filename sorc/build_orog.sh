@@ -28,39 +28,14 @@ fi
 
 cd ./orog.fd
 
-if [ $target = wcoss_cray ]; then
- export LIBSM="${BACIO_LIB4} ${IP_LIBd} ${W3NCO_LIBd} ${SP_LIBd}"
- export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl"
-elif [ $target = wcoss_dell_p3 ]; then
- INCS="${NETCDF_INCLUDE}"
- export LIBSM="${BACIO_LIB4} ${W3NCO_LIBd} ${IP_LIBd} ${SP_LIBd} ${NETCDF_LDFLAGS}"
- export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl ${INCS}"
-elif [ $target = wcoss ]; then
- INCS="${NETCDF_INCLUDE}"
- export LIBSM="${BACIO_LIB4} ${W3NCO_LIBd} ${IP_LIBd} ${SP_LIBd} ${NETCDF_LDFLAGS}"
- export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl ${INCS}"
-elif [ $target = jet ]; then
- INCS="-I${NETCDF}/include"
- export LIBSM="${BACIO_LIB4} ${W3NCO_LIBd} ${IP_LIBd} ${SP_LIBd} -L${NETCDF}/lib -lnetcdff -lnetcdf"
- export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl ${INCS}"
-elif [ $target = hera ]; then
- INCS="-I${NETCDF}/include"
- export LIBSM="${BACIO_LIB4} ${W3NCO_LIBd} ${IP_LIBd} ${SP_LIBd} -L${NETCDF}/lib -lnetcdff -lnetcdf"
- export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl ${INCS}"
-else
- echo machine $target not found
- exit 1
-fi
+rm -fr build
+mkdir build
+cd build
 
-export FCMP=${FCMP:-ifort}
-export FCMP95=$FCMP
+cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_INSTALL_PREFIX=../../..
 
-export LDFLAGSM="-qopenmp -auto"
-export OMPFLAGM="-qopenmp -auto"
-
-make -f Makefile clobber
-make -f Makefile
-make -f Makefile install
-make -f Makefile clobber
+make clean
+make VERBOSE=1
+make install
 
 exit
