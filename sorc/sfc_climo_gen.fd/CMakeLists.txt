@@ -30,6 +30,6 @@ target_link_libraries(
   ${exe_name}
   esmf
   MPI::MPI_Fortran
-  ${NETCDF_LIBRARIES})
+  NetCDF::NetCDF_Fortran)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION exec)

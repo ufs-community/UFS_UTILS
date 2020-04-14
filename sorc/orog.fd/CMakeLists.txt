@@ -26,7 +26,7 @@ target_link_libraries(
   w3nco_d
   ip_d
   sp_d
-  ${NETCDF_LIBRARIES})
+  NetCDF::NetCDF_Fortran)
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
 endif()
