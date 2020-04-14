@@ -19,7 +19,7 @@ endif()
 set(exe_name orog.x)
 add_executable(${exe_name} ${fortran_src})
 target_include_directories(
-  ${exe_name} PRIVATE ${NETCDF_INCLUDE_DIRS})
+  ${exe_name} PRIVATE)
 target_link_libraries(
   ${exe_name}
   bacio_4

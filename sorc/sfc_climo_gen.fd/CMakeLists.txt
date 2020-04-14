@@ -25,7 +25,7 @@ endif()
 set(exe_name sfc_climo_gen.exe)
 add_executable(${exe_name} ${fortran_src})
 target_include_directories(
-  ${exe_name} PRIVATE ${ESMF_INC} ${NETCDF_INCLUDES})
+  ${exe_name} PRIVATE ${ESMF_INC})
 target_link_libraries(
   ${exe_name}
   esmf

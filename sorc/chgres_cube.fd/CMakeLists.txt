@@ -28,7 +28,7 @@ endif()
 set(exe_name chgres_cube.exe)
 add_executable(${exe_name} ${fortran_src})
 target_include_directories(
-  ${exe_name} PRIVATE ${ESMF_INC} ${WGRIB2_INCLUDES} ${NETCDF_INCLUDE_DIRS})
+  ${exe_name} PRIVATE ${ESMF_INC} ${WGRIB2_INCLUDES})
 target_link_libraries(
   ${exe_name}
   nemsio
