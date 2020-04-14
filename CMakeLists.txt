@@ -5,7 +5,7 @@ file(STRINGS "VERSION" pVersion)
 project(
   ufs_util
   VERSION ${pVersion}
-  LANGUAGES Fortran)
+  LANGUAGES C Fortran)
 # LANGUAGES C CXX Fortran)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
 
@@ -20,6 +20,10 @@ endif()
 
 if(NOT CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|GNU|Clang|AppleClang)$")
   message(WARNING "Compiler not officially supported: ${CMAKE_Fortran_COMPILER_ID}")
+endif()
+
+if(NOT CMAKE_C_COMPILER_ID MATCHES "^(Intel|GNU)$")
+  message(WARNING "Compiler not officially supported: ${CMAKE_C_COMPILER_ID}")
 endif()
 
 if(POLICY CMP0054)

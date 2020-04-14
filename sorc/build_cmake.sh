@@ -38,7 +38,7 @@ cd ../build
 if [[ $target == "wcoss_cray" ]]; then
   cmake .. -DCMAKE_INSTALL_PREFIX=../
 else
-  cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_INSTALL_PREFIX=../
+  cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc -DCMAKE_INSTALL_PREFIX=../
 fi
 
 make -j 8 VERBOSE=1
