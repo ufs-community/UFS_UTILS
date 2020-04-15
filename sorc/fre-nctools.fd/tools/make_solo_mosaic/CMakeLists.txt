@@ -27,9 +27,9 @@ endif()
 set(exe_name make_solo_mosaic)
 add_executable(${exe_name} ${c_src})
 target_include_directories(
-  ${exe_name} PRIVATE ${NETCDF_INCLUDE_DIRS})
+  ${exe_name} PRIVATE)
 target_link_libraries(
   ${exe_name}
-  ${NETCDF_LIBRARIES})
+  NetCDF::NetCDF_C)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION exec)
