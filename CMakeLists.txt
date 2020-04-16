@@ -48,6 +48,10 @@ endif()
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
 
+if(NOT TARGET gfsio_4)
+  find_package(gfsio REQUIRED)
+endif()
+
 if(NOT TARGET sfcio_4)
   find_package(sfcio REQUIRED)
 endif()
@@ -56,12 +60,20 @@ if(NOT TARGET w3nco_d)
   find_package(w3nco REQUIRED)
 endif()
 
+if(NOT TARGET landsfcutil_d)
+  find_package(landsfcutil REQUIRED)
+endif()
+
 if(NOT TARGET bacio_4)
   find_package(bacio REQUIRED)
 endif()
 
 if(NOT TARGET nemsio)
   find_package(nemsio REQUIRED)
+endif()
+
+if(NOT TARGET nemsiogfs)
+  find_package(nemsiogfs REQUIRED)
 endif()
 
 if(NOT TARGET sigio_4)
@@ -74,6 +86,10 @@ endif()
 
 if(NOT TARGET ip_d)
   find_package(ip REQUIRED)
+endif()
+
+if(NOT TARGET w3emc_d)
+  find_package(w3emc REQUIRED)
 endif()
 
 add_subdirectory(sorc)
