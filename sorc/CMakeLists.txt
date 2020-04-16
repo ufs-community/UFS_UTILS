@@ -1,3 +1,4 @@
+add_subdirectory(global_cycle.fd)
 add_subdirectory(nemsio_read.fd)
 add_subdirectory(nemsio_get.fd)
 add_subdirectory(nemsio_chgdate.fd)
