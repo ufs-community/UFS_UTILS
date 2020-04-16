@@ -1,3 +1,4 @@
+add_subdirectory(nst_tf_chg.fd)
 add_subdirectory(global_cycle.fd)
 add_subdirectory(nemsio_read.fd)
 add_subdirectory(nemsio_get.fd)
