@@ -14,9 +14,7 @@ module load ip/3.0.1
 module load sfcio/1.1.0
 module load sigio/2.1.0
 
-export NCEPLIBS=/scratch1/NCEPDEV/global/gwv/l819/lib
-module use -a $NCEPLIBS/modulefiles
-module load esmflocal/8_0_48b.netcdf47
-export NETCDF="/apps/netcdf/4.7.0/intel/18.0.5.274"
+module load netcdf_parallel/4.7.4
+module load esmf/8.0.0_ParallelNetCDF
 
 export WGRIB2_ROOT="/scratch1/NCEPDEV/da/George.Gayno/noscrub/wgrib2"
