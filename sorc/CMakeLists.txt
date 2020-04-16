@@ -1,3 +1,7 @@
+add_subdirectory(nemsio_read.fd)
+add_subdirectory(nemsio_get.fd)
+add_subdirectory(nemsio_chgdate.fd)
+add_subdirectory(mkgfsnemsioctl.fd)
 add_subdirectory(fre-nctools.fd)
 add_subdirectory(chgres_cube.fd)
 add_subdirectory(orog.fd)
