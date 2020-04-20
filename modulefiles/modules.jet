@@ -19,6 +19,7 @@ module load nemsio/v2.2.3
 module load nemsiogfs/v2.0.1
 module load gfsio/v1.1.0
 module load landsfcutil/v2.1.0
+module load g2/v3.1.0
 
 # Use DTCs version of esmf v8.  POC Dom H.
 module use -a /lfs3/projects/hfv3gfs/GMTB/modulefiles/intel-18.0.5.274
