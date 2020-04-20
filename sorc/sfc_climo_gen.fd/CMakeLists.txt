@@ -22,7 +22,7 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   )
 endif()
 
-set(exe_name sfc_climo_gen.exe)
+set(exe_name sfc_climo_gen)
 add_executable(${exe_name} ${fortran_src})
 target_include_directories(
   ${exe_name} PRIVATE ${ESMF_INC})
