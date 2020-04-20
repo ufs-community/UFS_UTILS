@@ -35,6 +35,10 @@ endif()
 
 option(OPENMP "use OpenMP threading" ON)
 
+find_package(PNG REQUIRED)
+find_package(ZLIB REQUIRED)
+find_package(Jasper REQUIRED)
+
 find_package(NetCDF REQUIRED C Fortran)
 #unset(CMAKE_C_COMPILER_LOADED)
 #unset(CMAKE_CXX_COMPILER_LOADED)
@@ -90,6 +94,10 @@ endif()
 
 if(NOT TARGET w3emc_d)
   find_package(w3emc REQUIRED)
+endif()
+
+if(NOT TARGET g2_d)
+  find_package(g2 REQUIRED)
 endif()
 
 add_subdirectory(sorc)
