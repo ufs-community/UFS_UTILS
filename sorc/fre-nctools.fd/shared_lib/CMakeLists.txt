@@ -11,27 +11,21 @@ set(c_src
     read_mosaic.c
     tool_util.c)
 
-add_definitions(-Duse_netCDF)
-
 if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_C_FLAGS "-traceback")
   set(CMAKE_C_FLAGS_RELEASE "-O2")
-  set(CMAKE_C_FLAGS_DEBUG
-      "-O0"
-  )
+  set(CMAKE_C_FLAGS_DEBUG "-O0")
 elseif(CMAKE_C_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   set(CMAKE_C_FLAGS " ")
   set(CMAKE_C_FLAGS_RELEASE " ")
-  set(CMAKE_C_FLAGS_DEBUG " "
-  )
+  set(CMAKE_C_FLAGS_DEBUG " ")
 endif()
 
-set(lib_name shared_all)
-add_library(${lib_name} STATIC ${c_src})
-target_include_directories(
-  ${lib_name} PRIVATE)
-target_link_libraries(
-  ${lib_name}
-  NetCDF::NetCDF_C)
+add_library(shared_all STATIC ${c_src})
+target_compile_definitions(shared_all PRIVATE use_netCDF)
 
-install(TARGETS ${lib_name} RUNTIME DESTINATION ./)
+target_include_directories(shared_all PUBLIC ${CURRENT_SOURCE_DIR})
+
+target_link_libraries(shared_all NetCDF::NetCDF_C)
+
+install(TARGETS shared_all RUNTIME DESTINATION lib)
