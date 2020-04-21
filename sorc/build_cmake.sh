@@ -41,6 +41,6 @@ else
   cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc -DCMAKE_INSTALL_PREFIX=../
 fi
 
-make -j 8 VERBOSE=1
+make VERBOSE=1
 make install
 exit

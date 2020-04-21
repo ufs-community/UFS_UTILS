@@ -1,11 +1,17 @@
 set(c_src
-    make_solo_mosaic.c
-    get_contact.c
-    )
+    affinity.c
+    create_xgrid.c
+    gradient_c2l.c
+    interp.c
+    mosaic_util.c
+    mpp.c
+    mpp_domain.c
+    mpp_io.c
+    mpp_domain.c
+    read_mosaic.c
+    tool_util.c)
 
-set ( PROJECT_LINK_LIBS libshared_all.a )
-link_directories(${CMAKE_CURRENT_BINARY_DIR}/../../shared_lib)
-include_directories(../../shared_lib)
+add_definitions(-Duse_netCDF)
 
 if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_C_FLAGS "-traceback")
@@ -20,13 +26,12 @@ elseif(CMAKE_C_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   )
 endif()
 
-set(exe_name make_solo_mosaic)
-add_executable(${exe_name} ${c_src})
+set(lib_name shared_all)
+add_library(${lib_name} STATIC ${c_src})
 target_include_directories(
-  ${exe_name} PRIVATE)
+  ${lib_name} PRIVATE)
 target_link_libraries(
-  ${exe_name}
-  ${PROJECT_LINK_LIBS}
+  ${lib_name}
   NetCDF::NetCDF_C)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION exec)
+install(TARGETS ${lib_name} RUNTIME DESTINATION ./)
