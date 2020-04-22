@@ -30,17 +30,21 @@ if [ ! -d "../exec" ]; then
 fi
 
 #
-# --- Chgres part
+# --- Build all programs.
 #
+
 rm -fr ../build
 mkdir ../build
 cd ../build
+
 if [[ $target == "wcoss_cray" ]]; then
   cmake .. -DCMAKE_INSTALL_PREFIX=../
 else
   cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc -DCMAKE_INSTALL_PREFIX=../
 fi
 
-make VERBOSE=1
+make -j 8 VERBOSE=1
 make install
+
+rm -fr ../lib
 exit

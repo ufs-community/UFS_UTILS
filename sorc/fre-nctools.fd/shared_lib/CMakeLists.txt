@@ -24,7 +24,7 @@ endif()
 add_library(shared_all STATIC ${c_src})
 target_compile_definitions(shared_all PRIVATE use_netCDF)
 
-target_include_directories(shared_all PUBLIC ${CURRENT_SOURCE_DIR})
+target_include_directories(shared_all PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(shared_all NetCDF::NetCDF_C)
 
