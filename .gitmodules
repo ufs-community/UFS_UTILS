@@ -1,4 +1,4 @@
 [submodule "cmake"]
 	path = cmake
-	url = git@github.com:GeorgeGayno-NOAA/CMakeModules.git
+	url = https://github.com/GeorgeGayno-NOAA/CMakeModules
 	branch = feature/findNetCDF
