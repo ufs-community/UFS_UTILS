@@ -13,10 +13,10 @@ set(fortran_src
     surface_chgres.f90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_Fortran_FLAGS "-g -traceback")
-  set(CMAKE_Fortran_FLAGS_RELEASE "-i4 -O3 -r8  -convert big_endian -fp-model precise")
+  set(CMAKE_Fortran_FLAGS "-g -traceback -i4 -r8 -convert big_endian")
+  set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fp-model precise")
   set(CMAKE_Fortran_FLAGS_DEBUG
-      "-O0 -check -check noarg_temp_created -check nopointer -warn -warn noerrors -fp-stack-check -fstack-protector-all -fpe0 -debug -ftrapuv -r8 -i4 -convert big_endian"
+      "-O0 -check -check noarg_temp_created -check nopointer -fp-stack-check -fstack-protector-all -fpe0 -debug -ftrapuv"
   )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   set(CMAKE_Fortran_FLAGS "-g -fbacktrace -ffree-form -ffree-line-length-0")
