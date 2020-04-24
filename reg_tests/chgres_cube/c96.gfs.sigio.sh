@@ -18,7 +18,7 @@ export ATM_FILES_INPUT=gdas.t00z.sanl
 export SFC_FILES_INPUT=gdas.t00z.sfcanl
 export CONVERT_NST='.false.'
 export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
-export INPUT_TYPE="gfs_spectral"
+export INPUT_TYPE="gfs_sigio"
 
 # dont start/end with double quotes
 export TRACERS_TARGET='"sphum","o3mr","liq_wat"'

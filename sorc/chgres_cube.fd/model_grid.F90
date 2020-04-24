@@ -117,7 +117,7 @@
 
  if (trim(input_type) == "gaussian_nemsio" .or. &
      trim(input_type) == "gfs_gaussian_nemsio" .or. &
-     trim(input_type) == "gfs_spectral" .or. &
+     trim(input_type) == "gfs_sigio" .or. &
      trim(input_type) == "gaussian_netcdf") then
    call define_input_grid_gaussian(localpet, npets)
  elseif (trim(input_type) == "grib2") then
@@ -186,7 +186,7 @@
    the_file=trim(data_dir_input_grid) // "/" // trim(atm_files_input_grid(1))
  endif
 
- if (trim(input_type) == "gfs_spectral") then  ! sigio/sfcio format, used by
+ if (trim(input_type) == "gfs_sigio") then  ! sigio/sfcio format, used by
                                                ! spectral gfs prior to 7/19/2017.
 
    if (convert_sfc) then   ! sfcio format

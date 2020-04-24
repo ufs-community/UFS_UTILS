@@ -54,13 +54,13 @@
 !                                     (netcdf).
 !                                 (3) "gaussian_nemsio" for fv3 gaussian
 !                                     nemsio files;
-!                                 (4) "gfs_gaussian_nemsio" for spectral gfs
-!                                     gaussian nemsio files
-!                                 (5) "gfs_spectral" for spectral gfs
-!                                     gfs sigio/sfcio files.
-!                                 (6) "gaussian_netcdf" for fv3 gaussian
+!                                 (4) "gaussian_netcdf" for fv3 gaussian
 !                                     netcdf files.
-!                                 (7) "grib2" for fv3gfs grib2 files.
+!                                 (5) "grib2" for fv3gfs grib2 files.
+!                                 (6) "gfs_gaussian_nemsio" for spectral gfs
+!                                     gaussian nemsio files
+!                                 (7) "gfs_sigio" for spectral gfs
+!                                     gfs sigio/sfcio files.
 ! max_tracers                     Maximum number of atmospheric tracers
 !                                 processed
 ! maxsmc_input/target             Maximum soil moisture content input/
@@ -277,7 +277,7 @@
      print*,'- INPUT DATA FROM FV3 GAUSSIAN NEMSIO FILE.'
    case ("gfs_gaussian_nemsio")
      print*,'- INPUT DATA FROM SPECTRAL GFS GAUSSIAN NEMSIO FILE.'
-   case ("gfs_spectral")
+   case ("gfs_sigio")
      print*,'- INPUT DATA FROM SPECTRAL GFS SIGIO/SFCIO FILE.'
    case ("gaussian_netcdf")
      print*,'- INPUT DATA FROM FV3 GAUSSIAN NETCDF FILE.'
@@ -451,7 +451,7 @@ end subroutine get_var_cond
 !-------------------------------------------------------------------------
 
  select case (trim(input_type))
-   case ("gfs_spectral")
+   case ("gfs_sigio")
      print*,'- INPUT GRID USED ZOBLER SOIL TYPES.'
      num_soil_cats = num_zobler
    case default
@@ -470,7 +470,7 @@ end subroutine get_var_cond
  allocate(f11(num_soil_cats))
 
  select case (trim(input_type))
-   case ("gfs_spectral")
+   case ("gfs_sigio")
      smlow  = smlow_zobler
      smhigh = smhigh_zobler
      maxsmc_input = maxsmc_zobler

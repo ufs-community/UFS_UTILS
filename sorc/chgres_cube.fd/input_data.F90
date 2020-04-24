@@ -188,7 +188,7 @@
 ! Read the spectral gfs gaussian history files in sigio format.
 !-------------------------------------------------------------------------------
 
- elseif (trim(input_type) == "gfs_spectral") then ! spectral gfs sigio format.
+ elseif (trim(input_type) == "gfs_sigio") then ! spectral gfs sigio format.
  
    call read_input_atm_gfs_sigio_file(localpet)
 
@@ -561,7 +561,7 @@
 
  elseif (trim(input_type) == "gaussian_nemsio") then
 
-   call read_input_sfc_nemsio_file(localpet)
+   call read_input_sfc_gaussian_nemsio_file(localpet)
 
 !-------------------------------------------------------------------------------
 ! Read the spectral gfs gaussian history files in nemsio format.
@@ -569,13 +569,13 @@
 
  elseif (trim(input_type) == "gfs_gaussian_nemsio") then
 
-   call read_input_sfc_gfs_nemsio_file(localpet)
+   call read_input_sfc_gfs_gaussian_nemsio_file(localpet)
 
 !-------------------------------------------------------------------------------
 ! Read the spectral gfs gaussian history files in sfcio format.
 !-------------------------------------------------------------------------------
 
- elseif (trim(input_type) == "gfs_spectral") then
+ elseif (trim(input_type) == "gfs_sigio") then
 
    call read_input_sfc_gfs_sfcio_file(localpet)
 
@@ -3119,7 +3119,7 @@
 ! Format used by gfs starting July 19, 2017.
 !---------------------------------------------------------------------------
 
- subroutine read_input_sfc_gfs_nemsio_file(localpet)
+ subroutine read_input_sfc_gfs_gaussian_nemsio_file(localpet)
  
  implicit none
 
@@ -3462,13 +3462,13 @@
 
  if (localpet == 0) call nemsio_close(gfile)
 
- end subroutine read_input_sfc_gfs_nemsio_file
+ end subroutine read_input_sfc_gfs_gaussian_nemsio_file
 
 !---------------------------------------------------------------------------
 ! Read input grid surface data from an fv3 gaussian nemsio file.
 !---------------------------------------------------------------------------
 
- subroutine read_input_sfc_nemsio_file(localpet)
+ subroutine read_input_sfc_gaussian_nemsio_file(localpet)
 
  implicit none
 
@@ -3811,7 +3811,7 @@
 
  if (localpet == 0) call nemsio_close(gfile)
 
- end subroutine read_input_sfc_nemsio_file
+ end subroutine read_input_sfc_gaussian_nemsio_file
 
 !---------------------------------------------------------------------------
 ! Read input grid surface data tiled warm 'restart' files.

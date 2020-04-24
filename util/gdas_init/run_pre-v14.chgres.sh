@@ -64,7 +64,7 @@ cat << EOF > fort.41
  convert_atm=.true.
  convert_sfc=.true.
  convert_nst=.false.
- input_type="gfs_spectral"
+ input_type="gfs_sigio"
  tracers_input="spfh","o3mr","clwmr"
  tracers="sphum","o3mr","liq_wat"
 /

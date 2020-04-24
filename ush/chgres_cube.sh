@@ -69,7 +69,7 @@ HALO_BLEND=${HALO_BLEND:-0}
 #        'gaussian_netcdf' for fv3 gaussian netcdf files.
 #        'grib2' for fv3gfs grib2 files.
 #        'gfs_gaussain_nemsio' for spectral gfs nemsio files.
-#        'gfs_spectral' for spectral gfs sigio/sfcio files.
+#        'gfs_sigio' for spectral gfs sigio/sfcio files.
 #
 # MOSAIC_FILE_INPUT_GRID - Path/Name of mosaic file for input grid.  Only
 #                          used for 'history' and 'restart' INPUT_TYPE.
@@ -170,7 +170,7 @@ fi
 #----------------------------------------------------------------------------
 # APRUN - machine specific command to run program.
 # CHGRESEXEC - program executable.
-# OMP_NUM_THREADS - threads most useful for 'gfs_spectral' INPUT_TYPE.
+# OMP_NUM_THREADS - threads most useful for 'gfs_sigio' INPUT_TYPE.
 # DATA - working directory.
 # PGMOUT - standard output file
 # PGMERR - standard error file
