@@ -18,6 +18,7 @@ endif()
 add_executable(fregrid ${c_src})
 
 target_link_libraries(fregrid
+  m
   shared_all
   NetCDF::NetCDF_C)
 

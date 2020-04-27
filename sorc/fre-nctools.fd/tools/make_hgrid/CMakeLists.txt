@@ -19,6 +19,7 @@ endif()
 add_executable(make_hgrid ${c_src})
 
 target_link_libraries(make_hgrid
+  m
   shared_all
   NetCDF::NetCDF_C)
 
