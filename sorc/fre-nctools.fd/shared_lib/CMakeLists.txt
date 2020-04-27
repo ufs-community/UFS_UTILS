@@ -1,5 +1,4 @@
 set(c_src
-    affinity.c
     create_xgrid.c
     gradient_c2l.c
     interp.c
