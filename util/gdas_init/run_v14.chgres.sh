@@ -66,7 +66,7 @@ cat << EOF > fort.41
  convert_atm=.true.
  convert_sfc=.true.
  convert_nst=.true.
- input_type="gfs_gaussian"
+ input_type="gfs_gaussian_nemsio"
  tracers="sphum","liq_wat","o3mr"
  tracers_input="spfh","clwmr","o3mr"
 /

@@ -106,11 +106,19 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.regional -W  0:
         -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/c96.regional.sh"
 
 #-----------------------------------------------------------------------------
+# Initialize C96 using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+export OMP_NUM_THREADS=1
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.fv3.netcdf -W 0:15 -x -n 12 -w 'ended(c96.regional)' \
+        -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/c96.fv3.netcdf.sh"
+
+#-----------------------------------------------------------------------------
 # Initialize global C192 using GFS GRIB2 file.
 #-----------------------------------------------------------------------------
 
 export OMP_NUM_THREADS=1
-bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c192.gfs.grib2 -W 0:05 -x -n 6 -w 'ended(c96.regional)' \
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c192.gfs.grib2 -W 0:05 -x -n 6 -w 'ended(c96.fv3.netcdf)' \
         -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/c192.gfs.grib2.sh"
 
 #-----------------------------------------------------------------------------
