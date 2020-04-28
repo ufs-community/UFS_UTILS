@@ -5,7 +5,7 @@ file(STRINGS "VERSION" pVersion)
 project(
   ufs_util
   VERSION ${pVersion}
-  LANGUAGES Fortran)
+  LANGUAGES C Fortran)
 # LANGUAGES C CXX Fortran)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
 
@@ -22,6 +22,10 @@ if(NOT CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|GNU|Clang|AppleClang)$")
   message(WARNING "Compiler not officially supported: ${CMAKE_Fortran_COMPILER_ID}")
 endif()
 
+if(NOT CMAKE_C_COMPILER_ID MATCHES "^(Intel|GNU)$")
+  message(WARNING "Compiler not officially supported: ${CMAKE_C_COMPILER_ID}")
+endif()
+
 if(POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
 endif()
@@ -31,18 +35,11 @@ endif()
 
 option(OPENMP "use OpenMP threading" ON)
 
-if(NOT NETCDF)
-  if(NOT DEFINED ENV{NETCDF})
-    message(FATAL_ERROR "fatal error netcdf not set")
-  else()
-    list(APPEND CMAKE_PREFIX_PATH $ENV{NETCDF})
-    set(NETCDF $ENV{NETCDF})
-  endif()
-  if(DEFINED_ENV{NETCDF_FORTRAN})
-    list(APPEND CMAKE_PREFIX_PATH $ENV{NETCDF_FORTRAN})
-  endif()
-endif()
-find_package(NetCDF MODULE REQUIRED COMPONENTS C Fortran)
+find_package(PNG REQUIRED)
+find_package(ZLIB REQUIRED)
+find_package(Jasper REQUIRED)
+
+find_package(NetCDF REQUIRED C Fortran)
 #unset(CMAKE_C_COMPILER_LOADED)
 #unset(CMAKE_CXX_COMPILER_LOADED)
 find_package(MPI REQUIRED )
@@ -55,12 +52,20 @@ endif()
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
 
+if(NOT TARGET gfsio_4)
+  find_package(gfsio REQUIRED)
+endif()
+
 if(NOT TARGET sfcio_4)
   find_package(sfcio REQUIRED)
 endif()
 
 if(NOT TARGET w3nco_d)
   find_package(w3nco REQUIRED)
+endif()
+
+if(NOT TARGET landsfcutil_d)
+  find_package(landsfcutil REQUIRED)
 endif()
 
 if(NOT TARGET bacio_4)
@@ -71,12 +76,28 @@ if(NOT TARGET nemsio)
   find_package(nemsio REQUIRED)
 endif()
 
+if(NOT TARGET nemsiogfs)
+  find_package(nemsiogfs REQUIRED)
+endif()
+
 if(NOT TARGET sigio_4)
   find_package(sigio REQUIRED)
 endif()
 
 if(NOT TARGET sp_d)
   find_package(sp REQUIRED)
+endif()
+
+if(NOT TARGET ip_d)
+  find_package(ip REQUIRED)
+endif()
+
+if(NOT TARGET w3emc_d)
+  find_package(w3emc REQUIRED)
+endif()
+
+if(NOT TARGET g2_d)
+  find_package(g2 REQUIRED)
 endif()
 
 add_subdirectory(sorc)

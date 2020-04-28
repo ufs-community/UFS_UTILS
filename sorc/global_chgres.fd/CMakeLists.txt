@@ -1,21 +1,22 @@
 set(fortran_src
-    atmosphere.F90
-    chgres.F90
-    grib2_util.F90
-    input_data.F90
-    model_grid.F90
-    program_setup.f90
-    search_util.f90
-    static_data.F90
-    surface.F90
-    utils.f90
-    write_data.F90)
+    chgres.f90
+    chgres_utils.f90
+    funcphys.f90
+    machine_8.f90
+    nrlmsise00_sub.f90
+    nsst_chgres.f90
+    nstio_module.f90
+    num_parthds.f90
+    physcons.f90
+    read_write.f90
+    sfcsub.F
+    surface_chgres.f90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_Fortran_FLAGS "-g -traceback -r8 -i4 -convert big_endian -assume byterecl")
+  set(CMAKE_Fortran_FLAGS "-g -traceback -i4 -r8 -convert big_endian")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fp-model precise")
   set(CMAKE_Fortran_FLAGS_DEBUG
-      "-O0 -check -check noarg_temp_created -check nopointer -warn -warn noerrors -fp-stack-check -fstack-protector-all -fpe0 -debug -ftrapuv"
+      "-O0 -check -check noarg_temp_created -check nopointer -fp-stack-check -fstack-protector-all -fpe0 -debug -ftrapuv"
   )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   set(CMAKE_Fortran_FLAGS "-g -fbacktrace -ffree-line-length-0 -fdefault-real-8 -fconvert=big-endian")
@@ -25,21 +26,23 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   )
 endif()
 
-set(exe_name chgres_cube.exe)
+set(exe_name global_chgres)
 add_executable(${exe_name} ${fortran_src})
 target_include_directories(
-  ${exe_name} PRIVATE ${ESMF_INC} ${WGRIB2_INCLUDES})
+  ${exe_name} PRIVATE)
 target_link_libraries(
   ${exe_name}
+  gfsio_4
+  nemsiogfs
   nemsio
-  sfcio_4
   sigio_4
-  bacio_4
+  sfcio_4
+  landsfcutil_d
+  ip_d
   sp_d
+  w3emc_d
   w3nco_d
-  esmf
-  MPI::MPI_Fortran
-  ${WGRIB2_LIBRARIES}
+  bacio_4
   NetCDF::NetCDF_Fortran)
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
