@@ -20,7 +20,7 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   )
 endif()
 
-set(exe_name nst_tf_chg.x)
+set(exe_name nst_tf_chg)
 add_executable(${exe_name} ${fortran_src})
 target_include_directories(
   ${exe_name} PRIVATE)
