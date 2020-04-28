@@ -26,13 +26,6 @@ if(NOT CMAKE_C_COMPILER_ID MATCHES "^(Intel|GNU)$")
   message(WARNING "Compiler not officially supported: ${CMAKE_C_COMPILER_ID}")
 endif()
 
-if(POLICY CMP0054)
-  cmake_policy(SET CMP0054 NEW)
-endif()
-if(POLICY CMP0012)
-  cmake_policy(SET CMP0012 NEW)
-endif()
-
 option(OPENMP "use OpenMP threading" ON)
 
 find_package(PNG REQUIRED)
