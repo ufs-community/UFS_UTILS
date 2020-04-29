@@ -47,7 +47,7 @@ echo "Ending at: " `date`
 cd $out_dir
 
 test_failed=0
-for files in *.nc ./fix_sfc/*.nc
+for files in *tile*.nc ./fix_sfc/*tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files

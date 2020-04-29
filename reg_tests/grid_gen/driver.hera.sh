@@ -50,7 +50,7 @@ export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
 export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/grid_gen/baseline_data
 
 ulimit -a
-ulimit -s unlimited
+#ulimit -s unlimited
 
 rm -fr $WORK_DIR
 
