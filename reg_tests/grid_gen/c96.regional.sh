@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#-----------------------------------------------------------------------
+# Create a C96 regional grid.  Compare output to a set
+# of baseline files using the 'nccmp' utility.  This script is
+# run by the machine specific driver script.
+#-----------------------------------------------------------------------
+
 set -x
 
 export TMPDIR=${WORK_DIR}/c96.regional.work
@@ -55,7 +61,7 @@ done
 
 set +x
 if [ $test_failed -ne 0 ]; then
-  echo "<<< C96 REGIONAL TEST PASSED. >>>"
+  echo "<<< C96 REGIONAL TEST FAILED. >>>"
 else
   echo "<<< C96 REGIONAL TEST PASSED. >>>"
 fi

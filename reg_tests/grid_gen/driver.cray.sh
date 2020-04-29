@@ -2,15 +2,13 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run grid generation regression tests on Hera.
+# Run grid generation regression tests on WCOSS-Cray.
 #
 # Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
-# as appropriate.  To see which projects you are authorized to use,
-# type "account_params".
+# as appropriate.
 #
 # Invoke the script with no arguments.  A series of daily-
-# chained jobs will be submitted.  To check the queue, type:
-# "squeue -u USERNAME".
+# chained jobs will be submitted.  To check the queue, type: "bjobs".
 #
 # Log output from the suite will be in LOG_FILE.  Once the suite
 # has completed, a summary is placed in SUM_FILE.
@@ -21,61 +19,55 @@
 #
 #-----------------------------------------------------------------------------
 
-. /apps/lmod/lmod/init/sh
-module purge
-module load intel/18.0.5.274
-module load impi/2018.0.4
-module load hdf5/1.10.5
-module load netcdf/4.7.0
+. $MODULESHOME/init/sh
+module load PrgEnv-intel cfp-intel-sandybridge/1.1.0
 module list
 
 set -x
 
-export WORK_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_tests.grid
-QUEUE="batch"
-PROJECT_CODE="fv3-cpu"
+QUEUE="debug"
+PROJECT_CODE="GFS-DEV"
+export WORK_DIR=/gpfs/hps3/stmp/$LOGNAME/reg_tests.grid
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
+export home_dir=$PWD/../..
 LOG_FILE=regression.log
 SUM_FILE=summary.log
-export home_dir=$PWD/../..
-export APRUN=time
-export APRUN_SFC=srun
+export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"
+export APRUN_SFC="aprun -j 1 -n 24 -N 24"
 export OMP_STACKSIZE=2048m
-export machine=HERA
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/grid_gen/baseline_data
-
-ulimit -a
-ulimit -s unlimited
+export OMP_NUM_THREADS=6
+export machine=WCOSS_C
+export KMP_AFFINITY=disabled
+export NCCMP=/gpfs/hps3/emc/global/noscrub/George.Gayno/util/netcdf/nccmp
+export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
 
 rm -f $WORK_DIR
 
-export OMP_NUM_THREADS=24
+ulimit -a
+ulimit -s unlimited
 
 #-----------------------------------------------------------------------------
 # C96 uniform grid
 #-----------------------------------------------------------------------------
 
-TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.uniform \
-      -o $LOG_FILE -e $LOG_FILE ./c96.uniform.sh)
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.uniform -W 0:15 -M 2400 \
+        -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/c96.uniform.sh"
 
 #-----------------------------------------------------------------------------
 # C96 regional grid
 #-----------------------------------------------------------------------------
 
-TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.regional \
-      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c96.regional.sh)
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.regional -W 0:10 -M 2400 \
+        -w 'ended(c96.uniform)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/c96.regional.sh"
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
-sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST2 << EOF
-#!/bin/sh
-grep -a '<<<' $LOG_FILE  > $SUM_FILE
-EOF
+bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(c96.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+
+exit
