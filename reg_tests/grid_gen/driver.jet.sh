@@ -53,7 +53,7 @@ export HOMEreg=/mnt/lfs3/projects/emcda/George.Gayno/reg_tests/grid_gen/baseline
 ulimit -a
 ulimit -s unlimited
 
-rm -f $WORK_DIR
+rm -fr $WORK_DIR
 
 export OMP_NUM_THREADS=24
 

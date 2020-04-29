@@ -49,7 +49,7 @@ export NCCMP=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/util/nccmp/nccmp-1.8.
 export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
 export OMP_NUM_THREADS=24
 
-rm -f $WORK_DIR
+rm -fr $WORK_DIR
 
 ulimit -a
 ulimit -s unlimited

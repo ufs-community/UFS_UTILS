@@ -45,7 +45,7 @@ export KMP_AFFINITY=disabled
 export NCCMP=/gpfs/hps3/emc/global/noscrub/George.Gayno/util/netcdf/nccmp
 export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
 
-rm -f $WORK_DIR
+rm -fr $WORK_DIR
 
 ulimit -a
 ulimit -s unlimited

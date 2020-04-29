@@ -52,7 +52,7 @@ export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/grid_gen/base
 ulimit -a
 ulimit -s unlimited
 
-rm -f $WORK_DIR
+rm -fr $WORK_DIR
 
 export OMP_NUM_THREADS=24
 
