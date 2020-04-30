@@ -1,0 +1,52 @@
+#!/bin/bash
+
+#-----------------------------------------------------------------------------
+#
+# Run ice_blend regression test on Jet.
+#
+# Set $DATA to your working directory.  Set the project code (SBATCH -A)
+# and queue (SBATCH -q) as appropriate.
+#
+# Invoke the script as follows:  sbatch $script
+#
+# Log output is placed in regression.log.  A summary is
+# placed in summary.log
+#
+# The test fails when its output does not match the baseline files
+# as determined by the 'cmp' command.  The baseline files are
+# stored in HOMEreg.
+#
+#-----------------------------------------------------------------------------
+
+#SBATCH --nodes=1
+#SBATCH --partition=sjet
+#SBATCH --time 0:01
+#SBATCH --account=emcda
+#SBATCH --job-name=ice_blned
+#SBATCH -o regression.log
+#SBATCH -e regression.log
+
+set -x
+
+module load intel
+
+export DATA="/mnt/lfs3/projects/emcda/$LOGNAME/stmp/reg_test.ice_blend"
+
+#-----------------------------------------------------------------------------
+# Should not have to change anything below.
+#-----------------------------------------------------------------------------
+
+export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
+export WGRIB2=/apps/wgrib2/0.1.9.6a/bin/wgrib2
+export COPYGB=/mnt/lfs3/projects/emcda/George.Gayno/ufs_utils.git/jet_port/grib_util/copygb
+export COPYGB2=/mnt/lfs3/projects/emcda/George.Gayno/ufs_utils.git/jet_port/grib_util/copygb2
+export CNVGRIB=/apps/cnvgrib/1.4.0/bin/cnvgrib
+
+export HOMEreg=/lfs3/HFIP/emcda/George.Gayno/reg_tests/ice_blend
+export HOMEgfs=$PWD/../..
+
+rm -fr $DATA
+
+./ice_blend.sh
+
+exit 0
