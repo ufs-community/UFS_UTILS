@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run snow2mdl regression test on Hera.
+# Run ice_blend regression test on Hera.
 #
 # Set $DATA to your working directory.  Set the project code (SBATCH -A)
 # and queue (SBATCH -q) as appropriate.
@@ -18,7 +18,7 @@
 #
 #-----------------------------------------------------------------------------
 
-#SBATCH -J snow
+#SBATCH -J ice_blend
 #SBATCH -A fv3-cpu
 #SBATCH --open-mode=truncate
 #SBATCH -o regression.log
@@ -31,19 +31,23 @@ set -x
 
 module load intel
 
-export DATA="/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_tests.snow2mdl"
+export DATA="/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_test.ice_blend"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
-rm -fr $DATA
-
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/snow2mdl
-export HOMEgfs=$PWD/../..
 export WGRIB=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/wgrib
 export WGRIB2=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/wgrib2
+export COPYGB=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/copygb
+export COPYGB2=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/copygb2
+export CNVGRIB=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/cnvgrib
 
-./snow2mdl.sh
+export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/ice_blend
+export HOMEgfs=$PWD/../..
+
+rm -fr $DATA
+
+./ice_blend.sh
 
 exit 0

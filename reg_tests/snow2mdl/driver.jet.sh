@@ -32,7 +32,7 @@ module unload intel
 module load intel/18.0.5.274
 module list
 
-export DATA="/mnt/lfs3/projects/emcda/$LOGNAME/stmp/snow2mdl"
+export DATA="/mnt/lfs3/projects/emcda/$LOGNAME/stmp/reg_tests.snow2mdl"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
