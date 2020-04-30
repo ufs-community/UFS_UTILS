@@ -1,5 +1,23 @@
 #!/bin/bash
 
+#-----------------------------------------------------------------------------
+#
+# Run snow2mdl regression test on Hera.
+#
+# Set $DATA to your working directory.  Set the project code (SBATCH -A)
+# and queue (SBATCH -q) as appropriate.
+#
+# Invoke the script as follows:  sbatch $script
+#
+# Log output is placed in regression.log.  A summary is
+# placed in summary.log
+#
+# The test fails when its output does not match the baseline files
+# as determined by the 'cmp' command.  The baseline files are
+# stored in HOMEreg.
+#
+#-----------------------------------------------------------------------------
+
 #SBATCH -J snow
 #SBATCH -A fv3-cpu
 #SBATCH --open-mode=truncate
@@ -13,8 +31,11 @@ set -x
 
 module load intel
 
-export DATA="/scratch2/NCEPDEV/stmp1/George.Gayno/snow2mdl"
+export DATA="/scratch2/NCEPDEV/stmp1/$LOGNAME/snow2mdl"
 
+#-----------------------------------------------------------------------------
+# Should not have to change anything below.
+#-----------------------------------------------------------------------------
 
 rm -fr $DATA
 

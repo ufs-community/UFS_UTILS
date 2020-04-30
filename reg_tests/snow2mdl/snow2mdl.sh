@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#--------------------------------------------------------------------------
+# Create a T1534 snow file.  This script is run from its machine-specific
+# driver.
+#--------------------------------------------------------------------------
+
 set -x
 
 export IMS_FILE=$HOMEreg/input_data/imssnow96.grb
