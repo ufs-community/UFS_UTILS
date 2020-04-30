@@ -1,5 +1,23 @@
 #!/bin/bash
 
+#-----------------------------------------------------------------------------
+#
+# Run global_cycle regression test on WCOSS-Cray.
+#
+# Set $DATA to your working directory.  Set the project code (BSUB -P)
+# and queue (BSUB -q) as appropriate.
+#
+# Invoke the script as follows:  cat $script | bsub
+#
+# Log output is placed in regression.log.  A summary is
+# placed in summary.log
+#
+# The test fails when its output does not match the baseline files
+# as determined by the 'nccmp' utility.  This baseline files are
+# stored in HOMEreg.
+#
+#-----------------------------------------------------------------------------
+
 #BSUB -oo regression.log
 #BSUB -eo regression.log
 #BSUB -q debug
@@ -12,9 +30,13 @@
 module load PrgEnv-intel cfp-intel-sandybridge/1.1.0
 module list
 
-export NODES=1
-
 export DATA=/gpfs/hps3/stmp/$LOGNAME/reg_tests.cycle
+
+#-----------------------------------------------------------------------------
+# Should not have to change anything below.
+#-----------------------------------------------------------------------------
+
+export NODES=1
 
 export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/global_cycle
 

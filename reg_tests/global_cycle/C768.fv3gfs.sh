@@ -1,7 +1,11 @@
 #!/bin/bash
 
-set -x
+#------------------------------------------------------------------
+# Run global_cycle for a C768 test case.  Compare output
+# to a baseline set of files using the 'nccmp' utility.
+#------------------------------------------------------------------
 
+set -x
 
 export MAX_TASKS_CY=6
 

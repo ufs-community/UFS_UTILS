@@ -1,5 +1,23 @@
 #!/bin/bash
 
+#-----------------------------------------------------------------------------
+#
+# Run global_cycle regression test on Jet.
+#
+# Set $DATA to your working directory.  Set the project code (SBATCH -A)
+# and queue (SBATCH -q) as appropriate.
+#
+# Invoke the script as follows:  sbatch $script
+#
+# Log output is placed in regression.log.  A summary is
+# placed in summary.log
+#
+# The test fails when its output does not match the baseline files
+# as determined by the 'nccmp' utility.  This baseline files are
+# stored in HOMEreg.
+#
+#-----------------------------------------------------------------------------
+
 #SBATCH -J cycle_driver
 #SBATCH -A emcda
 #SBATCH --open-mode=truncate
@@ -23,8 +41,12 @@ module list
 
 export DATA=/lfs3/HFIP/emcda/$LOGNAME/stmp/reg_tests.cycle
 
+#-----------------------------------------------------------------------------
+# Should not have to change anything below.
+#-----------------------------------------------------------------------------
 
 export HOMEreg=/lfs3/HFIP/emcda/George.Gayno/reg_tests/global_cycle
+
 export OMP_NUM_THREADS_CY=2
 
 export APRUNCY="srun"
