@@ -25,4 +25,4 @@ target_link_libraries(
   bacio_4
   w3nco_d)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION exec)
+install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})

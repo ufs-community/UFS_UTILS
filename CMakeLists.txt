@@ -93,4 +93,10 @@ if(NOT TARGET g2_d)
   find_package(g2 REQUIRED)
 endif()
 
+# EMC requires executables in ./exec
+set(exec_dir bin)
+if(EMC_EXEC_DIR)
+  set(exec_dir exec)
+endif()
+
 add_subdirectory(sorc)

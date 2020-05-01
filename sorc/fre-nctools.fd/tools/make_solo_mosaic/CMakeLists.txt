@@ -19,4 +19,4 @@ target_link_libraries(make_solo_mosaic
   shared_all
   NetCDF::NetCDF_C)
 
-install(TARGETS make_solo_mosaic RUNTIME DESTINATION exec)
+install(TARGETS make_solo_mosaic RUNTIME DESTINATION ${exec_dir})

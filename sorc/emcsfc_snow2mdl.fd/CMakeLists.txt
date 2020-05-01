@@ -39,4 +39,4 @@ if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
 endif()
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION exec)
+install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})

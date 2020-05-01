@@ -22,4 +22,4 @@ target_link_libraries(fregrid
   shared_all
   NetCDF::NetCDF_C)
 
-install(TARGETS fregrid RUNTIME DESTINATION exec)
+install(TARGETS fregrid RUNTIME DESTINATION ${exec_dir})

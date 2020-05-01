@@ -24,4 +24,4 @@ target_link_libraries(
   nemsio
   bacio_4)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION exec)
+install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})

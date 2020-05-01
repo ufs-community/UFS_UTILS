@@ -23,4 +23,4 @@ target_link_libraries(
   ${exe_name}
   NetCDF::NetCDF_Fortran)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION exec)
+install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})

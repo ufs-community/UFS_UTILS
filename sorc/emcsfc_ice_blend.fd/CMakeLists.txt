@@ -28,4 +28,4 @@ target_link_libraries(
   PNG::PNG
   ZLIB::ZLIB)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION exec)
+install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})

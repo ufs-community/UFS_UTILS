@@ -32,4 +32,4 @@ target_link_libraries(
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION exec)
+install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})

@@ -23,4 +23,4 @@ target_link_libraries(make_hgrid
   shared_all
   NetCDF::NetCDF_C)
 
-install(TARGETS make_hgrid RUNTIME DESTINATION exec)
+install(TARGETS make_hgrid RUNTIME DESTINATION ${exec_dir})
