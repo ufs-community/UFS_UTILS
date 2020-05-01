@@ -12,8 +12,8 @@
 # Log output is placed in regression.log.  A summary is
 # placed in summary.log.
 #
-# The test fails when its output does not match the baseline files
-# as determined by the 'cmp' command.  The baseline files are
+# The test fails when its output does not match the baseline file
+# as determined by the 'cmp' command.  The baseline file is
 # stored in HOMEreg.
 #
 #-----------------------------------------------------------------------------
@@ -21,7 +21,7 @@
 #BSUB -W 0:02
 #BSUB -o regression.log
 #BSUB -e regression.log
-#BSUB -J s2m_regt
+#BSUB -J iceb_regt
 #BSUB -q debug
 #BSUB -R "rusage[mem=2000]"
 #BSUB -P GFS-DEV

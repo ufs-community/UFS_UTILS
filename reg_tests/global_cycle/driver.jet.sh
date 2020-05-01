@@ -18,7 +18,7 @@
 #
 #-----------------------------------------------------------------------------
 
-#SBATCH -J cycle_driver
+#SBATCH -J cycle_reg_test
 #SBATCH -A emcda
 #SBATCH --open-mode=truncate
 #SBATCH -o regression.log

@@ -12,8 +12,8 @@
 # Log output is placed in regression.log.  A summary is
 # placed in summary.log
 #
-# The test fails when its output does not match the baseline files
-# as determined by the 'cmp' command.  The baseline files are
+# The test fails when its output does not match the baseline file
+# as determined by the 'cmp' command.  The baseline file is
 # stored in HOMEreg.
 #
 #-----------------------------------------------------------------------------
