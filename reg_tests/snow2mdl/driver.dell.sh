@@ -26,6 +26,11 @@
 #BSUB -R "affinity[core(1)]"
 #BSUB -P GFS-DEV
 
+module purge
+module load ips/18.0.1.163
+module load jasper/1.900.29
+module list
+
 set -x
 
 export DATA=/gpfs/dell1/stmp/$LOGNAME/reg_tests.snow2mdl
