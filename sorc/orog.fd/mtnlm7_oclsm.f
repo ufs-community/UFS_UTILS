@@ -1935,7 +1935,7 @@ C
 C
       DO J=1,JMN
          GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
-         DELTAX(J) = DELTAY * COS(GLAT(J))
+         DELTAX(J) = DELTAY * COS(GLAT(J)*PI/180.0)
       ENDDO
 C
 C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
@@ -2137,7 +2137,7 @@ C
                HLPRIM(I,J) = SQRT(HL(I,J)*HL(I,J) + HXY(I,J)*HXY(I,J))
            IF( HL(I,J).NE. 0. .AND. SLM(I,J) .NE. 0. ) THEN
 C
-             THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
+             THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J)) * 180.0 / PI
 C ===   for testing print out in degrees
 C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
             ENDIF
@@ -2199,7 +2199,7 @@ C
 C
       DO J=1,JMN
          GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
-         DELTAX(J) = DELTAY * COS(GLAT(J))
+         DELTAX(J) = DELTAY * COS(GLAT(J)*D2R)
       ENDDO
 C
 C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
@@ -2369,7 +2369,7 @@ C
                HLPRIM(I,J) = SQRT(HL(I,J)*HL(I,J) + HXY(I,J)*HXY(I,J))
            IF( HL(I,J).NE. 0. .AND. SLM(I,J) .NE. 0. ) THEN
 C
-             THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
+             THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J)) / D2R
 C ===   for testing print out in degrees
 C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
             ENDIF
