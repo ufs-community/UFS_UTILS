@@ -55,6 +55,8 @@ export OMP_STACKSIZE=1024M
 
 export APRUN=srun
 
+export machine=orion
+
 rm -fr $OUTDIR
 
 #-----------------------------------------------------------------------------
