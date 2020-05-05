@@ -26,8 +26,6 @@ if(NOT CMAKE_C_COMPILER_ID MATCHES "^(Intel|GNU)$")
   message(WARNING "Compiler not officially supported: ${CMAKE_C_COMPILER_ID}")
 endif()
 
-option(OPENMP "use OpenMP threading" ON)
-
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Jasper REQUIRED)
@@ -39,9 +37,7 @@ find_package(MPI REQUIRED )
 find_package(ESMF MODULE REQUIRED)
 find_package(WGRIB2 REQUIRED)
 
-if(OPENMP)
-  find_package(OpenMP REQUIRED COMPONENTS Fortran)
-endif()
+find_package(OpenMP REQUIRED COMPONENTS Fortran)
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
 

@@ -34,9 +34,7 @@ target_link_libraries(
   w3nco_d
   ${JASPER_LIBRARIES}
   PNG::PNG
-  ZLIB::ZLIB)
-if(OpenMP_Fortran_FOUND)
-  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
-endif()
+  ZLIB::ZLIB
+  OpenMP::OpenMP_Fortran)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})

@@ -43,9 +43,7 @@ target_link_libraries(
   w3emc_d
   w3nco_d
   bacio_4
-  NetCDF::NetCDF_Fortran)
-if(OpenMP_Fortran_FOUND)
-  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
-endif()
+  NetCDF::NetCDF_Fortran
+  OpenMP::OpenMP_Fortran)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
