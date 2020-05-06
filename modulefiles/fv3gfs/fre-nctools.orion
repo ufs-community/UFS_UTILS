@@ -2,5 +2,8 @@
 ## Module file for fre-nctools
 #############################################################
 
-module load ics/16.0.3
-module load NetCDF/4.2/serial
+module load intel/2020
+module load impi/2020
+
+module load netcdf/4.7.2
+module load hdf5/1.10.5

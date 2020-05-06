@@ -51,6 +51,10 @@ elif [ $target = odin ]; then
  export INCS=""
  export LIBSM="${BACIO_LIB4} ${IP_LIBd} ${W3NCO_LIBd} ${SP_LIBd}"
  export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl"
+elif [ $target = orion ]; then
+ INCS="-I${NETCDF_INCLUDE_DIRS}"
+ export LIBSM="${BACIO_LIB4} ${W3NCO_LIBd} ${IP_LIBd} ${SP_LIBd} -L${NETCDF_LIBRARY_DIRS} -lnetcdff -lnetcdf"
+ export FFLAGSM="-O3 -g -traceback -r8  -convert big_endian -fp-model precise  -assume byterecl ${INCS}"
 else
  echo machine $target not found
  exit 1
