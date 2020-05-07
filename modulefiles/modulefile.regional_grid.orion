@@ -4,12 +4,19 @@
 module load intel/2020
 module load impi/2020
 
-module load netcdf/4.7.2
-module load hdf5/1.10.5
+
+module use /apps/contrib/NCEPLIBS/lib/modulefiles
+module load netcdfp/4.7.4
+#module load netcdf/4.7.2
+#module load hdf5/1.10.5
 
 export FC=ifort
 export FFLAGS="-O2 -g"
 
-export NETCDF_INCLUDE="-I${NETCDF_INCLUDE_DIRS}"
-export NETCDF_LDFLAGS="-L${NETCDF_LIBRARY_DIRS} -lnetcdf -lnetcdff -L${HDF5_LIBRARY_DIRS} -lhdf5 -lhdf5_fortran"
-export HDF5_LDFLAGS="-L${HDF5_LIBRARY_DIRS} -lhdf5 -lhdf5_fortran"
+export NETCDF_INCLUDE="-I${NETCDF}/include"
+export NETCDF_LDFLAGS="-L${NETCDF}/lib -lnetcdf -lnetcdff"
+export HDF5_LDFLAGS="-L${HDF5}/lib -lhdf5"
+
+#export NETCDF_INCLUDE="-I${NETCDF_INCLUDE_DIRS}"
+#export NETCDF_LDFLAGS="-L${NETCDF_LIBRARY_DIRS} -lnetcdf -lnetcdff -L${HDF5_LIBRARY_DIRS} -lhdf5 -lhdf5_fortran"
+#export HDF5_LDFLAGS="-L${HDF5_LIBRARY_DIRS} -lhdf5 -lhdf5_fortran"

@@ -4,7 +4,9 @@
 # Loading Intel Compiler Suite
 module load intel/2020
 
-module load netcdf/4.7.2
+module use /apps/contrib/NCEPLIBS/lib/modulefiles
+module load netcdfp/4.7.4
+#module load netcdf/4.7.2
 
 # Loding nceplibs modules
 module use -a $MOD_PATH
