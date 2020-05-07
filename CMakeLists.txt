@@ -6,7 +6,6 @@ project(
   ufs_util
   VERSION ${pVersion}
   LANGUAGES C Fortran)
-# LANGUAGES C CXX Fortran)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
 
 if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
@@ -29,10 +28,7 @@ endif()
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Jasper REQUIRED)
-
 find_package(NetCDF REQUIRED C Fortran)
-#unset(CMAKE_C_COMPILER_LOADED)
-#unset(CMAKE_CXX_COMPILER_LOADED)
 find_package(MPI REQUIRED )
 find_package(ESMF MODULE REQUIRED)
 find_package(WGRIB2 REQUIRED)
