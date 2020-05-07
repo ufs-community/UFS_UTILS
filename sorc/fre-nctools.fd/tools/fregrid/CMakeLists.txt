@@ -19,7 +19,7 @@ add_executable(fregrid ${c_src})
 
 target_link_libraries(fregrid
   m
-  shared_all
+  shared_lib
   NetCDF::NetCDF_C)
 
 install(TARGETS fregrid RUNTIME DESTINATION ${exec_dir})

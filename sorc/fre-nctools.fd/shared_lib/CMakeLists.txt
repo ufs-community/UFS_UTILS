@@ -20,9 +20,9 @@ elseif(CMAKE_C_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   set(CMAKE_C_FLAGS_DEBUG " ")
 endif()
 
-add_library(shared_all STATIC ${c_src})
-target_compile_definitions(shared_all PRIVATE use_netCDF)
+add_library(shared_lib STATIC ${c_src})
+target_compile_definitions(shared_lib PRIVATE use_netCDF)
 
-target_include_directories(shared_all PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(shared_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(shared_all NetCDF::NetCDF_C)
+target_link_libraries(shared_lib NetCDF::NetCDF_C)

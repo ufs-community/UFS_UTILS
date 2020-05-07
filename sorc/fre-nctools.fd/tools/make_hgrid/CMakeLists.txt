@@ -20,7 +20,7 @@ add_executable(make_hgrid ${c_src})
 
 target_link_libraries(make_hgrid
   m
-  shared_all
+  shared_lib
   NetCDF::NetCDF_C)
 
 install(TARGETS make_hgrid RUNTIME DESTINATION ${exec_dir})
