@@ -1,7 +1,8 @@
 #%Module#####################################################
-## chgres build module for WCOSS-Cray
+## Build module for WCOSS-Cray
 #############################################################
 
+module load cmake/3.16.2
 module load PrgEnv-intel/5.2.56
 module rm intel
 module load intel/16.3.210

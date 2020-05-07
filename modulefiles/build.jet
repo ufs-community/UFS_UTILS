@@ -1,7 +1,8 @@
 #%Module#####################################################
-## chgres build module for Jet
+## Build module for Jet
 #############################################################
 
+module load cmake/3.16.1
 module load intel/18.0.5.274
 module load impi/2018.4.274
 module load szip/2.1

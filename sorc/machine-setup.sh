@@ -28,7 +28,6 @@ if [[ -d /lfs3 ]] ; then
     target=jet
     module purge
     module use /lfs3/projects/hfv3gfs/nwprod/NCEPLIBS/modulefiles
-    module load cmake/3.16.1
 elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then
@@ -38,7 +37,6 @@ elif [[ -d /scratch1 ]] ; then
     target=hera
     module purge
     MOD_PATH=/scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
-    module load cmake/3.16.1
 elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
     # We are on NOAA Luna or Surge
     if ( ! eval module help > /dev/null 2>&1 ) ; then
@@ -72,7 +70,6 @@ elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
     module use /opt/cray/ari/modulefiles
     module use /opt/modulefiles
     module load modules
-    module load cmake/3.16.2
 
 elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
     # We are on NOAA Venus or Mars
@@ -82,7 +79,6 @@ elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
     fi
     target=wcoss_dell_p3
     module purge 
-    module load cmake/3.16.2
 
 elif [[ -d /dcom && -d /hwrf ]] ; then
     # We are on NOAA Tide or Gyre
@@ -117,7 +113,6 @@ elif [[ "$(hostname)" =~ "Orion" ]]; then
     target="orion"
     module purge
     MOD_PATH=/apps/contrib/NCEPLIBS/orion/modulefiles
-    module load cmake/3.15.4
 elif [[ "$(hostname)" =~ "odin" ]]; then
     target="odin"
 else
