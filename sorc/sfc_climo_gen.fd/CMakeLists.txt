@@ -24,8 +24,6 @@ endif()
 
 set(exe_name sfc_climo_gen)
 add_executable(${exe_name} ${fortran_src})
-target_include_directories(
-  ${exe_name} PRIVATE ${ESMF_INC})
 target_link_libraries(
   ${exe_name}
   esmf

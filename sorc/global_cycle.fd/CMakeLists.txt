@@ -21,8 +21,6 @@ endif()
 
 set(exe_name global_cycle)
 add_executable(${exe_name} ${fortran_src})
-target_include_directories(
-  ${exe_name} PRIVATE)
 target_link_libraries(
   ${exe_name}
   w3nco_d

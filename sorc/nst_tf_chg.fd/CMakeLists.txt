@@ -22,8 +22,6 @@ endif()
 
 set(exe_name nst_tf_chg)
 add_executable(${exe_name} ${fortran_src})
-target_include_directories(
-  ${exe_name} PRIVATE)
 target_link_libraries(
   ${exe_name}
   nemsio

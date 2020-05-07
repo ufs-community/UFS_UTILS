@@ -17,8 +17,6 @@ endif()
 
 set(exe_name emcsfc_ice_blend)
 add_executable(${exe_name} ${fortran_src})
-target_include_directories(
-  ${exe_name} PRIVATE)
 target_link_libraries(
   ${exe_name}
   bacio_4

@@ -17,8 +17,6 @@ endif()
 
 set(exe_name nemsio_chgdate)
 add_executable(${exe_name} ${fortran_src})
-target_include_directories(
-  ${exe_name} PRIVATE)
 target_link_libraries(
   ${exe_name}
   nemsio
