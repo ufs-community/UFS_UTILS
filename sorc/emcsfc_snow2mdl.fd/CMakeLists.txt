@@ -33,7 +33,7 @@ target_link_libraries(
   ${JASPER_LIBRARIES}
   PNG::PNG
   ZLIB::ZLIB)
-if(OpenMP_Fortran_Found)
+if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
 endif()
 
