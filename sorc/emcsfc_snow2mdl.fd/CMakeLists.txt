@@ -7,11 +7,7 @@ set(fortran_src
     snowdat.f)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_Fortran_FLAGS "-g -traceback -r8 -FR -convert big_endian -assume byterecl")
-  set(CMAKE_Fortran_FLAGS_RELEASE "-O0")
-  set(CMAKE_Fortran_FLAGS_DEBUG
-      "-O0 -check -check noarg_temp_created -check nopointer -warn -warn noerrors -fp-stack-check -fstack-protector-all -fpe0 -debug -ftrapuv"
-  )
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -FR -convert big_endian -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   set(CMAKE_Fortran_FLAGS "-g -fbacktrace -ffree-form -ffree-line-length-0 -fdefault-real-8 -fconvert=big-endian")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3")

@@ -2,11 +2,7 @@ set(fortran_src
     filter_topo.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_Fortran_FLAGS "-g -traceback -assume byterecl -real_size 64")
-  set(CMAKE_Fortran_FLAGS_RELEASE "-fltconsistency -fno-alias -stack_temps -safe_cray_ptr -ftz -O2")
-  set(CMAKE_Fortran_FLAGS_DEBUG
-      "-O0 -check -check noarg_temp_created -check nopointer -warn -warn noerrors -fp-stack-check -fstack-protector-all -fpe0 -debug -ftrapuv"
-  )
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -assume byterecl -real_size 64 -fno-alias -stack_temps -safe_cray_ptr -ftz")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   set(CMAKE_Fortran_FLAGS "-g -fbacktrace -ffree-line-length-0 -fdefault-real-8")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3")

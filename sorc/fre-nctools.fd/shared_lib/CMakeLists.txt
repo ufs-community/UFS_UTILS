@@ -10,16 +10,6 @@ set(c_src
     read_mosaic.c
     tool_util.c)
 
-if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_C_FLAGS "-traceback")
-  set(CMAKE_C_FLAGS_RELEASE "-O2")
-  set(CMAKE_C_FLAGS_DEBUG "-O0")
-elseif(CMAKE_C_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
-  set(CMAKE_C_FLAGS " ")
-  set(CMAKE_C_FLAGS_RELEASE " ")
-  set(CMAKE_C_FLAGS_DEBUG " ")
-endif()
-
 add_library(shared_lib STATIC ${c_src})
 target_compile_definitions(shared_lib PRIVATE use_netCDF)
 
