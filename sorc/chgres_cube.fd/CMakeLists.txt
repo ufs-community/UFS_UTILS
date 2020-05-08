@@ -40,7 +40,9 @@ target_link_libraries(
   esmf
   MPI::MPI_Fortran
   ${WGRIB2_LIBRARIES}
-  NetCDF::NetCDF_Fortran
-  OpenMP::OpenMP_Fortran)
+  NetCDF::NetCDF_Fortran)
+if(OpenMP_Fortran_FOUND)
+  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
+endif()
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})

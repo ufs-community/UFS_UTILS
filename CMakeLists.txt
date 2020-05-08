@@ -33,7 +33,10 @@ find_package(MPI REQUIRED )
 find_package(ESMF MODULE REQUIRED)
 find_package(WGRIB2 REQUIRED)
 
-find_package(OpenMP REQUIRED COMPONENTS Fortran)
+option(OPENMP "use OpenMP threading" ON)
+if(OPENMP)
+  find_package(OpenMP REQUIRED COMPONENTS Fortran)
+endif()
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
 
