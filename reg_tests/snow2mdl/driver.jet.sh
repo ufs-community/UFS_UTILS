@@ -28,9 +28,8 @@
 
 set -x
 
-module unload intel
-module load intel/18.0.5.274
-module list
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
 export DATA="/mnt/lfs3/projects/emcda/$LOGNAME/stmp/reg_tests.snow2mdl"
 
