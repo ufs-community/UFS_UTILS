@@ -26,10 +26,8 @@
 #BSUB -R "affinity[core(1)]"
 #BSUB -P GFS-DEV
 
-module purge
-module load ips/18.0.1.163
-module load jasper/1.900.29
-module list
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
 set -x
 

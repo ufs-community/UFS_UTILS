@@ -19,14 +19,9 @@
 #
 #-----------------------------------------------------------------------------
 
-module purge
-module load EnvVars/1.0.2
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 module load lsf/10.1
-module load ips/18.0.1.163
-module load impi/18.0.1
-module use /usrx/local/nceplibs/dev/NCEPLIBS/modulefiles
-module load netcdf_parallel/4.7.4
-module list
 
 set -x
 
