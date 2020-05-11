@@ -21,12 +21,8 @@
 #
 #-----------------------------------------------------------------------------
 
-. /apps/lmod/lmod/init/sh
-module purge
-module load intel/18.0.5.274
-module load impi/2018.0.4
-module load netcdf_parallel/4.7.4
-module list
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
 set -x
 

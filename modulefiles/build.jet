@@ -2,6 +2,7 @@
 ## Build module for Jet
 #############################################################
 
+module use /lfs3/projects/hfv3gfs/nwprod/NCEPLIBS/modulefiles
 module load cmake/3.16.1
 module load intel/18.0.5.274
 module load impi/2018.4.274
