@@ -19,8 +19,8 @@
 #
 #-----------------------------------------------------------------------------
 
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
 source ../../modulefiles/build.wcoss_cray
-module load cfp-intel-sandybridge/1.1.0
 module list
 
 set -x

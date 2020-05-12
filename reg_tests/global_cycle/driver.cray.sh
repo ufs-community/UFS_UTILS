@@ -27,6 +27,7 @@
 #BSUB -W 00:05
 #BSUB -extsched 'CRAYLINUX[]'
 
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
 source ../../modulefiles/build.wcoss_cray
 module list
 

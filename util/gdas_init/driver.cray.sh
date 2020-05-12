@@ -8,6 +8,7 @@
 
 set -x
 
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
 source ../../modulefiles/build.wcoss_cray
 module list
 
