@@ -27,7 +27,7 @@
 #BSUB -W 00:05
 #BSUB -extsched 'CRAYLINUX[]'
 
-module load PrgEnv-intel cfp-intel-sandybridge/1.1.0
+source ../../modulefiles/build.wcoss_cray
 module list
 
 export DATA=/gpfs/hps3/stmp/$LOGNAME/reg_tests.cycle

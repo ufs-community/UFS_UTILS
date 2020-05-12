@@ -28,7 +28,7 @@
 
 set -x
 
-module load PrgEnv-intel
+source ../../modulefiles/build.wcoss_cray
 module list
 
 export DATA=/gpfs/hps3/stmp/$LOGNAME/reg_tests.snow2mdl

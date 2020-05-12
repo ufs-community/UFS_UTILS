@@ -22,14 +22,7 @@
 
 set -x
 
-module purge
-module load PrgEnv-intel/5.2.56
-module rm intel
-module load intel/16.3.210
-module load cray-mpich/7.2.0
-module load craype-haswell
-module load cray-netcdf/4.3.3.1
-module load xt-lsfhpc/9.1.3
+source ../../modulefiles/build.wcoss_cray
 module list
 
 export OUTDIR=/gpfs/hps3/stmp/$LOGNAME/chgres_reg_tests

@@ -19,8 +19,8 @@
 #
 #-----------------------------------------------------------------------------
 
-. $MODULESHOME/init/sh
-module load PrgEnv-intel cfp-intel-sandybridge/1.1.0
+source ../../modulefiles/build.wcoss_cray
+module load cfp-intel-sandybridge/1.1.0
 module list
 
 set -x
