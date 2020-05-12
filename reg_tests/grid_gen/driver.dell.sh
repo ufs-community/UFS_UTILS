@@ -21,7 +21,6 @@
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 source ../../modulefiles/build.$target
-module load lsf/10.1
 
 set -x
 

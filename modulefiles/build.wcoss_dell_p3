@@ -1,7 +1,9 @@
 #%Module#####################################################
-## Build module for WCOSS-Dell P3
+## Build and run module for WCOSS-Dell P3
 #############################################################
 
+module load lsf/10.1
+module load HPSS/5.0.2.5
 module load cmake/3.16.2
 module load ips/18.0.1.163
 module load impi/18.0.1

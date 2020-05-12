@@ -10,8 +10,6 @@ set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 source ../../modulefiles/build.$target
-module load lsf/10.1
-module load HPSS/5.0.2.5
 
 PROJECT_CODE=GFS-DEV
 

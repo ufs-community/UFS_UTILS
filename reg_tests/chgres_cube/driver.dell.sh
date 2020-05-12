@@ -24,7 +24,6 @@ set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 source ../../modulefiles/build.$target
-module load lsf/10.1
 
 export OUTDIR=/gpfs/dell1/stmp/$LOGNAME/chgres_reg_tests
 QUEUE="debug"
