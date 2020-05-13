@@ -52,7 +52,7 @@
 set -x
 
 source ../sorc/machine-setup.sh > /dev/null 2>&1
-source ../modulefiles/build.hera
+source ../modulefiles/build.$target
 module list
 
 #-----------------------------------------------------------------------

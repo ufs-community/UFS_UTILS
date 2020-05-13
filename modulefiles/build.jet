@@ -1,5 +1,5 @@
 #%Module#####################################################
-## Build module for Jet
+## Build and run module for Jet
 #############################################################
 
 module use /lfs3/projects/hfv3gfs/nwprod/NCEPLIBS/modulefiles

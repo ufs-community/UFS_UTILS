@@ -9,7 +9,7 @@
 set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.wcoss_cray
+source ../../modulefiles/build.$target
 module list
 
 PROJECT_CODE=GFS-DEV
