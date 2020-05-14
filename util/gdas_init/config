@@ -38,15 +38,15 @@
 #         
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/gpfs/dell1/stmp/$USER/gdas.init/input
-EXTRACT_DATA=yes
+EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/George.Gayno/gdas.init/input
+EXTRACT_DATA=no
 
 RUN_CHGRES=yes
 
-yy=2017
-mm=07
-dd=19
-hh=18
+yy=2020
+mm=05
+dd=10
+hh=00
 
 LEVS=65
 
@@ -55,7 +55,7 @@ CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
 
-OUTDIR=/gpfs/dell1/stmp/$USER/gdas.init/output
+OUTDIR=/scratch2/NCEPDEV/stmp1/George.Gayno/gdas.init/output
 
 #---------------------------------------------------------
 # Dont touch anything below here.
@@ -75,6 +75,8 @@ elif [ $yy$mm$dd$hh -lt 2017072000 ]; then
 elif [ $yy$mm$dd$hh -lt 2019061200 ]; then
   gfs_ver=v14
 fi
+
+gfs_ver=v16
 
 export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF RUN_CHGRES
 export LEVS gfs_ver
