@@ -28,7 +28,8 @@
 
 set -x
 
-module load intel
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
 export DATA="/mnt/lfs3/projects/emcda/$LOGNAME/stmp/reg_test.ice_blend"
 

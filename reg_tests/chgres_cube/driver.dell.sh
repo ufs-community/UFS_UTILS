@@ -22,14 +22,8 @@
 
 set -x
 
-module purge
-module load EnvVars/1.0.2
-module load ips/18.0.1.163
-module load impi/18.0.1
-module load lsf/10.1
-module use /usrx/local/dev/modulefiles
-module load NetCDF/4.5.0
-module list
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
 export OUTDIR=/gpfs/dell1/stmp/$LOGNAME/chgres_reg_tests
 QUEUE="debug"
@@ -51,7 +45,7 @@ SUM_FILE=summary.log
 
 rm -f $LOG_FILE $SUM_FILE
 
-export NCCMP=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
+export NCCMP=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/util/nccmp/nccmp-nc4.7.4/src/nccmp
 
 export OMP_STACKSIZE=1024M
 

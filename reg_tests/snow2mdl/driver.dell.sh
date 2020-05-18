@@ -26,6 +26,9 @@
 #BSUB -R "affinity[core(1)]"
 #BSUB -P GFS-DEV
 
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
+
 set -x
 
 export DATA=/gpfs/dell1/stmp/$LOGNAME/reg_tests.snow2mdl

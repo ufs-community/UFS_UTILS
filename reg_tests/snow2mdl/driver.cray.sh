@@ -28,7 +28,8 @@
 
 set -x
 
-module load PrgEnv-intel
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 module list
 
 export DATA=/gpfs/hps3/stmp/$LOGNAME/reg_tests.snow2mdl

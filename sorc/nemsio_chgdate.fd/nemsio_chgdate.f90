@@ -60,11 +60,11 @@ write(6,'(A,7(1X,I6))') 'OLD idate  = ', idate
 write(6,'(A,I4)') 'OLD nfhour = ', nfhour
 
 ! Replace old date with new dates
-read(idatestr(1:4), '(I)') idate(1)
-read(idatestr(5:6), '(I)') idate(2)
-read(idatestr(7:8), '(I)') idate(3)
-read(idatestr(9:10), '(I)')idate(4)
-read(nfhourstr, '(I)') nfhour
+read(idatestr(1:4), '(I4)') idate(1)
+read(idatestr(5:6), '(I2)') idate(2)
+read(idatestr(7:8), '(I2)') idate(3)
+read(idatestr(9:10), '(I2)')idate(4)
+read(nfhourstr, '(I10)') nfhour
 
 write(6,'(A,7(1X,I6))') 'NEW idate  = ', idate
 write(6,'(A,I4)') 'NEW nfhour = ', nfhour

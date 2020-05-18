@@ -29,7 +29,8 @@
 
 set -x
 
-module load intel
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
 export DATA="/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_tests.snow2mdl"
 
