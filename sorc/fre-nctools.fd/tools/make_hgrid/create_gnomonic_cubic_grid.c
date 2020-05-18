@@ -1,3 +1,16 @@
+/*******************************************************************************
+                             create_gnomonic_cubic_grid.c
+  This file creates the 6 tiles for a gnomonic projection of a cubed sphere.
+    It also creates nest grids if they are defined.
+  Modifications:
+  05/10/2020  -- Added multiple nest capability.  Bill Ramstrom, AOML/HRD
+                 Nests can be specified on any parent tile, and can each be different sizes.
+                 Nests with different refinement ratios have NOT been tested and should be considered unsupported.
+
+*******************************************************************************/
+
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -50,20 +63,39 @@ void spherical_linear_interpolation(double beta, const double *p1, const double 
   create nomomic cubic grid. All six tiles grid will be generated.
 *******************************************************************************/
 void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *x, double *y,
-				double *dx, double *dy, double *area, double *angle_dx,
+				 double *dx, double *dy, double *area, double *angle_dx,
 				 double *angle_dy, double shift_fac, int do_schmidt, double stretch_factor,
-				 double target_lon, double target_lat, int nest_grid,
-				 int parent_tile, int refine_ratio, int istart_nest,
-				 int iend_nest, int jstart_nest, int jend_nest, int halo)
+				 double target_lon, double target_lat, int num_nest_grids,
+				 int parent_tile[MAX_NESTS], int refine_ratio[MAX_NESTS], int istart_nest[MAX_NESTS],
+				 int iend_nest[MAX_NESTS], int jstart_nest[MAX_NESTS], int jend_nest[MAX_NESTS], 
+				 int halo)
 {
   const int ntiles = 6;
+  int verbose = 1;
   int ntiles2, global_nest=0;
+
   int nx, ny, nxp, nyp, ni, nj, nip, njp;
-  int ni_nest, nj_nest, nx_nest, ny_nest;
-  int istart, iend, jstart, jend;
+
+  int nx_nest[MAX_NESTS], ny_nest[MAX_NESTS];
+  int ni_nest[MAX_NESTS], nj_nest[MAX_NESTS];
+  int istart[MAX_NESTS], iend[MAX_NESTS], jstart[MAX_NESTS], jend[MAX_NESTS];
+
+  int *nx_nest_arr=NULL;
+  int *ny_nest_arr=NULL;
+  int *ni_nest_arr=NULL;
+  int *nj_nest_arr=NULL;
+
+
   int ni2, nj2, ni2p, nj2p, n1, n2;
   int *nxl=NULL, *nyl=NULL, *nil=NULL, *njl=NULL;
-  int i, j, n, npts;
+  int *tile_offset=NULL;
+  int *tile_offset_supergrid=NULL;
+  int *tile_offset_supergrid_m=NULL;
+  int *tile_offset_area=NULL;
+
+  int i, j, n, npts, nn;
+  int npts_supergrid, npts_supergrid_m, npts_area;
+
   double p1[2], p2[2];
   double *lon=NULL, *lat=NULL;
   double *xc=NULL, *yc=NULL, *xtmp=NULL, *ytmp=NULL;
@@ -74,15 +106,25 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
      the size in x and y-direction are the same
   */
 
+
+  /* ntiles is a constant always equal to 6.  ntiles2 is variable, and includes the 6 global tiles plus any nests */
+
+  if (verbose) printf("[INFO] A.  Starting create_gnomonic_grid with num_nest_grids=%d\n", num_nest_grids);
+
   for(n=0; n<ntiles; n++) {
     if(nlon[n] != nlat[n] ) mpp_error("create_gnomonic_cubic_grid: the grid size in x and y-direction "
-			  	  "should be the same for the 6 tiles of cubic sphere grid");
+				      "should be the same for the 6 tiles of cubic sphere grid");
     if( nlon[n]%2 ) mpp_error("create_gnomonic_cubic_grid: supergrid size in x-direction should be divided by 2");
     if( nlat[n]%2 ) mpp_error("create_gnomonic_cubic_grid: supergrid size in y-direction should be divided by 2");
   }
   for(n=1; n<ntiles; n++) {
     if(nlon[n] != nlon[0]) mpp_error("create_gnomonic_cubic_grid: all six tiles should have same size");
   }
+
+  // nx, ny variables correspond to the supergrid, which has twice as many points
+  // ni, nj variables correspond to the number of cell centers
+  // nip, njp variables correspond to the number of cell edges (i.e. ni+1, nj+1)
+
 
   nx  = nlon[0];
   ny  = nx;
@@ -92,33 +134,78 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
   nj  = ni;
   nip = ni+1;
   njp = nip;
-  ni_nest = 0;
-  nj_nest = 0;  
+
+  for (nn=0; nn < MAX_NESTS; nn++) {
+    ni_nest[nn] = 0;
+    nj_nest[nn] = 0;  
+  }
+
   ntiles2=ntiles;
   global_nest=0;
-  if(nest_grid && parent_tile== 0)
+
+  if (verbose) printf("[INFO] B\n");
+
+
+  if(num_nest_grids && parent_tile[0]== 0)
     global_nest = 1;
-  else if(nest_grid) {
-    ntiles2 = ntiles+1;
-    if( (istart_nest+1)%2 ) mpp_error("create_gnomonic_cubic_grid: istart_nest+1 is not divisbile by 2");
-    if( iend_nest%2 ) mpp_error("create_gnomonic_cubic_grid: iend_nest is not divisbile by 2");
-    if( (jstart_nest+1)%2 ) mpp_error("create_gnomonic_cubic_grid: jstart_nest+1 is not divisbile by 2");
-    if( jend_nest%2 ) mpp_error("create_gnomonic_cubic_grid: jend_nest is not divisbile by 2");  
-    istart = (istart_nest+1)/2;
-    iend   = iend_nest/2;
-    jstart = (jstart_nest+1)/2;
-    jend   = jend_nest/2;
-    ni_nest = (iend-istart+1)*refine_ratio;
-    nj_nest = (jend-jstart+1)*refine_ratio;  
+  else {
+    for (nn=0; nn < num_nest_grids; nn++) {
+      ntiles2 = ntiles+num_nest_grids;
+      if( (istart_nest[nn]+1)%2 ) mpp_error("create_gnomonic_cubic_grid: istart_nest+1 is not divisbile by 2");
+      if( iend_nest[nn]%2 ) mpp_error("create_gnomonic_cubic_grid: iend_nest is not divisbile by 2");
+      if( (jstart_nest[nn]+1)%2 ) mpp_error("create_gnomonic_cubic_grid: jstart_nest+1 is not divisbile by 2");
+      if( jend_nest[nn]%2 ) mpp_error("create_gnomonic_cubic_grid: jend_nest is not divisbile by 2");  
+      istart[nn] = (istart_nest[nn]+1)/2;
+      iend[nn]   = iend_nest[nn]/2;
+      jstart[nn] = (jstart_nest[nn]+1)/2;
+      jend[nn]   = jend_nest[nn]/2;
+      ni_nest[nn] = (iend[nn]-istart[nn]+1)*refine_ratio[nn];
+      nj_nest[nn] = (jend[nn]-jstart[nn]+1)*refine_ratio[nn];  
+      
+      nx_nest[nn] = ni_nest[nn]*2;
+      ny_nest[nn] = nj_nest[nn]*2;
+    }
   }
-  nx_nest = ni_nest*2;
-  ny_nest = nj_nest*2;
+  if (verbose) printf("[INFO] C\n");
+
+
+
+  if (verbose) printf("[INFO] C1 ntiles: %d num_nest_grids: %d ntiles2: %d\n", ntiles, num_nest_grids, ntiles2);
+
+  /*  Since many of the variables for the global and nest tiles are stored in 1D arrays, 
+      we generate a set of indices that navigate to the start of each global and nest tile.
+      ntiles is set to 1 for regional or 6 for global
+      ntiles2 is ntiles + the number of nests
+
+      nxl, nyl indicate supergrid size for each tile
+      nil, njl indicate model grid size for each tile
+
+   */
+
     
-  /* nxl/nyl supergrid size, nil, njl model grid size */
+
   nxl = (int *)malloc(ntiles2*sizeof(int));
   nyl = (int *)malloc(ntiles2*sizeof(int));
   nil = (int *)malloc(ntiles2*sizeof(int));
   njl = (int *)malloc(ntiles2*sizeof(int));
+
+  
+  nx_nest_arr = (int *)malloc(num_nest_grids*sizeof(int));
+  ny_nest_arr = (int *)malloc(num_nest_grids*sizeof(int));
+  ni_nest_arr = (int *)malloc(num_nest_grids*sizeof(int));
+  nj_nest_arr = (int *)malloc(num_nest_grids*sizeof(int));
+
+for (nn=0; nn < num_nest_grids; nn++) {
+    nx_nest_arr[nn] = nx_nest[nn];
+    ny_nest_arr[nn] = ny_nest[nn];
+    ni_nest_arr[nn] = ni_nest[nn];
+    nj_nest_arr[nn] = nj_nest[nn];
+  }
+
+  tile_offset = (int *)malloc(ntiles2*sizeof(int));
+  tile_offset_supergrid = (int *)malloc(ntiles2*sizeof(int));
+  tile_offset_supergrid_m = (int *)malloc(ntiles2*sizeof(int));
+  tile_offset_area = (int *)malloc(ntiles2*sizeof(int));
 
   for(n=0; n<ntiles; n++) {
     nxl[n] = nx;
@@ -126,17 +213,30 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
     nil[n] = ni;
     njl[n] = nj;
   }
-  if(ntiles2 > ntiles) {
-    nxl[ntiles] = nx_nest;
-    nyl[ntiles] = ny_nest;
-    nil[ntiles] = ni_nest;
-    njl[ntiles] = nj_nest;
+
+  /* Use of these arrays permits different sized nests */
+  for (nn=0; nn < num_nest_grids; nn++) {
+    nxl[nn+ntiles] = nx_nest_arr[nn];
+    nyl[nn+ntiles] = ny_nest_arr[nn];
+    nil[nn+ntiles] = ni_nest_arr[nn];
+    njl[nn+ntiles] = nj_nest_arr[nn];
   }
 
+
+  if (verbose) {
+    printf("[INFO] INDEX ntiles: %d ntiles2: %d\n", ntiles, ntiles2);
+    for(n=0; n<ntiles2; n++) {
+      printf("[INFO] INDEX n: %d nxl[n]: %d nyl[n]: %d nil[n]: %d njl[n]: %d\n",n, nxl[n], nyl[n], nil[n], njl[n]);
+    }
+  }
+  
+  if (verbose) printf("[INFO] D\n");
+
   /* for global nest grid, set ni to the coarse grid size */
+  /* TODO -- can this code handle multiple different refinement ratios for global nests? */
   if(global_nest) {
-    ni /= refine_ratio;
-    nj /= refine_ratio;
+    ni /= refine_ratio[0];
+    nj /= refine_ratio[0];
   }
   nip=ni+1;
   njp=nj+1;
@@ -145,6 +245,8 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
   
   lon = (double *)malloc(nip*nip*sizeof(double));
   lat = (double *)malloc(nip*nip*sizeof(double));
+  
+  if (verbose) printf("[INFO] E\n");
   
   if(strcmp(grid_type, "gnomonic_ed")==0 )
     gnomonic_ed(  ni, lon, lat);
@@ -158,9 +260,32 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
   symm_ed(ni, lon, lat);
 
   
-  npts = ntiles*nip*nip;
-  if(ntiles2>ntiles) npts += (ni_nest+1)*(nj_nest+1);
+  if (verbose) printf("[INFO] F\n");
   
+  // Cycle through all of the tiles; global and nests, adding enough points based on the dimensions
+  // The 6 cubed-sphere tiles are square thus, nil=njl, but the nests can be rectangular
+  npts = 0;
+  npts_supergrid = 0;
+  npts_supergrid_m = 0;
+  npts_area = 0;
+
+  for (n=0; n<ntiles2; n++) {
+    tile_offset[n] = npts;
+    tile_offset_supergrid[n] = npts_supergrid;
+    tile_offset_supergrid_m[n] = npts_supergrid_m;
+    tile_offset_area[n] = npts_area;
+
+    if (verbose) printf("[INFO] INDEX OFFSET n: %d tile_offset[n]: %d tile_offset_supergrid[n]: %d tile_offset_supergrid_m[n]: %d tile_offset_area[n]: %d \n",
+			n, tile_offset[n],  tile_offset_supergrid[n],  tile_offset_supergrid_m[n],  tile_offset_area[n]);
+
+    npts += (nil[n] + 1) * (njl[n] + 1);
+    npts_supergrid += (nxl[n] + 1) * (nyl[n] + 1);
+    npts_supergrid_m += nxl[n] * (nyl[n] + 1);    // needed for grids of dx, dy
+    npts_area += nxl[n] * nyl[n];    // needed for area
+  }
+  
+  if (verbose) printf("[INFO] INDEX OFFSET npts: %d\n", npts);
+
   xc = (double *)malloc(npts*sizeof(double));
   yc = (double *)malloc(npts*sizeof(double));
   
@@ -175,13 +300,18 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
      and greenwich meridian Lon[-pi,pi]  */
   mirror_grid(ni, ntiles, xc, yc);
 
+  if (verbose) printf("[INFO] G\n");
+
+  // Operate only on the 6 parent tiles
   for(n=0; n<ntiles*nip*nip; n++) {
     /* This will result in the corner close to east coast of china */
-    if( do_schmidt == 0 && shift_fac > EPSLN4) xc[n] -= M_PI/shift_fac;
+    if( do_schmidt == 0 && shift_fac > EPSLN4) xc[n] -= M_PI/18.;
     if(xc[n] < 0.) xc[n] += 2.*M_PI;
     if(fabs(xc[n]) < EPSLN10) xc[n] = 0;
     if(fabs(yc[n]) < EPSLN10) yc[n] = 0;
   }
+
+  if (verbose) printf("[INFO] H\n");
       
   /* ensure consistency on the boundary between tiles */
   for(j=0; j<nip; j++) {
@@ -219,13 +349,24 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
     yc[5*nip*nip+j*nip] = yc[4*nip*nip+j*nip+ni];    /* 5E -> 6W */  
   }
 
+  if (verbose) printf("[INFO] I\n");
+
+
   /* Schmidt transformation */
   if ( do_schmidt ) {
     for(n=0; n<ntiles; n++) {
-       direct_transform(stretch_factor, 0, ni, 0, ni, target_lon*D2R, target_lat*D2R,
-			n, xc+n*nip*nip, yc+n*nip*nip);
+      
+      if (verbose) {
+	printf("[INFO] Calling direct_transform for tile %d\n", n);
+      }
+
+      direct_transform(stretch_factor, 0, ni, 0, ni, target_lon*D2R, target_lat*D2R,
+		       n, xc+n*nip*nip, yc+n*nip*nip);
     }
   }
+
+  if (verbose) printf("[INFO] J\n");
+
   
   /* get nest grid */
   if(global_nest) {
@@ -246,17 +387,41 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
     xc = (double *)malloc(npts*sizeof(double));
     yc = (double *)malloc(npts*sizeof(double));  
     for(n=0; n<ntiles; n++) {
-       printf("calling setup_aligned_nest, n=%d\n",n);
-       setup_aligned_nest(ni2, ni2, xc2+ni2p*ni2p*n, yc2+ni2p*ni2p*n, 0, refine_ratio,
-			  1, ni2, 1, ni2, xc+n*nip*nip, yc+n*nip*nip );      
+      printf("[INFO] calling setup_aligned_nest, n=%d\n",n);
+      setup_aligned_nest(ni2, ni2, xc2+ni2p*ni2p*n, yc2+ni2p*ni2p*n, 0, refine_ratio[n],
+      			 1, ni2, 1, ni2, xc+n*nip*nip, yc+n*nip*nip );      
+
+
+
     }
   }
-  else if( nest_grid ) {
-    setup_aligned_nest(ni, ni, xc+nip*nip*(parent_tile-1),
-		       yc+nip*nip*(parent_tile-1), halo, refine_ratio,
-		       istart, iend, jstart, jend,
-		       xc+ntiles*nip*nip, yc+ntiles*nip*nip );
+  else if( num_nest_grids > 0 ) {
+    for (nn=0; nn < num_nest_grids; nn++) {
+      if (verbose) {
+	printf("[INFO] Processing setup_aligned_nest for nest %d .  ntiles=%d parent_tile: %d\n", nn, ntiles, parent_tile);
+      }
+      
+      /* Setup aligned nest -- final two arguments are memory locations for data to be returned */
+      /* The pointer arithmetic is complicated */
+      /* ni = number of points on supergrid */
+      /* nip = ni + 1 */
+      
+      setup_aligned_nest(ni, ni, xc+tile_offset[parent_tile[nn]-1],
+			 yc+tile_offset[parent_tile[nn]-1], halo, refine_ratio[nn],
+			 istart[nn], iend[nn], jstart[nn], jend[nn],
+			 xc+tile_offset[ntiles+nn], yc+tile_offset[ntiles+nn]);
+    }
+    
+    
+    if (verbose) {
+      printf("[INFO] Completed processing setup_aligned_nest for nest(s)\n");
+    }
+
+
   }
+
+  if (verbose) printf("[INFO] K\n");
+
   
   /* calculate grid box center location */
 
@@ -270,79 +435,162 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
   nj2p = nj2+1;
   xtmp = (double *)malloc(ni2p*nj2p*sizeof(double));
   ytmp = (double *)malloc(ni2p*nj2p*sizeof(double));
-  
+
+  if (verbose) printf("[INFO] L\n");
+
+  /* Setting the x, y values for each tile */
+  /* Not clear that data is handled correctly for nested tiles, though. */
+
+  /* Iterate over all of the tiles                                                                   */
+  /* Copy the lat/lons into the x, y array                                                           */
+  /*     C-cell                                                                                      */
+  /*     Center                                                                                      */
+  /*     East                                                                                        */
+  /*     North                                                                                       */
+      
+
   for(n=0; n<ntiles2; n++) {
+    int min_n1 = -1;
+    int max_n1 = -1;
+    
+
     /* copy C-cell to supergrid */
+    if (verbose) printf("[INFO] INDEX fill x and y from C-cell.  n=%d n*nxp*nxp=%d tile_offset[n]: %d tile_offset_supergrid[n]: %d njl[n]: %d nil[n]: %d\n",n,  n*nxp*nxp, tile_offset[n], tile_offset_supergrid[n], njl[n], nil[n]);
+    if (verbose) printf("[INFO] START fill x and y from C-cell.  n=%d tile_offset_supergrid[n]: %d \n",n, tile_offset_supergrid[n]);
+
     for(j=0; j<=njl[n]; j++) for(i=0; i<=nil[n]; i++) {
-      n1 = n*nxp*nxp+j*2*(2*nil[n]+1)+i*2;
-      n2 = n*nip*nip+j*(nil[n]+1)+i;
-      x[n1]=xc[n2];
-      y[n1]=yc[n2];
-    }
+	/* n1 = n*nxp*nxp+j*2*(2*nil[n]+1)+i*2; */
+	//n1 = n*nxp*nxp+j*2*(2*nil[n]+1)+i*2;
+	//n2 = n*nip*nip+j*(nil[n]+1)+i;
+	n1 = tile_offset_supergrid[n] + j*2*(2*nil[n]+1) + i*2;
+	n2 = tile_offset[n] + j*(nil[n]+1)+i;
+	//if (verbose) printf("[INFO] CCELL n: %d i: %d j: %d n1: %d npts_supergrid: %d n2: %d npts: %d\n", n, i, j, n1, npts_supergrid, n2, npts);
+	x[n1]=xc[n2];
+	y[n1]=yc[n2];
+
+	if (verbose){ 
+	  if (n1 < min_n1 || min_n1 == -1) min_n1 = n1;
+	  if (n1 > max_n1) max_n1 = n1;
+	}
+
+
+
+      }
     
     /* cell center and copy to super grid */
-    cell_center(nil[n], njl[n], xc+n*nip*nip, yc+n*nip*nip, xtmp, ytmp);
+    //cell_center(nil[n], njl[n], xc+n*nip*nip, yc+n*nip*nip, xtmp, ytmp);
+    cell_center(nil[n], njl[n], xc + tile_offset[n], yc + tile_offset[n], xtmp, ytmp);
+    if (verbose) printf("[INFO] CENTER n: %d n*nip*nip: %d tile_offset[n]: %d\n", n, n*nip*nip, tile_offset[n]);
     for(j=0; j<njl[n]; j++) for(i=0; i<nil[n]; i++) {
-      n1 = n*nxp*nxp+(j*2+1)*(2*nil[n]+1)+i*2+1;
-      n2 = j*nil[n]+i;
-      x[n1]=xtmp[n2];
-      y[n1]=ytmp[n2];
-    }
+	// Offset of 2 for i=0, j=0
+	//n1 = n*nxp*nxp+(j*2+1)*(2*nil[n]+1)+i*2+1;
+	//n2 = j*nil[n]+i;
+	n1 = tile_offset_supergrid[n] + (j*2+1)*(2*nil[n]+1)+i*2+1;
+	n2 = j*nil[n]+i;   // WDR why does this not have a tile_offset??
+	x[n1]=xtmp[n2];
+	y[n1]=ytmp[n2];
+
+	if (verbose){ 
+	  if (n1 < min_n1) min_n1 = n1;
+	  if (n1 > max_n1) max_n1 = n1;
+	}
+
+      }
 
     /* cell east and copy to super grid */
-    cell_east(nil[n], njl[n], xc+n*nip*nip, yc+n*nip*nip, xtmp, ytmp);
+    //cell_east(nil[n], njl[n], xc+n*nip*nip, yc+n*nip*nip, xtmp, ytmp);
+    cell_east(nil[n], njl[n], xc + tile_offset[n], yc + tile_offset[n], xtmp, ytmp);
     for(j=0; j<njl[n]; j++) for(i=0; i<=nil[n]; i++) {
-      n1 = n*nxp*nxp+(j*2+1)*(2*nil[n]+1)+i*2;
-      n2 = j*(nil[n]+1)+i;
-      x[n1]=xtmp[n2];
-      y[n1]=ytmp[n2];
-    }
+	// Offset of 2*nil[n] + 1 for i=0, j=0
+	//n1 = n*nxp*nxp+(j*2+1)*(2*nil[n]+1)+i*2;
+	n1 = tile_offset_supergrid[n] + (j*2+1)*(2*nil[n]+1)+i*2;
+	n2 = j*(nil[n]+1)+i;   // WDR why does this not have a tile_offset??
+	x[n1]=xtmp[n2];
+	y[n1]=ytmp[n2];
+
+	if (verbose){ 
+	  if (n1 < min_n1) min_n1 = n1;
+	  if (n1 > max_n1) max_n1 = n1;
+	}
+
+
+      }
 
     /* cell north and copy to super grid */
-    cell_north(nil[n], njl[n], xc+n*nip*nip, yc+n*nip*nip, xtmp, ytmp);
+    //cell_north(nil[n], njl[n], xc+n*nip*nip, yc+n*nip*nip, xtmp, ytmp);
+    cell_north(nil[n], njl[n], xc + tile_offset[n], yc + tile_offset[n], xtmp, ytmp);
     for(j=0; j<=njl[n]; j++) for(i=0; i<nil[n]; i++) {
-      n1 = n*nxp*nxp+(j*2)*(2*nil[n]+1)+i*2+1;
-      n2 = j*nil[n]+i;
-      x[n1]=xtmp[n2];
-      y[n1]=ytmp[n2];
-    }
+	// Offset of 1 for i=0, j=0
+	//n1 = n*nxp*nxp+(j*2)*(2*nil[n]+1)+i*2+1;
+	n1 = tile_offset_supergrid[n] + (j*2)*(2*nil[n]+1)+i*2+1;
+	n2 = j*nil[n]+i;   // WDR why does this not have a tile_offset??
+	x[n1]=xtmp[n2];
+	y[n1]=ytmp[n2];
+
+	if (verbose){ 
+	  if (n1 < min_n1) min_n1 = n1;
+	  if (n1 > max_n1) max_n1 = n1;
+	}
+
+      }
+
+    if (verbose) printf("[INFO] INDEX tile: %d min_n1: %d max_n1: %d max_n1 - min_n1: %d sqrt(max_n1 - min_n1 + 1): %f\n", n, min_n1, max_n1, max_n1 - min_n1, sqrt(max_n1 - min_n1 + 1));
+
   } 
 
   free(xtmp);
   free(ytmp);
+
+  if (verbose) printf("[INFO] M\n");
   
   /* calculate grid cell length */
+
+  /* Calculate dx */
   for(n=0; n<ntiles2; n++) {
+    if (verbose) printf("[INFO] M1 Calculating dx for tile n: %d ntiles2: %d\n", n, ntiles2);
+    
     for(j=0; j<=nyl[n]; j++) {
       for(i=0; i<nxl[n]; i++) {
-	p1[0] = x[n*nxp*nxp+j*(nxl[n]+1)+i];
-	p1[1] = y[n*nxp*nxp+j*(nxl[n]+1)+i];
-	p2[0] = x[n*nxp*nxp+j*(nxl[n]+1)+i+1];
-	p2[1] = y[n*nxp*nxp+j*(nxl[n]+1)+i+1];
-	dx[n*nx*nxp+j*nxl[n]+i] = great_circle_distance(p1, p2);
+
+	p1[0] = x[tile_offset_supergrid[n] + j*(nxl[n]+1)+i];
+	p1[1] = y[tile_offset_supergrid[n] + j*(nxl[n]+1)+i];
+	p2[0] = x[tile_offset_supergrid[n] + j*(nxl[n]+1)+i+1];
+	p2[1] = y[tile_offset_supergrid[n] + j*(nxl[n]+1)+i+1];
+
+	dx[tile_offset_supergrid_m[n] + j*nxl[n]+i] = great_circle_distance(p1, p2);
+
       }
     }
   }
+
+  /* Calculate dy */
   for(n=0; n<ntiles2; n++) {
-    if( stretched_grid || n==ntiles ) { 
+    if (verbose) printf("[INFO] M2a Calculating dy for tile n: %d ntiles: %d ntiles2: %d\n", n, ntiles, ntiles2);
+
+    //if( stretched_grid || n==ntiles ) { 
+    if( stretched_grid || (n >= 6) ) { 
+      if (verbose) printf("[INFO] M2b Calculating dy for tile n: %d ntiles: %d ntiles2: %d\n", n, ntiles, ntiles2);
       for(j=0; j<nyl[n]; j++) {
 	for(i=0; i<=nxl[n]; i++) {
-	  p1[0] = x[n*nxp*nxp+j*(nxl[n]+1)+i];
-	  p1[1] = y[n*nxp*nxp+j*(nxl[n]+1)+i];
-	  p2[0] = x[n*nxp*nxp+(j+1)*(nxl[n]+1)+i];
-	  p2[1] = y[n*nxp*nxp+(j+1)*(nxl[n]+1)+i];
-	  dy[n*nx*nxp+j*(nxl[n]+1)+i] = great_circle_distance(p1, p2);
+	  p1[0] = x[tile_offset_supergrid[n] + j*(nxl[n]+1)+i];
+	  p1[1] = y[tile_offset_supergrid[n] + j*(nxl[n]+1)+i];
+	  p2[0] = x[tile_offset_supergrid[n] + (j+1)*(nxl[n]+1)+i];
+	  p2[1] = y[tile_offset_supergrid[n] + (j+1)*(nxl[n]+1)+i];
+
+	  dy[tile_offset_supergrid_m[n] + j*(nxl[n]+1)+i] = great_circle_distance(p1, p2);
 	}
       }
     }
     else {
-      for(n=0; n<ntiles; n++) {
-	for(j=0; j<nyp; j++) {
-	  for(i=0; i<nx; i++) dy[n*nx*nxp+i*nxp+j] = dx[n*nx*nxp+j*nx+i];
-	}
+      if (verbose) printf("[INFO] M2c Calculating dy for tile n: %d ntiles: %d ntiles2: %d\n", n, ntiles, ntiles2);
+      for(j=0; j<nyp; j++) {
+	for(i=0; i<nx; i++) dy[tile_offset_supergrid_m[n] + i*nxp+j] = dx[tile_offset_supergrid_m[n] + j*nx+i];
       }
     }
   }
+
+  if (verbose) printf("[INFO] N\n");
+
   
   /* ensure consistency on the boundaries between tiles */
   for(j=0; j<nx; j++) {
@@ -357,52 +605,72 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
     dy[5*nxp*nx+j*nxp+nx] = dx[nx*nxp+(nx-j-1)];       /* 2S -> 6E */    
   }
 
+  if (verbose) printf("[INFO] O\n");
+
+
   if(do_schmidt) { /* calculate area for each tile */
     for(n=0; n<ntiles; n++) {
-       calc_cell_area(nx, ny, x+n*nxp*nyp, y+n*nxp*nyp, area+n*nx*ny);
-    }
-    }
-  else  {
-   calc_cell_area(nx, ny, x, y, area);
-   for(j=0; j<nx; j++) {
-    for(i=0; i<nx; i++) {
-      double ar;
-      /* all the face have the same area */
-      ar = area[j*nx+i];
-      area[nx*nx+j*nx+i] = ar;
-      area[2*nx*nx+j*nx+i] = ar;
-      area[3*nx*nx+j*nx+i] = ar;
-      area[4*nx*nx+j*nx+i] = ar;
-      area[5*nx*nx+j*nx+i] = ar;        
+      if (verbose) printf("[INFO] call calc_cell_area do_schmidt for tile n=%d\n", n);
+      calc_cell_area(nx, ny, x + tile_offset_supergrid[n], y + tile_offset_supergrid[n], area + tile_offset_area[n]);
     }
   }
+  else  {
+    if (verbose) printf("[INFO] call calc_cell_area for first tile.\n");
+    calc_cell_area(nx, ny, x, y, area);
+    for(j=0; j<nx; j++) {
+      for(i=0; i<nx; i++) {
+	double ar;
+	/* all the faces have the same area */
+	ar = area[j*nx+i];
+	area[nx*nx+j*nx+i] = ar;
+	area[2*nx*nx+j*nx+i] = ar;
+	area[3*nx*nx+j*nx+i] = ar;
+	area[4*nx*nx+j*nx+i] = ar;
+	area[5*nx*nx+j*nx+i] = ar;        
+      }
+    }
   
-}
-  /* calculate nested grid area */
-  if(ntiles2>ntiles) calc_cell_area(nx_nest, ny_nest, x+ntiles*nxp*nyp, y+ntiles*nxp*nyp, area+ntiles*nx*ny);
+  }
+  if (verbose) printf("[INFO] P\n");
+
+
+  for (nn=0; nn < num_nest_grids; nn++) {
+    if (verbose) printf("[INFO] call calc_cell_area  for nest nn=%d tile n=%d\n", nn, ntiles+nn);
+    if (verbose) printf("[INFO] Q1\n");
+
+      calc_cell_area(nx_nest_arr[nn], ny_nest_arr[nn], x + tile_offset_supergrid[ntiles+nn], y + tile_offset_supergrid[ntiles+nn], area + tile_offset_area[ntiles+nn]);
+  }
+
+  if (verbose) printf("[INFO] Q2\n");
+
   
   /*calculate rotation angle, just some workaround, will modify this in the future. */
   calc_rotation_angle2(nxp, x, y, angle_dx, angle_dy );
 
+  if (verbose) printf("[INFO] R\n");
+
+
   /* since angle is used in the model, set angle to 0 for nested region */
-  if(ntiles2>ntiles) {
-    for(i=0; i<=(nx_nest+1)*(ny_nest+1); i++) {
-      angle_dx[ntiles*nxp*nxp+i]=0;
-      angle_dy[ntiles*nxp*nxp+i]=0;
+  for(nn=0; nn < num_nest_grids; nn++) {
+    for(i=0; i<=(nx_nest_arr[nn]+1)*(ny_nest_arr[nn]+1); i++) {
+      angle_dx[tile_offset_supergrid[ntiles+nn] + i]=0;
+      angle_dy[tile_offset_supergrid[ntiles+nn] + i]=0;
     }
   }
       
-  /* convert grid location from radians to degree */
-  npts = ntiles*nxp*nyp;
-  if(nx_nest>0) npts += (nx_nest+1)*(ny_nest+1);
     
-  for(i=0; i<npts; i++) {
+  /* convert grid location from radians to degree */
+  if (verbose) printf("[INFO] Convert radians to degrees: npts = %d npts_supergrid: %d\n", npts, npts_supergrid);
+  for(i=0; i<npts_supergrid; i++) {
     x[i] = x[i]*R2D;
     y[i] = y[i]*R2D;
   }
 
   free(xc);
   free(yc);  
+  
+  if (verbose) printf("[INFO] Z\n");
+
   
 }; /* void create_gnomonic_cubic_grid */
 
@@ -414,6 +682,7 @@ void calc_cell_area(int nx, int ny, const double *x, const double *y, double *ar
   nxp = nx+1;
   for(j=0; j<ny; j++) {
     for(i=0; i<nx; i++) {
+      //printf("[INFO] calc_cell_area: i: %d j: %d\n", i, j);
       p_ll[0] = x[j*nxp+i];       p_ll[1] = y[j*nxp+i];
       p_ul[0] = x[(j+1)*nxp+i];   p_ul[1] = y[(j+1)*nxp+i];
       p_lr[0] = x[j*nxp+i+1];     p_lr[1] = y[j*nxp+i+1];
@@ -429,7 +698,7 @@ void calc_cell_area(int nx, int ny, const double *x, const double *y, double *ar
 
 /*-------------------------------------------------------------------------
   void direct_transform(double c, int i1, int i2, int j1, int j2, double lon_p, double lat_p, int n,
-		        double *lon, double *lat)
+  double *lon, double *lat)
 
   This is a direct transformation of the standard (symmetrical) cubic grid
   to a locally enhanced high-res grid on the sphere; it is an application
@@ -437,12 +706,12 @@ void calc_cell_area(int nx, int ny, const double *x, const double *y, double *ar
   pole_shift_to_target (rotation) operation
 
   arguments:
-    c            : Stretching factor
-    lon_p, lat_p : center location of the target face, radian
-    n            : grid face number
-    i1,i2,j1,j2  : starting and ending index in i- and j-direction
-    lon          : longitude. 0 <= lon <= 2*pi
-    lat          : latitude. -pi/2 <= lat <= pi/2
+  c            : Stretching factor
+  lon_p, lat_p : center location of the target face, radian
+  n            : grid face number
+  i1,i2,j1,j2  : starting and ending index in i- and j-direction
+  lon          : longitude. 0 <= lon <= 2*pi
+  lat          : latitude. -pi/2 <= lat <= pi/2
   ------------------------------------------------------------------------*/
 
 void direct_transform(double stretch_factor, int i1, int i2, int j1, int j2, double lon_p, double lat_p,
@@ -493,14 +762,14 @@ void direct_transform(double stretch_factor, int i1, int i2, int j1, int j2, dou
 	else if( lon[l] >= two_pi )
 	  lon[l] -=two_pi;
       }
-  }
+    }
   
 }; /* direct_transform */
 
 
 
 /*-----------------------------------------------------
-      void gnomonic_ed
+  void gnomonic_ed
   Equal distance along the 4 edges of the cubed sphere
   -----------------------------------------------------
   Properties: 
@@ -539,10 +808,10 @@ void gnomonic_ed(int ni, double* lamda, double* theta)
   /* Get North-South edges by symmetry: */
 
   for(i=1; i<ni; i++) {
-      mirror_latlon(lamda[0], theta[0], lamda[ni*nip+ni], theta[ni*nip+ni],  
-		    lamda[i*nip], theta[i*nip], &lamda[i], &theta[i] );
-      lamda[ni*nip+i] = lamda[i];
-      theta[ni*nip+i] = -theta[i];
+    mirror_latlon(lamda[0], theta[0], lamda[ni*nip+ni], theta[ni*nip+ni],  
+		  lamda[i*nip], theta[i*nip], &lamda[i], &theta[i] );
+    lamda[ni*nip+i] = lamda[i];
+    theta[ni*nip+i] = -theta[i];
   }
 
   x = (double *)malloc(nip*nip*sizeof(double));
@@ -609,10 +878,10 @@ void gnomonic_dist(int ni, double* lamda, double* theta)
 }; /* gnomonic_dist */
 
 /*------------------------------------------------------------------
-        void mirror_latlon
-   Given the "mirror" as defined by (lon1, lat1), (lon2, lat2), and center 
-   of the sphere, compute the mirror image of (lon0, lat0) as  (lon, lat)
-   ---------------------------------------------------------------*/
+  void mirror_latlon
+  Given the "mirror" as defined by (lon1, lat1), (lon2, lat2), and center 
+  of the sphere, compute the mirror image of (lon0, lat0) as  (lon, lat)
+  ---------------------------------------------------------------*/
    
 void mirror_latlon(double lon1, double lat1, double lon2, double lat2, double lon0,
 		   double lat0, double *lon, double *lat)
@@ -847,7 +1116,7 @@ void rot_3d(int axis, double x1in, double y1in, double z1in, double angle, doubl
     *x2out=x2;;
     *y2out=y2;
     *z2out=z2;
-    }
+  }
 } /* rot_3d */
 
 /*-------------------------------------------------------------
@@ -1063,20 +1332,20 @@ void cell_center(int ni, int nj, const double *lonc, const double *latc, double 
   latlon2xyz(nip*njp, lonc, latc, xc, yc, zc); 
 
   for(j=0; j<nj; j++) for(i=0; i<ni; i++) {
-    p =  j*ni+i;
-    p1 = j*nip+i;
-    p2 = j*nip+i+1;
-    p3 = (j+1)*nip+i+1;
-    p4 = (j+1)*nip+i;
-    xt[p] = xc[p1] + xc[p2] + xc[p3] + xc[p4];
-    yt[p] = yc[p1] + yc[p2] + yc[p3] + yc[p4];
-    zt[p] = zc[p1] + zc[p2] + zc[p3] + zc[p4];
+      p =  j*ni+i;
+      p1 = j*nip+i;
+      p2 = j*nip+i+1;
+      p3 = (j+1)*nip+i+1;
+      p4 = (j+1)*nip+i;
+      xt[p] = xc[p1] + xc[p2] + xc[p3] + xc[p4];
+      yt[p] = yc[p1] + yc[p2] + yc[p3] + yc[p4];
+      zt[p] = zc[p1] + zc[p2] + zc[p3] + zc[p4];
 
-    dd = sqrt(pow(xt[p],2) + pow(yt[p],2) + pow(zt[p],2) );
-    xt[p] /= dd;
-    yt[p] /= dd;
-    zt[p] /= dd;
-  }
+      dd = sqrt(pow(xt[p],2) + pow(yt[p],2) + pow(zt[p],2) );
+      xt[p] /= dd;
+      yt[p] /= dd;
+      zt[p] /= dd;
+    }
   xyz2latlon(ni*nj, xt, yt, zt, lont, latt);
   free(zt);
   free(yt);
@@ -1107,18 +1376,18 @@ void cell_east(int ni, int nj, const double *lonc, const double *latc, double *l
   latlon2xyz(nip*njp, lonc, latc, xc, yc, zc); 
 
   for(j=0; j<nj; j++) for(i=0; i<nip; i++) {
-    p =  j*nip+i;
-    p1 = j*nip+i;
-    p2 = (j+1)*nip+i;
-    xe[p] = xc[p1] + xc[p2];
-    ye[p] = yc[p1] + yc[p2];
-    ze[p] = zc[p1] + zc[p2];
+      p =  j*nip+i;
+      p1 = j*nip+i;
+      p2 = (j+1)*nip+i;
+      xe[p] = xc[p1] + xc[p2];
+      ye[p] = yc[p1] + yc[p2];
+      ze[p] = zc[p1] + zc[p2];
 
-    dd = sqrt(pow(xe[p],2) + pow(ye[p],2) + pow(ze[p],2) );
-    xe[p] /= dd;
-    ye[p] /= dd;
-    ze[p] /= dd;
-  }
+      dd = sqrt(pow(xe[p],2) + pow(ye[p],2) + pow(ze[p],2) );
+      xe[p] /= dd;
+      ye[p] /= dd;
+      ze[p] /= dd;
+    }
   xyz2latlon(nip*nj, xe, ye, ze, lone, late);
   free(ze);
   free(ye);
@@ -1149,18 +1418,18 @@ void cell_north(int ni, int nj, const double *lonc, const double *latc, double *
   latlon2xyz(nip*njp, lonc, latc, xc, yc, zc); 
 
   for(j=0; j<njp; j++) for(i=0; i<ni; i++) {
-    p =  j*ni+i;
-    p1 = j*nip+i;
-    p2 = j*nip+i+1;
-    xn[p] = xc[p1] + xc[p2];
-    yn[p] = yc[p1] + yc[p2];
-    zn[p] = zc[p1] + zc[p2];
+      p =  j*ni+i;
+      p1 = j*nip+i;
+      p2 = j*nip+i+1;
+      xn[p] = xc[p1] + xc[p2];
+      yn[p] = yc[p1] + yc[p2];
+      zn[p] = zc[p1] + zc[p2];
 
-    dd = sqrt(pow(xn[p],2) + pow(yn[p],2) + pow(zn[p],2) );
-    xn[p] /= dd;
-    yn[p] /= dd;
-    zn[p] /= dd;
-  }
+      dd = sqrt(pow(xn[p],2) + pow(yn[p],2) + pow(zn[p],2) );
+      xn[p] /= dd;
+      yn[p] /= dd;
+      zn[p] /= dd;
+    }
   xyz2latlon(ni*njp, xn, yn, zn, lonn, latn);
   free(zn);
   free(yn);
@@ -1230,11 +1499,21 @@ void spherical_linear_interpolation(double beta, const double *p1, const double 
 
 /* void setup_aligned_nest
 
-/*
+   /*
 
-ni_parent  : parent grid size in x-direction.
-nj_parent  : parent grid size in y-direction.
+   parent_ni    : (input) parent grid size in x-direction.
+   parent_nj    : (input) parent grid size in y-direction.
+   parent_xc    : (input) parent array in x-direction
+   parent_yc    : (input) parent array in y-direction
+   halo         : (input) halo size
+   refine_ratio : (input) refinement ratio
+   istart       : (input) start of nest in x direction
+   iend         : (input) end of nest in x direction
+   jstart       : (input) start of nest in y direction
+   jend         : (input) end of nest in y direction
 
+   xc           : (output) nest array in x-direction
+   yc           : (output) nest array in y-direction
 
 */
 
@@ -1248,12 +1527,20 @@ void setup_aligned_nest(int parent_ni, int parent_nj, const double *parent_xc, c
   int    ni, nj, npi, npj;
   int    parent_npi, i, j, ic, jc, imod, jmod;
   
+  int verbose = 1;
+
   two_pi = 2.*M_PI;
     
   /* Check that the grid does not lie outside its parent */
   if( (jstart - halo) < 1 || (istart - halo) < 1 ||
       (jend + halo) > parent_nj || (iend + halo) > parent_ni )
     mpp_error("create_gnomonic_cubic_grid(setup_aligned_nest): nested grid lies outside its parent");
+
+  if (verbose) {
+    printf("[INFO] setup_aligned nest: parent_ni: %d parent_nj: %d refine_ratio: %d parent_xc: %p parent_yc: %p\n", 
+	   parent_ni, parent_nj, refine_ratio, parent_xc, parent_yc);
+
+  }
 
   ni = (iend-istart+1)*refine_ratio;
   nj = (jend-jstart+1)*refine_ratio;
@@ -1299,6 +1586,16 @@ void setup_aligned_nest(int parent_ni, int parent_nj, const double *parent_xc, c
 
       if( xc[j*npi+i] > two_pi ) xc[j*npi+i] -= two_pi;
       if( xc[j*npi+i] < 0. ) xc[j*npi+i] += two_pi;
+
+
+      if ((i==0) && (j==0)) {
+	printf("setup_aligned_nest xc[0]: %f yc[0]: %f\n", xc[0], yc[0]);
+	}
+      if ((i==1) && (j==0)) {
+	printf("setup_aligned_nest xc[1]: %f yc[1]: %f\n", xc[1], yc[1]);
+	}
+
+
     }
   }
 
