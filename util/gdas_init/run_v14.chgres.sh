@@ -72,7 +72,7 @@ cat << EOF > fort.41
 /
 EOF
 
-$APRUN $UFS_DIR/exec/chgres_cube.exe
+$APRUN $UFS_DIR/exec/chgres_cube
 rc=$?
 
 if [ $rc != 0 ]; then

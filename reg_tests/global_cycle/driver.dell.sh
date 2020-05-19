@@ -32,15 +32,8 @@
 
 set -x
 
-module purge
-module load EnvVars/1.0.2
-module load ips/18.0.1.163
-module load lsf/10.1
-module load impi/18.0.1
-module use /usrx/local/nceplibs/dev/NCEPLIBS/modulefiles
-module load netcdf_parallel/4.7.4
-
-set -x
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
 export DATA=/gpfs/dell1/stmp/$LOGNAME/reg_tests.cycle
 
