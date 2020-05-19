@@ -1283,7 +1283,7 @@
         endif 
                                                                         
         DPMINALL=1000.0 
-!$omp parallel do     , & 
+!$omp parallel do   & 
 !$omp& shared(im,km,kmp,ntracm,thermodyn_id,pp,tp,qp,cpi,cp0i)  , &
 !$omp& shared(ak,bk,ck,pi)                                      ,&        
 !$omp& private(i,k,nit,converg,dpmin,tvu,tvd,trk)               ,&        
