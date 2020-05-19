@@ -51,11 +51,8 @@
 
 set -x
 
-. /apps/lmod/init/sh
-module purge
-module load intel/2020
-module load impi/2020
-module load netcdf/4.7.2
+source ../sorc/machine-setup.sh > /dev/null 2>&1
+source ../modulefiles/build.$target
 module list
 
 #-----------------------------------------------------------------------
