@@ -6,11 +6,11 @@
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
-# type "account_params".
+# type "saccount_params".
 #
 # Invoke the script with no arguments.  A series of daily-chained
 # regression tests will be submitted.  To check the queue, type:
-# "squeue -u USERNAME".
+# "squeue -u $LOGNAME".
 #
 # The run output will be stored in OUTDIR.  Log output from the suite
 # will be in LOG_FILE.  Once the suite has completed, a summary is
