@@ -1112,7 +1112,9 @@
                                      longitude_target_grid, &
                                      latitude_target_grid, &
                                      longitude_s_target_grid, &
-                                     latitude_s_target_grid
+                                     latitude_s_target_grid, &
+                                     longitude_w_target_grid, &
+                                     latitude_w_target_grid
 
  implicit none
 
@@ -1129,6 +1131,7 @@
  integer, allocatable             :: id_tracers(:)
  integer                          :: id_lon, id_lat, id_ps
  integer                          :: id_lat_s, id_lon_s
+ integer                          :: id_lat_w, id_lon_w
  integer                          :: id_w, id_zh, id_u_w
  integer                          :: id_v_w, id_u_s, id_v_s
  integer                          :: id_t, id_delp
@@ -1213,51 +1216,98 @@
 
 !--- define field
    error = nf90_def_var(ncid, 'geolon', NF90_FLOAT, (/dim_lon,dim_lat/), id_lon)
-   call netcdf_err(error, 'DEFINING LON FIELD' )
+   call netcdf_err(error, 'DEFINING GEOLON FIELD' )
    error = nf90_put_att(ncid, id_lon, "long_name", "Longitude")
+   call netcdf_err(error, 'DEFINING GEOLON NAME' )
    error = nf90_put_att(ncid, id_lon, "units", "degrees_east")
-   call netcdf_err(error, 'WRITING LON NAME' )
+   call netcdf_err(error, 'DEFINING GEOLON UNITS' )
+
    error = nf90_def_var(ncid, 'geolat', NF90_FLOAT, (/dim_lon,dim_lat/), id_lat)
-   call netcdf_err(error, 'DEFINING LAT FIELD' )
+   call netcdf_err(error, 'DEFINING GEOLAT FIELD' )
    error = nf90_put_att(ncid, id_lat, "long_name", "Latitude")
+   call netcdf_err(error, 'DEFINING GEOLAT NAME' )
    error = nf90_put_att(ncid, id_lat, "units", "degrees_north")
-   call netcdf_err(error, 'WRITING LAT NAME' )
+   call netcdf_err(error, 'DEFINING GEOLAT UNITS' )
+
    error = nf90_def_var(ncid, 'geolon_s', NF90_FLOAT, (/dim_lon,dim_latp/), id_lon_s)
-   call netcdf_err(error, 'DEFINING LON_S FIELD' )
+   call netcdf_err(error, 'DEFINING GEOLON_S FIELD' )
    error = nf90_put_att(ncid, id_lon_s, "long_name", "Longitude_s")
+   call netcdf_err(error, 'DEFINING GEOLON_S NAME' )
    error = nf90_put_att(ncid, id_lon_s, "units", "degrees_east")
+   call netcdf_err(error, 'DEFINING GEOLON_S UNITS' )
+
    error = nf90_def_var(ncid, 'geolat_s', NF90_FLOAT, (/dim_lon,dim_latp/), id_lat_s)
-   call netcdf_err(error, 'DEFINING LAT_S FIELD' )
+   call netcdf_err(error, 'DEFINING GEOLAT_S FIELD' )
    error = nf90_put_att(ncid, id_lat_s, "long_name", "Latitude_s")
+   call netcdf_err(error, 'DEFINING GEOLAT_S NAME' )
    error = nf90_put_att(ncid, id_lat_s, "units", "degrees_north")
+   call netcdf_err(error, 'DEFINING GEOLAT_S UNITS' )
+
+   error = nf90_def_var(ncid, 'geolon_w', NF90_FLOAT, (/dim_lonp,dim_lat/), id_lon_w)
+   call netcdf_err(error, 'DEFINING GEOLON_W FIELD' )
+   error = nf90_put_att(ncid, id_lon_w, "long_name", "Longitude_w")
+   call netcdf_err(error, 'DEFINING GEOLON_W NAME' )
+   error = nf90_put_att(ncid, id_lon_w, "units", "degrees_east")
+   call netcdf_err(error, 'DEFINING GEOLON_W UNITS' )
+
+   error = nf90_def_var(ncid, 'geolat_w', NF90_FLOAT, (/dim_lonp,dim_lat/), id_lat_w)
+   call netcdf_err(error, 'DEFINING GEOLAT_W FIELD' )
+   error = nf90_put_att(ncid, id_lat_w, "long_name", "Latitude_w")
+   call netcdf_err(error, 'DEFINING GEOLAT_W NAME' )
+   error = nf90_put_att(ncid, id_lat_w, "units", "degrees_north")
+   call netcdf_err(error, 'DEFINING GEOLAT_W UNITS' )
+
    error = nf90_def_var(ncid, 'ps', NF90_FLOAT, (/dim_lon,dim_lat/), id_ps)
-   call netcdf_err(error, 'WRITING PS' )
+   call netcdf_err(error, 'DEFINING PS' )
    error = nf90_put_att(ncid, id_ps, "coordinates", "geolon geolat")
+   call netcdf_err(error, 'DEFINING PS COORD' )
+
    error = nf90_def_var(ncid, 'w', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_w)
-   call netcdf_err(error, 'WRITING W' )
+   call netcdf_err(error, 'DEFINING W' )
    error = nf90_put_att(ncid, id_w, "coordinates", "geolon geolat")
+   call netcdf_err(error, 'DEFINING W COORD' )
+
    error = nf90_def_var(ncid, 'zh', NF90_FLOAT, (/dim_lon,dim_lat,dim_levp1/), id_zh)
-   call netcdf_err(error, 'WRITING ZH' )
+   call netcdf_err(error, 'DEFINING ZH' )
    error = nf90_put_att(ncid, id_zh, "coordinates", "geolon geolat")
+   call netcdf_err(error, 'DEFINING ZH COORD' )
+
    error = nf90_def_var(ncid, 't', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_t)
-   call netcdf_err(error, 'WRITING T' )
+   call netcdf_err(error, 'DEFINING T' )
    error = nf90_put_att(ncid, id_t, "coordinates", "geolon geolat")
+   call netcdf_err(error, 'DEFINING T COORD' )
+
    error = nf90_def_var(ncid, 'delp', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_delp)
-   call netcdf_err(error, 'WRITING DELP' )
+   call netcdf_err(error, 'DEFINING DELP' )
    error = nf90_put_att(ncid, id_delp, "coordinates", "geolon geolat")
+   call netcdf_err(error, 'DEFINING DELP COORD' )
+
    do n = 1, num_tracers
      error = nf90_def_var(ncid, tracers(n), NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_tracers(n))
-     call netcdf_err(error, 'WRITING TRACERS' )
-   error = nf90_put_att(ncid, id_tracers(n), "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING TRACERS' )
+     error = nf90_put_att(ncid, id_tracers(n), "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING TRACERS COORD' )
    enddo
+
    error = nf90_def_var(ncid, 'u_w', NF90_FLOAT, (/dim_lonp,dim_lat,dim_lev/), id_u_w)
-   call netcdf_err(error, 'WRITING U_W' )
+   call netcdf_err(error, 'DEFINING U_W' )
+   error = nf90_put_att(ncid, id_u_w, "coordinates", "geolon_w geolat_w")
+   call netcdf_err(error, 'DEFINING U_W COORD' )
+
    error = nf90_def_var(ncid, 'v_w', NF90_FLOAT, (/dim_lonp,dim_lat,dim_lev/), id_v_w)
-   call netcdf_err(error, 'WRITING V_W' )
+   call netcdf_err(error, 'DEFINING V_W' )
+   error = nf90_put_att(ncid, id_v_w, "coordinates", "geolon_w geolat_w")
+   call netcdf_err(error, 'DEFINING V_W COORD' )
+
    error = nf90_def_var(ncid, 'u_s', NF90_FLOAT, (/dim_lon,dim_latp,dim_lev/), id_u_s)
-   call netcdf_err(error, 'WRITING U_S' )
+   call netcdf_err(error, 'DEFINING U_S' )
+   error = nf90_put_att(ncid, id_u_s, "coordinates", "geolon_s geolat_s")
+   call netcdf_err(error, 'DEFINING U_S COORD' )
+
    error = nf90_def_var(ncid, 'v_s', NF90_FLOAT, (/dim_lon,dim_latp,dim_lev/), id_v_s)
-   call netcdf_err(error, 'WRITING V_S' )
+   call netcdf_err(error, 'DEFINING V_S' )
+   error = nf90_put_att(ncid, id_v_s, "coordinates", "geolon_s geolat_s")
+   call netcdf_err(error, 'DEFINING V_S COORD' )
 
    error = nf90_enddef(ncid, header_buffer_val,4,0,4)
    call netcdf_err(error, 'DEFINING HEADER' )
@@ -1415,6 +1465,8 @@
 
  deallocate(dum3d, data_one_tile_3d)
 
+! lat/lon_s
+
  if (localpet < num_tiles_target_grid) then
    allocate(dum2d(i_target_out,jp1_target_out))
    allocate(data_one_tile(i_target,jp1_target))
@@ -1492,6 +1544,44 @@
  endif
 
  deallocate(dum3d, data_one_tile_3d)
+
+! lat/lon_w
+
+ if (localpet < num_tiles_target_grid) then
+   allocate(dum2d(ip1_target_out,j_target_out))
+   allocate(data_one_tile(ip1_target,j_target))
+ else
+   allocate(dum2d(0,0))
+   allocate(data_one_tile(0,0))
+ endif
+
+ do tile = 1, num_tiles_target_grid
+   print*,"- CALL FieldGather FOR TARGET GRID LON_W FOR TILE: ", tile
+   call ESMF_FieldGather(longitude_w_target_grid, data_one_tile, rootPet=tile-1, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+ enddo
+
+ if (localpet < num_tiles_target_grid) then
+   dum2d(:,:) = data_one_tile(i_start:ip1_end,j_start:j_end)
+   error = nf90_put_var( ncid, id_lon_w, dum2d)
+   call netcdf_err(error, 'WRITING LON_W RECORD' )
+ endif
+
+ do tile = 1, num_tiles_target_grid
+   print*,"- CALL FieldGather FOR TARGET GRID LAT_W FOR TILE: ", tile
+   call ESMF_FieldGather(latitude_w_target_grid, data_one_tile, rootPet=tile-1, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+ enddo
+
+ if (localpet < num_tiles_target_grid) then
+   dum2d(:,:) = data_one_tile(i_start:ip1_end,j_start:j_end)
+   error = nf90_put_var( ncid, id_lat_w, dum2d)
+   call netcdf_err(error, 'WRITING LAT_W RECORD' )
+ endif
+
+ deallocate(dum2d, data_one_tile)
 
 !  uwinds w
 
