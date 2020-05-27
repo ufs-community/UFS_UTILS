@@ -1643,6 +1643,8 @@
 
  use model_grid, only            : num_tiles_target_grid, &
                                    landmask_target_grid, &
+                                   latitude_target_grid, &
+                                   longitude_target_grid, &
                                    i_target, j_target, lsoil_target
 
  use program_setup, only         : convert_nst, halo=>halo_bndy
@@ -1710,6 +1712,7 @@
  integer                        :: error, i, ncid, tile
  integer                        :: id_x, id_y, id_lsoil
  integer                        :: id_slmsk, id_time
+ integer                        :: id_lat, id_lon
  integer                        :: id_tsea, id_sheleg, id_tg3
  integer                        :: id_zorl, id_alvsf, id_alvwf
  integer                        :: id_alnsf, id_alnwf, id_vfrac
@@ -1841,12 +1844,28 @@
      error = nf90_put_att(ncid, id_time, "cartesian_axis", "T")
      call netcdf_err(error, 'WRITING TIME FIELD' )
 
+     error = nf90_def_var(ncid, 'geolon', NF90_DOUBLE, (/dim_x,dim_y/), id_lon)
+     call netcdf_err(error, 'DEFINING GEOLON' )
+     error = nf90_put_att(ncid, id_lon, "long_name", "Longitude")
+     call netcdf_err(error, 'DEFINING GEOLON LONG NAME' )
+     error = nf90_put_att(ncid, id_lon, "units", "degrees_east")
+     call netcdf_err(error, 'DEFINING GEOLON UNITS' )
+
+     error = nf90_def_var(ncid, 'geolat', NF90_DOUBLE, (/dim_x,dim_y/), id_lat)
+     call netcdf_err(error, 'DEFINING GEOLAT' )
+     error = nf90_put_att(ncid, id_lat, "long_name", "Latitude")
+     call netcdf_err(error, 'DEFINING GEOLAT LONG NAME' )
+     error = nf90_put_att(ncid, id_lat, "units", "degrees_north")
+     call netcdf_err(error, 'DEFINING GEOLAT UNITS' )
+
      error = nf90_def_var(ncid, 'slmsk', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_slmsk)
      call netcdf_err(error, 'DEFINING SLMSK' )
      error = nf90_put_att(ncid, id_slmsk, "long_name", "slmsk")
      call netcdf_err(error, 'DEFINING SLMSK LONG NAME' )
      error = nf90_put_att(ncid, id_slmsk, "units", "none")
      call netcdf_err(error, 'DEFINING SLMSK UNITS' )
+     error = nf90_put_att(ncid, id_slmsk, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING SLMSK COORD' )
 
      error = nf90_def_var(ncid, 'tsea', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tsea)
      call netcdf_err(error, 'DEFINING TSEA' )
@@ -1854,6 +1873,8 @@
      call netcdf_err(error, 'DEFINING TSEA LONG NAME' )
      error = nf90_put_att(ncid, id_tsea, "units", "none")
      call netcdf_err(error, 'DEFINING TSEA UNITS' )
+     error = nf90_put_att(ncid, id_tsea, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING TSEA COORD' )
 
      error = nf90_def_var(ncid, 'sheleg', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_sheleg)
      call netcdf_err(error, 'DEFINING SHELEG' )
@@ -1861,6 +1882,8 @@
      call netcdf_err(error, 'DEFINING SHELEG LONG NAME' )
      error = nf90_put_att(ncid, id_sheleg, "units", "none")
      call netcdf_err(error, 'DEFINING SHELEG UNITS' )
+     error = nf90_put_att(ncid, id_sheleg, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING SHELEG COORD' )
 
      error = nf90_def_var(ncid, 'tg3', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tg3)
      call netcdf_err(error, 'DEFINING TG3' )
@@ -1868,6 +1891,8 @@
      call netcdf_err(error, 'DEFINING TG3 LONG NAME' )
      error = nf90_put_att(ncid, id_tg3, "units", "none")
      call netcdf_err(error, 'DEFINING TG3 UNITS' )
+     error = nf90_put_att(ncid, id_tg3, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING TG3 COORD' )
 
      error = nf90_def_var(ncid, 'zorl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl)
      call netcdf_err(error, 'DEFINING ZORL' )
@@ -1875,6 +1900,8 @@
      call netcdf_err(error, 'DEFINING ZORL LONG NAME' )
      error = nf90_put_att(ncid, id_zorl, "units", "none")
      call netcdf_err(error, 'DEFINING ZORL UNITS' )
+     error = nf90_put_att(ncid, id_zorl, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ZORL COORD' )
 
      error = nf90_def_var(ncid, 'alvsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alvsf)
      call netcdf_err(error, 'DEFINING ALVSF' )
@@ -1882,6 +1909,8 @@
      call netcdf_err(error, 'DEFINING ALVSF LONG NAME' )
      error = nf90_put_att(ncid, id_alvsf, "units", "none")
      call netcdf_err(error, 'DEFINING ALVSF UNITS' )
+     error = nf90_put_att(ncid, id_alvsf, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ALVSF COORD' )
 
      error = nf90_def_var(ncid, 'alvwf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alvwf)
      call netcdf_err(error, 'DEFINING ALVWF' )
@@ -1889,6 +1918,8 @@
      call netcdf_err(error, 'DEFINING ALVWF LONG NAME' )
      error = nf90_put_att(ncid, id_alvwf, "units", "none")
      call netcdf_err(error, 'DEFINING ALVWF UNITS' )
+     error = nf90_put_att(ncid, id_alvwf, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ALVWF COORD' )
 
      error = nf90_def_var(ncid, 'alnsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alnsf)
      call netcdf_err(error, 'DEFINING ALNSF' )
@@ -1896,6 +1927,8 @@
      call netcdf_err(error, 'DEFINING ALNSF LONG NAME' )
      error = nf90_put_att(ncid, id_alnsf, "units", "none")
      call netcdf_err(error, 'DEFINING ALNSF UNITS' )
+     error = nf90_put_att(ncid, id_alnsf, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ALNSF COORD' )
 
      error = nf90_def_var(ncid, 'alnwf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alnwf)
      call netcdf_err(error, 'DEFINING ALNWF' )
@@ -1903,6 +1936,8 @@
      call netcdf_err(error, 'DEFINING ALNWF LONG NAME' )
      error = nf90_put_att(ncid, id_alnwf, "units", "none")
      call netcdf_err(error, 'DEFINING ALNWF UNITS' )
+     error = nf90_put_att(ncid, id_alnwf, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ALNWF COORD' )
 
      error = nf90_def_var(ncid, 'facsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_facsf)
      call netcdf_err(error, 'DEFINING FACSF' )
@@ -1910,6 +1945,8 @@
      call netcdf_err(error, 'DEFINING FACSF LONG NAME' )
      error = nf90_put_att(ncid, id_facsf, "units", "none")
      call netcdf_err(error, 'DEFINING FACSF UNITS' )
+     error = nf90_put_att(ncid, id_facsf, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING FACSF COORD' )
 
      error = nf90_def_var(ncid, 'facwf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_facwf)
      call netcdf_err(error, 'DEFINING FACWF' )
@@ -1917,6 +1954,8 @@
      call netcdf_err(error, 'DEFINING FACWF LONG NAME' )
      error = nf90_put_att(ncid, id_facwf, "units", "none")
      call netcdf_err(error, 'DEFINING FACWF UNITS' )
+     error = nf90_put_att(ncid, id_facwf, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING FACWF COORD' )
 
      error = nf90_def_var(ncid, 'vfrac', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_vfrac)
      call netcdf_err(error, 'DEFINING VFRAC' )
@@ -1924,6 +1963,8 @@
      call netcdf_err(error, 'DEFINING VFRAC LONG NAME' )
      error = nf90_put_att(ncid, id_vfrac, "units", "none")
      call netcdf_err(error, 'DEFINING VFRAC UNITS' )
+     error = nf90_put_att(ncid, id_vfrac, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING VFRAC COORD' )
 
      error = nf90_def_var(ncid, 'canopy', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_canopy)
      call netcdf_err(error, 'DEFINING CANOPY' )
@@ -1931,6 +1972,8 @@
      call netcdf_err(error, 'DEFINING CANOPY LONG NAME' )
      error = nf90_put_att(ncid, id_canopy, "units", "none")
      call netcdf_err(error, 'DEFINING CANOPY UNITS' )
+     error = nf90_put_att(ncid, id_canopy, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING CANOPY COORD' )
 
      error = nf90_def_var(ncid, 'f10m', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_f10m)
      call netcdf_err(error, 'DEFINING F10M' )
@@ -1938,6 +1981,8 @@
      call netcdf_err(error, 'DEFINING F10M LONG NAME' )
      error = nf90_put_att(ncid, id_f10m, "units", "none")
      call netcdf_err(error, 'DEFINING F10M UNITS' )
+     error = nf90_put_att(ncid, id_f10m, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING F10M COORD' )
 
      error = nf90_def_var(ncid, 't2m', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_t2m)
      call netcdf_err(error, 'DEFINING T2M' )
@@ -1945,6 +1990,8 @@
      call netcdf_err(error, 'DEFINING T2M LONG NAME' )
      error = nf90_put_att(ncid, id_t2m, "units", "none")
      call netcdf_err(error, 'DEFINING T2M UNITS' )
+     error = nf90_put_att(ncid, id_t2m, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING T2M COORD' )
 
      error = nf90_def_var(ncid, 'q2m', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_q2m)
      call netcdf_err(error, 'DEFINING Q2M' )
@@ -1952,6 +1999,8 @@
      call netcdf_err(error, 'DEFINING Q2M LONG NAME' )
      error = nf90_put_att(ncid, id_q2m, "units", "none")
      call netcdf_err(error, 'DEFINING Q2M UNITS' )
+     error = nf90_put_att(ncid, id_q2m, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING Q2M COORD' )
 
      error = nf90_def_var(ncid, 'vtype', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_vtype)
      call netcdf_err(error, 'DEFINING VTYPE' )
@@ -1959,6 +2008,8 @@
      call netcdf_err(error, 'DEFINING VTYPE LONG NAME' )
      error = nf90_put_att(ncid, id_vtype, "units", "none")
      call netcdf_err(error, 'DEFINING VTYPE UNITS' )
+     error = nf90_put_att(ncid, id_vtype, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING VTYPE COORD' )
 
      error = nf90_def_var(ncid, 'stype', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_stype)
      call netcdf_err(error, 'DEFINING STYPE' )
@@ -1966,6 +2017,8 @@
      call netcdf_err(error, 'DEFINING STYPE LONG NAME' )
      error = nf90_put_att(ncid, id_stype, "units", "none")
      call netcdf_err(error, 'DEFINING STYPE UNITS' )
+     error = nf90_put_att(ncid, id_stype, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING STYPE COORD' )
 
      error = nf90_def_var(ncid, 'uustar', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_uustar)
      call netcdf_err(error, 'DEFINING UUSTAR' )
@@ -1973,6 +2026,8 @@
      call netcdf_err(error, 'DEFINING UUSTAR LONG NAME' )
      error = nf90_put_att(ncid, id_uustar, "units", "none")
      call netcdf_err(error, 'DEFINING UUSTAR UNITS' )
+     error = nf90_put_att(ncid, id_uustar, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING UUSTAR COORD' )
 
      error = nf90_def_var(ncid, 'ffmm', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_ffmm)
      call netcdf_err(error, 'DEFINING FFMM' )
@@ -1980,6 +2035,8 @@
      call netcdf_err(error, 'DEFINING FFMM LONG NAME' )
      error = nf90_put_att(ncid, id_ffmm, "units", "none")
      call netcdf_err(error, 'DEFINING FFMM UNITS' )
+     error = nf90_put_att(ncid, id_ffmm, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING FFMM COORD' )
 
      error = nf90_def_var(ncid, 'ffhh', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_ffhh)
      call netcdf_err(error, 'DEFINING FFHH' )
@@ -1987,6 +2044,8 @@
      call netcdf_err(error, 'DEFINING FFHH LONG NAME' )
      error = nf90_put_att(ncid, id_ffhh, "units", "none")
      call netcdf_err(error, 'DEFINING FFHH UNITS' )
+     error = nf90_put_att(ncid, id_ffhh, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING FFHH COORD' )
 
      error = nf90_def_var(ncid, 'hice', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_hice)
      call netcdf_err(error, 'DEFINING HICE' )
@@ -1994,6 +2053,8 @@
      call netcdf_err(error, 'DEFINING HICE LONG NAME' )
      error = nf90_put_att(ncid, id_hice, "units", "none")
      call netcdf_err(error, 'DEFINING HICE UNITS' )
+     error = nf90_put_att(ncid, id_hice, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING HICE COORD' )
 
      error = nf90_def_var(ncid, 'fice', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_fice)
      call netcdf_err(error, 'DEFINING FICE' )
@@ -2001,6 +2062,8 @@
      call netcdf_err(error, 'DEFINING FICE LONG NAME' )
      error = nf90_put_att(ncid, id_fice, "units", "none")
      call netcdf_err(error, 'DEFINING FICE UNITS' )
+     error = nf90_put_att(ncid, id_fice, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING FICE COORD' )
 
      error = nf90_def_var(ncid, 'tisfc', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tisfc)
      call netcdf_err(error, 'DEFINING TISFC' )
@@ -2008,6 +2071,8 @@
      call netcdf_err(error, 'DEFINING TISFC LONG NAME' )
      error = nf90_put_att(ncid, id_tisfc, "units", "none")
      call netcdf_err(error, 'DEFINING TISFC UNITS' )
+     error = nf90_put_att(ncid, id_tisfc, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING TISFC COORD' )
 
      error = nf90_def_var(ncid, 'tprcp', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tprcp)
      call netcdf_err(error, 'DEFINING TPRCP' )
@@ -2015,6 +2080,8 @@
      call netcdf_err(error, 'DEFINING TPRCP LONG NAME' )
      error = nf90_put_att(ncid, id_tprcp, "units", "none")
      call netcdf_err(error, 'DEFINING TPRCP UNITS' )
+     error = nf90_put_att(ncid, id_tprcp, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING TPRCP COORD' )
 
      error = nf90_def_var(ncid, 'srflag', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_srflag)
      call netcdf_err(error, 'DEFINING SRFLAG' )
@@ -2022,6 +2089,8 @@
      call netcdf_err(error, 'DEFINING SRFLAG LONG NAME' )
      error = nf90_put_att(ncid, id_srflag, "units", "none")
      call netcdf_err(error, 'DEFINING SRFLAG UNITS' )
+     error = nf90_put_att(ncid, id_srflag, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING SRFLAG COORD' )
 
      error = nf90_def_var(ncid, 'snwdph', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_snwdph)
      call netcdf_err(error, 'DEFINING SNWDPH' )
@@ -2029,6 +2098,8 @@
      call netcdf_err(error, 'DEFINING SNWDPH LONG NAME' )
      error = nf90_put_att(ncid, id_snwdph, "units", "none")
      call netcdf_err(error, 'DEFINING SNWDPH UNITS' )
+     error = nf90_put_att(ncid, id_snwdph, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING SNWDPH COORD' )
 
      error = nf90_def_var(ncid, 'shdmin', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_shdmin)
      call netcdf_err(error, 'DEFINING SHDMIN' )
@@ -2036,6 +2107,8 @@
      call netcdf_err(error, 'DEFINING SHDMIN LONG NAME' )
      error = nf90_put_att(ncid, id_shdmin, "units", "none")
      call netcdf_err(error, 'DEFINING SHDMIN UNITS' )
+     error = nf90_put_att(ncid, id_shdmin, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING SHDMIN COORD' )
 
      error = nf90_def_var(ncid, 'shdmax', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_shdmax)
      call netcdf_err(error, 'DEFINING SHDMAX' )
@@ -2043,6 +2116,8 @@
      call netcdf_err(error, 'DEFINING SHDMAX LONG NAME' )
      error = nf90_put_att(ncid, id_shdmax, "units", "none")
      call netcdf_err(error, 'DEFINING SHDMAX UNITS' )
+     error = nf90_put_att(ncid, id_shdmax, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING SHDMAX COORD' )
 
      error = nf90_def_var(ncid, 'slope', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_slope)
      call netcdf_err(error, 'DEFINING SLOPE' )
@@ -2050,6 +2125,8 @@
      call netcdf_err(error, 'DEFINING SLOPE LONG NAME' )
      error = nf90_put_att(ncid, id_slope, "units", "none")
      call netcdf_err(error, 'DEFINING SLOPE UNITS' )
+     error = nf90_put_att(ncid, id_slope, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING SLOPE COORD' )
 
      error = nf90_def_var(ncid, 'snoalb', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_snoalb)
      call netcdf_err(error, 'DEFINING SNOALB' )
@@ -2057,6 +2134,8 @@
      call netcdf_err(error, 'DEFINING SNOALB LONG NAME' )
      error = nf90_put_att(ncid, id_snoalb, "units", "none")
      call netcdf_err(error, 'DEFINING SNOALB UNITS' )
+     error = nf90_put_att(ncid, id_snoalb, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING SNOALB COORD' )
 
      error = nf90_def_var(ncid, 'stc', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_stc)
      call netcdf_err(error, 'DEFINING STC' )
@@ -2064,6 +2143,8 @@
      call netcdf_err(error, 'DEFINING STC LONG NAME' )
      error = nf90_put_att(ncid, id_stc, "units", "none")
      call netcdf_err(error, 'DEFINING STC UNITS' )
+     error = nf90_put_att(ncid, id_stc, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING STC COORD' )
 
      error = nf90_def_var(ncid, 'smc', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_smc)
      call netcdf_err(error, 'DEFINING SMC' )
@@ -2071,6 +2152,8 @@
      call netcdf_err(error, 'DEFINING SMC LONG NAME' )
      error = nf90_put_att(ncid, id_smc, "units", "none")
      call netcdf_err(error, 'DEFINING SMC UNITS' )
+     error = nf90_put_att(ncid, id_smc, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING SMC COORD' )
 
      error = nf90_def_var(ncid, 'slc', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_slc)
      call netcdf_err(error, 'DEFINING SLC' )
@@ -2078,6 +2161,8 @@
      call netcdf_err(error, 'DEFINING SLC LONG NAME' )
      error = nf90_put_att(ncid, id_slc, "units", "none")
      call netcdf_err(error, 'DEFINING SLC UNITS' )
+     error = nf90_put_att(ncid, id_slc, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING SLC COORD' )
 
      if (convert_nst) then
 
@@ -2087,6 +2172,8 @@
        call netcdf_err(error, 'DEFINING TREF LONG NAME' )
        error = nf90_put_att(ncid, id_tref, "units", "none")
        call netcdf_err(error, 'DEFINING TREF UNITS' )
+       error = nf90_put_att(ncid, id_tref, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING TREF COORD' )
 
        error = nf90_def_var(ncid, 'z_c', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_z_c)
        call netcdf_err(error, 'DEFINING Z_C' )
@@ -2094,6 +2181,8 @@
        call netcdf_err(error, 'DEFINING Z_C LONG NAME' )
        error = nf90_put_att(ncid, id_z_c, "units", "none")
        call netcdf_err(error, 'DEFINING Z_C UNITS' )
+       error = nf90_put_att(ncid, id_z_c, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING Z_C COORD' )
 
        error = nf90_def_var(ncid, 'c_0', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_c_0)
        call netcdf_err(error, 'DEFINING C_0' )
@@ -2101,6 +2190,8 @@
        call netcdf_err(error, 'DEFINING C_0 LONG NAME' )
        error = nf90_put_att(ncid, id_c_0, "units", "none")
        call netcdf_err(error, 'DEFINING C_0 UNITS' )
+       error = nf90_put_att(ncid, id_c_0, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING C_0 COORD' )
 
        error = nf90_def_var(ncid, 'c_d', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_c_d)
        call netcdf_err(error, 'DEFINING C_D' )
@@ -2108,6 +2199,8 @@
        call netcdf_err(error, 'DEFINING C_D LONG NAME' )
        error = nf90_put_att(ncid, id_c_d, "units", "none")
        call netcdf_err(error, 'DEFINING C_D UNITS' )
+       error = nf90_put_att(ncid, id_c_d, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING C_D COORD' )
 
        error = nf90_def_var(ncid, 'w_0', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_w_0)
        call netcdf_err(error, 'DEFINING W_0' )
@@ -2115,6 +2208,8 @@
        call netcdf_err(error, 'DEFINING W_0 LONG NAME' )
        error = nf90_put_att(ncid, id_w_0, "units", "none")
        call netcdf_err(error, 'DEFINING W_0 UNITS' )
+       error = nf90_put_att(ncid, id_w_0, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING W_0 COORD' )
 
        error = nf90_def_var(ncid, 'w_d', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_w_d)
        call netcdf_err(error, 'DEFINING W_D' )
@@ -2122,6 +2217,8 @@
        call netcdf_err(error, 'DEFINING W_D LONG NAME' )
        error = nf90_put_att(ncid, id_w_d, "units", "none")
        call netcdf_err(error, 'DEFINING W_D UNITS' )
+       error = nf90_put_att(ncid, id_w_d, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING W_D COORD' )
 
        error = nf90_def_var(ncid, 'xt', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_xt)
        call netcdf_err(error, 'DEFINING XT' )
@@ -2129,6 +2226,8 @@
        call netcdf_err(error, 'DEFINING XT LONG NAME' )
        error = nf90_put_att(ncid, id_xt, "units", "none")
        call netcdf_err(error, 'DEFINING XT UNITS' )
+       error = nf90_put_att(ncid, id_xt, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING XT COORD' )
 
        error = nf90_def_var(ncid, 'xs', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_xs)
        call netcdf_err(error, 'DEFINING XS' )
@@ -2136,6 +2235,8 @@
        call netcdf_err(error, 'DEFINING XS LONG NAME' )
        error = nf90_put_att(ncid, id_xs, "units", "none")
        call netcdf_err(error, 'DEFINING XS UNITS' )
+       error = nf90_put_att(ncid, id_xs, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING XS COORD' )
 
        error = nf90_def_var(ncid, 'xu', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_xu)
        call netcdf_err(error, 'DEFINING XU' )
@@ -2143,6 +2244,8 @@
        call netcdf_err(error, 'DEFINING XU LONG NAME' )
        error = nf90_put_att(ncid, id_xu, "units", "none")
        call netcdf_err(error, 'DEFINING XU UNITS' )
+       error = nf90_put_att(ncid, id_xu, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING XU COORD' )
 
        error = nf90_def_var(ncid, 'xv', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_xv)
        call netcdf_err(error, 'DEFINING XV' )
@@ -2150,6 +2253,8 @@
        call netcdf_err(error, 'DEFINING XV LONG NAME' )
        error = nf90_put_att(ncid, id_xv, "units", "none")
        call netcdf_err(error, 'DEFINING XV UNITS' )
+       error = nf90_put_att(ncid, id_xv, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING XV COORD' )
 
        error = nf90_def_var(ncid, 'xz', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_xz)
        call netcdf_err(error, 'DEFINING XZ' )
@@ -2157,6 +2262,8 @@
        call netcdf_err(error, 'DEFINING XZ LONG NAME' )
        error = nf90_put_att(ncid, id_xz, "units", "none")
        call netcdf_err(error, 'DEFINING XZ UNITS' )
+       error = nf90_put_att(ncid, id_xz, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING XZ COORD' )
 
        error = nf90_def_var(ncid, 'zm', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zm)
        call netcdf_err(error, 'DEFINING ZM' )
@@ -2164,6 +2271,8 @@
        call netcdf_err(error, 'DEFINING ZM LONG NAME' )
        error = nf90_put_att(ncid, id_zm, "units", "none")
        call netcdf_err(error, 'DEFINING ZM UNITS' )
+       error = nf90_put_att(ncid, id_zm, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING ZM COORD' )
 
        error = nf90_def_var(ncid, 'xtts', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_xtts)
        call netcdf_err(error, 'DEFINING XTTS' )
@@ -2171,6 +2280,8 @@
        call netcdf_err(error, 'DEFINING XTTS LONG NAME' )
        error = nf90_put_att(ncid, id_xtts, "units", "none")
        call netcdf_err(error, 'DEFINING XTTS UNITS' )
+       error = nf90_put_att(ncid, id_xtts, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING XTTS COORD' )
 
        error = nf90_def_var(ncid, 'xzts', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_xzts)
        call netcdf_err(error, 'DEFINING XZTS' )
@@ -2178,6 +2289,8 @@
        call netcdf_err(error, 'DEFINING XZTS LONG NAME' )
        error = nf90_put_att(ncid, id_xzts, "units", "none")
        call netcdf_err(error, 'DEFINING XZTS UNITS' )
+       error = nf90_put_att(ncid, id_xzts, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING XZTS COORD' )
 
        error = nf90_def_var(ncid, 'd_conv', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_d_conv)
        call netcdf_err(error, 'DEFINING D_CONV' )
@@ -2185,6 +2298,8 @@
        call netcdf_err(error, 'DEFINING D_CONV LONG NAME' )
        error = nf90_put_att(ncid, id_d_conv, "units", "none")
        call netcdf_err(error, 'DEFINING D_CONV UNITS' )
+       error = nf90_put_att(ncid, id_d_conv, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING D_CONV COORD' )
 
        error = nf90_def_var(ncid, 'ifd', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_ifd)
        call netcdf_err(error, 'DEFINING IFD' )
@@ -2192,6 +2307,8 @@
        call netcdf_err(error, 'DEFINING IFD LONG NAME' )
        error = nf90_put_att(ncid, id_ifd, "units", "none")
        call netcdf_err(error, 'DEFINING IFD UNITS' )
+       error = nf90_put_att(ncid, id_ifd, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING IFD COORD' )
 
        error = nf90_def_var(ncid, 'dt_cool', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_dt_cool)
        call netcdf_err(error, 'DEFINING DT_COOL' )
@@ -2199,6 +2316,8 @@
        call netcdf_err(error, 'DEFINING DT_COOL LONG NAME' )
        error = nf90_put_att(ncid, id_dt_cool, "units", "none")
        call netcdf_err(error, 'DEFINING DT_COOL UNITS' )
+       error = nf90_put_att(ncid, id_dt_cool, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING DT_COOL COORD' )
 
        error = nf90_def_var(ncid, 'qrain', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_qrain)
        call netcdf_err(error, 'DEFINING QRAIN' )
@@ -2206,6 +2325,8 @@
        call netcdf_err(error, 'DEFINING QRAIN LONG NAME' )
        error = nf90_put_att(ncid, id_qrain, "units", "none")
        call netcdf_err(error, 'DEFINING QRAIN UNITS' )
+       error = nf90_put_att(ncid, id_qrain, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING QRAIN COORD' )
 
      endif  ! nsst records
 
@@ -2224,6 +2345,28 @@
      times = 1.0
      error = nf90_put_var( ncid, id_time, times)
      call netcdf_err(error, 'WRITING TIME RECORD' )
+   endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID LATITUDE FOR TILE: ", tile
+   call ESMF_FieldGather(latitude_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_lat, dum2d)
+     call netcdf_err(error, 'WRITING LATITUDE RECORD' )
+   endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID LONGITUDE FOR TILE: ", tile
+   call ESMF_FieldGather(longitude_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_lon, dum2d)
+     call netcdf_err(error, 'WRITING LONGITUDE RECORD' )
    endif
 
    print*,"- CALL FieldGather FOR TARGET GRID SNOW LIQ EQUIV FOR TILE: ", tile
