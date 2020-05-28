@@ -51,6 +51,8 @@
                                        tracers, num_tracers,      &
                                        atm_weight_file
 
+ use thompson_mp, only               : read_thomp_mp_data
+
  implicit none
 
  private
@@ -141,6 +143,8 @@
 !-----------------------------------------------------------------------------------
 ! Read atmospheric fields on the input grid.
 !-----------------------------------------------------------------------------------
+
+ call read_thomp_mp_data
 
  call read_input_atm_data(localpet)
 
