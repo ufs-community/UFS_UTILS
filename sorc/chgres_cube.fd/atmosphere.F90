@@ -51,7 +51,8 @@
                                        tracers, num_tracers,      &
                                        atm_weight_file
 
- use thompson_mp, only               : read_thomp_mp_data
+ use thompson_mp, only               : read_thomp_mp_data, qnifa, &
+                                       k_thomp_mp_climo
 
  implicit none
 
@@ -63,6 +64,8 @@
                                                         ! variables
 
  real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  ! vertical coordinate
+
+ type(esmf_field)                       :: qnifa_b4adj_target_grid
 
  type(esmf_field), public               :: delp_target_grid
                                            ! pressure thickness
@@ -292,6 +295,30 @@
 
  call cleanup_input_atm_data
 
+! thompson
+
+ print*,"- CALL FieldCreate FOR TARGET GRID qnifa BEFORE ADJUSTMENT."
+ qnifa_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/k_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+   print*,"- CALL FieldRegridStore FOR THOMPSON FIELDS."
+
+   method=ESMF_REGRIDMETHOD_BILINEAR
+
+   call ESMF_FieldRegridStore(qnifa, &
+                              qnifa_b4adj_target_grid, &
+                              polemethod=ESMF_POLEMETHOD_ALLAVG, &
+                              srctermprocessing=isrctermprocessing, &
+                              extrapmethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
+                              routehandle=regrid_bl, &
+                              regridmethod=method, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldRegridStore", rc)
 !-----------------------------------------------------------------------------------
 ! Create target grid field objects to hold data after vertical interpolation.
 !-----------------------------------------------------------------------------------

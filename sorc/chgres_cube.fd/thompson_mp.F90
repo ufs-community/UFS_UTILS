@@ -9,11 +9,11 @@
 
  integer :: i_thomp_mp_climo = 288
  integer :: j_thomp_mp_climo = 181
- integer :: k_thomp_mp_climo = 30
+ integer, public :: k_thomp_mp_climo = 30
 
  type(esmf_grid),  public               :: thomp_mp_climo_grid
 
- type(esmf_field) :: qnifa
+ type(esmf_field), public :: qnifa, thomp_press
 
  public :: read_thomp_mp_data
 
@@ -122,6 +122,15 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
+ print*,"- CALL FieldCreate FOR THOMP PRESS"
+ thomp_press = ESMF_FieldCreate(thomp_mp_climo_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/k_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
 
  thomp_mp_climo_file = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/chgres_thomp_mp/QNWFA_QNIFA_SIGMA_MONTHLY.dat.nc"
 
@@ -160,6 +169,27 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
+ if (localpet == 0) then
+   do k = 1, k_thomp_mp_climo
+     write(level, "(I2.2)") k
+     if (k < 10) then
+     record = "P_WIF_" // month(1) // "__" // level
+     else
+     record = "P_WIF_" // month(1) // "__0" // level
+     endif
+     print*,'record is ',record
+     error=nf90_inq_varid(ncid, trim(record), id_var)
+     call netcdf_err(error, 'reading  field id' )
+     error=nf90_get_var(ncid, id_var, dummy3d(:,:,k))
+     call netcdf_err(error, 'reading field' )
+     print*,'maxval ', record,  maxval(dummy3d(:,:,k)),minval(dummy3d(:,:,k))
+   enddo
+ endif
+
+ print*,"- CALL FieldScatter FOR thomp press."
+ call ESMF_FieldScatter(thomp_press, dummy3d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
  error=nf90_close(ncid)
 
  end subroutine read_thomp_mp_data
