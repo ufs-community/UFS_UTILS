@@ -48,6 +48,8 @@ F_UFMTENDIAN=big
 if [ $system_site = "cray" ]; then
   HDF5=${HDF5_DIR}
   NETCDF=${NETCDF_DIR}
+elif [ $system_site = "orion" ]; then
+  HDF5=${HDF5_ROOT}
 fi
 
 if [ $system_site = "odin" ]; then

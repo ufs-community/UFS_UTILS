@@ -30,4 +30,5 @@ do
   cd $cwd
 done
 
+set +x
 echo; echo DONE BUILDING EMCSFC PROGRAMS

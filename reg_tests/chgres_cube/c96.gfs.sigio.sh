@@ -9,6 +9,12 @@
 
 set -x
 
+# Orion won't let me set the ulimit in the driver script.  Set it here.
+machine=${machine:-NULL}
+if [ $machine == 'orion' ]; then
+  ulimit -s 199000000
+fi
+
 export DATA=$OUTDIR/c96_gfs_sigio
 rm -fr $DATA
 
