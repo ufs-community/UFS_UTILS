@@ -2,9 +2,9 @@
 ## Module file for regional_grid
 #############################################################
 
-export COREPATH=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
-export NCEPLIBS=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
-module use /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib/modulefiles
+export COREPATH=/mnt/lfs3/HFIP/hfv3gfs/gwv/ljtjet/lib
+export NCEPLIBS=/mnt/lfs3/HFIP/hfv3gfs/gwv/ljtjet/lib
+module use /mnt/lfs3/HFIP/hfv3gfs/gwv/ljtjet/lib/modulefiles
 
 module load intel/15.0.3.187
 module load impi/2018.4.274

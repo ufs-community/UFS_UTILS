@@ -27,7 +27,7 @@ if [[ -d /lfs3 ]] ; then
     fi
     target=jet
     module purge
-    module use /lfs3/projects/hfv3gfs/nwprod/NCEPLIBS/modulefiles
+    module use /lfs3/HFIP/hfv3gfs/nwprod/NCEPLIBS/modulefiles
 elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then

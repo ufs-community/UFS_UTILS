@@ -2,7 +2,7 @@
 ## Module file for sfc_climo_gen
 #############################################################
 
-module use /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib/modulefiles
+module use /mnt/lfs3/HFIP/hfv3gfs/gwv/ljtjet/lib/modulefiles
 
 module load intel/18.0.5.274
 module load impi/2018.4.274

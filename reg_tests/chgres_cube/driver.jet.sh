@@ -5,7 +5,7 @@
 # Run the chgres_cube regression tests on JET.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
-# as appropriate.  To see which projects you are authorized to use,
+# as appropriate.  To see which HFIP you are authorized to use,
 # type "account_params".
 #
 # Invoke the script with no arguments.  A series of daily-
@@ -33,7 +33,7 @@ module load hdf5
 module load netcdf/4.2.1.1
 module list
 
-export OUTDIR=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/chgres_reg_tests
+export OUTDIR=/mnt/lfs3/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
 PROJECT_CODE="hfv3gfs"
 QUEUE="debug"
 
@@ -45,7 +45,7 @@ QUEUE="debug"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/mnt/lfs3/projects/emcda/George.Gayno/reg_tests/chgres_cube
+export HOMEreg=/mnt/lfs3/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
 
 export NCCMP=/apps/nccmp/1.8.2.1/intel/18.0.3.222/bin/nccmp
 
