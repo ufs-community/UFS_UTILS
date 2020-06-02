@@ -107,8 +107,8 @@ fi
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
-export TMPDIR=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/fv3_grid.$gtype
-export out_dir=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/my_grids
+export TMPDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/fv3_grid.$gtype
+export out_dir=/lfs4/HFIP/emcda/$LOGNAME/stmp/C${res}
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.

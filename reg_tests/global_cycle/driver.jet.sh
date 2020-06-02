@@ -33,13 +33,13 @@ set -x
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 source ../../modulefiles/build.$target
 
-export DATA=/lfs3/HFIP/emcda/$LOGNAME/stmp/reg_tests.cycle
+export DATA=/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_tests.cycle
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
-export HOMEreg=/lfs3/HFIP/emcda/George.Gayno/reg_tests/global_cycle
+export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/global_cycle
 
 export OMP_NUM_THREADS_CY=2
 
