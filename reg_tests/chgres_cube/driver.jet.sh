@@ -27,7 +27,7 @@ set -x
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 source ../../modulefiles/build.$target
 
-export OUTDIR=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/chgres_reg_tests
+export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
 PROJECT_CODE="hfv3gfs"
 QUEUE="debug"
 
@@ -39,7 +39,7 @@ QUEUE="debug"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/mnt/lfs3/projects/emcda/George.Gayno/reg_tests/chgres_cube
+export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
 
 export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
 
