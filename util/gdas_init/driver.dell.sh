@@ -8,16 +8,8 @@
 
 set -x
 
-module purge
-module load EnvVars/1.0.2
-module load ips/18.0.1.163
-module load impi/18.0.1
-module load lsf/10.1
-module load HPSS/5.0.2.5
-module use /usrx/local/dev/modulefiles
-module load NetCDF/4.5.0
-module load prod_util/1.1.3
-module list
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
 PROJECT_CODE=GFS-DEV
 

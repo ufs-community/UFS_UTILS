@@ -179,7 +179,7 @@ fi
 #----------------------------------------------------------------------------
 
 APRUN=${APRUN:-time}
-CHGRESEXEC=${CHGRESEXEC:-${EXECufs}/chgres_cube.exe}
+CHGRESEXEC=${CHGRESEXEC:-${EXECufs}/chgres_cube}
 
 export OMP_NUM_THREADS=${OMP_NUM_THREADS_CH:-1}
 

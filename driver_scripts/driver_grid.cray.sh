@@ -49,9 +49,8 @@
 #
 #-----------------------------------------------------------------------
 
-. $MODULESHOME/init/sh
-module load PrgEnv-intel cfp-intel-sandybridge/1.1.0
-module load cray-netcdf
+source ../sorc/machine-setup.sh > /dev/null 2>&1
+source ../modulefiles/build.$target
 module list
 
 #-----------------------------------------------------------------------

@@ -51,12 +51,8 @@
 
 set -x
 
-. /apps/lmod/lmod/init/sh
-module purge
-module load intel/18.0.5.274
-module load impi/2018.0.4
-module load hdf5/1.10.5
-module load netcdf/4.7.0
+source ../sorc/machine-setup.sh > /dev/null 2>&1
+source ../modulefiles/build.$target
 module list
 
 #-----------------------------------------------------------------------
