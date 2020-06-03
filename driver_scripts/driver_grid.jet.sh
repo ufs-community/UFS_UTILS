@@ -52,13 +52,8 @@
 
 set -x
 
-. /apps/lmod/lmod/init/sh
-module purge
-module load intel/18.0.5.274
-module load impi/2018.4.274
-module load szip
-module load hdf5
-module load netcdf/4.2.1.1
+source ../sorc/machine-setup.sh > /dev/null 2>&1
+source ../modulefiles/build.$target
 module list
 
 #-----------------------------------------------------------------------
@@ -92,8 +87,8 @@ fi
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
-export TMPDIR=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/fv3_grid.$gtype
-export out_dir=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/C${res}
+export TMPDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/fv3_grid.$gtype
+export out_dir=/lfs4/HFIP/emcda/$LOGNAME/stmp/C${res}
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
