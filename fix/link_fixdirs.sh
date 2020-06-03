@@ -42,7 +42,7 @@ elif [ $machine = "dell" ]; then
 elif [ $machine = "hera" ]; then
     FIX_DIR="/scratch1/NCEPDEV/global/glopara/fix"
 elif [ $machine = "jet" ]; then
-    FIX_DIR="/lfs3/projects/hfv3gfs/glopara/git/fv3gfs/fix"
+    FIX_DIR="/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix"
 fi
 for dir in fix_am fix_fv3 fix_orog fix_fv3_gmted2010 fix_sfc_climo; do
     [[ -d $dir ]] && rm -rf $dir

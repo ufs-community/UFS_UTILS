@@ -31,7 +31,7 @@ set -x
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 source ../../modulefiles/build.$target
 
-export DATA="/mnt/lfs3/projects/emcda/$LOGNAME/stmp/reg_test.ice_blend"
+export DATA="/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_test.ice_blend"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
@@ -39,11 +39,11 @@ export DATA="/mnt/lfs3/projects/emcda/$LOGNAME/stmp/reg_test.ice_blend"
 
 export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
 export WGRIB2=/apps/wgrib2/0.1.9.6a/bin/wgrib2
-export COPYGB=/mnt/lfs3/projects/emcda/George.Gayno/ufs_utils.git/jet_port/grib_util/copygb
-export COPYGB2=/mnt/lfs3/projects/emcda/George.Gayno/ufs_utils.git/jet_port/grib_util/copygb2
+export COPYGB=/lfs4/HFIP/emcda/George.Gayno/ufs_utils.git/jet_port/grib_util/copygb
+export COPYGB2=/lfs4/HFIP/emcda/George.Gayno/ufs_utils.git/jet_port/grib_util/copygb2
 export CNVGRIB=/apps/cnvgrib/1.4.0/bin/cnvgrib
 
-export HOMEreg=/lfs3/HFIP/emcda/George.Gayno/reg_tests/ice_blend
+export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/ice_blend
 export HOMEgfs=$PWD/../..
 
 rm -fr $DATA
