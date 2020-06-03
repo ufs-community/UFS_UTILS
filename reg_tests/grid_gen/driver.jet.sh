@@ -28,7 +28,7 @@ set -x
 
 QUEUE="windfall"
 PROJECT_CODE="emcda"
-export WORK_DIR=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/reg_tests.grid
+export WORK_DIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_tests.grid
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
@@ -42,7 +42,7 @@ export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export machine=JET
 export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
-export HOMEreg=/mnt/lfs3/projects/emcda/George.Gayno/reg_tests/grid_gen/baseline_data
+export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/grid_gen/baseline_data
 
 ulimit -a
 ulimit -s unlimited
