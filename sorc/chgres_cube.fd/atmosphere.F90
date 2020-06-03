@@ -52,7 +52,7 @@
                                        atm_weight_file
 
  use thompson_mp, only               : read_thomp_mp_data, qnifa, &
-                                       k_thomp_mp_climo
+                                       thomp_press, k_thomp_mp_climo
 
  implicit none
 
@@ -66,6 +66,7 @@
  real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  ! vertical coordinate
 
  type(esmf_field)                       :: qnifa_b4adj_target_grid
+ type(esmf_field)                       :: thomp_press_b4adj_target_grid
 
  type(esmf_field), public               :: delp_target_grid
                                            ! pressure thickness
@@ -295,10 +296,22 @@
 
  call cleanup_input_atm_data
 
+
+!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ! thompson
+!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
  print*,"- CALL FieldCreate FOR TARGET GRID qnifa BEFORE ADJUSTMENT."
  qnifa_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/k_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR TARGET GRID thomp_press BEFORE ADJUSTMENT."
+ thomp_press_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
@@ -319,6 +332,30 @@
                               regridmethod=method, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegridStore", rc)
+
+ print*,"- CALL Field_Regrid FOR qnifa."
+ call ESMF_FieldRegrid(qnifa, &
+                       qnifa_b4adj_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, &
+                       rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
+
+ print*,"- CALL Field_Regrid FOR THOMP PRESSURE."
+ call ESMF_FieldRegrid(thomp_press, &
+                       thomp_press_b4adj_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, &
+                       rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
+
+ print*,"- CALL FieldRegridRelease."
+ call ESMF_FieldRegridRelease(routehandle=regrid_bl, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldRegridRelease", rc)
+
 !-----------------------------------------------------------------------------------
 ! Create target grid field objects to hold data after vertical interpolation.
 !-----------------------------------------------------------------------------------
@@ -342,6 +379,8 @@
 !-----------------------------------------------------------------------------------
 
  call vintg
+
+ call vintg_thomp
 
 !-----------------------------------------------------------------------------------
 ! Compute height.
@@ -419,6 +458,7 @@
 
  call convert_winds
  
+
 !-----------------------------------------------------------------------------------
 ! Write target data to file.
 !-----------------------------------------------------------------------------------
@@ -1145,6 +1185,62 @@
  close(14)
 
  end subroutine read_vcoord_info
+
+ SUBROUTINE VINTG_THOMP
+
+ implicit none
+
+ INTEGER                         :: CLB(3), CUB(3), RC
+
+ REAL(ESMF_KIND_R8), ALLOCATABLE :: Z1(:,:,:), Z2(:,:,:)
+ REAL(ESMF_KIND_R8), ALLOCATABLE :: C1(:,:,:,:),C2(:,:,:,:)
+
+ REAL(ESMF_KIND_R8), POINTER     :: QNIFA1PTR(:,:,:)       ! input pressure
+ REAL(ESMF_KIND_R8), POINTER     :: P1PTR(:,:,:)       ! input pressure
+ REAL(ESMF_KIND_R8), POINTER     :: P2PTR(:,:,:)       ! target pressure
+
+ print*,"- VERTICALY INTERPOLATE THOMP TRACERS."
+
+ print*,"- CALL FieldGet FOR 3-D THOMP PRES."
+ call ESMF_FieldGet(thomp_press_b4adj_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=p1ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+! The '1'/'2' arrays hold fields before/after interpolation.  
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ ALLOCATE(Z1(CLB(1):CUB(1),CLB(2):CUB(2),k_thomp_mp_climo))
+ ALLOCATE(Z2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET))
+ ALLOCATE(C1(CLB(1):CUB(1),CLB(2):CUB(2),k_thomp_mp_climo,1))
+ ALLOCATE(C2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET,1))
+
+ Z1 = -LOG(P1PTR)
+
+ print*,"- CALL FieldGet FOR 3-D ADJUSTED PRESS"
+ call ESMF_FieldGet(pres_target_grid, &
+                    farrayPtr=P2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ Z2 = -LOG(P2PTR)
+
+ print*,'pres check 1 ', p1ptr(clb(1),clb(2),:)
+ print*,'pres check 2 ', p2ptr(clb(1),clb(2),:)
+
+
+ print*,"- CALL FieldGet FOR qnifa."
+ call ESMF_FieldGet(qnifa_b4adj_target_grid, &
+                    farrayPtr=QNIFA1PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ C1(:,:,:,1) =  QNIFA1PTR(:,:,:)
+
+ END SUBROUTINE VINTG_THOMP
 
  SUBROUTINE VINTG
 !$$$  SUBPROGRAM DOCUMENTATION BLOCK
