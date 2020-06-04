@@ -51,13 +51,8 @@
 #
 #-----------------------------------------------------------------------
 
-module purge
-module load EnvVars/1.0.2
-module load lsf/10.1
-module load ips/18.0.1.163
-module load impi/18.0.1
-module load NetCDF/4.5.0
-module load HDF5-serial/1.10.1
+source ../sorc/machine-setup.sh > /dev/null 2>&1
+source ../modulefiles/build.$target
 module list
 
 #-----------------------------------------------------------------------

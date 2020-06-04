@@ -8,16 +8,8 @@
 
 set -x
 
-module purge
-module load PrgEnv-intel/5.2.56
-module rm intel
-module load intel/16.3.210
-module load cray-mpich/7.2.0
-module load craype-haswell
-module load cray-netcdf/4.3.3.1
-module load xt-lsfhpc/9.1.3
-module load prod_util/1.1.0
-module load hpss/4.1.0.3
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 module list
 
 PROJECT_CODE=GFS-DEV
