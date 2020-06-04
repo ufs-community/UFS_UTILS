@@ -2,6 +2,7 @@
 ## Build and run module for WCOSS-Cray
 #############################################################
 
+module use /usrx/local/dev/modulefiles
 module load hpss/4.1.0.3
 module load xt-lsfhpc/9.1.3
 module load cfp-intel-sandybridge/1.1.0
