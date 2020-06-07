@@ -1,0 +1,23 @@
+FCserial = ifort
+
+EXE = lakefrac
+OBJS = lakefrac.o enclosure_cnvx.o find_limit.o 
+NETCDF_INC = -I$(NETCDF)/include
+NETCDF_LIB = -L$(NETCDF)/lib -lnetcdff -lnetcdf
+INCLUDE = $(NETCDF_INC)
+LIB = $(NETCDF_LIB)
+FFLAGS = -C -traceback -O3 -assume byterecl
+
+%.o: %.F90
+	$(FCserial) $(FFLAGS) -c $(INCLUDE) $<
+
+all: $(EXE) 
+
+$(EXE): $(EXE).o $(OBJS)
+	$(FCserial) $(FFLAGS) -o $@ $^ $(LIB)
+
+clean:
+	$(RM) *.o $(EXE)
+
+tarfile:
+	tar cvf $(EXE).tar *.F90 Makefile
