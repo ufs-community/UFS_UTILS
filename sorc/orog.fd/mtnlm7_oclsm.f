@@ -1935,7 +1935,7 @@ C
 C
       DO J=1,JMN
          GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
-         DELTAX(J) = DELTAY * COSD(GLAT(J))
+         DELTAX(J) = DELTAY * COS(GLAT(J)*PI/180.0)
       ENDDO
 C
 C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
@@ -2137,7 +2137,7 @@ C
                HLPRIM(I,J) = SQRT(HL(I,J)*HL(I,J) + HXY(I,J)*HXY(I,J))
            IF( HL(I,J).NE. 0. .AND. SLM(I,J) .NE. 0. ) THEN
 C
-             THETA(I,J) = 0.5 * ATAN2D(HXY(I,J),HL(I,J))
+             THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J)) * 180.0 / PI
 C ===   for testing print out in degrees
 C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
             ENDIF
@@ -2199,7 +2199,7 @@ C
 C
       DO J=1,JMN
          GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
-         DELTAX(J) = DELTAY * COSD(GLAT(J))
+         DELTAX(J) = DELTAY * COS(GLAT(J)*D2R)
       ENDDO
 C
 C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
@@ -2369,7 +2369,7 @@ C
                HLPRIM(I,J) = SQRT(HL(I,J)*HL(I,J) + HXY(I,J)*HXY(I,J))
            IF( HL(I,J).NE. 0. .AND. SLM(I,J) .NE. 0. ) THEN
 C
-             THETA(I,J) = 0.5 * ATAN2D(HXY(I,J),HL(I,J))
+             THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J)) / D2R
 C ===   for testing print out in degrees
 C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
             ENDIF
@@ -3917,7 +3917,8 @@ cc
       parameter   (ix=40*120,jx=50*120)
       parameter   (ia=60*120,ja=30*120)
 cc
-      integer*2    idat(ix,jx),itopo
+      integer*2    idat(ix,jx)
+      integer      itopo
 cc
 ccmr  integer*2    m9999 
 ccmr  data         m9999    / -9999 /
@@ -3930,8 +3931,8 @@ cc
       real(kind=8) dloin,dlain,rlon,rlat
 cc
       open(235, file="./fort.235", access='direct', recl=43200*21600*2)
-           read(235,rec=1)glob
-         rewind(235)
+      read(235,rec=1)glob
+      close(235)
 cc
 cc
       print*,' '
@@ -4417,7 +4418,7 @@ c
       real(kind=8)a(l),rtc,t1,t2
       character*24 cn
       character*(*) c
-      t1=rtc()
+c     t1=rtc()
 cgwv        print *, ' nanc call ',c
       do k=1,l
       word=a(k)
@@ -4434,12 +4435,12 @@ cgwv        print *, ' nanc call ',c
 
  101  format(e20.10)
       end do
-      t2=rtc()
+c     t2=rtc()
 cgwv      print 102,l,t2-t1,c
  102  format(' time to check ',i9,' words is ',f10.4,' ',a24)
       return
        end
-      real function timef
+      real function timef()
       character(8) :: date
       character(10) :: time
       character(5) :: zone

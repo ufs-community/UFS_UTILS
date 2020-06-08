@@ -1662,12 +1662,12 @@
        PZ1(50),PZ2(50),PAA1(50),PAA2(50)                                
       COMMON/LOWER7/PTM(10),PDM(10,8) 
       COMMON/MAVG7/PAVGM(10) 
-      COMMON/DATIM7/ISDATE(3),ISTIME(2),NAME(2) 
+!     COMMON/DATIM7/ISDATE(3),ISTIME(2),NAME(2) 
       COMMON/METSEL/IMR 
       common/pres/pr65(2,65),pr151(2,151) 
       DATA IMR/0/ 
-      DATA ISDATE/'01-F','EB-0','2   '/,ISTIME/'15:4','9:27'/ 
-      DATA NAME/'MSIS','E-00'/ 
+!     DATA ISDATE/'01-F','EB-0','2   '/,ISTIME/'15:4','9:27'/ 
+!     DATA NAME/'MSIS','E-00'/ 
 !         TEMPERATURE                                                   
       DATA PT1/                                                         &
         9.86573E-01, 1.62228E-02, 1.55270E-02,-1.04323E-01,-3.75801E-03,&
