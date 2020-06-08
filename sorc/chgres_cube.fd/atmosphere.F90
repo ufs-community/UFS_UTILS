@@ -66,6 +66,7 @@
  real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  ! vertical coordinate
 
  type(esmf_field)                       :: qnifa_b4adj_target_grid
+ type(esmf_field), public               :: qnifa_target_grid
  type(esmf_field)                       :: thomp_press_b4adj_target_grid
 
  type(esmf_field), public               :: delp_target_grid
@@ -319,6 +320,14 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
+ print*,"- CALL FieldCreate FOR TARGET GRID qnifa."
+ qnifa_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_target/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
    print*,"- CALL FieldRegridStore FOR THOMPSON FIELDS."
 
    method=ESMF_REGRIDMETHOD_BILINEAR
@@ -1191,11 +1200,14 @@
  implicit none
 
  INTEGER                         :: CLB(3), CUB(3), RC
+ INTEGER                         :: IM, KM1, KM2, NT
+ INTEGER                         :: I, J, K
 
  REAL(ESMF_KIND_R8), ALLOCATABLE :: Z1(:,:,:), Z2(:,:,:)
  REAL(ESMF_KIND_R8), ALLOCATABLE :: C1(:,:,:,:),C2(:,:,:,:)
 
- REAL(ESMF_KIND_R8), POINTER     :: QNIFA1PTR(:,:,:)       ! input pressure
+ REAL(ESMF_KIND_R8), POINTER     :: QNIFA1PTR(:,:,:)       ! input
+ REAL(ESMF_KIND_R8), POINTER     :: QNIFA2PTR(:,:,:)       ! target
  REAL(ESMF_KIND_R8), POINTER     :: P1PTR(:,:,:)       ! input pressure
  REAL(ESMF_KIND_R8), POINTER     :: P2PTR(:,:,:)       ! target pressure
 
@@ -1239,6 +1251,36 @@
          call error_handler("IN FieldGet", rc)
 
  C1(:,:,:,1) =  QNIFA1PTR(:,:,:)
+
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+!  PERFORM LAGRANGIAN ONE-DIMENSIONAL INTERPOLATION
+!  THAT IS 4TH-ORDER IN INTERIOR, 2ND-ORDER IN OUTSIDE INTERVALS
+!  AND 1ST-ORDER FOR EXTRAPOLATION.
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ IM = (CUB(1)-CLB(1)+1) * (CUB(2)-CLB(2)+1)
+ KM1= k_thomp_mp_climo
+ KM2= LEV_TARGET
+ NT=  1
+
+ CALL TERP3(IM,1,1,1,1,NT,(IM*KM1),(IM*KM2), &
+            KM1,IM,IM,Z1,C1,KM2,IM,IM,Z2,C2)
+
+ print*,"- CALL FieldGet FOR ADJUSTED qnifa."
+ call ESMF_FieldGet(qnifa_target_grid, &
+                    farrayPtr=QNIFA2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+     DO K=1,LEV_TARGET
+       DO I=CLB(1),CUB(1)
+       DO J=CLB(2),CUB(2)
+         QNIFA2PTR(I,J,K) = C2(I,J,K,1)
+       ENDDO
+       ENDDO
+     ENDDO
+
+ DEALLOCATE (Z1, Z2, C1, C2)
 
  END SUBROUTINE VINTG_THOMP
 
