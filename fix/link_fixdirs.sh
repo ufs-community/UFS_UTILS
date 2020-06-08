@@ -44,7 +44,7 @@ elif [ $machine = "hera" ]; then
 elif [ $machine = "jet" ]; then
     FIX_DIR="/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix"
 elif [ $machine = "orion" ]; then
-    FIX_DIR="/work/noaa/global/kfriedma/glopara/fix"
+    FIX_DIR="/work/noaa/global/glopara/fix"
 fi
 for dir in fix_am fix_fv3 fix_orog fix_fv3_gmted2010 fix_sfc_climo; do
     [[ -d $dir ]] && rm -rf $dir
