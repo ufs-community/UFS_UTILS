@@ -17,19 +17,9 @@ module load w3emc/2.5.0
 module load ip/3.1.0
 module load nemsiogfs/2.3.0
 module load landsfcutil/2.2.0
-
-# George V's version.
-module use -a /apps/contrib/NCEPLIBS/lib/modulefiles
-module load g2-intel-sandybridge/2.5.0
-
-# i suspect the official nceplibs version
-# was not compiled with threads.  use george v's
-# splib for now.
-module load sp-intel-sandybridge/2.0.2
-
+module load g2/3.1.1
+module load sp/2.0.3
 export Jasper_ROOT="/apps/jasper-1.900.1"
-
 module load netcdf/4.7.2-parallel
 module load esmf/8.0.0_ParallelNetCDF
-
 export WGRIB2_ROOT="/work/noaa/da/ggayno/save/wgrib2"
