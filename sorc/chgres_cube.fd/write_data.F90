@@ -1098,6 +1098,7 @@
                                      ps_target_grid, &
                                      zh_target_grid, &
                                      dzdt_target_grid, &
+                                     qnifa_target_grid, &
                                      tracers_target_grid, &
                                      temp_target_grid, &
                                      delp_target_grid, &
@@ -1134,7 +1135,7 @@
  integer                          :: id_lat_w, id_lon_w
  integer                          :: id_w, id_zh, id_u_w
  integer                          :: id_v_w, id_u_s, id_v_s
- integer                          :: id_t, id_delp
+ integer                          :: id_t, id_delp, id_qnifa
  integer                          :: i_start, i_end, j_start, j_end
  integer                          :: i_target_out, j_target_out
  integer                          :: ip1_target_out, jp1_target_out
@@ -1288,6 +1289,11 @@
      error = nf90_put_att(ncid, id_tracers(n), "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING TRACERS COORD' )
    enddo
+
+   error = nf90_def_var(ncid, 'qnifa', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_qnifa)
+   call netcdf_err(error, 'DEFINING QNIFA' )
+   error = nf90_put_att(ncid, id_qnifa, "coordinates", "geolon geolat")
+   call netcdf_err(error, 'DEFINING QNIFA COORD' )
 
    error = nf90_def_var(ncid, 'u_w', NF90_FLOAT, (/dim_lonp,dim_lat,dim_lev/), id_u_w)
    call netcdf_err(error, 'DEFINING U_W' )
@@ -1462,6 +1468,22 @@
    endif
 
  enddo
+
+!  qnifa
+
+ do tile = 1, num_tiles_target_grid
+   print*,"- CALL FieldGather FOR TARGET GRID QNIFA FOR TILE: ", tile
+   call ESMF_FieldGather(qnifa_target_grid, data_one_tile_3d, rootPet=tile-1, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+ enddo
+
+ if (localpet < num_tiles_target_grid) then
+   dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+   dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   error = nf90_put_var( ncid, id_qnifa, dum3d)
+   call netcdf_err(error, 'WRITING QNIFA RECORD' )
+ endif
 
  deallocate(dum3d, data_one_tile_3d)
 
