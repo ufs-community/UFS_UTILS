@@ -1098,7 +1098,8 @@
                                      ps_target_grid, &
                                      zh_target_grid, &
                                      dzdt_target_grid, &
-                                     qnifa_target_grid, &
+                                     qnifa_climo_target_grid, &
+                                     qnwfa_climo_target_grid, &
                                      tracers_target_grid, &
                                      temp_target_grid, &
                                      delp_target_grid, &
@@ -1135,7 +1136,7 @@
  integer                          :: id_lat_w, id_lon_w
  integer                          :: id_w, id_zh, id_u_w
  integer                          :: id_v_w, id_u_s, id_v_s
- integer                          :: id_t, id_delp, id_qnifa
+ integer                          :: id_t, id_delp, id_qnifa, id_qnwfa
  integer                          :: i_start, i_end, j_start, j_end
  integer                          :: i_target_out, j_target_out
  integer                          :: ip1_target_out, jp1_target_out
@@ -1294,6 +1295,11 @@
    call netcdf_err(error, 'DEFINING QNIFA' )
    error = nf90_put_att(ncid, id_qnifa, "coordinates", "geolon geolat")
    call netcdf_err(error, 'DEFINING QNIFA COORD' )
+
+   error = nf90_def_var(ncid, 'qnwfa', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_qnwfa)
+   call netcdf_err(error, 'DEFINING QNWFA' )
+   error = nf90_put_att(ncid, id_qnwfa, "coordinates", "geolon geolat")
+   call netcdf_err(error, 'DEFINING QNWFA COORD' )
 
    error = nf90_def_var(ncid, 'u_w', NF90_FLOAT, (/dim_lonp,dim_lat,dim_lev/), id_u_w)
    call netcdf_err(error, 'DEFINING U_W' )
@@ -1473,7 +1479,7 @@
 
  do tile = 1, num_tiles_target_grid
    print*,"- CALL FieldGather FOR TARGET GRID QNIFA FOR TILE: ", tile
-   call ESMF_FieldGather(qnifa_target_grid, data_one_tile_3d, rootPet=tile-1, tile=tile, rc=error)
+   call ESMF_FieldGather(qnifa_climo_target_grid, data_one_tile_3d, rootPet=tile-1, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", error)
  enddo
@@ -1483,6 +1489,22 @@
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
    error = nf90_put_var( ncid, id_qnifa, dum3d)
    call netcdf_err(error, 'WRITING QNIFA RECORD' )
+ endif
+
+!  qnwfa
+
+ do tile = 1, num_tiles_target_grid
+   print*,"- CALL FieldGather FOR TARGET GRID QNWFA FOR TILE: ", tile
+   call ESMF_FieldGather(qnwfa_climo_target_grid, data_one_tile_3d, rootPet=tile-1, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+ enddo
+
+ if (localpet < num_tiles_target_grid) then
+   dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+   dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   error = nf90_put_var( ncid, id_qnwfa, dum3d)
+   call netcdf_err(error, 'WRITING QNWFA RECORD' )
  endif
 
  deallocate(dum3d, data_one_tile_3d)

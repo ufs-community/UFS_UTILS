@@ -7,13 +7,15 @@
 
  private
 
- integer :: i_thomp_mp_climo = 288
- integer :: j_thomp_mp_climo = 181
- integer, public :: k_thomp_mp_climo = 30
+ integer                    :: i_thomp_mp_climo = 288
+ integer                    :: j_thomp_mp_climo = 181
+ integer, public            :: lev_thomp_mp_climo = 30
 
- type(esmf_grid),  public               :: thomp_mp_climo_grid
+ type(esmf_grid)            :: thomp_mp_climo_grid
 
- type(esmf_field), public :: qnifa, thomp_press
+ type(esmf_field), public   :: qnifa_climo_input_grid
+ type(esmf_field), public   :: qnwfa_climo_input_grid
+ type(esmf_field), public   :: thomp_pres_climo_input_grid
 
  public :: read_thomp_mp_data
 
@@ -113,21 +115,30 @@
  if(localpet == 1) print*,'lon check ',lon_ptr(:,clb(2))
  if(localpet == 0) print*,'lat check ',lat_ptr(clb(1),:)
 
- print*,"- CALL FieldCreate FOR QNIFA."
- qnifa = ESMF_FieldCreate(thomp_mp_climo_grid, &
+ print*,"- CALL FieldCreate FOR QNIFA INPUT CLIMO."
+ qnifa_climo_input_grid = ESMF_FieldCreate(thomp_mp_climo_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/k_thomp_mp_climo/), rc=rc)
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR QNWFA INPUT CLIMO."
+ qnwfa_climo_input_grid = ESMF_FieldCreate(thomp_mp_climo_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR THOMP PRESS"
- thomp_press = ESMF_FieldCreate(thomp_mp_climo_grid, &
+ thomp_pres_climo_input_grid = ESMF_FieldCreate(thomp_mp_climo_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/k_thomp_mp_climo/), rc=rc)
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
@@ -141,14 +152,14 @@
  
  
  if (localpet == 0) then
-   allocate(dummy3d(i_thomp_mp_climo, j_thomp_mp_climo, k_thomp_mp_climo))
+   allocate(dummy3d(i_thomp_mp_climo, j_thomp_mp_climo, lev_thomp_mp_climo))
    dummy3d = 0.0
  else
    allocate(dummy3d(0,0,0))
  endif
 
  if (localpet == 0) then
-   do k = 1, k_thomp_mp_climo
+   do k = 1, lev_thomp_mp_climo
      write(level, "(I2.2)") k
      if (k < 10) then
      record = "QNIFA_" // month(1) // "__" // level
@@ -164,13 +175,35 @@
    enddo
  endif
 
- print*,"- CALL FieldScatter FOR qnifa."
- call ESMF_FieldScatter(qnifa, dummy3d, rootpet=0, rc=rc)
+ print*,"- CALL FieldScatter FOR qnifa input climo."
+ call ESMF_FieldScatter(qnifa_climo_input_grid, dummy3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
-   do k = 1, k_thomp_mp_climo
+   do k = 1, lev_thomp_mp_climo
+     write(level, "(I2.2)") k
+     if (k < 10) then
+     record = "QNWFA_" // month(1) // "__" // level
+     else
+     record = "QNWFA_" // month(1) // "__0" // level
+     endif
+     print*,'record is ',record
+     error=nf90_inq_varid(ncid, trim(record), id_var)
+     call netcdf_err(error, 'reading  field id' )
+     error=nf90_get_var(ncid, id_var, dummy3d(:,:,k))
+     call netcdf_err(error, 'reading field' )
+     print*,'maxval ', record,  maxval(dummy3d(:,:,k)),minval(dummy3d(:,:,k))
+   enddo
+ endif
+
+ print*,"- CALL FieldScatter FOR qnwfa input climo."
+ call ESMF_FieldScatter(qnwfa_climo_input_grid, dummy3d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ if (localpet == 0) then
+   do k = 1, lev_thomp_mp_climo
      write(level, "(I2.2)") k
      if (k < 10) then
      record = "P_WIF_" // month(1) // "__" // level
@@ -187,15 +220,13 @@
  endif
 
  print*,"- CALL FieldScatter FOR thomp press."
- call ESMF_FieldScatter(thomp_press, dummy3d, rootpet=0, rc=rc)
+ call ESMF_FieldScatter(thomp_pres_climo_input_grid, dummy3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
  error=nf90_close(ncid)
 
+ deallocate(dummy3d)
+
  end subroutine read_thomp_mp_data
-
-
-
-
 
  end module thompson_mp

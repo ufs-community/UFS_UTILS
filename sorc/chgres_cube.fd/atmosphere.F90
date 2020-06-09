@@ -51,8 +51,11 @@
                                        tracers, num_tracers,      &
                                        atm_weight_file
 
- use thompson_mp, only               : read_thomp_mp_data, qnifa, &
-                                       thomp_press, k_thomp_mp_climo
+ use thompson_mp, only               : read_thomp_mp_data,  &
+                                       qnifa_climo_input_grid, &
+                                       qnwfa_climo_input_grid, &
+                                       thomp_pres_climo_input_grid, &
+                                       lev_thomp_mp_climo
 
  implicit none
 
@@ -65,9 +68,11 @@
 
  real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  ! vertical coordinate
 
- type(esmf_field)                       :: qnifa_b4adj_target_grid
- type(esmf_field), public               :: qnifa_target_grid
- type(esmf_field)                       :: thomp_press_b4adj_target_grid
+ type(esmf_field)                       :: qnifa_climo_b4adj_target_grid
+ type(esmf_field), public               :: qnifa_climo_target_grid
+ type(esmf_field)                       :: qnwfa_climo_b4adj_target_grid
+ type(esmf_field), public               :: qnwfa_climo_target_grid
+ type(esmf_field)                       :: thomp_pres_climo_b4adj_target_grid
 
  type(esmf_field), public               :: delp_target_grid
                                            ! pressure thickness
@@ -302,26 +307,45 @@
 ! thompson
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
- print*,"- CALL FieldCreate FOR TARGET GRID qnifa BEFORE ADJUSTMENT."
- qnifa_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+ print*,"- CALL FieldCreate FOR TARGET GRID climo qnifa BEFORE ADJUSTMENT."
+ qnifa_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/k_thomp_mp_climo/), rc=rc)
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
- print*,"- CALL FieldCreate FOR TARGET GRID thomp_press BEFORE ADJUSTMENT."
- thomp_press_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+ print*,"- CALL FieldCreate FOR TARGET GRID climo qnwfa BEFORE ADJUSTMENT."
+ qnwfa_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/k_thomp_mp_climo/), rc=rc)
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
- print*,"- CALL FieldCreate FOR TARGET GRID qnifa."
- qnifa_target_grid = ESMF_FieldCreate(target_grid, &
+ print*,"- CALL FieldCreate FOR TARGET GRID thomp_pres BEFORE ADJUSTMENT."
+ thomp_pres_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR TARGET GRID climo qnifa."
+ qnifa_climo_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_target/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+   print*,"- CALL FieldRegridStore FOR THOMPSON FIELDS."
+
+ print*,"- CALL FieldCreate FOR TARGET GRID climo qnwfa."
+ qnwfa_climo_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
@@ -332,8 +356,8 @@
 
    method=ESMF_REGRIDMETHOD_BILINEAR
 
-   call ESMF_FieldRegridStore(qnifa, &
-                              qnifa_b4adj_target_grid, &
+   call ESMF_FieldRegridStore(qnifa_climo_input_grid, &
+                              qnifa_climo_b4adj_target_grid, &
                               polemethod=ESMF_POLEMETHOD_ALLAVG, &
                               srctermprocessing=isrctermprocessing, &
                               extrapmethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
@@ -342,9 +366,18 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegridStore", rc)
 
- print*,"- CALL Field_Regrid FOR qnifa."
- call ESMF_FieldRegrid(qnifa, &
-                       qnifa_b4adj_target_grid, &
+ print*,"- CALL Field_Regrid FOR climo qnifa."
+ call ESMF_FieldRegrid(qnifa_climo_input_grid, &
+                       qnifa_climo_b4adj_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, &
+                       rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
+
+ print*,"- CALL Field_Regrid FOR climo qnwfa."
+ call ESMF_FieldRegrid(qnwfa_climo_input_grid, &
+                       qnwfa_climo_b4adj_target_grid, &
                        routehandle=regrid_bl, &
                        termorderflag=ESMF_TERMORDER_SRCSEQ, &
                        rc=rc)
@@ -352,8 +385,8 @@
     call error_handler("IN FieldRegrid", rc)
 
  print*,"- CALL Field_Regrid FOR THOMP PRESSURE."
- call ESMF_FieldRegrid(thomp_press, &
-                       thomp_press_b4adj_target_grid, &
+ call ESMF_FieldRegrid(thomp_pres_climo_input_grid, &
+                       thomp_pres_climo_b4adj_target_grid, &
                        routehandle=regrid_bl, &
                        termorderflag=ESMF_TERMORDER_SRCSEQ, &
                        rc=rc)
@@ -1208,13 +1241,15 @@
 
  REAL(ESMF_KIND_R8), POINTER     :: QNIFA1PTR(:,:,:)       ! input
  REAL(ESMF_KIND_R8), POINTER     :: QNIFA2PTR(:,:,:)       ! target
+ REAL(ESMF_KIND_R8), POINTER     :: QNWFA1PTR(:,:,:)       ! input
+ REAL(ESMF_KIND_R8), POINTER     :: QNWFA2PTR(:,:,:)       ! target
  REAL(ESMF_KIND_R8), POINTER     :: P1PTR(:,:,:)       ! input pressure
  REAL(ESMF_KIND_R8), POINTER     :: P2PTR(:,:,:)       ! target pressure
 
  print*,"- VERTICALY INTERPOLATE THOMP TRACERS."
 
  print*,"- CALL FieldGet FOR 3-D THOMP PRES."
- call ESMF_FieldGet(thomp_press_b4adj_target_grid, &
+ call ESMF_FieldGet(thomp_pres_climo_b4adj_target_grid, &
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=p1ptr, rc=rc)
@@ -1225,10 +1260,12 @@
 ! The '1'/'2' arrays hold fields before/after interpolation.  
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
- ALLOCATE(Z1(CLB(1):CUB(1),CLB(2):CUB(2),k_thomp_mp_climo))
+ NT=  2  ! number of thomp tracers
+
+ ALLOCATE(Z1(CLB(1):CUB(1),CLB(2):CUB(2),lev_thomp_mp_climo))
  ALLOCATE(Z2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET))
- ALLOCATE(C1(CLB(1):CUB(1),CLB(2):CUB(2),k_thomp_mp_climo,1))
- ALLOCATE(C2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET,1))
+ ALLOCATE(C1(CLB(1):CUB(1),CLB(2):CUB(2),lev_thomp_mp_climo,NT))
+ ALLOCATE(C2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET,NT))
 
  Z1 = -LOG(P1PTR)
 
@@ -1243,14 +1280,21 @@
  print*,'pres check 1 ', p1ptr(clb(1),clb(2),:)
  print*,'pres check 2 ', p2ptr(clb(1),clb(2),:)
 
-
- print*,"- CALL FieldGet FOR qnifa."
- call ESMF_FieldGet(qnifa_b4adj_target_grid, &
+ print*,"- CALL FieldGet FOR qnifa before vertical adjustment."
+ call ESMF_FieldGet(qnifa_climo_b4adj_target_grid, &
                     farrayPtr=QNIFA1PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  C1(:,:,:,1) =  QNIFA1PTR(:,:,:)
+
+ print*,"- CALL FieldGet FOR qnwfa before vertical adjustment."
+ call ESMF_FieldGet(qnwfa_climo_b4adj_target_grid, &
+                    farrayPtr=QNWFA1PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ C1(:,:,:,2) =  QNWFA1PTR(:,:,:)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  PERFORM LAGRANGIAN ONE-DIMENSIONAL INTERPOLATION
@@ -1259,16 +1303,21 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
  IM = (CUB(1)-CLB(1)+1) * (CUB(2)-CLB(2)+1)
- KM1= k_thomp_mp_climo
+ KM1= LEV_THOMP_MP_CLIMO
  KM2= LEV_TARGET
- NT=  1
 
  CALL TERP3(IM,1,1,1,1,NT,(IM*KM1),(IM*KM2), &
             KM1,IM,IM,Z1,C1,KM2,IM,IM,Z2,C2)
 
- print*,"- CALL FieldGet FOR ADJUSTED qnifa."
- call ESMF_FieldGet(qnifa_target_grid, &
+ print*,"- CALL FieldGet FOR ADJUSTED climo qnifa."
+ call ESMF_FieldGet(qnifa_climo_target_grid, &
                     farrayPtr=QNIFA2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR ADJUSTED climo qnwfa."
+ call ESMF_FieldGet(qnwfa_climo_target_grid, &
+                    farrayPtr=QNWFA2PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
@@ -1276,6 +1325,7 @@
        DO I=CLB(1),CUB(1)
        DO J=CLB(2),CUB(2)
          QNIFA2PTR(I,J,K) = C2(I,J,K,1)
+         QNWFA2PTR(I,J,K) = C2(I,J,K,2)
        ENDDO
        ENDDO
      ENDDO
