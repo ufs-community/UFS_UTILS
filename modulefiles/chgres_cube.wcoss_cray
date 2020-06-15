@@ -22,8 +22,15 @@ module rm gcc
 module load gcc/4.9.2
 
 
-export WGRIB2API_INC=/gpfs/hps3/emc/global/noscrub/George.Gayno/wgrib2/include
-export WGRIB2_LIB=/gpfs/hps3/emc/global/noscrub/George.Gayno/wgrib2/lib/libwgrib2.a
+# export WGRIB2API_INC=/gpfs/hps3/emc/global/noscrub/George.Gayno/wgrib2/include
+# export WGRIB2_LIB=/gpfs/hps3/emc/global/noscrub/George.Gayno/wgrib2/lib/libwgrib2.a
+
+export WGRIB2API_INC=${build_dir}/hireswfv3_utils.fd/wgrib2/include
+export WGRIB2_LIB=${build_dir}/hireswfv3_utils.fd/wgrib2/lib/libwgrib2.a
+
+# point directly at wgrib2 build rather than copy from fix?
+# export WGRIB2API_INC=${build_dir}/hireswfv3_wgrib2.cd/grib2/lib
+# export WGRIB2_LIB=${build_dir}/hireswfv3_wgrib2.cd/grib2/lib/libwgrib2.a
 
 export FCOMP=ftn
 export FFLAGS="-O3 -fp-model precise -g -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
