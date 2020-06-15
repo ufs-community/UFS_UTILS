@@ -23,11 +23,12 @@ elif [ $nargv -eq 7 ]; then  # cubed-sphere grid
   export tile=$2
   export griddir=$3
   export outdir=$4
-  export script_dir=$5
+#  export script_dir=$5
   export ntiles=6
   export is_latlon=0
   export orogfile="none"
-  export hist_dir=$6
+  export hist_dir=$5
+  export add_lake=$6
   export TMPDIR=$7
   export workdir=$TMPDIR/C${res}/orog/tile$tile
 elif [ $nargv -eq 8 ]; then  # input your own orography files
@@ -56,6 +57,12 @@ export indir=$hist_dir
 export executable=$exec_dir/orog
 if [ ! -s $executable ]; then
   echo "executable does not exist"
+  exit 1 
+fi
+
+export exe_add_lake=$exec_dir/lakefrac
+if [ ! -s $exe_add_lake ]; then
+  echo "executable to add lake does not exist"
   exit 1 
 fi
 
@@ -116,12 +123,15 @@ cd $workdir
     exit 1
   else
     if [ $is_latlon -eq 1 ]; then
-       export outfile=oro.${lonb}x${latb}.nc
+      export outfile=oro.${lonb}x${latb}.nc
     else
-       export outfile=oro.C${res}.tile${tile}.nc
+      export outfile=oro.C${res}.tile${tile}.nc
     fi
-
-    mv ./out.oro.nc $outdir/$outfile
+    mv ./out.oro.nc $outfile
+    if $add_lake; then
+      $exe_add_lake ${tile} ${res}
+    fi
+    mv $outfile $outdir/$outfile
     echo "file $outdir/$outfile is created"
     echo "Successfully running $executable "
     exit 0

@@ -88,6 +88,7 @@ fi
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TMPDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
 export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/C${res}
+export add_lake=false
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.

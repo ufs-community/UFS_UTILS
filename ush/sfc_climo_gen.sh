@@ -79,8 +79,8 @@ vegetation_greenness_method="bilinear"
 /
 EOF
 
-APRUN_SFC=${APRUN_SFC:-"aprun -j 1 -n 6 -N 6"}
-$APRUN_SFC $EXEC_DIR/sfc_climo_gen
+SRUN_SFC=${SRUN_SFC:-"srun -A gsd-fv3-dev -J sfc_climo -N 6"}
+$SRUN_SFC $EXEC_DIR/sfc_climo_gen
 
 rc=$?
 
