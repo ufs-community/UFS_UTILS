@@ -1,0 +1,34 @@
+#%Module#####################################################
+## Build and run module for WCOSS-Dell P3
+#############################################################
+
+module load lsf/10.1
+module load HPSS/5.0.2.5
+module load cmake/3.16.2
+module load ips/18.0.1.163
+module load impi/18.0.1
+module load w3nco/2.0.6
+module load w3emc/2.3.0
+module load sp/2.0.2
+module load nemsio/2.2.3
+module load bacio/2.0.2
+module load ip/3.0.1
+module load sfcio/1.0.0
+module load sigio/2.1.0
+module load gfsio/1.1.0
+module load landsfcutil/2.1.0
+module load nemsiogfs/2.0.1
+module load g2/3.1.0
+module load jasper/1.900.29
+export Jasper_ROOT="/usrx/local/prod/packages/gnu/4.8.5/jasper/1.900.29"
+
+module use /usrx/local/nceplibs/dev/NCEPLIBS/modulefiles
+module load netcdf_parallel/4.7.4
+
+module use /gpfs/dell2/emc/modeling/noscrub/emc.nemspara/soft/modulefiles
+module load esmf/8.0.0_ParallelNetCDF
+
+export WGRIB2_ROOT=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/wgrib2
+
+module use /usrx/local/dev/modulefiles
+module load prod_util/1.1.3

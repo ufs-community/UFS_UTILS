@@ -27,7 +27,6 @@ if [[ -d /lfs3 ]] ; then
     fi
     target=jet
     module purge
-    module use /lfs3/projects/hfv3gfs/nwprod/NCEPLIBS/modulefiles
 elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then
@@ -36,7 +35,6 @@ elif [[ -d /scratch1 ]] ; then
     fi
     target=hera
     module purge
-    MOD_PATH=/scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
 elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
     # We are on NOAA Luna or Surge
     if ( ! eval module help > /dev/null 2>&1 ) ; then
@@ -108,6 +106,9 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
         source /etc/profile
     fi
     target=gaea
+    module purge
+elif [[ "$(hostname)" =~ "Orion" ]]; then
+    target="orion"
     module purge
 elif [[ "$(hostname)" =~ "odin" ]]; then
     target="odin"

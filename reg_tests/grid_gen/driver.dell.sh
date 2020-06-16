@@ -19,14 +19,8 @@
 #
 #-----------------------------------------------------------------------------
 
-module purge
-module load EnvVars/1.0.2
-module load lsf/10.1
-module load ips/18.0.1.163
-module load impi/18.0.1
-module load NetCDF/4.5.0
-module load HDF5-serial/1.10.1
-module list
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
 set -x
 
@@ -45,7 +39,7 @@ export APRUN=time
 export APRUN_SFC="mpirun -l"
 export OMP_STACKSIZE=2048m
 export machine=WCOSS_DELL_P3
-export NCCMP=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
+export NCCMP=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/util/nccmp/nccmp-nc4.7.4/src/nccmp
 export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
 export OMP_NUM_THREADS=24
 

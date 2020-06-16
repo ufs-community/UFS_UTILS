@@ -285,9 +285,9 @@
  endif
 
  if (tile < 10) then
-   write(outfile, '(A, I1, A)'), 'out.sfc.tile', tile, '.nc'
+   write(outfile, '(A, I1, A)')  'out.sfc.tile', tile, '.nc'
  else
-   write(outfile, '(A, I2, A)'), 'out.sfc.tile', tile, '.nc'
+   write(outfile, '(A, I2, A)')  'out.sfc.tile', tile, '.nc'
  endif
 
 !--- open the file
@@ -1014,7 +1014,7 @@
 ! Create output file header.
 !----------------------------------------------------------------------------------
 
- WRITE(OUTFILE, '(A, I1, A)'), 'gfs_bndy.tile', 7, '.nc'
+ WRITE(OUTFILE, '(A, I1, A)')  'gfs_bndy.tile', 7, '.nc'
  ERROR = NF90_CREATE(OUTFILE, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
                      NCID2, INITIALSIZE=INITAL, CHUNKSIZE=FSIZE)
  CALL NETCDF_ERROR(ERROR, 'CREATING FILE: '//TRIM(OUTFILE) )

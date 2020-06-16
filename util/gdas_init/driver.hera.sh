@@ -8,16 +8,8 @@
 
 set -x
 
-source /apps/lmod/lmod/init/sh
-module purge
-module use -a /scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
-module load intel/18.0.5.274
-module load impi/2018.0.4
-module load netcdf/4.7.0
-module load hpss
-module load prod_util
-module load nco/4.7.0
-module list
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
 PROJECT_CODE=fv3-cpu
 QUEUE=batch

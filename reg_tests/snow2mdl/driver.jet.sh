@@ -28,17 +28,16 @@
 
 set -x
 
-module unload intel
-module load intel/18.0.5.274
-module list
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
 
-export DATA="/mnt/lfs3/projects/emcda/$LOGNAME/stmp/reg_tests.snow2mdl"
+export DATA="/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_tests.snow2mdl"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
-export HOMEreg=/lfs3/HFIP/emcda/George.Gayno/reg_tests/snow2mdl
+export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
 export WGRIB2=/apps/wgrib2/0.1.9.6a/bin/wgrib2

@@ -1,4 +1,4 @@
-subroutine read_tfs_nc(filename,tf,mask,nlon,nlat)
+subroutine read_tfs_nc_2d(filename,tf,mask,nlon,nlat)
 !
 ! abstract : read Tf at GFS Gaussin grids in netCDF 
 !
@@ -88,5 +88,4 @@ subroutine read_tfs_nc(filename,tf,mask,nlon,nlat)
 ! If we got this far, everything worked as expected. Yipee! 
   print *,"*** SUCCESS reading file ", filename, "!"
 
-end subroutine read_tfs_nc
-
+end subroutine read_tfs_nc_2d

@@ -2345,8 +2345,8 @@
    DO WHILE ( (NLOG .LT. 10) .AND. (KCOUNT .EQ. 0) )
 
      NLOG = NLOG+1
-     DF = ALOG(( PSIS*GRAV/HLICE ) * ( ( 1.+CK*SWL )**2. ) *      &
-        ( SMCMAX/(SMC-SWL) )**BX) - ALOG(-(TKELV-frz_h2o)/TKELV)
+     DF = LOG(( PSIS*GRAV/HLICE ) * ( ( 1.+CK*SWL )**2. ) *      &
+        ( SMCMAX/(SMC-SWL) )**BX) - LOG(-(TKELV-frz_h2o)/TKELV)
      DENOM = 2. * CK / ( 1.+CK*SWL ) + BX / ( SMC - SWL )
      SWLK = SWL - DF/DENOM
 

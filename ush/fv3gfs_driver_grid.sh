@@ -360,8 +360,8 @@ elif [ $gtype = regional ]; then
   echo $npts_cgx $npts_cgy $halop1 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog
   echo $npts_cgx $npts_cgy $halop1 \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid
 
-  $APRUN $exec_dir/shave.x <input.shave.orog
-  $APRUN $exec_dir/shave.x <input.shave.grid
+  $APRUN $exec_dir/shave <input.shave.orog
+  $APRUN $exec_dir/shave <input.shave.grid
 
   cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo${halop1}.nc
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halop1}.nc
@@ -374,8 +374,8 @@ elif [ $gtype = regional ]; then
   echo $npts_cgx $npts_cgy $halo \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo$halo
   echo $npts_cgx $npts_cgy $halo \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo$halo
 
-  $APRUN $exec_dir/shave.x <input.shave.orog.halo$halo
-  $APRUN $exec_dir/shave.x <input.shave.grid.halo$halo
+  $APRUN $exec_dir/shave <input.shave.orog.halo$halo
+  $APRUN $exec_dir/shave <input.shave.grid.halo$halo
  
   cp $filter_dir/oro.C${res}.tile${tile}.shave.nc $out_dir/C${res}_oro_data.tile${tile}.halo${halo}.nc
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halo}.nc
@@ -388,8 +388,8 @@ elif [ $gtype = regional ]; then
   echo $npts_cgx $npts_cgy 0 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo0
   echo $npts_cgx $npts_cgy 0 \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo0
 
-  $APRUN $exec_dir/shave.x <input.shave.orog.halo0
-  $APRUN $exec_dir/shave.x <input.shave.grid.halo0
+  $APRUN $exec_dir/shave <input.shave.orog.halo0
+  $APRUN $exec_dir/shave <input.shave.grid.halo0
 
   cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo0.nc
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo0.nc

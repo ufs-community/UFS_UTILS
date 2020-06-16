@@ -26,6 +26,10 @@
 ! grid_mdl                     ESMF grid object for the model grid.
 ! grid_tiles                   Array of model grid tile names.
 ! i/j_mdl                      i/j dimensions of model tile.
+! latitude_field_mdl           ESMF field object that holds the
+!                              model grid latitude
+! longitude_field_mdl          ESMF field object that holds the
+!                              model grid longitude
 ! mdl_field_mdl                ESMF field object that holds the
 !                              model land mask.
 ! missing                      Value assigned to undefined points
@@ -51,6 +55,7 @@
 
  type(esmf_grid),  public      :: grid_mdl
  type(esmf_field), public      :: data_field_mdl, mask_field_mdl
+ type(esmf_field), public      :: latitude_field_mdl, longitude_field_mdl
  type(esmf_field), public      :: vegt_field_mdl
 
  public                        :: define_model_grid
@@ -92,9 +97,12 @@
  integer                          :: extra, rc, tile
  integer, allocatable             :: decomptile(:,:)
 
- integer, allocatable             :: mask_mdl_one_tile(:,:)
+ integer(esmf_kind_i4), allocatable :: mask_mdl_one_tile(:,:)
  integer(esmf_kind_i4), pointer   :: mask_field_mdl_ptr(:,:)
  integer(esmf_kind_i4), pointer   :: mask_mdl_ptr(:,:)
+
+ real(esmf_kind_r4), allocatable  :: latitude_one_tile(:,:)
+ real(esmf_kind_r4), allocatable  :: longitude_one_tile(:,:)
 
 !-----------------------------------------------------------------------
 ! Get the number of tiles from the mosaic file.
@@ -193,6 +201,24 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
+ print*,"- CALL FieldCreate FOR MODEL GRID LATITUDE."
+ latitude_field_mdl = ESMF_FieldCreate(grid_mdl, &
+                                   typekind=ESMF_TYPEKIND_R4, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="latitude on model grid", &
+                                   rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR MODEL GRID LONGITUDE."
+ longitude_field_mdl = ESMF_FieldCreate(grid_mdl, &
+                                   typekind=ESMF_TYPEKIND_R4, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="longitude on model grid", &
+                                   rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
 !-----------------------------------------------------------------------
 ! Set model land mask.
 !-----------------------------------------------------------------------
@@ -216,22 +242,39 @@
 
  if (localpet == 0) then
    allocate(mask_mdl_one_tile(i_mdl,j_mdl))
+   allocate(latitude_one_tile(i_mdl,j_mdl))
+   allocate(longitude_one_tile(i_mdl,j_mdl))
  else
    allocate(mask_mdl_one_tile(0,0))
+   allocate(latitude_one_tile(0,0))
+   allocate(longitude_one_tile(0,0))
  endif
 
  do tile = 1, num_tiles
    if (localpet == 0) then
      the_file = trim(orog_dir_mdl) // trim(orog_files_mdl(tile))
-     call get_model_mask(trim(the_file), mask_mdl_one_tile, i_mdl, j_mdl)
+     call get_model_info(trim(the_file), mask_mdl_one_tile, & 
+                         latitude_one_tile, longitude_one_tile, i_mdl, j_mdl)
    endif
+
    print*,"- CALL FieldScatter FOR MODEL GRID MASK. TILE IS: ", tile
    call ESMF_FieldScatter(mask_field_mdl, mask_mdl_one_tile, rootpet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
+
+   print*,"- CALL FieldScatter FOR MODEL LATITUDE. TILE IS: ", tile
+   call ESMF_FieldScatter(latitude_field_mdl, latitude_one_tile, rootpet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", rc)
+
+   print*,"- CALL FieldScatter FOR MODEL LONGITUDE. TILE IS: ", tile
+   call ESMF_FieldScatter(longitude_field_mdl, longitude_one_tile, rootpet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", rc)
+
  enddo
 
- deallocate(mask_mdl_one_tile)
+ deallocate(mask_mdl_one_tile, latitude_one_tile, longitude_one_tile)
 
  print*,"- CALL GridAddItem FOR MODEL GRID."
  call ESMF_GridAddItem(grid_mdl, &
@@ -254,17 +297,17 @@
 
  end subroutine define_model_grid
 
- subroutine get_model_mask(orog_file, mask, idim, jdim)
+ subroutine get_model_info(orog_file, mask, lat2d, lon2d, idim, jdim)
 
 !-----------------------------------------------------------------------
 !  subroutine documentation block
 !
-! Subroutine: get model mask
+! Subroutine: get model information
 !   prgmmr: gayno          org: w/np2           date: 2018
 !
-! Abstract: Read model land/sea mask from the orography file.
+! Abstract: Read model land/sea mask and lat/lon from the orography file.
 !
-! Usage:  call get_model_mask(orog_file, mask, idim, jdim)
+! Usage:  call get_model_info(orog_file, mask, lat2d, lon2d, idim, jdim)
 !
 !   input argument list:
 !     orog_file              the orography file
@@ -272,6 +315,8 @@
 !
 !   output argument list:
 !     mask                   land/sea mask
+!     lat2d                  latitude
+!     lon2d                  longitude
 !
 !-----------------------------------------------------------------------
 
@@ -286,16 +331,19 @@
  integer, intent(in)                :: idim, jdim
  integer(esmf_kind_i4), intent(out) :: mask(idim,jdim)
 
+ real(esmf_kind_r4), intent(out)    :: lat2d(idim,jdim)
+ real(esmf_kind_r4), intent(out)    :: lon2d(idim,jdim)
+
  integer                            :: error, lat, lon
  integer                            :: ncid, id_dim, id_var
 
  real(kind=4), allocatable          :: dummy(:,:)
 
- print*,"- READ MODEL LAND MASK FILE"
+ print*,"- READ MODEL OROGRAPHY FILE"
 
- print*,'- OPEN LAND MASK FILE: ', orog_file
+ print*,'- OPEN FILE: ', orog_file
  error=nf90_open(orog_file,nf90_nowrite,ncid)
- call netcdf_err(error, "OPENING MODEL LAND MASK FILE")
+ call netcdf_err(error, "OPENING MODEL OROGRAPHY FILE")
 
  print*,"- READ I-DIMENSION"
  error=nf90_inq_dimid(ncid, 'lon', id_dim)
@@ -322,14 +370,27 @@
  call netcdf_err(error, "READING SLMSK ID")
  error=nf90_get_var(ncid, id_var, dummy)
  call netcdf_err(error, "READING SLMSK")
+ mask = nint(dummy)
+
+ print*,"- READ LATITUDE"
+ error=nf90_inq_varid(ncid, 'geolat', id_var)
+ call netcdf_err(error, "READING GEOLAT ID")
+ error=nf90_get_var(ncid, id_var, dummy)
+ call netcdf_err(error, "READING GEOLAT")
+ lat2d=dummy
+
+ print*,"- READ LONGITUDE"
+ error=nf90_inq_varid(ncid, 'geolon', id_var)
+ call netcdf_err(error, "READING GEOLON ID")
+ error=nf90_get_var(ncid, id_var, dummy)
+ call netcdf_err(error, "READING GEOLON")
+ lon2d=dummy
 
  error = nf90_close(ncid)
 
- mask = nint(dummy)
-
  deallocate (dummy)
 
- end subroutine get_model_mask
+ end subroutine get_model_info
 
  subroutine model_grid_cleanup
 
@@ -360,6 +421,12 @@
 
  print*,"- CALL FieldDestroy FOR MODEL GRID VEGETATION TYPE."
  call ESMF_FieldDestroy(vegt_field_mdl,rc=rc)
+
+ print*,"- CALL FieldDestroy FOR MODEL GRID LATITUDE."
+ call ESMF_FieldDestroy(latitude_field_mdl,rc=rc)
+
+ print*,"- CALL FieldDestroy FOR MODEL GRID LONGITUDE."
+ call ESMF_FieldDestroy(longitude_field_mdl,rc=rc)
 
  end subroutine model_grid_cleanup
 

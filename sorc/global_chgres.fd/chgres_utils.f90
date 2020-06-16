@@ -536,8 +536,8 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 !  COMPUTE LOG PRESSURE INTERPOLATING COORDINATE                        
 !  AND COPY INPUT WIND, TEMPERATURE, HUMIDITY AND OTHER TRACERS         
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(K,I)                                                     
+!$OMP PARALLEL DO DEFAULT(SHARED), &
+!$OMP& PRIVATE(K,I)                                                     
       DO K=1,KM1 
         DO I=1,IM 
           Z1(I,K)   = -LOG(P1(I,K)) 
@@ -556,8 +556,8 @@
           ENDDO 
         ENDDO 
       ENDDO 
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(K,I)                                                     
+!$OMP PARALLEL DO DEFAULT(SHARED), &
+!$OMP& PRIVATE(K,I)                                                     
       DO K=1,KM2 
         DO I=1,IM 
           Z2(I,K) = -LOG(P2(I,K)) 
@@ -678,9 +678,9 @@
 !  BUT WITHIN THE TWO EDGE INTERVALS INTERPOLATE LINEARLY.              
 !  KEEP THE OUTPUT FIELDS CONSTANT OUTSIDE THE INPUT DOMAIN.            
                                                                         
-!$OMP PARALLEL DO DEFAULT(PRIVATE) SHARED(IM,IXZ1,IXQ1,IXZ2)            
-!$OMP+ SHARED(IXQ2,NM,NXQ1,NXQ2,KM1,KXZ1,KXQ1,Z1,Q1,KM2,KXZ2)           
-!$OMP+ SHARED(KXQ2,Z2,Q2,J2,K1S)                                        
+!$OMP PARALLEL DO DEFAULT(PRIVATE) SHARED(IM,IXZ1,IXQ1,IXZ2)  , &
+!$OMP& SHARED(IXQ2,NM,NXQ1,NXQ2,KM1,KXZ1,KXQ1,Z1,Q1,KM2,KXZ2) , & 
+!$OMP& SHARED(KXQ2,Z2,Q2,J2,K1S)                                        
                                                                         
       DO K2=1,KM2 
         DO I=1,IM 
@@ -1085,8 +1085,8 @@
        deallocate (vcoord) 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         if(h%idvt==100.and.h%ntrac==20) then 
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(i,j,clat,rlon,k)                                         
+!$OMP PARALLEL DO DEFAULT(SHARED) , &
+!$OMP& PRIVATE(i,j,clat,rlon,k)                                         
           do j=1,h%latb 
             clat=sqrt(1-slat(j)**2) 
             do i=1,h%lonb 
@@ -1247,8 +1247,8 @@
         if (thermodyn_id <= 1) then 
 !!$OMP PARALLEL DO DEFAULT(PRIVATE) SHARED(KM,kmp,IM)                   
 !!$OMP+ SHARED(qn,qp,TOV,PI,AK,BK,PS,CK)                                
-!$omp  parallel do shared(km,kmp,im,qp,tp,tov,pi,ak,bk,ck)              
-!$omp1 private(i,k,tem,qnk,trk)                                         
+!$omp  parallel do shared(km,kmp,im,qp,tp,tov,pi,ak,bk,ck) , &
+!$omp& private(i,k,tem,qnk,trk)                                         
           DO K=2,KM 
             tem = float(k-1) / float(kmp-1) 
             DO I=1,IM 
@@ -1283,12 +1283,12 @@
         endif 
                                                                         
         DPMINALL=1000.0 
-!$omp parallel do                                                       
-!$omp1 shared(im,km,kmp,ntracm,thermodyn_id,pp,tp,qp,cpi,cp0i)          
-!$omp1 shared(ak,bk,ck,pi)                                              
-!$omp1 private(i,k,nit,converg,dpmin,tvu,tvd,trk)                       
-!$omp1 private(pio,po,to,qo,pn,tn,qn,akbkps)                            
-!$omp1 private(xcp,xcp2,sumq,sumq2,temu,temd)                           
+!$omp parallel do   & 
+!$omp& shared(im,km,kmp,ntracm,thermodyn_id,pp,tp,qp,cpi,cp0i)  , &
+!$omp& shared(ak,bk,ck,pi)                                      ,&        
+!$omp& private(i,k,nit,converg,dpmin,tvu,tvd,trk)               ,&        
+!$omp& private(pio,po,to,qo,pn,tn,qn,akbkps)                    ,&        
+!$omp& private(xcp,xcp2,sumq,sumq2,temu,temd)                           
 !                                                                       
         DO I=1,IM 
           DO K=1,KMP 
@@ -1439,8 +1439,8 @@
         ENDDO 
         PI(1:IM,1)=PS(1:IM) 
         PI(1:IM,KM+1)=0.0 
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(K,I,TVU,TVD,TRK)                                         
+!$OMP PARALLEL DO DEFAULT(SHARED)                  , &
+!$OMP& PRIVATE(K,I,TVU,TVD,TRK)                                         
         DO K=2,KM 
           DO I=1,IM 
             TVU=FTV(TP(I,K  ),QP(I,K  )) 
@@ -1518,16 +1518,16 @@
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 !  COMPUTE LOG PRESSURE INTERPOLATING COORDINATE                        
 !  AND COPY INPUT WIND, TEMPERATURE, HUMIDITY AND OTHER TRACERS         
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(K)                                                       
+!$OMP PARALLEL DO DEFAULT(SHARED)      , &
+!$OMP& PRIVATE(K)                                                       
       DO K=1,KM1 
         Z1(1,K)=-LOG(P1(K)) 
         C1(1,K,1)=T1(K) 
         C1(1,K,2)=Q1(K) 
       ENDDO 
 !$OMP END PARALLEL DO                                                   
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(K)                                                       
+!$OMP PARALLEL DO DEFAULT(SHARED), &
+!$OMP& PRIVATE(K)                                                       
       DO K=1,KM2 
         Z2(1,K)=-LOG(P2(K)) 
       ENDDO 
@@ -1741,8 +1741,8 @@
 !  COMPUTE LOG PRESSURE INTERPOLATING COORDINATE                        
 !  AND COPY INPUT WIND, TEMPERATURE, HUMIDITY AND OTHER TRACERS         
                                                                         
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(K,I)                                                     
+!$OMP PARALLEL DO DEFAULT(SHARED)       , &
+!$OMP& PRIVATE(K,I)                                                     
       DO K=1,KM1 
         DO I=1,IM 
           Z1(I,K)=-LOG(P1(I,K)) 
@@ -1758,8 +1758,8 @@
           ENDDO 
         ENDDO 
       ENDDO 
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(K,I)                                                     
+!$OMP PARALLEL DO DEFAULT(SHARED)  , &
+!$OMP& PRIVATE(K,I)                                                     
       DO K=1,KM2 
         DO I=1,IM 
           Z2(I,K)=-LOG(P2(I,K)) 
@@ -1829,16 +1829,16 @@
       CASE(0,1) 
           continue 
       CASE(2) 
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(i)                                                       
+!$OMP PARALLEL DO DEFAULT(SHARED)                , &
+!$OMP& PRIVATE(i)                                                       
           do i=1,ijn 
            psx(i)=psx(i)/(psi(i)*1.0E-3) 
            psy(i)=psy(i)/(psi(i)*1.0E-3) 
           enddo 
 !$OMP END PARALLEL DO                                                   
       CASE DEFAULT 
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(i)                                                       
+!$OMP PARALLEL DO DEFAULT(SHARED)        , &
+!$OMP& PRIVATE(i)                                                       
           do i=1,ijn 
            psx(i)=psx(i)/psi(i) 
            psy(i)=psy(i)/psi(i) 
@@ -1846,8 +1846,8 @@
 !$OMP END PARALLEL DO                                                   
       END SELECT 
                                                                         
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(K)                                                       
+!$OMP PARALLEL DO DEFAULT(SHARED)                             , &
+!$OMP& PRIVATE(K)                                                       
       do K=1,km 
         call sptran(0,jcap,idrt,lonb,latb,1,1,1,lonb2,lonb2,nc,ijn,     &
            j1,j2,jc,sd(1,k),di(in,k),di(is,k),1)                        
@@ -1858,8 +1858,8 @@
                    ps=psi,t=ti,pm=pm,pd=pd,dpmdps=dpmdps,dpddps=dpddps) 
                                                                         
 !----3.omeda from modstuff                                              
-!$OMP PARALLEL DO DEFAULT(SHARED)                                       
-!$OMP+ PRIVATE(i)                                                       
+!$OMP PARALLEL DO DEFAULT(SHARED)                     , &
+!$OMP& PRIVATE(i)                                                       
       do i=1,ijl 
        pi(i,1)=psi(i) 
        dpidps(i,1)=1. 
