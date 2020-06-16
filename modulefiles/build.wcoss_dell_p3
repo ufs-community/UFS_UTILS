@@ -29,3 +29,6 @@ module use /gpfs/dell2/emc/modeling/noscrub/emc.nemspara/soft/modulefiles
 module load esmf/8.0.0_ParallelNetCDF
 
 export WGRIB2_ROOT=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/wgrib2
+
+module use /usrx/local/dev/modulefiles
+module load prod_util/1.1.3
