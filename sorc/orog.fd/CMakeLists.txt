@@ -12,10 +12,10 @@ set(exe_name orog)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
-  bacio_4
-  w3nco_d
-  ip_d
-  sp_d
+  bacio::bacio_4
+  w3nco::w3nco_d
+  ip::ip_d
+  sp::sp_d
   NetCDF::NetCDF_Fortran)
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)

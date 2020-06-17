@@ -16,12 +16,12 @@ set(exe_name emcsfc_snow2mdl)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
-  g2_d
-  ip_d
-  sp_d
-  landsfcutil_d
-  bacio_4
-  w3nco_d
+  g2::g2_d
+  ip::ip_d
+  sp::sp_d
+  landsfcutil::landsfcutil_d
+  bacio::bacio_4
+  w3nco::w3nco_d
   ${JASPER_LIBRARIES}
   PNG::PNG
   ZLIB::ZLIB)

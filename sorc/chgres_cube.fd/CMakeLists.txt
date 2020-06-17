@@ -21,12 +21,12 @@ set(exe_name chgres_cube)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
-  nemsio
-  sfcio_4
-  sigio_4
-  bacio_4
-  sp_d
-  w3nco_d
+  nemsio::nemsio
+  sfcio::sfcio
+  sigio::sigio
+  bacio::bacio_4
+  sp::sp_d
+  w3nco::w3nco_d
   esmf
   wgrib2
   MPI::MPI_Fortran
