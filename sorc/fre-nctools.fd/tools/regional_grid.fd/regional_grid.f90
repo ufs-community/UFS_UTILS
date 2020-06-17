@@ -23,6 +23,7 @@ program regional_grid
 
   real(dp),dimension(:,:),allocatable:: glat,glon
   real(dp),dimension(:,:),allocatable:: garea
+  real(dp),dimension(:,:),allocatable:: dx,dy,angle_dx,angle_dy
 
   character(len=256)           :: nml_fname
 
@@ -30,6 +31,7 @@ program regional_grid
   integer                      :: ncid
   integer                      :: string_dimid, nxp_dimid, nyp_dimid, nx_dimid, ny_dimid
   integer                      :: tile_varid, x_varid, y_varid, area_varid
+  integer                      :: dx_varid, dy_varid, angle_dx_varid, angle_dy_varid
   integer, dimension(2)        :: dimids
 
 !=============================================================================
@@ -56,9 +58,14 @@ program regional_grid
   allocate(glon(0:nx,0:ny))
   allocate(garea(0:nxm,0:nym))
 
+  allocate(dx(0:nxm,0:ny))
+  allocate(dy(0:nx,0:nym))
+  allocate(angle_dx(0:nx,0:ny))
+  allocate(angle_dy(0:nx,0:ny))
+
   call hgrid_ak(lx,ly,nx,ny,a,k,plat*dtor,plon*dtor,pazi*dtor, &
-                re,redelx,redely, glat,glon,garea, ff)
-  if(ff)stop 'Failure flag raised in hgrid routine'
+                re,redelx,redely, glat,glon,garea,dx,dy,angle_dx,angle_dy, ff)
+  if(ff)stop 'Failure flag raised in hgrid_ak routine'
 
   glon = glon*rtod
   glat = glat*rtod
@@ -89,6 +96,28 @@ program regional_grid
   call check( nf90_put_att(ncid, area_varid, "units", "m2") )
   call check( nf90_put_att(ncid, area_varid, "hstagger", "H") )
 
+  dimids = (/ nx_dimid, nyp_dimid /)
+  call check( nf90_def_var(ncid, "dx", NF90_DOUBLE, dimids, dx_varid) )
+  call check( nf90_put_att(ncid, dx_varid, "standard_name", "dx") )
+  call check( nf90_put_att(ncid, dx_varid, "units", "m") )
+  call check( nf90_put_att(ncid, dx_varid, "hstagger", "H") )
+
+  dimids = (/ nxp_dimid, ny_dimid /)
+  call check( nf90_def_var(ncid, "dy", NF90_DOUBLE, dimids, dy_varid) )
+  call check( nf90_put_att(ncid, dy_varid, "standard_name", "dy") )
+  call check( nf90_put_att(ncid, dy_varid, "units", "m") )
+  call check( nf90_put_att(ncid, dy_varid, "hstagger", "H") )
+
+  dimids = (/ nxp_dimid, nyp_dimid /)
+  call check( nf90_def_var(ncid, "angle_dx", NF90_DOUBLE, dimids, angle_dx_varid) )
+  call check( nf90_put_att(ncid, angle_dx_varid, "standard_name", "angle_dx") )
+  call check( nf90_put_att(ncid, angle_dx_varid, "units", "deg") )
+  call check( nf90_put_att(ncid, angle_dx_varid, "hstagger", "C") )
+  call check( nf90_def_var(ncid, "angle_dy", NF90_DOUBLE, dimids, angle_dy_varid) )
+  call check( nf90_put_att(ncid, angle_dy_varid, "standard_name", "angle_dy") )
+  call check( nf90_put_att(ncid, angle_dy_varid, "units", "deg") )
+  call check( nf90_put_att(ncid, angle_dy_varid, "hstagger", "C") )
+
   call check( nf90_put_att(ncid, NF90_GLOBAL, "history", "gnomonic_ed") )
   call check( nf90_put_att(ncid, NF90_GLOBAL, "source", "FV3GFS") )
   call check( nf90_put_att(ncid, NF90_GLOBAL, "grid", "akappa") )
@@ -108,6 +137,10 @@ program regional_grid
   call check( nf90_put_var(ncid, x_varid, glon) )
   call check( nf90_put_var(ncid, y_varid, glat) )
   call check( nf90_put_var(ncid, area_varid, garea) )
+  call check( nf90_put_var(ncid, dx_varid, dx) )
+  call check( nf90_put_var(ncid, dy_varid, dy) )
+  call check( nf90_put_var(ncid, angle_dx_varid, angle_dx) )
+  call check( nf90_put_var(ncid, angle_dy_varid, angle_dy) )
 
   call check( nf90_close(ncid) )
 
