@@ -8,9 +8,9 @@
 
  private
 
- integer                    :: i_thomp_mp_climo = 288
- integer                    :: j_thomp_mp_climo = 181
- integer, public            :: lev_thomp_mp_climo = 30
+ integer                    :: i_thomp_mp_climo
+ integer                    :: j_thomp_mp_climo
+ integer, public            :: lev_thomp_mp_climo
 
  type(esmf_grid)            :: thomp_mp_climo_grid
 
@@ -28,30 +28,59 @@
  implicit none
 
  character(len=150) :: thomp_mp_climo_file
- character(len=3)   :: month(13)
- character(len=14)  :: record
- character(len=2)   :: level
 
  integer            :: error, ncid, rc, clb(2), cub(2)
  integer            :: i, j, k, localpet, npets, id_var
- integer            :: jda(8), jdow, jdoy, jday
+ integer            :: jda(8), jdow, jdoy, jday, id_dim
  integer            :: mm, mmm, mmp, mon1, mon2
 
- real(esmf_kind_r8), allocatable :: dummy3d(:,:,:), dummy4d(:,:,:,:)
+ real(esmf_kind_r8), allocatable :: dummy3d(:,:,:)
+ real(esmf_kind_r8), allocatable :: dummy3d_mon1(:,:,:)
+ real(esmf_kind_r8), allocatable :: dummy3d_mon2(:,:,:)
 
  real(esmf_kind_r8), pointer :: lat_ptr(:,:), lon_ptr(:,:)
  real(esmf_kind_r8) :: lon, lat
+ real(esmf_kind_r8), allocatable :: lons(:), lats(:)
  real               :: rjday, dayhf(13), wei1m, wei2m
 
  type(esmf_vm)                :: vm
 
  type(esmf_polekind_flag)         :: polekindflag(2)
 
- data month /'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', &
-             'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'JAN' /
-
  data dayhf/ 15.5, 45.0, 74.5,105.0,135.5,166.0,   &
              196.5,227.5,258.0,288.5,319.0,349.5,380.5/
+
+ thomp_mp_climo_file = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/chgres_thomp_mp/QNWFA_QNIFA_SIGMA_MONTHLY.step1.out.nc"
+
+ print*,"- READ THOMP_MP_CLIMO_FILE: ", trim(thomp_mp_climo_file)
+ error=nf90_open(trim(thomp_mp_climo_file),nf90_nowrite,ncid)
+ call netcdf_err(error, 'opening: '//trim(thomp_mp_climo_file) )
+
+ error=nf90_inq_dimid(ncid, 'lat', id_dim)
+ call netcdf_err(error, 'reading lat id')
+ error=nf90_inquire_dimension(ncid,id_dim,len=j_thomp_mp_climo)
+ call netcdf_err(error, 'reading lat')
+
+ error=nf90_inq_dimid(ncid, 'lon', id_dim)
+ call netcdf_err(error, 'reading lon id')
+ error=nf90_inquire_dimension(ncid,id_dim,len=i_thomp_mp_climo)
+ call netcdf_err(error, 'reading lon')
+
+ error=nf90_inq_dimid(ncid, 'plev', id_dim)
+ call netcdf_err(error, 'reading plev id')
+ error=nf90_inquire_dimension(ncid,id_dim,len=lev_thomp_mp_climo)
+ call netcdf_err(error, 'reading plev')
+
+ allocate(lons(i_thomp_mp_climo))
+ allocate(lats(j_thomp_mp_climo))
+ error=nf90_inq_varid(ncid, 'lon', id_var)
+ call netcdf_err(error, 'reading  field id' )
+ error=nf90_get_var(ncid, id_var, lons)
+ call netcdf_err(error, 'reading  lons' )
+ error=nf90_inq_varid(ncid, 'lat', id_var)
+ call netcdf_err(error, 'reading  field id' )
+ error=nf90_get_var(ncid, id_var, lats)
+ call netcdf_err(error, 'reading  lats' )
 
 ! First create esmf grid object for the climo grid.
 
@@ -106,17 +135,11 @@
     call error_handler("IN GridGetCoord", rc)
 
  do i = clb(1), cub(1)
-   lon = -180.0 + ( float(i-1) * (360.0/288.0) )
-   do j = clb(2), cub(2)
-     lon_ptr(i,j) = lon
-   enddo
+     lon_ptr(i,:) = lons(i)
  enddo
 
  do j = clb(2), cub(2)
-   lat = -90.0 + ( float(j-1) * 1.0 )
-   do i = clb(1), cub(1)
-     lat_ptr(i,j) = lat
-   enddo
+     lat_ptr(:,j) = lats(j)
  enddo
 
  if(localpet == 1) print*,'lon check ',lon_ptr(:,clb(2))
@@ -150,11 +173,6 @@
     call error_handler("IN FieldCreate", rc)
 
 
- thomp_mp_climo_file = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/chgres_thomp_mp/QNWFA_QNIFA_SIGMA_MONTHLY.dat.nc"
-
- print*,"- READ THOMP_MP_CLIMO_FILE: ", trim(thomp_mp_climo_file)
- error=nf90_open(trim(thomp_mp_climo_file),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening: '//trim(thomp_mp_climo_file) )
  
 
  jda=0
@@ -192,34 +210,36 @@
 
  print*,'mon1/2 ',mon1,mon2,wei1m,wei2m
 
+ if (mon2==13) mon2=1
+
  if (localpet == 0) then
    allocate(dummy3d(i_thomp_mp_climo, j_thomp_mp_climo, lev_thomp_mp_climo))
    dummy3d = 0.0
-   allocate(dummy4d(i_thomp_mp_climo, j_thomp_mp_climo, lev_thomp_mp_climo, mon1:mon2))
-   dummy4d = 0.0
+   allocate(dummy3d_mon1(i_thomp_mp_climo, j_thomp_mp_climo, lev_thomp_mp_climo))
+   dummy3d_mon1 = 0.0
+   allocate(dummy3d_mon2(i_thomp_mp_climo, j_thomp_mp_climo, lev_thomp_mp_climo))
+   dummy3d_mon2 = 0.0
  else
    allocate(dummy3d(0,0,0))
-   allocate(dummy4d(0,0,0,0))
+   allocate(dummy3d_mon1(0,0,0))
+   allocate(dummy3d_mon2(0,0,0))
  endif
 
  if (localpet == 0) then
-   do mm = mon1, mon2
-   do k = 1, lev_thomp_mp_climo
-     write(level, "(I2.2)") k
-     if (k < 10) then
-       record = "QNIFA_" // month(mm) // "__" // level
-     else
-       record = "QNIFA_" // month(mm) // "__0" // level
-     endif
-     print*,'reading record ',record
-     error=nf90_inq_varid(ncid, trim(record), id_var)
+     error=nf90_inq_varid(ncid, 'nifa', id_var)
      call netcdf_err(error, 'reading  field id' )
-     error=nf90_get_var(ncid, id_var, dummy4d(:,:,k,mm))
+     error=nf90_get_var(ncid, id_var, dummy3d_mon1, start=(/1,1,1,mon1/), &
+           count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
      call netcdf_err(error, 'reading field' )
-     print*,'maxval ', record,  maxval(dummy4d(:,:,k,mm)),minval(dummy4d(:,:,k,mm))
-   enddo
-   enddo
-   dummy3d(:,:,:) = wei1m * dummy4d(:,:,:,mon1) + wei2m * dummy4d(:,:,:,mon2)
+     print*,'maxval nifa mon1 ', maxval(dummy3d_mon1), minval(dummy3d_mon1)
+
+     error=nf90_get_var(ncid, id_var, dummy3d_mon2, start=(/1,1,1,mon2/), &
+           count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
+     call netcdf_err(error, 'reading field' )
+     print*,'maxval nifa mon2 ', maxval(dummy3d_mon2), minval(dummy3d_mon2)
+     call netcdf_err(error, 'reading  field id' )
+
+   dummy3d(:,:,:) = wei1m * dummy3d_mon1 + wei2m * dummy3d_mon2
  endif
 
  print*,"- CALL FieldScatter FOR qnifa input climo."
@@ -228,23 +248,20 @@
     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
-   do mm = mon1, mon2
-   do k = 1, lev_thomp_mp_climo
-     write(level, "(I2.2)") k
-     if (k < 10) then
-       record = "QNWFA_" // month(mm) // "__" // level
-     else
-       record = "QNWFA_" // month(mm) // "__0" // level
-     endif
-     print*,'reading record ',record
-     error=nf90_inq_varid(ncid, trim(record), id_var)
+     error=nf90_inq_varid(ncid, 'nwfa', id_var)
      call netcdf_err(error, 'reading  field id' )
-     error=nf90_get_var(ncid, id_var, dummy4d(:,:,k,mm))
+     error=nf90_get_var(ncid, id_var, dummy3d_mon1, start=(/1,1,1,mon1/), &
+           count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
      call netcdf_err(error, 'reading field' )
-     print*,'maxval ', record,  maxval(dummy4d(:,:,k,mm)),minval(dummy4d(:,:,k,mm))
-   enddo
-   enddo
-   dummy3d(:,:,:) = wei1m * dummy4d(:,:,:,mon1) + wei2m * dummy4d(:,:,:,mon2)
+     print*,'maxval nwfa mon1 ', maxval(dummy3d_mon1),minval(dummy3d_mon1)
+
+     error=nf90_get_var(ncid, id_var, dummy3d_mon2, start=(/1,1,1,mon2/), &
+           count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
+     call netcdf_err(error, 'reading field' )
+     print*,'maxval nwfa mon2 ', maxval(dummy3d_mon2),minval(dummy3d_mon2)
+     call netcdf_err(error, 'reading  field id' )
+
+   dummy3d(:,:,:) = wei1m * dummy3d_mon1 + wei2m * dummy3d_mon2
  endif
 
  print*,"- CALL FieldScatter FOR qnwfa input climo."
@@ -253,23 +270,20 @@
     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
-   do mm = mon1, mon2
-   do k = 1, lev_thomp_mp_climo
-     write(level, "(I2.2)") k
-     if (k < 10) then
-       record = "P_WIF_" // month(mm) // "__" // level
-     else
-       record = "P_WIF_" // month(mm) // "__0" // level
-     endif
-     print*,'reading record ',record
-     error=nf90_inq_varid(ncid, trim(record), id_var)
+     error=nf90_inq_varid(ncid, 'prs', id_var)
      call netcdf_err(error, 'reading  field id' )
-     error=nf90_get_var(ncid, id_var, dummy4d(:,:,k,mm))
+     error=nf90_get_var(ncid, id_var, dummy3d_mon1, start=(/1,1,1,mon1/), &
+           count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
      call netcdf_err(error, 'reading field' )
-     print*,'maxval ', record,  maxval(dummy4d(:,:,k,mm)),minval(dummy4d(:,:,k,mm))
-   enddo
-   enddo
-   dummy3d(:,:,:) = wei1m * dummy4d(:,:,:,mon1) + wei2m * dummy4d(:,:,:,mon2)
+     print*,'maxval nwfa mon1 ', maxval(dummy3d_mon1),minval(dummy3d_mon1)
+
+     error=nf90_get_var(ncid, id_var, dummy3d_mon2, start=(/1,1,1,mon2/), &
+           count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
+     call netcdf_err(error, 'reading field' )
+     print*,'maxval nwfa mon2 ', maxval(dummy3d_mon2),minval(dummy3d_mon2)
+     call netcdf_err(error, 'reading  field id' )
+
+   dummy3d(:,:,:) = wei1m * dummy3d_mon1 + wei2m * dummy3d_mon2
  endif
 
  print*,"- CALL FieldScatter FOR thomp press."
@@ -278,7 +292,7 @@
     call error_handler("IN FieldScatter", rc)
  error=nf90_close(ncid)
 
- deallocate(dummy3d, dummy4d)
+ deallocate(dummy3d, dummy3d_mon1, dummy3d_mon2)
 
  end subroutine read_thomp_mp_data
 
