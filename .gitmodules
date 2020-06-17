@@ -1,4 +1,4 @@
 [submodule "cmake"]
 	path = CMakeModules
 	url = https://github.com/NOAA-EMC/CMakeModules
-	branch = release/public-v1
+	branch = feature/cmakepkgs
