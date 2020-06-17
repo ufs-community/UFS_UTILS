@@ -11,7 +11,6 @@ set(exe_name nemsio_chgdate)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
-  nemsio::nemsio
-  bacio::bacio_4)
+  nemsio::nemsio)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
