@@ -49,9 +49,11 @@
  use program_setup, only             : vcoord_file_target_grid, &
                                        regional, &
                                        tracers, num_tracers,      &
-                                       atm_weight_file
+                                       atm_weight_file, &
+                                       use_thomp_mp_climo
 
  use thompson_mp, only               : read_thomp_mp_data,  &
+                                       cleanup_thomp_mp_input_data, &
                                        qnifa_climo_input_grid, &
                                        qnwfa_climo_input_grid, &
                                        thomp_pres_climo_input_grid, &
@@ -154,9 +156,15 @@
 ! Read atmospheric fields on the input grid.
 !-----------------------------------------------------------------------------------
 
- call read_thomp_mp_data
-
  call read_input_atm_data(localpet)
+
+!-----------------------------------------------------------------------------------
+! If selected, read thomp mp climo fields.
+!-----------------------------------------------------------------------------------
+
+ if (use_thomp_mp_climo) then
+   call read_thomp_mp_data
+ endif
 
 !-----------------------------------------------------------------------------------
 ! Read vertical coordinate info for target grid.
@@ -307,6 +315,8 @@
 ! thompson
 !%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+ if (use_thomp_mp_climo) then
+
  print*,"- CALL FieldCreate FOR TARGET GRID climo qnifa BEFORE ADJUSTMENT."
  qnifa_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -398,6 +408,10 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegridRelease", rc)
 
+ call cleanup_thomp_mp_input_data
+
+ endif
+
 !-----------------------------------------------------------------------------------
 ! Create target grid field objects to hold data after vertical interpolation.
 !-----------------------------------------------------------------------------------
@@ -422,7 +436,13 @@
 
  call vintg
 
- call vintg_thomp
+!-----------------------------------------------------------------------------------
+! Vertically interpolate thomp mp tracers
+!-----------------------------------------------------------------------------------
+
+ if (use_thomp_mp_climo) then
+   call vintg_thomp
+ endif
 
 !-----------------------------------------------------------------------------------
 ! Compute height.
@@ -1973,6 +1993,18 @@
 
  deallocate(tracers_b4adj_target_grid)
 
+ if (ESMF_FieldIsCreated(qnifa_climo_b4adj_target_grid)) then
+   call ESMF_FieldDestroy(qnifa_climo_b4adj_target_grid, rc=rc)
+ endif
+
+ if (ESMF_FieldIsCreated(qnwfa_climo_b4adj_target_grid)) then
+   call ESMF_FieldDestroy(qnwfa_climo_b4adj_target_grid, rc=rc)
+ endif
+
+ if (ESMF_FieldIsCreated(thomp_pres_climo_b4adj_target_grid)) then
+   call ESMF_FieldDestroy(thomp_pres_climo_b4adj_target_grid, rc=rc)
+ endif
+
  end subroutine cleanup_target_atm_b4adj_data
 
  subroutine cleanup_target_atm_data
@@ -2002,6 +2034,14 @@
  enddo
 
  deallocate(tracers_target_grid)
+
+ if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
+   call ESMF_FieldDestroy(qnifa_climo_target_grid, rc=rc)
+ endif
+
+ if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
+   call ESMF_FieldDestroy(qnwfa_climo_target_grid, rc=rc)
+ endif
 
  end subroutine cleanup_target_atm_data
 

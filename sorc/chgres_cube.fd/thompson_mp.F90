@@ -2,7 +2,8 @@
 
  use esmf
  use netcdf
- use program_setup, only      : cycle_mon, cycle_day, cycle_hour
+ use program_setup, only      : cycle_mon, cycle_day, cycle_hour, &
+                                thomp_mp_climo_file
 
  implicit none
 
@@ -19,6 +20,7 @@
  type(esmf_field), public   :: thomp_pres_climo_input_grid
 
  public :: read_thomp_mp_data
+ public :: cleanup_thomp_mp_input_data
 
  contains
 
@@ -26,8 +28,6 @@
  subroutine read_thomp_mp_data
 
  implicit none
-
- character(len=150) :: thomp_mp_climo_file
 
  integer            :: error, ncid, rc, clb(2), cub(2)
  integer            :: i, j, k, localpet, npets, id_var
@@ -49,8 +49,6 @@
 
  data dayhf/ 15.5, 45.0, 74.5,105.0,135.5,166.0,   &
              196.5,227.5,258.0,288.5,319.0,349.5,380.5/
-
- thomp_mp_climo_file = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/chgres_thomp_mp/QNWFA_QNIFA_SIGMA_MONTHLY.step1.out.nc"
 
  print*,"- READ THOMP_MP_CLIMO_FILE: ", trim(thomp_mp_climo_file)
  error=nf90_open(trim(thomp_mp_climo_file),nf90_nowrite,ncid)
@@ -295,5 +293,18 @@
  deallocate(dummy3d, dummy3d_mon1, dummy3d_mon2)
 
  end subroutine read_thomp_mp_data
+
+ subroutine cleanup_thomp_mp_input_data
+
+ implicit none
+
+ integer                    :: rc
+
+ call ESMF_GridDestroy(thomp_mp_climo_grid, rc=rc)
+ call ESMF_FieldDestroy(thomp_pres_climo_input_grid, rc=rc)
+ call ESMF_FieldDestroy(qnifa_climo_input_grid, rc=rc)
+ call ESMF_FieldDestroy(qnwfa_climo_input_grid, rc=rc)
+
+ end subroutine cleanup_thomp_mp_input_data
 
  end module thompson_mp
