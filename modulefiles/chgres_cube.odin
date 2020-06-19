@@ -5,12 +5,13 @@
 module use /home/larissa.reames//modulefiles
 #module load cray-mpich/7.6.2
 module load craype-ivybridge
-module swap intel/16.0.4.258 intel/19.1.0.166
+#module swap intel/16.0.4.258 intel/19.1.0.166
 
-
+module unload cray-hdf5
+module unload cray-netcdf
+module load cray-hdf5-parallel #/1.10.2.0
 module load cray-netcdf-hdf5parallel #/4.6.1.3
 module load cray-parallel-netcdf #/1.8.1.4
-module load cray-hdf5-parallel #/1.10.2.0
 module load esmf/8.0.0.bs2
 module load w3nco/v2.0.6
 module load nemsio/v2.2.2
