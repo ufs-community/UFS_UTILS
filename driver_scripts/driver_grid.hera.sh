@@ -90,6 +90,15 @@ export TMPDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
 export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/C${res}
 export add_lake=false
 
+if [ $add_lake = true ]; then
+  if  [ $gtype = stretch ] || [ $gtype = nest ]; then
+    set +x
+    echo "Adding fractional lake data to orography data is not available"
+    echo "for 'stretch' and 'nest' grid type; set add_lake=false."
+    exit 1
+  fi
+fi
+
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
 #-----------------------------------------------------------------------

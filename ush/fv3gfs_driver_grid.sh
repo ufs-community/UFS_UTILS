@@ -316,7 +316,7 @@ elif [ $gtype = regional ]; then
 #----------------------------------------------------------------------------------
  
   if [ $machine = WCOSS_C ]; then
-    echo "$script_dir/fv3gfs_make_orog.sh $res 7 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
+    echo "$script_dir/fv3gfs_make_orog.sh $res 7 $grid_dir $orog_dir $topo $add_lake $TMPDIR " >>$TMPDIR/orog.file1
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
     rm $TMPDIR/orog.file1
   else
@@ -325,7 +325,7 @@ elif [ $gtype = regional ]; then
     echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
     echo
     set -x
-    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $topo $add_lake $TMPDIR
     err=$?
     if [ $err != 0 ]; then
       exit $err

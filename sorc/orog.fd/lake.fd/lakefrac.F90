@@ -14,7 +14,6 @@
 !     
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 !#define DIAG_N_VERBOSE
-#define WRITE_TO_ORODATA
 #define ADD_ATT_FOR_NEW_VAR
 PROGRAM lake_frac
     USE netcdf
@@ -22,6 +21,7 @@ PROGRAM lake_frac
 
     CHARACTER(len=256) :: sfcdata_path
     INTEGER :: cs_res, ncsmp, ncscp, i
+    INTEGER :: res_x, res_y
 
     INTEGER*1, ALLOCATABLE :: lakestatus(:)
     INTEGER*2, ALLOCATABLE :: lakedepth(:)
@@ -39,37 +39,47 @@ PROGRAM lake_frac
     REAL*8, PARAMETER :: delta = 1.0 / 119.99444445
 
     CHARACTER(len=32) :: arg
+    CHARACTER(len=256) :: lakedata_path
     INTEGER :: stat
     
     CALL getarg(0, arg) ! get the program name
-    IF (iargc() /= 2) THEN
+    IF (iargc() /= 3) THEN
       PRINT*, 'Usage: ', trim(arg), & 
-       ' [tile_num (0 - all tiles)] [Resolution (48,96, ...)]'  
+       ' [tile_num (0:all tiles, 7:regional)] [resolution (48,96, ...)] [path to lake data file]'  
       STOP
     ENDIF
     CALL getarg(1, arg)
     READ(arg,*,iostat=stat) tile_req
     CALL getarg(2, arg)
     READ(arg,*,iostat=stat) cs_res
+    CALL getarg(3, lakedata_path)
 
     IF (tile_req == 0) THEN
       tile_beg = 1; tile_end = 6
       PRINT*, 'Process tile 1 - 6 at resolution C',cs_res
-    ELSE
+    ELSE IF (tile_req /= 7) THEN
       tile_beg = tile_req; tile_end = tile_req
       PRINT*, 'Process tile',tile_req, 'at resolution C',cs_res
+    ELSE
+      tile_beg = 1; tile_end = 1
+      PRINT*, 'Process regional tile (tile', tile_req, ') at resolution C',cs_res
     ENDIF
 
 !    cs_res = 96 !    tile_beg = 3; tile_end = 3
 
     ! read in grid spec data for each tile and concatenate them together
+
     ncsmp = (2*cs_res+1)*(2*cs_res+1)*6   
+    IF (tile_req /= 7) THEN
+      PRINT*, 'Read in cubed sphere grid information ... ',ncsmp,'pairs of lat/lons'
+    ENDIF
 
-    ALLOCATE(cs_grid(ncsmp, 2))
-    PRINT*, 'Read in cubed sphere grid information ... ',ncsmp,'pairs of lat/lons'
-    CALL  read_cubed_sphere_grid(cs_res, cs_grid) 
-!    cs_grid = cs_grid * d2r
-
+    IF (tile_req /= 7) THEN
+      ALLOCATE(cs_grid(ncsmp, 2))
+      CALL  read_cubed_sphere_grid(cs_res, cs_grid) 
+    ELSE
+      CALL  read_cubed_sphere_reg_grid(cs_res, cs_grid, 3, res_x, res_y) 
+    ENDIF
     ! compute source grid 
     ALLOCATE(src_grid_lon(nlon), src_grid_lat(nlat))
     DO i = 1, nlon
@@ -80,10 +90,11 @@ PROGRAM lake_frac
     ENDDO
 
     ! read in lake data file
-    sfcdata_path = '/scratch1/NCEPDEV/global/glopara/fix/fix_orog/'
+!    sfcdata_path = '/scratch1/NCEPDEV/global/glopara/fix/fix_orog/'
+    lakedata_path = trim(lakedata_path) // "/"
     ALLOCATE(lakestatus(nlon*nlat),lakedepth(nlon*nlat)) 
     PRINT*, 'Read in lake data file ...'
-    CALL read_lakedata(sfcdata_path,lakestatus,lakedepth,nlat,nlon)
+    CALL read_lakedata(lakedata_path,lakestatus,lakedepth,nlat,nlon)
 
     ! calculate fraction numbers for all cs-cells
     ncscp = cs_res*cs_res*6
@@ -91,16 +102,17 @@ PROGRAM lake_frac
     ALLOCATE(cs_lakedepth(ncscp))
 
     PRINT*, 'Calculate lake fraction and average depth for cubed-sphere cells ...'
-    CALL cal_lake_frac_depth(cs_res,lakestatus,cs_lakestatus,lakedepth,cs_lakedepth)
+    CALL cal_lake_frac_depth(lakestatus,cs_lakestatus,lakedepth,cs_lakedepth)
 
     ! write lake status (in terms of fraction) and lake depth(average)
     ! to a netcdf file
-    PRINT*, 'Write netcdf file for lake fraction on cubed sphere grid cells ...'
-#ifdef WRITE_TO_ORODATA
-    CALL write_lakedata_to_orodata(cs_res, cs_lakestatus, cs_lakedepth) 
-#else
-    CALL write_lakefrac_netcdf(cs_res, cs_lakestatus, cs_lakedepth) 
-#endif
+    IF (tile_req /= 7) THEN
+      PRINT*, 'Write lake fraction/depth on cubed sphere grid cells to netCDF files ...'
+      CALL write_lakedata_to_orodata(cs_res, cs_lakestatus, cs_lakedepth) 
+    ELSE
+      PRINT*, 'Write lake fraction/depth on regional FV3 grid cells to a netCDF file ...'
+      CALL write_reg_lakedata_to_orodata(cs_res, res_x, res_y, cs_lakestatus, cs_lakedepth) 
+    ENDIF
 
     DEALLOCATE(cs_lakestatus,cs_lakedepth)
     DEALLOCATE(cs_grid)
@@ -108,8 +120,7 @@ PROGRAM lake_frac
     STOP
 CONTAINS
 
-SUBROUTINE cal_lake_frac_depth(res,lakestat,cs_lakestat,lakedpth,cs_lakedpth)
-    INTEGER, INTENT(IN) :: res
+SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
     INTEGER*1, INTENT(IN) :: lakestat(:)
     INTEGER*2, INTENT(IN) :: lakedpth(:)
     REAL, INTENT(OUT) :: cs_lakestat(:), cs_lakedpth(:)
@@ -118,8 +129,8 @@ SUBROUTINE cal_lake_frac_depth(res,lakestat,cs_lakestat,lakedpth,cs_lakedpth)
     REAL*8 :: v(2,4), p(2)
     REAL :: latmin1, latmax1
     REAL :: latmin, latmax, lonmin, lonmax, lontmp, lat_sz_max, lon_sz_max
-    REAL :: lonmin_180pm, lonmax_180pm
-    INTEGER :: tile_num, i, j, gp, side_sz, row, col, cs_grid_idx, cs_data_idx
+    INTEGER :: tile_num, i, j, gp, row, col, cs_grid_idx, cs_data_idx
+    INTEGER :: sidex_res, sidey_res, sidex_sz, sidey_sz 
     INTEGER :: stride_lat, stride_lon
     INTEGER :: src_grid_lat_beg,src_grid_lat_end,src_grid_lon_beg,src_grid_lon_end
     INTEGER :: src_grid_lon_beg1,src_grid_lon_end1,src_grid_lon_beg2,src_grid_lon_end2
@@ -128,8 +139,15 @@ SUBROUTINE cal_lake_frac_depth(res,lakestat,cs_lakestat,lakedpth,cs_lakedpth)
     REAL*8 :: lake_dpth_sum
     LOGICAL :: two_section, enclosure_cnvx 
 
+    IF (tile_req /= 7) THEN
+      sidex_res = cs_res; sidey_res = cs_res
+    ELSE
+      sidex_res = res_x; sidey_res = res_y
+    ENDIF
+
+    sidex_sz = 2*sidex_res+1; sidey_sz = 2*sidey_res+1
+
     stride_lat = 1
-    side_sz = 2*res+1
 
     lat_sz_max = 0.0
     lon_sz_max = 0.0
@@ -137,34 +155,34 @@ SUBROUTINE cal_lake_frac_depth(res,lakestat,cs_lakestat,lakedpth,cs_lakedpth)
     cs_lakestat = 0.0
 
     DO tile_num = tile_beg, tile_end
-      row = 2 + side_sz*(tile_num-1); col = 2
-      DO gp = 1, res*res
+      row = 2 + sidex_sz*(tile_num-1); col = 2
+      DO gp = 1, sidex_res*sidey_res
         two_section = .false.
-        cs_grid_idx = (row-1)*side_sz+col
-        cs_data_idx = (tile_num-1)*res*res+gp
+        cs_grid_idx = (row-1)*sidex_sz+col
+        cs_data_idx = (tile_num-1)*sidex_res*sidey_res+gp
         IF (abs(cs_grid(cs_grid_idx,1)) > 80.0 ) THEN !ignore lakes in very high latitude
           cs_lakestat(cs_data_idx) = 0.0
           cs_lakedpth(cs_data_idx) = 0.0
           ! move to next cs cell
           col = col + 2
-          IF (col > side_sz) THEN
+          IF (col > sidex_sz) THEN
             col = 2
             row = row + 2
           ENDIF
           CYCLE
         ENDIF
         ! get the four corners of the cs cell 
-        lolf(1) = cs_grid(cs_grid_idx-side_sz-1, 1)
-        lolf(2) = cs_grid(cs_grid_idx-side_sz-1, 2)
+        lolf(1) = cs_grid(cs_grid_idx-sidex_sz-1, 1)
+        lolf(2) = cs_grid(cs_grid_idx-sidex_sz-1, 2)
         IF (lolf(2) > 180.0) lolf(2) = lolf(2) - 360.0
-        lort(1) = cs_grid(cs_grid_idx-side_sz+1, 1)
-        lort(2) = cs_grid(cs_grid_idx-side_sz+1, 2)
+        lort(1) = cs_grid(cs_grid_idx-sidex_sz+1, 1)
+        lort(2) = cs_grid(cs_grid_idx-sidex_sz+1, 2)
         IF (lort(2) > 180.0) lort(2) = lort(2) - 360.0
-        uplf(1) = cs_grid(cs_grid_idx+side_sz-1,1)
-        uplf(2) = cs_grid(cs_grid_idx+side_sz-1,2)
+        uplf(1) = cs_grid(cs_grid_idx+sidex_sz-1,1)
+        uplf(2) = cs_grid(cs_grid_idx+sidex_sz-1,2)
         IF (uplf(2) > 180.0) uplf(2) = uplf(2) - 360.0
-        uprt(1) = cs_grid(cs_grid_idx+side_sz+1,1)
-        uprt(2) = cs_grid(cs_grid_idx+side_sz+1,2)
+        uprt(1) = cs_grid(cs_grid_idx+sidex_sz+1,1)
+        uprt(2) = cs_grid(cs_grid_idx+sidex_sz+1,2)
 
         v(1,1) = lolf(1); v(2,1) = lolf(2) 
         v(1,2) = lort(1); v(2,2) = lort(2) 
@@ -216,7 +234,7 @@ SUBROUTINE cal_lake_frac_depth(res,lakestat,cs_lakestat,lakedpth,cs_lakedpth)
 
 #ifdef DIAG_N_VERBOSE
         PRINT*, 'cell centre lat/lon =', &
-          gp, res*res, cs_grid(cs_grid_idx,1),cs_grid(cs_grid_idx,2)
+          gp, cs_res*cs_res, cs_grid(cs_grid_idx,1),cs_grid(cs_grid_idx,2)
         PRINT*, 'lat index range and stride', &
           src_grid_lat_beg,src_grid_lat_end,stride_lat
         PRINT*, 'lat range ',  &
@@ -320,7 +338,7 @@ SUBROUTINE cal_lake_frac_depth(res,lakestat,cs_lakestat,lakedpth,cs_lakedpth)
 
        ! move to the next control volume
         col = col + 2
-        IF (col > side_sz) THEN
+        IF (col > sidex_sz) THEN
           col = 2
           row = row + 2
         ENDIF
@@ -346,13 +364,16 @@ SUBROUTINE read_cubed_sphere_grid(res, grid)
     side_sz = 2*res+1
     tile_sz = side_sz*side_sz
     ALLOCATE(lat(tile_sz), lon(tile_sz))
+
+    IF (tile_req == 0) THEN
+      tile_beg = 1; tile_end = 6
+    ELSE 
+      tile_beg = tile_req; tile_end = tile_req
+    ENDIF
     WRITE(res_ch,'(I4)') res
-    if (res == 96) then
-      gridfile_path = '/scratch1/NCEPDEV/nems/emc.nemspara/RT/NEMSfv3gfs/develop-20200603/INTEL/FV3_input_data/INPUT/'
-    else
-      gridfile_path = '/scratch1/NCEPDEV/nems/emc.nemspara/RT/NEMSfv3gfs/develop-20200603/INTEL/FV3_input_data_c'//trim(adjustl(res_ch))//'/INPUT/'
-    end if 
-    DO i = 1, 6
+!    gridfile_path = "/scratch1/NCEPDEV/global/glopara/fix/fix_fv3/C"//trim(adjustl(res_ch))//"/"
+    gridfile_path = "./"
+    DO i = tile_beg, tile_end
       WRITE(ich, '(I1)') i
       gridfile = trim(gridfile_path)//"C"//trim(adjustl(res_ch))//"_grid.tile"//ich//".nc"
 
@@ -381,9 +402,72 @@ SUBROUTINE read_cubed_sphere_grid(res, grid)
 
 END SUBROUTINE read_cubed_sphere_grid
 
+SUBROUTINE read_cubed_sphere_reg_grid(res, grid, halo_depth, res_x, res_y) 
+    INTEGER, INTENT(IN) :: res, halo_depth
+    INTEGER, INTENT(OUT) :: res_x, res_y
+    REAL, ALLOCATABLE, INTENT(OUT) :: grid(:,:)
 
-SUBROUTINE read_lakedata(sfcdata_path,lake_stat,lake_dpth,nlat,nlon)
-    CHARACTER(len=256), INTENT(IN) :: sfcdata_path
+    REAL*8, ALLOCATABLE :: lat(:), lon(:)
+    INTEGER :: sidex_sz, sidey_sz, tile_sz, ncid, varid, dimid 
+    INTEGER :: x_start, y_start
+    INTEGER :: nxp, nyp, stat 
+    CHARACTER(len=256) :: gridfile_path,gridfile
+    CHARACTER(len=1) ich
+    CHARACTER(len=4) res_ch
+    CHARACTER(len=8) dimname
+
+
+    WRITE(res_ch,'(I4)') res
+!    gridfile_path = '/scratch4/BMC/fim/fv3data/fix/reg/' 
+    gridfile_path = './' 
+    gridfile = trim(gridfile_path)//"C"//trim(adjustl(res_ch))//"_grid.tile7.nc"
+
+    PRINT*, 'Open cubed sphere grid spec file ', trim(gridfile)
+
+    stat = nf90_open(trim(gridfile), NF90_NOWRITE, ncid)
+    CALL nc_opchk(stat,'nf90_open')
+
+    stat = nf90_inq_dimid(ncid,'nxp',dimid)
+    CALL nc_opchk(stat,'nf90_inq_dimid: nxp')
+    stat = nf90_inquire_dimension(ncid,dimid,dimname,len=nxp)
+    CALL nc_opchk(stat,'nf90_inquire_dimension: nxp')
+
+    stat = nf90_inq_dimid(ncid,'nyp',dimid)
+    CALL nc_opchk(stat,'nf90_inq_dimid: nyp')
+    stat = nf90_inquire_dimension(ncid,dimid,dimname,len=nyp)
+    CALL nc_opchk(stat,'nf90_inquire_dimension: nyp')
+
+!    sidex_sz = nxp-2*halo_depth
+!    sidey_sz = nyp-2*halo_depth
+    sidex_sz = nxp
+    sidey_sz = nyp
+    tile_sz = sidex_sz*sidey_sz
+    ALLOCATE(lat(tile_sz), lon(tile_sz))
+
+!    x_start = halo_depth+1; y_start = halo_depth+1
+    x_start = 1; y_start = 1
+    stat = nf90_inq_varid(ncid,'x',varid)
+    CALL nc_opchk(stat,'nf90_inq_lon')
+    stat = nf90_get_var(ncid,varid,lon,start=(/x_start,y_start/),count=(/sidex_sz,sidey_sz/))
+    CALL nc_opchk(stat,'nf90_get_var_lon')
+    stat = nf90_inq_varid(ncid,'y',varid)
+    CALL nc_opchk(stat,'nf90_inq_lat')
+    stat = nf90_get_var(ncid,varid,lat,start=(/x_start,y_start/),count=(/sidex_sz,sidey_sz/))
+    CALL nc_opchk(stat,'nf90_get_var_lat')
+    stat = nf90_close(ncid)
+    CALL nc_opchk(stat,'nf90_close')
+
+    ALLOCATE(grid(tile_sz,2))
+    grid(1:tile_sz,1) = lat(1:tile_sz)
+    grid(1:tile_sz,2) = lon(1:tile_sz)
+
+    res_x = sidex_sz/2; res_y = sidey_sz/2
+    DEALLOCATE(lat,lon)
+
+END SUBROUTINE read_cubed_sphere_reg_grid
+
+SUBROUTINE read_lakedata(lakedata_path,lake_stat,lake_dpth,nlat,nlon)
+    CHARACTER(len=256), INTENT(IN) :: lakedata_path
     INTEGER*1, INTENT(OUT) :: lake_stat(:)
     INTEGER*2, INTENT(OUT) :: lake_dpth(:)
     INTEGER, INTENT(IN) :: nlat, nlon
@@ -394,12 +478,12 @@ SUBROUTINE read_lakedata(sfcdata_path,lake_stat,lake_dpth,nlat,nlon)
     data_sz = nlon*nlat
 
    ! read in 30 arc seconds lake data 
-    lakefile = trim(sfcdata_path) // "GlobalLakeStatus.dat"
+    lakefile = trim(lakedata_path) // "GlobalLakeStatus.dat"
     OPEN(10, file=lakefile, form='unformatted', access='direct', recl=data_sz*1)
     READ(10,rec=1) lake_stat
     CLOSE(10)
 
-    lakefile = trim(sfcdata_path) // "GlobalLakeDepth.dat"
+    lakefile = trim(lakedata_path) // "GlobalLakeDepth.dat"
     OPEN(10, file=lakefile, form='unformatted', access='direct', recl=data_sz*2)
     READ(10,rec=1) lake_dpth
     CLOSE(10)
@@ -457,6 +541,8 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
       stat = nf90_def_var(ncid,"lake_frac",NF90_FLOAT,dimids,lake_frac_id)
       CALL nc_opchk(stat, "nf90_def_var: lake_frac")
 #ifdef ADD_ATT_FOR_NEW_VAR
+      stat = nf90_put_att(ncid, lake_frac_id,'coordinates','geolon geolat')
+      CALL nc_opchk(stat, "nf90_put_att: lake_frac:coordinates") 
       stat = nf90_put_att(ncid, lake_frac_id,'long_name','lake fraction')
       CALL nc_opchk(stat, "nf90_put_att: lake_frac:long_name") 
       stat = nf90_put_att(ncid, lake_frac_id,'unit','fraction')
@@ -468,6 +554,8 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
       stat = nf90_def_var(ncid,"lake_depth",NF90_FLOAT,dimids,lake_depth_id)
       CALL nc_opchk(stat, "nf90_def_var: lake_depth")
 #ifdef ADD_ATT_FOR_NEW_VAR
+    stat = nf90_put_att(ncid, lake_depth_id,'coordinates','geolon geolat')
+    CALL nc_opchk(stat, "nf90_put_att: lake_depth:coordinates") 
       stat = nf90_put_att(ncid, lake_depth_id,'long_name','lake depth')
       CALL nc_opchk(stat, "nf90_put_att: lake_depth:long_name") 
       stat = nf90_put_att(ncid, lake_depth_id,'unit','meter')
@@ -598,56 +686,194 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
   
 END SUBROUTINE write_lakedata_to_orodata
 
-SUBROUTINE write_lakefrac_netcdf(cs_res, cs_lakestat, cs_lakedpth) 
+SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lakestat, cs_lakedpth) 
     USE netcdf 
-    INTEGER, INTENT(IN) :: cs_res
+    INTEGER, INTENT(IN) :: cs_res, tile_x_dim, tile_y_dim
     REAL, INTENT(IN) :: cs_lakestat(:)
     REAL, INTENT(IN) :: cs_lakedpth(:)
    
     INTEGER :: tile_sz, tile_num
     INTEGER :: stat, ncid, x_dimid, y_dimid, varid, dimids(2)
     INTEGER :: lake_frac_id, lake_depth_id
-    CHARACTER(len=256) :: filename
+    INTEGER :: land_frac_id, slmsk_id, geolon_id, geolat_id
+    CHARACTER(len=256) :: filename,string
     CHARACTER(len=1) :: ich
     CHARACTER(len=4) res_ch
-    REAL :: data_out(cs_res*cs_res)
+
+    REAL, ALLOCATABLE :: lake_frac(:), lake_depth(:), geolon(:), geolat(:)
+    REAL, ALLOCATABLE :: land_frac(:), slmsk(:)
+
+    real, parameter :: epsil=1.e-6   ! numerical min for lake_frac/land_frac
+    real            :: cutoff_lake=0.01, cutoff_land=1.e-6 ! if frac<cutoff, frac=0
+
+    INTEGER :: i, j, var_id
 
 !    include "netcdf.inc"
-    tile_sz = cs_res*cs_res
+    tile_sz = tile_x_dim*tile_y_dim
+
+    ALLOCATE(lake_frac(tile_sz), lake_depth(tile_sz))
+    ALLOCATE(geolon(tile_sz), geolat(tile_sz))
+    ALLOCATE(land_frac(tile_sz), slmsk(tile_sz))
 
     WRITE(res_ch,'(I4)') cs_res
-    DO tile_num = 1, 6
-      WRITE(ich, '(I1)') tile_num
-      filename = "C" // trim(adjustl(res_ch)) // "lake_frac.tile" // ich // ".nc" 
-      stat = nf90_create(filename, NF90_CLOBBER, ncid)
-      CALL nc_opchk(stat, "nf90_create lake_frac.nc")
-      stat = nf90_def_dim(ncid, "x", cs_res, x_dimid)
-      CALL nc_opchk(stat, "nf90_def_dim: x")
-      stat = nf90_def_dim(ncid, "y", cs_res, y_dimid)
-      CALL nc_opchk(stat, "nf90_def_dim: y")
-      dimids = (/ y_dimid, x_dimid /)
-     
-      stat = nf90_def_var(ncid,"lake_frac",NF90_FLOAT,dimids,lake_frac_id)
-      CALL nc_opchk(stat, "nf90_def_var: lake_frac")
-      stat = nf90_def_var(ncid,"lake_depth",NF90_FLOAT,dimids,lake_depth_id)
-      CALL nc_opchk(stat, "nf90_def_var: lake_depth")
-      stat = nf90_enddef(ncid) 
-      CALL nc_opchk(stat, "nf90_enddef")
+    tile_num  = 7
+    WRITE(ich, '(I1)') tile_num
+!    filename = "C" // trim(adjustl(res_ch)) // "_oro_data.tile" // ich // ".halo4.nc" 
+    filename = "oro.C" // trim(adjustl(res_ch)) // ".tile" // ich // ".nc"
+    PRINT*, 'Open and write regional orography data netCDF file ', trim(filename)
+    stat = nf90_open(filename, NF90_WRITE, ncid)
+    CALL nc_opchk(stat, "nf90_open oro_data.nc")
+    stat = nf90_inq_dimid(ncid, "lon", x_dimid)
+    CALL nc_opchk(stat, "nf90_inq_dim: x")
+    stat = nf90_inq_dimid(ncid, "lat", y_dimid)
+    CALL nc_opchk(stat, "nf90_inq_dim: y")
+    dimids = (/ x_dimid, y_dimid /)
 
-      data_out(:) = cs_lakestat((tile_num-1)*tile_sz+1:tile_num*tile_sz)
-      stat = nf90_put_var(ncid, lake_frac_id, data_out, &
-             start = (/ 1, 1 /), count = (/ cs_res, cs_res /) )
-      CALL nc_opchk(stat, "nf90_put_var: lake_frac") 
-      data_out(:) = cs_lakedepth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
-      stat = nf90_put_var(ncid, lake_depth_id, data_out, &
-             start = (/ 1, 1 /), count = (/ cs_res, cs_res /) )
-      CALL nc_opchk(stat, "nf90_put_var: lake_depth") 
-    
-      stat = nf90_close(ncid)
-      CALL nc_opchk(stat, "nf90_close") 
+    stat = nf90_inq_varid(ncid, "land_frac", land_frac_id)
+    CALL nc_opchk(stat, "nf90_inq_varid: land_frac")
+    stat = nf90_inq_varid(ncid, "slmsk", slmsk_id)
+    CALL nc_opchk(stat, "nf90_inq_varid: slmsk")
+
+! define 2 new variables, lake_frac and lake_depth 
+    stat = nf90_redef(ncid)
+    CALL nc_opchk(stat, "nf90_redef")
+
+    IF (nf90_inq_varid(ncid, "lake_frac",lake_frac_id) /= 0) THEN
+    stat = nf90_def_var(ncid,"lake_frac",NF90_FLOAT,dimids,lake_frac_id)
+    CALL nc_opchk(stat, "nf90_def_var: lake_frac")
+#ifdef ADD_ATT_FOR_NEW_VAR
+    stat = nf90_put_att(ncid, lake_frac_id,'coordinates','geolon geolat')
+    CALL nc_opchk(stat, "nf90_put_att: lake_frac:coordinates") 
+    stat = nf90_put_att(ncid, lake_frac_id,'long_name','lake fraction')
+    CALL nc_opchk(stat, "nf90_put_att: lake_frac:long_name") 
+    stat = nf90_put_att(ncid, lake_frac_id,'unit','fraction')
+    CALL nc_opchk(stat, "nf90_put_att: lake_frac:unit") 
+    stat = nf90_put_att(ncid, lake_frac_id,'description', &
+      'based on GLDBv2 (Choulga et al. 2014); missing Caspian/Aral Sea &
+       added based on land_frac in this dataset.')
+    CALL nc_opchk(stat, "nf90_put_att: lake_frac:description") 
+#endif
+    ENDIF
+    IF (nf90_inq_varid(ncid, "lake_depth",lake_depth_id) /= 0) THEN
+    stat = nf90_def_var(ncid,"lake_depth",NF90_FLOAT,dimids,lake_depth_id)
+    CALL nc_opchk(stat, "nf90_def_var: lake_depth")
+#ifdef ADD_ATT_FOR_NEW_VAR
+    stat = nf90_put_att(ncid, lake_depth_id,'coordinates','geolon geolat')
+    CALL nc_opchk(stat, "nf90_put_att: lake_depth:coordinates") 
+    stat = nf90_put_att(ncid, lake_depth_id,'long_name','lake depth')
+    CALL nc_opchk(stat, "nf90_put_att: lake_depth:long_name") 
+    stat = nf90_put_att(ncid, lake_depth_id,'unit','meter')
+    CALL nc_opchk(stat, "nf90_put_att: lake_depth:long_name") 
+    stat = nf90_put_att(ncid, lake_depth_id,'description', &
+      'based on GLDBv2 (Choulga et al. 2014); missing depth set to 211m &
+       for Caspian Sea and 10m for Aral Sea; neg. depths are replaced by &
+       default values of 10m for lake and 3m for river, spurious large pos. &
+       depths are left unchanged.')
+    CALL nc_opchk(stat, "nf90_put_att: lake_depth:description") 
+#endif
+    ENDIF
+    write(string,'(a,es8.1)') 'land_frac with lake; land_frac cutoff is',cutoff_land
+    stat = nf90_put_att(ncid, land_frac_id,'description',trim(string))
+    CALL nc_opchk(stat, "nf90_put_att: land_frac:description") 
+
+    write(string,'(a)') 'slmsk = nint(land_frac)'
+    stat = nf90_put_att(ncid, slmsk_id,'description',trim(string))
+    CALL nc_opchk(stat, "nf90_put_att: slmsk:description") 
+
+    stat = nf90_enddef(ncid) 
+    CALL nc_opchk(stat, "nf90_enddef")
+
+! read in geolon and geolat and 2 variables from orog data file
+    stat = nf90_inq_varid(ncid, "geolon", geolon_id)
+    CALL nc_opchk(stat, "nf90_inq_varid: geolon")
+    stat = nf90_inq_varid(ncid, "geolat", geolat_id)
+    CALL nc_opchk(stat, "nf90_inq_varid: geolat")
+    stat = nf90_inq_varid(ncid, "land_frac", land_frac_id)
+    CALL nc_opchk(stat, "nf90_inq_varid: land_frac")
+    stat = nf90_inq_varid(ncid, "slmsk", slmsk_id)
+    CALL nc_opchk(stat, "nf90_inq_varid: slmsk")
+
+    stat = nf90_get_var(ncid, geolon_id, geolon, &
+           start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
+    CALL nc_opchk(stat, "nf90_get_var: geolon")
+    stat = nf90_get_var(ncid, geolat_id, geolat, &
+           start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
+    CALL nc_opchk(stat, "nf90_get_var: geolat")
+    stat = nf90_get_var(ncid, land_frac_id, land_frac, &
+           start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
+    CALL nc_opchk(stat, "nf90_get_var: land_frac")
+    stat = nf90_get_var(ncid, slmsk_id, slmsk, &
+           start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
+    CALL nc_opchk(stat, "nf90_get_var: slmsk")
+
+! add Caspian Sea and Aral Sea to lake_frac and lake_depth
+    tile_num = 1
+    lake_frac(:) = cs_lakestat((tile_num-1)*tile_sz+1:tile_num*tile_sz)
+    lake_depth(:) = cs_lakedepth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
+    DO i = 1, tile_sz
+      IF (land_frac(i) < 0.9 .AND. lake_frac(i) < 0.1) THEN
+        IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
+            geolon(i) > 45.0 .AND. geolon(i) <= 55.0) THEN
+          lake_frac(i) = 1.-land_frac(i)
+          lake_depth(i) = 211.0
+        ENDIF 
+        IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
+            geolon(i) > 57.0 .AND. geolon(i) <= 63.0) THEN
+          lake_frac(i) = 1.-land_frac(i)
+          lake_depth(i) = 10.0
+        ENDIF 
+      ENDIF
     ENDDO
+
+    if (min(cutoff_lake,cutoff_land) < epsil) then
+      print *,'cutoff_lake/cutoff_land cannot be smaller than epsil, reset...'
+      cutoff_lake=max(epsil,cutoff_lake)
+      cutoff_land=max(epsil,cutoff_land)
+    end if
+    DO i = 1, tile_sz
+! epsil is "numerical" nonzero min for lake_frac/land_frac
+      if (lake_frac(i)>0. .and. lake_frac(i)<   epsil) lake_frac(i)=0.
+      if (lake_frac(i)<1. .and. lake_frac(i)>1.-epsil) lake_frac(i)=1.
+      if (land_frac(i)>0. .and. land_frac(i)<   epsil) land_frac(i)=0.
+      if (land_frac(i)<1. .and. land_frac(i)>1.-epsil) land_frac(i)=1.
+! cutoff_lake/cutoff_land is practical min for lake_frac/land_frac
+      if (land_frac(i)>0. .and. land_frac(i)<cutoff_land) then
+        land_frac(i)=0.
+      end if
+      
+      if (lake_frac(i)>0. .and. lake_frac(i)<cutoff_lake) then
+        lake_frac(i)=0.
+        lake_depth(i)=0.
+        land_frac(i)=1.
+      elseif (lake_frac(i) >= cutoff_lake .and. lake_depth(i)==0.) then
+        lake_depth(i)=10.
+      end if
+
+      slmsk(i) = nint(land_frac(i))
+    ENDDO
+
+! write 2 new variables      
+    stat = nf90_put_var(ncid, lake_frac_id, lake_frac, &
+           start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
+    CALL nc_opchk(stat, "nf90_put_var: lake_frac") 
+
+    stat = nf90_put_var(ncid, lake_depth_id, lake_depth, &
+           start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
+    CALL nc_opchk(stat, "nf90_put_var: lake_depth") 
+
+! write back 2 modified variables: land_frac and slmsk
+    stat = nf90_put_var(ncid, land_frac_id, land_frac, &
+           start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
+    CALL nc_opchk(stat, "nf90_put_var: land_frac") 
+
+    stat = nf90_put_var(ncid, slmsk_id, slmsk, &
+           start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
+    CALL nc_opchk(stat, "nf90_put_var: slmsk") 
+    
+    stat = nf90_close(ncid)
+    CALL nc_opchk(stat, "nf90_close") 
   
-END SUBROUTINE write_lakefrac_netcdf
+END SUBROUTINE write_reg_lakedata_to_orodata
 
 SUBROUTINE nc_opchk(stat,opname)
    USE netcdf

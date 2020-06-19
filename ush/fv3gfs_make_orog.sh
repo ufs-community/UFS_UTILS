@@ -110,7 +110,7 @@ cd $workdir
   if [ $is_latlon -eq 0 ]; then
      cp ${griddir}/$OUTGRID .
   fi
-  cp $executable .
+#  cp $executable .
 
   echo  $mtnres $lonb $latb $jcap $NR $NF1 $NF2 $efac $blat > INPS
   echo $OUTGRID >> INPS
@@ -129,7 +129,7 @@ cd $workdir
     fi
     mv ./out.oro.nc $outfile
     if $add_lake; then
-      $exe_add_lake ${tile} ${res}
+      $exe_add_lake ${tile} ${res} ${indir}
     fi
     mv $outfile $outdir/$outfile
     echo "file $outdir/$outfile is created"
