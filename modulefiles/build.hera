@@ -7,21 +7,23 @@ module load cmake/3.16.1
 module load intel/18.0.5.274
 module load impi/2018.0.4
 
-module use -a /scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
-module load prod_util/1.1.0
-module load w3nco/2.0.6
-module load w3emc/2.3.0
-module load nemsio/2.2.3
-module load bacio/2.0.2
-module load sp/2.0.2
-module load ip/3.0.1
-module load sfcio/1.1.0
-module load sigio/2.1.0
-module load gfsio/1.1.0
-module load nemsiogfs/2.2.0
-module load landsfcutil/2.1.0
-module load g2/2.5.0
+module use -a /scratch1/NCEPDEV/stmp2/Rahul.Mahajan/test/UFS/modulefiles/nceplibs
 
+module load w3nco
+module load w3emc
+module load nemsio
+module load bacio
+module load sp
+module load ip
+module load sfcio
+module load sigio
+module load gfsio
+module load nemsiogfs
+module load landsfcutil
+module load g2
+
+module use  /scratch1/NCEPDEV/nems/emc.nemspara/soft/modulefiles
+module load hdf5_parallel/1.10.6
 module load netcdf_parallel/4.7.4
 module load esmf/8.0.0_ParallelNetCDF
 
