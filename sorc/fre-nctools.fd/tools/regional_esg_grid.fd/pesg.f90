@@ -3,9 +3,9 @@
 !                                              *      pesg.f90       *
 !                                              *    R. J. Purser     *
 !                                              *   NOAA/NCEP/EMC     *
-!                                              *     May 2020        * 
+!                                              *     May 2020        *
 !                                              *                     *
-!                                              * jim.purser@noaa.gov *                
+!                                              * jim.purser@noaa.gov * 
 !                                              ***********************
 ! Suite of routines to perform the 2-parameter family of Extended
 ! Schmidt Gnomonic (ESG) regional grid mappings, and to optimize the
@@ -23,36 +23,48 @@
 module pesg
 !=============================================================================
 use pkind, only: spi,dp
-use pietc, only: F,T,u0,u1,u2,o2,rtod,dtor,pih
+use pietc, only: F,T,u0,u1,u2,o2,rtod,dtor,pih,pi2
 implicit none
 private
-public :: xctoxs,xstoxc,xstoxt,xttoxs,xttoxm,zttozm,zmtozt,xctoxm_ak,xmtoxc_ak,&
-          getedges,get_qq,get_qofmap,get_bestesg,get_bestesg_inv, &
-          hgrid_ak_rr,hgrid_ak_rc,hgrid_ak_dd,hgrid_ak_dc,hgrid_ak
-interface xctoxs;         module procedure xctoxs;          end interface
-interface xstoxc;         module procedure xstoxc;          end interface
-interface xstoxt;         module procedure xstoxt;          end interface
-interface xttoxs;         module procedure xttoxs;          end interface
-interface xttoxm;         module procedure xttoxm;          end interface
-interface zttozm;         module procedure zttozm;          end interface
-interface zmtozt;         module procedure zmtozt;          end interface
-interface xctoxm_ak;      module procedure xctoxm_ak;       end interface
-interface xmtoxc_ak;      module procedure xmtoxc_ak;       end interface
-interface getedges;       module procedure getedges;        end interface
-interface get_wxy;        module procedure get_wxy;         end interface
-interface get_qq;         module procedure get_qqw,get_qqt; end interface
-interface get_qofmap;     module procedure get_qofmap;      end interface
-interface get_bestesg;    module procedure get_bestesg;     end interface
-interface get_bestesgt;   module procedure get_bestesgt;    end interface
-interface get_bestesg_inv;module procedure get_bestesg_inv; end interface
-interface hgrid_ak_rr
-   module procedure hgrid_ak_rr,hgrid_ak_rr_c;              end interface
-interface hgrid_ak_rc;    module procedure hgrid_ak_rc;     end interface
-interface hgrid_ak_dd
-   module procedure hgrid_ak_dd,hgrid_ak_dd_c;              end interface
-interface hgrid_ak_dc;    module procedure hgrid_ak_dc;     end interface
-interface hgrid_ak 
-     module procedure hgrid_ak,hgrid_ak_c;                  end interface
+public :: xctoxm_ak,xmtoxc_ak,get_edges,bestesg_geo,bestesg_map, &
+          hgrid_ak_rr,hgrid_ak_rc,hgrid_ak_dd,hgrid_ak_dc,hgrid_ak, &
+          gtoxm_ak_rr,gtoxm_ak_dd,xmtog_ak_rr,xmtog_ak_dd
+
+interface xctoxs;         module procedure xctoxs;                end interface
+interface xstoxc;         module procedure xstoxc,xstoxc1;        end interface
+interface xstoxt;         module procedure xstoxt;                end interface
+interface xttoxs;         module procedure xttoxs,xttoxs1;        end interface
+interface xttoxm;         module procedure xttoxm;                end interface
+interface zttozm;         module procedure zttozm;                end interface
+interface xmtoxt;         module procedure xmtoxt,xmtoxt1;        end interface
+interface zmtozt;         module procedure zmtozt,zmtozt1;        end interface
+interface xctoxm_ak;      module procedure xctoxm_ak;             end interface
+interface xmtoxc_ak
+   module procedure xmtoxc_ak,xmtoxc_vak,xmtoxc_vak1;             end interface
+interface get_edges;      module procedure get_edges;             end interface
+interface get_qx;         module procedure get_qx,get_qxd;        end interface
+interface get_qofv;module procedure get_qofv,get_qofvd,get_qsofvs;end interface
+interface get_meanq;      module procedure get_meanqd,get_meanqs; end interface
+interface guessak_map;    module procedure guessak_map;           end interface
+interface guessak_geo;    module procedure guessak_geo;           end interface
+interface bestesg_geo;    module procedure bestesg_geo;           end interface
+interface bestesg_map;    module procedure bestesg_map;           end interface
+interface hgrid_ak_rr;module procedure hgrid_ak_rr,hgrid_ak_rr_c; end interface
+interface hgrid_ak_rc;    module procedure hgrid_ak_rc;           end interface
+interface hgrid_ak_dd;module procedure hgrid_ak_dd,hgrid_ak_dd_c; end interface
+interface hgrid_ak_dc;    module procedure hgrid_ak_dc;           end interface
+interface hgrid_ak;       module procedure hgrid_ak,hgrid_ak_c;   end interface
+interface gtoxm_ak_rr
+   module procedure gtoxm_ak_rr_m,gtoxm_ak_rr_g;                  end interface
+interface gtoxm_ak_dd
+   module procedure gtoxm_ak_dd_m,gtoxm_ak_dd_g;                  end interface
+interface xmtog_ak_rr
+   module procedure xmtog_ak_rr_m,xmtog_ak_rr_g;                  end interface
+interface xmtog_ak_dd
+   module procedure xmtog_ak_dd_m,xmtog_ak_dd_g;                  end interface
+
+interface gaulegh;        module procedure gaulegh;               end interface
+
 contains
 
 !=============================================================================
@@ -88,58 +100,131 @@ zp=u2/(u1+dot_product(xs,xs)); xc(1:2)=xs*zp; xc(3)=zp
 xcd=-outer_product(xc,xs)*zp; xcd(1,1)=xcd(1,1)+zp; xcd(2,2)=xcd(2,2)+zp
 xc(3)=xc(3)-u1
 end subroutine xstoxc
+!=============================================================================
+subroutine xstoxc1(xs,xc,xcd,xcdd)!                                   [xstoxc]
+!=============================================================================
+! Standard transformation from polar stereographic map coordinates, xs, to
+! cartesian, xc, assuming the projection axis is polar.
+! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.
+! xcdd is the further derivative, wrt xs, of xcd.
+!=============================================================================
+use pmat4, only: outer_product
+implicit none
+real(dp),dimension(2),    intent(in ):: xs
+real(dp),dimension(3),    intent(out):: xc
+real(dp),dimension(3,2),  intent(out):: xcd
+real(dp),dimension(3,2,2),intent(out):: xcdd
+!-----------------------------------------------------------------------------
+real(dp),dimension(3,2):: zpxcdxs
+real(dp),dimension(3)  :: zpxc
+real(dp)               :: zp
+integer(spi)           :: i
+!=============================================================================
+zp=u2/(u1+dot_product(xs,xs)); xc(1:2)=xs*zp; xc(3)=zp
+xcd=-outer_product(xc,xs)*zp
+zpxc=zp*xc; xc(3)=xc(3)-u1; xcdd=u0
+do i=1,2
+   zpxcdxs=xcd*xc(i)
+   xcdd(:,i,i)=xcdd(:,i,i)-zpxc
+   xcdd(:,i,:)=xcdd(:,i,:)-zpxcdxs
+   xcdd(:,:,i)=xcdd(:,:,i)-zpxcdxs
+   xcdd(i,:,i)=xcdd(i,:,i)-zpxc(1:2)
+   xcdd(i,i,:)=xcdd(i,i,:)-zpxc(1:2)
+enddo
+do i=1,2; xcd(i,i)=xcd(i,i)+zp; enddo
+end subroutine xstoxc1
 
 !=============================================================================
-subroutine xstoxt(kappa,xs,xt,ff)!                                    [xstoxt]
+subroutine xstoxt(k,xs,xt,ff)!                                        [xstoxt]
 !=============================================================================
 ! Inverse of xttoxs.
 !=============================================================================
 implicit none
-real(dp),             intent(in ):: kappa
+real(dp),             intent(in ):: k
 real(dp),dimension(2),intent(in ):: xs
 real(dp),dimension(2),intent(out):: xt
 logical,              intent(out):: ff
 !-----------------------------------------------------------------------------
 real(dp):: s,sc
 !=============================================================================
-s=kappa*(xs(1)*xs(1)+xs(2)*xs(2)); sc=u1-s
+s=k*(xs(1)*xs(1)+xs(2)*xs(2)); sc=u1-s
 ff=abs(s)>=u1; if(ff)return
 xt=u2*xs/sc
 end subroutine xstoxt
 
-!==============================================================================
-subroutine xttoxs(kappa,xt,xs,xsd,ff)!                                 [xttoxs]
-!==============================================================================
+!=============================================================================
+subroutine xttoxs(k,xt,xs,xsd,ff)!                                     [xttoxs
+!=============================================================================
 ! Scaled gnomonic plane xt to standard stereographic plane xs
-!==============================================================================
+!=============================================================================
+use pmat4, only: outer_product
 implicit none
-real(dp),               intent(in ):: kappa
+real(dp),               intent(in ):: k
 real(dp),dimension(2),  intent(in ):: xt
 real(dp),dimension(2),  intent(out):: xs
 real(dp),dimension(2,2),intent(out):: xsd
 logical,                intent(out):: ff
-!------------------------------------------------------------------------------
-real(dp):: s,sp,rsp,rspp,rspps,rspdx,rspdy
-!==============================================================================
-s=kappa*(xt(1)*xt(1) + xt(2)*xt(2)); sp=u1+s
+!-----------------------------------------------------------------------------
+real(dp),dimension(2):: rspd
+real(dp)             :: s,sp,rsp,rsppi,rsppis
+integer(spi)         :: i
+!=============================================================================
+s=k*dot_product(xt,xt); sp=u1+s
 ff=(sp<=u0); if(ff)return
 rsp=sqrt(sp)
-rspp=u1+rsp
-rspps=rspp**2
-xs=xt/rspp
-rspdx=kappa*xt(1)/rsp
-rspdy=kappa*xt(2)/rsp
-xsd(1,1)=u1/rspp -xt(1)*rspdx/rspps
-xsd(1,2)=        -xt(1)*rspdy/rspps
-xsd(2,1)=        -xt(2)*rspdx/rspps
-xsd(2,2)=u1/rspp -xt(2)*rspdy/rspps
+rsppi=u1/(u1+rsp)
+rsppis=rsppi**2
+xs=xt*rsppi
+rspd=k*xt/rsp
+xsd=-outer_product(xt,rspd)*rsppis
+do i=1,2; xsd(i,i)=xsd(i,i)+rsppi; enddo
 end subroutine xttoxs
+!=============================================================================
+subroutine xttoxs1(k,xt,xs,xsd,xsdd,xs1,xsd1,ff)!                     [xttoxs]
+!=============================================================================
+! Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd
+!=============================================================================
+use pmat4, only: outer_product
+implicit none
+real(dp),                 intent(in ):: k
+real(dp),dimension(2),    intent(in ):: xt
+real(dp),dimension(2),    intent(out):: xs ,xs1
+real(dp),dimension(2,2),  intent(out):: xsd,xsd1
+real(dp),dimension(2,2,2),intent(out):: xsdd
+logical,                  intent(out):: ff
+!-----------------------------------------------------------------------------
+real(dp),dimension(2,2):: rspdd
+real(dp),dimension(2)  :: rspd,rspd1,rsppid
+real(dp)               :: s,sp,rsp,rsppi,rsppis,s1,rsp1
+integer(spi)           :: i
+!=============================================================================
+s1=dot_product(xt,xt); s=k*s1; sp=u1+s
+ff=(sp<=u0); if(ff)return
+rsp=sqrt(sp);      rsp1=o2*s1/rsp
+rsppi=u1/(u1+rsp); rsppis=rsppi**2
+xs=xt*rsppi;       xs1=-xt*rsp1*rsppis
+rspd=k*xt/rsp;     rspd1=(xt*rsp-k*xt*rsp1)/sp
+rsppid=-rspd*rsppis
+xsd1=-outer_product(xt,rspd1-u2*rspd*rsp1*rsppi)
+do i=1,2; xsd1(i,i)=xsd1(i,i)-rsp1; enddo; xsd1=xsd1*rsppis
+
+xsd=-outer_product(xt,rspd)*rsppis
+do i=1,2; xsd(i,i)=xsd(i,i)+rsppi; enddo
+
+rspdd=-outer_product(xt,rspd)*rsppi
+xsdd=u0
+do i=1,2; xsdd(i,:,i)=            rsppid;                 enddo
+do i=1,2; xsdd(i,i,:)=xsdd(i,i,:)+rsppid;                 enddo
+do i=1,2; xsdd(:,:,i)=xsdd(:,:,i)+u2*rspdd*rsppid(i);     enddo
+do i=1,2; rspdd(i,i)=rspdd(i,i)+rsp*rsppi;                enddo
+do i=1,2; xsdd(i,:,:)=xsdd(i,:,:)-xt(i)*rspdd*rsppi*k/sp; enddo
+end subroutine xttoxs1
 
 !=============================================================================
-subroutine xttoxm(a,xt,xm,ff)!                                         [xttoxm]
+subroutine xttoxm(a,xt,xm,ff)!                                       [xttoxm]
 !=============================================================================
 ! Inverse of xmtoxt
-!============================================================================
+!=============================================================================
 implicit none
 real(dp),             intent(in ):: a
 real(dp),dimension(2),intent(in ):: xt
@@ -151,11 +236,11 @@ integer(spi):: i
 do i=1,2; call zttozm(a,xt(i),xm(i),ff); if(ff)return; enddo
 end subroutine xttoxm
 
-!==============================================================================
-subroutine xmtoxt(a,xm,xt,xtd,ff)!                                     [xmtoxt]
-!==============================================================================
+!=============================================================================
+subroutine xmtoxt(a,xm,xt,xtd,ff)!                                    [xmtoxt]
+!=============================================================================
 ! Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd
-!==============================================================================
+!=============================================================================
 implicit none
 real(dp),               intent(in ):: a
 real(dp),dimension(2),  intent(in ):: xm
@@ -164,9 +249,31 @@ real(dp),dimension(2,2),intent(out):: xtd
 logical,                intent(out):: ff
 !-----------------------------------------------------------------------------
 integer(spi):: i
-!==============================================================================
+!=============================================================================
 xtd=u0; do i=1,2; call zmtozt(a,xm(i),xt(i),xtd(i,i),ff); if(ff)return; enddo
 end subroutine xmtoxt
+!=============================================================================
+subroutine xmtoxt1(a,xm,xt,xtd,xt1,xtd1,ff)!                          [xmtoxt]
+!=============================================================================
+! Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd
+! Also, the derivatives, wrt a, of these quantities.
+!=============================================================================
+implicit none
+real(dp),                 intent(in ):: a
+real(dp),dimension(2),    intent(in ):: xm
+real(dp),dimension(2),    intent(out):: xt,xt1
+real(dp),dimension(2,2),  intent(out):: xtd,xtd1
+logical,                  intent(out):: ff
+!-----------------------------------------------------------------------------
+integer(spi):: i
+!=============================================================================
+xtd=u0
+xtd1=u0
+do i=1,2
+   call zmtozt1(a,xm(i),xt(i),xtd(i,i),xt1(i),xtd1(i,i),ff)
+   if(ff)return
+enddo
+end subroutine xmtoxt1
 
 !=============================================================================
 subroutine zttozm(a,zt,zm,ff)!                                        [zttozm]
@@ -188,19 +295,19 @@ else                                     ; zm=zt
 endif
 end subroutine zttozm
 
-!==============================================================================
-subroutine zmtozt(a,zm,zt,ztd,ff)!                                     [zmtozt]
-!==============================================================================
+!=============================================================================
+subroutine zmtozt(a,zm,zt,ztd,ff)!                                    [zmtozt]
+!=============================================================================
 ! Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd,
 ! for positive and negative A and for the limiting case, A --> 0
-!==============================================================================
+!=============================================================================
 implicit none
 real(dp),intent(in ):: a,zm
 real(dp),intent(out):: zt,ztd
 logical, intent(out):: ff
-!------------------------------------------------------------------------------
+!-----------------------------------------------------------------------------
 real(dp):: ra
-!==============================================================================
+!=============================================================================
 ff=f
 if    (a>u0)then; ra=sqrt( a); zt=tan (ra*zm)/ra; ff=abs(ra*zm)>=pih
 elseif(a<u0)then; ra=sqrt(-a); zt=tanh(ra*zm)/ra
@@ -208,39 +315,94 @@ else                         ; zt=zm
 endif
 ztd=u1+a*zt*zt
 end subroutine zmtozt
+!=============================================================================
+subroutine zmtozt1(a,zm,zt,ztd,zt1,ztd1,ff)!                          [zmtozt]
+!=============================================================================
+! Like zmtozt, but
+! also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd.
+!=============================================================================
+use pietc, only: o3
+use pfun,  only: sinoxm,sinox,sinhoxm,sinhox
+implicit none
+real(dp),intent(in ):: a,zm
+real(dp),intent(out):: zt,ztd,zt1,ztd1
+logical, intent(out):: ff
+!-----------------------------------------------------------------------------
+real(dp):: ra,rad,razm
+!=============================================================================
+ff=f
+if    (a>u0)then;ra=sqrt( a);razm=ra*zm; zt=tan(razm)/ra; ff=abs(razm)>=pih
+rad=o2/ra
+zt1=(rad*zm/ra)*((-u2*sin(razm*o2)**2-sinoxm(razm))/cos(razm)+(tan(razm))**2)
+elseif(a<u0)then;ra=sqrt(-a);razm=ra*zm; zt=tanh(razm)/ra
+rad=-o2/ra
+zt1=(rad*zm/ra)*((u2*sinh(razm*o2)**2-sinhoxm(razm))/cosh(razm)-(tanh(razm))**2)
+else                        ;zt=zm; zt1=zm**3*o3
+endif
+ztd=u1+a*zt*zt
+ztd1=zt*zt +u2*a*zt*zt1
+end subroutine zmtozt1
 
 !=============================================================================
-subroutine xctoxm_ak(a,kappa,xc,xm,ff)!                             [xctoxm_ak]
+subroutine xmtoxc_vak(ak,xm,xc,xcd,ff)!                            [xmtoxc_ak]
 !=============================================================================
-! Inverse mapping of xmtoxc_ak. That is, go from given cartesian unit 3-vector,
-! xc, to map coordinate 2-vector xm (or return a raised failure flag, FF, if
-! the attempt fails).
+! Assuming the vector AK parameterization of the Extended Schmidt-transformed
+! Gnomonic (ESG) mapping with parameter vector, and given a map-space
+! 2-vector, xm, find the corresponding cartesian unit 3-vector and its
+! derivative wrt xm, the Jacobian matrix, xcd.
+! If for any reason the mapping cannot be done, return a raised failure flag,z
+! FF.
 !=============================================================================
 implicit none
-real(dp),             intent(in ):: a,kappa
-real(dp),dimension(3),intent(in ):: xc
-real(dp),dimension(2),intent(out):: xm
-logical,              intent(out):: ff
-!-----------------------------------------------------------------------------
-real(dp),dimension(2):: xs,xt
+real(dp),dimension(2),  intent(in ):: ak,xm
+real(dp),dimension(3),  intent(out):: xc
+real(dp),dimension(3,2),intent(out):: xcd
+logical,                intent(out):: ff
 !=============================================================================
-ff=F
-call xctoxs(xc,xs)
-call xstoxt(kappa,xs,xt,ff); if(ff)return
-call xttoxm(a,xt,xm,ff)
-end subroutine xctoxm_ak
-
-!==============================================================================
-subroutine xmtoxc_ak(a,kappa,xm,xc,xcd,ff)!                         [xmtoxc_ak]
-!==============================================================================
-! Assuming the A-Kappa parameterization of the Extended Schmidt-transformed
+call xmtoxc_ak(ak(1),ak(2),xm,xc,xcd,ff)
+end subroutine xmtoxc_vak
+!=============================================================================
+subroutine xmtoxc_vak1(ak,xm,xc,xcd,xc1,xcd1,ff)!                  [xmtoxc_ak]
+!=============================================================================
+! Like xmtoxc_vak, _ak, but also return derivatives wrt ak.
+!=============================================================================
+implicit none
+real(dp),dimension(2),    intent(in ):: ak,xm
+real(dp),dimension(3),    intent(out):: xc
+real(dp),dimension(3,2),  intent(out):: xcd
+real(dp),dimension(3,2),  intent(out):: xc1
+real(dp),dimension(3,2,2),intent(out):: xcd1
+logical,                  intent(out):: ff
+!-----------------------------------------------------------------------------
+real(dp),dimension(3,2,2):: xcdd
+real(dp),dimension(2,2,2):: xsd1,xsdd
+real(dp),dimension(2,2)  :: xtd,xsd,xs1,xtd1,xsdk
+real(dp),dimension(2)    :: xt,xt1,xs,xsk
+integer(spi)             :: i
+!=============================================================================
+call xmtoxt1(ak(1),xm,xt,xtd,xt1,xtd1,ff);      if(ff)return
+call xttoxs1(ak(2),xt,xs,xsd,xsdd,xsk,xsdk,ff); if(ff)return
+xs1(:,2)=xsk; xs1(:,1)=matmul(xsd,xt1)
+xsd1(:,:,1)=matmul(xsd,xtd1)+matmul(xsdd(:,:,1)*xt1(1)+xsdd(:,:,2)*xt1(2),xtd)
+xsd1(:,:,2)=matmul(xsdk,xtd)
+xsd=matmul(xsd,xtd)
+call xstoxc(xs,xc,xcd,xcdd)
+xc1=matmul(xcd,xs1)
+do i=1,3; xcd1(i,:,:)=matmul(transpose(xsd),matmul(xcdd(i,:,:),xs1)); enddo
+do i=1,2; xcd1(:,:,i)=xcd1(:,:,i)+matmul(xcd,xsd1(:,:,i));            enddo
+xcd=matmul(xcd,xsd)
+end subroutine xmtoxc_vak1
+!=============================================================================
+subroutine xmtoxc_ak(a,k,xm,xc,xcd,ff)!                            [xmtoxc_ak]
+!=============================================================================
+! Assuming the A-K parameterization of the Extended Schmidt-transformed
 ! Gnomonic (ESG) mapping, and given a map-space 2-vector, xm, find the
 ! corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian
 ! matrix, xcd. If for any reason the mapping cannot be done, return a
 ! raised failure flag, FF.
 !=============================================================================
 implicit none
-real(dp),               intent(in ):: a,kappa
+real(dp),               intent(in ):: a,k
 real(dp),dimension(2),  intent(in ):: xm
 real(dp),dimension(3),  intent(out):: xc
 real(dp),dimension(3,2),intent(out):: xcd
@@ -250,14 +412,35 @@ real(dp),dimension(2,2):: xtd,xsd
 real(dp),dimension(2)  :: xt,xs
 !=============================================================================
 call xmtoxt(a,xm,xt,xtd,ff);     if(ff)return
-call xttoxs(kappa,xt,xs,xsd,ff); if(ff)return
+call xttoxs(k,xt,xs,xsd,ff); if(ff)return
 xsd=matmul(xsd,xtd)
 call xstoxc(xs,xc,xcd)
 xcd=matmul(xcd,xsd)
 end subroutine xmtoxc_ak
 
 !=============================================================================
-subroutine getedges(arcx,arcy,edgex,edgey)!                          [getedges]
+subroutine xctoxm_ak(a,k,xc,xm,ff)!                                [xctoxm_ak]
+!=============================================================================
+! Inverse mapping of xmtoxc_ak. That is, go from given cartesian unit 
+! 3-vector, xc, to map coordinate 2-vector xm (or return a raised failure 
+! flag, FF, if the attempt fails).
+!=============================================================================
+implicit none
+real(dp),             intent(in ):: a,k
+real(dp),dimension(3),intent(in ):: xc
+real(dp),dimension(2),intent(out):: xm
+logical,              intent(out):: ff
+!-----------------------------------------------------------------------------
+real(dp),dimension(2):: xs,xt
+!=============================================================================
+ff=F
+call xctoxs(xc,xs)
+call xstoxt(k,xs,xt,ff); if(ff)return
+call xttoxm(a,xt,xm,ff)
+end subroutine xctoxm_ak
+
+!=============================================================================
+subroutine get_edges(arcx,arcy,edgex,edgey)!                       [get_edges]
 !=============================================================================
 ! For angles (degrees) of the arcs spanning the halfwidths between the
 ! region's center and its x and y edges, get the two cartesian vectors
@@ -267,429 +450,284 @@ subroutine getedges(arcx,arcy,edgex,edgey)!                          [getedges]
 implicit none
 real(dp),             intent(in ):: arcx,arcy
 real(dp),dimension(3),intent(out):: edgex,edgey
-!------------------------------------------------------------------------------
-real(dp):: cx,sx,cy,sy
-!==============================================================================
-cx=cos(arcx*dtor); sx=sin(arcx*dtor)
-cy=cos(arcy*dtor); sy=sin(arcy*dtor)
+!-----------------------------------------------------------------------------
+real(dp):: cx,sx,cy,sy,rarcx,rarcy
+!=============================================================================
+rarcx=arcx*dtor;   rarcy=arcy*dtor
+cx=cos(rarcx); sx=sin(rarcx)
+cy=cos(rarcy); sy=sin(rarcy)
 edgex=(/sx,u0,cx/); edgey=(/u0,sy,cy/)
-end subroutine getedges
+end subroutine get_edges
 
 !=============================================================================
-subroutine get_wxy(nxh,nyh,ncor,wxy)!                                 [get_wxy]
+subroutine get_qx(j0, v1,v2,v3,v4)!                                   [get_qx]
 !=============================================================================
-! Get the array of weights, wxy, for the positive quadrant of the rectangular
-! grid having nxh*2 spaces in "x" and nyh spaces in "y" where it assumed the
-! grid is uniform and so the extended trapezoidal integration scheme would
-! be the appropriate source for these weights on the full grid. The extended
-! scheme used is the one of order ncor. The weights are normalized, so they
-! provide a definition of the grid average of the quantity they are applied to.
+! From a jacobian matrix, j0, get a sufficient set of v.. diagnostics such
+! that, from averages of these v, we can later compute the collective variance
+! of Q(lam) that they imply for any choice of the "lambda" parameter, lam.
+! Note that v1 and v4 are quadratic diagnostics of EL, while v2 and v3 are
+! linear.
 !=============================================================================
-use pmat4, only: outer_product
+use psym2, only: logsym2
 implicit none
-integer(spi),                   intent(in ):: nxh,nyh,ncor
-real(dp),dimension(0:nxh,0:nyh),intent(out):: wxy
+real(dp),dimension(3,2),intent(in ):: j0
+real(dp),               intent(out):: v1,v2,v3,v4
 !-----------------------------------------------------------------------------
-integer(spi),parameter     :: dencor0=2,dencor1=12,dencor2=24, &
-                              dencor3=720,dencor4=1440! <-denominators
-real(dp),dimension(0:nxh)  :: wx
-real(dp),dimension(0:nyh)  :: wy
-real(dp),dimension(0:ncor) :: cor     ! Becomes the full end-correction vector.
-integer(spi),dimension(0:0):: numcor0 ! numerator for uncorrected trapezoidal.
-integer(spi),dimension(0:1):: numcor1 ! numerators for common extended trap.
-integer(spi),dimension(0:2):: numcor2 ! ..numerators for higher order schemes..
-integer(spi),dimension(0:3):: numcor3 !
-integer(spi),dimension(0:4):: numcor4 !
-data numcor0/  1/
-data numcor1/  5,  13/
-data numcor2/  9,  28,  23/
-data numcor3/251, 897, 633, 739/
-data numcor4/475,1902,1104,1586,1413/
+real(dp),dimension(2,2):: el,g
 !=============================================================================
-! Initialize the real end correction coefficients, cor, to make the
-! "extended" trapezoidal integration schemes in both directions accurate
-! to a higher order (probably ncor+2, formally). These corrections are, in
-! some sense, like the discrete analogues of the Euler-Maclaurin formulae.
-select case(ncor)
-case(0); cor=numcor0; cor=cor/dencor0
-case(1); cor=numcor1; cor=cor/dencor1
-case(2); cor=numcor2; cor=cor/dencor2
-case(3); cor=numcor3; cor=cor/dencor3
-case(4); cor=numcor4; cor=cor/dencor4
-case default; stop 'In get_wxy; this value of ncor is not valid'
-end select
-if(ncor<0 .or. ncor>4)stop 'In get_wxy; ncor is out of bounds'
-if(ncor>=min(nxh,nyh))stop 'In get_wxy; ncor is too large for this small grid'
-! the wx and wy are the weight coefficients for an unnormalized
-! extended trapezoidal integration. The end correction coefficients can
-! be found by staggering, then summing, the Adams-Moulton coefficients
-! at both ends.
-wx=u1; wx(0)=o2; wx(nxh:nxh-ncor:-1)=cor
-wy=u1; wy(0)=o2; wy(nyh:nyh-ncor:-1)=cor
-wxy=outer_product(wx,wy); wxy=wxy/sum(wxy)
-end subroutine get_wxy
-
+g=matmul(transpose(j0),j0)
+call logsym2(g,el); el=el*o2
+v1=el(1,1)**2+u2*el(1,2)**2+el(2,2)**2
+v2=el(1,1)
+v3=el(2,2)
+v4=(el(1,1)+el(2,2))**2
+end subroutine get_qx
 !=============================================================================
-subroutine get_qqw(nxh,nyh,ncor,j0xy,tw,p,q)!                          [get_qq]
+subroutine get_qxd(j0,j0d, v1,v2,v3,v4,v1d,v2d,v3d,v4d)!              [get_qx]
 !=============================================================================
-! Like get_qqt, except the square norm involved in the definition of Q is
-! modified by including a "trace-weight" proportion, tw, of the squared-trace.
-! (Elsewhere tw is also known as "lambda".)
-! In the elasticity analogue, this extra degree of freedom is like being
-! able to include a nontrivial Poisson ratio defining the elastic modulus.
+! From a jacobian matrix, j0, and its derivative, j0d, get a sufficient set
+! of v.. diagnostics such that, from average of these diagnostics, we can
+! later compute the collective variance of Q and its derivative.
 !=============================================================================
-use pmat4, only: outer_product
-use psym2, only: logsym2,expsym2
+use psym2, only: logsym2
 implicit none
-integer(spi),                       intent(in   ):: nxh,nyh,ncor
-real(dp),dimension(3,2,0:nxh,0:nyh),intent(in   ):: j0xy
-real(dp),                           intent(in   ):: tw
-real(dp),dimension(2,2),            intent(inout):: p
-real(dp),                           intent(  out):: q
+real(dp),dimension(3,2),  intent(in ):: j0
+real(dp),dimension(3,2,2),intent(in ):: j0d
+real(dp),                 intent(out):: v1,v2,v3,v4
+real(dp),dimension(2),    intent(out):: v1d,v2d,v3d,v4d
 !-----------------------------------------------------------------------------
-integer(spi),parameter         :: nit=5
-real(dp),parameter             :: acrit=1.e-8_dp,dpx=.0099e0_dp
-real(dp),dimension(0:nxh,0:nyh):: wxy
-real(dp),dimension(3,2)        :: j0,j
-real(dp),dimension(2,2)        :: el,pf,elp,elmean,g,ppx,pmx,ppy,pmy
-real(dp),dimension(2)          :: hess,grad
-real(dp)                       :: anorm,q00,qpx,qmx,qpy,qmy,c,w,twc
-integer(spi)                   :: ix,iy,it
+real(dp),dimension(2,2,2,2):: deldg
+real(dp),dimension(2,2,2)  :: eld,gd
+real(dp),dimension(2,2)    :: el,g
+integer(spi)               :: i,j,k
 !=============================================================================
-call get_wxy(nxh,nyh,ncor,wxy)! <- get 2D extended trapezoidal averaging wts
-twc=u1-tw
-if(p(1,1)==u0)then; p=u0; p(1,1)=u1; p(2,2)=u1; endif
-! Iteratively calibrate preconditioner, p, to make elmean vanish:
-anorm=u1
-do it=1,nit
-   elmean=u0
-   q=u0
-   do iy=0,nyh; do ix=0,nxh
-      j0=j0xy(:,:,ix,iy); w=wxy(ix,iy)
-! Precondition the Jacobian using latest iteration of P:
-      j=matmul(j0,p)
-! Find the Gram matrix, G, implied by the column vectors of the new J:
-      g=matmul(transpose(j),j)
-! Find the matrix logarithm, L = 0.5*log(G), contributions to elmean and q:
-      call logsym2(g,el); el=el*o2; elmean=elmean+w*el
-      q=q+w*(twc*sum(el**2)+tw*(el(1,1)+el(2,2))**2)
-   enddo;      ; enddo
-   if(anorm<acrit)exit ! <- Convergence criterion was met at last iteration
-! Use double extended trapezoidal integration to find the domain-mean of L:
-   elmean(1,2)=u0; elmean(2,1)=u0 ! <-Symmetrize by zeroing out off-diagonals
-   elp=-elmean; call expsym2(elp,pf); p=matmul(p,pf) ! <- update P
-   anorm=maxval(abs(elmean))
+g=matmul(transpose(j0),j0)
+do i=1,2
+   gd(:,:,i)=matmul(transpose(j0d(:,:,i)),j0)+matmul(transpose(j0),j0d(:,:,i))
 enddo
-if(it>nit)&
-print'("WARNING: In get_qqw, relatively inferior convergence; anorm=",1x,e12.5)',anorm
-q00=q
-ppx=p; ppx(1,1)=ppx(1,1)*(u1+dpx);qpx=u0
-pmx=p; pmx(1,1)=pmx(1,1)*(u1-dpx);qmx=u0
-ppy=p; ppy(2,2)=ppy(2,2)*(u1+dpx);qpy=u0
-pmy=p; pmy(2,2)=pmy(2,2)*(u1-dpx);qmy=u0
-do iy=0,nyh; do ix=0,nxh
-   j0=j0xy(:,:,ix,iy); w=wxy(ix,iy)
-   j=matmul(j0,ppx); g=matmul(transpose(j),j)
-   call logsym2(g,el);el=el*o2;qpx=qpx+w*(twc*sum(el**2)+tw*(el(1,1)+el(2,2))**2)
-   j=matmul(j0,pmx); g=matmul(transpose(j),j)
-   call logsym2(g,el);el=el*o2;qmx=qmx+w*(twc*sum(el**2)+tw*(el(1,1)+el(2,2))**2)
-   j=matmul(j0,ppy); g=matmul(transpose(j),j)
-   call logsym2(g,el);el=el*o2;qpy=qpy+w*(twc*sum(el**2)+tw*(el(1,1)+el(2,2))**2)
-   j=matmul(j0,pmy); g=matmul(transpose(j),j)
-   call logsym2(g,el);el=el*o2;qmy=qmy+w*(twc*sum(el**2)+tw*(el(1,1)+el(2,2))**2)
-enddo; enddo
-! Estimate a (diagonal) Hessian matrix and a gradient vector:
-hess=(/ (qpx-u2*q00+qmx)/dpx**2, (qpy-u2*q00+qmy)/dpx**2 /)
-hess=(/8._dp,8._dp/)
-grad=(/ (qpx-qmx)/(u2*dpx)     , (qpy-qmy)/(u2*dpx)      /)
-! If the hessian is positive, polish p with a final Newton iteration:
-if(hess(1)>u0 .and. hess(2)>u0)then
-   c=u1-grad(1)/hess(1); p(:,1)=p(:,1)*c
-   c=u1-grad(2)/hess(2); p(:,2)=p(:,2)*c
-endif
-
-! and calculate the new q. Keep it only if it's numerically smaller than before:
-q00=0
-do iy=0,nyh; do ix=0,nxh
-   j0=j0xy(:,:,ix,iy); w=wxy(ix,iy)
-   j=matmul(j0,p); g=matmul(transpose(j),j)
-   call logsym2(g,el);el=el*o2;q00=q00+w*(twc*sum(el**2)+tw*(el(1,1)+el(2,2))**2)
-enddo; enddo
-if(q00<q)q=q00
-end subroutine get_qqw
+call logsym2(g,el,deldg); el=el*o2; deldg=deldg*o2
+eld=u0
+do i=1,2; do j=1,2; do k=1,2
+   eld(:,:,k)=eld(:,:,k)+deldg(:,:,i,j)*gd(i,j,k)
+enddo   ; enddo   ; enddo
+v1=el(1,1)**2+u2*el(1,2)**2+el(2,2)**2
+v2=el(1,1)
+v3=el(2,2)
+v4=(el(1,1)+el(2,2))**2
+v1d=u2*(el(1,1)*eld(1,1,:)+u2*el(1,2)*eld(1,2,:)+el(2,2)*eld(2,2,:))
+v2d=eld(1,1,:)
+v3d=eld(2,2,:)
+v4d=u2*(el(1,1)+el(2,2))*(eld(1,1,:)+eld(2,2,:))
+end subroutine get_qxd
 
 !=============================================================================
-subroutine get_qqt(nxh,nyh,ncor,j0xy,p,q)!                           [get_qq]
+subroutine get_meanqd(ngh,lam,xg,wg,ak,ma, q,qdak,qdma, & !        [get_meanq]
+     ga,gadak,gadma, ff)
 !=============================================================================
-! Assume the grid to be mirror-symmetric across both medians, so that the
-! computation of the quality diagnostic, Q, need only involve the positive
-! quadrant of the grid. The norm associated with the definition of Q is the
-! Frobenius norm (Q is the grid-mean of the squared-Frobenius norm of the
-! log of the Gram matrix of the given distribution of jacobian matrices.)
+! For a parameter vector, ak and a map-space domain-parameter vector, ma,
+! return the lambda-parameterized quality diagnostic, Q, and the geographic
+! domain-parameter vector ga. Lambda is given by lam <1. Also, return
+! the derivatives, qdak and qdma, of Q wrt ak and ma, and the derivatives
+! gadak and gadma, of ga wrt ak and ma.
+! The domain averages of Q are accurately computed by bi-Gauss-Legendre
+! quadrature over the positive quadrant of the domain (exploiting the
+! symmetry) of the four constituent terms, v1, v2, v3, v4, from which
+! the mean Q is computed using a quadratic formula of these constituents.
+! The number of Gauss points in eaxh half-interval is ngh, and the
+! nodes themselves are, in proportion to the half-interval, at xg.
+! the normalized gauss weights are wg.
+! If a failure occurs, colmputations cease immediately and a failure
+! flag, FF, is raised on return.
 !=============================================================================
-use pmat4, only: outer_product
-use psym2, only: logsym2,expsym2
 implicit none
-integer(spi),                       intent(in   ):: nxh,nyh,ncor
-real(dp),dimension(3,2,0:nxh,0:nyh),intent(in   ):: j0xy
-real(dp),dimension(2,2),            intent(inout):: p
-real(dp),                           intent(  out):: q
+integer(spi),           intent(in ):: ngh
+real(dp),               intent(in ):: lam
+real(dp),dimension(ngh),intent(in ):: xg,wg
+real(dp),dimension(2)  ,intent(in ):: ak,ma
+real(dp),               intent(out):: q
+real(dp),dimension(2),  intent(out):: qdak,qdma
+real(dp),dimension(2),  intent(out):: ga
+real(dp),dimension(2,2),intent(out):: gadak,gadma
+logical,                intent(out):: ff
 !-----------------------------------------------------------------------------
-integer(spi),parameter         :: nit=7
-real(dp),parameter             :: acrit=1.e-8_dp,dpx=.0099_dp
-real(dp),dimension(0:nxh,0:nyh):: wxy
-real(dp),dimension(3,2)        :: j0,j
-real(dp),dimension(2,2)        :: el,pf,elp,elmean,g,ppx,pmx,ppy,pmy
-real(dp),dimension(2)          :: hess,grad
-real(dp)                       :: anorm,q00,qpx,qmx,qpy,qmy,c,w
-integer(spi)                   :: ix,iy,it
+real(dp),dimension(3,2,2):: xcd1
+real(dp),dimension(3,2)  :: xcd,xc1
+real(dp),dimension(3)    :: xc
+real(dp),dimension(2)    :: xm, v1dxy,v2dxy,v3dxy,v4dxy,                &
+                            v1dL,v2dL,v3dL,v4dL, v1d,v2d,v3d,v4d
+real(dp)                 :: wx,wy,                                  &
+                            v1xy,v2xy,v3xy,v4xy, v1L,v2L,v3L,v4L, v1,v2,v3,v4
+integer(spi)             :: i,ic,ix,iy
 !=============================================================================
-call get_wxy(nxh,nyh,ncor,wxy)! <- get 2D extended trapezoidal averaging wts
-if(p(1,1)==u0)then; p=u0; p(1,1)=u1; p(2,2)=u1; endif
-! Iteratively calibrate preconditioner, p, to make elmean vanish:
-anorm=1
-do it=1,nit
-   elmean=u0
-   q=u0
-   do iy=0,nyh; do ix=0,nxh
-      j0=j0xy(:,:,ix,iy); w=wxy(ix,iy)
-! Precondition the Jacobian using latest iteration of P:
-      j=matmul(j0,p)
-! Find the Gram matrix, G, implied by the column vectors of the new J:
-      g=matmul(transpose(j),j)
-! Find the matrix logarithm, L = log(G), contrinutions to elmean and q:
-      call logsym2(g,el); el=el*o2; elmean=elmean+w*el; q=q+w*sum(el**2)
-   enddo       ; enddo
-   if(anorm<acrit)exit ! <- Convergence criterion was met at last iteration
-! Use double extended trapezoidal integration to find the domain-mean of L:
-   elmean(1,2)=u0; elmean(2,1)=u0 ! <-Symmetrize by zeroing out off-diganonals
-   elp=-elmean; call expsym2(elp,pf); p=matmul(p,pf) ! <- update P
-   anorm=maxval(abs(elmean))
-enddo
-if(it>nit)print'(" WARNING: In get_qqt, relatively inferior convergence")'
-
-q00=q
-ppx=p; ppx(1,1)=ppx(1,1)*(1+dpx);qpx=0
-pmx=p; pmx(1,1)=pmx(1,1)*(1-dpx);qmx=0
-ppy=p; ppy(2,2)=ppy(2,2)*(1+dpx);qpy=0
-pmy=p; pmy(2,2)=pmy(2,2)*(1-dpx);qmy=0
-do iy=0,nyh; do ix=0,nxh
-   j0=j0xy(:,:,ix,iy); w=wxy(ix,iy)
-   j=matmul(j0,ppx); g=matmul(transpose(j),j)
-   call logsym2(g,el); el=el/2; qpx=qpx+w*sum(el**2)
-   j=matmul(j0,pmx); g=matmul(transpose(j),j)
-   call logsym2(g,el); el=el/2; qmx=qmx+w*sum(el**2)
-   j=matmul(j0,ppy); g=matmul(transpose(j),j)
-   call logsym2(g,el); el=el/2; qpy=qpy+w*sum(el**2)
-   j=matmul(j0,pmy); g=matmul(transpose(j),j)
-   call logsym2(g,el); el=el/2; qmy=qmy+w*sum(el**2)
-enddo; enddo
-! Estimate a (diagonal) Hessian matrix and a gradient vector:
-hess=(/ (qpx-2*q00+qmx)/dpx**2, (qpy-2*q00+qmy)/dpx**2 /)
-grad=(/ (qpx-qmx)/(2*dpx)     , (qpy-qmy)/(2*dpx)      /)
-
-! If the hessian is positive, polish the final p with a final Newton iteration:
-if(hess(1)>0 .and. hess(2)>0.)then
-   c=u1-grad(1)/hess(1); p(:,1)=p(:,1)*c
-   c=u1-grad(2)/hess(2); p(:,2)=p(:,2)*c
-endif
-
-! and calculate the new q. Keep it only if is numerically smaller than before:
-q00=0
-do iy=0,nyh; do ix=0,nxh
-   j0=j0xy(:,:,ix,iy); w=wxy(ix,iy)
-   j=matmul(j0,p); g=matmul(transpose(j),j)
-   call logsym2(g,el); el=el*o2; q00=q00+w*sum(el**2)
-enddo; enddo
-if(q00<q)q=q00
-end subroutine get_qqt
-
-!============================================================================
-subroutine get_qofmap(nxh,nyh,a,k,lam,xcedgex,xcedgey,  & !      [get_qofmap]
-     q,xmedgex,xmedgey,ff)
-!============================================================================
-! For the map distortion formula with parameter, lam ("lambda"), and the
-! Extended Schmidt-Gnomonic mapping with parameters, (A,K), find the quality
-! grid-averaged distortion criterion, q, for domain in standardized
-! polar orientation whose right-edge and top-edge midpoints are the
-! cartesian unit 3-vectors, xcedgex, xcedgey. Work-space arrays are provided
-! for the positive quadrant of the domain, gridded (from (0,0) at the
-! projection center) out to nxh and nyh in x and y; these arrays are the
-! xcgrid and xcdgrid. If their is an failure of the computation at any of
-! the grid points, the failure flag, ff, is raised upon return.
-!============================================================================
-implicit none
-integer(spi),                       intent(in ):: nxh,nyh
-real(dp),                           intent(in ):: A,K,lam
-real(dp),dimension(3),              intent(in ):: xcedgex,xcedgey
-real(dp),                           intent(out):: q
-real(dp),dimension(2),              intent(out):: xmedgex,xmedgey
-logical,                            intent(out):: ff
-!----------------------------------------------------------------------------
-integer(spi),parameter             :: iend=2! <- trapezoidal end correction index.
-real(dp),dimension(3)              :: xc
-real(dp),dimension(3,2,0:nxh,0:nyh):: xcdgrid
-real(dp),dimension(2)              :: xm
-real(dp),dimension(2,2)            :: p
-real(dp)                           :: dx,dy
-integer(spi)                       :: ix,iy
-logical                            :: ffgrid
-!============================================================================
-call xctoxm_ak(a,k,xcedgex,xmedgex,ff)! <- get map (x,y) of "right edge" midpt.
-if(ff)then
-   print'(" In get_qofmap, at A; failure flag upon return from xctoxm_ak")'
-   return
-endif
-call xctoxm_ak(a,k,xcedgey,xmedgey,ff)! <- get map (x,y) of "top edge" midpt.
-if(ff)then
-   print'(" In get_qofmap, at B; failure flag upon return from xctoxm_ak")'
-   stop
-endif
-! Set up a uniform nxh by nyh grid in the positive quadrant:
-dx=xmedgex(1)/nxh
-dy=xmedgey(2)/nyh
-ff=F ! "false" is the default; "true" will mean something in xmtoxc failed.
-! Map each uniform-grid point of the positive quadrant of the domain to
-! the unit-sphere and record the absolute matrix-jacobian at each point:
-do ix=0,nxh
-   xm(1)=dx*ix
-   do iy=0,nyh
-      xm(2)=dy*iy
-      call xmtoxc_ak(a,k,xm,xc,xcdgrid(:,:,ix,iy),ffgrid)
-      if(ffgrid)ff=T ! <- set failure flag to .true. if it wasn't already
+v1 =u0; v2 =u0; v3 =u0; v4 =u0
+v1d=u0; v2d=u0; v3d=u0; v4d=u0
+do iy=1,ngh
+   wy=wg(iy)
+   xm(2)=ma(2)*xg(iy)
+   v1L =u0; v2L =u0; v3L =u0; v4L =u0
+   v1dL=u0; v2dL=u0; v3dL=u0; v4dL=u0
+   do ix=1,ngh
+      wx=wg(ix)
+      xm(1)=ma(1)*xg(ix)
+      call xmtoxc_ak(ak,xm,xc,xcd,xc1,xcd1,ff); if(ff)return
+      call get_qx(xcd,xcd1, v1xy,v2xy,v3xy,v4xy, v1dxy,v2dxy,v3dxy,v4dxy)
+      v1L =v1L +wx*v1xy; v2L =v2L +wx*v2xy 
+      v3L =v3L +wx*v3xy; v4L =v4L +wx*v4xy
+      v1dL=v1dL+wx*v1dxy;v2dL=v2dL+wx*v2dxy 
+      v3dL=v3dL+wx*v3dxy;v4dL=v4dL+wx*v4dxy
    enddo
+   v1 =v1 +wy*v1L;  v2 =v2 +wy*v2L;  v3 =v3 +wy*v3L;  v4 =v4 +wy*v4L
+   v1d=v1d+wy*v1dL; v2d=v2d+wy*v2dL; v3d=v3d+wy*v3dL; v4d=v4d+wy*v4dL
 enddo
-if(ff)then
-   print'(" In get_qofmap, at C, failure flag was raised in a xmtoxc_ac call")'
-   return
-endif
-p=0
-call get_qqw(nxh,nyh,iend,xcdgrid,lam,p,q)! <- Find the average quality criterion, Q.
-end subroutine get_qofmap
+call get_qofv(lam,v1,v2,v3,v4, q)! <- Q(lam) based on the v1,v2,v3,v4 
+call get_qofv(lam,v2,v3, v1d,v2d,v3d,v4d, qdak)! <- Derivative of Q wrt ak
+!------
+! Derivatives of ga wrt ak, and of q and ga wrt ma:
+gadma=u0! <- needed because only diagonal elements are filled
+do i=1,2
+   ic=3-i
+   xm=0; xm(i)=ma(i)
+   call xmtoxc_ak(ak,xm,xc,xcd,xc1,xcd1,ff); if(ff)return
+   ga(i)=atan2(xc(i),xc(3))*rtod
+   gadak(i,:)=(xc(3)*xc1(i,:)-xc(i)*xc1(3,:))*rtod
+   gadma(i,i)=(xc(3)*xcd(i,i)-xc(i)*xcd(3,i))*rtod
 
+   v1L=u0; v2L=u0; v3L=u0; v4L=u0
+   do iy=1,ngh
+      wy=wg(iy)
+      xm(ic)=ma(ic)*xg(iy)
+      call xmtoxc_ak(ak,xm,xc,xcd,ff); if(ff)return
+      call get_qx(xcd, v1xy,v2xy,v3xy,v4xy)
+      v1L=v1L+wy*v1xy; v2L=v2L+wy*v2xy; v3L=v3L+wy*v3xy; v4L=v4L+wy*v4xy
+   enddo
+   v1d(i)=(v1L-v1)/ma(i); v2d(i)=(v2L-v2)/ma(i)
+   v3d(i)=(v3L-v3)/ma(i); v4d(i)=(v4L-v4)/ma(i)
+enddo
+call get_qofv(lam,v2,v3, v1d,v2d,v3d,v4d, qdma)
+end subroutine get_meanqd
 !=============================================================================
-subroutine get_bestesg(lam,arcx,arcy, a,k,m_arcx,m_arcy,q,ff)!   [get_betsesg]
+subroutine get_meanqs(n,ngh,lam,xg,wg,aks,mas, qs,ff)!            [get_meanq]
 !=============================================================================
-! With prescribed optimization criterion parameter, lam ("lambda", typically 0.8),
-! semi-arcs, arcx and arcy, of the domain in degrees, return the following:
-! The best Extended Schmidt-Gnomonic (ESG) mapping parameters, A and K;
-! The nondimensional map-space coordinates, m_arcx, m_arcy, of
-! the optimally-mapped domain edges in the positive x and y directions;
-! the optimality diagnostic of the domain, Q(lam), which this routine
-! minimizes.
-! If the process fails for any reason, the logical failure flag, FF, is raised
-! (.true.), usually accompanied by a terse explanation, and the other output 
-! arguments are then meaningless.
+! Like getmeanqd, except for n different values, aks, of ak and n different
+! values, mas of ma, and without any of the derivatives.
 !=============================================================================
 implicit none
-real(dp),intent(in ):: lam,arcx,arcy
-real(dp),intent(out):: a,k,m_arcx,m_arcy,q
-logical, intent(out):: ff
+integer(spi),           intent(in ):: n,ngh
+real(dp),dimension(ngh),intent(in ):: xg,wg
+real(dp),               intent(in ):: lam
+real(dp),dimension(2,n),intent(in ):: aks,mas
+real(dp),dimension(n),  intent(out):: qs
+logical,                intent(out):: ff
 !-----------------------------------------------------------------------------
-real(dp),    parameter       :: eps=1.e-9_dp,u1eps=u1+eps
-real(dp),    parameter       :: darc=2._dp+eps ! <- arcx spacing of asplims
-real(dp),    parameter       :: dlam=.2_dp+eps  ! <- lam spacing of asplims
-integer(spi),parameter       :: larc=51,marc=55 ! <- arc index range of asplims
-integer(spi),parameter       :: mlam=5          ! <- lam index range of asplims
-real(dp),dimension(0:mlam,larc:marc):: asplims ! <- table of aspect ratio limits
-real(dp)                     :: tarcx,tarcy,tm_arcx,tm_arcy,slam,sarcx, &
-                                wi0,wi1,wj0,wj1,asplim,asp
-integer(spi)                 :: i0,i1,j0,j1
-logical                      :: flip
-data asplims/&
-        u1eps,   u1eps,   u1eps,   u1eps,   u1eps,   u1eps, & ! <- arcx=102
-     0.999_dp,   u1eps,   u1eps,   u1eps,   u1eps,   u1eps, & ! <- arcx=104
-     0.881_dp,0.882_dp,0.883_dp,0.885_dp,0.888_dp,0.888_dp, & ! <- arcx=106
-     0.651_dp,0.653_dp,0.655_dp,0.658_dp,0.662_dp,0.662_dp, & ! <- arcx=108
-     0.327_dp,0.329_dp,0.330_dp,0.332_dp,0.332_dp,0.333_dp/   ! <- arcx=110
-!============================================================================
-ff= lam<u0 .or. lam>=u1
-if(ff)then
-   print'("In get_bestesg; invalid optimization criterion parameter, lam")'
-   return
-endif
-ff= arcx<=u0 .or. arcy<=u0
-if(ff)then
-   print'("In get_bestesg; a nonpositive domain parameter, arcx or arcy")'
-   return
-endif
-! Make tarcx the longer of the two semi-axes of the domain:
-flip=arcy>arcx
-if(flip)then; tarcx=arcy; tarcy=arcx ! <- switch
-else        ; tarcx=arcx; tarcy=arcy ! <- don't switch
-endif
-asp=tarcy/tarcx ! <- Domain aspect ratio that does not exceed one
-sarcx=tarcx/darc
-i0=floor(sarcx); i1=i0+1; wi0=i1-sarcx; wi1=sarcx-i0
-ff=i1>marc
-if(ff)then
-   print'("In get_bestesg; domain length too large")'; return
-endif
-asplim=u1 ! <- Default aspect ratio limit for small tarcx 
-if(i0>=larc)then ! Interpolate aspect limit for this large tarcx from the table:
-   slam=lam/dlam
-   j0=floor(slam) ; j1=j0+1; wj0=j1-slam;  wj1=slam -j0
-   asplim=(asplims(j0,i0)*wi0+asplims(j0,i1)*wi1)*wj0 + &
-          (asplims(j1,i0)*wi0+asplims(j1,i1)*wi1)*wj1
-endif
-ff=asp>asplim
-if(ff)then
-   print'("In get_bestesg; domain width too large for given domain length")'
-   return
-endif
-call get_bestesgt(lam,asp,tarcx, A,K,tm_arcx,tm_arcy,q,ff)
-if(ff)return
-if(flip)then; m_arcx=tm_arcy; m_arcy=tm_arcx
-else        ; m_arcx=tm_arcx; m_arcy=tm_arcy
-endif
-end subroutine get_bestesg
+real(dp),dimension(n)  :: v1s,v2s,v3s,v4s
+real(dp),dimension(n)  :: v1sL,v2sL,v3sL,v4sL
+real(dp),dimension(3,2):: xcd
+real(dp),dimension(3)  :: xc
+real(dp),dimension(2)  :: xm,xgs
+real(dp)               :: wx,wy, v1xy,v2xy,v3xy,v4xy
+integer(spi)           :: i,ix,iy
+!=============================================================================
+v1s=u0; v2s=u0; v3s=u0; v4s=u0
+do iy=1,ngh
+   wy=wg(iy)
+   v1sL=u0; v2sL=u0; v3sL=u0; v4sL=u0
+   do ix=1,ngh
+      wx=wg(ix)
+      xgs=(/xg(ix),xg(iy)/)
+      do i=1,n
+         xm=mas(:,i)*xgs
+         call xmtoxc_ak(aks(:,i),xm,xc,xcd,ff); if(ff)return
+         call get_qx(xcd,v1xy,v2xy,v3xy,v4xy)
+         v1sL(i)=v1sL(i)+wx*v1xy; v2sL(i)=v2sL(i)+wx*v2xy
+         v3sL(i)=v3sL(i)+wx*v3xy; v4sL(i)=v4sL(i)+wx*v4xy
+      enddo
+   enddo
+   v1s=v1s+wy*v1sL; v2s=v2s+wy*v2sL; v3s=v3s+wy*v3sL; v4s=v4s+wy*v4sL
+enddo
+call get_qofv(n,lam,v1s,v2s,v3s,v4s, qs)
+end subroutine get_meanqs
 
 !=============================================================================
-subroutine get_bestesgt(lam,asp,arcx, a,k,m_arcx,m_arcy,q,ff)!   [get_betsesgt]
+subroutine get_qofv(lam,v1,v2,v3,v4, q)!                            [get_qofv]
 !=============================================================================
-! With prescribed optimization criterion parameter, lam ("lambda"),
-! aspect ratio, asp (0.1 < asp <= 1.), major semi-arc, in degrees, of arcx,
-! return the best Extended Schmidt-Gnomonic (ESG) mapping parameters, A and K,
-! for the rectangular domain whose edge midpoints are distant arcx and asp*arcx
-! from its center.
-! Also, return the map-space x and y coordinates, m_arcx, m_arcy, of
-! the domain edges in the positive directions.
-! The optimality criterion, Q(A,K), which this routine aims to minimize, 
-! is provided upon return. However A and K are independenly scaled, the contours
-! Q are highly elliptical; the differencing stencil is adjusted to mimic this
-! stretching to preserve good numerical conditioning of the calculations and, we
-! hope, tl thereby ensure an accurate and robust estimation of the location of
-! the minimum.
-! If the process fails for any reason (such as parameter combinations, lam, asp,
-! arcx for which no minimum of Q in the proper interior of the valid space
-! of these parameters exists), then the failure flag, FF, is raised (.true.)
-! and the output parameters are then of course meaningless. 
+! The quadratic quantity Q depends linearly on v1 and v4 (which are already
+! quadratic diagnostics of EL) and quadratically on v2 and v3 (which are
+! linear diagnostics of EL). EL = (1/2)log(G), where G=J^T.J, J the jacobian.
 !=============================================================================
-use pietc, only: u5,o5,s18,s36,s54,s72,ms18,ms36,ms54,ms72,pi2
-use psym2, only: chol2
 implicit none
-real(dp),intent(in ):: lam,arcx,asp
-real(dp),intent(out):: a,k,m_arcx,m_arcy,q
-logical, intent(out):: ff
+real(dp),intent(in ):: lam,v1,v2,v3,v4
+real(dp),intent(out):: q
 !-----------------------------------------------------------------------------
-integer(spi),parameter         :: narc=11,nasp=10,nit=8,nang=5
-real(dp),parameter             :: eps=1.e-7_dp,u2o5=u2*o5,darc=10._dp+eps,&
-                                  dasp=.1_dp+eps,dang=pi2*o5,r=0.0001_dp,rr=r*r, &
-                                  urc=.4_dp, & ! <- Under-relaxation coefficient 
-                                  enxyq=10000._dp! ~ pts in trial grid quadrant
-real(dp),parameter             :: f18=u2o5*s18,f36=u2o5*s36,f54=u2o5*s54,f72=u2o5*s72,&
-                                  mf18=-f18,mf36=-f36,mf54=-f54,mf72=-f72 !<- (Fourier)
-real(dp),dimension(0:4,0:4)    :: em5 ! <- Fourier matrix for 5 points
-real(dp),dimension(nasp,0:narc):: adarc,kdarc ! < 1st guess tables of A and K.
-real(dp),dimension(0:nang-1)   :: qs
-real(dp),dimension(2,0:nang-1) :: aks
-real(dp),dimension(2)          :: grad,v2,ak
-real(dp),dimension(2,2)        :: hess,el,basis0,basis
-real(dp),dimension(3)          :: xcedgex,xcedgey
-real(dp),dimension(2)          :: xmedgex,xmedgey
-real(dp)                       :: ang,sarcx,sasp,wx0,wx1,wa0,wa1,qold
-integer(spi)                   :: i,it,iarcx0,iasp0,iarcx1,iasp1,&
-                                  nxh,nyh
+real(dp):: lamc
+!=============================================================================
+lamc=u1-lam
+q=lamc*(v1-(v2**2+v3**2)) +lam*(v4 -(v2+v3)**2)
+end subroutine get_qofv
+!=============================================================================
+subroutine get_qofvd(lam, v2,v3, v1d,v2d,v3d,v4d, qd)!              [get_qofv]
+!=============================================================================
+! Like get_qofv, but for (only) the 2-vector derivatives of Q. Note that
+! the quadratic diagnostics v1 and v4 do not participate in this formula.
+!=============================================================================
+implicit none
+real(dp),             intent(in ):: lam,v2,v3
+real(dp),dimension(2),intent(in ):: v1d,v2d,v3d,v4d
+real(dp),dimension(2),intent(out):: qd
+!-----------------------------------------------------------------------------
+real(dp):: lamc
+!=============================================================================
+lamc=u1-lam
+qd=lamc*(v1d-u2*(v2d*v2+v3d*v3))+lam*(v4d-u2*(v2d+v3d)*(v2+v3))
+end subroutine get_qofvd
+!=============================================================================
+subroutine get_qsofvs(n,lam,v1s,v2s,v3s,v4s, qs)!                   [get_qofv]
+!=============================================================================
+implicit none
+integer(spi),         intent(in ):: n
+real(dp),             intent(in ):: lam
+real(dp),dimension(n),intent(in ):: v1s,v2s,v3s,v4s
+real(dp),dimension(n),intent(out):: qs
+!-----------------------------------------------------------------------------
+real(dp):: lamc
+!=============================================================================
+lamc=u1-lam
+qs=lamc*(v1s-(v2s**2+v3s**2)) +lam*(v4s -(v2s+v3s)**2)
+end subroutine get_qsofvs
+
+!=============================================================================
+subroutine guessak_map(asp,tmarcx,ak)!                           [guessak_map]
+!=============================================================================
+! Given an aspect ratio, asp<=1, and major semi-axis, arc, in map-space
+! nondimensional units, return a first guess for the parameter vector, ak, 
+! approximately optimal for the domain of the given dimensions.
+!=============================================================================
+implicit none
+real(dp),             intent(in ):: asp,tmarcx
+real(dp),dimension(2),intent(out):: ak
+!-----------------------------------------------------------------------------
+real(dp):: gmarcx
+!=============================================================================
+gmarcx=tmarcx*rtod
+call guessak_geo(asp,gmarcx,ak)
+end subroutine guessak_map
+
+!=============================================================================
+subroutine guessak_geo(asp,arc,ak)!                              [guessak_geo]
+!=============================================================================
+! Given an aspect ratio, asp<=1, and major semi-axis, arc, in geographical
+! (degree) units measured along the rectangle's median, return a first guess 
+! for the parameter vector, ak, approximately optimal for the domain of the 
+! given dimensions.
+!=============================================================================
+implicit none
+real(dp),             intent(in ):: asp,arc
+real(dp),dimension(2),intent(out):: ak
+!-----------------------------------------------------------------------------
+integer(spi),parameter         :: narc=11,nasp=10! <- Table index bounds
+real(dp),    parameter         :: eps=1.e-7_dp,darc=10._dp+eps,dasp=.1_dp+eps
+real(dp),dimension(nasp,0:narc):: adarc,kdarc
+real(dp)                       :: sasp,sarc,wx0,wx1,wa0,wa1
+integer(spi)                   :: iasp0,iasp1,iarc0,iarc1
 !------------------------
 ! Tables of approximate A (adarc) and K (kdarc), valid for lam=0.8, for aspect ratio,
 ! asp, at .1, .2, .3, .4, .5, .6, .7, .8, 1. and major semi-arc, arcx, at values,
@@ -697,7 +735,7 @@ integer(spi)                   :: i,it,iarcx0,iasp0,iarcx1,iasp1,&
 ! from a computation at 3 degrees, since zero would not make sense).
 ! The 100 degree rows are repeated as the 110 degree entries deliberately to pad the
 ! table into the partly forbidden parameter space to allow skinny domains of up to
-! 110 degree semi-length to be validly endowed with optimal A and K: 
+! 110 degree semi-length to be validly endowed with optimal A and K:
 data adarc/ &
 -.450_dp,-.328_dp,-.185_dp,-.059_dp,0.038_dp,0.107_dp,0.153_dp,0.180_dp,0.195_dp,0.199_dp,&
 -.452_dp,-.327_dp,-.184_dp,-.058_dp,0.039_dp,0.108_dp,0.154_dp,0.182_dp,0.196_dp,0.200_dp,&
@@ -725,128 +763,320 @@ data kdarc/ &
 -.418_dp,-.373_dp,-.322_dp,-.275_dp,-.236_dp,-.204_dp,-.178_dp,-.156_dp,-.139_dp,-.127_dp,&
 -.324_dp,-.296_dp,-.261_dp,-.229_dp,-.200_dp,-.174_dp,-.152_dp,-.133_dp,-.117_dp,-.104_dp,&
 -.324_dp,-.296_dp,-.261_dp,-.229_dp,-.200_dp,-.174_dp,-.152_dp,-.133_dp,-.117_dp,-.104_dp/
-
-data em5/o5, u2o5,   u0, u2o5,   u0, & ! <- The Fourier matrix for 5 points. Applied to
-         o5,  f18,  f72, mf54,  f36, & ! the five 72-degree spaced values in a column-
-         o5, mf54,  f36,  f18, mf72, & ! vector, the product vector has the components,
-         o5, mf54, mf36,  f18,  f72, & ! wave-0, cos and sin wave-1, cos and sin wave-2.
-         o5,  f18, mf72, mf54, mf36/
-
-data basis0/0.1_dp,u0,  0.3_dp,0.3_dp/! <- initial basis for orienting (a,k) differencing
-!============================================================================
+!=============================================================================
 sasp=asp/dasp
 iasp0=floor(sasp); wa1=sasp-iasp0
 iasp1=iasp0+1;     wa0=iasp1-sasp
-sarcx=arcx/darc
-iarcx0=floor(sarcx); wx1=sarcx-iarcx0
-iarcx1=iarcx0+1;     wx0=iarcx1-sarcx
-if(iasp0 <1 .or. iasp1 >nasp)stop 'Aspect ratio out of range'
-if(iarcx0<0 .or. iarcx1>narc)stop 'Major semi-arc is out of range'
-nxh=nint(sqrt(enxyq/asp))! < These nxh and nyh ensure nearly
-nyh=nint(sqrt(enxyq*asp))! square trial grid cells, and about enxyq points in total.
-call getedges(arcx,asp*arcx, xcedgex,xcedgey)
+sarc=arc/darc
+iarc0=floor(sarc); wx1=sarc-iarc0
+iarc1=iarc0+1;      wx0=iarc1-sarc
+if(iasp0<1 .or. iasp1>nasp)stop 'Guessak_geo; Aspect ratio out of range'
+if(iarc0<0 .or. iarc1>narc)stop 'Guessak_geo; Major semi-arc is out of range'
 
 ! Bilinearly interpolate A and K from crude table into a 2-vector:
-ak=(/wx0*(wa0*adarc(iasp0,iarcx0)+wa1*adarc(iasp1,iarcx0))+ &
-     wx1*(wa0*adarc(iasp0,iarcx1)+wa1*adarc(iasp1,iarcx1)), &
-     wx0*(wa0*kdarc(iasp0,iarcx0)+wa1*kdarc(iasp1,iarcx0))+ &
-     wx1*(wa0*kdarc(iasp0,iarcx1)+wa1*kdarc(iasp1,iarcx1))/)
-basis=basis0 ! <- initial the basis to a representative guess.
-qold=100._dp ! <- initialize qold to a meaningless large value to force at least one
-             !    complete Newton iteration to occur.
-do it=1,nit
-   call get_qofmap(nxh,nyh,ak(1),ak(2),lam,xcedgex,xcedgey,&
-        q,xmedgex,xmedgey,ff)
-   if(ff)return
-   if(q>=qold)exit ! <-Assume this condition indicates early convergence
-   m_arcx=xmedgex(1)
-   m_arcy=xmedgey(2)
-   qold=q
+ak=(/wx0*(wa0*adarc(iasp0,iarc0)+wa1*adarc(iasp1,iarc0))+ &
+     wx1*(wa0*adarc(iasp0,iarc1)+wa1*adarc(iasp1,iarc1)), &
+     wx0*(wa0*kdarc(iasp0,iarc0)+wa1*kdarc(iasp1,iarc0))+ &
+     wx1*(wa0*kdarc(iasp0,iarc1)+wa1*kdarc(iasp1,iarc1))/)
+end subroutine guessak_geo
 
-! Place five additional sample points around the stencil-ellipse:
-   do i=0,4
-      ang=i*dang ! steps of 72 degrees 
-      v2=(/cos(ang),sin(ang)/)*r ! points on a circle of radius r ...
-      aks(:,i)=ak+matmul(basis,v2) ! ... become points on an ellipse.
-! Get quality, qs(i)
-      call get_qofmap(nxh,nyh,aks(1,i),aks(2,i),lam,xcedgex,xcedgey,&
-           qs(i),xmedgex,xmedgey,ff)
-   enddo
+!=============================================================================
+subroutine bestesg_geo(lam,garcx,garcy, a,k,marcx,marcy,q,ff)!   [bestesg_geo]
+!=============================================================================
+! Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given
+! geographical half-spans, garcx and garcy, as well as the corresponding
+! map-space half-spans, garcx and garcy (in degrees) and the quality
+! diagnostic, Q(lam) for this optimal parameter choice. If this process
+! fails for any reason, the failure is alerted by a raised flag, FF, and
+! the other output arguments must then be taken to be meaningless.
+!
+! The diagnostic Q measures the variance over the domain of a local measure
+! of grid distortion. A logarithmic measure of local grid deformation is
+! give by L=log(J^t.J)/2, where J is the mapping Jacobian matrix, dX/dx,
+! where X is the cartesian unit 3-vector representation of the image of the
+! mapping of the map-coordinate 2-vector, x.
+! The Frobenius squared-norm, Trace(L*L), of L is the basis for the simplest
+! (lam=0) definition of the variance of L, but (Trace(L))**2 is another.
+! Here, we weight both contributions, by lam and (1-lam) respectively, with
+! 0 <= lam <1, to compute the variance Q(lam,a,k), and search for the (a,k)
+! that minimizes this Q.
+!
+! The domain averages are computed by double Gauss-Legendre quadrature (i.e.,
+! in both the x and y directions), but restricted to a mere quadrant of the
+! domain (since bilateral symmetry pertains across both domain medians,
+! yielding a domain mean L that is strictly diagonal.
+!=============================================================================
+use pietc, only: u5,o5,s18,s36,s54,s72,ms18,ms36,ms54,ms72
+use pmat,  only: inv
+use psym2, only: chol2
+implicit none
+real(dp),intent(in ):: lam,garcx,garcy
+real(dp),intent(out):: a,k,marcx,marcy,q
+logical ,intent(out):: FF
+!-----------------------------------------------------------------------------
+integer(spi),parameter     :: nit=200,mit=20,ngh=25
+real(dp)    ,parameter     :: u2o5=u2*o5,&
+                              f18=u2o5*s18,f36=u2o5*s36,f54=u2o5*s54,&
+                              f72=u2o5*s72,mf18=-f18,mf36=-f36,mf54=-f54,&
+                              mf72=-f72,& !<- (Fourier transform coefficients)
+                              r=0.001_dp,rr=r*r,dang=pi2*o5,crit=1.e-14_dp
+real(dp),dimension(ngh)    :: wg,xg
+real(dp),dimension(0:4,0:4):: em5 ! <- Fourier matrix for 5 points
+real(dp),dimension(0:4)    :: qs
+real(dp),dimension(2,0:4)  :: aks,mas
+real(dp),dimension(2,2)    :: basis0,basis,hess,el,gadak,gadma,madga,madak
+real(dp),dimension(2)      :: ak,dak,dma,vec2,grad,qdak,qdma,ga,ma,gat
+real(dp)                   :: s,tgarcx,tgarcy,asp,ang
+integer(spi)               :: i,it
+logical                    :: flip
+data em5/o5,u2o5,  u0,u2o5,  u0,& ! <-The Fourier matrix for 5 points. Applied
+         o5, f18, f72,mf54, f36,& ! to the five 72-degree spaced values in a
+         o5,mf54, f36, f18,mf72,& ! column-vector, the product vector has the
+         o5,mf54,mf36, f18, f72,& ! components, wave-0, cos and sin wave-1,
+         o5, f18,mf72,mf54,mf36/  ! cos and sin wave-2.
+! First guess upper-triangular basis regularizing the samples used to
+! estimate the Hessian of q by finite differencing:
+data basis0/0.1_dp,u0,  0.3_dp,0.3_dp/
+!=============================================================================
+ff=lam<u0 .or. lam>=u1
+if(ff)then; print'("In bestesg_geo; lam out of range")';return; endif
+ff= garcx<=u0 .or. garcy<=u0
+if(ff)then
+   print'("In bestesg_geo; a nonpositive domain parameter, garcx or garcy")'
+   return
+endif
+call gaulegh(ngh,xg,wg)! <- Prepare Gauss-Legendre nodes xg and weights wg
+flip=garcy>garcx
+if(flip)then; tgarcx=garcy; tgarcy=garcx! <- Switch
+else        ; tgarcx=garcx; tgarcy=garcy! <- Don't switch
+endif
+ga=(/tgarcx,tgarcy/)
+asp=tgarcy/tgarcx
+basis=basis0
+
+call guessak_geo(asp,tgarcx,ak)
+ma=ga*dtor*0.9_dp ! Shrink first estimate, to start always within bounds
+
+! Perform a Newton iteration (except with imperfect Hessian) to find the
+! parameter vector, ak, at which the derivative of Q at constant geographical
+! semi-axes, ga, as given, goes to zero. The direct evaluation of the
+! Q-derivative at constant ma (which is what is actually computed in
+! get_meanq) therefore needs modification to obtain Q-derivarive at constant
+! ga:
+! dQ/d(ak)|_ga = dQ/d(ak)|_ma - dQ/d(ma)|_ak*d(ma)/d(ga)|_ak*d(ga)/d(ak)|_ma
+!
+! Since the Hessian evaluation is only carried out at constant map-space
+! semi-axes, ma, it is not ideal for this problem; consequently, the allowance
+! of newton iterations, nit, is much more liberal than we allow for the
+! companion routine, bestesg_map, where the constant ma condition WAS
+! appropriate.
+do it=1,nit
+   call get_meanq(ngh,lam,xg,wg,ak,ma,q,qdak,qdma,gat,gadak,gadma,ff)
    if(ff)return
-! Recover gradient and hessian estimates, normalized by q, from all 
-! 6 samples, q, qs. These are wrt the basis, not (a,k) directly.
+   madga=gadma; call inv(madga)! <- d(ma)/d(ga)|_ak ("at constant ak")
+   madak=-matmul(madga,gadak)
+   qdak=qdak+matmul(qdma,madak)! dQ/d(ak)|_ga
+   if(it<=mit)then ! <- Only recompute aks if the basis is new
+! Place five additional sample points around the stencil-ellipse:
+      do i=0,4
+         ang=i*dang                     ! steps of 72 degrees
+         vec2=(/cos(ang),sin(ang)/)*r   ! points on a circle of radius r ...
+         dak=matmul(basis,vec2)
+         dma=matmul(madak,dak)
+         aks(:,i)=ak+dak ! ... become points on an ellipse.
+         mas(:,i)=ma+dma
+      enddo
+      call get_meanq(5,ngh,lam,xg,wg,aks,mas, qs,ff)
+   endif
+   grad=matmul(qdak,basis)/q ! <- New grad estimate, accurate to near roundoff
+   if(it<mit)then ! Assume the hessian will have significantly changed
+! Recover an approximate Hessian estimate, normalized by q, from all
+! 6 samples, q, qs. These are wrt the basis, not (a,k) directly. Note that
+! this finite-difference Hessian is wrt q at constant ak, which is roughly
+! approximating the desired Hessian wrt q at constant ga; the disparity
+! is the reason that we allow more iterations in this routine than in
+! companion routine bestesg_map, since we cannot achieve superlinear
+! convergence in the present case.
 ! Make qs the 5-pt discrete Fourier coefficients of the ellipse pts:
-   qs=matmul(em5,qs)/q
-   grad=qs(1:2)/r ! <- r is the finite differencing step size parameter
-   qs(0)=qs(0)-u1 ! <- cos(2*ang) coefficient relative to the central value.
-   hess(1,1)=qs(0)+qs(3)! <- combine cos(0*ang) and cos(2*ang) coefficients
-   hess(1,2)=qs(4)      ! <- sin(2*ang) coefficient
-   hess(2,1)=qs(4)      !
-   hess(2,2)=qs(0)-qs(3)! <- combine cos(0*ang) and cos(2*ang) coefficients
-   hess=hess*u2/rr ! <- rr is r**2
+      qs=matmul(em5,qs)/q
+!      grad=qs(1:2)/r ! Old finite difference estimate is inferior to new grad
+      qs(0)=qs(0)-u1! <- cos(2*ang) coefficient relative to the central value.
+      hess(1,1)=qs(0)+qs(3)! <- combine cos(0*ang) and cos(2*ang) coefficients
+      hess(1,2)=qs(4)      ! <- sin(2*ang) coefficient
+      hess(2,1)=qs(4)      !
+      hess(2,2)=qs(0)-qs(3)! <- combine cos(0*ang) and cos(2*ang) coefficients
+      hess=hess*u2/rr      ! <- rr is r**2
 
 ! Perform a Cholesky decomposition of the hessian:
-   call chol2(hess,el,ff)
-   if(ff)then
-      print'(" In get_bestESG, hessian is not positive; cholesky fails")'
-      return
-   endif
+      call chol2(hess,el,ff)
+      if(ff)then
+         print'(" In bestESG_geo, Hessian is not positive; cholesky fails")'
+         return
+      endif
 ! Invert the cholesky factor in place:
-   el(1,1)=u1/el(1,1)
-   el(2,2)=u1/el(2,2)
-   el(2,1)=-el(2,1)*el(1,1)*el(2,2)
+      el(1,1)=u1/el(1,1); el(2,2)=u1/el(2,2); el(2,1)=-el(2,1)*el(1,1)*el(2,2)
+   endif
 ! Estimate a Newton step towards the minimum of function Q(a,k):
-   v2=-matmul(transpose(el),matmul(el,grad))
-! qt=q+dot_product(grad,v2)*o2 ! <- Estimates what the new minimum will be
-! Apply an under-relaxation in the first iteration:
-   if(it<=1)v2=v2*urc
-   ak=ak+matmul(basis,v2)! <- increment the parameter vector estimate
+   vec2=-matmul(transpose(el),matmul(el,grad))
+   dak=matmul(basis,vec2)
+   gat=gat+matmul(gadak,dak)! <- increment ga
+   ak=ak+dak! <- increment the parameter vector estimate
+   dma=-matmul(madga,gat-ga)
+   ma=ma+dma
+
 ! Use the inverse cholesky factor to re-condition the basis. This is to make
 ! the next stencil-ellipse more closely share the shape of the elliptical
 ! contours of Q near its minumum -- essentially a preconditioning of the
 ! numerical optimization:
-   basis=matmul(basis,transpose(el))
+   if(it<mit)basis=matmul(basis,transpose(el))
+
+   s=sqrt(dot_product(dak,dak))
+   if(s<crit)exit ! <-Sufficient convergence of the Newton iteration
 enddo
-a=ak(1); k=ak(2)
+if(it>nit)print'("WARNING; Relatively inferior convergence in bestesg_geo")'
+a=ak(1)
+k=ak(2)
+if(flip)then; marcx=ma(2); marcy=ma(1)! Remember to switch back
+else        ; marcx=ma(1); marcy=ma(2)! don't switch
+endif
+end subroutine bestesg_geo
 
-end subroutine get_bestesgt
-
 !=============================================================================
-subroutine get_bestesg_inv(lam,m_arcx,m_arcy, a,k,arcx,arcy, q,ff)![get_bestesg_inv]
+subroutine bestesg_map(lam,marcx,marcy, a,k,garcx,garcy,q,ff)   ![bestesg_map]
 !=============================================================================
-! A form of inverse of get_bestesg where the desired map-space edge
-! coordinates, m_arcx and m_arcy, are input throught the argument
-! list, and the A, K, arcx, and arcy (degrees) are output such that,
-! if get_bestesg are called with these arcx and arcy as inputs, then
-! m_arcx and m_arcx that would be returned are exactly the desired
-! values. The A and K returned here are consistent also.
+! Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given
+! map-coordinate half-spans, marcx and marcy, as well as the corresponding
+! geographical half-spans, garcx and garcy (in degrees) and the quality
+! diagnostic, Q(lam) for this optimal parameter choice. If this process
+! fails for any reason, the failure is alerted by a raised flag, FF, and
+! the other output arguments must then be taken to be meaningless.
+!
+! The diagnostic Q measures the variance over the domain of a local measure
+! of grid distortion. A logarithmic measure of local grid deformation is
+! give by L=log(J^t.J)/2, where J is the mapping Jacobian matrix, dX/dx,
+! where X is the cartesian unit 3-vector representation of the image of the
+! mapping of the map-coordinate 2-vector, x.
+! The Frobenius squared-norm, Trace(L*L), of L is the basis for the simplest
+! (lam=0) definition of the variance of L, but (Trace(L))**2 is another.
+! Here, we weight both contributions, by lam and (1-lam) respectively, with
+! 0 <= lam <1, to compute the variance Q(lam,a,k), and search for the (a,k)
+! that minimizes this Q.
+!
+! The domain averages are computed by double Gauss-Legendre quadrature (i.e.,
+! in both the x and y directions), but restricted to a mere quadrant of the
+! domain (since bilateral symmetry pertains across both domain medians, 
+! yielding a domain mean L that is strictly diagonal.
 !=============================================================================
+use pietc, only: u5,o5,s18,s36,s54,s72,ms18,ms36,ms54,ms72
+use psym2, only: chol2
 implicit none
-real(dp),intent(in ):: lam,m_arcx,m_arcy
-real(dp),intent(out):: a,k,arcx,arcy,q
-logical, intent(out):: ff
+real(dp),intent(in ):: lam,marcx,marcy
+real(dp),intent(out):: a,k,garcx,garcy,q
+logical ,intent(out):: FF
 !-----------------------------------------------------------------------------
-integer(spi),parameter:: nit=40         ! <- Number of iterations allowed
-real(dp),    parameter:: crit=1.e-12_dp ! <- Convergence criterion
-real(dp)              :: rx,ry,m_arcxa,m_arcya
-integer(spi)          :: it
+integer(spi),parameter     :: nit=25,mit=7,ngh=25
+real(dp),parameter         :: u2o5=u2*o5,                                &
+                              f18=u2o5*s18,f36=u2o5*s36,f54=u2o5*s54,    &
+                              f72=u2o5*s72,mf18=-f18,mf36=-f36,mf54=-f54,&
+                              mf72=-f72,& !<- (Fourier)
+                              r=0.001_dp,rr=r*r,dang=pi2*o5,crit=1.e-12_dp
+real(dp),dimension(ngh)    :: wg,xg
+real(dp),dimension(0:4,0:4):: em5 ! <- Fourier matrix for 5 points
+real(dp),dimension(0:4)    :: qs ! <-Sampled q, its Fourier coefficients
+real(dp),dimension(2,0:4)  :: aks,mas! <- tiny elliptical array of ak
+real(dp),dimension(2,2)    :: basis0,basis,hess,el,gadak,gadma
+real(dp),dimension(2)      :: ak,dak,vec2,grad,qdak,qdma,ga,ma
+real(dp)                   :: s,tmarcx,tmarcy,asp,ang
+integer(spi)               :: i,it
+logical                    :: flip
+data em5/o5,u2o5,  u0,u2o5,  u0,& ! <-The Fourier matrix for 5 points. Applied
+         o5, f18, f72,mf54, f36,& ! to the five 72-degree spaced values in a
+         o5,mf54, f36, f18,mf72,& ! column-vector, the product vector has the
+         o5,mf54,mf36, f18, f72,& ! components, wave-0, cos and sin wave-1,
+         o5, f18,mf72,mf54,mf36/  ! cos and sin wave-2.
+! First guess upper-triangular basis regularizing the samples used to
+! estimate the Hessian of q by finite differencing:
+data basis0/0.1_dp,u0,  0.3_dp,0.3_dp/
 !=============================================================================
-arcx=m_arcx*rtod; arcy=m_arcy*rtod ! < 1st guess (degrees) of arcx and arcy
+ff=lam<u0 .or. lam>=u1
+if(ff)then; print'("In bestesg_map; lam out of range")';return; endif
+ff= marcx<=u0 .or. marcy<=u0
+if(ff)then
+   print'("In bestesg_map; a nonpositive domain parameter, marcx or marcy")'
+   return
+endif
+call gaulegh(ngh,xg,wg)
+flip=marcy>marcx
+if(flip)then; tmarcx=marcy; tmarcy=marcx! <- Switch
+else        ; tmarcx=marcx; tmarcy=marcy! <- Don't switch
+endif
+ma=(/tmarcx,tmarcy/); do i=0,4; mas(:,i)=ma; enddo
+asp=tmarcy/tmarcx
+basis=basis0
+
+call guessak_map(asp,tmarcx,ak)
+
 do it=1,nit
-   call get_bestesg(lam,arcx,arcy, a,k,m_arcxa,m_arcya, q,ff)
-   if(ff)then
-      print'("In get_bestesg_inv; raised failure flag prevents completion")'
-      return
+   call get_meanq(ngh,lam,xg,wg,ak,ma,q,qdak,qdma,ga,gadak,gadma,ff)
+   if(ff)return
+   if(it<=mit)then
+! Place five additional sample points around the stencil-ellipse:
+      do i=0,4
+         ang=i*dang                     ! steps of 72 degrees
+         vec2=(/cos(ang),sin(ang)/)*r   ! points on a circle of radius r ...
+         aks(:,i)=ak+matmul(basis,vec2) ! ... become points on an ellipse.
+      enddo
+      call get_meanq(5,ngh,lam,xg,wg,aks,mas, qs,ff)
    endif
-   rx=m_arcx/m_arcxa; ry=m_arcy/m_arcya
-   arcx=arcx*rx     ; arcy=arcy*ry
-   if(abs(rx-u1)<=crit .and. abs(ry-u1)<=crit)return
+   grad=matmul(qdak,basis)/q ! <- New grad estimate, accurate to near roundoff
+   if(it<mit)then
+! Recover Hessian estimate, normalized by q, from all
+! 6 samples, q, qs. These are wrt the basis, not (a,k) directly.
+! The Hessian estimate uses a careful finite method, which is accurate
+! enough. The gradient is NOT estimated by finite differences because we
+! need the gradient to be accurate to near roundoff levels in order that
+! the converged Newton iteration is a precise solution. 
+! Make qs the 5-pt discrete Fourier coefficients of the ellipse pts:
+      qs=matmul(em5,qs)/q
+!      grad=qs(1:2)/r ! Old finite difference estimate is inferior to new grad
+      qs(0)=qs(0)-u1 !<- cos(2*ang) coefficient relative to the central value.
+      hess(1,1)=qs(0)+qs(3)! <- combine cos(0*ang) and cos(2*ang) coefficients
+      hess(1,2)=qs(4)      ! <- sin(2*ang) coefficient
+      hess(2,1)=qs(4)      !
+      hess(2,2)=qs(0)-qs(3)! <- combine cos(0*ang) and cos(2*ang) coefficients
+      hess=hess*u2/rr      ! <- rr is r**2
+
+! Perform a Cholesky decomposition of the hessian:
+      call chol2(hess,el,ff)
+      if(ff)then
+         print'(" In bestESG_map, hessian is not positive; cholesky fails")'
+         return
+      endif
+! Invert the cholesky factor in place:
+      el(1,1)=u1/el(1,1); el(2,2)=u1/el(2,2); el(2,1)=-el(2,1)*el(1,1)*el(2,2)
+   endif
+! Estimate a Newton step towards the minimum of function Q(a,k):
+   vec2=-matmul(transpose(el),matmul(el,grad))
+   dak=matmul(basis,vec2)
+   ga=ga+matmul(gadak,dak)! <- increment ga
+   ak=ak+dak! <- increment the parameter vector estimate
+
+! Use the inverse cholesky factor to re-condition the basis. This is to make
+! the next stencil-ellipse more closely share the shape of the elliptical
+! contours of Q near its minumum -- essentially a preconditioning of the
+! numerical optimization:
+   if(it<mit)basis=matmul(basis,transpose(el))
+
+   s=sqrt(dot_product(dak,dak))
+   if(s<crit)exit ! <-Sufficient convergence of the Newton iteration
 enddo
-print'("WARNING; in get_bestesg_inv;")'
-print'("full convergence unattained after",i3," iterations")',nit
-print'("Residual proportionate mismatch of arcx and of arcy:",2(1x,e12.5))',&
-     rx-u1,ry-u1
-end subroutine get_bestesg_inv
+if(it>nit)print'("WARNING; Relatively inferior convergence in bestesg_map")'
+a=ak(1)
+k=ak(2)
+if(flip)then; garcx=ga(2); garcy=ga(1)! Remember to switch back
+else        ; garcx=ga(1); garcy=ga(2)! don't switch
+endif
+end subroutine bestesg_map
 
 !=============================================================================
 subroutine hgrid_ak_rr(lx,ly,nx,ny,A,K,plat,plon,pazi, & !       [hgrid_ak_rr]
@@ -865,11 +1095,12 @@ subroutine hgrid_ak_rr(lx,ly,nx,ny,A,K,plat,plon,pazi, & !       [hgrid_ak_rr]
 ! magnitude, half the values of nx and ny respectively.)
 ! Return the latitude and longitude, in radians again, of the grid points thus
 ! defined in the arrays, glat and glon, and return a rectangular array, garea,
-! of dimensions nx-1 by ny-1, that contains the areas of each of the grid cells
+! of dimensions nx-1 by ny-1, that contains the areas of each of the grid 
+! cells
 !
-! if all goes well, return a lowered failure flag, ff=.false. . But if, for some
-! reason, it is not possible to complete this task, return the raised failure
-! flag, ff=.TRUE. .
+! If all goes well, return a lowered failure flag, ff=.false. . 
+! But if, for some reason, it is not possible to complete this task, 
+! return the raised failure flag, ff=.TRUE. .
 !=============================================================================
 use pmat4, only: sarea
 use pmat5, only: ctogr
@@ -936,7 +1167,6 @@ do iy=ly,my-1
    enddo
 enddo
 end subroutine hgrid_ak_rr
-
 !=============================================================================
 subroutine hgrid_ak_rr_c(lx,ly,nx,ny,a,k,plat,plon,pazi, & !     [hgrid_ak_rr]
                     delx,dely,  glat,glon,garea,dx,dy,angle_dx,angle_dy, ff)
@@ -946,16 +1176,17 @@ subroutine hgrid_ak_rr_c(lx,ly,nx,ny,a,k,plat,plon,pazi, & !     [hgrid_ak_rr]
 ! by an azimuth angle of pazi counterclockwise (these angles in radians).
 !
 ! Using the central mapping point as the coordinate origin, set up the grid
-! with central x-spacing delx and y-spacing dely in nondimensional units, (i.e.,
-! as if the earth had unit radius) and with the location of the left-lower
-! corner of the grid at center-relative grid index pair, (lx,ly) and with
-! the number of the grid spaces in x and y directions given by nx and ny.
+! with central x-spacing delx and y-spacing dely in nondimensional units, 
+! (i.e., as if the earth had unit radius) and with the location of the left-
+! lower corner of the grid at center-relative grid index pair, (lx,ly) and 
+! with the number of the grid spaces in x and y directions given by nx and ny.
 ! (Note that, for a centered rectangular grid lx and ly are negative and, in
 ! magnitude, half the values of nx and ny respectively.)
-! Return the latitude and longitude, again, in radians, of the grid points thus
+! Return the latitude and longitude, again, in radians, of the grid pts thus
 ! defined in the arrays, glat and glon; return a rectangular array, garea,
-! of dimensions nx-1 by ny-1, that contains the areas of each of the grid cells
-! in nondimensional "steradian" units.
+! of dimensions nx-1 by ny-1, that contains the areas of each of the grid 
+! cells in nondimensional "steradian" units.
+!
 ! In this version, these grid cell areas are computed by 2D integrating the
 ! scalar jacobian of the transformation, using a 4th-order centered scheme.
 ! The estimated grid steps, dx and dy, are returned at the grid cell edges,
@@ -1150,11 +1381,12 @@ subroutine hgrid_ak_rc(lx,ly,nx,ny,A,K,plat,plon,pazi, & !       [hgrid_ak_rc]
 ! magnitude, half the values of nx and ny respectively.)
 ! Return the unit cartesian vectors xc of the grid points and their jacobian
 ! matrices xcd wrt the map coordinates, and return a rectangular array, garea,
-! of dimensions nx-1 by ny-1, that contains the areas of each of the grid cells
+! of dimensions nx-1 by ny-1, that contains the areas of each of the grid 
+! cells
 !
-! if all goes well, return a lowered failure flag, ff=.false. . But if, for some
-! reason, it is not possible to complete this task, return the raised failure
-! flag, ff=.TRUE. .
+! If all goes well, return a lowered failure flag, ff=.false. . 
+! But if, for some reason, it is not possible to complete this task, 
+! return the raised failure flag, ff=.TRUE. .
 !=============================================================================
 use pmat4, only: sarea
 use pmat5, only: ctogr
@@ -1224,17 +1456,18 @@ subroutine hgrid_ak_dd(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, & !    [hgrid_ak_dd]
      delx,dely,  gdlat,gdlon,garea, ff)
 !=============================================================================
 ! Use a and k as the parameters of an Extended Schmidt-transformed
-! Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center
+! Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this 
+! center.
 ! by an azimuth angle of pdazi counterclockwise (these angles in degrees).
 ! Like hgrid_ak_rr, return the grid points' lats and lons, except that here
 ! the angles are returned in degrees. Garea, the area of each grid cell, is
 ! returned as in hgrid_ak_rr, and a failure flag, ff, raised when a failure
-! occurs anywhere in these calculations
+! occurs anywhere in these calculations.
 !============================================================================
 implicit none
 integer(spi),                             intent(in ):: lx,ly,nx,ny
-real(dp),                                 intent(in ):: A,K,pdlat,pdlon,pdazi,&
-                                                        delx,dely
+real(dp),                                 intent(in ):: A,K,pdlat,pdlon,&
+                                                        pdazi,delx,dely
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny  ),intent(out):: gdlat,gdlon
 real(dp),dimension(lx:lx+nx-1,ly:ly+ny-1),intent(out):: garea
 logical,                                  intent(out):: ff
@@ -1259,8 +1492,8 @@ subroutine hgrid_ak_dd_c(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, &!   [hgrid_ak_dd]
 !=============================================================================
 implicit none
 integer(spi),                             intent(in ):: lx,ly,nx,ny
-real(dp),                                 intent(in ):: a,k,pdlat,pdlon,pdazi, &
-                                                        delx,dely
+real(dp),                                 intent(in ):: a,k,pdlat,pdlon,&
+                                                        pdazi,delx,dely
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny  ),intent(out):: gdlat,gdlon
 real(dp),dimension(lx:lx+nx-1,ly:ly+ny-1),intent(out):: garea
 real(dp),dimension(lx:lx+nx-1,ly:ly+ny  ),intent(out):: dx
@@ -1287,12 +1520,13 @@ subroutine hgrid_ak_dc(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, & !    [hgrid_ak_dc]
      delx,dely, xc,xcd,garea, ff)
 !=============================================================================
 ! Use a and k as the parameters of an Extended Schmidt-transformed
-! Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center
-! by an azimuth angle of pdazi counterclockwise (these angles in degrees).
-! Like hgrid_ak_rx, return the grid points' cartesians xc and jacobian matrices,
-! xcd. Garea, the area of each grid cell, is also
+! Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this 
+! center by an azimuth angle of pdazi counterclockwise (these angles in 
+! degrees).
+! Like hgrid_ak_rx, return the grid points' cartesians xc and Jacobian 
+! matrices, xcd. Garea, the area of each grid cell, is also
 ! returned as in hgrid_ak_rx, and a failure flag, ff, raised when a failure
-! occurs anywhere in these calculations
+! occurs anywhere in these calculations.
 !============================================================================
 implicit none
 integer(spi),intent(in ):: lx,ly,nx,ny
@@ -1353,7 +1587,7 @@ subroutine hgrid_ak_c(lx,ly,nx,ny,a,k,plat,plon,pazi, & !           [hgrid_ak]
 ! version of this routine, the relative rotations of the steps, dangle_dx
 ! and dangle_dy, are returned as degrees instead of radians (all other angles
 ! in the argument list, i.e., plat,plon,pazi,glat,glon, remain radians).
-!============================================================================
+!=============================================================================
 implicit none
 integer(spi),                             intent(in ):: lx,ly,nx,ny
 real(dp),                                 intent(in ):: a,k,plat,plon,pazi, &
@@ -1379,6 +1613,234 @@ dy=dy*re         ! <-
 dangle_dx=dangle_dx*rtod ! <-Convert from radians to degrees
 dangle_dy=dangle_dy*rtod ! <-Convert from radians to degrees
 end subroutine hgrid_ak_c
+
+!=============================================================================
+subroutine gaulegh(m,x,w)!                                           [gaulegh]
+!=============================================================================
+! This Gauss-Legendre quadrature integrates exactly any even polynomial
+! up to degree m*4-2 in the half-interval [0,1]. This code is liberally
+! adapted from the algorithm given in Press et al., Numerical Recipes.
+!=============================================================================
+implicit none
+integer(spi),         intent(IN ):: m   ! <- number of nodes in half-interval 
+real(dp),dimension(m),intent(OUT):: x,w ! <- nodes and weights
+!-----------------------------------------------------------------------------
+integer(spi),parameter:: nit=8
+real(dp),    parameter:: eps=3.e-14_dp
+integer(spi)          :: i,ic,j,jm,it,m2,m4p,m4p3
+real(dp)              :: z,zzm,p1,p2,p3,pp,z1
+!=============================================================================
+m2=m*2; m4p=m*4+1; m4p3=m4p+2
+do i=1,m; ic=m4p3-4*i
+   z=cos(pih*ic/m4p); zzm=z*z-u1
+   do it=1,nit
+      p1=u1; p2=u0
+      do j=1,m2; jm=j-1; p3=p2; p2=p1; p1=((j+jm)*z*p2-jm*p3)/j; enddo
+      pp=m2*(z*p1-p2)/zzm; z1=z; z=z1-p1/pp; zzm=z*z-u1
+      if(abs(z-z1) <= eps)exit
+   enddo
+   x(i)=z; w(i)=-u2/(zzm*pp*pp)
+enddo
+end subroutine gaulegh
+
+!=============================================================================
+subroutine gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff)!      [gtoxm_ak_rr]
+!=============================================================================
+! Given the map specification (angles in radians), the grid spacing (in
+! map-space units) and the sample lat-lon (in radian), return the the
+! image in map space in a 2-vector in grid units. If the transformation
+! is invalid, return a .true. failure flag.
+!=============================================================================
+use pmat5, only: grtoc
+implicit none
+real(dp),             intent(in ):: a,k,plat,plon,pazi,lat,lon
+real(dp),dimension(2),intent(out):: xm
+logical,              intent(out):: ff
+real(dp),dimension(3,3):: prot,azirot
+real(dp)               :: clat,slat,clon,slon,cazi,sazi
+real(dp),dimension(3)  :: xc
+!=============================================================================
+clat=cos(plat); slat=sin(plat)
+clon=cos(plon); slon=sin(plon)
+cazi=cos(pazi); sazi=sin(pazi)
+
+azirot(:,1)=(/ cazi, sazi, u0/)
+azirot(:,2)=(/-sazi, cazi, u0/)
+azirot(:,3)=(/   u0,   u0, u1/)
+
+prot(:,1)=(/     -slon,       clon,    u0/)
+prot(:,2)=(/-slat*clon, -slat*slon,  clat/)
+prot(:,3)=(/ clat*clon,  clat*slon,  slat/)
+prot=matmul(prot,azirot)
+
+call grtoc(lat,lon,xc)
+xc=matmul(transpose(prot),xc)
+call xctoxm_ak(a,k,xc,xm,ff)
+end subroutine gtoxm_ak_rr_m
+!=============================================================================
+subroutine gtoxm_ak_rr_g(A,K,plat,plon,pazi,delx,dely,lat,lon,&! [gtoxm_ak_rr]
+     xm,ff)
+!=============================================================================
+! Given the map specification (angles in radians), the grid spacing (in
+! map-space units) and the sample lat-lon (in radian), return the the
+! image in map space in a 2-vector in grid units. If the transformation
+! is invalid, return a .true. failure flag.
+!=============================================================================
+implicit none
+real(dp),             intent(in ):: a,k,plat,plon,pazi,delx,dely,lat,lon
+real(dp),dimension(2),intent(out):: xm
+logical,              intent(out):: ff
+!=============================================================================
+call gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff); if(ff)return
+xm(1)=xm(1)/delx; xm(2)=xm(2)/dely
+end subroutine gtoxm_ak_rr_g
+
+!=============================================================================
+subroutine gtoxm_ak_dd_m(A,K,pdlat,pdlon,pdazi,dlat,dlon,&!      [gtoxm_ak_dd]
+     xm,ff)
+!=============================================================================
+! Like gtoxm_ak_rr_m, except input angles are expressed in degrees
+!=============================================================================
+implicit none
+real(dp),             intent(in ):: a,k,pdlat,pdlon,pdazi,dlat,dlon
+real(dp),dimension(2),intent(out):: xm
+logical,              intent(out):: ff
+!-----------------------------------------------------------------------------
+real(dp):: plat,plon,pazi,lat,lon
+!=============================================================================
+plat=pdlat*dtor ! Convert these angles from degrees to radians
+plon=pdlon*dtor !
+pazi=pdazi*dtor !
+lat=dlat*dtor
+lon=dlon*dtor
+call gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff)
+end subroutine gtoxm_ak_dd_m
+!=============================================================================
+subroutine gtoxm_ak_dd_g(A,K,pdlat,pdlon,pdazi,delx,dely,&!      [gtoxm_ak_dd]
+dlat,dlon,     xm,ff)
+!=============================================================================
+! Like gtoxm_ak_rr_g, except input angles are expressed in degrees
+!=============================================================================
+implicit none
+real(dp),             intent(in ):: a,k,pdlat,pdlon,pdazi,delx,dely,dlat,dlon
+real(dp),dimension(2),intent(out):: xm
+logical,              intent(out):: ff
+!-----------------------------------------------------------------------------
+real(dp):: plat,plon,pazi,lat,lon
+!=============================================================================
+plat=pdlat*dtor ! Convert these angles from degrees to radians
+plon=pdlon*dtor !
+pazi=pdazi*dtor !
+lat=dlat*dtor
+lon=dlon*dtor
+call gtoxm_ak_rr_g(A,K,plat,plon,pazi,delx,dely,lat,lon,xm,ff)
+end subroutine gtoxm_ak_dd_g
+
+!=============================================================================
+subroutine xmtog_ak_rr_m(A,K,plat,plon,pazi,xm,lat,lon,ff)!      [xmtog_ak_rr]
+!=============================================================================
+! Given the ESG map specified by parameters (A,K) and geographical
+! orientation, plat,plon,pazi (radians), and a position, in map-space
+! coordinates given by the 2-vector, xm, return the geographical
+! coordinates, lat and lon (radians). If the transformation is invalid for
+! any reason, return instead with a raised failure flag, FF= .true.
+!=============================================================================
+use pmat5, only: ctogr
+implicit none
+real(dp),             intent(in ):: a,k,plat,plon,pazi
+real(dp),dimension(2),intent(in ):: xm
+real(dp),             intent(out):: lat,lon
+logical,              intent(out):: ff
+!-----------------------------------------------------------------------------
+real(dp),dimension(3,2):: xcd
+real(dp),dimension(3,3):: prot,azirot
+real(dp)               :: clat,slat,clon,slon,cazi,sazi
+real(dp),dimension(3)  :: xc
+!=============================================================================
+clat=cos(plat); slat=sin(plat)
+clon=cos(plon); slon=sin(plon)
+cazi=cos(pazi); sazi=sin(pazi)
+
+azirot(:,1)=(/ cazi, sazi, u0/)
+azirot(:,2)=(/-sazi, cazi, u0/)
+azirot(:,3)=(/   u0,   u0, u1/)
+
+prot(:,1)=(/     -slon,       clon,    u0/)
+prot(:,2)=(/-slat*clon, -slat*slon,  clat/)
+prot(:,3)=(/ clat*clon,  clat*slon,  slat/)
+prot=matmul(prot,azirot)
+call xmtoxc_ak(a,k,xm,xc,xcd,ff); if(ff)return
+xc=matmul(prot,xc)
+call ctogr(xc,lat,lon)
+end subroutine xmtog_ak_rr_m
+!=============================================================================
+subroutine xmtog_ak_rr_g(A,K,plat,plon,pazi,delx,dely,xm,&!      [xmtog_ak_rr]
+     lat,lon,ff)
+!=============================================================================
+! For an ESG map with parameters, (A,K), and geographical orientation,
+! given by plon,plat,pazi (radians), and given a point in grid-space units
+! as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians)
+! of this point. If instead the transformation is invalid for any reason, then
+! return the raised failure flag, FF=.true.
+!=============================================================================
+implicit none
+real(dp),             intent(in ):: a,k,plat,plon,pazi,delx,dely
+real(dp),dimension(2),intent(in ):: xm
+real(dp),             intent(out):: lat,lon
+logical,              intent(out):: ff
+!-----------------------------------------------------------------------------
+real(dp),dimension(2):: xmt
+!=============================================================================
+xmt(1)=xm(1)*delx ! Convert from grid units to intrinsic map-space units
+xmt(2)=xm(2)*dely !
+call xmtog_ak_rr_m(A,K,plat,plon,pazi,xmt,lat,lon,ff)
+end subroutine xmtog_ak_rr_g
+
+!=============================================================================
+subroutine xmtog_ak_dd_m(A,K,pdlat,pdlon,pdazi,xm,dlat,dlon,ff)! [xmtog_ak_dd]
+!=============================================================================
+! Like xmtog_ak_rr_m, except angles are expressed in degrees
+!=============================================================================
+use pmat5, only: ctogr
+implicit none
+real(dp),             intent(in ):: a,k,pdlat,pdlon,pdazi
+real(dp),dimension(2),intent(in ):: xm
+real(dp),             intent(out):: dlat,dlon
+logical,              intent(out):: ff
+!-----------------------------------------------------------------------------
+real(dp):: plat,plon,pazi,lat,lon
+!=============================================================================
+plat=pdlat*dtor ! Convert these angles from degrees to radians
+plon=pdlon*dtor !
+pazi=pdazi*dtor !
+call xmtog_ak_rr_m(A,K,plat,plon,pazi,xm,lat,lon,ff)
+dlat=lat*rtod
+dlon=lon*rtod
+end subroutine xmtog_ak_dd_m
+!=============================================================================
+subroutine xmtog_ak_dd_g(A,K,pdlat,pdlon,pdazi,delx,dely,xm,&!   [xmtog_ak_dd]
+     dlat,dlon,ff)
+!=============================================================================
+! Like xmtog_ak_rr_g, except angles are expressed in degrees
+!=============================================================================
+implicit none
+real(dp),             intent(in ):: a,k,pdlat,pdlon,pdazi,delx,dely
+real(dp),dimension(2),intent(in ):: xm
+real(dp),             intent(out):: dlat,dlon
+logical,              intent(out):: ff
+!-----------------------------------------------------------------------------
+real(dp),dimension(2):: xmt
+real(dp)             :: plat,plon,pazi,lat,lon
+!=============================================================================
+xmt(1)=xm(1)*delx ! Convert from grid units to intrinsic map-space units
+xmt(2)=xm(2)*dely !
+plat=pdlat*dtor ! Convert these angles from degrees to radians
+plon=pdlon*dtor !
+pazi=pdazi*dtor !
+call xmtog_ak_rr_m(A,K,plat,plon,pazi,xmt,lat,lon,ff)
+dlat=lat*rtod
+dlon=lon*rtod
+end subroutine xmtog_ak_dd_g
 
 end module pesg
 

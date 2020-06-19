@@ -5,7 +5,7 @@
 !                                         *          NCEP/EMC 2017        *
 !                                         *********************************
 ! Direct dependencies:
-! Modules: pkind
+! Modules: pkind, pietc_s, pietc
 !
 !=============================================================================
 module pfun
@@ -13,7 +13,8 @@ module pfun
 use pkind, only: sp,dp
 implicit none
 private
-public:: gd,gdi,hav,havh,ahav,ahavh,sech,sechs,atanh
+public:: gd,gdi,hav,havh,ahav,ahavh,sech,sechs,atanh,sinoxm,sinox,&
+         sinhoxm,sinhox
 
 interface gd;      module procedure gd_s,    gd_d;     end interface
 interface gdi;     module procedure gdi_s,   gdi_d;    end interface
@@ -24,6 +25,10 @@ interface ahavh;   module procedure ahavh_s, ahavh_d;  end interface
 interface atanh;   module procedure atanh_s, atanh_d;  end interface
 interface sech;    module procedure sech_s,  sech_d;   end interface
 interface sechs;   module procedure sechs_s, sechs_d;  end interface
+interface sinoxm;  module procedure          sinoxm_d; end interface
+interface sinox;   module procedure          sinox_d;  end interface
+interface sinhoxm; module procedure          sinhoxm_d;end interface
+interface sinhox;  module procedure          sinhox_d; end interface
 
 contains
 
@@ -214,5 +219,65 @@ real(dp),intent(in ):: x
 real(dp)            :: r
 r=sech(x)**2
 end function sechs_d
+
+!=============================================================================
+function sinoxm_d(x) result(r)!                                       [sinoxm]
+!=============================================================================
+! Evaluate the symmetric real function sin(x)/x-1
+use pietc, only: u1
+implicit none
+real(dp),intent(in ):: x
+real(dp)            :: r
+!-----------------------------------------------------------------------------
+real(dp):: xx
+!=============================================================================
+xx=x*x
+if(xx > .05_dp)then; r=sin(x)/x-u1
+else             ; r=-xx*(u1-xx*(u1-xx*(u1-xx*(u1-xx*(u1-xx/&
+                     156._dp)/110._dp)/72._dp)/42._dp)/20._dp)/6._dp
+endif
+end function sinoxm_d
+
+!=============================================================================
+function sinox_d(x) result(r)!                                         [sinox]
+!=============================================================================
+! Evaluate the symmetric real function sin(x)/x
+use pietc, only: u1
+implicit none
+real(dp),intent(in ):: x
+real(dp)            :: r
+!=============================================================================
+r=sinoxm(x)+u1
+end function sinox_d
+
+!=============================================================================
+function sinhoxm_d(x) result(r)!                                     [sinhoxm]
+!=============================================================================
+! Evaluate the symmetric real function sinh(x)/x-1
+use pietc, only: u1
+implicit none
+real(dp),intent(in ):: x
+real(dp)            :: r
+!-----------------------------------------------------------------------------
+real(dp):: xx
+!=============================================================================
+xx=x*x
+if(xx > .05_dp)then; r=sinh(x)/x-u1
+else;              r=xx*(u1+xx*(u1+xx*(u1+xx*(u1+xx*(u1+xx/&
+                     156._dp)/110._dp)/72._dp)/42._dp)/20._dp)/6._dp
+endif
+end function sinhoxm_d
+
+!=============================================================================
+function sinhox_d(x) result(r)!                                       [sinhox]
+!=============================================================================
+! Evaluate the symmetric real function sinh(x)/x
+use pietc, only: u1
+implicit none
+real(dp),intent(in ):: x
+real(dp)            :: r
+!=============================================================================
+r=sinhoxm(x)+u1
+end function sinhox_d
 
 end module pfun

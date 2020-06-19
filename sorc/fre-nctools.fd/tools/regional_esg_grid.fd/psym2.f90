@@ -11,7 +11,8 @@
 ! In addition, we include a simple cholesky routine
 !
 ! DIRECT DEPENDENCIES
-! Module: pkind, pietc
+! Library: pfun
+! Module: pkind, pietc, pfun
 !
 !=============================================================================
 module psym2
@@ -33,9 +34,7 @@ interface sqrtsym2d_t; module procedure sqrtsym2d_t;          end interface
 interface expsym2;     module procedure expsym2,expsym2d;     end interface
 interface expsym2d_e;  module procedure expsym2d_e;           end interface
 interface expsym2d_t;  module procedure expsym2d_t;           end interface
-interface logsym2;     module procedure logsym2,logsym2d ;    end interface
-interface logsym2d_e;  module procedure logsym2d_e;           end interface
-interface logsym2d_t;  module procedure logsym2d_t;           end interface
+interface logsym2;     module procedure logsym2,logsym2d;  end interface
 interface id2222;      module procedure id2222;               end interface
 interface chol2;       module procedure chol2;                end interface
 
@@ -343,7 +342,7 @@ real(dp),dimension(2,2),    intent(in ):: x
 real(dp),dimension(2,2),    intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
 !-----------------------------------------------------------------------------
-integer,parameter          :: nit=100 ! number of iterative increments allowed
+integer(spi),parameter     :: nit=100 ! number of iterative increments allowed
 real(dp),parameter         :: crit=1.e-17_dp
 real(dp),dimension(2,2)    :: xp,xd,xpd
 real(dp)                   :: c
@@ -379,15 +378,16 @@ subroutine logsym2(em,logem)!                                        [logsym2]
 !=============================================================================
 ! Get the log of a symmetric positive-definite 2*2 matrix
 !=============================================================================
+implicit none
 real(dp),dimension(2,2),intent(in ):: em
 real(dp),dimension(2,2),intent(out):: logem
 !-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: vv,oo
-integer                :: i
+integer(spi)           :: i
 !=============================================================================
 call eigensym2(em,vv,oo)
 do i=1,2
-   if(oo(i,i)<=0)stop 'In logsym2; matrix em is not positive definite'
+   if(oo(i,i)<=u0)stop 'In logsym2; matrix em is not positive definite'
    oo(i,i)=log(oo(i,i))
 enddo
 logem=matmul(vv,matmul(oo,transpose(vv)))
@@ -397,108 +397,33 @@ subroutine logsym2d(x,z,zd)!                                         [logsym2]
 !=============================================================================
 ! General routine to evaluate the logarithm, z=log(x),  and the symmetric
 ! derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite
-! matrix. If the eigenvalues are very close together, extract their
-! geometric mean for "preconditioning" a scaled version, px, of x, whose
-! log, and hence its derivative, can be easily obtained by the series
-! expansion method. Otherwise, use the eigen-method (which entails dividing
-! by the difference in the eignevalues to get zd, and which therefore
-! fails when the eigenvalues become too similar).
-!=============================================================================  
+! matrix.
+!=============================================================================
+use pfun, only: sinhox
+implicit none
 real(dp),dimension(2,2),    intent(in ):: x
 real(dp),dimension(2,2),    intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
 !-----------------------------------------------------------------------------
-real(dp),parameter     :: o8=u1/8
-real(dp),dimension(2,2):: px
-real(dp)               :: rdetx,lrdetx,htrpxs,q
+real(dp),dimension(2,2):: vv,oo,d11,d12,d22,pqr
+real(dp)               :: c,s,cc,cs,ss,c2h,p,q,r,lp,lq,L
+integer(spi)           :: i
 !=============================================================================
-rdetx=sqrt(x(1,1)*x(2,2)-x(1,2)*x(2,1)) ! <- sqrt(determinant of x)
-lrdetx=log(rdetx)
-px=x/rdetx                  ! <- preconditioned x (has unit determinant)
-htrpxs= ((px(1,1)+px(2,2))/2)**2 ! <- {half-trace-px}-squared
-q=htrpxs-u1
-if(q<o8)then               ! <- Taylor expansion method
-   call logsym2d_t(px,z,zd)
-   z(1,1)=z(1,1)+lrdetx; z(2,2)=z(2,2)+lrdetx; zd=zd/rdetx
-else
-   call logsym2d_e(x,z,zd) ! <- Eigen-method
-endif
+call eigensym2(x,vv,oo)
+if(oo(1,1)<=u0 .or. oo(2,2)<=u0)stop 'In logsym2; matrix x is not positive definite'
+c=vv(1,1); s=vv(1,2); cc=c*c; cs=c*s; ss=s*s; c2h=(cc-ss)*o2
+p=u1/oo(1,1); q=u1/oo(2,2); lp=log(p); lq=log(q); oo(1,1)=-lp; oo(2,2)=-lq
+z=matmul(vv,matmul(oo,transpose(vv)))
+L=(lp-lq)*o2; r=sqrt(p*q)/sinhox(L)
+d11(1,:)=(/ cc,cs /); d11(2,:)=(/ cs,ss/)
+d12(1,:)=(/-cs,c2h/); d12(2,:)=(/c2h,cs/)
+d22(1,:)=(/ ss,-cs/); d22(2,:)=(/-cs,cc/)
+pqr(1,:)=(/p,r/)    ; pqr(2,:)=(/r,q/)
+zd(:,:,1,1)=matmul(vv,matmul(d11*pqr,transpose(vv)))
+zd(:,:,1,2)=matmul(vv,matmul(d12*pqr,transpose(vv)))
+zd(:,:,2,2)=matmul(vv,matmul(d22*pqr,transpose(vv)))
+zd(:,:,2,1)=zd(:,:,1,2)
 end subroutine logsym2d
-
-!=============================================================================
-subroutine logsym2d_e(x,z,zd)!                                    [logsym2d_e]
-!=============================================================================
-! Use the Eigen-decomposition method (eigenvalues not close together)
-! For a 2*2 positive definite symmetric matrix x, try to get both the z=log(x)
-! and dz/dx using the eigen-decomposition method.
-!=============================================================================
-real(dp),dimension(2,2),    intent(in ):: x
-real(dp),dimension(2,2),    intent(out):: z
-real(dp),dimension(2,2,2,2),intent(out):: zd
-!-----------------------------------------------------------------------------
-real(dp),dimension(2,2,2,2):: vvd,ood
-real(dp),dimension(2,2)    :: vv,oo,ooi,tt
-integer                    :: i,j
-logical                    :: ff
-!==============================================================================
-call eigensym2(x,vv,oo,vvd,ood,ff)
-z=u0; z(1,1)=log(oo(1,1)); z(2,2)=log(oo(2,2))
-z=matmul(matmul(vv,z),transpose(vv))
-ooi=0; ooi(1,1)=u1/oo(1,1); ooi(2,2)=u1/oo(2,2)
-do j=1,2
-do i=1,2
-   tt=matmul(vvd(:,:,i,j),transpose(vv))
-   zd(:,:,i,j)=matmul(matmul(matmul(vv,ood(:,:,i,j)),ooi),transpose(vv))&
-        +matmul(tt,z)-matmul(z,tt)
-enddo
-enddo
-end subroutine logsym2d_e
-
-!=============================================================================
-subroutine logsym2d_t(x,z,zd)!                                    [logsym2d_t]
-!=============================================================================
-! Use the Taylor-series method (eigenvalues both fairly close to unity).
-! For a 2*2 positive definite symmetric matrix x, try to get both the z=log(x)
-! and dz/dx using the power-expansion method applied to the intermediate
-! matrix, y = (x-1)*(x+1)^{-1}. ie z=log(x) = log(1+Y)-log(1-Y) = 
-! 2*{Y + Y**3/3 + Y**5/5 + ....}, so, if Y' = dY/dX, then dZ/dX =
-! 2*{Y'+(Y**2*Y' + Y*Y'*Y + Y'*Y**2)/3 + (Y**4*Y' + ...+Y'*Y**4)/5 + ... }.
-! (Note, we are using the atanh function of Y.)
-!=============================================================================
-real(dp),dimension(2,2),    intent(in ):: x
-real(dp),dimension(2,2),    intent(out):: z
-real(dp),dimension(2,2,2,2),intent(out):: zd
-!-----------------------------------------------------------------------------
-integer,parameter          :: nit=30000 ! number of iterative increments allowed
-real(dp),parameter         :: crit=1.e-17
-real(dp),dimension(2,2)    :: xp,xm,xpi,y,yy,xd,yd,yyd,yp,ypd
-real(dp)                   :: den
-integer                    :: i,j,it
-!=============================================================================
-xp=x; xp(1,1)=x(1,1)+1; xp(2,2)=x(2,2)+1
-xm=x; xm(1,1)=x(1,1)-1; xm(2,2)=x(2,2)-1
-call invsym2(xp,xpi); y=matmul(xm,xpi); yy=matmul(y,y)
-z=0
-zd=0
-do j=1,2; do i=1,2
-   xd=id(:,:,i,j)
-   yd=2*matmul(xpi,matmul(xd,xpi)); yp=y; ypd=yd 
-   yyd=matmul(y,yd); yyd=yyd+transpose(yyd)
-   if(j*i==1)z=z+y
-   zd(:,:,i,j)=zd(:,:,i,j)+yd
-   den=1
-   do it=1,nit
-      den=den+2
-      ypd=matmul(yyd,yp)+matmul(yy,ypd)
-      yp =matmul(yy,yp)
-      if(i*j==1)z=z+yp/den
-      zd(:,:,i,j)=zd(:,:,i,j)+ypd/den
-      if(sum(abs(yp))<crit)exit
-   enddo
-enddo; enddo
-z=2*z
-zd=2*zd
-end subroutine logsym2d_t
 
 !=============================================================================
 subroutine id2222(em)!                                                [id2222]

@@ -34,7 +34,7 @@ program regional_grid
   integer                      :: dx_varid, dy_varid, angle_dx_varid, angle_dy_varid
   integer, dimension(2)        :: dimids
 
-  real(dp)                     :: asp, a,k,m_arcx,m_arcy,q
+  real(dp)                     :: a,k,m_arcx,m_arcy,q
   real(dp)                     :: m_delx,m_dely, delxre,delyre
   real(dp)                     :: arcx,arcy
 
@@ -68,10 +68,8 @@ program regional_grid
 
   arcx=delx*nxh
   arcy=dely*nyh
-  asp=arcy/arcx
   print'("arcx, arcy ",f8.4,f8.4)',arcx,arcy
-  print'("Aspect ratio for this domain is ",f8.4)',asp
-  call get_bestesg(lam,arcx,arcy, a,k,m_arcx,m_arcy,q,ff)
+  call bestesg_geo(lam,arcx,arcy, a,k,m_arcx,m_arcy,q,ff)
   if(ff)stop 'Failure flag returned from get_bestesg'
   print'("For lam=",f8.2," the best [smallest possible]")',lam
   print'("optimality criterion, Q, for this domain: ",e13.6 )',q
