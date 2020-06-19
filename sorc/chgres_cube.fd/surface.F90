@@ -296,6 +296,8 @@
 
  use static_data, only               : veg_type_target_grid, &
                                        soil_type_target_grid
+                                       
+ use grib2_util, only                : write_temp
 
  use search_util
 
@@ -583,7 +585,7 @@
    call ESMF_FieldGather(seaice_fract_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
-
+   
    print*,"- CALL FieldGather FOR TARGET GRID MASK TILE: ", tile
    call ESMF_FieldGather(seamask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -603,7 +605,7 @@
    call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
-
+   
    
    if (localpet == 0) then
      do j = 1, j_target

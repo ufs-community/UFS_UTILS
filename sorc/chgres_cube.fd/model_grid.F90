@@ -790,7 +790,7 @@
  integer                               :: ncid,id_var, id_dim
  real(esmf_kind_r8), pointer           :: lat_src_ptr(:,:), lon_src_ptr(:,:)
  character(len=10000)            :: cmdline_msg, temp_msg, temp_msg2
- character(len=10)              :: temp_num
+ character(len=10)              :: temp_num = 'NA'
 
  num_tiles_input_grid = 1
 
@@ -857,7 +857,7 @@
     error=grb2_mk_inv(the_file,inv_file)
     if (error /=0) call error_handler("OPENING GRIB2 FILE",error)
 
- else
+ elseif (temp_num == "3.0" .or. temp_num == "3.30") then
 
     if (temp_num =="3.0") input_grid_type = "latlon"
     if (temp_num =="3.30" .or. temp_num=='30') input_grid_type = "lambert"
@@ -876,7 +876,14 @@
 
    if (localpet==0) print*, "from file lon(1:10,1) = ", longitude_one_tile(1:10,1)
    if (localpet==0) print*, "from file lat(1,1:10) = ", latitude_one_tile(1,1:10)
-
+ elseif (temp_num=="NA") then
+   error = 0
+   call error_handler("Grid template number cannot be read from the input file. Please &
+    check that the wgrib2 executable is in your path.", error)
+ else
+   error = 0
+   call error_handler("Unknown input file grid template number. Must be one of: & 
+     3, 3.30, 3.32769", error)
  endif
 
  print*,"- I/J DIMENSIONS OF THE INPUT GRID TILES ", i_input, j_input
@@ -964,8 +971,8 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
     do j = clb(2),cub(2)
       do i = clb(1), cub(1)
-        lon_src_ptr(i,j)=longitude_one_tile(i,j)
-        lat_src_ptr(i,j)=latitude_one_tile(i,j)
+        lon_src_ptr(i,j)=real(longitude_one_tile(i,j),esmf_kind_r8)
+        lat_src_ptr(i,j)=real(latitude_one_tile(i,j),esmf_kind_r8)
       enddo
     enddo
 
@@ -1081,7 +1088,8 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  use netcdf
  use program_setup, only       : mosaic_file_target_grid, &
                                  orog_dir_target_grid,    &
-                                 orog_files_target_grid
+                                 orog_files_target_grid,  &
+                                 nsoill_out
 
  implicit none
 
@@ -1105,6 +1113,8 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  real(esmf_kind_r8), allocatable       :: longitude_w_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: terrain_one_tile(:,:)
 
+ lsoil_target = nsoill_out
+ 
  print*,'- OPEN TARGET GRID MOSAIC FILE: ',trim(mosaic_file_target_grid)
  error=nf90_open(trim(mosaic_file_target_grid),nf90_nowrite,ncid)
  call netcdf_err(error, 'opening grid mosaic file')

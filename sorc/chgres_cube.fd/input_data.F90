@@ -40,7 +40,11 @@
                                     tracers_input, num_tracers, &
                                     input_type, tracers, &
                                     get_var_cond, read_from_input, &
-                                    external_model
+                                    geogrid_file_input_grid, &
+                                    external_model, &
+                                    vgfrc_from_climo, &
+                                    minmax_vgfrc_from_climo, &
+                                    lai_from_climo
 
  use model_grid, only             : input_grid,        &
                                     i_input, j_input,  &
@@ -99,6 +103,10 @@
  type(esmf_field), public        :: ustar_input_grid        ! fric velocity
  type(esmf_field), public        :: veg_type_input_grid     ! vegetation type
  type(esmf_field), public        :: z0_input_grid           ! roughness length
+ type(esmf_field), public        :: veg_greenness_input_grid ! vegetation fraction
+ type(esmf_field), public        :: lai_input_grid          ! leaf area index
+ type(esmf_field), public        :: max_veg_greenness_input_grid ! shdmax
+ type(esmf_field), public        :: min_veg_greenness_input_grid ! shdmin
 
  integer, public      :: lsoil_input=4  ! # of soil layers, no longer hardwired to allow
                                         ! # for 7 layers of soil for the RUC LSM
@@ -481,6 +489,42 @@
                                    ungriddedUBound=(/lsoil_input/), rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
+    
+ 
+
+ if (vgfrc_from_climo == .false.) then
+ print*,"- CALL FieldCreate FOR INPUT VEGETATION GREENNESS."
+ veg_greenness_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+ endif
+ 
+ if (minmax_vgfrc_from_climo == .false.) then
+   print*,"- CALL FieldCreate FOR INPUT MIN VEGETATION GREENNESS."
+   min_veg_greenness_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate", rc)
+    
+    print*,"- CALL FieldCreate FOR INPUT MAX VEGETATION GREENNESS."
+   max_veg_greenness_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate", rc)
+ endif
+ 
+ if (lai_from_climo == .false.) then
+    print*,"- CALL FieldCreate FOR INPUT LEAF AREA INDEX."
+   lai_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate", rc)
+ endif
 
  if (trim(input_type) == "restart") then
    call read_input_sfc_restart_file(localpet)
@@ -4333,17 +4377,21 @@ else
  subroutine read_input_sfc_grib2_file(localpet)
 
    use wgrib2api
+   use grib2_util, only    : to_upper
+   use program_setup, only : vgtyp_from_climo, sotyp_from_climo
 
    implicit none
 
    integer, intent(in)                   :: localpet
 
    character(len=250)                    :: the_file
+   character(len=250)                    :: geo_file
    character(len=20)                     :: vname, vname_file,slev
 
    character(len=50)                      :: method
 
    integer                               :: rc, varnum, iret, i, j,k
+   integer                               :: ncid2d, varid
    integer, parameter                    :: icet_default = 265.0
 
    logical                               :: exist
@@ -4357,7 +4405,8 @@ else
    
 
    the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
-
+   geo_file = trim(geogrid_file_input_grid)
+   
    print*,"- READ SFC DATA FROM GRIB2 FILE: ", trim(the_file)
    inquire(file=the_file,exist=exist)
    if (.not.exist) then
@@ -4368,6 +4417,42 @@ else
    lsoil_input = grb2_inq(the_file, inv_file, ':TSOIL:',' below ground:')
    print*, "- FILE HAS ", lsoil_input, " SOIL LEVELS"
    if (lsoil_input <= 0) call error_handler("COUNTING SOIL LEVELS.", rc)
+   
+ !We need to recreate the soil fields if we have something other than 4 levels
+   if (lsoil_input /= 4) then
+   
+     call ESMF_FieldDestroy(soil_temp_input_grid, rc=rc)
+     call ESMF_FieldDestroy(soilm_tot_input_grid, rc=rc)
+     call ESMF_FieldDestroy(soilm_liq_input_grid, rc=rc)
+     
+     print*,"- CALL FieldCreate FOR INPUT SOIL TEMPERATURE."
+     soil_temp_input_grid = ESMF_FieldCreate(input_grid, &
+                                       typekind=ESMF_TYPEKIND_R8, &
+                                       staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                       ungriddedLBound=(/1/), &
+                                       ungriddedUBound=(/lsoil_input/), rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldCreate", rc)
+
+     print*,"- CALL FieldCreate FOR INPUT TOTAL SOIL MOISTURE."
+     soilm_tot_input_grid = ESMF_FieldCreate(input_grid, &
+                                       typekind=ESMF_TYPEKIND_R8, &
+                                       staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                       ungriddedLBound=(/1/), &
+                                       ungriddedUBound=(/lsoil_input/), rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldCreate", rc)
+
+     print*,"- CALL FieldCreate FOR INPUT LIQUID SOIL MOISTURE."
+     soilm_liq_input_grid = ESMF_FieldCreate(input_grid, &
+                                       typekind=ESMF_TYPEKIND_R8, &
+                                       staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                       ungriddedLBound=(/1/), &
+                                       ungriddedUBound=(/lsoil_input/), rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldCreate", rc)
+   
+   endif
 
  if (localpet == 0) then
    allocate(dummy2d(i_input,j_input))
@@ -4417,8 +4502,8 @@ if (localpet == 0) then
 !----------------------------------------------------------------------------------
 ! GFS v14 and v15.2 grib data has two land masks.  LANDN is created by
 ! nearest neighbor interpolation.  LAND is created by bilinear interpolation.
-! LANDN matches the bitmap.  So use it first.  For other GFS versions, use LAND.
-! Mask in grib file is '1' (land), '0' (not land).  Add sea/lake ice category
+! LANDN matches the bitmap.  So use it first.  For other GFS versions or other models,
+! use LAND. Mask in grib file is '1' (land), '0' (not land).  Add sea/lake ice category
 ! '2' based on ice concentration.
 !----------------------------------------------------------------------------------
 
@@ -4482,7 +4567,7 @@ if (localpet == 0) then
        if(dummy2d(i,j) == grb2_UNDEFINED) dummy2d(i,j) = 0.0_esmf_kind_r4
      enddo
    enddo
-!  print*,'weasd ',maxval(dummy2d),minval(dummy2d)
+  print*,'weasd ',maxval(dummy2d),minval(dummy2d)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
@@ -4497,7 +4582,7 @@ if (localpet == 0) then
    where(dummy2d == grb2_UNDEFINED) dummy2d = 0.0_esmf_kind_r4
    dummy2d = dummy2d*1000.0 ! Grib2 files have snow depth in (m), fv3 expects it in mm
    where(slmsk_save == 0) dummy2d = 0.0_esmf_kind_r4
-!  print*,'snod ',maxval(dummy2d),minval(dummy2d)
+  print*,'snod ',maxval(dummy2d),minval(dummy2d)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SNOW DEPTH."
@@ -4537,7 +4622,7 @@ if (localpet == 0) then
    tsk_save(:,:) = dummy2d
    dummy2d_8 = real(dummy2d,esmf_kind_r8)
    
-   print*,'tmp ',maxval(dummy2d),minval(dummy2d)
+   print*,'tsk ',maxval(dummy2d),minval(dummy2d)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
@@ -4552,9 +4637,55 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
-! Soil type is not available.  Set to a large negative fill value.
-
- dummy2d_8 = -99999.0_esmf_kind_r8
+ if (localpet == 0) then
+   print*,"- READ SOIL TYPE."
+   slev=":surface:" 
+   vname=":SOTYP:"                                     
+   rc = grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+   !failed => rc = 0
+   if (rc <= 0 .and. trim(to_upper(external_model))=="HRRR") then 
+     ! Some HRRR files don't have dominant soil type in the output, but the geogrid files
+     ! do, so this gives users the option to provide the geogrid file and use input soil
+     ! type 
+     print*, "OPEN GEOGRID FILE ", trim(geo_file)
+     rc = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
+     ! failed => rc < 0
+     if (rc == 0) then
+       print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
+       rc = nf90_inq_varid(ncid2d,"SCT_DOM",varid)
+       ! failed => rc < 0
+       if (rc<0) print*, "ERROR FINDING SCT_DOM IN GEOGRID FILE"
+       if (rc == 0) then
+         print*, "READ SOIL TYPE FROM GEOGRID FILE "
+         rc = nf90_get_var(ncid2d,varid,dummy2d)
+         ! failed => rc < 0
+         if (rc<0) print*, "ERROR READING SCT_DOM FROM FILE"
+         print*, "min max dummy2d = ", minval(dummy2d), maxval(dummy2d)
+       endif
+       print*, "CLOSE GEOGRID FILE "
+       iret = nf90_close(ncid2d)
+     endif
+   endif
+   
+   if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR") .or. (rc < 0 .and. trim(to_upper(external_model)) == "HRRR")) then
+     if (sotyp_from_climo == .false.) then
+       call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET SOTYP_FROM_CLIMO=.TRUE. . EXITING")
+     else
+       vname = "sotyp"
+       call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+                           loc=varnum)  
+       call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+       if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
+          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL NOT "//&
+                     "SCALE SOIL MOISTURE FOR DIFFERENCES IN SOIL TYPE. "
+          dummy2d(:,:) = -99999.0_esmf_kind_r8
+       endif
+     endif
+   endif
+   
+   dummy2d_8 = real(dummy2d,esmf_kind_r8)
+   print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
+ endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
  call ESMF_FieldScatter(soil_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
@@ -4563,10 +4694,127 @@ if (localpet == 0) then
 
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     
  ! Begin variables whose presence in grib2 files varies, but no climatological
- ! data is 
- ! available, so we have to account for values in the varmap table
+ ! data is available, so we have to account for values in the varmap table
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  
+ if (.not. vgfrc_from_climo) then  
+   if (localpet == 0) then
+     print*,"- READ VEG FRACTION."
+     vname="vfrac"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+               loc=varnum)                 
+     !! Changing these for GSD internal runs using new HRRR files
+     vname=":VEG:"
+     rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+     
+     if (rc > 1) then
+       rc= grb2_inq(the_file, inv_file, vname,slev,'n=1105:', data2=dummy2d)
+       if (rc <= 0) then
+         rc= grb2_inq(the_file, inv_file, vname,slev,'n=1101:', data2=dummy2d)
+         if (rc <= 0) then
+           rc= grb2_inq(the_file, inv_file, vname,slev,'n=1151:', data2=dummy2d)
+           if (rc <= 0) call error_handler("COULD NOT DETERMINE VEGETATION FRACTION IN FILE.  &
+             RECORD NUMBERS MAY HAVE CHANGED. PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
+         endif
+       endif
+     elseif (rc <= 0) then 
+       call error_handler("COULD NOT FIND VEGETATION FRACTION IN FILE.  &
+           PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
+     endif
+     if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
+      print*,'vfrac ',maxval(dummy2d),minval(dummy2d)   
+   endif
+
+ 
+   print*,"- CALL FieldScatter FOR INPUT GRID VEG GREENNESS."
+   call ESMF_FieldScatter(veg_greenness_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", rc)
+  endif
+
+  if (.not. minmax_vgfrc_from_climo) then
+   if (localpet == 0) then
+     print*,"- READ MIN VEG FRACTION."
+     vname="vfrac_min"
+     slev=":surface:"
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+               loc=varnum)
+     vname=":VEG:"
+     rc= grb2_inq(the_file, inv_file, vname,slev,'n=1106:',data2=dummy2d)
+
+     if (rc <= 0) then
+       rc= grb2_inq(the_file, inv_file, vname,slev,'n=1102:',data2=dummy2d)
+       if (rc <= 0) then
+         rc= grb2_inq(the_file, inv_file, vname,slev,'n=1152:',data2=dummy2d)
+         if (rc<=0) call error_handler("COULD NOT FIND MIN VEGETATION FRACTION IN FILE. &
+           PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+       endif
+     endif
+     if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
+     print*,'vfrac min',maxval(dummy2d),minval(dummy2d)
+
+     endif
+
+   print*,"- CALL FieldScatter FOR INPUT GRID MIN VEG GREENNESS."
+   call ESMF_FieldScatter(min_veg_greenness_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+   
+   if (localpet == 0) then
+     print*,"- READ MAX VEG FRACTION."
+     vname="vfrac_max"
+     slev=":surface:"
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+               loc=varnum)
+
+     vname=":VEG:"
+     rc= grb2_inq(the_file, inv_file, vname,slev,'n=1107:',data2=dummy2d)
+     if (rc <=0) then
+       rc= grb2_inq(the_file, inv_file, vname,slev,'n=1103:',data2=dummy2d)
+       if (rc <=0) then
+         rc= grb2_inq(the_file, inv_file, vname,slev,'n=1153:',data2=dummy2d)
+         if (rc <= 0) call error_handler("COULD NOT FIND MAX VEGETATION FRACTION IN FILE. &
+            PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+       endif
+     endif
+     if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
+     print*,'vfrac max',maxval(dummy2d),minval(dummy2d)
+
+   endif !localpet==0
+
+   print*,"- CALL FieldScatter FOR INPUT GRID MAX VEG GREENNESS."
+   call ESMF_FieldScatter(max_veg_greenness_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+ endif !minmax_vgfrc_from_climo
+ 
+ if (.not. lai_from_climo) then
+   if (localpet == 0) then
+     print*,"- READ LAI."
+     vname="lai"
+     slev=":surface:"
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+               loc=varnum)
+     vname=":var0_7_198:"
+     rc= grb2_inq(the_file, inv_file, vname,slev,':n=1108:',data2=dummy2d)
+     if (rc <=0) then
+       rc= grb2_inq(the_file, inv_file, vname,slev,':n=1104:',data2=dummy2d)
+       if (rc <=0) then
+         rc= grb2_inq(the_file, inv_file, vname,slev,':n=1154:',data2=dummy2d)
+         if (rc <= 0) call error_handler("COULD NOT FIND LAI IN FILE. &
+            PLEASE SET LAI_FROM_CLIMO=.TRUE. . EXITING",rc)
+       endif
+     endif
+      print*,'lai',maxval(dummy2d),minval(dummy2d)
+   endif !localpet==0
+
+   print*,"- CALL FieldScatter FOR INPUT GRID LAI."
+   call ESMF_FieldScatter(lai_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+
+ endif
  if (localpet == 0) then
    print*,"- READ SEAICE DEPTH."
    vname="hice"
@@ -4754,7 +5002,6 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
     
- deallocate(dummy2d)
  
  if (localpet == 0) then
    print*,"- READ LIQUID SOIL MOISTURE."
@@ -4778,38 +5025,59 @@ if (localpet == 0) then
    call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
    print*,'soilm ',maxval(dummy3d),minval(dummy3d)
  endif
-
-!-----------------------------------------------------------------------
-! Vegetation type is not available.  However, it is needed to identify
-! permanent land ice points.  At land ice, the total soil moisture
-! is a flag value of '1'.  Use this flag as a temporary solution.
-!-----------------------------------------------------------------------
-
- if (localpet == 0) then
-   dummy2d_8(:,:) = 0.0_esmf_kind_r8
-   do j = 1, j_input
-       do i = 1, i_input
-         if(slmsk_save(i,j) == 1_esmf_kind_i4 .and. dummy3d(i,j,1) > 0.99) &
-            dummy2d_8(i,j) = real(veg_type_landice_input,esmf_kind_r8)
-       enddo
-   enddo
- endif
-
- print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
- call ESMF_FieldScatter(veg_type_input_grid, dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
-
+ 
  print*,"- CALL FieldScatter FOR INPUT TOTAL SOIL MOISTURE."
  call ESMF_FieldScatter(soilm_tot_input_grid, dummy3d, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+    
+!----------------------------------------------------------------------------------------
+! Vegetation type is not available in some files.  However, it is needed to identify
+! permanent land ice points.  At land ice, the total soil moisture is a flag value of
+! '1'. Use this flag as a temporary solution.
+!----------------------------------------------------------------------------------------
+
+ if (localpet == 0) then
+   print*,"- READ VEG TYPE."
+   vname="vtype"
+   slev=":surface:" 
+   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+                         loc=varnum)
+   !Note: sometimes the grib files don't have this one named. Searching for this string
+   !      ensures that the data is found when it exists
+                 
+   vname="var2_2"   
+   rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,' hour fcst:', data2=dummy2d)
+   if (rc <= 0) then
+     rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
+     if (rc <= 0) then
+       if (.not. vgtyp_from_climo) then
+         call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING")
+       else
+		  do j = 1, j_input
+		    do i = 1, i_input
+		      dummy2d(i,j) = 0.0_esmf_kind_r4
+		      if(slmsk_save(i,j) == 1_esmf_kind_i4 .and. dummy3d(i,j,1) > 0.99) &
+			  	dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
+			enddo
+		  enddo    
+       endif ! replace_vgtyp
+     endif !not find :anl:
+   endif !not find hour fcst:
+   dummy2d_8= real(dummy2d,esmf_kind_r8)
+   print*,'vgtyp ',maxval(dummy2d),minval(dummy2d)
+ endif !localpet
+ deallocate(dummy2d)
+ print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
+ call ESMF_FieldScatter(veg_type_input_grid, dummy2d_8, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
 !---------------------------------------------------------------------------------
 ! At open water (slmsk==0), the soil temperature array is not used and set
 ! to the filler value of SST.  At lake/sea ice points (slmsk=2), the soil 
-! temperature array holds ice column temperature.  That field is not available
-! in GFS grib data, so set to a default value.
+! temperature array holds ice column temperature.  This field is not available
+! in the grib data, so set to a default value.
 !---------------------------------------------------------------------------------
 
  if (localpet == 0) then
@@ -5834,9 +6102,13 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
   if(lsoil_input == 4) then
     slevs = (/character(24)::':0-0.1 m below ground:', ':0.1-0.4 m below ground:', &
                              ':0.4-1 m below ground:', ':1-2 m below ground:'/)
+  elseif(lsoil_input == 9) then
+    slevs = (/character(26)::':0-0 m below ground',':0.01-0.01 m below ground:',':0.04-0.04 m below ground:', &
+        ':0.1-0.1 m below ground:',':0.3-0.3 m below ground:',':0.6-0.6 m below ground:', &
+        ':1-1 m below ground:',':1.6-1.6 m below ground:',':3-3 m below ground:'/)
   else
     rc = -1
-    call error_handler("reading soil levels. File must have 4 soil levels.", rc)
+    call error_handler("reading soil levels. File must have 4 or 9 soil levels.", rc)
   endif
  
   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &

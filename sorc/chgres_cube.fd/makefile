@@ -43,7 +43,7 @@ write_data.o: atmosphere.o  model_grid.o program_setup.o surface.o static_data.o
 input_data.o: program_setup.o model_grid.o grib2_util.o input_data.F90
 	$(FCOMP) $(FFLAGS) -I$(NEMSIO_INC) -I$(SIGIO_INC4) -I$(SFCIO_INC4) -I$(WGRIB2API_INC) $(ESMF_F90COMPILEPATHS) -c input_data.F90
 
-surface.o: search_util.o model_grid.o input_data.o program_setup.o static_data.o surface.F90
+surface.o: grib2_util.o search_util.o model_grid.o input_data.o program_setup.o static_data.o surface.F90
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -c surface.F90
 
 search_util.o: search_util.f90

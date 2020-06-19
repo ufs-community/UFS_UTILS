@@ -119,6 +119,7 @@
  character(len=20),  public      :: external_model="GFS"  !Default assume gfs data
  
  
+ 
 !!! Remove this option and assume wgrib2 is in the user's path 
 ! character(len=1000), public     :: wgrib2_path="wgrib2"  !Provide option to set path to 
 !                                                          !wgrib2 executable for command 
@@ -126,7 +127,7 @@
  !!! Remote this option in favor of a direct path to the chgres fixed files directory                                                         
  !character(len=1000), public     :: base_install_dir="."                            
  
- character(len=20), public       :: fix_dir_input_grid = "NULL"                             
+ character(len=500), public       :: fix_dir_input_grid = "NULL"                             
                                                           
 
  integer, parameter, public      :: max_tracers=100
@@ -147,6 +148,7 @@
  integer, public                 :: regional = 0
  integer, public                 :: halo_bndy = 0
  integer, public                 :: halo_blend = 0
+ integer, public                 :: nsoill_out = 4
 
  logical, public                 :: convert_atm = .false.
  logical, public                 :: convert_nst = .false.
@@ -157,9 +159,9 @@
  logical, public                 :: vgtyp_from_climo = .true.
  logical, public                 :: sotyp_from_climo = .true.
  logical, public                 :: vgfrc_from_climo = .true.
+ logical, public                 :: minmax_vgfrc_from_climo = .true.
  logical, public                 :: lai_from_climo = .true.
  logical, public                 :: tg3_from_soil = .false.
- logical, public                 :: internal_GSD = .false.
 
  real, allocatable, public       :: drysmc_input(:), drysmc_target(:)
  real, allocatable, public       :: maxsmc_input(:), maxsmc_target(:)
@@ -208,15 +210,16 @@
                    vgtyp_from_climo, &
                    sotyp_from_climo, &
                    vgfrc_from_climo, &
+                   minmax_vgfrc_from_climo, &
                    lai_from_climo, tg3_from_soil, &
-                   internal_GSD, &
                    regional, input_type, &
                    external_model, &
                    atm_weight_file, tracers, &
                    tracers_input,phys_suite, &
                    halo_bndy, & 
                    halo_blend, &
-                   fix_dir_input_grid
+                   fix_dir_input_grid, &
+                   nsoill_out
 !                   wgrib2_path, base_install_dir
 
  print*,"- READ SETUP NAMELIST"
@@ -335,21 +338,6 @@
 	 endif
  endif
  return
-
-!------------------------------------------------------------------------------
-! For internal_GSD=.true., check that data is HRRR and warn user of specific
-! use
-!------------------------------------------------------------------------------
- if ( internal_GSD) then
-	 if (trim(external_model) /= "HRRR") then
-		 call error_handler("internal_GSD = .true. is only valid for HRRRR input data")
-	 endif
-	 print*, "WARNING: THE internal_GSD OPTION IS INTENDED ONLY FOR INTERNAL &
-	 OPERATIONAL USE AT GSD WITH SPECIFIC HRRR FILES. UNINTENDED RESULTS ARE POSSIBLE &
-		OTHERWISE."
- endif
-	 
-
  
  end subroutine read_setup_namelist
 
