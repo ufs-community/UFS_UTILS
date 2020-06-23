@@ -507,8 +507,8 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
     REAL :: lake_frac(cs_res*cs_res), lake_depth(cs_res*cs_res)
     REAL :: geolon(cs_res*cs_res), geolat(cs_res*cs_res)
     REAL :: land_frac(cs_res*cs_res), slmsk(cs_res*cs_res)
-    real, parameter :: epsil=1.e-6   ! numerical min for lake_frac/land_frac
-    real            :: cutoff_lake=0.01, cutoff_land=1.e-6 ! if frac<cutoff, frac=0
+    real, parameter :: epsil=1.e-6                         ! numerical min for lake_frac/land_frac
+    real            :: cutoff_lake=0.01, cutoff_land=1.e-6 ! practical min for lake_frac/land_frac
 
     INTEGER :: i, j
 
@@ -622,44 +622,26 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
         ENDDO
       ENDIF 
 
-      if (min(cutoff_lake,cutoff_land) < epsil) then
-        print *,'cutoff_lake/cutoff_land cannot be smaller than epsil, reset...'
-        cutoff_lake=max(epsil,cutoff_lake)
+      if (min(cutoff_land,cutoff_lake) < epsil) then
+        print *,'practical cutoff_lake/cutoff_land cannot be smaller than numerical nonzero epsil, reset...'
         cutoff_land=max(epsil,cutoff_land)
+        cutoff_lake=max(epsil,cutoff_lake)
       end if
       DO i = 1, tile_sz
-!      IF (tile_num == 5 .and. abs(land_frac(i)-0.318) < 0.01 ) print *,'qq1 i=',i,' land/lake=',land_frac(i),lake_frac(i)
-! epsil is "numerical" nonzero min for lake_frac/land_frac
-        if (lake_frac(i)>0. .and. lake_frac(i)<   epsil) lake_frac(i)=0.
-        if (lake_frac(i)<1. .and. lake_frac(i)>1.-epsil) lake_frac(i)=1.
-        if (land_frac(i)>0. .and. land_frac(i)<   epsil) land_frac(i)=0.
-        if (land_frac(i)<1. .and. land_frac(i)>1.-epsil) land_frac(i)=1.
-! cutoff_lake/cutoff_land is practical min for lake_frac/land_frac
-        if (land_frac(i)>0. .and. land_frac(i)<cutoff_land) then
-          land_frac(i)=0.
-        end if
-! recalculate lake_frac, land_frac/slmsk, assuming lake/ocean don't coexist, so that max(lake,ocn)+land=1
-!        if (land_frac(i) > 0.) then
-!          if (lake_frac(i) >= cutoff_lake) then ! lake_frac dominates over land_frac
-!            land_frac(i) = min(1., land_frac(i)+lake_frac(i)) - lake_frac(i)
-!            land_frac(i) = max(1., land_frac(i)+lake_frac(i)) - lake_frac(i)
-!          else ! land_frac dominiates over lake_frac
-!            lake_frac(i) = min(1., land_frac(i)+lake_frac(i)) - land_frac(i)
-!            lake_frac(i) = max(1., land_frac(i)+lake_frac(i)) - land_frac(i)
-!          end if
-!        end if
+        if (land_frac(i)>0. .and. land_frac(i)<   cutoff_land) land_frac(i)=0.
+        if (land_frac(i)<1. .and. land_frac(i)>1.-cutoff_land) land_frac(i)=1.
+        if (lake_frac(i)>0. .and. lake_frac(i)<   cutoff_lake) lake_frac(i)=0.
+        if (lake_frac(i)<1. .and. lake_frac(i)>1.-cutoff_lake) lake_frac(i)=1.
 
-        if (lake_frac(i)>0. .and. lake_frac(i)<cutoff_lake) then
-          lake_frac(i)=0.
-          lake_depth(i)=0.
-          land_frac(i)=1.
-        elseif (lake_frac(i) >= cutoff_lake .and. lake_depth(i)==0.) then
-!          print *,'lake without depth at i=',i
+        if (lake_frac(i) > 0. .and. lake_depth(i)==0.) then
           lake_depth(i)=10.
+        elseif (lake_frac(i)==0. .and. lake_depth(i) > 0.) then
+          lake_depth(i)=0.
         end if
 
+! adjust land_frac/slmsk to be consistent with lake_frac
+        if (lake_frac(i) > 0.) land_frac(i) = 1. - lake_frac(i)
         slmsk(i) = nint(land_frac(i))
-!      IF (tile_num == 5 .and. (i==113375.or.i==98441.or.i==147232.or.i==108080)) print *,'qq2 i=',i,' land/lake=',land_frac(i),lake_frac(i)
       ENDDO
 
 ! write 2 new variables      
@@ -703,8 +685,8 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
     REAL, ALLOCATABLE :: lake_frac(:), lake_depth(:), geolon(:), geolat(:)
     REAL, ALLOCATABLE :: land_frac(:), slmsk(:)
 
-    real, parameter :: epsil=1.e-6   ! numerical min for lake_frac/land_frac
-    real            :: cutoff_lake=0.01, cutoff_land=1.e-6 ! if frac<cutoff, frac=0
+    real, parameter :: epsil=1.e-6                         ! numerical min for lake_frac/land_frac
+    real            :: cutoff_lake=0.01, cutoff_land=1.e-6 ! practical min for lake_frac/land_frac
 
     INTEGER :: i, j, var_id
 
@@ -825,30 +807,25 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
       ENDIF
     ENDDO
 
-    if (min(cutoff_lake,cutoff_land) < epsil) then
-      print *,'cutoff_lake/cutoff_land cannot be smaller than epsil, reset...'
-      cutoff_lake=max(epsil,cutoff_lake)
+    if (min(cutoff_land,cutoff_lake) < epsil) then
+      print *,'practical cutoff_lake/cutoff_land cannot be smaller than numerical nonzero epsil, reset...'
       cutoff_land=max(epsil,cutoff_land)
+      cutoff_lake=max(epsil,cutoff_lake)
     end if
     DO i = 1, tile_sz
-! epsil is "numerical" nonzero min for lake_frac/land_frac
-      if (lake_frac(i)>0. .and. lake_frac(i)<   epsil) lake_frac(i)=0.
-      if (lake_frac(i)<1. .and. lake_frac(i)>1.-epsil) lake_frac(i)=1.
-      if (land_frac(i)>0. .and. land_frac(i)<   epsil) land_frac(i)=0.
-      if (land_frac(i)<1. .and. land_frac(i)>1.-epsil) land_frac(i)=1.
-! cutoff_lake/cutoff_land is practical min for lake_frac/land_frac
-      if (land_frac(i)>0. .and. land_frac(i)<cutoff_land) then
-        land_frac(i)=0.
-      end if
-      
-      if (lake_frac(i)>0. .and. lake_frac(i)<cutoff_lake) then
-        lake_frac(i)=0.
-        lake_depth(i)=0.
-        land_frac(i)=1.
-      elseif (lake_frac(i) >= cutoff_lake .and. lake_depth(i)==0.) then
+      if (land_frac(i)>0. .and. land_frac(i)<   cutoff_land) land_frac(i)=0.
+      if (land_frac(i)<1. .and. land_frac(i)>1.-cutoff_land) land_frac(i)=1.
+      if (lake_frac(i)>0. .and. lake_frac(i)<   cutoff_lake) lake_frac(i)=0.
+      if (lake_frac(i)<1. .and. lake_frac(i)>1.-cutoff_lake) lake_frac(i)=1.
+
+      if (lake_frac(i) > 0. .and. lake_depth(i)==0.) then
         lake_depth(i)=10.
+      elseif (lake_frac(i)==0. .and. lake_depth(i) > 0.) then
+        lake_depth(i)=0.
       end if
 
+! adjust land_frac/slmsk to be consistent with lake_frac
+      if (lake_frac(i) > 0.) land_frac(i) = 1. - lake_frac(i)
       slmsk(i) = nint(land_frac(i))
     ENDDO
 
