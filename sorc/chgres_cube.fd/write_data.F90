@@ -111,7 +111,9 @@
                                    u_w_target_grid, &
                                    v_w_target_grid, &
                                    temp_target_grid, &
-                                   zh_target_grid
+                                   zh_target_grid, &
+                                   qnifa_climo_target_grid, &
+                                   qnwfa_climo_target_grid
 
  use model_grid, only            : i_target, ip1_target, j_target, jp1_target
 
@@ -136,6 +138,10 @@
  integer                        :: id_i_top, id_j_top
  integer                        :: id_i_right, id_j_right
  integer                        :: id_i_left, id_j_left
+ integer                        :: id_qnifa_bottom, id_qnifa_top
+ integer                        :: id_qnifa_right, id_qnifa_left
+ integer                        :: id_qnwfa_bottom, id_qnwfa_top
+ integer                        :: id_qnwfa_right, id_qnwfa_left
  integer                        :: id_ps_bottom, id_ps_top
  integer                        :: id_ps_right, id_ps_left
  integer                        :: id_t_bottom, id_t_top
@@ -341,6 +347,54 @@
      call netcdf_err(error, 'DEFINING TRACER_LEFT')
 
    enddo
+
+   if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
+
+     name = "qnifa_bottom"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_lon, dim_halo, dim_lev/), id_qnifa_bottom)
+     call netcdf_err(error, 'DEFINING QNIFA_BOTTOM')
+
+     name = "qnifa_top"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_lon, dim_halo, dim_lev/), id_qnifa_top)
+     call netcdf_err(error, 'DEFINING QNIFA_TOP')
+
+     name = "qnifa_right"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_halo, dim_lat, dim_lev/), id_qnifa_right)
+     call netcdf_err(error, 'DEFINING QNIFA_RIGHT')
+
+     name = "qnifa_left"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_halo, dim_lat, dim_lev/), id_qnifa_left)
+     call netcdf_err(error, 'DEFINING QNIFA_LEFT')
+
+   endif 
+
+   if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
+
+     name = "qnwfa_bottom"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_lon, dim_halo, dim_lev/), id_qnwfa_bottom)
+     call netcdf_err(error, 'DEFINING QNWFA_BOTTOM')
+
+     name = "qnwfa_top"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_lon, dim_halo, dim_lev/), id_qnwfa_top)
+     call netcdf_err(error, 'DEFINING QNWFA_TOP')
+
+     name = "qnwfa_right"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_halo, dim_lat, dim_lev/), id_qnwfa_right)
+     call netcdf_err(error, 'DEFINING QNWFA_RIGHT')
+
+     name = "qnwfa_left"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_halo, dim_lat, dim_lev/), id_qnwfa_left)
+     call netcdf_err(error, 'DEFINING QNWFA_LEFT')
+
+   endif
 
    error = nf90_def_var(ncid, 'i_w_bottom', NF90_INT, &
                              (/dim_lonp/), id_i_w_bottom)
@@ -756,6 +810,62 @@
    dum3d_right(:,:,1:lev_target) = dum3d_right(:,:,lev_target:1:-1) 
    error = nf90_put_var( ncid, id_t_right, dum3d_right)
    call netcdf_err(error, 'WRITING T RIGHT' )
+ endif
+
+ if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
+
+   print*,"- CALL FieldGather FOR TARGET GRID CLIMO QNIFA FOR TILE: ", tile
+   call ESMF_FieldGather(qnifa_climo_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum3d_top(:,:,:) = data_one_tile_3d(i_start_top:i_end_top,j_start_top:j_end_top,:)
+     dum3d_top(:,:,1:lev_target) = dum3d_top(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnifa_top, dum3d_top)
+     call netcdf_err(error, 'WRITING QNIFA CLIMO TOP' )
+     dum3d_bottom(:,:,:) = data_one_tile_3d(i_start_bottom:i_end_bottom,j_start_bottom:j_end_bottom,:)
+     dum3d_bottom(:,:,1:lev_target) = dum3d_bottom(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnifa_bottom, dum3d_bottom)
+     call netcdf_err(error, 'WRITING QNIFA CLIMO BOTTOM' )
+     dum3d_left(:,:,:) = data_one_tile_3d(i_start_left:i_end_left,j_start_left:j_end_left,:)
+     dum3d_left(:,:,1:lev_target) = dum3d_left(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnifa_left, dum3d_left)
+     call netcdf_err(error, 'WRITING QNIFA CLIMO LEFT' )
+     dum3d_right(:,:,:) = data_one_tile_3d(i_start_right:i_end_right,j_start_right:j_end_right,:)
+     dum3d_right(:,:,1:lev_target) = dum3d_right(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnifa_right, dum3d_right)
+     call netcdf_err(error, 'WRITING QNIFA CLIMO RIGHT' )
+   endif
+
+ endif
+
+ if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
+
+   print*,"- CALL FieldGather FOR TARGET GRID CLIMO QNWFA FOR TILE: ", tile
+   call ESMF_FieldGather(qnwfa_climo_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum3d_top(:,:,:) = data_one_tile_3d(i_start_top:i_end_top,j_start_top:j_end_top,:)
+     dum3d_top(:,:,1:lev_target) = dum3d_top(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnwfa_top, dum3d_top)
+     call netcdf_err(error, 'WRITING QNWFA CLIMO TOP' )
+     dum3d_bottom(:,:,:) = data_one_tile_3d(i_start_bottom:i_end_bottom,j_start_bottom:j_end_bottom,:)
+     dum3d_bottom(:,:,1:lev_target) = dum3d_bottom(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnwfa_bottom, dum3d_bottom)
+     call netcdf_err(error, 'WRITING QNWFA CLIMO BOTTOM' )
+     dum3d_left(:,:,:) = data_one_tile_3d(i_start_left:i_end_left,j_start_left:j_end_left,:)
+     dum3d_left(:,:,1:lev_target) = dum3d_left(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnwfa_left, dum3d_left)
+     call netcdf_err(error, 'WRITING QNWFA CLIMO LEFT' )
+     dum3d_right(:,:,:) = data_one_tile_3d(i_start_right:i_end_right,j_start_right:j_end_right,:)
+     dum3d_right(:,:,1:lev_target) = dum3d_right(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnwfa_right, dum3d_right)
+     call netcdf_err(error, 'WRITING QNWFA CLIMO RIGHT' )
+   endif
+
  endif
 
  deallocate(dum3d_top, dum3d_bottom, dum3d_left, dum3d_right, data_one_tile_3d)
