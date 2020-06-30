@@ -39,8 +39,8 @@ nx=`expr $res \* 2 `
 if [ ! -s $outdir ]; then  mkdir -p $outdir ;fi
 cd $outdir
 
-if [ $gtype = regional2 ]; then
-  executable=$exec_dir/regional_grid
+if [ $gtype = regional_esg ]; then
+  executable=$exec_dir/regional_esg_grid
 else
   executable=$exec_dir/make_hgrid
 fi
@@ -88,7 +88,7 @@ elif  [ $gtype = nest ] || [ $gtype = regional ] ; then
                      --nest_grid --parent_tile 6 --refine_ratio $refine_ratio --istart_nest $istart_nest --jstart_nest $jstart_nest \
                      --iend_nest $iend_nest --jend_nest $jend_nest --halo $halo --great_circle_algorithm
 
-elif [ $gtype = regional2 ] ; then
+elif [ $gtype = regional_esg ] ; then
 
   (( halop2=halo+2 ))
   (( lx=idim+halop2*2 ))
@@ -102,8 +102,6 @@ elif [ $gtype = regional2 ] ; then
       dely = ${dely}
       lx   = -${lx}
       ly   = -${ly}
-      a    = ${a_param}
-      k    = ${k_param}
     /
 EOF
 
@@ -120,7 +118,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-if [ $gtype = regional2 ]; then
+if [ $gtype = regional_esg ]; then
 
   $APRUN $exec_dir/global_equiv_resol regional_grid.nc
   if [ $? -ne 0 ]; then
@@ -173,7 +171,7 @@ elif [ $gtype = regional ];then
 
   $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile7.nc
 
-elif [ $gtype = regional2 ]; then
+elif [ $gtype = regional_esg ]; then
 
   res=$( ncdump -h regional_grid.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
   res=${res//$'\n'/}

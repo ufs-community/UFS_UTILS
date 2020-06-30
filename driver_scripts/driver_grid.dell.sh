@@ -59,7 +59,7 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=regional  # 'uniform', 'stretch', 'nest', or 'regional'
+export gtype=regional_esg  # 'uniform', 'stretch', 'nest', or 'regional'
 
 if [ $gtype = uniform ]; then
   export res=96
@@ -79,7 +79,7 @@ elif [ $gtype = nest ] || [ $gtype = regional ]; then
   export iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
   export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
   export halo=3
-elif [ $gtype = regional2 ] ; then
+elif [ $gtype = regional_esg ] ; then
   export res=-999              # equivalent res is computed.
   export target_lon=-97.5      # Center longitude of grid
   export target_lat=35.5       # Center latitude of grid
@@ -91,10 +91,6 @@ elif [ $gtype = regional2 ] ; then
                                # direction is related to delx as follows:
                                #    distance = 2*delx*(circumf_Earth/360 deg)
   export dely=0.0585           # Grid spacing (in degrees) in the 'j' direction.
-  export a_param=0.21423       # 'a' parameter of the generalized gnomonic mapping
-                               # centered at target_lon/lat.  See Purser office note.
-  export k_param=-0.23209      # 'k' parameter of the generalized gnomonic mapping
-                               # centered at target_lon/lat.  See Purser office note.
   export halo=3                # number of row/cols for halo
 fi
 
