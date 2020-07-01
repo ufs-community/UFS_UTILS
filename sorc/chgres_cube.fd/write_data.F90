@@ -350,22 +350,22 @@
 
    if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
 
-     name = "qnifa_bottom"
+     name = "ice_aero_bottom"
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
                              (/dim_lon, dim_halo, dim_lev/), id_qnifa_bottom)
      call netcdf_err(error, 'DEFINING QNIFA_BOTTOM')
 
-     name = "qnifa_top"
+     name = "ice_aero_top"
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
                              (/dim_lon, dim_halo, dim_lev/), id_qnifa_top)
      call netcdf_err(error, 'DEFINING QNIFA_TOP')
 
-     name = "qnifa_right"
+     name = "ice_aero_right"
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
                              (/dim_halo, dim_lat, dim_lev/), id_qnifa_right)
      call netcdf_err(error, 'DEFINING QNIFA_RIGHT')
 
-     name = "qnifa_left"
+     name = "ice_aero_left"
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
                              (/dim_halo, dim_lat, dim_lev/), id_qnifa_left)
      call netcdf_err(error, 'DEFINING QNIFA_LEFT')
@@ -374,22 +374,22 @@
 
    if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
 
-     name = "qnwfa_bottom"
+     name = "liq_aero_bottom"
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
                              (/dim_lon, dim_halo, dim_lev/), id_qnwfa_bottom)
      call netcdf_err(error, 'DEFINING QNWFA_BOTTOM')
 
-     name = "qnwfa_top"
+     name = "liq_aero_top"
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
                              (/dim_lon, dim_halo, dim_lev/), id_qnwfa_top)
      call netcdf_err(error, 'DEFINING QNWFA_TOP')
 
-     name = "qnwfa_right"
+     name = "liq_aero_right"
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
                              (/dim_halo, dim_lat, dim_lev/), id_qnwfa_right)
      call netcdf_err(error, 'DEFINING QNWFA_RIGHT')
 
-     name = "qnwfa_left"
+     name = "liq_aero_left"
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
                              (/dim_halo, dim_lat, dim_lev/), id_qnwfa_left)
      call netcdf_err(error, 'DEFINING QNWFA_LEFT')
@@ -1402,14 +1402,14 @@
    enddo
 
    if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
-     error = nf90_def_var(ncid, 'qnifa', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_qnifa)
+     error = nf90_def_var(ncid, 'ice_aero', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_qnifa)
      call netcdf_err(error, 'DEFINING QNIFA' )
      error = nf90_put_att(ncid, id_qnifa, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING QNIFA COORD' )
    endif
 
    if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
-     error = nf90_def_var(ncid, 'qnwfa', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_qnwfa)
+     error = nf90_def_var(ncid, 'liq_aero', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_qnwfa)
      call netcdf_err(error, 'DEFINING QNWFA' )
      error = nf90_put_att(ncid, id_qnwfa, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING QNWFA COORD' )
