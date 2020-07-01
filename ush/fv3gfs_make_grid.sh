@@ -121,16 +121,21 @@ fi
 if [ $gtype = regional_esg ]; then
 
   $APRUN $exec_dir/global_equiv_resol regional_grid.nc
-  if [ $? -ne 0 ]; then
-    set +x
-    echo
-    echo "FATAL ERROR running global_equiv_resol."
-    echo
-    set -x
-    exit 2
-  fi
+
+elif [ $gtype = regional ]; then
+
+  $APRUN $exec_dir/global_equiv_resol  C${res}_grid.tile7.nc
+
 fi
 
+if [ $? -ne 0 ]; then
+  set +x
+  echo
+  echo "FATAL ERROR running global_equiv_resol."
+  echo
+  set -x
+  exit 2
+fi
 
 #---------------------------------------------------------------------------------------
 # Create mosaic file.
@@ -169,6 +174,12 @@ elif [ $gtype = nest ]; then
 
 elif [ $gtype = regional ];then
 
+# For gfdl regional grids, redefine the CRES value.
+
+  res_save=$res
+  res=$( ncdump -h C${res}_grid.tile7.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
+  res=${res//$'\n'/}
+  mv C${res_save}_grid.tile7.nc  C${res}_grid.tile7.nc
   $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile7.nc
 
 elif [ $gtype = regional_esg ]; then

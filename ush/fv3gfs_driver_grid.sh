@@ -315,10 +315,7 @@ elif [ $gtype = regional ]; then
  
   export ntiles=1
   tile=7
-  rn=$( echo "$stretch_fac * 10" | bc | cut -c1-2 )
-  name=C${res}r${rn}n${refine_ratio}_${title}
-  out_dir=$out_dir/C${res}
-  mkdir -p $out_dir
+  name=gfdl
   grid_dir=$TMPDIR/${name}/grid
   orog_dir=$TMPDIR/$name/orog
   filter_dir=$orog_dir   # nested grid topography will be filtered online
@@ -335,6 +332,13 @@ elif [ $gtype = regional ]; then
   if [ $err != 0 ]; then
     exit $err
   fi
+
+# redefine res for gfdl regional grids.
+
+  res=$( ncdump -h ${grid_dir}/C*_grid.tile7.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
+  res=${res//$'\n'/}
+  out_dir=$out_dir/C${res}
+  mkdir -p $out_dir
 
   echo "Begin regional orography generation at `date`"
  
@@ -434,7 +438,7 @@ elif [ $gtype = regional_esg ]; then
 
   halop1=$(( halo + 1 ))
   tile=7
-  name=regional
+  name=regional_esg
   grid_dir=$TMPDIR/${name}/grid
   orog_dir=$TMPDIR/${name}/orog
   filter_dir=$TMPDIR/${name}/filter_topo
