@@ -19,7 +19,7 @@
 
  contains
 
- subroutine search (field, mask, idim, jdim, tile, field_num, latitude)
+ subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)
 
 !-----------------------------------------------------------------------
 ! Replace undefined values on the model grid with a valid value at
@@ -44,6 +44,8 @@
  integer(esmf_kind_i8), intent(in) :: mask(idim,jdim)
 
  real(esmf_kind_r8), intent(in), optional :: latitude(idim,jdim)
+ real(esmf_kind_r8), intent(in), optional :: terrain_land(idim,jdim)
+ real(esmf_kind_r8), intent(in), optional :: soilt_climo(idim,jdim)
 
  real(esmf_kind_r8), intent(inout) :: field(idim,jdim)
 
@@ -54,6 +56,7 @@
 
  real                              :: default_value
  real(esmf_kind_r8)                :: field_save(idim,jdim)
+ integer                           :: repl_nearby, repl_default
 
 !-----------------------------------------------------------------------
 ! Set default value.
@@ -91,6 +94,16 @@
      default_value = 0.0
    case (224) ! soil type, flag value to turn off soil moisture rescaling.
      default_value = -99999.9
+   case (225) ! vegetation type, flag value to be replaced
+     default_value = -99999.9
+   case (226) ! vegetation fraction, flag value to be replaced
+     default_value = 0.5
+   case (227) ! max vegetation fraction, flag value to be replaced
+     default_value = 0.5
+   case (228) ! min vegetation fraction, flag value to be replaced
+     default_value = 0.5
+   case (229) ! lai, flag value to be replaced
+     default_value = 1.0
    case default
      print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field
      call mpi_abort(mpi_comm_world, 77, ierr)
@@ -101,9 +114,10 @@
 !-----------------------------------------------------------------------
 
  field_save = field
-
+ repl_nearby = 0
+ repl_default = 0
 !$OMP PARALLEL DO DEFAULT(NONE), &
-!$OMP SHARED(IDIM,JDIM,MASK,FIELD_SAVE,FIELD,TILE,LATITUDE,DEFAULT_VALUE,FIELD_NUM), &
+!$OMP SHARED(IDIM,JDIM,MASK,FIELD_SAVE,FIELD,TILE,LATITUDE,DEFAULT_VALUE,FIELD_NUM,REPL_NEARBY,REPL_DEFAULT,SOILT_CLIMO,TERRAIN_LAND), &
 !$OMP PRIVATE(I,J,KRAD,ISTART,IEND,JSTART,JEND,II,JJ)
 
  J_LOOP : do j = 1, jdim
@@ -133,7 +147,10 @@
 
                if (mask(ii,jj) == 1  .and. field_save(ii,jj) > -9999.0) then
                  field(i,j) = field_save(ii,jj)
-                write(6,100) field_num,tile,i,j,ii,jj,field(i,j)
+                ! write(6,100) field_num,tile,i,j,ii,jj,field(i,j)
+                ! When using non-GFS data, there are a lot of these print statements even
+                ! when everything is working correctly. Count instead of printing each
+                 repl_nearby = repl_nearby + 1
                  cycle I_LOOP
                endif
 
@@ -149,22 +166,39 @@
        elseif (field_num == 91) then  ! sea ice fract
          if (abs(latitude(i,j)) > 55.0) then
            field(i,j) = default_value
+           repl_default = repl_default + 1
          else
            field(i,j) = 0.0
+           repl_default = repl_default + 1
          endif
+       elseif (field_num == 7) then 
+         ! Terrain heights for isolated landice points never get a correct value, so replace
+         ! with terrain height from the input grid interpolated to the target grid
+         field(i,j) = terrain_land(i,j)
+         repl_default = repl_default + 1
+       elseif (field_num == 224 .and. present(soilt_climo)) then
+          ! When using input soil type fields instead of climatological data on the
+          ! target grid, isolated land locations that exist in the target grid but
+          ! not the input grid don't receiving proper soil type information, so replace
+          ! with climatological values
+         field(i,j) = soilt_climo(i,j)
+         repl_default = repl_default + 1
        else
          field(i,j) = default_value  ! Search failed.  Use default value.
+         repl_default = repl_default + 1
        endif
 
-       write(6,101) field_num,tile,i,j,field(i,j)
+       !write(6,101) field_num,tile,i,j,field(i,j)
 
      endif
    enddo I_LOOP
  enddo J_LOOP
 !$OMP END PARALLEL DO
 
- 100 format(1x,"- MISSING POINT FIELD ",i4," TILE: ",i2," I/J: ",i5,i5," SET TO VALUE AT: ",i5,i5,". NEW VALUE IS: ",f8.3)
- 101 format(1x,"- MISSING POINT FIELD ",i4," TILE: ",i2," I/J: ",i5,i5," SET TO DEFAULT VALUE OF: ",f8.3)
+! 100 format(1x,"- MISSING POINT FIELD ",i4," TILE: ",i2," I/J: ",i5,i5," SET TO VALUE AT: ",i5,i5,". NEW VALUE IS: ",f8.3)
+! 101 format(1x,"- MISSING POINT FIELD ",i4," TILE: ",i2," I/J: ",i5,i5," SET TO DEFAULT VALUE OF: ",f8.3)
+ print*, "- TOTAL POINTS FOR VAR ", field_num, " REPLACED BY NEARBY VALUES: ", repl_nearby
+ print*, "- TOTAL POINTS FOR VAR ", field_num, " REPLACED BY DEFAULT VALUE: ", repl_default
 
  end subroutine search
 
