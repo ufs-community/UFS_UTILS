@@ -97,38 +97,6 @@ rm -fr $TMPDIR
 mkdir -p $TMPDIR
 cd $TMPDIR ||exit 8
 
-#----------------------------------------------------------------------------------------
-# filter_topo parameters. C192->50km, C384->25km, C768->13km, C1152->8.5km, C3072->3.2km
-#----------------------------------------------------------------------------------------
-
-if [ $res -eq 48 ]; then 
-  cd4=0.12;  max_slope=0.12; n_del2_weak=4; peak_fac=1.1  
-elif [ $res -eq 96 ]; then 
-  cd4=0.12;  max_slope=0.12; n_del2_weak=8; peak_fac=1.1  
-elif [ $res -eq 128 ]; then
-  cd4=0.13;  max_slope=0.12; n_del2_weak=8;  peak_fac=1.1
-elif [ $res -eq 192 ]; then 
-  cd4=0.15;  max_slope=0.12; n_del2_weak=12; peak_fac=1.05  
-elif [ $res -eq 384 ]; then 
-  cd4=0.15;  max_slope=0.12; n_del2_weak=12; peak_fac=1.0  
-elif [ $res -eq 768 ]; then 
-  cd4=0.15;  max_slope=0.12; n_del2_weak=16; peak_fac=1.0  
-elif [ $res -eq 1152 ]; then 
-  cd4=0.15;  max_slope=0.16; n_del2_weak=20; peak_fac=1.0  
-elif [ $res -eq 3072 ]; then 
-  cd4=0.15;  max_slope=0.30; n_del2_weak=24; peak_fac=1.0  
-elif [ $res -eq -999 ]; then 
- set +x
- echo "regional grid filter parameters will be computed later?"
- set -x
-# use the c768 values for now.
-  cd4=0.15;  max_slope=0.12; n_del2_weak=16; peak_fac=1.0  
-else
- set +x
- echo "grid C$res not supported, exit"
- exit 2
-fi
-
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
 # Make grid and orography.
@@ -234,7 +202,7 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
     echo "............ Execute fv3gfs_filter_topo.sh .............."
     echo
     set -x
-    $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
+    $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir
     err=$?
     if [ $err != 0 ]; then
       exit $err
@@ -370,7 +338,7 @@ elif [ $gtype = regional ]; then
   echo "............ Execute  fv3gfs_filter_topo.sh .............."
   echo
   set -x
-  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
+  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir
   err=$?
   if [ $err != 0 ]; then
     exit $err
@@ -486,7 +454,7 @@ elif [ $gtype = regional_esg ]; then
     exit $err
   fi
 
-  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir $cd4 $peak_fac $max_slope $n_del2_weak $script_dir
+  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir
   err=$?
   if [ $err != 0 ]; then
     exit $err
