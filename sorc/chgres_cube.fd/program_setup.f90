@@ -309,6 +309,7 @@
 !-------------------------------------------------------------------------
 
  if (trim(input_type) == "grib2") then
+<<<<<<< HEAD
 	 if (trim(grib2_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
 		 call error_handler("FOR GRIB2 DATA, PLEASE PROVIDE GRIB2_FILE_INPUT_GRID", 1)
 	 endif
