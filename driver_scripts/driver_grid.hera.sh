@@ -33,19 +33,24 @@
 #         "uniform"  - global uniform grid
 #         "stretch"  - global stretched grid
 #         "nest"     - global stretched grid with nest
-#         "regional" - stand-alone regional grid
+#         "regional_gfdl" - stand-alone gfdl regional grid
+#         "regional_esg"  - stand-alone extended Schmidt gnominic
+#                           (esg) regional grid
 #   3) For "stretch" and "nest" grids, set the stretching factor -
 #       "stretch_fac", and center lat/lon of highest resolution
 #      tile - "target_lat" and "target_lon".
 #   4) For "nest" grids, set the refinement ratio - "refine_ratio",
 #      the starting/ending i/j index location within the parent
 #      tile - "istart_nest", "jstart_nest", "iend_nest", "jend_nest"
-#   5) For "regional" grids, set the "halo".  Default is three
+#   5) For "regional_gfdl" grids, set the "halo".  Default is three
 #      rows/columns.
-#   6) Set working directory - TMPDIR - and path to the repository
+#   6) For "regional_esg" grids, set center lat/lon of grid,
+#      - "target_lat/lon" - the i/j dimensions - "i/jdim", the
+#      x/y grid spacing - "delx/y", and halo.
+#   7) Set working directory - TMPDIR - and path to the repository
 #      clone - home_dir.
-#   7) Submit script: "sbatch $script".
-#   8) All files will be placed in "out_dir".
+#   8) Submit script: "sbatch $script".
+#   9) All files will be placed in "out_dir".
 #
 #-----------------------------------------------------------------------
 
@@ -59,7 +64,8 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=regional_esg  # 'uniform', 'stretch', 'nest', or 'regional'
+export gtype=regional_esg  # 'uniform', 'stretch', 'nest'
+                           # 'regional_gfdl', 'regional_esg'
 
 if [ $gtype = uniform ]; then
   export res=96
@@ -68,7 +74,7 @@ elif [ $gtype = stretch ]; then
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile
   export target_lat=35.5       # Center latitude of the highest resolution tile
-elif [ $gtype = nest ] || [ $gtype = regional ]; then
+elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile

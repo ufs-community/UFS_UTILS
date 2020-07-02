@@ -7,7 +7,8 @@
 #   1) global uniform
 #   2) global stretched
 #   3) global stretched with nest
-#   4) stand-alone regional
+#   4) stand-alone GFDL regional
+#   5) stand-alone extended Schmidt gnonomic (ESG) regional
 #
 # Produces the following files (netcdf, each tile in separate file):
 #   1) 'mosaic' and 'grid' files containing lat/lon and other
@@ -41,7 +42,8 @@ export machine=${machine:?}
 #----------------------------------------------------------------------------------
 
 export res=${res:-96}           # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
-export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest or regional
+export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest, regional_gfdl
+                                #            or regional_esg
 
 if [ $gtype = uniform ];  then
   echo "Creating global uniform grid"
@@ -51,7 +53,7 @@ elif [ $gtype = stretch ]; then
   export target_lat=${target_lat:-35.5}   # Center latitude of the highest resolution tile
   title=c${res}s
   echo "Creating global stretched grid"
-elif [ $gtype = nest ] || [ $gtype = regional ]; then
+elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
   export stretch_fac=${stretch_fac:-1.5}  # Stretching factor for the grid
   export target_lon=${target_lon:--97.5}  # Center longitude of the highest resolution tile
   export target_lat=${target_lat:-35.5}   # Center latitude of the highest resolution tile
@@ -65,9 +67,10 @@ elif [ $gtype = nest ] || [ $gtype = regional ]; then
   if [ $gtype = nest ];then
    echo "Creating global nested grid"
   else
-   echo "Creating regional grid"
+   echo "Creating gfdl regional grid"
   fi
 elif [ $gtype = regional_esg ]; then
+  echo "Creating esg regional grid"
   export target_lon=${target_lon:--97.5}  # Center longitude of grid
   export target_lat=${target_lat:-35.5}   # Center latitude of grid
   export idim=${idim:-200}                # Dimension of grid in 'i' direction
@@ -81,7 +84,7 @@ elif [ $gtype = regional_esg ]; then
   export halo=${halo:-3}                  # Number of rows/cols for halo.
   title=esg
 else
-  echo "Error: please specify grid type with 'gtype' as uniform, stretch, nest or regional"
+  echo "Error: please specify grid type with 'gtype' as uniform, stretch, nest, regional_gfdl or regional_esg"
   exit 9
 fi
 
@@ -227,11 +230,11 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
-# Regional grid.
+# Regional grid (gfdl or esg)
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
 
-elif [ $gtype = regional ] || [ $gtype = regional_esg ]; then
+elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
  
 #----------------------------------------------------------------------------------
 # We are now creating only 1 tile and it is tile 7
@@ -251,7 +254,7 @@ elif [ $gtype = regional ] || [ $gtype = regional_esg ]; then
 # Create regional gfdl grid files.
 #----------------------------------------------------------------------------------
 
-  if [ $gtype = regional ]; then
+  if [ $gtype = regional_gfdl ]; then
 
     set +x # don't echo all the computation to figure out how many points to add/subtract from start/end nest values
  
@@ -444,7 +447,7 @@ export BASE_DIR=$home_dir
 export FIX_FV3=$out_dir
 export input_sfc_climo_dir=$home_dir/fix/fix_sfc_climo
 
-if [ $gtype = regional ] || [ $gtype = regional_esg ]; then
+if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   export HALO=$halop1
   ln -fs $out_dir/C${res}_grid.tile${tile}.halo${HALO}.nc $out_dir/C${res}_grid.tile${tile}.nc
   ln -fs $out_dir/C${res}_oro_data.tile${tile}.halo${HALO}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
@@ -460,7 +463,7 @@ if [ $err != 0 ]; then
   exit $err
 fi
 
-if [ $gtype = regional ] || [ $gtype = regional_esg ]; then
+if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   rm -f $out_dir/C${res}_grid.tile${tile}.nc
   rm -f $out_dir/C${res}_oro_data.tile${tile}.nc
 fi

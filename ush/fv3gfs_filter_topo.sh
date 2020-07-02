@@ -20,7 +20,7 @@ if [ $# -ne 4 ]; then
    exit 1
 fi
 
-if [ $gtype = stretch ] || [ $gtype = regional ]; then
+if [ $gtype = stretch ] || [ $gtype = regional_gfdl ]; then
   stretch=$stretch_fac
 else
   stretch=1.0
@@ -53,7 +53,7 @@ cp $orodir/${topo_file}.tile?.nc .
 cp $executable .
 
 regional=.false.
-if [ $gtype = regional ] || [ $gtype = regional_esg ] ; then
+if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ] ; then
   regional=.true.
 fi
 

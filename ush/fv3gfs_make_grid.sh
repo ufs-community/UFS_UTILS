@@ -16,7 +16,7 @@ set -ax
 #   APRUN            Command to invoke executables
 #   exec_dir         Location of executables
 #   gtype            Grid type.  'uniform' - global uniform; 'stretch' - global 
-#                    stretched; 'nest' - global stretched with nest; 'regional' -
+#                    stretched; 'nest' - global stretched with nest; 'regional_gfdl' -
 #                    stand alone GFDL regional nest; 'regional_esg' - stand alone
 #                    extended Schmidt gnomonic regional grid.
 #   halo             Lateral boundary halo size, regional grids only.
@@ -85,7 +85,7 @@ elif  [ $gtype = stretch ]; then
   ntiles=6
   $APRUN $executable --grid_type gnomonic_ed --nlon $nx --grid_name C${res}_grid \
                      --do_schmidt --stretch_factor ${stretch_fac} --target_lon ${target_lon} --target_lat ${target_lat} 
-elif  [ $gtype = nest ] || [ $gtype = regional ] ; then
+elif  [ $gtype = nest ] || [ $gtype = regional_gfdl ] ; then
   stretch_fac=${stretch_fac:?}
   target_lon=${target_lon:?}
   target_lat=${target_lat:?}
@@ -95,7 +95,7 @@ elif  [ $gtype = nest ] || [ $gtype = regional ] ; then
   iend_nest=$4
   jend_nest=$5
   halo=${halo:?}
-  if  [ $gtype = regional ]; then
+  if  [ $gtype = regional_gfdl ]; then
     ntiles=1
   else
     ntiles=7
@@ -143,7 +143,7 @@ fi
 # Below, this attribute is retrieved and used to rename the grid files.
 #---------------------------------------------------------------------------------------
 
-if [ $gtype = regional ] || [ $gtype = regional_esg ]; then
+if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   executable=$exec_dir/global_equiv_resol
   if [ ! -s $executable ]; then
     set +x
@@ -155,7 +155,7 @@ if [ $gtype = regional ] || [ $gtype = regional_esg ]; then
   fi
   if [ $gtype = regional_esg ]; then
     $APRUN $executable  regional_grid.nc
-  elif [ $gtype = regional ]; then
+  elif [ $gtype = regional_gfdl ]; then
     $APRUN $executable  C${res}_grid.tile7.nc
   fi
   if [ $? -ne 0 ]; then
@@ -206,7 +206,7 @@ elif [ $gtype = nest ]; then
 
   $APRUN $executable --num_tiles 1 --dir $outdir --mosaic C${res}_nested_mosaic --tile_file C${res}_grid.tile7.nc 
 
-elif [ $gtype = regional ];then
+elif [ $gtype = regional_gfdl ];then
 
   res_save=$res
   get_res C${res}_grid.tile7.nc
