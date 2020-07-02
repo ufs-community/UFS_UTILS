@@ -1,5 +1,15 @@
-#!/bin/ksh
+#!/bin/bash
 set -ax
+
+#-----------------------------------------------------------------------------------------
+#
+# Script name: fv3gfs_filter_topo.sh
+# -----------
+#
+# Description: Filters the topography.
+# -----------
+#
+#-----------------------------------------------------------------------------------------
 
 if [ $# -ne 4 ]; then
    set +x
@@ -51,7 +61,7 @@ cat > input.nml <<EOF
 &filter_topo_nml
   grid_file = $mosaic_grid
   topo_file = $topo_file
-  mask_field = "land_frac"    ! Defaults:
+  mask_field = "land_frac"
   regional = $regional 
   stretch_fac = $stretch
   res = $res

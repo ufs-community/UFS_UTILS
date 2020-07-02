@@ -1,4 +1,5 @@
-#!/bin/ksh
+#!/bin/bash
+
 set -ax
 
 #-----------------------------------------------------------------------------------------
@@ -16,17 +17,33 @@ set -ax
 #   exec_dir         Location of executables
 #   gtype            Grid type.  'uniform' - global uniform; 'stretch' - global 
 #                    stretched; 'nest' - global stretched with nest; 'regional' -
-#                    stand alone regional nest.
+#                    stand alone GFDL regional nest; 'regional_esg' - stand alone
+#                    extended Schmidt gnomonic regional grid.
 #   halo             Lateral boundary halo size, regional grids only.
 #   i/jstart_nest    Starting i/j index of nest within parent tile.
-#   i/jend_nst       Ending i/j index of nest within parent tile.
+#   i/jend_nest      Ending i/j index of nest within parent tile.
 #   outdir           Working directory.
 #   refine_ratio     Nest refinement ratio.
-#   res              Resolution, i.e, 96.
+#   res              Global resolution, i.e, 96.  For regional grids, this
+#                    redefined as a global equivalent resolution.
 #   stretch_fac      Stretching factor
 #   target_lat       Center latitude of highest resolution tile
 #   target_lon       Center longitude of highest resolution tile
 #
+#-----------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------
+# Retrieve global equivalent resolution from grid file.
+#-----------------------------------------------------------------------------------------
+
+function get_res()
+{
+  res=$( ncdump -h $1 | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
+  res=${res//$'\n'/}
+}
+
+#-----------------------------------------------------------------------------------------
+# Main script begins here.
 #-----------------------------------------------------------------------------------------
 
 gtype=${gtype:?}
@@ -38,6 +55,10 @@ nx=`expr $res \* 2 `
 
 if [ ! -s $outdir ]; then  mkdir -p $outdir ;fi
 cd $outdir
+
+#-----------------------------------------------------------------------------------------
+# Create 'grid' files - one for each tile in netcdf.
+#-----------------------------------------------------------------------------------------
 
 if [ $gtype = regional_esg ]; then
   executable=$exec_dir/regional_esg_grid
@@ -53,10 +74,6 @@ if [ ! -s $executable ]; then
   set -x
   exit 1 
 fi
-
-#-----------------------------------------------------------------------------------------
-# Create 'grid' files - one for each tile in netcdf.
-#-----------------------------------------------------------------------------------------
 
 if [ $gtype = uniform ]; then
   ntiles=6
@@ -112,29 +129,43 @@ fi
 if [ $? -ne 0 ]; then
   set +x
   echo
-  echo "FATAL ERROR creating C$res grid."
+  echo "FATAL ERROR creating grid files."
   echo
   set -x
   exit 1
 fi
 
-if [ $gtype = regional_esg ]; then
+#---------------------------------------------------------------------------------------
+# Compute the equivalent 'global' resolution for regional grids.  For GFDL
+# regional grids, the CRES value input to this script is the resolution of the
+# global grid in which it is embedded.  Compute a more realistic value.
+# Program adds the equivalent resolution as a global attribute to the grid file.
+# Below, this attribute is retrieved and used to rename the grid files.
+#---------------------------------------------------------------------------------------
 
-  $APRUN $exec_dir/global_equiv_resol regional_grid.nc
-
-elif [ $gtype = regional ]; then
-
-  $APRUN $exec_dir/global_equiv_resol  C${res}_grid.tile7.nc
-
-fi
-
-if [ $? -ne 0 ]; then
-  set +x
-  echo
-  echo "FATAL ERROR running global_equiv_resol."
-  echo
-  set -x
-  exit 2
+if [ $gtype = regional ] || [ $gtype = regional_esg ]; then
+  executable=$exec_dir/global_equiv_resol
+  if [ ! -s $executable ]; then
+    set +x
+    echo
+    echo "FATAL ERROR: ${executable} does not exist."
+    echo
+    set -x
+    exit 1 
+  fi
+  if [ $gtype = regional_esg ]; then
+    $APRUN $executable  regional_grid.nc
+  elif [ $gtype = regional ]; then
+    $APRUN $executable  C${res}_grid.tile7.nc
+  fi
+  if [ $? -ne 0 ]; then
+    set +x
+    echo
+    echo "FATAL ERROR running global_equiv_resol."
+    echo
+    set -x
+    exit 2
+  fi
 fi
 
 #---------------------------------------------------------------------------------------
@@ -145,6 +176,9 @@ fi
 # process seven tiles at once.
 #
 # For regional grids, there is only one tile and it is tile number 7.
+#
+# For regional grids, rename the grid files according to their global equivalent
+# resolution.
 #---------------------------------------------------------------------------------------
 
 executable=$exec_dir/make_solo_mosaic
@@ -174,18 +208,14 @@ elif [ $gtype = nest ]; then
 
 elif [ $gtype = regional ];then
 
-# For gfdl regional grids, redefine the CRES value.
-
   res_save=$res
-  res=$( ncdump -h C${res}_grid.tile7.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
-  res=${res//$'\n'/}
+  get_res C${res}_grid.tile7.nc
   mv C${res_save}_grid.tile7.nc  C${res}_grid.tile7.nc
   $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile7.nc
 
 elif [ $gtype = regional_esg ]; then
 
-  res=$( ncdump -h regional_grid.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
-  res=${res//$'\n'/}
+  get_res regional_grid.nc
   mv regional_grid.nc C${res}_grid.tile7.nc
   $APRUN $executable --num_tiles 1 --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile7.nc
 
