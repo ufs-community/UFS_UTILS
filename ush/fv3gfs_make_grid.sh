@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/ksh
 
 set -ax
 
@@ -36,7 +36,7 @@ set -ax
 # Retrieve global equivalent resolution from grid file.
 #-----------------------------------------------------------------------------------------
 
-function get_res()
+function get_res
 {
   res=$( ncdump -h $1 | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
   res=${res//$'\n'/}
