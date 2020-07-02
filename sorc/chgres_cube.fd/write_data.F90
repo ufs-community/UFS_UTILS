@@ -1517,6 +1517,7 @@
                                    tprcp_target_grid, &
                                    ustar_target_grid, &
                                    z0_target_grid, &
+                                   lai_target_grid, &
                                    c_d_target_grid, &
                                    c_0_target_grid, &
                                    d_conv_target_grid, &
@@ -1572,6 +1573,7 @@
  integer                        :: id_fice, id_tisfc, id_tprcp
  integer                        :: id_srflag, id_snwdph, id_shdmin
  integer                        :: id_shdmax, id_slope, id_snoalb
+ integer                        :: id_lai
  integer                        :: id_stc, id_smc, id_slc
  integer                        :: id_tref, id_z_c, id_c_0
  integer                        :: id_c_d, id_w_0, id_w_d
@@ -1909,6 +1911,13 @@
      call netcdf_err(error, 'DEFINING SNOALB LONG NAME' )
      error = nf90_put_att(ncid, id_snoalb, "units", "none")
      call netcdf_err(error, 'DEFINING SNOALB UNITS' )
+     
+     error = nf90_def_var(ncid, 'lai', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_lai)
+     call netcdf_err(error, 'DEFINING LAI' )
+     error = nf90_put_att(ncid, id_lai, "long_name", "lai")
+     call netcdf_err(error, 'DEFINING LAI LONG NAME' )
+     error = nf90_put_att(ncid, id_lai, "units", "none")
+     call netcdf_err(error, 'DEFINING LAI UNITS' )
 
      error = nf90_def_var(ncid, 'stc', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_stc)
      call netcdf_err(error, 'DEFINING STC' )
@@ -2131,6 +2140,17 @@
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
      error = nf90_put_var( ncid, id_snoalb, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING MAX SNOW ALBEDO RECORD' )
+   endif
+   
+   print*,"- CALL FieldGather FOR TARGET GRID LEAF AREA INDEX FOR TILE: ", tile
+   call ESMF_FieldGather(lai_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_lai, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+     call netcdf_err(error, 'WRITING LEAF AREA INDEX RECORD' )
    endif
 
    print*,"- CALL FieldGather FOR TARGET GRID SOIL TYPE FOR TILE: ", tile

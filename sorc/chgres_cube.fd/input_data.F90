@@ -4399,7 +4399,7 @@ else
    real(esmf_kind_r4)                    :: value
 
    real(esmf_kind_r4), allocatable       :: dummy2d(:,:),tsk_save(:,:),icec_save(:,:)
-   real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:)
+   real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:),dummy2d_82(:,:)
    real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:)
    integer(esmf_kind_i4), allocatable    :: slmsk_save(:,:)
    
@@ -4460,10 +4460,12 @@ else
    allocate(tsk_save(i_input,j_input))
    allocate(icec_save(i_input,j_input))
    allocate(dummy2d_8(i_input,j_input))
+   allocate(dummy2d_82(i_input,j_input))
    allocate(dummy3d(i_input,j_input,lsoil_input))
  else
    allocate(dummy3d(0,0,0))
    allocate(dummy2d_8(0,0))
+   allocate(dummy2d_82(0,0))
    allocate(dummy2d(0,0))
 
  endif
@@ -5037,6 +5039,10 @@ if (localpet == 0) then
 ! '1'. Use this flag as a temporary solution.
 !----------------------------------------------------------------------------------------
 
+ print*, "- CALL FieldGather for INPUT SOIL TYPE."
+ call ESMF_FieldGather(soil_type_input_grid, dummy2d_82, rootPet=0, tile=1, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN FieldGather", rc)
  if (localpet == 0) then
    print*,"- READ VEG TYPE."
    vname="vtype"
@@ -5064,12 +5070,34 @@ if (localpet == 0) then
        endif ! replace_vgtyp
      endif !not find :anl:
    endif !not find hour fcst:
+   
+   if (trim(external_model) .ne. "GFS") then
+	 do j = 1, j_input
+	   do i = 1,i_input
+		 if (dummy2d(i,j) == 15.0_esmf_kind_r4) then
+		   if (dummy3d(i,j,1) < 0.6) then 
+			 dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
+		   elseif (dummy3d(i,j,1) > 0.99) then
+			  dummy2d(i,j) = 0.0_esmf_kind_r4
+			  dummy2d_82(i,j) = 0.0_esmf_kind_r8
+		   endif
+		 elseif (dummy2d(i,j) == 17.0_esmf_kind_r4) then
+		   dummy2d(i,j) = 0.0_esmf_kind_r4
+		 endif
+	   enddo
+	 enddo
+   endif     
    dummy2d_8= real(dummy2d,esmf_kind_r8)
    print*,'vgtyp ',maxval(dummy2d),minval(dummy2d)
  endif !localpet
  deallocate(dummy2d)
  print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
  call ESMF_FieldScatter(veg_type_input_grid, dummy2d_8, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+
+ print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
+ call ESMF_FieldScatter(soil_type_input_grid, dummy2d_82, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 

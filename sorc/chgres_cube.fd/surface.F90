@@ -4330,6 +4330,21 @@ end subroutine replace_land_sfcparams
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
+ 
+ print*,"- CALL FieldCreate FOR TARGET GRID LEAF AREA INDEX."
+ lai_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET leaf area index."
+ call ESMF_FieldGet(lai_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
 
  print*,"- CALL FieldCreate FOR TARGET GRID Z0."
  z0_target_grid = ESMF_FieldCreate(target_grid, &
