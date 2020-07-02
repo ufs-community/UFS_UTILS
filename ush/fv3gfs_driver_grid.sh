@@ -104,7 +104,9 @@ cd $TMPDIR ||exit 8
 #----------------------------------------------------------------------------------
 
 #----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
 # Uniform, stretch or nest grid.
+#----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
 
 if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
@@ -224,10 +226,12 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
   echo "Grid and orography files are now prepared."
 
 #----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
 # Regional grid.
 #----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
 
-elif [ $gtype = regional ]; then
+elif [ $gtype = regional ] || [ $gtype = regional_esg ]; then
  
 #----------------------------------------------------------------------------------
 # We are now creating only 1 tile and it is tile 7
@@ -236,112 +240,88 @@ elif [ $gtype = regional ]; then
   export ntiles=1
   halop1=$(( halo + 1 ))
   tile=7
-  set +x # don't echo all the computation to figure out how many points to add/subtract from start/end nest values
- 
+  name=regional
+  grid_dir=$TMPDIR/${name}/grid
+  orog_dir=$TMPDIR/${name}/orog
+  filter_dir=$orog_dir   # nested grid topography will be filtered online
+  rm -rf $TMPDIR/$name
+  mkdir -p $grid_dir $orog_dir $filter_dir
+
 #----------------------------------------------------------------------------------
-# Number of parent points
+# Create regional gfdl grid files.
 #----------------------------------------------------------------------------------
+
+  if [ $gtype = regional ]; then
+
+    set +x # don't echo all the computation to figure out how many points to add/subtract from start/end nest values
  
-  nptsx=`expr $iend_nest - $istart_nest + 1`
-  nptsy=`expr $jend_nest - $jstart_nest + 1`
+    nptsx=`expr $iend_nest - $istart_nest + 1`  # parent points
+    nptsy=`expr $jend_nest - $jstart_nest + 1`
  
-#----------------------------------------------------------------------------------
-# Number of compute grid points
-#----------------------------------------------------------------------------------
- 
-  idim=`expr $nptsx  \* $refine_ratio / 2`
-  jdim=`expr $nptsy  \* $refine_ratio / 2`
+    idim=`expr $nptsx  \* $refine_ratio / 2`    # number of compute points
+    jdim=`expr $nptsy  \* $refine_ratio / 2`
  
 #----------------------------------------------------------------------------------
 # Figure out how many columns/rows to add in each direction so we have at least 
 # 5 halo points for make_hgrid and the orography program.
 #----------------------------------------------------------------------------------
  
-  index=0
-  add_subtract_value=0
-  while (test "$index" -le "0")
-   do
-    add_subtract_value=`expr $add_subtract_value + 1`
-    iend_nest_halo=`expr $iend_nest + $add_subtract_value`
-    istart_nest_halo=`expr $istart_nest - $add_subtract_value`
-    newpoints_i=`expr $iend_nest_halo - $istart_nest_halo + 1`
-    newpoints_cg_i=`expr $newpoints_i  \* $refine_ratio / 2`
-    diff=`expr $newpoints_cg_i - $idim`
-    if [ $diff -ge 10 ]; then 
-     index=`expr $index + 1`
-    fi
-   done
-  jend_nest_halo=`expr $jend_nest + $add_subtract_value`
-  jstart_nest_halo=`expr $jstart_nest - $add_subtract_value`
+    index=0
+    add_subtract_value=0
+    while (test "$index" -le "0")
+     do
+      add_subtract_value=`expr $add_subtract_value + 1`
+      iend_nest_halo=`expr $iend_nest + $add_subtract_value`
+      istart_nest_halo=`expr $istart_nest - $add_subtract_value`
+      newpoints_i=`expr $iend_nest_halo - $istart_nest_halo + 1`
+      newpoints_cg_i=`expr $newpoints_i  \* $refine_ratio / 2`
+      diff=`expr $newpoints_cg_i - $idim`
+      if [ $diff -ge 10 ]; then 
+       index=`expr $index + 1`
+      fi
+     done
+    jend_nest_halo=`expr $jend_nest + $add_subtract_value`
+    jstart_nest_halo=`expr $jstart_nest - $add_subtract_value`
 
-  echo "================================================================================== "
-  echo "For refine_ratio= $refine_ratio" 
-  echo " iend_nest= $iend_nest iend_nest_halo= $iend_nest_halo istart_nest= $istart_nest istart_nest_halo= $istart_nest_halo"
-  echo " jend_nest= $jend_nest jend_nest_halo= $jend_nest_halo jstart_nest= $jstart_nest jstart_nest_halo= $jstart_nest_halo"
-  echo "================================================================================== "
-  set -x
+    echo "================================================================================== "
+    echo "For refine_ratio= $refine_ratio" 
+    echo " iend_nest= $iend_nest iend_nest_halo= $iend_nest_halo istart_nest= $istart_nest istart_nest_halo= $istart_nest_halo"
+    echo " jend_nest= $jend_nest jend_nest_halo= $jend_nest_halo jstart_nest= $jstart_nest jstart_nest_halo= $jstart_nest_halo"
+    echo "================================================================================== "
  
-  export ntiles=1
-  tile=7
-  name=gfdl
-  grid_dir=$TMPDIR/${name}/grid
-  orog_dir=$TMPDIR/$name/orog
-  filter_dir=$orog_dir   # nested grid topography will be filtered online
-  rm -rf $TMPDIR/$name
-  mkdir -p $grid_dir $orog_dir $filter_dir
+    set +x
+    echo
+    echo "............ Execute fv3gfs_make_grid.sh ................."
+    echo
+    set -x
+    $script_dir/fv3gfs_make_grid.sh $grid_dir $istart_nest_halo $jstart_nest_halo $iend_nest_halo $jend_nest_halo
+    err=$?
+    if [ $err != 0 ]; then
+      exit $err
+    fi
 
-  set +x
-  echo
-  echo "............ Execute fv3gfs_make_grid.sh ................."
-  echo
-  set -x
-  $script_dir/fv3gfs_make_grid.sh $grid_dir $istart_nest_halo $jstart_nest_halo $iend_nest_halo $jend_nest_halo
-  err=$?
-  if [ $err != 0 ]; then
-    exit $err
+#----------------------------------------------------------------------------------
+# Create regional esg grid files.
+#----------------------------------------------------------------------------------
+
+  elif [ $gtype = regional_esg ]; then
+
+    set +x
+    echo
+    echo "............ Execute fv3gfs_make_grid.sh ................."
+    echo
+    set -x
+    $script_dir/fv3gfs_make_grid.sh $grid_dir
+    err=$?
+    if [ $err != 0 ]; then
+      exit $err
+    fi
+
   fi
 
 #----------------------------------------------------------------------------------
-
-elif [ $gtype = regional_esg ]; then
-
-  halop1=$(( halo + 1 ))
-  tile=7
-  name=regional_esg
-  grid_dir=$TMPDIR/${name}/grid
-  orog_dir=$TMPDIR/${name}/orog
-  filter_dir=$TMPDIR/${name}/filter_topo
-  rm -rf $TMPDIR/$name
-  mkdir -p $grid_dir $orog_dir $filter_dir
-
-  set +x
-  echo
-  echo "............ Execute fv3gfs_make_grid.sh ................."
-  echo
-  set -x
-  $script_dir/fv3gfs_make_grid.sh $grid_dir
-  err=$?
-  if [ $err != 0 ]; then
-    exit $err
-  fi
-
+# Redefine resolution for regional grids as a global equivalent resolution.
 #----------------------------------------------------------------------------------
-# End of block to create grid and orog files.
-#----------------------------------------------------------------------------------
-
-fi
-
-#----------------------------------------------------------------------------------
-# For regional grids, shave the orography file and then the grid file, the echo 
-# creates the file that contains the number of required points in x and y and the 
-# input and output file names.This first run of shave uses a halo of 4.
-# This is necessary so that chgres will create BC's with 4 rows/columns which is 
-# necessary for pt.
-#----------------------------------------------------------------------------------
-
-if [ $gtype = regional ] || [ $gtype = regional_esg ]; then
-
-# redefine res for regional grids.
 
   res=$( ncdump -h ${grid_dir}/C*_grid.tile7.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
   res=${res//$'\n'/}
@@ -349,6 +329,8 @@ if [ $gtype = regional ] || [ $gtype = regional_esg ]; then
   mkdir -p $out_dir
 
 #----------------------------------------------------------------------------------
+# Create orography.
+#
 # On WCOSS_C use cfp to run multiple tiles simulatneously for the orography.
 # For now we only have one tile but in the future we will have more.
 #----------------------------------------------------------------------------------
@@ -385,6 +367,14 @@ if [ $gtype = regional ] || [ $gtype = regional_esg ]; then
   if [ $err != 0 ]; then
     exit $err
   fi
+
+#----------------------------------------------------------------------------------
+# For regional grids, shave the orography file and then the grid file, the echo 
+# creates the file that contains the number of required points in x and y and the 
+# input and output file names.This first run of shave uses a halo of 4.
+# This is necessary so that chgres will create BC's with 4 rows/columns which is 
+# necessary for pt.
+#----------------------------------------------------------------------------------
 
   set +x
   echo
