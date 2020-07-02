@@ -249,8 +249,8 @@ elif [ $gtype = regional ]; then
 # Number of compute grid points
 #----------------------------------------------------------------------------------
  
-  npts_cgx=`expr $nptsx  \* $refine_ratio / 2`
-  npts_cgy=`expr $nptsy  \* $refine_ratio / 2`
+  idim=`expr $nptsx  \* $refine_ratio / 2`
+  jdim=`expr $nptsy  \* $refine_ratio / 2`
  
 #----------------------------------------------------------------------------------
 # Figure out how many columns/rows to add in each direction so we have at least 
@@ -266,7 +266,7 @@ elif [ $gtype = regional ]; then
     istart_nest_halo=`expr $istart_nest - $add_subtract_value`
     newpoints_i=`expr $iend_nest_halo - $istart_nest_halo + 1`
     newpoints_cg_i=`expr $newpoints_i  \* $refine_ratio / 2`
-    diff=`expr $newpoints_cg_i - $npts_cgx`
+    diff=`expr $newpoints_cg_i - $idim`
     if [ $diff -ge 10 ]; then 
      index=`expr $index + 1`
     fi
@@ -343,63 +343,7 @@ elif [ $gtype = regional ]; then
   if [ $err != 0 ]; then
     exit $err
   fi
-  set +x
-  echo
-  echo "............ Execute shave to reduce grid and orography files to required compute size .............."
-  echo
-  set -x
-  cd $filter_dir
 
-#----------------------------------------------------------------------------------
-# Shave the orography file and then the grid file, the echo creates the input 
-# file that contains the number of required points in x and y and the input
-# and output file names.This first run of shave uses a halo of 4.
-# This is necessary so that chgres will create BC's with 4 rows/columns which is 
-# necessary for pt.
-#----------------------------------------------------------------------------------
-
-  echo $npts_cgx $npts_cgy $halop1 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog
-  echo $npts_cgx $npts_cgy $halop1 \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid
-
-  $APRUN $exec_dir/shave <input.shave.orog
-  $APRUN $exec_dir/shave <input.shave.grid
-
-  cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo${halop1}.nc
-  cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halop1}.nc
- 
-#----------------------------------------------------------------------------------
-# Now shave the orography file and then the grid file with a halo of 3. 
-# This is necessary for running the model.
-#----------------------------------------------------------------------------------
-
-  echo $npts_cgx $npts_cgy $halo \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo$halo
-  echo $npts_cgx $npts_cgy $halo \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo$halo
-
-  $APRUN $exec_dir/shave <input.shave.orog.halo$halo
-  $APRUN $exec_dir/shave <input.shave.grid.halo$halo
- 
-  cp $filter_dir/oro.C${res}.tile${tile}.shave.nc $out_dir/C${res}_oro_data.tile${tile}.halo${halo}.nc
-  cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halo}.nc
- 
-#----------------------------------------------------------------------------------
-# Now shave the orography file and then the grid file with a halo of 0. 
-# This is handy for running chgres.
-#----------------------------------------------------------------------------------
-
-  echo $npts_cgx $npts_cgy 0 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo0
-  echo $npts_cgx $npts_cgy 0 \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo0
-
-  $APRUN $exec_dir/shave <input.shave.orog.halo0
-  $APRUN $exec_dir/shave <input.shave.grid.halo0
-
-  cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo0.nc
-  cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo0.nc
- 
-  cp $grid_dir/C${res}_*mosaic.nc                   $out_dir
-
-  echo "Grid and orography files are now prepared for regional grid"
-
-#----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
 
 elif [ $gtype = regional_esg ]; then
@@ -460,6 +404,30 @@ elif [ $gtype = regional_esg ]; then
     exit $err
   fi
 
+  echo "Grid and orography files are now prepared for regional_esg grid"
+
+#----------------------------------------------------------------------------------
+# End of block to create grid and orog files.
+#----------------------------------------------------------------------------------
+
+fi
+
+#----------------------------------------------------------------------------------
+# For regional grids, shave the orography file and then the grid file, the echo 
+# creates the file that contains the number of required points in x and y and the 
+# input and output file names.This first run of shave uses a halo of 4.
+# This is necessary so that chgres will create BC's with 4 rows/columns which is 
+# necessary for pt.
+#----------------------------------------------------------------------------------
+
+if [ $gtype = regional ] || [ $gtype = regional_esg ]; then
+
+  set +x
+  echo
+  echo "............ Execute shave to reduce grid and orography files to required compute size .............."
+  echo
+  set -x
+
   cd $filter_dir
 
   echo $idim $jdim $halop1 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog
@@ -470,6 +438,11 @@ elif [ $gtype = regional_esg ]; then
 
   cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo${halop1}.nc
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halop1}.nc
+ 
+#----------------------------------------------------------------------------------
+# Now shave the orography file and then the grid file with a halo of 3. 
+# This is necessary for running the model.
+#----------------------------------------------------------------------------------
 
   echo $idim $jdim $halo \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo$halo
   echo $idim $jdim $halo \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo$halo
@@ -479,6 +452,11 @@ elif [ $gtype = regional_esg ]; then
  
   cp $filter_dir/oro.C${res}.tile${tile}.shave.nc $out_dir/C${res}_oro_data.tile${tile}.halo${halo}.nc
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo${halo}.nc
+ 
+#----------------------------------------------------------------------------------
+# Now shave the orography file and then the grid file with a halo of 0. 
+# This is handy for running chgres.
+#----------------------------------------------------------------------------------
 
   echo $idim $jdim 0 \'$filter_dir/oro.C${res}.tile${tile}.nc\' \'$filter_dir/oro.C${res}.tile${tile}.shave.nc\' >input.shave.orog.halo0
   echo $idim $jdim 0 \'$filter_dir/C${res}_grid.tile${tile}.nc\' \'$filter_dir/C${res}_grid.tile${tile}.shave.nc\' >input.shave.grid.halo0
@@ -488,14 +466,10 @@ elif [ $gtype = regional_esg ]; then
 
   cp $filter_dir/oro.C${res}.tile${tile}.shave.nc   $out_dir/C${res}_oro_data.tile${tile}.halo0.nc
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo0.nc
-
+ 
   cp $grid_dir/C${res}_*mosaic.nc                   $out_dir
 
   echo "Grid and orography files are now prepared for regional grid"
-
-#----------------------------------------------------------------------------------
-# End of block to create grid and orog files.
-#----------------------------------------------------------------------------------
 
 fi
 
