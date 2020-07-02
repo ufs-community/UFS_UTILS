@@ -301,49 +301,6 @@ elif [ $gtype = regional ]; then
     exit $err
   fi
 
-# redefine res for gfdl regional grids.
-
-  res=$( ncdump -h ${grid_dir}/C*_grid.tile7.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
-  res=${res//$'\n'/}
-  out_dir=$out_dir/C${res}
-  mkdir -p $out_dir
-
-  echo "Begin regional orography generation at `date`"
- 
-#----------------------------------------------------------------------------------
-# On WCOSS_C use cfp to run multiple tiles simulatneously for the orography.
-# For now we only have one tile but in the future we will have more.
-#----------------------------------------------------------------------------------
- 
-  if [ $machine = WCOSS_C ]; then
-    echo "$script_dir/fv3gfs_make_orog.sh $res 7 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
-    err=$?
-    rm $TMPDIR/orog.file1
-  else
-    set +x
-    echo
-    echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
-    echo
-    set -x
-    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
-    err=$?
-    if [ $err != 0 ]; then
-      exit $err
-    fi
-  fi
-
-  set +x
-  echo
-  echo "............ Execute  fv3gfs_filter_topo.sh .............."
-  echo
-  set -x
-  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir
-  err=$?
-  if [ $err != 0 ]; then
-    exit $err
-  fi
-
 #----------------------------------------------------------------------------------
 
 elif [ $gtype = regional_esg ]; then
@@ -368,44 +325,6 @@ elif [ $gtype = regional_esg ]; then
     exit $err
   fi
 
-  res=$( ncdump -h ${grid_dir}/C*_grid.tile7.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
-  res=${res//$'\n'/}
-  out_dir=$out_dir/C${res}
-  mkdir -p $out_dir
-
-  echo "Begin orography generation at `date`"
- 
-#----------------------------------------------------------------------------------
-# On WCOSS_C use cfp to run multiple tiles simulatneously for the orography.
-# For now we only have one tile but in the future we will have more.
-#----------------------------------------------------------------------------------
- 
-  if [ $machine = WCOSS_C ]; then
-    echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
-    err=$?
-    rm $TMPDIR/orog.file1
-  else
-    set +x
-    echo
-    echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
-    echo
-    set -x
-    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
-    err=$?
-  fi
-  if [ $err != 0 ]; then
-    exit $err
-  fi
-
-  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir
-  err=$?
-  if [ $err != 0 ]; then
-    exit $err
-  fi
-
-  echo "Grid and orography files are now prepared for regional_esg grid"
-
 #----------------------------------------------------------------------------------
 # End of block to create grid and orog files.
 #----------------------------------------------------------------------------------
@@ -421,6 +340,51 @@ fi
 #----------------------------------------------------------------------------------
 
 if [ $gtype = regional ] || [ $gtype = regional_esg ]; then
+
+# redefine res for regional grids.
+
+  res=$( ncdump -h ${grid_dir}/C*_grid.tile7.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
+  res=${res//$'\n'/}
+  out_dir=$out_dir/C${res}
+  mkdir -p $out_dir
+
+#----------------------------------------------------------------------------------
+# On WCOSS_C use cfp to run multiple tiles simulatneously for the orography.
+# For now we only have one tile but in the future we will have more.
+#----------------------------------------------------------------------------------
+ 
+  echo "Begin orography generation at `date`"
+
+  if [ $machine = WCOSS_C ]; then
+    echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
+    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
+    err=$?
+    rm $TMPDIR/orog.file1
+  else
+    set +x
+    echo
+    echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
+    echo
+    set -x
+    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+    err=$?
+    if [ $err != 0 ]; then
+      exit $err
+    fi
+  fi
+
+  echo "Grid and orography files are now prepared."
+
+  set +x
+  echo
+  echo "............ Execute  fv3gfs_filter_topo.sh .............."
+  echo
+  set -x
+  $script_dir/fv3gfs_filter_topo.sh $res $grid_dir $orog_dir $filter_dir
+  err=$?
+  if [ $err != 0 ]; then
+    exit $err
+  fi
 
   set +x
   echo
