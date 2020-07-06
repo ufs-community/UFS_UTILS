@@ -46,6 +46,8 @@
  real(esmf_kind_r4), allocatable    :: data_src_global(:,:)
  real(esmf_kind_r4), allocatable    :: data_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: vegt_mdl_one_tile(:,:)
+ real(esmf_kind_r4), allocatable    :: lat_mdl_one_tile(:,:)
+ real(esmf_kind_r4), allocatable    :: lon_mdl_one_tile(:,:)
 
  type(esmf_regridmethod_flag),intent(in) :: method
  type(esmf_field)                        :: data_field_src
@@ -93,9 +95,13 @@
  if (localpet == 0) then
    allocate(data_mdl_one_tile(i_mdl,j_mdl))
    allocate(mask_mdl_one_tile(i_mdl,j_mdl))
+   allocate(lat_mdl_one_tile(i_mdl,j_mdl))
+   allocate(lon_mdl_one_tile(i_mdl,j_mdl))
  else
    allocate(data_mdl_one_tile(0,0))
    allocate(mask_mdl_one_tile(0,0))
+   allocate(lat_mdl_one_tile(0,0))
+   allocate(lon_mdl_one_tile(0,0))
  endif
 
  record = 0
@@ -199,6 +205,16 @@
 
    OUTPUT_LOOP : do tile = 1, num_tiles
 
+     print*,"- CALL FieldGather FOR MODEL LATITUDE."
+     call ESMF_FieldGather(latitude_field_mdl, lat_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather.", rc)
+
+     print*,"- CALL FieldGather FOR MODEL LONGITUDE."
+     call ESMF_FieldGather(longitude_field_mdl, lon_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather.", rc)
+
      print*,"- CALL FieldGather FOR MODEL GRID DATA."
      call ESMF_FieldGather(data_field_mdl, data_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -225,7 +241,7 @@
            call adjust_for_landice (data_mdl_one_tile, vegt_mdl_one_tile, i_mdl, j_mdl, field_names(n))
        end select
        where(mask_mdl_one_tile == 0) data_mdl_one_tile = missing
-       call output (data_mdl_one_tile, i_mdl, j_mdl, tile, record, t, n)
+       call output (data_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, tile, record, t, n)
      endif
 
      if (field_names(n) == 'vegetation_type') then
@@ -245,7 +261,7 @@
  status=nf90_close(ncid)
 
  deallocate(data_mdl_one_tile, mask_mdl_one_tile)
- deallocate(data_src_global)
+ deallocate(data_src_global, lat_mdl_one_tile, lon_mdl_one_tile)
 
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_data, rc=rc)

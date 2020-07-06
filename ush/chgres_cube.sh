@@ -62,11 +62,14 @@ HALO_BNDY=${HALO_BNDY:-0}
 HALO_BLEND=${HALO_BLEND:-0}
 
 #----------------------------------------------------------------------------
-# INPUT_TYPE - Input data type.  'history' for tiled fv3 history files.
-#              'restart' for tiled fv3 warm restart files.  'gfs_gaussian'
-#              for spectral gfs nemsio files.  'gfs_spectral' for 
-#              for spectral gfs sigio/sfcio files.  'gaussian' for fv3
-#              gaussian nemsio files. 'grib2' for gfs grib2 files.
+# INPUT_TYPE - Input data type:  
+#        'restart' for tiled fv3 warm restart files.  
+#        'history' for tiled fv3 history files.
+#        'gaussian_nemsio' for fv3 gaussian nemsio files.
+#        'gaussian_netcdf' for fv3 gaussian netcdf files.
+#        'grib2' for fv3gfs grib2 files.
+#        'gfs_gaussain_nemsio' for spectral gfs nemsio files.
+#        'gfs_sigio' for spectral gfs sigio/sfcio files.
 #
 # MOSAIC_FILE_INPUT_GRID - Path/Name of mosaic file for input grid.  Only
 #                          used for 'history' and 'restart' INPUT_TYPE.
@@ -81,7 +84,7 @@ HALO_BLEND=${HALO_BLEND:-0}
 #                         Set to NULL otherwise.
 #----------------------------------------------------------------------------
 
-INPUT_TYPE=${INPUT_TYPE:-"gaussian"}
+INPUT_TYPE=${INPUT_TYPE:-"gaussian_nemsio"}
 MOSAIC_FILE_INPUT_GRID=${MOSAIC_FILE_INPUT_GRID:-NULL}
 OROG_DIR_INPUT_GRID=${OROG_DIR_INPUT_GRID:-NULL}
 OROG_FILES_INPUT_GRID=${OROG_FILES_INPUT_GRID:-NULL}
@@ -101,7 +104,7 @@ COMIN=${COMIN:-$PWD}
 
 #----------------------------------------------------------------------------
 # ATM_FILES_INPUT - Input atmospheric data file(s).  Not used for 'restart'
-#                   and 'grib2' INPUT_TYPE.
+#                   or 'grib2' INPUT_TYPE.
 #
 # ATM_CORE_FILES - Input atmospheric core files.  Used for 'restart' 
 #                  INPUT_TYPE only.  The first six entries are the tiled
@@ -114,7 +117,7 @@ COMIN=${COMIN:-$PWD}
 # SFC_FILES_INPUT - Input surface data file(s).  Not used for 'grib2'
 #                   INPUT_TYPE.
 #
-# NST_FILES_INPUT - Input nst data file.  'gfs_gaussian' INPUT_TYPE only.
+# NST_FILES_INPUT - Input nst data file.  'gfs_gaussian_nemsio' INPUT_TYPE only.
 #
 # GRIB2_FILE_INPUT - Input gfs grib2 data file.  Only used for 'grib2'
 #                    INPUT_TYPE.
@@ -167,7 +170,7 @@ fi
 #----------------------------------------------------------------------------
 # APRUN - machine specific command to run program.
 # CHGRESEXEC - program executable.
-# OMP_NUM_THREADS - threads most useful for 'gfs_spectral' INPUT_TYPE.
+# OMP_NUM_THREADS - threads most useful for 'gfs_sigio' INPUT_TYPE.
 # DATA - working directory.
 # PGMOUT - standard output file
 # PGMERR - standard error file
@@ -176,9 +179,9 @@ fi
 #----------------------------------------------------------------------------
 
 APRUN=${APRUN:-time}
-CHGRESEXEC=${CHGRESEXEC:-${EXECufs}/chgres_cube.exe}
+CHGRESEXEC=${CHGRESEXEC:-${EXECufs}/chgres_cube}
 
-export OMP_NUM_THREADS=${OMP_NUM_THREADS_CY:-1}
+export OMP_NUM_THREADS=${OMP_NUM_THREADS_CH:-1}
 
 PGMOUT=${PGMOUT:-${pgmout:-'&1'}}
 PGMERR=${PGMERR:-${pgmerr:-'&2'}}
