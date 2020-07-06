@@ -179,8 +179,8 @@
 !---------------------------------------------------------------------------------------------
 ! Check for points where smois is too high to be a land point at a land point
 !---------------------------------------------------------------------------------------------
-
-call check_smois_water
+!
+!call check_smois_water
 
 !---------------------------------------------------------------------------------------------
 ! Adjust soil/landice column temperatures for any change in elevation between the
