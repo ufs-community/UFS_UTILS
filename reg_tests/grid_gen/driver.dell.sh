@@ -56,15 +56,15 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.uniform -W 0:15
         -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/c96.uniform.sh"
 
 #-----------------------------------------------------------------------------
-# C96 regional grid
+# GFDL regional grid
 #-----------------------------------------------------------------------------
 
-bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.regional -W 0:10 -x -n 24 -w 'ended(c96.uniform)' \
-        -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/c96.regional.sh"
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J gfdl.regional -W 0:10 -x -n 24 -w 'ended(c96.uniform)' \
+        -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/gfdl.regional.sh"
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "affinity[core(1)]" -R "rusage[mem=100]" -W 0:01 \
-     -w 'ended(c96.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+     -w 'ended(gfdl.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
