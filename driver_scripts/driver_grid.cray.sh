@@ -34,7 +34,7 @@
 #         "stretch"  - global stretched grid
 #         "nest"     - global stretched grid with nest
 #         "regional_gfdl" - stand-alone gfdl regional grid
-#         "regional_esg"  - stand-alone extended Schmidt gnominic
+#         "regional_esg"  - stand-alone extended Schmidt gnomonic
 #                           (esg) regional grid
 #   3) For "stretch" and "nest" grids, set the stretching factor -
 #       "stretch_fac", and center lat/lon of highest resolution

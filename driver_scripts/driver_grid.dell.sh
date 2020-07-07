@@ -36,7 +36,7 @@
 #         "stretch"  - global stretched grid
 #         "nest"     - global stretched grid with nest
 #         "regional_gfdl" - stand-alone gfdl regional grid
-#         "regional_esg"  - stand-alone extended Schmidt gnominic
+#         "regional_esg"  - stand-alone extended Schmidt gnomonic
 #                           (esg) regional grid
 #   3) For "stretch" and "nest" grids, set the stretching factor -
 #       "stretch_fac", and center lat/lon of highest resolution
@@ -64,7 +64,7 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=regional_gfdl  # 'uniform', 'stretch', 'nest', 
+export gtype=uniform  # 'uniform', 'stretch', 'nest', 
                            # 'regional_gfdl', 'regional_esg'
 
 if [ $gtype = uniform ]; then
