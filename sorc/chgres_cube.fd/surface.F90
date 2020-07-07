@@ -2142,7 +2142,7 @@
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
-    
+  
   if (.not. vgfrc_from_climo) then
     print*,"- CALL Field_Regrid for veg greenness over land."
    call ESMF_FieldRegrid(veg_greenness_input_grid, &
@@ -2244,7 +2244,6 @@
 
  l = lbound(unmapped_ptr)
  u = ubound(unmapped_ptr)
-
  do ij = l(1), u(1)
    call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
    soilm_tot_target_ptr(i,j,:) = -9999.9
@@ -2322,13 +2321,13 @@
 !---------------------------------------------------------------------------------------
 
    if (.not. sotyp_from_climo) then
-     if (localpet == 0 .and. maxval(data_one_tile) > 0) then  
-       ! If soil type from the input grid has any non-zero points then soil type must exist for
-       ! use
+     if (localpet==0) then
        call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224,soilt_climo=data_one_tile2)
      endif
    else
      if (localpet == 0 .and. maxval(data_one_tile) > 0) then
+       ! If soil type from the input grid has any non-zero points then soil type must exist for
+       ! use
        call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
      else
        data_one_tile = data_one_tile2
@@ -2336,7 +2335,7 @@
    endif
    
     if (.not. sotyp_from_climo) then
-     print*,"- CALL FieldScatter FOR SOIL TYPE FROM INPUT GRID, TILE: ", tile
+     print*,"- CALL FieldScatter FOR SOIL TYPE TARGET GRID, TILE: ", tile
      call ESMF_FieldScatter(soil_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldScatter", rc)

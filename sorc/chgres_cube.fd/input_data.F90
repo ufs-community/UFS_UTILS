@@ -5260,7 +5260,7 @@ if (localpet == 0) then
 		  do j = 1, j_input
 		    do i = 1, i_input
 		      dummy2d(i,j) = 0.0_esmf_kind_r4
-		      if(slmsk_save(i,j) == 1_esmf_kind_i4 .and. dummy3d(i,j,1) > 0.99) &
+		      if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
 			  	dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
 			enddo
 		  enddo    
@@ -5271,14 +5271,15 @@ if (localpet == 0) then
    if (trim(external_model) .ne. "GFS") then
 	 do j = 1, j_input
 	   do i = 1,i_input
-		 if (dummy2d(i,j) == 15.0_esmf_kind_r4) then
+		 if (dummy2d(i,j) == 15.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
 		   if (dummy3d(i,j,1) < 0.6) then 
 			 dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
 		   elseif (dummy3d(i,j,1) > 0.99) then
+		      slmsk_save(i,j) = 0
 			  dummy2d(i,j) = 0.0_esmf_kind_r4
 			  dummy2d_82(i,j) = 0.0_esmf_kind_r8
 		   endif
-		 elseif (dummy2d(i,j) == 17.0_esmf_kind_r4) then
+		 elseif (dummy2d(i,j) == 17.0_esmf_kind_r4 .and. slmsk_save(i,j)==0) then
 		   dummy2d(i,j) = 0.0_esmf_kind_r4
 		 endif
 	   enddo
@@ -5295,6 +5296,11 @@ if (localpet == 0) then
 
  print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
  call ESMF_FieldScatter(soil_type_input_grid, dummy2d_82, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldScatter", rc)
+    
+ print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
+ call ESMF_FieldScatter(landsea_mask_input_grid,real(slmsk_save,esmf_kind_r8),rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
