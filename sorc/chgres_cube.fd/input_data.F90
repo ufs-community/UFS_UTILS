@@ -2697,8 +2697,8 @@
 
    if (localpet == 0) print*,"- READ ", trim(tracers_input_vmap(n))
    vname = tracers_input_vmap(n)
-   !call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-   !                    this_field_var_name=tmpstr,loc=varnum)
+   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+                       this_field_var_name=tmpstr,loc=varnum)
    if (n==1 .and. .not. hasspfh) then 
         print*,"- CALL FieldGather TEMPERATURE." 
         call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
