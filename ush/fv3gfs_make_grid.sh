@@ -38,7 +38,7 @@ set -ax
 
 function get_res
 {
-  res=$( ncdump -h $1 | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
+  res=$( $NCDUMP -h $1 | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
   res=${res//$'\n'/}
 }
 

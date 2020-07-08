@@ -96,6 +96,8 @@ export script_dir=$home_dir/ush
 export exec_dir=$home_dir/exec
 export topo=$home_dir/fix/fix_orog
 
+export NCDUMP=${NCDUMP:-ncdump}
+
 rm -fr $TMPDIR
 mkdir -p $TMPDIR
 cd $TMPDIR ||exit 8
@@ -326,7 +328,7 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
 # Redefine resolution for regional grids as a global equivalent resolution.
 #----------------------------------------------------------------------------------
 
-  res=$( ncdump -h ${grid_dir}/C*_grid.tile7.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
+  res=$( $NCDUMP -h ${grid_dir}/C*_grid.tile7.nc | grep -o ":RES_equiv = [0-9]\+" | grep -o "[0-9]" )
   res=${res//$'\n'/}
   out_dir=$out_dir/C${res}
   mkdir -p $out_dir

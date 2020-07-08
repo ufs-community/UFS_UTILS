@@ -44,6 +44,7 @@ export machine=WCOSS_C
 export KMP_AFFINITY=disabled
 export NCCMP=/gpfs/hps3/emc/global/noscrub/George.Gayno/util/netcdf/nccmp
 export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
+export NCDUMP=/gpfs/hps/usrx/local/prod/NetCDF/4.2/intel/sandybridge/bin/ncdump
 
 rm -fr $WORK_DIR
 
