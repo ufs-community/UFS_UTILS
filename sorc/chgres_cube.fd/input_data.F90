@@ -2586,7 +2586,7 @@
  endif
  
  if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
- iret = grb2_inq(the_file,inv_file,trac_names_grib_1(1),trac_names_grib_2(1),lvl_str_space)
+ iret = grb2_inq(the_file,inv_file,trim(trac_names_grib_1(1)),trac_names_grib_2(1),lvl_str_space)
 
  if (iret <= 0) then
    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
@@ -2602,10 +2602,17 @@
  iret = grb2_inq(the_file,inv_file,trac_names_grib_1(4),trac_names_grib_2(4),lvl_str_space)
 
  if (iret <= 0) then
+   vname = trac_names_vmap(4)
+   print*, "vname = ", vname
+   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+                       this_field_var_name=tmpstr,loc=varnum)
    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_84:',lvl_str_space)
-   if (iret <= 0) call error_handler("READING CLOUD ICE VARIABLE.", iret)
-   trac_names_grib_2(4)='_1_84:'
-   if (localpet == 0) print*,"- FILE CONTAINS SCLIWC."
+   if (iret <= 0 ) then 
+     call handle_grib_error(vname, slevs(1),method,value,varnum,rc,var=dummy2d)
+   else
+     trac_names_grib_2(4)='_1_84:'
+     if (localpet == 0) print*,"- FILE CONTAINS SCLIWC."
+   endif
  else
    if (localpet == 0) print*,"- FILE CONTAINS ICMR."
  endif
@@ -2614,15 +2621,23 @@
  iret = grb2_inq(the_file,inv_file,trac_names_grib_1(5),trac_names_grib_2(5),lvl_str_space)
 
  if (iret <= 0) then
+   vname = trac_names_vmap(5)
+   print*, "vname = ", vname
+   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+                       this_field_var_name=tmpstr,loc=varnum)
    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_83:',lvl_str_space)
-   if (iret <= 0) call error_handler("READING CLOUD WATER VARIABLE.", iret)
-   trac_names_grib_2(4)='_1_83:'
-   if (localpet == 0) print*,"- FILE CONTAINS SCLLWC."
+   if (iret <= 0) then 
+      call handle_grib_error(vname, slevs(1),method,value,varnum,rc,var=dummy2d)
+   elseif (iret <=0 .and. rc .ne. 1) then
+     call error_handler("READING CLOUD WATER VARIABLE.", iret)
+   else
+     trac_names_grib_2(4)='_1_83:'
+     if (localpet == 0) print*,"- FILE CONTAINS SCLLWC."
+   endif
  else
    if (localpet == 0) print*,"- FILE CONTAINS CLWMR."
  endif
    
- print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
  do n = 1, num_tracers
 
    vname = tracers_input(n)
@@ -2636,7 +2651,7 @@
 
  enddo
 
- if (localpet==0) print*, "- NUMBER OF TRACERS IN FILE = ", num_tracers
+ if (localpet==0) print*, "- NUMBER OF TRACERS TO BE PROCESSED = ", num_tracers
 
 !---------------------------------------------------------------------------
 ! Initialize esmf atmospheric fields.
@@ -2682,14 +2697,15 @@
 
    if (localpet == 0) print*,"- READ ", trim(tracers_input_vmap(n))
    vname = tracers_input_vmap(n)
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                       this_field_var_name=tmpstr,loc=varnum)
+   !call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+   !                    this_field_var_name=tmpstr,loc=varnum)
    if (n==1 .and. .not. hasspfh) then 
         print*,"- CALL FieldGather TEMPERATURE." 
         call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
         if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGet", rc) 
    endif
+   
    if (localpet == 0) then
      vname = trim(tracers_input_grib_1(n))
      vname2 = trim(tracers_input_grib_2(n))

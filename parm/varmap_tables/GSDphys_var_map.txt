@@ -4,7 +4,7 @@ sphum               sphum     set_to_fill   1E-7      T
 liq_wat             liq_wat   set_to_fill   0         T
 o3mr                o3mr      set_to_fill   1E-7      T
 rainwat             rainwat   set_to_fill   0         T
-ice_wat             ice_wat   stop          0         T
+ice_wat             ice_wat   set_to_fill   0         T
 snowwat             snowwat   set_to_fill   0         T
 graupel             graupel   set_to_fill   0         T
 ice_nc              ice_nc    set_to_fill   -1.0      T
