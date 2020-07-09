@@ -2607,8 +2607,14 @@
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                        this_field_var_name=tmpstr,loc=varnum)
    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_84:',lvl_str_space)
-   if (iret <= 0 ) then 
-     call handle_grib_error(vname, slevs(1),method,value,varnum,rc,var=dummy2d)
+   if (iret <= 0) then
+     iret = grb2_inq(the_file,inv_file, ':var0_2','_6_0:',lvl_str_space)
+     if (iret <= 0 ) then 
+       call handle_grib_error(vname, slevs(1),method,value,varnum,rc,var=dummy2d)
+     else
+       trac_names_grib_2(4) = '_6_0'
+       if (localpet == 0) print*,"- FILE CONTAINS CICE."
+     endif     
    else
      trac_names_grib_2(4)='_1_84:'
      if (localpet == 0) print*,"- FILE CONTAINS SCLIWC."
