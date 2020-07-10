@@ -70,12 +70,6 @@
 
  real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  ! vertical coordinate
 
- type(esmf_field)                       :: qnifa_climo_b4adj_target_grid
- type(esmf_field), public               :: qnifa_climo_target_grid
- type(esmf_field)                       :: qnwfa_climo_b4adj_target_grid
- type(esmf_field), public               :: qnwfa_climo_target_grid
- type(esmf_field)                       :: thomp_pres_climo_b4adj_target_grid
-
  type(esmf_field), public               :: delp_target_grid
                                            ! pressure thickness
  type(esmf_field), public               :: dzdt_target_grid
@@ -120,6 +114,26 @@
  type(esmf_field), public               :: zh_target_grid
                                            ! 3-d height
 
+! Fields associated with thompson microphysics climatological tracers.
+
+ type(esmf_field)                       :: qnifa_climo_b4adj_target_grid
+                                           ! number concentration of ice
+                                           ! friendly aerosols before vert adj
+ type(esmf_field), public               :: qnifa_climo_target_grid
+                                           ! number concentration of ice
+                                           ! friendly aerosols on target 
+                                           ! horiz/vert grid.
+ type(esmf_field)                       :: qnwfa_climo_b4adj_target_grid
+                                           ! number concentration of water
+                                           ! friendly aerosols before vert adj
+ type(esmf_field), public               :: qnwfa_climo_target_grid
+                                           ! number concentration of water
+                                           ! friendly aerosols on target 
+                                           ! horiz/vert grid.
+ type(esmf_field)                       :: thomp_pres_climo_b4adj_target_grid
+                                           ! pressure of each level on
+                                           ! target grid
+
  public :: atmosphere_driver
 
  contains
@@ -157,14 +171,6 @@
 !-----------------------------------------------------------------------------------
 
  call read_input_atm_data(localpet)
-
-!-----------------------------------------------------------------------------------
-! If selected, read thomp mp climo fields.
-!-----------------------------------------------------------------------------------
-
- if (use_thomp_mp_climo) then
-   call read_thomp_mp_climo_data
- endif
 
 !-----------------------------------------------------------------------------------
 ! Read vertical coordinate info for target grid.
@@ -310,108 +316,6 @@
 
  call cleanup_input_atm_data
 
-
-!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-! thompson
-!%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
- if (use_thomp_mp_climo) then
-
- print*,"- CALL FieldCreate FOR TARGET GRID climo qnifa BEFORE ADJUSTMENT."
- qnifa_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR TARGET GRID climo qnwfa BEFORE ADJUSTMENT."
- qnwfa_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR TARGET GRID thomp_pres BEFORE ADJUSTMENT."
- thomp_pres_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldCreate FOR TARGET GRID climo qnifa."
- qnifa_climo_target_grid = ESMF_FieldCreate(target_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-   print*,"- CALL FieldRegridStore FOR THOMPSON FIELDS."
-
- print*,"- CALL FieldCreate FOR TARGET GRID climo qnwfa."
- qnwfa_climo_target_grid = ESMF_FieldCreate(target_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1/), &
-                                   ungriddedUBound=(/lev_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-   print*,"- CALL FieldRegridStore FOR THOMPSON FIELDS."
-
-   method=ESMF_REGRIDMETHOD_BILINEAR
-
-   call ESMF_FieldRegridStore(qnifa_climo_input_grid, &
-                              qnifa_climo_b4adj_target_grid, &
-                              polemethod=ESMF_POLEMETHOD_ALLAVG, &
-                              srctermprocessing=isrctermprocessing, &
-                              extrapmethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
-                              routehandle=regrid_bl, &
-                              regridmethod=method, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegridStore", rc)
-
- print*,"- CALL Field_Regrid FOR climo qnifa."
- call ESMF_FieldRegrid(qnifa_climo_input_grid, &
-                       qnifa_climo_b4adj_target_grid, &
-                       routehandle=regrid_bl, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, &
-                       rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL Field_Regrid FOR climo qnwfa."
- call ESMF_FieldRegrid(qnwfa_climo_input_grid, &
-                       qnwfa_climo_b4adj_target_grid, &
-                       routehandle=regrid_bl, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, &
-                       rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL Field_Regrid FOR THOMP PRESSURE."
- call ESMF_FieldRegrid(thomp_pres_climo_input_grid, &
-                       thomp_pres_climo_b4adj_target_grid, &
-                       routehandle=regrid_bl, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, &
-                       rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL FieldRegridRelease."
- call ESMF_FieldRegridRelease(routehandle=regrid_bl, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegridRelease", rc)
-
- call cleanup_thomp_mp_climo_input_data
-
- endif
-
 !-----------------------------------------------------------------------------------
 ! Create target grid field objects to hold data after vertical interpolation.
 !-----------------------------------------------------------------------------------
@@ -435,14 +339,6 @@
 !-----------------------------------------------------------------------------------
 
  call vintg
-
-!-----------------------------------------------------------------------------------
-! Vertically interpolate thomp mp tracers
-!-----------------------------------------------------------------------------------
-
- if (use_thomp_mp_climo) then
-   call vintg_thomp
- endif
 
 !-----------------------------------------------------------------------------------
 ! Compute height.
@@ -520,6 +416,15 @@
 
  call convert_winds
  
+!-----------------------------------------------------------------------------------
+! If selected, process thompson microphysics climatological fields.
+!-----------------------------------------------------------------------------------
+
+ if (use_thomp_mp_climo) then
+   call read_thomp_mp_climo_data
+   call horiz_interp_thomp_mp_climo
+   call vintg_thomp_mp_climo
+ endif 
 
 !-----------------------------------------------------------------------------------
 ! Write target data to file.
@@ -1248,7 +1153,122 @@
 
  end subroutine read_vcoord_info
 
- SUBROUTINE VINTG_THOMP
+!-----------------------------------------------------------------------------------
+! Horizontally interpolate thompson microphysics data to the target model grid.
+!-----------------------------------------------------------------------------------
+
+ subroutine horiz_interp_thomp_mp_climo
+
+ implicit none
+
+ integer  :: isrctermprocessing, rc
+
+ type(esmf_regridmethod_flag)       :: method
+ type(esmf_routehandle)             :: regrid_bl
+
+ isrctermprocessing=1
+
+ print*,"- CALL FieldCreate FOR TARGET GRID THOMP CLIMO QNIFA BEFORE ADJUSTMENT."
+ qnifa_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR TARGET GRID THOMP CLIMO QNWFA BEFORE ADJUSTMENT."
+ qnwfa_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR TARGET GRID THOMP CLIMO PRESSURE BEFORE ADJUSTMENT."
+ thomp_pres_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR TARGET GRID THOMP CLIMO QNIFA."
+ qnifa_climo_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_target/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR TARGET GRID THOMP CLIMO QNWFA."
+ qnwfa_climo_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_target/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldRegridStore FOR THOMPSON CLIMO FIELDS."
+
+ method=ESMF_REGRIDMETHOD_BILINEAR
+
+ call ESMF_FieldRegridStore(qnifa_climo_input_grid, &
+                            qnifa_climo_b4adj_target_grid, &
+                            polemethod=ESMF_POLEMETHOD_ALLAVG, &
+                            srctermprocessing=isrctermprocessing, &
+                            extrapmethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
+                            routehandle=regrid_bl, &
+                            regridmethod=method, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldRegridStore", rc)
+
+ print*,"- CALL Field_Regrid FOR THOMP CLIMO QNIFA."
+ call ESMF_FieldRegrid(qnifa_climo_input_grid, &
+                       qnifa_climo_b4adj_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
+
+ print*,"- CALL Field_Regrid FOR THOMP CLIMO QNWFA."
+ call ESMF_FieldRegrid(qnwfa_climo_input_grid, &
+                       qnwfa_climo_b4adj_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
+
+ print*,"- CALL Field_Regrid FOR THOMP PRESSURE."
+ call ESMF_FieldRegrid(thomp_pres_climo_input_grid, &
+                       thomp_pres_climo_b4adj_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
+
+ print*,"- CALL FieldRegridRelease."
+ call ESMF_FieldRegridRelease(routehandle=regrid_bl, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldRegridRelease", rc)
+
+!-----------------------------------------------------------------------------------
+! Free up input data memory.
+!-----------------------------------------------------------------------------------
+
+ call cleanup_thomp_mp_climo_input_data
+
+ end subroutine horiz_interp_thomp_mp_climo
+
+!-----------------------------------------------------------------------------------
+! Vertically interpolate thompson mp climo tracers to the target model levels.
+!-----------------------------------------------------------------------------------
+
+ SUBROUTINE VINTG_THOMP_MP_CLIMO
 
  implicit none
 
@@ -1266,7 +1286,7 @@
  REAL(ESMF_KIND_R8), POINTER     :: P1PTR(:,:,:)       ! input pressure
  REAL(ESMF_KIND_R8), POINTER     :: P2PTR(:,:,:)       ! target pressure
 
- print*,"- VERTICALY INTERPOLATE THOMP TRACERS."
+ print*,"- VERTICALY INTERPOLATE THOMP MP CLIMO TRACERS."
 
  print*,"- CALL FieldGet FOR 3-D THOMP PRES."
  call ESMF_FieldGet(thomp_pres_climo_b4adj_target_grid, &
@@ -1297,8 +1317,8 @@
 
  Z2 = -LOG(P2PTR)
 
- print*,'pres check 1 ', p1ptr(clb(1),clb(2),:)
- print*,'pres check 2 ', p2ptr(clb(1),clb(2),:)
+!print*,'pres check 1 ', p1ptr(clb(1),clb(2),:)
+!print*,'pres check 2 ', p2ptr(clb(1),clb(2),:)
 
  print*,"- CALL FieldGet FOR qnifa before vertical adjustment."
  call ESMF_FieldGet(qnifa_climo_b4adj_target_grid, &
@@ -1341,18 +1361,22 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
-     DO K=1,LEV_TARGET
-       DO I=CLB(1),CUB(1)
-       DO J=CLB(2),CUB(2)
-         QNIFA2PTR(I,J,K) = C2(I,J,K,1)
-         QNWFA2PTR(I,J,K) = C2(I,J,K,2)
-       ENDDO
-       ENDDO
-     ENDDO
+ DO K=1,LEV_TARGET
+   DO I=CLB(1),CUB(1)
+   DO J=CLB(2),CUB(2)
+     QNIFA2PTR(I,J,K) = C2(I,J,K,1)
+     QNWFA2PTR(I,J,K) = C2(I,J,K,2)
+   ENDDO
+   ENDDO
+ ENDDO
 
  DEALLOCATE (Z1, Z2, C1, C2)
 
- END SUBROUTINE VINTG_THOMP
+ call ESMF_FieldDestroy(qnifa_climo_b4adj_target_grid, rc=rc)
+ call ESMF_FieldDestroy(qnwfa_climo_b4adj_target_grid, rc=rc)
+ call ESMF_FieldDestroy(thomp_pres_climo_b4adj_target_grid, rc=rc)
+
+ END SUBROUTINE VINTG_THOMP_MP_CLIMO
 
  SUBROUTINE VINTG
 !$$$  SUBPROGRAM DOCUMENTATION BLOCK
@@ -1992,18 +2016,6 @@
  enddo
 
  deallocate(tracers_b4adj_target_grid)
-
- if (ESMF_FieldIsCreated(qnifa_climo_b4adj_target_grid)) then
-   call ESMF_FieldDestroy(qnifa_climo_b4adj_target_grid, rc=rc)
- endif
-
- if (ESMF_FieldIsCreated(qnwfa_climo_b4adj_target_grid)) then
-   call ESMF_FieldDestroy(qnwfa_climo_b4adj_target_grid, rc=rc)
- endif
-
- if (ESMF_FieldIsCreated(thomp_pres_climo_b4adj_target_grid)) then
-   call ESMF_FieldDestroy(thomp_pres_climo_b4adj_target_grid, rc=rc)
- endif
 
  end subroutine cleanup_target_atm_b4adj_data
 
