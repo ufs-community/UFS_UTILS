@@ -27,7 +27,7 @@
                         vcoord_target,  &
                         levp1_target
 
- use program_setup, only : num_tracers
+ use program_setup, only : num_tracers, use_thomp_mp_climo
 
  implicit none
 
@@ -39,6 +39,7 @@
  integer             :: header_buffer_val = 16384
  integer             :: error, ncid, dim_nvcoord
  integer             :: dim_levp1, id_ntrac, id_vcoord
+ integer             :: num_tracers_output
 
  real(kind=esmf_kind_r8), allocatable :: tmp(:,:)
 
@@ -67,7 +68,9 @@
  error = nf90_enddef(ncid, header_buffer_val,4,0,4)
  call netcdf_err(error, 'end meta define for file='//trim(outfile) )
 
- error = nf90_put_var( ncid, id_ntrac, num_tracers)
+ num_tracers_output = num_tracers
+ if (use_thomp_mp_climo) num_tracers_output = num_tracers + 2
+ error = nf90_put_var( ncid, id_ntrac, num_tracers_output)
  call netcdf_err(error, 'write var ntrac for file='//trim(outfile) )
 
  allocate(tmp(levp1_target, nvcoord_target))
@@ -118,7 +121,8 @@
  use model_grid, only            : i_target, ip1_target, j_target, jp1_target
 
  use program_setup, only         : halo_bndy, halo_blend, &
-                                   input_type, tracers, num_tracers
+                                   input_type, tracers, num_tracers, &
+                                   use_thomp_mp_climo
 
  implicit none
 
@@ -348,7 +352,7 @@
 
    enddo
 
-   if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
+   if (use_thomp_mp_climo) then
 
      name = "ice_aero_bottom"
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
@@ -369,10 +373,6 @@
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
                              (/dim_halo, dim_lat, dim_lev/), id_qnifa_left)
      call netcdf_err(error, 'DEFINING QNIFA_LEFT')
-
-   endif 
-
-   if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
 
      name = "liq_aero_bottom"
      error = nf90_def_var(ncid, name, NF90_FLOAT, &
@@ -812,7 +812,7 @@
    call netcdf_err(error, 'WRITING T RIGHT' )
  endif
 
- if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
+ if (use_thomp_mp_climo) then
 
    print*,"- CALL FieldGather FOR TARGET GRID CLIMO QNIFA FOR TILE: ", tile
    call ESMF_FieldGather(qnifa_climo_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
@@ -837,10 +837,6 @@
      error = nf90_put_var( ncid, id_qnifa_right, dum3d_right)
      call netcdf_err(error, 'WRITING QNIFA CLIMO RIGHT' )
    endif
-
- endif
-
- if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
 
    print*,"- CALL FieldGather FOR TARGET GRID CLIMO QNWFA FOR TILE: ", tile
    call ESMF_FieldGather(qnwfa_climo_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
@@ -1201,7 +1197,8 @@
  use netcdf
 
  use program_setup, only           : halo=>halo_bndy, &
-                                     input_type, tracers, num_tracers
+                                     input_type, tracers, num_tracers, &
+                                     use_thomp_mp_climo
 
  use atmosphere, only              : lev_target, &
                                      levp1_target, &
@@ -1250,7 +1247,7 @@
  integer                          :: i_start, i_end, j_start, j_end
  integer                          :: i_target_out, j_target_out
  integer                          :: ip1_target_out, jp1_target_out
- integer                          :: ip1_end, jp1_end
+ integer                          :: ip1_end, jp1_end, num_tracers_output
 
  real(esmf_kind_r8), allocatable  :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable  :: data_one_tile_3d(:,:,:)
@@ -1306,7 +1303,9 @@
    call netcdf_err(error, 'DEFINING LEV DIMENSION' )
    error = nf90_def_dim(ncid, 'levp', levp1_target, dim_levp1)
    call netcdf_err(error, 'DEFINING LEVP DIMENSION' )
-   error = nf90_def_dim(ncid, 'ntracer', num_tracers, dim_ntracer)
+   num_tracers_output = num_tracers
+   if (use_thomp_mp_climo) num_tracers_output = num_tracers + 2
+   error = nf90_def_dim(ncid, 'ntracer', num_tracers_output, dim_ntracer)
    call netcdf_err(error, 'DEFINING NTRACER DIMENSION' )
 
 !--- define global attributes
@@ -1401,14 +1400,12 @@
      call netcdf_err(error, 'DEFINING TRACERS COORD' )
    enddo
 
-   if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
+   if (use_thomp_mp_climo) then
      error = nf90_def_var(ncid, 'ice_aero', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_qnifa)
      call netcdf_err(error, 'DEFINING QNIFA' )
      error = nf90_put_att(ncid, id_qnifa, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING QNIFA COORD' )
-   endif
 
-   if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
      error = nf90_def_var(ncid, 'liq_aero', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_qnwfa)
      call netcdf_err(error, 'DEFINING QNWFA' )
      error = nf90_put_att(ncid, id_qnwfa, "coordinates", "geolon geolat")
@@ -1591,7 +1588,7 @@
 
 !  qnifa
 
- if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
+ if (use_thomp_mp_climo) then
    do tile = 1, num_tiles_target_grid
      print*,"- CALL FieldGather FOR TARGET GRID QNIFA FOR TILE: ", tile
      call ESMF_FieldGather(qnifa_climo_target_grid, data_one_tile_3d, rootPet=tile-1, tile=tile, rc=error)
@@ -1605,11 +1602,9 @@
      error = nf90_put_var( ncid, id_qnifa, dum3d)
      call netcdf_err(error, 'WRITING QNIFA RECORD' )
    endif
- endif
 
 !  qnwfa
 
- if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
    do tile = 1, num_tiles_target_grid
      print*,"- CALL FieldGather FOR TARGET GRID QNWFA FOR TILE: ", tile
      call ESMF_FieldGather(qnwfa_climo_target_grid, data_one_tile_3d, rootPet=tile-1, tile=tile, rc=error)

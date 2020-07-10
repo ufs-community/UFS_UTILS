@@ -296,7 +296,7 @@
  
  if (trim(thomp_mp_climo_file) /= "NULL") then
    use_thomp_mp_climo=.true.
-   print*,"- WILL PROCESS THOMP MP TRACERS FROM FILE: ", trim(thomp_mp_climo_file)
+   print*,"- WILL PROCESS CLIMO THOMPSON MP TRACERS FROM FILE: ", trim(thomp_mp_climo_file)
  endif
 
  end subroutine read_setup_namelist

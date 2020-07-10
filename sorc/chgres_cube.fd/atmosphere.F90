@@ -52,8 +52,8 @@
                                        atm_weight_file, &
                                        use_thomp_mp_climo
 
- use thompson_mp, only               : read_thomp_mp_data,  &
-                                       cleanup_thomp_mp_input_data, &
+ use thompson_mp_climo, only         : read_thomp_mp_climo_data,  &
+                                       cleanup_thomp_mp_climo_input_data, &
                                        qnifa_climo_input_grid, &
                                        qnwfa_climo_input_grid, &
                                        thomp_pres_climo_input_grid, &
@@ -163,7 +163,7 @@
 !-----------------------------------------------------------------------------------
 
  if (use_thomp_mp_climo) then
-   call read_thomp_mp_data
+   call read_thomp_mp_climo_data
  endif
 
 !-----------------------------------------------------------------------------------
@@ -408,7 +408,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegridRelease", rc)
 
- call cleanup_thomp_mp_input_data
+ call cleanup_thomp_mp_climo_input_data
 
  endif
 

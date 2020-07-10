@@ -1,4 +1,9 @@
- module thompson_mp
+ module thompson_mp_climo
+
+!-----------------------------------------------------------------------------------
+! Module to read the Thompson climatological MP data file and set up the
+! associated esmf field and grid objects.
+!-----------------------------------------------------------------------------------
 
  use esmf
  use netcdf
@@ -19,13 +24,17 @@
  type(esmf_field), public   :: qnwfa_climo_input_grid
  type(esmf_field), public   :: thomp_pres_climo_input_grid
 
- public :: read_thomp_mp_data
- public :: cleanup_thomp_mp_input_data
+ public                     :: read_thomp_mp_climo_data
+ public                     :: cleanup_thomp_mp_climo_input_data
 
  contains
 
+!-----------------------------------------------------------------------------------
+! Read Thompson climatological MP data file and time interpolate data to current
+! cycle time. 
+!-----------------------------------------------------------------------------------
 
- subroutine read_thomp_mp_data
+ subroutine read_thomp_mp_climo_data
 
  implicit none
 
@@ -37,18 +46,21 @@
  real(esmf_kind_r8), allocatable :: dummy3d(:,:,:)
  real(esmf_kind_r8), allocatable :: dummy3d_mon1(:,:,:)
  real(esmf_kind_r8), allocatable :: dummy3d_mon2(:,:,:)
-
- real(esmf_kind_r8), pointer :: lat_ptr(:,:), lon_ptr(:,:)
- real(esmf_kind_r8) :: lon, lat
+ real(esmf_kind_r8), pointer     :: lat_ptr(:,:), lon_ptr(:,:)
+ real(esmf_kind_r8)              :: lon, lat
  real(esmf_kind_r8), allocatable :: lons(:), lats(:)
- real               :: rjday, dayhf(13), wei1m, wei2m
+ real                            :: rjday, dayhf(13), wei1m, wei2m
 
- type(esmf_vm)                :: vm
+ type(esmf_vm)                   :: vm
 
- type(esmf_polekind_flag)         :: polekindflag(2)
+ type(esmf_polekind_flag)        :: polekindflag(2)
 
  data dayhf/ 15.5, 45.0, 74.5,105.0,135.5,166.0,   &
              196.5,227.5,258.0,288.5,319.0,349.5,380.5/
+
+!-----------------------------------------------------------------------------------
+! Open the file and read the grid dimensions and latitude/longitude.
+!-----------------------------------------------------------------------------------
 
  print*,"- READ THOMP_MP_CLIMO_FILE: ", trim(thomp_mp_climo_file)
  error=nf90_open(trim(thomp_mp_climo_file),nf90_nowrite,ncid)
@@ -72,15 +84,17 @@
  allocate(lons(i_thomp_mp_climo))
  allocate(lats(j_thomp_mp_climo))
  error=nf90_inq_varid(ncid, 'lon', id_var)
- call netcdf_err(error, 'reading  field id' )
+ call netcdf_err(error, 'reading lon field id' )
  error=nf90_get_var(ncid, id_var, lons)
- call netcdf_err(error, 'reading  lons' )
+ call netcdf_err(error, 'reading grid longitude' )
  error=nf90_inq_varid(ncid, 'lat', id_var)
- call netcdf_err(error, 'reading  field id' )
+ call netcdf_err(error, 'reading lat field id' )
  error=nf90_get_var(ncid, id_var, lats)
- call netcdf_err(error, 'reading  lats' )
+ call netcdf_err(error, 'reading grid latitude' )
 
-! First create esmf grid object for the climo grid.
+!-----------------------------------------------------------------------------------
+! Now that we have the grid information, create the esmf grid object.
+!-----------------------------------------------------------------------------------
 
  print*,"- CALL VMGetGlobal"
  call ESMF_VMGetGlobal(vm, rc=rc)
@@ -94,7 +108,7 @@
 
  polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
 
- print*,"- CALL GridCreate1PeriDim FOR THOMP_MP CLIMO GRID."
+ print*,"- CALL GridCreate1PeriDim FOR THOMP MP CLIMO GRID."
  thomp_mp_climo_grid = ESMF_GridCreate1PeriDim(minIndex=(/1,1/), &
                                     maxIndex=(/i_thomp_mp_climo,j_thomp_mp_climo/), &
                                     polekindflag=polekindflag, &
@@ -106,11 +120,15 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
    call error_handler("IN GridCreate1PeriDim", rc)
 
- print*,"- CALL GridAddCoord FOR INPUT GRID."
+ print*,"- CALL GridAddCoord FOR THOMP MP CLIMO GRID."
  call ESMF_GridAddCoord(thomp_mp_climo_grid, &
                         staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridAddCoord", rc)
+
+!-----------------------------------------------------------------------------------
+! Set the grid object lat/lon.
+!-----------------------------------------------------------------------------------
 
  print*,"- CALL GridGetCoord FOR INPUT GRID X-COORD."
  nullify(lon_ptr)
@@ -140,8 +158,9 @@
      lat_ptr(:,j) = lats(j)
  enddo
 
- if(localpet == 1) print*,'lon check ',lon_ptr(:,clb(2))
- if(localpet == 0) print*,'lat check ',lat_ptr(clb(1),:)
+!-----------------------------------------------------------------------------------
+! Create esmf fields for the two tracers and 3-d pressure.
+!-----------------------------------------------------------------------------------
 
  print*,"- CALL FieldCreate FOR QNIFA INPUT CLIMO."
  qnifa_climo_input_grid = ESMF_FieldCreate(thomp_mp_climo_grid, &
@@ -161,7 +180,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
- print*,"- CALL FieldCreate FOR THOMP PRESS"
+ print*,"- CALL FieldCreate FOR THOMP PRESS CLIMO."
  thomp_pres_climo_input_grid = ESMF_FieldCreate(thomp_mp_climo_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
@@ -170,8 +189,10 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
-
- 
+!-----------------------------------------------------------------------------------
+! Data are monthly and valid at the 15th of the month.  Compute time interpolation
+! weights for the current cycle.
+!-----------------------------------------------------------------------------------
 
  jda=0
  jda(1) = 2007
@@ -190,8 +211,6 @@
  call w3doxdat(jda,jdow,jdoy,jday)
  rjday = float(jdoy) + float(jda(5)) / 24.
  if(rjday < dayhf(1)) rjday = rjday + 365.
- 
- print*,'rjday ', jda, rjday
 
  do mm=1,12
    mmm = mm
@@ -206,9 +225,14 @@
  wei1m = (dayhf(mon2)-rjday)/(dayhf(mon2)-dayhf(mon1))
  wei2m = 1.0 - wei1m
 
- print*,'mon1/2 ',mon1,mon2,wei1m,wei2m
-
  if (mon2==13) mon2=1
+
+ print*,"- BOUNDING MONTHS AND INTERPOLATION WEIGHTS: ", mon1, wei1m, mon2, wei2m
+
+!-----------------------------------------------------------------------------------
+! Read tracers and 3-d pressure for each bounding month.  Then linearly
+! interpolate in time.
+!-----------------------------------------------------------------------------------
 
  if (localpet == 0) then
    allocate(dummy3d(i_thomp_mp_climo, j_thomp_mp_climo, lev_thomp_mp_climo))
@@ -224,19 +248,16 @@
  endif
 
  if (localpet == 0) then
-     error=nf90_inq_varid(ncid, 'nifa', id_var)
-     call netcdf_err(error, 'reading  field id' )
-     error=nf90_get_var(ncid, id_var, dummy3d_mon1, start=(/1,1,1,mon1/), &
+   print*,"- READ QNIFA FOR BOUNDING MONTH 1"
+   error=nf90_inq_varid(ncid, 'nifa', id_var)
+   call netcdf_err(error, 'reading nifa field id' )
+   error=nf90_get_var(ncid, id_var, dummy3d_mon1, start=(/1,1,1,mon1/), &
            count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
-     call netcdf_err(error, 'reading field' )
-     print*,'maxval nifa mon1 ', maxval(dummy3d_mon1), minval(dummy3d_mon1)
-
-     error=nf90_get_var(ncid, id_var, dummy3d_mon2, start=(/1,1,1,mon2/), &
+   call netcdf_err(error, 'reading nifa month1 field' )
+   print*,"- READ QNIFA FOR BOUNDING MONTH 2"
+   error=nf90_get_var(ncid, id_var, dummy3d_mon2, start=(/1,1,1,mon2/), &
            count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
-     call netcdf_err(error, 'reading field' )
-     print*,'maxval nifa mon2 ', maxval(dummy3d_mon2), minval(dummy3d_mon2)
-     call netcdf_err(error, 'reading  field id' )
-
+   call netcdf_err(error, 'reading nifa month2 field' )
    dummy3d(:,:,:) = wei1m * dummy3d_mon1 + wei2m * dummy3d_mon2
  endif
 
@@ -246,19 +267,16 @@
     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
-     error=nf90_inq_varid(ncid, 'nwfa', id_var)
-     call netcdf_err(error, 'reading  field id' )
-     error=nf90_get_var(ncid, id_var, dummy3d_mon1, start=(/1,1,1,mon1/), &
+   print*,"- READ QNWFA FOR BOUNDING MONTH 1"
+   error=nf90_inq_varid(ncid, 'nwfa', id_var)
+   call netcdf_err(error, 'reading nwfa field id' )
+   error=nf90_get_var(ncid, id_var, dummy3d_mon1, start=(/1,1,1,mon1/), &
            count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
-     call netcdf_err(error, 'reading field' )
-     print*,'maxval nwfa mon1 ', maxval(dummy3d_mon1),minval(dummy3d_mon1)
-
-     error=nf90_get_var(ncid, id_var, dummy3d_mon2, start=(/1,1,1,mon2/), &
+   call netcdf_err(error, 'reading nwfa month1 field' )
+   print*,"- READ QNWFA FOR BOUNDING MONTH 2"
+   error=nf90_get_var(ncid, id_var, dummy3d_mon2, start=(/1,1,1,mon2/), &
            count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
-     call netcdf_err(error, 'reading field' )
-     print*,'maxval nwfa mon2 ', maxval(dummy3d_mon2),minval(dummy3d_mon2)
-     call netcdf_err(error, 'reading  field id' )
-
+   call netcdf_err(error, 'reading nwfa month2 field' )
    dummy3d(:,:,:) = wei1m * dummy3d_mon1 + wei2m * dummy3d_mon2
  endif
 
@@ -268,19 +286,16 @@
     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
-     error=nf90_inq_varid(ncid, 'prs', id_var)
-     call netcdf_err(error, 'reading  field id' )
-     error=nf90_get_var(ncid, id_var, dummy3d_mon1, start=(/1,1,1,mon1/), &
+   print*,"- READ PRESSURE FOR BOUNDING MONTH 1"
+   error=nf90_inq_varid(ncid, 'prs', id_var)
+   call netcdf_err(error, 'reading prs field id' )
+   error=nf90_get_var(ncid, id_var, dummy3d_mon1, start=(/1,1,1,mon1/), &
            count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
-     call netcdf_err(error, 'reading field' )
-     print*,'maxval nwfa mon1 ', maxval(dummy3d_mon1),minval(dummy3d_mon1)
-
-     error=nf90_get_var(ncid, id_var, dummy3d_mon2, start=(/1,1,1,mon2/), &
+   call netcdf_err(error, 'reading prs month1 field' )
+   print*,"- READ PRESSURE FOR BOUNDING MONTH 2"
+   error=nf90_get_var(ncid, id_var, dummy3d_mon2, start=(/1,1,1,mon2/), &
            count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
-     call netcdf_err(error, 'reading field' )
-     print*,'maxval nwfa mon2 ', maxval(dummy3d_mon2),minval(dummy3d_mon2)
-     call netcdf_err(error, 'reading  field id' )
-
+   call netcdf_err(error, 'reading prs month2 field' )
    dummy3d(:,:,:) = wei1m * dummy3d_mon1 + wei2m * dummy3d_mon2
  endif
 
@@ -288,13 +303,18 @@
  call ESMF_FieldScatter(thomp_pres_climo_input_grid, dummy3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
+
  error=nf90_close(ncid)
 
- deallocate(dummy3d, dummy3d_mon1, dummy3d_mon2)
+ deallocate(lons, lats, dummy3d, dummy3d_mon1, dummy3d_mon2)
 
- end subroutine read_thomp_mp_data
+ end subroutine read_thomp_mp_climo_data
 
- subroutine cleanup_thomp_mp_input_data
+!-----------------------------------------------------------------------------------
+! Cleanup routine
+!-----------------------------------------------------------------------------------
+
+ subroutine cleanup_thomp_mp_climo_input_data
 
  implicit none
 
@@ -305,6 +325,6 @@
  call ESMF_FieldDestroy(qnifa_climo_input_grid, rc=rc)
  call ESMF_FieldDestroy(qnwfa_climo_input_grid, rc=rc)
 
- end subroutine cleanup_thomp_mp_input_data
+ end subroutine cleanup_thomp_mp_climo_input_data
 
- end module thompson_mp
+ end module thompson_mp_climo
