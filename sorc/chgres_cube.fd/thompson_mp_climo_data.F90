@@ -39,7 +39,7 @@
  implicit none
 
  integer            :: error, ncid, rc, clb(2), cub(2)
- integer            :: i, j, k, localpet, npets, id_var
+ integer            :: i, j, localpet, npets, id_var
  integer            :: jda(8), jdow, jdoy, jday, id_dim
  integer            :: mm, mmm, mmp, mon1, mon2
 
@@ -47,7 +47,6 @@
  real(esmf_kind_r8), allocatable :: dummy3d_mon1(:,:,:)
  real(esmf_kind_r8), allocatable :: dummy3d_mon2(:,:,:)
  real(esmf_kind_r8), pointer     :: lat_ptr(:,:), lon_ptr(:,:)
- real(esmf_kind_r8)              :: lon, lat
  real(esmf_kind_r8), allocatable :: lons(:), lats(:)
  real                            :: rjday, dayhf(13), wei1m, wei2m
 
