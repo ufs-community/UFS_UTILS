@@ -1,4 +1,4 @@
- module thompson_mp_climo
+ module thompson_mp_climo_data
 
 !-----------------------------------------------------------------------------------
 ! Module to read the Thompson climatological MP data file and set up the
@@ -327,4 +327,4 @@
 
  end subroutine cleanup_thomp_mp_climo_input_data
 
- end module thompson_mp_climo
+ end module thompson_mp_climo_data

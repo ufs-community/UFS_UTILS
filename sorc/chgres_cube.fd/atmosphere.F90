@@ -52,7 +52,7 @@
                                        atm_weight_file, &
                                        use_thomp_mp_climo
 
- use thompson_mp_climo, only         : read_thomp_mp_climo_data,  &
+ use thompson_mp_climo_data, only    : read_thomp_mp_climo_data,  &
                                        cleanup_thomp_mp_climo_input_data, &
                                        qnifa_climo_input_grid, &
                                        qnwfa_climo_input_grid, &
