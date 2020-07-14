@@ -2598,7 +2598,7 @@
    if (localpet == 0) print*,"- FILE CONTAINS SPFH."
  endif
  
- if (localpet == 0) print*,"- FIND ICMR or SCLIWC IN FILE"
+ if (localpet == 0) print*,"- FIND ICMR, SCLIWC, OR CICE IN FILE"
  iret = grb2_inq(the_file,inv_file,trac_names_grib_1(4),trac_names_grib_2(4),lvl_str_space)
 
  if (iret <= 0) then

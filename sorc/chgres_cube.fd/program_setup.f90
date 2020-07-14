@@ -129,7 +129,7 @@
  character(len=6),   public      :: cres_target_grid = "NULL"
  character(len=500), public      :: atm_weight_file="NULL"
  character(len=25),  public      :: input_type="restart"
- character(len=20), public       :: phys_suite="GFS"      !Default to gfs physics suite
+ !character(len=20), public       :: phys_suite="GFS"      !Default to gfs physics suite
  character(len=20),  public      :: external_model="GFS"  !Default assume gfs data
  
  
@@ -229,12 +229,12 @@
                    regional, input_type, &
                    external_model, &
                    atm_weight_file, tracers, &
-                   tracers_input,phys_suite, &
+                   tracers_input, &
                    halo_bndy, & 
                    halo_blend, &
                    fix_dir_input_grid, &
                    nsoill_out
-!                   wgrib2_path, base_install_dir
+!                   wgrib2_path, base_install_dir, phys_suite
 
  print*,"- READ SETUP NAMELIST"
 
@@ -245,7 +245,7 @@
  close (41)
  
  call to_lower(input_type)
- call to_upper(phys_suite)
+! call to_upper(phys_suite)
  
  orog_dir_target_grid = trim(orog_dir_target_grid) // '/'
  orog_dir_input_grid = trim(orog_dir_input_grid) // '/'
