@@ -113,11 +113,19 @@ TEST7=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST6 ./c192.gfs.grib2.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize global C96 using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+export OMP_NUM_THREADS=1  # needs to match cpus-per-task
+TEST8=$(sbatch --parsable --ntasks-per-node=6 --nodes=2 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf \
+      --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST7 ./c96.fv3.netcdf.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST7 << EOF
+       --open-mode=append -q $QUEUE -d afterok:$TEST8 << EOF
 #!/bin/sh
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF

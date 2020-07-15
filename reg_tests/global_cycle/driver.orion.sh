@@ -50,6 +50,8 @@ export COMOUT=$DATA
 
 export NCCMP=/apps/nccmp-1.8.5/bin/nccmp
 
+export machine='orion'
+
 reg_dir=$PWD
 
 ./C768.fv3gfs.sh
