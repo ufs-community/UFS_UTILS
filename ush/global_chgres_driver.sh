@@ -24,6 +24,7 @@ export CRES=`echo $CASE | cut -c 2-`
 export CDATE=${CDATE:-${cdate:-2017031900}}  # format yyyymmddhh yyyymmddhh ...
 export CDUMP=${CDUMP:-gfs}                   # gfs or gdas
 export LEVS=${LEVS:-65}
+export DOSFC=${DOSFC:-YES}
 export LSOIL=${LSOIL:-4}
 export REGIONAL=${REGIONAL:-0}               # default is to assume uniform grid, which is REGIONAL=0
                                              # REGIONAL=1 - generate data and boundary (for regional case)
@@ -230,40 +231,44 @@ if [ $REGIONAL -ne 2 ]; then           # REGIONAL -ne 2 is for uniform and regio
     mv ${DATA}/gfs_bndy.tile7.nc $OUTDIR/gfs_bndy.tile7.000.nc
   fi
 
+  echo "Atmosphere done" > $OUTDIR/chgres_atm.log
+
 #---------------------------------------------------
 # Convert surface and nst files one tile at a time.
 #---------------------------------------------------
 
-  export CHGRESVARS="use_ufo=.true.,idvc=2,nvcoord=2,idvt=21,idsl=1,IDVM=0,nopdpvv=$nopdpvv"
-  export SIGINP=NULL
-  export SFCINP=$SFCANL
-  export NSTINP=$NSTANL
-  export JCAP=$JCAP_CASE
-  export LATB=$LATB_SFC
-  export LONB=$LONB_SFC
+  if [ $DOSFC = YES ]; then
+    export CHGRESVARS="use_ufo=.true.,idvc=2,nvcoord=2,idvt=21,idsl=1,IDVM=0,nopdpvv=$nopdpvv"
+    export SIGINP=NULL
+    export SFCINP=$SFCANL
+    export NSTINP=$NSTANL
+    export JCAP=$JCAP_CASE
+    export LATB=$LATB_SFC
+    export LONB=$LONB_SFC
 
-  if [ $gtype = regional ]; then
-    $CHGRESSH
-    mv ${DATA}/out.sfc.tile${TILE_NUM}.nc $OUTDIR/sfc_data.tile${TILE_NUM}.nc
-    rc=$?
-    if [[ $rc -ne 0 ]] ; then
-      echo "***ERROR*** rc= $rc"
-      exit $rc
-    fi
-  else
-    tile=1
-    while [ $tile -le $ntiles ]; do
-      export TILE_NUM=$tile
+    if [ $gtype = regional ]; then
       $CHGRESSH
+      mv ${DATA}/out.sfc.tile${TILE_NUM}.nc $OUTDIR/sfc_data.tile${TILE_NUM}.nc
       rc=$?
       if [[ $rc -ne 0 ]] ; then
         echo "***ERROR*** rc= $rc"
         exit $rc
       fi
-      mv ${DATA}/out.sfc.tile${tile}.nc $OUTDIR/sfc_data.tile${tile}.nc
-      tile=`expr $tile + 1 `
-    done
-  fi
+    else
+      tile=1
+      while [ $tile -le $ntiles ]; do
+        export TILE_NUM=$tile
+        $CHGRESSH
+        rc=$?
+        if [[ $rc -ne 0 ]] ; then
+          echo "***ERROR*** rc= $rc"
+          exit $rc
+        fi
+        mv ${DATA}/out.sfc.tile${tile}.nc $OUTDIR/sfc_data.tile${tile}.nc
+        tile=`expr $tile + 1 `
+      done
+    fi
+  fi #if [ $DOSFC = YES ]
 
 else # REGIONAL = 2, just generate boundary data
 
