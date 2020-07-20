@@ -27,7 +27,7 @@
                         vcoord_target,  &
                         levp1_target
 
- use program_setup, only : num_tracers
+ use program_setup, only : num_tracers, use_thomp_mp_climo
 
  implicit none
 
@@ -39,6 +39,7 @@
  integer             :: header_buffer_val = 16384
  integer             :: error, ncid, dim_nvcoord
  integer             :: dim_levp1, id_ntrac, id_vcoord
+ integer             :: num_tracers_output
 
  real(kind=esmf_kind_r8), allocatable :: tmp(:,:)
 
@@ -67,7 +68,9 @@
  error = nf90_enddef(ncid, header_buffer_val,4,0,4)
  call netcdf_err(error, 'end meta define for file='//trim(outfile) )
 
- error = nf90_put_var( ncid, id_ntrac, num_tracers)
+ num_tracers_output = num_tracers
+ if (use_thomp_mp_climo) num_tracers_output = num_tracers + 2
+ error = nf90_put_var( ncid, id_ntrac, num_tracers_output)
  call netcdf_err(error, 'write var ntrac for file='//trim(outfile) )
 
  allocate(tmp(levp1_target, nvcoord_target))
@@ -111,12 +114,15 @@
                                    u_w_target_grid, &
                                    v_w_target_grid, &
                                    temp_target_grid, &
-                                   zh_target_grid
+                                   zh_target_grid, &
+                                   qnifa_climo_target_grid, &
+                                   qnwfa_climo_target_grid
 
  use model_grid, only            : i_target, ip1_target, j_target, jp1_target
 
  use program_setup, only         : halo_bndy, halo_blend, &
-                                   input_type, tracers, num_tracers
+                                   input_type, tracers, num_tracers, &
+                                   use_thomp_mp_climo
 
  implicit none
 
@@ -136,6 +142,10 @@
  integer                        :: id_i_top, id_j_top
  integer                        :: id_i_right, id_j_right
  integer                        :: id_i_left, id_j_left
+ integer                        :: id_qnifa_bottom, id_qnifa_top
+ integer                        :: id_qnifa_right, id_qnifa_left
+ integer                        :: id_qnwfa_bottom, id_qnwfa_top
+ integer                        :: id_qnwfa_right, id_qnwfa_left
  integer                        :: id_ps_bottom, id_ps_top
  integer                        :: id_ps_right, id_ps_left
  integer                        :: id_t_bottom, id_t_top
@@ -341,6 +351,50 @@
      call netcdf_err(error, 'DEFINING TRACER_LEFT')
 
    enddo
+
+   if (use_thomp_mp_climo) then
+
+     name = "ice_aero_bottom"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_lon, dim_halo, dim_lev/), id_qnifa_bottom)
+     call netcdf_err(error, 'DEFINING QNIFA_BOTTOM')
+
+     name = "ice_aero_top"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_lon, dim_halo, dim_lev/), id_qnifa_top)
+     call netcdf_err(error, 'DEFINING QNIFA_TOP')
+
+     name = "ice_aero_right"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_halo, dim_lat, dim_lev/), id_qnifa_right)
+     call netcdf_err(error, 'DEFINING QNIFA_RIGHT')
+
+     name = "ice_aero_left"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_halo, dim_lat, dim_lev/), id_qnifa_left)
+     call netcdf_err(error, 'DEFINING QNIFA_LEFT')
+
+     name = "liq_aero_bottom"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_lon, dim_halo, dim_lev/), id_qnwfa_bottom)
+     call netcdf_err(error, 'DEFINING QNWFA_BOTTOM')
+
+     name = "liq_aero_top"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_lon, dim_halo, dim_lev/), id_qnwfa_top)
+     call netcdf_err(error, 'DEFINING QNWFA_TOP')
+
+     name = "liq_aero_right"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_halo, dim_lat, dim_lev/), id_qnwfa_right)
+     call netcdf_err(error, 'DEFINING QNWFA_RIGHT')
+
+     name = "liq_aero_left"
+     error = nf90_def_var(ncid, name, NF90_FLOAT, &
+                             (/dim_halo, dim_lat, dim_lev/), id_qnwfa_left)
+     call netcdf_err(error, 'DEFINING QNWFA_LEFT')
+
+   endif
 
    error = nf90_def_var(ncid, 'i_w_bottom', NF90_INT, &
                              (/dim_lonp/), id_i_w_bottom)
@@ -758,6 +812,58 @@
    call netcdf_err(error, 'WRITING T RIGHT' )
  endif
 
+ if (use_thomp_mp_climo) then
+
+   print*,"- CALL FieldGather FOR TARGET GRID CLIMO QNIFA FOR TILE: ", tile
+   call ESMF_FieldGather(qnifa_climo_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum3d_top(:,:,:) = data_one_tile_3d(i_start_top:i_end_top,j_start_top:j_end_top,:)
+     dum3d_top(:,:,1:lev_target) = dum3d_top(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnifa_top, dum3d_top)
+     call netcdf_err(error, 'WRITING QNIFA CLIMO TOP' )
+     dum3d_bottom(:,:,:) = data_one_tile_3d(i_start_bottom:i_end_bottom,j_start_bottom:j_end_bottom,:)
+     dum3d_bottom(:,:,1:lev_target) = dum3d_bottom(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnifa_bottom, dum3d_bottom)
+     call netcdf_err(error, 'WRITING QNIFA CLIMO BOTTOM' )
+     dum3d_left(:,:,:) = data_one_tile_3d(i_start_left:i_end_left,j_start_left:j_end_left,:)
+     dum3d_left(:,:,1:lev_target) = dum3d_left(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnifa_left, dum3d_left)
+     call netcdf_err(error, 'WRITING QNIFA CLIMO LEFT' )
+     dum3d_right(:,:,:) = data_one_tile_3d(i_start_right:i_end_right,j_start_right:j_end_right,:)
+     dum3d_right(:,:,1:lev_target) = dum3d_right(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnifa_right, dum3d_right)
+     call netcdf_err(error, 'WRITING QNIFA CLIMO RIGHT' )
+   endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID CLIMO QNWFA FOR TILE: ", tile
+   call ESMF_FieldGather(qnwfa_climo_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum3d_top(:,:,:) = data_one_tile_3d(i_start_top:i_end_top,j_start_top:j_end_top,:)
+     dum3d_top(:,:,1:lev_target) = dum3d_top(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnwfa_top, dum3d_top)
+     call netcdf_err(error, 'WRITING QNWFA CLIMO TOP' )
+     dum3d_bottom(:,:,:) = data_one_tile_3d(i_start_bottom:i_end_bottom,j_start_bottom:j_end_bottom,:)
+     dum3d_bottom(:,:,1:lev_target) = dum3d_bottom(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnwfa_bottom, dum3d_bottom)
+     call netcdf_err(error, 'WRITING QNWFA CLIMO BOTTOM' )
+     dum3d_left(:,:,:) = data_one_tile_3d(i_start_left:i_end_left,j_start_left:j_end_left,:)
+     dum3d_left(:,:,1:lev_target) = dum3d_left(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnwfa_left, dum3d_left)
+     call netcdf_err(error, 'WRITING QNWFA CLIMO LEFT' )
+     dum3d_right(:,:,:) = data_one_tile_3d(i_start_right:i_end_right,j_start_right:j_end_right,:)
+     dum3d_right(:,:,1:lev_target) = dum3d_right(:,:,lev_target:1:-1) 
+     error = nf90_put_var( ncid, id_qnwfa_right, dum3d_right)
+     call netcdf_err(error, 'WRITING QNWFA CLIMO RIGHT' )
+   endif
+
+ endif
+
  deallocate(dum3d_top, dum3d_bottom, dum3d_left, dum3d_right, data_one_tile_3d)
 
 !---------------------------------------------------------------------------
@@ -1091,13 +1197,16 @@
  use netcdf
 
  use program_setup, only           : halo=>halo_bndy, &
-                                     input_type, tracers, num_tracers
+                                     input_type, tracers, num_tracers, &
+                                     use_thomp_mp_climo
 
  use atmosphere, only              : lev_target, &
                                      levp1_target, &
                                      ps_target_grid, &
                                      zh_target_grid, &
                                      dzdt_target_grid, &
+                                     qnifa_climo_target_grid, &
+                                     qnwfa_climo_target_grid, &
                                      tracers_target_grid, &
                                      temp_target_grid, &
                                      delp_target_grid, &
@@ -1134,11 +1243,11 @@
  integer                          :: id_lat_w, id_lon_w
  integer                          :: id_w, id_zh, id_u_w
  integer                          :: id_v_w, id_u_s, id_v_s
- integer                          :: id_t, id_delp
+ integer                          :: id_t, id_delp, id_qnifa, id_qnwfa
  integer                          :: i_start, i_end, j_start, j_end
  integer                          :: i_target_out, j_target_out
  integer                          :: ip1_target_out, jp1_target_out
- integer                          :: ip1_end, jp1_end
+ integer                          :: ip1_end, jp1_end, num_tracers_output
 
  real(esmf_kind_r8), allocatable  :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable  :: data_one_tile_3d(:,:,:)
@@ -1194,7 +1303,9 @@
    call netcdf_err(error, 'DEFINING LEV DIMENSION' )
    error = nf90_def_dim(ncid, 'levp', levp1_target, dim_levp1)
    call netcdf_err(error, 'DEFINING LEVP DIMENSION' )
-   error = nf90_def_dim(ncid, 'ntracer', num_tracers, dim_ntracer)
+   num_tracers_output = num_tracers
+   if (use_thomp_mp_climo) num_tracers_output = num_tracers + 2
+   error = nf90_def_dim(ncid, 'ntracer', num_tracers_output, dim_ntracer)
    call netcdf_err(error, 'DEFINING NTRACER DIMENSION' )
 
 !--- define global attributes
@@ -1288,6 +1399,18 @@
      error = nf90_put_att(ncid, id_tracers(n), "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING TRACERS COORD' )
    enddo
+
+   if (use_thomp_mp_climo) then
+     error = nf90_def_var(ncid, 'ice_aero', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_qnifa)
+     call netcdf_err(error, 'DEFINING QNIFA' )
+     error = nf90_put_att(ncid, id_qnifa, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING QNIFA COORD' )
+
+     error = nf90_def_var(ncid, 'liq_aero', NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_qnwfa)
+     call netcdf_err(error, 'DEFINING QNWFA' )
+     error = nf90_put_att(ncid, id_qnwfa, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING QNWFA COORD' )
+   endif
 
    error = nf90_def_var(ncid, 'u_w', NF90_FLOAT, (/dim_lonp,dim_lat,dim_lev/), id_u_w)
    call netcdf_err(error, 'DEFINING U_W' )
@@ -1462,6 +1585,40 @@
    endif
 
  enddo
+
+!  qnifa
+
+ if (use_thomp_mp_climo) then
+   do tile = 1, num_tiles_target_grid
+     print*,"- CALL FieldGather FOR TARGET GRID QNIFA FOR TILE: ", tile
+     call ESMF_FieldGather(qnifa_climo_target_grid, data_one_tile_3d, rootPet=tile-1, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather", error)
+   enddo
+
+   if (localpet < num_tiles_target_grid) then
+     dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+     dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+     error = nf90_put_var( ncid, id_qnifa, dum3d)
+     call netcdf_err(error, 'WRITING QNIFA RECORD' )
+   endif
+
+!  qnwfa
+
+   do tile = 1, num_tiles_target_grid
+     print*,"- CALL FieldGather FOR TARGET GRID QNWFA FOR TILE: ", tile
+     call ESMF_FieldGather(qnwfa_climo_target_grid, data_one_tile_3d, rootPet=tile-1, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather", error)
+   enddo
+
+   if (localpet < num_tiles_target_grid) then
+     dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+     dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+     error = nf90_put_var( ncid, id_qnwfa, dum3d)
+     call netcdf_err(error, 'WRITING QNWFA RECORD' )
+   endif
+ endif
 
  deallocate(dum3d, data_one_tile_3d)
 
