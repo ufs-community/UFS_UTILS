@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -J fv3_grid_driver
-#SBATCH -A fv3-cpu
+#SBATCH -A gsd-hpcs
 #SBATCH --open-mode=truncate
 #SBATCH -o log.fv3_grid_driver
 #SBATCH -e log.fv3_grid_driver
@@ -61,6 +61,7 @@ module list
 
 export res=96
 export gtype=uniform  # 'uniform', 'stretch', 'nest', or 'regional'
+export add_lake=true  # add fractional lake data to orography data
 
 if [ $gtype = stretch ]; then
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -88,6 +89,20 @@ fi
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TMPDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
 export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/C${res}
+
+export LOGNAME=sun
+export home_dir=/scratch1/BMC/gsd-fv3-dev/$LOGNAME/lake_new_commit
+export TMPDIR=/scratch1/BMC/gsd-fv3-dev/NCEPDEV/stmp3/$LOGNAME/fv3_grid.$gtype
+export out_dir=/scratch2/BMC/gsd-fv3-dev/NCEPDEV/stmp3/$LOGNAME/C${res}
+
+if [ $add_lake = true ]; then
+  if  [ $gtype = stretch ] || [ $gtype = nest ]; then
+    set +x
+    echo "Adding fractional lake data to orography data is not available"
+    echo "for 'stretch' and 'nest' grid type; set add_lake=false."
+    exit 1
+  fi
+fi
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
