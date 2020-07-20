@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -J fv3_grid_driver
-#SBATCH -A gsd-hpcs
+#SBATCH -A fv3-cpu
 #SBATCH --open-mode=truncate
 #SBATCH -o log.fv3_grid_driver
 #SBATCH -e log.fv3_grid_driver
@@ -89,11 +89,6 @@ fi
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TMPDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
 export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/C${res}
-
-export LOGNAME=sun
-export home_dir=/scratch1/BMC/gsd-fv3-dev/$LOGNAME/lake_new_commit
-export TMPDIR=/scratch1/BMC/gsd-fv3-dev/NCEPDEV/stmp3/$LOGNAME/fv3_grid.$gtype
-export out_dir=/scratch2/BMC/gsd-fv3-dev/NCEPDEV/stmp3/$LOGNAME/C${res}
 
 if [ $add_lake = true ]; then
   if  [ $gtype = stretch ] || [ $gtype = nest ]; then
