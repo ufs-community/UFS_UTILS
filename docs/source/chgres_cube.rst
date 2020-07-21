@@ -4,10 +4,10 @@
 Introduction
 ************************
 
-The chgres_cube program creates initial condition files to “coldstart” the forecast model.  The initial conditions are created from either Global Forecast System (GFS) gridded binary version 2 (GRIB2) or NOAA Environmental Modeling System Input/Output (NEMSIO) data.
+The chgres_cube program creates initial condition files to “coldstart” the forecast model.  The initial conditions are created from either Global Forecast System (GFS) gridded binary version 2 (GRIB2), NOAA Environmental Modeling System Input/Output (NEMSIO) data, or Network Common Data Form (NetCDF) data.
 
 ************************************************
-Where to find GFS GRIB2 and NEMSIO data
+Where to find GFS GRIB2, NEMSIO and NetCDF data
 ************************************************
 
 **GRIB2:**
@@ -22,6 +22,9 @@ Where to find GFS GRIB2 and NEMSIO data
 
       * T1534 gaussian (last 10 days only) - Use the **gfs.tHHz.atmanl.nemsio** (atmospheric fields) and **gfs.tHHz.sfcanl.nemsio** (surface fields) files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
+**NetCDF:**
+
+      * T1534 gaussian (don't have any more details at this time).
 
 ************************************************
 Initializing with GRIB2 data - some caveats
@@ -46,11 +49,11 @@ Keep this in mind when using GFS GRIB2 data for model initialization:
 
 The issue with not having NSST data is important.  In GFS we use the foundation temperature (Tref) and add a diurnal warming/cooling layer using NSST. This is the surface temperature that is passed to the atmospheric boundary layer. This is a critical feature, especially when we are doing Data Assimilation.
 
-When using NEMSIO data to initialize the model, both the foundation and surface temperature are available and the atmospheric model should be run using the NSST option as this will properly account for in the forward run of the model.
+When using NEMSIO or NetCDF data to initialize the model, both the foundation and surface temperature are available and the atmospheric model should be run using the NSST option as this will properly account for in the forward run of the model.
 
 In GRIB2 files only the Tsfc is stored and that is set as foundation temperature as well. So the diurnal heating / cooling is baked into the initial condition for the extent of the run. This can be critical if the model is being initialized when the ocean is warm and initialization is occuring at the peak of the diurnal warming. That warm ocean will be baked in for the extent of the run and may spawn off a number of fake hurricanes. The user has two options -- either to use a spin up cycle to spin up NSST (set **nstf_name** = [2,1,0,0,0] in **input.nml** of the model namelist file. This will create a diurnal cycle after 24 hours of spin up), or to run the model without any NSST option ( set **nstf_name** = [0,0,0,0,0] in **input.nml** of the model namelist file. The user will also have to choose one of the no NSST physics suite options in **input.nml**).
 
-Note, that neither of these two options will get rid of the underlying baked in heating/cooling in the surface temperature fields. For most cases this may not be an issue, but where it is then the user will either have to initialize the model with NEMSIO data or replace the surface temperature in the GRIB2 fields with independently obtained foundation temperature.
+Note, that neither of these two options will get rid of the underlying baked in heating/cooling in the surface temperature fields. For most cases this may not be an issue, but where it is then the user will either have to initialize the model with NEMSIO or NetCDF data, or replace the surface temperature in the GRIB2 fields with independently obtained foundation temperature.
 
 ************************************************
 chgres_cube namelist options
@@ -83,13 +86,32 @@ When using NEMSIO data as input to chgres_cube, set namelist as follows:
       * data_dir_input_grid - directory containing the NEMSIO input data
       * atm_files_input_grid - name of the NEMSIO input atmospheric data file
       * sfc_files_input_grid - name of the NEMSIO input surface/Near Sea Surface Temperature (NSST) data file
-      * input_type - input data type. Set to ‘gaussian’.
+      * input_type - input data type. Set to ‘gaussian_nemsio’.
       * cycle_mon/day/hour - month/day/hour of your model run
       * convert_atm - set to ‘true’ to process the atmospheric fields
       * convert_sfc - set to ‘true’ to process the surface fields
       * convert_nst - set to ‘true’ to process NSST fields
       * tracers_input - names of tracer records in input file.  For GFDL microphysics, set to “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
       * tracers - names of tracer records in output file expected by model.  For GFDL microphysics, set to “sphum”,”liq_wat”,”o3mr”,”ice_wat”,”rainwat”,”snowwat”,”graupel”.
+
+When using NetCDF data as input to chgres_cube, set namelist as follows:
+
+      * fix_dir_target_grid - Path to the tiled FV3 surface climatological files (such as albedo).
+      * mosaic_file_target_grid - Path and name of the FV3 mosaic file.
+      * orog_dir_target_grid - directory containing the tiled FV3 orography and grid files (NetCDF).
+      * orog_files_target_grid - names of the six tiled FV3 orography files.
+      * vcoord_file_target_grid - path and name of the model vertical coordinate definition file (“global_hyblev.l$LEVS.txt).
+      * data_dir_input_grid - directory containing the NetCDF input data
+      * atm_files_input_grid - name of the NetCDF input atmospheric data file
+      * sfc_files_input_grid - name of the NetCDF input surface/Near Sea Surface Temperature (NSST) data file
+      * input_type - input data type. Set to ‘gaussian_netcdf’.
+      * cycle_mon/day/hour - month/day/hour of your model run
+      * convert_atm - set to ‘true’ to process the atmospheric fields
+      * convert_sfc - set to ‘true’ to process the surface fields
+      * convert_nst - set to ‘true’ to process NSST fields
+      * tracers_input - names of tracer records in input file.  For GFDL microphysics, set to “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
+      * tracers - names of tracer records in output file expected by model.  For GFDL microphysics, set to “sphum”,”liq_wat”,”o3mr”,”ice_wat”,”rainwat”,”snowwat”,”graupel”.
+
 
 ************************
 Compiling the program
@@ -150,7 +172,7 @@ The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov
       * FV3 vertical coordinate file.  Text file.  Located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_am.v20191213/
 	      * global_hyblev.l$LEVS.txt
 
-      * Input data files.  GRIB2 or NEMSIO.  See above section for how to find this data.
+      * Input data files.  GRIB2, NEMSIO or NetCDF.  See above section for how to find this data.
 
 **Outputs**
 
@@ -185,7 +207,7 @@ Running the program stand alone
 Code structure
 ************************
 
-Note on variable names: “input” refers to the data input to the program (i.e., GRIB2, NEMSIO).  “Target” refers to the target or FV3 model grid.  See routine doc blocks for more details.
+Note on variable names: “input” refers to the data input to the program (i.e., GRIB2, NEMSIO, NetCDF).  “Target” refers to the target or FV3 model grid.  See routine doc blocks for more details.
 
       * chgres.F90 - This is the main driver routine.
       * program_setup.F90 - Sets up the program execution.
@@ -195,7 +217,7 @@ Note on variable names: “input” refers to the data input to the program (i.e
       * model_grid.F90 - Sets up the ESMF grid objects for the input data grid and target FV3 grid.
       * static_data.F90 - Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type).  Time interpolates time-varying fields, such as monthly plant greenness, to the model run time.  Data for each target FV3 resolution resides in the ‘fixed’ directory.  Set path via the fix_dir_target_grid namelist variable.
       * write_data.F90 - Writes the tiled and header files expected by the forecast model.
-      * input_data.F90 - Contains routines to read atmospheric and surface data from GRIB2 and NEMSIO files.
+      * input_data.F90 - Contains routines to read atmospheric and surface data from GRIB2, NEMSIO and NetCDF files.
       * utils.f90 - Contains utility routines, such as error handling.
       * grib2_util.F90 -  Routines to (1) convert from RH to specific humidity; (2) convert from omega to dzdt.  Required for GRIB2 input data.
       * atmosphere.F90 - Process atmospheric fields.  Horizontally interpolate from input to target FV3 grid using ESMF regridding.  Adjust surface pressure according to terrain differences between input and target grid.  Vertically interpolate to target FV3 grid vertical levels.  Description of main routines:
