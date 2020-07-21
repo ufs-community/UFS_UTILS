@@ -714,7 +714,7 @@
  print*,"- CALL FieldGet FOR TARGET grid snow depth."
  call ESMF_FieldGet(snow_depth_target_grid, &
                     farrayPtr=snow_depth_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL Field_Regrid for snow liq equiv."
@@ -2345,8 +2345,8 @@
    DO WHILE ( (NLOG .LT. 10) .AND. (KCOUNT .EQ. 0) )
 
      NLOG = NLOG+1
-     DF = LOG(( PSIS*GRAV/HLICE ) * ( ( 1.+CK*SWL )**2. ) *      &
-        ( SMCMAX/(SMC-SWL) )**BX) - LOG(-(TKELV-frz_h2o)/TKELV)
+     DF = ALOG(( PSIS*GRAV/HLICE ) * ( ( 1.+CK*SWL )**2. ) *      &
+        ( SMCMAX/(SMC-SWL) )**BX) - ALOG(-(TKELV-frz_h2o)/TKELV)
      DENOM = 2. * CK / ( 1.+CK*SWL ) + BX / ( SMC - SWL )
      SWLK = SWL - DF/DENOM
 
