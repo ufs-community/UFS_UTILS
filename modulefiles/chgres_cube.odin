@@ -21,12 +21,12 @@ module load sfcio/v1.0.0
 module load sigio/v2.0.1
 
 
-export FCOMP=ftn
-#export FFLAGS="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
-export WGRIB2API_LIB="/home/larissa.reames/tmp/grib2/lib/libwgrib2_api.a"
-export WGRIB2API_INC="/home/larissa.reames/tmp/grib2/lib"
-export WGRIB2_LIB="/home/larissa.reames/tmp/grib2/lib/libwgrib2.a"
+setenv FCOMP ftn
+#setenv FFLAGS -O3\ -fp-model\ precise\ -g\ -traceback\ -r8\ -i4\ -qopenmp\ -convert\ big_endian\ -assume\ byterecl
+setenv WGRIB2API_LIB /home/larissa.reames/tmp/grib2/lib/libwgrib2_api.a
+setenv WGRIB2API_INC /home/larissa.reames/tmp/grib2/lib
+setenv WGRIB2_LIB /home/larissa.reames/tmp/grib2/lib/libwgrib2.a
 
 
 # for debugging
-export FFLAGS="-O0 -g -traceback -r8 -i4 -qopenmp -convert big_endian -check bounds -warn unused -assume byterecl"
+setenv FFLAGS -O0\ -g\ -traceback\ -r8\ -i4\ -qopenmp\ -convert\ big_endian\ -check\ bounds\ -warn\ unused\ -assume\ byterecl"
