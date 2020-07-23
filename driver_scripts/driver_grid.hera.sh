@@ -60,8 +60,9 @@ module list
 #-----------------------------------------------------------------------
 
 export res=96
-export gtype=uniform  # 'uniform', 'stretch', 'nest', or 'regional'
-export add_lake=true  # add fractional lake data to orography data
+export gtype=uniform    # 'uniform', 'stretch', 'nest', or 'regional'
+export add_lake=true    # add lake frac and depth to orography data
+export lake_cutoff=0.20 # lake frac less than lake_cutoff is ignored
 
 if [ $gtype = stretch ]; then
   export stretch_fac=1.5       # Stretching factor for the grid

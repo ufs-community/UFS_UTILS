@@ -30,6 +30,7 @@ PROGRAM lake_frac
     REAL, ALLOCATABLE :: src_grid_lon(:), src_grid_lat(:)
 
     INTEGER :: tile_req, tile_beg, tile_end
+    REAL :: lake_cutoff
 
     INTEGER, PARAMETER :: nlat = 21600, nlon = 43200
     REAL, PARAMETER :: d2r = acos(-1.0) / 180.0
@@ -43,9 +44,11 @@ PROGRAM lake_frac
     INTEGER :: stat
     
     CALL getarg(0, arg) ! get the program name
-    IF (iargc() /= 3) THEN
+    IF (iargc() /= 3 .AND. iargc() /= 4) THEN
       PRINT*, 'Usage: ', trim(arg), & 
        ' [tile_num (0:all tiles, 7:regional)] [resolution (48,96, ...)] [path to lake data file]'  
+      PRINT*, 'Or: ', trim(arg), & 
+       ' [tile_num (0:all tiles, 7:regional)] [resolution (48,96, ...)] [path to lake data file] [lake_cutoff]'  
       STOP
     ENDIF
     CALL getarg(1, arg)
@@ -53,6 +56,13 @@ PROGRAM lake_frac
     CALL getarg(2, arg)
     READ(arg,*,iostat=stat) cs_res
     CALL getarg(3, lakedata_path)
+
+    IF (iargc() == 3) THEN
+      lake_cutoff = 0.20
+    ELSE
+      CALL getarg(4, arg)
+      READ(arg,*,iostat=stat) lake_cutoff
+    ENDIF
 
     IF (tile_req == 0) THEN
       tile_beg = 1; tile_end = 6
@@ -508,7 +518,7 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
     REAL :: geolon(cs_res*cs_res),geolat(cs_res*cs_res)
     REAL :: land_frac(cs_res*cs_res),slmsk(cs_res*cs_res),inland(cs_res*cs_res)
     real, parameter :: epsil=1.e-6   ! numerical min for lake_frac/land_frac
-    real            :: cutoff_lake=0.01, cutoff_land=1.e-6 ! if frac<cutoff, frac=0
+    real            :: land_cutoff=1.e-6 ! land_frac=0 if it is < land_cutoff
 
     INTEGER :: i, j
 
@@ -548,7 +558,7 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
       stat = nf90_put_att(ncid, lake_frac_id,'unit','fraction')
       CALL nc_opchk(stat, "nf90_put_att: lake_frac:unit") 
       write(string,'(a,f5.2)') 'based on GLDBv2 (Choulga et al. 2014); missing lakes &
-        added based on land_frac in this dataset. lake_frac cutoff is',cutoff_lake
+        added based on land_frac in this dataset; lake_frac cutoff is',lake_cutoff
       stat = nf90_put_att(ncid, lake_frac_id,'description',trim(string))
       CALL nc_opchk(stat, "nf90_put_att: lake_frac:description") 
 #endif
@@ -562,16 +572,16 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
       stat = nf90_put_att(ncid, lake_depth_id,'unit','meter')
       CALL nc_opchk(stat, "nf90_put_att: lake_depth:long_name") 
       stat = nf90_put_att(ncid, lake_depth_id,'description', &
-        'based on GLDBv2 (Choulga et al. 2014); missing depth set to 10m; spurious large pos. &
-         depths are left unchanged.')
+        'based on GLDBv2 (Choulga et al. 2014); missing depth set to 10m &
+        (except to 211m in Caspian Sea); spurious large pos. depths are left unchanged.')
       CALL nc_opchk(stat, "nf90_put_att: lake_depth:description") 
 #endif
 
-      write(string,'(a,es8.1)') 'land_frac with lake; land_frac cutoff is',cutoff_land
+      write(string,'(a,es8.1)') 'land_frac and lake_frac are adjusted such that their sum is 1 at points where inland=1; land_frac cutoff is',land_cutoff
       stat = nf90_put_att(ncid, land_frac_id,'description',trim(string))
       CALL nc_opchk(stat, "nf90_put_att: land_frac:description") 
 
-      write(string,'(a)') 'slmsk = ceiling(land_frac)'
+      write(string,'(a)') 'slmsk = nint(land_frac)'
       stat = nf90_put_att(ncid, slmsk_id,'description',trim(string))
       CALL nc_opchk(stat, "nf90_put_att: slmsk:description") 
 
@@ -608,35 +618,52 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
       lake_frac (:) = cs_lakestat ((tile_num-1)*tile_sz+1:tile_num*tile_sz)
       lake_depth(:) = cs_lakedepth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
 
+! add Caspian Sea and Aral Sea to lake_frac and lake_depth
+      IF (tile_num == 2 .or. tile_num == 3) THEN
+        DO i = 1, tile_sz
+          IF (land_frac(i) < 0.9 .AND. lake_frac(i) < 0.1) THEN
+            IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
+                geolon(i) > 45.0 .AND. geolon(i) <= 55.0) THEN
+              lake_frac(i) = 1.-land_frac(i)
+              lake_depth(i) = 211.0
+            ENDIF
+            IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
+                geolon(i) > 57.0 .AND. geolon(i) <= 63.0) THEN
+              lake_frac(i) = 1.-land_frac(i)
+              lake_depth(i) = 10.0
+            ENDIF
+          ENDIF
+        ENDDO
+      ENDIF
+
 ! adjust land_frac and lake_frac, and make sure land_frac+lake_frac=1 at inland points
       DO i = 1, tile_sz
-        if (lake_frac(i) >= cutoff_lake) then ! lake_frac dominates over land_frac
+        if (lake_frac(i) >= lake_cutoff) then ! non-zero lake_frac dominates over land_frac
           land_frac(i) = max(0., min(1., 1.-lake_frac(i)))
         elseif (inland(i) == 1.) then ! land_frac dominates over lake_frac at inland points
           lake_frac(i) = max(0., min(1., 1.-land_frac(i)))
         end if
 
 ! epsil is "numerical" nonzero min for lake_frac/land_frac
-! cutoff_lake/cutoff_land is practical min for lake_frac/land_frac
-        if (min(cutoff_lake,cutoff_land) < epsil) then
-          print *,'cutoff_lake/cutoff_land cannot be smaller than epsil, reset...'
-          cutoff_lake=max(epsil,cutoff_lake)
-          cutoff_land=max(epsil,cutoff_land)
+! lake_cutoff/land_cutoff is practical min for lake_frac/land_frac
+        if (min(lake_cutoff,land_cutoff) < epsil) then
+          print *,'lake_cutoff/land_cutoff cannot be smaller than epsil, reset...'
+          lake_cutoff=max(epsil,lake_cutoff)
+          land_cutoff=max(epsil,land_cutoff)
         end if
 
-        if (lake_frac(i)<   cutoff_lake) lake_frac(i)=0.
-        if (lake_frac(i)>1.-cutoff_lake) lake_frac(i)=1.
+        if (lake_frac(i)<   lake_cutoff) lake_frac(i)=0.
+        if (lake_frac(i)>1.-lake_cutoff) lake_frac(i)=1.
         if (inland(i) == 1.) land_frac(i) = 1.-lake_frac(i)
-        if (land_frac(i)<   cutoff_land) land_frac(i)=0.
-        if (land_frac(i)>1.-cutoff_land) land_frac(i)=1.
+        if (land_frac(i)<   land_cutoff) land_frac(i)=0.
+        if (land_frac(i)>1.-land_cutoff) land_frac(i)=1.
 
-        if (lake_frac(i) < cutoff_lake) then
+        if (lake_frac(i) < lake_cutoff) then
           lake_depth(i)=0.
-        elseif (lake_frac(i) >= cutoff_lake .and. lake_depth(i)==0.) then
+        elseif (lake_frac(i) >= lake_cutoff .and. lake_depth(i)==0.) then
           lake_depth(i)=10.
         end if
-
-        slmsk(i) = ceiling(land_frac(i))
+        slmsk(i) = nint(land_frac(i))
       ENDDO
 ! write 2 new variables      
       stat = nf90_put_var(ncid, lake_frac_id, lake_frac, &
@@ -680,7 +707,7 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
     REAL, ALLOCATABLE :: land_frac(:), slmsk(:)
 
     real, parameter :: epsil=1.e-6   ! numerical min for lake_frac/land_frac
-    real            :: cutoff_lake=0.01, cutoff_land=1.e-6 ! if frac<cutoff, frac=0
+    real            :: land_cutoff=1.e-6 ! land_frac=0 if it is < land_cutoff
 
     INTEGER :: i, j, var_id
 
@@ -741,12 +768,12 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
     stat = nf90_put_att(ncid, lake_depth_id,'unit','meter')
     CALL nc_opchk(stat, "nf90_put_att: lake_depth:long_name") 
     stat = nf90_put_att(ncid, lake_depth_id,'description', &
-      'based on GLDBv2 (Choulga et al. 2014); missing depth set to 10m; &
-       spurious large pos. depths are left unchanged.')
+      'based on GLDBv2 (Choulga et al. 2014); missing depth set to 10m &
+      (except to 211m in Caspian Sea); spurious large pos. depths are left unchanged.')
     CALL nc_opchk(stat, "nf90_put_att: lake_depth:description") 
 #endif
     ENDIF
-    write(string,'(a,es8.1)') 'land_frac with lake; land_frac cutoff is',cutoff_land
+    write(string,'(a,es8.1)') 'land_frac is adjusted to 1-lake_frac where lake_frac>0 but left unchanged where lake_frac=0. This could lead to land_frac+lake_frac<1 at some inland points; land_frac cutoff is',land_cutoff
     stat = nf90_put_att(ncid, land_frac_id,'description',trim(string))
     CALL nc_opchk(stat, "nf90_put_att: land_frac:description") 
 
@@ -780,58 +807,51 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
            start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
     CALL nc_opchk(stat, "nf90_get_var: slmsk")
 
-! add Caspian Sea and Aral Sea to lake_frac and lake_depth
     tile_num = 1
-    lake_frac(:) = cs_lakestat((tile_num-1)*tile_sz+1:tile_num*tile_sz)
+    lake_frac(:)  = cs_lakestat((tile_num-1)*tile_sz+1:tile_num*tile_sz)
     lake_depth(:) = cs_lakedepth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
-    DO i = 1, tile_sz
-      IF (land_frac(i) < 0.9 .AND. lake_frac(i) < 0.1) THEN
-        IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
-            geolon(i) > 45.0 .AND. geolon(i) <= 55.0) THEN
-          lake_frac(i) = 1.-land_frac(i)
-          lake_depth(i) = 211.0
-        ENDIF 
-        IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
-            geolon(i) > 57.0 .AND. geolon(i) <= 63.0) THEN
-          lake_frac(i) = 1.-land_frac(i)
-          lake_depth(i) = 10.0
-        ENDIF 
-      ENDIF
-    ENDDO
 
-    if (min(cutoff_lake,cutoff_land) < epsil) then
-      print *,'cutoff_lake/cutoff_land cannot be smaller than epsil, reset...'
-      cutoff_lake=max(epsil,cutoff_lake)
-      cutoff_land=max(epsil,cutoff_land)
-    end if
+! add Caspian Sea and Aral Sea to lake_frac and lake_depth
+    IF (tile_num == 2 .or. tile_num == 3) THEN
+      DO i = 1, tile_sz
+        IF (land_frac(i) < 0.9 .AND. lake_frac(i) < 0.1) THEN
+          IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
+              geolon(i) > 45.0 .AND. geolon(i) <= 55.0) THEN
+            lake_frac(i) = 1.-land_frac(i)
+            lake_depth(i) = 211.0
+          ENDIF
+          IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
+              geolon(i) > 57.0 .AND. geolon(i) <= 63.0) THEN
+            lake_frac(i) = 1.-land_frac(i)
+            lake_depth(i) = 10.0
+          ENDIF
+        ENDIF
+      ENDDO
+    ENDIF
+
     DO i = 1, tile_sz
 ! epsil is "numerical" nonzero min for lake_frac/land_frac
-      if (lake_frac(i)>0. .and. lake_frac(i)<   epsil) lake_frac(i)=0.
-      if (lake_frac(i)<1. .and. lake_frac(i)>1.-epsil) lake_frac(i)=1.
-      if (land_frac(i)>0. .and. land_frac(i)<   epsil) land_frac(i)=0.
-      if (land_frac(i)<1. .and. land_frac(i)>1.-epsil) land_frac(i)=1.
-! cutoff_lake/cutoff_land is practical min for lake_frac/land_frac
-      if (land_frac(i)>0. .and. land_frac(i)<cutoff_land) then
-        land_frac(i)=0.
+! lake_cutoff/land_cutoff is practical min for lake_frac/land_frac
+      if (min(lake_cutoff,land_cutoff) < epsil) then
+        print *,'lake_cutoff/land_cutoff cannot be smaller than epsil, reset...'
+        lake_cutoff=max(epsil,lake_cutoff)
+        land_cutoff=max(epsil,land_cutoff)
       end if
-      
-      if (lake_frac(i)>0. .and. lake_frac(i)<cutoff_lake) then
-        lake_frac(i)=0.
+
+      if (lake_frac(i)<   lake_cutoff) lake_frac(i)=0.
+      if (lake_frac(i)>1.-lake_cutoff) lake_frac(i)=1.
+      if (land_frac(i)<   land_cutoff) land_frac(i)=0.
+      if (land_frac(i)>1.-land_cutoff) land_frac(i)=1.
+
+      if (lake_frac(i) >= lake_cutoff) then ! non-zero lake_frac dominates over land_frac
+        land_frac(i) = max(0., min(1., 1.-lake_frac(i)))
+      end if
+
+      if (lake_frac(i) < lake_cutoff) then
         lake_depth(i)=0.
-        land_frac(i)=1.
-      elseif (lake_frac(i) >= cutoff_lake .and. lake_depth(i)==0.) then
+      elseif (lake_frac(i) >= lake_cutoff .and. lake_depth(i)==0.) then
         lake_depth(i)=10.
       end if
-
-! adjust land_frac/slmsk to be consistent with lake_frac
-      if (lake_frac(i) >= cutoff_lake) then ! lake_frac dominates over land_frac
-        land_frac(i) = min(1., land_frac(i)+lake_frac(i)) - lake_frac(i)
-        land_frac(i) = max(1., land_frac(i)+lake_frac(i)) - lake_frac(i)
-      else ! land_frac dominates over lake_frac
-        lake_frac(i) = min(1., land_frac(i)+lake_frac(i)) - land_frac(i)
-        lake_frac(i) = max(1., land_frac(i)+lake_frac(i)) - land_frac(i)
-      endif
-
       slmsk(i) = nint(land_frac(i))
     ENDDO
 

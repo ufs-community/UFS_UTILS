@@ -158,7 +158,7 @@ else
   while [ $tile -le $tile_end ]; do
     outfile=oro.C${res}.tile${tile}.nc
     if $add_lake; then
-      $exe_add_lake ${tile} ${res} ${indir}
+      $exe_add_lake ${tile} ${res} ${indir} ${lake_cutoff}
       echo "lake fraction is added to $outfile"
     fi
     mv $outfile $outdir/$outfile
