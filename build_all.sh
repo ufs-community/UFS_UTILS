@@ -10,7 +10,9 @@ else
 fi
 
 export MOD_PATH
-source ./modulefiles/build.$target             > /dev/null 2>&1
+module use ./modulefiles
+module load build.$target > /dev/null 2>&1
+#source ./modulefiles/build.$target             > /dev/null 2>&1
 
 #
 # --- Build all programs.

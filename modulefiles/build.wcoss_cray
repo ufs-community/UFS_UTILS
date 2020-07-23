@@ -27,14 +27,14 @@ module load gfsio-intel/1.1.0
 module load w3emc-intel/2.2.0
 module load nemsiogfs-intel/2.0.1
 module load g2-intel/2.5.0
-export ZLIB_ROOT=/usrx/local/prod/zlib/1.2.7/intel/haswell
-export PNG_ROOT=/usrx/local/prod//png/1.2.49/intel/haswell
-export Jasper_ROOT=/usrx/local/prod/jasper/1.900.1/intel/haswell
+setenv ZLIB_ROOT /usrx/local/prod/zlib/1.2.7/intel/haswell
+setenv PNG_ROOT /usrx/local/prod//png/1.2.49/intel/haswell
+setenv Jasper_ROOT /usrx/local/prod/jasper/1.900.1/intel/haswell
 
 module use /gpfs/hps3/emc/nems/noscrub/emc.nemspara/soft/modulefiles
 module load esmf/8.0.0
-export NETCDF=/opt/cray/netcdf/4.3.3.1/INTEL/14.0
+setenv NETCDF /opt/cray/netcdf/4.3.3.1/INTEL/14.0
 module rm gcc
 module load gcc/6.3.0
 
-export WGRIB2_ROOT=/gpfs/hps3/emc/global/noscrub/George.Gayno/wgrib2
+setenv WGRIB2_ROOT /gpfs/hps3/emc/global/noscrub/George.Gayno/wgrib2
