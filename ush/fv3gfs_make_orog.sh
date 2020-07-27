@@ -151,7 +151,7 @@ else
   done
   if [ $tile_id -ne 7 ]; then 
     cutoff=0.99
-    rd=6
+    rd=7
     $exe_inland $res $cutoff $rd
   fi
   tile=$tile_beg
