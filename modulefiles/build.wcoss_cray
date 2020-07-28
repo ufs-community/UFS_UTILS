@@ -15,17 +15,26 @@ module load craype-haswell
 module load alps/5.2.4-2.0502.9822.32.1.ari
 module load cray-netcdf/4.3.3.1
 module load cray-hdf5/1.8.14
-module load w3nco-intel/2.0.6
-module load nemsio-intel/2.2.3
-module load bacio-intel/2.0.2
-module load sp-intel/2.0.2
-module load ip-intel/3.0.0
-module load sigio-intel/2.1.0
-module load sfcio-intel/1.0.0
-module load landsfcutil-intel/2.1.0
-module load gfsio-intel/1.1.0
-module load w3emc-intel/2.2.0
-module load nemsiogfs-intel/2.0.1
+
+module use /usrx/local/nceplibs/NCEPLIBS/cmake/install/NCEPLIBS_UFS/modules
+module load bacio/2.4.0
+module load crtm/2.3.0
+module load g2/3.4.0
+module load g2tmpl/1.9.0
+module load ip/3.3.0
+module load nceppost/dceca26
+module load nemsio/2.5.1
+module load sp/2.3.0
+module load w3emc/2.7.0
+module load w3nco/2.4.0
+
+module load gfsio/1.4.0
+module load sfcio/1.4.0
+module load sigio/2.3.0
+
+module load nemsiogfs/2.5.0
+module load landsfcutil/2.4.0
+
 module load g2-intel/2.5.0
 export ZLIB_ROOT=/usrx/local/prod/zlib/1.2.7/intel/haswell
 export PNG_ROOT=/usrx/local/prod//png/1.2.49/intel/haswell
