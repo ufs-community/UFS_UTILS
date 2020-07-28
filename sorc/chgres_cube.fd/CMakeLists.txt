@@ -8,6 +8,7 @@ set(fortran_src
     search_util.f90
     static_data.F90
     surface.F90
+    thompson_mp_climo_data.F90
     utils.f90
     write_data.F90)
 
