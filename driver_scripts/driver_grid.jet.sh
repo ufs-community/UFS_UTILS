@@ -65,7 +65,7 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=regional_esg  # 'uniform', 'stretch', 'nest'
+export gtype=uniform       # 'uniform', 'stretch', 'nest'
                            # 'regional_gfdl', 'regional_esg'
 
 if [ $gtype = uniform ]; then
