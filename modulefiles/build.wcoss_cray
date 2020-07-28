@@ -18,11 +18,8 @@ module load cray-hdf5/1.8.14
 
 module use /usrx/local/nceplibs/NCEPLIBS/cmake/install/NCEPLIBS_UFS/modules
 module load bacio/2.4.0
-module load crtm/2.3.0
 module load g2/3.4.0
-module load g2tmpl/1.9.0
 module load ip/3.3.0
-module load nceppost/dceca26
 module load nemsio/2.5.1
 module load sp/2.3.0
 module load w3emc/2.7.0
@@ -35,7 +32,6 @@ module load sigio/2.3.0
 module load nemsiogfs/2.5.0
 module load landsfcutil/2.4.0
 
-module load g2-intel/2.5.0
 export ZLIB_ROOT=/usrx/local/prod/zlib/1.2.7/intel/haswell
 export PNG_ROOT=/usrx/local/prod//png/1.2.49/intel/haswell
 export Jasper_ROOT=/usrx/local/prod/jasper/1.900.1/intel/haswell

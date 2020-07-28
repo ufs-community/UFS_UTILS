@@ -10,11 +10,8 @@ module load impi/18.0.1
 
 module use /usrx/local/nceplibs/dev/NCEPLIBS/cmake/install/NCEPLIBS/modules
 module load bacio/2.4.0
-module load crtm/2.3.0
 module load g2/3.4.0
-module load g2tmpl/1.9.0
 module load ip/3.3.0
-module load nceppost/dceca26
 module load nemsio/2.5.1
 module load sp/2.3.0
 module load w3emc/2.7.0
