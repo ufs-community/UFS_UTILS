@@ -12,7 +12,7 @@
     integer            :: fsize=65536, inital = 0  
     integer            :: dim1, dim2
     integer            :: dim_lon, dim_lat
-    integer            :: id_lon,id_lat,id_geolon,id_geolat
+    integer            :: id_geolon,id_geolat
     integer            :: id_slmsk,id_orog_raw,id_orog_filt,id_land_frac
     integer            :: id_stddev,id_convex
     integer            :: id_oa1,id_oa2,id_oa3,id_oa4
@@ -40,74 +40,106 @@
     call netcdf_err(error, 'define dimension lat for file='//trim(outfile) )  
 
     !--- define field
-    error = nf_def_var(ncid, 'lon', NF_FLOAT, 1, (/dim_lon/), id_lon)
-    call netcdf_err(error, 'define var lon for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_lon, "cartesian_axis", 1, "X")
-    call netcdf_err(error, 'put att cartesian_axis for lon for file='//trim(outfile) )
-    error = nf_def_var(ncid, 'lat', NF_FLOAT, 1, (/dim_lat/), id_lat)
-    call netcdf_err(error, 'define var lat for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_lat, "cartesian_axis", 1, "Y")
-    call netcdf_err(error, 'put att cartesian_axis for lat for file='//trim(outfile) )
-
+!---geolon
     error = nf_def_var(ncid, 'geolon', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_geolon)
     call netcdf_err(error, 'define var geolon for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_geolon, "long_name", 9, "Longitude")
+    call netcdf_err(error, 'define geolon name for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_geolon, "units", 12, "degrees_east")
+    call netcdf_err(error, 'define geolon units for file='//trim(outfile) )
+!---geolat
     error = nf_def_var(ncid, 'geolat', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_geolat)
     call netcdf_err(error, 'define var geolat for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_geolat, "long_name", 8, "Latitude")
+    call netcdf_err(error, 'define geolat name for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_geolat, "units", 13, "degrees_north")
+    call netcdf_err(error, 'define geolat units for file='//trim(outfile) )
 !---slmsk
     error = nf_def_var(ncid, 'slmsk', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_slmsk)
     call netcdf_err(error, 'define var slmsk for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_slmsk, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define slmsk coordinates for file='//trim(outfile) )
 !--- land_frac
     error = nf_def_var(ncid, 'land_frac', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_land_frac)
     call netcdf_err(error, 'define var land_frac for file='//trim(outfile) )
-
+    error = nf_put_att_text(ncid, id_land_frac, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define land_frac coordinates for file='//trim(outfile) )
 !---orography - raw
     error = nf_def_var(ncid, 'orog_raw', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_orog_raw)
     call netcdf_err(error, 'define var orog_raw for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_orog_raw, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define orog_raw coordinates for file='//trim(outfile) )
 !---orography - filtered
     error = nf_def_var(ncid, 'orog_filt', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_orog_filt)
     call netcdf_err(error, 'define var orog_filt for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_orog_filt, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define orog_filt coordinates for file='//trim(outfile) )
 !---stddev
     error = nf_def_var(ncid, 'stddev', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_stddev)
     call netcdf_err(error, 'define var stddev for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_stddev, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define stddev coordinates for file='//trim(outfile) )
 !---convexity
     error = nf_def_var(ncid, 'convexity', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_convex)
     call netcdf_err(error, 'define var convexity for file='//trim(outfile) )      
+    error = nf_put_att_text(ncid, id_convex, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define convexity coordinates for file='//trim(outfile) )
 !---oa1 -> oa4
     error = nf_def_var(ncid, 'oa1', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_oa1)
     call netcdf_err(error, 'define var oa1 for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_oa1, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define oa1 coordinates for file='//trim(outfile) )
     error = nf_def_var(ncid, 'oa2', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_oa2)
     call netcdf_err(error, 'define var oa2 for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_oa2, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define oa2 coordinates for file='//trim(outfile) )
     error = nf_def_var(ncid, 'oa3', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_oa3)
     call netcdf_err(error, 'define var oa3 for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_oa3, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define oa3 coordinates for file='//trim(outfile) )
     error = nf_def_var(ncid, 'oa4', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_oa4)
     call netcdf_err(error, 'define var oa4 for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_oa4, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define oa4 coordinates for file='//trim(outfile) )
 !---ol1 -> ol4
     error = nf_def_var(ncid, 'ol1', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_ol1)
     call netcdf_err(error, 'define var ol1 for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_ol1, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define ol1 coordinates for file='//trim(outfile) )
     error = nf_def_var(ncid, 'ol2', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_ol2)
     call netcdf_err(error, 'define var ol2 for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_ol2, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define ol2 coordinates for file='//trim(outfile) )
     error = nf_def_var(ncid, 'ol3', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_ol3)
     call netcdf_err(error, 'define var ol3 for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_ol3, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define ol3 coordinates for file='//trim(outfile) )
     error = nf_def_var(ncid, 'ol4', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_ol4)
     call netcdf_err(error, 'define var ol4 for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_ol4, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define ol4 coordinates for file='//trim(outfile) )
 !---theta gamma sigma elvmax
     error = nf_def_var(ncid, 'theta', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_theta)
     call netcdf_err(error, 'define var theta for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_theta, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define theta coordinates for file='//trim(outfile) )
     error = nf_def_var(ncid, 'gamma', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_gamma)
     call netcdf_err(error, 'define var gamma for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_gamma, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define gamma coordinates for file='//trim(outfile) )
     error = nf_def_var(ncid, 'sigma', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_sigma)
     call netcdf_err(error, 'define var sigma for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_sigma, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define sigma coordinates for file='//trim(outfile) )
     error = nf_def_var(ncid, 'elvmax', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_elvmax)
     call netcdf_err(error, 'define var elvmax for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_elvmax, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define elvmax coordinates for file='//trim(outfile) )
 
     error = nf__enddef(ncid, header_buffer_val,4,0,4)
     call netcdf_err(error, 'end meta define for file='//trim(outfile) )
       
     !--- write out data
-    error = nf_put_var_double( ncid, id_lon, lon(:))
-    call netcdf_err(error, 'write var lon for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_lat, lat(:))
-    call netcdf_err(error, 'write var lat for file='//trim(outfile) )
     error = nf_put_var_double( ncid, id_geolon, geolon(:dim1,:dim2))
     call netcdf_err(error, 'write var geolon for file='//trim(outfile) )
     error = nf_put_var_double( ncid, id_geolat, geolat(:dim1,:dim2))
