@@ -109,6 +109,9 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
     fi
     target=gaea
     module purge
+elif [[ "$(hostname)" =~ "Orion" ]]; then
+    target="orion"
+    module purge
 elif [[ "$(hostname)" =~ "odin" ]]; then
     target="odin"
 else
