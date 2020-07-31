@@ -1,0 +1,9 @@
+#%Module#####################################################
+## Module file for fre-nctools
+#############################################################
+
+module load intel/2020
+module load impi/2020
+
+module use -a /apps/contrib/NCEPLIBS/lib/modulefiles
+module load netcdfp/4.7.4.release

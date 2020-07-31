@@ -18,6 +18,9 @@ case $1 in
   "hera" )
      FCMP=ifort
      FFLAGS="-O3 -fp-model precise -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf" ;;
+  "orion" )
+     FCMP=ifort
+     FFLAGS="-O3 -fp-model precise -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf" ;;
   *)
      echo "SHAVE UTILITY BUILD NOT TESTED ON MACHINE $1"
      exit 1 ;;
