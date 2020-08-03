@@ -2,15 +2,14 @@
 ## Module file for sfc_climo_gen
 #############################################################
 
-module use /mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib/modulefiles
-
 module load intel/18.0.5.274
 module load impi/2018.4.274
-module load szip
-module load hdf5
-module load netcdf/4.2.1.1
+module load szip/2.1
+module load hdf5/1.10.4
+module load netcdf/4.6.1
 
-module load esmflocal/ESMF_8_0_0_beta_snapshot_21
+module use -a /lfs4/HFIP/hfv3gfs/software/modulefiles/intel-18.0.5.274/impi-2018.4.274
+module load esmf/8.0.0
 
 export FCOMP=mpiifort
 export FFLAGS="-O3 -fp-model=precise -g -traceback -r8 -i4 -convert big_endian"

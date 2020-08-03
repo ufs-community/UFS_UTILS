@@ -4,7 +4,7 @@
 
 # Loading Intel Compiler Suite
 module load intel/18.0.5.274
-module load impi/5.0.3.048
+module load impi/2018.4.274
 
 # Loding nceplibs modules
 module load w3nco/v2.0.6
