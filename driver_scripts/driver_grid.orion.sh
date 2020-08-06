@@ -1,17 +1,16 @@
 #!/bin/bash
 
 #SBATCH -J fv3_grid_driver
-#SBATCH -A emcda
+#SBATCH -A fv3-cpu
 #SBATCH --open-mode=truncate
 #SBATCH -o log.fv3_grid_driver
 #SBATCH -e log.fv3_grid_driver
 #SBATCH --nodes=1 --ntasks-per-node=24
-#SBATCH --partition=xjet
-#SBATCH -q windfall
-#SBATCH -t 00:10:00
+#SBATCH -q debug
+#SBATCH -t 00:30:00
 
 #-----------------------------------------------------------------------
-# Driver script to create a cubic-sphere based model grid on Jet.
+# Driver script to create a cubic-sphere based model grid on Orion.
 #
 # Produces the following files (netcdf, each tile in separate file):
 #   1) 'mosaic' and 'grid' files containing lat/lon and other
@@ -24,8 +23,8 @@
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
 #       an ESMF library requirement.  Large grids may require
-#       tasks spread across multiple nodes.  The orography
-#       code benefits from threads.
+#       tasks spread across multiple nodes.  The orography code
+#       benefits from threads.
 #
 # To run, do the following:
 #
@@ -54,11 +53,10 @@ set -x
 
 . /apps/lmod/lmod/init/sh
 module purge
-module load intel/18.0.5.274
-module load impi/2018.4.274
-module load szip
-module load hdf5
-module load netcdf/4.2.1.1
+module load intel/2020
+module load impi/2020
+module use -a /apps/contrib/NCEPLIBS/lib/modulefiles
+module load netcdfp/4.7.4.release
 module list
 
 #-----------------------------------------------------------------------
@@ -66,7 +64,7 @@ module list
 #-----------------------------------------------------------------------
 
 export res=96
-export gtype=regional  # 'uniform', 'stretch', 'nest', or 'regional'
+export gtype=uniform  # 'uniform', 'stretch', 'nest', or 'regional'
 
 if [ $gtype = stretch ]; then
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -92,8 +90,8 @@ fi
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
-export TMPDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/fv3_grid.$gtype
-export out_dir=/lfs4/HFIP/emcda/$LOGNAME/stmp/C${res}
+export TMPDIR=/work/noaa/stmp/$LOGNAME/fv3_grid.$gtype
+export out_dir=/work/noaa/stmp/$LOGNAME/C${res}
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
@@ -103,10 +101,10 @@ export APRUN=time
 export APRUN_SFC=srun
 export OMP_NUM_THREADS=24
 export OMP_STACKSIZE=2048m
-export machine=JET
+export machine=ORION
 
 ulimit -a
-ulimit -s unlimited
+ulimit -s 199000000
 
 #-----------------------------------------------------------------------
 # Start script.

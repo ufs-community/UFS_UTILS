@@ -2,14 +2,11 @@
 ## Module file for sfc_climo_gen
 #############################################################
 
-module load intel/18.0.5.274
-module load impi/2018.4.274
-module load szip/2.1
-module load hdf5/1.10.4
-module load netcdf/4.6.1
+module load intel/2020
+module load impi/2020
 
-module use -a /lfs4/HFIP/hfv3gfs/software/modulefiles/intel-18.0.5.274/impi-2018.4.274
-module load esmf/8.0.0
+module use -a /apps/contrib/NCEPLIBS/lib/modulefiles
+module load esmflocal/8_0_0.release
 
 export FCOMP=mpiifort
 export FFLAGS="-O3 -fp-model=precise -g -traceback -r8 -i4 -convert big_endian"

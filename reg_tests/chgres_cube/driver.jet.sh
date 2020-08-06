@@ -28,12 +28,12 @@ source /apps/lmod/lmod/init/sh
 module purge
 module load intel/18.0.5.274
 module load impi/2018.4.274
-module load szip
-module load hdf5
-module load netcdf/4.2.1.1
+module load szip/2.1
+module load hdf5/1.10.4
+module load netcdf/4.6.1
 module list
 
-export OUTDIR=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/chgres_reg_tests
+export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
 PROJECT_CODE="hfv3gfs"
 QUEUE="debug"
 
@@ -45,9 +45,9 @@ QUEUE="debug"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/mnt/lfs3/projects/emcda/George.Gayno/reg_tests/chgres_cube
+export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
 
-export NCCMP=/apps/nccmp/1.8.2.1/intel/18.0.3.222/bin/nccmp
+export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
 
 LOG_FILE=regression.log
 SUM_FILE=summary.log
