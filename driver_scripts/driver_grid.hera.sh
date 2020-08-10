@@ -60,7 +60,9 @@ module list
 #-----------------------------------------------------------------------
 
 export res=96
-export gtype=uniform  # 'uniform', 'stretch', 'nest', or 'regional'
+export gtype=uniform    # 'uniform', 'stretch', 'nest', or 'regional'
+export add_lake=true    # add lake frac and depth to orography data
+export lake_cutoff=0.20 # lake frac less than lake_cutoff is ignored
 
 if [ $gtype = stretch ]; then
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -88,6 +90,15 @@ fi
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TMPDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
 export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/C${res}
+
+if [ $add_lake = true ]; then
+  if  [ $gtype = stretch ] || [ $gtype = nest ] || [ $gtype = regional ]; then
+    set +x
+    echo "Adding lake data to orography data is not available"
+    echo "for 'stretch', 'nest' and 'regional' grid type; set add_lake=false."
+    exit 1
+  fi
+fi
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.

@@ -20,21 +20,22 @@ elif [ $nargv -eq 7 ]; then  # cubed-sphere grid
   export res=$1 
   export lonb=$1
   export latb=$1
-  export tile=$2
+  export tile_id=$2
   export griddir=$3
   export outdir=$4
-  export script_dir=$5
+#  export script_dir=$5
   export ntiles=6
   export is_latlon=0
   export orogfile="none"
-  export hist_dir=$6
+  export hist_dir=$5
+  export add_lake=$6
   export TMPDIR=$7
-  export workdir=$TMPDIR/C${res}/orog/tile$tile
+#  export workdir=$TMPDIR/C${res}/orog/tile$tile
 elif [ $nargv -eq 8 ]; then  # input your own orography files
   export res=$1 
   export lonb=$1
   export latb=$1
-  export tile=$2
+  export tile_id=$2
   export griddir=$3
   export outdir=$4
   export ntiles=6
@@ -45,7 +46,7 @@ elif [ $nargv -eq 8 ]; then  # input your own orography files
   export inorogexist=1
   export hist_dir=$7
   export TMPDIR=$8
-  export workdir=$TMPDIR/C${res}/orog/tile$tile
+#  export workdir=$TMPDIR/C${res}/orog/tile$tile
 else
   echo "number of arguments must be 5 or 6 for cubic sphere grid and 4 for lat-lon grid"
   echo "Usage for cubic sphere grid: $0 resolution tile grid_dir out_dir script_dir hist_dir TMPDIR"
@@ -59,7 +60,18 @@ if [ ! -s $executable ]; then
   exit 1 
 fi
 
-if [ ! -s $workdir ]; then mkdir -p $workdir ;fi
+export exe_add_lake=$exec_dir/lakefrac
+if [ ! -s $exe_add_lake ]; then
+  echo "executable to add lake does not exist"
+  exit 1 
+fi
+
+export exe_inland=$exec_dir/inland
+if [ ! -s $exe_inland ]; then
+  echo "executable to create inland mask does not exist"
+  exit 1 
+fi
+
 if [ ! -s $outdir ]; then mkdir -p $outdir ;fi
 
 #jcap is for Gaussian grid
@@ -75,7 +87,7 @@ export NR=0
 if [ $is_latlon -eq 1 ]; then
   export OUTGRID="none"
 else
-  export OUTGRID="C${res}_grid.tile${tile}.nc"
+  export OUTGRID="C${res}_grid.tile?.nc"
 fi
 
 # Make Orograraphy
@@ -84,48 +96,74 @@ echo "workdir = $workdir"
 echo "outdir = $outdir"
 echo "indir = $indir"
 
+export workdir=$TMPDIR/C${res}/orog/tiles
+if [ ! -s $workdir ]; then mkdir -p $workdir ;fi
 cd $workdir
-#  export MTN_SLM=${indir}/TOP8M_slm.80I1.asc
-#  cp ${indir}/a_ocean_mask${lonb}x${latb}.txt  fort.25
-#  cp /home/z1l/GFS_tools/orog/a_ocean_mask${lonb}x${latb}.txt  fort.25
-#  cp $MTN_SLM fort.14
 
-  cp ${indir}/thirty.second.antarctic.new.bin fort.15
-  cp ${indir}/landcover30.fixed .
-#  uncomment next line to use the old gtopo30 data.
-#   cp ${indir}/gtopo30_gg.fine.nh  fort.235
-#  use gmted2020 data.
-  cp ${indir}/gmted2010.30sec.int  fort.235
-  if [ $inorogexist -eq 1 ]; then
-     cp $inputorog .
-  fi   
+cp ${indir}/thirty.second.antarctic.new.bin fort.15
+cp ${indir}/landcover30.fixed .
+cp ${indir}/gmted2010.30sec.int  fort.235
+if [ $inorogexist -eq 1 ]; then
+  cp $inputorog .
+fi   
      
-  if [ $is_latlon -eq 0 ]; then
-     cp ${griddir}/$OUTGRID .
-  fi
-  cp $executable .
+if [ $is_latlon -eq 0 ]; then
+   cp ${griddir}/$OUTGRID .
+fi
 
+
+if [ $is_latlon -eq 1 ]; then
   echo  $mtnres $lonb $latb $jcap $NR $NF1 $NF2 $efac $blat > INPS
   echo $OUTGRID >> INPS
   echo $orogfile >> INPS
   cat INPS
   time $executable < INPS
-
   if [ $? -ne 0 ]; then
     echo "ERROR in running $executable "
     exit 1
-  else
-    if [ $is_latlon -eq 1 ]; then
-       export outfile=oro.${lonb}x${latb}.nc
-    else
-       export outfile=oro.C${res}.tile${tile}.nc
-    fi
-
-    mv ./out.oro.nc $outdir/$outfile
-    echo "file $outdir/$outfile is created"
-    echo "Successfully running $executable "
-    exit 0
   fi
-
-
+  export outfile=oro.${lonb}x${latb}.nc
+  mv ./out.oro.nc $outdir/$outfile
+  echo "file $outdir/$outfile is created"
+  echo "Successfully running $executable "
+  exit 0
+else
+  if [ $tile_id -ne 7 ]; then
+    export tile_beg=1
+    export tile_end=6
+  else
+    export tile_beg=7
+    export tile_end=7
+  fi
+  tile=$tile_beg
+  while [ $tile -le $tile_end ]; do
+    OUTGRID="C${res}_grid.tile${tile}.nc"
+    echo  $mtnres $lonb $latb $jcap $NR $NF1 $NF2 $efac $blat > INPS
+    echo $OUTGRID >> INPS
+    echo $orogfile >> INPS
+    cat INPS
+    time $executable < INPS
+    outfile=oro.C${res}.tile${tile}.nc
+    mv ./out.oro.nc $outfile
+    echo "file $outdir/$outfile is created"
+    echo "Successfully running $executable for tile $tile"
+    tile=$(( $tile + 1 ))
+  done
+  if [ $tile_id -ne 7 ]; then 
+    cutoff=0.99
+    rd=7
+    $exe_inland $res $cutoff $rd
+  fi
+  tile=$tile_beg
+  while [ $tile -le $tile_end ]; do
+    outfile=oro.C${res}.tile${tile}.nc
+    if $add_lake; then
+      $exe_add_lake ${tile} ${res} ${indir} ${lake_cutoff}
+      echo "lake fraction is added to $outfile"
+    fi
+    mv $outfile $outdir/$outfile
+    tile=$(( $tile + 1 ))
+  done
+  exit 0
+fi
 exit
