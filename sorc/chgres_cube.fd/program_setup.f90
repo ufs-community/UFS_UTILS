@@ -12,12 +12,15 @@
 !
 ! Public variables:
 ! -----------------
-! atm_file_input_grid             File names of input atmospheric data.
-!                                 History or gaussian input type only.
+! atm_files_input_grid            File names of input atmospheric data.
+!                                 Not used for "grib2" or "restart"
+!                                 input types.
 ! atm_core_files_input_grid       File names of input atmospheric restart
-!                                 core files.
+!                                 core files.  Only used for 'restart'
+!                                 input type.
 ! atm_tracer_files_input_grid     File names of input atmospheric restart
-!                                 tracer files.
+!                                 tracer files.  Only used for 'restart'
+!                                 input type.
 ! atm_weight_file                 File containing pre-computed weights
 !                                 to horizontally interpolate
 !                                 atmospheric fields.
@@ -33,6 +36,10 @@
 !                                 target grids.
 ! fix_dir_target_grid             Directory containing target grid
 !                                 pre-computed fixed data (ex: soil type)
+! grib2_file_input_grid           File name of grib2 input data.
+!                                 Assumes atmospheric and surface data
+!                                 are in a single file. 'grib2' input
+!                                 type only.
 ! halo_blend                      Number of row/cols of blending halo,
 !                                 where model tendencies and lateral
 !                                 boundary tendencies are applied.
@@ -40,30 +47,36 @@
 ! halo_bndy                       Number of row/cols of lateral halo,
 !                                 where pure lateral bndy conditions are 
 !                                 applied (regional target grids).
-! input_type                      Input data type: "restart" for fv3
-!                                 tiled restart files; "history" for fv3
-!                                 tiled history files; "gaussian"
-!                                 for fv3 gaussian nemsio files;
-!                                 "gfs_gaussian" for spectral gfs gaussian
-!                                 nemsio files.
+! input_type                      Input data type: 
+!                                 (1) "restart" for fv3 tiled warm restart
+!                                     files (netcdf).
+!                                 (2) "history" for fv3 tiled history files
+!                                     (netcdf).
+!                                 (3) "gaussian_nemsio" for fv3 gaussian
+!                                     nemsio files;
+!                                 (4) "gaussian_netcdf" for fv3 gaussian
+!                                     netcdf files.
+!                                 (5) "grib2" for fv3gfs grib2 files.
+!                                 (6) "gfs_gaussian_nemsio" for spectral gfs
+!                                     gaussian nemsio files
+!                                 (7) "gfs_sigio" for spectral gfs
+!                                     gfs sigio/sfcio files.
 ! max_tracers                     Maximum number of atmospheric tracers
 !                                 processed
 ! maxsmc_input/target             Maximum soil moisture content input/
 !                                 target grids
-! mosaic_file_input_grid          Input grid mosaic file.  Not used
-!                                 with "gaussian" or "gfs_gaussian"
-!                                 input type.
+! mosaic_file_input_grid          Input grid mosaic file.  Only used for
+!                                 "restart" or "history" input type.
 ! mosaic_file_target_grid         Target grid mosaic file
 ! nst_files_input_grid            File name of input nst data.  Only
-!                                 used for input_type "gfs_gaussian".
+!                                 used for input_type "gfs_gaussian_nemsio".
 ! num_tracers                     Number of atmospheric tracers to
 !                                 be processed.
 ! orog_dir_input_grid             Directory containing the input grid
-!                                 orography files.  Not used for "gaussian"
-!                                 or "gfs_gaussian" input types.
-! orog_files_input_grid           Input grid orography files.  Not used
-!                                 for "gaussian" or "gfs_gaussian"
-!                                 input types.
+!                                 orography files.  Only used for "restart"
+!                                 or "history" input types.
+! orog_files_input_grid           Input grid orography files.  Only used for
+!                                 "restart" or "history" input types.
 ! orog_dir_target_grid            Directory containing the target grid
 !                                 orography files.
 ! orog_files_target_grid          Target grid orography files.
@@ -78,6 +91,7 @@
 !                                 Default is '0' (global grids).
 ! satpsi_target                   Saturated soil potential, target grid
 ! sfc_files_input_grid            File names containing input surface data.
+!                                 Not used for 'grib2' input type.
 ! tracers                         Name of each atmos tracer to be processed.
 !                                 These names will be used to identify
 !                                 the tracer records in the output files.
@@ -113,7 +127,7 @@
  character(len=500), public      :: vcoord_file_target_grid = "NULL"
  character(len=6),   public      :: cres_target_grid = "NULL"
  character(len=500), public      :: atm_weight_file="NULL"
- character(len=20),  public      :: input_type="restart"
+ character(len=25),  public      :: input_type="restart"
  character(len=20), public       :: phys_suite="GFS"      !Default to gfs physics suite
 
  integer, parameter, public      :: max_tracers=100
@@ -259,27 +273,19 @@
      print*,'- INPUT DATA FROM FV3 TILED RESTART FILES.'
    case ("history")
      print*,'- INPUT DATA FROM FV3 TILED HISTORY FILES.'
-   case ("gaussian")
+   case ("gaussian_nemsio")
      print*,'- INPUT DATA FROM FV3 GAUSSIAN NEMSIO FILE.'
-   case ("gfs_gaussian")
+   case ("gfs_gaussian_nemsio")
      print*,'- INPUT DATA FROM SPECTRAL GFS GAUSSIAN NEMSIO FILE.'
-   case ("gfs_spectral")
+   case ("gfs_sigio")
      print*,'- INPUT DATA FROM SPECTRAL GFS SIGIO/SFCIO FILE.'
+   case ("gaussian_netcdf")
+     print*,'- INPUT DATA FROM FV3 GAUSSIAN NETCDF FILE.'
    case ("grib2")
      print*,'- INPUT DATA FROM A GRIB2 FILE'
    case default
      call error_handler("UNRECOGNIZED INPUT DATA TYPE.", 1)
  end select
- 
-!-------------------------------------------------------------------------
-! Ensure proper file variable provided for grib2 input  
-!-------------------------------------------------------------------------
-
- if (trim(input_type) == "grib2") then
-   if (trim(grib2_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
-     call error_handler("FOR GRIB2 DATA, PLEASE PROVIDE GRIB2_FILE_INPUT_GRID", 1)
-   endif
- endif
  
  end subroutine read_setup_namelist
 
@@ -445,7 +451,7 @@ end subroutine get_var_cond
 !-------------------------------------------------------------------------
 
  select case (trim(input_type))
-   case ("gfs_spectral")
+   case ("gfs_sigio")
      print*,'- INPUT GRID USED ZOBLER SOIL TYPES.'
      num_soil_cats = num_zobler
    case default
@@ -464,7 +470,7 @@ end subroutine get_var_cond
  allocate(f11(num_soil_cats))
 
  select case (trim(input_type))
-   case ("gfs_spectral")
+   case ("gfs_sigio")
      smlow  = smlow_zobler
      smhigh = smhigh_zobler
      maxsmc_input = maxsmc_zobler
