@@ -168,27 +168,36 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 #----------------------------------------------------------------------------------
 
   if [ $machine = WCOSS_C ]; then
-   # touch $TMPDIR/orog.file1
-   # tile=1
-   # while [ $tile -le $ntiles ]; do
-   #   echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $topo $add_lake $TMPDIR " >>$TMPDIR/orog.file1
-   #   tile=$(( $tile + 1 ))
-   # done
-   # aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
-   # rm $TMPDIR/orog.file1
-    echo "fv3gfs_make_orog.sh still needs work on WCOSS_C"
-    echo "suggest to try with sth like: aprun -n 1 -N 1 -j 1 -d 6 $script_dir/fv3gfs_make_orog.sh"
+    touch $TMPDIR/orog.file1
+    tile=1
+    while [ $tile -le $ntiles ]; do
+      echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
+      tile=$(( $tile + 1 ))
+    done
+    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
+    rm $TMPDIR/orog.file1
+#    tile=0
+#    if [ $add_lake = true ]; then
+#      $script_dir/fv3gfs_make_lake.sh $res $tile $grid_dir $orog_dir $topo $TMPDIR
+#    fi
   else
+    tile=1
+    while [ $tile -le $ntiles ]; do
+      set +x
+      echo
+      echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
+      echo
+      set -x
+      $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+      err=$?
+      if [ $err != 0 ]; then
+        exit $err
+      fi
+      tile=$(( $tile + 1 ))
+    done
     tile=0
-    set +x
-    echo
-    echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
-    echo
-    set -x
-    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $topo $add_lake $TMPDIR
-    err=$?
-    if [ $err != 0 ]; then
-      exit $err
+    if [ $add_lake = true ]; then
+      $script_dir/fv3gfs_make_lake.sh $res $tile $grid_dir $orog_dir $topo $TMPDIR
     fi
   fi
 
@@ -315,18 +324,16 @@ elif [ $gtype = regional ]; then
 #----------------------------------------------------------------------------------
  
   if [ $machine = WCOSS_C ]; then
-   #echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $topo $add_lake $TMPDIR " >>$TMPDIR/orog.file1
-   #aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
-   #rm $TMPDIR/orog.file1
-    echo "fv3gfs_make_orog.sh still needs work on WCOSS_C"
-    echo "suggest to try with sth like: aprun -n 1 -N 1 -j 1 -d 6 $script_dir/fv3gfs_make_orog.sh"
+    echo "$script_dir/fv3gfs_make_orog.sh $res 7 $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
+    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
+    rm $TMPDIR/orog.file1
   else
     set +x
     echo
     echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
     echo
     set -x
-    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $topo $add_lake $TMPDIR
+    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
     err=$?
     if [ $err != 0 ]; then
       exit $err
