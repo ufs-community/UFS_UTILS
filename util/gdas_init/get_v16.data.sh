@@ -17,7 +17,7 @@ mm_m6=$(echo $date10_m6 | cut -c5-6)
 dd_m6=$(echo $date10_m6 | cut -c7-8)
 hh_m6=$(echo $date10_m6 | cut -c9-10)
 
- directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16rt2/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
+ directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro1e/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
  file=gdas_restartb.tar
 
   rm -f ./list.hires*

@@ -39,13 +39,13 @@
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/George.Gayno/gdas.init/input
-EXTRACT_DATA=no
+EXTRACT_DATA=yes
 
 RUN_CHGRES=yes
 
-yy=2020
-mm=05
-dd=10
+yy=2019
+mm=08
+dd=26
 hh=00
 
 LEVS=65
