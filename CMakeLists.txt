@@ -48,7 +48,6 @@ endif()
 find_package(NetCDF REQUIRED C Fortran)
 find_package(MPI REQUIRED)
 find_package(ESMF MODULE REQUIRED)
-find_package(WGRIB2 REQUIRED)
 
 option(OPENMP "use OpenMP threading" ON)
 if(OPENMP)
@@ -65,8 +64,10 @@ find_package(nemsiogfs REQUIRED)
 find_package(sigio REQUIRED)
 find_package(sp REQUIRED)
 find_package(ip REQUIRED)
+find_package(ip2 REQUIRED)
 find_package(w3emc REQUIRED)
 find_package(g2 REQUIRED)
+find_package(wgrib2 REQUIRED)
 
 # EMC requires executables in ./exec
 set(exec_dir bin)
