@@ -92,6 +92,8 @@
 ! satpsi_target                   Saturated soil potential, target grid
 ! sfc_files_input_grid            File names containing input surface data.
 !                                 Not used for 'grib2' input type.
+! thomp_mp_climo_file             Path/name to the Thompson MP climatology
+!                                 file.
 ! tracers                         Name of each atmos tracer to be processed.
 !                                 These names will be used to identify
 !                                 the tracer records in the output files.
@@ -99,6 +101,9 @@
 ! tracers_input                   Name of each atmos tracer record in 
 !                                 the input file.  May be different from
 !                                 value in 'tracers'. 
+! use_thomp_mp_climo              When true, read and process Thompson
+!                                 MP climatological tracers.  False,
+!                                 when 'thomp_mp_climo_file' is NULL.
 ! vcoord_file_target_grid         Vertical coordinate definition file
 ! wltsmc_input/target             Wilting point soil moisture content
 !                                 input/target grids
@@ -126,6 +131,7 @@
  character(len=500), public      :: orog_files_target_grid(6) = "NULL"
  character(len=500), public      :: sfc_files_input_grid(6) = "NULL"
  character(len=500), public      :: vcoord_file_target_grid = "NULL"
+ character(len=500), public      :: thomp_mp_climo_file= "NULL"
  character(len=6),   public      :: cres_target_grid = "NULL"
  character(len=500), public      :: atm_weight_file="NULL"
  character(len=25),  public      :: input_type="restart"
@@ -176,6 +182,7 @@
  logical, public                 :: minmax_vgfrc_from_climo = .true.
  logical, public                 :: lai_from_climo = .true.
  logical, public                 :: tg3_from_soil = .false.
+ logical, public                 :: use_thomp_mp_climo=.false.
 
  real, allocatable, public       :: drysmc_input(:), drysmc_target(:)
  real, allocatable, public       :: maxsmc_input(:), maxsmc_target(:)
@@ -233,8 +240,8 @@
                    halo_bndy, & 
                    halo_blend, &
                    fix_dir_input_grid, &
-                   nsoill_out
-!                   wgrib2_path, base_install_dir, phys_suite
+                   nsoill_out,
+                   thomp_mp_climo_file
 
  print*,"- READ SETUP NAMELIST"
 
@@ -355,6 +362,11 @@
  endif
  return
  
+ if (trim(thomp_mp_climo_file) /= "NULL") then
+   use_thomp_mp_climo=.true.
+   print*,"- WILL PROCESS CLIMO THOMPSON MP TRACERS FROM FILE: ", trim(thomp_mp_climo_file)
+ endif
+
  end subroutine read_setup_namelist
 
 subroutine read_varmap

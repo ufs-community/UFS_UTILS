@@ -35,7 +35,7 @@ echo "Ending at: " `date`
 # Compare output to baseline set of data.
 #-----------------------------------------------------------------------------
 
-cd $out_dir
+cd $out_dir/C96
 
 test_failed=0
 for files in *tile*.nc ./fix_sfc/*tile*.nc
