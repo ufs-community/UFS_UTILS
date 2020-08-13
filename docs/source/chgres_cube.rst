@@ -128,9 +128,10 @@ If the NCEPLIBS have been installed and the user wants to compile chgres_cube ag
       * set cmake compiler - export FC=ifort (if ifort is the compiler chosen)
       * cd to where you checked out the UFS_Utils
       * mkdir build and cd build
-      * cmake .. -DCMAKE_INSTALL_PREFIX=/path/where/you/want/the/code/installed
+      * cmake .. -DCMAKE_INSTALL_PREFIX=/path/where/you/want/the/code/installed -DCMAKE_PREFIX_PATH=/path/to/nceplibs/installed
       * make -j x (where x is a number that can be chosen to speed up the make, usually 8)
       * make install
+      * if you do get errors that cmake cannot find "FindNETCDF" or "FindESMF", run: git submodule update --init --recursive
 
 ************************************************
 Program inputs and outputs
