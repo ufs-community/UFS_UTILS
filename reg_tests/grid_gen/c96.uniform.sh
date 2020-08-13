@@ -43,7 +43,7 @@ if [[ "$machine" = "ORION" ]] ;then
   module load netcdf/4.7.2
 fi
 
-cd $out_dir
+cd $out_dir/C96
 
 test_failed=0
 for files in *tile*.nc ./fix_sfc/*tile*.nc
