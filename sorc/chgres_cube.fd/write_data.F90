@@ -1199,6 +1199,7 @@
  use program_setup, only           : halo=>halo_bndy, &
                                      input_type, tracers, num_tracers, &
                                      use_thomp_mp_climo
+                                     regional
 
  use atmosphere, only              : lev_target, &
                                      levp1_target, &
@@ -1283,7 +1284,11 @@
  HEADER : if (localpet < num_tiles_target_grid) then
 
    tile = localpet + 1
-   WRITE(OUTFILE, '(A, I1, A)') 'out.atm.tile', tile, '.nc'
+   if (regional > 0) then
+       outfile = "out.atm.tile7.nc"
+   else
+       WRITE(OUTFILE, '(A, I1, A)') 'out.atm.tile', tile, '.nc'
+   endif
 
 !--- open the file
    error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
@@ -1809,7 +1814,8 @@
                                    longitude_target_grid, &
                                    i_target, j_target, lsoil_target
 
- use program_setup, only         : convert_nst, halo=>halo_bndy
+ use program_setup, only         : convert_nst, halo=>halo_bndy, &
+                                   regional
 
  use surface, only               : canopy_mc_target_grid,  &
                                    f10m_target_grid, &
@@ -1954,7 +1960,11 @@
 
    LOCAL_PET : if (localpet == 0) then
 
-     WRITE(OUTFILE, '(A, I1, A)') 'out.sfc.tile', tile, '.nc'
+     if (regional > 0) then
+       outfile = "out.sfc.tile7.nc"
+     else
+       WRITE(OUTFILE, '(A, I1, A)') 'out.sfc.tile', tile, '.nc'
+     endif
 
 !--- open the file
      error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
