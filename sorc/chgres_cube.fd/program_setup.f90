@@ -135,17 +135,9 @@
  character(len=6),   public      :: cres_target_grid = "NULL"
  character(len=500), public      :: atm_weight_file="NULL"
  character(len=25),  public      :: input_type="restart"
- !character(len=20), public       :: phys_suite="GFS"      !Default to gfs physics suite
  character(len=20),  public      :: external_model="GFS"  !Default assume gfs data
  
- 
- 
-!!! Remove this option and assume wgrib2 is in the user's path 
-! character(len=1000), public     :: wgrib2_path="wgrib2"  !Provide option to set path to 
-!                                                          !wgrib2 executable for command 
-!                                                          !line use 
- !!! Remote this option in favor of a direct path to the chgres fixed files directory                                                         
- !character(len=1000), public     :: base_install_dir="."                            
+                        
  
  character(len=500), public       :: fix_dir_input_grid = "NULL"                             
                                                           
@@ -240,7 +232,7 @@
                    halo_bndy, & 
                    halo_blend, &
                    fix_dir_input_grid, &
-                   nsoill_out,
+                   nsoill_out, &
                    thomp_mp_climo_file
 
  print*,"- READ SETUP NAMELIST"
@@ -414,6 +406,12 @@ subroutine read_varmap
      if(trim(var_type(k))=='T') then
        num_tracers = num_tracers + 1
        tracers_input(num_tracers)=chgres_var_names(k)
+       if ((trim(chgres_var_names(k)) == "ice_aero" .or. trim(chgres_var_names(k)) == "liq_aero") .and. &
+           trim(thomp_mp_climo_file) .ne. "NULL" .and. trim(input_type) == "grib2") then
+           call error_handler("VARMAP TABLE CONTAINS TRACER ENTRIES FOR THOMPSON AEROSOLS liq_aero  &
+           ice_aero. REMOVE THESE ENTRIES OR REMOVE THE NAMELIST ENTRY FOR  &
+           thomp_mp_climo_file AND TRY AGAIN.")
+       endif
      endif
     enddo
    close(14)

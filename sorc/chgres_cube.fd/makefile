@@ -14,7 +14,8 @@ OBJS = chgres.o \
        search_util.o \
        static_data.o \
        utils.o \
-       grib2_util.o
+       grib2_util.o \
+       thompson_mp_climo_data.o
 
 $(CMD):	$(OBJS)
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -o $(CMD) $(OBJS) $(SP_LIBd) $(NEMSIO_LIB) $(BACIO_LIB4) $(W3NCO_LIBd) $(SFCIO_LIB4) $(SIGIO_LIB4) $(ESMF_F90LINKPATHS) $(ESMF_F90ESMFLINKRPATHS) $(ESMF_F90ESMFLINKLIBS) $(WGRIB2_LIB)
@@ -31,7 +32,10 @@ grib2_util.o:  model_grid.o program_setup.o grib2_util.F90
 program_setup.o:  program_setup.f90
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -c program_setup.f90
 
-atmosphere.o:  program_setup.o model_grid.o input_data.o atmosphere.F90
+thompson_mp_climo_data.o:  thompson_mp_climo_data.F90
+	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -c thompson_mp_climo_data.F90
+
+atmosphere.o:  program_setup.o model_grid.o input_data.o thompson_mp_climo_data.o atmosphere.F90
 	$(FCOMP) $(FFLAGS) $(ESMF_F90COMPILEPATHS) -c atmosphere.F90
 
 chgres.o: atmosphere.o model_grid.o program_setup.o surface.o chgres.F90
