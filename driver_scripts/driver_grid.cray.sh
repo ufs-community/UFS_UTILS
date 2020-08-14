@@ -58,7 +58,8 @@ module list
 #-----------------------------------------------------------------------
 
 export res=96
-export gtype=regional   # 'uniform', 'stretch', 'nest', or 'regional'
+export gtype=uniform   # 'uniform', 'stretch', 'nest', or 'regional'
+export add_lake=true
 
 if [ $gtype = stretch ]; then
   export stretch_fac=1.5       # Stretching factor for the grid

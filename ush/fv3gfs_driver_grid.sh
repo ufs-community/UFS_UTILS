@@ -42,6 +42,7 @@ export machine=${machine:?}
 
 export res=${res:-96}           # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
 export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest or regional
+export add_lake=${add_lake:-false} # add lake fraction and depth.  uniform only.
 
 if [ $gtype = uniform ];  then
   echo "Creating global uniform grid"
@@ -176,10 +177,6 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
     done
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
     rm $TMPDIR/orog.file1
-#    tile=0
-#    if [ $add_lake = true ]; then
-#      $script_dir/fv3gfs_make_lake.sh $res $tile $grid_dir $orog_dir $topo $TMPDIR
-#    fi
   else
     tile=1
     while [ $tile -le $ntiles ]; do
@@ -195,9 +192,13 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
       fi
       tile=$(( $tile + 1 ))
     done
-    tile=0
-    if [ $add_lake = true ]; then
-      $script_dir/fv3gfs_make_lake.sh $res $tile $grid_dir $orog_dir $topo $TMPDIR
+  fi
+
+  if [ $add_lake = true ]; then
+    $script_dir/fv3gfs_make_lake.sh
+    err=$?
+    if [ $err != 0 ]; then
+      exit $err
     fi
   fi
 
