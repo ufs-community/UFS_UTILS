@@ -59,7 +59,8 @@ module list
 
 export res=96
 export gtype=uniform   # 'uniform', 'stretch', 'nest', or 'regional'
-export add_lake=true
+export add_lake=false   # add lake frac and depth to orography data
+export lake_cutoff=0.20 # lake frac less than lake_cutoff is ignored
 
 if [ $gtype = stretch ]; then
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -87,6 +88,19 @@ fi
 export home_dir=$LS_SUBCWD/..
 export TMPDIR=/gpfs/hps3/stmp/$LOGNAME/fv3_grid.$gtype
 export out_dir=/gpfs/hps3/stmp/$LOGNAME/C${res}
+
+#-----------------------------------------------------------------------
+# Should not need to change anything below here.
+#-----------------------------------------------------------------------
+
+if [ $add_lake = true ]; then
+  if  [ $gtype != uniform ]; then
+    set +x
+    echo "Adding lake data to orography data is only available"
+    echo "for uniform grids."
+    exit 1
+  fi
+fi
 
 export NODES=1
 export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"

@@ -62,6 +62,8 @@ module list
 
 export res=96
 export gtype=regional  # 'uniform', 'stretch', 'nest', or 'regional'
+export add_lake=false   # add lake frac and depth to orography data
+export lake_cutoff=0.20 # lake frac less than lake_cutoff is ignored
 
 if [ $gtype = stretch ]; then
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -93,6 +95,15 @@ export out_dir=/lfs4/HFIP/emcda/$LOGNAME/stmp/C${res}
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
 #-----------------------------------------------------------------------
+
+if [ $add_lake = true ]; then
+  if  [ $gtype != uniform ]; then
+    set +x
+    echo "Adding lake data to orography data is only available"
+    echo "for uniform grids."
+    exit 1
+  fi
+fi
 
 export APRUN=time
 export APRUN_SFC=srun
