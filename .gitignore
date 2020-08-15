@@ -10,4 +10,4 @@ install/
 *.swp
 
 sorc/build_chgres_cube.sh
-sorc/chgres_cube.fd/makefile
+sorce/chgres_cube/makefile
