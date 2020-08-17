@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/bash
 set -ax
 
 nargv=$#
@@ -11,7 +11,6 @@ if [ $nargv -eq 6 ];  then  # lat-lon grid
   export outdir=$3
   export script_dir=$4
   export is_latlon=1
-  export ntiles=1
   export orogfile="none"
   export hist_dir=$5
   export TMPDIR=$6
@@ -24,7 +23,6 @@ elif [ $nargv -eq 7 ]; then  # cubed-sphere grid
   export griddir=$3
   export outdir=$4
   export script_dir=$5
-  export ntiles=6
   export is_latlon=0
   export orogfile="none"
   export hist_dir=$6
@@ -37,7 +35,6 @@ elif [ $nargv -eq 8 ]; then  # input your own orography files
   export tile=$2
   export griddir=$3
   export outdir=$4
-  export ntiles=6
   export is_latlon=0
   export inputorog=$5
   export script_dir=$6
