@@ -10,22 +10,19 @@ module use -a /apps/contrib/NCEPLIBS/orion/modulefiles
 module load w3nco/2.1.0
 module load nemsio/2.3.0
 module load bacio/2.2.0
-module load sp/2.1.0
 module load sfcio/1.2.0
 module load sigio/2.2.0
 module load gfsio/1.2.0
-module load w3emc/2.5.0
+module load w3emc/2.4.0
 module load ip/3.1.0
 module load nemsiogfs/2.3.0
 module load landsfcutil/2.2.0
-
-# George V's version.
-module use -a /apps/contrib/NCEPLIBS/lib/modulefiles
-module load g2-intel-sandybridge/2.5.0
-
+module load g2/3.1.1
+module load sp/2.0.3
 export Jasper_ROOT="/apps/jasper-1.900.1"
 
-module load netcdf/4.7.2-parallel
-module load esmf/8.0.0_ParallelNetCDF
+module use -a /apps/contrib/NCEPLIBS/lib/modulefiles
+module load netcdfp/4.7.4.release
+module load esmflocal/8_0_0.release
 
 export WGRIB2_ROOT="/work/noaa/da/ggayno/save/wgrib2"
