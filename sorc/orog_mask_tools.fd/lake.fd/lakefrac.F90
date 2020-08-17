@@ -518,7 +518,7 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
     REAL :: geolon(cs_res*cs_res),geolat(cs_res*cs_res)
     REAL :: land_frac(cs_res*cs_res),slmsk(cs_res*cs_res),inland(cs_res*cs_res)
     real, parameter :: epsil=1.e-6   ! numerical min for lake_frac/land_frac
-    real            :: land_cutoff=1.e-6 ! land_frac=0 if it is < land_cutoff
+    real            :: land_cutoff=1.e-4 ! land_frac=0 if it is < land_cutoff
 
     INTEGER :: i, j
 
