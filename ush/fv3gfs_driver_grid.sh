@@ -44,7 +44,10 @@ export machine=${machine:?}
 export res=${res:-96}           # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
 export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest, regional_gfdl,
                                 # or regional_esg
-export add_lake=${add_lake:-false} # add lake fraction and depth.  uniform only.
+
+export add_lake=${add_lake:-false}      # add lake fraction and depth.  uniform only.
+export lake_cutoff=${lake_cutoff:-0.20} # lake fractions less than lake_cutoff 
+                                        # are ignored.
 
 if [ $gtype = uniform ];  then
   echo "Creating global uniform grid"
@@ -87,6 +90,15 @@ elif [ $gtype = regional_esg ]; then
 else
   echo "Error: please specify grid type with 'gtype' as uniform, stretch, nest, regional_gfdl or regional_esg"
   exit 9
+fi
+
+if [ $add_lake = true ]; then
+  if  [ $gtype != uniform ]; then
+    set +x
+    echo "Adding lake data to orography data is only available"
+    echo "for uniform grids."
+    exit 1
+  fi
 fi
 
 export TMPDIR=${TMPDIR:?}
