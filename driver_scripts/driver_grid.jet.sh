@@ -72,7 +72,7 @@ export gtype=uniform       # 'uniform', 'stretch', 'nest'
 
 if [ $gtype = uniform ]; then
   export res=96
-  export add_lake=true    # Add lake frac and depth to orography data.
+  export add_lake=false   # Add lake frac and depth to orography data.
                           # Uniform grids only.
   export lake_cutoff=0.20 # lake frac less than lake_cutoff is ignored
 elif [ $gtype = stretch ]; then
