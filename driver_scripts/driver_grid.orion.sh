@@ -1,17 +1,16 @@
 #!/bin/bash
 
 #SBATCH -J fv3_grid_driver
-#SBATCH -A hfv3gfs
+#SBATCH -A fv3-cpu
 #SBATCH --open-mode=truncate
 #SBATCH -o log.fv3_grid_driver
 #SBATCH -e log.fv3_grid_driver
 #SBATCH --nodes=1 --ntasks-per-node=24
-#SBATCH --partition=xjet
-#SBATCH -q batch
-#SBATCH -t 00:10:00
+#SBATCH -q debug
+#SBATCH -t 00:30:00
 
 #-----------------------------------------------------------------------
-# Driver script to create a cubic-sphere based model grid on Jet.
+# Driver script to create a cubic-sphere based model grid on Orion.
 #
 # Produces the following files (netcdf, each tile in separate file):
 #   1) 'mosaic' and 'grid' files containing lat/lon and other
@@ -24,8 +23,8 @@
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
 #       an ESMF library requirement.  Large grids may require
-#       tasks spread across multiple nodes.  The orography
-#       code benefits from threads.
+#       tasks spread across multiple nodes.  The orography code
+#       benefits from threads.
 #
 # To run, do the following:
 #
@@ -35,8 +34,8 @@
 #         "stretch"  - global stretched grid
 #         "nest"     - global stretched grid with nest
 #         "regional_gfdl" - stand-alone gfdl regional grid
-#         "regional_esg"  - stand-alone extended Schmidt gnomonic
-#                           (esg) regional grid
+#         "regional_esg"  - stand-alone extended Schmidt
+#                           gnomonic (esg) regional grid
 #   3) For "stretch" and "nest" grids, set the stretching factor -
 #       "stretch_fac", and center lat/lon of highest resolution
 #      tile - "target_lat" and "target_lon".
@@ -65,8 +64,8 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=uniform       # 'uniform', 'stretch', 'nest'
-                           # 'regional_gfdl', 'regional_esg'
+export gtype=uniform   # 'uniform', 'stretch', 'nest', 
+                       # 'regional_gfdl', 'regional_esg'
 
 if [ $gtype = uniform ]; then
   export res=96
@@ -87,7 +86,7 @@ elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
   export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
   export halo=3                # Lateral boundary halo
 elif [ $gtype = regional_esg ] ; then
-  export res=-999              # equivalent resolution is computed
+  export res=-999              # equivalent res is computed.
   export target_lon=-97.5      # Center longitude of grid
   export target_lat=35.5       # Center latitude of grid
   export idim=301              # Dimension of grid in 'i' direction
@@ -109,8 +108,8 @@ fi
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
-export TMPDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/fv3_grid.$gtype
-export out_dir=/lfs4/HFIP/emcda/$LOGNAME/stmp/my_grids
+export TMPDIR=/work/noaa/stmp/$LOGNAME/fv3_grid.$gtype
+export out_dir=/work/noaa/stmp/$LOGNAME/my_grids
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
@@ -120,10 +119,10 @@ export APRUN=time
 export APRUN_SFC=srun
 export OMP_NUM_THREADS=24
 export OMP_STACKSIZE=2048m
-export machine=JET
+export machine=ORION
 
 ulimit -a
-ulimit -s unlimited
+ulimit -s 199000000
 
 #-----------------------------------------------------------------------
 # Start script.
