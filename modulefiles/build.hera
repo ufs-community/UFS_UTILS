@@ -12,6 +12,7 @@ module use -a /scratch2/NCEPDEV/nwprod/NCEPLIBS/cmake/install/NCEPLIBS/modules
 module load bacio/2.4.0
 module load g2/3.4.0
 module load ip/3.3.0
+module load ip2/1.1.0
 module load nemsio/2.5.1
 module load sp/2.3.0
 module load w3emc/2.7.0
@@ -21,10 +22,9 @@ module load sfcio/1.4.0
 module load sigio/2.3.0
 module load nemsiogfs/2.5.0
 module load landsfcutil/2.4.0
+export wgrib2_ROOT=/scratch2/NCEPDEV/nwprod/NCEPLIBS/cmake/install/NCEPLIBS/wgrib2/wgrib2-2.0.8
 
-module use  /scratch1/NCEPDEV/nems/emc.nemspara/soft/modulefiles
+module use /scratch1/NCEPDEV/nems/emc.nemspara/soft/modulefiles
 module load hdf5_parallel/1.10.6
 module load netcdf_parallel/4.7.4
 module load esmf/8.0.0_ParallelNetCDF
-
-export WGRIB2_ROOT="/scratch1/NCEPDEV/da/George.Gayno/noscrub/wgrib2"
