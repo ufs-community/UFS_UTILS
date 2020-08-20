@@ -128,10 +128,11 @@ program global_equiv_resol
   WRITE(*,500)
   WRITE(*,500) "Minimum, maximum, and average cell sizes are (based on square"
   WRITE(*,500) "root of cell area):"
-  WRITE(*,530) "  min_cell_size = ", min_cell_size
-  WRITE(*,530) "  max_cell_size = ", max_cell_size
-  WRITE(*,530) "  avg_cell_size = ", avg_cell_size
-530 FORMAT(A, G)
+  WRITE(*,*) "  min_cell_size = ", min_cell_size
+  WRITE(*,*) "  max_cell_size = ", max_cell_size
+  WRITE(*,*) "  avg_cell_size = ", avg_cell_size
+  ! does not work with gfortran
+!530 FORMAT(A, G)
 !
 !=======================================================================
 !
@@ -147,7 +148,7 @@ program global_equiv_resol
 
   WRITE(*,500)
   WRITE(*,500) "Equivalent global uniform cubed-sphere resolution is:"
-  WRITE(*,530) "  RES_equiv = ", RES_equiv
+  WRITE(*,*) "  RES_equiv = ", RES_equiv
 !
 !=======================================================================
 !
