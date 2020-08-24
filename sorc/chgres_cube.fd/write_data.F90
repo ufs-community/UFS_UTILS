@@ -1198,7 +1198,7 @@
 
  use program_setup, only           : halo=>halo_bndy, &
                                      input_type, tracers, num_tracers, &
-                                     use_thomp_mp_climo,
+                                     use_thomp_mp_climo, &
                                      regional
 
  use atmosphere, only              : lev_target, &
