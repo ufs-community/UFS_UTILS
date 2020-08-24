@@ -410,7 +410,7 @@ subroutine read_varmap
            trim(thomp_mp_climo_file) .ne. "NULL" .and. trim(input_type) == "grib2") then
            call error_handler("VARMAP TABLE CONTAINS TRACER ENTRIES FOR THOMPSON AEROSOLS liq_aero  &
            ice_aero. REMOVE THESE ENTRIES OR REMOVE THE NAMELIST ENTRY FOR  &
-           thomp_mp_climo_file AND TRY AGAIN.")
+           thomp_mp_climo_file AND TRY AGAIN.",1)
        endif
      endif
     enddo
