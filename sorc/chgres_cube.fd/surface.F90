@@ -169,6 +169,12 @@
 !-----------------------------------------------------------------------
 
  if (convert_nst) call create_nst_esmf_fields
+ 
+!-----------------------------------------------------------------------
+! Adjust soil levels of input grid !! not implemented yet
+!-----------------------------------------------------------------------
+
+ call adjust_soil_levels(localpet)
 
 !-----------------------------------------------------------------------
 ! Horizontally interpolate fields.
@@ -3507,6 +3513,122 @@ end subroutine replace_land_sfcparams
  enddo
 
  end subroutine adjust_soilt_for_terrain
+
+!---------------------------------------------------------------------------------------------
+! Adjust soil levels of the input grid if there's a mismatch between input and
+! target grids.
+!---------------------------------------------------------------------------------------------
+ 
+ subroutine adjust_soil_levels(localpet)
+ use model_grid, only       : lsoil_target, i_input, j_input, input_grid
+ use input_data, only       : lsoil_input, soil_temp_input_grid, &
+                              soilm_liq_input_grid, soilm_tot_input_grid
+ implicit none
+ integer, intent(in)                   :: localpet
+ character(len=1000)      :: msg
+ integer                  :: rc
+ real(esmf_kind_r8)          :: tmp(i_input,j_input), &
+                                data_one_tile(i_input,j_input,lsoil_input), &
+                                tmp3d(i_input,j_input,lsoil_target)
+ if (lsoil_input == 9 .and. lsoil_target == 4) then
+   print*, "CONVERTING FROM 9 INPUT SOIL LEVELS TO 4 TARGET SOIL LEVELS"
+   call ESMF_FieldGather(soil_temp_input_grid, data_one_tile, rootPet=0, tile=1, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", rc)
+      
+   call ESMF_FieldDestroy(soil_temp_input_grid,rc=rc)
+   soil_temp_input_grid = ESMF_FieldCreate(input_grid, &
+                         typekind=ESMF_TYPEKIND_R8, &
+                         staggerloc=ESMF_STAGGERLOC_CENTER, &
+                         ungriddedLBound=(/1/), &
+                         ungriddedUBound=(/lsoil_target/), rc=rc)
+                                         
+   if(localpet==0)then
+      tmp3d(:,:,1)= (data_one_tile(:,:,1) + data_one_tile(:,:,2))/2.0 * 0.1 + &
+                                      (data_one_tile(:,:,2) + data_one_tile(:,:,3))/2.0 * 0.3 + &
+                                      (data_one_tile(:,:,3) + data_one_tile(:,:,4))/2.0 * 0.6
+      tmp = (data_one_tile(:,:,6) - data_one_tile(:,:,5)) / 30.0 * 10.0 + data_one_tile(:,:,5) !Linear approx. of 40 cm obs
+      tmp3d(:,:,2)= (data_one_tile(:,:,4) + data_one_tile(:,:,5)) / 2.0 * 0.75 + &
+                                      (data_one_tile(:,:,5) + tmp) / 2.0 * 0.25
+      tmp3d(:,:,3)= (tmp + data_one_tile(:,:,6)) /2.0 * (1.0/3.0) + &
+                                      (data_one_tile(:,:,6) + data_one_tile(:,:,7)) / 2.0 * (2.0/3.0)
+      tmp = (data_one_tile(:,:,9) - data_one_tile(:,:,9)) / 140.0 * 40.0 + data_one_tile(:,:,8) !Linear approx of 200 cm obs
+      tmp3d(:,:,4)= (data_one_tile(:,:,7) + data_one_tile(:,:,8)) / 2.0 * 0.6 + &
+                                      (data_one_tile(:,:,8) + tmp) / 2.0 * 0.4
+   endif
+  
+   call ESMF_FieldScatter(soil_temp_input_grid, tmp3d, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)   
+                                                                              
+   call ESMF_FieldGather(soilm_tot_input_grid, data_one_tile, rootPet=0, tile=1, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", rc)
+      
+   call ESMF_FieldDestroy(soilm_tot_input_grid,rc=rc)
+   soilm_tot_input_grid = ESMF_FieldCreate(input_grid, &
+                         typekind=ESMF_TYPEKIND_R8, &
+                         staggerloc=ESMF_STAGGERLOC_CENTER, &
+                         ungriddedLBound=(/1/), &
+                         ungriddedUBound=(/lsoil_target/), rc=rc)
+                                         
+  if(localpet==0) then
+      tmp3d(:,:,1)= (data_one_tile(:,:,1) + data_one_tile(:,:,2))/2.0 * 0.1 + &
+                                      (data_one_tile(:,:,2) + data_one_tile(:,:,3))/2.0 * 0.3 + &
+                                      (data_one_tile(:,:,3) + data_one_tile(:,:,4))/2.0 * 0.6
+      tmp = (data_one_tile(:,:,6) - data_one_tile(:,:,5)) / 30.0 * 10.0 + data_one_tile(:,:,5) !Linear approx. of 40 cm obs
+      tmp3d(:,:,2)= (data_one_tile(:,:,4) + data_one_tile(:,:,5)) / 2.0 * 0.75 + &
+                                      (data_one_tile(:,:,5) + tmp) / 2.0 * 0.25
+      tmp3d(:,:,3)= (tmp + data_one_tile(:,:,6)) /2.0 * (1.0/3.0) + &
+                                      (data_one_tile(:,:,6) + data_one_tile(:,:,7)) / 2.0 * (2.0/3.0)
+      tmp = (data_one_tile(:,:,9) - data_one_tile(:,:,9)) / 140.0 * 40.0 + data_one_tile(:,:,8) !Linear approx of 200 cm obs
+      tmp3d(:,:,4)= (data_one_tile(:,:,7) + data_one_tile(:,:,8)) / 2.0 * 0.6 + &
+                                      (data_one_tile(:,:,8) + tmp) / 2.0 * 0.4
+   endif
+  
+   call ESMF_FieldScatter(soilm_tot_input_grid, tmp3d, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)   
+  
+   call ESMF_FieldGather(soilm_liq_input_grid, data_one_tile, rootPet=0, tile=1, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", rc)
+      
+   call ESMF_FieldDestroy(soilm_liq_input_grid,rc=rc)
+   soilm_liq_input_grid = ESMF_FieldCreate(input_grid, &
+                         typekind=ESMF_TYPEKIND_R8, &
+                         staggerloc=ESMF_STAGGERLOC_CENTER, &
+                         ungriddedLBound=(/1/), &
+                         ungriddedUBound=(/lsoil_target/), rc=rc)
+  if(localpet==0) then
+      tmp3d(:,:,1)= (data_one_tile(:,:,1) + data_one_tile(:,:,2))/2.0 * 0.1 + &
+                                      (data_one_tile(:,:,2) + data_one_tile(:,:,3))/2.0 * 0.3 + &
+                                      (data_one_tile(:,:,3) + data_one_tile(:,:,4))/2.0 * 0.6
+      tmp = (data_one_tile(:,:,6) - data_one_tile(:,:,5)) / 30.0 * 10.0 + data_one_tile(:,:,5) !Linear approx. of 40 cm obs
+      tmp3d(:,:,2)= (data_one_tile(:,:,4) + data_one_tile(:,:,5)) / 2.0 * 0.75 + &
+                                      (data_one_tile(:,:,5) + tmp) / 2.0 * 0.25
+      tmp3d(:,:,3)= (tmp + data_one_tile(:,:,6)) /2.0 * (1.0/3.0) + &
+                                      (data_one_tile(:,:,6) + data_one_tile(:,:,7)) / 2.0 * (2.0/3.0)
+      tmp = (data_one_tile(:,:,9) - data_one_tile(:,:,9)) / 140.0 * 40.0 + data_one_tile(:,:,8) !Linear approx of 200 cm obs
+      tmp3d(:,:,4)= (data_one_tile(:,:,7) + data_one_tile(:,:,8)) / 2.0 * 0.6 + &
+                                      (data_one_tile(:,:,8) + tmp) / 2.0 * 0.4
+   endif
+  
+   call ESMF_FieldScatter(soilm_liq_input_grid, tmp3d, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)   
+ 
+ elseif (lsoil_input /= lsoil_target) then
+  rc = -1
+  
+  write(msg,'("NUMBER OF SOIL LEVELS IN INPUT (",I2,") and OUPUT &
+               (",I2,") MUST EITHER BE EQUAL OR 9 AND 4, RESPECTIVELY")') &
+               lsoil_input, lsoil_target
+
+  call error_handler(trim(msg), rc)
+ endif
+ 
+ end subroutine adjust_soil_levels
 
 !---------------------------------------------------------------------------------------------
 ! Set roughness at land and sea ice.
