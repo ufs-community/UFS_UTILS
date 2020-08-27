@@ -16,19 +16,19 @@ export NETCDF=/opt/cray/pe/netcdf-hdf5parallel/4.6.3.2/INTEL/19.0
 
 #module use -a /oldscratch/ywang/external/modulefiles
 module use /oldscratch/ywang/external/NCEPLIBS_SRW/modules
-module load w3nco/2.4.0
-module load w3emc/2.7.0
-module load sp/2.3.0
-module load ip/3.3.0
-module load bacio/2.4.0
-module load sigio/2.3.0
-module load sfcio/1.4.0
-module load nemsio/2.5.1
-module load nemsiogfs/2.5.0
-module load gfsio/1.4.0
-module load landsfcutil/2.4.0
-module load g2/3.4.0
-module load wgrib2/2.0.8
+module load w3nco
+module load w3emc
+module load sp
+module load ip
+module load bacio
+module load sigio
+module load sfcio
+module load nemsio
+module load nemsiogfs
+module load gfsio
+module load landsfcutil
+module load g2
+module load wgrib2
 
 #module load esmf/8.0.0
 export ESMFMKFILE=/oldscratch/ywang/external/NCEPLIBS_SRW/lib64/esmf.mk
