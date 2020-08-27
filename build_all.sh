@@ -10,9 +10,9 @@ else
 fi
 
 export MOD_PATH
-module use ./modulefiles
-module load build.$target > /dev/null 2>&1
-#source ./modulefiles/build.$target             > /dev/null 2>&1
+#module use ./modulefiles
+#module load build.$target > /dev/null 2>&1
+source ./modulefiles/build.$target             > /dev/null 2>&1
 
 #
 # --- Build all programs.
@@ -22,7 +22,7 @@ rm -fr ./build
 mkdir ./build
 cd ./build
 
-if [[ $target == "wcoss_cray" ]]; then
+if [[ $target == "wcoss_cray" || "$target" == "odin" ]]; then
   cmake .. -DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON
 else
   cmake .. -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc -DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON

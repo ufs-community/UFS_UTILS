@@ -14,7 +14,7 @@ set(fortran_src
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian")
-elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8 -fconvert=big-endian")
 endif()
 
@@ -22,18 +22,20 @@ set(exe_name global_chgres)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
-  gfsio_4
-  nemsiogfs
-  nemsio
-  sigio_4
-  sfcio_4
-  landsfcutil_d
-  ip_d
-  sp_d
-  w3emc_d
-  w3nco_d
-  bacio_4
-  NetCDF::NetCDF_Fortran
-  OpenMP::OpenMP_Fortran)
+  gfsio::gfsio
+  nemsiogfs::nemsiogfs
+  nemsio::nemsio
+  sigio::sigio
+  sfcio::sfcio
+  landsfcutil::landsfcutil_d
+  ip::ip_d
+  sp::sp_d
+  w3emc::w3emc_d
+  w3nco::w3nco_d
+  bacio::bacio_4
+  NetCDF::NetCDF_Fortran)
+if(OpenMP_Fortran_FOUND)
+  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
+endif()
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})

@@ -1,0 +1,40 @@
+#%Module#####################################################
+## Build and run module for Stampede
+#############################################################
+
+module purge
+
+module load libfabric/1.7.0
+module load git/2.24.1
+module load autotools/1.1
+module load xalt/2.8
+module load TACC
+
+module load python3/3.7.0
+module load intel/18.0.2
+module load cmake/3.16.1
+module load impi/18.0.2
+module load pnetcdf/1.11.0
+module load netcdf/4.6.2
+module li
+
+export NETCDF=/opt/apps/intel18/netcdf/4.6.2/x86_64
+
+module use /work/00315/tg455890/stampede2/regional_fv3/ufs_testing/INSTALL/modules
+
+module load w3nco/2.4.0
+module load w3emc/2.7.0
+module load sp/2.3.0
+module load ip/3.3.0
+module load bacio/2.4.0
+module load sigio/2.3.0
+module load sfcio/1.4.0
+module load nemsio/2.5.1
+module load nemsiogfs/2.5.0
+module load gfsio/1.4.0
+module load landsfcutil/2.4.0
+module load g2/3.4.0
+module load wgrib2/2.0.8
+
+export ESMFMKFILE=/work/00315/tg455890/stampede2/regional_fv3/ufs_testing/INSTALL/lib64/esmf.mk
+
