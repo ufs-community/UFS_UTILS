@@ -21,8 +21,8 @@ module load esmf/8.0.0
 module rm gcc
 module add gcc/4.9.2
 
-export WGRIB2API_INC=/gpfs/hps3/emc/meso/save/Dusan.Jovic/wgrib2/include
-export WGRIB2_LIB=/gpfs/hps3/emc/meso/save/Dusan.Jovic/wgrib2/lib/libwgrib2.a
+#export WGRIB2API_INC=/gpfs/hps3/emc/meso/save/Dusan.Jovic/wgrib2/include
+#export WGRIB2_LIB=/gpfs/hps3/emc/meso/save/Dusan.Jovic/wgrib2/lib/libwgrib2.a
 
 export FCOMP=ftn
 export FFLAGS="-O3 -fp-model precise -g -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
