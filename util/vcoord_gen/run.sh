@@ -34,6 +34,6 @@ dptop=1.0              # real coordinate thickness at top (Pa)
 
 rm -f $outfile
 
-echo $levs $lupp $pbot $psig $ppre $pupp $ptop $dpbot $dpsig $dppre $dpupp $dptop | ../../exec/wcoss_ttakbkgen > $outfile
+echo $levs $lupp $pbot $psig $ppre $pupp $ptop $dpbot $dpsig $dppre $dpupp $dptop | ../../exec/vcoord_gen > $outfile
 
 exit
