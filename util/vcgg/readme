@@ -32,6 +32,10 @@
       dpupp    real coordinate thickness at pupp (Pa) 
       dptop    real coordinate thickness at top (Pa) 
  
+    Outputs a text file containing the 'ak' and 'bk' values -
+    bottom to top.  The conversion to pressure is:
+
+      pressure = ak + (bk * pbot)
  
     Graphical description of parameters and zones:
       ptop  ---  -----  ----------------------

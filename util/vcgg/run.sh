@@ -5,7 +5,7 @@
 # Generate a hybrid coordinate interface profile.
 #
 # Build the repository using the ./build_all.sh script before running.
-3
+#
 # Output 'ak' and 'bk' values are placed in $outfile.
 #
 #-------------------------------------------------------------------------------
