@@ -126,6 +126,7 @@ export OMP_NUM_THREADS=6
 export OMP_STACKSIZE=2048m
 export KMP_AFFINITY=disabled
 export machine=WCOSS_C
+export NCDUMP=/gpfs/hps/usrx/local/prod/NetCDF/4.2/intel/sandybridge/bin/ncdump
 
 ulimit -a
 ulimit -s unlimited
