@@ -187,6 +187,9 @@ SUBROUTINE write_inland(cs_res)
     CALL nc_opchk(stat, "nf90_def_var: inland")
     stat = nf90_put_att(ncid, inland_id,'coordinates','geolon geolat')
     CALL nc_opchk(stat, "nf90_put_att: inland:coordinates") 
+    stat = nf90_put_att(ncid, inland_id,'description', &
+        'inland = 1 indicates grid cells away from coast')
+    CALL nc_opchk(stat, "nf90_put_att: inland:description") 
 
     stat = nf90_enddef(ncid) 
     CALL nc_opchk(stat, "nf90_enddef")
