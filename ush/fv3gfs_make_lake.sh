@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/bash
 
 echo
 echo "CREATE AND ADD INLAND, LAKE_STATUS, AND LAKE_DEPTH TO THE OROGRAPHY FILES"

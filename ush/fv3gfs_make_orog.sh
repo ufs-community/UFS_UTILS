@@ -1,11 +1,12 @@
 #!/bin/bash
-set -ax
+
+set -eux
 
 nargv=$#
 
 export inorogexist=0
 
-if [ $nargv -eq 6 ];  then  # lat-lon grid
+if [ $nargv -eq 5 ];  then  # lat-lon grid
   export lonb=$1
   export latb=$2
   export outdir=$3
@@ -13,9 +14,8 @@ if [ $nargv -eq 6 ];  then  # lat-lon grid
   export is_latlon=1
   export orogfile="none"
   export hist_dir=$5
-  export TMPDIR=$6
-  export workdir=$TMPDIR/latlon/orog/latlon_${lonb}x${latb}
-elif [ $nargv -eq 7 ]; then  # cubed-sphere grid
+  export workdir=$TEMP_DIR/latlon/orog/latlon_${lonb}x${latb}
+elif [ $nargv -eq 6 ]; then  # cubed-sphere grid
   export res=$1 
   export lonb=$1
   export latb=$1
@@ -26,8 +26,7 @@ elif [ $nargv -eq 7 ]; then  # cubed-sphere grid
   export is_latlon=0
   export orogfile="none"
   export hist_dir=$6
-  export TMPDIR=$7
-  export workdir=$TMPDIR/C${res}/orog/tile$tile
+  export workdir=$TEMP_DIR/C${res}/orog/tile$tile
 elif [ $nargv -eq 8 ]; then  # input your own orography files
   export res=$1 
   export lonb=$1
@@ -41,11 +40,10 @@ elif [ $nargv -eq 8 ]; then  # input your own orography files
   export orogfile=$inputorog:t
   export inorogexist=1
   export hist_dir=$7
-  export TMPDIR=$8
-  export workdir=$TMPDIR/C${res}/orog/tile$tile
+  export workdir=$TEMP_DIR/C${res}/orog/tile$tile
 else
-  echo "number of arguments must be 5 or 6 for cubic sphere grid and 4 for lat-lon grid"
-  echo "Usage for cubic sphere grid: $0 resolution tile grid_dir out_dir script_dir hist_dir TMPDIR"
+  echo "Number of arguments must be 6 for cubic sphere grid"
+  echo "Usage for cubic sphere grid: $0 resolution tile griddir outdir script_dir hist_dir"
   exit 1
 fi
 

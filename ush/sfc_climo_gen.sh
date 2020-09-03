@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/bash
 
 #-------------------------------------------------------------------------
 # Run sfc_climo_gen program to create surface fixed fields,
