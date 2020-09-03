@@ -36,21 +36,23 @@
 #         "regional_gfdl" - stand-alone gfdl regional grid
 #         "regional_esg"  - stand-alone extended Schmidt
 #                           gnomonic (esg) regional grid
-#   3) For "stretch" and "nest" grids, set the stretching factor -
+#   3) For "uniform" grids - to include lake fraction and
+#      depth, set "add_lake" to true, and the "lake_cutoff" value.
+#   4) For "stretch" and "nest" grids, set the stretching factor -
 #       "stretch_fac", and center lat/lon of highest resolution
 #      tile - "target_lat" and "target_lon".
-#   4) For "nest" grids, set the refinement ratio - "refine_ratio",
+#   5) For "nest" grids, set the refinement ratio - "refine_ratio",
 #      the starting/ending i/j index location within the parent
 #      tile - "istart_nest", "jstart_nest", "iend_nest", "jend_nest"
-#   5) For "regional_gfdl" grids, set the "halo".  Default is three
+#   6) For "regional_gfdl" grids, set the "halo".  Default is three
 #      rows/columns.
-#   6) For "regional_esg" grids, set center lat/lon of grid,
+#   7) For "regional_esg" grids, set center lat/lon of grid,
 #      - "target_lat/lon" - the i/j dimensions - "i/jdim", the
 #      x/y grid spacing - "delx/y", and halo.
-#   7) Set working directory - TMPDIR - and path to the repository
+#   8) Set working directory - TMPDIR - and path to the repository
 #      clone - home_dir.
-#   8) Submit script: "sbatch $script".
-#   9) All files will be placed in "out_dir".
+#   9) Submit script: "sbatch $script".
+#  10) All files will be placed in "out_dir".
 #
 #-----------------------------------------------------------------------
 
@@ -69,6 +71,9 @@ export gtype=uniform   # 'uniform', 'stretch', 'nest',
 
 if [ $gtype = uniform ]; then
   export res=96
+  export add_lake=false   # Add lake frac and depth to orography data.
+                          # Uniform grids only.
+  export lake_cutoff=0.20 # lake frac less than lake_cutoff is ignored
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
