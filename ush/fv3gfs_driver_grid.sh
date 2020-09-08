@@ -269,7 +269,7 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   name=regional
   export grid_dir=$TEMP_DIR/${name}/grid
   export orog_dir=$TEMP_DIR/${name}/orog
-  filter_dir=$orog_dir   # nested grid topography will be filtered online
+  filter_dir=$TEMP_DIR/$name/filter_topo
   rm -rf $TEMP_DIR/$name
   mkdir -p $grid_dir $orog_dir $filter_dir
 
