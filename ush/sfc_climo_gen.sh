@@ -25,7 +25,7 @@
 # WORK_DIR                      Temporary working directory
 #-------------------------------------------------------------------------
 
-set -x
+set -eux
 
 ulimit -s unlimited
 ulimit -a

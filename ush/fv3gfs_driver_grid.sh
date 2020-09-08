@@ -33,7 +33,7 @@
 # ./driver_scripts.
 #-----------------------------------------------------------------------
 
-set -ax
+set -eux
 
 export machine=${machine:?}
 
@@ -142,8 +142,8 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
     name=C${res}r${rn}n${refine_ratio}_${title}
   fi
 
-  grid_dir=$TEMP_DIR/$name/grid
-  orog_dir=$TEMP_DIR/$name/orog
+  export grid_dir=$TEMP_DIR/$name/grid
+  export orog_dir=$TEMP_DIR/$name/orog
   out_dir=$out_dir/C${res}
   mkdir -p $out_dir
 
@@ -267,8 +267,8 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   halop1=$(( halo + 1 ))
   tile=7
   name=regional
-  grid_dir=$TEMP_DIR/${name}/grid
-  orog_dir=$TEMP_DIR/${name}/orog
+  export grid_dir=$TEMP_DIR/${name}/grid
+  export orog_dir=$TEMP_DIR/${name}/orog
   filter_dir=$orog_dir   # nested grid topography will be filtered online
   rm -rf $TEMP_DIR/$name
   mkdir -p $grid_dir $orog_dir $filter_dir
