@@ -41,4 +41,4 @@ export NETCDF=/opt/cray/netcdf/4.3.3.1/INTEL/14.0
 module rm gcc
 module load gcc/6.3.0
 
-export WGRIB2_ROOT=/usrx/local/nceplibs/NCEPLIBS/cmake/install/NCEPLIBS-v1.2.0/wgrib2/wgrib-2.0.8
+export wgrib2_ROOT=/usrx/local/nceplibs/NCEPLIBS/cmake/install/NCEPLIBS-v1.2.0/wgrib2/wgrib-2.0.8
