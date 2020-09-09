@@ -1,7 +1,7 @@
 set(fortran_src
-    wcoss.akbkgen.f90
-    wcoss.lu.f90
-    wcoss.ttakbkgen.f90)
+    driver.f90
+    matrix_utils.f90
+    vcoord_gen.f90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")

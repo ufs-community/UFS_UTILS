@@ -1,6 +1,6 @@
 !$$$  Subprogram documentation block
 !
-! Subprogram:    akbkgen     Generates hybrid coordinate interface profiles
+! Subprogram:    vcoord_gen   Generates hybrid coordinate interface profiles
 !   Prgmmr: Iredell    Org: W/NP23      Date: 2008-08-01
 !
 ! Abstract: This subprogram generates hybrid coordinate interface profiles
@@ -22,7 +22,7 @@
 ! Program history log:
 !   2008-08-01  Mark Iredell
 !
-! Usage:    call akbkgen(levs,lupp,pbot,psig,ppre,pupp,ptop,&
+! Usage:    call vcoord_gen(levs,lupp,pbot,psig,ppre,pupp,ptop,&
 !                        dpbot,dpsig,dppre,dpupp,dptop,pmin,ak,bk)
 !   Input argument list:
 !     levs     integer number of levels 
@@ -57,7 +57,7 @@
 ! Remarks:
 !   Example: Create the operational GFS 64-level hybrid coordinate.
 !     real(8) pmin,ak(0:64),bk(0:64)
-!     call akbkgen(64,64,100000.,99400.,7000.,0.,0.,500.,1200.,18000.,60.,60.,&
+!     call vcoord_gen(64,64,100000.,99400.,7000.,0.,0.,500.,1200.,18000.,60.,60.,&
 !                  pmin,ak,bk)
 !     print '(2i6)',2,64
 !     print '(f12.3,f12.8)',(ak(k),bk(k),k=0,64)
@@ -155,7 +155,7 @@
 !     p(psfc)=ak+bk*psfc
 !
 !$$$
-subroutine akbkgen(levs,lupp,pbot,psig,ppre,pupp,ptop,&
+subroutine vcoord_gen(levs,lupp,pbot,psig,ppre,pupp,ptop,&
                    dpbot,dpsig,dppre,dpupp,dptop,pmin,ak,bk)
   implicit none
   integer,intent(in):: levs,lupp
