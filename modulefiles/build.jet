@@ -1,13 +1,13 @@
 #%Module#####################################################
 ## Build and run module for Jet
 #############################################################
-
-module use /lfs4/HFIP/hfv3gfs/software/ufs-stack-20200908/intel-18.0.5.274/impi-2018.4.274/modules
 module load cmake/3.16.1
 module load intel/18.0.5.274
 module load impi/2018.4.274
 module load szip/2.1
 module load hdf5/1.10.4
+
+module use /lfs4/HFIP/hfv3gfs/software/ufs-stack-20200908/intel-18.0.5.274/impi-2018.4.274/modules
 module load netcdf/4.7.4
 module load w3nco/2.4.1
 module load w3emc/2.7.3
