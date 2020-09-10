@@ -103,6 +103,9 @@ elif [[ "$(hostname)" =~ "Orion" ]]; then
     module purge
 elif [[ "$(hostname)" =~ "odin" ]]; then
     target="odin"
+elif [[ -d /work/00315 && -d /scratch/00315 ]] ; then
+    target=stampede
+    module purge
 else
     echo WARNING: UNKNOWN PLATFORM 1>&2
 fi
