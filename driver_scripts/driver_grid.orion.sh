@@ -1,17 +1,16 @@
 #!/bin/bash
 
-#BSUB -L /bin/sh
-#BSUB -P GFS-DEV
-#BSUB -oo log.grid.%J
-#BSUB -eo log.grid.%J
-#BSUB -J grid_fv3
-#BSUB -q debug
-#BSUB -M 2400
-#BSUB -W 00:30
-#BSUB -extsched 'CRAYLINUX[]'
+#SBATCH -J fv3_grid_driver
+#SBATCH -A fv3-cpu
+#SBATCH --open-mode=truncate
+#SBATCH -o log.fv3_grid_driver
+#SBATCH -e log.fv3_grid_driver
+#SBATCH --nodes=1 --ntasks-per-node=24
+#SBATCH -q debug
+#SBATCH -t 00:30:00
 
 #-----------------------------------------------------------------------
-# Driver script to create a cubic-sphere based model grid on Cray.
+# Driver script to create a cubic-sphere based model grid on Orion.
 #
 # Produces the following files (netcdf, each tile in separate file):
 #   1) 'mosaic' and 'grid' files containing lat/lon and other
@@ -24,7 +23,8 @@
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
 #       an ESMF library requirement.  Large grids may require
-#       tasks spread across multiple nodes.
+#       tasks spread across multiple nodes.  The orography code
+#       benefits from threads.
 #
 # To run, do the following:
 #
@@ -34,8 +34,8 @@
 #         "stretch"  - global stretched grid
 #         "nest"     - global stretched grid with nest
 #         "regional_gfdl" - stand-alone gfdl regional grid
-#         "regional_esg"  - stand-alone extended Schmidt gnomonic
-#                           (esg) regional grid
+#         "regional_esg"  - stand-alone extended Schmidt
+#                           gnomonic (esg) regional grid
 #   3) For "uniform" grids - to include lake fraction and
 #      depth, set "add_lake" to true, and the "lake_cutoff" value.
 #   4) For "stretch" and "nest" grids, set the stretching factor -
@@ -51,10 +51,12 @@
 #      x/y grid spacing - "delx/y", and halo.
 #   8) Set working directory - TMPDIR - and path to the repository
 #      clone - home_dir.
-#   9) Submit script: "cat $script | bsub".
+#   9) Submit script: "sbatch $script".
 #  10) All files will be placed in "out_dir".
 #
 #-----------------------------------------------------------------------
+
+set -x
 
 source ../sorc/machine-setup.sh > /dev/null 2>&1
 source ../modulefiles/build.$target
@@ -64,8 +66,8 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=uniform       # 'uniform', 'stretch', 'nest'
-                           # 'regional_gfdl', 'regional_esg'
+export gtype=uniform   # 'uniform', 'stretch', 'nest', 
+                       # 'regional_gfdl', 'regional_esg'
 
 if [ $gtype = uniform ]; then
   export res=96
@@ -87,7 +89,7 @@ elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
   export jstart_nest=37        # Starting j-direction index of nest grid in parent tile supergrid
   export iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
   export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
-  export halo=3
+  export halo=3                # Lateral boundary halo
 elif [ $gtype = regional_esg ] ; then
   export res=-999              # equivalent res is computed.
   export target_lon=-97.5      # Center longitude of grid
@@ -104,32 +106,28 @@ elif [ $gtype = regional_esg ] ; then
 fi
 
 #-----------------------------------------------------------------------
-# Check paths.
+# Check paths.  
 #   home_dir - location of repository.
 #   TMPDIR   - working directory.
-#   out_dir  - where files will be placed upon completion.
+#   out_dir  - where files will be placed upon completion. 
 #-----------------------------------------------------------------------
 
-export home_dir=$LS_SUBCWD/..
-export TMPDIR=/gpfs/hps3/stmp/$LOGNAME/fv3_grid.$gtype
-export out_dir=/gpfs/hps3/stmp/$LOGNAME/my_grids
+export home_dir=$SLURM_SUBMIT_DIR/..
+export TMPDIR=/work/noaa/stmp/$LOGNAME/fv3_grid.$gtype
+export out_dir=/work/noaa/stmp/$LOGNAME/my_grids
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
 #-----------------------------------------------------------------------
 
-export NODES=1
-export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"
-export APRUN_SFC="aprun -j 1 -n 24 -N 24"
-# The orography code is optimized for six threads.
-export OMP_NUM_THREADS=6
+export APRUN=time
+export APRUN_SFC=srun
+export OMP_NUM_THREADS=24
 export OMP_STACKSIZE=2048m
-export KMP_AFFINITY=disabled
-export machine=WCOSS_C
-export NCDUMP=/gpfs/hps/usrx/local/prod/NetCDF/4.2/intel/sandybridge/bin/ncdump
+export machine=ORION
 
 ulimit -a
-ulimit -s unlimited
+ulimit -s 199000000
 
 #-----------------------------------------------------------------------
 # Start script.
