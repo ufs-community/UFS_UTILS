@@ -254,7 +254,7 @@
 !-------------------------------------------------------------------------
 
  is = index(mosaic_file_target_grid, "/", .true.)
- ie = index(mosaic_file_target_grid, "_mosaic")
+ ie = index(mosaic_file_target_grid, "mosaic") - 1
 
  if (is == 0 .or. ie == 0) then
    call error_handler("CANT DETERMINE CRES FROM MOSAIC FILE.", 1)
