@@ -4,6 +4,8 @@
 module load cmake/3.16.1
 module load intel/18.0.5.274
 module load impi/2018.4.274
+module load szip/2.1
+module load hdf5/1.10.5
 module load netcdf/4.7.0
 
 export CC=icc
@@ -27,5 +29,6 @@ module load gfsio/1.4.1
 module load landsfcutil/2.4.1
 module load g2/3.4.1
 module load wgrib2/2.0.8
+
 
  
