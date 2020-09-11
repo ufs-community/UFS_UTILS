@@ -292,7 +292,7 @@
 
  integer, parameter                :: landice=15
 
- integer                           :: i, j
+ integer                           :: i, j, ierr
 
  real                              :: landice_value
 
@@ -348,7 +348,7 @@
      enddo
    case default
      print*,'- FATAL ERROR IN ROUTINE ADJUST_FOR_LANDICE.  UNIDENTIFIED FIELD : ', field_ch
-     call mpi_abort(mpi_comm_world, 57)
+     call mpi_abort(mpi_comm_world, 57, ierr)
  end select
 
  end subroutine adjust_for_landice
