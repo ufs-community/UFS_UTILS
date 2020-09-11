@@ -1,16 +1,19 @@
 set(fortran_src
-    nemsio_get.f90)
+    nb.F90
+    inland.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -convert big_endian")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fconvert=big-endian")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-range-check")
 endif()
 
-set(exe_name nemsio_get)
+set(exe_name inland)
+
 add_executable(${exe_name} ${fortran_src})
+
 target_link_libraries(
   ${exe_name}
-  nemsio::nemsio bacio::bacio_4 w3nco::w3nco_d)
+  NetCDF::NetCDF_Fortran)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
