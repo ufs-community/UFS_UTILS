@@ -50,7 +50,7 @@
 
  integer                          :: initialsiz, fsize, error, j
  integer                          :: dim_x, dim_y, id_data
- integer                          :: dim_time, id_times
+ integer                          :: dim_time, id_times, ierr
  integer                          :: header_buffer_val = 16384
  integer                          :: i_out, j_out, id_lat, id_lon
  integer                          :: i_start, i_end, j_start, j_end
@@ -86,7 +86,7 @@
      out_file_with_halo = "./vegetation_type." // grid_tiles(tile) // ".halo.nc"
    case default
      print*,'- FATAL ERROR IN ROUTINE OUTPUT.  UNIDENTIFIED FIELD : ', field_names(field_idx)
-     call mpi_abort(mpi_comm_world, 67)
+     call mpi_abort(mpi_comm_world, 67, ierr)
  end select
 
 !----------------------------------------------------------------------

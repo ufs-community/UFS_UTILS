@@ -13,7 +13,7 @@
 /***********************************************************
    global variables
 ***********************************************************/
-int pe, npes, root_pe;
+static int pe, npes, root_pe;
 #define MAX_BUFFER_SIZE 10000000
 double rBuffer[MAX_BUFFER_SIZE];
 double sBuffer[MAX_BUFFER_SIZE];

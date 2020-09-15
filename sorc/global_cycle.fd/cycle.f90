@@ -563,7 +563,7 @@
  INTEGER                  :: ISTART, IEND, JSTART, JEND
  INTEGER                  :: MASK_TILE, MASK_FG_TILE
  INTEGER                  :: ITILE, JTILE
- INTEGER                  :: MAX_SEARCH, J
+ INTEGER                  :: MAX_SEARCH, J, IERR
  INTEGER                  :: IGAUSP1, JGAUSP1
  integer                  :: nintp,nsearched,nice,nland
  integer                  :: nfill,nfill_tice,nfill_clm
@@ -617,7 +617,7 @@
 
  IF (NRET /= (IDIM_GAUS*JDIM_GAUS)) THEN
    PRINT*,'FATAL ERROR: PROBLEM IN GDSWZD. STOP.'
-   CALL MPI_ABORT(MPI_COMM_WORLD, 12)
+   CALL MPI_ABORT(MPI_COMM_WORLD, 12, IERR)
  ENDIF
 
  DEALLOCATE (XPTS, YPTS)
