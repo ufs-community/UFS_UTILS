@@ -272,11 +272,11 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
           ENDIF
         ENDIF
 #endif
-          IF (two_section == .false.) THEN
+          IF (two_section .EQV. .false.) THEN
             DO i =  src_grid_lon_beg, src_grid_lon_end, stride_lon
               p(1) = src_grid_lat(j); p(2) = src_grid_lon(i) 
               p(:) = p(:)*d2r
-              IF(enclosure_cnvx(v, 4, p, co_gc) == .true.) THEN
+              IF(enclosure_cnvx(v, 4, p, co_gc) .EQV. .true.) THEN
                 grid_ct = grid_ct+1
                 IF (lakestat((j-1)*nlon+i) /= 0) THEN
                   lake_ct = lake_ct+1
@@ -296,7 +296,7 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
             DO i =  src_grid_lon_beg1, src_grid_lon_end1, stride_lon
               p(1) = src_grid_lat(j); p(2) = src_grid_lon(i) 
               p(:) = p(:)*d2r
-              IF(enclosure_cnvx(v, 4, p, co_gc) == .true.) THEN
+              IF(enclosure_cnvx(v, 4, p, co_gc) .EQV. .true.) THEN
                 grid_ct = grid_ct+1
                 IF (lakestat((j-1)*nlon+i) /= 0) THEN
                   lake_ct = lake_ct+1
@@ -315,7 +315,7 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
             DO i =  src_grid_lon_beg2, src_grid_lon_end2, stride_lon
               p(1) = src_grid_lat(j); p(2) = src_grid_lon(i) 
               p(:) = p(:)*d2r
-              IF(enclosure_cnvx(v, 4, p, co_gc) == .true.) THEN
+              IF(enclosure_cnvx(v, 4, p, co_gc) .EQV. .true.) THEN
                 grid_ct = grid_ct+1
                 IF (lakestat((j-1)*nlon+i) /= 0) THEN
                   lake_ct = lake_ct+1
@@ -577,7 +577,8 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
       CALL nc_opchk(stat, "nf90_put_att: lake_depth:description") 
 #endif
 
-      write(string,'(a,es8.1)') 'land_frac and lake_frac are adjusted such that their sum is 1 at points where inland=1; land_frac cutoff is',land_cutoff
+      write(string,'(a,es8.1)') 'land_frac and lake_frac are adjusted such that their sum '// &
+                                'is 1 at points where inland=1; land_frac cutoff is',land_cutoff
       stat = nf90_put_att(ncid, land_frac_id,'description',trim(string))
       CALL nc_opchk(stat, "nf90_put_att: land_frac:description") 
 
@@ -773,7 +774,9 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
     CALL nc_opchk(stat, "nf90_put_att: lake_depth:description") 
 #endif
     ENDIF
-    write(string,'(a,es8.1)') 'land_frac is adjusted to 1-lake_frac where lake_frac>0 but left unchanged where lake_frac=0. This could lead to land_frac+lake_frac<1 at some inland points; land_frac cutoff is',land_cutoff
+    write(string,'(a,es8.1)') 'land_frac is adjusted to 1-lake_frac where lake_frac>0 but lefti '// &
+                              'unchanged where lake_frac=0. This could lead to land_frac+lake_frac<1 '// &
+                              'at some inland points; land_frac cutoff is',land_cutoff
     stat = nf90_put_att(ncid, land_frac_id,'description',trim(string))
     CALL nc_opchk(stat, "nf90_put_att: land_frac:description") 
 

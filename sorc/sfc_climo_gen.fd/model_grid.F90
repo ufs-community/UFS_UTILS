@@ -88,12 +88,14 @@
 
  implicit none
 
+ include 'mpif.h'
+
  integer, intent(in)              :: localpet, npets
 
  character(len=500)               :: the_file
 
  integer                          :: error, id_dim, id_tiles, ncid
- integer                          :: id_grid_tiles
+ integer                          :: id_grid_tiles, ierr
  integer                          :: extra, rc, tile
  integer, allocatable             :: decomptile(:,:)
 
@@ -132,7 +134,7 @@
  if (mod(npets,num_tiles) /= 0) then
    print*,'- FATAL ERROR: MUST RUN THIS PROGRAM WITH A TASK COUNT THAT'
    print*,'- IS A MULTIPLE OF THE NUMBER OF TILES.'
-   call mpi_abort
+   call mpi_abort(mpi_comm_world, 44, ierr)
  endif
 
 !-----------------------------------------------------------------------
