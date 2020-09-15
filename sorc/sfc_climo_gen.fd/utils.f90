@@ -15,6 +15,7 @@
  integer, intent(in) :: err
  character(len=*), intent(in) :: string
  character(len=256) :: errmsg
+ integer :: ierr
 
  include "mpif.h"
 
@@ -23,7 +24,7 @@
  print*,''
  print*,'FATAL ERROR: ', trim(string), ': ', trim(errmsg)
  print*,'STOP.'
- call mpi_abort(mpi_comm_world, 999)
+ call mpi_abort(mpi_comm_world, 999, ierr)
 
  return
  end subroutine netcdf_err
@@ -36,9 +37,13 @@
 
  integer, optional, intent(in)   :: rc
 
+ integer :: ierr
+
+ include "mpif.h"
+
  print*,"- FATAL ERROR: ", string
  if (present(rc)) print*,"- IOSTAT IS: ", rc
- call mpi_abort
+ call mpi_abort(mpi_comm_world, 999, ierr)
 
  end subroutine error_handler
 
