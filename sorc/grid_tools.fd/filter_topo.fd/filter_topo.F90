@@ -21,15 +21,14 @@ program filter_topo
   real, parameter :: tiny_number=1.d-8
 
 
-  real:: cd4 = 0.16        ! Dimensionless coeff for del-4 difussion (with FCT)
-  real:: peak_fac = 1.05   ! overshoot factor for the mountain peak
-  real:: max_slope = 0.15       ! max allowable terrain slope: 1 --> 45 deg
-                                ! 0.15 for C768 or lower; 0.25 C1536; 0.3 for C3072
-  integer :: n_del2_weak = 12
+  real:: cd4        ! Dimensionless coeff for del-4 difussion (with FCT)
+  real:: peak_fac   ! overshoot factor for the mountain peak
+  real:: max_slope  ! max allowable terrain slope: 1 --> 45 deg
+
+  integer :: n_del2_weak
 
   logical :: zs_filter = .true. 
   logical :: zero_ocean = .true.          ! if true, no diffusive flux into water/ocean area 
-  integer :: refine_ratio = 1             ! default parent-to-nest space ratio
   real    :: res = 48.                    ! real value of the 'c' resolution
   real    :: stretch_fac = 1.0
   logical :: nested = .false. &
@@ -40,8 +39,7 @@ program filter_topo
   character(len=128) :: mask_field = "slmsk"
   character(len=128) :: grid_file = "atmos_mosaic.nc"
   namelist /filter_topo_nml/ topo_file, topo_field, mask_field, grid_file, zero_ocean, &
-       zs_filter, cd4, n_del2_weak, peak_fac, max_slope, stretch_fac, refine_ratio, res, &
-       nested, grid_type, regional
+       zs_filter, stretch_fac, res, nested, grid_type, regional
 
   integer :: stdunit = 6 
   integer :: ntiles = 0
@@ -61,10 +59,8 @@ program filter_topo
   !--- read namelist
   call read_namelist()
 
-  !--- compute filter constants for the regional resolution
-  if(regional)then
-    call compute_filter_constants
-  endif
+  !--- compute filter constants according to grid resolution.
+  call compute_filter_constants
 
   !--- read the target grid.
   call read_grid_file(regional)
@@ -1146,7 +1142,7 @@ contains
     real::  a1(is-1:ie+2)
     real::  a2(is:ie,js-1:je+2)
     real::  a3(is:ie,js:je,ntiles)
-    real:: smax, smin, m_slope, fac
+    real:: smax, m_slope, fac
     integer:: i,j, nt, t
     integer:: is1, ie2, js1, je2
 
@@ -1763,6 +1759,18 @@ contains
 
   end subroutine read_namelist
 
+  subroutine check(status)
+  use netcdf
+  integer,intent(in) :: status
+!
+  if(status /= nf90_noerr) then
+    write(0,*) ' check netcdf status = ', status
+    write(0,'("error ", a)') trim(nf90_strerror(status))
+    write(0,*) "Stopped"
+    stop 4
+  endif
+  end subroutine check
+
   !#######################################################################
   ! compute resolution-dependent values for the filtering.
 
@@ -1770,39 +1778,32 @@ contains
 
   ! set the given values for various cube resolutions (c48, c96, c192, c384, c768, c1152, c3072)
 
-  integer,parameter :: nres=7
+  integer,parameter :: nres=8
   integer :: index1,index2,n
 
-  real :: factor,res_regional
+  real :: factor
 
-  real,dimension(1:nres) :: cube_res=(/48.,96.,192.,384.,768.,1152.,3072./)
+  real,dimension(1:nres) :: cube_res=(/48.,96.,128.,192.,384.,768.,1152.,3072./)
 
-  real,dimension(1:nres) :: n_del2_weak_vals=(/4.,8.,12.,12.,16.,20.,24./)
-  real,dimension(1:nres) :: cd4_vals        =(/0.12,0.12,0.15,0.15,0.15,0.15,0.15/)
-  real,dimension(1:nres) :: max_slope_vals  =(/0.12,0.12,0.12,0.12,0.12,0.16,0.30/)
-  real,dimension(1:nres) :: peak_fac_vals   =(/1.1,1.1,1.05,1.0,1.0,1.0,1.0/)
-  
-!------------------------------------------------------------------
-! What is the equivalent cube resolution of this regional domain
-! where res is the parent cube's resolution?
-!------------------------------------------------------------------
+  real,dimension(1:nres) :: n_del2_weak_vals=(/4.,8.,8.,12.,12.,16.,20.,24./)
+  real,dimension(1:nres) :: cd4_vals        =(/0.12,0.12,0.13,0.15,0.15,0.15,0.15,0.15/)
+  real,dimension(1:nres) :: max_slope_vals  =(/0.12,0.12,0.12,0.12,0.12,0.12,0.16,0.30/)
+  real,dimension(1:nres) :: peak_fac_vals   =(/1.1,1.1,1.1,1.05,1.0,1.0,1.0,1.0/)
 
-  res_regional=res*stretch_fac*real(refine_ratio)
-
-  if(res_regional<cube_res(1))then
+  if(res<cube_res(1))then
     index1 = 1
     index2 = 1
     factor = 0.
-  elseif(res_regional>cube_res(nres))then
+  elseif(res>cube_res(nres))then
     index1 = nres
     index2 = nres
     factor = 0.
   else
     do n=2,nres
-      if(res_regional<=cube_res(n))then
+      if(res<=cube_res(n))then
         index2 = n
         index1 = n-1
-        factor = (res_regional-cube_res(n-1))/(cube_res(n)-cube_res(n-1))
+        factor = (res-cube_res(n-1))/(cube_res(n)-cube_res(n-1))
         exit
       endif
     enddo
@@ -1812,6 +1813,13 @@ contains
   cd4 = cd4_vals(index1)+factor*(cd4_vals(index2)-cd4_vals(index1))
   max_slope = max_slope_vals(index1)+factor*(max_slope_vals(index2)-max_slope_vals(index1))
   peak_fac = peak_fac_vals(index1)+factor*(peak_fac_vals(index2)-peak_fac_vals(index1))
+
+  print*,''
+  print*,'- FILTER COEFFICIENTS FOR RESOLUTION ', res
+  print*,'- CD4: ', cd4
+  print*,'- N_DEL2_WEAK: ', n_del2_weak
+  print*,'- MAX_SLOPE: ', max_slope
+  print*,'- PEAK_FAC: ', peak_fac
 
   end subroutine compute_filter_constants
 

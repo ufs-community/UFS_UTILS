@@ -88,12 +88,14 @@
 
  implicit none
 
+ include 'mpif.h'
+
  integer, intent(in)              :: localpet, npets
 
  character(len=500)               :: the_file
 
  integer                          :: error, id_dim, id_tiles, ncid
- integer                          :: id_grid_tiles
+ integer                          :: id_grid_tiles, ierr
  integer                          :: extra, rc, tile
  integer, allocatable             :: decomptile(:,:)
 
@@ -132,7 +134,7 @@
  if (mod(npets,num_tiles) /= 0) then
    print*,'- FATAL ERROR: MUST RUN THIS PROGRAM WITH A TASK COUNT THAT'
    print*,'- IS A MULTIPLE OF THE NUMBER OF TILES.'
-   call mpi_abort
+   call mpi_abort(mpi_comm_world, 44, ierr)
  endif
 
 !-----------------------------------------------------------------------
@@ -334,7 +336,7 @@
  real(esmf_kind_r4), intent(out)    :: lat2d(idim,jdim)
  real(esmf_kind_r4), intent(out)    :: lon2d(idim,jdim)
 
- integer                            :: error, lat, lon
+ integer                            :: error, lat, lon, i, j
  integer                            :: ncid, id_dim, id_var
 
  real(kind=4), allocatable          :: dummy(:,:)
@@ -365,12 +367,37 @@
 
  allocate(dummy(idim,jdim))
 
- print*,"- READ LAND MASK"
- error=nf90_inq_varid(ncid, 'slmsk', id_var)
- call netcdf_err(error, "READING SLMSK ID")
- error=nf90_get_var(ncid, id_var, dummy)
- call netcdf_err(error, "READING SLMSK")
- mask = nint(dummy)
+!-----------------------------------------------------------------------
+! If the lake maker was used, there will be a 'lake_frac' record.
+! In that case, land/non-land is determined by 'land_frac'.
+!
+! If the lake maker was not used, use 'slmsk', which is defined
+! as the nint(land_frac).
+!-----------------------------------------------------------------------
+
+ error=nf90_inq_varid(ncid, 'lake_frac', id_var)
+ if (error /= 0) then
+   print*,"- READ LAND MASK (SLMSK)"
+   error=nf90_inq_varid(ncid, 'slmsk', id_var)
+   call netcdf_err(error, "READING SLMSK ID")
+   error=nf90_get_var(ncid, id_var, dummy)
+   call netcdf_err(error, "READING SLMSK")
+   mask = nint(dummy)
+ else
+   print*,"- READ LAND FRACTION"
+   error=nf90_inq_varid(ncid, 'land_frac', id_var)
+   call netcdf_err(error, "READING LAND_FRAC ID")
+   error=nf90_get_var(ncid, id_var, dummy)
+   call netcdf_err(error, "READING LAND_FRAC")
+   mask = 0
+   do j = 1, lat
+   do i = 1, lon
+     if (dummy(i,j) > 0.0) then
+       mask(i,j) = 1
+     endif
+   enddo
+   enddo
+ endif
 
  print*,"- READ LATITUDE"
  error=nf90_inq_varid(ncid, 'geolat', id_var)
