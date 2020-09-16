@@ -13,7 +13,7 @@ fi
 
 export MOD_PATH
 set +x
-source ./modulefiles/build.$target             > /dev/null 2>&1
+module use ./modulefiles/build.$target #> /dev/null 2>&1
 module list
 set -x
 

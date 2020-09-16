@@ -24,7 +24,7 @@ module load landsfcutil/2.4.1
 module load wgrib2/2.0.8
 
 module load jasper/1.900.29
-export Jasper_ROOT="/usrx/local/prod/packages/gnu/4.8.5/jasper/1.900.29"
+setenv Jasper_ROOT /usrx/local/prod/packages/gnu/4.8.5/jasper/1.900.29
 
 module use /usrx/local/nceplibs/dev/NCEPLIBS/modulefiles
 module load netcdf_parallel/4.7.4
