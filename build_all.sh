@@ -13,7 +13,8 @@ fi
 
 export MOD_PATH
 set +x
-module use ./modulefiles/build.$target #> /dev/null 2>&1
+module use ./modulefiles
+module load build.hera > /dev/null 2>&1
 module list
 set -x
 
