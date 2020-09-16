@@ -26,3 +26,4 @@ setenv Jasper_ROOT /apps/jasper-1.900.1
 module use -a /apps/contrib/NCEPLIBS/lib/modulefiles
 module load netcdfp/4.7.4.release
 module load esmflocal/8_0_0.release
+

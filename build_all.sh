@@ -17,7 +17,6 @@ module use ./modulefiles/build.$target #> /dev/null 2>&1
 module list
 set -x
 
-#
 # --- Build all programs.
 #
 
@@ -27,7 +26,7 @@ cd ./build
 
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON"
 
-if [[ "$target" != "wcoss_cray" && "$target" != "odin" ]]; then
+if [[ "$target" != "wcoss_cray" ]]; then
   CMAKE_FLAGS+=" -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc"
 fi
 
