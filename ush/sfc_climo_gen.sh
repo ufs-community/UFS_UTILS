@@ -27,9 +27,6 @@
 
 set -eux
 
-ulimit -s unlimited
-ulimit -a
-
 res=${res:-96}
 WORK_DIR=${WORK_DIR:-/scratch3/NCEPDEV/stmp1/$LOGNAME/sfc_climo_gen.C${res}}
 SAVE_DIR=${SAVE_DIR:-$WORK_DIR}
