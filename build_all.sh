@@ -3,8 +3,6 @@ set -eux
 
 target=${target:-"NULL"}
 
-echo "target is $target"
-
 if [[ "$target" == "linux.gnu" || "$target" == "linux.intel" ]]; then
  unset -f module
 else
