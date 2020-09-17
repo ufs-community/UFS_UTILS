@@ -3,6 +3,8 @@ set -eux
 
 target=${target:-"NULL"}
 
+echo "target is $target"
+
 if [[ "$target" == "linux.gnu" || "$target" == "linux.intel" ]]; then
  unset -f module
 else
@@ -14,7 +16,7 @@ fi
 export MOD_PATH
 set +x
 module use ./modulefiles
-module load build.hera > /dev/null 2>&1
+module load build.$target > /dev/null 2>&1
 module list
 set -x
 
