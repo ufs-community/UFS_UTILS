@@ -1,9 +1,16 @@
 #!/bin/bash
 
+#BSUB -W 0:01
+#BSUB -o log
+#BSUB -e log
+#BSUB -J vcoord
+#BSUB -q debug
+#BSUB -R "rusage[mem=100]"
+#BSUB -P GFS-DEV
+
 #-------------------------------------------------------------------------------
 #
-# Generate a hybrid coordinate interface profile.  On WCOSS-Cray, use
-# 'run.cray.sh'.
+# Generate a hybrid coordinate interface profile on WCOSS-Cray.
 #
 # Build the repository using the ./build_all.sh script before running.
 #
@@ -12,6 +19,10 @@
 #-------------------------------------------------------------------------------
 
 set -x
+
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+source ../../modulefiles/build.$target
+module list
 
 outfile="./global_hyblev.txt"
 
@@ -35,6 +46,6 @@ dptop=1.0              # real coordinate thickness at top (Pa)
 
 rm -f $outfile
 
-echo $levs $lupp $pbot $psig $ppre $pupp $ptop $dpbot $dpsig $dppre $dpupp $dptop | ../../exec/vcoord_gen > $outfile
+echo $levs $lupp $pbot $psig $ppre $pupp $ptop $dpbot $dpsig $dppre $dpupp $dptop | $PWD/../../exec/vcoord_gen > $outfile
 
 exit
