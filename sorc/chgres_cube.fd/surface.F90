@@ -331,7 +331,8 @@
                                        vgfrc_from_climo, &
                                        minmax_vgfrc_from_climo, &
                                        lai_from_climo, &
-                                       tg3_from_soil
+                                       tg3_from_soil, & 
+                                       external_model
                                        
  use static_data, only               : veg_type_target_grid, &
                                        soil_type_target_grid, &
