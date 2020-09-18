@@ -2333,7 +2333,7 @@
        call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224,soilt_climo=data_one_tile2)
      endif
    else
-     if (localpet == 0 .and. maxval(data_one_tile) > 0 .and. (trim(external_model) .ne. "GFS" .or. trim(input_type) .ne. grib2)) then
+     if (localpet == 0 .and. maxval(data_one_tile) > 0 .and. (trim(external_model) .ne. "GFS" .or. trim(input_type) .ne. "grib2")) then
        ! If soil type from the input grid has any non-zero points then soil type must exist for
        ! use
        print*, "Soil type exists on input grid. Searching."
