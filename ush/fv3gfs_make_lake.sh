@@ -1,10 +1,10 @@
-#!/bin/ksh
+#!/bin/bash
 
 echo
 echo "CREATE AND ADD INLAND, LAKE_STATUS, AND LAKE_DEPTH TO THE OROGRAPHY FILES"
 echo
 
-set -ax
+set -eux
 
 outdir=$orog_dir
 indir=$topo
@@ -26,7 +26,7 @@ if [ ! -s $exe_inland ]; then
   exit 1 
 fi
 
-workdir=$TMPDIR/C${res}/orog/tiles
+workdir=$TEMP_DIR/C${res}/orog/tiles
 if [ ! -s $workdir ]; then mkdir -p $workdir ;fi
 
 # Make lake data - 

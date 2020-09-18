@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid.
@@ -33,7 +33,7 @@
 # ./driver_scripts.
 #-----------------------------------------------------------------------
 
-set -ax
+set -eux
 
 export machine=${machine:?}
 
@@ -101,19 +101,19 @@ if [ $add_lake = true ]; then
   fi
 fi
 
-export TMPDIR=${TMPDIR:?}
+export TEMP_DIR=${TEMP_DIR:?}
 export out_dir=${out_dir:?}
 
 export home_dir=${home_dir:-"$PWD/../"}
 export script_dir=$home_dir/ush
-export exec_dir=$home_dir/exec
+export exec_dir=${exec_dir:-"$home_dir/exec"}
 export topo=$home_dir/fix/fix_orog
 
 export NCDUMP=${NCDUMP:-ncdump}
 
-rm -fr $TMPDIR
-mkdir -p $TMPDIR
-cd $TMPDIR ||exit 8
+rm -fr $TEMP_DIR
+mkdir -p $TEMP_DIR
+cd $TEMP_DIR ||exit 8
 
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
@@ -142,18 +142,18 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
     name=C${res}r${rn}n${refine_ratio}_${title}
   fi
 
-  grid_dir=$TMPDIR/$name/grid
-  orog_dir=$TMPDIR/$name/orog
+  export grid_dir=$TEMP_DIR/$name/grid
+  export orog_dir=$TEMP_DIR/$name/orog
   out_dir=$out_dir/C${res}
   mkdir -p $out_dir
 
   if [ $gtype = nest ]; then
     filter_dir=$orog_dir   # nested grid topography will be filtered online
   else
-    filter_dir=$TMPDIR/$name/filter_topo
+    filter_dir=$TEMP_DIR/$name/filter_topo
   fi
 
-  rm -rf $TMPDIR/$name                  
+  rm -rf $TEMP_DIR/$name                  
   mkdir -p $grid_dir $orog_dir $filter_dir
 
   set +x
@@ -178,18 +178,18 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 #----------------------------------------------------------------------------------
 
   if [ $machine = WCOSS_C ]; then
-    touch $TMPDIR/orog.file1
+    touch $TEMP_DIR/orog.file1
     tile=1
     while [ $tile -le $ntiles ]; do
-      echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
+      echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo " >>$TEMP_DIR/orog.file1
       tile=$(( $tile + 1 ))
     done
-    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
+    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TEMP_DIR/orog.file1
     err=$?
     if [ $err != 0 ]; then
       exit $err
     fi
-    rm $TMPDIR/orog.file1
+    rm $TEMP_DIR/orog.file1
   else
     tile=1
     while [ $tile -le $ntiles ]; do
@@ -198,7 +198,7 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
       echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
       echo
       set -x
-      $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+      $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo
       err=$?
       if [ $err != 0 ]; then
         exit $err
@@ -267,10 +267,10 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   halop1=$(( halo + 1 ))
   tile=7
   name=regional
-  grid_dir=$TMPDIR/${name}/grid
-  orog_dir=$TMPDIR/${name}/orog
-  filter_dir=$orog_dir   # nested grid topography will be filtered online
-  rm -rf $TMPDIR/$name
+  export grid_dir=$TEMP_DIR/${name}/grid
+  export orog_dir=$TEMP_DIR/${name}/orog
+  filter_dir=$TEMP_DIR/$name/filter_topo
+  rm -rf $TEMP_DIR/$name
   mkdir -p $grid_dir $orog_dir $filter_dir
 
 #----------------------------------------------------------------------------------
@@ -364,17 +364,17 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   echo "Begin orography generation at `date`"
 
   if [ $machine = WCOSS_C ]; then
-    echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR " >>$TMPDIR/orog.file1
-    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TMPDIR/orog.file1
+    echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo " >>$TEMP_DIR/orog.file1
+    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TEMP_DIR/orog.file1
     err=$?
-    rm $TMPDIR/orog.file1
+    rm $TEMP_DIR/orog.file1
   else
     set +x
     echo
     echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
     echo
     set -x
-    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo $TMPDIR
+    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo
     err=$?
     if [ $err != 0 ]; then
       exit $err
@@ -464,7 +464,7 @@ fi
 #------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------
 
-export WORK_DIR=$TMPDIR/sfcfields
+export WORK_DIR=$TEMP_DIR/sfcfields
 export SAVE_DIR=$out_dir/fix_sfc
 export BASE_DIR=$home_dir
 export FIX_FV3=$out_dir
