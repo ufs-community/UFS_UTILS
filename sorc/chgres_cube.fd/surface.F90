@@ -2336,7 +2336,7 @@
        ! use
        print*, "Soil type exists on input grid. Searching."
        call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)
-     else
+     elseif (localpet == 0) then
        print*, "Soil type doesn't exist on input grid. Setting equal to climo."
        data_one_tile = data_one_tile2
      endif
