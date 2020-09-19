@@ -125,9 +125,10 @@
                                        read_input_nst_data
 
  use program_setup, only             : calc_soil_params_driver, &
-                                       convert_nst
-
- use static_data, only               : get_static_fields, &
+                                       convert_nst, &
+                                       vgtyp_from_climo, &
+                                       sotyp_from_climo
+ use static_data, only               :  get_static_fields, &
                                        cleanup_static_fields
 
  implicit none
@@ -182,18 +183,22 @@
 
  call interp(localpet)
  
-!---------------------------------------------------------------------------------------------
-! Check for points where smois is too high to be a land point at a land point
-!---------------------------------------------------------------------------------------------
-!
-!call check_smois_water
+ if (vgtyp_from_climo .or. sotyp_from_climo) then
+   !---------------------------------------------------------------------------------------------
+   ! Check for points where smois is too high to be a land point at a land point
+   !---------------------------------------------------------------------------------------------
+   !  
+   !call check_smois_water
 
-!---------------------------------------------------------------------------------------------
-! Adjust soil/landice column temperatures for any change in elevation between the
-! input and target grids.
-!---------------------------------------------------------------------------------------------
+   !---------------------------------------------------------------------------------------------
+   ! Adjust soil/landice column temperatures for any change in elevation between
+   ! the
+   ! input and target grids.
+   !---------------------------------------------------------------------------------------------
 
- call adjust_soilt_for_terrain
+   call adjust_soilt_for_terrain
+ 
+ endif
 
 !---------------------------------------------------------------------------------------------
 ! Rescale soil moisture for changes in soil type between the input and target grids.
@@ -201,18 +206,19 @@
 
  call rescale_soil_moisture
  
-!---------------------------------------------------------------------------------------------
-! Check soil moisture again for mismatches after rescale_soil_moisture subroutine
-!---------------------------------------------------------------------------------------------
- call check_smois_land
+ if (vgtyp_from_climo .or. sotyp_from_climo) then
+  !---------------------------------------------------------------------------------------------
+  ! Check soil moisture again for mismatches after rescale_soil_moisture subroutine
+  !---------------------------------------------------------------------------------------------
+   call check_smois_land
  
-!---------------------------------------------------------------------------------------------
-! Replacing values various land surface parameters at points identified as mis-masked in 
-! check_smois_land
-!---------------------------------------------------------------------------------------------
+  !---------------------------------------------------------------------------------------------
+  ! Replacing values various land surface parameters at points identified as mis-masked in 
+  ! check_smois_land
+  !---------------------------------------------------------------------------------------------
 
- call replace_land_sfcparams(localpet)
-
+   call replace_land_sfcparams(localpet)
+ endif
 !---------------------------------------------------------------------------------------------
 ! Compute liquid portion of total soil moisture.
 !---------------------------------------------------------------------------------------------
