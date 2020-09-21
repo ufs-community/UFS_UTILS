@@ -183,7 +183,7 @@
 
  call interp(localpet)
  
- if (vgtyp_from_climo .or. sotyp_from_climo) then
+ if (.not. (vgtyp_from_climo .or. sotyp_from_climo)) then
    !---------------------------------------------------------------------------------------------
    ! Check for points where smois is too high to be a land point at a land point
    !---------------------------------------------------------------------------------------------
@@ -206,7 +206,7 @@
 
  call rescale_soil_moisture
  
- if (vgtyp_from_climo .or. sotyp_from_climo) then
+ if (.not. (vgtyp_from_climo .or. sotyp_from_climo)) then
   !---------------------------------------------------------------------------------------------
   ! Check soil moisture again for mismatches after rescale_soil_moisture subroutine
   !---------------------------------------------------------------------------------------------
@@ -2347,6 +2347,7 @@
      elseif (localpet == 0) then
        print*, "Soil type doesn't exist on input grid. Setting equal to climo."
        data_one_tile = data_one_tile2
+       print*, "min max soil type from input = ", minval(data_one_tile), maxval(data_one_tile)
      endif
    endif
    
@@ -2724,7 +2725,7 @@ use static_data, only                : veg_type_target_grid, veg_greenness_targe
 
  do i =clb(1),cub(1)
    do j = clb(2),cub(2)
-     if (landmask_ptr(i,j)==1 .and. soilm_target_ptr(i,j,1) > 0.75) then
+     if (landmask_ptr(i,j)==1 .and. soilm_target_ptr(i,j,1) > 0.75 .and. nint(veg_type_target_ptr(i,j)) /= veg_type_landice_target) then
        !write(*,'(a,2i5,a,i3,f5.2,2i3)') "CORRECTING G.P.",i,j," FROM LAND TO SEA VALUES; &
        !    curr landmask, soilm, stype, vtype = ",landmask_ptr(i,j),&
        !    soilm_target_ptr(i,j,1),nint(soil_type_target_ptr(i,j)), &
@@ -2891,7 +2892,7 @@ print*,"- CALL FieldGet FOR TARGET GRID FACSF."
 
  do i =clb(1),cub(1)
    do j = clb(2),cub(2)
-     if (landmask_ptr(i,j)==1 .and. soilm_target_ptr(i,j,1) < 0.001) then !.and. &
+     if (landmask_ptr(i,j)==1 .and. soilm_target_ptr(i,j,1) < 0.001 .and. nint(veg_type_target_ptr(i,j)) /= veg_type_landice_target) then !.and. &
          !WRITE(*,'(a,2i5,a,2i3)'), " CORRECTING G.P. ",i,j," PARAMS FROM SEA TO LAND &
          !           VALUES; curr stype,vtype=",  nint(soil_type_target_ptr(i,j)),nint(veg_type_target_ptr(i,j))
          ! Set values to missing so that search function can then replace 
@@ -3371,7 +3372,7 @@ end subroutine replace_land_sfcparams
 !---------------------------------------------------------------------------------------------
 
         if (soilt_target /= soilt_input) then
-
+          print*, "target and input soil types are different; adjusting"
 !---------------------------------------------------------------------------------------------
 ! Rescale top layer.  First, determine direct evaporation part:
 !---------------------------------------------------------------------------------------------
