@@ -189,16 +189,17 @@
    !---------------------------------------------------------------------------------------------
    !  
    !call check_smois_water
-
-   !---------------------------------------------------------------------------------------------
-   ! Adjust soil/landice column temperatures for any change in elevation between
-   ! the
-   ! input and target grids.
-   !---------------------------------------------------------------------------------------------
-
-   call adjust_soilt_for_terrain
- 
  endif
+ 
+ !---------------------------------------------------------------------------------------------
+ ! Adjust soil/landice column temperatures for any change in elevation between
+ ! the
+ ! input and target grids.
+ !---------------------------------------------------------------------------------------------
+
+ call adjust_soilt_for_terrain
+ 
+
 
 !---------------------------------------------------------------------------------------------
 ! Rescale soil moisture for changes in soil type between the input and target grids.
@@ -1039,11 +1040,13 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
+     print*, "stc at 116,132 bf seaice search = ", data_one_tile_3d(116,132,1)
      do j = 1, lsoil_target
        data_one_tile = data_one_tile_3d(:,:,j)
        call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 21)
        data_one_tile_3d(:,:,j) = data_one_tile
      enddo
+     print*, "stc at 116,132 af seaice search = ", data_one_tile_3d(116,132,1)
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SEAICE COLUMN TEMP: ", tile
@@ -2062,11 +2065,13 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
+     print*, "stc at 116,132 bf landice search = ", data_one_tile_3d(116,132,1)
      do j = 1, lsoil_target
        data_one_tile = data_one_tile_3d(:,:,j)
        call search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 21)
        data_one_tile_3d(:,:,j) = data_one_tile
      enddo
+     print*, "stc at 116,132 af landice search = ", data_one_tile_3d(116,132,1)
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SEAICE COLUMN TEMP: ", tile
@@ -2453,11 +2458,13 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
+     print*, "stc at 116,132 bf land search = ", data_one_tile_3d(116,132,1)
      do j = 1, lsoil_target
        data_one_tile = data_one_tile_3d(:,:,j)
        call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 85)
        data_one_tile_3d(:,:,j) = data_one_tile
      enddo
+     print*, "stc at 116,132 af land search = ", data_one_tile_3d(116,132,1)
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SOIL TEMPERATURE, TILE: ", tile
@@ -3372,7 +3379,6 @@ end subroutine replace_land_sfcparams
 !---------------------------------------------------------------------------------------------
 
         if (soilt_target /= soilt_input) then
-          print*, "target and input soil types are different; adjusting"
 !---------------------------------------------------------------------------------------------
 ! Rescale top layer.  First, determine direct evaporation part:
 !---------------------------------------------------------------------------------------------
@@ -3508,6 +3514,7 @@ end subroutine replace_land_sfcparams
  
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
+   if (i .eq. 116 .and. j .eq. 132) print*, "stc at 116,132 bf adjust = ", soil_temp_target_ptr(i,j,1)
    if (landmask_ptr(i,j) == 1) then
      terrain_diff = abs(terrain_input_ptr(i,j) - terrain_target_ptr(i,j))
      if (terrain_diff > 100.0) then
@@ -3520,6 +3527,7 @@ end subroutine replace_land_sfcparams
        enddo
      endif
    endif
+   if (i .eq. 116 .and. j .eq. 132) print*, "stc at 116,132 af adjust = ", soil_temp_target_ptr(i,j,1)
  enddo
  enddo
 
