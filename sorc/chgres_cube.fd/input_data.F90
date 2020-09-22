@@ -549,7 +549,7 @@
     
  
 
- if (vgfrc_from_climo == .false.) then
+ if (.not. vgfrc_from_climo) then
  print*,"- CALL FieldCreate FOR INPUT VEGETATION GREENNESS."
  veg_greenness_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -558,7 +558,7 @@
     call error_handler("IN FieldCreate", rc)
  endif
  
- if (minmax_vgfrc_from_climo == .false.) then
+ if (.not. minmax_vgfrc_from_climo) then
    print*,"- CALL FieldCreate FOR INPUT MIN VEGETATION GREENNESS."
    min_veg_greenness_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -574,7 +574,7 @@
     call error_handler("IN FieldCreate", rc)
  endif
  
- if (lai_from_climo == .false.) then
+ if (.not. lai_from_climo) then
     print*,"- CALL FieldCreate FOR INPUT LEAF AREA INDEX."
    lai_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -4889,8 +4889,8 @@ if (localpet == 0) then
    endif
    
    if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR") .or. (rc < 0 .and. trim(to_upper(external_model)) == "HRRR")) then
-     if (sotyp_from_climo == .false.) then
-       call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET SOTYP_FROM_CLIMO=.TRUE. . EXITING")
+     if (.not. sotyp_from_climo) then
+       call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET SOTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
      else
        vname = "sotyp"
        call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
@@ -5277,7 +5277,7 @@ if (localpet == 0) then
      rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
      if (rc <= 0) then
        if (.not. vgtyp_from_climo) then
-         call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING")
+         call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
        else
 		  do j = 1, j_input
 		    do i = 1, i_input
