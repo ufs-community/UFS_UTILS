@@ -36,10 +36,6 @@
 !                                 target grids.
 ! fix_dir_target_grid             Directory containing target grid
 !                                 pre-computed fixed data (ex: soil type)
-! grib2_file_input_grid           File name of grib2 input data.
-!                                 Assumes atmospheric and surface data
-!                                 are in a single file. 'grib2' input
-!                                 type only.
 ! halo_blend                      Number of row/cols of blending halo,
 !                                 where model tendencies and lateral
 !                                 boundary tendencies are applied.
@@ -56,7 +52,7 @@
 !                                     nemsio files;
 !                                 (4) "gaussian_netcdf" for fv3 gaussian
 !                                     netcdf files.
-!                                 (5) "grib2" for fv3gfs grib2 files.
+!                                 (5) "grib2" for grib2 files.
 !                                 (6) "gfs_gaussian_nemsio" for spectral gfs
 !                                     gaussian nemsio files
 !                                 (7) "gfs_sigio" for spectral gfs
@@ -98,16 +94,66 @@
 !                                 These names will be used to identify
 !                                 the tracer records in the output files.
 !                                 Follows the convention in the field table.
+!                                 FOR GRIB2 FILES: Not used. Tracers instead taken
+!                                 from the varmap file. 
 ! tracers_input                   Name of each atmos tracer record in 
 !                                 the input file.  May be different from
 !                                 value in 'tracers'. 
+!                                 FOR GRIB2 FILES: Not used. Tracers instead taken
+!                                 from the varmap file. 
 ! use_thomp_mp_climo              When true, read and process Thompson
 !                                 MP climatological tracers.  False,
 !                                 when 'thomp_mp_climo_file' is NULL.
 ! vcoord_file_target_grid         Vertical coordinate definition file
 ! wltsmc_input/target             Wilting point soil moisture content
 !                                 input/target grids
-! 
+!
+! Variables that are relevant only for "grib2" input type:
+!
+! grib2_file_input_grid           REQUIRED. File name of grib2 input data.
+!                                 Assumes atmospheric and surface data are in a single 
+!                                 file. 
+!
+! varmap_file                     REQUIRED. Full path of the relevant varmap file. 
+!
+! external_model                  The model that the input data is derived from. Current
+!                                 supported options are: "GFS", "HRRR", "NAM", "RAP". 
+!                                 Default: "GFS"
+!
+! vgtyp_from_climo                If false, interpolate vegetation type from the input 
+!                                 data to the target grid instead of using data from 
+!                                 static data. Use with caution as vegetation categories
+!                                 can vary. 
+!                                 Default: False
+!
+! sotyp_from_climo                If false, interpolate soil type from the input 
+!                                 data to the target grid instead of using data from 
+!                                 static data. Use with caution as the code assumes
+!                                 input soil type use STATSGO soil categories.
+!                                 Default: False
+!
+! vgfrc_from_climo                If false, interpolate vegetation fraction from the input 
+!                                 data to the target grid instead of using data from 
+!                                 static data. Use with caution as vegetation categories
+!                                 can vary. 
+!                                 Default: False
+!
+! minmax_vgfrc_from_climo         If false, interpolate min/max vegetation fraction from 
+!                                 the input data to the target grid instead of using data
+!                                 from static data. Use with caution as vegetation
+!                                 categories can vary. 
+!                                 Default: False
+!
+! lai_from_climo                  If false, interpolate leaf area index from the input 
+!                                 data to the target grid instead of using data from 
+!                                 static data. 
+!                                 Default: False
+!
+! tg3_from_soil                   If false, use lowest level soil temperature for the
+!                                 base soil temperature instead of using data from 
+!                                 static data. 
+!                                 Default: False
+!
 !--------------------------------------------------------------------------
 
  implicit none
