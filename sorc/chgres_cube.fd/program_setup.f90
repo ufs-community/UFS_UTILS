@@ -108,6 +108,11 @@
 ! wltsmc_input/target             Wilting point soil moisture content
 !                                 input/target grids
 !
+! nsoill_out                      Number of soil levels desired in the output data. 
+!                                 chgres_cube can interpolate from 9 input to 4 output
+!                                 levels. 
+!                                 DEFAULT: 4    
+!
 ! Variables that are relevant only for "grib2" input type:
 !
 ! grib2_file_input_grid           REQUIRED. File name of grib2 input data.

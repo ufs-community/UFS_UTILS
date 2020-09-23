@@ -3542,7 +3542,7 @@ end subroutine replace_land_sfcparams
 
 !---------------------------------------------------------------------------------------------
 ! Adjust soil levels of the input grid if there's a mismatch between input and
-! target grids.
+! target grids. Presently can only convert from 9 to 4 levels. 
 !---------------------------------------------------------------------------------------------
  
  subroutine adjust_soil_levels(localpet)
