@@ -212,7 +212,6 @@
                               temp_b4adj_target_grid, &
                               polemethod=ESMF_POLEMETHOD_ALLAVG, &
                               srctermprocessing=isrctermprocessing, &
-                              extrapmethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                               routehandle=regrid_bl, &
                               regridmethod=method, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -382,7 +381,6 @@
                             wind_w_target_grid, &
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
-                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             routehandle=regrid_bl, &
                             regridmethod=method, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -409,7 +407,6 @@
                             wind_s_target_grid, &
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
-                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             routehandle=regrid_bl, &
                             regridmethod=method, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1240,7 +1237,6 @@
                             qnifa_climo_b4adj_target_grid, &
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
-                            extrapmethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             routehandle=regrid_bl, &
                             regridmethod=method, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
