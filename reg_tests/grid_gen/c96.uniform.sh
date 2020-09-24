@@ -8,7 +8,7 @@
 
 set -x
 
-export TMPDIR=${WORK_DIR}/c96.uniform.work
+export TEMP_DIR=${WORK_DIR}/c96.uniform.work
 export out_dir=${WORK_DIR}/c96.uniform
 
 export res=96
