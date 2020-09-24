@@ -54,6 +54,8 @@
                                     longitude_input_grid, &
                                     inv_file
 
+ use surface
+
  implicit none
 
  private
@@ -550,11 +552,11 @@
  
 
  if (.not. vgfrc_from_climo) then
- print*,"- CALL FieldCreate FOR INPUT VEGETATION GREENNESS."
- veg_greenness_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   print*,"- CALL FieldCreate FOR INPUT VEGETATION GREENNESS."
+   veg_greenness_input_grid = ESMF_FieldCreate(input_grid, &
+                     typekind=ESMF_TYPEKIND_R8, &
+                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
  endif
  
@@ -6467,6 +6469,16 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
  call ESMF_FieldDestroy(veg_type_input_grid, rc=rc)
  call ESMF_FieldDestroy(z0_input_grid, rc=rc)
  call ESMF_FieldDestroy(terrain_input_grid, rc=rc)
+ if (.not. vgfrc_from_climo) then
+   call ESMF_FieldDestroy(veg_greenness_input_grid, rc=rc)
+ endif
+ if (.not. minmax_vgfrc_from_climo) then
+   call ESMF_FieldDestroy(min_veg_greenness_input_grid, rc=rc)
+   call ESMF_FieldDestroy(max_veg_greenness_input_grid, rc=rc)
+ endif
+ if (.not. lai_from_climo) then
+   call ESMF_FieldDestroy(lai_input_grid, rc=rc)
+ endif
 
  end subroutine cleanup_input_sfc_data
 

@@ -1815,7 +1815,7 @@
                                    i_target, j_target, lsoil_target
 
  use program_setup, only         : convert_nst, halo=>halo_bndy, &
-                                   regional
+                                   regional, lai_from_climo
 
  use surface, only               : canopy_mc_target_grid,  &
                                    f10m_target_grid, &
@@ -2311,6 +2311,7 @@
      error = nf90_put_att(ncid, id_snoalb, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SNOALB COORD' )
      
+     if (.not. lai_from_climo) then
      error = nf90_def_var(ncid, 'lai', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_lai)
      call netcdf_err(error, 'DEFINING LAI' )
      error = nf90_put_att(ncid, id_lai, "long_name", "lai")
@@ -2319,6 +2320,7 @@
      call netcdf_err(error, 'DEFINING LAI UNITS' )
      error = nf90_put_att(ncid, id_lai, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING LAI COORD' )
+   endif
 
      error = nf90_def_var(ncid, 'stc', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_stc)
      call netcdf_err(error, 'DEFINING STC' )
@@ -2607,17 +2609,19 @@
      call netcdf_err(error, 'WRITING MAX SNOW ALBEDO RECORD' )
    endif
    
-   print*,"- CALL FieldGather FOR TARGET GRID LEAF AREA INDEX FOR TILE: ", tile
-   call ESMF_FieldGather(lai_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   if (.not. lai_from_climo) then
+     print*,"- CALL FieldGather FOR TARGET GRID LEAF AREA INDEX FOR TILE: ", tile
+     call ESMF_FieldGather(lai_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", error)
 
-   if (localpet == 0) then
+     if (localpet == 0) then
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
      error = nf90_put_var( ncid, id_lai, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING LEAF AREA INDEX RECORD' )
+     endif
    endif
-
+   
    print*,"- CALL FieldGather FOR TARGET GRID SOIL TYPE FOR TILE: ", tile
    call ESMF_FieldGather(soil_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
