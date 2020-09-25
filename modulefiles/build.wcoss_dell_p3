@@ -28,7 +28,7 @@ module load netcdf_parallel/4.7.4
 module use /gpfs/dell2/emc/modeling/noscrub/emc.nemspara/soft/modulefiles
 module load esmf/8.0.0_ParallelNetCDF
 
-export WGRIB2_ROOT=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/wgrib2
+export wgrib2_ROOT=/gpfs/dell1/nco/ops/nwtest/lib/wgrib2/v2.0.9/NCEPLIBS-wgrib2/build/install
 
 module use /usrx/local/dev/modulefiles
 module load prod_util/1.1.3
