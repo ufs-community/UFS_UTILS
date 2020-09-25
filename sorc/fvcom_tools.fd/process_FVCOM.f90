@@ -13,7 +13,7 @@
 !
 ! To run the script, use the following example, modifying file
 ! names as needed:
-!   ./fvcom_to_FV3.exe sfc_data.tile7.halo0.nc fvcom.nc
+!   ./fvcom_to_FV3 sfc_data.tile7.halo0.nc fvcom.nc
 !
 ! Code is strongly based upon Eric James' (ESRL/GSL) work 
 !  to update HRRR/WRF Great Lakes' temperature data with FVCOM.

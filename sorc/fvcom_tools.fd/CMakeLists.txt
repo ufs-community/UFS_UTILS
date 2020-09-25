@@ -12,7 +12,7 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8 -fconvert=big-endian")
 endif()
 
-set(exe_name fvcom_to_FV3.exe)
+set(exe_name fvcom_to_FV3)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
