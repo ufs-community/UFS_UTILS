@@ -609,11 +609,14 @@
 
  implicit none
 
+ include "mpif.h"
+
  integer, intent(in)              :: localpet, npets
 
  character(len=250)               :: the_file
 
  integer                          :: i, j, rc, clb(2), cub(2)
+ integer                          :: ierr
 
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
@@ -631,10 +634,14 @@
  num_tiles_input_grid = 1
 
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
- print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
- rc=grb2_mk_inv(the_file,inv_file)
- if (rc /=0) call error_handler("OPENING GRIB2 FILE",rc)
+ if(localpet==0) then
+    print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
+    rc=grb2_mk_inv(the_file,inv_file)
+    if (rc /=0) call error_handler("OPENING GRIB2 FILE",rc)
+ endif
 
+ ! Wait for localpet 0 to create inventory
+ call mpi_barrier(mpi_comm_world, ierr)
  rc = grb2_inq(the_file,inv_file,':PRES:',':surface:',nx=i_input, ny=j_input, &
     lat=lat4, lon=lon4)
  if (rc /= 1) call error_handler("READING GRIB2 FILE", rc)
