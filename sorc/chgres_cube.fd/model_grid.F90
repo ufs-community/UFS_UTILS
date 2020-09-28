@@ -883,7 +883,7 @@
      error=nf90_get_var(ncid, id_var, longitude_one_tile)
      call netcdf_err(error, 'reading field' )
      
-     if (localpet == 0) the
+     if (localpet == 0) then
        print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
        error=grb2_mk_inv(the_file,inv_file)
        if (error /=0) call error_handler("OPENING GRIB2 FILE",error)
