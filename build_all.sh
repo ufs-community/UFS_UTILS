@@ -27,7 +27,7 @@ cd ./build
 
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON"
 
-if [[ "$target" != "wcoss_cray" ]]; then
+if [[ "$target" != "wcoss_cray" && "$target" != "odin" ]]; then
   CMAKE_FLAGS+=" -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc"
 fi
 
