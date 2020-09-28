@@ -54,8 +54,6 @@
                                     longitude_input_grid, &
                                     inv_file
 
- use surface
-
  implicit none
 
  private
