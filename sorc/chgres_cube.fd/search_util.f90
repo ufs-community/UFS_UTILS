@@ -34,11 +34,10 @@
 ! future upgrade.
 !-----------------------------------------------------------------------
 
+ use mpi
  use esmf
 
  implicit none
-
- include 'mpif.h'
 
  integer, intent(in)               :: idim, jdim, tile, field_num
  integer(esmf_kind_i8), intent(in) :: mask(idim,jdim)

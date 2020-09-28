@@ -28,11 +28,10 @@
 !     field               field after missing values are replaced
 !-----------------------------------------------------------------------
 
+ use mpi
  use esmf
 
  implicit none
-
- include 'mpif.h'
 
  character(len=*)                  :: field_name
 
