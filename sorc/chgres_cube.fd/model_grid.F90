@@ -883,18 +883,21 @@
      error=nf90_get_var(ncid, id_var, longitude_one_tile)
      call netcdf_err(error, 'reading field' )
      
-     print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
-    error=grb2_mk_inv(the_file,inv_file)
-    if (error /=0) call error_handler("OPENING GRIB2 FILE",error)
+     if (localpet == 0) the
+       print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
+       error=grb2_mk_inv(the_file,inv_file)
+       if (error /=0) call error_handler("OPENING GRIB2 FILE",error)
+     endif
 
  elseif (temp_num == "3.0" .or. temp_num == "3.30") then
 
     if (temp_num =="3.0") input_grid_type = "latlon"
     if (temp_num =="3.30" .or. temp_num=='30') input_grid_type = "lambert"
 
-    print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
+   
 
-    if (localpet == 0) then
+    if (localpet == 0) then 
+      print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
       error=grb2_mk_inv(the_file,inv_file)
       if (error /=0) call error_handler("OPENING GRIB2 FILE",error)
      endif
