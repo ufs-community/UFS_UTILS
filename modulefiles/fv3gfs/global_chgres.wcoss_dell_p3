@@ -15,9 +15,7 @@ module load gfsio/1.1.0
 module load landsfcutil/2.1.0
 module load bacio/2.0.2
 module load  sigio/2.1.0 
-
-module use /usrx/local/nceplibs/dev/NCEPLIBS/modulefiles
-module load netcdf_parallel/4.7.4
+module load NetCDF-parallel/4.7.4
 
 #
 export FCMP=ifort
