@@ -382,6 +382,7 @@
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
                             routehandle=regrid_bl, &
+                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             regridmethod=method, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
@@ -408,6 +409,7 @@
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
                             routehandle=regrid_bl, &
+                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             regridmethod=method, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
