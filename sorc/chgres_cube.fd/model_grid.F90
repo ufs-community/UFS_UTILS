@@ -127,7 +127,7 @@
  elseif (trim(external_model) == "GFS" .and. trim(input_type) == "grib2") then
    call define_input_grid_gfs_grib2(localpet,npets)
  elseif (trim(input_type) == "grib2") then
-   call define_input_grid_grib2(localpet,npets)
+   call define_input_grid_gfs_grib2(localpet,npets)
  else
    call define_input_grid_mosaic(localpet, npets)
  endif
@@ -608,14 +608,14 @@
  
  subroutine define_input_grid_gfs_grib2(localpet, npets)
 
+ use mpi
+
  use wgrib2api
 
  use program_setup, only       : data_dir_input_grid, &
                                  grib2_file_input_grid
 
  implicit none
-
- include "mpif.h"
 
  integer, intent(in)              :: localpet, npets
 

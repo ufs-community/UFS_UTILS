@@ -9,6 +9,7 @@
 
  subroutine netcdf_err( err, string )
 
+ use mpi
  use netcdf
 
  implicit none
@@ -16,8 +17,6 @@
  character(len=*), intent(in) :: string
  character(len=256) :: errmsg
  integer :: ierr
-
- include "mpif.h"
 
  if( err.EQ.NF90_NOERR )return
  errmsg = NF90_STRERROR(err)
@@ -31,6 +30,8 @@
 
  subroutine error_handler(string, rc)
 
+ use mpi
+
  implicit none
 
  character(len=*), intent(in)    :: string
@@ -38,8 +39,6 @@
  integer, optional, intent(in)   :: rc
 
  integer :: ierr
-
- include "mpif.h"
 
  print*,"- FATAL ERROR: ", string
  if (present(rc)) print*,"- IOSTAT IS: ", rc
