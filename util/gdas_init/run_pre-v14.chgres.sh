@@ -27,14 +27,14 @@ if [ ${MEMBER} == 'hires' ]; then
   CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
-  OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}
+  OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos
   ATMFILE="gdas1.t${hh}z.sanl"
   SFCFILE="gdas1.t${hh}z.sfcanl"
 else  
   CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
-  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}
+  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}
   ATMFILE="siganl_${yy}${mm}${dd}${hh}_mem${MEMBER}"
   SFCFILE="sfcanl_${yy}${mm}${dd}${hh}_mem${MEMBER}"
 fi

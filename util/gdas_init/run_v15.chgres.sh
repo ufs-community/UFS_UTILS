@@ -27,13 +27,13 @@ if [ ${MEMBER} == 'hires' ]; then
   CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
-  OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}
+  OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos
 else  
   CINP=C384
   CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/mem${MEMBER}/RESTART"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
-  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}
+  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}
 fi
 
 rm -fr $WORKDIR
