@@ -5,7 +5,7 @@ target=${target:-"NULL"}
 
 export MOD_PATH
 
-if [[ "$target" == "linux" || "$target" == "macosx" ]]; then
+if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
  unset -f module
  set +x
  source ./modulefiles/build.$target > /dev/null 2>&1 
