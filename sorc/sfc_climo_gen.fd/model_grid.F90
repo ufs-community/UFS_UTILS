@@ -85,10 +85,9 @@
  use netcdf
  use program_setup 
  use utils
+ use mpi
 
  implicit none
-
- include 'mpif.h'
 
  integer, intent(in)              :: localpet, npets
 
