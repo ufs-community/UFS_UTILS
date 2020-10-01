@@ -127,7 +127,7 @@
  elseif (trim(external_model) == "GFS" .and. trim(input_type) == "grib2") then
    call define_input_grid_gfs_grib2(localpet,npets)
  elseif (trim(input_type) == "grib2") then
-   call define_input_grid_gfs_grib2(localpet,npets)
+   call define_input_grid_grib2(localpet,npets)
  else
    call define_input_grid_mosaic(localpet, npets)
  endif
