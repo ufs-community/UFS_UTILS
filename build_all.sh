@@ -8,13 +8,13 @@ export MOD_PATH
 if [[ "$target" == "linux" || "$target" == "macosx" ]]; then
  unset -f module
  set +x
- source ./modulefiles/build.$target
+ source ./modulefiles/build.$target > /dev/null 2>&1 
  set -x
 else
  set +x
  source ./sorc/machine-setup.sh
  module use ./modulefiles
- module load build.$target
+ module load build.$target > /dev/null 2>&1
  module list
  set -x
 fi
