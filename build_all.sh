@@ -3,20 +3,21 @@ set -eux
 
 target=${target:-"NULL"}
 
-if [[ "$target" == "linux.gnu" || "$target" == "linux.intel" ]]; then
+export MOD_PATH
+
+if [[ "$target" == "linux" || "$target" == "macosx" ]]; then
  unset -f module
+ set +x
+ source ./modulefiles/build.$target
+ set -x
 else
  set +x
- source ./sorc/machine-setup.sh > /dev/null 2>&1
+ source ./sorc/machine-setup.sh
+ module use ./modulefiles
+ module load build.$target
+ module list
  set -x
 fi
-
-export MOD_PATH
-set +x
-module use ./modulefiles
-module load build.$target > /dev/null 2>&1
-module list
-set -x
 
 # --- Build all programs.
 #
