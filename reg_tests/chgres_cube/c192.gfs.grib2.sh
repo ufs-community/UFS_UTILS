@@ -54,6 +54,10 @@ machine=${machine:-NULL}
 if [ $machine == 'orion' ]; then
   module unload netcdfp/4.7.4.release
   module load netcdf/4.7.2
+elif [ $machine == 'dell' ]; then
+  module unload NetCDF-parallel/4.7.4
+  module use /usrx/local/nceplibs/dev/NCEPLIBS/modulefiles
+  module load netcdf_parallel/4.7.4
 fi
 
 cd $DATA

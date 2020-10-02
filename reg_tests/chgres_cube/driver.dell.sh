@@ -28,6 +28,7 @@ source ../../modulefiles/build.$target
 export OUTDIR=/gpfs/dell1/stmp/$LOGNAME/chgres_reg_tests
 QUEUE="debug"
 PROJECT_CODE="GFS-DEV"
+export machine=dell
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
