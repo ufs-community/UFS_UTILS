@@ -25,7 +25,7 @@ export Jasper_ROOT="/usrx/local/prod/packages/gnu/4.8.5/jasper/1.900.29"
 module load NetCDF-parallel/4.7.4
 module load ESMF/8.0.0
 
-export WGRIB2_ROOT=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/wgrib2
+export wgrib2_ROOT=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/wgrib2.git/NCEPLIBS-wgrib2/build/install
 
 module use /usrx/local/dev/modulefiles
 module load prod_util/1.1.3

@@ -51,7 +51,7 @@ find_package(Jasper REQUIRED)
 find_package(NetCDF REQUIRED C Fortran)
 find_package(MPI REQUIRED )
 find_package(ESMF MODULE REQUIRED)
-find_package(WGRIB2 REQUIRED)
+find_package(wgrib2 REQUIRED)
 
 option(OPENMP "use OpenMP threading" ON)
 if(OPENMP)
