@@ -37,4 +37,4 @@ export NETCDF=/opt/cray/netcdf/4.3.3.1/INTEL/14.0
 module rm gcc
 module load gcc/6.3.0
 
-export WGRIB2_ROOT=/gpfs/hps3/emc/global/noscrub/George.Gayno/wgrib2
+export wgrib2_ROOT=/gpfs/hps3/emc/global/noscrub/George.Gayno/wgrib2.git/NCEPLIBS-wgrib2/build/install
