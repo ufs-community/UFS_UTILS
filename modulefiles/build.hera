@@ -25,4 +25,4 @@ module load g2/2.5.0
 module load netcdf_parallel/4.7.4
 module load esmf/8.0.0_ParallelNetCDF
 
-export WGRIB2_ROOT="/scratch1/NCEPDEV/da/George.Gayno/noscrub/wgrib2"
+export wgrib2_ROOT="/scratch1/NCEPDEV/da/George.Gayno/wgrib2.git/NCEPLIBS-wgrib2/build/install"
