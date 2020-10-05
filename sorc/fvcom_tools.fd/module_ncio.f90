@@ -2339,6 +2339,9 @@ subroutine add_new_var_3d(this,varname,dname1,dname2,dname3,lname,units)
                                  ,lname,units
   integer :: status, ncid, dim1id, dim2id, dim3id, varid
 
+  status = nf90_redef(this%ncid) !Enter Define Mode
+  if (status /= nf90_noerr) call this%handle_err(status)
+
   status = nf90_inq_dimid(this%ncid, dname1, dim1id)
   if (status /= nf90_noerr) call this%handle_err(status)
   status = nf90_inq_dimid(this%ncid, dname2, dim2id)
@@ -2353,6 +2356,10 @@ subroutine add_new_var_3d(this,varname,dname1,dname2,dname3,lname,units)
   status = nf90_put_att(this%ncid, varid, 'long_name', lname)
   if (status /= nf90_noerr) call this%handle_err(status)
   status = nf90_put_att(this%ncid, varid, 'units', units)
+  if (status /= nf90_noerr) call this%handle_err(status)
+
+  status = nf90_enddef(this%ncid) !Exit Define Mode and
+                                  ! return to Data Mode
   if (status /= nf90_noerr) call this%handle_err(status)
 
 end subroutine add_new_var_3d
