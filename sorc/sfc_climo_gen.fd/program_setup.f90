@@ -102,9 +102,9 @@
 !     localpet               mpi task number
 !-----------------------------------------------------------------------
 
- implicit none
+ use mpi
 
- include 'mpif.h'
+ implicit none
 
  integer, intent(in)   :: localpet
 

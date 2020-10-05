@@ -23,10 +23,9 @@
  use model_grid
  use source_grid
  use utils
+ use mpi
 
  implicit none
-
- include 'mpif.h'
 
  character(len=*), intent(in)       :: input_file
 
@@ -294,10 +293,9 @@
 !-----------------------------------------------------------------------
 
  use esmf
+ use mpi
 
  implicit none
-
- include 'mpif.h'
 
  character(len=*), intent(in)      :: field_ch
 
