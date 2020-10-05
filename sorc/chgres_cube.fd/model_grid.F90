@@ -65,8 +65,9 @@
  character(len=5), allocatable, public  :: tiles_target_grid(:)
  character(len=10), public              :: inv_file = "chgres.inv"
  character(len=50), public              :: input_grid_type = "latlon"
+ !character(len=100), public             :: the_file_hrrr = "./HRRR_adj_rad.grib2"
 
-  ! Made lsoil_target non-parameter to allow for RAP land surface initiation
+ ! Made lsoil_target non-parameter to allow for RAP land surface initiation
  integer, public                        :: lsoil_target = 4 ! # soil layers
  
  integer, public                        :: i_input, j_input
@@ -801,7 +802,7 @@
  use netcdf
  use wgrib2api
  use program_setup, only       : grib2_file_input_grid, data_dir_input_grid, &
-                                  fix_dir_input_grid
+                                  fix_dir_input_grid, external_model
  implicit none
 
  include 'mpif.h'
@@ -834,26 +835,23 @@
  call ESMF_FieldGather(longitude_target_grid, lon_target, rootPet=0, tile=1, rc=error)
  if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", error)
-
-
-  ! Check for the grid template number to see if wgrib2 can access the lat/lon arrays
-  if (localpet==0) then
-    cmdline_msg = "wgrib2 "//trim(the_file)//" -d 1 -Sec3 &> temp.out"
-    call system(cmdline_msg)
+  
+  if (localpet==0) then   
+    print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
+    error=grb2_mk_inv(the_file,inv_file)
+    if (error /=0) call error_handler("OPENING GRIB2 FILE",error)
+    error = grb2_inq(the_file, inv_file,grid_desc=temp_msg)
+    i = index(temp_msg, "grid_template=") + len("grid_template=")
+    j = index(temp_msg,":winds(")
+    temp_num=temp_msg(i:j-1)
   endif
   call MPI_BARRIER(MPI_COMM_WORLD, error)
-  open(4,file="temp.out")
-  read(4,"(A)") temp_msg
-  close(4)
-  i = index(temp_msg, "Template=") + len("Template=")
+  call MPI_BCAST(temp_num,10,MPI_CHAR,0,MPI_COMM_WORLD,error)
   
-  j = index(temp_msg," opt arg")
-  temp_num=temp_msg(i:j-1)
-
   ! Wgrib2 can't properly read the lat/lon arrays of data on NCEP rotated lat/lon
   ! grids, so read in lat/lon from fixed coordinate file
   print*, 'temp num =', temp_num
-  if (trim(temp_num)=="3.32769") then
+  if (trim(temp_num)=="3.32769" .or. trim(temp_num)=="32769") then
 
      input_grid_type = "rotated_latlon"
 
@@ -882,26 +880,12 @@
      call netcdf_err(error, 'reading field id' )
      error=nf90_get_var(ncid, id_var, longitude_one_tile)
      call netcdf_err(error, 'reading field' )
-     
-     if (localpet == 0) then
-       print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
-       error=grb2_mk_inv(the_file,inv_file)
-       if (error /=0) call error_handler("OPENING GRIB2 FILE",error)
-     endif
 
- elseif (temp_num == "3.0" .or. temp_num == "3.30") then
+ elseif (temp_num == "3.0" .or. temp_num == "3.30" .or. temp_num=="30" .or. temp_num == "0") then
 
-    if (temp_num =="3.0") input_grid_type = "latlon"
+    if (temp_num =="3.0" .or. temp_num == "0") input_grid_type = "latlon"
     if (temp_num =="3.30" .or. temp_num=='30') input_grid_type = "lambert"
 
-   
-
-    if (localpet == 0) then 
-      print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
-      error=grb2_mk_inv(the_file,inv_file)
-      if (error /=0) call error_handler("OPENING GRIB2 FILE",error)
-     endif
-     call MPI_BARRIER(MPI_COMM_WORLD, error)
      error = grb2_inq(the_file,inv_file,':PRES:',':surface:',nx=i_input, ny=j_input, &
                 lat=latitude_one_tile, lon=longitude_one_tile)
      if (error /= 1) call error_handler("READING FILE", error)
@@ -911,12 +895,12 @@
    if (localpet==0) print*, "from file lat(1,1:10) = ", latitude_one_tile(1,1:10)
  elseif (temp_num=="NA") then
    error = 0
-   call error_handler("Grid template number cannot be read from the input file. Please &
-    check that the wgrib2 executable is in your path.", error)
+   call error_handler("Grid template number cannot be read from the input file. Please " //&
+    "check that the wgrib2 executable is in your path.", error)
  else
    error = 0
-   call error_handler("Unknown input file grid template number. Must be one of: & 
-     3, 3.30, 3.32769", error)
+   call error_handler("Unknown input file grid template number. Must be one of: " //& 
+     "3, 3.30, 3.32769", error)
  endif
 
  print*,"- I/J DIMENSIONS OF THE INPUT GRID TILES ", i_input, j_input

@@ -52,7 +52,7 @@
                                     num_tiles_input_grid, &
                                     latitude_input_grid, &
                                     longitude_input_grid, &
-                                    inv_file
+                                    inv_file!, the_file_hrrr
 
  implicit none
 
@@ -2554,7 +2554,7 @@
 
    read(metadata(j:k),*) rlevs(i)
 
-   slevs(i) = metadata(j-1:k)	
+   slevs(i) = metadata(j-1:k) 
    if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
    if (localpet==0) print*, "- LEVEL = ", slevs(i)
  enddo
@@ -2564,25 +2564,25 @@
  call quicksort(rlevs,1,lev_input)
 
  if (.not. isnative) then
-	 do i = 1,lev_input
-	   write(slevs(i),"(F20.10)") rlevs(i)/100.0
-	   len_str = len_trim(slevs(i))
+   do i = 1,lev_input
+     write(slevs(i),"(F20.10)") rlevs(i)/100.0
+     len_str = len_trim(slevs(i))
 
-	   do while (slevs(i)(len_str:len_str) .eq. '0')
-			slevs(i) = slevs(i)(:len_str-1)
-			len_str = len_str - 1
-	   end do
+     do while (slevs(i)(len_str:len_str) .eq. '0')
+      slevs(i) = slevs(i)(:len_str-1)
+      len_str = len_str - 1
+     end do
 
-	   if (slevs(i)(len_str:len_str) .eq. '.') then
-		 slevs(i) = slevs(i)(:len_str-1)
-		 len_str = len_str - 1
-	   end if
+     if (slevs(i)(len_str:len_str) .eq. '.') then
+     slevs(i) = slevs(i)(:len_str-1)
+     len_str = len_str - 1
+     end if
 
-	   slevs(i) = trim(slevs(i))
+     slevs(i) = trim(slevs(i))
 
-	   slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
-	   if (localpet==0) print*, "- LEVEL AFTER SORT = ",slevs(i)
-	 enddo
+     slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
+     if (localpet==0) print*, "- LEVEL AFTER SORT = ",slevs(i)
+   enddo
  endif
  
  if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
@@ -2824,108 +2824,108 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet)
  deallocate(dummy2d, dummy2d_8)
  
 if (.not. isnative) then
-	!---------------------------------------------------------------------------
-	! Flip 'z' indices to all 3-d variables.  Data is read in from model
-	! top to surface.  This program expects surface to model top.
-	!---------------------------------------------------------------------------
-	
-	 if (localpet == 0) print*,"- CALL FieldGet FOR SURFACE PRESSURE."
-	 nullify(psptr)
-	 call ESMF_FieldGet(ps_input_grid, &
-						  farrayPtr=psptr, rc=rc)
-	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-		  call error_handler("IN FieldGet", rc)
-	  
-	 nullify(presptr)
-	 if (localpet == 0) print*,"- CALL FieldGet FOR 3-D PRESSURE."
-	 call ESMF_FieldGet(pres_input_grid, &
-						computationalLBound=clb, &
-						computationalUBound=cub, &
-						farrayPtr=presptr, rc=rc)
-	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-		call error_handler("IN FieldGet", rc)
+  !---------------------------------------------------------------------------
+  ! Flip 'z' indices to all 3-d variables.  Data is read in from model
+  ! top to surface.  This program expects surface to model top.
+  !---------------------------------------------------------------------------
+  
+   if (localpet == 0) print*,"- CALL FieldGet FOR SURFACE PRESSURE."
+   nullify(psptr)
+   call ESMF_FieldGet(ps_input_grid, &
+              farrayPtr=psptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGet", rc)
+    
+   nullify(presptr)
+   if (localpet == 0) print*,"- CALL FieldGet FOR 3-D PRESSURE."
+   call ESMF_FieldGet(pres_input_grid, &
+            computationalLBound=clb, &
+            computationalUBound=cub, &
+            farrayPtr=presptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
 
-	 nullify(tptr)
-	 if (localpet == 0) print*,"- CALL FieldGet TEMPERATURE."  
-	 call ESMF_FieldGet(temp_input_grid, &
-						farrayPtr=tptr, rc=rc)
-	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-		call error_handler("IN FieldGet", rc) 
+   nullify(tptr)
+   if (localpet == 0) print*,"- CALL FieldGet TEMPERATURE."  
+   call ESMF_FieldGet(temp_input_grid, &
+            farrayPtr=tptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc) 
   
-	 nullify(uptr)
-	 if (localpet == 0) print*,"- CALL FieldGet FOR U"
-	 call ESMF_FieldGet(u_input_grid, &
-						farrayPtr=uptr, rc=rc)
-	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-		call error_handler("IN FieldGet", rc)
-	
-	 nullify(vptr)
-	 if (localpet == 0) print*,"- CALL FieldGet FOR V"
-	 call ESMF_FieldGet(v_input_grid, &
-						farrayPtr=vptr, rc=rc)
-	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-		call error_handler("IN FieldGet", rc)
+   nullify(uptr)
+   if (localpet == 0) print*,"- CALL FieldGet FOR U"
+   call ESMF_FieldGet(u_input_grid, &
+            farrayPtr=uptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
   
-	 nullify(wptr)
-	 if (localpet == 0) print*,"- CALL FieldGet FOR W"
-	 call ESMF_FieldGet(dzdt_input_grid, &
-						farrayPtr=wptr, rc=rc)
-	 if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-		call error_handler("IN FieldGet", rc)
+   nullify(vptr)
+   if (localpet == 0) print*,"- CALL FieldGet FOR V"
+   call ESMF_FieldGet(v_input_grid, &
+            farrayPtr=vptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+  
+   nullify(wptr)
+   if (localpet == 0) print*,"- CALL FieldGet FOR W"
+   call ESMF_FieldGet(dzdt_input_grid, &
+            farrayPtr=wptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
  
-	  if (localpet == 0) print*,"- CALL FieldGet FOR TRACERS."
-	  do n=1,num_tracers
-		nullify(qptr)
-		call ESMF_FieldGet(tracers_input_grid(n), &
-						farrayPtr=qptr, rc=rc)
-		if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-		  call error_handler("IN FieldGet", rc)
-		do i = clb(1),cub(1)
-		  do j = clb(2),cub(2)
-			qptr(i,j,:) = qptr(i,j,lev_input:1:-1)
-		  end do
-		end do
-	  end do
+    if (localpet == 0) print*,"- CALL FieldGet FOR TRACERS."
+    do n=1,num_tracers
+    nullify(qptr)
+    call ESMF_FieldGet(tracers_input_grid(n), &
+            farrayPtr=qptr, rc=rc)
+    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGet", rc)
+    do i = clb(1),cub(1)
+      do j = clb(2),cub(2)
+      qptr(i,j,:) = qptr(i,j,lev_input:1:-1)
+      end do
+    end do
+    end do
 
-	  do i = clb(1),cub(1)
-		do j = clb(2),cub(2)
-		  presptr(i,j,:) = rlevs(lev_input:1:-1)
-		  tptr(i,j,:) = tptr(i,j,lev_input:1:-1)
-		  uptr(i,j,:) = uptr(i,j,lev_input:1:-1)
-		  vptr(i,j,:) = vptr(i,j,lev_input:1:-1)
-		  wptr(i,j,:) = wptr(i,j,lev_input:1:-1)
-		end do
-	  end do
+    do i = clb(1),cub(1)
+    do j = clb(2),cub(2)
+      presptr(i,j,:) = rlevs(lev_input:1:-1)
+      tptr(i,j,:) = tptr(i,j,lev_input:1:-1)
+      uptr(i,j,:) = uptr(i,j,lev_input:1:-1)
+      vptr(i,j,:) = vptr(i,j,lev_input:1:-1)
+      wptr(i,j,:) = wptr(i,j,lev_input:1:-1)
+    end do
+    end do
 
-	 if (localpet == 0) then
-	   print*,'psfc is ',clb(1),clb(2),psptr(clb(1),clb(2))
-	   print*,'pres is ',cub(1),cub(2),presptr(cub(1),cub(2),:) 
-	 
-	   print*,'pres check 1',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2),1)), &
-				  minval(presptr(clb(1):cub(1),clb(2):cub(2),1))
-	   print*,'pres check lev',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2), &
-				lev_input)),minval(presptr(clb(1):cub(1),clb(2):cub(2),lev_input))
-	 endif
+   if (localpet == 0) then
+     print*,'psfc is ',clb(1),clb(2),psptr(clb(1),clb(2))
+     print*,'pres is ',cub(1),cub(2),presptr(cub(1),cub(2),:) 
+   
+     print*,'pres check 1',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2),1)), &
+          minval(presptr(clb(1):cub(1),clb(2):cub(2),1))
+     print*,'pres check lev',localpet,maxval(presptr(clb(1):cub(1),clb(2):cub(2), &
+        lev_input)),minval(presptr(clb(1):cub(1),clb(2):cub(2),lev_input))
+   endif
  
 else
    ! For native files, read in pressure field directly from file but don't flip levels
    if (localpet == 0) then
-		print*,"- READ PRESSURE."
-		vname = ":PRES:"
-		do vlev = 1, lev_input
-			iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
-			if (iret<=0) then
-				call error_handler("READING IN PRESSURE AT LEVEL "//trim(slevs(vlev)),iret)
-			endif
-			dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-			print*,'pres check after read ',vlev, dummy3d(1,1,vlev)
-		enddo
-	endif
+    print*,"- READ PRESSURE."
+    vname = ":PRES:"
+    do vlev = 1, lev_input
+      iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
+      if (iret<=0) then
+        call error_handler("READING IN PRESSURE AT LEVEL "//trim(slevs(vlev)),iret)
+      endif
+      dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
+      print*,'pres check after read ',vlev, dummy3d(1,1,vlev)
+    enddo
+  endif
 
-	if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT GRID PRESSURE."
-	call ESMF_FieldScatter(pres_input_grid, dummy3d, rootpet=0, rc=rc)
-	if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-			call error_handler("IN FieldScatter", rc)
+  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT GRID PRESSURE."
+  call ESMF_FieldScatter(pres_input_grid, dummy3d, rootpet=0, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", rc)
  endif
  deallocate(dummy3d) 
  
@@ -4588,6 +4588,8 @@ else
    use wgrib2api
    use grib2_util, only    : to_upper
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
+   use search_util
+
 
    implicit none
 
@@ -4608,13 +4610,17 @@ else
    real(esmf_kind_r4)                    :: value
 
    real(esmf_kind_r4), allocatable       :: dummy2d(:,:),tsk_save(:,:),icec_save(:,:)
+   real(esmf_kind_r4), allocatable       :: dummy1d(:)
    real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:),dummy2d_82(:,:)
-   real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:)
+   real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy3d_stype(:,:,:)
    integer(esmf_kind_i4), allocatable    :: slmsk_save(:,:)
+   integer(esmf_kind_i8), allocatable    :: dummy2d_i(:,:)
    
+    
 
    the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
    geo_file = trim(geogrid_file_input_grid)
+   
    
    print*,"- READ SFC DATA FROM GRIB2 FILE: ", trim(the_file)
    inquire(file=the_file,exist=exist)
@@ -4666,11 +4672,14 @@ else
  if (localpet == 0) then
    allocate(dummy2d(i_input,j_input))
    allocate(slmsk_save(i_input,j_input))
+   allocate(dummy2d_i(i_input,j_input))
    allocate(tsk_save(i_input,j_input))
    allocate(icec_save(i_input,j_input))
    allocate(dummy2d_8(i_input,j_input))
    allocate(dummy2d_82(i_input,j_input))
    allocate(dummy3d(i_input,j_input,lsoil_input))
+   allocate(dummy3d_stype(i_input,j_input,16))
+   allocate(dummy1d(16))
  else
    allocate(dummy3d(0,0,0))
    allocate(dummy2d_8(0,0))
@@ -4883,9 +4892,34 @@ if (localpet == 0) then
          if (rc<0) print*, "ERROR READING SCT_DOM FROM FILE"
          print*, "min max dummy2d = ", minval(dummy2d), maxval(dummy2d)
        endif
+       print*, "INQUIRE ABOUT SOIL TYPE FRACTIONS FROM GEOGRID FILE"
+       rc = nf90_inq_varid(ncid2d,"SOILCTOP",varid)
+       ! failed => rc < 0
+       if (rc<0) print*, "ERROR FINDING SOILCTOP IN GEOGRID FILE"
+       if (rc == 0) then
+         print*, "READ SOIL TYPE FRACTIONS FROM GEOGRID FILE "
+         rc = nf90_get_var(ncid2d,varid,dummy3d_stype)
+         ! failed => rc < 0
+         if (rc<0) print*, "ERROR READING SCT_DOM FROM FILE"
+         print*, "min max dummy3d_stype = ", minval(dummy3d_stype), maxval(dummy3d_stype)
+       endif
+
        print*, "CLOSE GEOGRID FILE "
        iret = nf90_close(ncid2d)
      endif
+     
+     ! There's an issue with the geogrid file containing soil type water at land points. 
+     ! This correction replaces the soil type at these points with the soil type with
+     ! the next highest fractional coverage.
+     do j = 1, j_input
+       do i = 1, i_input
+         if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
+           dummy1d(:) = dummy3d_stype(i,j,:)
+           dummy1d(14) = 0.0_esmf_kind_r4
+           dummy2d(i,j) = real(MAXLOC(dummy1d, 1),esmf_kind_r4)
+         endif
+       enddo
+     enddo
    endif
    
    if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR") .or. (rc < 0 .and. trim(to_upper(external_model)) == "HRRR")) then
@@ -4899,14 +4933,33 @@ if (localpet == 0) then
        if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
           print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL NOT "//&
                      "SCALE SOIL MOISTURE FOR DIFFERENCES IN SOIL TYPE. "
-          dummy2d(:,:) = -99999.0_esmf_kind_r8
+          dummy2d(:,:) = -99999.0_esmf_kind_r4
        endif
      endif
    endif
    
-   dummy2d_8 = real(dummy2d,esmf_kind_r8)
+   ! In the event that the soil type on the input grid still contains mismatches between 
+   ! soil type and landmask, this correction is a last-ditch effort to replace these points
+   ! with soil type from a nearby land point.
+   if (.not. sotyp_from_climo) then
+     do j = 1, j_input
+     do i = 1, i_input
+       if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9   
+     enddo
+     enddo
+   
+     dummy2d_8 = real(dummy2d,esmf_kind_r8)
+     dummy2d_i(:,:) = 0
+     where(slmsk_save == 1) dummy2d_i = 1
+   
+     call search(dummy2d_8,dummy2d_i,i_input,j_input,1,230)
+   endif
+   
    print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
+   deallocate(dummy2d_i)
+   deallocate(dummy3d_stype)
  endif
+  
 
  print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
  call ESMF_FieldScatter(soil_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
@@ -5279,33 +5332,33 @@ if (localpet == 0) then
        if (.not. vgtyp_from_climo) then
          call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
        else
-		  do j = 1, j_input
-		    do i = 1, i_input
-		      dummy2d(i,j) = 0.0_esmf_kind_r4
-		      if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
-			  	dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
-			enddo
-		  enddo    
+      do j = 1, j_input
+        do i = 1, i_input
+          dummy2d(i,j) = 0.0_esmf_kind_r4
+          if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
+          dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
+      enddo
+      enddo    
        endif ! replace_vgtyp
      endif !not find :anl:
    endif !not find hour fcst:
    
    if (trim(external_model) .ne. "GFS") then
-	 do j = 1, j_input
-	   do i = 1,i_input
-		 if (dummy2d(i,j) == 15.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
-		   if (dummy3d(i,j,1) < 0.6) then 
-			 dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
-		   elseif (dummy3d(i,j,1) > 0.99) then
-		      slmsk_save(i,j) = 0
-			  dummy2d(i,j) = 0.0_esmf_kind_r4
-			  dummy2d_82(i,j) = 0.0_esmf_kind_r8
-		   endif
-		 elseif (dummy2d(i,j) == 17.0_esmf_kind_r4 .and. slmsk_save(i,j)==0) then
-		   dummy2d(i,j) = 0.0_esmf_kind_r4
-		 endif
-	   enddo
-	 enddo
+   do j = 1, j_input
+     do i = 1,i_input
+     if (dummy2d(i,j) == 15.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
+       if (dummy3d(i,j,1) < 0.6) then 
+       dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
+       elseif (dummy3d(i,j,1) > 0.99) then
+          slmsk_save(i,j) = 0
+        dummy2d(i,j) = 0.0_esmf_kind_r4
+        dummy2d_82(i,j) = 0.0_esmf_kind_r8
+       endif
+     elseif (dummy2d(i,j) == 17.0_esmf_kind_r4 .and. slmsk_save(i,j)==0) then
+       dummy2d(i,j) = 0.0_esmf_kind_r4
+     endif
+     enddo
+   enddo
    endif     
    dummy2d_8= real(dummy2d,esmf_kind_r8)
    print*,'vgtyp ',maxval(dummy2d),minval(dummy2d)
@@ -6013,8 +6066,7 @@ if (localpet == 0) then
 
    if (localpet==0) then
      print*,"- CALCULATE ROTATION ANGLE FOR ROTATED_LATLON INPUT GRID"
-     cmdline_msg = "wgrib2 "//trim(file)//" -d 1 -grid &> temp.out"
-     call system(cmdline_msg)
+     error = grb2_inq(file, inv,grid_desc=temp_msg)
      !1:0:grid_template=32769:winds(grid):
      !   I am not an Arakawa E-grid.
      !   I am rotated but have no rotation angle.
@@ -6022,19 +6074,13 @@ if (localpet == 0) then
      !   (953 x 834) units 1e-06 input WE:SN output WE:SN res 56
      !   lat0 -10.590603 lat-center 54.000000 dlat 121.813000
      !   lon0 220.914154 lon-center 254.000000 dlon 121.813000 #points=794802
-     open(4,file="temp.out")
-     do i = 1,7
-      read(4,"(A)") temp_msg
-      if (i.eq.6) then
-        istr = index(temp_msg, "lat-center ") + len("lat_center ")
-        read(temp_msg(istr:istr+9),*) latin1
-      else if (i.eq.7) then
-        istr = index(temp_msg, "lon-center ") + len("lon-center ")
-        read(temp_msg(istr:istr+10),*) lov
-      end if
-     enddo
-     close(4)
-     print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
+
+      istr = index(temp_msg, "lat-center ") + len("lat_center ")
+      read(temp_msg(istr:istr+9),"(F8.5)") latin1
+      istr = index(temp_msg, "lon-center ") + len("lon-center ")
+      read(temp_msg(istr:istr+10),"(F9.6)") lov
+
+      print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
       call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha)
       print*, " alpha min/max = ",MINVAL(alpha),MAXVAL(alpha)
    endif
@@ -6047,31 +6093,24 @@ if (localpet == 0) then
         call error_handler("IN FieldGather", error)
 
    if (localpet==0) then
-     cmdline_msg = "wgrib2 "//trim(file)//" -d 1 -grid &> temp.out"
-     call system(cmdline_msg)
+     error = grb2_inq(file, inv,grid_desc=temp_msg)
      !1:0:grid_template=30:winds(grid):
      !   Lambert Conformal: (1799 x 1059) input WE:SN output WE:SN res 8
      !   Lat1 21.138123 Lon1 237.280472 LoV 262.500000
      !   LatD 38.500000 Latin1 38.500000 Latin2 38.500000
      !   LatSP 0.000000 LonSP 0.000000
      !   North Pole (1799 x 1059) Dx 3000.000000 m Dy 3000.000000 m mode 8
-     open(4,file="temp2.out")
-     do i = 1,4
-      read(4,"(A)") temp_msg
-      if (i.eq.3) then
-        istr = index(temp_msg, "LoV ") + len("LoV ")
-        read(temp_msg(istr:istr+10),*) lov
-      else if (i.eq.4) then
-        istr = index(temp_msg, "Latin1 ") + len("Latin1 ")
-        read(temp_msg(istr:istr+9),*) latin1
-        istr = index(temp_msg, "Latin2 ") + len("Latin2 ")
-        read(temp_msg(istr:istr+9),*) latin2
-      end if
-     enddo
-     close(4)
-      print*, "- CALL GRIDROT for LC grid with lov,latin1/2 = ",lov,latin1,latin2
-      call gridrot(lov,latin1,latin2,lon,alpha)
-      print*, " alpha min/max = ",MINVAL(alpha),MAXVAL(alpha)
+
+   istr = index(temp_msg, "LoV ") + len("LoV ")
+   read(temp_msg(istr:istr+10),"(F9.6)") lov
+   istr = index(temp_msg, "Latin1 ") + len("Latin1 ")
+   read(temp_msg(istr:istr+9),"(F8.5)") latin1
+   istr = index(temp_msg, "Latin2 ") + len("Latin2 ")
+   read(temp_msg(istr:istr+9),"(F8.5)") latin2
+
+     print*, "- CALL GRIDROT for LC grid with lov,latin1/2 = ",lov,latin1,latin2
+     call gridrot(lov,latin1,latin2,lon,alpha)
+     print*, " alpha min/max = ",MINVAL(alpha),MAXVAL(alpha)
    endif
  endif
 

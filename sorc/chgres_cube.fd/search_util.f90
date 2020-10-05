@@ -104,6 +104,8 @@
      default_value = 0.5
    case (229) ! lai, flag value to be replaced
      default_value = 1.0
+   case (230) ! soil type on the input grid
+     default_value = 11.0
    case default
      print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field
      call mpi_abort(mpi_comm_world, 77, ierr)

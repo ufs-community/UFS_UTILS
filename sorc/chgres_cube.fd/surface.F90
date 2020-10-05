@@ -183,13 +183,13 @@
 
  call interp(localpet)
  
- if (.not. (vgtyp_from_climo .or. sotyp_from_climo)) then
+ !if (.not. (vgtyp_from_climo .or. sotyp_from_climo)) then
    !---------------------------------------------------------------------------------------------
    ! Check for points where smois is too high to be a land point at a land point
    !---------------------------------------------------------------------------------------------
    !  
    !call check_smois_water
- endif
+ !endif
  
 !---------------------------------------------------------------------------------------------
 ! Adjust soil/landice column temperatures for any change in elevation between
@@ -205,19 +205,19 @@
 
  call rescale_soil_moisture
  
- if (.not. (vgtyp_from_climo .or. sotyp_from_climo)) then
+ !if (.not. (vgtyp_from_climo .or. sotyp_from_climo)) then
   !---------------------------------------------------------------------------------------------
   ! Check soil moisture again for mismatches after rescale_soil_moisture subroutine
   !---------------------------------------------------------------------------------------------
-   call check_smois_land
+ !  call check_smois_land
  
   !---------------------------------------------------------------------------------------------
   ! Replacing values various land surface parameters at points identified as mis-masked in 
   ! check_smois_land
   !---------------------------------------------------------------------------------------------
 
-   call replace_land_sfcparams(localpet)
- endif
+  ! call replace_land_sfcparams(localpet)
+ !endif
 !---------------------------------------------------------------------------------------------
 ! Compute liquid portion of total soil moisture.
 !---------------------------------------------------------------------------------------------
@@ -2903,8 +2903,8 @@ print*,"- CALL FieldGet FOR TARGET GRID FACSF."
  do i =clb(1),cub(1)
    do j = clb(2),cub(2)
      if (landmask_ptr(i,j)==1 .and. soilm_target_ptr(i,j,1) < 0.001 .and. nint(veg_type_target_ptr(i,j)) /= veg_type_landice_target) then !.and. &
-         !WRITE(*,'(a,2i5,a,2i3)'), " CORRECTING G.P. ",i,j," PARAMS FROM SEA TO LAND &
-         !           VALUES; curr stype,vtype=",  nint(soil_type_target_ptr(i,j)),nint(veg_type_target_ptr(i,j))
+         WRITE(*,'(a,2i5,a,2i3)'), " CORRECTING G.P. ",i,j," PARAMS FROM SEA TO LAND &
+                    VALUES; curr stype,vtype=",  nint(soil_type_target_ptr(i,j)),nint(veg_type_target_ptr(i,j))
          ! Set values to missing so that search function can then replace 
          ! them with nearby point values (see replace_land_sfcparams)
          ! subroutine)
