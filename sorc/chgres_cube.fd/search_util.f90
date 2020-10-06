@@ -172,12 +172,12 @@
            field(i,j) = 0.0
            repl_default = repl_default + 1
          endif
-       elseif (field_num == 7) then 
+       elseif (field_num == 7 .and. PRESENT(terrain_land)) then 
          ! Terrain heights for isolated landice points never get a correct value, so replace
          ! with terrain height from the input grid interpolated to the target grid
          field(i,j) = terrain_land(i,j)
          repl_default = repl_default + 1
-       elseif (field_num == 224 .and. present(soilt_climo)) then
+       elseif (field_num == 224 .and. PRESENT(soilt_climo)) then
           ! When using input soil type fields instead of climatological data on the
           ! target grid, isolated land locations that exist in the target grid but
           ! not the input grid don't receiving proper soil type information, so replace
