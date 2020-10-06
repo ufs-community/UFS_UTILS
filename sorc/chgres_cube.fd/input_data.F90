@@ -4588,6 +4588,7 @@ else
    use wgrib2api
    use grib2_util, only    : to_upper
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
+   use model_grid, only    : input_grid_type
    use search_util
 
 
@@ -4605,7 +4606,7 @@ else
    integer                               :: ncid2d, varid
    integer, parameter                    :: icet_default = 265.0
 
-   logical                               :: exist
+   logical                               :: exist, rap_latlon
 
    real(esmf_kind_r4)                    :: value
 
@@ -4617,6 +4618,7 @@ else
    integer(esmf_kind_i8), allocatable    :: dummy2d_i(:,:)
    
     
+   rap_latlon = trim(to_upper(external_model))=="RAP" .and. trim(input_grid_type) == "rotated_latlon"
 
    the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
    geo_file = trim(geogrid_file_input_grid)
@@ -4873,8 +4875,8 @@ if (localpet == 0) then
    vname=":SOTYP:"                                     
    rc = grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
    !failed => rc = 0
-   if (rc <= 0 .and. trim(to_upper(external_model))=="HRRR") then 
-     ! Some HRRR files don't have dominant soil type in the output, but the geogrid files
+   if (rc <= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon)) then
+     ! Some HRRR and RAP files don't have dominant soil type in the output, but the geogrid files
      ! do, so this gives users the option to provide the geogrid file and use input soil
      ! type 
      print*, "OPEN GEOGRID FILE ", trim(geo_file)
@@ -4922,7 +4924,8 @@ if (localpet == 0) then
      enddo
    endif
    
-   if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR") .or. (rc < 0 .and. trim(to_upper(external_model)) == "HRRR")) then
+   if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR" .and. .not. rap_latlon) & 
+     .or. (rc < 0 .and. (trim(to_upper(external_model)) == "HRRR" .or. rap_latlon))) then
      if (.not. sotyp_from_climo) then
        call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET SOTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
      else
