@@ -609,14 +609,14 @@
  
  subroutine define_input_grid_gfs_grib2(localpet, npets)
 
+ use mpi
+
  use wgrib2api
 
  use program_setup, only       : data_dir_input_grid, &
                                  grib2_file_input_grid
 
  implicit none
-
- include "mpif.h"
 
  integer, intent(in)              :: localpet, npets
 

@@ -144,9 +144,9 @@
 
  subroutine atmosphere_driver(localpet)
 
- implicit none
+ use mpi
 
- include 'mpif.h'
+ implicit none
 
  integer, intent(in)                :: localpet
 
@@ -1424,9 +1424,9 @@
 !   LANGUAGE: FORTRAN
 !
 !
- IMPLICIT NONE
+ use mpi
 
- include 'mpif.h'
+ IMPLICIT NONE
 
  REAL(ESMF_KIND_R8), PARAMETER   :: DLTDZ=-6.5E-3*287.05/9.80665
  REAL(ESMF_KIND_R8), PARAMETER   :: DLPVDRT=-2.5E6/461.50

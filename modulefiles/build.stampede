@@ -20,7 +20,9 @@ module li
 
 setenv NETCDF /opt/apps/intel18/netcdf/4.6.2/x86_64
 
-module use /work/00315/tg455890/stampede2/regional_fv3/ufs_testing/INSTALL/modules
+#module use /work/00315/tg455890/stampede2/regional_fv3/ufs_testing/INSTALL/modules
+module use /work/00315/tg455890/stampede2/regional_fv3/NCEPLIBS_SRWv2.0/modules
+module load esmf/8.0.0
 
 module load w3nco
 module load w3emc
@@ -36,5 +38,4 @@ module load landsfcutil
 module load g2
 module load wgrib2
 
-setenv ESMFMKFILE /work/00315/tg455890/stampede2/regional_fv3/ufs_testing/INSTALL/lib64/esmf.mk
-
+#setenv ESMFMKFILE /work/00315/tg455890/stampede2/regional_fv3/NCEPLIBS_SRWv2.0/lib64/esmf.mk

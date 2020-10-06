@@ -79,11 +79,10 @@
 !
 !-----------------------------------------------------------------------
 
+ use mpi
  use netcdf
 
  implicit none
-
- include 'mpif.h'
 
  character(len=*), intent(in)     :: input_file
 

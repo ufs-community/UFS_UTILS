@@ -8,7 +8,7 @@
 # See comments for variable definitions and setup information.
 #----------------------------------------------------------------------------
 
-set -x
+set -eux
 
 #----------------------------------------------------------------------------
 # Resolution of target grid.
