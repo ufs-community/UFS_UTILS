@@ -803,9 +803,9 @@
  use wgrib2api
  use program_setup, only       : grib2_file_input_grid, data_dir_input_grid, &
                                   fix_dir_input_grid, external_model
- implicit none
+ use mpi
 
- include 'mpif.h'
+ implicit none
 
  character(len=500)           :: the_file, temp_file
 
