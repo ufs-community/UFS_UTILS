@@ -242,6 +242,7 @@
 
  subroutine interp(localpet)
 
+ use mpi
  use esmf
 
  use input_data, only                : canopy_mc_input_grid,  &
@@ -300,8 +301,6 @@
  use search_util
 
  implicit none
-
- include 'mpif.h'
 
  integer, intent(in)                :: localpet
 

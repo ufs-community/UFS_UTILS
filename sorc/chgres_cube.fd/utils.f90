@@ -1,8 +1,8 @@
  subroutine error_handler(string, rc)
 
- implicit none
+ use mpi
 
- include 'mpif.h'
+ implicit none
 
  character(len=*), intent(in)    :: string
  
@@ -18,6 +18,7 @@
 
  subroutine netcdf_err( err, string )
 
+ use mpi
  use netcdf
 
  implicit none
@@ -25,8 +26,6 @@
  character(len=*), intent(in) :: string
  character(len=256) :: errmsg
  integer :: iret
-
- include "mpif.h"
 
  if( err.EQ.NF90_NOERR )return
  errmsg = NF90_STRERROR(err)

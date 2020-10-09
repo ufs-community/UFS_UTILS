@@ -88,10 +88,10 @@
 !                         Added mpi directives.
 !----------------------------------------------------------------------
 
+ use mpi
+
  IMPLICIT NONE
 !
- include 'mpif.h'
-
  CHARACTER(LEN=3) :: DONST
  INTEGER :: IDIM, JDIM, LSOIL, LUGB, IY, IM, ID, IH, IALB
  INTEGER :: ISOT, IVEGSRC, LENSFC, ZSEA1_MM, ZSEA2_MM, IERR
@@ -542,9 +542,9 @@
                              SLMSK_GAUS, DTREF_GAUS, &
                              NSST_DATA
 
- IMPLICIT NONE
+ USE MPI
 
- include 'mpif.h'
+ IMPLICIT NONE
 
  INTEGER, INTENT(IN)      :: LENSFC, LSOIL, IDIM, JDIM, MON, DAY
 

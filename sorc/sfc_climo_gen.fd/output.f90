@@ -26,6 +26,7 @@
 !     time                      Time period to be output.
 !--------------------------------------------------------------------------
 
+ use mpi
  use esmf
  use netcdf
  use utils
@@ -35,8 +36,6 @@
  use program_setup, only           : halo
 
  implicit none
-
- include 'mpif.h'
 
  integer, intent(in)              :: i_mdl, j_mdl, tile
  integer, intent(in)              :: record, time, field_idx

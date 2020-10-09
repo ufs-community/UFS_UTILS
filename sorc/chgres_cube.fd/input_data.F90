@@ -1728,9 +1728,9 @@
 
  subroutine read_input_atm_gaussian_netcdf_file(localpet)
 
- implicit none
+ use mpi
 
- include 'mpif.h'
+ implicit none
 
  integer, intent(in)               :: localpet
 
@@ -2111,9 +2111,9 @@
 
  subroutine read_input_atm_tiled_history_file(localpet)
 
- implicit none
+ use mpi
 
- include 'mpif.h'
+ implicit none
 
  integer, intent(in)             :: localpet
 

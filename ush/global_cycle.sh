@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/bash
 ################################################################################
 ####  UNIX Script Documentation Block
 #                      .                                             .
@@ -242,9 +242,9 @@ COMIN=${COMIN:-$(pwd)}
 COMOUT=${COMOUT:-$(pwd)}
 
 #  Filenames.
-XC=${XC}
-PREINP=${PREINP}
-SUFINP=${SUFINP}
+XC=${XC:-" "}
+PREINP=${PREINP:-" "}
+SUFINP=${SUFINP:-" "}
 CYCLEXEC=${CYCLEXEC:-$EXECgfs/global_cycle$XC}
 
 CDATE=${CDATE:?}
@@ -295,10 +295,10 @@ GSI_FILE=${GSI_FILE:-"NULL"}
 FNTSFA=${FNTSFA:-${COMIN}/${PREINP}sstgrb${SUFINP}}
 FNACNA=${FNACNA:-${COMIN}/${PREINP}engicegrb${SUFINP}}
 FNSNOA=${FNSNOA:-${COMIN}/${PREINP}snogrb${SUFINP}}
-export INISCRIPT=${INISCRIPT}
+export INISCRIPT=${INISCRIPT:-" "}
 export ERRSCRIPT=${ERRSCRIPT:-'eval [[ $err = 0 ]]'}
-export LOGSCRIPT=${LOGSCRIPT}
-export ENDSCRIPT=${ENDSCRIPT}
+export LOGSCRIPT=${LOGSCRIPT:-" "}
+export ENDSCRIPT=${ENDSCRIPT:-" "}
 #  Other variables.
 export PGMOUT=${PGMOUT:-${pgmout:-'&1'}}
 export PGMERR=${PGMERR:-${pgmerr:-'&2'}}
