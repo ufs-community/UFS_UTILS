@@ -83,7 +83,7 @@ if [ $rc != 0 ]; then
 fi
 
 if [ ${MEMBER} == 'hires' ]; then
-  SAVEDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/INPUT
+  SAVEDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos/INPUT
   copy_data
 else  
   MEMBER=1
@@ -93,7 +93,7 @@ else
   else
     MEMBER_CH="0${MEMBER}"
   fi
-  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER_CH}/INPUT
+  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER_CH}/INPUT
   copy_data
   MEMBER=$(( $MEMBER + 1 ))
   done
