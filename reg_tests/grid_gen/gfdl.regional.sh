@@ -8,7 +8,7 @@
 
 set -x
 
-export TMPDIR=${WORK_DIR}/gfdl.regional.work
+export TEMP_DIR=${WORK_DIR}/gfdl.regional.work
 export out_dir=${WORK_DIR}/gfdl.regional
 
 export res=96                # global resolution in which grid is embedded.

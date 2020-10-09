@@ -49,7 +49,7 @@
 #   7) For "regional_esg" grids, set center lat/lon of grid,
 #      - "target_lat/lon" - the i/j dimensions - "i/jdim", the
 #      x/y grid spacing - "delx/y", and halo.
-#   8) Set working directory - TMPDIR - and path to the repository
+#   8) Set working directory - TEMP_DIR - and path to the repository
 #      clone - home_dir.
 #   9) Submit script: "sbatch $script".
 #  10) All files will be placed in "out_dir".
@@ -108,12 +108,12 @@ fi
 #-----------------------------------------------------------------------
 # Check paths.  
 #   home_dir - location of repository.
-#   TMPDIR   - working directory.
+#   TEMP_DIR   - working directory.
 #   out_dir  - where files will be placed upon completion. 
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
-export TMPDIR=/work/noaa/stmp/$LOGNAME/fv3_grid.$gtype
+export TEMP_DIR=/work/noaa/stmp/$LOGNAME/fv3_grid.$gtype
 export out_dir=/work/noaa/stmp/$LOGNAME/my_grids
 
 #-----------------------------------------------------------------------
