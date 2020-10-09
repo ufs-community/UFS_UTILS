@@ -26,7 +26,7 @@ if [ ${MEMBER} == 'hires' ]; then
   CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
-  OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}
+  OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos
   ATMFILE="gdas.t${hh}z.atmanl.nemsio"
   SFCFILE="gdas.t${hh}z.sfcanl.nemsio"
   NSTFILE="gdas.t${hh}z.nstanl.nemsio"
@@ -34,7 +34,7 @@ else
   CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
-  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}
+  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}
   ATMFILE="gdas.t${hh}z.ratmanl.mem${MEMBER}.nemsio"
   SFCFILE="gdas.t${hh}z.sfcanl.mem${MEMBER}.nemsio"
   NSTFILE="gdas.t${hh}z.nstanl.mem${MEMBER}.nemsio"
