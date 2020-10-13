@@ -908,10 +908,6 @@
  ip1_input = i_input + 1
  jp1_input = j_input + 1
 
- if (mod(npets,num_tiles_input_grid) /= 0) then
-   call error_handler("MUST RUN WITH A TASK COUNT THAT IS A MULTIPLE OF 6.", 1)
- endif
-
 !-----------------------------------------------------------------------
 ! Create ESMF grid object for the model grid.
 !-----------------------------------------------------------------------
