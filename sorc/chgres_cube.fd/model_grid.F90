@@ -609,14 +609,14 @@
  
  subroutine define_input_grid_gfs_grib2(localpet, npets)
 
- use mpi
-
  use wgrib2api
 
  use program_setup, only       : data_dir_input_grid, &
                                  grib2_file_input_grid
 
  implicit none
+
+ include "mpif.h"
 
  integer, intent(in)              :: localpet, npets
 
@@ -803,9 +803,9 @@
  use wgrib2api
  use program_setup, only       : grib2_file_input_grid, data_dir_input_grid, &
                                   fix_dir_input_grid, external_model
- use mpi
-
  implicit none
+
+ include 'mpif.h'
 
  character(len=500)           :: the_file, temp_file
 
@@ -907,6 +907,10 @@
 
  ip1_input = i_input + 1
  jp1_input = j_input + 1
+
+ if (mod(npets,num_tiles_input_grid) /= 0) then
+   call error_handler("MUST RUN WITH A TASK COUNT THAT IS A MULTIPLE OF 6.", 1)
+ endif
 
 !-----------------------------------------------------------------------
 ! Create ESMF grid object for the model grid.
@@ -1041,17 +1045,17 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
        enddo
      else
        if (localpet==0) then
-         cmdline_msg = "wgrib2 "//trim(the_file)//" -d 1 -grid &> temp2.out"
-         call system(cmdline_msg)
-         open(4,file="temp2.out")
-         do i = 1,6
-           read(4,"(A)") temp_msg2
-         enddo
-         close(4)
-         print*, trim(temp_msg2)
-         i = index(temp_msg2, "Dx ") + len("Dx ")
-         j = index(temp_msg2," m Dy")
-         read(temp_msg2(i:j-1),*) dx
+         !cmdline_msg = "wgrib2 "//trim(the_file)//" -d 1 -grid &> temp2.out"
+         !call system(cmdline_msg)
+         !open(4,file="temp2.out")
+         !do i = 1,6
+         !  read(4,"(A)") temp_msg2
+         !enddo
+         !close(4)
+         print*, trim(temp_msg)
+         i = index(temp_msg, "Dx ") + len("Dx ")
+         j = index(temp_msg," m Dy")
+         read(temp_msg(i:j-1),"(F9.6)") dx
          print*, "DX = ", dx
        endif
        call MPI_BARRIER(MPI_COMM_WORLD,error)

@@ -2046,7 +2046,7 @@
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
-     call search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 7)
+     call search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 7, terrain_land=data_one_tile2)
    endif
 
    print*,"- CALL FieldScatter FOR TERRAIN FROM INPUT GRID, TILE: ", tile
