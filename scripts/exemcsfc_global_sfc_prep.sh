@@ -2,7 +2,7 @@
 
 ####  UNIX Script Documentation Block ###################################
 #                      .                                             .
-# Script name:  exemcsfc_global_sfc_prep.sh.ecf
+# Script name:  exemcsfc_global_sfc_prep.sh
 # RFC Contact:  George Gayno
 # Abstract:  This script calls two utility scripts to prepare a global 
 #    blended ice analysis and global snow analyses for use by GFS/GDAS.
@@ -16,6 +16,8 @@
 #    12/2014  Gayno   Set file defaults to grib 2 versions
 #                     when available.
 #    08/2015  Gayno   Update to current NCO standards
+#    08/2020  Gayno   Rename without the '.ecf' extention per
+#                     latest NCO standards.
 #
 # Usage:
 #  Parameters:    < no arguments >
