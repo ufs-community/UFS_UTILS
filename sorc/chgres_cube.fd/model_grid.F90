@@ -610,13 +610,11 @@
  subroutine define_input_grid_gfs_grib2(localpet, npets)
 
  use wgrib2api
-
+ use mpi
  use program_setup, only       : data_dir_input_grid, &
                                  grib2_file_input_grid
 
  implicit none
-
- include "mpif.h"
 
  integer, intent(in)              :: localpet, npets
 
@@ -798,14 +796,12 @@
  
  subroutine define_input_grid_grib2(localpet, npets)
 
-
+ use mpi
  use netcdf
  use wgrib2api
  use program_setup, only       : grib2_file_input_grid, data_dir_input_grid, &
                                   fix_dir_input_grid, external_model
  implicit none
-
- include 'mpif.h'
 
  character(len=500)           :: the_file, temp_file
 
@@ -907,10 +903,6 @@
 
  ip1_input = i_input + 1
  jp1_input = j_input + 1
-
- if (mod(npets,num_tiles_input_grid) /= 0) then
-   call error_handler("MUST RUN WITH A TASK COUNT THAT IS A MULTIPLE OF 6.", 1)
- endif
 
 !-----------------------------------------------------------------------
 ! Create ESMF grid object for the model grid.
