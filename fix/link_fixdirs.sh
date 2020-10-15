@@ -46,8 +46,12 @@ elif [ $machine = "jet" ]; then
 elif [ $machine = "orion" ]; then
     FIX_DIR="/work/noaa/global/glopara/fix"
 fi
+
 for dir in fix_am fix_fv3 fix_orog fix_fv3_gmted2010 fix_sfc_climo; do
-    [[ -d $dir ]] && rm -rf $dir
+    if [ -d $dir ]; then
+      [[ $RUN_ENVIR = nco ]] && chmod -R 755 $dir
+      rm -rf $dir
+    fi
     $LINK $FIX_DIR/$dir  .
 done
 
