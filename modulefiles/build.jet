@@ -8,12 +8,12 @@ module load szip/2.1
 module load hdf5/1.10.5
 module load netcdf/4.7.0
 
-export CC=icc
-export FC=ifort
-export CXX=icpc
+setenv CC icc
+setenv FC ifort
+setenv CXX icpc
 
-export ESMFMKFILE=/lfs4/HFIP/hfv3gfs/software/NCEPLIBS-ufs-v2.0.0beta01/intel-18.0.5.274/impi-2018.4.274/lib64/esmf.mk
-export Jasper_ROOT=/lfs4/HFIP/hfv3gfs/software/NCEPLIBS-ufs-v2.0.0beta01/intel-18.0.5.274/impi-2018.4.274
+setenv ESMFMKFILE /lfs4/HFIP/hfv3gfs/software/NCEPLIBS-ufs-v2.0.0beta01/intel-18.0.5.274/impi-2018.4.274/lib64/esmf.mk
+setenv Jasper_ROOT /lfs4/HFIP/hfv3gfs/software/NCEPLIBS-ufs-v2.0.0beta01/intel-18.0.5.274/impi-2018.4.274
 
 module use /lfs4/HFIP/hfv3gfs/software/NCEPLIBS-ufs-v2.0.0beta01/intel-18.0.5.274/impi-2018.4.274/modules
 module load w3nco/2.4.1
@@ -29,6 +29,3 @@ module load gfsio/1.4.1
 module load landsfcutil/2.4.1
 module load g2/3.4.1
 module load wgrib2/2.0.8
-
-
- 
