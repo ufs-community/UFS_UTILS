@@ -18,6 +18,8 @@ module load png/1.6.35
 
 module load hdf5/1.10.6
 module load netcdf/4.7.4
+#module load nccmp/1.8.7.0
+setenv NCCMP /usrx/local/nceplibs/dev/hpc-stack/libs/hpc-stack/v1.0.0-beta1/ips-18.0.1.163/impi-18.0.1/nccmp/1.8.7.0/bin/nccmp
 module load esmf/8_1_0_beta_snapshot_27
 
 module load bacio/2.4.1
