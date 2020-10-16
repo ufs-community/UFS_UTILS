@@ -43,7 +43,6 @@ export APRUN=time
 export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export machine=HERA
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
 export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/grid_gen/baseline_data
 
 ulimit -a

@@ -50,8 +50,6 @@ export NWPROD=$PWD/../..
 
 export COMOUT=$DATA
 
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
-
 reg_dir=$PWD
 
 ./C768.fv3gfs.sh
