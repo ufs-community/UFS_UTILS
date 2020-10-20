@@ -19,7 +19,6 @@ target_link_libraries(
   g2::g2_d
   ip::ip_d
   sp::sp_d
-  landsfcutil::landsfcutil_d
   bacio::bacio_4
   w3nco::w3nco_d)
 if(OpenMP_Fortran_FOUND)
