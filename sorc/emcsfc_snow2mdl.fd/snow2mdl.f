@@ -87,8 +87,6 @@
                                     kgds_autosnow,     &
                                     bad_afwa_nh, bad_afwa_sh 
 
- use read_write_utils,     only   : uninterpred
-
  private
 
  real, allocatable               :: snow_cvr_mdl(:,:)  ! cover in % on mdl grid                                   
@@ -1144,5 +1142,75 @@
  return
 
  end subroutine write_grib1
+
+!-----------------------------------------------------------------------
+! fills out full grid using thinned grid data.  use an iord of
+! "1" to use a nearest neighbor approach.
+!-----------------------------------------------------------------------
+
+ subroutine uninterpred(iord,kmsk,fi,f,lonl,latd,len,lonsperlat)
+
+ implicit none
+
+ integer, intent(in)               :: len
+ integer, intent(in)               :: iord
+ integer, intent(in)               :: lonl
+ integer, intent(in)               :: latd
+ integer, intent(in)               :: lonsperlat(latd/2)
+ integer, intent(in)               :: kmsk(lonl*latd)
+ integer                           :: j,lons,jj,latd2,ii,i
+
+ real, intent(in)                  :: fi(len)
+ real, intent(out)                 :: f(lonl,latd)
+
+ latd2 = latd / 2
+ ii    = 1
+
+ do j=1,latd
+
+   jj = j
+   if (j .gt. latd2) jj = latd - j + 1
+   lons=lonsperlat(jj)
+
+   if(lons.ne.lonl) then
+     call intlon(iord,1,1,lons,lonl,kmsk(ii),fi(ii),f(1,j))
+   else
+     do i=1,lonl
+       f(i,j)  = fi(ii+i-1)
+     enddo
+   endif
+
+   ii = ii + lons
+
+ enddo
+
+ end subroutine uninterpred
+
+ subroutine intlon(iord,imon,imsk,m1,m2,k1,f1,f2)
+
+ implicit none
+
+ integer,intent(in)        :: iord,imon,imsk,m1,m2
+ integer,intent(in)        :: k1(m1)
+ integer                   :: i2,in,il,ir
+
+ real,intent(in)           :: f1(m1)
+ real,intent(out)          :: f2(m2)
+ real                      :: r,x1
+
+ r=real(m1)/real(m2)
+ do i2=1,m2
+   x1=(i2-1)*r
+   il=int(x1)+1
+   ir=mod(il,m1)+1
+   if(iord.eq.2.and.(imsk.eq.0.or.k1(il).eq.k1(ir))) then
+     f2(i2)=f1(il)*(il-x1)+f1(ir)*(x1-il+1)
+   else
+     in=mod(nint(x1),m1)+1
+     f2(i2)=f1(in)
+   endif
+ enddo
+
+ end subroutine intlon
 
  end module snow2mdl
