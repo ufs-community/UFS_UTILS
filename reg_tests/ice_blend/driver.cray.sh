@@ -29,7 +29,8 @@
 set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target
 module list
 
 export DATA=/gpfs/hps3/stmp/$LOGNAME/reg_tests.ice_blend
