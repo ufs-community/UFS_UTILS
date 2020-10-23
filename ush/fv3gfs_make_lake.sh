@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/ksh
 
 echo
 echo "CREATE AND ADD INLAND, LAKE_STATUS, AND LAKE_DEPTH TO THE OROGRAPHY FILES"
@@ -9,9 +9,9 @@ set -eux
 outdir=$orog_dir
 indir=$topo
 
-if [ $gtype != uniform ]; then
-  echo "lake_frac has not been implemented for FV3 stand-alone Regional (SAR) model"
-  exit 1
+if [[ $gtype != uniform && $gtype != regional_gfdl ]]; then
+  echo "lakefrac has only been implemented for 'uniform' and 'regional_gfdl'."
+  exit 0
 fi
 
 exe_add_lake=$exec_dir/lakefrac
@@ -40,22 +40,40 @@ cd $workdir
 
 # link all required files to the current work directory
 
-tile_beg=1
-tile_end=6
-tile=$tile_beg
-while [ $tile -le $tile_end ]; do
+
+if [ $gtype == uniform ]; then
+  tile_beg=1
+  tile_end=6
+  tile=$tile_beg
+  while [ $tile -le $tile_end ]; do
+    outfile=oro.C${res}.tile${tile}.nc
+    ln -s $outdir/$outfile .
+    outgrid="C${res}_grid.tile${tile}.nc"
+    ln -s $grid_dir/$outgrid .
+    tile=$(( $tile + 1 ))
+  done
+fi
+
+if [ $gtype == regional_gfdl ]; then
+  tile_beg=7
+  tile_end=7
+  tile=7
   outfile=oro.C${res}.tile${tile}.nc
   ln -s $outdir/$outfile .
   outgrid="C${res}_grid.tile${tile}.nc"
   ln -s $grid_dir/$outgrid .
-  tile=$(( $tile + 1 ))
-done
+fi
 
 # create inland mask and save it to the orography files
 
 cutoff=0.99
 rd=7
-$APRUN $exe_inland $res $cutoff $rd
+if [ $gtype == uniform ]; then
+  $APRUN $exe_inland $res $cutoff $rd g
+fi
+if [ $gtype == regional_gfdl ]; then
+  $APRUN $exe_inland $res $cutoff $rd r
+fi
 err=$?
 if [ $err != 0 ]; then
   set +x

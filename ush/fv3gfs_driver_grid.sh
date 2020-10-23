@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid.
@@ -90,15 +90,6 @@ elif [ $gtype = regional_esg ]; then
 else
   echo "Error: please specify grid type with 'gtype' as uniform, stretch, nest, regional_gfdl or regional_esg"
   exit 9
-fi
-
-if [ $add_lake = true ]; then
-  if  [ $gtype != uniform ]; then
-    set +x
-    echo "Adding lake data to orography data is only available"
-    echo "for uniform grids."
-    exit 1
-  fi
 fi
 
 export TEMP_DIR=${TEMP_DIR:?}
@@ -375,6 +366,16 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
     echo
     set -x
     $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo
+    err=$?
+    if [ $err != 0 ]; then
+      exit $err
+    fi
+  fi
+
+# add lake data to the orography file, if $add_lake is true
+ 
+  if [ $add_lake = true ]; then
+    $script_dir/fv3gfs_make_lake.sh
     err=$?
     if [ $err != 0 ]; then
       exit $err
