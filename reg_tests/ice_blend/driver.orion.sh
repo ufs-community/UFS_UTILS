@@ -31,7 +31,7 @@ set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
-module load build.$target
+module load build.$target.intel
 module list
 
 export DATA="/work/noaa/stmp/$LOGNAME/reg_test.ice_blend"
