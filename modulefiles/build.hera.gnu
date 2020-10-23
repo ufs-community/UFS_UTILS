@@ -27,3 +27,5 @@ module load sigio/2.3.0
 module load nemsiogfs/2.5.0
 module load landsfcutil/2.4.0
 module load wgrib2/2.0.8
+
+setenv NCCMP /scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/v1.0.0-beta1/intel-18.0.5.274/impi-2018.0.4/nccmp/1.8.7.0/bin/nccmp
