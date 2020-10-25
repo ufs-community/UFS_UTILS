@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/bash
 
 echo
 echo "CREATE AND ADD INLAND, LAKE_STATUS, AND LAKE_DEPTH TO THE OROGRAPHY FILES"
@@ -9,7 +9,7 @@ set -eux
 outdir=$orog_dir
 indir=$topo
 
-if [[ $gtype != uniform && $gtype != regional_gfdl ]]; then
+if [ $gtype != uniform ] && [ $gtype != regional_gfdl ]; then
   echo "lakefrac has only been implemented for 'uniform' and 'regional_gfdl'."
   exit 0
 fi

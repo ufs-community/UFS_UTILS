@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid.
