@@ -12,7 +12,7 @@ Code manager: George Gayno
 
 ## Prerequisites
 
-This package requires:
+This package requires the following NCEPLIBS packages:
  - [NCEPLIBS-gfsio](https://github.com/NOAA-EMC/NCEPLIBS-gfsio)
  - [NCEPLIBS-sfcio](https://github.com/NOAA-EMC/NCEPLIBS-sfcio)
  - [NCEPLIBS-w3nco](https://github.com/NOAA-EMC/NCEPLIBS-w3nco)
@@ -26,6 +26,11 @@ This package requires:
  - [NCEPLIBS-w3emc](https://github.com/NOAA-EMC/NCEPLIBS-w3emc)
  - [NCEPLIBS-g2](https://github.com/NOAA-EMC/NCEPLIBS-g2)
  - [NCEPLIBS-wgrib2](https://github.com/NOAA-EMC/NCEPLIBS-wgrib2)
+
+This package also requires:
+
+ - [netcdf-c Library](https://github.com/Unidata/netcdf-c)
+ - [netcdf-fortran Library](https://github.com/Unidata/netcdf-fortran)
 
 ## Installing
 
