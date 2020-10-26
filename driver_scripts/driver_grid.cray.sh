@@ -36,8 +36,9 @@
 #         "regional_gfdl" - stand-alone gfdl regional grid
 #         "regional_esg"  - stand-alone extended Schmidt gnomonic
 #                           (esg) regional grid
-#   3) For "uniform" grids - to include lake fraction and
-#      depth, set "add_lake" to true, and the "lake_cutoff" value.
+#   3) For "uniform" and "regional_gfdl" grids - to include lake
+#      fraction and depth, set "add_lake" to true, and the
+#      "lake_cutoff" value.
 #   4) For "stretch" and "nest" grids, set the stretching factor -
 #       "stretch_fac", and center lat/lon of highest resolution
 #      tile - "target_lat" and "target_lon".
@@ -65,13 +66,12 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=uniform    # 'uniform', 'stretch', 'nest', 
-                        # 'regional_gfdl', 'regional_esg'
-export lake_cutoff=0.20 # lake frac < lake_cutoff ignored when add_lake=T
-
+export gtype=uniform           # 'uniform', 'stretch', 'nest', 
+                               # 'regional_gfdl', 'regional_esg'
 if [ $gtype = uniform ]; then
   export res=96
   export add_lake=false        # Add lake frac and depth to orography data.
+  export lake_cutoff=0.20      # lake frac < lake_cutoff ignored when add_lake=T
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -79,6 +79,7 @@ elif [ $gtype = stretch ]; then
   export target_lat=35.5       # Center latitude of the highest resolution tile
 elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
   export add_lake=false        # Add lake frac and depth to orography data.
+  export lake_cutoff=0.20      # lake frac < lake_cutoff ignored when add_lake=T
   export res=768
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile
