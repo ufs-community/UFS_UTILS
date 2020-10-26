@@ -24,8 +24,8 @@
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
 #       an ESMF library requirement.  Large grids may require
-#       tasks spread across multiple nodes.  The orography
-#       code benefits from threads.
+#       tasks spread across multiple nodes. The orography code
+#       benefits from threads.
 #
 # To run, do the following:
 #
@@ -68,29 +68,29 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=uniform       # 'uniform', 'stretch', 'nest'
-                           # 'regional_gfdl', 'regional_esg'
+export gtype=uniform    # 'uniform', 'stretch', 'nest', 
+                        # 'regional_gfdl', 'regional_esg'
+export lake_cutoff=0.20 # lake frac < lake_cutoff ignored when add_lake=T
 
 if [ $gtype = uniform ]; then
   export res=96
-  export add_lake=false   # Add lake frac and depth to orography data.
-                          # Uniform grids only.
-  export lake_cutoff=0.20 # lake frac less than lake_cutoff is ignored
+  export add_lake=false        # Add lake frac and depth to orography data.
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile
   export target_lat=35.5       # Center latitude of the highest resolution tile
 elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
-  export res=96
+  export add_lake=false        # Add lake frac and depth to orography data.
+  export res=768
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile
-  export target_lat=35.5       # Center latitude of the highest resolution tile
+  export target_lat=38.5       # Center latitude of the highest resolution tile
   export refine_ratio=3        # The refinement ratio
-  export istart_nest=27        # Starting i-direction index of nest grid in parent tile supergrid
-  export jstart_nest=37        # Starting j-direction index of nest grid in parent tile supergrid
-  export iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
-  export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
+  export istart_nest=123       # Starting i-direction index of nest grid in parent tile supergrid
+  export jstart_nest=331       # Starting j-direction index of nest grid in parent tile supergrid
+  export iend_nest=1402        # Ending i-direction index of nest grid in parent tile supergrid
+  export jend_nest=1194        # Ending j-direction index of nest grid in parent tile supergrid
   export halo=3                # Lateral boundary halo
 elif [ $gtype = regional_esg ] ; then
   export res=-999              # equivalent resolution is computed
@@ -108,10 +108,10 @@ elif [ $gtype = regional_esg ] ; then
 fi
 
 #-----------------------------------------------------------------------
-# Check paths.  
+# Check paths.
 #   home_dir - location of repository.
-#   TEMP_DIR   - working directory.
-#   out_dir  - where files will be placed upon completion. 
+#   TEMP_DIR - working directory.
+#   out_dir  - where files will be placed upon completion.
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
