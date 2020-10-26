@@ -10,6 +10,23 @@ NCEP/EMC developers.
 
 Code manager: George Gayno
 
+## Prerequisites
+
+This package requires:
+ - [NCEPLIBS-gfsio](https://github.com/NOAA-EMC/NCEPLIBS-gfsio)
+ - [NCEPLIBS-sfcio](https://github.com/NOAA-EMC/NCEPLIBS-sfcio)
+ - [NCEPLIBS-w3nco](https://github.com/NOAA-EMC/NCEPLIBS-w3nco)
+ - [NCEPLIBS-landsfcutil](https://github.com/NOAA-EMC/NCEPLIBS-landsfcutil)
+ - [NCEPLIBS-bacio](https://github.com/NOAA-EMC/NCEPLIBS-bacio)
+ - [NCEPLIBS-nemsio](https://github.com/NOAA-EMC/NCEPLIBS-nemsio)
+ - [NCEPLIBS-nemsiogfs](https://github.com/NOAA-EMC/NCEPLIBS-nemsiogfs)
+ - [NCEPLIBS-sigio](https://github.com/NOAA-EMC/NCEPLIBS-sigio)
+ - [NCEPLIBS-sp](https://github.com/NOAA-EMC/NCEPLIBS-sp)
+ - [NCEPLIBS-ip](https://github.com/NOAA-EMC/NCEPLIBS-ip)
+ - [NCEPLIBS-w3emc](https://github.com/NOAA-EMC/NCEPLIBS-w3emc)
+ - [NCEPLIBS-g2](https://github.com/NOAA-EMC/NCEPLIBS-g2)
+ - [NCEPLIBS-wgrib2](https://github.com/NOAA-EMC/NCEPLIBS-wgrib2)
+
 ## Installing
 
 ```
