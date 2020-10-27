@@ -31,6 +31,7 @@ This package also requires:
 
  - [netcdf-c Library](https://github.com/Unidata/netcdf-c)
  - [netcdf-fortran Library](https://github.com/Unidata/netcdf-fortran)
+ - [ESMF](https://github.com/esmf-org/esmf)
 
 ## Installing
 
