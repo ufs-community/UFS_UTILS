@@ -42,7 +42,7 @@ if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
 endif()
 
 find_package(NetCDF REQUIRED C Fortran)
-find_package(MPI REQUIRED)
+find_package(MPI REQUIRED COMPONENTS C Fortran)
 find_package(ESMF MODULE REQUIRED)
 
 option(OPENMP "use OpenMP threading" ON)
