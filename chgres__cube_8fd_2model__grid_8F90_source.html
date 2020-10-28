@@ -202,7 +202,7 @@ $(document).ready(function(){initNavTree('chgres__cube_8fd_2model__grid_8F90_sou
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; <span class="keyword">subroutine </span>define_input_grid(localpet, npets)</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; <span class="keywordtype">use </span>program_setup, <span class="keywordtype">only</span>       : input_type, external_model</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>       : input_type, external_model</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; <span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
@@ -237,7 +237,7 @@ $(document).ready(function(){initNavTree('chgres__cube_8fd_2model__grid_8F90_sou
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; <span class="keywordtype">use </span>nemsio_module</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; <span class="keywordtype">use </span>program_setup, <span class="keywordtype">only</span>       : data_dir_input_grid, &amp;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>       : data_dir_input_grid, &amp;</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                                 atm_files_input_grid, &amp;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                                 sfc_files_input_grid, &amp;</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                                 input_type, &amp;</div>
@@ -486,7 +486,7 @@ $(document).ready(function(){initNavTree('chgres__cube_8fd_2model__grid_8F90_sou
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160; <span class="keyword">subroutine </span>define_input_grid_mosaic(localpet, npets)</div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160; </div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160; <span class="keywordtype">use </span>netcdf</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160; <span class="keywordtype">use </span>program_setup, <span class="keywordtype">only</span>       : mosaic_file_input_grid,  &amp;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>       : mosaic_file_input_grid,  &amp;</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;                                 orog_dir_input_grid, &amp;</div>
 <div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;                                 orog_files_input_grid</div>
 <div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160; </div>
@@ -699,7 +699,7 @@ $(document).ready(function(){initNavTree('chgres__cube_8fd_2model__grid_8F90_sou
 <div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160; </div>
 <div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160; <span class="keywordtype">use </span>wgrib2api</div>
 <div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160; <span class="keywordtype">use </span>mpi</div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160; <span class="keywordtype">use </span>program_setup, <span class="keywordtype">only</span>       : data_dir_input_grid, &amp;</div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>       : data_dir_input_grid, &amp;</div>
 <div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;                                 grib2_file_input_grid</div>
 <div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160; </div>
 <div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160; <span class="keywordtype">implicit none</span></div>
@@ -887,7 +887,7 @@ $(document).ready(function(){initNavTree('chgres__cube_8fd_2model__grid_8F90_sou
 <div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160; <span class="keywordtype">use </span>mpi</div>
 <div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160; <span class="keywordtype">use </span>netcdf</div>
 <div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160; <span class="keywordtype">use </span>wgrib2api</div>
-<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160; <span class="keywordtype">use </span>program_setup, <span class="keywordtype">only</span>       : grib2_file_input_grid, data_dir_input_grid, &amp;</div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>       : grib2_file_input_grid, data_dir_input_grid, &amp;</div>
 <div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;                                  fix_dir_input_grid, external_model</div>
 <div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160; <span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160; </div>
@@ -1183,7 +1183,7 @@ $(document).ready(function(){initNavTree('chgres__cube_8fd_2model__grid_8F90_sou
 <div class="line"><a name="l01095"></a><span class="lineno"> 1095</span>&#160; <span class="keyword">subroutine </span>define_target_grid(localpet, npets)</div>
 <div class="line"><a name="l01096"></a><span class="lineno"> 1096</span>&#160; </div>
 <div class="line"><a name="l01097"></a><span class="lineno"> 1097</span>&#160; <span class="keywordtype">use </span>netcdf</div>
-<div class="line"><a name="l01098"></a><span class="lineno"> 1098</span>&#160; <span class="keywordtype">use </span>program_setup, <span class="keywordtype">only</span>       : mosaic_file_target_grid, &amp;</div>
+<div class="line"><a name="l01098"></a><span class="lineno"> 1098</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>       : mosaic_file_target_grid, &amp;</div>
 <div class="line"><a name="l01099"></a><span class="lineno"> 1099</span>&#160;                                 orog_dir_target_grid,    &amp;</div>
 <div class="line"><a name="l01100"></a><span class="lineno"> 1100</span>&#160;                                 orog_files_target_grid,  &amp;</div>
 <div class="line"><a name="l01101"></a><span class="lineno"> 1101</span>&#160;                                 nsoill_out</div>
@@ -1779,6 +1779,7 @@ $(document).ready(function(){initNavTree('chgres__cube_8fd_2model__grid_8F90_sou
 <div class="line"><a name="l01691"></a><span class="lineno"> 1691</span>&#160; <span class="keyword">end module </span>model_grid</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="anamespaceprogram__setup_html"><div class="ttname"><a href="namespaceprogram__setup.html">program_setup</a></div><div class="ttdoc">program setup</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00001">chgres_cube.fd/program_setup.f90:1</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

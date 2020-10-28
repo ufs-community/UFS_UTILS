@@ -23,8 +23,15 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "UFS_UTILS", "index.html", [
-    [ "Data Types List", "annotated.html", [
+    [ "Modules", "namespaces.html", [
       [ "UFS_UTILS", "index.html#autotoc_md0", null ],
+      [ "Modules List", "namespaces.html", "namespaces_dup" ],
+      [ "Module Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions/Subroutines", "namespacemembers_func.html", null ]
+      ] ]
+    ] ],
+    [ "Data Types List", "annotated.html", [
       [ "Data Types List", "annotated.html", "annotated_dup" ]
     ] ],
     [ "Files", "files.html", [

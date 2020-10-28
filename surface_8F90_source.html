@@ -212,7 +212,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                                       read_input_sfc_data, &amp;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                                       read_input_nst_data</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; <span class="keywordtype">use </span>program_setup, <span class="keywordtype">only</span>             : calc_soil_params_driver, &amp;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>             : calc_soil_params_driver, &amp;</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                                       convert_nst, &amp;</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                                       vgtyp_from_climo, &amp;</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                                       sotyp_from_climo</div>
@@ -419,7 +419,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                                       seamask_target_grid,  &amp;</div>
 <div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                                       latitude_target_grid</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; <span class="keywordtype">use </span>program_setup, <span class="keywordtype">only</span>             : convert_nst, &amp;</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>             : convert_nst, &amp;</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                                       vgtyp_from_climo, &amp; </div>
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                                       sotyp_from_climo, &amp;</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                                       vgfrc_from_climo, &amp;</div>
@@ -738,7 +738,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;     <span class="keyword">allocate</span>(land_target_one_tile(i_target,j_target))</div>
 <div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;     land_target_one_tile = 0</div>
 <div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;     <span class="keywordflow">where</span>(mask_target_one_tile == 1) land_target_one_tile = 1</div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;     <span class="keyword">call </span>search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 7)</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, land_target_one_tile, i_target, j_target, tile, 7)</div>
 <div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;     <span class="keyword">deallocate</span>(land_target_one_tile)</div>
 <div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160; </div>
@@ -796,7 +796,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;       <span class="keyword">allocate</span>(land_target_one_tile(i_target,j_target))</div>
 <div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;       land_target_one_tile = 0</div>
 <div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;       <span class="keywordflow">where</span>(mask_target_one_tile == 1) land_target_one_tile = 1</div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;       <span class="keyword">call </span>search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 225)</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, land_target_one_tile, i_target, j_target, tile, 225)</div>
 <div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;       <span class="keyword">deallocate</span>(land_target_one_tile)</div>
 <div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160; </div>
@@ -889,7 +889,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;      <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160; </div>
 <div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;     <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 91, &amp;</div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 91, &amp;</div>
 <div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;                 latitude=latitude_one_tile)</div>
 <div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160; </div>
@@ -1069,7 +1069,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;     </div>
 <div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;     <span class="keywordflow">where</span>(mask_target_one_tile == 1) mask_target_one_tile = 0</div>
 <div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;     <span class="keywordflow">where</span>(mask_target_one_tile == 2) mask_target_one_tile = 1</div>
-<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;     <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 92)</div>
+<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 92)</div>
 <div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160; </div>
 <div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID SEAICE DEPTH TILE: &quot;</span>, tile</div>
@@ -1083,7 +1083,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160;      <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l00996"></a><span class="lineno">  996</span>&#160; </div>
 <div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;     <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 66)</div>
+<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 66)</div>
 <div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160; </div>
 <div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID SNOW DEPTH TILE: &quot;</span>, tile</div>
@@ -1097,7 +1097,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;      <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160; </div>
 <div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;     <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 65)</div>
+<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 65)</div>
 <div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160; </div>
 <div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID SNOW LIQ EQUIV TILE: &quot;</span>, tile</div>
@@ -1111,7 +1111,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01023"></a><span class="lineno"> 1023</span>&#160;      <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01024"></a><span class="lineno"> 1024</span>&#160; </div>
 <div class="line"><a name="l01025"></a><span class="lineno"> 1025</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01026"></a><span class="lineno"> 1026</span>&#160;     <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 21)</div>
+<div class="line"><a name="l01026"></a><span class="lineno"> 1026</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 21)</div>
 <div class="line"><a name="l01027"></a><span class="lineno"> 1027</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l01028"></a><span class="lineno"> 1028</span>&#160; </div>
 <div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID SEAICE SKIN TEMP: &quot;</span>, tile</div>
@@ -1127,7 +1127,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01039"></a><span class="lineno"> 1039</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l01040"></a><span class="lineno"> 1040</span>&#160;     <span class="keywordflow">do</span> j = 1, lsoil_target</div>
 <div class="line"><a name="l01041"></a><span class="lineno"> 1041</span>&#160;       data_one_tile = data_one_tile_3d(:,:,j)</div>
-<div class="line"><a name="l01042"></a><span class="lineno"> 1042</span>&#160;       <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 21)</div>
+<div class="line"><a name="l01042"></a><span class="lineno"> 1042</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 21)</div>
 <div class="line"><a name="l01043"></a><span class="lineno"> 1043</span>&#160;       data_one_tile_3d(:,:,j) = data_one_tile</div>
 <div class="line"><a name="l01044"></a><span class="lineno"> 1044</span>&#160;<span class="keywordflow">     enddo</span></div>
 <div class="line"><a name="l01045"></a><span class="lineno"> 1045</span>&#160;<span class="keywordflow">   endif</span></div>
@@ -1520,7 +1520,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01432"></a><span class="lineno"> 1432</span>&#160;     <span class="keyword">allocate</span>(water_target_one_tile(i_target,j_target))</div>
 <div class="line"><a name="l01433"></a><span class="lineno"> 1433</span>&#160;     water_target_one_tile = 0</div>
 <div class="line"><a name="l01434"></a><span class="lineno"> 1434</span>&#160;     <span class="keywordflow">where</span>(mask_target_one_tile == 0) water_target_one_tile = 1</div>
-<div class="line"><a name="l01435"></a><span class="lineno"> 1435</span>&#160;     <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 11, &amp;</div>
+<div class="line"><a name="l01435"></a><span class="lineno"> 1435</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 11, &amp;</div>
 <div class="line"><a name="l01436"></a><span class="lineno"> 1436</span>&#160;                 latitude=latitude_one_tile)</div>
 <div class="line"><a name="l01437"></a><span class="lineno"> 1437</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l01438"></a><span class="lineno"> 1438</span>&#160; </div>
@@ -1537,7 +1537,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01449"></a><span class="lineno"> 1449</span>&#160;      <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01450"></a><span class="lineno"> 1450</span>&#160; </div>
 <div class="line"><a name="l01451"></a><span class="lineno"> 1451</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01452"></a><span class="lineno"> 1452</span>&#160;     <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 83)</div>
+<div class="line"><a name="l01452"></a><span class="lineno"> 1452</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 83)</div>
 <div class="line"><a name="l01453"></a><span class="lineno"> 1453</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l01454"></a><span class="lineno"> 1454</span>&#160; </div>
 <div class="line"><a name="l01455"></a><span class="lineno"> 1455</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID Z0: &quot;</span>, tile</div>
@@ -1555,7 +1555,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01467"></a><span class="lineno"> 1467</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01468"></a><span class="lineno"> 1468</span>&#160; </div>
 <div class="line"><a name="l01469"></a><span class="lineno"> 1469</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01470"></a><span class="lineno"> 1470</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01470"></a><span class="lineno"> 1470</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01471"></a><span class="lineno"> 1471</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01472"></a><span class="lineno"> 1472</span>&#160; </div>
 <div class="line"><a name="l01473"></a><span class="lineno"> 1473</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID C_D: &quot;</span>, tile</div>
@@ -1571,7 +1571,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01483"></a><span class="lineno"> 1483</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01484"></a><span class="lineno"> 1484</span>&#160; </div>
 <div class="line"><a name="l01485"></a><span class="lineno"> 1485</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01486"></a><span class="lineno"> 1486</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01486"></a><span class="lineno"> 1486</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01487"></a><span class="lineno"> 1487</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01488"></a><span class="lineno"> 1488</span>&#160; </div>
 <div class="line"><a name="l01489"></a><span class="lineno"> 1489</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID C_0: &quot;</span>, tile</div>
@@ -1587,7 +1587,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01499"></a><span class="lineno"> 1499</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01500"></a><span class="lineno"> 1500</span>&#160; </div>
 <div class="line"><a name="l01501"></a><span class="lineno"> 1501</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01502"></a><span class="lineno"> 1502</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01502"></a><span class="lineno"> 1502</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01503"></a><span class="lineno"> 1503</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01504"></a><span class="lineno"> 1504</span>&#160; </div>
 <div class="line"><a name="l01505"></a><span class="lineno"> 1505</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID D_CONV: &quot;</span>, tile</div>
@@ -1603,7 +1603,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01515"></a><span class="lineno"> 1515</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01516"></a><span class="lineno"> 1516</span>&#160; </div>
 <div class="line"><a name="l01517"></a><span class="lineno"> 1517</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01518"></a><span class="lineno"> 1518</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01518"></a><span class="lineno"> 1518</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01519"></a><span class="lineno"> 1519</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01520"></a><span class="lineno"> 1520</span>&#160; </div>
 <div class="line"><a name="l01521"></a><span class="lineno"> 1521</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID DT_COOL: &quot;</span>, tile</div>
@@ -1619,7 +1619,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01531"></a><span class="lineno"> 1531</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01532"></a><span class="lineno"> 1532</span>&#160; </div>
 <div class="line"><a name="l01533"></a><span class="lineno"> 1533</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01534"></a><span class="lineno"> 1534</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 1)</div>
+<div class="line"><a name="l01534"></a><span class="lineno"> 1534</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 1)</div>
 <div class="line"><a name="l01535"></a><span class="lineno"> 1535</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01536"></a><span class="lineno"> 1536</span>&#160; </div>
 <div class="line"><a name="l01537"></a><span class="lineno"> 1537</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID IFD: &quot;</span>, tile</div>
@@ -1635,7 +1635,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01547"></a><span class="lineno"> 1547</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01548"></a><span class="lineno"> 1548</span>&#160; </div>
 <div class="line"><a name="l01549"></a><span class="lineno"> 1549</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01550"></a><span class="lineno"> 1550</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01550"></a><span class="lineno"> 1550</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01551"></a><span class="lineno"> 1551</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01552"></a><span class="lineno"> 1552</span>&#160; </div>
 <div class="line"><a name="l01553"></a><span class="lineno"> 1553</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID QRAIN: &quot;</span>, tile</div>
@@ -1651,7 +1651,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01563"></a><span class="lineno"> 1563</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01564"></a><span class="lineno"> 1564</span>&#160; </div>
 <div class="line"><a name="l01565"></a><span class="lineno"> 1565</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01566"></a><span class="lineno"> 1566</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 11, &amp;</div>
+<div class="line"><a name="l01566"></a><span class="lineno"> 1566</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 11, &amp;</div>
 <div class="line"><a name="l01567"></a><span class="lineno"> 1567</span>&#160;                   latitude=latitude_one_tile)</div>
 <div class="line"><a name="l01568"></a><span class="lineno"> 1568</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01569"></a><span class="lineno"> 1569</span>&#160; </div>
@@ -1668,7 +1668,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01580"></a><span class="lineno"> 1580</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01581"></a><span class="lineno"> 1581</span>&#160; </div>
 <div class="line"><a name="l01582"></a><span class="lineno"> 1582</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01583"></a><span class="lineno"> 1583</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01583"></a><span class="lineno"> 1583</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01584"></a><span class="lineno"> 1584</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01585"></a><span class="lineno"> 1585</span>&#160; </div>
 <div class="line"><a name="l01586"></a><span class="lineno"> 1586</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID W_D: &quot;</span>, tile</div>
@@ -1684,7 +1684,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01596"></a><span class="lineno"> 1596</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01597"></a><span class="lineno"> 1597</span>&#160; </div>
 <div class="line"><a name="l01598"></a><span class="lineno"> 1598</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01599"></a><span class="lineno"> 1599</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01599"></a><span class="lineno"> 1599</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01600"></a><span class="lineno"> 1600</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01601"></a><span class="lineno"> 1601</span>&#160; </div>
 <div class="line"><a name="l01602"></a><span class="lineno"> 1602</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID W_0: &quot;</span>, tile</div>
@@ -1700,7 +1700,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01612"></a><span class="lineno"> 1612</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01613"></a><span class="lineno"> 1613</span>&#160; </div>
 <div class="line"><a name="l01614"></a><span class="lineno"> 1614</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01615"></a><span class="lineno"> 1615</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01615"></a><span class="lineno"> 1615</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01616"></a><span class="lineno"> 1616</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01617"></a><span class="lineno"> 1617</span>&#160; </div>
 <div class="line"><a name="l01618"></a><span class="lineno"> 1618</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID XS: &quot;</span>, tile</div>
@@ -1716,7 +1716,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01628"></a><span class="lineno"> 1628</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01629"></a><span class="lineno"> 1629</span>&#160; </div>
 <div class="line"><a name="l01630"></a><span class="lineno"> 1630</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01631"></a><span class="lineno"> 1631</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01631"></a><span class="lineno"> 1631</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01632"></a><span class="lineno"> 1632</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01633"></a><span class="lineno"> 1633</span>&#160; </div>
 <div class="line"><a name="l01634"></a><span class="lineno"> 1634</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID XT: &quot;</span>, tile</div>
@@ -1732,7 +1732,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01644"></a><span class="lineno"> 1644</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01645"></a><span class="lineno"> 1645</span>&#160; </div>
 <div class="line"><a name="l01646"></a><span class="lineno"> 1646</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01647"></a><span class="lineno"> 1647</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01647"></a><span class="lineno"> 1647</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01648"></a><span class="lineno"> 1648</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01649"></a><span class="lineno"> 1649</span>&#160; </div>
 <div class="line"><a name="l01650"></a><span class="lineno"> 1650</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID XU: &quot;</span>, tile</div>
@@ -1748,7 +1748,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01660"></a><span class="lineno"> 1660</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01661"></a><span class="lineno"> 1661</span>&#160; </div>
 <div class="line"><a name="l01662"></a><span class="lineno"> 1662</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01663"></a><span class="lineno"> 1663</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01663"></a><span class="lineno"> 1663</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01664"></a><span class="lineno"> 1664</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01665"></a><span class="lineno"> 1665</span>&#160; </div>
 <div class="line"><a name="l01666"></a><span class="lineno"> 1666</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID XV: &quot;</span>, tile</div>
@@ -1764,7 +1764,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01676"></a><span class="lineno"> 1676</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01677"></a><span class="lineno"> 1677</span>&#160; </div>
 <div class="line"><a name="l01678"></a><span class="lineno"> 1678</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01679"></a><span class="lineno"> 1679</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 30)</div>
+<div class="line"><a name="l01679"></a><span class="lineno"> 1679</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 30)</div>
 <div class="line"><a name="l01680"></a><span class="lineno"> 1680</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01681"></a><span class="lineno"> 1681</span>&#160; </div>
 <div class="line"><a name="l01682"></a><span class="lineno"> 1682</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID XZ: &quot;</span>, tile</div>
@@ -1780,7 +1780,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01692"></a><span class="lineno"> 1692</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01693"></a><span class="lineno"> 1693</span>&#160; </div>
 <div class="line"><a name="l01694"></a><span class="lineno"> 1694</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01695"></a><span class="lineno"> 1695</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01695"></a><span class="lineno"> 1695</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01696"></a><span class="lineno"> 1696</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01697"></a><span class="lineno"> 1697</span>&#160; </div>
 <div class="line"><a name="l01698"></a><span class="lineno"> 1698</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID XTTS: &quot;</span>, tile</div>
@@ -1796,7 +1796,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01708"></a><span class="lineno"> 1708</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01709"></a><span class="lineno"> 1709</span>&#160; </div>
 <div class="line"><a name="l01710"></a><span class="lineno"> 1710</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01711"></a><span class="lineno"> 1711</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01711"></a><span class="lineno"> 1711</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01712"></a><span class="lineno"> 1712</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01713"></a><span class="lineno"> 1713</span>&#160; </div>
 <div class="line"><a name="l01714"></a><span class="lineno"> 1714</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID XZTS: &quot;</span>, tile</div>
@@ -1812,7 +1812,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01724"></a><span class="lineno"> 1724</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01725"></a><span class="lineno"> 1725</span>&#160; </div>
 <div class="line"><a name="l01726"></a><span class="lineno"> 1726</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01727"></a><span class="lineno"> 1727</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01727"></a><span class="lineno"> 1727</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01728"></a><span class="lineno"> 1728</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160; </div>
 <div class="line"><a name="l01730"></a><span class="lineno"> 1730</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID Z_C: &quot;</span>, tile</div>
@@ -1828,7 +1828,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01740"></a><span class="lineno"> 1740</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01741"></a><span class="lineno"> 1741</span>&#160; </div>
 <div class="line"><a name="l01742"></a><span class="lineno"> 1742</span>&#160;     <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01743"></a><span class="lineno"> 1743</span>&#160;       <span class="keyword">call </span>search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
+<div class="line"><a name="l01743"></a><span class="lineno"> 1743</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)</div>
 <div class="line"><a name="l01744"></a><span class="lineno"> 1744</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l01745"></a><span class="lineno"> 1745</span>&#160; </div>
 <div class="line"><a name="l01746"></a><span class="lineno"> 1746</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID ZM: &quot;</span>, tile</div>
@@ -1949,7 +1949,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01861"></a><span class="lineno"> 1861</span>&#160;     <span class="keyword">allocate</span>(land_target_one_tile(i_target,j_target))</div>
 <div class="line"><a name="l01862"></a><span class="lineno"> 1862</span>&#160;     land_target_one_tile = 0</div>
 <div class="line"><a name="l01863"></a><span class="lineno"> 1863</span>&#160;     <span class="keywordflow">where</span>(mask_target_one_tile == 1) land_target_one_tile = 1</div>
-<div class="line"><a name="l01864"></a><span class="lineno"> 1864</span>&#160;     <span class="keyword">call </span>search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 66)</div>
+<div class="line"><a name="l01864"></a><span class="lineno"> 1864</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, land_target_one_tile, i_target, j_target, tile, 66)</div>
 <div class="line"><a name="l01865"></a><span class="lineno"> 1865</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l01866"></a><span class="lineno"> 1866</span>&#160; </div>
 <div class="line"><a name="l01867"></a><span class="lineno"> 1867</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID SNOW DEPTH: &quot;</span>, tile</div>
@@ -1963,7 +1963,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01875"></a><span class="lineno"> 1875</span>&#160;      <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01876"></a><span class="lineno"> 1876</span>&#160; </div>
 <div class="line"><a name="l01877"></a><span class="lineno"> 1877</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01878"></a><span class="lineno"> 1878</span>&#160;     <span class="keyword">call </span>search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 65)</div>
+<div class="line"><a name="l01878"></a><span class="lineno"> 1878</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, land_target_one_tile, i_target, j_target, tile, 65)</div>
 <div class="line"><a name="l01879"></a><span class="lineno"> 1879</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l01880"></a><span class="lineno"> 1880</span>&#160; </div>
 <div class="line"><a name="l01881"></a><span class="lineno"> 1881</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID SNOW LIQUID EQUIV: &quot;</span>, tile</div>
@@ -1977,7 +1977,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l01889"></a><span class="lineno"> 1889</span>&#160;      <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l01890"></a><span class="lineno"> 1890</span>&#160; </div>
 <div class="line"><a name="l01891"></a><span class="lineno"> 1891</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01892"></a><span class="lineno"> 1892</span>&#160;     <span class="keyword">call </span>search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 223)</div>
+<div class="line"><a name="l01892"></a><span class="lineno"> 1892</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, land_target_one_tile, i_target, j_target, tile, 223)</div>
 <div class="line"><a name="l01893"></a><span class="lineno"> 1893</span>&#160;     <span class="keyword">deallocate</span>(land_target_one_tile)</div>
 <div class="line"><a name="l01894"></a><span class="lineno"> 1894</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l01895"></a><span class="lineno"> 1895</span>&#160; </div>
@@ -2115,7 +2115,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02027"></a><span class="lineno"> 2027</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l02028"></a><span class="lineno"> 2028</span>&#160;     land_target_one_tile = 0</div>
 <div class="line"><a name="l02029"></a><span class="lineno"> 2029</span>&#160;     <span class="keywordflow">where</span>(nint(veg_type_target_one_tile) == veg_type_landice_target) land_target_one_tile = 1</div>
-<div class="line"><a name="l02030"></a><span class="lineno"> 2030</span>&#160;     <span class="keyword">call </span>search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 21)</div>
+<div class="line"><a name="l02030"></a><span class="lineno"> 2030</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, land_target_one_tile, i_target, j_target, tile, 21)</div>
 <div class="line"><a name="l02031"></a><span class="lineno"> 2031</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l02032"></a><span class="lineno"> 2032</span>&#160; </div>
 <div class="line"><a name="l02033"></a><span class="lineno"> 2033</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID SKIN TEMP, TILE: &quot;</span>, tile</div>
@@ -2134,7 +2134,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02046"></a><span class="lineno"> 2046</span>&#160;      <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l02047"></a><span class="lineno"> 2047</span>&#160; </div>
 <div class="line"><a name="l02048"></a><span class="lineno"> 2048</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l02049"></a><span class="lineno"> 2049</span>&#160;     <span class="keyword">call </span>search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 7, terrain_land=data_one_tile2)</div>
+<div class="line"><a name="l02049"></a><span class="lineno"> 2049</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, land_target_one_tile, i_target, j_target, tile, 7, terrain_land=data_one_tile2)</div>
 <div class="line"><a name="l02050"></a><span class="lineno"> 2050</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l02051"></a><span class="lineno"> 2051</span>&#160; </div>
 <div class="line"><a name="l02052"></a><span class="lineno"> 2052</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TERRAIN FROM INPUT GRID, TILE: &quot;</span>, tile</div>
@@ -2150,7 +2150,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02062"></a><span class="lineno"> 2062</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l02063"></a><span class="lineno"> 2063</span>&#160;     <span class="keywordflow">do</span> j = 1, lsoil_target</div>
 <div class="line"><a name="l02064"></a><span class="lineno"> 2064</span>&#160;       data_one_tile = data_one_tile_3d(:,:,j)</div>
-<div class="line"><a name="l02065"></a><span class="lineno"> 2065</span>&#160;       <span class="keyword">call </span>search(data_one_tile, land_target_one_tile, i_target, j_target, tile, 21)</div>
+<div class="line"><a name="l02065"></a><span class="lineno"> 2065</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, land_target_one_tile, i_target, j_target, tile, 21)</div>
 <div class="line"><a name="l02066"></a><span class="lineno"> 2066</span>&#160;       data_one_tile_3d(:,:,j) = data_one_tile</div>
 <div class="line"><a name="l02067"></a><span class="lineno"> 2067</span>&#160;<span class="keywordflow">     enddo</span></div>
 <div class="line"><a name="l02068"></a><span class="lineno"> 2068</span>&#160;<span class="keywordflow">   endif</span></div>
@@ -2382,7 +2382,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02294"></a><span class="lineno"> 2294</span>&#160; </div>
 <div class="line"><a name="l02295"></a><span class="lineno"> 2295</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l02296"></a><span class="lineno"> 2296</span>&#160;     <span class="keywordflow">where</span>(nint(veg_type_target_one_tile) == veg_type_landice_target) mask_target_one_tile = 0</div>
-<div class="line"><a name="l02297"></a><span class="lineno"> 2297</span>&#160;     <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 7)</div>
+<div class="line"><a name="l02297"></a><span class="lineno"> 2297</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 7)</div>
 <div class="line"><a name="l02298"></a><span class="lineno"> 2298</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l02299"></a><span class="lineno"> 2299</span>&#160; </div>
 <div class="line"><a name="l02300"></a><span class="lineno"> 2300</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TERRAIN FROM INPUT GRID, TILE: &quot;</span>, tile</div>
@@ -2396,7 +2396,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02308"></a><span class="lineno"> 2308</span>&#160;      <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l02309"></a><span class="lineno"> 2309</span>&#160; </div>
 <div class="line"><a name="l02310"></a><span class="lineno"> 2310</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l02311"></a><span class="lineno"> 2311</span>&#160;     <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 85)</div>
+<div class="line"><a name="l02311"></a><span class="lineno"> 2311</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 85)</div>
 <div class="line"><a name="l02312"></a><span class="lineno"> 2312</span>&#160;<span class="keywordflow">   endif</span></div>
 <div class="line"><a name="l02313"></a><span class="lineno"> 2313</span>&#160; </div>
 <div class="line"><a name="l02314"></a><span class="lineno"> 2314</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR TARGET GRID SKIN TEMPERATURE, TILE: &quot;</span>, tile</div>
@@ -2422,13 +2422,13 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02334"></a><span class="lineno"> 2334</span>&#160; </div>
 <div class="line"><a name="l02335"></a><span class="lineno"> 2335</span>&#160;   <span class="keywordflow">if</span> (.not. sotyp_from_climo) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l02336"></a><span class="lineno"> 2336</span>&#160;     <span class="keywordflow">if</span> (localpet==0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l02337"></a><span class="lineno"> 2337</span>&#160;       <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224,soilt_climo=data_one_tile2)</div>
+<div class="line"><a name="l02337"></a><span class="lineno"> 2337</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224,soilt_climo=data_one_tile2)</div>
 <div class="line"><a name="l02338"></a><span class="lineno"> 2338</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l02339"></a><span class="lineno"> 2339</span>&#160;   <span class="keywordflow">else</span></div>
 <div class="line"><a name="l02340"></a><span class="lineno"> 2340</span>&#160;     <span class="keywordflow">if</span> (localpet == 0 .and. maxval(data_one_tile) &gt; 0 .and. (trim(external_model) .ne. <span class="stringliteral">&quot;GFS&quot;</span> .or. trim(input_type) .ne. <span class="stringliteral">&quot;grib2&quot;</span>)) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l02341"></a><span class="lineno"> 2341</span>&#160;       <span class="comment">! If soil type from the input grid has any non-zero points then soil type must exist for</span></div>
 <div class="line"><a name="l02342"></a><span class="lineno"> 2342</span>&#160;       <span class="comment">! use</span></div>
-<div class="line"><a name="l02343"></a><span class="lineno"> 2343</span>&#160;       <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)</div>
+<div class="line"><a name="l02343"></a><span class="lineno"> 2343</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 224)</div>
 <div class="line"><a name="l02344"></a><span class="lineno"> 2344</span>&#160;     <span class="keywordflow">elseif</span> (localpet == 0) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l02345"></a><span class="lineno"> 2345</span>&#160;       data_one_tile = data_one_tile2</div>
 <div class="line"><a name="l02346"></a><span class="lineno"> 2346</span>&#160;<span class="keywordflow">     endif</span></div>
@@ -2455,7 +2455,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02367"></a><span class="lineno"> 2367</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l02368"></a><span class="lineno"> 2368</span>&#160; </div>
 <div class="line"><a name="l02369"></a><span class="lineno"> 2369</span>&#160;     <span class="keywordflow">if</span> (localpet == 0 .and. maxval(data_one_tile) &gt; 0.0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l02370"></a><span class="lineno"> 2370</span>&#160;       <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 226)</div>
+<div class="line"><a name="l02370"></a><span class="lineno"> 2370</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 226)</div>
 <div class="line"><a name="l02371"></a><span class="lineno"> 2371</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l02372"></a><span class="lineno"> 2372</span>&#160;     </div>
 <div class="line"><a name="l02373"></a><span class="lineno"> 2373</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR VEG GREENNESS TARGET GRID, TILE: &quot;</span>, tile</div>
@@ -2471,7 +2471,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02383"></a><span class="lineno"> 2383</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l02384"></a><span class="lineno"> 2384</span>&#160; </div>
 <div class="line"><a name="l02385"></a><span class="lineno"> 2385</span>&#160;     <span class="keywordflow">if</span> (localpet == 0 .and. maxval(data_one_tile) &gt; 0.0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l02386"></a><span class="lineno"> 2386</span>&#160;       <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target,tile, 227)</div>
+<div class="line"><a name="l02386"></a><span class="lineno"> 2386</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target,tile, 227)</div>
 <div class="line"><a name="l02387"></a><span class="lineno"> 2387</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l02388"></a><span class="lineno"> 2388</span>&#160; </div>
 <div class="line"><a name="l02389"></a><span class="lineno"> 2389</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR MAX VEG GREENNESS TARGET GRID, TILE: &quot;</span>, tile</div>
@@ -2485,7 +2485,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02397"></a><span class="lineno"> 2397</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l02398"></a><span class="lineno"> 2398</span>&#160; </div>
 <div class="line"><a name="l02399"></a><span class="lineno"> 2399</span>&#160;     <span class="keywordflow">if</span> (localpet == 0 .and. maxval(data_one_tile) &gt; 0.0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l02400"></a><span class="lineno"> 2400</span>&#160;       <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target,tile,228)</div>
+<div class="line"><a name="l02400"></a><span class="lineno"> 2400</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target,tile,228)</div>
 <div class="line"><a name="l02401"></a><span class="lineno"> 2401</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l02402"></a><span class="lineno"> 2402</span>&#160; </div>
 <div class="line"><a name="l02403"></a><span class="lineno"> 2403</span>&#160; </div>
@@ -2503,7 +2503,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02415"></a><span class="lineno"> 2415</span>&#160;        <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l02416"></a><span class="lineno"> 2416</span>&#160; </div>
 <div class="line"><a name="l02417"></a><span class="lineno"> 2417</span>&#160;     <span class="keywordflow">if</span> (localpet == 0 .and. maxval(data_one_tile) &gt; 0.0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l02418"></a><span class="lineno"> 2418</span>&#160;       <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target,tile, 229)</div>
+<div class="line"><a name="l02418"></a><span class="lineno"> 2418</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target,tile, 229)</div>
 <div class="line"><a name="l02419"></a><span class="lineno"> 2419</span>&#160;<span class="keywordflow">     endif</span></div>
 <div class="line"><a name="l02420"></a><span class="lineno"> 2420</span>&#160; </div>
 <div class="line"><a name="l02421"></a><span class="lineno"> 2421</span>&#160;     print*,<span class="stringliteral">&quot;- CALL FieldScatter FOR LEAF AREA INDEX TARGET GRID, TILE: &quot;</span>, tile</div>
@@ -2520,7 +2520,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02432"></a><span class="lineno"> 2432</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l02433"></a><span class="lineno"> 2433</span>&#160;     <span class="keywordflow">do</span> j = 1, lsoil_target</div>
 <div class="line"><a name="l02434"></a><span class="lineno"> 2434</span>&#160;       data_one_tile = data_one_tile_3d(:,:,j)</div>
-<div class="line"><a name="l02435"></a><span class="lineno"> 2435</span>&#160;       <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 86)</div>
+<div class="line"><a name="l02435"></a><span class="lineno"> 2435</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 86)</div>
 <div class="line"><a name="l02436"></a><span class="lineno"> 2436</span>&#160;       data_one_tile_3d(:,:,j) = data_one_tile</div>
 <div class="line"><a name="l02437"></a><span class="lineno"> 2437</span>&#160;<span class="keywordflow">     enddo</span></div>
 <div class="line"><a name="l02438"></a><span class="lineno"> 2438</span>&#160;<span class="keywordflow">   endif</span></div>
@@ -2538,7 +2538,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02450"></a><span class="lineno"> 2450</span>&#160;   <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l02451"></a><span class="lineno"> 2451</span>&#160;     <span class="keywordflow">do</span> j = 1, lsoil_target</div>
 <div class="line"><a name="l02452"></a><span class="lineno"> 2452</span>&#160;       data_one_tile = data_one_tile_3d(:,:,j)</div>
-<div class="line"><a name="l02453"></a><span class="lineno"> 2453</span>&#160;       <span class="keyword">call </span>search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 85)</div>
+<div class="line"><a name="l02453"></a><span class="lineno"> 2453</span>&#160;       <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 85)</div>
 <div class="line"><a name="l02454"></a><span class="lineno"> 2454</span>&#160;       data_one_tile_3d(:,:,j) = data_one_tile</div>
 <div class="line"><a name="l02455"></a><span class="lineno"> 2455</span>&#160;<span class="keywordflow">     enddo</span></div>
 <div class="line"><a name="l02456"></a><span class="lineno"> 2456</span>&#160;<span class="keywordflow">   endif</span></div>
@@ -2582,7 +2582,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l02494"></a><span class="lineno"> 2494</span>&#160; </div>
 <div class="line"><a name="l02495"></a><span class="lineno"> 2495</span>&#160; <span class="keywordtype">use </span>model_grid, <span class="keywordtype">only</span>                : landmask_target_grid</div>
 <div class="line"><a name="l02496"></a><span class="lineno"> 2496</span>&#160; </div>
-<div class="line"><a name="l02497"></a><span class="lineno"> 2497</span>&#160; <span class="keywordtype">use </span>program_setup, <span class="keywordtype">only</span>             : maxsmc_target, &amp;</div>
+<div class="line"><a name="l02497"></a><span class="lineno"> 2497</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>             : maxsmc_target, &amp;</div>
 <div class="line"><a name="l02498"></a><span class="lineno"> 2498</span>&#160;                                       bb_target, &amp;</div>
 <div class="line"><a name="l02499"></a><span class="lineno"> 2499</span>&#160;                                       satpsi_target</div>
 <div class="line"><a name="l02500"></a><span class="lineno"> 2500</span>&#160; </div>
@@ -3128,28 +3128,28 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l03040"></a><span class="lineno"> 3040</span>&#160;      <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;IN FieldGather&quot;</span>, rc)</div>
 <div class="line"><a name="l03041"></a><span class="lineno"> 3041</span>&#160; <span class="keywordflow">if</span> (localpet == 0) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l03042"></a><span class="lineno"> 3042</span>&#160;  <span class="comment">! 2d vars</span></div>
-<div class="line"><a name="l03043"></a><span class="lineno"> 3043</span>&#160;   <span class="keyword">call </span>search(soiltype_one_tile,maskdata_one_tile,i_target,j_target,1,224)</div>
-<div class="line"><a name="l03044"></a><span class="lineno"> 3044</span>&#160;   <span class="keyword">call </span>search(alvsf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
-<div class="line"><a name="l03045"></a><span class="lineno"> 3045</span>&#160;   <span class="keyword">call </span>search(alvwf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
-<div class="line"><a name="l03046"></a><span class="lineno"> 3046</span>&#160;   <span class="keyword">call </span>search(alnsf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
-<div class="line"><a name="l03047"></a><span class="lineno"> 3047</span>&#160;   <span class="keyword">call </span>search(alnwf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
-<div class="line"><a name="l03048"></a><span class="lineno"> 3048</span>&#160;   <span class="keyword">call </span>search(facsf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
-<div class="line"><a name="l03049"></a><span class="lineno"> 3049</span>&#160;   <span class="keyword">call </span>search(facwf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
-<div class="line"><a name="l03050"></a><span class="lineno"> 3050</span>&#160;   <span class="keyword">call </span>search(mxsno_albedo_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
-<div class="line"><a name="l03051"></a><span class="lineno"> 3051</span>&#160;   <span class="keyword">call </span>search(max_veg_greenness_one_tile,maskdata_one_tile,i_target,j_target,1,226)</div>
-<div class="line"><a name="l03052"></a><span class="lineno"> 3052</span>&#160;   <span class="keyword">call </span>search(min_veg_greenness_one_tile,maskdata_one_tile,i_target,j_target,1,226)</div>
-<div class="line"><a name="l03053"></a><span class="lineno"> 3053</span>&#160;   <span class="keyword">call </span>search(slope_type_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
-<div class="line"><a name="l03054"></a><span class="lineno"> 3054</span>&#160;   <span class="keyword">call </span>search(veg_greenness_one_tile,maskdata_one_tile,i_target,j_target,1,226)</div>
-<div class="line"><a name="l03055"></a><span class="lineno"> 3055</span>&#160;   <span class="keyword">call </span>search(veg_type_one_tile,maskdata_one_tile,i_target,j_target,1,225)</div>
-<div class="line"><a name="l03056"></a><span class="lineno"> 3056</span>&#160;   <span class="keyword">call </span>search(canopy_mc_one_tile,maskdata_one_tile,i_target,j_target,1,223)</div>
+<div class="line"><a name="l03043"></a><span class="lineno"> 3043</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(soiltype_one_tile,maskdata_one_tile,i_target,j_target,1,224)</div>
+<div class="line"><a name="l03044"></a><span class="lineno"> 3044</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(alvsf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
+<div class="line"><a name="l03045"></a><span class="lineno"> 3045</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(alvwf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
+<div class="line"><a name="l03046"></a><span class="lineno"> 3046</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(alnsf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
+<div class="line"><a name="l03047"></a><span class="lineno"> 3047</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(alnwf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
+<div class="line"><a name="l03048"></a><span class="lineno"> 3048</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(facsf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
+<div class="line"><a name="l03049"></a><span class="lineno"> 3049</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(facwf_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
+<div class="line"><a name="l03050"></a><span class="lineno"> 3050</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(mxsno_albedo_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
+<div class="line"><a name="l03051"></a><span class="lineno"> 3051</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(max_veg_greenness_one_tile,maskdata_one_tile,i_target,j_target,1,226)</div>
+<div class="line"><a name="l03052"></a><span class="lineno"> 3052</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(min_veg_greenness_one_tile,maskdata_one_tile,i_target,j_target,1,226)</div>
+<div class="line"><a name="l03053"></a><span class="lineno"> 3053</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(slope_type_one_tile,maskdata_one_tile,i_target,j_target,1,0)</div>
+<div class="line"><a name="l03054"></a><span class="lineno"> 3054</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(veg_greenness_one_tile,maskdata_one_tile,i_target,j_target,1,226)</div>
+<div class="line"><a name="l03055"></a><span class="lineno"> 3055</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(veg_type_one_tile,maskdata_one_tile,i_target,j_target,1,225)</div>
+<div class="line"><a name="l03056"></a><span class="lineno"> 3056</span>&#160;   <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(canopy_mc_one_tile,maskdata_one_tile,i_target,j_target,1,223)</div>
 <div class="line"><a name="l03057"></a><span class="lineno"> 3057</span>&#160;  <span class="comment">! 3d  vars</span></div>
 <div class="line"><a name="l03058"></a><span class="lineno"> 3058</span>&#160;    <span class="keywordflow">do</span> k_soil = 1, lsoil_target</div>
 <div class="line"><a name="l03059"></a><span class="lineno"> 3059</span>&#160;     tmp = soiltdata_one_tile_3d(:,:,k_soil)</div>
-<div class="line"><a name="l03060"></a><span class="lineno"> 3060</span>&#160;     <span class="keyword">call </span>search(tmp,maskdata_one_tile,i_target,j_target,1,85)</div>
+<div class="line"><a name="l03060"></a><span class="lineno"> 3060</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(tmp,maskdata_one_tile,i_target,j_target,1,85)</div>
 <div class="line"><a name="l03061"></a><span class="lineno"> 3061</span>&#160;     soiltdata_one_tile_3d(:,:,k_soil) = tmp</div>
 <div class="line"><a name="l03062"></a><span class="lineno"> 3062</span>&#160; </div>
 <div class="line"><a name="l03063"></a><span class="lineno"> 3063</span>&#160;     tmp = soilmdata_one_tile_3d(:,:,k_soil)</div>
-<div class="line"><a name="l03064"></a><span class="lineno"> 3064</span>&#160;     <span class="keyword">call </span>search(tmp,maskdata_one_tile,i_target,j_target,1,86)</div>
+<div class="line"><a name="l03064"></a><span class="lineno"> 3064</span>&#160;     <span class="keyword">call </span><a class="code" href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a>(tmp,maskdata_one_tile,i_target,j_target,1,86)</div>
 <div class="line"><a name="l03065"></a><span class="lineno"> 3065</span>&#160;     soilmdata_one_tile_3d(:,:,k_soil) = tmp</div>
 <div class="line"><a name="l03066"></a><span class="lineno"> 3066</span>&#160;<span class="keywordflow">   end do</span></div>
 <div class="line"><a name="l03067"></a><span class="lineno"> 3067</span>&#160;<span class="keywordflow"> end if</span> <span class="comment">! localpet</span></div>
@@ -3394,7 +3394,7 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l03306"></a><span class="lineno"> 3306</span>&#160; </div>
 <div class="line"><a name="l03307"></a><span class="lineno"> 3307</span>&#160; <span class="keywordtype">use </span>model_grid, <span class="keywordtype">only</span>                : landmask_target_grid</div>
 <div class="line"><a name="l03308"></a><span class="lineno"> 3308</span>&#160; </div>
-<div class="line"><a name="l03309"></a><span class="lineno"> 3309</span>&#160; <span class="keywordtype">use </span>program_setup, <span class="keywordtype">only</span>             : drysmc_input, drysmc_target, &amp;</div>
+<div class="line"><a name="l03309"></a><span class="lineno"> 3309</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>             : drysmc_input, drysmc_target, &amp;</div>
 <div class="line"><a name="l03310"></a><span class="lineno"> 3310</span>&#160;                                       maxsmc_input, maxsmc_target, &amp;</div>
 <div class="line"><a name="l03311"></a><span class="lineno"> 3311</span>&#160;                                       refsmc_input, refsmc_target, &amp;</div>
 <div class="line"><a name="l03312"></a><span class="lineno"> 3312</span>&#160;                                       wltsmc_input, wltsmc_target</div>
@@ -4903,6 +4903,8 @@ $(document).ready(function(){initNavTree('surface_8F90_source.html',''); initRes
 <div class="line"><a name="l04815"></a><span class="lineno"> 4815</span>&#160; <span class="keyword">end module </span>surface</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="asearch_8f90_html_acda6493c6d4a2e9ba6e5d80d3852c93c"><div class="ttname"><a href="search_8f90.html#acda6493c6d4a2e9ba6e5d80d3852c93c">search</a></div><div class="ttdeci">subroutine search(field, mask, idim, jdim, tile, field_name)</div><div class="ttdoc">Replace undefined values on the model grid with a valid value at a nearby neighbor.</div><div class="ttdef"><b>Definition:</b> <a href="search_8f90_source.html#l00021">search.f90:21</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html"><div class="ttname"><a href="namespaceprogram__setup.html">program_setup</a></div><div class="ttdoc">program setup</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00001">chgres_cube.fd/program_setup.f90:1</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

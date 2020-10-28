@@ -1,24 +1,27 @@
 var indexSectionsWithContent =
 {
-  0: "dgilmnsv",
+  0: "dgilmnoprsv",
   1: "ns",
-  2: "dimnsv",
-  3: "dglm"
+  2: "p",
+  3: "dimnosv",
+  4: "dglmors"
 };
 
 var indexSectionNames =
 {
   0: "all",
   1: "classes",
-  2: "files",
-  3: "functions"
+  2: "namespaces",
+  3: "files",
+  4: "functions"
 };
 
 var indexSectionLabels =
 {
   0: "All",
   1: "Data Structures",
-  2: "Files",
-  3: "Functions"
+  2: "Namespaces",
+  3: "Files",
+  4: "Functions"
 };
 
