@@ -4,6 +4,9 @@
 Utilities for the NCEP models. This is part of the
 [NCEPLIBS](https://github.com/NOAA-EMC/NCEPLIBS) project.
 
+Complete documentation can be found at
+https://noaa-emc.github.io/UFS_UTILS/.
+
 ## Authors
 
 NCEP/EMC developers.
