@@ -1,35 +1,25 @@
-!-------------------------------------------------------------------------------
-!$$$  Subprogram documentation block
+!> @file
+!! Lower and upper triangular decomposition
+!! @author Iredell @date 2008-08-01
 !
-! Subprogram:    ludcmp      lower and upper triangular decomposition
-!   Prgmmr: Iredell    Org: W/NP23      Date: 2008-08-01
-!
-! Abstract: This subprogram decomposes a matrix into a product of
-!   lower and upper triangular matrices.
-!
-! Program history log:
-!   2008-08-01  Mark Iredell
-!
-! Usage:    call ludcmp(a,n,np,indx,d)
-!   Input argument list:
-!     a        real(np,np) matrix (will be overwritten)
-!     n        integer order of matrix
-!     np       integer dimension of matrix
-!
-!   Output argument list:
-!     a        real(np,np) LU-decomposed matrix
-!              (U is upper part of A, including diagonal;
-!               L is lower part of A, with 1 as diagonal;
-!               L*U equals original A after permuting)
-!     indx     integer(n) pivot indices
-!              (original A rows are permuted in order i with indx(i))
-!     d        real determinant permutation (1 or -1, or 0 if singular)
-!              (determinant is output diagonal product times d)
-!
-! Attributes:
-!   Language: Fortran 90
-!
-!$$$
+!> This subprogram decomposes a matrix into a product of
+!! lower and upper triangular matrices.
+!!
+!! Program history log:
+!! -  2008-08-01  Mark Iredell
+!!
+!! @param[inout] - input: a real(np,np) matrix (will be overwritten) output:
+!!                - output real(np,np) LU-decomposed matrix
+!!              (U is upper part of A, including diagonal;
+!!               L is lower part of A, with 1 as diagonal;
+!!               L*U equals original A after permuting)
+!! @param[in] n integer order of matrix
+!! @param[in] np integer dimension of matrix
+!! @param[out] indx integer(n) pivot indices
+!!              (original A rows are permuted in order i with indx(i))
+!! @param[out] d real determinant permutation (1 or -1, or 0 if singular)
+!!              (determinant is output diagonal product times d)
+!!
 subroutine ludcmp(a,n,np,indx,d)
   implicit none
   integer,intent(in):: n,np
@@ -95,36 +85,26 @@ subroutine ludcmp(a,n,np,indx,d)
     endif
   enddo
 end subroutine
-!-------------------------------------------------------------------------------
-!$$$  Subprogram documentation block
-!
-! Subprogram:    lubksb      lower and upper triangular back substitution
-!   Prgmmr: Iredell    Org: W/NP23      Date: 2008-08-01
-!
-! Abstract: This subprogram back substitutes to solve decomposed
-!   lower and upper triangular matrices as outputted by ludcmp.
-!
-! Program history log:
-!   2008-08-01  Mark Iredell
-!
-! Usage:    call lubksb(a,n,np,indx,b)
-!   Input argument list:
-!     a        real(np,np) LU-decomposed matrix
-!              (from ludcmp)
-!     n        integer order of matrix
-!     np       integer dimension of matrix
-!     indx     integer(n) pivot indices
-!              (from ludcmp)
-!     b        real(n) rhs vector of linear problem (will be overwritten)
-!
-!   Output argument list:
-!     b        real(n) solution of linear problem 
-!              (original A times output B equals original B)
-!
-! Attributes:
-!   Language: Fortran 90
-!
-!$$$
+
+!> Lower and upper triangular back substitution
+!! @author Iredell @date 2008-08-01
+!!
+!! This subprogram back substitutes to solve decomposed
+!! lower and upper triangular matrices as outputted by ludcmp.
+!!
+!! Program history log:
+!! -  2008-08-01  Mark Iredell
+!!
+!!   Input argument list:
+!! @param[in] a        real(np,np) LU-decomposed matrix
+!!                     (from ludcmp)
+!! @param[in] n        integer order of matrix
+!! @param[in] np       integer dimension of matrix
+!! @param[in] indx     integer(n) pivot indices (from ludcmp)
+!! @param[inout] b  - input real(n) rhs vector of linear problem (will be overwritten)
+!!                  - output real(n) solution of linear problem 
+!!                    (original A times output B equals original B)
+!!
 subroutine lubksb(a,n,np,indx,b)
   implicit none
   integer,intent(in):: n,np
