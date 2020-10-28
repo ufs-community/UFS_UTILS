@@ -1,24 +1,22 @@
- program driver
-  
-!-------------------------------------------------------------------------
-!  program documentation block
-!
-! Abstract: Reads static surface data on a global lat/lon grid,
-!   interpolates the data to the fv3 model grid, and outputs the
-!   result in netcdf format.
-!
-! Program execution is controlled by variables defined in the
-! program configuration namelist (see module program_setup for
-! details).
-!
-! Requires the following input files:
-!   1) Model mosaic file (netcdf)
-!   2) Model orography files (netcdf)
-!   3) Model grid files (netcdf)
-!   4) Source data file on global lat/lon grid (netcdf)
-!
-! Outputs surface data on the model tiles in netcdf format.
-!-------------------------------------------------------------------------
+!> @file
+!!
+!! Reads static surface data on a global lat/lon grid,
+!! interpolates the data to the fv3 model grid, and outputs the
+!! result in netcdf format.
+!!
+!! Program execution is controlled by variables defined in the
+!! program configuration namelist (see module program_setup for
+!! details).
+!!
+!! Requires the following input files:
+!!   1) Model mosaic file (netcdf)
+!!   2) Model orography files (netcdf)
+!!   3) Model grid files (netcdf)
+!!   4) Source data file on global lat/lon grid (netcdf)
+!!
+!! Outputs surface data on the model tiles in netcdf format.
+!!
+ program driver  
 
  use model_grid
  use source_grid

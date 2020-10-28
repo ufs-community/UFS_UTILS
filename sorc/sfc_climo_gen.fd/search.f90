@@ -1,32 +1,23 @@
+!> @file
+!! @author gayno @date 2018
+!
+!> Replace undefined values on the model grid with a valid
+!! value at a nearby neighbor.  Undefined values are typically
+!! associated with isolated islands where there is no source data.
+!! Routine searches a neighborhood with a radius of 100 grid points.
+!! If no valid value is found, a default value is used.  This
+!! routine works for one tile of a cubed sphere grid.  It does
+!! not consider valid values at adjacent faces.  That is a future
+!! upgrade.
+!!
+!! @param[in] idim/jdim i/j dimensions of tile
+!! @param[in] tile tile number
+!! @param[in] mask field bitmap.  field defined where mask=1
+!! @param[in] field_name field name
+!! @param[inout] field - input: field before missing values are replaced
+!!                     - output: field after missing values are replaced
+!!
  subroutine search (field, mask, idim, jdim, tile, field_name)
-
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine:  search
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Replace undefined values on the model grid with a valid
-!   value at a nearby neighbor.  Undefined values are typically
-!   associated with isolated islands where there is no source data.
-!   Routine searches a neighborhood with a radius of 100 grid points.
-!   If no valid value is found, a default value is used.  This
-!   routine works for one tile of a cubed sphere grid.  It does
-!   not consider valid values at adjacent faces.  That is a future
-!   upgrade.
-!
-! Usage:  call search (field, mask, idim, jdim, tile, field_name)
-!
-!   input argument list:
-!     idim/jdim           i/j dimensions of tile
-!     tile                tile number
-!     mask                field bitmap.  field defined where mask=1
-!     field_name          field name
-!     field               field before missing values are replaced
-!
-!   output argment list:
-!     field               field after missing values are replaced
-!-----------------------------------------------------------------------
 
  use mpi
  use esmf

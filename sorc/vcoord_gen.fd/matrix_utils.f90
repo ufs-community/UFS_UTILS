@@ -8,11 +8,11 @@
 !! Program history log:
 !! -  2008-08-01  Mark Iredell
 !!
-!! @param[inout] - input: a real(np,np) matrix (will be overwritten) output:
-!!                - output real(np,np) LU-decomposed matrix
-!!              (U is upper part of A, including diagonal;
-!!               L is lower part of A, with 1 as diagonal;
-!!               L*U equals original A after permuting)
+!! @param[inout] a - input: a real(np,np) matrix (will be overwritten) output:
+!!                 - output real(np,np) LU-decomposed matrix
+!!                   (U is upper part of A, including diagonal;
+!!                   L is lower part of A, with 1 as diagonal;
+!!                   L*U equals original A after permuting)
 !! @param[in] n integer order of matrix
 !! @param[in] np integer dimension of matrix
 !! @param[out] indx integer(n) pivot indices
