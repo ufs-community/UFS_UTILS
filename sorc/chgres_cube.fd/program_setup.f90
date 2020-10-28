@@ -129,30 +129,30 @@
 !                                 data to the target grid instead of using data from 
 !                                 static data. Use with caution as vegetation categories
 !                                 can vary. 
-!                                 Default: False
+!                                 Default: True
 !
 ! sotyp_from_climo                If false, interpolate soil type from the input 
 !                                 data to the target grid instead of using data from 
 !                                 static data. Use with caution as the code assumes
 !                                 input soil type use STATSGO soil categories.
-!                                 Default: False
+!                                 Default: True
 !
 ! vgfrc_from_climo                If false, interpolate vegetation fraction from the input 
 !                                 data to the target grid instead of using data from 
 !                                 static data. Use with caution as vegetation categories
 !                                 can vary. 
-!                                 Default: False
+!                                 Default: True
 !
 ! minmax_vgfrc_from_climo         If false, interpolate min/max vegetation fraction from 
 !                                 the input data to the target grid instead of using data
 !                                 from static data. Use with caution as vegetation
 !                                 categories can vary. 
-!                                 Default: False
+!                                 Default: True
 !
 ! lai_from_climo                  If false, interpolate leaf area index from the input 
 !                                 data to the target grid instead of using data from 
 !                                 static data. 
-!                                 Default: False
+!                                 Default: True
 !
 ! tg3_from_soil                   If false, use lowest level soil temperature for the
 !                                 base soil temperature instead of using data from 
