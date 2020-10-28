@@ -28,7 +28,11 @@ var NAVTREE =
       [ "Data Types List", "annotated.html", "annotated_dup" ]
     ] ],
     [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
+      [ "File List", "files.html", "files_dup" ],
+      [ "Globals", "globals.html", [
+        [ "All", "globals.html", null ],
+        [ "Functions/Subroutines", "globals_func.html", null ]
+      ] ]
     ] ]
   ] ]
 ];
