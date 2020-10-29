@@ -279,7 +279,7 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
 
   if [ $gtype = regional_gfdl ]; then
 
-    set +x # don't echo all the computation to figure out how many points to add/subtract from start/end nest values
+    set +x # dont echo all the computation to figure out how many points to add/subtract from start/end nest values
  
     nptsx=`expr $iend_nest - $istart_nest + 1`  # parent points
     nptsy=`expr $jend_nest - $jstart_nest + 1`
