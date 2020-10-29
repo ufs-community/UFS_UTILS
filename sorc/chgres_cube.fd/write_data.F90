@@ -532,13 +532,13 @@
    elseif (trim(input_type) == "gfs_sigio") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'SPECTRAL GFS SIGIO FILE')
    elseif (trim(input_type) == "history") then
-     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED HISTORY FILE')
+     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
    elseif (trim(input_type) == "restart") then
-     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED RESTART FILE')
+     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
    elseif (trim(input_type) == "gaussian_netcdf") then
-     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NETCDF FILE')
+     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
    elseif (trim(input_type) == "grib2") then
-     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GRIB2 FILE')
+     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NEMSIO FILE')
    endif
 
    error = nf90_enddef(ncid, header_buffer_val,4,0,4)
