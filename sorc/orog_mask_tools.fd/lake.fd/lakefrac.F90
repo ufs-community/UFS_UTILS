@@ -1,18 +1,17 @@
-!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-! This program computes lake fraction and depth numbers for FV3 cubed sphere 
-! grid cells, from a high resolution lat/lon data set.
-! 
-! Ning Wang, July 2018: Original version
-! 
-!   Shan Sun, Aug. 2018: Added Caspian Sea and Aral Sea to the lake fraction 
-!                        and lake depth fields.
-!   Shan Sun, Dec. 2018: Added round up and round down with respect to a 
-!                        numerical minimum value and a cut-off value, for lake 
-!                        fraction number. 
-!   Ning Wang, Apr. 2019: Extended the program to process the same lake data 
-!                         for FV3 stand-alone regional (SAR) model.
-!     
-!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+!> @file
+!! This program computes lake fraction and depth numbers for FV3 cubed sphere 
+!! grid cells, from a high resolution lat/lon data set.
+!! 
+!! @author Ning Wang @date July 2018
+!! 
+!!  - Shan Sun, Aug. 2018: Added Caspian Sea and Aral Sea to the lake fraction 
+!!                        and lake depth fields.
+!!  - Shan Sun, Dec. 2018: Added round up and round down with respect to a 
+!!                        numerical minimum value and a cut-off value, for lake 
+!!                        fraction number. 
+!!  - Ning Wang, Apr. 2019: Extended the program to process the same lake data 
+!!                         for FV3 stand-alone regional (SAR) model.
+!!     
 !#define DIAG_N_VERBOSE
 #define ADD_ATT_FOR_NEW_VAR
 PROGRAM lake_frac
