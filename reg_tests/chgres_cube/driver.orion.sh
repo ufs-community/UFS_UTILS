@@ -47,7 +47,7 @@ export NCCMP=/apps/nccmp-1.8.5/bin/nccmp
 
 LOG_FILE=regression.log
 SUM_FILE=summary.log
-rm -f $LOG_FILE $SUM_FILE
+rm -f $LOG_FILE* $SUM_FILE
 
 export OMP_STACKSIZE=1024M
 
@@ -61,6 +61,7 @@ rm -fr $OUTDIR
 # Initialize C96 using FV3 warm restart files.
 #-----------------------------------------------------------------------------
 
+LOG_FILE=regression.log01
 export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.restart.sh)
@@ -69,6 +70,7 @@ TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 # Initialize C192 using FV3 tiled history files.
 #-----------------------------------------------------------------------------
 
+LOG_FILE=regression.log02
 export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c192.fv3.history \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c192.fv3.history.sh)
@@ -77,6 +79,7 @@ TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 # Initialize C96 using FV3 gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
+LOG_FILE=regression.log03
 export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.nemsio \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./c96.fv3.nemsio.sh)
@@ -85,6 +88,7 @@ TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 # Initialize C96 using spectral GFS sigio/sfcio files.
 #-----------------------------------------------------------------------------
 
+LOG_FILE=regression.log04
 export OMP_NUM_THREADS=6  # needs to match cpus-per-task
 TEST4=$(sbatch --parsable --ntasks-per-node=3 --cpus-per-task=6 --nodes=2 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./c96.gfs.sigio.sh)
@@ -93,6 +97,7 @@ TEST4=$(sbatch --parsable --ntasks-per-node=3 --cpus-per-task=6 --nodes=2 -t 0:1
 # Initialize C96 using spectral GFS gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
+LOG_FILE=regression.log05
 export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST5=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.nemsio \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST4 ./c96.gfs.nemsio.sh)
@@ -101,6 +106,7 @@ TEST5=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 # Initialize regional C96 using FV3 gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
+LOG_FILE=regression.log06
 export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.regional \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST5 ./c96.regional.sh)
@@ -109,6 +115,7 @@ TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 # Initialize global C192 using GFS GRIB2 files.
 #-----------------------------------------------------------------------------
 
+LOG_FILE=regression.log07
 export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST7=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.gfs.grib2 \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST6 ./c192.gfs.grib2.sh)
@@ -116,19 +123,74 @@ TEST7=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
 #-----------------------------------------------------------------------------
 # Initialize global C96 using FV3 gaussian netcdf files.
 #-----------------------------------------------------------------------------
-
+LOG_FILE=regression.log08
 export OMP_NUM_THREADS=1  # needs to match cpus-per-task
 TEST8=$(sbatch --parsable --ntasks-per-node=6 --nodes=2 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf \
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST7 ./c96.fv3.netcdf.sh)
 
 #-----------------------------------------------------------------------------
-# Create summary log.
+# Initialize CONUS 25-KM USING GFS GRIB2 files.
 #-----------------------------------------------------------------------------
 
+LOG_FILE=regression.log09
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST9=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.grib2.conus \
+      -o $LOG_FILE -e $LOG_FILE ./25km.conus.gfs.grib2.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GFS PHYSICS.
+#-----------------------------------------------------------------------------
+
+LOG_FILE=regression.log10
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST10=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 3km.conus.hrrr.gfssdf.grib2.conus \
+      -o $LOG_FILE -e $LOG_FILE ./3km.conus.hrrr.gfssdf.grib2.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GSD PHYSICS AND SFC VARS FROM FILE.
+#-----------------------------------------------------------------------------
+
+LOG_FILE=regression.log11
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST11=$(sbatch --parsable --ntasks-per-node=6 --nodes=2 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 3km.conus.hrrr.newsfc.grib2.conus \
+      -o $LOG_FILE -e $LOG_FILE ./3km.conus.hrrr.newsfc.grib2.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize CONUS 13-KM USING NAM GRIB2 file WITH GFS PHYSICS .
+#-----------------------------------------------------------------------------
+
+LOG_FILE=regression.log12
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST12=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.nam.grib2.conus \
+      -o $LOG_FILE -e $LOG_FILE ./13km.conus.nam.grib2.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize CONUS 13-KM USING RAP GRIB2 file WITH GSD PHYSICS .
+#-----------------------------------------------------------------------------
+
+LOG_FILE=regression.log13
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST13=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.rap.grib2.conus \
+      -o $LOG_FILE -e $LOG_FILE ./13km.conus.rap.grib2.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize CONUS 13-KM NA USING NCEI GFS GRIB2 file WITH GFS PHYSICS .
+#-----------------------------------------------------------------------------
+
+LOG_FILE=regression.log14
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST14=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.na.gfs.ncei.grib2.conus \
+      -o $LOG_FILE -e $LOG_FILE ./13km.na.gfs.ncei.grib2.sh)
+
+#-----------------------------------------------------------------------------
+# Create summary log.
+#-----------------------------------------------------------------------------
+LOG_FILE=regression.log
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST8 << EOF
+       --open-mode=append -q $QUEUE -d\
+       afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14 << EOF
 #!/bin/bash
-grep -a '<<<' $LOG_FILE  > $SUM_FILE
+grep -a '<<<' $LOG_FILE*  > $SUM_FILE
 EOF
 
 exit 0
