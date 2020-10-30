@@ -12,8 +12,8 @@ setenv CC icc
 setenv FC ifort
 setenv CXX icpc
 
-setenv ESMFMKFILE /lfs4/HFIP/hfv3gfs/software/NCEPLIBS-ufs-v2.0.0beta01/intel-18.0.5.274/impi-2018.4.274/lib64/esmf.mk
-setenv Jasper_ROOT /lfs4/HFIP/hfv3gfs/software/NCEPLIBS-ufs-v2.0.0beta01/intel-18.0.5.274/impi-2018.4.274
+setenv ESMFMKFILE /lfs4/HFIP/hfv3gfs/software/NCEPLIBS-ufs-v2.0.0/intel-18.0.5.274/impi-2018.4.274/lib64/esmf.mk
+setenv Jasper_ROOT /lfs4/HFIP/hfv3gfs/software/NCEPLIBS-ufs-v2.0.0/intel-18.0.5.274/impi-2018.4.274
 
 module use /lfs4/HFIP/hfv3gfs/software/NCEPLIBS-ufs-v2.0.0/intel-18.0.5.274/impi-2018.4.274/modules
 module load w3nco/2.4.1
