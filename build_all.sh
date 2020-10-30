@@ -9,7 +9,7 @@ export MOD_PATH
 if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
  unset -f module
  set +x
- source ./modulefiles/build.$target > /dev/null 2>&1 
+ source ./modulefiles/build.$target > /dev/null 2>&1
  set -x
 else
  set +x
@@ -20,20 +20,18 @@ else
  set -x
 fi
 
-# --- Build all programs.
-#
-
-rm -fr ./build
-mkdir ./build
-cd ./build
-
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON"
 
 if [[ "$compiler" == "intel" ]]; then
-  if [[ "$target" != "wcoss_cray" && "$target" != "odin" ]]; then
+  if [[ "$target" != "wcoss_cray" && \
+        "$target" != "gaea" && \
+        "$target" != "odin" ]]; then
     CMAKE_FLAGS+=" -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc"
   fi
 fi
+
+rm -fr ./build
+mkdir ./build && cd ./build
 
 cmake .. ${CMAKE_FLAGS}
 

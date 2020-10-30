@@ -1,4 +1,5 @@
- module utils
+!> @file
+module utils
 
  private
 
