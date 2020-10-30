@@ -1,62 +1,58 @@
- module program_setup
+!> @file
 
-!--------------------------------------------------------------------------
-! module documentation block
-!
-! Module: program setup
-!   pgrmmr: gayno           org: w/np2           date: 2018
-!
-! Abstract: Set up program execution
-!
-! Usage: use program_setup
-!
-! Public Subroutines:
-! -------------------
-! read_setup_namelist          Reads configuration namelist
-!
-! Public variables:
-! -----------------
-!
-! Here 'input' indicates variables associated with the input source data 
-! and 'mdl' indicates variables associated with the fv3 model grid.
-!
-! To not process a surface field, set its 'input_file' variable to NULL.
-! However, vegetation type must always be processed as it defines
-! landice points.
-!
-! halo                         Number of row/cols defining the lateral
-!                              boundary halo.  Used for regionanl
-!                              nests.
-! input_facsf_file             File containing input fractional
-!                              coverage data for strong zenith angle
-!                              dependent albedo.
-! input_vegetation_greenness_  File containing input vegetation
-! file                         greenness data.
-! input_leaf_area_index_file   File containing input leaf area index   
-!                              data.
-! input_maximum_snow_albedo_   File containing input maximum snow
-! file                         albedo data.
-! input_snowfree_albedo_file   File containing input snow-free 
-!                              albedo data.
-! input_soil_type_file         File containing input soil type data.
-! input_slope_type_file        File containing input slope type data.
-! input_substrate_temperature_ File containing input soil substrate
-! file                         temperature data.
-! input_vegetation_type_file   File containing input vegetation type data.
-! leaf_area_index_method       Interpolation method for leaf area index.
-!                              Conservative or bilinear (default).
-! maximum snow albedo_method   Interpolation method for max snow albedo.
-!                              Conservative or bilinear (default).
-! mosaic_file_mdl              Model grid mosaic file
-! orog_dir_mdl                 Directory containing the model grid
-!                              orography files.
-! orog_files_mdl               Model grid orography filenames.
-! snowfree_albedo_method       Interpolation method for snowfree albedo.
-!                              Conservative or bilinear (default).
-! vegetation_greenness_        Interpolation method for vegetation 
-! method                       greenness.  Conservative or bilinear.
-!                              Default is bilinear.
-!--------------------------------------------------------------------------
+!> program setup
+!! @author gayno @date 2018
+!!
+!! Set up program execution
+!!
+!! Public Subroutines:
+!! -------------------
+!! - read_setup_namelist          Reads configuration namelist
+!!
+!! Public variables:
+!! -----------------
+!!
+!! Here 'input' indicates variables associated with the input source data 
+!! and 'mdl' indicates variables associated with the fv3 model grid.
+!!
+!! To not process a surface field, set its 'input_file' variable to NULL.
+!! However, vegetation type must always be processed as it defines
+!! landice points.
+!!
+!! - halo                         Number of row/cols defining the lateral
+!!                              boundary halo.  Used for regionanl
+!!                              nests.
+!! - input_facsf_file             File containing input fractional
+!!                              coverage data for strong zenith angle
+!!                              dependent albedo.
+!! - input_vegetation_greenness_  File containing input vegetation
+!! - file                         greenness data.
+!! - input_leaf_area_index_file   File containing input leaf area index   
+!!                              data.
+!! - input_maximum_snow_albedo_file   File containing input maximum snow
+!!                          albedo data.
+!! - input_snowfree_albedo_file   File containing input snow-free 
+!!                              albedo data.
+!! - input_soil_type_file         File containing input soil type data.
+!! - input_slope_type_file        File containing input slope type data.
+!! - input_substrate_temperature_file File containing input soil substrate
+!!                          temperature data.
+!! - input_vegetation_type_file   File containing input vegetation type data.
+!! - leaf_area_index_method       Interpolation method for leaf area index.
+!!                              Conservative or bilinear (default).
+!! - maximum snow albedo_method   Interpolation method for max snow albedo.
+!!                              Conservative or bilinear (default).
+!! - mosaic_file_mdl              Model grid mosaic file
+!! - orog_dir_mdl                 Directory containing the model grid
+!!                              orography files.
+!! - orog_files_mdl               Model grid orography filenames.
+!! - snowfree_albedo_method       Interpolation method for snowfree albedo.
+!!                              Conservative or bilinear (default).
+!! - vegetation_greenness_        Interpolation method for vegetation 
+!! - method                       greenness.  Conservative or bilinear.
+!!                              Default is bilinear.
+!!
+ module program_setup
 
  implicit none
 
@@ -86,21 +82,14 @@
 
  contains
 
+!> read setup namelist
+!! @author gayno @date 2018
+!!
+!! Read program setup namelist
+!!
+!! @param[in] localpet mpi task number
+!!
  subroutine read_setup_namelist(localpet)
-
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine: read setup namelist
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Read program setup namelist
-!
-! Usage:  call read_setup_namelist (localpet)
-!
-!   input argument list:
-!     localpet               mpi task number
-!-----------------------------------------------------------------------
 
  use mpi
 
