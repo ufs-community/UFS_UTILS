@@ -22,9 +22,8 @@ MODULE cs_nb
   TYPE(nb_tile_idx):: nb_tile(4,6)  
   TYPE(nb_gp_idx):: nb_index 
 
-  INTEGER :: cres
+  INTEGER :: cres, xres, yres
  
-
 CONTAINS
 
 !   _______1_______
@@ -75,6 +74,14 @@ CONTAINS
 
   END SUBROUTINE idx_init
 
+  SUBROUTINE idx_init_reg(xres_in, yres_in)
+    INTEGER, INTENT(IN) :: xres_in, yres_in
+
+    xres = xres_in
+    yres = yres_in
+
+  END SUBROUTINE idx_init_reg
+
   INTEGER FUNCTION bndry(i, j)
     INTEGER :: i,j
 
@@ -102,6 +109,32 @@ CONTAINS
 
   END FUNCTION bndry
 
+  INTEGER FUNCTION bndry_reg(i, j)
+    INTEGER :: i,j
+
+    bndry_reg = 0                ! no boundary
+
+    IF (j == yres) THEN      ! upper boundary
+      bndry_reg = 1
+      IF (i == 1) THEN
+        bndry_reg = 13
+      ELSE IF (i == xres) THEN
+        bndry_reg = 14
+      ENDIF  
+    ELSE IF (j == 1) THEN    ! bottom boundary
+      bndry_reg = 2
+      IF (i == 1) THEN
+        bndry_reg = 23
+      ELSE IF (i == xres) THEN
+        bndry_reg = 24
+      ENDIF  
+    ELSE IF (i == 1) THEN    ! left boundary
+      bndry_reg = 3
+    ELSE IF (i == xres) THEN ! right boundary
+      bndry_reg = 4
+    ENDIF
+
+  END FUNCTION bndry_reg
 !     ______________
 !    |    |    |    |              ________
 !    | 5  | 1  | 6  |             /\ 1 \ 6 \
@@ -231,7 +264,7 @@ CONTAINS
       nb%ijt(1,3) = i+1; nb%ijt(2,3) = j; nb%ijt(3,3) = tile 
       nb%ijt(1,4) = i; nb%ijt(2,4) = j-1; nb%ijt(3,4) = tile 
       nb%ijt(1,8) = i+1; nb%ijt(2,8) = j-1; nb%ijt(3,8) = tile 
-    ELSEIF (nb%gp_type == 14) THEN ! upper left coner
+    ELSEIF (nb%gp_type == 14) THEN ! upper right coner
       bd = 1
       nb_t_num = nb_tile(bd,tile)%nb_tile_num 
       nb%ijt(3,1)=nb_t_num; nb%ijt(3,5)=nb_t_num
@@ -256,7 +289,7 @@ CONTAINS
       nb%ijt(1,2) = i-1; nb%ijt(2,2) = j; nb%ijt(3,2) = tile 
       nb%ijt(1,4) = i; nb%ijt(2,4) = j-1; nb%ijt(3,4) = tile 
       nb%ijt(1,7) = i-1; nb%ijt(2,7) = j-1; nb%ijt(3,7) = tile 
-    ELSEIF (nb%gp_type == 23) THEN ! upper left coner
+    ELSEIF (nb%gp_type == 23) THEN ! lower left coner
       bd = 2
       nb_t_num = nb_tile(bd,tile)%nb_tile_num 
       nb%ijt(3,4)=nb_t_num; nb%ijt(3,8)=nb_t_num
@@ -281,7 +314,7 @@ CONTAINS
       nb%ijt(1,1) = i; nb%ijt(2,1) = j+1; nb%ijt(3,1) = tile 
       nb%ijt(1,3) = i+1; nb%ijt(2,3) = j; nb%ijt(3,3) = tile 
       nb%ijt(1,6) = i+1; nb%ijt(2,6) = j+1; nb%ijt(3,6) = tile 
-    ELSEIF (nb%gp_type == 24) THEN ! upper left coner
+    ELSEIF (nb%gp_type == 24) THEN ! lower right coner
       bd = 2
       nb_t_num = nb_tile(bd,tile)%nb_tile_num 
       nb%ijt(3,4)=nb_t_num; nb%ijt(3,7)=nb_t_num
@@ -309,6 +342,47 @@ CONTAINS
 
     ENDIF
   END SUBROUTINE neighbors
+
+  SUBROUTINE neighbors_reg(i, j, nb)
+    INTEGER :: i, j
+    TYPE(nb_gp_idx) :: nb
+
+! assign the standard interior cell neighbors as default values
+    ! top, bottom, left, and right
+    nb%ijt(1,1) = i; nb%ijt(2,1) = j+1; nb%ijt(3,1) = 1 
+    nb%ijt(1,2) = i-1; nb%ijt(2,2) = j; nb%ijt(3,2) = 1 
+    nb%ijt(1,3) = i+1; nb%ijt(2,3) = j; nb%ijt(3,3) = 1 
+    nb%ijt(1,4) = i; nb%ijt(2,4) = j-1; nb%ijt(3,4) = 1 
+    ! top left, top right, bottom left, and bottom right
+    nb%ijt(1,5) = i-1; nb%ijt(2,5) = j+1; nb%ijt(3,5) = 1 
+    nb%ijt(1,6) = i+1; nb%ijt(2,6) = j+1; nb%ijt(3,6) = 1 
+    nb%ijt(1,7) = i-1; nb%ijt(2,7) = j-1; nb%ijt(3,7) = 1 
+    nb%ijt(1,8) = i+1; nb%ijt(2,8) = j-1; nb%ijt(3,8) = 1 
+
+    nb%gp_type = bndry_reg(i,j)
+    IF (nb%gp_type == 1) THEN  !top boundary cell
+      nb%ijt(3,1) = 0; nb%ijt(3,5) = 0; nb%ijt(3,6) = 0 
+    ELSEIF (nb%gp_type == 2) THEN !bottom boundary cell
+      nb%ijt(3,4) = 0; nb%ijt(3,7) = 0; nb%ijt(3,8) = 0 
+    ELSEIF (nb%gp_type == 3) THEN !left boundary cell
+      nb%ijt(3,2) = 0; nb%ijt(3,5) = 0; nb%ijt(3,7) = 0 
+    ELSEIF (nb%gp_type == 4) THEN !right boundary cell
+      nb%ijt(3,3) = 0; nb%ijt(3,6) = 0; nb%ijt(3,8) = 0 
+    ELSEIF (nb%gp_type == 13) THEN ! upper left coner
+      nb%ijt(3,1) = 0; nb%ijt(3,5) = 0; nb%ijt(3,6) = 0; 
+      nb%ijt(3,2) = 0; nb%ijt(3,7) = 0 
+    ELSEIF (nb%gp_type == 14) THEN ! upper right coner
+      nb%ijt(3,1) = 0; nb%ijt(3,5) = 0; nb%ijt(3,6) = 0; 
+      nb%ijt(3,3) = 0; nb%ijt(3,8) = 0 
+    ELSEIF (nb%gp_type == 23) THEN ! lower left coner
+      nb%ijt(3,4) = 0; nb%ijt(3,7) = 0; nb%ijt(3,8) = 0 
+      nb%ijt(3,2) = 0; nb%ijt(3,5) = 0;  
+    ELSEIF (nb%gp_type == 24) THEN ! lower right coner
+      nb%ijt(3,4) = 0; nb%ijt(3,7) = 0; nb%ijt(3,8) = 0 
+      nb%ijt(3,3) = 0; nb%ijt(3,6) = 0; 
+    ENDIF
+
+  END SUBROUTINE neighbors_reg
     
 END MODULE cs_nb
 
