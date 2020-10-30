@@ -78,12 +78,12 @@ elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
     target=wcoss_dell_p3
     module purge 
 elif [[ -d /glade ]] ; then
-    # We are on NCAR Yellowstone
+    # We are on NCAR Cheyenne
     if ( ! eval module help > /dev/null 2>&1 ) ; then
 	echo load the module command 1>&2
-        . /usr/share/Modules/init/$__ms_shell
+        . /glade/u/apps/ch/opt/lmod/8.1.7/lmod/8.1.7/init/sh
     fi
-    target=yellowstone
+    target=cheyenne
     module purge
 elif [[ -d /lustre && -d /ncrc ]] ; then
     # We are on GAEA. 
@@ -103,6 +103,9 @@ elif [[ "$(hostname)" =~ "Orion" ]]; then
     module purge
 elif [[ "$(hostname)" =~ "odin" ]]; then
     target="odin"
+elif [[ -d /work/00315 && -d /scratch/00315 ]] ; then
+    target=stampede
+    module purge
 else
     echo WARNING: UNKNOWN PLATFORM 1>&2
 fi

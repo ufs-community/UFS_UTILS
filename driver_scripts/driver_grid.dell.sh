@@ -38,8 +38,9 @@
 #         "regional_gfdl" - stand-alone gfdl regional grid
 #         "regional_esg"  - stand-alone extended Schmidt gnomonic
 #                           (esg) regional grid
-#   3) For "uniform" grids - to include lake fraction and
-#      depth, set "add_lake" to true, and the "lake_cutoff" value.
+#   3) For "uniform" and "regional_gfdl" grids - to include lake
+#      fraction and depth, set "add_lake" to true, and the
+#      "lake_cutoff" value.
 #   4) For "stretch" and "nest" grids, set the stretching factor -
 #       "stretch_fac", and center lat/lon of highest resolution
 #      tile - "target_lat" and "target_lon".
@@ -49,7 +50,7 @@
 #   6) For "regional_gfdl" grids, set the "halo".  Default is three
 #      rows/columns.
 #   7) For "regional_esg" grids, set center lat/lon of grid,
-#      - "target_lat/lon" - the i/j dimensions - "i/jdim", the 
+#      - "target_lat/lon" - the i/j dimensions - "i/jdim", the
 #      x/y grid spacing - "delx/y", and halo.
 #   8) Set working directory - TEMP_DIR - and path to the repository
 #      clone - home_dir.
@@ -59,39 +60,40 @@
 #-----------------------------------------------------------------------
 
 source ../sorc/machine-setup.sh > /dev/null 2>&1
-source ../modulefiles/build.$target
+module use ../modulefiles
+module load build.$target.intel
 module list
 
 #-----------------------------------------------------------------------
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=uniform  # 'uniform', 'stretch', 'nest', 
-                      # 'regional_gfdl', 'regional_esg'
-
+export gtype=uniform           # 'uniform', 'stretch', 'nest', 
+                               # 'regional_gfdl', 'regional_esg'
 if [ $gtype = uniform ]; then
   export res=96
-  export add_lake=false   # Add lake frac and depth to orography data.
-                          # Uniform grids only.
-  export lake_cutoff=0.20 # lake frac less than lake_cutoff is ignored
+  export add_lake=false        # Add lake frac and depth to orography data.
+  export lake_cutoff=0.20      # lake frac < lake_cutoff ignored when add_lake=T
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile
   export target_lat=35.5       # Center latitude of the highest resolution tile
 elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
-  export res=96
+  export add_lake=false        # Add lake frac and depth to orography data.
+  export lake_cutoff=0.20      # lake frac < lake_cutoff ignored when add_lake=T
+  export res=768
   export stretch_fac=1.5       # Stretching factor for the grid
   export target_lon=-97.5      # Center longitude of the highest resolution tile
-  export target_lat=35.5       # Center latitude of the highest resolution tile
+  export target_lat=38.5       # Center latitude of the highest resolution tile
   export refine_ratio=3        # The refinement ratio
-  export istart_nest=27        # Starting i-direction index of nest grid in parent tile supergrid
-  export jstart_nest=37        # Starting j-direction index of nest grid in parent tile supergrid
-  export iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
-  export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
-  export halo=3
+  export istart_nest=123       # Starting i-direction index of nest grid in parent tile supergrid
+  export jstart_nest=331       # Starting j-direction index of nest grid in parent tile supergrid
+  export iend_nest=1402        # Ending i-direction index of nest grid in parent tile supergrid
+  export jend_nest=1194        # Ending j-direction index of nest grid in parent tile supergrid
+  export halo=3                # Lateral boundary halo
 elif [ $gtype = regional_esg ] ; then
-  export res=-999              # equivalent res is computed.
+  export res=-999              # equivalent resolution is computed
   export target_lon=-97.5      # Center longitude of grid
   export target_lat=35.5       # Center latitude of grid
   export idim=301              # Dimension of grid in 'i' direction
@@ -108,7 +110,7 @@ fi
 #-----------------------------------------------------------------------
 # Check paths.
 #   home_dir - location of repository.
-#   TEMP_DIR   - working directory.
+#   TEMP_DIR - working directory.
 #   out_dir  - where files will be placed upon completion.
 #-----------------------------------------------------------------------
 

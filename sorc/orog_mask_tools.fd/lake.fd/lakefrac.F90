@@ -75,8 +75,6 @@ PROGRAM lake_frac
       PRINT*, 'Process regional tile (tile', tile_req, ') at resolution C',cs_res
     ENDIF
 
-!    cs_res = 96 !    tile_beg = 3; tile_end = 3
-
     ! read in grid spec data for each tile and concatenate them together
 
     ncsmp = (2*cs_res+1)*(2*cs_res+1)*6   
@@ -127,6 +125,8 @@ PROGRAM lake_frac
     DEALLOCATE(cs_lakestatus,cs_lakedepth)
     DEALLOCATE(cs_grid)
     DEALLOCATE(lakestatus,lakedepth)
+    DEALLOCATE(src_grid_lat, src_grid_lon)
+
     STOP
 CONTAINS
 
@@ -426,9 +426,7 @@ SUBROUTINE read_cubed_sphere_reg_grid(res, grid, halo_depth, res_x, res_y)
     CHARACTER(len=4) res_ch
     CHARACTER(len=8) dimname
 
-
     WRITE(res_ch,'(I4)') res
-!    gridfile_path = '/scratch4/BMC/fim/fv3data/fix/reg/' 
     gridfile_path = './' 
     gridfile = trim(gridfile_path)//"C"//trim(adjustl(res_ch))//"_grid.tile7.nc"
 
@@ -447,8 +445,6 @@ SUBROUTINE read_cubed_sphere_reg_grid(res, grid, halo_depth, res_x, res_y)
     stat = nf90_inquire_dimension(ncid,dimid,dimname,len=nyp)
     CALL nc_opchk(stat,'nf90_inquire_dimension: nyp')
 
-!    sidex_sz = nxp-2*halo_depth
-!    sidey_sz = nyp-2*halo_depth
     sidex_sz = nxp
     sidey_sz = nyp
     tile_sz = sidex_sz*sidey_sz
@@ -699,13 +695,13 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
     INTEGER :: tile_sz, tile_num
     INTEGER :: stat, ncid, x_dimid, y_dimid, varid, dimids(2)
     INTEGER :: lake_frac_id, lake_depth_id
-    INTEGER :: land_frac_id, slmsk_id, geolon_id, geolat_id
+    INTEGER :: land_frac_id, slmsk_id, geolon_id, geolat_id, inland_id
     CHARACTER(len=256) :: filename,string
     CHARACTER(len=1) :: ich
     CHARACTER(len=4) res_ch
 
     REAL, ALLOCATABLE :: lake_frac(:), lake_depth(:), geolon(:), geolat(:)
-    REAL, ALLOCATABLE :: land_frac(:), slmsk(:)
+    REAL, ALLOCATABLE :: land_frac(:), slmsk(:), inland(:)
 
     real, parameter :: epsil=1.e-6   ! numerical min for lake_frac/land_frac
     real            :: land_cutoff=1.e-6 ! land_frac=0 if it is < land_cutoff
@@ -717,7 +713,7 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
 
     ALLOCATE(lake_frac(tile_sz), lake_depth(tile_sz))
     ALLOCATE(geolon(tile_sz), geolat(tile_sz))
-    ALLOCATE(land_frac(tile_sz), slmsk(tile_sz))
+    ALLOCATE(land_frac(tile_sz), slmsk(tile_sz), inland(tile_sz))
 
     WRITE(res_ch,'(I4)') cs_res
     tile_num  = 7
@@ -774,9 +770,9 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
     CALL nc_opchk(stat, "nf90_put_att: lake_depth:description") 
 #endif
     ENDIF
-    write(string,'(a,es8.1)') 'land_frac is adjusted to 1-lake_frac where lake_frac>0 but lefti '// &
-                              'unchanged where lake_frac=0. This could lead to land_frac+lake_frac<1 '// &
-                              'at some inland points; land_frac cutoff is',land_cutoff
+    write(string,'(a,es8.1)') 'land_frac and lake_frac are adjusted '// &
+     'such that their sum is 1 at points where inland=1; land_frac '// &
+     'cutoff is ',land_cutoff
     stat = nf90_put_att(ncid, land_frac_id,'description',trim(string))
     CALL nc_opchk(stat, "nf90_put_att: land_frac:description") 
 
@@ -796,6 +792,8 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
     CALL nc_opchk(stat, "nf90_inq_varid: land_frac")
     stat = nf90_inq_varid(ncid, "slmsk", slmsk_id)
     CALL nc_opchk(stat, "nf90_inq_varid: slmsk")
+    stat = nf90_inq_varid(ncid, "inland", inland_id)
+    CALL nc_opchk(stat, "nf90_inq_varid: inland")
 
     stat = nf90_get_var(ncid, geolon_id, geolon, &
            start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
@@ -809,30 +807,38 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
     stat = nf90_get_var(ncid, slmsk_id, slmsk, &
            start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
     CALL nc_opchk(stat, "nf90_get_var: slmsk")
+    stat = nf90_get_var(ncid, inland_id, inland, &
+           start = (/ 1, 1 /), count = (/ tile_x_dim, tile_y_dim /) )
+    CALL nc_opchk(stat, "nf90_get_var: inland")
 
     tile_num = 1
     lake_frac(:)  = cs_lakestat((tile_num-1)*tile_sz+1:tile_num*tile_sz)
     lake_depth(:) = cs_lakedepth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
 
 ! add Caspian Sea and Aral Sea to lake_frac and lake_depth
-    IF (tile_num == 2 .or. tile_num == 3) THEN
-      DO i = 1, tile_sz
-        IF (land_frac(i) < 0.9 .AND. lake_frac(i) < 0.1) THEN
-          IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
-              geolon(i) > 45.0 .AND. geolon(i) <= 55.0) THEN
-            lake_frac(i) = 1.-land_frac(i)
-            lake_depth(i) = 211.0
-          ENDIF
-          IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
-              geolon(i) > 57.0 .AND. geolon(i) <= 63.0) THEN
-            lake_frac(i) = 1.-land_frac(i)
-            lake_depth(i) = 10.0
-          ENDIF
-        ENDIF
-      ENDDO
-    ENDIF
-
     DO i = 1, tile_sz
+      IF (land_frac(i) < 0.9 .AND. lake_frac(i) < 0.1) THEN
+        IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
+            geolon(i) > 45.0 .AND. geolon(i) <= 55.0) THEN
+          lake_frac(i) = 1.-land_frac(i)
+          lake_depth(i) = 211.0
+        ENDIF
+        IF (geolat(i) > 35.0 .AND. geolat(i) <= 50.0 .AND. &
+            geolon(i) > 57.0 .AND. geolon(i) <= 63.0) THEN
+          lake_frac(i) = 1.-land_frac(i)
+          lake_depth(i) = 10.0
+        ENDIF
+      ENDIF
+    ENDDO
+
+! adjust land_frac and lake_frac, and make sure land_frac+lake_frac=1 at inland points
+    DO i = 1, tile_sz
+      if (lake_frac(i) >= lake_cutoff) then ! non-zero lake_frac dominates over land_frac
+        land_frac(i) = max(0., min(1., 1.-lake_frac(i)))
+      elseif (inland(i) == 1.) then ! land_frac dominates over lake_frac at inland points
+        lake_frac(i) = max(0., min(1., 1.-land_frac(i)))
+      end if
+
 ! epsil is "numerical" nonzero min for lake_frac/land_frac
 ! lake_cutoff/land_cutoff is practical min for lake_frac/land_frac
       if (min(lake_cutoff,land_cutoff) < epsil) then
@@ -843,12 +849,9 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
 
       if (lake_frac(i)<   lake_cutoff) lake_frac(i)=0.
       if (lake_frac(i)>1.-lake_cutoff) lake_frac(i)=1.
+      if (inland(i) == 1.) land_frac(i) = 1.-lake_frac(i)
       if (land_frac(i)<   land_cutoff) land_frac(i)=0.
       if (land_frac(i)>1.-land_cutoff) land_frac(i)=1.
-
-      if (lake_frac(i) >= lake_cutoff) then ! non-zero lake_frac dominates over land_frac
-        land_frac(i) = max(0., min(1., 1.-lake_frac(i)))
-      end if
 
       if (lake_frac(i) < lake_cutoff) then
         lake_depth(i)=0.
@@ -879,6 +882,10 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
     stat = nf90_close(ncid)
     CALL nc_opchk(stat, "nf90_close") 
   
+    DEALLOCATE(lake_frac, lake_depth)
+    DEALLOCATE(geolon, geolat)
+    DEALLOCATE(land_frac, slmsk)
+
 END SUBROUTINE write_reg_lakedata_to_orodata
 
 SUBROUTINE nc_opchk(stat,opname)

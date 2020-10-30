@@ -144,9 +144,9 @@
 
  subroutine atmosphere_driver(localpet)
 
- implicit none
+ use mpi
 
- include 'mpif.h'
+ implicit none
 
  integer, intent(in)                :: localpet
 
@@ -164,7 +164,7 @@
  real(esmf_kind_r8), parameter      :: exponent = rd*lapse/grav
  real(esmf_kind_r8), parameter      :: one_over_exponent = 1.0 / exponent
 
- real(esmf_kind_r8), pointer        :: psptr(:,:)
+ real(esmf_kind_r8), pointer        :: psptr(:,:), tempptr(:,:,:)
 
 !-----------------------------------------------------------------------------------
 ! Read atmospheric fields on the input grid.
@@ -212,7 +212,6 @@
                               temp_b4adj_target_grid, &
                               polemethod=ESMF_POLEMETHOD_ALLAVG, &
                               srctermprocessing=isrctermprocessing, &
-                              extrapmethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                               routehandle=regrid_bl, &
                               regridmethod=method, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -256,7 +255,25 @@
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
+    
+ nullify(tempptr)
+ print*,"- CALL FieldGet FOR INPUT GRID VERTICAL VEL."
+ call ESMF_FieldGet(dzdt_input_grid, &
+                    farrayPtr=tempptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+    
+ print*, "MIN MAX W INPUT = ", minval(tempptr), maxval(tempptr)
 
+ nullify(tempptr)
+ print*,"- CALL FieldGet FOR VERTICAL VEL B4ADJ."
+ call ESMF_FieldGet(dzdt_b4adj_target_grid, &
+                    farrayPtr=tempptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+    
+ print*, "MIN MAX W B4ADJ = ", minval(tempptr), maxval(tempptr)
+ 
  nullify(psptr)
  print*,"- CALL FieldGet FOR INPUT SURFACE PRESSURE."
  call ESMF_FieldGet(ps_input_grid, &
@@ -364,8 +381,8 @@
                             wind_w_target_grid, &
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
-                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             routehandle=regrid_bl, &
+                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             regridmethod=method, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
@@ -391,8 +408,8 @@
                             wind_s_target_grid, &
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
-                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             routehandle=regrid_bl, &
+                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             regridmethod=method, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
@@ -722,6 +739,7 @@
      enddo
    enddo
  enddo
+ 
 
  print*,"- CALL FieldGet FOR 3-D WIND_W."
  call ESMF_FieldGet(wind_w_target_grid, &
@@ -1221,7 +1239,6 @@
                             qnifa_climo_b4adj_target_grid, &
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
-                            extrapmethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             routehandle=regrid_bl, &
                             regridmethod=method, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1407,9 +1424,9 @@
 !   LANGUAGE: FORTRAN
 !
 !
- IMPLICIT NONE
+ use mpi
 
- include 'mpif.h'
+ IMPLICIT NONE
 
  REAL(ESMF_KIND_R8), PARAMETER   :: DLTDZ=-6.5E-3*287.05/9.80665
  REAL(ESMF_KIND_R8), PARAMETER   :: DLPVDRT=-2.5E6/461.50
@@ -1478,7 +1495,7 @@
  C1(:,:,:,1) =  WIND1PTR(:,:,:,1)
  C1(:,:,:,2) =  WIND1PTR(:,:,:,2)
  C1(:,:,:,3) =  WIND1PTR(:,:,:,3)
-
+ 
  print*,"- CALL FieldGet FOR VERTICAL VELOCITY."
  call ESMF_FieldGet(dzdt_b4adj_target_grid, &
                     farrayPtr=DZDT1PTR, rc=rc)
@@ -1486,6 +1503,7 @@
          call error_handler("IN FieldGet", rc)
 
  C1(:,:,:,4) =  DZDT1PTR(:,:,:)
+ print*,"MIN MAX W TARGETB4 IN VINTG = ", minval(DZDT1PTR(:,:,:)), maxval(DZDT1PTR(:,:,:))
 
  print*,"- CALL FieldGet FOR 3-D TEMP."
  call ESMF_FieldGet(temp_b4adj_target_grid, &

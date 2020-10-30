@@ -36,10 +36,6 @@
 !                                 target grids.
 ! fix_dir_target_grid             Directory containing target grid
 !                                 pre-computed fixed data (ex: soil type)
-! grib2_file_input_grid           File name of grib2 input data.
-!                                 Assumes atmospheric and surface data
-!                                 are in a single file. 'grib2' input
-!                                 type only.
 ! halo_blend                      Number of row/cols of blending halo,
 !                                 where model tendencies and lateral
 !                                 boundary tendencies are applied.
@@ -56,7 +52,7 @@
 !                                     nemsio files;
 !                                 (4) "gaussian_netcdf" for fv3 gaussian
 !                                     netcdf files.
-!                                 (5) "grib2" for fv3gfs grib2 files.
+!                                 (5) "grib2" for grib2 files.
 !                                 (6) "gfs_gaussian_nemsio" for spectral gfs
 !                                     gaussian nemsio files
 !                                 (7) "gfs_sigio" for spectral gfs
@@ -98,16 +94,71 @@
 !                                 These names will be used to identify
 !                                 the tracer records in the output files.
 !                                 Follows the convention in the field table.
+!                                 FOR GRIB2 FILES: Not used. Tracers instead taken
+!                                 from the varmap file. 
 ! tracers_input                   Name of each atmos tracer record in 
 !                                 the input file.  May be different from
 !                                 value in 'tracers'. 
+!                                 FOR GRIB2 FILES: Not used. Tracers instead taken
+!                                 from the varmap file. 
 ! use_thomp_mp_climo              When true, read and process Thompson
 !                                 MP climatological tracers.  False,
 !                                 when 'thomp_mp_climo_file' is NULL.
 ! vcoord_file_target_grid         Vertical coordinate definition file
 ! wltsmc_input/target             Wilting point soil moisture content
 !                                 input/target grids
-! 
+!
+! nsoill_out                      Number of soil levels desired in the output data. 
+!                                 chgres_cube can interpolate from 9 input to 4 output
+!                                 levels. 
+!                                 DEFAULT: 4    
+!
+! Variables that are relevant only for "grib2" input type:
+!
+! grib2_file_input_grid           REQUIRED. File name of grib2 input data.
+!                                 Assumes atmospheric and surface data are in a single 
+!                                 file. 
+!
+! varmap_file                     REQUIRED. Full path of the relevant varmap file. 
+!
+! external_model                  The model that the input data is derived from. Current
+!                                 supported options are: "GFS", "HRRR", "NAM", "RAP". 
+!                                 Default: "GFS"
+!
+! vgtyp_from_climo                If false, interpolate vegetation type from the input 
+!                                 data to the target grid instead of using data from 
+!                                 static data. Use with caution as vegetation categories
+!                                 can vary. 
+!                                 Default: False
+!
+! sotyp_from_climo                If false, interpolate soil type from the input 
+!                                 data to the target grid instead of using data from 
+!                                 static data. Use with caution as the code assumes
+!                                 input soil type use STATSGO soil categories.
+!                                 Default: False
+!
+! vgfrc_from_climo                If false, interpolate vegetation fraction from the input 
+!                                 data to the target grid instead of using data from 
+!                                 static data. Use with caution as vegetation categories
+!                                 can vary. 
+!                                 Default: False
+!
+! minmax_vgfrc_from_climo         If false, interpolate min/max vegetation fraction from 
+!                                 the input data to the target grid instead of using data
+!                                 from static data. Use with caution as vegetation
+!                                 categories can vary. 
+!                                 Default: False
+!
+! lai_from_climo                  If false, interpolate leaf area index from the input 
+!                                 data to the target grid instead of using data from 
+!                                 static data. 
+!                                 Default: False
+!
+! tg3_from_soil                   If false, use lowest level soil temperature for the
+!                                 base soil temperature instead of using data from 
+!                                 static data. 
+!                                 Default: False
+!
 !--------------------------------------------------------------------------
 
  implicit none
@@ -124,6 +175,7 @@
  character(len=500), public      :: mosaic_file_target_grid = "NULL"
  character(len=500), public      :: nst_files_input_grid = "NULL"
  character(len=500), public      :: grib2_file_input_grid = "NULL"
+ character(len=500), public      :: geogrid_file_input_grid = "NULL"
  character(len=500), public      :: orog_dir_input_grid = "NULL"
  character(len=500), public      :: orog_files_input_grid(6) = "NULL"
  character(len=500), public      :: orog_dir_target_grid = "NULL"
@@ -134,7 +186,12 @@
  character(len=6),   public      :: cres_target_grid = "NULL"
  character(len=500), public      :: atm_weight_file="NULL"
  character(len=25),  public      :: input_type="restart"
- character(len=20), public       :: phys_suite="GFS"      !Default to gfs physics suite
+ character(len=20),  public      :: external_model="GFS"  !Default assume gfs data
+ 
+                        
+ 
+ character(len=500), public       :: fix_dir_input_grid = "NULL"                             
+                                                          
 
  integer, parameter, public      :: max_tracers=100
  integer, public                 :: num_tracers, num_tracers_input
@@ -154,11 +211,20 @@
  integer, public                 :: regional = 0
  integer, public                 :: halo_bndy = 0
  integer, public                 :: halo_blend = 0
+ integer, public                 :: nsoill_out = 4
 
  logical, public                 :: convert_atm = .false.
  logical, public                 :: convert_nst = .false.
  logical, public                 :: convert_sfc = .false.
-
+ 
+ ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
+ ! Default is to use climatology instead
+ logical, public                 :: vgtyp_from_climo = .true.
+ logical, public                 :: sotyp_from_climo = .true.
+ logical, public                 :: vgfrc_from_climo = .true.
+ logical, public                 :: minmax_vgfrc_from_climo = .true.
+ logical, public                 :: lai_from_climo = .true.
+ logical, public                 :: tg3_from_soil = .false.
  logical, public                 :: use_thomp_mp_climo=.false.
 
  real, allocatable, public       :: drysmc_input(:), drysmc_target(:)
@@ -199,16 +265,26 @@
                    atm_core_files_input_grid,    &
                    atm_tracer_files_input_grid,    &
                    grib2_file_input_grid, &
+                   geogrid_file_input_grid, &
                    data_dir_input_grid,     &
                    vcoord_file_target_grid, &
                    cycle_mon, cycle_day,    &
                    cycle_hour, convert_atm, &
                    convert_nst, convert_sfc, &
+                   vgtyp_from_climo, &
+                   sotyp_from_climo, &
+                   vgfrc_from_climo, &
+                   minmax_vgfrc_from_climo, &
+                   lai_from_climo, tg3_from_soil, &
                    regional, input_type, &
+                   external_model, &
                    atm_weight_file, tracers, &
-                   tracers_input,phys_suite, &
+                   tracers_input, &
                    halo_bndy, & 
-                   halo_blend, thomp_mp_climo_file
+                   halo_blend, &
+                   fix_dir_input_grid, &
+                   nsoill_out, &
+                   thomp_mp_climo_file
 
  print*,"- READ SETUP NAMELIST"
 
@@ -219,7 +295,7 @@
  close (41)
  
  call to_lower(input_type)
- call to_upper(phys_suite)
+! call to_upper(phys_suite)
  
  orog_dir_target_grid = trim(orog_dir_target_grid) // '/'
  orog_dir_input_grid = trim(orog_dir_input_grid) // '/'
@@ -229,7 +305,7 @@
 !-------------------------------------------------------------------------
 
  is = index(mosaic_file_target_grid, "/", .true.)
- ie = index(mosaic_file_target_grid, "_mosaic")
+ ie = index(mosaic_file_target_grid, "mosaic") - 1
 
  if (is == 0 .or. ie == 0) then
    call error_handler("CANT DETERMINE CRES FROM MOSAIC FILE.", 1)
@@ -293,11 +369,51 @@
    case default
      call error_handler("UNRECOGNIZED INPUT DATA TYPE.", 1)
  end select
+
+!-------------------------------------------------------------------------
+! Ensure proper file variable provided for grib2 input  
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2") then
+	 if (trim(grib2_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
+		 call error_handler("FOR GRIB2 DATA, PLEASE PROVIDE GRIB2_FILE_INPUT_GRID", 1)
+	 endif
+ endif
+
+ !-------------------------------------------------------------------------
+! For grib2 input, warn about possibly unsupported external model types
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2") then
+	 if (.not. any((/character(4)::"GFS","NAM","RAP","HRRR"/)==trim(external_model))) then
+		 call error_handler( "KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, AND HRRR. " // &
+		 "IF YOU WISH TO PROCESS GRIB2 DATA FROM ANOTHER MODEL, YOU MAY ATTEMPT TO DO SO AT YOUR OWN RISK. " // &
+		 "ONE WAY TO DO THIS IS PROVIDE NAM FOR external_model AS IT IS A RELATIVELY STRAIGHT-" // &
+		 "FORWARD REGIONAL GRIB2 FILE. YOU MAY ALSO COMMENT OUT THIS ERROR MESSAGE IN " // &
+		 "program_setup.f90 LINE 389. NO GUARANTEE IS PROVIDED THAT THE CODE WILL WORK OR "// &
+		 "THAT THE RESULTING DATA WILL BE CORRECT OR WORK WITH THE ATMOSPHERIC MODEL.", 1)
+	 endif
+ endif
+
+!-------------------------------------------------------------------------
+! For grib2 hrrr input without geogrid file input, warn that soil moisture interpolation
+! will be less accurate
+!-------------------------------------------------------------------------
+
+ if (trim(input_type) == "grib2" .and. trim(external_model)=="HRRR") then
+	 if (trim(geogrid_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
+		 print*, "HRRR DATA DOES NOT CONTAIN SOIL TYPE INFORMATION. WITHOUT &
+			GEOGRID_FILE_INPUT_GRID SPECIFIED, SOIL MOISTURE INTERPOLATION MAY BE LESS &
+			ACCURATE. "
+	 endif
+ endif
  
  if (trim(thomp_mp_climo_file) /= "NULL") then
    use_thomp_mp_climo=.true.
    print*,"- WILL PROCESS CLIMO THOMPSON MP TRACERS FROM FILE: ", trim(thomp_mp_climo_file)
  endif
+
+ return
 
  end subroutine read_setup_namelist
 
@@ -346,6 +462,12 @@ subroutine read_varmap
      if(trim(var_type(k))=='T') then
        num_tracers = num_tracers + 1
        tracers_input(num_tracers)=chgres_var_names(k)
+       if ((trim(chgres_var_names(k)) == "ice_aero" .or. trim(chgres_var_names(k)) == "liq_aero") .and. &
+           trim(thomp_mp_climo_file) .ne. "NULL" .and. trim(input_type) == "grib2") then
+           call error_handler("VARMAP TABLE CONTAINS TRACER ENTRIES FOR THOMPSON AEROSOLS liq_aero or "// &
+           "ice_aero. REMOVE THESE ENTRIES OR REMOVE THE NAMELIST ENTRY FOR "// &
+           "thomp_mp_climo_file AND TRY AGAIN.",1)
+       endif
      endif
     enddo
    close(14)

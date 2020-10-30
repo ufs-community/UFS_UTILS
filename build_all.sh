@@ -2,20 +2,23 @@
 set -eux
 
 target=${target:-"NULL"}
-
-if [[ "$target" == "linux.gnu" || "$target" == "linux.intel" ]]; then
- unset -f module
-else
- set +x
- source ./sorc/machine-setup.sh > /dev/null 2>&1
- set -x
-fi
+compiler=${compiler:-"intel"}
 
 export MOD_PATH
-set +x
-source ./modulefiles/build.$target             > /dev/null 2>&1
-module list
-set -x
+
+if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
+ unset -f module
+ set +x
+ source ./modulefiles/build.$target > /dev/null 2>&1 
+ set -x
+else
+ set +x
+ source ./sorc/machine-setup.sh
+ module use ./modulefiles
+ module load build.$target.$compiler > /dev/null 2>&1
+ module list
+ set -x
+fi
 
 # --- Build all programs.
 #
@@ -26,8 +29,10 @@ cd ./build
 
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON"
 
-if [[ "$target" != "wcoss_cray" ]]; then
-  CMAKE_FLAGS+=" -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc"
+if [[ "$compiler" == "intel" ]]; then
+  if [[ "$target" != "wcoss_cray" && "$target" != "odin" ]]; then
+    CMAKE_FLAGS+=" -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc"
+  fi
 fi
 
 cmake .. ${CMAKE_FLAGS}

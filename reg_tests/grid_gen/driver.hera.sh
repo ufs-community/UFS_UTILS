@@ -21,8 +21,12 @@
 #
 #-----------------------------------------------------------------------------
 
+compiler=${compiler:-"intel"}
+
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.$compiler
+module list
 
 set -x
 
@@ -41,7 +45,7 @@ export APRUN=time
 export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export machine=HERA
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
+export NCCMP=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/v1.0.0-beta1/intel-18.0.5.274/impi-2018.0.4/nccmp/1.8.7.0/bin/nccmp
 export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/grid_gen/baseline_data
 
 ulimit -a

@@ -8,9 +8,8 @@ module load cmake/3.16.2
 module load ips/18.0.1.163
 module load impi/18.0.1
 
-
 module load jasper/1.900.29
-export Jasper_ROOT="/usrx/local/prod/packages/gnu/4.8.5/jasper/1.900.29"
+setenv Jasper_ROOT /usrx/local/prod/packages/gnu/4.8.5/jasper/1.900.29
 
 module use /usrx/local/nceplibs/dev/NCEPLIBS/modulefiles
 module load netcdf_parallel/4.7.4
