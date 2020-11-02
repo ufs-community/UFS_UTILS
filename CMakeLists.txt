@@ -75,5 +75,5 @@ add_subdirectory(sorc)
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)
   find_package(Doxygen REQUIRED)
+  add_subdirectory(docs)  
 endif()
-add_subdirectory(docs)  

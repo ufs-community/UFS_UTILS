@@ -741,23 +741,7 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT = @abs_top_srcdir@/docs/user_guide.md @abs_top_srcdir@/sorc \
-@abs_top_srcdir@/sorc/chgres_cube.fd  \
-@abs_top_srcdir@/sorc/emcsfc_ice_blend.fd  \
-@abs_top_srcdir@/sorc/emcsfc_snow2mdl.fd  \
-@abs_top_srcdir@/sorc/fre-nctools.fd  \
-@abs_top_srcdir@/sorc/fvcom_tools.fd  \
-@abs_top_srcdir@/sorc/global_chgres.fd  \
-@abs_top_srcdir@/sorc/global_cycle.fd  \
-@abs_top_srcdir@/sorc/grid_tools.fd  \
-@abs_top_srcdir@/sorc/mkgfsnemsioctl.fd  \
-@abs_top_srcdir@/sorc/nemsio_chgdate.fd  \
-@abs_top_srcdir@/sorc/nemsio_get.fd  \
-@abs_top_srcdir@/sorc/nemsio_read.fd  \
-@abs_top_srcdir@/sorc/nst_tf_chg.fd  \
-@abs_top_srcdir@/sorc/orog_mask_tools.fd  \
-@abs_top_srcdir@/sorc/sfc_climo_gen.fd  \
-@abs_top_srcdir@/sorc/vcoord_gen.fd
+INPUT = @abs_top_srcdir@/docs/user_guide.md @abs_top_srcdir@/sorc 
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -777,13 +761,13 @@ INPUT_ENCODING         = UTF-8
 # *.md, *.mm, *.dox, *.py, *.f90, *.f, *.for, *.tcl, *.vhd, *.vhdl, *.ucf,
 # *.qsf, *.as and *.js.
 
-FILE_PATTERNS          = *.F90 *.f90
+FILE_PATTERNS          = *.F90 *.f90 *.f *.F *.h                     
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
 # The default value is: NO.
 
-RECURSIVE              = NO
+RECURSIVE              = YES
 
 # The EXCLUDE tag can be used to specify files and/or directories that should be
 # excluded from the INPUT source files. This way you can easily exclude a

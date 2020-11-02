@@ -2,17 +2,14 @@
 #
 # Ed Hartnett 10/5/20
 
-if(ENABLE_DOCS)
+# Create doxyfile.
+set(abs_top_srcdir "${CMAKE_SOURCE_DIR}")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
 
-  # Create doxyfile.
-  set(abs_top_srcdir "${CMAKE_SOURCE_DIR}")
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+# Build documentation with target all.
+add_custom_target(doc ALL
+  ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMENT "Generating API Documentation with Doxygen" VERBATIM)
 
-  # Build documentation with target all.
-  add_custom_target(doc ALL
-    ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Generating API Documentation with Doxygen" VERBATIM)
-
-endif(ENABLE_DOCS)
 
