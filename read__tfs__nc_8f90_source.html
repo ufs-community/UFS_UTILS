@@ -87,101 +87,103 @@ $(document).ready(function(){initNavTree('read__tfs__nc_8f90_source.html',''); i
 </div><!--header-->
 <div class="contents">
 <a href="read__tfs__nc_8f90.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">!</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">subroutine </span><a class="code" href="read__tfs__nc_8f90.html#a8c9a60b111795f2990e7e0c561887c0c">read_tfs_nc</a>(filename,tf,mask,nlon,nlat)</div>
-<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="read__tfs__nc_8f90.html#a8c9a60b111795f2990e7e0c561887c0c">    6</a></span>&#160;  <span class="keywordtype">use </span>netcdf</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;  <span class="keywordtype">implicit none</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;  </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;  <span class="comment">! This is the name of the data file we will read.</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  <span class="keywordtype">character (len=5)</span>,            <span class="keywordtype">intent(in)</span>  :: filename</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  <span class="keywordtype">integer</span>,                      <span class="keywordtype">intent(in)</span>  :: nlat,nlon</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keywordtype">  real</span>, <span class="keywordtype">dimension(nlon,nlat)</span>,   <span class="keywordtype">intent(out)</span> :: tf</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(nlon,nlat)</span>,   <span class="keywordtype">intent(in)</span> :: mask</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">! Local variables</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keywordtype">  real</span>, <span class="keywordtype">dimension(nlon,nlat)</span> :: tf_tmp</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keywordtype">integer</span> :: ncid</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keywordtype">integer</span>, <span class="keywordtype">parameter</span> :: ndims = 3</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keywordtype">  real</span>, <span class="keywordtype">parameter</span> :: xoffset = 273.15, scale_factor = 0.01</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: lat_name = <span class="stringliteral">&quot;latitude&quot;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: lon_name = <span class="stringliteral">&quot;longitude&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: tim_name = <span class="stringliteral">&quot;time&quot;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: tf_name=<span class="stringliteral">&quot;tf&quot;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: mask_name=<span class="stringliteral">&quot;slmsk&quot;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keywordtype">integer</span> :: no_fill,fill_value</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keywordtype">integer</span> :: lon_varid, lat_varid, tf_varid, mask_varid</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="comment">! The start and count arrays will tell the netCDF library where to read our data.</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(ndims)</span> :: start, count</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">  real</span>, <span class="keywordtype">dimension(nlat)</span> :: xlats</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">  real</span>, <span class="keywordtype">dimension(nlon)</span> :: xlons</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: units = <span class="stringliteral">&quot;units&quot;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: tf_units = <span class="stringliteral">&quot;kelvin&quot;</span>, mask_units = <span class="stringliteral">&quot;none&quot;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: lat_units = <span class="stringliteral">&quot;degrees_north&quot;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: lon_units = <span class="stringliteral">&quot;degrees_east&quot;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: tim_units = <span class="stringliteral">&quot;seconds&quot;</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  <span class="keywordtype">integer</span> :: missv</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">! Loop indices</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keywordtype">integer</span> :: rec, i,j</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">! To check the units attributes.</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <span class="keywordtype">character*80</span> tf_units_in, mask_units_in</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keywordtype">character*80</span> lat_units_in, lon_units_in</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;filename, nlon, nlat : &#39;</span>,filename, nlon, nlat</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">! Open the file. </span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">! call nc_check( nf90_open(filename, nf90_netcdf4, ncid) )</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  <span class="keyword">call </span>nc_check( nf90_open(filename, nf90_nowrite, ncid) )</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">! Get the varids of the latitude and longitude coordinate variables.</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">! call nc_check( nf90_inq_varid(ncid, lat_name, lat_varid) )</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">! call nc_check( nf90_inq_varid(ncid, lon_name, lon_varid) )</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">! Read the time, latitude and longitude data.</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">! call nc_check( nf90_get_var(ncid, lat_varid, xlats) )</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">! call nc_check( nf90_get_var(ncid, lon_varid, xlons) )</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">! Get the varids of the tf &amp; mask netCDF variables.</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  <span class="keyword">call </span>nc_check( nf90_inq_varid(ncid, tf_name, tf_varid) )</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">! call nc_check( nf90_inq_varid(ncid, mask_name, mask_varid) )</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">! Get the missing value of analysed_sst</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">! call nc_check( nf90_get_att(ncid, tf_varid, &#39;_FillValue&#39;, missv) )</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">! write(*,*) &#39;ostia Tf fill_value, missing_value : &#39;,missv,missing_value</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">! Read 1 record of nlat*nlon values, starting at the beginning </span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">! of the record (the (1, 1, rec) element in the netCDF file).</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  start = (/ 1, 1, 1 /)</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  count = (/ nlon, nlat, 1 /)</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">! Read the tf &amp; mask data from the file, one record at a time.</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keyword">call </span>nc_check( nf90_get_var(ncid, tf_varid,   tf_tmp, start, count) )</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">! call nc_check( nf90_get_var(ncid, mask_varid, mask,   start, count) )</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <span class="keywordflow">do</span> j = 1, nlat</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;     <span class="keywordflow">do</span> i = 1, nlon</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">if</span> ( mask(i,j) == 0 ) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;           tf(i,j) = real(tf_tmp(i,nlat+1-j))*scale_factor + xoffset</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keywordflow">        endif</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keywordflow">     enddo</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keywordflow">  enddo</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">! Close the file. This frees up any internal netCDF resources</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">! associated with the file.</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  <span class="keyword">call </span>nc_check( nf90_close(ncid) )</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">! If we got this far, everything worked as expected. Yipee! </span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  print *,<span class="stringliteral">&quot;*** SUCCESS reading file &quot;</span>, filename, <span class="stringliteral">&quot;!&quot;</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="read__tfs__nc_8f90.html#a8c9a60b111795f2990e7e0c561887c0c">read_tfs_nc</a></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">subroutine </span>read_tfs_nc(filename,tf,mask,nlon,nlat)</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">!</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">! abstract : read Tf at GFS Gaussin grids in netCDF </span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">!</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;  <span class="keywordtype">use </span>netcdf</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;  <span class="keywordtype">implicit none</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;  </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  <span class="comment">! This is the name of the data file we will read.</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  <span class="keywordtype">character (len=5)</span>,            <span class="keywordtype">intent(in)</span>  :: filename</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  <span class="keywordtype">integer</span>,                      <span class="keywordtype">intent(in)</span>  :: nlat,nlon</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keywordtype">  real</span>, <span class="keywordtype">dimension(nlon,nlat)</span>,   <span class="keywordtype">intent(out)</span> :: tf</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(nlon,nlat)</span>,   <span class="keywordtype">intent(in)</span> :: mask</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">! Local variables</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keywordtype">  real</span>, <span class="keywordtype">dimension(nlon,nlat)</span> :: tf_tmp</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keywordtype">integer</span> :: ncid</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keywordtype">integer</span>, <span class="keywordtype">parameter</span> :: ndims = 3</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">  real</span>, <span class="keywordtype">parameter</span> :: xoffset = 273.15, scale_factor = 0.01</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: lat_name = <span class="stringliteral">&quot;latitude&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: lon_name = <span class="stringliteral">&quot;longitude&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: tim_name = <span class="stringliteral">&quot;time&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: tf_name=<span class="stringliteral">&quot;tf&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: mask_name=<span class="stringliteral">&quot;slmsk&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="keywordtype">integer</span> :: no_fill,fill_value</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;  <span class="keywordtype">integer</span> :: lon_varid, lat_varid, tf_varid, mask_varid</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="comment">! The start and count arrays will tell the netCDF library where to read our data.</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(ndims)</span> :: start, count</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">  real</span>, <span class="keywordtype">dimension(nlat)</span> :: xlats</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">  real</span>, <span class="keywordtype">dimension(nlon)</span> :: xlons</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: units = <span class="stringliteral">&quot;units&quot;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: tf_units = <span class="stringliteral">&quot;kelvin&quot;</span>, mask_units = <span class="stringliteral">&quot;none&quot;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: lat_units = <span class="stringliteral">&quot;degrees_north&quot;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: lon_units = <span class="stringliteral">&quot;degrees_east&quot;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keywordtype">character (len = *)</span>, <span class="keywordtype">parameter</span> :: tim_units = <span class="stringliteral">&quot;seconds&quot;</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="keywordtype">integer</span> :: missv</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">! Loop indices</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keywordtype">integer</span> :: rec, i,j</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">! To check the units attributes.</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keywordtype">character*80</span> tf_units_in, mask_units_in</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keywordtype">character*80</span> lat_units_in, lon_units_in</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keyword">write</span>(*,*) <span class="stringliteral">&#39;filename, nlon, nlat : &#39;</span>,filename, nlon, nlat</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">! Open the file. </span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">! call nc_check( nf90_open(filename, nf90_netcdf4, ncid) )</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <span class="keyword">call </span>nc_check( nf90_open(filename, nf90_nowrite, ncid) )</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">! Get the varids of the latitude and longitude coordinate variables.</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">! call nc_check( nf90_inq_varid(ncid, lat_name, lat_varid) )</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">! call nc_check( nf90_inq_varid(ncid, lon_name, lon_varid) )</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">! Read the time, latitude and longitude data.</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">! call nc_check( nf90_get_var(ncid, lat_varid, xlats) )</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">! call nc_check( nf90_get_var(ncid, lon_varid, xlons) )</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">! Get the varids of the tf &amp; mask netCDF variables.</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  <span class="keyword">call </span>nc_check( nf90_inq_varid(ncid, tf_name, tf_varid) )</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">! call nc_check( nf90_inq_varid(ncid, mask_name, mask_varid) )</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">! Get the missing value of analysed_sst</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">! call nc_check( nf90_get_att(ncid, tf_varid, &#39;_FillValue&#39;, missv) )</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">! write(*,*) &#39;ostia Tf fill_value, missing_value : &#39;,missv,missing_value</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">! Read 1 record of nlat*nlon values, starting at the beginning </span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">! of the record (the (1, 1, rec) element in the netCDF file).</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  start = (/ 1, 1, 1 /)</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  count = (/ nlon, nlat, 1 /)</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">! Read the tf &amp; mask data from the file, one record at a time.</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  <span class="keyword">call </span>nc_check( nf90_get_var(ncid, tf_varid,   tf_tmp, start, count) )</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">! call nc_check( nf90_get_var(ncid, mask_varid, mask,   start, count) )</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <span class="keywordflow">do</span> j = 1, nlat</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;     <span class="keywordflow">do</span> i = 1, nlon</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">if</span> ( mask(i,j) == 0 ) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;           tf(i,j) = real(tf_tmp(i,nlat+1-j))*scale_factor + xoffset</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keywordflow">        endif</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keywordflow">     enddo</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keywordflow">  enddo</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">! Close the file. This frees up any internal netCDF resources</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">! associated with the file.</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <span class="keyword">call </span>nc_check( nf90_close(ncid) )</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">! If we got this far, everything worked as expected. Yipee! </span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  print *,<span class="stringliteral">&quot;*** SUCCESS reading file &quot;</span>, filename, <span class="stringliteral">&quot;!&quot;</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="keyword">end subroutine </span>read_tfs_nc</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aread__tfs__nc_8f90_html_a8c9a60b111795f2990e7e0c561887c0c"><div class="ttname"><a href="read__tfs__nc_8f90.html#a8c9a60b111795f2990e7e0c561887c0c">read_tfs_nc</a></div><div class="ttdeci">subroutine read_tfs_nc(filename, tf, mask, nlon, nlat)</div><div class="ttdoc">Read Tf at GFS Gaussin grids in netCDF.</div><div class="ttdef"><b>Definition:</b> <a href="read__tfs__nc_8f90_source.html#l00006">read_tfs_nc.f90:6</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

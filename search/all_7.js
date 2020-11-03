@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['lakefrac_2ef90_17',['lakefrac.F90',['../lakefrac_8F90.html',1,'']]],
-  ['lubksb_18',['lubksb',['../matrix__utils_8f90.html#a275de2797d71a7dfccc587012ceaafad',1,'matrix_utils.f90']]],
-  ['ludcmp_19',['ludcmp',['../matrix__utils_8f90.html#aca7b6e6ef1458720883a20b4b4184f56',1,'matrix_utils.f90']]]
+  ['program_5fsetup_22',['program_setup',['../namespaceprogram__setup.html',1,'']]]
 ];
