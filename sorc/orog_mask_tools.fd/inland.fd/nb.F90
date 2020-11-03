@@ -1,11 +1,9 @@
-!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-! This module contains the subroutines that find the adjacent neighbors of a
-! given cell, in a cubed sphere grid. Each neighbor is in the form of (i,j,tile).
-! 
-! Ning Wang, July 1, 2020, original version.
-!
-!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
+!> @file
+!! This module contains the subroutines that find the adjacent neighbors of a
+!! given cell, in a cubed sphere grid. Each neighbor is in the form of (i,j,tile).
+!! 
+!! @author Ning Wang @date July 1, 2020
+!!
 MODULE cs_nb
   IMPLICIT NONE
 
