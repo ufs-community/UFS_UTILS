@@ -1,3 +1,4 @@
+!> @file
 module pkind
 integer,parameter:: spi=selected_int_kind(6),&
                     dpi=selected_int_kind(12),&

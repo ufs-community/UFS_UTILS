@@ -1,20 +1,15 @@
-!                                        ***********************************
-!                                        *    module psym2                 *
-!                                        *    R. J. Purser                 *
-!                                        *    NOAA/NCEP/EMC September 2018 *
-!                                        *    jim.purser@noaa.gov          *
-!                                        ***********************************
-!
-! A suite of routines to perform the eigen-decomposition of symmetric 2*2
-! matrices and to deliver basic analytic functions, and the derivatives
-! of these functions, of such matrices.
-! In addition, we include a simple cholesky routine
-!
-! DIRECT DEPENDENCIES
-! Library: pfun
-! Module: pkind, pietc, pfun
-!
-!=============================================================================
+!> @file
+!! @author R. J. Purser @date September 2018
+!!
+!! A suite of routines to perform the eigen-decomposition of symmetric 2*2
+!! matrices and to deliver basic analytic functions, and the derivatives
+!! of these functions, of such matrices.
+!! In addition, we include a simple cholesky routine
+!!
+!! DIRECT DEPENDENCIES
+!! Library: pfun
+!! Module: pkind, pietc, pfun
+!!
 module psym2
 !=============================================================================
 use pkind, only: spi,dp

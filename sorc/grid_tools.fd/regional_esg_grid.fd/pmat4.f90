@@ -1,58 +1,51 @@
-!
-!                                **********************************************
-!                                *             MODULE pmat4                   *
-!                                *  R. J. Purser, NOAA/NCEP/EMC      Oct 2005 * 
-!                                *                              18th May 2012 *
-!                                *  jim.purser@noaa.gov                       *
-!                                *                                            *
-!                                **********************************************
-!
-!  Euclidean geometry, geometric (stereographic) projections,
-!              related transformations (Mobius).
-! Package for handy vector and matrix operations in Euclidean geometry.
-! This package is primarily intended for 3D operations and three of the
-! functions (Cross_product, Triple_product and Axial) do not possess simple
-! generalizations to a generic number N of dimensions. The others, while
-! admitting such N-dimensional generalizations, have not all been provided
-! with such generic forms here at the time of writing, though some of these 
-! may be added at a future date.
-!
-! May 2017: Added routines to facilitate manipulation of 3D rotations,
-! their representations by axial vectors, and routines to compute the
-! exponentials of matrices (without resort to eigen methods). Also added
-! Quaternion and spinor representations of 3D rotations, and their 
-! conversion routines.
-!
-!   FUNCTION:
-! absv:           Absolute magnitude of vector as its euclidean length
-! Normalized:     Normalized version of given real vector
-! Orthogonalized: Orthogonalized version of second vector rel. to first unit v.
-! Cross_product:  Vector cross-product of the given 2 vectors
-! Outer_product:  outer-product matrix of the given 2 vectors
-! Triple_product: Scalar triple product of given 3 vectors
-! Det:            Determinant of given matrix
-! Axial:          Convert axial-vector <--> 2-form (antisymmetric matrix)
-! Diag:           Diagnl of given matrix, or diagonal matrix of given elements
-! Trace:          Trace of given matrix
-! Identity:       Identity 3*3 matrix, or identity n*n matrix for a given n
-! Sarea:          Spherical area subtended by three vectors, or by lat-lon
-!                 increments forming a triangle or quadrilateral
-! Huarea:         Spherical area subtended by right-angled spherical triangle
-!   SUBROUTINE:
-! Gram:           Right-handed orthogonal basis and rank, nrank. The first 
-!                 nrank basis vectors span the column range of matrix given,
-!                 OR  ("plain" version) simple unpivoted Gram-Schmidt of a
-!                 square matrix.
-!
-! In addition, we include routines that relate to stereographic projections
-! and some associated mobius transformation utilities, since these complex
-! operations have a strong geometrical flavor.
-!
-! DIRECT DEPENDENCIES
-! Libraries[their Modules]: pmat[pmat]
-! Additional Modules      : pkind, pietc
-!
-!============================================================================
+!> @file
+!! @author R. J. Purser @date Oct 2005 
+!!
+!!  Euclidean geometry, geometric (stereographic) projections,
+!!              related transformations (Mobius).
+!! Package for handy vector and matrix operations in Euclidean geometry.
+!! This package is primarily intended for 3D operations and three of the
+!! functions (Cross_product, Triple_product and Axial) do not possess simple
+!! generalizations to a generic number N of dimensions. The others, while
+!! admitting such N-dimensional generalizations, have not all been provided
+!! with such generic forms here at the time of writing, though some of these 
+!! may be added at a future date.
+!!
+!! May 2017: Added routines to facilitate manipulation of 3D rotations,
+!! their representations by axial vectors, and routines to compute the
+!! exponentials of matrices (without resort to eigen methods). Also added
+!! Quaternion and spinor representations of 3D rotations, and their 
+!! conversion routines.
+!!
+!!   FUNCTION:
+!!- absv:           Absolute magnitude of vector as its euclidean length
+!!- Normalized:     Normalized version of given real vector
+!!- Orthogonalized: Orthogonalized version of second vector rel. to first unit v.
+!!- Cross_product:  Vector cross-product of the given 2 vectors
+!!- Outer_product:  outer-product matrix of the given 2 vectors
+!!- Triple_product: Scalar triple product of given 3 vectors
+!!- Det:            Determinant of given matrix
+!!- Axial:          Convert axial-vector <--> 2-form (antisymmetric matrix)
+!!- Diag:           Diagnl of given matrix, or diagonal matrix of given elements
+!!- Trace:          Trace of given matrix
+!!- Identity:       Identity 3*3 matrix, or identity n*n matrix for a given n
+!!- Sarea:          Spherical area subtended by three vectors, or by lat-lon
+!!                 increments forming a triangle or quadrilateral
+!!- Huarea:         Spherical area subtended by right-angled spherical triangle
+!!   SUBROUTINE:
+!!- Gram:           Right-handed orthogonal basis and rank, nrank. The first 
+!!                 nrank basis vectors span the column range of matrix given,
+!!                 OR  ("plain" version) simple unpivoted Gram-Schmidt of a
+!!                 square matrix.
+!!
+!! In addition, we include routines that relate to stereographic projections
+!! and some associated mobius transformation utilities, since these complex
+!! operations have a strong geometrical flavor.
+!!
+!! DIRECT DEPENDENCIES
+!! Libraries[their Modules]: pmat[pmat]
+!! Additional Modules      : pkind, pietc
+!!
 module pmat4
 !============================================================================
 use pkind, only: spi,sp,dp,dpc
