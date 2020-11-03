@@ -101,6 +101,9 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>calc_so
 <tr class="memitem:aa1aa0e7ed8df76be6db0a0ab964756f3"><td class="memItemLeft" align="right" valign="top"><a id="aa1aa0e7ed8df76be6db0a0ab964756f3"></a>
 subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>get_var_cond</b> (var_name, this_miss_var_method, this_miss_var_value, this_field_var_name, loc)</td></tr>
 <tr class="separator:aa1aa0e7ed8df76be6db0a0ab964756f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40111d93a5e305839de5e43e78183273"><td class="memItemLeft" align="right" valign="top"><a id="a40111d93a5e305839de5e43e78183273"></a>
+subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>read_config_nml</b></td></tr>
+<tr class="separator:a40111d93a5e305839de5e43e78183273"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59431f09ff79583ed8dcea7de2fa918d"><td class="memItemLeft" align="right" valign="top"><a id="a59431f09ff79583ed8dcea7de2fa918d"></a>
 subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>read_setup_namelist</b></td></tr>
 <tr class="separator:a59431f09ff79583ed8dcea7de2fa918d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,6 +116,21 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>read_va
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:a15dfe9bc5e48794ce22cabc6c7dffce0"><td class="memItemLeft" align="right" valign="top"><a id="a15dfe9bc5e48794ce22cabc6c7dffce0"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>afwa_lsmask_nh_file</b></td></tr>
+<tr class="separator:a15dfe9bc5e48794ce22cabc6c7dffce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7586a891bc20c504915f41e672bd42a8"><td class="memItemLeft" align="right" valign="top"><a id="a7586a891bc20c504915f41e672bd42a8"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>afwa_lsmask_sh_file</b></td></tr>
+<tr class="separator:a7586a891bc20c504915f41e672bd42a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a377ea4d55070d4123243cc3674503e"><td class="memItemLeft" align="right" valign="top"><a id="a6a377ea4d55070d4123243cc3674503e"></a>
+character *200, public&#160;</td><td class="memItemRight" valign="bottom"><b>afwa_snow_global_file</b></td></tr>
+<tr class="separator:a6a377ea4d55070d4123243cc3674503e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea86983f0f34e45816cdf0d04bcb5481"><td class="memItemLeft" align="right" valign="top"><a id="aea86983f0f34e45816cdf0d04bcb5481"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>afwa_snow_nh_file</b></td></tr>
+<tr class="separator:aea86983f0f34e45816cdf0d04bcb5481"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a949cc46237f429a8d76c198a5c2ab437"><td class="memItemLeft" align="right" valign="top"><a id="a949cc46237f429a8d76c198a5c2ab437"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>afwa_snow_sh_file</b></td></tr>
+<tr class="separator:a949cc46237f429a8d76c198a5c2ab437"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ae247bd098f03d56ced018458e8aa80"><td class="memItemLeft" align="right" valign="top"><a id="a4ae247bd098f03d56ced018458e8aa80"></a>
 character(len=500), dimension(7), public&#160;</td><td class="memItemRight" valign="bottom"><b>atm_core_files_input_grid</b> = &quot;NULL&quot;</td></tr>
 <tr class="separator:a4ae247bd098f03d56ced018458e8aa80"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,12 +143,18 @@ character(len=500), dimension(6), public&#160;</td><td class="memItemRight" vali
 <tr class="memitem:ad0fadfbe4232b55e05a87f0044193290"><td class="memItemLeft" align="right" valign="top"><a id="ad0fadfbe4232b55e05a87f0044193290"></a>
 character(len=500), public&#160;</td><td class="memItemRight" valign="bottom"><b>atm_weight_file</b> =&quot;NULL&quot;</td></tr>
 <tr class="separator:ad0fadfbe4232b55e05a87f0044193290"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87ecff656aa9e50ec26787119e9e6043"><td class="memItemLeft" align="right" valign="top"><a id="a87ecff656aa9e50ec26787119e9e6043"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>autosnow_file</b></td></tr>
+<tr class="separator:a87ecff656aa9e50ec26787119e9e6043"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab72166ef093181118b706b0c8d9680da"><td class="memItemLeft" align="right" valign="top"><a id="ab72166ef093181118b706b0c8d9680da"></a>
 real, dimension(:), allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><b>bb_target</b></td></tr>
 <tr class="separator:ab72166ef093181118b706b0c8d9680da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a774028ea61ef16c070de132942d132e0"><td class="memItemLeft" align="right" valign="top"><a id="a774028ea61ef16c070de132942d132e0"></a>
 character(len=20), dimension(:), allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><b>chgres_var_names</b></td></tr>
 <tr class="separator:a774028ea61ef16c070de132942d132e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad84d2020786c8ca7fadf6a7bafbb1bb8"><td class="memItemLeft" align="right" valign="top"><a id="ad84d2020786c8ca7fadf6a7bafbb1bb8"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>climo_qc_file</b></td></tr>
+<tr class="separator:ad84d2020786c8ca7fadf6a7bafbb1bb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbdcf36483fb5f4df0671b0c0ea7fb56"><td class="memItemLeft" align="right" valign="top"><a id="acbdcf36483fb5f4df0671b0c0ea7fb56"></a>
 logical, public&#160;</td><td class="memItemRight" valign="bottom"><b>convert_atm</b> = .false.</td></tr>
 <tr class="separator:acbdcf36483fb5f4df0671b0c0ea7fb56"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,9 +200,27 @@ character(len=500), public&#160;</td><td class="memItemRight" valign="bottom"><b
 <tr class="memitem:a0c9b8f64a9bc2872a5cf70ee0c97c5f5"><td class="memItemLeft" align="right" valign="top"><a id="a0c9b8f64a9bc2872a5cf70ee0c97c5f5"></a>
 character(len=500), public&#160;</td><td class="memItemRight" valign="bottom"><b>geogrid_file_input_grid</b> = &quot;NULL&quot;</td></tr>
 <tr class="separator:a0c9b8f64a9bc2872a5cf70ee0c97c5f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcde4fcec634df055663af336bfb67e5"><td class="memItemLeft" align="right" valign="top"><a id="afcde4fcec634df055663af336bfb67e5"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>gfs_lpl_file</b></td></tr>
+<tr class="separator:afcde4fcec634df055663af336bfb67e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3060fbdb680807d9360c64ccd2d9855a"><td class="memItemLeft" align="right" valign="top"><a id="a3060fbdb680807d9360c64ccd2d9855a"></a>
 character(len=500), public&#160;</td><td class="memItemRight" valign="bottom"><b>grib2_file_input_grid</b> = &quot;NULL&quot;</td></tr>
 <tr class="separator:a3060fbdb680807d9360c64ccd2d9855a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae279dad8d751b50c8665a1c800e55dcc"><td class="memItemLeft" align="right" valign="top"><a id="ae279dad8d751b50c8665a1c800e55dcc"></a>
+integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>grib_century</b></td></tr>
+<tr class="separator:ae279dad8d751b50c8665a1c800e55dcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1699f69c7663e947954705fa2d47a400"><td class="memItemLeft" align="right" valign="top"><a id="a1699f69c7663e947954705fa2d47a400"></a>
+integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>grib_day</b></td></tr>
+<tr class="separator:a1699f69c7663e947954705fa2d47a400"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed771b4d68c745430d9e0d33ea32de42"><td class="memItemLeft" align="right" valign="top"><a id="aed771b4d68c745430d9e0d33ea32de42"></a>
+integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>grib_hour</b></td></tr>
+<tr class="separator:aed771b4d68c745430d9e0d33ea32de42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad417edd0599523f776d1ac397f5a5671"><td class="memItemLeft" align="right" valign="top"><a id="ad417edd0599523f776d1ac397f5a5671"></a>
+integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>grib_month</b></td></tr>
+<tr class="separator:ad417edd0599523f776d1ac397f5a5671"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a1e634fcd53f0e116c720d1210ea588"><td class="memItemLeft" align="right" valign="top"><a id="a7a1e634fcd53f0e116c720d1210ea588"></a>
+integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>grib_year</b></td></tr>
+<tr class="separator:a7a1e634fcd53f0e116c720d1210ea588"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69b3b78e03ab0ff3b84518a357f63b49"><td class="memItemLeft" align="right" valign="top"><a id="a69b3b78e03ab0ff3b84518a357f63b49"></a>
 integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>halo</b> = 0</td></tr>
 <tr class="separator:a69b3b78e03ab0ff3b84518a357f63b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -221,6 +263,9 @@ character(len=500), public&#160;</td><td class="memItemRight" valign="bottom"><b
 <tr class="memitem:a85264610be92f55f65062b22df35a04b"><td class="memItemLeft" align="right" valign="top"><a id="a85264610be92f55f65062b22df35a04b"></a>
 logical, public&#160;</td><td class="memItemRight" valign="bottom"><b>lai_from_climo</b> = .true.</td></tr>
 <tr class="separator:a85264610be92f55f65062b22df35a04b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2debd7c7f28465b9c8b1dfb4f2419cb5"><td class="memItemLeft" align="right" valign="top"><a id="a2debd7c7f28465b9c8b1dfb4f2419cb5"></a>
+real, public&#160;</td><td class="memItemRight" valign="bottom"><b>lat_threshold</b></td></tr>
+<tr class="separator:a2debd7c7f28465b9c8b1dfb4f2419cb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9af0c32bc3ae678908960765f51b62c7"><td class="memItemLeft" align="right" valign="top"><a id="a9af0c32bc3ae678908960765f51b62c7"></a>
 character(len=50), public&#160;</td><td class="memItemRight" valign="bottom"><b>leaf_area_index_method</b> ='bilinear'</td></tr>
 <tr class="separator:a9af0c32bc3ae678908960765f51b62c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -236,6 +281,9 @@ real, dimension(:), allocatable, public&#160;</td><td class="memItemRight" valig
 <tr class="memitem:a943991a14e371cba21a6198ea154ea8f"><td class="memItemLeft" align="right" valign="top"><a id="a943991a14e371cba21a6198ea154ea8f"></a>
 real, dimension(:), allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><b>maxsmc_target</b></td></tr>
 <tr class="separator:a943991a14e371cba21a6198ea154ea8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83781bd873dc7dbe2fa36e1ac303a87e"><td class="memItemLeft" align="right" valign="top"><a id="a83781bd873dc7dbe2fa36e1ac303a87e"></a>
+real, public&#160;</td><td class="memItemRight" valign="bottom"><b>min_snow_depth</b></td></tr>
+<tr class="separator:a83781bd873dc7dbe2fa36e1ac303a87e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe1e8a28060f5dd88fd1738bfca0a33c"><td class="memItemLeft" align="right" valign="top"><a id="afe1e8a28060f5dd88fd1738bfca0a33c"></a>
 logical, public&#160;</td><td class="memItemRight" valign="bottom"><b>minmax_vgfrc_from_climo</b> = .true.</td></tr>
 <tr class="separator:afe1e8a28060f5dd88fd1738bfca0a33c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -245,6 +293,18 @@ character(len=20), dimension(:), allocatable, public&#160;</td><td class="memIte
 <tr class="memitem:a6d96671eae2ba5e34f060066eaa2526f"><td class="memItemLeft" align="right" valign="top"><a id="a6d96671eae2ba5e34f060066eaa2526f"></a>
 real, dimension(:), allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><b>missing_var_values</b></td></tr>
 <tr class="separator:a6d96671eae2ba5e34f060066eaa2526f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a352945f028557b8d476e2b57a6f56cf7"><td class="memItemLeft" align="right" valign="top"><a id="a352945f028557b8d476e2b57a6f56cf7"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>model_lat_file</b></td></tr>
+<tr class="separator:a352945f028557b8d476e2b57a6f56cf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa387fab4cd50cd6a9c219d5658e6b64f"><td class="memItemLeft" align="right" valign="top"><a id="aa387fab4cd50cd6a9c219d5658e6b64f"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>model_lon_file</b></td></tr>
+<tr class="separator:aa387fab4cd50cd6a9c219d5658e6b64f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdafd252dcf257b865d774b76181b840"><td class="memItemLeft" align="right" valign="top"><a id="afdafd252dcf257b865d774b76181b840"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>model_lsmask_file</b></td></tr>
+<tr class="separator:afdafd252dcf257b865d774b76181b840"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b36ac6ae744101bae6e70fcdd6a67c0"><td class="memItemLeft" align="right" valign="top"><a id="a1b36ac6ae744101bae6e70fcdd6a67c0"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>model_snow_file</b></td></tr>
+<tr class="separator:a1b36ac6ae744101bae6e70fcdd6a67c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f48c2a86a201e890140ba255f235e19"><td class="memItemLeft" align="right" valign="top"><a id="a8f48c2a86a201e890140ba255f235e19"></a>
 character(len=500), public&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_file_input_grid</b> = &quot;NULL&quot;</td></tr>
 <tr class="separator:a8f48c2a86a201e890140ba255f235e19"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -254,6 +314,12 @@ character(len=500), public&#160;</td><td class="memItemRight" valign="bottom"><b
 <tr class="memitem:a87272b81090f1ec24acf3d417a4a0df2"><td class="memItemLeft" align="right" valign="top"><a id="a87272b81090f1ec24acf3d417a4a0df2"></a>
 character(len=500), public&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_file_target_grid</b> = &quot;NULL&quot;</td></tr>
 <tr class="separator:a87272b81090f1ec24acf3d417a4a0df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4982cca90f48aca8b528c4ec9d291d0"><td class="memItemLeft" align="right" valign="top"><a id="aa4982cca90f48aca8b528c4ec9d291d0"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>nesdis_lsmask_file</b></td></tr>
+<tr class="separator:aa4982cca90f48aca8b528c4ec9d291d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bb6c3bb1140614271f7d024232ae6ea"><td class="memItemLeft" align="right" valign="top"><a id="a2bb6c3bb1140614271f7d024232ae6ea"></a>
+character *150, public&#160;</td><td class="memItemRight" valign="bottom"><b>nesdis_snow_file</b></td></tr>
+<tr class="separator:a2bb6c3bb1140614271f7d024232ae6ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab00a20499ebc164b63c484864a14d185"><td class="memItemLeft" align="right" valign="top"><a id="ab00a20499ebc164b63c484864a14d185"></a>
 integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>nsoill_out</b> = 4</td></tr>
 <tr class="separator:ab00a20499ebc164b63c484864a14d185"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -284,6 +350,9 @@ character(len=500), dimension(6), public&#160;</td><td class="memItemRight" vali
 <tr class="memitem:a347c8473bf53672f02913c93a050ea7a"><td class="memItemLeft" align="right" valign="top"><a id="a347c8473bf53672f02913c93a050ea7a"></a>
 character(len=500), dimension(6), public&#160;</td><td class="memItemRight" valign="bottom"><b>orog_files_target_grid</b> = &quot;NULL&quot;</td></tr>
 <tr class="separator:a347c8473bf53672f02913c93a050ea7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9c1b20eec2b73f9129fa949d6358cb8"><td class="memItemLeft" align="right" valign="top"><a id="ac9c1b20eec2b73f9129fa949d6358cb8"></a>
+logical, public&#160;</td><td class="memItemRight" valign="bottom"><b>output_grib2</b></td></tr>
+<tr class="separator:ac9c1b20eec2b73f9129fa949d6358cb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ffec9219f0a5e00b4c285f62904eca7"><td class="memItemLeft" align="right" valign="top"><a id="a1ffec9219f0a5e00b4c285f62904eca7"></a>
 logical, dimension(:), allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><b>read_from_input</b></td></tr>
 <tr class="separator:a1ffec9219f0a5e00b4c285f62904eca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -302,6 +371,9 @@ real, dimension(:), allocatable, public&#160;</td><td class="memItemRight" valig
 <tr class="memitem:a1ac8f9f39991ff6eda54d9189661900d"><td class="memItemLeft" align="right" valign="top"><a id="a1ac8f9f39991ff6eda54d9189661900d"></a>
 character(len=500), dimension(6), public&#160;</td><td class="memItemRight" valign="bottom"><b>sfc_files_input_grid</b> = &quot;NULL&quot;</td></tr>
 <tr class="separator:a1ac8f9f39991ff6eda54d9189661900d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab11d857a926778a69088ecdd4bdadb8a"><td class="memItemLeft" align="right" valign="top"><a id="ab11d857a926778a69088ecdd4bdadb8a"></a>
+real, public&#160;</td><td class="memItemRight" valign="bottom"><b>snow_cvr_threshold</b></td></tr>
+<tr class="separator:ab11d857a926778a69088ecdd4bdadb8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad67d3b811268632d438e6f60a56c1149"><td class="memItemLeft" align="right" valign="top"><a id="ad67d3b811268632d438e6f60a56c1149"></a>
 character(len=50), public&#160;</td><td class="memItemRight" valign="bottom"><b>snowfree_albedo_method</b> ='bilinear'</td></tr>
 <tr class="separator:ad67d3b811268632d438e6f60a56c1149"><td class="memSeparator" colspan="2">&#160;</td></tr>

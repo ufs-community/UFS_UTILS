@@ -93,81 +93,28 @@ $(document).ready(function(){initNavTree('smth9__msk_8f90.html',''); initResizab
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:aa0d6d0ff60cfcc76ef326037c25c0081"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="smth9__msk_8f90.html#aa0d6d0ff60cfcc76ef326037c25c0081">smth9_msk</a> (a, b, isli, nlon, nlat, istyp)</td></tr>
-<tr class="memdesc:aa0d6d0ff60cfcc76ef326037c25c0081"><td class="mdescLeft">&#160;</td><td class="mdescRight">9-point smoother with surface mask by spatial average from a to b with ancillary surface mask (e.g., analysis grid =&gt; surface grid) for global arrays to gurantee the averaged value (b) is determined by the candidates (a) with the identical surface type from (a)  <a href="smth9__msk_8f90.html#aa0d6d0ff60cfcc76ef326037c25c0081">More...</a><br /></td></tr>
+<tr class="memitem:aa0d6d0ff60cfcc76ef326037c25c0081"><td class="memItemLeft" align="right" valign="top"><a id="aa0d6d0ff60cfcc76ef326037c25c0081"></a>
+subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>smth9_msk</b> (a, b, isli, nlon, nlat, istyp)</td></tr>
 <tr class="separator:aa0d6d0ff60cfcc76ef326037c25c0081"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function/Subroutine Documentation</h2>
-<a id="aa0d6d0ff60cfcc76ef326037c25c0081"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0d6d0ff60cfcc76ef326037c25c0081">&#9670;&nbsp;</a></span>smth9_msk()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine smth9_msk </td>
-          <td>(</td>
-          <td class="paramtype">real, dimension(nlon,nlat), intent(in)&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real, dimension(nlon,nlat), intent(inout)&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, dimension(nlon,nlat), intent(in)&#160;</td>
-          <td class="paramname"><em>isli</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>nlon</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>nlat</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>istyp</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>9-point smoother with surface mask by spatial average from a to b with ancillary surface mask (e.g., analysis grid =&gt; surface grid) for global arrays to gurantee the averaged value (b) is determined by the candidates (a) with the identical surface type from (a) </p>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>. . . smth9_msk &mdash; 9-point smoother with surface mask by spatial average from a to b with ancillary surface mask (e.g., analysis grid =&gt; surface grid) for global arrays to gurantee the averaged value (b) is determined by the candidates (a) with the identical surface type from (a)</p>
 <dl class="section author"><dt>Author</dt><dd>li </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>03/13/2017</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>2-d array such as analysis increment at analysis grids </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">isli</td><td>2-d array: surface mask (0 = water, 1 = land, 2 = sea ice) for a grids </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nlat</td><td>number of latitude of a &amp; b </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nlon</td><td>number of longitude of a &amp; b </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">istyp</td><td>target surface type value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">b</td><td>2-d array </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>- real: 2-d array such as analysis increment at analysis grids </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">b</td><td>- real: 2-d array </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">isli</td><td>- integer: 2-d array: surface mask (0 = water, 1 = land, 2 = sea ice) for a grids </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nlon</td><td>- integer: number of longitude of a &amp; b </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nlat</td><td>- integer: number of latitude of a &amp; b </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">istyp</td><td>- integer: target surface type value </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="smth9__msk_8f90_source.html#l00019">19</a> of file <a class="el" href="smth9__msk_8f90_source.html">smth9_msk.f90</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+<p class="definition">Definition in file <a class="el" href="smth9__msk_8f90_source.html">smth9_msk.f90</a>.</p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
