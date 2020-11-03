@@ -28,7 +28,7 @@ fi
 
 LINK="ln -fs"
 SLINK="ln -fs"
-[[ $RUN_ENVIR = nco ]] && LINK="cp -rp"
+#[[ $RUN_ENVIR = nco ]] && LINK="cp -rp"
 
 pwd=$(pwd -P)
 
@@ -46,8 +46,14 @@ elif [ $machine = "jet" ]; then
 elif [ $machine = "orion" ]; then
     FIX_DIR="/work/noaa/global/glopara/fix_nco_gfsv16"
 fi
+[[ $RUN_ENVIR = nco ]] && FIX_DIR=../../../fix
+
 cd ${pwd}/../fix                ||exit 8
-for dir in fix_am fix_fv3 fix_orog fix_fv3_gmted2010 fix_sfc_climo; do
+
+FIX_LIST="fix_am fix_fv3 fix_orog fix_fv3_gmted2010 fix_sfc_climo"
+[[ $RUN_ENVIR = nco ]] && FIX_LIST="fix_am fix_orog fix_fv3_gmted2010"
+
+for dir in $FIX_LIST; do
     if [ -d $dir ]; then
       [[ $RUN_ENVIR = nco ]] && chmod -R 755 $dir
       rm -rf $dir
