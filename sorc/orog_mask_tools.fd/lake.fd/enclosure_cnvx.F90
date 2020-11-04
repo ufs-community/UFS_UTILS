@@ -1,3 +1,4 @@
+!> @file
 #ifdef INCLUDE_TEST_DRIVER
     PROGRAM testenc
     IMPLICIT NONE

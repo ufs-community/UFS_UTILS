@@ -22,7 +22,7 @@ USERNAME=`echo $LOGNAME | awk '{ print tolower($0)'}`
 if [[ -d /lfs3 ]] ; then
     # We are on NOAA Jet
     if ( ! eval module help > /dev/null 2>&1 ) ; then
-	echo load the module command 1>&2
+        echo load the module command 1>&2
         source /apps/lmod/lmod/init/$__ms_shell
     fi
     target=jet
@@ -30,7 +30,7 @@ if [[ -d /lfs3 ]] ; then
 elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then
-	echo load the module command 1>&2
+        echo load the module command 1>&2
         source /apps/lmod/lmod/init/$__ms_shell
     fi
     target=hera
@@ -38,8 +38,8 @@ elif [[ -d /scratch1 ]] ; then
 elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
     # We are on NOAA Luna or Surge
     if ( ! eval module help > /dev/null 2>&1 ) ; then
-	echo load the module command 1>&2
-	source /opt/modules/default/init/$__ms_shell
+        echo load the module command 1>&2
+        source /opt/modules/default/init/$__ms_shell
     fi
     target=wcoss_cray
 
@@ -72,32 +72,57 @@ elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
 elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
     # We are on NOAA Venus or Mars
     if ( ! eval module help > /dev/null 2>&1 ) ; then
-	echo load the module command 1>&2
-	source /usrx/local/prod/lmod/lmod/init/$__ms_shell
+        echo load the module command 1>&2
+        source /usrx/local/prod/lmod/lmod/init/$__ms_shell
     fi
     target=wcoss_dell_p3
-    module purge 
+    module purge
 elif [[ -d /glade ]] ; then
     # We are on NCAR Cheyenne
     if ( ! eval module help > /dev/null 2>&1 ) ; then
-	echo load the module command 1>&2
+        echo load the module command 1>&2
         . /glade/u/apps/ch/opt/lmod/8.1.7/lmod/8.1.7/init/sh
     fi
     target=cheyenne
     module purge
 elif [[ -d /lustre && -d /ncrc ]] ; then
-    # We are on GAEA. 
+    # We are on GAEA.
     if ( ! eval module help > /dev/null 2>&1 ) ; then
         # We cannot simply load the module command.  The GAEA
         # /etc/profile modifies a number of module-related variables
         # before loading the module command.  Without those variables,
         # the module command fails.  Hence we actually have to source
         # /etc/profile here.
-	echo load the module command 1>&2
         source /etc/profile
+        __ms_source_etc_profile=yes
+    else
+        __ms_source_etc_profile=no
+    fi
+    module purge > /dev/null 2>&1
+    module purge
+# clean up after purge
+    unset _LMFILES_
+    unset _LMFILES_000
+    unset _LMFILES_001
+    unset LOADEDMODULES
+    module load modules
+    if [[ -d /opt/cray/ari/modulefiles ]] ; then
+        module use -a /opt/cray/ari/modulefiles
+    fi
+    if [[ -d /opt/cray/pe/ari/modulefiles ]] ; then
+        module use -a /opt/cray/pe/ari/modulefiles
+    fi
+    if [[ -d /opt/cray/pe/craype/default/modulefiles ]] ; then
+        module use -a /opt/cray/pe/craype/default/modulefiles
+    fi
+    if [[ -s /etc/opt/cray/pe/admin-pe/site-config ]] ; then
+        source /etc/opt/cray/pe/admin-pe/site-config
+    fi
+    if [[ "$__ms_source_etc_profile" == yes ]] ; then
+      source /etc/profile
+      unset __ms_source_etc_profile
     fi
     target=gaea
-    module purge
 elif [[ "$(hostname)" =~ "Orion" ]]; then
     target="orion"
     module purge

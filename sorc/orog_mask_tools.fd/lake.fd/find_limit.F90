@@ -1,3 +1,4 @@
+!> @file
 !#define DIAG
 SUBROUTINE find_limit (p1_in, p2_in, latmin, latmax)
     REAL*8, INTENT(IN) :: p1_in(2), p2_in(2)
@@ -36,28 +37,32 @@ SUBROUTINE find_limit (p1_in, p2_in, latmin, latmax)
 
 END SUBROUTINE find_limit
 
-!======================================================
-!  This subroutine computes the latitude and longitude 
-!  of the middle point between two given ponits.
-!
-!  There are two formulae available to compute it.
-!  
-!  One derived from a more general m-sect formula:
-!
-!  xyz = sin((1-f)*theta) / sin(theta) * xyz1 +
-!        sin(f*theta) /sin(theta) * xyz2 ;
-!  where theta is the angle of xyz1, and xyz2.
-!
-!  xyz = 0.5 / sqrt[(1+dot(xyz1,xyz2))/2] * (xyz1+xyz2)
-!
-!  and the other one is the normalized middle point of
-!  the two end points:
-!
-!  xyz = 0.5 * (xyz1+xyz2), xyz = xyz / sqrt(dot(xyz,xyz))
-!
-!  Author: Ning Wang,   March, 2006
-!======================================================
-
+!>
+!!  This subroutine computes the latitude and longitude 
+!!  of the middle point between two given ponits.
+!!
+!!  There are two formulae available to compute it.
+!!  
+!!  One derived from a more general m-sect formula:
+!!  <pre>
+!!  xyz = sin((1-f)*theta) / sin(theta) * xyz1 +
+!!        sin(f*theta) /sin(theta) * xyz2 ;
+!!  where theta is the angle of xyz1, and xyz2.
+!!  </pre>
+!!
+!!  <pre>
+!!  xyz = 0.5 / sqrt[(1+dot(xyz1,xyz2))/2] * (xyz1+xyz2)
+!!  </pre>
+!!
+!!  and the other one is the normalized middle point of
+!!  the two end points:
+!!
+!!  <pre>
+!!  xyz = 0.5 * (xyz1+xyz2), xyz = xyz / sqrt(dot(xyz,xyz))
+!!  </pre>
+!!
+!!  @author Ning Wang @date March, 2006
+!!
 SUBROUTINE middle(p1,p2,p)
      IMPLICIT NONE
 
