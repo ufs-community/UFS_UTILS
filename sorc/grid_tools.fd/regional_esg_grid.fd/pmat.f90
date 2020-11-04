@@ -1,4 +1,4 @@
-!> @date
+!> @file
 !! @author R. J. Purser, NOAA/NCEP/EMC, Tsukasa Fujita, JMA.                                 
 !!
 !! Utility routines for various linear inversions and Cholesky.
