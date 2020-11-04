@@ -1,7 +1,8 @@
+!> @file
+!
+!> Read Tf at GFS Gaussin grids in netCDF 
+!!
 subroutine read_tfs_nc(filename,tf,mask,nlon,nlat)
-!
-! abstract : read Tf at GFS Gaussin grids in netCDF 
-!
   use netcdf
   implicit none
   

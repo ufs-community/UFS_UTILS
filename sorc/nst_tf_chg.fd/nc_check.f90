@@ -1,3 +1,4 @@
+!> @file
 subroutine nc_check(status)
 
   use netcdf

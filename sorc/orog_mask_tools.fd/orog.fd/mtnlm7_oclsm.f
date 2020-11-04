@@ -1,87 +1,78 @@
-C$$$  MAIN PROGRAM DOCUMENTATION BLOCK
-C
-C MAIN PROGRAM:  TERRAIN  TERRAIN MAKER FOR GLOBAL SPECTRAL MODEL
-C   PRGMMR: IREDELL       ORG: W/NMC23       DATE: 92-04-16
-C
-C ABSTRACT: THIS PROGRAM CREATES 7 TERRAIN-RELATED FILES
-C   COMPUTED FROM THE NAVY 10-MINUTE TERRAIN DATASET.
-C   THE MODEL PHYSICS GRID PARAMETERS AND SPECTRAL TRUNCATION
-C   AND FILTER PARAMETERS ARE READ BY THIS PROGRAM AS INPUT.
-C   THE 7 FILES PRODUCED ARE RESPECTIVELY:
-C     1) SEA-LAND MASK ON MODEL PHYSICS GRID
-C     2) GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
-C     3) MOUNTAIN STD DEV ON MODEL PHYSICS GRID
-C     4) SPECTRAL OROGRAPHY IN SPECTRAL DOMAIN
-C     5) UNFILTERED GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
-C     6) GRIB SEA-LAND MASK ON MODEL PHYSICS GRID
-C     7) GRIB GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
-C   THE OROGRAPHY IS ONLY FILTERED FOR WAVENUMBERS GREATER THAN NF0.
-C   FOR WAVENUMBERS N BETWEEN NF0 AND NF1, THE OROGRAPHY IS FILTERED
-C   BY THE FACTOR 1-((N-NF0)/(NF1-NF0))**2.  THE FILTERED OROGRAPHY
-C   WILL NOT HAVE INFORMATION BEYOND WAVENUMBER NF1.
-C
-C PROGRAM HISTORY LOG:
-C   92-04-16  IREDELL
-C   98-02-02  IREDELL  FILTER
-C   98-05-31  HONG Modified for subgrid orography used in Kim's scheme
-C   98-12-31  HONG Modified for high-resolution GTOPO orography
-C   99-05-31  HONG Modified for getting OL4 (mountain fraction)
-!   00-02-10  Moorthi's modifications
-C   00-04-11  HONG Modified for reduced grids
-C   00-04-12  Iredell Modified for reduced grids
-C   02-01-07  (*j*) modified for principal axes of orography
-!             There are now 14 files, 4 additional for lm mb
-!   04-04-04  (*j*) re-Test on IST/ilen calc for sea-land mask(*j*)
-!   04-09-04   minus sign here in MAKEOA IST and IEN as in MAKEMT!
-!   05-09-05   if test on HK and HLPRIM for GAMMA SQRT
-!   07-08-07   replace 8' with 30" incl GICE, conintue w/ S-Y. lake slm
-!   08-08-07  All input 30", UMD option, and filter as described below
-! --- Quadratic filter applied by default.
-! --- NF0 is normally set to an even value beyond the previous truncation, 
-! --- for example, for jcap=382, NF0=254+2
-! --- NF1 is set as jcap+2 (and/or nearest even), eg., for t382, NF1=382+2=384
-! --- if no filter is desired then NF1=NF0=0 and ORF=ORO
-! --- but if no filter but spectral to grid (with gibbs) then NF1=jcap+2, and NF1=jcap+1
-C       
-C
-C USAGE:
-C
-C   INPUT FILES:
-C     UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),
-C                  SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR),
-C                  AND FIRST AND SECOND FILTER PARAMETERS (NF0,NF1).
-C                  RESPECTIVELY READ IN FREE FORMAT.
-C     UNIT235    - GTOPO 30" AVR for ZAVG elevation
-C     UNIT10     - 30" UMD land (lake) cover mask  see MSKSRC switch
-C    XUNIT11     - GTOPO AVR
-C    XUNIT12     - GTOPO STD DEV
-C    XUNIT13     - GTOPO MAX
-C     UNIT14     - GTOPO SLM (10' NAVY if switched to get lakes 
-C     UNIT15     - GICE Grumbine 30" RAMP Antarctica orog IMNx3616
-C     UNIT25     - Ocean land-sea mask on gaussian grid         
-C
-C   OUTPUT FILES:
-C     UNIT51     - SEA-LAND MASK (IM,JM)
-C     UNIT52     - GRIDDED OROGRAPHY (IM,JM)
-C     UNIT54     - SPECTRAL OROGRAPHY ((NM+1)*((NR+1)*NM+2))
-C     UNIT55     - UNFILTERED GRIDDED OROGRAPHY (IM,JM)
-C     UNIT57     - GRIB GRIDDED OROGRAPHY (IM,JM)
-C
-C   SUBPROGRAMS CALLED:
-C     UNIQUE:
-C     TERSUB     - MAIN SUBPROGRAM
-C     SPLAT      - COMPUTE GAUSSIAN LATITUDES OR EQUALLY-SPACED LATITUDES
-C     LIBRARY:
-C     SPTEZ      - SPHERICAL TRANSFORM
-C     GBYTES     - UNPACK BITS
-C
-C   REMARKS: FORTRAN 9X EXTENSIONS ARE USED.
-C           
-C ATTRIBUTES:
-C   CRAY YMP & IBM AIX 3 5 00C88D5D4C00.
-C
-C$$$
-CFPP$ NOCONCUR F
+C> @file
+C> TERRAIN MAKER FOR GLOBAL SPECTRAL MODEL
+C> @author IREDELL @date 92-04-16
+C>
+C> THIS PROGRAM CREATES 7 TERRAIN-RELATED FILES
+C>   COMPUTED FROM THE NAVY 10-MINUTE TERRAIN DATASET.
+C>   THE MODEL PHYSICS GRID PARAMETERS AND SPECTRAL TRUNCATION
+C>   AND FILTER PARAMETERS ARE READ BY THIS PROGRAM AS INPUT.
+C>   THE 7 FILES PRODUCED ARE RESPECTIVELY:
+C>     1) SEA-LAND MASK ON MODEL PHYSICS GRID
+C>     2) GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
+C>     3) MOUNTAIN STD DEV ON MODEL PHYSICS GRID
+C>     4) SPECTRAL OROGRAPHY IN SPECTRAL DOMAIN
+C>     5) UNFILTERED GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
+C>     6) GRIB SEA-LAND MASK ON MODEL PHYSICS GRID
+C>     7) GRIB GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
+C>   THE OROGRAPHY IS ONLY FILTERED FOR WAVENUMBERS GREATER THAN NF0.
+C>   FOR WAVENUMBERS N BETWEEN NF0 AND NF1, THE OROGRAPHY IS FILTERED
+C>   BY THE FACTOR 1-((N-NF0)/(NF1-NF0))**2.  THE FILTERED OROGRAPHY
+C>   WILL NOT HAVE INFORMATION BEYOND WAVENUMBER NF1.
+C>
+C> PROGRAM HISTORY LOG:
+C> -  92-04-16  IREDELL
+C> -  98-02-02  IREDELL  FILTER
+C> -  98-05-31  HONG Modified for subgrid orography used in Kim's scheme
+C> -  98-12-31  HONG Modified for high-resolution GTOPO orography
+C> -  99-05-31  HONG Modified for getting OL4 (mountain fraction)
+C>  - 00-02-10  Moorthi's modifications
+C> -  00-04-11  HONG Modified for reduced grids
+C> -  00-04-12  Iredell Modified for reduced grids
+C> -  02-01-07  (*j*) modified for principal axes of orography
+C>             There are now 14 files, 4 additional for lm mb
+C>  - 04-04-04  (*j*) re-Test on IST/ilen calc for sea-land mask(*j*)
+C>  - 04-09-04   minus sign here in MAKEOA IST and IEN as in MAKEMT!
+C>  - 05-09-05   if test on HK and HLPRIM for GAMMA SQRT
+C>  - 07-08-07   replace 8' with 30" incl GICE, conintue w/ S-Y. lake slm
+C>  - 08-08-07  All input 30", UMD option, and filter as described below
+C> Quadratic filter applied by default.
+C> NF0 is normally set to an even value beyond the previous truncation, 
+C> for example, for jcap=382, NF0=254+2
+C> NF1 is set as jcap+2 (and/or nearest even), eg., for t382, NF1=382+2=384
+C> if no filter is desired then NF1=NF0=0 and ORF=ORO
+C> but if no filter but spectral to grid (with gibbs) then NF1=jcap+2, and NF1=jcap+1
+C>       
+C>   INPUT FILES:
+C>  -   UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),
+C>                  SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR),
+C>                  AND FIRST AND SECOND FILTER PARAMETERS (NF0,NF1).
+C>                  RESPECTIVELY READ IN FREE FORMAT.
+C>  -   UNIT235    - GTOPO 30" AVR for ZAVG elevation
+C>  -   UNIT10     - 30" UMD land (lake) cover mask  see MSKSRC switch
+C>  -  XUNIT11     - GTOPO AVR
+C>  -  XUNIT12     - GTOPO STD DEV
+C>  -  XUNIT13     - GTOPO MAX
+C>  -   UNIT14     - GTOPO SLM (10' NAVY if switched to get lakes 
+C>  -   UNIT15     - GICE Grumbine 30" RAMP Antarctica orog IMNx3616
+C>  -   UNIT25     - Ocean land-sea mask on gaussian grid         
+C>
+C>   OUTPUT FILES:
+C>  -   UNIT51     - SEA-LAND MASK (IM,JM)
+C>  -   UNIT52     - GRIDDED OROGRAPHY (IM,JM)
+C>  -   UNIT54     - SPECTRAL OROGRAPHY ((NM+1)*((NR+1)*NM+2))
+C>  -   UNIT55     - UNFILTERED GRIDDED OROGRAPHY (IM,JM)
+C>  -   UNIT57     - GRIB GRIDDED OROGRAPHY (IM,JM)
+C>
+C>   SUBPROGRAMS CALLED:
+C>  -   UNIQUE:
+C>  -   TERSUB     - MAIN SUBPROGRAM
+C>  -   SPLAT      - COMPUTE GAUSSIAN LATITUDES OR EQUALLY-SPACED LATITUDES
+C>  -   LIBRARY:
+C>  -   SPTEZ      - SPHERICAL TRANSFORM
+C>  -   GBYTES     - UNPACK BITS
+C>
+C>   REMARKS: FORTRAN 9X EXTENSIONS ARE USED.
+C>           
       include 'netcdf.inc'
       logical fexist, opened
       integer fsize, ncid, error, id_dim, nx, ny

@@ -1,22 +1,14 @@
+!> @file
+!! @author gayno @date 2018
+!!
+!! Read the input source data and interpolate it to the
+!! model grid. 
+!!
+!! @param[in] input_flle filename of input source data.
+!! @param[in] localpet this mpi task
+!! @param[in] method interpolation method.defined where mask=1
+!!
  subroutine interp(localpet, method, input_file)
-
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine:  interp
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Read the input source data and interpolate it to the
-!    model grid. 
-!
-! Usage:  call interp(localpet, method, input_file)
-!
-!   input argument list:
-!     input_flle          filename of input source data.
-!     localpet            this mpi task
-!     method              interpolation method.defined where mask=1
-!
-!-----------------------------------------------------------------------
 
  use esmf
  use netcdf
