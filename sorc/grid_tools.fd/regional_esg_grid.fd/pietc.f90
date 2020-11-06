@@ -1,15 +1,13 @@
-!
-!=============================================================================
+!> @file
+!! @author R. J. Purser @date 2014
+!! Some of the commonly used constants (pi etc) mainly for double-precision
+!! subroutines.
+!! ms10 etc are needed to satisfy the some (eg., gnu fortran) compilers'
+!! more rigorous standards regarding the way "data" statements are initialized.
+!! Zero and the first few units are u0,u1,u2, etc., their reciprocals being,
+!! o2,o3 etc and their square roots, r2,r3. Reciprocal roots are or2,or3 etc.
+!!
 module pietc
-!=============================================================================
-!                           R. J. Purser (jim.purser@noaa.gov) 2014
-! Some of the commonly used constants (pi etc) mainly for double-precision
-! subroutines.
-! ms10 etc are needed to satisfy the some (eg., gnu fortran) compilers'
-! more rigorous standards regarding the way "data" statements are initialized.
-! Zero and the first few units are u0,u1,u2, etc., their reciprocals being,
-! o2,o3 etc and their square roots, r2,r3. Reciprocal roots are or2,or3 etc.
-!=============================================================================
 use pkind, only: dp,dpc
 implicit none
 logical ,parameter:: T=.true.,F=.false. !<- for pain-relief in logical ops

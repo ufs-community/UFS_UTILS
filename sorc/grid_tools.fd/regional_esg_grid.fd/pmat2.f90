@@ -1,35 +1,25 @@
-!
-!                                **********************************************
-!                                *             MODULE pmat2                   *
-!                                *  R. J. Purser, NOAA/NCEP/EMC  1994/1999    *
-!                                *  jim.purser@noaa.gov                       *
-!                                *  Tsukasa Fujita (JMA)             1999     *
-!                                *                                            *
-!                                **********************************************
-!
-! Routines dealing with the operations of banded matrices
-! The three special routines allow the construction of compact or
-! conventional interpolation and differencing stencils to a general
-! order of accuracy. These are:
-! AVCO:  Averaging, or interpolating;
-! DFCO:  Differentiating (once);
-! DFCO2: Differentiating (twice).
-!
-! Other routines provide the tools for applying compact schemes, and for
-! the construction and application of recursive filters.
-!
-! Programmers:  R. J. Purser and T. Fujita
-!               National Centers for Environmental Prediction.
-! Last modified (Purser):                              January 6th 2005
-!  added nonredundant ldltb and ltdlbv routines for symmetric matrices,
-!  and remove obsolescent routines.
-!                                                      January 6rd 2014
-!
-! DIRECT DEPENDENCIES
-! Libraries[their modules]: pmat[pmat]
-! Additional Modules      : pkind
-!
-!=============================================================================
+!> @file
+!! @author R. J. Purser, Tsukasa Fujita (JMA) @date 1994/1999
+!!
+!! Routines dealing with the operations of banded matrices
+!! The three special routines allow the construction of compact or
+!! conventional interpolation and differencing stencils to a general
+!! order of accuracy. These are:
+!! - AVCO:  Averaging, or interpolating;
+!! - DFCO:  Differentiating (once);
+!! - DFCO2: Differentiating (twice).
+!!
+!! Other routines provide the tools for applying compact schemes, and for
+!! the construction and application of recursive filters.
+!!
+!! Last modified (Purser):                              January 6th 2005
+!!  added nonredundant ldltb and ltdlbv routines for symmetric matrices,
+!!  and remove obsolescent routines.
+!!
+!! DIRECT DEPENDENCIES
+!! Libraries[their modules]: pmat[pmat]
+!! Additional Modules      : pkind
+!!
 module pmat2
 !============================================================================
 use    pkind, only: spi,sp,dp,dpc

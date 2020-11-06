@@ -1,13 +1,8 @@
-!
-!                                         *********************************
-!                                         *          module pfun          *
-!                                         *          R. J. Purser         *
-!                                         *          NCEP/EMC 2017        *
-!                                         *********************************
-! Direct dependencies:
-! Modules: pkind, pietc_s, pietc
-!
-!=============================================================================
+!> @file
+!! @author R. J. Purser
+!! Direct dependencies:
+!! Modules: pkind, pietc_s, pietc
+!!
 module pfun
 !=============================================================================
 use pkind, only: sp,dp
