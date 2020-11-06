@@ -1,24 +1,24 @@
-! process_FVCOM.f90
-! David Wright
-! University of Michigan and GLERL
-! 17 Aug 2020
-!
-! This is the code to put lake surface temperature and aerial ice
-! concentration from GLERL-provided FVCOM forecast files (which have
-! already been mapped to the FV3-LAM grid) into sfc_data.nc.  
-!
-! This script will take two variables from the command line:
-! 1. Name of FV3 sfc data file (e.g. sfc_data.tile7.halo0.nc)
-! 2. Name of FVCOM data file (e.g. fvcom.nc)
-!
-! To run the script, use the following example, modifying file
-! names as needed:
-!   ./fvcom_to_FV3 sfc_data.tile7.halo0.nc fvcom.nc
-!
-! Code is strongly based upon Eric James' (ESRL/GSL) work 
-!  to update HRRR/WRF Great Lakes' temperature data with FVCOM.
-!  Code also relies heavily on Ming Hu's ncio module.
-
+!> @file
+!!
+!! This is the code to put lake surface temperature and aerial ice
+!! concentration from GLERL-provided FVCOM forecast files (which have
+!! already been mapped to the FV3-LAM grid) into sfc_data.nc.  
+!!
+!! This script will take two variables from the command line:
+!! 1. Name of FV3 sfc data file (e.g. sfc_data.tile7.halo0.nc)
+!! 2. Name of FVCOM data file (e.g. fvcom.nc)
+!!
+!! To run the script, use the following example, modifying file
+!! names as needed:
+!!   ./fvcom_to_FV3 sfc_data.tile7.halo0.nc fvcom.nc
+!!
+!! Code is strongly based upon Eric James' (ESRL/GSL) work 
+!!  to update HRRR/WRF Great Lakes' temperature data with FVCOM.
+!!  Code also relies heavily on Ming Hu's ncio module.
+!!
+!! @author David Wright, University of Michigan and GLERL
+!! @date 17 Aug 2020
+!!
 program process_FVCOM
 
    use mpi
