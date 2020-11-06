@@ -149,7 +149,7 @@ $(document).ready(function(){initNavTree('pmat2_8f90_source.html',''); initResiz
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">! &lt;-- B:    the NB coefficients B for this scheme</span></div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">!=============================================================================</span></div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,u1</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepmat.html">pmat</a>,  <span class="keywordtype">only</span>: inv</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keywordtype">use </span>pmat,  <span class="keywordtype">only</span>: inv</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keywordtype">integer(spi)</span>,<span class="keywordtype">intent(in )</span>:: na,nb</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keywordtype">real</span>(sp),    <span class="keywordtype">intent(in )</span>:: za(na),zb(nb),z0</div>
@@ -174,7 +174,7 @@ $(document).ready(function(){initNavTree('pmat2_8f90_source.html',''); initResiz
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keyword">subroutine </span>davco(na,nb,za,zb,z0,a,b) <span class="comment">!                                  [AVCO]</span></div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">!=============================================================================</span></div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,u1</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepmat.html">pmat</a>, <span class="keywordtype">only</span>: inv</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="keywordtype">use </span>pmat, <span class="keywordtype">only</span>: inv</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keywordtype">integer(spi)</span>,<span class="keywordtype">intent(IN )</span>:: na,nb</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="keywordtype">real</span>(dp),    <span class="keywordtype">intent(IN )</span>:: za(na),zb(nb),z0</div>
@@ -230,7 +230,7 @@ $(document).ready(function(){initNavTree('pmat2_8f90_source.html',''); initResiz
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="comment">! &lt;-- B:    the B-coefficients for this scheme</span></div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="comment">!=============================================================================</span></div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="keywordtype">use </span>pietc_s, <span class="keywordtype">only</span>: u0,u1</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepmat.html">pmat</a>,    <span class="keywordtype">only</span>: inv</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="keywordtype">use </span>pmat,    <span class="keywordtype">only</span>: inv</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="keywordtype">integer(spi)</span>,<span class="keywordtype">intent(IN )</span>        :: na,nb</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="keywordtype">real</span>(sp),    <span class="keywordtype">intent(IN )</span>        :: za(na),zb(nb),z0</div>
@@ -256,7 +256,7 @@ $(document).ready(function(){initNavTree('pmat2_8f90_source.html',''); initResiz
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="keyword">subroutine </span>ddfco(na,nb,za,zb,z0,a,b) <span class="comment">! Real(dp) version of              [DFCO]</span></div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">!=============================================================================</span></div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,u1</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepmat.html">pmat</a>,  <span class="keywordtype">only</span>: inv</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="keywordtype">use </span>pmat,  <span class="keywordtype">only</span>: inv</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="keywordtype">integer(spi)</span>,<span class="keywordtype">intent(in)</span> :: na,nb</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="keywordtype">real</span>(dp),    <span class="keywordtype">intent(in)</span> :: za(na),zb(nb),z0</div>
@@ -313,7 +313,7 @@ $(document).ready(function(){initNavTree('pmat2_8f90_source.html',''); initResiz
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="comment">! &lt;-- B:    the NB coefficients B for this scheme</span></div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment">!=============================================================================</span></div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="keywordtype">use </span>pietc_s, <span class="keywordtype">only</span>: u0,u1</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepmat.html">pmat</a>, <span class="keywordtype">only</span>: inv</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="keywordtype">use </span>pmat, <span class="keywordtype">only</span>: inv</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="keywordtype">integer(spi)</span>, <span class="keywordtype">intent(IN )</span>:: na,nb</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="keywordtype">real</span>(sp),     <span class="keywordtype">intent(IN )</span>:: za(na),zb(nb),z0</div>
@@ -339,7 +339,7 @@ $(document).ready(function(){initNavTree('pmat2_8f90_source.html',''); initResiz
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="keyword">subroutine </span>ddfco2(na,nb,za,zb,z0,a,b) <span class="comment">! Real(dp) version of            [DFCO2]</span></div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="comment">!=============================================================================</span></div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,u1</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepmat.html">pmat</a>, <span class="keywordtype">only</span>: inv</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="keywordtype">use </span>pmat, <span class="keywordtype">only</span>: inv</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="keywordtype">integer(spi)</span>,<span class="keywordtype">intent(IN )</span>           :: na,nb</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="keywordtype">real</span>(dp),    <span class="keywordtype">intent(IN )</span>           :: za(na),zb(nb),z0</div>
@@ -1324,7 +1324,6 @@ $(document).ready(function(){initNavTree('pmat2_8f90_source.html',''); initResiz
 <div class="line"><a name="l01257"></a><span class="lineno"> 1257</span>&#160;<span class="keyword">end module </span>pmat2</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacepmat_html"><div class="ttname"><a href="namespacepmat.html">pmat</a></div><div class="ttdef"><b>Definition:</b> <a href="pmat_8f90_source.html#l00020">pmat.f90:20</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
