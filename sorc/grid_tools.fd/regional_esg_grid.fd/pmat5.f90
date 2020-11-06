@@ -1,16 +1,11 @@
-!
-!                                **********************************************
-!                                *  MODULES cstgeo, dcstgeo, pmat5            *
-!                                *  R. J. Purser, NOAA/NCEP/EMC          1996 * 
-!                                *                              26 Sep   2012 *
-!                                *  jim.purser@noaa.gov                       *
-!                                *                                            *
-!                                **********************************************
-! Handy geographical transformations
-!
-! DEPENDENCIES
-! Modules:  pkind, pietc, pmat4
-!=============================================================================
+!> @file
+!! @author R. J. Purser @date 1996 
+!!
+!! Handy geographical transformations
+!!
+!! DEPENDENCIES
+!! Modules:  pkind, pietc, pmat4
+!!
 module cstgeo ! Constants for orientation and stretching of map
 !=============================================================================
 use pkind, only: sp
