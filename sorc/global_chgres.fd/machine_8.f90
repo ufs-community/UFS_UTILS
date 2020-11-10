@@ -1,4 +1,5 @@
- MODULE MACHINE
+!> @file
+MODULE MACHINE
 
 !  Machine dependant constants
 
