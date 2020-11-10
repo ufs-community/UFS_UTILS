@@ -1,35 +1,25 @@
+!> @file
+!!                                                                       
+!! INTERPOLATE GAUSSIAN GRID TO ANY GRID      
+!! @author EMC @date JAN-18-2017
+!!                                                                       
+!!   INPUT ARGUMENT LIST:                                                
+!!     IP           INTEGER INTERPOLATION TYPE                           
+!!     KM           INTEGER NUMBER OF LEVELS                             
+!!     G1           REAL (IM1,JM1,KM) INPUT GAUSSIAN FIELD               
+!!     IM1          INTEGER NUMBER OF INPUT LONGITUDES                   
+!!     JM1          INTEGER NUMBER OF INPUT LATITUDES                    
+!!     IM2          INTEGER NUMBER OF OUTPUT LONGITUDES                  
+!!     JM2          INTEGER NUMBER OF OUTPUT LATITUDES                   
+!!     RLON         REAL (IM2,JM2) OUTPUT GRID LONGITUDES                
+!!     RLAT         REAL (IM2,JM2) OUTPUT GRID LATITUDES                 
+!!   OUTPUT ARGUMENT LIST:                                               
+!!     G2           REAL (IM2,JM2,KM) OUTPUT FIELD              
+!!                                                                       
+!! SUBPROGRAMS CALLED:                                                   
+!!  - ipolates()     IREDELL'S POLATE FOR SCALAR FIELDS                     
+!!                                                                       
       SUBROUTINE GL2ANY(IP,KM,G1,IM1,JM1,G2,IM2,JM2,RLON,RLAT) 
-!$$$  SUBPROGRAM DOCUMENTATION BLOCK                                    
-!                                                                       
-! SUBPROGRAM:    GL2ANY      INTERPOLATE GAUSSIAN GRID TO ANY GRID      
-!   PRGMMR: EMC              ORG: W/NMC23     DATE: JAN-18-2017
-!                                                                       
-! ABSTRACT: LINEARLY INTERPOLATES GAUSSIAN GRID TO ANY GRID.            
-!                                                                       
-! PROGRAM HISTORY LOG:                                                  
-!   2017-JAN-18  EMC      INITIAL VERSION
-!                                                                       
-! USAGE:    CALL GL2ANY(IP,KM,G1,IM1,JM1,G2,IM2,JM2,RLON,RLAT)          
-!   INPUT ARGUMENT LIST:                                                
-!     IP           INTEGER INTERPOLATION TYPE                           
-!     KM           INTEGER NUMBER OF LEVELS                             
-!     G1           REAL (IM1,JM1,KM) INPUT GAUSSIAN FIELD               
-!     IM1          INTEGER NUMBER OF INPUT LONGITUDES                   
-!     JM1          INTEGER NUMBER OF INPUT LATITUDES                    
-!     IM2          INTEGER NUMBER OF OUTPUT LONGITUDES                  
-!     JM2          INTEGER NUMBER OF OUTPUT LATITUDES                   
-!     RLON         REAL (IM2,JM2) OUTPUT GRID LONGITUDES                
-!     RLAT         REAL (IM2,JM2) OUTPUT GRID LATITUDES                 
-!   OUTPUT ARGUMENT LIST:                                               
-!     G2           REAL (IM2,JM2,KM) OUTPUT FIELD              
-!                                                                       
-! SUBPROGRAMS CALLED:                                                   
-!   IPOLATES     IREDELL'S POLATE FOR SCALAR FIELDS                     
-!                                                                       
-! ATTRIBUTES:                                                           
-!   LANGUAGE: FORTRAN                                                   
-!                                                                       
-!C$$$                                                                   
       IMPLICIT NONE 
       INTEGER, INTENT(IN)     :: IP, KM, IM1, JM1, IM2, JM2 
       REAL, INTENT(IN)        :: G1(IM1,JM1,KM) 

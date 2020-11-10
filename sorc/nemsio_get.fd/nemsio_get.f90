@@ -1,9 +1,8 @@
-!- - - - -- - -- - -- - -- - - -- - --  -- - -- - -- - - -- - - - -- - --
-! the program provide value for a variable/field in a nemsio file
-! revision history:
-!  Jan 2010:  Jun Wang  Initial code
-! - - - - -- - -- - -- - -- - - -- - --  -- - -- - -- - - -- - - - -- - --
-!
+!> @file
+!! The program provide value for a variable/field in a nemsio file.
+!!
+!! @author Jun Wang @date Jan 2010
+!!
   program main
 !
   use nemsio_module
