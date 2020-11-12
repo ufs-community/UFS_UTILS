@@ -1,9 +1,8 @@
-/***********************************************************************
-                      tool_util.h
+/** @file 
     This header file provide some utilities routine that will be used in many tools.
     
-    contact: Zhi.Liang@noaa.gov
-***********************************************************************/
+    @author Zhi.Liang@noaa.gov
+*/
 #ifndef TOOL_UTIL_H_
 #define TOOL_UTIL_H_
 #define MAX_GRID_LENGTH (10000)
