@@ -1,29 +1,16 @@
+!> @file
+!!                .      .    .                                       .
+!! Module to hold specification kinds for variable declaration.
+!! This module is based on (copied from) Paul vanDelst's 
+!! type_kinds module found in the community radiative transfer
+!! model
+!!
+!! The numerical data types defined in this module are:
+!! -     r_single  - specification kind for single precision (4-byte) real variable
+!! -     i_kind    - generic specification kind for default integer
+!! -     r_kind    - generic specification kind for default floating point
+!!
 module kinds
-!$$$  module documentation block
-!                .      .    .                                       .
-! module:   kinds
-! abstract:  Module to hold specification kinds for variable declaration.
-!            This module is based on (copied from) Paul vanDelst's 
-!            type_kinds module found in the community radiative transfer
-!            model
-!
-! module history log:
-!
-! Subroutines Included:
-!
-! Functions Included:
-!
-! remarks:
-!   The numerical data types defined in this module are:
-!      r_single  - specification kind for single precision (4-byte) real variable
-!      i_kind    - generic specification kind for default integer
-!      r_kind    - generic specification kind for default floating point
-!
-!
-! attributes:
-!   language: f90
-!
-!$$$ end documentation block
   implicit none
   private
 !

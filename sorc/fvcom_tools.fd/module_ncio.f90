@@ -1,14 +1,9 @@
+!> @file
+!!  module: functions to read and write netcdf files
+!!
+!! @author Ming Hu @date 2017-11-01
+!!
 module module_ncio
-!
-!  module: functions to read and write netcdf files
-!
-!  Ming Hu
-!
-! program history log:
-!   2017-11-01 Hu           initial build
-! 
-! Subroutines Included:
-!
 
   use netcdf
   implicit none

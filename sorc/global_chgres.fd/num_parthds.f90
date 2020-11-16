@@ -1,4 +1,5 @@
- INTEGER FUNCTION NUM_PARTHDS()
+!> @file
+INTEGER FUNCTION NUM_PARTHDS()
  use omp_lib
 !!$OMP PARALLEL
 !  num_parthds = omp_get_num_threads()

@@ -1,15 +1,13 @@
-! module_nwp_base.f90
-! David Wright
-! University of Michigan and GLERL
-! 17 Aug 2020
-!
-! This module defines nwp observation data structure and the method to
-! read and write observations from and to those data structures.  It is used by
-! ingest_FVCOM.f90.
-!
-! This script is strongly based upon Eric James' (ESRL/GSL) work with HRRR/WRF.
-!
-
+!> @file
+!!
+!! This module defines nwp observation data structure and the method to
+!! read and write observations from and to those data structures. It is used by
+!! ingest_FVCOM.f90.
+!!
+!! This script is strongly based upon Eric James' (ESRL/GSL) work with HRRR/WRF.
+!!
+!! @author David Wright, University of Michigan and GLERL @date 17 Aug 2020
+!!
 module module_nwp_base
 
    use kinds, only: r_kind, r_single, rmissing
