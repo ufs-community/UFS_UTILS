@@ -53,6 +53,8 @@ export OMP_STACKSIZE=1024M
 
 export APRUN=srun
 
+export NCCMP=$(which nccmp)
+
 rm -fr $OUTDIR
 
 #-----------------------------------------------------------------------------

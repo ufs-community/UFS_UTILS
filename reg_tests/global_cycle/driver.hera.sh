@@ -52,6 +52,8 @@ export NWPROD=$PWD/../..
 
 export COMOUT=$DATA
 
+export NCCMP=$(which nccmp)
+
 reg_dir=$PWD
 
 ./C768.fv3gfs.sh
