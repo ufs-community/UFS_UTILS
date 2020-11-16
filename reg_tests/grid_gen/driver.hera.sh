@@ -46,7 +46,6 @@ export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export machine=HERA
 export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/grid_gen/baseline_data
-export NCCMP=$(which nccmp)
 
 ulimit -a
 #ulimit -s unlimited

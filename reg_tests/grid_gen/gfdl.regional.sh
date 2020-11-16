@@ -23,6 +23,8 @@ export iend_nest=166         # Ending i-direction index of nest grid in parent t
 export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
 export halo=3
 
+NCCMP=${NCCMP:-$(which nccmp)}
+
 #-----------------------------------------------------------------------
 # Start script.
 #-----------------------------------------------------------------------
