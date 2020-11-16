@@ -1,30 +1,24 @@
+!> @file
+!!
+!! interpolate land fields from one grid to another.
+!!
+!! a collection of routines to interpolate land fields
+!! from one grid to another.
+!!
+!! program history log:
+!!  2005-10-25  gayno   - initial version
+!!  2006-04-25  gayno   - use ipolates library to interpolate
+!!                        continous fields.  modified for use
+!!                        with gfs and wrf.
+!!  2011-07-01  Moorthi - Added unfiltered orography for angulation correction
+!!  2019-06-10  Ramstrom  - Allow processing of tile numbers >= 10 for multiple
+!!                          nests
+!!  2019-06-12  Ramstrom  - Allow processing of all-ocean nest; suppress errors 
+!!                          from null land variable interpolation
+!!
+!! @author gayno @date 2005-10-25
+!!
  module surface_chgres
-!$$$ module documentation block
-!
-! module: surface_chgres    interpolate land fields from one
-!                           grid to another.
-!   prgmmr: gayno           org: w/np2     date: 2005-10-25
-!
-! abstract: a collection of routines to interpolate land fields
-!           from one grid to another.
-!
-! program history log:
-!  2005-10-25  gayno   - initial version
-!  2006-04-25  gayno   - use ipolates library to interpolate
-!                        continous fields.  modified for use
-!                        with gfs and wrf.
-!  2011-07-01  Moorthi - Added unfiltered orography for angulation correction
-!  2019-06-10  Ramstrom  - Allow processing of tile numbers >= 10 for multiple
-!                          nests
-!  2019-06-12  Ramstrom  - Allow processing of all-ocean nest; suppress errors 
-!                          from null land variable interpolation
-!
-! usage: use surface_chgres
-!
-! attributes:
-!   langauge: fortran 90
-!
-!$$$
 !-----------------------------------------------------------------------
 ! some variable definitions.  
 !

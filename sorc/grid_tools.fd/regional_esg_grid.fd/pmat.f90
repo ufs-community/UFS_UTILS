@@ -1,31 +1,22 @@
-!
-!                                **********************************************
-!                                *             MODULE pmat                    *
-!                                *  R. J. Purser, NOAA/NCEP/EMC       1993    *
-!                                *  and Tsukasa Fujita, visiting scientist    *
-!                                *  from JMA.                                 *
-!                                *  Major modifications: 2002, 2009, 2012     *
-!                                *  jim.purser@noaa.gov                       *
-!                                *                                            *
-!                                **********************************************
-!
-! Utility routines for various linear inversions and Cholesky.
-! Dependency: modules pkind, pietc
-! Originally, these routines were copies of the purely "inversion" members
-! of pmat1.f90 (a most extensive collection of matrix routines -- not just
-! inversions). As well as having both single and double precision versions
-! of each routine, these versions also make provision for a more graceful
-! termination in cases where the system matrix is detected to be 
-! essentially singular (and therefore noninvertible). This provision takes
-! the form of an optional "failure flag", FF, which is normally returned
-! as .FALSE., but is returned as .TRUE. when inversion fails.
-! In Sep 2012, these routines were collected together into pmat.f90 so
-! that all the main matrix routines could be in the same library, pmat.a.
-! 
-! DIRECT DEPENDENCIES:
-! Modules: pkind, pietc
-!
-!=============================================================================
+!> @file
+!! @author R. J. Purser, NOAA/NCEP/EMC, Tsukasa Fujita, JMA.                                 
+!!
+!! Utility routines for various linear inversions and Cholesky.
+!! Dependency: modules pkind, pietc
+!! Originally, these routines were copies of the purely "inversion" members
+!! of pmat1.f90 (a most extensive collection of matrix routines -- not just
+!! inversions). As well as having both single and double precision versions
+!! of each routine, these versions also make provision for a more graceful
+!! termination in cases where the system matrix is detected to be 
+!! essentially singular (and therefore noninvertible). This provision takes
+!! the form of an optional "failure flag", FF, which is normally returned
+!! as .FALSE., but is returned as .TRUE. when inversion fails.
+!! In Sep 2012, these routines were collected together into pmat.f90 so
+!! that all the main matrix routines could be in the same library, pmat.a.
+!! 
+!! DIRECT DEPENDENCIES:
+!! Modules: pkind, pietc
+!!
 module pmat
 !=============================================================================
 use pkind, only: spi,sp,dp,spc,dpc

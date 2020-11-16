@@ -1,25 +1,20 @@
-!
-!                                              ***********************
-!                                              *      pesg.f90       *
-!                                              *    R. J. Purser     *
-!                                              *   NOAA/NCEP/EMC     *
-!                                              *     May 2020        *
-!                                              *                     *
-!                                              * jim.purser@noaa.gov * 
-!                                              ***********************
-! Suite of routines to perform the 2-parameter family of Extended
-! Schmidt Gnomonic (ESG) regional grid mappings, and to optimize the
-! the two parameters, A and K, of those mappings for a given rectangular
-! domain's principal (median) semi-arcs with respect to a domain-averaged
-! measure of distortion. This criterion is itself endowed with a parameter, 
-! lam (for "lambda" in [0,1) ) which gives weight to additional weight
-! areal inhomogeneities instead of treating all distortion components
-! equally.
-!
-! DEPENDENCIES
-! Libraries: pmat, psym2, pfun
-! Modules: pkind, pietc, pietc_s 
-!=============================================================================
+!> @file
+!! @author R. J. Purser
+!! @date May 2020  
+!!
+!! Suite of routines to perform the 2-parameter family of Extended
+!! Schmidt Gnomonic (ESG) regional grid mappings, and to optimize the
+!! the two parameters, A and K, of those mappings for a given rectangular
+!! domain's principal (median) semi-arcs with respect to a domain-averaged
+!! measure of distortion. This criterion is itself endowed with a parameter, 
+!! lam (for "lambda" in [0,1) ) which gives weight to additional weight
+!! areal inhomogeneities instead of treating all distortion components
+!! equally.
+!!
+!! DEPENDENCIES
+!! Libraries: pmat, psym2, pfun
+!! Modules: pkind, pietc, pietc_s 
+!!
 module pesg
 !=============================================================================
 use pkind, only: spi,dp

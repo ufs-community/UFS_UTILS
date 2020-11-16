@@ -1,28 +1,27 @@
+!> @file
+!
+!>
+!!
+!!   interpolate nsst fields from one grid to another.
+!!   nearest neighbor interpolation is used because some nsst
+!!   fields are not continuous. nsst fields are only required 
+!!   at open water points.  for consistency, the nsst land-sea
+!!   mask is set to the land-sea mask from the surface restart
+!!   file.  therefore, when converting an nsst restart file,
+!!   you must also convert a surface restart file.
+!!
+!!   program history:
+!!   ===============
+!!   - 2011-aug-05       initial version   gayno
+!!   - 2017-dec-19       add bilinear option. ensure mask
+!!                     consistency between skin t and tref.
+!!
+!! @author gayno @date 2011-Aug
+!!
  subroutine nsst_chgres(im_input, jm_input,  &
                         mask_output, tskin_output, imo, ij_output, kgds_input, &
                         data_input, mask_input, data_output, num_nsst_fields, &
                         kgds_output, rlat_output, rlon_output)
-!----------------------------------------------------------------
-! subroutine: nsst_chgres
-!
-!   prgmmr: gayno            org: emc         date: 2011-Aug
-!
-!   abstract: 
-!   ========
-!   interpolate nsst fields from one grid to another.
-!   nearest neighbor interpolation is used because some nsst
-!   fields are not continuous. nsst fields are only required 
-!   at open water points.  for consistency, the nsst land-sea
-!   mask is set to the land-sea mask from the surface restart
-!   file.  therefore, when converting an nsst restart file,
-!   you must also convert a surface restart file.
-!
-!   program history:
-!   ===============
-!   2011-aug-05       initial version   gayno
-!   2017-dec-19       add bilinear option. ensure mask
-!                     consistency between skin t and tref.
-!----------------------------------------------------------------
 
  implicit none
 
