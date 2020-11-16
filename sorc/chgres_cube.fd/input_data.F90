@@ -2519,7 +2519,7 @@
  if (.not.lret) call error_handler("OPENING GRIB2 ATM FILE.", iret)
 
  print*,"- READ VERTICAL COORDINATE."
- iret = grb2_inq(the_file,inv_file,":var0_2","_0_0:"," hybrid ")
+ iret = grb2_inq(the_file,inv_file,":var0_2","_0_0:",":10 hybrid level:")
   
  if (iret <= 0) then
    lvl_str = "mb:" 
