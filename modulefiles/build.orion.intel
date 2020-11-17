@@ -30,6 +30,5 @@ module load png/1.6.35
 
 module load hdf5/1.10.6
 module load netcdf/4.7.4
-#module load nccmp/1.8.7.0
-setenv NCCMP /apps/contrib/NCEP/libs/hpc-stack/v1.0.0-beta1/intel-2018.4/impi-2018.4/nccmp/1.8.7.0/bin/nccmp
+module load nccmp/1.8.7.0
 module load esmf/8_1_0_beta_snapshot_27
