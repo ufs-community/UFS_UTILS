@@ -14,6 +14,8 @@ export out_dir=${WORK_DIR}/c96.uniform
 export res=96
 export gtype=uniform
 
+NCCMP=${NCCMP:-$(which nccmp)}
+
 #-----------------------------------------------------------------------
 # Start script.
 #-----------------------------------------------------------------------

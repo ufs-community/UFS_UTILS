@@ -1,3 +1,4 @@
+/** @file */
 /*
       **** MppDomain.cpp ****
       MppDomain package
