@@ -1,3 +1,4 @@
+/** @file */
 #ifndef READ_MOSAIC_H_
 #define READ_MOSAIC_H_
 
