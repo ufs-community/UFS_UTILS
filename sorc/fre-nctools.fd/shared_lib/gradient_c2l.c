@@ -1,3 +1,4 @@
+/** @file */
 #include <math.h>
 #include <stdlib.h>
 #include "constant.h"

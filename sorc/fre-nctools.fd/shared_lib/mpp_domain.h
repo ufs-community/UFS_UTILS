@@ -1,3 +1,4 @@
+/** @file */
 /****************************************************************
                         mpp_domain.h 
    This headers define interface to define domain layout, 
