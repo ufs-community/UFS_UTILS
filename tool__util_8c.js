@@ -1,0 +1,27 @@
+var tool__util_8c =
+[
+    [ "D2R", "tool__util_8c.html#a0a3cc1d5cde549e408f825ddd7f5853d", null ],
+    [ "R2D", "tool__util_8c.html#a39c663074332446065723e9be9350139", null ],
+    [ "bipolar_area", "tool__util_8c.html#ab5f93a2275b11f39b1c43879ef3c91c3", null ],
+    [ "bipolar_dist", "tool__util_8c.html#a1edb8c5b4c36dc56c9b5b0633c494773", null ],
+    [ "bp_lam", "tool__util_8c.html#a549c6ff4bc96d2d1f2624ce4a12e8cc0", null ],
+    [ "bp_phi", "tool__util_8c.html#a96a0125786ed862a4345c1ebb5ec1e9c", null ],
+    [ "compute_grid_bound", "tool__util_8c.html#a9dae2ee8185adfb625cd3439a1ee1788", null ],
+    [ "compute_grid_bound_legacy", "tool__util_8c.html#a7ac097de8c16caf1a48b1174974e7869", null ],
+    [ "distant", "tool__util_8c.html#aaa9b98e449c1216e9893ae1397aee00b", null ],
+    [ "get_boundary_type", "tool__util_8c.html#a603fc3723e603691de8e3fa8ac643dbf", null ],
+    [ "get_double_entry", "tool__util_8c.html#ad87e38e835484c8a569750dc2527c484", null ],
+    [ "get_file_path", "tool__util_8c.html#aff43485e013586220572bc43dd2fb20c", null ],
+    [ "get_int_entry", "tool__util_8c.html#a3f2ffcb51152a7008c8067e31195e0c6", null ],
+    [ "get_legacy_grid_size", "tool__util_8c.html#a716fcd6fac9d4dee5eebea2cd065cf3a", null ],
+    [ "lat_dist", "tool__util_8c.html#a444e7cf4c55cdde5cffdb065f80ecdb4", null ],
+    [ "lon_fix", "tool__util_8c.html#a320feff18147c9b24129ef76e31efc52", null ],
+    [ "lon_in_range", "tool__util_8c.html#ab41a8c8a43529171e6d7d6102210ce46", null ],
+    [ "round_to_nearest_int", "tool__util_8c.html#a6c1fdd881984915fdc4e571d21701903", null ],
+    [ "spherical_area", "tool__util_8c.html#af0e65fff68a4ca220133b9d248ccf34a", null ],
+    [ "spherical_dist", "tool__util_8c.html#a0390b756a4bbcf1d38b389c6f0908cbe", null ],
+    [ "tp_trans", "tool__util_8c.html#a65b94ba30be82c00e7ac71c4739f9a7c", null ],
+    [ "vtx_delete", "tool__util_8c.html#af4c98ef7c7361fba13b3603df951106c", null ],
+    [ "vtx_insert", "tool__util_8c.html#a15aa5564f8f9daf12b3a9ff8649b0b55", null ],
+    [ "SMALL", "tool__util_8c.html#a294df59fe1f1fcaee34bad8dab878cd4", null ]
+];
