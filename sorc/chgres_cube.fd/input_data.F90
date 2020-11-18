@@ -4956,6 +4956,8 @@ if (localpet == 0) then
      where(slmsk_save == 1) dummy2d_i = 1
    
      call search(dummy2d_8,dummy2d_i,i_input,j_input,1,230)
+   else
+      dummy2d_8=real(dummy2d,esmf_kind_r8)
    endif
    
    print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
