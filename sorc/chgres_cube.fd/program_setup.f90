@@ -444,7 +444,7 @@ subroutine read_varmap
      if ( trim(line) .eq. '' ) cycle
      nvars = nvars+1
    enddo
-
+   if ( nvars == 0) call error_handler("VARMAP FILE IS EMPTY.", -1)
 
    allocate(chgres_var_names(nvars))
    allocate(field_var_names(nvars))
