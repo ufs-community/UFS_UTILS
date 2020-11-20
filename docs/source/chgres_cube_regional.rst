@@ -47,9 +47,9 @@ Keep this in mind when using FV3GFS GRIB2 data for model initialization:
 
       * GRIB2 data does not contain the fields needed for the Near Sea Surface Temperature (NSST) scheme.  
       * External model recommendations for pre-defined CONUS grids:
-        * 3-km domain, HRRR or RAP data is recommended
-        * 13-km domain: RAP or GFS data is recommended
-        * 25-km domain: GFS data is recommended
+              * 3-km domain, HRRR or RAP data is recommended
+              * 13-km domain: RAP or GFS data is recommended
+              * 25-km domain: GFS data is recommended
       * Sea/lake ice thickness and column temperatures are not available.  So, nominal values of 1.5 m and 265 K are used.
       * For FV3GFS GRIB2 data, soil moisture is created using bilinear interpolation and, therefore, may be a mixture of values from different soil types. Could result in poor latent/sensible heat fluxes.
       * Ozone is not available at all isobaric levels. Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
@@ -78,9 +78,9 @@ When using GRIB2 data as input to chgres_cube, set namelist as follows:
       * convert_atm - Set to ‘true’ to process atmospheric fields
       * convert_sfc - Set to ‘true’ to process surface fields
       * regional 
-        * Set to 0 to create initial condition atmospheric file
-        * Set to 1 to create initial condition atmospheric file and zero hour boundary condition file
-        * Set to 2 to create a boundary condition file. Use this option for all but the initialization time.
+              * Set to 0 to create initial condition atmospheric file
+              * Set to 1 to create initial condition atmospheric file and zero hour boundary condition file
+              * Set to 2 to create a boundary condition file. Use this option for all but the initialization time.
       * halo_blend - Integer number of row/columns to apply halo blending into the domain, where model and lateral boundary tendencies are applied.
       * halo_bndy - Integer number of rows/columns that exist within the halo, where pure lateral boundary conditions are applied.
       * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. (Default: 'GFS')
@@ -108,8 +108,8 @@ If the NCEPLIBS have been installed and the user wants to compile chgres_cube ag
 
       * make sure paths are set to hdf5, compiler, mpi and cmake
       * In a bash environment run
-        * cd /path/to/nceplibs/installed
-        * source bin/setenv_nceplibs.sh (this will set all necessary environments)
+              * cd /path/to/nceplibs/installed
+              * source bin/setenv_nceplibs.sh (this will set all necessary environments)
       * set cmake compiler - export FC=ifort (if ifort is the compiler chosen)
       * cd to where you checked out the UFS_Utils
       * mkdir build and cd build
