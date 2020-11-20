@@ -6,13 +6,13 @@ module load lsf/10.1
 module load HPSS/5.0.2.5
 module load cmake/3.16.2
 
-module use /usrx/local/nceplibs/dev/hpc-stack/libs/hpc-stack/v1.0.0-beta1/modulefiles/stack
+module use /usrx/local/nceplibs/dev/hpc-stack/test/hpc-stack/modulefiles/stack
 
 module load hpc/1.0.0-beta1
 module load hpc-ips/18.0.1.163
 module load hpc-impi/18.0.1
 
-module load jasper/2.0.15
+module load jasper/2.0.22
 module load zlib/1.2.11
 module load png/1.6.35
 
