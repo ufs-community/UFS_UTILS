@@ -10,7 +10,7 @@ The chgres_cube program creates initial condition files to “coldstart” the f
 Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data
 ***************************************************************
 
-FV3GFS:
+**FV3GFS:**
 
       * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
@@ -18,7 +18,7 @@ FV3GFS:
 
       * 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2 file**, under **GFS Forecasts 003 (1-deg)** here: `NCDC - Global Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>`__.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
-NAM:
+**NAM:**
       
        * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfFH.tmHH.grib2** files in subdirectory nam.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`__.
     
@@ -26,11 +26,16 @@ NAM:
 
      *  12-km archived data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`__.
 
-HRRR: 
+**HRRR:**
+ 
        * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfFH.grib2** files in the subdirectory hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`__.
+
        * 3-km operational data from 2015 to present (AWS): http://awsopendata.s3-website-us-west-2.amazonaws.com/noaa-hrrr/
+
        * 3-km operational data from 2016 to present (University of Utah): `Click here <http://home.chpc.utah.edu/~u0553130/Brian_Blaylock/cgi-bin/hrrr_download.cgi>`__.
-RAP:
+
+**RAP:**
+
        * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfFH.grib2** files in the subdirectory rap.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/rap/prod/>`__.
 
 ************************************************
@@ -42,9 +47,9 @@ Keep this in mind when using FV3GFS GRIB2 data for model initialization:
 
       * GRIB2 data does not contain the fields needed for the Near Sea Surface Temperature (NSST) scheme.  
       * External model recommendations for pre-defined CONUS grids:
-        * 3-km domain, HRRR or RAP data is recommended
-        * 13-km domain: RAP or GFS data is recommended
-        * 25-km domain: GFS data is recommended
+           * 3-km domain, HRRR or RAP data is recommended
+           * 13-km domain: RAP or GFS data is recommended
+           * 25-km domain: GFS data is recommended
       * Sea/lake ice thickness and column temperatures are not available.  So, nominal values of 1.5 m and 265 K are used.
       * For FV3GFS GRIB2 data, soil moisture is created using bilinear interpolation and, therefore, may be a mixture of values from different soil types. Could result in poor latent/sensible heat fluxes.
       * Ozone is not available at all isobaric levels. Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
@@ -64,24 +69,20 @@ When using GRIB2 data as input to chgres_cube, set namelist as follows:
       * mosaic_file_target_grid - Path and name of the FV3-LAM mosaic file.
       * orog_dir_target_grid - Directory containing the FV3-LAM orography and grid files (NetCDF).
       * orog_files_target_grid - Names of the FV3-LAM orography file.
-      * vcoord_file_target_grid - Path and name of the model vertical coordinate definition file 
-                                                (“global_hyblev.l$LEVS.txt).
+      * vcoord_file_target_grid - Path and name of the model vertical coordinate definition file (“global_hyblev.l$LEVS.txt).
       * data_dir_input_grid - Directory containing the GRIB2 initial conditions data
       * grib2_file_input_grid - Name of the GRIB2 input data file
-      * varmap_file - Path and name of the variable mapping (VARMAP) table.  See below for details on 
-                              this table.
+      * varmap_file - Path and name of the variable mapping (VARMAP) table.  See below for details on this table.
       * input_type - Input data type. Set to ‘grib2’
       * cycle_mon/day/hour - Month/day/hour of your model initialization
       * convert_atm - Set to ‘true’ to process atmospheric fields
       * convert_sfc - Set to ‘true’ to process surface fields
-      * regional - Set to 0 to create initial condition atmospheric file
-                        Set to 1 to create initial condition atmospheric file and zero hour boundary condition file
-                        Set to 2 to create a boundary condition file. Use this option for all but the  
-                        initialization time.
-      * halo_blend - Integer number of row/columns to apply halo blending into the domain, where model 
-                             and lateral boundary tendencies are applied.
-      * halo_bndy - Integer number of rows/columns that exist within the halo, where pure lateral 
-                            boundary conditions are applied.
+      * regional 
+           * Set to 0 to create initial condition atmospheric file
+           * Set to 1 to create initial condition atmospheric file and zero hour boundary condition file
+           * Set to 2 to create a boundary condition file. Use this option for all but the initialization time.
+      * halo_blend - Integer number of row/columns to apply halo blending into the domain, where model and lateral boundary tendencies are applied.
+      * halo_bndy - Integer number of rows/columns that exist within the halo, where pure lateral boundary conditions are applied.
       * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. (Default: 'GFS')
 
       **Optional Entries**
@@ -90,10 +91,8 @@ When using GRIB2 data as input to chgres_cube, set namelist as follows:
       * nsoill_out - Number of soil levels to produce in the sfc_data.nc file (Default: 4).
       * sotyp_from_climo - Use soil type from climatology. Valid options: .true. or .false. (Default: .true.)
       * vgtyp_from_climo - Use vegetation type from climatology. Valid Options: .true. or  .false. (Default: .true.)
-      * vgfrc_from_climo - Use vegetation fraction from climatology. Valid options: .true. or .false. 
-                                       (Default: .true.)
-      * lai_from_climo - Use leaf area index from climatology. Valid options: .true. or .false. 
-                                   (Default: .true.)
+      * vgfrc_from_climo - Use vegetation fraction from climatology. Valid options: .true. or .false. (Default: .true.)
+      * lai_from_climo - Use leaf area index from climatology. Valid options: .true. or .false. (Default: .true.)
       * minmax_vgfrc_from_climo - Use min/max vegetation fraction from climatology. Valid options: .true. or .false. (Default: .true.)
       * tg3_from_soil - Use tg3 from input soil. Valid options: .true. or .false. . Default: .false.
       * thomp_mp_climo_file - Location of Thompson aerosol climatology file. Provide only if you wish to use these aerosol variables.
