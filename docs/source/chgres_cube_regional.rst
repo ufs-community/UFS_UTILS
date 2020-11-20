@@ -1,16 +1,16 @@
 .. _chgres_cube:
 
-************************
+**************
 Introduction
-************************
+**************
 
-The chgres_cube program creates initial condition files to “coldstart” the forecast model.  The initial conditions are created from either Global Forecast System (GFS), North American Mesoscale Forecast System (NAM), Rapid Refresh (RAP), or High Resolution Rapid Refresh (HRRR) gridded binary version 2 (GRIB2) data.
+The chgres_cube program creates initial condition files to “coldstart” the forecast model.  The initial conditions are created from either Finite-Volume Sphere (FV3) Global Forecast System (GFS), North American Mesoscale Forecast System (NAM), Rapid Refresh (RAP), or High Resolution Rapid Refresh (HRRR) gridded binary version 2 (GRIB2) data.
 
 ***************************************************************
-Where to find GFS, NAM, HRRR, and RAP GRIB2 data
+Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data
 ***************************************************************
 
-GFS:
+FV3GFS:
 
       * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
@@ -26,7 +26,6 @@ NAM:
 
      *  12-km archived data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`__.
 
-
 HRRR: 
        * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfFH.grib2** files in the subdirectory hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`__.
        * 3-km operational data from 2015 to present (AWS): http://awsopendata.s3-website-us-west-2.amazonaws.com/noaa-hrrr/
@@ -39,86 +38,65 @@ Initializing with GRIB2 data - some caveats
 ************************************************
 
 
-Keep this in mind when using GFS GRIB2 data for model initialization:
+Keep this in mind when using FV3GFS GRIB2 data for model initialization:
 
-      * GRIB2 data does not contain the fields needed for the Near Sea Surface Temperature (NSST) scheme.  See the next section for options on running the forecast model in this situation.
-      * Data is coarse (in vertical and horizontal) compared to the NCEP operational GFS .  May not provide a good initialization (especially for the surface).  Recommendations:
-
-        * C96 - use 0.25, 0.5 or 1.0-degree GRIB2 data
-        * C192 - use 0.25 or 0.5-degree GRIB2 data
-        * C384 - use 0.25-degree GRIB2 data
-        * C768 - try the 0.25-degree GRIB2 data.  But it may not work well.
+      * GRIB2 data does not contain the fields needed for the Near Sea Surface Temperature (NSST) scheme.  
+      * External model recommendations for pre-defined CONUS grids:
+        * 3-km domain, HRRR or RAP data is recommended
+        * 13-km domain: RAP or GFS data is recommended
+        * 25-km domain: GFS data is recommended
       * Sea/lake ice thickness and column temperatures are not available.  So, nominal values of 1.5 m and 265 K are used.
-      * Soil moisture in the GRIB2 files is created using bilinear interpolation and, therefore, may be a mixture of values from different soil types.  Could result in poor latent/sensible heat fluxes.
-      * Ozone is not available at all isobaric levels.  Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
-      * Only tested with GRIB2 data from GFS v14 and v15 (from 12z July 19, 2017 to current).  May not work with older GFS data.  Will not work with GRIB2 data from other models.
+      * For FV3GFS GRIB2 data, soil moisture is created using bilinear interpolation and, therefore, may be a mixture of values from different soil types. Could result in poor latent/sensible heat fluxes.
+      * Ozone is not available at all isobaric levels. Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
+      * Only tested with GRIB2 data from FV3GFS, RAP, NAM, and HRRR data. May not work with GRIB2 data from other models. Use these at your own risk.
 
-**Near Sea Surface Temperature (NSST) data and GRIB2 initialization**
-
-The issue with not having NSST data is important.  In GFS we use the foundation temperature (Tref) and add a diurnal warming/cooling layer using NSST. This is the surface temperature that is passed to the atmospheric boundary layer. This is a critical feature, especially when we are doing Data Assimilation.
-
-When using NEMSIO or NetCDF data to initialize the model, both the foundation and surface temperature are available and the atmospheric model should be run using the NSST option as this will properly account for in the forward run of the model.
-
-In GRIB2 files only the Tsfc is stored and that is set as foundation temperature as well. So the diurnal heating / cooling is baked into the initial condition for the extent of the run. This can be critical if the model is being initialized when the ocean is warm and initialization is occuring at the peak of the diurnal warming. That warm ocean will be baked in for the extent of the run and may spawn off a number of fake hurricanes. The user has two options -- either to use a spin up cycle to spin up NSST (set **nstf_name** = [2,1,0,0,0] in **input.nml** of the model namelist file. This will create a diurnal cycle after 24 hours of spin up), or to run the model without any NSST option ( set **nstf_name** = [0,0,0,0,0] in **input.nml** of the model namelist file. The user will also have to choose one of the no NSST physics suite options in **input.nml**).
-
-Note, that neither of these two options will get rid of the underlying baked in heating/cooling in the surface temperature fields. For most cases this may not be an issue, but where it is then the user will either have to initialize the model with NEMSIO or NetCDF data, or replace the surface temperature in the GRIB2 fields with independently obtained foundation temperature.
 
 ************************************************
 chgres_cube namelist options
 ************************************************
 
-Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3 horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
+Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3-LAM horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
 
 When using GRIB2 data as input to chgres_cube, set namelist as follows:
 
-      * fix_dir_target_grid - Path to the tiled FV3 surface climatological files (such as albedo).
-      * mosaic_file_target_grid - Path and name of the FV3 mosaic file.
-      * orog_dir_target_grid - directory containing the tiled FV3 orography and grid files (NetCDF).
-      * orog_files_target_grid - names of the six tiled FV3 orography files.
-      * vcoord_file_target_grid - path and name of the model vertical coordinate definition file (“global_hyblev.l$LEVS.txt).
-      * data_dir_input_grid - directory containing the GRIB2 initial conditions data
-      * grib2_file_input_grid - name of the GRIB2 input data file
-      * varmap_file - path and name of the variable mapping (VARMAP) table.  See below for details on this table.
-      * input_type - input data type. Set to ‘grib2’
-      * cycle_mon/day/hour - month/day/hour of your model initialization
-      * convert_atm - set to ‘true’ to process the atmospheric fields
-      * convert_sfc - set to ‘true’ to process the surface fields
+      * fix_dir_target_grid - Path to the FV3-LAM surface climatological files (such as albedo).
+      * fix_dir_input_grid - Directory containing RAP lat/lon file. On NOAA HPC machines, typically the “fix/fix_am” directory of the UFS_UTILS directory. 
+      * mosaic_file_target_grid - Path and name of the FV3-LAM mosaic file.
+      * orog_dir_target_grid - Directory containing the FV3-LAM orography and grid files (NetCDF).
+      * orog_files_target_grid - Names of the FV3-LAM orography file.
+      * vcoord_file_target_grid - Path and name of the model vertical coordinate definition file 
+                                                (“global_hyblev.l$LEVS.txt).
+      * data_dir_input_grid - Directory containing the GRIB2 initial conditions data
+      * grib2_file_input_grid - Name of the GRIB2 input data file
+      * varmap_file - Path and name of the variable mapping (VARMAP) table.  See below for details on 
+                              this table.
+      * input_type - Input data type. Set to ‘grib2’
+      * cycle_mon/day/hour - Month/day/hour of your model initialization
+      * convert_atm - Set to ‘true’ to process atmospheric fields
+      * convert_sfc - Set to ‘true’ to process surface fields
+      * regional - Set to 0 to create initial condition atmospheric file
+                        Set to 1 to create initial condition atmospheric file and zero hour boundary condition file
+                        Set to 2 to create a boundary condition file. Use this option for all but the  
+                        initialization time.
+      * halo_blend - Integer number of row/columns to apply halo blending into the domain, where model 
+                             and lateral boundary tendencies are applied.
+      * halo_bndy - Integer number of rows/columns that exist within the halo, where pure lateral 
+                            boundary conditions are applied.
+      * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. (Default: 'GFS')
 
-When using NEMSIO data as input to chgres_cube, set namelist as follows:
+      **Optional Entries**
 
-      * fix_dir_target_grid - Path to the tiled FV3 surface climatological files (such as albedo).
-      * mosaic_file_target_grid - Path and name of the FV3 mosaic file.
-      * orog_dir_target_grid - directory containing the tiled FV3 orography and grid files (NetCDF).
-      * orog_files_target_grid - names of the six tiled FV3 orography files.
-      * vcoord_file_target_grid - path and name of the model vertical coordinate definition file (“global_hyblev.l$LEVS.txt).
-      * data_dir_input_grid - directory containing the NEMSIO input data
-      * atm_files_input_grid - name of the NEMSIO input atmospheric data file
-      * sfc_files_input_grid - name of the NEMSIO input surface/Near Sea Surface Temperature (NSST) data file
-      * input_type - input data type. Set to ‘gaussian_nemsio’.
-      * cycle_mon/day/hour - month/day/hour of your model run
-      * convert_atm - set to ‘true’ to process the atmospheric fields
-      * convert_sfc - set to ‘true’ to process the surface fields
-      * convert_nst - set to ‘true’ to process NSST fields
-      * tracers_input - names of tracer records in input file.  For GFDL microphysics, set to “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
-      * tracers - names of tracer records in output file expected by model.  For GFDL microphysics, set to “sphum”,”liq_wat”,”o3mr”,”ice_wat”,”rainwat”,”snowwat”,”graupel”.
-
-When using NetCDF data as input to chgres_cube, set namelist as follows:
-
-      * fix_dir_target_grid - Path to the tiled FV3 surface climatological files (such as albedo).
-      * mosaic_file_target_grid - Path and name of the FV3 mosaic file.
-      * orog_dir_target_grid - directory containing the tiled FV3 orography and grid files (NetCDF).
-      * orog_files_target_grid - names of the six tiled FV3 orography files.
-      * vcoord_file_target_grid - path and name of the model vertical coordinate definition file (“global_hyblev.l$LEVS.txt).
-      * data_dir_input_grid - directory containing the NetCDF input data
-      * atm_files_input_grid - name of the NetCDF input atmospheric data file
-      * sfc_files_input_grid - name of the NetCDF input surface/Near Sea Surface Temperature (NSST) data file
-      * input_type - input data type. Set to ‘gaussian_netcdf’.
-      * cycle_mon/day/hour - month/day/hour of your model run
-      * convert_atm - set to ‘true’ to process the atmospheric fields
-      * convert_sfc - set to ‘true’ to process the surface fields
-      * convert_nst - set to ‘true’ to process NSST fields
-      * tracers_input - names of tracer records in input file.  For GFDL microphysics, set to “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
-      * tracers - names of tracer records in output file expected by model.  For GFDL microphysics, set to “sphum”,”liq_wat”,”o3mr”,”ice_wat”,”rainwat”,”snowwat”,”graupel”.
+      * geogrid_file_input_grid - Full path to the RAP or HRRR geogrid file corresponding to the external model input data. Only used with external_model = ‘HRRR’ or ‘RAP’. 
+      * nsoill_out - Number of soil levels to produce in the sfc_data.nc file (Default: 4).
+      * sotyp_from_climo - Use soil type from climatology. Valid options: .true. or .false. (Default: .true.)
+      * vgtyp_from_climo - Use vegetation type from climatology. Valid Options: .true. or  .false. (Default: .true.)
+      * vgfrc_from_climo - Use vegetation fraction from climatology. Valid options: .true. or .false. 
+                                       (Default: .true.)
+      * lai_from_climo - Use leaf area index from climatology. Valid options: .true. or .false. 
+                                   (Default: .true.)
+      * minmax_vgfrc_from_climo - Use min/max vegetation fraction from climatology. Valid options: .true. or .false. (Default: .true.)
+      * tg3_from_soil - Use tg3 from input soil. Valid options: .true. or .false. . Default: .false.
+      * thomp_mp_climo_file - Location of Thompson aerosol climatology file. Provide only if you wish to use these aerosol variables.
 
 
 ************************
