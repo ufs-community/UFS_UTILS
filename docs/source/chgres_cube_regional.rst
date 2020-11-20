@@ -19,12 +19,12 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data
       * 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2 file**, under **GFS Forecasts 003 (1-deg)** here: `NCDC - Global Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>`__.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
 **NAM:**
-      
-       * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfFH.tmHH.grib2** files in subdirectory nam.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`__.
-    
-      *  12-km data from previous 6 months - Use the **nam_218_YYYYMMDD_00HH_000.grb2 file**,   under **NAM Forecasts NAM-NMM 218 (12km) Domain** here: `NCDC - North American Mesoscale Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/north-american-mesoscale-forecast-system-nam>`__.
 
-     *  12-km archived data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`__.
+     * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfFH.tmHH.grib2** files in subdirectory nam.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`__.
+
+     * 12-km data from previous 6 months - Use the **nam_218_YYYYMMDD_00HH_000.grb2 file**,   under **NAM Forecasts NAM-NMM 218 (12km) Domain** here: `NCDC - North American Mesoscale Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/north-american-mesoscale-forecast-system-nam>`__.
+
+     * 12-km archived data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`__.
 
 **HRRR:**
  
@@ -47,9 +47,9 @@ Keep this in mind when using FV3GFS GRIB2 data for model initialization:
 
       * GRIB2 data does not contain the fields needed for the Near Sea Surface Temperature (NSST) scheme.  
       * External model recommendations for pre-defined CONUS grids:
-           * 3-km domain, HRRR or RAP data is recommended
-           * 13-km domain: RAP or GFS data is recommended
-           * 25-km domain: GFS data is recommended
+           - 3-km domain, HRRR or RAP data is recommended
+           - 13-km domain: RAP or GFS data is recommended
+           - 25-km domain: GFS data is recommended
       * Sea/lake ice thickness and column temperatures are not available.  So, nominal values of 1.5 m and 265 K are used.
       * For FV3GFS GRIB2 data, soil moisture is created using bilinear interpolation and, therefore, may be a mixture of values from different soil types. Could result in poor latent/sensible heat fluxes.
       * Ozone is not available at all isobaric levels. Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
@@ -78,9 +78,9 @@ When using GRIB2 data as input to chgres_cube, set namelist as follows:
       * convert_atm - Set to ‘true’ to process atmospheric fields
       * convert_sfc - Set to ‘true’ to process surface fields
       * regional 
-           * Set to 0 to create initial condition atmospheric file
-           * Set to 1 to create initial condition atmospheric file and zero hour boundary condition file
-           * Set to 2 to create a boundary condition file. Use this option for all but the initialization time.
+           - Set to 0 to create initial condition atmospheric file
+           - Set to 1 to create initial condition atmospheric file and zero hour boundary condition file
+           - Set to 2 to create a boundary condition file. Use this option for all but the initialization time.
       * halo_blend - Integer number of row/columns to apply halo blending into the domain, where model and lateral boundary tendencies are applied.
       * halo_bndy - Integer number of rows/columns that exist within the halo, where pure lateral boundary conditions are applied.
       * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. (Default: 'GFS')
