@@ -2607,7 +2607,7 @@ $(document).ready(function(){initNavTree('input__data_8F90_source.html',''); ini
 <div class="line"><a name="l02519"></a><span class="lineno"> 2519</span>&#160; <span class="keywordflow">if</span> (.not.lret) <span class="keyword">call </span>error_handler(<span class="stringliteral">&quot;OPENING GRIB2 ATM FILE.&quot;</span>, iret)</div>
 <div class="line"><a name="l02520"></a><span class="lineno"> 2520</span>&#160; </div>
 <div class="line"><a name="l02521"></a><span class="lineno"> 2521</span>&#160; print*,<span class="stringliteral">&quot;- READ VERTICAL COORDINATE.&quot;</span></div>
-<div class="line"><a name="l02522"></a><span class="lineno"> 2522</span>&#160; iret = grb2_inq(the_file,inv_file,<span class="stringliteral">&quot;:var0_2&quot;</span>,<span class="stringliteral">&quot;_0_0:&quot;</span>,<span class="stringliteral">&quot; hybrid &quot;</span>)</div>
+<div class="line"><a name="l02522"></a><span class="lineno"> 2522</span>&#160; iret = grb2_inq(the_file,inv_file,<span class="stringliteral">&quot;:var0_2&quot;</span>,<span class="stringliteral">&quot;_0_0:&quot;</span>,<span class="stringliteral">&quot;:10 hybrid level:&quot;</span>)</div>
 <div class="line"><a name="l02523"></a><span class="lineno"> 2523</span>&#160;  </div>
 <div class="line"><a name="l02524"></a><span class="lineno"> 2524</span>&#160; <span class="keywordflow">if</span> (iret &lt;= 0) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l02525"></a><span class="lineno"> 2525</span>&#160;   lvl_str = <span class="stringliteral">&quot;mb:&quot;</span> </div>
