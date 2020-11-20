@@ -9,18 +9,18 @@
 !! Snow and Ice Mapping System (IMS) data, and the 
 !! NCEP/MMAB global 5-minute ice concentration data.
 !!
-!! ## Program History Log
+!! Program History Log
 !! -  2014-03-20  Initial version.
 !! -  2014-10-20  Use grib2 for all i/o.  Mask out 'land' points
 !!               in the blended analysis using a bitmap
 !!               instead of the '1.57' flag.
 !!
-!!   input files:
+!! input files:
 !!   -   fort.11 - NH IMS ice data, interpolated to the 5-minute grid  (grib 2)
 !!   -   fort.15 - global 5-minute MMAB ice concentration file (grib 2)
 !!   -   fort.17 - global 5-minute MMAB land mask file (grib 2).  
 !!
-!!   output files:
+!! output files:
 !!   -   fort.51 - global 5-minute blended ice concentration file (grib 2)
 !!
 !! condition codes:
