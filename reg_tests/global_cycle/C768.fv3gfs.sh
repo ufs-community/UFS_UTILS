@@ -7,6 +7,8 @@
 
 set -x
 
+NCCMP=${NCCMP:-$(which nccmp)}
+
 export MAX_TASKS_CY=6
 
 export HOMEgfs=$NWPROD
