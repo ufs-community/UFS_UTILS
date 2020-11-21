@@ -20,7 +20,8 @@
 #-----------------------------------------------------------------------------
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
 module list
 
 set -x
@@ -44,6 +45,7 @@ export machine=WCOSS_C
 export KMP_AFFINITY=disabled
 export NCCMP=/gpfs/hps3/emc/global/noscrub/George.Gayno/util/netcdf/nccmp
 export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
+export NCDUMP=/gpfs/hps/usrx/local/prod/NetCDF/4.2/intel/sandybridge/bin/ncdump
 
 rm -fr $WORK_DIR
 
@@ -58,16 +60,16 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.uniform -W 0:15
         -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/c96.uniform.sh"
 
 #-----------------------------------------------------------------------------
-# C96 regional grid
+# gfdl regional grid
 #-----------------------------------------------------------------------------
 
-bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.regional -W 0:10 -M 2400 \
-        -w 'ended(c96.uniform)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/c96.regional.sh"
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J gfdl.regional -W 0:10 -M 2400 \
+        -w 'ended(c96.uniform)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/gfdl.regional.sh"
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
-bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(c96.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(gfdl.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
 
 exit

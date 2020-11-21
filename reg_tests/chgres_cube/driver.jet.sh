@@ -25,7 +25,9 @@
 set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
 PROJECT_CODE="hfv3gfs"
@@ -123,7 +125,7 @@ TEST8=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:05
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d afterok:$TEST8 << EOF
-#!/bin/sh
+#!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
 

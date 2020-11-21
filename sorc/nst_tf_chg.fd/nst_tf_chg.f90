@@ -1,8 +1,9 @@
+!> @file
+!! Replace tref to be a new one by
+!! 1. Read in a new Tref
+!! 2. Smoothing Tref
+!! @author Xu Li @date Mar, 2017
 program nst_tref_chg
-! Abstract:  Replace tref to be a new one by
-!            1. Read in a new Tref
-!            2. Smoothing Tref
-! Created by Xu Li, Mar., 2017
   use nemsio_module, only: nemsio_init,nemsio_open,nemsio_close
   use nemsio_module, only: nemsio_gfile,nemsio_getfilehead
   use nemsio_module, only: nemsio_readrec,nemsio_writerec,nemsio_readrecv,nemsio_writerecv

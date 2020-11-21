@@ -8,11 +8,13 @@
 
 set -x
 
-export TMPDIR=${WORK_DIR}/c96.uniform.work
+export TEMP_DIR=${WORK_DIR}/c96.uniform.work
 export out_dir=${WORK_DIR}/c96.uniform
 
 export res=96
 export gtype=uniform
+
+NCCMP=${NCCMP:-$(which nccmp)}
 
 #-----------------------------------------------------------------------
 # Start script.
@@ -33,9 +35,17 @@ echo "Ending at: " `date`
 
 #-----------------------------------------------------------------------------
 # Compare output to baseline set of data.
+#
+# Note: orion's nccmp utility does not work with the netcdf
+# required to run ufs_utils.  So swap it.
 #-----------------------------------------------------------------------------
 
-cd $out_dir
+if [[ "$machine" = "ORION" ]] ;then
+  module unload netcdfp/4.7.4.release
+  module load netcdf/4.7.2
+fi
+
+cd $out_dir/C96
 
 test_failed=0
 for files in *tile*.nc ./fix_sfc/*tile*.nc

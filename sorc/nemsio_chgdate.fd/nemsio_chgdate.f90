@@ -1,23 +1,11 @@
+!> @file
+!!
+!! @author mahajan @date 2018-02-14
+!!
+!! Replace the date and forecast hour from NCEP/EMC nemsio file
+!! with a date and hour provided from input.
+!!
 program nemsio_chgdate
-!$$$  main program documentation block
-!
-! program:  nemsio_chgdate
-!
-! prgmmr: mahajan          org: ncep/emc               date: 2018-02-14
-!
-! abstract:  Replace the date and forecast hour from NCEP/EMC nemsio file
-!            with a date and hour provided from input
-!
-! program history log:
-!   2018-02-14  Initial version.
-!
-! usage:
-!   nemsio_chgdate.x filename.nemsio new_idate_YYYYMMDDHH new_nfhour_HH
-!
-! attributes:
-!   language: f95
-!
-!$$$
 
 use nemsio_module, only:  nemsio_init, nemsio_open, nemsio_close
 use nemsio_module, only:  nemsio_intkind

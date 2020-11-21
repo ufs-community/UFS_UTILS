@@ -1,3 +1,4 @@
+/** @file */
 /***********************************************************************
                       mosaic_util.h
     This header file provide some utilities routine that will be used in many tools.

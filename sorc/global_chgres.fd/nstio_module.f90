@@ -1,229 +1,226 @@
-!-------------------------------------------------------------------------------
+!> @file
+!!
+!! API for global spectral nst file I/O (modified from sfcio_modul)
+!! @author Xu Li @date 2007-10-26.
+!!
+!! This module provides an Application Program Interface
+!! for performing I/O on the nst restart file of the global nst diurnal warming and sub-layer cooling models.
+!! Functions include opening, reading, writing, and closing as well as
+!! allocating and deallocating data buffers sed in the transfers.
+!! The I/O performed here is sequential.
+!! The transfers are limited to header records or data records.
+!!   
+!! Program History Log:
+!! -  2007-10-26  Xu Li
+!! -  2008-03-25  Xu Li: add surface mask field
+!! -  2009-06-30  Xu Li: modified for NCEP DTM-1p
+!!
+!! Public Variables:
+!! -  nstio_lhead1      Integer parameter length of first header record (=32)
+!! -  nstio_intkind     Integer parameter kind or length of passed integers (=4)
+!! -  nstio_realkind    Integer parameter kind or length of passed reals (=4)
+!! -  nstio_dblekind    Integer parameter kind or length of passed longreals (=8)
+!! -  nstio_realfill    Real(nstio_realkind) fill value (=-9999.)
+!! -  nstio_dblefill    Real(nstio_dblekind) fill value (=-9999.)
+!!
+!! Public Defined Types:
+!!  - nstio_head        nst file header information
+!!    - clabnst           Character(nstio_lhead1) ON85 label
+!!    - fhour             Real(nstio_realkind) forecast hour
+!!    - idate             Integer(nstio_intkind)(4) initial date
+!!                       (hour, month, day, 4-digit year)
+!!    - latb              Integer(nstio_intkind) latitudes
+!!    - lonb              Integer(nstio_intkind) longitudes
+!!    - ivo               Integer(nstio_intkind) version number
+!!    - lsea              Integer(nstio_intkind) sea levels
+!!    - irealf            Integer(sigio_intkind) floating point flag
+!!                       (=1 for 4-byte ieee, =2 for 8-byte ieee)
+!!    - lpl               Integer(nstio_intkind)(latb/2) lons per lat
+!!    - zsea              Real(nstio_realkind) sea depths (meter)
+!!
+!!  - nstio_data        nst file data fields
+!!    - slmsk             Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       surface mask: 0 = water; 1 = land; 2 = ice
+!!    - xt                Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       heat content in DTL                                  (M*K)
+!!    - xs                Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       salinity content in DTL                              (M*ppt)
+!!    - xu                Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       u-current content in DTL                             (M*M/S)
+!!    - xv                Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       v-current content in DTL                             (M*M/S)
+!!    - xz                Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       DTL thickness                                        (M)
+!!    - zm                Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       MXL thickness                                        (M)
+!!    - xtts              Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       d(xt)/d(Ts)                                          (1/M)
+!!    - xzts              Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       d(xz)/d(Ts)                                          (M/K)
+!!    - dt_cool           Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       sea surface cooling amount by sub-layer cooling effect
+!!    - z_c               Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       sea sub-layer depth in m
+!!    - c_0               Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       coefficient to calculate d(Tz)/d(tr) in dimensionless
+!!    - c_d               Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       coefficient to calculate d(Tz)/d(tr) in               (1/M)
+!!    - w_0               Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       coefficient to calculate d(Tz)/d(tr) in dimensionless
+!!    - w_d               Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       coefficient to calculate d(Tz)/d(tr)                  (1/M)
+!!    - d_conv            Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       FCL thickness                                          (M)
+!!    - ifd               Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       index of time integral started mode: 0 = not yet; 1 = started already
+!!    - Tref              Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       reference temperature                                  (K)
+!!    - Qrain             Real(nstio_realkind)(:,:) pointer to lonb*latb
+!!                       sensible heat flux due to rainfall                     (W*M^-2)
+!!                       
+!!  - nstio_dbta        nst file longreal data fields
+!!
+!! <pre>
+!! Public Subprograms:
+!!   nstio_sropen      Open nst file for sequential reading
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     cfname            Character(*) input filename
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_swopen      Open nst file for sequential writing
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     cfname            Character(*) input filename
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_srclose      Close nst file for sequential I/O
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_srhead      Read header information with sequential I/O
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     head              Type(nstio_head) output header information
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_swhead      Write header information with sequential I/O
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     head              Type(nstio_head) input header information
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_alhead      Allocate head allocatables
+!!     head              Type(nstio_head) input/output header information
+!!     iret              Integer(nstio_intkind) output return code
+!!     latb              Integer(nstio_intkind) optional latitudes
+!!     lsea             Integer(nstio_intkind) optional sea levels
+!!
+!!   nstio_aldata      Allocate data fields
+!!     head              Type(nstio_head) input header information
+!!     data              Type(nstio_data) output data fields
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_axdata      Deallocate data fields
+!!     data              Type(nstio_data) output data fields
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_srdata      Read data fields with sequential I/O
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     head              Type(nstio_head) input header information
+!!     data              Type(nstio_data) output data fields
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_swdata      Write data fields with sequential I/O
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     head              Type(nstio_head) input header information
+!!     data              Type(nstio_data) input data fields
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_srohdc      Open, read header & data and close with sequential I/O
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     cfname            Character(*) input filename
+!!     head              Type(nstio_head) output header information
+!!     data              Type(nstio_data) output data fields
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_swohdc      Open, write header & data and close with sequential I/O
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     cfname            Character(*) input filename
+!!     head              Type(nstio_head) input header information
+!!     data              Type(nstio_data) input data fields
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_aldbta      Allocate longreal data fields
+!!     head              Type(nstio_head) input header information
+!!     dbta              Type(nstio_dbta) output longreal data fields
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_axdbta      Deallocate longreal data fields
+!!     dbta              Type(nstio_dbta) output longreal data fields
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_srdbta      Read longreal data fields with sequential I/O
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     head              Type(nstio_head) input header information
+!!     dbta              Type(nstio_dbta) output longreal data fields
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!!   nstio_swdbta      Write longreal data fields with sequential I/O
+!!     lu                Integer(nstio_intkind) input logical unit
+!!     head              Type(nstio_head) input header information
+!!     dbta              Type(nstio_dbta) input longreal data fields
+!!     iret              Integer(nstio_intkind) output return code
+!!
+!! Remarks:
+!!   (1) Here's the supported nst file formats.
+!!       For ivo=200907 
+!!         Label containing
+!!           'GFS ','NST ',ivo,nhead,ndata,reserved(3) (8 4-byte words)
+!!         Header records
+!!           lhead(nhead),ldata(ndata) (nhead+ndata 4-byte words)
+!!           fhour, idate(4), lonb, latb, lsea, irealf,
+!!             reserved(16)  (25 4-byte words)
+!!           lpl  (latb/2 4-byte words)
+!!           zsea  (lsea 4-byte words)
+!!         Data records
+!!           slmsk    (lonb*latb 4-byte words)
+!!           xt       (lonb*latb 4-byte words)
+!!           xs       (lonb*latb 4-byte words)
+!!           xu       (lonb*latb 4-byte words)
+!!           xv       (lonb*latb 4-byte words)
+!!           xz       (lonb*latb 4-byte words)
+!!           zm       (lonb*latb 4-byte words)
+!!           xtts     (lonb*latb 4-byte words)
+!!           xzts     (lonb*latb 4-byte words)
+!!           dt_cool  (lonb*latb 4-byte words)
+!!           z_c      (lonb*latb 4-byte words)
+!!           c_0      (lonb*latb 4-byte words)
+!!           c_d      (lonb*latb 4-byte words)
+!!           w_0      (lonb*latb 4-byte words)
+!!           w_d      (lonb*latb 4-byte words)
+!!           d_conv   (lonb*latb 4-byte words)
+!!           ifd      (lonb*latb 4-byte words)
+!!           Tref     (lonb*latb 4-byte words)
+!!           Qrain    (lonb*latb 4-byte words)
+!!
+!!   (2) Possible return codes:
+!!          0   Successful call
+!!         -1   Open or close I/O error
+!!         -2   Header record I/O error or unrecognized version
+!!         -3   Allocation or deallocation error
+!!         -4   Data record I/O error
+!!         -5   Insufficient data dimensions allocated
+!!
+!! Examples:
+!!   (1) Read the entire nst file 'nstf24' and
+!!       print out the northernmost nst temperature at greenwich.
+!!
+!!     use nstio_module
+!!     type(nstio_head):: head
+!!     type(nstio_data):: data
+!!     call nstio_srohdc(11,'nstf24',head,data,iret)
+!!     print '(f8.2)',data%tref(1,1)
+!!     end
+!! </pre>
+!!
 module nstio_module
-!$$$  Module Documentation Block
-!
-! Module:    nstio_module    API for global spectral nst file I/O
-!   Prgmmr: Xu Li (modified from sfcio_modul)         Org: w/nx23     date: 2007-10-26
-!
-! Abstract: This module provides an Application Program Interface
-!   for performing I/O on the nst restart file of the global nst diurnal warming and sub-layer cooling models.
-!   Functions include opening, reading, writing, and closing as well as
-!   allocating and deallocating data buffers sed in the transfers.
-!   The I/O performed here is sequential.
-!   The transfers are limited to header records or data records.
-!   
-! Program History Log:
-!   2007-10-26  Xu Li
-!   2008-03-25  Xu Li: add surface mask field
-!   2009-06-30  Xu Li: modified for NCEP DTM-1p
-!
-! Public Variables:
-!   nstio_lhead1      Integer parameter length of first header record (=32)
-!   nstio_intkind     Integer parameter kind or length of passed integers (=4)
-!   nstio_realkind    Integer parameter kind or length of passed reals (=4)
-!   nstio_dblekind    Integer parameter kind or length of passed longreals (=8)
-!   nstio_realfill    Real(nstio_realkind) fill value (=-9999.)
-!   nstio_dblefill    Real(nstio_dblekind) fill value (=-9999.)
-!
-! Public Defined Types:
-!   nstio_head        nst file header information
-!     clabnst           Character(nstio_lhead1) ON85 label
-!     fhour             Real(nstio_realkind) forecast hour
-!     idate             Integer(nstio_intkind)(4) initial date
-!                       (hour, month, day, 4-digit year)
-!     latb              Integer(nstio_intkind) latitudes
-!     lonb              Integer(nstio_intkind) longitudes
-!     ivo               Integer(nstio_intkind) version number
-!     lsea              Integer(nstio_intkind) sea levels
-!     irealf            Integer(sigio_intkind) floating point flag
-!                       (=1 for 4-byte ieee, =2 for 8-byte ieee)
-!     lpl               Integer(nstio_intkind)(latb/2) lons per lat
-!     zsea              Real(nstio_realkind) sea depths (meter)
-!
-!   nstio_data        nst file data fields
-!     slmsk             Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       surface mask: 0 = water; 1 = land; 2 = ice
-!     xt                Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       heat content in DTL                                  (M*K)
-!     xs                Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       salinity content in DTL                              (M*ppt)
-!     xu                Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       u-current content in DTL                             (M*M/S)
-!     xv                Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       v-current content in DTL                             (M*M/S)
-!     xz                Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       DTL thickness                                        (M)
-!     zm                Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       MXL thickness                                        (M)
-!     xtts              Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       d(xt)/d(Ts)                                          (1/M)
-!     xzts              Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       d(xz)/d(Ts)                                          (M/K)
-!     dt_cool           Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       sea surface cooling amount by sub-layer cooling effect
-!     z_c               Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       sea sub-layer depth in m
-!     c_0               Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       coefficient to calculate d(Tz)/d(tr) in dimensionless
-!     c_d               Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       coefficient to calculate d(Tz)/d(tr) in               (1/M)
-!     w_0               Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       coefficient to calculate d(Tz)/d(tr) in dimensionless
-!     w_d               Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       coefficient to calculate d(Tz)/d(tr)                  (1/M)
-!     d_conv            Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       FCL thickness                                          (M)
-!     ifd               Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       index of time integral started mode: 0 = not yet; 1 = started already
-!     Tref              Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       reference temperature                                  (K)
-!     Qrain             Real(nstio_realkind)(:,:) pointer to lonb*latb
-!                       sensible heat flux due to rainfall                     (W*M^-2)
-!                       
-!   nstio_dbta        nst file longreal data fields
-!                       
-! Public Subprograms:
-!   nstio_sropen      Open nst file for sequential reading
-!     lu                Integer(nstio_intkind) input logical unit
-!     cfname            Character(*) input filename
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_swopen      Open nst file for sequential writing
-!     lu                Integer(nstio_intkind) input logical unit
-!     cfname            Character(*) input filename
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_srclose      Close nst file for sequential I/O
-!     lu                Integer(nstio_intkind) input logical unit
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_srhead      Read header information with sequential I/O
-!     lu                Integer(nstio_intkind) input logical unit
-!     head              Type(nstio_head) output header information
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_swhead      Write header information with sequential I/O
-!     lu                Integer(nstio_intkind) input logical unit
-!     head              Type(nstio_head) input header information
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_alhead      Allocate head allocatables
-!     head              Type(nstio_head) input/output header information
-!     iret              Integer(nstio_intkind) output return code
-!     latb              Integer(nstio_intkind) optional latitudes
-!     lsea             Integer(nstio_intkind) optional sea levels
-!
-!   nstio_aldata      Allocate data fields
-!     head              Type(nstio_head) input header information
-!     data              Type(nstio_data) output data fields
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_axdata      Deallocate data fields
-!     data              Type(nstio_data) output data fields
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_srdata      Read data fields with sequential I/O
-!     lu                Integer(nstio_intkind) input logical unit
-!     head              Type(nstio_head) input header information
-!     data              Type(nstio_data) output data fields
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_swdata      Write data fields with sequential I/O
-!     lu                Integer(nstio_intkind) input logical unit
-!     head              Type(nstio_head) input header information
-!     data              Type(nstio_data) input data fields
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_srohdc      Open, read header & data and close with sequential I/O
-!     lu                Integer(nstio_intkind) input logical unit
-!     cfname            Character(*) input filename
-!     head              Type(nstio_head) output header information
-!     data              Type(nstio_data) output data fields
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_swohdc      Open, write header & data and close with sequential I/O
-!     lu                Integer(nstio_intkind) input logical unit
-!     cfname            Character(*) input filename
-!     head              Type(nstio_head) input header information
-!     data              Type(nstio_data) input data fields
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_aldbta      Allocate longreal data fields
-!     head              Type(nstio_head) input header information
-!     dbta              Type(nstio_dbta) output longreal data fields
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_axdbta      Deallocate longreal data fields
-!     dbta              Type(nstio_dbta) output longreal data fields
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_srdbta      Read longreal data fields with sequential I/O
-!     lu                Integer(nstio_intkind) input logical unit
-!     head              Type(nstio_head) input header information
-!     dbta              Type(nstio_dbta) output longreal data fields
-!     iret              Integer(nstio_intkind) output return code
-!
-!   nstio_swdbta      Write longreal data fields with sequential I/O
-!     lu                Integer(nstio_intkind) input logical unit
-!     head              Type(nstio_head) input header information
-!     dbta              Type(nstio_dbta) input longreal data fields
-!     iret              Integer(nstio_intkind) output return code
-!
-! Remarks:
-!   (1) Here's the supported nst file formats.
-!       For ivo=200907 
-!         Label containing
-!           'GFS ','NST ',ivo,nhead,ndata,reserved(3) (8 4-byte words)
-!         Header records
-!           lhead(nhead),ldata(ndata) (nhead+ndata 4-byte words)
-!           fhour, idate(4), lonb, latb, lsea, irealf,
-!             reserved(16)  (25 4-byte words)
-!           lpl  (latb/2 4-byte words)
-!           zsea  (lsea 4-byte words)
-!         Data records
-!           slmsk    (lonb*latb 4-byte words)
-!           xt       (lonb*latb 4-byte words)
-!           xs       (lonb*latb 4-byte words)
-!           xu       (lonb*latb 4-byte words)
-!           xv       (lonb*latb 4-byte words)
-!           xz       (lonb*latb 4-byte words)
-!           zm       (lonb*latb 4-byte words)
-!           xtts     (lonb*latb 4-byte words)
-!           xzts     (lonb*latb 4-byte words)
-!           dt_cool  (lonb*latb 4-byte words)
-!           z_c      (lonb*latb 4-byte words)
-!           c_0      (lonb*latb 4-byte words)
-!           c_d      (lonb*latb 4-byte words)
-!           w_0      (lonb*latb 4-byte words)
-!           w_d      (lonb*latb 4-byte words)
-!           d_conv   (lonb*latb 4-byte words)
-!           ifd      (lonb*latb 4-byte words)
-!           Tref     (lonb*latb 4-byte words)
-!           Qrain    (lonb*latb 4-byte words)
-!
-!   (2) Possible return codes:
-!          0   Successful call
-!         -1   Open or close I/O error
-!         -2   Header record I/O error or unrecognized version
-!         -3   Allocation or deallocation error
-!         -4   Data record I/O error
-!         -5   Insufficient data dimensions allocated
-!
-! Examples:
-!   (1) Read the entire nst file 'nstf24' and
-!       print out the northernmost nst temperature at greenwich.
-!
-!     use nstio_module
-!     type(nstio_head):: head
-!     type(nstio_data):: data
-!     call nstio_srohdc(11,'nstf24',head,data,iret)
-!     print '(f8.2)',data%tref(1,1)
-!     end
-!
-! Attributes:
-!   Language: Fortran 90
-!
-!$$$
   implicit none
   private
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

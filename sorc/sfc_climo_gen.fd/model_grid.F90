@@ -1,45 +1,35 @@
+!> @file
+!! Defines the model grid.
+!! @author gayno @date 2018
+!!
+!! ### Public Subroutines:
+!! - define_model_grid            Defines esmf grid object for the
+!!                              model grid.
+!! - model_grid_cleanup           Free up memory used in this module.
+!!
+!! ### Public variables:
+!!
+!! Variables named with 'mdl' refer to the model grid.
+!!
+!! - data_field_mdl               ESMF field object that holds the
+!!                              data interpolated to model grid.
+!! - grid_mdl                     ESMF grid object for the model grid.
+!! - grid_tiles                   Array of model grid tile names.
+!! - i/j_mdl                      i/j dimensions of model tile.
+!! - latitude_field_mdl           ESMF field object that holds the
+!!                              model grid latitude
+!! - longitude_field_mdl          ESMF field object that holds the
+!!                              model grid longitude
+!! - mdl_field_mdl                ESMF field object that holds the
+!!                              model land mask.
+!! - missing                      Value assigned to undefined points
+!!                              (i.e., ocean points for a land
+!!                              field).
+!! - num_tiles                    Total number of model grid tiles.
+!! - vegt_field_mdl               ESMF field object that holds the
+!!                              vegetation type on the model grid.
+!! 
  module model_grid
-
-!--------------------------------------------------------------------------
-! module documentation block
-!
-! Module: model grid
-!   pgrmmr: gayno           org: w/np2           date: 2018
-!
-! Abstract: Defines the model grid.
-!
-! Usage:  use model_grid 
-!
-! Public Subroutines:
-! -------------------
-! define_model_grid            Defines esmf grid object for the
-!                              model grid.
-! model_grid_cleanup           Free up memory used in this module.
-!
-! Public variables:
-! -----------------
-!
-! Variables named with 'mdl' refer to the model grid.
-!
-! data_field_mdl               ESMF field object that holds the
-!                              data interpolated to model grid.
-! grid_mdl                     ESMF grid object for the model grid.
-! grid_tiles                   Array of model grid tile names.
-! i/j_mdl                      i/j dimensions of model tile.
-! latitude_field_mdl           ESMF field object that holds the
-!                              model grid latitude
-! longitude_field_mdl          ESMF field object that holds the
-!                              model grid longitude
-! mdl_field_mdl                ESMF field object that holds the
-!                              model land mask.
-! missing                      Value assigned to undefined points
-!                              (i.e., ocean points for a land
-!                              field).
-! num_tiles                    Total number of model grid tiles.
-! vegt_field_mdl               ESMF field object that holds the
-!                              vegetation type on the model grid.
-! 
-!-----------------------------------------------------------------------
 
  use esmf
 
@@ -63,28 +53,22 @@
 
  contains
 
+!> define model grid
+!! @author gayno @date 2018
+!!
+!! Define the model grid from the mosaic and orography
+!! files.  Create the ESMF grid object for the model grid.
+!!
+!! @param[in] localpet this mpi task      
+!! @param[in] npets total number of mpi tasks      
+!!
  subroutine define_model_grid(localpet, npets)
-
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine: define model grid
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Define the model grid from the mosaic and orography
-!   files.  Create the ESMF grid object for the model grid.
-!
-! Usage:  define_model_grid(localpet, npets)
-!
-!   input argument list:
-!     localpet               this mpi task      
-!     npets                  total number of mpi tasks      
-!-----------------------------------------------------------------------
 
  use esmf
  use netcdf
  use program_setup 
  use utils
+ use mpi
 
  implicit none
 
@@ -93,7 +77,7 @@
  character(len=500)               :: the_file
 
  integer                          :: error, id_dim, id_tiles, ncid
- integer                          :: id_grid_tiles
+ integer                          :: id_grid_tiles, ierr
  integer                          :: extra, rc, tile
  integer, allocatable             :: decomptile(:,:)
 
@@ -132,7 +116,7 @@
  if (mod(npets,num_tiles) /= 0) then
    print*,'- FATAL ERROR: MUST RUN THIS PROGRAM WITH A TASK COUNT THAT'
    print*,'- IS A MULTIPLE OF THE NUMBER OF TILES.'
-   call mpi_abort
+   call mpi_abort(mpi_comm_world, 44, ierr)
  endif
 
 !-----------------------------------------------------------------------
@@ -297,28 +281,19 @@
 
  end subroutine define_model_grid
 
+!> Get model information
+!! @author gayno @date 2018
+!!
+!! Read model land/sea mask and lat/lon from the orography file.
+!!
+!! @param[in] orog_file the orography file
+!! @param[out] mask land/sea mask
+!! @param[out] lat2d latitude
+!! @param[out] lon2d longitude
+!! @param[in] idim i dimension of the model tile
+!! @param[in] jdim j dimension of the model tile
+!!
  subroutine get_model_info(orog_file, mask, lat2d, lon2d, idim, jdim)
-
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine: get model information
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Read model land/sea mask and lat/lon from the orography file.
-!
-! Usage:  call get_model_info(orog_file, mask, lat2d, lon2d, idim, jdim)
-!
-!   input argument list:
-!     orog_file              the orography file
-!     i/jdim                 i/j dimension of the model tile
-!
-!   output argument list:
-!     mask                   land/sea mask
-!     lat2d                  latitude
-!     lon2d                  longitude
-!
-!-----------------------------------------------------------------------
 
  use esmf
  use netcdf
@@ -334,7 +309,7 @@
  real(esmf_kind_r4), intent(out)    :: lat2d(idim,jdim)
  real(esmf_kind_r4), intent(out)    :: lon2d(idim,jdim)
 
- integer                            :: error, lat, lon
+ integer                            :: error, lat, lon, i, j
  integer                            :: ncid, id_dim, id_var
 
  real(kind=4), allocatable          :: dummy(:,:)
@@ -365,12 +340,37 @@
 
  allocate(dummy(idim,jdim))
 
- print*,"- READ LAND MASK"
- error=nf90_inq_varid(ncid, 'slmsk', id_var)
- call netcdf_err(error, "READING SLMSK ID")
- error=nf90_get_var(ncid, id_var, dummy)
- call netcdf_err(error, "READING SLMSK")
- mask = nint(dummy)
+!-----------------------------------------------------------------------
+! If the lake maker was used, there will be a 'lake_frac' record.
+! In that case, land/non-land is determined by 'land_frac'.
+!
+! If the lake maker was not used, use 'slmsk', which is defined
+! as the nint(land_frac).
+!-----------------------------------------------------------------------
+
+ error=nf90_inq_varid(ncid, 'lake_frac', id_var)
+ if (error /= 0) then
+   print*,"- READ LAND MASK (SLMSK)"
+   error=nf90_inq_varid(ncid, 'slmsk', id_var)
+   call netcdf_err(error, "READING SLMSK ID")
+   error=nf90_get_var(ncid, id_var, dummy)
+   call netcdf_err(error, "READING SLMSK")
+   mask = nint(dummy)
+ else
+   print*,"- READ LAND FRACTION"
+   error=nf90_inq_varid(ncid, 'land_frac', id_var)
+   call netcdf_err(error, "READING LAND_FRAC ID")
+   error=nf90_get_var(ncid, id_var, dummy)
+   call netcdf_err(error, "READING LAND_FRAC")
+   mask = 0
+   do j = 1, lat
+   do i = 1, lon
+     if (dummy(i,j) > 0.0) then
+       mask(i,j) = 1
+     endif
+   enddo
+   enddo
+ endif
 
  print*,"- READ LATITUDE"
  error=nf90_inq_varid(ncid, 'geolat', id_var)
@@ -392,19 +392,12 @@
 
  end subroutine get_model_info
 
+!> model grid cleanup
+!! @author gayno @date 2018
+!!
+!! Free up memory associated with this module.
+!!
  subroutine model_grid_cleanup
-
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine: model grid cleanup
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Free up memory associated with this module.
-!
-! Usage:  call model_grid_cleanup
-!
-!-----------------------------------------------------------------------
 
  implicit none
 

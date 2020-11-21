@@ -32,6 +32,8 @@ export TRACERS_INPUT='"spfh","o3mr","clwmr"'
 export CDATE=2017071700
 export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
 
+NCCMP=${NCCMP:-$(which nccmp)}
+
 echo "Starting at: " `date`
 
 ${HOMEufs}/ush/chgres_cube.sh
@@ -47,7 +49,15 @@ echo "Ending at: " `date`
 
 #-----------------------------------------------------------------------------
 # Compare output from chgres to baseline set of data.
+#
+# orion's nccmp utility does not work with the netcdf
+# required to run ufs_utils.  So swap it.
 #-----------------------------------------------------------------------------
+
+if [ $machine == 'orion' ]; then
+  module unload netcdfp/4.7.4.release
+  module load netcdf/4.7.2
+fi
 
 cd $DATA
 

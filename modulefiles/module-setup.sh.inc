@@ -48,7 +48,7 @@ elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
 elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
     # We are on NOAA Mars or Venus
     if ( ! eval module help > /dev/null 2>&1 ) ; then
-	source /usrx/local/prod/lmod/lmod/init/$__ms_shell
+        source /usrx/local/prod/lmod/lmod/init/$__ms_shell
     fi
     module purge
 elif [[ -d /glade ]] ; then
@@ -58,7 +58,7 @@ elif [[ -d /glade ]] ; then
     fi
     module purge
 elif [[ -d /lustre && -d /ncrc ]] ; then
-    # We are on GAEA. 
+    # We are on GAEA.
     if ( ! eval module help > /dev/null 2>&1 ) ; then
         # We cannot simply load the module command.  The GAEA
         # /etc/profile modifies a number of module-related variables
@@ -70,8 +70,9 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
     else
         __ms_source_etc_profile=no
     fi
+    module purge > /dev/null 2>&1
     module purge
-# clean up after purge 
+    # clean up after purge
     unset _LMFILES_
     unset _LMFILES_000
     unset _LMFILES_001
@@ -88,10 +89,6 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
     fi
     if [[ -s /etc/opt/cray/pe/admin-pe/site-config ]] ; then
         source /etc/opt/cray/pe/admin-pe/site-config
-    fi
-    export NCEPLIBS=/lustre/f1/pdata/ncep_shared/NCEPLIBS/lib
-    if [[ -d "$NCEPLIBS" ]] ; then
-        module use $NCEPLIBS/modulefiles
     fi
     if [[ "$__ms_source_etc_profile" == yes ]] ; then
       source /etc/profile

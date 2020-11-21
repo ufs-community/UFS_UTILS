@@ -21,8 +21,12 @@
 #
 #-----------------------------------------------------------------------------
 
+compiler=${compiler:-"intel"}
+
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.$compiler
+module list
 
 set -x
 
@@ -41,7 +45,6 @@ export APRUN=time
 export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export machine=HERA
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
 export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/grid_gen/baseline_data
 
 ulimit -a
@@ -59,11 +62,11 @@ TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_
       -o $LOG_FILE -e $LOG_FILE ./c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
-# C96 regional grid
+# gfdl regional grid
 #-----------------------------------------------------------------------------
 
-TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.regional \
-      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c96.regional.sh)
+TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J gfdl.regional \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
@@ -71,6 +74,6 @@ TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d afterok:$TEST2 << EOF
-#!/bin/sh
+#!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF

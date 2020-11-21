@@ -1,32 +1,23 @@
+!> @file
+!! @author gayno @date 2018
+!!
+!! Read the input source data and interpolate it to the
+!! model grid. 
+!!
+!! @param[in] input_flle filename of input source data.
+!! @param[in] localpet this mpi task
+!! @param[in] method interpolation method.defined where mask=1
+!!
  subroutine interp(localpet, method, input_file)
-
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine:  interp
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Read the input source data and interpolate it to the
-!    model grid. 
-!
-! Usage:  call interp(localpet, method, input_file)
-!
-!   input argument list:
-!     input_flle          filename of input source data.
-!     localpet            this mpi task
-!     method              interpolation method.defined where mask=1
-!
-!-----------------------------------------------------------------------
 
  use esmf
  use netcdf
  use model_grid
  use source_grid
  use utils
+ use mpi
 
  implicit none
-
- include 'mpif.h'
 
  character(len=*), intent(in)       :: input_file
 
@@ -294,10 +285,9 @@
 !-----------------------------------------------------------------------
 
  use esmf
+ use mpi
 
  implicit none
-
- include 'mpif.h'
 
  character(len=*), intent(in)      :: field_ch
 
@@ -308,7 +298,7 @@
 
  integer, parameter                :: landice=15
 
- integer                           :: i, j
+ integer                           :: i, j, ierr
 
  real                              :: landice_value
 
@@ -364,7 +354,7 @@
      enddo
    case default
      print*,'- FATAL ERROR IN ROUTINE ADJUST_FOR_LANDICE.  UNIDENTIFIED FIELD : ', field_ch
-     call mpi_abort(mpi_comm_world, 57)
+     call mpi_abort(mpi_comm_world, 57, ierr)
  end select
 
  end subroutine adjust_for_landice

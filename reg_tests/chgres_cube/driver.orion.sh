@@ -6,11 +6,11 @@
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
-# type "account_params".
+# type "saccount_params".
 #
 # Invoke the script with no arguments.  A series of daily-chained
 # regression tests will be submitted.  To check the queue, type:
-# "squeue -u USERNAME".
+# "squeue -u $LOGNAME".
 #
 # The run output will be stored in OUTDIR.  Log output from the suite
 # will be in LOG_FILE.  Once the suite has completed, a summary is
@@ -24,11 +24,9 @@
 
 set -x
 
-source /apps/lmod/init/sh
-module purge
-module load intel/2020
-module load impi/2020
-module load netcdf/4.7.2
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+module use ../../modulefiles
+module load build.$target.intel
 module list
 
 export OUTDIR=/work/noaa/stmp/$LOGNAME/chgres_reg_tests
@@ -116,12 +114,20 @@ TEST7=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
       --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST6 ./c192.gfs.grib2.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize global C96 using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+export OMP_NUM_THREADS=1  # needs to match cpus-per-task
+TEST8=$(sbatch --parsable --ntasks-per-node=6 --nodes=2 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf \
+      --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST7 ./c96.fv3.netcdf.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST7 << EOF
-#!/bin/sh
+       --open-mode=append -q $QUEUE -d afterok:$TEST8 << EOF
+#!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
 

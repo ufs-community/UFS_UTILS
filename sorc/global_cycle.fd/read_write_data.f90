@@ -1,3 +1,4 @@
+!> @file
  MODULE READ_WRITE_DATA
 
  USE NETCDF
@@ -63,6 +64,8 @@
 ! let the model compute it.
 !------------------------------------------------------------------
 
+ use mpi
+
  implicit none
 
  integer, intent(in)         :: idim, jdim, lensfc, lsoil
@@ -117,8 +120,6 @@
  real(kind=4)                :: times
  real(kind=4), allocatable   :: lsoil_data(:), x_data(:), y_data(:)
  real(kind=8), allocatable   :: dum2d(:,:), dum3d(:,:,:)
-
- include "mpif.h"
 
  call mpi_comm_rank(mpi_comm_world, myrank, error)
 
@@ -853,9 +854,9 @@
 ! THE "GRID" FILE.
 !--------------------------------------------------------------
 
- IMPLICIT NONE
+ USE MPI
 
- include "mpif.h"
+ IMPLICIT NONE
 
  INTEGER, INTENT(IN)    :: IDIM, JDIM, IJDIM
 
@@ -901,7 +902,7 @@
  IF ((NX/2) /= IDIM .OR. (NY/2) /= JDIM) THEN
    PRINT*,'FATAL ERROR: DIMENSIONS IN FILE: ',(NX/2),(NY/2)
    PRINT*,'DO NOT MATCH GRID DIMENSIONS: ',IDIM,JDIM
-   CALL MPI_ABORT(MPI_COMM_WORLD, 130)
+   CALL MPI_ABORT(MPI_COMM_WORLD, 130, ERROR)
  ENDIF
 
  ALLOCATE(GEOLON(NX+1,NY+1))
@@ -985,20 +986,21 @@
 ! AND STOP PROCESSING.
 !--------------------------------------------------------------
 
- IMPLICIT NONE
+ USE MPI
 
- include 'mpif.h'
+ IMPLICIT NONE
 
  INTEGER, INTENT(IN) :: ERR
  CHARACTER(LEN=*), INTENT(IN) :: STRING
  CHARACTER(LEN=80) :: ERRMSG
+ INTEGER :: IRET
 
  IF( ERR == NF90_NOERR )RETURN
  ERRMSG = NF90_STRERROR(ERR)
  PRINT*,''
  PRINT*,'FATAL ERROR: ', TRIM(STRING), ': ', TRIM(ERRMSG)
  PRINT*,'STOP.'
- CALL MPI_ABORT(MPI_COMM_WORLD, 999)
+ CALL MPI_ABORT(MPI_COMM_WORLD, 999, IRET)
 
  RETURN
  END SUBROUTINE NETCDF_ERR
@@ -1088,9 +1090,9 @@
 ! SELECTED) FOR A SINGLE CUBED-SPHERE TILE.
 !-----------------------------------------------------------------
 
- IMPLICIT NONE
+ USE MPI
 
- include "mpif.h"
+ IMPLICIT NONE
 
  INTEGER, INTENT(IN)       :: LSOIL, LENSFC
 
@@ -1123,7 +1125,7 @@
 
  INTEGER                   :: ERROR, NCID, MYRANK
  INTEGER                   :: IDIM, JDIM, ID_DIM
- INTEGER                   :: ID_VAR
+ INTEGER                   :: ID_VAR, IERR
 
  REAL(KIND=8), ALLOCATABLE :: DUMMY(:,:), DUMMY3D(:,:,:)
 
@@ -1151,7 +1153,7 @@
 
  IF ((IDIM*JDIM) /= LENSFC) THEN
    PRINT*,'FATAL ERROR: DIMENSIONS WRONG.'
-   CALL MPI_ABORT(MPI_COMM_WORLD, 88)
+   CALL MPI_ABORT(MPI_COMM_WORLD, 88, IERR)
  ENDIF
 
  ALLOCATE(DUMMY(IDIM,JDIM))
@@ -1540,9 +1542,9 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
 !   language: f90
 !
 !$$$
-  implicit none
+  use mpi
 
-  include "mpif.h"
+  implicit none
 
 ! declare passed variables and arrays
   character(*)                       , intent(in   ) :: file_sst
@@ -1560,7 +1562,7 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
 
   integer :: nlat_sst,nlon_sst
   integer :: iret,ni,nj
-  integer :: mscan,kb1
+  integer :: mscan,kb1,ierr
   integer :: jincdir,i,iincdir,kb2,kb3,kf,kg,k,j,jf
   integer, dimension(22):: jgds,kgds
   integer, dimension(25):: jpds,kpds
@@ -1575,7 +1577,7 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
   call baopenr(lu_sst,trim(file_sst),iret)
   if (iret /= 0 ) then
      write(6,*)'read_tf_clm_grb:  ***error*** opening sst file'
-     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
 ! define sst variables for read
@@ -1603,14 +1605,14 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
   if (iret /= 0) then
      write(6,*)'read_tf_clm_grb:  ***error*** reading sst analysis data record'
      deallocate(lb,f)
-     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
   if ( (nlat_sst /= mlat_sst) .or. (nlon_sst /= mlon_sst) ) then
      write(6,*)'read_rtg_org:  inconsistent dimensions.  mlat_sst,mlon_sst=',&
           mlat_sst,mlon_sst,' -versus- nlat_sst,nlon_sst=',nlat_sst,nlon_sst
      deallocate(lb,f)
-     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
 !
@@ -1665,7 +1667,7 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
   call baclose(lu_sst,iret)
   if (iret /= 0 ) then
      write(6,*)'read_tf_clm_grb:  ***error*** close sst file'
-     CALL MPI_ABORT(MPI_COMM_WORLD, 121)
+     CALL MPI_ABORT(MPI_COMM_WORLD, 121, ierr)
   endif
   
 end subroutine read_tf_clim_grb
@@ -1690,9 +1692,9 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
 !   machine:  ibm rs/6000 sp
 !
 !$$$
-  implicit none
+  use mpi
 
-  include "mpif.h"
+  implicit none
 
 ! declare passed variables and arrays
   character(*)                                   , intent(in ) :: file_sst
@@ -1703,7 +1705,7 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
 
   integer :: iret
   integer :: mscan,kb1
-  integer :: kf,kg,k,j
+  integer :: kf,kg,k,j,ierr
   integer, dimension(22):: jgds,kgds
   integer, dimension(25):: jpds,kpds
 
@@ -1713,7 +1715,7 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
   call baopenr(lu_sst,trim(file_sst),iret)
   if (iret /= 0 ) then
      write(6,*)'get_tf_clm_dim:  ***error*** opening sst file'
-     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
 ! define sst variables for read
@@ -1733,7 +1735,7 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
   call baclose(lu_sst,iret)
   if (iret /= 0 ) then
      write(6,*)'get_tf_clm_dim:  ***error*** close sst file'
-     CALL MPI_ABORT(MPI_COMM_WORLD, 121)
+     CALL MPI_ABORT(MPI_COMM_WORLD, 121, ierr)
   endif
 end subroutine get_tf_clm_dim
 
@@ -1843,15 +1845,15 @@ end subroutine get_dim_nc
 
 subroutine nc_check(status)
 
+  use mpi
   use netcdf
 
-  include "mpif.h"
-
   integer, intent ( in) :: status
+  integer :: ierr
 
   if(status /= nf90_noerr) then
     print *, trim(nf90_strerror(status))
-    CALL MPI_ABORT(MPI_COMM_WORLD, 122)
+    CALL MPI_ABORT(MPI_COMM_WORLD, 122, ierr)
   end if
 end subroutine nc_check
 

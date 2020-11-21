@@ -22,7 +22,9 @@
 #-----------------------------------------------------------------------------
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 set -x
 
@@ -59,11 +61,11 @@ TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_
       --partition=xjet -o $LOG_FILE -e $LOG_FILE ./c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
-# C96 regional grid
+# gfdl regional grid
 #-----------------------------------------------------------------------------
 
-TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.regional \
-      --partition=xjet -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c96.regional.sh)
+TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J gfdl.regional \
+      --partition=xjet -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
@@ -71,6 +73,6 @@ TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d afterok:$TEST2 << EOF
-#!/bin/sh
+#!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF

@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/bash
 
 ####  UNIX Script Documentation Block ###################################
 #                      .                                             .
@@ -55,6 +55,8 @@ fi
 # the "postmsg", "startmsg" and "prep_step" utilities
 # are only used in ncep ops when the "prod_util" module is loaded.
 #-----------------------------------------------------------------------
+
+jlogfile=${jlogfile:-"jlogfile"}
 
 use_prod_util=`echo $UTILROOT`
 if ((${#use_prod_util} != 0)); then
@@ -160,17 +162,18 @@ $WGRIB2 -Sec0 ${IMS_FILE} 2>&1 | grep "grib1 message"
 status=$?
 if (( status == 0 )); then   # grib 1 file
   tempdate=$($WGRIB -v $IMS_FILE | head -1)
-  typeset -L10 IMSDATE10
-  IMSDATE10=${tempdate#*D=}
+  IMSDATE=${tempdate#*D=}
 else # grib 2 file
   tempdate=$($WGRIB2 -t $IMS_FILE | head -1)
-  typeset -L10 IMSDATE10
-  IMSDATE10=${tempdate#*d=}
+  IMSDATE=${tempdate#*d=}
 fi
+IMSDATE10=$(echo $IMSDATE|cut -c1-10)
 IMSYEAR=$(echo $IMSDATE10 | cut -c1-4)
 IMSMONTH=$(echo $IMSDATE10 | cut -c5-6)
 IMSDAY=$(echo $IMSDATE10 | cut -c7-8)
 IMSHOUR=0   # emc convention is to use 00Z.
+
+pgmout=${pgmout:-OUTPUT}
 
 if test "$use_prod_util" = "true" ; then
   . prep_step
@@ -213,8 +216,6 @@ cat > ./fort.41 << !
   snow_cvr_threshold=50.0
  /
 !
-
-pgmout=${pgmout:-OUTPUT}
 
 eval $SNOW2MDLEXEC  >> $pgmout 2> errfile
 rc2=$?
