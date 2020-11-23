@@ -44,7 +44,6 @@ export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export OMP_NUM_THREADS=24
 export machine=ORION
-export NCCMP=/apps/nccmp-1.8.5/bin/nccmp
 export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/grid_gen/baseline_data
 
 rm -fr $WORK_DIR

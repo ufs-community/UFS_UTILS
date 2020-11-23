@@ -43,8 +43,6 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
 
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
-
 LOG_FILE=regression.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE $SUM_FILE
