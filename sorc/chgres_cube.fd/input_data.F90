@@ -4603,7 +4603,7 @@ else
    character(len=50)                      :: method
 
    integer                               :: rc, varnum, iret, i, j,k
-   integer                               :: ncid2d, varid
+   integer                               :: ncid2d, varid, varsize
    integer, parameter                    :: icet_default = 265.0
 
    logical                               :: exist, rap_latlon
@@ -4875,40 +4875,42 @@ if (localpet == 0) then
    vname=":SOTYP:"                                     
    rc = grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
    !failed => rc = 0
-   if (rc <= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon)) then
+   if (rc <= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon) .and. geo_file .ne. "NULL")  then
      ! Some HRRR and RAP files don't have dominant soil type in the output, but the geogrid files
      ! do, so this gives users the option to provide the geogrid file and use input soil
      ! type 
      print*, "OPEN GEOGRID FILE ", trim(geo_file)
      rc = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
      ! failed => rc < 0
-     if (rc == 0) then
-       print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
-       rc = nf90_inq_varid(ncid2d,"SCT_DOM",varid)
-       ! failed => rc < 0
-       if (rc<0) print*, "ERROR FINDING SCT_DOM IN GEOGRID FILE"
-       if (rc == 0) then
-         print*, "READ SOIL TYPE FROM GEOGRID FILE "
-         rc = nf90_get_var(ncid2d,varid,dummy2d)
-         ! failed => rc < 0
-         if (rc<0) print*, "ERROR READING SCT_DOM FROM FILE"
-         print*, "min max dummy2d = ", minval(dummy2d), maxval(dummy2d)
-       endif
-       print*, "INQUIRE ABOUT SOIL TYPE FRACTIONS FROM GEOGRID FILE"
-       rc = nf90_inq_varid(ncid2d,"SOILCTOP",varid)
-       ! failed => rc < 0
-       if (rc<0) print*, "ERROR FINDING SOILCTOP IN GEOGRID FILE"
-       if (rc == 0) then
-         print*, "READ SOIL TYPE FRACTIONS FROM GEOGRID FILE "
-         rc = nf90_get_var(ncid2d,varid,dummy3d_stype)
-         ! failed => rc < 0
-         if (rc<0) print*, "ERROR READING SCT_DOM FROM FILE"
-         print*, "min max dummy3d_stype = ", minval(dummy3d_stype), maxval(dummy3d_stype)
-       endif
+     if (rc /= nf90_noerr) call error_handler("READING GEOGRID FILE",rc)
 
-       print*, "CLOSE GEOGRID FILE "
-       iret = nf90_close(ncid2d)
-     endif
+     print*, "INQURE ABOUT DIM IDS"
+     rc = nf90_inq_dimid(ncid2d,"west_east",varid)
+     if (rc /= nf90_noerr) call error_handler("READING west_east DIMENSION FROM GEOGRID FILE",rc)
+     
+     rc = nf90_inquire_dimension(ncid2d,varid,len=varsize)
+     if (rc /= nf90_noerr) call error_handler("READING west_east DIMENSION SIZE",rc)
+     if (varsize .ne. i_input) call error_handler ("GEOGRID FILE GRID SIZE DIFFERS FROM INPUT DATA.", -1)
+        
+     print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
+     rc = nf90_inq_varid(ncid2d,"SCT_DOM",varid)
+     if (rc /= nf90_noerr) call error_handler("FINDING SCT_DOM IN GEOGRID FILE",rc)
+     
+     print*, "READ SOIL TYPE FROM GEOGRID FILE "
+     rc = nf90_get_var(ncid2d,varid,dummy2d)
+     if (rc /= nf90_noerr) call error_handler("READING SCT_DOM FROM FILE",rc)
+       
+     print*, "INQUIRE ABOUT SOIL TYPE FRACTIONS FROM GEOGRID FILE"
+     rc = nf90_inq_varid(ncid2d,"SOILCTOP",varid)
+     if (rc /= nf90_noerr) call error_handler("FINDING SOILCTOP IN GEOGRID FILE",rc)
+     
+     print*, "READ SOIL TYPE FRACTIONS FROM GEOGRID FILE "
+     rc = nf90_get_var(ncid2d,varid,dummy3d_stype)
+     if (rc /= nf90_noerr) call error_handler("READING SCT_DOM FROM FILE",rc)
+
+     print*, "CLOSE GEOGRID FILE "
+     iret = nf90_close(ncid2d)
+   
      
      ! There's an issue with the geogrid file containing soil type water at land points. 
      ! This correction replaces the soil type at these points with the soil type with
@@ -4956,6 +4958,8 @@ if (localpet == 0) then
      where(slmsk_save == 1) dummy2d_i = 1
    
      call search(dummy2d_8,dummy2d_i,i_input,j_input,1,230)
+   else
+      dummy2d_8=real(dummy2d,esmf_kind_r8)
    endif
    
    print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)

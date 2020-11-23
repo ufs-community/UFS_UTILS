@@ -373,8 +373,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord", rc)
 
- print*,'bounds for corners ',localpet,clb(1),cub(1),clb(2),cub(2)
-
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
      lon_corner_src_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
@@ -699,7 +697,6 @@
  deallocate(lat4, lon4)
 
  deltalon = abs(longitude(2,1)-longitude(1,1))
- if(localpet==0) print*, "deltalon = ", deltalon
  
  print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  call ESMF_FieldScatter(longitude_input_grid, longitude, rootpet=0, rc=rc)
@@ -745,9 +742,6 @@
    enddo
  enddo
 
- if(localpet==0) print*, "lon first = ", lon_src_ptr(1:10,1)
- if(localpet==0) print*, "lat first = ", lat_src_ptr(1,1:10)
- 
  print*,"- CALL GridAddCoord FOR INPUT GRID."
  call ESMF_GridAddCoord(input_grid, &
                         staggerloc=ESMF_STAGGERLOC_CORNER, rc=rc)
@@ -846,7 +840,6 @@
   
   ! Wgrib2 can't properly read the lat/lon arrays of data on NCEP rotated lat/lon
   ! grids, so read in lat/lon from fixed coordinate file
-  print*, 'temp num =', temp_num
   if (trim(temp_num)=="3.32769" .or. trim(temp_num)=="32769") then
 
      input_grid_type = "rotated_latlon"
@@ -1011,7 +1004,6 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN GridGetCoord", error)
 
-   print*,'bounds for corners ',localpet,clb(1),cub(1),clb(2),cub(2)
    
   ! If we have data on a lat/lon or lambert grid, create staggered coordinates
   if(trim(input_grid_type)=="latlon" .or. trim(input_grid_type) == "lambert") then
@@ -1048,7 +1040,6 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
          i = index(temp_msg, "Dx ") + len("Dx ")
          j = index(temp_msg," m Dy")
          read(temp_msg(i:j-1),"(F9.6)") dx
-         print*, "DX = ", dx
        endif
        call MPI_BARRIER(MPI_COMM_WORLD,error)
        call MPI_BCAST(dx,1,MPI_REAL8,0,MPI_COMM_WORLD,error)
@@ -1071,8 +1062,6 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
     call netcdf_err(error, 'reading field id' )
     error=nf90_get_var(ncid, id_var, lat_corners)
     call netcdf_err(error, 'reading field' )
-    print*, 'min, max lat corners =', minval(lat_corners), maxval(lat_corners)
-    print*, 'min, max lon corners =', minval(lon_corners), maxval(lon_corners)
 
     do j = clb(2),cub(2)
       do i = clb(1), cub(1)

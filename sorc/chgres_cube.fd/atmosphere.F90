@@ -1162,11 +1162,6 @@
    call error_handler("READING VERTICAL COORD FILE", istat)
  endif
 
- print*
- do k = 1, levp1_target
-    print*,'VCOORD FOR LEV ', k, 'IS: ', vcoord_target(k,:)
- enddo
- 
  close(14)
 
  end subroutine read_vcoord_info
