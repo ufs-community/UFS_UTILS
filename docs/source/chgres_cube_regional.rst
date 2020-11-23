@@ -28,20 +28,19 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data
 
 **HRRR:**
  
-       * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfFH.grib2** files in the subdirectory hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`__.
+      * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfFH.grib2** files in the subdirectory hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`__.
 
-       * 3-km operational data from 2015 to present (AWS S3): Go `here <https://registry.opendata.aws/noaa-hrrr-pds/>` and click “Browse Bucket.” Type "YYYYMMDD" in to the Search bar. Use the **hrrr.t00z.wrfnatf00.grib2** files in the directory hrrr.YYYYMMDD/conus/.
+      * 3-km operational data from 2015 to present (AWS S3): Go `here <https://registry.opendata.aws/noaa-hrrr-pds/>`__ and click “Browse Bucket.” Type "YYYYMMDD" in to the Search bar. Use the **hrrr.t00z.wrfnatf00.grib2** files in the directory hrrr.YYYYMMDD/conus/.
 
-      * 3-km operational data from 2015 to present (Google Cloud): Go ‘here <https://console.cloud.google.com/marketplace/product/noaa-public/hrrr>` and click “View Dataset.” Type “hrrr.YYYYMMDD” into the “Filter” box. Use the **hrrr.tHHz.wrfnatfFF.grib2** files in the hrrr.YYYYMMDD/conus directory.
-     
+      * 3-km operational data from 2015 to present (Google Cloud): Go `here <https://console.cloud.google.com/marketplace/product/noaa-public/hrrr>`__ and click “View Dataset.” Type “hrrr.YYYYMMDD” into the “Filter” box. Use the **hrrr.tHHz.wrfnatfFF.grib2** files in the hrrr.YYYYMMDD/conus directory.
 
-       * 3-km operational data from 2016 to present (University of Utah): `Click here <http://home.chpc.utah.edu/~u0553130/Brian_Blaylock/cgi-bin/hrrr_download.cgi>`__.
+      * 3-km operational data from 2016 to present (University of Utah): `Click here <http://home.chpc.utah.edu/~u0553130/Brian_Blaylock/cgi-bin/hrrr_download.cgi>`__.
 
 **RAP:**
 
-       * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfFH.grib2** files in the subdirectory rap.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/rap/prod/>`__.
+      * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfFH.grib2** files in the subdirectory rap.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/rap/prod/>`__.
 
-       * 13-km isobaric level data from previous 6 months : Use the **rap_130_YYYYMMDD_00HH_0FF.grb2** files from the HTTPS option under **RAP Forecasts - RAP 130 (13km) - Domain** at NCEI ‘here <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/rapid-refresh-rap>’__.
+      * 13-km isobaric level data from previous 6 months : Use the **rap_130_YYYYMMDD_00HH_0FF.grb2** files from the HTTPS option under **RAP Forecasts - RAP 130 (13km) - Domain** at NCEI `here <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/rapid-refresh-rap>`__.
 
       * 13-km archived isobaric data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=RAP130&subqueryby=STATION&applname=&outdest=FILE>`__.
 
