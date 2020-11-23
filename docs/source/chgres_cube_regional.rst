@@ -77,7 +77,8 @@ When using GRIB2 data as input to chgres_cube, set namelist as follows:
       * cycle_mon/day/hour - Month/day/hour of your model initialization
       * convert_atm - Set to ‘true’ to process atmospheric fields
       * convert_sfc - Set to ‘true’ to process surface fields
-      * regional 
+      * regional
+ 
               * Set to 0 to create initial condition atmospheric file
               * Set to 1 to create initial condition atmospheric file and zero hour boundary condition file
               * Set to 2 to create a boundary condition file. Use this option for all but the initialization time.
