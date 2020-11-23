@@ -47,8 +47,6 @@ SUM_FILE=summary.log
 
 rm -f $LOG_FILE $SUM_FILE
 
-export NCCMP=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/util/nccmp/nccmp-nc4.7.4/src/nccmp
-
 export OMP_STACKSIZE=1024M
 
 export APRUN=mpirun

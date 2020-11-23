@@ -17,6 +17,6 @@ prepend-path CMAKE_PREFIX_PATH /ncrc/home2/Rahul.Mahajan/dev/opt
 prepend-path LD_LIBRARY_PATH /ncrc/home2/Rahul.Mahajan/dev/opt/lib
 prepend-path LD_LIBRARY_PATH /ncrc/home2/Rahul.Mahajan/dev/opt/lib64
 
-setenv CMAKE_C_COMPIELR cc
-setenv CMAKE_CXX_COMPIELR CC
-setenv CMAKE_Fortran_COMPIELR ftn
+setenv CMAKE_C_COMPILER cc
+setenv CMAKE_CXX_COMPILER CC
+setenv CMAKE_Fortran_COMPILER ftn
