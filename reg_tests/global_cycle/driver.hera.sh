@@ -52,8 +52,6 @@ export NWPROD=$PWD/../..
 
 export COMOUT=$DATA
 
-export NCCMP=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/v1.0.0-beta1/intel-18.0.5.274/impi-2018.0.4/nccmp/1.8.7.0/bin/nccmp
-
 reg_dir=$PWD
 
 ./C768.fv3gfs.sh

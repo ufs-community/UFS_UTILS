@@ -166,7 +166,7 @@
 !!                 ONE,K,SIGMA,PS,PRES,TEMP,ENTROPY,MOIST ENTROPY
 !!                 VAPOR,OZONE,CLOUD
 !!   200       5   IDEA tracer set with O and O2 in addition q, O3, clw
-!! </re>
+!! </pre>
 !!
 !! NUMBER OF TRACERS FOR NEMSIO FILE:
 !! - data holder q(:,:,ntraco_q)
