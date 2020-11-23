@@ -43,8 +43,6 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/chgres_cube
 
-export NCCMP=/apps/nccmp-1.8.5/bin/nccmp
-
 LOG_FILE=regression.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE $SUM_FILE
