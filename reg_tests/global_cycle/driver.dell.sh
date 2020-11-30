@@ -53,8 +53,6 @@ export NWPROD=$PWD/../..
 
 export COMOUT=$DATA
 
-export NCCMP=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/util/nccmp/nccmp-nc4.7.4/src/nccmp
-
 reg_dir=$PWD
 
 ./C768.fv3gfs.sh
