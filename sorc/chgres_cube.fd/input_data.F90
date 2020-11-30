@@ -4881,32 +4881,31 @@ if (localpet == 0) then
      ! type 
      print*, "OPEN GEOGRID FILE ", trim(geo_file)
      rc = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
-     ! failed => rc < 0
-     if (rc /= nf90_noerr) call error_handler("READING GEOGRID FILE",rc)
+     call netcdf_err(rc,"READING GEOGRID FILE")
 
      print*, "INQURE ABOUT DIM IDS"
      rc = nf90_inq_dimid(ncid2d,"west_east",varid)
-     if (rc /= nf90_noerr) call error_handler("READING west_east DIMENSION FROM GEOGRID FILE",rc)
+     call netcdf_err(rc,"READING west_east DIMENSION FROM GEOGRID FILE")
      
      rc = nf90_inquire_dimension(ncid2d,varid,len=varsize)
-     if (rc /= nf90_noerr) call error_handler("READING west_east DIMENSION SIZE",rc)
+     call netcdf_err(rc,"READING west_east DIMENSION SIZE")
      if (varsize .ne. i_input) call error_handler ("GEOGRID FILE GRID SIZE DIFFERS FROM INPUT DATA.", -1)
         
      print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
      rc = nf90_inq_varid(ncid2d,"SCT_DOM",varid)
-     if (rc /= nf90_noerr) call error_handler("FINDING SCT_DOM IN GEOGRID FILE",rc)
+     call netcdf_err(rc,"FINDING SCT_DOM IN GEOGRID FILE")
      
      print*, "READ SOIL TYPE FROM GEOGRID FILE "
      rc = nf90_get_var(ncid2d,varid,dummy2d)
-     if (rc /= nf90_noerr) call error_handler("READING SCT_DOM FROM FILE",rc)
+     call netcdf_err(rc,"READING SCT_DOM FROM FILE")
        
      print*, "INQUIRE ABOUT SOIL TYPE FRACTIONS FROM GEOGRID FILE"
      rc = nf90_inq_varid(ncid2d,"SOILCTOP",varid)
-     if (rc /= nf90_noerr) call error_handler("FINDING SOILCTOP IN GEOGRID FILE",rc)
+     call netcdf_err(rc,"FINDING SOILCTOP IN GEOGRID FILE")
      
      print*, "READ SOIL TYPE FRACTIONS FROM GEOGRID FILE "
      rc = nf90_get_var(ncid2d,varid,dummy3d_stype)
-     if (rc /= nf90_noerr) call error_handler("READING SCT_DOM FROM FILE",rc)
+     call netcdf_err(rc,"READING SCT_DOM FROM FILE")
 
      print*, "CLOSE GEOGRID FILE "
      iret = nf90_close(ncid2d)
