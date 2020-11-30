@@ -28,3 +28,6 @@ module load wgrib2/2.0.8
 module load netcdf/4.7.4
 
 setenv ESMFMKFILE /glade/p/ral/jntp/GMTB/tools/NCEPLIBS-ufs-v2.0.0/intel-19.1.1/mpt-2.19/lib64/esmf.mk
+
+setenv CMAKE_C_COMPILER icc
+setenv CMAKE_Fortran_COMPILER ifort
