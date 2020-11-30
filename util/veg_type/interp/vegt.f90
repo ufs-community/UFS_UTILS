@@ -9,16 +9,14 @@
 
  implicit none
 
- include 'mpif.h'
-
  character(len=150) :: filenetcdf, raw_file
 
  integer :: i, j, iraw, jraw
  integer :: lon, lat, nearest_i, nearest_j
- integer :: ncid, status, ierr, iunit
+ integer :: ncid_raw, ncid, status, ierr, iunit
  integer :: times, num_times, landice
  integer :: dim_lon, dim_lat, dim_lat_p1, dim_time
- integer :: id_lat_corner, id_lon_corner
+ integer :: id_lat_corner, id_lon_corner, id_var
  integer :: id_times, id_lat, id_lon, id_data
  integer(kind=8) :: offset
  integer, allocatable :: count(:,:,:)
@@ -33,41 +31,34 @@
  real(kind=8), allocatable :: lats(:), lats_corner(:)
  real, allocatable :: the_data(:,:)
 
- raw_file="./vegtype_igbp1a.30s.bin"
+ raw_file="/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/orig_data/NESDIS_VIIRS_SfcType.nc"
+
+ print*,'open ',trim(raw_file)
+ status=nf90_open(trim(raw_file), nf90_nowrite, ncid_raw)
+ if (status /= nf90_noerr) stop 2
 
  iraw = 43200
  jraw = 21600
 
  dx_raw = 1.0_8/120.0_8
- dy_raw = -(1.0_8/120.0_8)
+ dy_raw = 1.0_8/120.0_8
  
- lat11_raw =  90.0_8 + dy_raw*0.5_8
+ lat11_raw =  -90.0_8 + dy_raw*0.5_8
  lon11_raw = -180.0_8 + dx_raw*0.5_8
 
  print*,'raw corner point ',lat11_raw,lon11_raw
 
- call mpi_init(ierr)
- print*,'open: ',trim(raw_file)
- iunit = 9
- call mpi_file_open(mpi_comm_world, raw_file, mpi_mode_rdonly, &
-                    mpi_info_null, iunit, ierr)
-
- if (ierr /= 0) then
-   print*,'bad open', ierr
-   stop
- endif
+ status=nf90_inq_varid(ncid_raw, 'surface_type', id_var)
+ if (status /= nf90_noerr) stop 2
 
  allocate(raw_data(iraw,jraw))
- offset = 48_8
- call mpi_file_read_at(iunit, offset, raw_data, (iraw*jraw), &
-                        mpi_integer1, mpi_status_ignore, ierr)
- if (ierr /= 0) then
-   print*,'error', ierr
-   stop
- endif
- close(9)
+
+ status=nf90_get_var(ncid_raw, id_var, raw_data)
+ if (status /= nf90_noerr) stop 3
 
  print*,maxval(raw_data),minval(raw_data)
+
+ status=nf90_close(ncid_raw)
 
  lon = 7200
  lat = 3600

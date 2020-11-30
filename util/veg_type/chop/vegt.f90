@@ -9,22 +9,18 @@
 
  implicit none
 
- include 'mpif.h'
-
  character(len=150) :: filenetcdf, raw_file
 
  integer*4, parameter :: isrc=43200
  integer*4, parameter :: jsrc=21600
 
- integer :: ncid, status, dim_lat, dim_lon, dim_lat_p1, dim_lon_p1
+ integer :: ncid, ncid_raw, status, dim_lat, dim_lon, dim_lat_p1, dim_lon_p1
  integer :: i, j, jj, lon, lat, dim_time
  integer :: id_lat, id_lon, landice
  integer :: id_lat_corner, id_lon_corner
- integer :: num_times, id_times, id_data
+ integer :: num_times, id_times, id_data, id_var
  integer :: times, ierr, iunit
  integer :: istart, iend, jstart, jend
- integer(kind=8) :: offset
- integer(kind=1), allocatable :: global_dat(:,:)
  integer :: water_flag
 
  real    :: missing = -999.9
@@ -32,30 +28,26 @@
  real(kind=8), allocatable :: lons(:), lons_corner(:)
  real(kind=8), allocatable :: lats(:), lats_corner(:)
  real, allocatable :: the_data(:,:)
+ real, allocatable :: global_dat(:,:)
 
 
- raw_file="/work/noaa/da/ggayno/save/ufs_utils.git/fv3.vegt.new.tundra.netcdf/interp/vegtype_igbp1a.30s.bin"
+ raw_file="/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/orig_data/NESDIS_VIIRS_SfcType.nc"
  filenetcdf="./vegetation_type.igbp.0.01.nc"
 
- call mpi_init(ierr)
  print*,'open: ',trim(raw_file)
- iunit = 9
- call mpi_file_open(mpi_comm_world, raw_file, mpi_mode_rdonly, &
-                    mpi_info_null, iunit, ierr)
 
- if (ierr /= 0) then
-   print*,'bad open', ierr
-   stop
- endif
+ status=nf90_open(trim(raw_file), nf90_nowrite, ncid_raw)
+ if (status /= nf90_noerr) stop 2
 
  allocate(global_dat(isrc,jsrc))
- offset = 48_8
- call mpi_file_read_at(iunit, offset, global_dat, (isrc*jsrc), &
-                        mpi_integer1, mpi_status_ignore, ierr)
- if (ierr /= 0) then
-   print*,'bad read ', ierr
-   stop
- endif
+
+ status=nf90_inq_varid(ncid_raw, 'surface_type', id_var)
+ if (status /= nf90_noerr) stop 2
+
+ status=nf90_get_var(ncid_raw, id_var, global_dat)
+ if (status /= nf90_noerr) stop 3
+
+ status=nf90_close(ncid_raw)
 
  print*,'global_data ',maxval(global_dat),minval(global_dat)
 
@@ -72,12 +64,13 @@
 
  allocate(the_data(istart:iend,jstart:jend))
  do j = jstart, jend
-   jj = jsrc - j + 1
+!  jj = jsrc - j + 1
+   jj = j
  do i = istart, iend
-   if (global_dat(i,jj) == water_flag) then
+   if (nint(global_dat(i,jj)) == water_flag) then
      the_data(i,j) = missing
    else
-     the_data(i,j) = float(global_dat(i,jj))
+     the_data(i,j) = global_dat(i,jj)
    endif
  enddo
  enddo

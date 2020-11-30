@@ -1,5 +1,5 @@
 EXEC    =vegt.exe
-FC	=mpiifort
+FC	=ifort
 FOPTS	= -O0 -FR -I${NETCDF}/include -check bounds -assume noold_ldout_format -assume byterecl
 OBJ_TST =vegt.o
 OBJS=${OBJ_TST}
