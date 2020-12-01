@@ -10,6 +10,8 @@
  implicit none
 
  character(len=150) :: filenetcdf, raw_file
+ character(len=80), allocatable :: att_name(:), gatt_name(:)
+ character(len=150), allocatable :: att_value(:), gatt_value(:)
 
  integer :: i, j, iraw, jraw
  integer :: lon, lat, nearest_i, nearest_j
@@ -22,7 +24,7 @@
  integer, allocatable :: count(:,:,:)
  integer(kind=1), allocatable :: raw_data(:,:)
  integer :: num_vegt = 20
- integer :: vegtype
+ integer :: vegtype, natts, ngatts
 
  real    :: missing = -999.9
  real(kind=8)    :: lat11, lon11, dx, dy, dx_raw, dy_raw
@@ -57,6 +59,42 @@
  if (status /= nf90_noerr) stop 3
 
  print*,maxval(raw_data),minval(raw_data)
+
+ status=nf90_inquire_variable(ncid_raw, id_var, natts=natts)
+ if (status /= nf90_noerr) stop 3
+
+ print*,'number of atts ', natts
+
+ allocate(att_name(natts))
+ att_name = " "
+ allocate(att_value(natts))
+ att_value = " "
+ do i = 1, natts
+   status=nf90_inq_attname(ncid_raw, id_var, i, att_name(i))
+   if (status /= nf90_noerr) stop 3
+   if (index(att_name(i), "class") /= 0) then
+     status=nf90_get_att(ncid_raw, id_var, att_name(i), att_value(i))
+     if (status /= nf90_noerr) stop 4
+     print*,'attribute ',i, trim(att_name(i)), ' ', trim(att_value(i))
+   endif
+ enddo
+
+ status=nf90_inquire_variable(ncid_raw, nf90_global, natts=ngatts)
+ if (status /= nf90_noerr) stop 3
+
+ print*,'number of global atts ', ngatts
+
+ allocate(gatt_name(ngatts))
+ gatt_name = ' '
+ allocate(gatt_value(ngatts))
+ gatt_value = ' '
+ do i = 1, ngatts
+   status=nf90_inq_attname(ncid_raw, nf90_global, i, gatt_name(i))
+   if (status /= nf90_noerr) stop 3
+   status=nf90_get_att(ncid_raw, nf90_global, gatt_name(i), gatt_value(i))
+   if (status /= nf90_noerr) stop 4
+   print*,'global attribute ',i, trim(gatt_name(i)), ' ', trim(gatt_value(i))
+ enddo
 
  status=nf90_close(ncid_raw)
 
@@ -161,11 +199,16 @@
  status=nf90_def_dim(ncid, 'time', num_times, dim_time)
  if (status /= nf90_noerr) stop 5
 
- status=nf90_put_att(ncid, nf90_global, 'source', 'IGBP VEG TYPE')
+ status=nf90_put_att(ncid, nf90_global, 'source', 'VIIRS-BASED IGBP VEGETATION TYPE')
  if (status /= nf90_noerr) stop 4
 
  status=nf90_put_att(ncid, nf90_global, 'projection', 'regular lat/lon')
  if (status /= nf90_noerr) stop 34
+
+ do i = 1, ngatts
+   status=nf90_put_att(ncid, nf90_global, gatt_name(i), gatt_value(i))
+   if (status /= nf90_noerr) stop 35
+ enddo
 
  status=nf90_def_var(ncid, 'time', nf90_float, dim_time, id_times)
  if (status /= nf90_noerr) stop 6
@@ -203,12 +246,18 @@
  status=nf90_put_att(ncid, id_data, 'missing_value', missing)
  if (status /= nf90_noerr) stop 10
 
+ do i = 1, natts
+   if (index(att_name(i), "class") /= 0) then
+     status=nf90_put_att(ncid, id_data, att_name(i), att_value(i))
+     if (status /= nf90_noerr) stop 38
+  endif
+ enddo
+
  status=nf90_put_att(ncid, id_times, 'units', 'days since 2015-1-1')
  if (status /= nf90_noerr) stop 7
 
  status=nf90_enddef(ncid)
  if (status /= nf90_noerr) stop 8
-
 
  status=nf90_put_var(ncid, id_times, times)
  if (status /= nf90_noerr) stop 9
