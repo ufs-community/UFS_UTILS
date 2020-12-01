@@ -63,6 +63,11 @@ if [ $EXTRACT_DATA == yes ]; then
         -R "rusage[mem=$MEM]" "./get_v15.data.sh grp8"
       DEPEND="-w ended(get.data.*)"
       ;;
+    v16)
+      bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
+        -R "rusage[mem=$MEM]" "./get_v16.data.sh"
+      DEPEND="-w ended(get.data.hires)"
+      ;;
  esac
 
 else
@@ -109,19 +114,30 @@ if [ $RUN_CHGRES == yes ]; then
       bsub -e log.${MEMBER} -o log.${MEMBER} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER} -M $MEM -W $WALLT \
          -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v15.chgres.sh ${MEMBER}"
       ;;
+    v16)
+      bsub -e log.${MEMBER} -o log.${MEMBER} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER} -M $MEM -W $WALLT \
+         -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres.sh ${MEMBER}"
+      ;;
   esac
 
   WALLT="0:15"
   NUM_NODES=1
   export APRUN="aprun -j 1 -n 12 -N 12 -d ${OMP_NUM_THREADS} -cc depth"
-  MEMBER=1
-  while [ $MEMBER -le 80 ]; do
-    if [ $MEMBER -lt 10 ]; then
-      MEMBER_CH="00${MEMBER}"
-    else
-      MEMBER_CH="0${MEMBER}"
-    fi
-    case $gfs_ver in
+  
+  case $gfs_ver in
+    v16)
+      bsub -e log.enkf -o log.enkf -q $QUEUE -P $PROJECT_CODE -J chgres_enkf -M $MEM -W $WALLT \
+         -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres.sh enkf"
+      ;;
+    *)
+      MEMBER=1
+      while [ $MEMBER -le 80 ]; do
+        if [ $MEMBER -lt 10 ]; then
+          MEMBER_CH="00${MEMBER}"
+        else
+          MEMBER_CH="0${MEMBER}"
+        fi
+      case $gfs_ver in
       v12 | v13)
         bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W $WALLT \
           -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_pre-v14.chgres.sh ${MEMBER_CH}"
@@ -134,7 +150,9 @@ if [ $RUN_CHGRES == yes ]; then
         bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W $WALLT \
           -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v15.chgres.sh ${MEMBER_CH}"
       ;;
-    esac
-    MEMBER=$(( $MEMBER + 1 ))
-  done
+      esac
+      MEMBER=$(( $MEMBER + 1 ))
+    done
+    ;;
+  esac
 fi
