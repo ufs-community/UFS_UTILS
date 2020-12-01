@@ -38,11 +38,15 @@ WORKDIR=$OUTDIR/work.$MEMBER
 if [ ${MEMBER} == 'hires' ]; then
   CINP=C768
   CTAR=${CRES_HIRES}
-  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
 else  
   CINP=C768
   CTAR=${CRES_ENKF}
+fi
+
+if [ ${yy_d}${mm_d}${dd_d}${hh_d} -lt 2020082018 ]; then
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
+else
+  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/atmos/RESTART"
 fi
 
 rm -fr $WORKDIR

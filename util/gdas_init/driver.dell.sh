@@ -63,6 +63,10 @@ if [ $EXTRACT_DATA == yes ]; then
         -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh grp8"
       DEPEND="-w ended(get.data.*)"
       ;;
+    v16)
+      bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
+        -R "affinity[core(1)]" -M $MEM "./get_v16.data.sh"
+      DEPEND="-w ended(get.data.hires)"
  esac
 
 else
@@ -72,7 +76,7 @@ else
 fi
 
 if [ $RUN_CHGRES == yes ]; then
-  QUEUE=dev
+  QUEUE=dev2
   MEMBER=hires
   WALLT="0:15"
   export OMP_NUM_THREADS=1
@@ -102,10 +106,22 @@ if [ $RUN_CHGRES == yes ]; then
         -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
         "./run_v15.chgres.sh ${MEMBER}"
       ;;
+    v16)
+      bsub -e log.${MEMBER} -o log.${MEMBER} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER} -W $WALLT \
+        -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
+        "./run_v16.chgres.sh ${MEMBER}"
+     ;;
   esac
 
   NODES="-n 18 -R "span[ptile=9]""
   WALLT="0:15"
+  case $gfs_ver in
+      v16)
+        bsub -e log.enkf -o log.enkf -q $QUEUE -P $PROJECT_CODE -J chgres_enkf -W $WALLT \
+          -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
+          "./run_v16.chgres.sh enkf"
+        ;;
+      *)
   MEMBER=1
   while [ $MEMBER -le 80 ]; do
     if [ $MEMBER -lt 10 ]; then
@@ -130,8 +146,10 @@ if [ $RUN_CHGRES == yes ]; then
         bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W $WALLT \
           -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
           "./run_v15.chgres.sh ${MEMBER_CH}"
-      ;;
+        ;;
     esac
     MEMBER=$(( $MEMBER + 1 ))
   done
+  ;;
+esac
 fi
