@@ -1,37 +1,26 @@
+!> @file
+!! @brief Determine whether file is grib or not.
+!
+!> Determine whether file is grib or not.
+!! @author gayno org: w/np2 @date 2007-nov-28
+!!
+!! program history log:
+!! - 2007-nov-28  gayno    - initial version
+!! - 2011-apr-26  gayno    - replace my simple-minded logic
+!!                         with call to w3lib routin skgb.
+!! - 2014-feb-07  gayno    - determine whether file is
+!!                         grib1 or grib2.
+!!
+!! @param[in] file_name - file to be checked
+!! @param[out] isgrib - '1' or '2' if grib1/2 file '0' if not grib
+!!
+!! input files: 
+!!     - file to be checked, fort.11
+!!
+!! condition codes:  all fatal
+!!     - bad file open, fort.11
+!!          
  subroutine grib_check(file_name, isgrib)
-!$$$  subprogram documentation block
-!
-! subprogram:    grib_check
-!   prgmmr: gayno          org: w/np2     date: 2007-nov-28
-!
-! abstract:  determine whether file is grib or not.
-!  
-! program history log:
-! 2007-nov-28  gayno    - initial version
-! 2011-apr-26  gayno    - replace my simple-minded logic
-!                         with call to w3lib routin skgb.
-! 2014-feb-07  gayno    - determine whether file is
-!                         grib1 or grib2.
-!
-! usage: call grib_check(file_name, isgrib)
-!
-!   input argument list:  file_name - file to be checked
-!
-!   output argument list: isgrib - '1' or '2' if grib1/2 file
-!                                  '0' if not grib
-!
-! files: 
-!   input:
-!     - file to be checked, fort.11
-!
-!   output: none
-!
-! condition codes:  all fatal
-!     - bad file open, fort.11
-! 
-! remarks: none.
-!          
-!$$$
 
  implicit none
 
