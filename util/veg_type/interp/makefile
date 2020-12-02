@@ -1,6 +1,6 @@
 EXEC    =vegt.exe
 FC	=ifort
-FOPTS	= -O0 -FR -g -traceback -I${NETCDF}/include -check bounds -assume noold_ldout_format -assume byterecl
+FOPTS	= -O0 -FR -g -traceback -I${NETCDF}/include -warn unused -check bounds
 OBJ_TST =vegt.o
 OBJS=${OBJ_TST}
 # *************************************************************************
