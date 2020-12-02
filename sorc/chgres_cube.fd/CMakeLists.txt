@@ -9,6 +9,7 @@ set(fortran_src
     static_data.F90
     surface.F90
     thompson_mp_climo_data.F90
+    wam_climo_data.f90
     utils.f90
     write_data.F90)
 

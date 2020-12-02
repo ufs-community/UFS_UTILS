@@ -1,0 +1,9 @@
+This ud directory is for personal use, as user directory
+1) to modify sorc go to ../sorc
+2) to compile sorc code for all, go to .. and do
+      ./build_all.sh machine >&build_all.log
+   where machine can be orion, hera, wcoss_cray etc, check ../modulefiles to see the machine specific files.
+3) to run chgres etc, check under ud
+   scriots/ provides some job script, such as getic,sh to get IC for chgres
+   chgres_wam/ provides nml files and run.sh to run chgres_wam
+       qsub run.sh

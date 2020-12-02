@@ -18,6 +18,8 @@
  convert_atm=.true.
  convert_sfc=.true.
  convert_nst=.true.
- tracers="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
+ tracers="sphum","liq_wat","spfo3","ice_wat","rainwat","snowwat","graupel","spfo","spfo2"
  tracers_input="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
+ wam_cold_start=.true.
+ wam_start_date=2020010100
 /

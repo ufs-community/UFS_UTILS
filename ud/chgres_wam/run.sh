@@ -1,14 +1,16 @@
 #!/bin/bash
 
 #
-# to submit this job to batch queue do  `sbatch <run.sh`
+# to submit this job to batch queue do  `sbatch run.sh`
 #
 #-----------------------------------------------------------
 # Invoke as: sbatch $script
 #-----------------------------------------------------------
 
+###SBATCH --ntasks-per-node=6 --nodes=2   (for gsm)
+
 #SBATCH --ntasks-per-node=6 --nodes=2
-#SBATCH -t 0:05:00
+#SBATCH -t 0:15:00
 #SBATCH -A fv3-cpu
 #SBATCH -q debug
 #SBATCH -J fv3
@@ -18,7 +20,7 @@
 set -x
 
 PACKDIR=/scratch1/NCEPDEV/global/Henry.Juang/testGC/
-EXPN=v15
+EXPN=v15	# gsm, v15, v16
 LEVS=150
 
 source $PACKDIR/UFS_UTILS/sorc/machine-setup.sh > /dev/null 2>&1

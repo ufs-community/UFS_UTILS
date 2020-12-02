@@ -28,6 +28,9 @@
 ! convert_atm                     Convert atmospheric data when true.
 ! convert_nst                     Convert nst data when true.
 ! convert_sfc                     Convert sfc data when true.
+! wam_start_date                  whole atmospheric model date yyyymmddhh !hmhj
+! wam_cold_start                  whole atmospheric model cold start to   !hmhj
+!                                 prepare vertical profile when true      !hmhj
 ! cres_target_grid                Target grid resolution, i.e., C768.
 ! cycle_mon/day/hour              Cycle month/day/hour
 ! data_dir_input_grid             Directory containing input atm or sfc
@@ -154,10 +157,13 @@
  integer, public                 :: regional = 0
  integer, public                 :: halo_bndy = 0
  integer, public                 :: halo_blend = 0
+ integer, public                 :: wam_start_date			!hmhj
 
  logical, public                 :: convert_atm = .false.
  logical, public                 :: convert_nst = .false.
  logical, public                 :: convert_sfc = .false.
+
+ logical, public                 :: wam_cold_start = .false.       	!hmhj
 
  logical, public                 :: use_thomp_mp_climo=.false.
 
@@ -204,6 +210,7 @@
                    cycle_mon, cycle_day,    &
                    cycle_hour, convert_atm, &
                    convert_nst, convert_sfc, &
+                   wam_cold_start, wam_start_date, &                     !hmhj
                    regional, input_type, &
                    atm_weight_file, tracers, &
                    tracers_input,phys_suite, &
