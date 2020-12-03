@@ -1,3 +1,46 @@
+!> @file
+!! @brief This is a limited point version of surface program.
+!!
+!! This program runs in two different modes:
+!!
+!!  1.  analysis mode (fh=0.)
+!!      this program merges climatology, analysis and forecast guess to create
+!!      new surface fields.  if analysis file is given, the program
+!!      uses it if date of the analysis matches with iy,im,id,ih (see note
+!!      below).
+!!
+!!  2.  forecast mode (fh.gt.0.)
+!!      this program interpolates climatology to the date corresponding to the
+!!      forecast hour.  if surface analysis file is given, for the corresponding
+!!      dates, the program will use it.
+!!
+!! if the date of the analysis does not match given iy,im,id,ih, (and fh),
+!! the program searches an old analysis by going back 6 hours, then 12 hours,
+!! then one day upto nrepmx days (parameter statement in the subrotine fixrd.
+!! now defined as 8).  this allows the user to provide non-daily analysis to
+!! be used.  if matching field is not found, the forecast guess will be used.
+!!
+!! use of a combined earlier surface analyses and current analysis is
+!! not allowed (as was done in the old version for snow analysis in which
+!! old snow analysis is used in combination with initial guess), except
+!! for sea surface temperature.  for sst anolmaly interpolation, you need to
+!! set lanom=.true. and must provide sst analysis at initial time.
+!!
+!! if you want to do complex merging of past and present surface field analysis,
+!! you need to create a separate file that contains daily surface field.
+!!
+!! for a dead start, do not supply fnbgsi or set fnbgsi='        '
+!!
+!! - lugb           is the unit number used in this subprogram
+!! - len ...        number of points on which sfccyc operates
+!! - lsoil .. 	  number of soil layers (2 as of april, 1994)
+!! - iy,im,id,ih .. year, month, day, and hour of initial state.
+!! - fh ..          forecast hour
+!! - rla, rlo --    latitude and longitudes of the len points
+!! - sig1t .. sigma level 1 temperature for dead start.  should be on gaussian
+!!           grid.  if not dead start, no need for dimension but set to zero
+!!           as in the example below.
+!!      
       module sfccyc_module
       implicit none
       save
@@ -129,52 +172,6 @@
       character(len=*), intent(in) :: input_nml_file(sz_nml)
 
       integer num_parthds
-!
-!  this is a limited point version of surface program.
-!
-!  this program runs in two different modes:
-!
-!  1.  analysis mode (fh=0.)
-!
-!      this program merges climatology, analysis and forecast guess to create
-!      new surface fields.  if analysis file is given, the program
-!      uses it if date of the analysis matches with iy,im,id,ih (see note
-!      below).
-!
-!  2.  forecast mode (fh.gt.0.)
-!
-!      this program interpolates climatology to the date corresponding to the
-!      forecast hour.  if surface analysis file is given, for the corresponding
-!      dates, the program will use it.
-!
-!   note:
-!
-!      if the date of the analysis does not match given iy,im,id,ih, (and fh),
-!      the program searches an old analysis by going back 6 hours, then 12 hours,
-!      then one day upto nrepmx days (parameter statement in the subrotine fixrd.
-!      now defined as 8).  this allows the user to provide non-daily analysis to
-!      be used.  if matching field is not found, the forecast guess will be used.
-!
-!      use of a combined earlier surface analyses and current analysis is
-!      not allowed (as was done in the old version for snow analysis in which
-!      old snow analysis is used in combination with initial guess), except
-!      for sea surface temperature.  for sst anolmaly interpolation, you need to
-!      set lanom=.true. and must provide sst analysis at initial time.
-!
-!      if you want to do complex merging of past and present surface field analysis,
-!      you need to create a separate file that contains daily surface field.
-!
-!      for a dead start, do not supply fnbgsi or set fnbgsi='        '
-!
-!  lugb           is the unit number used in this subprogram
-!  len ...        number of points on which sfccyc operates
-!  lsoil .. 	  number of soil layers (2 as of april, 1994)
-!  iy,im,id,ih .. year, month, day, and hour of initial state.
-!  fh ..          forecast hour
-!  rla, rlo --    latitude and longitudes of the len points
-!  sig1t .. sigma level 1 temperature for dead start.  should be on gaussian
-!           grid.  if not dead start, no need for dimension but set to zero
-!           as in the example below.
 !
 !  variable naming conventions:
 !

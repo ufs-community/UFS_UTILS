@@ -23,7 +23,9 @@
 set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 export OUTDIR=/gpfs/dell1/stmp/$LOGNAME/chgres_reg_tests
 QUEUE="debug"
@@ -44,8 +46,6 @@ LOG_FILE=regression.log
 SUM_FILE=summary.log
 
 rm -f $LOG_FILE $SUM_FILE
-
-export NCCMP=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/util/nccmp/nccmp-nc4.7.4/src/nccmp
 
 export OMP_STACKSIZE=1024M
 

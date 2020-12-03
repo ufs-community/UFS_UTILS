@@ -31,7 +31,9 @@
 set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 export DATA=/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_tests.cycle
 
@@ -48,8 +50,6 @@ export APRUNCY="srun"
 export NWPROD=$PWD/../..
 
 export COMOUT=$DATA
-
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
 
 reg_dir=$PWD
 

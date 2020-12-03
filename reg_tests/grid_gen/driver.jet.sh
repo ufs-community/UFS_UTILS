@@ -22,7 +22,9 @@
 #-----------------------------------------------------------------------------
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 set -x
 
@@ -41,7 +43,6 @@ export APRUN=time
 export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export machine=JET
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
 export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/grid_gen/baseline_data
 
 ulimit -a

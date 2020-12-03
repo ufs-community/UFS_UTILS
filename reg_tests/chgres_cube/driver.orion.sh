@@ -25,7 +25,8 @@
 set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
 module list
 
 export OUTDIR=/work/noaa/stmp/$LOGNAME/chgres_reg_tests
@@ -41,8 +42,6 @@ QUEUE="debug"
 export HOMEufs=$PWD/../..
 
 export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/chgres_cube
-
-export NCCMP=/apps/nccmp-1.8.5/bin/nccmp
 
 LOG_FILE=regression.log
 SUM_FILE=summary.log

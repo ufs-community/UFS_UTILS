@@ -1,9 +1,8 @@
-!- - - - -- - -- - -- - -- - - -- - --  -- - -- - -- - - -- - - - -- - --
-! the program reads and list the contents in a nemsio file
-! - - - - -- - -- - -- - -- - - -- - --  -- - -- - -- - - -- - - - -- -
-!  Revision history
-!   Sep 2008:  Jun Wang Initial code
-! --
+!> @file
+!! the program reads and list the contents in a nemsio file
+!!
+!! @author Jun Wang @date Sep 2008 
+!! 
   program main
 !
   use nemsio_module

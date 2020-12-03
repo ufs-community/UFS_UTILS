@@ -1,33 +1,22 @@
+!> @file
+!!                .      .    .
+!! smth9_msk --- 9-point smoother with surface mask
+!! by spatial average from a to b with ancillary surface mask (e.g.,
+!! analysis grid => surface grid) for global arrays
+!! to gurantee the averaged value (b) is determined by the
+!! candidates (a) with the identical surface type from (a)
+!!
+!! @author li @date 03/13/2017
+!!
+!! @param[in] a        - real: 2-d array such as analysis increment at analysis grids
+!! @param[out] b       - real: 2-d array 
+!! @param[in] isli   - integer: 2-d array: surface mask (0 = water, 1 = land, 2 = sea ice) for a grids
+!! @param[in] nlon     - integer: number of longitude of a & b
+!! @param[in] nlat     - integer: number of latitude of a & b
+!! @param[in] istyp    - integer: target surface type value
+!!
+!!
  subroutine smth9_msk(a,b,isli,nlon,nlat,istyp)
-!$$$  subprogram documentation block
-!                .      .    .
-! subprogram:    smth9_msk --- 9-point smoother with surface mask
-!                by spatial average from a to b with ancillary surface mask (e.g.,
-!                analysis grid => surface grid) for global arrays
-!                to gurantee the averaged value (b) is determined by the
-!                candidates (a) with the identical surface type from (a)
-!
-! prgrmmr:     li -  initial version; org: np2. 03/13/2017
-!
-!
-! program history log:
-!
-!  input argument list:
-!    a        - real: 2-d array such as analysis increment at analysis grids
-!    isli   - integer: 2-d array: surface mask (0 = water, 1 = land, 2 = sea ice) for a grids
-
-!    nlat     - integer: number of latitude of a & b
-!    nlon     - integer: number of longitude of a & b
-!    istyp    - integer: target surface type value
-!
-!  output argument list:
-!    b       - real: 2-d array 
-!
-! attributes:
-!   language: f90
-!   machines: ibm RS/6000 SP; SGI Origin 2000; Compaq HP
-!
-!$$$ end documentation block
 ! USES:
 
  implicit none

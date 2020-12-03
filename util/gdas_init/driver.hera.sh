@@ -8,8 +8,15 @@
 
 set -x
 
+compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.$compiler
+module list
+
+# Needed for NDATE utility
+module use -a /scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
+module load prod_util/1.1.0
 
 PROJECT_CODE=fv3-cpu
 QUEUE=batch

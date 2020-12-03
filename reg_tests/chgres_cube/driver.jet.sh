@@ -25,7 +25,9 @@
 set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
 PROJECT_CODE="hfv3gfs"
@@ -40,8 +42,6 @@ QUEUE="debug"
 export HOMEufs=$PWD/../..
 
 export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
-
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
 
 LOG_FILE=regression.log
 SUM_FILE=summary.log

@@ -1,12 +1,19 @@
+# This is the main CMake file for NCEPLIBS-ip.
+#
+# George Gayno
 cmake_minimum_required(VERSION 3.15)
 
+# Get the version from the VERSION file.
 file(STRINGS "VERSION" pVersion)
 
 project(
   ufs_util
   VERSION ${pVersion}
   LANGUAGES C Fortran)
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/Modules")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# User options.
+option(OPENMP "use OpenMP threading" ON)
 
 if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
   message(STATUS "Setting build type to 'Release' as none was specified.")
@@ -17,14 +24,7 @@ if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
                                                "MinSizeRel" "RelWithDebInfo")
 endif()
 
-if(NOT CMAKE_C_COMPILER_ID MATCHES "^(Intel|GNU|Clang|AppleClang)$")
-  message(WARNING "Compiler not officially supported: ${CMAKE_C_COMPILER_ID}")
-endif()
-
-if(NOT CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|GNU)$")
-  message(WARNING "Compiler not officially supported: ${CMAKE_Fortran_COMPILER_ID}")
-endif()
-
+# Set compiler flags.
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -g -traceback")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fp-model precise")
@@ -41,11 +41,11 @@ if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_C_FLAGS_DEBUG "-O0")
 endif()
 
+# Find packages.
 find_package(NetCDF REQUIRED C Fortran)
 find_package(MPI REQUIRED)
 find_package(ESMF MODULE REQUIRED)
 
-option(OPENMP "use OpenMP threading" ON)
 if(OPENMP)
   find_package(OpenMP REQUIRED COMPONENTS Fortran)
 endif()
@@ -71,3 +71,9 @@ if(EMC_EXEC_DIR)
 endif()
 
 add_subdirectory(sorc)
+
+# If doxygen documentation we enabled, build it.
+if(ENABLE_DOCS)
+  find_package(Doxygen REQUIRED)
+  add_subdirectory(docs)  
+endif()

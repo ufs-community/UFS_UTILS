@@ -7,6 +7,8 @@
 
 set -x
 
+NCCMP=${NCCMP:-$(which nccmp)}
+
 export MAX_TASKS_CY=6
 
 export HOMEgfs=$NWPROD
@@ -47,15 +49,6 @@ if [ $iret -ne 0 ]; then
   echo "<<< GLOBAL CYCLE TEST FAILED. <<<"
   echo "<<< GLOBAL CYCLE TEST FAILED. <<<"  > ./summary.log
   exit $iret
-fi
-
-# orion's nccmp utility does not work with the netcdf
-# required to run global_cycle.  So swap it.
-
-machine=${machine:-NULL}
-if [[ "$machine" = 'orion' ]]; then
-  module unload netcdfp/4.7.4.release
-  module load netcdf/4.7.2
 fi
 
 test_failed=0

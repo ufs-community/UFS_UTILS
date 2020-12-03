@@ -1,22 +1,19 @@
+!> @file
+!! The grid driver step in FV3 preprocessing generates a grid_tile
+!! file and an oro_tile file for the regional domain. The final
+!! size of these files' domains must include the halo surrounding
+!! the computational domain. However the original size of these
+!! domains must exceed the domain size plus haloes so that the
+!! topography filtering program can produce correct values over
+!! the halo region. Then before the files go into the chgres
+!! job their domains must be shaved down to only the computational
+!! interior and the halo which is what this code does.
 !-----------------------------------------------------------------------
       program shave_nc
 !-----------------------------------------------------------------------
       use netcdf
 !-----------------------------------------------------------------------
       implicit none
-!-----------------------------------------------------------------------
-!
-!***  The grid driver step in FV3 preprocessing generates a grid_tile
-!***  file and an oro_tile file for the regional domain.  The final
-!***  size of these files' domains must include the halo surrounding
-!***  the computational domain.  However the original size of these
-!***  domains must exceed the domain size plus haloes so that the
-!***  topography filtering program can produce correct values over
-!***  the halo region.  Then before the files go into the chgres
-!***  job their domains must be shaved down to only the computational
-!***  interior and the halo which is what this code does.
-!
-!-----------------------------------------------------------------------
 !
       integer,parameter :: kdbl=selected_real_kind(p=13,r=200)
 !

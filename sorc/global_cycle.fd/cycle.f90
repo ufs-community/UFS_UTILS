@@ -1,97 +1,95 @@
+!> @file
+!!
+!!  Stand alone surface/NSST cycle driver for the cubed-sphere grid.
+!!  Each cubed-sphere tile runs independently on its own mpi task.  
+!!  The surface update component runs with threads.  The NSST
+!!  update component in not threaded.
+!!
+!!  The program can be run in the following ways:
+!!  1) Update the surface fields only.  NSST fields are not
+!!     processed.  Invoke this option by setting namelist
+!!     variable DONST=.false.  Output files only contain
+!!     surface fields.
+!!
+!!  2) Update the surface fields and NSST TREF field using
+!!     GSI increments on the Gaussian grid.  All other NSST
+!!     fields are cycled.  Invoke this option by setting
+!!     namelist variable DONST=.true. and GSI_FILE to 
+!!     the name of the GSI increment file.
+!!  
+!!  3) Update surface and run with NSST, but postpone the TREF update.  
+!!     Here all NSST fields are cycled.  But the NSST IFD field is
+!!     used to flag points that flipped from ice to open water.
+!!     To invoke this option, set DONST=.true. and GSI_FILE="NULL".
+!!
+!!  4) Perform the NSST TREF adjustment only.  Surface fields are
+!!     only cycled.  To run with this option, set DONST=.true.,
+!!     GSI_FILE to the GSI increment file, and ADJT_NST_ONLY=.true.
+!!     The input cubed-sphere restart files must be those from
+!!     option (3).
+!!
+!!  NOTE: running (3) then (4) is equivalent to running (2).
+!!  
+!!  INPUT FILES:
+!!  -----------
+!!  -fngrid.$NNN        The cubed-sphere grid file (contains
+!!                     grid point latitude and longitdue).
+!!  -fnorog.$NNN        The cubed-sphere orography file (contains
+!!                     land mask and orography).
+!!  -fnbgsi.$NNN        The cubed-sphere input sfc/nsst restart
+!!                     file.
+!!  -$GSI_FILE          Gaussian GSI file which contains NSST
+!!                     TREF increments
+!!  
+!!  OUTPUT FILES:
+!!  ------------
+!!  -fnbgso.$NNN        The updated sfc/nsst restart file.
+!!
+!!  NOTE: $NNN corresponds to (mpi rank + 1)
+
+!!  NAMELIST VARIABLE DEFINITIONS:
+!!
+!!  -IDIM,JDIM      i/j dimension of a cubed-sphere tile.
+!!  -LUGB           Unit number used in the sfccycle subprogram
+!!                 to read input datasets.
+!!  -LSOIL          Number of soil layers.
+!!  -IY,IM,ID,IH    Year, month, day, and hour of initial state.
+!!  -FH             Forecast hour
+!!  -DELTSFC        Cycling frequency in hours.
+!!  -IALB           Use modis albedo when '1'. Use brigleb when '0'.
+!!  -USE_UFO        Adjust sst and soil substrate temperature for
+!!                 differences between the filtered and unfiltered
+!!                 terrain.
+!!  -DONST          Process NSST records.
+!!  -ADJT_NST_ONLY  When true, only do the NSST update (don't call
+!!                 sfcsub component).
+!!  -ISOT           Use statsgo soil type when '1'. Use zobler when '0'.
+!!  -IVEGSRC        Use igbp veg type when '1'.  Use sib when '2'.
+!!  -ZSEA1/2_MM     When running with NSST model, this is the lower/
+!!                 upper bound of depth of sea temperature.  In
+!!                 whole mm.
+!!  -MAX_TASKS      Normally, program should be run with a number of mpi 
+!!                 tasks equal to the number of cubed-sphere tiles 
+!!                 being processed. However, the current parallel 
+!!                 scripts may over-specify the number of tasks.
+!!                 Set this variable to not process any ranks >
+!!                 (max_tasks-1).
+!!  -GSI_FILE       path/name of the gaussian GSI file which contains NSST
+!!                 TREF increments.
+!!
+!!  -2005-02-03:  Iredell   for global_analysis
+!!  -2014-11-30:  xuli      add nst_anl
+!!  -2015-05-26:  Hang Lei  Added NEMSIO read/write function in the code
+!!  -2017-08-08:  Gayno     Modify to work on cubed-sphere grid.
+!!                         Added processing of NSST and TREF update.
+!!                         Added mpi directives.
+!!
  PROGRAM SFC_DRV
 
-!----------------------------------------------------------------------
-!
-!  Stand alone surface/NSST cycle driver for the cubed-sphere grid.
-!  Each cubed-sphere tile runs independently on its own mpi task.  
-!  The surface update component runs with threads.  The NSST
-!  update component in not threaded.
-!
-!  The program can be run in the following ways:
-
-!  1) Update the surface fields only.  NSST fields are not
-!     processed.  Invoke this option by setting namelist
-!     variable DONST=.false.  Output files only contain
-!     surface fields.
-!
-!  2) Update the surface fields and NSST TREF field using
-!     GSI increments on the Gaussian grid.  All other NSST
-!     fields are cycled.  Invoke this option by setting
-!     namelist variable DONST=.true. and GSI_FILE to 
-!     the name of the GSI increment file.
-!  
-!  3) Update surface and run with NSST, but postpone the TREF update.  
-!     Here all NSST fields are cycled.  But the NSST IFD field is
-!     used to flag points that flipped from ice to open water.
-!     To invoke this option, set DONST=.true. and GSI_FILE="NULL".
-!
-!  4) Perform the NSST TREF adjustment only.  Surface fields are
-!     only cycled.  To run with this option, set DONST=.true.,
-!     GSI_FILE to the GSI increment file, and ADJT_NST_ONLY=.true.
-!     The input cubed-sphere restart files must be those from
-!     option (3).
-!
-!  NOTE: running (3) then (4) is equivalent to running (2).
-!  
-!  INPUT FILES:
-!  -----------
-!  fngrid.$NNN        The cubed-sphere grid file (contains
-!                     grid point latitude and longitdue).
-!  fnorog.$NNN        The cubed-sphere orography file (contains
-!                     land mask and orography).
-!  fnbgsi.$NNN        The cubed-sphere input sfc/nsst restart
-!                     file.
-!  $GSI_FILE          Gaussian GSI file which contains NSST
-!                     TREF increments
-!  
-!  OUTPUT FILES:
-!  ------------
-!  fnbgso.$NNN        The updated sfc/nsst restart file.
-!
-!  NOTE: $NNN corresponds to (mpi rank + 1)
-
-!  NAMELIST VARIABLE DEFINITIONS:
-!
-!  IDIM,JDIM      i/j dimension of a cubed-sphere tile.
-!  LUGB           Unit number used in the sfccycle subprogram
-!                 to read input datasets.
-!  LSOIL          Number of soil layers.
-!  IY,IM,ID,IH    Year, month, day, and hour of initial state.
-!  FH             Forecast hour
-!  DELTSFC        Cycling frequency in hours.
-!  IALB           Use modis albedo when '1'. Use brigleb when '0'.
-!  USE_UFO        Adjust sst and soil substrate temperature for
-!                 differences between the filtered and unfiltered
-!                 terrain.
-!  DONST          Process NSST records.
-!  ADJT_NST_ONLY  When true, only do the NSST update (don't call
-!                 sfcsub component).
-!  ISOT           Use statsgo soil type when '1'. Use zobler when '0'.
-!  IVEGSRC        Use igbp veg type when '1'.  Use sib when '2'.
-!  ZSEA1/2_MM     When running with NSST model, this is the lower/
-!                 upper bound of depth of sea temperature.  In
-!                 whole mm.
-!  MAX_TASKS      Normally, program should be run with a number of mpi 
-!                 tasks equal to the number of cubed-sphere tiles 
-!                 being processed. However, the current parallel 
-!                 scripts may over-specify the number of tasks.
-!                 Set this variable to not process any ranks >
-!                 (max_tasks-1).
-!  GSI_FILE       path/name of the gaussian GSI file which contains NSST
-!                 TREF increments.
-!
-!  2005-02-03:  Iredell   for global_analysis
-!  2014-11-30:  xuli      add nst_anl
-!  2015-05-26:  Hang Lei  Added NEMSIO read/write function in the code
-!  2017-08-08:  Gayno     Modify to work on cubed-sphere grid.
-!                         Added processing of NSST and TREF update.
-!                         Added mpi directives.
-!----------------------------------------------------------------------
+ use mpi
 
  IMPLICIT NONE
 !
- include 'mpif.h'
-
  CHARACTER(LEN=3) :: DONST
  INTEGER :: IDIM, JDIM, LSOIL, LUGB, IY, IM, ID, IH, IALB
  INTEGER :: ISOT, IVEGSRC, LENSFC, ZSEA1_MM, ZSEA2_MM, IERR
@@ -542,9 +540,9 @@
                              SLMSK_GAUS, DTREF_GAUS, &
                              NSST_DATA
 
- IMPLICIT NONE
+ USE MPI
 
- include 'mpif.h'
+ IMPLICIT NONE
 
  INTEGER, INTENT(IN)      :: LENSFC, LSOIL, IDIM, JDIM, MON, DAY
 

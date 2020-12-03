@@ -20,7 +20,9 @@
 #-----------------------------------------------------------------------------
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 set -x
 
@@ -39,7 +41,6 @@ export APRUN=time
 export APRUN_SFC="mpirun -l"
 export OMP_STACKSIZE=2048m
 export machine=WCOSS_DELL_P3
-export NCCMP=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/util/nccmp/nccmp-nc4.7.4/src/nccmp
 export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
 export OMP_NUM_THREADS=24
 

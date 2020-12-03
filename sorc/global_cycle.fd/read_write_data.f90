@@ -1,3 +1,4 @@
+!> @file
  MODULE READ_WRITE_DATA
 
  USE NETCDF
@@ -63,6 +64,8 @@
 ! let the model compute it.
 !------------------------------------------------------------------
 
+ use mpi
+
  implicit none
 
  integer, intent(in)         :: idim, jdim, lensfc, lsoil
@@ -117,8 +120,6 @@
  real(kind=4)                :: times
  real(kind=4), allocatable   :: lsoil_data(:), x_data(:), y_data(:)
  real(kind=8), allocatable   :: dum2d(:,:), dum3d(:,:,:)
-
- include "mpif.h"
 
  call mpi_comm_rank(mpi_comm_world, myrank, error)
 
@@ -853,9 +854,9 @@
 ! THE "GRID" FILE.
 !--------------------------------------------------------------
 
- IMPLICIT NONE
+ USE MPI
 
- include "mpif.h"
+ IMPLICIT NONE
 
  INTEGER, INTENT(IN)    :: IDIM, JDIM, IJDIM
 
@@ -985,9 +986,9 @@
 ! AND STOP PROCESSING.
 !--------------------------------------------------------------
 
- IMPLICIT NONE
+ USE MPI
 
- include 'mpif.h'
+ IMPLICIT NONE
 
  INTEGER, INTENT(IN) :: ERR
  CHARACTER(LEN=*), INTENT(IN) :: STRING
@@ -1089,9 +1090,9 @@
 ! SELECTED) FOR A SINGLE CUBED-SPHERE TILE.
 !-----------------------------------------------------------------
 
- IMPLICIT NONE
+ USE MPI
 
- include "mpif.h"
+ IMPLICIT NONE
 
  INTEGER, INTENT(IN)       :: LSOIL, LENSFC
 
@@ -1541,9 +1542,9 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
 !   language: f90
 !
 !$$$
-  implicit none
+  use mpi
 
-  include "mpif.h"
+  implicit none
 
 ! declare passed variables and arrays
   character(*)                       , intent(in   ) :: file_sst
@@ -1691,9 +1692,9 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
 !   machine:  ibm rs/6000 sp
 !
 !$$$
-  implicit none
+  use mpi
 
-  include "mpif.h"
+  implicit none
 
 ! declare passed variables and arrays
   character(*)                                   , intent(in ) :: file_sst
@@ -1844,9 +1845,8 @@ end subroutine get_dim_nc
 
 subroutine nc_check(status)
 
+  use mpi
   use netcdf
-
-  include "mpif.h"
 
   integer, intent ( in) :: status
   integer :: ierr

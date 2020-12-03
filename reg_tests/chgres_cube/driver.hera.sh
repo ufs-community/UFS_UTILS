@@ -24,8 +24,12 @@
 
 set -x
 
+compiler=${compiler:-"intel"}
+
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.$compiler
+module list
 
 export OUTDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/chgres_reg_tests
 PROJECT_CODE="fv3-cpu"
@@ -40,8 +44,6 @@ QUEUE="batch"
 export HOMEufs=$PWD/../..
 
 export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
-
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
 
 LOG_FILE=regression.log
 SUM_FILE=summary.log
