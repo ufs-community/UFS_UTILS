@@ -36,5 +36,4 @@ export NETCDF=/usrx/local/prod/NetCDF/4.7.4/intel/sandybridge
 module rm gcc
 module load gcc/6.3.0
 
-export wgrib2_ROOT=/gpfs/hps/nco/ops/nwpara/lib/wgrib2/v2.0.8/intel
-#future export wgrib2_ROOT=/gpfs/hps/nco/ops/nwprod/lib/wgrib2/v2.0.8/intel
+export wgrib2_ROOT=/gpfs/hps/nco/ops/nwprod/lib/wgrib2/v2.0.8/intel
