@@ -706,27 +706,17 @@ contains
           dx(i,j,t) = great_circle_dist( g2, g1, radius )
        enddo ; enddo
     enddo
-    if( stretch_fac /= 1 ) then
-       do t = 1, ntiles
-          do j = js, je
-             do i = is, ie+1
-                g1(1) = geolon_c(i,j,  t)
-                g1(2) = geolat_c(i,j,  t)
-                g2(1) = geolon_c(i,j+1,t)
-                g2(2) = geolat_c(i,j+1,t)
-                dy(i,j,t) = great_circle_dist( g2, g1, radius )
-             enddo
+    do t = 1, ntiles
+       do j = js, je
+          do i = is, ie+1
+             g1(1) = geolon_c(i,j,  t)
+             g1(2) = geolat_c(i,j,  t)
+             g2(1) = geolon_c(i,j+1,t)
+             g2(2) = geolat_c(i,j+1,t)
+             dy(i,j,t) = great_circle_dist( g2, g1, radius )
           enddo
        enddo
-    else
-       do t = 1, ntiles
-          do j = js, je
-             do i = is, ie+1
-                dy(i,j,t) = dx(j,i,t)
-             enddo
-          enddo
-       enddo
-    endif
+    enddo
 
     if( .not. regional ) then
       !--- make sure it is consitent between tiles. The following maybe not necessary.
