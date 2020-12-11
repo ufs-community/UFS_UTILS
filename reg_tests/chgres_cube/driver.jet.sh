@@ -5,7 +5,7 @@
 # Run the chgres_cube regression tests on JET.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
-# as appropriate.  To see which HFIP you are authorized to use,
+# as appropriate.  To see which projects you are authorized to use,
 # type "account_params".
 #
 # Invoke the script with no arguments.  A series of daily-

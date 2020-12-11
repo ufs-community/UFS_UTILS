@@ -1163,9 +1163,6 @@
  endif
 
  print*
- do k = 1, levp1_target
-    print*,'VCOORD FOR LEV ', k, 'IS: ', vcoord_target(k,:)
- enddo
  
  close(14)
 
