@@ -69,6 +69,13 @@ TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
+# esg regional grid
+#-----------------------------------------------------------------------------
+
+TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./esg.regional.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
