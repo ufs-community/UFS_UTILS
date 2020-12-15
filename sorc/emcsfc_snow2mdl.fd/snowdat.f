@@ -1,52 +1,47 @@
+!> @file
+!! @brief Read and qc afwa, nesdis/ims and autosnow snow data.
+!!
+!! @author gayno org: w/np2 @date 2005-dec-16
+!!
+!! program history log:
+!! -  2005-dec-16  gayno   - initial version
+!! -  2007-aug-10  gayno   - allow program to run with no nesdis/ims data
+!!                          add 16th mesh afwa grib data
+!! -  2008-feb-04  gayno   - add autosnow cover data for sh.
+!! -  2009-jun-03  gayno   - add qc check for nesdis/ims and afwa data.
+!! -  2014-feb-07  gayno   - read nesdis/ims data in grib1 or grib 2
+!!                          format.
+!! -  2014-sep-30  gayno   - convert weekly nh snow climatology - used to 
+!!                          qc input data - to grib 2.
+!!
+!! variable definitions:
+!! -  afwa_res           - resolution of afwa data in km
+!! -  autosnow_res       - resolution of autosnow in km
+!! -  bad_afwa_Xh        - is afwa data corrupt?
+!! -  bad_nesdis         - is nesdis ims data corrupt?
+!! -  bitmap_afwa_Xh     - bitmap of afwa grid (false-non land, true-land)
+!! -  bitmap_nesdis      - bitmap of nesdis grid (false-non land, true-land)
+!! -  iafwa              - i-dimension of afwa grid
+!! -  jafwa              - j-dimension of afwa grid
+!! -  iautosnow          - i-dimension of autosnow grid
+!! -  jautosnow          - j-dimension of autosnow grid
+!! -  inesdis            - i-dimension of nesdis grid
+!! -  jnesdis            - j-dimension of nesdis grid
+!! -  kgds_afwa_Xh       - afwa grid description section (grib section 2)
+!! -  kgds_autosnow      - autosnow grid description section (grib section 2)
+!! -  kgds_nesdis        - nesdis/ims grid description section (grib section 2)
+!! -  mesh_nesdis        - nesdis/ims data is 96th mesh (or bediant)
+!! -  nesdis_res         - resolution of nesdis/ims data in km
+!! -  sea_ice_nesdis     - nesdis/ims sea ice flag (0-open water, 1-ice)
+!! -  snow_cvr_autosnow  - autosnow snow cover flag (0-no, 100-yes)
+!! -  snow_cvr_nesdis    - nesdis/ims snow cover flag (0-no, 100-yes)
+!! -  snow_dep_afwa_Xh   - afwa snow depth data (inches*10 on input, 
+!!                                              meters on output)
+!! -  use_xh_afwa        - true if afwa data to be used
+!! -  use_autosnow       - true if autosnow data to be used
+!! -  use_nesdis         - true if nesdis/ims data to be used
+!!
  module snowdat
-!$$$  module documentation block
-!
-! module:    snowdat
-!   prgmmr: gayno         org: w/np2     date: 2005-dec-16
-!
-! abstract: read and qc afwa, nesdis/ims and autosnow snow data.
-!
-! program history log:
-!   2005-dec-16  gayno   - initial version
-!   2007-aug-10  gayno   - allow program to run with no nesdis/ims data
-!                          add 16th mesh afwa grib data
-!   2008-feb-04  gayno   - add autosnow cover data for sh.
-!   2009-jun-03  gayno   - add qc check for nesdis/ims and afwa data.
-!   2014-feb-07  gayno   - read nesdis/ims data in grib1 or grib 2
-!                          format.
-!   2014-sep-30  gayno   - convert weekly nh snow climatology - used to 
-!                          qc input data - to grib 2.
-!
-! usage: use snowdat
-!
-! remarks: some variable definitions
-!   afwa_res           - resolution of afwa data in km
-!   autosnow_res       - resolution of autosnow in km
-!   bad_afwa_Xh        - is afwa data corrupt?
-!   bad_nesdis         - is nesdis ims data corrupt?
-!   bitmap_afwa_Xh     - bitmap of afwa grid (false-non land, true-land)
-!   bitmap_nesdis      - bitmap of nesdis grid (false-non land, true-land)
-!   iafwa              - i-dimension of afwa grid
-!   jafwa              - j-dimension of afwa grid
-!   iautosnow          - i-dimension of autosnow grid
-!   jautosnow          - j-dimension of autosnow grid
-!   inesdis            - i-dimension of nesdis grid
-!   jnesdis            - j-dimension of nesdis grid
-!   kgds_afwa_Xh       - afwa grid description section (grib section 2)
-!   kgds_autosnow      - autosnow grid description section (grib section 2)
-!   kgds_nesdis        - nesdis/ims grid description section (grib section 2)
-!   mesh_nesdis        - nesdis/ims data is 96th mesh (or bediant)
-!   nesdis_res         - resolution of nesdis/ims data in km
-!   sea_ice_nesdis     - nesdis/ims sea ice flag (0-open water, 1-ice)
-!   snow_cvr_autosnow  - autosnow snow cover flag (0-no, 100-yes)
-!   snow_cvr_nesdis    - nesdis/ims snow cover flag (0-no, 100-yes)
-!   snow_dep_afwa_Xh   - afwa snow depth data (inches*10 on input, 
-!                                              meters on output)
-!   use_xh_afwa        - true if afwa data to be used
-!   use_autosnow       - true if autosnow data to be used
-!   use_nesdis         - true if nesdis/ims data to be used
-!
-!$$$
 
  use program_setup, only  : autosnow_file,       &
                             nesdis_snow_file,    &
