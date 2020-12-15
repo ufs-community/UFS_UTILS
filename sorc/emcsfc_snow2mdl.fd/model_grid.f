@@ -1,43 +1,38 @@
+!> @file
+!! @brief Read in data defining the model grid.
+!!
+!! @author gayno org: w/np2 @date 2005-dec-16
+!!
+!! program history log:
+!! -  2005-dec-16  gayno   - initial version
+!! -  2007-nov-30  gayno   - improved method for thinning gfs grids.
+!!                          added nam b-grids.
+!! -  2014-sep-29  gayno   - add option to read model lat, lon and
+!!                          landmask data in grib2.
+!!
+!! variable definitions:
+!! -  grid_id_mdl    - grib id of model grid, 4-gaussian, 203-egrid
+!! -  i/jpts_mdl     - i/j index of point on full grid
+!! -  imdl           - i-dimension of model grid
+!! -  jmdl           - j-dimension of model grid
+!! -  ijmdl          - total number of model land points
+!! -  kgds_mdl       - holds grib gds info of model grid
+!! -  lats_mdl       - latitudes of model grid points
+!! -  lons_mdl       - longitudes of model grid points
+!! -  lonsperlat     - for global grids, the number of i points
+!!                    in each row (decrease toward pole)
+!! -  lsmask_mdl     - land mask of model grid (0 - non land, 1-land)
+!!                    for global grids run thinned, will contain
+!!                    a modified version of the original mask
+!!                    that has land at all points encompassed by a 
+!!                    thinned point
+!! -  lsmask_mdl_sav - saved copy of land mask of model grid (0 - non land, 1-land)
+!!                    only used for global thinned grids.
+!! -  resol_mdl      - approximate model resolution in km.
+!! -  thinned        - when true, global grids will run thinned
+!!                    (# i points decrease toward pole)
+!!
  module model_grid
-!$$$  module documentation block
-!            
-! module:    model_grid
-!   prgmmr: gayno         org: w/np2     date: 2005-dec-16
-!
-! abstract: read in data defining the model grid.
-!     
-! program history log:
-!   2005-dec-16  gayno   - initial version
-!   2007-nov-30  gayno   - improved method for thinning gfs grids.
-!                          added nam b-grids.
-!   2014-sep-29  gayno   - add option to read model lat, lon and
-!                          landmask data in grib2.
-!
-! usage: use model_grid
-!
-! remarks: some variable definitions
-!   grid_id_mdl    - grib id of model grid, 4-gaussian, 203-egrid
-!   i/jpts_mdl     - i/j index of point on full grid
-!   imdl           - i-dimension of model grid
-!   jmdl           - j-dimension of model grid
-!   ijmdl          - total number of model land points
-!   kgds_mdl       - holds grib gds info of model grid
-!   lats_mdl       - latitudes of model grid points
-!   lons_mdl       - longitudes of model grid points
-!   lonsperlat     - for global grids, the number of i points
-!                    in each row (decrease toward pole)
-!   lsmask_mdl     - land mask of model grid (0 - non land, 1-land)
-!                    for global grids run thinned, will contain
-!                    a modified version of the original mask
-!                    that has land at all points encompassed by a 
-!                    thinned point
-!   lsmask_mdl_sav - saved copy of land mask of model grid (0 - non land, 1-land)
-!                    only used for global thinned grids.
-!   resol_mdl      - approximate model resolution in km.
-!   thinned        - when true, global grids will run thinned
-!                    (# i points decrease toward pole)
-!
-!$$$
 
  use program_setup, only         : model_lsmask_file, &
                                    model_lon_file, &

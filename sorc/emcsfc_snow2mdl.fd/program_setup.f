@@ -1,50 +1,45 @@
+!> @file
+!! @brief This module reads in data from the program's configuration
+!! namelist.
+!!
+!! @author gayno org: w/np2 @date 2005-DEC-16
+!!
+!! program history log:
+!! -  2005-DEC-16  gayno   - initial version
+!! -  2008-Feb-01  gayno   - added autosnow data
+!! -  2014-Sep-30  gayno   - added 'output_grib2' flag
+!!
+!! variable definitions:
+!! -  afwa_snow_nh_file       - path/name afwa n hemis snow depth
+!! -  afwa_snow_sh_file       - path/name afwa s hemis snow depth
+!! -  afwa_lsmask_nh_file     - path/name afwa n hemis land/sea mask
+!! -  afwa_lsmask_sh_file     - path/name afwa s hemis land/sea mask
+!! -  autosnow_file           - path/name s hemis autosnow file
+!! -  grib_century/day/hour/month/year -  
+!!                             date of the final merged
+!!                             snow product that will be placed
+!!                             in grib header.
+!! -  model_lat_file          - path/name lats on the model grid
+!! -  model_lon_file          - path/name lons on the model grid
+!! -  nesdis_lsmask_file      - path/name nesdis/ims land mask
+!! -  nesdis_snow_file        - path/name nesdis/ims snow cover
+!! -  lat_threshold           - equatorward of this latitude, model
+!!                             points with undefined cover or depth 
+!!                             (because the interpolation routines
+!!                             could not find valid snow data)
+!!                             are set to a default value of zero.
+!!                             poleward, undefined points are set
+!!                             according to logic in module snow2mdl
+!! -  min_snow_depth          - minimum snow depth in meters at model
+!!                             points with coverage exceeding threshold.
+!! -  output_grib2            - when true, output model snow analysis
+!!                             is grib 2.  when false, grib 1.
+!! -  snow_cvr_threshold      - if percent coverage according to nesdis/ims
+!!                             or autosnow exceeds this value, then
+!!                             non-zero snow depth is assigned. below
+!!                             this threshold, depth is set to zero.
+!!
  module program_setup
-!$$$  module documentation block
-!                .      .    .                                       .
-! module:    program_setup
-!   prgmmr: gayno         org: w/np2     date: 2005-DEC-16
-!
-! abstract: this module reads in data from the program's
-!           configuration namelist.
-!
-! program history log:
-!   2005-DEC-16  gayno   - initial version
-!   2008-Feb-01  gayno   - added autosnow data
-!   2014-Sep-30  gayno   - added 'output_grib2' flag
-!
-! usage: use program_setup
-!
-! remarks: some variable definitions
-!   afwa_snow_nh_file       - path/name afwa n hemis snow depth
-!   afwa_snow_sh_file       - path/name afwa s hemis snow depth
-!   afwa_lsmask_nh_file     - path/name afwa n hemis land/sea mask
-!   afwa_lsmask_sh_file     - path/name afwa s hemis land/sea mask
-!   autosnow_file           - path/name s hemis autosnow file
-!   grib_century/day/hour/month/year -  
-!                             date of the final merged
-!                             snow product that will be placed
-!                             in grib header.
-!   model_lat_file          - path/name lats on the model grid
-!   model_lon_file          - path/name lons on the model grid
-!   nesdis_lsmask_file      - path/name nesdis/ims land mask
-!   nesdis_snow_file        - path/name nesdis/ims snow cover
-!   lat_threshold           - equatorward of this latitude, model
-!                             points with undefined cover or depth 
-!                             (because the interpolation routines
-!                             could not find valid snow data)
-!                             are set to a default value of zero.
-!                             poleward, undefined points are set
-!                             according to logic in module snow2mdl
-!   min_snow_depth          - minimum snow depth in meters at model
-!                             points with coverage exceeding threshold.
-!   output_grib2            - when true, output model snow analysis
-!                             is grib 2.  when false, grib 1.
-!   snow_cvr_threshold      - if percent coverage according to nesdis/ims
-!                             or autosnow exceeds this value, then
-!                             non-zero snow depth is assigned. below
-!                             this threshold, depth is set to zero.
-!
-!$$$ 
 
  implicit none
 
