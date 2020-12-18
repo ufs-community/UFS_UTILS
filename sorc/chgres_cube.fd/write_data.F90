@@ -1,21 +1,22 @@
-!--------------------------------------------------------------------------
-! Module: write_data
-!
-! Abstract: Write out target grid data into appropriate files for
-!    the forecast model.
-!
-! Main Subroutines:
-! -------------------
-! write_fv3_atm_header_netcdf      Writes atmospheric header file,
-!                                  netcdf format.
-! write_fv3_atm_bndy_data_netcdf   Writes atmospheric fields along the
-!                                  lateral boundary.  For regional grids.
-!                                  netcdf format.
-! write_fv3_atm_data_netcdf        Writes atmospheric data into a 
-!                                  'coldstart' file (netcdf)
-! write_fv3_sfc_data_netcdf        Writes surface and nst data into a 
-!                                  'coldstart' file (netcdf)
-!--------------------------------------------------------------------------
+!> @file
+!! @brief Write model coldstart files.
+!!
+!! @author gayno NCEP/EMC
+!!
+!! Abstract: Write out target grid data into appropriate files for
+!!    the forecast model.
+!!
+!! Main Subroutines:
+!! -------------------
+!! - write_fv3_atm_header_netcdf -    Writes atmospheric header file,
+!!                                    netcdf format.
+!! - write_fv3_atm_bndy_data_netcdf - Writes atmospheric fields along the
+!!                                    lateral boundary.  For regional grids.
+!!                                    netcdf format.
+!! - write_fv3_atm_data_netcdf -      Writes atmospheric data into a 
+!!                                   'coldstart' file (netcdf)
+!! - write_fv3_sfc_data_netcdf -      Writes surface and nst data into a 
+!!                                   'coldstart' file (netcdf)
 
  subroutine write_fv3_atm_header_netcdf(localpet)
 

@@ -1,27 +1,28 @@
- module input_data
+!> @file
+!! @brief Read input data
+!! @author gayno NCEP/EMC
+!!
+!! Abstract: Read atmospheric, surface and nst data on the input grid.
+!!    Supported formats include fv3 tiled 'restart' files, fv3 tiled 
+!!    'history' files, fv3 gaussian history files, spectral gfs
+!!    gaussian nemsio files, and spectral gfs sigio/sfcio files.
+!!
+!! Public Subroutines:
+!! -----------------
+!! - read_input_atm_data -        Driver routine to read atmospheric data
+!! - cleanup_input_atm_data -     Free up memory associated with atm data
+!! - read_input_sfc_data -        Driver routine to read surface data
+!! - cleanup_input_sfc_data -     Free up memory associated with sfc data
+!! - read_input_nst_data -        Driver routine to read nst data
+!! - cleanup_input_nst_data -     Free up memory associated with nst data
+!!
+!! Public variables:
+!! -----------------
+!! Defined below.  "input" indicates field associated with the input grid.
+!!
+!--------------------------------------------------------------------------
 
-!--------------------------------------------------------------------------
-! Module input_data
-!
-! Abstract: Read atmospheric, surface and nst data on the input grid.
-!    Supported formats include fv3 tiled 'restart' files, fv3 tiled 
-!    'history' files, fv3 gaussian history files, spectral gfs
-!    gaussian nemsio files, and spectral gfs sigio/sfcio files.
-!
-! Public Subroutines:
-! -----------------
-! read_input_atm_data         Driver routine to read atmospheric data
-! cleanup_input_atm_data      Free up memory associated with atm data
-! read_input_sfc_data         Driver routine to read surface data
-! cleanup_input_sfc_data      Free up memory associated with sfc data
-! read_input_nst_data         Driver routine to read nst data
-! cleanup_input_nst_data      Free up memory associated with nst data
-!
-! Public variables:
-! -----------------
-! Defined below.  "input" indicates field associated with the input grid.
-!
-!--------------------------------------------------------------------------
+ module input_data
 
  use esmf
  use netcdf

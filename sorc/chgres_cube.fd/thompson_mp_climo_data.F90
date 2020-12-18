@@ -1,9 +1,11 @@
- module thompson_mp_climo_data
+!> @file
+!! @brief Process Thompson climatological MP data
+!!
+!! Abstract: Module to read the Thompson climatological MP data file
+!! and set up the associated esmf field and grid objects.
+!!
 
-!-----------------------------------------------------------------------------------
-! Module to read the Thompson climatological MP data file and set up the
-! associated esmf field and grid objects.
-!-----------------------------------------------------------------------------------
+ module thompson_mp_climo_data
 
  use esmf
  use netcdf

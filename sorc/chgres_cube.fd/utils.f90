@@ -1,3 +1,7 @@
+!> @file
+!! @brief Contains utility routines
+!!
+
  subroutine error_handler(string, rc)
 
  use mpi

@@ -1,59 +1,61 @@
- module model_grid
+!> @file
+!! @brief Specify input and target model grids
+!!
+!! @author gayno NCEP/EMC
+!!
+!! Abstract: Specify input and target model grids via ESMF grid objects.
+!!
+!! Public Subroutines:
+!! -------------------
+!! - define_target_grid -              Setup the esmf grid object for the
+!!                                     target grid.
+!! - define_input_grid -               Setup the esmf grid object for the
+!!                                     input grid.
+!! - cleanup_input_target_grid_data -  Deallocate all esmf grid objects.
+!!
+!! Public variables:
+!! -----------------
+!! - i/j_input -                       i/j dimension of each cube of the
+!!                                     input grid.
+!! - ip1/jp1_input -                   i/j dimension plus 1 of input grid.
+!! - i/j_target -                      i/j dimension of each cube or of
+!!                                     a nest, target grid.
+!! - ip1/jp1_target -                  i/j dimension plus 1 of input grid.
+!! - input_grid -                      input grid esmf grid object
+!! - landmask_target_grid -            land mask target grid - '1' land;
+!!                                     '0' non-land
+!! - latitude_input_grid -             latitude of grid center, input grid
+!! - latitude_target_grid -            latitude of grid center, target grid
+!! - latitude_s_input_grid -           latitude of 'south' edge of grid
+!!                                     box, input grid
+!! - latitude_s_target_grid -          latitude of 'south' edge of grid
+!!                                     box, target grid
+!! - latitude_w_input_grid -           latitude of 'west' edge of grid
+!!                                     box, input grid
+!! - latitude_w_target_grid -          latitude of 'west' edge of grid
+!!                                     box, target grid
+!! - longitude_input_grid -            longitude of grid center, input grid
+!! - longitude_target_grid -           longitude of grid center, target grid
+!! - longitude_s_input_grid -          longitude of 'south' edge of grid
+!!                                     box, input grid
+!! - longitude_s_target_grid -         longitude of 'south' edge of grid
+!!                                     box, target grid
+!! - longitude_w_input_grid -          longitude of 'west' edge of grid
+!!                                     box, input grid
+!! - longitude_w_target_grid -         longitude of 'west' edge of grid
+!!                                     box, target grid
+!! - lsoil_target -                    Number of soil layers, target grid.
+!! - num_tiles_input_grid -            Number of tiles, input grid
+!! - num_tiles_target_grid -           Number of tiles, target grid
+!! - seamask_target_grid -             sea mask target grid - '1' non-land;
+!!                                     '0' land
+!! - target_grid -                     target grid esmf grid object.
+!! - terrain_target_grid -             terrain height target grid
+!! - tiles_target_grid -               Tile names of target grid.
+!!
+!--------------------------------------------------------------------------
 
-!--------------------------------------------------------------------------
-! Module model_grid
-!
-! Abstract: Specify input and target model grids
-!
-! Public Subroutines:
-! -------------------
-! define_target_grid               Setup the esmf grid object for the
-!                                  target grid.
-! define_input_grid                Setup the esmf grid object for the
-!                                  input grid.
-! cleanup_input_target_grid_data   Deallocate all esmf grid objects.
-!
-! Public variables:
-! -----------------
-! i/j_input                        i/j dimension of each cube of the
-!                                  input grid.
-! ip1/jp1_input                    i/j dimension plus 1 of input grid.
-! i/j_target                       i/j dimension of each cube or of
-!                                  a nest, target grid.
-! ip1/jp1_target                   i/j dimension plus 1 of input grid.
-! input_grid                       input grid esmf grid object
-! landmask_target_grid             land mask target grid - '1' land;
-!                                  '0' non-land
-! latitude_input_grid              latitude of grid center, input grid
-! latitude_target_grid             latitude of grid center, target grid
-! latitude_s_input_grid            latitude of 'south' edge of grid
-!                                  box, input grid
-! latitude_s_target_grid           latitude of 'south' edge of grid
-!                                  box, target grid
-! latitude_w_input_grid            latitude of 'west' edge of grid
-!                                  box, input grid
-! latitude_w_target_grid           latitude of 'west' edge of grid
-!                                  box, target grid
-! longitude_input_grid             longitude of grid center, input grid
-! longitude_target_grid            longitude of grid center, target grid
-! longitude_s_input_grid           longitude of 'south' edge of grid
-!                                  box, input grid
-! longitude_s_target_grid          longitude of 'south' edge of grid
-!                                  box, target grid
-! longitude_w_input_grid           longitude of 'west' edge of grid
-!                                  box, input grid
-! longitude_w_target_grid          longitude of 'west' edge of grid
-!                                  box, target grid
-! lsoil_target                     Number of soil layers, target grid.
-! num_tiles_input_grid             Number of tiles, input grid
-! num_tiles_target_grid            Number of tiles, target grid
-! seamask_target_grid              sea mask target grid - '1' non-land;
-!                                  '0' land
-! target_grid                      target grid esmf grid object.
-! terrain_target_grid              terrain height target grid
-! tiles_target_grid                Tile names of target grid.
-!
-!--------------------------------------------------------------------------
+ module model_grid
 
  use esmf
  use ESMF_LogPublicMod

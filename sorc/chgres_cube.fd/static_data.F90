@@ -1,39 +1,40 @@
- module static_data
+!> @file
+!! @brief Process static surface data
+!!
+!! @author gayno NCEP/EMC
+!!
+!! Abstract: Read pre-computed static/climatological data on the fv3 
+!!    target grid.  Time interpolate if necessary (for example a
+!!    monthly climo field).
+!!
+!! Public Subroutines:
+!! -------------------
+!! - get_static_fields -       Driver routine to read/time interpolate
+!!                             static/climo fields on the fv3 target
+!!                             grid.
+!! - cleanup_static_fields -   Free up memory for fields in this module.
+!!
+!! Public variables:
+!! -----------------
+!! - alnsf_target_grid -                near ir black sky albedo
+!! - alnwf_target_grid -                near ir white sky albedo
+!! - alvsf_target_grid -                visible black sky albedo
+!! - alvwf_target_grid -                visible white sky albedo
+!! - facsf_target_grid -                fractional coverage for strong
+!!                                      zenith angle dependent albedo
+!! - facwf_target_grid -                fractional coverage for weak
+!!                                      zenith angle dependent albedo
+!! - max_veg_greenness_target_grid -    maximum annual greenness fraction
+!! - min_veg_greenness_target_grid -    minimum annual greenness fraction
+!! - mxsno_albedo_target_grid -         maximum snow albedo
+!! - slope_type_target_grid -           slope type
+!! - soil_type_target_grid -            soil type
+!! - substrate_temp_target_grid -       soil subtrate temperature
+!! - veg_greenness_target_grid -        vegetation greenness fraction
+!! - veg_type_target_grid -             vegetation type
+!!
 
-!--------------------------------------------------------------------------
-! Module static data
-!
-! Abstract: Read pre-computed static/climatological data on the fv3 
-!    target grid.  Time interpolate if necessary (for example a
-!    monthly climo fields).
-!
-! Public Subroutines:
-! -------------------
-! get_static_fields            Driver routine to read/time interpolate
-!                              static/climo fields on the fv3 target
-!                              grid.
-! cleanup_static_fields        Free up memory for fields in this module.
-!
-! Public variables:
-! -----------------
-! alnsf_target_grid                 near ir black sky albedo
-! alnwf_target_grid                 near ir white sky albedo
-! alvsf_target_grid                 visible black sky albedo
-! alvwf_target_grid                 visible white sky albedo
-! facsf_target_grid                 fractional coverage for strong
-!                                   zenith angle dependent albedo
-! facwf_target_grid                 fractional coverage for weak
-!                                   zenith angle dependent albedo
-! max_veg_greenness_target_grid     maximum annual greenness fraction
-! min_veg_greenness_target_grid     minimum annual greenness fraction
-! mxsno_albedo_target_grid          maximum snow albedo
-! slope_type_target_grid            slope type
-! soil_type_target_grid             soil type
-! substrate_temp_target_grid        soil subtrate temperature
-! veg_greenness_target_grid         vegetation greenness fraction
-! veg_type_targe_grid               vegetation type
-!
-!--------------------------------------------------------------------------
+ module static_data
 
  use esmf
 

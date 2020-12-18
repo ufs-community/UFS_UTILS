@@ -1,17 +1,19 @@
- module search_util
+!> @file
+!! @brief Replace undefined surface values.
+!!
+!! @author gayno NCEP/EMC
+!!
+!! Abstract: Replace undefined values with a valid value.  This can
+!!   happen for an isolated lake or island that is unresolved by
+!!   the input grid.
+!!
+!! Public Subroutines:
+!! -------------------
+!! - search -                      Performs the search and replace.
+!!
+!!--------------------------------------------------------------------------
 
-!--------------------------------------------------------------------------
-! Module search
-!
-! Abstract: Replace undefined values with a valid value.  This can
-!   happen for an isolated lake or island that is unresolved by
-!   the input grid.
-!
-! Public Subroutines:
-! -------------------
-! search                           Performs the search and replace.
-!
-!--------------------------------------------------------------------------
+ module search_util
 
  private
 

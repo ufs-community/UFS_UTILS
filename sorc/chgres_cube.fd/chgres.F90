@@ -1,13 +1,15 @@
- program chgres
+!> @file
+!! @brief Initialize an FV3 model run.
+!!
+!! Program CHGRES_CUBE
+!!
+!! Abstract: Initialize an FV3 run using history or restart data from
+!!   another FV3 run, the spectral GFS, and a few other models.
+!!   Converts atmospheric, surface and nst data.
+!!
+!-------------------------------------------------------------------------
 
-!-------------------------------------------------------------------------
-! Program CHGRES
-!
-! Abstract: Initialize an FV3 run using history or restart data from
-!   another FV3 run, or the NEMS version of the spectral GFS.  
-!   Converts atmospheric, surface and nst data.
-!
-!-------------------------------------------------------------------------
+ program chgres
 
  use mpi
  use esmf
