@@ -1,30 +1,21 @@
+!> @file
+!! @brief Interpolate snow data to model grid and grib the result.
+!!
+!! @author gayno org: w/np2 @date 2005-dec-16
+!!
+!! program history log:
+!! -  2005-DEC-16  gayno   - initial version
+!! -  2007-SEP-20  gayno   - tested for b-grids. added improved
+!!                          thinning for gfs grid.
+!! -  2008-feb-04  gayno   - added autosnow data
+!! -  2014-sep-26  gayno   - added option to output analysed
+!!                          snow in grib2.
+!!
+!! variable definitions:
+!! -  snow_cvr_mdl  - snow cover on model grid in percent
+!! -  snow_dep_mdl  - snow depth on model grid in meters 
+!!                              
  module snow2mdl
-!$$$  module documentation block
-!
-! module:    snow2mdl
-!   prgmmr: gayno         org: w/np2     date: 2005-dec-16
-!
-! abstract: interpolate snow data to model grid and grib the result
-!
-! program history log:
-!   2005-DEC-16  gayno   - initial version
-!   2007-SEP-20  gayno   - tested for b-grids. added improved
-!                          thinning for gfs grid.
-!   2008-feb-04  gayno   - added autosnow data
-!   2014-sep-26  gayno   - added option to output analysed
-!                          snow in grib2.
-!
-! usage: use snow2mdl
-!
-! remarks: some variable definitions
-!   snow_cvr_mdl  - snow cover on model grid in percent
-!   snow_dep_mdl  - snow depth on model grid in meters 
-!                              
-! attributes:
-!   language: fortran 90
-!   machine:  ibm wcoss
-!
-!$$$
 
  use program_setup,        only   : lat_threshold,          &
                                     model_snow_file,        &
