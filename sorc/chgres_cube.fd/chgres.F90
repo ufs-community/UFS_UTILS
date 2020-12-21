@@ -3,9 +3,9 @@
 !!
 !! Program CHGRES_CUBE
 !!
-!! Abstract: Initialize an FV3 run using history or restart data from
-!!   another FV3 run, the spectral GFS, and a few other models.
-!!   Converts atmospheric, surface and nst data.
+!! Initialize an FV3 run using history or restart data from
+!! another FV3 run, the spectral GFS, and a few other models.
+!! Converts atmospheric, surface and nst data.
 !!
 !-------------------------------------------------------------------------
 

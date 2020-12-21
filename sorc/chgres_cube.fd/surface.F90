@@ -3,21 +3,15 @@
 !!
 !! @author gayno NCEP/EMC
 !!
-!! Abstract: Process surface and nst fields.  Interpolates fields from
-!!    the input to target grids.  Adjusts soil temperature according
-!!    to differences in input and target grid terrain.  Rescales
-!!    soil moisture for soil type differences between input and target
-!!    grid.  Computes frozen portion of total soil moisture.
+!! Process surface and nst fields.  Interpolates fields from
+!! the input to target grids.  Adjusts soil temperature according
+!! to differences in input and target grid terrain.  Rescales
+!! soil moisture for soil type differences between input and target
+!! grid.  Computes frozen portion of total soil moisture.
 !!
-!! Public Subroutines:
-!! -----------------
-!! - surface_driver -         Driver routine to process surface/nst data
-!!
-!! Public variables:
-!! -----------------
-!! Defined below.  "target" indicates field associated with the target grid.
-!! "input" indicates field associated with the input grid.
-!!
+!! Public variables are defined below.  "target" indicates field
+!! associated with the target grid. "input" indicates field associated
+!! with the input grid.
 
  module surface
 
@@ -117,6 +111,10 @@
  public :: surface_driver
 
  contains
+
+!------------------------------------------------------------------
+!> @brief  Driver routine to process surface/nst data
+!------------------------------------------------------------------
 
  subroutine surface_driver(localpet)
 

@@ -2,23 +2,13 @@
 !! @brief Read input data
 !! @author gayno NCEP/EMC
 !!
-!! Abstract: Read atmospheric, surface and nst data on the input grid.
-!!    Supported formats include fv3 tiled 'restart' files, fv3 tiled 
-!!    'history' files, fv3 gaussian history files, spectral gfs
-!!    gaussian nemsio files, and spectral gfs sigio/sfcio files.
+!! Read atmospheric, surface and nst data on the input grid.
+!! Supported formats include fv3 tiled 'restart' files, fv3 tiled 
+!! 'history' files, fv3 gaussian history files, spectral gfs
+!! gaussian nemsio files, and spectral gfs sigio/sfcio files.
 !!
-!! Public Subroutines:
-!! -----------------
-!! - read_input_atm_data -        Driver routine to read atmospheric data
-!! - cleanup_input_atm_data -     Free up memory associated with atm data
-!! - read_input_sfc_data -        Driver routine to read surface data
-!! - cleanup_input_sfc_data -     Free up memory associated with sfc data
-!! - read_input_nst_data -        Driver routine to read nst data
-!! - cleanup_input_nst_data -     Free up memory associated with nst data
-!!
-!! Public variables:
-!! -----------------
-!! Defined below.  "input" indicates field associated with the input grid.
+!! Public variables are defined below: "input" indicates field
+!! associated with the input grid.
 !!
 !--------------------------------------------------------------------------
 
@@ -53,7 +43,7 @@
                                     num_tiles_input_grid, &
                                     latitude_input_grid, &
                                     longitude_input_grid, &
-                                    inv_file!, the_file_hrrr
+                                    inv_file
 
  implicit none
 
@@ -145,7 +135,8 @@
  contains
 
 !---------------------------------------------------------------------------
-! Read input grid atmospheric data driver
+!> @brief
+!! Read input grid atmospheric data driver
 !---------------------------------------------------------------------------
 
  subroutine read_input_atm_data(localpet)
@@ -215,7 +206,8 @@
  end subroutine read_input_atm_data
 
 !---------------------------------------------------------------------------
-! Read input grid nst data driver
+!> @brief
+!! Driver to read input grid nst data.
 !---------------------------------------------------------------------------
 
  subroutine read_input_nst_data(localpet)
@@ -377,7 +369,8 @@
  end subroutine read_input_nst_data
 
 !---------------------------------------------------------------------------
-! Read input grid surface data driver.
+!> @brief
+!! Driver to read input grid surface data.
 !---------------------------------------------------------------------------
 
  subroutine read_input_sfc_data(localpet)
@@ -6429,6 +6422,11 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
 
  end subroutine read_grib_soil
 
+!---------------------------------------------------------------------------
+!> @brief
+!! Free up memory associated with atm data
+!---------------------------------------------------------------------------
+
  subroutine cleanup_input_atm_data
 
  implicit none
@@ -6450,6 +6448,11 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
  deallocate(tracers_input_grid)
 
  end subroutine cleanup_input_atm_data
+
+!---------------------------------------------------------------------------
+!> @brief
+!! Free up memory associated with nst data
+!---------------------------------------------------------------------------
 
  subroutine cleanup_input_nst_data
 
@@ -6480,6 +6483,11 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
  call ESMF_FieldDestroy(zm_input_grid, rc=rc)
 
  end subroutine cleanup_input_nst_data
+
+!---------------------------------------------------------------------
+!> @brief
+!! Free up memory associated with sfc data
+!---------------------------------------------------------------------
 
  subroutine cleanup_input_sfc_data
 

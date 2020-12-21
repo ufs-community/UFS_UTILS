@@ -3,21 +3,13 @@
 !!
 !! @author gayno NCEP/EMC
 !!
-!! Abstract: Write out target grid data into appropriate files for
-!!    the forecast model.
+!! Write out target grid data into appropriate files for
+!! the forecast model.
 !!
-!! Main Subroutines:
-!! -------------------
-!! - write_fv3_atm_header_netcdf -    Writes atmospheric header file,
-!!                                    netcdf format.
-!! - write_fv3_atm_bndy_data_netcdf - Writes atmospheric fields along the
-!!                                    lateral boundary.  For regional grids.
-!!                                    netcdf format.
-!! - write_fv3_atm_data_netcdf -      Writes atmospheric data into a 
-!!                                   'coldstart' file (netcdf)
-!! - write_fv3_sfc_data_netcdf -      Writes surface and nst data into a 
-!!                                   'coldstart' file (netcdf)
 
+!-------------------------------------------------------------------------------
+!> @brief Writes atmospheric header file in netcdf format
+!!
  subroutine write_fv3_atm_header_netcdf(localpet)
 
  use esmf
@@ -86,6 +78,11 @@
 
  end subroutine write_fv3_atm_header_netcdf
 
+!-------------------------------------------------------------------------------
+!> @brief 
+!! Writes atmospheric fields along the lateral boundary.
+!! For regional grids only.  Output in netcdf format.
+!!   
  subroutine write_fv3_atm_bndy_data_netcdf(localpet)
 
 !---------------------------------------------------------------------------
@@ -1185,12 +1182,11 @@
  end subroutine write_fv3_atm_bndy_data_netcdf
 
 !---------------------------------------------------------------------------
-! Write atmospheric coldstart files.
-!
-! Routine write tiled files in parallel.  Tile 1 is written by
-! localpet 0; tile 2 by localpet 1, etc.  The number of pets
-! must be equal to or greater than the number of tiled files.
-!---------------------------------------------------------------------------
+!> @brief Write atmospheric coldstart files (netcdf format).
+!!
+!! Routine writes tiled files in parallel.  Tile 1 is written by
+!! localpet 0; tile 2 by localpet 1, etc.  The number of pets
+!! must be equal to or greater than the number of tiled files.
 
  subroutine write_fv3_atm_data_netcdf(localpet)
 
@@ -1802,8 +1798,9 @@
  end subroutine write_fv3_atm_data_netcdf
 
 !-------------------------------------------------------------------------------
-!-------------------------------------------------------------------------------
-
+!> @brief 
+!! Writes surface and nst data into a 'coldstart' file (netcdf).
+!! 
  subroutine write_fv3_sfc_data_netcdf(localpet)
 
  use esmf

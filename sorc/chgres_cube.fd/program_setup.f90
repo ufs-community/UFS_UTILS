@@ -3,15 +3,10 @@
 !!
 !! @author gayno NCEP/EMC
 !!
-!! Abstract: Set up program execution
-!!
-!! Public Subroutines:
-!! -------------------
-!! - read_setup_namelist -          Reads configuration namelist
-!! - calc_soil_params_driver -      Computes soil parameters
+!! Set up program execution
 !!
 !! Public variables:
-!! -----------------
+!!
 !! - atm_files_input_grid -         File names of input atmospheric data.
 !!                                  Not used for "grib2" or "restart"
 !!                                  input types.
@@ -240,6 +235,10 @@
  public :: get_var_cond
 
  contains
+
+!--------------------------------------------------------------------------
+!> @brief Reads configuration namelist.
+!--------------------------------------------------------------------------
 
  subroutine read_setup_namelist
  
@@ -514,6 +513,10 @@ subroutine get_var_cond(var_name,this_miss_var_method,this_miss_var_value, &
   endif
   
 end subroutine get_var_cond
+
+!------------------------------------------------------------------------------
+!> @brief Compute soil parameters.
+!------------------------------------------------------------------------------
 
  subroutine calc_soil_params_driver(localpet)
 

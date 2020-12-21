@@ -3,19 +3,12 @@
 !!
 !! @author gayno NCEP/EMC
 !!
-!! Abstract: Read pre-computed static/climatological data on the fv3 
-!!    target grid.  Time interpolate if necessary (for example a
-!!    monthly climo field).
-!!
-!! Public Subroutines:
-!! -------------------
-!! - get_static_fields -       Driver routine to read/time interpolate
-!!                             static/climo fields on the fv3 target
-!!                             grid.
-!! - cleanup_static_fields -   Free up memory for fields in this module.
+!! Read pre-computed static/climatological data on the fv3 
+!! target grid.  Time interpolate if necessary (for example a
+!! monthly climo field).
 !!
 !! Public variables:
-!! -----------------
+!!
 !! - alnsf_target_grid -                near ir black sky albedo
 !! - alnwf_target_grid -                near ir white sky albedo
 !! - alvsf_target_grid -                visible black sky albedo
@@ -63,7 +56,8 @@
  contains
 
 !------------------------------------------------------------------------------
-! Read static fields on the target grid.
+!> @brief Driver routine to read/time interpolate static/climo fields
+!! on the fv3 target grid.
 !------------------------------------------------------------------------------
 
  subroutine get_static_fields(localpet)
@@ -501,6 +495,10 @@
 
  end subroutine read_static_file
  
+!--------------------------------------------------------------------
+!> @brief Free up memory for fields in this module.
+!--------------------------------------------------------------------
+
  subroutine cleanup_static_fields
 
  implicit none

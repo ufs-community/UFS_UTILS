@@ -1,7 +1,7 @@
 !> @file
 !! @brief Process Thompson climatological MP data
 !!
-!! Abstract: Module to read the Thompson climatological MP data file
+!! Module to read the Thompson climatological MP data file
 !! and set up the associated esmf field and grid objects.
 !!
 
@@ -32,10 +32,8 @@
  contains
 
 !-----------------------------------------------------------------------------------
-! Read Thompson climatological MP data file and time interpolate data to current
-! cycle time. 
-!-----------------------------------------------------------------------------------
-
+!> @brief Read Thompson climatological MP data file and time interpolate data to
+!! to current cycle time. 
  subroutine read_thomp_mp_climo_data
 
  implicit none
@@ -312,8 +310,7 @@
  end subroutine read_thomp_mp_climo_data
 
 !-----------------------------------------------------------------------------------
-! Cleanup routine
-!-----------------------------------------------------------------------------------
+!> @brief Free up memory associated with this module.
 
  subroutine cleanup_thomp_mp_climo_input_data
 

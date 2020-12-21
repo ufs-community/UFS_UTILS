@@ -3,18 +3,10 @@
 !!
 !! @author gayno NCEP/EMC
 !!
-!! Abstract: Specify input and target model grids via ESMF grid objects.
-!!
-!! Public Subroutines:
-!! -------------------
-!! - define_target_grid -              Setup the esmf grid object for the
-!!                                     target grid.
-!! - define_input_grid -               Setup the esmf grid object for the
-!!                                     input grid.
-!! - cleanup_input_target_grid_data -  Deallocate all esmf grid objects.
+!! Specify input and target model grids via ESMF grid objects.
 !!
 !! Public variables:
-!! -----------------
+!!
 !! - i/j_input -                       i/j dimension of each cube of the
 !!                                     input grid.
 !! - ip1/jp1_input -                   i/j dimension plus 1 of input grid.
@@ -67,7 +59,6 @@
  character(len=5), allocatable, public  :: tiles_target_grid(:)
  character(len=10), public              :: inv_file = "chgres.inv"
  character(len=50), public              :: input_grid_type = "latlon"
- !character(len=100), public             :: the_file_hrrr = "./HRRR_adj_rad.grib2"
 
  ! Made lsoil_target non-parameter to allow for RAP land surface initiation
  integer, public                        :: lsoil_target = 4 ! # soil layers
@@ -106,12 +97,13 @@
  contains
 
 !--------------------------------------------------------------------------
-! Set up the esmf grid object for the input grid.  If the input
-! source is tiled fv3 restart or history data, the grid is created
-! by reading the mosaic and grid files.  If the input source is
-! fv3 global gaussian nemsio, spectral gfs global gaussian nemsio, or
-! spectral gfs global gaussian sigio/sfcio, the grid is setup by  
-! computing lat/lons using the sp library.
+!> @brief Setup the esmf grid object for the input grid.
+!!
+!! If the input source is tiled fv3 restart or history data, the grid is 
+!! created by reading the mosaic and grid files.  If the input source is
+!! fv3 global gaussian nemsio, spectral gfs global gaussian nemsio, or
+!! spectral gfs global gaussian sigio/sfcio, the grid is setup by  
+!! computing lat/lons using the sp library.
 !--------------------------------------------------------------------------
 
  subroutine define_input_grid(localpet, npets)
@@ -1083,6 +1075,11 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
  end subroutine define_input_grid_grib2
  
+!------------------------------------------------------------------------
+!> @brief
+!! Setup the esmf grid object for the target grid.
+!------------------------------------------------------------------------
+
  subroutine define_target_grid(localpet, npets)
 
  use netcdf
@@ -1644,6 +1641,10 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  deallocate (dummy)
 
  end subroutine get_model_mask_terrain
+
+!----------------------------------------------------------------------
+!> @brief Deallocate all esmf grid objects.
+!----------------------------------------------------------------------
 
  subroutine cleanup_input_target_grid_data
 
