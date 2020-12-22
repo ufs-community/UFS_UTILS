@@ -12,7 +12,6 @@
 !! Public variables are defined below.  "target" indicates field
 !! associated with the target grid. "input" indicates field associated
 !! with the input grid.
-
  module surface
 
  use esmf
@@ -112,10 +111,10 @@
 
  contains
 
-!------------------------------------------------------------------
 !> @brief  Driver routine to process surface/nst data
-!------------------------------------------------------------------
-
+!!
+!! @author gayno NCEP/EMC
+!!
  subroutine surface_driver(localpet)
 
  use input_data, only                : cleanup_input_sfc_data, &

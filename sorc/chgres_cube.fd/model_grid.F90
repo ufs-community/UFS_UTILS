@@ -5,48 +5,6 @@
 !!
 !! Specify input and target model grids via ESMF grid objects.
 !!
-!! Public variables:
-!!
-!! - i/j_input -                       i/j dimension of each cube of the
-!!                                     input grid.
-!! - ip1/jp1_input -                   i/j dimension plus 1 of input grid.
-!! - i/j_target -                      i/j dimension of each cube or of
-!!                                     a nest, target grid.
-!! - ip1/jp1_target -                  i/j dimension plus 1 of input grid.
-!! - input_grid -                      input grid esmf grid object
-!! - landmask_target_grid -            land mask target grid - '1' land;
-!!                                     '0' non-land
-!! - latitude_input_grid -             latitude of grid center, input grid
-!! - latitude_target_grid -            latitude of grid center, target grid
-!! - latitude_s_input_grid -           latitude of 'south' edge of grid
-!!                                     box, input grid
-!! - latitude_s_target_grid -          latitude of 'south' edge of grid
-!!                                     box, target grid
-!! - latitude_w_input_grid -           latitude of 'west' edge of grid
-!!                                     box, input grid
-!! - latitude_w_target_grid -          latitude of 'west' edge of grid
-!!                                     box, target grid
-!! - longitude_input_grid -            longitude of grid center, input grid
-!! - longitude_target_grid -           longitude of grid center, target grid
-!! - longitude_s_input_grid -          longitude of 'south' edge of grid
-!!                                     box, input grid
-!! - longitude_s_target_grid -         longitude of 'south' edge of grid
-!!                                     box, target grid
-!! - longitude_w_input_grid -          longitude of 'west' edge of grid
-!!                                     box, input grid
-!! - longitude_w_target_grid -         longitude of 'west' edge of grid
-!!                                     box, target grid
-!! - lsoil_target -                    Number of soil layers, target grid.
-!! - num_tiles_input_grid -            Number of tiles, input grid
-!! - num_tiles_target_grid -           Number of tiles, target grid
-!! - seamask_target_grid -             sea mask target grid - '1' non-land;
-!!                                     '0' land
-!! - target_grid -                     target grid esmf grid object.
-!! - terrain_target_grid -             terrain height target grid
-!! - tiles_target_grid -               Tile names of target grid.
-!!
-!--------------------------------------------------------------------------
-
  module model_grid
 
  use esmf
@@ -57,38 +15,86 @@
  private
 
  character(len=5), allocatable, public  :: tiles_target_grid(:)
+                                           !< Tile names of target grid.
  character(len=10), public              :: inv_file = "chgres.inv"
+                                           !< wgrib2 inventory file
  character(len=50), public              :: input_grid_type = "latlon"
+                                           !< map projection of input grid
 
  ! Made lsoil_target non-parameter to allow for RAP land surface initiation
  integer, public                        :: lsoil_target = 4 ! # soil layers
- 
- integer, public                        :: i_input, j_input
- integer, public                        :: ip1_input, jp1_input
- integer, public                        :: i_target, j_target
- integer, public                        :: ip1_target, jp1_target
+                                           !< Number of soil layers, target grid.
+ integer, public                        :: i_input
+                                           !< i-dimension of input grid
+                                           !! (or of each global tile)
+ integer, public                        :: j_input
+                                           !< j-dimension of input grid
+                                           !! (or of each global tile)
+ integer, public                        :: ip1_input
+                                           !< i_input plus 1
+ integer, public                        :: jp1_input
+                                           !< j_input plus 1
+ integer, public                        :: i_target
+                                           !< i dimension of each global tile, 
+                                           !! or of a nest, target grid.
+ integer, public                        :: j_target
+                                           !< j dimension of each global tile,
+                                           !! or of a nest, target grid.
+ integer, public                        :: ip1_target
+                                           !< ip1_target plus 1
+ integer, public                        :: jp1_target
+                                           !< jp1_target plus 1
  integer, public                        :: num_tiles_input_grid
+                                           !< Number of tiles, input grid
  integer, public                        :: num_tiles_target_grid
+                                           !< Number of tiles, target grid
 
  type(esmf_grid),  public               :: input_grid
+                                           !< input grid esmf grid object
  type(esmf_grid),  public               :: target_grid
+                                           !< target grid esmf grid object.
 
  type(esmf_field),  public              :: latitude_input_grid
+                                           !< latitude of grid center, input grid
  type(esmf_field),  public              :: longitude_input_grid
+                                           !< longitude of grid center, input grid
  type(esmf_field),  public              :: latitude_s_input_grid
+                                           !< latitude of 'south' edge of grid
+                                           !! box, input grid
  type(esmf_field),  public              :: longitude_s_input_grid
+                                           !< longitude of 'south' edge of grid
+                                           !! box, input grid
  type(esmf_field),  public              :: latitude_w_input_grid
+                                           !< latitude of 'west' edge of grid
+                                           !! box, input grid
  type(esmf_field),  public              :: longitude_w_input_grid
+                                           !< longitude of 'west' edge of grid
+                                           !! box, input grid
 
  type(esmf_field),  public              :: landmask_target_grid
+                                           !< land mask target grid - '1' land;
+                                           !! '0' non-land
  type(esmf_field),  public              :: latitude_target_grid
+                                           !< latitude of grid center, target grid
  type(esmf_field),  public              :: latitude_s_target_grid
+                                           !< latitude of 'south' edge of grid
+                                           !! box, target grid
  type(esmf_field),  public              :: latitude_w_target_grid
+                                           !< latitude of 'west' edge of grid
+                                           !! box, target grid
  type(esmf_field),  public              :: longitude_target_grid
+                                           !< longitude of grid center, target grid
  type(esmf_field),  public              :: longitude_s_target_grid
+                                           !< longitude of 'south' edge of grid
+                                           !! box, target grid
  type(esmf_field),  public              :: longitude_w_target_grid
+                                           !< longitude of 'west' edge of grid
+                                           !! box, target grid
  type(esmf_field),  public              :: seamask_target_grid
+                                           !< sea mask target grid - '1' non-land;
+                                           !! '0' land
  type(esmf_field),  public              :: terrain_target_grid
+                                           !< terrain height target grid
 
  public :: define_target_grid
  public :: define_input_grid
@@ -96,7 +102,6 @@
 
  contains
 
-!--------------------------------------------------------------------------
 !> @brief Setup the esmf grid object for the input grid.
 !!
 !! If the input source is tiled fv3 restart or history data, the grid is 
@@ -104,8 +109,7 @@
 !! fv3 global gaussian nemsio, spectral gfs global gaussian nemsio, or
 !! spectral gfs global gaussian sigio/sfcio, the grid is setup by  
 !! computing lat/lons using the sp library.
-!--------------------------------------------------------------------------
-
+!!
  subroutine define_input_grid(localpet, npets)
 
  use program_setup, only       : input_type, external_model
@@ -1075,11 +1079,9 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
  end subroutine define_input_grid_grib2
  
-!------------------------------------------------------------------------
 !> @brief
 !! Setup the esmf grid object for the target grid.
-!------------------------------------------------------------------------
-
+!!
  subroutine define_target_grid(localpet, npets)
 
  use netcdf
@@ -1642,10 +1644,8 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
  end subroutine get_model_mask_terrain
 
-!----------------------------------------------------------------------
 !> @brief Deallocate all esmf grid objects.
-!----------------------------------------------------------------------
-
+!!
  subroutine cleanup_input_target_grid_data
 
  implicit none

@@ -151,8 +151,6 @@
 !!                                  static data. 
 !!                                  Default: False
 !!
-!--------------------------------------------------------------------------
-
  module program_setup
 
  implicit none
@@ -236,10 +234,10 @@
 
  contains
 
-!--------------------------------------------------------------------------
 !> @brief Reads configuration namelist.
-!--------------------------------------------------------------------------
-
+!!
+!! @author gayno NCEP/EMC
+!!
  subroutine read_setup_namelist
  
  implicit none
@@ -514,10 +512,10 @@ subroutine get_var_cond(var_name,this_miss_var_method,this_miss_var_value, &
   
 end subroutine get_var_cond
 
-!------------------------------------------------------------------------------
 !> @brief Compute soil parameters.
-!------------------------------------------------------------------------------
-
+!!
+!! @author gayno NCEP/EMC
+!!
  subroutine calc_soil_params_driver(localpet)
 
  implicit none

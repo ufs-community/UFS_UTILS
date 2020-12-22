@@ -26,7 +26,6 @@
 !! - veg_greenness_target_grid -        vegetation greenness fraction
 !! - veg_type_target_grid -             vegetation type
 !!
-
  module static_data
 
  use esmf
@@ -55,11 +54,11 @@
 
  contains
 
-!------------------------------------------------------------------------------
 !> @brief Driver routine to read/time interpolate static/climo fields
 !! on the fv3 target grid.
-!------------------------------------------------------------------------------
-
+!!
+!! @author gayno NCEP/EMC
+!!
  subroutine get_static_fields(localpet)
 
  use model_grid, only               : target_grid, &
@@ -357,10 +356,10 @@
 
  end subroutine get_static_fields
 
-!------------------------------------------------------------------------------
-! Read data file.
-!------------------------------------------------------------------------------
-
+!> @brief Read static climatological data file
+!!
+!! @author gayno NCEP/EMC
+!!
  subroutine read_static_file(field, i_target, j_target, tile, &
                              data_one_tile, max_data_one_tile, &
                              min_data_one_tile)
@@ -495,10 +494,10 @@
 
  end subroutine read_static_file
  
-!--------------------------------------------------------------------
 !> @brief Free up memory for fields in this module.
-!--------------------------------------------------------------------
-
+!!
+!! @author gayno NCEP/EMC
+!!
  subroutine cleanup_static_fields
 
  implicit none

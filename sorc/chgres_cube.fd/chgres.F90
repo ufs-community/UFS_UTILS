@@ -7,8 +7,6 @@
 !! another FV3 run, the spectral GFS, and a few other models.
 !! Converts atmospheric, surface and nst data.
 !!
-!-------------------------------------------------------------------------
-
  program chgres
 
  use mpi

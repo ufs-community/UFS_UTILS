@@ -15,7 +15,6 @@
 !! on the 'south' edge of the grid box.  "_w" indicate fields on the 
 !! 'west' edge of the grid box.  Otherwise, fields are at the center
 !! of the grid box.
-
  module atmosphere
 
  use esmf
@@ -131,11 +130,9 @@
 
  contains
 
-!-----------------------------------------------------------------------------------
 !> @brief
 !! Driver routine for atmospheric fields.
-!-----------------------------------------------------------------------------------
-
+!!
  subroutine atmosphere_driver(localpet)
 
  use mpi

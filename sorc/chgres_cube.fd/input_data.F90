@@ -10,8 +10,6 @@
 !! Public variables are defined below: "input" indicates field
 !! associated with the input grid.
 !!
-!--------------------------------------------------------------------------
-
  module input_data
 
  use esmf
@@ -134,11 +132,9 @@
  
  contains
 
-!---------------------------------------------------------------------------
 !> @brief
 !! Read input grid atmospheric data driver
-!---------------------------------------------------------------------------
-
+!!
  subroutine read_input_atm_data(localpet)
 
  implicit none
@@ -205,11 +201,9 @@
 
  end subroutine read_input_atm_data
 
-!---------------------------------------------------------------------------
 !> @brief
 !! Driver to read input grid nst data.
-!---------------------------------------------------------------------------
-
+!!
  subroutine read_input_nst_data(localpet)
 
  implicit none
@@ -368,11 +362,9 @@
 
  end subroutine read_input_nst_data
 
-!---------------------------------------------------------------------------
 !> @brief
 !! Driver to read input grid surface data.
-!---------------------------------------------------------------------------
-
+!!
  subroutine read_input_sfc_data(localpet)
 
  implicit none
@@ -6422,11 +6414,9 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
 
  end subroutine read_grib_soil
 
-!---------------------------------------------------------------------------
 !> @brief
 !! Free up memory associated with atm data
-!---------------------------------------------------------------------------
-
+!!
  subroutine cleanup_input_atm_data
 
  implicit none
@@ -6449,11 +6439,9 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
 
  end subroutine cleanup_input_atm_data
 
-!---------------------------------------------------------------------------
 !> @brief
 !! Free up memory associated with nst data
-!---------------------------------------------------------------------------
-
+!!
  subroutine cleanup_input_nst_data
 
  implicit none
@@ -6484,11 +6472,9 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
 
  end subroutine cleanup_input_nst_data
 
-!---------------------------------------------------------------------
 !> @brief
 !! Free up memory associated with sfc data
-!---------------------------------------------------------------------
-
+!!
  subroutine cleanup_input_sfc_data
 
  implicit none
