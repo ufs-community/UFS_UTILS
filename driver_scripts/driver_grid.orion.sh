@@ -68,7 +68,9 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=uniform           # 'uniform', 'stretch', 'nest', 
+export VEG_FILE=/work/noaa/da/ggayno/save/ufs_utils.git/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.05.nc
+
+export gtype=regional_esg           # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
 if [ $gtype = uniform ]; then
   export res=96

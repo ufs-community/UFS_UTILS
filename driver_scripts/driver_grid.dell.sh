@@ -70,6 +70,8 @@ module list
 
 export gtype=uniform           # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
+export VEG_FILE=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.05.nc
+
 if [ $gtype = uniform ]; then
   export res=96
   export add_lake=false        # Add lake frac and depth to orography data.
