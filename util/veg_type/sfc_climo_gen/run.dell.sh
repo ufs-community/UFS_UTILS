@@ -26,11 +26,24 @@ export res=768
 
 # where the 'grid', 'mosaic' and 'oro' files reside.
 export FIX_FV3=${BASE_DIR}/fix/fix_fv3_gmted2010/C${res}
-##export FIX_FV3=/gpfs/dell1/stmp/George.Gayno/my_grids/C3379
 
 # uncomment for regional grid
 ##HALO=3
 ##export GRIDTYPE=regional
+
+# use global 0.05-degree viirs data
+export VEG_FILE=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.05.nc
+# use global 0.03-degree viirs data
+##export VEG_FILE=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.03.nc
+# use conus 0.01-degree viirs data (do not use for global fv3 grids).
+##export VEG_FILE=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.conus.0.01.nc
+
+# set working directory and directory where output files will reside.
+
+export WORK_DIR=/gpfs/dell1/stmp/$LOGNAME/work.sfc
+export SAVE_DIR=/gpfs/dell1/stmp/$LOGNAME/sfc.C${res}
+
+# Should not have to touch anything below here.
 
 if [[ $GRIDTYPE = "regional" ]]; then
   HALO=$(( $HALO + 1 ))
@@ -39,8 +52,6 @@ if [[ $GRIDTYPE = "regional" ]]; then
   ln -fs $FIX_FV3/C${res}_oro_data.tile7.halo${HALO}.nc $FIX_FV3/C${res}_oro_data.tile7.nc
 fi
 
-export WORK_DIR=/gpfs/dell1/stmp/$LOGNAME/work.sfc
-export SAVE_DIR=/gpfs/dell1/stmp/$LOGNAME/sfc.C${res}
 export input_sfc_climo_dir=${BASE_DIR}/fix/fix_sfc_climo
 export APRUN_SFC="mpirun -l"
 
