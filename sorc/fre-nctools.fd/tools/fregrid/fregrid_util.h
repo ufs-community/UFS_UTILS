@@ -1,3 +1,4 @@
+/** @file */
 #ifndef FREGRID_UTIL_H_
 #define FREGRID_UTIL_H_
 #include "globals.h"

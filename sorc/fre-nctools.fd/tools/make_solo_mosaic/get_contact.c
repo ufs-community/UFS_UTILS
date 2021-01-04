@@ -1,3 +1,4 @@
+/** @file */
 #include <stdlib.h>
 #include <math.h>
 #include "mosaic_util.h"

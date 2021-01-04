@@ -1,4 +1,5 @@
 set(fortran_src
+    machine.f90
     mtnlm7_oclsm.f
     netcdf_io.F90)
 

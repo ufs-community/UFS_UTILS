@@ -1,3 +1,4 @@
+/** @file */
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 #include <netcdf.h>

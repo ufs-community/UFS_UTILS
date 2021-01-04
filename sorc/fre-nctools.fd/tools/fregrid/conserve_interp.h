@@ -1,3 +1,4 @@
+/** @file */
 #ifndef CONSERVE_INTERP_H_
 #define CONSERVE_INTERP_H_
 #include "globals.h"
