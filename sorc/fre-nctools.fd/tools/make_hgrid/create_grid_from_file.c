@@ -1,7 +1,5 @@
 /** @file
-  @copyright 2011 NOAA Geophysical Fluid Dynamics Lab, Princeton, NJ
-  This program is distributed under the terms of the GNU General Public
-  License. See the file COPYING contained in this directory
+    @brief Create grid from a file.
 */
 #include <stdlib.h>
 #include <stdio.h>

@@ -1,4 +1,6 @@
-/** @file */
+/** @file 
+    @brief Utilities for the fregrid program.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

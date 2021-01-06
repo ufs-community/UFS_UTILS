@@ -1,7 +1,7 @@
 /** @file
   
   This header file provide interface to create different types of horizontal 
-  grid. geographical grid location, cell length, cell area and rotation
+  grid. Geographical grid location, cell length, cell area and rotation
   angle are returned. All the returned data are on supergrid.
 
   @author Zhi.Liang@noaa.gov

@@ -1,4 +1,6 @@
-/** @file */
+/** @file
+    @brief Routines to perform bilinear interpolation.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

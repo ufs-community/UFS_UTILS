@@ -1,4 +1,6 @@
-/** @file */
+/** @file 
+    @brief Function declarations for conservative interpolation module.
+*/
 #ifndef CONSERVE_INTERP_H_
 #define CONSERVE_INTERP_H_
 #include "globals.h"

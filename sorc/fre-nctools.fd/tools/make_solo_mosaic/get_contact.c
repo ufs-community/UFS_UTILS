@@ -1,4 +1,6 @@
-/** @file */
+/** @file
+    @brief Determine contacts between tiles.
+*/
 #include <stdlib.h>
 #include <math.h>
 #include "mosaic_util.h"

@@ -1,4 +1,6 @@
-/** @file */
+/** @file
+    @brief Define global constants and type definitions.
+*/
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 #include <netcdf.h>

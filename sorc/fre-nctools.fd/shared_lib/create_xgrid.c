@@ -1,4 +1,6 @@
-/** @file */
+/** @file
+    @brief Utility routines to create and process exchange grids.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

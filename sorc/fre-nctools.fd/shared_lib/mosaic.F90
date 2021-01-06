@@ -1,5 +1,6 @@
 !> @file
-!! author Zhi.Liang@noaa.gov
+!! @brief Read information from the mosaic file.
+!! @author Zhi.Liang@noaa.gov
 !!
 module mosaic_mod
 

@@ -1,4 +1,6 @@
-/** @file */
+/** @file 
+    @brief Routines to perform conservative interpolation.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
