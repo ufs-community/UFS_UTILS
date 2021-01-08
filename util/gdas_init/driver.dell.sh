@@ -65,8 +65,13 @@ if [ $EXTRACT_DATA == yes ]; then
       ;;
     v16)
       bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v16.data.sh"
-      DEPEND="-w ended(get.data.hires)"
+        -R "affinity[core(1)]" -M $MEM "./get_v16.data2.sh hires"
+      for group in grp1 grp2 grp3 grp4 grp5 grp6 grp7 grp8
+      do
+        bsub -o log.data.enkf.${group} -e log.data.enkf.${group} -q $QUEUE -P $PROJECT_CODE -J get.data.enkf.${group} -W $WALLT \
+          -R "affinity[core(1)]" -M $MEM "./get_v16.data2.sh ${group}"
+      done
+      DEPEND="-w ended(get.data.*)"
  esac
 
 else
