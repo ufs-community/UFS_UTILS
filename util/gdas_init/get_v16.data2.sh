@@ -48,7 +48,7 @@ if [ $bundle = 'hires' ]; then
 #----------------------------------------------------------------------
 
   directory=/NCEPDEV/emc-meso/2year/Eric.Rogers/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-  file=com_gfs_para_gdas.${yy}${mm}${dd}_${hh}.gdas.tar
+  file=com_gfs_para_gdas.${yy}${mm}${dd}_${hh}.gdas_restart.tar
 
   htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias
   rc=$?
@@ -60,6 +60,9 @@ if [ $bundle = 'hires' ]; then
   rc=$?
   [ $rc != 0 ] && exit $rc
   htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias_pc
+  rc=$?
+  [ $rc != 0 ] && exit $rc
+  htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.radstat
   rc=$?
   [ $rc != 0 ] && exit $rc
 

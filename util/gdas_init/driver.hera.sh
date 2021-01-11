@@ -69,8 +69,10 @@ if [ $EXTRACT_DATA == yes ]; then
       ;;
     v16)
       DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_hires \
-       -o log.data.hires -e log.data.hires ./get_v16.data.sh)
-      DEPEND="-d afterok:$DATAH"
+       -o log.data.hires -e log.data.hires ./get_v16.data2.sh hires)
+      DATA1=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp1 \
+       -o log.data.grp1 -e log.data.grp1 ./get_v16.data2.sh grp1)
+      DEPEND="-d afterok:$DATAH:$DATA1"
       ;;
  esac
 
