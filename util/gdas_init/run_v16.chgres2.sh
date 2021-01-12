@@ -1,0 +1,104 @@
+#!/bin/bash
+
+copy_data()
+{
+
+mkdir -p $SAVEDIR
+cp gfs_ctrl.nc $SAVEDIR
+
+for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
+do
+  cp out.atm.${tile}.nc  ${SAVEDIR}/gfs_data.${tile}.nc
+  cp out.sfc.${tile}.nc  ${SAVEDIR}/sfc_data.${tile}.nc 
+done
+}
+
+#---------------------------------------------------------------------------
+# Run chgres using gfs v16 data as input.
+#---------------------------------------------------------------------------
+
+set -x
+
+MEMBER=$1
+
+FIX_FV3=$UFS_DIR/fix
+FIX_ORO=${FIX_FV3}/fix_fv3_gmted2010
+FIX_AM=${FIX_FV3}/fix_am
+
+date10=`$NDATE -6 $yy$mm$dd$hh`
+yy_d=$(echo $date10 | cut -c1-4)
+mm_d=$(echo $date10 | cut -c5-6)
+dd_d=$(echo $date10 | cut -c7-8)
+hh_d=$(echo $date10 | cut -c9-10)
+
+WORKDIR=$OUTDIR/work.$MEMBER
+
+if [ ${MEMBER} == 'hires' ]; then
+  CTAR=${CRES_HIRES}
+  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}/atmos"
+  ATMFILE="gdas.t${hh}z.atmanl.nc"
+  SFCFILE="gdas.t${hh}z.sfcanl.nc"
+else  
+  CTAR=${CRES_ENKF}
+  INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/atmos/mem${MEMBER}"
+  ATMFILE="gdas.t${hh_d}z.atmf006.nc"
+  SFCFILE="gdas.t${hh_d}z.sfcf006.nc"
+fi
+
+rm -fr $WORKDIR
+mkdir -p $WORKDIR
+cd $WORKDIR
+
+cat << EOF > fort.41
+
+&config
+ fix_dir_target_grid="${FIX_ORO}/${CTAR}/fix_sfc"
+ mosaic_file_target_grid="${FIX_ORO}/${CTAR}/${CTAR}_mosaic.nc"
+ orog_dir_target_grid="${FIX_ORO}/${CTAR}"
+ orog_files_target_grid="${CTAR}_oro_data.tile1.nc","${CTAR}_oro_data.tile2.nc","${CTAR}_oro_data.tile3.nc","${CTAR}_oro_data.tile4.nc","${CTAR}_oro_data.tile5.nc","${CTAR}_oro_data.tile6.nc"
+ data_dir_input_grid="${INPUT_DATA_DIR}"
+ atm_files_input_grid="${ATMFILE}"
+ sfc_files_input_grid="${SFCFILE}"
+ vcoord_file_target_grid="${FIX_AM}/global_hyblev.l${LEVS}.txt"
+ cycle_mon=$mm
+ cycle_day=$dd
+ cycle_hour=$hh
+ convert_atm=.true.
+ convert_sfc=.true.
+ convert_nst=.true.
+ input_type="gaussian_netcdf"
+ tracers="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
+ tracers_input="spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"
+/
+EOF
+
+$APRUN $UFS_DIR/exec/chgres_cube
+rc=$?
+
+if [ $rc != 0 ]; then
+  exit $rc
+fi
+
+if [ ${MEMBER} == 'hires' ]; then
+  SAVEDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos/INPUT
+  copy_data
+else  
+  MEMBER=1
+  while [ $MEMBER -le 80 ]; do
+  if [ $MEMBER -lt 10 ]; then
+    MEMBER_CH="00${MEMBER}"
+  else
+    MEMBER_CH="0${MEMBER}"
+  fi
+  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER_CH}/INPUT
+  copy_data
+  MEMBER=$(( $MEMBER + 1 ))
+  done
+fi
+
+rm -fr $WORKDIR
+
+set +x
+echo CHGRES COMPLETED FOR MEMBER $1
+
+exit 0

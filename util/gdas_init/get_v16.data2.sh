@@ -1,9 +1,7 @@
 #!/bin/bash
 
 #----------------------------------------------------------------------
-# Retrieve gfs v15 data from hpss.
-#
-# Data available after 2019061206.
+# Retrieve gfs v16 data from Eric's tarballs.
 #----------------------------------------------------------------------
 
 bundle=$1

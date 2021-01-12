@@ -38,10 +38,10 @@
 #         
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/George.Gayno/gdas.init/input
-EXTRACT_DATA=yes
+EXTRACT_DIR=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/junk/gdas.init/input
+EXTRACT_DATA=no
 
-RUN_CHGRES=no
+RUN_CHGRES=yes
 
 yy=2021
 mm=01
@@ -55,7 +55,7 @@ CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
 
-OUTDIR=/scratch2/NCEPDEV/stmp1/George.Gayno/gdas.init/output
+OUTDIR=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/junk/gdas.init/output
 
 #---------------------------------------------------------
 # Dont touch anything below here.

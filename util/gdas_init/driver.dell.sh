@@ -42,7 +42,7 @@ if [ $EXTRACT_DATA == yes ]; then
         -R "affinity[core(1)]" -M $MEM "./get_v14.data.sh enkf"
       DEPEND="-w ended(get.data.*)"
       ;;
-    v15)
+    v15)   # make this a loop
       bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
         -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh hires"
       bsub -o log.data.grp1 -e log.data.grp1 -q $QUEUE -P $PROJECT_CODE -J get.data.enkf1 -W $WALLT \
@@ -72,6 +72,7 @@ if [ $EXTRACT_DATA == yes ]; then
           -R "affinity[core(1)]" -M $MEM "./get_v16.data2.sh ${group}"
       done
       DEPEND="-w ended(get.data.*)"
+      ;;
  esac
 
 else
@@ -114,21 +115,14 @@ if [ $RUN_CHGRES == yes ]; then
     v16)
       bsub -e log.${MEMBER} -o log.${MEMBER} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER} -W $WALLT \
         -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
-        "./run_v16.chgres.sh ${MEMBER}"
+        "./run_v16.chgres2.sh ${MEMBER}"
      ;;
   esac
 
   NODES="-n 18 -R "span[ptile=9]""
   WALLT="0:15"
-  case $gfs_ver in
-      v16)
-        bsub -e log.enkf -o log.enkf -q $QUEUE -P $PROJECT_CODE -J chgres_enkf -W $WALLT \
-          -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
-          "./run_v16.chgres.sh enkf"
-        ;;
-      *)
   MEMBER=1
-  while [ $MEMBER -le 80 ]; do
+  while [ $MEMBER -le 2 ]; do
     if [ $MEMBER -lt 10 ]; then
       MEMBER_CH="00${MEMBER}"
     else
@@ -152,9 +146,12 @@ if [ $RUN_CHGRES == yes ]; then
           -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
           "./run_v15.chgres.sh ${MEMBER_CH}"
         ;;
+      v16)
+        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W $WALLT \
+          -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
+          "./run_v16.chgres2.sh ${MEMBER_CH}"
+        ;;
     esac
     MEMBER=$(( $MEMBER + 1 ))
   done
-  ;;
-esac
 fi
