@@ -33,11 +33,11 @@ hh_d=$(echo $date10 | cut -c9-10)
 
 WORKDIR=$OUTDIR/work.$MEMBER
 
-if [ ${MEMBER} == 'hires' ]; then
+if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ] ; then
   CTAR=${CRES_HIRES}
-  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}/atmos"
-  ATMFILE="gdas.t${hh}z.atmanl.nc"
-  SFCFILE="gdas.t${hh}z.sfcanl.nc"
+  INPUT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos"
+  ATMFILE="${MEMBER}.t${hh}z.atmanl.nc"
+  SFCFILE="${MEMBER}.t${hh}z.sfcanl.nc"
 else  
   CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/atmos/mem${MEMBER}"
@@ -79,8 +79,8 @@ if [ $rc != 0 ]; then
   exit $rc
 fi
 
-if [ ${MEMBER} == 'hires' ]; then
-  SAVEDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos/INPUT
+if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ]; then
+  SAVEDIR=$OUTDIR/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos/INPUT
   copy_data
 else  
   MEMBER=1

@@ -34,7 +34,10 @@
 #               your experiment.
 # UFS_DIR - Location of your checked out UFS_UTILS
 #           repo.
-# OUTDIR - Directory where data output from chgres is stored.
+# OUTDIR  - Directory where data output from chgres is stored.
+# CDUMP   - When 'gdas', will process gdas and enkf members,
+#           when 'gfs', will process gfs for free forecast
+#           only.
 #         
 #-----------------------------------------------------------
 
@@ -49,6 +52,8 @@ dd=06
 hh=06
 
 LEVS=65
+
+CDUMP=gfs
 
 CRES_HIRES=C192
 CRES_ENKF=C96
@@ -78,5 +83,5 @@ fi
 
 gfs_ver=v16
 
-export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF RUN_CHGRES
+export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF
 export LEVS gfs_ver

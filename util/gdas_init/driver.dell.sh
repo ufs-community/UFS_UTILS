@@ -17,6 +17,10 @@ PROJECT_CODE=GFS-DEV
 
 source config
 
+#----------------------------------------------------------------------
+# Extract data.
+#----------------------------------------------------------------------
+
 if [ $EXTRACT_DATA == yes ]; then
 
   rm -fr $EXTRACT_DIR
@@ -79,11 +83,16 @@ else
 
   DEPEND=' '
 
-fi
+fi # extract data?
+
+#----------------------------------------------------------------------
+# Run chgres.
+#----------------------------------------------------------------------
 
 if [ $RUN_CHGRES == yes ]; then
+
   QUEUE=dev2
-  MEMBER=hires
+  MEMBER=$CDUMP
   WALLT="0:15"
   export OMP_NUM_THREADS=1
   NODES="-n 18 -R "span[ptile=9]""
@@ -94,6 +103,7 @@ if [ $RUN_CHGRES == yes ]; then
     NODES="-n 36 -R "span[ptile=6]""
     WALLT="0:20"
   fi
+
   case $gfs_ver in
     v12 | v13)
       export OMP_STACKSIZE=1024M
@@ -119,16 +129,22 @@ if [ $RUN_CHGRES == yes ]; then
      ;;
   esac
 
-  NODES="-n 18 -R "span[ptile=9]""
-  WALLT="0:15"
-  MEMBER=1
-  while [ $MEMBER -le 2 ]; do
-    if [ $MEMBER -lt 10 ]; then
-      MEMBER_CH="00${MEMBER}"
-    else
-      MEMBER_CH="0${MEMBER}"
-    fi
-    case $gfs_ver in
+#----------------------------------------------------------------------
+# If selected, run chgres for enkf members.
+#----------------------------------------------------------------------
+
+  if [ $CDUMP = "gdas" ]; then
+
+    NODES="-n 18 -R "span[ptile=9]""
+    WALLT="0:15"
+    MEMBER=1
+    while [ $MEMBER -le 2 ]; do
+      if [ $MEMBER -lt 10 ]; then
+        MEMBER_CH="00${MEMBER}"
+      else
+        MEMBER_CH="0${MEMBER}"
+      fi
+      case $gfs_ver in
       v12 | v13)
         export OMP_STACKSIZE=1024M
         export OMP_NUM_THREADS=2
@@ -151,7 +167,10 @@ if [ $RUN_CHGRES == yes ]; then
           -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
           "./run_v16.chgres2.sh ${MEMBER_CH}"
         ;;
-    esac
-    MEMBER=$(( $MEMBER + 1 ))
-  done
-fi
+      esac
+      MEMBER=$(( $MEMBER + 1 ))
+    done
+
+  fi # is this gdas? then process enkf.
+
+fi  # run chgres?
