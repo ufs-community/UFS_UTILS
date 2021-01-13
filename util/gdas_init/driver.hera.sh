@@ -68,11 +68,28 @@ if [ $EXTRACT_DATA == yes ]; then
       DEPEND="-d afterok:$DATAH:$DATA1:$DATA2:$DATA3:$DATA4:$DATA5:$DATA6:$DATA7:$DATA8"
       ;;
     v16)
-      DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_hires \
-       -o log.data.hires -e log.data.hires ./get_v16.data2.sh hires)
-      DATA1=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp1 \
-       -o log.data.grp1 -e log.data.grp1 ./get_v16.data2.sh grp1)
-      DEPEND="-d afterok:$DATAH:$DATA1"
+      DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_${CDUMP} \
+       -o log.data.${CDUMP} -e log.data.${CDUMP} ./get_v16.data2.sh ${CDUMP})
+      DEPEND="-d afterok:$DATAH"
+      if [ "$CDUMP" = "gdas" ] ; then
+        DATA1=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp1 \
+         -o log.data.grp1 -e log.data.grp1 ./get_v16.data2.sh grp1)
+        DATA2=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp2 \
+         -o log.data.grp2 -e log.data.grp2 ./get_v16.data2.sh grp2)
+        DATA3=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp3 \
+         -o log.data.grp3 -e log.data.grp3 ./get_v16.data2.sh grp3)
+        DATA4=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp4 \
+         -o log.data.grp4 -e log.data.grp4 ./get_v16.data2.sh grp4)
+        DATA5=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp5 \
+         -o log.data.grp5 -e log.data.grp5 ./get_v16.data2.sh grp5)
+        DATA6=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp6 \
+         -o log.data.grp6 -e log.data.grp6 ./get_v16.data2.sh grp6)
+        DATA7=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp7 \
+         -o log.data.grp7 -e log.data.grp7 ./get_v16.data2.sh grp7)
+        DATA8=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp8 \
+         -o log.data.grp8 -e log.data.grp8 ./get_v16.data2.sh grp8)
+        DEPEND="-d afterok:$DATAH:$DATA1:$DATA2:$DATA3:$DATA4:$DATA5:$DATA6:$DATA7:$DATA8"
+      fi
       ;;
  esac
 
@@ -85,7 +102,7 @@ fi
 if [ $RUN_CHGRES == yes ]; then
 
   export APRUN=srun
-  MEMBER=hires
+  MEMBER=$CDUMP
   NODES=3
   WALLT="0:15:00"
   export OMP_NUM_THREADS=1
@@ -113,17 +130,13 @@ if [ $RUN_CHGRES == yes ]; then
       ;;
     v16)
       sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER} \
-      -o log.${MEMBER} -e log.${MEMBER} ${DEPEND} run_v16.chgres.sh ${MEMBER}
+      -o log.${MEMBER} -e log.${MEMBER} ${DEPEND} run_v16.chgres2.sh ${MEMBER}
       ;;
   esac
 
-  WALLT="0:15:00"
-  case $gfs_ver in
-     v16)
-        sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_enkf \
-        -o log.enkf -e log.enkf ${DEPEND} run_v16.chgres.sh enkf
-       ;;
-     *)   
+  if [ "$CDUMP" = "gdas" ]; then
+
+    WALLT="0:15:00"
         MEMBER=1
         while [ $MEMBER -le 80 ]; do
           if [ $MEMBER -lt 10 ]; then
@@ -147,10 +160,14 @@ if [ $RUN_CHGRES == yes ]; then
               sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
               -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v15.chgres.sh ${MEMBER_CH}
             ;;
+            v16)
+              sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
+              -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v16.chgres2.sh ${MEMBER_CH}
+            ;;
           esac
           MEMBER=$(( $MEMBER + 1 ))
         done
-       ;;
-  esac
+
+  fi
 
 fi
