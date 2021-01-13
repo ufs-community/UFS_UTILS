@@ -23,10 +23,15 @@ hh_m6=$(echo $date10_m6 | cut -c9-10)
 # the previous cycle.  
 #----------------------------------------------------------------------
 
-if [ $bundle = 'hires' ]; then
+if [ "$bundle" = "gdas" ] || [ "$bundle" = "gfs" ]; then
 
-  directory=/NCEPDEV/emc-meso/2year/Eric.Rogers/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-  file=com_gfs_para_gdas.${yy}${mm}${dd}_${hh}.gdas_nc.tar
+  if [ "$bundle" = "gdas" ] ; then
+    directory=/NCEPDEV/emc-meso/2year/Eric.Rogers/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
+    file=com_gfs_para_gdas.${yy}${mm}${dd}_${hh}.gdas_nc.tar
+  else
+    directory=/NCEPDEV/emc-meso/2year/Eric.Rogers/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
+    file=com_gfs_para_gfs.${yy}${mm}${dd}_${hh}.gfs_nca.tar
+  fi
 
   rm -f ./list.hires*
   touch ./list.hires3
@@ -41,30 +46,34 @@ if [ $bundle = 'hires' ]; then
   rc=$?
   [ $rc != 0 ] && exit $rc
 
+  rm -f ./list.hires*
+
 #----------------------------------------------------------------------
 # Get the 'abias' files from current cycle
 #----------------------------------------------------------------------
 
-  directory=/NCEPDEV/emc-meso/2year/Eric.Rogers/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-  file=com_gfs_para_gdas.${yy}${mm}${dd}_${hh}.gdas_restart.tar
+  if [ "$bundle" = "gdas" ] ; then
 
-  htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias
-  rc=$?
-  [ $rc != 0 ] && exit $rc
-  htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias_air
-  rc=$?
-  [ $rc != 0 ] && exit $rc
-  htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias_int
-  rc=$?
-  [ $rc != 0 ] && exit $rc
-  htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias_pc
-  rc=$?
-  [ $rc != 0 ] && exit $rc
-  htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.radstat
-  rc=$?
-  [ $rc != 0 ] && exit $rc
+    directory=/NCEPDEV/emc-meso/2year/Eric.Rogers/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
+    file=com_gfs_para_gdas.${yy}${mm}${dd}_${hh}.gdas_restart.tar
 
-  rm -f ./list.hires*
+    htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias
+    rc=$?
+    [ $rc != 0 ] && exit $rc
+    htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias_air
+    rc=$?
+    [ $rc != 0 ] && exit $rc
+    htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias_int
+    rc=$?
+    [ $rc != 0 ] && exit $rc
+    htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias_pc
+    rc=$?
+    [ $rc != 0 ] && exit $rc
+    htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.radstat
+    rc=$?
+    [ $rc != 0 ] && exit $rc
+
+  fi
 
 #----------------------------------------------------------------------
 # Get the enkf tiled restart files for all members.

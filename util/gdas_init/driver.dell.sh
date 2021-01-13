@@ -21,7 +21,7 @@ source config
 # Extract data.
 #----------------------------------------------------------------------
 
-if [ $EXTRACT_DATA == yes ]; then
+if [ "$EXTRACT_DATA" = "yes" ]; then
 
   rm -fr $EXTRACT_DIR
   mkdir -p $EXTRACT_DIR
@@ -68,13 +68,15 @@ if [ $EXTRACT_DATA == yes ]; then
       DEPEND="-w ended(get.data.*)"
       ;;
     v16)
-      bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v16.data2.sh hires"
-      for group in grp1 grp2 grp3 grp4 grp5 grp6 grp7 grp8
-      do
-        bsub -o log.data.enkf.${group} -e log.data.enkf.${group} -q $QUEUE -P $PROJECT_CODE -J get.data.enkf.${group} -W $WALLT \
-          -R "affinity[core(1)]" -M $MEM "./get_v16.data2.sh ${group}"
-      done
+      bsub -o log.data.${CDUMP} -e log.data.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J get.data.${CDUMP} -W $WALLT \
+        -R "affinity[core(1)]" -M $MEM "./get_v16.data2.sh ${CDUMP}"
+      if [ "$CDUMP" = "gdas" ] ; then
+        for group in grp1 grp2 grp3 grp4 grp5 grp6 grp7 grp8
+        do
+          bsub -o log.data.enkf.${group} -e log.data.enkf.${group} -q $QUEUE -P $PROJECT_CODE -J get.data.enkf.${group} -W $WALLT \
+            -R "affinity[core(1)]" -M $MEM "./get_v16.data2.sh ${group}"
+        done
+      fi
       DEPEND="-w ended(get.data.*)"
       ;;
  esac
@@ -89,7 +91,7 @@ fi # extract data?
 # Run chgres.
 #----------------------------------------------------------------------
 
-if [ $RUN_CHGRES == yes ]; then
+if [ "$RUN_CHGRES" = "yes" ]; then
 
   QUEUE=dev2
   MEMBER=$CDUMP
@@ -97,9 +99,9 @@ if [ $RUN_CHGRES == yes ]; then
   export OMP_NUM_THREADS=1
   NODES="-n 18 -R "span[ptile=9]""
   export APRUN="mpirun"
-  if [ $CRES_HIRES == 'C768' ] ; then
+  if [ "$CRES_HIRES" = "C768" ] ; then
     NODES="-n 24 -R "span[ptile=6]""
-  elif [ $CRES_HIRES == 'C1152' ] ; then
+  elif [ "$CRES_HIRES" = "C1152" ] ; then
     NODES="-n 36 -R "span[ptile=6]""
     WALLT="0:20"
   fi
@@ -133,12 +135,12 @@ if [ $RUN_CHGRES == yes ]; then
 # If selected, run chgres for enkf members.
 #----------------------------------------------------------------------
 
-  if [ $CDUMP = "gdas" ]; then
+  if [ "$CDUMP" = "gdas" ]; then
 
     NODES="-n 18 -R "span[ptile=9]""
     WALLT="0:15"
     MEMBER=1
-    while [ $MEMBER -le 2 ]; do
+    while [ $MEMBER -le 80 ]; do
       if [ $MEMBER -lt 10 ]; then
         MEMBER_CH="00${MEMBER}"
       else
