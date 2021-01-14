@@ -64,9 +64,16 @@ if [ $EXTRACT_DATA == yes ]; then
       DEPEND="-w ended(get.data.*)"
       ;;
     v16)
-      bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
-        -R "rusage[mem=$MEM]" "./get_v16.data.sh"
-      DEPEND="-w ended(get.data.hires)"
+      bsub -o log.data.${CDUMP} -e log.data.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J get.data.${CDUMP} -W $WALLT \
+        -R "rusage[mem=$MEM]" "./get_v16.data2.sh ${CDUMP}"
+      if [ "$CDUMP" = "gdas" ] ; then
+        for group in grp1 grp2 grp3 grp4 grp5 grp6 grp7 grp8
+        do
+          bsub -o log.data.${group} -e log.data.${group} -q $QUEUE -P $PROJECT_CODE -J get.data.${group} -W $WALLT \
+            -R "rusage[mem=$MEM]" "./get_v16.data2.sh ${group}"
+        done
+      fi
+      DEPEND="-w ended(get.data.*)"
       ;;
  esac
 
@@ -79,9 +86,9 @@ fi
 if [ $RUN_CHGRES == yes ]; then
   MEM=2000
   QUEUE=dev
-  MEMBER=hires
+  MEMBER=$CDUMP
   WALLT="0:15"
-  NUM_NODES=1
+  NUM_NODES=2
   case $gfs_ver in
     v12 | v13)
       export OMP_NUM_THREADS=2
@@ -91,7 +98,7 @@ if [ $RUN_CHGRES == yes ]; then
       export OMP_NUM_THREADS=1
       ;;
   esac
-  export APRUN="aprun -j 1 -n 12 -N 12 -d ${OMP_NUM_THREADS} -cc depth"
+  export APRUN="aprun -j 1 -n 24 -N 12 -d ${OMP_NUM_THREADS} -cc depth"
   if [ $CRES_HIRES == 'C768' ] ; then
     WALLT="0:20"
     NUM_NODES=3
@@ -116,27 +123,23 @@ if [ $RUN_CHGRES == yes ]; then
       ;;
     v16)
       bsub -e log.${MEMBER} -o log.${MEMBER} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER} -M $MEM -W $WALLT \
-         -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres.sh ${MEMBER}"
+         -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres2.sh ${MEMBER}"
       ;;
   esac
 
-  WALLT="0:15"
-  NUM_NODES=1
-  export APRUN="aprun -j 1 -n 12 -N 12 -d ${OMP_NUM_THREADS} -cc depth"
+  if [ "$CDUMP" = 'gdas' ]; then
+
+    WALLT="0:15"
+    NUM_NODES=1
+    export APRUN="aprun -j 1 -n 12 -N 12 -d ${OMP_NUM_THREADS} -cc depth"
   
-  case $gfs_ver in
-    v16)
-      bsub -e log.enkf -o log.enkf -q $QUEUE -P $PROJECT_CODE -J chgres_enkf -M $MEM -W $WALLT \
-         -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres.sh enkf"
-      ;;
-    *)
-      MEMBER=1
-      while [ $MEMBER -le 80 ]; do
-        if [ $MEMBER -lt 10 ]; then
-          MEMBER_CH="00${MEMBER}"
-        else
-          MEMBER_CH="0${MEMBER}"
-        fi
+    MEMBER=1
+    while [ $MEMBER -le 80 ]; do
+      if [ $MEMBER -lt 10 ]; then
+        MEMBER_CH="00${MEMBER}"
+      else
+        MEMBER_CH="0${MEMBER}"
+      fi
       case $gfs_ver in
       v12 | v13)
         bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W $WALLT \
@@ -150,9 +153,14 @@ if [ $RUN_CHGRES == yes ]; then
         bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W $WALLT \
           -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v15.chgres.sh ${MEMBER_CH}"
       ;;
+      v16)
+        bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W $WALLT \
+          -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres2.sh ${MEMBER_CH}"
+      ;;
       esac
       MEMBER=$(( $MEMBER + 1 ))
     done
-    ;;
-  esac
+
+  fi
+
 fi

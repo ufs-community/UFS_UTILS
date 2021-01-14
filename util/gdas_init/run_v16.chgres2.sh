@@ -25,12 +25,6 @@ FIX_FV3=$UFS_DIR/fix
 FIX_ORO=${FIX_FV3}/fix_fv3_gmted2010
 FIX_AM=${FIX_FV3}/fix_am
 
-date10=`$NDATE -6 $yy$mm$dd$hh`
-yy_d=$(echo $date10 | cut -c1-4)
-mm_d=$(echo $date10 | cut -c5-6)
-dd_d=$(echo $date10 | cut -c7-8)
-hh_d=$(echo $date10 | cut -c9-10)
-
 WORKDIR=$OUTDIR/work.$MEMBER
 
 if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ] ; then
@@ -39,6 +33,11 @@ if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ] ; then
   ATMFILE="${MEMBER}.t${hh}z.atmanl.nc"
   SFCFILE="${MEMBER}.t${hh}z.sfcanl.nc"
 else  
+  date10=`$NDATE -6 $yy$mm$dd$hh`
+  yy_d=$(echo $date10 | cut -c1-4)
+  mm_d=$(echo $date10 | cut -c5-6)
+  dd_d=$(echo $date10 | cut -c7-8)
+  hh_d=$(echo $date10 | cut -c9-10)
   CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/atmos/mem${MEMBER}"
   ATMFILE="gdas.t${hh_d}z.atmf006.nc"
@@ -82,18 +81,15 @@ fi
 if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ]; then
   SAVEDIR=$OUTDIR/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos/INPUT
   copy_data
-else  
-  MEMBER=1
-  while [ $MEMBER -le 80 ]; do
-  if [ $MEMBER -lt 10 ]; then
-    MEMBER_CH="00${MEMBER}"
-  else
-    MEMBER_CH="0${MEMBER}"
+  touch $SAVEDIR/${MEMBER}.t${hh}z.loginc.txt
+  if [ ${MEMBER} == 'gdas' ]; then
+    cp ${INPUT_DATA_DIR}/*abias* $SAVEDIR
+    cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR
   fi
-  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER_CH}/INPUT
+else  
+  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}/INPUT
   copy_data
-  MEMBER=$(( $MEMBER + 1 ))
-  done
+  touch $SAVEDIR/enkfgdas.t${hh}z.loginc.txt
 fi
 
 rm -fr $WORKDIR
