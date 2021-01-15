@@ -40,31 +40,23 @@ if [ "$EXTRACT_DATA" = "yes" ]; then
       DEPEND="-w ended(get.data.*)"
       ;;
     v14)
-      bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v14.data.sh hires"
-      bsub -o log.data.enkf -e log.data.enkf -q $QUEUE -P $PROJECT_CODE -J get.data.enkf -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v14.data.sh enkf"
+      bsub -o log.data.${CDUMP} -e log.data.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J get.data.${CDUMP} -W $WALLT \
+        -R "affinity[core(1)]" -M $MEM "./get_v14.data.sh ${CDUMP}"
+      
+      if [ "$CDUMP" = "gdas" ] ; then
+        bsub -o log.data.enkf -e log.data.enkf -q $QUEUE -P $PROJECT_CODE -J get.data.enkf -W $WALLT \
+          -R "affinity[core(1)]" -M $MEM "./get_v14.data.sh enkf"
+      fi
       DEPEND="-w ended(get.data.*)"
       ;;
-    v15)   # make this a loop
+    v15)
       bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
         -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh hires"
-      bsub -o log.data.grp1 -e log.data.grp1 -q $QUEUE -P $PROJECT_CODE -J get.data.enkf1 -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh grp1"
-      bsub -o log.data.grp2 -e log.data.grp2 -q $QUEUE -P $PROJECT_CODE -J get.data.enkf2 -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh grp2"
-      bsub -o log.data.grp3 -e log.data.grp3 -q $QUEUE -P $PROJECT_CODE -J get.data.enkf3 -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh grp3"
-      bsub -o log.data.grp4 -e log.data.grp4 -q $QUEUE -P $PROJECT_CODE -J get.data.enkf4 -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh grp4"
-      bsub -o log.data.grp5 -e log.data.grp5 -q $QUEUE -P $PROJECT_CODE -J get.data.enkf5 -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh grp5"
-      bsub -o log.data.grp6 -e log.data.grp6 -q $QUEUE -P $PROJECT_CODE -J get.data.enkf6 -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh grp6"
-      bsub -o log.data.grp7 -e log.data.grp7 -q $QUEUE -P $PROJECT_CODE -J get.data.enkf7 -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh grp7"
-      bsub -o log.data.grp8 -e log.data.grp8 -q $QUEUE -P $PROJECT_CODE -J get.data.enkf8 -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh grp8"
+        for group in grp1 grp2 grp3 grp4 grp5 grp6 grp7 grp8
+        do
+          bsub -o log.data.enkf.${group} -e log.data.enkf.${group} -q $QUEUE -P $PROJECT_CODE -J get.data.enkf.${group} -W $WALLT \
+            -R "affinity[core(1)]" -M $MEM "./get_v15.data.sh ${group}"
+        done
       DEPEND="-w ended(get.data.*)"
       ;;
     v16)
