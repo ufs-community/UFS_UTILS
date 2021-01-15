@@ -38,10 +38,12 @@ if [ $EXTRACT_DATA == yes ]; then
       DEPEND="-w ended(get.data.*)"
       ;;
     v14)
-      bsub -o log.data.hires -e log.data.hires -q $QUEUE -P $PROJECT_CODE -J get.data.hires -W $WALLT \
-        -R "rusage[mem=$MEM]" "./get_v14.data.sh hires"
-      bsub -o log.data.enkf -e log.data.enkf -q $QUEUE -P $PROJECT_CODE -J get.data.enkf -W $WALLT \
-        -R "rusage[mem=$MEM]" "./get_v14.data.sh enkf"
+      bsub -o log.data.$CDUMP -e log.data.$CDUMP -q $QUEUE -P $PROJECT_CODE -J get.data.$CDUMP -W $WALLT \
+        -R "rusage[mem=$MEM]" "./get_v14.data.sh ${CDUMP}"
+      if [ "$CDUMP" = "gdas" ] ; then
+        bsub -o log.data.enkf -e log.data.enkf -q $QUEUE -P $PROJECT_CODE -J get.data.enkf -W $WALLT \
+          -R "rusage[mem=$MEM]" "./get_v14.data.sh enkf"
+      fi
       DEPEND="-w ended(get.data.*)"
       ;;
     v15)
