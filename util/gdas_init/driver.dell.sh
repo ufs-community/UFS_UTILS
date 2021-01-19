@@ -75,7 +75,7 @@ if [ "$EXTRACT_DATA" = "yes" ]; then
       ;;
  esac
 
-else
+else  # do not extract data.
 
   DEPEND=' '
 

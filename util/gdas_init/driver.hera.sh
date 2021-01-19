@@ -33,11 +33,14 @@ if [ $EXTRACT_DATA == yes ]; then
 
   case $gfs_ver in
     v12 | v13)
-      DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_hires \
-       -o log.data.hires -e log.data.hires ./get_pre-v14.data.sh hires)
-      DATA1=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_enkf \
-       -o log.data.enkf -e log.data.enkf ./get_pre-v14.data.sh enkf)
-      DEPEND="-d afterok:$DATAH:$DATA1"
+      DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_${CDUMP} \
+       -o log.data.${CDUMP} -e log.data.${CDUMP} ./get_pre-v14.data.sh ${CDUMP})
+      DEPEND="-d afterok:$DATAH"
+      if [ "$CDUMP" = "gdas" ] ; then
+        DATA1=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_enkf \
+         -o log.data.enkf -e log.data.enkf ./get_pre-v14.data.sh enkf)
+        DEPEND="-d afterok:$DATAH:$DATA1"
+      fi
       ;;
     v14)
       DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_hires \
@@ -93,11 +96,11 @@ if [ $EXTRACT_DATA == yes ]; then
       ;;
  esac
 
-else
+else  # do not extract data.
 
   DEPEND=' '
 
-fi
+fi  # extract data?
 
 if [ $RUN_CHGRES == yes ]; then
 
@@ -137,36 +140,36 @@ if [ $RUN_CHGRES == yes ]; then
   if [ "$CDUMP" = "gdas" ]; then
 
     WALLT="0:15:00"
-        MEMBER=1
-        while [ $MEMBER -le 80 ]; do
-          if [ $MEMBER -lt 10 ]; then
-            MEMBER_CH="00${MEMBER}"
-          else
-            MEMBER_CH="0${MEMBER}"
-          fi
-          case $gfs_ver in
-            v12 | v13)
+    MEMBER=1
+    while [ $MEMBER -le 80 ]; do
+      if [ $MEMBER -lt 10 ]; then
+        MEMBER_CH="00${MEMBER}"
+      else
+        MEMBER_CH="0${MEMBER}"
+      fi
+      case $gfs_ver in
+          v12 | v13)
               export OMP_NUM_THREADS=2
               export OMP_STACKSIZE=1024M
               sbatch --parsable --ntasks-per-node=12 --nodes=1 --cpus-per-task=$OMP_NUM_THREADS \
                -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
                -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_pre-v14.chgres.sh ${MEMBER_CH}
             ;;
-            v14)
+          v14)
               sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
               -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v14.chgres.sh ${MEMBER_CH}
             ;;
-            v15)
+          v15)
               sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
               -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v15.chgres.sh ${MEMBER_CH}
             ;;
-            v16)
+          v16)
               sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
               -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v16.chgres2.sh ${MEMBER_CH}
             ;;
-          esac
-          MEMBER=$(( $MEMBER + 1 ))
-        done
+      esac
+      MEMBER=$(( $MEMBER + 1 ))
+    done
 
   fi
 
