@@ -81,7 +81,7 @@ fi
 if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ]; then
   SAVEDIR=$OUTDIR/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos/INPUT
   copy_data
-  touch $SAVEDIR/${MEMBER}.t${hh}z.loginc.txt
+  touch $SAVEDIR/../${MEMBER}.t${hh}z.loginc.txt
   if [ ${MEMBER} == 'gdas' ]; then
     cp ${INPUT_DATA_DIR}/*abias* $SAVEDIR
     cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR
@@ -89,7 +89,7 @@ if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ]; then
 else  
   SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}/INPUT
   copy_data
-  touch $SAVEDIR/enkfgdas.t${hh}z.loginc.txt
+  touch $SAVEDIR/../enkfgdas.t${hh}z.loginc.txt
 fi
 
 rm -fr $WORKDIR
