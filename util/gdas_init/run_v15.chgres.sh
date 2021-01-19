@@ -22,7 +22,7 @@ YMDH=${yy}${mm}${dd}.${hh}0000
 
 WORKDIR=$OUTDIR/work.$MEMBER
 
-if [ ${MEMBER} == 'hires' ]; then
+if [ ${MEMBER} == 'gdas' ]; then
   CINP=C768
   CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
@@ -85,7 +85,7 @@ do
   mv out.sfc.${tile}.nc  ${OUTDIR}/INPUT/sfc_data.${tile}.nc 
 done
 
-if [ ${MEMBER} == 'hires' ]; then
+if [ ${MEMBER} == 'gdas' ]; then
   cp ${RADSTAT_DATA_DIR}/* $OUTDIR
   touch $OUTDIR/gdas.t${hh}z.loginc.txt
 else

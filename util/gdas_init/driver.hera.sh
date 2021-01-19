@@ -53,25 +53,31 @@ if [ $EXTRACT_DATA == yes ]; then
       fi
       ;;
     v15)
-      DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_hires \
-       -o log.data.hires -e log.data.hires ./get_v15.data.sh hires)
-      DATA1=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp1 \
-       -o log.data.grp1 -e log.data.grp1 ./get_v15.data.sh grp1)
-      DATA2=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp2 \
-       -o log.data.grp2 -e log.data.grp2 ./get_v15.data.sh grp2)
-      DATA3=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp3 \
-       -o log.data.grp3 -e log.data.grp3 ./get_v15.data.sh grp3)
-      DATA4=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp4 \
-       -o log.data.grp4 -e log.data.grp4 ./get_v15.data.sh grp4)
-      DATA5=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp5 \
-       -o log.data.grp5 -e log.data.grp5 ./get_v15.data.sh grp5)
-      DATA6=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp6 \
-       -o log.data.grp6 -e log.data.grp6 ./get_v15.data.sh grp6)
-      DATA7=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp7 \
-       -o log.data.grp7 -e log.data.grp7 ./get_v15.data.sh grp7)
-      DATA8=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp8 \
-       -o log.data.grp8 -e log.data.grp8 ./get_v15.data.sh grp8)
-      DEPEND="-d afterok:$DATAH:$DATA1:$DATA2:$DATA3:$DATA4:$DATA5:$DATA6:$DATA7:$DATA8"
+      if [ "$CDUMP" = "gfs" ] ; then
+        DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_${CDUMP} \
+         -o log.data.${CDUMP} -e log.data.${CDUMP} ./get_v15.data.sh ${CDUMP})
+        DEPEND="-d afterok:$DATAH"
+      else
+        DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_${CDUMP} \
+         -o log.data.${CDUMP} -e log.data.${CDUMP} ./get_v15.data.sh ${CDUMP})
+        DATA1=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp1 \
+         -o log.data.grp1 -e log.data.grp1 ./get_v15.data.sh grp1)
+        DATA2=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp2 \
+         -o log.data.grp2 -e log.data.grp2 ./get_v15.data.sh grp2)
+        DATA3=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp3 \
+         -o log.data.grp3 -e log.data.grp3 ./get_v15.data.sh grp3)
+        DATA4=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp4 \
+         -o log.data.grp4 -e log.data.grp4 ./get_v15.data.sh grp4)
+        DATA5=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp5 \
+         -o log.data.grp5 -e log.data.grp5 ./get_v15.data.sh grp5)
+        DATA6=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp6 \
+         -o log.data.grp6 -e log.data.grp6 ./get_v15.data.sh grp6)
+        DATA7=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp7 \
+         -o log.data.grp7 -e log.data.grp7 ./get_v15.data.sh grp7)
+        DATA8=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp8 \
+         -o log.data.grp8 -e log.data.grp8 ./get_v15.data.sh grp8)
+        DEPEND="-d afterok:$DATAH:$DATA1:$DATA2:$DATA3:$DATA4:$DATA5:$DATA6:$DATA7:$DATA8"
+      fi
       ;;
     v16)
       DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_${CDUMP} \
@@ -108,7 +114,6 @@ fi  # extract data?
 if [ $RUN_CHGRES == yes ]; then
 
   export APRUN=srun
-  MEMBER=$CDUMP
   NODES=3
   WALLT="0:15:00"
   export OMP_NUM_THREADS=1
@@ -123,20 +128,25 @@ if [ $RUN_CHGRES == yes ]; then
       export OMP_NUM_THREADS=4
       export OMP_STACKSIZE=1024M
       sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} --cpus-per-task=$OMP_NUM_THREADS \
-        -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER} \
-        -o log.${MEMBER} -e log.${MEMBER} ${DEPEND} run_pre-v14.chgres.sh ${MEMBER}
+        -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_pre-v14.chgres.sh ${CDUMP}
       ;;
     v14)
-      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER} \
-      -o log.${MEMBER} -e log.${MEMBER} ${DEPEND} run_v14.chgres.sh ${MEMBER}
+      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+      -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v14.chgres.sh ${CDUMP}
       ;;
     v15)
-      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER} \
-      -o log.${MEMBER} -e log.${MEMBER} ${DEPEND} run_v15.chgres.sh ${MEMBER}
+      if [ "$CDUMP" = "gdas" ]; then
+        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.sh ${CDUMP}
+      else
+        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.gfs.sh
+      fi
       ;;
     v16)
-      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER} \
-      -o log.${MEMBER} -e log.${MEMBER} ${DEPEND} run_v16.chgres2.sh ${MEMBER}
+      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+      -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v16.chgres2.sh ${CDUMP}
       ;;
   esac
 

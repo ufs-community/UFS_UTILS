@@ -25,7 +25,24 @@ hh_m6=$(echo $date10_m6 | cut -c9-10)
 # the previous cycle.  
 #----------------------------------------------------------------------
 
-if [ $bundle = 'hires' ]; then
+if [ $bundle = 'gfs' ]; then
+
+  directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
+  if [ $yy$mm$dd$hh -lt 2020022600 ]; then
+    file=gpfs_dell1_nco_ops_com_gfs_prod_gfs.${yy}${mm}${dd}_${hh}.gfs_nemsioa.tar
+  else
+    file=com_gfs_prod_gfs.${yy}${mm}${dd}_${hh}.gfs_nemsioa.tar
+  fi
+
+  htar -xvf $directory/$file ./gfs.${yy}${mm}${dd}/${hh}/gfs.t${hh}z.atmanl.nemsio
+  rc=$?
+  [ $rc != 0 ] && exit $rc
+
+  htar -xvf $directory/$file ./gfs.${yy}${mm}${dd}/${hh}/gfs.t${hh}z.sfcanl.nemsio
+  rc=$?
+  [ $rc != 0 ] && exit $rc
+
+elif [ $bundle = 'gdas' ]; then
 
   directory=/NCEPPROD/hpssprod/runhistory/rh${yy_m6}/${yy_m6}${mm_m6}/${yy_m6}${mm_m6}${dd_m6}
   if [ $date10_m6 -lt 2020022600 ]; then
@@ -82,29 +99,24 @@ if [ $bundle = 'hires' ]; then
 
 else
 
-  for group in $bundle
-  do
-
     directory=/NCEPPROD/hpssprod/runhistory/rh${yy_m6}/${yy_m6}${mm_m6}/${yy_m6}${mm_m6}${dd_m6}
     if [ $date10_m6 -lt 2020022600 ]; then
-      file=gpfs_dell1_nco_ops_com_gfs_prod_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_restart_${group}.tar
+      file=gpfs_dell1_nco_ops_com_gfs_prod_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_restart_${bundle}.tar
     else
-      file=com_gfs_prod_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_restart_${group}.tar
+      file=com_gfs_prod_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_restart_${bundle}.tar
     fi
 
-    rm -f ./list*.${group}
-    htar -tvf  $directory/$file > ./list1.${group}
-    grep ${yy}${mm}${dd}.${hh} ./list1.${group} > ./list2.${group}
+    rm -f ./list*.${bundle}
+    htar -tvf  $directory/$file > ./list1.${bundle}
+    grep ${yy}${mm}${dd}.${hh} ./list1.${bundle} > ./list2.${bundle}
     while read -r line
     do 
-      echo ${line##*' '} >> ./list3.${group}
-    done < "./list2.${group}"
-    htar -xvf $directory/$file  -L ./list3.${group}
+      echo ${line##*' '} >> ./list3.${bundle}
+    done < "./list2.${bundle}"
+    htar -xvf $directory/$file  -L ./list3.${bundle}
     rc=$?
     [ $rc != 0 ] && exit $rc
-    rm -f ./list*.${group}
-
-  done
+    rm -f ./list*.${bundle}
 
 fi
 
