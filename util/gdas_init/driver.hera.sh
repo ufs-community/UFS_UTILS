@@ -43,11 +43,14 @@ if [ $EXTRACT_DATA == yes ]; then
       fi
       ;;
     v14)
-      DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_hires \
-       -o log.data.hires -e log.data.hires ./get_v14.data.sh hires)
-      DATA1=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_enkf \
-       -o log.data.enkf -e log.data.enkf ./get_v14.data.sh enkf)
-      DEPEND="-d afterok:$DATAH:$DATA1"
+      DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_${CDUMP} \
+       -o log.data.${CDUMP} -e log.data.${CDUMP} ./get_v14.data.sh ${CDUMP})
+      DEPEND="-d afterok:$DATAH"
+      if [ "$CDUMP" = "gdas" ] ; then
+        DATA1=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_enkf \
+         -o log.data.enkf -e log.data.enkf ./get_v14.data.sh enkf)
+        DEPEND="-d afterok:$DATAH:$DATA1"
+      fi
       ;;
     v15)
       DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_hires \
