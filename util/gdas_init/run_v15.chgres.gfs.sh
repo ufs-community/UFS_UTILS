@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #----------------------------------------------------------------
-# Run chgres using gfs v15 data as input.
+# Run chgres using v15 nemsio data as input.  This is used
+# for initializing GFS free forecasts.
 #----------------------------------------------------------------
 
 set -x

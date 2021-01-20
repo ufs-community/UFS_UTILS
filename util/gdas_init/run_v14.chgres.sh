@@ -12,14 +12,6 @@ FIX_FV3=$UFS_DIR/fix
 FIX_ORO=${FIX_FV3}/fix_fv3_gmted2010
 FIX_AM=${FIX_FV3}/fix_am
 
-date10=$yy$mm$dd$hh
-yy=$(echo $date10 | cut -c1-4)
-mm=$(echo $date10 | cut -c5-6)
-dd=$(echo $date10 | cut -c7-8)
-hh=$(echo $date10 | cut -c9-10)
-
-YMDH=${yy}${mm}${dd}.${hh}0000
-
 WORKDIR=$OUTDIR/work.$MEMBER
 
 if [ "${MEMBER}" = "gdas" ] || [ "${MEMBER}" = "gfs" ]; then

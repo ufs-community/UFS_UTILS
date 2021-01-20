@@ -21,8 +21,7 @@ dd_m6=$(echo $date10_m6 | cut -c7-8)
 hh_m6=$(echo $date10_m6 | cut -c9-10)
 
 #----------------------------------------------------------------------
-# Get the hires tiled restart files.  Need to use the 6-hour forecast files from
-# the previous cycle.  
+# Read the nemsio analysis files from the gfs bundle.
 #----------------------------------------------------------------------
 
 if [ $bundle = 'gfs' ]; then
@@ -41,6 +40,12 @@ if [ $bundle = 'gfs' ]; then
   htar -xvf $directory/$file ./gfs.${yy}${mm}${dd}/${hh}/gfs.t${hh}z.sfcanl.nemsio
   rc=$?
   [ $rc != 0 ] && exit $rc
+
+#----------------------------------------------------------------------
+# For GDAS, use the tiled restart files.  Need to use the 6-hour 
+# forecast files from the previous cycle as they are not saved
+# at the current cycle.
+#----------------------------------------------------------------------
 
 elif [ $bundle = 'gdas' ]; then
 
@@ -63,6 +68,8 @@ elif [ $bundle = 'gdas' ]; then
   htar -xvf $directory/$file -L ./list.hires3
   rc=$?
   [ $rc != 0 ] && exit $rc
+
+  rm -f ./list.hires*
 
 #----------------------------------------------------------------------
 # Get the 'abias' and 'radstat' files from current cycle
@@ -91,10 +98,9 @@ elif [ $bundle = 'gdas' ]; then
   rc=$?
   [ $rc != 0 ] && exit $rc
 
-  rm -f ./list.hires*
-
 #----------------------------------------------------------------------
-# Get the enkf tiled restart files for all members.
+# Get the enkf tiled restart files for all members.  They are not
+# stored for the current cycle, so use the 6-hr old tarball.
 #----------------------------------------------------------------------
 
 else
