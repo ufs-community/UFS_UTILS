@@ -23,13 +23,13 @@ YMDH=${yy}${mm}${dd}.${hh}0000
 WORKDIR=$OUTDIR/work.$MEMBER
 
 if [ ${MEMBER} == 'gdas' ]; then
-  CINP=C768
+  CINP=${CINP:-"C768"}
   CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
   OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos
 else  
-  CINP=C384
+  CINP=${CINP:-"C384"}
   CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/mem${MEMBER}/RESTART"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}"

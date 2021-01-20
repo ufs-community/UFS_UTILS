@@ -36,10 +36,10 @@ YMDH=${yy}${mm}${dd}.${hh}0000
 WORKDIR=$OUTDIR/work.$MEMBER
 
 if [ ${MEMBER} == 'hires' ]; then
-  CINP=C768
+  CINP=${CINP:-"C768"}
   CTAR=${CRES_HIRES}
 else  
-  CINP=C768
+  CINP=${CINP:-"C768"}
   CTAR=${CRES_ENKF}
 fi
 
