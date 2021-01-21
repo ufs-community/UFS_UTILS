@@ -64,9 +64,11 @@ If the NCEPLIBS have been installed and the user wants to compile chgres_cube ag
 Configuring and using chgres_cube for global applications
 ***************************************************************
 
-***Program inputs and outputs for global applications***
+Program inputs and outputs for global applications
+--------------------------------------------------
 
-**Inputs**
+Inputs
+``````
 
 The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/
 
@@ -104,7 +106,8 @@ The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov
 
       * Input data files.  GRIB2, NEMSIO or NetCDF.  See above section for how to find this data.
 
-**Outputs**
+Outputs
+```````
 
       * Atmospheric “coldstart” files.  NetCDF.
 	      * out.atm.tile1.nc
@@ -169,10 +172,7 @@ In GRIB2 files only the Tsfc is stored and that is set as foundation temperature
 
 Note, that neither of these two options will get rid of the underlying baked in heating/cooling in the surface temperature fields. For most cases this may not be an issue, but where it is then the user will either have to initialize the model with NEMSIO or NetCDF data, or replace the surface temperature in the GRIB2 fields with independently obtained foundation temperature.
 
-
-
 ***Global chgres_cube namelist options***
-
 
 Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3 horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
 
@@ -226,12 +226,6 @@ When using NetCDF data as input to chgres_cube, set namelist as follows:
       * convert_nst - set to ‘true’ to process NSST fields
       * tracers_input - names of tracer records in input file.  For GFDL microphysics, set to “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
       * tracers - names of tracer records in output file expected by model.  For GFDL microphysics, set to “sphum”,”liq_wat”,”o3mr”,”ice_wat”,”rainwat”,”snowwat”,”graupel”.
-
-
-
-
-
-
 
 ***************************************************************
 Configuring and using chgres_cube for regional applications
@@ -317,9 +311,9 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
       * 13-km archived isobaric data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=RAP130&subqueryby=STATION&applname=&outdest=FILE>`__.
 
 
-************************************************
+
 Initializing regional domains with GRIB2 data - some caveats
-************************************************
+------------------------------------------------------------
 
 
 Keep this in mind when using FV3GFS GRIB2 data for model initialization:
@@ -335,10 +329,8 @@ Keep this in mind when using FV3GFS GRIB2 data for model initialization:
       * Ozone is not available at all isobaric levels. Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
       * Only tested with GRIB2 data from FV3GFS, RAP, NAM, and HRRR data. May not work with GRIB2 data from other models. Use these at your own risk.
 
-
-************************************************
 Regional chgres_cube namelist options
-************************************************
+-------------------------------------
 
 Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3-LAM horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
 
