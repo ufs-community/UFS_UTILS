@@ -103,7 +103,7 @@ The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov
       * FV3 vertical coordinate file.  Text file.  Located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_am.v20191213/
 	      * global_hyblev.l$LEVS.txt
 
-      * Input data files.  GRIB2, NEMSIO or NetCDF.  See above section for how to find this data.
+      * Input data files.  GRIB2, NEMSIO or NetCDF.  See the next section for how to find this data.
 
 Outputs
 ~~~~~~~
@@ -248,28 +248,28 @@ Inputs
 The following four sets of files/directories should all be located in the same directory (orog_dir_target_grid in the namelist):
 
       * FV3 mosaic file - (NetCDF format)
-        * CRES_mosaic.halo4.nc
+	      * CRES_mosaic.halo4.nc
 
       * FV3 grid files - (NetCDF format)
-        * CRES_grid.tile7.halo4.nc 
+	      * CRES_grid.tile7.halo4.nc 
 
       * FV3 orography files - (NetCDF format)
-        * CRES_oro_data.tile7.halo4.nc
+	      * CRES_oro_data.tile7.halo4.nc
 
       * FV3 surface climatological files - NetCDF format.  Linked without the “halo4” (e.g., CRES.facsf.tile7.halo4.nc linked as CRES.facsf.tile7.nc)
-        * CRES.facsf.tile7.halo4.nc (fractional coverage for strong/weak zenith angle dependent albedo)
-        * CRES.maximum_snow_albedo.tile7.halo4.nc (maximum snow albedo)
-        * CRES.slope_type.tile7.halo4.nc (slope type)
-        * CRES.snowfree_albedo.tile7.halo4.nc (snow-free albedo)
-        * CRES.soil_type.tile7.halo4.nc (soil type)
-        * CRES.subtrate_temperature.tile7.halo4.nc (soil substrate temperature)
-        * CRES.vegetation_greenness.tile7.halo4.nc (vegetation greenness)
-        * CRES.vegetation_type.tile7.halo4.nc (vegetation type)
+	      * CRES.facsf.tile7.halo4.nc (fractional coverage for strong/weak zenith angle dependent albedo)
+	      * CRES.maximum_snow_albedo.tile7.halo4.nc (maximum snow albedo)
+	      * CRES.slope_type.tile7.halo4.nc (slope type)
+	      * CRES.snowfree_albedo.tile7.halo4.nc (snow-free albedo)
+	      * CRES.soil_type.tile7.halo4.nc (soil type)
+	      * CRES.subtrate_temperature.tile7.halo4.nc (soil substrate temperature)
+	      * CRES.vegetation_greenness.tile7.halo4.nc (vegetation greenness)
+	      * CRES.vegetation_type.tile7.halo4.nc (vegetation type)
 
       * FV3 vertical coordinate file.  Text file. Located in ./fix_am directory.
-        * global_hyblev.l$LEVS.txt
+	      * global_hyblev.l$LEVS.txt
 
-      * Input data files.  GRIB2 only.  See above section for how to find this data.
+      * Input data files. GRIB2 only.  See the next section for how to find this data.
 
 Outputs
 ~~~~~~~~
