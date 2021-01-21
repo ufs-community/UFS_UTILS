@@ -79,6 +79,11 @@ if [ $EXTRACT_DATA == yes ]; then
         DEPEND="-d afterok:$DATAH:$DATA1:$DATA2:$DATA3:$DATA4:$DATA5:$DATA6:$DATA7:$DATA8"
       fi
       ;;
+    v16retro)
+      DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_v16retro \
+       -o log.data.v16retro -e log.data.v16retro ./get_v16retro.data.sh)
+      DEPEND="-d afterok:$DATAH"
+      ;;
     v16)
       DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_${CDUMP} \
        -o log.data.${CDUMP} -e log.data.${CDUMP} ./get_v16.data2.sh ${CDUMP})
@@ -144,6 +149,10 @@ if [ $RUN_CHGRES == yes ]; then
         -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.gfs.sh
       fi
       ;;
+    v16retro)
+      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_gdas \
+      -o log.gdas -e log.gdas ${DEPEND} run_v16retro.chgres.sh hires
+      ;;
     v16)
       sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
       -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v16.chgres2.sh ${CDUMP}
@@ -153,14 +162,22 @@ if [ $RUN_CHGRES == yes ]; then
   if [ "$CDUMP" = "gdas" ]; then
 
     WALLT="0:15:00"
-    MEMBER=1
-    while [ $MEMBER -le 80 ]; do
-      if [ $MEMBER -lt 10 ]; then
-        MEMBER_CH="00${MEMBER}"
-      else
-        MEMBER_CH="0${MEMBER}"
-      fi
-      case $gfs_ver in
+
+    if [ "$gfs_ver" = "v16retro" ]; then
+
+      sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_enkf \
+      -o log.enkf -e log.enkf ${DEPEND} run_v16retro.chgres.sh enkf
+
+    else
+
+      MEMBER=1
+      while [ $MEMBER -le 80 ]; do
+        if [ $MEMBER -lt 10 ]; then
+          MEMBER_CH="00${MEMBER}"
+        else
+          MEMBER_CH="0${MEMBER}"
+        fi
+        case $gfs_ver in
           v12 | v13)
               export OMP_NUM_THREADS=2
               export OMP_STACKSIZE=1024M
@@ -180,10 +197,12 @@ if [ $RUN_CHGRES == yes ]; then
               sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
               -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v16.chgres2.sh ${MEMBER_CH}
             ;;
-      esac
-      MEMBER=$(( $MEMBER + 1 ))
-    done
+        esac
+        MEMBER=$(( $MEMBER + 1 ))
+      done
 
-  fi
+    fi # v16 retro?
 
-fi
+  fi  # which CDUMP?
+
+fi  # run chgres?
