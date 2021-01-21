@@ -83,8 +83,8 @@ if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ]; then
   copy_data
   touch $SAVEDIR/../${MEMBER}.t${hh}z.loginc.txt
   if [ ${MEMBER} == 'gdas' ]; then
-    cp ${INPUT_DATA_DIR}/*abias* $SAVEDIR
-    cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR
+    cp ${INPUT_DATA_DIR}/*abias* $SAVEDIR/..
+    cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR/..
   fi
 else  
   SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}/INPUT
