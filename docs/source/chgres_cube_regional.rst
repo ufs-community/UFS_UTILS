@@ -59,7 +59,6 @@ If the NCEPLIBS have been installed and the user wants to compile chgres_cube ag
       * if you do get errors that cmake cannot find "FindNETCDF" or "FindESMF", run: git submodule update --init --recursive
 
 
-
 ***************************************************************
 Configuring and using chgres_cube for global applications
 ***************************************************************
@@ -68,7 +67,7 @@ Program inputs and outputs for global applications
 --------------------------------------------------
 
 Inputs
-``````
+~~~~~~
 
 The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/
 
@@ -107,7 +106,7 @@ The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov
       * Input data files.  GRIB2, NEMSIO or NetCDF.  See above section for how to find this data.
 
 Outputs
-```````
+~~~~~~~
 
       * Atmospheric “coldstart” files.  NetCDF.
 	      * out.atm.tile1.nc
@@ -126,9 +125,11 @@ Outputs
 	      * out.sfc.tile1.nc
 
 
-***Where to find GFS GRIB2, NEMSIO and NetCDF data for global applications***
+Where to find GFS GRIB2, NEMSIO and NetCDF data for global applications
+--------------
 
-**GRIB2:**
+GRIB2
+~~~~~
 
       * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.`
 
@@ -136,19 +137,21 @@ Outputs
 
       * 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2 file**, under **GFS Forecasts 003 (1-deg)** here: `NCDC - Global Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>`__.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
-**NEMSIO:**
+NEMSIO
+~~~~~~
 
       * T1534 gaussian (last 10 days only) - Use the **gfs.tHHz.atmanl.nemsio** (atmospheric fields) and **gfs.tHHz.sfcanl.nemsio** (surface fields) files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
-**NetCDF:**
+NetCDF
+~~~~~~
 
       * T1534 gaussian (don't have any more details at this time).
 
+Initializing global domains with GRIB2 data - some caveats
+-----------------------
 
-***Initializing global domains with GRIB2 data - some caveats***
-
-
-Keep this in mind when using GFS GRIB2 data for model initialization:
+Keep these things in mind when using GFS GRIB2 data for model initialization
+~~~~~~~~~~~~~~~~
 
       * GRIB2 data does not contain the fields needed for the Near Sea Surface Temperature (NSST) scheme.  See the next section for options on running the forecast model in this situation.
       * Data is coarse (in vertical and horizontal) compared to the NCEP operational GFS .  May not provide a good initialization (especially for the surface).  Recommendations:
@@ -162,7 +165,8 @@ Keep this in mind when using GFS GRIB2 data for model initialization:
       * Ozone is not available at all isobaric levels.  Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
       * Only tested with GRIB2 data from GFS v14 and v15 (from 12z July 19, 2017 to current).  May not work with older GFS data.  Will not work with GRIB2 data from other models.
 
-**Near Sea Surface Temperature (NSST) data and GRIB2 initialization**
+Near Sea Surface Temperature (NSST) data and GRIB2 initialization
+~~~~~~~
 
 The issue with not having NSST data is important.  In GFS we use the foundation temperature (Tref) and add a diurnal warming/cooling layer using NSST. This is the surface temperature that is passed to the atmospheric boundary layer. This is a critical feature, especially when we are doing Data Assimilation.
 
@@ -172,11 +176,13 @@ In GRIB2 files only the Tsfc is stored and that is set as foundation temperature
 
 Note, that neither of these two options will get rid of the underlying baked in heating/cooling in the surface temperature fields. For most cases this may not be an issue, but where it is then the user will either have to initialize the model with NEMSIO or NetCDF data, or replace the surface temperature in the GRIB2 fields with independently obtained foundation temperature.
 
-***Global chgres_cube namelist options***
+Global chgres_cube namelist options
+-----------------
 
 Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3 horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
 
-When using GRIB2 data as input to chgres_cube, set namelist as follows:
+Namelist settings for using **GRIB2** data as input in global chgres_cube applications 
+~~~~~~~~~~~~~~~~~~~~~~
 
       * fix_dir_target_grid - Path to the tiled FV3 surface climatological files (such as albedo).
       * mosaic_file_target_grid - Path and name of the FV3 mosaic file.
@@ -191,7 +197,8 @@ When using GRIB2 data as input to chgres_cube, set namelist as follows:
       * convert_atm - set to ‘true’ to process the atmospheric fields
       * convert_sfc - set to ‘true’ to process the surface fields
 
-When using NEMSIO data as input to chgres_cube, set namelist as follows:
+Namelist settings for using **NEMSIO** data as input in global chgres_cube applications
+~~~~~~~~~~~~~~~~~~~~~
 
       * fix_dir_target_grid - Path to the tiled FV3 surface climatological files (such as albedo).
       * mosaic_file_target_grid - Path and name of the FV3 mosaic file.
@@ -209,7 +216,8 @@ When using NEMSIO data as input to chgres_cube, set namelist as follows:
       * tracers_input - names of tracer records in input file.  For GFDL microphysics, set to “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
       * tracers - names of tracer records in output file expected by model.  For GFDL microphysics, set to “sphum”,”liq_wat”,”o3mr”,”ice_wat”,”rainwat”,”snowwat”,”graupel”.
 
-When using NetCDF data as input to chgres_cube, set namelist as follows:
+Namelist settings for using **NetCDF** data as input in global chgres_cube applications 
+~~~~~~~~~~~~~~~~~~~~~~
 
       * fix_dir_target_grid - Path to the tiled FV3 surface climatological files (such as albedo).
       * mosaic_file_target_grid - Path and name of the FV3 mosaic file.
@@ -234,8 +242,8 @@ Configuring and using chgres_cube for regional applications
 Regional program inputs and outputs
 ---------------------------------------------------
 
-      Inputs
-      ````````````````````````````````````````````````````
+Inputs
+~~~~~~
 
 The following four sets of files/directories should all be located in the same directory (orog_dir_target_grid in the namelist):
 
@@ -263,8 +271,8 @@ The following four sets of files/directories should all be located in the same d
 
       * Input data files.  GRIB2 only.  See above section for how to find this data.
 
-      Outputs
-      ````````````````````````````````````````````````````
+Outputs
+~~~~~~~~
 
       * Atmospheric “coldstart” file.  NetCDF.
         * out.atm.tile7.nc
@@ -275,8 +283,8 @@ The following four sets of files/directories should all be located in the same d
 Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 ---------------------------------------------------
 
-      FV3GFS
-      ```````````````````````````````````````
+FV3GFS
+~~~~~~~~
 
       * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
@@ -284,15 +292,16 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
       * 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2 file**, under **GFS Forecasts 003 (1-deg)** here: `NCDC - Global Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>`__.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
-      NAM
-      ```````````````````````````````````````
+NAM
+~~~~~
      * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfFH.tmHH.grib2** files in subdirectory nam.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`__.
 
      * 12-km data from previous 6 months - Use the **nam_218_YYYYMMDD_00HH_000.grb2 file**,   under **NAM Forecasts NAM-NMM 218 (12km) Domain** here: `NCDC - North American Mesoscale Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/north-american-mesoscale-forecast-system-nam>`__.
 
      * 12-km archived data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`__.
 
-**HRRR:**
+HRRR
+~~~~
  
       * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfFH.grib2** files in the subdirectory hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`__.
 
@@ -302,7 +311,8 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
       * 3-km operational data from 2016 to present (University of Utah): `Click here <http://home.chpc.utah.edu/~u0553130/Brian_Blaylock/cgi-bin/hrrr_download.cgi>`__.
 
-**RAP:**
+RAP
+~~~~~
 
       * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfFH.grib2** files in the subdirectory rap.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/rap/prod/>`__.
 
@@ -315,8 +325,7 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 Initializing regional domains with GRIB2 data - some caveats
 ------------------------------------------------------------
 
-
-Keep this in mind when using FV3GFS GRIB2 data for model initialization:
+Keep these things in mind when using FV3GFS GRIB2 data for model initialization:
 
       * GRIB2 data does not contain the fields needed for the Near Sea Surface Temperature (NSST) scheme.  
       * External model recommendations for pre-defined CONUS grids:
@@ -334,7 +343,8 @@ Regional chgres_cube namelist options
 
 Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3-LAM horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
 
-When using GRIB2 data as input to chgres_cube, set namelist as follows:
+Required Entries
+~~~~~~~~~~~~~~~~
 
       * fix_dir_target_grid - Path to the FV3-LAM surface climatological files (such as albedo).
       * fix_dir_input_grid - Directory containing RAP lat/lon file. On NOAA HPC machines, typically the “fix/fix_am” directory of the UFS_UTILS directory. 
@@ -358,8 +368,8 @@ When using GRIB2 data as input to chgres_cube, set namelist as follows:
       * halo_bndy - Integer number of rows/columns that exist within the halo, where pure lateral boundary conditions are applied.
       * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. (Default: 'GFS')
 
-      Optional Entries
-      ````````````````````````````````````````````````````
+Optional Entries
+~~~~~~~~~~~~~~~
 
       * geogrid_file_input_grid - Full path to the RAP or HRRR geogrid file corresponding to the external model input data. Only used with external_model = ‘HRRR’ or ‘RAP’. 
       * nsoill_out - Number of soil levels to produce in the sfc_data.nc file (Default: 4).
@@ -444,11 +454,3 @@ chgres_cube is part of the UFS_UTILS repository (https://github.com/NOAA-EMC/UFS
 For more details, see the UFS_UTILS wiki page: https://github.com/NOAA-EMC/UFS_UTILS/wiki
 
 Changes that support current or future NCEP operations will be given priority for inclusion into the authoritative repository.
-
-
-
-
-
-
-
-
