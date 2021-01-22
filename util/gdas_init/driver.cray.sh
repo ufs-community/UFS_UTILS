@@ -58,6 +58,11 @@ if [ $EXTRACT_DATA == yes ]; then
       fi
       DEPEND="-w ended(get.data.*)"
       ;;
+    v16retro)
+      bsub -o log.data.v16retro -e log.data.v16retro -q $QUEUE -P $PROJECT_CODE -J get.data.v16retro -W $WALLT \
+        -R "rusage[mem=$MEM]" "./get_v16retro.data.sh"
+      DEPEND="-w ended(get.data.v16retro)"
+      ;;
     v16)
       bsub -o log.data.${CDUMP} -e log.data.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J get.data.${CDUMP} -W $WALLT \
         -R "rusage[mem=$MEM]" "./get_v16.data2.sh ${CDUMP}"
@@ -120,6 +125,10 @@ if [ $RUN_CHGRES == yes ]; then
            -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v15.chgres.gfs.sh"
       fi
       ;;
+    v16retro)
+      bsub -e log.gdas -o log.gdas -q $QUEUE -P $PROJECT_CODE -J chgres_gdas -M $MEM -W $WALLT \
+         -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16retro.chgres.sh hires"
+      ;;
     v16)
       bsub -e log.${CDUMP} -o log.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J chgres_${CDUMP} -M $MEM -W $WALLT \
          -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres2.sh ${CDUMP}"
@@ -132,6 +141,13 @@ if [ $RUN_CHGRES == yes ]; then
     NUM_NODES=1
     export APRUN="aprun -j 1 -n 12 -N 12 -d ${OMP_NUM_THREADS} -cc depth"
   
+    if [ "$gfs_ver" = "v16retro" ]; then
+
+      bsub -e log.enkf -o log.enkf -q $QUEUE -P $PROJECT_CODE -J chgres_enkf -M $MEM -W $WALLT \
+         -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16retro.chgres.sh enkf"
+
+    else
+
     MEMBER=1
     while [ $MEMBER -le 80 ]; do
       if [ $MEMBER -lt 10 ]; then
@@ -159,6 +175,8 @@ if [ $RUN_CHGRES == yes ]; then
       esac
       MEMBER=$(( $MEMBER + 1 ))
     done
+
+    fi # is this v16 retro?
 
   fi
 
