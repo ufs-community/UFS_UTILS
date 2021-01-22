@@ -1162,8 +1162,6 @@
    call error_handler("READING VERTICAL COORD FILE", istat)
  endif
 
- print*
- 
  close(14)
 
  end subroutine read_vcoord_info
