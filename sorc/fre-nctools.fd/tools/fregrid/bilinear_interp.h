@@ -1,3 +1,6 @@
+/** @file 
+    @brief Function declarations for bilinear interpolation module.
+*/
 #ifndef BILINEAR_INTERP_H_
 #define BILINEAR_INTERP_H_
 void setup_bilinear_interp(int ntiles_in, const Grid_config *grid_in, int ntiles_out, const Grid_config *grid_out, 

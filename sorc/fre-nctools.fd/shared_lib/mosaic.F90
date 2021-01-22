@@ -1,3 +1,7 @@
+!> @file
+!! @brief Read information from the mosaic file.
+!! @author Zhi.Liang@noaa.gov
+!!
 module mosaic_mod
 
 ! <CONTACT EMAIL="Zhi.Liang@noaa.gov">

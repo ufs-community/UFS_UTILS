@@ -1,4 +1,6 @@
-/** @file */
+/** @file
+    @brief Function declarations for create_xgrid.c.
+*/
 #ifndef CREATE_XGRID_H_
 #define CREATE_XGRID_H_
 #ifndef MAXXGRID
