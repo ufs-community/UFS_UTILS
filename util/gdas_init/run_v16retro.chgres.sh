@@ -14,7 +14,10 @@ done
 }
 
 #---------------------------------------------------------------------------
-# Run chgres using gfs v16 data as input.
+# Run chgres using gfs v16 parallel data as input.
+# The enkf data is not saved.  So the coldstart files for all
+# 80 members are simply copies of a single run of chgres using the
+# gdas restart files as input.
 #---------------------------------------------------------------------------
 
 set -x
@@ -43,10 +46,19 @@ else
   CTAR=${CRES_ENKF}
 fi
 
-if [ ${yy_d}${mm_d}${dd_d}${hh_d} -lt 2020082018 ]; then
-  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
-else
+# Some parallel tarballs have 'atmos' in their directory path.  And
+# some do not.
+
+if [ -d "${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/atmos/RESTART" ]; then
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/atmos/RESTART"
+else
+  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
+fi
+
+if [ -d "${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}/atmos" ]; then
+  RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}/atmos"
+else
+  RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
 fi
 
 rm -fr $WORKDIR
@@ -89,6 +101,9 @@ fi
 if [ ${MEMBER} == 'hires' ]; then
   SAVEDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos/INPUT
   copy_data
+  cp $RADSTAT_DATA_DIR/*abias* $SAVEDIR/..
+  cp $RADSTAT_DATA_DIR/*radstat $SAVEDIR/..
+  touch $SAVEDIR/../gdas.t${hh}z.loginc.txt
 else  
   MEMBER=1
   while [ $MEMBER -le 80 ]; do
@@ -99,6 +114,7 @@ else
   fi
   SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER_CH}/INPUT
   copy_data
+  touch $SAVEDIR/../enkfgdas.t${hh}z.loginc.txt
   MEMBER=$(( $MEMBER + 1 ))
   done
 fi

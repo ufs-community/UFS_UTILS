@@ -1,8 +1,7 @@
 #!/bin/bash
 
 #----------------------------------------------------------------------
-# Retrieve gfs v16 data from hpss.
-#
+# Retrieve gfs v16 parallel run data from hpss.
 #----------------------------------------------------------------------
 
 set -x
@@ -17,22 +16,77 @@ mm_m6=$(echo $date10_m6 | cut -c5-6)
 dd_m6=$(echo $date10_m6 | cut -c7-8)
 hh_m6=$(echo $date10_m6 | cut -c9-10)
 
+if [ $date10_m6 -lt 2019050100 ]; then
+ set +x
+ echo NO DATA FOR $date10_m6
+ exit 2
+elif [ $date10_m6 -le 2019060100 ]; then
+ directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro0e/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
+elif [ $date10_m6 -lt 2019090100 ]; then
+ directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro1e/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
+elif [ $date10_m6 -lt 2019101700 ]; then
+ directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro2e/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
+elif [ $date10_m6 -lt 2020122200 ]; then
  directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16rt2/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
- file=gdas_restartb.tar
+else
+ directory=/NCEPDEV/emc-global/5year/emc.gloparadev/WCOSS_D/gfsv16/v16rt2n/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
+fi
 
-  rm -f ./list.hires*
-  touch ./list.hires3
-  htar -tvf  $directory/$file > ./list.hires1
-  grep ${yy}${mm}${dd}.${hh} ./list.hires1 > ./list.hires2
-  while read -r line
-  do 
-    echo ${line##*' '} >> ./list.hires3
-  done < "./list.hires2"
+#----------------------------------------------------------------------
+# Pull restart files.
+#----------------------------------------------------------------------
 
-  htar -xvf $directory/$file -L ./list.hires3
-  rc=$?
-  [ $rc != 0 ] && exit $rc
+file=gdas_restartb.tar
 
+rm -f ./list.hires*
+touch ./list.hires3
+htar -tvf  $directory/$file > ./list.hires1
+grep ${yy}${mm}${dd}.${hh} ./list.hires1 > ./list.hires2
+while read -r line
+do 
+  echo ${line##*' '} >> ./list.hires3
+done < "./list.hires2"
+
+htar -xvf $directory/$file -L ./list.hires3
+rc=$?
+[ $rc != 0 ] && exit $rc
+
+#----------------------------------------------------------------------
+# Pull abias and radstat files.
+#----------------------------------------------------------------------
+
+rm -f ./list.hires*
+
+if [ ${yy}${mm}${dd}${hh} -lt 2019050106 ]; then
+  set +x
+  echo NO DATA FOR ${yy}${mm}${dd}${hh}
+  exit 2
+elif [ ${yy}${mm}${dd}${hh} -lt 2019060106 ]; then
+  directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro0e/${yy}${mm}${dd}${hh}
+elif [ ${yy}${mm}${dd}${hh} -lt 2019090106 ]; then
+  directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro1e/${yy}${mm}${dd}${hh}
+elif [ ${yy}${mm}${dd}${hh} -lt 2019101706 ]; then
+  directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro2e/${yy}${mm}${dd}${hh}
+elif [ ${yy}${mm}${dd}${hh} -lt 2020122206 ]; then
+  directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16rt2/${yy}${mm}${dd}${hh}
+else
+  directory=/NCEPDEV/emc-global/5year/emc.gloparadev/WCOSS_D/gfsv16/v16rt2n/${yy}${mm}${dd}${hh}
+fi
+
+file=gdas_restarta.tar
+
+touch ./list.hires3
+htar -tvf  $directory/$file > ./list.hires1
+grep abias ./list.hires1 > ./list.hires2
+grep radstat ./list.hires1 >> ./list.hires2
+while read -r line
+do
+  echo ${line##*' '} >> ./list.hires3
+done < "./list.hires2"
+
+htar -xvf $directory/$file -L ./list.hires3
+rc=$?
+[ $rc != 0 ] && exit $rc
 
 set +x
 echo DATA PULL FOR v16 DONE

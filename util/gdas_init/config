@@ -38,7 +38,8 @@
 # CDUMP   - When 'gdas', will process gdas and enkf members,
 #           when 'gfs', will process gfs for free forecast
 #           only.
-#         
+# use_v16 - When 'yes', use v16 retro parallel data.         
+#
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/gpfs/dell1/stmp/George.Gayno/gdas.init/input
@@ -48,8 +49,10 @@ RUN_CHGRES=yes
 
 yy=2021
 mm=01
-dd=06
-hh=06
+dd=20
+hh=00
+
+use_v16=yes
 
 LEVS=65
 
@@ -66,22 +69,31 @@ OUTDIR=/gpfs/dell1/stmp/George.Gayno/gdas.init/output
 # Dont touch anything below here.
 #---------------------------------------------------------
 
-gfs_ver=v15
+if [ "$use_v16" = "yes" ]; then
+
+  gfs_ver=v16retro
+
+else
+
+  gfs_ver=v15
 
 # No ENKF data prior to 2012/05/21/00z
-if [ $yy$mm$dd$hh -lt 2012052100 ]; then
-  set +x
-  echo FATAL ERROR: SCRIPTS DO NOT SUPPORT OLD GFS DATA
-  exit 2
-elif [ $yy$mm$dd$hh -lt 2016051000 ]; then
-  gfs_ver=v12
-elif [ $yy$mm$dd$hh -lt 2017072000 ]; then
-  gfs_ver=v13
-elif [ $yy$mm$dd$hh -lt 2019061200 ]; then
-  gfs_ver=v14
+  if [ $yy$mm$dd$hh -lt 2012052100 ]; then
+    set +x
+    echo FATAL ERROR: SCRIPTS DO NOT SUPPORT OLD GFS DATA
+    exit 2
+  elif [ $yy$mm$dd$hh -lt 2016051000 ]; then
+    gfs_ver=v12
+  elif [ $yy$mm$dd$hh -lt 2017072000 ]; then
+    gfs_ver=v13
+  elif [ $yy$mm$dd$hh -lt 2019061200 ]; then
+    gfs_ver=v14
+  fi
+
 fi
 
-gfs_ver=v16
+# This is for Eric's OPS look-alike tarball
+#gfs_ver=v16
 
 export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF
 export LEVS gfs_ver
