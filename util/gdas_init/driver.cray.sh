@@ -59,9 +59,9 @@ if [ $EXTRACT_DATA == yes ]; then
       DEPEND="-w ended(get.data.*)"
       ;;
     v16retro)
-      bsub -o log.data.v16retro -e log.data.v16retro -q $QUEUE -P $PROJECT_CODE -J get.data.v16retro -W $WALLT \
-        -R "rusage[mem=$MEM]" "./get_v16retro.data.sh"
-      DEPEND="-w ended(get.data.v16retro)"
+      bsub -o log.data.$CDUMP -e log.data.$CDUMP -q $QUEUE -P $PROJECT_CODE -J get.data.$CDUMP -W $WALLT \
+        -R "rusage[mem=$MEM]" "./get_v16retro.data.sh ${CDUMP}"
+      DEPEND="-w ended(get.data.${CDUMP})"
       ;;
     v16)
       bsub -o log.data.${CDUMP} -e log.data.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J get.data.${CDUMP} -W $WALLT \
