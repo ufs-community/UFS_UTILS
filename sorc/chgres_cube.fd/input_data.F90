@@ -4742,7 +4742,7 @@ if (localpet == 0) then
      do i = 1, i_input
        if(dummy2d(i,j) < 0.5_esmf_kind_r4) dummy2d(i,j)=0.0_esmf_kind_r4
        if(icec_save(i,j) > 0.15_esmf_kind_r4) then 
-         !if (dummy2d(i,j) == 0.0_esmf_kind_r4) print*, "CONVERTING WATER TO SEA/LAKE ICE AT ", i, j
+         if (dummy2d(i,j) == 0.0_esmf_kind_r4) print*, "CONVERTING WATER TO SEA/LAKE ICE AT ", i, j
          dummy2d(i,j) = 2.0_esmf_kind_r4
        endif
      enddo
@@ -4917,11 +4917,13 @@ if (localpet == 0) then
      ! the next highest fractional coverage.
      do j = 1, j_input
        do i = 1, i_input
-         if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
+         if((dummy2d(i,j) == 14.0_esmf_kind_r4 .or. dummy2d(i,j) == 17.0_esmf_kind_r4) .and. slmsk_save(i,j) == 1) then
            dummy1d(:) = dummy3d_stype(i,j,:)
-           dummy1d(14) = 0.0_esmf_kind_r4
+           if(dummy2d(i,j) == 14.0_esmf_kind_r4) dummy1d(14) = 0.0_esmf_kind_r4
+           if(dummy2d(i,j) == 17.0_esmf_kind_r4) dummy1d(17) = 0.0_esmf_kind_r4
            dummy2d(i,j) = real(MAXLOC(dummy1d, 1),esmf_kind_r4)
          endif
+!         if(slmsk_save(i,j) == 2) dummy2d(i,j) = 0.0_esmf_kind_r4
        enddo
      enddo
    endif
@@ -4949,7 +4951,7 @@ if (localpet == 0) then
    if (.not. sotyp_from_climo) then
      do j = 1, j_input
      do i = 1, i_input
-       if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9   
+       if((dummy2d(i,j) == 14.0_esmf_kind_r4 .or. dummy2d(i,j) == 17.0_esmf_kind_r4) .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9   
      enddo
      enddo
    
@@ -5336,16 +5338,16 @@ if (localpet == 0) then
    if (rc <= 0) then
      rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
      if (rc <= 0) then
-       if (.not. vgtyp_from_climo) then
+       if (.not. vgtyp_from_climo .and. trim(external_model) .ne. "GFS") then
          call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
        else
-      do j = 1, j_input
-        do i = 1, i_input
-          dummy2d(i,j) = 0.0_esmf_kind_r4
-          if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
-          dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
-      enddo
-      enddo    
+         do j = 1, j_input
+         do i = 1, i_input
+           dummy2d(i,j) = 0.0_esmf_kind_r4
+           if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
+           dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
+         enddo
+         enddo    
        endif ! replace_vgtyp
      endif !not find :anl:
    endif !not find hour fcst:
@@ -5353,17 +5355,22 @@ if (localpet == 0) then
    if (trim(external_model) .ne. "GFS") then
    do j = 1, j_input
      do i = 1,i_input
+     
+     
+     !if land ice over land
      if (dummy2d(i,j) == 15.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
-       if (dummy3d(i,j,1) < 0.6) then 
-       dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
-       elseif (dummy3d(i,j,1) > 0.99) then
-          slmsk_save(i,j) = 0
-        dummy2d(i,j) = 0.0_esmf_kind_r4
-        dummy2d_82(i,j) = 0.0_esmf_kind_r8
+       ! max soil moisture means glacier. others are snowpack
+       if (dummy3d(i,j,1) > 0.99) then
+         dummy2d_82(i,j) = 16.0_esmf_kind_r8
        endif
-     elseif (dummy2d(i,j) == 17.0_esmf_kind_r4 .and. slmsk_save(i,j)==0) then
+     endif
+
+     ! HRRR has vegetation type 15 over sea ice, but should be 0 for
+     ! interpolation to target grid
+     if (dummy2d(i,j) == 15.0_esmf_kind_r4 .and. slmsk_save(i,j) == 2) then
        dummy2d(i,j) = 0.0_esmf_kind_r4
      endif
+
      enddo
    enddo
    endif     
@@ -5376,7 +5383,7 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
- print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
+ print*,"- CALL FieldScatter FOR INPUT SOIL TYPE."
  call ESMF_FieldScatter(soil_type_input_grid, dummy2d_82, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
