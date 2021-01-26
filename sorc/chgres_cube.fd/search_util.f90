@@ -105,6 +105,8 @@
      default_value = 1.0
    case (230) ! soil type on the input grid
      default_value = 11.0
+   case (231) ! soil type at land ice points
+     default_value = 16.0
    case default
      print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field
      call mpi_abort(mpi_comm_world, 77, ierr)
@@ -177,16 +179,18 @@
          ! with terrain height from the input grid interpolated to the target grid
          field(i,j) = terrain_land(i,j)
          repl_default = repl_default + 1
-       elseif (field_num == 224 .and. PRESENT(soilt_climo)) then
+       elseif ((field_num == 224 .or. field_num == 231) .and. PRESENT(soilt_climo)) then
           ! When using input soil type fields instead of climatological data on the
           ! target grid, isolated land locations that exist in the target grid but
           ! not the input grid don't receiving proper soil type information, so replace
           ! with climatological values
          field(i,j) = soilt_climo(i,j)
          repl_default = repl_default + 1
+         !write(6,101) field_num,tile,i,j,field(i,j)
        else
          field(i,j) = default_value  ! Search failed.  Use default value.
          repl_default = repl_default + 1
+         !write(6,101) field_num,tile,i,j,field(i,j)
        endif
 
        !write(6,101) field_num,tile,i,j,field(i,j)
