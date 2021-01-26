@@ -40,7 +40,7 @@ hh_d=$(echo $date10 | cut -c9-10)
 
 YMDH=${yy}${mm}${dd}.${hh}0000
 
-WORKDIR=$OUTDIR/work.$MEMBER
+WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
 if [ ${MEMBER} == 'hires' ]; then
   CINP=${CINP:-"C768"}
