@@ -65,7 +65,7 @@ if [ "$EXTRACT_DATA" = "yes" ]; then
       ;;
     v16retro)
       bsub -o log.data.v16retro -e log.data.v16retro -q $QUEUE -P $PROJECT_CODE -J get.data.v16retro -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v16retro.data.sh"
+        -R "affinity[core(1)]" -M $MEM "./get_v16retro.data.sh ${CDUMP}"
       DEPEND="-w ended(get.data.v16retro)"
       ;;
     v16)
@@ -131,9 +131,15 @@ if [ "$RUN_CHGRES" = "yes" ]; then
       fi
       ;;
     v16retro)
-      bsub -e log.gdas -o log.gdas -q $QUEUE -P $PROJECT_CODE -J chgres_gdas -W $WALLT \
-        -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
-        "./run_v16retro.chgres.sh hires"
+      if [ "$CDUMP" = "gdas" ]; then
+        bsub -e log.${CDUMP} -o log.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J chgres_${CDUMP} -W $WALLT \
+          -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
+          "./run_v16retro.chgres.sh hires"
+      else
+        bsub -e log.${CDUMP} -o log.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J chgres_${CDUMP} -W $WALLT \
+          -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
+          "./run_v16.chgres2.sh ${CDUMP}"
+      fi
      ;;
     v16)
       bsub -e log.${CDUMP} -o log.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J chgres_${CDUMP} -W $WALLT \
