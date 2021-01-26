@@ -65,12 +65,12 @@ if [ $EXTRACT_DATA == yes ]; then
       ;;
     v16)
       bsub -o log.data.${CDUMP} -e log.data.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J get.data.${CDUMP} -W $WALLT \
-        -R "rusage[mem=$MEM]" "./get_v16.data2.sh ${CDUMP}"
+        -R "rusage[mem=$MEM]" "./get_v16.data.sh ${CDUMP}"
       if [ "$CDUMP" = "gdas" ] ; then
         for group in grp1 grp2 grp3 grp4 grp5 grp6 grp7 grp8
         do
           bsub -o log.data.${group} -e log.data.${group} -q $QUEUE -P $PROJECT_CODE -J get.data.${group} -W $WALLT \
-            -R "rusage[mem=$MEM]" "./get_v16.data2.sh ${group}"
+            -R "rusage[mem=$MEM]" "./get_v16.data.sh ${group}"
         done
       fi
       DEPEND="-w ended(get.data.*)"
@@ -131,12 +131,12 @@ if [ $RUN_CHGRES == yes ]; then
            -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16retro.chgres.sh hires"
       else
         bsub -e log.${CDUMP} -o log.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J chgres_${CDUMP} -M $MEM -W $WALLT \
-           -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres2.sh ${CDUMP}"
+           -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres.sh ${CDUMP}"
       fi 
       ;;
     v16)
       bsub -e log.${CDUMP} -o log.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J chgres_${CDUMP} -M $MEM -W $WALLT \
-         -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres2.sh ${CDUMP}"
+         -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres.sh ${CDUMP}"
       ;;
   esac
 
@@ -175,7 +175,7 @@ if [ $RUN_CHGRES == yes ]; then
       ;;
       v16)
         bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -M $MEM -W $WALLT \
-          -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres2.sh ${MEMBER_CH}"
+          -extsched 'CRAYLINUX[]' $DEPEND "export NODES=$NUM_NODES; ./run_v16.chgres.sh ${MEMBER_CH}"
       ;;
       esac
       MEMBER=$(( $MEMBER + 1 ))

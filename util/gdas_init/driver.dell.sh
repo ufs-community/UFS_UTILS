@@ -70,12 +70,12 @@ if [ "$EXTRACT_DATA" = "yes" ]; then
       ;;
     v16)
       bsub -o log.data.${CDUMP} -e log.data.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J get.data.${CDUMP} -W $WALLT \
-        -R "affinity[core(1)]" -M $MEM "./get_v16.data2.sh ${CDUMP}"
+        -R "affinity[core(1)]" -M $MEM "./get_v16.data.sh ${CDUMP}"
       if [ "$CDUMP" = "gdas" ] ; then
         for group in grp1 grp2 grp3 grp4 grp5 grp6 grp7 grp8
         do
           bsub -o log.data.enkf.${group} -e log.data.enkf.${group} -q $QUEUE -P $PROJECT_CODE -J get.data.enkf.${group} -W $WALLT \
-            -R "affinity[core(1)]" -M $MEM "./get_v16.data2.sh ${group}"
+            -R "affinity[core(1)]" -M $MEM "./get_v16.data.sh ${group}"
         done
       fi
       DEPEND="-w ended(get.data.*)"
@@ -138,13 +138,13 @@ if [ "$RUN_CHGRES" = "yes" ]; then
       else
         bsub -e log.${CDUMP} -o log.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J chgres_${CDUMP} -W $WALLT \
           -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
-          "./run_v16.chgres2.sh ${CDUMP}"
+          "./run_v16.chgres.sh ${CDUMP}"
       fi
      ;;
     v16)
       bsub -e log.${CDUMP} -o log.${CDUMP} -q $QUEUE -P $PROJECT_CODE -J chgres_${CDUMP} -W $WALLT \
         -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
-        "./run_v16.chgres2.sh ${CDUMP}"
+        "./run_v16.chgres.sh ${CDUMP}"
      ;;
   esac
 
@@ -193,7 +193,7 @@ if [ "$RUN_CHGRES" = "yes" ]; then
       v16)
         bsub -e log.${MEMBER_CH} -o log.${MEMBER_CH} -q $QUEUE -P $PROJECT_CODE -J chgres_${MEMBER_CH} -W $WALLT \
           -x $NODES -R "affinity[core(1):distribute=balance]" $DEPEND \
-          "./run_v16.chgres2.sh ${MEMBER_CH}"
+          "./run_v16.chgres.sh ${MEMBER_CH}"
         ;;
       esac
       MEMBER=$(( $MEMBER + 1 ))
