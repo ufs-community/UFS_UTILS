@@ -81,7 +81,7 @@ if [ $EXTRACT_DATA == yes ]; then
       ;;
     v16retro)
       DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_v16retro \
-       -o log.data.v16retro -e log.data.v16retro ./get_v16retro.data.sh)
+       -o log.data.v16retro -e log.data.v16retro ./get_v16retro.data.sh ${CDUMP})
       DEPEND="-d afterok:$DATAH"
       ;;
     v16)
@@ -150,8 +150,13 @@ if [ $RUN_CHGRES == yes ]; then
       fi
       ;;
     v16retro)
-      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_gdas \
-      -o log.gdas -e log.gdas ${DEPEND} run_v16retro.chgres.sh hires
+      if [ "$CDUMP" = "gdas" ] ; then
+        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v16retro.chgres.sh hires
+      else
+        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v16.chgres2.sh ${CDUMP}
+      fi
       ;;
     v16)
       sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
