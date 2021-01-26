@@ -14,7 +14,11 @@ done
 }
 
 #---------------------------------------------------------------------------
-# Run chgres using gfs v16 data as input.
+# Run chgres using v16 netcdf history data as input.  These history
+# files are part of the OPS v16 gfs/gdas/enkf tarballs, and the
+# v16 retro parallel gfs tarballs.  To run using the v16 retro
+# gdas tarballs (which contain warm restart files), the 
+# run_v16retro.chgres.sh is used.
 #---------------------------------------------------------------------------
 
 set -x
@@ -29,7 +33,14 @@ WORKDIR=$OUTDIR/work.$MEMBER
 
 if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ] ; then
   CTAR=${CRES_HIRES}
+#---------------------------------------------------------------------------
+# Some gfs tarballs from the v16 retro parallels dont have 'atmos'
+# in their path.  Account for this.
+#---------------------------------------------------------------------------
   INPUT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos"
+  if [ ! -d ${INPUT_DATA_DIR} ]; then
+    INPUT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}"
+  fi
   ATMFILE="${MEMBER}.t${hh}z.atmanl.nc"
   SFCFILE="${MEMBER}.t${hh}z.sfcanl.nc"
 else  

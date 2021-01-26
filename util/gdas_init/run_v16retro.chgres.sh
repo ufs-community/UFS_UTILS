@@ -14,10 +14,14 @@ done
 }
 
 #---------------------------------------------------------------------------
-# Run chgres using gfs v16 parallel data as input.
+# Run chgres for gdas/enkf members using v16 parallel data as input.
 # The enkf data is not saved.  So the coldstart files for all
 # 80 members are simply copies of a single run of chgres using the
-# gdas restart files as input.
+# gdas warm restart files as input.
+#
+# The gfs tarballs only have the netcdf history files.  To run 
+# chgres_cube for the gfs member using the history files, the
+# run_chgres.v16.sh script is used.
 #---------------------------------------------------------------------------
 
 set -x
