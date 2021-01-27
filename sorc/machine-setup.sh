@@ -97,7 +97,8 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
         source /etc/profile
     fi
     target=gaea
-    module purge
+    # Don't purge on gaea, or hell will break loose
+    #module purge
 elif [[ "$(hostname)" =~ "Orion" ]]; then
     target="orion"
     module purge

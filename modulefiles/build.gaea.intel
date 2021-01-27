@@ -1,0 +1,39 @@
+#%Module######################################################################
+##
+##    NEMS FV3 Prerequisites: Gaea/Intel
+
+proc ModulesHelp {} {
+  puts stderr "\tcit - loads modules required for building and running FV3 under NEMS on Gaea/Intel"
+}
+
+module-whatis "loads NEMS FV3 prerequisites for Gaea/Intel"
+
+# NOTE: the "module purge" and loading of the module command are
+# handled by the module-setup.sh (or .csh) script.
+
+##
+## load programming environment
+## this typically includes compiler, MPI and job scheduler
+##
+module load PrgEnv-intel/6.0.5
+module rm intel
+module load intel/19.0.5.281
+module load cray-mpich/7.7.11
+
+##
+## use pre-compiled NetCDF, EMSF and NCEP libraries for above compiler / MPI combination
+##
+module use /lustre/f2/pdata/esrl/gsd/ufs/NCEPLIBS-ufs-v2.0.0/intel-19.0.5.281/cray-mpich-7.7.11/modules
+module load NCEPLIBS/2.0.0
+
+# Needed at runtime:
+module load alps
+
+##
+## load cmake
+##
+module load cmake/3.17.0
+setenv CMAKE_C_COMPILER cc
+setenv CMAKE_CXX_COMPILER CC
+setenv CMAKE_Fortran_COMPILER ftn
+setenv CMAKE_Platform gaea.intel
