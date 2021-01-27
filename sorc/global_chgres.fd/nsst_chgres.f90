@@ -23,6 +23,7 @@
                         data_input, mask_input, data_output, num_nsst_fields, &
                         kgds_output, rlat_output, rlon_output)
 
+ use ipolates_mod
  implicit none
 
  integer, intent(in)          :: imo
@@ -178,7 +179,7 @@
  iret     =0
  ij_input =im_input*jm_input
 
- call ipolates(ip,ipopt,kgds_input,kgds,ij_input,count_water,& 
+ call ipolates_grib1(ip,ipopt,kgds_input,kgds,ij_input,count_water,& 
                num_nsst_fields, ibi, bitmap_input, data_input,  &
                count_water,rlat_water,rlon_water,ibo,bitmap_water, &
                data_water,iret) 

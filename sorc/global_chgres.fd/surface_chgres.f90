@@ -464,6 +464,7 @@
                                calc_liq_soilm, calc_albedo
  
  use gdswzd_mod
+ use ipolates_mod
 
  implicit none
 
@@ -811,18 +812,20 @@
      kgds_output_tmp(1) = kgdso1
      no=count_nonland_output
      allocate(ibo(1))
+     allocate(ibi(1))
+     ibi=1
      allocate(input_dat(imdl_input,jmdl_input,1))
      input_dat(:,:,1)=float(input%sea_ice_flag)
-     call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+     call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                 (imdl_input*jmdl_input), count_nonland_output,    &
-                 1, 1, bitmap_nonland_input, input_dat,  &
+                 1, ibi, bitmap_nonland_input, input_dat,  &
                  no, lats_nonland_output, lons_nonland_output, ibo, &
                  bitmap_nonland_output, output_data_nonland, iret)
      if (iret /= 0) then
        print*,'- ERROR IN IPOLATES ',iret
        return
      endif
-     deallocate(ibo)
+     deallocate(ibo,ibi)
    endif ! is grid all non-land?
    output%sea_ice_flag = 0 ! land
    do ij = 1, count_nonland_output
@@ -846,17 +849,19 @@
      kgds_output_tmp=kgds_output
      kgds_output_tmp(1) = kgdso1
      allocate(ibo(1))
+     allocate(ibi(1))
+     ibi=1
      no=count_nonland_output
-     call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+     call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                 (imdl_input*jmdl_input), count_nonland_output,       &
-                 1, 1, bitmap_nonland_input, input%sea_ice_fract,  &
+                 1, ibi, bitmap_nonland_input, input%sea_ice_fract,  &
                  no, lats_nonland_output, lons_nonland_output, ibo,  &
                  bitmap_nonland_output, output_data_nonland, iret)
      if (iret /= 0) then
        print*,'- ERROR IN IPOLATES ',iret
        return
      endif
-     deallocate(ibo)
+     deallocate(ibo,ibi)
    endif ! is grid all non-land?
    output%sea_ice_flag = 0  ! land
    do ij = 1, count_nonland_output
@@ -964,10 +969,12 @@
      kgds_output_tmp=kgds_output
      kgds_output_tmp(1) = kgdso1
      allocate(ibo(1))
+     allocate(ibi(1))
+     ibi=1
      no=count_sea_ice_output
-     call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+     call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_sea_ice_output,               &
-                   1, 1, bitmap_sea_ice_input, input%sea_ice_depth,  &
+                   1, ibi, bitmap_sea_ice_input, input%sea_ice_depth,  &
                    no, lats_sea_ice_output, lons_sea_ice_output,  &
                    ibo, bitmap_sea_ice_output,     &
                    output_data_sea_ice, iret)
@@ -975,7 +982,7 @@
        print*,'- ERROR IN IPOLATES ',iret
        return
      endif
-     deallocate(ibo)
+     deallocate(ibo,ibi)
      output%sea_ice_depth = 0.0  ! open water/land
      do ij = 1, count_sea_ice_output
        if (bitmap_sea_ice_output(ij)) then 
@@ -1123,17 +1130,19 @@
    kgds_output_tmp=kgds_output
    kgds_output_tmp(1) = kgdso1
    allocate(ibo(1))
+   allocate(ibi(1))
+   ibi=1
    no=count_land_output
-   call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+   call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
               (imdl_input*jmdl_input), count_land_output,               &
-               1, 1, bitmap_land_input, input%skin_temp,  &
+               1, ibi, bitmap_land_input, input%skin_temp,  &
                no, lats_land_output, lons_land_output, ibo,  &
                bitmap_land_output, output_data_land, iret)
    if (iret /= 0) then
      print*,'- ERROR IN IPOLATES SKIN TEMP LAND',iret
      return
    endif
-   deallocate(ibo)
+   deallocate(ibo,ibi)
  endif ! are there land points?
  output%skin_temp= 0.0 
  do ij = 1, count_land_output
@@ -1152,17 +1161,19 @@
    kgds_output_tmp=kgds_output
    kgds_output_tmp(1) = kgdso1
    allocate(ibo(1))
+   allocate(ibi(1))
+   ibi=1
    no=count_nonland_output
-   call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+   call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
               (imdl_input*jmdl_input), count_nonland_output,               &
-               1, 1, bitmap_nonland_input, input%skin_temp,  &
+               1, ibi, bitmap_nonland_input, input%skin_temp,  &
                no, lats_nonland_output, lons_nonland_output, ibo,  &
                bitmap_nonland_output, output_data_nonland, iret)
    if (iret /= 0) then
      print*,'- ERROR IN IPOLATES SKIN TEMP NON LAND',iret
      return
    endif
-   deallocate(ibo)
+   deallocate(ibo,ibi)
  endif
  do ij = 1, count_nonland_output
    if (bitmap_nonland_output(ij)) then
@@ -1277,7 +1288,7 @@
  allocate(ibo(nsoil_input))
  allocate(ibi(nsoil_input))
  ibi=1
- call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+ call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                (imdl_input*jmdl_input), count_sea_ice_output,               &
                 nsoil_input, ibi, bitmap_sea_ice_input2, input_dat,  &
                 no, lats_sea_ice_output, lons_sea_ice_output, ibo,  &
@@ -1336,16 +1347,18 @@
    kgds_output_tmp(1) = kgdso1
    no=count_land_output
    allocate(ibo(1))
-   call ipolates(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
+   allocate(ibi(1))
+   ibi=1
+   call ipolates_grib1(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
               (imdl_input*jmdl_input), count_land_output,               &
-               1, 1, bitmap_land_input, input%snow_liq_equiv,  &
+               1, ibi, bitmap_land_input, input%snow_liq_equiv,  &
                no, lats_land_output, lons_land_output, ibo, bitmap_land_output,     &
                output_data_land, iret)
    if (iret /= 0) then
      print*,'- ERROR IN IPOLATES FOR SNOW LIQUID EQUIVALENT ',iret
      return
    endif
-   deallocate(ibo)
+   deallocate(ibo,ibi)
  endif ! are there land points?
  output%snow_liq_equiv= 0.0 ! non-land
 ! the budget interpolation can spread very shallow amounts of snow over
@@ -1374,16 +1387,18 @@
  kgds_output_tmp(1) = kgdso1
  no=count_sea_ice_output
  allocate(ibo(1))
- call ipolates(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
+ allocate(ibi(1))
+ ibi=1
+ call ipolates_grib1(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
               (imdl_input*jmdl_input), count_sea_ice_output,               &
-               1, 1, bitmap_sea_ice_input, input%snow_liq_equiv,  &
+               1, ibi, bitmap_sea_ice_input, input%snow_liq_equiv,  &
                no, lats_sea_ice_output, lons_sea_ice_output, ibo,  &
                bitmap_sea_ice_output, output_data_sea_ice, iret)
  if (iret /= 0) then
    print*,'- ERROR IN IPOLATES ',iret
    return
  endif
- deallocate(ibo)
+ deallocate(ibo,ibi)
  do ij = 1, count_sea_ice_output
    if (bitmap_sea_ice_output(ij)) then
      output%snow_liq_equiv(ijsav_sea_ice_output(ij))=output_data_sea_ice(ij)
@@ -1431,17 +1446,19 @@
        kgds_output_tmp=kgds_output
        kgds_output_tmp(1) = kgdso1
        allocate(ibo(1))
+       allocate(ibi(1))
+       ibi=1
        no=count_land_output
-       call ipolates(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
+       call ipolates_grib1(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_land_output,               &
-                   1, 1, bitmap_land_input, input%snow_depth,  &
+                   1, ibi, bitmap_land_input, input%snow_depth,  &
                    no, lats_land_output, lons_land_output, ibo, bitmap_land_output,     &
                    output_data_land, iret)
        if (iret /= 0) then
          print*,'- ERROR IN IPOLATES ',iret
          return
        endif
-       deallocate(ibo)
+       deallocate(ibo,ibi)
      endif ! are there land points?
 ! note: very shallow amounts of liquid equivalent are zeroed out
 ! when the budget interpolation is used.  make sure depth is consistent.
@@ -1474,16 +1491,18 @@
        kgds_output_tmp(1) = kgdso1
        no=count_sea_ice_output
        allocate(ibo(1))
-       call ipolates(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
+       allocate(ibi(1))
+       ibi=1
+       call ipolates_grib1(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
                     (imdl_input*jmdl_input), count_sea_ice_output,               &
-                     1, 1, bitmap_sea_ice_input, input%snow_depth,  &
+                     1, ibi, bitmap_sea_ice_input, input%snow_depth,  &
                      no, lats_sea_ice_output, lons_sea_ice_output, ibo,  &
                      bitmap_sea_ice_output, output_data_sea_ice, iret)
        if (iret /= 0) then
          print*,'- ERROR IN IPOLATES ',iret
          return
        endif
-       deallocate(ibo)
+       deallocate(ibo,ibi)
        do ij = 1, count_sea_ice_output
          if (bitmap_sea_ice_output(ij)) then  ! ipolates found data
 ! ensure interpolated liq equiv is consistent with depth
@@ -1633,17 +1652,19 @@
      kgds_output_tmp=kgds_output
      kgds_output_tmp(1) = kgdso1
      allocate(ibo(1))
+     allocate(ibi(1))
+     ibi=1
      no=count_land_output
-     call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+     call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                 (imdl_input*jmdl_input), count_land_output,               &
-                 1, 1, bitmap_land_input, input%greenfrc,  &
+                 1, ibi, bitmap_land_input, input%greenfrc,  &
                  no, lats_land_output, lons_land_output, ibo,  &
                  bitmap_land_output, output_data_land, iret)
      if (iret /= 0) then
         print*,'- ERROR IN IPOLATES ',iret
         return
      endif
-     deallocate(ibo)
+     deallocate(ibo,ibi)
    endif ! are there land points?
    output%greenfrc= 0.0 ! non-land
    do ij = 1, count_land_output
@@ -1713,7 +1734,7 @@
        kgds_output_tmp(1) = kgdso1
        allocate(ibo(2))
        no=count_land_output
-       call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+       call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_land_output,               &
                    2, (/1,1/), bitmap_land_input2, input_dat,  &
                    no, lats_land_output, lons_land_output, ibo,  &
@@ -1870,7 +1891,7 @@
      kgds_output_tmp(1) = kgdso1
      allocate(ibo(6))
      no=count_land_output
-     call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+     call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_land_output,          &
                    6, (/1,1,1,1,1,1/), bitmap_land_input2, input_dat,  &
                    no, lats_land_output, lons_land_output, ibo,  &
@@ -1974,16 +1995,18 @@
        kgds_output_tmp(1) = kgdso1
        no=count_land_output
        allocate(ibo(1))
-       call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+       allocate(ibi(1))
+       ibi=1
+       call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_land_output,     &
-                   1, 1, bitmap_land_input, input%snow_free_albedo,  &
+                   1, ibi, bitmap_land_input, input%snow_free_albedo,  &
                    no, lats_land_output, lons_land_output, ibo,   &
                    bitmap_land_output, output_data_land, iret)
        if (iret /= 0) then
          print*,'- ERROR IN IPOLATES ',iret
          return
        endif
-       deallocate(ibo)
+       deallocate(ibo,ibi)
      endif ! are there land points?
      output%snow_free_albedo = 0.06  ! open water
      do ij = 1, count_land_output
@@ -2019,16 +2042,18 @@
        kgds_output_tmp(1) = kgdso1
        no=count_land_output
        allocate(ibo(1))
-       call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+       allocate(ibi(1))
+       ibi=1
+       call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_land_output,               &
-                   1, 1, bitmap_land_input, input%mxsnow_alb,  &
+                   1, ibi, bitmap_land_input, input%mxsnow_alb,  &
                    no, lats_land_output, lons_land_output, ibo, bitmap_land_output,     &
                    output_data_land, iret)
        if (iret /= 0) then
          print*,'- ERROR IN IPOLATES ',iret
          return
        endif
-       deallocate(ibo)
+       deallocate(ibo,ibi)
      endif ! are there land points?
      output%mxsnow_alb= 0.0 ! non-land
      do ij = 1, count_land_output

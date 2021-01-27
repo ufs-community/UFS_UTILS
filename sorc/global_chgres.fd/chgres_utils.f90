@@ -20,10 +20,11 @@
 !!  - ipolates()     IREDELL'S POLATE FOR SCALAR FIELDS                     
 !!                                                                       
       SUBROUTINE GL2ANY(IP,KM,G1,IM1,JM1,G2,IM2,JM2,RLON,RLAT) 
+      use ipolates_mod
       IMPLICIT NONE 
       INTEGER, INTENT(IN)     :: IP, KM, IM1, JM1, IM2, JM2 
       REAL, INTENT(IN)        :: G1(IM1,JM1,KM) 
-      REAL, INTENT(IN)        :: RLAT(IM2,JM2),RLON(IM2,JM2) 
+      REAL, INTENT(INOUT)     :: RLAT(IM2,JM2),RLON(IM2,JM2) 
       REAL, INTENT(OUT)       :: G2(IM2,JM2,KM) 
       LOGICAL*1               :: L1(IM1,JM1,KM),L2(IM2,JM2,KM) 
       INTEGER                 :: IB1(KM),IB2(KM) 
@@ -41,7 +42,7 @@
       KGDS1(3)=JM1 
       KGDS1(8)=NINT(-360000./IM1) 
       KGDS1(10)=JM1/2 
-      CALL IPOLATES(IP,IPOPT,KGDS1,KGDS2,IM1*JM1,IM2*JM2,KM,IB1,L1,G1,  &
+      CALL IPOLATES_GRIB1(IP,IPOPT,KGDS1,KGDS2,IM1*JM1,IM2*JM2,KM,IB1,L1,G1,  &
                     NO,RLAT,RLON,IB2,L2,G2,IRET)                        
       IF(IRET/=0)THEN 
         PRINT*,'FATAL ERROR IN ROUTINE GL2ANY, IRET: ', IRET 
@@ -85,10 +86,11 @@
 !   LANGUAGE: FORTRAN 90
 !                                                                       
 !C$$$                                                                   
+      use ipolatev_mod
       IMPLICIT NONE 
       INTEGER, INTENT(IN)     :: IP, KM, IM1, JM1, IM2, JM2 
       REAL, INTENT(IN)        :: G1U(IM1,JM1,KM), G1V(IM1,JM1,KM)
-      REAL, INTENT(IN)        :: RLAT(IM2,JM2),RLON(IM2,JM2) 
+      REAL, INTENT(INOUT)     :: RLAT(IM2,JM2),RLON(IM2,JM2) 
       REAL, INTENT(OUT)       :: G2U(IM2,JM2,KM), G2V(IM2,JM2,KM)
       LOGICAL*1               :: L1(IM1,JM1,KM),L2(IM2,JM2,KM) 
       INTEGER                 :: IB1(KM),IB2(KM) 
@@ -109,7 +111,7 @@
       KGDS1(10)=JM1/2 
       CROT = 1.0    ! DONT ROTATE WINDS TO THE OUTPUT GRID.
       SROT = 0.0    ! FV3 EXPECTS EARTH RELATIVE WINDS.
-      CALL IPOLATEV(IP,IPOPT,KGDS1,KGDS2,IM1*JM1,IM2*JM2,KM,IB1,L1,G1U,  &
+      CALL IPOLATEV_GRIB1(IP,IPOPT,KGDS1,KGDS2,IM1*JM1,IM2*JM2,KM,IB1,L1,G1U,  &
                     G1V,NO,RLAT,RLON,CROT,SROT,IB2,L2,G2U,G2V,IRET)                        
       IF(IRET/=0)THEN 
         PRINT*,'FATAL ERROR IN ROUTINE GL2ANYV, IRET: ', IRET 

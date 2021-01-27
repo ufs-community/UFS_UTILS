@@ -3115,70 +3115,6 @@ C
       RETURN
       END
 
-
-C-----------------------------------------------------------------------
-      SUBROUTINE GL2ANY(IP,KM,G1,IM1,JM1,G2,IM2,JM2,IDRTI,RLON,RLAT)
-C$$$  SUBPROGRAM DOCUMENTATION BLOCK
-C
-C SUBPROGRAM:    GL2GL       INTERPOLATE GAUSSIAN GRID TO GAUSSIAN GRID
-C   PRGMMR: IREDELL          ORG: W/NMC23     DATE: 92-10-31
-C
-C ABSTRACT: LINEARLY INTERPOLATES GAUSSIAN GRID TO GAUSSIAN GRID.
-C
-C PROGRAM HISTORY LOG:
-C   91-10-31  MARK IREDELL
-C
-C USAGE:    CALL GL2GL(IP,KM,G1,IM1,JM1,G2,IM2,JM2)
-C   INPUT ARGUMENT LIST:
-C     IP           INTEGER INTERPOLATION TYPE
-C     KM           INTEGER NUMBER OF LEVELS
-C     G1           REAL (IM1,JM1,KM) INPUT GAUSSIAN FIELD
-C     IM1          INTEGER NUMBER OF INPUT LONGITUDES
-C     JM1          INTEGER NUMBER OF INPUT LATITUDES
-C     IM2          INTEGER NUMBER OF OUTPUT LONGITUDES
-C     JM2          INTEGER NUMBER OF OUTPUT LATITUDES
-C   OUTPUT ARGUMENT LIST:
-C     G2           REAL (IM2,JM2,KM) OUTPUT GAUSSIAN FIELD
-C
-C SUBPROGRAMS CALLED:
-C   IPOLATES     IREDELL'S POLATE FOR SCALAR FIELDS
-C
-C ATTRIBUTES:
-C   LANGUAGE: FORTRAN
-C
-CC$$$
-      REAL G1(IM1,JM1,KM),G2(IM2,JM2,KM)
-      LOGICAL*1 L1(IM1,JM1,KM),L2(IM2,JM2,KM)
-      REAL, intent(in) :: RLAT(IM2,JM2),RLON(IM2,JM2)
-      INTEGER IB1(KM),IB2(KM)
-      INTEGER KGDS1(200),KGDS2(200)
-      INTEGER IDRTI, IDRTO
-      DATA KGDS1/4,0,0,90000,0,0,-90000,193*0/
-      DATA KGDS2/4,0,0,90000,0,0,-90000,193*0/
-      INTEGER IPOPT(20)
-      DATA IPOPT/20*0/
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      KGDS1(1) = IDRTI
-      KGDS2(1) = -1
-      NO = IM2*JM2
-      IF(IM1.NE.IM2.OR.JM1.NE.JM2) THEN
-        IB1=0
-        KGDS1(2)=IM1
-        KGDS1(3)=JM1
-        KGDS1(8)=NINT(-360000./IM1)
-        KGDS1(10)=JM1/2
-        KGDS2(2)=IM2
-        KGDS2(3)=JM2
-        KGDS2(8)=NINT(-360000./IM2)
-        KGDS2(10)=JM2/2
-        CALL IPOLATES(IP,IPOPT,KGDS1,KGDS2,IM1*JM1,IM2*JM2,KM,IB1,L1,G1,
-     &                NO,RLAT,RLON,IB2,L2,G2,IRET)
-      ELSE
-        G2=G1
-      ENDIF
-      END
-
-
       function spherical_distance(theta1,phi1,theta2,phi2)
 
       real, intent(in) :: theta1, phi1, theta2, phi2
@@ -3285,6 +3221,7 @@ C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,
      3           is_south_pole,is_north_pole,IMI,JMI,OA_IN,OL_IN,
      4           slm_in,lon_in,lat_in)
+      use ipolates_mod
       implicit none
       real, parameter :: MISSING_VALUE = -9999.
       real, parameter :: D2R = 3.14159265358979/180.
@@ -3324,7 +3261,7 @@ C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       integer int_opt, ipopt(20), kgds_input(200), kgds_output(200)
       integer count_land_output
       integer ij, ijmdl_output, iret, num_mismatch_land, num
-      integer ibo(1)
+      integer ibo(1), ibi(1)
       logical*1, allocatable :: bitmap_input(:,:)
       logical*1, allocatable :: bitmap_output(:)
       integer, allocatable :: ijsav_land_output(:)
@@ -3489,13 +3426,14 @@ C
 
       oa4 = 0.0
       ol = 0.0
+      ibi = 1
       
       do KWD=1,4
         bitmap_output = .false.
          output_data_land = 0.0
-        call ipolates(int_opt, ipopt, kgds_input, kgds_output,   
+        call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output,   
      &         (IMI*JMI), count_land_output,               
-     &          1, 1, bitmap_input, oa_in(:,:,KWD),  
+     &          1, ibi, bitmap_input, oa_in(:,:,KWD),  
      &          count_land_output, lats_land_output,
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)
@@ -3565,9 +3503,9 @@ C
       do KWD=1,4
         bitmap_output = .false.
         output_data_land = 0.0
-        call ipolates(int_opt, ipopt, kgds_input, kgds_output,   
+        call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output,   
      &         (IMI*JMI), count_land_output,               
-     &          1, 1, bitmap_input, ol_in(:,:,KWD),  
+     &          1, ibi, bitmap_input, ol_in(:,:,KWD),  
      &          count_land_output, lats_land_output,
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)

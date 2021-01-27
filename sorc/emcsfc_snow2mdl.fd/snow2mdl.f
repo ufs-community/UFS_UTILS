@@ -175,15 +175,16 @@
 !$$$
 
  use gdswzd_mod
+ use ipolates_mod
 
  implicit none
 
  integer                   :: i, j, ii, jj, ij
  integer                   :: ijmdl2, istart, iend, imid, iii
  integer, allocatable      :: idum(:,:)
- integer                   :: int_opt, ipopt(20)
+ integer                   :: int_opt, ipopt(20), ibi(1)
  integer                   :: kgds_mdl_tmp(200)
- integer                   :: no, ibo, iret, nret
+ integer                   :: no, ibo(1), iret, nret
 
  logical*1, allocatable    :: bitmap_mdl(:)
 
@@ -248,6 +249,7 @@
  NESDIS_IMS : if (use_nesdis) then
 
    ipopt = 0
+   ibi = 1
    if (nesdis_res < (0.5*resol_mdl)) then
      print*,"- INTERPOLATE NH NESDIS/IMS DATA TO MODEL GRID USING BUDGET METHOD."
      ipopt(1)=2  ! break model grid cell into 25 points.
@@ -274,9 +276,9 @@
    bitmap_mdl=.false.  ! if interpolation routine can't find data
                        ! at a point, this flag is false.
 
-   call ipolates(int_opt, ipopt, kgds_nesdis, kgds_mdl_tmp,   &
+   call ipolates_grib1(int_opt, ipopt, kgds_nesdis, kgds_mdl_tmp,   &
                 (inesdis*jnesdis), ijmdl,               &
-                 1, 1, bitmap_nesdis, snow_cvr_nesdis,  &
+                 1, ibi, bitmap_nesdis, snow_cvr_nesdis,  &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_cvr_mdl_1d, iret)
 
@@ -302,7 +304,7 @@
        if (lats_mdl(ij) <= lat_threshold) then
          snow_cvr_mdl_1d(ij) = 0.0
        else 
-         call gdswzd(kgds_nesdis,-1,1,undefined_value,gridi,gridj, &
+         call gdswzd_grib1(kgds_nesdis,-1,1,undefined_value,gridi,gridj, &
                      lons_mdl(ij),lats_mdl(ij),nret) 
          if (nret /= 1) then
            print*,"- WARNING: MODEL POINT OUTSIDE NESDIS/IMS GRID: ", ipts_mdl(ij), jpts_mdl(ij)
@@ -337,6 +339,7 @@
 !----------------------------------------------------------------------
 
    ipopt = 0
+   ibi = 1
    if (afwa_res < (0.5*resol_mdl)) then
      print*,"- INTERPOLATE GLOBAL AFWA DATA TO MODEL GRID USING BUDGET METHOD."
      ipopt(1)=-1  ! break model grid cell into 25 points.
@@ -361,9 +364,9 @@
    allocate (bitmap_mdl(ijmdl))
    bitmap_mdl = .false.
 
-   call ipolates(int_opt, ipopt, kgds_afwa_global, kgds_mdl_tmp,    &
+   call ipolates_grib1(int_opt, ipopt, kgds_afwa_global, kgds_mdl_tmp,    &
                 (iafwa*jafwa), ijmdl,  &
-                 1, 1, bitmap_afwa_global, snow_dep_afwa_global, &
+                 1, ibi, bitmap_afwa_global, snow_dep_afwa_global, &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_dep_mdl_tmp, iret)
 
@@ -408,6 +411,7 @@
 !----------------------------------------------------------------------
 
    ipopt = 0
+   ibi = 1
    if (afwa_res < (0.5*resol_mdl)) then
      print*,"- INTERPOLATE NH AFWA DATA TO MODEL GRID USING BUDGET METHOD."
      ipopt(1)=-1  ! break model grid cell into 25 points.
@@ -432,9 +436,9 @@
    allocate (bitmap_mdl(ijmdl))
    bitmap_mdl = .false.
 
-   call ipolates(int_opt, ipopt, kgds_afwa_nh, kgds_mdl_tmp,    &
+   call ipolates_grib1(int_opt, ipopt, kgds_afwa_nh, kgds_mdl_tmp,    &
                 (iafwa*jafwa), ijmdl,  &
-                 1, 1, bitmap_afwa_nh, snow_dep_afwa_nh, &
+                 1, ibi, bitmap_afwa_nh, snow_dep_afwa_nh, &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_dep_mdl_tmp, iret)
 
@@ -545,6 +549,7 @@
  AUTOSNOW : if (use_autosnow) then
 
    ipopt = 0
+   ibi = 1
    if (autosnow_res < (0.5*resol_mdl)) then
      print*,"- INTERPOLATE AUTOSNOW DATA TO MODEL GRID USING BUDGET METHOD."
      ipopt(1)=2    ! break model grid cell into 25 points.
@@ -571,9 +576,9 @@
    bitmap_mdl=.false.  ! if interpolation routine can't find data
                        ! at a point, this flag is false.
 
-   call ipolates(int_opt, ipopt, kgds_autosnow, kgds_mdl_tmp,   &
+   call ipolates_grib1(int_opt, ipopt, kgds_autosnow, kgds_mdl_tmp,   &
                 (iautosnow*jautosnow), ijmdl,               &
-                 1, 1, bitmap_autosnow, snow_cvr_autosnow,  &
+                 1, ibi, bitmap_autosnow, snow_cvr_autosnow,  &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_cvr_mdl_1d, iret)
 
@@ -618,6 +623,7 @@
 !----------------------------------------------------------------------
 
    ipopt = 0
+   ibi = 1
    if (afwa_res < (0.5*resol_mdl)) then
      print*,"- INTERPOLATE SH AFWA DATA TO MODEL GRID USING BUDGET METHOD."
      ipopt(1)=-1  ! break model grid cell into 25 points.
@@ -642,9 +648,9 @@
    allocate (bitmap_mdl(ijmdl))
    bitmap_mdl = .false.
 
-   call ipolates(int_opt, ipopt, kgds_afwa_sh, kgds_mdl_tmp,    &
+   call ipolates_grib1(int_opt, ipopt, kgds_afwa_sh, kgds_mdl_tmp,    &
                 (iafwa*jafwa), ijmdl,  &
-                 1, 1, bitmap_afwa_sh, snow_dep_afwa_sh, &
+                 1, ibi, bitmap_afwa_sh, snow_dep_afwa_sh, &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_dep_mdl_tmp, iret)
 
