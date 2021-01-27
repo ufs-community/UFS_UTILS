@@ -15,35 +15,36 @@
 #
 # Variable definitions:
 # --------------------
-# EXTRACT_DIR - directory where data extracted from HPSS
-#               is stored.
+# EXTRACT_DIR  - Directory where data extracted from HPSS
+#                is stored.
 # EXTRACT_DATA - Set to 'yes' to extract data from HPSS.
 #                If data has been extracted and is located
 #                in EXTRACT_DIR, set to 'no'.
-# RUN_CHGRES - To run chgres, set to 'yes'.  To extract
-#              data only, set to 'no'.
-# yy/mm/dd/hh - The year/month/day/hour of your desired
-#               experiment.  Currently, does not support
-#               pre-ENKF GFS data, prior to
-#               2012 May 21 00z.
-# LEVS        - Number of hybrid levels plus 1.  To
-#               run with 64 levels, set LEVS to 65.
-# CRES_HIRES  - Resolution of the hires component of
-#               your experiment.
-# CRES_ENKF   - Resolution of the enkf component of the
-#               your experiment.
-# UFS_DIR - Location of your checked out UFS_UTILS
-#           repo.
-# OUTDIR  - Directory where data output from chgres is stored.
-# CDUMP   - When 'gdas', will process gdas and enkf members,
-#           when 'gfs', will process gfs for free forecast
-#           only.
-# use_v16 - When 'yes', use v16 retro parallel data.         
+# RUN_CHGRES   - To run chgres, set to 'yes'.  To extract
+#                data only, set to 'no'.
+# yy/mm/dd/hh  - The year/month/day/hour of your desired
+#                experiment.  Currently, does not support
+#                pre-ENKF GFS data, prior to
+#                2012 May 21 00z.  Use two digits.
+# LEVS         - Number of hybrid levels plus 1.  To
+#                run with 64 levels, set LEVS to 65.
+# CRES_HIRES   - Resolution of the hires component of
+#                your experiment.
+# CRES_ENKF    - Resolution of the enkf component of the
+#                your experiment.
+# UFS_DIR      - Location of your checked out UFS_UTILS
+#                repo.
+# OUTDIR       - Directory where the coldstart data output 
+#                from chgres is stored.
+# CDUMP        - When 'gdas', will process gdas and enkf 
+#                members. When 'gfs', will process gfs 
+#                member for running free forecast only.
+# use_v16retro - When 'yes', use v16 retro parallel data.         
 #
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/gpfs/dell1/stmp/George.Gayno/gdas.init/input
-EXTRACT_DATA=yes
+EXTRACT_DATA=no
 
 RUN_CHGRES=yes
 
@@ -52,7 +53,7 @@ mm=01
 dd=20
 hh=00
 
-use_v16=yes
+use_v16retro=yes
 
 LEVS=65
 
@@ -69,13 +70,13 @@ OUTDIR=/gpfs/dell1/stmp/George.Gayno/gdas.init/output
 # Dont touch anything below here.
 #---------------------------------------------------------
 
-if [ "$use_v16" = "yes" ]; then
+if [ "$use_v16retro" = "yes" ]; then
 
   gfs_ver=v16retro
 
 else
 
-  gfs_ver=v15
+  gfs_ver=v16
 
 # No ENKF data prior to 2012/05/21/00z
   if [ $yy$mm$dd$hh -lt 2012052100 ]; then
@@ -88,6 +89,8 @@ else
     gfs_ver=v13
   elif [ $yy$mm$dd$hh -lt 2019061200 ]; then
     gfs_ver=v14
+  elif [ $yy$mm$dd$hh -lt 2021030100 ]; then  # change this once v16 is implemented.
+    gfs_ver=v15
   fi
 
 fi

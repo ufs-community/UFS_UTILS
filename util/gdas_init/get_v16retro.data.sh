@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #----------------------------------------------------------------------
-# Retrieve gfs v16 parallel run data from hpss.
+# Retrieve gfs v16 retrospective parallel data from hpss.
 #----------------------------------------------------------------------
 
 set -x
