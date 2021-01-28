@@ -41,7 +41,7 @@ QUEUE="batch"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
+export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube.public.v2
 
 export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
 

@@ -29,8 +29,10 @@ module use ../../modulefiles
 module load build.$target
 module list
 
-export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
-PROJECT_CODE="hfv3gfs"
+#export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
+export OUTDIR=/lfs4/NAGAPE/hpc-wof1/lreames/chgres_cube/reg_tests/tests_out/release.publicv2.new
+#PROJECT_CODE="hfv3gfs"
+PROJECT_CODE="hpc-wof1"
 QUEUE="batch"
 export machine="jet"
 export HDF5_DISABLE_VERSION_CHECK=2
@@ -42,9 +44,11 @@ export HDF5_DISABLE_VERSION_CHECK=2
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
+#export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube.public.v2
+export HOMEreg=/lfs4/NAGAPE/hpc-wof1/lreames/chgres_cube/reg_tests/
 
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
+#export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
+export NCCMP=nccmp
 
 LOG_FILE=regression.log
 SUM_FILE=summary.log
@@ -54,7 +58,9 @@ export OMP_STACKSIZE=1024M
 
 export APRUN=srun
 
-rm -fr $OUTDIR
+#rm -fr $OUTDIR
+mkdir $OUTDIR
+
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using FV3 warm restart files.
@@ -62,7 +68,7 @@ rm -fr $OUTDIR
 
 LOG_FILE=regression.log01
 export OMP_NUM_THREADS=1
-TEST1=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
+TEST1=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.restart.sh)
 
 #-----------------------------------------------------------------------------
@@ -71,7 +77,7 @@ TEST1=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10
 
 LOG_FILE=regression.log02
 export OMP_NUM_THREADS=1
-TEST2=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c192.fv3.history \
+TEST2=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c192.fv3.history \
       -o $LOG_FILE -e $LOG_FILE ./c192.fv3.history.sh)
 
 #-----------------------------------------------------------------------------
@@ -80,7 +86,7 @@ TEST2=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10
 
 LOG_FILE=regression.log03
 export OMP_NUM_THREADS=1
-TEST3=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.nemsio \
+TEST3=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.nemsio \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.nemsio.sh)
 
 #-----------------------------------------------------------------------------
@@ -179,7 +185,7 @@ TEST13=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:0
 
 LOG_FILE=regression.log14
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST14=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.na.gfs.ncei.grib2.conus \
+TEST14=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=2 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 13km.na.gfs.ncei.grib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./13km.na.gfs.ncei.grib2.sh)
 
 #-----------------------------------------------------------------------------

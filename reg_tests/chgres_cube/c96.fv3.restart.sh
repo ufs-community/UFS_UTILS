@@ -69,7 +69,7 @@ for files in *.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/srw)release/c96_fv3_restart/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c96_fv3_restart/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1

@@ -42,7 +42,7 @@ export machine="odin"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/scratch/larissa.reames/chgres_cube/reg_tests
+export HOMEreg=/scratch/larissa.reames/chgres_cube/reg_tests.public.v2
 
 export NCCMP=/scratch/software/Odin/python/miniconda3/bin/nccmp
 

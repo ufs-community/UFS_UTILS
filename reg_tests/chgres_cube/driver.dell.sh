@@ -39,7 +39,7 @@ PROJECT_CODE="GFS-DEV"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
+export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube.public.v2
 
 LOG_FILE=regression.log
 

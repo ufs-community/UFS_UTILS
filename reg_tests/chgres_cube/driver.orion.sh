@@ -41,7 +41,7 @@ QUEUE="debug"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/chgres_cube
+export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/chgres_cube.public.v2
 
 export NCCMP=/apps/nccmp-1.8.5/bin/nccmp
 
