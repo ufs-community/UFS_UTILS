@@ -29,10 +29,10 @@ module use ../../modulefiles
 module load build.$target
 module list
 
-#export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
-export OUTDIR=/lfs4/NAGAPE/hpc-wof1/lreames/chgres_cube/reg_tests/tests_out/release.publicv2.new
-#PROJECT_CODE="hfv3gfs"
-PROJECT_CODE="hpc-wof1"
+export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
+
+PROJECT_CODE="hfv3gfs"
+
 QUEUE="batch"
 export machine="jet"
 export HDF5_DISABLE_VERSION_CHECK=2
@@ -44,10 +44,8 @@ export HDF5_DISABLE_VERSION_CHECK=2
 
 export HOMEufs=$PWD/../..
 
-#export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube.public.v2
-export HOMEreg=/lfs4/NAGAPE/hpc-wof1/lreames/chgres_cube/reg_tests/
+export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube.public.v2
 
-#export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
 export NCCMP=nccmp
 
 LOG_FILE=regression.log
