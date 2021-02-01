@@ -19,6 +19,8 @@ else
  set -x
 fi
 
+compiler=${compiler:-"intel"}
+
 # --- Build all programs.
 #
 
