@@ -19,6 +19,8 @@ else
  set -x
 fi
 
+compiler=${compiler:-"intel"}
+
 # --- Build all programs.
 #
 
@@ -28,8 +30,10 @@ cd ./build
 
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON"
 
-if [[ "$target" != "wcoss_cray" && "$target" != "odin" ]]; then
-  CMAKE_FLAGS+=" -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc"
+if [[ "$compiler" == "intel" ]]; then
+  if [[ "$target" != "wcoss_cray" && "$target" != "odin" && "$target" != "gaea" ]]; then
+    CMAKE_FLAGS+=" -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_C_COMPILER=icc"
+  fi
 fi
 
 cmake .. ${CMAKE_FLAGS}

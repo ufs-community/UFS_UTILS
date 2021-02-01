@@ -1781,7 +1781,7 @@ C
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
-      real  hgt_1d(MAXSUM)     
+      real, dimension(:), allocatable ::  hgt_1d
       integer IM, JM, IMN, JMN
       real GLAT(JMN), GLON(IMN)
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
@@ -1806,6 +1806,7 @@ C
 ! ---  mskocn=1 Use ocean model sea land mask, OK and present,
 ! ---  mskocn=0 dont use Ocean model sea land mask, not OK, not present
       print *,' _____ SUBROUTINE MAKEMT2 '
+      allocate(hgt_1d(MAXSUM))
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
       JM1 = JM - 1
@@ -1901,9 +1902,9 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
          ENDDO
       ENDDO
 !$omp end parallel do
-      WRITE(6,*) "! MAKEMT ORO SLM VAR VAR4 DONE"
+      WRITE(6,*) "! MAKEMT2 ORO SLM VAR VAR4 DONE"
 C
-
+      deallocate(hgt_1d)
       RETURN
       END
 
