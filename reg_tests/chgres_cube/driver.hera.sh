@@ -31,6 +31,7 @@ module list
 
 export OUTDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/chgres_reg_tests
 PROJECT_CODE="fv3-cpu"
+
 QUEUE="batch"
 
 #-----------------------------------------------------------------------------
@@ -43,7 +44,8 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube.public.v2
 
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
+#export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
+export NCCMP=nccmp
 
 LOG_FILE=regression.log
 SUM_FILE=summary.log
