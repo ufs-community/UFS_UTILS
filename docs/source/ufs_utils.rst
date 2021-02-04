@@ -1,8 +1,5 @@
 .. _ufs_utils:
 
-.. _figure_reference:
-
-.. figure:: _static/supergrid.png
 
 ****************************
 Introduction
@@ -55,6 +52,10 @@ Introduction
 ------------
 
 The make_hgrid program computes geo-referencing parameters for the global uniform and GFDL stand-alone regional grids.  (Extended Schmidt gnomonic regional grids are created by the regional_esg_grid program.)  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  All grids are gnomonic such that all great circles are straight lines.  The parameters are computed on the staggered or "supergrid" - which has twice the resolution of the model grid.  The chgres_cube initialization program maps mass fields - such as temperature - at the supergrid centroids, and u/v winds at the face mid-points.  The supergrid is shown here :numref:`Figure %s <figure_reference>`.
+
+.. _figure_reference:
+
+.. figure:: _static/supergrid.png
 
 Code Structure
 --------------
