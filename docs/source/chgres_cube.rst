@@ -73,7 +73,6 @@ Program inputs and outputs for global applications
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Inputs
-~~~~~~
 
 The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/
 
@@ -112,7 +111,6 @@ The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov
       * Input data files.  GRIB2, NEMSIO or NetCDF.  See the next section for how to find this data.
 
 Outputs
-~~~~~~~
 
       * Atmospheric “coldstart” files.  NetCDF.
 	      * out.atm.tile1.nc
@@ -135,7 +133,6 @@ Where to find GFS GRIB2, NEMSIO and NetCDF data for global applications
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 GRIB2
-~~~~~
 
       * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.`
 
@@ -144,12 +141,10 @@ GRIB2
       * 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2 file**, under **GFS Forecasts 003 (1-deg)** here: `NCDC - Global Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>`__.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
 NEMSIO
-~~~~~~
 
       * T1534 gaussian (last 10 days only) - Use the **gfs.tHHz.atmanl.nemsio** (atmospheric fields) and **gfs.tHHz.sfcanl.nemsio** (surface fields) files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
 NetCDF
-~~~~~~
 
       * T1534 gaussian (don't have any more details at this time).
 
