@@ -1,14 +1,12 @@
 .. _chgres_cube:
 
-**************
 Introduction
-**************
+------------
 
 The chgres_cube program creates initial condition files to “coldstart” the forecast model.  The initial conditions are created from either Finite-Volume Sphere (FV3) Global Forecast System (GFS), North American Mesoscale Forecast System (NAM), Rapid Refresh (RAP), or High Resolution Rapid Refresh (HRRR) gridded binary version 2 (GRIB2) data.
 
-************************
 Code structure
-************************
+--------------
 
 Note on variable names: “input” refers to the data input to the program (i.e., GRIB2, NEMSIO, NetCDF).  “Target” refers to the target or FV3 model grid.  See routine doc blocks for more details.
 
@@ -37,9 +35,8 @@ Note on variable names: “input” refers to the data input to the program (i.e
         * qc_check - some consistency checks.
       * search_util.f90 - searches for the nearest valid land/non-land data where the input and target fv3 land-mask differ.  Example: when the target FV3 grid depicts an island that is not resolved by the input data.  If nearby valid data is not found, a default value is used.
 
-************************
 Compiling the program
-************************
+---------------------
 
 chgres_cube requires cmake 3.12 or higher. It can be built as part of the NCEPLIBS unified build system that includes two separate build systems -- one for the third party libraries that are needed and the other for the libraries and utilities themselves. See https://github.com/NOAA-EMC/NCEPLIBS-external/wiki for more detailed information.
 
@@ -59,9 +56,8 @@ If the NCEPLIBS have been installed and the user wants to compile chgres_cube ag
       * if you do get errors that cmake cannot find "FindNETCDF" or "FindESMF", run: git submodule update --init --recursive
 
 
-***************************************************************
 Configuring and using chgres_cube for global applications
-***************************************************************
+---------------------------------------------------------
 
 Program inputs and outputs for global applications
 --------------------------------------------------
@@ -235,9 +231,8 @@ Namelist settings for using **NetCDF** data as input in global chgres_cube appli
       * tracers_input - names of tracer records in input file.  For GFDL microphysics, set to “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
       * tracers - names of tracer records in output file expected by model.  For GFDL microphysics, set to “sphum”,”liq_wat”,”o3mr”,”ice_wat”,”rainwat”,”snowwat”,”graupel”.
 
-***************************************************************
 Configuring and using chgres_cube for regional applications
-***************************************************************
+---------------------------------------------------
 
 Regional program inputs and outputs
 ---------------------------------------------------
@@ -381,9 +376,8 @@ Optional Entries
       * tg3_from_soil - Use tg3 from input soil. Valid options: .true. or .false. . Default: .false.
       * thomp_mp_climo_file - Location of Thompson aerosol climatology file. Provide only if you wish to use these aerosol variables.
 
-************************************************
 Variable Mapping (VARMAP) table
-************************************************
+-------------------------------
 
 The VARMAP table, set in the chgres_cube namelist (variable varmap_file), controls how chgres_cube handles variables that might be missing from the GRIB2 files. Since there are so many different versions of GRIB2 files, it's often uncertain what fields are available even if you know what source model the data is coming from.  Each file contains the following:  (Note, only the GFS physics suite is currently supported.)
 
@@ -430,9 +424,8 @@ Column 5: Variable type descriptor. Variable names designated as tracers are use
       * “D”: 3-dimensional non-tracer array
       * “S”: 2-dimensional surface array
 
-************************************************
 Running the program stand alone
-************************************************
+-------------------------------
 
       * Locate your input files.  See above for a list.
       * Set the namelist for your experiment.  See above for an explanation of the namelist entries.
@@ -441,9 +434,8 @@ Running the program stand alone
       * Load any required runtime libraries.  For example, you may need to load libraries for NetCDF and/or your Fortran compiler.
       * Run the program with an MPI task count that is a multiple of six.  This is an ESMF library requirement when processing a six-tiled global grid.
 
-************************************************
 Making changes to the chgres_cube program
-************************************************
+-----------------------------------------
 
 chgres_cube is part of the UFS_UTILS repository (https://github.com/NOAA-EMC/UFS_UTILS). When wanting to contribute to this repository developers shall follow the Gitflow software development process
 
