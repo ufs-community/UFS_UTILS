@@ -124,7 +124,7 @@ The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov
 
 
 Where to find GFS GRIB2, NEMSIO and NetCDF data for global applications
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **GRIB2**
 
@@ -143,7 +143,7 @@ Where to find GFS GRIB2, NEMSIO and NetCDF data for global applications
       * T1534 gaussian (don't have any more details at this time).
 
 Initializing global domains with GRIB2 data - some caveats
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Keep these things in mind when using GFS GRIB2 data for model initialization.**
 
@@ -160,7 +160,7 @@ Initializing global domains with GRIB2 data - some caveats
       * Only tested with GRIB2 data from GFS v14 and v15 (from 12z July 19, 2017 to current).  May not work with older GFS data.  Will not work with GRIB2 data from other models.
 
 Near Sea Surface Temperature (NSST) data and GRIB2 initialization
-~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The issue with not having NSST data is important.  In GFS we use the foundation temperature (Tref) and add a diurnal warming/cooling layer using NSST. This is the surface temperature that is passed to the atmospheric boundary layer. This is a critical feature, especially when we are doing Data Assimilation.
 
@@ -171,7 +171,7 @@ In GRIB2 files only the Tsfc is stored and that is set as foundation temperature
 Note, that neither of these two options will get rid of the underlying baked in heating/cooling in the surface temperature fields. For most cases this may not be an issue, but where it is then the user will either have to initialize the model with NEMSIO or NetCDF data, or replace the surface temperature in the GRIB2 fields with independently obtained foundation temperature.
 
 Global chgres_cube namelist options
------------------
+--------------------------------------
 
 Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3 horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
 
@@ -227,7 +227,7 @@ Namelist settings for using **NetCDF** data as input in global chgres_cube appli
       * tracers - names of tracer records in output file expected by model.  For GFDL microphysics, set to “sphum”,”liq_wat”,”o3mr”,”ice_wat”,”rainwat”,”snowwat”,”graupel”.
 
 Configuring and using chgres_cube for regional applications
----------------------------------------------------
+----------------------------------------------------------------
 
 Regional program inputs and outputs
 ---------------------------------------------------
@@ -271,7 +271,7 @@ Outputs
         * out.sfc.tile7.nc
 
 Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
----------------------------------------------------
+-------------------------------------------------------------------------------
 
 FV3GFS
 ~~~~~~~~
@@ -359,7 +359,7 @@ Required Entries
       * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. (Default: 'GFS')
 
 Optional Entries
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
       * geogrid_file_input_grid - Full path to the RAP or HRRR geogrid file corresponding to the external model input data. Only used with external_model = ‘HRRR’ or ‘RAP’. 
       * nsoill_out - Number of soil levels to produce in the sfc_data.nc file (Default: 4).
