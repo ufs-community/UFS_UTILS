@@ -11,38 +11,31 @@ Code structure
 Note on variable names: “input” refers to the data input to the program (i.e., GRIB2, NEMSIO, NetCDF).  “Target” refers to the target or FV3 model grid.  See routine doc blocks for more details.
 
       * chgres.F90 - This is the main driver routine.
-
       * program_setup.F90 - Sets up the program execution.
+
             * Reads program namelist
             * Computes required soil parameters
             * Reads the variable mapping (VARMAP) table.
-
       * model_grid.F90 - Sets up the ESMF grid objects for the input data grid and target FV3 grid.
-
       * static_data.F90 - Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type).  Time interpolates time-varying fields, such as monthly plant greenness, to the model run time.  Data for each target FV3 resolution resides in the ‘fixed’ directory.  Set path via the fix_dir_target_grid namelist variable.
-
       * write_data.F90 - Writes the tiled and header files expected by the forecast model.
-
       * input_data.F90 - Contains routines to read atmospheric and surface data from GRIB2, NEMSIO and NetCDF files.
-
       * utils.f90 - Contains utility routines, such as error handling.
-
       * grib2_util.F90 -  Routines to (1) convert from RH to specific humidity; (2) convert from omega to dzdt.  Required for GRIB2 input data.
-
       * atmosphere.F90 - Process atmospheric fields.  Horizontally interpolate from input to target FV3 grid using ESMF regridding.  Adjust surface pressure according to terrain differences between input and target grid.  Vertically interpolate to target FV3 grid vertical levels.  Description of main routines:
+
             * read_vcoord_info - Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid).
             * newps - computes adjusted surface pressure given a new terrain height.
             * newpr1 - computes 3-D pressure given an adjusted surface pressure.
             * vintg - vertically interpolate atmospheric fields to target FV3 grid.
-
       * surface.F90 - process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields.  Assumes the input land data are Noah LSM-based, and the fv3 run will use the Noah LSM.   NSST fields are not available when using GRIB2 input data.  Description of main routines:
+
             * interp - horizontally interpolate fields from input to target FV3 grid.
             * calc_liq_soil_moisture - compute liquid portion of total soil moisture.
             * adjust_soilt_for_terrain - adjust soil temperature for large differences between input and target FV3 grids.
             * rescale_soil_moisture - adjust total soil moisture for differences between soil type on input and target FV3 grids.  Required to preserve latent/sensible heat fluxes.  Assumes Noah LSM.
             * roughness - set roughness length at land and sea/lake ice.  At land, a vegetation type-based lookup table is used.
             * qc_check - some consistency checks.
-
       * search_util.f90 - searches for the nearest valid land/non-land data where the input and target fv3 land-mask differ.  Example: when the target FV3 grid depicts an island that is not resolved by the input data.  If nearby valid data is not found, a default value is used.
 
 Compiling the program
