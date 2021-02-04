@@ -51,7 +51,7 @@ make_hgrid
 Introduction
 ------------
 
-The make_hgrid program computes geo-referencing parameters for the global uniform and GFDL stand-alone regional grids.  (Extended Schmidt gnomonic regional grids are created by the regional_esg_grid program.)  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  All grids are gnomonic such that all great circles are straight lines.  The parameters are computed on the staggered or "supergrid" - which has twice the resolution of the model grid.  The chgres_cube initialization program maps mass fields - such as temperature - at the supergrid centroids, and u/v winds at the face mid-points.  The supergrid is shown here :numref:`Figure %s <figure_reference>`.
+The make_hgrid program computes geo-referencing parameters for the global uniform and GFDL stand-alone regional grids.  (Extended Schmidt gnomonic regional grids are created by the regional_esg_grid program.)  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  All grids are gnomonic such that all great circles are straight lines.  The parameters are computed on the staggered or "supergrid" - which has twice the resolution of the model grid.  The chgres_cube initialization program maps mass fields - such as temperature - at the supergrid centroids, and u/v winds at the face mid-points.  The supergrid is shown here:
 
 .. _figure_reference:
 
@@ -110,7 +110,7 @@ regional_esg_grid
 Introduction
 ------------
 
-The regional_esg_grid program computes geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  The advantage of the ESG grid - compared to the GFDL regional grid - is its much more uniform grid spacing.  Like the make_hgrid program, the parameters are computed on the staggered or "supergrid".  See this link for a diagram of the "supergrid".  For more information on the Extended Schmidt Gnomonic, see: `Purser, et. al <https://dtcenter.org/sites/default/files/events/2020/2-purser-james.pdf>`_.
+The regional_esg_grid program computes geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  The advantage of the ESG grid - compared to the GFDL regional grid - is its much more uniform grid spacing.  Like the make_hgrid program, the parameters are computed on the staggered or "supergrid".  For more information on the Extended Schmidt Gnomonic, see: `Purser, et. al <https://dtcenter.org/sites/default/files/events/2020/2-purser-james.pdf>`_.
 
 Code Structure
 --------------
