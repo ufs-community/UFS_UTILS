@@ -12,9 +12,9 @@ Note on variable names: “input” refers to the data input to the program (i.e
 
       * chgres.F90 - This is the main driver routine.
       * program_setup.F90 - Sets up the program execution.
-        * Reads program namelist
-        * Computes required soil parameters
-        * Reads the variable mapping (VARMAP) table.
+            * Reads program namelist
+            * Computes required soil parameters
+            * Reads the variable mapping (VARMAP) table.
       * model_grid.F90 - Sets up the ESMF grid objects for the input data grid and target FV3 grid.
       * static_data.F90 - Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type).  Time interpolates time-varying fields, such as monthly plant greenness, to the model run time.  Data for each target FV3 resolution resides in the ‘fixed’ directory.  Set path via the fix_dir_target_grid namelist variable.
       * write_data.F90 - Writes the tiled and header files expected by the forecast model.
