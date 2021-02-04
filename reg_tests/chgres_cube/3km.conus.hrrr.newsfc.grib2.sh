@@ -12,7 +12,7 @@ set -x
 export DATA=$OUTDIR/3km_conus_hrrr_newsfc_grib2
 rm -fr $DATA
 
-export CRES=3356
+export CRES=3357
 export KMRES=3km
 export FIXfv3=${HOMEreg}/fix/RRFS_CONUS_${KMRES}
 export FIXsfc=${FIXfv3}/fix_sfc
@@ -23,7 +23,7 @@ export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
 export VARMAP_FILE=${HOMEufs}/parm/varmap_tables/GSDphys_var_map.txt
 export INPUT_TYPE='grib2'
 export CONVERT_NST=".false."
-export OROG_FILES_TARGET_GRID="C3356_oro_data.tile7.nc"
+export OROG_FILES_TARGET_GRID="C${CRES}_oro_data.tile7.nc"
 export REGIONAL=1
 export HALO_BLEND=0
 export HALO_BNDY=4 
