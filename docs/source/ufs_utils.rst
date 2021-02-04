@@ -2,7 +2,7 @@
 
 .. _figure_reference:
 
-.. figure::_static/supergrid.png
+.. figure:: _static/supergrid.png
 
 ****************************
 Introduction
