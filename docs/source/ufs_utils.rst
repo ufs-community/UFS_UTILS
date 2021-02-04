@@ -1,6 +1,6 @@
 .. _ufs_utils:
 
-.. figure::_static/supergrid.pdf
+.. figure::_static/supergrid.png
 
 ****************************
 Introduction
