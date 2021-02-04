@@ -1,5 +1,7 @@
 .. _ufs_utils:
 
+.. _figure_reference:
+
 .. figure::_static/supergrid.png
 
 ****************************
