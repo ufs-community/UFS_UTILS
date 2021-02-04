@@ -50,7 +50,7 @@ make_hgrid
 Introduction
 ------------
 
-The make_hgrid program computes geo-referencing parameters for the global uniform and GFDL stand-alone regional grids.  (Extended Schmidt gnomonic regional grids are created by the regional_esg_grid program described in section 4.c).  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section 4.b.iv for a full list of parameters.  All grids are gnomonic such that all great circles are straight lines.  The parameters are computed on the staggered or "supergrid" - which has twice the resolution of the model grid.  The chgres_cube initialization program maps mass fields - such as temperature - at the supergrid centroids, and u/v winds at the face mid-points.  See this link for a diagram of the supergrid.   
+The make_hgrid program computes geo-referencing parameters for the global uniform and GFDL stand-alone regional grids.  (Extended Schmidt gnomonic regional grids are created by the regional_esg_grid program.)  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  All grids are gnomonic such that all great circles are straight lines.  The parameters are computed on the staggered or "supergrid" - which has twice the resolution of the model grid.  The chgres_cube initialization program maps mass fields - such as temperature - at the supergrid centroids, and u/v winds at the face mid-points.  See this link for a diagram of the supergrid.   
 
 Code Structure
 --------------
@@ -105,7 +105,7 @@ regional_esg_grid
 Introduction
 ------------
 
-The regional_esg_grid program computes geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  The parameters include geographic latitude and longitude, and grid cell area.  See section 4.c.iv for a full list of parameters.  The advantage of the ESG grid - compared to the GFDL regional grid - is its much more uniform grid spacing.  Like the make_hgrid program, the parameters are computed on the staggered or "supergrid".  See this link for a diagram of the "supergrid".  For more information on the Extended Schmidt Gnomonic, see: `Purser, et. al <https://dtcenter.org/sites/default/files/events/2020/2-purser-james.pdf>`_.
+The regional_esg_grid program computes geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  The advantage of the ESG grid - compared to the GFDL regional grid - is its much more uniform grid spacing.  Like the make_hgrid program, the parameters are computed on the staggered or "supergrid".  See this link for a diagram of the "supergrid".  For more information on the Extended Schmidt Gnomonic, see: `Purser, et. al <https://dtcenter.org/sites/default/files/events/2020/2-purser-james.pdf>`_.
 
 Code Structure
 --------------
@@ -223,7 +223,7 @@ orog
 Introduction
 ------------
 
-This program computes the land mask, land fraction, orography and gravity wave drag (GWD) fields on the model grid.  See output data/link for a complete list of fields.
+This program computes the land mask, land fraction, orography and gravity wave drag (GWD) fields on the model grid.  See the output data section for a complete list of fields.
 
 Land-sea mask and land fraction are created from a global 30-arc second University of Maryland land cover (land/non-land flag) dataset.  Land fraction is determined by averaging all 30-second land cover points located within the model grid box.   Points with a land fraction of 50% or more are given a land-sea mask of "land".  Orography and GWD fields are created from two datasets: 1) 30-arc-second `USGS GMTED2010 <https://www.usgs.gov/core-science-systems/eros/coastal-changes-and-impacts/gmted2010?qt-science_support_page_related_con=0#qt-science_support_page_related_con>`_ orography data; 2) for Antarctica, 30-arc-second `RAMP <https://nsidc.org/data/nsidc-0082>`_ terrain data (Radarsat Antarctic Mapping Project).  Fields are determined from all 30-arc second data located within the model grid box.  The orography is simply the average of the 30-arc second values.  It is later filtered by the filter_topo program.  For details on the GWD fields, see:
 
