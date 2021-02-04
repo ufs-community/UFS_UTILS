@@ -60,7 +60,7 @@ Configuring and using chgres_cube for global applications
 ---------------------------------------------------------
 
 Program inputs and outputs for global applications
---------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Inputs
 ~~~~~~
@@ -122,7 +122,7 @@ Outputs
 
 
 Where to find GFS GRIB2, NEMSIO and NetCDF data for global applications
---------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 GRIB2
 ~~~~~
@@ -144,7 +144,7 @@ NetCDF
       * T1534 gaussian (don't have any more details at this time).
 
 Initializing global domains with GRIB2 data - some caveats
------------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 Keep these things in mind when using GFS GRIB2 data for model initialization
 ~~~~~~~~~~~~~~~~
