@@ -56,7 +56,8 @@ If the NCEPLIBS have been installed and the user wants to compile chgres_cube ag
       * cmake .. -DCMAKE_INSTALL_PREFIX=/path/where/you/want/the/code/installed -DCMAKE_PREFIX_PATH=/path/to/nceplibs/installed
       * make -j x (where x is a number that can be chosen to speed up the make, usually 8)
       * make install
-      * if you do get errors that cmake cannot find "FindNETCDF" or "FindESMF", run: git submodule update --init --recursive
+
+If you do get errors that cmake cannot find "FindNETCDF" or "FindESMF", run: git submodule update --init --recursive
 
 
 Configuring and using chgres_cube for global applications
@@ -290,7 +291,7 @@ NAM
      * 12-km archived data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`__.
 
 HRRR
-~~~~
+""""
  
       * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfFH.grib2** files in the subdirectory hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`__.
 
