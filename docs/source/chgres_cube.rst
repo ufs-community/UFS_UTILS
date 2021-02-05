@@ -38,28 +38,6 @@ Note on variable names: “input” refers to the data input to the program (i.e
             * qc_check - some consistency checks.
       * search_util.f90 - searches for the nearest valid land/non-land data where the input and target fv3 land-mask differ.  Example: when the target FV3 grid depicts an island that is not resolved by the input data.  If nearby valid data is not found, a default value is used.
 
-Compiling the program
----------------------
-
-chgres_cube requires cmake 3.12 or higher. It can be built as part of the NCEPLIBS unified build system that includes two separate build systems -- one for the third party libraries that are needed and the other for the libraries and utilities themselves. See https://github.com/NOAA-EMC/NCEPLIBS-external/wiki for more detailed information.
-
-If the NCEPLIBS have been installed and the user wants to compile chgres_cube again
-
-      * make sure paths are set to hdf5, compiler, mpi and cmake
-      * In a bash environment run
-
-              * cd /path/to/nceplibs/installed
-              * source bin/setenv_nceplibs.sh (this will set all necessary environments)
-      * set cmake compiler - export FC=ifort (if ifort is the compiler chosen)
-      * cd to where you checked out the UFS_Utils
-      * mkdir build and cd build
-      * cmake .. -DCMAKE_INSTALL_PREFIX=/path/where/you/want/the/code/installed -DCMAKE_PREFIX_PATH=/path/to/nceplibs/installed
-      * make -j x (where x is a number that can be chosen to speed up the make, usually 8)
-      * make install
-
-If you do get errors that cmake cannot find "FindNETCDF" or "FindESMF", run: git submodule update --init --recursive
-
-
 Configuring and using chgres_cube for global applications
 ---------------------------------------------------------
 
