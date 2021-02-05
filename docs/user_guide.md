@@ -23,9 +23,10 @@ https://github.com/NOAA-EMC/UFS_UTILS.
 - fvcom_tools - replaces lake surface and lake ice temperature along
 with aerial ice concentration generated from Great Lakes Operational
 Forecast System (GLOFS), an FVCOM-based model, into
-sfc_data.nc. [fvcom documentation](sorc/fvcom_tools.fd/readme.md)
+sfc_data.nc. [fvcom documentation](sorc/fvcom_tools.fd/fvcom_readme.md)
  
-- global_chgres
+- global_chgres [global_chgres
+  documentation](sorc/global_chgres.fd/global_chgres_users_guide.md)
 
 - global_cycle
 
