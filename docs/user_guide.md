@@ -11,16 +11,31 @@ https://github.com/NOAA-EMC/UFS_UTILS.
 ## The Utilities
 
 - exemcsfc_global_sfc_prep.sh
+
 - chgres_cube
+
 - emcsfc_ice_blend
+
 - emcsfc_snow2mdl
+
 - fre-nctools
-- fvcom_tools
+
+- fvcom_tools - replaces lake surface and lake ice temperature along
+with aerial ice concentration generated from Great Lakes Operational
+Forecast System (GLOFS), an FVCOM-based model, into
+sfc_data.nc. [fvcom documentation](sorc/fvcom_tools.fd/readme.md)
+ 
 - global_chgres
+
 - global_cycle
+
 - grid_tools
+
 - nst_tf_chg
+
 - orog_mask_tools
+
 - sfc_climo_gen
+
 - vcoord_gen
 
