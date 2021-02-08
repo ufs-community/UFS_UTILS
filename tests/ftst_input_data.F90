@@ -6,6 +6,7 @@
 program ftst_input_data
 
   print *,'Testing input_data module...'
+  
   print *,'SUCCESS!'
 
 end program ftst_input_data
