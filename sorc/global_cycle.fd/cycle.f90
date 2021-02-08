@@ -14,17 +14,17 @@
 !!  2) Update the surface fields and NSST TREF field using
 !!     GSI increments on the Gaussian grid.  All other NSST
 !!     fields are cycled.  Invoke this option by setting
-!!     namelist variable DONST=.true. and GSI_FILE to 
+!!     namelist variable DONST=.true. and NST_FILE to 
 !!     the name of the GSI increment file.
 !!  
 !!  3) Update surface and run with NSST, but postpone the TREF update.  
 !!     Here all NSST fields are cycled.  But the NSST IFD field is
 !!     used to flag points that flipped from ice to open water.
-!!     To invoke this option, set DONST=.true. and GSI_FILE="NULL".
+!!     To invoke this option, set DONST=.true. and NST_FILE="NULL".
 !!
 !!  4) Perform the NSST TREF adjustment only.  Surface fields are
 !!     only cycled.  To run with this option, set DONST=.true.,
-!!     GSI_FILE to the GSI increment file, and ADJT_NST_ONLY=.true.
+!!     NST_FILE to the GSI increment file, and ADJT_NST_ONLY=.true.
 !!     The input cubed-sphere restart files must be those from
 !!     option (3).
 !!
@@ -38,7 +38,7 @@
 !!                     land mask and orography).
 !!  -fnbgsi.$NNN        The cubed-sphere input sfc/nsst restart
 !!                     file.
-!!  -$GSI_FILE          Gaussian GSI file which contains NSST
+!!  -$NST_FILE          Gaussian GSI file which contains NSST
 !!                     TREF increments
 !!  
 !!  OUTPUT FILES:
@@ -74,7 +74,7 @@
 !!                 scripts may over-specify the number of tasks.
 !!                 Set this variable to not process any ranks >
 !!                 (max_tasks-1).
-!!  -GSI_FILE       path/name of the gaussian GSI file which contains NSST
+!!  -NST_FILE       path/name of the gaussian GSI file which contains NSST
 !!                 TREF increments.
 !!
 !!  -2005-02-03:  Iredell   for global_analysis
@@ -95,12 +95,12 @@
  INTEGER :: ISOT, IVEGSRC, LENSFC, ZSEA1_MM, ZSEA2_MM, IERR
  INTEGER :: NPROCS, MYRANK, NUM_THREADS, NUM_PARTHDS, MAX_TASKS
  REAL    :: FH, DELTSFC, ZSEA1, ZSEA2
- LOGICAL :: USE_UFO, DO_NSST, ADJT_NST_ONLY
+ LOGICAL :: USE_UFO, DO_NSST, DO_LNDINC, DO_SFCCYCLE
 !
  NAMELIST/NAMCYC/ IDIM,JDIM,LSOIL,LUGB,IY,IM,ID,IH,FH,    &
                   DELTSFC,IALB,USE_UFO,DONST,             &
-                  ADJT_NST_ONLY,ISOT,IVEGSRC,ZSEA1_MM,    &
-                  ZSEA2_MM, MAX_TASKS
+                  DO_SFCCYCLE,ISOT,IVEGSRC,ZSEA1_MM,    &
+                  ZSEA2_MM, MAX_TASKS, DO_LNDINC
 !
  DATA IDIM,JDIM,LSOIL/96,96,4/
  DATA IY,IM,ID,IH,FH/1997,8,2,0,0./
@@ -122,7 +122,8 @@
 
  USE_UFO = .FALSE.
  DONST   = "NO"
- ADJT_NST_ONLY = .FALSE.
+ DO_LNDINC   = .FALSE.
+ DO_SFCCYCLE = .TRUE. 
 
  PRINT*
  PRINT*,"READ NAMCYC NAMELIST."
@@ -154,7 +155,7 @@
 
  CALL SFCDRV(LUGB,IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
              IY,IM,ID,IH,FH,IALB,                  &
-             USE_UFO,DO_NSST,ADJT_NST_ONLY,        &
+             USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LNDINC, &
              ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
  
  PRINT*
@@ -174,10 +175,11 @@
 !
  SUBROUTINE SFCDRV(LUGB,IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
                    IY,IM,ID,IH,FH,IALB,                  &
-                   USE_UFO,DO_NSST,ADJT_NST_ONLY,        &
+                   USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LNDINC,&
                    ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
 !
  USE READ_WRITE_DATA
+ USE MPI
 
  IMPLICIT NONE
 
@@ -185,7 +187,8 @@
  INTEGER, INTENT(IN) :: LUGB, IY, IM, ID, IH
  INTEGER, INTENT(IN) :: ISOT, IVEGSRC, MYRANK
 
- LOGICAL, INTENT(IN) :: USE_UFO, DO_NSST, ADJT_NST_ONLY
+ LOGICAL, INTENT(IN) :: USE_UFO, DO_NSST,DO_SFCCYCLE
+ LOGICAL, INTENT(IN) :: DO_LNDINC
  
  REAL, INTENT(IN)    :: FH, DELTSFC, ZSEA1, ZSEA2
 
@@ -193,7 +196,8 @@
  INTEGER, PARAMETER  :: SZ_NML=1
 
  CHARACTER(LEN=5)    :: TILE_NUM
- CHARACTER(LEN=500)  :: GSI_FILE
+ CHARACTER(LEN=500)  :: NST_FILE
+ CHARACTER(LEN=500)  :: LND_FILE
  CHARACTER(LEN=4)    :: INPUT_NML_FILE(SZ_NML)
 
  INTEGER             :: I, IERR
@@ -223,18 +227,22 @@
  REAL(KIND=4)        :: ZSOIL(LSOIL)
  REAL                :: SIG1T(LENSFC)
  REAL, ALLOCATABLE   :: SLIFCS_FG(:)
+ INTEGER, ALLOCATABLE :: SOILSNOW_FG_MASK(:), SOILSNOW_MASK(:)
 
  TYPE(NSST_DATA)     :: NSST
  real, dimension(idim,jdim) :: tf_clm,tf_trd,sal_clm
  real, dimension(lensfc)    :: tf_clm_tile,tf_trd_tile,sal_clm_tile
+
+ logical :: file_exists
 !--------------------------------------------------------------------------------
-! GSI_FILE is the path/name of the gaussian GSI file which contains NSST
+! NST_FILE is the path/name of the gaussian GSI file which contains NSST
 ! increments.
 !--------------------------------------------------------------------------------
  
- DATA GSI_FILE/'NULL'/
+ DATA NST_FILE/'NULL'/
+ DATA LND_FILE/'NULL'/
  
- NAMELIST/NAMSFCD/ GSI_FILE
+ NAMELIST/NAMSFCD/ NST_FILE, LND_FILE
 
 !--------------------------------------------------------------------------------
 !
@@ -384,6 +392,13 @@
    ALLOCATE(SLIFCS_FG(LENSFC))
  ENDIF
 
+IF (DO_LNDINC) THEN 
+   PRINT*
+   PRINT*," APPLYING LAND INCREMENTS FROM THE GSI" 
+   ALLOCATE(SOILSNOW_FG_MASK(LENSFC))
+   ALLOCATE(SOILSNOW_MASK(LENSFC))
+ENDIF
+
 !--------------------------------------------------------------------------------
 ! READ THE INPUT SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
@@ -409,7 +424,7 @@
  ENDDO
 
  IF (DO_NSST) THEN
-   IF (ADJT_NST_ONLY) THEN
+   IF (.NOT. DO_SFCCYCLE ) THEN
      PRINT*
      PRINT*,"FIRST GUESS MASK ADJUSTED BY IFD RECORD"
      SLIFCS_FG = SLIFCS
@@ -420,12 +435,16 @@
      SLIFCS_FG = SLIFCS
    ENDIF
  ENDIF
+ 
+ ! CALCULATE MASK FOR LAND INCREMENTS
+ IF (DO_LNDINC)  & 
+    CALL CALCULATE_SOILSNOWMASK(SLCFCS(:,1),SNOFCS, LENSFC, SOILSNOW_FG_MASK)
 
 !--------------------------------------------------------------------------------
 ! UPDATE SURFACE FIELDS.
 !--------------------------------------------------------------------------------
 
- IF (.NOT. ADJT_NST_ONLY) THEN
+ IF (DO_SFCCYCLE) THEN
    PRINT*
    PRINT*,"CALL SFCCYCLE TO UPDATE SURFACE FIELDS."
    CALL SFCCYCLE(LUGB,LENSFC,LSOIL,SIG1T,DELTSFC,          &
@@ -441,6 +460,7 @@
                IALB,ISOT,IVEGSRC,TILE_NUM,I_INDEX,J_INDEX)
  ENDIF
 
+
 !--------------------------------------------------------------------------------
 ! IF RUNNING WITH NSST, READ IN GSI FILE WITH THE UPDATED INCREMENTS (ON THE
 ! GAUSSIAN GRID), INTERPOLATE INCREMENTS TO THE CUBED-SPHERE TILE, AND PERFORM
@@ -448,7 +468,7 @@
 !--------------------------------------------------------------------------------
 
  IF (DO_NSST) THEN
-   IF (GSI_FILE == "NULL") THEN
+   IF (NST_FILE == "NULL") THEN
      PRINT*
      PRINT*,"NO GSI FILE.  ADJUST IFD FOR FORMER ICE POINTS."
      DO I = 1, LENSFC
@@ -474,7 +494,7 @@
 !
 !    read tf analysis increment generated by GSI
 !
-     CALL READ_GSI_DATA(GSI_FILE)
+     CALL READ_GSI_DATA(NST_FILE, 'NST')
 !
 !    update foundation & surface temperature for NSST
 !
@@ -484,6 +504,51 @@
    ENDIF
  ENDIF
 
+!--------------------------------------------------------------------------------
+! READ IN AND APPLY LAND INCEREMENTS FROM THE GSI
+!--------------------------------------------------------------------------------
+
+ IF (DO_LNDINC) THEN 
+
+!--------------------------------------------------------------------------------
+! RE-CALCULATE SOILSNOW MASK AFTER SNOW UPDATE
+!--------------------------------------------------------------------------------
+
+    IF (DO_SFCCYCLE)  THEN ! should really make this a snow DA flag, but this will do
+        CALL CALCULATE_SOILSNOWMASK(SLCFCS(:,1),SNOFCS, LENSFC, SOILSNOW_MASK ) 
+    ELSE 
+        SOILSNOW_MASK = SOILSNOW_FG_MASK
+    ENDIF 
+
+!--------------------------------------------------------------------------------
+! read increments in 
+!--------------------------------------------------------------------------------
+
+    INQUIRE(FILE=trim(LND_FILE), EXIST=file_exists)
+    IF (.not. file_exists) then 
+        print *, 'ERROR: land increment update requested, but file does not exist: ', & 
+                trim(lnd_file)
+        call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+    ENDIF
+
+    CALL READ_GSI_DATA(LND_FILE, 'LND', LSOIL=LSOIL)
+
+
+!--------------------------------------------------------------------------------
+! add increments to state vars
+!--------------------------------------------------------------------------------
+   CALL ADJUST_SOIL(RLA,RLO,STCFCS,SOILSNOW_MASK,SOILSNOW_FG_MASK,  & 
+        LENSFC,LSOIL,IDIM,JDIM, MYRANK)
+
+!--------------------------------------------------------------------------------
+! clean up
+!--------------------------------------------------------------------------------
+
+   ! to do - save and write out  STC_INC? (soil temperature increments)
+   DEALLOCATE(SOILSNOW_FG_MASK, SOILSNOW_MASK) 
+
+
+ ENDIF 
 !--------------------------------------------------------------------------------
 ! WRITE OUT UPDATED SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
@@ -623,8 +688,9 @@
  ALLOCATE(DUM2D(IDIM_GAUS,JDIM_GAUS))
  DUM2D = RESHAPE(LATS, (/IDIM_GAUS,JDIM_GAUS/) )
  DEALLOCATE(LATS)
+ 
+ ALLOCATE(LATS_RAD(JDIM_GAUS)) 
 
- ALLOCATE(LATS_RAD(JDIM_GAUS))
  DO J = 1, JDIM_GAUS
    LATS_RAD(J) = DUM2D(1,JDIM_GAUS-J+1) * 3.1415926 / 180.0
  ENDDO
@@ -927,6 +993,268 @@
  DEALLOCATE(ID1, ID2, JDC, S2C)
 
  END SUBROUTINE ADJUST_NSST
+
+
+ SUBROUTINE ADJUST_SOIL(RLA,RLO,STC_STATE,SOILSNOW_TILE, SOILSNOW_FG_TILE, & 
+                        LENSFC,LSOIL,IDIM,JDIM, MYRANK) 
+
+!--------------------------------------------------------------------------------
+! USING SOIL  INCREMENTS ALREADY READ IN  (ON THE GAUSSIAN
+! GRID), INTERPOLATE INCREMENTS TO THE CUBED-SPHERE TILE, AND PERFORM
+! REQUIRED SOIL ADJUSTMENTS AND QC.
+!--------------------------------------------------------------------------------
+
+ USE GDSWZD_MOD
+ USE READ_WRITE_DATA, ONLY : IDIM_GAUS, JDIM_GAUS, &
+                             STC_INC_GAUS, SOILSNOW_GAUS 
+ USE MPI
+
+ IMPLICIT NONE
+
+ INTEGER, INTENT(IN)      :: LENSFC, LSOIL, IDIM, JDIM, MYRANK
+
+ INTEGER, INTENT(IN)         :: SOILSNOW_TILE(LENSFC), SOILSNOW_FG_TILE(LENSFC)
+ REAL, INTENT(INOUT)      :: RLA(LENSFC), RLO(LENSFC)
+ REAL, INTENT(INOUT)      :: STC_STATE(LENSFC, LSOIL)
+
+ INTEGER                  :: IOPT, NRET, KGDS_GAUS(200)
+ INTEGER                  :: IGAUS, JGAUS, IJ
+ INTEGER                  :: MASK_TILE, MASK_FG_TILE
+ INTEGER                  :: ITILE, JTILE
+ INTEGER                  :: J, IERR
+ INTEGER                  :: IGAUSP1, JGAUSP1
+ REAL                     :: FILL
+
+ INTEGER, ALLOCATABLE     :: ID1(:,:), ID2(:,:), JDC(:,:)
+
+ REAL                     :: WSUM 
+ REAL                     :: STC_INC(LSOIL)
+ REAL, ALLOCATABLE        :: XPTS(:), YPTS(:), LATS(:), LONS(:)
+ REAL, ALLOCATABLE        :: DUM2D(:,:), LATS_RAD(:), LONS_RAD(:)
+ REAL, ALLOCATABLE        :: AGRID(:,:,:), S2C(:,:,:)
+
+ INTEGER                  :: K, nother, nsnowupd, nnosoilnear, nsoilupd, nsnowchange
+ LOGICAL                  :: gaus_has_soil
+
+
+ KGDS_GAUS     = 0
+ KGDS_GAUS(1)  = 4          ! OCT 6 - TYPE OF GRID (GAUSSIAN)
+ KGDS_GAUS(2)  = IDIM_GAUS  ! OCT 7-8 - # PTS ON LATITUDE CIRCLE
+ KGDS_GAUS(3)  = JDIM_GAUS
+ KGDS_GAUS(4)  = 90000      ! OCT 11-13 - LAT OF ORIGIN
+ KGDS_GAUS(5)  = 0          ! OCT 14-16 - LON OF ORIGIN
+ KGDS_GAUS(6)  = 128        ! OCT 17 - RESOLUTION FLAG
+ KGDS_GAUS(7)  = -90000     ! OCT 18-20 - LAT OF EXTREME POINT
+ KGDS_GAUS(8)  = NINT(-360000./FLOAT(IDIM_GAUS))  ! OCT 21-23 - LON OF EXTREME POINT
+ KGDS_GAUS(9)  = NINT((360.0 / FLOAT(IDIM_GAUS))*1000.0)
+                            ! OCT 24-25 - LONGITUDE DIRECTION INCR.
+ KGDS_GAUS(10) = JDIM_GAUS/2     ! OCT 26-27 - NUMBER OF CIRCLES POLE TO EQUATOR
+ KGDS_GAUS(12) = 255        ! OCT 29 - RESERVED
+ KGDS_GAUS(20) = 255        ! OCT 5  - NOT USED, SET TO 255
+
+ PRINT*
+ PRINT*,'ADJUST SOILS USING GSI INCREMENTS ON GAUSSIAN GRID'
+
+!----------------------------------------------------------------------
+! CALL GDSWZD TO COMPUTE THE LAT/LON OF EACH GSI GAUSSIAN GRID POINT.
+!----------------------------------------------------------------------
+
+ IOPT = 0
+ FILL = -9999.
+ ALLOCATE(XPTS(IDIM_GAUS*JDIM_GAUS))
+ ALLOCATE(YPTS(IDIM_GAUS*JDIM_GAUS))
+ ALLOCATE(LATS(IDIM_GAUS*JDIM_GAUS))
+ ALLOCATE(LONS(IDIM_GAUS*JDIM_GAUS))
+ XPTS = FILL
+ YPTS = FILL
+ LATS = FILL
+ LONS = FILL
+
+ CALL GDSWZD(KGDS_GAUS,IOPT,(IDIM_GAUS*JDIM_GAUS),FILL,XPTS,YPTS,LONS,LATS,NRET)
+
+ IF (NRET /= (IDIM_GAUS*JDIM_GAUS)) THEN
+   PRINT*,'FATAL ERROR: PROBLEM IN GDSWZD. STOP.'
+   CALL MPI_ABORT(MPI_COMM_WORLD, 12, IERR)
+ ENDIF
+
+ DEALLOCATE (XPTS, YPTS)
+
+ ALLOCATE(DUM2D(IDIM_GAUS,JDIM_GAUS))
+ DUM2D = RESHAPE(LATS, (/IDIM_GAUS,JDIM_GAUS/) )
+ DEALLOCATE(LATS)
+ 
+ ALLOCATE(LATS_RAD(JDIM_GAUS)) 
+
+ DO J = 1, JDIM_GAUS
+   LATS_RAD(J) = DUM2D(1,JDIM_GAUS-J+1) * 3.1415926 / 180.0
+ ENDDO
+
+ DUM2D = RESHAPE(LONS, (/IDIM_GAUS,JDIM_GAUS/) )
+ DEALLOCATE(LONS)
+ ALLOCATE(LONS_RAD(IDIM_GAUS))
+ LONS_RAD = DUM2D(:,1) * 3.1415926 / 180.0
+
+ DEALLOCATE(DUM2D)
+
+ ALLOCATE(AGRID(IDIM,JDIM,2))
+ AGRID(:,:,1) = RESHAPE (RLO, (/IDIM,JDIM/) )
+ AGRID(:,:,2) = RESHAPE (RLA, (/IDIM,JDIM/) )
+ AGRID        = AGRID * 3.1415926 / 180.0
+
+ ALLOCATE(ID1(IDIM,JDIM))
+ ALLOCATE(ID2(IDIM,JDIM))
+ ALLOCATE(JDC(IDIM,JDIM))
+ ALLOCATE(S2C(IDIM,JDIM,4))
+
+!----------------------------------------------------------------------
+! COMPUTE BILINEAR WEIGHTS FOR EACH MODEL POINT FROM THE NEAREST
+! FOUR GSI/GAUSSIAN POINTS.  DOES NOT ACCOUNT FOR MASK.  THAT
+! HAPPENS LATER.
+!----------------------------------------------------------------------
+
+ CALL REMAP_COEF( 1, IDIM, 1, JDIM, IDIM_GAUS, JDIM_GAUS, &
+                  LONS_RAD, LATS_RAD, ID1, ID2, JDC, S2C, AGRID )
+
+ DEALLOCATE(LONS_RAD, LATS_RAD, AGRID)
+!
+! Initialize variables for counts statitics to be zeros
+!
+
+! 
+ nother = 0 ! grid cells not land
+ nsnowupd = 0  ! grid cells with snow (temperature not yet updated) 
+ nsnowchange = 0  ! grid cells where no temp upd made, because snow occurence changed 
+ nnosoilnear = 0 ! grid cells where model has soil, but 4 closest gaus grids don't 
+                 ! (no update made here)
+ nsoilupd = 0 
+
+! do-will skipping above skip close-by grid cells, due to model grid arrangement?
+ 
+ IJ_LOOP : DO IJ = 1, LENSFC
+
+! for now,  do not make a temperature update if snow differs  
+! between FG and ANAL (allow correction of snow to 
+! address temperature error first) 
+
+
+   MASK_TILE    = SOILSNOW_TILE(IJ)
+   MASK_FG_TILE = SOILSNOW_FG_TILE(IJ)
+
+!----------------------------------------------------------------------
+! MASK: 1  - soil, 2 - snow, 0 - neither
+!----------------------------------------------------------------------
+
+   IF (MASK_TILE == 0) THEN ! skip if neither soil nor snow
+     nother = nother + 1
+     CYCLE IJ_LOOP  
+   ENDIF
+
+
+!  Get i,j index on array of (idim,jdim) from known ij
+
+   JTILE = (IJ-1) / IDIM + 1
+   ITILE = MOD(IJ,IDIM)
+   IF (ITILE==0) ITILE = IDIM
+
+!----------------------------------------------------------------------
+! if the snow analysis has chnaged to occurence of snow, skip the 
+! temperature analysis
+!----------------------------------------------------------------------
+
+   IF ((MASK_FG_TILE == 2 .AND. MASK_TILE == 1) .or. (MASK_FG_TILE == 1 .AND. MASK_TILE == 2) ) THEN
+     nsnowchange = nsnowchange + 1
+     CYCLE IJ_LOOP  
+   ENDIF
+
+!----------------------------------------------------------------------
+!  DO UPDATE TO SOIL TEMPERATURE GRID CELLS, USING BILINEAR INTERP 
+!----------------------------------------------------------------------
+ 
+   IF (MASK_TILE == 1) THEN
+       ! these are the four nearest grid cells on the GAUS grid
+       IGAUS   = ID1(ITILE,JTILE)
+       JGAUS   = JDC(ITILE,JTILE)
+       IGAUSP1 = ID2(ITILE,JTILE)
+       JGAUSP1 = JDC(ITILE,JTILE)+1
+  
+! MAKE SURE GAUS GRID HAS SOIL NEARBY 
+       gaus_has_soil = .false.
+       IF (SOILSNOW_GAUS(IGAUS,JGAUS)     == 1 .OR. &
+           SOILSNOW_GAUS(IGAUSP1,JGAUS)   == 1 .OR. &
+           SOILSNOW_GAUS(IGAUSP1,JGAUSP1) == 1 .OR. &
+           SOILSNOW_GAUS(IGAUS,JGAUSP1)   == 1)  gaus_has_soil = .true. 
+       
+       IF (.not. gaus_has_soil) THEN
+         nnosoilnear = nnosoilnear + 1 
+         CYCLE IJ_LOOP 
+       ENDIF
+
+! CALCUALATE WEIGHTED INCREMENT OVER NEARBY GRID CELLS THAT HAVE SOIL
+
+       nsoilupd = nsoilupd + 1 
+
+       STC_INC = 0.0
+       WSUM  = 0.0
+ 
+       IF (SOILSNOW_GAUS(IGAUS,JGAUS) == 1) THEN
+         DO K = 1, LSOIL
+             STC_INC(K)  = STC_INC(K) + (S2C(ITILE,JTILE,1) * STC_INC_GAUS(K,IGAUS,JGAUS))
+         ENDDO
+         WSUM  = WSUM + S2C(ITILE,JTILE,1)
+       ENDIF
+
+       IF (SOILSNOW_GAUS(IGAUSP1,JGAUS) == 1) THEN
+         DO K = 1, LSOIL
+             STC_INC(K) = STC_INC(K) + (S2C(ITILE,JTILE,2) * STC_INC_GAUS(K,IGAUSP1,JGAUS))
+         ENDDO
+         WSUM  = WSUM + S2C(ITILE,JTILE,2)
+       ENDIF
+
+       IF (SOILSNOW_GAUS(IGAUSP1,JGAUSP1) == 1) THEN
+         DO K = 1, LSOIL
+             STC_INC(K) = STC_INC(K) + (S2C(ITILE,JTILE,3) * STC_INC_GAUS(K,IGAUSP1,JGAUSP1))
+         ENDDO
+         WSUM  = WSUM + S2C(ITILE,JTILE,3)
+       ENDIF
+
+       IF (SOILSNOW_GAUS(IGAUS,JGAUSP1) == 1) THEN
+         DO K = 1, LSOIL
+             STC_INC(K) = STC_INC(K) + (S2C(ITILE,JTILE,4) * STC_INC_GAUS(K,IGAUS,JGAUSP1))
+         ENDDO
+         WSUM  = WSUM + S2C(ITILE,JTILE,4)
+       ENDIF
+
+! ADD INCREMENT
+       DO K = 1, LSOIL
+         STC_INC(K) = STC_INC(K) / WSUM
+         STC_STATE(IJ,K) = STC_STATE(IJ,K) + STC_INC(K)
+! todo, apply some bounds
+       ENDDO
+
+   ELSEIF(MASK_TILE==2) THEN
+       !print *,  'CSD2', RLO(IJ), RLA(IJ) 
+       nsnowupd = nsnowupd + 1 
+
+   ENDIF ! if soil/snow point
+
+  ENDDO IJ_LOOP
+
+ write(*,'(a)') 'statistics of grids number processed for rank : ', MYRANK
+ write(*,'(a,I8)') ' soil grid cells updated = ',nsoilupd 
+ write(*,'(a,I8)') ' (not updated) soil grid cells, no soil nearby on gsi grid = ',nnosoilnear
+ write(*,'(a,I8)') ' (not updated) soil grid cells, change in presence of snow = ', nsnowchange
+ write(*,'(a,I8)') ' (not updated yet) snow grid cells = ', nsnowupd
+ write(*,'(a,I8)') ' grid cells, without soil of snow = ', nother 
+
+ nother = 0 ! grid cells not land
+ nsnowupd = 0  ! grid cells where no temp upd made, because snow occurence changed
+ nnosoilnear = 0 ! grid cells where model has soil, but 4 closest gaus grids don't
+                 ! (no update made here)
+ nsoilupd = 0
+
+ DEALLOCATE(ID1, ID2, JDC, S2C)
+
+ END SUBROUTINE ADJUST_SOIL
 
  SUBROUTINE CLIMO_TREND(LATITUDE, MON, DAY, DELTSFC, DTREF)
 
@@ -1740,4 +2068,30 @@ subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
 
  return
  end
+
+ subroutine calculate_soilsnowmask(smc,swe,lensfc,mask)
+ ! calculate soilsnowmask: 1  - soil, 2 - snow-covere, 0 - other
+ 
+  implicit none 
+
+  integer, intent(in)           :: lensfc
+  real, intent(in)              :: smc(lensfc), swe(lensfc) 
+  integer, intent(out)          :: mask(lensfc) 
+ 
+  integer :: i
+
+  mask = 0
+  do i=1,lensfc
+        if (smc(i) .LT. 1.0) then
+        mask(i) = 1
+        endif
+  end do
+
+  do i=1,lensfc
+        if (swe(i) .GT. 0.001) then
+        mask(i) = 2
+        endif
+  end do
+
+ end subroutine calculate_soilsnowmask
 
