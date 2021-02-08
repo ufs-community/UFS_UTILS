@@ -1,4 +1,4 @@
-# This is the main CMake file for NCEPLIBS-ip.
+# This is the main CMake file for UFS_UTILS.
 #
 # George Gayno
 cmake_minimum_required(VERSION 3.15)
@@ -71,6 +71,12 @@ if(EMC_EXEC_DIR)
 endif()
 
 add_subdirectory(sorc)
+
+# Run unit tests.
+include(CTest)
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)
