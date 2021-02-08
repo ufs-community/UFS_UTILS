@@ -1,6 +1,6 @@
 !> @file
-!-------------------------------------------------------------------------------
-! write out data in netcdf format
+!! @brief Write out data in netcdf format
+!!
   subroutine write_netcdf(im, jm, slm, land_frac, oro, orf, hprime, ntiles, tile, geolon, geolat, lon, lat)
     implicit none
     integer, intent(in):: im, jm, ntiles, tile

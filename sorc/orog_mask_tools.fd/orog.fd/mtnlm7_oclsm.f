@@ -163,8 +163,8 @@ C>
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &     OUTGRID,INPUTOROG)
 !jaa      use ipfort
+      use machine
       implicit none
-      include 'machine.h'
       include 'netcdf.inc'
 C
       integer                      :: IMN,JMN,IM,JM,NW
@@ -3895,10 +3895,8 @@ C  PHYSICAL TO FOURIER TRANSFORM.
 ! --- tiles in the output working dir.  The glob array can not be 
 ! --- acted on with grads, but the tiles can be if lat/lon are reduced slightly
 cc
+      use machine
       implicit none
-cc
-      include 'machine.h'
-      include 'resevod.h'
 cc
       integer*2    glob(360*120,180*120)
 cc

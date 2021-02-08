@@ -1,17 +1,13 @@
+!> @file
+!! @brief Replace undefined surface values.
+!!
+!! @author gayno NCEP/EMC
+!!
+!! Replace undefined values with a valid value.  This can
+!! happen for an isolated lake or island that is unresolved by
+!! the input grid.
+!!
  module search_util
-
-!--------------------------------------------------------------------------
-! Module search
-!
-! Abstract: Replace undefined values with a valid value.  This can
-!   happen for an isolated lake or island that is unresolved by
-!   the input grid.
-!
-! Public Subroutines:
-! -------------------
-! search                           Performs the search and replace.
-!
-!--------------------------------------------------------------------------
 
  private
 
@@ -19,20 +15,19 @@
 
  contains
 
+!> @brief Replace undefined surface values.
+!!
+!! Replace undefined values on the model grid with a valid value at
+!! a nearby neighbor.  Undefined values are typically associated
+!! with isolated islands where there is no source data.
+!!
+!! Routine searches a neighborhood with a radius of 100 grid points.
+!! If no valid value is found, a default value is used.
+!!
+!! @note This routine works for one tile of a cubed sphere grid.  It
+!! does not consider valid values at adjacent faces.  That is a 
+!! future upgrade.
  subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)
-
-!-----------------------------------------------------------------------
-! Replace undefined values on the model grid with a valid value at
-! a nearby neighbor.  Undefined values are typically associated
-! with isolated islands where there is no source data.
-!
-! Routine searches a neighborhood with a radius of 100 grid points.
-! If no valid value is found, a default value is used.
-!
-! Note: This routine works for one tile of a cubed sphere grid.  It
-! does not consider valid values at adjacent faces.  That is a 
-! future upgrade.
-!-----------------------------------------------------------------------
 
  use mpi
  use esmf

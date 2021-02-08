@@ -1,3 +1,6 @@
+/** @file
+    @brief Create gnomonic cubic grids.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

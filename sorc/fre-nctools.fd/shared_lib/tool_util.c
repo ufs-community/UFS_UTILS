@@ -1,4 +1,7 @@
-/** @file */
+/** @file
+    @brief Utility routines used by many tools.
+    @author Zhi.Liang@noaa.gov
+*/
 #include <stdlib.h> 
 #include <stdio.h>
 #include <string.h>

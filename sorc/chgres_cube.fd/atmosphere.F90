@@ -1,29 +1,21 @@
+!> @file
+!! @brief Process atmospheric fields
+!!
+!! @author gayno NCEP/EMC
+!!
+!! Process atmospheric fields:  Horizontally interpolate input
+!! fields to the target grid.  Adjust surface pressure according to
+!! terrain difference between input and target grids.  Vertically
+!! interpolate to target grid vertical levels.  Processing based on
+!! the spectral GFS version of CHGRES.
+!! 
+!! Variables defined below.  Here "b4adj" indicates fields on the target
+!! grid before vertical adjustment. "target" indicates data on target
+!! grid.  "input" indicates data on input grid. "_s" indicates fields
+!! on the 'south' edge of the grid box.  "_w" indicate fields on the 
+!! 'west' edge of the grid box.  Otherwise, fields are at the center
+!! of the grid box.
  module atmosphere
-
-!--------------------------------------------------------------------------
-! Module atmosphere
-!
-! Abstract: Process atmospheric fields:  Horizontally interpolate input
-!    fields to the target grid.  Adjust surface pressure according to
-!    terrain difference between input and target grids.  Vertically
-!    interpolate to target grid vertical levels.  Processing based on
-!    the spectral GFS version of CHGRES.
-!
-! Public Subroutines:
-! -------------------
-! atmosphere driver            Driver routine for processing atmospheric
-!                              fields
-!
-! Public variables:
-! -----------------
-! Variables defined below.  Here "b4adj" indicates fields on the target
-! grid before vertical adjustment. "target" indicates data on target
-! grid.  "input" indicates data on input grid. "_s" indicates fields
-! on the 'south' edge of the grid box.  "_w" indicate fields on the 
-! 'west' edge of the grid box.  Otherwise, fields are at the center
-! of the grid box.
-!
-!--------------------------------------------------------------------------
 
  use esmf
 
@@ -140,10 +132,9 @@
 
  contains
 
-!-----------------------------------------------------------------------------------
-! Driver routine for atmospheric fields.
-!-----------------------------------------------------------------------------------
-
+!> @brief
+!! Driver routine for atmospheric fields.
+!!
  subroutine atmosphere_driver(localpet)
 
  use mpi

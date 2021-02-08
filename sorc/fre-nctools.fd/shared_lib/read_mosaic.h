@@ -1,4 +1,6 @@
-/** @file */
+/** @file
+    @brief Function declarations for read_mosaic.c 
+*/
 #ifndef READ_MOSAIC_H_
 #define READ_MOSAIC_H_
 

@@ -1,11 +1,7 @@
+!> @file
+!! @brief Utilities for use when reading grib2 data.
+!!
 module grib2_util
-
-!--------------------------------------------------------------------------
-! Module: grib2_util
-!
-! Abstract: Utilities for use when reading grib2 data.
-!
-!--------------------------------------------------------------------------
 
 use esmf
 
