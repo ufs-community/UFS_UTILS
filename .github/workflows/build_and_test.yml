@@ -47,14 +47,6 @@ jobs:
         export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
         make -j2
         make install
-
-    - name: checkout-jasper
-      uses: actions/checkout@v2
-      with:
-        repository: jasper-software/jasper
-        path: jasper
-        ref: version-2.0.22
-
     - name: cache-jasper
       id: cache-jasper
       uses: actions/cache@v2
@@ -62,6 +54,14 @@ jobs:
         path: ~/jasper
         key: jasper-${{ runner.os }}-2.0.22-1
         
+    - name: checkout-jasper
+      if: steps.cache-jasper.outputs.cache-hit != 'true'
+      uses: actions/checkout@v2
+      with:
+        repository: jasper-software/jasper
+        path: jasper
+        ref: version-2.0.22
+
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
       run: |
@@ -70,8 +70,15 @@ jobs:
         cmake .. -DCMAKE_INSTALL_PREFIX=~
         make -j2
         make install
+    - name: cache-jasper
+      id: cache-nceplibs
+      uses: actions/cache@v2
+      with:
+        path: ~/nceplibs
+        key: nceplibs-${{ runner.os }}-1.2.0
 
     - name: checkout-nceplibs
+      if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       uses: actions/checkout@v2
       with:
         repository: NOAA-EMC/NCEPLIBS
@@ -79,6 +86,7 @@ jobs:
         ref: v1.2.0
 
     - name: build-nceplibs
+      if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
         export ESMFMKFILE=~/lib/esmf.mk
         cd nceplibs
