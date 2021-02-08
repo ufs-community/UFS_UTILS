@@ -11,7 +11,7 @@ The Unified Forecast Systems (UFS) Utilities repository contains pre-processing 
 Grid Generation
 ***********************************
 
-The following programs are used to create a grid.  Three grid types are available: global uniform, GFDL regional, and Extended Schmidt Gnomonic regional (ESG). The Short Range Weather APP only supports the ESG grid.
+The following programs are used to create a grid.
 
       * make_hgrid
       * regional_grid_esg
@@ -45,7 +45,7 @@ make_hgrid
 Introduction
 ------------
 
-The make_hgrid program computes geo-referencing parameters for the global uniform and GFDL stand-alone regional grids.  (Extended Schmidt gnomonic regional grids are created by the regional_esg_grid program.)  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  All grids are gnomonic such that all great circles are straight lines.  The parameters are computed on the staggered or "supergrid" - which has twice the resolution of the model grid.  The chgres_cube initialization program maps mass fields - such as temperature - at the supergrid centroids, and u/v winds at the face mid-points.  The supergrid is shown here:
+The make_hgrid program computes geo-referencing parameters for global uniform grids.  (Extended Schmidt gnomonic regional grids are created by the regional_esg_grid program.)  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  Grids are gnomonic such that all great circles are straight lines.  The parameters are computed on the staggered or "supergrid" - which has twice the resolution of the model grid.  The chgres_cube initialization program maps mass fields - such as temperature - at the supergrid centroids, and u/v winds at the face mid-points.  The supergrid is shown here:
 
 .. _figure_reference:
 
@@ -66,18 +66,6 @@ The program is controlled by these script variables:
 
       * Global uniform grid
              * res - x/y dimension of one tile.  The "CRES" resolution.  Example: a 96x96 tile would be classified as C96.  It may be converted to physical resolution as follows: resol = (360 degrees / 4*CRES) * 111 km. 
-   
-      * GFDL regional
-             * res - x/y dimension of the parent global tile
-             * stretch_fac - stretching factor for the parent global grid
-             * target_lon - center longitude of regional grid
-             * target_lat - center latitude of regional grid
-             * refine_ratio - resolution refinement ratio between the parent and regional grids.  Typically, "3".
-             * istart_nest - starting i-direction index of the regional grid in the parent tile supergrid.
-             * iend_nest - ending i-direction index of the regional grid in the parent tile supergrid.
-             * jstart_nest - starting j-direction index of the regional grid in the parent tile supergrid.
-             * jend_nest - ending j-direction index of the regional grid in the parent tile supergrid.
-             * halo - number row/columns of the lateral boundary halo.
 
 Program inputs and outputs
 --------------------------
@@ -88,7 +76,7 @@ None
 
 **Output data:**
 
-Tiled "grid" files (NetCDF) containing geo-referencing records.  File naming convention: CRES_grid.tile#.nc.  Regional grids are tile 7.  Note: the forecast model assumes regional grids are tile 1.  For regional grids, CRES is computed by the global_equiv_resol program.   File records include:
+Tiled "grid" files (NetCDF) containing geo-referencing records.  File naming convention: CRES_grid.tile#.nc. File records include:
 
       * x - geographic longitude (degrees)
       * y - geographic latitude (degrees)
@@ -104,7 +92,7 @@ regional_esg_grid
 Introduction
 ------------
 
-The regional_esg_grid program computes geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  The advantage of the ESG grid - compared to the GFDL regional grid - is its much more uniform grid spacing.  Like the make_hgrid program, the parameters are computed on the staggered or "supergrid".  For more information on the Extended Schmidt Gnomonic, see: `Purser, et. al <https://dtcenter.org/sites/default/files/events/2020/2-purser-james.pdf>`_.
+The regional_esg_grid program computes geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  The ESG grid is designed to have nearly homogenous grid spacing.  Like the make_hgrid program, the parameters are computed on the staggered or "supergrid".  For more information on the Extended Schmidt Gnomonic, see: `Purser, et. al <https://dtcenter.org/sites/default/files/events/2020/2-purser-james.pdf>`_.
 
 Code Structure
 --------------
@@ -210,7 +198,7 @@ Program inputs and outputs
 
 **Input data:**  
 
-The regional "grid" file (CRES_grid.tile#.nc) created by programs make_hgrid or regional_esg_grid - (NetCDF).  Uses the grid cell area record.
+The regional "grid" file (CRES_grid.tile#.nc) created by the regional_esg_grid program - (NetCDF).  Uses the grid cell area record.
 
 **Output data:**  
 
