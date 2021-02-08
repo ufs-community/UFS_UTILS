@@ -1,4 +1,4 @@
-# This is the main CMake file for NCEPLIBS-ip.
+# This is the main CMake file for UFS_UTILS.
 #
 # George Gayno
 cmake_minimum_required(VERSION 3.15)
