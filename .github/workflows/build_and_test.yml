@@ -16,19 +16,20 @@ jobs:
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
         sudo apt-get install libpng-dev
         sudo apt-get install libjpeg-dev
-
-    - name: checkout-esmf
-      uses: actions/checkout@v2
-      with:
-       repository: esmf-org/esmf
-       path: esmf
-       ref: ESMF_8_0_1
     - name: cache-esmf
       id: cache-esmf
       uses: actions/cache@v2
       with:
         path: ~/esmf
         key: esmf-${{ runner.os }}-8.0.1
+
+    - name: checkout-esmf
+      if: steps.cache-esmf.outputs.cache-hit != 'true'        
+      uses: actions/checkout@v2
+      with:
+       repository: esmf-org/esmf
+       path: esmf
+       ref: ESMF_8_0_1
         
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
