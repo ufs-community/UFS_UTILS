@@ -28,7 +28,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf-${{ runner.os }}-1.12.0-mpich-3.3.2-2
+        key: esmf-${{ runner.os }}-8.0.1
         
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
