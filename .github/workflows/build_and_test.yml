@@ -59,7 +59,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: jasper-${{ runner.os }}-2.0.22
+        key: jasper-${{ runner.os }}-2.0.22-1
         
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
