@@ -19,12 +19,13 @@
 
 set -x
 
-PACKDIR=/scratch1/NCEPDEV/global/Henry.Juang/testGC/
-EXPN=v15	# gsm, v15, v16
+PACKDIR=/scratch1/NCEPDEV/global/Henry.Juang/testCC/
+EXPN=v16	# gsm, v15, v16
 LEVS=150
+compile=intel
 
 source $PACKDIR/UFS_UTILS/sorc/machine-setup.sh > /dev/null 2>&1
-source $PACKDIR/UFS_UTILS/modulefiles/build.$target
+source $PACKDIR/UFS_UTILS/modulefiles/build.$target.$compile
 
 # Threads useful when ingesting spectral gfs sigio files.
 # Otherwise set to 1.

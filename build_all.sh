@@ -1,6 +1,10 @@
 #! /usr/bin/env bash
 set -eux
 
+target=hera
+##compiler=gnu
+##compiler=intel
+
 target=${target:-"NULL"}
 compiler=${compiler:-"intel"}
 

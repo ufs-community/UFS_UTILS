@@ -273,7 +273,7 @@
    10 CONTINUE 
       GOTO 90 
    50 CONTINUE 
-      DD=DENSM(ALT,1.,0,TZ,MN3,ZN3,TN3,TGN3,MN2,ZN2,TN2,TGN2) 
+      DD=DENSM(ALT,1.,0.,TZ,MN3,ZN3,TN3,TGN3,MN2,ZN2,TN2,TGN2) 
       T(2)=TZ 
    90 CONTINUE 
       ALAST=ALT 
@@ -1172,8 +1172,9 @@
 !  PARMS NOT USED: 83, 90,100,140-150                                   
    49 CONTINUE 
       TINF=P(31) 
-      DO 50 I = 1,NSW 
-   50 TINF = TINF + ABS(SW(I))*T(I) 
+      DO I = 1,NSW 
+        TINF = TINF + ABS(SW(I))*T(I) 
+      ENDDO
       GLOBE7 = TINF 
       RETURN 
       END FUNCTION GLOBE7                         
@@ -1297,8 +1298,9 @@
           )*SIN(DGTR*LONG))                                             
    49 CONTINUE 
       TT=0. 
-      DO 50 I=1,14 
-   50 TT=TT+ABS(SW(I))*T(I) 
+      DO I=1,14 
+        TT=TT+ABS(SW(I))*T(I) 
+      ENDDO
       GLOB7S=TT 
       RETURN 
       END FUNCTION GLOB7S                          

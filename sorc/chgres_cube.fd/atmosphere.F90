@@ -1562,9 +1562,9 @@
    ENDDO
 
    IF (TRIM(TRACERS(II)) == "sphum") QVPTR => Q2PTR
-   IF (TRIM(TRACERS(II)) == "spfo" ) QOPTR => Q2PTR
-   IF (TRIM(TRACERS(II)) == "spfo2") O2PTR => Q2PTR
-   IF (TRIM(TRACERS(II)) == "spfo3") O3PTR => Q2PTR
+   IF (TRIM(TRACERS(II)) == "spo" ) QOPTR => Q2PTR
+   IF (TRIM(TRACERS(II)) == "spo2") O2PTR => Q2PTR
+   IF (TRIM(TRACERS(II)) == "spo3") O3PTR => Q2PTR
 
  ENDDO
 

@@ -6,4 +6,4 @@ This ud directory is for personal use, as user directory
 3) to run chgres etc, check under ud
    scriots/ provides some job script, such as getic,sh to get IC for chgres
    chgres_wam/ provides nml files and run.sh to run chgres_wam
-       qsub run.sh
+       sbatch  run.sh

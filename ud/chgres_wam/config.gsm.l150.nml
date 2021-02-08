@@ -8,7 +8,7 @@
  atm_files_input_grid="gfnanl.gdas.2017011906"
  sfc_files_input_grid="sfnanl.gdas.2017011906"
  nst_files_input_grid="nsnanl.gdas.2017011906"
- vcoord_file_target_grid="/scratch1/NCEPDEV/global/Henry.Juang/testGC/UFS_UTILS/fix/fix_am/global_hyblev.l150.txt"
+ vcoord_file_target_grid="/scratch1/NCEPDEV/global/glopara/fix/fix_am/global_hyblev.l150.txt"
  cycle_mon=1
  cycle_day=19
  cycle_hour=6
@@ -16,7 +16,7 @@
  convert_sfc=.true.
  convert_nst=.true.
  input_type="gfs_gaussian_nemsio"
- tracers="sphum","liq_wat","spfo3","spfo","spfo2"
+ tracers="sphum","liq_wat","spo3","spo","spo2"
  tracers_input="spfh","clwmr","o3mr"
  wam_cold_start=.true.
  wam_start_date=2017011906
