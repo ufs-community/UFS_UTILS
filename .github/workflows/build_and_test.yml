@@ -7,7 +7,6 @@ jobs:
     env:
       FC: gfortran-9
       CC: gcc-9
-      ESMF_DIR: `pwd`/esmf-ESMF_8_0_1
 
     steps:
     - name: install-dependencies
@@ -21,6 +20,7 @@ jobs:
 
     - name: build-esmf
       run: |
+        export ESMF_DIR=`pwd`/esmf-ESMF_8_0_1
         wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null && ls -l
         tar zxf ESMF_8_0_1.tar.gz && ls -l
         cd esmf-ESMF_8_0_1
@@ -74,6 +74,7 @@ jobs:
     - name: build-ufs-utils
       run: |
         export ESMFMKFILE=~/lib/esmf.mk
+        export ESMF_DIR=`pwd`/esmf-ESMF_8_0_1
         cd ufs_utils
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH=~
