@@ -18,17 +18,12 @@ jobs:
         sudo apt-get install libjpeg-dev
         sudo apt-get install wget
 
-    - name: checkout-esmf
-      uses: actions/checkout@v2
-      with:
-       repository: esmf-org/esmf
-       path: esmf
-       ref: ESMF_8_0_1
-        
     - name: build-esmf
       run: |
-        export ESMF_DIR=`pwd`/esmf
-        cd esmf
+        wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz
+	tar zxf esmf-ESMF_8_0_1.tar.gz
+        export ESMF_DIR=`pwd`/esmf-ESMF_8_0_1
+        cd esmf-ESMF_8_0_1
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
