@@ -7,6 +7,8 @@ jobs:
     env:
       FC: gfortran-9
       CC: gcc-9
+      ESMF_DIR: `pwd`/esmf-ESMF_8_0_1
+
 
     steps:
     - name: install-dependencies
@@ -22,7 +24,6 @@ jobs:
       run: |
         wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null && ls -l
         tar zxf ESMF_8_0_1.tar.gz && ls -l
-        export ESMF_DIR=`pwd`/esmf-ESMF_8_0_1
         cd esmf-ESMF_8_0_1
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
