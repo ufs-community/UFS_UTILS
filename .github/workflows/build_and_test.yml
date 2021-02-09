@@ -9,7 +9,6 @@ jobs:
       CC: gcc-9
       ESMF_DIR: `pwd`/esmf-ESMF_8_0_1
 
-
     steps:
     - name: install-dependencies
       run: |
