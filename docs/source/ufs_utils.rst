@@ -258,6 +258,56 @@ Orography files - one for each tile - oro.CRES.tile#.nc (NetCDF).  Contains thes
       * sigma - slope of orography (unitless)
       * elvmax - maximum height above mean (meters)
 
+filter_topo
+===========
+
+Introduction
+------------
+
+The FV3 terrain filtering algorithm has several unique properties compared to conventional topography filters. The resulting topography filtered by this algorithm has conserved globally integrated elevations. More importantly, this filter has the following island-preserving properties: 1) No Gibbs ringing at the coastlines where discontinuities occur; 2) the filtered terrain's coastlines strictly match the source terrain's. The detailed implementation of this terrain filtering algorithm will be described in a forthcoming publication by Dr. Shian-Jiann Lin and his group.
+
+Code structure
+--------------
+
+Location of source code: ./sorc/grid_tools.fd/filter_topo.fd. The entire program is contained in filter_topo.F90.
+
+Namelist options
+----------------
+
+Program execution is controlled via a namelist.  The namelist variables are:
+
+      * topo_file - Name of the orography file (See input data) (character)
+      * topo_field - Name of the filtered orography record in the orography file ("orog_filt") (character)
+      * mask_field - Name of the land-sea mask record in the orography file ("land_frac") (character)
+      * grid_file - The mosaic file (See input data) (character)
+      * zero_ocean - Flag to turn on the "island-preserving" property.  Default is true (logical)
+      * stretch_fac - Stretching factor.  Equal to "1" for global uniform grids. Not applicable for ESG regional grids (floating point)
+      * res - The "CRES" resolution (floating point)
+      * grid_type - 0 for a gnomonic grid (integer)
+      * regional - True for an ESG regional grid (logical)
+
+Program inputs and outputs
+--------------------------
+
+**Input data:**
+
+      * mosaic file - the mosaic file from the make_solo_mosaic program - CRES_mosaic.nc (NetCDF)
+      * grid file - the "grid" file from the make_hgrid or regional_esg programs  - CRES_grid.tile#.nc - (NetCDF)
+      * orography file - the orography file from the orog program - oro.CRES.tile#.nc (NetCDF)
+
+**Output data:**
+
+      * The filtered orography is written to the "orog_filt" record of the input orography file - oro.CRES.tile#.nc (NetCDF).
+
+Filtering parameters
+--------------------
+
+      * n_del2 - Second-order strong filtering coefficient.
+      * n_del2_weak - Second-order weak filtering coefficient - used to more finely smooth the topography compared to the strong filter.
+      * cd4 - dimensionless coefficient for delta-4 diffusion.
+      * peak_fac - overshoot factor for the mountain peak
+      * max_slope - maximum allowable terrain slope
+
 shave
 =====
 
