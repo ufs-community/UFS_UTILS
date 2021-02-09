@@ -4,8 +4,10 @@ module gsl_oro_data_lg_scale_sar
 ! This module calculates the parameters required for the subgrid-
 ! scale orographic gravity-wave drag (GWDO) scheme on the FV3
 ! grid.  These parameters are for the large-scale GWDO and blocking
-! schemes of the GSL drag suite.  2.5minute (~5km) global topography
-! is used.  The output fields are:
+! schemes of the GSL drag suite, (Kim and Doyle, 2005).
+! 2.5minute (~5km) global topography is used.  These are located
+! in the 'fix' file geo_em.d01.lat-lon.2.5m.HGT_M.nc.
+! The output fields are:
 ! var, con, ol{1,2,3,4} and oa{1,2,3,4}
 ! or in FV3 parlance:
 ! stddev, convexity, ol{1,2,3,4} and oa{1,2,3,4}
@@ -37,7 +39,7 @@ integer :: dimX_fine, dimY_fine
 
 real (kind = real_kind), allocatable :: lat1d_fine(:), lon1d_fine(:)
 
-real, parameter :: p5 = 0.5_real_kind
+real (kind = real_kind), parameter :: p5 = 0.5_real_kind
 
 real (kind = real_kind), allocatable :: HGT_M_fine(:,:)
 real (kind = real_kind), parameter :: HGT_missing = 1.E+10

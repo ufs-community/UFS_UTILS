@@ -3,9 +3,9 @@ module gsl_oro_data_sm_scale
 !--------------------------------------------------------------------
 ! This module calculates the parameters required for the subgrid-
 ! scale orographic gravity-wave drag (GWDO) scheme on the FV3
-! grid.  These parameters are for the small-scale GWD and Beljaars
-! (2004) turbulent orographic form drag (TOFD) schemes
-! of the GSL drag suite.  30 second (~1km) global topography
+! grid.  These parameters are for the small-scale GWD (Tsiringakis et al.,
+! 2017) and the turbulent orographic form drag (TOFD) (Beljaars, 2004)
+! schemes of the GSL drag suite.  30 second (~1km) global topography
 ! is used.  The output fields are:
 ! var, con, ol{1,2,3,4} and oa{1,2,3,4}
 ! or in FV3 parlance:
@@ -29,7 +29,7 @@ integer :: dimX_fine, dimY_fine
 
 real (kind = real_kind), allocatable :: lat1d_fine(:), lon1d_fine(:)
 
-real, parameter :: p5 = 0.5_real_kind
+real (kind = real_kind), parameter :: p5 = 0.5_real_kind
 
 
 

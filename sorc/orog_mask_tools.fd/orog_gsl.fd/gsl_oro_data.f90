@@ -2,10 +2,11 @@ program gsl_oro_data
 
 !--------------------------------------------------------------------
 ! This program calls subroutines which calculate the parameters
-! required for the subgrid-scale orographic gravity-wave drag (GWDO)
-! scheme on the FV3 grid.  These parameters are for the small-scale
-! GWD and Beljaars (2004) turbulent orographic form drag (TOFD)
-! schemes of the GSL drag suite.  The output fields are:
+! required for the GSL subgrid-scale orographic gravity-wave drag (GWDO)
+! suite on the FV3 grid.  These parameters are for the small-scale
+! GWD (Tsiringakis et al., 2017) and turbulent orographic form drag (TOFD)
+! (Beljaars et al., 2004) schemes of the GSL drag suite.  The output
+! fields are:
 ! var, con, ol{1,2,3,4} and oa{1,2,3,4}
 ! or in FV3 parlance:
 ! stddev, convexity, ol{1,2,3,4} and oa{1,2,3,4}

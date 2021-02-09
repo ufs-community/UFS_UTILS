@@ -1,7 +1,9 @@
 set(fortran_src
-    machine.f90
-    mtnlm7_oclsm.f
-    netcdf_io.F90)
+    module_gsl_oro_data_lg_scale.f90
+    module_gsl_oro_data_lg_scale.sar.f90
+    module_gsl_oro_data_sm_scale.f90
+    module_gsl_oro_data_sm_scale.sar.f90
+    gsl_oro_data.f90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
@@ -12,7 +14,7 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   endif()
 endif()
 
-set(exe_name orog)
+set(exe_name orog_gsl)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}

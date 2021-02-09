@@ -38,7 +38,7 @@ integer :: dimX_fine, dimY_fine
 
 real (kind = real_kind), allocatable :: lat1d_fine(:), lon1d_fine(:)
 
-real, parameter :: p5 = 0.5_real_kind
+real (kind = real_kind), parameter :: p5 = 0.5_real_kind
 
 
 
