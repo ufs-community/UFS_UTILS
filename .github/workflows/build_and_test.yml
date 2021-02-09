@@ -53,8 +53,15 @@ jobs:
         repository: jasper-software/jasper
         path: jasper
         ref: version-2.0.22
+    - name: cache-jasper
+      id: cache-jasper
+      uses: actions/cache@v2
+      with:
+        path: ~/jasper
+        key: jasper-${{ runner.os }}-2.0.22
 
     - name: build-jasper
+      if: steps.cache-jasper.outputs.cache-hit != 'true'
       run: |
         cd jasper
         mkdir build-jasper && cd build-jasper
@@ -68,8 +75,15 @@ jobs:
         repository: NOAA-EMC/NCEPLIBS
         path: nceplibs
         ref: v1.2.0
+    - name: cache-nceplibs
+      id: cache-nceplibs
+      uses: actions/cache@v2
+      with:
+        path: ~/nceplibs
+        key: nceplibs-${{ runner.os }}-1.2.0
 
     - name: build-nceplibs
+      if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
         export ESMFMKFILE=~/lib/esmf.mk
         cd nceplibs
