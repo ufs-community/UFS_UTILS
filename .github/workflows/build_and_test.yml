@@ -16,23 +16,21 @@ jobs:
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
         sudo apt-get install libpng-dev
         sudo apt-get install libjpeg-dev
+        sudo apt-get install wget
 
-    - name: checkout-esmf
-      uses: actions/checkout@v2
-      with:
-       repository: esmf-org/esmf
-       path: esmf
-       ref: ESMF_8_0_1
     - name: cache-esmf
       id: cache-esmf
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf-${{ runner.os }}-8.0.1
+        key: esmf-${{ runner.os }}-8.0.1-1
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
+      wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz
+      tar zxf ESMF_8_0_1.tar.gz
+      mv esmf-ESMF_8_0_1 esmf
         export ESMF_DIR=`pwd`/esmf
         cd esmf
         export ESMF_COMM=mpich3
