@@ -23,8 +23,15 @@ jobs:
        repository: esmf-org/esmf
        path: esmf
        ref: ESMF_8_0_1
-        
+    - name: cache-esmf
+      id: cache-esmf
+      uses: actions/cache@v2
+      with:
+        path: ~/esmf
+        key: esmf-${{ runner.os }}-8.0.1
+
     - name: build-esmf
+      if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         export ESMF_DIR=`pwd`/esmf
         cd esmf
