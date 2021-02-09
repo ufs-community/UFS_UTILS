@@ -16,18 +16,21 @@ jobs:
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
         sudo apt-get install libpng-dev
         sudo apt-get install libjpeg-dev
-
-    - name: checkout-esmf
-      uses: actions/checkout@v2
+        sudo apt-get install wget
+    - name: cache-esmf
+      id: cache-esmf
+      uses: actions/cache@v2
       with:
-       repository: esmf-org/esmf
-       path: esmf
-       ref: ESMF_8_0_1
-        
+        path: ~/esmf
+        key: esmf-${{ runner.os }}-8.0.1
+
     - name: build-esmf
+      if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
-        export ESMF_DIR=`pwd`/esmf
-        cd esmf
+        export ESMF_DIR=`pwd`/esmf-ESMF_8_0_1
+        wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null && ls -l
+        tar zxf ESMF_8_0_1.tar.gz && ls -l
+        cd esmf-ESMF_8_0_1
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
@@ -78,6 +81,7 @@ jobs:
     - name: build-ufs-utils
       run: |
         export ESMFMKFILE=~/lib/esmf.mk
+        export ESMF_DIR=`pwd`/esmf-ESMF_8_0_1
         cd ufs_utils
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH=~
