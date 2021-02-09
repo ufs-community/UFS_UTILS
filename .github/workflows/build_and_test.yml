@@ -82,7 +82,6 @@ jobs:
     - name: build-ufs-utils
       run: |
         export ESMFMKFILE=~/lib/esmf.mk
-        export ESMF_DIR=`pwd`/esmf-ESMF_8_0_1
         cd ufs_utils
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH=~
