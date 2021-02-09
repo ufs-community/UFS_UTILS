@@ -42,11 +42,19 @@ https://github.com/NOAA-EMC/UFS_UTILS.
   extended Schmidt gnomonic grids, and to compute the equivalent
   global resolution of a regional grid.
 
-- nst_tf_chg
+- nst_tf_chg - Initializes the reference temperature used by the NSST
+  model.
 
-- orog_mask_tools
+- orog_mask_tools - Utilities to create land mask, terrain and gravity
+  wave drag fields; set lake fraction and depth; creates an inland
+  land mask.
 
-- sfc_climo_gen
+- sfc_climo_gen - Creates surface climatological fields, such as
+  vegetation type and albedo, for an FV3 grid.
 
-- vcoord_gen
+- vcoord_gen - Generates hybrid coordinate parameters from fields such
+  as surface pressure, model top and the number of vertical
+  levels. Outputs the 'ak' and 'bk' parameters used by the forecast
+  model to define the hybrid levels.
+
 
