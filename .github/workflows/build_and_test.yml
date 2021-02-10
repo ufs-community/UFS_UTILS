@@ -54,6 +54,9 @@ jobs:
 
     - name: build-jasper
       run: |
+        set -x
+	pwd
+	wget https://github.com/jasper-software/jasper/archive/version-2.0.22.tar.gz &> /dev/null && ls -l
         cd jasper
         mkdir build-jasper && cd build-jasper
         cmake .. -DCMAKE_INSTALL_PREFIX=~
