@@ -69,7 +69,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS
         path: nceplibs
-        ref: v1.2.0
+        ref: v1.3.0
 
     - name: build-nceplibs
       run: |
