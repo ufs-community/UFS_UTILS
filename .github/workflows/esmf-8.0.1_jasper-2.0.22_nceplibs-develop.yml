@@ -1,4 +1,4 @@
-name: Build and Test
+name: esmf-8.0.1_jasper-2.0.22_nceplibs-develop
 on: [push, pull_request]
 
 jobs:
@@ -74,10 +74,9 @@ jobs:
       run: |
         set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk
-        wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.3.0.tar.gz &> /dev/null && ls -l
         cd nceplibs
         mkdir build && cd build
-        cmake .. -DCMAKE_INSTALL_PREFIX='~;~/jasper' -DFLAT=ON
+        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper' -DCMAKE_INSTALL_PREFIX='~' -DFLAT=ON
         make -j2
        
     - name: checkout-ufs-utils
