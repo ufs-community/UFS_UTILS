@@ -91,7 +91,7 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
-        cmake .. -DCMAKE_PREFIX_PATH=~
+        cmake .. -DCMAKE_PREFIX_PATH=~;~/jasper
         make -j2
 
 
