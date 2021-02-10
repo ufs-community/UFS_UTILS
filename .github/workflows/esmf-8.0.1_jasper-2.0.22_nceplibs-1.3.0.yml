@@ -1,0 +1,102 @@
+name: esmf-8.0.1_jasper-2.0.22_nceplibs-1.3.0
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      FC: gfortran-9
+      CC: gcc-9
+
+    steps:
+    - name: install-dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install libmpich-dev
+        sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
+        sudo apt-get install libpng-dev
+        sudo apt-get install libjpeg-dev
+        sudo apt-get install wget
+    - name: cache-esmf
+      id: cache-esmf
+      uses: actions/cache@v2
+      with:
+        path: ~/esmf
+        key: esmf-${{ runner.os }}-8.0.1-2
+
+    - name: build-esmf
+      if: steps.cache-esmf.outputs.cache-hit != 'true'
+      run: |
+        set -x
+        pushd ~
+        export ESMF_DIR=~/esmf-ESMF_8_0_1
+        wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null
+        tar zxf ESMF_8_0_1.tar.gz
+        cd esmf-ESMF_8_0_1
+        export ESMF_COMM=mpich3
+        export ESMF_INSTALL_BINDIR=bin
+        export ESMF_INSTALL_LIBDIR=lib
+        export ESMF_INSTALL_MODDIR=mod
+        export ESMF_COMPILER=gfortran
+        export ESMF_INSTALL_PREFIX=~/esmf
+        export ESMF_NETCDF=split
+        export ESMF_NETCDF_INCLUDE=/usr/include
+        export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
+        make -j2
+        make install
+    - name: cache-jasper
+      id: cache-jasper
+      uses: actions/cache@v2
+      with:
+        path: ~/jasper
+        key: jasper-${{ runner.os }}-2.0.22
+
+    - name: build-jasper
+      if: steps.cache-jasper.outputs.cache-hit != 'true'
+      run: |
+        set -x
+        pwd
+        wget https://github.com/jasper-software/jasper/archive/version-2.0.22.tar.gz &> /dev/null
+        tar zxf version-2.0.22.tar.gz
+        cd jasper-version-2.0.22
+        mkdir build-jasper && cd build-jasper
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
+        make -j2
+        make install
+    - name: cache-nceplibs
+      id: cache-nceplibs
+      uses: actions/cache@v2
+      with:
+        path: ~/nceplibs
+        key: nceplibs-${{ runner.os }}-1.3.0
+
+    - name: build-nceplibs
+      if: steps.cache-nceplibs.outputs.cache-hit != 'true'
+      run: |
+        set -x
+        export ESMFMKFILE=~/esmf/lib/esmf.mk
+        wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.3.0.tar.gz &> /dev/null
+        tar zxf v1.3.0.tar.gz && ls -l
+        cd NCEPLIBS-1.3.0
+        mkdir build && cd build
+        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
+        make -j2
+       
+    - name: checkout-ufs-utils
+      uses: actions/checkout@v2
+      with: 
+        path: ufs_utils
+
+    - name: build-ufs-utils
+      run: |
+        export ESMFMKFILE=~/esmf/lib/esmf.mk
+        cd ufs_utils
+        mkdir build && cd build
+        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs'
+        make -j2
+
+
+    
+        
+   
+
