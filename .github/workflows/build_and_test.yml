@@ -44,15 +44,15 @@ jobs:
         export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
         make -j2
         make install
-
-    - name: checkout-jasper
-      uses: actions/checkout@v2
+    - name: cache-jasper
+      id: cache-jasper
+      uses: actions/cache@v2
       with:
-        repository: jasper-software/jasper
-        path: jasper
-        ref: version-2.0.22
+        path: ~/jasper
+        key: jasper-${{ runner.os }}-2.0.22
 
     - name: build-jasper
+      if: steps.cache-jasper.outputs.cache-hit != 'true'
       run: |
         set -x
         pwd
@@ -60,7 +60,7 @@ jobs:
         tar zxf version-2.0.22.tar.gz && ls -l
         cd jasper-version-2.0.22
         mkdir build-jasper && cd build-jasper
-        cmake .. -DCMAKE_INSTALL_PREFIX=~
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
         make -j2
         make install
 
