@@ -63,21 +63,21 @@ jobs:
         cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
         make -j2
         make install
-
-    - name: checkout-nceplibs
-      uses: actions/checkout@v2
+    - name: cache-nceplibs
+      id: cache-nceplibs
+      uses: actions/cache@v2
       with:
-        repository: NOAA-EMC/NCEPLIBS
-        path: nceplibs
-        ref: v1.3.0
+        path: ~/nceplibs
+        key: nceplibs-${{ runner.os }}-1.3.0
 
     - name: build-nceplibs
+      if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
         set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.3.0.tar.gz &> /dev/null
         tar zxf v1.3.0.tar.gz && ls -l
-        cd nceplibs
+        cd NCEPLIBS-1.3.0
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
         make -j2
