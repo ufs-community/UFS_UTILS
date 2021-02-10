@@ -77,7 +77,7 @@ add_subdirectory(sorc)
 # Run unit tests.
 include(CTest)
 if(BUILD_TESTING)
-  add_subdirectory(unit-tests)
+  add_subdirectory(tests)
 endif()
 
 # If doxygen documentation we enabled, build it.

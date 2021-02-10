@@ -1,9 +1,7 @@
 !> @file
-
-!> output
+!! @author Lin Gan NCEP/EMC
 !!
 !! Unit test for to_upper() and to_lower() functions under UFS_UTILS package
-!! exit code other than zero identify issue found
 !!
  
 program to_upper_lower
@@ -31,18 +29,20 @@ program to_upper_lower
 
  call to_lower(test_input_char_1) 
  match_result = test_input_char_1 == l_st_base
+ if (.not.match_result) then
+   stop
+ endif
 
  call to_upper(test_input_char_2)
  match_result = test_input_char_2 == u_st_base
+ if (.not.match_result) then
+   stop
+ endif
 
 !-------------------------------------------------------------------------
 ! Display final result
 !-------------------------------------------------------------------------
 
- if (.not.match_result) then
-   stop 'unit_test to_lower and to_upper failed'
- else
-   print*, "Pass"
- endif
+ print*, "Pass"
 
 end program

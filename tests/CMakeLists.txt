@@ -1,5 +1,5 @@
 set(fortran_src
-    ../sorc/chgres_cube.fd/utils.f90
+    "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.f90"
     to_upper_lower.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
