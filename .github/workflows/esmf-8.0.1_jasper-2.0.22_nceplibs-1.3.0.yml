@@ -94,6 +94,7 @@ jobs:
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs'
         make -j2
+        make test
 
 
     
