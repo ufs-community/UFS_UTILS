@@ -30,8 +30,8 @@ jobs:
         set -x
         pushd ~
         export ESMF_DIR=~/esmf-ESMF_8_0_1
-        wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null && ls -l
-        tar zxf ESMF_8_0_1.tar.gz && ls -l
+        wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null
+        tar zxf ESMF_8_0_1.tar.gz
         cd esmf-ESMF_8_0_1
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
@@ -56,8 +56,8 @@ jobs:
       run: |
         set -x
         pwd
-        wget https://github.com/jasper-software/jasper/archive/version-2.0.22.tar.gz &> /dev/null && ls -l
-        tar zxf version-2.0.22.tar.gz && ls -l
+        wget https://github.com/jasper-software/jasper/archive/version-2.0.22.tar.gz &> /dev/null
+        tar zxf version-2.0.22.tar.gz
         cd jasper-version-2.0.22
         mkdir build-jasper && cd build-jasper
         cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
