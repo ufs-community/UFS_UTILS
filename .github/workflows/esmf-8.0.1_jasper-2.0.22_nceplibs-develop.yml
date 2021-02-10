@@ -1,4 +1,4 @@
-name: Build and Test
+name: esmf-8.0.1_jasper-2.0.22_nceplibs-develop
 on: [push, pull_request]
 
 jobs:
@@ -44,19 +44,23 @@ jobs:
         export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
         make -j2
         make install
-
-    - name: checkout-jasper
-      uses: actions/checkout@v2
+    - name: cache-jasper
+      id: cache-jasper
+      uses: actions/cache@v2
       with:
-        repository: jasper-software/jasper
-        path: jasper
-        ref: version-2.0.22
+        path: ~/jasper
+        key: jasper-${{ runner.os }}-2.0.22
 
     - name: build-jasper
+      if: steps.cache-jasper.outputs.cache-hit != 'true'
       run: |
-        cd jasper
+        set -x
+        pwd
+        wget https://github.com/jasper-software/jasper/archive/version-2.0.22.tar.gz &> /dev/null && ls -l
+        tar zxf version-2.0.22.tar.gz && ls -l
+        cd jasper-version-2.0.22
         mkdir build-jasper && cd build-jasper
-        cmake .. -DCMAKE_INSTALL_PREFIX=~
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
         make -j2
         make install
 
@@ -65,16 +69,14 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS
         path: nceplibs
-        ref: v1.2.0
 
     - name: build-nceplibs
       run: |
         set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk
-        wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.3.0.tar.gz &> /dev/null && ls -l
         cd nceplibs
         mkdir build && cd build
-        cmake .. -DCMAKE_INSTALL_PREFIX=~ -DFLAT=ON
+        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper' -DCMAKE_INSTALL_PREFIX='~' -DFLAT=ON
         make -j2
        
     - name: checkout-ufs-utils
@@ -87,7 +89,7 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
-        cmake .. -DCMAKE_PREFIX_PATH=~
+        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper'
         make -j2
 
 
