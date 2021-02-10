@@ -91,6 +91,7 @@ jobs:
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper'
         make -j2
+        make test
 
 
 
