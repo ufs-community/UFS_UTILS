@@ -27,11 +27,11 @@ https://github.com/NOAA-EMC/UFS_UTILS.
 - fvcom_tools - - Replaces lake surface and lake ice temperature along
   with aerial ice concentration generated from the Great Lakes
   Operational Forecast System (GLOFS) in an FV3 surface restart
-  file. [fvcom documentation](sorc/fvcom_tools.fd/fvcom_readme.md)
+  file. See [fvcom documentation](@ref fvcom_readme).
  
 - global_chgres - Creates cold start initial conditions for FV3 model
-  runs. Deprecated by the chgres_cube utility. [global_chgres
-  documentation](sorc/global_chgres.fd/global_chgres_users_guide.md)
+  runs. Deprecated by the chgres_cube utility. See [global_chgres
+  documentation](@ref global_chgres_users_guide).
 
 - global_cycle - Updates the GFS surface conditions using external
   snow and sea ice analyses. Updates monthly climatological fields
