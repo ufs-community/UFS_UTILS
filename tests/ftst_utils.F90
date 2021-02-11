@@ -3,7 +3,7 @@
 !
 ! Lin Gan NCEP/EMC
  
-program to_upper_lower
+program ftst_utils
 
  
  implicit none
@@ -45,4 +45,4 @@ program to_upper_lower
  print*, "OK"
  print*, "SUCCESS!"
 
-end program
+end program ftst_utils
