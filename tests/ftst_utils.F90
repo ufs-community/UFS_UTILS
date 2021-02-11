@@ -1,8 +1,7 @@
-!> @file
-!! @author Lin Gan NCEP/EMC
-!!
-!! Unit test for to_upper() and to_lower() functions under UFS_UTILS package
-!!
+! Unit test for to_upper() and to_lower() functions under UFS_UTILS
+! package, chres_cube utility.
+!
+! Lin Gan NCEP/EMC
  
 program to_upper_lower
 
@@ -18,8 +17,8 @@ program to_upper_lower
  test_input_char_1="sTAGGErLOCCE"
  test_input_char_2="staGGErLOCCE"
 
- print*, "-------- Starting Unit Testing to_upper_lower  ----------"
- print*, "------------ Testing to_lower and to_upper --------------"
+ print*, "Starting Unit Testing to_upper_lower."
+ print*, "testing to_lower and to_upper..."
 
 !-------------------------------------------------------------------------
 ! Execute testing below by running target function with testing string 
@@ -43,6 +42,7 @@ program to_upper_lower
 ! Display final result
 !-------------------------------------------------------------------------
 
- print*, "Pass"
+ print*, "OK"
+ print*, "SUCCESS!"
 
 end program
