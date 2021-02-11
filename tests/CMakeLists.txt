@@ -1,3 +1,8 @@
+# This is the cmake build file for the tests directory of the
+# UFS_UTILS project.
+#
+# George Gayno, Lin Gan, Ed Hartnett
+
 set(fortran_src
     "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.f90"
     to_upper_lower.F90)
@@ -14,6 +19,7 @@ include_directories(
 
 set(exe_name to_upper_lower)
 add_executable(${exe_name} ${fortran_src})
+add_test(NAME to_upper_lower COMMAND to_upper_lower)
 target_link_libraries(
   ${exe_name}
   nemsio::nemsio
