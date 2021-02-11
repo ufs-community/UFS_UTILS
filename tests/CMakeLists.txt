@@ -21,7 +21,7 @@ set(exe_name to_upper_lower)
 add_executable(${exe_name} ${fortran_src})
 add_test(NAME to_upper_lower COMMAND to_upper_lower)
 target_link_libraries(
-  ${exe_name}
+  to_upper_lower
   nemsio::nemsio
   sfcio::sfcio
   sigio::sigio
@@ -34,7 +34,7 @@ target_link_libraries(
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
 if(OpenMP_Fortran_FOUND)
-  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
+  target_link_libraries(to_upper_lower OpenMP::OpenMP_Fortran)
 endif()
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+
