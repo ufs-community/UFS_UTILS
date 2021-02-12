@@ -234,10 +234,9 @@
 
  contains
 
-!> @brief Reads configuration namelist.
+!> Reads configuration namelist.
 !!
-!! @author gayno NCEP/EMC
-!!
+!! @author George Gayno NCEP/EMC
  subroutine read_setup_namelist
  
  implicit none
@@ -412,6 +411,9 @@
 
  end subroutine read_setup_namelist
 
+!> Reads var map.
+!!
+!! @author gayno NCEP/EMC
 subroutine read_varmap
 
  implicit none
@@ -469,10 +471,14 @@ subroutine read_varmap
  endif
 end subroutine read_varmap
 
-! ----------------------------------------------------------------------------------------
-! Find conditions for handling missing variables from varmap arrays
-! ----------------------------------------------------------------------------------------
-
+!> Find conditions for handling missing variables from varmap arrays.
+!!
+!! @param var_name
+!! @param this_miss_var_method
+!! @param this_miss_var_value
+!! @param this_field_var_name
+!! @param loc
+!! @author George Gayno NCEP/EMC
 subroutine get_var_cond(var_name,this_miss_var_method,this_miss_var_value, &
                             this_field_var_name, loc)
   use esmf
@@ -514,8 +520,8 @@ end subroutine get_var_cond
 
 !> @brief Compute soil parameters.
 !!
-!! @author gayno NCEP/EMC
-!!
+!! @param localpet
+!! @author George Gayno NCEP/EMC
  subroutine calc_soil_params_driver(localpet)
 
  implicit none
@@ -662,6 +668,21 @@ end subroutine get_var_cond
 
  end subroutine calc_soil_params_driver
 
+!> Reads configuration namelist.
+!!
+!! @param num_soil_cats
+!! @param smlow
+!! @param smhigh
+!! @param satdk
+!! @param maxsmc
+!! @param bb
+!! @param satpsi
+!! @param satdw
+!! @param f11
+!! @param refsmc
+!! @param drysmc
+!! @param wltsmc
+!! @author George Gayno NCEP/EMC
  subroutine calc_soil_params(num_soil_cats, smlow, smhigh, satdk,  &
             maxsmc, bb, satpsi, satdw, f11, refsmc, drysmc, wltsmc)
 
