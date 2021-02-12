@@ -102,7 +102,7 @@
 
  contains
 
-!> @brief Setup the esmf grid object for the input grid.
+!> Setup the esmf grid object for the input grid.
 !!
 !! If the input source is tiled fv3 restart or history data, the grid is 
 !! created by reading the mosaic and grid files.  If the input source is
@@ -110,6 +110,9 @@
 !! spectral gfs global gaussian sigio/sfcio, the grid is setup by  
 !! computing lat/lons using the sp library.
 !!
+!! @param localpet
+!! @param npets
+!! @author George Gayno NCEP/EMC   
  subroutine define_input_grid(localpet, npets)
 
  use program_setup, only       : input_type, external_model
@@ -133,16 +136,17 @@
 
  end subroutine define_input_grid
 
-!--------------------------------------------------------------------------
-! Define grid object for input data on global gaussian grids.
-! Recognized file formats: 
-!
-!  - fv3gfs nemsio
-!  - spectral gfs nemsio (starting July 19, 2017)
-!  - spectral gfs sigio  (prior to July 19, 2017)
-!  - spectral gfs sfcio  (prior to July 19, 2017)
-!--------------------------------------------------------------------------
-
+!> Define grid object for input data on global gaussian grids.
+!!
+!! Recognized file formats: 
+!!  - fv3gfs nemsio
+!!  - spectral gfs nemsio (starting July 19, 2017)
+!!  - spectral gfs sigio  (prior to July 19, 2017)
+!!  - spectral gfs sfcio  (prior to July 19, 2017)
+!!
+!! @param localpet
+!! @param npets
+!! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_gaussian(localpet, npets)
 
  use nemsio_module
@@ -391,6 +395,11 @@
 
  end subroutine define_input_grid_gaussian
 
+!> Define input grid.
+!!
+!! @param localpet
+!! @param npets
+!! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_mosaic(localpet, npets)
 
  use netcdf
@@ -598,11 +607,12 @@
 
  end subroutine define_input_grid_mosaic
 
-!--------------------------------------------------------------------------
-! Define grid object for GFS grib2 data.  Only works for data on
-! global lat/lon or gaussian grids.
-!--------------------------------------------------------------------------
- 
+!> Define grid object for GFS grib2 data. Only works for data on
+!! global lat/lon or gaussian grids.
+!!
+!! @param localpet
+!! @param npets
+!! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_gfs_grib2(localpet, npets)
 
  use wgrib2api
@@ -786,6 +796,11 @@
 
  end subroutine define_input_grid_gfs_grib2
  
+!> Define input grid.
+!!
+!! @param localpet
+!! @param npets
+!! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_grib2(localpet, npets)
 
  use mpi
@@ -1079,9 +1094,11 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
  end subroutine define_input_grid_grib2
  
-!> @brief
-!! Setup the esmf grid object for the target grid.
+!> Setup the esmf grid object for the target grid.
 !!
+!! @param localpet
+!! @param npets
+!! @author George Gayno NCEP/EMC   
  subroutine define_target_grid(localpet, npets)
 
  use netcdf
@@ -1352,10 +1369,23 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
  end subroutine define_target_grid
 
-!-----------------------------------------------------------------------
-! Read model lat/lons for a single tile from the "grid" file.
-!-----------------------------------------------------------------------
-
+!> Read model lat/lons for a single tile from the "grid" file.
+!!
+!! @param mosaic_file
+!! @param orog_dir
+!! @param num_tiles
+!! @param tile
+!! @param i_tile
+!! @param j_tile
+!! @param ip1_tile
+!! @param jp1_tile
+!! @param latitude
+!! @param latitude_s
+!! @param latitude_w
+!! @param longitude
+!! @param longitude_s
+!! @param longitude_w
+!! @author George Gayno NCEP/EMC   
  subroutine get_model_latlons(mosaic_file, orog_dir, num_tiles, tile, &
                               i_tile, j_tile, ip1_tile, jp1_tile,  &
                               latitude, latitude_s, latitude_w, &
@@ -1498,11 +1528,16 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
  end subroutine get_model_latlons
  
- !----------------------------------------------------------------------------------------
-! For grids with equal cell sizes (e.g., lambert conformal), get lat and on of the grid
-! cell corners
-!----------------------------------------------------------------------------------------
-
+!> For grids with equal cell sizes (e.g., lambert conformal), get lat
+!! and on of the grid cell corners
+!! @param latitude
+!! @param longitude
+!! @param latitude_sw
+!! @param longitude_sw
+!! @param dx
+!! @param clb
+!! @param cub
+!! @author George Gayno NCEP/EMC   
   subroutine get_cell_corners( latitude, longitude, latitude_sw, longitude_sw, dx,clb,cub)
   implicit none
 
@@ -1576,10 +1611,15 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
  end subroutine get_cell_corners
 
-!-----------------------------------------------------------------------
-! Read the model land mask and terrain for a single tile.
-!-----------------------------------------------------------------------
 
+!> Read the model land mask and terrain for a single tile.
+!!
+!! @param orog_file
+!! @param idim
+!! @param jdim
+!! @param mask
+!! @param terrain
+!! @author George Gayno NCEP/EMC   
  subroutine get_model_mask_terrain(orog_file, idim, jdim, mask, terrain)
 
  use netcdf
@@ -1644,8 +1684,9 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
  end subroutine get_model_mask_terrain
 
-!> @brief Deallocate all esmf grid objects.
+!> Deallocate all esmf grid objects.
 !!
+!! @author George Gayno NCEP/EMC   
  subroutine cleanup_input_target_grid_data
 
  implicit none
