@@ -1,24 +1,27 @@
+!> @file
+!! @brief Create orographic (oro_data) files for use by GSL drag suite
+!!
+!! Program GSL_ORO_DATA
+!!
+!! This program calls subroutines which calculate the parameters
+!! required for the GSL subgrid-scale orographic gravity-wave drag (GWDO)
+!! suite on the FV3 grid.  These parameters are for the small-scale
+!! GWD (Tsiringakis et al., 2017) and turbulent orographic form drag (TOFD)
+!! (Beljaars et al., 2004) schemes of the GSL drag suite.  The output
+!! fields are:
+!! var, con, ol{1,2,3,4} and oa{1,2,3,4}
+!! or in FV3 parlance:
+!! stddev, convexity, ol{1,2,3,4} and oa{1,2,3,4}
+!! These variables are output to netCDF.
+!!
+!! Note:  This program works for both the global FV3GFS cubed
+!!        sphere, i.e., for tiles 1 through 6, and for the
+!!        regional lam, i.e., for tile 7
+!!
+!! Author:  Michael Toy -- NOAA/GSL   January 27, 2021
+!! Based on code by Michael Duda provided by NCAR/MMM
+!!
 program gsl_oro_data
-
-!--------------------------------------------------------------------
-! This program calls subroutines which calculate the parameters
-! required for the GSL subgrid-scale orographic gravity-wave drag (GWDO)
-! suite on the FV3 grid.  These parameters are for the small-scale
-! GWD (Tsiringakis et al., 2017) and turbulent orographic form drag (TOFD)
-! (Beljaars et al., 2004) schemes of the GSL drag suite.  The output
-! fields are:
-! var, con, ol{1,2,3,4} and oa{1,2,3,4}
-! or in FV3 parlance:
-! stddev, convexity, ol{1,2,3,4} and oa{1,2,3,4}
-! These variables are output to netCDF.
-!
-! Note:  This program works for both the global FV3GFS cubed
-!        sphere, i.e., for tiles 1 through 6, and for the
-!        regional lam, i.e., for tile 7
-!
-! Author:  Michael Toy -- NOAA/GSL   January 27, 2021
-! Based on code by Michael Duda provided by NCAR/MMM
-!--------------------------------------------------------------------
 
 use gsl_oro_data_sm_scale, only: calc_gsl_oro_data_sm_scale
 use gsl_oro_data_lg_scale, only: calc_gsl_oro_data_lg_scale

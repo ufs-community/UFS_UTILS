@@ -1,35 +1,34 @@
+!> @file
+!! @brief Calculates regional large-scale GWD orographic stats
+!!
+!! @author toy NOAA/GSL
+!!
+!! This module calculates the parameters required for the subgrid-
+!! scale orographic gravity-wave drag (GWDO) scheme on the FV3
+!! grid.  These parameters are for the large-scale GWDO and blocking
+!! schemes of the GSL drag suite, (Kim and Doyle, 2005).
+!! 2.5minute (~5km) global topography is used.  The topographic data
+!! comes from the 'fix' file geo_em.d01.lat-lon.2.5m.HGT_M.nc.
+!! The output fields are:
+!! var, con, ol{1,2,3,4} and oa{1,2,3,4}
+!! or in FV3 parlance:
+!! stddev, convexity, ol{1,2,3,4} and oa{1,2,3,4}
+!! These variables are output to netCDF.
+!!
+!! This version is for the stand-alone regional version
+!! for tile7.
+!! Note:  The main difference between this version and
+!!    the global version is that the CXXX_grid.tilex.nc file
+!!    is now CXXX_grid.tile7.halo4.nc (we need the halo4 grid)
+!!    The outer halo is then discarded to come up with halo0
+!!    oro_data grid.
+!!
+!! Author:  Michael Toy -- NOAA/GSL   January 13, 2021
+!! Based on code by Michael Duda provided by NCAR/MMM
+!!
 module gsl_oro_data_lg_scale_sar
 
-!--------------------------------------------------------------------
-! This module calculates the parameters required for the subgrid-
-! scale orographic gravity-wave drag (GWDO) scheme on the FV3
-! grid.  These parameters are for the large-scale GWDO and blocking
-! schemes of the GSL drag suite, (Kim and Doyle, 2005).
-! 2.5minute (~5km) global topography is used.  These are located
-! in the 'fix' file geo_em.d01.lat-lon.2.5m.HGT_M.nc.
-! The output fields are:
-! var, con, ol{1,2,3,4} and oa{1,2,3,4}
-! or in FV3 parlance:
-! stddev, convexity, ol{1,2,3,4} and oa{1,2,3,4}
-! These variables are output to netCDF.
-!
-! This version is for the stand-alone regional version
-! for tile7.
-! Note:  The main difference between this version and
-!    the global version is that the CXXX_grid.tilex.nc file
-!    is now CXXX_grid.tile7.halo4.nc (we need the halo4 grid)
-!    The outer halo is then discarded to come up with halo0
-!    oro_data grid.
-!
-! Author:  Michael Toy -- NOAA/GSL   January 13, 2021
-! Based on code by Michael Duda provided by NCAR/MMM
-!--------------------------------------------------------------------
-
-
 implicit none
-
-include 'netcdf.inc'
-
 
 integer, parameter :: real_kind = selected_real_kind(6)
 integer, parameter :: dbl_kind = selected_real_kind(13)
@@ -51,6 +50,8 @@ contains
 
 
 subroutine calc_gsl_oro_data_lg_scale_sar(tile_num,res_indx)
+
+use netcdf
 
 implicit none
 
@@ -126,12 +127,12 @@ print *, "Reading from file: ", FV3_grid_input_file_name
 
 ! Open Cxxx_grid (halo4) netCDF file for input and get dimensions
 ! Note:  We subtract halo region to get halo0 values
-err = NF_OPEN(FV3_grid_input_file_name,NF_NOWRITE,ncid_in) 
-err = NF_INQ_DIMID(ncid_in,'nx',dimid)
-err = NF_INQ_DIMLEN(ncid_in,dimid,temp_int)
+err = nf90_open(FV3_grid_input_file_name,nf90_nowrite,ncid_in)
+err = nf90_inq_dimid(ncid_in,'nx',dimid)
+err = nf90_inquire_dimension(ncid_in,dimid,len=temp_int)
 dimX_FV3 = temp_int/2 - 8   ! subtracting 2*4 halo points from edges
-err = NF_INQ_DIMID(ncid_in,'ny',dimid)
-err = NF_INQ_DIMLEN(ncid_in,dimid,temp_int)
+err = nf90_inq_dimid(ncid_in,'ny',dimid)
+err = nf90_inquire_dimension(ncid_in,dimid,len=temp_int)
 dimY_FV3 = temp_int/2 - 8   ! subtracting 2*4 halo points from edges
 
 print *, "dimX_FV3 =", dimX_FV3  ! number of model cells in x-direction (halo0)
@@ -140,19 +141,19 @@ print *
 
 ! Read in lat/lon (in degrees)
 allocate (lat_FV3_raw((2*dimX_FV3+1),(2*dimY_FV3+1)))
-err = NF_INQ_VARID(ncid_in,'y',varid)
-err = NF_GET_VARA_DOUBLE(ncid_in,varid,(/9,9/),                      &
-                        (/2*dimX_FV3+1,2*dimY_FV3+1/),lat_FV3_raw)
+err = nf90_inq_varid(ncid_in,'y',varid)
+err = nf90_get_var(ncid_in,varid,lat_FV3_raw,start=(/9,9/),    &
+                        count=(/2*dimX_FV3+1,2*dimY_FV3+1/))
 allocate (lon_FV3_raw((2*dimX_FV3+1),(2*dimY_FV3+1)))
-err = NF_INQ_VARID(ncid_in,'x',varid)
-err = NF_GET_VARA_DOUBLE(ncid_in,varid,(/9,9/),                      &
-                        (/2*dimX_FV3+1,2*dimY_FV3+1/),lon_FV3_raw)
+err = nf90_inq_varid(ncid_in,'x',varid)
+err = nf90_get_var(ncid_in,varid,lon_FV3_raw,start=(/9,9/),    &
+                        count=(/2*dimX_FV3+1,2*dimY_FV3+1/))
 
 ! Read in quarter grid-cell areas
 allocate (area_FV3_qtr((2*dimX_FV3),(2*dimY_FV3)))
-err = NF_INQ_VARID(ncid_in,'area',varid)
-err = NF_GET_VARA_DOUBLE(ncid_in,varid,(/9,9/),                      &
-                        (/2*dimX_FV3,2*dimY_FV3/),area_FV3_qtr)
+err = nf90_inq_varid(ncid_in,'area',varid)
+err = nf90_get_var(ncid_in,varid,area_FV3_qtr,start=(/9,9/),   &
+                        count=(/2*dimX_FV3,2*dimY_FV3/))
 
 ! Calculate lat/lon at mass points (cell-centers)
 ! Stride by 2 starting with 2nd point
@@ -187,18 +188,18 @@ do j = 1,dimY_FV3
 end do
 deallocate(area_FV3_qtr)
 
-err = NF_CLOSE(ncid_in)
+err = nf90_close(ncid_in)
 
 
 
 ! Open file containing 2.5min topo data (fine grid)
 fine_topo_source_file_name = "geo_em.d01.lat-lon.2.5m.HGT_M.nc"
-err = NF_OPEN(trim(fine_topo_source_file_name),NF_NOWRITE,ncid_in)
+err = nf90_open(trim(fine_topo_source_file_name),nf90_nowrite,ncid_in)
 ! Get dimensions
-err = NF_INQ_DIMID(ncid_in,'west_east',dimid)
-err = NF_INQ_DIMLEN(ncid_in,dimid,dimX_fine)
-err = NF_INQ_DIMID(ncid_in,'south_north',dimid)
-err = NF_INQ_DIMLEN(ncid_in,dimid,dimY_fine)
+err = nf90_inq_dimid(ncid_in,'west_east',dimid)
+err = nf90_inquire_dimension(ncid_in,dimid,len=dimX_fine)
+err = nf90_inq_dimid(ncid_in,'south_north',dimid)
+err = nf90_inquire_dimension(ncid_in,dimid,len=dimY_fine)
 
 print *, "Source file for high-resolution topography: ",                &
                trim(fine_topo_source_file_name)
@@ -210,10 +211,12 @@ print *
 ! Read in lat/lon of fine grid
 allocate(lat1d_fine(dimY_fine))
 allocate(lon1d_fine(dimX_fine))
-err = NF_INQ_VARID(ncid_in,'CLAT',varid)
-err = NF_GET_VARA_REAL(ncid_in,varid,(/1,1/),(/1,dimY_fine/),lat1d_fine)
-err = NF_INQ_VARID(ncid_in,'CLONG',varid)
-err = NF_GET_VARA_REAL(ncid_in,varid,(/1,1/),(/dimX_fine,1/),lon1d_fine)
+err = nf90_inq_varid(ncid_in,'CLAT',varid)
+err = nf90_get_var(ncid_in,varid,lat1d_fine,start=(/1,1/),     &
+                   count=(/1,dimY_fine/))
+err = nf90_inq_varid(ncid_in,'CLONG',varid)
+err = nf90_get_var(ncid_in,varid,lon1d_fine,start=(/1,1/),     &
+                   count=(/dimX_fine,1/))
 
 ! Convert lat/lon to radians
 lat1d_fine = lat1d_fine*pi/180._real_kind
@@ -232,11 +235,12 @@ end do
 
 ! Read in fine-scale topography
 allocate(HGT_M_fine(dimX_fine,dimY_fine))
-err = NF_INQ_VARID(ncid_in,'HGT_M',varid)
-err = NF_GET_VARA_REAL(ncid_in,varid,(/1,1/),(/dimX_fine,dimY_fine/),HGT_M_fine)
+err = nf90_inq_varid(ncid_in,'HGT_M',varid)
+err = nf90_get_var(ncid_in,varid,HGT_M_fine,start=(/1,1/),     &
+                   count=(/dimX_fine,dimY_fine/))
 
 
-err = NF_CLOSE(ncid_in)
+err = nf90_close(ncid_in)
 
 
 ! Allocate GWD statistics fields
@@ -705,12 +709,12 @@ oro_data_output_file_name = "C" // trim(res_indx) // "_oro_data_ls.tile" &
 
 
 ! Open netCDF file for output
-err = NF_CREATE(oro_data_output_file_name, NF_CLOBBER, ncid_out)
-err = NF_REDEF(ncid_out)
+err = nf90_create(oro_data_output_file_name, NF90_CLOBBER, ncid_out)
+err = nf90_redef(ncid_out)
 
 ! Define dimensions
-err = NF_DEF_DIM(ncid_out,'lon',dimX_FV3,lonid)
-err = NF_DEF_DIM(ncid_out,'lat',dimY_FV3,latid)
+err = nf90_def_dim(ncid_out,'lon',dimX_FV3,lonid)
+err = nf90_def_dim(ncid_out,'lat',dimY_FV3,latid)
 
 ! Define the 'dimensions vector' dimids to be used for writing
 ! the 2-dimensional variables to the netCDF file
@@ -718,96 +722,107 @@ dimids(1) = lonid
 dimids(2) = latid
 
 ! Define variables and attributes to put in the netCDF file
-err = NF_DEF_VAR(ncid_out,'geolon',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',7,'degrees')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',9,'longitude')
-err = NF_DEF_VAR(ncid_out,'geolat',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',7,'degrees')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',8,'latitude')
-err = NF_DEF_VAR(ncid_out,'stddev',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',6,'meters')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',40,                  &
+err = nf90_def_var(ncid_out,'geolon',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','degrees')
+err = nf90_put_att(ncid_out,varid,'description','longitude')
+err = nf90_def_var(ncid_out,'geolat',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','degrees')
+err = nf90_put_att(ncid_out,varid,'description','latitude')
+err = nf90_def_var(ncid_out,'stddev',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','meters')
+err = nf90_put_att(ncid_out,varid,'description',                     &
                       'standard deviation of subgrid topography')
-err = NF_DEF_VAR(ncid_out,'convexity',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',1,'-')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',31,                  &
+err = nf90_def_var(ncid_out,'convexity',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','-')
+err = nf90_put_att(ncid_out,varid,'description',                     &
                       'convexity of subgrid topography')
-err = NF_DEF_VAR(ncid_out,'oa1',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',1,'-')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',38,                  &
+err = nf90_def_var(ncid_out,'oa1',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','-')
+err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic asymmetry in west direction')
-err = NF_DEF_VAR(ncid_out,'oa2',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',1,'-')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',39,                  &
+err = nf90_def_var(ncid_out,'oa2',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','-')
+err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic asymmetry in south direction')
-err = NF_DEF_VAR(ncid_out,'oa3',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',1,'-')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',44,                  &
+err = nf90_def_var(ncid_out,'oa3',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','-')
+err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic asymmetry in south-west direction')
-err = NF_DEF_VAR(ncid_out,'oa4',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',1,'-')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',44,                  &
+err = nf90_def_var(ncid_out,'oa4',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','-')
+err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic asymmetry in north-west direction')
-err = NF_DEF_VAR(ncid_out,'ol1',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',1,'-')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',45,                  &
+err = nf90_def_var(ncid_out,'ol1',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','-')
+err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic effective length for westerly flow')
-err = NF_DEF_VAR(ncid_out,'ol2',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',1,'-')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',46,                  &
+err = nf90_def_var(ncid_out,'ol2',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','-')
+err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic effective length for southerly flow')
-err = NF_DEF_VAR(ncid_out,'ol3',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',1,'-')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',51,                  &
+err = nf90_def_var(ncid_out,'ol3',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','-')
+err = nf90_put_att(ncid_out,varid,'description',                     &
                  'orographic effective length for south-westerly flow')
-err = NF_DEF_VAR(ncid_out,'ol4',NF_REAL,2,dimids,varid)
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'units',1,'-')
-err = NF_PUT_ATT_TEXT(ncid_out,varid,'description',51,                  &
+err = nf90_def_var(ncid_out,'ol4',NF90_FLOAT,dimids,varid)
+err = nf90_put_att(ncid_out,varid,'units','-')
+err = nf90_put_att(ncid_out,varid,'description',                     &
                  'orographic effective length for north-westerly flow')
 
 ! Add global attributes
-err = NF_PUT_ATT_TEXT(ncid_out,NF_GLOBAL,                               &
-            'source_file_for_high-resolution_topography',               &
-            len(trim(fine_topo_source_file_name)),                      &
+err = nf90_put_att(ncid_out,nf90_global,                               &
+            'source_file_for_high-resolution_topography',              &
             trim(fine_topo_source_file_name))
 if ( detrend_topography ) then
-   err = NF_PUT_ATT_TEXT(ncid_out,NF_GLOBAL,                            &
-                         'high-res_topography_detrended',6,'.TRUE.')
+   err = nf90_put_att(ncid_out,nf90_global,                            &
+                         'high-res_topography_detrended','.TRUE.')
 else
-   err = NF_PUT_ATT_TEXT(ncid_out,NF_GLOBAL,                            &
-                         'high-res_topography_detrended',7,'.FALSE.')
+   err = nf90_put_att(ncid_out,nf90_global,                            &
+                         'high-res_topography_detrended','.FALSE.')
 end if
 
-err = NF_ENDDEF(ncid_out)
+err = nf90_enddef(ncid_out)
 
 
 ! Write data to output netCDF file
-err = NF_INQ_VARID(ncid_out,'geolon',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),lon_FV3_deg)
-err = NF_INQ_VARID(ncid_out,'geolat',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),lat_FV3_deg)
-err = NF_INQ_VARID(ncid_out,'stddev',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),std_dev)
-err = NF_INQ_VARID(ncid_out,'convexity',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),convexity)
-err = NF_INQ_VARID(ncid_out,'oa1',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),OA1)
-err = NF_INQ_VARID(ncid_out,'oa2',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),OA2)
-err = NF_INQ_VARID(ncid_out,'oa3',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),OA3)
-err = NF_INQ_VARID(ncid_out,'oa4',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),OA4)
-err = NF_INQ_VARID(ncid_out,'ol1',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),OL1)
-err = NF_INQ_VARID(ncid_out,'ol2',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),OL2)
-err = NF_INQ_VARID(ncid_out,'ol3',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),OL3)
-err = NF_INQ_VARID(ncid_out,'ol4',varid)
-err = NF_PUT_VARA_REAL(ncid_out,varid,(/1,1/),(/dimX_FV3,dimY_FV3/),OL4)
+err = nf90_inq_varid(ncid_out,'geolon',varid)
+err = nf90_put_var(ncid_out,varid,lon_FV3_deg,start=(/1,1/),           &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'geolat',varid)
+err = nf90_put_var(ncid_out,varid,lat_FV3_deg,start=(/1,1/),           &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'stddev',varid)
+err = nf90_put_var(ncid_out,varid,std_dev,start=(/1,1/),               &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'convexity',varid)
+err = nf90_put_var(ncid_out,varid,convexity,start=(/1,1/),             &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'oa1',varid)
+err = nf90_put_var(ncid_out,varid,OA1,start=(/1,1/),                   &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'oa2',varid)
+err = nf90_put_var(ncid_out,varid,OA2,start=(/1,1/),                   &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'oa3',varid)
+err = nf90_put_var(ncid_out,varid,OA3,start=(/1,1/),                   &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'oa4',varid)
+err = nf90_put_var(ncid_out,varid,OA4,start=(/1,1/),                   &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'ol1',varid)
+err = nf90_put_var(ncid_out,varid,OL1,start=(/1,1/),                   &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'ol2',varid)
+err = nf90_put_var(ncid_out,varid,OL2,start=(/1,1/),                   &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'ol3',varid)
+err = nf90_put_var(ncid_out,varid,OL3,start=(/1,1/),                   &
+                   count=(/dimX_FV3,dimY_FV3/))
+err = nf90_inq_varid(ncid_out,'ol4',varid)
+err = nf90_put_var(ncid_out,varid,OL4,start=(/1,1/),                   &
+                   count=(/dimX_FV3,dimY_FV3/))
 
-err = NF_CLOSE(ncid_out)
+err = nf90_close(ncid_out)
 
 
 
