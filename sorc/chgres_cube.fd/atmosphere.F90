@@ -754,14 +754,14 @@
 
  end subroutine convert_winds
 
-!> COMPUTE MODEL PRESSURES.
-!!   PRGMMR: JUANG          ORG: W/NMC23     DATE: 2005-04-11            
-!!   PRGMMR: Fanglin Yang   ORG: W/NMC23     DATE: 2006-11-28            
-!!   PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2006-12-12            
-!!   PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2007-01-02            
+!> Compute model pressures.
 !!                                                                       
 !! PROGRAM HISTORY LOG:                                                  
 !! 2005-04-11  HANN_MING HENRY JUANG    hybrid sigma, sigma-p, and sigma-
+!! - PRGMMR: JUANG          ORG: W/NMC23     DATE: 2005-04-11            
+!! - PRGMMR: Fanglin Yang   ORG: W/NMC23     DATE: 2006-11-28            
+!! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2006-12-12            
+!! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2007-01-02            
 !!                                                                       
 !!   INPUT ARGUMENT LIST:                                                
 !!     IM           INTEGER NUMBER OF POINTS TO COMPUTE                  
@@ -782,7 +782,7 @@
 !!     PM           REAL (IX,KM) MID-LAYER PRESSURE (PA)                 
 !!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)               
 !!
-!! @author HANN_MING HENRY JUANG
+!! @author HANN_MING HENRY JUANG, JUANG, Fanglin Yang, S. Moorthi
  subroutine newpr1(localpet)
  implicit none 
 
