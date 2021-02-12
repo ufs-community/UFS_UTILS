@@ -1,4 +1,4 @@
-          HOW TO CONVERT A SURFACE RESTART FILE
+@brief HOW TO CONVERT A SURFACE RESTART FILE @anchor global_chgres_users_guide
 
 1.0 INTRODUCTION
 

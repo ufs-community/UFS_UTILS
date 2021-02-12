@@ -1,20 +1,11 @@
-# This is the CMake build file for the chgres_cube utility in the UFS_UTILS package.
+# This is the cmake build file for the tests directory of the
+# UFS_UTILS project.
 #
-# George Gayno, Mark Potts
+# George Gayno, Lin Gan, Ed Hartnett
 
 set(fortran_src
-    atmosphere.F90
-    chgres.F90
-    grib2_util.F90
-    input_data.F90
-    model_grid.F90
-    program_setup.f90
-    search_util.f90
-    static_data.F90
-    surface.F90
-    thompson_mp_climo_data.F90
-    utils.f90
-    write_data.F90)
+    "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.f90"
+    ftst_utils.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
@@ -22,10 +13,15 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8 -fconvert=big-endian")
 endif()
 
-set(exe_name chgres_cube)
+include_directories(
+      ${PROJECT_SOURCE_DIR}
+)
+
+set(exe_name ftst_utils)
 add_executable(${exe_name} ${fortran_src})
+add_test(NAME ftst_utils COMMAND ftst_utils)
 target_link_libraries(
-  ${exe_name}
+  ftst_utils
   nemsio::nemsio
   sfcio::sfcio
   sigio::sigio
@@ -38,7 +34,9 @@ target_link_libraries(
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
 if(OpenMP_Fortran_FOUND)
-  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
+  target_link_libraries(ftst_utils OpenMP::OpenMP_Fortran)
 endif()
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+
+
+
