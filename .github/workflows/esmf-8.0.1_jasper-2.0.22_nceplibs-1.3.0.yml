@@ -3,20 +3,38 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
     env:
-      FC: gfortran-9
       CC: gcc-9
+      FC: gfortran-9
+      CXX: g++-9
+    strategy:
+      matrix:
+        os: [macos-10.15, ubuntu-20.04]
+        compiler: [gcc-9]      
 
     steps:
     - name: install-dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install libmpich-dev
-        sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
-        sudo apt-get install libpng-dev
-        sudo apt-get install libjpeg-dev
-        sudo apt-get install wget
+        if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
+          sudo apt-get update
+          sudo apt-get install doxygen
+          sudo apt-get install libmpich-dev
+          sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
+          sudo apt-get install libpng-dev
+          sudo apt-get install libjpeg-dev
+        elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
+          brew install doxygen
+          brew install mpich
+          brew install netcdf
+          brew install wget
+          if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
+            sudo ln -sf /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
+          elif  [[ ${{ matrix.compiler }} == "gcc-10" ]]; then
+            sudo ln -sf /usr/local/bin/gfortran-10 /usr/local/bin/gfortran
+          fi
+        fi
+
     - name: cache-esmf
       id: cache-esmf
       uses: actions/cache@v2
@@ -30,8 +48,8 @@ jobs:
         set -x
         pushd ~
         export ESMF_DIR=~/esmf-ESMF_8_0_1
-        wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null
-        tar zxf ESMF_8_0_1.tar.gz
+        wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null && ls -l
+        tar zxf ESMF_8_0_1.tar.gz && ls -l
         cd esmf-ESMF_8_0_1
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
@@ -40,10 +58,16 @@ jobs:
         export ESMF_COMPILER=gfortran
         export ESMF_INSTALL_PREFIX=~/esmf
         export ESMF_NETCDF=split
-        export ESMF_NETCDF_INCLUDE=/usr/include
-        export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
+        if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then 
+          export ESMF_NETCDF_INCLUDE=/usr/include
+          export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
+        elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
+          export ESMF_NETCDF_INCLUDE=/usr/local/include
+          export ESMF_NETCDF_LIBPATH=/usr/local/lib
+        fi
         make -j2
         make install
+
     - name: cache-jasper
       id: cache-jasper
       uses: actions/cache@v2
@@ -56,13 +80,20 @@ jobs:
       run: |
         set -x
         pwd
-        wget https://github.com/jasper-software/jasper/archive/version-2.0.22.tar.gz &> /dev/null
-        tar zxf version-2.0.22.tar.gz
+        wget https://github.com/jasper-software/jasper/archive/version-2.0.22.tar.gz &> /dev/null && ls -l
+        tar zxf version-2.0.22.tar.gz && ls -l
         cd jasper-version-2.0.22
         mkdir build-jasper && cd build-jasper
         cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
         make -j2
         make install
+
+    - name: checkout-nceplibs
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS
+        path: nceplibs
+
     - name: cache-nceplibs
       id: cache-nceplibs
       uses: actions/cache@v2
@@ -71,7 +102,6 @@ jobs:
         key: nceplibs-${{ runner.os }}-1.3.0
 
     - name: build-nceplibs
-      if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
         set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk

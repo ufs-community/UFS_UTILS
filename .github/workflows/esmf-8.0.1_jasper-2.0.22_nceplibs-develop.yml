@@ -3,20 +3,38 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
     env:
-      FC: gfortran-9
       CC: gcc-9
+      FC: gfortran-9
+      CXX: g++-9
+    strategy:
+      matrix:
+        os: [macos-10.15, ubuntu-20.04]
+        compiler: [gcc-9]      
 
     steps:
     - name: install-dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install libmpich-dev
-        sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
-        sudo apt-get install libpng-dev
-        sudo apt-get install libjpeg-dev
-        sudo apt-get install wget
+        if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
+          sudo apt-get update
+          sudo apt-get install doxygen
+          sudo apt-get install libmpich-dev
+          sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
+          sudo apt-get install libpng-dev
+          sudo apt-get install libjpeg-dev
+        elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
+          brew install doxygen
+          brew install mpich
+          brew install netcdf
+          brew install wget
+          if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
+            sudo ln -sf /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
+          elif  [[ ${{ matrix.compiler }} == "gcc-10" ]]; then
+            sudo ln -sf /usr/local/bin/gfortran-10 /usr/local/bin/gfortran
+          fi
+        fi
+
     - name: cache-esmf
       id: cache-esmf
       uses: actions/cache@v2
@@ -40,10 +58,16 @@ jobs:
         export ESMF_COMPILER=gfortran
         export ESMF_INSTALL_PREFIX=~/esmf
         export ESMF_NETCDF=split
-        export ESMF_NETCDF_INCLUDE=/usr/include
-        export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
+        if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then 
+          export ESMF_NETCDF_INCLUDE=/usr/include
+          export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
+        elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
+          export ESMF_NETCDF_INCLUDE=/usr/local/include
+          export ESMF_NETCDF_LIBPATH=/usr/local/lib
+        fi
         make -j2
         make install
+
     - name: cache-jasper
       id: cache-jasper
       uses: actions/cache@v2

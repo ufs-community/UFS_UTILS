@@ -14,6 +14,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # User options.
 option(OPENMP "use OpenMP threading" ON)
+option(ENABLE_DOCS "Enable generation of doxygen-based documentation." OFF)
 
 if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
   message(STATUS "Setting build type to 'Release' as none was specified.")
