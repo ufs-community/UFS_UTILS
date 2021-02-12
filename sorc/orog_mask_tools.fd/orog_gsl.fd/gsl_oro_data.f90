@@ -1,5 +1,7 @@
 !> @file
 !! @brief Create orographic (oro_data) files for use by GSL drag suite
+!! @author Michael Toy, NOAA/GSL
+!! @date 2021-01-27
 !!
 !! Program GSL_ORO_DATA
 !!
@@ -7,18 +9,17 @@
 !! required for the GSL subgrid-scale orographic gravity-wave drag (GWDO)
 !! suite on the FV3 grid.  These parameters are for the small-scale
 !! GWD (Tsiringakis et al., 2017) and turbulent orographic form drag (TOFD)
-!! (Beljaars et al., 2004) schemes of the GSL drag suite.  The output
-!! fields are:
-!! var, con, ol{1,2,3,4} and oa{1,2,3,4}
-!! or in FV3 parlance:
-!! stddev, convexity, ol{1,2,3,4} and oa{1,2,3,4}
-!! These variables are output to netCDF.
+!! (Beljaars et al., 2004) schemes of the GSL drag suite.
+!! The output fields are:
+!! - stddev      standard deviation of subgrid-scale topograpy
+!! - convexity   convexity (kurtosis) of subgrid-scale topography
+!! - ol{1,2,3,4} orographic effective lengths of subgrid-scale topography
+!! - oa{1,2,3,4} orographic asymmetries of subgrid-scale topography
 !!
 !! Note:  This program works for both the global FV3GFS cubed
 !!        sphere, i.e., for tiles 1 through 6, and for the
 !!        regional lam, i.e., for tile 7
 !!
-!! Author:  Michael Toy -- NOAA/GSL   January 27, 2021
 !! Based on code by Michael Duda provided by NCAR/MMM
 !!
 program gsl_oro_data

@@ -1,7 +1,7 @@
 !> @file
 !! @brief Calculates global small-scale GWD orographic stats
-!!
-!! @author toy NOAA/GSL
+!! @author Michael Toy, NOAA/GSL
+!! @date 2021-01-14
 !!
 !! This module calculates the parameters required for the subgrid-
 !! scale orographic gravity-wave drag (GWDO) scheme on the FV3
@@ -11,12 +11,11 @@
 !! is used.  The topographic data comes from the 'fix' file
 !! HGT.Beljaars_filtered.lat-lon.30s_res.nc.
 !! The output fields are:
-!! var, con, ol{1,2,3,4} and oa{1,2,3,4}
-!! or in FV3 parlance:
-!! stddev, convexity, ol{1,2,3,4} and oa{1,2,3,4}
-!! These variables are output to netCDF.
+!! - stddev      standard deviation of subgrid-scale topograpy
+!! - convexity   convexity (kurtosis) of subgrid-scale topography
+!! - ol{1,2,3,4} orographic effective lengths of subgrid-scale topography
+!! - oa{1,2,3,4} orographic asymmetries of subgrid-scale topography
 !!
-!! Author:  Michael Toy -- NOAA/GSL   January 14, 2021
 !! Based on code by Michael Duda provided by NCAR/MMM
 !!
 module gsl_oro_data_sm_scale
