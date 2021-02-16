@@ -18,10 +18,11 @@ program ftst_input_data
   print*, "Starting test of input_data."
 
   print*, "testing read_fv3_grid_data_netcdf..."
+
   allocate(data_one_tile(i_input,j_input))
-  call read_fv3_grid_data_netcdf('slc', tile, i_input, j_input, &
-       lsoil_input, sfcdata=data_one_tile)
-  deallocate(data_one_tile)
+  ! call read_fv3_grid_data_netcdf('slc', tile, i_input, j_input, &
+  !      lsoil_input, sfcdata=data_one_tile)
+  Deallocate(data_one_tile)
 
   print*, "OK"
 
