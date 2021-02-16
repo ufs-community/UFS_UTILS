@@ -30,7 +30,13 @@ if(OpenMP_Fortran_FOUND)
   target_link_libraries(ftst_utils OpenMP::OpenMP_Fortran)
 endif()
 
-add_executable(ftst_input_data "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.f90" ftst_input_data.F90)
+add_executable(ftst_input_data "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/input_data.F90"
+  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/model_grid.F90"
+  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/program_setup.f90"
+  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/grib2_util.F90"
+  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/search_util.f90"
+  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.f90"
+  ftst_input_data.F90)
 add_test(NAME ftst_input_data COMMAND ftst_input_data)
 target_link_libraries(
   ftst_input_data

@@ -45,6 +45,7 @@
 
  implicit none
 
+ public :: READ_FV3_GRID_DATA_NETCDF
  private
 
 ! Fields associated with the atmospheric model.
