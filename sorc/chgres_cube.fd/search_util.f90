@@ -1,12 +1,12 @@
 !> @file
-!! @brief Replace undefined surface values.
-!!
-!! @author gayno NCEP/EMC
-!!
-!! Replace undefined values with a valid value.  This can
-!! happen for an isolated lake or island that is unresolved by
-!! the input grid.
-!!
+!> @brief Replace undefined surface values.
+
+!> @author gayno NCEP/EMC
+
+!> Replace undefined values with a valid value.  This can
+!> happen for an isolated lake or island that is unresolved by
+!> the input grid.
+
  module search_util
 
  private
@@ -16,23 +16,27 @@
  contains
 
 !> @brief Replace undefined surface values.
-!!
-!! Replace undefined values on the model grid with a valid value at
-!! a nearby neighbor.  Undefined values are typically associated
-!! with isolated islands where there is no source data.
-!!
-!! Routine searches a neighborhood with a radius of 100 grid points.
-!! If no valid value is found, a default value is used.
-!!
-!! @note This routine works for one tile of a cubed sphere grid.  It
-!! does not consider valid values at adjacent faces.  That is a 
-!! future upgrade.
+!>
+!> Replace undefined values on the model grid with a valid value at
+!> a nearby neighbor.  Undefined values are typically associated
+!> with isolated islands where there is no source data.
+
+!> Routine searches a neighborhood with a radius of 100 grid points.
+!> If no valid value is found, a default value is used.
+
+!> @note This routine works for one tile of a cubed sphere grid.  It
+!> does not consider valid values at adjacent faces.  That is a 
+!> future upgrade.
+
  subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)
 
  use mpi
  use esmf
 
  implicit none
+
+!> @param terrain_land          - 2D field of terrain height points.
+!> @param soilt_climo           - 2D field of soil type points. 
 
  integer, intent(in)               :: idim, jdim, tile, field_num
  integer(esmf_kind_i8), intent(in) :: mask(idim,jdim)
@@ -52,9 +56,8 @@
  real(esmf_kind_r8)                :: field_save(idim,jdim)
  integer                           :: repl_nearby, repl_default
 
-!-----------------------------------------------------------------------
-! Set default value.
-!-----------------------------------------------------------------------
+!> @note Set default value.
+!> @return default value based on field_num
 
  select case (field_num)
    case (0) ! most nst fields
@@ -105,9 +108,7 @@
      call mpi_abort(mpi_comm_world, 77, ierr)
  end select
 
-!-----------------------------------------------------------------------
-! Perform search and replace.
-!-----------------------------------------------------------------------
+!> @note Perform search and replace.
 
  field_save = field
  repl_nearby = 0
@@ -131,9 +132,7 @@
          JJ_LOOP : do jj = jstart, jend
          II_LOOP : do ii = istart, iend
 
-!-----------------------------------------------------------------------
-!          Search only along outer square.
-!-----------------------------------------------------------------------
+!> @note Search only along outer square.
 
            if ((jj == jstart) .or. (jj == jend) .or.   &
                (ii == istart) .or. (ii == iend)) then
@@ -144,8 +143,8 @@
                if (mask(ii,jj) == 1  .and. field_save(ii,jj) > -9999.0) then
                  field(i,j) = field_save(ii,jj)
                 ! write(6,100) field_num,tile,i,j,ii,jj,field(i,j)
-                ! When using non-GFS data, there are a lot of these print statements even
-                ! when everything is working correctly. Count instead of printing each
+                !> @note When using non-GFS data, there are a lot of these print statements even
+                !> when everything is working correctly. Count instead of printing each
                  repl_nearby = repl_nearby + 1
                  cycle I_LOOP
                endif
@@ -168,15 +167,15 @@
            repl_default = repl_default + 1
          endif
        elseif (field_num == 7 .and. PRESENT(terrain_land)) then 
-         ! Terrain heights for isolated landice points never get a correct value, so replace
-         ! with terrain height from the input grid interpolated to the target grid
+         !> @note Terrain heights for isolated landice points never get a correct value, so replace
+         !>  with terrain height from the input grid interpolated to the target grid
          field(i,j) = terrain_land(i,j)
          repl_default = repl_default + 1
        elseif (field_num == 224 .and. PRESENT(soilt_climo)) then
-          ! When using input soil type fields instead of climatological data on the
-          ! target grid, isolated land locations that exist in the target grid but
-          ! not the input grid don't receiving proper soil type information, so replace
-          ! with climatological values
+          !> @note When using input soil type fields instead of climatological data on the
+          !> target grid, isolated land locations that exist in the target grid but
+          !> not the input grid don't receiving proper soil type information, so replace
+          !> with climatological values
          field(i,j) = soilt_climo(i,j)
          repl_default = repl_default + 1
        else
