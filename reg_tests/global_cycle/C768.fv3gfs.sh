@@ -26,7 +26,7 @@ export COMIN=$HOMEreg/input_data
 export FNTSFA=$COMIN/gdas.t00z.rtgssthr.grb
 export FNSNOA=$COMIN/gdas.t00z.snogrb_t1534.3072.1536
 export FNACNA=$COMIN/gdas.t00z.seaice.5min.blend.grb
-export GSI_FILE=$COMIN/gdas.t00z.dtfanl.nc
+export NST_FILE=$COMIN/gdas.t00z.dtfanl.nc
 
 export JCAP=1534
 export LONB=3072
