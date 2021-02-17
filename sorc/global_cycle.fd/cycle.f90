@@ -1,34 +1,26 @@
 !> @file
 !!
-!!  Stand alone surface/NSST cycle driver for the cubed-sphere grid.
+!!  Stand alone surface/NSST/land update driver for the cubed-sphere grid.
 !!  Each cubed-sphere tile runs independently on its own mpi task.  
 !!  The surface update component runs with threads.  The NSST
 !!  update component in not threaded.
 !!
-!!  The program can be run in the following ways:
-!!  1) Update the surface fields only.  NSST fields are not
-!!     processed.  Invoke this option by setting namelist
-!!     variable DONST=.false.  Output files only contain
-!!     surface fields.
+!!  There are three main options (which can be called in combination): 
+!!  1) Update the surface fields with sfccylce (do_sfccycle = .true.) 
+!!  2) Update the land states with increments read in from file (do_lndinc = .true.) 
+!!  3) Update the NSST field, several options: 
 !!
-!!  2) Update the surface fields and NSST TREF field using
+!!  3a) Update the NSST TREF field using
 !!     GSI increments on the Gaussian grid.  All other NSST
 !!     fields are cycled.  Invoke this option by setting
 !!     namelist variable DONST=.true. and NST_FILE to 
 !!     the name of the GSI increment file.
 !!  
-!!  3) Update surface and run with NSST, but postpone the TREF update.  
+!!  3b) Run with NSST, but postpone the TREF update.  
 !!     Here all NSST fields are cycled.  But the NSST IFD field is
 !!     used to flag points that flipped from ice to open water.
 !!     To invoke this option, set DONST=.true. and NST_FILE="NULL".
 !!
-!!  4) Perform the NSST TREF adjustment only.  Surface fields are
-!!     only cycled.  To run with this option, set DONST=.true.,
-!!     NST_FILE to the GSI increment file, and ADJT_NST_ONLY=.true.
-!!     The input cubed-sphere restart files must be those from
-!!     option (3).
-!!
-!!  NOTE: running (3) then (4) is equivalent to running (2).
 !!  
 !!  INPUT FILES:
 !!  -----------
@@ -38,8 +30,10 @@
 !!                     land mask and orography).
 !!  -fnbgsi.$NNN        The cubed-sphere input sfc/nsst restart
 !!                     file.
-!!  -$NST_FILE          Gaussian GSI file which contains NSST
+!!  -$NST_FILE         Gaussian GSI file which contains NSST
 !!                     TREF increments
+!!  -$LND_FILE         Gaussian GSI file which contains soil state
+!!                     increments
 !!  
 !!  OUTPUT FILES:
 !!  ------------
@@ -61,8 +55,9 @@
 !!                 differences between the filtered and unfiltered
 !!                 terrain.
 !!  -DONST          Process NSST records.
-!!  -ADJT_NST_ONLY  When true, only do the NSST update (don't call
-!!                 sfcsub component).
+!!  -DO_SFCCYCLE    Call sfccycle routine to update surface fields 
+!!  -DO_LNDINC      Read in land increment files, and add increments to 
+!!                  soil states.
 !!  -ISOT           Use statsgo soil type when '1'. Use zobler when '0'.
 !!  -IVEGSRC        Use igbp veg type when '1'.  Use sib when '2'.
 !!  -ZSEA1/2_MM     When running with NSST model, this is the lower/
@@ -76,6 +71,8 @@
 !!                 (max_tasks-1).
 !!  -NST_FILE       path/name of the gaussian GSI file which contains NSST
 !!                 TREF increments.
+!!  -LND_FILE       path/name of the gaussian GSI file which contains soil
+!!                 state increments.
 !!
 !!  -2005-02-03:  Iredell   for global_analysis
 !!  -2014-11-30:  xuli      add nst_anl
@@ -83,6 +80,7 @@
 !!  -2017-08-08:  Gayno     Modify to work on cubed-sphere grid.
 !!                         Added processing of NSST and TREF update.
 !!                         Added mpi directives.
+!!  -2020-02-17:  Clara Draper Added soil state increments capability.
 !!
  PROGRAM SFC_DRV
 
@@ -1035,7 +1033,8 @@ ENDIF
 
  INTEGER                  :: K, nother, nsnowupd, nnosoilnear, nsoilupd, nsnowchange
  LOGICAL                  :: gaus_has_soil
-
+ 
+ ! THIS PRODUCES THE SAME LAT/LON AS CAN BE READ IN FROM THE FILE
 
  KGDS_GAUS     = 0
  KGDS_GAUS(1)  = 4          ! OCT 6 - TYPE OF GRID (GAUSSIAN)
@@ -1190,6 +1189,10 @@ ENDIF
        ENDIF
 
 ! CALCUALATE WEIGHTED INCREMENT OVER NEARBY GRID CELLS THAT HAVE SOIL
+
+! DRAPER: TO-DO, CODE ADDING INCREMENTS TO SOIL MOISTURE. 
+!         WILL REQUIRE CONVERTING TO SOIL WETNESS INDEX FIRST 
+!         (NEED TO ADD SOIL PROPERTIES TO THE INCREMENT FILE)
 
        nsoilupd = nsoilupd + 1 
 

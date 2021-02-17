@@ -1076,6 +1076,7 @@
        SLMSK_GAUS(:,J) = IDUMMY(:,J+1)
        DTREF_GAUS(:,J) = DUMMY(:,J+1)
      ENDDO
+
  ELSEIF (FILE_TYPE=='LND') then 
 
      ALLOCATE(DUMMY(IDIM_GAUS,JDIM_GAUS+2))
