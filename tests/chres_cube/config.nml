@@ -1,5 +1,5 @@
 ! Test namelist
 &CONFIG
-varmap_file = "varmap_file",
+varmap_file = "varmap_file"
 data_dir_input_grid = "data_dir_input_grid"
 /
