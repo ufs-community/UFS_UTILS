@@ -1,4 +1,6 @@
-/** @file */
+/** @file
+    @brief MPI utility routines 
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

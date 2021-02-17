@@ -1,4 +1,6 @@
-/** @file */
+/** @file 
+    @brief Set or get CPU affinity.
+*/
 #define _GNU_SOURCE
 
 #include <stdio.h>
