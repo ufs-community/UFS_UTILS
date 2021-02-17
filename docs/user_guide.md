@@ -29,10 +29,6 @@ https://github.com/NOAA-EMC/UFS_UTILS.
   Operational Forecast System (GLOFS) in an FV3 surface restart
   file. See [fvcom documentation](@ref fvcom_readme).
  
-- global_chgres - Creates cold start initial conditions for FV3 model
-  runs. Deprecated by the chgres_cube utility. See [global_chgres
-  documentation](@ref global_chgres_users_guide).
-
 - global_cycle - Updates the GFS surface conditions using external
   snow and sea ice analyses. Updates monthly climatological fields
   such as plant greenness fraction and albedo. Runs as part of the GFS
