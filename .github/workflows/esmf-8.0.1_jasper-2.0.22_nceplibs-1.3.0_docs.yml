@@ -3,15 +3,11 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-20.04
     env:
       CC: gcc-9
       FC: gfortran-9
       CXX: g++-9
-    strategy:
-      matrix:
-        os: ubuntu-20.04
-        compiler: [gcc-9]      
 
     steps:
     - name: install-dependencies
