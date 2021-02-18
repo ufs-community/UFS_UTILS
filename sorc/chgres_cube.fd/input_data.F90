@@ -132,8 +132,7 @@
  
  contains
 
-!> @brief 
-!! Read input grid atmospheric data driver
+!> Read input grid atmospheric data driver.
 !!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
@@ -203,8 +202,7 @@
 
  end subroutine read_input_atm_data
 
-!> @brief
-!! Driver to read input grid nst data.
+!> Driver to read input grid nst data.
 !!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
@@ -366,8 +364,7 @@
 
  end subroutine read_input_nst_data
 
-!> @brief
-!! Driver to read input grid surface data.
+!> Driver to read input grid surface data.
 !!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
@@ -628,8 +625,8 @@
 
  end subroutine read_input_sfc_data
 
-!> @brief
-!! Create atmospheric esmf fields.
+!> Create atmospheric esmf fields.
+!!
 !! @author George Gayno NCEP/EMC   
  subroutine init_atm_esmf_fields
  
@@ -722,8 +719,8 @@
  
  end subroutine init_atm_esmf_fields
 
-!> @brief
-!! Read input atmospheric data from spectral gfs (old sigio format).
+!> Read input atmospheric data from spectral gfs (old sigio format).
+!! 
 !! @note Format used prior to July 19, 2017.
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
@@ -961,9 +958,9 @@
 
  end subroutine read_input_atm_gfs_sigio_file
 
-!> @brief
-!! Read input atmospheric data from spectral gfs (global gaussian in
-!! nemsio format. Starting July 19, 2017).  
+!> Read input atmospheric data from spectral gfs (global gaussian in
+!! nemsio format. Starting July 19, 2017).
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_gfs_gaussian_nemsio_file(localpet)
@@ -1215,8 +1212,8 @@
 
  end subroutine read_input_atm_gfs_gaussian_nemsio_file
 
-!> @brief
-!! Read input grid atmospheric fv3 gaussian nemsio files.
+!> Read input grid atmospheric fv3 gaussian nemsio files.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_gaussian_nemsio_file(localpet)
@@ -1494,8 +1491,7 @@
 
  end subroutine read_input_atm_gaussian_nemsio_file
 
-!> @brief
-!! Read input grid fv3 atmospheric data 'warm' restart files.
+!> Read input grid fv3 atmospheric data 'warm' restart files.
 !!
 !! @note Routine reads tiled files in parallel.  Tile 1 is read by 
 !! localpet 0; tile 2 by localpet 1, etc.  The number of pets
@@ -1757,9 +1753,9 @@
 
  end subroutine read_input_atm_restart_file
 
-!> @brief
-!! Read fv3 netcdf gaussian history file.  Each task reads a horizontal
+!> Read fv3 netcdf gaussian history file.  Each task reads a horizontal
 !! slice.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_gaussian_netcdf_file(localpet)
@@ -2137,12 +2133,13 @@
 
  end subroutine read_input_atm_gaussian_netcdf_file
 
-!> @brief
-!! Read input grid fv3 atmospheric tiled history files in netcdf format.
+!> Read input grid fv3 atmospheric tiled history files in netcdf
+!! format.
 !!
 !! @note Routine reads tiled files in parallel.  Tile 1 is read by 
 !! localpet 0; tile 2 by localpet 1, etc.  The number of pets
 !! must be equal to or greater than the number of tiled files.  
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_tiled_history_file(localpet)
@@ -2432,8 +2429,8 @@
 
  end subroutine read_input_atm_tiled_history_file
  
-!> @brief
-!! Read input grid atmospheric fv3gfs grib2 files.
+!> Read input grid atmospheric fv3gfs grib2 files.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_grib2_file(localpet)
@@ -2971,9 +2968,11 @@ else
  
  end subroutine read_input_atm_grib2_file
 
-!> @brief
-!! Read input grid surface data from a spectral gfs gaussian sfcio file.
+!> Read input grid surface data from a spectral gfs gaussian sfcio
+!! file.
+!!
 !! @note Prior to July 19, 2017.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_sfc_gfs_sfcio_file(localpet)
@@ -3193,9 +3192,11 @@ else
 
  end subroutine read_input_sfc_gfs_sfcio_file
 
-!> @brief
-!! Read input grid surface data from a spectral gfs gaussian nemsio file.
+!> Read input grid surface data from a spectral gfs gaussian nemsio
+!! file.
+!!
 !! @note Format used by gfs starting July 19, 2017.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_sfc_gfs_gaussian_nemsio_file(localpet)
@@ -3543,8 +3544,8 @@ else
 
  end subroutine read_input_sfc_gfs_gaussian_nemsio_file
 
-!> @brief
-!! Read input grid surface data from an fv3 gaussian nemsio file.
+!> Read input grid surface data from an fv3 gaussian nemsio file.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_sfc_gaussian_nemsio_file(localpet)
@@ -3892,8 +3893,8 @@ else
 
  end subroutine read_input_sfc_gaussian_nemsio_file
 
-!> @brief
-!! Read input grid surface data from fv3 tiled warm 'restart' files.
+!> Read input grid surface data from fv3 tiled warm 'restart' files.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_sfc_restart_file(localpet)
@@ -4208,9 +4209,9 @@ else
 
  end subroutine read_input_sfc_restart_file
 
-!> @brief
-!! Read input grid surface data from tiled 'history' files (netcdf) or 
+!> Read input grid surface data from tiled 'history' files (netcdf) or 
 !! gaussian netcdf files.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_sfc_netcdf_file(localpet)
@@ -4570,8 +4571,8 @@ else
 
  end subroutine read_input_sfc_netcdf_file
 
-!> @brief 
-!! Read input grid surface data from a grib2 file.
+!> Read input grid surface data from a grib2 file.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author Larissa Reames 
  subroutine read_input_sfc_grib2_file(localpet)
@@ -5411,9 +5412,9 @@ if (localpet == 0) then
  
  end subroutine read_input_sfc_grib2_file
    
-!> @brief
-!! Read nst data from these netcdf formatted fv3 files: tiled history,
+!> Read nst data from these netcdf formatted fv3 files: tiled history,
 !! tiled warm restart, and gaussian history.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_nst_netcdf_file(localpet)
@@ -5691,12 +5692,13 @@ if (localpet == 0) then
 
  end subroutine read_input_nst_netcdf_file
 
-!> @brief
-!! Read input grid nst data from fv3 gaussian nemsio history file or
-!! spectral GFS nemsio file.  
+!> Read input grid nst data from fv3 gaussian nemsio history file or
+!! spectral GFS nemsio file.
+!!
 !! @note The spectral GFS nst data is in a separate file from
 !! the surface data.  The fv3 surface and nst data are in a
 !! single file.
+!!
 !! @param[in] localpet  ESMF local persistent execution thread 
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_nst_nemsio_file(localpet)
@@ -5964,8 +5966,8 @@ if (localpet == 0) then
 
  end subroutine read_input_nst_nemsio_file
 
-!> @brief
-!! Read a record from a netcdf file
+!> Read a record from a netcdf file
+!!
 !! @param [in] field  name of field to be read 
 !! @param [in] tile_num  grid tile number
 !! @param [in] imo i-dimension of field
@@ -6012,9 +6014,9 @@ if (localpet == 0) then
 
  END SUBROUTINE READ_FV3_GRID_DATA_NETCDF
  
-!> @brief
-!! Read winds from a grib2 file.  Rotate winds
+!> Read winds from a grib2 file.  Rotate winds
 !! to be earth relative if necessary.
+!!
 !! @param [in] file  grib2 file to be read
 !! @param [in] inv   grib2 inventory file
 !! @param [inout] u  u-component wind
@@ -6177,8 +6179,8 @@ if (localpet == 0) then
 
 end subroutine read_winds
 
-!> @brief
-!! Convert winds from 2-d to 3-d components
+!> Convert winds from 2-d to 3-d components.
+!!
 !! @author George Gayno NCEP/EMC   
  subroutine convert_winds
 
@@ -6243,11 +6245,13 @@ end subroutine read_winds
 
  end subroutine convert_winds
  
-!> @brief
-!! Compute grid rotation angle for non-latlon grids.
-!! @note The original gridrot subroutine was specific to polar stereographic grids.
-!! We need to compute it for Lambert Conformal grids. So we need lat1,lat2.
-!! This follows the ncl_ncarg source code: ncl_ncarg-6.6.2/ni/src/ncl/GetGrids.c
+!> Compute grid rotation angle for non-latlon grids.
+!!
+!! @note The original gridrot subroutine was specific to polar
+!! stereographic grids.  We need to compute it for Lambert Conformal
+!! grids. So we need lat1,lat2.  This follows the ncl_ncarg source
+!! code: ncl_ncarg-6.6.2/ni/src/ncl/GetGrids.c
+!!
 !! @param [in] lov  orientation angle
 !! @param [in] latin1  first tangent latitude
 !! @param [in] latin2  second tangent latitude
@@ -6286,9 +6290,9 @@ subroutine gridrot(lov,latin1,latin2,lon,rot)
 
 end subroutine gridrot
 
-!> @brief
-!! Calculate rotation angle for rotated latlon grids.
+!> Calculate rotation angle for rotated latlon grids.
 !! Needed to convert to earth-relative winds.
+!!
 !! @param [in] latgrid  grid latitudes
 !! @param [in] longrid  grid longitudes
 !! @param [in] cenlat   center latitude
@@ -6331,9 +6335,9 @@ subroutine calcalpha_rotlatlon(latgrid,longrid,cenlat,cenlon,alpha)
   ! returns alpha in degrees
 end subroutine calcalpha_rotlatlon
 
-!> @brief
-!! Handle GRIB2 read error based on the user selected
+!> Handle GRIB2 read error based on the user selected
 !! method in the varmap file.
+!!
 !! @param [in] vname  grib2 variable name
 !! @param [in] lev    grib2 variable level
 !! @param [in] method  how missing data is handled
@@ -6397,8 +6401,8 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
 
 end subroutine handle_grib_error
 
-!> @brief
-!! Read soil fields from a GRIB2 file.
+!> Read soil fields from a GRIB2 file.
+!!
 !! @param [in] the_file      grib2 file name
 !! @param [in] inv_file      grib2 inventory file name
 !! @param [in] vname         variable name in varmap table
@@ -6465,8 +6469,8 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
 
  end subroutine read_grib_soil
 
-!> @brief
-!! Free up memory associated with atm data.
+!> Free up memory associated with atm data.
+!!
 !! @author George Gayno NCEP/EMC   
  subroutine cleanup_input_atm_data
 
@@ -6490,8 +6494,8 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
 
  end subroutine cleanup_input_atm_data
 
-!> @brief
-!! Free up memory associated with nst data.
+!> Free up memory associated with nst data.
+!!
 !! @author George Gayno NCEP/EMC   
  subroutine cleanup_input_nst_data
 
@@ -6523,8 +6527,8 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
 
  end subroutine cleanup_input_nst_data
 
-!> @brief
-!! Free up memory associated with sfc data
+!> Free up memory associated with sfc data.
+!!
 !! @author George Gayno NCEP/EMC   
  subroutine cleanup_input_sfc_data
 
@@ -6571,7 +6575,8 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
 
  end subroutine cleanup_input_sfc_data
 
-!> @brief Sort an array of values
+!> Sort an array of values.
+!!
 !! @param a      the sorted array
 !! @param first  the first value of sorted array
 !! @param last   the last value of sorted array
