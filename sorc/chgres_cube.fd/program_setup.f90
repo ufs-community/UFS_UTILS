@@ -7,9 +7,6 @@
 !!
 !! Public variables:
 !!
-!! - atm_files_input_grid -         File names of input atmospheric data.
-!!                                  Not used for "grib2" or "restart"
-!!                                  input types.
 !! - atm_core_files_input_grid -    File names of input atmospheric restart
 !!                                  core files.  Only used for 'restart'
 !!                                  input type.
@@ -158,7 +155,10 @@
  private
  
  character(len=500), public      :: varmap_file = "NULL"
- character(len=500), public      :: atm_files_input_grid(6) = "NULL"
+ character(len=500), public      :: atm_files_input_grid(6) = "NULL" !< File names of input
+                                                                     !< atmospheric data. Not used
+                                                                     !< for "grib2" or "restart"
+                                                                     !< input types.
  character(len=500), public      :: atm_core_files_input_grid(7) = "NULL"
  character(len=500), public      :: atm_tracer_files_input_grid(6) = "NULL"
  character(len=500), public      :: data_dir_input_grid = "NULL"
