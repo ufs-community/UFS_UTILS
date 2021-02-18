@@ -1,10 +1,9 @@
 !> @file
-!! @brief Specify input and target model grids
-!!
-!! @author gayno NCEP/EMC
+!! @brief Specify input and target model grids.
 !!
 !! Specify input and target model grids via ESMF grid objects.
 !!
+!! @author gayno NCEP/EMC
  module model_grid
 
  use esmf
@@ -104,13 +103,13 @@
 
 !> Setup the esmf grid object for the input grid.
 !!
-!! If the input source is tiled fv3 restart or history data, the grid is 
-!! created by reading the mosaic and grid files.  If the input source is
-!! fv3 global gaussian nemsio, spectral gfs global gaussian nemsio, or
-!! spectral gfs global gaussian sigio/sfcio, the grid is setup by  
-!! computing lat/lons using the sp library.
+!! If the input source is tiled fv3 restart or history data, the grid
+!! is created by reading the mosaic and grid files.  If the input
+!! source is fv3 global gaussian nemsio, spectral gfs global gaussian
+!! nemsio, or spectral gfs global gaussian sigio/sfcio, the grid is
+!! setup by computing lat/lons using the sp library.
 !!
-!! @param localpet
+!! @param localpet ESMF local persistent execution thread 
 !! @param npets
 !! @author George Gayno NCEP/EMC   
  subroutine define_input_grid(localpet, npets)
@@ -144,7 +143,7 @@
 !!  - spectral gfs sigio  (prior to July 19, 2017)
 !!  - spectral gfs sfcio  (prior to July 19, 2017)
 !!
-!! @param localpet
+!! @param localpet ESMF local persistent execution thread 
 !! @param npets
 !! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_gaussian(localpet, npets)
@@ -397,7 +396,7 @@
 
 !> Define input grid.
 !!
-!! @param localpet
+!! @param localpet ESMF local persistent execution thread 
 !! @param npets
 !! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_mosaic(localpet, npets)
@@ -610,7 +609,7 @@
 !> Define grid object for GFS grib2 data. Only works for data on
 !! global lat/lon or gaussian grids.
 !!
-!! @param localpet
+!! @param localpet ESMF local persistent execution thread 
 !! @param npets
 !! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_gfs_grib2(localpet, npets)
@@ -798,7 +797,7 @@
  
 !> Define input grid.
 !!
-!! @param localpet
+!! @param localpet ESMF local persistent execution thread 
 !! @param npets
 !! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_grib2(localpet, npets)
@@ -1096,7 +1095,7 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  
 !> Setup the esmf grid object for the target grid.
 !!
-!! @param localpet
+!! @param localpet ESMF local persistent execution thread 
 !! @param npets
 !! @author George Gayno NCEP/EMC   
  subroutine define_target_grid(localpet, npets)
@@ -1529,7 +1528,8 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  end subroutine get_model_latlons
  
 !> For grids with equal cell sizes (e.g., lambert conformal), get lat
-!! and on of the grid cell corners
+!! and on of the grid cell corners.
+!!
 !! @param latitude
 !! @param longitude
 !! @param latitude_sw
