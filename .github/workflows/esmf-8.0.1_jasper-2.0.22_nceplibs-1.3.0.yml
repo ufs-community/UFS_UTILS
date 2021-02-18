@@ -122,7 +122,7 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
-        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs'
+        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs' -DENABLE_DOCS=On
         make -j2
         make test
 
