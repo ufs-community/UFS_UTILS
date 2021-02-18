@@ -6401,7 +6401,7 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
 
 end subroutine handle_grib_error
 
-!> Read soil fields from a GRIB2 file.
+!> Read soil temperature and soil moisture fields from a GRIB2 file.
 !!
 !! @param [in] the_file      grib2 file name
 !! @param [in] inv_file      grib2 inventory file name
