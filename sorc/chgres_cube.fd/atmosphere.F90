@@ -1,8 +1,6 @@
 !> @file
 !! @brief Process atmospheric fields
 !!
-!! @author gayno NCEP/EMC
-!!
 !! Process atmospheric fields:  Horizontally interpolate input
 !! fields to the target grid.  Adjust surface pressure according to
 !! terrain difference between input and target grids.  Vertically
@@ -15,6 +13,8 @@
 !! on the 'south' edge of the grid box.  "_w" indicate fields on the 
 !! 'west' edge of the grid box.  Otherwise, fields are at the center
 !! of the grid box.
+!!
+!! @author gayno NCEP/EMC
  module atmosphere
 
  use esmf
@@ -104,7 +104,7 @@
 
 !> Driver routine for atmospheric fields.
 !!
-!! @param localpet
+!! @param localpet ESMF local persistent execution thread 
 !! @author George Gayno
  subroutine atmosphere_driver(localpet)
 
@@ -883,16 +883,16 @@
 
 !> Compute new surface pressure.
 !!
-!! computes a new surface pressure given a new orography.  the new
+!! Computes a new surface pressure given a new orography. The new
 !! pressure is computed assuming a hydrostatic balance and a constant
-!! temperature lapse rate.  below ground, the lapse rate is assumed to
+!! temperature lapse rate. Below ground, the lapse rate is assumed to
 !! be -6.5 k/km.
 !!
 !! program history log:
 !! -  91-10-31  mark iredell
 !! -  2018-apr  adapt for fv3. george gayno
 !!
-!! @param localpet
+!! @param localpet ESMF local persistent execution thread 
 !! @author iredell org: w/nmc23, George Gayno @date 92-10-31
  subroutine newps(localpet)
 
@@ -1120,7 +1120,8 @@
 
  end subroutine read_vcoord_info
 
-!> Horizontally interpolate thompson microphysics data to the target model grid.
+!> Horizontally interpolate thompson microphysics data to the target
+!> model grid.
 !!
 !! @author George Gayno
  subroutine horiz_interp_thomp_mp_climo
@@ -1342,20 +1343,18 @@
 
  END SUBROUTINE VINTG_THOMP_MP_CLIMO
 
-!> VERTICALLY INTERPOLATE UPPER-AIR FIELDS.
+!> Vertically interpolate upper-air fields.
 !!
-!! VERTICALLY INTERPOLATE UPPER-AIR FIELDS. WIND, TEMPERATURE,
-!! HUMIDITY AND OTHER TRACERS ARE INTERPOLATED. THE INTERPOLATION IS
-!! CUBIC LAGRANGIAN IN LOG PRESSURE WITH A MONOTONIC CONSTRAINT IN THE
-!! CENTER OF THE DOMAIN. IN THE OUTER INTERVALS IT IS LINEAR IN LOG
-!! PRESSURE. OUTSIDE THE DOMAIN, FIELDS ARE GENERALLY HELD CONSTANT,
-!! EXCEPT FOR TEMPERATURE AND HUMIDITY BELOW THE INPUT DOMAIN, WHERE
-!! THE TEMPERATURE LAPSE RATE IS HELD FIXED AT -6.5 K/KM AND THE
-!! RELATIVE HUMIDITY IS HELD CONSTANT. THIS ROUTINE EXPECTS FIELDS
-!! ORDERED FROM BOTTOM TO TOP OF ATMOSPHERE.
+!! Vertically interpolate upper-air fields. Wind, temperature,
+!! humidity and other tracers are interpolated. The interpolation is
+!! cubic lagrangian in log pressure with a monotonic constraint in the
+!! center of the domain. In the outer intervals it is linear in log
+!! pressure. Outside the domain, fields are generally held constant,
+!! except for temperature and humidity below the input domain, where
+!! the temperature lapse rate is held fixed at -6.5 k/km and the
+!! relative humidity is held constant. This routine expects fields
+!! ordered from bottom to top of atmosphere.
 !!
-!! PROGRAM HISTORY LOG:
-!!   91-10-31  MARK IREDELL
 !! @author IREDELL ORG: W/NMC23 @date 92-10-31
  SUBROUTINE VINTG
  use mpi
@@ -1565,33 +1564,33 @@
 !! -  98-05-01  MARK IREDELL                                              
 !! - 1999-01-04  IREDELL  USE ESSL SEARCH                                  
 !!                                                                       
-!! @param[in] IM INTEGER NUMBER OF COLUMNS                            
-!! @param[in] IXZ1 INTEGER COLUMN SKIP NUMBER FOR Z1                    
-!! @param[in] IXQ1 INTEGER COLUMN SKIP NUMBER FOR Q1                    
-!! @param[in] IXZ2 INTEGER COLUMN SKIP NUMBER FOR Z2                    
-!! @param[in] IXQ2 INTEGER COLUMN SKIP NUMBER FOR Q2                    
-!! @param[in] NM INTEGER NUMBER OF FIELDS PER COLUMN                  
-!! @param[in] NXQ1 INTEGER FIELD SKIP NUMBER FOR Q1                     
-!! @param[in] NXQ2 INTEGER FIELD SKIP NUMBER FOR Q2                     
-!! @param[in] KM1 INTEGER NUMBER OF INPUT POINTS                       
-!! @param[in] KXZ1 INTEGER POINT SKIP NUMBER FOR Z1                     
-!! @param[in] KXQ1 INTEGER POINT SKIP NUMBER FOR Q1                     
-!! @param[in] Z1 REAL (1+(IM-1)*IXZ1+(KM1-1)*KXZ1)                    
-!!                  INPUT COORDINATE VALUES IN WHICH TO INTERPOLATE      
-!!                  (Z1 MUST BE STRICTLY MONOTONIC IN EITHER DIRECTION)  
-!! @param[in] Q1 REAL (1+(IM-1)*IXQ1+(KM1-1)*KXQ1+(NM-1)*NXQ1)        
-!!                  INPUT FIELDS TO INTERPOLATE                          
-!! @param[in] KM2 INTEGER NUMBER OF OUTPUT POINTS                      
-!! @param[in] KXZ2 INTEGER POINT SKIP NUMBER FOR Z2                     
-!! @param[in] KXQ2 INTEGER POINT SKIP NUMBER FOR Q2                     
-!! @param[in] Z2 REAL (1+(IM-1)*IXZ2+(KM2-1)*KXZ2)                    
-!!                  OUTPUT COORDINATE VALUES TO WHICH TO INTERPOLATE     
-!!                  (Z2 NEED NOT BE MONOTONIC)                           
-!! @param[out] Q2 REAL (1+(IM-1)*IXQ2+(KM2-1)*KXQ2+(NM-1)*NXQ2)        
-!!                  OUTPUT INTERPOLATED FIELDS                           
-!! @param[out] J2 REAL (1+(IM-1)*IXQ2+(KM2-1)*KXQ2+(NM-1)*NXQ2)        
-!!                  OUTPUT INTERPOLATED FIELDS CHANGE WRT Z2             
-!! @author IREDELL ORG: W/NMC23 @date 98-05-01            
+!! @param[in] im integer number of columns                            
+!! @param[in] ixz1 integer column skip number for z1                    
+!! @param[in] ixq1 integer column skip number for q1                    
+!! @param[in] ixz2 integer column skip number for z2                    
+!! @param[in] ixq2 integer column skip number for q2                    
+!! @param[in] nm integer number of fields per column                  
+!! @param[in] nxq1 integer field skip number for q1                     
+!! @param[in] nxq2 integer field skip number for q2                     
+!! @param[in] km1 integer number of input points                       
+!! @param[in] kxz1 integer point skip number for z1                     
+!! @param[in] kxq1 integer point skip number for q1                     
+!! @param[in] z1 real (1+(im-1)*ixz1+(km1-1)*kxz1)                    
+!!                  input coordinate values in which to interpolate      
+!!                  (z1 must be strictly monotonic in either direction)  
+!! @param[in] q1 real (1+(im-1)*ixq1+(km1-1)*kxq1+(nm-1)*nxq1)        
+!!                  input fields to interpolate                          
+!! @param[in] km2 integer number of output points                      
+!! @param[in] kxz2 integer point skip number for z2                     
+!! @param[in] kxq2 integer point skip number for q2                     
+!! @param[in] z2 real (1+(im-1)*ixz2+(km2-1)*kxz2)                    
+!!                  output coordinate values to which to interpolate     
+!!                  (z2 need not be monotonic)                           
+!! @param[out] q2 real (1+(im-1)*ixq2+(km2-1)*kxq2+(nm-1)*nxq2)        
+!!                  output interpolated fields                           
+!! @param[out] j2 real (1+(im-1)*ixq2+(km2-1)*kxq2+(nm-1)*nxq2)        
+!!                  output interpolated fields change wrt z2             
+!! @author Mark Iredell @date 98-05-01            
  SUBROUTINE TERP3(IM,IXZ1,IXQ1,IXZ2,IXQ2,NM,NXQ1,NXQ2,             &
                   KM1,KXZ1,KXQ1,Z1,Q1,KM2,KXZ2,KXQ2,Z2,Q2)      
       IMPLICIT NONE 
@@ -1753,42 +1752,42 @@
 !! to more than one of the sequence values, then the location returned
 !! may point to any of the identical values.
 !!                                                                       
-!! TO BE EXACT, FOR EACH I FROM 1 TO IM AND FOR EACH K FROM 1 TO KM2,
-!! Z=Z2(1+(I-1)*IXZ2+(K-1)*KXZ2) IS THE SEARCH VALUE AND
-!! L=L2(1+(I-1)*IXL2+(K-1)*KXL2) IS THE LOCATION RETURNED.  IF L=0,
-!! THEN Z IS LESS THAN THE START POINT Z1(1+(I-1)*IXZ1) FOR ASCENDING
-!! SEQUENCES (OR GREATER THAN FOR DESCENDING SEQUENCES).  IF L=KM1,
-!! THEN Z IS GREATER THAN OR EQUAL TO THE END POINT
-!! Z1(1+(I-1)*IXZ1+(KM1-1)*KXZ1) FOR ASCENDING SEQUENCES (OR LESS THAN
-!! OR EQUAL TO FOR DESCENDING SEQUENCES).  OTHERWISE Z IS BETWEEN THE
-!! VALUES Z1(1+(I-1)*IXZ1+(L-1)*KXZ1) AND Z1(1+(I-1)*IXZ1+(L-0)*KXZ1)
-!! AND MAY EQUAL THE FORMER.
+!! to be exact, for each i from 1 to im and for each k from 1 to km2,
+!! z=z2(1+(i-1)*ixz2+(k-1)*kxz2) is the search value and
+!! l=l2(1+(i-1)*ixl2+(k-1)*kxl2) is the location returned.  if l=0,
+!! then z is less than the start point z1(1+(i-1)*ixz1) for ascending
+!! sequences (or greater than for descending sequences).  if l=km1,
+!! then z is greater than or equal to the end point
+!! z1(1+(i-1)*ixz1+(km1-1)*kxz1) for ascending sequences (or less than
+!! or equal to for descending sequences).  otherwise z is between the
+!! values z1(1+(i-1)*ixz1+(l-1)*kxz1) and z1(1+(i-1)*ixz1+(l-0)*kxz1)
+!! and may equal the former.
 !!                                                                       
 !! PROGRAM HISTORY LOG:                                                  
 !! - 1999-01-05  MARK IREDELL                                              
 !!                                                                       
-!! @param[in] IM INTEGER NUMBER OF SEQUENCES TO SEARCH                
-!! @param[in] KM1 INTEGER NUMBER OF POINTS IN EACH SEQUENCE            
-!! @param[in] IXZ1 INTEGER SEQUENCE SKIP NUMBER FOR Z1                  
-!! @param[in] KXZ1 INTEGER POINT SKIP NUMBER FOR Z1                     
-!! @param[in] Z1 REAL (1+(IM-1)*IXZ1+(KM1-1)*KXZ1)                    
-!!                  SEQUENCE VALUES TO SEARCH                            
-!!                  (Z1 MUST BE MONOTONIC IN EITHER DIRECTION)           
-!! @param[in] KM2 INTEGER NUMBER OF POINTS TO SEARCH FOR               
-!!                  IN EACH RESPECTIVE SEQUENCE                          
-!! @param[in] IXZ2 INTEGER SEQUENCE SKIP NUMBER FOR Z2                  
-!! @param[in] KXZ2 INTEGER POINT SKIP NUMBER FOR Z2                     
-!! @param[in] Z2 REAL (1+(IM-1)*IXZ2+(KM2-1)*KXZ2)                    
-!!                  SET OF VALUES TO SEARCH FOR                          
-!!                  (Z2 NEED NOT BE MONOTONIC)                           
-!! @param[in] IXL2 INTEGER SEQUENCE SKIP NUMBER FOR L2                  
-!! @param[in] KXL2 INTEGER POINT SKIP NUMBER FOR L2                     
+!! @param[in] im integer number of sequences to search                
+!! @param[in] km1 integer number of points in each sequence            
+!! @param[in] ixz1 integer sequence skip number for z1                  
+!! @param[in] kxz1 integer point skip number for z1                     
+!! @param[in] z1 real (1+(im-1)*ixz1+(km1-1)*kxz1)                    
+!!                  sequence values to search                            
+!!                  (z1 must be monotonic in either direction)           
+!! @param[in] km2 integer number of points to search for               
+!!                  in each respective sequence                          
+!! @param[in] ixz2 integer sequence skip number for z2                  
+!! @param[in] kxz2 integer point skip number for z2                     
+!! @param[in] z2 real (1+(im-1)*ixz2+(km2-1)*kxz2)                    
+!!                  set of values to search for                          
+!!                  (z2 need not be monotonic)                           
+!! @param[in] ixl2 integer sequence skip number for l2                  
+!! @param[in] kxl2 integer point skip number for l2                     
 !!                                                                       
-!! @param[out] L2 INTEGER (1+(IM-1)*IXL2+(KM2-1)*KXL2)                 
-!!                  INTERVAL LOCATIONS HAVING VALUES FROM 0 TO KM1       
-!!                  (Z2 WILL BE BETWEEN Z1(L2) AND Z1(L2+1))             
+!! @param[out] l2 integer (1+(im-1)*ixl2+(km2-1)*kxl2)                 
+!!                  interval locations having values from 0 to km1       
+!!                  (z2 will be between z1(l2) and z1(l2+1))             
 !!                                                                       
-!! @author IREDELL ORG: W/NMC23 @date 98-05-01            
+!! @author Mark Iredell @date 98-05-01            
  SUBROUTINE RSEARCH(IM,KM1,IXZ1,KXZ1,Z1,KM2,IXZ2,KXZ2,Z2,IXL2,KXL2,L2)
  IMPLICIT NONE 
 
