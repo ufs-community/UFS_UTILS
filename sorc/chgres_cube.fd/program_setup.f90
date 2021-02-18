@@ -1,7 +1,7 @@
 !> @file
 !! @brief Set up program execution
 !!
-!! @author gayno NCEP/EMC
+!! @author George Gayno NCEP/EMC
 !!
 !! Set up program execution
 !!
@@ -100,7 +100,7 @@
 !!                                  MP climatological tracers.  False,
 !!                                  when 'thomp_mp_climo_file' is NULL.
 !! - vcoord_file_target_grid -      Vertical coordinate definition file
-!! - wltsmc_input/target -          Wilting point soil moisture content
+!! - wltsmc_input/target -          Plant wilting point soil moisture content
 !!                                  input/target grids
 !! - nsoill_out -                   Number of soil levels desired in the output data. 
 !!                                  chgres_cube can interpolate from 9 input to 4 output
@@ -234,7 +234,7 @@
 
  contains
 
-!> Reads configuration namelist.
+!> Reads program configuration namelist.
 !!
 !! @author George Gayno NCEP/EMC
  subroutine read_setup_namelist
@@ -411,9 +411,11 @@
 
  end subroutine read_setup_namelist
 
-!> Reads var map.
+!> Reads the variable mapping table, which is
+!! required for initializing with GRIB2 data.
 !!
-!! @author gayno NCEP/EMC
+!! @author Larissa Reames
+!! @author Jeff Beck
 subroutine read_varmap
 
  implicit none
@@ -471,20 +473,24 @@ subroutine read_varmap
  endif
 end subroutine read_varmap
 
-!> Find conditions for handling missing variables from varmap arrays.
+!> Search the variable mapping table to find conditions for handling 
+!! missing variables.  Only applicable when using GRIB2 data as
+!! input.
 !!
-!! @param var_name
-!! @param this_miss_var_method
-!! @param this_miss_var_value
-!! @param this_field_var_name
-!! @param loc
-!! @author George Gayno NCEP/EMC
+!! @param [in] var_name  table variable name to search for
+!! @param [out] this_miss_var_method  the method used to replace missing data
+!! @param [out] this_miss_var_value  the value used to replace missing data
+!! @param [out] this_field_var_name  name of variable in output file. not
+!!                                   currently implemented.
+!! @param [out] loc  variable table location index
+!! @author Larissa Reames
+!! @author Jeff Beck
 subroutine get_var_cond(var_name,this_miss_var_method,this_miss_var_value, &
                             this_field_var_name, loc)
   use esmf
   
   implicit none
-  character(len=20)         :: var_name
+  character(len=20), intent(in) :: var_name
   
   character(len=20), optional, intent(out) :: this_miss_var_method, &
                                               this_field_var_name
@@ -518,9 +524,10 @@ subroutine get_var_cond(var_name,this_miss_var_method,this_miss_var_value, &
   
 end subroutine get_var_cond
 
-!> @brief Compute soil parameters.
+!> Driver routine to compute soil parameters for each
+!! soil type. Works for Zobler and STATSGO soil categories.
 !!
-!! @param localpet
+!! @param [in] localpet  ESMF local persistent execution thread
 !! @author George Gayno NCEP/EMC
  subroutine calc_soil_params_driver(localpet)
 
@@ -551,7 +558,6 @@ end subroutine get_var_cond
 
  real, allocatable         :: bb(:)
  real                      :: smlow, smhigh
- real, allocatable         :: f11(:)
  real, allocatable         :: satdk(:)
  real, allocatable         :: satpsi(:)
  real, allocatable         :: satdw(:)
@@ -606,7 +612,6 @@ end subroutine get_var_cond
  allocate(satdk(num_soil_cats))
  allocate(satpsi(num_soil_cats))
  allocate(satdw(num_soil_cats))
- allocate(f11(num_soil_cats))
 
  select case (trim(input_type))
    case ("gfs_sigio")
@@ -626,9 +631,9 @@ end subroutine get_var_cond
  end select
 
  call calc_soil_params(num_soil_cats, smlow, smhigh, satdk, maxsmc_input, &
-                       bb, satpsi, satdw, f11, refsmc_input, drysmc_input, wltsmc_input)
+                       bb, satpsi, satdw, refsmc_input, drysmc_input, wltsmc_input)
 
- deallocate(bb, satdk, satpsi, satdw, f11)
+ deallocate(bb, satdk, satpsi, satdw)
 
  if (localpet == 0) print*,'maxsmc input grid ',maxsmc_input
  if (localpet == 0) print*,'wltsmc input grid ',wltsmc_input
@@ -649,7 +654,6 @@ end subroutine get_var_cond
  allocate(satpsi_target(num_soil_cats))
  allocate(satdk(num_soil_cats))
  allocate(satdw(num_soil_cats))
- allocate(f11(num_soil_cats))
 
  smlow  = smlow_statsgo
  smhigh = smhigh_statsgo
@@ -659,32 +663,33 @@ end subroutine get_var_cond
  satpsi_target = satpsi_statsgo
 
  call calc_soil_params(num_soil_cats, smlow, smhigh, satdk, maxsmc_target, &
-                       bb_target, satpsi_target, satdw, f11, refsmc_target, drysmc_target, wltsmc_target)
+                       bb_target, satpsi_target, satdw, refsmc_target, drysmc_target, wltsmc_target)
 
- deallocate(satdk, satdw, f11)
+ deallocate(satdk, satdw)
 
  if (localpet == 0) print*,'maxsmc target grid ',maxsmc_target
  if (localpet == 0) print*,'wltsmc input grid ',wltsmc_target
 
  end subroutine calc_soil_params_driver
 
-!> Reads configuration namelist.
+!> Compute soil parameters.  Will be used to rescale soil moisture
+!! differences in soil type between the input grid and target
+!! model grid.
 !!
-!! @param num_soil_cats
-!! @param smlow
-!! @param smhigh
-!! @param satdk
-!! @param maxsmc
-!! @param bb
-!! @param satpsi
-!! @param satdw
-!! @param f11
-!! @param refsmc
-!! @param drysmc
-!! @param wltsmc
+!! @param [in] num_soil_cats  number of soil type categories
+!! @param [in] smlow  reference parameter for wltsmc
+!! @param [in] smhigh reference parameter for refsmc
+!! @param [in] satdk  saturated soil moisture hydraulic conductivity
+!! @param [in] maxsmc maximum soil moisture (porosity)
+!! @param [in] bb  soil 'b' parameter
+!! @param [in] satpsi saturated soil potential
+!! @param [out] satdw  saturated soil diffusivity/conductivity coefficient
+!! @param [out] refsmc  onset of soil moisture stress (field capacity)
+!! @param [out] drysmc  air dry soil moisture limit
+!! @param [out] wltsmc  plant soil moisture wilting point
 !! @author George Gayno NCEP/EMC
  subroutine calc_soil_params(num_soil_cats, smlow, smhigh, satdk,  &
-            maxsmc, bb, satpsi, satdw, f11, refsmc, drysmc, wltsmc)
+            maxsmc, bb, satpsi, satdw, refsmc, drysmc, wltsmc)
 
  implicit none
 
@@ -696,7 +701,6 @@ end subroutine get_var_cond
  real, intent(in)               :: satdk(num_soil_cats)
  real, intent(in)               :: satpsi(num_soil_cats)
 
- real, intent(out)              :: f11(num_soil_cats)
  real, intent(out)              :: satdw(num_soil_cats)
  real, intent(out)              :: refsmc(num_soil_cats)
  real, intent(out)              :: drysmc(num_soil_cats)
@@ -708,7 +712,6 @@ end subroutine get_var_cond
  real                      :: wltsmc1
 
  satdw = 0.0
- f11   = 0.0
  refsmc = 0.0
  wltsmc = 0.0
  drysmc = 0.0
@@ -718,7 +721,6 @@ end subroutine get_var_cond
    if (maxsmc(i) > 0.0) then
 
    SATDW(I)  = BB(I)*SATDK(I)*(SATPSI(I)/MAXSMC(I))
-   F11(I) = ALOG10(SATPSI(I)) + BB(I)*ALOG10(MAXSMC(I)) + 2.0
    REFSMC1 = MAXSMC(I)*(5.79E-9/SATDK(I)) **(1.0/(2.0*BB(I)+3.0))
    REFSMC(I) = REFSMC1 + (MAXSMC(I)-REFSMC1) / SMHIGH
    WLTSMC1 = MAXSMC(I) * (200.0/SATPSI(I))**(-1.0/BB(I))
