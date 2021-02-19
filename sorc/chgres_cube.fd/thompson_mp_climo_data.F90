@@ -4,7 +4,7 @@
 !! Module to read the Thompson climatological MP data file
 !! and set up the associated esmf field and grid objects.
 !!
-!! @author ???
+!! @author George Gayno NOAA/EMC
  module thompson_mp_climo_data
 
  use esmf
@@ -44,7 +44,7 @@
 !> Read Thompson climatological MP data file and time interpolate data
 !! to current cycle time. 
 !!
-!! @author ???
+!! @author George Gayno NOAA/EMC
  subroutine read_thomp_mp_climo_data
 
  implicit none
@@ -322,7 +322,7 @@
 
 !> Free up memory associated with this module.
 !!
-!! @author ???
+!! @author George Gayno NOAA/EMC
  subroutine cleanup_thomp_mp_climo_input_data
 
  implicit none
