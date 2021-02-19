@@ -11,11 +11,12 @@ implicit none
 
 contains 
 
-!> ???
-!! @param rh_sphum
-!! @param p
-!! @param t
-!! @author George Gayno  
+!> Convert relative humidity to specific humidity
+!! @param [inout]  rh_sphum rel humidity on input. spec hum on output.
+!! @param [in] p   pressure in Pa
+!! @param [in] t   temperature
+!! @author Larissa Reames
+!! @author Jeff Beck
  subroutine rh2spfh(rh_sphum,p,t)
     
   implicit none
@@ -47,14 +48,15 @@ contains
 
 end subroutine RH2SPFH
 
-!> Convert omega.
-!! @param omega
-!! @param p
-!! @param t
-!! @param q
-!! @param clb
-!! @param cub
-!! @author George Gayno  
+!> Convert omega to vertical velocity
+!! @param [inout] omega on input, vertical velocity on output
+!! @param [in] p  pressure
+!! @param [in] t  temperature
+!! @param [in] q  specific humidity
+!! @param [in] clb lower bounds of indices processed by this mpi task
+!! @param [in] cub upper bounds of indices processed by this mpi task
+!! @author Larissa Reames
+!! @author Jeff Beck
 subroutine convert_omega(omega,p,t,q,clb,cub)
 
   implicit none
@@ -83,11 +85,13 @@ subroutine convert_omega(omega,p,t,q,clb,cub)
 
 end subroutine convert_omega
 
-!> To upper.
-!! @param strIn
+!> Convert string from lower to uppercase.
+!! @author Clive Page
+!!
 !! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
-!! Original author: Clive Page
-!! @author George Gayno  
+!!
+!! @param[in] strIn   string to convert
+!! @return strOut string in uppercase
 function to_upper(strIn) result(strOut)
 
      implicit none
