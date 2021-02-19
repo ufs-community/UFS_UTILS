@@ -338,13 +338,15 @@
 
 !> Read static climatological data file.
 !!
-!! @param[in] field
-!! @param[in] i_target
-!! @param[in] j_target
-!! @param[in] tile
-!! @param[in] data_one_tile
-!! @param[in] max_data_one_tile
-!! @param[in] min_data_one_tile
+!! @param[in] field     the name of the surface field to be processed
+!! @param[in] i_target  the "i" dimension of the target model tile
+!! @param[in] j_target  the "j" dimension of the target model tile
+!! @param[in] tile      the tile number of be processed
+!! @param[out] data_one_tile  the processed surface data on the tile
+!! @param[out] max_data_one_tile  for fields with multiple time periods, the max
+!! yearly value on the tile  
+!! @param[out] min_data_one_tile  for fields with multiple time periods, the min
+!! yearly value on the tile
 !! @author George Gayno NCEP/EMC   
  subroutine read_static_file(field, i_target, j_target, tile, &
                              data_one_tile, max_data_one_tile, &
