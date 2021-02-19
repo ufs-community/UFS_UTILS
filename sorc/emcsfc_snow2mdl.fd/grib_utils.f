@@ -20,6 +20,9 @@
 !! condition codes:  all fatal
 !!     - bad file open, fort.11
 !!          
+!! @brief  doc for SKGB2 inserted by gwv 
+!!  additional SKGB2  doc
+##
  subroutine grib_check(file_name, isgrib)
 
  implicit none
@@ -56,7 +59,8 @@
  return
 
  end subroutine grib_check
-
+ 
+!! @brief  doc for SKGB2 inserted by gwv 
  SUBROUTINE SKGB2(LUGB,ISEEK,MSEEK,LSKIP,LGRIB,I1)
 !$$$  subprogram documentation block
 !
