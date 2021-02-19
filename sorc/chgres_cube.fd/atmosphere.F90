@@ -102,7 +102,7 @@
 
  contains
 
-!> Driver routine for atmospheric fields.
+!> Driver routine to process for atmospheric fields.
 !!
 !! @param localpet ESMF local persistent execution thread 
 !! @author George Gayno
@@ -638,7 +638,7 @@
 
  end subroutine create_atm_esmf_fields
 
-!> Convert winds.
+!> Convert 3-d component winds to u and v.
 !!
 !! @author George Gayno
  subroutine convert_winds
@@ -754,7 +754,7 @@
 
  end subroutine convert_winds
 
-!> Compute model pressures.
+!> Compute model level pressures.
 !!                                                                       
 !! PROGRAM HISTORY LOG:                                                  
 !! 2005-04-11  HANN_MING HENRY JUANG    hybrid sigma, sigma-p, and sigma-
@@ -892,7 +892,7 @@
 !! -  91-10-31  mark iredell
 !! -  2018-apr  adapt for fv3. george gayno
 !!
-!! @param localpet ESMF local persistent execution thread 
+!! @param [in] localpet ESMF local persistent execution thread 
 !! @author iredell org: w/nmc23, George Gayno @date 92-10-31
  subroutine newps(localpet)
 
@@ -1121,7 +1121,7 @@
  end subroutine read_vcoord_info
 
 !> Horizontally interpolate thompson microphysics data to the target
-!> model grid.
+!! model grid.
 !!
 !! @author George Gayno
  subroutine horiz_interp_thomp_mp_climo
@@ -1230,7 +1230,7 @@
 
  end subroutine horiz_interp_thomp_mp_climo
 
-!> Vertically interpolate thompson mp climo tracers to the target
+!> Vertically interpolate thompson microphysics climo tracers to the target
 !! model levels.
 !! @author George Gayno
  SUBROUTINE VINTG_THOMP_MP_CLIMO
@@ -1588,8 +1588,6 @@
 !!                  (z2 need not be monotonic)                           
 !! @param[out] q2 real (1+(im-1)*ixq2+(km2-1)*kxq2+(nm-1)*nxq2)        
 !!                  output interpolated fields                           
-!! @param[out] j2 real (1+(im-1)*ixq2+(km2-1)*kxq2+(nm-1)*nxq2)        
-!!                  output interpolated fields change wrt z2             
 !! @author Mark Iredell @date 98-05-01            
  SUBROUTINE TERP3(IM,IXZ1,IXQ1,IXZ2,IXQ2,NM,NXQ1,NXQ2,             &
                   KM1,KXZ1,KXQ1,Z1,Q1,KM2,KXZ2,KXQ2,Z2,Q2)      
@@ -1834,7 +1832,7 @@
                                                                         
  END SUBROUTINE RSEARCH 
 
-!> Compute zh.
+!> Compute vertical level height
 !! @author George Gayno
  subroutine compute_zh
 
@@ -1923,7 +1921,7 @@
 
  end subroutine compute_zh 
  
-!> Cleanup.
+!> Cleanup atmospheric field (before adjustment) objects
 !! @author George Gayno
  subroutine cleanup_target_atm_b4adj_data
 
@@ -1948,7 +1946,7 @@
 
  end subroutine cleanup_target_atm_b4adj_data
 
-!> Cleanup.
+!> Cleanup target grid atmospheric field objects.
 !! @author George Gayno
  subroutine cleanup_target_atm_data
 
