@@ -1,13 +1,12 @@
 !> @file
-!! @author gayno @date 2018
+!! @brief Read the input source data and interpolate it to the
+!! model grid.
 !!
-!! Read the input source data and interpolate it to the
-!! model grid. 
+!! @author gayno @date 2018
 !!
 !! @param[in] input_flle filename of input source data.
 !! @param[in] localpet this mpi task
 !! @param[in] method interpolation method.defined where mask=1
-!!
  subroutine interp(localpet, method, input_file)
 
  use esmf
@@ -259,30 +258,17 @@
 
  end subroutine interp
 
- subroutine adjust_for_landice(field, vegt, idim, jdim, field_ch)
+!> Ensure consistent fields at land ice points
+!! Land ice is vegetation type 15 (variable landice).
+!! @author George Gayno NCEP/EMC
+!! Usage: call adjust_for_landice(field, vegt, idim, jdim, field_ch)
+!! output is Model field
+!! @param field         - Model field before adjustments for land ice.
+!! @param field_ch      - Field name.
+!! @param i/jdim        - i/j dimension of model tile.
+!! @param vegt          - Vegetation type on the model tile.
 
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine:  adjust for landice
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract:  Ensure consistent fields at land ice points.
-!   Land ice is vegetation type 15 (variable landice).
-!
-! Usage:  call adjust_for_landice(field, vegt, idim, jdim, field_ch)
-!
-!   input argument list:
-!     field               Model field before adjustments for
-!                         land ice.
-!     field_ch            Field name
-!     i/jdim              i/j dimension of model tile.
-!     vegt                Vegetation type on the model tile
-!
-!   output argument list:
-!     field               Model field after adjustments for
-!                         land ice.
-!-----------------------------------------------------------------------
+ subroutine adjust_for_landice(field, vegt, idim, jdim, field_ch)
 
  use esmf
  use mpi
