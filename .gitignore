@@ -9,3 +9,11 @@ exec/
 *.x
 
 *.swp
+*.o
+emcsfc_ice_blend
+ml01rg2.x
+fix_am
+fix_fv3
+fix_fv3_gmted2010
+fix_orog
+fix_sfc_climo
