@@ -1,7 +1,7 @@
 !> @file
 !! @brief Write model coldstart files.
 !!
-!! @author gayno NCEP/EMC
+!! @author George Gayno NCEP/EMC
 !!
 !! Write out target grid data into appropriate files for
 !! the forecast model.
@@ -10,7 +10,7 @@
 !> Writes atmospheric header file in netcdf format.
 !!
 !! @param[in] localpet  ESMF local persistent execution thread
-!! @author gayno NCEP/EMC
+!! @author George Gayno NCEP/EMC
  subroutine write_fv3_atm_header_netcdf(localpet)
 
  use esmf
@@ -83,7 +83,7 @@
 !! For regional grids only. Output in netcdf format.
 !!   
 !! @param[in] localpet  ESMF local persistent execution thread
-!! @author gayno NCEP/EMC
+!! @author George Gayno NCEP/EMC
  subroutine write_fv3_atm_bndy_data_netcdf(localpet)
 
 !---------------------------------------------------------------------------
