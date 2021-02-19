@@ -15,16 +15,13 @@
 
  contains
 
-!! @brief Replace undefined surface values.
-!!
+!! Replace undefined surface values.
 !! Replace undefined values on the model grid with a valid value at
 !! a nearby neighbor.  Undefined values are typically associated
 !! with isolated islands where there is no source data.
-!!
 !! Routine searches a neighborhood with a radius of 100 grid points.
 !! If no valid value is found, a default value is used.
-!!
-!! @note This routine works for one tile of a cubed sphere grid.  It
+!! This routine works for one tile of a cubed sphere grid.  It
 !! does not consider valid values at adjacent faces.  That is a 
 !! future upgrade.
 !! @param terrain_land          - 2D field of terrain height points.
@@ -61,48 +58,48 @@
 !-----------------------------------------------------------------------
 
  select case (field_num)
-   case (0) !< most nst fields
+   case (0) ! most nst fields
      default_value = 0.0
-   case (1) !< ifd
+   case (1) ! ifd
      default_value = 1.0
-   case (7) !< terrain height, flag value to turn off terrain adjustment
-            !< of soil temperatures.
+   case (7) ! terrain height, flag value to turn off terrain adjustment
+            ! of soil temperatures.
      default_value = -99999.9
-   case (11) !< water temperature will use latitude-dependent value
+   case (11) ! water temperature will use latitude-dependent value
      default_value = -999.0
-   case (21) !< ice temperature
+   case (21) ! ice temperature
      default_value = 265.0
-   case (30) !< xz
+   case (30) ! xz
      default_value = 30.0
-   case (65) !< snow liq equivalent
+   case (65) ! snow liq equivalent
      default_value = 0.0
-   case (66) !< snow depth
+   case (66) ! snow depth
      default_value = 0.0
-   case (83) !< z0 (cm)
+   case (83) ! z0 (cm)
      default_value = 0.01
-   case (85) !< soil temp
+   case (85) ! soil temp
      default_value = 280.0
-   case (86) !< soil moisture (volumetric)
+   case (86) ! soil moisture (volumetric)
      default_value = 0.18
-   case (91) !< sea ice fraction
+   case (91) ! sea ice fraction
      default_value = 0.5
-   case (92) !< sea ice depth (meters)
+   case (92) ! sea ice depth (meters)
      default_value = 1.0
-   case (223) !< canopy moist
+   case (223) ! canopy moist
      default_value = 0.0
-   case (224) !< soil type, flag value to turn off soil moisture rescaling.
+   case (224) ! soil type, flag value to turn off soil moisture rescaling.
      default_value = -99999.9
-   case (225) !< vegetation type, flag value to be replaced
+   case (225) ! vegetation type, flag value to be replaced
      default_value = -99999.9
-   case (226) !< vegetation fraction, flag value to be replaced
+   case (226) ! vegetation fraction, flag value to be replaced
      default_value = 0.5
-   case (227) !< max vegetation fraction, flag value to be replaced
+   case (227) ! max vegetation fraction, flag value to be replaced
      default_value = 0.5
-   case (228) !< min vegetation fraction, flag value to be replaced
+   case (228) ! min vegetation fraction, flag value to be replaced
      default_value = 0.5
-   case (229) !< lai, flag value to be replaced
+   case (229) ! lai, flag value to be replaced
      default_value = 1.0
-   case (230) !< soil type on the input grid
+   case (230) ! soil type on the input grid
      default_value = 11.0
    case default
      print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field
@@ -202,7 +199,7 @@
 
  end subroutine search
 
-!> set sst values based on latitude
+!> @brief set sst values based on latitude
 !!
 !! @param latitude      - latitude input
 !! @param sst           - sst guess value to be set
