@@ -1,12 +1,12 @@
 !> @file
 !! @brief Replace undefined surface values.
-!!
-!! @author gayno NCEP/EMC
-!!
+
+!! @author George Gayno NCEP/EMC
+
 !! Replace undefined values with a valid value.  This can
 !! happen for an isolated lake or island that is unresolved by
 !! the input grid.
-!!
+
  module search_util
 
  private
@@ -15,24 +15,28 @@
 
  contains
 
-!> @brief Replace undefined surface values.
-!!
+!! @brief Replace undefined surface values.
+
 !! Replace undefined values on the model grid with a valid value at
 !! a nearby neighbor.  Undefined values are typically associated
 !! with isolated islands where there is no source data.
-!!
+
 !! Routine searches a neighborhood with a radius of 100 grid points.
 !! If no valid value is found, a default value is used.
-!!
+
 !! @note This routine works for one tile of a cubed sphere grid.  It
 !! does not consider valid values at adjacent faces.  That is a 
 !! future upgrade.
+
  subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)
 
  use mpi
  use esmf
 
  implicit none
+
+!! @param terrain_land          - 2D field of terrain height points.
+!! @param soilt_climo           - 2D field of soil type points. 
 
  integer, intent(in)               :: idim, jdim, tile, field_num
  integer(esmf_kind_i8), intent(in) :: mask(idim,jdim)
@@ -52,62 +56,59 @@
  real(esmf_kind_r8)                :: field_save(idim,jdim)
  integer                           :: repl_nearby, repl_default
 
-!-----------------------------------------------------------------------
-! Set default value.
-!-----------------------------------------------------------------------
+!! @note Set default value.
+!! @return default value based on field_num
 
  select case (field_num)
-   case (0) ! most nst fields
+   case (0) !< most nst fields
      default_value = 0.0
-   case (1) ! ifd
+   case (1) !< ifd
      default_value = 1.0
-   case (7) ! terrain height, flag value to turn off terrain adjustment
-            ! of soil temperatures.
+   case (7) !< terrain height, flag value to turn off terrain adjustment
+            !< of soil temperatures.
      default_value = -99999.9
-   case (11) ! water temperature will use latitude-dependent value
+   case (11) !< water temperature will use latitude-dependent value
      default_value = -999.0
-   case (21) ! ice temperature
+   case (21) !< ice temperature
      default_value = 265.0
-   case (30) ! xz
+   case (30) !< xz
      default_value = 30.0
-   case (65) ! snow liq equivalent
+   case (65) !< snow liq equivalent
      default_value = 0.0
-   case (66) ! snow depth
+   case (66) !< snow depth
      default_value = 0.0
-   case (83) ! z0 (cm)
+   case (83) !< z0 (cm)
      default_value = 0.01
-   case (85) ! soil temp
+   case (85) !< soil temp
      default_value = 280.0
-   case (86) ! soil moisture (volumetric)
+   case (86) !< soil moisture (volumetric)
      default_value = 0.18
-   case (91) ! sea ice fraction
+   case (91) !< sea ice fraction
      default_value = 0.5
-   case (92) ! sea ice depth (meters)
+   case (92) !< sea ice depth (meters)
      default_value = 1.0
-   case (223) ! canopy moist
+   case (223) !< canopy moist
      default_value = 0.0
-   case (224) ! soil type, flag value to turn off soil moisture rescaling.
+   case (224) !< soil type, flag value to turn off soil moisture rescaling.
      default_value = -99999.9
-   case (225) ! vegetation type, flag value to be replaced
+   case (225) !< vegetation type, flag value to be replaced
      default_value = -99999.9
-   case (226) ! vegetation fraction, flag value to be replaced
+   case (226) !< vegetation fraction, flag value to be replaced
      default_value = 0.5
-   case (227) ! max vegetation fraction, flag value to be replaced
+   case (227) !< max vegetation fraction, flag value to be replaced
      default_value = 0.5
-   case (228) ! min vegetation fraction, flag value to be replaced
+   case (228) !< min vegetation fraction, flag value to be replaced
      default_value = 0.5
-   case (229) ! lai, flag value to be replaced
+   case (229) !< lai, flag value to be replaced
      default_value = 1.0
-   case (230) ! soil type on the input grid
+   case (230) !< soil type on the input grid
      default_value = 11.0
    case default
      print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field
      call mpi_abort(mpi_comm_world, 77, ierr)
  end select
 
-!-----------------------------------------------------------------------
-! Perform search and replace.
-!-----------------------------------------------------------------------
+!! @note Perform search and replace.
 
  field_save = field
  repl_nearby = 0
@@ -131,9 +132,7 @@
          JJ_LOOP : do jj = jstart, jend
          II_LOOP : do ii = istart, iend
 
-!-----------------------------------------------------------------------
-!          Search only along outer square.
-!-----------------------------------------------------------------------
+!! @note Search only along outer square.
 
            if ((jj == jstart) .or. (jj == jend) .or.   &
                (ii == istart) .or. (ii == iend)) then
@@ -144,8 +143,8 @@
                if (mask(ii,jj) == 1  .and. field_save(ii,jj) > -9999.0) then
                  field(i,j) = field_save(ii,jj)
                 ! write(6,100) field_num,tile,i,j,ii,jj,field(i,j)
-                ! When using non-GFS data, there are a lot of these print statements even
-                ! when everything is working correctly. Count instead of printing each
+                !! @note When using non-GFS data, there are a lot of these print statements even
+                !! when everything is working correctly. Count instead of printing each
                  repl_nearby = repl_nearby + 1
                  cycle I_LOOP
                endif
@@ -168,19 +167,19 @@
            repl_default = repl_default + 1
          endif
        elseif (field_num == 7 .and. PRESENT(terrain_land)) then 
-         ! Terrain heights for isolated landice points never get a correct value, so replace
-         ! with terrain height from the input grid interpolated to the target grid
+         !! @note Terrain heights for isolated landice points never get a correct value, so replace
+         !!  with terrain height from the input grid interpolated to the target grid
          field(i,j) = terrain_land(i,j)
          repl_default = repl_default + 1
        elseif (field_num == 224 .and. PRESENT(soilt_climo)) then
-          ! When using input soil type fields instead of climatological data on the
-          ! target grid, isolated land locations that exist in the target grid but
-          ! not the input grid don't receiving proper soil type information, so replace
-          ! with climatological values
+          !! @note When using input soil type fields instead of climatological data on the
+          !! target grid, isolated land locations that exist in the target grid but
+          !! not the input grid don't receiving proper soil type information, so replace
+          !! with climatological values
          field(i,j) = soilt_climo(i,j)
          repl_default = repl_default + 1
        else
-         field(i,j) = default_value  ! Search failed.  Use default value.
+         field(i,j) = default_value  !< Search failed.  Use default value.
          repl_default = repl_default + 1
        endif
 
