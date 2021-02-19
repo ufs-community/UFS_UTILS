@@ -20,8 +20,15 @@
 !! condition codes:  all fatal
 !!     - bad file open, fort.11
 !!          
-!! @brief  doc for SKGB2 inserted by gwv 
+!! @brief  doc for SKGB2 inserted by gwv  .
 !!  additional SKGB2  doc
+!! usage: call SKGB2(LUGB,ISEEK,MSEEK,LSKIP,LGRIB,I1)
+!!
+!!  input argument list:  lugb  - file unit number
+!!                        iseek - number of bits to skip
+!!                                before search.
+!!                        mseek - max number of bytes 
+!!                                to search.
 ##
  subroutine grib_check(file_name, isgrib)
 
