@@ -5,12 +5,15 @@
 !! FV3 run, the spectral GFS, and a few other models. Converts
 !! atmospheric, surface and nst data.
 !!
+!! This file reads a configuration namelist.
+!!
 !! Usage:
-!! chgres ????
+!! Link the configuration namelist to ./fort.41.  Then run the
+!! program with a multiple of six mpi tasks (an ESMF library
+!! requirement for fv3 cubed sphere grids).
 !!
-!! This file reads a configuration namelist called fort.41(???)
 !!
-!! @author ???
+!! @author George Gayno NOAA/EMC
  program chgres
 
  use mpi
