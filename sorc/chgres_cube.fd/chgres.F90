@@ -1,12 +1,16 @@
 !> @file
 !! @brief Initialize an FV3 model run.
 !!
-!! Program CHGRES_CUBE
+!! Initialize an FV3 run using history or restart data from another
+!! FV3 run, the spectral GFS, and a few other models. Converts
+!! atmospheric, surface and nst data.
 !!
-!! Initialize an FV3 run using history or restart data from
-!! another FV3 run, the spectral GFS, and a few other models.
-!! Converts atmospheric, surface and nst data.
+!! Usage:
+!! chgres ????
 !!
+!! This file reads a configuration namelist called fort.41(???)
+!!
+!! @author ???
  program chgres
 
  use mpi
