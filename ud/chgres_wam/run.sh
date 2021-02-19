@@ -24,6 +24,9 @@ EXPN=v16	# gsm, v15, v16
 LEVS=150
 compile=intel
 
+conf_file=${SLURM_SUBMIT_DIR}/config.$EXPN.l$LEVS.nml
+CDATE=` grep wam_start_date $conf_file | awk -F= '{ print $2 }' `
+
 source $PACKDIR/UFS_UTILS/sorc/machine-setup.sh > /dev/null 2>&1
 source $PACKDIR/UFS_UTILS/modulefiles/build.$target.$compile
 
@@ -32,12 +35,13 @@ source $PACKDIR/UFS_UTILS/modulefiles/build.$target.$compile
 export OMP_NUM_THREADS=1
 export OMP_STACKSIZE=1024M
 
-WORKDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/chgres.wam.$EXPN.$LEVS
+WORKDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/chgres.wam.$LEVS.$EXPN.$CDATE
 rm -fr $WORKDIR
 mkdir -p $WORKDIR
 cd $WORKDIR
 
-ln -fs ${SLURM_SUBMIT_DIR}/config.$EXPN.l$LEVS.nml ./fort.41
+#ln -fs ${SLURM_SUBMIT_DIR}/config.$EXPN.l$LEVS.nml ./fort.41
+ln -fs $conf_file ./fort.41
 
 date
 
