@@ -4,6 +4,9 @@
 Utilities for the NCEP models. This is part of the
 [NCEPLIBS](https://github.com/NOAA-EMC/NCEPLIBS) project.
 
+Documentation for the chgres_cube utility can be found at
+https://noaa-emcufs-utils.readthedocs.io/en/latest/.
+
 Complete documentation can be found at
 https://noaa-emc.github.io/UFS_UTILS/.
 
