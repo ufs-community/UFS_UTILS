@@ -199,8 +199,8 @@
 
  end subroutine search
 
-!> @brief set sst values based on latitude
-!!
+!> set sst values based on latitude
+!! @author George Gayno NCEP/EMC
 !! @param latitude      - latitude input
 !! @param sst           - sst guess value to be set
  subroutine sst_guess(latitude, sst)
