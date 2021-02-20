@@ -1,3 +1,7 @@
+# This is the cmake build file for the chgres_cube utility in the
+# UFS_UTILS project.
+#
+# George Gayno
 add_subdirectory(emcsfc_ice_blend.fd)
 add_subdirectory(emcsfc_snow2mdl.fd)
 if (OpenMP_FOUND)
