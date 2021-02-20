@@ -84,7 +84,11 @@ elseif ( tile_num_int.eq.7 ) then  ! tile is a regional tile
 
 else
 
-   print *, "Error: ", tile_num, " is not a valid tile number"
+   print *
+   print *, "Fatal error: ", tile_num, " is not a valid tile number"
+   print *, "Exiting program gsl_oro_data.f90"
+   print *
+   call exit(4)
 
 end if
 

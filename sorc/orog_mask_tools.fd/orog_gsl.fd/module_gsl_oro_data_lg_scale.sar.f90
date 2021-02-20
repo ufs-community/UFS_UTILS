@@ -109,6 +109,7 @@ real (kind = real_kind), dimension(3,3) :: HGT_M_coarse
 real (kind = real_kind), allocatable :: HGT_M_coarse_on_fine(:,:)
 integer :: cell_count  ! allows for use of 1D arrays for GWD statistics fields
 
+logical :: fexist
 
 logical, parameter :: detrend_topography = .true.  ! switch for using detrended
                                                    ! or actual fine-grid topography
@@ -123,15 +124,32 @@ FV3_grid_input_file_name = "C" // trim(res_indx) // "_grid.tile" //  &
                                   trim(tile_num) // ".halo4.nc"
 print *, "Reading from file: ", FV3_grid_input_file_name
 
+! Check that input file exists -- exit with error message if not
+inquire(file=FV3_grid_input_file_name,exist=fexist)
+if (.not.fexist) then
+   print *
+   print *, "Fatal error: Input file "//trim(FV3_grid_input_file_name)// &
+            " does not exist"
+   print *, "Exiting program gsl_oro_data.f90"
+   print *
+   call exit(4)
+end if
 
 ! Open Cxxx_grid (halo4) netCDF file for input and get dimensions
 ! Note:  We subtract halo region to get halo0 values
 err = nf90_open(FV3_grid_input_file_name,nf90_nowrite,ncid_in)
+call netcdf_err(err, 'opening: '//FV3_grid_input_file_name)
+
 err = nf90_inq_dimid(ncid_in,'nx',dimid)
+call netcdf_err(err, 'reading nx id')
 err = nf90_inquire_dimension(ncid_in,dimid,len=temp_int)
+call netcdf_err(err, 'reading nx value')
 dimX_FV3 = temp_int/2 - 8   ! subtracting 2*4 halo points from edges
+
 err = nf90_inq_dimid(ncid_in,'ny',dimid)
+call netcdf_err(err, 'reading ny id')
 err = nf90_inquire_dimension(ncid_in,dimid,len=temp_int)
+call netcdf_err(err, 'reading ny value')
 dimY_FV3 = temp_int/2 - 8   ! subtracting 2*4 halo points from edges
 
 print *, "dimX_FV3 =", dimX_FV3  ! number of model cells in x-direction (halo0)
@@ -141,18 +159,25 @@ print *
 ! Read in lat/lon (in degrees)
 allocate (lat_FV3_raw((2*dimX_FV3+1),(2*dimY_FV3+1)))
 err = nf90_inq_varid(ncid_in,'y',varid)
+call netcdf_err(err, 'reading y id')
 err = nf90_get_var(ncid_in,varid,lat_FV3_raw,start=(/9,9/),    &
                         count=(/2*dimX_FV3+1,2*dimY_FV3+1/))
+call netcdf_err(err, 'reading y')
+
 allocate (lon_FV3_raw((2*dimX_FV3+1),(2*dimY_FV3+1)))
 err = nf90_inq_varid(ncid_in,'x',varid)
+call netcdf_err(err, 'reading x id')
 err = nf90_get_var(ncid_in,varid,lon_FV3_raw,start=(/9,9/),    &
                         count=(/2*dimX_FV3+1,2*dimY_FV3+1/))
+call netcdf_err(err, 'reading x')
 
 ! Read in quarter grid-cell areas
 allocate (area_FV3_qtr((2*dimX_FV3),(2*dimY_FV3)))
 err = nf90_inq_varid(ncid_in,'area',varid)
+call netcdf_err(err, 'reading area id')
 err = nf90_get_var(ncid_in,varid,area_FV3_qtr,start=(/9,9/),   &
                         count=(/2*dimX_FV3,2*dimY_FV3/))
+call netcdf_err(err, 'reading area')
 
 ! Calculate lat/lon at mass points (cell-centers)
 ! Stride by 2 starting with 2nd point
@@ -193,12 +218,29 @@ err = nf90_close(ncid_in)
 
 ! Open file containing 2.5min topo data (fine grid)
 fine_topo_source_file_name = "geo_em.d01.lat-lon.2.5m.HGT_M.nc"
+! Check that input file exists -- exit with error message if not
+inquire(file=fine_topo_source_file_name,exist=fexist)
+if (.not.fexist) then
+   print *
+   print *, "Fatal error: Topo source file "//                           &
+            trim(fine_topo_source_file_name)//" does not exist"
+   print *, "Exiting program gsl_oro_data.f90"
+   print *
+   call exit(4)
+end if
 err = nf90_open(trim(fine_topo_source_file_name),nf90_nowrite,ncid_in)
+call netcdf_err(err, 'opening: '//trim(fine_topo_source_file_name))
+
 ! Get dimensions
 err = nf90_inq_dimid(ncid_in,'west_east',dimid)
+call netcdf_err(err, 'reading west_east id')
 err = nf90_inquire_dimension(ncid_in,dimid,len=dimX_fine)
+call netcdf_err(err, 'reading west_east value')
+
 err = nf90_inq_dimid(ncid_in,'south_north',dimid)
+call netcdf_err(err, 'reading south_north id')
 err = nf90_inquire_dimension(ncid_in,dimid,len=dimY_fine)
+call netcdf_err(err, 'reading south_north value')
 
 print *, "Source file for high-resolution topography: ",                &
                trim(fine_topo_source_file_name)
@@ -211,11 +253,16 @@ print *
 allocate(lat1d_fine(dimY_fine))
 allocate(lon1d_fine(dimX_fine))
 err = nf90_inq_varid(ncid_in,'CLAT',varid)
+call netcdf_err(err, 'reading CLAT id')
 err = nf90_get_var(ncid_in,varid,lat1d_fine,start=(/1,1/),     &
                    count=(/1,dimY_fine/))
+call netcdf_err(err, 'reading CLAT')
+
 err = nf90_inq_varid(ncid_in,'CLONG',varid)
+call netcdf_err(err, 'reading CLONG id')
 err = nf90_get_var(ncid_in,varid,lon1d_fine,start=(/1,1/),     &
                    count=(/dimX_fine,1/))
+call netcdf_err(err, 'reading CLONG')
 
 ! Convert lat/lon to radians
 lat1d_fine = lat1d_fine*pi/180._real_kind
@@ -235,8 +282,10 @@ end do
 ! Read in fine-scale topography
 allocate(HGT_M_fine(dimX_fine,dimY_fine))
 err = nf90_inq_varid(ncid_in,'HGT_M',varid)
+call netcdf_err(err, 'reading HGT_M id')
 err = nf90_get_var(ncid_in,varid,HGT_M_fine,start=(/1,1/),     &
                    count=(/dimX_fine,dimY_fine/))
+call netcdf_err(err, 'reading HGT_M')
 
 
 err = nf90_close(ncid_in)
@@ -709,11 +758,15 @@ oro_data_output_file_name = "C" // trim(res_indx) // "_oro_data_ls.tile" &
 
 ! Open netCDF file for output
 err = nf90_create(oro_data_output_file_name, NF90_CLOBBER, ncid_out)
+call netcdf_err(err, 'creating: '//oro_data_output_file_name)
+
 err = nf90_redef(ncid_out)
 
 ! Define dimensions
 err = nf90_def_dim(ncid_out,'lon',dimX_FV3,lonid)
+call netcdf_err(err, 'defining lon dimension')
 err = nf90_def_dim(ncid_out,'lat',dimY_FV3,latid)
+call netcdf_err(err, 'defining lat dimension')
 
 ! Define the 'dimensions vector' dimids to be used for writing
 ! the 2-dimensional variables to the netCDF file
@@ -722,48 +775,60 @@ dimids(2) = latid
 
 ! Define variables and attributes to put in the netCDF file
 err = nf90_def_var(ncid_out,'geolon',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining geolon')
 err = nf90_put_att(ncid_out,varid,'units','degrees')
 err = nf90_put_att(ncid_out,varid,'description','longitude')
 err = nf90_def_var(ncid_out,'geolat',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining geolat')
 err = nf90_put_att(ncid_out,varid,'units','degrees')
 err = nf90_put_att(ncid_out,varid,'description','latitude')
 err = nf90_def_var(ncid_out,'stddev',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'stddev')
 err = nf90_put_att(ncid_out,varid,'units','meters')
 err = nf90_put_att(ncid_out,varid,'description',                     &
                       'standard deviation of subgrid topography')
 err = nf90_def_var(ncid_out,'convexity',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining convexity')
 err = nf90_put_att(ncid_out,varid,'units','-')
 err = nf90_put_att(ncid_out,varid,'description',                     &
                       'convexity of subgrid topography')
 err = nf90_def_var(ncid_out,'oa1',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining oa1')
 err = nf90_put_att(ncid_out,varid,'units','-')
 err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic asymmetry in west direction')
 err = nf90_def_var(ncid_out,'oa2',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining oa2')
 err = nf90_put_att(ncid_out,varid,'units','-')
 err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic asymmetry in south direction')
 err = nf90_def_var(ncid_out,'oa3',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining oa3')
 err = nf90_put_att(ncid_out,varid,'units','-')
 err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic asymmetry in south-west direction')
 err = nf90_def_var(ncid_out,'oa4',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining oa4')
 err = nf90_put_att(ncid_out,varid,'units','-')
 err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic asymmetry in north-west direction')
 err = nf90_def_var(ncid_out,'ol1',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining ol1')
 err = nf90_put_att(ncid_out,varid,'units','-')
 err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic effective length for westerly flow')
 err = nf90_def_var(ncid_out,'ol2',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining ol2')
 err = nf90_put_att(ncid_out,varid,'units','-')
 err = nf90_put_att(ncid_out,varid,'description',                     &
                       'orographic effective length for southerly flow')
 err = nf90_def_var(ncid_out,'ol3',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining ol3')
 err = nf90_put_att(ncid_out,varid,'units','-')
 err = nf90_put_att(ncid_out,varid,'description',                     &
                  'orographic effective length for south-westerly flow')
 err = nf90_def_var(ncid_out,'ol4',NF90_FLOAT,dimids,varid)
+call netcdf_err(err, 'defining ol4')
 err = nf90_put_att(ncid_out,varid,'units','-')
 err = nf90_put_att(ncid_out,varid,'description',                     &
                  'orographic effective length for north-westerly flow')
@@ -785,41 +850,65 @@ err = nf90_enddef(ncid_out)
 
 ! Write data to output netCDF file
 err = nf90_inq_varid(ncid_out,'geolon',varid)
+call netcdf_err(err, 'reading geolon id')
 err = nf90_put_var(ncid_out,varid,lon_FV3_deg,start=(/1,1/),           &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing geolon')
 err = nf90_inq_varid(ncid_out,'geolat',varid)
+call netcdf_err(err, 'reading geolat id')
 err = nf90_put_var(ncid_out,varid,lat_FV3_deg,start=(/1,1/),           &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing geolat')
 err = nf90_inq_varid(ncid_out,'stddev',varid)
+call netcdf_err(err, 'reading stddev id')
 err = nf90_put_var(ncid_out,varid,std_dev,start=(/1,1/),               &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing stddev')
 err = nf90_inq_varid(ncid_out,'convexity',varid)
+call netcdf_err(err, 'reading convexity id')
 err = nf90_put_var(ncid_out,varid,convexity,start=(/1,1/),             &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing convexity')
 err = nf90_inq_varid(ncid_out,'oa1',varid)
+call netcdf_err(err, 'reading oa1 id')
 err = nf90_put_var(ncid_out,varid,OA1,start=(/1,1/),                   &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing oa1')
 err = nf90_inq_varid(ncid_out,'oa2',varid)
+call netcdf_err(err, 'reading oa2 id')
 err = nf90_put_var(ncid_out,varid,OA2,start=(/1,1/),                   &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing oa2')
 err = nf90_inq_varid(ncid_out,'oa3',varid)
+call netcdf_err(err, 'reading oa3 id')
 err = nf90_put_var(ncid_out,varid,OA3,start=(/1,1/),                   &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing oa3')
 err = nf90_inq_varid(ncid_out,'oa4',varid)
+call netcdf_err(err, 'reading oa4 id')
 err = nf90_put_var(ncid_out,varid,OA4,start=(/1,1/),                   &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing oa4')
 err = nf90_inq_varid(ncid_out,'ol1',varid)
+call netcdf_err(err, 'reading ol1 id')
 err = nf90_put_var(ncid_out,varid,OL1,start=(/1,1/),                   &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing ol1')
 err = nf90_inq_varid(ncid_out,'ol2',varid)
+call netcdf_err(err, 'reading ol2 id')
 err = nf90_put_var(ncid_out,varid,OL2,start=(/1,1/),                   &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing ol2')
 err = nf90_inq_varid(ncid_out,'ol3',varid)
+call netcdf_err(err, 'reading ol3 id')
 err = nf90_put_var(ncid_out,varid,OL3,start=(/1,1/),                   &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing ol3')
 err = nf90_inq_varid(ncid_out,'ol4',varid)
+call netcdf_err(err, 'reading ol4 id')
 err = nf90_put_var(ncid_out,varid,OL4,start=(/1,1/),                   &
                    count=(/dimX_FV3,dimY_FV3/))
+call netcdf_err(err, 'writing ol4')
 
 err = nf90_close(ncid_out)
 
@@ -1159,6 +1248,27 @@ slope = (y2-y1)/(x2-x1)
 interp_1d = y1 + slope*(x-x1)
 
 end function interp_1d
+
+
+subroutine netcdf_err(err,string)
+
+use netcdf
+
+implicit none
+
+integer, intent(in) :: err
+character(len=*), intent(in) :: string
+character(len=256) :: errmsg
+
+if (err.eq.NF90_NOERR ) return
+errmsg = NF90_STRERROR(err)
+print *, ""
+print *, "FATAL ERROR: ", trim(string), ": ", trim(errmsg)
+print *, "STOP."
+call exit(4)
+
+return
+end subroutine netcdf_err
 
 
 
