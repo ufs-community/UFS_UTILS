@@ -12,14 +12,50 @@
 !!                         grib1 or grib2.
 !!
 !! @param[in] file_name - file to be checked
-!! @param[out] isgrib - '1' or '2' if grib1/2 file '0' if not grib
+!! @param[out] isgrib - '1' or '2' if grib1/2 file '0' if not grib 
 !!
 !! input files: 
 !!     - file to be checked, fort.11
 !!
 !! condition codes:  all fatal
 !!     - bad file open, fort.11
-!! GWV add line
+!!
+!!  SUBROUTINE SKGB2gwv(LUGB,ISEEK,MSEEK,LSKIP,LGRIB,I1)
+!
+!! @param[in] LUGB  input fortran unit default integer
+!@ subprogram:   skgb2
+!!    prgmmr: gayno          org: w/np2     date: 2014-feb-07
+!! abstract:  determine whether file is grib or not.
+!!           based on w3nco library routine skgb.
+!! program history log:
+!! 2014-feb-07  gayno    - initial version
+!!
+!! usage: call SKGB2(LUGB,ISEEK,MSEEK,LSKIP,LGRIB,I1)
+!!
+!!   input argument list:  lugb  - file unit number
+!!                         iseek - number of bits to skip
+!!                                 before search.
+!!                         mseek - max number of bytes
+!!                                 to search.
+!!
+!!   output argument list:  lskip  - number of bytes to skip
+!!                                   before message
+!!                          lgrib  - number of bytes in message.
+!!                                   '0' if not grib.
+!!                          i1     - '1' or '2' if grib1/2 file.
+!!                                   '0' if not grib.
+!!
+!! files:
+!!    input:
+!!      - file to be checked, unit=lugb
+!!
+!!    output: none
+!!
+!! condition codes: none
+!!
+!! remarks: none.
+!!
+!! 
 !!          
  subroutine grib_check(file_name, isgrib)
 
@@ -62,6 +98,7 @@
  SUBROUTINE SKGB2(LUGB,ISEEK,MSEEK,LSKIP,LGRIB,I1)
 !$$$  subprogram documentation block
 !
+!! @param[in] LUGB  input fortran unit default integer
 ! subprogram:   skgb2
 !   prgmmr: gayno          org: w/np2     date: 2014-feb-07
 !
