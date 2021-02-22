@@ -51,6 +51,45 @@ make -j2
 make install
 ```
 
+## Contents
+
+The UFS_UTILS package contains the following utilities (under the sorc
+directory):
+- chgres_cube
+- emcsfc_ice_blend
+- emcsfc_snow2mdl
+- fre-nctools
+- fvcom_tools
+- global_chgres
+- global_cycle
+- grid_tools
+- nst_tf_chg
+- orog_mask_tools
+- sfc_climo_gen
+- vcoord_gen
+
+The reg_tests directory contians the regression test code.
+
+The fix directory is where we set links to directories containing
+large, static data files used by UFS_UTILS programs.
+
+The tests directory contains unit tests.
+
+The ush directory contains ???
+
+The util directory contains ???
+
+The parm directory contains ???
+
+The driver_scripts directory contains ???
+
+The modulefiles directory contains ???
+
+The docs directory contains the control file for the doxygen
+documentation build, as well as some markdown files which are part of
+the documentation. It also contains (in the source subdirectory) the
+ReadTheDocs documentation files.
+
 ## Disclaimer
 
 The United States Department of Commerce (DOC) GitHub project code is
