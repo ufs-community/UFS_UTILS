@@ -2,7 +2,7 @@
 !! @brief Determine whether file is grib or not.
 !
 !> Determine whether file is grib or not.
-!! @author gayno org: w/np2 @date 2007-nov-28
+!! @author gayno org: w/np2 @date 2007-nov-28   #GWV check for action
 !!
 !! program history log:
 !! - 2007-nov-28  gayno    - initial version
@@ -19,6 +19,7 @@
 !!
 !! condition codes:  all fatal
 !!     - bad file open, fort.11
+!! GWV add line
 !!          
  subroutine grib_check(file_name, isgrib)
 
@@ -42,6 +43,7 @@
  mseek = 64
  call skgb2(iunit, iseek, mseek, lskip, lgrib, version)
 
+!! GWV add  line for SKGB2
  call baclose(iunit, istat)
  
  if (lgrib > 0) then
