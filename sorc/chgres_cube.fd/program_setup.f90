@@ -1,41 +1,39 @@
 !> @file
 !! @brief Set up program execution
 !!
-!! @author George Gayno NCEP/EMC
-!!
 !! Set up program execution
 !!
-!! Public variables:
-!!
-!! - atm_core_files_input_grid -    File names of input atmospheric restart
-!!                                  core files.  Only used for 'restart'
-!!                                  input type.
-!! - atm_tracer_files_input_grid -  File names of input atmospheric restart
-!!                                  tracer files.  Only used for 'restart'
-!!                                  input type.
-!! - atm_weight_file -              File containing pre-computed weights
-!!                                  to horizontally interpolate
-!!                                  atmospheric fields.
-!! - bb_target -                    Soil 'b' parameter, target grid
-!! - convert_atm -                  Convert atmospheric data when true.
-!! - convert_nst -                  Convert nst data when true.
-!! - convert_sfc -                  Convert sfc data when true.
-!! - cres_target_grid -             Target grid resolution, i.e., C768.
-!! - cycle_mon/day/hour -           Cycle month/day/hour
-!! - data_dir_input_grid -          Directory containing input atm or sfc
-!!                                  files.
-!! - drysmc_input/target -          Air dry soil moisture content input/
-!!                                  target grids.
-!! - fix_dir_target_grid -          Directory containing target grid
-!!                                  pre-computed fixed data (ex: soil type)
-!! - halo_blend -                   Number of row/cols of blending halo,
-!!                                  where model tendencies and lateral
-!!                                  boundary tendencies are applied.
-!!                                  Regional target grids only.
-!! - halo_bndy -                    Number of row/cols of lateral halo,
-!!                                  where pure lateral bndy conditions are 
-!!                                  applied (regional target grids).
-!! - input_type -                   Input data type: 
+!! @author George Gayno NCEP/EMC
+ module program_setup
+
+ implicit none
+
+ private
+ 
+ character(len=500), public      :: varmap_file = "NULL" !< REQUIRED. Full path of the relevant varmap file.
+ character(len=500), public      :: atm_files_input_grid(6) = "NULL" !< File names of input
+                                                                     !< atmospheric data. Not used
+                                                                     !< for "grib2" or "restart"
+                                                                     !< input types.
+ character(len=500), public      :: atm_core_files_input_grid(7) = "NULL" !<  File names of input atmospheric restart core files.  Only used for 'restart' input type.
+ character(len=500), public      :: atm_tracer_files_input_grid(6) = "NULL" !< File names of input atmospheric restart tracer files.  Only used for 'restart' input type.
+ character(len=500), public      :: data_dir_input_grid = "NULL"  !< Directory containing input atm or sfc files.
+ character(len=500), public      :: fix_dir_target_grid = "NULL" !< Directory containing target grid pre-computed fixed data (ex: soil type).
+ character(len=500), public      :: mosaic_file_input_grid = "NULL" !< Input grid mosaic file.  Only used for "restart" or "history" input type.
+ character(len=500), public      :: mosaic_file_target_grid = "NULL" !< Target grid mosaic file.
+ character(len=500), public      :: nst_files_input_grid = "NULL" !< File name of input nst data.  Only used for input_type "gfs_gaussian_nemsio".
+ character(len=500), public      :: grib2_file_input_grid = "NULL" !<  REQUIRED. File name of grib2 input data. Assumes atmospheric and surface data are in a single file. 
+ character(len=500), public      :: geogrid_file_input_grid = "NULL"
+ character(len=500), public      :: orog_dir_input_grid = "NULL" !<  Directory containing the input grid orography files.  Only used for "restart" or "history" input types.
+ character(len=500), public      :: orog_files_input_grid(6) = "NULL" !<  Input grid orography files.  Only used for "restart" or "history" input types.
+ character(len=500), public      :: orog_dir_target_grid = "NULL" !<  Directory containing the target grid orography files.
+ character(len=500), public      :: orog_files_target_grid(6) = "NULL" !<  Target grid orography files.
+ character(len=500), public      :: sfc_files_input_grid(6) = "NULL" !<  File names containing input surface data. Not used for 'grib2' input type.
+ character(len=500), public      :: vcoord_file_target_grid = "NULL" !<  Vertical coordinate definition file.
+ character(len=500), public      :: thomp_mp_climo_file= "NULL" !<  Path/name to the Thompson MP climatology file.
+ character(len=6),   public      :: cres_target_grid = "NULL" !<  Target grid resolution, i.e., C768.
+ character(len=500), public      :: atm_weight_file="NULL" !<  File containing pre-computed weights to horizontally interpolate atmospheric fields.
+ character(len=25),  public      :: input_type="restart" !< Input data type: 
 !!                                 - "restart" for fv3 tiled warm restart
 !!                                    files (netcdf).
 !!                                 - "history" for fv3 tiled history files
@@ -49,181 +47,84 @@
 !!                                    gaussian nemsio files
 !!                                 - "gfs_sigio" for spectral gfs
 !!                                    gfs sigio/sfcio files.
-!! - max_tracers -                  Maximum number of atmospheric tracers
-!!                                  processed
-!! - maxsmc_input/target -          Maximum soil moisture content input/
-!!                                  target grids
-!! - mosaic_file_input_grid -       Input grid mosaic file.  Only used for
-!!                                  "restart" or "history" input type.
-!! - mosaic_file_target_grid -      Target grid mosaic file
-!! - nst_files_input_grid -         File name of input nst data.  Only
-!!                                  used for input_type "gfs_gaussian_nemsio".
-!! - num_tracers -                  Number of atmospheric tracers to
-!!                                  be processed.
-!! - orog_dir_input_grid -          Directory containing the input grid
-!!                                  orography files.  Only used for "restart"
-!!                                  or "history" input types.
-!! - orog_files_input_grid -        Input grid orography files.  Only used for
-!!                                  "restart" or "history" input types.
-!! - orog_dir_target_grid -         Directory containing the target grid
-!!                                  orography files.
-!! - orog_files_target_grid -       Target grid orography files.
-!! - refsmc_input/target -          Reference soil moisture content input/
-!!                                  target grids (onset of soil moisture
-!!                                  stress).
-!! - regional -                     For regional target grids.  When '1'
-!!                                  remove boundary halo region from
-!!                                  atmospheric/surface data and
-!!                                  output atmospheric boundary file.
-!!                                  When '2' output boundary file only.
-!!                                  Default is '0' (global grids).
-!! - satpsi_target -                Saturated soil potential, target grid
-!! - sfc_files_input_grid -         File names containing input surface data.
-!!                                  Not used for 'grib2' input type.
-!! - thomp_mp_climo_file -          Path/name to the Thompson MP climatology
-!!                                  file.
-!! - tracers -                      Name of each atmos tracer to be processed.
-!!                                  These names will be used to identify
-!!                                  the tracer records in the output files.
-!!                                  Follows the convention in the field table.
-!!                                  FOR GRIB2 FILES: Not used. Tracers instead taken
-!!                                  from the varmap file. 
-!! - tracers_input -                Name of each atmos tracer record in 
-!!                                  the input file.  May be different from
-!!                                  value in 'tracers'. 
-!!                                  FOR GRIB2 FILES: Not used. Tracers instead taken
-!!                                  from the varmap file. 
-!! - use_thomp_mp_climo -           When true, read and process Thompson
-!!                                  MP climatological tracers.  False,
-!!                                  when 'thomp_mp_climo_file' is NULL.
-!! - vcoord_file_target_grid -      Vertical coordinate definition file
-!! - wltsmc_input/target -          Plant wilting point soil moisture content
-!!                                  input/target grids
-!! - nsoill_out -                   Number of soil levels desired in the output data. 
-!!                                  chgres_cube can interpolate from 9 input to 4 output
-!!                                  levels. DEFAULT: 4
-!!
-!! Variables that are relevant only for "grib2" input type:
-!!
-!! - grib2_file_input_grid -        REQUIRED. File name of grib2 input data.
-!!                                  Assumes atmospheric and surface data are in a single 
-!!                                  file. 
-!!
-!! - varmap_file -                  REQUIRED. Full path of the relevant varmap file. 
-!!
-!! - external_model -               The model that the input data is derived from. Current
-!!                                  supported options are: "GFS", "HRRR", "NAM", "RAP". 
-!!                                  Default: "GFS"
-!!
-!! - vgtyp_from_climo -             If false, interpolate vegetation type from the input 
-!!                                  data to the target grid instead of using data from 
-!!                                  static data. Use with caution as vegetation categories
-!!                                  can vary. Default: True
-!!
-!! - sotyp_from_climo -             If false, interpolate soil type from the input 
-!!                                  data to the target grid instead of using data from 
-!!                                  static data. Use with caution as the code assumes
-!!                                  input soil type use STATSGO soil categories.
-!!                                  Default: True
-!!
-!! - vgfrc_from_climo -             If false, interpolate vegetation fraction from the input 
-!!                                  data to the target grid instead of using data from 
-!!                                  static data. Use with caution as vegetation categories
-!!                                  can vary. 
-!!                                  Default: True
-!!
-!! - minmax_vgfrc_from_climo -      If false, interpolate min/max vegetation fraction from 
-!!                                  the input data to the target grid instead of using data
-!!                                  from static data. Use with caution as vegetation
-!!                                  categories can vary. 
-!!                                  Default: True
-!!
-!! - lai_from_climo -               If false, interpolate leaf area index from the input 
-!!                                  data to the target grid instead of using data from 
-!!                                  static data. 
-!!                                  Default: True
-!!
-!! - tg3_from_soil -                If false, use lowest level soil temperature for the
-!!                                  base soil temperature instead of using data from 
-!!                                  static data. 
-!!                                  Default: False
-!!
- module program_setup
-
- implicit none
-
- private
- 
- character(len=500), public      :: varmap_file = "NULL"
- character(len=500), public      :: atm_files_input_grid(6) = "NULL" !< File names of input
-                                                                     !< atmospheric data. Not used
-                                                                     !< for "grib2" or "restart"
-                                                                     !< input types.
- character(len=500), public      :: atm_core_files_input_grid(7) = "NULL"
- character(len=500), public      :: atm_tracer_files_input_grid(6) = "NULL"
- character(len=500), public      :: data_dir_input_grid = "NULL"
- character(len=500), public      :: fix_dir_target_grid = "NULL"
- character(len=500), public      :: mosaic_file_input_grid = "NULL"
- character(len=500), public      :: mosaic_file_target_grid = "NULL"
- character(len=500), public      :: nst_files_input_grid = "NULL"
- character(len=500), public      :: grib2_file_input_grid = "NULL"
- character(len=500), public      :: geogrid_file_input_grid = "NULL"
- character(len=500), public      :: orog_dir_input_grid = "NULL"
- character(len=500), public      :: orog_files_input_grid(6) = "NULL"
- character(len=500), public      :: orog_dir_target_grid = "NULL"
- character(len=500), public      :: orog_files_target_grid(6) = "NULL"
- character(len=500), public      :: sfc_files_input_grid(6) = "NULL"
- character(len=500), public      :: vcoord_file_target_grid = "NULL"
- character(len=500), public      :: thomp_mp_climo_file= "NULL"
- character(len=6),   public      :: cres_target_grid = "NULL"
- character(len=500), public      :: atm_weight_file="NULL"
- character(len=25),  public      :: input_type="restart"
- character(len=20),  public      :: external_model="GFS"  !Default assume gfs data
- 
-                        
+ character(len=20),  public      :: external_model="GFS"  !< The model that the input data is derived from. Current supported options are: "GFS", "HRRR", "NAM", "RAP". Default: "GFS"
  
  character(len=500), public       :: fix_dir_input_grid = "NULL"                             
                                                           
 
- integer, parameter, public      :: max_tracers=100
- integer, public                 :: num_tracers, num_tracers_input
+ integer, parameter, public      :: max_tracers=100 !< Maximum number of atmospheric tracers processed.
+ integer, public                 :: num_tracers !< Number of atmospheric tracers to be processed.
+ integer, public                 :: num_tracers_input
  
  logical, allocatable, public    :: read_from_input(:)
  
- character(len=20), public       :: tracers(max_tracers)="NULL"
- character(len=20), public       :: tracers_input(max_tracers)="NULL"
+ character(len=20), public       :: tracers(max_tracers)="NULL" !< Name of each atmos tracer to be processed.
+                                                                !! These names will be used to identify
+                                                                !! the tracer records in the output files.
+                                                                !! Follows the convention in the field table.
+                                                                !! FOR GRIB2 FILES: Not used. Tracers instead taken
+                                                                !! from the varmap file. 
+ character(len=20), public       :: tracers_input(max_tracers)="NULL" !<  Name of each atmos tracer record in 
+                                                                      !! the input file.  May be different from
+                                                                      !! value in 'tracers'. 
+                                                                      !! FOR GRIB2 FILES: Not used. Tracers instead taken
+                                                                      !! from the varmap file. 
  character(len=20), allocatable, public      :: missing_var_methods(:)
  character(len=20), allocatable, public      :: chgres_var_names(:)
  character(len=20), allocatable, public      :: field_var_names(:)
  
  
- integer, public                 :: cycle_mon = -999
- integer, public                 :: cycle_day = -999
- integer, public                 :: cycle_hour = -999
- integer, public                 :: regional = 0
- integer, public                 :: halo_bndy = 0
- integer, public                 :: halo_blend = 0
- integer, public                 :: nsoill_out = 4
+ integer, public                 :: cycle_mon = -999 !< Cycle month.
+ integer, public                 :: cycle_day = -999 !< Cycle day.
+ integer, public                 :: cycle_hour = -999 !< Cycle hour.
+ integer, public                 :: regional = 0 !<  For regional target grids.  When '1' remove boundary halo region from atmospheric/surface data and
+                                                 !! output atmospheric boundary file. When '2' output boundary file only. Default is '0' (global grids).
+ integer, public                 :: halo_bndy = 0 !< Number of row/cols of lateral halo, where pure lateral bndy conditions are applied (regional target grids).
+ integer, public                 :: halo_blend = 0 !< Number of row/cols of blending halo, where model tendencies and lateral boundary tendencies are applied. Regional target grids only.
+ integer, public                 :: nsoill_out = 4 !<  Number of soil levels desired in the output data. chgres_cube can interpolate from 9 input to 4 output levels. DEFAULT: 4.
 
- logical, public                 :: convert_atm = .false.
- logical, public                 :: convert_nst = .false.
- logical, public                 :: convert_sfc = .false.
+ logical, public                 :: convert_atm = .false. !< Convert atmospheric data when true.
+ logical, public                 :: convert_nst = .false. !< Convert nst data when true.
+ logical, public                 :: convert_sfc = .false. !< Convert sfc data when true.
  
  ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
  ! Default is to use climatology instead
- logical, public                 :: vgtyp_from_climo = .true.
- logical, public                 :: sotyp_from_climo = .true.
- logical, public                 :: vgfrc_from_climo = .true.
- logical, public                 :: minmax_vgfrc_from_climo = .true.
- logical, public                 :: lai_from_climo = .true.
- logical, public                 :: tg3_from_soil = .false.
- logical, public                 :: use_thomp_mp_climo=.false.
+ logical, public                 :: vgtyp_from_climo = .true. !<  If false, interpolate vegetation type from the input 
+                                                              !! data to the target grid instead of using data from 
+                                                              !! static data. Use with caution as vegetation categories
+                                                              !! can vary. Default: True.
+ logical, public                 :: sotyp_from_climo = .true. !<  If false, interpolate soil type from the input 
+                                                              !! data to the target grid instead of using data from 
+                                                              !! static data. Use with caution as the code assumes
+                                                              !! input soil type use STATSGO soil categories.
+                                                              !! Default: True.
+ logical, public                 :: vgfrc_from_climo = .true. !<  If false, interpolate vegetation fraction from the input 
+                                                              !! data to the target grid instead of using data from 
+                                                              !! static data. Use with caution as vegetation categories
+                                                              !! can vary. Default: True.
 
- real, allocatable, public       :: drysmc_input(:), drysmc_target(:)
- real, allocatable, public       :: maxsmc_input(:), maxsmc_target(:)
- real, allocatable, public       :: refsmc_input(:), refsmc_target(:)
- real, allocatable, public       :: wltsmc_input(:), wltsmc_target(:)
- real, allocatable, public       :: bb_target(:),    satpsi_target(:)
+ logical, public                 :: minmax_vgfrc_from_climo = .true. !<  If false, interpolate min/max vegetation fraction from 
+                                                                     !! the input data to the target grid instead of using data
+                                                                     !! from static data. Use with caution as vegetation
+                                                                     !! categories can vary. Default: True.
+ logical, public                 :: lai_from_climo = .true. !< If false, interpolate leaf area index from the input 
+                                                            !! data to the target grid instead of using data from 
+                                                            !! static data. Default: True.
+ logical, public                 :: tg3_from_soil = .false. !<  If false, use lowest level soil temperature for the
+                                                            !! base soil temperature instead of using data from 
+                                                            !! static data. Default: False.
+ logical, public                 :: use_thomp_mp_climo=.false. !<  When true, read and process Thompson MP climatological tracers.  False, when 'thomp_mp_climo_file' is NULL.
+
+ real, allocatable, public       :: drysmc_input(:)   !< Air dry soil moisture content input grid.
+ real, allocatable, public       :: drysmc_target(:)  !< Air dry soil moisture content target grid.
+ real, allocatable, public       :: maxsmc_input(:) !< Maximum soil moisture content input grid.
+ real, allocatable, public       :: maxsmc_target(:) !< Maximum soil moisture content target grid.
+ real, allocatable, public       :: refsmc_input(:) !<  Reference soil moisture content input grid (onset of soil moisture stress).
+ real, allocatable, public       :: refsmc_target(:) !<  Reference soil moisture content target grid (onset of soil moisture stress).
+ real, allocatable, public       :: wltsmc_input(:) !< Plant wilting point soil moisture content input grid.
+ real, allocatable, public       :: wltsmc_target(:) !< Plant wilting point soil moisture content target grid.
+ real, allocatable, public       :: bb_target(:)  !<  Soil 'b' parameter, target grid
+ real, allocatable, public       :: satpsi_target(:) !<   Saturated soil potential, target grid
  real, allocatable, public       :: missing_var_values(:)
  
 

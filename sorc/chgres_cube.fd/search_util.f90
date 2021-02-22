@@ -1,12 +1,11 @@
 !> @file
 !! @brief Replace undefined surface values.
 !!
-!! @author George Gayno NCEP/EMC
-!!
 !! Replace undefined values with a valid value.  This can
 !! happen for an isolated lake or island that is unresolved by
 !! the input grid.
 !!
+!! @author George Gayno NCEP/EMC
  module search_util
 
  private
@@ -16,17 +15,21 @@
  contains
 
 !! Replace undefined surface values.
+!!
 !! Replace undefined values on the model grid with a valid value at
 !! a nearby neighbor.  Undefined values are typically associated
 !! with isolated islands where there is no source data.
+!!
 !! Routine searches a neighborhood with a radius of 100 grid points.
 !! If no valid value is found, a default value is used.
+!!
 !! This routine works for one tile of a cubed sphere grid.  It
 !! does not consider valid values at adjacent faces.  That is a 
 !! future upgrade.
+!!
 !! @param terrain_land          - 2D field of terrain height points.
 !! @param soilt_climo           - 2D field of soil type points.
-
+!! @author George Gayno NCEP/EMC
  subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)
 
  use mpi
@@ -199,10 +202,11 @@
 
  end subroutine search
 
-!> set sst values based on latitude
+!> Set sst values based on latitude.
+!!
+!! @param latitude latitude input
+!! @param sst sst guess value to be set
 !! @author George Gayno NCEP/EMC
-!! @param latitude      - latitude input
-!! @param sst           - sst guess value to be set
  subroutine sst_guess(latitude, sst)
 
  use esmf

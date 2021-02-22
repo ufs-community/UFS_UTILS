@@ -104,24 +104,24 @@
 
 ! Fields associated with the nst model.
 
- type(esmf_field), public        :: c_d_input_grid
- type(esmf_field), public        :: c_0_input_grid
- type(esmf_field), public        :: d_conv_input_grid
- type(esmf_field), public        :: dt_cool_input_grid
- type(esmf_field), public        :: ifd_input_grid
- type(esmf_field), public        :: qrain_input_grid
+ type(esmf_field), public        :: c_d_input_grid   !< ???
+ type(esmf_field), public        :: c_0_input_grid   !< ???
+ type(esmf_field), public        :: d_conv_input_grid   !< ???
+ type(esmf_field), public        :: dt_cool_input_grid   !< ???
+ type(esmf_field), public        :: ifd_input_grid   !< ???
+ type(esmf_field), public        :: qrain_input_grid   !< ???
  type(esmf_field), public        :: tref_input_grid  !< reference temperature
- type(esmf_field), public        :: w_d_input_grid
- type(esmf_field), public        :: w_0_input_grid
- type(esmf_field), public        :: xs_input_grid
- type(esmf_field), public        :: xt_input_grid
- type(esmf_field), public        :: xu_input_grid
- type(esmf_field), public        :: xv_input_grid
- type(esmf_field), public        :: xz_input_grid
- type(esmf_field), public        :: xtts_input_grid
- type(esmf_field), public        :: xzts_input_grid
- type(esmf_field), public        :: z_c_input_grid
- type(esmf_field), public        :: zm_input_grid
+ type(esmf_field), public        :: w_d_input_grid   !< ???
+ type(esmf_field), public        :: w_0_input_grid   !< ???
+ type(esmf_field), public        :: xs_input_grid   !< ???
+ type(esmf_field), public        :: xt_input_grid   !< ???
+ type(esmf_field), public        :: xu_input_grid   !< ???
+ type(esmf_field), public        :: xv_input_grid   !< ???
+ type(esmf_field), public        :: xz_input_grid   !< ???
+ type(esmf_field), public        :: xtts_input_grid   !< ???
+ type(esmf_field), public        :: xzts_input_grid   !< ???
+ type(esmf_field), public        :: z_c_input_grid   !< ???
+ type(esmf_field), public        :: zm_input_grid   !< ???
 
  public :: read_input_atm_data
  public :: cleanup_input_atm_data
