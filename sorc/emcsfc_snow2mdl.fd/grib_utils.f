@@ -2,7 +2,7 @@
 !! @brief Determine whether file is grib or not.
 !
 !> Determine whether file is grib or not.
-!! @author gayno org: w/np2 @date 2007-nov-28   #GWV check for action
+!! @author gayno org: w/np2 @date 2007-nov-28   
 !!
 !! program history log:
 !! - 2007-nov-28  gayno    - initial version
@@ -19,11 +19,7 @@
 !!
 !! condition codes:  all fatal
 !!     - bad file open, fort.11
-!!
-!!  SUBROUTINE SKGB2gwv(LUGB,ISEEK,MSEEK,LSKIP,LGRIB,I1)
-!
-!! @param[in] LUGB  input fortran unit default integer
-!@ subprogram:   skgb2
+!! other stuff for skgb2 (will reformat before commit)
 !!    prgmmr: gayno          org: w/np2     date: 2014-feb-07
 !! abstract:  determine whether file is grib or not.
 !!           based on w3nco library routine skgb.
