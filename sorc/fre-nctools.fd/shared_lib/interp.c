@@ -1,5 +1,7 @@
 /** @file 
-    @brief Interpolation utilities.
+ * @brief Interpolation utilities.
+ * 
+ * @author Fanglin Yang
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,25 +10,20 @@
 #include "interp.h"
 #include "create_xgrid.h"
 
-/*********************************************************************
-   void cublic_spline_sp(size1, size2, grid1, grid2, data1, data2)
-
-   Calculate a shape preserving cubic spline. Monotonicity is ensured over each subinterval
-   unlike classic cubic spline interpolation.
-   It will be used to interpolation data in 1-D space.
-
-   INPUT Arguments:
-    grid1:    grid for input data grid.          
-    grid2:    grid for output data grid.         
-    size1:    size of input grid.                
-    size2:    size of output grid.               
-    data1:    input data associated with grid1.
-
-   OUTPUT ARGUMENTS:
-    data2:    output data associated with grid2. (OUTPUT)
-
-*********************************************************************/
-
+/*
+ *  Calculate a shape preserving cubic spline. Monotonicity is ensured
+ *  over each subinterval unlike classic cubic spline
+ *  interpolation. It will be used to interpolation data in 1-D space.
+ *
+ * @param grid1 grid for input data grid.          
+ * @param grid2 grid for output data grid.         
+ * @param size1 size of input grid.                
+ * @param size2 size of output grid.               
+ * @param data1 input data associated with grid1.
+ * @param data2 output data associated with grid2. (OUTPUT)
+ *
+ * @author Fanglin Yang
+ */
 void cubic_spline_sp(int size1, int size2, const double *grid1, const double *grid2, const double *data1,
                   double *data2 )
 {
@@ -130,30 +127,23 @@ End slopes
 };/* cubic spline sp */
 
 
-/*********************************************************************
-   void cublic_spline(size1, size2, grid1, grid2, data1, data2, yp1, ypn  )
-
-   This alborithm is to get an interpolation formula that is smooth in the first
-   derivative, and continuous in the second derivative, both within an interval
-   and its boundaries. It will be used to interpolation data in 1-D space.
-
-   INPUT Arguments:
-    grid1:    grid for input data grid.          
-    grid2:    grid for output data grid.         
-    size1:    size of input grid.                
-    size2:    size of output grid.               
-    data1:    input data associated with grid1.
-    yp1:      first derivative of starting point.
-              Set to 0 to be "natural"           (INPUT)
-    ypn:      first derivative of ending point.
-              Set to 0 to be "natural"           (INPUT)
-
-   OUTPUT ARGUMENTS:
-    data2:    output data associated with grid2. (OUTPUT)
-
-*********************************************************************/
-
-                                     
+/**
+ * This alborithm is to get an interpolation formula that is smooth in
+ * the first derivative, and continuous in the second derivative, both
+ * within an interval and its boundaries. It will be used to
+ * interpolation data in 1-D space.
+ *
+ * @param grid1 grid for input data grid.          
+ * @param grid2 grid for output data grid.         
+ * @param size1 size of input grid.                
+ * @param size2 size of output grid.               
+ * @param data1 input data associated with grid1.
+ * @param yp1 first derivative of starting point. Set to 0 to be "natural" (INPUT)
+ * @param ypn first derivative of ending point.
+ *             Set to 0 to be "natural" (INPUT)
+ * @param data2 output data associated with grid2. (OUTPUT)
+ * @author Fanglin Yang
+ */
 void cubic_spline(int size1, int size2, const double *grid1, const double *grid2, const double *data1,
 		  double *data2, double yp1, double ypn  )
 {
@@ -234,12 +224,23 @@ void cubic_spline(int size1, int size2, const double *grid1, const double *grid2
   
 };/* cubic spline */
 
-
-/*------------------------------------------------------------------------------
-  void conserve_interp()
-  conservative interpolation through exchange grid.
-  Currently only first order interpolation are implemented here.
-  ----------------------------------------------------------------------------*/
+/**
+ * Conservative interpolation through exchange grid. Currently only
+ * first order interpolation are implemented here.
+ *
+ * @param nx_src
+ * @param ny_src
+ * @param nx_dst
+ * @param ny_dst
+ * @param x_src
+ * @param y_src
+ * @param x_dst
+ * @param y_dst
+ * @param mask_src
+ * @param data_src
+ * @param data_dst
+ * @author Fanglin Yang
+ */
 void conserve_interp(int nx_src, int ny_src, int nx_dst, int ny_dst, const double *x_src,
 		     const double *y_src, const double *x_dst, const double *y_dst,
 		     const double *mask_src, const double *data_src, double *data_dst )
@@ -284,12 +285,24 @@ void conserve_interp(int nx_src, int ny_src, int nx_dst, int ny_dst, const doubl
   
 }; /* conserve_interp */
 
-/*------------------------------------------------------------------------------
-  void conserve_interp_great_circle()
-  conservative interpolation through exchange grid.
-  Currently only first order interpolation are implemented here.
-  great_circle algorithm is used for clipping and interpolation.
-  ----------------------------------------------------------------------------*/
+/**
+ * Conservative interpolation through exchange grid. Currently only
+ * first order interpolation are implemented here. great_circle
+ * algorithm is used for clipping and interpolation.
+ *
+ * @param nx_src
+ * @param ny_src
+ * @param nx_dst
+ * @param ny_dst
+ * @param x_src
+ * @param y_src
+ * @param x_dst
+ * @param y_dst
+ * @param mask_src
+ * @param data_src
+ * @param data_dst
+ * @author Fanglin Yang
+ */
 void conserve_interp_great_circle(int nx_src, int ny_src, int nx_dst, int ny_dst, const double *x_src,
 		     const double *y_src, const double *x_dst, const double *y_dst,
 		     const double *mask_src, const double *data_src, double *data_dst )
@@ -337,7 +350,19 @@ void conserve_interp_great_circle(int nx_src, int ny_src, int nx_dst, int ny_dst
 }; /* conserve_interp_great_circle */
 
 
-
+/**
+ * ???
+ *
+ * @param nx
+ * @param ny
+ * @param nk1
+ * @param nk2
+ * @param grid1
+ * @param grid2
+ * @param data1
+ * @param data2
+ * @author Fanglin Yang
+ */
 void linear_vertical_interp(int nx, int ny, int nk1, int nk2, const double *grid1, const double *grid2,
 			    double *data1, double *data2) 
 {

@@ -1,13 +1,16 @@
 /** @file
-    @brief Function declarations for create_xgrid.c.
+ * @brief Function declarations for create_xgrid.c.
+ *
+ * @author Fanglin Yang
 */
 #ifndef CREATE_XGRID_H_
 #define CREATE_XGRID_H_
+
 #ifndef MAXXGRID
-#define MAXXGRID 1e6
+#define MAXXGRID 1e6 /**< ??? */
 #endif
 
-#define MV 50
+#define MV 50 /**< ??? */
 /* this value is small compare to earth area */
 
 double poly_ctrlon(const double lon[], const double lat[], int n, double clon);

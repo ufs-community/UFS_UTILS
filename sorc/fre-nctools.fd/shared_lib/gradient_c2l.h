@@ -1,5 +1,7 @@
 /** @file 
-    @brief Function declarations for gradient_c2l.c
+ * @brief Function declarations for gradient_c2l.c.
+ *
+ * @author Fanglin Yang
 */
 #ifndef GRADIENT_H_
 #define GRADIENT_H_

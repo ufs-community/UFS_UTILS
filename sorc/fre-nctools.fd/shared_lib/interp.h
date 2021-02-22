@@ -1,6 +1,7 @@
 /** @file
-    @brief Function declarations for interp.c
-    @author Zhi.Liang@noaa.gov
+ * @brief Function declarations for interp.c.
+ *
+ * @author Zhi.Liang@noaa.gov
 */
 #ifndef INTERP_H_
 #define INTERP_H_
