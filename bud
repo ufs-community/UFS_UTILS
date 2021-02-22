@@ -1,7 +1,0 @@
-bash -x bu
-cd build/docs/html
-/bin/pwd
-tar -cvf /tmp/tax .
-sh  -x $HOME/rzput /tmp/tax tax
-    ssh wd43gv@emcrzdm.ncep.noaa.gov ' cd doc ; rm * ;  tar -xvf $HOME/tax'
-
