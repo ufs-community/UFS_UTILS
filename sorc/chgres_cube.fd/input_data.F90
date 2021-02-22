@@ -104,23 +104,23 @@
 
 ! Fields associated with the nst model.
 
- type(esmf_field), public        :: c_d_input_grid   !< ???
- type(esmf_field), public        :: c_0_input_grid   !< ???
- type(esmf_field), public        :: d_conv_input_grid   !< ???
- type(esmf_field), public        :: dt_cool_input_grid   !< ???
- type(esmf_field), public        :: ifd_input_grid   !< ???
- type(esmf_field), public        :: qrain_input_grid   !< ???
- type(esmf_field), public        :: tref_input_grid  !< reference temperature
- type(esmf_field), public        :: w_d_input_grid   !< ???
- type(esmf_field), public        :: w_0_input_grid   !< ???
- type(esmf_field), public        :: xs_input_grid   !< ???
- type(esmf_field), public        :: xt_input_grid   !< ???
- type(esmf_field), public        :: xu_input_grid   !< ???
- type(esmf_field), public        :: xv_input_grid   !< ???
- type(esmf_field), public        :: xz_input_grid   !< ???
- type(esmf_field), public        :: xtts_input_grid   !< ???
- type(esmf_field), public        :: xzts_input_grid   !< ???
- type(esmf_field), public        :: z_c_input_grid   !< ???
+ type(esmf_field), public        :: c_d_input_grid   !< Coefficient 2 to calculate d(tz)/d(ts)
+ type(esmf_field), public        :: c_0_input_grid   !< Coefficient 1 to calculate d(tz)/d(ts)
+ type(esmf_field), public        :: d_conv_input_grid   !< Thickness of free convection layer
+ type(esmf_field), public        :: dt_cool_input_grid   !< Sub-layer cooling amount
+ type(esmf_field), public        :: ifd_input_grid   !< nst mask
+ type(esmf_field), public        :: qrain_input_grid   !< Sensible heat flux due to rainfall
+ type(esmf_field), public        :: tref_input_grid  !< Reference temperature
+ type(esmf_field), public        :: w_d_input_grid   !< Coefficient 4 to calculate d(tz)/d(ts)
+ type(esmf_field), public        :: w_0_input_grid   !< Coefficient 3 to calculate d(tz)/d(ts)
+ type(esmf_field), public        :: xs_input_grid   !< Salinity content in diurnal thermocline layer
+ type(esmf_field), public        :: xt_input_grid   !< Heat content in diurnal thermocline layer
+ type(esmf_field), public        :: xu_input_grid   !< u-current content in diurnal thermocline layer
+ type(esmf_field), public        :: xv_input_grid   !< v-current content in diurnal thermocline layer
+ type(esmf_field), public        :: xz_input_grid   !< Diurnal thermocline layer thickness
+ type(esmf_field), public        :: xtts_input_grid   !< d(xt)/d(ts)
+ type(esmf_field), public        :: xzts_input_grid   !< d(xz)/d(ts)
+ type(esmf_field), public        :: z_c_input_grid   !< Sub-layer cooling thickness
  type(esmf_field), public        :: zm_input_grid   !< ???
 
  public :: read_input_atm_data
