@@ -11,10 +11,9 @@
 !!
 !! This file reads a configuration namelist.
 !!
-!! Usage:
-!! Link the configuration namelist to ./fort.41.  Then run the
-!! program with a multiple of six mpi tasks (an ESMF library
-!! requirement for fv3 cubed sphere grids).
+!! Link the configuration namelist to ./fort.41. Then run the program
+!! with a multiple of six mpi tasks (an ESMF library requirement for
+!! fv3 cubed sphere grids).
 !!
 !! @author George Gayno NOAA/EMC
 !! @return 0 for success, error code otherwise.
