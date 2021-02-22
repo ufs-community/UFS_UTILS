@@ -290,10 +290,9 @@
 
  end subroutine surface_driver
 
-!---------------------------------------------------------------------------------------------
-! Horizontally interpolate surface fields using esmf routines.
-!---------------------------------------------------------------------------------------------
-
+!> Horizontally interpolate surface fields using esmf routines.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine interp(localpet)
 
  use mpi
@@ -2770,14 +2769,16 @@
 !
 !end subroutine check_smois_water
 
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!> Check soil mositure
+!!
 !! When using vegetation type from the input data instead of the orography file, there
 !! are frequently points with ~0 soil moisture at land points. For these points, set 
 !! values in all relevant target grid surface arrays to fill values (done in 
 !! check_smois_land) then run the search routine again to fill with appropriate values 
 !! from nearby points (done in replace_land_sfcparams).
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!! @author Larissa Reames
+!! @author Jeff Beck
 subroutine check_smois_land
 
 use model_grid, only                 : landmask_target_grid
@@ -3677,10 +3678,9 @@ end subroutine replace_land_sfcparams
  
  end subroutine adjust_soil_levels
 
-!---------------------------------------------------------------------------------------------
-! Set roughness at land and sea ice.
-!---------------------------------------------------------------------------------------------
- 
+!> Set roughness length at land and sea ice.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine roughness
 
  use model_grid, only                : landmask_target_grid
@@ -3732,10 +3732,9 @@ end subroutine replace_land_sfcparams
 
  end subroutine roughness
 
-!---------------------------------------------------------------------------------------------
-! QC data before output.
-!---------------------------------------------------------------------------------------------
-
+!> Perform some quality control checks before output.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine qc_check
 
  use model_grid, only                : landmask_target_grid
@@ -4067,11 +4066,10 @@ end subroutine replace_land_sfcparams
 
  end subroutine qc_check
 
-!---------------------------------------------------------------------------------------------
-! nst is not active at land or sea ice points.  Set nst fields to flag values at these
-! points.
-!---------------------------------------------------------------------------------------------
-
+!> nst is not active at land or sea ice points.  Set nst fields to flag values at these
+!! points.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine nst_land_fill
 
  use model_grid, only         : landmask_target_grid
@@ -4278,6 +4276,9 @@ end subroutine replace_land_sfcparams
 
  end subroutine nst_land_fill
 
+!> Create ESMF fields for the target grid surface variables
+!!
+!! @author George Gayno NOAA/EMC
  subroutine create_surface_esmf_fields
 
  use model_grid, only         : target_grid, lsoil_target
@@ -4612,6 +4613,9 @@ end subroutine replace_land_sfcparams
 
  end subroutine create_surface_esmf_fields
 
+!> Create ESMF fields for the target grid nst variables
+!!
+!! @author George Gayno
  subroutine create_nst_esmf_fields
 
  use model_grid, only               : target_grid
@@ -4748,6 +4752,14 @@ end subroutine replace_land_sfcparams
 
  end subroutine create_nst_esmf_fields
 
+!> Convert 1d index to 2d indices.
+!!
+!! @param[in] ij  the 1d index
+!! @param[in] itile  i-dimension of the tile
+!! @param[in] jtile  j-dimension of the tile
+!! @param[out] i  the "i" index
+!! @param[out] j  the "j" index
+!! @author George Gayno NOAA/EMC
  subroutine ij_to_i_j(ij, itile, jtile, i, j)
 
  implicit none
