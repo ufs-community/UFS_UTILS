@@ -67,24 +67,46 @@
 
 ! nst fields
  type(esmf_field), public           :: c_d_target_grid
+                                       !< Coefficient 2 to calculate d(tz)/d(ts)
  type(esmf_field), public           :: c_0_target_grid
+                                       !< Coefficient 1 to calculate d(tz)/d(ts)
  type(esmf_field), public           :: d_conv_target_grid
+                                       !< Thickness of free convection layer
  type(esmf_field), public           :: dt_cool_target_grid
+                                       !< Sub-layer cooling amount
  type(esmf_field), public           :: ifd_target_grid
+                                       !< Model mode index. 0-diurnal model not
+                                       !< started; 1-diurnal model started.
  type(esmf_field), public           :: qrain_target_grid
+                                       !< Sensible heat flux due to rainfall
  type(esmf_field), public           :: tref_target_grid
                                        !< reference temperature
  type(esmf_field), public           :: w_d_target_grid
+                                       !< Coefficient 4 to calculate d(tz)/d(ts)
  type(esmf_field), public           :: w_0_target_grid
+                                       !< Coefficient 3 to calculate d(tz)/d(ts)
  type(esmf_field), public           :: xs_target_grid
+                                       !< Salinity content in diurnal
+                                       !< thermocline layer
  type(esmf_field), public           :: xt_target_grid
+                                       !< Heat content in diurnal thermocline
+                                       !< layer
  type(esmf_field), public           :: xu_target_grid
+                                       !< u-current content in diurnal
+                                       !< thermocline layer
  type(esmf_field), public           :: xv_target_grid
+                                       !< v-current content in diurnal
+                                       !< thermocline layer
  type(esmf_field), public           :: xz_target_grid
+                                       !< Diurnal thermocline layer thickness
  type(esmf_field), public           :: xtts_target_grid
+                                       !< d(xt)/d(ts)
  type(esmf_field), public           :: xzts_target_grid
+                                       !< d(xz)/d(ts)
  type(esmf_field), public           :: z_c_target_grid
+                                       !< Sub-layer cooling thickness
  type(esmf_field), public           :: zm_target_grid
+                                       !< Oceanic mixed layer depth
 
  type(esmf_field)                   :: soil_type_from_input_grid
                                        !< soil type interpolated from

@@ -108,7 +108,8 @@
  type(esmf_field), public        :: c_0_input_grid   !< Coefficient 1 to calculate d(tz)/d(ts)
  type(esmf_field), public        :: d_conv_input_grid   !< Thickness of free convection layer
  type(esmf_field), public        :: dt_cool_input_grid   !< Sub-layer cooling amount
- type(esmf_field), public        :: ifd_input_grid   !< nst mask
+ type(esmf_field), public        :: ifd_input_grid   !< Model mode index. 0-diurnal model not
+                                                     !< started; 1-diurnal model started.
  type(esmf_field), public        :: qrain_input_grid   !< Sensible heat flux due to rainfall
  type(esmf_field), public        :: tref_input_grid  !< Reference temperature
  type(esmf_field), public        :: w_d_input_grid   !< Coefficient 4 to calculate d(tz)/d(ts)
@@ -121,7 +122,7 @@
  type(esmf_field), public        :: xtts_input_grid   !< d(xt)/d(ts)
  type(esmf_field), public        :: xzts_input_grid   !< d(xz)/d(ts)
  type(esmf_field), public        :: z_c_input_grid   !< Sub-layer cooling thickness
- type(esmf_field), public        :: zm_input_grid   !< ???
+ type(esmf_field), public        :: zm_input_grid   !< Oceanic mixed layer depth
 
  public :: read_input_atm_data
  public :: cleanup_input_atm_data
