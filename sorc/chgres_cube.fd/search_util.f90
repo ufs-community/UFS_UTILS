@@ -27,8 +27,15 @@
 !! does not consider valid values at adjacent faces.  That is a 
 !! future upgrade.
 !!
-!! @param terrain_land          - 2D field of terrain height points.
-!! @param soilt_climo           - 2D field of soil type points.
+!! @param [inout] field  On input/output, surface data with undefined/no undefined values.
+!! @param [in] mask  land-mask of surface data.
+!! @param [in] idim   'i' dimension of tile
+!! @param [in] jdim   'j' dimension of tile
+!! @param [in] tile  tile number
+!! @param [in] field_num  surface field number
+!! @param [in] latitude latitude of the surface data
+!! @param [in] terrain_land  terrain height
+!! @param [in] soilt_climo  climatological soil type
 !! @author George Gayno NCEP/EMC
  subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)
 
