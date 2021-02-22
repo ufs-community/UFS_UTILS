@@ -1,17 +1,17 @@
 !> @file
 !! @brief Process surface and nst fields.
 !!
-!! @author gayno NCEP/EMC
+!! Process surface and nst fields. Interpolates fields from the input
+!! to target grids. Adjusts soil temperature according to differences
+!! in input and target grid terrain. Rescales soil moisture for soil
+!! type differences between input and target grid. Computes frozen
+!! portion of total soil moisture.
 !!
-!! Process surface and nst fields.  Interpolates fields from
-!! the input to target grids.  Adjusts soil temperature according
-!! to differences in input and target grid terrain.  Rescales
-!! soil moisture for soil type differences between input and target
-!! grid.  Computes frozen portion of total soil moisture.
-!!
-!! Public variables are defined below.  "target" indicates field
+!! Public variables are defined below. "target" indicates field
 !! associated with the target grid. "input" indicates field associated
 !! with the input grid.
+!!
+!! @author gayno NCEP/EMC
  module surface
 
  use esmf
@@ -25,45 +25,45 @@
 
 ! surface fields (not including nst)
  type(esmf_field), public           :: canopy_mc_target_grid
-                                       ! canopy moisture content
+                                       !< canopy moisture content
  type(esmf_field), public           :: f10m_target_grid
-                                       ! log((z0+10)*1/z0)
-                                       ! See sfc_diff.f for details
+                                       !< log((z0+10)*1/z0)
+                                       !< See sfc_diff.f for details
  type(esmf_field), public           :: ffmm_target_grid
-                                       ! log((z0+z1)*1/z0)
-                                       ! See sfc_diff.f for details
+                                       !< log((z0+z1)*1/z0)
+                                       !< See sfc_diff.f for details
  type(esmf_field), public           :: q2m_target_grid
-                                       ! 2-m specific humidity
+                                       !< 2-m specific humidity
  type(esmf_field), public           :: seaice_depth_target_grid
-                                       ! sea ice depth
+                                       !< sea ice depth
  type(esmf_field), public           :: seaice_fract_target_grid
-                                       ! sea ice fraction
+                                       !< sea ice fraction
  type(esmf_field), public           :: seaice_skin_temp_target_grid
-                                       ! sea ice skin temperature
+                                       !< sea ice skin temperature
  type(esmf_field), public           :: skin_temp_target_grid
-                                       ! skin temperature/sst
+                                       !< skin temperature/sst
  type(esmf_field), public           :: srflag_target_grid
-                                       ! snow/rain flag
+                                       !< snow/rain flag
  type(esmf_field), public           :: snow_liq_equiv_target_grid
-                                       ! liquid equiv snow depth
+                                       !< liquid equiv snow depth
  type(esmf_field), public           :: snow_depth_target_grid
-                                       ! physical snow depth
+                                       !< physical snow depth
  type(esmf_field), public           :: soil_temp_target_grid
-                                       ! 3-d soil temperature
+                                       !< 3-d soil temperature
  type(esmf_field), public           :: soilm_liq_target_grid
-                                       ! 3-d liquid soil moisture
+                                       !< 3-d liquid soil moisture
  type(esmf_field), public           :: soilm_tot_target_grid
-                                       ! 3-d total soil moisture
+                                       !< 3-d total soil moisture
  type(esmf_field), public           :: t2m_target_grid
-                                       ! 2-m temperatrure
+                                       !< 2-m temperatrure
  type(esmf_field), public           :: tprcp_target_grid
-                                       ! precip
+                                       !< precip
  type(esmf_field), public           :: ustar_target_grid
-                                       ! friction velocity
+                                       !< friction velocity
  type(esmf_field), public           :: z0_target_grid
-                                       ! roughness length
+                                       !< roughness length
   type(esmf_field), public           :: lai_target_grid
-                                       ! leaf area index
+                                       !< leaf area index
 
 ! nst fields
  type(esmf_field), public           :: c_d_target_grid
@@ -73,7 +73,7 @@
  type(esmf_field), public           :: ifd_target_grid
  type(esmf_field), public           :: qrain_target_grid
  type(esmf_field), public           :: tref_target_grid
-                                       ! reference temperature
+                                       !< reference temperature
  type(esmf_field), public           :: w_d_target_grid
  type(esmf_field), public           :: w_0_target_grid
  type(esmf_field), public           :: xs_target_grid
@@ -87,25 +87,25 @@
  type(esmf_field), public           :: zm_target_grid
 
  type(esmf_field)                   :: soil_type_from_input_grid
-                                       ! soil type interpolated from
-                                       ! input grid
+                                       !< soil type interpolated from
+                                       !< input grid
  type(esmf_field)                   :: terrain_from_input_grid
-                                       ! terrain height interpolated
-                                       ! from input grid
+                                       !< terrain height interpolated
+                                       !< from input grid
  type(esmf_field)                   :: terrain_from_input_grid_land
-                                       ! terrain height interpolated
-                                       ! from input grid at all land points 
+                                       !< terrain height interpolated
+                                       !< from input grid at all land points 
 
  real, parameter, private           :: blim        = 5.5
-                                       ! soil 'b' parameter limit
+                                       !< soil 'b' parameter limit
  real, parameter, private           :: frz_h2o     = 273.15
-                                       ! melting pt water
+                                       !< melting pt water
  real, parameter, private           :: frz_ice     = 271.21
-                                       ! melting pt sea ice
+                                       !< melting pt sea ice
  real, parameter, private           :: grav        = 9.81
-                                       ! gravity
+                                       !< gravity
  real, parameter, private           :: hlice       = 3.335E5
-                                       ! latent heat of fusion
+                                       !< latent heat of fusion
 
  public :: surface_driver
 
