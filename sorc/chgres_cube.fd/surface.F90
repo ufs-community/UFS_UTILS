@@ -3142,51 +3142,31 @@ end subroutine check_smois_land
 
 end subroutine replace_land_sfcparams
 
-
+!> Calculate supercooled soil moisture
+!!
+!! Calculate amount of supercooled liquid soil water content if
+!! temperature is below 273.15K. Requires Newton-type iteration to
+!! solve the nonlinear implicit equation given in eqn 17 of Koren et. al
+!! (1999, JGR, VOL 104(D16), 19569-19585).
+!!
+!! New version (June 2001): Much faster and more accurate Newton
+!! iteration achieved by first taking log of eqn cited above -- less than
+!! 4 (typically 1 or 2) iterations achieves convergence. Also, explicit
+!! 1-step solution option for special case of parameter ck=0, which
+!! reduces the original implicit equation to a simpler explicit form,
+!! known as the "Flerchinger eqn". Improved handling of solution in the
+!! limit of freezing point temperature.
+!!
+!! @param[in]  tkelv  Temperature (Kelvin)
+!! @param[in]  smc    Total soil moisture content (volumetric)
+!! @param[in]  sh2O   Liquid soil moisture content (volumetric)
+!! @param[in]  smcmax  Saturation soil moisture content
+!! @param[in]  bexp    Soil type "b" parameter
+!! @param[in]  psis    Saturated soil matric potential
+!! @return     frh2O   Supercooled liquid water content
+!!
+!! @author George Gayno NOAA/EMC @date 2005-05-20
  FUNCTION FRH2O (TKELV,SMC,SH2O,SMCMAX,BEXP,PSIS)
-!$$$  function documentation block
-!
-! function:   frh2o
-!   prgmmr: gayno          org: w/np2     date: 2005-05-20
-!
-! abstract:  calculate supercooled soil moisture
-!
-! program history log:
-! 2005-05-20  gayno    - initial version
-!
-! usage: x = frh2o (tkelv,smc,sh2o,smcmax,bexp,psis)
-!
-!   input argument list: 
-!     tkelv        - temperature (Kelvin)
-!     smc          - total soil moisture content (volumetric)
-!     sh2O         - liquid soil moisture content (volumetric)
-!     smcmax       - saturation soil moisture content
-!     b            - soil type "b" parameter
-!     psis         - saturated soil matric potential
-!
-!   output argument list: 
-!     frh2O        - supercooled liquid water content
-!
-! remarks: stolen from noah lsm code
-!
-!   CALCULATE AMOUNT OF SUPERCOOLED LIQUID SOIL WATER CONTENT IF
-!   TEMPERATURE IS BELOW 273.15K (T0).  REQUIRES NEWTON-TYPE ITERATION TO
-!   SOLVE THE NONLINEAR IMPLICIT EQUATION GIVEN IN EQN 17 OF KOREN ET AL
-!   (1999, JGR, VOL 104(D16), 19569-19585).
-! 
-!   NEW VERSION (JUNE 2001): MUCH FASTER AND MORE ACCURATE NEWTON
-!   ITERATION ACHIEVED BY FIRST TAKING LOG OF EQN CITED ABOVE -- LESS THAN
-!   4 (TYPICALLY 1 OR 2) ITERATIONS ACHIEVES CONVERGENCE.  ALSO, EXPLICIT
-!   1-STEP SOLUTION OPTION FOR SPECIAL CASE OF PARAMETER CK=0, WHICH
-!   REDUCES THE ORIGINAL IMPLICIT EQUATION TO A SIMPLER EXPLICIT FORM,
-!   KNOWN AS THE "FLERCHINGER EQN". IMPROVED HANDLING OF SOLUTION IN THE
-!   LIMIT OF FREEZING POINT TEMPERATURE [AT0.
-!
-! attributes:
-!   language: fortran 90
-!   machine:  IBM SP
-!
-!$$$
 
  use esmf
 

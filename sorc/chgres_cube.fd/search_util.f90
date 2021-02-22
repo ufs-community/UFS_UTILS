@@ -14,7 +14,7 @@
 
  contains
 
-!! Replace undefined surface values.
+!> Replace undefined surface values.
 !!
 !! Replace undefined values on the model grid with a valid value at
 !! a nearby neighbor.  Undefined values are typically associated
