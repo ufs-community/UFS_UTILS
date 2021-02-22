@@ -23,7 +23,9 @@
  character(len=500), public      :: mosaic_file_target_grid = "NULL" !< Target grid mosaic file.
  character(len=500), public      :: nst_files_input_grid = "NULL" !< File name of input nst data.  Only used for input_type "gfs_gaussian_nemsio".
  character(len=500), public      :: grib2_file_input_grid = "NULL" !<  REQUIRED. File name of grib2 input data. Assumes atmospheric and surface data are in a single file. 
- character(len=500), public      :: geogrid_file_input_grid = "NULL"
+ character(len=500), public      :: geogrid_file_input_grid = "NULL" !< Name of "geogrid" file, which contains static
+                                                                     !! surface fields on the input grid.  GRIB2 option
+                                                                     !! only.
  character(len=500), public      :: orog_dir_input_grid = "NULL" !<  Directory containing the input grid orography files.  Only used for "restart" or "history" input types.
  character(len=500), public      :: orog_files_input_grid(6) = "NULL" !<  Input grid orography files.  Only used for "restart" or "history" input types.
  character(len=500), public      :: orog_dir_target_grid = "NULL" !<  Directory containing the target grid orography files.
@@ -49,14 +51,16 @@
 !!                                    gfs sigio/sfcio files.
  character(len=20),  public      :: external_model="GFS"  !< The model that the input data is derived from. Current supported options are: "GFS", "HRRR", "NAM", "RAP". Default: "GFS"
  
- character(len=500), public       :: fix_dir_input_grid = "NULL"                             
+ character(len=500), public      :: fix_dir_input_grid = "NULL" !< Directory containing files of latitude and
+                                                                !! and longitude for certain GRIB2 input data.
                                                           
 
  integer, parameter, public      :: max_tracers=100 !< Maximum number of atmospheric tracers processed.
  integer, public                 :: num_tracers !< Number of atmospheric tracers to be processed.
- integer, public                 :: num_tracers_input
+ integer, public                 :: num_tracers_input !< Number of atmospheric tracers in input file.
  
- logical, allocatable, public    :: read_from_input(:)
+ logical, allocatable, public    :: read_from_input(:) !< When false, variable was not read from GRIB2 
+                                                       !! input file.
  
  character(len=20), public       :: tracers(max_tracers)="NULL" !< Name of each atmos tracer to be processed.
                                                                 !! These names will be used to identify
@@ -69,9 +73,11 @@
                                                                       !! value in 'tracers'. 
                                                                       !! FOR GRIB2 FILES: Not used. Tracers instead taken
                                                                       !! from the varmap file. 
- character(len=20), allocatable, public      :: missing_var_methods(:)
- character(len=20), allocatable, public      :: chgres_var_names(:)
- character(len=20), allocatable, public      :: field_var_names(:)
+ character(len=20), allocatable, public      :: missing_var_methods(:) !< Method to replace missing GRIB2 input
+                                                                       !! records.
+ character(len=20), allocatable, public      :: chgres_var_names(:) !< Varmap table variable name as recognized
+                                                                    !! by this program.
+ character(len=20), allocatable, public      :: field_var_names(:)  !< The GRIB2 variable name in the varmap table.
  
  
  integer, public                 :: cycle_mon = -999 !< Cycle month.
@@ -125,7 +131,8 @@
  real, allocatable, public       :: wltsmc_target(:) !< Plant wilting point soil moisture content target grid.
  real, allocatable, public       :: bb_target(:)  !<  Soil 'b' parameter, target grid
  real, allocatable, public       :: satpsi_target(:) !<   Saturated soil potential, target grid
- real, allocatable, public       :: missing_var_values(:)
+ real, allocatable, public       :: missing_var_values(:) !< If input GRIB2 record is missing, the variable
+                                                          !! is set to this value.
  
 
  public :: read_setup_namelist
