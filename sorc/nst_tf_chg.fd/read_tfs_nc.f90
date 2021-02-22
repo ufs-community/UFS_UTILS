@@ -1,7 +1,15 @@
 !> @file
+!! @brief Contains function to Read Tf at GFS Gaussin grids in netCDF.
+!! @author Fanglin Yang
 !
-!> Read Tf at GFS Gaussin grids in netCDF 
+!> Read Tf at GFS Gaussin grids in netCDF.
 !!
+!! @param[in] filename the name of the data file we will read.
+!! @param tf
+!! @param mask
+!! @param nlon
+!! @param nlat
+!! @author Fanglin Yang
 subroutine read_tfs_nc(filename,tf,mask,nlon,nlat)
   use netcdf
   implicit none

@@ -1,21 +1,22 @@
 !> @file
-!!                .      .    .
+!! @brief Contains 9-point smoother subroutine.
+
+!> 9-point smoother subroutine.
+!!
 !! smth9_msk --- 9-point smoother with surface mask
 !! by spatial average from a to b with ancillary surface mask (e.g.,
 !! analysis grid => surface grid) for global arrays
 !! to gurantee the averaged value (b) is determined by the
 !! candidates (a) with the identical surface type from (a)
 !!
-!! @author li @date 03/13/2017
+!! @param[in] a real: 2-d array such as analysis increment at analysis grids
+!! @param[out] b real: 2-d array 
+!! @param[in] isli integer: 2-d array: surface mask (0 = water, 1 = land, 2 = sea ice) for a grids
+!! @param[in] nlon integer: number of longitude of a & b
+!! @param[in] nlat integer: number of latitude of a & b
+!! @param[in] istyp integer: target surface type value
 !!
-!! @param[in] a        - real: 2-d array such as analysis increment at analysis grids
-!! @param[out] b       - real: 2-d array 
-!! @param[in] isli   - integer: 2-d array: surface mask (0 = water, 1 = land, 2 = sea ice) for a grids
-!! @param[in] nlon     - integer: number of longitude of a & b
-!! @param[in] nlat     - integer: number of latitude of a & b
-!! @param[in] istyp    - integer: target surface type value
-!!
-!!
+!! @author  Xu Li @date 2017-03-13
  subroutine smth9_msk(a,b,isli,nlon,nlat,istyp)
 ! USES:
 

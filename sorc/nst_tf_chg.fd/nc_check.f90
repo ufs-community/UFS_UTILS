@@ -1,4 +1,10 @@
 !> @file
+!! @brief Contains subroutine to Check netCDF return code.
+
+!> Check netCDF return code, printing error message for errors.
+!!
+!! @param status the error code to check
+!! @author Xu Li @date Mar, 2017
 subroutine nc_check(status)
 
   use netcdf

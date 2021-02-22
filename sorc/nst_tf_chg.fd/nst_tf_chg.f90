@@ -1,5 +1,8 @@
 !> @file
-!! Replace tref to be a new one by
+!! @brief Replace tref to be a new one.
+!! @author Xu Li @date Mar, 2017
+
+!> Replace tref to be a new one by
 !! 1. Read in a new Tref
 !! 2. Smoothing Tref
 !! @author Xu Li @date Mar, 2017

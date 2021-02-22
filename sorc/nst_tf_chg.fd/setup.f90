@@ -1,25 +1,20 @@
 !> @file
-!! @author  Xu Li @date 2017-03-13
 !!
 !! This module contains variables to run nst_tf_chg.
 !!
-!! Subroutines Included:
-!! -  sub init_grdmod   - initialize grided related variables to default values
-!!
-!! Variable Definitions:
-!! -  def nsmth       - the number of 9-point smooth
-!! -  def missing_value - missing_value
-!!
+!! @author Xu Li @date 2017-03-13
 module setup
 
-  integer :: nsmth,istyp
+  integer :: nsmth !< the number of 9-point smooth
+  integer :: istyp
   
 contains
 
+  !> Initialize grided related variables to default values. Set
+  !! defaults for observation related variables.
+  !!
+  !! @author Xu Li @date 2017-03-13
   subroutine init_setup
-!
-! abstract:  set defaults for observation related variables
-!
     implicit none
 
 !   Initialize arrays used in namelist obs_input 
