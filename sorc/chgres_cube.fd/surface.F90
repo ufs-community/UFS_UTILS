@@ -2504,10 +2504,9 @@
 
  end subroutine interp
  
-!---------------------------------------------------------------------------------------------
-! Compute liquid portion of the total soil moisture.
-!---------------------------------------------------------------------------------------------
-
+!> Compute liquid portion of the total soil moisture.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine calc_liq_soil_moisture
 
  use esmf
@@ -2952,14 +2951,17 @@ print*,"- CALL FieldGet FOR TARGET GRID FACSF."
  !call search(soilm_target_ptr(clb(1):cub(1),clb(2):cub(2),
 end subroutine check_smois_land
 
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!> Replace bad surface points.
+!!
 !! When using vegetation type from the input data instead of the orography file, there
 !! are frequently points with ~0 soil moisture at land points. For these points, set 
 !! values in all relevant target grid surface arrays to fill values (done in 
 !! check_smois_land) then run the search routine again to fill with appropriate values 
 !! from nearby points (done in replace_land_sfcparams).
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author Larissa Reames
+!! @author Jeff Beck
  subroutine replace_land_sfcparams(localpet)
 
  use search_util
@@ -3316,10 +3318,10 @@ end subroutine replace_land_sfcparams
 
  END function frh2o
 
-!---------------------------------------------------------------------------------------------
-! Adjust soil moisture for changes in soil type between the input and target grids.
-!---------------------------------------------------------------------------------------------
-
+!> Adjust soil moisture for changes in soil type between the input and target grids.
+!! Works for Noah land model only.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine rescale_soil_moisture
 
  use esmf
@@ -3484,11 +3486,10 @@ end subroutine replace_land_sfcparams
 
  end subroutine rescale_soil_moisture
 
-!---------------------------------------------------------------------------------------------
-! Adjust soil temperature for changes in terrain height between the input and
-! target grids.
-!---------------------------------------------------------------------------------------------
-
+!> Adjust soil temperature for changes in terrain height between the input and
+!! target grids.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine adjust_soilt_for_terrain
 
  use model_grid, only                : landmask_target_grid,  &
@@ -3559,11 +3560,12 @@ end subroutine replace_land_sfcparams
 
  end subroutine adjust_soilt_for_terrain
 
-!---------------------------------------------------------------------------------------------
-! Adjust soil levels of the input grid if there's a mismatch between input and
-! target grids. Presently can only convert from 9 to 4 levels. 
-!---------------------------------------------------------------------------------------------
- 
+!> Adjust soil levels of the input grid if there is a mismatch between input and
+!! target grids. Presently can only convert from 9 to 4 levels. 
+!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author Larissa Reames
+!! @author Jeff Beck
  subroutine adjust_soil_levels(localpet)
  use model_grid, only       : lsoil_target, i_input, j_input, input_grid
  use input_data, only       : lsoil_input, soil_temp_input_grid, &
