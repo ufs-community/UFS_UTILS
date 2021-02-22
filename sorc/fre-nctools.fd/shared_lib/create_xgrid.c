@@ -24,30 +24,57 @@ int line_intersect_2D_3D(double *a1, double *a2, double *q1, double *q2, double 
 
 
 /**
-  int get_maxxgrid
-  return constants MAXXGRID.
+  Return MAXXGRID???
+
+  @return MAXXGRID???
+  @author ???
 */
 int get_maxxgrid(void)  
 {
   return MAXXGRID;
 }
 
+/** 
+ * Call get_maxxgrid().
+ * 
+ * @author ???
+ */
 int get_maxxgrid_(void)
 {
   return get_maxxgrid();
 }
 
-/**
-void get_grid_area(const int *nlon, const int *nlat, const double *lon, const double *lat, const double *area)
-  return the grid area.
-*/
 #ifndef __AIX
+/** 
+ * Get grid area.
+ *
+ * @param nlon
+ * @param nlat
+ * @param lon
+ * @param lat
+ * @param area
+ * 
+ * @return the grid area.
+ * @author ???
+*/
 void get_grid_area_(const int *nlon, const int *nlat, const double *lon, const double *lat, double *area)
 {
   get_grid_area(nlon, nlat, lon, lat, area);
 }
 #endif
 
+/** 
+ * Get grid area.
+ *
+ * @param nlon
+ * @param nlat
+ * @param lon
+ * @param lat
+ * @param area
+ * 
+ * @return the grid area.
+ * @author ???
+*/
 void get_grid_area(const int *nlon, const int *nlat, const double *lon, const double *lat, double *area)
 {
   int nx, ny, nxp, i, j, n_in;
@@ -73,6 +100,18 @@ void get_grid_area(const int *nlon, const int *nlat, const double *lon, const do
 };  /* get_grid_area */
 
 #ifndef __AIX
+/**
+ * Get grid great circle area.
+ *
+ * @param nlon
+ * @param nlat
+ * @param lon
+ * @param lat
+ * @param area
+ * 
+ * @return the grid area.
+ * @author ???
+ */
 void get_grid_great_circle_area_(const int *nlon, const int *nlat, const double *lon, const double *lat, double *area)
 {
   get_grid_great_circle_area(nlon, nlat, lon, lat, area);
@@ -80,6 +119,18 @@ void get_grid_great_circle_area_(const int *nlon, const int *nlat, const double 
 }
 #endif
 
+/**
+ * Get grid great circle area.
+ *
+ * @param nlon
+ * @param nlat
+ * @param lon
+ * @param lat
+ * @param area
+ * 
+ * @return the grid area.
+ * @author ???
+ */
 void get_grid_great_circle_area(const int *nlon, const int *nlat, const double *lon, const double *lat, double *area)
 {
   int nx, ny, nxp, nyp, i, j, n_in;
@@ -122,6 +173,21 @@ void get_grid_great_circle_area(const int *nlon, const int *nlat, const double *
 };  /* get_grid_great_circle_area */
 
 
+/**
+ * Get grid area???
+ *
+/**
+ * Get grid great circle area.
+ *
+ * @param nlon
+ * @param nlat
+ * @param lon
+ * @param lat
+ * @param area
+ * 
+ * @return the grid area.
+ * @author ???
+ */
 void get_grid_area_dimensionless(const int *nlon, const int *nlat, const double *lon, const double *lat, double *area)
 {
   int nx, ny, nxp, i, j, n_in;
@@ -146,8 +212,18 @@ void get_grid_area_dimensionless(const int *nlon, const int *nlat, const double 
 
 };  /* get_grid_area */
 
-
-
+/**
+ * Get grid great circle area.
+ *
+ * @param nlon
+ * @param nlat
+ * @param lon
+ * @param lat
+ * @param area
+ * 
+ * @return the grid area.
+ * @author ???
+ */
 void get_grid_area_no_adjust(const int *nlon, const int *nlat, const double *lon, const double *lat, double *area)
 {
   int nx, ny, nxp, i, j, n_in;
@@ -173,11 +249,29 @@ void get_grid_area_no_adjust(const int *nlon, const int *nlat, const double *lon
 };  /* get_grid_area_no_adjust */
 
 /**
-  void create_xgrid_1dx2d_order1
-  This routine generate exchange grids between two grids for the first order
-  conservative interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of the grid cell
-  and lon_in,lat_in are 1-D grid bounds, lon_out,lat_out are geographic grid location of grid cell bounds. 
-*/
+ * This routine generate exchange grids between two grids for the
+ * first order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_in,lat_in are 1-D grid bounds,
+ * lon_out,lat_out are geographic grid location of grid cell bounds.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_1dx2d_order1_(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			       const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			       const double *mask_in, int *i_in, int *j_in, int *i_out, int *j_out, double *xgrid_area)
@@ -190,6 +284,30 @@ int create_xgrid_1dx2d_order1_(const int *nlon_in, const int *nlat_in, const int
     
 };  
 
+/**
+ * This routine generate exchange grids between two grids for the
+ * first order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_in,lat_in are 1-D grid bounds,
+ * lon_out,lat_out are geographic grid location of grid cell bounds.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_1dx2d_order1(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out, const double *lon_in,
 			      const double *lat_in, const double *lon_out, const double *lat_out,
 			      const double *mask_in, int *i_in, int *j_in, int *i_out,
@@ -277,11 +395,29 @@ int create_xgrid_1dx2d_order1(const int *nlon_in, const int *nlat_in, const int 
 
 
 /**
-  void create_xgrid_1dx2d_order2
-  This routine generate exchange grids between two grids for the second order
-  conservative interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of the grid cell
-  and lon_in,lat_in are 1-D grid bounds, lon_out,lat_out are geographic grid location of grid cell bounds.
-*/
+ * This routine generate exchange grids between two grids for the
+ * second order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_in,lat_in are 1-D grid bounds,
+ * lon_out,lat_out are geographic grid location of grid cell bounds.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_1dx2d_order2_(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			       const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			       const double *mask_in, int *i_in, int *j_in, int *i_out, int *j_out,
@@ -293,6 +429,31 @@ int create_xgrid_1dx2d_order2_(const int *nlon_in, const int *nlat_in, const int
   return nxgrid;
 
 };
+
+/**
+ * This routine generate exchange grids between two grids for the
+ * second order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_in,lat_in are 1-D grid bounds,
+ * lon_out,lat_out are geographic grid location of grid cell bounds.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_1dx2d_order2(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			      const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			      const double *mask_in, int *i_in, int *j_in, int *i_out, int *j_out,
@@ -376,12 +537,30 @@ int create_xgrid_1dx2d_order2(const int *nlon_in, const int *nlat_in, const int 
 }; /* create_xgrid_1dx2d_order2 */
 
 /**
-  void create_xgrid_2dx1d_order1
-  This routine generate exchange grids between two grids for the first order
-  conservative interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of the grid cell
-  and lon_out,lat_out are 1-D grid bounds, lon_in,lat_in are geographic grid location of grid cell bounds.
-  mask is on grid lon_in/lat_in. 
-*/
+ * This routine generate exchange grids between two grids for the
+ * first order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_out,lat_out are 1-D grid bounds,
+ * lon_in,lat_in are geographic grid location of grid cell bounds.
+ * mask is on grid lon_in/lat_in.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_2dx1d_order1_(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			       const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			       const double *mask_in, int *i_in, int *j_in, int *i_out,
@@ -393,7 +572,33 @@ int create_xgrid_2dx1d_order1_(const int *nlon_in, const int *nlat_in, const int
 			       i_in, j_in, i_out, j_out, xgrid_area);
   return nxgrid;
     
-};  
+};
+
+/**
+ * This routine generate exchange grids between two grids for the
+ * first order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_out,lat_out are 1-D grid bounds,
+ * lon_in,lat_in are geographic grid location of grid cell bounds.
+ * mask is on grid lon_in/lat_in.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_2dx1d_order1(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out, const double *lon_in,
 			      const double *lat_in, const double *lon_out, const double *lat_out,
 			      const double *mask_in, int *i_in, int *j_in, int *i_out,
@@ -477,12 +682,30 @@ int create_xgrid_2dx1d_order1(const int *nlon_in, const int *nlat_in, const int 
 
 
 /**
-  void create_xgrid_2dx1d_order2
-  This routine generate exchange grids between two grids for the second order
-  conservative interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of the grid cell
-  and lon_out,lat_out are 1-D grid bounds, lon_in,lat_in are geographic grid location of grid cell bounds.
-  mask is on grid lon_in/lat_in. 
-*/
+ * This routine generate exchange grids between two grids for the
+ * second order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_out,lat_out are 1-D grid bounds,
+ * lon_in,lat_in are geographic grid location of grid cell bounds.
+ * mask is on grid lon_in/lat_in.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_2dx1d_order2_(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			       const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			       const double *mask_in, int *i_in, int *j_in, int *i_out, int *j_out,
@@ -495,6 +718,31 @@ int create_xgrid_2dx1d_order2_(const int *nlon_in, const int *nlat_in, const int
 
 };
 
+/**
+ * This routine generate exchange grids between two grids for the
+ * second order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_out,lat_out are 1-D grid bounds,
+ * lon_in,lat_in are geographic grid location of grid cell bounds.
+ * mask is on grid lon_in/lat_in.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_2dx1d_order2(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			      const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			      const double *mask_in, int *i_in, int *j_in, int *i_out, int *j_out,
@@ -581,14 +829,31 @@ int create_xgrid_2dx1d_order2(const int *nlon_in, const int *nlat_in, const int 
   
 }; /* create_xgrid_2dx1d_order2 */
 
-/**
-  void create_xgrid_2DX2D_order1
-  This routine generate exchange grids between two grids for the first order
-  conservative interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of the grid cell
-  and lon_in,lat_in, lon_out,lat_out are geographic grid location of grid cell bounds.
-  mask is on grid lon_in/lat_in.
-*/
 #ifndef __AIX
+/**
+ * This routine generate exchange grids between two grids for the
+ * first order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_in,lat_in, lon_out,lat_out are geographic
+ * grid location of grid cell bounds.  mask is on grid lon_in/lat_in.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_2dx2d_order1_(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			       const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			       const double *mask_in, int *i_in, int *j_in, int *i_out,
@@ -602,6 +867,31 @@ int create_xgrid_2dx2d_order1_(const int *nlon_in, const int *nlat_in, const int
     
 };  
 #endif
+
+/**
+ * This routine generate exchange grids between two grids for the
+ * first order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_in,lat_in, lon_out,lat_out are geographic
+ * grid location of grid cell bounds.  mask is on grid lon_in/lat_in.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_2dx2d_order1(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			      const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			      const double *mask_in, int *i_in, int *j_in, int *i_out,
@@ -852,14 +1142,31 @@ nxgrid = 0;
   
 };/* get_xgrid_2Dx2D_order1 */
 
-/**
-  void create_xgrid_2dx1d_order2
-  This routine generate exchange grids between two grids for the second order
-  conservative interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of the grid cell
-  and lon_in,lat_in, lon_out,lat_out are geographic grid location of grid cell bounds.
-  mask is on grid lon_in/lat_in. 
-*/
 #ifndef __AIX
+/**
+ * This routine generate exchange grids between two grids for the
+ * second order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_in,lat_in, lon_out,lat_out are geographic
+ * grid location of grid cell bounds.  mask is on grid lon_in/lat_in.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_2dx2d_order2_(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			       const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			       const double *mask_in, int *i_in, int *j_in, int *i_out, int *j_out,
@@ -872,6 +1179,31 @@ int create_xgrid_2dx2d_order2_(const int *nlon_in, const int *nlat_in, const int
 
 };
 #endif
+
+/**
+ * This routine generate exchange grids between two grids for the
+ * second order conservative
+ * interpolation. nlon_in,nlat_in,nlon_out,nlat_out are the size of
+ * the grid cell and lon_in,lat_in, lon_out,lat_out are geographic
+ * grid location of grid cell bounds.  mask is on grid lon_in/lat_in.
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @return the grid area.
+ * @author ???
+ */
 int create_xgrid_2dx2d_order2(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			      const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			      const double *mask_in, int *i_in, int *j_in, int *i_out, int *j_out,
@@ -1135,9 +1467,21 @@ nxgrid = 0;
 
 
 /**
-   Sutherland-Hodgeman algorithm sequentially clips parts outside 4 boundaries
+ * Sutherland-Hodgeman algorithm sequentially clips parts outside 4
+ * boundaries.
+ *
+ * @param lon_in
+ * @param lat_in
+ * @param n_in
+ * @param ll_lon
+ * @param ll_lat
+ * @param ur_lon
+ * @param ur_lat
+ * @param lon_out
+ * @param lat_out
+ * @return ???
+ * @author ???
 */
-
 int clip(const double lon_in[], const double lat_in[], int n_in, double ll_lon, double ll_lat,
 	 double ur_lon, double ur_lat, double lon_out[], double lat_out[])
 {
@@ -1241,10 +1585,21 @@ int clip(const double lon_in[], const double lat_in[], int n_in, double ll_lon, 
 
 
 /**
-   Revise Sutherland-Hodgeman algorithm to find the vertices of the overlapping
-   between any two grid boxes. It return the number of vertices for the exchange grid.
+ * Revise Sutherland-Hodgeman algorithm to find the vertices of the
+ * overlapping between any two grid boxes. It return the number of
+ * vertices for the exchange grid.
+ *
+ * @param lon1_in
+ * @param lat1_in
+ * @param n1_in
+ * @param lon2_in
+ * @param lat2_in
+ * @param n2_in
+ * @param lon_out
+ * @param lat_out
+ * @return ???
+ * @author ???
 */
-
 int clip_2dx2d(const double lon1_in[], const double lat1_in[], int n1_in, 
 	 const double lon2_in[], const double lat2_in[], int n2_in, 
 	 double lon_out[], double lat_out[])
@@ -1315,6 +1670,28 @@ int clip_2dx2d(const double lon1_in[], const double lat1_in[], int n1_in,
 /*#define debug_test_create_xgrid*/  
 
 #ifndef __AIX
+/**
+ * ???
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @param xgrid_clon
+ * @param xgrid_clat
+ * @return ???
+ * @author ???
+*/
 int create_xgrid_great_circle_(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			      const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			      const double *mask_in, int *i_in, int *j_in, int *i_out, int *j_out,
@@ -1328,6 +1705,28 @@ int create_xgrid_great_circle_(const int *nlon_in, const int *nlat_in, const int
 };
 #endif
   
+/**
+ * ???
+ *
+ * @param nlon_in
+ * @param nlat_in
+ * @param nlon_out
+ * @param nlat_out
+ * @param lon_in
+ * @param lat_in
+ * @param lon_out
+ * @param lat_out
+ * @param mask_in
+ * @param i_in
+ * @param j_in
+ * @param i_out
+ * @param j_out
+ * @param xgrid_area
+ * @param xgrid_clon
+ * @param xgrid_clat
+ * @return ???
+ * @author ???
+*/
 int create_xgrid_great_circle(const int *nlon_in, const int *nlat_in, const int *nlon_out, const int *nlat_out,
 			      const double *lon_in, const double *lat_in, const double *lon_out, const double *lat_out,
 			      const double *mask_in, int *i_in, int *j_in, int *i_out, int *j_out,
@@ -1431,16 +1830,31 @@ int create_xgrid_great_circle(const int *nlon_in, const int *nlat_in, const int 
 };/* create_xgrid_great_circle */
 
 /**
-   Revise Sutherland-Hodgeman algorithm to find the vertices of the overlapping
-   between any two grid boxes. It return the number of vertices for the exchange grid.
-   Each edge of grid box is a part of great circle. All the points are cartesian
-   coordinates. Here we are assuming each polygon is convex.
-   RANGE_CHECK_CRITERIA is used to determine if the two grid boxes are possible to be
-   overlap. The size should be between 0 and 0.5. The larger the range_check_criteria,
-   the more expensive of the computatioin. When the value is close to 0,
-   some small exchange grid might be lost. Suggest to use value 0.05 for C48. 
-*******************************************************************************/
-
+ * Revise Sutherland-Hodgeman algorithm to find the vertices of the
+ * overlapping between any two grid boxes. It return the number of
+ * vertices for the exchange grid.  Each edge of grid box is a part of
+ * great circle. All the points are cartesian coordinates. Here we are
+ * assuming each polygon is convex.  RANGE_CHECK_CRITERIA is used to
+ * determine if the two grid boxes are possible to be overlap. The
+ * size should be between 0 and 0.5. The larger the
+ * range_check_criteria, the more expensive of the computatioin. When
+ * the value is close to 0, some small exchange grid might be
+ * lost. Suggest to use value 0.05 for C48.
+ *
+ * @param x1_in
+ * @param y1_in
+ * @param z1_in
+ * @param n1_in
+ * @param x2_in
+ * @param y2_in
+ * @param z2_in
+ * @param n2_in
+ * @param x_out
+ * @param y_out
+ * @param z_out
+ * @return ???
+ * @author ???
+ */
 int clip_2dx2d_great_circle(const double x1_in[], const double y1_in[], const double z1_in[], int n1_in, 
 			    const double x2_in[], const double y2_in[], const double z2_in [], int n2_in, 
 			    double x_out[], double y_out[], double z_out[])
@@ -1874,14 +2288,26 @@ int clip_2dx2d_great_circle(const double x1_in[], const double y1_in[], const do
 
 
 /**
-   Intersects between the line a and the seqment s
-   where both line and segment are great circle lines on the sphere represented by
-   3D cartesian points.
-   [sin sout] are the ends of a line segment
-   returns true if the lines could be intersected, false otherwise.
-   inbound means the direction of (a1,a2) go inside or outside of (q1,q2,q3)
+ * Intersects between the line a and the seqment s where both line and
+ * segment are great circle lines on the sphere represented by 3D
+ * cartesian points.  [sin sout] are the ends of a line segment
+ * returns true if the lines could be intersected, false otherwise.
+ * inbound means the direction of (a1,a2) go inside or outside of
+ * (q1,q2,q3)
+ *
+ * @param a1
+ * @param a2
+ * @param q1
+ * @param q2
+ * @param q3
+ * @param intersect
+ * @param U-a
+ * @param u_q
+ * @param inbound
+ *
+ * @return ???
+ * @author ???
 */
-
 int line_intersect_2D_3D(double *a1, double *a2, double *q1, double *q2, double *q3,
 			 double *intersect, double *u_a, double *u_q, int *inbound){
 
@@ -2048,10 +2474,14 @@ int line_intersect_2D_3D(double *a1, double *a2, double *q1, double *q2, double 
 
 
 /**
-  double poly_ctrlat(const double x[], const double y[], int n)
-  This routine is used to calculate the latitude of the centroid 
-   ---------------------------------------------------------------------------*/
-
+ * This routine is used to calculate the latitude of the centroid.
+ *
+ * @param x
+ * @param y
+ * @param n
+ * @return ???
+ * @author ???
+ */
 double poly_ctrlat(const double x[], const double y[], int n)
 {
   double ctrlat = 0.0;
@@ -2080,9 +2510,15 @@ double poly_ctrlat(const double x[], const double y[], int n)
 }; /* poly_ctrlat */        
 
 /**
-  double poly_ctrlon(const double x[], const double y[], int n, double clon)
-  This routine is used to calculate the lontitude of the centroid.
-   ---------------------------------------------------------------------------*/
+ * This routine is used to calculate the lontitude of the centroid.
+ *
+ * @param x
+ * @param y
+ * @param n
+ * @param clon
+ * @return ???
+ * @author ???
+ */
 double poly_ctrlon(const double x[], const double y[], int n, double clon)
 {
   double ctrlon = 0.0;
@@ -2133,9 +2569,15 @@ double poly_ctrlon(const double x[], const double y[], int n, double clon)
 };   /* poly_ctrlon */
 
 /**
-   double box_ctrlat(double ll_lon, double ll_lat, double ur_lon, double ur_lat)
-   This routine is used to calculate the latitude of the centroid.
-   ---------------------------------------------------------------------------*/
+ * This routine is used to calculate the latitude of the centroid.
+ *
+ * @param ll_lon
+ * @param ll_lat
+ * @param ur_lon
+ * @param ur_lat
+ * @return ???
+ * @author ???
+ */
 double box_ctrlat(double ll_lon, double ll_lat, double ur_lon, double ur_lat)
 {
   double dphi = ur_lon-ll_lon;
@@ -2148,9 +2590,16 @@ double box_ctrlat(double ll_lon, double ll_lat, double ur_lon, double ur_lat)
 }; /* box_ctrlat */
 
 /**
-  double box_ctrlon(double ll_lon, double ll_lat, double ur_lon, double ur_lat, double clon)
-  This routine is used to calculate the lontitude of the centroid 
-   ----------------------------------------------------------------------------*/
+ * This routine is used to calculate the lontitude of the centroid.
+ *
+ * @param ll_lon
+ * @param ll_lat
+ * @param ur_lon
+ * @param ur_lat
+ * @param clon
+ * @return ???
+ * @author ???
+ */
 double box_ctrlon(double ll_lon, double ll_lat, double ur_lon, double ur_lat, double clon)
 {
   double phi1, phi2, dphi, lat1, lat2, dphi1, dphi2;
@@ -2200,10 +2649,16 @@ double box_ctrlon(double ll_lon, double ll_lat, double ur_lon, double ur_lat, do
 } /* box_ctrlon */
 
 /**
-  double grid_box_radius(double *x, double *y, double *z, int n);
-  Find the radius of the grid box, the radius is defined the
-  maximum distance between any two vertices
-*******************************************************************************/ 
+ * Find the radius of the grid box, the radius is defined the maximum
+ * distance between any two vertices.
+ *
+ * @param x
+ * @param y
+ * @param z
+ * @param n
+ * @return ???
+ * @author ???
+ */
 double grid_box_radius(const double *x, const double *y, const double *z, int n)
 {
   double radius;
@@ -2223,11 +2678,21 @@ double grid_box_radius(const double *x, const double *y, const double *z, int n)
 }; /* grid_box_radius */
 
 /**
-  double dist_between_boxes(const double *x1, const double *y1, const double *z1, int n1,
-			    const double *x2, const double *y2, const double *z2, int n2);
-  Find the distance between any two grid boxes. The distance is defined by the maximum
-  distance between any vertices of these two box
-*******************************************************************************/
+ * Find the distance between any two grid boxes. The distance is
+ *  defined by the maximum distance between any vertices of these two
+ *  box.
+ *
+ * @param x1
+ * @param y1
+ * @param z1
+ * @param n1
+ * @param x2
+ * @param y2
+ * @param z2
+ * @param n2
+ * @return ???
+ * @author ???
+ */
 double dist_between_boxes(const double *x1, const double *y1, const double *z1, int n1,
 			  const double *x2, const double *y2, const double *z2, int n2)
 {
@@ -2247,14 +2712,23 @@ double dist_between_boxes(const double *x1, const double *y1, const double *z1, 
 }; /* dist_between_boxes */
 
 /**
- int inside_edge(double x0, double y0, double x1, double y1, double x, double y)
- determine a point(x,y) is inside or outside a given edge with vertex,
- (x0,y0) and (x1,y1). return 1 if inside and 0 if outside. <y1-y0, -(x1-x0)> is
- the outward edge normal from vertex <x0,y0> to <x1,y1>. <x-x0,y-y0> is the vector
- from <x0,y0> to <x,y>. 
- if Inner produce <x-x0,y-y0>*<y1-y0, -(x1-x0)> > 0, outside, otherwise inside.
- inner product value = 0 also treate as inside.
-*******************************************************************************/
+ * Determine a point(x,y) is inside or outside a given edge with
+ * vertex, (x0,y0) and (x1,y1). return 1 if inside and 0 if
+ * outside. <y1-y0, -(x1-x0)> is the outward edge normal from vertex
+ * <x0,y0> to <x1,y1>. <x-x0,y-y0> is the vector from <x0,y0> to
+ * <x,y>.  if Inner produce <x-x0,y-y0>*<y1-y0, -(x1-x0)> > 0,
+ * outside, otherwise inside.  inner product value = 0 also treate as
+ * inside.
+ *
+ * @param x0
+ * @param y0
+ * @param x1
+ * @param y1
+ * @param x
+ * @param y
+ * @return ???
+ * @author ???
+ */
 int inside_edge(double x0, double y0, double x1, double y1, double x, double y)
 {
    const double SMALL = 1.e-12;
