@@ -1,0 +1,27 @@
+var program__setup_8f =
+[
+    [ "read_config_nml", "program__setup_8f.html#a40111d93a5e305839de5e43e78183273", null ],
+    [ "afwa_lsmask_nh_file", "program__setup_8f.html#a15dfe9bc5e48794ce22cabc6c7dffce0", null ],
+    [ "afwa_lsmask_sh_file", "program__setup_8f.html#a7586a891bc20c504915f41e672bd42a8", null ],
+    [ "afwa_snow_global_file", "program__setup_8f.html#a6a377ea4d55070d4123243cc3674503e", null ],
+    [ "afwa_snow_nh_file", "program__setup_8f.html#aea86983f0f34e45816cdf0d04bcb5481", null ],
+    [ "afwa_snow_sh_file", "program__setup_8f.html#a949cc46237f429a8d76c198a5c2ab437", null ],
+    [ "autosnow_file", "program__setup_8f.html#a87ecff656aa9e50ec26787119e9e6043", null ],
+    [ "climo_qc_file", "program__setup_8f.html#ad84d2020786c8ca7fadf6a7bafbb1bb8", null ],
+    [ "gfs_lpl_file", "program__setup_8f.html#afcde4fcec634df055663af336bfb67e5", null ],
+    [ "grib_century", "program__setup_8f.html#ae279dad8d751b50c8665a1c800e55dcc", null ],
+    [ "grib_day", "program__setup_8f.html#a1699f69c7663e947954705fa2d47a400", null ],
+    [ "grib_hour", "program__setup_8f.html#aed771b4d68c745430d9e0d33ea32de42", null ],
+    [ "grib_month", "program__setup_8f.html#ad417edd0599523f776d1ac397f5a5671", null ],
+    [ "grib_year", "program__setup_8f.html#a7a1e634fcd53f0e116c720d1210ea588", null ],
+    [ "lat_threshold", "program__setup_8f.html#a2debd7c7f28465b9c8b1dfb4f2419cb5", null ],
+    [ "min_snow_depth", "program__setup_8f.html#a83781bd873dc7dbe2fa36e1ac303a87e", null ],
+    [ "model_lat_file", "program__setup_8f.html#a352945f028557b8d476e2b57a6f56cf7", null ],
+    [ "model_lon_file", "program__setup_8f.html#aa387fab4cd50cd6a9c219d5658e6b64f", null ],
+    [ "model_lsmask_file", "program__setup_8f.html#afdafd252dcf257b865d774b76181b840", null ],
+    [ "model_snow_file", "program__setup_8f.html#a1b36ac6ae744101bae6e70fcdd6a67c0", null ],
+    [ "nesdis_lsmask_file", "program__setup_8f.html#aa4982cca90f48aca8b528c4ec9d291d0", null ],
+    [ "nesdis_snow_file", "program__setup_8f.html#a2bb6c3bb1140614271f7d024232ae6ea", null ],
+    [ "output_grib2", "program__setup_8f.html#ac9c1b20eec2b73f9129fa949d6358cb8", null ],
+    [ "snow_cvr_threshold", "program__setup_8f.html#ab11d857a926778a69088ecdd4bdadb8a", null ]
+];
