@@ -110,11 +110,11 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                                       longitude_w_target_grid, &amp;</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                                       terrain_target_grid</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>             : vcoord_file_target_grid, &amp;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                                       regional, &amp;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                                       tracers, num_tracers,      &amp;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                                       atm_weight_file, &amp;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                                       use_thomp_mp_climo</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>             : <a class="code" href="namespaceprogram__setup.html#af00a42c8dcd1d98cb4e152e5e7fdfe4c">vcoord_file_target_grid</a>, &amp;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                                       <a class="code" href="namespaceprogram__setup.html#a46f3ccd75736f06244e9110197e424f2">regional</a>, &amp;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                                       <a class="code" href="namespaceprogram__setup.html#a4e934ac801fd213f8f422e5e9bb83568">tracers</a>, <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a>,      &amp;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                                       <a class="code" href="namespaceprogram__setup.html#ad0fadfbe4232b55e05a87f0044193290">atm_weight_file</a>, &amp;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                                       <a class="code" href="namespaceprogram__setup.html#a6f53159282cadb12b9c881d901ce0699">use_thomp_mp_climo</a></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; <span class="keywordtype">use </span>thompson_mp_climo_data, <span class="keywordtype">only</span>    : read_thomp_mp_climo_data,  &amp;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                                       cleanup_thomp_mp_climo_input_data, &amp;</div>
@@ -215,13 +215,13 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; isrctermprocessing = 1</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; <span class="keywordflow">if</span> (trim(atm_weight_file) /= <span class="stringliteral">&quot;NULL&quot;</span>) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; <span class="keywordflow">if</span> (trim(<a class="code" href="namespaceprogram__setup.html#ad0fadfbe4232b55e05a87f0044193290">atm_weight_file</a>) /= <span class="stringliteral">&quot;NULL&quot;</span>) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldSMMStore FOR ATMOSPHERIC FIELDS.&quot;</span></div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;   <span class="keyword">call </span>esmf_fieldsmmstore(temp_input_grid, &amp;</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                           temp_b4adj_target_grid, &amp;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                           atm_weight_file, &amp;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                           <a class="code" href="namespaceprogram__setup.html#ad0fadfbe4232b55e05a87f0044193290">atm_weight_file</a>, &amp;</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                           routehandle=regrid_bl, &amp;</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                           srctermprocessing=isrctermprocessing, rc=rc)</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;   <span class="keywordflow">if</span>(esmf_logfounderror(rctocheck=rc,msg=esmf_logerr_passthru,line=__line__,file=__file__)) &amp;</div>
@@ -262,8 +262,8 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; <span class="keywordflow">if</span>(esmf_logfounderror(rctocheck=rc,msg=esmf_logerr_passthru,line=__line__,file=__file__)) &amp;</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <span class="keyword">call </span><a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;IN FieldRegrid&quot;</span>, rc)</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; <span class="keywordflow">do</span> n = 1, num_tracers</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;   print*,<span class="stringliteral">&quot;- CALL Field_Regrid FOR TRACER &quot;</span>, trim(tracers(n))</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; <span class="keywordflow">do</span> n = 1, <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;   print*,<span class="stringliteral">&quot;- CALL Field_Regrid FOR TRACER &quot;</span>, trim(<a class="code" href="namespaceprogram__setup.html#a4e934ac801fd213f8f422e5e9bb83568">tracers</a>(n))</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;   <span class="keyword">call </span>esmf_fieldregrid(tracers_input_grid(n), &amp;</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                         tracers_b4adj_target_grid(n), &amp;</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                         routehandle=regrid_bl, &amp;</div>
@@ -462,7 +462,7 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;<span class="comment">! If selected, process thompson microphysics climatological fields.</span></div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;<span class="comment">!-----------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160; <span class="keywordflow">if</span> (use_thomp_mp_climo) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160; <span class="keywordflow">if</span> (<a class="code" href="namespaceprogram__setup.html#a6f53159282cadb12b9c881d901ce0699">use_thomp_mp_climo</a>) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;   <span class="keyword">call </span>read_thomp_mp_climo_data</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;   <span class="keyword">call </span>horiz_interp_thomp_mp_climo</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;   <span class="keyword">call </span>vintg_thomp_mp_climo</div>
@@ -473,8 +473,8 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;<span class="comment">!-----------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160; </div>
 <div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160; <span class="keyword">call </span><a class="code" href="write__data_8F90.html#a7b255517030a7f64aee71d4ff16863dd">write_fv3_atm_header_netcdf</a>(localpet)</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160; <span class="keywordflow">if</span> (regional &lt;= 1) <span class="keyword">call </span><a class="code" href="write__data_8F90.html#a0d32984d1e12f6fefe37f9b7e75de5d9">write_fv3_atm_data_netcdf</a>(localpet)</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; <span class="keywordflow">if</span> (regional &gt;= 1) <span class="keyword">call </span><a class="code" href="write__data_8F90.html#a5444b28ff73771c629f9246a7ab8c689">write_fv3_atm_bndy_data_netcdf</a>(localpet)</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160; <span class="keywordflow">if</span> (<a class="code" href="namespaceprogram__setup.html#a46f3ccd75736f06244e9110197e424f2">regional</a> &lt;= 1) <span class="keyword">call </span><a class="code" href="write__data_8F90.html#a0d32984d1e12f6fefe37f9b7e75de5d9">write_fv3_atm_data_netcdf</a>(localpet)</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; <span class="keywordflow">if</span> (<a class="code" href="namespaceprogram__setup.html#a46f3ccd75736f06244e9110197e424f2">regional</a> &gt;= 1) <span class="keyword">call </span><a class="code" href="write__data_8F90.html#a5444b28ff73771c629f9246a7ab8c689">write_fv3_atm_bndy_data_netcdf</a>(localpet)</div>
 <div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160; </div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;<span class="comment">!-----------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;<span class="comment">! Free up memory.</span></div>
@@ -490,10 +490,10 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160; </div>
 <div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160; <span class="keywordtype">integer</span>                          :: rc, n</div>
 <div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160; </div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160; <span class="keyword">allocate</span>(tracers_b4adj_target_grid(num_tracers))</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160; <span class="keyword">allocate</span>(tracers_b4adj_target_grid(<a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a>))</div>
 <div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160; </div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160; <span class="keywordflow">do</span> n = 1, num_tracers</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldCreate FOR TARGET GRID TRACER BEFORE ADJUSTMENT &quot;</span>, trim(tracers(n))</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160; <span class="keywordflow">do</span> n = 1, <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a></div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldCreate FOR TARGET GRID TRACER BEFORE ADJUSTMENT &quot;</span>, trim(<a class="code" href="namespaceprogram__setup.html#a4e934ac801fd213f8f422e5e9bb83568">tracers</a>(n))</div>
 <div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;   tracers_b4adj_target_grid(n) = esmf_fieldcreate(target_grid, &amp;</div>
 <div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;                                   typekind=esmf_typekind_r8, &amp;</div>
 <div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;                                   staggerloc=esmf_staggerloc_center, &amp;</div>
@@ -561,10 +561,10 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160; </div>
 <div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160; <span class="keywordtype">integer</span>                          :: rc, n</div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160; </div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160; <span class="keyword">allocate</span>(tracers_target_grid(num_tracers))</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160; <span class="keyword">allocate</span>(tracers_target_grid(<a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a>))</div>
 <div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160; </div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160; <span class="keywordflow">do</span> n = 1, num_tracers</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;    print*,<span class="stringliteral">&quot;- CALL FieldCreate FOR TARGET GRID TRACERS &quot;</span>, trim(tracers(n))    </div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160; <span class="keywordflow">do</span> n = 1, <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a></div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;    print*,<span class="stringliteral">&quot;- CALL FieldCreate FOR TARGET GRID TRACERS &quot;</span>, trim(<a class="code" href="namespaceprogram__setup.html#a4e934ac801fd213f8f422e5e9bb83568">tracers</a>(n))    </div>
 <div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;    tracers_target_grid(n) = esmf_fieldcreate(target_grid, &amp;</div>
 <div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;                                   typekind=esmf_typekind_r8, &amp;</div>
 <div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;                                   staggerloc=esmf_staggerloc_center, &amp;</div>
@@ -961,8 +961,8 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;    </div>
 <div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;<span class="comment">! Find specific humidity in the array of tracer fields.</span></div>
 <div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160; </div>
-<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160; <span class="keywordflow">do</span> ii = 1, num_tracers</div>
-<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;   <span class="keywordflow">if</span> (trim(tracers(ii)) == <span class="stringliteral">&quot;sphum&quot;</span>) <span class="keywordflow">exit</span></div>
+<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160; <span class="keywordflow">do</span> ii = 1, <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a></div>
+<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;   <span class="keywordflow">if</span> (trim(<a class="code" href="namespaceprogram__setup.html#a4e934ac801fd213f8f422e5e9bb83568">tracers</a>(ii)) == <span class="stringliteral">&quot;sphum&quot;</span>) <span class="keywordflow">exit</span></div>
 <div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;<span class="keywordflow"> enddo</span></div>
 <div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160; </div>
 <div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160; print*,<span class="stringliteral">&quot;- CALL FieldGet FOR SPECIFIC HUMIDITY&quot;</span></div>
@@ -1101,8 +1101,8 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l01095"></a><span class="lineno"> 1095</span>&#160; <span class="keywordtype">integer</span>                    :: istat, n, k</div>
 <div class="line"><a name="l01096"></a><span class="lineno"> 1096</span>&#160; </div>
 <div class="line"><a name="l01097"></a><span class="lineno"> 1097</span>&#160; print*</div>
-<div class="line"><a name="l01098"></a><span class="lineno"> 1098</span>&#160; print*,<span class="stringliteral">&quot;OPEN VERTICAL COORD FILE: &quot;</span>, trim(vcoord_file_target_grid)</div>
-<div class="line"><a name="l01099"></a><span class="lineno"> 1099</span>&#160; <span class="keyword">open</span>(14, file=trim(vcoord_file_target_grid), form=<span class="stringliteral">&#39;formatted&#39;</span>, iostat=istat)</div>
+<div class="line"><a name="l01098"></a><span class="lineno"> 1098</span>&#160; print*,<span class="stringliteral">&quot;OPEN VERTICAL COORD FILE: &quot;</span>, trim(<a class="code" href="namespaceprogram__setup.html#af00a42c8dcd1d98cb4e152e5e7fdfe4c">vcoord_file_target_grid</a>)</div>
+<div class="line"><a name="l01099"></a><span class="lineno"> 1099</span>&#160; <span class="keyword">open</span>(14, file=trim(<a class="code" href="namespaceprogram__setup.html#af00a42c8dcd1d98cb4e152e5e7fdfe4c">vcoord_file_target_grid</a>), form=<span class="stringliteral">&#39;formatted&#39;</span>, iostat=istat)</div>
 <div class="line"><a name="l01100"></a><span class="lineno"> 1100</span>&#160; <span class="keywordflow">if</span> (istat /= 0) <span class="keywordflow">then</span></div>
 <div class="line"><a name="l01101"></a><span class="lineno"> 1101</span>&#160;   <span class="keyword">call </span><a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;OPENING VERTICAL COORD FILE&quot;</span>, istat)</div>
 <div class="line"><a name="l01102"></a><span class="lineno"> 1102</span>&#160;<span class="keywordflow"> endif</span></div>
@@ -1392,8 +1392,8 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l01406"></a><span class="lineno"> 1406</span>&#160; </div>
 <div class="line"><a name="l01407"></a><span class="lineno"> 1407</span>&#160; <span class="keyword">ALLOCATE</span>(z1(clb(1):cub(1),clb(2):cub(2),lev_input))</div>
 <div class="line"><a name="l01408"></a><span class="lineno"> 1408</span>&#160; <span class="keyword">ALLOCATE</span>(z2(clb(1):cub(1),clb(2):cub(2),lev_target))</div>
-<div class="line"><a name="l01409"></a><span class="lineno"> 1409</span>&#160; <span class="keyword">ALLOCATE</span>(c1(clb(1):cub(1),clb(2):cub(2),lev_input,num_tracers+5))</div>
-<div class="line"><a name="l01410"></a><span class="lineno"> 1410</span>&#160; <span class="keyword">ALLOCATE</span>(c2(clb(1):cub(1),clb(2):cub(2),lev_target,num_tracers+5))</div>
+<div class="line"><a name="l01409"></a><span class="lineno"> 1409</span>&#160; <span class="keyword">ALLOCATE</span>(c1(clb(1):cub(1),clb(2):cub(2),lev_input,<a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a>+5))</div>
+<div class="line"><a name="l01410"></a><span class="lineno"> 1410</span>&#160; <span class="keyword">ALLOCATE</span>(c2(clb(1):cub(1),clb(2):cub(2),lev_target,<a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a>+5))</div>
 <div class="line"><a name="l01411"></a><span class="lineno"> 1411</span>&#160; </div>
 <div class="line"><a name="l01412"></a><span class="lineno"> 1412</span>&#160; z1 = -log(p1ptr)</div>
 <div class="line"><a name="l01413"></a><span class="lineno"> 1413</span>&#160; </div>
@@ -1432,9 +1432,9 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l01446"></a><span class="lineno"> 1446</span>&#160; </div>
 <div class="line"><a name="l01447"></a><span class="lineno"> 1447</span>&#160; c1(:,:,:,5) =  t1ptr(:,:,:)</div>
 <div class="line"><a name="l01448"></a><span class="lineno"> 1448</span>&#160; </div>
-<div class="line"><a name="l01449"></a><span class="lineno"> 1449</span>&#160; <span class="keywordflow">DO</span> i = 1, num_tracers</div>
+<div class="line"><a name="l01449"></a><span class="lineno"> 1449</span>&#160; <span class="keywordflow">DO</span> i = 1, <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a></div>
 <div class="line"><a name="l01450"></a><span class="lineno"> 1450</span>&#160; </div>
-<div class="line"><a name="l01451"></a><span class="lineno"> 1451</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldGet FOR 3-D TRACERS &quot;</span>, trim(tracers(i))</div>
+<div class="line"><a name="l01451"></a><span class="lineno"> 1451</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldGet FOR 3-D TRACERS &quot;</span>, trim(<a class="code" href="namespaceprogram__setup.html#a4e934ac801fd213f8f422e5e9bb83568">tracers</a>(i))</div>
 <div class="line"><a name="l01452"></a><span class="lineno"> 1452</span>&#160;   <span class="keyword">call </span>esmf_fieldget(tracers_b4adj_target_grid(i), &amp;</div>
 <div class="line"><a name="l01453"></a><span class="lineno"> 1453</span>&#160;                      farrayptr=q1ptr, rc=rc)</div>
 <div class="line"><a name="l01454"></a><span class="lineno"> 1454</span>&#160;   <span class="keywordflow">if</span>(esmf_logfounderror(rctocheck=rc,msg=esmf_logerr_passthru,line=__line__,file=__file__)) &amp;</div>
@@ -1453,7 +1453,7 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l01467"></a><span class="lineno"> 1467</span>&#160; im = (cub(1)-clb(1)+1) * (cub(2)-clb(2)+1)</div>
 <div class="line"><a name="l01468"></a><span class="lineno"> 1468</span>&#160; km1= lev_input</div>
 <div class="line"><a name="l01469"></a><span class="lineno"> 1469</span>&#160; km2= lev_target</div>
-<div class="line"><a name="l01470"></a><span class="lineno"> 1470</span>&#160; nt=  num_tracers + 1 <span class="comment">! treat &#39;z&#39; wind as tracer.</span></div>
+<div class="line"><a name="l01470"></a><span class="lineno"> 1470</span>&#160; nt=  <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a> + 1 <span class="comment">! treat &#39;z&#39; wind as tracer.</span></div>
 <div class="line"><a name="l01471"></a><span class="lineno"> 1471</span>&#160; </div>
 <div class="line"><a name="l01472"></a><span class="lineno"> 1472</span>&#160; <span class="keyword">CALL </span>terp3(im,1,1,1,1,4+nt,(im*km1),(im*km2), &amp;</div>
 <div class="line"><a name="l01473"></a><span class="lineno"> 1473</span>&#160;            km1,im,im,z1,c1,km2,im,im,z2,c2)</div>
@@ -1498,15 +1498,15 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l01512"></a><span class="lineno"> 1512</span>&#160;<span class="keywordflow">   ENDDO</span></div>
 <div class="line"><a name="l01513"></a><span class="lineno"> 1513</span>&#160;<span class="keywordflow"> ENDDO</span></div>
 <div class="line"><a name="l01514"></a><span class="lineno"> 1514</span>&#160; </div>
-<div class="line"><a name="l01515"></a><span class="lineno"> 1515</span>&#160; <span class="keywordflow">DO</span> ii = 1, num_tracers</div>
+<div class="line"><a name="l01515"></a><span class="lineno"> 1515</span>&#160; <span class="keywordflow">DO</span> ii = 1, <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a></div>
 <div class="line"><a name="l01516"></a><span class="lineno"> 1516</span>&#160; </div>
-<div class="line"><a name="l01517"></a><span class="lineno"> 1517</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldGet FOR 3-D TRACER &quot;</span>, trim(tracers(ii))</div>
+<div class="line"><a name="l01517"></a><span class="lineno"> 1517</span>&#160;   print*,<span class="stringliteral">&quot;- CALL FieldGet FOR 3-D TRACER &quot;</span>, trim(<a class="code" href="namespaceprogram__setup.html#a4e934ac801fd213f8f422e5e9bb83568">tracers</a>(ii))</div>
 <div class="line"><a name="l01518"></a><span class="lineno"> 1518</span>&#160;   <span class="keyword">call </span>esmf_fieldget(tracers_target_grid(ii), &amp;</div>
 <div class="line"><a name="l01519"></a><span class="lineno"> 1519</span>&#160;                      farrayptr=q2ptr, rc=rc)</div>
 <div class="line"><a name="l01520"></a><span class="lineno"> 1520</span>&#160;   <span class="keywordflow">if</span>(esmf_logfounderror(rctocheck=rc,msg=esmf_logerr_passthru,line=__line__,file=__file__)) &amp;</div>
 <div class="line"><a name="l01521"></a><span class="lineno"> 1521</span>&#160;          <span class="keyword">call </span><a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;IN FieldGet&quot;</span>, rc)</div>
 <div class="line"><a name="l01522"></a><span class="lineno"> 1522</span>&#160; </div>
-<div class="line"><a name="l01523"></a><span class="lineno"> 1523</span>&#160;   <span class="keywordflow">IF</span> (trim(tracers(ii)) == <span class="stringliteral">&quot;sphum&quot;</span>) <span class="keywordflow">THEN</span>  <span class="comment">! specific humidity</span></div>
+<div class="line"><a name="l01523"></a><span class="lineno"> 1523</span>&#160;   <span class="keywordflow">IF</span> (trim(<a class="code" href="namespaceprogram__setup.html#a4e934ac801fd213f8f422e5e9bb83568">tracers</a>(ii)) == <span class="stringliteral">&quot;sphum&quot;</span>) <span class="keywordflow">THEN</span>  <span class="comment">! specific humidity</span></div>
 <div class="line"><a name="l01524"></a><span class="lineno"> 1524</span>&#160; </div>
 <div class="line"><a name="l01525"></a><span class="lineno"> 1525</span>&#160;     <span class="keywordflow">DO</span> k=1,lev_target</div>
 <div class="line"><a name="l01526"></a><span class="lineno"> 1526</span>&#160;       <span class="keywordflow">DO</span> i=clb(1),cub(1)</div>
@@ -1768,8 +1768,8 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l01879"></a><span class="lineno"> 1879</span>&#160; <span class="keywordflow">if</span>(esmf_logfounderror(rctocheck=rc,msg=esmf_logerr_passthru,line=__line__,file=__file__)) &amp;</div>
 <div class="line"><a name="l01880"></a><span class="lineno"> 1880</span>&#160;         <span class="keyword">call </span><a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;IN FieldGet&quot;</span>, rc)</div>
 <div class="line"><a name="l01881"></a><span class="lineno"> 1881</span>&#160; </div>
-<div class="line"><a name="l01882"></a><span class="lineno"> 1882</span>&#160; <span class="keywordflow">do</span> ii = 1, num_tracers</div>
-<div class="line"><a name="l01883"></a><span class="lineno"> 1883</span>&#160;   <span class="keywordflow">if</span> (trim(tracers(ii)) == <span class="stringliteral">&quot;sphum&quot;</span>) <span class="keywordflow">exit</span></div>
+<div class="line"><a name="l01882"></a><span class="lineno"> 1882</span>&#160; <span class="keywordflow">do</span> ii = 1, <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a></div>
+<div class="line"><a name="l01883"></a><span class="lineno"> 1883</span>&#160;   <span class="keywordflow">if</span> (trim(<a class="code" href="namespaceprogram__setup.html#a4e934ac801fd213f8f422e5e9bb83568">tracers</a>(ii)) == <span class="stringliteral">&quot;sphum&quot;</span>) <span class="keywordflow">exit</span></div>
 <div class="line"><a name="l01884"></a><span class="lineno"> 1884</span>&#160;<span class="keywordflow"> enddo</span></div>
 <div class="line"><a name="l01885"></a><span class="lineno"> 1885</span>&#160; </div>
 <div class="line"><a name="l01886"></a><span class="lineno"> 1886</span>&#160; print*,<span class="stringliteral">&quot;- CALL FieldGet FOR SPECIFIC HUMIDITY&quot;</span></div>
@@ -1825,7 +1825,7 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l01938"></a><span class="lineno"> 1938</span>&#160; <span class="keyword">call </span>esmf_fielddestroy(temp_b4adj_target_grid, rc=rc)</div>
 <div class="line"><a name="l01939"></a><span class="lineno"> 1939</span>&#160; <span class="keyword">call </span>esmf_fielddestroy(terrain_interp_to_target_grid, rc=rc)</div>
 <div class="line"><a name="l01940"></a><span class="lineno"> 1940</span>&#160; </div>
-<div class="line"><a name="l01941"></a><span class="lineno"> 1941</span>&#160; <span class="keywordflow">do</span> i = 1, num_tracers</div>
+<div class="line"><a name="l01941"></a><span class="lineno"> 1941</span>&#160; <span class="keywordflow">do</span> i = 1, <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a></div>
 <div class="line"><a name="l01942"></a><span class="lineno"> 1942</span>&#160;   <span class="keyword">call </span>esmf_fielddestroy(tracers_b4adj_target_grid(i), rc=rc)</div>
 <div class="line"><a name="l01943"></a><span class="lineno"> 1943</span>&#160;<span class="keywordflow"> enddo</span></div>
 <div class="line"><a name="l01944"></a><span class="lineno"> 1944</span>&#160; </div>
@@ -1855,7 +1855,7 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l01970"></a><span class="lineno"> 1970</span>&#160; <span class="keyword">call </span>esmf_fielddestroy(v_w_target_grid, rc=rc)</div>
 <div class="line"><a name="l01971"></a><span class="lineno"> 1971</span>&#160; <span class="keyword">call </span>esmf_fielddestroy(zh_target_grid, rc=rc)</div>
 <div class="line"><a name="l01972"></a><span class="lineno"> 1972</span>&#160; </div>
-<div class="line"><a name="l01973"></a><span class="lineno"> 1973</span>&#160; <span class="keywordflow">do</span> i = 1, num_tracers</div>
+<div class="line"><a name="l01973"></a><span class="lineno"> 1973</span>&#160; <span class="keywordflow">do</span> i = 1, <a class="code" href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">num_tracers</a></div>
 <div class="line"><a name="l01974"></a><span class="lineno"> 1974</span>&#160;   <span class="keyword">call </span>esmf_fielddestroy(tracers_target_grid(i), rc=rc)</div>
 <div class="line"><a name="l01975"></a><span class="lineno"> 1975</span>&#160;<span class="keywordflow"> enddo</span></div>
 <div class="line"><a name="l01976"></a><span class="lineno"> 1976</span>&#160; </div>
@@ -1874,11 +1874,17 @@ $(document).ready(function(){initNavTree('atmosphere_8F90_source.html',''); init
 <div class="line"><a name="l01989"></a><span class="lineno"> 1989</span>&#160; <span class="keyword">end module </span>atmosphere</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="anamespaceprogram__setup_html_af00a42c8dcd1d98cb4e152e5e7fdfe4c"><div class="ttname"><a href="namespaceprogram__setup.html#af00a42c8dcd1d98cb4e152e5e7fdfe4c">program_setup::vcoord_file_target_grid</a></div><div class="ttdeci">character(len=500), public vcoord_file_target_grid</div><div class="ttdoc">Vertical coordinate definition file.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00034">program_setup.f90:34</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html_a6f53159282cadb12b9c881d901ce0699"><div class="ttname"><a href="namespaceprogram__setup.html#a6f53159282cadb12b9c881d901ce0699">program_setup::use_thomp_mp_climo</a></div><div class="ttdeci">logical, public use_thomp_mp_climo</div><div class="ttdoc">When true, read and process Thompson MP climatological tracers.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00122">program_setup.f90:122</a></div></div>
 <div class="ttc" id="awrite__data_8F90_html_a0d32984d1e12f6fefe37f9b7e75de5d9"><div class="ttname"><a href="write__data_8F90.html#a0d32984d1e12f6fefe37f9b7e75de5d9">write_fv3_atm_data_netcdf</a></div><div class="ttdeci">subroutine write_fv3_atm_data_netcdf(localpet)</div><div class="ttdoc">Write atmospheric coldstart files (netcdf format).</div><div class="ttdef"><b>Definition:</b> <a href="write__data_8F90_source.html#l01194">write_data.F90:1194</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html_a4e934ac801fd213f8f422e5e9bb83568"><div class="ttname"><a href="namespaceprogram__setup.html#a4e934ac801fd213f8f422e5e9bb83568">program_setup::tracers</a></div><div class="ttdeci">character(len=20), dimension(max_tracers), public tracers</div><div class="ttdoc">Name of each atmos tracer to be processed.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00065">program_setup.f90:65</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html_a46f3ccd75736f06244e9110197e424f2"><div class="ttname"><a href="namespaceprogram__setup.html#a46f3ccd75736f06244e9110197e424f2">program_setup::regional</a></div><div class="ttdeci">integer, public regional</div><div class="ttdoc">For regional target grids.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00086">program_setup.f90:86</a></div></div>
 <div class="ttc" id="awrite__data_8F90_html_a7b255517030a7f64aee71d4ff16863dd"><div class="ttname"><a href="write__data_8F90.html#a7b255517030a7f64aee71d4ff16863dd">write_fv3_atm_header_netcdf</a></div><div class="ttdeci">subroutine write_fv3_atm_header_netcdf(localpet)</div><div class="ttdoc">Writes atmospheric header file in netcdf format.</div><div class="ttdef"><b>Definition:</b> <a href="write__data_8F90_source.html#l00015">write_data.F90:15</a></div></div>
-<div class="ttc" id="anamespaceprogram__setup_html"><div class="ttname"><a href="namespaceprogram__setup.html">program_setup</a></div><div class="ttdoc">program setup</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00151">program_setup.f90:151</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html"><div class="ttname"><a href="namespaceprogram__setup.html">program_setup</a></div><div class="ttdoc">program setup</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00007">program_setup.f90:7</a></div></div>
 <div class="ttc" id="achgres__cube_8fd_2utils_8f90_html_a494d969fc26018c8a44274492cd80086"><div class="ttname"><a href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a></div><div class="ttdeci">subroutine error_handler(string, rc)</div><div class="ttdoc">General error handler.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2utils_8f90_source.html#l00011">utils.f90:11</a></div></div>
 <div class="ttc" id="awrite__data_8F90_html_a5444b28ff73771c629f9246a7ab8c689"><div class="ttname"><a href="write__data_8F90.html#a5444b28ff73771c629f9246a7ab8c689">write_fv3_atm_bndy_data_netcdf</a></div><div class="ttdeci">subroutine write_fv3_atm_bndy_data_netcdf(localpet)</div><div class="ttdoc">Writes atmospheric fields along the lateral boundary.</div><div class="ttdef"><b>Definition:</b> <a href="write__data_8F90_source.html#l00088">write_data.F90:88</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html_a539f60d15e53a303d938db95e8d8a98b"><div class="ttname"><a href="namespaceprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b">program_setup::num_tracers</a></div><div class="ttdeci">integer, public num_tracers</div><div class="ttdoc">Number of atmospheric tracers to be processed.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00059">program_setup.f90:59</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html_ad0fadfbe4232b55e05a87f0044193290"><div class="ttname"><a href="namespaceprogram__setup.html#ad0fadfbe4232b55e05a87f0044193290">program_setup::atm_weight_file</a></div><div class="ttdeci">character(len=500), public atm_weight_file</div><div class="ttdoc">File containing pre-computed weights to horizontally interpolate atmospheric fields.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00037">program_setup.f90:37</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

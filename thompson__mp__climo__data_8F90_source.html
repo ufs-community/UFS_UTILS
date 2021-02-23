@@ -91,8 +91,8 @@ $(document).ready(function(){initNavTree('thompson__mp__climo__data_8F90_source.
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; <span class="keywordtype">use </span>esmf</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; <span class="keywordtype">use </span>netcdf</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>      : cycle_mon, cycle_day, cycle_hour, &amp;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                                thomp_mp_climo_file</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; <span class="keywordtype">use </span><a class="code" href="namespaceprogram__setup.html">program_setup</a>, <span class="keywordtype">only</span>      : <a class="code" href="namespaceprogram__setup.html#a98f420b05c47203e45300d1a65d948e6">cycle_mon</a>, <a class="code" href="namespaceprogram__setup.html#aaf0e825f9aa8cffe8c0035079ac12bb0">cycle_day</a>, <a class="code" href="namespaceprogram__setup.html#ac5f0577071c1c98ce380d51b397bffbe">cycle_hour</a>, &amp;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                                <a class="code" href="namespaceprogram__setup.html#a8712b252b9407a7e8034c78e1f61614c">thomp_mp_climo_file</a></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; <span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
@@ -147,9 +147,9 @@ $(document).ready(function(){initNavTree('thompson__mp__climo__data_8F90_source.
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">! Open the file and read the grid dimensions and latitude/longitude.</span></div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">!-----------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; print*,<span class="stringliteral">&quot;- READ THOMP_MP_CLIMO_FILE: &quot;</span>, trim(thomp_mp_climo_file)</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; error=nf90_open(trim(thomp_mp_climo_file),nf90_nowrite,ncid)</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; <span class="keyword">call </span><a class="code" href="chgres__cube_8fd_2utils_8f90.html#a442215c3836c0cf8a853c078861ba79f">netcdf_err</a>(error, <span class="stringliteral">&#39;opening: &#39;</span>//trim(thomp_mp_climo_file) )</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; print*,<span class="stringliteral">&quot;- READ THOMP_MP_CLIMO_FILE: &quot;</span>, trim(<a class="code" href="namespaceprogram__setup.html#a8712b252b9407a7e8034c78e1f61614c">thomp_mp_climo_file</a>)</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; error=nf90_open(trim(<a class="code" href="namespaceprogram__setup.html#a8712b252b9407a7e8034c78e1f61614c">thomp_mp_climo_file</a>),nf90_nowrite,ncid)</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; <span class="keyword">call </span><a class="code" href="chgres__cube_8fd_2utils_8f90.html#a442215c3836c0cf8a853c078861ba79f">netcdf_err</a>(error, <span class="stringliteral">&#39;opening: &#39;</span>//trim(<a class="code" href="namespaceprogram__setup.html#a8712b252b9407a7e8034c78e1f61614c">thomp_mp_climo_file</a>) )</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; error=nf90_inq_dimid(ncid, <span class="stringliteral">&#39;lat&#39;</span>, id_dim)</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; <span class="keyword">call </span><a class="code" href="chgres__cube_8fd_2utils_8f90.html#a442215c3836c0cf8a853c078861ba79f">netcdf_err</a>(error, <span class="stringliteral">&#39;reading lat id&#39;</span>)</div>
@@ -281,15 +281,15 @@ $(document).ready(function(){initNavTree('thompson__mp__climo__data_8F90_source.
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; jda=0</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; jda(1) = 2007</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; <span class="keywordflow">if</span> (cycle_mon == 2 .and. cycle_day == 29) <span class="keywordflow">then</span>  <span class="comment">! leap year</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; <span class="keywordflow">if</span> (<a class="code" href="namespaceprogram__setup.html#a98f420b05c47203e45300d1a65d948e6">cycle_mon</a> == 2 .and. <a class="code" href="namespaceprogram__setup.html#aaf0e825f9aa8cffe8c0035079ac12bb0">cycle_day</a> == 29) <span class="keywordflow">then</span>  <span class="comment">! leap year</span></div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;   jda(2) = 3</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;   jda(3) = 1</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;   jda(2) = cycle_mon</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;   jda(3) = cycle_day</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;   jda(2) = <a class="code" href="namespaceprogram__setup.html#a98f420b05c47203e45300d1a65d948e6">cycle_mon</a></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;   jda(3) = <a class="code" href="namespaceprogram__setup.html#aaf0e825f9aa8cffe8c0035079ac12bb0">cycle_day</a></div>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="keywordflow"> endif</span></div>
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160; </div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; jda(5) = cycle_hour</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; jda(5) = <a class="code" href="namespaceprogram__setup.html#ac5f0577071c1c98ce380d51b397bffbe">cycle_hour</a></div>
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; jdow = 0</div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; jdoy = 0</div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; jday = 0</div>
@@ -412,7 +412,11 @@ $(document).ready(function(){initNavTree('thompson__mp__climo__data_8F90_source.
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="achgres__cube_8fd_2utils_8f90_html_a442215c3836c0cf8a853c078861ba79f"><div class="ttname"><a href="chgres__cube_8fd_2utils_8f90.html#a442215c3836c0cf8a853c078861ba79f">netcdf_err</a></div><div class="ttdeci">subroutine netcdf_err(err, string)</div><div class="ttdoc">Error handler for netcdf.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2utils_8f90_source.html#l00033">utils.f90:33</a></div></div>
-<div class="ttc" id="anamespaceprogram__setup_html"><div class="ttname"><a href="namespaceprogram__setup.html">program_setup</a></div><div class="ttdoc">program setup</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00151">program_setup.f90:151</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html_a8712b252b9407a7e8034c78e1f61614c"><div class="ttname"><a href="namespaceprogram__setup.html#a8712b252b9407a7e8034c78e1f61614c">program_setup::thomp_mp_climo_file</a></div><div class="ttdeci">character(len=500), public thomp_mp_climo_file</div><div class="ttdoc">Path/name to the Thompson MP climatology file.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00035">program_setup.f90:35</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html_aaf0e825f9aa8cffe8c0035079ac12bb0"><div class="ttname"><a href="namespaceprogram__setup.html#aaf0e825f9aa8cffe8c0035079ac12bb0">program_setup::cycle_day</a></div><div class="ttdeci">integer, public cycle_day</div><div class="ttdoc">Cycle day.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00084">program_setup.f90:84</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html_a98f420b05c47203e45300d1a65d948e6"><div class="ttname"><a href="namespaceprogram__setup.html#a98f420b05c47203e45300d1a65d948e6">program_setup::cycle_mon</a></div><div class="ttdeci">integer, public cycle_mon</div><div class="ttdoc">Cycle month.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00083">program_setup.f90:83</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html_ac5f0577071c1c98ce380d51b397bffbe"><div class="ttname"><a href="namespaceprogram__setup.html#ac5f0577071c1c98ce380d51b397bffbe">program_setup::cycle_hour</a></div><div class="ttdeci">integer, public cycle_hour</div><div class="ttdoc">Cycle hour.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00085">program_setup.f90:85</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html"><div class="ttname"><a href="namespaceprogram__setup.html">program_setup</a></div><div class="ttdoc">program setup</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2program__setup_8f90_source.html#l00007">program_setup.f90:7</a></div></div>
 <div class="ttc" id="achgres__cube_8fd_2utils_8f90_html_a494d969fc26018c8a44274492cd80086"><div class="ttname"><a href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a></div><div class="ttdeci">subroutine error_handler(string, rc)</div><div class="ttdoc">General error handler.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2utils_8f90_source.html#l00011">utils.f90:11</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

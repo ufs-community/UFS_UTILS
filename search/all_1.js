@@ -1,12 +1,13 @@
 var searchData=
 [
-  ['bilinear_5finterp_2ec_10',['bilinear_interp.c',['../bilinear__interp_8c.html',1,'']]],
-  ['bilinear_5finterp_2eh_11',['bilinear_interp.h',['../bilinear__interp_8h.html',1,'']]],
-  ['bipolar_5farea_12',['bipolar_area',['../tool__util_8c.html#ab5f93a2275b11f39b1c43879ef3c91c3',1,'bipolar_area(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4):&#160;tool_util.c'],['../tool__util_8h.html#ab5f93a2275b11f39b1c43879ef3c91c3',1,'bipolar_area(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4):&#160;tool_util.c']]],
-  ['bipolar_5fdist_13',['bipolar_dist',['../tool__util_8c.html#a1edb8c5b4c36dc56c9b5b0633c494773',1,'bipolar_dist(double x1, double y1, double x2, double y2, double bpeq, double bpsp, double bpnp, double rp):&#160;tool_util.c'],['../tool__util_8h.html#a1edb8c5b4c36dc56c9b5b0633c494773',1,'bipolar_dist(double x1, double y1, double x2, double y2, double bpeq, double bpsp, double bpnp, double rp):&#160;tool_util.c']]],
-  ['bound_5fconfig_14',['Bound_config',['../globals_8h.html#structBound__config',1,'']]],
-  ['box_5fctrlat_15',['box_ctrlat',['../create__xgrid_8c.html#a2bfdfb2d796dadce1247fd606f91982a',1,'box_ctrlat(double ll_lon, double ll_lat, double ur_lon, double ur_lat):&#160;create_xgrid.c'],['../create__xgrid_8h.html#a2bfdfb2d796dadce1247fd606f91982a',1,'box_ctrlat(double ll_lon, double ll_lat, double ur_lon, double ur_lat):&#160;create_xgrid.c']]],
-  ['box_5fctrlon_16',['box_ctrlon',['../create__xgrid_8c.html#afd25e608bc30387694af055ff3c56c5d',1,'box_ctrlon(double ll_lon, double ll_lat, double ur_lon, double ur_lat, double clon):&#160;create_xgrid.c'],['../create__xgrid_8h.html#afd25e608bc30387694af055ff3c56c5d',1,'box_ctrlon(double ll_lon, double ll_lat, double ur_lon, double ur_lat, double clon):&#160;create_xgrid.c']]],
-  ['bp_5flam_17',['bp_lam',['../tool__util_8c.html#a549c6ff4bc96d2d1f2624ce4a12e8cc0',1,'tool_util.c']]],
-  ['bp_5fphi_18',['bp_phi',['../tool__util_8c.html#a96a0125786ed862a4345c1ebb5ec1e9c',1,'tool_util.c']]]
+  ['bb_5ftarget_15',['bb_target',['../namespaceprogram__setup.html#ab72166ef093181118b706b0c8d9680da',1,'program_setup']]],
+  ['bilinear_5finterp_2ec_16',['bilinear_interp.c',['../bilinear__interp_8c.html',1,'']]],
+  ['bilinear_5finterp_2eh_17',['bilinear_interp.h',['../bilinear__interp_8h.html',1,'']]],
+  ['bipolar_5farea_18',['bipolar_area',['../tool__util_8c.html#ab5f93a2275b11f39b1c43879ef3c91c3',1,'bipolar_area(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4):&#160;tool_util.c'],['../tool__util_8h.html#ab5f93a2275b11f39b1c43879ef3c91c3',1,'bipolar_area(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4):&#160;tool_util.c']]],
+  ['bipolar_5fdist_19',['bipolar_dist',['../tool__util_8c.html#a1edb8c5b4c36dc56c9b5b0633c494773',1,'bipolar_dist(double x1, double y1, double x2, double y2, double bpeq, double bpsp, double bpnp, double rp):&#160;tool_util.c'],['../tool__util_8h.html#a1edb8c5b4c36dc56c9b5b0633c494773',1,'bipolar_dist(double x1, double y1, double x2, double y2, double bpeq, double bpsp, double bpnp, double rp):&#160;tool_util.c']]],
+  ['bound_5fconfig_20',['Bound_config',['../globals_8h.html#structBound__config',1,'']]],
+  ['box_5fctrlat_21',['box_ctrlat',['../create__xgrid_8c.html#a2bfdfb2d796dadce1247fd606f91982a',1,'box_ctrlat(double ll_lon, double ll_lat, double ur_lon, double ur_lat):&#160;create_xgrid.c'],['../create__xgrid_8h.html#a2bfdfb2d796dadce1247fd606f91982a',1,'box_ctrlat(double ll_lon, double ll_lat, double ur_lon, double ur_lat):&#160;create_xgrid.c']]],
+  ['box_5fctrlon_22',['box_ctrlon',['../create__xgrid_8c.html#afd25e608bc30387694af055ff3c56c5d',1,'box_ctrlon(double ll_lon, double ll_lat, double ur_lon, double ur_lat, double clon):&#160;create_xgrid.c'],['../create__xgrid_8h.html#afd25e608bc30387694af055ff3c56c5d',1,'box_ctrlon(double ll_lon, double ll_lat, double ur_lon, double ur_lat, double clon):&#160;create_xgrid.c']]],
+  ['bp_5flam_23',['bp_lam',['../tool__util_8c.html#a549c6ff4bc96d2d1f2624ce4a12e8cc0',1,'tool_util.c']]],
+  ['bp_5fphi_24',['bp_phi',['../tool__util_8c.html#a96a0125786ed862a4345c1ebb5ec1e9c',1,'tool_util.c']]]
 ];

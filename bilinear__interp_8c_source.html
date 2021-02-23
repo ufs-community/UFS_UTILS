@@ -173,23 +173,23 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;  nxd      = nx_in + 2;</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  nyd      = ny_in + 2;</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  interp-&gt;index  = (<span class="keywordtype">int</span>    *)malloc(3*nx_out*ny_out*<span class="keyword">sizeof</span>(<span class="keywordtype">int</span>   ));</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  interp-&gt;weight = (<span class="keywordtype">double</span> *)malloc(4*nx_out*ny_out*<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>));</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index  = (<span class="keywordtype">int</span>    *)malloc(3*nx_out*ny_out*<span class="keyword">sizeof</span>(<span class="keywordtype">int</span>   ));</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight = (<span class="keywordtype">double</span> *)malloc(4*nx_out*ny_out*<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>));</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="keywordflow">if</span>( (opcode &amp; READ) &amp;&amp; interp-&gt;file_exist ) { <span class="comment">/* reading from file */</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="keywordflow">if</span>( (opcode &amp; READ) &amp;&amp; <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;file_exist ) { <span class="comment">/* reading from file */</span></div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">int</span> nx2, ny2, fid, vid;</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="comment">/* check the size of the grid matching the size in remapping file */</span></div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    printf(<span class="stringliteral">&quot;NOTE: reading index and weight for bilinear interpolation from file.\n&quot;</span>);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    fid = mpp_open(interp-&gt;remap_file, MPP_READ);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    fid = mpp_open(<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;remap_file, MPP_READ);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    nx2 = mpp_get_dimlen(fid, <span class="stringliteral">&quot;nlon&quot;</span>);</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    ny2 = mpp_get_dimlen(fid, <span class="stringliteral">&quot;nlat&quot;</span>);</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    printf(<span class="stringliteral">&quot;grid size is nx=%d, ny=%d, remap file size is nx=%d, ny=%d.\n&quot;</span>, nx_out, ny_out, nx2, ny2);</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordflow">if</span>(nx2 != nx_out || ny2 != ny_out ) mpp_error(<span class="stringliteral">&quot;bilinear_interp: size mismatch between grid size and remap file size&quot;</span>);</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    vid = mpp_get_varid(fid, <span class="stringliteral">&quot;index&quot;</span>);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    mpp_get_var_value(fid, vid, interp-&gt;index);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    mpp_get_var_value(fid, vid, <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    vid = mpp_get_varid(fid, <span class="stringliteral">&quot;weight&quot;</span>);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    mpp_get_var_value(fid, vid, interp-&gt;weight);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    mpp_get_var_value(fid, vid, <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight);</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    mpp_close(fid);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  }</div>
@@ -257,7 +257,7 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="comment">/*------------------------------------------------</span></div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="comment">              determine lower left corner                    </span></div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="comment">              ------------------------------------------------*/</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        found[n0] = get_closest_index(&amp;(grid_in[l]), grid_out, &amp;(interp-&gt;index[3*(j*nx_out+i)]), index[3*l],</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        found[n0] = get_closest_index(&amp;(grid_in[l]), grid_out, &amp;(<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[3*(j*nx_out+i)]), index[3*l],</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                  index[3*l+1], index[3*l+2], i, j);</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;      }</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    }</div>
@@ -319,7 +319,7 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;      found[n0]=0;</div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;      <span class="keywordflow">for</span>(l=0; l&lt;ntiles_in; l++) {</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="keywordflow">if</span> (!found[n0]) {</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      found[n0]=get_index(&amp;(grid_in[l]), grid_out, &amp;(interp-&gt;index[3*(j*nx_out+i)]), index[3*l],</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      found[n0]=get_index(&amp;(grid_in[l]), grid_out, &amp;(<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[3*(j*nx_out+i)]), index[3*l],</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                  index[3*l+1], index[3*l+2], i, j);</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;      <span class="keywordflow">if</span> (found[n0]) <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    }</div>
@@ -331,9 +331,9 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="comment">      formed by cubed sphere cell centers                        </span></div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="comment">      special corner treatment                                   </span></div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment">      ------------------------------------------------------------*/</span></div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    ic=interp-&gt;index[m0];</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    jc=interp-&gt;index[m0+1];</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    l =interp-&gt;index[m0+2];</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    ic=<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[m0];</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    jc=<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[m0+1];</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    l =<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[m0+2];</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keywordflow">if</span> (ic==nx_in &amp;&amp; jc==ny_in) {</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;      <span class="comment">/*------------------------------------------------------------</span></div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="comment">    calculate weights for bilinear interpolation near corner   </span></div>
@@ -356,15 +356,15 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;      dist1=dist2side(v2, v3, v0);</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;      dist2=dist2side(v2, v1, v0);</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;      dist3=dist2side(v1, v3, v0);</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;      interp-&gt;weight[m1]  =dist1;      <span class="comment">/* ic,   jc    weight */</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;      interp-&gt;weight[m1+1]=dist2;      <span class="comment">/* ic,   jc+1  weight */</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;      interp-&gt;weight[m1+2]=0.;         <span class="comment">/* ic+1, jc+1  weight */</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;      interp-&gt;weight[m1+3]=dist3;      <span class="comment">/* ic+1, jc    weight */</span></div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]  =dist1;      <span class="comment">/* ic,   jc    weight */</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+1]=dist2;      <span class="comment">/* ic,   jc+1  weight */</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+2]=0.;         <span class="comment">/* ic+1, jc+1  weight */</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+3]=dist3;      <span class="comment">/* ic+1, jc    weight */</span></div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;             </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;      sum=interp-&gt;weight[m1]+interp-&gt;weight[m1+1]+interp-&gt;weight[m1+3];</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;      interp-&gt;weight[m1]  /=sum;</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;      interp-&gt;weight[m1+1]/=sum;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;      interp-&gt;weight[m1+3]/=sum;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;      sum=<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]+<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+1]+<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+3];</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]  /=sum;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+1]/=sum;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+3]/=sum;</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    }</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ic==0 &amp;&amp; jc==ny_in) {</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;      <span class="comment">/*------------------------------------------------------------</span></div>
@@ -389,15 +389,15 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;      dist1=dist2side(v3, v2, v0);</div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;      dist2=dist2side(v2, v1, v0);</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;      dist3=dist2side(v3, v1, v0);             </div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;      interp-&gt;weight[m1]  =dist1;      <span class="comment">/* ic,   jc    weight */</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;      interp-&gt;weight[m1+1]=0.;         <span class="comment">/* ic,   jc+1  weight */</span></div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;      interp-&gt;weight[m1+2]=dist2;      <span class="comment">/* ic+1, jc+1  weight */</span></div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;      interp-&gt;weight[m1+3]=dist3;      <span class="comment">/* ic+1, jc    weight */</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]  =dist1;      <span class="comment">/* ic,   jc    weight */</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+1]=0.;         <span class="comment">/* ic,   jc+1  weight */</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+2]=dist2;      <span class="comment">/* ic+1, jc+1  weight */</span></div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+3]=dist3;      <span class="comment">/* ic+1, jc    weight */</span></div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;             </div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;      sum=interp-&gt;weight[m1]+interp-&gt;weight[m1+2]+interp-&gt;weight[m1+3];</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;      interp-&gt;weight[m1]  /=sum;</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;      interp-&gt;weight[m1+2]/=sum;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;      interp-&gt;weight[m1+3]/=sum;</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;      sum=<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]+<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+2]+<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+3];</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]  /=sum;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+2]/=sum;</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+3]/=sum;</div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    }</div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (jc==0 &amp;&amp; ic==nx_in) {</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;      <span class="comment">/*------------------------------------------------------------</span></div>
@@ -422,15 +422,15 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;      dist2=dist2side(v1, v3, v0);</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;      dist3=dist2side(v1, v2, v0);                   </div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;             </div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;      interp-&gt;weight[m1]  =dist1;      <span class="comment">/* ic,   jc    weight */</span></div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;      interp-&gt;weight[m1+1]=dist2;      <span class="comment">/* ic,   jc+1  weight */</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;      interp-&gt;weight[m1+2]=dist3;      <span class="comment">/* ic+1, jc+1  weight */</span></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;      interp-&gt;weight[m1+3]=0.;         <span class="comment">/* ic+1, jc    weight */</span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]  =dist1;      <span class="comment">/* ic,   jc    weight */</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+1]=dist2;      <span class="comment">/* ic,   jc+1  weight */</span></div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+2]=dist3;      <span class="comment">/* ic+1, jc+1  weight */</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+3]=0.;         <span class="comment">/* ic+1, jc    weight */</span></div>
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;             </div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;      sum=interp-&gt;weight[m1]+interp-&gt;weight[m1+1]+interp-&gt;weight[m1+2];</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;      interp-&gt;weight[m1]  /=sum;</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;      interp-&gt;weight[m1+1]/=sum;</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;      interp-&gt;weight[m1+2]/=sum;</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;      sum=<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]+<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+1]+<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+2];</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]  /=sum;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+1]/=sum;</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+2]/=sum;</div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    }</div>
 <div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;      <span class="comment">/*------------------------------------------------------------</span></div>
@@ -460,16 +460,16 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;      dist3=dist2side(v4, v2, v0);</div>
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;      dist4=dist2side(v2, v1, v0);</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    </div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;      interp-&gt;weight[m1]  =dist2*dist3;      <span class="comment">/* ic,   jc    weight */</span></div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;      interp-&gt;weight[m1+1]=dist3*dist4;      <span class="comment">/* ic,   jc+1  weight */</span></div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;      interp-&gt;weight[m1+2]=dist4*dist1;      <span class="comment">/* ic+1, jc+1  weight */</span></div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;      interp-&gt;weight[m1+3]=dist1*dist2;      <span class="comment">/* ic+1, jc    weight */</span></div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]  =dist2*dist3;      <span class="comment">/* ic,   jc    weight */</span></div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+1]=dist3*dist4;      <span class="comment">/* ic,   jc+1  weight */</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+2]=dist4*dist1;      <span class="comment">/* ic+1, jc+1  weight */</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+3]=dist1*dist2;      <span class="comment">/* ic+1, jc    weight */</span></div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;             </div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;      sum=interp-&gt;weight[m1]+interp-&gt;weight[m1+1]+interp-&gt;weight[m1+2]+interp-&gt;weight[m1+3];</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;      interp-&gt;weight[m1]  /=sum;</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;      interp-&gt;weight[m1+1]/=sum;</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;      interp-&gt;weight[m1+2]/=sum;</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;      interp-&gt;weight[m1+3]/=sum;</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;      sum=<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]+<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+1]+<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+2]+<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+3];</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1]  /=sum;</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+1]/=sum;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+2]/=sum;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;      <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[m1+3]/=sum;</div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    }</div>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;  }</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160; </div>
@@ -478,7 +478,7 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    <span class="keywordtype">int</span> fid, dim_three, dim_four, dim_nlon, dim_nlat, dims[3];</div>
 <div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    <span class="keywordtype">int</span> fld_index, fld_weight;</div>
 <div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    </div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    fid = mpp_open( interp-&gt;remap_file, MPP_WRITE);</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    fid = mpp_open( <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;remap_file, MPP_WRITE);</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    dim_nlon = mpp_def_dim(fid, <span class="stringliteral">&quot;nlon&quot;</span>, nx_out);</div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    dim_nlat = mpp_def_dim(fid, <span class="stringliteral">&quot;nlat&quot;</span>, ny_out);</div>
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    dim_three = mpp_def_dim(fid, <span class="stringliteral">&quot;three&quot;</span>, 3);</div>
@@ -489,8 +489,8 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    dims[0] = dim_four; dims[1] = dim_nlat; dims[2] = dim_nlon;</div>
 <div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    fld_weight = mpp_def_var(fid, <span class="stringliteral">&quot;weight&quot;</span>, NC_DOUBLE, 3, dims, 0);</div>
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    mpp_end_def(fid);</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    mpp_put_var_value(fid, fld_index, interp-&gt;index);</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    mpp_put_var_value(fid, fld_weight, interp-&gt;weight);</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    mpp_put_var_value(fid, fld_index, <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index);</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    mpp_put_var_value(fid, fld_weight, <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight);</div>
 <div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    mpp_close(fid);</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;  }</div>
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160; </div>
@@ -640,16 +640,16 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;  <span class="keywordflow">if</span> (has_missing) {</div>
 <div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;    <span class="keywordflow">for</span>(k=0; k&lt;nz; k++) <span class="keywordflow">for</span>(j=0; j&lt;ny_out; j++) <span class="keywordflow">for</span>(i=0; i&lt;nx_out; i++) {</div>
 <div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;      n1      = j*nx_out+i;</div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;      ic      = interp-&gt;index[3*n1];</div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;      jc      = interp-&gt;index[3*n1+1];</div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;      tile    = interp-&gt;index[3*n1+2];</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;      ic      = <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[3*n1];</div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;      jc      = <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[3*n1+1];</div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;      tile    = <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[3*n1+2];</div>
 <div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;      d_in[0] = field_in[tile].data[k*nxd*nyd+jc    *nxd+ic];</div>
 <div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;      d_in[1] = field_in[tile].data[k*nxd*nyd+(jc+1)*nxd+ic];</div>
 <div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;      d_in[2] = field_in[tile].data[k*nxd*nyd+(jc+1)*nxd+ic+1];</div>
 <div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;      d_in[3] = field_in[tile].data[k*nxd*nyd+jc    *nxd+ic+1];</div>
 <div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;      <span class="keywordflow">if</span> (d_in[0] == missing || d_in[1] == missing || d_in[2] == missing || d_in[3] == missing ) {</div>
 <div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;    <span class="keywordflow">if</span> (fill_missing) {</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;      ind = max_weight_index( &amp;(interp-&gt;weight[4*n1]), 4);</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;      ind = max_weight_index( &amp;(<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[4*n1]), 4);</div>
 <div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;      data_out[k*nx_out*ny_out+n1] = d_in[ind];</div>
 <div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;    }</div>
 <div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;    <span class="keywordflow">else</span> {</div>
@@ -657,23 +657,23 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;    }</div>
 <div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;      }</div>
 <div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;      <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;    data_out[k*nx_out*ny_out+n1] = d_in[0]*interp-&gt;weight[4*n1] + d_in[1]*interp-&gt;weight[4*n1+1]</div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;      + d_in[2]*interp-&gt;weight[4*n1+2] + d_in[3]*interp-&gt;weight[4*n1+3];</div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;    data_out[k*nx_out*ny_out+n1] = d_in[0]*<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[4*n1] + d_in[1]*<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[4*n1+1]</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;      + d_in[2]*<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[4*n1+2] + d_in[3]*<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[4*n1+3];</div>
 <div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;      }</div>
 <div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;    }</div>
 <div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;  }</div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;  <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;    <span class="keywordflow">for</span>(k=0; k&lt;nz; k++) <span class="keywordflow">for</span>(j=0; j&lt;ny_out; j++) <span class="keywordflow">for</span>(i=0; i&lt;nx_out; i++) {</div>
 <div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;      n1      = j*nx_out+i;</div>
-<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;      ic      = interp-&gt;index[3*n1];</div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;      jc      = interp-&gt;index[3*n1+1];</div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;      tile    = interp-&gt;index[3*n1+2];</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;      ic      = <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[3*n1];</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;      jc      = <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[3*n1+1];</div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;      tile    = <a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;index[3*n1+2];</div>
 <div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;      d_in[0] = field_in[tile].data[k*nxd*nyd+jc    *nxd+ic];</div>
 <div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;      d_in[1] = field_in[tile].data[k*nxd*nyd+(jc+1)*nxd+ic];</div>
 <div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;      d_in[2] = field_in[tile].data[k*nxd*nyd+(jc+1)*nxd+ic+1];</div>
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;      d_in[3] = field_in[tile].data[k*nxd*nyd+jc    *nxd+ic+1];</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;      data_out[k*nx_out*ny_out+n1] = d_in[0]*interp-&gt;weight[4*n1] + d_in[1]*interp-&gt;weight[4*n1+1]</div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;    + d_in[2]*interp-&gt;weight[4*n1+2] + d_in[3]*interp-&gt;weight[4*n1+3];</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;      data_out[k*nx_out*ny_out+n1] = d_in[0]*<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[4*n1] + d_in[1]*<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[4*n1+1]</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;    + d_in[2]*<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[4*n1+2] + d_in[3]*<a class="code" href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">interp</a>-&gt;weight[4*n1+3];</div>
 <div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;    }</div>
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;  }</div>
 <div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;  </div>
@@ -1231,6 +1231,7 @@ $(document).ready(function(){initNavTree('bilinear__interp_8c_source.html',''); 
 <div class="ttc" id="aglobals_8h_html_structField__config"><div class="ttname"><a href="globals_8h.html#structField__config">Field_config</a></div><div class="ttdef"><b>Definition:</b> <a href="globals_8h_source.html#l00082">globals.h:82</a></div></div>
 <div class="ttc" id="amosaic__util_8h_html"><div class="ttname"><a href="mosaic__util_8h.html">mosaic_util.h</a></div><div class="ttdoc">Function declarations for mosaic_util.c.</div></div>
 <div class="ttc" id="aglobals_8h_html_structGrid__config"><div class="ttname"><a href="globals_8h.html#structGrid__config">Grid_config</a></div><div class="ttdef"><b>Definition:</b> <a href="globals_8h_source.html#l00146">globals.h:146</a></div></div>
+<div class="ttc" id="asurface_8F90_html_a898a2b475d3a72705c4df5306a200fd5"><div class="ttname"><a href="surface_8F90.html#a898a2b475d3a72705c4df5306a200fd5">surface::interp</a></div><div class="ttdeci">subroutine interp(localpet)</div><div class="ttdoc">Horizontally interpolate surface fields using esmf routines.</div><div class="ttdef"><b>Definition:</b> <a href="surface_8F90_source.html#l00297">surface.F90:297</a></div></div>
 <div class="ttc" id="ampp__io_8h_html"><div class="ttname"><a href="mpp__io_8h.html">mpp_io.h</a></div><div class="ttdoc">Define constants and function declarations for mpp_io.c.</div></div>
 <div class="ttc" id="abilinear__interp_8h_html"><div class="ttname"><a href="bilinear__interp_8h.html">bilinear_interp.h</a></div><div class="ttdoc">Function declarations for bilinear interpolation module.</div></div>
 <div class="ttc" id="aglobals_8h_html_structInterp__config"><div class="ttname"><a href="globals_8h.html#structInterp__config">Interp_config</a></div><div class="ttdef"><b>Definition:</b> <a href="globals_8h_source.html#l00120">globals.h:120</a></div></div>

@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['u_5fs_5ftarget_5fgrid_668',['u_s_target_grid',['../atmosphere_8F90.html#a4f4e2ff9ea5fbdc485a8306cf58c1422',1,'atmosphere']]],
-  ['u_5fw_5ftarget_5fgrid_669',['u_w_target_grid',['../atmosphere_8F90.html#acd2b58a77e1d7a74861bd36dd5fd6ad2',1,'atmosphere']]],
-  ['ustar_5finput_5fgrid_670',['ustar_input_grid',['../input__data_8F90.html#a5ba40095249bd33705b810ce1f520041',1,'input_data']]]
+  ['orog_5fdir_5finput_5fgrid_827',['orog_dir_input_grid',['../namespaceprogram__setup.html#a1be9ccab8a35f168bcbfdf9c5a222a45',1,'program_setup']]],
+  ['orog_5fdir_5ftarget_5fgrid_828',['orog_dir_target_grid',['../namespaceprogram__setup.html#a7399d25dfd372508d36eb5f6605cfb95',1,'program_setup']]],
+  ['orog_5ffiles_5finput_5fgrid_829',['orog_files_input_grid',['../namespaceprogram__setup.html#a377c50042036e5bb66eb6961dd6f011e',1,'program_setup']]],
+  ['orog_5ffiles_5ftarget_5fgrid_830',['orog_files_target_grid',['../namespaceprogram__setup.html#a347c8473bf53672f02913c93a050ea7a',1,'program_setup']]]
 ];

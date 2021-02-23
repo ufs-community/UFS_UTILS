@@ -96,19 +96,40 @@ $(document).ready(function(){initNavTree('chgres_8F90.html',''); initResizable()
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:ad344b0a3c44aec05c1d3d8170d5527b1"><td class="memItemLeft" align="right" valign="top"><a id="ad344b0a3c44aec05c1d3d8170d5527b1"></a>
-program&#160;</td><td class="memItemRight" valign="bottom"><b>chgres</b></td></tr>
+<tr class="memitem:ad344b0a3c44aec05c1d3d8170d5527b1"><td class="memItemLeft" align="right" valign="top">program&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="chgres_8F90.html#ad344b0a3c44aec05c1d3d8170d5527b1">chgres</a></td></tr>
+<tr class="memdesc:ad344b0a3c44aec05c1d3d8170d5527b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize an FV3 model run.  <a href="chgres_8F90.html#ad344b0a3c44aec05c1d3d8170d5527b1">More...</a><br /></td></tr>
 <tr class="separator:ad344b0a3c44aec05c1d3d8170d5527b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Initialize an FV3 model run. </p>
-<p>Initialize an FV3 run using history or restart data from another FV3 run, the spectral GFS, and a few other models. Converts atmospheric, surface and nst data.</p>
-<p>This file reads a configuration namelist.</p>
-<p>Usage: Link the configuration namelist to ./fort.41. Then run the program with a multiple of six mpi tasks (an ESMF library requirement for fv3 cubed sphere grids).</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="chgres_8F90_source.html">chgres.F90</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a id="ad344b0a3c44aec05c1d3d8170d5527b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad344b0a3c44aec05c1d3d8170d5527b1">&#9670;&nbsp;</a></span>chgres()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">program chgres</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize an FV3 model run. </p>
+<p>Initialize an FV3 run using history or restart data from another FV3 run, the spectral GFS, and a few other models. Converts atmospheric, surface and nst data.</p>
+<p>This file reads a configuration namelist.</p>
+<p>Link the configuration namelist to ./fort.41. Then run the program with a multiple of six mpi tasks (an ESMF library requirement for fv3 cubed sphere grids).</p>
+<dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0 for success, error code otherwise. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="chgres_8F90_source.html#l00020">20</a> of file <a class="el" href="chgres_8F90_source.html">chgres.F90</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

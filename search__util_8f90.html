@@ -96,20 +96,112 @@ $(document).ready(function(){initNavTree('search__util_8f90.html',''); initResiz
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:a4a511a55b3ce58a03cc053d19cecc458"><td class="memItemLeft" align="right" valign="top"><a id="a4a511a55b3ce58a03cc053d19cecc458"></a>
-subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>search_util::search</b> (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)</td></tr>
+<tr class="memitem:a4a511a55b3ce58a03cc053d19cecc458"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="search__util_8f90.html#a4a511a55b3ce58a03cc053d19cecc458">search_util::search</a> (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)</td></tr>
+<tr class="memdesc:a4a511a55b3ce58a03cc053d19cecc458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace undefined surface values.  <a href="search__util_8f90.html#a4a511a55b3ce58a03cc053d19cecc458">More...</a><br /></td></tr>
 <tr class="separator:a4a511a55b3ce58a03cc053d19cecc458"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f5cd2507060bc834d1fd8a08a4c31ba"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="search__util_8f90.html#a5f5cd2507060bc834d1fd8a08a4c31ba">search_util::sst_guess</a> (latitude, sst)</td></tr>
-<tr class="memdesc:a5f5cd2507060bc834d1fd8a08a4c31ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">set sst values based on latitude  <a href="search__util_8f90.html#a5f5cd2507060bc834d1fd8a08a4c31ba">More...</a><br /></td></tr>
+<tr class="memdesc:a5f5cd2507060bc834d1fd8a08a4c31ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set sst values based on latitude.  <a href="search__util_8f90.html#a5f5cd2507060bc834d1fd8a08a4c31ba">More...</a><br /></td></tr>
 <tr class="separator:a5f5cd2507060bc834d1fd8a08a4c31ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Replace undefined surface values. </p>
-<dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC</dd></dl>
-<p>Replace undefined values with a valid value. This can happen for an isolated lake or island that is unresolved by the input grid. </p>
+<p>Replace undefined values with a valid value. This can happen for an isolated lake or island that is unresolved by the input grid.</p>
+<dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="search__util_8f90_source.html">search_util.f90</a>.</p>
 </div><h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a id="a4a511a55b3ce58a03cc053d19cecc458"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a511a55b3ce58a03cc053d19cecc458">&#9670;&nbsp;</a></span>search()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public search_util::search </td>
+          <td>(</td>
+          <td class="paramtype">real(esmf_kind_r8), dimension(idim,jdim), intent(inout)&#160;</td>
+          <td class="paramname"><em>field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(esmf_kind_i8), dimension(idim,jdim), intent(in)&#160;</td>
+          <td class="paramname"><em>mask</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>idim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>jdim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>tile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>field_num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_r8), dimension(idim,jdim), intent(in), optional&#160;</td>
+          <td class="paramname"><em>latitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_r8), dimension(idim,jdim), intent(in), optional&#160;</td>
+          <td class="paramname"><em>terrain_land</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_r8), dimension(idim,jdim), intent(in), optional&#160;</td>
+          <td class="paramname"><em>soilt_climo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Replace undefined surface values. </p>
+<p>Replace undefined values on the model grid with a valid value at a nearby neighbor. Undefined values are typically associated with isolated islands where there is no source data.</p>
+<p>Routine searches a neighborhood with a radius of 100 grid points. If no valid value is found, a default value is used.</p>
+<p>This routine works for one tile of a cubed sphere grid. It does not consider valid values at adjacent faces. That is a future upgrade.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">field</td><td>On input/output, surface data with undefined/no undefined values. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mask</td><td>land-mask of surface data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">idim</td><td>'i' dimension of tile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">jdim</td><td>'j' dimension of tile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tile</td><td>tile number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">field_num</td><td>surface field number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">latitude</td><td>latitude of the surface data </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">terrain_land</td><td>terrain height </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">soilt_climo</td><td>climatological soil type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="search__util_8f90_source.html#l00041">41</a> of file <a class="el" href="search__util_8f90_source.html">search_util.f90</a>.</p>
+
+</div>
+</div>
 <a id="a5f5cd2507060bc834d1fd8a08a4c31ba"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5f5cd2507060bc834d1fd8a08a4c31ba">&#9670;&nbsp;</a></span>sst_guess()</h2>
 
@@ -136,17 +228,17 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>search_
       </table>
 </div><div class="memdoc">
 
-<p>set sst values based on latitude </p>
-<dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
+<p>Set sst values based on latitude. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">latitude</td><td>- latitude input </td></tr>
-    <tr><td class="paramname">sst</td><td>- sst guess value to be set </td></tr>
+    <tr><td class="paramname">latitude</td><td>latitude input </td></tr>
+    <tr><td class="paramname">sst</td><td>sst guess value to be set </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="search__util_8f90_source.html#l00207">207</a> of file <a class="el" href="search__util_8f90_source.html">search_util.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="search__util_8f90_source.html#l00218">218</a> of file <a class="el" href="search__util_8f90_source.html">search_util.f90</a>.</p>
 
 </div>
 </div>
