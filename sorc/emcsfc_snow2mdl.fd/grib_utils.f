@@ -2,13 +2,13 @@
 !! @brief Determine whether file is grib or not.
 !
 !> Determine whether file is grib or not.
-!! @author gayno org: w/np2 @date 2007-nov-28   
+!! @author George Gayno org: w/np2 @date 2007-Nov-28   
 !!
 !! program history log:
-!! - 2007-nov-28  gayno    - initial version
-!! - 2011-apr-26  gayno    - replace my simple-minded logic
+!! - 2007-Nov-28  gayno    - initial version
+!! - 2011-Apr-26  gayno    - replace my simple-minded logic
 !!                         with call to w3lib routin skgb.
-!! - 2014-feb-07  gayno    - determine whether file is
+!! - 2014-Feb-07  gayno    - determine whether file is
 !!                         grib1 or grib2.
 !!
 !! @param[in] file_name - file to be checked
@@ -19,27 +19,22 @@
 !!
 !! condition codes:  all fatal
 !!     - bad file open, fort.11
-!! other stuff for skgb2 (will reformat before commit)
-!!    prgmmr: gayno          org: w/np2     date: 2014-feb-07
-!! abstract:  determine whether file is grib or not.
+!!
+!!  SUBROUTINE SKGB2(LUGB,ISEEK,MSEEK,LSKIP,LGRIB,I1)  ! this line hand inserted
+!!
+!! @author George Gayno org: w/np2 @date  2014-Feb-07
+!!
+!! Determine whether file is grib or not.
 !!           based on w3nco library routine skgb.
 !! program history log:
-!! 2014-feb-07  gayno    - initial version
 !!
-!! usage: call SKGB2(LUGB,ISEEK,MSEEK,LSKIP,LGRIB,I1)
-!!
-!!   input argument list:  lugb  - file unit number
-!!                         iseek - number of bits to skip
-!!                                 before search.
-!!                         mseek - max number of bytes
-!!                                 to search.
-!!
-!!   output argument list:  lskip  - number of bytes to skip
-!!                                   before message
-!!                          lgrib  - number of bytes in message.
-!!                                   '0' if not grib.
-!!                          i1     - '1' or '2' if grib1/2 file.
-!!                                   '0' if not grib.
+!!  argument list: 
+!! @param[in] lugb      - file to be checked
+!! @param[in] iseek     - number of bits to skip before search
+!! @param[in] lugb      - max number of bytes to search
+!! @param[out] lskip     -number of bytes to skip before message
+!! @param[out] lgrib     - number of bytes in message '0' if not grib
+!! @param[out] i1        - 1 or 2 if grib1/2 file '0' if not grib.
 !!
 !! files:
 !!    input:
@@ -50,8 +45,6 @@
 !! condition codes: none
 !!
 !! remarks: none.
-!!
-!! 
 !!          
  subroutine grib_check(file_name, isgrib)
 
