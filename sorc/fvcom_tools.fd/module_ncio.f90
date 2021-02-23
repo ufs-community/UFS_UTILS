@@ -1,5 +1,5 @@
 !> @file
-!!  module: functions to read and write netcdf files
+!! @brief Functions to read and write netcdf files.
 !!
 !! @author Ming Hu @date 2017-11-01
 !!
@@ -99,14 +99,14 @@ module module_ncio
 
 contains
 
+!> Open a netcdf file, set initial debug level.
+!!
+!! @param this instance of an ncio class
+!! @param filename the file to open
+!! @param action "r" for read, "w" for write
+!! @param debug_level set to non-zero for some verbose output
+!! @author Ming Hu @date 2017-11-01
 subroutine open_nc(this,filename,action,debug_level)
-!
-! open a netcdf file, set initial debug level
-!
-! prgmmr:  Ming Hu             org: GSD           date: 2017-11-01
-!
-! abstract: 
-!
 
   implicit none
 !
@@ -139,14 +139,11 @@ subroutine open_nc(this,filename,action,debug_level)
 
 end subroutine open_nc
 
+!> Close a netcdf file.
+!!
+!! @param this instance of an ncio class
+!! @author Ming Hu org: GSD/AMB @date 2017-04-10
 subroutine close_nc(this)
-!
-! initial netcdf file
-!
-! prgmmr:  Ming Hu             org: GSD/AMB           date: 2017-04-10
-!
-! abstract: 
-!
 
   implicit none
 !
@@ -162,15 +159,13 @@ subroutine close_nc(this)
 
 end subroutine close_nc
 
+!> Get attribute in wrf netcdf file.
+!!
+!! @param this instance of an ncio class
+!! @param attname name of the attribute to get
+!! @param rval return value
+!! @author Ming Hu org: GSD/AMB @date 2017-10-04
 subroutine get_att_nc_real(this,attname,rval)
-!
-! get attribute in wrf netcdf file
-!
-! prgmmr:  Ming Hu             org: GSD/AMB           date: 2017-10-04
-!
-! abstract: 
-!
-
   implicit none
 !
   class(ncio) :: this
@@ -188,15 +183,13 @@ subroutine get_att_nc_real(this,attname,rval)
 !
 end subroutine get_att_nc_real
 
+!> Get integer attribute in wrf netcdf file.
+!!
+!! @param this instance of an ncio class
+!! @param attname name of the attribute to get
+!! @param ival value of attribute.
+!! @author Ming Hu org: GSD/AMB @date 2017-10-04
 subroutine get_att_nc_int(this,attname,ival)
-!
-! get attribute in wrf netcdf file
-!
-! prgmmr:  Ming Hu             org: GSD/AMB           date: 2017-10-04
-!
-! abstract: 
-!
-
   implicit none
 !
   class(ncio) :: this
@@ -214,15 +207,13 @@ subroutine get_att_nc_int(this,attname,ival)
 !
 end subroutine get_att_nc_int
 
+!> Get string attribute in wrf netcdf file.
+!!
+!! @param this instance of an ncio class
+!! @param attname name of the attribute to get
+!! @param string value of attribute.
+!! @author Ming Hu org: GSD/AMB @date 2017-10-04
 subroutine get_att_nc_string(this,attname,string)
-!
-! get attribute in wrf netcdf file
-!
-! prgmmr:  Ming Hu             org: GSD/AMB           date: 2017-10-04
-!
-! abstract: 
-!
-
   implicit none
 !
   class(ncio) :: this
@@ -241,15 +232,13 @@ subroutine get_att_nc_string(this,attname,string)
 end subroutine get_att_nc_string
 
 
+!> Get dimensions in netcdf file.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] dimname name of the dimension
+!! @param[out] dimvalue length of the dimension
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_dim_nc(this,dimname,dimvalue)
-!
-! get dimensions in netcdf file
-!
-! prgmmr:  Ming Hu             org: GSD/AMB           date: 2017-11-01
-!
-! abstract: 
-!
-
   implicit none
 !
   class(ncio) :: this
@@ -270,11 +259,15 @@ subroutine get_dim_nc(this,dimname,dimvalue)
 !
 end subroutine get_dim_nc
 
-!==========================begin replace_var ==========================
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_char_1d(this,varname,nd1,field)
-!
-! read in one field 
-!
+
   use netcdf
 !
   implicit none
@@ -301,10 +294,15 @@ subroutine replace_var_nc_char_1d(this,varname,nd1,field)
 !
 end subroutine replace_var_nc_char_1d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_char_2d(this,varname,nd1,nd2,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -343,10 +341,16 @@ subroutine replace_var_nc_char_2d(this,varname,nd1,nd2,field)
 !
 end subroutine replace_var_nc_char_2d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] nd3
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_char_3d(this,varname,nd1,nd2,nd3,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -388,11 +392,15 @@ subroutine replace_var_nc_char_3d(this,varname,nd1,nd2,nd3,field)
   deallocate(temp)
 !
 end subroutine replace_var_nc_char_3d
-!
+
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] ilength
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_char(this,varname,ilength,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -492,11 +500,14 @@ subroutine replace_var_nc_char(this,varname,ilength,field)
 end subroutine replace_var_nc_char
 !--- replace_var_nc_char
 
-!---- replace real
+!> Replace real.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_real_1d(this,varname,nd1,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -523,10 +534,15 @@ subroutine replace_var_nc_real_1d(this,varname,nd1,field)
 !
 end subroutine replace_var_nc_real_1d
 
+!> Replace real.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_real_2d(this,varname,nd1,nd2,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -565,6 +581,15 @@ subroutine replace_var_nc_real_2d(this,varname,nd1,nd2,field)
 !
 end subroutine replace_var_nc_real_2d
 
+!> Replace real.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] nd3
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_real_3d(this,varname,nd1,nd2,nd3,field)
 !
 ! read in one field 
@@ -613,10 +638,14 @@ subroutine replace_var_nc_real_3d(this,varname,nd1,nd2,nd3,field)
 !
 end subroutine replace_var_nc_real_3d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] ilength
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_real(this,varname,ilength,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -715,7 +744,13 @@ subroutine replace_var_nc_real(this,varname,ilength,field)
 !
 end subroutine replace_var_nc_real
 
-!---- repalce double
+!> Replace double.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_double_1d(this,varname,nd1,field)
 !
 ! read in one field 
@@ -746,6 +781,14 @@ subroutine replace_var_nc_double_1d(this,varname,nd1,field)
 !
 end subroutine replace_var_nc_double_1d
 
+!> Replace double.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_double_2d(this,varname,nd1,nd2,field)
 !
 ! read in one field 
@@ -788,6 +831,15 @@ subroutine replace_var_nc_double_2d(this,varname,nd1,nd2,field)
 !
 end subroutine replace_var_nc_double_2d
 
+!> Replace double.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] nd3
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_double_3d(this,varname,nd1,nd2,nd3,field)
 !
 ! read in one field 
@@ -837,10 +889,14 @@ subroutine replace_var_nc_double_3d(this,varname,nd1,nd2,nd3,field)
 end subroutine replace_var_nc_double_3d
 !
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] ilength
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_double(this,varname,ilength,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -938,12 +994,15 @@ subroutine replace_var_nc_double(this,varname,ilength,field)
   endif
 !
 end subroutine replace_var_nc_double
-!
-!---- replace int
+
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_int_1d(this,varname,nd1,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -970,6 +1029,14 @@ subroutine replace_var_nc_int_1d(this,varname,nd1,field)
 !
 end subroutine replace_var_nc_int_1d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_int_2d(this,varname,nd1,nd2,field)
 !
 ! read in one field 
@@ -1012,10 +1079,16 @@ subroutine replace_var_nc_int_2d(this,varname,nd1,nd2,field)
 !
 end subroutine replace_var_nc_int_2d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] nd3
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_int_3d(this,varname,nd1,nd2,nd3,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1059,11 +1132,15 @@ subroutine replace_var_nc_int_3d(this,varname,nd1,nd2,nd3,field)
   deallocate(temp)
 !
 end subroutine replace_var_nc_int_3d
-!
+
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] ilength
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_int(this,varname,ilength,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1161,14 +1238,15 @@ subroutine replace_var_nc_int(this,varname,ilength,field)
   endif
 !
 end subroutine replace_var_nc_int
-!
-!==========================end of replace_var ==========================
 
-!==========================begin get_var ==========================
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_double_1d(this,varname,nd1,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1198,10 +1276,15 @@ subroutine get_var_nc_double_1d(this,varname,nd1,field)
 !
 end subroutine get_var_nc_double_1d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_double_2d(this,varname,nd1,nd2,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1244,10 +1327,16 @@ subroutine get_var_nc_double_2d(this,varname,nd1,nd2,field)
 !
 end subroutine get_var_nc_double_2d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] nd3
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_double_3d(this,varname,nd1,nd2,nd3,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1295,11 +1384,15 @@ subroutine get_var_nc_double_3d(this,varname,nd1,nd2,nd3,field)
   deallocate(temp)
 !
 end subroutine get_var_nc_double_3d
-!
+
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] ilength
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_double(this,varname,ilength,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1398,10 +1491,14 @@ subroutine get_var_nc_double(this,varname,ilength,field)
 !
 end subroutine get_var_nc_double
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_real_1d(this,varname,nd1,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1431,6 +1528,14 @@ subroutine get_var_nc_real_1d(this,varname,nd1,field)
 !
 end subroutine get_var_nc_real_1d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_real_2d(this,varname,nd1,nd2,field)
 !
 ! read in one field 
@@ -1477,10 +1582,16 @@ subroutine get_var_nc_real_2d(this,varname,nd1,nd2,field)
 !
 end subroutine get_var_nc_real_2d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] nd3
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_real_3d(this,varname,nd1,nd2,nd3,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1528,7 +1639,14 @@ subroutine get_var_nc_real_3d(this,varname,nd1,nd2,nd3,field)
   deallocate(temp)
 !
 end subroutine get_var_nc_real_3d
-!
+
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] ilength
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_real(this,varname,ilength,field)
 !
 ! read in one field 
@@ -1631,10 +1749,14 @@ subroutine get_var_nc_real(this,varname,ilength,field)
 !
 end subroutine get_var_nc_real
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_int_1d(this,varname,nd1,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1664,6 +1786,14 @@ subroutine get_var_nc_int_1d(this,varname,nd1,field)
 !
 end subroutine get_var_nc_int_1d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_int_2d(this,varname,nd1,nd2,field)
 !
 ! read in one field 
@@ -1710,10 +1840,16 @@ subroutine get_var_nc_int_2d(this,varname,nd1,nd2,field)
 !
 end subroutine get_var_nc_int_2d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] nd3
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_int_3d(this,varname,nd1,nd2,nd3,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1761,7 +1897,14 @@ subroutine get_var_nc_int_3d(this,varname,nd1,nd2,nd3,field)
   deallocate(temp)
 !
 end subroutine get_var_nc_int_3d
-!
+
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] ilength
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_int(this,varname,ilength,field)
 !
 ! read in one field 
@@ -1863,11 +2006,15 @@ subroutine get_var_nc_int(this,varname,ilength,field)
   endif
 !
 end subroutine get_var_nc_int
-!
+
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_short_1d(this,varname,nd1,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -1896,7 +2043,15 @@ subroutine get_var_nc_short_1d(this,varname,nd1,field)
   endif
 !
 end subroutine get_var_nc_short_1d
-!
+
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_short_2d(this,varname,nd1,nd2,field)
 !
 ! read in one field 
@@ -1943,10 +2098,14 @@ subroutine get_var_nc_short_2d(this,varname,nd1,nd2,field)
 !
 end subroutine get_var_nc_short_2d
 !
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] ilength
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_short(this,varname,ilength,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -2045,10 +2204,14 @@ subroutine get_var_nc_short(this,varname,ilength,field)
 !
 end subroutine get_var_nc_short
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_char_1d(this,varname,nd1,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -2078,10 +2241,15 @@ subroutine get_var_nc_char_1d(this,varname,nd1,field)
 !
 end subroutine get_var_nc_char_1d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_char_2d(this,varname,nd1,nd2,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -2124,10 +2292,16 @@ subroutine get_var_nc_char_2d(this,varname,nd1,nd2,field)
 !
 end subroutine get_var_nc_char_2d
 
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] nd1
+!! @param[in] nd2
+!! @param[in] nd3
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_char_3d(this,varname,nd1,nd2,nd3,field)
-!
-! read in one field 
-!
   use netcdf
 !
   implicit none
@@ -2174,6 +2348,13 @@ subroutine get_var_nc_char_3d(this,varname,nd1,nd2,nd3,field)
 !
 end subroutine get_var_nc_char_3d
 !
+!> Read in one field.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] varname name of the variable
+!! @param[in] ilength
+!! @param[in] field
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_char(this,varname,ilength,field)
 !
 ! read in one field 
@@ -2275,8 +2456,12 @@ subroutine get_var_nc_char(this,varname,ilength,field)
   endif
 !
 end subroutine get_var_nc_char
-!==========================end of get_var ==========================
 
+!> Handle netCDF errors.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] status return code from neCDF
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine handle_err(this,status)
   use netcdf
   implicit none
@@ -2289,8 +2474,15 @@ subroutine handle_err(this,status)
   end if
 end subroutine handle_err
 
+!> Convert theta T to T.
+!!
+!! @param[in] this instance of an ncio class
+!! @param[in] nx
+!! @param[in] ny
+!! @param[in] ps
+!! @param[in] t2
+!! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine convert_theta2t_2dgrid(this,nx,ny,ps,t2)
-! convertt theta T to T 
          implicit none
          class(ncio) :: this
 
@@ -2314,19 +2506,18 @@ subroutine convert_theta2t_2dgrid(this,nx,ny,ps,t2)
 
 end subroutine convert_theta2t_2dgrid
 
+!> Add a new variable to sfc_data.nc with dimensions (Time, yaxis_1,
+!! xaxis_1).
+!!
+!! @param[in] varname Name of variable to be created in netcdf file
+!! @param[in] dname1 1st dimension name
+!! @param[in] dname2 2nd dimension name
+!! @param[in] dname3 3rd dimension name
+!! @param lname long name output for netcdf variable
+!! @param units units to use in netcdf variable
+!!
+!! @author David.M.Wright org: UM/GLERL @date 2020-09-01
 subroutine add_new_var_3d(this,varname,dname1,dname2,dname3,lname,units)
-!
-! prgmmr:  David.M.Wright    org: UM/GLERL        date: 2020-09-01
-!
-! abstract: Add a new variable to sfc_data.nc with dimensions
-!            (Time, yaxis_1, xaxis_1)
-! 
-! Input: varname = Name of variable to be created in netcdf file
-!        dname1,dname2,dname3 = 1st,2nd, and 3rd dimension names
-!        lname = long name output for netcdf variable
-!        units = units to use in netcdf variable
-!
-  use netcdf
   implicit none
 !
   class(ncio) :: this

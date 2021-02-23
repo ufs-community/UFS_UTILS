@@ -1,3 +1,8 @@
+# This is the CMake file for the fvcom_tools utility in the UFS_UTILS
+# project.
+#
+# David Wright
+
 set(fortran_src
    kinds.f90
    module_ncio.f90
