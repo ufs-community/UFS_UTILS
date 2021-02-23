@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'chgres'
+project = 'ufs_utils'
 copyright = '2020 '
 author = 'George Gayno and others'
 
@@ -53,6 +53,8 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinxcontrib.bibtex'
 ]
+
+bibtex_bibfiles = ['references.bib']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -118,7 +120,7 @@ def setup(app):
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'chgres'
+htmlhelp_basename = 'ufs_utils'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -147,7 +149,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'chgres.tex', 'chgres Documentation',
+    (master_doc, 'ufs_utils.tex', 'ufs_utils Documentation',
      author,'manual'),
 ]
 
@@ -157,7 +159,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'chgres', 'chgres Documentation',
+    (master_doc, 'ufs_utils', 'ufs_utils Documentation',
      [author], 1)
 ]
 
@@ -168,8 +170,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'chgres', 'chgres Documentation',
-     'author, chgres', 'One line description of project.',
+    (master_doc, 'ufs_utils', 'ufs_utils Documentation',
+     'author, ufs_utils', 'One line description of project.',
      'Miscellaneous'),
 ]
 
