@@ -149,7 +149,7 @@ In GRIB2 files only the Tsfc is stored and that is set as foundation temperature
 Note, that neither of these two options will get rid of the underlying baked in heating/cooling in the surface temperature fields. For most cases this may not be an issue, but where it is then the user will either have to initialize the model with NEMSIO or NetCDF data, or replace the surface temperature in the GRIB2 fields with independently obtained foundation temperature.
 
 Global chgres_cube namelist options
---------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3 horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
 
