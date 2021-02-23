@@ -28,12 +28,12 @@ Note on variable names: “input” refers to the data input to the program (i.e
             * newps - computes adjusted surface pressure given a new terrain height.
             * newpr1 - computes 3-D pressure given an adjusted surface pressure.
             * vintg - vertically interpolate atmospheric fields to target FV3 grid.
-      * surface.F90 - process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields.  Assumes the input land data are Noah LSM-based, and the fv3 run will use the Noah LSM.   NSST fields are not available when using GRIB2 input data.  Description of main routines:
+      * surface.F90 - process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields.  NSST fields are not available when using GRIB2 input data.  Description of main routines:
 
             * interp - horizontally interpolate fields from input to target FV3 grid.
             * calc_liq_soil_moisture - compute liquid portion of total soil moisture.
             * adjust_soilt_for_terrain - adjust soil temperature for large differences between input and target FV3 grids.
-            * rescale_soil_moisture - adjust total soil moisture for differences between soil type on input and target FV3 grids.  Required to preserve latent/sensible heat fluxes.  Assumes Noah LSM.
+            * rescale_soil_moisture - adjust total soil moisture for differences between soil type on input and target FV3 grids.  Required to preserve latent/sensible heat fluxes.
             * roughness - set roughness length at land and sea/lake ice.  At land, a vegetation type-based lookup table is used.
             * qc_check - some consistency checks.
       * search_util.f90 - searches for the nearest valid land/non-land data where the input and target fv3 land-mask differ.  Example: when the target FV3 grid depicts an island that is not resolved by the input data.  If nearby valid data is not found, a default value is used.
