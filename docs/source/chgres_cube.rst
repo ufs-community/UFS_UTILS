@@ -208,10 +208,9 @@ Configuring and using chgres_cube for regional applications
 ----------------------------------------------------------------
 
 Regional program inputs and outputs
----------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Inputs
-~~~~~~
+**Inputs**
 
 The following four sets of files/directories should all be located in the same directory (orog_dir_target_grid in the namelist):
 
@@ -239,8 +238,7 @@ The following four sets of files/directories should all be located in the same d
 
       * Input data files. GRIB2 only.  See the next section for how to find this data.
 
-Outputs
-~~~~~~~~
+**Outputs**
 
       * Atmospheric “coldstart” file.  NetCDF.
         * out.atm.tile7.nc
@@ -249,10 +247,9 @@ Outputs
         * out.sfc.tile7.nc
 
 Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
--------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-FV3GFS
-~~~~~~~~
+**FV3GFS**
 
       * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
@@ -260,16 +257,15 @@ FV3GFS
 
       * 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2 file**, under **GFS Forecasts 003 (1-deg)** here: `NCDC - Global Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>`__.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
-NAM
-~~~~~
+**NAM**
+
      * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfFH.tmHH.grib2** files in subdirectory nam.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`__.
 
      * 12-km data from previous 6 months - Use the **nam_218_YYYYMMDD_00HH_000.grb2 file**,   under **NAM Forecasts NAM-NMM 218 (12km) Domain** here: `NCDC - North American Mesoscale Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/north-american-mesoscale-forecast-system-nam>`__.
 
      * 12-km archived data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`__.
 
-HRRR
-""""
+**HRRR**
  
       * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfFH.grib2** files in the subdirectory hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`__.
 
@@ -279,8 +275,8 @@ HRRR
 
       * 3-km operational data from 2016 to present (University of Utah): `Click here <http://home.chpc.utah.edu/~u0553130/Brian_Blaylock/cgi-bin/hrrr_download.cgi>`__.
 
-RAP
-~~~~~
+**RAP**
+
 
       * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfFH.grib2** files in the subdirectory rap.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/rap/prod/>`__.
 
@@ -291,7 +287,7 @@ RAP
 
 
 Initializing regional domains with GRIB2 data - some caveats
-------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Keep these things in mind when using FV3GFS GRIB2 data for model initialization:
 
@@ -307,12 +303,11 @@ Keep these things in mind when using FV3GFS GRIB2 data for model initialization:
       * Only tested with GRIB2 data from FV3GFS, RAP, NAM, and HRRR data. May not work with GRIB2 data from other models. Use these at your own risk.
 
 Regional chgres_cube namelist options
--------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3-LAM horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
 
-Required Entries
-~~~~~~~~~~~~~~~~
+**Required Entries**
 
       * fix_dir_target_grid - Path to the FV3-LAM surface climatological files (such as albedo).
       * fix_dir_input_grid - Directory containing RAP lat/lon file. On NOAA HPC machines, typically the “fix/fix_am” directory of the UFS_UTILS directory. 
@@ -336,8 +331,7 @@ Required Entries
       * halo_bndy - Integer number of rows/columns that exist within the halo, where pure lateral boundary conditions are applied.
       * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. (Default: 'GFS')
 
-Optional Entries
-~~~~~~~~~~~~~~~~~~~~~~
+**Optional Entries**
 
       * geogrid_file_input_grid - Full path to the RAP or HRRR geogrid file corresponding to the external model input data. Only used with external_model = ‘HRRR’ or ‘RAP’. 
       * nsoill_out - Number of soil levels to produce in the sfc_data.nc file (Default: 4).
