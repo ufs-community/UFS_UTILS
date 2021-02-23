@@ -388,7 +388,6 @@
 !! @param[in] lon11 lon of first grid point
 !! @param[in] latlast lat of last grid point
 !! @param[in] lonlast lon of last grid point
-
 !! @param[out] igds grib2 section 3 information.
 !! @param[out] listsec0 grib2 section 0 information.
 !! @param[out] listsec1 grib2 section 1 information.
