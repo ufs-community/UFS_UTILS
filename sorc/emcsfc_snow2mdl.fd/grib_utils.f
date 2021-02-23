@@ -123,15 +123,10 @@
 !> Convert from the grib2 grid description template array
 !! used by the ncep grib2 library, to the grib1 grid
 !! description section array used by ncep ipolates library.
-!!  
-!! program history log:
-!! - 2014-Sep-26  gayno    - initial version
 !!
 !! @param[in] igdtnum grib2 grid desc template number
 !! @param[in] igdstmpl grib2 grid desc template array
 !! @param[in] igdtlen grib2 grid desc template array size
-!
-!   output argument list: 
 !! @param[out] kgds grib1 grid description section array used by ncep ipolates library.
 !! @param[out] ni i grid dimensions
 !! @param[out] nj j grid dimensions
@@ -373,15 +368,16 @@
  end subroutine grib2_check
 
 !> Initialize grib2 arrays required by the ncep g2 library according to
-!> grib1 gds information. The grib1 gds is held in the kgds array, which
-!> is used by the ncep ipolates and w3nco (grib 1) libraries.
+!! grib1 gds information. The grib1 gds is held in the kgds array, which
+!! is used by the ncep ipolates and w3nco (grib 1) libraries.
 !!
-!! @note Call routine grib2_check first to determine igdstmplen.
-!!      
+!! Call routine grib2_check first to determine igdstmplen.
+!!
 !! @param[in] century current date/time info
 !! @param[in] year current date/time info
 !! @param[in] month current date/time info
 !! @param[in] day current date/time info
+!! @param[in] hour current date/time info
 !! @param[in] kgds grib1 gds information
 !! @param[in] igdstmplen length of grib2 gdt template.
 !! @param[in] lat11 lat of first grid point
