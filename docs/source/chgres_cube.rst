@@ -10,6 +10,8 @@ Code structure
 
 Note on variable names: “input” refers to the data input to the program (i.e., GRIB2, NEMSIO, NetCDF).  “Target” refers to the target or FV3 model grid.  See routine doc blocks for more details.
 
+The program assumes Noah/Noah-MP LSM coefficients for certain soil thresholds. In the future, an option will be added to use RUC LSM thresholds.
+
       * chgres.F90 - This is the main driver routine.
       * program_setup.F90 - Sets up the program execution.
 
