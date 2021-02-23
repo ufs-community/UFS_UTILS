@@ -1,7 +1,7 @@
 !> @file
 !! @brief Read in data defining the model grid.
 !!
-!! @author gayno org: w/np2 @date 2005-dec-16
+!!@author gayno org: w/np2 @date 2005-dec-16  
 !!
 !! program history log:
 !! -  2005-dec-16  gayno   - initial version
@@ -58,57 +58,53 @@
  real, allocatable              :: lsmask_mdl_sav (:,:)
  real                           :: resol_mdl  ! in km
 
+!> 
+!! @brief read latitude, longitude, land/sea mask on the    model grid.
+!!
+!! @author George Gayno org: w/np2 @date 2005-dec-16
+!!              
+!!
+!! program history log:
+!! 2005-dec-16  gayno    - initial version
+!! 2007-nov-30  gayno    - improved method for thinning gfs grids
+!!                         added nam b-grids
+!! 2014-sep-29  gayno    - add option to read lat,lon and mask
+!!                         data in grib2.
+!!
+!! usage: call read_mdl_grid_info
+!!
+!!   input argument list:  n/a
+!!
+!!   output argument list: n/a
+!!
+!! files:
+!!   inputs:
+!!     - model latitudes (grib 1 or grib 2)
+!!     - model longitudes (grib 1 or grib 2)
+!!     - model landmask (grib 1 or grib 2)
+!!     - # pts per row, gfs grid (the "lonsperlat" file, ascii)
+!!
+!!  outputs: none
+!!
+!! condition codes: all fatal
+!!   76 - bad open/read gfs "lonsperlat" file
+!!   79 - unrecognized model grid
+!!   80 - bad open model latitude file
+!!   81 - bad read of model latitude grib 1 header
+!!   82 - bad read of model latitude data
+!!   83 - bad open model longitude file
+!!   82 - bad read of model longitude data
+!!   85 - bad open model landmask file
+!!   86 - bad read of model landmask data
+!!   90 - model latitude file not grib 1 or grib 2
+!!   91 - model longitude file not grib 1 or grib 2
+!!   92 - model landmask file not grib 1 or grib 2
+!!
+!! remarks: none.
+!!
+
  contains
-
  subroutine read_mdl_grid_info
-!$$$  subprogram documentation block
-!              
-! subprogram:    read_mdl_grid_info
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract: read latitude, longitude, land/sea mask on the
-!   model grid.
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-! 2007-nov-30  gayno    - improved method for thinning gfs grids
-!                         added nam b-grids
-! 2014-sep-29  gayno    - add option to read lat,lon and mask
-!                         data in grib2.
-!
-! usage: call read_mdl_grid_info
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files:
-!   inputs:
-!     - model latitudes (grib 1 or grib 2)
-!     - model longitudes (grib 1 or grib 2)
-!     - model landmask (grib 1 or grib 2)
-!     - # pts per row, gfs grid (the "lonsperlat" file, ascii)
-!
-!  outputs: none
-!
-! condition codes: all fatal
-!   76 - bad open/read gfs "lonsperlat" file
-!   79 - unrecognized model grid
-!   80 - bad open model latitude file
-!   81 - bad read of model latitude grib 1 header
-!   82 - bad read of model latitude data
-!   83 - bad open model longitude file
-!   82 - bad read of model longitude data
-!   85 - bad open model landmask file
-!   86 - bad read of model landmask data
-!   90 - model latitude file not grib 1 or grib 2
-!   91 - model longitude file not grib 1 or grib 2
-!   92 - model landmask file not grib 1 or grib 2
-!
-! remarks: none.
-!
-!$$$
-
  use grib_mod  ! grib 2 library
 
  implicit none
