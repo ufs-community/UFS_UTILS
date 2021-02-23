@@ -58,11 +58,10 @@
  real, allocatable              :: lsmask_mdl_sav (:,:)
  real                           :: resol_mdl  ! in km
 
+ contains
 !> 
-!! @brief read latitude, longitude, land/sea mask on the    model grid.
 !!
 !! @author George Gayno org: w/np2 @date 2005-dec-16
-!!              
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
@@ -70,23 +69,15 @@
 !!                         added nam b-grids
 !! 2014-sep-29  gayno    - add option to read lat,lon and mask
 !!                         data in grib2.
-!!
 !! usage: call read_mdl_grid_info
-!!
-!!   input argument list:  n/a
-!!
-!!   output argument list: n/a
-!!
 !! files:
 !!   inputs:
 !!     - model latitudes (grib 1 or grib 2)
 !!     - model longitudes (grib 1 or grib 2)
 !!     - model landmask (grib 1 or grib 2)
-!!     - # pts per row, gfs grid (the "lonsperlat" file, ascii)
-!!
+!!     - number  pts per row, gfs grid (the "lonsperlat" file, ascii)
 !!  outputs: none
-!!
-!! condition codes: all fatal
+!!    condition codes: all fatal
 !!   76 - bad open/read gfs "lonsperlat" file
 !!   79 - unrecognized model grid
 !!   80 - bad open model latitude file
@@ -102,8 +93,6 @@
 !!
 !! remarks: none.
 !!
-
- contains
  subroutine read_mdl_grid_info
  use grib_mod  ! grib 2 library
 
