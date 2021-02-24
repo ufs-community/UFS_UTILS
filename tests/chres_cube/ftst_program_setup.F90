@@ -7,6 +7,7 @@ program ftst_program_setup
   use netcdf
   use program_setup
   implicit none
+  integer :: is
   
   print*, "Starting test of program_setup."
 
@@ -36,6 +37,12 @@ program ftst_program_setup
        tracers_input(3) .ne. "o3mr" .or. tracers_input(4) .ne. "icmr" .or. &
        tracers_input(5) .ne. "rwmr" .or. tracers_input(6) .ne. "snmr" .or. &
        tracers_input(7) .ne. "grle") stop 23
+
+  ! Reset the tracers array.
+  do is = 1, max_tracers
+     tracers(is) = "NULL"
+     tracers_input(is) = "NULL"
+  enddo
   print*, "OK"
 
   print*, "testing read_setup_namelist with config_fv3..."
@@ -49,21 +56,18 @@ program ftst_program_setup
   if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 40
   if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.history") stop 41
   if (trim(atm_files_input_grid(1)) .ne. 'dynf000.tile1.nc') stop 42
-  if (trim(sfc_files_input_grid(1)) .ne. 'phyf000.tile1.nc') stop 13
-  ! if (varmap_file .ne. "NULL") stop 14
-  ! if (thomp_mp_climo_file .ne. "NULL") stop 16
-  ! if (trim(cres_target_grid) .ne. "C96") stop 17
-  ! if (atm_weight_file .ne. "NULL") stop 18
-  ! if (trim(input_type) .ne. "gaussian_nemsio") stop 19
-  ! if (trim(external_model) .ne. "GFS") stop 20
-  ! if (num_tracers .ne. 7) stop 21
-  ! if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr" .or. &
-  !      tracers(4) .ne. "ice_wat" .or. tracers(5) .ne. "rainwat" .or. tracers(6) .ne. "snowwat" .or. &
-  !      tracers(7) .ne. "graupel") stop 22
-  ! if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
-  !      tracers_input(3) .ne. "o3mr" .or. tracers_input(4) .ne. "icmr" .or. &
-  !      tracers_input(5) .ne. "rwmr" .or. tracers_input(6) .ne. "snmr" .or. &
-  !      tracers_input(7) .ne. "grle") stop 23
+  if (trim(sfc_files_input_grid(1)) .ne. 'phyf000.tile1.nc') stop 43
+  if (varmap_file .ne. "NULL") stop 44
+  if (thomp_mp_climo_file .ne. "NULL") stop 46
+  if (trim(cres_target_grid) .ne. "C192") stop 47
+  if (atm_weight_file .ne. "NULL") stop 48
+  if (trim(input_type) .ne. "history") stop 49
+  if (trim(external_model) .ne. "GFS") stop 50
+  print *,num_tracers
+  if (num_tracers .ne. 3) stop 51
+  if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr") stop 52
+  if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
+       tracers_input(3) .ne. "o3mr") stop 53
   print*, "OK"
 
   print*, "SUCCESS!"
