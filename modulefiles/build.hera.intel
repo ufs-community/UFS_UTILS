@@ -21,8 +21,6 @@ module load w3nco/2.4.1
 module load gfsio/1.4.1
 module load sfcio/1.4.1
 module load sigio/2.3.2
-module load nemsiogfs/2.5.3
-module load landsfcutil/2.4.1
 module load wgrib2/2.0.8
 
 module load jasper/2.0.22

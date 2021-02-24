@@ -22,8 +22,6 @@ module load bacio/2.4.1
 module load sigio/2.3.2
 module load sfcio/1.4.1
 module load nemsio/2.5.2
-module load nemsiogfs/2.5.3
 module load gfsio/1.4.1
-module load landsfcutil/2.4.1
 module load g2/3.4.1
 module load wgrib2/2.0.8
