@@ -68,6 +68,12 @@ program ftst_program_setup
   if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr") stop 52
   if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
        tracers_input(3) .ne. "o3mr") stop 53
+
+  ! Reset the tracers array.
+  do is = 1, max_tracers
+     tracers(is) = "NULL"
+     tracers_input(is) = "NULL"
+  enddo
   print*, "OK"
 
   print*, "SUCCESS!"

@@ -1,0 +1,22 @@
+&config
+  mosaic_file_target_grid="/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/C96_mosaic.nc"
+  fix_dir_target_grid="/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/fix_sfc"
+  orog_dir_target_grid="/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96"
+  orog_files_target_grid="C96_oro_data.tile1.nc","C96_oro_data.tile2.nc","C96_oro_data.tile3.nc","C96_oro_data.tile4.nc","C96_oro_data.tile5.nc","C96_oro_data.tile6.nc"
+  vcoord_file_target_grid="/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt"
+  data_dir_input_grid="/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/gfs.sigio"
+  atm_files_input_grid="gdas.t00z.sanl"
+  sfc_files_input_grid="gdas.t00z.sfcanl"
+  cycle_mon=07
+  cycle_day=17
+  cycle_hour=00
+  convert_atm=.true.
+  convert_sfc=.true.
+  convert_nst=.false.
+  input_type="gfs_sigio"
+  tracers="sphum","o3mr","liq_wat"
+  tracers_input="spfh","o3mr","clwmr"
+  regional=0
+  halo_bndy=0
+  halo_blend=0
+ /
