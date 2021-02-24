@@ -1,7 +1,7 @@
 !> @file
 !! @brief Interpolate snow data to model grid and grib the result.
 !!
-!! @author gayno org: w/np2 @date 2005-dec-16
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16
 !!
 !! program history log:
 !! -  2005-DEC-16  gayno   - initial version
@@ -86,94 +86,83 @@
  public                          :: interp
 
  contains
-
+!>   subprogram documentation block
+!!
+!!  @author George Gayno org: w/np2  @date 2005-Dec-16
+!!
+!! @note      interpolate snow data to model grid.
+!!
+!! program history log:
+!! 2005-dec-16  gayno    - initial version
+!! 2007-sep-20  gayno    - tested for b-grids. added improved
+!!                         thinning for gfs grid.
+!! 2008-feb-04  gayno    - add use of autosnow data
+!! 2014-sep-29  gayno    - add option to output model snow
+!!                         data in grib2 format.
+!!
+!! condition codes: all fatal
+!!   54 - selected input snow data not valid for model grid
+!!   55 - error in ipolates interpolating snow data 
+!! 
+!! @note    The determination of cover and depth on the model
+!!   grid depends on the input snow data selected:
+!!
+!!   nam grids:
+!!   ---------
+!!
+!!   1) nesdis/ims only - An analysis of snow cover on the
+!!      model grid is produced.  No depth analysis is
+!!      produced.
+!!
+!!   2) afwa only - An analysis of snow cover and depth on
+!!      the model grid is produced.  Depth is determined from
+!!      the afwa data.  Cover is set to 100% where afwa indicates
+!!      snow and 0% otherwise.
+!!
+!!   3) nesdis/ims and afwa - An analysis of snow cover and
+!!      depth on the model grid is produced.  Cover is
+!!      determined by the nesdis/ims data.  If cover is
+!!      greater than user-defined threshold (variable
+!!      snow_cvr_threshold) the depth is set to the afwa
+!!      value or a nominal value, whichever is greater.
+!!      The nominal value is user-defined (varaible
+!!      min_snow_depth).  If cover is less than user-
+!!      defined threshold, the depth is set to 0,
+!!      regardless of the afwa depth value.
+!!
+!!   gfs grid:
+!!   --------
+!!
+!!   1) nesdis/ims and autosnow only - An analysis of snow
+!!      cover and depth on the model grid is produced.
+!!      Cover is determined from the ims and autosnow data.
+!!      If cover is greater than the user-defined
+!!      threshold (variable snow_cvr_threshold), the
+!!      the depth is set to the user-defined default
+!!      depth (variable min_snow_depth).
+!!
+!!   2) afwa only - An analysis of snow cover and depth on
+!!      the model grid is produced.  Depth is determined from
+!!      the afwa data.  Cover is set to 100% where afwa indicates
+!!      snow and 0% otherwise.
+!!
+!!   3) nesdis/ims, autosnow and afwa - An analysis of snow
+!!      cover and depth on the model grid is produced.  Cover is
+!!      determined by the ims and autosnow data.  If cover is
+!!      greater than user-defined threshold (variable
+!!      snow_cvr_threshold) the depth is set to the afwa
+!!      value or a nominal value, whichever is greater.
+!!      The nominal value is user-defined (varaible
+!!      min_snow_depth).  If cover is less than user-
+!!      defined threshold, the depth is set to 0,
+!!      regardless of the afwa depth value.
+!!      
+!! attributes:
+!!   language: fortran 90
+!!   machine:  IBM WCOSS
+!!
+!!
  subroutine interp
-!$$$  subprogram documentation block
-!
-! subprogram:   interp
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract:  interpolate snow data to model grid.
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-! 2007-sep-20  gayno    - tested for b-grids. added improved
-!                         thinning for gfs grid.
-! 2008-feb-04  gayno    - add use of autosnow data
-! 2014-sep-29  gayno    - add option to output model snow
-!                         data in grib2 format.
-!
-! usage: call interp
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files: none
-!
-! condition codes: all fatal
-!   54 - selected input snow data not valid for model grid
-!   55 - error in ipolates interpolating snow data 
-! 
-! remarks: The determination of cover and depth on the model
-!   grid depends on the input snow data selected:
-!
-!   nam grids:
-!   ---------
-!
-!   1) nesdis/ims only - An analysis of snow cover on the
-!      model grid is produced.  No depth analysis is
-!      produced.
-!
-!   2) afwa only - An analysis of snow cover and depth on
-!      the model grid is produced.  Depth is determined from
-!      the afwa data.  Cover is set to 100% where afwa indicates
-!      snow and 0% otherwise.
-!
-!   3) nesdis/ims and afwa - An analysis of snow cover and
-!      depth on the model grid is produced.  Cover is
-!      determined by the nesdis/ims data.  If cover is
-!      greater than user-defined threshold (variable
-!      snow_cvr_threshold) the depth is set to the afwa
-!      value or a nominal value, whichever is greater.
-!      The nominal value is user-defined (varaible
-!      min_snow_depth).  If cover is less than user-
-!      defined threshold, the depth is set to 0,
-!      regardless of the afwa depth value.
-!
-!   gfs grid:
-!   --------
-!
-!   1) nesdis/ims and autosnow only - An analysis of snow
-!      cover and depth on the model grid is produced.
-!      Cover is determined from the ims and autosnow data.
-!      If cover is greater than the user-defined
-!      threshold (variable snow_cvr_threshold), the
-!      the depth is set to the user-defined default
-!      depth (variable min_snow_depth).
-!
-!   2) afwa only - An analysis of snow cover and depth on
-!      the model grid is produced.  Depth is determined from
-!      the afwa data.  Cover is set to 100% where afwa indicates
-!      snow and 0% otherwise.
-!
-!   3) nesdis/ims, autosnow and afwa - An analysis of snow
-!      cover and depth on the model grid is produced.  Cover is
-!      determined by the ims and autosnow data.  If cover is
-!      greater than user-defined threshold (variable
-!      snow_cvr_threshold) the depth is set to the afwa
-!      value or a nominal value, whichever is greater.
-!      The nominal value is user-defined (varaible
-!      min_snow_depth).  If cover is less than user-
-!      defined threshold, the depth is set to 0,
-!      regardless of the afwa depth value.
-!      
-! attributes:
-!   language: fortran 90
-!   machine:  IBM WCOSS
-!
-!$$$
-
  use gdswzd_mod
 
  implicit none
@@ -811,37 +800,27 @@
 
  end subroutine interp
 
+!>  subprogram documentation block
+!!
+!! subprogram:   write_grib2
+!!   @author George Gayno  org: w/np2   date 2014-Sep-26
+!!
+!! @note  output snow cover and depth on the model grid 
+!!            in grib 2 format.
+!!
+!! program history log:
+!! 2014-sep-26  gayno    - initial version
+!!
+!! files:
+!!
+!!   output: 
+!!     - snow on the model grid, grib 2, unit=lugb
+!!
+!! condition codes: all fatal
+!!    48 - error writing model snow flie
+!!    49 - error opening model snow flie
+!!
  subroutine write_grib2
-!$$$  subprogram documentation block
-!
-! subprogram:   write_grib2
-!   prgmmr: gayno          org: w/np2     date: 2014-sep-26
-!
-! abstract:  output snow cover and depth on the model grid 
-!            in grib 2 format.
-!
-! program history log:
-! 2014-sep-26  gayno    - initial version
-!
-! usage: call write_grib2
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files:
-!   input: none
-!
-!   output: 
-!     - snow on the model grid, grib 2, unit=lugb
-!
-! condition codes: all fatal
-!    48 - error writing model snow flie
-!    49 - error opening model snow flie
-!
-! remarks: none.
-!
-!$$$
 
  use grib_mod
 
@@ -1006,39 +985,38 @@
 
  end subroutine write_grib2
 
+!>    subprogram documentation block
+!!
+!! subprogram:   write_grib1
+!!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
+!!
+!! abstract:  output snow cover and depth on the model grid
+!!            in grib1 format.
+!!
+!! program history log:
+!! 2005-dec-16  gayno    - initial version
+!! 2014-sep-26  gayno    - rename as write_grib1 (was gribit)
+!!
+!! usage: call write_grib1
+!!
+!!   input argument list:  n/a
+!!
+!!   output argument list: n/a
+!!
+!! files:
+!!   input: none
+!!
+!!   output:
+!!     - snow on model grid, grib 1, unit=lugb
+!!
+!! condition codes:
+!!    57 - error writing model snow depth record
+!!    58 - error writing model snow cover record
+!!    59 - error opening model snow file
+!!
+!! remarks: none.
+!!      
  subroutine write_grib1
-!$$$  subprogram documentation block
-!
-! subprogram:   write_grib1
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract:  output snow cover and depth on the model grid
-!            in grib1 format.
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-! 2014-sep-26  gayno    - rename as write_grib1 (was gribit)
-!
-! usage: call write_grib1
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files:
-!   input: none
-!
-!   output:
-!     - snow on model grid, grib 1, unit=lugb
-!
-! condition codes:
-!    57 - error writing model snow depth record
-!    58 - error writing model snow cover record
-!    59 - error opening model snow file
-!
-! remarks: none.
-!      
-!$$$
 
  implicit none
 
