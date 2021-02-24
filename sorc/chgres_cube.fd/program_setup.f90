@@ -144,11 +144,13 @@
 
 !> Reads program configuration namelist.
 !!
+!! @param filename the name of the configuration file (defaults to ./fort.41).
 !! @author George Gayno NCEP/EMC
- subroutine read_setup_namelist
- 
+ subroutine read_setup_namelist(filename)
  implicit none
- 
+
+ character(len=*), intent(in), optional :: filename
+ character(:), allocatable :: filename_to_use
  
 
  integer                     :: is, ie, ierr
@@ -191,7 +193,13 @@
 
  print*,"- READ SETUP NAMELIST"
 
- open(41, file="./fort.41", iostat=ierr)
+ if (present(filename)) then
+    filename_to_use = filename
+ else
+    filename_to_use = "./fort.41"
+ endif
+
+ open(41, file=filename_to_use, iostat=ierr)
  if (ierr /= 0) call error_handler("OPENING SETUP NAMELIST.", ierr)
  read(41, nml=config, iostat=ierr)
  if (ierr /= 0) call error_handler("READING SETUP NAMELIST.", ierr)
