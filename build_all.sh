@@ -1,4 +1,11 @@
 #! /usr/bin/env bash
+#
+# This build script is only used on NOAA WCOSS systems. All other
+# users should set module files as needed, and build directly with
+# CMake.
+#
+# George Gayno
+
 set -eux
 
 target=hera

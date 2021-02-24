@@ -1,8 +1,6 @@
 !> @file
 !! @brief Process atmospheric fields
 !!
-!! @author gayno NCEP/EMC
-!!
 !! Process atmospheric fields:  Horizontally interpolate input
 !! fields to the target grid.  Adjust surface pressure according to
 !! terrain difference between input and target grids.  Vertically
@@ -15,6 +13,8 @@
 !! on the 'south' edge of the grid box.  "_w" indicate fields on the 
 !! 'west' edge of the grid box.  Otherwise, fields are at the center
 !! of the grid box.
+!!
+!! @author gayno NCEP/EMC
  module atmosphere
 
  use esmf
@@ -57,84 +57,57 @@
 
  private
 
- integer, public                    :: lev_target       ! num vertical levels
- integer, public                    :: levp1_target     ! num levels plus 1
- integer, public                    :: nvcoord_target   ! num vertical coordinate
-                                                        ! variables
+ integer, public                    :: lev_target       !< num vertical levels
+ integer, public                    :: levp1_target     !< num levels plus 1
+ integer, public                    :: nvcoord_target   !< num vertical coordinate variables
 
- real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  ! vertical coordinate
+ real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  !< vertical coordinate
 
- type(esmf_field), public               :: delp_target_grid
-                                           ! pressure thickness
- type(esmf_field), public               :: dzdt_target_grid
-                                           ! vertical velocity
- type(esmf_field)                       :: dzdt_b4adj_target_grid
-                                           ! vertical vel before vert adj
- type(esmf_field), allocatable, public  :: tracers_target_grid(:)
-                                           ! tracers
- type(esmf_field), allocatable          :: tracers_b4adj_target_grid(:)
-                                           ! tracers before vert adj
- type(esmf_field), public               :: ps_target_grid
-                                           ! surface pressure
- type(esmf_field)                       :: ps_b4adj_target_grid
-                                           ! sfc pres before terrain adj
- type(esmf_field)                       :: pres_target_grid
-                                           ! 3-d pressure
- type(esmf_field)                       :: pres_b4adj_target_grid
-                                           ! 3-d pres before terrain adj
- type(esmf_field), public               :: temp_target_grid
-                                           ! temperautre
- type(esmf_field)                       :: temp_b4adj_target_grid
-                                           ! temp before vert adj
- type(esmf_field)                       :: terrain_interp_to_target_grid 
-                                           ! Input grid terrain
-                                           ! interpolated to target grid.   
- type(esmf_field), public               :: u_s_target_grid
-                                           ! u-wind, 'south' edge
- type(esmf_field), public               :: v_s_target_grid
-                                           ! v-wind, 'south' edge
- type(esmf_field)                       :: wind_target_grid
-                                           ! 3-d wind, grid box center
- type(esmf_field)                       :: wind_b4adj_target_grid  
-                                           ! 3-d wind before vert adj
- type(esmf_field)                       :: wind_s_target_grid
-                                           ! 3-d wind, 'south' edge
- type(esmf_field), public               :: u_w_target_grid
-                                           ! u-wind, 'west' edge
- type(esmf_field), public               :: v_w_target_grid
-                                           ! v-wind, 'west' edge
- type(esmf_field)                       :: wind_w_target_grid
-                                           ! 3-d wind, 'west' edge
- type(esmf_field), public               :: zh_target_grid
-                                           ! 3-d height
+ type(esmf_field), public               :: delp_target_grid !< pressure thickness
+ type(esmf_field), public               :: dzdt_target_grid !< vertical velocity
+ type(esmf_field)                       :: dzdt_b4adj_target_grid !< vertical vel before vert adj
+ type(esmf_field), allocatable, public  :: tracers_target_grid(:) !< tracers
+ type(esmf_field), allocatable          :: tracers_b4adj_target_grid(:) !< tracers before vert adj
+ type(esmf_field), public               :: ps_target_grid !< surface pressure
+ type(esmf_field)                       :: ps_b4adj_target_grid !< sfc pres before terrain adj
+ type(esmf_field)                       :: pres_target_grid !< 3-d pressure
+ type(esmf_field)                       :: pres_b4adj_target_grid !< 3-d pres before terrain adj
+ type(esmf_field), public               :: temp_target_grid !< temperautre
+ type(esmf_field)                       :: temp_b4adj_target_grid !< temp before vert adj
+ type(esmf_field)                       :: terrain_interp_to_target_grid !< Input grid terrain interpolated to target grid.   
+ type(esmf_field), public               :: u_s_target_grid !< u-wind, 'south' edge
+ type(esmf_field), public               :: v_s_target_grid !< v-wind, 'south' edge
+ type(esmf_field)                       :: wind_target_grid !< 3-d wind, grid box center
+ type(esmf_field)                       :: wind_b4adj_target_grid !< 3-d wind before vert adj
+ type(esmf_field)                       :: wind_s_target_grid !< 3-d wind, 'south' edge
+ type(esmf_field), public               :: u_w_target_grid !< u-wind, 'west' edge
+ type(esmf_field), public               :: v_w_target_grid !< v-wind, 'west' edge
+ type(esmf_field)                       :: wind_w_target_grid !< 3-d wind, 'west' edge
+ type(esmf_field), public               :: zh_target_grid !< 3-d height
 
 ! Fields associated with thompson microphysics climatological tracers.
 
- type(esmf_field)                       :: qnifa_climo_b4adj_target_grid
-                                           ! number concentration of ice
-                                           ! friendly aerosols before vert adj
- type(esmf_field), public               :: qnifa_climo_target_grid
-                                           ! number concentration of ice
-                                           ! friendly aerosols on target 
-                                           ! horiz/vert grid.
- type(esmf_field)                       :: qnwfa_climo_b4adj_target_grid
-                                           ! number concentration of water
-                                           ! friendly aerosols before vert adj
- type(esmf_field), public               :: qnwfa_climo_target_grid
-                                           ! number concentration of water
-                                           ! friendly aerosols on target 
-                                           ! horiz/vert grid.
- type(esmf_field)                       :: thomp_pres_climo_b4adj_target_grid
-                                           ! pressure of each level on
-                                           ! target grid
+ type(esmf_field)                       :: qnifa_climo_b4adj_target_grid !< number concentration of ice
+                                           !! friendly aerosols before vert adj
+ type(esmf_field), public               :: qnifa_climo_target_grid !< number concentration of ice
+                                           !! friendly aerosols on target 
+                                           !! horiz/vert grid.
+ type(esmf_field)                       :: qnwfa_climo_b4adj_target_grid !< number concentration of water
+                                           !! friendly aerosols before vert adj
+ type(esmf_field), public               :: qnwfa_climo_target_grid !< number concentration of water
+                                           !! friendly aerosols on target 
+                                           !! horiz/vert grid.
+ type(esmf_field)                       :: thomp_pres_climo_b4adj_target_grid !< pressure of each level on
+                                           !! target grid
 
  public :: atmosphere_driver
 
  contains
 
-!> @brief
-!! Driver routine for atmospheric fields.
+!> Driver routine to process for atmospheric fields.
 !!
+!! @param localpet ESMF local persistent execution thread 
+!! @author George Gayno
  subroutine atmosphere_driver(localpet)
 
  use mpi
@@ -456,11 +429,11 @@
 
  end subroutine atmosphere_driver
 
-!-----------------------------------------------------------------------------------
-! Create target grid field objects to hold data before vertical interpolation.
-! These will be defined with the same number of vertical levels as the input grid.
-!-----------------------------------------------------------------------------------
-
+!> Create target grid field objects to hold data before vertical interpolation.
+!! These will be defined with the same number of vertical levels as
+!! the input grid.
+!!
+!! @author George Gayno
  subroutine create_atm_b4adj_esmf_fields
 
  implicit none
@@ -532,10 +505,9 @@
 
  end subroutine create_atm_b4adj_esmf_fields
 
-!-----------------------------------------------------------------------------------
-! Create target grid field objects.
-!-----------------------------------------------------------------------------------
-
+!> Create target grid field objects.
+!!
+!! @author George Gayno
  subroutine create_atm_esmf_fields
 
  implicit none
@@ -672,6 +644,9 @@
 
  end subroutine create_atm_esmf_fields
 
+!> Convert 3-d component winds to u and v.
+!!
+!! @author George Gayno
  subroutine convert_winds
  
  implicit none
@@ -785,44 +760,36 @@
 
  end subroutine convert_winds
 
+!> Compute model level pressures.
+!!                                                                       
+!! PROGRAM HISTORY LOG:                                                  
+!! 2005-04-11  HANN_MING HENRY JUANG    hybrid sigma, sigma-p, and sigma-
+!! - PRGMMR: JUANG          ORG: W/NMC23     DATE: 2005-04-11            
+!! - PRGMMR: Fanglin Yang   ORG: W/NMC23     DATE: 2006-11-28            
+!! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2006-12-12            
+!! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2007-01-02            
+!!                                                                       
+!!   INPUT ARGUMENT LIST:                                                
+!!     IM           INTEGER NUMBER OF POINTS TO COMPUTE                  
+!!     KM           INTEGER NUMBER OF LEVELS                             
+!!     IDVC         INTEGER VERTICAL COORDINATE ID                       
+!!                  (1 FOR SIGMA AND 2 FOR HYBRID)                       
+!!     IDSL         INTEGER TYPE OF SIGMA STRUCTURE                      
+!!                  (1 FOR PHILLIPS OR 2 FOR MEAN)                       
+!!     NVCOORD      INTEGER NUMBER OF VERTICAL COORDINATES               
+!!     VCOORD       REAL (KM+1,NVCOORD) VERTICAL COORDINATE VALUES       
+!!                  FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE               
+!!                  FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B      
+!!                  FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE
+!!                     AK  REAL (KM+1) HYBRID INTERFACE A                
+!!                     BK  REAL (KM+1) HYBRID INTERFACE B                
+!!     PS           REAL (IX) SURFACE PRESSURE (PA)                      
+!!   OUTPUT ARGUMENT LIST:                                               
+!!     PM           REAL (IX,KM) MID-LAYER PRESSURE (PA)                 
+!!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)               
+!!
+!! @author HANN_MING HENRY JUANG, JUANG, Fanglin Yang, S. Moorthi
  subroutine newpr1(localpet)
-!$$$  SUBPROGRAM DOCUMENTATION BLOCK                                    
-!                                                                       
-! SUBPROGRAM:    NEWPR1      COMPUTE MODEL PRESSURES                    
-!   PRGMMR: JUANG          ORG: W/NMC23     DATE: 2005-04-11            
-!   PRGMMR: Fanglin Yang   ORG: W/NMC23     DATE: 2006-11-28            
-!   PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2006-12-12            
-!   PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2007-01-02            
-!                                                                       
-! ABSTRACT: COMPUTE MODEL PRESSURES.                                    
-!                                                                       
-! PROGRAM HISTORY LOG:                                                  
-! 2005-04-11  HANN_MING HENRY JUANG    hybrid sigma, sigma-p, and sigma-
-!                                                                       
-! USAGE:    CALL NEWPR1(IM,IX,KM,KMP,IDVC,IDSL,NVCOORD,VCOORD,PP,TP,QP,P
-!   INPUT ARGUMENT LIST:                                                
-!     IM           INTEGER NUMBER OF POINTS TO COMPUTE                  
-!     KM           INTEGER NUMBER OF LEVELS                             
-!     IDVC         INTEGER VERTICAL COORDINATE ID                       
-!                  (1 FOR SIGMA AND 2 FOR HYBRID)                       
-!     IDSL         INTEGER TYPE OF SIGMA STRUCTURE                      
-!                  (1 FOR PHILLIPS OR 2 FOR MEAN)                       
-!     NVCOORD      INTEGER NUMBER OF VERTICAL COORDINATES               
-!     VCOORD       REAL (KM+1,NVCOORD) VERTICAL COORDINATE VALUES       
-!                  FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE               
-!                  FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B      
-!                  FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE
-!                     AK  REAL (KM+1) HYBRID INTERFACE A                
-!                     BK  REAL (KM+1) HYBRID INTERFACE B                
-!     PS           REAL (IX) SURFACE PRESSURE (PA)                      
-!   OUTPUT ARGUMENT LIST:                                               
-!     PM           REAL (IX,KM) MID-LAYER PRESSURE (PA)                 
-!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)               
-!                                                                       
-! ATTRIBUTES:                                                           
-!   LANGUAGE: FORTRAN                                                   
-!                                                                       
-!C$$$                                                                   
  implicit none 
 
  integer, intent(in) :: localpet
@@ -920,23 +887,20 @@
 
  end subroutine newpr1 
 
+!> Compute new surface pressure.
+!!
+!! Computes a new surface pressure given a new orography. The new
+!! pressure is computed assuming a hydrostatic balance and a constant
+!! temperature lapse rate. Below ground, the lapse rate is assumed to
+!! be -6.5 k/km.
+!!
+!! program history log:
+!! -  91-10-31  mark iredell
+!! -  2018-apr  adapt for fv3. george gayno
+!!
+!! @param [in] localpet ESMF local persistent execution thread 
+!! @author iredell org: w/nmc23, George Gayno @date 92-10-31
  subroutine newps(localpet)
-
-!$$$  subprogram documentation block
-!
-! subprogram:    newps       compute new surface pressure
-!   prgmmr: iredell          org: w/nmc23     date: 92-10-31
-!
-! abstract: computes a new surface pressure given a new orography.
-!   the new pressure is computed assuming a hydrostatic balance
-!   and a constant temperature lapse rate.  below ground, the
-!   lapse rate is assumed to be -6.5 k/km.
-!
-! program history log:
-!   91-10-31  mark iredell
-!   2018-apr  adapt for fv3. george gayno
-!
-!c$$$
 
  implicit none
 
@@ -1129,12 +1093,9 @@
 
  end subroutine newps
 
+!> Read vertical coordinate information.
+!! @author George Gayno
  subroutine read_vcoord_info
-
-!---------------------------------------------------------------------------------
-! Read vertical coordinate information.
-!---------------------------------------------------------------------------------
-
  implicit none
 
  integer                    :: istat, n, k
@@ -1165,10 +1126,10 @@
 
  end subroutine read_vcoord_info
 
-!-----------------------------------------------------------------------------------
-! Horizontally interpolate thompson microphysics data to the target model grid.
-!-----------------------------------------------------------------------------------
-
+!> Horizontally interpolate thompson microphysics data to the target
+!! model grid.
+!!
+!! @author George Gayno
  subroutine horiz_interp_thomp_mp_climo
 
  implicit none
@@ -1275,10 +1236,9 @@
 
  end subroutine horiz_interp_thomp_mp_climo
 
-!-----------------------------------------------------------------------------------
-! Vertically interpolate thompson mp climo tracers to the target model levels.
-!-----------------------------------------------------------------------------------
-
+!> Vertically interpolate thompson microphysics climo tracers to the target
+!! model levels.
+!! @author George Gayno
  SUBROUTINE VINTG_THOMP_MP_CLIMO
 
  implicit none
@@ -1389,9 +1349,11 @@
 
  END SUBROUTINE VINTG_THOMP_MP_CLIMO
 
-!-------------------------------------------------------------------------------
-! Vertically extend model top into thermosphere for whole atmosphere model
-!-------------------------------------------------------------------------------
+
+!!------------------------------------------------------------------------------
+!! Vertically extend model top into thermosphere for whole atmosphere model
+!! @author Henry Juang
+!!------------------------------------------------------------------------------
 
  SUBROUTINE VINTG_WAM (WAM_START_DATE)
 
@@ -1607,35 +1569,21 @@
  END SUBROUTINE VINTG_WAM
 
 
+!> Vertically interpolate upper-air fields.
+!!
+!! Vertically interpolate upper-air fields. Wind, temperature,
+!! humidity and other tracers are interpolated. The interpolation is
+!! cubic lagrangian in log pressure with a monotonic constraint in the
+!! center of the domain. In the outer intervals it is linear in log
+!! pressure. Outside the domain, fields are generally held constant,
+!! except for temperature and humidity below the input domain, where
+!! the temperature lapse rate is held fixed at -6.5 k/km and the
+!! relative humidity is held constant. This routine expects fields
+!! ordered from bottom to top of atmosphere.
+!!
+!! @author IREDELL ORG: W/NMC23 @date 92-10-31
+
  SUBROUTINE VINTG
-!$$$  SUBPROGRAM DOCUMENTATION BLOCK
-!
-! SUBPROGRAM:    VINTG       VERTICALLY INTERPOLATE UPPER-AIR FIELDS
-!   PRGMMR: IREDELL          ORG: W/NMC23     DATE: 92-10-31
-!
-! ABSTRACT: VERTICALLY INTERPOLATE UPPER-AIR FIELDS.
-!   WIND, TEMPERATURE, HUMIDITY AND OTHER TRACERS ARE INTERPOLATED.
-!   THE INTERPOLATION IS CUBIC LAGRANGIAN IN LOG PRESSURE
-!   WITH A MONOTONIC CONSTRAINT IN THE CENTER OF THE DOMAIN.
-!   IN THE OUTER INTERVALS IT IS LINEAR IN LOG PRESSURE.
-!   OUTSIDE THE DOMAIN, FIELDS ARE GENERALLY HELD CONSTANT,
-!   EXCEPT FOR TEMPERATURE AND HUMIDITY BELOW THE INPUT DOMAIN,
-!   WHERE THE TEMPERATURE LAPSE RATE IS HELD FIXED AT -6.5 K/KM AND
-!   THE RELATIVE HUMIDITY IS HELD CONSTANT.  THIS ROUTINE EXPECTS
-!   FIELDS ORDERED FROM BOTTOM TO TOP OF ATMOSPHERE.
-!
-! PROGRAM HISTORY LOG:
-!   91-10-31  MARK IREDELL
-!
-! USAGE:    CALL VINTG
-!
-! SUBPROGRAMS CALLED:
-!   TERP3        CUBICALLY INTERPOLATE IN ONE DIMENSION
-!
-! ATTRIBUTES:
-!   LANGUAGE: FORTRAN
-!
-!
  use mpi
 
  IMPLICIT NONE
@@ -1832,61 +1780,44 @@
 
  END SUBROUTINE VINTG
 
+!> Cubically interpolate in one dimension.
+!!                                                                       
+!! Interpolate field(s) in one dimension along the column(s). The
+!! interpolation is cubic lagrangian with a monotonic constraint in
+!! the center of the domain. In the outer intervals it is linear.
+!! Outside the domain, fields are held constant.
+!!                                                                       
+!! PROGRAM HISTORY LOG:                                                  
+!! -  98-05-01  MARK IREDELL                                              
+!! - 1999-01-04  IREDELL  USE ESSL SEARCH                                  
+!!                                                                       
+!! @param[in] im integer number of columns                            
+!! @param[in] ixz1 integer column skip number for z1                    
+!! @param[in] ixq1 integer column skip number for q1                    
+!! @param[in] ixz2 integer column skip number for z2                    
+!! @param[in] ixq2 integer column skip number for q2                    
+!! @param[in] nm integer number of fields per column                  
+!! @param[in] nxq1 integer field skip number for q1                     
+!! @param[in] nxq2 integer field skip number for q2                     
+!! @param[in] km1 integer number of input points                       
+!! @param[in] kxz1 integer point skip number for z1                     
+!! @param[in] kxq1 integer point skip number for q1                     
+!! @param[in] z1 real (1+(im-1)*ixz1+(km1-1)*kxz1)                    
+!!                  input coordinate values in which to interpolate      
+!!                  (z1 must be strictly monotonic in either direction)  
+!! @param[in] q1 real (1+(im-1)*ixq1+(km1-1)*kxq1+(nm-1)*nxq1)        
+!!                  input fields to interpolate                          
+!! @param[in] km2 integer number of output points                      
+!! @param[in] kxz2 integer point skip number for z2                     
+!! @param[in] kxq2 integer point skip number for q2                     
+!! @param[in] z2 real (1+(im-1)*ixz2+(km2-1)*kxz2)                    
+!!                  output coordinate values to which to interpolate     
+!!                  (z2 need not be monotonic)                           
+!! @param[out] q2 real (1+(im-1)*ixq2+(km2-1)*kxq2+(nm-1)*nxq2)        
+!!                  output interpolated fields                           
+!! @author Mark Iredell @date 98-05-01            
  SUBROUTINE TERP3(IM,IXZ1,IXQ1,IXZ2,IXQ2,NM,NXQ1,NXQ2,             &
                   KM1,KXZ1,KXQ1,Z1,Q1,KM2,KXZ2,KXQ2,Z2,Q2)      
-!$$$  SUBPROGRAM DOCUMENTATION BLOCK                                    
-!                                                                       
-! SUBPROGRAM:    TERP3       CUBICALLY INTERPOLATE IN ONE DIMENSION     
-!   PRGMMR: IREDELL          ORG: W/NMC23     DATE: 98-05-01            
-!                                                                       
-! ABSTRACT: INTERPOLATE FIELD(S) IN ONE DIMENSION ALONG THE COLUMN(S).  
-!   THE INTERPOLATION IS CUBIC LAGRANGIAN WITH A MONOTONIC CONSTRAINT   
-!   IN THE CENTER OF THE DOMAIN.  IN THE OUTER INTERVALS IT IS LINEAR.  
-!   OUTSIDE THE DOMAIN, FIELDS ARE HELD CONSTANT.                       
-!                                                                       
-! PROGRAM HISTORY LOG:                                                  
-!   98-05-01  MARK IREDELL                                              
-! 1999-01-04  IREDELL  USE ESSL SEARCH                                  
-!                                                                       
-! USAGE:    CALL TERP3(IM,IXZ1,IXQ1,IXZ2,IXQ2,NM,NXQ1,NXQ2,             
-!    &                 KM1,KXZ1,KXQ1,Z1,Q1,KM2,KXZ2,KXQ2,Z2,Q2,J2)      
-!   INPUT ARGUMENT LIST:                                                
-!     IM           INTEGER NUMBER OF COLUMNS                            
-!     IXZ1         INTEGER COLUMN SKIP NUMBER FOR Z1                    
-!     IXQ1         INTEGER COLUMN SKIP NUMBER FOR Q1                    
-!     IXZ2         INTEGER COLUMN SKIP NUMBER FOR Z2                    
-!     IXQ2         INTEGER COLUMN SKIP NUMBER FOR Q2                    
-!     NM           INTEGER NUMBER OF FIELDS PER COLUMN                  
-!     NXQ1         INTEGER FIELD SKIP NUMBER FOR Q1                     
-!     NXQ2         INTEGER FIELD SKIP NUMBER FOR Q2                     
-!     KM1          INTEGER NUMBER OF INPUT POINTS                       
-!     KXZ1         INTEGER POINT SKIP NUMBER FOR Z1                     
-!     KXQ1         INTEGER POINT SKIP NUMBER FOR Q1                     
-!     Z1           REAL (1+(IM-1)*IXZ1+(KM1-1)*KXZ1)                    
-!                  INPUT COORDINATE VALUES IN WHICH TO INTERPOLATE      
-!                  (Z1 MUST BE STRICTLY MONOTONIC IN EITHER DIRECTION)  
-!     Q1           REAL (1+(IM-1)*IXQ1+(KM1-1)*KXQ1+(NM-1)*NXQ1)        
-!                  INPUT FIELDS TO INTERPOLATE                          
-!     KM2          INTEGER NUMBER OF OUTPUT POINTS                      
-!     KXZ2         INTEGER POINT SKIP NUMBER FOR Z2                     
-!     KXQ2         INTEGER POINT SKIP NUMBER FOR Q2                     
-!     Z2           REAL (1+(IM-1)*IXZ2+(KM2-1)*KXZ2)                    
-!                  OUTPUT COORDINATE VALUES TO WHICH TO INTERPOLATE     
-!                  (Z2 NEED NOT BE MONOTONIC)                           
-!                                                                       
-!   OUTPUT ARGUMENT LIST:                                               
-!     Q2           REAL (1+(IM-1)*IXQ2+(KM2-1)*KXQ2+(NM-1)*NXQ2)        
-!                  OUTPUT INTERPOLATED FIELDS                           
-!     J2           REAL (1+(IM-1)*IXQ2+(KM2-1)*KXQ2+(NM-1)*NXQ2)        
-!                  OUTPUT INTERPOLATED FIELDS CHANGE WRT Z2             
-!                                                                       
-! SUBPROGRAMS CALLED:                                                   
-!   RSEARCH      SEARCH FOR A SURROUNDING REAL INTERVAL                 
-!                                                                       
-! ATTRIBUTES:                                                           
-!   LANGUAGE: FORTRAN                                                   
-!                                                                       
-!C$$$                                                                   
       IMPLICIT NONE 
       INTEGER IM,IXZ1,IXQ1,IXZ2,IXQ2,NM,NXQ1,NXQ2 
       INTEGER KM1,KXZ1,KXQ1,KM2,KXZ2,KXQ2 
@@ -2023,77 +1954,66 @@
 
  END SUBROUTINE TERP3 
 
+!> Search for a surrounding real interval.
+!!                                                                       
+!! This subprogram searches monotonic sequences of real numbers for
+!! intervals that surround a given search set of real numbers. The
+!! sequences may be monotonic in either direction; the real numbers
+!! may be single or double precision; the input sequences and sets and
+!! the output locations may be arbitrarily dimensioned.
+!!                                                                       
+!! If the array z1 is dimensioned (im,km1), then the skip numbers are
+!! ixz1=1 and kxz1=im; if it is dimensioned (km1,im), then the skip
+!! numbers are ixz1=km1 and kxz1=1; if it is dimensioned (im,jm,km1),
+!! then the skip numbers are ixz1=1 and kxz1=im*jm; etcetera. Similar
+!! examples apply to the skip numbers for z2 and l2.
+!!                                                                       
+!! Returned values of 0 or km1 indicate that the given search value    
+!! is outside the range of the sequence. 
+!!                                                                       
+!! If a search value is identical to one of the sequence values then
+!! the location returned points to the identical value. If the
+!! sequence is not strictly monotonic and a search value is identical
+!! to more than one of the sequence values, then the location returned
+!! may point to any of the identical values.
+!!                                                                       
+!! to be exact, for each i from 1 to im and for each k from 1 to km2,
+!! z=z2(1+(i-1)*ixz2+(k-1)*kxz2) is the search value and
+!! l=l2(1+(i-1)*ixl2+(k-1)*kxl2) is the location returned.  if l=0,
+!! then z is less than the start point z1(1+(i-1)*ixz1) for ascending
+!! sequences (or greater than for descending sequences).  if l=km1,
+!! then z is greater than or equal to the end point
+!! z1(1+(i-1)*ixz1+(km1-1)*kxz1) for ascending sequences (or less than
+!! or equal to for descending sequences).  otherwise z is between the
+!! values z1(1+(i-1)*ixz1+(l-1)*kxz1) and z1(1+(i-1)*ixz1+(l-0)*kxz1)
+!! and may equal the former.
+!!                                                                       
+!! PROGRAM HISTORY LOG:                                                  
+!! - 1999-01-05  MARK IREDELL                                              
+!!                                                                       
+!! @param[in] im integer number of sequences to search                
+!! @param[in] km1 integer number of points in each sequence            
+!! @param[in] ixz1 integer sequence skip number for z1                  
+!! @param[in] kxz1 integer point skip number for z1                     
+!! @param[in] z1 real (1+(im-1)*ixz1+(km1-1)*kxz1)                    
+!!                  sequence values to search                            
+!!                  (z1 must be monotonic in either direction)           
+!! @param[in] km2 integer number of points to search for               
+!!                  in each respective sequence                          
+!! @param[in] ixz2 integer sequence skip number for z2                  
+!! @param[in] kxz2 integer point skip number for z2                     
+!! @param[in] z2 real (1+(im-1)*ixz2+(km2-1)*kxz2)                    
+!!                  set of values to search for                          
+!!                  (z2 need not be monotonic)                           
+!! @param[in] ixl2 integer sequence skip number for l2                  
+!! @param[in] kxl2 integer point skip number for l2                     
+!!                                                                       
+!! @param[out] l2 integer (1+(im-1)*ixl2+(km2-1)*kxl2)                 
+!!                  interval locations having values from 0 to km1       
+!!                  (z2 will be between z1(l2) and z1(l2+1))             
+!!                                                                       
+!! @author Mark Iredell @date 98-05-01            
  SUBROUTINE RSEARCH(IM,KM1,IXZ1,KXZ1,Z1,KM2,IXZ2,KXZ2,Z2,IXL2,KXL2,L2)
-!$$$  SUBPROGRAM DOCUMENTATION BLOCK                                    
-!                                                                       
-! SUBPROGRAM:    RSEARCH     SEARCH FOR A SURROUNDING REAL INTERVAL     
-!   PRGMMR: IREDELL          ORG: W/NMC23     DATE: 98-05-01            
-!                                                                       
-! ABSTRACT: THIS SUBPROGRAM SEARCHES MONOTONIC SEQUENCES OF REAL NUMBERS
-!   FOR INTERVALS THAT SURROUND A GIVEN SEARCH SET OF REAL NUMBERS.     
-!   THE SEQUENCES MAY BE MONOTONIC IN EITHER DIRECTION; THE REAL NUMBERS
-!   MAY BE SINGLE OR DOUBLE PRECISION; THE INPUT SEQUENCES AND SETS     
-!   AND THE OUTPUT LOCATIONS MAY BE ARBITRARILY DIMENSIONED.            
-!                                                                       
-! PROGRAM HISTORY LOG:                                                  
-! 1999-01-05  MARK IREDELL                                              
-!                                                                       
-! USAGE:    CALL RSEARCH(IM,KM1,IXZ1,KXZ1,Z1,KM2,IXZ2,KXZ2,Z2,IXL2,KXL2,
-!    &                   L2)                                            
-!   INPUT ARGUMENT LIST:                                                
-!     IM           INTEGER NUMBER OF SEQUENCES TO SEARCH                
-!     KM1          INTEGER NUMBER OF POINTS IN EACH SEQUENCE            
-!     IXZ1         INTEGER SEQUENCE SKIP NUMBER FOR Z1                  
-!     KXZ1         INTEGER POINT SKIP NUMBER FOR Z1                     
-!     Z1           REAL (1+(IM-1)*IXZ1+(KM1-1)*KXZ1)                    
-!                  SEQUENCE VALUES TO SEARCH                            
-!                  (Z1 MUST BE MONOTONIC IN EITHER DIRECTION)           
-!     KM2          INTEGER NUMBER OF POINTS TO SEARCH FOR               
-!                  IN EACH RESPECTIVE SEQUENCE                          
-!     IXZ2         INTEGER SEQUENCE SKIP NUMBER FOR Z2                  
-!     KXZ2         INTEGER POINT SKIP NUMBER FOR Z2                     
-!     Z2           REAL (1+(IM-1)*IXZ2+(KM2-1)*KXZ2)                    
-!                  SET OF VALUES TO SEARCH FOR                          
-!                  (Z2 NEED NOT BE MONOTONIC)                           
-!     IXL2         INTEGER SEQUENCE SKIP NUMBER FOR L2                  
-!     KXL2         INTEGER POINT SKIP NUMBER FOR L2                     
-!                                                                       
-!   OUTPUT ARGUMENT LIST:                                               
-!     L2           INTEGER (1+(IM-1)*IXL2+(KM2-1)*KXL2)                 
-!                  INTERVAL LOCATIONS HAVING VALUES FROM 0 TO KM1       
-!                  (Z2 WILL BE BETWEEN Z1(L2) AND Z1(L2+1))             
-!                                                                       
-! REMARKS:                                                              
-!   IF THE ARRAY Z1 IS DIMENSIONED (IM,KM1), THEN THE SKIP NUMBERS ARE  
-!   IXZ1=1 AND KXZ1=IM; IF IT IS DIMENSIONED (KM1,IM), THEN THE SKIP    
-!   NUMBERS ARE IXZ1=KM1 AND KXZ1=1; IF IT IS DIMENSIONED (IM,JM,KM1),  
-!   THEN THE SKIP NUMBERS ARE IXZ1=1 AND KXZ1=IM*JM; ETCETERA.          
-!   SIMILAR EXAMPLES APPLY TO THE SKIP NUMBERS FOR Z2 AND L2.           
-!                                                                       
-!   RETURNED VALUES OF 0 OR KM1 INDICATE THAT THE GIVEN SEARCH VALUE    
-!   IS OUTSIDE THE RANGE OF THE SEQUENCE.                               
-!                                                                       
-!   IF A SEARCH VALUE IS IDENTICAL TO ONE OF THE SEQUENCE VALUES        
-!   THEN THE LOCATION RETURNED POINTS TO THE IDENTICAL VALUE.           
-!   IF THE SEQUENCE IS NOT STRICTLY MONOTONIC AND A SEARCH VALUE IS     
-!   IDENTICAL TO MORE THAN ONE OF THE SEQUENCE VALUES, THEN THE         
-!   LOCATION RETURNED MAY POINT TO ANY OF THE IDENTICAL VALUES.         
-!                                                                       
-!   TO BE EXACT, FOR EACH I FROM 1 TO IM AND FOR EACH K FROM 1 TO KM2,  
-!   Z=Z2(1+(I-1)*IXZ2+(K-1)*KXZ2) IS THE SEARCH VALUE AND               
-!   L=L2(1+(I-1)*IXL2+(K-1)*KXL2) IS THE LOCATION RETURNED.             
-!   IF L=0, THEN Z IS LESS THAN THE START POINT Z1(1+(I-1)*IXZ1)        
-!   FOR ASCENDING SEQUENCES (OR GREATER THAN FOR DESCENDING SEQUENCES). 
-!   IF L=KM1, THEN Z IS GREATER THAN OR EQUAL TO THE END POINT          
-!   Z1(1+(I-1)*IXZ1+(KM1-1)*KXZ1) FOR ASCENDING SEQUENCES               
-!   (OR LESS THAN OR EQUAL TO FOR DESCENDING SEQUENCES).                
-!   OTHERWISE Z IS BETWEEN THE VALUES Z1(1+(I-1)*IXZ1+(L-1)*KXZ1) AND   
-!   Z1(1+(I-1)*IXZ1+(L-0)*KXZ1) AND MAY EQUAL THE FORMER.               
-!                                                                       
-! ATTRIBUTES:                                                           
-!   LANGUAGE: FORTRAN                                                   
-!                                                                       
-!                                                                   
  IMPLICIT NONE 
 
  INTEGER,INTENT(IN)    :: IM,KM1,IXZ1,KXZ1,KM2,IXZ2,KXZ2,IXL2,KXL2 
@@ -2139,6 +2059,8 @@
                                                                         
  END SUBROUTINE RSEARCH 
 
+!> Compute vertical level height
+!! @author George Gayno
  subroutine compute_zh
 
  implicit none 
@@ -2226,6 +2148,8 @@
 
  end subroutine compute_zh 
  
+!> Cleanup atmospheric field (before adjustment) objects
+!! @author George Gayno
  subroutine cleanup_target_atm_b4adj_data
 
  implicit none
@@ -2249,6 +2173,8 @@
 
  end subroutine cleanup_target_atm_b4adj_data
 
+!> Cleanup target grid atmospheric field objects.
+!! @author George Gayno
  subroutine cleanup_target_atm_data
 
  implicit none
