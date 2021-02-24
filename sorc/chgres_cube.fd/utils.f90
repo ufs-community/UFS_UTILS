@@ -1,3 +1,12 @@
+!> @file
+!! @brief Contains utility routines
+!!
+
+
+!> @brief General error handler.
+!!
+!! @param[in] string  error message
+!! @param[in] rc      error status code
  subroutine error_handler(string, rc)
 
  use mpi
@@ -16,6 +25,10 @@
 
  end subroutine error_handler
 
+!> @brief Error handler for netcdf
+!!
+!! @param[in] err     error status code
+!! @param[in] string  error message
  subroutine netcdf_err( err, string )
 
  use mpi
@@ -37,9 +50,13 @@
  return
  end subroutine netcdf_err
  
+!> @brief Convert from lower to uppercase.
+!! @author Clive Page
+!!
+!! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
+!!
+!! @param[in,out] strIn   string to convert
  subroutine to_upper(strIn)
-! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
-! Original author: Clive Page
 
      implicit none
 
@@ -58,9 +75,13 @@
   strIn(:) = strOut(:)
 end subroutine to_upper
 
+!> @brief Convert from upper to lowercase
+!! @author Clive Page
+!!
+!! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
+!!
+!! @param[in,out] strIn   string to convert
 subroutine to_lower(strIn)
-! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
-! Original author: Clive Page
 
      implicit none
 

@@ -1,11 +1,7 @@
+!> @file
+!! @brief Utilities for use when reading grib2 data.
+!!
 module grib2_util
-
-!--------------------------------------------------------------------------
-! Module: grib2_util
-!
-! Abstract: Utilities for use when reading grib2 data.
-!
-!--------------------------------------------------------------------------
 
 use esmf
 
@@ -15,6 +11,12 @@ implicit none
 
 contains 
 
+!> Convert relative humidity to specific humidity
+!! @param [inout]  rh_sphum rel humidity on input. spec hum on output.
+!! @param [in] p   pressure in Pa
+!! @param [in] t   temperature
+!! @author Larissa Reames
+!! @author Jeff Beck
  subroutine rh2spfh(rh_sphum,p,t)
     
   implicit none
@@ -46,6 +48,15 @@ contains
 
 end subroutine RH2SPFH
 
+!> Convert omega to vertical velocity
+!! @param [inout] omega on input, vertical velocity on output
+!! @param [in] p  pressure
+!! @param [in] t  temperature
+!! @param [in] q  specific humidity
+!! @param [in] clb lower bounds of indices processed by this mpi task
+!! @param [in] cub upper bounds of indices processed by this mpi task
+!! @author Larissa Reames
+!! @author Jeff Beck
 subroutine convert_omega(omega,p,t,q,clb,cub)
 
   implicit none
@@ -74,9 +85,14 @@ subroutine convert_omega(omega,p,t,q,clb,cub)
 
 end subroutine convert_omega
 
+!> Convert string from lower to uppercase.
+!! @author Clive Page
+!!
+!! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
+!!
+!! @param[in] strIn   string to convert
+!! @return strOut string in uppercase
 function to_upper(strIn) result(strOut)
-! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
-! Original author: Clive Page
 
      implicit none
 

@@ -1,3 +1,6 @@
+/** @file
+    @brief Generate mosaic information between tiles.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

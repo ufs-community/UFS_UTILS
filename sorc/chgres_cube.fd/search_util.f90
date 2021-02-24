@@ -1,17 +1,12 @@
+!> @file
+!! @brief Replace undefined surface values.
+!!
+!! Replace undefined values with a valid value.  This can
+!! happen for an isolated lake or island that is unresolved by
+!! the input grid.
+!!
+!! @author George Gayno NCEP/EMC
  module search_util
-
-!--------------------------------------------------------------------------
-! Module search
-!
-! Abstract: Replace undefined values with a valid value.  This can
-!   happen for an isolated lake or island that is unresolved by
-!   the input grid.
-!
-! Public Subroutines:
-! -------------------
-! search                           Performs the search and replace.
-!
-!--------------------------------------------------------------------------
 
  private
 
@@ -19,25 +14,36 @@
 
  contains
 
+!> Replace undefined surface values.
+!!
+!! Replace undefined values on the model grid with a valid value at
+!! a nearby neighbor.  Undefined values are typically associated
+!! with isolated islands where there is no source data.
+!!
+!! Routine searches a neighborhood with a radius of 100 grid points.
+!! If no valid value is found, a default value is used.
+!!
+!! This routine works for one tile of a cubed sphere grid.  It
+!! does not consider valid values at adjacent faces.  That is a 
+!! future upgrade.
+!!
+!! @param [inout] field  On input/output, surface data with undefined/no undefined values.
+!! @param [in] mask  land-mask of surface data.
+!! @param [in] idim   'i' dimension of tile
+!! @param [in] jdim   'j' dimension of tile
+!! @param [in] tile  tile number
+!! @param [in] field_num  surface field number
+!! @param [in] latitude latitude of the surface data
+!! @param [in] terrain_land  terrain height
+!! @param [in] soilt_climo  climatological soil type
+!! @author George Gayno NCEP/EMC
  subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)
-
-!-----------------------------------------------------------------------
-! Replace undefined values on the model grid with a valid value at
-! a nearby neighbor.  Undefined values are typically associated
-! with isolated islands where there is no source data.
-!
-! Routine searches a neighborhood with a radius of 100 grid points.
-! If no valid value is found, a default value is used.
-!
-! Note: This routine works for one tile of a cubed sphere grid.  It
-! does not consider valid values at adjacent faces.  That is a 
-! future upgrade.
-!-----------------------------------------------------------------------
 
  use mpi
  use esmf
 
  implicit none
+
 
  integer, intent(in)               :: idim, jdim, tile, field_num
  integer(esmf_kind_i8), intent(in) :: mask(idim,jdim)
@@ -173,19 +179,19 @@
            repl_default = repl_default + 1
          endif
        elseif (field_num == 7 .and. PRESENT(terrain_land)) then 
-         ! Terrain heights for isolated landice points never get a correct value, so replace
-         ! with terrain height from the input grid interpolated to the target grid
+         !  Terrain heights for isolated landice points never get a correct value, so replace
+         !  with terrain height from the input grid interpolated to the target grid
          field(i,j) = terrain_land(i,j)
          repl_default = repl_default + 1
        elseif (field_num == 224 .and. PRESENT(soilt_climo)) then
-          ! When using input soil type fields instead of climatological data on the
+          !  When using input soil type fields instead of climatological data on the
           ! target grid, isolated land locations that exist in the target grid but
           ! not the input grid don't receiving proper soil type information, so replace
           ! with climatological values
          field(i,j) = soilt_climo(i,j)
          repl_default = repl_default + 1
        else
-         field(i,j) = default_value  ! Search failed.  Use default value.
+         field(i,j) = default_value  !< Search failed.  Use default value.
          repl_default = repl_default + 1
        endif
 
@@ -203,6 +209,11 @@
 
  end subroutine search
 
+!> Set sst values based on latitude.
+!!
+!! @param latitude latitude input
+!! @param sst sst guess value to be set
+!! @author George Gayno NCEP/EMC
  subroutine sst_guess(latitude, sst)
 
  use esmf

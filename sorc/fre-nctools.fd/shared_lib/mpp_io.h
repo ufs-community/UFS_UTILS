@@ -1,12 +1,7 @@
-/** @file */
-/****************************************************************
-                    mpp_io.h
-   This headers defines interface to read and write netcdf file. All the data
-will be written out from root pe. 
-
-   contact: Zhi.Liang@noaa.gov
-
-****************************************************************/
+/** @file 
+    @brief Define constants and function declarations for mpp_io.c
+    @author Zhi.Liang@noaa.gov
+*/
 #ifndef MPP_IO_H_
 #define MPP_IO_H_
 #include <netcdf.h>

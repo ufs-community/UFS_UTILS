@@ -1,11 +1,10 @@
-/** @file */
+/** @file
 
-/*********************************************************************
-                    mpp.h
-  This header contains subroutine for parallel programming.
-  only MPI parallel is implemented. 
-  Contact: Zhi.Liang@noaa.gov
- ********************************************************************/
+  @brief Function declarations for parallel programming. Only
+  MPI parallel is implemented. 
+
+  @author Zhi.Liang@noaa.gov
+*/
 #ifndef MPP_H_
 #define MPP_H_
 

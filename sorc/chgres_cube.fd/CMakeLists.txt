@@ -1,3 +1,8 @@
+# This is the CMake build file for the chgres_cube utility in the
+# UFS_UTILS package.
+#
+# George Gayno, Mark Potts
+
 set(fortran_src
     atmosphere.F90
     chgres.F90

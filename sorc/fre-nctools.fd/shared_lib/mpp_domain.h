@@ -1,14 +1,15 @@
-/** @file */
-/****************************************************************
-                        mpp_domain.h 
-   This headers define interface to define domain layout, 
-   define domain decomposition and global field to root pe, 
-   some utilities routine to return domain decomposition.
-   Currently it only used in tools and assume only one domain is created. 
-   If more domains are needed, we may define a struct to hold domain informaiton.
-   contact: Zhi.Liang@noaa.gov
+/** @file
+  
+    @brief Headers that define interface, domain layout, 
+    domain decomposition and global field to root pe.
+    Some routines return domain decomposition.
 
-****************************************************************/
+    @note Currently it only used in tools and assumes only one domain is created. 
+    If more domains are needed, we may define a struct to hold domain informaiton.
+
+    @author Zhi.Liang@noaa.gov
+
+*/
 #ifndef MPP_DOMAIN_H_
 #define MPP_DOMAIN_H_
 #define max(a,b) (a>b ? a:b)
