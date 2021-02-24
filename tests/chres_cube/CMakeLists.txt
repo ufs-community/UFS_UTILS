@@ -13,8 +13,9 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 # Copy necessary test files.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config.nml
-    ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
+    ${CMAKE_CURRENT_SOURCE_DIR}/config.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/config_fv3_tiled.nml)
 
 add_executable(ftst_utils "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.f90" ftst_utils.F90)
 add_test(NAME ftst_utils COMMAND ftst_utils)
