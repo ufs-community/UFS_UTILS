@@ -572,21 +572,17 @@
  deallocate (lats_mdl_temp, lons_mdl_temp)
 
  return
- end
+ end subroutine read_mdl_grid_info
 
 
 !>   clean up allocatable arrays  
 !!
-!!@ author   George Gayno          org: w/np2     date: 2005-Dec-16
+!! @author   George Gayno org: w/np2 @Date 2005-Dec-16
 !!
 !! This deallocate this module's allocatable array.
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
-!!
-!!
-!!
-!!
 !!
  subroutine model_grid_cleanup
 
