@@ -1,7 +1,8 @@
 !> @file
 !! @brief Create blended ice product for gfs/gdas cycles.
 !!
-!! @author gayno @date 2014-03-20
+!! @author George Gayno NCEP/EMC
+!! @date 2014-03-20
 !!
 !! Create a global 5-minute blended ice concentration 
 !! dataset for use by GDAS/GFS. This blend is created
@@ -86,6 +87,17 @@
 !!
 !! In the SH, the blended value is simply the 5-minute ice concentration
 !! at 'water' points.  'Coast' and 'land' points are bitmapped out.
+!!
+!! @param imax, jmax constant value on i and j dim
+!! @param j     search position of a file
+!! @param lugi  set to 0 - no grib index file
+!! @param jdisc set to 2 - search for discipline
+!! @param jpdtn search for product definition template number
+!! @param jgdtn search for grid definition template number; 0 - lat/lon grid
+!! @param jids  array of values in identification section, set to wildcard
+!! @param jgdt  array of values in grid definition template 3.m
+!! @param jpdt  array of values in product definition template 4.n
+!! @param unpack switch for unpack data
 !!
  program emcsfc_ice_blend
 
