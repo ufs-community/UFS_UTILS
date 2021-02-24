@@ -588,9 +588,28 @@ end subroutine get_var_cond
 
  end subroutine calc_soil_params_driver
 
-!> Compute soil parameters.  Will be used to rescale soil moisture
-!! differences in soil type between the input grid and target
-!! model grid.
+!> Compute soil parameters. Will be used to rescale soil moisture
+!! differences in soil type between the input grid and target model
+!! grid.
+!!
+!! The calculations are those used in the Noah Land Surface Model. For
+!! more information see (Implementation of Noah land surface model
+!! advances in the National Centers for Environmental Prediction
+!! operational mesoscale Eta
+!! model)[https://doi.org/10.1029/2002JD003296].
+!!
+!! For more details about the soil parameters/properties see (Coupling
+!! an Advanced Land Surface–Hydrology Model with the Penn State–NCAR
+!! MM5 Modeling System. Part I: Model Implementation and Sensitivity)
+!! [https://journals.ametsoc.org/view/journals/mwre/129/4/1520-0493_2001_129_0569_caalsh_2.0.co_2.xml].
+!!
+!! The original source for soil properties is here:
+!!
+!! Cosby, B. J., G. M. Hornberger, R. B. Clapp, and T. R. Ginn, 1984:
+!! (A statistical exploration of the relationships of soil moisture
+!! characteristics to the physical properties of
+!! soils)[https://agupubs.onlinelibrary.wiley.com/doi/10.1029/WR020i006p00682]. Water
+!! Resour. Res.,20, 682–690.
 !!
 !! @param [in] num_soil_cats  number of soil type categories
 !! @param [in] smlow  reference parameter for wltsmc
