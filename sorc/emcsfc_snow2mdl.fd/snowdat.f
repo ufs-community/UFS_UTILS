@@ -118,8 +118,8 @@
 !!   74 - bad open of autosnow file
 !!   75 - bad read of autosnow file
 !!
-!! remarks: autosnow data available only for southern hemis.
-!!          autosnow data is in grib 2.          
+!! @note  : Autosnow data is available only for southern hemis.
+!!          Autosnow data is in grib 2.          
 !!
 !!
  subroutine readautosnow
@@ -232,9 +232,9 @@
 !!   87 - bad open ims land mask file
 !!   88 - bad read ims land mask file
 !!   
-!! remarks: nesdis/ims data available only for n hemis.  ims data used
-!!          to be created by nesdis.  hence the references to "nesdis"
-!!          in this routine.  ims data is now created by the national
+!! @note    Nesdis/ims data available only for n hemis.  Ims data used
+!!          to be created by nesdis,  hence the references to "nesdis"
+!!          in this routine.  Ims data is now created by the national
 !!          ice center.
 !!
  subroutine readnesdis
@@ -1276,7 +1276,7 @@
 !!   60 - bad open of afwa file
 !!   61 - bad read of afwa file
 !!
-!! remarks: read logic for binary data taken from hua-lu's code:
+!! @note  : Read logic for binary data taken from hua-lu's code:
 !!          /nwprod/sorc/grib_snowgrib.fd
 !!
  subroutine read_afwa_binary(file_name, snow_dep_afwa) 
