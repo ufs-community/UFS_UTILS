@@ -1,7 +1,7 @@
 !> @file
 !! @brief Read in data defining the model grid.
 !!
-!!@author gayno org: w/np2 @date 2005-dec-16  
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16  
 !!
 !! program history log:
 !! -  2005-dec-16  gayno   - initial version
@@ -69,14 +69,12 @@
 !!                         added nam b-grids
 !! 2014-sep-29  gayno    - add option to read lat,lon and mask
 !!                         data in grib2.
-!! usage: call read_mdl_grid_info
 !! files:
 !!   inputs:
 !!     - model latitudes (grib 1 or grib 2)
 !!     - model longitudes (grib 1 or grib 2)
 !!     - model landmask (grib 1 or grib 2)
 !!     - number  pts per row, gfs grid (the "lonsperlat" file, ascii)
-!!  outputs: none
 !!    condition codes: all fatal
 !!   76 - bad open/read gfs "lonsperlat" file
 !!   79 - unrecognized model grid
@@ -91,7 +89,6 @@
 !!   91 - model longitude file not grib 1 or grib 2
 !!   92 - model landmask file not grib 1 or grib 2
 !!
-!! remarks: none.
 !!
  subroutine read_mdl_grid_info
  use grib_mod  ! grib 2 library
@@ -575,33 +572,23 @@
  deallocate (lats_mdl_temp, lons_mdl_temp)
 
  return
+ end
 
- end subroutine read_mdl_grid_info
 
+!>   clean up allocatable arrays  
+!!
+!!@ author   George Gayno          org: w/np2     date: 2005-Dec-16
+!!
+!! This deallocate this module's allocatable array.
+!!
+!! program history log:
+!! 2005-dec-16  gayno    - initial version
+!!
+!!
+!!
+!!
+!!
  subroutine model_grid_cleanup
-!$$$  subprogram documentation block
-!              
-! subprogram:    model_grid_cleanup
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract: this deallocate this module's allocatable array.
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-!
-! usage: call model_grid_cleanup
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files: none
-!
-! condition codes: none
-!
-! remarks: none.
-!
-!$$$
 
  implicit none
 

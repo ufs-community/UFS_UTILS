@@ -1,7 +1,7 @@
 !> @file
 !! @brief Read and qc afwa, nesdis/ims and autosnow snow data.
 !!
-!! @author gayno org: w/np2 @date 2005-dec-16 gwv
+!! @author gayno org: w/np2 @date 2005-dec-16 
 !!
 !! program history log:
 !! -  2005-dec-16  gayno   - initial version
@@ -107,14 +107,12 @@
 !! program history log:
 !! 2008-feb-04  gayno    - initial version
 !!
-!! usage: call readautosnow
 !!
 !!
 !! files:
 !!   input:
 !!     - autosnow data, grib 2, unit=lugb
 !!
-!!   output: none
 !!
 !! condition codes:  all fatal
 !!   74 - bad open of autosnow file
@@ -215,18 +213,14 @@
 !! 2014-feb-07  gayno    - read 4km ims data in either
 !!                         grib1 or grib 2 format.
 !!
-!! usage: call readnesdis
 !!
-!!   input argument list:  n/a
 !!
-!!   output argument list: n/a
 !!
 !! files:
 !!   input:
 !!      - ims snow cover and ice file, grib 1 or grib 2
 !!      - 16th-mesh ims land mask, binary
 !!
-!!   output: none
 !!
 !! condition codes: all fatal
 !!   41 - ims file not grib 1 or grib 2
@@ -543,11 +537,7 @@
 !! 2005-dec-16  gayno    - initial version
 !! 2007-nov-28  gayno    - read 16th mesh afwa data in grib format
 !!
-!! usage: call readafwa
 !!
-!!   input argument list:  n/a
-!!
-!!   output argument list: n/a
 !!
 !! files:
 !!   input:
@@ -555,13 +545,11 @@
 !!     - nh afwa data in grib 1 (if selected)
 !!     - sh afwa data in grib 1 (if selected)
 !!
-!!   output: none
 !!
 !! condition codes:
 !!   60 - bad open afwa file
 !!   61 - bad degrib of afwa file
 !!
-!! remarks:  none
 !!
  subroutine readafwa
  implicit none
@@ -872,7 +860,6 @@
 !! 2014-sep-30  gayno    - weekly climo file converted
 !!                         to grib 2.
 !!
-!! usage: call nh_climo_check
 !!
 !!    argument list:  
 !! @param[in]  - kgds_data  - grib 1 grid description sect of data to be qcd
@@ -887,12 +874,6 @@
 !!   input:
 !!     - NH weekly climatological snow cover file (grib 2)
 !!
-!!   output: none
-!!
-!! condition codes: none
-!!
-!! remarks: none.
-!!          
  subroutine nh_climo_check(kgds_data,snow_data,bitmap_data,idata,jdata,isrc,bad)
  use gdswzd_mod
 
@@ -1172,16 +1153,10 @@
 !! program history log:
 !! 2009-jun-3   gayno    - initial version
 !!
-!! usage: call afwa_check(hemi)
 !!  argument list
 !! @param[in]    hemi (1-nh, 2-sh)
 !!
 !!
-!! files: none
-!!
-!! condition codes: none
-!!
-!! remarks: none.
 !!
 !!$$$
  subroutine afwa_check(hemi)
@@ -1286,7 +1261,6 @@
 !! program history log:
 !! 2007-nov-28  gayno    - initial version
 !!
-!! usage: call grib_check(file_name, snow_dep_afwa)
 !!
 !!   argument list:
 !! @param[in] `  file_name - file name
@@ -1297,7 +1271,6 @@
 !!   input:
 !!     - nh/sh afwa data in simple binary format
 !!
-!!   output: none
 !!
 !! condition codes: all fatal
 !!   60 - bad open of afwa file
@@ -1385,7 +1358,6 @@
 !! program history log:
 !! 2007-nov-28  gayno    - initial version
 !!
-!! usage: call read_afwa_mask(file_name, bitmap_afwa)
 !!
 !!   argument list:  
 !! @param[in] file_name - land mask file name
@@ -1395,13 +1367,11 @@
 !!   input:
 !!    - afwa landmask in simple binary format
 !! 
-!!   output: none
 !!
 !! condition codes: all fatal
 !!   62 - bad open of afwa landmask file
 !!   63 - bad read of afwa landmask file
 !!
-!! remarks: none.
 !!
 !!$$$
 !!
