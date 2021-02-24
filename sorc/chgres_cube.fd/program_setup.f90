@@ -1,7 +1,8 @@
 !> @file
-!! @brief Set up program execution
+!! @brief Set up program execution.
 !!
-!! Set up program execution
+!! This module contains code to read the setup namelist file, handle
+!! the varmap file for GRIB2 data, and calculate the soil parameters.
 !!
 !! @author George Gayno NCEP/EMC
  module program_setup
@@ -144,7 +145,8 @@
 
 !> Reads program configuration namelist.
 !!
-!! @param filename the name of the configuration file (defaults to ./fort.41).
+!! @param filename the name of the configuration file (defaults to
+!! ./fort.41).
 !! @author George Gayno NCEP/EMC
  subroutine read_setup_namelist(filename)
  implicit none
