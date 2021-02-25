@@ -11,7 +11,7 @@ module kinds
   private
 !
 ! for name string
-  integer, parameter, public  :: len_sta_name  = 8
+  integer, parameter, public  :: len_sta_name  = 8 !< Name length.
 
 ! Integer type definitions below
 
