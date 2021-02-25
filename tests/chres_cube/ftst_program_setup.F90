@@ -108,27 +108,31 @@ program ftst_program_setup
 
   print*, "testing read_setup_namelist with config_gaussian_nemsio..."
   call read_setup_namelist("config_gaussian_nemsio.nml")
-  ! if (cycle_mon .ne. 10 .or. cycle_day .ne. 3 .or. cycle_hour .ne. 0) stop 74
-  ! if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 75
-  ! if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 76
-  ! if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/C192_mosaic.nc") stop 77
-  ! if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/fix_sfc") stop 78
-  ! if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/") stop 79
-  ! if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 80
-  ! if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.history") stop 81
-  ! if (trim(atm_files_input_grid(1)) .ne. 'dynf000.tile1.nc') stop 82
-  ! if (trim(sfc_files_input_grid(1)) .ne. 'phyf000.tile1.nc') stop 83
-  ! if (varmap_file .ne. "NULL") stop 84
-  ! if (thomp_mp_climo_file .ne. "NULL") stop 86
-  ! if (trim(cres_target_grid) .ne. "C192") stop 87
-  ! if (atm_weight_file .ne. "NULL") stop 88
-  ! if (trim(input_type) .ne. "history") stop 89
-  ! if (trim(external_model) .ne. "GFS") stop 90
-  ! print *,num_tracers
-  ! if (num_tracers .ne. 3) stop 91
-  ! if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr") stop 92
-  ! if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
-  !      tracers_input(3) .ne. "o3mr") stop 93
+  if (cycle_mon .ne. 7 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 12) stop 74
+  if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 75
+  if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 76
+  if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/C96_mosaic.nc") stop 77
+  if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/fix_sfc") stop 78
+  if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/") stop 79
+  if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 80
+  if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.nemsio") stop 81
+  if (trim(atm_files_input_grid(1)) .ne. 'gfs.t12z.atmf000.nemsio') stop 82
+  if (trim(sfc_files_input_grid(1)) .ne. 'gfs.t12z.sfcf000.nemsio') stop 83
+  if (varmap_file .ne. "NULL") stop 84
+  if (thomp_mp_climo_file .ne. "NULL") stop 86
+  if (trim(cres_target_grid) .ne. "C96") stop 87
+  if (atm_weight_file .ne. "NULL") stop 88
+  if (trim(input_type) .ne. "gaussian_nemsio") stop 89
+  if (trim(external_model) .ne. "GFS") stop 90
+  print *,num_tracers
+  if (num_tracers .ne. 7) stop 21
+  if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr" .or. &
+       tracers(4) .ne. "ice_wat" .or. tracers(5) .ne. "rainwat" .or. tracers(6) .ne. "snowwat" .or. &
+       tracers(7) .ne. "graupel") stop 22
+  if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
+       tracers_input(3) .ne. "o3mr" .or. tracers_input(4) .ne. "icmr" .or. &
+       tracers_input(5) .ne. "rwmr" .or. tracers_input(6) .ne. "snmr" .or. &
+       tracers_input(7) .ne. "grle") stop 23
 
   ! Reset the tracers array.
   do is = 1, max_tracers
@@ -150,16 +154,15 @@ program ftst_program_setup
   if (trim(atm_files_input_grid(1)) .ne. 'gdas.t00z.sanl') stop 122
   if (trim(sfc_files_input_grid(1)) .ne. 'gdas.t00z.sfcanl') stop 123
   if (varmap_file .ne. "NULL") stop 124
-  ! if (thomp_mp_climo_file .ne. "NULL") stop 126
-  ! if (trim(cres_target_grid) .ne. "C96") stop 127
-  ! if (atm_weight_file .ne. "NULL") stop 128
-  ! if (trim(input_type) .ne. "history") stop 129
-  ! if (trim(external_model) .ne. "GFS") stop 130
-  ! print *,num_tracers
-  ! if (num_tracers .ne. 3) stop 131
-  ! if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr") stop 132
-  ! if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
-  !      tracers_input(3) .ne. "o3mr") stop 133
+  if (thomp_mp_climo_file .ne. "NULL") stop 126
+  if (trim(cres_target_grid) .ne. "C96") stop 127
+  if (atm_weight_file .ne. "NULL") stop 128
+  if (trim(input_type) .ne. "gfs_sigio") stop 129
+  if (trim(external_model) .ne. "GFS") stop 130
+  if (num_tracers .ne. 3) stop 131
+  if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "o3mr" .or. tracers(3) .ne. "liq_wat") stop 132
+  if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "o3mr" .or. &
+       tracers_input(3) .ne. "clwmr") stop 133
 
   ! Reset the tracers array.
   do is = 1, max_tracers
@@ -171,26 +174,29 @@ program ftst_program_setup
   print*, "testing read_setup_namelist with config_gfs_grib2..."
   call read_setup_namelist("config_gfs_grib2.nml")
   if (cycle_mon .ne. 11 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 0) stop 94
-  if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 95
+  if (.not. convert_atm .or. .not. convert_sfc .or. convert_nst) stop 95
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 96
   if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/C192_mosaic.nc") stop 97
   if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/fix_sfc") stop 98
   if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/") stop 99
-  if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 100
-  if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.history") stop 101
-  if (trim(atm_files_input_grid(1)) .ne. 'dynf000.tile1.nc') stop 102
-  if (trim(sfc_files_input_grid(1)) .ne. 'phyf000.tile1.nc') stop 103
-  ! if (varmap_file .ne. "NULL") stop 1010
-  ! if (thomp_mp_climo_file .ne. "NULL") stop 106
-  ! if (trim(cres_target_grid) .ne. "C192") stop 107
-  ! if (atm_weight_file .ne. "NULL") stop 108
-  ! if (trim(input_type) .ne. "history") stop 109
-  ! if (trim(external_model) .ne. "GFS") stop 110
-  ! print *,num_tracers
-  ! if (num_tracers .ne. 3) stop 111
-  ! if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr") stop 112
-  ! if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
-  !      tracers_input(3) .ne. "o3mr") stop 113
+  if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l65.txt") stop 100
+  if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/gfs.grib2") stop 101
+  if (trim(grib2_file_input_grid) .ne. 'gfs.t00z.pgrb2.0p50.f000') stop 102
+  if (trim(sfc_files_input_grid(1)) .ne. 'gdas.t00z.sfcanl') stop 103
+  if (varmap_file .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../parm/varmap_tables/GFSphys_var_map.txt") stop 1010
+  if (thomp_mp_climo_file .ne. "NULL") stop 106
+  if (trim(cres_target_grid) .ne. "C192") stop 107
+  if (atm_weight_file .ne. "NULL") stop 108
+  if (trim(input_type) .ne. "grib2") stop 109
+  if (trim(external_model) .ne. "GFS") stop 110
+  if (num_tracers .ne. 7) stop 111
+  if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr" .or. &
+       tracers(4) .ne. "ice_wat" .or. tracers(5) .ne. "rainwat" .or. tracers(6) .ne. "snowwat" .or. &
+       tracers(7) .ne. "graupel") stop 22
+  if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
+       tracers_input(3) .ne. "o3mr" .or. tracers_input(4) .ne. "icmr" .or. &
+       tracers_input(5) .ne. "rwmr" .or. tracers_input(6) .ne. "snmr" .or. &
+       tracers_input(7) .ne. "grle") stop 23
 
   ! Reset the tracers array.
   do is = 1, max_tracers
