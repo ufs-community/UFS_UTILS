@@ -22,6 +22,7 @@
 !!
 !! @author David Wright, University of Michigan and GLERL
 !! @date 17 Aug 2020
+!! @return 0 for success, error code otherwise
 !!
 program process_FVCOM
 
