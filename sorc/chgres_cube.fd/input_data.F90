@@ -1,8 +1,8 @@
 !> @file
 !! @brief Read input data
 !! @author George Gayno NCEP/EMC
-!!
-!! Read atmospheric, surface and nst data on the input grid.
+
+!> Read atmospheric, surface and nst data on the input grid.
 !! Supported formats include fv3 tiled 'restart' files, fv3 tiled 
 !! 'history' files, fv3 gaussian history files, spectral gfs
 !! gaussian nemsio files, and spectral gfs sigio/sfcio files.
@@ -10,6 +10,7 @@
 !! Public variables are defined below: "input" indicates field
 !! associated with the input grid.
 !!
+!! @author George Gayno NCEP/EMC
  module input_data
 
  use esmf

@@ -1,7 +1,8 @@
 !> @file
 !! @brief Process Thompson climatological MP data.
-!!
-!! Module to read the Thompson climatological MP data file
+!! @author George Gayno NOAA/EMC
+
+!> Module to read the Thompson climatological MP data file
 !! and set up the associated esmf field and grid objects.
 !!
 !! @author George Gayno NOAA/EMC

@@ -1,6 +1,9 @@
 !> @file
 !! @brief Utilities for use when reading grib2 data.
-!!
+!! @author George Gayno NCEP/EMC
+
+!> Utilities for use when reading grib2 data.
+!! @author George Gayno NCEP/EMC
 module grib2_util
 
 use esmf
