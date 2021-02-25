@@ -67,11 +67,18 @@ TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
       --partition=xjet -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
+# ESG regional grid
+#-----------------------------------------------------------------------------
+
+TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional \
+      --partition=xjet -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./esg.regional.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST2 << EOF
+       --open-mode=append -q $QUEUE -d afterok:$TEST3 << EOF
 #!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
