@@ -20,8 +20,11 @@
 
  private
 
-! noah land ice option is applied at these vegetation types.
  integer, parameter                 :: veg_type_landice_target = 15
+                                       !< Vegetation type category that
+                                       !< defines permanent land ice points.
+                                       !< The Noah LSM land ice physics
+                                       !< are applied at these points.
 
 ! surface fields (not including nst)
  type(esmf_field), public           :: canopy_mc_target_grid
