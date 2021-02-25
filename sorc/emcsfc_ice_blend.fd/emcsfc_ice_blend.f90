@@ -87,15 +87,6 @@
 !!
 !! In the SH, the blended value is simply the 5-minute ice concentration
 !! at 'water' points.  'Coast' and 'land' points are bitmapped out.
-!! @param j search position of a file
-!! @param lugi set to 0 - no grib index file
-!! @param jdisc set to 2 - search for discipline
-!! @param jpdtn search for product definition template number
-!! @param jgdtn search for grid definition template number; 0 - lat/lon grid
-!! @param jids array of values in identification section, set to wildcard
-!! @param jgdt array of values in grid definition template 3.m
-!! @param jpdt array of values in product definition template 4.n
-!! @param unpack switch for unpack data
 !!
  program emcsfc_ice_blend
 
@@ -110,15 +101,21 @@
  integer, parameter     :: imax=4320 !< Constant value on i dim.
  integer, parameter     :: jmax=2160 !< Constant value on j dim.
 
- integer                :: i,j, istat, iunit
+ integer                :: i,j, istat, iunit !< j search position of a file
  integer                :: ii, iii, jj, jjj, count
- integer                :: lugi
- integer                :: jdisc, jgdtn, jpdtn, k
+ integer                :: lugi !< set to 0 - no grib index file
+ integer                :: jdisc, jgdtn, jpdtn, k 
+                            !< jdisc set to 2 - search for discipline
+                            !< jpdtn search for product definition template number
+                            !< jgdtn search for grid definition template number; 0 - lat/lon grid
  integer                :: jids(200), jgdt(200), jpdt(200)
+                            !< jids array of values in identification section, set to wildcard
+                            !< jgdt array of values in grid definition template 3.m
+                            !< jpdt array of values in product definition template 4.n
  integer, allocatable   :: mask_5min(:,:), mask_ims(:,:)
 
  logical*1, allocatable :: lbms_ims(:,:)
- logical                :: unpack
+ logical                :: unpack !< unpack switch for unpack data
 
  real, allocatable      :: dummy(:,:)
  real, allocatable      :: ice_ims(:,:), ice_5min(:,:), ice_blend(:,:)
