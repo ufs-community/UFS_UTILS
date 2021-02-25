@@ -1,8 +1,9 @@
 !> @file
 !! @brief Functions to read and write netcdf files.
-!!
 !! @author Ming Hu @date 2017-11-01
-!!
+
+!> @brief Functions to read and write netcdf files.
+!! @author Ming Hu @date 2017-11-01
 module module_ncio
 
   use netcdf

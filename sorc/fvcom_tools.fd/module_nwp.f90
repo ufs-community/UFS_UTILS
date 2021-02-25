@@ -1,11 +1,13 @@
 !> @file
+!! @brief Defines FV3LAM and FVCOM forecast data structure.
+!! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
+
+!> This module defines FV3LAM and FVCOM forecast data structure and
+!! the method to read and write observations from and to those data
+!! structures. It is used by ingest_FVCOM.f90.
 !!
-!! This module defines FV3LAM and FVCOM forecast data structure and the method to
-!! read and write observations from and to those data structures.  It is used by
-!! ingest_FVCOM.f90.
-!!
-!! This script is strongly based upon Eric James' (ESRL/GSL) work with HRRR/WRF
-!!  to get FVCOM data into the model.
+!! This script is strongly based upon Eric James' (ESRL/GSL) work with
+!! HRRR/WRF to get FVCOM data into the model.
 !!
 !! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
 !!
