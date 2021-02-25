@@ -1,8 +1,6 @@
 !> @file
 !! @brief Interpolate snow data to model grid and grib the result.
 !!
-!! @author George Gayno  org: w/np2 @date 2005-Dec-16
-!!
 !! program history log:
 !! -  2005-DEC-16  gayno   - initial version
 !! -  2007-SEP-20  gayno   - tested for b-grids. added improved
@@ -15,6 +13,7 @@
 !! -  snow_cvr_mdl  - snow cover on model grid in percent
 !! -  snow_dep_mdl  - snow depth on model grid in meters 
 !!                              
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16
  module snow2mdl
 
  use program_setup,        only   : lat_threshold,          &
@@ -86,9 +85,7 @@
  public                          :: interp
 
  contains
-!>   subprogram documentation block
-!!
-!!  @author George Gayno org: w/np2  @date 2005-Dec-16
+!>   snow grid transform routine    
 !!
 !! @note      interpolate snow data to model grid.
 !!
@@ -157,11 +154,10 @@
 !!      defined threshold, the depth is set to 0,
 !!      regardless of the afwa depth value.
 !!      
-!! attributes:
 !!   language: fortran 90
 !!   machine:  IBM WCOSS
 !!
-!!
+!!  @author George Gayno org: w/np2  @date 2005-Dec-16
  subroutine interp
  use gdswzd_mod
 
@@ -800,10 +796,7 @@
 
  end subroutine interp
 
-!>  subprogram documentation block
-!!
-!! subprogram:   write_grib2
-!!   @author George Gayno  org: w/np2   date 2014-Sep-26
+!>  grib 2 write routine                  
 !!
 !! @note  output snow cover and depth on the model grid 
 !!            in grib 2 format.
@@ -820,6 +813,7 @@
 !!    48 - error writing model snow flie
 !!    49 - error opening model snow flie
 !!
+!!   @author George Gayno  org: w/np2   @date 2014-Sep-26
  subroutine write_grib2
 
  use grib_mod
@@ -985,10 +979,9 @@
 
  end subroutine write_grib2
 
-!>    subprogram documentation block
+!>    grib 1 writer                        
 !!
 !! subprogram:   write_grib1
-!!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
 !!
 !! abstract:  output snow cover and depth on the model grid
 !!            in grib1 format.
@@ -997,15 +990,7 @@
 !! 2005-dec-16  gayno    - initial version
 !! 2014-sep-26  gayno    - rename as write_grib1 (was gribit)
 !!
-!! usage: call write_grib1
-!!
-!!   input argument list:  n/a
-!!
-!!   output argument list: n/a
-!!
-!! files:
-!!   input: none
-!!
+!!  files!
 !!   output:
 !!     - snow on model grid, grib 1, unit=lugb
 !!
@@ -1016,6 +1001,7 @@
 !!
 !! remarks: none.
 !!      
+!!   @author George Gayno org: w/np2     @date  2005-Dec-16
  subroutine write_grib1
 
  implicit none
@@ -1116,7 +1102,18 @@
 ! fills out full grid using thinned grid data.  use an iord of
 ! "1" to use a nearest neighbor approach.
 !-----------------------------------------------------------------------
-
+!> incomplete doxygen framework for undocumented routine unintrpred
+!!
+!! @param iord
+!! @param kmsk
+!! @param fi
+!! @param f           
+!! @param lonl 
+!! @param latd
+!! @param len  
+!! @param lonsperlat
+!!
+!! @ author unknown
  subroutine uninterpred(iord,kmsk,fi,f,lonl,latd,len,lonsperlat)
 
  implicit none
@@ -1154,7 +1151,18 @@
  enddo
 
  end subroutine uninterpred
-
+!>  incomplee doxygen framework  for intlon
+!!
+!! @param iord
+!! @param imon
+!! @param imsk
+!! @param m1  
+!! @param m2
+!! @param k1  
+!! @param k2
+!! @param f2
+!!
+!! @author     unknown
  subroutine intlon(iord,imon,imsk,m1,m2,k1,f1,f2)
 
  implicit none

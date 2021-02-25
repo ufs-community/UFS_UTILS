@@ -1,8 +1,6 @@
 !> @file
 !! @brief Read in data defining the model grid.
 !!
-!! @author George Gayno  org: w/np2 @date 2005-Dec-16  
-!!
 !! program history log:
 !! -  2005-dec-16  gayno   - initial version
 !! -  2007-nov-30  gayno   - improved method for thinning gfs grids.
@@ -32,6 +30,7 @@
 !! -  thinned        - when true, global grids will run thinned
 !!                    (# i points decrease toward pole)
 !!
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16  
  module model_grid
 
  use program_setup, only         : model_lsmask_file, &
@@ -61,8 +60,6 @@
  contains
 !> 
 !!
-!! @author George Gayno org: w/np2 @date 2005-dec-16
-!!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
 !! 2007-nov-30  gayno    - improved method for thinning gfs grids
@@ -89,7 +86,7 @@
 !!   91 - model longitude file not grib 1 or grib 2
 !!   92 - model landmask file not grib 1 or grib 2
 !!
-!!
+!! @author George Gayno org: w/np2 @date 2005-dec-16
  subroutine read_mdl_grid_info
  use grib_mod  ! grib 2 library
 
@@ -577,13 +574,12 @@
 
 !>   clean up allocatable arrays  
 !!
-!! @author   George Gayno org: w/np2 @Date 2005-Dec-16
-!!
 !! This deallocate this module's allocatable array.
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
 !!
+!! @author   George Gayno org: w/np2 @Date 2005-Dec-16
  subroutine model_grid_cleanup
 
  implicit none
