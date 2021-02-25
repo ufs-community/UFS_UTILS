@@ -1,7 +1,8 @@
 !> @file
 !! @brief Specify input and target model grids.
-!!
-!! Specify input and target model grids via ESMF grid objects.
+!! @author George Gayno NCEP/EMC
+
+!> Specify input and target model grids via ESMF grid objects.
 !!
 !! @author George Gayno NCEP/EMC
  module model_grid
