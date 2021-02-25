@@ -195,11 +195,11 @@
  do j = 1, jmax
  do i = 1, imax
    if (dummy(i,j) < 0.1) then
-      mask_5min(i,j)=0   !< water
+      mask_5min(i,j)=0   ! water
    elseif (dummy(i,j) > 1.94) then
-      mask_5min(i,j)=1   !< coast
+      mask_5min(i,j)=1   ! coast
    else
-      mask_5min(i,j)=2   !< land
+      mask_5min(i,j)=2   ! land
    endif
  enddo
  enddo
