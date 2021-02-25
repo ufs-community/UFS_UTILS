@@ -76,35 +76,35 @@ program ftst_program_setup
   print*, "OK"
 
   ! Reading this namelist fails for some reason.
-  ! print*, "testing read_setup_namelist with config_fv3_tiled_warm_restart..."
-  ! call read_setup_namelist("config_fv3_tiled_warm_restart.nml")
-  ! if (cycle_mon .ne. 10 .or. cycle_day .ne. 3 .or. cycle_hour .ne. 0) stop 54
-  ! if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 55
-  ! if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 56
-  ! if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/C192_mosaic.nc") stop 57
-  ! if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/fix_sfc") stop 58
-  ! if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/") stop 59
-  ! if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 60
-  ! if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.history") stop 61
-  ! if (trim(atm_files_input_grid(1)) .ne. 'dynf000.tile1.nc') stop 62
-  ! if (trim(sfc_files_input_grid(1)) .ne. 'phyf000.tile1.nc') stop 63
-  ! if (varmap_file .ne. "NULL") stop 64
-  ! if (thomp_mp_climo_file .ne. "NULL") stop 66
-  ! if (trim(cres_target_grid) .ne. "C192") stop 67
-  ! if (atm_weight_file .ne. "NULL") stop 68
-  ! if (trim(input_type) .ne. "history") stop 69
-  ! if (trim(external_model) .ne. "GFS") stop 70
-  ! if (num_tracers .ne. 3) stop 71
-  ! if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr") stop 72
-  ! if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
-  !      tracers_input(3) .ne. "o3mr") stop 73
+  print*, "testing read_setup_namelist with config_fv3_tiled_warm_restart..."
+  call read_setup_namelist("config_fv3_tiled_warm_restart.nml")
+  if (cycle_mon .ne. 10 .or. cycle_day .ne. 3 .or. cycle_hour .ne. 0) stop 54
+  if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 55
+  if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 56
+  if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/C192_mosaic.nc") stop 57
+  if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/fix_sfc") stop 58
+  if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/") stop 59
+  if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 60
+  if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.history") stop 61
+  if (trim(atm_files_input_grid(1)) .ne. 'dynf000.tile1.nc') stop 62
+  if (trim(sfc_files_input_grid(1)) .ne. 'phyf000.tile1.nc') stop 63
+  if (varmap_file .ne. "NULL") stop 64
+  if (thomp_mp_climo_file .ne. "NULL") stop 66
+  if (trim(cres_target_grid) .ne. "C192") stop 67
+  if (atm_weight_file .ne. "NULL") stop 68
+  if (trim(input_type) .ne. "history") stop 69
+  if (trim(external_model) .ne. "GFS") stop 70
+  if (num_tracers .ne. 3) stop 71
+  if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr") stop 72
+  if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
+       tracers_input(3) .ne. "o3mr") stop 73
 
-  ! ! Reset the tracers array.
-  ! do is = 1, max_tracers
-  !    tracers(is) = "NULL"
-  !    tracers_input(is) = "NULL"
-  ! enddo
-  ! print*, "OK"
+  ! Reset the tracers array.
+  do is = 1, max_tracers
+     tracers(is) = "NULL"
+     tracers_input(is) = "NULL"
+  enddo
+  print*, "OK"
 
   print*, "testing read_setup_namelist with config_gaussian_nemsio..."
   call read_setup_namelist("config_gaussian_nemsio.nml")
