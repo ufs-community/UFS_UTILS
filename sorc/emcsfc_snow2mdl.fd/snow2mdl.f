@@ -981,8 +981,6 @@
 
 !>    grib 1 writer                        
 !!
-!! subprogram:   write_grib1
-!!
 !! abstract:  output snow cover and depth on the model grid
 !!            in grib1 format.
 !!
