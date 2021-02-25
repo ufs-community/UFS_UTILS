@@ -9,7 +9,8 @@
 !! This script is strongly based upon Eric James' (ESRL/GSL) work with
 !! HRRR/WRF to get FVCOM data into the model.
 !!
-!! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
+!! @author David Wright, University of Michigan and GLERL,
+!! @date 17 Aug 2020
 !!
 module module_nwp
 
@@ -63,7 +64,7 @@ module module_nwp
      !!
      !! @param this
      !! @param[in] itype either ' FVCOM' or 'FV3LAM'.
-     !! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
+     !! @author David Wright, University of Michigan and GLERL
       subroutine initial_nwp(this,itype)
 
 
@@ -149,7 +150,7 @@ module module_nwp
       !! the initial_nwp subroutine.
       !!
       !! @param this 
-      !! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
+      !! @author David Wright, University of Michigan and GLERL
       subroutine list_initial_nwp(this)
 
          class(fcst_nwp) :: this
@@ -187,7 +188,7 @@ module module_nwp
       !! @param[inout] sfcT
       !! @param[inout] iceT
       !! 
-      !! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
+      !! @author David Wright, University of Michigan and GLERL
       subroutine read_nwp(this,filename,itype,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT)
 
          class(fcst_nwp) :: this
@@ -265,7 +266,7 @@ module module_nwp
       !> Finish.
       !!
       !! @param this 
-      !! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
+      !! @author David Wright, University of Michigan and GLERL
       subroutine finish_nwp(this)
 
          class(fcst_nwp) :: this
