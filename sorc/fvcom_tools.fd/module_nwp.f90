@@ -52,7 +52,7 @@ module module_nwp
          procedure :: finish => finish_nwp
    end type fcst_nwp
 
-   type(ncio) :: ncdata
+   type(ncio) :: ncdata !< Wrapper object for netCDF data file.
 !   type(map_util) :: map
 
    contains
