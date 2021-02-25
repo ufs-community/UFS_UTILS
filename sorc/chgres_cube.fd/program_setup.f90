@@ -446,22 +446,24 @@ end subroutine get_var_cond
 !! soil type. Works for Zobler and STATSGO soil categories.
 !!
 !! The calculations are those used in the Noah Land Surface Model. For
-!! more information see [Implementation of Noah land surface model
-!! advances in the National Centers for Environmental Prediction
-!! operational mesoscale Eta
-!! model](https://doi.org/10.1029/2002JD003296).
+!! more information see <a
+!! href="https://doi.org/10.1029/2002JD003296">Implementation of Noah
+!! land surface model advances in the National Centers for
+!! Environmental Prediction operational mesoscale Eta model</a>.
 !!
-!! For more details about the soil parameters/properties see [Coupling
+!! For more details about the soil parameters/properties see <a
+!! href="https://journals.ametsoc.org/view/journals/mwre/129/4/1520-0493_2001_129_0569_caalsh_2.0.co_2.xml">Coupling
 !! an Advanced Land Surface–Hydrology Model with the Penn State–NCAR
-!! MM5 Modeling System. Part I: Model Implementation and Sensitivity]
-!! (https://journals.ametsoc.org/view/journals/mwre/129/4/1520-0493_2001_129_0569_caalsh_2.0.co_2.xml).
+!! MM5 Modeling System. Part I: Model Implementation and
+!! Sensitivity</a>.
 !!
 !! The original source for soil properties is here:
 !!
 !! Cosby, B. J., G. M. Hornberger, R. B. Clapp, and T. R. Ginn, 1984:
-!! [A statistical exploration of the relationships of soil moisture
-!! characteristics to the physical properties of
-!! soils](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/WR020i006p00682). Water
+!! <a
+!! href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/WR020i006p00682">A
+!! statistical exploration of the relationships of soil moisture
+!! characteristics to the physical properties of soils</a>. Water
 !! Resour. Res.,20, 682–690.
 !!
 !! @param [in] localpet  ESMF local persistent execution thread
