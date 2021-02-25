@@ -57,11 +57,15 @@ module module_nwp
 
    contains
 
+     !> This subroutine defines the number of variables and their
+     !! names for each NWP data type. The indices of the variables are
+     !! also defined for later reference.
+     !!
+     !! @param this
+     !! @param[in] itype either ' FVCOM' or 'FV3LAM'.
+     !! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
       subroutine initial_nwp(this,itype)
 
-!        This subroutine defines the number of variables and their names for
-!        each NWP data type.  The indices of the variables are
-!        also defined for later reference.
 
          class(fcst_nwp) :: this
 
@@ -141,10 +145,12 @@ module module_nwp
 
       end subroutine initial_nwp
 
+      !> This subroutine lists the setup for NWP data that was done by
+      !! the initial_nwp subroutine.
+      !!
+      !! @param this 
+      !! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
       subroutine list_initial_nwp(this)
-
-!        This subroutine lists the setup for NWP data that was done by
-!        the initial_nwp subroutine.
 
          class(fcst_nwp) :: this
 
@@ -165,10 +171,24 @@ module module_nwp
 
       end subroutine list_initial_nwp
 
+      !> This subroutine initializes arrays to receive the NWP data,
+      !! and opens the file and gets the data.
+      !!
+      !! @param this
+      !! @param[in] filename
+      !! @param[in] itype
+      !! @param[inout] numlon
+      !! @param[inout] numlat
+      !! @param[inout] numtimes
+      !! @param[in] time_to_get
+      !! @param[inout] mask
+      !! @param[inout] sst
+      !! @param[inout] ice
+      !! @param[inout] sfcT
+      !! @param[inout] iceT
+      !! 
+      !! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
       subroutine read_nwp(this,filename,itype,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT)
-
-!        This subroutine initializes arrays to receive the NWP data,
-!        and opens the file and gets the data.
 
          class(fcst_nwp) :: this
 
@@ -242,6 +262,10 @@ module module_nwp
 
       end subroutine read_nwp
 
+      !> Finish.
+      !!
+      !! @param this 
+      !! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
       subroutine finish_nwp(this)
 
          class(fcst_nwp) :: this

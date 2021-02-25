@@ -49,9 +49,12 @@ module module_nwp_base
 
    contains
 
+     !> This subroutine lists the contents of a base nwp observation.
+     !!
+     !! @param this the base nwp obervation
+     !! @author David Wright, University of Michigan and GLERL @date 17 Aug 2020     
       subroutine list_obsbase(this)
 
-!     This subroutine lists the contents of a base nwp observation
 
          class(nwpbase) :: this
 
@@ -76,12 +79,16 @@ module module_nwp_base
 
       end subroutine list_obsbase
 
+      !> This subroutine allocates memory for base nwp observation
+      !! variables.
+      !!
+      !! @param this the base nwp obervation
+      !! @param[in] numvar number of variables in this ob type
+      !! @param[in] itquality does this observation include quality
+      !! information?
+      !! @author David Wright, University of Michigan and GLERL @date 17 Aug 2020
       subroutine alloc_obsbase(this,numvar,ifquality)
 
-!     This subroutine allocates memory for base nwp observation variables
-!     Input variables:
-!        numvar : number of variables in this ob type
-!        itquality: does this observation include quality information?
 
          class(nwpbase) :: this
 
@@ -106,9 +113,12 @@ module module_nwp_base
 
       end subroutine alloc_obsbase
 
+      !> This subroutine releases memory associated with nwp
+      !! observations.
+      !!
+      !! @param this the base nwp obervation
+      !! @author David Wright, University of Michigan and GLERL @date 17 Aug 2020
       subroutine destroy_obsbase(this)
-
-!     This subroutine releases memory associated with nwp observations
 
          class(nwpbase) :: this
 
