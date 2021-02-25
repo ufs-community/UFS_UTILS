@@ -94,24 +94,22 @@
 
  implicit none
 
- type(gribfield)        :: ims, mask, mmab
-
+ type(gribfield)        :: ims !< ims is Ice Mapping System 5-min grid date
+ type(gribfield)        :: mask !< data mask
+ type(gribfield)        :: mmab !< NCEP/MMAB global 5-minute ice concentration data
  character(len=200)     :: infile, outfile
-
  integer, parameter     :: imax=4320 !< Constant value on i dim.
  integer, parameter     :: jmax=2160 !< Constant value on j dim.
-
  integer                :: i,j, istat, iunit !< j search position of a file
  integer                :: ii, iii, jj, jjj, count
  integer                :: lugi !< set to 0 - no grib index file
- integer                :: jdisc, jgdtn, jpdtn, k 
-                            !< jdisc set to 2 - search for discipline
-                            !< jpdtn search for product definition template number
-                            !< jgdtn search for grid definition template number; 0 - lat/lon grid
- integer                :: jids(200), jgdt(200), jpdt(200)
-                            !< jids array of values in identification section, set to wildcard
-                            !< jgdt array of values in grid definition template 3.m
-                            !< jpdt array of values in product definition template 4.n
+ integer                :: jdisc !< jdisc set to 2 - search for discipline
+ integer                :: jgdtn !< jpdtn search for product definition template number
+ integer                :: jpdtn !< jgdtn search for grid definition template number; 0 - lat/lon grid
+ integer                :: k
+ integer                :: jids(200) !< jids array of values in identification section, set to wildcard
+ integer                :: jgdt(200) !< jgdt array of values in grid definition template 3.m
+ integer                :: jpdt(200) !< jpdt array of values in product definition template 4.n
  integer, allocatable   :: mask_5min(:,:), mask_ims(:,:)
 
  logical*1, allocatable :: lbms_ims(:,:)
@@ -197,11 +195,11 @@
  do j = 1, jmax
  do i = 1, imax
    if (dummy(i,j) < 0.1) then
-      mask_5min(i,j)=0   ! water
+      mask_5min(i,j)=0   !< water
    elseif (dummy(i,j) > 1.94) then
-      mask_5min(i,j)=1   ! coast
+      mask_5min(i,j)=1   !< coast
    else
-      mask_5min(i,j)=2   ! land
+      mask_5min(i,j)=2   !< land
    endif
  enddo
  enddo
