@@ -8,7 +8,7 @@ program ftst_program_setup
   use program_setup
   implicit none
   integer :: is
-  
+
   print*, "Starting test of program_setup."
 
   print*, "testing read_setup_namelist with file fort.41..."
@@ -75,8 +75,9 @@ program ftst_program_setup
   enddo
   print*, "OK"
 
-!  print*, "testing read_setup_namelist with config_fv3_tiled_warm_restart..."
-!  call read_setup_namelist("config_fv3_tiled_warm_restart.nml")
+  ! Reading this namelist fails for some reason.
+  ! print*, "testing read_setup_namelist with config_fv3_tiled_warm_restart..."
+  ! call read_setup_namelist("config_fv3_tiled_warm_restart.nml")
   ! if (cycle_mon .ne. 10 .or. cycle_day .ne. 3 .or. cycle_hour .ne. 0) stop 54
   ! if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 55
   ! if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 56
@@ -98,7 +99,7 @@ program ftst_program_setup
   ! if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
   !      tracers_input(3) .ne. "o3mr") stop 73
 
-  ! Reset the tracers array.
+  ! ! Reset the tracers array.
   ! do is = 1, max_tracers
   !    tracers(is) = "NULL"
   !    tracers_input(is) = "NULL"
@@ -135,19 +136,50 @@ program ftst_program_setup
      tracers_input(is) = "NULL"
   enddo
   print*, "OK"
-  
+
+  print*, "testing read_setup_namelist with config_spectral_sigio..."
+  call read_setup_namelist("config_spectral_sigio.nml")
+  if (cycle_mon .ne. 7 .or. cycle_day .ne. 17 .or. cycle_hour .ne. 0) stop 114
+  if (.not. convert_atm .or. .not. convert_sfc .or. convert_nst) stop 115
+  if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 116
+  if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/C96_mosaic.nc") stop 117
+  if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/fix_sfc") stop 118
+  if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/") stop 119
+  if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 120
+  if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/gfs.sigio") stop 121
+  if (trim(atm_files_input_grid(1)) .ne. 'gdas.t00z.sanl') stop 122
+  if (trim(sfc_files_input_grid(1)) .ne. 'gdas.t00z.sfcanl') stop 123
+  if (varmap_file .ne. "NULL") stop 124
+  ! if (thomp_mp_climo_file .ne. "NULL") stop 126
+  ! if (trim(cres_target_grid) .ne. "C96") stop 127
+  ! if (atm_weight_file .ne. "NULL") stop 128
+  ! if (trim(input_type) .ne. "history") stop 129
+  ! if (trim(external_model) .ne. "GFS") stop 130
+  ! print *,num_tracers
+  ! if (num_tracers .ne. 3) stop 131
+  ! if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr") stop 132
+  ! if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
+  !      tracers_input(3) .ne. "o3mr") stop 133
+
+  ! Reset the tracers array.
+  do is = 1, max_tracers
+     tracers(is) = "NULL"
+     tracers_input(is) = "NULL"
+  enddo
+  print*, "OK"
+
   print*, "testing read_setup_namelist with config_gfs_grib2..."
   call read_setup_namelist("config_gfs_grib2.nml")
-  ! if (cycle_mon .ne. 10 .or. cycle_day .ne. 3 .or. cycle_hour .ne. 0) stop 94
-  ! if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 95
-  ! if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 96
-  ! if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/C192_mosaic.nc") stop 97
-  ! if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/fix_sfc") stop 98
-  ! if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/") stop 99
-  ! if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 100
-  ! if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.history") stop 101
-  ! if (trim(atm_files_input_grid(1)) .ne. 'dynf000.tile1.nc') stop 102
-  ! if (trim(sfc_files_input_grid(1)) .ne. 'phyf000.tile1.nc') stop 103
+  if (cycle_mon .ne. 11 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 0) stop 94
+  if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 95
+  if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 96
+  if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/C192_mosaic.nc") stop 97
+  if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/fix_sfc") stop 98
+  if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C192/") stop 99
+  if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 100
+  if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.history") stop 101
+  if (trim(atm_files_input_grid(1)) .ne. 'dynf000.tile1.nc') stop 102
+  if (trim(sfc_files_input_grid(1)) .ne. 'phyf000.tile1.nc') stop 103
   ! if (varmap_file .ne. "NULL") stop 1010
   ! if (thomp_mp_climo_file .ne. "NULL") stop 106
   ! if (trim(cres_target_grid) .ne. "C192") stop 107
@@ -166,37 +198,6 @@ program ftst_program_setup
      tracers_input(is) = "NULL"
   enddo
   print*, "OK"
-  
-  print*, "testing read_setup_namelist with config_spectral_sigio..."
-  call read_setup_namelist("config_spectral_sigio.nml")
-  if (cycle_mon .ne. 7 .or. cycle_day .ne. 17 .or. cycle_hour .ne. 0) stop 114
-  if (.not. convert_atm .or. .not. convert_sfc .or. convert_nst) stop 115
-  if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 116
-  if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/C96_mosaic.nc") stop 117
-  if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/fix_sfc") stop 118
-  if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/") stop 119
-  if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 120
-  if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/gfs.sigio") stop 121
-  if (trim(atm_files_input_grid(1)) .ne. 'gdas.t00z.sanl') stop 122
-  if (trim(sfc_files_input_grid(1)) .ne. 'gdas.t00z.sfcanl') stop 123
-  ! if (varmap_file .ne. "NULL") stop 124
-  ! if (thomp_mp_climo_file .ne. "NULL") stop 126
-  ! if (trim(cres_target_grid) .ne. "C96") stop 127
-  ! if (atm_weight_file .ne. "NULL") stop 128
-  ! if (trim(input_type) .ne. "history") stop 129
-  ! if (trim(external_model) .ne. "GFS") stop 130
-  ! print *,num_tracers
-  ! if (num_tracers .ne. 3) stop 131
-  ! if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr") stop 132
-  ! if (tracers_input(1) .ne. "spfh" .or. tracers_input(2) .ne. "clwmr" .or. &
-  !      tracers_input(3) .ne. "o3mr") stop 133
 
-  ! Reset the tracers array.
-  do is = 1, max_tracers
-     tracers(is) = "NULL"
-     tracers_input(is) = "NULL"
-  enddo
-  print*, "OK"
-  
   print*, "SUCCESS!"
 end program ftst_program_setup
