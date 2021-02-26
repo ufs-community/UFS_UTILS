@@ -62,7 +62,7 @@ module module_nwp
      !! names for each NWP data type. The indices of the variables are
      !! also defined for later reference.
      !!
-     !! @param this
+     !! @param this fcst_nwp object
      !! @param[in] itype either ' FVCOM' or 'FV3LAM'.
      !! @author David Wright, University of Michigan and GLERL
       subroutine initial_nwp(this,itype)
@@ -149,7 +149,7 @@ module module_nwp
       !> This subroutine lists the setup for NWP data that was done by
       !! the initial_nwp subroutine.
       !!
-      !! @param this 
+      !! @param this fcst_nwp object
       !! @author David Wright, University of Michigan and GLERL
       subroutine list_initial_nwp(this)
 
@@ -175,19 +175,19 @@ module module_nwp
       !> This subroutine initializes arrays to receive the NWP data,
       !! and opens the file and gets the data.
       !!
-      !! @param this
-      !! @param[in] filename
-      !! @param[in] itype
-      !! @param[inout] numlon
-      !! @param[inout] numlat
-      !! @param[inout] numtimes
-      !! @param[in] time_to_get
-      !! @param[inout] mask
-      !! @param[inout] sst
-      !! @param[inout] ice
-      !! @param[inout] sfcT
-      !! @param[inout] iceT
-      !! 
+      !! @param this fcst_nwp ojbect
+      !! @param[in] filename netcdf file name
+      !! @param[in] itype either ' FVCOM' or 'FV3LAM'
+      !! @param[inout] numlon number of grid points in x-direction
+      !! @param[inout] numlat number of grid poinst in y-direction
+      !! @param[inout] numtimes length of time dimension
+      !! @param[in] time_to_get integer of time dimension to read in
+      !! @param[inout] mask Water points mask
+      !! @param[inout] sst Water surface temperature
+      !! @param[inout] ice Ice concentration (%)
+      !! @param[inout] sfcT Skin Temperature
+      !! @param[inout] iceT Ice Skin Temperature
+      !!
       !! @author David Wright, University of Michigan and GLERL
       subroutine read_nwp(this,filename,itype,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT)
 
@@ -263,9 +263,9 @@ module module_nwp
 
       end subroutine read_nwp
 
-      !> Finish.
+      !> Finish and deallocate.
       !!
-      !! @param this 
+      !! @param this fcst_nwp object
       !! @author David Wright, University of Michigan and GLERL
       subroutine finish_nwp(this)
 
