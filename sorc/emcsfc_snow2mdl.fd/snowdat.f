@@ -3,6 +3,7 @@
 !!
 !! @author gayno org: w/np2 @date 2005-dec-16 
 !!
+
 !! program history log:
 !! -  2005-dec-16  gayno   - initial version
 !! -  2007-aug-10  gayno   - allow program to run with no nesdis/ims data
@@ -16,9 +17,9 @@
 !! variable definitions:
 !! -  afwa_res           - resolution of afwa data in km
 !! -  autosnow_res       - resolution of autosnow in km
-!! -  bad_afwa_Xh        - is afwa data corrupt?
-!! -  bad_nesdis         - is nesdis ims data corrupt?
-!! -  bitmap_afwa_Xh     - bitmap of afwa grid (false-non land, true-land)
+!! -  bad_afwa_Xh         !< is afwa data corrupt?
+!! -  bad_nesdis        !< is nesdis ims data corrupt?
+!! -  bitmap_afwa_Xh     !<  bitmap of afwa grid (false-non land, true-land)
 !! -  bitmap_nesdis      - bitmap of nesdis grid (false-non land, true-land)
 !! -  iafwa              - i-dimension of afwa grid
 !! -  jafwa              - j-dimension of afwa grid
@@ -54,36 +55,39 @@
  use model_grid, only     : imdl,                &
                             jmdl
 
- integer                 :: iafwa
- integer                 :: iautosnow
- integer                 :: inesdis 
- integer                 :: jafwa
- integer                 :: jautosnow
- integer                 :: jnesdis
- integer                 :: kgds_afwa_global(200)
+ integer                 :: iafwa  !< i-dimension of afwa grid
+ integer                 :: iautosnow  !< i-dimension of autosnow grid
+ integer                 :: inesdis   !< i-dimension of nesdis grid
+ integer                 :: jafwa  !< j-dimension of afwa grid
+ integer                 :: jautosnow  !< j-dimension of autosnow grid
+ integer                 :: jnesdis  !< j-dimension of nesdis grid
+ integer                 :: kgds_afwa_global(200) 
  integer                 :: kgds_afwa_nh(200)
  integer                 :: kgds_afwa_nh_8th(200)
  integer                 :: kgds_afwa_sh(200)
  integer                 :: kgds_afwa_sh_8th(200)
- integer                 :: kgds_autosnow(200)
- integer                 :: kgds_nesdis(200)
- integer                 :: mesh_nesdis
- integer*1, allocatable  :: sea_ice_nesdis(:,:)  
-
- logical                 :: bad_afwa_nh, bad_afwa_sh, bad_nesdis, bad_afwa_global
+ integer                 :: kgds_autosnow(200)  !< autosnow grid description section (grib section 2)
+ integer                 :: kgds_nesdis(200)  !< nesdis/ims grid description section (grib section 2)
+ integer                 :: mesh_nesdis !< nesdis/ims data is 96th mesh (or bediant)
+ integer*1, allocatable  :: sea_ice_nesdis(:,:) !< nesdis/ims sea ice flag (0-open water, 1-ice) 
+ logical                 :: bad_afwa_nh
+ logical                 :: bad_afwa_sh
+ logical                 :: bad_nesdis !< is nesdis ims data corrupt?
+ logical                 ::  bad_afwa_global
  logical*1, allocatable  :: bitmap_afwa_global(:,:)
  logical*1, allocatable  :: bitmap_afwa_nh(:,:)
  logical*1, allocatable  :: bitmap_afwa_sh(:,:)
- logical*1, allocatable  :: bitmap_nesdis(:,:)
+ logical*1, allocatable  :: bitmap_nesdis(:,:) !< bitmap of nesdis grid (false-non land, true-land)
  logical*1, allocatable  :: bitmap_autosnow(:,:)
  logical                 :: use_nh_afwa, use_sh_afwa, use_global_afwa
- logical                 :: use_autosnow, use_nesdis
+ logical                 :: use_autosnow
+ logical                 ::  use_nesdis  !< true if nesdis/ims data to be used
 
- real                    :: autosnow_res  ! in km
- real                    :: afwa_res  ! in km
+ real                    :: autosnow_res  !< resolution of autosnow in km 
+ real                    :: afwa_res   !<  resolution of afwa data in km
  real                    :: nesdis_res
- real, allocatable       :: snow_cvr_nesdis(:,:)  
- real, allocatable       :: snow_cvr_autosnow(:,:)  
+ real, allocatable       :: snow_cvr_nesdis(:,:)   !< nesdis/ims snow cover flag (0-no, 100-yes)
+ real, allocatable       :: snow_cvr_autosnow(:,:)  !< autosnow snow cover flag (0-no, 100-yes)
  real, allocatable       :: snow_dep_afwa_global(:,:) 
  real, allocatable       :: snow_dep_afwa_nh(:,:) 
  real, allocatable       :: snow_dep_afwa_sh(:,:) 
