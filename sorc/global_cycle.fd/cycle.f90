@@ -174,27 +174,27 @@
 
  !> ???
  !!
- !! LUGB
- !! IDIM
- !! JDIM
- !! LENSFC
- !! LSOIL
- !! DELTSFC
- !! IY
- !! IM
- !! ID
- !! IH
- !! FH
- !! IALB
- !! USE_UFO
- !! DO_NSST
- !! ADJT_NST_ONLY
- !! ZSEA1
- !! ZSEA2
- !! ISOT
- !! IVEGSRC
- !! MYRANK
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[in] LUGB
+ !! @param[in] IDIM
+ !! @param[in] JDIM
+ !! @param[in] LENSFC
+ !! @param[in] LSOIL
+ !! @param[in] DELTSFC
+ !! @param[in] IY
+ !! @param[in] IM
+ !! @param[in] ID
+ !! @param[in] IH
+ !! @param[in] FH
+ !! @param[in] IALB
+ !! @param[in] USE_UFO
+ !! @param[in] DO_NSST
+ !! @param[in] ADJT_NST_ONLY
+ !! @param[in] ZSEA1
+ !! @param[in] ZSEA2
+ !! @param[in] ISOT
+ !! @param[in] IVEGSRC
+ !! @param[in] MYRANK
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
  SUBROUTINE SFCDRV(LUGB, IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
                    IY,IM,ID,IH,FH,IALB,                  &
                    USE_UFO,DO_NSST,ADJT_NST_ONLY,        &
