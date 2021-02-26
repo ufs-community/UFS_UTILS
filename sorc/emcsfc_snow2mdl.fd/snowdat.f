@@ -217,7 +217,7 @@
 !!          in this routine.  Ims data is now created by the national
 !!          ice center.
 !!
-!! @author  George Gayno   org: w/np2     date: 2005-dec-16
+!! @author  George Gayno   org: w/np2     @date  2005-Dec-16
  subroutine readnesdis
  use grib_mod
 
@@ -526,7 +526,7 @@
 !!   60 - bad open afwa file
 !!   61 - bad degrib of afwa file
 !!
-!! @author  George Gayno    org: w/np2     date: 2005-dec-16
+!! @author  George Gayno    org: w/np2     @date 2005-Dec-16
  subroutine readafwa
  implicit none
 
@@ -846,7 +846,7 @@
 !!   input:
 !!     - NH weekly climatological snow cover file (grib 2)
 !!
-!! @author  George Gayno    org: w/np2     date: 2009-jun-3
+!! @author  George Gayno    org: w/np2     @date  2009-Jun-3
  subroutine nh_climo_check(kgds_data,snow_data,bitmap_data,idata,jdata,isrc,bad)
  use gdswzd_mod
 
@@ -1237,7 +1237,7 @@
 !! @note  : Read logic for binary data taken from hua-lu's code:
 !!          /nwprod/sorc/grib_snowgrib.fd
 !!
-!! @author  George Gayno    org: w/np2     date: 2007-nov-28
+!! @author  George Gayno    org: w/np2     @date  2007-Nov-28
  subroutine read_afwa_binary(file_name, snow_dep_afwa) 
 
  implicit none
@@ -1324,7 +1324,7 @@
 !!   62 - bad open of afwa landmask file
 !!   63 - bad read of afwa landmask file
 !!
-!! @author  George Gayno    org: w/np2     date: 2007-nov-28
+!! @author  George Gayno    org: w/np2     @date 2007-Nov-28
  subroutine read_afwa_mask(file_name, bitmap_afwa)
  implicit none
 
@@ -1378,5 +1378,6 @@
  deallocate (dummy4)
 
  end subroutine read_afwa_mask
+
 
  end module snowdat
