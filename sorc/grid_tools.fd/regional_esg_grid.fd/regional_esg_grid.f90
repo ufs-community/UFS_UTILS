@@ -1,7 +1,6 @@
 !> @file
-!=============================================================================
+
 program regional_grid
-!=============================================================================
 
   use pkind, only: dp
   use pietc, only: dtor,rtod
@@ -38,8 +37,6 @@ program regional_grid
   real(dp)                     :: a,k,m_arcx,m_arcy,q
   real(dp)                     :: m_delx,m_dely, delxre,delyre
   real(dp)                     :: arcx,arcy
-
-!=============================================================================
 
   if (command_argument_count() == 1) then
     call get_command_argument(1, nml_fname)
@@ -169,10 +166,12 @@ program regional_grid
 
 end program regional_grid
 
+!> checking error code and do exception handling
+!! @param status the error code
 subroutine check(status)
 use netcdf
 integer,intent(in) :: status
-!
+
 if(status /= nf90_noerr) then
   write(0,*)' check netcdf status=',status
   write(0,'("error ", a)')trim(nf90_strerror(status))
