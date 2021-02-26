@@ -109,7 +109,7 @@
 !!   74 - bad open of autosnow file
 !!   75 - bad read of autosnow file
 !!
-!! @note  : Autosnow data is available only for southern hemis.
+!! @note    Autosnow data is available only for southern hemis.
 !!          Autosnow data is in grib 2.          
 !!
 !! @author  George Gayno   org: w/np2   @date  2008-Feb-04
@@ -508,7 +508,7 @@
 
 !>  read snow data
 !!
-!! @note read nh and sh afwa snow depth data and
+!! @note Read nh and sh afwa snow depth data and
 !!   land sea mask. 
 !!
 !! program history log:
@@ -823,30 +823,31 @@
 
 !>  check for corrupt nh snow cover data
 !!
-!! @note  check for corrupt nh data by comparing it
-!!            to climatology
+!! @note  Check for corrupt nh data by comparing it
+!!            to climatology.
 !!  
 !! program history log:
 !! 2009-jun-3   gayno    - initial version
-!! 2011-apr-26  gayno    - perform gross check first,
-!!                         then check against climo
-!! 2014-sep-30  gayno    - weekly climo file converted
+!! 2011-apr-26  gayno    - Perform gross check first,
+!!                         then check against climo.
+!! 2014-sep-30  gayno    - Weekly climo file converted
 !!                         to grib 2.
 !!
 !!    argument list:  
-!! @param[in]  - kgds_data  - grib 1 grid description sect of data to be qcd
-!! @param[in]  - snow_data  - snow cover to be qcd
-!! @param[in]  - bitmap_data - bitmap of data to be qcd
-!! @param[in]  - i/jdata     - i/j dimension of data to be qcd
-!! @param[in]  - isrc        - flag indicating data source; 1-afwa depth, 2-ims cover
+!! @param[in]   kgds_dat a   Grib 1 grid description sect of data to be qcd.
+!! @param[in]   snow_data    Snow cover to be qcd.
+!! @param[in]   bitmap_data  bitmap of data to be qcd.
+!! @param[in]   idata        I dimension of data to be qcd.
+!! @param[in]   jdata        J dimension of data to be qcd.
+!! @param[in]   isrc         Flag indicating data source; 1- afwa depth, 2-ims cover.
 !!
-!! @param[out]  - bad - when true, data failed check
+!! @param[out]   bad         When true, data failed check.
 !!
 !! files:
 !!   input:
-!!     - NH weekly climatological snow cover file (grib 2)
+!!     - NH weekly climatological snow cover file (grib 2).
 !!
-!! @author  George Gayno    org: w/np2     @date  2009-Jun-3
+!! @author  George Gayno org: w/np2 @date  2009-Jun-3
  subroutine nh_climo_check(kgds_data,snow_data,bitmap_data,idata,jdata,isrc,bad)
  use gdswzd_mod
 
@@ -1122,7 +1123,7 @@
 !!
 !!  argument list
 !! @param[in]    hemi (1-nh, 2-sh)
-!! @author  George Gayno    org: w/np2     @date  2009-Jun-3
+!! @author  George Gayno  org: w/np2 @date 2009-Jun-3
  subroutine afwa_check(hemi)
   use gdswzd_mod
 
@@ -1222,7 +1223,7 @@
 !! 2007-nov-28  gayno    - initial version
 !!
 !!   argument list:
-!! @param[in] `  file_name - file name
+!! @param[in]  file_name - file name
 !!
 !! @param[out] snow_dep_afwa - snow depth in meters
 !!
@@ -1234,10 +1235,10 @@
 !!   60 - bad open of afwa file
 !!   61 - bad read of afwa file
 !!
-!! @note  : Read logic for binary data taken from hua-lu's code:
-!!          /nwprod/sorc/grib_snowgrib.fd
+!! @note    Read logic for binary data is  taken from hua-lu's code,
+!!          /nwprod/sorc/grib_snowgrib.fd.
 !!
-!! @author  George Gayno    org: w/np2     @date  2007-Nov-28
+!! @author  George Gayno org: w/np2 @date  2007-Nov-28
  subroutine read_afwa_binary(file_name, snow_dep_afwa) 
 
  implicit none
@@ -1313,8 +1314,8 @@
 !! 2007-nov-28  gayno    - initial version
 !!
 !!   argument list:  
-!! @param[in] file_name - land mask file name
-!! @param[out]  bitmap_afwa - .true. if land
+!! @param[in]   file_name      land mask file name
+!! @param[out]  bitmap_afwa   .true. if land
 !!
 !! files:
 !!   input:
@@ -1324,7 +1325,7 @@
 !!   62 - bad open of afwa landmask file
 !!   63 - bad read of afwa landmask file
 !!
-!! @author  George Gayno    org: w/np2     @date 2007-Nov-28
+!! @author  George Gayno org: w/np2 @date 2007-Nov-28
  subroutine read_afwa_mask(file_name, bitmap_afwa)
  implicit none
 

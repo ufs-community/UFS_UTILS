@@ -87,7 +87,7 @@
  contains
 !>   snow grid transform routine    
 !!
-!! @note      interpolate snow data to model grid.
+!! @note      Interpolate snow data to model grid.
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
@@ -798,7 +798,7 @@
 
 !>  grib 2 write routine                  
 !!
-!! @note  output snow cover and depth on the model grid 
+!! @note  Output snow cover and depth on the model grid 
 !!            in grib 2 format.
 !!
 !! program history log:
@@ -981,12 +981,12 @@
 
 !>    grib 1 writer                        
 !!
-!! abstract:  output snow cover and depth on the model grid
+!! abstract:  Output snow cover and depth on the model grid
 !!            in grib1 format.
 !!
 !! program history log:
-!! 2005-dec-16  gayno    - initial version
-!! 2014-sep-26  gayno    - rename as write_grib1 (was gribit)
+!! 2005-dec-16  gayno    - Initial version
+!! 2014-sep-26  gayno    - Rename as write_grib1 (was gribit).
 !!
 !!  files!
 !!   output:
@@ -997,9 +997,7 @@
 !!    58 - error writing model snow cover record
 !!    59 - error opening model snow file
 !!
-!! remarks: none.
-!!      
-!!   @author George Gayno org: w/np2     @date  2005-Dec-16
+!!   @author George Gayno org: w/np2 @date  2005-Dec-16
  subroutine write_grib1
 
  implicit none

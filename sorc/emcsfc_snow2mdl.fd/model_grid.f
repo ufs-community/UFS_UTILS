@@ -58,7 +58,7 @@
  real                           :: resol_mdl  ! in km
 
  contains
-!> 
+!>  read mdl grid
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
