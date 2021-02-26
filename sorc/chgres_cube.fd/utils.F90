@@ -1,9 +1,8 @@
 !> @file
-!! @brief Contains utility routines
+!! @brief Contains utility routines.
 !!
 
-
-!> @brief General error handler.
+!> General error handler.
 !!
 !! @param[in] string  error message
 !! @param[in] rc      error status code

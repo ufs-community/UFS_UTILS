@@ -1,7 +1,8 @@
 !> @file
 !! @brief Process atmospheric fields
-!!
-!! Process atmospheric fields:  Horizontally interpolate input
+!! @author George Gayno NCEP/EMC
+
+!> Process atmospheric fields:  Horizontally interpolate input
 !! fields to the target grid.  Adjust surface pressure according to
 !! terrain difference between input and target grids.  Vertically
 !! interpolate to target grid vertical levels.  Processing based on
@@ -14,7 +15,7 @@
 !! 'west' edge of the grid box.  Otherwise, fields are at the center
 !! of the grid box.
 !!
-!! @author gayno NCEP/EMC
+!! @author George Gayno NCEP/EMC
  module atmosphere
 
  use esmf
