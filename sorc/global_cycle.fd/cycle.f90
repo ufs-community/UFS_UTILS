@@ -83,7 +83,7 @@
 !!  -2017-08-08:  Gayno     Modify to work on cubed-sphere grid.
 !!                         Added processing of NSST and TREF update.
 !!                         Added mpi directives.
-!!
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
  PROGRAM SFC_DRV
 
  use mpi
@@ -171,8 +171,31 @@
  STOP
 
  END PROGRAM SFC_DRV
-!
- SUBROUTINE SFCDRV(LUGB,IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
+
+ !> ???
+ !!
+ !! LUGB
+ !! IDIM
+ !! JDIM
+ !! LENSFC
+ !! LSOIL
+ !! DELTSFC
+ !! IY
+ !! IM
+ !! ID
+ !! IH
+ !! FH
+ !! IALB
+ !! USE_UFO
+ !! DO_NSST
+ !! ADJT_NST_ONLY
+ !! ZSEA1
+ !! ZSEA2
+ !! ISOT
+ !! IVEGSRC
+ !! MYRANK
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
+ SUBROUTINE SFCDRV(LUGB, IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
                    IY,IM,ID,IH,FH,IALB,                  &
                    USE_UFO,DO_NSST,ADJT_NST_ONLY,        &
                    ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
@@ -524,16 +547,37 @@
 
  END SUBROUTINE SFCDRV
  
+ !> Read in gsi file with the updated tref increments (on the gaussian
+ !! grid), interpolate increments to the cubed-sphere tile, and
+ !! perform required nsst adjustments and qc.
+ !!
+ !! @param[in] RLA
+ !! @param[in] RLO
+ !! @param[in] SLMSK_TILE
+ !! @param[in] SLMSK_FG_TILE
+ !! @param[in] SKINT_TILE
+ !! @param[in] SICET_TILE
+ !! @param[in] sice_tile
+ !! @param[in] SOILT_TILE
+ !! @param[in] NSST
+ !! @param[in] LENSFC
+ !! @param[in] LSOIL
+ !! @param[in] IDIM
+ !! @param[in] JDIM
+ !! @param[in] ZSEA1
+ !! @param[in] ZSEA2
+ !! @param[in] MON
+ !! @param[in] DAY
+ !! @param[in] DELTSFC
+ !! @param[in] tf_clm_tile
+ !! @param[in] tf_trd_tile
+ !! @param[in] sal_clm_tile
+ !!
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
  SUBROUTINE ADJUST_NSST(RLA,RLO,SLMSK_TILE,SLMSK_FG_TILE,SKINT_TILE,&
                         SICET_TILE,sice_tile,SOILT_TILE,NSST,LENSFC,LSOIL,    &
                         IDIM,JDIM,ZSEA1,ZSEA2,MON,DAY,DELTSFC, &
                         tf_clm_tile,tf_trd_tile,sal_clm_tile)
-
-!--------------------------------------------------------------------------------
-! READ IN GSI FILE WITH THE UPDATED TREF INCREMENTS (ON THE GAUSSIAN
-! GRID), INTERPOLATE INCREMENTS TO THE CUBED-SPHERE TILE, AND PERFORM
-! REQUIRED NSST ADJUSTMENTS AND QC.
-!--------------------------------------------------------------------------------
 
  USE GDSWZD_MOD
  USE READ_WRITE_DATA, ONLY : IDIM_GAUS, JDIM_GAUS, &
@@ -928,15 +972,17 @@
 
  END SUBROUTINE ADJUST_NSST
 
+ !> If the tile point is an isolated water point that has no
+ !! corresponding gsi water point, then tref is updated using ! the rtg
+ !! sst climo trend. This monthly trend is sorted by latitude band.
+ !!
+ !! @param[in] LATITUDE
+ !! @param[in] MON
+ !! @param[in] DAY
+ !! @param[in] DELTSFC
+ !! @param[out] DTREF
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
  SUBROUTINE CLIMO_TREND(LATITUDE, MON, DAY, DELTSFC, DTREF)
-
-!----------------------------------------------------------------
-! IF THE TILE POINT IS AN ISOLATED WATER POINT THAT HAS NO
-! CORRESPONDING GSI WATER POINT, THEN TREF IS UPDATED USING
-! THE RTG SST CLIMO TREND.  THIS MONTHLY TREND IS SORTED BY
-! LATITUDE BAND.
-!----------------------------------------------------------------
-
  IMPLICIT NONE
 
  INTEGER, INTENT(IN)    :: MON, DAY
@@ -1078,34 +1124,21 @@
 
  END SUBROUTINE CLIMO_TREND
 
+ !> ???
+ !!
+ !! get dtzm = mean of dT(z) (z1 - z2) with NSST dT(z)     
+ !!                dT(z) = (1-z/xz)*dt_warm - (1-z/zc)*dt_cool            
+ !!                                                                 
+ !! @param[in] xt real, heat content in dtl.
+ !! @param[in] xz real, dtl thickness.
+ !! @param[in] dt cool - real, sub-layer cooling amount.
+ !! @param[in] zc sub-layer cooling thickness.
+ !! @param[in] z1 lower bound of depth of sea temperature.
+ !! @param[in] z2 upper bound of depth of sea temperature.
+ !! @param[out] dtzm mean of dT(z)  (z1 to z2).
+ !!
+ !! @author Xu Li @date 2015
  SUBROUTINE DTZM_POINT(XT,XZ,DT_COOL,ZC,Z1,Z2,DTZM)
-! ===================================================================== !
-!                                                                       !
-!  description:  get dtzm = mean of dT(z) (z1 - z2) with NSST dT(z)     !
-!                dT(z) = (1-z/xz)*dt_warm - (1-z/zc)*dt_cool            !
-!                                                                       !
-!  usage:                                                               !
-!                                                                       !
-!    call dtzm_point                                                    !
-!                                                                       !
-!       inputs:                                                         !
-!          (xt,xz,dt_cool,zc,z1,z2,                                     !
-!       outputs:                                                        !
-!          dtzm)                                                        !
-!                                                                       !
-!  program history log:                                                 !
-!                                                                       !
-!         2015  -- xu li       createad original code                   !
-!  inputs:                                                              !
-!     xt      - real, heat content in dtl                            1  !
-!     xz      - real, dtl thickness                                  1  !
-!     dt_cool - real, sub-layer cooling amount                       1  !
-!     zc      - sub-layer cooling thickness                          1  !
-!     z1      - lower bound of depth of sea temperature              1  !
-!     z2      - upper bound of depth of sea temperature              1  !
-!  outputs:                                                             !
-!     dtzm   - mean of dT(z)  (z1 to z2)                             1  !
-!
   implicit none
 
   real, intent(in)  :: xt,xz,dt_cool,zc,z1,z2
@@ -1158,13 +1191,27 @@
 
  END SUBROUTINE DTZM_POINT
 
+ !> ???
+ !!
+ !! This routine was taken from the forecast model -
+ !! ./atmos_cubed_sphere/tools/fv_treat_da_inc.f90.
+ !!
+ !! @param[in] is
+ !! @param[in] ie
+ !! @param[in] js
+ !! @param[in] je
+ !! @param[in] im
+ !! @param[in] jm
+ !! @param[in] lon
+ !! @param[in] lat
+ !! @param[in] id1
+ !! @param[in] id2
+ !! @param[in] jdc
+ !! @param[in] s2c
+ !! @param[in] agrid
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
  SUBROUTINE REMAP_COEF( is, ie, js, je,&
       im, jm, lon, lat, id1, id2, jdc, s2c, agrid )
-
-!----------------------------------------------------------------------
-! THIS ROUTINE WAS TAKEN FROM THE FORECAST MODEL -
-! ./ATMOS_CUBED_SPHERE/TOOLS/FV_TREAT_DA_INC.F90.
-!----------------------------------------------------------------------
 
     implicit none
     integer, intent(in):: is, ie, js, je
@@ -1243,17 +1290,24 @@
 
  END SUBROUTINE REMAP_COEF
 
+ !> Set a vakue to tf background for the thaw (just melted water)
+ !! situation.
+ !!
+ !! @param[in] tf Foundation temperature background on FV3 native grids.
+ !! @param[in] mask ij     : mask of the tile (FV3 native grids).
+ !! @param[in] itile location index of the tile.
+ !! @param[in] jtile location index of the tile.
+ !! @param[in] tice water temperature (calulated with a salinity formula).
+ !! @param[in] tclm SST climatology valid at the analysis time.
+ !! @param [out] tf_thaw
+ !! @param[inout] nx
+ !! @param[inout] ny
+ !! @param[inout] nset_thaw_s
+ !! @param[inout] nset_thaw_i
+ !! @param[inout] nset_thaw_c
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
  subroutine tf_thaw_set(tf_ij,mask_ij,itile,jtile,tice,tclm,tf_thaw,nx,ny, &
                         nset_thaw_s,nset_thaw_i,nset_thaw_c)
-!
-! set a vakue to tf background for the thaw (just melted water) situation
-!
-!Input/output: 
-!       tf          : Foundation temperature background on FV3 native grids
-!       mask_ij     : mask of the tile (FV3 native grids)
-!       itile,jtile : location index of the tile
-!       tice        : water temperature (calulated with a salinity formula)
-!       tclm        : SST climatology valid at the analysis time
 
  real,    dimension(nx*ny), intent(in)    :: tf_ij
  integer, dimension(nx*ny), intent(in)    :: mask_ij
@@ -1336,13 +1390,14 @@
 
  end subroutine tf_thaw_set
 
+ !> If the first guess was sea ice, but the analysis is open water,
+ !! reset all nsst variables.
+ !! 
+ !! @param[in] nsst
+ !! @param[in] ij
+ !! @param[in] tf_thaw
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
  subroutine nsst_water_reset(nsst,ij,tf_thaw)
-
-!-------------------------------------------------------------------
-! if the first guess was sea ice, but the analysis is open water,
-! reset all nsst variables.
-!-------------------------------------------------------------------
-
  use read_write_data, only : nsst_data
  implicit none
 
@@ -1373,20 +1428,29 @@
 
  end subroutine nsst_water_reset
 
+ !> Get sst climatology at the valid time (atime) and target
+ !! resolution (nx,ny).
+ !!
+ !! @param[in] xlats_ij latitudes of target grids (nx*ny)
+ !! @param[in] xlons_ij longitudes of target grids (nx*ny)
+ !! @param[in] ny 
+ !! @param[in] nx
+ !! @param[in] iy
+ !! @param[in] im
+ !! @param[in] id
+ !! @param[in] ih
+ !! @param[out] tf_clm sst climatology valid at atime (nx,ny)
+ !! @param[out] tf_trd 6-hourly sst climatology tendency valid at atime (nx,ny)
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
 subroutine get_tf_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,tf_clm,tf_trd)
-!
-! abstract: get sst climatology at the valid time (atime) and target resolution (nx,ny)
-!
-! input & output 
-!
  use read_write_data, only : get_tf_clm_dim
 
  implicit none
 
- real,    dimension(nx*ny), intent(in)  :: xlats_ij   ! latitudes of target grids (nx*ny)
- real,    dimension(nx*ny), intent(in)  :: xlons_ij   ! latitudes of target grids (nx*ny)
- real,    dimension(nx,ny), intent(out) :: tf_clm     ! sst climatology valid at atime (nx,ny)
- real,    dimension(nx,ny), intent(out) :: tf_trd     ! 6-hourly sst climatology tendency valid at atime (nx,ny)
+ real,    dimension(nx*ny), intent(in)  :: xlats_ij 
+ real,    dimension(nx*ny), intent(in)  :: xlons_ij 
+ real,    dimension(nx,ny), intent(out) :: tf_clm   
+ real,    dimension(nx,ny), intent(out) :: tf_trd   
  integer, intent(in) :: iy,im,id,ih,nx,ny
 ! local declare
  real,    allocatable, dimension(:,:)   :: tf_clm0    ! sst climatology at the valid time (nxc,nyc)
@@ -1433,11 +1497,20 @@ subroutine get_tf_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,tf_clm,tf_trd)
 
 end subroutine get_tf_clm
 
+!> Get tf/sst climatology & the trend at analysis time.
+!!
+!! @param[out] tf_clm_ta
+!! @param[out] tf_clm_trend
+!! @param[out] xlats
+!! @param[out] xlons
+!! @param[in] nlat
+!! @param[in] nlon
+!! @param[in] mon1
+!! @param[in] mon2
+!! @param[in] wei1
+!! @param[in] wei2
+!! @author xu li @date March 2019 
 subroutine get_tf_clm_ta(tf_clm_ta,tf_clm_trend,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
-!$$$
-! abstract:  get tf/sst climatology & the trend at analysis time
-! created by xu li, march, 2019
-
  use read_write_data, only : read_tf_clim_grb
  implicit none
 
@@ -1473,18 +1546,26 @@ subroutine get_tf_clm_ta(tf_clm_ta,tf_clm_trend,xlats,xlons,nlat,nlon,mon1,mon2,
    write(*,'(a,2f9.3)') 'tf_clm_trend, min, max : ',minval(tf_clm_trend),maxval(tf_clm_trend)
  end subroutine get_tf_clm_ta
 
+ !> Get salinity climatology at the valid time (atime) and target
+ !> resolution (nx,ny).
+ !!
+ !! @param[in] xlats_ij latitudes of target grids (nx*ny).
+ !! @param[in] xlons_ij longitudes of target grids (nx*ny).
+ !! @param[in] ny
+ !! @param[in] nx
+ !! @param[in] iy
+ !! @param[in] im
+ !! @param[in] id
+ !! @param[in] ih
+ !! @param[out] sal_clm salinity climatology valid at atime (nx,ny).
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
 subroutine get_sal_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,sal_clm)
-!
-! abstract: get salinity climatology at the valid time (atime) and target resolution (nx,ny)
-!
-! input & output 
-!
  use read_write_data, only : get_dim_nc
  implicit none
 
- real,    dimension(nx*ny), intent(in)  :: xlats_ij   ! latitudes of target grids (nx*ny)
- real,    dimension(nx*ny), intent(in)  :: xlons_ij   ! latitudes of target grids (nx*ny)
- real,    dimension(nx,ny), intent(out) :: sal_clm    ! salinity climatology valid at atime (nx,ny)
+ real,    dimension(nx*ny), intent(in)  :: xlats_ij   ! 
+ real,    dimension(nx*ny), intent(in)  :: xlons_ij   ! 
+ real,    dimension(nx,ny), intent(out) :: sal_clm    ! 
  integer, intent(in) :: iy,im,id,ih,nx,ny
 ! local declare
  real,    allocatable, dimension(:,:)   :: sal_clm0   ! salinity climatology at the valid time
@@ -1526,10 +1607,19 @@ subroutine get_sal_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,sal_clm)
 
 end subroutine get_sal_clm
 
+!> Get sal climatology at analysis time.
+!!
+!! @param[in] sal_clm_ta
+!! @param[in] xlats
+!! @param[in] xlons
+!! @param[in] nlat
+!! @param[in] nlon
+!! @param[in] mon1
+!! @param[in] mon2
+!! @param[in] wei1
+!! @param[in] wei2
+!! @author xu li @date March 2019 
 subroutine get_sal_clm_ta(sal_clm_ta,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
-!$$$
-! abstract:  get sal climatology at analysis time
-! created by xu li, march, 2019
 
  use read_write_data, only : read_salclm_gfs_nc
  implicit none
@@ -1560,28 +1650,22 @@ subroutine get_sal_clm_ta(sal_clm_ta,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
    write(*,'(a,2f9.3)') 'sal_clm_ta, min, max : ',minval(sal_clm_ta),maxval(sal_clm_ta)
  end subroutine get_sal_clm_ta
 
+ !> Interpolate lon/lat grid to fv3 native grid (tf_lalo => tf_tile)
+ !> for not dependent on mask.
+ !!
+ !! @param[in] tf_lalo (idim_lalo,idim_lalo) tf at lat/lon regular grid.
+ !! @param[in] dlats_lalo (jdim_lalo) latitudes along y direction of lat/lon regular grid points.
+ !! @param[in] dlons_lalo (idim_lalo) longitudes along x direction of lat/lon regular grid points.
+ !! @param[in] jdim_lalo number of y dimension of tf_lalo.
+ !! @param[in] idim_lalo number of x dimension of tf_lalo.
+ !! @param[in] xlats_tile (jdim_tile*idim_tile) latitudes of all tile grid points.
+ !! @param[in] xlons_tile (jdim_tile*idim_tile) longitudes of all tile grid points.
+ !! @param[in] jdim_tile number of y dimension of tf_tile.
+ !! @param[in] idim_tile number of x dimension of tf_tile.
+ !! @param[in] tf_tile (jdim_tile*idim_tile) tf at cubed sphere grid.
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
 subroutine intp_tile(tf_lalo,dlats_lalo,dlons_lalo,jdim_lalo,idim_lalo, &
                      tf_tile,xlats_tile,xlons_tile,jdim_tile,idim_tile)
-!--------------------------------------------------------------------------------
-! abstract: interpolate lon/lat grid to fv3 native grid (tf_lalo => tf_tile) for
-! not dependent on mask
-!--------------------------------------------------------------------------------
-
-! input
-!
-! tf_lalo     : (idim_lalo,idim_lalo) tf at lat/lon regular grid
-! dlats_lalo  : (jdim_lalo) latitudes along y direction of lat/lon regular grid points
-! dlons_lalo  : (idim_lalo) longitudes along x direction of lat/lon regular grid points
-! jdim_lalo   : number of y dimension of tf_lalo
-! idim_lalo   : number of x dimension of tf_lalo
-! xlats_tile  : (jdim_tile*idim_tile) latitudes of all tile grid points
-! xlons_tile  : (jdim_tile*idim_tile) longitudes of all tile grid points
-! jdim_tile   : number of y dimension of tf_tile
-! idim_tile   : number of x dimension of tf_tile
-!
-! output
-!
-! tf_tile     : (jdim_tile*idim_tile) tf at cubed sphere grid
 
  implicit none
 
@@ -1656,11 +1740,18 @@ subroutine intp_tile(tf_lalo,dlats_lalo,dlons_lalo,jdim_lalo,idim_lalo, &
 
 end subroutine intp_tile
 
+!> Get two months and weights for monthly climatology.
+!!
+!! @param[in] iy
+!! @param[in] im
+!! @param[in] id
+!! @param[in] ih
+!! @param[in] mon1
+!! @param[in] mon2
+!! @param[in] wei1
+!! @param[in] wei2
+!! @author xu li @date March 2019 
 subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
-!$$$
-! abstract:  get two months and weights for monthly climatology
-! created by xu li, march, 2019
-
  implicit none
 
 ! input
@@ -1718,10 +1809,13 @@ subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
 
  end subroutine get_tim_wei
 
+ !> ???
+ !!
+ !! Constants taken from Gill, 1982.
+ !!
+ !! @date 21 September 1994.
+ !! @author Robert Grumbine
  real function tfreez(salinity)
-!Constants taken from Gill, 1982.
-!Author: Robert Grumbine
-!LAST MODIFIED: 21 September 1994.
 
  implicit none
 
