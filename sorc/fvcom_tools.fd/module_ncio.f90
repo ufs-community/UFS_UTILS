@@ -260,12 +260,12 @@ subroutine get_dim_nc(this,dimname,dimvalue)
 !
 end subroutine get_dim_nc
 
-!> Read in one field.
+!> Replace 1D character type variable
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_char_1d(this,varname,nd1,field)
 
@@ -295,13 +295,13 @@ subroutine replace_var_nc_char_1d(this,varname,nd1,field)
 !
 end subroutine replace_var_nc_char_1d
 
-!> Read in one field.
+!> Replace 2D character type variable
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_char_2d(this,varname,nd1,nd2,field)
   use netcdf
@@ -342,14 +342,14 @@ subroutine replace_var_nc_char_2d(this,varname,nd1,nd2,field)
 !
 end subroutine replace_var_nc_char_2d
 
-!> Read in one field.
+!> Replace 3D character type variable
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] nd3
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] nd3 length of third dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_char_3d(this,varname,nd1,nd2,nd3,field)
   use netcdf
@@ -394,12 +394,12 @@ subroutine replace_var_nc_char_3d(this,varname,nd1,nd2,nd3,field)
 !
 end subroutine replace_var_nc_char_3d
 
-!> Read in one field.
+!> Replace character type variable
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] ilength
-!! @param[in] field
+!! @param[in] ilength length of array
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_char(this,varname,ilength,field)
   use netcdf
@@ -501,12 +501,12 @@ subroutine replace_var_nc_char(this,varname,ilength,field)
 end subroutine replace_var_nc_char
 !--- replace_var_nc_char
 
-!> Replace real.
+!> Replace 1D real type variable
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_real_1d(this,varname,nd1,field)
   use netcdf
@@ -535,13 +535,13 @@ subroutine replace_var_nc_real_1d(this,varname,nd1,field)
 !
 end subroutine replace_var_nc_real_1d
 
-!> Replace real.
+!> Replace 2D real type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_real_2d(this,varname,nd1,nd2,field)
   use netcdf
@@ -582,14 +582,14 @@ subroutine replace_var_nc_real_2d(this,varname,nd1,nd2,field)
 !
 end subroutine replace_var_nc_real_2d
 
-!> Replace real.
+!> Replace 3D real type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] nd3
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] nd3 length of third dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_real_3d(this,varname,nd1,nd2,nd3,field)
 !
@@ -639,12 +639,12 @@ subroutine replace_var_nc_real_3d(this,varname,nd1,nd2,nd3,field)
 !
 end subroutine replace_var_nc_real_3d
 
-!> Read in one field.
+!> Replace real type variable
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] ilength
-!! @param[in] field
+!! @param[in] ilength length of array
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_real(this,varname,ilength,field)
   use netcdf
@@ -745,12 +745,12 @@ subroutine replace_var_nc_real(this,varname,ilength,field)
 !
 end subroutine replace_var_nc_real
 
-!> Replace double.
+!> Replace 1D double type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_double_1d(this,varname,nd1,field)
 !
@@ -782,13 +782,13 @@ subroutine replace_var_nc_double_1d(this,varname,nd1,field)
 !
 end subroutine replace_var_nc_double_1d
 
-!> Replace double.
+!> Replace 2D double type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_double_2d(this,varname,nd1,nd2,field)
 !
@@ -832,14 +832,14 @@ subroutine replace_var_nc_double_2d(this,varname,nd1,nd2,field)
 !
 end subroutine replace_var_nc_double_2d
 
-!> Replace double.
+!> Replace 3D double type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] nd3
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] nd3 length of third dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_double_3d(this,varname,nd1,nd2,nd3,field)
 !
@@ -890,12 +890,12 @@ subroutine replace_var_nc_double_3d(this,varname,nd1,nd2,nd3,field)
 end subroutine replace_var_nc_double_3d
 !
 
-!> Read in one field.
+!> Replace double type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] ilength
-!! @param[in] field
+!! @param[in] ilength size of array
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_double(this,varname,ilength,field)
   use netcdf
@@ -996,12 +996,12 @@ subroutine replace_var_nc_double(this,varname,ilength,field)
 !
 end subroutine replace_var_nc_double
 
-!> Read in one field.
+!> Replace 1D integer type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] field
+!! @param[in] nd1 lenth of first dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_int_1d(this,varname,nd1,field)
   use netcdf
@@ -1030,13 +1030,13 @@ subroutine replace_var_nc_int_1d(this,varname,nd1,field)
 !
 end subroutine replace_var_nc_int_1d
 
-!> Read in one field.
+!> Replace 2D integer type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_int_2d(this,varname,nd1,nd2,field)
 !
@@ -1080,14 +1080,14 @@ subroutine replace_var_nc_int_2d(this,varname,nd1,nd2,field)
 !
 end subroutine replace_var_nc_int_2d
 
-!> Read in one field.
+!> Replace 3D integer type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] nd3
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] nd3 length of third dimension
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_int_3d(this,varname,nd1,nd2,nd3,field)
   use netcdf
@@ -1134,12 +1134,12 @@ subroutine replace_var_nc_int_3d(this,varname,nd1,nd2,nd3,field)
 !
 end subroutine replace_var_nc_int_3d
 
-!> Read in one field.
+!> Replace integer type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] ilength
-!! @param[in] field
+!! @param[in] ilength size of array
+!! @param[in] field replacement field
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine replace_var_nc_int(this,varname,ilength,field)
   use netcdf
@@ -1240,12 +1240,12 @@ subroutine replace_var_nc_int(this,varname,ilength,field)
 !
 end subroutine replace_var_nc_int
 
-!> Read in one field.
+!> Read in 1D double type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] field
+!! @param[in] nd1 lenth of first dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_double_1d(this,varname,nd1,field)
   use netcdf
@@ -1277,13 +1277,13 @@ subroutine get_var_nc_double_1d(this,varname,nd1,field)
 !
 end subroutine get_var_nc_double_1d
 
-!> Read in one field.
+!> Read in 2D double type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_double_2d(this,varname,nd1,nd2,field)
   use netcdf
@@ -1328,14 +1328,14 @@ subroutine get_var_nc_double_2d(this,varname,nd1,nd2,field)
 !
 end subroutine get_var_nc_double_2d
 
-!> Read in one field.
+!> Read in 3D double type field.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] nd3
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] nd3 length of third dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_double_3d(this,varname,nd1,nd2,nd3,field)
   use netcdf
@@ -1386,12 +1386,12 @@ subroutine get_var_nc_double_3d(this,varname,nd1,nd2,nd3,field)
 !
 end subroutine get_var_nc_double_3d
 
-!> Read in one field.
+!> Read in double type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] ilength
-!! @param[in] field
+!! @param[in] ilength size of array
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_double(this,varname,ilength,field)
   use netcdf
@@ -1492,12 +1492,12 @@ subroutine get_var_nc_double(this,varname,ilength,field)
 !
 end subroutine get_var_nc_double
 
-!> Read in one field.
+!> Read in 1D real type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_real_1d(this,varname,nd1,field)
   use netcdf
@@ -1529,13 +1529,13 @@ subroutine get_var_nc_real_1d(this,varname,nd1,field)
 !
 end subroutine get_var_nc_real_1d
 
-!> Read in one field.
+!> Read in 2D real type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_real_2d(this,varname,nd1,nd2,field)
 !
@@ -1583,14 +1583,14 @@ subroutine get_var_nc_real_2d(this,varname,nd1,nd2,field)
 !
 end subroutine get_var_nc_real_2d
 
-!> Read in one field.
+!> Read in 3D real type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] nd3
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] nd3 length of third dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_real_3d(this,varname,nd1,nd2,nd3,field)
   use netcdf
@@ -1641,12 +1641,12 @@ subroutine get_var_nc_real_3d(this,varname,nd1,nd2,nd3,field)
 !
 end subroutine get_var_nc_real_3d
 
-!> Read in one field.
+!> Read in real type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] ilength
-!! @param[in] field
+!! @param[in] ilength size of array
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_real(this,varname,ilength,field)
 !
@@ -1750,12 +1750,12 @@ subroutine get_var_nc_real(this,varname,ilength,field)
 !
 end subroutine get_var_nc_real
 
-!> Read in one field.
+!> Read in 1D integer variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_int_1d(this,varname,nd1,field)
   use netcdf
@@ -1787,13 +1787,13 @@ subroutine get_var_nc_int_1d(this,varname,nd1,field)
 !
 end subroutine get_var_nc_int_1d
 
-!> Read in one field.
+!> Read in 2D integer type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_int_2d(this,varname,nd1,nd2,field)
 !
@@ -1841,14 +1841,14 @@ subroutine get_var_nc_int_2d(this,varname,nd1,nd2,field)
 !
 end subroutine get_var_nc_int_2d
 
-!> Read in one field.
+!> Read in 3D integer type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] nd3
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] nd3 length of third dimension
+!! @param[in] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_int_3d(this,varname,nd1,nd2,nd3,field)
   use netcdf
@@ -1899,12 +1899,12 @@ subroutine get_var_nc_int_3d(this,varname,nd1,nd2,nd3,field)
 !
 end subroutine get_var_nc_int_3d
 
-!> Read in one field.
+!> Read in integer type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] ilength
-!! @param[in] field
+!! @param[in] ilength size of array
+!! @param[in] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_int(this,varname,ilength,field)
 !
@@ -2008,12 +2008,12 @@ subroutine get_var_nc_int(this,varname,ilength,field)
 !
 end subroutine get_var_nc_int
 
-!> Read in one field.
+!> Read in 1D short type variable
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_short_1d(this,varname,nd1,field)
   use netcdf
@@ -2045,13 +2045,13 @@ subroutine get_var_nc_short_1d(this,varname,nd1,field)
 !
 end subroutine get_var_nc_short_1d
 
-!> Read in one field.
+!> Read in 2D short type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_short_2d(this,varname,nd1,nd2,field)
 !
@@ -2099,12 +2099,12 @@ subroutine get_var_nc_short_2d(this,varname,nd1,nd2,field)
 !
 end subroutine get_var_nc_short_2d
 !
-!> Read in one field.
+!> Read in short type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] ilength
-!! @param[in] field
+!! @param[in] ilength size of array
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_short(this,varname,ilength,field)
   use netcdf
@@ -2205,12 +2205,12 @@ subroutine get_var_nc_short(this,varname,ilength,field)
 !
 end subroutine get_var_nc_short
 
-!> Read in one field.
+!> Read in 1D character type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_char_1d(this,varname,nd1,field)
   use netcdf
@@ -2242,13 +2242,13 @@ subroutine get_var_nc_char_1d(this,varname,nd1,field)
 !
 end subroutine get_var_nc_char_1d
 
-!> Read in one field.
+!> Read in 2D character type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_char_2d(this,varname,nd1,nd2,field)
   use netcdf
@@ -2293,14 +2293,14 @@ subroutine get_var_nc_char_2d(this,varname,nd1,nd2,field)
 !
 end subroutine get_var_nc_char_2d
 
-!> Read in one field.
+!> Read in 3D character type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] nd1
-!! @param[in] nd2
-!! @param[in] nd3
-!! @param[in] field
+!! @param[in] nd1 length of first dimension
+!! @param[in] nd2 length of second dimension
+!! @param[in] nd3 length of third dimension
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_char_3d(this,varname,nd1,nd2,nd3,field)
   use netcdf
@@ -2349,12 +2349,12 @@ subroutine get_var_nc_char_3d(this,varname,nd1,nd2,nd3,field)
 !
 end subroutine get_var_nc_char_3d
 !
-!> Read in one field.
+!> Read in character type variable.
 !!
 !! @param[in] this instance of an ncio class
 !! @param[in] varname name of the variable
-!! @param[in] ilength
-!! @param[in] field
+!! @param[in] ilength size of array
+!! @param[out] field output variable
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine get_var_nc_char(this,varname,ilength,field)
 !
@@ -2475,13 +2475,13 @@ subroutine handle_err(this,status)
   end if
 end subroutine handle_err
 
-!> Convert theta T to T.
+!> Convert theta T (Kelvin) to T (deg C).
 !!
 !! @param[in] this instance of an ncio class
-!! @param[in] nx
-!! @param[in] ny
-!! @param[in] ps
-!! @param[in] t2
+!! @param[in] nx number of grid points in x-dir
+!! @param[in] ny number of grid points in y-dir
+!! @param[in] ps Pressure (Pa)
+!! @param[inout] t2 Pot. Temperature (Kelvin)
 !! @author Ming Hu org: GSD/AMB @date 2017-11-01
 subroutine convert_theta2t_2dgrid(this,nx,ny,ps,t2)
          implicit none
@@ -2514,8 +2514,8 @@ end subroutine convert_theta2t_2dgrid
 !! @param[in] dname1 1st dimension name
 !! @param[in] dname2 2nd dimension name
 !! @param[in] dname3 3rd dimension name
-!! @param lname long name output for netcdf variable
-!! @param units units to use in netcdf variable
+!! @param[in] lname long name output for netcdf variable
+!! @param[in] units units to use in netcdf variable
 !!
 !! @author David.M.Wright org: UM/GLERL @date 2020-09-01
 subroutine add_new_var_3d(this,varname,dname1,dname2,dname3,lname,units)
