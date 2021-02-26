@@ -1,5 +1,10 @@
 !> @file
- MODULE READ_WRITE_DATA
+!! @brief ???
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
+
+!> ???
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
+MODULE READ_WRITE_DATA
 
  USE NETCDF
 
@@ -44,6 +49,53 @@
 
  CONTAINS
 
+   !> Write out all surface records - and nsst records if selected -
+   !! to a netcdf file.  
+   !! 
+   !! @note The model restart files contain an additional snow field -
+   !! snow cover (snocvr). That field is required for bit identical
+   !! reproducability. If that record does not exist, the model will
+   !! compute it as an initialization step. Because this program does not
+   !! contain the snow cover algorithm, it will let the model compute it.
+   !!
+   !! @param[in] slifcs
+   !! @param[in] tsffcs
+   !! @param[in] snofcs
+   !! @param[in] tg3fcs
+   !! @param[in] zorfcs
+   !! @param[in] albfcs
+   !! @param[in] alffcs
+   !! @param[in] vegfcs
+   !! @param[in] cnpfcs
+   !! @param[in] f10m
+   !! @param[in] t2m
+   !! @param[in] q2m
+   !! @param[in] vetfcs
+   !! @param[in] sotfcs
+   !! @param[in] ustar
+   !! @param[in] fmm
+   !! @param[in] fhh
+   !! @param[in] sicfcs
+   !! @param[in] sihfcs
+   !! @param[in] sitfcs
+   !! @param[in] tprcp
+   !! @param[in] srflag
+   !! @param[in] swdfcs
+   !! @param[in] vmnfcs
+   !! @param[in] vmxfcs
+   !! @param[in] slpfcs
+   !! @param[in] absfcs
+   !! @param[in] slcfcs
+   !! @param[in] smcfcs
+   !! @param[in] stcfcs
+   !! @param[in] idim
+   !! @param[in] jdim
+   !! @param[in] lensfc
+   !! @param[in] lsoil
+   !! @param[in] do_nsst
+   !! @param[in] nsst
+   !!
+   !! @author M. Iredell, xuli, Hang Lei, George Gayno
  subroutine write_data(slifcs,tsffcs,snofcs,tg3fcs,zorfcs, &
                        albfcs,alffcs,vegfcs,cnpfcs,f10m, &
                        t2m,q2m,vetfcs,sotfcs,ustar,fmm,fhh, &
@@ -52,17 +104,6 @@
                        absfcs,slcfcs,smcfcs,stcfcs,&
                        idim,jdim,lensfc,lsoil,do_nsst,nsst)
 
-!------------------------------------------------------------------
-! Write out all surface records - and nsst records if selected -
-! to a netcdf file.  
-! 
-! Note: the model restart files contain an additional snow field -
-! snow cover (snocvr).  That field is required for bit identical
-! reproducability.  If that record does not exist, the model
-! will compute it as an initialization step.  Because this
-! program does not contain the snow cover algorithm, it will
-! let the model compute it.
-!------------------------------------------------------------------
 
  use mpi
 
@@ -845,14 +886,21 @@
 
  end subroutine write_data
 
+ !> Read latitude, longitude, filtered orography, and
+ !! unfiltered orography for the cubed-sphere tile from
+ !! the "grid" file.
+ !!
+ !! @param[in] RLA
+ !! @param[in] RLO
+ !! @param[in] OROG
+ !! @param[in] OROG_UF
+ !! @param[in] TILE_NUM
+ !! @param[in] IDIM
+ !! @param[in] JDIM
+ !! @param[in] IJDIM
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
  SUBROUTINE READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,&
                               TILE_NUM,IDIM,JDIM,IJDIM)
-
-!--------------------------------------------------------------
-! READ LATITUDE, LONGITUDE, FILTERED OROGRAPHY, AND
-! UNFILTERED OROGRAPHY FOR THE CUBED-SPHERE TILE FROM
-! THE "GRID" FILE.
-!--------------------------------------------------------------
 
  USE MPI
 
@@ -979,12 +1027,13 @@
 
  END SUBROUTINE READ_LAT_LON_OROG
 
+ !> If at netcdf call returns an error, print out a message
+ !! and stop processing.
+ !!
+ !! @param[in] ERR
+ !! @param[in] STRING
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
  SUBROUTINE NETCDF_ERR( ERR, STRING )
-
-!--------------------------------------------------------------
-! IF AT NETCDF CALL RETURNS AN ERROR, PRINT OUT A MESSAGE
-! AND STOP PROCESSING.
-!--------------------------------------------------------------
 
  USE MPI
 
@@ -1005,15 +1054,16 @@
  RETURN
  END SUBROUTINE NETCDF_ERR
 
+ !> Read file from the gsi containing the foundation temperature
+ !! increments and mask.
+ !!
+ !! Data is in netcdf and on a gaussian grid.  The grid contains two
+ !! extra rows for each pole. The interpolation from gaussian to
+ !! native grid assumes no pole points, so these are removed.
+ !!
+ !! @param[in] GSI_FILE
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
  SUBROUTINE READ_GSI_DATA(GSI_FILE)
-
-!-----------------------------------------------------------------
-! READ FILE FROM THE GSI CONTAINING THE FOUNDATION TEMPERATURE
-! INCREMENTS AND MASK.  DATA IS IN NETCDF AND ON A GAUSSIAN GRID. 
-! THE GRID CONTAINS TWO EXTRA ROWS FOR EACH POLE.  THE 
-! INTERPOLATION FROM GAUSSIAN TO NATIVE GRID ASSUMES NO POLE
-! POINTS, SO THESE ARE REMOVED.  
-!-----------------------------------------------------------------
 
  IMPLICIT NONE
 
@@ -1073,6 +1123,50 @@
 
  END SUBROUTINE READ_GSI_DATA
 
+
+ !> Read the first guess surface records and nsst records (if
+ !! selected) for a single cubed-sphere tile.
+ !!
+ !! @param[in] TSFFCS
+ !! @param[in] SMCFCS
+ !! @param[in] SNOFCS
+ !! @param[in] STCFCS
+ !! @param[in] TG3FCS
+ !! @param[in] ZORFCS
+ !! @param[in] CVFCS
+ !! @param[in] CVBFCS
+ !! @param[in] CVTFCS
+ !! @param[in] ALBFCS
+ !! @param[in] SLIFCS
+ !! @param[in] VEGFCS
+ !! @param[in] CNPFCS
+ !! @param[in] F10M
+ !! @param[in] VETFCS
+ !! @param[in] SOTFCS
+ !! @param[in] ALFFCS
+ !! @param[in] USTAR
+ !! @param[in] FMM
+ !! @param[in] FHH
+ !! @param[in] SIHFCS
+ !! @param[in] SICFCS
+ !! @param[in] SITFCS
+ !! @param[in] TPRCP
+ !! @param[in] SRFLAG
+ !! @param[in] SWDFCS
+ !! @param[in] VMNFCS
+ !! @param[in] VMXFCS
+ !! @param[in] SLCFCS
+ !! @param[in] SLPFCS
+ !! @param[in] ABSFCS
+ !! @param[in] T2M
+ !! @param[in] Q2M
+ !! @param[in] SLMASK
+ !! @param[in] ZSOIL
+ !! @param[in] LSOIL
+ !! @param[in] LENSFC
+ !! @param[in] DO_NSST
+ !! @param[in] NSST
+ !! @author M. Iredell, xuli, Hang Lei, George Gayno
  SUBROUTINE READ_DATA(TSFFCS,SMCFCS,SNOFCS,STCFCS, &
                       TG3FCS,ZORFCS, &
                       CVFCS,CVBFCS,CVTFCS,ALBFCS, &
@@ -1084,12 +1178,6 @@
                       VMNFCS,VMXFCS,SLCFCS, &
                       SLPFCS,ABSFCS,T2M,Q2M,SLMASK, &
                       ZSOIL,LSOIL,LENSFC,DO_NSST,NSST)
-
-!-----------------------------------------------------------------
-! READ THE FIRST GUESS SURFACE RECORDS AND NSST RECORDS (IF
-! SELECTED) FOR A SINGLE CUBED-SPHERE TILE.
-!-----------------------------------------------------------------
-
  USE MPI
 
  IMPLICIT NONE
@@ -1503,45 +1591,32 @@
 
  END SUBROUTINE READ_DATA
  
+ !> Read grib1 sst analysis.
+ !!
+ !! Read sst analysis (grib format) and save it as expanded and
+ !! transposed array.
+ !!
+ !! Subroutine rdgrbsst must be compiled with the ncep w3 library and
+ !! the bacio library.
+ !!
+ !! @param[in] file_sst file name of grib sst file.
+ !! @param[in] sst sst field.
+ !! @param[in] rlats_sst
+ !! @param[in] rlons_sst
+ !! @param[in] mlat_sst
+ !! @param[in] mlon_sst
+ !! @param[in] mon month number.
+ !!
+ !!     note: (1) the data is stored from north to south originally in grib format,
+ !!             but is stored from south to north with this reading routine
+ !!     nlat_sst  - latitudinal dimension of sst
+ !!     nlon_sst  - longitudinal dimension of sst
+ !!     xsst0 - latitude of origin
+ !!     ysst0 - longitude of origin
+ !!     dres  - lat/lon increment
+ !! @author xu li org: np23 @date 2019-03-13
 subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,mon)
 
-!                .      .    .                                       .
-! abstrac:    read_tf_clim_grb :  read grib1 sst analysis
-!   prgmmr: xu li            org: np23                date: 2019-03-13
-!
-! abstract: read sst analysis (grib format) and save it as expanded and transposed array
-!
-!     subroutine rdgrbsst must be compiled with the ncep w3 library
-!     and the bacio library.
-!
-!
-! program history log:
-!
-!   input argument list:
-!     file_sst - file name of grib sst file
-!     mon      - month number
-!     mlat_sst,mlon_sst
-!   output:
-!     rlats_sst
-!     rlons_sst
-!     sst
-!
-!   argument list defined by this reading:
-!     sst - sst field
-!     note: (1) the data is stored from north to south originally in grib format,
-!             but is stored from south to north with this reading routine
-!     nlat_sst  - latitudinal dimension of sst
-!     nlon_sst  - longitudinal dimension of sst
-!     xsst0 - latitude of origin
-!     ysst0 - longitude of origin
-!     dres  - lat/lon increment
-!
-!     call subs: getgbh, getgb
-!
-! attributes:
-!   language: f90
-!
-!$$$
   use mpi
 
   implicit none
@@ -1672,26 +1747,13 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
   
 end subroutine read_tf_clim_grb
 
+!> Get dimension of rtg sst climatology.
+!!
+!! @param[in] file_sst file name of grib sst file
+!! @param[in] mlat_sst
+!! @param[in] mlon_sst
+!! @author xu li org: np23 @date 2019-03-13
 subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
-!                .      .    .                                       .
-! abstract:   get_tf_clm_dim :  get dimension of rtg sst climatology
-!   prgmmr: xu li            org: np23                date: 2019-03-13
-!
-!
-! program history log:
-!
-!   input argument list:
-!     file_sst - file name of grib sst file
-! output
-!     mlat_sst,mlon_sst
-!
-!     call subs: getgbh
-!
-! attributes:
-!   language: f90
-!   machine:  ibm rs/6000 sp
-!
-!$$$
   use mpi
 
   implicit none
@@ -1739,8 +1801,17 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
   endif
 end subroutine get_tf_clm_dim
 
+!> Read woa05 salinity monthly climatology (netcdf).
+!!
+!! @param[in] filename
+!! @param[in] sal
+!! @param[in] xlats
+!! @param[in] xlons
+!! @param[in] nlat
+!! @param[in] nlon
+!! @param[in] itime
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
 subroutine read_salclm_gfs_nc(filename,sal,xlats,xlons,nlat,nlon,itime)
-! abstract: read woa05 salinity monthly climatology  (netcdf)
   use netcdf
   implicit none
   
@@ -1810,8 +1881,13 @@ subroutine read_salclm_gfs_nc(filename,sal,xlats,xlons,nlat,nlon,itime)
 
 end subroutine read_salclm_gfs_nc
 
+!> Get dimensions of sal array.
+!!
+!! @param[in] filename
+!! @param[in] nlat
+!! @param[in] nlon
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
 subroutine get_dim_nc(filename,nlat,nlon)
-! abstract: get dimensions of sal array
   use netcdf
   implicit none
   
@@ -1843,6 +1919,10 @@ subroutine get_dim_nc(filename,nlat,nlon)
 
 end subroutine get_dim_nc
 
+!> Check netCDF return code.
+!!
+!! @param[in] status
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
 subroutine nc_check(status)
 
   use mpi

@@ -1,7 +1,8 @@
 !> @file
 !! @brief This is a limited point version of surface program.
-!!
-!! This program runs in two different modes:
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
+
+!> This program runs in two different modes:
 !!
 !!  1.  analysis mode (fh=0.)
 !!      this program merges climatology, analysis and forecast guess to create
@@ -41,6 +42,7 @@
 !!           grid.  if not dead start, no need for dimension but set to zero
 !!           as in the example below.
 !!      
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       module sfccyc_module
       implicit none
       save
@@ -71,6 +73,63 @@
       integer            :: soil_type_landice
 !
       end module sfccyc_module
+
+!> ???
+!!
+!! @param[in] lugb
+!! @param[in] len
+!! @param[in] lsoil
+!! @param[in] sig1t
+!! @param[in] deltsfc
+!! @param[in] iy
+!! @param[in] im
+!! @param[in] id
+!! @param[in] ih
+!! @param[in] fh
+!! @param[in] rla
+!! @param[in] rlo
+!! @param[in] slmask
+!! @param[in] orog
+!! @param[in] orog_uf
+!! @param[in] use_ufo
+!! @param[in] nst_anl
+!! @param[in] sihfcs
+!! @param[in] sicfcs
+!! @param[in] sitfcs
+!! @param[in] swdfcs
+!! @param[in] slcfcs
+!! @param[in] vmnfcs
+!! @param[in] vmxfcs
+!! @param[in] slpfcs
+!! @param[in] absfcs
+!! @param[in] tsffcs
+!! @param[in] snofcs
+!! @param[in] zorfcs
+!! @param[in] albfcs
+!! @param[in] tg3fcs
+!! @param[in] cnpfcs
+!! @param[in] smcfcs
+!! @param[in] stcfcs
+!! @param[in] slifcs
+!! @param[in] aisfcs
+!! @param[in] vegfcs
+!! @param[in] vetfcs
+!! @param[in] sotfcs
+!! @param[in] alffcs
+!! @param[in] cvfcs
+!! @param[in] cvbfcs
+!! @param[in] cvtfcs
+!! @param[in] me
+!! @param[in] nlunit
+!! @param[in] sz_nml
+!! @param[in] input_nml_file
+!! @param[in] ialb
+!! @param[in] isot
+!! @param[in] ivegsrc
+!! @param[in] tile_num_ch
+!! @param[in] i_index
+!! @param[in] j_index
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine sfccycle(lugb,len,lsoil,sig1t,deltsfc
      &,                   iy,im,id,ih,fh
      &,                   rla, rlo, slmask,orog,orog_uf,use_ufo,nst_anl
@@ -2514,6 +2573,13 @@
 !     if(lprnt) print *,' tsffcsf=',tsffcs(iprnt)
       return
       end subroutine sfccycle 
+
+!> ???
+!!
+!! @param[in] slimsk
+!! @param[in] sno
+!! @param[in] ijmax
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine count(slimsk,sno,ijmax)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -2566,6 +2632,15 @@
 !     if(lprnt) print *,' tsffcsf=',tsffcs(iprnt)
       return
       end
+
+!> ???
+!!
+!! @param[in] lfld
+!! @param[in] fld
+!! @param[in] slimsk
+!! @param[in] sno
+!! @param[in] ijmax
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine monitr(lfld,fld,slimsk,sno,ijmax)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -2630,6 +2705,14 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] iyr
+!! @param[in] imo
+!! @param[in] idy
+!! @param[in] ldy
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine dayoyr(iyr,imo,idy,ldy)
       implicit none
       integer ldy,i,idy,iyr,imo
@@ -2645,6 +2728,20 @@
       enddo
       return
       end
+
+!> ???
+!!
+!! @param[in] lugb
+!! @param[in] imsk
+!! @param[in] jmsk
+!! @param[in] fnmskh
+!! @param[in] kpds5
+!! @param[in] slmskh
+!! @param[in] gausm
+!! @param[in] blnmsk
+!! @param[in] bltmsk
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine hmskrd(lugb,imsk,jmsk,fnmskh,
      &                  kpds5,slmskh,gausm,blnmsk,bltmsk,me)
       use machine , only : kind_io8,kind_io4
@@ -2678,6 +2775,20 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] lugb
+!! @param[in] idim
+!! @param[in] jdim
+!! @param[in] fngrib
+!! @param[in] kpds5
+!! @param[in] gdata
+!! @param[in] gaus
+!! @param[in] blno
+!! @param[in] blto
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine fixrdg(lugb,idim,jdim,fngrib,
      &                  kpds5,gdata,gaus,blno,blto,me)
       use machine      , only : kind_io8,kind_io4
@@ -2793,6 +2904,19 @@
       deallocate(lbms)
       return
       end
+
+!> ???
+!!
+!! @param[in] kgds
+!! @param[in] dlat
+!! @param[in] dlon
+!! @param[in] rslat
+!! @param[in] rnlat
+!! @param[in] wlon
+!! @param[in] elon
+!! @param[in] ijordr
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine getarea(kgds,dlat,dlon,rslat,rnlat,wlon,elon,ijordr
      &,                  me)
       use machine , only : kind_io8,kind_io4
@@ -2943,6 +3067,16 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] data
+!! @param[in] imax
+!! @param[in] jmax
+!! @param[in] dlon
+!! @param[in] dlat
+!! @param[in] ijordr
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine subst(data,imax,jmax,dlon,dlat,ijordr)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -3003,6 +3137,26 @@
       endif
       return
       end
+
+!> ???
+!!
+!! @param[in] regin
+!! @param[in] imxin
+!! @param[in] jmxin
+!! @param[in] rinlon
+!! @param[in] rinlat
+!! @param[in] rlon
+!! @param[in] rlat
+!! @param[in] inttyp
+!! @param[in] gauout
+!! @param[in] len
+!! @param[in] lmask
+!! @param[in] rslmsk
+!! @param[in] slmask
+!! @param[in] outlat
+!! @param[in] outlon
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine la2ga(regin,imxin,jmxin,rinlon,rinlat,rlon,rlat,inttyp,
      &                 gauout,len,lmask,rslmsk,slmask
      &,                outlat, outlon,me)
@@ -3540,6 +3694,13 @@
 !
       return
       end subroutine la2ga
+
+!> ???
+!!
+!! @param[in] f
+!! @param[in] imax
+!! @param[in] kmax
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine maxmin(f,imax,kmax)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -3572,6 +3733,64 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] tsfanl
+!! @param[in] tsfan2
+!! @param[in] wetanl
+!! @param[in] snoanl
+!! @param[in] zoranl
+!! @param[in] albanl
+!! @param[in] aisanl
+!! @param[in] tg3anl
+!! @param[in] cvanl 
+!! @param[in] cvbanl
+!! @param[in] cvtanl
+!! @param[in] cnpanl
+!! @param[in] smcanl
+!! @param[in] stcanl
+!! @param[in] slianl
+!! @param[in] scvanl
+!! @param[in] veganl
+!! @param[in] vetanl
+!! @param[in] sotanl
+!! @param[in] alfanl
+!! @param[in] sihanl
+!! @param[in] sicanl
+!! @param[in] vmnanl
+!! @param[in] vmxanl
+!! @param[in] slpanl
+!! @param[in] absanl
+!! @param[in] tsfclm
+!! @param[in] tsfcl2
+!! @param[in] wetclm
+!! @param[in] snoclm
+!! @param[in] zorclm
+!! @param[in] albclm
+!! @param[in] aisclm
+!! @param[in] tg3clm
+!! @param[in] cvclm 
+!! @param[in] cvbclm
+!! @param[in] cvtclm
+!! @param[in] cnpclm
+!! @param[in] smcclm
+!! @param[in] stcclm
+!! @param[in] sliclm
+!! @param[in] scvclm
+!! @param[in] vegclm
+!! @param[in] vetclm
+!! @param[in] sotclm
+!! @param[in] alfclm
+!! @param[in] sihclm
+!! @param[in] sicclm
+!! @param[in] vmnclm
+!! @param[in] vmxclm
+!! @param[in] slpclm
+!! @param[in] absclm
+!! @param[in] len
+!! @param[in] lsoil
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine filanl(tsfanl,tsfan2,wetanl,snoanl,zoranl,albanl,
      &                  aisanl,
      &                  tg3anl,cvanl ,cvbanl,cvtanl,
@@ -3669,6 +3888,107 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] lugb
+!! @param[in] iy
+!! @param[in] im
+!! @param[in] id
+!! @param[in] ih
+!! @param[in] fh
+!! @param[in] len
+!! @param[in] lsoil
+!! @param[in] slmask
+!! @param[in] fntsfa
+!! @param[in] fnweta
+!! @param[in] fnsnoa
+!! @param[in] fnzora
+!! @param[in] fnalba
+!! @param[in] fnaisa
+!! @param[in] fntg3a
+!! @param[in] fnscva
+!! @param[in] fnsmca
+!! @param[in] fnstca
+!! @param[in] fnacna
+!! @param[in] fnvega
+!! @param[in] fnveta
+!! @param[in] fnsota
+!! @param[in] fnvmna
+!! @param[in] fnvmxa
+!! @param[in] fnslpa
+!! @param[in] fnabsa
+!! @param[in] tsfanl
+!! @param[in] wetanl
+!! @param[in] snoanl
+!! @param[in] zoranl
+!! @param[in] albanl
+!! @param[in] aisanl
+!! @param[in] tg3anl
+!! @param[in] cvanl 
+!! @param[in] cvbanl
+!! @param[in] cvtanl
+!! @param[in] smcanl
+!! @param[in] stcanl
+!! @param[in] slianl
+!! @param[in] scvanl
+!! @param[in] acnanl
+!! @param[in] veganl
+!! @param[in] vetanl
+!! @param[in] sotanl
+!! @param[in] alfanl
+!! @param[in] tsfan0
+!! @param[in] vmnanl
+!! @param[in] vmxanl
+!! @param[in] slpanl
+!! @param[in] absanl
+!! @param[in] kpdtsf
+!! @param[in] kpdwet
+!! @param[in] kpdsno
+!! @param[in] kpdsnd
+!! @param[in] kpdzor
+!! @param[in] kpdalb
+!! @param[in] kpdais
+!! @param[in] kpdtg3
+!! @param[in] kpdscv
+!! @param[in] kpdacn
+!! @param[in] kpdsmc
+!! @param[in] kpdstc
+!! @param[in] kpdveg
+!! @param[in] kprvet
+!! @param[in] kpdsot
+!! @param[in] kpdalf
+!! @param[in] kpdvmn
+!! @param[in] kpdvmx
+!! @param[in] kpdslp
+!! @param[in] kpdabs
+!! @param[in] irttsf
+!! @param[in] irtwet
+!! @param[in] irtsno
+!! @param[in] irtzor
+!! @param[in] irtalb
+!! @param[in] irtais
+!! @param[in] irttg3
+!! @param[in] irtscv
+!! @param[in] irtacn
+!! @param[in] irtsmc
+!! @param[in] irtstc
+!! @param[in] irtveg
+!! @param[in] irtvet
+!! @param[in] irtsot
+!! @param[in] irtalfirtvmn
+!! @param[in] irtvmx
+!! @param[in] irtslp
+!! @param[in] irtabsimsk
+!! @param[in] jmsk
+!! @param[in] slmskh
+!! @param[in] outlat
+!! @param[in] outlongaus
+!! @param[in] blno
+!! @param[in] blto
+!! @param[in] me
+!! @param[in] lanom
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine analy(lugb,iy,im,id,ih,fh,len,lsoil,
      &                 slmask,fntsfa,fnweta,fnsnoa,fnzora,fnalba,fnaisa,
      &                 fntg3a,fnscva,fnsmca,fnstca,fnacna,fnvega,
@@ -4333,6 +4653,60 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] tsffcs
+!! @param[in] wetfcs
+!! @param[in] snofcs
+!! @param[in] zorfcs
+!! @param[in] albfcs
+!! @param[in] tg3fcs
+!! @param[in] cvfcs 
+!! @param[in] cvbfcs
+!! @param[in] cvtfcs
+!! @param[in] cnpfcs
+!! @param[in] smcfcs
+!! @param[in] stcfcs
+!! @param[in] slifcs
+!! @param[in] aisfcs
+!! @param[in] vegfcs
+!! @param[in] vetfcs
+!! @param[in] sotfcs
+!! @param[in] alffcs
+!! @param[in] sihfcs
+!! @param[in] sicfcs
+!! @param[in] vmnfcs
+!! @param[in] vmxfcs
+!! @param[in] slpfcs
+!! @param[in] absfcs
+!! @param[in] tsfanl
+!! @param[in] wetanl
+!! @param[in] snoanl
+!! @param[in] zoranl
+!! @param[in] albanl
+!! @param[in] tg3anl
+!! @param[in] cvanl
+!! @param[in] cvbanl
+!! @param[in] cvtanl
+!! @param[in] cnpanl
+!! @param[in] smcanl
+!! @param[in] stcanl
+!! @param[in] slianl
+!! @param[in] aisanl
+!! @param[in] veganl
+!! @param[in] vetanl
+!! @param[in] sotanl
+!! @param[in] alfanl
+!! @param[in] sihanl
+!! @param[in] sicanl
+!! @param[in] vmnanl
+!! @param[in] vmxanl
+!! @param[in] slpanl
+!! @param[in] absanl
+!! @param[in] len
+!! @param[in] lsoil
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine filfcs(tsffcs,wetfcs,snofcs,zorfcs,albfcs,
      &                  tg3fcs,cvfcs ,cvbfcs,cvtfcs,
      &                  cnpfcs,smcfcs,stcfcs,slifcs,aisfcs,
@@ -4425,6 +4799,15 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] smcfcs
+!! @param[in] slianl
+!! @param[in] stcfcs
+!! @param[in] len
+!! @param[in] lsoil
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine bktges(smcfcs,slianl,stcfcs,len,lsoil)
 !
       use machine , only : kind_io8,kind_io4
@@ -4453,6 +4836,14 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] aisfld
+!! @param[in] len
+!! @param[in] op
+!! @param[in] crit
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine rof01(aisfld,len,op,crit)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -4499,6 +4890,16 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] tsfc
+!! @param[in] orog
+!! @param[in] slmask
+!! @param[in] umask
+!! @param[in] len
+!! @param[in] rlapse
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine tsfcor(tsfc,orog,slmask,umask,len,rlapse)
 !
       use machine , only : kind_io8,kind_io4
@@ -4514,6 +4915,21 @@
       enddo
       return
       end
+
+!> ???
+!!
+!! @param[in] scvanl
+!! @param[in] slianl
+!! @param[in] tsfanl
+!! @param[in] snoclm
+!! @param[in] glacir
+!! @param[in] snwmax
+!! @param[in] snwmin
+!! @param[in] landice
+!! @param[in] len
+!! @param[in] snoanl
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine snodpth(scvanl,slianl,tsfanl,snoclm,
      &                   glacir,snwmax,snwmin,landice,len,snoanl, me)
       use machine , only : kind_io8,kind_io4
@@ -4568,6 +4984,125 @@
       enddo
       return
       end subroutine snodpth
+
+!> ???
+!!
+!! @param[in] len
+!! @param[in] lsoil
+!! @param[in] iy
+!! @param[in] im
+!! @param[in] id
+!! @param[in] ih
+!! @param[in] fh
+!! @param[in] deltsf
+!! @param[in] c
+!! @param[in] sihfcs
+!! @param[in] sicfcs
+!! @param[in] vmnfcs
+!! @param[in] vmxfcs
+!! @param[in] slpfcs
+!! @param[in] absfcs
+!! @param[in] tsffcs
+!! @param[in] wetfcs
+!! @param[in] snofcs
+!! @param[in] zorfcs
+!! @param[in] albfcs
+!! @param[in] aisfcs
+!! @param[in] cvfcs 
+!! @param[in] cvbfcs
+!! @param[in] cvtfcs
+!! @param[in] cnpfcs
+!! @param[in] smcfcs
+!! @param[in] stcfcs
+!! @param[in] slifcs
+!! @param[in] vegfcs
+!! @param[in] vetfcs
+!! @param[in] sotfcs
+!! @param[in] alffcs
+!! @param[in] sihanl
+!! @param[in] sicanl
+!! @param[in] vmnanl
+!! @param[in] vmxanl
+!! @param[in] slpanl
+!! @param[in] absanl
+!! @param[in] tsfanl
+!! @param[in] tsfan2
+!! @param[in] wetanl
+!! @param[in] snoanl
+!! @param[in] zoranl
+!! @param[in] albanl
+!! @param[in] aisanl
+!! @param[in] cvanl 
+!! @param[in] cvbanl
+!! @param[in] cvtanl
+!! @param[in] cnpanl
+!! @param[in] smcanl
+!! @param[in] stcanl
+!! @param[in] slianl
+!! @param[in] veganl
+!! @param[in] vetanl
+!! @param[in] sotanl
+!! @param[in] alfanl
+!! @param[in] ctsfl
+!! @param[in] calbl
+!! @param[in] caisl
+!! @param[in] csnol
+!! @param[in] csmcl
+!! @param[in] czorl
+!! @param[in] cstcl
+!! @param[in] cvegl
+!! @param[in] ctsfs
+!! @param[in] calbs
+!! @param[in] caiss
+!! @param[in] csnos
+!! @param[in] csmcs
+!! @param[in] czors
+!! @param[in] cstcs
+!! @param[in] cvegs
+!! @param[in] ccv,cc
+!! @param[in] vb
+!! @param[in] ccvt,c
+!! @param[in] cnp
+!! @param[in] cvetl
+!! @param[in] cvets
+!! @param[in] csotl
+!! @param[in] csots
+!! @param[in] calfl
+!! @param[in] calfs
+!! @param[in] csihl
+!! @param[in] csihs
+!! @param[in] csicl
+!! @param[in] csics
+!! @param[in] cvmnl
+!! @param[in] cvmns
+!! @param[in] cvmxl
+!! @param[in] cvmxs
+!! @param[in] cslpl
+!! @param[in] cslps
+!! @param[in] cabsl
+!! @param[in] cabss
+!! @param[in] irttsf
+!! @param[in] irtwet
+!! @param[in] irtsno
+!! @param[in] irtzor
+!! @param[in] irtalb
+!! @param[in] irtais
+!! @param[in] irttg3
+!! @param[in] irtscv
+!! @param[in] irtacn
+!! @param[in] irtsmc
+!! @param[in] irtstc
+!! @param[in] irtveg
+!! @param[in] irtvmn
+!! @param[in] irtvmx
+!! @param[in] irtslp
+!! @param[in] irtabs
+!! @param[in] irtvet
+!! @param[in] irtsot
+!! @param[in] irtalf
+!! @param[in] landice
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine merge(len,lsoil,iy,im,id,ih,fh,deltsfc,
      &                 sihfcs,sicfcs,
      &                 vmnfcs,vmxfcs,slpfcs,absfcs,
@@ -5019,6 +5554,38 @@
 !$omp end parallel do
       return
       end subroutine merge
+
+!> ???
+!!
+!! @param[in] slianl
+!! @param[in] slifcs
+!! @param[in] tsfanl
+!! @param[in] tsffcs
+!! @param[in] len
+!! @param[in] lsoil
+!! @param[in] sihnew
+!! @param[in] sicnew
+!! @param[in] sihanl
+!! @param[in] sicanl
+!! @param[in] albanl
+!! @param[in] snoanl
+!! @param[in] zoranl
+!! @param[in] smcanl
+!! @param[in] stcanl
+!! @param[in] albsea
+!! @param[in] snosea
+!! @param[in] zorsea
+!! @param[in] smcsea
+!! @param[in] smcice
+!! @param[in] tsfmin
+!! @param[in] tsfice
+!! @param[in] albice
+!! @param[in] zorice
+!! @param[in] tgice
+!! @param[in] rla
+!! @param[in] rlo
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine newice(slianl,slifcs,tsfanl,tsffcs,len,lsoil,
 !cwu [+1l] add sihnew,sicnew,sihanl,sicanl
      &                   sihnew,sicnew,sihanl,sicanl,      
@@ -5115,6 +5682,18 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] snoanl
+!! @param[in] slmask
+!! @param[in] aisanl
+!! @param[in] glacir
+!! @param[in] len
+!! @param[in] snoval
+!! @param[in] landice
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcsnow(snoanl,slmask,aisanl,glacir,len,snoval,
      &                  landice,me)
       use machine , only : kind_io8,kind_io4
@@ -5161,6 +5740,21 @@
       endif
       return
       end subroutine qcsnow
+
+!> ???
+!!
+!! @param[in] ais
+!! @param[in] glacir
+!! @param[in] amxice
+!! @param[in] aicice
+!! @param[in] aicsea
+!! @param[in] sllnd
+!! @param[in] slmask
+!! @param[in] rla
+!! @param[in] rlo
+!! @param[in] len
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcsice(ais,glacir,amxice,aicice,aicsea,sllnd,slmask,
      &                  rla,rlo,len,me)
       use machine , only : kind_io8,kind_io4
@@ -5260,6 +5854,15 @@
 !     enddo
       return
       end
+
+!> ???
+!!
+!! @param[in] slmask
+!! @param[in] aisfld
+!! @param[in] len
+!! @param[in] aicice
+!! @param[in] slifld
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine setlsi(slmask,aisfld,len,aicice,slifld)
 !
       use machine , only : kind_io8,kind_io4
@@ -5278,6 +5881,13 @@
       enddo
       return
       end
+
+!> ???
+!!
+!! @param[in] fld
+!! @param[in] len
+!! @param[in] scl
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine scale(fld,len,scl)
 !
       use machine , only : kind_io8,kind_io4
@@ -5289,6 +5899,33 @@
       enddo
       return
       end
+
+!> ???
+!!
+!! @param[in] ttl
+!! @param[in] fld
+!! @param[in] slimsk
+!! @param[in] sno
+!! @param[in] iceflg
+!! @param[in] fldlmx
+!! @param[in] fldlmn
+!! @param[in] fldomx
+!! @param[in] fldomn
+!! @param[in] fldimx
+!! @param[in] fldimn
+!! @param[in] fldjmx
+!! @param[in] fldjmn
+!! @param[in] fldsmx
+!! @param[in] fldsmn
+!! @param[in] epsfld
+!! @param[in] rla
+!! @param[in] rlo
+!! @param[in] len
+!! @param[in] mode
+!! @param[in] percrit
+!! @param[in] lgchek
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcmxmn(ttl,fld,slimsk,sno,iceflg,
      &                  fldlmx,fldlmn,fldomx,fldomn,fldimx,fldimn,
      &                  fldjmx,fldjmn,fldsmx,fldsmn,epsfld,
@@ -5706,6 +6343,13 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] fld
+!! @param[in] eps
+!! @param[in] len
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine setzro(fld,eps,len)
 !
       use machine , only : kind_io8,kind_io4
@@ -5717,6 +6361,13 @@
       enddo
       return
       end
+
+!> ???
+!!
+!! @param[in] snofld
+!! @param[in] scvfld
+!! @param[in] len
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine getscv(snofld,scvfld,len)
 !
       use machine , only : kind_io8,kind_io4
@@ -5730,6 +6381,17 @@
       enddo
       return
       end
+
+!> ???
+!!
+!! @param[in] tsffld
+!! @param[in] tg3fld
+!! @param[in] slifld
+!! @param[in] len
+!! @param[in] lsoil
+!! @param[in] stcfld
+!! @param[in] tsfimx
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine getstc(tsffld,tg3fld,slifld,len,lsoil,stcfld,tsfimx)
 !
       use machine , only : kind_io8,kind_io4
@@ -5763,6 +6425,15 @@
       endif
       return
       end
+
+!> ???
+!!
+!! @param[in] wetfld
+!! @param[in] len
+!! @param[in] lsoil
+!! @param[in] smcfld
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine getsmc(wetfld,len,lsoil,smcfld,me)
 !
       use machine , only : kind_io8,kind_io4
@@ -5781,6 +6452,18 @@
       enddo
       return
       end
+
+!> ???
+!!
+!! @param[in] sig1t
+!! @param[in] slianl
+!! @param[in] tg3anl
+!! @param[in] len
+!! @param[in] lsoil
+!! @param[in] tsfanl
+!! @param[in] stcanl
+!! @param[in] tsfimx
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine usesgt(sig1t,slianl,tg3anl,len,lsoil,tsfanl,stcanl,
      &                  tsfimx)
 !
@@ -5804,6 +6487,15 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] snoanl
+!! @param[in] tsfanl
+!! @param[in] tsfsmx
+!! @param[in] len
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine snosfc(snoanl,tsfanl,tsfsmx,len,me)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -5828,6 +6520,14 @@
       endif
       return
       end
+
+!> ???
+!!
+!! @param[in] albclm
+!! @param[in] slmask
+!! @param[in] albomx
+!! @param[in] len
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine albocn(albclm,slmask,albomx,len)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -5844,6 +6544,14 @@
       enddo
       return
       end
+
+!> ???
+!!
+!! @param[in] glacir
+!! @param[in] amxice
+!! @param[in] len
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcmxice(glacir,amxice,len,me)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -5864,6 +6572,14 @@
       endif
       return
       end
+
+!> ???
+!!
+!! @param[in] slianl
+!! @param[in] slifcs
+!! @param[in] len
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcsli(slianl,slifcs,len,me)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -5902,6 +6618,7 @@
       endif
       return
       end
+
 !     subroutine nntprt(data,imax,fact)
 !     real (kind=kind_io8) data(imax)
 !     ilast=0
@@ -5927,6 +6644,29 @@
 !1111 format(80i1)
 !     return
 !     end
+
+!> ???
+!!
+!! @param[in] tsffcs
+!! @param[in] snofcs
+!! @param[in] qctsfs
+!! @param[in] qcsnos
+!! @param[in] qctsfi
+!! @param[in] len
+!! @param[in] lsoil
+!! @param[in] snoanl
+!! @param[in] aisanl
+!! @param[in] slianl
+!! @param[in] tsfanl
+!! @param[in] albanl
+!! @param[in] zoranl
+!! @param[in] smcanl
+!! @param[in] smcclm
+!! @param[in] tsfsmx
+!! @param[in] albomx
+!! @param[in] zoromx
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcbyfc(tsffcs,snofcs,qctsfs,qcsnos,qctsfi,
      &                  len,lsoil,snoanl,aisanl,slianl,tsfanl,albanl,
      &                  zoranl,smcanl,
@@ -6023,6 +6763,29 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] kpds5
+!! @param[in] slmask
+!! @param[in] igaul
+!! @param[in] jgaul
+!! @param[in] wlon
+!! @param[in] rnlat
+!! @param[in]data
+!! @param[in] i
+!! @param[in] max
+!! @param[in] jmax
+!! @param[in] rlnout
+!! @param[in] rltout
+!! @param[in] lmask
+!! @param[in] rslmskgaus
+!! @param[in] blno
+!! @param[in] blto
+!! @param[in] kgds1
+!! @param[in] kpds4
+!! @param[in] lbms
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine setrmsk(kpds5,slmask,igaul,jgaul,wlon,rnlat,
      &                   data,imax,jmax,rlnout,rltout,lmask,rslmsk
      &,                  gaus,blno, blto, kgds1, kpds4, lbms)
@@ -6504,6 +7267,23 @@
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] gauin
+!! @param[in] imxin
+!! @param[in] jmxin
+!! @param[in] regout
+!! @param[in] imxout
+!! @param[in] jmxout
+!! @param[in] wlon
+!! @param[in] rnlat
+!! @param[in] rlnout
+!! @param[in] rltout
+!! @param[in] gaus
+!! @param[in] blno
+!! @param[in] blto
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine ga2la(gauin,imxin,jmxin,regout,imxout,jmxout,
      &                 wlon,rnlat,rlnout,rltout,gaus,blno, blto)
       use machine , only : kind_io8,kind_io4
@@ -6750,6 +7530,15 @@ cjfe
 !
       return
       end
+
+!> ???
+!!
+!! @param[in] vegtype
+!! @param[in] soiltype
+!! @param[in] slptype
+!! @param[in] slmask
+!! @param[in] len
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine landtyp(vegtype,soiltype,slptype,slmask,len)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -6768,6 +7557,12 @@ cjfe
       enddo
       return
       end subroutine landtyp
+
+!> ???
+!!
+!! @param[in] gaul
+!! @param[in] k
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine gaulat(gaul,k)
 !
       use machine , only : kind_io8,kind_io4
@@ -6791,7 +7586,15 @@ cjfe
  6000 format(//5x,'error in gauaw'//)
       stop
       end
-!-----------------------------------------------------------------------
+
+!> ???
+!!
+!! @param[in] tsfan0
+!! @param[in] tsfclm
+!! @param[in] tsfcl0
+!! @param[in] tsfanl
+!! @param[in] len
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine anomint(tsfan0,tsfclm,tsfcl0,tsfanl,len)
 !
       use machine , only : kind_io8,kind_io4
@@ -6809,6 +7612,98 @@ cjfe
       enddo
       return
       end
+
+!> ???
+!!
+!! @param[in] lugb
+!! @param[in] iy
+!! @param[in] im
+!! @param[in] id
+!! @param[in] ih
+!! @param[in] fh
+!! @param[in] len
+!! @param[in] lsoil
+!! @param[in] slmask
+!! @param[in] fntsfc
+!! @param[in] fnwetc
+!! @param[in] fnsnoc
+!! @param[in] fnzorc
+!! @param[in] fnalbc
+!! @param[in] fnaisc
+!! @param[in] fntg3c
+!! @param[in] fnscvc
+!! @param[in] fnsmcc
+!! @param[in] fnstcc
+!! @param[in] fnacnc
+!! @param[in] fnvegc
+!! @param[in] fnvetc
+!! @param[in] fnsotc
+!! @param[in] fnvmnc
+!! @param[in] fnvmxc
+!! @param[in] fnslpc
+!! @param[in] fnabsc
+!! @param[in] tsfclm
+!! @param[in] tsfcl2
+!! @param[in] wetclm
+!! @param[in] snoclm
+!! @param[in] zorclm
+!! @param[in] albclm
+!! @param[in] aisclm
+!! @param[in] tg3clm
+!! @param[in] cvclm 
+!! @param[in] cvbclm
+!! @param[in] cvtclm
+!! @param[in] cnpclm
+!! @param[in] smcclm
+!! @param[in] stcclm
+!! @param[in] sliclm
+!! @param[in] scvclm
+!! @param[in] acnclm
+!! @param[in] vegclm
+!! @param[in] vetclm
+!! @param[in] sotclm
+!! @param[in] alfclm
+!! @param[in] vmnclm
+!! @param[in] vmxclm
+!! @param[in] slpclm
+!! @param[in] absclm
+!! @param[in] kpdtsf
+!! @param[in] kpdwet
+!! @param[in] kpdsno
+!! @param[in] kpdzor
+!! @param[in] kpdalb
+!! @param[in] kpdais
+!! @param[in] kpdtg3
+!! @param[in] kpdscv
+!! @param[in] kpdacn
+!! @param[in] kpdsmc
+!! @param[in] kpdstc
+!! @param[in] kpdveg
+!! @param[in] kpdvet
+!! @param[in] kpdsot
+!! @param[in] kpdalf
+!! @param[in] tsfcl0
+!! @param[in] kpdvmn
+!! @param[in] kpdvmx
+!! @param[in] kpdslp
+!! @param[in] kpdabs
+!! @param[in] deltsf
+!! @param[in] c
+!! @param[in] lanomimsk
+!! @param[in] jmsk
+!! @param[in] slmskh
+!! @param[in] outlat
+!! @param[in] outlongaus
+!! @param[in] blno
+!! @param[in] blto
+!! @param[in] me
+!! @param[in] lprnt
+!! @param[in] iprnt
+!! @param[in] fnalbc2
+!! @param[in] ialbtile_num_ch
+!! @param[in] i_index
+!! @param[in] j_index
+!! @author M. Iredell,  xuli, Hang Lei, George Gayno
       subroutine clima(lugb,iy,im,id,ih,fh,len,lsoil,
      &                 slmask,fntsfc,fnwetc,fnsnoc,fnzorc,fnalbc,fnaisc,
      &                 fntg3c,fnscvc,fnsmcc,fnstcc,fnacnc,fnvegc,
@@ -7979,6 +8874,19 @@ cjfe
 !
       return
       end subroutine clima
+
+!> ???
+!!
+!! @param[in] filename_raw
+!! @param[in] tile_num_ch
+!! @param[in] i_index
+!! @param[in] j_index
+!! @param[in] kpds
+!! @param[in] var
+!! @param[in] mon
+!! @param[in] npts
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine fixrdc_tile(filename_raw, tile_num_ch,
      &                       i_index, j_index, kpds,
      &                       var, mon, npts, me)
@@ -8116,6 +9024,11 @@ cjfe
       return
 
       end subroutine fixrdc_tile
+
+!> Check netCDF return code.
+!!
+!! @param[in] error
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine netcdf_err(error)
 
       use netcdf
@@ -8129,6 +9042,28 @@ cjfe
       call abort
 
       end subroutine netcdf_err
+
+!> ???
+!!
+!! @param[in] lugb
+!! @param[in] fngrib
+!! @param[in] kpds5
+!! @param[in] kpds7
+!! @param[in] mon
+!! @param[in] slmask
+!! @param[in] gdata
+!! @param[in] len
+!! @param[in] iret
+!! @param[in] imsk
+!! @param[in] jmsk
+!! @param[in] slmskh
+!! @param[in] gaus
+!! @param[in] blno
+!! @param[in] blto
+!! @param[in] outlat
+!! @param[in] outlon
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine fixrdc(lugb,fngrib,kpds5,kpds7,mon,slmask,
      &                 gdata,len,iret
      &,                imsk, jmsk, slmskh, gaus,blno, blto
@@ -8305,6 +9240,31 @@ cjfe
       deallocate(lbms)
       return
       end subroutine fixrdc
+
+!> ???
+!!
+!! @param[in] lugb
+!! @param[in] fngrib
+!! @param[in] kpds5
+!! @param[in] slmask
+!! @param[in] iy
+!! @param[in] im
+!! @param[in] id
+!! @param[in] ih
+!! @param[in] fh
+!! @param[in] gdata
+!! @param[in] len
+!! @param[in] iret
+!! @param[in] imsk
+!! @param[in] jmsk
+!! @param[in] slmskh
+!! @param[in] gaus
+!! @param[in] blno
+!! @param[in] blto
+!! @param[in] outlat
+!! @param[in] outlon
+!! @param[in] me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine fixrda(lugb,fngrib,kpds5,slmask,
      &                  iy,im,id,ih,fh,gdata,len,iret
      &,                 imsk, jmsk, slmskh, gaus,blno, blto
@@ -8624,6 +9584,11 @@ cjfe
       deallocate(data8)
       return
       end subroutine fixrda
+
+!> ???
+!!
+!! glacir,snwmax,snoanl, len, me
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine snodpth2(glacir,snwmax,snoanl, len, me)
       use machine , only : kind_io8,kind_io4
       implicit none

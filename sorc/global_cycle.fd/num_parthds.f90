@@ -1,4 +1,11 @@
 !> @file
+!! @brief ???
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
+
+!> ???
+!!
+!! @return ???
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
 integer function num_parthds()
  use omp_lib
 !$OMP PARALLEL
