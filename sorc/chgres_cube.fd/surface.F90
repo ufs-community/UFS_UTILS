@@ -1,7 +1,8 @@
 !> @file
 !! @brief Process surface and nst fields.
-!!
-!! Process surface and nst fields. Interpolates fields from the input
+!! @author George Gayno NCEP/EMC
+
+!> Process surface and nst fields. Interpolates fields from the input
 !! to target grids. Adjusts soil temperature according to differences
 !! in input and target grid terrain. Rescales soil moisture for soil
 !! type differences between input and target grid. Computes frozen

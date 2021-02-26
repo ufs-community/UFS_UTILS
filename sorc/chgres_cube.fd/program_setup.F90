@@ -1,7 +1,8 @@
 !> @file
 !! @brief Set up program execution.
-!!
-!! This module contains code to read the setup namelist file, handle
+!! @author George Gayno NCEP/EMC
+
+!> This module contains code to read the setup namelist file, handle
 !! the varmap file for GRIB2 data, and calculate the soil parameters.
 !!
 !! @author George Gayno NCEP/EMC
