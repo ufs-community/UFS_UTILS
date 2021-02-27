@@ -4580,7 +4580,6 @@ else
  subroutine read_input_sfc_grib2_file(localpet)
 
    use wgrib2api
-   use grib2_util, only    : to_upper
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
    use model_grid, only    : input_grid_type
    use search_util
@@ -4593,9 +4592,9 @@ else
    character(len=250)                    :: the_file
    character(len=250)                    :: geo_file
    character(len=20)                     :: vname, vname_file,slev
-
-   character(len=50)                      :: method
-
+   character(len=50)                     :: method
+   character(len=20)                     :: to_upper
+ 
    integer                               :: rc, varnum, iret, i, j,k
    integer                               :: ncid2d, varid, varsize
    integer, parameter                    :: icet_default = 265.0
