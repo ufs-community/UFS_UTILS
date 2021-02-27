@@ -24,7 +24,7 @@
 
  end subroutine error_handler
 
-!> @brief Error handler for netcdf
+!> Error handler for netcdf
 !!
 !! @param[in] err     error status code
 !! @param[in] string  error message
@@ -49,17 +49,18 @@
  return
  end subroutine netcdf_err
  
-!> @brief Convert from lower to uppercase.
+!> Convert string from lower to uppercase.
 !! @author Clive Page
 !!
 !! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
 !!
-!! @param[in,out] strIn   string to convert
- subroutine to_upper(strIn)
+!! @param[in] strIn   string to convert
+!! @return strOut string in uppercase
+function to_upper(strIn) result(strOut)
 
      implicit none
 
-     character(len=*), intent(inout) :: strIn
+     character(len=*), intent(in) :: strIn
      character(len=len(strIn)) :: strOut
      integer :: i,j
 
@@ -71,10 +72,10 @@
                strOut(i:i) = strIn(i:i)
           end if
      end do
-  strIn(:) = strOut(:)
-end subroutine to_upper
 
-!> @brief Convert from upper to lowercase
+end function to_upper
+
+!> Convert from upper to lowercase
 !! @author Clive Page
 !!
 !! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
