@@ -4,15 +4,17 @@
 !! @author gayno org: w/np2 @date 2005-dec-16 
 !!
 
+!> @module
+!! @brief Read and qc afwa, nesdis/ims and autosnow snow data.
 !! program history log:
 !! -  2005-dec-16  gayno   - initial version
-!! -  2007-aug-10  gayno   - allow program to run with no nesdis/ims data
-!!                          add 16th mesh afwa grib data
-!! -  2008-feb-04  gayno   - add autosnow cover data for sh.
-!! -  2009-jun-03  gayno   - add qc check for nesdis/ims and afwa data.
-!! -  2014-feb-07  gayno   - read nesdis/ims data in grib1 or grib 2
+!! -  2007-aug-10  gayno   - Allow program to run with no nesdis/ims data.
+!!                          Add 16th mesh afwa grib data.
+!! -  2008-feb-04  gayno   - Add autosnow cover data for sh.
+!! -  2009-jun-03  gayno   - Add qc check for nesdis/ims and afwa data.
+!! -  2014-feb-07  gayno   - Read nesdis/ims data in grib1 or grib 2
 !!                          format.
-!! -  2014-sep-30  gayno   - convert weekly nh snow climatology - used to 
+!! -  2014-sep-30  gayno   - Convert weekly nh snow climatology - used to 
 !!                          qc input data - to grib 2.
 !! variable definitions:
 !! -  afwa_res           - resolution of afwa data in km
@@ -72,7 +74,7 @@
  integer*1, allocatable  :: sea_ice_nesdis(:,:) !< nesdis/ims sea ice flag (0-open water, 1-ice) 
  logical                 :: bad_afwa_nh
  logical                 :: bad_afwa_sh
- logical                 :: bad_nesdis !< is nesdis ims data corrupt?
+ logical                 :: bad_nesdis   !< is nesdis ims data corrupt?
  logical                 ::  bad_afwa_global
  logical*1, allocatable  :: bitmap_afwa_global(:,:)
  logical*1, allocatable  :: bitmap_afwa_nh(:,:)
@@ -100,7 +102,7 @@
  data kgds_afwa_sh_8th/5,2*512,20826,-125000,8,-80000,2*47625,128, &
                        9*0,255,180*0/
  contains
-!>  read autosnow snow cover
+!>  Read autosnow snow cover.
 !!
 !! program history log:
 !! 2008-feb-04  gayno    - initial version
@@ -195,11 +197,11 @@
 
  end subroutine readautosnow
 
-!> read nesdis/ims snow cover/ice data.
+!> Read nesdis/ims snow cover/ice data.
 !!   
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
-!! 2014-feb-07  gayno    - read 4km ims data in either
+!! 2014-feb-07  gayno    - Read 4km ims data in either
 !!                         grib1 or grib 2 format.
 !! files:
 !!   input:
@@ -221,7 +223,7 @@
 !!          in this routine.  Ims data is now created by the national
 !!          ice center.
 !!
-!! @author  George Gayno   org: w/np2     @date  2005-Dec-16
+!! @author  George Gayno org: w/np2 @date 2005-Dec-16
  subroutine readnesdis
  use grib_mod
 
@@ -510,7 +512,7 @@
 
  end subroutine readnesdis
 
-!>  read snow data
+!>  Read snow depth data and masks.
 !!
 !! @note Read nh and sh afwa snow depth data and
 !!   land sea mask. 
@@ -530,7 +532,7 @@
 !!   60 - bad open afwa file
 !!   61 - bad degrib of afwa file
 !!
-!! @author  George Gayno    org: w/np2     @date 2005-Dec-16
+!! @author  George Gayno org: w/np2 @date 2005-Dec-16
  subroutine readafwa
  implicit none
 
@@ -825,7 +827,7 @@
 
  end subroutine readafwa 
 
-!>  check for corrupt nh snow cover data
+!>  Check for corrupt nh snow cover data.
 !!
 !! @note  Check for corrupt nh data by comparing it
 !!            to climatology.
@@ -1120,7 +1122,7 @@
 
  end subroutine nh_climo_check
 
-!>   check for corrupt afwa data
+!>   Check for corrupt afwa data.
 !!
 !! program history log:
 !! 2009-jun-3   gayno    - initial version
@@ -1219,10 +1221,8 @@
 
  end subroutine afwa_check
 
-!>
+!>  Read afwa binary snow depth file.
 !!
-!! abstract:  read afwa binary snow depth file
-!!  
 !! program history log:
 !! 2007-nov-28  gayno    - initial version
 !!
@@ -1312,7 +1312,7 @@
 
  end subroutine read_afwa_binary
 
-!> read afwa land mask file to get a bitmap
+!> Read afwa land mask file to get a bitmap.
 !!  
 !! program history log:
 !! 2007-nov-28  gayno    - initial version

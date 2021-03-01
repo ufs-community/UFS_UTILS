@@ -2,11 +2,11 @@
 !! @brief Interpolate snow data to model grid and grib the result.
 !!
 !! program history log:
-!! -  2005-DEC-16  gayno   - initial version
-!! -  2007-SEP-20  gayno   - tested for b-grids. added improved
+!! -  2005-Dec-16  gayno   - initial version
+!! -  2007-Sep-20  gayno   - Tested for b-grids. Added improved
 !!                          thinning for gfs grid.
-!! -  2008-feb-04  gayno   - added autosnow data
-!! -  2014-sep-26  gayno   - added option to output analysed
+!! -  2008-Feb-04  gayno   - Added autosnow data.
+!! -  2014-Sep-26  gayno   - Added option to output analysed
 !!                          snow in grib2.
 !!
 !! variable definitions:
@@ -85,9 +85,8 @@
  public                          :: interp
 
  contains
-!>   snow grid transform routine    
+!>   Interpolate snow data to model grid.
 !!
-!! @note      Interpolate snow data to model grid.
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
@@ -102,7 +101,7 @@
 !!   55 - error in ipolates interpolating snow data 
 !! 
 !! @note    The determination of cover and depth on the model
-!!   grid depends on the input snow data selected:
+!!   grid depends on the input snow data selected.
 !!
 !!   nam grids:
 !!   ---------
@@ -796,10 +795,7 @@
 
  end subroutine interp
 
-!>  grib 2 write routine                  
-!!
-!! @note  Output snow cover and depth on the model grid 
-!!            in grib 2 format.
+!>  Write  grib2  snow cover and depth on the model grid. 
 !!
 !! program history log:
 !! 2014-sep-26  gayno    - initial version
@@ -979,10 +975,7 @@
 
  end subroutine write_grib2
 
-!>    grib 1 writer                        
-!!
-!! abstract:  Output snow cover and depth on the model grid
-!!            in grib1 format.
+!>    Write grib1 snow cover and depth on the model grid.
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - Initial version
@@ -1098,7 +1091,7 @@
 ! fills out full grid using thinned grid data.  use an iord of
 ! "1" to use a nearest neighbor approach.
 !-----------------------------------------------------------------------
-!> incomplete doxygen framework for undocumented routine unintrpred
+!> ???                                                                  
 !!
 !! @param iord
 !! @param kmsk
@@ -1147,7 +1140,7 @@
  enddo
 
  end subroutine uninterpred
-!>  incomplee doxygen framework  for intlon
+!>  ???                                             
 !!
 !! @param iord
 !! @param imon

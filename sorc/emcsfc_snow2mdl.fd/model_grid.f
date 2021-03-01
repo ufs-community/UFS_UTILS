@@ -58,13 +58,13 @@
  real                           :: resol_mdl  ! in km
 
  contains
-!>  read mdl grid
+!>  Read mdl grid.
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
-!! 2007-nov-30  gayno    - improved method for thinning gfs grids
-!!                         added nam b-grids
-!! 2014-sep-29  gayno    - add option to read lat,lon and mask
+!! 2007-nov-30  gayno    - Improved method for thinning gfs grids.
+!!                         Added nam b-grids.
+!! 2014-sep-29  gayno    - Add option to read lat,lon and mask
 !!                         data in grib2.
 !! files:
 !!   inputs:
@@ -572,7 +572,7 @@
  end subroutine read_mdl_grid_info
 
 
-!>   clean up allocatable arrays  
+!>   Clean up allocatable arrays. 
 !!
 !! This deallocate this module's allocatable array.
 !!
