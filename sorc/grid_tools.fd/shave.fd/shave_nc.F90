@@ -8,7 +8,7 @@
 !! the halo region. Then before the files go into the chgres
 !! job their domains must be shaved down to only the computational
 !! interior and the halo which is what this code does.
-!!
+!! @author Tom Black
       program shave_nc
       use netcdf
       implicit none
