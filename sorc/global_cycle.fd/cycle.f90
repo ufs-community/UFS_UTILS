@@ -978,15 +978,15 @@
  END SUBROUTINE ADJUST_NSST
 
  !> If the tile point is an isolated water point that has no
- !! corresponding gsi water point, then tref is updated using ! the rtg
+ !! corresponding gsi water point, then tref is updated using the rtg
  !! sst climo trend. This monthly trend is sorted by latitude band.
  !!
- !! @param[in] LATITUDE
- !! @param[in] MON
- !! @param[in] DAY
- !! @param[in] DELTSFC
- !! @param[out] DTREF
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[in] LATITUDE Latitude of tile point
+ !! @param[in] MON Month
+ !! @param[in] DAY Day
+ !! @param[in] DELTSFC Cycling frequency in hours
+ !! @param[out] DTREF Monthly trend of reference temperature
+ !! @author Xu Li, George Gayno
  SUBROUTINE CLIMO_TREND(LATITUDE, MON, DAY, DELTSFC, DTREF)
  IMPLICIT NONE
 
@@ -1398,10 +1398,10 @@
  !> If the first guess was sea ice, but the analysis is open water,
  !! reset all nsst variables.
  !! 
- !! @param[in] nsst
- !! @param[in] ij
- !! @param[in] tf_thaw
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[inout] nsst Data structure that holds the nsst fields
+ !! @param[in] ij Index of point to be updated
+ !! @param[in] tf_thaw Reference temperature for former ice points
+ !! @author Xu Li
  subroutine nsst_water_reset(nsst,ij,tf_thaw)
  use read_write_data, only : nsst_data
  implicit none
@@ -1612,17 +1612,17 @@ subroutine get_sal_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,sal_clm)
 
 end subroutine get_sal_clm
 
-!> Get sal climatology at analysis time.
+!> Get climatological salinity at the analysis time.
 !!
-!! @param[in] sal_clm_ta
-!! @param[in] xlats
-!! @param[in] xlons
 !! @param[in] nlat
 !! @param[in] nlon
-!! @param[in] mon1
-!! @param[in] mon2
-!! @param[in] wei1
-!! @param[in] wei2
+!! @param[in] mon1 First bounding month
+!! @param[in] mon2 Second bounding month
+!! @param[in] wei1 Weight of first bounding month
+!! @param[in] wei2 Weight of second bounding month
+!! @param[out] sal_clm_ta Climatological salinity on the cubed-sphere grid
+!! @param[out] xlats 
+!! @param[out] xlons
 !! @author xu li @date March 2019 
 subroutine get_sal_clm_ta(sal_clm_ta,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
 
@@ -1655,10 +1655,10 @@ subroutine get_sal_clm_ta(sal_clm_ta,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
    write(*,'(a,2f9.3)') 'sal_clm_ta, min, max : ',minval(sal_clm_ta),maxval(sal_clm_ta)
  end subroutine get_sal_clm_ta
 
- !> Interpolate lon/lat grid to fv3 native grid (tf_lalo => tf_tile)
- !> for not dependent on mask.
+ !> Interpolate lon/lat grid data to the fv3 native grid (tf_lalo => tf_tile). Does not
+ !! account for a mask.
  !!
- !! @param[in] tf_lalo (idim_lalo,idim_lalo) tf at lat/lon regular grid.
+ !! @param[in] tf_lalo (idim_lalo,idim_lalo) field on the lat/lon regular grid.
  !! @param[in] dlats_lalo (jdim_lalo) latitudes along y direction of lat/lon regular grid points.
  !! @param[in] dlons_lalo (idim_lalo) longitudes along x direction of lat/lon regular grid points.
  !! @param[in] jdim_lalo number of y dimension of tf_lalo.
@@ -1667,8 +1667,8 @@ subroutine get_sal_clm_ta(sal_clm_ta,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
  !! @param[in] xlons_tile (jdim_tile*idim_tile) longitudes of all tile grid points.
  !! @param[in] jdim_tile number of y dimension of tf_tile.
  !! @param[in] idim_tile number of x dimension of tf_tile.
- !! @param[in] tf_tile (jdim_tile*idim_tile) tf at cubed sphere grid.
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[out] tf_tile (jdim_tile*idim_tile) field on the cubed sphere grid.
+ !! @author Xu Li
 subroutine intp_tile(tf_lalo,dlats_lalo,dlons_lalo,jdim_lalo,idim_lalo, &
                      tf_tile,xlats_tile,xlons_tile,jdim_tile,idim_tile)
 
@@ -1745,17 +1745,18 @@ subroutine intp_tile(tf_lalo,dlats_lalo,dlons_lalo,jdim_lalo,idim_lalo, &
 
 end subroutine intp_tile
 
-!> Get two months and weights for monthly climatology.
+!> For a given date, determine the bounding months and the linear
+!! time interpolation weights.
 !!
-!! @param[in] iy
-!! @param[in] im
-!! @param[in] id
-!! @param[in] ih
-!! @param[in] mon1
-!! @param[in] mon2
-!! @param[in] wei1
-!! @param[in] wei2
-!! @author xu li @date March 2019 
+!! @param[in] iy The year
+!! @param[in] im The month
+!! @param[in] id The day
+!! @param[in] ih The hour
+!! @param[out] mon1 First bounding month
+!! @param[out] mon2 Second bounding month
+!! @param[out] wei1 Weighting of first bounding month
+!! @param[out] wei2 Weighting of second bounding month
+!! @author Xu Li @date March 2019 
 subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
  implicit none
 
@@ -1814,12 +1815,15 @@ subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
 
  end subroutine get_tim_wei
 
- !> ???
+ !> Compute the freezing point of water as a function of salinity.
  !!
  !! Constants taken from Gill, 1982.
  !!
  !! @date 21 September 1994.
  !! @author Robert Grumbine
+ !!
+ !! @param [in] salinity The salinity.
+ !! @return tfreez The freezing point of water.
  real function tfreez(salinity)
 
  implicit none
