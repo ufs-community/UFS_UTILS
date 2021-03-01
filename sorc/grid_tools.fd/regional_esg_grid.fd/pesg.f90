@@ -62,59 +62,57 @@ interface gaulegh;        module procedure gaulegh;               end interface
 
 contains
 
-!=============================================================================
+!> Inverse of xstoxc. I.e., cartesians to stereographic
+!! @author R. J. Purser
+!! @param xc xstoxc
+!! @param xs Inverse of xstoxc
 subroutine xctoxs(xc,xs)!                                             [xctoxs]
-!=============================================================================
-! Inverse of xstoxc. I.e., cartesians to stereographic
-!=============================================================================
 implicit none
 real(dp),dimension(3),intent(in ):: xc
 real(dp),dimension(2),intent(out):: xs
-!-----------------------------------------------------------------------------
 real(dp):: zp
-!=============================================================================
 zp=u1+xc(3); xs=xc(1:2)/zp
 end subroutine xctoxs
 
-!=============================================================================
+!> Standard transformation from polar stereographic map coordinates, xs, to
+!! cartesian, xc, assuming the projection axis is polar.
+!! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.
+!! @author R. J. Purser
+!! @param xs polar stereographic map coordinates
+!! @param xc cartesian
+!! @param xcd value of jacobian matrix, encoding distortion and metric
 subroutine xstoxc(xs,xc,xcd)!                                         [xstoxc]
-!=============================================================================
-! Standard transformation from polar stereographic map coordinates, xs, to
-! cartesian, xc, assuming the projection axis is polar.
-! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.
-!=============================================================================
 use pmat4, only: outer_product
 implicit none
 real(dp),dimension(2),  intent(in ):: xs
 real(dp),dimension(3),  intent(out):: xc
 real(dp),dimension(3,2),intent(out):: xcd
-!-----------------------------------------------------------------------------
 real(dp):: zp
-!=============================================================================
 zp=u2/(u1+dot_product(xs,xs)); xc(1:2)=xs*zp; xc(3)=zp
 xcd=-outer_product(xc,xs)*zp; xcd(1,1)=xcd(1,1)+zp; xcd(2,2)=xcd(2,2)+zp
 xc(3)=xc(3)-u1
 end subroutine xstoxc
-!=============================================================================
+
+!> Standard transformation from polar stereographic map coordinates, xs, to
+!! cartesian, xc, assuming the projection axis is polar.
+!! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.
+!! xcdd is the further derivative, wrt xs, of xcd.
+!! @author R. J. Purser
+!! @param xs polar stereographic map coordinates
+!! @param xc cartesian
+!! @param xcd jacobian matrix, encoding distortion and metric
+!! @param xcdd further derivative, wrt xs, of xcd
 subroutine xstoxc1(xs,xc,xcd,xcdd)!                                   [xstoxc]
-!=============================================================================
-! Standard transformation from polar stereographic map coordinates, xs, to
-! cartesian, xc, assuming the projection axis is polar.
-! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.
-! xcdd is the further derivative, wrt xs, of xcd.
-!=============================================================================
 use pmat4, only: outer_product
 implicit none
 real(dp),dimension(2),    intent(in ):: xs
 real(dp),dimension(3),    intent(out):: xc
 real(dp),dimension(3,2),  intent(out):: xcd
 real(dp),dimension(3,2,2),intent(out):: xcdd
-!-----------------------------------------------------------------------------
 real(dp),dimension(3,2):: zpxcdxs
 real(dp),dimension(3)  :: zpxc
 real(dp)               :: zp
 integer(spi)           :: i
-!=============================================================================
 zp=u2/(u1+dot_product(xs,xs)); xc(1:2)=xs*zp; xc(3)=zp
 xcd=-outer_product(xc,xs)*zp
 zpxc=zp*xc; xc(3)=xc(3)-u1; xcdd=u0
@@ -129,29 +127,25 @@ enddo
 do i=1,2; xcd(i,i)=xcd(i,i)+zp; enddo
 end subroutine xstoxc1
 
-!=============================================================================
+!> Inverse of xttoxs
+!! @author R. J. Purser
 subroutine xstoxt(k,xs,xt,ff)!                                        [xstoxt]
-!=============================================================================
-! Inverse of xttoxs.
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: k
 real(dp),dimension(2),intent(in ):: xs
 real(dp),dimension(2),intent(out):: xt
 logical,              intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: s,sc
-!=============================================================================
 s=k*(xs(1)*xs(1)+xs(2)*xs(2)); sc=u1-s
 ff=abs(s)>=u1; if(ff)return
 xt=u2*xs/sc
 end subroutine xstoxt
 
-!=============================================================================
+!> Scaled gnomonic plane xt to standard stereographic plane xs
+!! @author R. J. Purser
+!! @param xt Scaled gnomonic plane
+!! @param xs standard stereographic plane
 subroutine xttoxs(k,xt,xs,xsd,ff)!                                     [xttoxs
-!=============================================================================
-! Scaled gnomonic plane xt to standard stereographic plane xs
-!=============================================================================
 use pmat4, only: outer_product
 implicit none
 real(dp),               intent(in ):: k
@@ -159,11 +153,9 @@ real(dp),dimension(2),  intent(in ):: xt
 real(dp),dimension(2),  intent(out):: xs
 real(dp),dimension(2,2),intent(out):: xsd
 logical,                intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(2):: rspd
 real(dp)             :: s,sp,rsp,rsppi,rsppis
 integer(spi)         :: i
-!=============================================================================
 s=k*dot_product(xt,xt); sp=u1+s
 ff=(sp<=u0); if(ff)return
 rsp=sqrt(sp)
@@ -174,11 +166,13 @@ rspd=k*xt/rsp
 xsd=-outer_product(xt,rspd)*rsppis
 do i=1,2; xsd(i,i)=xsd(i,i)+rsppi; enddo
 end subroutine xttoxs
-!=============================================================================
+
+!> Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd
+!! @author R. J. Purser
+!! @param xt Scaled gnomonic plane
+!! @param xs standard stereographic plane
+!! @param K derivatives, wrt K, of xs and xsd
 subroutine xttoxs1(k,xt,xs,xsd,xsdd,xs1,xsd1,ff)!                     [xttoxs]
-!=============================================================================
-! Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd
-!=============================================================================
 use pmat4, only: outer_product
 implicit none
 real(dp),                 intent(in ):: k
@@ -187,12 +181,10 @@ real(dp),dimension(2),    intent(out):: xs ,xs1
 real(dp),dimension(2,2),  intent(out):: xsd,xsd1
 real(dp),dimension(2,2,2),intent(out):: xsdd
 logical,                  intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: rspdd
 real(dp),dimension(2)  :: rspd,rspd1,rsppid
 real(dp)               :: s,sp,rsp,rsppi,rsppis,s1,rsp1
 integer(spi)           :: i
-!=============================================================================
 s1=dot_product(xt,xt); s=k*s1; sp=u1+s
 ff=(sp<=u0); if(ff)return
 rsp=sqrt(sp);      rsp1=o2*s1/rsp
@@ -215,53 +207,49 @@ do i=1,2; rspdd(i,i)=rspdd(i,i)+rsp*rsppi;                enddo
 do i=1,2; xsdd(i,:,:)=xsdd(i,:,:)-xt(i)*rspdd*rsppi*k/sp; enddo
 end subroutine xttoxs1
 
-!=============================================================================
+!> Inverse of xmtoxt
+!! @author R. J. Purser
 subroutine xttoxm(a,xt,xm,ff)!                                       [xttoxm]
-!=============================================================================
-! Inverse of xmtoxt
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: a
 real(dp),dimension(2),intent(in ):: xt
 real(dp),dimension(2),intent(out):: xm
 logical              ,intent(out):: ff
-!-----------------------------------------------------------------------------
 integer(spi):: i
-!=============================================================================
 do i=1,2; call zttozm(a,xt(i),xm(i),ff); if(ff)return; enddo
 end subroutine xttoxm
 
-!=============================================================================
+!> Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd
+!! @author R. J. Purser
+!! @param xm vector value
+!! @param xt vector value
+!! @param xtd 2*2 diagonal Jacobian
 subroutine xmtoxt(a,xm,xt,xtd,ff)!                                    [xmtoxt]
-!=============================================================================
-! Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd
-!=============================================================================
 implicit none
 real(dp),               intent(in ):: a
 real(dp),dimension(2),  intent(in ):: xm
 real(dp),dimension(2),  intent(out):: xt
 real(dp),dimension(2,2),intent(out):: xtd
 logical,                intent(out):: ff
-!-----------------------------------------------------------------------------
 integer(spi):: i
-!=============================================================================
 xtd=u0; do i=1,2; call zmtozt(a,xm(i),xt(i),xtd(i,i),ff); if(ff)return; enddo
 end subroutine xmtoxt
-!=============================================================================
+
+!> Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd
+!! Also, the derivatives, wrt a, of these quantities.
+!! @author R. J. Purser
+!! @param xm vector value
+!! @param xt vector value
+!! @param xtd 2*2 diagonal Jacobian
+!! @param a the derivatives of these quantities
 subroutine xmtoxt1(a,xm,xt,xtd,xt1,xtd1,ff)!                          [xmtoxt]
-!=============================================================================
-! Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd
-! Also, the derivatives, wrt a, of these quantities.
-!=============================================================================
 implicit none
 real(dp),                 intent(in ):: a
 real(dp),dimension(2),    intent(in ):: xm
 real(dp),dimension(2),    intent(out):: xt,xt1
 real(dp),dimension(2,2),  intent(out):: xtd,xtd1
 logical,                  intent(out):: ff
-!-----------------------------------------------------------------------------
 integer(spi):: i
-!=============================================================================
 xtd=u0
 xtd1=u0
 do i=1,2
@@ -270,18 +258,14 @@ do i=1,2
 enddo
 end subroutine xmtoxt1
 
-!=============================================================================
+!> Inverse of zmtozt
+!! @author R. J. Purser
 subroutine zttozm(a,zt,zm,ff)!                                        [zttozm]
-!=============================================================================
-! Inverse of zmtozt
-!=============================================================================
 implicit none
 real(dp),intent(in ):: a,zt
 real(dp),intent(out):: zm
 logical, intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: ra,razt
-!=============================================================================
 ff=F
 if    (a>u0)then; ra=sqrt( a); razt=ra*zt; zm=atan (razt)/ra
 elseif(a<u0)then; ra=sqrt(-a); razt=ra*zt; ff=abs(razt)>=u1; if(ff)return
@@ -290,19 +274,17 @@ else                                     ; zm=zt
 endif
 end subroutine zttozm
 
-!=============================================================================
+!> Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd,
+!! for positive and negative A and for the limiting case, A --> 0
+!! @author R. J. Purser
+!! @param zt function to be evaluated
+!! @param ztd derivative of the source function
 subroutine zmtozt(a,zm,zt,ztd,ff)!                                    [zmtozt]
-!=============================================================================
-! Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd,
-! for positive and negative A and for the limiting case, A --> 0
-!=============================================================================
 implicit none
 real(dp),intent(in ):: a,zm
 real(dp),intent(out):: zt,ztd
 logical, intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: ra
-!=============================================================================
 ff=f
 if    (a>u0)then; ra=sqrt( a); zt=tan (ra*zm)/ra; ff=abs(ra*zm)>=pih
 elseif(a<u0)then; ra=sqrt(-a); zt=tanh(ra*zm)/ra
@@ -310,21 +292,18 @@ else                         ; zt=zm
 endif
 ztd=u1+a*zt*zt
 end subroutine zmtozt
-!=============================================================================
+
+!> Like zmtozt, but
+!! also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd.
+!! @author R. J. Purser
 subroutine zmtozt1(a,zm,zt,ztd,zt1,ztd1,ff)!                          [zmtozt]
-!=============================================================================
-! Like zmtozt, but
-! also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd.
-!=============================================================================
 use pietc, only: o3
 use pfun,  only: sinoxm,sinox,sinhoxm,sinhox
 implicit none
 real(dp),intent(in ):: a,zm
 real(dp),intent(out):: zt,ztd,zt1,ztd1
 logical, intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: ra,rad,razm
-!=============================================================================
 ff=f
 if    (a>u0)then;ra=sqrt( a);razm=ra*zm; zt=tan(razm)/ra; ff=abs(razm)>=pih
 rad=o2/ra
@@ -338,29 +317,29 @@ ztd=u1+a*zt*zt
 ztd1=zt*zt +u2*a*zt*zt1
 end subroutine zmtozt1
 
-!=============================================================================
+!> Assuming the vector AK parameterization of the Extended Schmidt-transformed
+!! Gnomonic (ESG) mapping with parameter vector, and given a map-space
+!! 2-vector, xm, find the corresponding cartesian unit 3-vector and its
+!! derivative wrt xm, the Jacobian matrix, xcd.
+!! If for any reason the mapping cannot be done, return a raised failure flag,z
+!! FF.
+!! @author R. J. Purser
+!! @param ak parameterization of the Extended ESG
+!! @param xm vector
+!! @param ff raised failure error code
 subroutine xmtoxc_vak(ak,xm,xc,xcd,ff)!                            [xmtoxc_ak]
-!=============================================================================
-! Assuming the vector AK parameterization of the Extended Schmidt-transformed
-! Gnomonic (ESG) mapping with parameter vector, and given a map-space
-! 2-vector, xm, find the corresponding cartesian unit 3-vector and its
-! derivative wrt xm, the Jacobian matrix, xcd.
-! If for any reason the mapping cannot be done, return a raised failure flag,z
-! FF.
-!=============================================================================
 implicit none
 real(dp),dimension(2),  intent(in ):: ak,xm
 real(dp),dimension(3),  intent(out):: xc
 real(dp),dimension(3,2),intent(out):: xcd
 logical,                intent(out):: ff
-!=============================================================================
 call xmtoxc_ak(ak(1),ak(2),xm,xc,xcd,ff)
 end subroutine xmtoxc_vak
-!=============================================================================
+
+!> Like xmtoxc_vak, _ak, but also return derivatives wrt ak.
+!! @author R. J. Purser
+!! @param ak derivatives wrt ak
 subroutine xmtoxc_vak1(ak,xm,xc,xcd,xc1,xcd1,ff)!                  [xmtoxc_ak]
-!=============================================================================
-! Like xmtoxc_vak, _ak, but also return derivatives wrt ak.
-!=============================================================================
 implicit none
 real(dp),dimension(2),    intent(in ):: ak,xm
 real(dp),dimension(3),    intent(out):: xc
@@ -368,13 +347,11 @@ real(dp),dimension(3,2),  intent(out):: xcd
 real(dp),dimension(3,2),  intent(out):: xc1
 real(dp),dimension(3,2,2),intent(out):: xcd1
 logical,                  intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(3,2,2):: xcdd
 real(dp),dimension(2,2,2):: xsd1,xsdd
 real(dp),dimension(2,2)  :: xtd,xsd,xs1,xtd1,xsdk
 real(dp),dimension(2)    :: xt,xt1,xs,xsk
 integer(spi)             :: i
-!=============================================================================
 call xmtoxt1(ak(1),xm,xt,xtd,xt1,xtd1,ff);      if(ff)return
 call xttoxs1(ak(2),xt,xs,xsd,xsdd,xsk,xsdk,ff); if(ff)return
 xs1(:,2)=xsk; xs1(:,1)=matmul(xsd,xt1)
@@ -387,25 +364,28 @@ do i=1,3; xcd1(i,:,:)=matmul(transpose(xsd),matmul(xcdd(i,:,:),xs1)); enddo
 do i=1,2; xcd1(:,:,i)=xcd1(:,:,i)+matmul(xcd,xsd1(:,:,i));            enddo
 xcd=matmul(xcd,xsd)
 end subroutine xmtoxc_vak1
-!=============================================================================
+
+!> Assuming the A-K parameterization of the Extended Schmidt-transformed
+!! Gnomonic (ESG) mapping, and given a map-space 2-vector, xm, find the
+!! corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian
+!! matrix, xcd. If for any reason the mapping cannot be done, return a
+!! raised failure flag, FF.
+!! @author R. J. Purser
+!! @param a ESG mapping parameterization
+!! @param k ESG mapping parameterization
+!! @param xm map-space vector
+!! @param xm derivative
+!! @param xcd jacobian matrix
+!! @param ff error flag
 subroutine xmtoxc_ak(a,k,xm,xc,xcd,ff)!                            [xmtoxc_ak]
-!=============================================================================
-! Assuming the A-K parameterization of the Extended Schmidt-transformed
-! Gnomonic (ESG) mapping, and given a map-space 2-vector, xm, find the
-! corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian
-! matrix, xcd. If for any reason the mapping cannot be done, return a
-! raised failure flag, FF.
-!=============================================================================
 implicit none
 real(dp),               intent(in ):: a,k
 real(dp),dimension(2),  intent(in ):: xm
 real(dp),dimension(3),  intent(out):: xc
 real(dp),dimension(3,2),intent(out):: xcd
 logical,                intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: xtd,xsd
 real(dp),dimension(2)  :: xt,xs
-!=============================================================================
 call xmtoxt(a,xm,xt,xtd,ff);     if(ff)return
 call xttoxs(k,xt,xs,xsd,ff); if(ff)return
 xsd=matmul(xsd,xtd)
@@ -413,63 +393,63 @@ call xstoxc(xs,xc,xcd)
 xcd=matmul(xcd,xsd)
 end subroutine xmtoxc_ak
 
-!=============================================================================
+!> Inverse mapping of xmtoxc_ak. That is, go from given cartesian unit
+!! 3-vector, xc, to map coordinate 2-vector xm (or return a raised failure
+!! flag, FF, if the attempt fails).
+!! @author R. J. Purser
+!! @param a Inverse mapping of xmtoxc
+!! @param k Inverse mapping of xmtoxc
+!! @param xc cartesian unit 3-vector
+!! @param xm 2-vector map coordinate
+!! @param ff error flag
 subroutine xctoxm_ak(a,k,xc,xm,ff)!                                [xctoxm_ak]
-!=============================================================================
-! Inverse mapping of xmtoxc_ak. That is, go from given cartesian unit 
-! 3-vector, xc, to map coordinate 2-vector xm (or return a raised failure 
-! flag, FF, if the attempt fails).
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: a,k
 real(dp),dimension(3),intent(in ):: xc
 real(dp),dimension(2),intent(out):: xm
 logical,              intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(2):: xs,xt
-!=============================================================================
 ff=F
 call xctoxs(xc,xs)
 call xstoxt(k,xs,xt,ff); if(ff)return
 call xttoxm(a,xt,xm,ff)
 end subroutine xctoxm_ak
 
-!=============================================================================
+!> For angles (degrees) of the arcs spanning the halfwidths between the
+!! region's center and its x and y edges, get the two cartesian vectors
+!! that represent the locations of these edge midpoints in the positive x and y
+!! directions.
+!! @author R. J. Purser
+!! @param edgex region's x edges
+!! @param edgey region's y edges
 subroutine get_edges(arcx,arcy,edgex,edgey)!                       [get_edges]
-!=============================================================================
-! For angles (degrees) of the arcs spanning the halfwidths between the
-! region's center and its x and y edges, get the two cartesian vectors
-! that represent the locations of these edge midpoints in the positive x and y
-! directions.
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: arcx,arcy
 real(dp),dimension(3),intent(out):: edgex,edgey
-!-----------------------------------------------------------------------------
 real(dp):: cx,sx,cy,sy,rarcx,rarcy
-!=============================================================================
 rarcx=arcx*dtor;   rarcy=arcy*dtor
 cx=cos(rarcx); sx=sin(rarcx)
 cy=cos(rarcy); sy=sin(rarcy)
 edgex=(/sx,u0,cx/); edgey=(/u0,sy,cy/)
 end subroutine get_edges
 
-!=============================================================================
+!> From a jacobian matrix, j0, get a sufficient set of v.. diagnostics such
+!! that, from averages of these v, we can later compute the collective variance
+!! of Q(lam) that they imply for any choice of the "lambda" parameter, lam.
+!! Note that v1 and v4 are quadratic diagnostics of EL, while v2 and v3 are
+!! linear.
+!! @author R. J. Purser
+!! @param j0 jacobian matrix
+!! @param v1 quadratic diagnostics of EL
+!! @param v4 quadratic diagnostics of EL
+!! @param v2 linear diagnostics of EL
+!! @param v3 linear diagnostics of EL
 subroutine get_qx(j0, v1,v2,v3,v4)!                                   [get_qx]
-!=============================================================================
-! From a jacobian matrix, j0, get a sufficient set of v.. diagnostics such
-! that, from averages of these v, we can later compute the collective variance
-! of Q(lam) that they imply for any choice of the "lambda" parameter, lam.
-! Note that v1 and v4 are quadratic diagnostics of EL, while v2 and v3 are
-! linear.
-!=============================================================================
 use psym2, only: logsym2
 implicit none
 real(dp),dimension(3,2),intent(in ):: j0
 real(dp),               intent(out):: v1,v2,v3,v4
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: el,g
-!=============================================================================
 g=matmul(transpose(j0),j0)
 call logsym2(g,el); el=el*o2
 v1=el(1,1)**2+u2*el(1,2)**2+el(2,2)**2
@@ -477,25 +457,24 @@ v2=el(1,1)
 v3=el(2,2)
 v4=(el(1,1)+el(2,2))**2
 end subroutine get_qx
-!=============================================================================
+
+!> From a jacobian matrix, j0, and its derivative, j0d, get a sufficient set
+!! of v.. diagnostics such that, from average of these diagnostics, we can
+!! later compute the collective variance of Q and its derivative.
+!! @author R. J. Purser
+!! @param j0 jacobian matrix
+!! @param j0d derivative of j0
 subroutine get_qxd(j0,j0d, v1,v2,v3,v4,v1d,v2d,v3d,v4d)!              [get_qx]
-!=============================================================================
-! From a jacobian matrix, j0, and its derivative, j0d, get a sufficient set
-! of v.. diagnostics such that, from average of these diagnostics, we can
-! later compute the collective variance of Q and its derivative.
-!=============================================================================
 use psym2, only: logsym2
 implicit none
 real(dp),dimension(3,2),  intent(in ):: j0
 real(dp),dimension(3,2,2),intent(in ):: j0d
 real(dp),                 intent(out):: v1,v2,v3,v4
 real(dp),dimension(2),    intent(out):: v1d,v2d,v3d,v4d
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2,2,2):: deldg
 real(dp),dimension(2,2,2)  :: eld,gd
 real(dp),dimension(2,2)    :: el,g
 integer(spi)               :: i,j,k
-!=============================================================================
 g=matmul(transpose(j0),j0)
 do i=1,2
    gd(:,:,i)=matmul(transpose(j0d(:,:,i)),j0)+matmul(transpose(j0),j0d(:,:,i))
@@ -515,25 +494,31 @@ v3d=eld(2,2,:)
 v4d=u2*(el(1,1)+el(2,2))*(eld(1,1,:)+eld(2,2,:))
 end subroutine get_qxd
 
-!=============================================================================
+!> For a parameter vector, ak and a map-space domain-parameter vector, ma,
+!! return the lambda-parameterized quality diagnostic, Q, and the geographic
+!! domain-parameter vector ga. Lambda is given by lam <1. Also, return
+!! the derivatives, qdak and qdma, of Q wrt ak and ma, and the derivatives
+!! gadak and gadma, of ga wrt ak and ma.
+!! The domain averages of Q are accurately computed by bi-Gauss-Legendre
+!! quadrature over the positive quadrant of the domain (exploiting the
+!! symmetry) of the four constituent terms, v1, v2, v3, v4, from which
+!! the mean Q is computed using a quadratic formula of these constituents.
+!! The number of Gauss points in eaxh half-interval is ngh, and the
+!! nodes themselves are, in proportion to the half-interval, at xg.
+!! the normalized gauss weights are wg.
+!! If a failure occurs, colmputations cease immediately and a failure
+!! flag, FF, is raised on return.
+!! @author R. J. Purser
+!! @param ak parameter vector
+!! @param ma map-space domain-parameter vector
+!! @param q lambda-parameterized quality diagnostic
+!! @param ga geographic domain-parameter vector
+!! @param lam Lambda
+!! @param qdak derivatives value
+!! @param qdma derivatives value
+!! @param ff error flag
 subroutine get_meanqd(ngh,lam,xg,wg,ak,ma, q,qdak,qdma, & !        [get_meanq]
      ga,gadak,gadma, ff)
-!=============================================================================
-! For a parameter vector, ak and a map-space domain-parameter vector, ma,
-! return the lambda-parameterized quality diagnostic, Q, and the geographic
-! domain-parameter vector ga. Lambda is given by lam <1. Also, return
-! the derivatives, qdak and qdma, of Q wrt ak and ma, and the derivatives
-! gadak and gadma, of ga wrt ak and ma.
-! The domain averages of Q are accurately computed by bi-Gauss-Legendre
-! quadrature over the positive quadrant of the domain (exploiting the
-! symmetry) of the four constituent terms, v1, v2, v3, v4, from which
-! the mean Q is computed using a quadratic formula of these constituents.
-! The number of Gauss points in eaxh half-interval is ngh, and the
-! nodes themselves are, in proportion to the half-interval, at xg.
-! the normalized gauss weights are wg.
-! If a failure occurs, colmputations cease immediately and a failure
-! flag, FF, is raised on return.
-!=============================================================================
 implicit none
 integer(spi),           intent(in ):: ngh
 real(dp),               intent(in ):: lam
@@ -544,7 +529,6 @@ real(dp),dimension(2),  intent(out):: qdak,qdma
 real(dp),dimension(2),  intent(out):: ga
 real(dp),dimension(2,2),intent(out):: gadak,gadma
 logical,                intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(3,2,2):: xcd1
 real(dp),dimension(3,2)  :: xcd,xc1
 real(dp),dimension(3)    :: xc
@@ -553,7 +537,6 @@ real(dp),dimension(2)    :: xm, v1dxy,v2dxy,v3dxy,v4dxy,                &
 real(dp)                 :: wx,wy,                                  &
                             v1xy,v2xy,v3xy,v4xy, v1L,v2L,v3L,v4L, v1,v2,v3,v4
 integer(spi)             :: i,ic,ix,iy
-!=============================================================================
 v1 =u0; v2 =u0; v3 =u0; v4 =u0
 v1d=u0; v2d=u0; v3d=u0; v4d=u0
 do iy=1,ngh
@@ -576,7 +559,6 @@ do iy=1,ngh
 enddo
 call get_qofv(lam,v1,v2,v3,v4, q)! <- Q(lam) based on the v1,v2,v3,v4 
 call get_qofv(lam,v2,v3, v1d,v2d,v3d,v4d, qdak)! <- Derivative of Q wrt ak
-!------
 ! Derivatives of ga wrt ak, and of q and ga wrt ma:
 gadma=u0! <- needed because only diagonal elements are filled
 do i=1,2
@@ -600,12 +582,11 @@ do i=1,2
 enddo
 call get_qofv(lam,v2,v3, v1d,v2d,v3d,v4d, qdma)
 end subroutine get_meanqd
-!=============================================================================
+
+!> Like getmeanqd, except for n different values, aks, of ak and n different
+!! values, mas of ma, and without any of the derivatives.
+!! @author R. J. Purser
 subroutine get_meanqs(n,ngh,lam,xg,wg,aks,mas, qs,ff)!            [get_meanq]
-!=============================================================================
-! Like getmeanqd, except for n different values, aks, of ak and n different
-! values, mas of ma, and without any of the derivatives.
-!=============================================================================
 implicit none
 integer(spi),           intent(in ):: n,ngh
 real(dp),dimension(ngh),intent(in ):: xg,wg
@@ -613,7 +594,6 @@ real(dp),               intent(in ):: lam
 real(dp),dimension(2,n),intent(in ):: aks,mas
 real(dp),dimension(n),  intent(out):: qs
 logical,                intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(n)  :: v1s,v2s,v3s,v4s
 real(dp),dimension(n)  :: v1sL,v2sL,v3sL,v4sL
 real(dp),dimension(3,2):: xcd
@@ -621,7 +601,6 @@ real(dp),dimension(3)  :: xc
 real(dp),dimension(2)  :: xm,xgs
 real(dp)               :: wx,wy, v1xy,v2xy,v3xy,v4xy
 integer(spi)           :: i,ix,iy
-!=============================================================================
 v1s=u0; v2s=u0; v3s=u0; v4s=u0
 do iy=1,ngh
    wy=wg(iy)
@@ -642,82 +621,76 @@ enddo
 call get_qofv(n,lam,v1s,v2s,v3s,v4s, qs)
 end subroutine get_meanqs
 
-!=============================================================================
+!> The quadratic quantity Q depends linearly on v1 and v4 (which are already
+!! quadratic diagnostics of EL) and quadratically on v2 and v3 (which are
+!! linear diagnostics of EL). EL = (1/2)log(G), where G=J^T.J, J the jacobian.
+!! @author R. J. Purser
+!! @param q quadratic quantity
+!! @param v1 quadratic diagnostics of EL
+!! @param v4 quadratic diagnostics of EL
+!! @param v2 linear diagnostics of EL
+!! @param v3 linear diagnostics of EL
 subroutine get_qofv(lam,v1,v2,v3,v4, q)!                            [get_qofv]
-!=============================================================================
-! The quadratic quantity Q depends linearly on v1 and v4 (which are already
-! quadratic diagnostics of EL) and quadratically on v2 and v3 (which are
-! linear diagnostics of EL). EL = (1/2)log(G), where G=J^T.J, J the jacobian.
-!=============================================================================
 implicit none
 real(dp),intent(in ):: lam,v1,v2,v3,v4
 real(dp),intent(out):: q
-!-----------------------------------------------------------------------------
 real(dp):: lamc
-!=============================================================================
 lamc=u1-lam
 q=lamc*(v1-(v2**2+v3**2)) +lam*(v4 -(v2+v3)**2)
 end subroutine get_qofv
-!=============================================================================
+
+!> Like get_qofv, but for (only) the 2-vector derivatives of Q. Note that
+!! the quadratic diagnostics v1 and v4 do not participate in this formula.
+!! @author R. J. Purser
 subroutine get_qofvd(lam, v2,v3, v1d,v2d,v3d,v4d, qd)!              [get_qofv]
-!=============================================================================
-! Like get_qofv, but for (only) the 2-vector derivatives of Q. Note that
-! the quadratic diagnostics v1 and v4 do not participate in this formula.
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: lam,v2,v3
 real(dp),dimension(2),intent(in ):: v1d,v2d,v3d,v4d
 real(dp),dimension(2),intent(out):: qd
-!-----------------------------------------------------------------------------
 real(dp):: lamc
-!=============================================================================
 lamc=u1-lam
 qd=lamc*(v1d-u2*(v2d*v2+v3d*v3))+lam*(v4d-u2*(v2d+v3d)*(v2+v3))
 end subroutine get_qofvd
-!=============================================================================
+
+!> General util to convert value
+!! @author R. J. Purser
 subroutine get_qsofvs(n,lam,v1s,v2s,v3s,v4s, qs)!                   [get_qofv]
-!=============================================================================
 implicit none
 integer(spi),         intent(in ):: n
 real(dp),             intent(in ):: lam
 real(dp),dimension(n),intent(in ):: v1s,v2s,v3s,v4s
 real(dp),dimension(n),intent(out):: qs
-!-----------------------------------------------------------------------------
 real(dp):: lamc
-!=============================================================================
 lamc=u1-lam
 qs=lamc*(v1s-(v2s**2+v3s**2)) +lam*(v4s -(v2s+v3s)**2)
 end subroutine get_qsofvs
 
-!=============================================================================
+!> Given an aspect ratio, asp<=1, and major semi-axis, arc, in map-space
+!! nondimensional units, return a first guess for the parameter vector, ak,
+!! approximately optimal for the domain of the given dimensions.
+!! @author R. J. Purser
+!! @param asp aspect ratio
+!! @param ak first guess for the parameter vector
 subroutine guessak_map(asp,tmarcx,ak)!                           [guessak_map]
-!=============================================================================
-! Given an aspect ratio, asp<=1, and major semi-axis, arc, in map-space
-! nondimensional units, return a first guess for the parameter vector, ak, 
-! approximately optimal for the domain of the given dimensions.
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: asp,tmarcx
 real(dp),dimension(2),intent(out):: ak
-!-----------------------------------------------------------------------------
 real(dp):: gmarcx
-!=============================================================================
 gmarcx=tmarcx*rtod
 call guessak_geo(asp,gmarcx,ak)
 end subroutine guessak_map
 
-!=============================================================================
+!> Given an aspect ratio, asp<=1, and major semi-axis, arc, in geographical
+!! (degree) units measured along the rectangle's median, return a first guess
+!! for the parameter vector, ak, approximately optimal for the domain of the
+!! given dimensions.
+!! @author R. J. Purser
+!! @param asp aspect ratio
+!! @param ak first guess or the parameter vector
 subroutine guessak_geo(asp,arc,ak)!                              [guessak_geo]
-!=============================================================================
-! Given an aspect ratio, asp<=1, and major semi-axis, arc, in geographical
-! (degree) units measured along the rectangle's median, return a first guess 
-! for the parameter vector, ak, approximately optimal for the domain of the 
-! given dimensions.
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: asp,arc
 real(dp),dimension(2),intent(out):: ak
-!-----------------------------------------------------------------------------
 integer(spi),parameter         :: narc=11,nasp=10! <- Table index bounds
 real(dp),    parameter         :: eps=1.e-7_dp,darc=10._dp+eps,dasp=.1_dp+eps
 real(dp),dimension(nasp,0:narc):: adarc,kdarc
@@ -775,32 +748,35 @@ ak=(/wx0*(wa0*adarc(iasp0,iarc0)+wa1*adarc(iasp1,iarc0))+ &
      wx1*(wa0*kdarc(iasp0,iarc1)+wa1*kdarc(iasp1,iarc1))/)
 end subroutine guessak_geo
 
-!=============================================================================
+!> Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given
+!! geographical half-spans, garcx and garcy, as well as the corresponding
+!! map-space half-spans, garcx and garcy (in degrees) and the quality
+!! diagnostic, Q(lam) for this optimal parameter choice. If this process
+!! fails for any reason, the failure is alerted by a raised flag, FF, and
+!! the other output arguments must then be taken to be meaningless.
+!!
+!! The diagnostic Q measures the variance over the domain of a local measure
+!! of grid distortion. A logarithmic measure of local grid deformation is
+!! give by L=log(J^t.J)/2, where J is the mapping Jacobian matrix, dX/dx,
+!! where X is the cartesian unit 3-vector representation of the image of the
+!! mapping of the map-coordinate 2-vector, x.
+!! The Frobenius squared-norm, Trace(L*L), of L is the basis for the simplest
+!! (lam=0) definition of the variance of L, but (Trace(L))**2 is another.
+!! Here, we weight both contributions, by lam and (1-lam) respectively, with
+!! 0 <= lam <1, to compute the variance Q(lam,a,k), and search for the (a,k)
+!! that minimizes this Q.
+!!
+!! The domain averages are computed by double Gauss-Legendre quadrature (i.e.,
+!! in both the x and y directions), but restricted to a mere quadrant of the
+!! domain (since bilateral symmetry pertains across both domain medians,
+!! yielding a domain mean L that is strictly diagonal.
+!! @author R. J. Purser
+!! @param a Extended Schmidt Gnomonic parameter
+!! @param k Extended Schmidt Gnomonic parameter
+!! @param ff failure flag
+!! @param garcx map-space half-spans
+!! @param garcy map-space half-spans
 subroutine bestesg_geo(lam,garcx,garcy, a,k,marcx,marcy,q,ff)!   [bestesg_geo]
-!=============================================================================
-! Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given
-! geographical half-spans, garcx and garcy, as well as the corresponding
-! map-space half-spans, garcx and garcy (in degrees) and the quality
-! diagnostic, Q(lam) for this optimal parameter choice. If this process
-! fails for any reason, the failure is alerted by a raised flag, FF, and
-! the other output arguments must then be taken to be meaningless.
-!
-! The diagnostic Q measures the variance over the domain of a local measure
-! of grid distortion. A logarithmic measure of local grid deformation is
-! give by L=log(J^t.J)/2, where J is the mapping Jacobian matrix, dX/dx,
-! where X is the cartesian unit 3-vector representation of the image of the
-! mapping of the map-coordinate 2-vector, x.
-! The Frobenius squared-norm, Trace(L*L), of L is the basis for the simplest
-! (lam=0) definition of the variance of L, but (Trace(L))**2 is another.
-! Here, we weight both contributions, by lam and (1-lam) respectively, with
-! 0 <= lam <1, to compute the variance Q(lam,a,k), and search for the (a,k)
-! that minimizes this Q.
-!
-! The domain averages are computed by double Gauss-Legendre quadrature (i.e.,
-! in both the x and y directions), but restricted to a mere quadrant of the
-! domain (since bilateral symmetry pertains across both domain medians,
-! yielding a domain mean L that is strictly diagonal.
-!=============================================================================
 use pietc, only: u5,o5,s18,s36,s54,s72,ms18,ms36,ms54,ms72
 use pmat,  only: inv
 use psym2, only: chol2
@@ -808,7 +784,6 @@ implicit none
 real(dp),intent(in ):: lam,garcx,garcy
 real(dp),intent(out):: a,k,marcx,marcy,q
 logical ,intent(out):: FF
-!-----------------------------------------------------------------------------
 integer(spi),parameter     :: nit=200,mit=20,ngh=25
 real(dp)    ,parameter     :: u2o5=u2*o5,&
                               f18=u2o5*s18,f36=u2o5*s36,f54=u2o5*s54,&
@@ -832,7 +807,6 @@ data em5/o5,u2o5,  u0,u2o5,  u0,& ! <-The Fourier matrix for 5 points. Applied
 ! First guess upper-triangular basis regularizing the samples used to
 ! estimate the Hessian of q by finite differencing:
 data basis0/0.1_dp,u0,  0.3_dp,0.3_dp/
-!=============================================================================
 ff=lam<u0 .or. lam>=u1
 if(ff)then; print'("In bestesg_geo; lam out of range")';return; endif
 ff= garcx<=u0 .or. garcy<=u0
@@ -936,39 +910,42 @@ else        ; marcx=ma(1); marcy=ma(2)! don't switch
 endif
 end subroutine bestesg_geo
 
-!=============================================================================
+!> Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given
+!! map-coordinate half-spans, marcx and marcy, as well as the corresponding
+!! geographical half-spans, garcx and garcy (in degrees) and the quality
+!! diagnostic, Q(lam) for this optimal parameter choice. If this process
+!! fails for any reason, the failure is alerted by a raised flag, FF, and
+!! the other output arguments must then be taken to be meaningless.
+!!
+!! The diagnostic Q measures the variance over the domain of a local measure
+!! of grid distortion. A logarithmic measure of local grid deformation is
+!! give by L=log(J^t.J)/2, where J is the mapping Jacobian matrix, dX/dx,
+!! where X is the cartesian unit 3-vector representation of the image of the
+!! mapping of the map-coordinate 2-vector, x.
+!! The Frobenius squared-norm, Trace(L*L), of L is the basis for the simplest
+!! (lam=0) definition of the variance of L, but (Trace(L))**2 is another.
+!! Here, we weight both contributions, by lam and (1-lam) respectively, with
+!! 0 <= lam <1, to compute the variance Q(lam,a,k), and search for the (a,k)
+!! that minimizes this Q.
+!!
+!! The domain averages are computed by double Gauss-Legendre quadrature (i.e.,
+!! in both the x and y directions), but restricted to a mere quadrant of the
+!! domain (since bilateral symmetry pertains across both domain medians,
+!! yielding a domain mean L that is strictly diagonal.
+!! @author R. J. Purser
+!! @param a Extended Schmidt Gnomonic parameter
+!! @param k Extended Schmidt Gnomonic parameter
+!! @param marcx map-coordinate half-spans
+!! @param marcy map-coordinate half-spans
+!! @param garcx geographical half-spans
+!! @param garcy geographical half-spans
 subroutine bestesg_map(lam,marcx,marcy, a,k,garcx,garcy,q,ff)   ![bestesg_map]
-!=============================================================================
-! Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given
-! map-coordinate half-spans, marcx and marcy, as well as the corresponding
-! geographical half-spans, garcx and garcy (in degrees) and the quality
-! diagnostic, Q(lam) for this optimal parameter choice. If this process
-! fails for any reason, the failure is alerted by a raised flag, FF, and
-! the other output arguments must then be taken to be meaningless.
-!
-! The diagnostic Q measures the variance over the domain of a local measure
-! of grid distortion. A logarithmic measure of local grid deformation is
-! give by L=log(J^t.J)/2, where J is the mapping Jacobian matrix, dX/dx,
-! where X is the cartesian unit 3-vector representation of the image of the
-! mapping of the map-coordinate 2-vector, x.
-! The Frobenius squared-norm, Trace(L*L), of L is the basis for the simplest
-! (lam=0) definition of the variance of L, but (Trace(L))**2 is another.
-! Here, we weight both contributions, by lam and (1-lam) respectively, with
-! 0 <= lam <1, to compute the variance Q(lam,a,k), and search for the (a,k)
-! that minimizes this Q.
-!
-! The domain averages are computed by double Gauss-Legendre quadrature (i.e.,
-! in both the x and y directions), but restricted to a mere quadrant of the
-! domain (since bilateral symmetry pertains across both domain medians, 
-! yielding a domain mean L that is strictly diagonal.
-!=============================================================================
 use pietc, only: u5,o5,s18,s36,s54,s72,ms18,ms36,ms54,ms72
 use psym2, only: chol2
 implicit none
 real(dp),intent(in ):: lam,marcx,marcy
 real(dp),intent(out):: a,k,garcx,garcy,q
 logical ,intent(out):: FF
-!-----------------------------------------------------------------------------
 integer(spi),parameter     :: nit=25,mit=7,ngh=25
 real(dp),parameter         :: u2o5=u2*o5,                                &
                               f18=u2o5*s18,f36=u2o5*s36,f54=u2o5*s54,    &
@@ -992,7 +969,6 @@ data em5/o5,u2o5,  u0,u2o5,  u0,& ! <-The Fourier matrix for 5 points. Applied
 ! First guess upper-triangular basis regularizing the samples used to
 ! estimate the Hessian of q by finite differencing:
 data basis0/0.1_dp,u0,  0.3_dp,0.3_dp/
-!=============================================================================
 ff=lam<u0 .or. lam>=u1
 if(ff)then; print'("In bestesg_map; lam out of range")';return; endif
 ff= marcx<=u0 .or. marcy<=u0
@@ -1073,30 +1049,40 @@ else        ; garcx=ga(1); garcy=ga(2)! don't switch
 endif
 end subroutine bestesg_map
 
-!=============================================================================
+!> Use a and k as the parameters of an Extended Schmidt-transformed
+!! Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center
+!! by an azimuth angle of pazi counterclockwise (these angles in radians).
+!!
+!! Assume the radius of the earth is unity, and using the central mapping
+!! point as the coordinate origin, set up the grid with central x-spacing delx
+!! and y-spacing dely. The grid index location of the left-lower
+!! corner of the domain is (lx,ly) (typically both NEGATIVE).
+!! The numbers of the grid spaces in x and y directions are nx and ny.
+!! (Note that, for a centered rectangular grid lx and ly are negative and, in
+!! magnitude, half the values of nx and ny respectively.)
+!! Return the latitude and longitude, in radians again, of the grid points thus
+!! defined in the arrays, glat and glon, and return a rectangular array, garea,
+!! of dimensions nx-1 by ny-1, that contains the areas of each of the grid
+!! cells
+!!
+!! If all goes well, return a lowered failure flag, ff=.false. .
+!! But if, for some reason, it is not possible to complete this task,
+!! return the raised failure flag, ff=.TRUE. .
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping centered at (plat,plon)
+!! @param k parameters of an ESG mapping centered at (plat,plon)
+!! @param plat latitude center point
+!! @param plon longitude center point
+!! @param lx grid index location
+!! @param ly grid index location
+!! @param nx grid spaces
+!! @param ny grid spaces
+!! @param glat grid points for latitude
+!! @param glon grid points for longitude
+!! @param garea rectangular array
+!! @param ff failure flag
 subroutine hgrid_ak_rr(lx,ly,nx,ny,A,K,plat,plon,pazi, & !       [hgrid_ak_rr]
      delx,dely,  glat,glon,garea, ff)
-!=============================================================================
-! Use a and k as the parameters of an Extended Schmidt-transformed
-! Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center
-! by an azimuth angle of pazi counterclockwise (these angles in radians).
-!
-! Assume the radius of the earth is unity, and using the central mapping
-! point as the coordinate origin, set up the grid with central x-spacing delx
-! and y-spacing dely. The grid index location of the left-lower
-! corner of the domain is (lx,ly) (typically both NEGATIVE).
-! The numbers of the grid spaces in x and y directions are nx and ny.
-! (Note that, for a centered rectangular grid lx and ly are negative and, in
-! magnitude, half the values of nx and ny respectively.)
-! Return the latitude and longitude, in radians again, of the grid points thus
-! defined in the arrays, glat and glon, and return a rectangular array, garea,
-! of dimensions nx-1 by ny-1, that contains the areas of each of the grid 
-! cells
-!
-! If all goes well, return a lowered failure flag, ff=.false. . 
-! But if, for some reason, it is not possible to complete this task, 
-! return the raised failure flag, ff=.TRUE. .
-!=============================================================================
 use pmat4, only: sarea
 use pmat5, only: ctogr
 implicit none
@@ -1106,7 +1092,6 @@ real(dp),                                 intent(in ):: a,k,plat,plon,pazi, &
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny  ),intent(out):: glat,glon
 real(dp),dimension(lx:lx+nx-1,ly:ly+ny-1),intent(out):: garea
 logical,                                  intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(3,3):: prot,azirot
 real(dp),dimension(3,2):: xcd
 real(dp),dimension(3)  :: xc
@@ -1115,7 +1100,6 @@ real(dp)               :: clat,slat,clon,slon,cazi,sazi,&
                           rlat,drlata,drlatb,drlatc,    &
                           rlon,drlona,drlonb,drlonc
 integer(spi)           :: ix,iy,mx,my
-!=============================================================================
 clat=cos(plat); slat=sin(plat)
 clon=cos(plon); slon=sin(plon)
 cazi=cos(pazi); sazi=sin(pazi)
@@ -1162,37 +1146,51 @@ do iy=ly,my-1
    enddo
 enddo
 end subroutine hgrid_ak_rr
-!=============================================================================
+
+!> Use a and k as the parameters of an extended Schmidt-transformed
+!! gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center
+!! by an azimuth angle of pazi counterclockwise (these angles in radians).
+!!
+!! Using the central mapping point as the coordinate origin, set up the grid
+!! with central x-spacing delx and y-spacing dely in nondimensional units,
+!! (i.e., as if the earth had unit radius) and with the location of the left-
+!! lower corner of the grid at center-relative grid index pair, (lx,ly) and
+!! with the number of the grid spaces in x and y directions given by nx and ny.
+!! (Note that, for a centered rectangular grid lx and ly are negative and, in
+!! magnitude, half the values of nx and ny respectively.)
+!! Return the latitude and longitude, again, in radians, of the grid pts thus
+!! defined in the arrays, glat and glon; return a rectangular array, garea,
+!! of dimensions nx-1 by ny-1, that contains the areas of each of the grid
+!! cells in nondimensional "steradian" units.
+!!
+!! In this version, these grid cell areas are computed by 2D integrating the
+!! scalar jacobian of the transformation, using a 4th-order centered scheme.
+!! The estimated grid steps, dx and dy, are returned at the grid cell edges,
+!! using the same 4th-order scheme to integrate the 1D projected jacobian.
+!! The angles, relative to local east and north, are returned respectively
+!! as angle_dx and angle_dy at grid cell corners, in radians counterclockwise.
+!!
+!! if all goes well, return a .FALSE. failure flag, ff. If, for some
+!! reason, it is not possible to complete this task, return the failure flag
+!! as .TRUE.
+!! @author R. J. Purser
+!! @param a Extended Schmidt Gnomonic parameter
+!! @param k Extended Schmidt Gnomonic parameter
+!! @param plat latitude define centered mapping
+!! @param plon longitude define centered mapping
+!! @param delx central x-spacing grid point
+!! @param dely central y-spacing grid point
+!! @param lx x grid index for left-lower corner of the grid at center
+!! @param ly y grid index for left-lower corner of the grid at center
+!! @param nx numbers of the grid spaces in x
+!! @param ny numbers of the grid spaces in y
+!! @param dx estimated grid steps x grid cell edges
+!! @param dy estimated grid steps y grid cell edges
+!! @param angle_dx x angles relative to local east and north
+!! @param angle_dy y angles relative to local east and north
+!! @param ff failure flag
 subroutine hgrid_ak_rr_c(lx,ly,nx,ny,a,k,plat,plon,pazi, & !     [hgrid_ak_rr]
                     delx,dely,  glat,glon,garea,dx,dy,angle_dx,angle_dy, ff)
-!=============================================================================
-! Use a and k as the parameters of an extended Schmidt-transformed
-! gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center
-! by an azimuth angle of pazi counterclockwise (these angles in radians).
-!
-! Using the central mapping point as the coordinate origin, set up the grid
-! with central x-spacing delx and y-spacing dely in nondimensional units, 
-! (i.e., as if the earth had unit radius) and with the location of the left-
-! lower corner of the grid at center-relative grid index pair, (lx,ly) and 
-! with the number of the grid spaces in x and y directions given by nx and ny.
-! (Note that, for a centered rectangular grid lx and ly are negative and, in
-! magnitude, half the values of nx and ny respectively.)
-! Return the latitude and longitude, again, in radians, of the grid pts thus
-! defined in the arrays, glat and glon; return a rectangular array, garea,
-! of dimensions nx-1 by ny-1, that contains the areas of each of the grid 
-! cells in nondimensional "steradian" units.
-!
-! In this version, these grid cell areas are computed by 2D integrating the
-! scalar jacobian of the transformation, using a 4th-order centered scheme.
-! The estimated grid steps, dx and dy, are returned at the grid cell edges,
-! using the same 4th-order scheme to integrate the 1D projected jacobian.
-! The angles, relative to local east and north, are returned respectively
-! as angle_dx and angle_dy at grid cell corners, in radians counterclockwise.
-!
-! if all goes well, return a .FALSE. failure flag, ff. If, for some
-! reason, it is not possible to complete this task, return the failure flag
-! as .TRUE.
-!=============================================================================
 use pmat4, only: cross_product,triple_product
 use pmat5, only: ctogr
 implicit none
@@ -1205,7 +1203,6 @@ real(dp),dimension(lx:lx+nx-1,ly:ly+ny  ),intent(out):: dx
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny-1),intent(out):: dy
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny  ),intent(out):: angle_dx,angle_dy
 logical,                                  intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(lx-1:lx+nx+1,ly-1:ly+ny+1):: gat ! Temporary area array
 real(dp),dimension(lx-1:lx+nx+1,ly  :ly+ny  ):: dxt ! Temporary dx array
 real(dp),dimension(lx  :lx+nx  ,ly-1:ly+ny+1):: dyt ! Temporary dy array
@@ -1216,7 +1213,6 @@ real(dp),dimension(3)  :: xc,east,north
 real(dp),dimension(2)  :: xm
 real(dp)               :: clat,slat,clon,slon,cazi,sazi,delxy
 integer(spi)           :: ix,iy,mx,my,lxm,lym,mxp,myp
-!=============================================================================
 delxy=delx*dely
 clat=cos(plat); slat=sin(plat)
 clon=cos(plon); slon=sin(plon)
@@ -1359,30 +1355,43 @@ garea         =(13_dp*(gat(lx:mx-1,ly :my-1)+gat(lx:mx-1,ly+1:my )) &
                   -(gat(lx:mx-1,lym:my-2)+gat(lx:mx-1,ly+2:myp)))/24_dp
 end subroutine hgrid_ak_rr_c
 
-!=============================================================================
+!> Use a and k as the parameters of an Extended Schmidt-transformed
+!! Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center
+!! by an azimuth angle of pazi counterclockwise (these angles in radians).
+!!
+!! Assume the radius of the earth is unity, and using the central mapping
+!! point as the coordinate origin, set up the grid with central x-spacing delx
+!! and y-spacing dely. The grid index location of the left-lower
+!! corner of the domain is (lx,ly) (typically both NEGATIVE).
+!! The numbers of the grid spaces in x and y directions are nx and ny.
+!! (Note that, for a centered rectangular grid lx and ly are negative and, in
+!! magnitude, half the values of nx and ny respectively.)
+!! Return the unit cartesian vectors xc of the grid points and their jacobian
+!! matrices xcd wrt the map coordinates, and return a rectangular array, garea,
+!! of dimensions nx-1 by ny-1, that contains the areas of each of the grid
+!! cells
+!!
+!! If all goes well, return a lowered failure flag, ff=.false. .
+!! But if, for some reason, it is not possible to complete this task,
+!! return the raised failure flag, ff=.TRUE. .
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping centered at (plat,plon)
+!! @param k parameters of an ESG mapping centered at (plat,plon)
+!! @param plat latitude define centered mapping
+!! @param plon longitude define centered mapping
+!! @param delx central x-spacing grid point
+!! @param dely central y-spacing grid point
+!! @param lx x grid index for left-lower corner of the grid at center
+!! @param ly y grid index for left-lower corner of the grid at center
+!! @param nx numbers of the grid spaces in x
+!! @param ny numbers of the grid spaces in y
+!! @param xc unit cartesian vectors
+!! @param garea rectangular array
+!! @param nx-1 x dimensions for garea
+!! @param ny-1 y dimensions for garea
+!! @param ff failure flag
 subroutine hgrid_ak_rc(lx,ly,nx,ny,A,K,plat,plon,pazi, & !       [hgrid_ak_rc]
      delx,dely, xc,xcd,garea, ff)
-!=============================================================================
-! Use a and k as the parameters of an Extended Schmidt-transformed
-! Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center
-! by an azimuth angle of pazi counterclockwise (these angles in radians).
-!
-! Assume the radius of the earth is unity, and using the central mapping
-! point as the coordinate origin, set up the grid with central x-spacing delx
-! and y-spacing dely. The grid index location of the left-lower
-! corner of the domain is (lx,ly) (typically both NEGATIVE).
-! The numbers of the grid spaces in x and y directions are nx and ny.
-! (Note that, for a centered rectangular grid lx and ly are negative and, in
-! magnitude, half the values of nx and ny respectively.)
-! Return the unit cartesian vectors xc of the grid points and their jacobian
-! matrices xcd wrt the map coordinates, and return a rectangular array, garea,
-! of dimensions nx-1 by ny-1, that contains the areas of each of the grid 
-! cells
-!
-! If all goes well, return a lowered failure flag, ff=.false. . 
-! But if, for some reason, it is not possible to complete this task, 
-! return the raised failure flag, ff=.TRUE. .
-!=============================================================================
 use pmat4, only: sarea
 use pmat5, only: ctogr
 implicit none
@@ -1392,14 +1401,12 @@ real(dp),dimension(3,  lx:lx+nx  ,ly:ly+ny  ),intent(out):: xc
 real(dp),dimension(3,2,lx:lx+nx  ,ly:ly+ny  ),intent(out):: xcd
 real(dp),dimension(    lx:lx+nx-1,ly:ly+ny-1),intent(out):: garea
 logical,                                      intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(3,3):: prot,azirot
 real(dp),dimension(2)  :: xm
 real(dp)               :: clat,slat,clon,slon,cazi,sazi,                  &
                           rlat,rlata,rlatb,rlatc,drlata,drlatb,drlatc,    &
                           rlon,rlona,rlonb,rlonc,drlona,drlonb,drlonc
 integer(spi)           :: ix,iy,mx,my
-!=============================================================================
 clat=cos(plat); slat=sin(plat)
 clon=cos(plon); slon=sin(plon)
 cazi=cos(pazi); sazi=sin(pazi)
@@ -1446,19 +1453,28 @@ do iy=ly,my-1
 enddo
 end subroutine hgrid_ak_rc
 
-!=============================================================================
+!> Use a and k as the parameters of an Extended Schmidt-transformed
+!! Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this
+!! center.
+!! by an azimuth angle of pdazi counterclockwise (these angles in degrees).
+!! Like hgrid_ak_rr, return the grid points' lats and lons, except that here
+!! the angles are returned in degrees. Garea, the area of each grid cell, is
+!! returned as in hgrid_ak_rr, and a failure flag, ff, raised when a failure
+!! occurs anywhere in these calculations.
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param pdlat latitude define centered mapping
+!! @param pdlon longitude define centered mapping
+!! @param lx x grid index for left-lower corner of the grid at center
+!! @param ly y grid index for left-lower corner of the grid at center
+!! @param nx numbers of the grid spaces in x
+!! @param ny numbers of the grid spaces in y
+!! @param delx central x-spacing grid point
+!! @param dely central y-spacing grid point
+!! @param ff failure flag
 subroutine hgrid_ak_dd(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, & !    [hgrid_ak_dd]
      delx,dely,  gdlat,gdlon,garea, ff)
-!=============================================================================
-! Use a and k as the parameters of an Extended Schmidt-transformed
-! Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this 
-! center.
-! by an azimuth angle of pdazi counterclockwise (these angles in degrees).
-! Like hgrid_ak_rr, return the grid points' lats and lons, except that here
-! the angles are returned in degrees. Garea, the area of each grid cell, is
-! returned as in hgrid_ak_rr, and a failure flag, ff, raised when a failure
-! occurs anywhere in these calculations.
-!============================================================================
 implicit none
 integer(spi),                             intent(in ):: lx,ly,nx,ny
 real(dp),                                 intent(in ):: A,K,pdlat,pdlon,&
@@ -1466,9 +1482,7 @@ real(dp),                                 intent(in ):: A,K,pdlat,pdlon,&
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny  ),intent(out):: gdlat,gdlon
 real(dp),dimension(lx:lx+nx-1,ly:ly+ny-1),intent(out):: garea
 logical,                                  intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: plat,plon,pazi
-!=============================================================================
 plat=pdlat*dtor ! Convert these angles from degrees to radians
 plon=pdlon*dtor !
 pazi=pdazi*dtor !
@@ -1478,13 +1492,25 @@ if(ff)return
 gdlat=gdlat*rtod ! Convert these angles from radians to degrees
 gdlon=gdlon*rtod !
 end subroutine hgrid_ak_dd
-!=============================================================================
+
+!> Like hgrid_ak_rr_c, except all the angle arguments (but not delx,dely)
+!! are in degrees instead of radians.
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param pdlat latitude define centered mapping
+!! @param pdlon longitude define centered mapping
+!! @param lx x grid index for left-lower corner of the grid at center
+!! @param ly y grid index for left-lower corner of the grid at center
+!! @param nx numbers of the grid spaces in x
+!! @param ny numbers of the grid spaces in y
+!! @param delx central x-spacing grid point
+!! @param dely central y-spacing grid point
+!! @param dangle_dx x rotations of the steps
+!! @param dangle_dy y rotations of the steps
+!! @param ff failure flag
 subroutine hgrid_ak_dd_c(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, &!   [hgrid_ak_dd]
      delx,dely,  gdlat,gdlon,garea,dx,dy,dangle_dx,dangle_dy, ff)
-!=============================================================================
-! Like hgrid_ak_rr_c, except all the angle arguments (but not delx,dely)
-! are in degrees instead of radians.
-!=============================================================================
 implicit none
 integer(spi),                             intent(in ):: lx,ly,nx,ny
 real(dp),                                 intent(in ):: a,k,pdlat,pdlon,&
@@ -1495,9 +1521,7 @@ real(dp),dimension(lx:lx+nx-1,ly:ly+ny  ),intent(out):: dx
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny-1),intent(out):: dy
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny  ),intent(out):: dangle_dx,dangle_dy
 logical,                                  intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: plat,plon,pazi
-!=============================================================================
 plat=pdlat*dtor ! Convert these angles from degrees to radians
 plon=pdlon*dtor !
 pazi=pdazi*dtor !
@@ -1510,19 +1534,31 @@ dangle_dx=dangle_dx*rtod !
 dangle_dy=dangle_dy*rtod !
 end subroutine hgrid_ak_dd_c
 
-!=============================================================================
+!> Use a and k as the parameters of an Extended Schmidt-transformed
+!! Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this
+!! center by an azimuth angle of pdazi counterclockwise (these angles in
+!! degrees).
+!! Like hgrid_ak_rx, return the grid points' cartesians xc and Jacobian
+!! matrices, xcd. Garea, the area of each grid cell, is also
+!! returned as in hgrid_ak_rx, and a failure flag, ff, raised when a failure
+!! occurs anywhere in these calculations.
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param pdlat latitude define centered mapping
+!! @param pdlon longitude define centered mapping
+!! @param lx x grid index for left-lower corner of the grid at center
+!! @param ly y grid index for left-lower corner of the grid at center
+!! @param nx numbers of the grid spaces in x
+!! @param ny numbers of the grid spaces in y
+!! @param delx central x-spacing grid point
+!! @param dely central y-spacing grid point
+!! @param xc grid points' cartesians
+!! @param xcd Jacobian matrices
+!! @param garea Jacobian matrices
+!! @param ff failure flag
 subroutine hgrid_ak_dc(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, & !    [hgrid_ak_dc]
      delx,dely, xc,xcd,garea, ff)
-!=============================================================================
-! Use a and k as the parameters of an Extended Schmidt-transformed
-! Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this 
-! center by an azimuth angle of pdazi counterclockwise (these angles in 
-! degrees).
-! Like hgrid_ak_rx, return the grid points' cartesians xc and Jacobian 
-! matrices, xcd. Garea, the area of each grid cell, is also
-! returned as in hgrid_ak_rx, and a failure flag, ff, raised when a failure
-! occurs anywhere in these calculations.
-!============================================================================
 implicit none
 integer(spi),intent(in ):: lx,ly,nx,ny
 real(dp),    intent(in ):: A,K,pdlat,pdlon,pdazi,delx,dely
@@ -1530,9 +1566,7 @@ real(dp),dimension(3,  lx:lx+nx  ,ly:ly+ny  ),intent(out):: xc
 real(dp),dimension(3,2,lx:lx+nx  ,ly:ly+ny  ),intent(out):: xcd
 real(dp),dimension(    lx:lx+nx-1,ly:ly+ny-1),intent(out):: garea
 logical,                                      intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: plat,plon,pazi
-!=============================================================================
 plat=pdlat*dtor
 plon=pdlon*dtor
 pazi=pdazi*dtor
@@ -1540,16 +1574,26 @@ call hgrid_ak_rc(lx,ly,nx,ny,A,K,plat,plon,pazi, &
     delx,dely,   xc,xcd,garea, ff)
 end subroutine hgrid_ak_dc
 
-!=============================================================================
+!> Like hgrid_ak_rr_c except the argument list includes the earth radius, re,
+!! and this is used to express the map-space grid increments in the dimensional
+!! units, delxre, delyre on entry, and to express the grid cell areas, garea,
+!! in dimensional units upon return.
+!! The gridded lats and lons, glat and glon, remain in radians.
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param pdlat latitude define centered mapping
+!! @param pdlon longitude define centered mapping
+!! @param lx x grid index for left-lower corner of the grid at center
+!! @param ly y grid index for left-lower corner of the grid at center
+!! @param nx numbers of the grid spaces in x
+!! @param ny numbers of the grid spaces in y
+!! @param re earth radius
+!! @param delxre map-space grid increments in the dimensional units
+!! @param delyre map-space grid increments in the dimensional units
+!! @param ff failure flag
 subroutine hgrid_ak(lx,ly,nx,ny,a,k,plat,plon,pazi, & !             [hgrid_ak]
      re,delxre,delyre,  glat,glon,garea, ff)
-!=============================================================================
-! Like hgrid_ak_rr_c except the argument list includes the earth radius, re,
-! and this is used to express the map-space grid increments in the dimensional
-! units, delxre, delyre on entry, and to express the grid cell areas, garea,
-! in dimensional units upon return.
-! The gridded lats and lons, glat and glon, remain in radians.
-!============================================================================
 implicit none
 integer(spi),                             intent(in ):: lx,ly,nx,ny
 real(dp),                                 intent(in ):: a,k,plat,plon,pazi, &
@@ -1557,9 +1601,7 @@ real(dp),                                 intent(in ):: a,k,plat,plon,pazi, &
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny  ),intent(out):: glat,glon
 real(dp),dimension(lx:lx+nx-1,ly:ly+ny-1),intent(out):: garea
 logical,                                  intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: delx,dely,rere
-!=============================================================================
 delx=delxre/re ! <- set nondimensional grid step delx
 dely=delyre/re ! <- set nondimensional grid step dely
 call hgrid_ak_rr(lx,ly,nx,ny,a,k,plat,plon,pazi, &
@@ -1569,20 +1611,32 @@ rere=re*re
 garea=garea*rere ! <- Convert from steradians to physical area units.
 end subroutine hgrid_ak
 
-!=============================================================================
+!> Like hgrid_ak_rr_c except the argument list includes the earth radius, re,
+!! and this is used to express the map-space grid increments in the dimensional
+!! units, delxre, delyre on entry, and to express the grid cell areas, garea,
+!! and the x- and y- grid steps, dx and dy, in dimensional units upon return.
+!! The gridded lats and lons, glat and glon, remain in radians.
+!! Also, in order for the argument list to remain compatible with an earlier
+!! version of this routine, the relative rotations of the steps, dangle_dx
+!! and dangle_dy, are returned as degrees instead of radians (all other angles
+!! in the argument list, i.e., plat,plon,pazi,glat,glon, remain radians).
+!! @author R. J. Purser
+!! @param a Extended Schmidt Gnomonic parameter
+!! @param k Extended Schmidt Gnomonic parameter
+!! @param plat latitude define centered mapping
+!! @param plon longitude define centered mapping
+!! @param re earth radius
+!! @param delxre map-space grid increments in the dimensional units
+!! @param delyre map-space grid increments in the dimensional units
+!! @param garea grid cell areas
+!! @param dx x- grid steps
+!! @param dy y- grid steps
+!! @param glat gridded lats
+!! @param glon gridded lons
+!! @param dangle_dx x rotations of the steps
+!! @param dangle_dy y rotations of the steps
 subroutine hgrid_ak_c(lx,ly,nx,ny,a,k,plat,plon,pazi, & !           [hgrid_ak]
      re,delxre,delyre,  glat,glon,garea,dx,dy,dangle_dx,dangle_dy, ff)
-!=============================================================================
-! Like hgrid_ak_rr_c except the argument list includes the earth radius, re,
-! and this is used to express the map-space grid increments in the dimensional
-! units, delxre, delyre on entry, and to express the grid cell areas, garea,
-! and the x- and y- grid steps, dx and dy, in dimensional units upon return.
-! The gridded lats and lons, glat and glon, remain in radians.
-! Also, in order for the argument list to remain compatible with an earlier
-! version of this routine, the relative rotations of the steps, dangle_dx
-! and dangle_dy, are returned as degrees instead of radians (all other angles
-! in the argument list, i.e., plat,plon,pazi,glat,glon, remain radians).
-!=============================================================================
 implicit none
 integer(spi),                             intent(in ):: lx,ly,nx,ny
 real(dp),                                 intent(in ):: a,k,plat,plon,pazi, &
@@ -1593,9 +1647,7 @@ real(dp),dimension(lx:lx+nx-1,ly:ly+ny  ),intent(out):: dx
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny-1),intent(out):: dy
 real(dp),dimension(lx:lx+nx  ,ly:ly+ny  ),intent(out):: dangle_dx,dangle_dy
 logical,                                  intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: delx,dely,rere
-!=============================================================================
 delx=delxre/re ! <- set nondimensional grid step delx
 dely=delyre/re ! <- set nondimensional grid step dely
 call hgrid_ak_rr_c(lx,ly,nx,ny,a,k,plat,plon,pazi, &
@@ -1609,22 +1661,20 @@ dangle_dx=dangle_dx*rtod ! <-Convert from radians to degrees
 dangle_dy=dangle_dy*rtod ! <-Convert from radians to degrees
 end subroutine hgrid_ak_c
 
-!=============================================================================
+!> This Gauss-Legendre quadrature integrates exactly any even polynomial
+!! up to degree m*4-2 in the half-interval [0,1]. This code is liberally
+!! adapted from the algorithm given in Press et al., Numerical Recipes.
+!! @param m number of nodes in half-interval
+!! @param x nodes and weights
+!! @param w nodes and weights
 subroutine gaulegh(m,x,w)!                                           [gaulegh]
-!=============================================================================
-! This Gauss-Legendre quadrature integrates exactly any even polynomial
-! up to degree m*4-2 in the half-interval [0,1]. This code is liberally
-! adapted from the algorithm given in Press et al., Numerical Recipes.
-!=============================================================================
 implicit none
 integer(spi),         intent(IN ):: m   ! <- number of nodes in half-interval 
 real(dp),dimension(m),intent(OUT):: x,w ! <- nodes and weights
-!-----------------------------------------------------------------------------
 integer(spi),parameter:: nit=8
 real(dp),    parameter:: eps=3.e-14_dp
 integer(spi)          :: i,ic,j,jm,it,m2,m4p,m4p3
 real(dp)              :: z,zzm,p1,p2,p3,pp,z1
-!=============================================================================
 m2=m*2; m4p=m*4+1; m4p3=m4p+2
 do i=1,m; ic=m4p3-4*i
    z=cos(pih*ic/m4p); zzm=z*z-u1
@@ -1638,14 +1688,19 @@ do i=1,m; ic=m4p3-4*i
 enddo
 end subroutine gaulegh
 
-!=============================================================================
+!> Given the map specification (angles in radians), the grid spacing (in
+!! map-space units) and the sample lat-lon (in radian), return the the
+!! image in map space in a 2-vector in grid units. If the transformation
+!! is invalid, return a .true. failure flag.
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param plat latitude define centered mapping
+!! @param plon longitude define centered mapping
+!! @param lat radian latitude
+!! @param lon radian longitude
+!! @param ff failure flag
 subroutine gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff)!      [gtoxm_ak_rr]
-!=============================================================================
-! Given the map specification (angles in radians), the grid spacing (in
-! map-space units) and the sample lat-lon (in radian), return the the
-! image in map space in a 2-vector in grid units. If the transformation
-! is invalid, return a .true. failure flag.
-!=============================================================================
 use pmat5, only: grtoc
 implicit none
 real(dp),             intent(in ):: a,k,plat,plon,pazi,lat,lon
@@ -1654,7 +1709,6 @@ logical,              intent(out):: ff
 real(dp),dimension(3,3):: prot,azirot
 real(dp)               :: clat,slat,clon,slon,cazi,sazi
 real(dp),dimension(3)  :: xc
-!=============================================================================
 clat=cos(plat); slat=sin(plat)
 clon=cos(plon); slon=sin(plon)
 cazi=cos(pazi); sazi=sin(pazi)
@@ -1672,37 +1726,47 @@ call grtoc(lat,lon,xc)
 xc=matmul(transpose(prot),xc)
 call xctoxm_ak(a,k,xc,xm,ff)
 end subroutine gtoxm_ak_rr_m
-!=============================================================================
+
+!> Given the map specification (angles in radians), the grid spacing (in
+!! map-space units) and the sample lat-lon (in radian), return the the
+!! image in map space in a 2-vector in grid units. If the transformation
+!! is invalid, return a .true. failure flag.
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param plat latitude define centered mapping
+!! @param plon longitude define centered mapping
+!! @param delx central x-spacing grid point
+!! @param dely central y-spacing grid point
+!! @param lat radian latitude
+!! @param lon radian longitude
+!! @param ff failure flag
 subroutine gtoxm_ak_rr_g(A,K,plat,plon,pazi,delx,dely,lat,lon,&! [gtoxm_ak_rr]
      xm,ff)
-!=============================================================================
-! Given the map specification (angles in radians), the grid spacing (in
-! map-space units) and the sample lat-lon (in radian), return the the
-! image in map space in a 2-vector in grid units. If the transformation
-! is invalid, return a .true. failure flag.
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: a,k,plat,plon,pazi,delx,dely,lat,lon
 real(dp),dimension(2),intent(out):: xm
 logical,              intent(out):: ff
-!=============================================================================
 call gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff); if(ff)return
 xm(1)=xm(1)/delx; xm(2)=xm(2)/dely
 end subroutine gtoxm_ak_rr_g
 
-!=============================================================================
+!> Like gtoxm_ak_rr_m, except input angles are expressed in degrees
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param pdlat latitude define centered mapping
+!! @param pdlon longitude define centered mapping
+!! @param dlat radian latitude
+!! @param dlon radian longitude
+!! @param ff failure flag
 subroutine gtoxm_ak_dd_m(A,K,pdlat,pdlon,pdazi,dlat,dlon,&!      [gtoxm_ak_dd]
      xm,ff)
-!=============================================================================
-! Like gtoxm_ak_rr_m, except input angles are expressed in degrees
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: a,k,pdlat,pdlon,pdazi,dlat,dlon
 real(dp),dimension(2),intent(out):: xm
 logical,              intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: plat,plon,pazi,lat,lon
-!=============================================================================
 plat=pdlat*dtor ! Convert these angles from degrees to radians
 plon=pdlon*dtor !
 pazi=pdazi*dtor !
@@ -1710,19 +1774,23 @@ lat=dlat*dtor
 lon=dlon*dtor
 call gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff)
 end subroutine gtoxm_ak_dd_m
-!=============================================================================
+
+!> Like gtoxm_ak_rr_g, except input angles are expressed in degrees
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param pdlat latitude define centered mapping
+!! @param pdlon longitude define centered mapping
+!! @param delx central x-spacing grid point
+!! @param dely central y-spacing grid point
+!! @param ff failure flag
 subroutine gtoxm_ak_dd_g(A,K,pdlat,pdlon,pdazi,delx,dely,&!      [gtoxm_ak_dd]
 dlat,dlon,     xm,ff)
-!=============================================================================
-! Like gtoxm_ak_rr_g, except input angles are expressed in degrees
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: a,k,pdlat,pdlon,pdazi,delx,dely,dlat,dlon
 real(dp),dimension(2),intent(out):: xm
 logical,              intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: plat,plon,pazi,lat,lon
-!=============================================================================
 plat=pdlat*dtor ! Convert these angles from degrees to radians
 plon=pdlon*dtor !
 pazi=pdazi*dtor !
@@ -1731,27 +1799,30 @@ lon=dlon*dtor
 call gtoxm_ak_rr_g(A,K,plat,plon,pazi,delx,dely,lat,lon,xm,ff)
 end subroutine gtoxm_ak_dd_g
 
-!=============================================================================
+!> Given the ESG map specified by parameters (A,K) and geographical
+!! orientation, plat,plon,pazi (radians), and a position, in map-space
+!! coordinates given by the 2-vector, xm, return the geographical
+!! coordinates, lat and lon (radians). If the transformation is invalid for
+!! any reason, return instead with a raised failure flag, FF= .true.
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param plat latitude of geographical orientation
+!! @param plon longitude of geographical orientation
+!! @param lat latitude of geographical coordinates
+!! @param lon longitude of geographical coordinates
+!! @param ff failure flag
 subroutine xmtog_ak_rr_m(A,K,plat,plon,pazi,xm,lat,lon,ff)!      [xmtog_ak_rr]
-!=============================================================================
-! Given the ESG map specified by parameters (A,K) and geographical
-! orientation, plat,plon,pazi (radians), and a position, in map-space
-! coordinates given by the 2-vector, xm, return the geographical
-! coordinates, lat and lon (radians). If the transformation is invalid for
-! any reason, return instead with a raised failure flag, FF= .true.
-!=============================================================================
 use pmat5, only: ctogr
 implicit none
 real(dp),             intent(in ):: a,k,plat,plon,pazi
 real(dp),dimension(2),intent(in ):: xm
 real(dp),             intent(out):: lat,lon
 logical,              intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(3,2):: xcd
 real(dp),dimension(3,3):: prot,azirot
 real(dp)               :: clat,slat,clon,slon,cazi,sazi
 real(dp),dimension(3)  :: xc
-!=============================================================================
 clat=cos(plat); slat=sin(plat)
 clon=cos(plon); slon=sin(plon)
 cazi=cos(pazi); sazi=sin(pazi)
@@ -1768,43 +1839,51 @@ call xmtoxc_ak(a,k,xm,xc,xcd,ff); if(ff)return
 xc=matmul(prot,xc)
 call ctogr(xc,lat,lon)
 end subroutine xmtog_ak_rr_m
-!=============================================================================
+
+!> For an ESG map with parameters, (A,K), and geographical orientation,
+!! given by plon,plat,pazi (radians), and given a point in grid-space units
+!! as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians)
+!! of this point. If instead the transformation is invalid for any reason, then
+!! return the raised failure flag, FF=.true.
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param plon longitude geographical orientation
+!! @param plat latitude geographical orientation
+!! @param xm grid-space units as the 2-vector
+!! @param lat latitude geographical coordinates
+!! @param lon longitude geographical coordinates
+!! @param delx central x-spacing grid point
+!! @param dely central y-spacing grid point
+!! @param ff failure flag
 subroutine xmtog_ak_rr_g(A,K,plat,plon,pazi,delx,dely,xm,&!      [xmtog_ak_rr]
      lat,lon,ff)
-!=============================================================================
-! For an ESG map with parameters, (A,K), and geographical orientation,
-! given by plon,plat,pazi (radians), and given a point in grid-space units
-! as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians)
-! of this point. If instead the transformation is invalid for any reason, then
-! return the raised failure flag, FF=.true.
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: a,k,plat,plon,pazi,delx,dely
 real(dp),dimension(2),intent(in ):: xm
 real(dp),             intent(out):: lat,lon
 logical,              intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(2):: xmt
-!=============================================================================
 xmt(1)=xm(1)*delx ! Convert from grid units to intrinsic map-space units
 xmt(2)=xm(2)*dely !
 call xmtog_ak_rr_m(A,K,plat,plon,pazi,xmt,lat,lon,ff)
 end subroutine xmtog_ak_rr_g
 
-!=============================================================================
+!> Like xmtog_ak_rr_m, except angles are expressed in degrees
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param plat latitude of geographical orientation
+!! @param plon longitude of geographical orientation
+!! @param ff failure flag
 subroutine xmtog_ak_dd_m(A,K,pdlat,pdlon,pdazi,xm,dlat,dlon,ff)! [xmtog_ak_dd]
-!=============================================================================
-! Like xmtog_ak_rr_m, except angles are expressed in degrees
-!=============================================================================
 use pmat5, only: ctogr
 implicit none
 real(dp),             intent(in ):: a,k,pdlat,pdlon,pdazi
 real(dp),dimension(2),intent(in ):: xm
 real(dp),             intent(out):: dlat,dlon
 logical,              intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp):: plat,plon,pazi,lat,lon
-!=============================================================================
 plat=pdlat*dtor ! Convert these angles from degrees to radians
 plon=pdlon*dtor !
 pazi=pdazi*dtor !
@@ -1812,21 +1891,28 @@ call xmtog_ak_rr_m(A,K,plat,plon,pazi,xm,lat,lon,ff)
 dlat=lat*rtod
 dlon=lon*rtod
 end subroutine xmtog_ak_dd_m
-!=============================================================================
+
+!> Like xmtog_ak_rr_g, except angles are expressed in degrees
+!! @author R. J. Purser
+!! @param a parameters of an ESG mapping
+!! @param k parameters of an ESG mapping
+!! @param pdlat latitude define centered mapping
+!! @param pdlon longitude define centered mapping
+!! @param dlat latitude radians angle
+!! @param dlon longitude radians angle
+!! @param xm grid-space
+!! @param delx central x-spacing grid point
+!! @param dely central y-spacing grid point
+!! @param ff failure flag
 subroutine xmtog_ak_dd_g(A,K,pdlat,pdlon,pdazi,delx,dely,xm,&!   [xmtog_ak_dd]
      dlat,dlon,ff)
-!=============================================================================
-! Like xmtog_ak_rr_g, except angles are expressed in degrees
-!=============================================================================
 implicit none
 real(dp),             intent(in ):: a,k,pdlat,pdlon,pdazi,delx,dely
 real(dp),dimension(2),intent(in ):: xm
 real(dp),             intent(out):: dlat,dlon
 logical,              intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(2):: xmt
 real(dp)             :: plat,plon,pazi,lat,lon
-!=============================================================================
 xmt(1)=xm(1)*delx ! Convert from grid units to intrinsic map-space units
 xmt(2)=xm(2)*dely !
 plat=pdlat*dtor ! Convert these angles from degrees to radians
