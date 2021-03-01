@@ -1,6 +1,7 @@
 !> @file
-!! @brief ???
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @brief Contains utility routines that read and write data.
+!! 
+!! @author Xu Li, Hang Lei, George Gayno
 
 !> ???
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
@@ -50,7 +51,7 @@ MODULE READ_WRITE_DATA
  CONTAINS
 
    !> Write out all surface records - and nsst records if selected -
-   !! to a netcdf file.  
+   !! on a single cubed-sphere tile to a model restart file (in netcdf).
    !! 
    !! @note The model restart files contain an additional snow field -
    !! snow cover (snocvr). That field is required for bit identical
@@ -58,44 +59,48 @@ MODULE READ_WRITE_DATA
    !! compute it as an initialization step. Because this program does not
    !! contain the snow cover algorithm, it will let the model compute it.
    !!
-   !! @param[in] slifcs
-   !! @param[in] tsffcs
-   !! @param[in] snofcs
-   !! @param[in] tg3fcs
-   !! @param[in] zorfcs
-   !! @param[in] albfcs
-   !! @param[in] alffcs
-   !! @param[in] vegfcs
-   !! @param[in] cnpfcs
-   !! @param[in] f10m
-   !! @param[in] t2m
-   !! @param[in] q2m
-   !! @param[in] vetfcs
-   !! @param[in] sotfcs
-   !! @param[in] ustar
-   !! @param[in] fmm
-   !! @param[in] fhh
-   !! @param[in] sicfcs
-   !! @param[in] sihfcs
-   !! @param[in] sitfcs
-   !! @param[in] tprcp
-   !! @param[in] srflag
-   !! @param[in] swdfcs
-   !! @param[in] vmnfcs
-   !! @param[in] vmxfcs
-   !! @param[in] slpfcs
-   !! @param[in] absfcs
-   !! @param[in] slcfcs
-   !! @param[in] smcfcs
-   !! @param[in] stcfcs
-   !! @param[in] idim
-   !! @param[in] jdim
-   !! @param[in] lensfc
-   !! @param[in] lsoil
-   !! @param[in] do_nsst
-   !! @param[in] nsst
+   !! @param[in] slifcs Land-sea mask.
+   !! @param[in] tsffcs Skin temperature.
+   !! @param[in] snofcs Liquid-equivalent snow depth.
+   !! @param[in] tg3fcs Soil substrate temperature.
+   !! @param[in] zorfcs Roughness length.
+   !! @param[in] albfcs Snow-free albedo.
+   !! @param[in] alffcs Fractional coverage for strong/weak zenith angle
+   !! dependent albedo.
+   !! @param[in] vegfcs Vegetation greenness.
+   !! @param[in] cnpfcs Plant canopy moisture content.
+   !! @param[in] f10m log((z0+10)/z0). See model routine sfc_diff.f for
+   !! details.
+   !! @param[in] t2m Two-meter air temperature.
+   !! @param[in] q2m Two-meter specific humidity.
+   !! @param[in] vetfcs Vegetation type.
+   !! @param[in] sotfcs Soil type.
+   !! @param[in] ustar Friction velocity.
+   !! @param[in] fmm log((z0+z1)/z0). See model routine sfc_diff.f for
+   !! details.
+   !! @param[in] fhh log(ztmax+z1)/ztmax).  See model routine sfc_diff.f for
+   !! details.
+   !! @param[in] sicfcs Sea ice concentraton.
+   !! @param[in] sihfcs Sea ice depth.
+   !! @param[in] sitfcs Sea ice temperature.
+   !! @param[in] tprcp Precipitation.
+   !! @param[in] srflag Snow/rain flag.
+   !! @param[in] swdfcs Physical snow depth.
+   !! @param[in] vmnfcs Minimum vegetation greenness.
+   !! @param[in] vmxfcs Maximum vegetation greenness.
+   !! @param[in] slpfcs Slope type.
+   !! @param[in] absfcs Maximum snow albedo.
+   !! @param[in] slcfcs Liquid portion of volumetric soil moisture.
+   !! @param[in] smcfcs Total volumetric soil moisture.
+   !! @param[in] stcfcs Soil temperature.
+   !! @param[in] idim 'i' dimension of a tile.
+   !! @param[in] jdim 'j' dimension of a tile.
+   !! @param[in] lensfc Total number of points on a tile.
+   !! @param[in] lsoil Number of soil layers.
+   !! @param[in] do_nsst When true, nsst fields were processed.
+   !! @param[in] nsst Data structure containing nsst fields.
    !!
-   !! @author M. Iredell, xuli, Hang Lei, George Gayno
+   !! @author George Gayno
  subroutine write_data(slifcs,tsffcs,snofcs,tg3fcs,zorfcs, &
                        albfcs,alffcs,vegfcs,cnpfcs,f10m, &
                        t2m,q2m,vetfcs,sotfcs,ustar,fmm,fhh, &
@@ -886,19 +891,19 @@ MODULE READ_WRITE_DATA
 
  end subroutine write_data
 
- !> Read latitude, longitude, filtered orography, and
- !! unfiltered orography for the cubed-sphere tile from
- !! the "grid" file.
+ !> Read latitude and longitude for the cubed-sphere tile from the
+ !! 'grid' file.  Read the filtered and unfiltered orography from
+ !! 'orography' file.
  !!
- !! @param[in] RLA
- !! @param[in] RLO
- !! @param[in] OROG
- !! @param[in] OROG_UF
- !! @param[in] TILE_NUM
- !! @param[in] IDIM
- !! @param[in] JDIM
- !! @param[in] IJDIM
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[in] IDIM 'i' dimension of cubed-sphere tile.
+ !! @param[in] JDIM 'j' dimension of cubed-sphere tile.
+ !! @param[in] IJDIM Total number of points on the cubed-sphere tile.
+ !! @param[out] RLA Latitude on the cubed-sphere tile.
+ !! @param[out] RLO Longitude on the cubed-sphere tile.
+ !! @param[out] OROG Filtered orography.
+ !! @param[out] OROG_UF Unfiltered orography.
+ !! @param[out] TILE_NUM Cubed-sphere tile number
+ !! @author George Gayno
  SUBROUTINE READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,&
                               TILE_NUM,IDIM,JDIM,IJDIM)
 
