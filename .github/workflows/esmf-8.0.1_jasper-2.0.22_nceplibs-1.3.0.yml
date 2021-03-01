@@ -125,9 +125,4 @@ jobs:
         cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs' -DENABLE_DOCS=On
         make -j2
         make test
-
-
-    
         
-   
-
