@@ -83,7 +83,7 @@
 !!  -2017-08-08:  Gayno     Modify to work on cubed-sphere grid.
 !!                         Added processing of NSST and TREF update.
 !!                         Added mpi directives.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author M. Iredell, George Gayno
  PROGRAM SFC_DRV
 
  use mpi
@@ -172,29 +172,34 @@
 
  END PROGRAM SFC_DRV
 
- !> ???
+ !> Driver routine for updating the surface fields.
  !!
- !! @param[in] LUGB
- !! @param[in] IDIM
- !! @param[in] JDIM
- !! @param[in] LENSFC
- !! @param[in] LSOIL
- !! @param[in] DELTSFC
- !! @param[in] IY
- !! @param[in] IM
- !! @param[in] ID
- !! @param[in] IH
- !! @param[in] FH
- !! @param[in] IALB
- !! @param[in] USE_UFO
- !! @param[in] DO_NSST
- !! @param[in] ADJT_NST_ONLY
- !! @param[in] ZSEA1
- !! @param[in] ZSEA2
- !! @param[in] ISOT
- !! @param[in] IVEGSRC
- !! @param[in] MYRANK
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[in] LUGB Fortran unit number uses in sfccycle subprogram to
+ !!            read input datasets.
+ !! @param[in] IDIM 'i' dimension of the cubed-sphere tile
+ !! @param[in] JDIM 'j' dimension of the cubed-sphere tile
+ !! @param[in] LENSFC Total numberof points for the cubed-sphere tile
+ !! @param[in] LSOIL Number of soil layers
+ !! @param[in] DELTSFC Cycling frequency in hours
+ !! @param[in] IY Year of initial state
+ !! @param[in] IM Month of initial state
+ !! @param[in] ID Day of initial state
+ !! @param[in] IH Hour of initial state
+ !! @param[in] FH Forecast hour
+ !! @param[in] IALB Use modis albedo when '1'. Use brigleb when '0'.
+ !! @param[in] USE_UFO When true, adjust SST and soil temperature for
+ !!            differences between the filtered and unfiltered terrain.
+ !! @param[in] DO_NSST When true, process NSST records.
+ !! @param[in] ADJT_NST_ONLY When true, only do the NSST update (don't
+ !!            call sfcsub component.
+ !! @param[in] ZSEA1 When running NSST model, this is the lower bound
+ !!            of depth of sea temperature.  In whole mm.
+ !! @param[in] ZSEA2 When running NSST model, this is the upper bound
+ !!            of depth of sea temperature.  In whole mm.
+ !! @param[in] ISOT Use STATSGO soil type when '1'.  Use Zobler when '0'.
+ !! @param[in] IVEGSRC Use IGBP vegetation type when '1'.  Use SIB when '2'.
+ !! @param[in] MYRANK MPI rank number
+ !! @author M. Iredell, George Gayno
  SUBROUTINE SFCDRV(LUGB, IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
                    IY,IM,ID,IH,FH,IALB,                  &
                    USE_UFO,DO_NSST,ADJT_NST_ONLY,        &
