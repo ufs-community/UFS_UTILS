@@ -121,7 +121,7 @@ end subroutine invsym2
 !> Get the inverse, z,of a 2*2 symmetric matrix, em, and its derivative, zd,
 !! with respect to symmetric variations of its components. I.e., for a
 !! symmetric infinitesimal change, delta_em, in em, the resulting
-!1 infinitesimal change in z would be:
+!! infinitesimal change in z would be:
 !! delta_z(i,j) = matmul(zd(i,j,:,:),delta_em)
 !! @author R. J. Purser
 !! @param z inverse of a 2*2 symmetric matrix
