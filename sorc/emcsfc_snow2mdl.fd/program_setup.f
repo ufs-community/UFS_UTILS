@@ -76,40 +76,27 @@
 
  contains
 
+!>   read namelist controls
+!!   @author George Gayno   org: w/np2   @date  2005-Dec-16
+!!
+!! @note     this subroutine reads the program's configuration namelist
+!!   that contains the the paths/filenames for input and output, and
+!!   other program control flags.
+!!
+!! program history log:
+!! 2005-dec-16  gayno    - initial version
+!! 2008-feb-01  gayno    - added read of autosnow path/file
+!! 2014-sep-30  gayno    - added read of 'output_grib2' flag.
+!!
+!! files:
+!!   input:
+!!      - program configuration namelist, fort.41
+!!
+!! condition codes:  all fatal
+!!   77 - bad open on configuration namelist
+!!   78 - bad read on configuration namelist
+!!
  subroutine read_config_nml
-!$$$  subprogram documentation block
-!                .      .    .                                       .
-! subprogram:    read_config_nml
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract: this subroutine reads the program's configuration namelist
-!   that contains the the paths/filenames for input and output, and
-!   other program control flags.
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-! 2008-feb-01  gayno    - added read of autosnow path/file
-! 2014-sep-30  gayno    - added read of 'output_grib2' flag.
-!
-! usage: call read_config_nml
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files:
-!   input:
-!      - program configuration namelist, fort.41
-!
-!   output: none
-!
-! condition codes:  all fatal
-!   77 - bad open on configuration namelist
-!   78 - bad read on configuration namelist
-!
-! remarks: none.
-!
-!$$$
 
  implicit none
 
