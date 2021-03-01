@@ -1,7 +1,8 @@
 !> @file
 !! @brief Process surface and nst fields.
-!!
-!! Process surface and nst fields. Interpolates fields from the input
+!! @author George Gayno NCEP/EMC
+
+!> Process surface and nst fields. Interpolates fields from the input
 !! to target grids. Adjusts soil temperature according to differences
 !! in input and target grid terrain. Rescales soil moisture for soil
 !! type differences between input and target grid. Computes frozen
@@ -11,7 +12,7 @@
 !! associated with the target grid. "input" indicates field associated
 !! with the input grid.
 !!
-!! @author gayno NCEP/EMC
+!! @author George Gayno NCEP/EMC
  module surface
 
  use esmf
@@ -20,8 +21,11 @@
 
  private
 
-! noah land ice option is applied at these vegetation types.
  integer, parameter                 :: veg_type_landice_target = 15
+                                       !< Vegetation type category that
+                                       !< defines permanent land ice points.
+                                       !< The Noah LSM land ice physics
+                                       !< are applied at these points.
 
 ! surface fields (not including nst)
  type(esmf_field), public           :: canopy_mc_target_grid
@@ -133,10 +137,11 @@
 
  contains
 
-!> @brief  Driver routine to process surface/nst data
+!> Driver routine to process surface/nst data
 !!
-!! @author gayno NCEP/EMC
+!! @param[in] localpet  ESMF local persistent execution thread
 !!
+!! @author George Gayno NCEP/EMC
  subroutine surface_driver(localpet)
 
  use input_data, only                : cleanup_input_sfc_data, &
@@ -291,6 +296,8 @@
  end subroutine surface_driver
 
 !> Horizontally interpolate surface fields using esmf routines.
+!!
+!! @param[in] localpet  ESMF local persistent execution thread
 !!
 !! @author George Gayno NOAA/EMC
  subroutine interp(localpet)
@@ -3659,6 +3666,9 @@ end subroutine replace_land_sfcparams
  end subroutine adjust_soil_levels
 
 !> Set roughness length at land and sea ice.
+!! At land, roughness is set from a lookup table
+!! based on the vegetation type. At sea ice, roughness is
+!! set to 1 cm.
 !!
 !! @author George Gayno NOAA/EMC
  subroutine roughness
@@ -4765,6 +4775,10 @@ end subroutine replace_land_sfcparams
 
  end subroutine ij_to_i_j
 
+!> Free up memory once the target grid surface fields are
+!! no longer needed.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine cleanup_target_sfc_data
 
  implicit none
@@ -4797,6 +4811,10 @@ end subroutine replace_land_sfcparams
 
  end subroutine cleanup_target_sfc_data
 
+!> Free up memory once the target grid nst fields are
+!! no longer needed.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine cleanup_target_nst_data
 
  implicit none

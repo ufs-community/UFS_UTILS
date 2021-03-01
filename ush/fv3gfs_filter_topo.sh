@@ -59,8 +59,8 @@ fi
 
 cat > input.nml <<EOF
 &filter_topo_nml
-  grid_file = $mosaic_grid
-  topo_file = $topo_file
+  grid_file = "$mosaic_grid"
+  topo_file = "$topo_file"
   mask_field = "land_frac"
   regional = $regional 
   stretch_fac = $stretch

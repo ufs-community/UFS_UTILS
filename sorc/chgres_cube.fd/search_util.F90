@@ -1,7 +1,8 @@
 !> @file
 !! @brief Replace undefined surface values.
-!!
-!! Replace undefined values with a valid value.  This can
+!! @author George Gayno NCEP/EMC
+
+!> Replace undefined values with a valid value. This can
 !! happen for an isolated lake or island that is unresolved by
 !! the input grid.
 !!
