@@ -1,25 +1,27 @@
 !> @file
 !! @brief Read and qc afwa, nesdis/ims and autosnow snow data.
 !!
-!! @author gayno org: w/np2 @date 2005-dec-16
+!! @author gayno org: w/np2 @date 2005-dec-16 
 !!
+
+!> @module
+!! @brief Read and qc afwa, nesdis/ims and autosnow snow data.
 !! program history log:
 !! -  2005-dec-16  gayno   - initial version
-!! -  2007-aug-10  gayno   - allow program to run with no nesdis/ims data
-!!                          add 16th mesh afwa grib data
-!! -  2008-feb-04  gayno   - add autosnow cover data for sh.
-!! -  2009-jun-03  gayno   - add qc check for nesdis/ims and afwa data.
-!! -  2014-feb-07  gayno   - read nesdis/ims data in grib1 or grib 2
+!! -  2007-aug-10  gayno   - Allow program to run with no nesdis/ims data.
+!!                          Add 16th mesh afwa grib data.
+!! -  2008-feb-04  gayno   - Add autosnow cover data for sh.
+!! -  2009-jun-03  gayno   - Add qc check for nesdis/ims and afwa data.
+!! -  2014-feb-07  gayno   - Read nesdis/ims data in grib1 or grib 2
 !!                          format.
-!! -  2014-sep-30  gayno   - convert weekly nh snow climatology - used to 
+!! -  2014-sep-30  gayno   - Convert weekly nh snow climatology - used to 
 !!                          qc input data - to grib 2.
-!!
 !! variable definitions:
 !! -  afwa_res           - resolution of afwa data in km
 !! -  autosnow_res       - resolution of autosnow in km
-!! -  bad_afwa_Xh        - is afwa data corrupt?
-!! -  bad_nesdis         - is nesdis ims data corrupt?
-!! -  bitmap_afwa_Xh     - bitmap of afwa grid (false-non land, true-land)
+!! -  bad_afwa_Xh         !< is afwa data corrupt?
+!! -  bad_nesdis        !< is nesdis ims data corrupt?
+!! -  bitmap_afwa_Xh     !<  bitmap of afwa grid (false-non land, true-land)
 !! -  bitmap_nesdis      - bitmap of nesdis grid (false-non land, true-land)
 !! -  iafwa              - i-dimension of afwa grid
 !! -  jafwa              - j-dimension of afwa grid
@@ -55,36 +57,39 @@
  use model_grid, only     : imdl,                &
                             jmdl
 
- integer                 :: iafwa
- integer                 :: iautosnow
- integer                 :: inesdis 
- integer                 :: jafwa
- integer                 :: jautosnow
- integer                 :: jnesdis
- integer                 :: kgds_afwa_global(200)
+ integer                 :: iafwa  !< i-dimension of afwa grid
+ integer                 :: iautosnow  !< i-dimension of autosnow grid
+ integer                 :: inesdis   !< i-dimension of nesdis grid
+ integer                 :: jafwa  !< j-dimension of afwa grid
+ integer                 :: jautosnow  !< j-dimension of autosnow grid
+ integer                 :: jnesdis  !< j-dimension of nesdis grid
+ integer                 :: kgds_afwa_global(200) 
  integer                 :: kgds_afwa_nh(200)
  integer                 :: kgds_afwa_nh_8th(200)
  integer                 :: kgds_afwa_sh(200)
  integer                 :: kgds_afwa_sh_8th(200)
- integer                 :: kgds_autosnow(200)
- integer                 :: kgds_nesdis(200)
- integer                 :: mesh_nesdis
- integer*1, allocatable  :: sea_ice_nesdis(:,:)  
-
- logical                 :: bad_afwa_nh, bad_afwa_sh, bad_nesdis, bad_afwa_global
+ integer                 :: kgds_autosnow(200)  !< autosnow grid description section (grib section 2)
+ integer                 :: kgds_nesdis(200)  !< nesdis/ims grid description section (grib section 2)
+ integer                 :: mesh_nesdis !< nesdis/ims data is 96th mesh (or bediant)
+ integer*1, allocatable  :: sea_ice_nesdis(:,:) !< nesdis/ims sea ice flag (0-open water, 1-ice) 
+ logical                 :: bad_afwa_nh
+ logical                 :: bad_afwa_sh
+ logical                 :: bad_nesdis   !< is nesdis ims data corrupt?
+ logical                 ::  bad_afwa_global
  logical*1, allocatable  :: bitmap_afwa_global(:,:)
  logical*1, allocatable  :: bitmap_afwa_nh(:,:)
  logical*1, allocatable  :: bitmap_afwa_sh(:,:)
- logical*1, allocatable  :: bitmap_nesdis(:,:)
+ logical*1, allocatable  :: bitmap_nesdis(:,:) !< bitmap of nesdis grid (false-non land, true-land)
  logical*1, allocatable  :: bitmap_autosnow(:,:)
  logical                 :: use_nh_afwa, use_sh_afwa, use_global_afwa
- logical                 :: use_autosnow, use_nesdis
+ logical                 :: use_autosnow
+ logical                 ::  use_nesdis  !< true if nesdis/ims data to be used
 
- real                    :: autosnow_res  ! in km
- real                    :: afwa_res  ! in km
+ real                    :: autosnow_res  !< resolution of autosnow in km 
+ real                    :: afwa_res   !<  resolution of afwa data in km
  real                    :: nesdis_res
- real, allocatable       :: snow_cvr_nesdis(:,:)  
- real, allocatable       :: snow_cvr_autosnow(:,:)  
+ real, allocatable       :: snow_cvr_nesdis(:,:)   !< nesdis/ims snow cover flag (0-no, 100-yes)
+ real, allocatable       :: snow_cvr_autosnow(:,:)  !< autosnow snow cover flag (0-no, 100-yes)
  real, allocatable       :: snow_dep_afwa_global(:,:) 
  real, allocatable       :: snow_dep_afwa_nh(:,:) 
  real, allocatable       :: snow_dep_afwa_sh(:,:) 
@@ -96,41 +101,25 @@
                        9*0,255,180*0/
  data kgds_afwa_sh_8th/5,2*512,20826,-125000,8,-80000,2*47625,128, &
                        9*0,255,180*0/
-
  contains
-
+!>  Read autosnow snow cover.
+!!
+!! program history log:
+!! 2008-feb-04  gayno    - initial version
+!!
+!! files:
+!!   input:
+!!     - autosnow data, grib 2, unit=lugb
+!!
+!! condition codes:  all fatal
+!!   74 - bad open of autosnow file
+!!   75 - bad read of autosnow file
+!!
+!! @note    Autosnow data is available only for southern hemis.
+!!          Autosnow data is in grib 2.          
+!!
+!! @author  George Gayno   org: w/np2   @date  2008-Feb-04
  subroutine readautosnow
-!$$$  subprogram documentation block
-!
-! subprogram:    readautosnow
-!   prgmmr: gayno          org: w/np2     date: 2008-feb-04
-!
-! abstract:  read autosnow snow cover. 
-!
-! program history log:
-! 2008-feb-04  gayno    - initial version
-!
-! usage: call readautosnow
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files:
-!   input:
-!     - autosnow data, grib 2, unit=lugb
-!
-!   output: none
-!
-! condition codes:  all fatal
-!   74 - bad open of autosnow file
-!   75 - bad read of autosnow file
-!
-! remarks: autosnow data available only for southern hemis.
-!          autosnow data is in grib 2.          
-!
-!$$$
-
  use grib_mod  ! grib 2 libraries
 
  implicit none
@@ -208,49 +197,34 @@
 
  end subroutine readautosnow
 
+!> Read nesdis/ims snow cover/ice data.
+!!   
+!! program history log:
+!! 2005-dec-16  gayno    - initial version
+!! 2014-feb-07  gayno    - Read 4km ims data in either
+!!                         grib1 or grib 2 format.
+!! files:
+!!   input:
+!!      - ims snow cover and ice file, grib 1 or grib 2
+!!      - 16th-mesh ims land mask, binary
+!!
+!! condition codes: all fatal
+!!   41 - ims file not grib 1 or grib 2
+!!   53 - ims data failed quality check
+!!   70 - bad read of ims snow cover data
+!!   71 - bad read of ims ice data
+!!   72 - bad read of ims grib 1 header
+!!   73 - bad open of ims file
+!!   87 - bad open ims land mask file
+!!   88 - bad read ims land mask file
+!!   
+!! @note    Nesdis/ims data available only for n hemis.  Ims data used
+!!          to be created by nesdis,  hence the references to "nesdis"
+!!          in this routine.  Ims data is now created by the national
+!!          ice center.
+!!
+!! @author  George Gayno org: w/np2 @date 2005-Dec-16
  subroutine readnesdis
-!$$$  subprogram documentation block
-!
-! subprogram:    readnesdis
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract:  read nesdis/ims snow cover/ice data. 
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-! 2014-feb-07  gayno    - read 4km ims data in either
-!                         grib1 or grib 2 format.
-!
-! usage: call readnesdis
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files:
-!   input:
-!      - ims snow cover and ice file, grib 1 or grib 2
-!      - 16th-mesh ims land mask, binary
-!
-!   output: none
-!
-! condition codes: all fatal
-!   41 - ims file not grib 1 or grib 2
-!   53 - ims data failed quality check
-!   70 - bad read of ims snow cover data
-!   71 - bad read of ims ice data
-!   72 - bad read of ims grib 1 header
-!   73 - bad open of ims file
-!   87 - bad open ims land mask file
-!   88 - bad read ims land mask file
-!   
-! remarks: nesdis/ims data available only for n hemis.  ims data used
-!          to be created by nesdis.  hence the references to "nesdis"
-!          in this routine.  ims data is now created by the national
-!          ice center.
-!
-!$$$
-
  use grib_mod
 
  implicit none
@@ -538,41 +512,28 @@
 
  end subroutine readnesdis
 
+!>  Read snow depth data and masks.
+!!
+!! @note Read nh and sh afwa snow depth data and
+!!   land sea mask. 
+!!
+!! program history log:
+!!
+!! 2005-dec-16  gayno    - initial version
+!! 2007-nov-28  gayno    - read 16th mesh afwa data in grib format
+!!
+!! files:
+!!   input:
+!!     - global afwa data in grib 1 (if selected)
+!!     - nh afwa data in grib 1 (if selected)
+!!     - sh afwa data in grib 1 (if selected)
+!!
+!! condition codes:
+!!   60 - bad open afwa file
+!!   61 - bad degrib of afwa file
+!!
+!! @author  George Gayno org: w/np2 @date 2005-Dec-16
  subroutine readafwa
-!$$$  subprogram documentation block
-!
-! subprogram:    readafwa
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract:  read nh and sh afwa snow depth data and
-!   land sea mask. 
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-! 2007-nov-28  gayno    - read 16th mesh afwa data in grib format
-!
-! usage: call readafwa
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files:
-!   input:
-!     - global afwa data in grib 1 (if selected)
-!     - nh afwa data in grib 1 (if selected)
-!     - sh afwa data in grib 1 (if selected)
-!
-!   output: none
-!
-! condition codes:
-!   60 - bad open afwa file
-!   61 - bad degrib of afwa file
-!
-! remarks:  none
-!
-!$$$
-
  implicit none
 
  integer, parameter            :: iunit=11
@@ -866,46 +827,34 @@
 
  end subroutine readafwa 
 
+!>  Check for corrupt nh snow cover data.
+!!
+!! @note  Check for corrupt nh data by comparing it
+!!            to climatology.
+!!  
+!! program history log:
+!! 2009-jun-3   gayno    - initial version
+!! 2011-apr-26  gayno    - Perform gross check first,
+!!                         then check against climo.
+!! 2014-sep-30  gayno    - Weekly climo file converted
+!!                         to grib 2.
+!!
+!!    argument list:  
+!! @param[in]   kgds_dat a   Grib 1 grid description sect of data to be qcd.
+!! @param[in]   snow_data    Snow cover to be qcd.
+!! @param[in]   bitmap_data  bitmap of data to be qcd.
+!! @param[in]   idata        I dimension of data to be qcd.
+!! @param[in]   jdata        J dimension of data to be qcd.
+!! @param[in]   isrc         Flag indicating data source; 1- afwa depth, 2-ims cover.
+!!
+!! @param[out]   bad         When true, data failed check.
+!!
+!! files:
+!!   input:
+!!     - NH weekly climatological snow cover file (grib 2).
+!!
+!! @author  George Gayno org: w/np2 @date  2009-Jun-3
  subroutine nh_climo_check(kgds_data,snow_data,bitmap_data,idata,jdata,isrc,bad)
-!$$$  subprogram documentation block
-!
-! subprogram:    nh_climo_check
-!   prgmmr: gayno          org: w/np2     date: 2009-jun-3
-!
-! abstract:  check for corrupt nh data by comparing it
-!            to climatology
-!  
-! program history log:
-! 2009-jun-3   gayno    - initial version
-! 2011-apr-26  gayno    - perform gross check first,
-!                         then check against climo
-! 2014-sep-30  gayno    - weekly climo file converted
-!                         to grib 2.
-!
-! usage: call nh_climo_check
-!
-!   input argument list:  
-!     - kgds_data  - grib 1 grid description sect of data to be qcd
-!     - snow_data  - snow cover to be qcd
-!     - bitmap_data - bitmap of data to be qcd
-!     - i/jdata     - i/j dimension of data to be qcd
-!     - isrc        - flag indicating data source; 1-afwa depth, 2-ims cover
-!
-!   output argument list: 
-!     - bad - when true, data failed check
-!
-! files:
-!   input:
-!     - NH weekly climatological snow cover file (grib 2)
-!
-!   output: none
-!
-! condition codes: none
-!
-! remarks: none.
-!          
-!$$$
-
  use gdswzd_mod
 
  use program_setup, only    : climo_qc_file,  &
@@ -1173,31 +1122,16 @@
 
  end subroutine nh_climo_check
 
+!>   Check for corrupt afwa data.
+!!
+!! program history log:
+!! 2009-jun-3   gayno    - initial version
+!!
+!!  argument list
+!! @param[in]    hemi (1-nh, 2-sh)
+!! @author  George Gayno  org: w/np2 @date 2009-Jun-3
  subroutine afwa_check(hemi)
-!$$$  subprogram documentation block
-!
-! subprogram:    afwa_check
-!   prgmmr: gayno          org: w/np2     date: 2009-jun-3
-!
-! abstract:  check for corrupt afwa data
-!  
-! program history log:
-! 2009-jun-3   gayno    - initial version
-!
-! usage: call afwa_check(hemi)
-!
-!   input argument list:  hemi (1-nh, 2-sh)
-!
-!   output argument list: n/a
-!
-! files: none
-!
-! condition codes: none
-!
-! remarks: none.
-!
-!$$$
- use gdswzd_mod
+  use gdswzd_mod
 
  implicit none
 
@@ -1287,37 +1221,29 @@
 
  end subroutine afwa_check
 
+!>  Read afwa binary snow depth file.
+!!
+!! program history log:
+!! 2007-nov-28  gayno    - initial version
+!!
+!!   argument list:
+!! @param[in]  file_name - file name
+!!
+!! @param[out] snow_dep_afwa - snow depth in meters
+!!
+!! files:
+!!   input:
+!!     - nh/sh afwa data in simple binary format
+!!
+!! condition codes: all fatal
+!!   60 - bad open of afwa file
+!!   61 - bad read of afwa file
+!!
+!! @note    Read logic for binary data is  taken from hua-lu's code,
+!!          /nwprod/sorc/grib_snowgrib.fd.
+!!
+!! @author  George Gayno org: w/np2 @date  2007-Nov-28
  subroutine read_afwa_binary(file_name, snow_dep_afwa) 
-!$$$  subprogram documentation block
-!
-! subprogram:    read_afwa_binary
-!   prgmmr: gayno          org: w/np2     date: 2007-nov-28
-!
-! abstract:  read afwa binary snow depth file
-!  
-! program history log:
-! 2007-nov-28  gayno    - initial version
-!
-! usage: call grib_check(file_name, snow_dep_afwa)
-!
-!   input argument list:  file_name - file name
-!
-!   output argument list: snow_dep_afwa - snow depth in meters
-!
-! files:
-!   input:
-!     - nh/sh afwa data in simple binary format
-!
-!   output: none
-!
-! condition codes: all fatal
-!   60 - bad open of afwa file
-!   61 - bad read of afwa file
-!
-! remarks: read logic for binary data taken from hua-lu's code:
-!          /nwprod/sorc/grib_snowgrib.fd
-!
-!$$$
 
  implicit none
 
@@ -1386,37 +1312,25 @@
 
  end subroutine read_afwa_binary
 
+!> Read afwa land mask file to get a bitmap.
+!!  
+!! program history log:
+!! 2007-nov-28  gayno    - initial version
+!!
+!!   argument list:  
+!! @param[in]   file_name      land mask file name
+!! @param[out]  bitmap_afwa   .true. if land
+!!
+!! files:
+!!   input:
+!!    - afwa landmask in simple binary format
+!!
+!! condition codes: all fatal
+!!   62 - bad open of afwa landmask file
+!!   63 - bad read of afwa landmask file
+!!
+!! @author  George Gayno org: w/np2 @date 2007-Nov-28
  subroutine read_afwa_mask(file_name, bitmap_afwa)
-!$$$  subprogram documentation block
-!
-! subprogram:    read_afwa_mask
-!   prgmmr: gayno          org: w/np2     date: 2007-nov-28
-!
-! abstract:  read afwa land mask file to get a bitmap
-!  
-! program history log:
-! 2007-nov-28  gayno    - initial version
-!
-! usage: call read_afwa_mask(file_name, bitmap_afwa)
-!
-!   input argument list:  file_name - land mask file name
-!
-!   output argument list: bitmap_afwa - .true. if land
-!
-! files:
-!   input:
-!    - afwa landmask in simple binary format
-! 
-!   output: none
-!
-! condition codes: all fatal
-!   62 - bad open of afwa landmask file
-!   63 - bad read of afwa landmask file
-!
-! remarks: none.
-!
-!$$$
-
  implicit none
 
  character*(*), intent(in)         :: file_name
@@ -1469,5 +1383,6 @@
  deallocate (dummy4)
 
  end subroutine read_afwa_mask
+
 
  end module snowdat
