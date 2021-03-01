@@ -1,6 +1,8 @@
 !> @file
-!!
-!!  Stand alone surface/NSST cycle driver for the cubed-sphere grid.
+!! @brief Update surface and NSST fields
+!! @author Mark Iredell NCEP/EMC
+  
+!>  Stand alone surface/NSST cycle driver for the cubed-sphere grid.
 !!  Each cubed-sphere tile runs independently on its own mpi task.  
 !!  The surface update component runs with threads.  The NSST
 !!  update component in not threaded.
@@ -46,7 +48,7 @@
 !!  -fnbgso.$NNN        The updated sfc/nsst restart file.
 !!
 !!  NOTE: $NNN corresponds to (mpi rank + 1)
-
+!!
 !!  NAMELIST VARIABLE DEFINITIONS:
 !!
 !!  -IDIM,JDIM      i/j dimension of a cubed-sphere tile.
@@ -83,7 +85,8 @@
 !!  -2017-08-08:  Gayno     Modify to work on cubed-sphere grid.
 !!                         Added processing of NSST and TREF update.
 !!                         Added mpi directives.
-!! @author M. Iredell, George Gayno
+!! @author Mark Iredell
+!! @return 0 for success, error code otherwise.
  PROGRAM SFC_DRV
 
  use mpi
@@ -199,7 +202,7 @@
  !! @param[in] ISOT Use STATSGO soil type when '1'.  Use Zobler when '0'.
  !! @param[in] IVEGSRC Use IGBP vegetation type when '1'.  Use SIB when '2'.
  !! @param[in] MYRANK MPI rank number
- !! @author M. Iredell, George Gayno
+ !! @author Mark Iredell, George Gayno
  SUBROUTINE SFCDRV(LUGB, IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
                    IY,IM,ID,IH,FH,IALB,                  &
                    USE_UFO,DO_NSST,ADJT_NST_ONLY,        &
@@ -552,33 +555,37 @@
 
  END SUBROUTINE SFCDRV
  
- !> Read in gsi file with the updated tref increments (on the gaussian
+ !> Read in gsi file with the updated reference temperature increments (on the gaussian
  !! grid), interpolate increments to the cubed-sphere tile, and
  !! perform required nsst adjustments and qc.
  !!
- !! @param[in] RLA
- !! @param[in] RLO
- !! @param[in] SLMSK_TILE
- !! @param[in] SLMSK_FG_TILE
- !! @param[in] SKINT_TILE
- !! @param[in] SICET_TILE
- !! @param[in] sice_tile
- !! @param[in] SOILT_TILE
- !! @param[in] NSST
- !! @param[in] LENSFC
- !! @param[in] LSOIL
- !! @param[in] IDIM
- !! @param[in] JDIM
- !! @param[in] ZSEA1
- !! @param[in] ZSEA2
- !! @param[in] MON
- !! @param[in] DAY
- !! @param[in] DELTSFC
- !! @param[in] tf_clm_tile
- !! @param[in] tf_trd_tile
- !! @param[in] sal_clm_tile
+ !! @param[inout] RLA Latitude on the cubed-sphere tile
+ !! @param[inout] RLO Longitude on the cubed-sphere tile
+ !! @param[in] SLMSK_TILE Land-sea mask on the cubed-sphere tile
+ !! @param[in] SLMSK_FG_TILE First guess land-sea mask on the cubed-sphere tile
+ !! @param[inout] SKINT_TILE Skin temperature on the cubed-sphere tile
+ !! @param[inout] SICET_TILE Ice temperature on the cubed-sphere tile
+ !! @param[inout] sice_tile Ice concentration on the cubed-sphere tile
+ !! @param[inout] SOILT_TILE Soil temperature on the cubed-sphere tile
+ !! @param[in] NSST Data structure holding nsst fields
+ !! @param[in] LENSFC Number of points on a tile
+ !! @param[in] LSOIL Number of soil layers
+ !! @param[in] IDIM 'I' dimension of a tile
+ !! @param[in] JDIM 'J' dimension of a tile
+ !! @param[in] ZSEA1 When running nsst model, this is the lower bound of
+ !! depth of sea temperature. In whole mm.
+ !! @param[in] ZSEA2 When running nsst model, this is the upper bound of
+ !! depth of sea temperature. In whole mm.
+ !! @param[in] MON Month
+ !! @param[in] DAY Day
+ !! @param[in] DELTSFC Cycling frequency in hours
+ !! @param[in] tf_clm_tile Climatological reference temperature on the
+ !! cubed-sphere tile.
+ !! @param[in] tf_trd_tile Climatolocial reference temperature trend on the
+ !! cubed-sphere tile.
+ !! @param[in] sal_clm_tile Climatological salinity on the cubed-sphere tile.
  !!
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @author Xu Li, George Gayno
  SUBROUTINE ADJUST_NSST(RLA,RLO,SLMSK_TILE,SLMSK_FG_TILE,SKINT_TILE,&
                         SICET_TILE,sice_tile,SOILT_TILE,NSST,LENSFC,LSOIL,    &
                         IDIM,JDIM,ZSEA1,ZSEA2,MON,DAY,DELTSFC, &
@@ -1136,11 +1143,11 @@
  !!                                                                 
  !! @param[in] xt real, heat content in dtl.
  !! @param[in] xz real, dtl thickness.
- !! @param[in] dt cool - real, sub-layer cooling amount.
- !! @param[in] zc sub-layer cooling thickness.
+ !! @param[in] dt_cool Sub-layer cooling amount.
+ !! @param[in] zc Sub-layer cooling thickness.
  !! @param[in] z1 lower bound of depth of sea temperature.
  !! @param[in] z2 upper bound of depth of sea temperature.
- !! @param[out] dtzm mean of dT(z)  (z1 to z2).
+ !! @param[out] dtzm Mean of dT(z)  (z1 to z2).
  !!
  !! @author Xu Li @date 2015
  SUBROUTINE DTZM_POINT(XT,XZ,DT_COOL,ZC,Z1,Z2,DTZM)
@@ -1295,13 +1302,13 @@
 
  END SUBROUTINE REMAP_COEF
 
- !> Set a vakue to tf background for the thaw (just melted water)
- !! situation.
+ !> Set the background reference temperature (tf) for points where
+ !! the ice has just melted.
  !!
- !! @param[in] tf Foundation temperature background on FV3 native grids.
- !! @param[in] mask ij     : mask of the tile (FV3 native grids).
- !! @param[in] itile location index of the tile.
- !! @param[in] jtile location index of the tile.
+ !! @param[in] tf_ij Foundation temperature background on FV3 native grids.
+ !! @param[in] mask_ij Mask of the tile (FV3 native grids).
+ !! @param[in] itile Location index of the tile.
+ !! @param[in] jtile Location index of the tile.
  !! @param[in] tice water temperature (calulated with a salinity formula).
  !! @param[in] tclm SST climatology valid at the analysis time.
  !! @param [out] tf_thaw
@@ -1310,7 +1317,7 @@
  !! @param[inout] nset_thaw_s
  !! @param[inout] nset_thaw_i
  !! @param[inout] nset_thaw_c
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @author Xu Li
  subroutine tf_thaw_set(tf_ij,mask_ij,itile,jtile,tice,tclm,tf_thaw,nx,ny, &
                         nset_thaw_s,nset_thaw_i,nset_thaw_c)
 
@@ -1447,7 +1454,7 @@
  !! @param[out] tf_clm sst climatology at the valid time and on the target grid
  !! @param[out] tf_trd 6-hourly sst climatology tendency at the valid time
  !! and on the target grid.
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @author Xu Li
 subroutine get_tf_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,tf_clm,tf_trd)
  use read_write_data, only : get_tf_clm_dim
 
@@ -1503,19 +1510,20 @@ subroutine get_tf_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,tf_clm,tf_trd)
 
 end subroutine get_tf_clm
 
-!> Get tf/sst climatology & the trend at analysis time.
+!> Get the reference temperature/sst climatology and its trend at analysis time.
+!! The data is time interpolated between two bounding months.
 !!
-!! @param[out] tf_clm_ta
-!! @param[out] tf_clm_trend
-!! @param[out] xlats
-!! @param[out] xlons
-!! @param[in] nlat
-!! @param[in] nlon
-!! @param[in] mon1
-!! @param[in] mon2
-!! @param[in] wei1
-!! @param[in] wei2
-!! @author xu li @date March 2019 
+!! @param[out] tf_clm_ta Climatological tf/sst at analysis time
+!! @param[out] tf_clm_trend  Climatological tf/sst trend at analysis time
+!! @param[out] xlats Latitudes on the climatological data grid
+!! @param[out] xlons Longitudes on the climatological data grid
+!! @param[in] nlat 'j' dimension on the climatological grid
+!! @param[in] nlon 'i' dimension on the climatological grid
+!! @param[in] mon1 First bounding month
+!! @param[in] mon2 Second bounding month
+!! @param[in] wei1 Weighting of first bounding month
+!! @param[in] wei2 Weighting of second bounding month
+!! @author Xu Li @date March 2019 
 subroutine get_tf_clm_ta(tf_clm_ta,tf_clm_trend,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
  use read_write_data, only : read_tf_clim_grb
  implicit none
@@ -1562,7 +1570,7 @@ subroutine get_tf_clm_ta(tf_clm_ta,tf_clm_trend,xlats,xlons,nlat,nlon,mon1,mon2,
  !! @param[in] im Month
  !! @param[in] id Day
  !! @param[in] ih Hour
- !! @param[out] sal_clm Salinity climatology on target grid at the valid time
+ !! @param[out] sal_clm Salinity climatology on the target grid at the valid time
  !! @author Xu Li
 subroutine get_sal_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,sal_clm)
  use read_write_data, only : get_dim_nc
@@ -1614,16 +1622,16 @@ end subroutine get_sal_clm
 
 !> Get climatological salinity at the analysis time.
 !!
-!! @param[in] nlat
-!! @param[in] nlon
+!! @param[in] nlat 'j' dimension of climatological data
+!! @param[in] nlon 'i' dimension of climatological data
 !! @param[in] mon1 First bounding month
 !! @param[in] mon2 Second bounding month
 !! @param[in] wei1 Weight of first bounding month
 !! @param[in] wei2 Weight of second bounding month
-!! @param[out] sal_clm_ta Climatological salinity on the cubed-sphere grid
-!! @param[out] xlats 
-!! @param[out] xlons
-!! @author xu li @date March 2019 
+!! @param[out] sal_clm_ta Climatological salinity at the analysis time
+!! @param[out] xlats Latitudes on the climatological grid
+!! @param[out] xlons Longitudes on the climatological grid
+!! @author Xu Li @date March 2019 
 subroutine get_sal_clm_ta(sal_clm_ta,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
 
  use read_write_data, only : read_salclm_gfs_nc
