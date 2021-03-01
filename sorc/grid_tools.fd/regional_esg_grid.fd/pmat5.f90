@@ -5,7 +5,8 @@
 !!
 !! DEPENDENCIES
 !! Modules:  pkind, pietc, pmat4
-!> Constants for orientation and stretching of map
+!! 
+!> Constants for orientation and stretching of map.
 !! @author R. J. Purser
 module cstgeo ! Constants for orientation and stretching of map
 use pkind, only: sp
@@ -14,7 +15,7 @@ real(sp),dimension(3,3):: rotm
 real(sp)               :: sc,sci
 end module cstgeo
 
-!> Constants for orientation and stretching of map
+!> Constants for orientation and stretching of map.
 !! @author R. J. Purser
 module dcstgeo ! Constants for orientation and stretching of map
 use pkind, only: dp
@@ -52,15 +53,15 @@ interface plroti;    module procedure plroti,dplroti;             end interface
 interface plctoc;    module procedure plctoc;                     end interface
 contains
 
-!> R.J.Purser, National Meteorological Center, Washington D.C.  1995
-!!  Initialize the rotation matrix ROT3 needed to transform standard
-!!  earth-centered cartesian components to the alternative cartesian frame
-!!  oriented so as to put geographical point (ALAT0,ALON0) on the projection
-!!  axis
+!> Initialize the rotation matrix ROT3 needed to transform standard
+!! earth-centered cartesian components to the alternative cartesian frame
+!! oriented so as to put geographical point (ALAT0,ALON0) on the projection
+!! axis.
 !! @author R. J. Purser
 !! @param rot3 rotation matrix
 !! @param alat0 geographical point
 !! @param alon0 geographical point
+!! @date 1995
 subroutine sininmap(alon0,alat0,rot3)!                               [ininmap]
 use pietc_s, only: u0,dtor
 implicit none
@@ -74,7 +75,7 @@ rot3(2,1)=-slon0;      rot3(2,2)=clon0;       rot3(2,3)=u0
 rot3(3,1)=clat0*clon0; rot3(3,2)=clat0*slon0; rot3(3,3)=slat0
 end subroutine sininmap
 
-!> Another transform utility routine
+!> Another transform utility routine.
 !! @author R. J. Purser
 !! @param rot3 rotation matrix
 !! @param alat0 geographical point
@@ -92,15 +93,15 @@ rot3(2,1)=-slon0;      rot3(2,2)=clon0;       rot3(2,3)=u0
 rot3(3,1)=clat0*clon0; rot3(3,2)=clat0*slon0; rot3(3,3)=slat0
 end subroutine dininmap
 
-!> R.J.Purser, National Meteorological Center, Washington D.C.  1995
-!!  Initialize the rotation matrix ROT3 needed to transform standard
-!!  earth-centered cartesian components to the alternative cartesian frame
-!!  oriented so as to put geographical point (ALAT0,ALON0) at the viewing
-!!  nadir.
+!> Initialize the rotation matrix ROT3 needed to transform standard
+!! earth-centered cartesian components to the alternative cartesian frame
+!! oriented so as to put geographical point (ALAT0,ALON0) at the viewing
+!! nadir.
 !! @author R. J. Purser
 !! @param rot3 rotation matrix
 !! @param alat0 geographical point
 !! @param alon0 geographical point
+!! @date 1995
 subroutine sinivmap(alon0,alat0,rot3)!                               [inivmap]
 use pietc_s, only: u0,dtor
 implicit none
@@ -124,7 +125,7 @@ rot3(3,2)=clat0*slon0
 rot3(3,3)=slat0
 end subroutine sinivmap
 
-!> Another transform utility routine
+!> Another transform utility routine.
 !! @author R. J. Purser
 !! @param rot3 rotation matrix
 !! @param alat0 geographical point
@@ -178,7 +179,7 @@ else
 endif
 end subroutine sctogr
 
-!> Transform utility
+!> Transform utility.
 !! @author R. J. Purser
 !! @param  xe three components.
 !! @param  rlat radians latitude
@@ -198,7 +199,7 @@ else
 endif
 end subroutine dctogr
 
-!> utility routine to calculate
+!> utility routine to calculate.
 !! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
@@ -212,7 +213,7 @@ slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine sgrtoc
 
-!> utility routine to calculate
+!> utility routine to calculate.
 !! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
@@ -226,7 +227,7 @@ slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine dgrtoc
 
-!> utility routine to calculate
+!> utility routine to calculate.
 !! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
@@ -243,7 +244,7 @@ dxedlat=dxedlat_d
 dxedlon=dxedlon_d
 end subroutine sgrtocd
 
-!> utility routine to calculate
+!> utility routine to calculate.
 !! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
@@ -260,7 +261,7 @@ dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla
 dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 
 end subroutine dgrtocd
 
-!> utility routine to calculate
+!> utility routine to calculate.
 !! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
@@ -284,7 +285,7 @@ ddxedlatdlon=ddxedlatdlon_d
 ddxedlondlon=ddxedlondlon_d
 end subroutine sgrtocdd
 
-!> utility routine to calculate
+!> utility routine to calculate.
 !! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
@@ -312,19 +313,18 @@ ddxedlondlon(2)=-cla*slo
 ddxedlondlon(3)= u0
 end subroutine dgrtocdd
 
-!> R.J.Purser, National Meteorological Center, Washington D.C.  1994
-!!                   SUBROUTINE CTOG
-!!   Transform "Cartesian" to "Geographical" coordinates, where the
-!!   geographical coordinates refer to latitude and longitude (degrees)
-!!   and cartesian coordinates are standard earth-centered cartesian
-!!   coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
-!!  XE       three cartesian components.
-!!  DLAT     degrees latitude
-!!  DLON     degrees longitude
+!> Transform "Cartesian" to "Geographical" coordinates, where the
+!! geographical coordinates refer to latitude and longitude (degrees)
+!! and cartesian coordinates are standard earth-centered cartesian
+!! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! - XE       three cartesian components.
+!! - DLAT     degrees latitude
+!! - DLON     degrees longitude
 !! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
 !! @param xe three cartesian components
+!! @date 1994
 subroutine sctog(xe,dlat,dlon)!                                         [ctog]
 use pietc_s, only: u0,rtod
 implicit none
@@ -340,7 +340,7 @@ else
 endif
 end subroutine sctog
 
-!> calculation routine
+!> calculation routine.
 !! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
@@ -360,19 +360,18 @@ else
 endif
 end subroutine dctog
 
-!> R.J.Purser, National Meteorological Center, Washington D.C.  1994
-!!                   SUBROUTINE GTOC
-!!   Transform "Geographical" to "Cartesian" coordinates, where the
-!!   geographical coordinates refer to latitude and longitude (degrees)
-!!   and cartesian coordinates are standard earth-centered cartesian
-!!   coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
-!!  --> DLAT     degrees latitude
-!!  --> DLON     degrees longitude
-!!  <-- XE       three cartesian components.
+!> Transform "Geographical" to "Cartesian" coordinates, where the
+!! geographical coordinates refer to latitude and longitude (degrees)
+!! and cartesian coordinates are standard earth-centered cartesian
+!! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! - DLAT     degrees latitude
+!! - DLON     degrees longitude
+!! - XE       three cartesian components.
 !! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
 !! @param xe three cartesian components.
+!! @date 1994
 subroutine sgtoc(dlat,dlon,xe)!                                         [gtoc]
 use pietc_s, only: dtor
 implicit none
@@ -385,7 +384,7 @@ slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine sgtoc
 
-!> calculation routine
+!> calculation routine.
 !! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
@@ -402,7 +401,7 @@ slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine dgtoc
 
-!> calculation routine
+!> calculation routine.
 !! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
@@ -420,7 +419,7 @@ dxedlat=dxedlat_d
 dxedlon=dxedlon_d
 end subroutine sgtocd
 
-!> calculation routine
+!> calculation routine.
 !! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
@@ -438,7 +437,7 @@ dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla; dxedlat=dxedlat*dtor
 dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 ; dxedlon=dxedlon*dtor
 end subroutine dgtocd
 
-!> calculation routine
+!> calculation routine.
 !! @author R. J. Purser
 subroutine sgtocdd(dlat,dlon,xe,dxedlat,dxedlon, &
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)!                           [gtoc]
@@ -460,7 +459,7 @@ ddxedlatdlon=ddxedlatdlon_d
 ddxedlondlon=ddxedlondlon_d
 end subroutine sgtocdd
 
-!> calculation routine
+!> calculation routine.
 !! @author R. J. Purser
 subroutine dgtocdd(dlat,dlon,xe,dxedlat,dxedlon, &
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)!                           [gtoc]
@@ -490,7 +489,7 @@ ddxedlatdlon=ddxedlatdlon*dtor**2
 ddxedlondlon=ddxedlondlon*dtor**2
 end subroutine dgtocdd
 
-!> calculation routine
+!> calculation routine.
 !! @author R. J. Purser
 subroutine sgtoframem(splat,splon,sorth)!                            [gtoframe]
 implicit none
@@ -562,7 +561,7 @@ else
 endif
 end subroutine gtoframev
 
-!> calling paraframe for additional processing
+!> calling paraframe for additional processing.
 subroutine sparaframe(sxp,syp,szp, sxv,syv,szv)!                    [paraframe]
 implicit none
 real(sp),dimension(3),intent(in ):: sxp,syp,szp, szv
@@ -576,7 +575,7 @@ end subroutine sparaframe
 !> Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent
 !! point defined by unit vector, zv, and complete the V-frame cartesian
 !! components, {xv,yv}, that are the result of parallel-transport of {xp,yp}
-!! along the geodesic between P and V
+!! along the geodesic between P and V.
 !! @author R. J. Purser
 !! @param xp reference orthonormal frame
 !! @param yp reference orthonormal frame
@@ -600,7 +599,7 @@ xv=xq*ctheta-yq*stheta
 yv=xq*stheta+yq*ctheta
 end subroutine paraframe
 
-!> calling frametwist for additional processing
+!> calling frametwist for additional processing.
 !! @author R. J. Purser
 subroutine sframetwist(sxp,syp,szp, sxv,syv,szv, stwist)!          [frametwist]
 implicit none
@@ -635,7 +634,7 @@ c=dot_product(xv,xxv); s=dot_product(xv,yyv)
 twist=atan2(s,c)
 end subroutine frametwist
 
-!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s
+!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s.
 !! @author R. J. Purser
 !! @param xc1 schmidt transformation
 !! @param xc2 schmidt transformation
@@ -749,7 +748,7 @@ ddxc2(2,3,3)=u2*ab2**2*aambb*y*dddi
 ddxc2(3,3,3)=u2*ab2*(aapbb*ddi+ab2*e*dddi)
 end subroutine sctocdd
 
-!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s
+!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s.
 !! @author R. J. Purser
 !! @param xc1 schmidt transformation
 !! @param xc2 schmidt transformation
@@ -867,7 +866,7 @@ ddxc2(2,3,3)=u2*ab2**2*aambb*y*dddi
 ddxc2(3,3,3)=u2*ab2*(aapbb*ddi+ab2*e*dddi)
 end subroutine dctocdd
 
-!> Apply a constant rotation to a three dimensional polyline
+!> Apply a constant rotation to a three dimensional polyline.
 !! @author R. J. Purser
 subroutine plrot(rot3,n,x,y,z)!                                        [plrot]
 implicit none
@@ -883,7 +882,7 @@ do k=1,n
 enddo
 end subroutine plrot
 
-!> Invert the rotation of a three-dimensional polyline
+!> Invert the rotation of a three-dimensional polyline.
 !! @author R. J. Purser
 subroutine plroti(rot3,n,x,y,z)!                                      [plroti]
 implicit none
@@ -899,7 +898,7 @@ do k=1,n
 enddo
 end subroutine plroti
 
-!> Apply a constant rotation to a three dimensional polyline
+!> Apply a constant rotation to a three dimensional polyline.
 !! @author R. J. Purser
 subroutine dplrot(rot3,n,x,y,z)!                                        [plrot]
 implicit none
@@ -915,7 +914,7 @@ do k=1,n
 enddo
 end subroutine dplrot
 
-!> Invert the rotation of a three-dimensional polyline
+!> Invert the rotation of a three-dimensional polyline.
 !! @author R. J. Purser
 subroutine dplroti(rot3,n,x,y,z)!                                      [plroti]
 implicit none
@@ -931,7 +930,7 @@ do k=1,n
 enddo
 end subroutine dplroti
 
-!> Perform schmidt transformation with scaling parameter s to a polyline
+!> Perform schmidt transformation with scaling parameter s to a polyline.
 !! @author R. J. Purser
 subroutine plctoc(s,n,x,y,z)!                                         [plctoc]
 use pietc_s, only: u1
