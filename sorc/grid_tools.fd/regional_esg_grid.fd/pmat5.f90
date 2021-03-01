@@ -5,30 +5,27 @@
 !!
 !! DEPENDENCIES
 !! Modules:  pkind, pietc, pmat4
-!!
+!> Constants for orientation and stretching of map
+!! @author R. J. Purser
 module cstgeo ! Constants for orientation and stretching of map
-!=============================================================================
 use pkind, only: sp
 implicit none
 real(sp),dimension(3,3):: rotm
 real(sp)               :: sc,sci
-!=============================================================================
 end module cstgeo
 
-!=============================================================================
+!> Constants for orientation and stretching of map
+!! @author R. J. Purser
 module dcstgeo ! Constants for orientation and stretching of map
-!=============================================================================
 use pkind, only: dp
 implicit none
 real(dp),dimension(3,3):: rotm
 real(dp)               :: sc,sci
-!=============================================================================
 end module dcstgeo
 
-! Utility routines for orienting the globe and basic geographical mappings
-!=============================================================================
+!> Utility routines for orienting the globe and basic geographical mappings
+!! @author R. J. Purser
 module pmat5
-!=============================================================================
 use pkind, only: spi,sp,dp
 implicit none
 private
@@ -54,63 +51,62 @@ interface plrot;     module procedure plrot, dplrot;              end interface
 interface plroti;    module procedure plroti,dplroti;             end interface
 interface plctoc;    module procedure plctoc;                     end interface
 contains
-!=============================================================================
+
+!> R.J.Purser, National Meteorological Center, Washington D.C.  1995
+!!  Initialize the rotation matrix ROT3 needed to transform standard
+!!  earth-centered cartesian components to the alternative cartesian frame
+!!  oriented so as to put geographical point (ALAT0,ALON0) on the projection
+!!  axis
+!! @author R. J. Purser
+!! @param rot3 rotation matrix
+!! @param alat0 geographical point
+!! @param alon0 geographical point
 subroutine sininmap(alon0,alat0,rot3)!                               [ininmap]
-!=============================================================================
-!   R.J.Purser, National Meteorological Center, Washington D.C.  1995	       
-!  Initialize the rotation matrix ROT3 needed to transform standard	       
-!  earth-centered cartesian components to the alternative cartesian frame      
-!  oriented so as to put geographical point (ALAT0,ALON0) on the projection    
-!  axis.								       
-!=============================================================================
 use pietc_s, only: u0,dtor
 implicit none
 real(sp),               intent(IN ):: alon0,alat0
 real(sp),dimension(3,3),intent(OUT):: rot3
-!-----------------------------------------------------------------------------
 real(sp)                           :: blon0,blat0,clon0,clat0,slon0,slat0
-!=============================================================================
 blon0=dtor*alon0; clon0=cos(blon0); slon0=sin(blon0)
 blat0=dtor*alat0; clat0=cos(blat0); slat0=sin(blat0)
-
 rot3(1,1)=slat0*clon0; rot3(1,2)=slat0*slon0; rot3(1,3)=-clat0
 rot3(2,1)=-slon0;      rot3(2,2)=clon0;       rot3(2,3)=u0
 rot3(3,1)=clat0*clon0; rot3(3,2)=clat0*slon0; rot3(3,3)=slat0
 end subroutine sininmap
-!=============================================================================
+
+!> Another transform utility routine
+!! @author R. J. Purser
+!! @param rot3 rotation matrix
+!! @param alat0 geographical point
+!! @param alon0 geographical point
 subroutine dininmap(alon0,alat0,rot3)!                               [ininmap]
-!=============================================================================
 use pietc, only: u0,dtor
 implicit none
 real(dp),               intent(IN ):: alon0,alat0
 real(dp),dimension(3,3),intent(OUT):: rot3
-!-----------------------------------------------------------------------------
 real(dp)                           :: blon0,blat0,clon0,clat0,slon0,slat0
-!=============================================================================
 blon0=dtor*alon0; clon0=cos(blon0); slon0=sin(blon0)
 blat0=dtor*alat0; clat0=cos(blat0); slat0=sin(blat0)
-
 rot3(1,1)=slat0*clon0; rot3(1,2)=slat0*slon0; rot3(1,3)=-clat0
 rot3(2,1)=-slon0;      rot3(2,2)=clon0;       rot3(2,3)=u0
 rot3(3,1)=clat0*clon0; rot3(3,2)=clat0*slon0; rot3(3,3)=slat0
 end subroutine dininmap
 
-!=============================================================================
+!> R.J.Purser, National Meteorological Center, Washington D.C.  1995
+!!  Initialize the rotation matrix ROT3 needed to transform standard
+!!  earth-centered cartesian components to the alternative cartesian frame
+!!  oriented so as to put geographical point (ALAT0,ALON0) at the viewing
+!!  nadir.
+!! @author R. J. Purser
+!! @param rot3 rotation matrix
+!! @param alat0 geographical point
+!! @param alon0 geographical point
 subroutine sinivmap(alon0,alat0,rot3)!                               [inivmap]
-!=============================================================================
-!   R.J.Purser, National Meteorological Center, Washington D.C.  1995	       
-!  Initialize the rotation matrix ROT3 needed to transform standard	       
-!  earth-centered cartesian components to the alternative cartesian frame      
-!  oriented so as to put geographical point (ALAT0,ALON0) at the viewing
-!  nadir.								       
-!=============================================================================
 use pietc_s, only: u0,dtor
 implicit none
 real(sp),               intent(IN ):: alon0,alat0
 real(sp),dimension(3,3),intent(OUT):: rot3
-!-----------------------------------------------------------------------------
 real(sp)                           :: blon0,blat0,clon0,clat0,slon0,slat0
-!=============================================================================
 blon0=dtor*alon0
 blat0=dtor*alat0
 clon0=cos(blon0)
@@ -127,16 +123,18 @@ rot3(3,1)=clat0*clon0
 rot3(3,2)=clat0*slon0
 rot3(3,3)=slat0
 end subroutine sinivmap
-!=============================================================================
+
+!> Another transform utility routine
+!! @author R. J. Purser
+!! @param rot3 rotation matrix
+!! @param alat0 geographical point
+!! @param alon0 geographical point
 subroutine dinivmap(alon0,alat0,rot3)!                               [inivmap]
-!=============================================================================
 use pietc, only: u0,dtor
 implicit none
 real(dp),               intent(IN ):: alon0,alat0
 real(dp),dimension(3,3),intent(OUT):: rot3
-!-----------------------------------------------------------------------------
 real(dp)                           :: blon0,blat0,clon0,clat0,slon0,slat0
-!=============================================================================
 blon0=dtor*alon0
 blat0=dtor*alat0
 clon0=cos(blon0)
@@ -154,24 +152,23 @@ rot3(3,2)=clat0*slon0
 rot3(3,3)=slat0
 end subroutine dinivmap
 
-!=============================================================================
+!> Transform "Cartesian" to "Geographical" coordinates, where the
+!!   geographical coordinates refer to latitude and longitude (radians)
+!!   and cartesian coordinates are standard earth-centered cartesian
+!!   coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!!  XE       three cartesian components.
+!!  RLAT     radians latitude
+!!  RLON     radians longitude
+!! @author R. J. Purser
+!! @param rlat radians latitude
+!! @param rlon radians longitude
+!! @param xe three cartesian components
 subroutine sctogr(xe,rlat,rlon)!                                       [ctogr]
-!=============================================================================
-!   Transform "Cartesian" to "Geographical" coordinates, where the
-!   geographical coordinates refer to latitude and longitude (radians)
-!   and cartesian coordinates are standard earth-centered cartesian
-!   coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
-!  --> XE       three cartesian components.
-!  <-- RLAT     radians latitude
-!  <-- RLON     radians longitude
-!=============================================================================
 use pietc_s, only: u0
 implicit none
 real(sp),dimension(3),intent(IN ):: xe
 real(sp),             intent(OUT):: rlat,rlon
-!-----------------------------------------------------------------------------
 real(sp)                         :: r
-!=============================================================================
 r=sqrt(xe(1)**2+xe(2)**2)
 rlat=atan2(xe(3),r)
 if(r==u0)then
@@ -180,16 +177,18 @@ else
    rlon=atan2(xe(2),xe(1))
 endif
 end subroutine sctogr
-!=============================================================================
+
+!> Transform utility
+!! @author R. J. Purser
+!! @param  xe three components.
+!! @param  rlat radians latitude
+!! @param  rlon radians longitude
 subroutine dctogr(xe,rlat,rlon)!                                       [ctogr]
-!=============================================================================
 use pietc, only: u0
 implicit none
 real(dp),dimension(3),intent(IN ):: xe
 real(dp),             intent(OUT):: rlat,rlon
-!-----------------------------------------------------------------------------
 real(dp)                         :: r
-!=============================================================================
 r=sqrt(xe(1)**2+xe(2)**2)
 rlat=atan2(xe(3),r)
 if(r==u0)then
@@ -199,77 +198,81 @@ else
 endif
 end subroutine dctogr
 
-!=============================================================================
+!> utility routine to calculate
+!! @author R. J. Purser
+!! @param  rlat latitude
+!! @param  rlon longitude
 subroutine sgrtoc(rlat,rlon,xe)!                                       [grtoc]
-!=============================================================================
 implicit none
 real(sp),             intent(IN ):: rlat,rlon
 real(sp),dimension(3),intent(OUT):: xe
-!-----------------------------------------------------------------------------
 real(sp)                         :: sla,cla,slo,clo
-!=============================================================================
 sla=sin(rlat);  cla=cos(rlat)
 slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine sgrtoc
-!=============================================================================
+
+!> utility routine to calculate
+!! @author R. J. Purser
+!! @param  rlat latitude
+!! @param  rlon longitude
 subroutine dgrtoc(rlat,rlon,xe)!                                       [grtoc]
-!=============================================================================
 implicit none
 real(dp),             intent(IN ):: rlat,rlon
 real(dp),dimension(3),intent(OUT):: xe
-!-----------------------------------------------------------------------------
 real(dp)                         :: sla,cla,slo,clo
-!=============================================================================
 sla=sin(rlat);  cla=cos(rlat)
 slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine dgrtoc
-!=============================================================================
+
+!> utility routine to calculate
+!! @author R. J. Purser
+!! @param  rlat latitude
+!! @param  rlon longitude
 subroutine sgrtocd(rlat,rlon,xe,dxedlat,dxedlon)!                      [grtoc]
-!=============================================================================
 implicit none
 real(sp),             intent(IN ):: rlat,rlon
 real(sp),dimension(3),intent(OUT):: xe,dxedlat,dxedlon
-!-----------------------------------------------------------------------------
 real(dp)             :: rlat_d,rlon_d
 real(dp),dimension(3):: xe_d,dxedlat_d,dxedlon_d
-!=============================================================================
 rlat_d=rlat; rlon_d=rlon
 call dgrtocd(rlat_d,rlon_d,xe_d,dxedlat_d,dxedlon_d)
 xe     =xe_d
 dxedlat=dxedlat_d
 dxedlon=dxedlon_d
 end subroutine sgrtocd
-!=============================================================================
+
+!> utility routine to calculate
+!! @author R. J. Purser
+!! @param  rlat latitude
+!! @param  rlon longitude
 subroutine dgrtocd(rlat,rlon,xe,dxedlat,dxedlon)!                      [grtoc]
-!=============================================================================
 use pietc, only: u0
 implicit none
 real(dp),             intent(IN ):: rlat,rlon
 real(dp),dimension(3),intent(OUT):: xe,dxedlat,dxedlon
-!-----------------------------------------------------------------------------
 real(dp)                         :: sla,cla,slo,clo
-!=============================================================================
 sla=sin(rlat);  cla=cos(rlat)
 slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla
 dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 
 end subroutine dgrtocd
-!=============================================================================
+
+!> utility routine to calculate
+!! @author R. J. Purser
+!! @param  rlat latitude
+!! @param  rlon longitude
 subroutine sgrtocdd(rlat,rlon,xe,dxedlat,dxedlon, &!                   [grtoc]
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)
-!=============================================================================
 implicit none
 real(sp),             intent(IN ):: rlat,rlon
 real(sp),dimension(3),intent(OUT):: xe,dxedlat,dxedlon, &
                                     ddxedlatdlat,ddxedlatdlon,ddxedlondlon
-!-----------------------------------------------------------------------------
 real(dp)             :: rlat_d,rlon_d
 real(dp),dimension(3):: xe_d,dxedlat_d,dxedlon_d, &
                         ddxedlatdlat_d,ddxedlatdlon_d,ddxedlondlon_d
-!=============================================================================
 rlat_d=rlat; rlon_d=rlon
 call dgtocdd(rlat_d,rlon_d,xe_d,dxedlat_d,dxedlon_d, &
      ddxedlatdlat_d,ddxedlatdlon_d,ddxedlondlon_d)
@@ -280,18 +283,19 @@ ddxedlatdlat=ddxedlatdlat_d
 ddxedlatdlon=ddxedlatdlon_d
 ddxedlondlon=ddxedlondlon_d
 end subroutine sgrtocdd
-!=============================================================================
+
+!> utility routine to calculate
+!! @author R. J. Purser
+!! @param  rlat latitude
+!! @param  rlon longitude
 subroutine dgrtocdd(rlat,rlon,xe,dxedlat,dxedlon, &!                   [grtoc]
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)
-!=============================================================================
 use pietc, only: u0
 implicit none
 real(dp),             intent(IN ):: rlat,rlon
 real(dp),dimension(3),intent(OUT):: xe,dxedlat,dxedlon, &
                                     ddxedlatdlat,ddxedlatdlon,ddxedlondlon
-!-----------------------------------------------------------------------------
 real(dp)                         :: sla,cla,slo,clo
-!=============================================================================
 sla=sin(rlat);  cla=cos(rlat)
 slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
@@ -308,26 +312,25 @@ ddxedlondlon(2)=-cla*slo
 ddxedlondlon(3)= u0
 end subroutine dgrtocdd
 
-!=============================================================================
+!> R.J.Purser, National Meteorological Center, Washington D.C.  1994
+!!                   SUBROUTINE CTOG
+!!   Transform "Cartesian" to "Geographical" coordinates, where the
+!!   geographical coordinates refer to latitude and longitude (degrees)
+!!   and cartesian coordinates are standard earth-centered cartesian
+!!   coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!!  XE       three cartesian components.
+!!  DLAT     degrees latitude
+!!  DLON     degrees longitude
+!! @author R. J. Purser
+!! @param dlat degrees latitude
+!! @param dlon degrees longitude
+!! @param xe three cartesian components
 subroutine sctog(xe,dlat,dlon)!                                         [ctog]
-!=============================================================================
-!   R.J.Purser, National Meteorological Center, Washington D.C.  1994	      
-!                   SUBROUTINE CTOG
-!   Transform "Cartesian" to "Geographical" coordinates, where the
-!   geographical coordinates refer to latitude and longitude (degrees) 
-!   and cartesian coordinates are standard earth-centered cartesian    
-!   coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
-!  --> XE	three cartesian components.				      
-!  <-- DLAT	degrees latitude					      
-!  <-- DLON	degrees longitude					      
-!=============================================================================
 use pietc_s, only: u0,rtod
 implicit none
 real(sp),dimension(3),intent(IN ):: xe
 real(sp),             intent(OUT):: dlat,dlon
-!-----------------------------------------------------------------------------
 real(sp)                         :: r
-!=============================================================================
 r=sqrt(xe(1)**2+xe(2)**2)
 dlat=atan2(xe(3),r)*rtod
 if(r==u0)then
@@ -337,16 +340,17 @@ else
 endif
 end subroutine sctog
 
-!=============================================================================
+!> calculation routine
+!! @author R. J. Purser
+!! @param dlat degrees latitude
+!! @param dlon degrees longitude
+!! @param xe three cartesian components
 subroutine dctog(xe,dlat,dlon)!                                         [ctog]
-!=============================================================================
 use pietc, only: u0,rtod
 implicit none
 real(dp),dimension(3),intent(IN ):: xe
 real(dp),             intent(OUT):: dlat,dlon
-!-----------------------------------------------------------------------------
 real(dp)                         :: r
-!=============================================================================
 r=sqrt(xe(1)**2+xe(2)**2)
 dlat=atan2(xe(3),r)*rtod
 if(r==u0)then
@@ -356,72 +360,76 @@ else
 endif
 end subroutine dctog
 
-!=============================================================================
+!> R.J.Purser, National Meteorological Center, Washington D.C.  1994
+!!                   SUBROUTINE GTOC
+!!   Transform "Geographical" to "Cartesian" coordinates, where the
+!!   geographical coordinates refer to latitude and longitude (degrees)
+!!   and cartesian coordinates are standard earth-centered cartesian
+!!   coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!!  --> DLAT     degrees latitude
+!!  --> DLON     degrees longitude
+!!  <-- XE       three cartesian components.
+!! @author R. J. Purser
+!! @param dlat degrees latitude
+!! @param dlon degrees longitude
+!! @param xe three cartesian components.
 subroutine sgtoc(dlat,dlon,xe)!                                         [gtoc]
-!=============================================================================
-!   R.J.Purser, National Meteorological Center, Washington D.C.  1994	      
-!		    SUBROUTINE GTOC					      
-!   Transform "Geographical" to "Cartesian" coordinates, where the
-!   geographical coordinates refer to latitude and longitude (degrees) 
-!   and cartesian coordinates are standard earth-centered cartesian    
-!   coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
-!  --> DLAT	degrees latitude					      
-!  --> DLON	degrees longitude					      
-!  <-- XE	three cartesian components.				      
-!=============================================================================
 use pietc_s, only: dtor
 implicit none
 real(sp),             intent(IN ):: dlat,dlon
 real(sp),dimension(3),intent(OUT):: xe
-!-----------------------------------------------------------------------------
 real(sp)                         :: rlat,rlon,sla,cla,slo,clo
-!=============================================================================
 rlat=dtor*dlat; rlon=dtor*dlon
 sla=sin(rlat);  cla=cos(rlat)
 slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine sgtoc
-!=============================================================================
+
+!> calculation routine
+!! @author R. J. Purser
+!! @param dlat degrees latitude
+!! @param dlon degrees longitude
+!! @param xe three cartesian components.
 subroutine dgtoc(dlat,dlon,xe)!                                         [gtoc]
-!=============================================================================
 use pietc, only: dtor
 implicit none
 real(dp),             intent(IN ):: dlat,dlon
 real(dp),dimension(3),intent(OUT):: xe
-!-----------------------------------------------------------------------------
 real(dp)                         :: rlat,rlon,sla,cla,slo,clo
-!=============================================================================
 rlat=dtor*dlat; rlon=dtor*dlon
 sla=sin(rlat);  cla=cos(rlat)
 slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine dgtoc
-!=============================================================================
+
+!> calculation routine
+!! @author R. J. Purser
+!! @param dlat degrees latitude
+!! @param dlon degrees longitude
+!! @param xe three cartesian components.
 subroutine sgtocd(dlat,dlon,xe,dxedlat,dxedlon)!                        [gtoc]
-!=============================================================================
 implicit none
 real(sp),             intent(IN ):: dlat,dlon
 real(sp),dimension(3),intent(OUT):: xe,dxedlat,dxedlon
-!-----------------------------------------------------------------------------
 real(dp)             :: dlat_d,dlon_d
 real(dp),dimension(3):: xe_d,dxedlat_d,dxedlon_d
-!=============================================================================
 dlat_d=dlat; dlon_d=dlon
 call dgtocd(dlat_d,dlon_d,xe_d,dxedlat_d,dxedlon_d)
 xe     =xe_d
 dxedlat=dxedlat_d
 dxedlon=dxedlon_d
 end subroutine sgtocd
-!=============================================================================
+
+!> calculation routine
+!! @author R. J. Purser
+!! @param dlat degrees latitude
+!! @param dlon degrees longitude
 subroutine dgtocd(dlat,dlon,xe,dxedlat,dxedlon)!                        [gtoc]
-!=============================================================================
 use pietc, only: u0,dtor
 implicit none
 real(dp),             intent(IN ):: dlat,dlon
 real(dp),dimension(3),intent(OUT):: xe,dxedlat,dxedlon
-!-----------------------------------------------------------------------------
 real(dp)                         :: rlat,rlon,sla,cla,slo,clo
-!=============================================================================
 rlat=dtor*dlat; rlon=dtor*dlon
 sla=sin(rlat);  cla=cos(rlat)
 slo=sin(rlon);  clo=cos(rlon)
@@ -429,19 +437,18 @@ xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla; dxedlat=dxedlat*dtor
 dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 ; dxedlon=dxedlon*dtor
 end subroutine dgtocd
-!=============================================================================
+
+!> calculation routine
+!! @author R. J. Purser
 subroutine sgtocdd(dlat,dlon,xe,dxedlat,dxedlon, &
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)!                           [gtoc]
-!=============================================================================
 implicit none
 real(sp),             intent(IN ):: dlat,dlon
 real(sp),dimension(3),intent(OUT):: xe,dxedlat,dxedlon, &
                                     ddxedlatdlat,ddxedlatdlon,ddxedlondlon
-!-----------------------------------------------------------------------------
 real(dp)             :: dlat_d,dlon_d
 real(dp),dimension(3):: xe_d,dxedlat_d,dxedlon_d, &
                         ddxedlatdlat_d,ddxedlatdlon_d,ddxedlondlon_d
-!=============================================================================
 dlat_d=dlat; dlon_d=dlon
 call dgtocdd(dlat_d,dlon_d,xe_d,dxedlat_d,dxedlon_d, &
      ddxedlatdlat_d,ddxedlatdlon_d,ddxedlondlon_d)
@@ -452,18 +459,17 @@ ddxedlatdlat=ddxedlatdlat_d
 ddxedlatdlon=ddxedlatdlon_d
 ddxedlondlon=ddxedlondlon_d
 end subroutine sgtocdd
-!=============================================================================
+
+!> calculation routine
+!! @author R. J. Purser
 subroutine dgtocdd(dlat,dlon,xe,dxedlat,dxedlon, &
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)!                           [gtoc]
-!=============================================================================
 use pietc, only: u0,dtor
 implicit none
 real(dp),             intent(IN ):: dlat,dlon
 real(dp),dimension(3),intent(OUT):: xe,dxedlat,dxedlon, &
                                     ddxedlatdlat,ddxedlatdlon,ddxedlondlon
-!-----------------------------------------------------------------------------
 real(dp)                         :: rlat,rlon,sla,cla,slo,clo
-!=============================================================================
 rlat=dtor*dlat; rlon=dtor*dlon
 sla=sin(rlat);  cla=cos(rlat)
 slo=sin(rlon);  clo=cos(rlon)
@@ -484,34 +490,34 @@ ddxedlatdlon=ddxedlatdlon*dtor**2
 ddxedlondlon=ddxedlondlon*dtor**2
 end subroutine dgtocdd
 
-!==============================================================================
+!> calculation routine
+!! @author R. J. Purser
 subroutine sgtoframem(splat,splon,sorth)!                            [gtoframe]
-!==============================================================================
 implicit none
 real(sp),               intent(in ):: splat,splon
 real(sp),dimension(3,3),intent(out):: sorth
-!------------------------------------------------------------------------------
 real(dp):: plat,plon
 real(dp),dimension(3,3):: orth
-!==============================================================================
 plat=splat; plon=splon; call gtoframem(plat,plon,orth); sorth=orth
 end subroutine sgtoframem
-!==============================================================================
+
+!> From the degree lat and lo (plat and plon) return the standard orthogonal
+!! 3D frame at this location as an orthonormal matrix, orth.
+!! @author R. J. Purser
+!! @param plat latitude degree
+!! @param plon longitude degree
+!! @param orth orthonormal matrix
 subroutine gtoframem(plat,plon,orth)!                                [gtoframe]
-!==============================================================================
-! From the degree lat and lo (plat and plon) return the standard orthogonal
-! 3D frame at this location as an orthonormal matrix, orth.
-!==============================================================================
 implicit none
 real(dp),               intent(in ):: plat,plon
 real(dp),dimension(3,3),intent(out):: orth
-!------------------------------------------------------------------------------
 real(dp),dimension(3):: xp,yp,zp
-!==============================================================================
 call gtoframev(plat,plon, xp,yp,zp)
 orth(:,1)=xp; orth(:,2)=yp; orth(:,3)=zp
 end subroutine gtoframem
-!==============================================================================
+
+!> calling gtoframev for additional processing
+!! @author R. J. Purser
 subroutine sgtoframev(splat,splon,sxp,syp,szp)!                       [gtoframe]
 !==============================================================================
 implicit none
@@ -525,20 +531,22 @@ plat=splat; plon=splon
 call gtoframev(plat,plon, xp,yp,zp)
 sxp=xp; syp=yp; szp=zp
 end subroutine sgtoframev
-!==============================================================================
+
+!> Given a geographical point by its degrees lat and lon, plat and plon,
+!! return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered
+!! coordinates.
+!! @author R. J. Purser
+!! @param plat latitude point
+!! @param plon longitude point
+!! @param xp orthogonal cartesian frame in earth-centered coordinates.
+!! @param yp orthogonal cartesian frame in earth-centered coordinates.
+!! @param zp orthogonal cartesian frame in earth-centered coordinates.
 subroutine gtoframev(plat,plon, xp,yp,zp)!                           [gtoframe]
-!==============================================================================
-! Given a geographical point by its degrees lat and lon, plat and plon,
-! return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered
-! coordinates.
-!=============================================================================
 use pietc, only: u0,u1
 implicit none
 real(dp),             intent(in ):: plat,plon
 real(dp),dimension(3),intent(out):: xp,yp,zp
-!------------------------------------------------------------------------------
 real(dp),dimension(3):: dzpdlat,dzpdlon
-!==============================================================================
 if(plat==90)then ! is this the north pole?
    xp=(/ u0,u1, u0/) ! Assume the limiting case lat-->90 along the 0-meridian
    yp=(/-u1,u0, u0/) !
@@ -554,35 +562,35 @@ else
 endif
 end subroutine gtoframev
 
-!==============================================================================
+!> calling paraframe for additional processing
 subroutine sparaframe(sxp,syp,szp, sxv,syv,szv)!                    [paraframe]
-!==============================================================================
 implicit none
 real(sp),dimension(3),intent(in ):: sxp,syp,szp, szv
 real(sp),dimension(3),intent(out):: sxv,syv
-!-----------------------------------------------------------------------------
 real(dp),dimension(3):: xp,yp,zp, xv,yv,zv
-!=============================================================================
 xp=sxp; yp=syp; zp=szp
 call paraframe(xp,yp,zp, xv,yv,zv)
 sxv=xv; syv=yv
 end subroutine sparaframe
-!==============================================================================
+
+!> Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent
+!! point defined by unit vector, zv, and complete the V-frame cartesian
+!! components, {xv,yv}, that are the result of parallel-transport of {xp,yp}
+!! along the geodesic between P and V
+!! @author R. J. Purser
+!! @param xp reference orthonormal frame
+!! @param yp reference orthonormal frame
+!! @param zp reference orthonormal frame
+!! @param zv dependent point
+!! @param xv V-frame cartesian components
+!! @param yv V-frame cartesian components
 subroutine paraframe(xp,yp,zp, xv,yv,zv)!                           [paraframe]
-!==============================================================================
-! Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent
-! point defined by unit vector, zv, and complete the V-frame cartesian
-! components, {xv,yv}, that are the result of parallel-transport of {xp,yp}
-! along the geodesic between P and V
-!==============================================================================
 use pmat4,  only: cross_product,normalized
 implicit none
 real(dp),dimension(3),intent(in ):: xp,yp,zp, zv
 real(dp),dimension(3),intent(out):: xv,yv
-!------------------------------------------------------------------------------
 real(dp)             :: xpofv,ypofv,theta,ctheta,stheta
 real(dp),dimension(3):: xq,yq
-!==============================================================================
 xpofv=dot_product(xp,zv)
 ypofv=dot_product(yp,zv)
 theta=atan2(ypofv,xpofv); ctheta=cos(theta); stheta=sin(theta)
@@ -592,54 +600,52 @@ xv=xq*ctheta-yq*stheta
 yv=xq*stheta+yq*ctheta
 end subroutine paraframe
 
-!==============================================================================
+!> calling frametwist for additional processing
+!! @author R. J. Purser
 subroutine sframetwist(sxp,syp,szp, sxv,syv,szv, stwist)!          [frametwist]
-!==============================================================================
 implicit none
 real(sp),dimension(3),intent(in ):: sxp,syp,szp, sxv,syv,szv
 real(sp),             intent(out):: stwist
-!------------------------------------------------------------------------------
 real(dp),dimension(3):: xp,yp,zp, xv,yv,zv
 real(dp)             :: twist
-!==============================================================================
 xp=sxp;yp=syp; zp=szp; xv=sxv; yv=syv; zv=szv
 call frametwist(xp,yp,zp, xv,yv,zv, twist)
 stwist=twist
 end subroutine sframetwist
-!==============================================================================
+
+!> Given a principal cartesian orthonormal frame, {xp,yp,zp} (i.e., at P with
+!! Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V
+!! with Earth-centered cartesians zv, find the relative rotation angle, "twist"
+!! by which the frame at V is rotated in the counterclockwise sense relative
+!! to the parallel-transportation of P's frame to V.
+!! Note that, by symmetry, transposing P and V leads to the opposite twist.
+!! @author R. J. Purser
+!! @param xp cartesian orthonormal frame
+!! @param yp cartesian orthonormal frame
+!! @param zp cartesian orthonormal frame
+!! @param zv Earth-centered cartesians
 subroutine frametwist(xp,yp,zp, xv,yv,zv, twist)!                  [frametwist]
-!==============================================================================
-! Given a principal cartesian orthonormal frame, {xp,yp,zp} (i.e., at P with
-! Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V
-! with Earth-centered cartesians zv, find the relative rotation angle, "twist"
-! by which the frame at V is rotated in the counterclockwise sense relative
-! to the parallel-transportation of P's frame to V.
-! Note that, by symmetry, transposing P and V leads to the opposite twist.
-!==============================================================================
 implicit none
 real(dp),dimension(3),intent(in ):: xp,yp,zp, xv,yv,zv
 real(dp),             intent(out):: twist
-!------------------------------------------------------------------------------
 real(dp),dimension(3):: xxv,yyv
 real(dp)             :: c,s
-!==============================================================================
 call paraframe(xp,yp,zp, xxv,yyv,zv)
 c=dot_product(xv,xxv); s=dot_product(xv,yyv)
 twist=atan2(s,c)
 end subroutine frametwist
 
-!=============================================================================
+!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s
+!! @author R. J. Purser
+!! @param xc1 schmidt transformation
+!! @param xc2 schmidt transformation
+!! @param s scaling parameter
 subroutine sctoc(s,xc1,xc2)!                                       [ctoc_schm]
-!=============================================================================
-!  Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s
-!=============================================================================
 use pietc_s, only: u1,u2
 implicit none
 real(sp),             intent(IN   ):: s
 real(sp),dimension(3),intent(INOUT):: xc1,xc2
-!-----------------------------------------------------------------------------
 real(sp)                           :: x,y,z,a,b,d,e,ab2,aa,bb,di,aapbb,aambb
-!=============================================================================
 x=xc1(1); y=xc1(2); z=xc1(3)
 a=s+u1
 b=s-u1
@@ -656,21 +662,19 @@ xc2(2)=(aambb*y)*di
 xc2(3)=e*di
 end subroutine sctoc
 
-!=============================================================================
+!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
+!!  and its jacobian, dxc2.
+!! @author R. J. Purser
+!! @param s scaling
+!! @param dxc2 jacobian
 subroutine sctocd(s,xc1,xc2,dxc2)!                                 [ctoc_schm]
-!=============================================================================
-!  Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
-!  and its jacobian, dxc2.
-!=============================================================================
 use pietc_s, only: u0,u1,u2
 implicit none
 real(sp),intent(IN)                  :: s
 real(sp),dimension(3),  intent(INOUT):: xc1,xc2
 real(sp),dimension(3,3),intent(  OUT):: dxc2
-!-----------------------------------------------------------------------------
 real(sp)                             :: x,y,z,a,b,d,e, &
                                         ab2,aa,bb,di,ddi,aapbb,aambb
-!=============================================================================
 x=xc1(1); y=xc1(2); z=xc1(3)
 a=s+u1
 b=s-u1
@@ -695,23 +699,22 @@ dxc2(2,3)=ab2*aambb*y*ddi
 dxc2(3,3)=aapbb*di +ab2*e*ddi
 end subroutine sctocd
 
-!=============================================================================
+!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
+!!  its jacobian, dxc2, and its 2nd derivative, ddxc2.
+!! @author R. J. Purser
+!! @param s scaling
+!! @param dxc2 jacobian
+!! @param ddxc2 2nd derivative
 subroutine sctocdd(s,xc1,xc2,dxc2,ddxc2)!                          [ctoc_schm]
-!=============================================================================
-!  Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
-!  its jacobian, dxc2, and its 2nd derivative, ddxc2.
-!=============================================================================
 use pietc_s, only: u0,u1,u2
 implicit none
 real(sp),                 intent(IN   ):: s
 real(sp),dimension(3),    intent(INOUT):: xc1,xc2
 real(sp),dimension(3,3),  intent(  OUT):: dxc2
 real(sp),dimension(3,3,3),intent(  OUT):: ddxc2
-!-----------------------------------------------------------------------------
 real(sp)                               :: x,y,z,a,b,d,e, &
                                           ab2,aa,bb,di,ddi,dddi, &
                                           aapbb,aambb
-!=============================================================================
 x=xc1(1); y=xc1(2); z=xc1(3)
 a=s+u1
 b=s-u1
@@ -746,19 +749,18 @@ ddxc2(2,3,3)=u2*ab2**2*aambb*y*dddi
 ddxc2(3,3,3)=u2*ab2*(aapbb*ddi+ab2*e*dddi)
 end subroutine sctocdd
 
-!=============================================================================
+!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s
+!! @author R. J. Purser
+!! @param xc1 schmidt transformation
+!! @param xc2 schmidt transformation
+!! @param s scaling
 subroutine dctoc(s,xc1,xc2)!                                       [ctoc_schm]
-!=============================================================================
-!  Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s
-!=============================================================================
 use pietc, only: u1,u2
 implicit none
 real(dp),             intent(IN   ):: s
 real(dp),dimension(3),intent(INOUT):: xc1,xc2
-!-----------------------------------------------------------------------------
 real(dp)                           :: x,y,z,a,b,d,e, &
                                       ab2,aa,bb,di,aapbb,aambb
-!=============================================================================
 x=xc1(1); y=xc1(2); z=xc1(3)
 a=s+u1
 b=s-u1
@@ -775,21 +777,20 @@ xc2(2)=(aambb*y)*di
 xc2(3)=e*di
 end subroutine dctoc
 
-!=============================================================================
+!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
+!!  and its jacobian, dxc2.
+!! @author R. J. Purser
+!! @param xc1 schmidt transformation
+!! @param xc2 schmidt transformation
+!! @param s scaling 
 subroutine dctocd(s,xc1,xc2,dxc2)!                                 [ctoc_schm]
-!=============================================================================
-!  Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
-!  and its jacobian, dxc2.
-!=============================================================================
 use pietc, only: u0,u1,u2
 implicit none
 real(dp),               intent(IN   ):: s
 real(dp),dimension(3),  intent(INOUT):: xc1,xc2
 real(dp),dimension(3,3),intent(  OUT):: dxc2
-!-----------------------------------------------------------------------------
 real(dp)                             :: x,y,z,a,b,d,e, &
                                         ab2,aa,bb,di,ddi,aapbb,aambb
-!=============================================================================
 x=xc1(1); y=xc1(2); z=xc1(3)
 a=s+u1
 b=s-u1
@@ -814,23 +815,24 @@ dxc2(2,3)=ab2*aambb*y*ddi
 dxc2(3,3)=aapbb*di +ab2*e*ddi
 end subroutine dctocd
 
-!=============================================================================
+!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
+!!  its jacobian, dxc2, and its 2nd derivative, ddxc2.
+!! @author R. J. Purser
+!! @param xc1 schmidt transformation
+!! @param xc2 schmidt transformation
+!! @param s scaling
+!! @param dxc2 jacobian
+!! @param ddxc2 derivative
 subroutine dctocdd(s,xc1,xc2,dxc2,ddxc2)!                          [ctoc_schm]
-!=============================================================================
-!  Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
-!  its jacobian, dxc2, and its 2nd derivative, ddxc2.
-!=============================================================================
 use pietc, only: u0,u1,u2
 implicit none
 real(dp),intent(IN)                    :: s
 real(dp),dimension(3),    intent(INOUT):: xc1,xc2
 real(dp),dimension(3,3),  intent(OUT  ):: dxc2
 real(dp),dimension(3,3,3),intent(OUT  ):: ddxc2
-!-----------------------------------------------------------------------------
 real(dp)                               :: x,y,z,a,b,d,e, &
                                           ab2,aa,bb,di,ddi,dddi, &
                                           aapbb,aambb
-!=============================================================================
 x=xc1(1); y=xc1(2); z=xc1(3)
 a=s+u1
 b=s-u1
@@ -865,19 +867,15 @@ ddxc2(2,3,3)=u2*ab2**2*aambb*y*dddi
 ddxc2(3,3,3)=u2*ab2*(aapbb*ddi+ab2*e*dddi)
 end subroutine dctocdd
 
-!=============================================================================
+!> Apply a constant rotation to a three dimensional polyline
+!! @author R. J. Purser
 subroutine plrot(rot3,n,x,y,z)!                                        [plrot]
-!=============================================================================
-! Apply a constant rotation to a three dimensional polyline
-!=============================================================================
 implicit none
 integer,                intent(IN   ):: n
 real(sp),dimension(3,3),intent(IN   ):: rot3
 real(sp),dimension(n),  intent(INOUT):: x,y,z
-!-----------------------------------------------------------------------------
 real(sp),dimension(3)                :: t
 integer                              :: k
-!=============================================================================
 do k=1,n
    t(1)=x(k); t(2)=y(k); t(3)=z(k)
    t=matmul(rot3,t) 
@@ -885,19 +883,15 @@ do k=1,n
 enddo
 end subroutine plrot
 
-!=============================================================================
+!> Invert the rotation of a three-dimensional polyline
+!! @author R. J. Purser
 subroutine plroti(rot3,n,x,y,z)!                                      [plroti]
-!=============================================================================
-! Invert the rotation of a three-dimensional polyline
-!=============================================================================
 implicit none
 integer,                intent(IN   ):: n
 real(sp),dimension(3,3),intent(IN   ):: rot3
 real(sp),dimension(n),  intent(INOUT):: x,y,z
-!-----------------------------------------------------------------------------
 real(sp),dimension(3)                :: t
 integer                              :: k
-!=============================================================================
 do k=1,n
    t(1)=x(k); t(2)=y(k); t(3)=z(k)
    t=matmul(t,rot3)
@@ -905,19 +899,15 @@ do k=1,n
 enddo
 end subroutine plroti
 
-!=============================================================================
+!> Apply a constant rotation to a three dimensional polyline
+!! @author R. J. Purser
 subroutine dplrot(rot3,n,x,y,z)!                                        [plrot]
-!=============================================================================
-! Apply a constant rotation to a three dimensional polyline
-!=============================================================================
 implicit none
 integer,                intent(IN   ):: n
 real(dP),dimension(3,3),intent(IN   ):: rot3
 real(dP),dimension(n),  intent(INOUT):: x,y,z
-!-----------------------------------------------------------------------------
 real(dP),dimension(3)                :: t
 integer                              :: k
-!=============================================================================
 do k=1,n
    t(1)=x(k); t(2)=y(k); t(3)=z(k)
    t=matmul(rot3,t) 
@@ -925,19 +915,15 @@ do k=1,n
 enddo
 end subroutine dplrot
 
-!=============================================================================
+!> Invert the rotation of a three-dimensional polyline
+!! @author R. J. Purser
 subroutine dplroti(rot3,n,x,y,z)!                                      [plroti]
-!=============================================================================
-! Invert the rotation of a three-dimensional polyline
-!=============================================================================
 implicit none
 integer,                intent(IN   ):: n
 real(dP),dimension(3,3),intent(IN   ):: rot3
 real(dP),dimension(n),  intent(INOUT):: x,y,z
-!-----------------------------------------------------------------------------
 real(dP),dimension(3)                :: t
 integer                              :: k
-!=============================================================================
 do k=1,n
    t(1)=x(k); t(2)=y(k); t(3)=z(k)
    t=matmul(t,rot3)
@@ -945,20 +931,16 @@ do k=1,n
 enddo
 end subroutine dplroti
 
-!=============================================================================
+!> Perform schmidt transformation with scaling parameter s to a polyline
+!! @author R. J. Purser
 subroutine plctoc(s,n,x,y,z)!                                         [plctoc]
-!=============================================================================
-!  Perform schmidt transformation with scaling parameter s to a polyline
-!=============================================================================
 use pietc_s, only: u1
 implicit none
 integer,              intent(IN   ):: n
 real(sp),             intent(IN   ):: s
 real(sp),dimension(n),intent(INOUT):: x,y,z
-!-----------------------------------------------------------------------------
 real(sp)                           :: a,b,d,e,ab2,aa,bb,di,aapbb,aambb
 integer                            :: i
-!=============================================================================
 a=s+u1
 b=s-u1
 ab2=a*b*2
