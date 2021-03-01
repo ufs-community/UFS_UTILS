@@ -1,5 +1,6 @@
 !> @file
-!! @author R. J. Purser @date September 2018
+!! @author R. J. Purser 
+!! @date September 2018
 !!
 !! A suite of routines to perform the eigen-decomposition of symmetric 2*2
 !! matrices and to deliver basic analytic functions, and the derivatives
@@ -35,18 +36,17 @@ interface chol2;       module procedure chol2;                end interface
 
 contains
 
-!=============================================================================
+!> Get the orthogonal eigenvectors, vv, and diagonal matrix of eigenvalues, oo,
+!! of the symmetric 2*2 matrix, em.
+!! @author R. J. Purser
+!! @param em symmetric 2*2 matrix
+!! @param vv orthogonal eigenvectors
+!! @param oo diagonal matrix of eigenvalues
 subroutine eigensym2(em,vv,oo)!                                    [eigensym2]
-!=============================================================================
-! Get the orthogonal eigenvectors, vv, and diagonal matrix of eigenvalues, oo, 
-! of the symmetric 2*2 matrix, em.
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),intent(in ):: em
 real(dp),dimension(2,2),intent(out):: vv,oo
-!-----------------------------------------------------------------------------
 real(dp):: a,b,c,d,e,f,g,h
-!=============================================================================
 a=em(1,1); b=em(1,2); c=em(2,2)
 d=a*c-b*b! <- det(em)
 e=(a+c)*o2; f=(a-c)*o2
@@ -60,26 +60,29 @@ vv(:,2)=(/-vv(2,1),vv(1,1)/)
 oo=matmul(transpose(vv),matmul(em,vv))
 oo(1,2)=u0; oo(2,1)=u0
 end subroutine eigensym2
-!=============================================================================
+
+!> For a symmetric 2*2 matrix, em, return the normalized eigenvectors, vv, and
+!! the diagonal matrix of eigenvalues, oo. If the two eigenvalues are equal,
+!! proceed no further and raise the logical failure flag, ff, to .true.;
+!! otherwise, return with vvd=d(vv)/d(em) and ood=d(oo)/d(em) and ff=.false.,
+!! and maintain the symmetries between the last two of the indices of
+!! these derivatives.
+!! @author R. J. Purser
+!! @param em symmetric 2*2 matrix
+!! @param vv normalized eigenvectors
+!! @param oo diagonal matrix of eigenvalues
+!! @param ff logical failure flag
+!! @param vvd vvd=d(vv)/d(em)
+!! @param ood ood=d(oo)/d(em)
 subroutine eigensym2d(em,vv,oo,vvd,ood,ff)!                        [eigensym2]
-!=============================================================================
-! For a symmetric 2*2 matrix, em, return the normalized eigenvectors, vv, and
-! the diagonal matrix of eigenvalues, oo. If the two eigenvalues are equal,
-! proceed no further and raise the logical failure flag, ff, to .true.;
-! otherwise, return with vvd=d(vv)/d(em) and ood=d(oo)/d(em) and ff=.false.,
-! and maintain the symmetries between the last two of the indices of 
-! these derivatives.
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),    intent(in ):: em
 real(dp),dimension(2,2),    intent(out):: vv,oo
 real(dp),dimension(2,2,2,2),intent(out):: vvd,ood
 logical,                    intent(out):: ff
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: emd,tt,vvr
 real(dp)               :: oodif,dtheta
 integer(spi)           :: i,j
-!=============================================================================
 call eigensym2(em,vv,oo); vvr(1,:)=-vv(2,:); vvr(2,:)=vv(1,:)
 oodif=oo(1,1)-oo(2,2); ff=oodif==u0; if(ff)return
 ood=0
@@ -101,37 +104,35 @@ do j=1,2
 enddo
 end subroutine eigensym2d
 
-!=============================================================================
+!> Get the inverse of a 2*2 matrix (need not be symmetric in this case).
+!! @author R. J. Purser
+!! @param em 2*2 matrix
+!! @param z inverse of a 2*2 matrix
 subroutine invsym2(em,z)!                                            [invsym2]
-!=============================================================================
-! Get the inverse of a 2*2 matrix (need not be symmetric in this case).
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),intent(in ):: em
 real(dp),dimension(2,2),intent(out):: z
-!-----------------------------------------------------------------------------
 real(dp):: detem
-!=============================================================================
 z(1,1)=em(2,2); z(2,1)=-em(2,1); z(1,2)=-em(1,2); z(2,2)=em(1,1)
 detem=em(1,1)*em(2,2)-em(2,1)*em(1,2)
 z=z/detem
 end subroutine invsym2
-!=============================================================================
+
+!> Get the inverse, z,of a 2*2 symmetric matrix, em, and its derivative, zd,
+!! with respect to symmetric variations of its components. I.e., for a
+!! symmetric infinitesimal change, delta_em, in em, the resulting
+!1 infinitesimal change in z would be:
+!! delta_z(i,j) = matmul(zd(i,j,:,:),delta_em)
+!! @author R. J. Purser
+!! @param z inverse of a 2*2 symmetric matrix
+!! @param em 2*2 symmetric matrix
+!! @param zd derivative of the 2*2 symmetric matrix
 subroutine invsym2d(em,z,zd)!                                        [invsym2]
-!=============================================================================
-! Get the inverse, z,of a 2*2 symmetric matrix, em, and its derivative, zd, 
-! with respect to symmetric variations of its components. I.e., for a 
-! symmetric infinitesimal change, delta_em, in em, the resulting
-! infinitesimal change in z would be:
-! delta_z(i,j) = matmul(zd(i,j,:,:),delta_em)
-!=============================================================================
 implicit none
 real(dp),dimension(2,2)    ,intent(in ):: em
 real(dp),dimension(2,2)    ,intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
-!-----------------------------------------------------------------------------
 integer(spi):: k,l
-!=============================================================================
 call invsym2(em,z)
 call id2222(zd)
 do l=1,2; do k=1,2
@@ -139,18 +140,16 @@ do l=1,2; do k=1,2
 enddo;    enddo
 end subroutine invsym2d
 
-!=============================================================================
+!> Get the sqrt of a symmetric positive-definite 2*2 matrix
+!! @author R. J. Purser
+!! @param em 2*2 symmetric matrix
+!! @param z sqrt of a symmetric positive-definite 2*2 matrix
 subroutine sqrtsym2(em,z)!                                          [sqrtsym2]
-!=============================================================================
-! Get the sqrt of a symmetric positive-definite 2*2 matrix
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),intent(in ):: em
 real(dp),dimension(2,2),intent(out):: z
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: vv,oo
 integer(spi)           :: i
-!=============================================================================
 call eigensym2(em,vv,oo)
 do i=1,2
 if(oo(i,i)<0)stop 'In sqrtsym2; matrix em is not non-negative'
@@ -158,52 +157,52 @@ oo(i,i)=sqrt(oo(i,i)); enddo
 z=matmul(vv,matmul(oo,transpose(vv)))
 end subroutine sqrtsym2
 
-!=============================================================================
+!> General routine to evaluate z=sqrt(x),  and the symmetric
+!! derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite
+!! matrix. If the eigenvalues are very close together, extract their
+!! geometric mean for "preconditioning" a scaled version, px, of x, whose
+!! sqrt, and hence its derivative, can be easily obtained by the series
+!! expansion method. Otherwise, use the eigen-method (which entails dividing
+!! by the difference in the eignevalues to get zd, and which therefore
+!! fails when the eigenvalues become too similar).
+!! @author R. J. Purser
+!! @param z sqrt(x) result
+!! @param zd symmetric derivative 
+!! @param x symmetric 2*2 positive-definite matrix
 subroutine sqrtsym2d(x,z,zd)!                                        [sqrtsym2]
-!=============================================================================
-! General routine to evaluate z=sqrt(x),  and the symmetric
-! derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite
-! matrix. If the eigenvalues are very close together, extract their
-! geometric mean for "preconditioning" a scaled version, px, of x, whose
-! sqrt, and hence its derivative, can be easily obtained by the series
-! expansion method. Otherwise, use the eigen-method (which entails dividing
-! by the difference in the eignevalues to get zd, and which therefore
-! fails when the eigenvalues become too similar).
-!============================================================================= 
 implicit none
 real(dp),dimension(2,2),    intent(in ):: x
 real(dp),dimension(2,2),    intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: px
 real(dp)               :: rdetx,lrdetx,htrpxs,q
-!=============================================================================
 rdetx=sqrt(x(1,1)*x(2,2)-x(1,2)*x(2,1)) ! <- sqrt(determinant of x)
 lrdetx=sqrt(rdetx)
-px=x/rdetx                  ! <- preconditioned x (has unit determinant)
-htrpxs= ((px(1,1)+px(2,2))/2)**2 ! <- {half-trace-px}-squared
+px=x/rdetx                  ! - preconditioned x (has unit determinant)
+htrpxs= ((px(1,1)+px(2,2))/2)**2 ! - {half-trace-px}-squared
 q=htrpxs-u1
-if(q<.05_dp)then               ! <- Taylor expansion method
+if(q<.05_dp)then               ! - Taylor expansion method
    call sqrtsym2d_t(px,z,zd)
    z=z*lrdetx; zd=zd/lrdetx
 else
-   call sqrtsym2d_e(x,z,zd) ! <- Eigen-method
+   call sqrtsym2d_e(x,z,zd) ! - Eigen-method
 endif
 end subroutine sqrtsym2d
 
-!=============================================================================
+!> Eigen-method
+!! @author R. J. Purser
+!! @param z sqrt(x) result
+!! @param zd symmetric derivative
+!! @param x symmetric 2*2 positive-definite matrix
 subroutine sqrtsym2d_e(x,z,zd)!                                  [sqrtsym2d_e]
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),    intent(in ):: x
 real(dp),dimension(2,2),    intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2,2,2):: vvd,ood
 real(dp),dimension(2,2)    :: vv,oo,oori,tt
 integer(spi)               :: i,j
 logical                    :: ff
-!=============================================================================
 call eigensym2(x,vv,oo,vvd,ood,ff)
 z=u0; z(1,1)=sqrt(oo(1,1)); z(2,2)=sqrt(oo(2,2))
 z=matmul(matmul(vv,z),transpose(vv))
@@ -217,26 +216,25 @@ enddo
 enddo
 end subroutine sqrtsym2d_e
 
-!=============================================================================
+!> Use the Taylor-series method (eigenvalues both fairly close to unity).
+!! For a 2*2 positive definite symmetric matrix x, try to get both the z=sqrt(x)
+!! and dz/dx using the binomial-expansion method applied to the intermediate
+!! matrix, r = (x-1). ie z=sqrt(x) = (1+r)^{1/2} = I + (1/2)*r -(1/8)*r^2 ...
+!!  + [(-)^n *(2n)!/{(n+1)! * n! *2^{2*n-1}} ]*r^{n+1}
+!! @author R. J. Purser
+!! @param z sqrt(x) result
+!! @param zd symmetric derivative
+!! @param x symmetric 2*2 positive-definite matrix
 subroutine sqrtsym2d_t(x,z,zd)!                                  [sqrtsym2d_t]
-!=============================================================================
-! Use the Taylor-series method (eigenvalues both fairly close to unity).
-! For a 2*2 positive definite symmetric matrix x, try to get both the z=sqrt(x)
-! and dz/dx using the binomial-expansion method applied to the intermediate
-! matrix, r = (x-1). ie z=sqrt(x) = (1+r)^{1/2} = I + (1/2)*r -(1/8)*r^2 ...
-!  + [(-)^n *(2n)!/{(n+1)! * n! *2^{2*n-1}} ]*r^{n+1}
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),    intent(in ):: x
 real(dp),dimension(2,2),    intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
-!-----------------------------------------------------------------------------
 integer(spi),parameter     :: nit=300 ! number of iterative increments allowed
 real(dp),parameter         :: crit=1.e-17
 real(dp),dimension(2,2)    :: r,rp,rd,rpd
 real(dp)                   :: c
 integer(spi)               :: i,j,n
-!=============================================================================
 r=x; r(1,1)=x(1,1)-1; r(2,2)=x(2,2)-1
 z=u0; z(1,1)=u1; z(2,2)=u1
 rp=r
@@ -263,33 +261,32 @@ do j=1,2; do i=1,2
 enddo; enddo
 end subroutine sqrtsym2d_t
 
-!=============================================================================
+!> Get the exp of a symmetric 2*2 matrix
+!! @author R. J. Purser
+!! @param em symmetric 2*2 matrix
+!! @param expem exp of a symmetric 2*2 matrix
 subroutine expsym2(em,expem)!                                        [expsym2]
-!=============================================================================
-! Get the exp of a symmetric 2*2 matrix
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),intent(in ):: em
 real(dp),dimension(2,2),intent(out):: expem
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: vv,oo
 integer(spi)           :: i
-!=============================================================================
 call eigensym2(em,vv,oo)
 do i=1,2; oo(i,i)=exp(oo(i,i)); enddo
 expem=matmul(vv,matmul(oo,transpose(vv)))
 end subroutine expsym2
-!=============================================================================
+
+!> Sub Process for process symmetric 2*2 matrix 
+!! @author R. J. Purser
+!! @param zd symmetric derivative
+!! @param x symmetric 2*2 positive-definite matrix
 subroutine expsym2d(x,z,zd)!                                         [expsym2]
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),    intent(in ):: x
 real(dp),dimension(2,2),    intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: px
 real(dp)               :: trxh,detpx
-!=============================================================================
 trxh=(x(1,1)+x(2,2))*o2
 px=x;px(1,1)=x(1,1)-trxh;px(2,2)=x(2,2)-trxh
 detpx=abs(px(1,1)*px(2,2)-px(1,2)*px(2,1))
@@ -299,19 +296,19 @@ endif
 z=z*exp(trxh)
 end subroutine expsym2d
 
-!=============================================================================
+!> Sub Process for process symmetric 2*2 matrix
+!! @author R. J. Purser
+!! @param zd symmetric derivative
+!! @param x symmetric 2*2 positive-definite matrix
 subroutine expsym2d_e(x,z,zd)!                                    [expsym2d_e]
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),    intent(in ):: x
 real(dp),dimension(2,2),    intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2,2,2):: vvd,ood
 real(dp),dimension(2,2)    :: vv,oo,ooe,tt
 integer(spi)               :: i,j
 logical                    :: ff
-!=============================================================================
 call eigensym2(x,vv,oo,vvd,ood,ff)
 z=u0; z(1,1)=exp(oo(1,1)); z(2,2)=exp(oo(2,2))
 z=matmul(matmul(vv,z),transpose(vv))
@@ -325,24 +322,23 @@ enddo
 enddo
 end subroutine expsym2d_e
 
-!=============================================================================
+!> Use the Taylor-series method (eigenvalues both fairly close to zero).
+!! For a 2*2 symmetric matrix x, try to get both the z=exp(x)
+!! and dz/dx using the Taylor series expansion method.
+!! @author R. J. Purser
+!! @param z Taylor series expansion method exp(x)
+!! @param zd symmetric derivative
+!! @param x symmetric 2*2 positive-definite matrix
 subroutine expsym2d_t(x,z,zd)!                                    [expsym2d_t]
-!=============================================================================
-! Use the Taylor-series method (eigenvalues both fairly close to zero).
-! For a 2*2 symmetric matrix x, try to get both the z=exp(x)
-! and dz/dx using the Taylor series expansion method.
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),    intent(in ):: x
 real(dp),dimension(2,2),    intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
-!-----------------------------------------------------------------------------
 integer(spi),parameter     :: nit=100 ! number of iterative increments allowed
 real(dp),parameter         :: crit=1.e-17_dp
 real(dp),dimension(2,2)    :: xp,xd,xpd
 real(dp)                   :: c
 integer(spi)               :: i,j,n
-!=============================================================================
 z=0; z(1,1)=u1; z(2,2)=u1
 xp=x
 c=u1
@@ -368,18 +364,16 @@ do j=1,2; do i=1,2
 enddo; enddo
 end subroutine expsym2d_t
 
-!=============================================================================
+!> Get the log of a symmetric positive-definite 2*2 matrix
+!! @author R. J. Purser
+!! @param em symmetric 2*2 matrix
+!! @param logem log of a symmetric positive-definite 2*2 matrix
 subroutine logsym2(em,logem)!                                        [logsym2]
-!=============================================================================
-! Get the log of a symmetric positive-definite 2*2 matrix
-!=============================================================================
 implicit none
 real(dp),dimension(2,2),intent(in ):: em
 real(dp),dimension(2,2),intent(out):: logem
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: vv,oo
 integer(spi)           :: i
-!=============================================================================
 call eigensym2(em,vv,oo)
 do i=1,2
    if(oo(i,i)<=u0)stop 'In logsym2; matrix em is not positive definite'
@@ -387,23 +381,23 @@ do i=1,2
 enddo
 logem=matmul(vv,matmul(oo,transpose(vv)))
 end subroutine logsym2
-!=============================================================================
+
+!> General routine to evaluate the logarithm, z=log(x),  and the symmetric
+!! derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite
+!! matrix.
+!! @author R. J. Purser
+!! @param zd the symmetric derivative
+!! @param x a symmetric 2*2 positive-definite matrix
+!! @param z evaluate the logarithm log(x)
 subroutine logsym2d(x,z,zd)!                                         [logsym2]
-!=============================================================================
-! General routine to evaluate the logarithm, z=log(x),  and the symmetric
-! derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite
-! matrix.
-!=============================================================================
 use pfun, only: sinhox
 implicit none
 real(dp),dimension(2,2),    intent(in ):: x
 real(dp),dimension(2,2),    intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
-!-----------------------------------------------------------------------------
 real(dp),dimension(2,2):: vv,oo,d11,d12,d22,pqr
 real(dp)               :: c,s,cc,cs,ss,c2h,p,q,r,lp,lq,L
 integer(spi)           :: i
-!=============================================================================
 call eigensym2(x,vv,oo)
 if(oo(1,1)<=u0 .or. oo(2,2)<=u0)stop 'In logsym2; matrix x is not positive definite'
 c=vv(1,1); s=vv(1,2); cc=c*c; cs=c*s; ss=s*s; c2h=(cc-ss)*o2
@@ -420,9 +414,9 @@ zd(:,:,2,2)=matmul(vv,matmul(d22*pqr,transpose(vv)))
 zd(:,:,2,1)=zd(:,:,1,2)
 end subroutine logsym2d
 
-!=============================================================================
+!> General routine for Effective identity
+!! @author R. J. Purser
 subroutine id2222(em)!                                                [id2222]
-!=============================================================================
 implicit none
 real(dp),dimension(2,2,2,2),intent(out):: em
 real(dp),dimension(2,2,2,2)            :: id
@@ -430,20 +424,19 @@ real(dp),dimension(2,2,2,2)            :: id
 em=id
 end subroutine id2222
 
-!===========================================================================
+!> Return the cholesky lower triangular factor, C, of the 2X2 symmetric
+!! matrix, S, or raise the failure flag, FF, if S is not positive-definite.
+!! @author R. J. Purser
+!! @param c cholesky lower triangular factor
+!! @param s 2X2 symmetric matrix
+!! @param ff raise the failure flag
 subroutine chol2(s,c,ff)!                                            [chol2]
-!===========================================================================
-! Return the cholesky lower triangular factor, C, of the 2X2 symmetric
-! matrix, S, or raise the failure flag, FF, if S is not positive-definite.
-!===========================================================================
 use pietc, only: u0
 implicit none
 real(dp),dimension(2,2),intent(in ):: s
 real(dp),dimension(2,2),intent(out):: c
 logical                ,intent(out):: ff
-!---------------------------------------------------------------------------
 real(dp):: r
-!===========================================================================
 ff=s(1,1)<=u0; if(ff)return
 c(1,1)=sqrt(s(1,1))
 c(1,2)=u0
