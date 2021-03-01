@@ -1433,19 +1433,20 @@
 
  end subroutine nsst_water_reset
 
- !> Get sst climatology at the valid time (atime) and target
- !! resolution (nx,ny).
+ !> Get the sst climatology at the valid time and on the target
+ !! grid.
  !!
- !! @param[in] xlats_ij latitudes of target grids (nx*ny)
- !! @param[in] xlons_ij longitudes of target grids (nx*ny)
- !! @param[in] ny 
- !! @param[in] nx
- !! @param[in] iy
- !! @param[in] im
- !! @param[in] id
- !! @param[in] ih
- !! @param[out] tf_clm sst climatology valid at atime (nx,ny)
- !! @param[out] tf_trd 6-hourly sst climatology tendency valid at atime (nx,ny)
+ !! @param[in] xlats_ij latitude of target grid
+ !! @param[in] xlons_ij longitude of target grid
+ !! @param[in] ny 'j' dimension of target grid
+ !! @param[in] nx 'i' dimension of target grid
+ !! @param[in] iy Year 
+ !! @param[in] im Month
+ !! @param[in] id Day
+ !! @param[in] ih Hour
+ !! @param[out] tf_clm sst climatology at the valid time and on the target grid
+ !! @param[out] tf_trd 6-hourly sst climatology tendency at the valid time
+ !! and on the target grid.
  !! @author M. Iredell, xuli, Hang Lei, George Gayno
 subroutine get_tf_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,tf_clm,tf_trd)
  use read_write_data, only : get_tf_clm_dim
@@ -1551,19 +1552,18 @@ subroutine get_tf_clm_ta(tf_clm_ta,tf_clm_trend,xlats,xlons,nlat,nlon,mon1,mon2,
    write(*,'(a,2f9.3)') 'tf_clm_trend, min, max : ',minval(tf_clm_trend),maxval(tf_clm_trend)
  end subroutine get_tf_clm_ta
 
- !> Get salinity climatology at the valid time (atime) and target
- !> resolution (nx,ny).
+ !> Get salinity climatology at the valid time on the target grid.
  !!
- !! @param[in] xlats_ij latitudes of target grids (nx*ny).
- !! @param[in] xlons_ij longitudes of target grids (nx*ny).
- !! @param[in] ny
- !! @param[in] nx
- !! @param[in] iy
- !! @param[in] im
- !! @param[in] id
- !! @param[in] ih
- !! @param[out] sal_clm salinity climatology valid at atime (nx,ny).
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[in] xlats_ij Latitudes of target grid
+ !! @param[in] xlons_ij Longitudes of target grid
+ !! @param[in] ny 'j' dimension of target grid
+ !! @param[in] nx 'i' dimension of target grid
+ !! @param[in] iy Year
+ !! @param[in] im Month
+ !! @param[in] id Day
+ !! @param[in] ih Hour
+ !! @param[out] sal_clm Salinity climatology on target grid at the valid time
+ !! @author Xu Li
 subroutine get_sal_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,sal_clm)
  use read_write_data, only : get_dim_nc
  implicit none
