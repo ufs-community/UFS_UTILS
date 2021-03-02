@@ -13,10 +13,19 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 # Copy necessary test files.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config.nml
-    ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
+    ${CMAKE_CURRENT_SOURCE_DIR}/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/config_fv3_tiled.nml)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/config_fv3_tiled_warm_restart.nml ${CMAKE_CURRENT_BINARY_DIR}/config_fv3_tiled_warm_restart.nml)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/config_gaussian_nemsio.nml)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/config_gfs_grib2.nml ${CMAKE_CURRENT_BINARY_DIR}/config_gfs_grib2.nml)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/config_spectral_sigio.nml ${CMAKE_CURRENT_BINARY_DIR}/config_spectral_sigio.nml)
 
-add_executable(ftst_utils "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.f90" ftst_utils.F90)
+add_executable(ftst_utils "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.F90" ftst_utils.F90)
 add_test(NAME ftst_utils COMMAND ftst_utils)
 target_link_libraries(
   ftst_utils
@@ -37,10 +46,10 @@ endif()
 
 add_executable(ftst_program_setup "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/input_data.F90"
   "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/model_grid.F90"
-  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/program_setup.f90"
+  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/program_setup.F90"
   "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/grib2_util.F90"
-  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/search_util.f90"
-  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.f90"
+  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/search_util.F90"
+  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.F90"
   ftst_program_setup.F90)
 add_test(NAME ftst_program_setup COMMAND ftst_program_setup)
 target_link_libraries(

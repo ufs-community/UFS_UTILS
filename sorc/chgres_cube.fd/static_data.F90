@@ -1,8 +1,9 @@
 !> @file
 !! @brief Process static surface data
-!!
-!! Read pre-computed static/climatological data on the fv3 
-!! target grid.  Time interpolate if necessary (for example a
+!! @author George Gayno NCEP/EMC
+
+!> Read pre-computed static/climatological data on the fv3 
+!! target grid. Time interpolate if necessary (for example a
 !! monthly climo field).
 !!
 !! @author George Gayno NCEP/EMC

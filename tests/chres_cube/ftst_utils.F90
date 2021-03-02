@@ -10,6 +10,7 @@ program ftst_utils
 
  logical                          :: match_result
 
+ character(len=12)                :: to_upper
  character(len=12)                :: test_input_char_1, test_input_char_2, u_st_base, l_st_base
 
  u_st_base="STAGGERLOCCE"
@@ -29,13 +30,11 @@ program ftst_utils
  call to_lower(test_input_char_1) 
  match_result = test_input_char_1 == l_st_base
  if (.not.match_result) then
-   stop
+   stop 1
  endif
 
- call to_upper(test_input_char_2)
- match_result = test_input_char_2 == u_st_base
- if (.not.match_result) then
-   stop
+ if (to_upper(test_input_char_2) /= u_st_base) then
+   stop 2
  endif
 
 !-------------------------------------------------------------------------
