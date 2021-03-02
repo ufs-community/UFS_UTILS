@@ -134,4 +134,4 @@ jobs:
       with:
         if: ${{ matrix.os == 'ubuntu-20.04' }}
         name: test-coverage
-        path: ufs_utils/build/test-coverag.html
+        path: ufs_utils/build/test-coverage.html
