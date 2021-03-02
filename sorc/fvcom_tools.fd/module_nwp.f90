@@ -51,8 +51,12 @@ module module_nwp
    end type nwp_type
 
    type, extends(nwp_type) :: fcst_nwp
-      type(nwpbase), pointer :: head => NULL() !< ???
-      type(nwpbase), pointer :: tail => NULL() !< ???
+      ! The pointers are carryover from when I inherited the code from
+      ! GSL's work with HRRR for a similar use. I am not sure with
+      ! object based coding in Fortran if it needs to have parts
+      ! initialized to gain access to the procedures within it. - D. Wright.
+      type(nwpbase), pointer :: head => NULL() !< Pointer to head of list.
+      type(nwpbase), pointer :: tail => NULL() !< Pointer to tail of list.
       contains
          procedure :: initial => initial_nwp !< Defines vars and names. @return
          procedure :: list_initial => list_initial_nwp !< List the setup. @return
