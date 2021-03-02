@@ -18,8 +18,8 @@
       use netcdf
       implicit none
       integer,parameter :: kdbl=selected_real_kind(p=13,r=200)
-      character(len=255) :: filename_full !< the netcdf input file
-      character(len=255) :: filename_shaved !< the NetCDF file for shaved data
+      character(len=255) :: filename_full ! the netcdf input file
+      character(len=255) :: filename_shaved ! the NetCDF file for shaved data
       integer :: idim_compute,jdim_compute,halo
       integer :: i_count_compute,j_count_compute                        &
                 ,i_count_super,j_count_super
@@ -33,8 +33,8 @@
 
       integer :: n,na,ncid_in,ncid_out,nd,ndims,ngatts     &
                 ,nvars,unlimdimid
-      integer :: natts !< # of attributes
-      integer :: nctype !< type of the nth variable
+      integer :: natts ! # of attributes
+      integer :: nctype ! type of the nth variable
       integer :: dim_id,len_dim,len_x,len_y,var_id,xdim_id,xdim_id_out  &
                 ,ydim_id,ydim_id_out
       integer :: istat
@@ -45,8 +45,8 @@
 !     real*8,dimension(:,:),allocatable :: var_2d_dbl_with_halo
       character(len=50) :: file,name_dim,name_xdim,name_ydim   &
                           ,xdim,ydim
-      character(len=50) :: name_att !< the attribute's name
-      character(len=50) :: name_var !< the name of the nth variable
+      character(len=50) :: name_att ! the attribute's name
+      character(len=50) :: name_var ! the name of the nth variable
       character(len=255) :: att=' '
       character(len=255),dimension(:),allocatable :: var_1d_char
 
