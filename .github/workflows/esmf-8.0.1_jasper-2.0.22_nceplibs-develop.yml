@@ -128,7 +128,7 @@ jobs:
         make -j2
         make test
         export PATH="/home/runner/.local/bin:$PATH"
-        gcovr -r .. --html -o test-coverage.html
+        gcovr -r .. --html -o test-coverage-${{ matrix.os }}.html
 
     - uses: actions/upload-artifact@v2
       with:
