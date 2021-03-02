@@ -12,7 +12,7 @@
 !! must be shaved down to only the computational interior and the halo
 !! which is what this code does.
 !!
-!! @return 0 for success, error code otherwise
+!! @return 0 for success, error code otherwise.
 !! @author Tom Black
       program shave_nc
       use netcdf
