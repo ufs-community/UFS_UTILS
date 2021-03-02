@@ -66,7 +66,7 @@ module module_ncio
           replace_var_nc_int_1d,replace_var_nc_int_2d,        &
           replace_var_nc_int_3d,                              &
           replace_var_nc_char_1d,replace_var_nc_char_2d,      &
-          replace_var_nc_char_3d file. !< Replace 1d, 2d, 3d, or 4d field from the nc file. @return
+          replace_var_nc_char_3d !< Replace 1d, 2d, 3d, or 4d field from the nc file. @return
      procedure :: replace_var_nc_int !< Replace 1d, 2d, 3d, or 4d field from the nc file. @return
      procedure :: replace_var_nc_int_1d !< Replace 1d, 2d, 3d, or 4d field from the nc file. @return
      procedure :: replace_var_nc_int_2d !< Replace 1d, 2d, 3d, or 4d field from the nc file. @return
