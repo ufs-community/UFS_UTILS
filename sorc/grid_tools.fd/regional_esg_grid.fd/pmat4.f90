@@ -1,8 +1,7 @@
 !> @file
-!! @author R. J. Purser @date Oct 2005 
-!!
-!!  Euclidean geometry, geometric (stereographic) projections,
+!! @brief Euclidean geometry, geometric (stereographic) projections,
 !!              related transformations (Mobius).
+!! 
 !! Package for handy vector and matrix operations in Euclidean geometry.
 !! This package is primarily intended for 3D operations and three of the
 !! functions (Cross_product, Triple_product and Axial) do not possess simple
@@ -16,7 +15,6 @@
 !! exponentials of matrices (without resort to eigen methods). Also added
 !! Quaternion and spinor representations of 3D rotations, and their 
 !! conversion routines.
-!!
 !!   FUNCTION:
 !!- absv:           Absolute magnitude of vector as its euclidean length
 !!- Normalized:     Normalized version of given real vector
@@ -45,7 +43,10 @@
 !! DIRECT DEPENDENCIES
 !! Libraries[their Modules]: pmat[pmat]
 !! Additional Modules      : pkind, pietc
-!!
+!! @author R. J. Purser @date Oct 2005
+
+!> Module for handy vector and matrix operations in Euclidean geometry
+!! @author R. J. Purser
 module pmat4
 !============================================================================
 use pkind, only: spi,sp,dp,dpc
@@ -114,26 +115,27 @@ interface mobiusi;  module procedure zmobiusi;                  end interface
 
 contains
 
-!=============================================================================
+!> sqrt calculation for absv_s function
+!! @author R. J. Purser
 function absv_s(a)result(s)!                                            [absv]
-!=============================================================================
 implicit none
 real(sp),dimension(:),intent(in):: a
 real(sp)                        :: s
 s=sqrt(dot_product(a,a))
 end function absv_s
-!=============================================================================
+
+!> sqrt calculation for absv_d function
+!! @author R. J. Purser
 function absv_d(a)result(s)!                                            [absv]
-!=============================================================================
 implicit none
 real(dp),dimension(:),intent(in):: a
 real(dp)                        :: s
 s=sqrt(dot_product(a,a))
 end function absv_d
 
-!=============================================================================
+!> calculation for normalized_s function
+!! @author R. J. Purser
 function normalized_s(a)result(b)!                                [normalized]
-!=============================================================================
 use pietc_s, only: u0
 implicit none
 real(sp),dimension(:),intent(IN):: a
@@ -141,9 +143,10 @@ real(sp),dimension(size(a))     :: b
 real(sp)                        :: s
 s=absv_s(a); if(s==u0)then; b=u0;else;b=a/s;endif
 end function normalized_s
-!=============================================================================
+
+!> calculation for normalized_d function
+!! @author R. J. Purser
 function normalized_d(a)result(b)!                                [normalized]
-!=============================================================================
 use pietc, only: u0
 implicit none
 real(dp),dimension(:),intent(IN):: a
@@ -152,9 +155,9 @@ real(dp)                        :: s
 s=absv_d(a); if(s==u0)then; b=u0;else;b=a/s;endif
 end function normalized_d
 
-!=============================================================================
+!> calculation for orthogonalized_s function
+!! @author R. J. Purser
 function orthogonalized_s(u,a)result(b)!                      [orthogonalized]
-!=============================================================================
 implicit none
 real(sp),dimension(:),intent(in):: u,a
 real(sp),dimension(size(u))     :: b
@@ -162,9 +165,10 @@ real(sp)                        :: s
 ! Note: this routine assumes u is already normalized
 s=dot_product(u,a); b=a-u*s
 end function orthogonalized_s
-!=============================================================================
+
+!> calculation for orthogonalized_d function
+!! @author R. J. Purser
 function orthogonalized_d(u,a)result(b)!                      [orthogonalized]
-!=============================================================================
 implicit none
 real(dp),dimension(:),intent(in):: u,a
 real(dp),dimension(size(u))     :: b
@@ -173,36 +177,38 @@ real(dp)                        :: s
 s=dot_product(u,a); b=a-u*s
 end function orthogonalized_d
 
-!=============================================================================
+!> calculation for cross_product_s function
+!! @author R. J. Purser
 function cross_product_s(a,b)result(c)!                        [cross_product]
-!=============================================================================
 implicit none
 real(sp),dimension(3),intent(in):: a,b
 real(sp),dimension(3)           :: c
 c(1)=a(2)*b(3)-a(3)*b(2); c(2)=a(3)*b(1)-a(1)*b(3); c(3)=a(1)*b(2)-a(2)*b(1)
 end function cross_product_s
-!=============================================================================
+
+!> calculation for cross_product_d function
+!! @author R. J. Purser
 function cross_product_d(a,b)result(c)!                        [cross_product]
-!=============================================================================
 implicit none
 real(dp),dimension(3),intent(in):: a,b
 real(dp),dimension(3)           :: c
 c(1)=a(2)*b(3)-a(3)*b(2); c(2)=a(3)*b(1)-a(1)*b(3); c(3)=a(1)*b(2)-a(2)*b(1)
 end function cross_product_d
-!=============================================================================
+
+!> Deliver the triple-cross-product, x, of the
+!! three 4-vectors, u, v, w, with the sign convention
+!! that ordered, {u,v,w,x} form a right-handed quartet
+!! in the generic case (determinant >= 0).
+!! @param x triple-cross-product vector
+!! @param u vector
+!! @param v vector
+!! @param w vector
+!! @author R. J. Purser
 function triple_cross_product_s(u,v,w)result(x)!               [cross_product]
-!=============================================================================
-! Deliver the triple-cross-product, x, of the
-! three 4-vectors, u, v, w, with the sign convention
-! that ordered, {u,v,w,x} form a right-handed quartet 
-! in the generic case (determinant >= 0).
-!============================================================================= 
 implicit none
 real(sp),dimension(4),intent(in ):: u,v,w
 real(sp),dimension(4)            :: x
-!-----------------------------------------------------------------------------
 real(sp):: uv12,uv13,uv14,uv23,uv24,uv34
-!=============================================================================
 uv12=u(1)*v(2)-u(2)*v(1); uv13=u(1)*v(3)-u(3)*v(1); uv14=u(1)*v(4)-u(4)*v(1)
                           uv23=u(2)*v(3)-u(3)*v(2); uv24=u(2)*v(4)-u(4)*v(2)
                                                     uv34=u(3)*v(4)-u(4)*v(3)
@@ -211,15 +217,14 @@ x(2)= uv13*w(4)-uv14*w(3)          +uv34*w(1)
 x(3)=-uv12*w(4)          +uv14*w(2)-uv24*w(1)
 x(4)=           uv12*w(3)-uv13*w(2)+uv23*w(1)
 end function triple_cross_product_s
-!=============================================================================
+
+!> calculation for triple_cross_product_d function
+!! @author R. J. Purser
 function triple_cross_product_d(u,v,w)result(x)!               [cross_product]
-!=============================================================================
 implicit none
 real(dp),dimension(4),intent(in ):: u,v,w
 real(dp),dimension(4)            :: x
-!-----------------------------------------------------------------------------
 real(dp):: uv12,uv13,uv14,uv23,uv24,uv34
-!=============================================================================
 uv12=u(1)*v(2)-u(2)*v(1); uv13=u(1)*v(3)-u(3)*v(1); uv14=u(1)*v(4)-u(4)*v(1)
                           uv23=u(2)*v(3)-u(3)*v(2); uv24=u(2)*v(4)-u(4)*v(2)
                                                     uv34=u(3)*v(4)-u(4)*v(3)
@@ -229,7 +234,8 @@ x(3)=-uv12*w(4)          +uv14*w(2)-uv24*w(1)
 x(4)=           uv12*w(3)-uv13*w(2)+uv23*w(1)
 end function triple_cross_product_d
 
-!=============================================================================
+!> calculation for outer_product_s function
+!! @author R. J. Purser
 function outer_product_s(a,b)result(c)!                        [outer_product]
 !=============================================================================
 implicit none
@@ -240,9 +246,10 @@ integer(spi)                       :: nb,i
 nb=size(b)
 do i=1,nb; c(:,i)=a*b(i); enddo
 end function outer_product_s
-!=============================================================================
+
+!> Calculation for outer_product_d function
+!! @author R. J. Purser
 function outer_product_d(a,b)result(c)!                        [outer_product]
-!=============================================================================
 implicit none
 real(dp),dimension(:),  intent(in ):: a
 real(dp),dimension(:),  intent(in ):: b
@@ -251,9 +258,10 @@ integer(spi)                       :: nb,i
 nb=size(b)
 do i=1,nb; c(:,i)=a*b(i); enddo
 end function outer_product_d
-!=============================================================================
+
+!> Calculation for outer_product_i function
+!! @author R. J. Purser
 function outer_product_i(a,b)result(c)!                        [outer_product]
-!=============================================================================
 implicit none
 integer(spi),dimension(:),  intent(in ):: a
 integer(spi),dimension(:),  intent(in ):: b
@@ -263,26 +271,27 @@ nb=size(b)
 do i=1,nb; c(:,i)=a*b(i); enddo
 end function outer_product_i
 
-!=============================================================================
+!> Calculation for triple_product_s function
+!! @author R. J. Purser
 function triple_product_s(a,b,c)result(tripleproduct)!        [triple_product]
-!=============================================================================
 implicit none
 real(sp),dimension(3),intent(IN ):: a,b,c
 real(sp)                         :: tripleproduct
 tripleproduct=dot_product( cross_product(a,b),c )
 end function triple_product_s
-!=============================================================================
+
+!> Calculation for triple_product_d function
+!! @author R. J. Purser
 function triple_product_d(a,b,c)result(tripleproduct)!        [triple_product]
-!=============================================================================
 implicit none
 real(dp),dimension(3),intent(IN ):: a,b,c
 real(dp)                         :: tripleproduct
 tripleproduct=dot_product( cross_product(a,b),c )
 end function triple_product_d
 
-!=============================================================================
+!> Calculation for det_s function
+!! @author R. J. Purser
 function det_s(a)result(det)!                                            [det]
-!=============================================================================
 use pietc_s, only: u0
 implicit none
 real(sp),dimension(:,:),intent(IN )    :: a
@@ -297,9 +306,10 @@ else
    if(nrank<n)det=u0
 endif
 end function det_s
-!=============================================================================
+
+!> Calculation for det_d function
+!! @author R. J. Purser
 function det_d(a)result(det)!                                            [det]
-!=============================================================================
 use pietc, only: u0
 implicit none
 real(dp),dimension(:,:),intent(IN )    ::a
@@ -314,9 +324,10 @@ else
    if(nrank<n)det=u0
 endif
 end function det_d
-!=============================================================================
+
+!> Calculation for det_i function
+!! @author R. J. Purser
 function det_i(a)result(idet)!                                           [det]
-!=============================================================================
 implicit none
 integer(spi), dimension(:,:),intent(IN )    :: a
 integer(spi)                                :: idet
@@ -325,9 +336,9 @@ real(dp)                               :: bdet
 b=a; bdet=det(b); idet=nint(bdet)
 end function det_i
 
-!=============================================================================
+!> Calculation for det_id function
+!! @author R. J. Purser
 function det_id(a)result(idet)!                                          [det]
-!=============================================================================
 use pkind, only: dp,dpi
 implicit none
 integer(dpi), dimension(:,:),intent(IN ):: a
@@ -337,36 +348,39 @@ real(dp)                                :: bdet
 b=a; bdet=det(b); idet=nint(bdet)
 end function det_id
 
-!=============================================================================
+!> Calculation for axial3_s function
+!! @author R. J. Purser
 function axial3_s(a)result(b)!                                         [axial]
-!=============================================================================
 use pietc_s, only: u0
 implicit none
 real(sp),dimension(3),intent(IN ):: a
 real(sp),dimension(3,3)          :: b
 b=u0;b(3,2)=a(1);b(1,3)=a(2);b(2,1)=a(3);b(2,3)=-a(1);b(3,1)=-a(2);b(1,2)=-a(3)
 end function axial3_s
-!=============================================================================
+
+!> Calculation for axial3_d function
+!! @author R. J. Purser
 function axial3_d(a)result(b)!                                         [axial]
-!=============================================================================
 use pietc, only: u0
 implicit none
 real(dp),dimension(3),intent(IN ):: a
 real(dp),dimension(3,3)          :: b
 b=u0;b(3,2)=a(1);b(1,3)=a(2);b(2,1)=a(3);b(2,3)=-a(1);b(3,1)=-a(2);b(1,2)=-a(3)
 end function axial3_d
-!=============================================================================
+
+!> Calculation for axial33_s function
+!! @author R. J. Purser
 function axial33_s(b)result(a)!                                        [axial]
-!=============================================================================
 use pietc_s, only: o2
 implicit none
 real(sp),dimension(3,3),intent(IN ):: b
 real(sp),dimension(3)              :: a
 a(1)=(b(3,2)-b(2,3))*o2; a(2)=(b(1,3)-b(3,1))*o2; a(3)=(b(2,1)-b(1,2))*o2
 end function axial33_s
-!=============================================================================
+
+!> Calculation for axial33_d function
+!! @author R. J. Purser
 function axial33_d(b)result(a)!                                        [axial]
-!=============================================================================
 use pietc, only: o2
 implicit none
 real(dp),dimension(3,3),intent(IN ):: b
@@ -374,9 +388,9 @@ real(dp),dimension(3)              :: a
 a(1)=(b(3,2)-b(2,3))*o2; a(2)=(b(1,3)-b(3,1))*o2; a(3)=(b(2,1)-b(1,2))*o2
 end function axial33_d
 
-!=============================================================================
+!> Calculation for diagn_s function
+!! @author R. J. Purser
 function diagn_s(a)result(b)!                                           [diag]
-!=============================================================================
 use pietc, only: u0
 implicit none
 real(sp),dimension(:),intent(IN )  :: a
@@ -385,9 +399,10 @@ integer(spi)                        :: n,i
 n=size(a)
 b=u0; do i=1,n; b(i,i)=a(i); enddo
 end function diagn_s
-!=============================================================================
+
+!> Calculation for diagn_d function
+!! @author R. J. Purser
 function diagn_d(a)result(b)!                                           [diag]
-!=============================================================================
 use pietc, only: u0
 implicit none
 real(dp),dimension(:),intent(IN )  :: a
@@ -396,9 +411,10 @@ integer(spi)                       :: n,i
 n=size(a)
 b=u0; do i=1,n; b(i,i)=a(i); enddo
 end function diagn_d
-!=============================================================================
+
+!> Calculation for diagn_i function
+!! @author R. J. Purser
 function diagn_i(a)result(b)!                                           [diag]
-!=============================================================================
 implicit none
 integer(spi),dimension(:),intent(IN )  :: a
 integer(spi),dimension(size(a),size(a)):: b
@@ -406,9 +422,10 @@ integer(spi)                           :: n,i
 n=size(a)
 b=0; do i=1,n; b(i,i)=a(i); enddo
 end function diagn_i
-!=============================================================================
+
+!> Calculation for diagnn_s function
+!! @author R. J. Purser
 function diagnn_s(b)result(a)!                                          [diag]
-!=============================================================================
 implicit none
 real(sp),dimension(:,:),intent(IN ):: b
 real(sp),dimension(size(b,1))      :: a
@@ -416,9 +433,10 @@ integer(spi)                       :: n,i
 n=size(b,1)
 do i=1,n; a(i)=b(i,i); enddo
 end function diagnn_s
-!=============================================================================
+
+!> Calculation for diagnn_d function
+!! @author R. J. Purser
 function diagnn_d(b)result(a)!                                          [diag]
-!=============================================================================
 implicit none
 real(dp),dimension(:,:),intent(IN ):: b
 real(dp),dimension(size(b,1))      :: a
@@ -426,9 +444,10 @@ integer(spi)                       :: n,i
 n=size(b,1)
 do i=1,n; a(i)=b(i,i); enddo
 end function diagnn_d
-!=============================================================================
+
+!> Calculation for diagnn_i function
+!! @author R. J. Purser
 function diagnn_i(b)result(a)!                                          [diag]
-!=============================================================================
 implicit none
 integer(spi),dimension(:,:),intent(IN ):: b
 integer(spi),dimension(size(b,1))      :: a
@@ -437,93 +456,92 @@ n=size(b,1)
 do i=1,n; a(i)=b(i,i); enddo
 end function diagnn_i
 
-!=============================================================================
+!> Calculation for trace_s function
+!! @author R. J. Purser
 function trace_s(b)result(s)!                                          [trace]
-!=============================================================================
 implicit none
 real(sp),dimension(:,:),intent(IN ):: b
 real(sp)                           :: s
 s=sum(diag(b))
 end function trace_s
-!=============================================================================
+
+!> Calculation for trace_d function
+!! @author R. J. Purser
 function trace_d(b)result(s)!                                          [trace]
-!=============================================================================
 implicit none
 real(dp),dimension(:,:),intent(IN ):: b
 real(dp)                           :: s
 s=sum(diag(b))
 end function trace_d
-!=============================================================================
+
+!> Calculation for trace_i function
+!! @author R. J. Purser
 function trace_i(b)result(s)!                                         [trace]
-!=============================================================================
 implicit none
 integer(spi),dimension(:,:),intent(IN ):: b
 integer(spi)                           :: s
 s=sum(diag(b))
 end function trace_i
 
-!=============================================================================
+!> Calculation for identity_i function
+!! @author R. J. Purser
 function identity_i(n)result(a)!                                    [identity]
-!=============================================================================
 implicit none
 integer(spi),intent(IN )   :: n
 integer(spi),dimension(n,n):: a
 integer(spi)               :: i
 a=0; do i=1,n; a(i,i)=1; enddo
 end function identity_i
-!=============================================================================
+
+!> Calculation for identity3_i function
+!! @author R. J. Purser
 function identity3_i()result(a)!                                    [identity]
-!=============================================================================
 implicit none
 integer(spi),dimension(3,3):: a
 integer(spi)               :: i
 a=0; do i=1,3; a(i,i)=1; enddo
 end function identity3_i
 
-!=============================================================================
+!> Spherical area of right-angle triangle whose orthogonal sides have
+!! orthographic projection dimensions, sa and sb.
+!! @author R. J. Purser
 function huarea_s(sa,sb)result(area)!                                 [huarea]
-!=============================================================================
-! Spherical area of right-angle triangle whose orthogonal sides have
-! orthographic projection dimensions, sa and sb.
-!=============================================================================
 implicit none
 real(sp),intent(IN ):: sa,sb
 real(sp)            :: area
 real(sp)            :: ca,cb
-!-----------------------------------------------------------------------------
 ca=sqrt(1-sa**2)
 cb=sqrt(1-sb**2)
 area=asin(sa*sb/(1+ca*cb))
 end function huarea_s
-!=============================================================================
+
+!> Calculation for huarea_d function
+!! @author R. J. Purser
 function huarea_d(sa,sb)result(area)!                                 [huarea]
-!=============================================================================
 implicit none
 real(dp),intent(IN ):: sa,sb
 real(dp)            :: area
 real(dp)            :: ca,cb
-!-----------------------------------------------------------------------------
 ca=sqrt(1-sa**2)
 cb=sqrt(1-sb**2)
 area=asin(sa*sb/(1+ca*cb))
 end function huarea_d
 
-!=============================================================================
+!> Compute the area of the spherical triangle, {v1,v2,v3}, measured in the
+!! right-handed sense, by dropping a perpendicular to u0 on the longest side so
+!! that the area becomes the sum of areas of the two simpler right-angled
+!! triangles.
+!! @param v1 area of the spherical triangle
+!! @param v2 area of the spherical triangle
+!! @param v3 area of the spherical triangle
+!! @author R. J. Purser
 function sarea_s(v1,v2,v3)result(area)!                                [sarea]
-!=============================================================================
-! Compute the area of the spherical triangle, {v1,v2,v3}, measured in the
-! right-handed sense, by dropping a perpendicular to u0 on the longest side so
-! that the area becomes the sum of areas of the two simpler right-angled
-! triangles.
-!=============================================================================
 use pietc_s, only: zero=>u0
 implicit none
 real(sp),dimension(3),intent(IN ):: v1,v2,v3
 real(sp)                         :: area
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 real(sp)                         :: s123,a1,a2,b,d1,d2,d3
 real(sp),dimension(3)            :: u0,u1,u2,u3,x,y
-!=============================================================================
 area=zero
 u1=normalized(v1); u2=normalized(v2); u3=normalized(v3)
 s123=triple_product(u1,u2,u3)
@@ -544,9 +562,16 @@ a1=-dot_product(x,u1-u0); a2= dot_product(x,u2-u0)
 area=huarea(a1,b)+huarea(a2,b)
 
 contains
-!-----------------------------------------------------------------------------
+
+!> Shift switch variable
+!! @param u1 real variable to be shifted
+!! @param u2 real variable to be shifted
+!! @param u3 real variable to be shifted
+!! @param d1 real variable to be shifted
+!! @param d2 real variable to be shifted
+!! @param d3 real variable to be shifted
+!! @author R. J. Purser
    subroutine cyclic(u1,u2,u3,d1,d2,d3)
-!-----------------------------------------------------------------------------
 implicit none
    real(sp),dimension(3),intent(INOUT):: u1,u2,u3
    real(sp),             intent(INOUT):: d1,d2,d3
@@ -556,17 +581,19 @@ implicit none
    ut=u1; u1=u2; u2=u3; u3=ut
    end subroutine cyclic
 end function sarea_s
-!=============================================================================
+
+!> Compute the area of sarea_d, {v1,v2,v3}
+!! @param v1 area of the spherical triangle
+!! @param v2 area of the spherical triangle
+!! @param v3 area of the spherical triangle
+!! @author R. J. Purser
 function sarea_d(v1,v2,v3)result(area)!                                [sarea]
-!=============================================================================
 use pietc, only: zero=>u0
 implicit none
 real(dp),dimension(3),intent(IN ):: v1,v2,v3
 real(dp)                         :: area
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 real(dp)                         :: s123,a1,a2,b,d1,d2,d3
 real(dp),dimension(3)            :: u0,u1,u2,u3,x,y
-!=============================================================================
 area=zero
 u1=normalized(v1); u2=normalized(v2); u3=normalized(v3)
 s123=triple_product(u1,u2,u3)
@@ -587,9 +614,16 @@ a1=-dot_product(x,u1-u0); a2= dot_product(x,u2-u0)
 area=huarea(a1,b)+huarea(a2,b)
 
 contains
-!-----------------------------------------------------------------------------
+
+!> Shift switch variable
+!! @param u1 real variable to be shifted
+!! @param u2 real variable to be shifted
+!! @param u3 real variable to be shifted
+!! @param d1 real variable to be shifted
+!! @param d2 real variable to be shifted
+!! @param d3 real variable to be shifted
+!! @author R. J. Purser
    subroutine cyclic(u1,u2,u3,d1,d2,d3)
-!-----------------------------------------------------------------------------
 implicit none
    real(dp),dimension(3),intent(INOUT):: u1,u2,u3
    real(dp),             intent(INOUT):: d1,d2,d3
@@ -599,24 +633,26 @@ implicit none
    ut=u1; u1=u2; u2=u3; u3=ut
    end subroutine cyclic
 end function sarea_d
-!=============================================================================
+
+!> Compute the area of the spherical triangle with a vertex at latitude
+!! rlat, and two other vertices, A and B, whose incremented latitudes
+!! and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B).
+!! The computations are designed to give a proportionately accurate area
+!! estimate even when the triangle is very small, provided the B-increment
+!! is not disproportionately small compared to the other two sides.
+!! @param rlat latitude
+!! @param drlata latitudes
+!! @param drlona longitudes
+!! @param drlatb latitudes
+!! @param drlonb longitudes
+!! @author R. J. Purser
 function dtarea_s(rlat,drlata,drlona,drlatb,drlonb) result(area)!      [sarea]
-!=============================================================================
-! Compute the area of the spherical triangle with a vertex at latitude
-! rlat, and two other vertices, A and B, whose incremented latitudes
-! and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B).
-! The computations are designed to give a proportionately accurate area
-! estimate even when the triangle is very small, provided the B-increment
-! is not disproportionately small compared to the other two sides.
-!=============================================================================
 use pietc_s, only: u0,u1
 implicit none
 real(sp),intent(in ):: rlat,drlata,drlona,drlatb,drlonb
 real(sp)            :: area
-!-----------------------------------------------------------------------------
 real(sp),dimension(2):: x2a,x2b,xb,yb
 real(sp)             :: sb,ssb,cb,xa,sa,ca,sc,cc
-!=============================================================================
 call dlltoxy(rlat,drlata,drlona,x2a)
 call dlltoxy(rlat,drlatb,drlonb,x2b)
 ssb=dot_product(x2b,x2b); sb=sqrt(ssb)
@@ -633,17 +669,21 @@ cc=sqrt(u1-sc**2)
 sb=sb*cc-cb*sc
 area=huarea(-sa,sb)+huarea(sc,-sa)
 end function dtarea_s
-!=============================================================================
+
+!> Compute the area with dtarea_d
+!! @param rlat latitude
+!! @param drlata latitudes
+!! @param drlona longitudes
+!! @param drlatb latitudes
+!! @param drlonb longitudes
+!! @author R. J. Purser
 function dtarea_d(rlat,drlata,drlona,drlatb,drlonb) result(area)!      [sarea]
-!=============================================================================
 use pietc, only: u0,u1
 implicit none
 real(dp),intent(in ):: rlat,drlata,drlona,drlatb,drlonb
 real(dp)            :: area
-!-----------------------------------------------------------------------------
 real(dp),dimension(2):: x2a,x2b,xb,yb
 real(dp)             :: sb,ssb,cb,xa,sa,ca,sc,cc
-!=============================================================================
 call dlltoxy(rlat,drlata,drlona,x2a)
 call dlltoxy(rlat,drlatb,drlonb,x2b)
 ssb=dot_product(x2b,x2b); sb=sqrt(ssb)
@@ -660,78 +700,93 @@ cc=sqrt(u1-sc**2)
 sb=sb*cc-cb*sc
 area=huarea(-sa,sb)+huarea(sc,-sa)
 end function dtarea_d
-!=============================================================================
+
+!> Compute the area of the spherical quadrilateral with a vertex at latitude
+!! rlat, and three other vertices at A, B, and C inturn,
+!! whose incremented latitudes and longitudes are drlata,drlona (for A),
+!! drlatb,drlonb (for B), and drlatc,drlonc (for C).
+!! The computations are designed to give a proportionately accurate area
+!! estimate even when the quadrilateral is very small, provided the
+!! diagonal making the B-increment is not disproportionately small compared to
+!! the characteristic size of the quadrilateral.
+!! @param rlat latitude
+!! @param drlata latitudes
+!! @param drlona longitudes
+!! @param drlatb latitudes
+!! @param drlonb longitudes
+!! @param drlatc latitudes
+!! @param drlonc longitudes
+!! @author R. J. Purser
 function dqarea_s &!                                                   [sarea]
      (rlat,drlata,drlona,drlatb,drlonb,drlatc,drlonc) result(area)
-!=============================================================================
-! Compute the area of the spherical quadrilateral with a vertex at latitude
-! rlat, and three other vertices at A, B, and C inturn, 
-! whose incremented latitudes and longitudes are drlata,drlona (for A),
-! drlatb,drlonb (for B), and drlatc,drlonc (for C).
-! The computations are designed to give a proportionately accurate area
-! estimate even when the quadrilateral is very small, provided the 
-! diagonal making the B-increment is not disproportionately small compared to 
-! the characteristic size of the quadrilateral.
-!=============================================================================
 implicit none
 real(sp),intent(in ):: rlat,drlata,drlona,drlatb,drlonb,drlatc,drlonc
 real(sp)            :: area
-!=============================================================================
 area=sarea(rlat,drlata,drlona,drlatb,drlonb)&
     -sarea(rlat,drlatc,drlonc,drlatb,drlonb)
 end function dqarea_s
-!=============================================================================
+
+!> Compute the area using dqarea_d
+!! @param rlat latitude
+!! @param drlata latitudes
+!! @param drlona longitudes
+!! @param drlatb latitudes
+!! @param drlonb longitudes
+!! @param drlatc latitudes
+!! @param drlonc longitudes
+!! @author R. J. Purser
 function dqarea_d &!                                                   [sarea]
      (rlat,drlata,drlona,drlatb,drlonb,drlatc,drlonc) result(area)
-!=============================================================================
 implicit none
 real(dp),intent(in ):: rlat,drlata,drlona,drlatb,drlonb,drlatc,drlonc
 real(dp)            :: area
-!=============================================================================
 area=sarea(rlat,drlata,drlona,drlatb,drlonb)&
     -sarea(rlat,drlatc,drlonc,drlatb,drlonb)
 end function dqarea_d
 
-!=============================================================================
+!> Calculate dlltoxy_s
+!! @param rlat latitude
+!! @param drlat latitude
+!! @param drlon longitudes
+!! @author R. J. Purser
 subroutine dlltoxy_s(rlat,drlat,drlon,x2)!                           [dlltoxy]
-!=============================================================================
 use pietc_s, only: u2
 implicit none
 real(sp),             intent(in ):: rlat,drlat,drlon
 real(sp),dimension(2),intent(out):: x2
-!-----------------------------------------------------------------------------
 real(sp):: clata
-!=============================================================================
 clata=cos(rlat+drlat)
 x2=(/clata*sin(drlon),sin(drlat)+u2*sin(rlat)*clata*hav(drlon)/)
 end subroutine dlltoxy_s
-!=============================================================================
+
+!> Calculate dlltoxy_d
+!! @param rlat latitude
+!! @param drlat latitude
+!! @param drlon longitudes
+!! @author R. J. Purser
 subroutine dlltoxy_d(rlat,drlat,drlon,x2)!                           [dlltoxy]
-!=============================================================================
 use pietc, only: u2
 implicit none
 real(dp),             intent(in ):: rlat,drlat,drlon
 real(dp),dimension(2),intent(out):: x2
-!-----------------------------------------------------------------------------
 real(dp):: clata
-!=============================================================================
 clata=cos(rlat+drlat)
 x2=(/clata*sin(drlon),sin(drlat)+u2*sin(rlat)*clata*hav(drlon)/)
 end subroutine dlltoxy_d
 
-!=============================================================================
+!> Haversine function
+!! @author R. J. Purser
 function hav_s(t) result(a)!                                             [hav]
-!=============================================================================
-! Haversine function
 use pietc_s, only: o2
 implicit none
 real(sp),intent(in ):: t
 real(sp)            :: a
 a=(sin(t*o2))**2
 end function hav_s
-!=============================================================================
+
+!> hav_d function
+!! @author R. J. Purser
 function hav_d(t) result(a)!                                             [hav]
-!=============================================================================
 use pietc, only: o2
 implicit none
 real(dp),intent(in ):: t
@@ -739,19 +794,21 @@ real(dp)            :: a
 a=(sin(t*o2))**2
 end function hav_d
 
-!=============================================================================
+!> Normalize the given vector
+!! @param v vector
+!! @author R. J. Purser
 subroutine normalize_s(v)!                                         [normalize]
-!=============================================================================
-! Normalize the given vector.
 use pietc_s, only: u0,u1
 implicit none
 real(sp),dimension(:),intent(inout):: v
 real(sp)                           :: s
 s=absv(v); if(s==0)then; v=u0; v(1)=u1; else; v=v/s; endif
 end subroutine normalize_s
-!=============================================================================
+
+!> normalize_d calculation for given vector
+!! @param v vector
+!! @author R. J. Purser
 subroutine normalize_d(v)!                                         [normalize]
-!=============================================================================
 use pietc, only: u0,u1
 implicit none
 real(dp),dimension(:),intent(inout):: v
@@ -759,16 +816,15 @@ real(dp)                           :: s
 s=absv(v); if(s==u0)then; v=0; v(1)=u1; else; v=v/s; endif
 end subroutine normalize_d
 
-!=============================================================================
+!> gram_s routine
+!! @author R. J. Purser
 subroutine gram_s(as,b,nrank,det)!                                      [gram]
-!=============================================================================
 use pietc_s, only: u0,u1
 implicit none
 real(sp),dimension(:,:),intent(IN )      :: as
 real(sp),dimension(:,:),intent(OUT)      :: b
 integer(spi),           intent(OUT)      :: nrank
 real(sp),               intent(OUT)      :: det
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 real(sp),parameter                       :: crit=1.e-5_sp
 real(sp),dimension(size(as,1),size(as,2)):: a
 real(sp),dimension(size(as,2),size(as,1)):: ab
@@ -776,7 +832,6 @@ real(sp),dimension(size(as,1))           :: tv,w
 real(sp)                                 :: val,s,vcrit
 integer(spi)                             :: i,j,k,l,m,n
 integer(spi),dimension(2)                :: ii
-!=============================================================================
 n=size(as,1)
 m=size(as,2)
 if(n/=size(b,1) .or. n/=size(b,2))stop 'In gram; incompatible dimensions'
@@ -822,17 +877,16 @@ do k=1,n
    enddo
 enddo
 end subroutine gram_s
-   
-!=============================================================================
+
+!> gram_d routine
+!! @author R. J. Purser   
 subroutine gram_d(as,b,nrank,det)!                                      [gram]
-!=============================================================================
 use pietc, only: u0,u1
 implicit none
 real(dp),dimension(:,:),intent(IN )      :: as
 real(dp),dimension(:,:),intent(OUT)      :: b
 integer(spi),           intent(OUT)      :: nrank
 real(dp),               intent(OUT)      :: det
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 real(dp),parameter                       :: crit=1.e-9_dp
 real(dp),dimension(size(as,1),size(as,2)):: a
 real(dp),dimension(size(as,2),size(as,1)):: ab
@@ -840,7 +894,6 @@ real(dp),dimension(size(as,1))           :: tv,w
 real(dp)                                 :: val,s,vcrit
 integer(spi)                             :: i,j,k,l,m,n
 integer(spi),dimension(2)                :: ii
-!=============================================================================
 n=size(as,1)
 m=size(as,2)
 if(n/=size(b,1) .or. n/=size(b,2))stop 'In gram; incompatible dimensions'
@@ -887,15 +940,14 @@ do k=1,n
 enddo
 end subroutine gram_d
    
-!=============================================================================
+!> A version of gram_d where the determinant information is returned in
+!! logarithmic form (to avoid overflows for large matrices). When the
+!! matrix is singular, the "sign" of the determinant, detsign, is returned
+!! as zero (instead of either +1 or -1) and ldet is then just the log of
+!! the nonzero factors found by the process.
+!! @param detsign singular determinant
+!! @author R. J. Purser
 subroutine graml_d(as,b,nrank,detsign,ldet)!                            [gram]
-!=============================================================================
-! A version of gram_d where the determinant information is returned in
-! logarithmic form (to avoid overflows for large matrices). When the
-! matrix is singular, the "sign" of the determinant, detsign, is returned
-! as zero (instead of either +1 or -1) and ldet is then just the log of
-! the nonzero factors found by the process.
-!=============================================================================
 use pietc, only: u0
 implicit none
 real(dp),dimension(:,:),intent(IN )      :: as
@@ -903,7 +955,6 @@ real(dp),dimension(:,:),intent(OUT)      :: b
 integer(spi),           intent(OUT)      :: nrank
 integer(spi),           intent(out)      :: detsign
 real(dp),               intent(OUT)      :: ldet
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 real(dp),parameter                       :: crit=1.e-9_dp
 real(dp),dimension(size(as,1),size(as,2)):: a
 real(dp),dimension(size(as,2),size(as,1)):: ab
@@ -911,14 +962,12 @@ real(dp),dimension(size(as,1))           :: tv,w
 real(dp)                                 :: val,s,vcrit
 integer(spi)                             :: i,j,k,l,m,n
 integer(spi),dimension(2)                :: ii
-!=============================================================================
 detsign=1
 n=size(as,1)
 m=size(as,2)
 if(n/=size(b,1) .or. n/=size(b,2))stop 'In gram; incompatible dimensions'
 a=as
 b=identity(n)
-
 ldet=u0
 val=maxval(abs(a))
 if(val==u0)then
@@ -967,20 +1016,18 @@ do k=1,n
    enddo
 enddo
 end subroutine graml_d
-   
-!=============================================================================
+
+
+!> A "plain" (unpivoted) version of Gram-Schmidt, for square matrices only.
+!! @author R. J. Purser
 subroutine plaingram_s(b,nrank)!                                        [gram]
-!=============================================================================
-! A "plain" (unpivoted) version of Gram-Schmidt, for square matrices only.
 use pietc_s, only: u0
 implicit none
 real(sp),dimension(:,:),intent(INOUT)    :: b
 integer(spi),           intent(  OUT)    :: nrank
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 real(sp),parameter                       :: crit=1.e-5_sp
 real(sp)                                 :: val,vcrit
 integer(spi)                             :: j,k,n
-!=============================================================================
 n=size(b,1); if(n/=size(b,2))stop 'In gram; matrix needs to be square'
 val=maxval(abs(b))
 nrank=0
@@ -1003,19 +1050,16 @@ do k=1,n
 enddo
 end subroutine plaingram_s
 
-!=============================================================================
+!> A "plain" (unpivoted) version of Gram-Schmidt, for square matrices only.
+!! @author R. J. Purser
 subroutine plaingram_d(b,nrank)!                                        [gram]
-!=============================================================================
-! A "plain" (unpivoted) version of Gram-Schmidt, for square matrices only.
 use pietc, only: u0
 implicit none
 real(dp),dimension(:,:),intent(INOUT):: b
 integer(spi),           intent(  OUT):: nrank
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 real(dp),parameter:: crit=1.e-9_dp
 real(dp)          :: val,vcrit
 integer(spi)      :: j,k,n
-!=============================================================================
 n=size(b,1); if(n/=size(b,2))stop 'In gram; matrix needs to be square'
 val=maxval(abs(b))
 nrank=0
@@ -1038,23 +1082,25 @@ do k=1,n
 enddo
 end subroutine plaingram_d
 
-!=============================================================================
+!> Without changing (tall) rectangular input matrix a, perform pivoted gram-
+!! Schmidt operations to orthogonalize the rows, until rows that remain become
+!! negligible. Record the pivoting sequence in ipiv, and the row-normalization
+!! in tt(j,j) and the row-orthogonalization in tt(i,j), for i>j. Note that
+!! tt(i,j)=0 for i<j (tt is truncated lower triangular). The orthonormalized
+!! rows are returned in square array b, which is complete even when the
+!! effective rank < n.
+!! The recorded row operations can be repeated on independent column vectors
+!! through the use of subroutine ROWOPS (in this module).
+!! It is recommended to rescale the original matrix A via a call to CORRAL
+!! (in this module) because the negligibility criterion depends upon an
+!! "epsilon" value that is fixed (10**(-13)) and assumes elements of a are
+!! never too different in magnitude from unity, unless they are actually zero.
+!! @param a rectangular input matrix
+!! @param ipiv pivoting sequence
+!! @param tt row-normalization
+!! @param b orthonormalized rows
+!! @author R. J. Purser
 subroutine rowgram(m,n,a,ipiv,tt,b,rank)!                               [gram]
-!=============================================================================
-! Without changing (tall) rectangular input matrix a, perform pivoted gram-
-! Schmidt operations to orthogonalize the rows, until rows that remain become
-! negligible. Record the pivoting sequence in ipiv, and the row-normalization
-! in tt(j,j) and the row-orthogonalization in tt(i,j), for i>j. Note that
-! tt(i,j)=0 for i<j (tt is truncated lower triangular). The orthonormalized
-! rows are returned in square array b, which is complete even when the
-! effective rank < n. 
-! The recorded row operations can be repeated on independent column vectors
-! through the use of subroutine ROWOPS (in this module).
-! It is recommended to rescale the original matrix A via a call to CORRAL
-! (in this module) because the negligibility criterion depends upon an
-! "epsilon" value that is fixed (10**(-13)) and assumes elements of a are
-! never too different in magnitude from unity, unless they are actually zero.
-!=============================================================================
 use pietc, only: u0,u1
 implicit none
 integer(spi),             intent(IN ):: m,n
@@ -1063,7 +1109,6 @@ integer(spi),dimension(n),intent(out):: ipiv
 real(dp),dimension(m,n),  intent(out):: tt
 real(dp),dimension(n,n),  intent(out):: b
 integer(spi),             intent(out):: rank
-!-----------------------------------------------------------------------------
 real(dp),parameter       :: eps=1.e-13_dp,epss=eps**2
 real(dp),dimension(m,n)  :: aa
 real(dp),dimension(n)    :: rowv
@@ -1071,14 +1116,12 @@ real(dp),dimension(m)    :: p
 real(dp)                 :: maxp,nepss
 integer(spi),dimension(1):: jloc
 integer(spi)             :: i,ii,iii,j,maxi
-!=============================================================================
 if(m<n)stop 'In rowgram; this routines needs m>=n please'
 nepss=n*epss
 rank=n
 aa=a
 tt=u0
 do ii=1,n
-
 ! At this stage, all rows less than ii are already orthonormalized and are
 ! orthogonal to all rows at and beyond ii. Find the norms of these lower
 ! rows and pivot the largest of them into position ii:
@@ -1113,7 +1156,6 @@ do ii=1,n
       rank=ii-1
       return
    endif
-   
    ipiv(ii)=maxi
    if(maxi/=ii)then
       rowv      =aa(ii,  :)
@@ -1133,22 +1175,20 @@ enddo
 b=aa(1:n,:)
 end subroutine rowgram
 
-!=============================================================================
+!> Apply the row-operations, implied by ipiv and tt returned by rowgram, to
+!! the single column vector, v, to produce the transformed vector vv.
+!! @param v vector
+!! @param vv vector
+!! @author R. J. Purser
 subroutine rowops(m,n,ipiv,tt,v,vv)!                                  [rowops]
-!=============================================================================
-! Apply the row-operations, implied by ipiv and tt returned by rowgram, to
-! the single column vector, v, to produce the transformed vector vv.
-!=============================================================================
 implicit none
 integer(spi),             intent(in ):: m,n
 integer(spi),dimension(n),intent(in ):: ipiv
 real(dp),dimension(m,n),  intent(in ):: tt
 real(dp),dimension(m),    intent(in ):: v
 real(dp),dimension(m),    intent(out):: vv
-!-----------------------------------------------------------------------------
 integer(spi):: i,j,k
 real(dp)    :: p
-!=============================================================================
 vv=v
 do j=1,n
    k=ipiv(j)
@@ -1163,19 +1203,21 @@ do j=1,n
    enddo
 enddo
 end subroutine rowops
-   
-!=============================================================================
+
+!> Find positive diagonals D and E and a Lagrange multiplier F that minimize
+!! the row-sum +column-sum of masked terms,
+!! (D_i +log(|A_ij|) +E_j)^2
+!! subject to the single constraint, sum_j E_j =0, where the mask permits
+!! only nonnegligible A_ij to participate in the quadratic quantities.
+!! Once a solution for D and E is found, return their exponentials, d and e,
+!! together with the rescaled matrix aa such that a = d.aa.e when d and e are
+!! interpreted as diagonal matrices.
+!! @param d positive diagonals
+!! @param e positive diagonals
+!! @param a positive diagonals
+!! @param f Lagrange multiplier
+!! @author R. J. Purser   
 subroutine corral(m,n,mask,a,d,aa,e)!                                 [corral]
-!=============================================================================
-! Find positive diagonals D and E and a Lagrange multiplier F that minimize
-! the row-sum +column-sum of masked terms, 
-! (D_i +log(|A_ij|) +E_j)^2
-! subject to the single constraint, sum_j E_j =0, where the mask permits
-! only nonnegligible A_ij to participate in the quadratic quantities. 
-! Once a solution for D and E is found, return their exponentials, d and e,
-! together with the rescaled matrix aa such that a = d.aa.e when d and e are
-! interpreted as diagonal matrices.
-!=============================================================================
 use pietc, only: u0,u1
 use pmat, only: inv
 implicit none
@@ -1185,11 +1227,9 @@ real(dp),dimension(m,n),intent(in ):: a
 real(dp),dimension(m  ),intent(out):: d
 real(dp),dimension(m,n),intent(out):: aa
 real(dp),dimension(  n),intent(out):: e
-!-----------------------------------------------------------------------------
 real(dp),dimension(0:m+n,0:m+n):: g
 real(dp),dimension(0:m+n)      :: h
 integer(spi)                   :: i,j,k,nh
-!=============================================================================
 nh=1+m+n
 aa=u0
 do j=1,n
@@ -1197,16 +1237,13 @@ do i=1,m
    if(mask(i,j))aa(i,j)=log(abs(a(i,j)))
 enddo
 enddo
-
 h=u0
 g=u0
-
 ! Equations on row 0 enforcing Lagrange multiplier F-constraint:
 do j=1,n
    k=m+j
    g(0,k)=u1
 enddo
-
 ! Equations on rows 1:m minimizing row sums of quadratic terms:
 do i=1,m
    do j=1,n
@@ -1218,7 +1255,6 @@ do i=1,m
       endif
    enddo
 enddo
-
 ! Equations on rows m+1:m+n minimizing col sums subject to constraint
 do j=1,n
    k=m+j
@@ -1231,10 +1267,8 @@ do j=1,n
       endif
    enddo
 enddo
-
 ! Invert the normal equations:
 call inv(g,h)
-
 ! Exponentiate the parts that become final scaling diagnonal matrices d and e:
 do i=1,m
    d(i)=exp(h(i))
@@ -1243,7 +1277,6 @@ do j=1,n
    k=m+j
    e(j)=exp(h(k))
 enddo
-
 ! Compute the rescaled matrix directly:
 do j=1,n
 do i=1,m
@@ -1252,25 +1285,23 @@ enddo
 enddo
 end subroutine corral
 
-!=============================================================================
+!> Assuming that given orth33 is a 3*3 proper rotation matrix, derive an axial
+!! 3-vector, ax3, such that orth33 is implied by ax3 when the latter is
+!! interpreted as encoding a rotation (as in subroutine axtorot). Note that
+!! such ax3 are not unique -- adding any multiple of 2*pi times the parallel
+!! unit vector leads to the same orth33.
+!! @param orth33 3*3 proper rotation matrix
+!! @param ax3 axial 3-vector
+!! @author R. J. Purser
 subroutine rottoax(orth33,ax3)!                                    [rottoax]
-!=============================================================================
-! Assuming that given orth33 is a 3*3 proper rotation matrix, derive an axial
-! 3-vector, ax3, such that orth33 is implied by ax3 when the latter is
-! interpreted as encoding a rotation (as in subroutine axtorot). Note that
-! such ax3 are not unique -- adding any multiple of 2*pi times the parallel
-! unit vector leads to the same orth33.
-!=============================================================================
 implicit none
 real(dp),dimension(3,3),intent(in ):: orth33
 real(dp),dimension(3),  intent(out):: ax3
-!-----------------------------------------------------------------------------
 real(dp),dimension(3,3)  :: plane
 real(dp),dimension(3)    :: x,y,z
 real(dp)                 :: s
 integer(spi),dimension(1):: ii
 integer(spi)             :: i,j,k
-!=============================================================================
 plane=orth33-identity()! Columns must be coplanar vectors
 do i=1,3; z(i)=dot_product(plane(:,i),plane(:,i)); enddo
 ii=minloc(z)
@@ -1285,67 +1316,61 @@ z=matmul(orth33,x)! Rotate x by the original rotation matrix
 ax3=ax3*atan2(dot_product(y,z),dot_product(x,z))! multiply ax3 by the angle
 end subroutine rottoax
 
-!=============================================================================
+!> Construct the 3*3 orthogonal matrix, orth33, that corresponds to the
+!! proper rotation encoded by the 3-vector, ax3. The antisymmetric matrix
+!! ax33 equivalent to the axial vector ax3 is exponentiated to obtain orth33.
+!! @param orth33 3*3 orthogonal matrix
+!! @param ax3 axial 3-vector
+!! @author R. J. Purser
 subroutine axtorot(ax3,orth33)!                                    [axtorot]
-!=============================================================================
-! Construct the 3*3 orthogonal matrix, orth33, that corresponds to the 
-! proper rotation encoded by the 3-vector, ax3. The antisymmetric matrix
-! ax33 equivalent to the axial vector ax3 is exponentiated to obtain orth33.
-!=============================================================================
 implicit none
 real(dp),dimension(3),  intent(in ):: ax3
 real(dp),dimension(3,3),intent(out):: orth33
-!-----------------------------------------------------------------------------
 real(dp),dimension(3,3):: ax33
 real(dp)               :: d
-!=============================================================================
 ax33=axial(ax3); call expmat(3,ax33,orth33,d)
 end subroutine axtorot
 
-!=============================================================================
+!> Go from the spinor to the quaternion representation.
+!! @param cspin spinor representation
+!! @param q quaternion representation
+!! @author R. J. Purser
 subroutine spintoq(cspin,q)!                                         [spintoq]
-!=============================================================================
-! Go from the spinor to the quaternion representation
-!=============================================================================
 implicit none
 complex(dpc),dimension(2,2),intent(IN ):: cspin
 real(dp),    dimension(0:3),intent(OUT):: q
-!-------------------------------------------
 q(0)=real(cspin(1,1)); q(3)=aimag(cspin(1,1))
 q(2)=real(cspin(2,1)); q(1)=aimag(cspin(2,1))
 end subroutine spintoq
 
-!==============================================================================
+!> Go from the quaternion to the spinor representation
+!! @param cspin spinor representation
+!! @param q quaternion representation
+!! @author R. J. Purser
 subroutine qtospin(q,cspin)!                                          [qtospin]
-!==============================================================================
-! Go from the quaternion to the spinor representation
-!==============================================================================
 implicit none
 real(dp),    dimension(0:3),intent(IN ):: q
 complex(dpc),dimension(2,2),intent(OUT):: cspin
-!-------------------------------------------
 cspin(1,1)=cmplx( q(0), q(3))
 cspin(2,1)=cmplx( q(2), q(1))
 cspin(1,2)=cmplx(-q(2), q(1))
 cspin(2,2)=cmplx( q(0),-q(3))
 end subroutine qtospin
 
-!=============================================================================
+!> Go from rotation matrix to quaternion representation
+!! @param rot rotation matrix
+!! @param q quaternion representation
+!! @author R. J. Purser
 subroutine rottoq(rot,q)!                                             [rottoq]
-!=============================================================================
-! Go from rotation matrix to quaternion representation
-!=============================================================================
 use pietc, only: zero=>u0,one=>u1,two=>u2
 implicit none
 real(dp),dimension(3,3),intent(IN ):: rot
 real(dp),dimension(0:3),intent(OUT):: q
-!------------------------------------------------------------------------------
 real(dp),dimension(3,3)  :: t1,t2
 real(dp),dimension(3)    :: u1,u2
 real(dp)                 :: gamma,gammah,s,ss
 integer(spi)             :: i,j
 integer(spi),dimension(1):: ii
-!==============================================================================
 ! construct the orthogonal matrix, t1, whose third row is the rotation axis
 ! of rot:
 t1=rot; do i=1,3; t1(i,i)=t1(i,i)-1; u1(i)=dot_product(t1(i,:),t1(i,:)); enddo
@@ -1372,18 +1397,14 @@ ss=u1(j)
 if(ss==zero)stop 'In rotov; invalid rot'
 if(j/=2)t1(2,:)=t1(3,:)
 t1(2,:)=t1(2,:)/sqrt(ss)
-
 ! Form t1(3,:) as the cross product of t1(1,:) and t1(2,:)
 t1(3,1)=t1(1,2)*t1(2,3)-t1(1,3)*t1(2,2)
 t1(3,2)=t1(1,3)*t1(2,1)-t1(1,1)*t1(2,3)
 t1(3,3)=t1(1,1)*t1(2,2)-t1(1,2)*t1(2,1)
-
 ! Project rot into the frame whose axes are the rows of t1:
 t2=matmul(t1,matmul(rot,transpose(t1)))
-
 ! Obtain the rotation angle, gamma, implied by rot, and gammah=gamma/2:
 gamma=atan2(t2(2,1),t2(1,1)); gammah=gamma/two
-
 ! Hence deduce coefficients (in the form of a real 4-vector) of one of the two
 ! possible equivalent spinors:
 s=sin(gammah)
@@ -1391,57 +1412,50 @@ q(0)=cos(gammah)
 q(1:3)=t1(3,:)*s
 end subroutine rottoq
 
-!==============================================================================
+!> Go from quaternion to rotation matrix representations
+!! @param q quaternion representation
+!! @param rot rotation matrix representations
+!! @author R. J. Purser
 subroutine qtorot(q,rot)!                                              [qtorot]
-!==============================================================================
-! Go from quaternion to rotation matrix representations
-!==============================================================================
 implicit none
 real(dp),dimension(0:3),intent(IN ):: q
 real(dp),dimension(3,3),intent(OUT):: rot
-!=============================================================================
 call setem(q(0),q(1),q(2),q(3),rot)
 end subroutine qtorot
 
-!=============================================================================
+!> Go from an axial 3-vector to its equivalent quaternion
+!! @param q quaternion
+!! @param v axial 3-vector
+!! @author R. J. Purser
 subroutine axtoq(v,q)!                                                 [axtoq]
-!=============================================================================
-! Go from an axial 3-vector to its equivalent quaternion
-!=============================================================================
 implicit none
 real(dp),dimension(3),  intent(in ):: v
 real(dp),dimension(0:3),intent(out):: q
-!-----------------------------------------------------------------------------
 real(dp),dimension(3,3):: rot
-!=============================================================================
 call axtorot(v,rot)
 call rottoq(rot,q)
 end subroutine axtoq
 
-!=============================================================================
+!> Go from quaternion to axial 3-vector
+!! @param q quaternion
+!! @param v axial 3-vector
+!! @author R. J. Purser
 subroutine qtoax(q,v)!                                                [qtoax]
-!=============================================================================
-! Go from quaternion to axial 3-vector 
-!=============================================================================
 implicit none
 real(dp),dimension(0:3),intent(in ):: q
 real(dp),dimension(3),  intent(out):: v
-!-----------------------------------------------------------------------------
 real(dp),dimension(3,3):: rot
-!=============================================================================
 call qtorot(q,rot)
 call rottoax(rot,v)
 end subroutine qtoax
 
-!=============================================================================
+!> setem routine
+!! @author R. J. Purser
 subroutine setem(c,d,e,g,r)!                                           [setem]
-!=============================================================================
 implicit none
 real(dp),               intent(IN ):: c,d,e,g
 real(dp),dimension(3,3),intent(OUT):: r
-!-----------------------------------------------------------------------------
 real(dp):: cc,dd,ee,gg,de,dg,eg,dc,ec,gc
-!=============================================================================
 cc=c*c; dd=d*d; ee=e*e; gg=g*g
 de=d*e; dg=d*g; eg=e*g
 dc=d*c; ec=e*c; gc=g*c
@@ -1450,40 +1464,39 @@ r(2,3)=2*(eg-dc);   r(3,1)=2*(dg-ec);   r(1,2)=2*(de-gc)
 r(3,2)=2*(eg+dc);   r(1,3)=2*(dg+ec);   r(2,1)=2*(de+gc)
 end subroutine setem
 
-!=============================================================================
+!> Multiply quaternions, a*b, assuming operation performed from right to left
+!! @param a real quaternion
+!! @param b real quaternion
+!! @author R. J. Purser
 function mulqq(a,b)result(c)!                                         [mulqq]
-!=============================================================================
-! Multiply quaternions, a*b, assuming operation performed from right to left
-!=============================================================================
 implicit none
 real(dp),dimension(0:3),intent(IN ):: a,b
 real(dp),dimension(0:3)            :: c
-!-------------------------------------------
 c(0)=a(0)*b(0) -a(1)*b(1) -a(2)*b(2) -a(3)*b(3)
 c(1)=a(0)*b(1) +a(1)*b(0) +a(2)*b(3) -a(3)*b(2)
 c(2)=a(0)*b(2) +a(2)*b(0) +a(3)*b(1) -a(1)*b(3)
 c(3)=a(0)*b(3) +a(3)*b(0) +a(1)*b(2) -a(2)*b(1)
 end function mulqq
-!=============================================================================
+
+!> Evaluate the exponential, b, of a matrix, a, of degree n.
+!! Apply the iterated squaring method, m times, to the approximation to
+!! exp(a/(2**m)) obtained as a Taylor expansion of degree L
+!! See Fung, T. C., 2004, Int. J. Numer. Meth. Engng, 59, 1273--1286.
+!! @param b exponential
+!! @param a matrix
+!! @param n degree
+!! @author R. J. Purser
 subroutine expmat(n,a,b,detb)!                                        [expmat]
-!=============================================================================
-! Evaluate the exponential, b, of a matrix, a, of degree n.
-! Apply the iterated squaring method, m times, to the approximation to
-! exp(a/(2**m)) obtained as a Taylor expansion of degree L
-! See Fung, T. C., 2004, Int. J. Numer. Meth. Engng, 59, 1273--1286.
-!=============================================================================
 use pietc, only: u0,u1,u2,o2
 implicit none
 integer(spi),           intent(IN ):: n
 real(dp),dimension(n,n),intent(IN ):: a
 real(dp),dimension(n,n),intent(OUT):: b
 real(dp),               intent(OUT):: detb
-!-----------------------------------------------------------------------------
 integer(spi),parameter :: L=5
 real(dp),dimension(n,n):: c,p
 real(dp)               :: t
 integer(spi)           :: i,m
-!=============================================================================
 m=10+floor(log(u1+maxval(abs(a)))/log(u2))
 t=o2**m
 c=a*t
@@ -1502,11 +1515,12 @@ enddo
 detb=u0; do i=1,n; detb=detb+a(i,i); enddo; detb=exp(detb)
 end subroutine expmat
 
-!=============================================================================
+!> Like expmat, but for the 1st derivatives also.
+!! @param b exponential
+!! @param a matrix
+!! @param n degree
+!! @author R. J. Purser
 subroutine expmatd(n,a,b,bd,detb,detbd)!                              [expmat]
-!=============================================================================
-! Like expmat, but for the 1st derivatives also.
-!=============================================================================
 use pietc, only: u0,u1,u2,o2
 implicit none
 integer(spi),                       intent(IN ):: n
@@ -1515,13 +1529,11 @@ real(dp),dimension(n,n),            intent(OUT):: b
 real(dp),dimension(n,n,(n*(n+1))/2),intent(OUT):: bd
 real(dp),                           intent(OUT):: detb
 real(dp),dimension((n*(n+1))/2),    intent(OUT):: detbd
-!-----------------------------------------------------------------------------
 integer(spi),parameter             :: L=5
 real(dp),dimension(n,n)            :: c,p
 real(dp),dimension(n,n,(n*(n+1))/2):: pd,cd
 real(dp)                           :: t
 integer(spi)                       :: i,j,k,m,n1
-!=============================================================================
 n1=(n*(n+1))*o2
 m=10+floor(log(u1+maxval(abs(a)))/log(u2))
 t=o2**m
@@ -1543,7 +1555,6 @@ if(k/=n1)stop 'In expmatd; n1 is inconsistent with n'
 cd=pd
 b=p
 bd=pd
-
 do i=2,L
    do k=1,n1
       pd(:,:,k)=(matmul(cd(:,:,k),p)+matmul(c,pd(:,:,k)))/i
@@ -1565,11 +1576,12 @@ detb=u0; do i=1,n; detb=detb+a(i,i); enddo; detb=exp(detb)
 detbd=u0; do k=1,n; detbd(k)=detb; enddo
 end subroutine expmatd
 
-!=============================================================================
+!> Like expmat, but for the 1st and 2nd derivatives also.
+!! @param b exponential
+!! @param a matrix
+!! @param n degree
+!! @author R. J. Purser
 subroutine expmatdd(n,a,b,bd,bdd,detb,detbd,detbdd)!                  [expmat]
-!=============================================================================
-! Like expmat, but for the 1st and 2nd derivatives also.
-!=============================================================================
 use pietc, only: u0,u1,u2,o2
 implicit none
 integer(spi),                                   intent(IN ):: n
@@ -1580,14 +1592,12 @@ real(dp),dimension(n,n,(n*(n+1))/2,(n*(n+1))/2),intent(OUT):: bdd
 real(dp),                                       intent(OUT):: detb
 real(dp),dimension((n*(n+1))/2),                intent(OUT):: detbd
 real(dp),dimension((n*(n+1))/2,(n*(n+1))/2),    intent(OUT):: detbdd
-!-----------------------------------------------------------------------------
 integer(spi),parameter                         :: L=5
 real(dp),dimension(n,n)                        :: c,p
 real(dp),dimension(n,n,(n*(n+1))/2)            :: pd,cd
 real(dp),dimension(n,n,(n*(n+1))/2,(n*(n+1))/2):: pdd,cdd
 real(dp)                                       :: t
 integer(spi)                                   :: i,j,k,ki,kj,m,n1
-!=============================================================================
 n1=(n*(n+1))/2
 m=10+floor(log(u1+maxval(abs(a)))/log(u2))
 t=o2**m
@@ -1612,7 +1622,6 @@ cdd=u0
 b=p
 bd=pd
 bdd=u0
-
 do i=2,L
    do ki=1,n1
       do kj=1,n1
@@ -1652,20 +1661,18 @@ detbd=u0;  do k=1,n; detbd(k)=detb; enddo
 detbdd=u0; do ki=1,n; do kj=1,n; detbdd(ki,kj)=detb; enddo; enddo
 end subroutine expmatdd
 
-!=============================================================================
+!> routine zntay
+!! @author R. J. Purser
 subroutine zntay(n,z,zn)!                                              [zntay]
-!=============================================================================
 use pietc, only: u2
 implicit none
 integer(spi), intent(IN ):: n
 real(dp),     intent(IN ):: z
 real(dp),     intent(OUT):: zn
-!-----------------------------------------------------------------------------
 integer(spi),parameter:: ni=100
 real(dp),parameter    :: eps0=1.e-16_dp
 integer(spi)          :: i,i2,n2
 real(dp)              :: t,eps,z2
-!=============================================================================
 z2=z*u2
 n2=n*2
 t=1
@@ -1684,18 +1691,16 @@ enddo
 print'("In zntay;  full complement of iterations used")'
 end subroutine zntay
 
-!=============================================================================
+!> routine znfun
+!! @author R. J. Purser
 subroutine znfun(n,z,zn,znd,zndd,znddd)!                               [znfun]
-!=============================================================================
 use pietc, only: u0,u2,u3
 implicit none
 integer(spi),intent(IN ):: n
 real(dp),    intent(IN ):: z
 real(dp),    intent(OUT):: zn,znd,zndd,znddd
-!-----------------------------------------------------------------------------
 real(dp)    :: z2,rz2
 integer(spi):: i,i2p3
-!=============================================================================
 z2=abs(z*u2)
 rz2=sqrt(z2)
 if(z2<u2)then
@@ -1732,31 +1737,26 @@ else
 endif
 end subroutine znfun
       
-!=============================================================================
-! Utility code for various Mobius transformations. If aa1,bb1,cc1,dd1 are
-! the coefficients for one transformation, and aa2,bb2,cc2,dd2 are the 
-! coefficients for a second one, then the coefficients for the mapping
-! of a test point, zz, by aa1 etc to zw, followed by a mapping of zw, by
-! aa2 etc to zv, is equivalent to a single mapping zz-->zv by the transformatn
-! with coefficients aa3,bb3,cc3,dd3, such that, as 2*2 complex matrices:
-!
-! [ aa3, bb3 ]   [ aa2, bb2 ]   [ aa1, bb1 ]
-! [          ] = [          ] * [          ]
-! [ cc3, dd3 ]   [ cc2, dd2 ]   [ cc1, dd1 ] .
-!
-!  Note that the determinant of these matrices is always +1
-!
-!=============================================================================
+!> Utility code for various Mobius transformations. If aa1,bb1,cc1,dd1 are
+!! the coefficients for one transformation, and aa2,bb2,cc2,dd2 are the 
+!! coefficients for a second one, then the coefficients for the mapping
+!! of a test point, zz, by aa1 etc to zw, followed by a mapping of zw, by
+!! aa2 etc to zv, is equivalent to a single mapping zz-->zv by the transformatn
+!! with coefficients aa3,bb3,cc3,dd3, such that, as 2*2 complex matrices:
+!!
+!! [ aa3, bb3 ]   [ aa2, bb2 ]   [ aa1, bb1 ]
+!! [          ] = [          ] * [          ]
+!! [ cc3, dd3 ]   [ cc2, dd2 ]   [ cc1, dd1 ] .
+!!
+!!  Note that the determinant of these matrices is always +1
+!! @author R. J. Purser
 subroutine ctoz(v, z,infz)!                                             [ctoz]
-!=============================================================================
 use pietc, only: u0,u1
 implicit none
 real(dp),dimension(3),intent(IN ):: v
 complex(dpc),         intent(OUT):: z
 logical,              intent(OUT):: infz
-!-----------------------------------------------------------------------------
 real(dp)          :: rr,zzpi
-!=============================================================================
 infz=.false.
 z=cmplx(v(1),v(2),dpc)
 if(v(3)>u0)then
@@ -1769,17 +1769,15 @@ endif
 z=z*zzpi
 end subroutine ctoz
    
-!=============================================================================
+!> routine ztoc
+!! @author R. J. Purser
 subroutine ztoc(z,infz, v)!                                             [ztoc]
-!=============================================================================
 implicit none
 complex(dpc),         intent(IN ):: z
 logical,              intent(IN ):: infz
 real(dp),dimension(3),intent(OUT):: v
-!-----------------------------------------------------------------------------
 real(dp),parameter:: zero=0_dp,one=1_dp,two=2_dp
 real(dp)          :: r,q,rs,rsc,rsbi
-!=============================================================================
 if(infz)then; v=(/zero,zero,-one/); return; endif
 r=real(z); q=aimag(z); rs=r*r+q*q
 rsc=one-rs
@@ -1789,27 +1787,25 @@ v(2)=two*rsbi*q
 v(3)=rsc*rsbi
 end subroutine ztoc
 
-!=============================================================================
+!> The convention adopted for the complex derivative is that, for a complex
+!! infinitesimal map displacement, delta_z, the corresponding infinitesimal
+!! change of cartesian vector position is delta_v given by:
+!! delta_v = Real(vd*delta_z).
+!! Thus, by a kind of Cauchy-Riemann relation, Imag(vd)=v CROSS Real(vd).
+!! THE DERIVATIVE FOR THE IDEAL POINT AT INFINITY HAS NOT BEEN CODED YET!!!
+!! @param z delta_z
+!! @param v delta_v
+!! @author R. J. Purser
 subroutine ztocd(z,infz, v,vd)!                                         [ztoc]
-!=============================================================================
-! The convention adopted for the complex derivative is that, for a complex
-! infinitesimal map displacement, delta_z, the corresponding infinitesimal
-! change of cartesian vector position is delta_v given by:
-! delta_v = Real(vd*delta_z).
-! Thus, by a kind of Cauchy-Riemann relation, Imag(vd)=v CROSS Real(vd).
-! THE DERIVATIVE FOR THE IDEAL POINT AT INFINITY HAS NOT BEEN CODED YET!!!
-!=============================================================================
 implicit none
 complex(dpc),             intent(IN ):: z
 logical,                  intent(IN ):: infz
 real(dp),dimension(3),    intent(OUT):: v
 complex(dpc),dimension(3),intent(OUT):: vd
-!-----------------------------------------------------------------------------
 real(dp),parameter   :: zero=0_dp,one=1_dp,two=2_dp,four=4_dp
 real(dp)             :: r,q,rs,rsc,rsbi,rsbis
 real(dp),dimension(3):: u1,u2
 integer(spi)         :: i
-!=============================================================================
 if(infz)then; v=(/zero,zero,-one/); return; endif
 r=real(z); q=aimag(z); rs=r*r+q*q
 rsc=one-rs
@@ -1827,22 +1823,22 @@ do i=1,3
 enddo
 end subroutine ztocd
 
-!============================================================================
+!> Find the Mobius transformation complex coefficients, aa,bb,cc,dd,
+!! with aa*dd-bb*cc=1, for a standard (north-)polar stereographic transformation
+!! that takes cartesian point, xc0 to the north pole, xc1 to (lat=0,lon=0),
+!! xc2 to the south pole (=complex infinity).
+!! @param aa Mobius transformation complex coefficients
+!! @param bb Mobius transformation complex coefficients
+!! @param cc Mobius transformation complex coefficients
+!! @param dd Mobius transformation complex coefficients
+!! @author R. J. Purser
 subroutine setmobius(xc0,xc1,xc2, aa,bb,cc,dd)!                   [setmobius]
-!============================================================================
-! Find the Mobius transformation complex coefficients, aa,bb,cc,dd,
-! with aa*dd-bb*cc=1, for a standard (north-)polar stereographic transformation
-! that takes cartesian point, xc0 to the north pole, xc1 to (lat=0,lon=0),
-! xc2 to the south pole (=complex infinity).
-!============================================================================
 implicit none
 real(dp),dimension(3),intent(IN ):: xc0,xc1,xc2
 complex(dpc),         intent(OUT):: aa,bb,cc,dd
-!----------------------------------------------------------------------------
 real(dp),parameter:: zero=0_dp,one=1_dp
 logical           :: infz0,infz1,infz2
 complex(dpc)      :: z0,z1,z2,z02,z10,z21
-!============================================================================
 call ctoz(xc0,z0,infz0)
 call ctoz(xc1,z1,infz1)
 call ctoz(xc2,z2,infz2)
@@ -1854,7 +1850,6 @@ if(  (z0==z1.and.infz0.eqv.infz1).or.&
      (z1==z2.and.infz1.eqv.infz2).or.&
      (z2==z0.and.infz2.eqv.infz0))   &
      stop 'In setmobius; anchor points must be distinct'
-
 if(infz2 .or. (.not.infz0 .and. abs(z0)<abs(z2)))then
 ! z0 is finite and smaller than z2:
    if(infz1)then
@@ -1898,38 +1893,35 @@ else
 endif
 end subroutine setmobius
 
-!============================================================================
+!> Find the Mobius transformation complex coefficients, aa,bb,cc,dd,
+!! with aa*dd-bb*cc=1,
+!! that takes polar stereographic  point, z0 to the north pole,
+!! z1 to (lat=0,lon=0), z2 to the south pole (=complex infinity).
+!! Should any one of z0,z1,z2 be itself the "point at infinity" its
+!! corresponding infz will be set "true" (and the z value itself not used).
+!! This routine is like setmobius, except the three fixed points defining
+!! the mapping are given in standard complex stereographic form, together
+!! with the logical codes "infzn" that are TRUE if that point is itself
+!! the projection pole (i.e., the South Pole for a north polar stereographic).
+!! @param aa Mobius transformation complex coefficients
+!! @param bb Mobius transformation complex coefficients
+!! @param cc Mobius transformation complex coefficients
+!! @param dd Mobius transformation complex coefficients
+!! @author R. J. Purser
 subroutine zsetmobius(z0,infz0, z1,infz1, z2,infz2,  aa,bb,cc,dd)
-!                                                                 [setmobius]
-!============================================================================
-! Find the Mobius transformation complex coefficients, aa,bb,cc,dd,
-! with aa*dd-bb*cc=1, 
-! that takes polar stereographic  point, z0 to the north pole, 
-! z1 to (lat=0,lon=0), z2 to the south pole (=complex infinity).
-! Should any one of z0,z1,z2 be itself the "point at infinity" its 
-! corresponding infz will be set "true" (and the z value itself not used).
-! This routine is like setmobius, except the three fixed points defining
-! the mapping are given in standard complex stereographic form, together
-! with the logical codes "infzn" that are TRUE if that point is itself
-! the projection pole (i.e., the South Pole for a north polar stereographic).
-!============================================================================
 implicit none
 complex(dp),          intent(IN ):: z0,z1,z2
 logical,              intent(IN ):: infz0,infz1,infz2
 complex(dpc),         intent(OUT):: aa,bb,cc,dd
-!----------------------------------------------------------------------------
 real(dp),parameter:: zero=0_dp,one=1_dp
 complex(dpc)      :: z02,z10,z21
-!============================================================================
 z21=z2-z1
 z02=z0-z2
 z10=z1-z0
-
 if(  (z0==z1.and.infz0.eqv.infz1).or.&
      (z1==z2.and.infz1.eqv.infz2).or.&
      (z2==z0.and.infz2.eqv.infz0))   &
      stop 'In setmobius; anchor points must be distinct'
-
 if(infz2 .or. (.not.infz0 .and. abs(z0)<abs(z2)))then
 ! z0 is finite and smaller than z2:
    if(infz1)then
@@ -1973,23 +1965,27 @@ else
 endif
 end subroutine zsetmobius
 
-!=============================================================================
+!> Perform a complex Mobius transformation from (z,infz) to (w,infw)
+!! where the transformation coefficients are the standard aa,bb,cc,dd.
+!! Infz is .TRUE. only when z is at complex infinity; likewise infw and w.
+!! For these infinite cases, it is important that numerical z==(0,0).
+!! @param z Mobius transformation
+!! @param infz Mobius transformation
+!! @param w Mobius transformation
+!! @param infw Mobius transformation
+!! @param aa Mobius transformation complex coefficients
+!! @param bb Mobius transformation complex coefficients
+!! @param cc Mobius transformation complex coefficients
+!! @param dd Mobius transformation complex coefficients
+!! @author R. J. Purser
 subroutine zmobius(aa,bb,cc,dd, z,infz, w,infw)!                      [mobius]
-!=============================================================================
-! Perform a complex Mobius transformation from (z,infz) to (w,infw)
-! where the transformation coefficients are the standard aa,bb,cc,dd.
-! Infz is .TRUE. only when z is at complex infinity; likewise infw and w.
-! For these infinite cases, it is important that numerical z==(0,0).
-!=============================================================================
 implicit none
 complex(dpc),intent(IN ):: aa,bb,cc,dd,z
 logical,     intent(IN ):: infz
 complex(dpc),intent(OUT):: w
 logical,     intent(OUT):: infw
-!-----------------------------------------------------------------------------
 real(dp),parameter:: zero=0_dp
 complex(dpc)      :: top,bot
-!=============================================================================
 w=0
 infw=.false.
 if(infz)then
@@ -2007,40 +2003,42 @@ else
 endif
 end subroutine zmobius
 
-!=============================================================================
+!> Perform a complex Mobius transformation from cartesian vz to cartesian vw
+!! where the transformation coefficients are the standard aa,bb,cc,dd.
+!! @param aa Mobius transformation coefficients
+!! @param bb Mobius transformation coefficients
+!! @param cc Mobius transformation coefficients
+!! @param dd Mobius transformation coefficients
+!! @param vz cartesian
+!! @param vw cartesian
+!! @author R. J. Purser
 subroutine cmobius(aa,bb,cc,dd, vz,vw)!                               [mobius]
-!=============================================================================
-! Perform a complex Mobius transformation from cartesian vz to cartesian vw
-! where the transformation coefficients are the standard aa,bb,cc,dd.
-!=============================================================================
 implicit none
 complex(dpc),         intent(IN ):: aa,bb,cc,dd
 real(dp),dimension(3),intent(IN ):: vz
 real(dp),dimension(3),intent(OUT):: vw
-!-----------------------------------------------------------------------------
 complex(dpc):: z,w
 logical     :: infz,infw
-!=============================================================================
 call ctoz(vz, z,infz)
 call zmobius(aa,bb,cc,dd, z,infz, w,infw)
 call ztoc(w,infw, vw)
 end subroutine cmobius
 
-!============================================================================
+!> Perform the inverse of the mobius transformation with coefficients,
+!! {aa,bb,cc,dd}.
+!! @param aa Mobius transformation coefficients
+!! @param bb Mobius transformation coefficients
+!! @param cc Mobius transformation coefficients
+!! @param dd Mobius transformation coefficients
+!! @author R. J. Purser
 subroutine zmobiusi(aa,bb,cc,dd, zz,infz, zw,infw)                ! [mobiusi]
-!============================================================================
-! Perform the inverse of the mobius transformation with coefficients,
-! {aa,bb,cc,dd}.
-!============================================================================
 implicit none
 complex(dpc),intent(IN ):: aa,bb,cc,dd,zz
 logical,     intent(IN ):: infz
 complex(dpc),intent(OUT):: zw
 logical,     intent(OUT):: infw
-!----------------------------------------------------------------------------
 real(dp),parameter:: one=1_dp
 complex(dpc)      :: aai,bbi,cci,ddi,d
-!============================================================================
 d=one/(aa*dd-bb*cc)
 aai=dd*d
 ddi=aa*d
