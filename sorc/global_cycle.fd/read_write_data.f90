@@ -1032,12 +1032,12 @@ MODULE READ_WRITE_DATA
 
  END SUBROUTINE READ_LAT_LON_OROG
 
- !> If at netcdf call returns an error, print out a message
- !! and stop processing.
+ !> If a NetCDF call returns an error, print out a user-supplied
+ !! message and the NetCDF library message.  Then stop processing.
  !!
- !! @param[in] ERR
- !! @param[in] STRING
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[in] ERR NetCDF error code.
+ !! @param[in] STRING User-defined error message.
+ !! @author George Gayno
  SUBROUTINE NETCDF_ERR( ERR, STRING )
 
  USE MPI
@@ -1059,15 +1059,15 @@ MODULE READ_WRITE_DATA
  RETURN
  END SUBROUTINE NETCDF_ERR
 
- !> Read file from the gsi containing the foundation temperature
+ !> Read file from the GSI containing the foundation temperature
  !! increments and mask.
  !!
- !! Data is in netcdf and on a gaussian grid.  The grid contains two
+ !! Data is in NetCDF and on a gaussian grid.  The grid contains two
  !! extra rows for each pole. The interpolation from gaussian to
  !! native grid assumes no pole points, so these are removed.
  !!
- !! @param[in] GSI_FILE
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[in] GSI_FILE Path/name of the GSI file to be read.
+ !! @author George Gayno
  SUBROUTINE READ_GSI_DATA(GSI_FILE)
 
  IMPLICIT NONE
@@ -1128,50 +1128,51 @@ MODULE READ_WRITE_DATA
 
  END SUBROUTINE READ_GSI_DATA
 
-
  !> Read the first guess surface records and nsst records (if
  !! selected) for a single cubed-sphere tile.
  !!
- !! @param[in] TSFFCS
- !! @param[in] SMCFCS
- !! @param[in] SNOFCS
- !! @param[in] STCFCS
- !! @param[in] TG3FCS
- !! @param[in] ZORFCS
- !! @param[in] CVFCS
- !! @param[in] CVBFCS
- !! @param[in] CVTFCS
- !! @param[in] ALBFCS
- !! @param[in] SLIFCS
- !! @param[in] VEGFCS
- !! @param[in] CNPFCS
- !! @param[in] F10M
- !! @param[in] VETFCS
- !! @param[in] SOTFCS
- !! @param[in] ALFFCS
- !! @param[in] USTAR
- !! @param[in] FMM
- !! @param[in] FHH
- !! @param[in] SIHFCS
- !! @param[in] SICFCS
- !! @param[in] SITFCS
- !! @param[in] TPRCP
- !! @param[in] SRFLAG
- !! @param[in] SWDFCS
- !! @param[in] VMNFCS
- !! @param[in] VMXFCS
- !! @param[in] SLCFCS
- !! @param[in] SLPFCS
- !! @param[in] ABSFCS
- !! @param[in] T2M
- !! @param[in] Q2M
- !! @param[in] SLMASK
- !! @param[in] ZSOIL
- !! @param[in] LSOIL
- !! @param[in] LENSFC
- !! @param[in] DO_NSST
- !! @param[in] NSST
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[in] LSOIL Number of soil layers.
+ !! @param[in] LENSFC Total number of points on a tile.
+ !! @param[in] DO_NSST When true, nsst fields are read.
+ !! @param[out] TSFFCS Skin Temperature.
+ !! @param[out] SMCFCS Total volumetric soil moisture.
+ !! @param[out] SNOFCS Liquid-equivalent snow depth.
+ !! @param[out] STCFCS Soil temperature.
+ !! @param[out] TG3FCS Soil substrate temperature.
+ !! @param[out] ZORFCS Roughness length.
+ !! @param[out] CVFCS Cloud cover.
+ !! @param[out] CVBFCS Cloud base.
+ !! @param[out] CVTFCS Cloud top.
+ !! @param[out] ALBFCS Snow-free albedo.
+ !! @param[out] SLIFCS Land-sea mask including ice flag.
+ !! @param[out] VEGFCS Vegetation greenness.
+ !! @param[out] CNPFCS Plant canopy moisture content.
+ !! @param[out] F10M log((z0+10)/z0). See model routine sfc_diff.f for details.
+ !! @param[out] VETFCS Vegetation type.
+ !! @param[out] SOTFCS Soil type.
+ !! @param[out] ALFFCS Fractional coverage for strong/weak zenith angle
+ !! dependent albedo.
+ !! @param[out] USTAR Friction velocity.
+ !! @param[out] FMM log((z0+z1)/z0). See model routine sfc_diff.f for details.
+ !! @param[out] FHH log((ztmax+z1)/ztmax). See model routine sfc_diff.f for
+ !! details.
+ !! @param[out] SIHFCS Sea ice depth.
+ !! @param[out] SICFCS Sea ice concentration.
+ !! @param[out] SITFCS Sea ice temperature.
+ !! @param[out] TPRCP Precipitation.
+ !! @param[out] SRFLAG Snow/rain flag.
+ !! @param[out] SWDFCS Physical snow depth.
+ !! @param[out] VMNFCS Minimum vegetation greenness.
+ !! @param[out] VMXFCS Maximum vegetation greenness.
+ !! @param[out] SLCFCS Liquid portion of volumetric soil moisture.
+ !! @param[out] SLPFCS Slope type.
+ !! @param[out] ABSFCS Maximum snow albedo.
+ !! @param[out] T2M Two-meter air temperature.
+ !! @param[out] Q2M Two-meter specific humidity.
+ !! @param[out] SLMASK Land-sea mask without ice flag.
+ !! @param[out] ZSOIL Soil layer thickness.
+ !! @param[out] NSST Data structure containing nsst fields.
+ !! @author George Gayno
  SUBROUTINE READ_DATA(TSFFCS,SMCFCS,SNOFCS,STCFCS, &
                       TG3FCS,ZORFCS, &
                       CVFCS,CVBFCS,CVTFCS,ALBFCS, &
