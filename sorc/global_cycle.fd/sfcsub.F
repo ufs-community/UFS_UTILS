@@ -2794,7 +2794,7 @@
 !! @param[out] blno Corner point longitude of grid.
 !! @param[out] blto Corner point latitude of grid.
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine fixrdg(lugb,idim,jdim,fngrib,
      &                  kpds5,gdata,gaus,blno,blto,me)
       use machine      , only : kind_io8,kind_io4
@@ -2911,18 +2911,20 @@
       return
       end
 
-!> ???
+!> For a given GRIB1 grid description section array, determine
+!! some grid specifications.
 !!
-!! @param[in] kgds
-!! @param[in] dlat
-!! @param[in] dlon
-!! @param[in] rslat
-!! @param[in] rnlat
-!! @param[in] wlon
-!! @param[in] elon
-!! @param[in] ijordr
-!! @param[in] me
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] kgds GRIB1 grid description section array.
+!! @param[out] dlat Grid resolution in the 'j' direction.
+!! @param[out] dlon Grid resolution in the 'i' direction.
+!! @param[out] rslat Latitude of the southern row of data.
+!! @param[out] rnlat Latitude of the northern row of data.
+!! @param[out] wlon Longitude of the western column of data.
+!! @param[out] elon Longitude of the eastern column of data.
+!! @param[out] ijordr When false, adjacent points in the 'i' direction
+!! are consecutive.  Otherwise, 'j' points are consecutive.
+!! @param[in] me MPI rank number.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine getarea(kgds,dlat,dlon,rslat,rnlat,wlon,elon,ijordr
      &,                  me)
       use machine , only : kind_io8,kind_io4
