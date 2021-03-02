@@ -33,59 +33,58 @@
 !!  NOTE: running (3) then (4) is equivalent to running (2).
 !!  
 !!  INPUT FILES:
-!!  -----------
-!!  -fngrid.$NNN        The cubed-sphere grid file (contains
+!!  - fngrid.$NNN      The cubed-sphere grid file (contains
 !!                     grid point latitude and longitdue).
-!!  -fnorog.$NNN        The cubed-sphere orography file (contains
+!!  - fnorog.$NNN      The cubed-sphere orography file (contains
 !!                     land mask and orography).
-!!  -fnbgsi.$NNN        The cubed-sphere input sfc/nsst restart
+!!  - fnbgsi.$NNN      The cubed-sphere input sfc/nsst restart
 !!                     file.
-!!  -$GSI_FILE          Gaussian GSI file which contains NSST
+!!  - $GSI_FILE        Gaussian GSI file which contains NSST
 !!                     TREF increments
 !!  
 !!  OUTPUT FILES:
-!!  ------------
-!!  -fnbgso.$NNN        The updated sfc/nsst restart file.
+!!  - fnbgso.$NNN        The updated sfc/nsst restart file.
 !!
 !!  NOTE: $NNN corresponds to (mpi rank + 1)
 !!
 !!  NAMELIST VARIABLE DEFINITIONS:
 !!
-!!  -IDIM,JDIM      i/j dimension of a cubed-sphere tile.
-!!  -LUGB           Unit number used in the sfccycle subprogram
+!!  - IDIM,JDIM    i/j dimension of a cubed-sphere tile.
+!!  - LUGB         Unit number used in the sfccycle subprogram
 !!                 to read input datasets.
-!!  -LSOIL          Number of soil layers.
-!!  -IY,IM,ID,IH    Year, month, day, and hour of initial state.
-!!  -FH             Forecast hour
-!!  -DELTSFC        Cycling frequency in hours.
-!!  -IALB           Use modis albedo when '1'. Use brigleb when '0'.
-!!  -USE_UFO        Adjust sst and soil substrate temperature for
+!!  - LSOIL        Number of soil layers.
+!!  - IY,IM,ID,IH  Year, month, day, and hour of initial state.
+!!  - FH           Forecast hour
+!!  - DELTSFC      Cycling frequency in hours.
+!!  - IALB         Use modis albedo when '1'. Use brigleb when '0'.
+!!  - USE_UFO      Adjust sst and soil substrate temperature for
 !!                 differences between the filtered and unfiltered
 !!                 terrain.
-!!  -DONST          Process NSST records.
-!!  -ADJT_NST_ONLY  When true, only do the NSST update (don't call
-!!                 sfcsub component).
-!!  -ISOT           Use statsgo soil type when '1'. Use zobler when '0'.
-!!  -IVEGSRC        Use igbp veg type when '1'.  Use sib when '2'.
-!!  -ZSEA1/2_MM     When running with NSST model, this is the lower/
+!!  - DONST          Process NSST records.
+!!  - ADJT_NST_ONLY  When true, only do the NSST update (don't call
+!!                   sfcsub component).
+!!  - ISOT         Use statsgo soil type when '1'. Use zobler when '0'.
+!!  - IVEGSRC      Use igbp veg type when '1'.  Use sib when '2'.
+!!  - ZSEA1/2_MM   When running with NSST model, this is the lower/
 !!                 upper bound of depth of sea temperature.  In
 !!                 whole mm.
-!!  -MAX_TASKS      Normally, program should be run with a number of mpi 
+!!  - MAX_TASKS    Normally, program should be run with a number of mpi 
 !!                 tasks equal to the number of cubed-sphere tiles 
 !!                 being processed. However, the current parallel 
 !!                 scripts may over-specify the number of tasks.
 !!                 Set this variable to not process any ranks >
 !!                 (max_tasks-1).
-!!  -GSI_FILE       path/name of the gaussian GSI file which contains NSST
+!!  - GSI_FILE     Path/name of the gaussian GSI file which contains NSST
 !!                 TREF increments.
 !!
-!!  -2005-02-03:  Iredell   for global_analysis
-!!  -2014-11-30:  xuli      add nst_anl
-!!  -2015-05-26:  Hang Lei  Added NEMSIO read/write function in the code
-!!  -2017-08-08:  Gayno     Modify to work on cubed-sphere grid.
-!!                         Added processing of NSST and TREF update.
-!!                         Added mpi directives.
-!! @author Mark Iredell
+!!  Program Updates:
+!!  - 2005-02-03:  Iredell   For global_analysis
+!!  - 2014-11-30:  Xu Li     Add nst_anl
+!!  - 2015-05-26:  Hang Lei  Added NEMSIO read/write function in the code
+!!  - 2017-08-08:  Gayno     Modify to work on cubed-sphere grid.
+!!                           Added processing of NSST and TREF update.
+!!                           Added mpi directives.
+!! @author Mark Iredell NOAA/EMC
 !! @return 0 for success, error code otherwise.
  PROGRAM SFC_DRV
 
@@ -177,6 +176,84 @@
 
  !> Driver routine for updating the surface fields.
  !!
+ !!  This program runs in two different modes:
+ !!
+ !!  1.  Analysis mode (FH=0.)
+ !!
+ !!      This program merges climatology, analysis and forecast guess to create
+ !!      new surface fields.  If analysis file is given, the program 
+ !!      uses it if date of the analysis matches with IY,IM,ID,IH (see Note
+ !!      below).
+ !!
+ !!  2.  Forecast mode (FH.GT.0.)
+ !!   
+ !!      This program interpolates climatology to the date corresponding to the 
+ !!      forecast hour.  If surface analysis file is given, for the corresponding
+ !!      dates, the program will use it.  This is forcing-by-observation experiment.
+ !!
+ !!  If the date of the analysis does not match given IY,IM,ID,IH, (and FH),
+ !!  the program searches an old analysis by going back 6 hours, then 12 hours,
+ !!  then one day upto NREPMX days (parameter statement in the SUBROTINE FIXRD. 
+ !!  Now defined as 15).  This allows the user to provide non-daily analysis to 
+ !!  be used.  If matching field is not found, the forecast guess will be used.
+ !!
+ !!  Variable naming convention for this program:
+ !!
+ !!   - OROG .. Orography
+ !!   - ALB  .. Snow-free albedo
+ !!   - SNO  .. Liquid-equivalent snow depth
+ !!   - ZOR  .. Surface roughness length
+ !!   - VET  .. Vegetation type
+ !!   - TSF  .. Surface skin temperature.  Sea surface temp. over ocean.
+ !!   - TG3  .. Deep soil temperature (at 500cm)
+ !!   - STC  .. Soil temperature (LSOIL layrs)
+ !!   - SMC  .. Total soil moisture (LSOIL layrs)
+ !!   - AIS  .. Sea ice mask (0 or 1)
+ !!   - CNP  .. Canopy water content
+ !!   - CV   .. Convective cloud cover
+ !!   - CVB  .. Convective cloud base
+ !!   - CVT  .. Convective cloud top
+ !!   - SLI  .. LAND/SEA/SEA-ICE mask. (1/0/2 respectively)
+ !!   - VEG  .. Vegetation cover
+ !!   - SOT  .. Soil type
+ !!   - SIH  .. Sea ice thickness
+ !!   - SIC  .. Sea ice concentration
+ !!   - SWD  .. Actual snow depth
+ !!   - SLC  .. Liquid soil moisture (LSOIL layers)
+ !!   - VMN  .. Vegetation cover minimum
+ !!   - VMX  .. Vegetation cover maximum
+ !!   - SLP  .. Slope type
+ !!   - ABS  .. Maximum snow albedo
+ !!   - T2M  .. 2m Temperature
+ !!   - Q2M  .. 2m Specific Humidity
+ !!   - TICE .. Ice Temperature
+ !!   - OROG_UF .. Orography unfiltered
+ !!
+ !! Most fields have a blending coefficient. This controls
+ !! the blending of the forecast (first guess) and interpolated
+ !! climatology or analyzed fields. When it is equal to 1.0, the
+ !! pure forecast is used. When the coefficient is equal to 0,
+ !! the pure climatology or analysis is used. The default values
+ !! are set as follows:
+ !!
+ !!   Variables |  Land  |  Sea
+ !!   ----------|--------|-------------------------------------
+ !!   Surface temperature    |   Forecast          |  Analysis
+ !!   Albedo                 |   Analysis          |  Analysis
+ !!   Sea-ice                |   Analysis          |  Analysis
+ !!   Snow                   |   Analysis          |  Forecast (over sea ice)
+ !!   Roughness              |   Analysis          |  Forecast
+ !!   Plant resistance       |   Analysis          |  Analysis
+ !!   Soil moisture          |   Weighted average  |  Analysis
+ !!   Soil temperature       |   Forecast          |  Analysis
+ !!   Canopy waver content   |   Forecast          |  Forecast
+ !!   Convective cloud cover |   Forecast          |  Forecast
+ !!   Convective cloud bottm |   Forecast          |  Forecast
+ !!   Convective cloud top   |   Forecast          |  Forecast
+ !!   Vegetation greenness   |   Analysis          |  Analysis
+ !!   Vegetation type        |   Analysis          |  Analysis
+ !!   Soil type              |   Analysis          |  Analysis
+ !!
  !! @param[in] LUGB Fortran unit number uses in sfccycle subprogram to
  !!            read input datasets.
  !! @param[in] IDIM 'i' dimension of the cubed-sphere tile
@@ -252,12 +329,15 @@
  REAL                :: FMM(LENSFC), FHH(LENSFC)
  REAL                :: RLA(LENSFC), RLO(LENSFC)
  REAL(KIND=4)        :: ZSOIL(LSOIL)
- REAL                :: SIG1T(LENSFC)
+ REAL                :: SIG1T(LENSFC) !< The sigma level 1 temperature for a
+                                      !! dead start. Set to zero for non-dead
+                                      !! start.
  REAL, ALLOCATABLE   :: SLIFCS_FG(:)
 
  TYPE(NSST_DATA)     :: NSST
  real, dimension(idim,jdim) :: tf_clm,tf_trd,sal_clm
  real, dimension(lensfc)    :: tf_clm_tile,tf_trd_tile,sal_clm_tile
+
 !--------------------------------------------------------------------------------
 ! GSI_FILE is the path/name of the gaussian GSI file which contains NSST
 ! increments.
@@ -266,100 +346,6 @@
  DATA GSI_FILE/'NULL'/
  
  NAMELIST/NAMSFCD/ GSI_FILE
-
-!--------------------------------------------------------------------------------
-!
-!  This program runs in two different modes:
-!
-!  1.  Analysis mode (FH=0.)
-!
-!      This program merges climatology, analysis and forecast guess to create
-!      new surface fields.  If analysis file is given, the program 
-!      uses it if date of the analysis matches with IY,IM,ID,IH (see Note
-!      below).
-!
-!  2.  Forecast mode (FH.GT.0.)
-!    
-!      This program interpolates climatology to the date corresponding to the 
-!      forecast hour.  If surface analysis file is given, for the corresponding
-!      dates, the program will use it.  This is forcing-by-observation experiment.
-!
-!   NOTE:
-!
-!      If the date of the analysis does not match given IY,IM,ID,IH, (and FH),
-!      the program searches an old analysis by going back 6 hours, then 12 hours,
-!      then one day upto NREPMX days (parameter statement in the SUBROTINE FIXRD. 
-!      Now defined as 15).  This allows the user to provide non-daily analysis to 
-!      be used.  If matching field is not found, the forecast guess will be used.
-!
-!      LUGB is the unit number used in sfccycle subprogram
-!      IDIM,JDIM is thegrid dimension in x and y direction, respectively of a tile
-!                of the cubed-sphere grid.
-!      LSOIL is the number of soil layers 
-!      IY,IM,ID,IH is the Year, month, day, and hour of initial state.
-!      FH is the forecast hour
-!      SIG1T is the sigma level 1 temperature for dead start.  
-!      SIG1T is the sigma level 1 temperature for dead start.
-!            If not dead start, no need for dimension but set to zero.
-!
-!  Variable naming conventions:
-!
-!     OROG .. Orography
-!     ALB  .. Snow-free albedo
-!     SNO  .. Liquid-equivalent snow depth
-!     ZOR  .. Surface roughness length
-!     VET  .. Vegetation type
-!     TSF  .. Surface skin temperature.  Sea surface temp. over ocean.
-!     TG3  .. Deep soil temperature (at 500cm)
-!     STC  .. Soil temperature (LSOIL layrs)
-!     SMC  .. Total soil moisture (LSOIL layrs)
-!     AIS  .. Sea ice mask (0 or 1)
-!     CNP  .. Canopy water content
-!     CV   .. Convective cloud cover
-!     CVB  .. Convective cloud base
-!     CVT  .. Convective cloud top
-!     SLI  .. LAND/SEA/SEA-ICE mask. (1/0/2 respectively)
-!     VEG  .. Vegetation cover
-!     SOT  .. Soil type
-!     SIH  .. Sea ice thickness
-!     SIC  .. Sea ice concentration
-!     SWD  .. Actual snow depth
-!     SLC  .. Liquid soil moisture (LSOIL layers)
-!     VMN  .. Vegetation cover minimum
-!     VMX  .. Vegetation cover maximum
-!     SLP  .. Slope type
-!     ABS  .. Maximum snow albedo
-!     T2M  .. 2m Temperature
-!     Q2M  .. 2m Specific Humidity
-!     TICE .. Ice Temperature
-!     OROG_UF .. Orography unfiltered
-!
-!  COEEFICIENTS OF BLENDING FORECAST AND INTERPOLATED CLIM
-!  (OR ANALYZED) FIELDS OVER SEA OR LAND(L) (NOT FOR CLOUDS)
-!  1.0 = USE OF FORECAST
-!  0.0 = REPLACE WITH INTERPOLATED ANALYSIS
-!
-!   These values are set for analysis mode.
-!
-!   Variables                  Land                 Sea
-!   ---------------------------------------------------------
-!   Surface temperature        Forecast             Analysis
-!   Albedo                     Analysis             Analysis
-!   Sea-ice                    Analysis             Analysis
-!   Snow                       Analysis             Forecast (over sea ice)
-!   Roughness                  Analysis             Forecast
-!   Plant resistance           Analysis             Analysis
-!   Soil wetness (layer)       Weighted average     Analysis
-!   Soil temperature           Forecast             Analysis
-!   Canopy waver content       Forecast             Forecast
-!   Convective cloud cover     Forecast             Forecast
-!   Convective cloud bottm     Forecast             Forecast
-!   Convective cloud top       Forecast             Forecast
-!   Vegetation cover           Analysis             Analysis
-!   vegetation type            Analysis             Analysis
-!   soil type                  Analysis             Analysis
-!
-!--------------------------------------------------------------------------------
 
  SIG1T = 0.0            ! Not a dead start!
 

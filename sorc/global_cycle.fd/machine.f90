@@ -1,9 +1,9 @@
 !> @file
 !! @brief Holds machine dependent constants for global_cycle.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Mark Iredell NOAA/EMC
 
 !> Holds machine dependent constants for global_cycle.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Mark Iredell NOAA/EMC
 MODULE MACHINE
 
  IMPLICIT NONE
