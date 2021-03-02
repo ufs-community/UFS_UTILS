@@ -2574,12 +2574,13 @@
       return
       end subroutine sfccycle 
 
-!> ???
+!> Counts the number of model points that are snow covered land,
+!! snow-free land, open water, sea ice, and snow covered sea ice.
 !!
-!! @param[in] slimsk
-!! @param[in] sno
-!! @param[in] ijmax
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] slimsk The land-sea-ice mask.
+!! @param[in] sno Snow
+!! @param[in] ijmax Number of model points to process.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine count(slimsk,sno,ijmax)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -2633,14 +2634,16 @@
       return
       end
 
-!> ???
+!> Determine the maximum and minimum values of a surface field
+!! at snow-free and snow covered land, open water, and 
+!! snow-free and snow covered sea ice.
 !!
-!! @param[in] lfld
-!! @param[in] fld
-!! @param[in] slimsk
-!! @param[in] sno
-!! @param[in] ijmax
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] lfld The name of the surface field to monitory.
+!! @param[in] fld The surface field to monitor.
+!! @param[in] slimsk Land-sea-ice mask.
+!! @param[in] sno Snow.
+!! @param[in] ijmax Number of model points to process.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine monitr(lfld,fld,slimsk,sno,ijmax)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -2706,13 +2709,13 @@
       return
       end
 
-!> ???
+!> Compute day of the year based on month and day.
 !!
-!! @param[in] iyr
-!! @param[in] imo
-!! @param[in] idy
-!! @param[in] ldy
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] iyr Year.
+!! @param[in] imo Month.
+!! @param[in] idy Day.
+!! @param[out] ldy Day of the year.
+!! @author Mark Iredell NOAA/EMC
       subroutine dayoyr(iyr,imo,idy,ldy)
       implicit none
       integer ldy,i,idy,iyr,imo
@@ -2729,19 +2732,21 @@
       return
       end
 
-!> ???
+!> Read a high-resolution land mask. It will be used
+!! as a surrogate for GRIB input data without a bitmap.
+!! This is NOT the model land mask. This mask file is GRIB1.
 !!
-!! @param[in] lugb
-!! @param[in] imsk
-!! @param[in] jmsk
-!! @param[in] fnmskh
-!! @param[in] kpds5
-!! @param[in] slmskh
-!! @param[in] gausm
-!! @param[in] blnmsk
-!! @param[in] bltmsk
-!! @param[in] me
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] lugb Fortran unit number of the mask file.
+!! @param[out] imsk 'i' dimension of the mask.
+!! @param[out] jmsk 'j' dimension of the mask.
+!! @param[in] fnmskh Name of the mask file.
+!! @param[in] kpds5 GRIB1 parameter number for mask.
+!! @param[out] slmskh The high-resolution mask.
+!! @param[out] gausm When true, mask is on a gaussian grid.
+!! @param[out] blnmsk Corner point longitude of the mask grid.
+!! @param[out] bltmsk Corner point latitude of the mask grid.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine hmskrd(lugb,imsk,jmsk,fnmskh,
      &                  kpds5,slmskh,gausm,blnmsk,bltmsk,me)
       use machine , only : kind_io8,kind_io4
@@ -2776,18 +2781,19 @@
       return
       end
 
-!> ???
+!> Read a GRIB1 file.  Return the requested data record
+!! and some grid specifications.
 !!
-!! @param[in] lugb
-!! @param[in] idim
-!! @param[in] jdim
-!! @param[in] fngrib
-!! @param[in] kpds5
-!! @param[in] gdata
-!! @param[in] gaus
-!! @param[in] blno
-!! @param[in] blto
-!! @param[in] me
+!! @param[in] lugb Fortran unit number of the grib file.
+!! @param[inout] idim "i" dimension of the data.
+!! @param[inout] jdim "j" dimension of the data.
+!! @param[in] fngrib Name of the grib file.
+!! @param[in] kpds5 The grib1 parameter number for the requested field.
+!! @param[out] gdata The requested data.
+!! @param[out] gaus When true, grid is gaussian.
+!! @param[out] blno Corner point longitude of grid.
+!! @param[out] blto Corner point latitude of grid.
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine fixrdg(lugb,idim,jdim,fngrib,
      &                  kpds5,gdata,gaus,blno,blto,me)
