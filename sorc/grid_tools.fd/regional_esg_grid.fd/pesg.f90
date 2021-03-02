@@ -1,7 +1,4 @@
 !> @file
-!! @author R. J. Purser
-!! @date May 2020  
-!!
 !! Suite of routines to perform the 2-parameter family of Extended
 !! Schmidt Gnomonic (ESG) regional grid mappings, and to optimize the
 !! the two parameters, A and K, of those mappings for a given rectangular
@@ -10,11 +7,13 @@
 !! lam (for "lambda" in [0,1) ) which gives weight to additional weight
 !! areal inhomogeneities instead of treating all distortion components
 !! equally.
-!!
 !! DEPENDENCIES
 !! Libraries: pmat, psym2, pfun
 !! Modules: pkind, pietc, pietc_s 
-!!
+!! @author R. J. Purser @date May 2020
+
+!> Module contain subroutines
+!! @author R. J. Purser
 module pesg
 !=============================================================================
 use pkind, only: spi,dp
@@ -63,9 +62,9 @@ interface gaulegh;        module procedure gaulegh;               end interface
 contains
 
 !> Inverse of xstoxc. I.e., cartesians to stereographic
-!! @author R. J. Purser
 !! @param xc xstoxc
 !! @param xs Inverse of xstoxc
+!! @author R. J. Purser
 subroutine xctoxs(xc,xs)!                                             [xctoxs]
 implicit none
 real(dp),dimension(3),intent(in ):: xc
@@ -77,10 +76,10 @@ end subroutine xctoxs
 !> Standard transformation from polar stereographic map coordinates, xs, to
 !! cartesian, xc, assuming the projection axis is polar.
 !! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.
-!! @author R. J. Purser
 !! @param xs polar stereographic map coordinates
 !! @param xc cartesian
 !! @param xcd value of jacobian matrix, encoding distortion and metric
+!! @author R. J. Purser
 subroutine xstoxc(xs,xc,xcd)!                                         [xstoxc]
 use pmat4, only: outer_product
 implicit none
@@ -97,11 +96,11 @@ end subroutine xstoxc
 !! cartesian, xc, assuming the projection axis is polar.
 !! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.
 !! xcdd is the further derivative, wrt xs, of xcd.
-!! @author R. J. Purser
 !! @param xs polar stereographic map coordinates
 !! @param xc cartesian
 !! @param xcd jacobian matrix, encoding distortion and metric
 !! @param xcdd further derivative, wrt xs, of xcd
+!! @author R. J. Purser
 subroutine xstoxc1(xs,xc,xcd,xcdd)!                                   [xstoxc]
 use pmat4, only: outer_product
 implicit none
@@ -142,9 +141,9 @@ xt=u2*xs/sc
 end subroutine xstoxt
 
 !> Scaled gnomonic plane xt to standard stereographic plane xs
-!! @author R. J. Purser
 !! @param xt Scaled gnomonic plane
 !! @param xs standard stereographic plane
+!! @author R. J. Purser
 subroutine xttoxs(k,xt,xs,xsd,ff)!                                     [xttoxs
 use pmat4, only: outer_product
 implicit none
@@ -168,10 +167,10 @@ do i=1,2; xsd(i,i)=xsd(i,i)+rsppi; enddo
 end subroutine xttoxs
 
 !> Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd
-!! @author R. J. Purser
 !! @param xt Scaled gnomonic plane
 !! @param xs standard stereographic plane
 !! @param K derivatives, wrt K, of xs and xsd
+!! @author R. J. Purser
 subroutine xttoxs1(k,xt,xs,xsd,xsdd,xs1,xsd1,ff)!                     [xttoxs]
 use pmat4, only: outer_product
 implicit none
@@ -220,10 +219,10 @@ do i=1,2; call zttozm(a,xt(i),xm(i),ff); if(ff)return; enddo
 end subroutine xttoxm
 
 !> Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd
-!! @author R. J. Purser
 !! @param xm vector value
 !! @param xt vector value
 !! @param xtd 2*2 diagonal Jacobian
+!! @author R. J. Purser
 subroutine xmtoxt(a,xm,xt,xtd,ff)!                                    [xmtoxt]
 implicit none
 real(dp),               intent(in ):: a
@@ -237,11 +236,11 @@ end subroutine xmtoxt
 
 !> Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd
 !! Also, the derivatives, wrt a, of these quantities.
-!! @author R. J. Purser
 !! @param xm vector value
 !! @param xt vector value
 !! @param xtd 2*2 diagonal Jacobian
 !! @param a the derivatives of these quantities
+!! @author R. J. Purser
 subroutine xmtoxt1(a,xm,xt,xtd,xt1,xtd1,ff)!                          [xmtoxt]
 implicit none
 real(dp),                 intent(in ):: a
@@ -276,9 +275,9 @@ end subroutine zttozm
 
 !> Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd,
 !! for positive and negative A and for the limiting case, A --> 0
-!! @author R. J. Purser
 !! @param zt function to be evaluated
 !! @param ztd derivative of the source function
+!! @author R. J. Purser
 subroutine zmtozt(a,zm,zt,ztd,ff)!                                    [zmtozt]
 implicit none
 real(dp),intent(in ):: a,zm
@@ -323,10 +322,10 @@ end subroutine zmtozt1
 !! derivative wrt xm, the Jacobian matrix, xcd.
 !! If for any reason the mapping cannot be done, return a raised failure flag,z
 !! FF.
-!! @author R. J. Purser
 !! @param ak parameterization of the Extended ESG
 !! @param xm vector
 !! @param ff raised failure error code
+!! @author R. J. Purser
 subroutine xmtoxc_vak(ak,xm,xc,xcd,ff)!                            [xmtoxc_ak]
 implicit none
 real(dp),dimension(2),  intent(in ):: ak,xm
@@ -337,8 +336,8 @@ call xmtoxc_ak(ak(1),ak(2),xm,xc,xcd,ff)
 end subroutine xmtoxc_vak
 
 !> Like xmtoxc_vak, _ak, but also return derivatives wrt ak.
-!! @author R. J. Purser
 !! @param ak derivatives wrt ak
+!! @author R. J. Purser
 subroutine xmtoxc_vak1(ak,xm,xc,xcd,xc1,xcd1,ff)!                  [xmtoxc_ak]
 implicit none
 real(dp),dimension(2),    intent(in ):: ak,xm
@@ -370,13 +369,13 @@ end subroutine xmtoxc_vak1
 !! corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian
 !! matrix, xcd. If for any reason the mapping cannot be done, return a
 !! raised failure flag, FF.
-!! @author R. J. Purser
 !! @param a ESG mapping parameterization
 !! @param k ESG mapping parameterization
 !! @param xm map-space vector
 !! @param xm derivative
 !! @param xcd jacobian matrix
 !! @param ff error flag
+!! @author R. J. Purser
 subroutine xmtoxc_ak(a,k,xm,xc,xcd,ff)!                            [xmtoxc_ak]
 implicit none
 real(dp),               intent(in ):: a,k
@@ -396,12 +395,12 @@ end subroutine xmtoxc_ak
 !> Inverse mapping of xmtoxc_ak. That is, go from given cartesian unit
 !! 3-vector, xc, to map coordinate 2-vector xm (or return a raised failure
 !! flag, FF, if the attempt fails).
-!! @author R. J. Purser
 !! @param a Inverse mapping of xmtoxc
 !! @param k Inverse mapping of xmtoxc
 !! @param xc cartesian unit 3-vector
 !! @param xm 2-vector map coordinate
 !! @param ff error flag
+!! @author R. J. Purser
 subroutine xctoxm_ak(a,k,xc,xm,ff)!                                [xctoxm_ak]
 implicit none
 real(dp),             intent(in ):: a,k
@@ -419,9 +418,9 @@ end subroutine xctoxm_ak
 !! region's center and its x and y edges, get the two cartesian vectors
 !! that represent the locations of these edge midpoints in the positive x and y
 !! directions.
-!! @author R. J. Purser
 !! @param edgex region's x edges
 !! @param edgey region's y edges
+!! @author R. J. Purser
 subroutine get_edges(arcx,arcy,edgex,edgey)!                       [get_edges]
 implicit none
 real(dp),             intent(in ):: arcx,arcy
@@ -438,12 +437,12 @@ end subroutine get_edges
 !! of Q(lam) that they imply for any choice of the "lambda" parameter, lam.
 !! Note that v1 and v4 are quadratic diagnostics of EL, while v2 and v3 are
 !! linear.
-!! @author R. J. Purser
 !! @param j0 jacobian matrix
 !! @param v1 quadratic diagnostics of EL
 !! @param v4 quadratic diagnostics of EL
 !! @param v2 linear diagnostics of EL
 !! @param v3 linear diagnostics of EL
+!! @author R. J. Purser
 subroutine get_qx(j0, v1,v2,v3,v4)!                                   [get_qx]
 use psym2, only: logsym2
 implicit none
@@ -461,9 +460,9 @@ end subroutine get_qx
 !> From a jacobian matrix, j0, and its derivative, j0d, get a sufficient set
 !! of v.. diagnostics such that, from average of these diagnostics, we can
 !! later compute the collective variance of Q and its derivative.
-!! @author R. J. Purser
 !! @param j0 jacobian matrix
 !! @param j0d derivative of j0
+!! @author R. J. Purser
 subroutine get_qxd(j0,j0d, v1,v2,v3,v4,v1d,v2d,v3d,v4d)!              [get_qx]
 use psym2, only: logsym2
 implicit none
@@ -508,7 +507,6 @@ end subroutine get_qxd
 !! the normalized gauss weights are wg.
 !! If a failure occurs, colmputations cease immediately and a failure
 !! flag, FF, is raised on return.
-!! @author R. J. Purser
 !! @param ak parameter vector
 !! @param ma map-space domain-parameter vector
 !! @param q lambda-parameterized quality diagnostic
@@ -517,6 +515,7 @@ end subroutine get_qxd
 !! @param qdak derivatives value
 !! @param qdma derivatives value
 !! @param ff error flag
+!! @author R. J. Purser
 subroutine get_meanqd(ngh,lam,xg,wg,ak,ma, q,qdak,qdma, & !        [get_meanq]
      ga,gadak,gadma, ff)
 implicit none
@@ -624,12 +623,12 @@ end subroutine get_meanqs
 !> The quadratic quantity Q depends linearly on v1 and v4 (which are already
 !! quadratic diagnostics of EL) and quadratically on v2 and v3 (which are
 !! linear diagnostics of EL). EL = (1/2)log(G), where G=J^T.J, J the jacobian.
-!! @author R. J. Purser
 !! @param q quadratic quantity
 !! @param v1 quadratic diagnostics of EL
 !! @param v4 quadratic diagnostics of EL
 !! @param v2 linear diagnostics of EL
 !! @param v3 linear diagnostics of EL
+!! @author R. J. Purser
 subroutine get_qofv(lam,v1,v2,v3,v4, q)!                            [get_qofv]
 implicit none
 real(dp),intent(in ):: lam,v1,v2,v3,v4
@@ -668,9 +667,9 @@ end subroutine get_qsofvs
 !> Given an aspect ratio, asp<=1, and major semi-axis, arc, in map-space
 !! nondimensional units, return a first guess for the parameter vector, ak,
 !! approximately optimal for the domain of the given dimensions.
-!! @author R. J. Purser
 !! @param asp aspect ratio
 !! @param ak first guess for the parameter vector
+!! @author R. J. Purser
 subroutine guessak_map(asp,tmarcx,ak)!                           [guessak_map]
 implicit none
 real(dp),             intent(in ):: asp,tmarcx
@@ -684,9 +683,9 @@ end subroutine guessak_map
 !! (degree) units measured along the rectangle's median, return a first guess
 !! for the parameter vector, ak, approximately optimal for the domain of the
 !! given dimensions.
-!! @author R. J. Purser
 !! @param asp aspect ratio
 !! @param ak first guess or the parameter vector
+!! @author R. J. Purser
 subroutine guessak_geo(asp,arc,ak)!                              [guessak_geo]
 implicit none
 real(dp),             intent(in ):: asp,arc
@@ -770,12 +769,12 @@ end subroutine guessak_geo
 !! in both the x and y directions), but restricted to a mere quadrant of the
 !! domain (since bilateral symmetry pertains across both domain medians,
 !! yielding a domain mean L that is strictly diagonal.
-!! @author R. J. Purser
 !! @param a Extended Schmidt Gnomonic parameter
 !! @param k Extended Schmidt Gnomonic parameter
 !! @param ff failure flag
 !! @param garcx map-space half-spans
 !! @param garcy map-space half-spans
+!! @author R. J. Purser
 subroutine bestesg_geo(lam,garcx,garcy, a,k,marcx,marcy,q,ff)!   [bestesg_geo]
 use pietc, only: u5,o5,s18,s36,s54,s72,ms18,ms36,ms54,ms72
 use pmat,  only: inv
@@ -932,13 +931,13 @@ end subroutine bestesg_geo
 !! in both the x and y directions), but restricted to a mere quadrant of the
 !! domain (since bilateral symmetry pertains across both domain medians,
 !! yielding a domain mean L that is strictly diagonal.
-!! @author R. J. Purser
 !! @param a Extended Schmidt Gnomonic parameter
 !! @param k Extended Schmidt Gnomonic parameter
 !! @param marcx map-coordinate half-spans
 !! @param marcy map-coordinate half-spans
 !! @param garcx geographical half-spans
 !! @param garcy geographical half-spans
+!! @author R. J. Purser
 subroutine bestesg_map(lam,marcx,marcy, a,k,garcx,garcy,q,ff)   ![bestesg_map]
 use pietc, only: u5,o5,s18,s36,s54,s72,ms18,ms36,ms54,ms72
 use psym2, only: chol2
@@ -1068,7 +1067,6 @@ end subroutine bestesg_map
 !! If all goes well, return a lowered failure flag, ff=.false. .
 !! But if, for some reason, it is not possible to complete this task,
 !! return the raised failure flag, ff=.TRUE. .
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping centered at (plat,plon)
 !! @param k parameters of an ESG mapping centered at (plat,plon)
 !! @param plat latitude center point
@@ -1081,6 +1079,7 @@ end subroutine bestesg_map
 !! @param glon grid points for longitude
 !! @param garea rectangular array
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine hgrid_ak_rr(lx,ly,nx,ny,A,K,plat,plon,pazi, & !       [hgrid_ak_rr]
      delx,dely,  glat,glon,garea, ff)
 use pmat4, only: sarea
@@ -1173,7 +1172,6 @@ end subroutine hgrid_ak_rr
 !! if all goes well, return a .FALSE. failure flag, ff. If, for some
 !! reason, it is not possible to complete this task, return the failure flag
 !! as .TRUE.
-!! @author R. J. Purser
 !! @param a Extended Schmidt Gnomonic parameter
 !! @param k Extended Schmidt Gnomonic parameter
 !! @param plat latitude define centered mapping
@@ -1189,6 +1187,7 @@ end subroutine hgrid_ak_rr
 !! @param angle_dx x angles relative to local east and north
 !! @param angle_dy y angles relative to local east and north
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine hgrid_ak_rr_c(lx,ly,nx,ny,a,k,plat,plon,pazi, & !     [hgrid_ak_rr]
                     delx,dely,  glat,glon,garea,dx,dy,angle_dx,angle_dy, ff)
 use pmat4, only: cross_product,triple_product
@@ -1374,7 +1373,6 @@ end subroutine hgrid_ak_rr_c
 !! If all goes well, return a lowered failure flag, ff=.false. .
 !! But if, for some reason, it is not possible to complete this task,
 !! return the raised failure flag, ff=.TRUE. .
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping centered at (plat,plon)
 !! @param k parameters of an ESG mapping centered at (plat,plon)
 !! @param plat latitude define centered mapping
@@ -1390,6 +1388,7 @@ end subroutine hgrid_ak_rr_c
 !! @param nx-1 x dimensions for garea
 !! @param ny-1 y dimensions for garea
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine hgrid_ak_rc(lx,ly,nx,ny,A,K,plat,plon,pazi, & !       [hgrid_ak_rc]
      delx,dely, xc,xcd,garea, ff)
 use pmat4, only: sarea
@@ -1461,7 +1460,6 @@ end subroutine hgrid_ak_rc
 !! the angles are returned in degrees. Garea, the area of each grid cell, is
 !! returned as in hgrid_ak_rr, and a failure flag, ff, raised when a failure
 !! occurs anywhere in these calculations.
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param pdlat latitude define centered mapping
@@ -1473,6 +1471,7 @@ end subroutine hgrid_ak_rc
 !! @param delx central x-spacing grid point
 !! @param dely central y-spacing grid point
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine hgrid_ak_dd(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, & !    [hgrid_ak_dd]
      delx,dely,  gdlat,gdlon,garea, ff)
 implicit none
@@ -1495,7 +1494,6 @@ end subroutine hgrid_ak_dd
 
 !> Like hgrid_ak_rr_c, except all the angle arguments (but not delx,dely)
 !! are in degrees instead of radians.
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param pdlat latitude define centered mapping
@@ -1509,6 +1507,7 @@ end subroutine hgrid_ak_dd
 !! @param dangle_dx x rotations of the steps
 !! @param dangle_dy y rotations of the steps
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine hgrid_ak_dd_c(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, &!   [hgrid_ak_dd]
      delx,dely,  gdlat,gdlon,garea,dx,dy,dangle_dx,dangle_dy, ff)
 implicit none
@@ -1542,7 +1541,6 @@ end subroutine hgrid_ak_dd_c
 !! matrices, xcd. Garea, the area of each grid cell, is also
 !! returned as in hgrid_ak_rx, and a failure flag, ff, raised when a failure
 !! occurs anywhere in these calculations.
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param pdlat latitude define centered mapping
@@ -1557,6 +1555,7 @@ end subroutine hgrid_ak_dd_c
 !! @param xcd Jacobian matrices
 !! @param garea Jacobian matrices
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine hgrid_ak_dc(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, & !    [hgrid_ak_dc]
      delx,dely, xc,xcd,garea, ff)
 implicit none
@@ -1579,7 +1578,6 @@ end subroutine hgrid_ak_dc
 !! units, delxre, delyre on entry, and to express the grid cell areas, garea,
 !! in dimensional units upon return.
 !! The gridded lats and lons, glat and glon, remain in radians.
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param pdlat latitude define centered mapping
@@ -1592,6 +1590,7 @@ end subroutine hgrid_ak_dc
 !! @param delxre map-space grid increments in the dimensional units
 !! @param delyre map-space grid increments in the dimensional units
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine hgrid_ak(lx,ly,nx,ny,a,k,plat,plon,pazi, & !             [hgrid_ak]
      re,delxre,delyre,  glat,glon,garea, ff)
 implicit none
@@ -1620,7 +1619,6 @@ end subroutine hgrid_ak
 !! version of this routine, the relative rotations of the steps, dangle_dx
 !! and dangle_dy, are returned as degrees instead of radians (all other angles
 !! in the argument list, i.e., plat,plon,pazi,glat,glon, remain radians).
-!! @author R. J. Purser
 !! @param a Extended Schmidt Gnomonic parameter
 !! @param k Extended Schmidt Gnomonic parameter
 !! @param plat latitude define centered mapping
@@ -1635,6 +1633,7 @@ end subroutine hgrid_ak
 !! @param glon gridded lons
 !! @param dangle_dx x rotations of the steps
 !! @param dangle_dy y rotations of the steps
+!! @author R. J. Purser
 subroutine hgrid_ak_c(lx,ly,nx,ny,a,k,plat,plon,pazi, & !           [hgrid_ak]
      re,delxre,delyre,  glat,glon,garea,dx,dy,dangle_dx,dangle_dy, ff)
 implicit none
@@ -1667,6 +1666,7 @@ end subroutine hgrid_ak_c
 !! @param m number of nodes in half-interval
 !! @param x nodes and weights
 !! @param w nodes and weights
+!! @author R. J. Purser
 subroutine gaulegh(m,x,w)!                                           [gaulegh]
 implicit none
 integer(spi),         intent(IN ):: m   ! <- number of nodes in half-interval 
@@ -1692,7 +1692,6 @@ end subroutine gaulegh
 !! map-space units) and the sample lat-lon (in radian), return the the
 !! image in map space in a 2-vector in grid units. If the transformation
 !! is invalid, return a .true. failure flag.
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param plat latitude define centered mapping
@@ -1700,6 +1699,7 @@ end subroutine gaulegh
 !! @param lat radian latitude
 !! @param lon radian longitude
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff)!      [gtoxm_ak_rr]
 use pmat5, only: grtoc
 implicit none
@@ -1731,7 +1731,6 @@ end subroutine gtoxm_ak_rr_m
 !! map-space units) and the sample lat-lon (in radian), return the the
 !! image in map space in a 2-vector in grid units. If the transformation
 !! is invalid, return a .true. failure flag.
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param plat latitude define centered mapping
@@ -1741,6 +1740,7 @@ end subroutine gtoxm_ak_rr_m
 !! @param lat radian latitude
 !! @param lon radian longitude
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine gtoxm_ak_rr_g(A,K,plat,plon,pazi,delx,dely,lat,lon,&! [gtoxm_ak_rr]
      xm,ff)
 implicit none
@@ -1752,7 +1752,6 @@ xm(1)=xm(1)/delx; xm(2)=xm(2)/dely
 end subroutine gtoxm_ak_rr_g
 
 !> Like gtoxm_ak_rr_m, except input angles are expressed in degrees
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param pdlat latitude define centered mapping
@@ -1760,6 +1759,7 @@ end subroutine gtoxm_ak_rr_g
 !! @param dlat radian latitude
 !! @param dlon radian longitude
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine gtoxm_ak_dd_m(A,K,pdlat,pdlon,pdazi,dlat,dlon,&!      [gtoxm_ak_dd]
      xm,ff)
 implicit none
@@ -1776,7 +1776,6 @@ call gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff)
 end subroutine gtoxm_ak_dd_m
 
 !> Like gtoxm_ak_rr_g, except input angles are expressed in degrees
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param pdlat latitude define centered mapping
@@ -1784,6 +1783,7 @@ end subroutine gtoxm_ak_dd_m
 !! @param delx central x-spacing grid point
 !! @param dely central y-spacing grid point
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine gtoxm_ak_dd_g(A,K,pdlat,pdlon,pdazi,delx,dely,&!      [gtoxm_ak_dd]
 dlat,dlon,     xm,ff)
 implicit none
@@ -1804,7 +1804,6 @@ end subroutine gtoxm_ak_dd_g
 !! coordinates given by the 2-vector, xm, return the geographical
 !! coordinates, lat and lon (radians). If the transformation is invalid for
 !! any reason, return instead with a raised failure flag, FF= .true.
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param plat latitude of geographical orientation
@@ -1812,6 +1811,7 @@ end subroutine gtoxm_ak_dd_g
 !! @param lat latitude of geographical coordinates
 !! @param lon longitude of geographical coordinates
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine xmtog_ak_rr_m(A,K,plat,plon,pazi,xm,lat,lon,ff)!      [xmtog_ak_rr]
 use pmat5, only: ctogr
 implicit none
@@ -1845,7 +1845,6 @@ end subroutine xmtog_ak_rr_m
 !! as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians)
 !! of this point. If instead the transformation is invalid for any reason, then
 !! return the raised failure flag, FF=.true.
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param plon longitude geographical orientation
@@ -1856,6 +1855,7 @@ end subroutine xmtog_ak_rr_m
 !! @param delx central x-spacing grid point
 !! @param dely central y-spacing grid point
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine xmtog_ak_rr_g(A,K,plat,plon,pazi,delx,dely,xm,&!      [xmtog_ak_rr]
      lat,lon,ff)
 implicit none
@@ -1870,12 +1870,12 @@ call xmtog_ak_rr_m(A,K,plat,plon,pazi,xmt,lat,lon,ff)
 end subroutine xmtog_ak_rr_g
 
 !> Like xmtog_ak_rr_m, except angles are expressed in degrees
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param plat latitude of geographical orientation
 !! @param plon longitude of geographical orientation
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine xmtog_ak_dd_m(A,K,pdlat,pdlon,pdazi,xm,dlat,dlon,ff)! [xmtog_ak_dd]
 use pmat5, only: ctogr
 implicit none
@@ -1893,7 +1893,6 @@ dlon=lon*rtod
 end subroutine xmtog_ak_dd_m
 
 !> Like xmtog_ak_rr_g, except angles are expressed in degrees
-!! @author R. J. Purser
 !! @param a parameters of an ESG mapping
 !! @param k parameters of an ESG mapping
 !! @param pdlat latitude define centered mapping
@@ -1904,6 +1903,7 @@ end subroutine xmtog_ak_dd_m
 !! @param delx central x-spacing grid point
 !! @param dely central y-spacing grid point
 !! @param ff failure flag
+!! @author R. J. Purser
 subroutine xmtog_ak_dd_g(A,K,pdlat,pdlon,pdazi,delx,dely,xm,&!   [xmtog_ak_dd]
      dlat,dlon,ff)
 implicit none
