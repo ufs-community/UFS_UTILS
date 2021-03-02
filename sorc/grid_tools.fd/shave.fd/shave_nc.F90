@@ -1,13 +1,18 @@
 !> @file
-!! The grid driver step in FV3 preprocessing generates a grid_tile
-!! file and an oro_tile file for the regional domain. The final
-!! size of these files' domains must include the halo surrounding
-!! the computational domain. However the original size of these
-!! domains must exceed the domain size plus haloes so that the
-!! topography filtering program can produce correct values over
-!! the halo region. Then before the files go into the chgres
-!! job their domains must be shaved down to only the computational
-!! interior and the halo which is what this code does.
+!! @brief Utility to shave down domains of FV3 files.
+!! @author Tom Black
+
+!> The grid driver step in FV3 preprocessing generates a grid_tile
+!! file and an oro_tile file for the regional domain. The final size
+!! of these files' domains must include the halo surrounding the
+!! computational domain. However the original size of these domains
+!! must exceed the domain size plus haloes so that the topography
+!! filtering program can produce correct values over the halo
+!! region. Then before the files go into the chgres job their domains
+!! must be shaved down to only the computational interior and the halo
+!! which is what this code does.
+!!
+!! @return 0 for success, error code otherwise
 !! @author Tom Black
       program shave_nc
       use netcdf
@@ -253,11 +258,11 @@
       call check(nf90_close(ncid_out))
       call check(nf90_close(ncid_in))
 
-!-----------------------------------------------------------------------
       contains
-!-----------------------------------------------------------------------
-!> exception handling 
-!! @param status error code
+
+        !> Handle netCDF return codes.
+        !! @param status error code
+        !! @author Tom Black
       subroutine check(status)
       integer,intent(in) :: status
       if(status /= nf90_noerr) then
