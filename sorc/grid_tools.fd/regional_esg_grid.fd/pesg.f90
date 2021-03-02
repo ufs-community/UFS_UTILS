@@ -1,18 +1,16 @@
 !> @file
-!! Suite of routines to perform the 2-parameter family of Extended
-!! Schmidt Gnomonic (ESG) regional grid mappings, and to optimize the
-!! the two parameters, A and K, of those mappings for a given rectangular
-!! domain's principal (median) semi-arcs with respect to a domain-averaged
-!! measure of distortion. This criterion is itself endowed with a parameter, 
-!! lam (for "lambda" in [0,1) ) which gives weight to additional weight
-!! areal inhomogeneities instead of treating all distortion components
-!! equally.
-!! DEPENDENCIES
-!! Libraries: pmat, psym2, pfun
-!! Modules: pkind, pietc, pietc_s 
+!! @brief Routines to perform ESG regional grid mappings.
 !! @author R. J. Purser @date May 2020
 
-!> Module contain subroutines
+!> Suite of routines to perform the 2-parameter family of Extended
+!! Schmidt Gnomonic (ESG) regional grid mappings, and to optimize the
+!! the two parameters, A and K, of those mappings for a given
+!! rectangular domain's principal (median) semi-arcs with respect to a
+!! domain-averaged measure of distortion. This criterion is itself
+!! endowed with a parameter, lam (for "lambda" in [0,1) ) which gives
+!! weight to additional weight areal inhomogeneities instead of
+!! treating all distortion components equally.
+!!
 !! @author R. J. Purser
 module pesg
 !=============================================================================
@@ -61,9 +59,10 @@ interface gaulegh;        module procedure gaulegh;               end interface
 
 contains
 
-!> Inverse of xstoxc. I.e., cartesians to stereographic
-!! @param xc xstoxc
-!! @param xs Inverse of xstoxc
+!> Inverse of xstoxc. I.e., cartesians to stereographic.
+!!
+!! @param[in] xc xstoxc
+!! @param[out] xs Inverse of xstoxc
 !! @author R. J. Purser
 subroutine xctoxs(xc,xs)!                                             [xctoxs]
 implicit none
@@ -73,12 +72,14 @@ real(dp):: zp
 zp=u1+xc(3); xs=xc(1:2)/zp
 end subroutine xctoxs
 
-!> Standard transformation from polar stereographic map coordinates, xs, to
-!! cartesian, xc, assuming the projection axis is polar.
-!! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.
-!! @param xs polar stereographic map coordinates
-!! @param xc cartesian
-!! @param xcd value of jacobian matrix, encoding distortion and metric
+!> Standard transformation from polar stereographic map coordinates,
+!! xs, to cartesian, xc, assuming the projection axis is polar.
+!! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and
+!! metric.
+!!
+!! @param[in] xs polar stereographic map coordinates
+!! @param[out] xc cartesian
+!! @param[out] xcd value of jacobian matrix, encoding distortion and metric
 !! @author R. J. Purser
 subroutine xstoxc(xs,xc,xcd)!                                         [xstoxc]
 use pmat4, only: outer_product
@@ -92,14 +93,15 @@ xcd=-outer_product(xc,xs)*zp; xcd(1,1)=xcd(1,1)+zp; xcd(2,2)=xcd(2,2)+zp
 xc(3)=xc(3)-u1
 end subroutine xstoxc
 
-!> Standard transformation from polar stereographic map coordinates, xs, to
-!! cartesian, xc, assuming the projection axis is polar.
-!! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.
-!! xcdd is the further derivative, wrt xs, of xcd.
-!! @param xs polar stereographic map coordinates
-!! @param xc cartesian
-!! @param xcd jacobian matrix, encoding distortion and metric
-!! @param xcdd further derivative, wrt xs, of xcd
+!> Standard transformation from polar stereographic map coordinates,
+!! xs, to cartesian, xc, assuming the projection axis is polar.
+!! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and
+!! metric. xcdd is the further derivative, wrt xs, of xcd.
+!!
+!! @param[in] xs polar stereographic map coordinates
+!! @param[out] xc cartesian
+!! @param[out] xcd jacobian matrix, encoding distortion and metric
+!! @param[out] xcdd further derivative, wrt xs, of xcd
 !! @author R. J. Purser
 subroutine xstoxc1(xs,xc,xcd,xcdd)!                                   [xstoxc]
 use pmat4, only: outer_product
@@ -126,7 +128,12 @@ enddo
 do i=1,2; xcd(i,i)=xcd(i,i)+zp; enddo
 end subroutine xstoxc1
 
-!> Inverse of xttoxs
+!> Inverse of xttoxs.
+!!
+!! @param[in] k ???
+!! @param[in] xs ???
+!! @param[out] xt ???
+!! @param[out] ff ???
 !! @author R. J. Purser
 subroutine xstoxt(k,xs,xt,ff)!                                        [xstoxt]
 implicit none
@@ -140,9 +147,13 @@ ff=abs(s)>=u1; if(ff)return
 xt=u2*xs/sc
 end subroutine xstoxt
 
-!> Scaled gnomonic plane xt to standard stereographic plane xs
-!! @param xt Scaled gnomonic plane
-!! @param xs standard stereographic plane
+!> Scaled gnomonic plane xt to standard stereographic plane xs.
+!!
+!! @param[in] k ???
+!! @param[in] xt Scaled gnomonic plane
+!! @param[out] xs standard stereographic plane
+!! @param[out] xsd ???
+!! @param[out] ff ???
 !! @author R. J. Purser
 subroutine xttoxs(k,xt,xs,xsd,ff)!                                     [xttoxs
 use pmat4, only: outer_product
@@ -166,10 +177,17 @@ xsd=-outer_product(xt,rspd)*rsppis
 do i=1,2; xsd(i,i)=xsd(i,i)+rsppi; enddo
 end subroutine xttoxs
 
-!> Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd
-!! @param xt Scaled gnomonic plane
-!! @param xs standard stereographic plane
-!! @param K derivatives, wrt K, of xs and xsd
+!> Like xttoxs, but also, return the derivatives, wrt K, of xs and
+!! xsd.
+!!
+!! @param[in] k derivatives, wrt K, of xs and xsd
+!! @param[in] xt Scaled gnomonic plane
+!! @param[out] xs standard stereographic plane
+!! @param[out] xsd ???
+!! @param[out] xsdd ???
+!! @param[out] xs1 ???
+!! @param[out] xsd1 ???
+!! @param[out] ff ???
 !! @author R. J. Purser
 subroutine xttoxs1(k,xt,xs,xsd,xsdd,xs1,xsd1,ff)!                     [xttoxs]
 use pmat4, only: outer_product
@@ -206,7 +224,12 @@ do i=1,2; rspdd(i,i)=rspdd(i,i)+rsp*rsppi;                enddo
 do i=1,2; xsdd(i,:,:)=xsdd(i,:,:)-xt(i)*rspdd*rsppi*k/sp; enddo
 end subroutine xttoxs1
 
-!> Inverse of xmtoxt
+!> Inverse of xmtoxt.
+!!
+!! @param[in] a ???
+!! @param[in] xt ???
+!! @param[out] xm ???
+!! @param[out] ff ???
 !! @author R. J. Purser
 subroutine xttoxm(a,xt,xm,ff)!                                       [xttoxm]
 implicit none
@@ -218,10 +241,14 @@ integer(spi):: i
 do i=1,2; call zttozm(a,xt(i),xm(i),ff); if(ff)return; enddo
 end subroutine xttoxm
 
-!> Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd
-!! @param xm vector value
-!! @param xt vector value
-!! @param xtd 2*2 diagonal Jacobian
+!> Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian
+!! xtd.
+!!
+!! @param[in] a ???
+!! @param[in] xm vector value
+!! @param[out] xt vector value
+!! @param[out] xtd 2*2 diagonal Jacobian
+!! @param[out] ff ???
 !! @author R. J. Purser
 subroutine xmtoxt(a,xm,xt,xtd,ff)!                                    [xmtoxt]
 implicit none
@@ -234,12 +261,16 @@ integer(spi):: i
 xtd=u0; do i=1,2; call zmtozt(a,xm(i),xt(i),xtd(i,i),ff); if(ff)return; enddo
 end subroutine xmtoxt
 
-!> Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd
-!! Also, the derivatives, wrt a, of these quantities.
-!! @param xm vector value
-!! @param xt vector value
-!! @param xtd 2*2 diagonal Jacobian
-!! @param a the derivatives of these quantities
+!> Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian
+!! xtd Also, the derivatives, wrt a, of these quantities.
+!!
+!! @param[in] a the derivatives of these quantities
+!! @param[in] xm vector value
+!! @param[out] xt vector value
+!! @param[out] xtd 2*2 diagonal Jacobian
+!! @param[out] xt1 ???
+!! @param[out] xtd1 ???
+!! @param[out] ff ???
 !! @author R. J. Purser
 subroutine xmtoxt1(a,xm,xt,xtd,xt1,xtd1,ff)!                          [xmtoxt]
 implicit none
@@ -258,6 +289,11 @@ enddo
 end subroutine xmtoxt1
 
 !> Inverse of zmtozt
+!!
+!! @param[in] a ???
+!! @param[in] zt ???
+!! @param[out] zm ???
+!! @param[out] ff ???
 !! @author R. J. Purser
 subroutine zttozm(a,zt,zm,ff)!                                        [zttozm]
 implicit none
@@ -273,10 +309,15 @@ else                                     ; zm=zt
 endif
 end subroutine zttozm
 
-!> Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd,
-!! for positive and negative A and for the limiting case, A --> 0
-!! @param zt function to be evaluated
-!! @param ztd derivative of the source function
+!> Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its
+!! derivative, ztd, for positive and negative A and for the limiting
+!! case, A --> 0.
+!!
+!! @param[in] a ???
+!! @param[in] zm ???
+!! @param[out] zt function to be evaluated
+!! @param[out] ztd derivative of the source function
+!! @param[out] ff ???
 !! @author R. J. Purser
 subroutine zmtozt(a,zm,zt,ztd,ff)!                                    [zmtozt]
 implicit none
