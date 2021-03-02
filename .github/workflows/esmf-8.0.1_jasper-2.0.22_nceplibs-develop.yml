@@ -133,4 +133,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: test-coverage
-        path: ufs_utils/build/test-coverage.html
+        path: ufs_utils/build/test-coverage-${{ matrix.os }}.html
