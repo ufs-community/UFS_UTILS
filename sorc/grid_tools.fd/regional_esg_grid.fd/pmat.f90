@@ -36,6 +36,7 @@ interface inv
 sinvmt, dinvmt, cinvmt, slinmmt, dlinmmt, clinmmt, slinmvt, dlinmvt, clinmvt, &
 sinvmtf,dinvmtf,cinvmtf,slinmmtf,dlinmmtf,clinmmtf,slinmvtf,dlinmvtf,clinmvtf,&
 iinvf
+                                                               end interface
 interface L1Lm;   module procedure sL1Lm,dL1Lm,sL1Lmf,dL1Lmf;  end interface
 interface LdLm;   module procedure sLdLm,dLdLm,sLdLmf,dLdLmf;  end interface
 interface invl;   module procedure sinvl,dinvl,slinlv,dlinlv;  end interface
