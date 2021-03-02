@@ -44,6 +44,7 @@ interface invu;   module procedure sinvu,dinvu,slinuv,dlinuv;  end interface
 contains
 
 !> Swap vectors
+!!
 !! @param d vector
 !! @param e vector
 !! @author R. J. Purser
@@ -97,6 +98,7 @@ if(ff)stop 'In cinvmt; Unable to invert matrix'
 end subroutine cinvmt
 
 !> Invert matrix (or flag if can't)
+!!
 !! @param a matrix
 !! @param ff flag for error condition
 !! @author R. J. Purser
@@ -134,6 +136,7 @@ do j=m-1,1,-1; l=ipiv(j); call sswpvv(a(:,j),a(:,l)); enddo
 end subroutine sinvmtf
 
 !> Routine dinvmtf to Invert and Permute
+!!
 !! @param a matrix
 !! @param ff flag for error condition
 !! @author R. J. Purser
@@ -170,6 +173,7 @@ do j=m-1,1,-1; l=ipiv(j); call dswpvv(a(:,j),a(:,l)); enddo
 end subroutine dinvmtf
 
 !> routine cinvmtf to Invert and Permute
+!!
 !! @param a matrix
 !! @param ff flag for error condition
 !! @author R. J. Purser
@@ -379,6 +383,7 @@ end subroutine clinmvtf
 
 !> Invert integer square array, imat, if possible, but flag ff=.true.
 !! if not possible. (Determinant of imat must be +1 or -1
+!!
 !! @param imat integer square array
 !! @param ff error flag
 !! @author R. J. Purser
@@ -435,6 +440,7 @@ end subroutine cldum
 
 !> perform l-d-u decomposition of square matrix a in place with
 !! pivoting.
+!!
 !! @param a    square matrix to be factorized
 !! @param ipiv array encoding the pivoting sequence
 !! @param d    indicator for possible sign change of determinant
@@ -626,6 +632,7 @@ end subroutine cldumf
 !> @brief SUBROUTINE UDLMM.
 !! use l-u factors in A to back-substitute for several rhs in B, using ipiv to
 !! define the pivoting permutation used in the l-u decomposition.
+!!
 !! @param A    L-D-U factorization of linear system matrux
 !! @param B    rt-hand-sides vectors on input, corresponding solutions on return
 !! @param IPIV array encoding the pivoting sequence
@@ -712,6 +719,7 @@ end subroutine cudlmm
 !> @brief SUBROUTINE UDLMV
 !! use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to
 !! define the pivoting permutation used in the l-u decomposition.
+!!
 !! @param A    L-D-U factorization of linear system matrix
 !! @param B    right-hand-side vector on input, corresponding solution on return
 !! @param IPIV array encoding the pivoting sequence
@@ -955,6 +963,7 @@ end subroutine dldlmf
 
 !> Invert the upper triangular matrix in place by transposing, calling
 !! invl, and transposing again.
+!!
 !! @param a upper triangular matrix
 !! @author R. J. Purser
 subroutine sinvu(a)!                                                     [invu]
