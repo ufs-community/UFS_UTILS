@@ -25,26 +25,25 @@ module module_nwp_base
 !  Define a nwp observation type.
 
    type nwplocation
-      real(r_single) :: lon  ! stroke longitude
-      real(r_single) :: lat  ! stroke latitiude
+      real(r_single) :: lon  !< stroke longitude
+      real(r_single) :: lat  !< stroke latitiude
    end type nwplocation
 
 !  Define a nwp observation type to contain actual data.
 
    type, extends(nwplocation) :: nwpbase
 !  HOW DOES THIS POINTER THING WORK?
-      type(nwpbase), pointer :: next => NULL()
-      real(r_single) :: time                 ! observation time
-      integer :: numvar                      ! number of variables in this obs type
-!      real(r_single), allocatable :: obs(:)  ! observation value (# numvar)
-      real(r_kind), allocatable :: obs(:)
-      logical :: ifquality                   ! do these obs include quality info?
-!                                              GLM has flash_quality_flag
-      integer, allocatable :: quality(:)     ! if so, quality flags
+      type(nwpbase), pointer :: next => NULL() !< Pointer.
+      real(r_single) :: time                 !< observation time.
+      integer :: numvar                      !< number of variables in this obs type.
+!      real(r_single), allocatable :: obs(:)  !< observation value (# numvar).
+      real(r_kind), allocatable :: obs(:) !< Observations.
+      logical :: ifquality                   !< do these obs include quality info? GLM has flash_quality_flag.
+      integer, allocatable :: quality(:)     !< if so, quality flags.
       contains
-         procedure :: list => list_obsbase
-         procedure :: alloc => alloc_obsbase
-         procedure :: destroy => destroy_obsbase
+         procedure :: list => list_obsbase !< List contents of obs. @return
+         procedure :: alloc => alloc_obsbase !< Allocate memory for observations. @return
+         procedure :: destroy => destroy_obsbase  !< Release memory. @return
    end type nwpbase
 
    contains
@@ -52,10 +51,9 @@ module module_nwp_base
      !> This subroutine lists the contents of a base nwp observation.
      !!
      !! @param this the base nwp obervation
-     !! @author David Wright, University of Michigan and GLERL @date 17 Aug 2020     
+     !! @author David Wright, University of Michigan and GLERL
+     !! @date 17 Aug 2020
       subroutine list_obsbase(this)
-
-
          class(nwpbase) :: this
 
          integer :: i, numvar
@@ -84,7 +82,7 @@ module module_nwp_base
       !!
       !! @param this the base nwp obervation
       !! @param[in] numvar number of variables in this ob type
-      !! @param[in] itquality does this observation include quality
+      !! @param[in] ifquality does this observation include quality
       !! information?
       !! @author David Wright, University of Michigan and GLERL @date 17 Aug 2020
       subroutine alloc_obsbase(this,numvar,ifquality)

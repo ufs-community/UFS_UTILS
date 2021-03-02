@@ -26,31 +26,38 @@ module module_nwp
 
    private
    type :: nwp_type
-      character(len=6) :: datatype
-      integer :: numvar, xlat, xlon, xtime
-      integer :: i_mask, i_sst, i_ice, i_sfcT, i_iceT
-      character(len=20), allocatable :: varnames(:)
-      character(len=20), allocatable :: latname
-      character(len=20), allocatable :: lonname
-      character(len=20), allocatable :: dimnameEW
-      character(len=20), allocatable :: dimnameNS
-      character(len=20), allocatable :: dimnameTIME
+      character(len=6) :: datatype !< Data type.
+      integer :: numvar !< Number of variabls.
+      integer :: xlat !< Number of latitudes.
+      integer :: xlon !< Number of longitudes.
+      integer :: xtime !< Number of times.
+      integer :: i_mask !< Is var visible (always 1).
+      integer :: i_sst !< Index of sst var.
+      integer :: i_ice !< Index of ice var.
+      integer :: i_sfcT !< Index of sst temp var.
+      integer :: i_iceT !< Index of ice temp var.
+      character(len=20), allocatable :: varnames(:) !< Variable names.
+      character(len=20), allocatable :: latname !< Latitude name.
+      character(len=20), allocatable :: lonname !< Longitude name.
+      character(len=20), allocatable :: dimnameEW !< East/West dimension name.
+      character(len=20), allocatable :: dimnameNS !< North/South dimension name.
+      character(len=20), allocatable :: dimnameTIME !< Time dimension name.
 
-      real(r_kind), allocatable :: nwp_mask(:,:,:)
-      real(r_kind), allocatable :: nwp_sst(:,:,:)
-      real(r_kind), allocatable :: nwp_ice(:,:,:)
-      real(r_kind), allocatable :: nwp_sfcT(:,:,:)
-      real(r_kind), allocatable :: nwp_iceT(:,:,:) 
+      real(r_kind), allocatable :: nwp_mask(:,:,:) !< ???
+      real(r_kind), allocatable :: nwp_sst(:,:,:) !< ???
+      real(r_kind), allocatable :: nwp_ice(:,:,:) !< ???
+      real(r_kind), allocatable :: nwp_sfcT(:,:,:) !< ???
+      real(r_kind), allocatable :: nwp_iceT(:,:,:)  !< ???
    end type nwp_type
 
    type, extends(nwp_type) :: fcst_nwp
-      type(nwpbase), pointer :: head => NULL()
-      type(nwpbase), pointer :: tail => NULL()
+      type(nwpbase), pointer :: head => NULL() !< ???
+      type(nwpbase), pointer :: tail => NULL() !< ???
       contains
-         procedure :: initial => initial_nwp
-         procedure :: list_initial => list_initial_nwp
-         procedure :: read_n => read_nwp
-         procedure :: finish => finish_nwp
+         procedure :: initial => initial_nwp !< Defines vars and names. @return
+         procedure :: list_initial => list_initial_nwp !< List the setup. @return
+         procedure :: read_n => read_nwp !< Initialize arrays, get data. @return
+         procedure :: finish => finish_nwp !< Finish and deallocate. @return
    end type fcst_nwp
 
    type(ncio) :: ncdata !< Wrapper object for netCDF data file.
@@ -66,8 +73,6 @@ module module_nwp
      !! @param[in] itype either ' FVCOM' or 'FV3LAM'.
      !! @author David Wright, University of Michigan and GLERL
       subroutine initial_nwp(this,itype)
-
-
          class(fcst_nwp) :: this
 
          character(len=6), intent(in) :: itype
