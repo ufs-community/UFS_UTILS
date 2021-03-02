@@ -23,13 +23,13 @@
       integer :: idim_compute,jdim_compute,halo
       integer :: i_count_compute,j_count_compute                        &
                 ,i_count_super,j_count_super
-      integer :: i_start !< starting i of 2-D data with halo rows
-      integer :: j_start !< starting j of 2-D data with halo rows
-      integer :: i_count !< i extent of 2-D data with halo rows
-      integer :: j_count !< j extent of 2-D data with halo rows
+      integer :: i_start ! starting i of 2-D data with halo rows
+      integer :: j_start ! starting j of 2-D data with halo rows
+      integer :: i_count ! i extent of 2-D data with halo rows
+      integer :: j_count ! j extent of 2-D data with halo rows
       integer :: n_count
-      integer :: n_shave !< # of rows to shave off full data to leave halo rows
-      integer :: n_start !< location where Start reading incoming character data
+      integer :: n_shave ! number of rows to shave off full data to leave halo rows
+      integer :: n_start ! location where Start reading incoming character data
 
       integer :: n,na,ncid_in,ncid_out,nd,ndims,ngatts     &
                 ,nvars,unlimdimid
