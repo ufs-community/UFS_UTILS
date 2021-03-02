@@ -1,11 +1,9 @@
 !> @file
-!! @author R. J. Purser @date 1996 
-!!
 !! Handy geographical transformations
-!!
 !! DEPENDENCIES
 !! Modules:  pkind, pietc, pmat4
-!! 
+!! @author R. J. Purser @date 1996
+ 
 !> Constants for orientation and stretching of map.
 !! @author R. J. Purser
 module cstgeo ! Constants for orientation and stretching of map
@@ -57,11 +55,10 @@ contains
 !! earth-centered cartesian components to the alternative cartesian frame
 !! oriented so as to put geographical point (ALAT0,ALON0) on the projection
 !! axis.
-!! @author R. J. Purser
 !! @param rot3 rotation matrix
 !! @param alat0 geographical point
 !! @param alon0 geographical point
-!! @date 1995
+!! @author R. J. Purser @date 1995
 subroutine sininmap(alon0,alat0,rot3)!                               [ininmap]
 use pietc_s, only: u0,dtor
 implicit none
@@ -76,10 +73,10 @@ rot3(3,1)=clat0*clon0; rot3(3,2)=clat0*slon0; rot3(3,3)=slat0
 end subroutine sininmap
 
 !> Another transform utility routine.
-!! @author R. J. Purser
 !! @param rot3 rotation matrix
 !! @param alat0 geographical point
 !! @param alon0 geographical point
+!! @author R. J. Purser
 subroutine dininmap(alon0,alat0,rot3)!                               [ininmap]
 use pietc, only: u0,dtor
 implicit none
@@ -97,11 +94,10 @@ end subroutine dininmap
 !! earth-centered cartesian components to the alternative cartesian frame
 !! oriented so as to put geographical point (ALAT0,ALON0) at the viewing
 !! nadir.
-!! @author R. J. Purser
 !! @param rot3 rotation matrix
 !! @param alat0 geographical point
 !! @param alon0 geographical point
-!! @date 1995
+!! @author R. J. Purser @date 1995
 subroutine sinivmap(alon0,alat0,rot3)!                               [inivmap]
 use pietc_s, only: u0,dtor
 implicit none
@@ -126,10 +122,10 @@ rot3(3,3)=slat0
 end subroutine sinivmap
 
 !> Another transform utility routine.
-!! @author R. J. Purser
 !! @param rot3 rotation matrix
 !! @param alat0 geographical point
 !! @param alon0 geographical point
+!! @author R. J. Purser
 subroutine dinivmap(alon0,alat0,rot3)!                               [inivmap]
 use pietc, only: u0,dtor
 implicit none
@@ -160,10 +156,10 @@ end subroutine dinivmap
 !!  XE       three cartesian components.
 !!  RLAT     radians latitude
 !!  RLON     radians longitude
-!! @author R. J. Purser
 !! @param rlat radians latitude
 !! @param rlon radians longitude
 !! @param xe three cartesian components
+!! @author R. J. Purser
 subroutine sctogr(xe,rlat,rlon)!                                       [ctogr]
 use pietc_s, only: u0
 implicit none
@@ -180,10 +176,10 @@ endif
 end subroutine sctogr
 
 !> Transform utility.
-!! @author R. J. Purser
 !! @param  xe three components.
 !! @param  rlat radians latitude
 !! @param  rlon radians longitude
+!! @author R. J. Purser
 subroutine dctogr(xe,rlat,rlon)!                                       [ctogr]
 use pietc, only: u0
 implicit none
@@ -200,9 +196,9 @@ endif
 end subroutine dctogr
 
 !> utility routine to calculate.
-!! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
+!! @author R. J. Purser
 subroutine sgrtoc(rlat,rlon,xe)!                                       [grtoc]
 implicit none
 real(sp),             intent(IN ):: rlat,rlon
@@ -214,9 +210,9 @@ xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine sgrtoc
 
 !> utility routine to calculate.
-!! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
+!! @author R. J. Purser
 subroutine dgrtoc(rlat,rlon,xe)!                                       [grtoc]
 implicit none
 real(dp),             intent(IN ):: rlat,rlon
@@ -228,9 +224,9 @@ xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine dgrtoc
 
 !> utility routine to calculate.
-!! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
+!! @author R. J. Purser
 subroutine sgrtocd(rlat,rlon,xe,dxedlat,dxedlon)!                      [grtoc]
 implicit none
 real(sp),             intent(IN ):: rlat,rlon
@@ -245,9 +241,9 @@ dxedlon=dxedlon_d
 end subroutine sgrtocd
 
 !> utility routine to calculate.
-!! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
+!! @author R. J. Purser
 subroutine dgrtocd(rlat,rlon,xe,dxedlat,dxedlon)!                      [grtoc]
 use pietc, only: u0
 implicit none
@@ -262,9 +258,9 @@ dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0
 end subroutine dgrtocd
 
 !> utility routine to calculate.
-!! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
+!! @author R. J. Purser
 subroutine sgrtocdd(rlat,rlon,xe,dxedlat,dxedlon, &!                   [grtoc]
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)
 implicit none
@@ -286,9 +282,9 @@ ddxedlondlon=ddxedlondlon_d
 end subroutine sgrtocdd
 
 !> utility routine to calculate.
-!! @author R. J. Purser
 !! @param  rlat latitude
 !! @param  rlon longitude
+!! @author R. J. Purser
 subroutine dgrtocdd(rlat,rlon,xe,dxedlat,dxedlon, &!                   [grtoc]
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)
 use pietc, only: u0
@@ -320,11 +316,10 @@ end subroutine dgrtocdd
 !! - XE       three cartesian components.
 !! - DLAT     degrees latitude
 !! - DLON     degrees longitude
-!! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
 !! @param xe three cartesian components
-!! @date 1994
+!! @author R. J. Purser @date 1994
 subroutine sctog(xe,dlat,dlon)!                                         [ctog]
 use pietc_s, only: u0,rtod
 implicit none
@@ -341,10 +336,10 @@ endif
 end subroutine sctog
 
 !> calculation routine.
-!! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
 !! @param xe three cartesian components
+!! @author R. J. Purser
 subroutine dctog(xe,dlat,dlon)!                                         [ctog]
 use pietc, only: u0,rtod
 implicit none
@@ -367,11 +362,10 @@ end subroutine dctog
 !! - DLAT     degrees latitude
 !! - DLON     degrees longitude
 !! - XE       three cartesian components.
-!! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
 !! @param xe three cartesian components.
-!! @date 1994
+!! @author R. J. Purser @date 1994
 subroutine sgtoc(dlat,dlon,xe)!                                         [gtoc]
 use pietc_s, only: dtor
 implicit none
@@ -385,10 +379,10 @@ xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine sgtoc
 
 !> calculation routine.
-!! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
 !! @param xe three cartesian components.
+!! @author R. J. Purser
 subroutine dgtoc(dlat,dlon,xe)!                                         [gtoc]
 use pietc, only: dtor
 implicit none
@@ -402,10 +396,10 @@ xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine dgtoc
 
 !> calculation routine.
-!! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
 !! @param xe three cartesian components.
+!! @author R. J. Purser
 subroutine sgtocd(dlat,dlon,xe,dxedlat,dxedlon)!                        [gtoc]
 implicit none
 real(sp),             intent(IN ):: dlat,dlon
@@ -420,9 +414,9 @@ dxedlon=dxedlon_d
 end subroutine sgtocd
 
 !> calculation routine.
-!! @author R. J. Purser
 !! @param dlat degrees latitude
 !! @param dlon degrees longitude
+!! @author R. J. Purser
 subroutine dgtocd(dlat,dlon,xe,dxedlat,dxedlon)!                        [gtoc]
 use pietc, only: u0,dtor
 implicit none
@@ -502,10 +496,10 @@ end subroutine sgtoframem
 
 !> From the degree lat and lo (plat and plon) return the standard orthogonal
 !! 3D frame at this location as an orthonormal matrix, orth.
-!! @author R. J. Purser
 !! @param plat latitude degree
 !! @param plon longitude degree
 !! @param orth orthonormal matrix
+!! @author R. J. Purser
 subroutine gtoframem(plat,plon,orth)!                                [gtoframe]
 implicit none
 real(dp),               intent(in ):: plat,plon
@@ -534,12 +528,12 @@ end subroutine sgtoframev
 !> Given a geographical point by its degrees lat and lon, plat and plon,
 !! return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered
 !! coordinates.
-!! @author R. J. Purser
 !! @param plat latitude point
 !! @param plon longitude point
 !! @param xp orthogonal cartesian frame in earth-centered coordinates.
 !! @param yp orthogonal cartesian frame in earth-centered coordinates.
 !! @param zp orthogonal cartesian frame in earth-centered coordinates.
+!! @author R. J. Purser
 subroutine gtoframev(plat,plon, xp,yp,zp)!                           [gtoframe]
 use pietc, only: u0,u1
 implicit none
@@ -562,6 +556,7 @@ endif
 end subroutine gtoframev
 
 !> calling paraframe for additional processing.
+!! @author R. J. Purser
 subroutine sparaframe(sxp,syp,szp, sxv,syv,szv)!                    [paraframe]
 implicit none
 real(sp),dimension(3),intent(in ):: sxp,syp,szp, szv
@@ -576,13 +571,13 @@ end subroutine sparaframe
 !! point defined by unit vector, zv, and complete the V-frame cartesian
 !! components, {xv,yv}, that are the result of parallel-transport of {xp,yp}
 !! along the geodesic between P and V.
-!! @author R. J. Purser
 !! @param xp reference orthonormal frame
 !! @param yp reference orthonormal frame
 !! @param zp reference orthonormal frame
 !! @param zv dependent point
 !! @param xv V-frame cartesian components
 !! @param yv V-frame cartesian components
+!! @author R. J. Purser
 subroutine paraframe(xp,yp,zp, xv,yv,zv)!                           [paraframe]
 use pmat4,  only: cross_product,normalized
 implicit none
@@ -618,11 +613,11 @@ end subroutine sframetwist
 !! by which the frame at V is rotated in the counterclockwise sense relative
 !! to the parallel-transportation of P's frame to V.
 !! Note that, by symmetry, transposing P and V leads to the opposite twist.
-!! @author R. J. Purser
 !! @param xp cartesian orthonormal frame
 !! @param yp cartesian orthonormal frame
 !! @param zp cartesian orthonormal frame
 !! @param zv Earth-centered cartesians
+!! @author R. J. Purser
 subroutine frametwist(xp,yp,zp, xv,yv,zv, twist)!                  [frametwist]
 implicit none
 real(dp),dimension(3),intent(in ):: xp,yp,zp, xv,yv,zv
@@ -635,10 +630,10 @@ twist=atan2(s,c)
 end subroutine frametwist
 
 !> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s.
-!! @author R. J. Purser
 !! @param xc1 schmidt transformation
 !! @param xc2 schmidt transformation
 !! @param s scaling parameter
+!! @author R. J. Purser
 subroutine sctoc(s,xc1,xc2)!                                       [ctoc_schm]
 use pietc_s, only: u1,u2
 implicit none
@@ -663,9 +658,9 @@ end subroutine sctoc
 
 !> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
 !!  and its jacobian, dxc2.
-!! @author R. J. Purser
 !! @param s scaling
 !! @param dxc2 jacobian
+!! @author R. J. Purser
 subroutine sctocd(s,xc1,xc2,dxc2)!                                 [ctoc_schm]
 use pietc_s, only: u0,u1,u2
 implicit none
@@ -700,10 +695,10 @@ end subroutine sctocd
 
 !> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
 !!  its jacobian, dxc2, and its 2nd derivative, ddxc2.
-!! @author R. J. Purser
 !! @param s scaling
 !! @param dxc2 jacobian
 !! @param ddxc2 2nd derivative
+!! @author R. J. Purser
 subroutine sctocdd(s,xc1,xc2,dxc2,ddxc2)!                          [ctoc_schm]
 use pietc_s, only: u0,u1,u2
 implicit none
@@ -749,10 +744,10 @@ ddxc2(3,3,3)=u2*ab2*(aapbb*ddi+ab2*e*dddi)
 end subroutine sctocdd
 
 !> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s.
-!! @author R. J. Purser
 !! @param xc1 schmidt transformation
 !! @param xc2 schmidt transformation
 !! @param s scaling
+!! @author R. J. Purser
 subroutine dctoc(s,xc1,xc2)!                                       [ctoc_schm]
 use pietc, only: u1,u2
 implicit none
@@ -778,10 +773,10 @@ end subroutine dctoc
 
 !> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
 !!  and its jacobian, dxc2.
-!! @author R. J. Purser
 !! @param xc1 schmidt transformation
 !! @param xc2 schmidt transformation
-!! @param s scaling 
+!! @param s scaling
+!! @author R. J. Purser
 subroutine dctocd(s,xc1,xc2,dxc2)!                                 [ctoc_schm]
 use pietc, only: u0,u1,u2
 implicit none
@@ -816,12 +811,12 @@ end subroutine dctocd
 
 !> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
 !!  its jacobian, dxc2, and its 2nd derivative, ddxc2.
-!! @author R. J. Purser
 !! @param xc1 schmidt transformation
 !! @param xc2 schmidt transformation
 !! @param s scaling
 !! @param dxc2 jacobian
 !! @param ddxc2 derivative
+!! @author R. J. Purser
 subroutine dctocdd(s,xc1,xc2,dxc2,ddxc2)!                          [ctoc_schm]
 use pietc, only: u0,u1,u2
 implicit none
