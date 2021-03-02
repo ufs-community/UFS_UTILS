@@ -43,11 +43,11 @@ module module_nwp
       character(len=20), allocatable :: dimnameNS !< North/South dimension name.
       character(len=20), allocatable :: dimnameTIME !< Time dimension name.
 
-      real(r_kind), allocatable :: nwp_mask(:,:,:) !< ???
-      real(r_kind), allocatable :: nwp_sst(:,:,:) !< ???
-      real(r_kind), allocatable :: nwp_ice(:,:,:) !< ???
-      real(r_kind), allocatable :: nwp_sfcT(:,:,:) !< ???
-      real(r_kind), allocatable :: nwp_iceT(:,:,:)  !< ???
+      real(r_kind), allocatable :: nwp_mask(:,:,:) !< Land/water mask 3D array
+      real(r_kind), allocatable :: nwp_sst(:,:,:) !< SST 3D array
+      real(r_kind), allocatable :: nwp_ice(:,:,:) !< Over water ice concentration 3D array
+      real(r_kind), allocatable :: nwp_sfcT(:,:,:) !< Skin temperature 3D array
+      real(r_kind), allocatable :: nwp_iceT(:,:,:)  !< Ice skin temperature 3D array
    end type nwp_type
 
    type, extends(nwp_type) :: fcst_nwp
