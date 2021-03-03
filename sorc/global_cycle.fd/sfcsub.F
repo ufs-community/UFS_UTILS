@@ -5908,32 +5908,37 @@
       return
       end
 
-!> ???
+!> Range check a field.  The check is a function of whether the
+!! point is land, water or ice.
 !!
-!! @param[in] ttl
-!! @param[in] fld
-!! @param[in] slimsk
-!! @param[in] sno
-!! @param[in] iceflg
-!! @param[in] fldlmx
-!! @param[in] fldlmn
-!! @param[in] fldomx
-!! @param[in] fldomn
-!! @param[in] fldimx
-!! @param[in] fldimn
-!! @param[in] fldjmx
-!! @param[in] fldjmn
-!! @param[in] fldsmx
-!! @param[in] fldsmn
-!! @param[in] epsfld
-!! @param[in] rla
-!! @param[in] rlo
-!! @param[in] len
-!! @param[in] mode
-!! @param[in] percrit
-!! @param[in] lgchek
-!! @param[in] me
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] ttl Name of field.
+!! @param[inout] fld The field array to be ranged checked.
+!! @param[in] slimsk The land-sea-ice mask.
+!! @param[in] sno Snow.
+!! @param[in] iceflg When true, check ice points.
+!! @param[in] fldlmx Maximum allowable value at snow-free land.
+!! @param[in] fldlmn Minimum allowable value at snow-free land.
+!! @param[in] fldomx Maximum allowable value at open water.
+!! @param[in] fldomn Minimum allowable value at open water.
+!! @param[in] fldimx Maximum allowable value at snow-free ice.
+!! @param[in] fldimn Minimum allowable value at snow-free ice.
+!! @param[in] fldjmx Maximum allowable value at snow covered ice.
+!! @param[in] fldjmn Minimum allowable value at snow covered ice.
+!! @param[in] fldsmx Maximum allowable value at snow covered land.
+!! @param[in] fldsmn Minimum allowable value at snow covered land.
+!! @param[in] epsfld Difference from the max/min allowable
+!! value at which the field is updated.
+!! @param[in] rla Latitude of the points to process.
+!! @param[in] rlo Longitude of the points to process.
+!! @param[in] len Number of points to process.
+!! @param[in] mode When '1', update the field.  When not '1', run
+!! routine in diagnostic mode.
+!! @param[in] percrit Critical percentage of 'bad' points required
+!! for abort.
+!! @param[in] lgchek When true, abort when a critical percentage of points
+!! are outside acceptable range.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine qcmxmn(ttl,fld,slimsk,sno,iceflg,
      &                  fldlmx,fldlmn,fldomx,fldomn,fldimx,fldimn,
      &                  fldjmx,fldjmn,fldsmx,fldsmn,epsfld,
