@@ -12,9 +12,34 @@ https://noaa-emc.github.io/UFS_UTILS/.
 
 ## Authors
 
-NCEP/EMC developers.
+### chgres_cube
+- George Gayno
 
-Code manager: George Gayno
+### emcsfc_ice_blend
+- George Gayno
+
+### emcsfc_snow2mdl
+- George Gayno
+
+### fvcom_tools
+ - David Wright, University of Michigan
+ 
+### global_cycle
+ - ???
+
+### grid_tools
+ - R. J. Purser
+
+### orog_mask_tools
+ - Ning Wang
+
+### sfc_climo_gen
+ - ???
+
+### vcoord_gen
+ - ???
+
+Code managers: George Gayno, Kyle Gerheiser
 
 ## Prerequisites
 
