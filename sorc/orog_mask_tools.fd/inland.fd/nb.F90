@@ -7,6 +7,7 @@
 MODULE cs_nb
   IMPLICIT NONE
 
+  !> 
   TYPE nb_tile_idx
     INTEGER       :: nb_tile_num
     CHARACTER (1) :: nb_tile_bndry 
@@ -23,18 +24,21 @@ MODULE cs_nb
   INTEGER :: cres, xres, yres
  
 CONTAINS
-
-!   _______1_______
-!  |               |       1-upper, 2-bottom, 3-left, 4-right 
-!  |               |
-!  |               |
-! 3|               |4
-!  |               |
-!  |               |
-!  |_______________|
-!          2
-!      Figure 1. Boundary numbers
-!
+  
+  !> Initialize inter-panel neighbor index for global grid
+  !! @param[in] cubed sphere resolution (48, 96...)
+  !!
+  !!   _______1_______
+  !!  |               |       1-upper, 2-bottom, 3-left, 4-right 
+  !!  |               |
+  !!  |               |
+  !! 3|               |4
+  !!  |               |
+  !!  |               |
+  !!  |_______________|
+  !!          2
+  !!      Figure 1. Boundary numbers
+  !!
   SUBROUTINE idx_init(cres_in) 
     INTEGER :: cres_in
 
@@ -72,6 +76,9 @@ CONTAINS
 
   END SUBROUTINE idx_init
 
+  !> Initialize resolution module variables for regional grid.
+  !! @param[in] xres_in x resolution
+  !! @param[in] yres_in y resolution
   SUBROUTINE idx_init_reg(xres_in, yres_in)
     INTEGER, INTENT(IN) :: xres_in, yres_in
 
@@ -80,6 +87,9 @@ CONTAINS
 
   END SUBROUTINE idx_init_reg
 
+  !> Get boundary type from indices for global grid
+  !! @param[in] i
+  !! @param[in] j
   INTEGER FUNCTION bndry(i, j)
     INTEGER :: i,j
 
@@ -106,7 +116,10 @@ CONTAINS
     ENDIF
 
   END FUNCTION bndry
-
+  
+  !> Get boundary type from indices for regional grid
+  !! @param[in] i
+  !! @param[in] j
   INTEGER FUNCTION bndry_reg(i, j)
     INTEGER :: i,j
 
@@ -133,20 +146,26 @@ CONTAINS
     ENDIF
 
   END FUNCTION bndry_reg
-!     ______________
-!    |    |    |    |              ________
-!    | 5  | 1  | 6  |             /\ 1 \ 6 \
-!    |____|____|____|            /  \___\___\
-!    |    |    |    |           /\2 / c / 3 /
-!    | 2  | c  | 3  |          /  \/___/___/
-!    |____|____|____|          \7 / 4 / 8 /
-!    |    |    |    |           \/___/___/
-!    | 7  | 4  | 8  |       
-!    |____|____|____|    
-!  
-! Figure 2.  Eight neighbors of cell 'c' and special cases at upper left 
-!                  cornner of the tile 
-!
+
+  !> Get neighbors of cell 'c' at (tile, i, j) for global grid.
+  !! @param[in] tile tile face
+  !! @param[in] i index
+  !! @param[in] j index
+  !! @param[out] nb neighbors
+  !!
+  !!     ______________
+  !!    |    |    |    |              ________
+  !!    | 5  | 1  | 6  |             /\ 1 \ 6 \
+  !!    |____|____|____|            /  \___\___\
+  !!    |    |    |    |           /\2 / c / 3 /
+  !!    | 2  | c  | 3  |          /  \/___/___/
+  !!    |____|____|____|          \7 / 4 / 8 /
+  !!    |    |    |    |           \/___/___/
+  !!    | 7  | 4  | 8  |       
+  !!    |____|____|____|    
+  !!  
+  !! Figure 2.  Eight neighbors of cell 'c' and special cases at upper left
+  !! cornner of the tile 
   SUBROUTINE neighbors(tile, i, j, nb)
     INTEGER :: tile, i, j
     TYPE(nb_gp_idx) :: nb  
@@ -341,6 +360,11 @@ CONTAINS
     ENDIF
   END SUBROUTINE neighbors
 
+  !> Get neighbors of cell 'c' at (tile, i, j) for regional grid.
+  !! @param[in] tile tile face
+  !! @param[in] i index
+  !! @param[in] j index
+  !! @param[out] nb neighbors
   SUBROUTINE neighbors_reg(i, j, nb)
     INTEGER :: i, j
     TYPE(nb_gp_idx) :: nb
