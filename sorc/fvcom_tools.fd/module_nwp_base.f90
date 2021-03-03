@@ -1,10 +1,13 @@
 !> @file
+!! @brief Defines nwp observation data structure. 
+!! @author David Wright, University of Michigan and GLERL @date 17 Aug 2020
+
+!> This module defines nwp observation data structure and the method
+!! to read and write observations from and to those data
+!! structures. It is used by ingest_FVCOM.f90.
 !!
-!! This module defines nwp observation data structure and the method to
-!! read and write observations from and to those data structures. It is used by
-!! ingest_FVCOM.f90.
-!!
-!! This script is strongly based upon Eric James' (ESRL/GSL) work with HRRR/WRF.
+!! This script is strongly based upon Eric James' (ESRL/GSL) work with
+!! HRRR/WRF.
 !!
 !! @author David Wright, University of Michigan and GLERL @date 17 Aug 2020
 !!
@@ -22,34 +25,35 @@ module module_nwp_base
 !  Define a nwp observation type.
 
    type nwplocation
-      real(r_single) :: lon  ! stroke longitude
-      real(r_single) :: lat  ! stroke latitiude
+      real(r_single) :: lon  !< stroke longitude
+      real(r_single) :: lat  !< stroke latitiude
    end type nwplocation
 
 !  Define a nwp observation type to contain actual data.
 
    type, extends(nwplocation) :: nwpbase
 !  HOW DOES THIS POINTER THING WORK?
-      type(nwpbase), pointer :: next => NULL()
-      real(r_single) :: time                 ! observation time
-      integer :: numvar                      ! number of variables in this obs type
-!      real(r_single), allocatable :: obs(:)  ! observation value (# numvar)
-      real(r_kind), allocatable :: obs(:)
-      logical :: ifquality                   ! do these obs include quality info?
-!                                              GLM has flash_quality_flag
-      integer, allocatable :: quality(:)     ! if so, quality flags
+      type(nwpbase), pointer :: next => NULL() !< Pointer.
+      real(r_single) :: time                 !< observation time.
+      integer :: numvar                      !< number of variables in this obs type.
+!      real(r_single), allocatable :: obs(:)  !< observation value (# numvar).
+      real(r_kind), allocatable :: obs(:) !< Observations.
+      logical :: ifquality                   !< do these obs include quality info? GLM has flash_quality_flag.
+      integer, allocatable :: quality(:)     !< if so, quality flags.
       contains
-         procedure :: list => list_obsbase
-         procedure :: alloc => alloc_obsbase
-         procedure :: destroy => destroy_obsbase
+         procedure :: list => list_obsbase !< List contents of obs. @return
+         procedure :: alloc => alloc_obsbase !< Allocate memory for observations. @return
+         procedure :: destroy => destroy_obsbase  !< Release memory. @return
    end type nwpbase
 
    contains
 
+     !> This subroutine lists the contents of a base nwp observation.
+     !!
+     !! @param this the base nwp obervation
+     !! @author David Wright, University of Michigan and GLERL
+     !! @date 17 Aug 2020
       subroutine list_obsbase(this)
-
-!     This subroutine lists the contents of a base nwp observation
-
          class(nwpbase) :: this
 
          integer :: i, numvar
@@ -73,12 +77,16 @@ module module_nwp_base
 
       end subroutine list_obsbase
 
+      !> This subroutine allocates memory for base nwp observation
+      !! variables.
+      !!
+      !! @param this the base nwp obervation
+      !! @param[in] numvar number of variables in this ob type
+      !! @param[in] ifquality does this observation include quality
+      !! information?
+      !! @author David Wright, University of Michigan and GLERL @date 17 Aug 2020
       subroutine alloc_obsbase(this,numvar,ifquality)
 
-!     This subroutine allocates memory for base nwp observation variables
-!     Input variables:
-!        numvar : number of variables in this ob type
-!        itquality: does this observation include quality information?
 
          class(nwpbase) :: this
 
@@ -103,9 +111,12 @@ module module_nwp_base
 
       end subroutine alloc_obsbase
 
+      !> This subroutine releases memory associated with nwp
+      !! observations.
+      !!
+      !! @param this the base nwp obervation
+      !! @author David Wright, University of Michigan and GLERL @date 17 Aug 2020
       subroutine destroy_obsbase(this)
-
-!     This subroutine releases memory associated with nwp observations
 
          class(nwpbase) :: this
 
