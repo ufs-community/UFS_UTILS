@@ -6501,14 +6501,15 @@
       return
       end
 
-!> ???
+!> Check skin temperature at points with snow. If it is
+!! above a threshold, reset it to that value.
 !!
-!! @param[in] snoanl
-!! @param[in] tsfanl
-!! @param[in] tsfsmx
-!! @param[in] len
-!! @param[in] me
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] snoanl Snow.
+!! @param[inout] tsfanl Skin temperature at the model points.
+!! @param[in] tsfsmx Maximum allowable skin temperature at snow points.
+!! @param[in] len Number of model points to process.
+!! @param[in] me MPI rank 
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine snosfc(snoanl,tsfanl,tsfsmx,len,me)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -6534,13 +6535,13 @@
       return
       end
 
-!> ???
+!> Set the albedo at open water points.
 !!
-!! @param[in] albclm
-!! @param[in] slmask
-!! @param[in] albomx
-!! @param[in] len
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[inout] albclm Albedo.
+!! @param[in] slmask The land-sea-ice mask.
+!! @param[in] albomx The albedo at open water.
+!! @param[in] len Number of model points to process.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine albocn(albclm,slmask,albomx,len)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -6777,7 +6778,7 @@
       return
       end
 
-!> ???
+!> Set the mask for the input data. (Not the model mask).
 !!
 !! @param[in] kpds5
 !! @param[in] slmask
@@ -6785,14 +6786,14 @@
 !! @param[in] jgaul
 !! @param[in] wlon
 !! @param[in] rnlat
-!! @param[in]data
-!! @param[in] i
-!! @param[in] max
+!! @param[in] data
+!! @param[in] imax
 !! @param[in] jmax
 !! @param[in] rlnout
 !! @param[in] rltout
 !! @param[in] lmask
-!! @param[in] rslmskgaus
+!! @param[in] rslmsk
+!! @param[in] gaus
 !! @param[in] blno
 !! @param[in] blto
 !! @param[in] kgds1

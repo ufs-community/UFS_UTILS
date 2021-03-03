@@ -1122,18 +1122,15 @@
 
  END SUBROUTINE CLIMO_TREND
 
- !> ???
- !!
- !! get dtzm = mean of dT(z) (z1 - z2) with NSST dT(z)     
- !!                dT(z) = (1-z/xz)*dt_warm - (1-z/zc)*dt_cool            
+ !> Compute the vertical mean of the NSST t-profile.
  !!                                                                 
- !! @param[in] xt real, heat content in dtl.
- !! @param[in] xz real, dtl thickness.
- !! @param[in] dt_cool Sub-layer cooling amount.
- !! @param[in] zc Sub-layer cooling thickness.
- !! @param[in] z1 lower bound of depth of sea temperature.
- !! @param[in] z2 upper bound of depth of sea temperature.
- !! @param[out] dtzm Mean of dT(z)  (z1 to z2).
+ !! @param[in] xt Heat content in the diurnal thermocline layer.
+ !! @param[in] xz Thickness of the diurnal thermocline layer.
+ !! @param[in] dt_cool Skin-layer cooling amount.
+ !! @param[in] zc Thickness of skin-layer.
+ !! @param[in] z1 Lower bound of depth of sea temperature.
+ !! @param[in] z2 Upper bound of depth of sea temperature.
+ !! @param[out] dtzm Mean of the NSST t-profile from z1 to z2.
  !!
  !! @author Xu Li @date 2015
  SUBROUTINE DTZM_POINT(XT,XZ,DT_COOL,ZC,Z1,Z2,DTZM)
@@ -1293,13 +1290,13 @@
  !!
  !! @param[in] tf_ij Foundation temperature background on FV3 native grids.
  !! @param[in] mask_ij Mask of the tile (FV3 native grids).
- !! @param[in] itile Location index of the tile.
- !! @param[in] jtile Location index of the tile.
- !! @param[in] tice water temperature (calulated with a salinity formula).
+ !! @param[in] itile Location index in the 'i' direction.
+ !! @param[in] jtile Location index in the 'j' direction.
+ !! @param[in] tice Water temperature (calulated with a salinity formula).
  !! @param[in] tclm SST climatology valid at the analysis time.
- !! @param [out] tf_thaw
- !! @param[inout] nx
- !! @param[inout] ny
+ !! @param [out] tf_thaw Foundation temperature of thawed points.
+ !! @param[inout] nx 'i' dimension of tf_ij
+ !! @param[inout] ny 'j' dimension of tf_ij
  !! @param[inout] nset_thaw_s
  !! @param[inout] nset_thaw_i
  !! @param[inout] nset_thaw_c
