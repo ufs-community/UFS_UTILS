@@ -131,7 +131,7 @@ jobs:
         gcovr -r .. --html -o test-coverage.html
 
     - uses: actions/upload-artifact@v2
+      if: ${{ matrix.os == 'ubuntu-20.04' }}
       with:
-        if: ${{ matrix.os == 'ubuntu-20.04' }}
         name: test-coverage
         path: ufs_utils/build/test-coverage.html
