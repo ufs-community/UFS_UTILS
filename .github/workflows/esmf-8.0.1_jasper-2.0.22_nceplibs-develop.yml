@@ -96,13 +96,18 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS
         path: nceplibs
+
+    - name: get-git-hash:
+      run: |
+        cd nceplibs
+        git rev-parse HEAD > hash.txt
         
     - name: cache-nceplibs-develop
       id: cache-nceplibs-develop
       uses: actions/cache@v2
       with:
         path: ~/nceplibs
-        key: nceplibs-develop-${{ runner.os }}-${{ hashFiles('nceplibs/VERSION') }}
+        key: nceplibs-develop-${{ runner.os }}-${{ hashFiles('nceplibs/hash.txt') }}
 
     - name: build-nceplibs
       if: steps.cache-nceplibs-develop.outputs.cache-hit != 'true'
