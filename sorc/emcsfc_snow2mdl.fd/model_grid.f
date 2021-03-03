@@ -1,8 +1,6 @@
 !> @file
 !! @brief Read in data defining the model grid.
 !!
-!! @author gayno org: w/np2 @date 2005-dec-16
-!!
 !! program history log:
 !! -  2005-dec-16  gayno   - initial version
 !! -  2007-nov-30  gayno   - improved method for thinning gfs grids.
@@ -32,6 +30,7 @@
 !! -  thinned        - when true, global grids will run thinned
 !!                    (# i points decrease toward pole)
 !!
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16  
  module model_grid
 
  use program_setup, only         : model_lsmask_file, &
@@ -59,56 +58,36 @@
  real                           :: resol_mdl  ! in km
 
  contains
-
+!>  Read mdl grid.
+!!
+!! program history log:
+!! 2005-dec-16  gayno    - initial version
+!! 2007-nov-30  gayno    - Improved method for thinning gfs grids.
+!!                         Added nam b-grids.
+!! 2014-sep-29  gayno    - Add option to read lat,lon and mask
+!!                         data in grib2.
+!! files:
+!!   inputs:
+!!     - model latitudes (grib 1 or grib 2)
+!!     - model longitudes (grib 1 or grib 2)
+!!     - model landmask (grib 1 or grib 2)
+!!     - number  pts per row, gfs grid (the "lonsperlat" file, ascii)
+!!    condition codes: all fatal
+!!   76 - bad open/read gfs "lonsperlat" file
+!!   79 - unrecognized model grid
+!!   80 - bad open model latitude file
+!!   81 - bad read of model latitude grib 1 header
+!!   82 - bad read of model latitude data
+!!   83 - bad open model longitude file
+!!   82 - bad read of model longitude data
+!!   85 - bad open model landmask file
+!!   86 - bad read of model landmask data
+!!   90 - model latitude file not grib 1 or grib 2
+!!   91 - model longitude file not grib 1 or grib 2
+!!   92 - model landmask file not grib 1 or grib 2
+!!
+!! @author George Gayno org: w/np2 @date 2005-dec-16
  subroutine read_mdl_grid_info
-!$$$  subprogram documentation block
-!              
-! subprogram:    read_mdl_grid_info
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract: read latitude, longitude, land/sea mask on the
-!   model grid.
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-! 2007-nov-30  gayno    - improved method for thinning gfs grids
-!                         added nam b-grids
-! 2014-sep-29  gayno    - add option to read lat,lon and mask
-!                         data in grib2.
-!
-! usage: call read_mdl_grid_info
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files:
-!   inputs:
-!     - model latitudes (grib 1 or grib 2)
-!     - model longitudes (grib 1 or grib 2)
-!     - model landmask (grib 1 or grib 2)
-!     - # pts per row, gfs grid (the "lonsperlat" file, ascii)
-!
-!  outputs: none
-!
-! condition codes: all fatal
-!   76 - bad open/read gfs "lonsperlat" file
-!   79 - unrecognized model grid
-!   80 - bad open model latitude file
-!   81 - bad read of model latitude grib 1 header
-!   82 - bad read of model latitude data
-!   83 - bad open model longitude file
-!   82 - bad read of model longitude data
-!   85 - bad open model landmask file
-!   86 - bad read of model landmask data
-!   90 - model latitude file not grib 1 or grib 2
-!   91 - model longitude file not grib 1 or grib 2
-!   92 - model landmask file not grib 1 or grib 2
-!
-! remarks: none.
-!
-!$$$
-
  use grib_mod  ! grib 2 library
 
  implicit none
@@ -590,33 +569,18 @@
  deallocate (lats_mdl_temp, lons_mdl_temp)
 
  return
-
  end subroutine read_mdl_grid_info
 
+
+!>   Clean up allocatable arrays. 
+!!
+!! This deallocate this module's allocatable array.
+!!
+!! program history log:
+!! 2005-dec-16  gayno    - initial version
+!!
+!! @author   George Gayno org: w/np2 @Date 2005-Dec-16
  subroutine model_grid_cleanup
-!$$$  subprogram documentation block
-!              
-! subprogram:    model_grid_cleanup
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract: this deallocate this module's allocatable array.
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-!
-! usage: call model_grid_cleanup
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files: none
-!
-! condition codes: none
-!
-! remarks: none.
-!
-!$$$
 
  implicit none
 
