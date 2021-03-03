@@ -103,6 +103,7 @@ jobs:
 
     - name: build-nceplibs
       run: |
+        if: steps.cache-nceplibs.outputs.cache-hit != 'true'
         set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.3.0.tar.gz &> /dev/null
