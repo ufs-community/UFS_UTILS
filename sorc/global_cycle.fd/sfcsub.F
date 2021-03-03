@@ -9057,27 +9057,31 @@ cjfe
 
       end subroutine netcdf_err
 
-!> ???
+!> Read in grib1 climatology data for a specific month and
+!! and horizontally interpolate to the model grid.
 !!
-!! @param[in] lugb
-!! @param[in] fngrib
-!! @param[in] kpds5
-!! @param[in] kpds7
-!! @param[in] mon
-!! @param[in] slmask
-!! @param[in] gdata
-!! @param[in] len
-!! @param[in] iret
-!! @param[in] imsk 
-!! @param[in] jmsk
-!! @param[in] slmskh
-!! @param[in] gaus
-!! @param[in] blno
-!! @param[in] blto
-!! @param[in] outlat
-!! @param[in] outlon
-!! @param[in] me
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] lugb Fortran unit number of the grib1 climatology data file.
+!! @param[in] fngrib The name of the grib1 climatology data file.
+!! @param[in] kpds5 The grib1 parameter number of the requested data.
+!! @param[in] kpds7 The grib1 level indicator of the requested data.
+!! @param[in] mon The requested month.
+!! @param[in] slmask Model land-sea-ice mask.
+!! @param[out] gdata The climatology data interpolated to the model grid.
+!! @param[in] len The number of model points to process.
+!! @param[in] iret Return code. '0' is success.
+!! @param[in] imsk 'i' dimension of the high-res mask used for input
+!! data without a bitmap.
+!! @param[in] jmsk 'j' dimension of the high-res mask used for input
+!! data without a bitmap.
+!! @param[in] slmskh The high-resolution mask used for input
+!! data witouth a bitmap.
+!! @param[in] gaus When true, the high-res mask is on a gaussian grid.
+!! @param[in] blno Corner point longitude of the high-res mask.
+!! @param[in] blto Corner point latitude of the high-res mask.
+!! @param[in] outlat Model latitudes.
+!! @param[in] outlon Model longitudes.
+!! @param[in] me MPI task number
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine fixrdc(lugb,fngrib,kpds5,kpds7,mon,slmask,
      &                 gdata,len,iret
      &,                imsk, jmsk, slmskh, gaus,blno, blto
@@ -9089,11 +9093,6 @@ cjfe
      &        jmsk,len,lugb,kpds5,mon,lskip,lgrib,ndata,lugi,me,kmami
      &,       jj,w3kindreal,w3kindint
       real (kind=kind_io8) wlon,elon,rnlat,dlat,dlon,rslat,blno,blto
-!
-!   read in grib climatology files and interpolate to the input
-!   grid.  grib files should allow all the necessary parameters
-!   to be extracted from the description records.
-!
 !
       character*500 fngrib
 !     character*80 fngrib, asgnstr
@@ -9255,8 +9254,9 @@ cjfe
       return
       end subroutine fixrdc
 
-!> Read in grib1 analysis data, time interpolate to the current
-!! date and horizontally interpolate to the model grid.
+!> Read in grib1 analysis data for the requested date and
+!! horizontally interpolate to the model grid.  If data not found
+!! for the requested date, a backwards search is performed.
 !!
 !! @param[in] lugb Fortran unit number of the grib1 analysis data file.
 !! @param[in] fngrib The name of the grib1 analysis data file.
@@ -9296,10 +9296,6 @@ cjfe
      &        monend,jy,iy4,kmami,iret2,jj,w3kindreal,w3kindint
       real (kind=kind_io8) rnlat,rslat,wlon,elon,dlon,dlat,fh,blno,
      &                     rjday,blto
-!
-!   read in grib climatology/analysis files and interpolate to the input
-!   dates and the grid.  grib files should allow all the necessary parameters
-!   to be extracted from the description records.
 !
 !  nrepmx:  max number of days for going back date search
 !  nvalid:  analysis later than (current date - nvalid) is regarded as
