@@ -7627,26 +7627,29 @@ cjfe
       return
       end
 
-!> ???
+!> Driver routine that reads in climatological data for a given time,
+!! and, if necessary, interpolates it to the model grid.
 !!
-!! @param[in] lugb
+!! @param[in] lugb Fortran unit number of GRIB1 climatological data.
 !! @param[in] iy
 !! @param[in] im
 !! @param[in] id
 !! @param[in] ih
 !! @param[in] fh
-!! @param[in] len
-!! @param[in] lsoil
-!! @param[in] slmask
-!! @param[in] fntsfc
-!! @param[in] fnwetc
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @param[in] slmask Model land-sea-ice mask.
+!! @param[in] fntsfc Climatological SST file.
+!! @param[in] fnwetc Climatological soil wetness file.
 !! @param[in] fnsnoc
-!! @param[in] fnzorc
-!! @param[in] fnalbc
+!! @param[in] fnzorc Climatological roughness length file. Or 'igbp' 
+!! to use igbp vegetation type lookup table. Or 'sib' to use sib 
+!! vegeation type lookup table.
+!! @param[in] fnalbc Climatological snow-free albedo file.
 !! @param[in] fnaisc
-!! @param[in] fntg3c
-!! @param[in] fnscvc
-!! @param[in] fnsmcc
+!! @param[in] fntg3c Climatological soil substrate temperature file.
+!! @param[in] fnscvc Climatological snow cover file.
+!! @param[in] fnsmcc Climatological soil moisture file.
 !! @param[in] fnstcc
 !! @param[in] fnacnc
 !! @param[in] fnvegc
@@ -7701,20 +7704,22 @@ cjfe
 !! @param[in] kpdvmx
 !! @param[in] kpdslp
 !! @param[in] kpdabs
-!! @param[in] deltsf
-!! @param[in] c
-!! @param[in] lanomimsk
+!! @param[in] deltsfc
+!! @param[in] lanom
+!! @param[in] imsk
 !! @param[in] jmsk
 !! @param[in] slmskh
 !! @param[in] outlat
-!! @param[in] outlongaus
+!! @param[in] outlon
+!! @param[in] gaus
 !! @param[in] blno
 !! @param[in] blto
-!! @param[in] me
+!! @param[in] me MPI task number.
 !! @param[in] lprnt
 !! @param[in] iprnt
 !! @param[in] fnalbc2
-!! @param[in] ialbtile_num_ch
+!! @param[in] ialb
+!! @param[in] tile_num_ch Model tile number to process.
 !! @param[in] i_index
 !! @param[in] j_index
 !! @author M. Iredell,  xuli, Hang Lei, George Gayno
@@ -8889,18 +8894,21 @@ cjfe
       return
       end subroutine clima
 
-!> ???
+!> Reads in climatological data on the model grid tile for
+!! a given month. Unlike fixrdc, this routine assumes
+!! the input data is already interpolated to the model tile.
+!! The climatological data must be NetCDF.
 !!
-!! @param[in] filename_raw
-!! @param[in] tile_num_ch
-!! @param[in] i_index
-!! @param[in] j_index
-!! @param[in] kpds
-!! @param[in] var
-!! @param[in] mon
-!! @param[in] npts
-!! @param[in] me
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] filename_raw The name of the climatological file.
+!! @param[in] tile_num_ch The tile number to be processed.
+!! @param[in] i_index The 'i' indices of the model grid to process.
+!! @param[in] j_index The 'j' indices of the model grid to process.
+!! @param[in] kpds Parameter code for the data.
+!! @param[out] var The climatological data on the model grid.
+!! @param[in] mon Which month of data to read.
+!! @param[in] npts Number of model points to process.
+!! @param[in] me MPI task number.
+!! @author George Gayno NOAA/EMC
       subroutine fixrdc_tile(filename_raw, tile_num_ch,
      &                       i_index, j_index, kpds,
      &                       var, mon, npts, me)
@@ -9039,10 +9047,10 @@ cjfe
 
       end subroutine fixrdc_tile
 
-!> Check netCDF return code.
+!> Print the error message for a given netCDF return code.
 !!
 !! @param[in] error
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Xu Li NOAA/EMC
       subroutine netcdf_err(error)
 
       use netcdf
