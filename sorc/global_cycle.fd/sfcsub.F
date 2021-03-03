@@ -9068,7 +9068,7 @@ cjfe
 !! @param[in] gdata
 !! @param[in] len
 !! @param[in] iret
-!! @param[in] imsk
+!! @param[in] imsk 
 !! @param[in] jmsk
 !! @param[in] slmskh
 !! @param[in] gaus
@@ -9255,30 +9255,34 @@ cjfe
       return
       end subroutine fixrdc
 
-!> ???
+!> Read in grib1 analysis data, time interpolate to the current
+!! date and horizontally interpolate to the model grid.
 !!
-!! @param[in] lugb
-!! @param[in] fngrib
-!! @param[in] kpds5
-!! @param[in] slmask
-!! @param[in] iy
-!! @param[in] im
-!! @param[in] id
-!! @param[in] ih
-!! @param[in] fh
-!! @param[in] gdata
-!! @param[in] len
-!! @param[in] iret
-!! @param[in] imsk
-!! @param[in] jmsk
-!! @param[in] slmskh
-!! @param[in] gaus
-!! @param[in] blno
-!! @param[in] blto
-!! @param[in] outlat
-!! @param[in] outlon
-!! @param[in] me
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] lugb Fortran unit number of the grib1 analysis data file.
+!! @param[in] fngrib The name of the grib1 analysis data file.
+!! @param[in] kpds5 The grib1 parameter number of the requested data.
+!! @param[in] slmask Model land-sea-ice mask.
+!! @param[in] iy Year.
+!! @param[in] im Month.
+!! @param[in] id Day.
+!! @param[in] ih Hour.
+!! @param[in] fh Forecast hour.
+!! @param[out] gdata The analysis data interpolated to the model grid.
+!! @param[in] len The number of model points to process.
+!! @param[in] iret Return code. '0' is success.
+!! @param[in] imsk 'i' dimension of the high-res mask used for input analysis
+!! data without a bitmap.
+!! @param[in] jmsk 'j' dimension of the high-res mask used for input analysis
+!! data without a bitmap.
+!! @param[in] slmskh The high-resolution mask used for input analysis
+!! data witouth a bitmap.
+!! @param[in] gaus When true, the high-res mask is on a gaussian grid.
+!! @param[in] blno Corner point longitude of the high-res mask.
+!! @param[in] blto Corner point latitude of the high-res mask.
+!! @param[in] outlat Model latitudes.
+!! @param[in] outlon Model longitudes.
+!! @param[in] me MPI task number
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine fixrda(lugb,fngrib,kpds5,slmask,
      &                  iy,im,id,ih,fh,gdata,len,iret
      &,                 imsk, jmsk, slmskh, gaus,blno, blto
@@ -9599,10 +9603,14 @@ cjfe
       return
       end subroutine fixrda
 
-!> ???
+!> Ensure deep snow pack at permanent glacial points.
 !!
-!! glacir,snwmax,snoanl, len, me
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! param[in] glacir Glacial flag
+!! param[in] snwmax Deep snow pack depth
+!! param[inout] snoanl Model snow
+!! param[in] len Number of model points to process.
+!! param[in] me MPI task number.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine snodpth2(glacir,snwmax,snoanl, len, me)
       use machine , only : kind_io8,kind_io4
       implicit none
