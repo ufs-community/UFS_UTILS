@@ -97,7 +97,7 @@ jobs:
         repository: NOAA-EMC/NCEPLIBS
         path: nceplibs
 
-    - name: get-git-hash:
+    - name: get-git-hash
       run: |
         cd nceplibs
         git rev-parse HEAD > hash.txt
