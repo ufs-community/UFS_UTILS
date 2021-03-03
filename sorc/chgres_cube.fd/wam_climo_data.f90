@@ -1,3 +1,14 @@
+!> @file
+!! @brief Process vertical profile climatologic data for WAM.
+!!
+!! This file contains all data need to form exosphere and used
+!! whole atmsopheric modeling (wam). It has two modules and some
+!! routines to compute the temperature and compositions of neutral
+!! density in specific values.
+!! The original package contains fortran 77 blockdata and common statement
+!! they are all recoded to use modules and use-statements.
+!!
+!! @author Hann-Ming Henry Juang  NCEP/EMC
 !-----------------------------------------------------------------------
    MODULE WAM_GTD7BK_MOD
 !          MSISE-00 01-FEB-02                                           
@@ -810,8 +821,22 @@
    end module gettemp_mod
 
 ! ----------------------------------------------------------------------
+!> Entry routine to get WAM needed temperature and composition profiles.
+!!
+!! Calculate temperature at each grid point useing nrlmsise00_sub
+!! @param [in] iday(ngay) calendat date 
+!! @param [in] ngay dimension length of iday
+!! @param [in] xlat(nlat) latitudes
+!! @param [in] nlat dimension length of xlat
+!! @param [in] pr(np) pressure in vertical
+!! @param [in] np dimension length of pr
+!! @param [out] temp temperature
+!! @param [out] n_o single oxygen number
+!! @param [out] n_o2 oxygen number
+!! @param [out] n_n2 nitrogen number
+!!
+!! @author Hann-Ming Henry Juang  NCEP/EMC
       subroutine gettemp(iday,nday,xlat,nlat,pr,np,temp,n_o,n_o2,n_n2)
-!  calculate temperature at each grid point useing nrlmsise00_sub
       implicit none
       integer, intent(in) :: nday                 ! number of days
       integer, intent(in) :: nlat                 ! number of latitudes
@@ -857,140 +882,142 @@
       enddo
       enddo
       end subroutine gettemp
-! ============================================================================
+
+!-----------------------------------------------------------------------
+!>    NRLMSISE-00 subroutine GTD7.
+!!    -----------                                                       
+!!       Neutral Atmosphere Empirical Model from the surface to lower   
+!!       exosphere                                                      
+!!                                                                      
+!!       NEW FEATURES:                                                  
+!!         *Extensive satellite drag database used in model generation  
+!!         *Revised O2 (and O) in lower thermosphere                    
+!!         *Additional nonlinear solar activity term                    
+!!         *"ANOMALOUS OXYGEN" NUMBER DENSITY, OUTPUT D(9)              
+!!          At high altitudes (> 500 km), hot atomic oxygen or ionized  
+!!          oxygen can become appreciable for some ranges of subroutine 
+!!          inputs, thereby affecting drag on satellites and debris. We 
+!!          group these species under the term "anomalous oxygen," since
+!!          their individual variations are not presently separable with
+!!          the drag data used to define this model component.          
+!!                                                                      
+!!       SUBROUTINES FOR SPECIAL OUTPUTS:                               
+!!                                                                      
+!!       HIGH ALTITUDE DRAG: EFFECTIVE TOTAL MASS DENSITY               
+!!       (SUBROUTINE GTD7D, OUTPUT D(6))                                
+!!          For atmospheric drag calculations at altitudes above 500 km,
+!!          call SUBROUTINE GTD7D to compute the "effective total mass  
+!!          density" by including contributions from "anomalous oxygen."
+!!          See "NOTES ON OUTPUT VARIABLES" below on D(6).              
+!!                                                                      
+!!       PRESSURE GRID (SUBROUTINE GHP7)                                
+!!         See subroutine GHP7 to specify outputs at a pressure level   
+!!         rather than at an altitude.                                  
+!!                                                                      
+!!       OUTPUT IN M-3 and KG/M3:   CALL METERS(.TRUE.)                 
+!!                                                                      
+!!    INPUT VARIABLES:                                                  
+!!       IYD - YEAR AND DAY AS YYDDD (day of year from 1 to 365 (or 366)
+!!             (Year ignored in current model)                          
+!!       SEC - UT(SEC)                                                  
+!!       ALT - ALTITUDE(KM)                                             
+!!       GLAT - GEODETIC LATITUDE(DEG)                                  
+!!       GLONG - GEODETIC LONGITUDE(DEG)                                
+!!       STL - LOCAL APPARENT SOLAR TIME(HRS; see Note below)           
+!!       F107A - 81 day AVERAGE OF F10.7 FLUX (centered on day DDD)     
+!!       F107 - DAILY F10.7 FLUX FOR PREVIOUS DAY                       
+!!       AP - MAGNETIC INDEX(DAILY) OR WHEN SW(9)=-1. :                 
+!!          - ARRAY CONTAINING:                                         
+!!            (1) DAILY AP                                              
+!!            (2) 3 HR AP INDEX FOR CURRENT TIME                        
+!!            (3) 3 HR AP INDEX FOR 3 HRS BEFORE CURRENT TIME           
+!!            (4) 3 HR AP INDEX FOR 6 HRS BEFORE CURRENT TIME           
+!!            (5) 3 HR AP INDEX FOR 9 HRS BEFORE CURRENT TIME           
+!!            (6) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 12 TO 33 HRS PR
+!!                   TO CURRENT TIME                                    
+!!            (7) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 36 TO 57 HRS PR
+!!                   TO CURRENT TIME                                    
+!!       MASS - MASS NUMBER (ONLY DENSITY FOR SELECTED GAS IS           
+!!                CALCULATED.  MASS 0 IS TEMPERATURE.  MASS 48 FOR ALL. 
+!!                MASS 17 IS Anomalous O ONLY.)                         
+!!                                                                      
+!!    NOTES ON INPUT VARIABLES:                                         
+!!       UT, Local Time, and Longitude are used independently in the    
+!!       model and are not of equal importance for every situation.     
+!!       For the most physically realistic calculation these three      
+!!       variables should be consistent (STL=SEC/3600+GLONG/15).        
+!!       The Equation of Time departures from the above formula         
+!!       for apparent local time can be included if available but       
+!!       are of minor importance.                                       
+!!                                                                      
+!!       F107 and F107A values used to generate the model correspond    
+!!       to the 10.7 cm radio flux at the actual distance of the Earth  
+!!       from the Sun rather than the radio flux at 1 AU. The following 
+!!       site provides both classes of values:                          
+!!       ftp://ftp.ngdc.noaa.gov/STP/SOLAR_DATA/SOLAR_RADIO/FLUX/       
+!!                                                                      
+!!       F107, F107A, and AP effects are neither large nor well         
+!!       established below 80 km and these parameters should be set to  
+!!       150., 150., and 4. respectively.                               
+!!                                                                      
+!!    OUTPUT VARIABLES:                                                 
+!!       D(1) - HE NUMBER DENSITY(CM-3)                                 
+!!       D(2) - O NUMBER DENSITY(CM-3)                                  
+!!       D(3) - N2 NUMBER DENSITY(CM-3)                                 
+!!       D(4) - O2 NUMBER DENSITY(CM-3)                                 
+!!       D(5) - AR NUMBER DENSITY(CM-3)                                 
+!!       D(6) - TOTAL MASS DENSITY(GM/CM3)                              
+!!       D(7) - H NUMBER DENSITY(CM-3)                                  
+!!       D(8) - N NUMBER DENSITY(CM-3)                                  
+!!       D(9) - Anomalous oxygen NUMBER DENSITY(CM-3)                   
+!!       T(1) - EXOSPHERIC TEMPERATURE                                  
+!!       T(2) - TEMPERATURE AT ALT                                      
+!!                                                                      
+!!    NOTES ON OUTPUT VARIABLES:                                        
+!!       TO GET OUTPUT IN M-3 and KG/M3:   CALL METERS(.TRUE.)          
+!!                                                                      
+!!       O, H, and N are set to zero below 72.5 km                      
+!!                                                                      
+!!       T(1), Exospheric temperature, is set to global average for     
+!!       altitudes below 120 km. The 120 km gradient is left at global  
+!!       average value for altitudes below 72 km.                       
+!!                                                                      
+!!       D(6), TOTAL MASS DENSITY, is NOT the same for subroutines GTD7 
+!!       and GTD7D                                                      
+!!                                                                      
+!!         SUBROUTINE GTD7 -- D(6) is the sum of the mass densities of t
+!!         species labeled by indices 1-5 and 7-8 in output variable D. 
+!!         This includes He, O, N2, O2, Ar, H, and N but does NOT includ
+!!         anomalous oxygen (species index 9).                          
+!!                                                                      
+!!         SUBROUTINE GTD7D -- D(6) is the "effective total mass density
+!!         for drag" and is the sum of the mass densities of all species
+!!         in this model, INCLUDING anomalous oxygen.                   
+!!                                                                      
+!!    SWITCHES: The following is for test and special purposes:         
+!!                                                                      
+!!       TO TURN ON AND OFF PARTICULAR VARIATIONS CALL TSELEC(SW),      
+!!       WHERE SW IS A 25 ELEMENT ARRAY CONTAINING 0. FOR OFF, 1.       
+!!       FOR ON, OR 2. FOR MAIN EFFECTS OFF BUT CROSS TERMS ON          
+!!       FOR THE FOLLOWING VARIATIONS                                   
+!!              1 - F10.7 EFFECT ON MEAN  2 - TIME INDEPENDENT          
+!!              3 - SYMMETRICAL ANNUAL    4 - SYMMETRICAL SEMIANNUAL    
+!!              5 - ASYMMETRICAL ANNUAL   6 - ASYMMETRICAL SEMIANNUAL   
+!!              7 - DIURNAL               8 - SEMIDIURNAL               
+!!              9 - DAILY AP             10 - ALL UT/LONG EFFECTS       
+!!             11 - LONGITUDINAL         12 - UT AND MIXED UT/LONG      
+!!             13 - MIXED AP/UT/LONG     14 - TERDIURNAL                
+!!             15 - DEPARTURES FROM DIFFUSIVE EQUILIBRIUM               
+!!             16 - ALL TINF VAR         17 - ALL TLB VAR               
+!!             18 - ALL TN1 VAR           19 - ALL S VAR                
+!!             20 - ALL TN2 VAR           21 - ALL NLB VAR              
+!!             22 - ALL TN3 VAR           23 - TURBO SCALE HEIGHT VAR   
+!!                                                                      
+!!       To get current values of SW: CALL TRETRV(SW)                   
+!!        Modify all common-statements by use-statements.
+!!
+!! @author Hann-Ming Henry Juang
       SUBROUTINE GTD7(IYD,SEC,ALT,GLAT,GLONG,STL,F107A,F107,AP,MASS,D,T) 
-!                                                                       
-!     NRLMSISE-00                                                       
-!     -----------                                                       
-!        Neutral Atmosphere Empirical Model from the surface to lower   
-!        exosphere                                                      
-!                                                                       
-!        NEW FEATURES:                                                  
-!          *Extensive satellite drag database used in model generation  
-!          *Revised O2 (and O) in lower thermosphere                    
-!          *Additional nonlinear solar activity term                    
-!          *"ANOMALOUS OXYGEN" NUMBER DENSITY, OUTPUT D(9)              
-!           At high altitudes (> 500 km), hot atomic oxygen or ionized  
-!           oxygen can become appreciable for some ranges of subroutine 
-!           inputs, thereby affecting drag on satellites and debris. We 
-!           group these species under the term "anomalous oxygen," since
-!           their individual variations are not presently separable with
-!           the drag data used to define this model component.          
-!                                                                       
-!        SUBROUTINES FOR SPECIAL OUTPUTS:                               
-!                                                                       
-!        HIGH ALTITUDE DRAG: EFFECTIVE TOTAL MASS DENSITY               
-!        (SUBROUTINE GTD7D, OUTPUT D(6))                                
-!           For atmospheric drag calculations at altitudes above 500 km,
-!           call SUBROUTINE GTD7D to compute the "effective total mass  
-!           density" by including contributions from "anomalous oxygen."
-!           See "NOTES ON OUTPUT VARIABLES" below on D(6).              
-!                                                                       
-!        PRESSURE GRID (SUBROUTINE GHP7)                                
-!          See subroutine GHP7 to specify outputs at a pressure level   
-!          rather than at an altitude.                                  
-!                                                                       
-!        OUTPUT IN M-3 and KG/M3:   CALL METERS(.TRUE.)                 
-!                                                                       
-!     INPUT VARIABLES:                                                  
-!        IYD - YEAR AND DAY AS YYDDD (day of year from 1 to 365 (or 366)
-!              (Year ignored in current model)                          
-!        SEC - UT(SEC)                                                  
-!        ALT - ALTITUDE(KM)                                             
-!        GLAT - GEODETIC LATITUDE(DEG)                                  
-!        GLONG - GEODETIC LONGITUDE(DEG)                                
-!        STL - LOCAL APPARENT SOLAR TIME(HRS; see Note below)           
-!        F107A - 81 day AVERAGE OF F10.7 FLUX (centered on day DDD)     
-!        F107 - DAILY F10.7 FLUX FOR PREVIOUS DAY                       
-!        AP - MAGNETIC INDEX(DAILY) OR WHEN SW(9)=-1. :                 
-!           - ARRAY CONTAINING:                                         
-!             (1) DAILY AP                                              
-!             (2) 3 HR AP INDEX FOR CURRENT TIME                        
-!             (3) 3 HR AP INDEX FOR 3 HRS BEFORE CURRENT TIME           
-!             (4) 3 HR AP INDEX FOR 6 HRS BEFORE CURRENT TIME           
-!             (5) 3 HR AP INDEX FOR 9 HRS BEFORE CURRENT TIME           
-!             (6) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 12 TO 33 HRS PR
-!                    TO CURRENT TIME                                    
-!             (7) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 36 TO 57 HRS PR
-!                    TO CURRENT TIME                                    
-!        MASS - MASS NUMBER (ONLY DENSITY FOR SELECTED GAS IS           
-!                 CALCULATED.  MASS 0 IS TEMPERATURE.  MASS 48 FOR ALL. 
-!                 MASS 17 IS Anomalous O ONLY.)                         
-!                                                                       
-!     NOTES ON INPUT VARIABLES:                                         
-!        UT, Local Time, and Longitude are used independently in the    
-!        model and are not of equal importance for every situation.     
-!        For the most physically realistic calculation these three      
-!        variables should be consistent (STL=SEC/3600+GLONG/15).        
-!        The Equation of Time departures from the above formula         
-!        for apparent local time can be included if available but       
-!        are of minor importance.                                       
-!                                                                       
-!        F107 and F107A values used to generate the model correspond    
-!        to the 10.7 cm radio flux at the actual distance of the Earth  
-!        from the Sun rather than the radio flux at 1 AU. The following 
-!        site provides both classes of values:                          
-!        ftp://ftp.ngdc.noaa.gov/STP/SOLAR_DATA/SOLAR_RADIO/FLUX/       
-!                                                                       
-!        F107, F107A, and AP effects are neither large nor well         
-!        established below 80 km and these parameters should be set to  
-!        150., 150., and 4. respectively.                               
-!                                                                       
-!     OUTPUT VARIABLES:                                                 
-!        D(1) - HE NUMBER DENSITY(CM-3)                                 
-!        D(2) - O NUMBER DENSITY(CM-3)                                  
-!        D(3) - N2 NUMBER DENSITY(CM-3)                                 
-!        D(4) - O2 NUMBER DENSITY(CM-3)                                 
-!        D(5) - AR NUMBER DENSITY(CM-3)                                 
-!        D(6) - TOTAL MASS DENSITY(GM/CM3)                              
-!        D(7) - H NUMBER DENSITY(CM-3)                                  
-!        D(8) - N NUMBER DENSITY(CM-3)                                  
-!        D(9) - Anomalous oxygen NUMBER DENSITY(CM-3)                   
-!        T(1) - EXOSPHERIC TEMPERATURE                                  
-!        T(2) - TEMPERATURE AT ALT                                      
-!                                                                       
-!     NOTES ON OUTPUT VARIABLES:                                        
-!        TO GET OUTPUT IN M-3 and KG/M3:   CALL METERS(.TRUE.)          
-!                                                                       
-!        O, H, and N are set to zero below 72.5 km                      
-!                                                                       
-!        T(1), Exospheric temperature, is set to global average for     
-!        altitudes below 120 km. The 120 km gradient is left at global  
-!        average value for altitudes below 72 km.                       
-!                                                                       
-!        D(6), TOTAL MASS DENSITY, is NOT the same for subroutines GTD7 
-!        and GTD7D                                                      
-!                                                                       
-!          SUBROUTINE GTD7 -- D(6) is the sum of the mass densities of t
-!          species labeled by indices 1-5 and 7-8 in output variable D. 
-!          This includes He, O, N2, O2, Ar, H, and N but does NOT includ
-!          anomalous oxygen (species index 9).                          
-!                                                                       
-!          SUBROUTINE GTD7D -- D(6) is the "effective total mass density
-!          for drag" and is the sum of the mass densities of all species
-!          in this model, INCLUDING anomalous oxygen.                   
-!                                                                       
-!     SWITCHES: The following is for test and special purposes:         
-!                                                                       
-!        TO TURN ON AND OFF PARTICULAR VARIATIONS CALL TSELEC(SW),      
-!        WHERE SW IS A 25 ELEMENT ARRAY CONTAINING 0. FOR OFF, 1.       
-!        FOR ON, OR 2. FOR MAIN EFFECTS OFF BUT CROSS TERMS ON          
-!        FOR THE FOLLOWING VARIATIONS                                   
-!               1 - F10.7 EFFECT ON MEAN  2 - TIME INDEPENDENT          
-!               3 - SYMMETRICAL ANNUAL    4 - SYMMETRICAL SEMIANNUAL    
-!               5 - ASYMMETRICAL ANNUAL   6 - ASYMMETRICAL SEMIANNUAL   
-!               7 - DIURNAL               8 - SEMIDIURNAL               
-!               9 - DAILY AP             10 - ALL UT/LONG EFFECTS       
-!              11 - LONGITUDINAL         12 - UT AND MIXED UT/LONG      
-!              13 - MIXED AP/UT/LONG     14 - TERDIURNAL                
-!              15 - DEPARTURES FROM DIFFUSIVE EQUILIBRIUM               
-!              16 - ALL TINF VAR         17 - ALL TLB VAR               
-!              18 - ALL TN1 VAR           19 - ALL S VAR                
-!              20 - ALL TN2 VAR           21 - ALL NLB VAR              
-!              22 - ALL TN3 VAR           23 - TURBO SCALE HEIGHT VAR   
-!                                                                       
-!        To get current values of SW: CALL TRETRV(SW)                   
-!                                                                       
       use wam_gtd7bk_mod
 !x-------------------------- PTM,PDM,     &
 !x-------------------------- ISD,IST,NAM,   &
@@ -1028,10 +1055,6 @@
       DATA MN2/4/,ZN2/72.5,55.,45.,32.5/ 
       DATA ZMIX/62.5/,ALAST/99999./,MSSL/-999/ 
       DATA SV/25*1./ 
-!!         MN3=5; ZN3(1)=32.5; ZN3(2)=20.; ZN3(3)=15.; ZN3(4)=10.; ZN3(5)=0. 
-!!         MN2=4; ZN2(1)=72.5; ZN2(2)=55.; ZN2(3)=45.; ZN2(4)=32.5 
-!!         ZMIX=62.5; ALAST=99999.; MSSL=-999 
-!!         SV=1. 
 ! ==== assign common/PARM7/
       PT(1:50)  =PT1(1:50); PT(51:100)  =PT2(1:50); PT(101:150)  =PT3(1:50)
       PD(1:50,1)=PA1(1:50); PD(51:100,1)=PA2(1:50); PD(101:150,1)=PA3(1:50)
@@ -1186,69 +1209,70 @@
       ALAST=ALT 
       RETURN 
       END SUBROUTINE GTD7                                         
+
 !-----------------------------------------------------------------------
+!>    NRLMSISE-00 subroutine GTD7D
+!!    -----------                                                       
+!!       This subroutine provides Effective Total Mass Density for      
+!!       output D(6) which includes contributions from "anomalous       
+!!       oxygen" which can affect satellite drag above 500 km.  This    
+!!       subroutine is part of the distribution package for the         
+!!       Neutral Atmosphere Empirical Model from the surface to lower   
+!!       exosphere.  See subroutine GTD7 for more extensive comments.   
+!!                                                                      
+!!    INPUT VARIABLES:                                                  
+!!       IYD - YEAR AND DAY AS YYDDD (day of year from 1 to 365 (or 366)
+!!             (Year ignored in current model)                          
+!!       SEC - UT(SEC)                                                  
+!!       ALT - ALTITUDE(KM)                                             
+!!       GLAT - GEODETIC LATITUDE(DEG)                                  
+!!       GLONG - GEODETIC LONGITUDE(DEG)                                
+!!       STL - LOCAL APPARENT SOLAR TIME(HRS; see Note below)           
+!!       F107A - 81 day AVERAGE OF F10.7 FLUX (centered on day DDD)     
+!!       F107 - DAILY F10.7 FLUX FOR PREVIOUS DAY                       
+!!       AP - MAGNETIC INDEX(DAILY) OR WHEN SW(9)=-1. :                 
+!!          - ARRAY CONTAINING:                                         
+!!            (1) DAILY AP                                              
+!!            (2) 3 HR AP INDEX FOR CURRENT TIME                        
+!!            (3) 3 HR AP INDEX FOR 3 HRS BEFORE CURRENT TIME           
+!!            (4) 3 HR AP INDEX FOR 6 HRS BEFORE CURRENT TIME           
+!!            (5) 3 HR AP INDEX FOR 9 HRS BEFORE CURRENT TIME           
+!!            (6) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 12 TO 33 HRS PR
+!!                   TO CURRENT TIME                                    
+!!            (7) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 36 TO 57 HRS PR
+!!                   TO CURRENT TIME                                    
+!!       MASS - MASS NUMBER (ONLY DENSITY FOR SELECTED GAS IS           
+!!                CALCULATED.  MASS 0 IS TEMPERATURE.  MASS 48 FOR ALL. 
+!!                MASS 17 IS Anomalous O ONLY.)                         
+!!                                                                      
+!!    NOTES ON INPUT VARIABLES:                                         
+!!       UT, Local Time, and Longitude are used independently in the    
+!!       model and are not of equal importance for every situation.     
+!!       For the most physically realistic calculation these three      
+!!       variables should be consistent (STL=SEC/3600+GLONG/15).        
+!!       The Equation of Time departures from the above formula         
+!!       for apparent local time can be included if available but       
+!!       are of minor importance.                                       
+!!                                                                      
+!!       F107 and F107A values used to generate the model correspond    
+!!       to the 10.7 cm radio flux at the actual distance of the Earth  
+!!       from the Sun rather than the radio flux at 1 AU.               
+!!                                                                      
+!!    OUTPUT VARIABLES:                                                 
+!!       D(1) - HE NUMBER DENSITY(CM-3)                                 
+!!       D(2) - O NUMBER DENSITY(CM-3)                                  
+!!       D(3) - N2 NUMBER DENSITY(CM-3)                                 
+!!       D(4) - O2 NUMBER DENSITY(CM-3)                                 
+!!       D(5) - AR NUMBER DENSITY(CM-3)                                 
+!!       D(6) - TOTAL MASS DENSITY(GM/CM3) [includes anomalous oxygen]  
+!!       D(7) - H NUMBER DENSITY(CM-3)                                  
+!!       D(8) - N NUMBER DENSITY(CM-3)                                  
+!!       D(9) - Anomalous oxygen NUMBER DENSITY(CM-3)                   
+!!       T(1) - EXOSPHERIC TEMPERATURE                                  
+!!       T(2) - TEMPERATURE AT ALT                                      
+!!                                                                      
+!! @author Hann-Ming Henry Juang
       SUBROUTINE GTD7D(IYD,SEC,ALT,GLAT,GLONG,STL,F107A,F107,AP,MASS,D,T)
-!                                                                       
-!     NRLMSISE-00                                                       
-!     -----------                                                       
-!        This subroutine provides Effective Total Mass Density for      
-!        output D(6) which includes contributions from "anomalous       
-!        oxygen" which can affect satellite drag above 500 km.  This    
-!        subroutine is part of the distribution package for the         
-!        Neutral Atmosphere Empirical Model from the surface to lower   
-!        exosphere.  See subroutine GTD7 for more extensive comments.   
-!                                                                       
-!     INPUT VARIABLES:                                                  
-!        IYD - YEAR AND DAY AS YYDDD (day of year from 1 to 365 (or 366)
-!              (Year ignored in current model)                          
-!        SEC - UT(SEC)                                                  
-!        ALT - ALTITUDE(KM)                                             
-!        GLAT - GEODETIC LATITUDE(DEG)                                  
-!        GLONG - GEODETIC LONGITUDE(DEG)                                
-!        STL - LOCAL APPARENT SOLAR TIME(HRS; see Note below)           
-!        F107A - 81 day AVERAGE OF F10.7 FLUX (centered on day DDD)     
-!        F107 - DAILY F10.7 FLUX FOR PREVIOUS DAY                       
-!        AP - MAGNETIC INDEX(DAILY) OR WHEN SW(9)=-1. :                 
-!           - ARRAY CONTAINING:                                         
-!             (1) DAILY AP                                              
-!             (2) 3 HR AP INDEX FOR CURRENT TIME                        
-!             (3) 3 HR AP INDEX FOR 3 HRS BEFORE CURRENT TIME           
-!             (4) 3 HR AP INDEX FOR 6 HRS BEFORE CURRENT TIME           
-!             (5) 3 HR AP INDEX FOR 9 HRS BEFORE CURRENT TIME           
-!             (6) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 12 TO 33 HRS PR
-!                    TO CURRENT TIME                                    
-!             (7) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 36 TO 57 HRS PR
-!                    TO CURRENT TIME                                    
-!        MASS - MASS NUMBER (ONLY DENSITY FOR SELECTED GAS IS           
-!                 CALCULATED.  MASS 0 IS TEMPERATURE.  MASS 48 FOR ALL. 
-!                 MASS 17 IS Anomalous O ONLY.)                         
-!                                                                       
-!     NOTES ON INPUT VARIABLES:                                         
-!        UT, Local Time, and Longitude are used independently in the    
-!        model and are not of equal importance for every situation.     
-!        For the most physically realistic calculation these three      
-!        variables should be consistent (STL=SEC/3600+GLONG/15).        
-!        The Equation of Time departures from the above formula         
-!        for apparent local time can be included if available but       
-!        are of minor importance.                                       
-!                                                                       
-!        F107 and F107A values used to generate the model correspond    
-!        to the 10.7 cm radio flux at the actual distance of the Earth  
-!        from the Sun rather than the radio flux at 1 AU.               
-!                                                                       
-!     OUTPUT VARIABLES:                                                 
-!        D(1) - HE NUMBER DENSITY(CM-3)                                 
-!        D(2) - O NUMBER DENSITY(CM-3)                                  
-!        D(3) - N2 NUMBER DENSITY(CM-3)                                 
-!        D(4) - O2 NUMBER DENSITY(CM-3)                                 
-!        D(5) - AR NUMBER DENSITY(CM-3)                                 
-!        D(6) - TOTAL MASS DENSITY(GM/CM3) [includes anomalous oxygen]  
-!        D(7) - H NUMBER DENSITY(CM-3)                                  
-!        D(8) - N NUMBER DENSITY(CM-3)                                  
-!        D(9) - Anomalous oxygen NUMBER DENSITY(CM-3)                   
-!        T(1) - EXOSPHERIC TEMPERATURE                                  
-!        T(2) - TEMPERATURE AT ALT                                      
-!                                                                       
       use wam_gtd7bk_mod, only: IMR
 !x----COMMON/METSEL/IMR 
       DIMENSION D(9),T(2),AP(7),DS(9),TS(2) 
@@ -1262,43 +1286,47 @@
          ENDIF 
       RETURN 
       END SUBROUTINE GTD7D
+
 !-----------------------------------------------------------------------
+!> GHP7: FIND ALTITUDE OF PRESSURE SURFACE (PRESS) FROM GTD7             
+!!
+!!    INPUT:                                                            
+!!       IYD - YEAR AND DAY AS YYDDD                                    
+!!       SEC - UT(SEC)                                                  
+!!       GLAT - GEODETIC LATITUDE(DEG)                                  
+!!       GLONG - GEODETIC LONGITUDE(DEG)                                
+!!       STL - LOCAL APPARENT SOLAR TIME(HRS)                           
+!!       F107A - 3 MONTH AVERAGE OF F10.7 FLUX                          
+!!       F107 - DAILY F10.7 FLUX FOR PREVIOUS DAY                       
+!!       AP - MAGNETIC INDEX(DAILY) OR WHEN SW(9)=-1. :                 
+!!          - ARRAY CONTAINING:                                         
+!!            (1) DAILY AP                                              
+!!            (2) 3 HR AP INDEX FOR CURRENT TIME                        
+!!            (3) 3 HR AP INDEX FOR 3 HRS BEFORE CURRENT TIME           
+!!            (4) 3 HR AP INDEX FOR 6 HRS BEFORE CURRENT TIME           
+!!            (5) 3 HR AP INDEX FOR 9 HRS BEFORE CURRENT TIME           
+!!            (6) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 12 TO 33 HRS PR
+!!                   TO CURRENT TIME                                    
+!!            (7) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 36 TO 59 HRS PR
+!!                   TO CURRENT TIME                                    
+!!       PRESS - PRESSURE LEVEL(MB)                                     
+!!    OUTPUT:                                                           
+!!       ALT - ALTITUDE(KM)                                             
+!!       D(1) - HE NUMBER DENSITY(CM-3)                                 
+!!       D(2) - O NUMBER DENSITY(CM-3)                                  
+!!       D(3) - N2 NUMBER DENSITY(CM-3)                                 
+!!       D(4) - O2 NUMBER DENSITY(CM-3)                                 
+!!       D(5) - AR NUMBER DENSITY(CM-3)                                 
+!!       D(6) - TOTAL MASS DENSITY(GM/CM3)                              
+!!       D(7) - H NUMBER DENSITY(CM-3)                                  
+!!       D(8) - N NUMBER DENSITY(CM-3)                                  
+!!       D(9) - HOT O NUMBER DENSITY(CM-3)                              
+!!       T(1) - EXOSPHERIC TEMPERATURE                                  
+!!       T(2) - TEMPERATURE AT ALT                                      
+!!                                                                      
+!!
+!! @author Hann-Ming Henry Juang
       SUBROUTINE GHP7(IYD,SEC,ALT,GLAT,GLONG,STL,F107A,F107,AP,D,T,PRESS)
-!       FIND ALTITUDE OF PRESSURE SURFACE (PRESS) FROM GTD7             
-!     INPUT:                                                            
-!        IYD - YEAR AND DAY AS YYDDD                                    
-!        SEC - UT(SEC)                                                  
-!        GLAT - GEODETIC LATITUDE(DEG)                                  
-!        GLONG - GEODETIC LONGITUDE(DEG)                                
-!        STL - LOCAL APPARENT SOLAR TIME(HRS)                           
-!        F107A - 3 MONTH AVERAGE OF F10.7 FLUX                          
-!        F107 - DAILY F10.7 FLUX FOR PREVIOUS DAY                       
-!        AP - MAGNETIC INDEX(DAILY) OR WHEN SW(9)=-1. :                 
-!           - ARRAY CONTAINING:                                         
-!             (1) DAILY AP                                              
-!             (2) 3 HR AP INDEX FOR CURRENT TIME                        
-!             (3) 3 HR AP INDEX FOR 3 HRS BEFORE CURRENT TIME           
-!             (4) 3 HR AP INDEX FOR 6 HRS BEFORE CURRENT TIME           
-!             (5) 3 HR AP INDEX FOR 9 HRS BEFORE CURRENT TIME           
-!             (6) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 12 TO 33 HRS PR
-!                    TO CURRENT TIME                                    
-!             (7) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 36 TO 59 HRS PR
-!                    TO CURRENT TIME                                    
-!        PRESS - PRESSURE LEVEL(MB)                                     
-!     OUTPUT:                                                           
-!        ALT - ALTITUDE(KM)                                             
-!        D(1) - HE NUMBER DENSITY(CM-3)                                 
-!        D(2) - O NUMBER DENSITY(CM-3)                                  
-!        D(3) - N2 NUMBER DENSITY(CM-3)                                 
-!        D(4) - O2 NUMBER DENSITY(CM-3)                                 
-!        D(5) - AR NUMBER DENSITY(CM-3)                                 
-!        D(6) - TOTAL MASS DENSITY(GM/CM3)                              
-!        D(7) - H NUMBER DENSITY(CM-3)                                  
-!        D(8) - N NUMBER DENSITY(CM-3)                                  
-!        D(9) - HOT O NUMBER DENSITY(CM-3)                              
-!        T(1) - EXOSPHERIC TEMPERATURE                                  
-!        T(2) - TEMPERATURE AT ALT                                      
-!                                                                       
       use gettemp_mod, only: GSURF,RE
       use wam_gtd7bk_mod, only: IMR
 !x    COMMON/PARMB/GSURF,RE 
@@ -1357,10 +1385,14 @@
       ALT=Z 
       RETURN 
       END SUBROUTINE GHP7
+
 !-----------------------------------------------------------------------
+!> Calculate latitude variable. 
+!!
+!! gravity (gv) and effective radius (reff) at given latitude (lat)
+!!
+!! @author  Hann-Ming Henry Juang
       SUBROUTINE GLATF(LAT,GV,REFF) 
-!      CALCULATE LATITUDE VARIABLE GRAVITY (GV) AND EFFECTIVE           
-!      RADIUS (REFF)                                                    
       REAL LAT 
       SAVE 
       DATA DGTR/1.74533E-2/ 
@@ -1370,10 +1402,15 @@
       REFF = 2.*GV/(3.085462E-6 + 2.27E-9*C2)*1.E-5 
       RETURN 
       END SUBROUTINE GLATF
+
 !-----------------------------------------------------------------------
+!> Testvariable condition.
+!!
+!! Test if geophysical variables or switches changed and save      
+!! Return 0 if unchanged and 1 if changed                          
+!!
+!! @author Hann-Ming Henry Juan
       FUNCTION VTST7(IYD,SEC,GLAT,GLONG,STL,F107A,F107,AP,IC) 
-!       Test if geophysical variables or switches changed and save      
-!       Return 0 if unchanged and 1 if changed                          
       use gettemp_mod, only: SW,SWC,ISW
 !x    COMMON/CSW/SW(25),SWC(25),ISW 
       DIMENSION AP(7),IYDL(2),SECL(2),GLATL(2),GLL(2),STLL(2) 
@@ -1382,9 +1419,6 @@
       DATA IYDL/2*-999/,SECL/2*-999./,GLATL/2*-999./,GLL/2*-999./ 
       DATA STLL/2*-999./,FAL/2*-999./,FL/2*-999./,APL/14*-999./ 
       DATA SWL/50*-999./,SWCL/50*-999./ 
-!!         IYDL=-999; SECL=-999.; GLATL=-999.; GLL=-999. 
-!!         STLL=-999.; FAL=-999.; FL=-999.; APL=-999. 
-!!         SWL=-999.; SWCL=-999. 
       VTST7=0 
       IF(IYD.NE.IYDL(IC)) GOTO 10 
       IF(SEC.NE.SECL(IC)) GOTO 10 
@@ -1421,70 +1455,71 @@
       RETURN 
       END FUNCTION VTST7                               
 !-----------------------------------------------------------------------
+!> Thermospheric portion of NRLMSISE-00                              
+!!
+!!    See GTD7 for more extensive comments                              
+!!                                                                      
+!!       OUTPUT IN M-3 and KG/M3:   CALL METERS(.TRUE.)                 
+!!                                                                      
+!!    INPUT VARIABLES:                                                  
+!!       IYD - YEAR AND DAY AS YYDDD (day of year from 1 to 365 (or 366)
+!!             (Year ignored in current model)                          
+!!       SEC - UT(SEC)                                                  
+!!       ALT - ALTITUDE(KM) (>72.5 km)                                  
+!!       GLAT - GEODETIC LATITUDE(DEG)                                  
+!!       GLONG - GEODETIC LONGITUDE(DEG)                                
+!!       STL - LOCAL APPARENT SOLAR TIME(HRS; see Note below)           
+!!       F107A - 81 day AVERAGE OF F10.7 FLUX (centered on day DDD)     
+!!       F107 - DAILY F10.7 FLUX FOR PREVIOUS DAY                       
+!!       AP - MAGNETIC INDEX(DAILY) OR WHEN SW(9)=-1. :                 
+!!          - ARRAY CONTAINING:                                         
+!!            (1) DAILY AP                                              
+!!            (2) 3 HR AP INDEX FOR CURRENT TIME                        
+!!            (3) 3 HR AP INDEX FOR 3 HRS BEFORE CURRENT TIME           
+!!            (4) 3 HR AP INDEX FOR 6 HRS BEFORE CURRENT TIME           
+!!            (5) 3 HR AP INDEX FOR 9 HRS BEFORE CURRENT TIME           
+!!            (6) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 12 TO 33 HRS PR
+!!                   TO CURRENT TIME                                    
+!!            (7) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 36 TO 57 HRS PR
+!!                   TO CURRENT TIME                                    
+!!       MASS - MASS NUMBER (ONLY DENSITY FOR SELECTED GAS IS           
+!!                CALCULATED.  MASS 0 IS TEMPERATURE.  MASS 48 FOR ALL. 
+!!                MASS 17 IS Anomalous O ONLY.)                         
+!!                                                                      
+!!    NOTES ON INPUT VARIABLES:                                         
+!!       UT, Local Time, and Longitude are used independently in the    
+!!       model and are not of equal importance for every situation.     
+!!       For the most physically realistic calculation these three      
+!!       variables should be consistent (STL=SEC/3600+GLONG/15).        
+!!       The Equation of Time departures from the above formula         
+!!       for apparent local time can be included if available but       
+!!       are of minor importance.                                       
+!!                                                                      
+!!       F107 and F107A values used to generate the model correspond    
+!!       to the 10.7 cm radio flux at the actual distance of the Earth  
+!!       from the Sun rather than the radio flux at 1 AU. The following 
+!!       site provides both classes of values:                          
+!!       ftp://ftp.ngdc.noaa.gov/STP/SOLAR_DATA/SOLAR_RADIO/FLUX/       
+!!                                                                      
+!!       F107, F107A, and AP effects are neither large nor well         
+!!       established below 80 km and these parameters should be set to  
+!!       150., 150., and 4. respectively.                               
+!!                                                                      
+!!    OUTPUT VARIABLES:                                                 
+!!       D(1) - HE NUMBER DENSITY(CM-3)                                 
+!!       D(2) - O NUMBER DENSITY(CM-3)                                  
+!!       D(3) - N2 NUMBER DENSITY(CM-3)                                 
+!!       D(4) - O2 NUMBER DENSITY(CM-3)                                 
+!!       D(5) - AR NUMBER DENSITY(CM-3)                                 
+!!       D(6) - TOTAL MASS DENSITY(GM/CM3) [Anomalous O NOT included]   
+!!       D(7) - H NUMBER DENSITY(CM-3)                                  
+!!       D(8) - N NUMBER DENSITY(CM-3)                                  
+!!       D(9) - Anomalous oxygen NUMBER DENSITY(CM-3)                   
+!!       T(1) - EXOSPHERIC TEMPERATURE                                  
+!!       T(2) - TEMPERATURE AT ALT                                      
+!!                                                                      
+!! @author Hann-Ming Henry Juan
       SUBROUTINE GTS7(IYD,SEC,ALT,GLAT,GLONG,STL,F107A,F107,AP,MASS,D,T) 
-!                                                                       
-!     Thermospheric portion of NRLMSISE-00                              
-!     See GTD7 for more extensive comments                              
-!                                                                       
-!        OUTPUT IN M-3 and KG/M3:   CALL METERS(.TRUE.)                 
-!                                                                       
-!     INPUT VARIABLES:                                                  
-!        IYD - YEAR AND DAY AS YYDDD (day of year from 1 to 365 (or 366)
-!              (Year ignored in current model)                          
-!        SEC - UT(SEC)                                                  
-!        ALT - ALTITUDE(KM) (>72.5 km)                                  
-!        GLAT - GEODETIC LATITUDE(DEG)                                  
-!        GLONG - GEODETIC LONGITUDE(DEG)                                
-!        STL - LOCAL APPARENT SOLAR TIME(HRS; see Note below)           
-!        F107A - 81 day AVERAGE OF F10.7 FLUX (centered on day DDD)     
-!        F107 - DAILY F10.7 FLUX FOR PREVIOUS DAY                       
-!        AP - MAGNETIC INDEX(DAILY) OR WHEN SW(9)=-1. :                 
-!           - ARRAY CONTAINING:                                         
-!             (1) DAILY AP                                              
-!             (2) 3 HR AP INDEX FOR CURRENT TIME                        
-!             (3) 3 HR AP INDEX FOR 3 HRS BEFORE CURRENT TIME           
-!             (4) 3 HR AP INDEX FOR 6 HRS BEFORE CURRENT TIME           
-!             (5) 3 HR AP INDEX FOR 9 HRS BEFORE CURRENT TIME           
-!             (6) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 12 TO 33 HRS PR
-!                    TO CURRENT TIME                                    
-!             (7) AVERAGE OF EIGHT 3 HR AP INDICIES FROM 36 TO 57 HRS PR
-!                    TO CURRENT TIME                                    
-!        MASS - MASS NUMBER (ONLY DENSITY FOR SELECTED GAS IS           
-!                 CALCULATED.  MASS 0 IS TEMPERATURE.  MASS 48 FOR ALL. 
-!                 MASS 17 IS Anomalous O ONLY.)                         
-!                                                                       
-!     NOTES ON INPUT VARIABLES:                                         
-!        UT, Local Time, and Longitude are used independently in the    
-!        model and are not of equal importance for every situation.     
-!        For the most physically realistic calculation these three      
-!        variables should be consistent (STL=SEC/3600+GLONG/15).        
-!        The Equation of Time departures from the above formula         
-!        for apparent local time can be included if available but       
-!        are of minor importance.                                       
-!                                                                       
-!        F107 and F107A values used to generate the model correspond    
-!        to the 10.7 cm radio flux at the actual distance of the Earth  
-!        from the Sun rather than the radio flux at 1 AU. The following 
-!        site provides both classes of values:                          
-!        ftp://ftp.ngdc.noaa.gov/STP/SOLAR_DATA/SOLAR_RADIO/FLUX/       
-!                                                                       
-!        F107, F107A, and AP effects are neither large nor well         
-!        established below 80 km and these parameters should be set to  
-!        150., 150., and 4. respectively.                               
-!                                                                       
-!     OUTPUT VARIABLES:                                                 
-!        D(1) - HE NUMBER DENSITY(CM-3)                                 
-!        D(2) - O NUMBER DENSITY(CM-3)                                  
-!        D(3) - N2 NUMBER DENSITY(CM-3)                                 
-!        D(4) - O2 NUMBER DENSITY(CM-3)                                 
-!        D(5) - AR NUMBER DENSITY(CM-3)                                 
-!        D(6) - TOTAL MASS DENSITY(GM/CM3) [Anomalous O NOT included]   
-!        D(7) - H NUMBER DENSITY(CM-3)                                  
-!        D(8) - N NUMBER DENSITY(CM-3)                                  
-!        D(9) - Anomalous oxygen NUMBER DENSITY(CM-3)                   
-!        T(1) - EXOSPHERIC TEMPERATURE                                  
-!        T(2) - TEMPERATURE AT ALT                                      
-!                                                                       
       use wam_gtd7bk_mod, only: &
                              PTM,PDM,     &
                              IMR
@@ -1516,11 +1551,6 @@
       DATA MN1/5/,ZN1/120.,110.,100.,90.,72.5/ 
       DATA DGTR/1.74533E-2/,DR/1.72142E-2/,ALAST/-999./ 
       DATA ALPHA/-0.38,0.,0.,0.,0.17,0.,-0.38,0.,0./ 
-!!         MT=(/48,0,4,16,28,32,40,1,49,14,17 /)
-!!         ALTL=(/200.,300.,160.,250.,240.,450.,320.,450./)
-!!         MN1=5; ZN1=(/120.,110.,100.,90.,72.5/) 
-!!         DGTR=1.74533E-2; DR=1.72142E-2; ALAST=-999. 
-!!         ALPHA=(/-0.38,0.,0.,0.,0.17,0.,-0.38,0.,0./)
 !        Test for changed input                                         
       V2=VTST7(IYD,SEC,GLAT,GLONG,STL,F107A,F107,AP,2) 
 !                                                                       
@@ -1870,9 +1900,11 @@
       RETURN 
   100 FORMAT(1X,'MASS', I5, '  NOT VALID') 
       END SUBROUTINE GTS7                            
+
 !-----------------------------------------------------------------------
+!> Convert outputs to Kg & Meters if METER true.
+!! @author
       SUBROUTINE METERS(METER) 
-!      Convert outputs to Kg & Meters if METER true                     
       use wam_gtd7bk_mod, only: IMR
 !x----COMMON/METSEL/IMR 
       LOGICAL METER 
@@ -1880,22 +1912,25 @@
       IMR=0 
       IF(METER) IMR=1 
       END SUBROUTINE METERS                                         
+
 !-----------------------------------------------------------------------
+!> Calculate scale height (km)                                      
+!! @author originally unknown, Henry Juang modified.
       FUNCTION SCALH(ALT,XM,TEMP) 
-!      Calculate scale height (km)                                      
       use gettemp_mod, only: GSURF,RE
 !x    COMMON/PARMB/GSURF,RE 
       SAVE 
       DATA RGAS/831.4/ 
-!!         RGAS=831.4
       G=GSURF/(1.+ALT/RE)**2 
       SCALH=RGAS*TEMP/(G*XM) 
       RETURN 
       END FUNCTION SCALH                            
+
 !-----------------------------------------------------------------------
+!> CALCULATE G(L) FUNCTION                                         
+!! Upper Thermosphere Parameters                                   
+!! @author Hann-Ming Henry Juan
       FUNCTION GLOBE7(YRD,SEC,LAT,LONG,TLOC,F107A,F107,AP,P) 
-!       CALCULATE G(L) FUNCTION                                         
-!       Upper Thermosphere Parameters                                   
       use gettemp_mod, only: TINF=>TINFG,GB,ROUT,T=>TT,    &
                              SW,SWC,ISW,        &
                              PLG,CTLOC,STLOC,C2TLOC,S2TLOC,C3TLOC,S3TLOC,    &
@@ -1922,9 +1957,6 @@
       DATA DGTR/1.74533E-2/,DR/1.72142E-2/, XL/1000./,TLL/1000./ 
       DATA SW9/1./,DAYL/-1./,P14/-1000./,P18/-1000./,P32/-1000./ 
       DATA HR/.2618/,SR/7.2722E-5/,SV/25*1./,NSW/14/,P39/-1000./ 
-!!         DGTR=1.74533E-2; DR=1.72142E-2;  XL=1000.; TLL=1000. 
-!!         SW9=1.; DAYL=-1.; P14=-1000.; P18=-1000.; P32=-1000. 
-!!         HR=.2618; SR=7.2722E-5; SV=   1.; NSW=14; P39=-1000. 
       IF(ISW.NE.64999) CALL TSELEC(SV) 
       DO 10 J=1,14 
        T(J)=0 
@@ -2123,18 +2155,21 @@
       GLOBE7 = TINF 
       RETURN 
       END FUNCTION GLOBE7                         
+
 !-----------------------------------------------------------------------
+!> SET SWITCHES.
+!!
+!! Output in  COMMON/CSW/SW(25),ISW,SWC(25)                       
+!! SW FOR MAIN TERMS, SWC FOR CROSS TERMS                         
+!!                                                              
+!! TO TURN ON AND OFF PARTICULAR VARIATIONS CALL TSELEC(SV),      
+!! WHERE SV IS A 25 ELEMENT ARRAY CONTAINING 0. FOR OFF, 1.       
+!! FOR ON, OR 2. FOR MAIN EFFECTS OFF BUT CROSS TERMS ON          
+!!                                                                      
+!! To get current values of SW: CALL TRETRV(SW)                   
+!!                                                                      
+!! @author Hann-Ming Henry Juan
       SUBROUTINE TSELEC(SV) 
-!        SET SWITCHES                                                   
-!        Output in  COMMON/CSW/SW(25),ISW,SWC(25)                       
-!        SW FOR MAIN TERMS, SWC FOR CROSS TERMS                         
-!                                                                       
-!        TO TURN ON AND OFF PARTICULAR VARIATIONS CALL TSELEC(SV),      
-!        WHERE SV IS A 25 ELEMENT ARRAY CONTAINING 0. FOR OFF, 1.       
-!        FOR ON, OR 2. FOR MAIN EFFECTS OFF BUT CROSS TERMS ON          
-!                                                                       
-!        To get current values of SW: CALL TRETRV(SW)                   
-!                                                                       
       use gettemp_mod, only: SW,SWC,ISW
 !x    COMMON/CSW/SW(25),SWC(25),ISW 
       DIMENSION SV(*),SAV(25),SVV(*) 
@@ -2155,9 +2190,11 @@
         SVV(I)=SAV(I) 
   200 END DO 
       END SUBROUTINE TSELEC                         
+
 !-----------------------------------------------------------------------
+!> VERSION OF GLOBE FOR LOWER ATMOSPHERE 10/26/99                   
+!! @author Hann-Ming Henry Juan
       FUNCTION GLOB7S(P) 
-!      VERSION OF GLOBE FOR LOWER ATMOSPHERE 10/26/99                   
       use gettemp_mod, only:PLG,CTLOC,STLOC,C2TLOC,S2TLOC,C3TLOC,S3TLOC,    &
                             DAY,DF,DFA,APD,APDF,APT,LONG=>XLONG,IYR,   &
                             SW,SWC,ISW
@@ -2169,9 +2206,6 @@
       SAVE 
       DATA DR/1.72142E-2/,DGTR/1.74533E-2/,PSET/2./ 
       DATA DAYL/-1./,P32,P18,P14,P39/4*-1000./ 
-!!         DR=1.72142E-2; DGTR=1.74533E-2; PSET=2.  
-!!         DAYL=-1.; P32=-1000.; P18=-1000.; P14=-1000.; P39=-1000. 
-!       CONFIRM PARAMETER SET                                           
       IF(P(100).EQ.0) P(100)=PSET 
       IF(P(100).NE.PSET) THEN 
         WRITE(6,900) PSET,P(100) 
@@ -2253,11 +2287,13 @@
       GLOB7S=TT 
       RETURN 
       END FUNCTION GLOB7S                          
+
 !--------------------------------------------------------------------   
+!> Calculate Temperature and Density Profiles.
+!! New lower thermo polynomial 10/30/89                            
+!! @author Hann-Ming Henry Juan
       FUNCTION DENSU(ALT,DLB,TINF,TLB,XM,ALPHA,TZ,ZLB,S2,               &
         MN1,ZN1,TN1,TGN1)                                               
-!       Calculate Temperature and Density Profiles for MSIS models      
-!       New lower thermo polynomial 10/30/89                            
       use gettemp_mod, only: GSURF,RE, &
                              MP,II,JG,LT,QPB,IERR,IFUN,N,J,DV
 !x    COMMON/PARMB/GSURF,RE 
@@ -2339,9 +2375,11 @@
    50 CONTINUE 
       RETURN 
       END FUNCTION DENSU                                          
+
 !--------------------------------------------------------------------   
+!> Calculate Temperature and Density Profiles for lower atmos.     
+!! @author Hann-Ming Henry Juan
       FUNCTION DENSM(ALT,D0,XM,TZ,MN3,ZN3,TN3,TGN3,MN2,ZN2,TN2,TGN2) 
-!       Calculate Temperature and Density Profiles for lower atmos.     
       use gettemp_mod, only: GSURF,RE, &
                              TAF,      & 
                              MP,II,JG,LT,QPB,IERR,IFUN,N,J,DV 
@@ -2432,15 +2470,19 @@
       IF(XM.EQ.0) DENSM=TZ 
       RETURN 
       END FUNCTION DENSM                            
+
 !-----------------------------------------------------------------------
+!> CALCULATE 2ND DERIVATIVES OF CUBIC SPLINE INTERP FUNCTION      
+!!
+!! ADAPTED FROM NUMERICAL RECIPES BY PRESS ET AL                  
+!! X,Y: ARRAYS OF TABULATED FUNCTION IN ASCENDING ORDER BY X      
+!! N: SIZE OF ARRAYS X,Y                                          
+!! YP1,YPN: SPECIFIED DERIVATIVES AT X(1) AND X(N); VALUES        
+!!           >= 1E30 SIGNAL SIGNAL SECOND DERIVATIVE ZERO          
+!! Y2: OUTPUT ARRAY OF SECOND DERIVATIVES                         
+!!
+!! @author Hann-Ming Henry Juan
       SUBROUTINE SPLINE(X,Y,N,YP1,YPN,Y2) 
-!        CALCULATE 2ND DERIVATIVES OF CUBIC SPLINE INTERP FUNCTION      
-!        ADAPTED FROM NUMERICAL RECIPES BY PRESS ET AL                  
-!        X,Y: ARRAYS OF TABULATED FUNCTION IN ASCENDING ORDER BY X      
-!        N: SIZE OF ARRAYS X,Y                                          
-!        YP1,YPN: SPECIFIED DERIVATIVES AT X(1) AND X(N); VALUES        
-!                 >= 1E30 SIGNAL SIGNAL SECOND DERIVATIVE ZERO          
-!        Y2: OUTPUT ARRAY OF SECOND DERIVATIVES                         
       PARAMETER (NMAX=100) 
       DIMENSION X(N),Y(N),Y2(N),U(NMAX) 
       SAVE 
@@ -2471,15 +2513,19 @@
    12 END DO 
       RETURN 
       END SUBROUTINE SPLINE                         
+
 !-----------------------------------------------------------------------
+!> CALCULATE CUBIC SPLINE INTERP VALUE                            
+!!
+!! ADAPTED FROM NUMERICAL RECIPES BY PRESS ET AL.                 
+!! XA,YA: ARRAYS OF TABULATED FUNCTION IN ASCENDING ORDER BY X    
+!! Y2A: ARRAY OF SECOND DERIVATIVES                               
+!! N: SIZE OF ARRAYS XA,YA,Y2A                                    
+!! X: ABSCISSA FOR INTERPOLATION                                  
+!! Y: OUTPUT VALUE                                                
+!!
+!! @author Hann-Ming Henry Juan
       SUBROUTINE SPLINT(XA,YA,Y2A,N,X,Y) 
-!        CALCULATE CUBIC SPLINE INTERP VALUE                            
-!        ADAPTED FROM NUMERICAL RECIPES BY PRESS ET AL.                 
-!        XA,YA: ARRAYS OF TABULATED FUNCTION IN ASCENDING ORDER BY X    
-!        Y2A: ARRAY OF SECOND DERIVATIVES                               
-!        N: SIZE OF ARRAYS XA,YA,Y2A                                    
-!        X: ABSCISSA FOR INTERPOLATION                                  
-!        Y: OUTPUT VALUE                                                
       DIMENSION XA(N),YA(N),Y2A(N) 
       SAVE 
       KLO=1 
@@ -2502,14 +2548,18 @@
         ((A*A*A-A)*Y2A(KLO)+(B*B*B-B)*Y2A(KHI))*H*H/6.                  
       RETURN 
       END SUBROUTINE SPLINT                         
+
 !-----------------------------------------------------------------------
+!> INTEGRATE CUBIC SPLINE FUNCTION FROM XA(1) TO X                 
+!!
+!! A,YA: ARRAYS OF TABULATED FUNCTION IN ASCENDING ORDER BY X    
+!! Y2A: ARRAY OF SECOND DERIVATIVES                               
+!! N: SIZE OF ARRAYS XA,YA,Y2A                                    
+!! X: ABSCISSA ENDPOINT FOR INTEGRATION                           
+!! Y: OUTPUT VALUE                                                
+!!
+!! @author Hann-Ming Henry Juan
       SUBROUTINE SPLINI(XA,YA,Y2A,N,X,YI) 
-!       INTEGRATE CUBIC SPLINE FUNCTION FROM XA(1) TO X                 
-!        XA,YA: ARRAYS OF TABULATED FUNCTION IN ASCENDING ORDER BY X    
-!        Y2A: ARRAY OF SECOND DERIVATIVES                               
-!        N: SIZE OF ARRAYS XA,YA,Y2A                                    
-!        X: ABSCISSA ENDPOINT FOR INTEGRATION                           
-!        Y: OUTPUT VALUE                                                
       DIMENSION XA(N),YA(N),Y2A(N) 
       SAVE 
       YI=0 
@@ -2533,17 +2583,20 @@
       ENDIF 
       RETURN 
       END SUBROUTINE SPLINI                         
+
 !-----------------------------------------------------------------------
+!> TURBOPAUSE CORRECTION.
+!!
+!!        Root mean density                                             
+!!      8/20/80                                                         
+!!         DD - diffusive density                                       
+!!         DM - full mixed density                                      
+!!         ZHM - transition scale length                                
+!!         XMM - full mixed molecular weight                            
+!!         XM  - species molecular weight                               
+!!         DNET - combined density                                      
+!! @author Hann-Ming Henry Juan
       FUNCTION DNET(DD,DM,ZHM,XMM,XM) 
-!       TURBOPAUSE CORRECTION FOR MSIS MODELS                           
-!         Root mean density                                             
-!       8/20/80                                                         
-!          DD - diffusive density                                       
-!          DM - full mixed density                                      
-!          ZHM - transition scale length                                
-!          XMM - full mixed molecular weight                            
-!          XM  - species molecular weight                               
-!          DNET - combined density                                      
       SAVE 
       A=ZHM/(XMM-XM) 
       IF(DM.GT.0.AND.DD.GT.0) GOTO 5 
@@ -2566,13 +2619,16 @@
    50 CONTINUE 
       RETURN 
       END FUNCTION DNET                             
+
 !-----------------------------------------------------------------------
+!> CHEMISTRY/DISSOCIATION CORRECTION.
+!!
+!!       ALT - altitude                                                 
+!!       R - target ratio                                               
+!!       H1 - transition scale length                                   
+!!       ZH - altitude of 1/2 R                                         
+!! @author  Hann-Ming Henry Juan
       FUNCTION CCOR(ALT, R,H1,ZH) 
-!        CHEMISTRY/DISSOCIATION CORRECTION FOR MSIS MODELS              
-!        ALT - altitude                                                 
-!        R - target ratio                                               
-!        H1 - transition scale length                                   
-!        ZH - altitude of 1/2 R                                         
       SAVE 
       E=(ALT-ZH)/H1 
       IF(E.GT.70.) GO TO 20 
@@ -2588,9 +2644,11 @@
       CCOR=EXP(CCOR) 
        RETURN 
       END FUNCTION CCOR                             
+
 !-----------------------------------------------------------------------
+!> O&O2 CHEMISTRY/DISSOCIATION CORRECTION.
+!! @author  Hann-Ming Henry Juan
       FUNCTION CCOR2(ALT, R,H1,ZH,H2) 
-!       O&O2 CHEMISTRY/DISSOCIATION CORRECTION FOR MSIS MODELS          
       E1=(ALT-ZH)/H1 
       E2=(ALT-ZH)/H2 
       IF(E1.GT.70. .OR. E2.GT.70.) GO TO 20 
@@ -2607,4 +2665,3 @@
       CCOR2=EXP(CCOR2) 
        RETURN 
       END FUNCTION CCOR2                            
-!-----------------------------------------------------------------------

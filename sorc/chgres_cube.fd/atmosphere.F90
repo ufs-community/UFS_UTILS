@@ -788,7 +788,7 @@
 !!     PM           REAL (IX,KM) MID-LAYER PRESSURE (PA)                 
 !!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)               
 !!
-!! @author HANN_MING HENRY JUANG, JUANG, Fanglin Yang, S. Moorthi
+!! @author HANN-MING HENRY JUANG, JUANG, Fanglin Yang, S. Moorthi
  subroutine newpr1(localpet)
  implicit none 
 
@@ -1350,11 +1350,15 @@
  END SUBROUTINE VINTG_THOMP_MP_CLIMO
 
 
-!!------------------------------------------------------------------------------
-!! Vertically extend model top into thermosphere for whole atmosphere model
-!! @author Henry Juang
-!!------------------------------------------------------------------------------
-
+!> Vertically extend model top into thermosphere for whole atmosphere model.
+!!
+!! Use climatological data to extent model top into thermosphere for
+!! temperature and consoder primary compositions of neutral atmosphere
+!! in term of specific values of oxygen, single oxygen, and ozone.
+!!
+!! @param [in] wam_start_date  initial date as yyyymmddhh
+!!
+!! @author Hann-Ming Henry Juang NCEP/EMC
  SUBROUTINE VINTG_WAM (WAM_START_DATE)
 
  IMPLICIT NONE
