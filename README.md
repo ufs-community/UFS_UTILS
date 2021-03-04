@@ -14,7 +14,7 @@ https://noaa-emc.github.io/UFS_UTILS/.
 
 Utility | Programmer(s)
 --------|----------
-chgres_cube | George Gayno
+chgres_cube | George Gayno, Jeff Beck, Larissa Reames
 emcsfc_ice_blend | George Gayno
 emcsfc_snow2mdl | George Gayno
 fvcom_tools | David Wright, University of Michigan
