@@ -130,10 +130,10 @@ end subroutine xstoxc1
 
 !> Inverse of xttoxs.
 !!
-!! @param[in] k ???
-!! @param[in] xs ???
-!! @param[out] xt ???
-!! @param[out] ff ???
+!! @param[in] k ??? 
+!! @param[in] xs ??? 
+!! @param[out] xt ??? 
+!! @param[out] ff ??? 
 !! @author R. J. Purser
 subroutine xstoxt(k,xs,xt,ff)!                                        [xstoxt]
 implicit none
@@ -149,11 +149,11 @@ end subroutine xstoxt
 
 !> Scaled gnomonic plane xt to standard stereographic plane xs.
 !!
-!! @param[in] k ???
+!! @param[in] k ??? 
 !! @param[in] xt Scaled gnomonic plane
 !! @param[out] xs standard stereographic plane
-!! @param[out] xsd ???
-!! @param[out] ff ???
+!! @param[out] xsd ??? 
+!! @param[out] ff ??? 
 !! @author R. J. Purser
 subroutine xttoxs(k,xt,xs,xsd,ff)!                                     [xttoxs
 use pmat4, only: outer_product
@@ -183,11 +183,11 @@ end subroutine xttoxs
 !! @param[in] k derivatives, wrt K, of xs and xsd
 !! @param[in] xt Scaled gnomonic plane
 !! @param[out] xs standard stereographic plane
-!! @param[out] xsd ???
-!! @param[out] xsdd ???
-!! @param[out] xs1 ???
-!! @param[out] xsd1 ???
-!! @param[out] ff ???
+!! @param[out] xsd ??? 
+!! @param[out] xsdd ??? 
+!! @param[out] xs1 ??? 
+!! @param[out] xsd1 ??? 
+!! @param[out] ff ??? 
 !! @author R. J. Purser
 subroutine xttoxs1(k,xt,xs,xsd,xsdd,xs1,xsd1,ff)!                     [xttoxs]
 use pmat4, only: outer_product
@@ -226,10 +226,10 @@ end subroutine xttoxs1
 
 !> Inverse of xmtoxt.
 !!
-!! @param[in] a ???
-!! @param[in] xt ???
-!! @param[out] xm ???
-!! @param[out] ff ???
+!! @param[in] a ??? 
+!! @param[in] xt ??? 
+!! @param[out] xm ??? 
+!! @param[out] ff ??? 
 !! @author R. J. Purser
 subroutine xttoxm(a,xt,xm,ff)!                                       [xttoxm]
 implicit none
@@ -244,11 +244,11 @@ end subroutine xttoxm
 !> Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian
 !! xtd.
 !!
-!! @param[in] a ???
+!! @param[in] a ??? 
 !! @param[in] xm vector value
 !! @param[out] xt vector value
 !! @param[out] xtd 2*2 diagonal Jacobian
-!! @param[out] ff ???
+!! @param[out] ff ??? 
 !! @author R. J. Purser
 subroutine xmtoxt(a,xm,xt,xtd,ff)!                                    [xmtoxt]
 implicit none
@@ -268,9 +268,9 @@ end subroutine xmtoxt
 !! @param[in] xm vector value
 !! @param[out] xt vector value
 !! @param[out] xtd 2*2 diagonal Jacobian
-!! @param[out] xt1 ???
-!! @param[out] xtd1 ???
-!! @param[out] ff ???
+!! @param[out] xt1 ??? 
+!! @param[out] xtd1 ??? 
+!! @param[out] ff ??? 
 !! @author R. J. Purser
 subroutine xmtoxt1(a,xm,xt,xtd,xt1,xtd1,ff)!                          [xmtoxt]
 implicit none
@@ -290,10 +290,10 @@ end subroutine xmtoxt1
 
 !> Inverse of zmtozt
 !!
-!! @param[in] a ???
-!! @param[in] zt ???
-!! @param[out] zm ???
-!! @param[out] ff ???
+!! @param[in] a ??? 
+!! @param[in] zt ??? 
+!! @param[out] zm ??? 
+!! @param[out] ff ??? 
 !! @author R. J. Purser
 subroutine zttozm(a,zt,zm,ff)!                                        [zttozm]
 implicit none
@@ -313,11 +313,11 @@ end subroutine zttozm
 !! derivative, ztd, for positive and negative A and for the limiting
 !! case, A --> 0.
 !!
-!! @param[in] a ???
-!! @param[in] zm ???
+!! @param[in] a ??? 
+!! @param[in] zm ??? 
 !! @param[out] zt function to be evaluated
 !! @param[out] ztd derivative of the source function
-!! @param[out] ff ???
+!! @param[out] ff ??? 
 !! @author R. J. Purser
 subroutine zmtozt(a,zm,zt,ztd,ff)!                                    [zmtozt]
 implicit none
@@ -336,13 +336,13 @@ end subroutine zmtozt
 !> Like zmtozt, but also, get the derivative with respect to a, zt1 of
 !! zt, and ztd1 of ztd.
 !! 
-!! @param[in] a ???
-!! @param[in] zm ???
-!! @param[in] zt ???
-!! @param[in] ztd ???
-!! @param[in] zt1 ???
-!! @param[in] ztd1 ???
-!! @param[in] ff ???
+!! @param[in] a ??? 
+!! @param[in] zm ??? 
+!! @param[in] zt ??? 
+!! @param[in] ztd ??? 
+!! @param[in] zt1 ??? 
+!! @param[in] ztd1 ??? 
+!! @param[in] ff ??? 
 !! @author R. J. Purser
 subroutine zmtozt1(a,zm,zt,ztd,zt1,ztd1,ff)!                          [zmtozt]
 use pietc, only: o3
@@ -801,7 +801,7 @@ end subroutine guessak_map
 !! optimal for the domain of the given dimensions.
 !!
 !! @param asp aspect ratio
-!! @param arc ???
+!! @param arc ??? 
 !! @param ak first guess or the parameter vector
 !! @author R. J. Purser
 subroutine guessak_geo(asp,arc,ak)!                              [guessak_geo]
@@ -1527,11 +1527,11 @@ end subroutine hgrid_ak_rr_c
 !! @param k parameters of an ESG mapping centered at (plat,plon)
 !! @param plat latitude define centered mapping
 !! @param plon longitude define centered mapping
-!! @param pazi ???
+!! @param pazi ??? 
 !! @param delx central x-spacing grid point
 !! @param dely central y-spacing grid point
 !! @param xc unit cartesian vectors
-!! @param xcd ???
+!! @param xcd ??? 
 !! @param garea rectangular array
 !! @param ff failure flag
 !! @author R. J. Purser
@@ -1616,12 +1616,12 @@ end subroutine hgrid_ak_rc
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] pdlat latitude define centered mapping
 !! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ???
+!! @param[in] pdazi ??? 
 !! @param[in] delx central x-spacing grid point
 !! @param[in] dely central y-spacing grid point
-!! @param[out] gdlat ???
-!! @param[out] gdlon ???
-!! @param[out] garea ???
+!! @param[out] gdlat ??? 
+!! @param[out] gdlon ??? 
+!! @param[out] garea ??? 
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine hgrid_ak_dd(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, & !    [hgrid_ak_dd]
@@ -1655,14 +1655,14 @@ end subroutine hgrid_ak_dd
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] pdlat latitude define centered mapping
 !! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ???
+!! @param[in] pdazi ??? 
 !! @param[in] delx central x-spacing grid point
 !! @param[in] dely central y-spacing grid point
-!! @param[out] gdlat ???
-!! @param[out] gdlon ???
-!! @param[out] garea ???
-!! @param[out] dx ???
-!! @param[out] dy ???
+!! @param[out] gdlat ??? 
+!! @param[out] gdlon ??? 
+!! @param[out] garea ??? 
+!! @param[out] dx ??? 
+!! @param[out] dy ??? 
 !! @param[out] dangle_dx x rotations of the steps
 !! @param[out] dangle_dy y rotations of the steps
 !! @param[out] ff failure flag
@@ -1710,7 +1710,7 @@ end subroutine hgrid_ak_dd_c
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] pdlat latitude define centered mapping
 !! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ???
+!! @param[in] pdazi ??? 
 !! @param[in] delx central x-spacing grid point
 !! @param[in] dely central y-spacing grid point
 !! @param[out] xc grid points' cartesians
@@ -1751,7 +1751,7 @@ end subroutine hgrid_ak_dc
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] plat latitude define centered mapping
 !! @param[in] plon longitude define centered mapping
-!! @param[in] pazi ???
+!! @param[in] pazi ??? 
 !! @param[in] re earth radius
 !! @param[in] delxre map-space grid increments in the dimensional units
 !! @param[in] delyre map-space grid increments in the dimensional units
@@ -1793,13 +1793,13 @@ end subroutine hgrid_ak
 !!
 !! @param[in] lx x grid index for left-lower corner of the grid at center
 !! @param[in] ly y grid index for left-lower corner of the grid at center
-!! @param[in] nx ???
-!! @param[in] ny ???
+!! @param[in] nx ??? 
+!! @param[in] ny ??? 
 !! @param[in] a Extended Schmidt Gnomonic parameter
 !! @param[in] k Extended Schmidt Gnomonic parameter
 !! @param[in] plat latitude define centered mapping
 !! @param[in] plon longitude define centered mapping
-!! @param[in] pazi ???
+!! @param[in] pazi ??? 
 !! @param[in] re earth radius
 !! @param[in] delxre map-space grid increments in the dimensional units
 !! @param[in] delyre map-space grid increments in the dimensional units
@@ -1877,10 +1877,10 @@ end subroutine gaulegh
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] plat latitude define centered mapping
 !! @param[in] plon longitude define centered mapping
-!! @param[in] pazi ???
+!! @param[in] pazi ??? 
 !! @param[in] lat radian latitude
 !! @param[in] lon radian longitude
-!! @param[out] xm ???
+!! @param[out] xm ??? 
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff)!      [gtoxm_ak_rr]
@@ -1919,12 +1919,12 @@ end subroutine gtoxm_ak_rr_m
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] plat latitude define centered mapping
 !! @param[in] plon longitude define centered mapping
-!! @param[in] pazi ???
+!! @param[in] pazi ??? 
 !! @param[in] delx central x-spacing grid point
 !! @param[in] dely central y-spacing grid point
 !! @param[in] lat radian latitude
 !! @param[in] lon radian longitude
-!! @param[out] xm ???
+!! @param[out] xm ??? 
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine gtoxm_ak_rr_g(A,K,plat,plon,pazi,delx,dely,lat,lon,&! [gtoxm_ak_rr]
@@ -1943,10 +1943,10 @@ end subroutine gtoxm_ak_rr_g
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] pdlat latitude define centered mapping
 !! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ???
+!! @param[in] pdazi ??? 
 !! @param[in] dlat radian latitude
 !! @param[in] dlon radian longitude
-!! @param[out] xm ???
+!! @param[out] xm ??? 
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine gtoxm_ak_dd_m(A,K,pdlat,pdlon,pdazi,dlat,dlon,&!      [gtoxm_ak_dd]
@@ -1970,10 +1970,10 @@ end subroutine gtoxm_ak_dd_m
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] pdlat latitude define centered mapping
 !! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ???
+!! @param[in] pdazi ??? 
 !! @param[in] delx central x-spacing grid point
 !! @param[in] dely central y-spacing grid point
-!! @param[out] xm ???
+!! @param[out] xm ??? 
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine gtoxm_ak_dd_g(A,K,pdlat,pdlon,pdazi,delx,dely,&!      [gtoxm_ak_dd]
@@ -2002,8 +2002,8 @@ end subroutine gtoxm_ak_dd_g
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] plat latitude of geographical orientation
 !! @param[in] plon longitude of geographical orientation
-!! @param[in] pazi ???
-!! @param[in] xm ???
+!! @param[in] pazi ??? 
+!! @param[in] xm ??? 
 !! @param[out] lat latitude of geographical coordinates
 !! @param[out] lon longitude of geographical coordinates
 !! @param[out] ff failure flag
@@ -2047,7 +2047,7 @@ end subroutine xmtog_ak_rr_m
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] plat latitude geographical orientation
 !! @param[in] plon longitude geographical orientation
-!! @param[in] pazi ???
+!! @param[in] pazi ??? 
 !! @param[in] delx central x-spacing grid point
 !! @param[in] dely central y-spacing grid point
 !! @param[in] xm grid-space units as the 2-vector
@@ -2072,10 +2072,10 @@ end subroutine xmtog_ak_rr_g
 !!
 !! @param[in] a parameters of an ESG mapping
 !! @param[in] k parameters of an ESG mapping
-!! @param[in] pdlat ???
-!! @param[in] pdlon ???
-!! @param[in] pdazi ???
-!! @param[in] xm ???
+!! @param[in] pdlat ??? 
+!! @param[in] pdlon ??? 
+!! @param[in] pdazi ??? 
+!! @param[in] xm ??? 
 !! @param[out] dlat latitude of geographical orientation
 !! @param[out] dlon longitude of geographical orientation
 !! @param[out] ff failure flag
@@ -2102,7 +2102,7 @@ end subroutine xmtog_ak_dd_m
 !! @param[in] k parameters of an ESG mapping
 !! @param[in] pdlat latitude define centered mapping
 !! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ???
+!! @param[in] pdazi ??? 
 !! @param[in] delx central x-spacing grid point
 !! @param[in] dely central y-spacing grid point
 !! @param[in] xm grid-space
