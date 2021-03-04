@@ -1,3 +1,7 @@
+# This is the CMake file for the regional_esf_grid utility in
+# UFS_UTILS.
+#
+# George Gayno
 set(fortran_src
     pesg.f90
     pfun.f90
