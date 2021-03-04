@@ -77,10 +77,10 @@
 !> ???
 !!
 !! @param[in] lugb
-!! @param[in] len
-!! @param[in] lsoil
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
 !! @param[in] sig1t
-!! @param[in] deltsfc
+!! @param[in] deltsfc Cycling frequency in hours.
 !! @param[in] iy
 !! @param[in] im
 !! @param[in] id
@@ -119,17 +119,17 @@
 !! @param[in] cvfcs
 !! @param[in] cvbfcs
 !! @param[in] cvtfcs
-!! @param[in] me
+!! @param[in] me MPI task number.
 !! @param[in] nlunit
 !! @param[in] sz_nml
 !! @param[in] input_nml_file
-!! @param[in] ialb
+!! @param[in] ialb Use modis albedo when '1'. Use brigleb when '0'.
 !! @param[in] isot
 !! @param[in] ivegsrc
-!! @param[in] tile_num_ch
-!! @param[in] i_index
-!! @param[in] j_index
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] tile_num_ch Model tile number to process.
+!! @param[in] i_index The 'i' indices of the model grid to process.
+!! @param[in] j_index The 'j' indices of the model grid to process.
+!! @author Shrinivas Moorthi
       subroutine sfccycle(lugb,len,lsoil,sig1t,deltsfc
      &,                   iy,im,id,ih,fh
      &,                   rla, rlo, slmask,orog,orog_uf,use_ufo,nst_anl
@@ -3157,13 +3157,13 @@
 !! @param[in] rlat
 !! @param[in] inttyp
 !! @param[in] gauout
-!! @param[in] len
+!! @param[in] len Number of model points to process.
 !! @param[in] lmask
 !! @param[in] rslmsk
 !! @param[in] slmask
 !! @param[in] outlat
 !! @param[in] outlon
-!! @param[in] me
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine la2ga(regin,imxin,jmxin,rinlon,rinlat,rlon,rlat,inttyp,
      &                 gauout,len,lmask,rslmsk,slmask
@@ -3703,12 +3703,12 @@
       return
       end subroutine la2ga
 
-!> ???
+!> Compute the maxmimum and minimum of a field.
 !!
-!! @param[in] f
-!! @param[in] imax
-!! @param[in] kmax
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] f The field to check.
+!! @param[in] imax The horizontal dimension of the field.
+!! @param[in] kmax Number of vertical levels of the field.
+!! @author Shrinivas Moorthi
       subroutine maxmin(f,imax,kmax)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -3772,7 +3772,7 @@
 !! @param[in] absanl
 !! @param[in] tsfclm
 !! @param[in] tsfcl2
-!! @param[in] wetclm
+!! @param[in] wetclm Climatological soil wetness on model grid.
 !! @param[in] snoclm
 !! @param[in] zorclm
 !! @param[in] albclm
@@ -3796,8 +3796,8 @@
 !! @param[in] vmxclm
 !! @param[in] slpclm
 !! @param[in] absclm
-!! @param[in] len
-!! @param[in] lsoil
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine filanl(tsfanl,tsfan2,wetanl,snoanl,zoranl,albanl,
      &                  aisanl,
@@ -3905,8 +3905,8 @@
 !! @param[in] id
 !! @param[in] ih
 !! @param[in] fh
-!! @param[in] len
-!! @param[in] lsoil
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
 !! @param[in] slmask
 !! @param[in] fntsfa
 !! @param[in] fnweta
@@ -3950,26 +3950,31 @@
 !! @param[in] vmxanl
 !! @param[in] slpanl
 !! @param[in] absanl
-!! @param[in] kpdtsf
-!! @param[in] kpdwet
-!! @param[in] kpdsno
-!! @param[in] kpdsnd
-!! @param[in] kpdzor
-!! @param[in] kpdalb
-!! @param[in] kpdais
-!! @param[in] kpdtg3
-!! @param[in] kpdscv
-!! @param[in] kpdacn
-!! @param[in] kpdsmc
-!! @param[in] kpdstc
-!! @param[in] kpdveg
-!! @param[in] kprvet
-!! @param[in] kpdsot
-!! @param[in] kpdalf
-!! @param[in] kpdvmn
-!! @param[in] kpdvmx
-!! @param[in] kpdslp
-!! @param[in] kpdabs
+!! @param[in] kpdtsf Grib parameter number of skin temperature/SST.
+!! @param[in] kpdwet Grib parameter number of soil wetness.
+!! @param[in] kpdsno Grib parameter number of liquid equivalent snow
+!! depth.
+!! @param[in] kpdsnd Grib parameter number of physical snow depth.
+!! @param[in] kpdzor Grib parameter number of roughness length.
+!! @param[in] kpdalb Grib parameter number of snow-free albedo.
+!! @param[in] kpdais Grib parameter number of sea ice mask.
+!! @param[in] kpdtg3 Grib parameter number of soil substrate
+!! temperature.
+!! @param[in] kpdscv Grib parameter number of snow cover.
+!! @param[in] kpdacn Grib parameter number of sea ice concentration.
+!! @param[in] kpdsmc Grib parameter number of soil moisture.
+!! @param[in] kpdstc Grib parameter number of soil temperature.
+!! @param[in] kpdveg Grib parameter number of vegetation greenness.
+!! @param[in] kprvet Grib parameter number of vegetation type.
+!! @param[in] kpdsot Grib parameter number of soil type.
+!! @param[in] kpdalf Grib parameter number for fraction for strongly 
+!! and weakly zenith angle dependent albedo.
+!! @param[in] kpdvmn Grib parameter number of minimum vegetation
+!! greenness.
+!! @param[in] kpdvmx Grib parameter number of maximum vegetation
+!! greenness.
+!! @param[in] kpdslp Grib parameter number of slope type.
+!! @param[in] kpdabs Grib parameter number of maximum snow albedo.
 !! @param[in] irttsf
 !! @param[in] irtwet
 !! @param[in] irtsno
@@ -3994,7 +3999,7 @@
 !! @param[in] outlongaus
 !! @param[in] blno
 !! @param[in] blto
-!! @param[in] me
+!! @param[in] me MPI task number.
 !! @param[in] lanom
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine analy(lugb,iy,im,id,ih,fh,len,lsoil,
@@ -4712,8 +4717,8 @@
 !! @param[in] vmxanl
 !! @param[in] slpanl
 !! @param[in] absanl
-!! @param[in] len
-!! @param[in] lsoil
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine filfcs(tsffcs,wetfcs,snofcs,zorfcs,albfcs,
      &                  tg3fcs,cvfcs ,cvbfcs,cvtfcs,
@@ -4810,45 +4815,8 @@
 
 !> ???
 !!
-!! @param[in] smcfcs
-!! @param[in] slianl
-!! @param[in] stcfcs
-!! @param[in] len
-!! @param[in] lsoil
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
-      subroutine bktges(smcfcs,slianl,stcfcs,len,lsoil)
-!
-      use machine , only : kind_io8,kind_io4
-      implicit none
-      integer i,j,len,lsoil,k
-      real (kind=kind_io8) smcfcs(len,lsoil), stcfcs(len,lsoil),
-     &                     slianl(len)
-!
-!  note that smfcs comes in with the original unit (cm?) (not grib file)
-!
-      do i = 1, len
-        smcfcs(i,1) = (smcfcs(i,1)/150.) * .37 + .1
-      enddo
-      do k = 2, lsoil
-        do i = 1, len
-          smcfcs(i,k) = smcfcs(i,1)
-        enddo
-      enddo
-      if(lsoil.gt.2) then
-        do k = 3, lsoil
-          do i = 1, len
-            stcfcs(i,k) = stcfcs(i,2)
-          enddo
-        enddo
-      endif
-!
-      return
-      end
-
-!> ???
-!!
 !! @param[in] aisfld
-!! @param[in] len
+!! @param[in] len Number of model points to process.
 !! @param[in] op
 !! @param[in] crit
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
@@ -4905,7 +4873,7 @@
 !! @param[in] orog
 !! @param[in] slmask
 !! @param[in] umask
-!! @param[in] len
+!! @param[in] len Number of model points to process.
 !! @param[in] rlapse
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine tsfcor(tsfc,orog,slmask,umask,len,rlapse)
@@ -4934,9 +4902,9 @@
 !! @param[in] snwmax
 !! @param[in] snwmin
 !! @param[in] landice
-!! @param[in] len
+!! @param[in] len Number of model points to process.
 !! @param[in] snoanl
-!! @param[in] me
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine snodpth(scvanl,slianl,tsfanl,snoclm,
      &                   glacir,snwmax,snwmin,landice,len,snoanl, me)
@@ -4995,15 +4963,14 @@
 
 !> ???
 !!
-!! @param[in] len
-!! @param[in] lsoil
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
 !! @param[in] iy
 !! @param[in] im
 !! @param[in] id
 !! @param[in] ih
 !! @param[in] fh
 !! @param[in] deltsf
-!! @param[in] c
 !! @param[in] sihfcs
 !! @param[in] sicfcs
 !! @param[in] vmnfcs
@@ -5109,7 +5076,7 @@
 !! @param[in] irtsot
 !! @param[in] irtalf
 !! @param[in] landice
-!! @param[in] me
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine merge(len,lsoil,iy,im,id,ih,fh,deltsfc,
      &                 sihfcs,sicfcs,
@@ -5569,8 +5536,8 @@
 !! @param[in] slifcs
 !! @param[in] tsfanl
 !! @param[in] tsffcs
-!! @param[in] len
-!! @param[in] lsoil
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
 !! @param[in] sihnew
 !! @param[in] sicnew
 !! @param[in] sihanl
@@ -5592,7 +5559,7 @@
 !! @param[in] tgice
 !! @param[in] rla
 !! @param[in] rlo
-!! @param[in] me
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine newice(slianl,slifcs,tsfanl,tsffcs,len,lsoil,
 !cwu [+1l] add sihnew,sicnew,sihanl,sicanl
@@ -5697,10 +5664,10 @@
 !! @param[in] slmask
 !! @param[in] aisanl
 !! @param[in] glacir
-!! @param[in] len
+!! @param[in] len Number of model points to process.
 !! @param[in] snoval
 !! @param[in] landice
-!! @param[in] me
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcsnow(snoanl,slmask,aisanl,glacir,len,snoval,
      &                  landice,me)
@@ -5760,8 +5727,8 @@
 !! @param[in] slmask
 !! @param[in] rla
 !! @param[in] rlo
-!! @param[in] len
-!! @param[in] me
+!! @param[in] len Number of model points to process.
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcsice(ais,glacir,amxice,aicice,aicsea,sllnd,slmask,
      &                  rla,rlo,len,me)
@@ -5863,14 +5830,14 @@
       return
       end
 
-!> ???
+!> Set land-sea-ice mask at sea ice.
 !!
-!! @param[in] slmask
-!! @param[in] aisfld
-!! @param[in] len
-!! @param[in] aicice
-!! @param[in] slifld
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] slmask The model mask on input.
+!! @param[in] aisfld The ice mask on the model grid.
+!! @param[in] len Number of model points to process.
+!! @param[in] aicice Ice concentration theshold for an ice point.
+!! @param[out] slifld The model mask with sea ice added.
+!! @author Shrinivas Moorthi
       subroutine setlsi(slmask,aisfld,len,aicice,slifld)
 !
       use machine , only : kind_io8,kind_io4
@@ -5890,12 +5857,12 @@
       return
       end
 
-!> ???
+!> Multiply a field by a scaling factor.
 !!
-!! @param[in] fld
-!! @param[in] len
-!! @param[in] scl
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[inout] fld The field to scale.
+!! @param[in] len Number of model points to process.
+!! @param[in] scl Scaling factor.
+!! @author Shrinivas Moorthi
       subroutine scale(fld,len,scl)
 !
       use machine , only : kind_io8,kind_io4
@@ -6361,7 +6328,7 @@
 !!
 !! @param[in] fld
 !! @param[in] eps
-!! @param[in] len
+!! @param[in] len Number of model points to process.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine setzro(fld,eps,len)
 !
@@ -6379,7 +6346,7 @@
 !!
 !! @param[in] snofld
 !! @param[in] scvfld
-!! @param[in] len
+!! @param[in] len Number of model points to process.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine getscv(snofld,scvfld,len)
 !
@@ -6401,7 +6368,7 @@
 !! @param[in] tg3fld
 !! @param[in] slifld
 !! @param[in] len
-!! @param[in] lsoil
+!! @param[in] lsoil Number of soil layers.
 !! @param[in] stcfld
 !! @param[in] tsfimx
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
@@ -6442,10 +6409,10 @@
 !> ???
 !!
 !! @param[in] wetfld
-!! @param[in] len
-!! @param[in] lsoil
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
 !! @param[in] smcfld
-!! @param[in] me
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine getsmc(wetfld,len,lsoil,smcfld,me)
 !
@@ -6471,8 +6438,8 @@
 !! @param[in] sig1t
 !! @param[in] slianl
 !! @param[in] tg3anl
-!! @param[in] len
-!! @param[in] lsoil
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
 !! @param[in] tsfanl
 !! @param[in] stcanl
 !! @param[in] tsfimx
@@ -6563,8 +6530,8 @@
 !!
 !! @param[in] glacir
 !! @param[in] amxice
-!! @param[in] len
-!! @param[in] me
+!! @param[in] len Number of model points to process.
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcmxice(glacir,amxice,len,me)
       use machine , only : kind_io8,kind_io4
@@ -6591,8 +6558,8 @@
 !!
 !! @param[in] slianl
 !! @param[in] slifcs
-!! @param[in] len
-!! @param[in] me
+!! @param[in] len Number of model points to process.
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcsli(slianl,slifcs,len,me)
       use machine , only : kind_io8,kind_io4
@@ -6666,8 +6633,8 @@
 !! @param[in] qctsfs
 !! @param[in] qcsnos
 !! @param[in] qctsfi
-!! @param[in] len
-!! @param[in] lsoil
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
 !! @param[in] snoanl
 !! @param[in] aisanl
 !! @param[in] slianl
@@ -6679,7 +6646,7 @@
 !! @param[in] tsfsmx
 !! @param[in] albomx
 !! @param[in] zoromx
-!! @param[in] me
+!! @param[in] me MPI task number.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine qcbyfc(tsffcs,snofcs,qctsfs,qcsnos,qctsfi,
      &                  len,lsoil,snoanl,aisanl,slianl,tsfanl,albanl,
@@ -7551,7 +7518,7 @@ cjfe
 !! @param[in] soiltype
 !! @param[in] slptype
 !! @param[in] slmask
-!! @param[in] len
+!! @param[in] len Number of model points to process.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine landtyp(vegtype,soiltype,slptype,slmask,len)
       use machine , only : kind_io8,kind_io4
@@ -7607,7 +7574,7 @@ cjfe
 !! @param[in] tsfclm
 !! @param[in] tsfcl0
 !! @param[in] tsfanl
-!! @param[in] len
+!! @param[in] len Number of model points to process.
 !! @author M. Iredell, xuli, Hang Lei, George Gayno
       subroutine anomint(tsfan0,tsfclm,tsfcl0,tsfanl,len)
 !
