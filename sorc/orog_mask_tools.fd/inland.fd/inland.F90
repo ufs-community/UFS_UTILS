@@ -1,9 +1,14 @@
 !> @file
-!! Program and associated routines for creating inland mask
-!! 
+!! @brief Program and associated routines for creating inland mask
 !! @author Ning Wang @date July 1, 2020
-!!
+
 !> This program creates the inland mask and writes it to the orography data files.
+!!
+!! @param[in] cres cubed-sphere resolution (48, 96...)
+!! @param[in] cutoff nonland cutoff
+!! @param[in] rd max recursive depth
+!! @param[in] domain regional (r) or global (g)
+!!
 !! @author Ning Wang
 !! @return 0 for success, error otherwise.
 PROGRAM inland_mask
@@ -23,7 +28,7 @@ PROGRAM inland_mask
   REAL :: cutoff
   CHARACTER(len=1) :: reg
 
-  LOGICAL, ALLOCATABLE :: done(:,:,:) 
+  LOGICAL, ALLOCATABLE :: done(:,:,:)
 
   CALL getarg(0, arg) ! get the program name
   IF (iargc() /= 3 .AND. iargc() /= 4) THEN
