@@ -7631,98 +7631,113 @@ cjfe
 !! and, if necessary, interpolates it to the model grid.
 !!
 !! @param[in] lugb Fortran unit number of GRIB1 climatological data.
-!! @param[in] iy
-!! @param[in] im
-!! @param[in] id
-!! @param[in] ih
-!! @param[in] fh
+!! @param[in] iy Cycle year.
+!! @param[in] im Cycle month.
+!! @param[in] id Cycle day.
+!! @param[in] ih Cycle hour.
+!! @param[in] fh Forecast hour.
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
 !! @param[in] slmask Model land-sea-ice mask.
 !! @param[in] fntsfc Climatological SST file.
 !! @param[in] fnwetc Climatological soil wetness file.
-!! @param[in] fnsnoc
+!! @param[in] fnsnoc Climatological snow depth file.
 !! @param[in] fnzorc Climatological roughness length file. Or 'igbp' 
 !! to use igbp vegetation type lookup table. Or 'sib' to use sib 
 !! vegeation type lookup table.
 !! @param[in] fnalbc Climatological snow-free albedo file.
-!! @param[in] fnaisc
+!! @param[in] fnaisc Climatological sea ice mask file.
 !! @param[in] fntg3c Climatological soil substrate temperature file.
 !! @param[in] fnscvc Climatological snow cover file.
 !! @param[in] fnsmcc Climatological soil moisture file.
-!! @param[in] fnstcc
-!! @param[in] fnacnc
-!! @param[in] fnvegc
-!! @param[in] fnvetc
-!! @param[in] fnsotc
-!! @param[in] fnvmnc
-!! @param[in] fnvmxc
-!! @param[in] fnslpc
-!! @param[in] fnabsc
-!! @param[in] tsfclm
-!! @param[in] tsfcl2
-!! @param[in] wetclm
-!! @param[in] snoclm
-!! @param[in] zorclm
-!! @param[in] albclm
-!! @param[in] aisclm
-!! @param[in] tg3clm
-!! @param[in] cvclm 
-!! @param[in] cvbclm
-!! @param[in] cvtclm
-!! @param[in] cnpclm
-!! @param[in] smcclm
-!! @param[in] stcclm
-!! @param[in] sliclm
-!! @param[in] scvclm
-!! @param[in] acnclm
-!! @param[in] vegclm
-!! @param[in] vetclm
-!! @param[in] sotclm
-!! @param[in] alfclm
-!! @param[in] vmnclm
-!! @param[in] vmxclm
-!! @param[in] slpclm
-!! @param[in] absclm
-!! @param[in] kpdtsf
-!! @param[in] kpdwet
-!! @param[in] kpdsno
-!! @param[in] kpdzor
-!! @param[in] kpdalb
-!! @param[in] kpdais
-!! @param[in] kpdtg3
-!! @param[in] kpdscv
-!! @param[in] kpdacn
-!! @param[in] kpdsmc
-!! @param[in] kpdstc
-!! @param[in] kpdveg
-!! @param[in] kpdvet
-!! @param[in] kpdsot
-!! @param[in] kpdalf
-!! @param[in] tsfcl0
-!! @param[in] kpdvmn
-!! @param[in] kpdvmx
-!! @param[in] kpdslp
-!! @param[in] kpdabs
-!! @param[in] deltsfc
-!! @param[in] lanom
-!! @param[in] imsk
-!! @param[in] jmsk
-!! @param[in] slmskh
-!! @param[in] outlat
-!! @param[in] outlon
-!! @param[in] gaus
-!! @param[in] blno
-!! @param[in] blto
+!! @param[in] fnstcc Climatological soil temperature file.
+!! @param[in] fnacnc Climatological sea ice concentration file.
+!! @param[in] fnvegc Climatological vegetation greenness file.
+!! @param[in] fnvetc Climatological vegetation type file.
+!! @param[in] fnsotc Climatological soil type file.
+!! @param[in] fnvmnc Climatological minimum vegetation greenness file.
+!! @param[in] fnvmxc Climatological maximum vegetation greenness file.
+!! @param[in] fnslpc Climatological slope type file.
+!! @param[in] fnabsc Climatological maximum snow albedo file.
+!! @param[out] tsfclm Climatological skin temperature/SST on model grid.
+!! @param[out] tsfcl2 Climatological skin temperature/SST on model grid
+!! at time minus deltsfc.
+!! @param[out] wetclm Climatological soil wetness on model grid.
+!! @param[out] snoclm Climatological liquid equivalent snow depth on model grid.
+!! @param[out] zorclm Climatological roughness length on model grid.
+!! @param[out] albclm Climatological snow-free albedo on model grid.
+!! @param[out] aisclm Climatological sea ice mask on model grid.
+!! @param[out] tg3clm Climatological soil substrate temperature on model
+!! grid.
+!! @param[out] cvclm Climatological convective cloud cover on model grid.
+!! @param[out] cvbclm Climatological convective cloud base on model grid.
+!! @param[out] cvtclm Climatological convective cloud top on model grid.
+!! @param[out] cnpclm Climatological canopy water content on model grid.
+!! @param[out] smcclm Climatological soil moisture on model grid.
+!! @param[out] stcclm Climatologcial soil temperature on model grid.
+!! @param[out] sliclm Climatological model land-sea-ice mask.
+!! @param[out] scvclm Climatological snow cover on model grid.
+!! @param[out] acnclm Climatological sea ice concentration on model grid.
+!! @param[out] vegclm Climatological vegetation greenness on model grid.
+!! @param[out] vetclm Climatological vegetation type on model grid.
+!! @param[out] sotclm Climatological soil type on model grid.
+!! @param[out] alfclm Climatological fraction for strongly and weakly
+!! zenith angle dependent albedo on model grid.
+!! @param[out] vmnclm Climatological minimum vegetation greenness on
+!! model grid.
+!! @param[out] vmxclm Climatological maximum vegetation greenness on
+!! model grid.
+!! @param[out] slpclm Climatological slope type on model grid.
+!! @param[out] absclm Climatological maximum snow albedo on model grid.
+!! @param[in] kpdtsf Grib parameter number of skin temperature/SST.
+!! @param[in] kpdwet Grib parameter number of soil wetness.
+!! @param[in] kpdsno Grib parameter number of liquid equivalent snow
+!! depth.
+!! @param[in] kpdzor Grib parameter number of roughness length.
+!! @param[in] kpdalb Grib parameter number of snow-free albedo.
+!! @param[in] kpdais Grib parameter number of sea ice mask.
+!! @param[in] kpdtg3 Grib parameter number of soil substrate
+!! temperature.
+!! @param[in] kpdscv Grib parameter number of snow cover.
+!! @param[in] kpdacn Grib parameter number of sea ice concentration.
+!! @param[in] kpdsmc Grib parameter number of soil moisture.
+!! @param[in] kpdstc Grib parameter number of soil temperature.
+!! @param[in] kpdveg Grib parameter number of vegetation greenness.
+!! @param[in] kpdvet Grib parameter number of vegetation type.
+!! @param[in] kpdsot Grib parameter number of soil type.
+!! @param[in] kpdalf Grib parameter number for fraction for strongly 
+!! and weakly zenith angle dependent albedo.
+!! @param[in] tsfcl0 Climatological skn temperature/SST at forecast
+!! hour 0.
+!! @param[in] kpdvmn Grib parameter number of minimum vegetation
+!! greenness.
+!! @param[in] kpdvmx Grib parameter number of maximum vegetation
+!! greenness.
+!! @param[in] kpdslp Grib parameter number of slope type.
+!! @param[in] kpdabs Grib parameter number of maximum snow albedo.
+!! @param[in] deltsfc Cycling frequency in hours.
+!! @param[in] lanom When true, so sst anomaly interpolation.
+!! @param[in] imsk 'i' dimension of the high-res mask used for
+!! climatological data without a bitmap.
+!! @param[in] jmsk 'j' dimension of the high-res mask used for
+!! climatological data without a bitmap.
+!! @param[in] slmskh The high-resolution mask used for 
+!! climatological data without a bitmap.
+!! @param[in] outlat Model latitudes
+!! @param[in] outlon Model longitudes
+!! @param[in] gaus When true, the high-res mask is on a gaussian grid.
+!! @param[in] blno Corner point longitude of the high-res mask.
+!! @param[in] blto Corner point latitude of the high-res mask.
 !! @param[in] me MPI task number.
-!! @param[in] lprnt
-!! @param[in] iprnt
-!! @param[in] fnalbc2
-!! @param[in] ialb
+!! @param[in] lprnt Turn of diagnostic print.
+!! @param[in] iprnt Index of diagnotic print point.
+!! @param[in] fnalbc2 File containing climatological fraction for
+!! strongly and weakly zenith angle dependent albedo.
+!! @param[in] ialb Use modis albedo when '1'. Use brigleb when '0'.
 !! @param[in] tile_num_ch Model tile number to process.
-!! @param[in] i_index
-!! @param[in] j_index
-!! @author M. Iredell,  xuli, Hang Lei, George Gayno
+!! @param[in] i_index The 'i' indices of the model grid to process.
+!! @param[in] j_index The 'j' indices of the model grid to process.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine clima(lugb,iy,im,id,ih,fh,len,lsoil,
      &                 slmask,fntsfc,fnwetc,fnsnoc,fnzorc,fnalbc,fnaisc,
      &                 fntg3c,fnscvc,fnsmcc,fnstcc,fnacnc,fnvegc,
