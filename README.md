@@ -12,32 +12,17 @@ https://noaa-emc.github.io/UFS_UTILS/.
 
 ## Authors
 
-### chgres_cube
-- George Gayno
-
-### emcsfc_ice_blend
-- George Gayno
-
-### emcsfc_snow2mdl
-- George Gayno
-
-### fvcom_tools
- - David Wright, University of Michigan
- 
-### global_cycle
- - George Gayno, Shrinivas Moorthi
-
-### grid_tools
- - R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), GFDL programmer (topo filtering code).
-
-### orog_mask_tools
- - Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
-
-### sfc_climo_gen
- - George Gayno
-
-### vcoord_gen
- - Fanglin Yang
+Utility | Programmer(s)
+--------|----------
+chgres_cube | George Gayno
+emcsfc_ice_blend | George Gayno
+emcsfc_snow2mdl | George Gayno
+fvcom_tools | David Wright, University of Michigan
+global_cycle | George Gayno, Shrinivas Moorthi
+grid_tools | R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), GFDL programmer (topo filtering code).
+orog_mask_tools | Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
+sfc_climo_gen | George Gayno
+vcoord_gen | Fanglin Yang
 
 Code managers: George Gayno, Kyle Gerheiser
 
@@ -47,10 +32,8 @@ This package requires the following NCEPLIBS packages:
  - [NCEPLIBS-gfsio](https://github.com/NOAA-EMC/NCEPLIBS-gfsio)
  - [NCEPLIBS-sfcio](https://github.com/NOAA-EMC/NCEPLIBS-sfcio)
  - [NCEPLIBS-w3nco](https://github.com/NOAA-EMC/NCEPLIBS-w3nco)
- - [NCEPLIBS-landsfcutil](https://github.com/NOAA-EMC/NCEPLIBS-landsfcutil)
  - [NCEPLIBS-bacio](https://github.com/NOAA-EMC/NCEPLIBS-bacio)
  - [NCEPLIBS-nemsio](https://github.com/NOAA-EMC/NCEPLIBS-nemsio)
- - [NCEPLIBS-nemsiogfs](https://github.com/NOAA-EMC/NCEPLIBS-nemsiogfs)
  - [NCEPLIBS-sigio](https://github.com/NOAA-EMC/NCEPLIBS-sigio)
  - [NCEPLIBS-sp](https://github.com/NOAA-EMC/NCEPLIBS-sp)
  - [NCEPLIBS-ip](https://github.com/NOAA-EMC/NCEPLIBS-ip)
