@@ -63,7 +63,6 @@ directory):
 - global_chgres
 - global_cycle
 - grid_tools
-- nst_tf_chg
 - orog_mask_tools
 - sfc_climo_gen
 - vcoord_gen
