@@ -69,6 +69,8 @@ PROGRAM inland_mask
 CONTAINS
 
 !> Create inland mask for global grid.
+!! @author Ning Wang  
+!!
 !! @param[in] cs_res cubed sphere resolution (48, 96...)
 SUBROUTINE mark_global_inland(cs_res)
   INTEGER, INTENT(IN) :: cs_res
@@ -86,6 +88,7 @@ SUBROUTINE mark_global_inland(cs_res)
 END SUBROUTINE mark_global_inland
 
 !> Create inland mask for regional grid.
+!!
 !! @param[in] cubed sphere resolution (48, 96...)
 SUBROUTINE mark_inland_reg(cs_res)
   INTEGER, INTENT(IN) :: cs_res
@@ -112,8 +115,10 @@ SUBROUTINE mark_inland_reg(cs_res)
 END SUBROUTINE mark_inland_reg
 
 !> Recursively walk through neighbors marking inland points for global grid.
-!! @param[in] i index
-!! @param[in] j index
+!! @author Ning Wang
+!!
+!! @param[in] i cell index
+!! @param[in] j cell index
 !! @param[in] t tile number
 !! @param[in] rd current recursive depth (starts at 0)
 RECURSIVE SUBROUTINE mark_global_inland_rec_d(i, j, t, rd)
@@ -146,8 +151,10 @@ RECURSIVE SUBROUTINE mark_global_inland_rec_d(i, j, t, rd)
 END SUBROUTINE mark_global_inland_rec_d
 
 !> Recursively walk through neighbors marking inland points for regional grid.
-!! @param[in] i index
-!! @param[in] j index
+!! @author Ning Wang
+!!
+!! @param[in] i cell index
+!! @param[in] j cell index
 !! @param[in] t tile face
 !! @param[in] rd current recursive depth (starts at 0)
 RECURSIVE SUBROUTINE mark_regional_inland_rec_d(i, j, t, rd)
@@ -180,6 +187,8 @@ RECURSIVE SUBROUTINE mark_regional_inland_rec_d(i, j, t, rd)
 END SUBROUTINE mark_regional_inland_rec_d
 
 !> Read in orography (land fraction) data.
+!! @author Ning Wang
+!!
 !! @param[in] cs_res cubed sphere resolution (48, 96...)
 SUBROUTINE read_orog(cs_res)
   USE netcdf 
@@ -223,6 +232,8 @@ SUBROUTINE read_orog(cs_res)
 END SUBROUTINE read_orog
 
 !> Read in orography (land fraction) data for regional grid.
+!! @author Ning Wang
+!!
 !! @param[in] cs_res cubed sphere resolution (48, 96...)
 SUBROUTINE read_orog_reg(cs_res)
   USE netcdf 
@@ -272,6 +283,8 @@ SUBROUTINE read_orog_reg(cs_res)
 END SUBROUTINE read_orog_reg
 
 !> Write inland back to the orography data files for global grid
+!! @author Ning Wang
+!!
 !! @param[in] cs_res cubed sphere resolution (48, 96...)
 SUBROUTINE write_inland(cs_res)
   USE netcdf 
@@ -331,6 +344,8 @@ SUBROUTINE write_inland(cs_res)
 END SUBROUTINE write_inland
 
 !> Write inland back to the orography data files for regional grid.
+!! @author Ning Wang
+!!
 !! @param[in] cs_res cubed sphere resolution (48, 96...)
 SUBROUTINE write_inland_reg(cs_res)
   USE netcdf 
@@ -394,7 +409,7 @@ SUBROUTINE write_inland_reg(cs_res)
 
 END SUBROUTINE write_inland_reg
 
-!> Deallocate arrays
+!> Deallocate module arrays
 SUBROUTINE free_mem()
 
   DEALLOCATE(inland, land_frac)
@@ -402,6 +417,8 @@ SUBROUTINE free_mem()
 END SUBROUTINE free_mem
 
 !> Check NetCDF return code and print error message.
+!! @author Ning Wang
+!!
 !! @param[in] stat status code returned from NetCDF
 !! @param[in] opname description of NetCDF operation called
 SUBROUTINE nc_opchk(stat,opname)

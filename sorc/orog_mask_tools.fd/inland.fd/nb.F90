@@ -26,6 +26,7 @@ MODULE cs_nb
 CONTAINS
   
   !> Initialize inter-panel neighbor index for global grid
+  !!
   !! @param[in] cubed sphere resolution (48, 96...)
   !
   !   _______1_______
@@ -76,6 +77,8 @@ CONTAINS
   END SUBROUTINE idx_init
 
   !> Initialize resolution module variables for regional grid.
+  !! @author Ning Wang
+  !!
   !! @param[in] xres_in x resolution
   !! @param[in] yres_in y resolution
   SUBROUTINE idx_init_reg(xres_in, yres_in)
@@ -87,8 +90,10 @@ CONTAINS
   END SUBROUTINE idx_init_reg
 
   !> Get boundary type from indices for global grid
-  !! @param[in] i
-  !! @param[in] j
+  !! @author Ning Wang
+  !!
+  !! @param[in] i cell index
+  !! @param[in] j cell index
   INTEGER FUNCTION bndry(i, j)
     INTEGER :: i,j
 
@@ -117,8 +122,10 @@ CONTAINS
   END FUNCTION bndry
   
   !> Get boundary type from indices for regional grid
-  !! @param[in] i
-  !! @param[in] j
+  !! @author Ning Wang
+  !!
+  !! @param[in] i cell index
+  !! @param[in] j cell index
   INTEGER FUNCTION bndry_reg(i, j)
     INTEGER :: i,j
 
@@ -147,9 +154,11 @@ CONTAINS
   END FUNCTION bndry_reg
 
   !> Get neighbors of cell 'c' at (tile, i, j) for global grid.
+  !! @author Ning Wang
+  !!
   !! @param[in] tile tile face
-  !! @param[in] i index
-  !! @param[in] j index
+  !! @param[in] cell index
+  !! @param[in] cell index
   !! @param[out] nb neighbors
   !
   !     ______________
@@ -360,9 +369,11 @@ CONTAINS
   END SUBROUTINE neighbors
 
   !> Get neighbors of cell 'c' at (tile, i, j) for regional grid.
+  !! @author Ning Wang
+  !!
   !! @param[in] tile tile face
-  !! @param[in] i index
-  !! @param[in] j index
+  !! @param[in] i cell index
+  !! @param[in] j cell index
   !! @param[out] nb neighbors
   SUBROUTINE neighbors_reg(i, j, nb)
     INTEGER :: i, j
