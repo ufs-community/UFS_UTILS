@@ -74,58 +74,64 @@
 !
       end module sfccyc_module
 
-!> ???
+!> Surface cycling driver routine. Update 'first guess' surface
+!! fields with either analysis or climatological data.
 !!
-!! @param[in] lugb
+!! @param[in] lugb Fortran unit number used to read data files.
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
-!! @param[in] sig1t
+!! @param[in] sig1t Sigma level 1 temperature for dead start.
 !! @param[in] deltsfc Cycling frequency in hours.
-!! @param[in] iy
-!! @param[in] im
-!! @param[in] id
-!! @param[in] ih
-!! @param[in] fh
-!! @param[in] rla
-!! @param[in] rlo
-!! @param[in] slmask
-!! @param[in] orog
-!! @param[in] orog_uf
-!! @param[in] use_ufo
-!! @param[in] nst_anl
-!! @param[in] sihfcs
-!! @param[in] sicfcs
-!! @param[in] sitfcs
-!! @param[in] swdfcs
-!! @param[in] slcfcs
-!! @param[in] vmnfcs
-!! @param[in] vmxfcs
-!! @param[in] slpfcs
-!! @param[in] absfcs
-!! @param[in] tsffcs
-!! @param[in] snofcs
-!! @param[in] zorfcs
-!! @param[in] albfcs
-!! @param[in] tg3fcs
-!! @param[in] cnpfcs
-!! @param[in] smcfcs
-!! @param[in] stcfcs
-!! @param[in] slifcs
-!! @param[in] aisfcs
-!! @param[in] vegfcs
-!! @param[in] vetfcs
-!! @param[in] sotfcs
-!! @param[in] alffcs
-!! @param[in] cvfcs
-!! @param[in] cvbfcs
-!! @param[in] cvtfcs
+!! @param[in] iy Year of initial state.
+!! @param[in] im Month of initial state.
+!! @param[in] id Day of initial state.
+!! @param[in] ih Hour of initial state.
+!! @param[in] fh Forecast hour.
+!! @param[in] rla Latitude of model points.
+!! @param[in] rlo Longitude of model points.
+!! @param[in] slmask Model land-sea mask without ice flag.
+!! @param[in] orog Filtered orography on model grid.
+!! @param[in] orog_uf Unfiltered orography on model grid.
+!! @param[in] use_ufo When true, adjust sst and soil substrate
+!! temperature for differences between filtered and unfiltered terrain.
+!! @param[in] nst_anl Set to true when using nst model.
+!! @param[inout] sihfcs Sea ice thickness on model grid.
+!! @param[inout] sicfcs Sea ice concentration on model grid.
+!! @param[inout] sitfcs Sea ice skin temperature on model grid.
+!! @param[inout] swdfcs Physical snow depth on model grid.
+!! @param[inout] slcfcs Liquid portion of volumentric soil moisture on 
+!! model grid.
+!! @param[inout] vmnfcs Minimum greenness fraction of model grid.
+!! @param[inout] vmxfcs Maximum greenness fraction of model grid.
+!! @param[inout] slpfcs Slope type on model grid.
+!! @param[inout] absfcs Maximum snow albedo on model grid.
+!! @param[inout] tsffcs Skin temperature/SST on model grid.
+!! @param[inout] snofcs Liquid equivalent snow depth on model grid.
+!! @param[inout] zorfcs Roughness length on model grid.
+!! @param[inout] albfcs Snow-free albedo on model grid.
+!! @param[inout] tg3fcs Soil substrate temperature on model grid.
+!! @param[inout] cnpfcs Canopy moisture content on model grid.
+!! @param[inout] smcfcs Total volumetric soil moisture on model grid.
+!! @param[inout] stcfcs Soil/ice depth temperature on model grid.
+!! @param[inout] slifcs Model land-sea mask including ice flag.
+!! @param[inout] aisfcs Model ice mask.
+!! @param[inout] vegfcs Vegetation greenness on model grid.
+!! @param[inout] vetfcs Vegetation type on model grid.
+!! @param[inout] sotfcs Soil type on model grid.
+!! @param[inout] alffcs Fraction for strongly and weakly
+!! zenith angle dependent albedo on model grid.
+!! @param[inout] cvfcs Convective cloud cover on model grid.
+!! @param[inout] cvbfcs Convective cloud base on model grid.
+!! @param[inout] cvtfcs Convective cloud top on model grid.
 !! @param[in] me MPI task number.
-!! @param[in] nlunit
-!! @param[in] sz_nml
-!! @param[in] input_nml_file
+!! @param[in] nlunit Program namelist unit number.
+!! @param[in] sz_nml Dimension of input_nml_file.
+!! @param[in] input_nml_file Name of program namelist file.
 !! @param[in] ialb Use modis albedo when '1'. Use brigleb when '0'.
-!! @param[in] isot
-!! @param[in] ivegsrc
+!! @param[in] isot When '1', use statsgo soil type.  When '0' use
+!! zobler soil type.
+!! @param[in] ivegsrc When '1', use igbp vegetation type.  When '2'
+!! use sib vegetation type.
 !! @param[in] tile_num_ch Model tile number to process.
 !! @param[in] i_index The 'i' indices of the model grid to process.
 !! @param[in] j_index The 'j' indices of the model grid to process.
