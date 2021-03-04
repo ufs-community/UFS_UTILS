@@ -25,7 +25,7 @@ https://noaa-emc.github.io/UFS_UTILS/.
  - David Wright, University of Michigan
  
 ### global_cycle
- - ???
+ - George Gayno, Shrinivas Moorthi
 
 ### grid_tools
  - R. J. Purser
@@ -34,10 +34,10 @@ https://noaa-emc.github.io/UFS_UTILS/.
  - Ning Wang
 
 ### sfc_climo_gen
- - ???
+ - George Gayno
 
 ### vcoord_gen
- - ???
+ - Fanglin Yang
 
 Code managers: George Gayno, Kyle Gerheiser
 
