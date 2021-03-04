@@ -3082,15 +3082,18 @@
       return
       end
 
-!> ???
+!> Take an array of data on a lat/lon based grid and rearrange
+!! it so the corner point is in the 'lower left' and adjacent
+!! points in the 'i' direction are consecutive.
 !!
-!! @param[in] data
-!! @param[in] imax
-!! @param[in] jmax
-!! @param[in] dlon
-!! @param[in] dlat
-!! @param[in] ijordr
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[inout] data The data to be adjusted.
+!! @param[in] imax 'i' dimension of data.
+!! @param[in] jmax 'j' dimension of data.
+!! @param[in] dlon Delta longitude of the data.
+!! @param[in] dlat Delta latitude of the data.
+!! @param[in] ijordr When false, adjacent points in the 'i' direction
+!! are consecutive.  Otherwise, 'j' points are consecutive.
+!! @author Shrinivas Moorthi
       subroutine subst(data,imax,jmax,dlon,dlat,ijordr)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -3913,59 +3916,62 @@
       return
       end
 
-!> ???
+!> Read analysis fields.
 !!
-!! @param[in] lugb
-!! @param[in] iy
-!! @param[in] im
-!! @param[in] id
-!! @param[in] ih
-!! @param[in] fh
+!! @param[in] lugb Fortran unit number for analysis files.
+!! @param[in] iy Cycle year.
+!! @param[in] im Cycle month.
+!! @param[in] id Cycle day.
+!! @param[in] ih Cycle hour.
+!! @param[in] fh Forecast hour.
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
-!! @param[in] slmask
-!! @param[in] fntsfa
-!! @param[in] fnweta
-!! @param[in] fnsnoa
-!! @param[in] fnzora
-!! @param[in] fnalba
-!! @param[in] fnaisa
-!! @param[in] fntg3a
-!! @param[in] fnscva
-!! @param[in] fnsmca
-!! @param[in] fnstca
-!! @param[in] fnacna
-!! @param[in] fnvega
-!! @param[in] fnveta
-!! @param[in] fnsota
-!! @param[in] fnvmna
-!! @param[in] fnvmxa
-!! @param[in] fnslpa
-!! @param[in] fnabsa
-!! @param[in] tsfanl
-!! @param[in] wetanl
-!! @param[in] snoanl
-!! @param[in] zoranl
-!! @param[in] albanl
-!! @param[in] aisanl
-!! @param[in] tg3anl
-!! @param[in] cvanl 
-!! @param[in] cvbanl
-!! @param[in] cvtanl
-!! @param[in] smcanl
-!! @param[in] stcanl
-!! @param[in] slianl
-!! @param[in] scvanl
-!! @param[in] acnanl
-!! @param[in] veganl
-!! @param[in] vetanl
-!! @param[in] sotanl
-!! @param[in] alfanl
-!! @param[in] tsfan0
-!! @param[in] vmnanl
-!! @param[in] vmxanl
-!! @param[in] slpanl
-!! @param[in] absanl
+!! @param[in] slmask Model land-sea mask.
+!! @param[in] fntsfa SST analysis file.
+!! @param[in] fnweta Soil wetness analysis file.
+!! @param[in] fnsnoa Snow analysis file
+!! @param[in] fnzora Roughness length analysis file.
+!! @param[in] fnalba Snow-free albedo analysis file.
+!! @param[in] fnaisa Sea ice mask analysis file.
+!! @param[in] fntg3a Soil substrate analysis file.
+!! @param[in] fnscva Snow cover analysis file.
+!! @param[in] fnsmca Soil moisture analysis file.
+!! @param[in] fnstca Soil temperature analysis file.
+!! @param[in] fnacna Sea ice concentration analysis file.
+!! @param[in] fnvega Vegetation greenness analysis file.
+!! @param[in] fnveta Vegetation type analysis file.
+!! @param[in] fnsota Soil type analysis file.
+!! @param[in] fnvmna Minimum vegetation greenness analysis file.
+!! @param[in] fnvmxa Maximum vegetation greenness analysis file.
+!! @param[in] fnslpa Slope type analysis file.
+!! @param[in] fnabsa Maximum snow albedo analysis file.
+!! @param[out] tsfanl Skin temperature/SST analysis on model grid.
+!! @param[out] wetanl Soil wetness analysis on model grid.
+!! @param[out] snoanl Snow analysis on model grid.
+!! @param[out] zoranl Roughness length analysis on model grid.
+!! @param[out] albanl Snow-free albedo analysis on model grid.
+!! @param[out] aisanl Sea ice mask analysis on model grid.
+!! @param[out] tg3anl Soil substrate analysis on model grid.
+!! @param[out] cvanl Convective cloud cover analysis on model grid.
+!! @param[out] cvbanl Convective cloud base analysis on model grid.
+!! @param[out] cvtanl Convective cloud top analysis on model grid.
+!! @param[out] smcanl Soil moisture analysis on model grid.
+!! @param[out] stcanl Soil temperature analysis on model grid.
+!! @param[out] slianl Not used.
+!! @param[out] scvanl Snow cover analysis on model grid.
+!! @param[out] acnanl Sea ice concentration analysis on model grid.
+!! @param[out] veganl Vegetation greenness analysis on model grid.
+!! @param[out] vetanl Vegetation type analysis on model grid.
+!! @param[out] sotanl Soil type analysis on model grid.
+!! @param[out] alfanl Analysis of fraction for strongly and 
+!! weakly zenith angle dependent albedo on model grid.
+!! @param[out] tsfan0 SST analysis at forecast hour 0 on model grid.
+!! @param[out] vmnanl Minimum vegetation greenness analysis on model
+!! grid.
+!! @param[out] vmxanl Maximum vegetation greenness analysis on model
+!! grid.
+!! @param[out] slpanl Slope type analysis on model grid.
+!! @param[out] absanl Maximum snow albedo analysis on model grid.
 !! @param[in] kpdtsf Grib parameter number of skin temperature/SST.
 !! @param[in] kpdwet Grib parameter number of soil wetness.
 !! @param[in] kpdsno Grib parameter number of liquid equivalent snow
@@ -3991,33 +3997,51 @@
 !! greenness.
 !! @param[in] kpdslp Grib parameter number of slope type.
 !! @param[in] kpdabs Grib parameter number of maximum snow albedo.
-!! @param[in] irttsf
-!! @param[in] irtwet
-!! @param[in] irtsno
-!! @param[in] irtzor
-!! @param[in] irtalb
-!! @param[in] irtais
-!! @param[in] irttg3
-!! @param[in] irtscv
-!! @param[in] irtacn
-!! @param[in] irtsmc
-!! @param[in] irtstc
-!! @param[in] irtveg
-!! @param[in] irtvet
-!! @param[in] irtsot
-!! @param[in] irtalfirtvmn
-!! @param[in] irtvmx
-!! @param[in] irtslp
-!! @param[in] irtabsimsk
-!! @param[in] jmsk
-!! @param[in] slmskh
-!! @param[in] outlat
-!! @param[in] outlongaus
-!! @param[in] blno
-!! @param[in] blto
+!! @param[out] irttsf Return code from read of skin temperature/SST 
+!! analysis file.
+!! @param[out] irtwet Return code from read of soil wetness analysis
+!! file.
+!! @param[out] irtsno Return code from read of snow analysis file.
+!! @param[out] irtzor Return code from read of roughness length file.
+!! @param[out] irtalb Return code from read of snow-free albedo analysis file.
+!! @param[out] irtais Return code from read of ice mask analysis file.
+!! @param[out] irttg3 Return code from read of soil substrate
+!! temperature analysis file.
+!! @param[out] irtscv Return code from read of snow cover analysis file.
+!! @param[out] irtacn Return code from read of sea ice concentration
+!! analysis file.
+!! @param[out] irtsmc Return code from read of soil moisture analysis
+!! file.
+!! @param[out] irtstc Return code from read of soil temperature analysis 
+!! file.
+!! @param[out] irtveg Return code from read of vegetation greenness 
+!! analysis file.
+!! @param[out] irtvet Return code from read of vegetation type analysis
+!! file.
+!! @param[out] irtsot Return code from read of soil type analysis file.
+!! @param[out] irtalf Return code from read of file containing fraction
+!! for strongly and weakly zenith angle dependent albedo.
+!! @param[out] irtvmn Return code from read of minimum vegetation
+!! greenness analysis file.
+!! @param[out] irtvmx Return code from read of maximum vegetation
+!! greenness analysis file.
+!! @param[out] irtslp Return code from read of slope type analysis file.
+!! @param[out] irtabs Return code from read of maximum snow albedo
+!! analysis file.
+!! @param[in] imsk 'i' dimension of the high-res mask used for
+!! analysis data without a bitmap.
+!! @param[in] jmsk 'j' dimension of the high-res mask used for
+!! analysis data without a bitmap.
+!! @param[in] slmskh The high-resolution mask used for 
+!! analysis data without a bitmap.
+!! @param[in] outlat Model latitudes
+!! @param[in] outlon Model longitudes
+!! @param[in] gaus When true, the high-res mask is on a gaussian grid.
+!! @param[in] blno Corner point longitude of the high-res mask.
+!! @param[in] blto Corner point latitude of the high-res mask.
 !! @param[in] me MPI task number.
-!! @param[in] lanom
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] lanom When true, do sst anomaly interpolation.
+!! @author Shrinivas Moorthi
       subroutine analy(lugb,iy,im,id,ih,fh,len,lsoil,
      &                 slmask,fntsfa,fnweta,fnsnoa,fnzora,fnalba,fnaisa,
      &                 fntg3a,fnscva,fnsmca,fnstca,fnacna,fnvega,
@@ -7691,7 +7715,7 @@ cjfe
 !! @param[in] kpdsot Grib parameter number of soil type.
 !! @param[in] kpdalf Grib parameter number for fraction for strongly 
 !! and weakly zenith angle dependent albedo.
-!! @param[in] tsfcl0 Climatological skn temperature/SST at forecast
+!! @param[in] tsfcl0 Climatological SST at forecast
 !! hour 0.
 !! @param[in] kpdvmn Grib parameter number of minimum vegetation
 !! greenness.
@@ -7700,7 +7724,7 @@ cjfe
 !! @param[in] kpdslp Grib parameter number of slope type.
 !! @param[in] kpdabs Grib parameter number of maximum snow albedo.
 !! @param[in] deltsfc Cycling frequency in hours.
-!! @param[in] lanom When true, so sst anomaly interpolation.
+!! @param[in] lanom When true, do sst anomaly interpolation.
 !! @param[in] imsk 'i' dimension of the high-res mask used for
 !! climatological data without a bitmap.
 !! @param[in] jmsk 'j' dimension of the high-res mask used for
