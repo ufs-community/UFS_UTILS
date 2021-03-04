@@ -28,17 +28,19 @@ CONTAINS
   !> Initialize inter-panel neighbor index for global grid
   !!
   !! @param[in] cubed sphere resolution (48, 96...)
-  !
-  !   _______1_______
-  !  |               |       1-upper, 2-bottom, 3-left, 4-right 
-  !  |               |
-  !  |               |
-  ! 3|               |4
-  !  |               |
-  !  |               |
-  !  |_______________|
-  !          2
-  !      Figure 1. Boundary numbers
+  !!
+  !! <pre>
+  !!   _______1_______
+  !!  |               |       1-upper, 2-bottom, 3-left, 4-right 
+  !!  |               |
+  !!  |               |
+  !! 3|               |4
+  !!  |               |
+  !!  |               |
+  !!  |_______________|
+  !!          2
+  !!      Figure 1. Boundary numbers
+  !! </pre>
   SUBROUTINE idx_init(cres_in) 
     INTEGER :: cres_in
 
@@ -160,20 +162,22 @@ CONTAINS
   !! @param[in] cell index
   !! @param[in] cell index
   !! @param[out] nb neighbors
-  !
-  !     ______________
-  !    |    |    |    |              ________
-  !    | 5  | 1  | 6  |             /\ 1 \ 6 \
-  !    |____|____|____|            /  \___\___\
-  !    |    |    |    |           /\2 / c / 3 /
-  !    | 2  | c  | 3  |          /  \/___/___/
-  !    |____|____|____|          \7 / 4 / 8 /
-  !    |    |    |    |           \/___/___/
-  !    | 7  | 4  | 8  |       
-  !    |____|____|____|    
-  !  
-  ! Figure 2.  Eight neighbors of cell 'c' and special cases at upper left
-  ! cornner of the tile 
+  !!
+  !! <pre>
+  !!     ______________
+  !!    |    |    |    |              ________
+  !!    | 5  | 1  | 6  |             /\ 1 \ 6 \
+  !!    |____|____|____|            /  \___\___\
+  !!    |    |    |    |           /\2 / c / 3 /
+  !!    | 2  | c  | 3  |          /  \/___/___/
+  !!    |____|____|____|          \7 / 4 / 8 /
+  !!    |    |    |    |           \/___/___/
+  !!    | 7  | 4  | 8  |       
+  !!    |____|____|____|    
+  !!  
+  !! Figure 2.  Eight neighbors of cell 'c' and special cases at upper left
+  !! cornner of the tile
+  !! </pre>
   SUBROUTINE neighbors(tile, i, j, nb)
     INTEGER :: tile, i, j
     TYPE(nb_gp_idx) :: nb  
