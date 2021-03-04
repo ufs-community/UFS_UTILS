@@ -68,10 +68,8 @@ directory):
 - emcsfc_snow2mdl
 - fre-nctools
 - fvcom_tools
-- global_chgres
 - global_cycle
 - grid_tools
-- nst_tf_chg
 - orog_mask_tools
 - sfc_climo_gen
 - vcoord_gen
@@ -83,19 +81,22 @@ large, static data files used by UFS_UTILS programs.
 
 The tests directory contains unit tests.
 
-The ush directory contains scripts to run UFS_UTILS programs.  Most are called from
-driver scripts.
+The ush directory contains scripts to run UFS_UTILS programs.  Most
+are called from driver scripts.
 
-The util directory contains utility scripts to create coldstart initial conditions
-for GFS parallels, and to run the vertical coordinate generator.
+The util directory contains utility scripts to create coldstart
+initial conditions for GFS parallels, and to run the vertical
+coordinate generator.
 
-The parm directory contains variable mapping parameter tables used by the chgres_cube program.
+The parm directory contains variable mapping parameter tables used by
+the chgres_cube program.
 
-The driver_scripts directory contains high-level driver scripts to create a model
-grid on officially supported HPC platforms.
+The driver_scripts directory contains high-level driver scripts to
+create a model grid on officially supported HPC platforms.
 
-The modulefiles directory contains modules loaded when building UFS_UTILS on supported
-HPC platforms.  They are also loaded at runtime by utility and regression test scripts.
+The modulefiles directory contains modules loaded when building
+UFS_UTILS on supported HPC platforms.  They are also loaded at runtime
+by utility and regression test scripts.
 
 The docs directory contains the control file for the doxygen
 documentation build, as well as some markdown files which are part of
