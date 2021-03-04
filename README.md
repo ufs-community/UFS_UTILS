@@ -28,7 +28,7 @@ https://noaa-emc.github.io/UFS_UTILS/.
  - George Gayno, Shrinivas Moorthi
 
 ### grid_tools
- - R. J. Purser
+ - R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), GFDL programmer (topo filtering code).
 
 ### orog_mask_tools
  - Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
