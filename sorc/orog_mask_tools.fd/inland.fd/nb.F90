@@ -7,7 +7,6 @@
 MODULE cs_nb
   IMPLICIT NONE
 
-  !> 
   TYPE nb_tile_idx
     INTEGER       :: nb_tile_num
     CHARACTER (1) :: nb_tile_bndry 
@@ -79,10 +78,11 @@ CONTAINS
   END SUBROUTINE idx_init
 
   !> Initialize resolution module variables for regional grid.
-  !! @author Ning Wang
   !!
   !! @param[in] xres_in x resolution
   !! @param[in] yres_in y resolution
+  !!
+  !! @author Ning Wang
   SUBROUTINE idx_init_reg(xres_in, yres_in)
     INTEGER, INTENT(IN) :: xres_in, yres_in
 
@@ -92,10 +92,11 @@ CONTAINS
   END SUBROUTINE idx_init_reg
 
   !> Get boundary type from indices for global grid
-  !! @author Ning Wang
   !!
   !! @param[in] i cell index
   !! @param[in] j cell index
+  !!
+  !! @author Ning Wang
   INTEGER FUNCTION bndry(i, j)
     INTEGER :: i,j
 
@@ -124,10 +125,11 @@ CONTAINS
   END FUNCTION bndry
   
   !> Get boundary type from indices for regional grid
-  !! @author Ning Wang
   !!
   !! @param[in] i cell index
   !! @param[in] j cell index
+  !!
+  !! @author Ning Wang
   INTEGER FUNCTION bndry_reg(i, j)
     INTEGER :: i,j
 
@@ -156,7 +158,6 @@ CONTAINS
   END FUNCTION bndry_reg
 
   !> Get neighbors of cell 'c' at (tile, i, j) for global grid.
-  !! @author Ning Wang
   !!
   !! @param[in] tile tile face
   !! @param[in] cell index
@@ -178,6 +179,8 @@ CONTAINS
   !! Figure 2.  Eight neighbors of cell 'c' and special cases at upper left
   !! cornner of the tile
   !! </pre>
+  !!
+  !! @author Ning Wang
   SUBROUTINE neighbors(tile, i, j, nb)
     INTEGER :: tile, i, j
     TYPE(nb_gp_idx) :: nb  
@@ -373,12 +376,13 @@ CONTAINS
   END SUBROUTINE neighbors
 
   !> Get neighbors of cell 'c' at (tile, i, j) for regional grid.
-  !! @author Ning Wang
   !!
   !! @param[in] tile tile face
   !! @param[in] i cell index
   !! @param[in] j cell index
   !! @param[out] nb neighbors
+  !!
+  !! @author Ning Wang
   SUBROUTINE neighbors_reg(i, j, nb)
     INTEGER :: i, j
     TYPE(nb_gp_idx) :: nb
