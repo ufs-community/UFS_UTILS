@@ -38,9 +38,6 @@ https://github.com/NOAA-EMC/UFS_UTILS.
   extended Schmidt gnomonic grids, and to compute the equivalent
   global resolution of a regional grid.
 
-- nst_tf_chg - Initializes the reference temperature used by the NSST
-  model.
-
 - orog_mask_tools - Utilities to create land mask, terrain and gravity
   wave drag fields; set lake fraction and depth; creates an inland
   land mask.
