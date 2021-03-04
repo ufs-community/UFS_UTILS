@@ -4707,59 +4707,62 @@
       return
       end
 
-!> ???
+!> Fill in model grid guess arrays with analysis values if this is a dead start.
+!! All fields are on the model grid.
 !!
-!! @param[in] tsffcs
-!! @param[in] wetfcs
-!! @param[in] snofcs
-!! @param[in] zorfcs
-!! @param[in] albfcs
-!! @param[in] tg3fcs
-!! @param[in] cvfcs 
-!! @param[in] cvbfcs
-!! @param[in] cvtfcs
-!! @param[in] cnpfcs
-!! @param[in] smcfcs
-!! @param[in] stcfcs
-!! @param[in] slifcs
-!! @param[in] aisfcs
-!! @param[in] vegfcs
-!! @param[in] vetfcs
-!! @param[in] sotfcs
-!! @param[in] alffcs
-!! @param[in] sihfcs
-!! @param[in] sicfcs
-!! @param[in] vmnfcs
-!! @param[in] vmxfcs
-!! @param[in] slpfcs
-!! @param[in] absfcs
-!! @param[in] tsfanl
-!! @param[in] wetanl
-!! @param[in] snoanl
-!! @param[in] zoranl
-!! @param[in] albanl
-!! @param[in] tg3anl
-!! @param[in] cvanl
-!! @param[in] cvbanl
-!! @param[in] cvtanl
-!! @param[in] cnpanl
-!! @param[in] smcanl
-!! @param[in] stcanl
-!! @param[in] slianl
-!! @param[in] aisanl
-!! @param[in] veganl
-!! @param[in] vetanl
-!! @param[in] sotanl
-!! @param[in] alfanl
-!! @param[in] sihanl
-!! @param[in] sicanl
-!! @param[in] vmnanl
-!! @param[in] vmxanl
-!! @param[in] slpanl
-!! @param[in] absanl
+!! @param[out] tsffcs First guess skin temperature/SST analysis.
+!! @param[out] wetfcs First guess soil wetness.
+!! @param[out] snofcs First guess liquid equivalent snow depth.
+!! @param[out] zorfcs First guess roughness length.
+!! @param[out] albfcs First guess snow-free albedo.
+!! @param[out] tg3fcs First guess soil substrate temperature.
+!! @param[out] cvfcs First guess cloud cover.
+!! @param[out] cvbfcs First guess convective cloud bottom.
+!! @param[out] cvtfcs First guess convective cloud top.
+!! @param[out] cnpfcs First guess canopy water content.
+!! @param[out] smcfcs First guess soil moisture.
+!! @param[out] stcfcs First guess soil temperature.
+!! @param[out] slifcs First guess land-sea-ice mask.
+!! @param[out] aisfcs First guess sea ice mask.
+!! @param[out] vegfcs First guess vegetation greenness.
+!! @param[out] vetfcs First guess vegetation type.
+!! @param[out] sotfcs First guess soil type.
+!! @param[out] alffcs First guess of fraction for strongly and
+!! weakly zenith angle dependent albedo.
+!! @param[out] sihfcs First guess sea ice depth.
+!! @param[out] sicfcs First guess sea ice concentration.
+!! @param[out] vmnfcs First guess minimum greenness fraction.
+!! @param[out] vmxfcs First guess maximum greenness fraction.
+!! @param[out] slpfcs First guess slope type.
+!! @param[out] absfcs First guess maximum snow albedo analysis.
+!! @param[in] tsfanl Skin temperature/SST analysis.
+!! @param[in] wetanl Soil wetness analysis.
+!! @param[in] snoanl Liquid equivalent snow depth analysis.
+!! @param[in] zoranl Roughness length analysis.
+!! @param[in] albanl Snow-free albedo analysis.
+!! @param[in] tg3anl Soil substrate temperature analysis.
+!! @param[in] cvanl Convective cloud cover analysis.
+!! @param[in] cvbanl Convective cloud base analysis.
+!! @param[in] cvtanl Convective cloud top analysis.
+!! @param[in] cnpanl Canopy water content analysis.
+!! @param[in] smcanl Soil moisture analysis.
+!! @param[in] stcanl Soil temperature analysis.
+!! @param[in] slianl Land-sea-ice mask analysis.
+!! @param[in] aisanl Sea ice mask analysis.
+!! @param[in] veganl Vegetation greenness analysis.
+!! @param[in] vetanl Vegetation type analysis.
+!! @param[in] sotanl Soil type analysis.
+!! @param[in] alfanl Analysis of fraction for strongly and weakly
+!! zenith angle dependent albedo.
+!! @param[in] sihanl Sea ice depth analysis.
+!! @param[in] sicanl Sea ice concentration analysis.
+!! @param[in] vmnanl Minimum greenness fraction analysis.
+!! @param[in] vmxanl Maximum greenness fraction analysis.
+!! @param[in] slpanl Slope type analysis.
+!! @param[in] absanl Maximum snow albedo analysis.
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine filfcs(tsffcs,wetfcs,snofcs,zorfcs,albfcs,
      &                  tg3fcs,cvfcs ,cvbfcs,cvtfcs,
      &                  cnpfcs,smcfcs,stcfcs,slifcs,aisfcs,
