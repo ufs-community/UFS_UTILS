@@ -7,11 +7,19 @@
 MODULE cs_nb
   IMPLICIT NONE
 
+  !> 
+  !!
+  !! @param nb_tile_num
+  !! @param nb_tile_bndry 
   TYPE nb_tile_idx
     INTEGER       :: nb_tile_num
     CHARACTER (1) :: nb_tile_bndry 
   END TYPE nb_tile_idx
 
+  !>
+  !!
+  !! @param gp_type
+  !! @param ijt
   TYPE nb_gp_idx
     INTEGER  :: gp_type
     INTEGER  :: ijt(3,8)
