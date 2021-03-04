@@ -1,5 +1,5 @@
 !> @file
-!! @brief Program and associated routines for creating inland mask
+!! @brief Program and associated routines for creating inland mask.
 !! @author Ning Wang @date July 1, 2020
 
 !> This program creates the inland mask and writes it to the orography data files.
