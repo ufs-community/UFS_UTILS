@@ -3742,40 +3742,42 @@
       return
       end
 
-!> ???
+!> Fill in analysis arrays with climatology before reading analysis
+!! data.
 !!
-!! @param[in] tsfanl
-!! @param[in] tsfan2
-!! @param[in] wetanl
-!! @param[in] snoanl
-!! @param[in] zoranl
-!! @param[in] albanl
-!! @param[in] aisanl
-!! @param[in] tg3anl
-!! @param[in] cvanl 
-!! @param[in] cvbanl
-!! @param[in] cvtanl
-!! @param[in] cnpanl
-!! @param[in] smcanl
-!! @param[in] stcanl
-!! @param[in] slianl
-!! @param[in] scvanl
-!! @param[in] veganl
-!! @param[in] vetanl
-!! @param[in] sotanl
-!! @param[in] alfanl
-!! @param[in] sihanl
-!! @param[in] sicanl
-!! @param[in] vmnanl
-!! @param[in] vmxanl
-!! @param[in] slpanl
-!! @param[in] absanl
-!! @param[in] tsfclm
-!! @param[in] tsfcl2
+!! @param[out] tsfanl
+!! @param[out] tsfan2
+!! @param[out] wetanl
+!! @param[out] snoanl
+!! @param[out] zoranl
+!! @param[out] albanl
+!! @param[out] aisanl
+!! @param[out] tg3anl
+!! @param[out] cvanl 
+!! @param[out] cvbanl
+!! @param[out] cvtanl
+!! @param[out] cnpanl
+!! @param[out] smcanl
+!! @param[out] stcanl
+!! @param[out] slianl
+!! @param[out] scvanl
+!! @param[out] veganl
+!! @param[out] vetanl
+!! @param[out] sotanl
+!! @param[out] alfanl
+!! @param[out] sihanl
+!! @param[out] sicanl
+!! @param[out] vmnanl
+!! @param[out] vmxanl
+!! @param[out] slpanl
+!! @param[out] absanl
+!! @param[in] tsfclm Climatological skin temperature/SST on model grid.
+!! @param[in] tsfcl2 Climatological skin temperature/SST on model grid
+!! at time minus deltsfc.
 !! @param[in] wetclm Climatological soil wetness on model grid.
-!! @param[in] snoclm
-!! @param[in] zorclm
-!! @param[in] albclm
+!! @param[in] snoclm Climatological liquid equivalent snow depth on model grid.
+!! @param[in] zorclm Climatological roughness length on model grid.
+!! @param[in] albclm Climatological snow-free albedo on model grid.
 !! @param[in] aisclm
 !! @param[in] tg3clm
 !! @param[in] cvclm 
@@ -3787,7 +3789,7 @@
 !! @param[in] sliclm
 !! @param[in] scvclm
 !! @param[in] vegclm
-!! @param[in] vetclm
+!! @param[in] vetclm Climatological vegetation type on model grid.
 !! @param[in] sotclm
 !! @param[in] alfclm
 !! @param[in] sihclm
@@ -3798,7 +3800,7 @@
 !! @param[in] absclm
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine filanl(tsfanl,tsfan2,wetanl,snoanl,zoranl,albanl,
      &                  aisanl,
      &                  tg3anl,cvanl ,cvbanl,cvtanl,
@@ -4813,13 +4815,14 @@
       return
       end
 
-!> ???
+!> Round a field up to one or down to zero.
 !!
-!! @param[in] aisfld
+!! @param[inout] aisfld The field to adjust.
 !! @param[in] len Number of model points to process.
-!! @param[in] op
-!! @param[in] crit
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] op Operation on field.
+!! @param[in] crit Critical value above/below the 
+!! field is rounded.
+!! @author Shrinivas Moorthi
       subroutine rof01(aisfld,len,op,crit)
       use machine , only : kind_io8,kind_io4
       implicit none
