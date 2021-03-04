@@ -31,7 +31,7 @@ https://noaa-emc.github.io/UFS_UTILS/.
  - R. J. Purser
 
 ### orog_mask_tools
- - Ning Wang
+ - Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
 
 ### sfc_climo_gen
  - George Gayno
