@@ -34,13 +34,15 @@
     END PROGRAM
 #endif
 
-!> Test whether a given point, p, is inside a convex spherical polygon defined with a series of n vertices.
+!> Test whether a given point 'p' is inside a convex spherical polygon defined with a series of 'n' vertices.
 !! Both the test point and the polygon are specified in latitude and longitude radians.
+!! It is assumed that a side of a spherical polygon is a great-circle arc that connects 2 adjacent vertices of the polygon.
 !!    
 !! @param[in] v set of vertices
 !! @param[in] n number of vertices in v
 !! @param[in] p point to test
-!! @param[out] co_gc
+!! @param[out] co_gc 'i' if @p p is on or within epsilon to side 'i' of the given spherical polygon,
+!! or 0 if point is not on any side of the given polygon.
 !! @return enclosure_cnvx whether the point is inside the polygon
 !!
 !! @author N Wang   
