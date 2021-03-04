@@ -3745,32 +3745,36 @@
 !> Fill in analysis arrays with climatology before reading analysis
 !! data.
 !!
-!! @param[out] tsfanl
-!! @param[out] tsfan2
-!! @param[out] wetanl
-!! @param[out] snoanl
-!! @param[out] zoranl
-!! @param[out] albanl
-!! @param[out] aisanl
-!! @param[out] tg3anl
-!! @param[out] cvanl 
-!! @param[out] cvbanl
-!! @param[out] cvtanl
-!! @param[out] cnpanl
-!! @param[out] smcanl
-!! @param[out] stcanl
-!! @param[out] slianl
-!! @param[out] scvanl
-!! @param[out] veganl
-!! @param[out] vetanl
-!! @param[out] sotanl
-!! @param[out] alfanl
-!! @param[out] sihanl
-!! @param[out] sicanl
-!! @param[out] vmnanl
-!! @param[out] vmxanl
-!! @param[out] slpanl
-!! @param[out] absanl
+!! @param[out] tsfanl Skin temperature/SST analysis on model grid.
+!! @param[out] tsfan2 Skin temperature/SST analysis on model grid
+!! at time minus deltsfc.
+!! @param[out] wetanl Soil wetness analysis on model grid.
+!! @param[out] snoanl Liquid equivalent snow depth analysis on model grid.
+!! @param[out] zoranl Roughness length analysis on model grid.
+!! @param[out] albanl Snow-free albedo analysis on model grid.
+!! @param[out] aisanl Sea ice mask analysis on model grid.
+!! @param[out] tg3anl Soil substrate temperature analysis on model grid.
+!! @param[out] cvanl Convective cloud cover analysis on model grid.
+!! @param[out] cvbanl Convective cloud base analysis on model grid.
+!! @param[out] cvtanl Convective cloud top analysis on model grid.
+!! @param[out] cnpanl Canopy water content analysis on model grid.
+!! @param[out] smcanl Soil moisture analysis on model grid.
+!! @param[out] stcanl Soil temperature analysis on model grid.
+!! @param[out] slianl Land-sea-ice mask analysis on model grid.
+!! @param[out] scvanl Snow cover analysis on model grid.
+!! @param[out] veganl Vegetation greenness analysis on model grid.
+!! @param[out] vetanl Vegetation type analysis on model grid.
+!! @param[out] sotanl Soil type analysis on model grid.
+!! @param[out] alfanl Fraction for strongly and weakly zenith
+!! angle dependent albedo analysis on model grid.
+!! @param[out] sihanl Sea ice depth analysis on model grid.
+!! @param[out] sicanl Sea ice concentration analysis on model grid.
+!! @param[out] vmnanl Minimum vegetation greenness analysis on model
+!! grid.
+!! @param[out] vmxanl Maximum vegetation greenness analysis on model
+!! grid.
+!! @param[out] slpanl Slope type analysis on model grid.
+!! @param[out] absanl Maximum snow albedo analysis on model grid.
 !! @param[in] tsfclm Climatological skin temperature/SST on model grid.
 !! @param[in] tsfcl2 Climatological skin temperature/SST on model grid
 !! at time minus deltsfc.
@@ -3778,26 +3782,30 @@
 !! @param[in] snoclm Climatological liquid equivalent snow depth on model grid.
 !! @param[in] zorclm Climatological roughness length on model grid.
 !! @param[in] albclm Climatological snow-free albedo on model grid.
-!! @param[in] aisclm
-!! @param[in] tg3clm
-!! @param[in] cvclm 
-!! @param[in] cvbclm
-!! @param[in] cvtclm
-!! @param[in] cnpclm
-!! @param[in] smcclm
-!! @param[in] stcclm
-!! @param[in] sliclm
-!! @param[in] scvclm
-!! @param[in] vegclm
+!! @param[in] aisclm Climatological sea ice mask on model grid.
+!! @param[in] tg3clm Climatological soil substrate temperature on model
+!! grid.
+!! @param[in] cvclm Climatological convective cloud cover on model grid.
+!! @param[in] cvbclm Climatological convective cloud base on model grid.
+!! @param[in] cvtclm Climatological convective cloud top on model grid.
+!! @param[in] cnpclm Climatological canopy water content on model grid.
+!! @param[in] smcclm Climatological soil moisture on model grid.
+!! @param[in] stcclm Climatologcial soil temperature on model grid.
+!! @param[in] sliclm Climatological model land-sea-ice mask.
+!! @param[in] scvclm Climatological snow cover on model grid.
+!! @param[in] vegclm Climatological vegetation greenness on model grid.
 !! @param[in] vetclm Climatological vegetation type on model grid.
-!! @param[in] sotclm
-!! @param[in] alfclm
-!! @param[in] sihclm
-!! @param[in] sicclm
-!! @param[in] vmnclm
-!! @param[in] vmxclm
-!! @param[in] slpclm
-!! @param[in] absclm
+!! @param[in] sotclm Climatological soil type on model grid.
+!! @param[in] alfclm Climatological fraction for strongly and weakly
+!! zenith angle dependent albedo on model grid.
+!! @param[in] sihclm Climatological sea ice depth on the model grid.
+!! @param[in] sicclm Climatological sea ice concentration on the model grid.
+!! @param[in] vmnclm Climatological minimum vegetation greenness on
+!! model grid.
+!! @param[in] vmxclm Climatological maximum vegetation greenness on
+!! model grid.
+!! @param[in] slpclm Climatological slope type on model grid.
+!! @param[in] absclm Climatological maximum snow albedo on model grid.
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
 !! @author Shrinivas Moorthi
