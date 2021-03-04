@@ -922,9 +922,7 @@ end subroutine dplroti
 
 !> Perform schmidt transformation with scaling parameter s to a polyline.
 !!
-!! @param[inout] x input of the three dimensional polyline
-!! @param[inout] y input of the three dimensional polyline
-!! @param[inout] z input of the three dimensional polyline
+!! @param[in] s scaling
 !! @author R. J. Purser
 subroutine plctoc(s,n,x,y,z)!                                         [plctoc]
 use pietc_s, only: u1
