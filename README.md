@@ -24,7 +24,7 @@ orog_mask_tools | Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
 sfc_climo_gen | George Gayno
 vcoord_gen | Fanglin Yang
 
-Code managers: George Gayno, Kyle Gerheiser
+UFS_UTILS Code managers: George Gayno, Kyle Gerheiser
 
 ## Prerequisites
 
