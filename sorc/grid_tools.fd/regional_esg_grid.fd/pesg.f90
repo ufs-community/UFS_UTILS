@@ -431,7 +431,7 @@ end subroutine xmtoxc_vak1
 !! @param a ESG mapping parameterization
 !! @param k ESG mapping parameterization
 !! @param xm map-space vector
-!! @param xm derivative
+!! @param xc derivative
 !! @param xcd jacobian matrix
 !! @param ff error flag
 !! @author R. J. Purser
@@ -451,7 +451,7 @@ call xstoxc(xs,xc,xcd)
 xcd=matmul(xcd,xsd)
 end subroutine xmtoxc_ak
 
-!! Inverse mapping of xmtoxc_ak. That is, go from given cartesian unit
+!> Inverse mapping of xmtoxc_ak. That is, go from given cartesian unit
 !! 3-vector, xc, to map coordinate 2-vector xm (or return a raised
 !! failure flag, FF, if the attempt fails).
 !!
@@ -1598,7 +1598,7 @@ do iy=ly,my-1
 enddo
 end subroutine hgrid_ak_rc
 
-!! Use a and k as the parameters of an Extended Schmidt-transformed
+!> Use a and k as the parameters of an Extended Schmidt-transformed
 !! Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about
 !! this center by an azimuth angle of pdazi counterclockwise (these
 !! angles in degrees).
@@ -1644,7 +1644,7 @@ gdlat=gdlat*rtod ! Convert these angles from radians to degrees
 gdlon=gdlon*rtod !
 end subroutine hgrid_ak_dd
 
-!! Like hgrid_ak_rr_c, except all the angle arguments (but not
+!> Like hgrid_ak_rr_c, except all the angle arguments (but not
 !! delx,dely) are in degrees instead of radians.
 !!
 !! @param[in] lx x grid index for left-lower corner of the grid at center
@@ -1973,6 +1973,8 @@ end subroutine gtoxm_ak_dd_m
 !! @param[in] pdazi ???
 !! @param[in] delx central x-spacing grid point
 !! @param[in] dely central y-spacing grid point
+!! @param[in] dlat ???
+!! @param[in] dlon ???
 !! @param[out] xm ???
 !! @param[out] ff failure flag
 !! @author R. J. Purser
