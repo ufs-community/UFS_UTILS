@@ -7,8 +7,9 @@
 module cstgeo ! Constants for orientation and stretching of map
 use pkind, only: sp
 implicit none
-real(sp),dimension(3,3):: rotm
-real(sp)               :: sc,sci
+real(sp),dimension(3,3):: rotm !< ???
+real(sp)               :: sc !< ???
+real(sp)               :: sci !< ???
 end module cstgeo
 
 !> Constants for orientation and stretching of map.
@@ -16,8 +17,9 @@ end module cstgeo
 module dcstgeo ! Constants for orientation and stretching of map
 use pkind, only: dp
 implicit none
-real(dp),dimension(3,3):: rotm
-real(dp)               :: sc,sci
+real(dp),dimension(3,3):: rotm !< ???
+real(dp)               :: sc !< ???
+real(dp)               :: sci !< ???
 end module dcstgeo
 
 !> Utility routines for orienting the globe and basic geographical mappings.
@@ -72,6 +74,10 @@ rot3(3,1)=clat0*clon0; rot3(3,2)=clat0*slon0; rot3(3,3)=slat0
 end subroutine sininmap
 
 !> ???
+!!
+!! @param[in] alon0 ???
+!! @param[in] alat0 ???
+!! @param[in] rot3 ???
 !! @author R. J. Purser
 subroutine dininmap(alon0,alat0,rot3)!                               [ininmap]
 use pietc, only: u0,dtor
@@ -118,7 +124,11 @@ rot3(3,2)=clat0*slon0
 rot3(3,3)=slat0
 end subroutine sinivmap
 
-!> ??? 
+!> ???
+!!
+!! @param[in] alon0 ???
+!! @param[in] alat0 ???
+!! @param[in] rot3 ???
 !! @author R. J. Purser
 subroutine dinivmap(alon0,alat0,rot3)!                               [inivmap]
 use pietc, only: u0,dtor
@@ -168,6 +178,10 @@ endif
 end subroutine sctogr
 
 !> ???
+!!
+!! @param[in] xe
+!! @param[out] rlat
+!! @param[out] rlon
 !! @author R. J. Purser
 subroutine dctogr(xe,rlat,rlon)!                                       [ctogr]
 use pietc, only: u0
@@ -185,6 +199,10 @@ endif
 end subroutine dctogr
 
 !> ???
+!!
+!! @param[in] rlat
+!! @param[in] rlon
+!! @param[out] xe
 !! @author R. J. Purser
 subroutine sgrtoc(rlat,rlon,xe)!                                       [grtoc]
 implicit none
@@ -197,6 +215,10 @@ xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine sgrtoc
 
 !> ???
+!!
+!! @param[in] rlat
+!! @param[in] rlon
+!! @param[out] xe
 !! @author R. J. Purser
 subroutine dgrtoc(rlat,rlon,xe)!                                       [grtoc]
 implicit none
@@ -209,6 +231,12 @@ xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine dgrtoc
 
 !> ???
+!!
+!! @param[in] rlat
+!! @param[in] rlon
+!! @param[out] xe
+!! @param[out] dxedlat
+!! @param[out] dxedlon
 !! @author R. J. Purser
 subroutine sgrtocd(rlat,rlon,xe,dxedlat,dxedlon)!                      [grtoc]
 implicit none
@@ -224,6 +252,12 @@ dxedlon=dxedlon_d
 end subroutine sgrtocd
 
 !> ???
+!!
+!! @param[in] rlat
+!! @param[in] rlon
+!! @param[out] xe
+!! @param[out] dxedlat
+!! @param[out] dxedlon
 !! @author R. J. Purser
 subroutine dgrtocd(rlat,rlon,xe,dxedlat,dxedlon)!                      [grtoc]
 use pietc, only: u0
@@ -239,6 +273,15 @@ dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0
 end subroutine dgrtocd
 
 !> ???
+!!
+!! @param[in] rlat
+!! @param[in] rlon
+!! @param[out] xe
+!! @param[out] dxedlat
+!! @param[out] dxedlon
+!! @param[in] ddxedlatdlat
+!! @param[in] ddxedlatdlon
+!! @param[in] ddxedlondlon
 !! @author R. J. Purser
 subroutine sgrtocdd(rlat,rlon,xe,dxedlat,dxedlon, &!                   [grtoc]
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)
@@ -261,6 +304,15 @@ ddxedlondlon=ddxedlondlon_d
 end subroutine sgrtocdd
 
 !> ???
+!!
+!! @param[in] rlat ???
+!! @param[in] rlon ???
+!! @param[out] xe  ???
+!! @param[out] dxedlat ???
+!! @param[out] dxedlon ???
+!! @param[in] ddxedlatdlat ???
+!! @param[in] ddxedlatdlon ???
+!! @param[in] ddxedlondlon ???
 !! @author R. J. Purser
 subroutine dgrtocdd(rlat,rlon,xe,dxedlat,dxedlon, &!                   [grtoc]
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)
@@ -311,6 +363,10 @@ endif
 end subroutine sctog
 
 !> ???
+!!
+!! @param[in] xe three cartesian components
+!! @param[out] dlat degrees latitude
+!! @param[out] dlon degrees longitude
 !! @author R. J. Purser
 subroutine dctog(xe,dlat,dlon)!                                         [ctog]
 use pietc, only: u0,rtod
@@ -349,6 +405,10 @@ xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine sgtoc
 
 !> ???
+!!
+!! @param[in] dlat degrees latitude
+!! @param[in] dlon degrees longitude
+!! @param[out] xe three cartesian components.
 !! @author R. J. Purser
 subroutine dgtoc(dlat,dlon,xe)!                                         [gtoc]
 use pietc, only: dtor
@@ -363,6 +423,12 @@ xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine dgtoc
 
 !> ??? 
+!!
+!! @param[in] dlat degrees latitude
+!! @param[in] dlon degrees longitude
+!! @param[out] xe three cartesian components.
+!! @param[out] dxedlat ???
+!! @param[out] dxedlon ???
 !! @author R. J. Purser
 subroutine sgtocd(dlat,dlon,xe,dxedlat,dxedlon)!                        [gtoc]
 implicit none
@@ -378,6 +444,12 @@ dxedlon=dxedlon_d
 end subroutine sgtocd
 
 !> ???
+!!
+!! @param[in] dlat degrees latitude
+!! @param[in] dlon degrees longitude
+!! @param[out] xe three cartesian components.
+!! @param[out] dxedlat ???
+!! @param[out] dxedlon ???
 !! @author R. J. Purser
 subroutine dgtocd(dlat,dlon,xe,dxedlat,dxedlon)!                        [gtoc]
 use pietc, only: u0,dtor
@@ -394,6 +466,15 @@ dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 ; dxedlon=dxedlon*dtor
 end subroutine dgtocd
 
 !> ???
+!!
+!! @param[in] dlat degrees latitude
+!! @param[in] dlon degrees longitude
+!! @param[out] xe three cartesian components.
+!! @param[out] dxedlat ???
+!! @param[out] dxedlon ???
+!! @param[in] ddxedlatdlat ???
+!! @param[in] ddxedlatdlon ???
+!! @param[in] ddxedlondlon ???
 !! @author R. J. Purser
 subroutine sgtocdd(dlat,dlon,xe,dxedlat,dxedlon, &
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)!                           [gtoc]
@@ -416,6 +497,15 @@ ddxedlondlon=ddxedlondlon_d
 end subroutine sgtocdd
 
 !> ???
+!!
+!! @param[in] dlat degrees latitude
+!! @param[in] dlon degrees longitude
+!! @param[out] xe three cartesian components.
+!! @param[out] dxedlat ???
+!! @param[out] dxedlon ???
+!! @param[in] ddxedlatdlat ???
+!! @param[in] ddxedlatdlon ???
+!! @param[in] ddxedlondlon ???
 !! @author R. J. Purser
 subroutine dgtocdd(dlat,dlon,xe,dxedlat,dxedlon, &
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)!                           [gtoc]
@@ -446,6 +536,10 @@ ddxedlondlon=ddxedlondlon*dtor**2
 end subroutine dgtocdd
 
 !> ???
+!!
+!! @param[in] splat ???
+!! @param[in] splon ???
+!! @param[in] sorth ???
 !! @author R. J. Purser
 subroutine sgtoframem(splat,splon,sorth)!                            [gtoframe]
 implicit none
@@ -473,6 +567,12 @@ orth(:,1)=xp; orth(:,2)=yp; orth(:,3)=zp
 end subroutine gtoframem
 
 !> ???
+!!
+!! @param[in] splat ???
+!! @param[in] splon ???
+!! @param[out] sxp ???
+!! @param[out] syp ???
+!! @param[out] szp ???
 !! @author R. J. Purser
 subroutine sgtoframev(splat,splon,sxp,syp,szp)!                       [gtoframe]
 !==============================================================================
@@ -488,9 +588,9 @@ call gtoframev(plat,plon, xp,yp,zp)
 sxp=xp; syp=yp; szp=zp
 end subroutine sgtoframev
 
-!> Given a geographical point by its degrees lat and lon, plat and plon,
-!! return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered
-!! coordinates.
+!> Given a geographical point by its degrees lat and lon, plat and
+!! plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in
+!! earth-centered coordinates.
 !!
 !! @param[in] plat latitude point
 !! @param[in] plon longitude point
@@ -520,6 +620,13 @@ endif
 end subroutine gtoframev
 
 !> ???
+!!
+!! @param[in] sxp ???
+!! @param[in] syp ???
+!! @param[in] szp ???
+!! @param[in] sxv ???
+!! @param[out] syv ???
+!! @param[out] szv  ???
 !! @author R. J. Purser
 subroutine sparaframe(sxp,syp,szp, sxv,syv,szv)!                    [paraframe]
 implicit none
@@ -560,6 +667,14 @@ yv=xq*stheta+yq*ctheta
 end subroutine paraframe
 
 !> ???
+!!
+!! @param[in] sxp ???
+!! @param[in] syp ???
+!! @param[in] szp ???
+!! @param[in] sxv ???
+!! @param[in] syv ???
+!! @param[in] szv ???
+!! @param[out] stwist ???
 !! @author R. J. Purser
 subroutine sframetwist(sxp,syp,szp, sxv,syv,szv, stwist)!          [frametwist]
 implicit none
@@ -582,6 +697,8 @@ end subroutine sframetwist
 !! @param[in] xp cartesian orthonormal frame
 !! @param[in] yp cartesian orthonormal frame
 !! @param[in] zp cartesian orthonormal frame
+!! @param[in] xv ???
+!! @param[in] yv ???
 !! @param[in] zv Earth-centered cartesians
 !! @param[out] twist opposite twist of cartesian orthonormal frame input
 !! @author R. J. Purser
@@ -668,6 +785,8 @@ end subroutine sctocd
 !! its jacobian, dxc2, and its 2nd derivative, ddxc2.
 !!
 !! @param[in] s scaling
+!! @param[in] xc1 ???
+!! @param[in] xc2 ???
 !! @param[out] dxc2 jacobian
 !! @param[out] ddxc2 2nd derivative
 !! @author R. J. Purser
@@ -750,6 +869,7 @@ end subroutine dctoc
 !! @param[in] s scaling
 !! @param[inout] xc1 schmidt transformation
 !! @param[inout] xc2 schmidt transformation
+!! @param[out] dxc2 ???
 !! @author R. J. Purser
 subroutine dctocd(s,xc1,xc2,dxc2)!                                 [ctoc_schm]
 use pietc, only: u0,u1,u2
@@ -839,6 +959,7 @@ end subroutine dctocdd
 !> Apply a constant rotation to a three dimensional polyline.
 !!
 !! @param[in] rot3 rotation
+!! @param[in] n ???
 !! @param[inout] x input of the three dimensional polyline
 !! @param[inout] y input of the three dimensional polyline
 !! @param[inout] z input of the three dimensional polyline
@@ -860,6 +981,7 @@ end subroutine plrot
 !> Invert the rotation of a three-dimensional polyline.
 !!
 !! @param[in] rot3 rotation to be inverted
+!! @param[in] n ???
 !! @param[inout] x input of the three dimensional polyline
 !! @param[inout] y input of the three dimensional polyline
 !! @param[inout] z input of the three dimensional polyline
@@ -881,6 +1003,7 @@ end subroutine plroti
 !> Apply a constant rotation to a three dimensional polyline.
 !!
 !! @param[in] rot3 rotation to be inverted
+!! @param[in] n ???
 !! @param[inout] x input of the three dimensional polyline
 !! @param[inout] y input of the three dimensional polyline
 !! @param[inout] z input of the three dimensional polyline
@@ -902,6 +1025,7 @@ end subroutine dplrot
 !> Invert the rotation of a three-dimensional polyline.
 !!
 !! @param[in] rot3 rotation to be inverted
+!! @param[in] n ???
 !! @param[inout] x input of the three dimensional polyline
 !! @param[inout] y input of the three dimensional polyline
 !! @param[inout] z input of the three dimensional polyline
@@ -923,6 +1047,10 @@ end subroutine dplroti
 !> Perform schmidt transformation with scaling parameter s to a polyline.
 !!
 !! @param[in] s scaling
+!! @param[in] n ???
+!! @param[inout] x input of the three dimensional polyline
+!! @param[inout] y input of the three dimensional polyline
+!! @param[inout] z input of the three dimensional polyline
 !! @author R. J. Purser
 subroutine plctoc(s,n,x,y,z)!                                         [plctoc]
 use pietc_s, only: u1
