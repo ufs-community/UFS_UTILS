@@ -4911,15 +4911,16 @@
       return
       end
 
-!> ???
+!> Adjust skin temperature or SST for terrain.
 !!
-!! @param[in] tsfc
-!! @param[in] orog
-!! @param[in] slmask
-!! @param[in] umask
+!! @param[inout] tsfc Skin temperature/SST
+!! @param[in] orog Orography height.
+!! @param[in] slmask Model land-sea mask.
+!! @param[in] umask When '0' adjust SST, when '1' adjust skin
+!! temperature.
 !! @param[in] len Number of model points to process.
-!! @param[in] rlapse
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] rlapse Standard atmospheric lapse rate.
+!! @author Shrinivas Moorthi
       subroutine tsfcor(tsfc,orog,slmask,umask,len,rlapse)
 !
       use machine , only : kind_io8,kind_io4
@@ -4936,20 +4937,20 @@
       return
       end
 
-!> ???
+!> Estimate snow depth at glacial, land and sea ice points.
 !!
-!! @param[in] scvanl
-!! @param[in] slianl
-!! @param[in] tsfanl
-!! @param[in] snoclm
-!! @param[in] glacir
-!! @param[in] snwmax
-!! @param[in] snwmin
-!! @param[in] landice
+!! @param[in] scvanl Snow cover.
+!! @param[in] slianl Land-sea-ice mask.
+!! @param[in] tsfanl Skin temperature.
+!! @param[in] snoclm Climatological snow depth.
+!! @param[in] glacir Permanent glacial point when '1'.
+!! @param[in] snwmax Maximum snow depth.
+!! @param[in] snwmin Minimum snow depth.
+!! @param[in] landice When true, point is permanent land ice.
 !! @param[in] len Number of model points to process.
-!! @param[in] snoanl
+!! @param[out] snoanl Snow depth.
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine snodpth(scvanl,slianl,tsfanl,snoclm,
      &                   glacir,snwmax,snwmin,landice,len,snoanl, me)
       use machine , only : kind_io8,kind_io4
