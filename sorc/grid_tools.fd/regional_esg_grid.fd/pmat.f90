@@ -96,7 +96,7 @@ call dinvmtf(a,ff)
 if(ff)stop 'In dinvmt; Unable to invert matrix'
 end subroutine dinvmt
 
-!> Invert matrix
+!> Invert matrix.
 !!
 !! @param[inout] a matrix
 !! @author R. J. Purser
@@ -107,7 +107,7 @@ call cinvmtf(a,ff)
 if(ff)stop 'In cinvmt; Unable to invert matrix'
 end subroutine cinvmt
 
-!> Invert matrix (or flag if can't)
+!> Invert matrix (or flag if can't).
 !!
 !! @param[inout] a matrix
 !! @param[out] ff flag for error condition
@@ -145,7 +145,7 @@ enddo
 do j=m-1,1,-1; l=ipiv(j); call sswpvv(a(:,j),a(:,l)); enddo
 end subroutine sinvmtf
 
-!> Routine dinvmtf to Invert and Permute
+!> Routine dinvmtf to Invert and Permute.
 !!
 !! @param[inout] a matrix
 !! @param[out] ff flag for error condition
@@ -182,7 +182,7 @@ enddo
 do j=m-1,1,-1; l=ipiv(j); call dswpvv(a(:,j),a(:,l)); enddo
 end subroutine dinvmtf
 
-!> Routine cinvmtf to Invert and Permute
+!> Routine cinvmtf to Invert and Permute.
 !!
 !! @param[inout] a matrix
 !! @param[out] ff flag for error condition
@@ -703,11 +703,13 @@ do j=1,m-1
 enddo
 end subroutine cldumf
 
-!> Use l-u factors in A to back-substitute for several rhs in B, using ipiv to
-!! define the pivoting permutation used in the l-u decomposition.
+!> Use l-u factors in A to back-substitute for several rhs in B, using
+!! ipiv to define the pivoting permutation used in the l-u
+!! decomposition.
 !!
 !! @param[in] a L-D-U factorization of linear system matrux
-!! @param[inout] b rt-hand-sides vectors on input, corresponding solutions on return
+!! @param[inout] b rt-hand-sides vectors on input, corresponding
+!! solutions on return
 !! @param[in] ipiv array encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine sudlmm(a,b,ipiv)!                                           [udlmm]
@@ -1100,7 +1102,7 @@ real(dp),dimension(:,:),intent(inout):: a
 a=transpose(a); call dinvl(a); a=transpose(a)
 end subroutine dinvu
 
-!> Invert lower triangular matrix in place
+!> Invert lower triangular matrix in place.
 !!
 !! @param[inout] a  matrix
 !! @author R. J. Purser
