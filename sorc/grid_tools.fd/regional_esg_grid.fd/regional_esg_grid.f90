@@ -1,7 +1,12 @@
 !> @file
-!=============================================================================
+!! @brief ???
+!! @author R. J. Purser
+
+!! Program which does ???
+!!
+!! @author R. J. Purser
+!! @return 0 for success, error code otherwise.
 program regional_grid
-!=============================================================================
 
   use pkind, only: dp
   use pietc, only: dtor,rtod

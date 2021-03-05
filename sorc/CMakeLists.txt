@@ -1,4 +1,4 @@
-# This is the cmake build file for the chgres_cube utility in the
+# This is the cmake build file for the sorc directory in the
 # UFS_UTILS project.
 #
 # George Gayno
@@ -9,7 +9,6 @@ if (OpenMP_FOUND)
 else()
   message(STATUS "OpenMP is required for global_cycle.fd and was NOT found, skipping ...")
 endif()
-add_subdirectory(nst_tf_chg.fd)
 add_subdirectory(fre-nctools.fd)
 add_subdirectory(grid_tools.fd)
 add_subdirectory(chgres_cube.fd)
