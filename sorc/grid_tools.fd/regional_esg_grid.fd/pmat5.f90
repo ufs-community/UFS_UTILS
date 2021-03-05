@@ -1,5 +1,5 @@
 !> @file
-!! Handy geographical transformations.
+!! @brief Handy geographical transformations.
 !! @author R. J. Purser @date 1996
  
 !> Constants for orientation and stretching of map.
