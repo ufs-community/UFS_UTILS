@@ -110,7 +110,7 @@ real(dp),parameter:: ms77=-s77 !< ???
 real(dp),parameter:: ms79=-s79 !< ???
 real(dp),parameter:: ms80=-s80 !< ???
 
-complex(dpc)parameter:: &
+complex(dpc),parameter:: &
      c0=(u0,u0),c1=(u1,u0),mc1=-c1,ci=(u0,u1),mci=-ci,cipi=ci*pi,     &
 ! Main fractional rotations, as unimodular complex numbers:
      z000=c1        ,z010=( s80,s10),z011=( s79,s11),z013=( s77,s13),&
