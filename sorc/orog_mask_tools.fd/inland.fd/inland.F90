@@ -98,7 +98,7 @@ END SUBROUTINE mark_global_inland
 
 !> Create inland mask for regional grid.
 !!
-!! @param[in] cubed sphere resolution (48, 96...)
+!! @param[in] cs_res cubed sphere resolution (48, 96...)
 !!
 !! @author Ning Wang
 SUBROUTINE mark_inland_reg(cs_res)

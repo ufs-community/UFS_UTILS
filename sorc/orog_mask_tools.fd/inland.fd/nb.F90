@@ -7,36 +7,31 @@
 MODULE cs_nb
   IMPLICIT NONE
 
-  !> 
-  !!
-  !! @param nb_tile_num
-  !! @param nb_tile_bndry 
+  !> Neighboring tile descriptor.
   TYPE nb_tile_idx
-    INTEGER       :: nb_tile_num
-    CHARACTER (1) :: nb_tile_bndry 
+    INTEGER       :: nb_tile_num !< Neighbor tile number (1..6)
+    CHARACTER (1) :: nb_tile_bndry !< Neighbor tile boundary (l)eft, (r)ight, (t)op, (b)ottom
   END TYPE nb_tile_idx
 
-  !>
-  !!
-  !! @param gp_type
-  !! @param ijt
+  !> Neighboring cell descriptor.
   TYPE nb_gp_idx
-    INTEGER  :: gp_type
-    INTEGER  :: ijt(3,8)
+    INTEGER  :: gp_type !< Cell boundary type from bndry function
+    INTEGER  :: ijt(3,8) !< Neighboring cell indices
   END TYPE nb_gp_idx
 
-  TYPE(nb_tile_idx):: nb_tile(4,6)  
-  TYPE(nb_gp_idx):: nb_index 
+  TYPE(nb_tile_idx):: nb_tile(4,6) !< Descriptor for each edge of each tile on the cubed sphere.
 
-  INTEGER :: cres, xres, yres
+  INTEGER :: cres !< Cubed sphere resolution
+  integer :: xres !< x resolution of regional grid
+  integer :: yres !< y resolution of regional grid
  
 CONTAINS
   
-  !> Initialize inter-panel neighbor index for global grid
+  !> Initialize inter-panel neighbor index for global grid.
   !!
-  !! @param[in] cubed sphere resolution (48, 96...)
+  !! @param[in] cres_in cubed sphere resolution (48, 96...)
   !!
-  !! <pre>
+  !! @verbatim  
   !!   _______1_______
   !!  |               |       1-upper, 2-bottom, 3-left, 4-right 
   !!  |               |
@@ -47,7 +42,9 @@ CONTAINS
   !!  |_______________|
   !!          2
   !!      Figure 1. Boundary numbers
-  !! </pre>
+  !! @endverbatim
+  !!
+  !! @author Ning Wang
   SUBROUTINE idx_init(cres_in) 
     INTEGER :: cres_in
 
@@ -99,10 +96,11 @@ CONTAINS
 
   END SUBROUTINE idx_init_reg
 
-  !> Get boundary type from indices for global grid
+  !> Get boundary type from indices for global grid.
   !!
   !! @param[in] i cell index
   !! @param[in] j cell index
+  !! @return bndry cell boundary type
   !!
   !! @author Ning Wang
   INTEGER FUNCTION bndry(i, j)
@@ -132,10 +130,11 @@ CONTAINS
 
   END FUNCTION bndry
   
-  !> Get boundary type from indices for regional grid
+  !> Get boundary type from indices for regional grid.
   !!
   !! @param[in] i cell index
   !! @param[in] j cell index
+  !! @return cell boundary type
   !!
   !! @author Ning Wang
   INTEGER FUNCTION bndry_reg(i, j)
@@ -167,12 +166,8 @@ CONTAINS
 
   !> Get neighbors of cell 'c' at (tile, i, j) for global grid.
   !!
-  !! @param[in] tile tile face
-  !! @param[in] cell index
-  !! @param[in] cell index
-  !! @param[out] nb neighbors
   !!
-  !! <pre>
+  !! @verbatim
   !!     ______________
   !!    |    |    |    |              ________
   !!    | 5  | 1  | 6  |             /\ 1 \ 6 \
@@ -186,7 +181,12 @@ CONTAINS
   !!  
   !! Figure 2.  Eight neighbors of cell 'c' and special cases at upper left
   !! cornner of the tile
-  !! </pre>
+  !! @endverbatim
+  !!
+  !! @param[in] tile tile face
+  !! @param[in] i cell index
+  !! @param[in] j cell index
+  !! @param[out] nb neighbors
   !!
   !! @author Ning Wang
   SUBROUTINE neighbors(tile, i, j, nb)
@@ -385,7 +385,6 @@ CONTAINS
 
   !> Get neighbors of cell 'c' at (tile, i, j) for regional grid.
   !!
-  !! @param[in] tile tile face
   !! @param[in] i cell index
   !! @param[in] j cell index
   !! @param[out] nb neighbors
