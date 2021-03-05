@@ -9,7 +9,8 @@
 module pietc_s
 use pkind, only: sp,spc
 implicit none
-logical ,parameter:: T=.true.,F=.false. !<- for pain-relief in logical ops
+logical ,parameter:: T=.true. !< for pain-relief in logical ops
+logical ,parameter:: F=.false. !< for pain-relief in logical ops
 real(sp),parameter:: u0=0_sp !< ???
 real(sp),parameter:: u1=1_sp !< ???
 real(sp),parameter:: mu1=-u1 !< ???
@@ -105,31 +106,123 @@ real(sp),parameter:: ms77=-s77 !< ???
 real(sp),parameter:: ms79=-s79 !< ???
 real(sp),parameter:: ms80=-s80 !< ???
 
-complex(spc),parameter:: &
-     c0=(u0,u0),c1=(u1,u0),mc1=-c1,ci=(u0,u1),mci=-ci,cipi=ci*pi,     &
-! Main fractional rotations, as unimodualr complex numbers:
-     z000=c1        ,z010=( s80,s10),z011=( s79,s11),z013=( s77,s13),&
-     z015=( s75,s15),z018=( s72,s18),z020=( s70,s20),z022=( s68,s22),&
-     z026=( s64,s26),z030=( s60,s30),z034=( s56,s34),z036=( s54,s36),&
-     z039=( s51,s39),z040=( s50,s40),z045=( s45,s45),z050=( s40,s50),&
-     z051=( s39,s51),z054=( s36,s54),z056=( s34,s56),z060=( s30,s60),&
-     z064=( s26,s64),z068=( s22,s68),z070=( s20,s70),z072=( s18,s72),&
-     z075=( s15,s75),z077=( s13,s77),z079=( s11,s79),z080=( s10,s80),&
-     z090=ci,        z100=(ms10,s80),z101=(ms11,s79),z103=(ms13,s77),&
-     z105=(ms15,s75),z108=(ms18,s72),z110=(ms20,s70),z112=(ms22,s68),&
-     z116=(ms26,s64),z120=(ms30,s60),z124=(ms34,s56),z126=(ms36,s54),&
-     z129=(ms39,s51),z130=(ms40,s50),z135=(ms45,s45),z140=(ms50,s40),&
-     z141=(ms51,s39),z144=(ms54,s36),z146=(ms56,s34),z150=(ms60,s30),&
-     z154=(ms64,s26),z158=(ms68,s22),z160=(ms70,s20),z162=(ms72,s18),&
-     z165=(ms75,s15),z167=(ms77,s13),z169=(ms79,s11),z170=(ms80,s10),&
-     z180=-z000,z190=-z010,z191=-z011,z193=-z013,z195=-z015,z198=-z018,&
-     z200=-z020,z202=-z022,z206=-z026,z210=-z030,z214=-z034,z216=-z036,&
-     z219=-z039,z220=-z040,z225=-z045,z230=-z050,z231=-z051,z234=-z054,&
-     z236=-z056,z240=-z060,z244=-z064,z248=-z068,z250=-z070,z252=-z072,&
-     z255=-z075,z257=-z077,z259=-z079,z260=-z080,z270=-z090,z280=-z100,&
-     z281=-z101,z283=-z103,z285=-z105,z288=-z108,z290=-z110,z292=-z112,&
-     z296=-z116,z300=-z120,z304=-z124,z306=-z126,z309=-z129,z310=-z130,&
-     z315=-z135,z320=-z140,z321=-z141,z324=-z144,z326=-z146,z330=-z150,&
-     z334=-z154,z338=-z158,z340=-z160,z342=-z162,z345=-z165,z347=-z167,&
-     z349=-z169,z350=-z170
+complex(spc),parameter::  c0=(u0,u0) !< ???
+complex(spc),parameter::  c1=(u1,u0) !< ???
+complex(spc),parameter::  mc1=-c1 !< ???
+complex(spc),parameter::  ci=(u0,u1) !< ???
+complex(spc),parameter::  mci=-ci !< ???
+complex(spc),parameter::  cipi=ci*pi !< ???
+! Main fractional rotations, as unimodualr complex numbers: !< ???
+complex(spc),parameter::  z000=c1 !< ???
+complex(spc),parameter::  z010=( s80,s10) !< ???
+complex(spc),parameter::  z011=( s79,s11) !< ???
+complex(spc),parameter::  z013=( s77,s13) !< ???
+complex(spc),parameter::  z015=( s75,s15) !< ???
+complex(spc),parameter::  z018=( s72,s18) !< ???
+complex(spc),parameter::  z020=( s70,s20) !< ???
+complex(spc),parameter::  z022=( s68,s22) !< ???
+complex(spc),parameter::  z026=( s64,s26) !< ???
+complex(spc),parameter::  z030=( s60,s30) !< ???
+complex(spc),parameter::  z034=( s56,s34) !< ???
+complex(spc),parameter::  z036=( s54,s36) !< ???
+complex(spc),parameter::  z039=( s51,s39) !< ???
+complex(spc),parameter::  z040=( s50,s40) !< ???
+complex(spc),parameter::  z045=( s45,s45) !< ???
+complex(spc),parameter::  z050=( s40,s50) !< ???
+complex(spc),parameter::  z051=( s39,s51) !< ???
+complex(spc),parameter::  z054=( s36,s54) !< ???
+complex(spc),parameter::  z056=( s34,s56) !< ???
+complex(spc),parameter::  z060=( s30,s60) !< ???
+complex(spc),parameter::  z064=( s26,s64) !< ???
+complex(spc),parameter::  z068=( s22,s68) !< ???
+complex(spc),parameter::  z070=( s20,s70) !< ???
+complex(spc),parameter::  z072=( s18,s72) !< ???
+complex(spc),parameter::  z075=( s15,s75) !< ???
+complex(spc),parameter::  z077=( s13,s77) !< ???
+complex(spc),parameter::  z079=( s11,s79) !< ???
+complex(spc),parameter::  z080=( s10,s80) !< ???
+complex(spc),parameter::  z090=ci !< ???
+complex(spc),parameter::  z100=(ms10,s80) !< ???
+complex(spc),parameter::  z101=(ms11,s79) !< ???
+complex(spc),parameter::  z103=(ms13,s77) !< ???
+complex(spc),parameter::  z105=(ms15,s75) !< ???
+complex(spc),parameter::  z108=(ms18,s72) !< ???
+complex(spc),parameter::  z110=(ms20,s70) !< ???
+complex(spc),parameter::  z112=(ms22,s68) !< ???
+complex(spc),parameter::  z116=(ms26,s64) !< ???
+complex(spc),parameter::  z120=(ms30,s60) !< ???
+complex(spc),parameter::  z124=(ms34,s56) !< ???
+complex(spc),parameter::  z126=(ms36,s54) !< ???
+complex(spc),parameter::  z129=(ms39,s51) !< ???
+complex(spc),parameter::  z130=(ms40,s50) !< ???
+complex(spc),parameter::  z135=(ms45,s45) !< ???
+complex(spc),parameter::  z140=(ms50,s40) !< ???
+complex(spc),parameter::  z141=(ms51,s39) !< ???
+complex(spc),parameter::  z144=(ms54,s36) !< ???
+complex(spc),parameter::  z146=(ms56,s34) !< ???
+complex(spc),parameter::  z150=(ms60,s30) !< ???
+complex(spc),parameter::  z154=(ms64,s26) !< ???
+complex(spc),parameter::  z158=(ms68,s22) !< ???
+complex(spc),parameter::  z160=(ms70,s20) !< ???
+complex(spc),parameter::  z162=(ms72,s18) !< ???
+complex(spc),parameter::  z165=(ms75,s15) !< ???
+complex(spc),parameter::  z167=(ms77,s13) !< ???
+complex(spc),parameter::  z169=(ms79,s11) !< ???
+complex(spc),parameter::  z170=(ms80,s10) !< ???
+complex(spc),parameter::  z180=-z000 !< ???
+complex(spc),parameter::  z190=-z010 !< ???
+complex(spc),parameter::  z191=-z011 !< ???
+complex(spc),parameter::  z193=-z013 !< ???
+complex(spc),parameter::  z195=-z015 !< ???
+complex(spc),parameter::  z198=-z018 !< ???
+complex(spc),parameter::  z200=-z020 !< ???
+complex(spc),parameter::  z202=-z022 !< ???
+complex(spc),parameter::  z206=-z026 !< ???
+complex(spc),parameter::  z210=-z030 !< ???
+complex(spc),parameter::  z214=-z034 !< ???
+complex(spc),parameter::  z216=-z036 !< ???
+complex(spc),parameter::  z219=-z039 !< ???
+complex(spc),parameter::  z220=-z040 !< ???
+complex(spc),parameter::  z225=-z045 !< ???
+complex(spc),parameter::  z230=-z050 !< ???
+complex(spc),parameter::  z231=-z051 !< ???
+complex(spc),parameter::  z234=-z054 !< ???
+complex(spc),parameter::  z236=-z056 !< ???
+complex(spc),parameter::  z240=-z060 !< ???
+complex(spc),parameter::  z244=-z064 !< ???
+complex(spc),parameter::  z248=-z068 !< ???
+complex(spc),parameter::  z250=-z070 !< ???
+complex(spc),parameter::  z252=-z072 !< ???
+complex(spc),parameter::  z255=-z075 !< ???
+complex(spc),parameter::  z257=-z077 !< ???
+complex(spc),parameter::  z259=-z079 !< ???
+complex(spc),parameter::  z260=-z080 !< ???
+complex(spc),parameter::  z270=-z090 !< ???
+complex(spc),parameter::  z280=-z100 !< ???
+complex(spc),parameter::  z281=-z101 !< ???
+complex(spc),parameter::  z283=-z103 !< ???
+complex(spc),parameter::  z285=-z105 !< ???
+complex(spc),parameter::  z288=-z108 !< ???
+complex(spc),parameter::  z290=-z110 !< ???
+complex(spc),parameter::  z292=-z112 !< ???
+complex(spc),parameter::  z296=-z116 !< ???
+complex(spc),parameter::  z300=-z120 !< ???
+complex(spc),parameter::  z304=-z124 !< ???
+complex(spc),parameter::  z306=-z126 !< ???
+complex(spc),parameter::  z309=-z129 !< ???
+complex(spc),parameter::  z310=-z130 !< ???
+complex(spc),parameter::  z315=-z135 !< ???
+complex(spc),parameter::  z320=-z140 !< ???
+complex(spc),parameter::  z321=-z141 !< ???
+complex(spc),parameter::  z324=-z144 !< ???
+complex(spc),parameter::  z326=-z146 !< ???
+complex(spc),parameter::  z330=-z150 !< ???
+complex(spc),parameter::  z334=-z154 !< ???
+complex(spc),parameter::  z338=-z158 !< ???
+complex(spc),parameter::  z340=-z160 !< ???
+complex(spc),parameter::  z342=-z162 !< ???
+complex(spc),parameter::  z345=-z165 !< ???
+complex(spc),parameter::  z347=-z167 !< ???
+complex(spc),parameter::  z349=-z169 !< ???
+complex(spc),parameter::  z350=-z170 !< ???
 end module pietc_s
