@@ -3,8 +3,8 @@
 !!
 !! @author George Gayno NCEP/EMC
 !! @date 2014-03-20
-!!
-!! Create a global 5-minute blended ice concentration 
+
+!> Create a global 5-minute blended ice concentration 
 !! dataset for use by GDAS/GFS. This blend is created
 !! from National Ice Center Interactive Multisensor
 !! Snow and Ice Mapping System (IMS) data, and the 
@@ -88,6 +88,8 @@
 !! In the SH, the blended value is simply the 5-minute ice concentration
 !! at 'water' points.  'Coast' and 'land' points are bitmapped out.
 !!
+!! @return 0 for success, error code otherwise.
+!! @author George Gayno NCEP/EMC
  program emcsfc_ice_blend
 
  use grib_mod  ! grib 2 libraries
