@@ -89,22 +89,77 @@ $(document).ready(function(){initNavTree('shave__nc_8F90.html',''); initResizabl
 </div><!--header-->
 <div class="contents">
 
+<p>Utility to shave down domains of FV3 files.  
+<a href="#details">More...</a></p>
+
 <p><a href="shave__nc_8F90_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:af506435d12571939190a6f9be3034d42"><td class="memItemLeft" align="right" valign="top"><a id="af506435d12571939190a6f9be3034d42"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (status)</td></tr>
+<tr class="memitem:af506435d12571939190a6f9be3034d42"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shave__nc_8F90.html#af506435d12571939190a6f9be3034d42">check</a> (status)</td></tr>
+<tr class="memdesc:af506435d12571939190a6f9be3034d42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle netCDF return codes.  <a href="shave__nc_8F90.html#af506435d12571939190a6f9be3034d42">More...</a><br /></td></tr>
 <tr class="separator:af506435d12571939190a6f9be3034d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2af361e0786880807affb066c9678b17"><td class="memItemLeft" align="right" valign="top"><a id="a2af361e0786880807affb066c9678b17"></a>
-program&#160;</td><td class="memItemRight" valign="bottom"><b>shave_nc</b></td></tr>
+<tr class="memitem:a2af361e0786880807affb066c9678b17"><td class="memItemLeft" align="right" valign="top">program&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="shave__nc_8F90.html#a2af361e0786880807affb066c9678b17">shave_nc</a></td></tr>
+<tr class="memdesc:a2af361e0786880807affb066c9678b17"><td class="mdescLeft">&#160;</td><td class="mdescRight">The grid driver step in FV3 preprocessing generates a grid_tile file and an oro_tile file for the regional domain.  <a href="shave__nc_8F90.html#a2af361e0786880807affb066c9678b17">More...</a><br /></td></tr>
 <tr class="separator:a2af361e0786880807affb066c9678b17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The grid driver step in FV3 preprocessing generates a grid_tile file and an oro_tile file for the regional domain. The final size of these files' domains must include the halo surrounding the computational domain. However the original size of these domains must exceed the domain size plus haloes so that the topography filtering program can produce correct values over the halo region. Then before the files go into the chgres job their domains must be shaved down to only the computational interior and the halo which is what this code does. </p>
+<div class="textblock"><p>Utility to shave down domains of FV3 files. </p>
+<dl class="section author"><dt>Author</dt><dd>Tom Black </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="shave__nc_8F90_source.html">shave_nc.F90</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a id="af506435d12571939190a6f9be3034d42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af506435d12571939190a6f9be3034d42">&#9670;&nbsp;</a></span>check()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine shave_nc::check </td>
+          <td>(</td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle netCDF return codes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">status</td><td>error code </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Tom Black </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="shave__nc_8F90_source.html#l00267">267</a> of file <a class="el" href="shave__nc_8F90_source.html">shave_nc.F90</a>.</p>
+
+</div>
+</div>
+<a id="a2af361e0786880807affb066c9678b17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2af361e0786880807affb066c9678b17">&#9670;&nbsp;</a></span>shave_nc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">program shave_nc</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The grid driver step in FV3 preprocessing generates a grid_tile file and an oro_tile file for the regional domain. </p>
+<p>The final size of these files' domains must include the halo surrounding the computational domain. However the original size of these domains must exceed the domain size plus haloes so that the topography filtering program can produce correct values over the halo region. Then before the files go into the chgres job their domains must be shaved down to only the computational interior and the halo which is what this code does.</p>
+<dl class="section return"><dt>Returns</dt><dd>0 for success, error code otherwise. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Tom Black </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="shave__nc_8F90_source.html#l00017">17</a> of file <a class="el" href="shave__nc_8F90_source.html">shave_nc.F90</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

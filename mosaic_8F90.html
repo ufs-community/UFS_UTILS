@@ -83,7 +83,8 @@ $(document).ready(function(){initNavTree('mosaic_8F90.html',''); initResizable()
 
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions/Subroutines</a>  </div>
+<a href="#func-members">Functions/Subroutines</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">mosaic.F90 File Reference</div>  </div>
 </div><!--header-->
@@ -123,6 +124,42 @@ integer function, public&#160;</td><td class="memItemRight" valign="bottom"><b>m
 <tr class="memitem:aa383575e5a216fc381a88a8a2e316df8"><td class="memItemLeft" align="right" valign="top"><a id="aa383575e5a216fc381a88a8a2e316df8"></a>
 logical function, public&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::is_inside_polygon</b> (lon1, lat1, lon2, lat2)</td></tr>
 <tr class="separator:aa383575e5a216fc381a88a8a2e316df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7e9878b21e789b9c82ef0c90953f5a0"><td class="memItemLeft" align="right" valign="top"><a id="ae7e9878b21e789b9c82ef0c90953f5a0"></a>
+subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::mosaic_init</b> ()</td></tr>
+<tr class="separator:ae7e9878b21e789b9c82ef0c90953f5a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affe450199d0979b2f344e18a29b0af46"><td class="memItemLeft" align="right" valign="top"><a id="affe450199d0979b2f344e18a29b0af46"></a>
+integer function&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::parse_string</b> (string, set, value)</td></tr>
+<tr class="separator:affe450199d0979b2f344e18a29b0af46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a347b163d27605cd2bd09d999aca119b0"><td class="memItemLeft" align="right" valign="top"><a id="a347b163d27605cd2bd09d999aca119b0"></a>
+integer function&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::transfer_to_model_index</b> (istart, iend, refine_ratio)</td></tr>
+<tr class="separator:a347b163d27605cd2bd09d999aca119b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ab3b0197cef7cb2d6a998e66679a5143c"><td class="memItemLeft" align="right" valign="top"><a id="ab3b0197cef7cb2d6a998e66679a5143c"></a>
+character(len= *), parameter&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::grid_dir</b> = 'INPUT/'</td></tr>
+<tr class="separator:ab3b0197cef7cb2d6a998e66679a5143c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdb9208d613ac03799116b34fc3b62cc"><td class="memItemLeft" align="right" valign="top"><a id="acdb9208d613ac03799116b34fc3b62cc"></a>
+integer, parameter&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::max_file</b> = 1024</td></tr>
+<tr class="separator:acdb9208d613ac03799116b34fc3b62cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31dade5e8d5888cbe4332170403b9655"><td class="memItemLeft" align="right" valign="top"><a id="a31dade5e8d5888cbe4332170403b9655"></a>
+integer, parameter&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::max_name</b> = 256</td></tr>
+<tr class="separator:a31dade5e8d5888cbe4332170403b9655"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e991f976411a01d6af79a4e80ae48d7"><td class="memItemLeft" align="right" valign="top"><a id="a7e991f976411a01d6af79a4e80ae48d7"></a>
+logical&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::module_is_initialized</b> = .true.</td></tr>
+<tr class="separator:a7e991f976411a01d6af79a4e80ae48d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16bd4d7ebce81b924293b885e1328fd3"><td class="memItemLeft" align="right" valign="top"><a id="a16bd4d7ebce81b924293b885e1328fd3"></a>
+character(len=128)&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::tagname</b> = '$Name$'</td></tr>
+<tr class="separator:a16bd4d7ebce81b924293b885e1328fd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28fd60a75a1999fc63d348743a640353"><td class="memItemLeft" align="right" valign="top"><a id="a28fd60a75a1999fc63d348743a640353"></a>
+character(len=128)&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::version</b> = '$Id$'</td></tr>
+<tr class="separator:a28fd60a75a1999fc63d348743a640353"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45c79377a55027d58cf7c9cb04a5972a"><td class="memItemLeft" align="right" valign="top"><a id="a45c79377a55027d58cf7c9cb04a5972a"></a>
+integer, parameter&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::x_refine</b> = 2</td></tr>
+<tr class="separator:a45c79377a55027d58cf7c9cb04a5972a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa48e40dcf165b3a66d58d00533ae6120"><td class="memItemLeft" align="right" valign="top"><a id="aa48e40dcf165b3a66d58d00533ae6120"></a>
+integer, parameter&#160;</td><td class="memItemRight" valign="bottom"><b>mosaic_mod::y_refine</b> = 2</td></tr>
+<tr class="separator:aa48e40dcf165b3a66d58d00533ae6120"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Read information from the mosaic file. </p>

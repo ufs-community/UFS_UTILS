@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['vtx_5fdelete_714',['vtx_delete',['../tool__util_8c.html#af4c98ef7c7361fba13b3603df951106c',1,'tool_util.c']]],
-  ['vtx_5finsert_715',['vtx_insert',['../tool__util_8c.html#a15aa5564f8f9daf12b3a9ff8649b0b55',1,'tool_util.c']]]
+  ['uninterpred_1515',['uninterpred',['../snow2mdl_8f.html#ad1b735d894ed77eb2161f22258074536',1,'snow2mdl']]]
 ];

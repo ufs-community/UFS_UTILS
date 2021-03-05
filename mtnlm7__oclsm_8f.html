@@ -132,8 +132,7 @@ subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>interpolate_mis
 <tr class="memitem:a5869b044207f7ecb10fb381ece00732c"><td class="memItemLeft" align="right" valign="top"><a id="a5869b044207f7ecb10fb381ece00732c"></a>
 subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>latlon2xyz</b> (siz, lon, lat, x, y, z)</td></tr>
 <tr class="separator:a5869b044207f7ecb10fb381ece00732c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89f85be5dafb21b91445404caa580949"><td class="memItemLeft" align="right" valign="top"><a id="a89f85be5dafb21b91445404caa580949"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>makemt</b> (ZAVG, ZSLM, ORO, SLM, VAR, VAR4, GLAT, IST, IEN, JST, JEN, IM, JM, IMN, JMN, XLAT, numi)</td></tr>
+<tr class="memitem:a89f85be5dafb21b91445404caa580949"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mtnlm7__oclsm_8f.html#a89f85be5dafb21b91445404caa580949">makemt</a> (ZAVG, ZSLM, ORO, SLM, VAR, VAR4, GLAT, IST, IEN, JST, JEN, IM, JM, IMN, JMN, XLAT, numi)</td></tr>
 <tr class="separator:a89f85be5dafb21b91445404caa580949"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a924c72cd90b596d07c2c3051b0991367"><td class="memItemLeft" align="right" valign="top"><a id="a924c72cd90b596d07c2c3051b0991367"></a>
 subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>makemt2</b> (ZAVG, ZSLM, ORO, SLM, land_frac, VAR, VAR4, GLAT, IM, JM, IMN, JMN, lon_c, lat_c)</td></tr>
@@ -186,8 +185,7 @@ real function&#160;</td><td class="memItemRight" valign="bottom"><b>spherical_an
 <tr class="memitem:af72c017d12f741c8cecd92603d4dfa0c"><td class="memItemLeft" align="right" valign="top"><a id="af72c017d12f741c8cecd92603d4dfa0c"></a>
 real function&#160;</td><td class="memItemRight" valign="bottom"><b>spherical_distance</b> (theta1, phi1, theta2, phi2)</td></tr>
 <tr class="separator:af72c017d12f741c8cecd92603d4dfa0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abadd243394b9ea0a607cf77d4f3a5254"><td class="memItemLeft" align="right" valign="top"><a id="abadd243394b9ea0a607cf77d4f3a5254"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>tersub</b> (IMN, JMN, IM, JM, NM, NR, NF0, NF1, NW, EFAC, BLAT, OUTGRID, INPUTOROG)</td></tr>
+<tr class="memitem:abadd243394b9ea0a607cf77d4f3a5254"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mtnlm7__oclsm_8f.html#abadd243394b9ea0a607cf77d4f3a5254">tersub</a> (IMN, JMN, IM, JM, NM, NR, NF0, NF1, NW, EFAC, BLAT, OUTGRID, INPUTOROG)</td></tr>
 <tr class="separator:abadd243394b9ea0a607cf77d4f3a5254"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e5afa4168cab2cdedef3c01e086494f"><td class="memItemLeft" align="right" valign="top"><a id="a6e5afa4168cab2cdedef3c01e086494f"></a>
 real function&#160;</td><td class="memItemRight" valign="bottom"><b>timef</b> ()</td></tr>
@@ -248,7 +246,282 @@ real function&#160;</td><td class="memItemRight" valign="bottom"><b>timef</b> ()
 </ul>
 
 <p class="definition">Definition in file <a class="el" href="mtnlm7__oclsm_8f_source.html">mtnlm7_oclsm.f</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a id="a89f85be5dafb21b91445404caa580949"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89f85be5dafb21b91445404caa580949">&#9670;&nbsp;</a></span>makemt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine makemt </td>
+          <td>(</td>
+          <td class="paramtype">integer, dimension(imn,jmn)&#160;</td>
+          <td class="paramname"><em>ZAVG</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, dimension(imn,jmn)&#160;</td>
+          <td class="paramname"><em>ZSLM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(im,jm)&#160;</td>
+          <td class="paramname"><em>ORO</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(im,jm)&#160;</td>
+          <td class="paramname"><em>SLM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(im,jm)&#160;</td>
+          <td class="paramname"><em>VAR</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(im,jm)&#160;</td>
+          <td class="paramname"><em>VAR4</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(jmn)&#160;</td>
+          <td class="paramname"><em>GLAT</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(im,jm)&#160;</td>
+          <td class="paramname"><em>IST</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(im,jm)&#160;</td>
+          <td class="paramname"><em>IEN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(jm)&#160;</td>
+          <td class="paramname"><em>JST</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(jm)&#160;</td>
+          <td class="paramname"><em>JEN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>IM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>JM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>IMN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>JMN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(jm)&#160;</td>
+          <td class="paramname"><em>XLAT</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimension(jm)&#160;</td>
+          <td class="paramname"><em>numi</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section note"><dt>Note</dt><dd>undocumented subroutine MAKEMT <br  />
+ </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ZAVG</td><td></td></tr>
+    <tr><td class="paramname">ZSLM</td><td></td></tr>
+    <tr><td class="paramname">ORO</td><td><br  />
+ </td></tr>
+    <tr><td class="paramname">SLM</td><td><br  />
+ </td></tr>
+    <tr><td class="paramname">VAR</td><td><br  />
+ </td></tr>
+    <tr><td class="paramname">VAR4</td><td></td></tr>
+    <tr><td class="paramname">GLAT</td><td></td></tr>
+    <tr><td class="paramname">IST</td><td></td></tr>
+    <tr><td class="paramname">IEN</td><td></td></tr>
+    <tr><td class="paramname">JST</td><td></td></tr>
+    <tr><td class="paramname">JEN</td><td></td></tr>
+    <tr><td class="paramname">IM</td><td><br  />
+ </td></tr>
+    <tr><td class="paramname">JM</td><td><br  />
+ </td></tr>
+    <tr><td class="paramname">IMN</td><td></td></tr>
+    <tr><td class="paramname">JMN</td><td></td></tr>
+    <tr><td class="paramname">XLAT</td><td></td></tr>
+    <tr><td class="paramname">numi</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>unknown, probably Mark Iredell </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="mtnlm7__oclsm_8f_source.html#l01593">1593</a> of file <a class="el" href="mtnlm7__oclsm_8f_source.html">mtnlm7_oclsm.f</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="mtnlm7__oclsm_8f_source.html#l00187">tersub()</a>.</p>
+
+</div>
+</div>
+<a id="abadd243394b9ea0a607cf77d4f3a5254"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abadd243394b9ea0a607cf77d4f3a5254">&#9670;&nbsp;</a></span>tersub()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine tersub </td>
+          <td>(</td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>IMN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>JMN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>IM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>JM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>NM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>NR</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>NF0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>NF1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>NW</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>EFAC</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer&#160;</td>
+          <td class="paramname"><em>BLAT</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(len=*), intent(in)&#160;</td>
+          <td class="paramname"><em>OUTGRID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">character(len=*), intent(in)&#160;</td>
+          <td class="paramname"><em>INPUTOROG</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section note"><dt>Note</dt><dd>Subroutine TERSUB is undocumented by developer Inserting doxygen framework only including undescribed params </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">IMN</td><td></td></tr>
+    <tr><td class="paramname">JMN</td><td></td></tr>
+    <tr><td class="paramname">IM</td><td></td></tr>
+    <tr><td class="paramname">JM</td><td></td></tr>
+    <tr><td class="paramname">NM</td><td></td></tr>
+    <tr><td class="paramname">NR</td><td></td></tr>
+    <tr><td class="paramname">NF0</td><td></td></tr>
+    <tr><td class="paramname">NF1</td><td></td></tr>
+    <tr><td class="paramname">NW</td><td></td></tr>
+    <tr><td class="paramname">EFAC</td><td></td></tr>
+    <tr><td class="paramname">BLAT</td><td></td></tr>
+    <tr><td class="paramname">OUTGRID</td><td></td></tr>
+    <tr><td class="paramname">IFAC</td><td></td></tr>
+    <tr><td class="paramname">EFAC</td><td></td></tr>
+    <tr><td class="paramname">BLAT</td><td></td></tr>
+    <tr><td class="paramname">OUTGRID</td><td></td></tr>
+    <tr><td class="paramname">INPUTOROG</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Mark Iredell </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="mtnlm7__oclsm_8f_source.html#l00187">187</a> of file <a class="el" href="mtnlm7__oclsm_8f_source.html">mtnlm7_oclsm.f</a>.</p>
+
+<p class="reference">References <a class="el" href="mtnlm7__oclsm_8f_source.html#l01593">makemt()</a>, and <a class="el" href="utils_8F90_source.html#l00032">netcdf_err()</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

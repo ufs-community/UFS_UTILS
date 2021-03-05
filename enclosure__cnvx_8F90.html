@@ -89,14 +89,80 @@ $(document).ready(function(){initNavTree('enclosure__cnvx_8F90.html',''); initRe
 </div><!--header-->
 <div class="contents">
 
+<p>Test whether a point is inside a spherical convex polygon.  
+<a href="#details">More...</a></p>
+
 <p><a href="enclosure__cnvx_8F90_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:a0235896a27bb16a029a62ef4561f24d8"><td class="memItemLeft" align="right" valign="top"><a id="a0235896a27bb16a029a62ef4561f24d8"></a>
-logical function&#160;</td><td class="memItemRight" valign="bottom"><b>enclosure_cnvx</b> (v, n, p, co_gc)</td></tr>
+<tr class="memitem:a0235896a27bb16a029a62ef4561f24d8"><td class="memItemLeft" align="right" valign="top">logical function&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="enclosure__cnvx_8F90.html#a0235896a27bb16a029a62ef4561f24d8">enclosure_cnvx</a> (v, n, p, co_gc)</td></tr>
+<tr class="memdesc:a0235896a27bb16a029a62ef4561f24d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test whether a given point 'p' is inside a convex spherical polygon defined with a series of 'n' vertices.  <a href="enclosure__cnvx_8F90.html#a0235896a27bb16a029a62ef4561f24d8">More...</a><br /></td></tr>
 <tr class="separator:a0235896a27bb16a029a62ef4561f24d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Test whether a point is inside a spherical convex polygon. </p>
+<dl class="section author"><dt>Author</dt><dd>N Wang </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="enclosure__cnvx_8F90_source.html">enclosure_cnvx.F90</a>.</p>
+</div><h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a id="a0235896a27bb16a029a62ef4561f24d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0235896a27bb16a029a62ef4561f24d8">&#9670;&nbsp;</a></span>enclosure_cnvx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">logical function enclosure_cnvx </td>
+          <td>(</td>
+          <td class="paramtype">real*8, dimension(2,n), intent(in)&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real*8, dimension(2), intent(in)&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(out)&#160;</td>
+          <td class="paramname"><em>co_gc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Test whether a given point 'p' is inside a convex spherical polygon defined with a series of 'n' vertices. </p>
+<p>Both the test point and the polygon are specified in latitude and longitude radians. It is assumed that a side of a spherical polygon is a great-circle arc that connects 2 adjacent vertices of the polygon.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>set of vertices </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>number of vertices in v </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>point to test </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">co_gc</td><td>'i' if <code>p</code> is on or within epsilon to side 'i' of the given spherical polygon, or 0 if point is not on any side of the given polygon. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>enclosure_cnvx whether the point is inside the polygon</dd></dl>
+<dl class="section author"><dt>Author</dt><dd>N Wang <br  />
+ </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="enclosure__cnvx_8F90_source.html#l00050">50</a> of file <a class="el" href="enclosure__cnvx_8F90_source.html">enclosure_cnvx.F90</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

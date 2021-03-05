@@ -83,16 +83,46 @@ $(document).ready(function(){initNavTree('module__nwp__base_8f90.html',''); init
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Types</a>  </div>
+<a href="#nested-classes">Data Types</a> &#124;
+<a href="#namespaces">Modules</a> &#124;
+<a href="#func-members">Functions/Subroutines</a>  </div>
   <div class="headertitle">
 <div class="title">module_nwp_base.f90 File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
+<p>Defines nwp observation data structure.  
+<a href="#details">More...</a></p>
+
 <p><a href="module__nwp__base_8f90_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Data Types</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp__base_1_1nwpbase.html">module_nwp_base::nwpbase</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp__base_1_1nwplocation.html">module_nwp_base::nwplocation</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Modules</h2></td></tr>
+<tr class="memitem:namespacemodule__nwp__base"><td class="memItemLeft" align="right" valign="top">module &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodule__nwp__base.html">module_nwp_base</a></td></tr>
+<tr class="memdesc:namespacemodule__nwp__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">This module defines nwp observation data structure and the method to read and write observations from and to those data structures. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions/Subroutines</h2></td></tr>
+<tr class="memitem:a41791fc0cc9b2f010464c92190651f8e"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodule__nwp__base.html#a41791fc0cc9b2f010464c92190651f8e">module_nwp_base::alloc_obsbase</a> (this, numvar, ifquality)</td></tr>
+<tr class="memdesc:a41791fc0cc9b2f010464c92190651f8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This subroutine allocates memory for base nwp observation variables.  <a href="namespacemodule__nwp__base.html#a41791fc0cc9b2f010464c92190651f8e">More...</a><br /></td></tr>
+<tr class="separator:a41791fc0cc9b2f010464c92190651f8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab14934a7de825d5e2992d20d9e171b26"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodule__nwp__base.html#ab14934a7de825d5e2992d20d9e171b26">module_nwp_base::destroy_obsbase</a> (this)</td></tr>
+<tr class="memdesc:ab14934a7de825d5e2992d20d9e171b26"><td class="mdescLeft">&#160;</td><td class="mdescRight">This subroutine releases memory associated with nwp observations.  <a href="namespacemodule__nwp__base.html#ab14934a7de825d5e2992d20d9e171b26">More...</a><br /></td></tr>
+<tr class="separator:ab14934a7de825d5e2992d20d9e171b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45fb87692508f36b382911236296f8c6"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodule__nwp__base.html#a45fb87692508f36b382911236296f8c6">module_nwp_base::list_obsbase</a> (this)</td></tr>
+<tr class="memdesc:a45fb87692508f36b382911236296f8c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">This subroutine lists the contents of a base nwp observation.  <a href="namespacemodule__nwp__base.html#a45fb87692508f36b382911236296f8c6">More...</a><br /></td></tr>
+<tr class="separator:a45fb87692508f36b382911236296f8c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This module defines nwp observation data structure and the method to read and write observations from and to those data structures. It is used by ingest_FVCOM.f90.</p>
-<p>This script is strongly based upon Eric James' (ESRL/GSL) work with HRRR/WRF.</p>
+<div class="textblock"><p>Defines nwp observation data structure. </p>
 <dl class="section author"><dt>Author</dt><dd>David Wright, University of Michigan and GLERL </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>17 Aug 2020 </dd></dl>
 

@@ -123,7 +123,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keywordtype">void</span> <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *msg)</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keywordtype">void</span> <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *msg)</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;{</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  fprintf(stderr, <span class="stringliteral">&quot;FATAL Error: %s\n&quot;</span>, msg );</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#ifdef use_libMPI      </span></div>
@@ -155,7 +155,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keywordflow">for</span>(i=1; i&lt;ia; i++){</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordflow">if</span> (array[i] &lt; array[i-1]) </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;nearest_index: array must be monotonically increasing&quot;</span>); </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;nearest_index: array must be monotonically increasing&quot;</span>); </div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  }</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <span class="keywordflow">if</span> (value &lt; array[0] )</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    index = 0;</div>
@@ -190,7 +190,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  len = strlen(<span class="keywordtype">string</span>);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  ntoken = strlen(tokens);</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  <span class="comment">/* here we use the fact that C array [][] is contiguous in memory */</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  <span class="keywordflow">if</span>(<span class="keywordtype">string</span>[0] == 0)<a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from tokenize: to-be-parsed string is empty&quot;</span>);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  <span class="keywordflow">if</span>(<span class="keywordtype">string</span>[0] == 0)<a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from tokenize: to-be-parsed string is empty&quot;</span>);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  </div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  <span class="keywordflow">for</span>(i = 0; i &lt; len; i ++){</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordflow">if</span>(<span class="keywordtype">string</span>[i] != <span class="charliteral">&#39; &#39;</span> &amp;&amp; <span class="keywordtype">string</span>[i] != <span class="charliteral">&#39;\t&#39;</span>){</div>
@@ -205,12 +205,12 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordflow">if</span>( j != 0) { <span class="comment">/* remove :: */</span></div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;      *(pstring + (nvar++)*varlen + j) = 0;</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;      j = 0;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      <span class="keywordflow">if</span>(nvar &gt;= maxvar) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from tokenize: number of variables exceeds limit&quot;</span>);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;      <span class="keywordflow">if</span>(nvar &gt;= maxvar) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from tokenize: number of variables exceeds limit&quot;</span>);</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    }</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      }</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;      <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        *(pstring + nvar*varlen + j++) = <span class="keywordtype">string</span>[i];</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordflow">if</span>(j &gt;= varlen ) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;error from tokenize: variable name length exceeds limit during tokenization&quot;</span>);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordflow">if</span>(j &gt;= varlen ) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;error from tokenize: variable name length exceeds limit during tokenization&quot;</span>);</div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;      }</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    }</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;  }</div>
@@ -865,7 +865,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;  </div>
 <div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;  temp = nodeList+curListPos;</div>
 <div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;  curListPos++;</div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;  <span class="keywordflow">if</span>(curListPos &gt; MAXNODELIST) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;getNext: curListPos &gt;= MAXNODELIST&quot;</span>);</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;  <span class="keywordflow">if</span>(curListPos &gt; MAXNODELIST) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;getNext: curListPos &gt;= MAXNODELIST&quot;</span>);</div>
 <div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;  </div>
 <div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;  <span class="keywordflow">return</span> (temp);</div>
 <div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;}</div>
@@ -890,7 +890,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160; </div>
 <div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;  <span class="keyword">struct </span><a class="code" href="mosaic__util_8h.html#structNode">Node</a> *temp=NULL;</div>
 <div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160; </div>
-<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;  <span class="keywordflow">if</span>(list == NULL) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;addEnd: list is NULL&quot;</span>);</div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;  <span class="keywordflow">if</span>(list == NULL) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;addEnd: list is NULL&quot;</span>);</div>
 <div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;  </div>
 <div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;  <span class="keywordflow">if</span>(list-&gt;initialized) {</div>
 <div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160; </div>
@@ -932,7 +932,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;  <span class="keywordtype">int</span>    i1_cur, i2_cur;</div>
 <div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;  <span class="keyword">struct </span><a class="code" href="mosaic__util_8h.html#structNode">Node</a> *temp=NULL;</div>
 <div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160; </div>
-<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;  <span class="keywordflow">if</span>(list == NULL) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;addEnd: list is NULL&quot;</span>);</div>
+<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;  <span class="keywordflow">if</span>(list == NULL) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;addEnd: list is NULL&quot;</span>);</div>
 <div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160; </div>
 <div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;  <span class="comment">/* first check to make sure this point is not in the list */</span></div>
 <div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;  u1_cur = u1;</div>
@@ -1065,7 +1065,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;{</div>
 <div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;  <span class="keyword">struct </span><a class="code" href="mosaic__util_8h.html#structNode">Node</a> *temp;</div>
 <div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160; </div>
-<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;  <span class="keywordflow">if</span>(list == NULL) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;printNode: list is NULL&quot;</span>);</div>
+<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;  <span class="keywordflow">if</span>(list == NULL) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;printNode: list is NULL&quot;</span>);</div>
 <div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;  <span class="keywordflow">if</span>(str) printf(<span class="stringliteral">&quot;  %s \n&quot;</span>, str);</div>
 <div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;  temp = list;</div>
 <div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;  <span class="keywordflow">while</span>(temp) {</div>
@@ -1091,7 +1091,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;    }</div>
 <div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160;    temp=temp-&gt;Next;</div>
 <div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;  }</div>
-<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;  <span class="keywordflow">if</span> (!found) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;intersectInList: point (x,y,z) is not found in the list&quot;</span>);</div>
+<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;  <span class="keywordflow">if</span> (!found) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;intersectInList: point (x,y,z) is not found in the list&quot;</span>);</div>
 <div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;  <span class="keywordflow">if</span>( temp-&gt;intersect == 2 )</div>
 <div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;    <span class="keywordflow">return</span> 1;</div>
 <div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;  <span class="keywordflow">else</span></div>
@@ -1121,7 +1121,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160;    }</div>
 <div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160;    temp1=temp1-&gt;Next;</div>
 <div class="line"><a name="l01037"></a><span class="lineno"> 1037</span>&#160;  }</div>
-<div class="line"><a name="l01038"></a><span class="lineno"> 1038</span>&#160;  <span class="keywordflow">if</span> (!found) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;inserAfter: point (x,y,z) is not found in the list&quot;</span>);</div>
+<div class="line"><a name="l01038"></a><span class="lineno"> 1038</span>&#160;  <span class="keywordflow">if</span> (!found) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;inserAfter: point (x,y,z) is not found in the list&quot;</span>);</div>
 <div class="line"><a name="l01039"></a><span class="lineno"> 1039</span>&#160; </div>
 <div class="line"><a name="l01040"></a><span class="lineno"> 1040</span>&#160;  <span class="comment">/* when u = 0 or u = 1, set the grid point to be the intersection point to solve truncation error isuse */</span></div>
 <div class="line"><a name="l01041"></a><span class="lineno"> 1041</span>&#160;  u_cur = u1;</div>
@@ -1316,7 +1316,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l01230"></a><span class="lineno"> 1230</span>&#160;    temp1_prev = temp1;</div>
 <div class="line"><a name="l01231"></a><span class="lineno"> 1231</span>&#160;    temp1 = temp1-&gt;Next;</div>
 <div class="line"><a name="l01232"></a><span class="lineno"> 1232</span>&#160;      }</div>
-<div class="line"><a name="l01233"></a><span class="lineno"> 1233</span>&#160;      <span class="keywordflow">if</span>(!temp1_next) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from create_xgrid.c: temp is not in list1&quot;</span>);</div>
+<div class="line"><a name="l01233"></a><span class="lineno"> 1233</span>&#160;      <span class="keywordflow">if</span>(!temp1_next) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from create_xgrid.c: temp is not in list1&quot;</span>);</div>
 <div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;      <span class="keywordflow">if</span>( temp1_prev-&gt;isInside == 0 &amp;&amp; temp1_next-&gt;isInside == 1)</div>
 <div class="line"><a name="l01235"></a><span class="lineno"> 1235</span>&#160;    temp-&gt;inbound = 2;   <span class="comment">/* go inside */</span></div>
 <div class="line"><a name="l01236"></a><span class="lineno"> 1236</span>&#160;      <span class="keywordflow">else</span></div>
@@ -1328,7 +1328,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="line"><a name="l01242"></a><span class="lineno"> 1242</span>&#160; </div>
 <div class="line"><a name="l01243"></a><span class="lineno"> 1243</span>&#160;<span class="keywordtype">int</span> isInside(<span class="keyword">struct</span> <a class="code" href="mosaic__util_8h.html#structNode">Node</a> *node) {</div>
 <div class="line"><a name="l01244"></a><span class="lineno"> 1244</span>&#160; </div>
-<div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;  <span class="keywordflow">if</span>(node-&gt;isInside == -1) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from mosaic_util.c: node-&gt;isInside is not set&quot;</span>);</div>
+<div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;  <span class="keywordflow">if</span>(node-&gt;isInside == -1) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from mosaic_util.c: node-&gt;isInside is not set&quot;</span>);</div>
 <div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;  <span class="keywordflow">return</span>(node-&gt;isInside);</div>
 <div class="line"><a name="l01247"></a><span class="lineno"> 1247</span>&#160;  </div>
 <div class="line"><a name="l01248"></a><span class="lineno"> 1248</span>&#160;}</div>
@@ -1443,7 +1443,7 @@ $(document).ready(function(){initNavTree('mosaic__util_8c_source.html',''); init
 <div class="ttc" id="aconstant_8h_html"><div class="ttname"><a href="constant_8h.html">constant.h</a></div><div class="ttdoc">Set some global constants.</div></div>
 <div class="ttc" id="amosaic__util_8h_html_structNode"><div class="ttname"><a href="mosaic__util_8h.html#structNode">Node</a></div><div class="ttdef"><b>Definition:</b> <a href="mosaic__util_8h_source.html#l00015">mosaic_util.h:15</a></div></div>
 <div class="ttc" id="amosaic__util_8h_html"><div class="ttname"><a href="mosaic__util_8h.html">mosaic_util.h</a></div><div class="ttdoc">Function declarations for mosaic_util.c.</div></div>
-<div class="ttc" id="achgres__cube_8fd_2utils_8f90_html_a494d969fc26018c8a44274492cd80086"><div class="ttname"><a href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a></div><div class="ttdeci">subroutine error_handler(string, rc)</div><div class="ttdoc">General error handler.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2utils_8f90_source.html#l00011">utils.f90:11</a></div></div>
+<div class="ttc" id="autils_8F90_html_a494d969fc26018c8a44274492cd80086"><div class="ttname"><a href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a></div><div class="ttdeci">subroutine error_handler(string, rc)</div><div class="ttdoc">General error handler.</div><div class="ttdef"><b>Definition:</b> <a href="utils_8F90_source.html#l00010">utils.F90:10</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

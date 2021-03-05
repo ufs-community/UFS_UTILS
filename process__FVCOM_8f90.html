@@ -89,17 +89,35 @@ $(document).ready(function(){initNavTree('process__FVCOM_8f90.html',''); initRes
 </div><!--header-->
 <div class="contents">
 
+<p>This is the code to put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data.nc.  
+<a href="#details">More...</a></p>
+
 <p><a href="process__FVCOM_8f90_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:aaa1839bdf781b4e6dd0a96ecc81e921f"><td class="memItemLeft" align="right" valign="top"><a id="aaa1839bdf781b4e6dd0a96ecc81e921f"></a>
-program&#160;</td><td class="memItemRight" valign="bottom"><b>process_fvcom</b></td></tr>
+<tr class="memitem:aaa1839bdf781b4e6dd0a96ecc81e921f"><td class="memItemLeft" align="right" valign="top">program&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="process__FVCOM_8f90.html#aaa1839bdf781b4e6dd0a96ecc81e921f">process_fvcom</a></td></tr>
+<tr class="memdesc:aaa1839bdf781b4e6dd0a96ecc81e921f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data.nc.  <a href="process__FVCOM_8f90.html#aaa1839bdf781b4e6dd0a96ecc81e921f">More...</a><br /></td></tr>
 <tr class="separator:aaa1839bdf781b4e6dd0a96ecc81e921f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This is the code to put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data.nc. <br  />
-</p>
+<div class="textblock"><p>This is the code to put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data.nc. </p>
+
+<p class="definition">Definition in file <a class="el" href="process__FVCOM_8f90_source.html">process_FVCOM.f90</a>.</p>
+</div><h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a id="aaa1839bdf781b4e6dd0a96ecc81e921f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa1839bdf781b4e6dd0a96ecc81e921f">&#9670;&nbsp;</a></span>process_fvcom()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">program process_fvcom</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data.nc. </p>
 <p>This script will take two variables from the command line:</p><ol type="1">
 <li>Name of FV3 sfc data file (e.g. sfc_data.tile7.halo0.nc)</li>
 <li>Name of FVCOM data file (e.g. fvcom.nc)</li>
@@ -108,9 +126,15 @@ program&#160;</td><td class="memItemRight" valign="bottom"><b>process_fvcom</b><
 <p>Code is strongly based upon Eric James' (ESRL/GSL) work to update HRRR/WRF Great Lakes' temperature data with FVCOM. Code also relies heavily on Ming Hu's ncio module.</p>
 <dl class="section author"><dt>Author</dt><dd>David Wright, University of Michigan and GLERL </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>17 Aug 2020 </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0 for success, error code otherwise </dd></dl>
 
-<p class="definition">Definition in file <a class="el" href="process__FVCOM_8f90_source.html">process_FVCOM.f90</a>.</p>
-</div></div><!-- contents -->
+<p class="definition">Definition at line <a class="el" href="process__FVCOM_8f90_source.html#l00027">27</a> of file <a class="el" href="process__FVCOM_8f90_source.html">process_FVCOM.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="kinds_8f90_source.html#l00021">kinds::i_kind</a>, <a class="el" href="kinds_8f90_source.html#l00026">kinds::r_kind</a>, and <a class="el" href="kinds_8f90_source.html#l00025">kinds::r_single</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

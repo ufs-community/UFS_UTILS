@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keywordtype">char</span> errmsg[512];</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  sprintf( errmsg, <span class="stringliteral">&quot;%s: %s&quot;</span>, msg, (<span class="keywordtype">char</span> *)nc_strerror(status) );</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(errmsg);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(errmsg);</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;}; <span class="comment">/* handle_netcdf_error */</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
@@ -161,7 +161,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keywordflow">return</span> existed;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;  <span class="keywordflow">return</span> 0; </div>
@@ -204,7 +204,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    handle_netcdf_error(msg, status);</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  }</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  </div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  <span class="keywordflow">return</span> len;</div>
@@ -242,7 +242,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    handle_netcdf_error(msg, status);</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  }  </div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;  </div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;}; <span class="comment">/* get_string_data */</span></div>
@@ -283,7 +283,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    handle_netcdf_error(msg, status);</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;  }  </div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;  <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;  <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;  </div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;}; <span class="comment">/* get_string_data_level */</span></div>
@@ -332,7 +332,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;  <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    sprintf(msg, <span class="stringliteral">&quot;get_var_data: field %s in file %s has an invalid type, &quot;</span></div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            <span class="stringliteral">&quot;the type should be NC_DOUBLE, NC_FLOAT or NC_INT&quot;</span>, name, file);</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(msg);</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(msg);</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;  }</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;  <span class="keywordflow">if</span>(status != NC_NOERR) {</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    sprintf(msg, <span class="stringliteral">&quot;in getting data of %s from file %s.&quot;</span>, name, file);</div>
@@ -344,7 +344,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    handle_netcdf_error(msg, status);</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;  }  </div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;  <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;  <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;  </div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;}; <span class="comment">/* get_var_data */</span></div>
@@ -392,7 +392,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;  <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    sprintf(msg, <span class="stringliteral">&quot;get_var_data_region: field %s in file %s has an invalid type, &quot;</span></div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            <span class="stringliteral">&quot;the type should be NC_DOUBLE, NC_FLOAT or NC_INT&quot;</span>, name, file);</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(msg);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(msg);</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;  }</div>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
 <div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;  <span class="keywordflow">if</span>(status != NC_NOERR) {</div>
@@ -405,7 +405,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    handle_netcdf_error(msg, status);</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;  }  </div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;  <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;  <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;  </div>
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;}; <span class="comment">/* get_var_data_region */</span></div>
@@ -441,7 +441,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    handle_netcdf_error(msg, status);</div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;  }  </div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;  <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;  <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;read_mosaic: Add flag -Duse_netCDF when compiling&quot;</span>);</div>
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;  </div>
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;}; <span class="comment">/* get_var_text_att */</span></div>
@@ -735,8 +735,8 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;    sprintf(tilefile, <span class="stringliteral">&quot;%s/%s&quot;</span>, dir, gridfile);</div>
 <div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;    nx[n] = get_dimlen(tilefile, <span class="stringliteral">&quot;nx&quot;</span>);</div>
 <div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;    ny[n] = get_dimlen(tilefile, <span class="stringliteral">&quot;ny&quot;</span>);</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;    <span class="keywordflow">if</span>(nx[n]%x_refine != 0) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic_grid_sizes: nx is not divided by x_refine&quot;</span>);</div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;    <span class="keywordflow">if</span>(ny[n]%y_refine != 0) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic_grid_sizes: ny is not divided by y_refine&quot;</span>);</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;    <span class="keywordflow">if</span>(nx[n]%x_refine != 0) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic_grid_sizes: nx is not divided by x_refine&quot;</span>);</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;    <span class="keywordflow">if</span>(ny[n]%y_refine != 0) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic_grid_sizes: ny is not divided by y_refine&quot;</span>);</div>
 <div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;    nx[n] /= x_refine;</div>
 <div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;    ny[n] /= y_refine;</div>
 <div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;  }</div>
@@ -783,7 +783,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;      }</div>
 <div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160; </div>
 <div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;      <span class="keywordflow">if</span>( istart_out[0]%refine_ratio || iend_out[0]%refine_ratio)</div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;         <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic: mismatch between refine_ratio and istart_in/iend_in&quot;</span>);</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;         <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic: mismatch between refine_ratio and istart_in/iend_in&quot;</span>);</div>
 <div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;      istart_out[0] /= refine_ratio;</div>
 <div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;      iend_out[0]   /= refine_ratio;</div>
 <div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;   }      </div>
@@ -817,7 +817,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;    get_string_data_level(mosaic_file, <span class="stringliteral">&quot;contacts&quot;</span>, contacts, &amp;n);</div>
 <div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;    <span class="comment">/* parse the string contacts to get tile number */</span></div>
 <div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;    tokenize( contacts, <span class="stringliteral">&quot;:&quot;</span>, STRING, MAXVAR, (<span class="keywordtype">char</span> *)pstring, &amp;nstr);</div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;    <span class="keywordflow">if</span>(nstr != 4) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic: number of elements &quot;</span></div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;    <span class="keywordflow">if</span>(nstr != 4) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic: number of elements &quot;</span></div>
 <div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;                 <span class="stringliteral">&quot;in contact seperated by :/:: should be 4&quot;</span>);</div>
 <div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;    found = 0;</div>
 <div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;    <span class="keywordflow">for</span>(m=0; m&lt;ntiles; m++) {</div>
@@ -827,7 +827,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;      }</div>
 <div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;    }</div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;    <span class="keywordflow">if</span>(!found) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;error from read_mosaic: the first tile name specified &quot;</span></div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;    <span class="keywordflow">if</span>(!found) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;error from read_mosaic: the first tile name specified &quot;</span></div>
 <div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;                 <span class="stringliteral">&quot;in contact is not found in tile list&quot;</span>);</div>
 <div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;    found = 0;</div>
 <div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;    <span class="keywordflow">for</span>(m=0; m&lt;ntiles; m++) {</div>
@@ -837,17 +837,17 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;      }</div>
 <div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    }</div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;    <span class="keywordflow">if</span>(!found) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;error from read_mosaic: the second tile name specified &quot;</span></div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;    <span class="keywordflow">if</span>(!found) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;error from read_mosaic: the second tile name specified &quot;</span></div>
 <div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;                 <span class="stringliteral">&quot;in contact is not found in tile list&quot;</span>);    </div>
 <div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;    get_string_data_level(mosaic_file, <span class="stringliteral">&quot;contact_index&quot;</span>, contacts, &amp;n);</div>
 <div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;    <span class="comment">/* parse the string to get contact index */</span></div>
 <div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;    tokenize( contacts, <span class="stringliteral">&quot;:,&quot;</span>, STRING, MAXVAR, (<span class="keywordtype">char</span> *)pstring, &amp;nstr);</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;    <span class="keywordflow">if</span>(nstr != 8) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic: number of elements &quot;</span></div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;    <span class="keywordflow">if</span>(nstr != 8) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic: number of elements &quot;</span></div>
 <div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;                 <span class="stringliteral">&quot;in contact_index seperated by :/, should be 8&quot;</span>);</div>
 <div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;    <span class="comment">/* make sure the string is only composed of numbers */</span></div>
 <div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;    <span class="keywordflow">for</span>(m=0; m&lt;nstr; m++) <span class="keywordflow">for</span>(l=0; l&lt;strlen(pstring[m]); l++) {</div>
 <div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;      <span class="keywordflow">if</span>(pstring[m][l] &gt; <span class="charliteral">&#39;9&#39;</span> ||  pstring[m][l] &lt; <span class="charliteral">&#39;0&#39;</span> ) {</div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic: some of the character in &quot;</span></div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic: some of the character in &quot;</span></div>
 <div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;              <span class="stringliteral">&quot;contact_indices except token is not digit number&quot;</span>);</div>
 <div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;      }</div>
 <div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;    }</div>
@@ -864,11 +864,11 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;    i2_type = transfer_to_model_index(istart2[n], iend2[n], istart2+n, iend2+n, x_refine);</div>
 <div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;    j2_type = transfer_to_model_index(jstart2[n], jend2[n], jstart2+n, jend2+n, y_refine);</div>
 <div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;    <span class="keywordflow">if</span>( i1_type == 0 &amp;&amp; j1_type == 0 )</div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;      <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic_contact:istart1==iend1 and jstart1==jend1&quot;</span>);</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;      <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic_contact:istart1==iend1 and jstart1==jend1&quot;</span>);</div>
 <div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;    <span class="keywordflow">if</span>( i2_type == 0 &amp;&amp; j2_type == 0 )</div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;      <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic_contact:istart2==iend2 and jstart2==jend2&quot;</span>);</div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;      <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic_contact:istart2==iend2 and jstart2==jend2&quot;</span>);</div>
 <div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;    <span class="keywordflow">if</span>( i1_type + j1_type != i2_type + j2_type )</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;      <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic_contact: It is not a line or overlap contact&quot;</span>);</div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;      <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;Error from read_mosaic_contact: It is not a line or overlap contact&quot;</span>);</div>
 <div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160; </div>
 <div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;  }</div>
 <div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160; </div>
@@ -906,7 +906,7 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 <div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;  ni = get_dimlen(tilefile, <span class="stringliteral">&quot;nx&quot;</span>);</div>
 <div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;  nj = get_dimlen(tilefile, <span class="stringliteral">&quot;ny&quot;</span>);</div>
 <div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160; </div>
-<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;  <span class="keywordflow">if</span>( ni != nx*2 || nj != ny*2) <a class="code" href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;supergrid size should be double of the model grid size&quot;</span>);</div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;  <span class="keywordflow">if</span>( ni != nx*2 || nj != ny*2) <a class="code" href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a>(<span class="stringliteral">&quot;supergrid size should be double of the model grid size&quot;</span>);</div>
 <div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;  tmp = (<span class="keywordtype">double</span> *)malloc((ni+1)*(nj+1)*<span class="keyword">sizeof</span>(<span class="keywordtype">double</span>));</div>
 <div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;  get_var_data( tilefile, name, tmp);</div>
 <div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;  nxp = nx + 1 - ioff;</div>
@@ -921,8 +921,8 @@ $(document).ready(function(){initNavTree('read__mosaic_8c_source.html',''); init
 </div><!-- doc-content -->
 <div class="ttc" id="aconstant_8h_html"><div class="ttname"><a href="constant_8h.html">constant.h</a></div><div class="ttdoc">Set some global constants.</div></div>
 <div class="ttc" id="amosaic__util_8h_html"><div class="ttname"><a href="mosaic__util_8h.html">mosaic_util.h</a></div><div class="ttdoc">Function declarations for mosaic_util.c.</div></div>
+<div class="ttc" id="autils_8F90_html_a494d969fc26018c8a44274492cd80086"><div class="ttname"><a href="utils_8F90.html#a494d969fc26018c8a44274492cd80086">error_handler</a></div><div class="ttdeci">subroutine error_handler(string, rc)</div><div class="ttdoc">General error handler.</div><div class="ttdef"><b>Definition:</b> <a href="utils_8F90_source.html#l00010">utils.F90:10</a></div></div>
 <div class="ttc" id="aread__mosaic_8h_html"><div class="ttname"><a href="read__mosaic_8h.html">read_mosaic.h</a></div><div class="ttdoc">Function declarations for read_mosaic.c.</div></div>
-<div class="ttc" id="achgres__cube_8fd_2utils_8f90_html_a494d969fc26018c8a44274492cd80086"><div class="ttname"><a href="chgres__cube_8fd_2utils_8f90.html#a494d969fc26018c8a44274492cd80086">error_handler</a></div><div class="ttdeci">subroutine error_handler(string, rc)</div><div class="ttdoc">General error handler.</div><div class="ttdef"><b>Definition:</b> <a href="chgres__cube_8fd_2utils_8f90_source.html#l00011">utils.f90:11</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

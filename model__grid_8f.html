@@ -83,6 +83,7 @@ $(document).ready(function(){initNavTree('model__grid_8f.html',''); initResizabl
 
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Modules</a> &#124;
 <a href="#func-members">Functions/Subroutines</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -95,13 +96,19 @@ $(document).ready(function(){initNavTree('model__grid_8f.html',''); initResizabl
 
 <p><a href="model__grid_8f_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Modules</h2></td></tr>
+<tr class="memitem:namespacemodel__grid"><td class="memItemLeft" align="right" valign="top">module &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodel__grid.html">model_grid</a></td></tr>
+<tr class="memdesc:namespacemodel__grid"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify input and target model grids via ESMF grid objects. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:ab7e9539fbb4303f6a0a36e96b8ef22ce"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="model__grid_8f.html#ab7e9539fbb4303f6a0a36e96b8ef22ce">model_grid::model_grid_cleanup</a></td></tr>
-<tr class="memdesc:ab7e9539fbb4303f6a0a36e96b8ef22ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">model grid cleanup  <a href="model__grid_8f.html#ab7e9539fbb4303f6a0a36e96b8ef22ce">More...</a><br /></td></tr>
+<tr class="memitem:ab7e9539fbb4303f6a0a36e96b8ef22ce"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodel__grid.html#ab7e9539fbb4303f6a0a36e96b8ef22ce">model_grid::model_grid_cleanup</a></td></tr>
+<tr class="memdesc:ab7e9539fbb4303f6a0a36e96b8ef22ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clean up allocatable arrays.  <a href="namespacemodel__grid.html#ab7e9539fbb4303f6a0a36e96b8ef22ce">More...</a><br /></td></tr>
 <tr class="separator:ab7e9539fbb4303f6a0a36e96b8ef22ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeea3795bb9567fb780907965aeb22970"><td class="memItemLeft" align="right" valign="top"><a id="aeea3795bb9567fb780907965aeb22970"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>model_grid::read_mdl_grid_info</b></td></tr>
+<tr class="memitem:aeea3795bb9567fb780907965aeb22970"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodel__grid.html#aeea3795bb9567fb780907965aeb22970">model_grid::read_mdl_grid_info</a></td></tr>
+<tr class="memdesc:aeea3795bb9567fb780907965aeb22970"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read mdl grid.  <a href="namespacemodel__grid.html#aeea3795bb9567fb780907965aeb22970">More...</a><br /></td></tr>
 <tr class="separator:aeea3795bb9567fb780907965aeb22970"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -163,8 +170,6 @@ logical&#160;</td><td class="memItemRight" valign="bottom"><b>model_grid::thinne
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Read in data defining the model grid. </p>
-<dl class="section author"><dt>Author</dt><dd>gayno org: w/np2 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2005-dec-16</dd></dl>
 <p>program history log:</p><ul>
 <li>2005-dec-16 gayno - initial version</li>
 <li>2007-nov-30 gayno - improved method for thinning gfs grids. added nam b-grids.</li>
@@ -183,33 +188,14 @@ logical&#160;</td><td class="memItemRight" valign="bottom"><b>model_grid::thinne
 <li>lsmask_mdl - land mask of model grid (0 - non land, 1-land) for global grids run thinned, will contain a modified version of the original mask that has land at all points encompassed by a thinned point</li>
 <li>lsmask_mdl_sav - saved copy of land mask of model grid (0 - non land, 1-land) only used for global thinned grids.</li>
 <li>resol_mdl - approximate model resolution in km.</li>
-<li>thinned - when true, global grids will run thinned (# i points decrease toward pole) </li>
+<li>thinned - when true, global grids will run thinned (# i points decrease toward pole)</li>
 </ul>
+<dl class="section author"><dt>Author</dt><dd>George Gayno org: w/np2 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2005-Dec-16 <br  />
+ </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="model__grid_8f_source.html">model_grid.f</a>.</p>
-</div><h2 class="groupheader">Function/Subroutine Documentation</h2>
-<a id="ab7e9539fbb4303f6a0a36e96b8ef22ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab7e9539fbb4303f6a0a36e96b8ef22ce">&#9670;&nbsp;</a></span>model_grid_cleanup()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine public model_grid::model_grid_cleanup</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>model grid cleanup </p>
-<dl class="section author"><dt>Author</dt><dd>gayno </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2018</dd></dl>
-<p>Free up memory associated with this module. </p>
-
-<p class="definition">Definition at line <a class="el" href="model__grid_8f_source.html#l00597">597</a> of file <a class="el" href="model__grid_8f_source.html">model_grid.f</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

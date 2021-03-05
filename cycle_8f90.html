@@ -148,10 +148,10 @@ real function&#160;</td><td class="memItemRight" valign="bottom"><b>tfreez</b> (
  Here all NSST fields are cycled. But the NSST IFD field is used to flag points that flipped from ice to open water. To invoke this option, set DONST=.true. and GSI_FILE="NULL".</p>
 <p>4) Perform the NSST TREF adjustment only. Surface fields are only cycled. To run with this option, set DONST=.true., GSI_FILE to the GSI increment file, and ADJT_NST_ONLY=.true. The input cubed-sphere restart files must be those from option (3).</p>
 <p>NOTE: running (3) then (4) is equivalent to running (2).</p>
-<h2><a class="anchor" id="autotoc_md26"></a>
+<h2><a class="anchor" id="autotoc_md6"></a>
 INPUT FILES:</h2>
 <p>-fngrid.$NNN The cubed-sphere grid file (contains grid point latitude and longitdue). -fnorog.$NNN The cubed-sphere orography file (contains land mask and orography). -fnbgsi.$NNN The cubed-sphere input sfc/nsst restart file. -$GSI_FILE Gaussian GSI file which contains NSST TREF increments</p>
-<h2><a class="anchor" id="autotoc_md27"></a>
+<h2><a class="anchor" id="autotoc_md7"></a>
 OUTPUT FILES:</h2>
 <p>-fnbgso.$NNN The updated sfc/nsst restart file.</p>
 <p>NOTE: $NNN corresponds to (mpi rank + 1) </p>

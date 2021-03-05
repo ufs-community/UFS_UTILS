@@ -1,5 +1,13 @@
 var pmat_8f90 =
 [
+    [ "inv", "interfacepmat_1_1inv.html", "interfacepmat_1_1inv" ],
+    [ "invl", "interfacepmat_1_1invl.html", "interfacepmat_1_1invl" ],
+    [ "invu", "interfacepmat_1_1invu.html", "interfacepmat_1_1invu" ],
+    [ "l1lm", "interfacepmat_1_1l1lm.html", "interfacepmat_1_1l1lm" ],
+    [ "ldlm", "interfacepmat_1_1ldlm.html", "interfacepmat_1_1ldlm" ],
+    [ "ldum", "interfacepmat_1_1ldum.html", "interfacepmat_1_1ldum" ],
+    [ "swpvv", "interfacepmat_1_1swpvv.html", "interfacepmat_1_1swpvv" ],
+    [ "udlmm", "interfacepmat_1_1udlmm.html", "interfacepmat_1_1udlmm" ],
     [ "cinvmt", "pmat_8f90.html#a66211bbfe11ffae8c686f04052b9b264", null ],
     [ "cinvmtf", "pmat_8f90.html#a94d1e16e885b4c488589b98c5849fa83", null ],
     [ "cldum", "pmat_8f90.html#a59e712821f27ada7cd57a4d93c70ca37", null ],

@@ -1,5 +1,18 @@
 var pfun_8f90 =
 [
+    [ "ahav", "interfacepfun_1_1ahav.html", "interfacepfun_1_1ahav" ],
+    [ "ahavh", "interfacepfun_1_1ahavh.html", "interfacepfun_1_1ahavh" ],
+    [ "atanh", "interfacepfun_1_1atanh.html", "interfacepfun_1_1atanh" ],
+    [ "gd", "interfacepfun_1_1gd.html", "interfacepfun_1_1gd" ],
+    [ "gdi", "interfacepfun_1_1gdi.html", "interfacepfun_1_1gdi" ],
+    [ "hav", "interfacepfun_1_1hav.html", "interfacepfun_1_1hav" ],
+    [ "havh", "interfacepfun_1_1havh.html", "interfacepfun_1_1havh" ],
+    [ "sech", "interfacepfun_1_1sech.html", "interfacepfun_1_1sech" ],
+    [ "sechs", "interfacepfun_1_1sechs.html", "interfacepfun_1_1sechs" ],
+    [ "sinhox", "interfacepfun_1_1sinhox.html", "interfacepfun_1_1sinhox" ],
+    [ "sinhoxm", "interfacepfun_1_1sinhoxm.html", "interfacepfun_1_1sinhoxm" ],
+    [ "sinox", "interfacepfun_1_1sinox.html", "interfacepfun_1_1sinox" ],
+    [ "sinoxm", "interfacepfun_1_1sinoxm.html", "interfacepfun_1_1sinoxm" ],
     [ "ahav_d", "pfun_8f90.html#a7eb3f64f647bd19d04fc18d4cae97140", null ],
     [ "ahav_s", "pfun_8f90.html#a4b5788e629ba2dfae6f8c5c718266379", null ],
     [ "ahavh_d", "pfun_8f90.html#abb88923266701b775e808682ff5f936b", null ],

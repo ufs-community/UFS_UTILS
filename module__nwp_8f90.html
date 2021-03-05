@@ -83,16 +83,56 @@ $(document).ready(function(){initNavTree('module__nwp_8f90.html',''); initResiza
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Types</a>  </div>
+<a href="#nested-classes">Data Types</a> &#124;
+<a href="#namespaces">Modules</a> &#124;
+<a href="#func-members">Functions/Subroutines</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">module_nwp.f90 File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
+<p>Defines FV3LAM and FVCOM forecast data structure.  
+<a href="#details">More...</a></p>
+
 <p><a href="module__nwp_8f90_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Data Types</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1fcst__nwp.html">module_nwp::fcst_nwp</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html">module_nwp::nwp_type</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Modules</h2></td></tr>
+<tr class="memitem:namespacemodule__nwp"><td class="memItemLeft" align="right" valign="top">module &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodule__nwp.html">module_nwp</a></td></tr>
+<tr class="memdesc:namespacemodule__nwp"><td class="mdescLeft">&#160;</td><td class="mdescRight">This module defines FV3LAM and FVCOM forecast data structure and the method to read and write observations from and to those data structures. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions/Subroutines</h2></td></tr>
+<tr class="memitem:af5d5b105c92eb2611a1ac884e7ddf651"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodule__nwp.html#af5d5b105c92eb2611a1ac884e7ddf651">module_nwp::finish_nwp</a> (this)</td></tr>
+<tr class="memdesc:af5d5b105c92eb2611a1ac884e7ddf651"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finish and deallocate.  <a href="namespacemodule__nwp.html#af5d5b105c92eb2611a1ac884e7ddf651">More...</a><br /></td></tr>
+<tr class="separator:af5d5b105c92eb2611a1ac884e7ddf651"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aceba924c5bf6d026ebe56a7f7eb5de48"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodule__nwp.html#aceba924c5bf6d026ebe56a7f7eb5de48">module_nwp::initial_nwp</a> (this, itype)</td></tr>
+<tr class="memdesc:aceba924c5bf6d026ebe56a7f7eb5de48"><td class="mdescLeft">&#160;</td><td class="mdescRight">This subroutine defines the number of variables and their names for each NWP data type.  <a href="namespacemodule__nwp.html#aceba924c5bf6d026ebe56a7f7eb5de48">More...</a><br /></td></tr>
+<tr class="separator:aceba924c5bf6d026ebe56a7f7eb5de48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8813da3d8f29617bee44f7209b765b4a"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodule__nwp.html#a8813da3d8f29617bee44f7209b765b4a">module_nwp::list_initial_nwp</a> (this)</td></tr>
+<tr class="memdesc:a8813da3d8f29617bee44f7209b765b4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This subroutine lists the setup for NWP data that was done by the initial_nwp subroutine.  <a href="namespacemodule__nwp.html#a8813da3d8f29617bee44f7209b765b4a">More...</a><br /></td></tr>
+<tr class="separator:a8813da3d8f29617bee44f7209b765b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b8f57e80b9444f54731f26d7f64c64a"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodule__nwp.html#a9b8f57e80b9444f54731f26d7f64c64a">module_nwp::read_nwp</a> (this, filename, itype, numlon, numlat, numtimes, time_to_get, mask, sst, ice, sfcT, iceT)</td></tr>
+<tr class="memdesc:a9b8f57e80b9444f54731f26d7f64c64a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This subroutine initializes arrays to receive the NWP data, and opens the file and gets the data.  <a href="namespacemodule__nwp.html#a9b8f57e80b9444f54731f26d7f64c64a">More...</a><br /></td></tr>
+<tr class="separator:a9b8f57e80b9444f54731f26d7f64c64a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:af103c9fe9d0bfa17cc2c55e1cf463cdd"><td class="memItemLeft" align="right" valign="top">type(ncio)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodule__nwp.html#af103c9fe9d0bfa17cc2c55e1cf463cdd">module_nwp::ncdata</a></td></tr>
+<tr class="memdesc:af103c9fe9d0bfa17cc2c55e1cf463cdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper object for netCDF data file.  <a href="namespacemodule__nwp.html#af103c9fe9d0bfa17cc2c55e1cf463cdd">More...</a><br /></td></tr>
+<tr class="separator:af103c9fe9d0bfa17cc2c55e1cf463cdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This module defines FV3LAM and FVCOM forecast data structure and the method to read and write observations from and to those data structures. It is used by ingest_FVCOM.f90.</p>
-<p>This script is strongly based upon Eric James' (ESRL/GSL) work with HRRR/WRF to get FVCOM data into the model.</p>
+<div class="textblock"><p>Defines FV3LAM and FVCOM forecast data structure. </p>
 <dl class="section author"><dt>Author</dt><dd>David Wright, University of Michigan and GLERL, </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>17 Aug 2020 </dd></dl>
 

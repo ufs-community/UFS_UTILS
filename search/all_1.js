@@ -1,13 +1,9 @@
 var searchData=
 [
-  ['bb_5ftarget_15',['bb_target',['../namespaceprogram__setup.html#ab72166ef093181118b706b0c8d9680da',1,'program_setup']]],
-  ['bilinear_5finterp_2ec_16',['bilinear_interp.c',['../bilinear__interp_8c.html',1,'']]],
-  ['bilinear_5finterp_2eh_17',['bilinear_interp.h',['../bilinear__interp_8h.html',1,'']]],
-  ['bipolar_5farea_18',['bipolar_area',['../tool__util_8c.html#ab5f93a2275b11f39b1c43879ef3c91c3',1,'bipolar_area(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4):&#160;tool_util.c'],['../tool__util_8h.html#ab5f93a2275b11f39b1c43879ef3c91c3',1,'bipolar_area(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4):&#160;tool_util.c']]],
-  ['bipolar_5fdist_19',['bipolar_dist',['../tool__util_8c.html#a1edb8c5b4c36dc56c9b5b0633c494773',1,'bipolar_dist(double x1, double y1, double x2, double y2, double bpeq, double bpsp, double bpnp, double rp):&#160;tool_util.c'],['../tool__util_8h.html#a1edb8c5b4c36dc56c9b5b0633c494773',1,'bipolar_dist(double x1, double y1, double x2, double y2, double bpeq, double bpsp, double bpnp, double rp):&#160;tool_util.c']]],
-  ['bound_5fconfig_20',['Bound_config',['../globals_8h.html#structBound__config',1,'']]],
-  ['box_5fctrlat_21',['box_ctrlat',['../create__xgrid_8c.html#a2bfdfb2d796dadce1247fd606f91982a',1,'box_ctrlat(double ll_lon, double ll_lat, double ur_lon, double ur_lat):&#160;create_xgrid.c'],['../create__xgrid_8h.html#a2bfdfb2d796dadce1247fd606f91982a',1,'box_ctrlat(double ll_lon, double ll_lat, double ur_lon, double ur_lat):&#160;create_xgrid.c']]],
-  ['box_5fctrlon_22',['box_ctrlon',['../create__xgrid_8c.html#afd25e608bc30387694af055ff3c56c5d',1,'box_ctrlon(double ll_lon, double ll_lat, double ur_lon, double ur_lat, double clon):&#160;create_xgrid.c'],['../create__xgrid_8h.html#afd25e608bc30387694af055ff3c56c5d',1,'box_ctrlon(double ll_lon, double ll_lat, double ur_lon, double ur_lat, double clon):&#160;create_xgrid.c']]],
-  ['bp_5flam_23',['bp_lam',['../tool__util_8c.html#a549c6ff4bc96d2d1f2624ce4a12e8cc0',1,'tool_util.c']]],
-  ['bp_5fphi_24',['bp_phi',['../tool__util_8c.html#a96a0125786ed862a4345c1ebb5ec1e9c',1,'tool_util.c']]]
+  ['bad_5fnesdis_35',['bad_nesdis',['../namespacesnowdat.html#a19a23d63b720bcdea4c7fed701d55bd6',1,'snowdat']]],
+  ['bb_5ftarget_36',['bb_target',['../namespaceprogram__setup.html#ab72166ef093181118b706b0c8d9680da',1,'program_setup']]],
+  ['bestesg_5fgeo_37',['bestesg_geo',['../interfacepesg_1_1bestesg__geo.html',1,'pesg::bestesg_geo'],['../interfacepesg_1_1bestesg__geo.html#a2ab7bf5fe621ccf7e709fbd15af4dea9',1,'pesg::bestesg_geo::bestesg_geo()'],['../namespacepesg.html#abb391d45295581c1b15c7cb6d5c9afb6',1,'pesg::bestesg_geo()']]],
+  ['bestesg_5fmap_38',['bestesg_map',['../interfacepesg_1_1bestesg__map.html',1,'pesg::bestesg_map'],['../interfacepesg_1_1bestesg__map.html#aec609b83b6f4f05beaba28ce0b6144a7',1,'pesg::bestesg_map::bestesg_map()'],['../namespacepesg.html#a5c9f36282d23e5297d6a5ae71d60d6bf',1,'pesg::bestesg_map()']]],
+  ['bitmap_5fnesdis_39',['bitmap_nesdis',['../namespacesnowdat.html#a4524fabd19ec12cb48a1ec96aa6f3eb2',1,'snowdat']]],
+  ['blim_40',['blim',['../namespacesurface.html#a8504e69c586b0d22fd77f08056996bec',1,'surface']]]
 ];
