@@ -61,8 +61,8 @@ contains
 
 !> Inverse of xstoxc. I.e., cartesians to stereographic.
 !!
-!! @param[in] xc xstoxc
-!! @param[out] xs Inverse of xstoxc
+!! @param[in] xc Earth-centered cartesian unit 3-vector
+!! @param[out] xs Stereographic map coordinates
 !! @author R. J. Purser
 subroutine xctoxs(xc,xs)!                                             [xctoxs]
 implicit none
@@ -77,9 +77,9 @@ end subroutine xctoxs
 !! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and
 !! metric.
 !!
-!! @param[in] xs polar stereographic map coordinates
-!! @param[out] xc cartesian
-!! @param[out] xcd value of jacobian matrix, encoding distortion and metric
+!! @param[in] xs Stereographic map coordinates
+!! @param[out] xc Cartesian earth-centered 3-vector
+!! @param[out] xcd Value of jacobian matrix, encoding distortion and metric
 !! @author R. J. Purser
 subroutine xstoxc(xs,xc,xcd)!                                         [xstoxc]
 use pmat4, only: outer_product
@@ -98,10 +98,10 @@ end subroutine xstoxc
 !! xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and
 !! metric. xcdd is the further derivative, wrt xs, of xcd.
 !!
-!! @param[in] xs polar stereographic map coordinates
-!! @param[out] xc cartesian
-!! @param[out] xcd jacobian matrix, encoding distortion and metric
-!! @param[out] xcdd further derivative, wrt xs, of xcd
+!! @param[in] xs Stereographic map coordinates
+!! @param[out] xc Cartesian earth-centered 3-vector
+!! @param[out] xcd Jacobian matrix, encoding distortion and metric
+!! @param[out] xcdd Further derivative, wrt xs, of xcd
 !! @author R. J. Purser
 subroutine xstoxc1(xs,xc,xcd,xcdd)!                                   [xstoxc]
 use pmat4, only: outer_product
@@ -130,10 +130,10 @@ end subroutine xstoxc1
 
 !> Inverse of xttoxs.
 !!
-!! @param[in] k ??? 
-!! @param[in] xs ??? 
-!! @param[out] xt ??? 
-!! @param[out] ff ??? 
+!! @param[in] k Gaussian curvature parameter of Schmidt mapping 
+!! @param[in] xs Stereographic plane coordinates
+!! @param[out] xt Scaled gnomonic plane coordinates 
+!! @param[out] ff Failure flag
 !! @author R. J. Purser
 subroutine xstoxt(k,xs,xt,ff)!                                        [xstoxt]
 implicit none
@@ -149,11 +149,11 @@ end subroutine xstoxt
 
 !> Scaled gnomonic plane xt to standard stereographic plane xs.
 !!
-!! @param[in] k ??? 
+!! @param[in] k Gaussian curvature parameter of Schmidt mapping 
 !! @param[in] xt Scaled gnomonic plane
-!! @param[out] xs standard stereographic plane
-!! @param[out] xsd ??? 
-!! @param[out] ff ??? 
+!! @param[out] xs Standard stereographic plane
+!! @param[out] xsd Jacobian matrix, d(xs)/d(xt). 
+!! @param[out] ff Failure flag
 !! @author R. J. Purser
 subroutine xttoxs(k,xt,xs,xsd,ff)!                                     [xttoxs
 use pmat4, only: outer_product
@@ -180,14 +180,14 @@ end subroutine xttoxs
 !> Like xttoxs, but also, return the derivatives, wrt K, of xs and
 !! xsd.
 !!
-!! @param[in] k derivatives, wrt K, of xs and xsd
+!! @param[in] k Gaussian curvature parameter of the Schmidt mapping
 !! @param[in] xt Scaled gnomonic plane
-!! @param[out] xs standard stereographic plane
-!! @param[out] xsd ??? 
-!! @param[out] xsdd ??? 
-!! @param[out] xs1 ??? 
-!! @param[out] xsd1 ??? 
-!! @param[out] ff ??? 
+!! @param[out] xs Standard stereographic plane
+!! @param[out] xsd Jacobian matrix, d(xs)/d(xt)
+!! @param[out] xsdd Second partial derivatives, d^2(xs)/(d(xt)d(xt))
+!! @param[out] xs1 Derivative of xs wrt mapping parameter, d(xs)/dk
+!! @param[out] xsd1 Derivative of Jacobian wrt k: d^2(xs)/(d(xt)dk)
+!! @param[out] ff Failure flag
 !! @author R. J. Purser
 subroutine xttoxs1(k,xt,xs,xsd,xsdd,xs1,xsd1,ff)!                     [xttoxs]
 use pmat4, only: outer_product
@@ -226,10 +226,10 @@ end subroutine xttoxs1
 
 !> Inverse of xmtoxt.
 !!
-!! @param[in] a ??? 
-!! @param[in] xt ??? 
-!! @param[out] xm ??? 
-!! @param[out] ff ??? 
+!! @param[in] a Mapping parameter controlling grid line spacing profile  
+!! @param[in] xt Gnomonic plane coordinates  
+!! @param[out] xm Map coordinates
+!! @param[out] ff Failure flag 
 !! @author R. J. Purser
 subroutine xttoxm(a,xt,xm,ff)!                                       [xttoxm]
 implicit none
@@ -244,11 +244,11 @@ end subroutine xttoxm
 !> Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian
 !! xtd.
 !!
-!! @param[in] a ??? 
-!! @param[in] xm vector value
-!! @param[out] xt vector value
-!! @param[out] xtd 2*2 diagonal Jacobian
-!! @param[out] ff ??? 
+!! @param[in] a Mapping parameter controlling grid line spacing profile 
+!! @param[in] xm Vector value of map coordinates
+!! @param[out] xt Vector value of gnomonic plane coordinates
+!! @param[out] xtd 2*2 diagonal Jacobian, d(xt)/d(xm)
+!! @param[out] ff Failure flag
 !! @author R. J. Purser
 subroutine xmtoxt(a,xm,xt,xtd,ff)!                                    [xmtoxt]
 implicit none
@@ -264,13 +264,13 @@ end subroutine xmtoxt
 !> Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian
 !! xtd Also, the derivatives, wrt a, of these quantities.
 !!
-!! @param[in] a the derivatives of these quantities
-!! @param[in] xm vector value
-!! @param[out] xt vector value
-!! @param[out] xtd 2*2 diagonal Jacobian
-!! @param[out] xt1 ??? 
-!! @param[out] xtd1 ??? 
-!! @param[out] ff ??? 
+!! @param[in] a Mapping parameter controlling grid line spacing profile
+!! @param[in] xm Vector value of map plane coordinates
+!! @param[out] xt Vector value of gnomonic plane coordinates
+!! @param[out] xtd 2*2 diagonal Jacobian, d(xt)/d(xm)
+!! @param[out] xt1 Derivative wrt a of xt, d(xt)/da 
+!! @param[out] xtd1 Derivative wrt a of Jacobian xtd, d^2(xt)/(d(xm)da)
+!! @param[out] ff Failure flag
 !! @author R. J. Purser
 subroutine xmtoxt1(a,xm,xt,xtd,xt1,xtd1,ff)!                          [xmtoxt]
 implicit none
@@ -290,10 +290,10 @@ end subroutine xmtoxt1
 
 !> Inverse of zmtozt
 !!
-!! @param[in] a ??? 
-!! @param[in] zt ??? 
-!! @param[out] zm ??? 
-!! @param[out] ff ??? 
+!! @param[in] a Mapping parameter controlling grid line spacing profile 
+!! @param[in] zt Scalar value of single gnomonic plane coordinate
+!! @param[out] zm Scalar value of single map plane coordinate
+!! @param[out] ff Failure flag
 !! @author R. J. Purser
 subroutine zttozm(a,zt,zm,ff)!                                        [zttozm]
 implicit none
@@ -313,11 +313,11 @@ end subroutine zttozm
 !! derivative, ztd, for positive and negative A and for the limiting
 !! case, A --> 0.
 !!
-!! @param[in] a ??? 
-!! @param[in] zm ??? 
-!! @param[out] zt function to be evaluated
-!! @param[out] ztd derivative of the source function
-!! @param[out] ff ??? 
+!! @param[in] a Mapping parameter controlling grid line spacing profile 
+!! @param[in] zm Scalar value of single map plane coordinate 
+!! @param[out] zt Scalar value of single gnomonic plane coordinate
+!! @param[out] ztd Derivative of gnomonic coordinate, d(zt)/d(zm)
+!! @param[out] ff Failure flag 
 !! @author R. J. Purser
 subroutine zmtozt(a,zm,zt,ztd,ff)!                                    [zmtozt]
 implicit none
@@ -336,13 +336,13 @@ end subroutine zmtozt
 !> Like zmtozt, but also, get the derivative with respect to a, zt1 of
 !! zt, and ztd1 of ztd.
 !! 
-!! @param[in] a ??? 
-!! @param[in] zm ??? 
-!! @param[in] zt ??? 
-!! @param[in] ztd ??? 
-!! @param[in] zt1 ??? 
-!! @param[in] ztd1 ??? 
-!! @param[in] ff ??? 
+!! @param[in] a Mapping parameter controlling grid line spacing profile 
+!! @param[in] zm Single map plane coordinate
+!! @param[in] zt Single gnomonic plane coordinate
+!! @param[in] ztd Derivative wrt zm of zt, d(zt)/d(zm)
+!! @param[in] zt1 Derivative wrt a of zt, d(zt)/da 
+!! @param[in] ztd1 Derivative wrt a of ztd, d^2(zt)/(d(zm)da) 
+!! @param[in] ff Failure flag 
 !! @author R. J. Purser
 subroutine zmtozt1(a,zm,zt,ztd,zt1,ztd1,ff)!                          [zmtozt]
 use pietc, only: o3
@@ -371,11 +371,11 @@ end subroutine zmtozt1
 !! derivative wrt xm, the Jacobian matrix, xcd.
 !! If for any reason the mapping cannot be done, return a raised failure flag,z
 !! FF.
-!! @param ak parameterization of the Extended ESG
-!! @param xm vector
-!! @param xc
-!! @param xcd
-!! @param ff raised failure error code
+!! @param [in] ak 2-vector parameterization of the ESG mapping
+!! @param [in] xm 2-vector of map plane coordinates
+!! @param [out] xc Earth-centered cartesian unit 3-vector
+!! @param [out] xcd Jacobian, d(xc)/d(xm)
+!! @param [out] ff Failure flag
 !! @author R. J. Purser
 subroutine xmtoxc_vak(ak,xm,xc,xcd,ff)!                            [xmtoxc_ak]
 implicit none
@@ -388,13 +388,13 @@ end subroutine xmtoxc_vak
 
 !> Like xmtoxc_vak, _ak, but also return derivatives wrt ak.
 !!
-!! @param ak derivatives wrt ak
-!! @param[in] xm
-!! @param[out] xc
-!! @param[out] xcd
-!! @param[out] xc1
-!! @param[out] xcd1
-!! @param[out] ff
+!! @param[in] ak 2-vector parameterization of the ESG mapping 
+!! @param[in] xm 2-vector of map plane coordinates
+!! @param[out] xc Earth-centered cartesian unit 3-vector
+!! @param[out] xcd Jacobian of xc wrt xm, d(xc)/d(xm)
+!! @param[out] xc1 Partial derivatives wrt ak of xc, d(xc)/d(ak)
+!! @param[out] xcd1 Second derivative wrt xm and ak of xc, d^2(xc)/(d(xm)d(ak))
+!! @param[out] ff Failure flag
 !! @author R. J. Purser
 subroutine xmtoxc_vak1(ak,xm,xc,xcd,xc1,xcd1,ff)!                  [xmtoxc_ak]
 implicit none
@@ -428,12 +428,12 @@ end subroutine xmtoxc_vak1
 !! its derivative wrt xm, jacobian matrix, xcd. If for any reason the
 !! mapping cannot be done, return a raised failure flag, FF.
 !!
-!! @param a ESG mapping parameterization
-!! @param k ESG mapping parameterization
-!! @param xm map-space vector
-!! @param xm derivative
-!! @param xcd jacobian matrix
-!! @param ff error flag
+!! @param[in] a ESG mapping parameter for line spacing profile
+!! @param[in] k ESG mapping parameter for Gauss curvature in Schmidt mapping
+!! @param[in] xm map-space 2-vector
+!! @param[out] xc Earth-centered cartesian unit 3-vector
+!! @param[out] xcd Jacobian matrix, d(xc)/d(xm)
+!! @param[out] ff Failure flag
 !! @author R. J. Purser
 subroutine xmtoxc_ak(a,k,xm,xc,xcd,ff)!                            [xmtoxc_ak]
 implicit none
@@ -444,7 +444,7 @@ real(dp),dimension(3,2),intent(out):: xcd
 logical,                intent(out):: ff
 real(dp),dimension(2,2):: xtd,xsd
 real(dp),dimension(2)  :: xt,xs
-call xmtoxt(a,xm,xt,xtd,ff);     if(ff)return
+call xmtoxt(a,xm,xt,xtd,ff); if(ff)return
 call xttoxs(k,xt,xs,xsd,ff); if(ff)return
 xsd=matmul(xsd,xtd)
 call xstoxc(xs,xc,xcd)
@@ -455,11 +455,11 @@ end subroutine xmtoxc_ak
 !! 3-vector, xc, to map coordinate 2-vector xm (or return a raised
 !! failure flag, FF, if the attempt fails).
 !!
-!! @param[in] a Inverse mapping of xmtoxc
-!! @param[in] k Inverse mapping of xmtoxc
-!! @param[in] xc cartesian unit 3-vector
+!! @param[in] a ESG mapping parameter for line spacing profile
+!! @param[in] k ESG mapping parameter for Gauss curvature in Schmidt mapping
+!! @param[in] xc Earth-centered cartesian unit 3-vector
 !! @param[out] xm 2-vector map coordinate
-!! @param[out] ff error flag
+!! @param[out] ff Failure flag
 !! @author R. J. Purser
 subroutine xctoxm_ak(a,k,xc,xm,ff)!                                [xctoxm_ak]
 implicit none
@@ -479,10 +479,10 @@ end subroutine xctoxm_ak
 !! vectors that represent the locations of these edge midpoints in the
 !! positive x and y directions.
 !!
-!! @param[in] arcx
-!! @param[in] arcy
-!! @param[out] edgex region's x edges
-!! @param[out] edgey region's y edges
+!! @param[in] arcx Center-relative angle (degrees) of edge midpoint in +x
+!! @param[in] arcy Center-relative angle (degrees) of edge midpoint in +y
+!! @param[out] edgex region's +x edge midpoint as cartesian unit 3-vector
+!! @param[out] edgey region's +y edge midpoint as cartesian unit 3-vector
 !! @author R. J. Purser
 subroutine get_edges(arcx,arcy,edgex,edgey)!                       [get_edges]
 implicit none
@@ -800,9 +800,9 @@ end subroutine guessak_map
 !! return a first guess for the parameter vector, ak, approximately
 !! optimal for the domain of the given dimensions.
 !!
-!! @param asp aspect ratio
-!! @param arc ??? 
-!! @param ak first guess or the parameter vector
+!! @param asp aspect ratio of intended domain
+!! @param arc major semi-axis angle in degrees for intended domain
+!! @param ak first guess of the parameter vector
 !! @author R. J. Purser
 subroutine guessak_geo(asp,arc,ak)!                              [guessak_geo]
 implicit none
@@ -1199,20 +1199,20 @@ end subroutine bestesg_map
 !! if, for some reason, it is not possible to complete this task,
 !! return the raised failure flag, ff=.TRUE. .
 !!
-!! @param[in] lx grid index location
-!! @param[in] ly grid index location
-!! @param[in] nx grid spaces
-!! @param[in] ny grid spaces
-!! @param[in] A parameters of an ESG mapping centered at (plat,plon)
-!! @param[in] K parameters of an ESG mapping centered at (plat,plon)
-!! @param[in] plat latitude center point
-!! @param[in] plon longitude center point
-!! @param[in] pazi
-!! @param[in] delx central x-spacing grid point
-!! @param[in] dely central y-spacing grid point
-!! @param[out] glat grid points for latitude
-!! @param[out] glon grid points for longitude
-!! @param[out] garea rectangular array
+!! @param[in] lx center-relative grid index in x of left edge of the domain
+!! @param[in] ly center-relative grid index in y of lower edge of the domain
+!! @param[in] nx number of grid spaces in x
+!! @param[in] ny number of grid spaces in y
+!! @param[in] A parameter of the ESG mapping centered at (plat,plon)
+!! @param[in] K parameter of the ESG mapping centered at (plat,plon)
+!! @param[in] plat latitude of projection center of mapping (radians)
+!! @param[in] plon longitude of projection center of mapping (radians)
+!! @param[in] pazi azimuth of orientation of mapping at its center
+!! @param[in] delx central x-spacing of the grid (radians)
+!! @param[in] dely central y-spacing of the grid (radians)
+!! @param[out] glat grid points' latitudes
+!! @param[out] glon grid points' longitudes
+!! @param[out] garea array of grid-cell areas (steradians)
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine hgrid_ak_rr(lx,ly,nx,ny,A,K,plat,plon,pazi, & !       [hgrid_ak_rr]
@@ -1312,24 +1312,24 @@ end subroutine hgrid_ak_rr
 !! reason, it is not possible to complete this task, return the
 !! failure flag as .TRUE.
 !!
-!! @param[in] lx x grid index for left-lower corner of the grid at center
-!! @param[in] ly y grid index for left-lower corner of the grid at center
+!! @param[in] lx center-relative x grid index for left edge of the domain
+!! @param[in] ly center-relative y grid index for lower edge of the domain
 !! @param[in] nx numbers of the grid spaces in x
 !! @param[in] ny numbers of the grid spaces in y
 !! @param[in] a Extended Schmidt Gnomonic parameter
 !! @param[in] k Extended Schmidt Gnomonic parameter
-!! @param[in] plat latitude define centered mapping
-!! @param[in] plon longitude define centered mapping
-!! @param[in] pazi
-!! @param[in] delx central x-spacing grid point
-!! @param[in] dely central y-spacing grid point
-!! @param[out] glat grid points for latitude
-!! @param[out] glon grid points for longitude
-!! @param[out] garea rectangular array
-!! @param[out] dx estimated grid steps x grid cell edges
-!! @param[out] dy estimated grid steps y grid cell edges
-!! @param[out] angle_dx x angles relative to local east and north
-!! @param[out] angle_dy y angles relative to local east and north
+!! @param[in] plat latitude of the projection center of the mapping (radians)
+!! @param[in] plon longitude of the projection center of the mapping (radians)
+!! @param[in] pazi azimuth of the orientation of the mapping at its center
+!! @param[in] delx central x-spacing of the grid (radians) 
+!! @param[in] dely central y-spacing of the grid (radians)
+!! @param[out] glat grid points' latitudes (radians)
+!! @param[out] glon grid points' longitudes (radians)
+!! @param[out] garea array of grid-cell areas (steradians)
+!! @param[out] dx grid steps in x at grid cell edges (radians)
+!! @param[out] dy grid steps in y at grid cell edges (radians)
+!! @param[out] angle_dx x angles relative to local east (radians)
+!! @param[out] angle_dy y angles relative to local north (radians)
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine hgrid_ak_rr_c(lx,ly,nx,ny,a,k,plat,plon,pazi, & !     [hgrid_ak_rr]
@@ -1519,20 +1519,20 @@ end subroutine hgrid_ak_rr_c
 !! if, for some reason, it is not possible to complete this task,
 !! return the raised failure flag, ff=.TRUE. .
 !!
-!! @param lx x grid index for left-lower corner of the grid at center
-!! @param ly y grid index for left-lower corner of the grid at center
+!! @param lx center-relative x grid index for left edge of the domain
+!! @param ly center-relative y grid index for lower edge of the domain
 !! @param nx numbers of the grid spaces in x
 !! @param ny numbers of the grid spaces in y
-!! @param a parameters of an ESG mapping centered at (plat,plon)
-!! @param k parameters of an ESG mapping centered at (plat,plon)
-!! @param plat latitude define centered mapping
-!! @param plon longitude define centered mapping
-!! @param pazi ??? 
-!! @param delx central x-spacing grid point
-!! @param dely central y-spacing grid point
-!! @param xc unit cartesian vectors
-!! @param xcd ??? 
-!! @param garea rectangular array
+!! @param a parameters of the ESG mapping centered at (plat,plon)
+!! @param k parameters of the ESG mapping centered at (plat,plon)
+!! @param plat latitude of the projection center of the mapping (radians)
+!! @param plon longitude of the projection center of the mapping (radians)
+!! @param pazi azimuth of orientation of mapping at its center 
+!! @param delx central x-spacing of the grid (in radians)
+!! @param dely central y-spacing of the grid (in radians)
+!! @param xc Earth-centered unit cartesian 3-vectors at each grid point
+!! @param xcd Jacobian matrices, d(xc)/d(xm), at each grid point
+!! @param garea rectangular array of grid-cell areas (steradians)
 !! @param ff failure flag
 !! @author R. J. Purser
 subroutine hgrid_ak_rc(lx,ly,nx,ny,A,K,plat,plon,pazi, & !       [hgrid_ak_rc]
@@ -1608,20 +1608,20 @@ end subroutine hgrid_ak_rc
 !! each grid cell, is returned as in hgrid_ak_rr, and a failure flag,
 !! ff, raised when a failure occurs anywhere in these calculations.
 !!
-!! @param[in] lx x grid index for left-lower corner of the grid at center
-!! @param[in] ly y grid index for left-lower corner of the grid at center
-!! @param[in] nx numbers of the grid spaces in x
-!! @param[in] ny numbers of the grid spaces in y
-!! @param[in] a parameters of an ESG mapping
-!! @param[in] k parameters of an ESG mapping
-!! @param[in] pdlat latitude define centered mapping
-!! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ??? 
-!! @param[in] delx central x-spacing grid point
-!! @param[in] dely central y-spacing grid point
-!! @param[out] gdlat ??? 
-!! @param[out] gdlon ??? 
-!! @param[out] garea ??? 
+!! @param[in] lx center-relative x grid index for left edge of the domain
+!! @param[in] ly center-relative y grid index for lower edge of the domain
+!! @param[in] nx number of the grid spaces in x
+!! @param[in] ny number of the grid spaces in y
+!! @param[in] a parameter of an ESG mapping
+!! @param[in] k parameter of an ESG mapping
+!! @param[in] pdlat degrees latitude of the projection center of mapping
+!! @param[in] pdlon degrees longitude of the projection center of mapping
+!! @param[in] pdazi degrees azimuth of orientation of mapping at its center 
+!! @param[in] delx central x-spacing of the grid (in radians)
+!! @param[in] dely central y-spacing of the grid (in radians)
+!! @param[out] gdlat array of grid point latitudes (in degrees)
+!! @param[out] gdlon array of grid point longitudes (in dgrees)
+!! @param[out] garea array of grid cell areas (in steradians)
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine hgrid_ak_dd(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, & !    [hgrid_ak_dd]
@@ -1647,24 +1647,24 @@ end subroutine hgrid_ak_dd
 !! Like hgrid_ak_rr_c, except all the angle arguments (but not
 !! delx,dely) are in degrees instead of radians.
 !!
-!! @param[in] lx x grid index for left-lower corner of the grid at center
-!! @param[in] ly y grid index for left-lower corner of the grid at center
+!! @param[in] lx center-relative x grid index for left edge of the domain
+!! @param[in] ly center-relative y grid index for lower edge of the domain 
 !! @param[in] nx numbers of the grid spaces in x
 !! @param[in] ny numbers of the grid spaces in y
 !! @param[in] a parameters of an ESG mapping
 !! @param[in] k parameters of an ESG mapping
-!! @param[in] pdlat latitude define centered mapping
-!! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ??? 
-!! @param[in] delx central x-spacing grid point
-!! @param[in] dely central y-spacing grid point
-!! @param[out] gdlat ??? 
-!! @param[out] gdlon ??? 
-!! @param[out] garea ??? 
-!! @param[out] dx ??? 
-!! @param[out] dy ??? 
-!! @param[out] dangle_dx x rotations of the steps
-!! @param[out] dangle_dy y rotations of the steps
+!! @param[in] pdlat latitude defining projection center of the mapping
+!! @param[in] pdlon longitude defining projection center of the mapping
+!! @param[in] pdazi azimuth of the orientation of the mapping at its center 
+!! @param[in] delx central x-spacing of the grid (in radians)
+!! @param[in] dely central y-spacing of the grid (in radians)
+!! @param[out] gdlat array of grid point degree-latitudes 
+!! @param[out] gdlon array of grid point degree-longitudes 
+!! @param[out] garea array of grid-cell areas (steradians)
+!! @param[out] dx step sizes of the grid-cell edges in x (earth radius=1 unit)
+!! @param[out] dy step sizes of the grid-cell edges in y (earth radius=1 unit)
+!! @param[out] dangle_dx azimuth rotation of the x grid steps, dx (degrees)
+!! @param[out] dangle_dy azimuth rotation of the y grid steps, dy (degrees)
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine hgrid_ak_dd_c(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, &!   [hgrid_ak_dd]
@@ -1702,20 +1702,20 @@ end subroutine hgrid_ak_dd_c
 !! returned as in hgrid_ak_rx, and a failure flag, ff, raised when a
 !! failure occurs anywhere in these calculations.
 !!
-!! @param[in] lx x grid index for left-lower corner of the grid at center
-!! @param[in] ly y grid index for left-lower corner of the grid at center
+!! @param[in] lx center-relative x grid index for left edge of the domain
+!! @param[in] ly center-relative y grid index for lower edge of the domain
 !! @param[in] nx numbers of the grid spaces in x
 !! @param[in] ny numbers of the grid spaces in y
 !! @param[in] a parameters of an ESG mapping
 !! @param[in] k parameters of an ESG mapping
-!! @param[in] pdlat latitude define centered mapping
-!! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ??? 
-!! @param[in] delx central x-spacing grid point
-!! @param[in] dely central y-spacing grid point
-!! @param[out] xc grid points' cartesians
-!! @param[out] xcd Jacobian matrices
-!! @param[out] garea Jacobian matrices
+!! @param[in] pdlat degrees latitude of the projection center of the mapping
+!! @param[in] pdlon degrees longitude of the projection center of the mapping
+!! @param[in] pdazi azimuth of the orientation of the mapping at its center 
+!! @param[in] delx central x-spacing of the grid in radians
+!! @param[in] dely central y-spacing of the grid in radians
+!! @param[out] xc grid points' earth-centered unit cartesians
+!! @param[out] xcd Jacobian matrices, d(xc)/d(xm)
+!! @param[out] garea array of grid-cell areas (steradians)
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine hgrid_ak_dc(lx,ly,nx,ny,a,k,pdlat,pdlon,pdazi, & !    [hgrid_ak_dc]
@@ -1743,21 +1743,21 @@ end subroutine hgrid_ak_dc
 !!
 !! The gridded lats and lons, glat and glon, remain in radians.
 !!
-!! @param[in] lx x grid index for left-lower corner of the grid at center
-!! @param[in] ly y grid index for left-lower corner of the grid at center
+!! @param[in] lx center-relative x grid index for left edge of the domain
+!! @param[in] ly center-relative y grid index for lower edge of the domain
 !! @param[in] nx numbers of the grid spaces in x
 !! @param[in] ny numbers of the grid spaces in y
 !! @param[in] a parameters of an ESG mapping
 !! @param[in] k parameters of an ESG mapping
-!! @param[in] plat latitude define centered mapping
-!! @param[in] plon longitude define centered mapping
-!! @param[in] pazi ??? 
+!! @param[in] plat radians latitude of the projection center of the mapping
+!! @param[in] plon radians longitude of the projection center of the mapping
+!! @param[in] pazi Azimuth of map orientation at its center
 !! @param[in] re earth radius
 !! @param[in] delxre map-space grid increments in the dimensional units
 !! @param[in] delyre map-space grid increments in the dimensional units
 !! @param[out] glat grid points for latitude
 !! @param[out] glon grid points for longitude
-!! @param[out] garea rectangular array
+!! @param[out] garea array of grid-cell areas in dimensional units
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine hgrid_ak(lx,ly,nx,ny,a,k,plat,plon,pazi, & !             [hgrid_ak]
@@ -1791,25 +1791,25 @@ end subroutine hgrid_ak
 !! angles in the argument list, i.e., plat,plon,pazi,glat,glon, remain
 !! radians).
 !!
-!! @param[in] lx x grid index for left-lower corner of the grid at center
-!! @param[in] ly y grid index for left-lower corner of the grid at center
-!! @param[in] nx ??? 
-!! @param[in] ny ??? 
+!! @param[in] lx center-relative x grid index for left edge of the domain
+!! @param[in] ly center-relative y grid index for lower edge of the domain
+!! @param[in] nx number of grid spaces in x 
+!! @param[in] ny number of grid spaces in y 
 !! @param[in] a Extended Schmidt Gnomonic parameter
 !! @param[in] k Extended Schmidt Gnomonic parameter
-!! @param[in] plat latitude define centered mapping
-!! @param[in] plon longitude define centered mapping
-!! @param[in] pazi ??? 
-!! @param[in] re earth radius
+!! @param[in] plat latitude of projection center of the mapping (radians)
+!! @param[in] plon longitude of projection center of the mapping (radians)
+!! @param[in] pazi Azimuth of map orientation at its center (radians) 
+!! @param[in] re earth radius in dimensional length units 
 !! @param[in] delxre map-space grid increments in the dimensional units
 !! @param[in] delyre map-space grid increments in the dimensional units
-!! @param[out] glat gridded lats
-!! @param[out] glon gridded lons
-!! @param[out] garea grid cell areas
-!! @param[out] dx x- grid steps
-!! @param[out] dy y- grid steps
-!! @param[out] dangle_dx x rotations of the steps
-!! @param[out] dangle_dy y rotations of the steps
+!! @param[out] glat gridded lats (radians)
+!! @param[out] glon gridded lons (radians)
+!! @param[out] garea grid cell areas in dimensional units
+!! @param[out] dx x- grid steps in dimensional units
+!! @param[out] dy y- grid steps in dimensional units
+!! @param[out] dangle_dx azimuth rotations of the steps dx (in degrees)
+!! @param[out] dangle_dy azimuth rotations of the steps dy (in degrees)
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine hgrid_ak_c(lx,ly,nx,ny,a,k,plat,plon,pazi, & !           [hgrid_ak]
@@ -1875,12 +1875,12 @@ end subroutine gaulegh
 !!
 !! @param[in] a parameters of an ESG mapping
 !! @param[in] k parameters of an ESG mapping
-!! @param[in] plat latitude define centered mapping
-!! @param[in] plon longitude define centered mapping
-!! @param[in] pazi ??? 
-!! @param[in] lat radian latitude
-!! @param[in] lon radian longitude
-!! @param[out] xm ??? 
+!! @param[in] plat radians latitude defining mapping projection center
+!! @param[in] plon radians longitude defining mapping projection center
+!! @param[in] pazi Aximuth of mapping orientation at its center 
+!! @param[in] lat radians latitude of a point to be mapped
+!! @param[in] lon radians longitude of a point to be mapped
+!! @param[out] xm 2-vector center-relative map-space image of mapped point 
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff)!      [gtoxm_ak_rr]
@@ -1915,16 +1915,16 @@ end subroutine gtoxm_ak_rr_m
 !! the image in map space in a 2-vector in grid units. If the
 !! transformation is invalid, return a .true. failure flag.
 !!
-!! @param[in] a parameters of an ESG mapping
-!! @param[in] k parameters of an ESG mapping
-!! @param[in] plat latitude define centered mapping
-!! @param[in] plon longitude define centered mapping
-!! @param[in] pazi ??? 
-!! @param[in] delx central x-spacing grid point
-!! @param[in] dely central y-spacing grid point
-!! @param[in] lat radian latitude
-!! @param[in] lon radian longitude
-!! @param[out] xm ??? 
+!! @param[in] a parameter of the ESG mapping
+!! @param[in] k parameter of the ESG mapping
+!! @param[in] plat radians latitude defining mapping projection center
+!! @param[in] plon radians longitude defining mapping projection center
+!! @param[in] pazi Azimuth of mapping orientation at its center 
+!! @param[in] delx central x-spacing of the grid in radians
+!! @param[in] dely central y-spacing of the grid in radians
+!! @param[in] lat radians latitude of a point to be mapped
+!! @param[in] lon radians longitude of a point to be mapped
+!! @param[out] xm 2-vector map space image in center-relative grid units 
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine gtoxm_ak_rr_g(A,K,plat,plon,pazi,delx,dely,lat,lon,&! [gtoxm_ak_rr]
@@ -1937,16 +1937,16 @@ call gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff); if(ff)return
 xm(1)=xm(1)/delx; xm(2)=xm(2)/dely
 end subroutine gtoxm_ak_rr_g
 
-!> Like gtoxm_ak_rr_m, except input angles are expressed in degrees.
+!> Like gtoxm_ak_rr_m, except lat, lon, azimuth, are expressed in degrees.
 !!
-!! @param[in] a parameters of an ESG mapping
-!! @param[in] k parameters of an ESG mapping
-!! @param[in] pdlat latitude define centered mapping
-!! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ??? 
-!! @param[in] dlat radian latitude
-!! @param[in] dlon radian longitude
-!! @param[out] xm ??? 
+!! @param[in] a parameter of the ESG mapping
+!! @param[in] k parameter of the ESG mapping
+!! @param[in] pdlat degrees latitude defining mapping center
+!! @param[in] pdlon degrees longitude defining mapping center
+!! @param[in] pdazi Azimuth of mapping orientation at its center 
+!! @param[in] dlat degrees latitude of point to be mapped
+!! @param[in] dlon degrees longitude of point to be mapped
+!! @param[out] xm 2-vector center-relative map space image of the point 
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine gtoxm_ak_dd_m(A,K,pdlat,pdlon,pdazi,dlat,dlon,&!      [gtoxm_ak_dd]
@@ -1964,16 +1964,18 @@ lon=dlon*dtor
 call gtoxm_ak_rr_m(A,K,plat,plon,pazi,lat,lon,xm,ff)
 end subroutine gtoxm_ak_dd_m
 
-!> Like gtoxm_ak_rr_g, except input angles are expressed in degrees.
+!> Like gtoxm_ak_rr_g, except lat, lon, azimuth, are expressed in degrees.
 !!
-!! @param[in] a parameters of an ESG mapping
-!! @param[in] k parameters of an ESG mapping
-!! @param[in] pdlat latitude define centered mapping
-!! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ??? 
-!! @param[in] delx central x-spacing grid point
-!! @param[in] dely central y-spacing grid point
-!! @param[out] xm ??? 
+!! @param[in] a parameter of the ESG mapping
+!! @param[in] k parameter of the ESG mapping
+!! @param[in] pdlat degrees latitude defining mapping projection center
+!! @param[in] pdlon degrees longitude defining mapping projection center
+!! @param[in] pdazi Azimuth of mapping orientation at its center 
+!! @param[in] delx central x-spacing of the grid in radians
+!! @param[in] dely central y-spacing of the grid in radians
+!! @param[in] dlat degrees latitude of a point to be mapped
+!! @param[in] dlon degrees longitude of a point to be mapped
+!! @param[out] xm 2-vector image of the point in center-relative grid units 
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine gtoxm_ak_dd_g(A,K,pdlat,pdlon,pdazi,delx,dely,&!      [gtoxm_ak_dd]
@@ -1991,21 +1993,21 @@ lon=dlon*dtor
 call gtoxm_ak_rr_g(A,K,plat,plon,pazi,delx,dely,lat,lon,xm,ff)
 end subroutine gtoxm_ak_dd_g
 
-!> Given the ESG map specified by parameters (A,K) and geographical
+!> Given the ESG map specified by parameters (A,K) and geographical center and
 !! orientation, plat,plon,pazi (radians), and a position, in map-space
 !! coordinates given by the 2-vector, xm, return the geographical
 !! coordinates, lat and lon (radians). If the transformation is
 !! invalid for any reason, return instead with a raised failure flag,
 !! FF= .true.
 !!
-!! @param[in] a parameters of an ESG mapping
-!! @param[in] k parameters of an ESG mapping
-!! @param[in] plat latitude of geographical orientation
-!! @param[in] plon longitude of geographical orientation
-!! @param[in] pazi ??? 
-!! @param[in] xm ??? 
-!! @param[out] lat latitude of geographical coordinates
-!! @param[out] lon longitude of geographical coordinates
+!! @param[in] a parameter of an ESG mapping
+!! @param[in] k parameter of an ESG mapping
+!! @param[in] plat radians latitude of the projection center of the mapping
+!! @param[in] plon radians longitude of the projection center of the mapping
+!! @param[in] pazi Azimuth of orientation of the mapping at its center 
+!! @param[in] xm center-relative 2-vector map space coordinates of a point 
+!! @param[out] lat radians latitude of the point
+!! @param[out] lon radians longitude of the point
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine xmtog_ak_rr_m(A,K,plat,plon,pazi,xm,lat,lon,ff)!      [xmtog_ak_rr]
@@ -2043,16 +2045,16 @@ end subroutine xmtog_ak_rr_m
 !! transformation is invalid for any reason, then return the raised
 !! failure flag, FF=.true.
 !!
-!! @param[in] a parameters of an ESG mapping
-!! @param[in] k parameters of an ESG mapping
-!! @param[in] plat latitude geographical orientation
-!! @param[in] plon longitude geographical orientation
-!! @param[in] pazi ??? 
-!! @param[in] delx central x-spacing grid point
-!! @param[in] dely central y-spacing grid point
-!! @param[in] xm grid-space units as the 2-vector
-!! @param[out] lat latitude geographical coordinates
-!! @param[out] lon longitude geographical coordinates
+!! @param[in] a parameters of the ESG mapping
+!! @param[in] k parameters of the ESG mapping
+!! @param[in] plat radians latitude of the projection center of the mapping
+!! @param[in] plon radians longitude of the projection center of the mapping
+!! @param[in] pazi Azimuth of the orientation of the mapping at its center 
+!! @param[in] delx central x-spacing of the grid in radians
+!! @param[in] dely central y-spacing grid point in radians
+!! @param[in] xm grid-space 2-vector coordinates of a point to be mapped
+!! @param[out] lat radians latitude of the point
+!! @param[out] lon radians longitude of the point
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine xmtog_ak_rr_g(A,K,plat,plon,pazi,delx,dely,xm,&!      [xmtog_ak_rr]
@@ -2068,16 +2070,16 @@ xmt(2)=xm(2)*dely !
 call xmtog_ak_rr_m(A,K,plat,plon,pazi,xmt,lat,lon,ff)
 end subroutine xmtog_ak_rr_g
 
-!> Like xmtog_ak_rr_m, except angles are expressed in degrees.
+!> Like xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees.
 !!
-!! @param[in] a parameters of an ESG mapping
-!! @param[in] k parameters of an ESG mapping
-!! @param[in] pdlat ??? 
-!! @param[in] pdlon ??? 
-!! @param[in] pdazi ??? 
-!! @param[in] xm ??? 
-!! @param[out] dlat latitude of geographical orientation
-!! @param[out] dlon longitude of geographical orientation
+!! @param[in] a parameters of the ESG mapping
+!! @param[in] k parameters of the ESG mapping
+!! @param[in] pdlat degrees latitude of the projection center of the mapping 
+!! @param[in] pdlon degrees longitude of the projection center of the mapping
+!! @param[in] pdazi Azimuth of the orientation of the mapping at its center
+!! @param[in] xm map space 2-vector coordinates of a point 
+!! @param[out] dlat degrees latitude of the point
+!! @param[out] dlon degrees longitude of the point
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine xmtog_ak_dd_m(A,K,pdlat,pdlon,pdazi,xm,dlat,dlon,ff)! [xmtog_ak_dd]
@@ -2096,18 +2098,18 @@ dlat=lat*rtod
 dlon=lon*rtod
 end subroutine xmtog_ak_dd_m
 
-!> Like xmtog_ak_rr_g, except angles are expressed in degrees.
+!> Like xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees.
 !!
 !! @param[in] a parameters of an ESG mapping
 !! @param[in] k parameters of an ESG mapping
-!! @param[in] pdlat latitude define centered mapping
-!! @param[in] pdlon longitude define centered mapping
-!! @param[in] pdazi ??? 
-!! @param[in] delx central x-spacing grid point
-!! @param[in] dely central y-spacing grid point
-!! @param[in] xm grid-space
-!! @param[out] dlat latitude radians angle
-!! @param[out] dlon longitude radians angle
+!! @param[in] pdlat degrees latitude of projection center of the mapping
+!! @param[in] pdlon degrees longitude of projection center of the mapping
+!! @param[in] pdazi Azimuth of the mapping orientation about its center 
+!! @param[in] delx central x-spacing of the grid in radians
+!! @param[in] dely central y-spacing of the grid in radians
+!! @param[in] xm map coordinates, in grid units, of a point to be mapped
+!! @param[out] dlat degrees latitude of the point
+!! @param[out] dlon degrees longitude of the point
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine xmtog_ak_dd_g(A,K,pdlat,pdlon,pdazi,delx,dely,xm,&!   [xmtog_ak_dd]
