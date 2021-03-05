@@ -5006,123 +5006,165 @@
       return
       end subroutine snodpth
 
-!> ???
+!> Blend the model forecast (or first guess) fields with the
+!! analysis/climatology.  The forecast/first guess variables
+!! are named with "fcs".  The analysis/climatology variables
+!! are named with "anl". On output, the blended fields are
+!! stored in the "anl" variables.
 !!
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
-!! @param[in] iy
-!! @param[in] im
-!! @param[in] id
-!! @param[in] ih
-!! @param[in] fh
-!! @param[in] deltsf
-!! @param[in] sihfcs
-!! @param[in] sicfcs
-!! @param[in] vmnfcs
-!! @param[in] vmxfcs
-!! @param[in] slpfcs
-!! @param[in] absfcs
-!! @param[in] tsffcs
-!! @param[in] wetfcs
-!! @param[in] snofcs
-!! @param[in] zorfcs
-!! @param[in] albfcs
-!! @param[in] aisfcs
-!! @param[in] cvfcs 
-!! @param[in] cvbfcs
-!! @param[in] cvtfcs
-!! @param[in] cnpfcs
-!! @param[in] smcfcs
-!! @param[in] stcfcs
-!! @param[in] slifcs
-!! @param[in] vegfcs
-!! @param[in] vetfcs
-!! @param[in] sotfcs
-!! @param[in] alffcs
-!! @param[in] sihanl
-!! @param[in] sicanl
-!! @param[in] vmnanl
-!! @param[in] vmxanl
-!! @param[in] slpanl
-!! @param[in] absanl
-!! @param[in] tsfanl
-!! @param[in] tsfan2
-!! @param[in] wetanl
-!! @param[in] snoanl
-!! @param[in] zoranl
-!! @param[in] albanl
-!! @param[in] aisanl
-!! @param[in] cvanl 
-!! @param[in] cvbanl
-!! @param[in] cvtanl
-!! @param[in] cnpanl
-!! @param[in] smcanl
-!! @param[in] stcanl
-!! @param[in] slianl
-!! @param[in] veganl
-!! @param[in] vetanl
-!! @param[in] sotanl
-!! @param[in] alfanl
-!! @param[in] ctsfl
-!! @param[in] calbl
-!! @param[in] caisl
-!! @param[in] csnol
-!! @param[in] csmcl
-!! @param[in] czorl
-!! @param[in] cstcl
-!! @param[in] cvegl
-!! @param[in] ctsfs
-!! @param[in] calbs
-!! @param[in] caiss
-!! @param[in] csnos
-!! @param[in] csmcs
-!! @param[in] czors
-!! @param[in] cstcs
-!! @param[in] cvegs
-!! @param[in] ccv,cc
-!! @param[in] vb
-!! @param[in] ccvt,c
-!! @param[in] cnp
-!! @param[in] cvetl
-!! @param[in] cvets
-!! @param[in] csotl
-!! @param[in] csots
-!! @param[in] calfl
-!! @param[in] calfs
-!! @param[in] csihl
-!! @param[in] csihs
-!! @param[in] csicl
-!! @param[in] csics
-!! @param[in] cvmnl
-!! @param[in] cvmns
-!! @param[in] cvmxl
-!! @param[in] cvmxs
-!! @param[in] cslpl
-!! @param[in] cslps
-!! @param[in] cabsl
-!! @param[in] cabss
-!! @param[in] irttsf
-!! @param[in] irtwet
-!! @param[in] irtsno
-!! @param[in] irtzor
-!! @param[in] irtalb
-!! @param[in] irtais
-!! @param[in] irttg3
-!! @param[in] irtscv
-!! @param[in] irtacn
-!! @param[in] irtsmc
-!! @param[in] irtstc
-!! @param[in] irtveg
-!! @param[in] irtvmn
-!! @param[in] irtvmx
-!! @param[in] irtslp
-!! @param[in] irtabs
-!! @param[in] irtvet
-!! @param[in] irtsot
-!! @param[in] irtalf
-!! @param[in] landice
+!! @param[in] iy Cycle year.
+!! @param[in] im Cycle month.
+!! @param[in] id Cycle day.
+!! @param[in] ih Cycle hour.
+!! @param[in] fh Forecast hour.
+!! @param[in] deltsfc Cycling frequency in hours.
+!! @param[in] sihfcs First guess sea ice depth.
+!! @param[in] sicfcs First guess sea ice concentration.
+!! @param[in] vmnfcs First guess minimum vegetation greenness.
+!! @param[in] vmxfcs First guess maximum vegetation greenness.
+!! @param[in] slpfcs First guess slope type.
+!! @param[in] absfcs First guess maximum snow albedo.
+!! @param[in] tsffcs First guess skin temperature/SST.
+!! @param[in] wetfcs First guess soil wetness.
+!! @param[in] snofcs First guess liquid equivalent snow depth.
+!! @param[in] zorfcs First guess roughness length.
+!! @param[in] albfcs First guess snow free albedo.
+!! @param[in] aisfcs First guess ice.
+!! @param[in] cvfcs First guess convective cloud cover.
+!! @param[in] cvbfcs First guess convective cloud bottom.
+!! @param[in] cvtfcs First guess convective cloud top.
+!! @param[in] cnpfcs First guess canopy water content.
+!! @param[in] smcfcs First guess soil moisture.
+!! @param[in] stcfcs First guess soil/ice temperature.
+!! @param[in] slifcs First guess land-sea-ice mask.
+!! @param[in] vegfcs First guess vegetation greenness.
+!! @param[in] vetfcs First guess vegetation type.
+!! @param[in] sotfcs First guess soil type.
+!! @param[in] alffcs First guess strong/weak zenith angle
+!! dependent albedo.
+!! @param[inout] sihanl Blended sea ice depth.
+!! @param[inout] sicanl Blended sea ice concentration.
+!! @param[inout] vmnanl Blended minimum vegetation greenness.
+!! @param[inout] vmxanl Blended maximum vegetation greenness.
+!! @param[inout] slpanl Blended slope type.
+!! @param[inout] absanl Blended maximum snow albedo.
+!! @param[inout] tsfanl Blended skin temperature/SST.
+!! @param[inout] tsfan2 Not used.
+!! @param[inout] wetanl Blended soil wetness.
+!! @param[inout] snoanl Blended liquid equivalent snow depth.
+!! @param[inout] zoranl Blended roughness length.
+!! @param[inout] albanl Blended snow-free albedo.
+!! @param[inout] aisanl Blended ice.
+!! @param[inout] cvanl Blended convective cloud cover.
+!! @param[inout] cvbanl Blended convective cloud base.
+!! @param[inout] cvtanl Blended convective cloud top.
+!! @param[inout] cnpanl Blended canopy moisture content.
+!! @param[inout] smcanl Blended soil moisture.
+!! @param[inout] stcanl Blended soil/ice temperature.
+!! @param[inout] slianl Blended land-sea-ice mask.
+!! @param[inout] veganl Blended vegetation greenness.
+!! @param[inout] vetanl Blended vegetation type.
+!! @param[inout] sotanl Blended soil type.
+!! @param[inout] alfanl Blended strong/weak zenith angle
+!! dependent albedo.
+!! @param[in] ctsfl Merging coefficient for skin temperature.
+!! @param[in] calbl Merging coefficient for snow-free albedo at land
+!! points.
+!! @param[in] caisl Merging coefficient for sea ice at land points.
+!! @param[in] csnol Merging coefficient for snow at land points.
+!! @param[in] csmcl Merging coefficient for soil moisture at land
+!! points.
+!! @param[in] czorl Merging coefficient for roughness length at land
+!! points.
+!! @param[in] cstcl Merging coefficient for soil temperature at land
+!! points.
+!! @param[in] cvegl Merging coefficient for vegetation greenness at land
+!! points.
+!! @param[in] ctsfs Merging coefficient for SST.
+!! @param[in] calbs Merging coefficient for snow-free albedo at water
+!! points.
+!! @param[in] caiss Merging coefficient for sea ice at water points.
+!! @param[in] csnos Merging coefficient for snow at water points.
+!! @param[in] csmcs Merging coefficient for soil moisture at water
+!! points.
+!! @param[in] czors Merging coefficient for roughness length at water
+!! points.
+!! @param[in] cstcs Merging coefficient for sea ice temperature at water
+!! points.
+!! @param[in] cvegs Merging coefficient for vegetation greenness at
+!! water points.
+!! @param[in] ccv Merging coefficient for convective cloud cover.
+!! @param[in] ccvb Merging coefficient for covective cloud bottom.
+!! @param[in] ccvt Merging coefficient for covective cloud top.
+!! @param[in] ccnp Merging coefficient for canopy moisture.
+!! @param[in] cvetl Merging coefficient for vegetation type at land
+!! points.
+!! @param[in] cvets Merging coefficient for vegetation type at water
+!! points.
+!! @param[in] csotl Merging coefficient for soil type at land points.
+!! @param[in] csots Merging coefficient for soil type at water points.
+!! @param[in] calfl Merging coefficient for strong/weak zenith
+!! angle dependent albedo at land points.
+!! @param[in] calfs Merging coefficient for strong/weak zenith
+!! angle dependent albedo at water points.
+!! @param[in] csihl Merging coefficient for sea ice depth at land
+!! points.
+!! @param[in] csihs Merging coefficient for sea ice depth at water
+!! points.
+!! @param[in] csicl Merging coefficient for sea ice concentration at 
+!! land points.
+!! @param[in] csics Merging coefficient for sea ice concentration at
+!! water points.
+!! @param[in] cvmnl Merging coefficient for minimum vegetation greenness
+!! at land points. 
+!! @param[in] cvmns Merging coefficient for minimum vegetation greenness
+!! at water points.
+!! @param[in] cvmxl Merging coefficient for maximum vegetation greenness
+!! at land points.
+!! @param[in] cvmxs Merging coefficient for maximum vegetation greenness
+!! at water points.
+!! @param[in] cslpl  Merging coefficient for slope type at land points.
+!! @param[in] cslps Merging coefficient for slope type at water points.
+!! @param[in] cabsl Merging coefficient for maximum snow albedo at land
+!! points.
+!! @param[in] cabss Merging coefficient for maximum snow albedo at
+!! water points.
+!! @param[in] irttsf Return code from read of skin temperature/SST 
+!! analysis file.
+!! @param[in] irtwet Return code from read of soil wetness analysis
+!! file.
+!! @param[in] irtsno Return code from read of snow analysis file.
+!! @param[in] irtzor Return code from read of roughness length file.
+!! @param[in] irtalb Return code from read of snow-free albedo analysis file.
+!! @param[in] irtais Return code from read of ice mask analysis file.
+!! @param[in] irttg3 Return code from read of soil substrate
+!! temperature analysis file.
+!! @param[in] irtscv Return code from read of snow cover analysis file.
+!! @param[in] irtacn Return code from read of sea ice concentration
+!! analysis file.
+!! @param[in] irtsmc Return code from read of soil moisture analysis
+!! file.
+!! @param[in] irtstc Return code from read of soil temperature analysis 
+!! file.
+!! @param[in] irtveg Return code from read of vegetation greenness 
+!! analysis file.
+!! @param[in] irtvmn Return code from read of minimum vegetation
+!! greenness analysis file.
+!! @param[in] irtvmx Return code from read of maximum vegetation
+!! greenness analysis file.
+!! @param[in] irtslp Return code from read of slope type analysis file.
+!! @param[in] irtabs Return code from read of maximum snow albedo
+!! analysis file.
+!! @param[in] irtvet Return code from read of vegetation type analysis
+!! file.
+!! @param[in] irtsot Return code from read of soil type analysis file.
+!! @param[in] irtalf Return code from read of file containing fraction
+!! for strongly and weakly zenith angle dependent albedo.
+!! @param[in] landice Permanent land ice flag.
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine merge(len,lsoil,iy,im,id,ih,fh,deltsfc,
      &                 sihfcs,sicfcs,
      &                 vmnfcs,vmxfcs,slpfcs,absfcs,
