@@ -5617,37 +5617,38 @@
       return
       end subroutine merge
 
-!> ???
+!> Adjust surface fields when ice melts or forms.
 !!
-!! @param[in] slianl
-!! @param[in] slifcs
-!! @param[in] tsfanl
-!! @param[in] tsffcs
+!! @param[in] slianl Land-sea-ice mask.
+!! @param[in] slifcs First guess land-sea-ice mask.
+!! @param[out] tsfanl Skin temperature/SST.
+!! @param[in] tsffcs First guess skin temperature/SST.
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
-!! @param[in] sihnew
-!! @param[in] sicnew
-!! @param[in] sihanl
-!! @param[in] sicanl
-!! @param[in] albanl
-!! @param[in] snoanl
-!! @param[in] zoranl
-!! @param[in] smcanl
-!! @param[in] stcanl
-!! @param[in] albsea
-!! @param[in] snosea
-!! @param[in] zorsea
-!! @param[in] smcsea
-!! @param[in] smcice
-!! @param[in] tsfmin
-!! @param[in] tsfice
-!! @param[in] albice
-!! @param[in] zorice
-!! @param[in] tgice
-!! @param[in] rla
-!! @param[in] rlo
+!! @param[in] sihnew Sea ice depth for new ice.
+!! @param[in] sicnew Sea ice concentration for new ice.
+!! @param[out] sihanl Sea ice depth.
+!! @param[out] sicanl Sea ice concentration.
+!! @param[out] albanl Snow-free albedo.
+!! @param[out] snoanl Liquid equivalent snow depth.
+!! @param[out] zoranl Roughness length.
+!! @param[out] smcanl Soil moisture 
+!! @param[out] stcanl Soil temperature
+!! @param[in] albsea Albedo at open water.
+!! @param[in] snosea Snow at open water.
+!! @param[in] zorsea Roughness length at open water.
+!! @param[in] smcsea Soil moisture at open water.
+!! @param[in] smcice Soil moisture at ice.
+!! @param[in] tsfmin SST at open water.
+!! @param[in] tsfice Skin temperature at ice.
+!! @param[in] albice Ice albedo.
+!! @param[in] zorice Roughness length of ice.
+!! @param[in] tgice Freezing point of salt water.
+!! @param[in] rla Model latitudes.
+!! @param[in] rlo Model longitudes.
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
+!! @author Xingen Wu
       subroutine newice(slianl,slifcs,tsfanl,tsffcs,len,lsoil,
 !cwu [+1l] add sihnew,sicnew,sihanl,sicanl
      &                   sihnew,sicnew,sihanl,sicanl,      
@@ -5745,17 +5746,17 @@
       return
       end
 
-!> ???
+!> Quality control snow at the model points.
 !!
-!! @param[in] snoanl
-!! @param[in] slmask
-!! @param[in] aisanl
-!! @param[in] glacir
+!! @param[out] snoanl Model snow to be qc'd.
+!! @param[in] slmask Land-sea-ice mask.
+!! @param[in] aisanl Ice mask.
+!! @param[in] glacir Permanent glacial point when '1'.
 !! @param[in] len Number of model points to process.
-!! @param[in] snoval
-!! @param[in] landice
+!! @param[in] snoval Minimum snow depth at glacial points.
+!! @param[in] landice Is the point permanent land ice?
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine qcsnow(snoanl,slmask,aisanl,glacir,len,snoval,
      &                  landice,me)
       use machine , only : kind_io8,kind_io4
