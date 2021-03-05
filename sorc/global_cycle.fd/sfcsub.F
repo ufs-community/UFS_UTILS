@@ -6716,28 +6716,29 @@
 !     return
 !     end
 
-!> ???
+!> Quality control analysis fields using the first guess.
 !!
-!! @param[in] tsffcs
-!! @param[in] snofcs
-!! @param[in] qctsfs
-!! @param[in] qcsnos
-!! @param[in] qctsfi
+!! @param[in] tsffcs First guess skin temperature/SST.
+!! @param[in] snofcs First guess snow.
+!! @param[in] qctsfs Surface temperature above which no snow
+!! allowed.
+!! @param[in] qcsnos Snow depth above which snow must exits.
+!! @param[in] qctsfi SST above which sea ice is not allowed.
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
-!! @param[in] snoanl
-!! @param[in] aisanl
-!! @param[in] slianl
-!! @param[in] tsfanl
-!! @param[in] albanl
-!! @param[in] zoranl
-!! @param[in] smcanl
-!! @param[in] smcclm
-!! @param[in] tsfsmx
-!! @param[in] albomx
-!! @param[in] zoromx
+!! @param[out] snoanl Snow analysis.
+!! @param[in] aisanl Ice mask.
+!! @param[in] slianl Land-sea-ice mask.
+!! @param[out] tsfanl Skin temperature/SST analysis.
+!! @param[in] albanl Snow-free albedo analysis.
+!! @param[in] zoranl Roughness length analysis.
+!! @param[in] smcanl Soil moisture analysis.
+!! @param[in] smcclm Soil moisture climatology.
+!! @param[in] tsfsmx Not used.
+!! @param[in] albomx Snow-free albedo at open water.
+!! @param[in] zoromx Roughness length at open water.
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine qcbyfc(tsffcs,snofcs,qctsfs,qcsnos,qctsfi,
      &                  len,lsoil,snoanl,aisanl,slianl,tsfanl,albanl,
      &                  zoranl,smcanl,
@@ -7602,14 +7603,14 @@ cjfe
       return
       end
 
-!> ???
+!> Set vegetation, soil and slope type at undefined model points.
 !!
-!! @param[in] vegtype
-!! @param[in] soiltype
-!! @param[in] slptype
-!! @param[in] slmask
+!! @param[inout] vegtype Vegetation type
+!! @param[inout] soiltype Soil type
+!! @param[inout] slptype Slope type
+!! @param[in] slmask Land-sea-ice mask.
 !! @param[in] len Number of model points to process.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine landtyp(vegtype,soiltype,slptype,slmask,len)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -7658,14 +7659,14 @@ cjfe
       stop
       end
 
-!> ???
+!> Add initial SST anomaly to date interpolated climatology
 !!
-!! @param[in] tsfan0
-!! @param[in] tsfclm
-!! @param[in] tsfcl0
-!! @param[in] tsfanl
+!! @param[in] tsfan0 Skin temperature/SST analysis at initial time.
+!! @param[in] tsfclm Skin temperature/SST climatology.
+!! @param[in] tsfcl0 Skin temperature/SST climatology at initial time.
+!! @param[out] tsfanl Updated skin temperature/SST.
 !! @param[in] len Number of model points to process.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine anomint(tsfan0,tsfclm,tsfcl0,tsfanl,len)
 !
       use machine , only : kind_io8,kind_io4
