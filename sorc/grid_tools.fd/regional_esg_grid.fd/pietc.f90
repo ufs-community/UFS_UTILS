@@ -1,70 +1,116 @@
 !> @file
+!! @brief Double-precision constants.
 !! @author R. J. Purser @date 2014
-!! Some of the commonly used constants (pi etc) mainly for double-precision
+
+!> Some of the commonly used constants (pi etc) mainly for double-precision
 !! subroutines.
+!!
 !! ms10 etc are needed to satisfy the some (eg., gnu fortran) compilers'
 !! more rigorous standards regarding the way "data" statements are initialized.
 !! Zero and the first few units are u0,u1,u2, etc., their reciprocals being,
 !! o2,o3 etc and their square roots, r2,r3. Reciprocal roots are or2,or3 etc.
 !!
+!! @author R. J. Purser @date 2014
 module pietc
 use pkind, only: dp,dpc
 implicit none
-logical ,parameter:: T=.true.,F=.false. !<- for pain-relief in logical ops
-real(dp),parameter:: &
-     u0=0_dp,u1=1_dp,mu1=-u1,u2=2_dp,mu2=-u2,u3=3_dp,mu3=-u3,u4=4_dp,       &
-     mu4=-u4,u5=5_dp,mu5=-u5,u6=6_dp,mu6=-u6,o2=u1/u2,o3=u1/u3,o4=u1/u4,    &
-     o5=u1/u5,o6=u1/u6,mo2=-o2,mo3=-o3,mo4=-o4,mo5=-o5,mo6=-o6,             &
-     pi =3.1415926535897932384626433832795028841971693993751058209749e0_dp, &
-     pi2=6.2831853071795864769252867665590057683943387987502116419498e0_dp, &
-     pih=1.5707963267948966192313216916397514420985846996875529104874e0_dp, &
-     rpi=1.7724538509055160272981674833411451827975494561223871282138e0_dp, &
-! Important square-roots
-     r2 =1.4142135623730950488016887242096980785696718753769480731766e0_dp, &
-     r3 =1.7320508075688772935274463415058723669428052538103806280558e0_dp, &
-     r5 =2.2360679774997896964091736687312762354406183596115257242708e0_dp, &
-     or2=u1/r2,or3=u1/r3,or5=u1/r5,                                         &
-! Golden number:
-     phi=1.6180339887498948482045868343656381177203091798057628621354e0_dp, &
-! Euler-Mascheroni constant:
-     euler=0.57721566490153286060651209008240243104215933593992359880e0_dp, &
-! Degree to radians; radians to degrees:
-     dtor=pi/180,rtod=180/pi,                                               & 
-! Sines of all main fractions of 90 degrees (down to ninths):
-     s10=.173648177666930348851716626769314796000375677184069387236241e0_dp,&
-     s11=.195090322016128267848284868477022240927691617751954807754502e0_dp,&
-     s13=.222520933956314404288902564496794759466355568764544955311987e0_dp,&
-     s15=.258819045102520762348898837624048328349068901319930513814003e0_dp,&
-     s18=.309016994374947424102293417182819058860154589902881431067724e0_dp,&
-     s20=.342020143325668733044099614682259580763083367514160628465048e0_dp,&
-     s22=.382683432365089771728459984030398866761344562485627041433800e0_dp,&
-     s26=.433883739117558120475768332848358754609990727787459876444547e0_dp,&
-     s30=o2,                                                                &
-     s34=.555570233019602224742830813948532874374937190754804045924153e0_dp,&
-     s36=.587785252292473129168705954639072768597652437643145991072272e0_dp,&
-     s39=.623489801858733530525004884004239810632274730896402105365549e0_dp,&
-     s40=.642787609686539326322643409907263432907559884205681790324977e0_dp,&
-     s45=or2,                                                               &
-     s50=.766044443118978035202392650555416673935832457080395245854045e0_dp,&
-     s51=.781831482468029808708444526674057750232334518708687528980634e0_dp,&
-     s54=.809016994374947424102293417182819058860154589902881431067724e0_dp,&
-     s56=.831469612302545237078788377617905756738560811987249963446124e0_dp,&
-     s60=r3*o2,                                                             &
-     s64=.900968867902419126236102319507445051165919162131857150053562e0_dp,&
-     s68=.923879532511286756128183189396788286822416625863642486115097e0_dp,&
-     s70=.939692620785908384054109277324731469936208134264464633090286e0_dp,&
-     s72=.951056516295153572116439333379382143405698634125750222447305e0_dp,&
-     s75=.965925826289068286749743199728897367633904839008404550402343e0_dp,&
-     s77=.974927912181823607018131682993931217232785800619997437648079e0_dp,&
-     s79=.980785280403230449126182236134239036973933730893336095002916e0_dp,&
-     s80=.984807753012208059366743024589523013670643251719842418790025e0_dp,&
+logical ,parameter:: T=.true. !< for pain-relief in logical ops
+logical ,parameter:: F=.false. !< for pain-relief in logical ops
+real(dp),parameter:: u0=0_dp !< ???
+real(dp),parameter:: u1=1_dp !< ???
+real(dp),parameter:: mu1=-u1 !< ???
+real(dp),parameter:: u2=2_dp !< ???
+real(dp),parameter:: mu2=-u2 !< ???
+real(dp),parameter:: u3=3_dp !< ???
+real(dp),parameter:: mu3=-u3 !< ???
+real(dp),parameter:: u4=4_dp !< ???
+real(dp),parameter:: mu4=-u4 !< ???
+real(dp),parameter:: u5=5_dp !< ???
+real(dp),parameter:: mu5=-u5 !< ???
+real(dp),parameter:: u6=6_dp !< ???
+real(dp),parameter:: mu6=-u6 !< ???
+real(dp),parameter:: o2=u1/u2 !< ???
+real(dp),parameter:: o3=u1/u3 !< ???
+real(dp),parameter:: o4=u1/u4 !< ???
+real(dp),parameter:: o5=u1/u5 !< ???
+real(dp),parameter:: o6=u1/u6 !< ???
+real(dp),parameter:: mo2=-o2 !< ???
+real(dp),parameter:: mo3=-o3 !< ???
+real(dp),parameter:: mo4=-o4 !< ???
+real(dp),parameter:: mo5=-o5 !< ???
+real(dp),parameter:: mo6=-o6 !< ???
+real(dp),parameter:: pi =3.1415926535897932384626433832795028841971693993751058209749e0_dp !< Pi.
+real(dp),parameter:: pi2=6.2831853071795864769252867665590057683943387987502116419498e0_dp !< Pi*2.
+real(dp),parameter:: pih=1.5707963267948966192313216916397514420985846996875529104874e0_dp !< ???
+real(dp),parameter:: rpi=1.7724538509055160272981674833411451827975494561223871282138e0_dp !< ???
+real(dp),parameter:: r2 =1.4142135623730950488016887242096980785696718753769480731766e0_dp !< Square root of 2.
+real(dp),parameter:: r3 =1.7320508075688772935274463415058723669428052538103806280558e0_dp !< Square root of 3.
+real(dp),parameter:: r5 =2.2360679774997896964091736687312762354406183596115257242708e0_dp !< Square root of 5.
+real(dp),parameter:: or2=u1/r2 !< ???
+real(dp),parameter:: or3=u1/r3 !< ???
+real(dp),parameter:: or5=u1/r5 !< ???
+real(dp),parameter:: phi=1.6180339887498948482045868343656381177203091798057628621354e0_dp !< Golden number.
+real(dp),parameter:: euler=0.57721566490153286060651209008240243104215933593992359880e0_dp !< Euler-Mascheroni constant.
+real(dp),parameter:: dtor=pi/180 !< Degree to radians
+real(dp),parameter:: rtod=180/pi !< radians to degrees
+! Sines of all main fractions of 90 degrees (down to ninths): !< ???
+real(dp),parameter:: s10=.173648177666930348851716626769314796000375677184069387236241e0_dp !< ???
+real(dp),parameter:: s11=.195090322016128267848284868477022240927691617751954807754502e0_dp !< ???
+real(dp),parameter:: s13=.222520933956314404288902564496794759466355568764544955311987e0_dp !< ???
+real(dp),parameter:: s15=.258819045102520762348898837624048328349068901319930513814003e0_dp !< ???
+real(dp),parameter:: s18=.309016994374947424102293417182819058860154589902881431067724e0_dp !< ???
+real(dp),parameter:: s20=.342020143325668733044099614682259580763083367514160628465048e0_dp !< ???
+real(dp),parameter:: s22=.382683432365089771728459984030398866761344562485627041433800e0_dp !< ???
+real(dp),parameter:: s26=.433883739117558120475768332848358754609990727787459876444547e0_dp !< ???
+real(dp),parameter:: s30=o2 !< ???
+real(dp),parameter:: s34=.555570233019602224742830813948532874374937190754804045924153e0_dp !< ???
+real(dp),parameter:: s36=.587785252292473129168705954639072768597652437643145991072272e0_dp !< ???
+real(dp),parameter:: s39=.623489801858733530525004884004239810632274730896402105365549e0_dp !< ???
+real(dp),parameter:: s40=.642787609686539326322643409907263432907559884205681790324977e0_dp !< ???
+real(dp),parameter:: s45=or2 !< ???
+real(dp),parameter:: s50=.766044443118978035202392650555416673935832457080395245854045e0_dp !< ???
+real(dp),parameter:: s51=.781831482468029808708444526674057750232334518708687528980634e0_dp !< ???
+real(dp),parameter:: s54=.809016994374947424102293417182819058860154589902881431067724e0_dp !< ???
+real(dp),parameter:: s56=.831469612302545237078788377617905756738560811987249963446124e0_dp !< ???
+real(dp),parameter:: s60=r3*o2 !< ???
+real(dp),parameter:: s64=.900968867902419126236102319507445051165919162131857150053562e0_dp !< ???
+real(dp),parameter:: s68=.923879532511286756128183189396788286822416625863642486115097e0_dp !< ???
+real(dp),parameter:: s70=.939692620785908384054109277324731469936208134264464633090286e0_dp !< ???
+real(dp),parameter:: s72=.951056516295153572116439333379382143405698634125750222447305e0_dp !< ???
+real(dp),parameter:: s75=.965925826289068286749743199728897367633904839008404550402343e0_dp !< ???
+real(dp),parameter:: s77=.974927912181823607018131682993931217232785800619997437648079e0_dp !< ???
+real(dp),parameter:: s79=.980785280403230449126182236134239036973933730893336095002916e0_dp !< ???
+real(dp),parameter:: s80=.984807753012208059366743024589523013670643251719842418790025e0_dp !< ???
 ! ... and their minuses:
-     ms10=-s10,ms11=-s11,ms13=-s13,ms15=-s15,ms18=-s18,ms20=-s20,ms22=-s22,&
-     ms26=-s26,ms30=-s30,ms34=-s34,ms36=-s36,ms39=-s39,ms40=-s40,ms45=-s45,&
-     ms50=-s50,ms51=-s51,ms54=-s54,ms56=-s56,ms60=-s60,ms64=-s64,ms68=-s68,&
-     ms70=-s70,ms72=-s72,ms75=-s75,ms77=-s77,ms79=-s79,ms80=-s80
+real(dp),parameter:: ms10=-s10 !< ???
+real(dp),parameter:: ms11=-s11 !< ???
+real(dp),parameter:: ms13=-s13 !< ???
+real(dp),parameter:: ms15=-s15 !< ???
+real(dp),parameter:: ms18=-s18 !< ???
+real(dp),parameter:: ms20=-s20 !< ???
+real(dp),parameter:: ms22=-s22 !< ???
+real(dp),parameter:: ms26=-s26 !< ???
+real(dp),parameter:: ms30=-s30 !< ???
+real(dp),parameter:: ms34=-s34 !< ???
+real(dp),parameter:: ms36=-s36 !< ???
+real(dp),parameter:: ms39=-s39 !< ???
+real(dp),parameter:: ms40=-s40 !< ???
+real(dp),parameter:: ms45=-s45 !< ???
+real(dp),parameter:: ms50=-s50 !< ???
+real(dp),parameter:: ms51=-s51 !< ???
+real(dp),parameter:: ms54=-s54 !< ???
+real(dp),parameter:: ms56=-s56 !< ???
+real(dp),parameter:: ms60=-s60 !< ???
+real(dp),parameter:: ms64=-s64 !< ???
+real(dp),parameter:: ms68=-s68 !< ???
+real(dp),parameter:: ms70=-s70 !< ???
+real(dp),parameter:: ms72=-s72 !< ???
+real(dp),parameter:: ms75=-s75 !< ???
+real(dp),parameter:: ms77=-s77 !< ???
+real(dp),parameter:: ms79=-s79 !< ???
+real(dp),parameter:: ms80=-s80 !< ???
 
-complex(dpc),parameter:: &
+complex(dpc)parameter:: &
      c0=(u0,u0),c1=(u1,u0),mc1=-c1,ci=(u0,u1),mci=-ci,cipi=ci*pi,     &
 ! Main fractional rotations, as unimodular complex numbers:
      z000=c1        ,z010=( s80,s10),z011=( s79,s11),z013=( s77,s13),&
