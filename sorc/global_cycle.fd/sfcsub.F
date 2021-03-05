@@ -6412,12 +6412,12 @@
       return
       end
 
-!> ???
+!> Set a field to zero if it is less than a threshold.
 !!
-!! @param[in] fld
-!! @param[in] eps
+!! @param[inout] fld Field to set.
+!! @param[in] eps Threshold.
 !! @param[in] len Number of model points to process.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine setzro(fld,eps,len)
 !
       use machine , only : kind_io8,kind_io4
@@ -6430,12 +6430,12 @@
       return
       end
 
-!> ???
+!> Set snow cover flag based on snow depth.
 !!
-!! @param[in] snofld
-!! @param[in] scvfld
+!! @param[in] snofld Snow depth.
+!! @param[out] scvfld Snow cover.
 !! @param[in] len Number of model points to process.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine getscv(snofld,scvfld,len)
 !
       use machine , only : kind_io8,kind_io4
@@ -6450,16 +6450,16 @@
       return
       end
 
-!> ???
+!> Set soil temperature and sea ice column temperature.
 !!
-!! @param[in] tsffld
-!! @param[in] tg3fld
-!! @param[in] slifld
-!! @param[in] len
+!! @param[in] tsffld Skin temperature/SST.
+!! @param[in] tg3fld Soil substrate temperature.
+!! @param[in] slifld Land-sea-ice mask.
+!! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
-!! @param[in] stcfld
-!! @param[in] tsfimx
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[out] stcfld Soil/sea ice column temperature.
+!! @param[in] tsfimx Freezing point of sea water.
+!! @author Shrinivas Moorthi
       subroutine getstc(tsffld,tg3fld,slifld,len,lsoil,stcfld,tsfimx)
 !
       use machine , only : kind_io8,kind_io4
@@ -6494,14 +6494,14 @@
       return
       end
 
-!> ???
+!> Set soil moisture from soil wetness.
 !!
-!! @param[in] wetfld
+!! @param[in] wetfld Soil wetness
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
-!! @param[in] smcfld
+!! @param[out] smcfld Soil moisture.
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine getsmc(wetfld,len,lsoil,smcfld,me)
 !
       use machine , only : kind_io8,kind_io4
@@ -6521,17 +6521,18 @@
       return
       end
 
-!> ???
+!> Set soil temperature and sea ice column temperature for
+!! a dead start.
 !!
-!! @param[in] sig1t
-!! @param[in] slianl
-!! @param[in] tg3anl
+!! @param[in] sig1t Sigma level 1 temperature for dead start.
+!! @param[in] slianl Land-sea-ice mask.
+!! @param[in] tg3anl Soil substrate temperature.
 !! @param[in] len Number of model points to process.
 !! @param[in] lsoil Number of soil layers.
-!! @param[in] tsfanl
-!! @param[in] stcanl
-!! @param[in] tsfimx
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[out] tsfanl Skin temperature.
+!! @param[out] stcanl Soil/sea ice column temperature.
+!! @param[in] tsfimx Freezing point of sea water.
+!! @author Shrinivas Moorthi
       subroutine usesgt(sig1t,slianl,tg3anl,len,lsoil,tsfanl,stcanl,
      &                  tsfimx)
 !
@@ -6614,13 +6615,13 @@
       return
       end
 
-!> ???
+!> Quality control maximum ice extent.
 !!
-!! @param[in] glacir
-!! @param[in] amxice
+!! @param[in] glacir Glacial flag
+!! @param[out] amxice Maximum ice extent.
 !! @param[in] len Number of model points to process.
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine qcmxice(glacir,amxice,len,me)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -6642,13 +6643,14 @@
       return
       end
 
-!> ???
+!> Check consistency between the forecast and analysis
+!! land-sea-ice mask.
 !!
-!! @param[in] slianl
-!! @param[in] slifcs
+!! @param[in] slianl Analysis mask.
+!! @param[inout] slifcs Forecast mask.
 !! @param[in] len Number of model points to process.
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine qcsli(slianl,slifcs,len,me)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -7627,11 +7629,11 @@ cjfe
       return
       end subroutine landtyp
 
-!> ???
+!> Calculate gaussian latitudes.
 !!
-!! @param[in] gaul
-!! @param[in] k
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[out] gaul Gaussian latitudes
+!! @param[in] k Number of latitudes
+!! @author Shrinivas Moorthi
       subroutine gaulat(gaul,k)
 !
       use machine , only : kind_io8,kind_io4
@@ -9679,11 +9681,11 @@ cjfe
 
 !> Ensure deep snow pack at permanent glacial points.
 !!
-!! param[in] glacir Glacial flag
-!! param[in] snwmax Deep snow pack depth
-!! param[inout] snoanl Model snow
-!! param[in] len Number of model points to process.
-!! param[in] me MPI task number.
+!! @param[in] glacir Glacial flag
+!! @param[in] snwmax Deep snow pack depth
+!! @param[inout] snoanl Model snow
+!! @param[in] len Number of model points to process.
+!! @param[in] me MPI task number.
 !! @author Shrinivas Moorthi NOAA/EMC
       subroutine snodpth2(glacir,snwmax,snoanl, len, me)
       use machine , only : kind_io8,kind_io4
