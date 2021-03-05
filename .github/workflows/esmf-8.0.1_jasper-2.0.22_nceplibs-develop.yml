@@ -34,6 +34,8 @@ jobs:
             sudo ln -sf /usr/local/bin/gfortran-10 /usr/local/bin/gfortran
           fi
         fi
+        export PATH="~/.local/bin:$PATH"
+        python3 -m pip install gcovr
 
     - name: cache-esmf
       id: cache-esmf
@@ -94,13 +96,26 @@ jobs:
         repository: NOAA-EMC/NCEPLIBS
         path: nceplibs
 
+    - name: get-git-hash
+      run: |
+        cd nceplibs
+        git rev-parse HEAD > hash.txt
+        
+    - name: cache-nceplibs-develop
+      id: cache-nceplibs-develop
+      uses: actions/cache@v2
+      with:
+        path: ~/nceplibs
+        key: nceplibs-develop-${{ runner.os }}-${{ hashFiles('nceplibs/hash.txt') }}
+
     - name: build-nceplibs
+      if: steps.cache-nceplibs-develop.outputs.cache-hit != 'true'
       run: |
         set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd nceplibs
         mkdir build && cd build
-        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper' -DCMAKE_INSTALL_PREFIX='~' -DFLAT=ON
+        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
         make -j2
        
     - name: checkout-ufs-utils
@@ -113,12 +128,14 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
-        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper' -DENABLE_DOCS=On
+        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"
         make -j2
         make test
+        export PATH="/home/runner/.local/bin:$PATH"
+        gcovr -r .. --html -o test-coverage.html
 
-
-    
-        
-   
-
+    - uses: actions/upload-artifact@v2
+      if: ${{ matrix.os == 'ubuntu-20.04' }}
+      with:
+        name: test-coverage
+        path: ufs_utils/build/test-coverage.html
