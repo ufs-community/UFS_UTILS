@@ -3155,25 +3155,25 @@
       return
       end
 
-!> ???
+!> Interpolate data from a lat/lon grid to the model grid.
 !!
-!! @param[in] regin
-!! @param[in] imxin
-!! @param[in] jmxin
+!! @param[in] regin Input data.
+!! @param[in] imxin 'i' dimension of input data.
+!! @param[in] jmxin 'j' dimension of input data.
 !! @param[in] rinlon
 !! @param[in] rinlat
 !! @param[in] rlon
 !! @param[in] rlat
 !! @param[in] inttyp
-!! @param[in] gauout
+!! @param[out] gauout The interpolated data on the model grid.
 !! @param[in] len Number of model points to process.
 !! @param[in] lmask
 !! @param[in] rslmsk
-!! @param[in] slmask
-!! @param[in] outlat
-!! @param[in] outlon
+!! @param[in] slmask Model land-sea-ice mask.
+!! @param[in] outlat Latitudes on the model grid.
+!! @param[in] outlon Longitudes on the model grid.
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorth
       subroutine la2ga(regin,imxin,jmxin,rinlon,rinlat,rlon,rlat,inttyp,
      &                 gauout,len,lmask,rslmsk,slmask
      &,                outlat, outlon,me)
@@ -5804,20 +5804,20 @@
       return
       end subroutine qcsnow
 
-!> ???
+!> Check the sea ice cover mask against the land-sea mask.
 !!
-!! @param[in] ais
-!! @param[in] glacir
-!! @param[in] amxice
-!! @param[in] aicice
-!! @param[in] aicsea
-!! @param[in] sllnd
-!! @param[in] slmask
-!! @param[in] rla
-!! @param[in] rlo
+!! @param[out] ais Sea ice cover mask.
+!! @param[in] glacir Glacial flag
+!! @param[in] amxice Maximum ice extent.
+!! @param[in] aicice Ice indicator.
+!! @param[in] aicsea Open water indicator.
+!! @param[in] sllnd Land indicator.
+!! @param[in] slmask Land-sea-ice mask.
+!! @param[in] rla Model latitudes
+!! @param[in] rlo Model longitudes
 !! @param[in] len Number of model points to process.
 !! @param[in] me MPI task number.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @author Shrinivas Moorthi
       subroutine qcsice(ais,glacir,amxice,aicice,aicsea,sllnd,slmask,
      &                  rla,rlo,len,me)
       use machine , only : kind_io8,kind_io4
@@ -6837,27 +6837,30 @@
       end
 
 !> Set the mask for the input data. (Not the model mask).
+!! The mask is determined from the input data bitmap or by
+!! interpolating a high-resolution mask to the input
+!! data grid.  Note: not all data has a mask.
 !!
-!! @param[in] kpds5
-!! @param[in] slmask
-!! @param[in] igaul
-!! @param[in] jgaul
-!! @param[in] wlon
-!! @param[in] rnlat
-!! @param[in] data
-!! @param[in] imax
-!! @param[in] jmax
-!! @param[in] rlnout
-!! @param[in] rltout
-!! @param[in] lmask
-!! @param[in] rslmsk
-!! @param[in] gaus
-!! @param[in] blno
-!! @param[in] blto
-!! @param[in] kgds1
-!! @param[in] kpds4
-!! @param[in] lbms
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] kpds5 Grib parameter number.
+!! @param[in] slmask High-resolution mask.
+!! @param[in] igaul "i" dimension of the high-res mask.
+!! @param[in] jgaul "j" dimension of the high-res mask.
+!! @param[in] wlon Longitude of 'west' boundary of input data.
+!! @param[in] rnlat Latitude of north row of input data.
+!! @param[in] data The input data.
+!! @param[in] imax "i" dimension of input grid.
+!! @param[in] jmax "j" dimension of input grid.
+!! @param[out] rlnout Latitudes on input data grid.
+!! @param[out] rltout Longitudes on input data grid.
+!! @param[out] lmask True, when input data has a mask.
+!! @param[out] rslmsk The mask of the input data grid.
+!! @param[in] gaus Is high-resolution mask on a gaussian grid.
+!! @param[in] blno Corner point longitude of the high-res mask.
+!! @param[in] blto Corner point longitude of the high-res mask.
+!! @param[in] kgds1 Grib indicator for grid type.
+!! @param[in] kpds4 Grib indicator for bitmap.
+!! @param[in] lbms Bitmap of input data.
+!! @author Shrinivas Moorthi
       subroutine setrmsk(kpds5,slmask,igaul,jgaul,wlon,rnlat,
      &                   data,imax,jmax,rlnout,rltout,lmask,rslmsk
      &,                  gaus,blno, blto, kgds1, kpds4, lbms)
