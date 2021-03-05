@@ -1,8 +1,10 @@
 !> @file
 !! @brief Utility routines for various linear inversions and Cholesky.
 !!
+!! @author R. J. Purser, NOAA/NCEP/EMC, Tsukasa Fujita, JMA.
+
 !! Utility routines for various linear inversions and Cholesky.
-!! Dependency: modules pkind, pietc
+!!
 !! Originally, these routines were copies of the purely "inversion" members
 !! of pmat1.f90 (a most extensive collection of matrix routines -- not just
 !! inversions). As well as having both single and double precision versions
@@ -14,11 +16,6 @@
 !! In Sep 2012, these routines were collected together into pmat.f90 so
 !! that all the main matrix routines could be in the same library, pmat.a.
 !! 
-!! DIRECT DEPENDENCIES:
-!! Modules: pkind, pietc
-!! @author R. J. Purser, NOAA/NCEP/EMC, Tsukasa Fujita, JMA.
-
-!> Utility routines interface module
 !! @author R. J. Purser
 module pmat
 use pkind, only: spi,sp,dp,spc,dpc
@@ -80,7 +77,6 @@ end subroutine cswpvv
 !> Invert matrix
 !!
 !! @param[inout] a matrix
-!! @param ff error flag
 !! @author R. J. Purser
 subroutine sinvmt(a)!                                                    [inv]
 real(sp),dimension(:,:),intent(INOUT):: a
@@ -89,10 +85,9 @@ call sinvmtf(a,ff)
 if(ff)stop 'In sinvmt; Unable to invert matrix'
 end subroutine sinvmt
 
-!> Invert matrix
+!> Invert matrix.
 !!
 !! @param[inout] a matrix
-!! @param ff error flag
 !! @author R. J. Purser
 subroutine dinvmt(a)!                                                    [inv]
 real(dp),dimension(:,:),intent(inout):: a
@@ -104,7 +99,6 @@ end subroutine dinvmt
 !> Invert matrix
 !!
 !! @param[inout] a matrix
-!! @param ff error flag
 !! @author R. J. Purser
 subroutine cinvmt(a)!                                                    [inv]
 complex(dpc),dimension(:,:),intent(inout):: a
@@ -154,7 +148,7 @@ end subroutine sinvmtf
 !> Routine dinvmtf to Invert and Permute
 !!
 !! @param[inout] a matrix
-!! @param ff[out] flag for error condition
+!! @param[out] ff flag for error condition
 !! @author R. J. Purser
 subroutine dinvmtf(a,ff)!                                                [inv]
 real(dp),dimension(:,:),intent(inout):: a
@@ -190,8 +184,8 @@ end subroutine dinvmtf
 
 !> Routine cinvmtf to Invert and Permute
 !!
-!! @param a[inout] matrix
-!! @param ff[out] flag for error condition
+!! @param[inout] a matrix
+!! @param[out] ff flag for error condition
 !! @author R. J. Purser
 subroutine cinvmtf(a,ff)!                                                [inv]
 use pietc, only: c1
@@ -227,6 +221,9 @@ do j=m-1,1,-1; l=ipiv(j); call cswpvv(a(:,j),a(:,l)); enddo
 end subroutine cinvmtf
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
 !! @author R. J. Purser
 subroutine slinmmt(a,b)!                                                 [inv]
 real(sp),dimension(:,:),intent(inout):: a,b
@@ -236,6 +233,9 @@ if(ff)stop 'In slinmmt; unable to invert linear system'
 end subroutine slinmmt
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
 !! @author R. J. Purser
 subroutine dlinmmt(a,b)!                                                 [inv]
 real(dp),dimension(:,:),intent(inout):: a,b
@@ -245,6 +245,9 @@ if(ff)stop 'In dlinmmt; unable to invert linear system'
 end subroutine dlinmmt
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
 !! @author R. J. Purser
 subroutine clinmmt(a,b)!                                                 [inv]
 complex(dpc),dimension(:,:),intent(inout):: a,b
@@ -254,6 +257,10 @@ if(ff)stop 'In clinmmt; unable to invert linear system'
 end subroutine clinmmt
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
+!! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine slinmmtf(a,b,ff)!                                             [inv]
 real(sp),   dimension(:,:),intent(inout):: a,b
@@ -274,6 +281,10 @@ call sudlmm(a,b,ipiv)
 end subroutine slinmmtf
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
+!! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine dlinmmtf(a,b,ff)!                                             [inv]
 real(dp),dimension(:,:),   intent(inout):: a,b
@@ -294,6 +305,10 @@ call dudlmm(a,b,ipiv)
 end subroutine dlinmmtf
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
+!! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine clinmmtf(a,b,ff)!                                             [inv]
 complex(dpc),dimension(:,:),intent(INOUT):: a,b
@@ -314,6 +329,9 @@ call cudlmm(a,b,ipiv)
 end subroutine clinmmtf
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
 !! @author R. J. Purser
 subroutine slinmvt(a,b)!                                                 [inv]
 real(sp),dimension(:,:),intent(inout):: a
@@ -324,6 +342,9 @@ if(ff)stop 'In slinmvt; matrix singular, unable to continue'
 end subroutine slinmvt
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
 !! @author R. J. Purser
 subroutine dlinmvt(a,b)!                                                 [inv]
 real(dp),dimension(:,:),intent(inout):: a
@@ -334,6 +355,9 @@ if(ff)stop 'In dlinmvt; matrix singular, unable to continue'
 end subroutine dlinmvt
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
 !! @author R. J. Purser
 subroutine clinmvt(a,b)!                                                 [inv]
 complex(dpc),   dimension(:,:),intent(inout):: a
@@ -344,6 +368,10 @@ if(ff)stop 'In clinmvt; matrix singular, unable to continue'
 end subroutine clinmvt
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
+!! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine slinmvtf(a,b,ff)!                                             [inv]
 real(sp),dimension(:,:),intent(inout):: a
@@ -362,6 +390,10 @@ call sudlmv(a,b,ipiv)
 end subroutine slinmvtf
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
+!! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine dlinmvtf(a,b,ff)!                                             [inv]
 real(dp),dimension(:,:),intent(inout):: a
@@ -380,6 +412,10 @@ call dudlmv(a,b,ipiv)
 end subroutine dlinmvtf
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[inout] b ???
+!! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine clinmvtf(a,b,ff)!                                             [inv]
 complex(dpc),dimension(:,:),intent(inout):: a
@@ -400,8 +436,8 @@ end subroutine clinmvtf
 !> Invert integer square array, imat, if possible, but flag ff=.true.
 !! if not possible. (Determinant of imat must be +1 or -1
 !!
-!! @param imat[inout] integer square array
-!! @param ff[out] error flag
+!! @param[inout] imat integer square array
+!! @param[out] ff error flag
 !! @author R. J. Purser
 subroutine iinvf(imat,ff)!                                               [inv]
 integer(spi),dimension(:,:),intent(INOUT):: imat
@@ -422,6 +458,10 @@ endif
 end subroutine iinvf
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[out] d ???
+!! @param[out] ipiv ???
 !! @author R. J. Purser
 subroutine sldum(a,ipiv,d)!                                             [ldum]
 real(sp),    intent(inout) :: a(:,:) 
@@ -433,6 +473,10 @@ if(ff)stop 'In sldum; matrix singular, unable to continue'
 end subroutine sldum
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[out] d ???
+!! @param[out] ipiv ???
 !! @author R. J. Purser
 subroutine dldum(a,ipiv,d)!                                             [ldum]
 real(dp),    intent(inout) :: a(:,:) 
@@ -444,6 +488,10 @@ if(ff)stop 'In dldum; matrix singular, unable to continue'
 end subroutine dldum
 
 !> ???
+!!
+!! @param[inout] a ???
+!! @param[out] d ???
+!! @param[out] ipiv ???
 !! @author R. J. Purser
 subroutine cldum(a,ipiv,d)!                                             [ldum]
 complex(dpc),intent(inout) :: a(:,:) 
@@ -522,6 +570,11 @@ enddo
 end subroutine sldumf
 
 !> ???
+!!
+!! @param[inout] a    square matrix to be factorized
+!! @param[out] ipiv array encoding the pivoting sequence
+!! @param[out] d    indicator for possible sign change of determinant
+!! @param[out] ff:  failure flag, set to .true. when determinant of a vanishes.
 !! @author R. J. Purser
 subroutine dldumf(a,ipiv,d,ff)!                                         [ldum]
 use pietc, only: u0,u1
@@ -583,6 +636,11 @@ enddo
 end subroutine dldumf
 
 !> ???
+!!
+!! @param[inout] a    square matrix to be factorized
+!! @param[out] ipiv array encoding the pivoting sequence
+!! @param[out] d    indicator for possible sign change of determinant
+!! @param[out] ff:  failure flag, set to .true. when determinant of a vanishes.
 !! @author R. J. Purser
 subroutine cldumf(a,ipiv,d,ff)!                                         [ldum]
 use pietc, only: u0,u1,c0,c1
@@ -648,9 +706,9 @@ end subroutine cldumf
 !> Use l-u factors in A to back-substitute for several rhs in B, using ipiv to
 !! define the pivoting permutation used in the l-u decomposition.
 !!
-!! @param[in] A L-D-U factorization of linear system matrux
-!! @param[inout] B rt-hand-sides vectors on input, corresponding solutions on return
-!! @param[in] IPIV array encoding the pivoting sequence
+!! @param[in] a L-D-U factorization of linear system matrux
+!! @param[inout] b rt-hand-sides vectors on input, corresponding solutions on return
+!! @param[in] ipiv array encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine sudlmm(a,b,ipiv)!                                           [udlmm]
 use pietc_s, only: u1
@@ -678,6 +736,10 @@ enddo
 end subroutine sudlmm
 
 !> ???
+!!
+!! @param[in] a square matrix to be factorized
+!! @param[inout] b ???
+!! @param[in] ipiv array encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine dudlmm(a,b,ipiv)!                                           [udlmm]
 use pietc, only: u1
@@ -705,6 +767,10 @@ enddo
 end subroutine dudlmm
 
 !> ???
+!!
+!! @param[in] a square matrix to be factorized
+!! @param[inout] b ???
+!! @param[in] ipiv array encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine cudlmm(a,b,ipiv)!                                           [udlmm]
 use pietc, only: c1
@@ -734,9 +800,9 @@ end subroutine cudlmm
 !> Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to
 !! define the pivoting permutation used in the l-u decomposition.
 !!
-!! @param[in] A L-D-U factorization of linear system matrix
-!! @param[inout] B right-hand-side vector on input, corresponding solution on return
-!! @param[in] IPIV array encoding the pivoting sequence
+!! @param[in] a L-D-U factorization of linear system matrix
+!! @param[inout] b right-hand-side vector on input, corresponding solution on return
+!! @param[in] ipiv array encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine sudlmv(a,b,ipiv)!                                           [udlmv]
 use pietc_s, only: u1
@@ -762,6 +828,10 @@ enddo
 end subroutine sudlmv
 
 !> ???
+!!
+!! @param[in] a square matrix to be factorized
+!! @param[inout] b ???
+!! @param[in] ipiv array encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine dudlmv(a,b,ipiv)!                                           [udlmv]
 use pietc, only: u1
@@ -787,6 +857,10 @@ enddo
 end subroutine dudlmv
 
 !> ???
+!!
+!! @param[in] a square matrix to be factorized
+!! @param[inout] b ???
+!! @param[in] ipiv array encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine cudlmv(a,b,ipiv)!                                           [udlmv]
 use pietc, only: c1
@@ -841,6 +915,7 @@ end subroutine dl1lm
 !!
 !! @param[in] a matrix
 !! @param[inout] b matrix
+!! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine sl1lmf(a,b,ff)!                                              [L1Lm] 
 use pietc_s, only: u0
@@ -871,6 +946,10 @@ enddo
 end subroutine sl1lmf
 
 !> ???
+!!
+!! @param[in] a matrix
+!! @param[inout] b matrix
+!! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine dl1lmf(a,b,ff) !                                             [L1Lm]
 use pietc, only: u0,u1
@@ -916,6 +995,10 @@ if(ff)stop 'In sldlm; matrix singular, unable to continue'
 end subroutine sldlm
 
 !> ???
+!!
+!! @param[in] a matrix
+!! @param[inout] b matrix
+!! @param[out] d matrix
 !! @author R. J. Purser
 subroutine dldlm(a,b,d)!                                                [LdLm]
 real(dp),intent(in   ):: a(:,:)
@@ -1009,6 +1092,8 @@ a=transpose(a); call sinvl(a); a=transpose(a)
 end subroutine sinvu
 
 !> ???
+!!
+!! @param[inout] a  matrix
 !! @author R. J. Purser
 subroutine dinvu(a)!                                                     [invu]
 real(dp),dimension(:,:),intent(inout):: a
@@ -1034,6 +1119,8 @@ enddo
 end subroutine sinvl
 
 !> ???
+!!
+!! @param[inout] a  matrix
 !! @author R. J. Purser
 subroutine dinvl(a)!                                                     [invl]
 use pietc, only: u0,u1
@@ -1064,6 +1151,9 @@ do i=1,size(u); u(i)=(u(i) - sum(u(:i-1)*a(i,:i-1)))/a(i,i); enddo
 end subroutine slinlv
 
 !> ???
+!!
+!! @param[in] a matrix
+!! @param[inout] u matrix
 !! @author R. J. Purser
 subroutine dlinlv(a,u)!                                                  [invl]
 real(dp),intent(in   ) :: a(:,:)
@@ -1089,6 +1179,9 @@ do i=size(u),1,-1; u(i)=(u(i) - sum(a(i+1:,i)*u(i+1:)))/a(i,i); enddo
 end subroutine slinuv
 
 !> ???
+!!
+!! @param[in] a matrix
+!! @param[inout] u matrix
 !! @author R. J. Purser
 subroutine dlinuv(a,u)!                                                  [invu]
 real(dp), intent(in   ) :: a(:,:)
