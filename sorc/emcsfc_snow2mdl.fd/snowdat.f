@@ -43,38 +43,51 @@
  integer                 :: jafwa  !< j-dimension of afwa grid
  integer                 :: jautosnow  !< j-dimension of autosnow grid
  integer                 :: jnesdis  !< j-dimension of nesdis grid
- integer                 :: kgds_afwa_global(200) !< ???
- integer                 :: kgds_afwa_nh(200) !< ???
- integer                 :: kgds_afwa_nh_8th(200) !< ???
- integer                 :: kgds_afwa_sh(200) !< ???
- integer                 :: kgds_afwa_sh_8th(200) !< ???
+ integer                 :: kgds_afwa_global(200) !< grib1 grid description section for
+                                                  !! global afwa data.
+ integer                 :: kgds_afwa_nh(200) !< grib1 grid description section for northern
+                                              !! hemisphere 16th mesh afwa data.
+ integer                 :: kgds_afwa_nh_8th(200) !< grib1 grid description section for
+                                                  !! northern hemisphere 8th mesh afwa data.
+ integer                 :: kgds_afwa_sh(200) !< grib1 grid description section for southern
+                                              !! hemisphere 16th mesh afwa data.
+ integer                 :: kgds_afwa_sh_8th(200) !< grib1 grid description section for
+                                                  !! southern hemisphere 8th mesh afwa data.
  integer                 :: kgds_autosnow(200)  !< autosnow grid description section (grib section 2)
  integer                 :: kgds_nesdis(200)  !< nesdis/ims grid description section (grib section 2)
  integer                 :: mesh_nesdis !< nesdis/ims data is 96th mesh (or bediant)
  integer*1, allocatable  :: sea_ice_nesdis(:,:) !< nesdis/ims sea ice flag (0-open water, 1-ice) 
- logical                 :: bad_afwa_nh !< ???
- logical                 :: bad_afwa_sh !< ???
- logical                 :: bad_nesdis   !< is nesdis ims data corrupt?
- logical                 ::  bad_afwa_global !< ???
- logical*1, allocatable  :: bitmap_afwa_global(:,:) !< ???
- logical*1, allocatable  :: bitmap_afwa_nh(:,:) !< ???
- logical*1, allocatable  :: bitmap_afwa_sh(:,:) !< ???
- logical*1, allocatable  :: bitmap_nesdis(:,:) !< bitmap of nesdis grid (false-non land, true-land)
- logical*1, allocatable  :: bitmap_autosnow(:,:) !< ???
- logical                 :: use_nh_afwa !< ???
- logical                 :: use_sh_afwa !< ???
- logical                 :: use_global_afwa !< ???
- logical                 :: use_autosnow !< true if autosnow data to be used
- logical                 ::  use_nesdis  !< true if nesdis/ims data to be used
+ logical                 :: bad_afwa_nh !< When true, the northern hemisphere afwa data failed
+                                        !! its quality control check.
+ logical                 :: bad_afwa_sh !< When true, the southern hemisphere afwa data failed
+                                        !! its quality control check.
+ logical                 :: bad_nesdis   !< When true, the nesdis data failed its quality 
+                                         !! control check.
+ logical                 :: bad_afwa_global !< When true, the global afwa data failed its quality
+                                            !! control check.
+ logical*1, allocatable  :: bitmap_afwa_global(:,:) !< The global afwa data grib bitmap.
+                                                    !!(false-non land, true-land).
+ logical*1, allocatable  :: bitmap_afwa_nh(:,:) !< The northern hemisphere afwa data grib bitmap.
+                                                !! (false-non land, true-land).
+ logical*1, allocatable  :: bitmap_afwa_sh(:,:) !< The southern hemisphere afwa data grib bitmap.
+                                                !! (false-non land, true-land).
+ logical*1, allocatable  :: bitmap_nesdis(:,:) !< nesdis data grib bitmap (false-non land, true-land).
+ logical*1, allocatable  :: bitmap_autosnow(:,:) !< autosnow data grib bitmap (false-non land,
+                                                 !! true-land).
+ logical                 :: use_nh_afwa !< True if northern hemisphere afwa data to be used.
+ logical                 :: use_sh_afwa !< True if southern hemisphere afwa data to be used.
+ logical                 :: use_global_afwa !< True if global hemisphere afwa data to be used.
+ logical                 :: use_autosnow !< True if autosnow data to be used
+ logical                 :: use_nesdis  !< True if nesdis/ims data to be used
 
- real                    :: autosnow_res  !< resolution of autosnow in km 
- real                    :: afwa_res   !<  resolution of afwa data in km
- real                    :: nesdis_res !< ???
+ real                    :: autosnow_res  !< Resolution of autosnow in km 
+ real                    :: afwa_res   !<  Resolution of afwa data in km
+ real                    :: nesdis_res !< Resolution of the nesdis data in km.
  real, allocatable       :: snow_cvr_nesdis(:,:)   !< nesdis/ims snow cover flag (0-no, 100-yes)
  real, allocatable       :: snow_cvr_autosnow(:,:)  !< autosnow snow cover flag (0-no, 100-yes)
- real, allocatable       :: snow_dep_afwa_global(:,:)  !< ???
- real, allocatable       :: snow_dep_afwa_nh(:,:)  !< ???
- real, allocatable       :: snow_dep_afwa_sh(:,:)  !< ???
+ real, allocatable       :: snow_dep_afwa_global(:,:) !< The global afwa snow depth.
+ real, allocatable       :: snow_dep_afwa_nh(:,:)  !< Northern hemisphere afwa snow depth.
+ real, allocatable       :: snow_dep_afwa_sh(:,:)  !< Southern hemisphere afwa snow depth.
 
 ! the afwa 8th mesh binary data has no grib header, so set it from these
 ! data statements. needed for ipolates routines.

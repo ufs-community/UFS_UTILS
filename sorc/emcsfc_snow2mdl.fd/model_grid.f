@@ -31,22 +31,24 @@
  integer, allocatable           :: jpts_mdl(:) !< j index of point on full grid
 
  integer                        :: kgds_mdl(200) !< holds grib gds info of model grid
- integer, allocatable           :: lonsperlat_mdl (:) !< ???
+ integer, allocatable           :: lonsperlat_mdl (:) !< Number of longitudes (i-points)
+                                                      !! for each latitude (row).  Used
+                                                      !! for global thinned (reduced) grids.
  
- logical                        :: thinned !< when true, global grids will run thinned
+ logical                        :: thinned !< When true, global grids will run thinned
                                            !! (number of i points decrease toward pole)
 
- real, allocatable              :: lats_mdl    (:) !<  latitudes of model grid points
- real                           :: lat11 !< ???
- real                           :: latlast !< ???
- real                           :: lon11 !< ???
- real                           :: lonlast !< ???
- real, allocatable              :: lons_mdl    (:) !<  longitudes of model grid points
- real, allocatable              :: lsmask_mdl  (:,:) !<  land mask of model grid (0 - non land, 1-land) for global
-                                                     !! grids run thinned, will contain a modified version of the original
-                                                     !! mask that has land at all points encompassed by a thinned point
- real, allocatable              :: lsmask_mdl_sav (:,:) !< saved copy of land mask of model grid (0 - non land, 1-land)
-                                                        !! only used for global thinned grids.
+ real, allocatable              :: lats_mdl(:) !< Latitudes of model grid points
+ real                           :: lat11 !< Corner point latitude (1,1) of model grid.
+ real                           :: latlast !< Corner point latitude (imdl,jmdl) of model grid.
+ real                           :: lon11 !< Corner point longitude (1,1) of model grid.
+ real                           :: lonlast !< Corner point longitude (imdl,jmdl) of model grid.
+ real, allocatable              :: lons_mdl(:) !<  longitudes of model grid points
+ real, allocatable              :: lsmask_mdl(:,:) !<  land mask of model grid (0 - non land, 1-land) for global
+                                                   !! grids run thinned, will contain a modified version of the original
+                                                   !! mask that has land at all points encompassed by a thinned point
+ real, allocatable              :: lsmask_mdl_sav(:,:) !< saved copy of land mask of model grid (0 - non land, 1-land)
+                                                       !! only used for global thinned grids.
  real                           :: resol_mdl  !< approximate model resolution in km.
 
  contains
