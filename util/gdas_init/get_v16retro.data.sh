@@ -20,7 +20,7 @@ if [ "$MEMBER" = "gfs" ]; then
     directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro0e/${yy}${mm}${dd}${hh}
   elif [ ${yy}${mm}${dd}${hh} -lt 2019090100 ]; then
     directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro1e/${yy}${mm}${dd}${hh}
-  elif [ ${yy}${mm}${dd}${hh} -lt 2019101706 ]; then
+  elif [ ${yy}${mm}${dd}${hh} -lt 2019111000 ]; then
     directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro2e/${yy}${mm}${dd}${hh}
   elif [ ${yy}${mm}${dd}${hh} -lt 2020122206 ]; then
     directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16rt2/${yy}${mm}${dd}${hh}
