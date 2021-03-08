@@ -451,7 +451,7 @@ call xstoxc(xs,xc,xcd)
 xcd=matmul(xcd,xsd)
 end subroutine xmtoxc_ak
 
-!! Inverse mapping of xmtoxc_ak. That is, go from given cartesian unit
+!> Inverse mapping of xmtoxc_ak. That is, go from given cartesian unit
 !! 3-vector, xc, to map coordinate 2-vector xm (or return a raised
 !! failure flag, FF, if the attempt fails).
 !!
@@ -1598,7 +1598,7 @@ do iy=ly,my-1
 enddo
 end subroutine hgrid_ak_rc
 
-!! Use a and k as the parameters of an Extended Schmidt-transformed
+!> Use a and k as the parameters of an Extended Schmidt-transformed
 !! Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about
 !! this center by an azimuth angle of pdazi counterclockwise (these
 !! angles in degrees).
@@ -1644,7 +1644,7 @@ gdlat=gdlat*rtod ! Convert these angles from radians to degrees
 gdlon=gdlon*rtod !
 end subroutine hgrid_ak_dd
 
-!! Like hgrid_ak_rr_c, except all the angle arguments (but not
+!> Like hgrid_ak_rr_c, except all the angle arguments (but not
 !! delx,dely) are in degrees instead of radians.
 !!
 !! @param[in] lx center-relative x grid index for left edge of the domain
