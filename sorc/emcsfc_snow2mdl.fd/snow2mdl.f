@@ -1133,16 +1133,16 @@
  enddo
 
  end subroutine uninterpred
-!>  ???                                             
+!>  ???
 !!
-!! @param iord
-!! @param imon
-!! @param imsk
-!! @param m1  
-!! @param m2
-!! @param k1  
-!! @param f1
-!! @param f2
+!! @param iord ???
+!! @param imon ???
+!! @param imsk ???
+!! @param m1   ???
+!! @param m2 ???
+!! @param k1   ???
+!! @param f1 ???
+!! @param f2 ???
 !!
 !! @author George Gayno  org: w/np2 @date 2005-Dec-16
  subroutine intlon(iord,imon,imsk,m1,m2,k1,f1,f2)
