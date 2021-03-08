@@ -1,4 +1,6 @@
 !> @file
+!! @brief Test whether a point is inside a spherical convex polygon.
+!! @author N Wang
 #ifdef INCLUDE_TEST_DRIVER
     PROGRAM testenc
     IMPLICIT NONE
@@ -32,15 +34,19 @@
     END PROGRAM
 #endif
 
-
+!> Test whether a given point 'p' is inside a convex spherical polygon defined with a series of 'n' vertices.
+!! Both the test point and the polygon are specified in latitude and longitude radians.
+!! It is assumed that a side of a spherical polygon is a great-circle arc that connects 2 adjacent vertices of the polygon.
+!!    
+!! @param[in] v set of vertices
+!! @param[in] n number of vertices in v
+!! @param[in] p point to test
+!! @param[out] co_gc 'i' if @p p is on or within epsilon to side 'i' of the given spherical polygon,
+!! or 0 if point is not on any side of the given polygon.
+!! @return enclosure_cnvx whether the point is inside the polygon
+!!
+!! @author N Wang   
 LOGICAL FUNCTION enclosure_cnvx(v, n, p, co_gc)
-!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-!  Function enclosure tests whether a given point p(2) is inside a convex spherical polygon
-!  defined with a sequence of n vertices v(2,n). Both the test point and the polygon are 
-!  apecified in latitude and longitude radians.
-!
-!  N. Wang, Jan 2007 - Initial version
-!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     IMPLICIT NONE
     REAL*8, INTENT(IN) :: v(2,n), p(2)
     INTEGER, INTENT(IN) :: n
@@ -79,5 +85,3 @@ LOGICAL FUNCTION enclosure_cnvx(v, n, p, co_gc)
     RETURN
 
 END FUNCTION enclosure_cnvx
-
-!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
