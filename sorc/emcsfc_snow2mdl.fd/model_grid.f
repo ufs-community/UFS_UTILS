@@ -566,14 +566,14 @@
  end subroutine read_mdl_grid_info
 
 
-!>   Clean up allocatable arrays. 
+!> Clean up allocatable arrays. 
 !!
 !! This deallocate this module's allocatable array.
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
 !!
-!! @author   George Gayno org: w/np2 @Date 2005-Dec-16
+!! @author George Gayno org: w/np2 @date Dec 16, 2005
  subroutine model_grid_cleanup
 
  implicit none

@@ -85,7 +85,7 @@
  real, allocatable               :: snow_cvr_mdl(:,:)  !< snow cover on model grid in percent
  real, allocatable               :: snow_dep_mdl(:,:)  !< snow depth on model grid in meters
 
- public                          :: interp !< ???
+ public                          :: interp !< Interpolate snow data to model grid.
 
  contains
 !> Interpolate snow data to model grid.
@@ -1086,14 +1086,17 @@
 !> Fills out full grid using thinned grid data. Use an iord of
 !! "1" to use a nearest neighbor approach.
 !!
-!! @param iord ???
-!! @param kmsk ???
-!! @param fi ???
-!! @param f      ???      
-!! @param lonl  ???
-!! @param latd ???
-!! @param len   ???
-!! @param lonsperlat  ???
+!! @param[in] iord Interpolation method. '1' neighbor; '2' bilinear.
+!! @param[in] kmsk Mask of the input data. For masked fields, set to '1' 
+!! for defined points, '0' for undefined points. Not used for unmasked
+!! fields - set to '0'.
+!! @param[in] fi 1-d array to be processed.
+!! @param[out] f 2-d array on the full grid.
+!! @param[in] lonl 'i' dimension of 2-d data.
+!! @param[in] latd 'j' dimension of 2-d data.
+!! @param[in] len Number of elements of 1-d data.
+!! @param[in] lonsperlat  Definition of thinned (or reduced) grid. Number of
+!! "i" points for each 'j' row.
 !!
 !! @author George Gayno  org: w/np2 @date 2005-Dec-16
  subroutine uninterpred(iord,kmsk,fi,f,lonl,latd,len,lonsperlat)
@@ -1133,16 +1136,18 @@
  enddo
 
  end subroutine uninterpred
-!>  ???
+
+!> Convert data from the thinned (or reduced) to the full grid
+!! along a single row.
 !!
-!! @param iord ???
-!! @param imon ???
-!! @param imsk ???
-!! @param m1   ???
-!! @param m2 ???
-!! @param k1   ???
-!! @param f1 ???
-!! @param f2 ???
+!! @param[in] iord Interpolation method. '1' neighbor; '2' bilinear.
+!! @param[in] imon Not used.
+!! @param[in] imsk Flag to account for mask during conversion. '0' - use mask.
+!! @param[in] m1 Number of points along a row of the thinned grid.
+!! @param[in] m2 Number of points along a row on the full grid.
+!! @param[in] k1 Mask of input data.
+!! @param[in] f1 Data on the thinned (or reduced) grid.
+!! @param[out] f2 Data on the full grid.
 !!
 !! @author George Gayno  org: w/np2 @date 2005-Dec-16
  subroutine intlon(iord,imon,imsk,m1,m2,k1,f1,f2)
