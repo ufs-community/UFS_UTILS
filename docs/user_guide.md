@@ -10,8 +10,8 @@ https://github.com/NOAA-EMC/UFS_UTILS.
 
 ## The Utilities
 
-- chgres_cube - Creates cold start initial conditions for FV3 model
-  runs.
+- <a href="chgres_cube/index.html">chgres_cube</a> - Creates cold
+  start initial conditions for FV3 model runs.
 
 - emcsfc_ice_blend - Blends National Ice Center sea ice cover and EMC
   sea ice concentration data to create a global sea ice analysis used
