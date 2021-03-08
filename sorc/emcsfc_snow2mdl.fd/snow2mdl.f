@@ -1,5 +1,8 @@
 !> @file
 !! @brief Interpolate snow data to model grid and grib the result.
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16
+      
+!> Interpolate snow data to model grid and grib the result.
 !!
 !! program history log:
 !! -  2005-Dec-16  gayno   - initial version
@@ -10,8 +13,8 @@
 !!                          snow in grib2.
 !!
 !! variable definitions:
-!! -  snow_cvr_mdl  - snow cover on model grid in percent
-!! -  snow_dep_mdl  - snow depth on model grid in meters 
+!! -  snow_cvr_mdl  - 
+!! -  snow_dep_mdl  - 
 !!                              
 !! @author George Gayno  org: w/np2 @date 2005-Dec-16
  module snow2mdl
@@ -79,14 +82,13 @@
 
  private
 
- real, allocatable               :: snow_cvr_mdl(:,:)  ! cover in % on mdl grid                                   
- real, allocatable               :: snow_dep_mdl(:,:)  ! depth on model grid
+ real, allocatable               :: snow_cvr_mdl(:,:)  !< snow cover on model grid in percent
+ real, allocatable               :: snow_dep_mdl(:,:)  !< snow depth on model grid in meters
 
- public                          :: interp
+ public                          :: interp !< ???
 
  contains
-!>   Interpolate snow data to model grid.
-!!
+!> Interpolate snow data to model grid.
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
@@ -100,8 +102,8 @@
 !!   54 - selected input snow data not valid for model grid
 !!   55 - error in ipolates interpolating snow data 
 !! 
-!! @note    The determination of cover and depth on the model
-!!   grid depends on the input snow data selected.
+!! @note The determination of cover and depth on the model
+!! grid depends on the input snow data selected.
 !!
 !!   nam grids:
 !!   ---------
@@ -153,9 +155,6 @@
 !!      defined threshold, the depth is set to 0,
 !!      regardless of the afwa depth value.
 !!      
-!!   language: fortran 90
-!!   machine:  IBM WCOSS
-!!
 !!  @author George Gayno org: w/np2  @date 2005-Dec-16
  subroutine interp
  use gdswzd_mod
@@ -795,21 +794,19 @@
 
  end subroutine interp
 
-!>  Write  grib2  snow cover and depth on the model grid. 
+!> Write grib2 snow cover and depth on the model grid. 
 !!
 !! program history log:
 !! 2014-sep-26  gayno    - initial version
 !!
-!! files:
-!!
-!!   output: 
+!! output file: 
 !!     - snow on the model grid, grib 2, unit=lugb
 !!
 !! condition codes: all fatal
-!!    48 - error writing model snow flie
-!!    49 - error opening model snow flie
+!!   - 48 error writing model snow flie
+!!   - 49 error opening model snow flie
 !!
-!!   @author George Gayno  org: w/np2   @date 2014-Sep-26
+!! @author George Gayno  org: w/np2   @date 2014-Sep-26
  subroutine write_grib2
 
  use grib_mod
@@ -975,22 +972,21 @@
 
  end subroutine write_grib2
 
-!>    Write grib1 snow cover and depth on the model grid.
+!> Write grib1 snow cover and depth on the model grid.
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - Initial version
 !! 2014-sep-26  gayno    - Rename as write_grib1 (was gribit).
 !!
-!!  files!
-!!   output:
+!!  output file:
 !!     - snow on model grid, grib 1, unit=lugb
 !!
 !! condition codes:
-!!    57 - error writing model snow depth record
-!!    58 - error writing model snow cover record
-!!    59 - error opening model snow file
+!!   - 57 - error writing model snow depth record
+!!   - 58 - error writing model snow cover record
+!!   - 59 - error opening model snow file
 !!
-!!   @author George Gayno org: w/np2 @date  2005-Dec-16
+!! @author George Gayno org: w/np2 @date  2005-Dec-16
  subroutine write_grib1
 
  implicit none
@@ -1087,22 +1083,19 @@
 
  end subroutine write_grib1
 
-!-----------------------------------------------------------------------
-! fills out full grid using thinned grid data.  use an iord of
-! "1" to use a nearest neighbor approach.
-!-----------------------------------------------------------------------
-!> ???                                                                  
+!> Fills out full grid using thinned grid data. Use an iord of
+!! "1" to use a nearest neighbor approach.
 !!
-!! @param iord
-!! @param kmsk
-!! @param fi
-!! @param f           
-!! @param lonl 
-!! @param latd
-!! @param len  
-!! @param lonsperlat
+!! @param iord ???
+!! @param kmsk ???
+!! @param fi ???
+!! @param f      ???      
+!! @param lonl  ???
+!! @param latd ???
+!! @param len   ???
+!! @param lonsperlat  ???
 !!
-!! @ author unknown
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16
  subroutine uninterpred(iord,kmsk,fi,f,lonl,latd,len,lonsperlat)
 
  implicit none
@@ -1148,10 +1141,10 @@
 !! @param m1  
 !! @param m2
 !! @param k1  
-!! @param k2
+!! @param f1
 !! @param f2
 !!
-!! @author     unknown
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16
  subroutine intlon(iord,imon,imsk,m1,m2,k1,f1,f2)
 
  implicit none
