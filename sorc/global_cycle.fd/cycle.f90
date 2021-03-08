@@ -1297,9 +1297,12 @@
  !! @param [out] tf_thaw Foundation temperature of thawed points.
  !! @param[inout] nx 'i' dimension of tf_ij
  !! @param[inout] ny 'j' dimension of tf_ij
- !! @param[inout] nset_thaw_s
- !! @param[inout] nset_thaw_i
- !! @param[inout] nset_thaw_c
+ !! @param[inout] nset_thaw_s Number of foundation temperature points filled
+ !! via a search.
+ !! @param[inout] nset_thaw_i Number of ice points filled with a calculated
+ !! tice.
+ !! @param[inout] nset_thaw_c Number of points filled with a weighted 
+ !! average of tice and tclm.
  !! @author Xu Li
  subroutine tf_thaw_set(tf_ij,mask_ij,itile,jtile,tice,tclm,tf_thaw,nx,ny, &
                         nset_thaw_s,nset_thaw_i,nset_thaw_c)
