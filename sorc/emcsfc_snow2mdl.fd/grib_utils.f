@@ -602,10 +602,9 @@
 
  end subroutine init_grib2
 
-!>  Nullify the grib2 gribfield pointers.
+!> Nullify the grib2 gribfield pointers.
 !!
 !! @param[in] gfld a gribfield data structure
-!! @param[out] gfld a gribfield data structure
 !!
 !! @author George Gayno org: w/np2 @date 2014-Sep-28
  subroutine grib2_null(gfld)
@@ -630,7 +629,6 @@
 
 !> Deallocate the grib2 gribfield pointers.
 !!
-!! @param[in] gfld a gribfield data structure
 !! @param[in] gfld a gribfield data structure
 !!
 !! @author George Gayno org: w/np2 @date 2014-Sep-28
