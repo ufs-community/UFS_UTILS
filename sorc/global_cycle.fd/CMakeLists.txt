@@ -1,7 +1,7 @@
-# This is the CMake build file for the global_cycle utility in the
-# UFS_UTILS package.
+# This is the CMake file for the global_cycle utility in the UFS_UTILS
+# project.
 #
-# George Gayno, Mark Potts
+# George Gayno
 
 set(fortran_src
     cycle.f90
