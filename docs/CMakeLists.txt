@@ -4,7 +4,6 @@
 # Ed Hartnett 10/5/20
 
 # Create doxyfile.
-set(abs_top_srcdir "${CMAKE_SOURCE_DIR}")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
 
 # Build documentation with target all.
