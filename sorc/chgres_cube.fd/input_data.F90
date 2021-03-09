@@ -101,7 +101,7 @@
  integer, public      :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
                                         !! for 7 layers of soil for the RUC LSM
  
- character(len=50), private, allocatable :: slevs(:)                           
+ character(len=50), private, allocatable :: slevs(:) !< The atmospheric levels in the GRIB2 input file.
 
 ! Fields associated with the nst model.
 
