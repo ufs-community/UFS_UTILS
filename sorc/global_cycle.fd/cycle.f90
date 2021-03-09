@@ -1186,25 +1186,31 @@
 
  END SUBROUTINE DTZM_POINT
 
- !> ???
+ !> Generate the weights and index of the grids used in the bilinear
+ !! interpolation.
  !!
  !! This routine was taken from the forecast model -
  !! ./atmos_cubed_sphere/tools/fv_treat_da_inc.f90.
  !!
- !! @param[in] is
- !! @param[in] ie
- !! @param[in] js
- !! @param[in] je
- !! @param[in] im
- !! @param[in] jm
- !! @param[in] lon
- !! @param[in] lat
- !! @param[in] id1
- !! @param[in] id2
- !! @param[in] jdc
- !! @param[in] s2c
- !! @param[in] agrid
- !! @author M. Iredell, xuli, Hang Lei, George Gayno
+ !! @param[in] is Start index in x-direction of the source array.
+ !! @param[in] ie End index in x-direction of the source array.
+ !! @param[in] js Start index in y-direction of the source array.
+ !! @param[in] je End index in y-direction of the source array.
+ !! @param[in] im x-dimension of the source array.
+ !! @param[in] jm y-dimension of the source array.
+ !! @param[in] lon 1-d array of longitudes (in radians).
+ !! @param[in] lat 1-d array of latitudes (in radians).
+ !! @param[in] agrid 2-d array for lon [agrid(:,:,1)] & lat
+ !! [agrid(:,:,2)] (in radians).
+ !! @param[out] s2c Bi-linear interpolation weights of the four nearby
+ !! grids of the source array.
+ !! @param[out] id1 Index 1 in x-direction of the nearby grids of
+ !! the source array.
+ !! @param[out] id2 Index 2 in x-direction of the nearby grids of
+ !! the source array.
+ !! @param[out] jdc Index in y-direction of the nearby grid of the
+ !! source array.
+ !! @author Xu Li
  SUBROUTINE REMAP_COEF( is, ie, js, je,&
       im, jm, lon, lat, id1, id2, jdc, s2c, agrid )
 
