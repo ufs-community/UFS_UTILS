@@ -1,6 +1,9 @@
 !> @file
 !! @brief Utilities for use when reading grib2 data.
-!!
+!! @author George Gayno NCEP/EMC
+
+!> Utilities for use when reading grib2 data.
+!! @author George Gayno NCEP/EMC
 module grib2_util
 
 use esmf
@@ -84,31 +87,5 @@ subroutine convert_omega(omega,p,t,q,clb,cub)
   enddo
 
 end subroutine convert_omega
-
-!> Convert string from lower to uppercase.
-!! @author Clive Page
-!!
-!! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
-!!
-!! @param[in] strIn   string to convert
-!! @return strOut string in uppercase
-function to_upper(strIn) result(strOut)
-
-     implicit none
-
-     character(len=*), intent(in) :: strIn
-     character(len=len(strIn)) :: strOut
-     integer :: i,j
-
-     do i = 1, len(strIn)
-          j = iachar(strIn(i:i))
-          if (j>= iachar("a") .and. j<=iachar("z") ) then
-               strOut(i:i) = achar(iachar(strIn(i:i))-32)
-          else
-               strOut(i:i) = strIn(i:i)
-          end if
-     end do
-
-end function to_upper
 
  end module grib2_util

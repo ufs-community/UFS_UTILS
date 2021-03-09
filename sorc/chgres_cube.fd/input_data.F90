@@ -1,8 +1,8 @@
 !> @file
 !! @brief Read input data
 !! @author George Gayno NCEP/EMC
-!!
-!! Read atmospheric, surface and nst data on the input grid.
+
+!> Read atmospheric, surface and nst data on the input grid.
 !! Supported formats include fv3 tiled 'restart' files, fv3 tiled 
 !! 'history' files, fv3 gaussian history files, spectral gfs
 !! gaussian nemsio files, and spectral gfs sigio/sfcio files.
@@ -10,6 +10,7 @@
 !! Public variables are defined below: "input" indicates field
 !! associated with the input grid.
 !!
+!! @author George Gayno NCEP/EMC
  module input_data
 
  use esmf
@@ -100,7 +101,7 @@
  integer, public      :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
                                         !! for 7 layers of soil for the RUC LSM
  
- character(len=50), private, allocatable :: slevs(:)                           
+ character(len=50), private, allocatable :: slevs(:) !< The atmospheric levels in the GRIB2 input file.
 
 ! Fields associated with the nst model.
 
@@ -4582,7 +4583,6 @@ else
  subroutine read_input_sfc_grib2_file(localpet)
 
    use wgrib2api
-   use grib2_util, only    : to_upper
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
    use model_grid, only    : input_grid_type
    use search_util
@@ -4595,9 +4595,9 @@ else
    character(len=250)                    :: the_file
    character(len=250)                    :: geo_file
    character(len=20)                     :: vname, vname_file,slev
-
-   character(len=50)                      :: method
-
+   character(len=50)                     :: method
+   character(len=20)                     :: to_upper
+ 
    integer                               :: rc, varnum, iret, i, j,k
    integer                               :: ncid2d, varid, varsize
    integer, parameter                    :: icet_default = 265.0

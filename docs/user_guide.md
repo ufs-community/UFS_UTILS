@@ -10,8 +10,8 @@ https://github.com/NOAA-EMC/UFS_UTILS.
 
 ## The Utilities
 
-- chgres_cube - Creates cold start initial conditions for FV3 model
-  runs.
+- <a href="chgres_cube/index.html">chgres_cube</a> - Creates cold
+  start initial conditions for FV3 model runs.
 
 - emcsfc_ice_blend - Blends National Ice Center sea ice cover and EMC
   sea ice concentration data to create a global sea ice analysis used
@@ -37,9 +37,6 @@ https://github.com/NOAA-EMC/UFS_UTILS.
 - grid_tools - Utilities to filter topography, to create regional
   extended Schmidt gnomonic grids, and to compute the equivalent
   global resolution of a regional grid.
-
-- nst_tf_chg - Initializes the reference temperature used by the NSST
-  model.
 
 - orog_mask_tools - Utilities to create land mask, terrain and gravity
   wave drag fields; set lake fraction and depth; creates an inland

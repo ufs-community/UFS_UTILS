@@ -1,9 +1,10 @@
 !> @file
 !! @brief Create blended ice product for gfs/gdas cycles.
 !!
-!! @author gayno @date 2014-03-20
-!!
-!! Create a global 5-minute blended ice concentration 
+!! @author George Gayno NCEP/EMC
+!! @date 2014-03-20
+
+!> Create a global 5-minute blended ice concentration 
 !! dataset for use by GDAS/GFS. This blend is created
 !! from National Ice Center Interactive Multisensor
 !! Snow and Ice Mapping System (IMS) data, and the 
@@ -87,28 +88,34 @@
 !! In the SH, the blended value is simply the 5-minute ice concentration
 !! at 'water' points.  'Coast' and 'land' points are bitmapped out.
 !!
+!! @return 0 for success, error code otherwise.
+!! @author George Gayno NCEP/EMC
  program emcsfc_ice_blend
 
  use grib_mod  ! grib 2 libraries
 
  implicit none
 
- type(gribfield)        :: ims, mask, mmab
-
+ type(gribfield)        :: ims !< ims is Ice Mapping System 5-min grid date
+ type(gribfield)        :: mask !< data mask
+ type(gribfield)        :: mmab !< NCEP/MMAB global 5-minute ice concentration data
  character(len=200)     :: infile, outfile
-
- integer, parameter     :: imax=4320
- integer, parameter     :: jmax=2160
-
- integer                :: i,j, istat, iunit
+ integer, parameter     :: imax=4320 !< Constant value on i dim.
+ integer, parameter     :: jmax=2160 !< Constant value on j dim.
+ integer                :: i,j, istat, iunit !< j search position of a file
  integer                :: ii, iii, jj, jjj, count
- integer                :: lugi
- integer                :: jdisc, jgdtn, jpdtn, k
- integer                :: jids(200), jgdt(200), jpdt(200)
+ integer                :: lugi !< set to 0 - no grib index file
+ integer                :: jdisc !< jdisc set to 2 - search for discipline
+ integer                :: jgdtn !< jpdtn search for product definition template number
+ integer                :: jpdtn !< jgdtn search for grid definition template number; 0 - lat/lon grid
+ integer                :: k
+ integer                :: jids(200) !< jids array of values in identification section, set to wildcard
+ integer                :: jgdt(200) !< jgdt array of values in grid definition template 3.m
+ integer                :: jpdt(200) !< jpdt array of values in product definition template 4.n
  integer, allocatable   :: mask_5min(:,:), mask_ims(:,:)
 
  logical*1, allocatable :: lbms_ims(:,:)
- logical                :: unpack
+ logical                :: unpack !< unpack switch for unpack data
 
  real, allocatable      :: dummy(:,:)
  real, allocatable      :: ice_ims(:,:), ice_5min(:,:), ice_blend(:,:)

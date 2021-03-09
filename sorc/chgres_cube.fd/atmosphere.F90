@@ -1,7 +1,8 @@
 !> @file
 !! @brief Process atmospheric fields
-!!
-!! Process atmospheric fields:  Horizontally interpolate input
+!! @author George Gayno NCEP/EMC
+
+!> Process atmospheric fields:  Horizontally interpolate input
 !! fields to the target grid.  Adjust surface pressure according to
 !! terrain difference between input and target grids.  Vertically
 !! interpolate to target grid vertical levels.  Processing based on
@@ -14,7 +15,7 @@
 !! 'west' edge of the grid box.  Otherwise, fields are at the center
 !! of the grid box.
 !!
-!! @author gayno NCEP/EMC
+!! @author George Gayno NCEP/EMC
  module atmosphere
 
  use esmf
@@ -769,8 +770,28 @@
 !! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2006-12-12            
 !! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2007-01-02            
 !!                                                                       
-!! @param [in] localpet ESMF local persistent execution thread 
-!! @author Hann-Ming Henry Juang, Fanglin Yang, S. Moorthi
+!!   INPUT ARGUMENT LIST:                                                
+!!     IM           INTEGER NUMBER OF POINTS TO COMPUTE                  
+!!     KM           INTEGER NUMBER OF LEVELS                             
+!!     IDVC         INTEGER VERTICAL COORDINATE ID                       
+!!                  (1 FOR SIGMA AND 2 FOR HYBRID)                       
+!!     IDSL         INTEGER TYPE OF SIGMA STRUCTURE                      
+!!                  (1 FOR PHILLIPS OR 2 FOR MEAN)                       
+!!     NVCOORD      INTEGER NUMBER OF VERTICAL COORDINATES               
+!!     VCOORD       REAL (KM+1,NVCOORD) VERTICAL COORDINATE VALUES       
+!!                  FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE               
+!!                  FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B      
+!!                  FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE
+!!                     AK  REAL (KM+1) HYBRID INTERFACE A                
+!!                     BK  REAL (KM+1) HYBRID INTERFACE B                
+!!     PS           REAL (IX) SURFACE PRESSURE (PA)                      
+!!   OUTPUT ARGUMENT LIST:                                               
+!!     PM           REAL (IX,KM) MID-LAYER PRESSURE (PA)                 
+!!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)
+!!
+!! @param localpet ESMF local persistent execution thread  
+!!
+!! @author HANN_MING HENRY JUANG, JUANG, Fanglin Yang, S. Moorthi
  subroutine newpr1(localpet)
  implicit none 
 

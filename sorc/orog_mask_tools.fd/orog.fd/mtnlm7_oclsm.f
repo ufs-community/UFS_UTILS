@@ -160,6 +160,28 @@ C>
      &            OUTGRID,INPUTOROG)
       STOP
       END
+!>
+!!  @note  Subroutine TERSUB is undocumented by developer 
+!!         Inserting doxygen framework only including undescribed params
+!! @param IMN
+!! @param JMN 
+!! @param IM
+!! @param JM 
+!! @param NM 
+!! @param NR 
+!! @param NF0
+!! @param NF1
+!! @param NW 
+!! @param EFAC
+!! @param BLAT 
+!! @param OUTGRID
+!! @param IFAC
+!! @param EFAC
+!! @param BLAT
+!! @param OUTGRID
+!! @param INPUTOROG
+!!
+!! @author Mark Iredell
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &     OUTGRID,INPUTOROG)
 !jaa      use ipfort
@@ -1545,8 +1567,28 @@ C
       write(6,*)' Total runtime time= ',tend-tbeg1
       RETURN
       END
+!>
+!! @note undocumented subroutine MAKEMT  
+!! @param ZAVG
+!! @param ZSLM
+!! @param ORO  
+!! @param SLM  
+!! @param VAR  
+!! @param VAR4 
+!! @param GLAT
+!! @param IST 
+!! @param IEN 
+!! @param JST 
+!! @param JEN 
+!! @param IM  
+!! @param JM  
+!! @param IMN 
+!! @param JMN 
+!! @param XLAT
+!! @param numi
+!!
+!! @author unknown, probably Mark Iredell
       SUBROUTINE MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
-!     SUBROUTINE MAKEMT(ZAVG,ZSLM,ORO,OCLSM,mskocn,SLM,VAR,VAR4,
      1 GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
       DIMENSION GLAT(JMN),XLAT(JM)
 !     REAL*4 OCLSM

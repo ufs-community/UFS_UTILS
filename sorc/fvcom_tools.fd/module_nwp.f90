@@ -1,13 +1,16 @@
 !> @file
-!!
-!! This module defines FV3LAM and FVCOM forecast data structure and the method to
-!! read and write observations from and to those data structures.  It is used by
-!! ingest_FVCOM.f90.
-!!
-!! This script is strongly based upon Eric James' (ESRL/GSL) work with HRRR/WRF
-!!  to get FVCOM data into the model.
-!!
+!! @brief Defines FV3LAM and FVCOM forecast data structure.
 !! @author David Wright, University of Michigan and GLERL, @date 17 Aug 2020
+
+!> This module defines FV3LAM and FVCOM forecast data structure and
+!! the method to read and write observations from and to those data
+!! structures. It is used by ingest_FVCOM.f90.
+!!
+!! This script is strongly based upon Eric James' (ESRL/GSL) work with
+!! HRRR/WRF to get FVCOM data into the model.
+!!
+!! @author David Wright, University of Michigan and GLERL,
+!! @date 17 Aug 2020
 !!
 module module_nwp
 
@@ -23,44 +26,57 @@ module module_nwp
 
    private
    type :: nwp_type
-      character(len=6) :: datatype
-      integer :: numvar, xlat, xlon, xtime
-      integer :: i_mask, i_sst, i_ice, i_sfcT, i_iceT
-      character(len=20), allocatable :: varnames(:)
-      character(len=20), allocatable :: latname
-      character(len=20), allocatable :: lonname
-      character(len=20), allocatable :: dimnameEW
-      character(len=20), allocatable :: dimnameNS
-      character(len=20), allocatable :: dimnameTIME
+      character(len=6) :: datatype !< Data type.
+      integer :: numvar !< Number of variabls.
+      integer :: xlat !< Number of latitudes.
+      integer :: xlon !< Number of longitudes.
+      integer :: xtime !< Number of times.
+      integer :: i_mask !< Is var visible (always 1).
+      integer :: i_sst !< Index of sst var.
+      integer :: i_ice !< Index of ice var.
+      integer :: i_sfcT !< Index of sst temp var.
+      integer :: i_iceT !< Index of ice temp var.
+      character(len=20), allocatable :: varnames(:) !< Variable names.
+      character(len=20), allocatable :: latname !< Latitude name.
+      character(len=20), allocatable :: lonname !< Longitude name.
+      character(len=20), allocatable :: dimnameEW !< East/West dimension name.
+      character(len=20), allocatable :: dimnameNS !< North/South dimension name.
+      character(len=20), allocatable :: dimnameTIME !< Time dimension name.
 
-      real(r_kind), allocatable :: nwp_mask(:,:,:)
-      real(r_kind), allocatable :: nwp_sst(:,:,:)
-      real(r_kind), allocatable :: nwp_ice(:,:,:)
-      real(r_kind), allocatable :: nwp_sfcT(:,:,:)
-      real(r_kind), allocatable :: nwp_iceT(:,:,:) 
+      real(r_kind), allocatable :: nwp_mask(:,:,:) !< Land/water mask 3D array
+      real(r_kind), allocatable :: nwp_sst(:,:,:) !< SST 3D array
+      real(r_kind), allocatable :: nwp_ice(:,:,:) !< Over water ice concentration 3D array
+      real(r_kind), allocatable :: nwp_sfcT(:,:,:) !< Skin temperature 3D array
+      real(r_kind), allocatable :: nwp_iceT(:,:,:)  !< Ice skin temperature 3D array
    end type nwp_type
 
    type, extends(nwp_type) :: fcst_nwp
-      type(nwpbase), pointer :: head => NULL()
-      type(nwpbase), pointer :: tail => NULL()
+      ! The pointers are carryover from when I inherited the code from
+      ! GSL's work with HRRR for a similar use. I am not sure with
+      ! object based coding in Fortran if it needs to have parts
+      ! initialized to gain access to the procedures within it. - D. Wright.
+      type(nwpbase), pointer :: head => NULL() !< Pointer to head of list.
+      type(nwpbase), pointer :: tail => NULL() !< Pointer to tail of list.
       contains
-         procedure :: initial => initial_nwp
-         procedure :: list_initial => list_initial_nwp
-         procedure :: read_n => read_nwp
-         procedure :: finish => finish_nwp
+         procedure :: initial => initial_nwp !< Defines vars and names. @return
+         procedure :: list_initial => list_initial_nwp !< List the setup. @return
+         procedure :: read_n => read_nwp !< Initialize arrays, get data. @return
+         procedure :: finish => finish_nwp !< Finish and deallocate. @return
    end type fcst_nwp
 
-   type(ncio) :: ncdata
+   type(ncio) :: ncdata !< Wrapper object for netCDF data file.
 !   type(map_util) :: map
 
    contains
 
+     !> This subroutine defines the number of variables and their
+     !! names for each NWP data type. The indices of the variables are
+     !! also defined for later reference.
+     !!
+     !! @param this fcst_nwp object
+     !! @param[in] itype either ' FVCOM' or 'FV3LAM'.
+     !! @author David Wright, University of Michigan and GLERL
       subroutine initial_nwp(this,itype)
-
-!        This subroutine defines the number of variables and their names for
-!        each NWP data type.  The indices of the variables are
-!        also defined for later reference.
-
          class(fcst_nwp) :: this
 
          character(len=6), intent(in) :: itype
@@ -139,10 +155,12 @@ module module_nwp
 
       end subroutine initial_nwp
 
+      !> This subroutine lists the setup for NWP data that was done by
+      !! the initial_nwp subroutine.
+      !!
+      !! @param this fcst_nwp object
+      !! @author David Wright, University of Michigan and GLERL
       subroutine list_initial_nwp(this)
-
-!        This subroutine lists the setup for NWP data that was done by
-!        the initial_nwp subroutine.
 
          class(fcst_nwp) :: this
 
@@ -163,10 +181,24 @@ module module_nwp
 
       end subroutine list_initial_nwp
 
+      !> This subroutine initializes arrays to receive the NWP data,
+      !! and opens the file and gets the data.
+      !!
+      !! @param this fcst_nwp ojbect
+      !! @param[in] filename netcdf file name
+      !! @param[in] itype either ' FVCOM' or 'FV3LAM'
+      !! @param[inout] numlon number of grid points in x-direction
+      !! @param[inout] numlat number of grid poinst in y-direction
+      !! @param[inout] numtimes length of time dimension
+      !! @param[in] time_to_get integer of time dimension to read in
+      !! @param[inout] mask Water points mask
+      !! @param[inout] sst Water surface temperature
+      !! @param[inout] ice Ice concentration (%)
+      !! @param[inout] sfcT Skin Temperature
+      !! @param[inout] iceT Ice Skin Temperature
+      !!
+      !! @author David Wright, University of Michigan and GLERL
       subroutine read_nwp(this,filename,itype,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT)
-
-!        This subroutine initializes arrays to receive the NWP data,
-!        and opens the file and gets the data.
 
          class(fcst_nwp) :: this
 
@@ -240,6 +272,10 @@ module module_nwp
 
       end subroutine read_nwp
 
+      !> Finish and deallocate.
+      !!
+      !! @param this fcst_nwp object
+      !! @author David Wright, University of Michigan and GLERL
       subroutine finish_nwp(this)
 
          class(fcst_nwp) :: this

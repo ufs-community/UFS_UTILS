@@ -1,7 +1,9 @@
 !> @file
-!! @brief Set up program execution
-!!
-!! Set up program execution
+!! @brief Set up program execution.
+!! @author George Gayno NCEP/EMC
+
+!> This module contains code to read the setup namelist file, handle
+!! the varmap file for GRIB2 data, and calculate the soil parameters.
 !!
 !! @author George Gayno NCEP/EMC
  module program_setup
@@ -146,7 +148,8 @@
 
 !> Reads program configuration namelist.
 !!
-!! @param filename the name of the configuration file (defaults to ./fort.41).
+!! @param filename the name of the configuration file (defaults to
+!! ./fort.41).
 !! @author George Gayno NCEP/EMC
  subroutine read_setup_namelist(filename)
  implicit none
@@ -446,6 +449,27 @@ end subroutine get_var_cond
 !> Driver routine to compute soil parameters for each
 !! soil type. Works for Zobler and STATSGO soil categories.
 !!
+!! The calculations are those used in the Noah Land Surface Model. For
+!! more information see <a
+!! href="https://doi.org/10.1029/2002JD003296">Implementation of Noah
+!! land surface model advances in the National Centers for
+!! Environmental Prediction operational mesoscale Eta model</a>.
+!!
+!! For more details about the soil parameters/properties see <a
+!! href="https://journals.ametsoc.org/view/journals/mwre/129/4/1520-0493_2001_129_0569_caalsh_2.0.co_2.xml">Coupling
+!! an Advanced Land Surface–Hydrology Model with the Penn State–NCAR
+!! MM5 Modeling System. Part I: Model Implementation and
+!! Sensitivity</a>.
+!!
+!! The original source for soil properties is here:
+!!
+!! Cosby, B. J., G. M. Hornberger, R. B. Clapp, and T. R. Ginn, 1984:
+!! <a
+!! href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/WR020i006p00682">A
+!! statistical exploration of the relationships of soil moisture
+!! characteristics to the physical properties of soils</a>. Water
+!! Resour. Res.,20, 682–690.
+!!
 !! @param [in] localpet  ESMF local persistent execution thread
 !! @author George Gayno NCEP/EMC
  subroutine calc_soil_params_driver(localpet)
@@ -591,8 +615,8 @@ end subroutine get_var_cond
 
  end subroutine calc_soil_params_driver
 
-!> Compute soil parameters.  Will be used to rescale soil moisture
-!! differences in soil type between the input grid and target
+!> Compute soil parameters. These will be used to rescale soil
+!! moisture differences in soil type between the input grid and target
 !! model grid.
 !!
 !! @param [in] num_soil_cats  number of soil type categories
