@@ -1,3 +1,8 @@
+# This is the CMake build file for the emcsfc_snow2mdl utility in the
+# UFS_UTILS package.
+#
+# George Gayno, Mark Potts
+
 set(fortran_src
     driver.F90
     grib_utils.F90
@@ -26,3 +31,8 @@ if(OpenMP_Fortran_FOUND)
 endif()
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+
+# If doxygen documentation we enabled, build it.
+if(ENABLE_DOCS)
+  add_subdirectory(docs)  
+endif()

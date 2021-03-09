@@ -1,3 +1,8 @@
+# This is the CMake build file for the sfc_climo_gen utility in the
+# UFS_UTILS package.
+#
+# George Gayno, Mark Potts
+
 set(fortran_src
     driver.F90
     interp.F90
@@ -23,3 +28,8 @@ target_link_libraries(
   NetCDF::NetCDF_Fortran)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+
+# If doxygen documentation we enabled, build it.
+if(ENABLE_DOCS)
+  add_subdirectory(docs)  
+endif()
