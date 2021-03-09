@@ -39,10 +39,10 @@
                                        terrain_target_grid
 
  use program_setup, only             : vcoord_file_target_grid, &
-                                       wam_cold_start, wam_start_date, &  !hmhj
+                                       wam_cold_start, wam_start_date, & 
                                        regional, &
                                        tracers, num_tracers,      &
-                                       num_tracers_input,         &       !hmhj
+                                       num_tracers_input,         & 
                                        atm_weight_file, &
                                        use_thomp_mp_climo
 
@@ -323,7 +323,7 @@
 
  call vintg
 
- if( wam_cold_start ) then                                                !hmhj
+ if( wam_cold_start ) then 
    call vintg_wam (wam_start_date)
  endif
 
@@ -762,33 +762,15 @@
 
 !> Compute model level pressures.
 !!                                                                       
-!! PROGRAM HISTORY LOG:                                                  
-!! 2005-04-11  HANN_MING HENRY JUANG    hybrid sigma, sigma-p, and sigma-
-!! - PRGMMR: JUANG          ORG: W/NMC23     DATE: 2005-04-11            
+!! program history log:                                                  
+!! 2005-04-11  Hann-Ming Henry Juang    hybrid sigma, sigma-p, and sigma-
+!! - PRGMMR: Henry Juang    ORG: W/NMC23     DATE: 2005-04-11            
 !! - PRGMMR: Fanglin Yang   ORG: W/NMC23     DATE: 2006-11-28            
 !! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2006-12-12            
 !! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2007-01-02            
 !!                                                                       
-!!   INPUT ARGUMENT LIST:                                                
-!!     IM           INTEGER NUMBER OF POINTS TO COMPUTE                  
-!!     KM           INTEGER NUMBER OF LEVELS                             
-!!     IDVC         INTEGER VERTICAL COORDINATE ID                       
-!!                  (1 FOR SIGMA AND 2 FOR HYBRID)                       
-!!     IDSL         INTEGER TYPE OF SIGMA STRUCTURE                      
-!!                  (1 FOR PHILLIPS OR 2 FOR MEAN)                       
-!!     NVCOORD      INTEGER NUMBER OF VERTICAL COORDINATES               
-!!     VCOORD       REAL (KM+1,NVCOORD) VERTICAL COORDINATE VALUES       
-!!                  FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE               
-!!                  FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B      
-!!                  FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE
-!!                     AK  REAL (KM+1) HYBRID INTERFACE A                
-!!                     BK  REAL (KM+1) HYBRID INTERFACE B                
-!!     PS           REAL (IX) SURFACE PRESSURE (PA)                      
-!!   OUTPUT ARGUMENT LIST:                                               
-!!     PM           REAL (IX,KM) MID-LAYER PRESSURE (PA)                 
-!!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)               
-!!
-!! @author HANN-MING HENRY JUANG, JUANG, Fanglin Yang, S. Moorthi
+!! @param [in] localpet ESMF local persistent execution thread 
+!! @author Hann-Ming Henry Juang, Fanglin Yang, S. Moorthi
  subroutine newpr1(localpet)
  implicit none 
 
@@ -1585,8 +1567,7 @@
 !! relative humidity is held constant. This routine expects fields
 !! ordered from bottom to top of atmosphere.
 !!
-!! @author IREDELL ORG: W/NMC23 @date 92-10-31
-
+!! @author Iredell org: W/NMC23 @date 92-10-31
  SUBROUTINE VINTG
  use mpi
 
