@@ -600,52 +600,52 @@ $(document).ready(function(){initNavTree('grib__utils_8f_source.html',''); initR
 <div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160; </div>
 <div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160; <span class="keyword">end subroutine </span><a class="code" href="grib__utils_8f.html#a51864b4717ca8fb9cc712eb5c391983d">init_grib2</a></div>
 <div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160; </div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160; <span class="keyword">subroutine </span><a class="code" href="grib__utils_8f.html#adffeca48f5856efec29e2174413f18cd">grib2_null</a>(gfld)</div>
-<div class="line"><a name="l00612"></a><span class="lineno"><a class="line" href="grib__utils_8f.html#adffeca48f5856efec29e2174413f18cd">  612</a></span>&#160; </div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160; <span class="keywordtype">use </span>grib_mod</div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160; </div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160; <span class="keywordtype">implicit none</span></div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160; </div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160; <span class="keywordtype">type</span>(gribfield), <span class="keywordtype">intent(inout)</span>           :: gfld</div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160; </div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160; <span class="keyword">nullify</span>(gfld%idsect)</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160; <span class="keyword">nullify</span>(gfld%local)</div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160; <span class="keyword">nullify</span>(gfld%list_opt)</div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160; <span class="keyword">nullify</span>(gfld%igdtmpl)</div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160; <span class="keyword">nullify</span>(gfld%ipdtmpl)</div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160; <span class="keyword">nullify</span>(gfld%coord_list)</div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160; <span class="keyword">nullify</span>(gfld%idrtmpl)</div>
-<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160; <span class="keyword">nullify</span>(gfld%bmap)</div>
-<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160; <span class="keyword">nullify</span>(gfld%fld)</div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160; </div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160; <span class="keyword">end subroutine </span><a class="code" href="grib__utils_8f.html#adffeca48f5856efec29e2174413f18cd">grib2_null</a></div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160; </div>
-<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160; <span class="keyword">subroutine </span><a class="code" href="grib__utils_8f.html#a48ceeee24ae44923e136e479584053be">grib2_free</a>(gfld)</div>
-<div class="line"><a name="l00638"></a><span class="lineno"><a class="line" href="grib__utils_8f.html#a48ceeee24ae44923e136e479584053be">  638</a></span>&#160; </div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160; <span class="keywordtype">use </span>grib_mod</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160; <span class="keyword">subroutine </span><a class="code" href="grib__utils_8f.html#adffeca48f5856efec29e2174413f18cd">grib2_null</a>(gfld)</div>
+<div class="line"><a name="l00611"></a><span class="lineno"><a class="line" href="grib__utils_8f.html#adffeca48f5856efec29e2174413f18cd">  611</a></span>&#160; </div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160; <span class="keywordtype">use </span>grib_mod</div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160; </div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160; <span class="keywordtype">implicit none</span></div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160; </div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160; <span class="keywordtype">type</span>(gribfield), <span class="keywordtype">intent(inout)</span>           :: gfld</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160; </div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160; <span class="keyword">nullify</span>(gfld%idsect)</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160; <span class="keyword">nullify</span>(gfld%local)</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160; <span class="keyword">nullify</span>(gfld%list_opt)</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160; <span class="keyword">nullify</span>(gfld%igdtmpl)</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160; <span class="keyword">nullify</span>(gfld%ipdtmpl)</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160; <span class="keyword">nullify</span>(gfld%coord_list)</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160; <span class="keyword">nullify</span>(gfld%idrtmpl)</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160; <span class="keyword">nullify</span>(gfld%bmap)</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160; <span class="keyword">nullify</span>(gfld%fld)</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160; </div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160; <span class="keyword">end subroutine </span><a class="code" href="grib__utils_8f.html#adffeca48f5856efec29e2174413f18cd">grib2_null</a></div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160; </div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160; <span class="keyword">subroutine </span><a class="code" href="grib__utils_8f.html#a48ceeee24ae44923e136e479584053be">grib2_free</a>(gfld)</div>
+<div class="line"><a name="l00636"></a><span class="lineno"><a class="line" href="grib__utils_8f.html#a48ceeee24ae44923e136e479584053be">  636</a></span>&#160; </div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160; <span class="keywordtype">use </span>grib_mod</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160; </div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160; <span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160; </div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160; <span class="keywordtype">implicit none</span></div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160; <span class="keywordtype">type</span>(gribfield), <span class="keywordtype">intent(inout)</span>    :: gfld</div>
 <div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160; </div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160; <span class="keywordtype">type</span>(gribfield), <span class="keywordtype">intent(inout)</span>    :: gfld</div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160; </div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%idsect)) <span class="keyword">deallocate</span>(gfld%idsect)</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%local)) <span class="keyword">deallocate</span>(gfld%local)</div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%list_opt)) <span class="keyword">deallocate</span>(gfld%list_opt)</div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%igdtmpl)) <span class="keyword">deallocate</span>(gfld%igdtmpl)</div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%ipdtmpl)) <span class="keyword">deallocate</span>(gfld%ipdtmpl)</div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%coord_list)) <span class="keyword">deallocate</span>(gfld%coord_list)</div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%idrtmpl)) <span class="keyword">deallocate</span>(gfld%idrtmpl)</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%bmap)) <span class="keyword">deallocate</span>(gfld%bmap)</div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%fld)) <span class="keyword">deallocate</span>(gfld%fld)</div>
-<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160; </div>
-<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160; <span class="keyword">end subroutine </span><a class="code" href="grib__utils_8f.html#a48ceeee24ae44923e136e479584053be">grib2_free</a></div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%idsect)) <span class="keyword">deallocate</span>(gfld%idsect)</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%local)) <span class="keyword">deallocate</span>(gfld%local)</div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%list_opt)) <span class="keyword">deallocate</span>(gfld%list_opt)</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%igdtmpl)) <span class="keyword">deallocate</span>(gfld%igdtmpl)</div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%ipdtmpl)) <span class="keyword">deallocate</span>(gfld%ipdtmpl)</div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%coord_list)) <span class="keyword">deallocate</span>(gfld%coord_list)</div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%idrtmpl)) <span class="keyword">deallocate</span>(gfld%idrtmpl)</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%bmap)) <span class="keyword">deallocate</span>(gfld%bmap)</div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160; <span class="keywordflow">if</span> (<span class="keyword">associated</span>(gfld%fld)) <span class="keyword">deallocate</span>(gfld%fld)</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160; </div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160; <span class="keyword">end subroutine </span><a class="code" href="grib__utils_8f.html#a48ceeee24ae44923e136e479584053be">grib2_free</a></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="agrib__utils_8f_html_a48ceeee24ae44923e136e479584053be"><div class="ttname"><a href="grib__utils_8f.html#a48ceeee24ae44923e136e479584053be">grib2_free</a></div><div class="ttdeci">subroutine grib2_free(gfld)</div><div class="ttdoc">Deallocate the grib2 gribfield pointers.</div><div class="ttdef"><b>Definition:</b> <a href="grib__utils_8f_source.html#l00638">grib_utils.f:638</a></div></div>
+<div class="ttc" id="agrib__utils_8f_html_a48ceeee24ae44923e136e479584053be"><div class="ttname"><a href="grib__utils_8f.html#a48ceeee24ae44923e136e479584053be">grib2_free</a></div><div class="ttdeci">subroutine grib2_free(gfld)</div><div class="ttdoc">Deallocate the grib2 gribfield pointers.</div><div class="ttdef"><b>Definition:</b> <a href="grib__utils_8f_source.html#l00636">grib_utils.f:636</a></div></div>
 <div class="ttc" id="agrib__utils_8f_html_a51864b4717ca8fb9cc712eb5c391983d"><div class="ttname"><a href="grib__utils_8f.html#a51864b4717ca8fb9cc712eb5c391983d">init_grib2</a></div><div class="ttdeci">subroutine init_grib2(century, year, month, day, hour, kgds, lat11, latlast, lon11, lonlast, listsec0, listsec1, igds, ipdstmpl, ipdsnum, igdstmpl, igdstmplen, idefnum, ideflist, ngrdpts)</div><div class="ttdoc">Initialize grib2 arrays required by the ncep g2 library according to grib1 gds information.</div><div class="ttdef"><b>Definition:</b> <a href="grib__utils_8f_source.html#l00401">grib_utils.f:401</a></div></div>
 <div class="ttc" id="agrib__utils_8f_html_a1dda8daced403ff2fda164b321f6aefb"><div class="ttname"><a href="grib__utils_8f.html#a1dda8daced403ff2fda164b321f6aefb">grib2_check</a></div><div class="ttdeci">subroutine grib2_check(kgds, igdstmplen)</div><div class="ttdoc">Determine length of grib2 gds template array, which is a function of the map projection.</div><div class="ttdef"><b>Definition:</b> <a href="grib__utils_8f_source.html#l00351">grib_utils.f:351</a></div></div>
 <div class="ttc" id="agrib__utils_8f_html_aef0131ff1bc5f61f551de1345e711fa4"><div class="ttname"><a href="grib__utils_8f.html#aef0131ff1bc5f61f551de1345e711fa4">skgb2</a></div><div class="ttdeci">subroutine skgb2(LUGB, ISEEK, MSEEK, LSKIP, LGRIB, I1)</div><div class="ttdoc">Determine whether file is grib or not.</div><div class="ttdef"><b>Definition:</b> <a href="grib__utils_8f_source.html#l00076">grib_utils.f:76</a></div></div>
-<div class="ttc" id="agrib__utils_8f_html_adffeca48f5856efec29e2174413f18cd"><div class="ttname"><a href="grib__utils_8f.html#adffeca48f5856efec29e2174413f18cd">grib2_null</a></div><div class="ttdeci">subroutine grib2_null(gfld)</div><div class="ttdoc">Nullify the grib2 gribfield pointers.</div><div class="ttdef"><b>Definition:</b> <a href="grib__utils_8f_source.html#l00612">grib_utils.f:612</a></div></div>
+<div class="ttc" id="agrib__utils_8f_html_adffeca48f5856efec29e2174413f18cd"><div class="ttname"><a href="grib__utils_8f.html#adffeca48f5856efec29e2174413f18cd">grib2_null</a></div><div class="ttdeci">subroutine grib2_null(gfld)</div><div class="ttdoc">Nullify the grib2 gribfield pointers.</div><div class="ttdef"><b>Definition:</b> <a href="grib__utils_8f_source.html#l00611">grib_utils.f:611</a></div></div>
 <div class="ttc" id="agrib__utils_8f_html_afb32109d497155b14ab1db47cbaaf364"><div class="ttname"><a href="grib__utils_8f.html#afb32109d497155b14ab1db47cbaaf364">grib_check</a></div><div class="ttdeci">subroutine grib_check(file_name, isgrib)</div><div class="ttdoc">Determine whether file is grib or not.</div><div class="ttdef"><b>Definition:</b> <a href="grib__utils_8f_source.html#l00024">grib_utils.f:24</a></div></div>
 <div class="ttc" id="agrib__utils_8f_html_a99c537ea7d78555234e6b8bf27fa9c15"><div class="ttname"><a href="grib__utils_8f.html#a99c537ea7d78555234e6b8bf27fa9c15">gdt_to_gds</a></div><div class="ttdeci">subroutine gdt_to_gds(igdtnum, igdstmpl, igdtlen, kgds, ni, nj, res)</div><div class="ttdoc">Convert from the grib2 grid description template array used by the ncep grib2 library,...</div><div class="ttdef"><b>Definition:</b> <a href="grib__utils_8f_source.html#l00140">grib_utils.f:140</a></div></div>
 <!-- start footer part -->

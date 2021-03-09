@@ -92,10 +92,10 @@ $(document).ready(function(){initNavTree('interfacepesg_1_1gtoxm__ak__dd.html','
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ac1071d57180a7703340a3ba0e9755d0b"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepesg_1_1gtoxm__ak__dd.html#ac1071d57180a7703340a3ba0e9755d0b">gtoxm_ak_dd_g</a> (A, K, pdlat, pdlon, pdazi, delx, dely, dlat, dlon, xm, ff)</td></tr>
-<tr class="memdesc:ac1071d57180a7703340a3ba0e9755d0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like gtoxm_ak_rr_g, except input angles are expressed in degrees.  <a href="interfacepesg_1_1gtoxm__ak__dd.html#ac1071d57180a7703340a3ba0e9755d0b">More...</a><br /></td></tr>
+<tr class="memdesc:ac1071d57180a7703340a3ba0e9755d0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like gtoxm_ak_rr_g, except lat, lon, azimuth, are expressed in degrees.  <a href="interfacepesg_1_1gtoxm__ak__dd.html#ac1071d57180a7703340a3ba0e9755d0b">More...</a><br /></td></tr>
 <tr class="separator:ac1071d57180a7703340a3ba0e9755d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af90c23ad50d9a59a6c7fd4fda9f78195"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepesg_1_1gtoxm__ak__dd.html#af90c23ad50d9a59a6c7fd4fda9f78195">gtoxm_ak_dd_m</a> (A, K, pdlat, pdlon, pdazi, dlat, dlon, xm, ff)</td></tr>
-<tr class="memdesc:af90c23ad50d9a59a6c7fd4fda9f78195"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like gtoxm_ak_rr_m, except input angles are expressed in degrees.  <a href="interfacepesg_1_1gtoxm__ak__dd.html#af90c23ad50d9a59a6c7fd4fda9f78195">More...</a><br /></td></tr>
+<tr class="memdesc:af90c23ad50d9a59a6c7fd4fda9f78195"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like gtoxm_ak_rr_m, except lat, lon, azimuth, are expressed in degrees.  <a href="interfacepesg_1_1gtoxm__ak__dd.html#af90c23ad50d9a59a6c7fd4fda9f78195">More...</a><br /></td></tr>
 <tr class="separator:af90c23ad50d9a59a6c7fd4fda9f78195"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -190,24 +190,26 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Like gtoxm_ak_rr_g, except input angles are expressed in degrees. </p>
+<p>Like gtoxm_ak_rr_g, except lat, lon, azimuth, are expressed in degrees. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>degrees latitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>degrees longitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>Azimuth of mapping orientation at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dlat</td><td>degrees latitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dlon</td><td>degrees longitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>2-vector image of the point in center-relative grid units </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01981">1981</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01983">1983</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
 </div>
 </div>
@@ -287,17 +289,17 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Like gtoxm_ak_rr_m, except input angles are expressed in degrees. </p>
+<p>Like gtoxm_ak_rr_m, except lat, lon, azimuth, are expressed in degrees. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dlat</td><td>radian latitude </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dlon</td><td>radian longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>degrees latitude defining mapping center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>degrees longitude defining mapping center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>Azimuth of mapping orientation at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dlat</td><td>degrees latitude of point to be mapped </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dlon</td><td>degrees longitude of point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>2-vector center-relative map space image of the point </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>

@@ -83,7 +83,7 @@ var hierarchy =
     [ "module_ncio::ncio", "structmodule__ncio_1_1ncio.html", null ],
     [ "pmat4::normalize", "interfacepmat4_1_1normalize.html", null ],
     [ "pmat4::normalized", "interfacepmat4_1_1normalized.html", null ],
-    [ "read_write_data::nsst_data", "structread__write__data_1_1nsst__data.html", null ],
+    [ "read_write_data::nsst_data", "namespaceread__write__data.html#structread__write__data_1_1nsst__data", null ],
     [ "module_nwp::nwp_type", "structmodule__nwp_1_1nwp__type.html", [
       [ "module_nwp::fcst_nwp", "structmodule__nwp_1_1fcst__nwp.html", null ]
     ] ],

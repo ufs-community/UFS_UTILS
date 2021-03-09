@@ -1,0 +1,113 @@
+.TH "/home/ed/UFS_UTILS/sorc/vcoord_gen.fd/matrix_utils.f90" 3 "Tue Mar 9 2021" "Version 1.0.0" "vcoord_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/ed/UFS_UTILS/sorc/vcoord_gen.fd/matrix_utils.f90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBlubksb\fP (a, n, np, indx, b)"
+.br
+.RI "Lower and upper triangular back substitution\&. "
+.ti -1c
+.RI "subroutine \fBludcmp\fP (a, n, np, indx, d)"
+.br
+.RI "This subprogram decomposes a matrix into a product of lower and upper triangular matrices\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Lower and upper triangular decomposition 
+.PP
+\fBAuthor\fP
+.RS 4
+Iredell 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2008-08-01 
+.RE
+.PP
+
+.PP
+Definition in file \fBmatrix_utils\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine lubksb (real, dimension(np,np), intent(in) a, integer, intent(in) n, integer, intent(in) np, integer, dimension(n), intent(in) indx, real, dimension(n), intent(inout) b)"
+
+.PP
+Lower and upper triangular back substitution\&. 
+.PP
+\fBAuthor\fP
+.RS 4
+Iredell 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2008-08-01
+.RE
+.PP
+This subprogram back substitutes to solve decomposed lower and upper triangular matrices as outputted by ludcmp\&.
+.PP
+Program history log:
+.IP "\(bu" 2
+2008-08-01 Mark Iredell
+.PP
+Input argument list: 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP real(np,np) LU-decomposed matrix (from ludcmp) 
+.br
+\fIn\fP integer order of matrix 
+.br
+\fInp\fP integer dimension of matrix 
+.br
+\fIindx\fP integer(n) pivot indices (from ludcmp) 
+.br
+\fIb\fP - input real(n) rhs vector of linear problem (will be overwritten)
+.IP "  \(bu" 4
+output real(n) solution of linear problem (original A times output B equals original B) 
+.PP
+.RE
+.PP
+
+.PP
+
+.PP
+Definition at line 109 of file matrix_utils\&.f90\&.
+.SS "subroutine ludcmp (real, dimension(np,np), intent(inout) a, integer, intent(in) n, integer, intent(in) np, integer, dimension(n), intent(out) indx, real, intent(out) d)"
+
+.PP
+This subprogram decomposes a matrix into a product of lower and upper triangular matrices\&. Program history log:
+.IP "\(bu" 2
+2008-08-01 Mark Iredell
+.PP
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP - input: a real(np,np) matrix (will be overwritten) output:
+.IP "\(bu" 2
+output real(np,np) LU-decomposed matrix (U is upper part of A, including diagonal; L is lower part of A, with 1 as diagonal; L*U equals original A after permuting) 
+.PP
+.br
+\fIn\fP integer order of matrix 
+.br
+\fInp\fP integer dimension of matrix 
+.br
+\fIindx\fP integer(n) pivot indices (original A rows are permuted in order i with indx(i)) 
+.br
+\fId\fP real determinant permutation (1 or -1, or 0 if singular) (determinant is output diagonal product times d) 
+.RE
+.PP
+
+.PP
+Definition at line 24 of file matrix_utils\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for vcoord_gen from the source code\&.

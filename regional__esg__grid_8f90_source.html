@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('regional__esg__grid_8f90_source.html',
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">program</span> regional_grid</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  <span class="keywordtype">use </span>pkind, <span class="keywordtype">only</span>: dp</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  <span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: dtor,rtod</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;  <span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>,<a class="code" href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">rtod</a></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <span class="keywordtype">use </span><a class="code" href="namespacepesg.html">pesg</a></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  <span class="keywordtype">use </span>netcdf</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
@@ -177,12 +177,12 @@ $(document).ready(function(){initNavTree('regional__esg__grid_8f90_source.html',
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  delxre=m_delx*re</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;  delyre=m_dely*re</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <span class="keyword">call </span><a class="code" href="interfacepesg_1_1hgrid__ak.html">hgrid_ak</a>(lx,ly, nx,ny, a,k, plat*dtor,plon*dtor,pazi*dtor, re,delxre,delyre, &amp;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <span class="keyword">call </span><a class="code" href="interfacepesg_1_1hgrid__ak.html">hgrid_ak</a>(lx,ly, nx,ny, a,k, plat*<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>,plon*<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>,pazi*<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>, re,delxre,delyre, &amp;</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                glat,glon,garea, dx,dy,angle_dx,angle_dy, ff)</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  <span class="keywordflow">if</span>(ff)stop <span class="stringliteral">&#39;Failure flag raised in hgrid routine&#39;</span></div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  glon = glon*rtod</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  glat = glat*rtod</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  glon = glon*<a class="code" href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">rtod</a></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  glat = glat*<a class="code" href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">rtod</a></div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  <span class="keywordflow">where</span> (glon &lt; 0.0) glon = glon + 360.0</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <span class="keyword">call </span>check( nf90_create(<span class="stringliteral">&quot;regional_grid.nc&quot;</span>, nf90_64bit_offset, ncid) )</div>
@@ -238,8 +238,8 @@ $(document).ready(function(){initNavTree('regional__esg__grid_8f90_source.html',
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;  <span class="keyword">call </span>check( nf90_put_att(ncid, nf90_global, <span class="stringliteral">&quot;plat&quot;</span>, plat) )</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;  <span class="keyword">call </span>check( nf90_put_att(ncid, nf90_global, <span class="stringliteral">&quot;plon&quot;</span>, plon) )</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  <span class="keyword">call </span>check( nf90_put_att(ncid, nf90_global, <span class="stringliteral">&quot;pazi&quot;</span>, pazi) )</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <span class="keyword">call </span>check( nf90_put_att(ncid, nf90_global, <span class="stringliteral">&quot;delx&quot;</span>, m_delx*rtod) )</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <span class="keyword">call </span>check( nf90_put_att(ncid, nf90_global, <span class="stringliteral">&quot;dely&quot;</span>, m_dely*rtod) )</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  <span class="keyword">call </span>check( nf90_put_att(ncid, nf90_global, <span class="stringliteral">&quot;delx&quot;</span>, m_delx*<a class="code" href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">rtod</a>) )</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  <span class="keyword">call </span>check( nf90_put_att(ncid, nf90_global, <span class="stringliteral">&quot;dely&quot;</span>, m_dely*<a class="code" href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">rtod</a>) )</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  <span class="keyword">call </span>check( nf90_put_att(ncid, nf90_global, <span class="stringliteral">&quot;lx&quot;</span>, lx) )</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;  <span class="keyword">call </span>check( nf90_put_att(ncid, nf90_global, <span class="stringliteral">&quot;ly&quot;</span>, ly) )</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;  <span class="keyword">call </span>check( nf90_put_att(ncid, nf90_global, <span class="stringliteral">&quot;a&quot;</span>, a) )</div>
@@ -273,8 +273,11 @@ $(document).ready(function(){initNavTree('regional__esg__grid_8f90_source.html',
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="ainterfacepesg_1_1hgrid__ak_html"><div class="ttname"><a href="interfacepesg_1_1hgrid__ak.html">pesg::hgrid_ak</a></div><div class="ttdef"><b>Definition:</b> <a href="pesg_8f90_source.html#l00048">pesg.f90:48</a></div></div>
+<div class="ttc" id="anamespacepietc_html"><div class="ttname"><a href="namespacepietc.html">pietc</a></div><div class="ttdoc">Some of the commonly used constants (pi etc) mainly for double-precision subroutines.</div><div class="ttdef"><b>Definition:</b> <a href="pietc_8f90_source.html#l00014">pietc.f90:14</a></div></div>
 <div class="ttc" id="anamespacepesg_html"><div class="ttname"><a href="namespacepesg.html">pesg</a></div><div class="ttdoc">Suite of routines to perform the 2-parameter family of Extended Schmidt Gnomonic (ESG) regional grid ...</div><div class="ttdef"><b>Definition:</b> <a href="pesg_8f90_source.html#l00015">pesg.f90:15</a></div></div>
 <div class="ttc" id="ainterfacepesg_1_1bestesg__geo_html"><div class="ttname"><a href="interfacepesg_1_1bestesg__geo.html">pesg::bestesg_geo</a></div><div class="ttdef"><b>Definition:</b> <a href="pesg_8f90_source.html#l00042">pesg.f90:42</a></div></div>
+<div class="ttc" id="anamespacepietc_html_a57d89085283cb2a7bfd9152324b4b463"><div class="ttname"><a href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">pietc::rtod</a></div><div class="ttdeci">real(dp), parameter rtod</div><div class="ttdoc">radians to degrees</div><div class="ttdef"><b>Definition:</b> <a href="pietc_8f90_source.html#l00055">pietc.f90:55</a></div></div>
+<div class="ttc" id="anamespacepietc_html_a0e5882b8de6720f66db6ce7dd8c2f856"><div class="ttname"><a href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">pietc::dtor</a></div><div class="ttdeci">real(dp), parameter dtor</div><div class="ttdoc">Degree to radians.</div><div class="ttdef"><b>Definition:</b> <a href="pietc_8f90_source.html#l00054">pietc.f90:54</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

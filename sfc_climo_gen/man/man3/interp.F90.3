@@ -1,0 +1,77 @@
+.TH "/home/ed/UFS_UTILS/sorc/sfc_climo_gen.fd/interp.F90" 3 "Tue Mar 9 2021" "Version 1.0.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/ed/UFS_UTILS/sorc/sfc_climo_gen.fd/interp.F90 \- Read the input source data and interpolate it to the model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBadjust_for_landice\fP (field, vegt, idim, jdim, field_ch)"
+.br
+.RI "Ensure consistent fields at land ice points Land ice is vegetation type 15 (variable landice)\&. "
+.ti -1c
+.RI "subroutine \fBinterp\fP (localpet, method, input_file)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Read the input source data and interpolate it to the model grid\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIinput_flle\fP filename of input source data\&. 
+.br
+\fIlocalpet\fP this mpi task 
+.br
+\fImethod\fP interpolation method\&.defined where mask=1 
+.RE
+.PP
+
+.PP
+Definition in file \fBinterp\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine adjust_for_landice (real(esmf_kind_r4), dimension(idim,jdim), intent(inout) field, real(esmf_kind_i4), dimension(idim,jdim), intent(in) vegt, integer, intent(in) idim, integer, intent(in) jdim, character(len=*), intent(in) field_ch)"
+
+.PP
+Ensure consistent fields at land ice points Land ice is vegetation type 15 (variable landice)\&. 
+.PP
+\fBAuthor\fP
+.RS 4
+George Gayno NCEP/EMC Usage: call adjust_for_landice(field, vegt, idim, jdim, field_ch) output is Model field 
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIfield\fP - Model field before adjustments for land ice\&. 
+.br
+\fIfield_ch\fP - Field name\&. 
+.br
+\fIi/jdim\fP - i/j dimension of model tile\&. 
+.br
+\fIvegt\fP - Vegetation type on the model tile\&. 
+.RE
+.PP
+
+.PP
+Definition at line 273 of file interp\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

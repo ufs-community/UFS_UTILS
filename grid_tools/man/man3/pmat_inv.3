@@ -1,0 +1,483 @@
+.TH "pmat::inv" 3 "Tue Mar 9 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat::inv
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcinvmt\fP (a)"
+.br
+.RI "Invert matrix\&. "
+.ti -1c
+.RI "subroutine \fBcinvmtf\fP (a, ff)"
+.br
+.RI "Routine cinvmtf to Invert and Permute\&. "
+.ti -1c
+.RI "subroutine \fBclinmmt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBclinmmtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBclinmvt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBclinmvtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdinvmt\fP (a)"
+.br
+.RI "Invert matrix\&. "
+.ti -1c
+.RI "subroutine \fBdinvmtf\fP (a, ff)"
+.br
+.RI "Routine dinvmtf to Invert and Permute\&. "
+.ti -1c
+.RI "subroutine \fBdlinmmt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdlinmmtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdlinmvt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdlinmvtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBiinvf\fP (imat, ff)"
+.br
+.RI "Invert integer square array, imat, if possible, but flag ff=\&.true\&. "
+.ti -1c
+.RI "subroutine \fBsinvmt\fP (a)"
+.br
+.RI "Invert matrix\&. "
+.ti -1c
+.RI "subroutine \fBsinvmtf\fP (a, ff)"
+.br
+.RI "Invert matrix (or flag if can't)\&. "
+.ti -1c
+.RI "subroutine \fBslinmmt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBslinmmtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBslinmvt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBslinmvtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 31 of file pmat\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat::inv::cinvmt (complex(dpc), dimension(:,:), intent(inout) a)\fC [private]\fP"
+
+.PP
+Invert matrix\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 104 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::cinvmtf (complex(dpc), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Routine cinvmtf to Invert and Permute\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIff\fP flag for error condition 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 191 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::clinmmt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 253 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::clinmmtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 314 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::clinmvt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 363 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::clinmvtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 421 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::dinvmt (real(dp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+
+.PP
+Invert matrix\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 93 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::dinvmtf (real(dp), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Routine dinvmtf to Invert and Permute\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIff\fP flag for error condition 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 154 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::dlinmmt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 241 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::dlinmmtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 290 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::dlinmvt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 350 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::dlinmvtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 399 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::iinvf (integer(spi), dimension(:,:), intent(inout) imat, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Invert integer square array, imat, if possible, but flag ff=\&.true\&. if not possible\&. (Determinant of imat must be +1 or -1
+.PP
+\fBParameters\fP
+.RS 4
+\fIimat\fP integer square array 
+.br
+\fIff\fP error flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 443 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::sinvmt (real(sp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+
+.PP
+Invert matrix\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 82 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::sinvmtf (real(sp), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Invert matrix (or flag if can't)\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIff\fP flag for error condition 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 116 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::slinmmt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 229 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::slinmmtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 266 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::slinmvt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 337 of file pmat\&.f90\&.
+.SS "subroutine pmat::inv::slinmvtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 377 of file pmat\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

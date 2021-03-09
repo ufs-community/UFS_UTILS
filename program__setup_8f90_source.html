@@ -114,11 +114,11 @@ $(document).ready(function(){initNavTree('program__setup_8f90_source.html',''); 
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; <span class="keywordtype">integer</span>, <span class="keywordtype">public</span>              :: halo = 0</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; <span class="keywordtype">public</span> :: <a class="code" href="namespaceprogram__setup.html#a34de94770b10be0f4975b63813ddbe8d">read_setup_namelist</a></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; <span class="keywordtype">public</span> :: <a class="code" href="namespaceprogram__setup.html#ac52f11da9f12e0cf9ff87fae136f0cde">read_setup_namelist</a></div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; <span class="keyword">contains</span></div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; <span class="keyword">subroutine </span><a class="code" href="namespaceprogram__setup.html#a34de94770b10be0f4975b63813ddbe8d">read_setup_namelist</a>(localpet)</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; <span class="keyword">subroutine </span><a class="code" href="namespaceprogram__setup.html#ac52f11da9f12e0cf9ff87fae136f0cde">read_setup_namelist</a>(localpet)</div>
 <div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="namespaceprogram__setup.html#ac52f11da9f12e0cf9ff87fae136f0cde">   93</a></span>&#160; </div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; <span class="keywordtype">use </span>mpi</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
@@ -153,13 +153,13 @@ $(document).ready(function(){initNavTree('program__setup_8f90_source.html',''); 
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; print*,<span class="stringliteral">&#39;- IOSTAT IS: &#39;</span>, ierr</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; <span class="keyword">call </span>mpi_abort(mpi_comm_world, 11, ierr)</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; <span class="keyword">end subroutine </span><a class="code" href="namespaceprogram__setup.html#a34de94770b10be0f4975b63813ddbe8d">read_setup_namelist</a></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; <span class="keyword">end subroutine </span><a class="code" href="namespaceprogram__setup.html#ac52f11da9f12e0cf9ff87fae136f0cde">read_setup_namelist</a></div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; <span class="keyword">end module </span><a class="code" href="namespaceprogram__setup.html">program_setup</a></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespaceprogram__setup_html_a34de94770b10be0f4975b63813ddbe8d"><div class="ttname"><a href="namespaceprogram__setup.html#a34de94770b10be0f4975b63813ddbe8d">program_setup::read_setup_namelist</a></div><div class="ttdeci">subroutine, public read_setup_namelist(filename)</div><div class="ttdoc">Reads program configuration namelist.</div><div class="ttdef"><b>Definition:</b> <a href="program__setup_8F90_source.html#l00153">program_setup.F90:153</a></div></div>
-<div class="ttc" id="anamespaceprogram__setup_html"><div class="ttname"><a href="namespaceprogram__setup.html">program_setup</a></div><div class="ttdoc">This module contains code to read the setup namelist file, handle the varmap file for GRIB2 data,...</div><div class="ttdef"><b>Definition:</b> <a href="program__setup_8F90_source.html#l00009">program_setup.F90:9</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html_ac52f11da9f12e0cf9ff87fae136f0cde"><div class="ttname"><a href="namespaceprogram__setup.html#ac52f11da9f12e0cf9ff87fae136f0cde">program_setup::read_setup_namelist</a></div><div class="ttdeci">subroutine, public read_setup_namelist(localpet)</div><div class="ttdoc">read setup namelist</div><div class="ttdef"><b>Definition:</b> <a href="program__setup_8f90_source.html#l00093">program_setup.f90:93</a></div></div>
+<div class="ttc" id="anamespaceprogram__setup_html"><div class="ttname"><a href="namespaceprogram__setup.html">program_setup</a></div><div class="ttdoc">This module reads in data from the program's configuration namelist.</div><div class="ttdef"><b>Definition:</b> <a href="program__setup_8f_source.html#l00015">program_setup.f:15</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

@@ -146,9 +146,9 @@ Private Member Functions</h2></td></tr>
 <p>xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">xs</td><td>polar stereographic map coordinates </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>cartesian </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>value of jacobian matrix, encoding distortion and metric </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xs</td><td>Stereographic map coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>Cartesian earth-centered 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Value of jacobian matrix, encoding distortion and metric </td></tr>
   </table>
   </dd>
 </dl>
@@ -209,10 +209,10 @@ Private Member Functions</h2></td></tr>
 <p>xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric. xcdd is the further derivative, wrt xs, of xcd.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">xs</td><td>polar stereographic map coordinates </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>cartesian </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>jacobian matrix, encoding distortion and metric </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcdd</td><td>further derivative, wrt xs, of xcd </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xs</td><td>Stereographic map coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>Cartesian earth-centered 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian matrix, encoding distortion and metric </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcdd</td><td>Further derivative, wrt xs, of xcd </td></tr>
   </table>
   </dd>
 </dl>

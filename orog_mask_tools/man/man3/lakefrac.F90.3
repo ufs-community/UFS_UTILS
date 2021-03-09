@@ -1,0 +1,63 @@
+.TH "/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/lake.fd/lakefrac.F90" 3 "Tue Mar 9 2021" "Version 1.0.0" "orog_mask_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/lake.fd/lakefrac.F90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcal_lake_frac_depth\fP (lakestat, cs_lakestat, lakedpth, cs_lakedpth)"
+.br
+.ti -1c
+.RI "program \fBlake_frac\fP"
+.br
+.ti -1c
+.RI "subroutine \fBnc_opchk\fP (stat, opname)"
+.br
+.ti -1c
+.RI "subroutine \fBread_cubed_sphere_grid\fP (res, grid)"
+.br
+.ti -1c
+.RI "subroutine \fBread_cubed_sphere_reg_grid\fP (res, grid, halo_depth, res_x, res_y)"
+.br
+.ti -1c
+.RI "subroutine \fBread_lakedata\fP (lakedata_path, lake_stat, lake_dpth, nlat, nlon)"
+.br
+.ti -1c
+.RI "subroutine \fBwrite_lakedata_to_orodata\fP (cs_res, cs_lakestat, cs_lakedpth)"
+.br
+.ti -1c
+.RI "subroutine \fBwrite_reg_lakedata_to_orodata\fP (cs_res, tile_x_dim, tile_y_dim, cs_lakestat, cs_lakedpth)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This program computes lake fraction and depth numbers for FV3 cubed sphere grid cells, from a high resolution lat/lon data set\&.
+.PP
+\fBAuthor\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+July 2018
+.RE
+.PP
+.IP "\(bu" 2
+Shan Sun, Aug\&. 2018: Added Caspian Sea and Aral Sea to the lake fraction and lake depth fields\&.
+.IP "\(bu" 2
+Shan Sun, Dec\&. 2018: Added round up and round down with respect to a numerical minimum value and a cut-off value, for lake fraction number\&.
+.IP "\(bu" 2
+Ning Wang, Apr\&. 2019: Extended the program to process the same lake data for FV3 stand-alone regional (SAR) model\&. 
+.PP
+
+.PP
+Definition in file \fBlakefrac\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for orog_mask_tools from the source code\&.

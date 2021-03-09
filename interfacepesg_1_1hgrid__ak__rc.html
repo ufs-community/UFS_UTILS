@@ -216,20 +216,20 @@ Private Member Functions</h2></td></tr>
 <p>If all goes well, return a lowered failure flag, ff=.false. . But if, for some reason, it is not possible to complete this task, return the raised failure flag, ff=.TRUE. .</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lx</td><td>x grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramname">ly</td><td>y grid index for left-lower corner of the grid at center </td></tr>
+    <tr><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
     <tr><td class="paramname">nx</td><td>numbers of the grid spaces in x </td></tr>
     <tr><td class="paramname">ny</td><td>numbers of the grid spaces in y </td></tr>
-    <tr><td class="paramname">a</td><td>parameters of an ESG mapping centered at (plat,plon) </td></tr>
-    <tr><td class="paramname">k</td><td>parameters of an ESG mapping centered at (plat,plon) </td></tr>
-    <tr><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramname">xc</td><td>unit cartesian vectors </td></tr>
-    <tr><td class="paramname">xcd</td><td>??? </td></tr>
-    <tr><td class="paramname">garea</td><td>rectangular array </td></tr>
+    <tr><td class="paramname">a</td><td>parameters of the ESG mapping centered at (plat,plon) </td></tr>
+    <tr><td class="paramname">k</td><td>parameters of the ESG mapping centered at (plat,plon) </td></tr>
+    <tr><td class="paramname">plat</td><td>latitude of the projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramname">plon</td><td>longitude of the projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramname">pazi</td><td>azimuth of orientation of mapping at its center </td></tr>
+    <tr><td class="paramname">delx</td><td>central x-spacing of the grid (in radians) </td></tr>
+    <tr><td class="paramname">dely</td><td>central y-spacing of the grid (in radians) </td></tr>
+    <tr><td class="paramname">xc</td><td>Earth-centered unit cartesian 3-vectors at each grid point </td></tr>
+    <tr><td class="paramname">xcd</td><td>Jacobian matrices, d(xc)/d(xm), at each grid point </td></tr>
+    <tr><td class="paramname">garea</td><td>rectangular array of grid-cell areas (steradians) </td></tr>
     <tr><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>

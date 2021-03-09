@@ -1,0 +1,96 @@
+.TH "grib2_util" 3 "Tue Mar 9 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+grib2_util \- Utilities for use when reading grib2 data\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBconvert_omega\fP (omega, p, t, q, clb, cub)"
+.br
+.RI "Convert omega to vertical velocity\&. "
+.ti -1c
+.RI "subroutine \fBrh2spfh\fP (rh_sphum, p, t)"
+.br
+.RI "Convert relative humidity to specific humidity\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Utilities for use when reading grib2 data\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine grib2_util::convert_omega (real(esmf_kind_r8), dimension(:,:,:), pointer omega, real(esmf_kind_r8), dimension(:,:,:), pointer p, real(esmf_kind_r8), dimension(:,:,:), pointer t, real(esmf_kind_r8), dimension(:,:,:), pointer q, integer, dimension(3) clb, integer, dimension(3) cub)"
+
+.PP
+Convert omega to vertical velocity\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIomega\fP on input, vertical velocity on output 
+.br
+\fIp\fP pressure 
+.br
+\fIt\fP temperature 
+.br
+\fIq\fP specific humidity 
+.br
+\fIclb\fP lower bounds of indices processed by this mpi task 
+.br
+\fIcub\fP upper bounds of indices processed by this mpi task 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Larissa Reames 
+.PP
+Jeff Beck 
+.RE
+.PP
+
+.PP
+Definition at line 64 of file grib2_util\&.F90\&.
+.PP
+Referenced by input_data::read_input_atm_grib2_file()\&.
+.SS "subroutine grib2_util::rh2spfh (real(esmf_kind_r4), dimension(i_input,j_input), intent(inout) rh_sphum, real(esmf_kind_r8), intent(in) p, real(esmf_kind_r8), dimension(i_input,j_input), intent(in) t)"
+
+.PP
+Convert relative humidity to specific humidity\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrh_sphum\fP rel humidity on input\&. spec hum on output\&. 
+.br
+\fIp\fP pressure in Pa 
+.br
+\fIt\fP temperature 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Larissa Reames 
+.PP
+Jeff Beck 
+.RE
+.PP
+
+.PP
+Definition at line 24 of file grib2_util\&.F90\&.
+.PP
+Referenced by input_data::read_input_atm_grib2_file()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

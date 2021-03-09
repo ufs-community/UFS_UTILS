@@ -1,0 +1,29 @@
+.TH "/home/ed/UFS_UTILS/sorc/sfc_climo_gen.fd/driver.F90" 3 "Tue Mar 9 2021" "Version 1.0.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/ed/UFS_UTILS/sorc/sfc_climo_gen.fd/driver.F90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "program \fBdriver\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Reads static surface data on a global lat/lon grid, interpolates the data to the fv3 model grid, and outputs the result in netcdf format\&.
+.PP
+Program execution is controlled by variables defined in the program configuration namelist (see module \fBprogram_setup\fP for details)\&.
+.PP
+Requires the following input files: 1) Model mosaic file (netcdf) 2) Model orography files (netcdf) 3) Model grid files (netcdf) 4) Source data file on global lat/lon grid (netcdf)
+.PP
+Outputs surface data on the model tiles in netcdf format\&. 
+.PP
+Definition in file \fBdriver\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

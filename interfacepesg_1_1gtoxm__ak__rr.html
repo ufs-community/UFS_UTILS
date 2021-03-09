@@ -194,16 +194,16 @@ Private Member Functions</h2></td></tr>
 <p>If the transformation is invalid, return a .true. failure flag.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lat</td><td>radian latitude </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lon</td><td>radian longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>radians latitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>radians longitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Azimuth of mapping orientation at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lat</td><td>radians latitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lon</td><td>radians longitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>2-vector map space image in center-relative grid units </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -296,12 +296,12 @@ Private Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lat</td><td>radian latitude </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lon</td><td>radian longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>radians latitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>radians longitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Aximuth of mapping orientation at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lat</td><td>radians latitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lon</td><td>radians longitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>2-vector center-relative map-space image of mapped point </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>

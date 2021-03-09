@@ -91,20 +91,253 @@ $(document).ready(function(){initNavTree('interfacepmat2_1_1dfco.html',''); init
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a62df06d29c8e7a91bfe9130140a7e7cf"><td class="memItemLeft" align="right" valign="top"><a id="a62df06d29c8e7a91bfe9130140a7e7cf"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>dfco</b> (na, nb, za, zb, z0, a, b)</td></tr>
+<tr class="memitem:a62df06d29c8e7a91bfe9130140a7e7cf"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1dfco.html#a62df06d29c8e7a91bfe9130140a7e7cf">dfco</a> (na, nb, za, zb, z0, a, b)</td></tr>
+<tr class="memdesc:a62df06d29c8e7a91bfe9130140a7e7cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A.d = B.c (*) In either case, d is the derivative of c.  <a href="interfacepmat2_1_1dfco.html#a62df06d29c8e7a91bfe9130140a7e7cf">More...</a><br /></td></tr>
 <tr class="separator:a62df06d29c8e7a91bfe9130140a7e7cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf188e9442e31d38463ffa9496e51591"><td class="memItemLeft" align="right" valign="top"><a id="acf188e9442e31d38463ffa9496e51591"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>ddfco</b> (na, nb, za, zb, z0, a, b)</td></tr>
+<tr class="memitem:acf188e9442e31d38463ffa9496e51591"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1dfco.html#acf188e9442e31d38463ffa9496e51591">ddfco</a> (na, nb, za, zb, z0, a, b)</td></tr>
+<tr class="memdesc:acf188e9442e31d38463ffa9496e51591"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1dfco.html#acf188e9442e31d38463ffa9496e51591">More...</a><br /></td></tr>
 <tr class="separator:acf188e9442e31d38463ffa9496e51591"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaef7322a836c43b168e52e72218d5454"><td class="memItemLeft" align="right" valign="top"><a id="aaef7322a836c43b168e52e72218d5454"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>tdfco</b> (xa, xb, a, b)</td></tr>
+<tr class="memitem:aaef7322a836c43b168e52e72218d5454"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1dfco.html#aaef7322a836c43b168e52e72218d5454">tdfco</a> (xa, xb, a, b)</td></tr>
+<tr class="memdesc:aaef7322a836c43b168e52e72218d5454"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1dfco.html#aaef7322a836c43b168e52e72218d5454">More...</a><br /></td></tr>
 <tr class="separator:aaef7322a836c43b168e52e72218d5454"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00035">35</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
-</div><hr/>The documentation for this interface was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00057">57</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a62df06d29c8e7a91bfe9130140a7e7cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62df06d29c8e7a91bfe9130140a7e7cf">&#9670;&nbsp;</a></span>dfco()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine pmat2::dfco::dfco </td>
+          <td>(</td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>na</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>nb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(sp), dimension(na), intent(in)&#160;</td>
+          <td class="paramname"><em>za</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(sp), dimension(nb), intent(in)&#160;</td>
+          <td class="paramname"><em>zb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(sp), intent(in)&#160;</td>
+          <td class="paramname"><em>z0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(sp), dimension(na), intent(out)&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(sp), dimension(nb), intent(out)&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A.d = B.c (*) In either case, d is the derivative of c. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">na</td><td>number of d-points operated on by this row of the A of (*) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nb</td><td>number of c-points operated on by this row of the B of (*) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">za</td><td>coordinates of d-points used in this row of (*) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zb</td><td>coordinates of c-points used in this row of (*) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">z0</td><td>nominal point of application of this row of (*) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>the A-coefficients for this scheme </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">B</td><td>the B-coefficients for this scheme </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00190">190</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function/Subroutine Documentation</h2>
+<a id="acf188e9442e31d38463ffa9496e51591"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf188e9442e31d38463ffa9496e51591">&#9670;&nbsp;</a></span>ddfco()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine pmat2::dfco::ddfco </td>
+          <td>(</td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>na</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>nb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(na), intent(in)&#160;</td>
+          <td class="paramname"><em>za</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(nb), intent(in)&#160;</td>
+          <td class="paramname"><em>zb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>z0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(na), intent(out)&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(nb), intent(out)&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>??? </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">na</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nb</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">za</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zb</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">z0</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>??? </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00225">225</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+
+</div>
+</div>
+<a id="aaef7322a836c43b168e52e72218d5454"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaef7322a836c43b168e52e72218d5454">&#9670;&nbsp;</a></span>tdfco()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine pmat2::dfco::tdfco </td>
+          <td>(</td>
+          <td class="paramtype">real(dp), dimension(:), intent(in)&#160;</td>
+          <td class="paramname"><em>xa</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(:), intent(in)&#160;</td>
+          <td class="paramname"><em>xb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(:), intent(out)&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(:), intent(out)&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>??? </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xa</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xb</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>??? </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00257">257</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this interface was generated from the following file:<ul>
 <li>/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/<a class="el" href="pmat2_8f90_source.html">pmat2.f90</a></li>
 </ul>
 </div><!-- contents -->
@@ -112,7 +345,7 @@ subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>tdfco</b> (xa, 
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>pmat2</b></li><li class="navelem"><a class="el" href="interfacepmat2_1_1dfco.html">dfco</a></li>
+    <li class="navelem"><a class="el" href="namespacepmat2.html">pmat2</a></li><li class="navelem"><a class="el" href="interfacepmat2_1_1dfco.html">dfco</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

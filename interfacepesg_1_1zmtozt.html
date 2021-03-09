@@ -157,11 +157,11 @@ Private Member Functions</h2></td></tr>
 <p>Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd, for positive and negative A and for the limiting case, A --&gt; 0. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zm</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">zt</td><td>function to be evaluated </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ztd</td><td>derivative of the source function </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Mapping parameter controlling grid line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zm</td><td>Scalar value of single map plane coordinate </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">zt</td><td>Scalar value of single gnomonic plane coordinate </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ztd</td><td>Derivative of gnomonic coordinate, d(zt)/d(zm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
@@ -239,13 +239,13 @@ Private Member Functions</h2></td></tr>
 <p>Like zmtozt, but also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zm</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zt</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ztd</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zt1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ztd1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Mapping parameter controlling grid line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zm</td><td>Single map plane coordinate </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zt</td><td>Single gnomonic plane coordinate </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ztd</td><td>Derivative wrt zm of zt, d(zt)/d(zm) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zt1</td><td>Derivative wrt a of zt, d(zt)/da </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ztd1</td><td>Derivative wrt a of ztd, d^2(zt)/(d(zm)da) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>

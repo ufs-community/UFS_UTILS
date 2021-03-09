@@ -1,0 +1,170 @@
+.TH "program_setup" 3 "Tue Mar 9 2021" "Version 1.0.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+program_setup \- program setup  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBread_setup_namelist\fP (localpet)"
+.br
+.RI "read setup namelist "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, public \fBhalo\fP = 0"
+.br
+.ti -1c
+.RI "character(len=500), public \fBinput_facsf_file\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=500), public \fBinput_leaf_area_index_file\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=500), public \fBinput_maximum_snow_albedo_file\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=500), public \fBinput_slope_type_file\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=500), public \fBinput_snowfree_albedo_file\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=500), public \fBinput_soil_type_file\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=500), public \fBinput_substrate_temperature_file\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=500), public \fBinput_vegetation_greenness_file\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=500), public \fBinput_vegetation_type_file\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=50), public \fBleaf_area_index_method\fP ='bilinear'"
+.br
+.ti -1c
+.RI "character(len=50), public \fBmaximum_snow_albedo_method\fP ='bilinear'"
+.br
+.ti -1c
+.RI "character(len=500), public \fBmosaic_file_mdl\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=500), public \fBorog_dir_mdl\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=500), dimension(6), public \fBorog_files_mdl\fP = 'NULL'"
+.br
+.ti -1c
+.RI "character(len=50), public \fBsnowfree_albedo_method\fP ='bilinear'"
+.br
+.ti -1c
+.RI "character(len=50), public \fBvegetation_greenness_method\fP ='bilinear'"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+program setup 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018
+.RE
+.PP
+Set up program execution
+.SS "Public Subroutines:"
+.IP "\(bu" 2
+read_setup_namelist Reads configuration namelist
+.PP
+.SS "Public variables:"
+Here 'input' indicates variables associated with the input source data and 'mdl' indicates variables associated with the fv3 model grid\&.
+.PP
+To not process a surface field, set its 'input_file' variable to NULL\&. However, vegetation type must always be processed as it defines landice points\&.
+.PP
+.IP "\(bu" 2
+halo Number of row/cols defining the lateral boundary halo\&. Used for regionanl nests\&.
+.IP "\(bu" 2
+input_facsf_file File containing input fractional coverage data for strong zenith angle dependent albedo\&.
+.IP "\(bu" 2
+input_vegetation_greenness_ File containing input vegetation
+.IP "\(bu" 2
+file greenness data\&.
+.IP "\(bu" 2
+input_leaf_area_index_file File containing input leaf area index 
+.br
+ data\&.
+.IP "\(bu" 2
+input_maximum_snow_albedo_file File containing input maximum snow albedo data\&.
+.IP "\(bu" 2
+input_snowfree_albedo_file File containing input snow-free albedo data\&.
+.IP "\(bu" 2
+input_soil_type_file File containing input soil type data\&.
+.IP "\(bu" 2
+input_slope_type_file File containing input slope type data\&.
+.IP "\(bu" 2
+input_substrate_temperature_file File containing input soil substrate temperature data\&.
+.IP "\(bu" 2
+input_vegetation_type_file File containing input vegetation type data\&.
+.IP "\(bu" 2
+leaf_area_index_method Interpolation method for leaf area index\&. Conservative or bilinear (default)\&.
+.IP "\(bu" 2
+maximum snow albedo_method Interpolation method for max snow albedo\&. Conservative or bilinear (default)\&.
+.IP "\(bu" 2
+mosaic_file_mdl Model grid mosaic file
+.IP "\(bu" 2
+orog_dir_mdl Directory containing the model grid orography files\&.
+.IP "\(bu" 2
+orog_files_mdl Model grid orography filenames\&.
+.IP "\(bu" 2
+snowfree_albedo_method Interpolation method for snowfree albedo\&. Conservative or bilinear (default)\&.
+.IP "\(bu" 2
+vegetation_greenness_ Interpolation method for vegetation
+.IP "\(bu" 2
+method greenness\&. Conservative or bilinear\&. Default is bilinear\&. 
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public program_setup::read_setup_namelist (integer, intent(in) localpet)"
+
+.PP
+read setup namelist 
+.PP
+\fBAuthor\fP
+.RS 4
+gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018
+.RE
+.PP
+Read program setup namelist
+.PP
+\fBParameters\fP
+.RS 4
+\fIlocalpet\fP mpi task number 
+.RE
+.PP
+
+.PP
+Definition at line 93 of file program_setup\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

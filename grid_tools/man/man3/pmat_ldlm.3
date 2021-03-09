@@ -1,0 +1,129 @@
+.TH "pmat::ldlm" 3 "Tue Mar 9 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat::ldlm
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBdldlm\fP (a, b, d)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdldlmf\fP (a, b, d, ff)"
+.br
+.RI "Modified Cholesky Q --> L*D*U, U(i,j)=L(j,i) "
+.ti -1c
+.RI "subroutine \fBsldlm\fP (a, b, d)"
+.br
+.RI "Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) "
+.ti -1c
+.RI "subroutine \fBsldlmf\fP (a, b, d, ff)"
+.br
+.RI "Modified Cholesky decompose Q --> L*D*U\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 38 of file pmat\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat::ldlm::dldlm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, real(dp), dimension(:), intent(out) d)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.br
+\fId\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1006 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldlm::dldlmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, real(dp), dimension(:), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Modified Cholesky Q --> L*D*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.br
+\fId\fP matrix 
+.br
+\fIff\fP error flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1059 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldlm::sldlm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, real(sp), dimension(:), intent(out) d)\fC [private]\fP"
+
+.PP
+Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.br
+\fId\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 991 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldlm::sldlmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, real(sp), dimension(:), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Modified Cholesky decompose Q --> L*D*U\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.br
+\fId\fP matrix 
+.br
+\fIff\fP error flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1022 of file pmat\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

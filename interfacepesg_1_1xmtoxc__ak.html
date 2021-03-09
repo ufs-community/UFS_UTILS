@@ -167,12 +167,12 @@ Private Member Functions</h2></td></tr>
 <p>If for any reason the mapping cannot be done, return a raised failure flag, FF.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">a</td><td>ESG mapping parameterization </td></tr>
-    <tr><td class="paramname">k</td><td>ESG mapping parameterization </td></tr>
-    <tr><td class="paramname">xm</td><td>map-space vector </td></tr>
-    <tr><td class="paramname">xm</td><td>derivative </td></tr>
-    <tr><td class="paramname">xcd</td><td>jacobian matrix </td></tr>
-    <tr><td class="paramname">ff</td><td>error flag </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>ESG mapping parameter for line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>ESG mapping parameter for Gauss curvature in Schmidt mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>map-space 2-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>Earth-centered cartesian unit 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian matrix, d(xc)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
@@ -238,11 +238,11 @@ Private Member Functions</h2></td></tr>
 <p>Assuming the vector AK parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping with parameter vector, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, the Jacobian matrix, xcd. </p>
 <p>If for any reason the mapping cannot be done, return a raised failure flag,z FF. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ak</td><td>parameterization of the Extended ESG </td></tr>
-    <tr><td class="paramname">xm</td><td>vector </td></tr>
-    <tr><td class="paramname">xc</td><td></td></tr>
-    <tr><td class="paramname">xcd</td><td></td></tr>
-    <tr><td class="paramname">ff</td><td>raised failure error code </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ak</td><td>2-vector parameterization of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>2-vector of map plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>Earth-centered cartesian unit 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian, d(xc)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
@@ -319,13 +319,13 @@ Private Member Functions</h2></td></tr>
 <p>Like xmtoxc_vak, _ak, but also return derivatives wrt ak. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir"></td><td class="paramname">ak</td><td>derivatives wrt ak </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xc1</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcd1</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ak</td><td>2-vector parameterization of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>2-vector of map plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>Earth-centered cartesian unit 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian of xc wrt xm, d(xc)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc1</td><td>Partial derivatives wrt ak of xc, d(xc)/d(ak) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd1</td><td>Second derivative wrt xm and ak of xc, d^2(xc)/(d(xm)d(ak)) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>

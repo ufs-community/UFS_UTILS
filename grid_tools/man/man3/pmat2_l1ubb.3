@@ -1,0 +1,101 @@
+.TH "pmat2::l1ubb" 3 "Tue Mar 9 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat2::l1ubb
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBl1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
+.ti -1c
+.RI "subroutine \fBdl1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "??? "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 66 of file pmat2\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat2::l1ubb::l1ubb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a, real(sp), dimension(m,\-mbh1:mbh2), intent(inout) b)\fC [private]\fP"
+
+.PP
+Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP input as band matrix, output as lower and upper triangulars with 1s implicitly assumed to lie on the main diagonal\&. The product of these triangular matrices is [D**-1]*[A], where [D] is a diagonal matrix\&. 
+.br
+\fIb\fP in as band matrix, out as same but premultiplied by diagonal [D**-1] 
+.br
+\fIm\fP Number of rows of A and B 
+.br
+\fImah1\fP left half-width of fortran array A 
+.br
+\fImah2\fP right half-width of fortran array A 
+.br
+\fImbh1\fP left half-width of fortran array B 
+.br
+\fImbh2\fP right half-width of fortran array B 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.PP
+Definition at line 715 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::l1ubb::dl1ubb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a, real(dp), dimension(m,\-mbh1:mbh2), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIm\fP ??? 
+.br
+\fImah1\fP ??? 
+.br
+\fImah2\fP ??? 
+.br
+\fImbh1\fP ??? 
+.br
+\fImbh2\fP ??? 
+.br
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 752 of file pmat2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

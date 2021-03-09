@@ -1,0 +1,311 @@
+.TH "/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pmat2.f90" 3 "Tue Mar 9 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pmat2.f90 \- Routines dealing with the operations of banded matrices\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBpmat2::avco\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::cad1b\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::cad2b\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::clipb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::csb1b\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::csb2b\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::dfco\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::dfco2\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::l1ubb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::l1ueb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::ldltb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::ldub\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::linbv\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::ltdlbv\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::u1lbv\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::u1lbx\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::u1lby\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::u1lvb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::u1lxb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::u1lyb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::udlb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::udlbv\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::udlbx\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::udlby\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::udlvb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::udlxb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::udlyb\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat2::wrtb\fP"
+.br
+.in -1c
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBpmat2\fP"
+.br
+.RI "Routines dealing with the operations of banded matrices\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBpmat2::avco\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "Compute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A\&.t = B\&.s (*) Where s is the vector of 'source' values, t the staggered 'target' values\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::cad1b\fP (m1, mah1, mah2, mirror2, a)"
+.br
+.RI "Incorporate operand symmetry near end-1 of a band matrix operator\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::cad2b\fP (m1, m2, mah1, mah2, mirror2, a)"
+.br
+.RI "Incorporate operand symmetry near end-2 of a band matrix operator\&. "
+.ti -1c
+.RI "pure subroutine \fBpmat2::clib\fP (m1, m2, mah1, mah2, a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "pure subroutine \fBpmat2::clib_c\fP (m1, m2, mah1, mah2, a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "pure subroutine \fBpmat2::clib_d\fP (m1, m2, mah1, mah2, a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine, public \fBpmat2::csb1b\fP (m1, mah1, mah2, mirror2, a)"
+.br
+.RI "Like \fBcad1b\fP, but for antisymmetric operand\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::csb2b\fP (m1, m2, mah1, mah2, mirror2, a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat2::davco\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat2::ddfco\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat2::ddfco2\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine, public \fBpmat2::dfco\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative of c\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::dfco2\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "Compute one row of the coefficients for either the compact second- differencing scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) Where d is the second-derivative of c\&. "
+.ti -1c
+.RI "subroutine \fBpmat2::dl1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat2::dl1ueb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat2::dldltb\fP (m, mah1, a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat2::dldub\fP (m, mah1, mah2, a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat2::dltdlbv\fP (m, mah1, a, v)"
+.br
+.RI "Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) "
+.ti -1c
+.RI "subroutine \fBpmat2::dudlb\fP (m, mah1, mah2, a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat2::dudlbv\fP (m, mah1, mah2, a, v)"
+.br
+.RI "Back-substitution step of linear inversion involving banded matrix and Vector\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::l1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::l1ueb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::ldltb\fP (m, mah1, a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine, public \fBpmat2::ldub\fP (m, mah1, mah2, a)"
+.br
+.RI "Compute [L]*[D**-1]*[U] decomposition of asymmetric band-matrix\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::linbv\fP (m, mah1, mah2, a, v)"
+.br
+.RI "Solve LINear system with square Banded-matrix and vector V\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::ltdlbv\fP (m, mah1, a, v)"
+.br
+.RI "Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) "
+.ti -1c
+.RI "subroutine \fBpmat2::tavco\fP (xa, xb, a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat2::tdfco\fP (xa, xb, a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat2::tdfco2\fP (xa, xb, a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine, public \fBpmat2::u1lbv\fP (m, mah1, mah2, a, v)"
+.br
+.RI "BACk-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::u1lbx\fP (mx, mah1, mah2, my, a, v)"
+.br
+.RI "Special BaCk-substitution step of parallel linear inversion involving Banded matrix and X-right-Vectors\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::u1lby\fP (my, mah1, mah2, mx, a, v)"
+.br
+.RI "Special BaCk-substitution step of parallel linear inversion involving Banded matrix and Y-right-Vectors\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::u1lvb\fP (m, mah1, mah2, v, a)"
+.br
+.RI "Special BaCk-substitution step of linear inversion involving left-Vector and Banded matrix\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::u1lxb\fP (mx, mah1, mah2, my, v, a)"
+.br
+.RI "Special BaCk-substitution step of parallel linear inversion involving Banded matrix and X-left-Vectors\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::u1lyb\fP (my, mah1, mah2, mx, v, a)"
+.br
+.RI "Special BaCk-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::udlb\fP (m, mah1, mah2, a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine, public \fBpmat2::udlbv\fP (m, mah1, mah2, a, v)"
+.br
+.RI "Back-substitution step of linear inversion involving banded matrix and Vector\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::udlbx\fP (mx, mah1, mah2, my, a, v)"
+.br
+.RI "Back-substitution step of parallel linear inversion involving Banded matrix and X-Vectors\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::udlby\fP (my, mah1, mah2, mx, a, v)"
+.br
+.RI "Back-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::udlvb\fP (m, mah1, mah2, v, a)"
+.br
+.RI "Back-substitution step of linear inversion involving row-Vector and Banded matrix\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::udlxb\fP (mx, mah1, mah2, my, v, a)"
+.br
+.RI "Back-substitution step of parallel linear inversion involving Banded matrix and row-X-Vectors\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::udlyb\fP (my, mah1, mah2, mx, v, a)"
+.br
+.RI "BACk-substitution step of parallel linear inversion involving Banded matrix and row-Y-Vectors\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat2::wrtb\fP (m1, m2, mah1, mah2, a)"
+.br
+.RI "??? "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "real(dp), parameter \fBpmat2::zero\fP =0"
+.br
+.RI "??? "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Routines dealing with the operations of banded matrices\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1994/1999 
+.RE
+.PP
+
+.PP
+Definition in file \fBpmat2\&.f90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

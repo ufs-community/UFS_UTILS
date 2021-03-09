@@ -1,0 +1,95 @@
+.TH "machine" 3 "Tue Mar 9 2021" "Version 1.0.0" "global_cycle" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+machine \- Holds machine dependent constants for global_cycle\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, parameter \fBkind_dbl_prec\fP = 8"
+.br
+.ti -1c
+.RI "integer, parameter \fBkind_evod\fP = 8"
+.br
+.ti -1c
+.RI "integer, parameter \fBkind_integer\fP = 4"
+.br
+.RI "-,,- "
+.ti -1c
+.RI "integer, parameter \fBkind_io4\fP = 4"
+.br
+.ti -1c
+.RI "integer, parameter \fBkind_io8\fP = 8"
+.br
+.ti -1c
+.RI "integer, parameter \fBkind_ior\fP = 8"
+.br
+.ti -1c
+.RI "integer, parameter \fBkind_phys\fP = selected_real_kind(13, 60)"
+.br
+.RI "the '60' maps to 64-bit real "
+.ti -1c
+.RI "integer, parameter \fBkind_rad\fP = selected_real_kind(13, 60)"
+.br
+.RI "the '60' maps to 64-bit real "
+.ti -1c
+.RI "integer, parameter \fBkind_real\fP = 8"
+.br
+.RI "used in cmp_comm "
+.ti -1c
+.RI "real(kind=kind_evod), parameter \fBmprec\fP = 1\&.e\-12"
+.br
+.RI "machine precision to restrict dep "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Holds machine dependent constants for global_cycle\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Mark Iredell NOAA/EMC 
+.RE
+.PP
+
+.SH "Variable Documentation"
+.PP 
+.SS "integer, parameter machine::kind_integer = 4"
+
+.PP
+-,,- 
+.PP
+Definition at line 20 of file machine\&.f90\&.
+.SS "integer, parameter machine::kind_phys = selected_real_kind(13, 60)"
+
+.PP
+the '60' maps to 64-bit real 
+.PP
+Definition at line 18 of file machine\&.f90\&.
+.SS "integer, parameter machine::kind_rad = selected_real_kind(13, 60)"
+
+.PP
+the '60' maps to 64-bit real 
+.PP
+Definition at line 17 of file machine\&.f90\&.
+.SS "integer, parameter machine::kind_real = 8"
+
+.PP
+used in cmp_comm 
+.PP
+Definition at line 19 of file machine\&.f90\&.
+.SS "real(kind=kind_evod), parameter machine::mprec = 1\&.e\-12"
+
+.PP
+machine precision to restrict dep 
+.PP
+Definition at line 22 of file machine\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for global_cycle from the source code\&.

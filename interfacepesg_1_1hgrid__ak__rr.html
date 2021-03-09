@@ -219,20 +219,20 @@ Private Member Functions</h2></td></tr>
 <p>If all goes well, return a lowered failure flag, ff=.false. . But if, for some reason, it is not possible to complete this task, return the raised failure flag, ff=.TRUE. .</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>grid index location </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>grid index location </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>grid spaces </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>grid spaces </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>parameters of an ESG mapping centered at (plat,plon) </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">K</td><td>parameters of an ESG mapping centered at (plat,plon) </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude center point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude center point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>grid points for latitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>grid points for longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>rectangular array </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative grid index in x of left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative grid index in y of lower edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>number of grid spaces in x </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>number of grid spaces in y </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>parameter of the ESG mapping centered at (plat,plon) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">K</td><td>parameter of the ESG mapping centered at (plat,plon) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude of projection center of mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude of projection center of mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>azimuth of orientation of mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>grid points' latitudes </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>grid points' longitudes </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>array of grid-cell areas (steradians) </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -386,24 +386,24 @@ Private Member Functions</h2></td></tr>
 <p>if all goes well, return a .FALSE. failure flag, ff. If, for some reason, it is not possible to complete this task, return the failure flag as .TRUE.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>x grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>y grid index for left-lower corner of the grid at center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>numbers of the grid spaces in x </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>numbers of the grid spaces in y </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Extended Schmidt Gnomonic parameter </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>Extended Schmidt Gnomonic parameter </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>grid points for latitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>grid points for longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>rectangular array </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dx</td><td>estimated grid steps x grid cell edges </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dy</td><td>estimated grid steps y grid cell edges </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">angle_dx</td><td>x angles relative to local east and north </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">angle_dy</td><td>y angles relative to local east and north </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude of the projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude of the projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>azimuth of the orientation of the mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>grid points' latitudes (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>grid points' longitudes (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>array of grid-cell areas (steradians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dx</td><td>grid steps in x at grid cell edges (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dy</td><td>grid steps in y at grid cell edges (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">angle_dx</td><td>x angles relative to local east (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">angle_dy</td><td>y angles relative to local north (radians) </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>

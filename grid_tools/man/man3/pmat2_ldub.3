@@ -1,0 +1,96 @@
+.TH "pmat2::ldub" 3 "Tue Mar 9 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat2::ldub
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBldub\fP (m, mah1, mah2, a)"
+.br
+.RI "Compute [L]*[D**-1]*[U] decomposition of asymmetric band-matrix\&. "
+.ti -1c
+.RI "subroutine \fBdldub\fP (m, mah1, mah2, a)"
+.br
+.RI "??? "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 64 of file pmat2\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat2::ldub::ldub (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+
+.PP
+Compute [L]*[D**-1]*[U] decomposition of asymmetric band-matrix\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP input as the asymmetric band matrix\&. On output, it contains the [L]*[D**-1]*[U] factorization of the input matrix, where
+.IP "\(bu" 2
+[L] is lower triangular with unit main diagonal
+.IP "\(bu" 2
+[D] is a diagonal matrix
+.IP "\(bu" 2
+[U] is upper triangular with unit main diagonal 
+.PP
+.br
+\fIm\fP The number of rows of array A 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 532 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::ldub::dldub (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIm\fP ??? 
+.br
+\fImah1\fP ??? 
+.br
+\fImah2\fP ??? 
+.br
+\fIa\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 568 of file pmat2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

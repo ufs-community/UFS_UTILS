@@ -1,0 +1,147 @@
+.TH "/home/ed/UFS_UTILS/sorc/sfc_climo_gen.fd/source_grid.F90" 3 "Tue Mar 9 2021" "Version 1.0.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/ed/UFS_UTILS/sorc/sfc_climo_gen.fd/source_grid.F90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBsource_grid::define_source_grid\fP (localpet, npets, input_file)"
+.br
+.RI "define source grid "
+.ti -1c
+.RI "subroutine, public \fBsource_grid::source_grid_cleanup\fP"
+.br
+.RI "source grid cleanup "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, dimension(:), allocatable, public \fBsource_grid::day_of_rec\fP"
+.br
+.ti -1c
+.RI "character(len=50), dimension(:), allocatable, public \fBsource_grid::field_names\fP"
+.br
+.ti -1c
+.RI "type(esmf_grid), public \fBsource_grid::grid_src\fP"
+.br
+.ti -1c
+.RI "integer, public \fBsource_grid::i_src\fP"
+.br
+.ti -1c
+.RI "integer, public \fBsource_grid::j_src\fP"
+.br
+.ti -1c
+.RI "integer, public \fBsource_grid::num_fields\fP"
+.br
+.ti -1c
+.RI "integer, public \fBsource_grid::num_records\fP"
+.br
+.ti -1c
+.RI "integer, public \fBsource_grid::num_time_recs\fP"
+.br
+.ti -1c
+.RI "character(len=75), public \fBsource_grid::source\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor\fP
+.RS 4
+gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018
+.RE
+.PP
+Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&. Also, sets up the ESMF grid object for the source grid\&. Source grid is assumed to be global lat/lon\&.
+.SS "Public Subroutines:"
+.IP "\(bu" 2
+\fBdefine_source_grid()\fP Defines esmf grid object for source grid\&. Retrieves date and field information from source file\&.
+.IP "\(bu" 2
+\fBsource_grid_cleanup()\fP Free up memory used in this module\&.
+.PP
+.SS "Public variables:"
+.IP "\(bu" 2
+day_of_rec Day of each time record with respect to Jan 1\&.
+.IP "\(bu" 2
+field_names Names of fields to be processed\&.
+.IP "\(bu" 2
+grid_src ESMF grid object for the source grid\&.
+.IP "\(bu" 2
+i_src i/j dimensions of the source grid\&.
+.IP "\(bu" 2
+j_src i/j dimensions of the source grid\&.
+.IP "\(bu" 2
+num_fields Number of fields in the file\&. Some files have more than one (ex: the 4-component albedo)\&.
+.IP "\(bu" 2
+num_records Number of fields times time records\&.
+.IP "\(bu" 2
+num_time_recs Number of time records\&.
+.IP "\(bu" 2
+source Original source of the data\&. 
+.PP
+
+.PP
+Definition in file \fBsource_grid\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public source_grid::define_source_grid (integer, intent(in) localpet, integer, intent(in) npets, character(len=*), intent(in) input_file)"
+
+.PP
+define source grid 
+.PP
+\fBAuthor\fP
+.RS 4
+gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018
+.RE
+.PP
+Read date information from input source data file\&. Create esmf grid object for the source grid\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIlocalpet\fP mpi task number 
+.br
+\fInpets\fP total number mpi tasks 
+.br
+\fIinput_file\fP file containing the source grid data\&. 
+.RE
+.PP
+
+.PP
+Definition at line 67 of file source_grid\&.F90\&.
+.SS "subroutine, public source_grid::source_grid_cleanup"
+
+.PP
+source grid cleanup 
+.PP
+\fBAuthor\fP
+.RS 4
+gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018
+.RE
+.PP
+Free up memory associated with this module\&. 
+.PP
+Definition at line 400 of file source_grid\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

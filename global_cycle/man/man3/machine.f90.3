@@ -1,0 +1,73 @@
+.TH "/home/ed/UFS_UTILS/sorc/global_cycle.fd/machine.f90" 3 "Tue Mar 9 2021" "Version 1.0.0" "global_cycle" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/ed/UFS_UTILS/sorc/global_cycle.fd/machine.f90 \- Holds machine dependent constants for global_cycle\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBmachine\fP"
+.br
+.RI "Holds machine dependent constants for global_cycle\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, parameter \fBmachine::kind_dbl_prec\fP = 8"
+.br
+.ti -1c
+.RI "integer, parameter \fBmachine::kind_evod\fP = 8"
+.br
+.ti -1c
+.RI "integer, parameter \fBmachine::kind_integer\fP = 4"
+.br
+.RI "-,,- "
+.ti -1c
+.RI "integer, parameter \fBmachine::kind_io4\fP = 4"
+.br
+.ti -1c
+.RI "integer, parameter \fBmachine::kind_io8\fP = 8"
+.br
+.ti -1c
+.RI "integer, parameter \fBmachine::kind_ior\fP = 8"
+.br
+.ti -1c
+.RI "integer, parameter \fBmachine::kind_phys\fP = selected_real_kind(13, 60)"
+.br
+.RI "the '60' maps to 64-bit real "
+.ti -1c
+.RI "integer, parameter \fBmachine::kind_rad\fP = selected_real_kind(13, 60)"
+.br
+.RI "the '60' maps to 64-bit real "
+.ti -1c
+.RI "integer, parameter \fBmachine::kind_real\fP = 8"
+.br
+.RI "used in cmp_comm "
+.ti -1c
+.RI "real(kind=kind_evod), parameter \fBmachine::mprec\fP = 1\&.e\-12"
+.br
+.RI "machine precision to restrict dep "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Holds machine dependent constants for global_cycle\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Mark Iredell NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBmachine\&.f90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for global_cycle from the source code\&.

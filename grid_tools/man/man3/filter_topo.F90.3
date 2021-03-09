@@ -1,0 +1,96 @@
+.TH "/home/ed/UFS_UTILS/sorc/grid_tools.fd/filter_topo.fd/filter_topo.F90" 3 "Tue Mar 9 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/ed/UFS_UTILS/sorc/grid_tools.fd/filter_topo.fd/filter_topo.F90
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <netcdf\&.inc>\fP
+.br
+
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcart_to_latlon\fP (np, q, xs, ys)"
+.br
+.ti -1c
+.RI "subroutine \fBcell_center2\fP (q1, q2, q3, q4, e2)"
+.br
+.ti -1c
+.RI "subroutine \fBcheck\fP (status)"
+.br
+.ti -1c
+.RI "subroutine \fBcompute_filter_constants\fP"
+.br
+.ti -1c
+.RI "real function \fBcos_angle\fP (p1, p2, p3)"
+.br
+.ti -1c
+.RI "subroutine \fBdel2_cubed_sphere\fP (is, ie, js, je, isd, ied, jsd, jed, npx, npy, ntiles, q, area, dx, dy, dxc, dyc, sin_sg, nmax, cd, zero_ocean, mask, nested, regional)"
+.br
+.ti -1c
+.RI "subroutine \fBdel4_cubed_sphere\fP (is, ie, js, je, isd, ied, jsd, jed, npx, npy, ntiles, q, area, dx, dy, dxc, dyc, sin_sg, nmax, zero_ocean, mask, nested, regional)"
+.br
+.ti -1c
+.RI "subroutine \fBfill_agrid_scalar_corners\fP (q, ng, npx, npy, isd, jsd, fill)"
+.br
+.ti -1c
+.RI "subroutine \fBfill_agrid_xy_corners\fP (x, y, ng, npx, npy, isd, jsd)"
+.br
+.ti -1c
+.RI "subroutine \fBfill_bgrid_scalar_corners\fP (q, ng, npx, npy, isd, jsd, fill)"
+.br
+.ti -1c
+.RI "subroutine \fBfill_cubic_grid_halo\fP (data, data2, halo, ioff, joff, sign1, sign2)"
+.br
+.ti -1c
+.RI "subroutine \fBfill_dgrid_xy_corners\fP (x, y, ng, npx, npy, isd, jsd)"
+.br
+.ti -1c
+.RI "program \fBfilter_topo\fP"
+.br
+.ti -1c
+.RI "subroutine \fBfv3_zs_filter\fP (is, ie, js, je, isd, ied, jsd, jed, npx, npy, npx_global, ntiles, grid_type, stretch_fac, nested, area, dxa, dya, dx, dy, dxc, dyc, sin_sg, phis, regional)"
+.br
+.ti -1c
+.RI "real function \fBget_area\fP (p1, p4, p2, p3, radius)"
+.br
+.ti -1c
+.RI "real function \fBgreat_circle_dist\fP (q1, q2, radius)"
+.br
+.ti -1c
+.RI "subroutine \fBhandle_err\fP (status, string)"
+.br
+.ti -1c
+.RI "subroutine \fBlatlon2xyz\fP (p, e)"
+.br
+.ti -1c
+.RI "subroutine \fBmid_pt3_cart\fP (p1, p2, e)"
+.br
+.ti -1c
+.RI "subroutine \fBmid_pt_sphere\fP (p1, p2, pm)"
+.br
+.ti -1c
+.RI "subroutine \fBread_grid_file\fP (regional)"
+.br
+.ti -1c
+.RI "subroutine \fBread_namelist\fP"
+.br
+.ti -1c
+.RI "subroutine \fBread_topo_file\fP (regional)"
+.br
+.ti -1c
+.RI "real function \fBspherical_angle\fP (p1, p2, p3)"
+.br
+.ti -1c
+.RI "subroutine \fBtwo_delta_filter\fP (is, ie, js, je, isd, ied, jsd, jed, npx, npy, ntiles, q, area, dx, dy, dxa, dya, dxc, dyc, sin_sg, cd, zero_ocean, check_slope, filter_type, grid_type, mask, nested, ntmax, regional)"
+.br
+.ti -1c
+.RI "subroutine \fBwrite_topo_file\fP (is, ie, js, je, ntiles, q, regional)"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

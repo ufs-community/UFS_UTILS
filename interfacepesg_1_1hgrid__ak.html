@@ -224,21 +224,21 @@ Private Member Functions</h2></td></tr>
 <p>The gridded lats and lons, glat and glon, remain in radians.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>x grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>y grid index for left-lower corner of the grid at center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>numbers of the grid spaces in x </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>numbers of the grid spaces in y </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>radians latitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>radians longitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Azimuth of map orientation at its center </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">re</td><td>earth radius </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">delxre</td><td>map-space grid increments in the dimensional units </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">delyre</td><td>map-space grid increments in the dimensional units </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>grid points for latitude </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>grid points for longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>rectangular array </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>array of grid-cell areas in dimensional units </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -396,25 +396,25 @@ Private Member Functions</h2></td></tr>
 <p>The gridded lats and lons, glat and glon, remain in radians. Also, in order for the argument list to remain compatible with an earlier version of this routine, the relative rotations of the steps, dangle_dx and dangle_dy, are returned as degrees instead of radians (all other angles in the argument list, i.e., plat,plon,pazi,glat,glon, remain radians).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>x grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>y grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>number of grid spaces in x </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>number of grid spaces in y </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Extended Schmidt Gnomonic parameter </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>Extended Schmidt Gnomonic parameter </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">re</td><td>earth radius </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude of projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude of projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Azimuth of map orientation at its center (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">re</td><td>earth radius in dimensional length units </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">delxre</td><td>map-space grid increments in the dimensional units </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">delyre</td><td>map-space grid increments in the dimensional units </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>gridded lats </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>gridded lons </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>grid cell areas </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dx</td><td>x- grid steps </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dy</td><td>y- grid steps </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dangle_dx</td><td>x rotations of the steps </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dangle_dy</td><td>y rotations of the steps </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>gridded lats (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>gridded lons (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>grid cell areas in dimensional units </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dx</td><td>x- grid steps in dimensional units </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dy</td><td>y- grid steps in dimensional units </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dangle_dx</td><td>azimuth rotations of the steps dx (in degrees) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dangle_dy</td><td>azimuth rotations of the steps dy (in degrees) </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>

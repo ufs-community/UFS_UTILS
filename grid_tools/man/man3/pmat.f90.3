@@ -1,0 +1,1332 @@
+.TH "/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pmat.f90" 3 "Tue Mar 9 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pmat.f90 \- Utility routines for various linear inversions and Cholesky\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBpmat::inv\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat::invl\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat::invu\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat::l1lm\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat::ldlm\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat::ldum\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat::swpvv\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat::udlmm\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBpmat::cinvmt\fP (a)"
+.br
+.RI "Invert matrix\&. "
+.ti -1c
+.RI "subroutine \fBpmat::cinvmtf\fP (a, ff)"
+.br
+.RI "Routine cinvmtf to Invert and Permute\&. "
+.ti -1c
+.RI "subroutine \fBpmat::cldum\fP (a, ipiv, d)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::cldumf\fP (a, ipiv, d, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::clinmmt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::clinmmtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::clinmvt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::clinmvtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::cswpvv\fP (d, e)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::cudlmm\fP (a, b, ipiv)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::cudlmv\fP (a, b, ipiv)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dinvl\fP (a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dinvmt\fP (a)"
+.br
+.RI "Invert matrix\&. "
+.ti -1c
+.RI "subroutine \fBpmat::dinvmtf\fP (a, ff)"
+.br
+.RI "Routine dinvmtf to Invert and Permute\&. "
+.ti -1c
+.RI "subroutine \fBpmat::dinvu\fP (a)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dl1lm\fP (a, b)"
+.br
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
+.ti -1c
+.RI "subroutine \fBpmat::dl1lmf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dldlm\fP (a, b, d)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dldlmf\fP (a, b, d, ff)"
+.br
+.RI "Modified Cholesky Q --> L*D*U, U(i,j)=L(j,i) "
+.ti -1c
+.RI "subroutine \fBpmat::dldum\fP (a, ipiv, d)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dldumf\fP (a, ipiv, d, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dlinlv\fP (a, u)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dlinmmt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dlinmmtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dlinmvt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dlinmvtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dlinuv\fP (a, u)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dswpvv\fP (d, e)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dudlmm\fP (a, b, ipiv)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::dudlmv\fP (a, b, ipiv)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::iinvf\fP (imat, ff)"
+.br
+.RI "Invert integer square array, imat, if possible, but flag ff=\&.true\&. "
+.ti -1c
+.RI "subroutine \fBpmat::sinvl\fP (a)"
+.br
+.RI "Invert lower triangular matrix in place\&. "
+.ti -1c
+.RI "subroutine \fBpmat::sinvmt\fP (a)"
+.br
+.RI "Invert matrix\&. "
+.ti -1c
+.RI "subroutine \fBpmat::sinvmtf\fP (a, ff)"
+.br
+.RI "Invert matrix (or flag if can't)\&. "
+.ti -1c
+.RI "subroutine \fBpmat::sinvu\fP (a)"
+.br
+.RI "Invert the upper triangular matrix in place by transposing, calling invl, and transposing again\&. "
+.ti -1c
+.RI "subroutine \fBpmat::sl1lm\fP (a, b)"
+.br
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
+.ti -1c
+.RI "subroutine \fBpmat::sl1lmf\fP (a, b, ff)"
+.br
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
+.ti -1c
+.RI "subroutine \fBpmat::sldlm\fP (a, b, d)"
+.br
+.RI "Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) "
+.ti -1c
+.RI "subroutine \fBpmat::sldlmf\fP (a, b, d, ff)"
+.br
+.RI "Modified Cholesky decompose Q --> L*D*U\&. "
+.ti -1c
+.RI "subroutine \fBpmat::sldum\fP (a, ipiv, d)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::sldumf\fP (a, ipiv, d, ff)"
+.br
+.RI "Perform l-d-u decomposition of square matrix a in place with pivoting\&. "
+.ti -1c
+.RI "subroutine \fBpmat::slinlv\fP (a, u)"
+.br
+.RI "Solve linear system involving lower triangular system matrix\&. "
+.ti -1c
+.RI "subroutine \fBpmat::slinmmt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::slinmmtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::slinmvt\fP (a, b)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::slinmvtf\fP (a, b, ff)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::slinuv\fP (a, u)"
+.br
+.RI "Solve linear system involving upper triangular system matrix\&. "
+.ti -1c
+.RI "subroutine \fBpmat::sswpvv\fP (d, e)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBpmat::sudlmm\fP (a, b, ipiv)"
+.br
+.RI "Use l-u factors in A to back-substitute for several rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. "
+.ti -1c
+.RI "subroutine \fBpmat::sudlmv\fP (a, b, ipiv)"
+.br
+.RI "Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Utility routines for various linear inversions and Cholesky\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser, NOAA/NCEP/EMC, Tsukasa Fujita, JMA\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBpmat\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat::cinvmt (complex(dpc), dimension(:,:), intent(inout) a)\fC [private]\fP"
+
+.PP
+Invert matrix\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 104 of file pmat\&.f90\&.
+.SS "subroutine pmat::cinvmtf (complex(dpc), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Routine cinvmtf to Invert and Permute\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIff\fP flag for error condition 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 191 of file pmat\&.f90\&.
+.PP
+References pietc::c1\&.
+.SS "subroutine pmat::cldum (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fId\fP ??? 
+.br
+\fIipiv\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 497 of file pmat\&.f90\&.
+.SS "subroutine pmat::cldumf (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d, logical, intent(out) ff)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP square matrix to be factorized 
+.br
+\fIipiv\fP array encoding the pivoting sequence 
+.br
+\fId\fP indicator for possible sign change of determinant 
+.br
+\fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 646 of file pmat\&.f90\&.
+.PP
+References pietc::c0, pietc::c1, pietc::u0, and pietc::u1\&.
+.SS "subroutine pmat::clinmmt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 253 of file pmat\&.f90\&.
+.SS "subroutine pmat::clinmmtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 314 of file pmat\&.f90\&.
+.SS "subroutine pmat::clinmvt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 363 of file pmat\&.f90\&.
+.SS "subroutine pmat::clinmvtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 421 of file pmat\&.f90\&.
+.SS "subroutine pmat::cswpvv (complex(dpc), dimension(:), intent(inout) d, complex(dpc), dimension(:), intent(inout) e)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fId\fP vector 
+.br
+\fIe\fP vector 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 72 of file pmat\&.f90\&.
+.SS "subroutine pmat::cudlmm (complex(dpc), dimension(:,:), intent(in) a, complex(dpc), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP square matrix to be factorized 
+.br
+\fIb\fP ??? 
+.br
+\fIipiv\fP array encoding the pivoting sequence 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 778 of file pmat\&.f90\&.
+.PP
+References pietc::c1\&.
+.SS "subroutine pmat::cudlmv (complex(dpc), dimension(:,:), intent(in) a, complex(dpc), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP square matrix to be factorized 
+.br
+\fIb\fP ??? 
+.br
+\fIipiv\fP array encoding the pivoting sequence 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 868 of file pmat\&.f90\&.
+.PP
+References pietc::c1\&.
+.SS "subroutine pmat::dinvl (real(dp), dimension(:,:), intent(inout) a)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1128 of file pmat\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.SS "subroutine pmat::dinvmt (real(dp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+
+.PP
+Invert matrix\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 93 of file pmat\&.f90\&.
+.SS "subroutine pmat::dinvmtf (real(dp), dimension(:,:), intent(inout) a, logical, intent(out) ff)"
+
+.PP
+Routine dinvmtf to Invert and Permute\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIff\fP flag for error condition 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 154 of file pmat\&.f90\&.
+.SS "subroutine pmat::dinvu (real(dp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1101 of file pmat\&.f90\&.
+.SS "subroutine pmat::dl1lm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b)\fC [private]\fP"
+
+.PP
+Cholesky, M -> L*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 909 of file pmat\&.f90\&.
+.SS "subroutine pmat::dl1lmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 957 of file pmat\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.SS "subroutine pmat::dldlm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, real(dp), dimension(:), intent(out) d)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.br
+\fId\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1006 of file pmat\&.f90\&.
+.SS "subroutine pmat::dldlmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, real(dp), dimension(:), intent(out) d, logical, intent(out) ff)"
+
+.PP
+Modified Cholesky Q --> L*D*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.br
+\fId\fP matrix 
+.br
+\fIff\fP error flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1059 of file pmat\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.SS "subroutine pmat::dldum (real(dp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(dp), intent(out) d)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fId\fP ??? 
+.br
+\fIipiv\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 482 of file pmat\&.f90\&.
+.SS "subroutine pmat::dldumf (real(dp), dimension(:,:), intent(inout) a, integer, dimension(:), intent(out) ipiv, real(dp), intent(out) d, logical(spi), intent(out) ff)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP square matrix to be factorized 
+.br
+\fIipiv\fP array encoding the pivoting sequence 
+.br
+\fId\fP indicator for possible sign change of determinant 
+.br
+\fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 580 of file pmat\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.SS "subroutine pmat::dlinlv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) u)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIu\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1161 of file pmat\&.f90\&.
+.SS "subroutine pmat::dlinmmt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 241 of file pmat\&.f90\&.
+.SS "subroutine pmat::dlinmmtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 290 of file pmat\&.f90\&.
+.SS "subroutine pmat::dlinmvt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 350 of file pmat\&.f90\&.
+.SS "subroutine pmat::dlinmvtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 399 of file pmat\&.f90\&.
+.SS "subroutine pmat::dlinuv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) u)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIu\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1189 of file pmat\&.f90\&.
+.SS "subroutine pmat::dswpvv (real(dp), dimension(:), intent(inout) d, real(dp), dimension(:), intent(inout) e)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fId\fP vector 
+.br
+\fIe\fP vector 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 61 of file pmat\&.f90\&.
+.SS "subroutine pmat::dudlmm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP square matrix to be factorized 
+.br
+\fIb\fP ??? 
+.br
+\fIipiv\fP array encoding the pivoting sequence 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 747 of file pmat\&.f90\&.
+.PP
+References pietc::u1\&.
+.SS "subroutine pmat::dudlmv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP square matrix to be factorized 
+.br
+\fIb\fP ??? 
+.br
+\fIipiv\fP array encoding the pivoting sequence 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 839 of file pmat\&.f90\&.
+.PP
+References pietc::u1\&.
+.SS "subroutine pmat::iinvf (integer(spi), dimension(:,:), intent(inout) imat, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Invert integer square array, imat, if possible, but flag ff=\&.true\&. if not possible\&. (Determinant of imat must be +1 or -1
+.PP
+\fBParameters\fP
+.RS 4
+\fIimat\fP integer square array 
+.br
+\fIff\fP error flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 443 of file pmat\&.f90\&.
+.PP
+References pietc::t\&.
+.SS "subroutine pmat::sinvl (real(sp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+
+.PP
+Invert lower triangular matrix in place\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1110 of file pmat\&.f90\&.
+.SS "subroutine pmat::sinvmt (real(sp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+
+.PP
+Invert matrix\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 82 of file pmat\&.f90\&.
+.SS "subroutine pmat::sinvmtf (real(sp), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Invert matrix (or flag if can't)\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIff\fP flag for error condition 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 116 of file pmat\&.f90\&.
+.SS "subroutine pmat::sinvu (real(sp), dimension(:,:), intent(inout) a)"
+
+.PP
+Invert the upper triangular matrix in place by transposing, calling invl, and transposing again\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1092 of file pmat\&.f90\&.
+.SS "subroutine pmat::sl1lm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b)"
+
+.PP
+Cholesky, M -> L*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 896 of file pmat\&.f90\&.
+.SS "subroutine pmat::sl1lmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Cholesky, M -> L*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 923 of file pmat\&.f90\&.
+.PP
+References pietc::f\&.
+.SS "subroutine pmat::sldlm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, real(sp), dimension(:), intent(out) d)"
+
+.PP
+Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.br
+\fId\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 991 of file pmat\&.f90\&.
+.SS "subroutine pmat::sldlmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, real(sp), dimension(:), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Modified Cholesky decompose Q --> L*D*U\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIb\fP matrix 
+.br
+\fId\fP matrix 
+.br
+\fIff\fP error flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1022 of file pmat\&.f90\&.
+.PP
+References pietc::f\&.
+.SS "subroutine pmat::sldum (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fId\fP ??? 
+.br
+\fIipiv\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 467 of file pmat\&.f90\&.
+.SS "subroutine pmat::sldumf (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Perform l-d-u decomposition of square matrix a in place with pivoting\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP square matrix to be factorized 
+.br
+\fIipiv\fP array encoding the pivoting sequence 
+.br
+\fId\fP indicator for possible sign change of determinant 
+.br
+\fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 514 of file pmat\&.f90\&.
+.PP
+References pietc::f, and pietc::t\&.
+.SS "subroutine pmat::slinlv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) u)"
+
+.PP
+Solve linear system involving lower triangular system matrix\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIu\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1147 of file pmat\&.f90\&.
+.SS "subroutine pmat::slinmmt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 229 of file pmat\&.f90\&.
+.SS "subroutine pmat::slinmmtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 266 of file pmat\&.f90\&.
+.SS "subroutine pmat::slinmvt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 337 of file pmat\&.f90\&.
+.SS "subroutine pmat::slinmvtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP ??? 
+.br
+\fIb\fP ??? 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 377 of file pmat\&.f90\&.
+.SS "subroutine pmat::slinuv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) u)\fC [private]\fP"
+
+.PP
+Solve linear system involving upper triangular system matrix\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP matrix 
+.br
+\fIu\fP matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1175 of file pmat\&.f90\&.
+.SS "subroutine pmat::sswpvv (real(sp), dimension(:), intent(inout) d, real(sp), dimension(:), intent(inout) e)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fId\fP vector 
+.br
+\fIe\fP vector 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 50 of file pmat\&.f90\&.
+.SS "subroutine pmat::sudlmm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+
+.PP
+Use l-u factors in A to back-substitute for several rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP L-D-U factorization of linear system matrux 
+.br
+\fIb\fP rt-hand-sides vectors on input, corresponding solutions on return 
+.br
+\fIipiv\fP array encoding the pivoting sequence 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 716 of file pmat\&.f90\&.
+.SS "subroutine pmat::sudlmv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+
+.PP
+Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP L-D-U factorization of linear system matrix 
+.br
+\fIb\fP right-hand-side vector on input, corresponding solution on return 
+.br
+\fIipiv\fP array encoding the pivoting sequence 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 810 of file pmat\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

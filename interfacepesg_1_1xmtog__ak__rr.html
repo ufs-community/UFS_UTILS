@@ -95,7 +95,7 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:a436175556f7f34e2e0a2803ccb1df66d"><td class="mdescLeft">&#160;</td><td class="mdescRight">For an ESG map with parameters, (A,K), and geographical orientation, given by plon,plat,pazi (radians), and given a point in grid-space units as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians) of this point.  <a href="interfacepesg_1_1xmtog__ak__rr.html#a436175556f7f34e2e0a2803ccb1df66d">More...</a><br /></td></tr>
 <tr class="separator:a436175556f7f34e2e0a2803ccb1df66d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bf3a9ea52eab26a3aefafb34f6e8899"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepesg_1_1xmtog__ak__rr.html#a1bf3a9ea52eab26a3aefafb34f6e8899">xmtog_ak_rr_m</a> (A, K, plat, plon, pazi, xm, lat, lon, ff)</td></tr>
-<tr class="memdesc:a1bf3a9ea52eab26a3aefafb34f6e8899"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given the ESG map specified by parameters (A,K) and geographical orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians).  <a href="interfacepesg_1_1xmtog__ak__rr.html#a1bf3a9ea52eab26a3aefafb34f6e8899">More...</a><br /></td></tr>
+<tr class="memdesc:a1bf3a9ea52eab26a3aefafb34f6e8899"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians).  <a href="interfacepesg_1_1xmtog__ak__rr.html#a1bf3a9ea52eab26a3aefafb34f6e8899">More...</a><br /></td></tr>
 <tr class="separator:a1bf3a9ea52eab26a3aefafb34f6e8899"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -194,23 +194,23 @@ Private Member Functions</h2></td></tr>
 <p>If instead the transformation is invalid for any reason, then return the raised failure flag, FF=.true.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude geographical orientation </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude geographical orientation </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>grid-space units as the 2-vector </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">lat</td><td>latitude geographical coordinates </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">lon</td><td>longitude geographical coordinates </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>radians latitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>radians longitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Azimuth of the orientation of the mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>grid-space 2-vector coordinates of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">lat</td><td>radians latitude of the point </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">lon</td><td>radians longitude of the point </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02060">2060</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02062">2062</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
 </div>
 </div>
@@ -290,25 +290,25 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Given the ESG map specified by parameters (A,K) and geographical orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians). </p>
+<p>Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians). </p>
 <p>If the transformation is invalid for any reason, return instead with a raised failure flag, FF= .true.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude of geographical orientation </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude of geographical orientation </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">lat</td><td>latitude of geographical coordinates </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">lon</td><td>longitude of geographical coordinates </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameter of an ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameter of an ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>radians latitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>radians longitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Azimuth of orientation of the mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>center-relative 2-vector map space coordinates of a point </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">lat</td><td>radians latitude of the point </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">lon</td><td>radians longitude of the point </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02012">2012</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02014">2014</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
 </div>
 </div>

@@ -157,11 +157,11 @@ Private Member Functions</h2></td></tr>
 <p>Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>vector value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xt</td><td>vector value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xtd</td><td>2*2 diagonal Jacobian </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Mapping parameter controlling grid line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>Vector value of map coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xt</td><td>Vector value of gnomonic plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xtd</td><td>2*2 diagonal Jacobian, d(xt)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
@@ -239,13 +239,13 @@ Private Member Functions</h2></td></tr>
 <p>Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd Also, the derivatives, wrt a, of these quantities. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>the derivatives of these quantities </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>vector value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xt</td><td>vector value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xtd</td><td>2*2 diagonal Jacobian </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xt1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xtd1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Mapping parameter controlling grid line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>Vector value of map plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xt</td><td>Vector value of gnomonic plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xtd</td><td>2*2 diagonal Jacobian, d(xt)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xt1</td><td>Derivative wrt a of xt, d(xt)/da </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xtd1</td><td>Derivative wrt a of Jacobian xtd, d^2(xt)/(d(xm)da) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>

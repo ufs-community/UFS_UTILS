@@ -188,10 +188,10 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memdesc:a6c51ec9c9b6f0396f6811afaf053003c"><td class="mdescLeft">&#160;</td><td class="mdescRight">From a jacobian matrix, j0, and its derivative, j0d, get a sufficient set of v.  <a href="namespacepesg.html#a6c51ec9c9b6f0396f6811afaf053003c">More...</a><br /></td></tr>
 <tr class="separator:a6c51ec9c9b6f0396f6811afaf053003c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa65c5b5e54a03ce01b07070022dda5f5"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#aa65c5b5e54a03ce01b07070022dda5f5">gtoxm_ak_dd_g</a> (A, K, pdlat, pdlon, pdazi, delx, dely, dlat, dlon, xm, ff)</td></tr>
-<tr class="memdesc:aa65c5b5e54a03ce01b07070022dda5f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like gtoxm_ak_rr_g, except input angles are expressed in degrees.  <a href="namespacepesg.html#aa65c5b5e54a03ce01b07070022dda5f5">More...</a><br /></td></tr>
+<tr class="memdesc:aa65c5b5e54a03ce01b07070022dda5f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like gtoxm_ak_rr_g, except lat, lon, azimuth, are expressed in degrees.  <a href="namespacepesg.html#aa65c5b5e54a03ce01b07070022dda5f5">More...</a><br /></td></tr>
 <tr class="separator:aa65c5b5e54a03ce01b07070022dda5f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab803ad3d6f3cbf8858804822ffac2ac7"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#ab803ad3d6f3cbf8858804822ffac2ac7">gtoxm_ak_dd_m</a> (A, K, pdlat, pdlon, pdazi, dlat, dlon, xm, ff)</td></tr>
-<tr class="memdesc:ab803ad3d6f3cbf8858804822ffac2ac7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like gtoxm_ak_rr_m, except input angles are expressed in degrees.  <a href="namespacepesg.html#ab803ad3d6f3cbf8858804822ffac2ac7">More...</a><br /></td></tr>
+<tr class="memdesc:ab803ad3d6f3cbf8858804822ffac2ac7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like gtoxm_ak_rr_m, except lat, lon, azimuth, are expressed in degrees.  <a href="namespacepesg.html#ab803ad3d6f3cbf8858804822ffac2ac7">More...</a><br /></td></tr>
 <tr class="separator:ab803ad3d6f3cbf8858804822ffac2ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50c059ec290acbbd18d3be0a0a873517"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a50c059ec290acbbd18d3be0a0a873517">gtoxm_ak_rr_g</a> (A, K, plat, plon, pazi, delx, dely, lat, lon, xm, ff)</td></tr>
 <tr class="memdesc:a50c059ec290acbbd18d3be0a0a873517"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units.  <a href="namespacepesg.html#a50c059ec290acbbd18d3be0a0a873517">More...</a><br /></td></tr>
@@ -214,11 +214,11 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a41d995a58d366d36942a51e0e88e9987"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a41d995a58d366d36942a51e0e88e9987">hgrid_ak_dc</a> (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, xc, xcd, garea, ff)</td></tr>
 <tr class="memdesc:a41d995a58d366d36942a51e0e88e9987"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees).  <a href="namespacepesg.html#a41d995a58d366d36942a51e0e88e9987">More...</a><br /></td></tr>
 <tr class="separator:a41d995a58d366d36942a51e0e88e9987"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b4abffb6f22a026c43a960a524e711c"><td class="memItemLeft" align="right" valign="top"><a id="a8b4abffb6f22a026c43a960a524e711c"></a>
-subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>hgrid_ak_dd</b> (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, gdlat, gdlon, garea, ff)</td></tr>
+<tr class="memitem:a8b4abffb6f22a026c43a960a524e711c"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a8b4abffb6f22a026c43a960a524e711c">hgrid_ak_dd</a> (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, gdlat, gdlon, garea, ff)</td></tr>
+<tr class="memdesc:a8b4abffb6f22a026c43a960a524e711c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees).  <a href="namespacepesg.html#a8b4abffb6f22a026c43a960a524e711c">More...</a><br /></td></tr>
 <tr class="separator:a8b4abffb6f22a026c43a960a524e711c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c7cd32a349e41308d43ccb10f47a5e9"><td class="memItemLeft" align="right" valign="top"><a id="a8c7cd32a349e41308d43ccb10f47a5e9"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>hgrid_ak_dd_c</b> (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, gdlat, gdlon, garea, dx, dy, dangle_dx, dangle_dy, ff)</td></tr>
+<tr class="memitem:a8c7cd32a349e41308d43ccb10f47a5e9"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a8c7cd32a349e41308d43ccb10f47a5e9">hgrid_ak_dd_c</a> (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, gdlat, gdlon, garea, dx, dy, dangle_dx, dangle_dy, ff)</td></tr>
+<tr class="memdesc:a8c7cd32a349e41308d43ccb10f47a5e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like hgrid_ak_rr_c, except all the angle arguments (but not delx,dely) are in degrees instead of radians.  <a href="namespacepesg.html#a8c7cd32a349e41308d43ccb10f47a5e9">More...</a><br /></td></tr>
 <tr class="separator:a8c7cd32a349e41308d43ccb10f47a5e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afae7d39e7d0315a7b11db90f68231096"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#afae7d39e7d0315a7b11db90f68231096">hgrid_ak_rc</a> (lx, ly, nx, ny, A, K, plat, plon, pazi, delx, dely, xc, xcd, garea, ff)</td></tr>
 <tr class="memdesc:afae7d39e7d0315a7b11db90f68231096"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians).  <a href="namespacepesg.html#afae7d39e7d0315a7b11db90f68231096">More...</a><br /></td></tr>
@@ -229,23 +229,23 @@ subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>hgrid_ak_dd_c</
 <tr class="memitem:a2a47e8a580093c4d81d1c413235dba5a"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a2a47e8a580093c4d81d1c413235dba5a">hgrid_ak_rr_c</a> (lx, ly, nx, ny, a, k, plat, plon, pazi, delx, dely, glat, glon, garea, dx, dy, angle_dx, angle_dy, ff)</td></tr>
 <tr class="memdesc:a2a47e8a580093c4d81d1c413235dba5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use a and k as the parameters of an extended Schmidt-transformed gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians).  <a href="namespacepesg.html#a2a47e8a580093c4d81d1c413235dba5a">More...</a><br /></td></tr>
 <tr class="separator:a2a47e8a580093c4d81d1c413235dba5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fa7090c8dad76b177fa350019faaed6"><td class="memItemLeft" align="right" valign="top"><a id="a7fa7090c8dad76b177fa350019faaed6"></a>
-subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_ak</b> (a, k, xc, xm, ff)</td></tr>
+<tr class="memitem:a7fa7090c8dad76b177fa350019faaed6"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a7fa7090c8dad76b177fa350019faaed6">xctoxm_ak</a> (a, k, xc, xm, ff)</td></tr>
+<tr class="memdesc:a7fa7090c8dad76b177fa350019faaed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse mapping of <a class="el" href="interfacepesg_1_1xmtoxc__ak.html">xmtoxc_ak</a>.  <a href="namespacepesg.html#a7fa7090c8dad76b177fa350019faaed6">More...</a><br /></td></tr>
 <tr class="separator:a7fa7090c8dad76b177fa350019faaed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13e4b5afc81f452f403a419f5dc407ea"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a13e4b5afc81f452f403a419f5dc407ea">xctoxs</a> (xc, xs)</td></tr>
 <tr class="memdesc:a13e4b5afc81f452f403a419f5dc407ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverse of xstoxc.  <a href="namespacepesg.html#a13e4b5afc81f452f403a419f5dc407ea">More...</a><br /></td></tr>
 <tr class="separator:a13e4b5afc81f452f403a419f5dc407ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5145974b344b9ed001bc1849ac33a947"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a5145974b344b9ed001bc1849ac33a947">xmtog_ak_dd_g</a> (A, K, pdlat, pdlon, pdazi, delx, dely, xm, dlat, dlon, ff)</td></tr>
-<tr class="memdesc:a5145974b344b9ed001bc1849ac33a947"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like xmtog_ak_rr_g, except angles are expressed in degrees.  <a href="namespacepesg.html#a5145974b344b9ed001bc1849ac33a947">More...</a><br /></td></tr>
+<tr class="memdesc:a5145974b344b9ed001bc1849ac33a947"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees.  <a href="namespacepesg.html#a5145974b344b9ed001bc1849ac33a947">More...</a><br /></td></tr>
 <tr class="separator:a5145974b344b9ed001bc1849ac33a947"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a167d85418627ade97bf4cebfc26f5909"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a167d85418627ade97bf4cebfc26f5909">xmtog_ak_dd_m</a> (A, K, pdlat, pdlon, pdazi, xm, dlat, dlon, ff)</td></tr>
-<tr class="memdesc:a167d85418627ade97bf4cebfc26f5909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like xmtog_ak_rr_m, except angles are expressed in degrees.  <a href="namespacepesg.html#a167d85418627ade97bf4cebfc26f5909">More...</a><br /></td></tr>
+<tr class="memdesc:a167d85418627ade97bf4cebfc26f5909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees.  <a href="namespacepesg.html#a167d85418627ade97bf4cebfc26f5909">More...</a><br /></td></tr>
 <tr class="separator:a167d85418627ade97bf4cebfc26f5909"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fc7233669c1c84c4e6aa7b9bf8b988d"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a4fc7233669c1c84c4e6aa7b9bf8b988d">xmtog_ak_rr_g</a> (A, K, plat, plon, pazi, delx, dely, xm, lat, lon, ff)</td></tr>
 <tr class="memdesc:a4fc7233669c1c84c4e6aa7b9bf8b988d"><td class="mdescLeft">&#160;</td><td class="mdescRight">For an ESG map with parameters, (A,K), and geographical orientation, given by plon,plat,pazi (radians), and given a point in grid-space units as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians) of this point.  <a href="namespacepesg.html#a4fc7233669c1c84c4e6aa7b9bf8b988d">More...</a><br /></td></tr>
 <tr class="separator:a4fc7233669c1c84c4e6aa7b9bf8b988d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07c56831f84286a46dcaa68a930145db"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a07c56831f84286a46dcaa68a930145db">xmtog_ak_rr_m</a> (A, K, plat, plon, pazi, xm, lat, lon, ff)</td></tr>
-<tr class="memdesc:a07c56831f84286a46dcaa68a930145db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given the ESG map specified by parameters (A,K) and geographical orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians).  <a href="namespacepesg.html#a07c56831f84286a46dcaa68a930145db">More...</a><br /></td></tr>
+<tr class="memdesc:a07c56831f84286a46dcaa68a930145db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians).  <a href="namespacepesg.html#a07c56831f84286a46dcaa68a930145db">More...</a><br /></td></tr>
 <tr class="separator:a07c56831f84286a46dcaa68a930145db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a386bd317b37c41032e6e3c4a701f3e29"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepesg.html#a386bd317b37c41032e6e3c4a701f3e29">xmtoxc_ak</a> (a, k, xm, xc, xcd, ff)</td></tr>
 <tr class="memdesc:a386bd317b37c41032e6e3c4a701f3e29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assuming the A-K parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian matrix, xcd.  <a href="namespacepesg.html#a386bd317b37c41032e6e3c4a701f3e29">More...</a><br /></td></tr>
@@ -385,6 +385,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00902">902</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00089">pietc::ms18</a>, <a class="el" href="pietc_8f90_source.html#l00095">pietc::ms36</a>, <a class="el" href="pietc_8f90_source.html#l00101">pietc::ms54</a>, <a class="el" href="pietc_8f90_source.html#l00107">pietc::ms72</a>, <a class="el" href="pietc_8f90_source.html#l00035">pietc::o5</a>, <a class="el" href="pietc_8f90_source.html#l00061">pietc::s18</a>, <a class="el" href="pietc_8f90_source.html#l00067">pietc::s36</a>, <a class="el" href="pietc_8f90_source.html#l00073">pietc::s54</a>, <a class="el" href="pietc_8f90_source.html#l00079">pietc::s72</a>, and <a class="el" href="pietc_8f90_source.html#l00028">pietc::u5</a>.</p>
+
 </div>
 </div>
 <a id="a5c9f36282d23e5297d6a5ae71d60d6bf"></a>
@@ -477,6 +479,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01072">1072</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00089">pietc::ms18</a>, <a class="el" href="pietc_8f90_source.html#l00095">pietc::ms36</a>, <a class="el" href="pietc_8f90_source.html#l00101">pietc::ms54</a>, <a class="el" href="pietc_8f90_source.html#l00107">pietc::ms72</a>, <a class="el" href="pietc_8f90_source.html#l00035">pietc::o5</a>, <a class="el" href="pietc_8f90_source.html#l00061">pietc::s18</a>, <a class="el" href="pietc_8f90_source.html#l00067">pietc::s36</a>, <a class="el" href="pietc_8f90_source.html#l00073">pietc::s54</a>, <a class="el" href="pietc_8f90_source.html#l00079">pietc::s72</a>, and <a class="el" href="pietc_8f90_source.html#l00028">pietc::u5</a>.</p>
+
 </div>
 </div>
 <a id="a746e360a259db39d63e1158569a9fbb8"></a>
@@ -533,6 +537,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01851">1851</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00044">pietc::pih</a>, <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>, and <a class="el" href="pietc_8f90_source.html#l00022">pietc::u2</a>.</p>
+
 </div>
 </div>
 <a id="ac2d1049cd6301974935cf9ffa9486616"></a>
@@ -576,16 +582,18 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>For angles (degrees) of the arcs spanning the halfwidths between the region's center and its x and y edges, get the two cartesian vectors that represent the locations of these edge midpoints in the positive x and y directions. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">arcx</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">arcy</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">edgex</td><td>region's x edges </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">edgey</td><td>region's y edges </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">arcx</td><td>Center-relative angle (degrees) of edge midpoint in +x </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">arcy</td><td>Center-relative angle (degrees) of edge midpoint in +y </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">edgex</td><td>region's +x edge midpoint as cartesian unit 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">edgey</td><td>region's +y edge midpoint as cartesian unit 3-vector </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00488">488</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00054">pietc::dtor</a>, and <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>.</p>
 
 </div>
 </div>
@@ -707,6 +715,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00603">603</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00055">pietc::rtod</a>, and <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>.</p>
+
 </div>
 </div>
 <a id="af356d7aa00db9deeaaf2223e2b9cf23f"></a>
@@ -804,6 +814,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00681">681</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>.</p>
+
 </div>
 </div>
 <a id="a2d1f5bfe4e8ff8520662549860fb0048"></a>
@@ -880,6 +892,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00728">728</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
 
 </div>
 </div>
@@ -972,6 +986,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00750">750</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>, and <a class="el" href="pietc_8f90_source.html#l00022">pietc::u2</a>.</p>
+
 </div>
 </div>
 <a id="a1ce5f976f4e335f7c3711c8262e0a7d7"></a>
@@ -1055,6 +1071,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00770">770</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
+
 </div>
 </div>
 <a id="af9c7f9dfc44f9638a3832c39cb87bf62"></a>
@@ -1124,6 +1142,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00511">511</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00032">pietc::o2</a>, and <a class="el" href="pietc_8f90_source.html#l00022">pietc::u2</a>.</p>
 
 </div>
 </div>
@@ -1222,6 +1242,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00541">541</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00032">pietc::o2</a>, <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00022">pietc::u2</a>.</p>
+
 </div>
 </div>
 <a id="aa65c5b5e54a03ce01b07070022dda5f5"></a>
@@ -1312,26 +1334,28 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 </table>
 </div><div class="memdoc">
 
-<p>Like gtoxm_ak_rr_g, except input angles are expressed in degrees. </p>
+<p>Like gtoxm_ak_rr_g, except lat, lon, azimuth, are expressed in degrees. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>degrees latitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>degrees longitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>Azimuth of mapping orientation at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dlat</td><td>degrees latitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dlon</td><td>degrees longitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>2-vector image of the point in center-relative grid units </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01981">1981</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01983">1983</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
-<p class="reference">References <a class="el" href="pesg_8f90_source.html#l01932">gtoxm_ak_rr_g()</a>.</p>
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00054">pietc::dtor</a>, and <a class="el" href="pesg_8f90_source.html#l01932">gtoxm_ak_rr_g()</a>.</p>
 
 </div>
 </div>
@@ -1411,17 +1435,17 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 </table>
 </div><div class="memdoc">
 
-<p>Like gtoxm_ak_rr_m, except input angles are expressed in degrees. </p>
+<p>Like gtoxm_ak_rr_m, except lat, lon, azimuth, are expressed in degrees. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dlat</td><td>radian latitude </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dlon</td><td>radian longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>degrees latitude defining mapping center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>degrees longitude defining mapping center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>Azimuth of mapping orientation at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dlat</td><td>degrees latitude of point to be mapped </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dlon</td><td>degrees longitude of point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>2-vector center-relative map space image of the point </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -1430,7 +1454,7 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01954">1954</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
-<p class="reference">References <a class="el" href="pesg_8f90_source.html#l01887">gtoxm_ak_rr_m()</a>.</p>
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00054">pietc::dtor</a>, and <a class="el" href="pesg_8f90_source.html#l01887">gtoxm_ak_rr_m()</a>.</p>
 
 </div>
 </div>
@@ -1518,16 +1542,16 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>If the transformation is invalid, return a .true. failure flag.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lat</td><td>radian latitude </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lon</td><td>radian longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameter of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>radians latitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>radians longitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Azimuth of mapping orientation at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lat</td><td>radians latitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lon</td><td>radians longitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>2-vector map space image in center-relative grid units </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -1538,7 +1562,7 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="reference">References <a class="el" href="pesg_8f90_source.html#l01887">gtoxm_ak_rr_m()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="pesg_8f90_source.html#l01981">gtoxm_ak_dd_g()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="pesg_8f90_source.html#l01983">gtoxm_ak_dd_g()</a>.</p>
 
 </div>
 </div>
@@ -1624,12 +1648,12 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lat</td><td>radian latitude </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lon</td><td>radian longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>radians latitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>radians longitude defining mapping projection center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Aximuth of mapping orientation at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lat</td><td>radians latitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lon</td><td>radians longitude of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>2-vector center-relative map-space image of mapped point </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -1637,6 +1661,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01887">1887</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="pesg_8f90_source.html#l01954">gtoxm_ak_dd_m()</a>, and <a class="el" href="pesg_8f90_source.html#l01932">gtoxm_ak_rr_g()</a>.</p>
 
@@ -1685,9 +1711,9 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Given an aspect ratio, asp&lt;=1, and major semi-axis, arc, in geographical (degree) units measured along the rectangle's median, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">asp</td><td>aspect ratio </td></tr>
-    <tr><td class="paramname">arc</td><td>??? </td></tr>
-    <tr><td class="paramname">ak</td><td>first guess or the parameter vector </td></tr>
+    <tr><td class="paramname">asp</td><td>aspect ratio of intended domain </td></tr>
+    <tr><td class="paramname">arc</td><td>major semi-axis angle in degrees for intended domain </td></tr>
+    <tr><td class="paramname">ak</td><td>first guess of the parameter vector </td></tr>
   </table>
   </dd>
 </dl>
@@ -1749,6 +1775,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00790">790</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00055">pietc::rtod</a>.</p>
 
 </div>
 </div>
@@ -1866,21 +1894,21 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>The gridded lats and lons, glat and glon, remain in radians.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>x grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>y grid index for left-lower corner of the grid at center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>numbers of the grid spaces in x </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>numbers of the grid spaces in y </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>radians latitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>radians longitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Azimuth of map orientation at its center </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">re</td><td>earth radius </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">delxre</td><td>map-space grid increments in the dimensional units </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">delyre</td><td>map-space grid increments in the dimensional units </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>grid points for latitude </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>grid points for longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>rectangular array </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>array of grid-cell areas in dimensional units </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -2037,25 +2065,25 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>The gridded lats and lons, glat and glon, remain in radians. Also, in order for the argument list to remain compatible with an earlier version of this routine, the relative rotations of the steps, dangle_dx and dangle_dy, are returned as degrees instead of radians (all other angles in the argument list, i.e., plat,plon,pazi,glat,glon, remain radians).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>x grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>y grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>number of grid spaces in x </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>number of grid spaces in y </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Extended Schmidt Gnomonic parameter </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>Extended Schmidt Gnomonic parameter </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">re</td><td>earth radius </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude of projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude of projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Azimuth of map orientation at its center (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">re</td><td>earth radius in dimensional length units </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">delxre</td><td>map-space grid increments in the dimensional units </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">delyre</td><td>map-space grid increments in the dimensional units </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>gridded lats </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>gridded lons </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>grid cell areas </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dx</td><td>x- grid steps </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dy</td><td>y- grid steps </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dangle_dx</td><td>x rotations of the steps </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dangle_dy</td><td>y rotations of the steps </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>gridded lats (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>gridded lons (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>grid cell areas in dimensional units </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dx</td><td>x- grid steps in dimensional units </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dy</td><td>y- grid steps in dimensional units </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dangle_dx</td><td>azimuth rotations of the steps dx (in degrees) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dangle_dy</td><td>azimuth rotations of the steps dy (in degrees) </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -2064,7 +2092,7 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01817">1817</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
-<p class="reference">References <a class="el" href="pesg_8f90_source.html#l01337">hgrid_ak_rr_c()</a>.</p>
+<p class="reference">References <a class="el" href="pesg_8f90_source.html#l01337">hgrid_ak_rr_c()</a>, and <a class="el" href="pietc_8f90_source.html#l00055">pietc::rtod</a>.</p>
 
 </div>
 </div>
@@ -2176,20 +2204,20 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Like hgrid_ak_rx, return the grid points' cartesians xc and Jacobian matrices, xcd. Garea, the area of each grid cell, is also returned as in hgrid_ak_rx, and a failure flag, ff, raised when a failure occurs anywhere in these calculations.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>x grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>y grid index for left-lower corner of the grid at center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>numbers of the grid spaces in x </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>numbers of the grid spaces in y </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>grid points' cartesians </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian matrices </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>Jacobian matrices </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>degrees latitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>degrees longitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>azimuth of the orientation of the mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>grid points' earth-centered unit cartesians </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian matrices, d(xc)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>array of grid-cell areas (steradians) </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -2197,6 +2225,311 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01723">1723</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00054">pietc::dtor</a>.</p>
+
+</div>
+</div>
+<a id="a8b4abffb6f22a026c43a960a524e711c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b4abffb6f22a026c43a960a524e711c">&#9670;&nbsp;</a></span>hgrid_ak_dd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public <a class="el" href="interfacepesg_1_1hgrid__ak__dd.html">pesg::hgrid_ak_dd</a> </td>
+          <td>(</td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>lx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>ly</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>nx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>ny</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>pdlat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>pdlon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>pdazi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>delx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>dely</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)&#160;</td>
+          <td class="paramname"><em>gdlat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)&#160;</td>
+          <td class="paramname"><em>gdlon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(lx:lx+nx-1,ly:ly+ny-1), intent(out)&#160;</td>
+          <td class="paramname"><em>garea</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, intent(out)&#160;</td>
+          <td class="paramname"><em>ff</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees). </p>
+<p>Like <a class="el" href="interfacepesg_1_1hgrid__ak__rr.html">hgrid_ak_rr</a>, return the grid points' lats and lons, except that here the angles are returned in degrees. Garea, the area of each grid cell, is returned as in <a class="el" href="interfacepesg_1_1hgrid__ak__rr.html">hgrid_ak_rr</a>, and a failure flag, ff, raised when a failure occurs anywhere in these calculations.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>number of the grid spaces in x </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>number of the grid spaces in y </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameter of an ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameter of an ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>degrees latitude of the projection center of mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>degrees longitude of the projection center of mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>degrees azimuth of orientation of mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid (in radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid (in radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">gdlat</td><td>array of grid point latitudes (in degrees) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">gdlon</td><td>array of grid point longitudes (in dgrees) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>array of grid cell areas (in steradians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01629">1629</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00054">pietc::dtor</a>, and <a class="el" href="pietc_8f90_source.html#l00055">pietc::rtod</a>.</p>
+
+</div>
+</div>
+<a id="a8c7cd32a349e41308d43ccb10f47a5e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c7cd32a349e41308d43ccb10f47a5e9">&#9670;&nbsp;</a></span>hgrid_ak_dd_c()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine pesg::hgrid_ak_dd_c </td>
+          <td>(</td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>lx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>ly</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>nx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>ny</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>pdlat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>pdlon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>pdazi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>delx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>dely</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)&#160;</td>
+          <td class="paramname"><em>gdlat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)&#160;</td>
+          <td class="paramname"><em>gdlon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(lx:lx+nx-1,ly:ly+ny-1), intent(out)&#160;</td>
+          <td class="paramname"><em>garea</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(lx:lx+nx-1,ly:ly+ny  ), intent(out)&#160;</td>
+          <td class="paramname"><em>dx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(lx:lx+nx  ,ly:ly+ny-1), intent(out)&#160;</td>
+          <td class="paramname"><em>dy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)&#160;</td>
+          <td class="paramname"><em>dangle_dx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)&#160;</td>
+          <td class="paramname"><em>dangle_dy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, intent(out)&#160;</td>
+          <td class="paramname"><em>ff</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Like hgrid_ak_rr_c, except all the angle arguments (but not delx,dely) are in degrees instead of radians. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>numbers of the grid spaces in x </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>numbers of the grid spaces in y </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>latitude defining projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>longitude defining projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>azimuth of the orientation of the mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid (in radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid (in radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">gdlat</td><td>array of grid point degree-latitudes </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">gdlon</td><td>array of grid point degree-longitudes </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>array of grid-cell areas (steradians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dx</td><td>step sizes of the grid-cell edges in x (earth radius=1 unit) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dy</td><td>step sizes of the grid-cell edges in y (earth radius=1 unit) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dangle_dx</td><td>azimuth rotation of the x grid steps, dx (degrees) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dangle_dy</td><td>azimuth rotation of the y grid steps, dy (degrees) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01672">1672</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00054">pietc::dtor</a>, <a class="el" href="pesg_8f90_source.html#l01337">hgrid_ak_rr_c()</a>, and <a class="el" href="pietc_8f90_source.html#l00055">pietc::rtod</a>.</p>
 
 </div>
 </div>
@@ -2309,20 +2642,20 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>If all goes well, return a lowered failure flag, ff=.false. . But if, for some reason, it is not possible to complete this task, return the raised failure flag, ff=.TRUE. .</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lx</td><td>x grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramname">ly</td><td>y grid index for left-lower corner of the grid at center </td></tr>
+    <tr><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
     <tr><td class="paramname">nx</td><td>numbers of the grid spaces in x </td></tr>
     <tr><td class="paramname">ny</td><td>numbers of the grid spaces in y </td></tr>
-    <tr><td class="paramname">a</td><td>parameters of an ESG mapping centered at (plat,plon) </td></tr>
-    <tr><td class="paramname">k</td><td>parameters of an ESG mapping centered at (plat,plon) </td></tr>
-    <tr><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramname">xc</td><td>unit cartesian vectors </td></tr>
-    <tr><td class="paramname">xcd</td><td>??? </td></tr>
-    <tr><td class="paramname">garea</td><td>rectangular array </td></tr>
+    <tr><td class="paramname">a</td><td>parameters of the ESG mapping centered at (plat,plon) </td></tr>
+    <tr><td class="paramname">k</td><td>parameters of the ESG mapping centered at (plat,plon) </td></tr>
+    <tr><td class="paramname">plat</td><td>latitude of the projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramname">plon</td><td>longitude of the projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramname">pazi</td><td>azimuth of orientation of mapping at its center </td></tr>
+    <tr><td class="paramname">delx</td><td>central x-spacing of the grid (in radians) </td></tr>
+    <tr><td class="paramname">dely</td><td>central y-spacing of the grid (in radians) </td></tr>
+    <tr><td class="paramname">xc</td><td>Earth-centered unit cartesian 3-vectors at each grid point </td></tr>
+    <tr><td class="paramname">xcd</td><td>Jacobian matrices, d(xc)/d(xm), at each grid point </td></tr>
+    <tr><td class="paramname">garea</td><td>rectangular array of grid-cell areas (steradians) </td></tr>
     <tr><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -2331,7 +2664,7 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01540">1540</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
-<p class="reference">References <a class="el" href="pesg_8f90_source.html#l01337">hgrid_ak_rr_c()</a>.</p>
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
 
 </div>
 </div>
@@ -2444,20 +2777,20 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>If all goes well, return a lowered failure flag, ff=.false. . But if, for some reason, it is not possible to complete this task, return the raised failure flag, ff=.TRUE. .</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>grid index location </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>grid index location </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>grid spaces </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>grid spaces </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>parameters of an ESG mapping centered at (plat,plon) </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">K</td><td>parameters of an ESG mapping centered at (plat,plon) </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude center point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude center point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>grid points for latitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>grid points for longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>rectangular array </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative grid index in x of left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative grid index in y of lower edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>number of grid spaces in x </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>number of grid spaces in y </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>parameter of the ESG mapping centered at (plat,plon) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">K</td><td>parameter of the ESG mapping centered at (plat,plon) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude of projection center of mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude of projection center of mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>azimuth of orientation of mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>grid points' latitudes </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>grid points' longitudes </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>array of grid-cell areas (steradians) </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -2465,6 +2798,8 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01220">1220</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
 
 </div>
 </div>
@@ -2602,24 +2937,24 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>if all goes well, return a .FALSE. failure flag, ff. If, for some reason, it is not possible to complete this task, return the failure flag as .TRUE.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>x grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>y grid index for left-lower corner of the grid at center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>numbers of the grid spaces in x </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>numbers of the grid spaces in y </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Extended Schmidt Gnomonic parameter </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>Extended Schmidt Gnomonic parameter </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>grid points for latitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>grid points for longitude </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>rectangular array </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dx</td><td>estimated grid steps x grid cell edges </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dy</td><td>estimated grid steps y grid cell edges </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">angle_dx</td><td>x angles relative to local east and north </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">angle_dy</td><td>y angles relative to local east and north </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude of the projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude of the projection center of the mapping (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>azimuth of the orientation of the mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid (radians) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glat</td><td>grid points' latitudes (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">glon</td><td>grid points' longitudes (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>array of grid-cell areas (steradians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dx</td><td>grid steps in x at grid cell edges (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dy</td><td>grid steps in y at grid cell edges (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">angle_dx</td><td>x angles relative to local east (radians) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">angle_dy</td><td>y angles relative to local north (radians) </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
@@ -2628,7 +2963,73 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l01337">1337</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="pesg_8f90_source.html#l01817">hgrid_ak_c()</a>, and <a class="el" href="pesg_8f90_source.html#l01540">hgrid_ak_rc()</a>.</p>
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="pesg_8f90_source.html#l01817">hgrid_ak_c()</a>, and <a class="el" href="pesg_8f90_source.html#l01672">hgrid_ak_dd_c()</a>.</p>
+
+</div>
+</div>
+<a id="a7fa7090c8dad76b177fa350019faaed6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fa7090c8dad76b177fa350019faaed6">&#9670;&nbsp;</a></span>xctoxm_ak()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public <a class="el" href="interfacepesg_1_1xctoxm__ak.html">pesg::xctoxm_ak</a> </td>
+          <td>(</td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), intent(in)&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(3), intent(in)&#160;</td>
+          <td class="paramname"><em>xc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(2), intent(out)&#160;</td>
+          <td class="paramname"><em>xm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, intent(out)&#160;</td>
+          <td class="paramname"><em>ff</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Inverse mapping of <a class="el" href="interfacepesg_1_1xmtoxc__ak.html">xmtoxc_ak</a>. </p>
+<p>That is, go from given cartesian unit 3-vector, xc, to map coordinate 2-vector xm (or return a raised failure flag, FF, if the attempt fails).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>ESG mapping parameter for line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>ESG mapping parameter for Gauss curvature in Schmidt mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xc</td><td>Earth-centered cartesian unit 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>2-vector map coordinate </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00465">465</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00018">pietc::f</a>.</p>
 
 </div>
 </div>
@@ -2670,14 +3071,16 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>I.e., cartesians to stereographic.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">xc</td><td>xstoxc </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>Inverse of xstoxc </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xc</td><td>Earth-centered cartesian unit 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>Stereographic map coordinates </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00068">68</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
 
 </div>
 </div>
@@ -2761,28 +3164,28 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
       </table>
 </div><div class="memdoc">
 
-<p>Like xmtog_ak_rr_g, except angles are expressed in degrees. </p>
+<p>Like xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>grid-space </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dlat</td><td>latitude radians angle </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dlon</td><td>longitude radians angle </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>degrees latitude of projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>degrees longitude of projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>Azimuth of the mapping orientation about its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>map coordinates, in grid units, of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dlat</td><td>degrees latitude of the point </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dlon</td><td>degrees longitude of the point </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02115">2115</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02117">2117</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
-<p class="reference">References <a class="el" href="pesg_8f90_source.html#l02012">xmtog_ak_rr_m()</a>.</p>
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00054">pietc::dtor</a>, <a class="el" href="pietc_8f90_source.html#l00055">pietc::rtod</a>, and <a class="el" href="pesg_8f90_source.html#l02014">xmtog_ak_rr_m()</a>.</p>
 
 </div>
 </div>
@@ -2862,26 +3265,26 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 </table>
 </div><div class="memdoc">
 
-<p>Like xmtog_ak_rr_m, except angles are expressed in degrees. </p>
+<p>Like xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dlat</td><td>latitude of geographical orientation </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">dlon</td><td>longitude of geographical orientation </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>degrees latitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>degrees longitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>Azimuth of the orientation of the mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>map space 2-vector coordinates of a point </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dlat</td><td>degrees latitude of the point </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">dlon</td><td>degrees longitude of the point </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02084">2084</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02086">2086</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
-<p class="reference">References <a class="el" href="pesg_8f90_source.html#l02012">xmtog_ak_rr_m()</a>.</p>
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00054">pietc::dtor</a>, <a class="el" href="pietc_8f90_source.html#l00055">pietc::rtod</a>, and <a class="el" href="pesg_8f90_source.html#l02014">xmtog_ak_rr_m()</a>.</p>
 
 </div>
 </div>
@@ -2969,25 +3372,25 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>If instead the transformation is invalid for any reason, then return the raised failure flag, FF=.true.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude geographical orientation </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude geographical orientation </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>grid-space units as the 2-vector </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">lat</td><td>latitude geographical coordinates </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">lon</td><td>longitude geographical coordinates </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>radians latitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>radians longitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Azimuth of the orientation of the mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>grid-space 2-vector coordinates of a point to be mapped </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">lat</td><td>radians latitude of the point </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">lon</td><td>radians longitude of the point </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02060">2060</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02062">2062</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
-<p class="reference">References <a class="el" href="pesg_8f90_source.html#l02012">xmtog_ak_rr_m()</a>.</p>
+<p class="reference">References <a class="el" href="pesg_8f90_source.html#l02014">xmtog_ak_rr_m()</a>.</p>
 
 </div>
 </div>
@@ -3067,27 +3470,29 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 </table>
 </div><div class="memdoc">
 
-<p>Given the ESG map specified by parameters (A,K) and geographical orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians). </p>
+<p>Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians). </p>
 <p>If the transformation is invalid for any reason, return instead with a raised failure flag, FF= .true.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>latitude of geographical orientation </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>longitude of geographical orientation </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">lat</td><td>latitude of geographical coordinates </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">lon</td><td>longitude of geographical coordinates </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameter of an ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameter of an ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plat</td><td>radians latitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">plon</td><td>radians longitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pazi</td><td>Azimuth of orientation of the mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>center-relative 2-vector map space coordinates of a point </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">lat</td><td>radians latitude of the point </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">lon</td><td>radians longitude of the point </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02012">2012</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l02014">2014</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="pesg_8f90_source.html#l02115">xmtog_ak_dd_g()</a>, <a class="el" href="pesg_8f90_source.html#l02084">xmtog_ak_dd_m()</a>, and <a class="el" href="pesg_8f90_source.html#l02060">xmtog_ak_rr_g()</a>.</p>
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="pesg_8f90_source.html#l02117">xmtog_ak_dd_g()</a>, <a class="el" href="pesg_8f90_source.html#l02086">xmtog_ak_dd_m()</a>, and <a class="el" href="pesg_8f90_source.html#l02062">xmtog_ak_rr_g()</a>.</p>
 
 </div>
 </div>
@@ -3145,12 +3550,12 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>If for any reason the mapping cannot be done, return a raised failure flag, FF.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">a</td><td>ESG mapping parameterization </td></tr>
-    <tr><td class="paramname">k</td><td>ESG mapping parameterization </td></tr>
-    <tr><td class="paramname">xm</td><td>map-space vector </td></tr>
-    <tr><td class="paramname">xm</td><td>derivative </td></tr>
-    <tr><td class="paramname">xcd</td><td>jacobian matrix </td></tr>
-    <tr><td class="paramname">ff</td><td>error flag </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>ESG mapping parameter for line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>ESG mapping parameter for Gauss curvature in Schmidt mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>map-space 2-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>Earth-centered cartesian unit 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian matrix, d(xc)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
@@ -3207,11 +3612,11 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Assuming the vector AK parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping with parameter vector, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, the Jacobian matrix, xcd. </p>
 <p>If for any reason the mapping cannot be done, return a raised failure flag,z FF. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ak</td><td>parameterization of the Extended ESG </td></tr>
-    <tr><td class="paramname">xm</td><td>vector </td></tr>
-    <tr><td class="paramname">xc</td><td></td></tr>
-    <tr><td class="paramname">xcd</td><td></td></tr>
-    <tr><td class="paramname">ff</td><td>raised failure error code </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ak</td><td>2-vector parameterization of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>2-vector of map plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>Earth-centered cartesian unit 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian, d(xc)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
@@ -3288,13 +3693,13 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Like xmtoxc_vak, _ak, but also return derivatives wrt ak. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir"></td><td class="paramname">ak</td><td>derivatives wrt ak </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xc1</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcd1</td><td></td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td></td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ak</td><td>2-vector parameterization of the ESG mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>2-vector of map plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>Earth-centered cartesian unit 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian of xc wrt xm, d(xc)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc1</td><td>Partial derivatives wrt ak of xc, d(xc)/d(ak) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd1</td><td>Second derivative wrt xm and ak of xc, d^2(xc)/(d(xm)d(ak)) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
@@ -3361,17 +3766,19 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>vector value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xt</td><td>vector value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xtd</td><td>2*2 diagonal Jacobian </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Mapping parameter controlling grid line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>Vector value of map coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xt</td><td>Vector value of gnomonic plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xtd</td><td>2*2 diagonal Jacobian, d(xt)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00254">254</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>.</p>
 
 </div>
 </div>
@@ -3442,13 +3849,13 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd Also, the derivatives, wrt a, of these quantities. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>the derivatives of these quantities </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>vector value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xt</td><td>vector value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xtd</td><td>2*2 diagonal Jacobian </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xt1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xtd1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Mapping parameter controlling grid line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xm</td><td>Vector value of map plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xt</td><td>Vector value of gnomonic plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xtd</td><td>2*2 diagonal Jacobian, d(xt)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xt1</td><td>Derivative wrt a of xt, d(xt)/da </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xtd1</td><td>Derivative wrt a of Jacobian xtd, d^2(xt)/(d(xm)da) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
@@ -3456,7 +3863,7 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00276">276</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
 
-<p class="reference">References <a class="el" href="pesg_8f90_source.html#l00348">zmtozt1()</a>.</p>
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pesg_8f90_source.html#l00348">zmtozt1()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="pesg_8f90_source.html#l00400">xmtoxc_vak1()</a>.</p>
 
@@ -3506,15 +3913,17 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">xs</td><td>polar stereographic map coordinates </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>cartesian </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>value of jacobian matrix, encoding distortion and metric </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xs</td><td>Stereographic map coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>Cartesian earth-centered 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Value of jacobian matrix, encoding distortion and metric </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00085">85</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>, and <a class="el" href="pietc_8f90_source.html#l00022">pietc::u2</a>.</p>
 
 </div>
 </div>
@@ -3560,16 +3969,18 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric. xcdd is the further derivative, wrt xs, of xcd.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">xs</td><td>polar stereographic map coordinates </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>cartesian </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>jacobian matrix, encoding distortion and metric </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcdd</td><td>further derivative, wrt xs, of xcd </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xs</td><td>Stereographic map coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>Cartesian earth-centered 3-vector </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian matrix, encoding distortion and metric </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcdd</td><td>Further derivative, wrt xs, of xcd </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00107">107</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>, and <a class="el" href="pietc_8f90_source.html#l00022">pietc::u2</a>.</p>
 
 </div>
 </div>
@@ -3614,16 +4025,18 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Inverse of xttoxs. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xs</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xt</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>Gaussian curvature parameter of Schmidt mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xs</td><td>Stereographic plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xt</td><td>Scaled gnomonic plane coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00139">139</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>, and <a class="el" href="pietc_8f90_source.html#l00022">pietc::u2</a>.</p>
 
 </div>
 </div>
@@ -3668,10 +4081,12 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Inverse of xmtoxt. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xt</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Mapping parameter controlling grid line spacing profile <br  />
+ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xt</td><td>Gnomonic plane coordinates <br  />
+ </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xm</td><td>Map coordinates </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
@@ -3736,17 +4151,19 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Scaled gnomonic plane xt to standard stereographic plane xs. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>Gaussian curvature parameter of Schmidt mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">xt</td><td>Scaled gnomonic plane </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>standard stereographic plane </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xsd</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>Standard stereographic plane </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xsd</td><td>Jacobian matrix, d(xs)/d(xt). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00159">159</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
 
 </div>
 </div>
@@ -3815,20 +4232,22 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>derivatives, wrt K, of xs and xsd </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>Gaussian curvature parameter of the Schmidt mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">xt</td><td>Scaled gnomonic plane </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>standard stereographic plane </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xsd</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xsdd</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xs1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xsd1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>Standard stereographic plane </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xsd</td><td>Jacobian matrix, d(xs)/d(xt) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xsdd</td><td>Second partial derivatives, d^2(xs)/(d(xt)d(xt)) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xs1</td><td>Derivative of xs wrt mapping parameter, d(xs)/dk </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xsd1</td><td>Derivative of Jacobian wrt k: d^2(xs)/(d(xt)dk) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00193">193</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00032">pietc::o2</a>, <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>, and <a class="el" href="pietc_8f90_source.html#l00022">pietc::u2</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="pesg_8f90_source.html#l00400">xmtoxc_vak1()</a>.</p>
 
@@ -3889,17 +4308,19 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd, for positive and negative A and for the limiting case, A --&gt; 0. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zm</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">zt</td><td>function to be evaluated </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ztd</td><td>derivative of the source function </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Mapping parameter controlling grid line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zm</td><td>Scalar value of single map plane coordinate </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">zt</td><td>Scalar value of single gnomonic plane coordinate </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ztd</td><td>Derivative of gnomonic coordinate, d(zt)/d(zm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00323">323</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00018">pietc::f</a>, <a class="el" href="pietc_8f90_source.html#l00044">pietc::pih</a>, <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
 
 </div>
 </div>
@@ -3970,19 +4391,21 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Like zmtozt, but also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zm</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zt</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ztd</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zt1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ztd1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Mapping parameter controlling grid line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zm</td><td>Single map plane coordinate </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zt</td><td>Single gnomonic plane coordinate </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ztd</td><td>Derivative wrt zm of zt, d(zt)/d(zm) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zt1</td><td>Derivative wrt a of zt, d(zt)/da </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ztd1</td><td>Derivative wrt a of ztd, d^2(zt)/(d(zm)da) </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00348">348</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00033">pietc::o3</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="pesg_8f90_source.html#l00276">xmtoxt1()</a>.</p>
 
@@ -4037,16 +4460,18 @@ subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><b>xctoxm_
 <p>Inverse of zmtozt. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zt</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">zm</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>Mapping parameter controlling grid line spacing profile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zt</td><td>Scalar value of single gnomonic plane coordinate </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">zm</td><td>Scalar value of single map plane coordinate </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="pesg_8f90_source.html#l00299">299</a> of file <a class="el" href="pesg_8f90_source.html">pesg.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="pietc_8f90_source.html#l00018">pietc::f</a>, <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
 
 </div>
 </div>

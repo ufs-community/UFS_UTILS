@@ -145,15 +145,15 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#ac90003637943f98a27697961f8383bb0">sininmap</a></div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a0ab365448bc120e2e47f6e5caaf2cd1a">dininmap</a>(alon0,alat0,rot3)<span class="comment">!                               [ininmap]</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a0ab365448bc120e2e47f6e5caaf2cd1a">   83</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,dtor</div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a0ab365448bc120e2e47f6e5caaf2cd1a">   83</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a></div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keywordtype">real</span>(dp),               <span class="keywordtype">intent(IN )</span>:: alon0,alat0</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3,3)</span>,<span class="keywordtype">intent(OUT)</span>:: rot3</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keywordtype">real</span>(dp)                           :: blon0,blat0,clon0,clat0,slon0,slat0</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;blon0=dtor*alon0; clon0=cos(blon0); slon0=sin(blon0)</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;blat0=dtor*alat0; clat0=cos(blat0); slat0=sin(blat0)</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;blon0=<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>*alon0; clon0=cos(blon0); slon0=sin(blon0)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;blat0=<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>*alat0; clat0=cos(blat0); slat0=sin(blat0)</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;rot3(1,1)=slat0*clon0; rot3(1,2)=slat0*slon0; rot3(1,3)=-clat0</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;rot3(2,1)=-slon0;      rot3(2,2)=clon0;       rot3(2,3)=u0</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;rot3(2,1)=-slon0;      rot3(2,2)=clon0;       rot3(2,3)=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;rot3(3,1)=clat0*clon0; rot3(3,2)=clat0*slon0; rot3(3,3)=slat0</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a0ab365448bc120e2e47f6e5caaf2cd1a">dininmap</a></div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
@@ -181,20 +181,20 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a094c4f88c3584c4e81e87376c40b6823">sinivmap</a></div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#ade2ed1d8ce5fddd0cac9792ee83aa64f">dinivmap</a>(alon0,alat0,rot3)<span class="comment">!                               [inivmap]</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno"><a class="line" href="namespacepmat5.html#ade2ed1d8ce5fddd0cac9792ee83aa64f">  134</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,dtor</div>
+<div class="line"><a name="l00134"></a><span class="lineno"><a class="line" href="namespacepmat5.html#ade2ed1d8ce5fddd0cac9792ee83aa64f">  134</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a></div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="keywordtype">real</span>(dp),               <span class="keywordtype">intent(IN )</span>:: alon0,alat0</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3,3)</span>,<span class="keywordtype">intent(OUT)</span>:: rot3</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="keywordtype">real</span>(dp)                           :: blon0,blat0,clon0,clat0,slon0,slat0</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;blon0=dtor*alon0</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;blat0=dtor*alat0</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;blon0=<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>*alon0</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;blat0=<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>*alat0</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;clon0=cos(blon0)</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;slon0=sin(blon0)</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;clat0=cos(blat0)</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;slat0=sin(blat0)</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;rot3(1,1)=-slon0</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;rot3(1,2)=clon0</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;rot3(1,3)=u0</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;rot3(1,3)=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;rot3(2,1)=-slat0*clon0</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;rot3(2,2)=-slat0*slon0</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;rot3(2,3)=clat0</div>
@@ -219,15 +219,15 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a7ae12feca1ae732c41143c9d1fb09a13">sctogr</a></div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#ae29767929af2337004430fb7c1e9d469">dctogr</a>(xe,rlat,rlon)<span class="comment">!                                       [ctogr]</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno"><a class="line" href="namespacepmat5.html#ae29767929af2337004430fb7c1e9d469">  187</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0</div>
+<div class="line"><a name="l00187"></a><span class="lineno"><a class="line" href="namespacepmat5.html#ae29767929af2337004430fb7c1e9d469">  187</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,<span class="keywordtype">intent(IN )</span>:: xe</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="keywordtype">real</span>(dp),             <span class="keywordtype">intent(OUT)</span>:: rlat,rlon</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="keywordtype">real</span>(dp)                         :: r</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;r=sqrt(xe(1)**2+xe(2)**2)</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;rlat=atan2(xe(3),r)</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="keywordflow">if</span>(r==u0)<span class="keywordflow">then</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;   rlon=u0</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="keywordflow">if</span>(r==<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>)<span class="keywordflow">then</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;   rlon=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="keywordflow">else</span></div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;   rlon=atan2(xe(2),xe(1))</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="keywordflow">endif</span></div>
@@ -267,7 +267,7 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#ae598bf2142d5bac03f4add7ab526d1d1">sgrtocd</a></div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a1997ebe527feb6466baac99464a8352b">dgrtocd</a>(rlat,rlon,xe,dxedlat,dxedlon)<span class="comment">!                      [grtoc]</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a1997ebe527feb6466baac99464a8352b">  263</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0</div>
+<div class="line"><a name="l00263"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a1997ebe527feb6466baac99464a8352b">  263</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="keywordtype">real</span>(dp),             <span class="keywordtype">intent(IN )</span>:: rlat,rlon</div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,<span class="keywordtype">intent(OUT)</span>:: xe,dxedlat,dxedlon</div>
@@ -276,7 +276,7 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;slo=sin(rlon);  clo=cos(rlon)</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 </div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a> </div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a1997ebe527feb6466baac99464a8352b">dgrtocd</a></div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a4a3c6fc6906b4d433f114b02b70b8781">sgrtocdd</a>(rlat,rlon,xe,dxedlat,dxedlon, &amp;!                   [grtoc]</div>
@@ -301,7 +301,7 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a8a88a3f4d6997939589ad5305effe61b">dgrtocdd</a>(rlat,rlon,xe,dxedlat,dxedlon, &amp;!                   [grtoc]</div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;     ddxedlatdlat,ddxedlatdlon,ddxedlondlon)</div>
-<div class="line"><a name="l00319"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a8a88a3f4d6997939589ad5305effe61b">  319</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0</div>
+<div class="line"><a name="l00319"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a8a88a3f4d6997939589ad5305effe61b">  319</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="keywordtype">real</span>(dp),             <span class="keywordtype">intent(IN )</span>:: rlat,rlon</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,<span class="keywordtype">intent(OUT)</span>:: xe,dxedlat,dxedlon, &amp;</div>
@@ -311,16 +311,16 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;slo=sin(rlon);  clo=cos(rlon)</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla</div>
 <div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 </div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a> </div>
 <div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;ddxedlatdlat(1)=-cla*clo</div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;ddxedlatdlat(2)=-cla*slo</div>
 <div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;ddxedlatdlat(3)=-sla</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;ddxedlatdlon(1)= sla*slo</div>
 <div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;ddxedlatdlon(2)=-sla*clo</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;ddxedlatdlon(3)= u0</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;ddxedlatdlon(3)= <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;ddxedlondlon(1)=-cla*clo</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;ddxedlondlon(2)=-cla*slo</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;ddxedlondlon(3)= u0</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;ddxedlondlon(3)= <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a8a88a3f4d6997939589ad5305effe61b">dgrtocdd</a></div>
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
 <div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a5af7ff2967ce4feb2dbaad607b86b53c">sctog</a>(xe,dlat,dlon)<span class="comment">!                                         [ctog]</span></div>
@@ -339,17 +339,17 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a5af7ff2967ce4feb2dbaad607b86b53c">sctog</a></div>
 <div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160; </div>
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a4cdb980157241ae715742587a273d651">dctog</a>(xe,dlat,dlon)<span class="comment">!                                         [ctog]</span></div>
-<div class="line"><a name="l00372"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a4cdb980157241ae715742587a273d651">  372</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,rtod</div>
+<div class="line"><a name="l00372"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a4cdb980157241ae715742587a273d651">  372</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">rtod</a></div>
 <div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,<span class="keywordtype">intent(IN )</span>:: xe</div>
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="keywordtype">real</span>(dp),             <span class="keywordtype">intent(OUT)</span>:: dlat,dlon</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;<span class="keywordtype">real</span>(dp)                         :: r</div>
 <div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;r=sqrt(xe(1)**2+xe(2)**2)</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;dlat=atan2(xe(3),r)*rtod</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="keywordflow">if</span>(r==u0)<span class="keywordflow">then</span></div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;   dlon=u0</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;dlat=atan2(xe(3),r)*<a class="code" href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">rtod</a></div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="keywordflow">if</span>(r==<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>)<span class="keywordflow">then</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;   dlon=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="keywordflow">else</span></div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;   dlon=atan2(xe(2),xe(1))*rtod</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;   dlon=atan2(xe(2),xe(1))*<a class="code" href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">rtod</a></div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="keywordflow">endif</span></div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a4cdb980157241ae715742587a273d651">dctog</a></div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160; </div>
@@ -366,12 +366,12 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a5fb323cf2d5049ca71cea8b093f246a5">sgtoc</a></div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160; </div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a46c54c999c0f22cfb21c14164f6afaee">dgtoc</a>(dlat,dlon,xe)<span class="comment">!                                         [gtoc]</span></div>
-<div class="line"><a name="l00414"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a46c54c999c0f22cfb21c14164f6afaee">  414</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: dtor</div>
+<div class="line"><a name="l00414"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a46c54c999c0f22cfb21c14164f6afaee">  414</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a></div>
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;<span class="keywordtype">real</span>(dp),             <span class="keywordtype">intent(IN )</span>:: dlat,dlon</div>
 <div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,<span class="keywordtype">intent(OUT)</span>:: xe</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;<span class="keywordtype">real</span>(dp)                         :: rlat,rlon,sla,cla,slo,clo</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;rlat=dtor*dlat; rlon=dtor*dlon</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;rlat=<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>*dlat; rlon=<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>*dlon</div>
 <div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;sla=sin(rlat);  cla=cos(rlat)</div>
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;slo=sin(rlon);  clo=cos(rlon)</div>
 <div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla</div>
@@ -391,17 +391,17 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a003a281787daf4e97fcaaa3b8c3274a3">sgtocd</a></div>
 <div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160; </div>
 <div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a47cb195cf58372342e19e710030bf70b">dgtocd</a>(dlat,dlon,xe,dxedlat,dxedlon)<span class="comment">!                        [gtoc]</span></div>
-<div class="line"><a name="l00455"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a47cb195cf58372342e19e710030bf70b">  455</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,dtor</div>
+<div class="line"><a name="l00455"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a47cb195cf58372342e19e710030bf70b">  455</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a></div>
 <div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;<span class="keywordtype">real</span>(dp),             <span class="keywordtype">intent(IN )</span>:: dlat,dlon</div>
 <div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,<span class="keywordtype">intent(OUT)</span>:: xe,dxedlat,dxedlon</div>
 <div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;<span class="keywordtype">real</span>(dp)                         :: rlat,rlon,sla,cla,slo,clo</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;rlat=dtor*dlat; rlon=dtor*dlon</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;rlat=<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>*dlat; rlon=<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>*dlon</div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;sla=sin(rlat);  cla=cos(rlat)</div>
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;slo=sin(rlon);  clo=cos(rlon)</div>
 <div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla; dxedlat=dxedlat*dtor</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 ; dxedlon=dxedlon*dtor</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla; dxedlat=dxedlat*<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a></div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a> ; dxedlon=dxedlon*<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a></div>
 <div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a47cb195cf58372342e19e710030bf70b">dgtocd</a></div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160; </div>
 <div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#aff15189d640f2985c4cb86870fe939e3">sgtocdd</a>(dlat,dlon,xe,dxedlat,dxedlon, &amp;</div>
@@ -426,30 +426,30 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160; </div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a43d7cd0b9288695a76ff704fbe1d95b3">dgtocdd</a>(dlat,dlon,xe,dxedlat,dxedlon, &amp;</div>
 <div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;     ddxedlatdlat,ddxedlatdlon,ddxedlondlon)<span class="comment">!                           [gtoc]</span></div>
-<div class="line"><a name="l00512"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a43d7cd0b9288695a76ff704fbe1d95b3">  512</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,dtor</div>
+<div class="line"><a name="l00512"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a43d7cd0b9288695a76ff704fbe1d95b3">  512</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a></div>
 <div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;<span class="keywordtype">real</span>(dp),             <span class="keywordtype">intent(IN )</span>:: dlat,dlon</div>
 <div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,<span class="keywordtype">intent(OUT)</span>:: xe,dxedlat,dxedlon, &amp;</div>
 <div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;                                    ddxedlatdlat,ddxedlatdlon,ddxedlondlon</div>
 <div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;<span class="keywordtype">real</span>(dp)                         :: rlat,rlon,sla,cla,slo,clo</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;rlat=dtor*dlat; rlon=dtor*dlon</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;rlat=<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>*dlat; rlon=<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>*dlon</div>
 <div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;sla=sin(rlat);  cla=cos(rlat)</div>
 <div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;slo=sin(rlon);  clo=cos(rlon)</div>
 <div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla; dxedlat=dxedlat*dtor</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 ; dxedlon=dxedlon*dtor</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla; dxedlat=dxedlat*<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a></div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a> ; dxedlon=dxedlon*<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a></div>
 <div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;ddxedlatdlat(1)=-cla*clo</div>
 <div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;ddxedlatdlat(2)=-cla*slo</div>
 <div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;ddxedlatdlat(3)=-sla</div>
 <div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;ddxedlatdlon(1)= sla*slo</div>
 <div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;ddxedlatdlon(2)=-sla*clo</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;ddxedlatdlon(3)= u0</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;ddxedlatdlon(3)= <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;ddxedlondlon(1)=-cla*clo</div>
 <div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;ddxedlondlon(2)=-cla*slo</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;ddxedlondlon(3)= u0</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;ddxedlatdlat=ddxedlatdlat*dtor**2</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;ddxedlatdlon=ddxedlatdlon*dtor**2</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;ddxedlondlon=ddxedlondlon*dtor**2</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;ddxedlondlon(3)= <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;ddxedlatdlat=ddxedlatdlat*<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>**2</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;ddxedlatdlon=ddxedlatdlon*<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>**2</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;ddxedlondlon=ddxedlondlon*<a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>**2</div>
 <div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a43d7cd0b9288695a76ff704fbe1d95b3">dgtocdd</a></div>
 <div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160; </div>
 <div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#ae6e7a5a97b413e17866c523ef49e5785">sgtoframem</a>(splat,splon,sorth)<span class="comment">!                            [gtoframe]</span></div>
@@ -485,19 +485,19 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#acce6c355875099aa350a33edf2a47680">sgtoframev</a></div>
 <div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160; </div>
 <div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a277a5dc65adacdfda2ceefa3485a34a9">gtoframev</a>(plat,plon, xp,yp,zp)<span class="comment">!                           [gtoframe]</span></div>
-<div class="line"><a name="l00602"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a277a5dc65adacdfda2ceefa3485a34a9">  602</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,u1</div>
+<div class="line"><a name="l00602"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a277a5dc65adacdfda2ceefa3485a34a9">  602</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a></div>
 <div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;<span class="keywordtype">real</span>(dp),             <span class="keywordtype">intent(in )</span>:: plat,plon</div>
 <div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,<span class="keywordtype">intent(out)</span>:: xp,yp,zp</div>
 <div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>:: dzpdlat,dzpdlon</div>
 <div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;<span class="keywordflow">if</span>(plat==90)<span class="keywordflow">then</span> <span class="comment">! is this the north pole?</span></div>
-<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;   xp=(/ u0,u1, u0/) <span class="comment">! Assume the limiting case lat--&gt;90 along the 0-meridian</span></div>
-<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;   yp=(/-u1,u0, u0/) <span class="comment">!</span></div>
-<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;   zp=(/ u0,u0, u1/)</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;   xp=(/ <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>, <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>/) <span class="comment">! Assume the limiting case lat--&gt;90 along the 0-meridian</span></div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;   yp=(/-<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>,<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>, <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>/) <span class="comment">!</span></div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;   zp=(/ <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>, <a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>/)</div>
 <div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;<span class="keywordflow">elseif</span>(plat==-90)<span class="keywordflow">then</span></div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;   xp=(/ u0,u1, u0/) <span class="comment">! Assume the limiting case lat--&gt;90 along the 0-meridian</span></div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;   yp=(/ u1,u0, u0/) <span class="comment">!</span></div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;   zp=(/ u0,u0,-u1/)</div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;   xp=(/ <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>, <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>/) <span class="comment">! Assume the limiting case lat--&gt;90 along the 0-meridian</span></div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;   yp=(/ <a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>,<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>, <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>/) <span class="comment">!</span></div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;   zp=(/ <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,-<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>/)</div>
 <div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;<span class="keywordflow">else</span></div>
 <div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;   <span class="keyword">call </span><a class="code" href="interfacepmat5_1_1gtoc.html">gtoc</a>(plat,plon,zp,dzpdlat,dzpdlon)</div>
 <div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;   xp=dzpdlon/sqrt(dot_product(dzpdlon,dzpdlon))</div>
@@ -652,30 +652,30 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#ad04f85b3792a2b8d7d980a1ab2c8d2c4">sctocdd</a></div>
 <div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160; </div>
 <div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a7db3de0fe562e88337558ea0bedf0694">dctoc</a>(s,xc1,xc2)<span class="comment">!                                       [ctoc_schm]</span></div>
-<div class="line"><a name="l00844"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a7db3de0fe562e88337558ea0bedf0694">  844</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u1,u2</div>
+<div class="line"><a name="l00844"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a7db3de0fe562e88337558ea0bedf0694">  844</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>,<a class="code" href="namespacepietc.html#ad40c60cf454a23bacb142e0e3af48960">u2</a></div>
 <div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;<span class="keywordtype">real</span>(dp),             <span class="keywordtype">intent(IN   )</span>:: s</div>
 <div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,<span class="keywordtype">intent(INOUT)</span>:: xc1,xc2</div>
 <div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;<span class="keywordtype">real</span>(dp)                           :: x,y,z,a,b,d,e, &amp;</div>
 <div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;                                      ab2,aa,bb,di,aapbb,aambb</div>
 <div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;x=xc1(1); y=xc1(2); z=xc1(3)</div>
-<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;a=s+u1</div>
-<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;b=s-u1</div>
-<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;ab2=a*b*u2</div>
+<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;a=s+<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a></div>
+<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;b=s-<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a></div>
+<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;ab2=a*b*<a class="code" href="namespacepietc.html#ad40c60cf454a23bacb142e0e3af48960">u2</a></div>
 <div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;aa=a*a</div>
 <div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;bb=b*b</div>
 <div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;aapbb=aa+bb</div>
 <div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;aambb=aa-bb</div>
 <div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;d=aapbb-ab2*z</div>
 <div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;e=aapbb*z-ab2</div>
-<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;di=u1/d</div>
+<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;di=<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>/d</div>
 <div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;xc2(1)=(aambb*x)*di</div>
 <div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;xc2(2)=(aambb*y)*di</div>
 <div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;xc2(3)=e*di</div>
 <div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a7db3de0fe562e88337558ea0bedf0694">dctoc</a></div>
 <div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160; </div>
 <div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a17df6aadf501db01b8eb5ea159a356fd">dctocd</a>(s,xc1,xc2,dxc2)<span class="comment">!                                 [ctoc_schm]</span></div>
-<div class="line"><a name="l00875"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a17df6aadf501db01b8eb5ea159a356fd">  875</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,u1,u2</div>
+<div class="line"><a name="l00875"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a17df6aadf501db01b8eb5ea159a356fd">  875</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>,<a class="code" href="namespacepietc.html#ad40c60cf454a23bacb142e0e3af48960">u2</a></div>
 <div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;<span class="keywordtype">real</span>(dp),               <span class="keywordtype">intent(IN   )</span>:: s</div>
 <div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,  <span class="keywordtype">intent(INOUT)</span>:: xc1,xc2</div>
@@ -683,22 +683,22 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;<span class="keywordtype">real</span>(dp)                             :: x,y,z,a,b,d,e, &amp;</div>
 <div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;                                        ab2,aa,bb,di,ddi,aapbb,aambb</div>
 <div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;x=xc1(1); y=xc1(2); z=xc1(3)</div>
-<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;a=s+u1</div>
-<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;b=s-u1</div>
-<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;ab2=a*b*u2</div>
+<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;a=s+<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a></div>
+<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;b=s-<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a></div>
+<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;ab2=a*b*<a class="code" href="namespacepietc.html#ad40c60cf454a23bacb142e0e3af48960">u2</a></div>
 <div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;aa=a*a</div>
 <div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;bb=b*b</div>
 <div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;aapbb=aa+bb</div>
 <div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;aambb=aa-bb</div>
 <div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;d=aapbb-ab2*z</div>
 <div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;e=aapbb*z-ab2</div>
-<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;di=u1/d</div>
+<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;di=<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>/d</div>
 <div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;xc2(1)=(aambb*x)*di</div>
 <div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;xc2(2)=(aambb*y)*di</div>
 <div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;xc2(3)=e*di</div>
 <div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;ddi=di*di</div>
 <div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160; </div>
-<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;dxc2=u0</div>
+<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;dxc2=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160;dxc2(1,1)=aambb*di</div>
 <div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160;dxc2(1,3)=ab2*aambb*x*ddi</div>
 <div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;dxc2(2,2)=aambb*di</div>
@@ -707,7 +707,7 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a17df6aadf501db01b8eb5ea159a356fd">dctocd</a></div>
 <div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160; </div>
 <div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;<span class="keyword">subroutine </span><a class="code" href="namespacepmat5.html#a1f36d39ea3a96f9644202ed9546a2f97">dctocdd</a>(s,xc1,xc2,dxc2,ddxc2)<span class="comment">!                          [ctoc_schm]</span></div>
-<div class="line"><a name="l00916"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a1f36d39ea3a96f9644202ed9546a2f97">  916</a></span>&#160;<span class="keywordtype">use </span>pietc, <span class="keywordtype">only</span>: u0,u1,u2</div>
+<div class="line"><a name="l00916"></a><span class="lineno"><a class="line" href="namespacepmat5.html#a1f36d39ea3a96f9644202ed9546a2f97">  916</a></span>&#160;<span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a>,<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>,<a class="code" href="namespacepietc.html#ad40c60cf454a23bacb142e0e3af48960">u2</a></div>
 <div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;<span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">intent(IN)</span>                    :: s</div>
 <div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;<span class="keywordtype">real</span>(dp),<span class="keywordtype">dimension(3)</span>,    <span class="keywordtype">intent(INOUT)</span>:: xc1,xc2</div>
@@ -717,37 +717,37 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;                                          ab2,aa,bb,di,ddi,dddi, &amp;</div>
 <div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;                                          aapbb,aambb</div>
 <div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;x=xc1(1); y=xc1(2); z=xc1(3)</div>
-<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;a=s+u1</div>
-<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;b=s-u1</div>
-<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;ab2=a*b*u2</div>
+<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;a=s+<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a></div>
+<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;b=s-<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a></div>
+<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;ab2=a*b*<a class="code" href="namespacepietc.html#ad40c60cf454a23bacb142e0e3af48960">u2</a></div>
 <div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;aa=a*a</div>
 <div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;bb=b*b</div>
 <div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;aapbb=aa+bb</div>
 <div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;aambb=aa-bb</div>
 <div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;d=aapbb-ab2*z</div>
 <div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;e=aapbb*z-ab2</div>
-<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;di=u1/d</div>
+<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;di=<a class="code" href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">u1</a>/d</div>
 <div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;xc2(1)=(aambb*x)*di</div>
 <div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;xc2(2)=(aambb*y)*di</div>
 <div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;xc2(3)=e*di</div>
 <div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;ddi=di*di</div>
 <div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;dddi=ddi*di</div>
 <div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160; </div>
-<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;dxc2=u0</div>
+<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;dxc2=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;dxc2(1,1)=aambb*di</div>
 <div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;dxc2(1,3)=ab2*aambb*x*ddi</div>
 <div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160;dxc2(2,2)=aambb*di</div>
 <div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;dxc2(2,3)=ab2*aambb*y*ddi</div>
 <div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;dxc2(3,3)=aapbb*di +ab2*e*ddi</div>
 <div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160; </div>
-<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;ddxc2=u0</div>
+<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;ddxc2=<a class="code" href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">u0</a></div>
 <div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160;ddxc2(1,1,3)=ab2*aambb*ddi</div>
 <div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;ddxc2(1,3,1)=ddxc2(1,1,3)</div>
-<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;ddxc2(1,3,3)=u2*ab2**2*aambb*x*dddi</div>
+<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;ddxc2(1,3,3)=<a class="code" href="namespacepietc.html#ad40c60cf454a23bacb142e0e3af48960">u2</a>*ab2**2*aambb*x*dddi</div>
 <div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;ddxc2(2,2,3)=ab2*aambb*ddi</div>
 <div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;ddxc2(2,3,2)=ddxc2(2,2,3)</div>
-<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;ddxc2(2,3,3)=u2*ab2**2*aambb*y*dddi</div>
-<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160;ddxc2(3,3,3)=u2*ab2*(aapbb*ddi+ab2*e*dddi)</div>
+<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;ddxc2(2,3,3)=<a class="code" href="namespacepietc.html#ad40c60cf454a23bacb142e0e3af48960">u2</a>*ab2**2*aambb*y*dddi</div>
+<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160;ddxc2(3,3,3)=<a class="code" href="namespacepietc.html#ad40c60cf454a23bacb142e0e3af48960">u2</a>*ab2*(aapbb*ddi+ab2*e*dddi)</div>
 <div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="namespacepmat5.html#a1f36d39ea3a96f9644202ed9546a2f97">dctocdd</a></div>
 <div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160; </div>
 <div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;<span class="keyword">subroutine </span><a class="code" href="interfacepmat5_1_1plrot.html">plrot</a>(rot3,n,x,y,z)<span class="comment">!                                        [plrot]</span></div>
@@ -838,6 +838,7 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="ainterfacepmat5_1_1plctoc_html"><div class="ttname"><a href="interfacepmat5_1_1plctoc.html">pmat5::plctoc</a></div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00051">pmat5.f90:51</a></div></div>
+<div class="ttc" id="anamespacepietc_html_ac4b2c921dc2126df39de4d45ce464dc2"><div class="ttname"><a href="namespacepietc.html#ac4b2c921dc2126df39de4d45ce464dc2">pietc::u0</a></div><div class="ttdeci">real(dp), parameter u0</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pietc_8f90_source.html#l00019">pietc.f90:19</a></div></div>
 <div class="ttc" id="anamespacedcstgeo_html_a25d603dde5cb470f72b8dacbabbc8efd"><div class="ttname"><a href="namespacedcstgeo.html#a25d603dde5cb470f72b8dacbabbc8efd">dcstgeo::sci</a></div><div class="ttdeci">real(dp) sci</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00022">pmat5.f90:22</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_a5fb323cf2d5049ca71cea8b093f246a5"><div class="ttname"><a href="namespacepmat5.html#a5fb323cf2d5049ca71cea8b093f246a5">pmat5::sgtoc</a></div><div class="ttdeci">subroutine sgtoc(dlat, dlon, xe)</div><div class="ttdoc">Transform &quot;Geographical&quot; to &quot;Cartesian&quot; coordinates, where the geographical coordinates refer to lati...</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00396">pmat5.f90:396</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_ae29767929af2337004430fb7c1e9d469"><div class="ttname"><a href="namespacepmat5.html#ae29767929af2337004430fb7c1e9d469">pmat5::dctogr</a></div><div class="ttdeci">subroutine dctogr(xe, rlat, rlon)</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00187">pmat5.f90:187</a></div></div>
@@ -856,6 +857,7 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="ttc" id="anamespacepmat5_html_a86a7576b348a2747a7f7feb9a8bd60c8"><div class="ttname"><a href="namespacepmat5.html#a86a7576b348a2747a7f7feb9a8bd60c8">pmat5::sctoc</a></div><div class="ttdeci">subroutine sctoc(s, xc1, xc2)</div><div class="ttdoc">Evaluate schmidt transformation, xc1 --&gt; xc2, with scaling parameter s.</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00723">pmat5.f90:723</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_a43d7cd0b9288695a76ff704fbe1d95b3"><div class="ttname"><a href="namespacepmat5.html#a43d7cd0b9288695a76ff704fbe1d95b3">pmat5::dgtocdd</a></div><div class="ttdeci">subroutine dgtocdd(dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00512">pmat5.f90:512</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_a46c54c999c0f22cfb21c14164f6afaee"><div class="ttname"><a href="namespacepmat5.html#a46c54c999c0f22cfb21c14164f6afaee">pmat5::dgtoc</a></div><div class="ttdeci">subroutine dgtoc(dlat, dlon, xe)</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00414">pmat5.f90:414</a></div></div>
+<div class="ttc" id="anamespacepietc_html_a2c3ccea1400f40b1e25fd0b31079054c"><div class="ttname"><a href="namespacepietc.html#a2c3ccea1400f40b1e25fd0b31079054c">pietc::u1</a></div><div class="ttdeci">real(dp), parameter u1</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pietc_8f90_source.html#l00020">pietc.f90:20</a></div></div>
 <div class="ttc" id="ainterfacepmat5_1_1gtoc_html"><div class="ttname"><a href="interfacepmat5_1_1gtoc.html">pmat5::gtoc</a></div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00041">pmat5.f90:41</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_aff15189d640f2985c4cb86870fe939e3"><div class="ttname"><a href="namespacepmat5.html#aff15189d640f2985c4cb86870fe939e3">pmat5::sgtocdd</a></div><div class="ttdeci">subroutine sgtocdd(dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00481">pmat5.f90:481</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_ad70f27c21aac45e54af9b2b696419809"><div class="ttname"><a href="namespacepmat5.html#ad70f27c21aac45e54af9b2b696419809">pmat5::dplrot</a></div><div class="ttdeci">subroutine dplrot(rot3, n, x, y, z)</div><div class="ttdoc">Apply a constant rotation to a three dimensional polyline.</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l01012">pmat5.f90:1012</a></div></div>
@@ -870,6 +872,7 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="ttc" id="anamespacepmat4_html"><div class="ttname"><a href="namespacepmat4.html">pmat4</a></div><div class="ttdoc">Module for handy vector and matrix operations in Euclidean geometry.</div><div class="ttdef"><b>Definition:</b> <a href="pmat4_8f90_source.html#l00046">pmat4.f90:46</a></div></div>
 <div class="ttc" id="ainterfacepmat5_1_1grtoc_html"><div class="ttname"><a href="interfacepmat5_1_1grtoc.html">pmat5::grtoc</a></div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00037">pmat5.f90:37</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_a68ec9d48a671321dcd7e7ce5ddf8f973"><div class="ttname"><a href="namespacepmat5.html#a68ec9d48a671321dcd7e7ce5ddf8f973">pmat5::sparaframe</a></div><div class="ttdeci">subroutine sparaframe(sxp, syp, szp, sxv, syv, szv)</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00632">pmat5.f90:632</a></div></div>
+<div class="ttc" id="anamespacepietc_html"><div class="ttname"><a href="namespacepietc.html">pietc</a></div><div class="ttdoc">Some of the commonly used constants (pi etc) mainly for double-precision subroutines.</div><div class="ttdef"><b>Definition:</b> <a href="pietc_8f90_source.html#l00014">pietc.f90:14</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_a47cb195cf58372342e19e710030bf70b"><div class="ttname"><a href="namespacepmat5.html#a47cb195cf58372342e19e710030bf70b">pmat5::dgtocd</a></div><div class="ttdeci">subroutine dgtocd(dlat, dlon, xe, dxedlat, dxedlon)</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00455">pmat5.f90:455</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_a4a3c6fc6906b4d433f114b02b70b8781"><div class="ttname"><a href="namespacepmat5.html#a4a3c6fc6906b4d433f114b02b70b8781">pmat5::sgrtocdd</a></div><div class="ttdeci">subroutine sgrtocdd(rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00288">pmat5.f90:288</a></div></div>
 <div class="ttc" id="ainterfacepmat5_1_1ctoc__schm_html"><div class="ttname"><a href="interfacepmat5_1_1ctoc__schm.html">pmat5::ctoc_schm</a></div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00047">pmat5.f90:47</a></div></div>
@@ -885,7 +888,9 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="ttc" id="anamespacepmat5_html_a3069df15efa59d1d48a4c4a221dd201d"><div class="ttname"><a href="namespacepmat5.html#a3069df15efa59d1d48a4c4a221dd201d">pmat5::dplroti</a></div><div class="ttdeci">subroutine dplroti(rot3, n, x, y, z)</div><div class="ttdoc">Invert the rotation of a three-dimensional polyline.</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l01034">pmat5.f90:1034</a></div></div>
 <div class="ttc" id="anamespacedcstgeo_html"><div class="ttname"><a href="namespacedcstgeo.html">dcstgeo</a></div><div class="ttdoc">Constants for orientation and stretching of map.</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00017">pmat5.f90:17</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_ad04f85b3792a2b8d7d980a1ab2c8d2c4"><div class="ttname"><a href="namespacepmat5.html#ad04f85b3792a2b8d7d980a1ab2c8d2c4">pmat5::sctocdd</a></div><div class="ttdeci">subroutine sctocdd(s, xc1, xc2, dxc2, ddxc2)</div><div class="ttdoc">Evaluate schmidt transformation, xc1 --&gt; xc2, with scaling parameter s, its jacobian,...</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00794">pmat5.f90:794</a></div></div>
+<div class="ttc" id="anamespacepietc_html_a57d89085283cb2a7bfd9152324b4b463"><div class="ttname"><a href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">pietc::rtod</a></div><div class="ttdeci">real(dp), parameter rtod</div><div class="ttdoc">radians to degrees</div><div class="ttdef"><b>Definition:</b> <a href="pietc_8f90_source.html#l00055">pietc.f90:55</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_ae598bf2142d5bac03f4add7ab526d1d1"><div class="ttname"><a href="namespacepmat5.html#ae598bf2142d5bac03f4add7ab526d1d1">pmat5::sgrtocd</a></div><div class="ttdeci">subroutine sgrtocd(rlat, rlon, xe, dxedlat, dxedlon)</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00242">pmat5.f90:242</a></div></div>
+<div class="ttc" id="anamespacepietc_html_ad40c60cf454a23bacb142e0e3af48960"><div class="ttname"><a href="namespacepietc.html#ad40c60cf454a23bacb142e0e3af48960">pietc::u2</a></div><div class="ttdeci">real(dp), parameter u2</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pietc_8f90_source.html#l00022">pietc.f90:22</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_ac105f0c4e3ea9e7b2dbfb9a9d6f9f97e"><div class="ttname"><a href="namespacepmat5.html#ac105f0c4e3ea9e7b2dbfb9a9d6f9f97e">pmat5::gtoframem</a></div><div class="ttdeci">subroutine gtoframem(plat, plon, orth)</div><div class="ttdoc">From the degree lat and lo (plat and plon) return the standard orthogonal 3D frame at this location a...</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00561">pmat5.f90:561</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_a7248db240ab1a98ac980d3b4190e003e"><div class="ttname"><a href="namespacepmat5.html#a7248db240ab1a98ac980d3b4190e003e">pmat5::sctocd</a></div><div class="ttdeci">subroutine sctocd(s, xc1, xc2, dxc2)</div><div class="ttdoc">Evaluate schmidt transformation, xc1 --&gt; xc2, with scaling parameter s, and its jacobian,...</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00753">pmat5.f90:753</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_a0ab365448bc120e2e47f6e5caaf2cd1a"><div class="ttname"><a href="namespacepmat5.html#a0ab365448bc120e2e47f6e5caaf2cd1a">pmat5::dininmap</a></div><div class="ttdeci">subroutine dininmap(alon0, alat0, rot3)</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00083">pmat5.f90:83</a></div></div>
@@ -895,6 +900,7 @@ $(document).ready(function(){initNavTree('pmat5_8f90_source.html',''); initResiz
 <div class="ttc" id="anamespacepmat5_html_ade2ed1d8ce5fddd0cac9792ee83aa64f"><div class="ttname"><a href="namespacepmat5.html#ade2ed1d8ce5fddd0cac9792ee83aa64f">pmat5::dinivmap</a></div><div class="ttdeci">subroutine dinivmap(alon0, alat0, rot3)</div><div class="ttdoc">???</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00134">pmat5.f90:134</a></div></div>
 <div class="ttc" id="anamespacecstgeo_html"><div class="ttname"><a href="namespacecstgeo.html">cstgeo</a></div><div class="ttdoc">Constants for orientation and stretching of map.</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00007">pmat5.f90:7</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_a7db3de0fe562e88337558ea0bedf0694"><div class="ttname"><a href="namespacepmat5.html#a7db3de0fe562e88337558ea0bedf0694">pmat5::dctoc</a></div><div class="ttdeci">subroutine dctoc(s, xc1, xc2)</div><div class="ttdoc">Evaluate schmidt transformation, xc1 --&gt; xc2, with scaling parameter s.</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00844">pmat5.f90:844</a></div></div>
+<div class="ttc" id="anamespacepietc_html_a0e5882b8de6720f66db6ce7dd8c2f856"><div class="ttname"><a href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">pietc::dtor</a></div><div class="ttdeci">real(dp), parameter dtor</div><div class="ttdoc">Degree to radians.</div><div class="ttdef"><b>Definition:</b> <a href="pietc_8f90_source.html#l00054">pietc.f90:54</a></div></div>
 <div class="ttc" id="anamespacepmat5_html_ac90003637943f98a27697961f8383bb0"><div class="ttname"><a href="namespacepmat5.html#ac90003637943f98a27697961f8383bb0">pmat5::sininmap</a></div><div class="ttdeci">subroutine sininmap(alon0, alat0, rot3)</div><div class="ttdoc">Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components ...</div><div class="ttdef"><b>Definition:</b> <a href="pmat5_8f90_source.html#l00064">pmat5.f90:64</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

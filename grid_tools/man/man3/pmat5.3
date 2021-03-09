@@ -1,0 +1,1281 @@
+.TH "pmat5" 3 "Tue Mar 9 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat5 \- Utility routines for orienting the globe and basic geographical mappings\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBctoc_schm\fP"
+.br
+.ti -1c
+.RI "interface \fBctog\fP"
+.br
+.ti -1c
+.RI "interface \fBctogr\fP"
+.br
+.ti -1c
+.RI "interface \fBframetwist\fP"
+.br
+.ti -1c
+.RI "interface \fBgrtoc\fP"
+.br
+.ti -1c
+.RI "interface \fBgtoc\fP"
+.br
+.ti -1c
+.RI "interface \fBgtoframe\fP"
+.br
+.ti -1c
+.RI "interface \fBininmap\fP"
+.br
+.ti -1c
+.RI "interface \fBinivmap\fP"
+.br
+.ti -1c
+.RI "interface \fBparaframe\fP"
+.br
+.ti -1c
+.RI "interface \fBplctoc\fP"
+.br
+.ti -1c
+.RI "interface \fBplrot\fP"
+.br
+.ti -1c
+.RI "interface \fBplroti\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBdctoc\fP (s, xc1, xc2)"
+.br
+.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s\&. "
+.ti -1c
+.RI "subroutine \fBdctocd\fP (s, xc1, xc2, dxc2)"
+.br
+.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. "
+.ti -1c
+.RI "subroutine \fBdctocdd\fP (s, xc1, xc2, dxc2, ddxc2)"
+.br
+.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. "
+.ti -1c
+.RI "subroutine \fBdctog\fP (xe, dlat, dlon)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdctogr\fP (xe, rlat, rlon)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdgrtoc\fP (rlat, rlon, xe)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdgrtocd\fP (rlat, rlon, xe, dxedlat, dxedlon)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdgrtocdd\fP (rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdgtoc\fP (dlat, dlon, xe)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdgtocd\fP (dlat, dlon, xe, dxedlat, dxedlon)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdgtocdd\fP (dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdininmap\fP (alon0, alat0, rot3)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdinivmap\fP (alon0, alat0, rot3)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBdplrot\fP (rot3, n, x, y, z)"
+.br
+.RI "Apply a constant rotation to a three dimensional polyline\&. "
+.ti -1c
+.RI "subroutine \fBdplroti\fP (rot3, n, x, y, z)"
+.br
+.RI "Invert the rotation of a three-dimensional polyline\&. "
+.ti -1c
+.RI "subroutine, public \fBframetwist\fP (xp, yp, zp, xv, yv, zv, twist)"
+.br
+.RI "Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. "
+.ti -1c
+.RI "subroutine \fBgtoframem\fP (plat, plon, orth)"
+.br
+.RI "From the degree lat and lo (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
+.ti -1c
+.RI "subroutine \fBgtoframev\fP (plat, plon, xp, yp, zp)"
+.br
+.RI "Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. "
+.ti -1c
+.RI "subroutine, public \fBparaframe\fP (xp, yp, zp, xv, yv, zv)"
+.br
+.RI "Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. "
+.ti -1c
+.RI "subroutine, public \fBplctoc\fP (s, n, x, y, z)"
+.br
+.RI "Perform schmidt transformation with scaling parameter s to a polyline\&. "
+.ti -1c
+.RI "subroutine, public \fBplrot\fP (rot3, n, x, y, z)"
+.br
+.RI "Apply a constant rotation to a three dimensional polyline\&. "
+.ti -1c
+.RI "subroutine, public \fBplroti\fP (rot3, n, x, y, z)"
+.br
+.RI "Invert the rotation of a three-dimensional polyline\&. "
+.ti -1c
+.RI "subroutine \fBsctoc\fP (s, xc1, xc2)"
+.br
+.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s\&. "
+.ti -1c
+.RI "subroutine \fBsctocd\fP (s, xc1, xc2, dxc2)"
+.br
+.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. "
+.ti -1c
+.RI "subroutine \fBsctocdd\fP (s, xc1, xc2, dxc2, ddxc2)"
+.br
+.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. "
+.ti -1c
+.RI "subroutine \fBsctog\fP (xe, dlat, dlon)"
+.br
+.RI "Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBsctogr\fP (xe, rlat, rlon)"
+.br
+.RI "Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (radians) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBsframetwist\fP (sxp, syp, szp, sxv, syv, szv, stwist)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBsgrtoc\fP (rlat, rlon, xe)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBsgrtocd\fP (rlat, rlon, xe, dxedlat, dxedlon)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBsgrtocdd\fP (rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBsgtoc\fP (dlat, dlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBsgtocd\fP (dlat, dlon, xe, dxedlat, dxedlon)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBsgtocdd\fP (dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBsgtoframem\fP (splat, splon, sorth)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBsgtoframev\fP (splat, splon, sxp, syp, szp)"
+.br
+.RI "??? "
+.ti -1c
+.RI "subroutine \fBsininmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. "
+.ti -1c
+.RI "subroutine \fBsinivmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) at the viewing nadir\&. "
+.ti -1c
+.RI "subroutine \fBsparaframe\fP (sxp, syp, szp, sxv, syv, szv)"
+.br
+.RI "??? "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Utility routines for orienting the globe and basic geographical mappings\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat5::dctoc (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2)"
+
+.PP
+Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP scaling 
+.br
+\fIxc1\fP schmidt transformation 
+.br
+\fIxc2\fP schmidt transformation 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 844 of file pmat5\&.f90\&.
+.PP
+References pietc::u1, and pietc::u2\&.
+.SS "subroutine pmat5::dctocd (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2, real(dp), dimension(3,3), intent(out) dxc2)"
+
+.PP
+Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP scaling 
+.br
+\fIxc1\fP schmidt transformation 
+.br
+\fIxc2\fP schmidt transformation 
+.br
+\fIdxc2\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 875 of file pmat5\&.f90\&.
+.PP
+References pietc::u0, pietc::u1, and pietc::u2\&.
+.SS "subroutine pmat5::dctocdd (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2, real(dp), dimension(3,3), intent(out) dxc2, real(dp), dimension(3,3,3), intent(out) ddxc2)"
+
+.PP
+Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP scaling 
+.br
+\fIxc1\fP schmidt transformation 
+.br
+\fIxc2\fP schmidt transformation 
+.br
+\fIdxc2\fP jacobian 
+.br
+\fIddxc2\fP derivative 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 916 of file pmat5\&.f90\&.
+.PP
+References pietc::u0, pietc::u1, and pietc::u2\&.
+.SS "subroutine pmat5::dctog (real(dp), dimension(3), intent(in) xe, real(dp), intent(out) dlat, real(dp), intent(out) dlon)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIxe\fP three cartesian components 
+.br
+\fIdlat\fP degrees latitude 
+.br
+\fIdlon\fP degrees longitude 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 372 of file pmat5\&.f90\&.
+.PP
+References pietc::rtod, and pietc::u0\&.
+.SS "subroutine pmat5::dctogr (real(dp), dimension(3), intent(in) xe, real(dp), intent(out) rlat, real(dp), intent(out) rlon)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIxe\fP 
+.br
+\fIrlat\fP 
+.br
+\fIrlon\fP 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 187 of file pmat5\&.f90\&.
+.PP
+References pietc::u0\&.
+.SS "subroutine pmat5::dgrtoc (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrlat\fP 
+.br
+\fIrlon\fP 
+.br
+\fIxe\fP 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 224 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::dgrtocd (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrlat\fP 
+.br
+\fIrlon\fP 
+.br
+\fIxe\fP 
+.br
+\fIdxedlat\fP 
+.br
+\fIdxedlon\fP 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 263 of file pmat5\&.f90\&.
+.PP
+References pietc::u0\&.
+.PP
+Referenced by sgrtocd()\&.
+.SS "subroutine pmat5::dgrtocdd (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon, real(dp), dimension(3), intent(out) ddxedlatdlat, real(dp), dimension(3), intent(out) ddxedlatdlon, real(dp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrlat\fP ??? 
+.br
+\fIrlon\fP ??? 
+.br
+\fIxe\fP ??? 
+.br
+\fIdxedlat\fP ??? 
+.br
+\fIdxedlon\fP ??? 
+.br
+\fIddxedlatdlat\fP ??? 
+.br
+\fIddxedlatdlon\fP ??? 
+.br
+\fIddxedlondlon\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 319 of file pmat5\&.f90\&.
+.PP
+References pietc::u0\&.
+.SS "subroutine pmat5::dgtoc (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdlat\fP degrees latitude 
+.br
+\fIdlon\fP degrees longitude 
+.br
+\fIxe\fP three cartesian components\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 414 of file pmat5\&.f90\&.
+.PP
+References pietc::dtor\&.
+.SS "subroutine pmat5::dgtocd (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdlat\fP degrees latitude 
+.br
+\fIdlon\fP degrees longitude 
+.br
+\fIxe\fP three cartesian components\&. 
+.br
+\fIdxedlat\fP ??? 
+.br
+\fIdxedlon\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 455 of file pmat5\&.f90\&.
+.PP
+References pietc::dtor, and pietc::u0\&.
+.PP
+Referenced by sgtocd()\&.
+.SS "subroutine pmat5::dgtocdd (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon, real(dp), dimension(3), intent(out) ddxedlatdlat, real(dp), dimension(3), intent(out) ddxedlatdlon, real(dp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdlat\fP degrees latitude 
+.br
+\fIdlon\fP degrees longitude 
+.br
+\fIxe\fP three cartesian components\&. 
+.br
+\fIdxedlat\fP ??? 
+.br
+\fIdxedlon\fP ??? 
+.br
+\fIddxedlatdlat\fP ??? 
+.br
+\fIddxedlatdlon\fP ??? 
+.br
+\fIddxedlondlon\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 512 of file pmat5\&.f90\&.
+.PP
+References pietc::dtor, and pietc::u0\&.
+.PP
+Referenced by sgrtocdd(), and sgtocdd()\&.
+.SS "subroutine pmat5::dininmap (real(dp), intent(in) alon0, real(dp), intent(in) alat0, real(dp), dimension(3,3), intent(out) rot3)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIalon0\fP ??? 
+.br
+\fIalat0\fP ??? 
+.br
+\fIrot3\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 83 of file pmat5\&.f90\&.
+.PP
+References pietc::dtor, and pietc::u0\&.
+.SS "subroutine pmat5::dinivmap (real(dp), intent(in) alon0, real(dp), intent(in) alat0, real(dp), dimension(3,3), intent(out) rot3)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIalon0\fP ??? 
+.br
+\fIalat0\fP ??? 
+.br
+\fIrot3\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 134 of file pmat5\&.f90\&.
+.PP
+References pietc::dtor, and pietc::u0\&.
+.SS "subroutine pmat5::dplrot (real(dp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(dp), dimension(n), intent(inout) x, real(dp), dimension(n), intent(inout) y, real(dp), dimension(n), intent(inout) z)\fC [private]\fP"
+
+.PP
+Apply a constant rotation to a three dimensional polyline\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrot3\fP rotation to be inverted 
+.br
+\fIn\fP ??? 
+.br
+\fIx\fP input of the three dimensional polyline 
+.br
+\fIy\fP input of the three dimensional polyline 
+.br
+\fIz\fP input of the three dimensional polyline 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1012 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::dplroti (real(dp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(dp), dimension(n), intent(inout) x, real(dp), dimension(n), intent(inout) y, real(dp), dimension(n), intent(inout) z)\fC [private]\fP"
+
+.PP
+Invert the rotation of a three-dimensional polyline\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrot3\fP rotation to be inverted 
+.br
+\fIn\fP ??? 
+.br
+\fIx\fP input of the three dimensional polyline 
+.br
+\fIy\fP input of the three dimensional polyline 
+.br
+\fIz\fP input of the three dimensional polyline 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1034 of file pmat5\&.f90\&.
+.SS "subroutine, public \fBpmat5::frametwist\fP (real(dp), dimension(3), intent(in) xp, real(dp), dimension(3), intent(in) yp, real(dp), dimension(3), intent(in) zp, real(dp), dimension(3), intent(in) xv, real(dp), dimension(3), intent(in) yv, real(dp), dimension(3), intent(in) zv, real(dp), intent(out) twist)"
+
+.PP
+Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. Note that, by symmetry, transposing P and V leads to the opposite twist\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIxp\fP cartesian orthonormal frame 
+.br
+\fIyp\fP cartesian orthonormal frame 
+.br
+\fIzp\fP cartesian orthonormal frame 
+.br
+\fIxv\fP ??? 
+.br
+\fIyv\fP ??? 
+.br
+\fIzv\fP Earth-centered cartesians 
+.br
+\fItwist\fP opposite twist of cartesian orthonormal frame input 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 706 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::gtoframem (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3,3), intent(out) orth)\fC [private]\fP"
+
+.PP
+From the degree lat and lo (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIplat\fP latitude degree 
+.br
+\fIplon\fP longitude degree 
+.br
+\fIorth\fP orthonormal matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 561 of file pmat5\&.f90\&.
+.PP
+References gtoframev()\&.
+.PP
+Referenced by sgtoframem()\&.
+.SS "subroutine pmat5::gtoframev (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3), intent(out) xp, real(dp), dimension(3), intent(out) yp, real(dp), dimension(3), intent(out) zp)\fC [private]\fP"
+
+.PP
+Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIplat\fP latitude point 
+.br
+\fIplon\fP longitude point 
+.br
+\fIxp\fP orthogonal cartesian frame in earth-centered coordinates\&. 
+.br
+\fIyp\fP orthogonal cartesian frame in earth-centered coordinates\&. 
+.br
+\fIzp\fP orthogonal cartesian frame in earth-centered coordinates\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 602 of file pmat5\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.PP
+Referenced by gtoframem(), and sgtoframev()\&.
+.SS "subroutine, public \fBpmat5::paraframe\fP (real(dp), dimension(3), intent(in) xp, real(dp), dimension(3), intent(in) yp, real(dp), dimension(3), intent(in) zp, real(dp), dimension(3), intent(out) xv, real(dp), dimension(3), intent(out) yv, real(dp), dimension(3), intent(in) zv)"
+
+.PP
+Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIxp\fP reference orthonormal frame 
+.br
+\fIyp\fP reference orthonormal frame 
+.br
+\fIzp\fP reference orthonormal frame 
+.br
+\fIzv\fP dependent point 
+.br
+\fIxv\fP V-frame cartesian components 
+.br
+\fIyv\fP V-frame cartesian components 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 654 of file pmat5\&.f90\&.
+.SS "subroutine, public \fBpmat5::plctoc\fP (real(sp), intent(in) s, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)"
+
+.PP
+Perform schmidt transformation with scaling parameter s to a polyline\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP scaling 
+.br
+\fIn\fP ??? 
+.br
+\fIx\fP input of the three dimensional polyline 
+.br
+\fIy\fP input of the three dimensional polyline 
+.br
+\fIz\fP input of the three dimensional polyline 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1056 of file pmat5\&.f90\&.
+.SS "subroutine, public \fBpmat5::plrot\fP (real(sp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)"
+
+.PP
+Apply a constant rotation to a three dimensional polyline\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrot3\fP rotation 
+.br
+\fIn\fP ??? 
+.br
+\fIx\fP input of the three dimensional polyline 
+.br
+\fIy\fP input of the three dimensional polyline 
+.br
+\fIz\fP input of the three dimensional polyline 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 968 of file pmat5\&.f90\&.
+.SS "subroutine, public \fBpmat5::plroti\fP (real(sp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)"
+
+.PP
+Invert the rotation of a three-dimensional polyline\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrot3\fP rotation to be inverted 
+.br
+\fIn\fP ??? 
+.br
+\fIx\fP input of the three dimensional polyline 
+.br
+\fIy\fP input of the three dimensional polyline 
+.br
+\fIz\fP input of the three dimensional polyline 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 990 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sctoc (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2)\fC [private]\fP"
+
+.PP
+Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP scaling parameter 
+.br
+\fIxc1\fP schmidt transformation 
+.br
+\fIxc2\fP schmidt transformation 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 723 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sctocd (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2, real(sp), dimension(3,3), intent(out) dxc2)"
+
+.PP
+Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP scaling 
+.br
+\fIxc1\fP schmidt transformation 
+.br
+\fIxc2\fP schmidt transformation 
+.br
+\fIdxc2\fP jacobian 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 753 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sctocdd (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2, real(sp), dimension(3,3), intent(out) dxc2, real(sp), dimension(3,3,3), intent(out) ddxc2)"
+
+.PP
+Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIs\fP scaling 
+.br
+\fIxc1\fP ??? 
+.br
+\fIxc2\fP ??? 
+.br
+\fIdxc2\fP jacobian 
+.br
+\fIddxc2\fP 2nd derivative 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 794 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sctog (real(sp), dimension(3), intent(in) xe, real(sp), intent(out) dlat, real(sp), intent(out) dlon)"
+
+.PP
+Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIxe\fP three cartesian components 
+.br
+\fIdlat\fP degrees latitude 
+.br
+\fIdlon\fP degrees longitude 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 351 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sctogr (real(sp), dimension(3), intent(in) xe, real(sp), intent(out) rlat, real(sp), intent(out) rlon)"
+
+.PP
+Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (radians) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIxe\fP three cartesian components 
+.br
+\fIrlat\fP radians latitude 
+.br
+\fIrlon\fP radians longitude 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 166 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sframetwist (real(sp), dimension(3), intent(in) sxp, real(sp), dimension(3), intent(in) syp, real(sp), dimension(3), intent(in) szp, real(sp), dimension(3), intent(in) sxv, real(sp), dimension(3), intent(in) syv, real(sp), dimension(3), intent(in) szv, real(sp), intent(out) stwist)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsxp\fP ??? 
+.br
+\fIsyp\fP ??? 
+.br
+\fIszp\fP ??? 
+.br
+\fIsxv\fP ??? 
+.br
+\fIsyv\fP ??? 
+.br
+\fIszv\fP ??? 
+.br
+\fIstwist\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 680 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sgrtoc (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrlat\fP 
+.br
+\fIrlon\fP 
+.br
+\fIxe\fP 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 208 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sgrtocd (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrlat\fP 
+.br
+\fIrlon\fP 
+.br
+\fIxe\fP 
+.br
+\fIdxedlat\fP 
+.br
+\fIdxedlon\fP 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 242 of file pmat5\&.f90\&.
+.PP
+References dgrtocd()\&.
+.SS "subroutine pmat5::sgrtocdd (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon, real(sp), dimension(3), intent(out) ddxedlatdlat, real(sp), dimension(3), intent(out) ddxedlatdlon, real(sp), dimension(3), intent(out) ddxedlondlon)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIrlat\fP 
+.br
+\fIrlon\fP 
+.br
+\fIxe\fP 
+.br
+\fIdxedlat\fP 
+.br
+\fIdxedlon\fP 
+.br
+\fIddxedlatdlat\fP 
+.br
+\fIddxedlatdlon\fP 
+.br
+\fIddxedlondlon\fP 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 288 of file pmat5\&.f90\&.
+.PP
+References dgtocdd()\&.
+.SS "subroutine pmat5::sgtoc (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe)"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdlat\fP degrees latitude 
+.br
+\fIdlon\fP degrees longitude 
+.br
+\fIxe\fP three cartesian components\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 396 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sgtocd (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdlat\fP degrees latitude 
+.br
+\fIdlon\fP degrees longitude 
+.br
+\fIxe\fP three cartesian components\&. 
+.br
+\fIdxedlat\fP ??? 
+.br
+\fIdxedlon\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 434 of file pmat5\&.f90\&.
+.PP
+References dgtocd()\&.
+.SS "subroutine pmat5::sgtocdd (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon, real(sp), dimension(3), intent(out) ddxedlatdlat, real(sp), dimension(3), intent(out) ddxedlatdlon, real(sp), dimension(3), intent(out) ddxedlondlon)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIdlat\fP degrees latitude 
+.br
+\fIdlon\fP degrees longitude 
+.br
+\fIxe\fP three cartesian components\&. 
+.br
+\fIdxedlat\fP ??? 
+.br
+\fIdxedlon\fP ??? 
+.br
+\fIddxedlatdlat\fP ??? 
+.br
+\fIddxedlatdlon\fP ??? 
+.br
+\fIddxedlondlon\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 481 of file pmat5\&.f90\&.
+.PP
+References dgtocdd()\&.
+.SS "subroutine pmat5::sgtoframem (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3,3), intent(out) sorth)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsplat\fP ??? 
+.br
+\fIsplon\fP ??? 
+.br
+\fIsorth\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 545 of file pmat5\&.f90\&.
+.PP
+References gtoframem()\&.
+.SS "subroutine pmat5::sgtoframev (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3), intent(out) sxp, real(sp), dimension(3), intent(out) syp, real(sp), dimension(3), intent(out) szp)\fC [private]\fP"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsplat\fP ??? 
+.br
+\fIsplon\fP ??? 
+.br
+\fIsxp\fP ??? 
+.br
+\fIsyp\fP ??? 
+.br
+\fIszp\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 578 of file pmat5\&.f90\&.
+.PP
+References gtoframev()\&.
+.SS "subroutine pmat5::sininmap (real(sp), intent(in) alon0, real(sp), intent(in) alat0, real(sp), dimension(3,3), intent(out) rot3)\fC [private]\fP"
+
+.PP
+Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIalon0\fP geographical point 
+.br
+\fIalat0\fP geographical point 
+.br
+\fIrot3\fP rotation matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1995 
+.RE
+.PP
+
+.PP
+Definition at line 64 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sinivmap (real(sp), intent(in) alon0, real(sp), intent(in) alat0, real(sp), dimension(3,3), intent(out) rot3)"
+
+.PP
+Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) at the viewing nadir\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIalon0\fP geographical point 
+.br
+\fIalat0\fP geographical point 
+.br
+\fIrot3\fP rotation matrix 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+1995 
+.RE
+.PP
+
+.PP
+Definition at line 105 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sparaframe (real(sp), dimension(3), intent(in) sxp, real(sp), dimension(3), intent(in) syp, real(sp), dimension(3), intent(in) szp, real(sp), dimension(3), intent(out) sxv, real(sp), dimension(3), intent(out) syv, real(sp), dimension(3), intent(in) szv)"
+
+.PP
+??? 
+.PP
+\fBParameters\fP
+.RS 4
+\fIsxp\fP ??? 
+.br
+\fIsyp\fP ??? 
+.br
+\fIszp\fP ??? 
+.br
+\fIsxv\fP ??? 
+.br
+\fIsyv\fP ??? 
+.br
+\fIszv\fP ??? 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 632 of file pmat5\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

@@ -157,11 +157,11 @@ Private Member Functions</h2></td></tr>
 <p>Scaled gnomonic plane xt to standard stereographic plane xs. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>Gaussian curvature parameter of Schmidt mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">xt</td><td>Scaled gnomonic plane </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>standard stereographic plane </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xsd</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>Standard stereographic plane </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xsd</td><td>Jacobian matrix, d(xs)/d(xt). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>
@@ -245,14 +245,14 @@ Private Member Functions</h2></td></tr>
 <p>Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>derivatives, wrt K, of xs and xsd </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>Gaussian curvature parameter of the Schmidt mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">xt</td><td>Scaled gnomonic plane </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>standard stereographic plane </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xsd</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xsdd</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xs1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xsd1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>??? </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xs</td><td>Standard stereographic plane </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xsd</td><td>Jacobian matrix, d(xs)/d(xt) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xsdd</td><td>Second partial derivatives, d^2(xs)/(d(xt)d(xt)) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xs1</td><td>Derivative of xs wrt mapping parameter, d(xs)/dk </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xsd1</td><td>Derivative of Jacobian wrt k: d^2(xs)/(d(xt)dk) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>Failure flag </td></tr>
   </table>
   </dd>
 </dl>

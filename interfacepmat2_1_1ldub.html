@@ -91,17 +91,150 @@ $(document).ready(function(){initNavTree('interfacepmat2_1_1ldub.html',''); init
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a556dd6da7c68f34acfc7b9de8e49a775"><td class="memItemLeft" align="right" valign="top"><a id="a556dd6da7c68f34acfc7b9de8e49a775"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>ldub</b> (m, mah1, mah2, a)</td></tr>
+<tr class="memitem:a556dd6da7c68f34acfc7b9de8e49a775"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1ldub.html#a556dd6da7c68f34acfc7b9de8e49a775">ldub</a> (m, mah1, mah2, a)</td></tr>
+<tr class="memdesc:a556dd6da7c68f34acfc7b9de8e49a775"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute [L]*[D**-1]*[U] decomposition of asymmetric band-matrix.  <a href="interfacepmat2_1_1ldub.html#a556dd6da7c68f34acfc7b9de8e49a775">More...</a><br /></td></tr>
 <tr class="separator:a556dd6da7c68f34acfc7b9de8e49a775"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8f80a63e81eb293d4534519a2379e09"><td class="memItemLeft" align="right" valign="top"><a id="ac8f80a63e81eb293d4534519a2379e09"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>dldub</b> (m, mah1, mah2, a)</td></tr>
+<tr class="memitem:ac8f80a63e81eb293d4534519a2379e09"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1ldub.html#ac8f80a63e81eb293d4534519a2379e09">dldub</a> (m, mah1, mah2, a)</td></tr>
+<tr class="memdesc:ac8f80a63e81eb293d4534519a2379e09"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1ldub.html#ac8f80a63e81eb293d4534519a2379e09">More...</a><br /></td></tr>
 <tr class="separator:ac8f80a63e81eb293d4534519a2379e09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00042">42</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
-</div><hr/>The documentation for this interface was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00064">64</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a556dd6da7c68f34acfc7b9de8e49a775"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a556dd6da7c68f34acfc7b9de8e49a775">&#9670;&nbsp;</a></span>ldub()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine pmat2::ldub::ldub </td>
+          <td>(</td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>mah1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>mah2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(sp), dimension(m,-mah1:mah2), intent(inout)&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute [L]*[D**-1]*[U] decomposition of asymmetric band-matrix. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>input as the asymmetric band matrix. On output, it contains the [L]*[D**-1]*[U] factorization of the input matrix, where<ul>
+<li>[L] is lower triangular with unit main diagonal</li>
+<li>[D] is a diagonal matrix</li>
+<li>[U] is upper triangular with unit main diagonal </li>
+</ul>
+</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>The number of rows of array A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>the left half-bandwidth of fortran array A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>the right half-bandwidth of fortran array A </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>1994 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00532">532</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function/Subroutine Documentation</h2>
+<a id="ac8f80a63e81eb293d4534519a2379e09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8f80a63e81eb293d4534519a2379e09">&#9670;&nbsp;</a></span>dldub()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine pmat2::ldub::dldub </td>
+          <td>(</td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>mah1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(spi), intent(in)&#160;</td>
+          <td class="paramname"><em>mah2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(dp), dimension(m,-mah1:mah2), intent(inout)&#160;</td>
+          <td class="paramname"><em>a</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>??? </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00568">568</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this interface was generated from the following file:<ul>
 <li>/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/<a class="el" href="pmat2_8f90_source.html">pmat2.f90</a></li>
 </ul>
 </div><!-- contents -->
@@ -109,7 +242,7 @@ subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>dldub</b> (m, m
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>pmat2</b></li><li class="navelem"><a class="el" href="interfacepmat2_1_1ldub.html">ldub</a></li>
+    <li class="navelem"><a class="el" href="namespacepmat2.html">pmat2</a></li><li class="navelem"><a class="el" href="interfacepmat2_1_1ldub.html">ldub</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

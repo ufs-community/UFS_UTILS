@@ -1,0 +1,200 @@
+.TH "/home/ed/UFS_UTILS/sorc/sfc_climo_gen.fd/model_grid.F90" 3 "Tue Mar 9 2021" "Version 1.0.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/ed/UFS_UTILS/sorc/sfc_climo_gen.fd/model_grid.F90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBmodel_grid::define_model_grid\fP (localpet, npets)"
+.br
+.RI "define model grid "
+.ti -1c
+.RI "subroutine \fBmodel_grid::get_model_info\fP (orog_file, mask, lat2d, lon2d, idim, jdim)"
+.br
+.RI "Get model information\&. "
+.ti -1c
+.RI "subroutine, public \fBmodel_grid::model_grid_cleanup\fP"
+.br
+.RI "model grid cleanup "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::data_field_mdl\fP"
+.br
+.ti -1c
+.RI "type(esmf_grid), public \fBmodel_grid::grid_mdl\fP"
+.br
+.ti -1c
+.RI "character(len=5), dimension(:), allocatable, public \fBmodel_grid::grid_tiles\fP"
+.br
+.ti -1c
+.RI "integer, public \fBmodel_grid::i_mdl\fP"
+.br
+.ti -1c
+.RI "integer, public \fBmodel_grid::ij_mdl\fP"
+.br
+.ti -1c
+.RI "integer, public \fBmodel_grid::j_mdl\fP"
+.br
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::latitude_field_mdl\fP"
+.br
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::longitude_field_mdl\fP"
+.br
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::mask_field_mdl\fP"
+.br
+.ti -1c
+.RI "real(kind=4), public \fBmodel_grid::missing\fP = \-999\&."
+.br
+.ti -1c
+.RI "integer, public \fBmodel_grid::num_tiles\fP"
+.br
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::vegt_field_mdl\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines the model grid\&. 
+.PP
+\fBAuthor\fP
+.RS 4
+gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018
+.RE
+.PP
+.SS "Public Subroutines:"
+.IP "\(bu" 2
+define_model_grid Defines esmf grid object for the model grid\&.
+.IP "\(bu" 2
+model_grid_cleanup Free up memory used in this module\&.
+.PP
+.SS "Public variables:"
+Variables named with 'mdl' refer to the model grid\&.
+.PP
+.IP "\(bu" 2
+data_field_mdl ESMF field object that holds the data interpolated to model grid\&.
+.IP "\(bu" 2
+grid_mdl ESMF grid object for the model grid\&.
+.IP "\(bu" 2
+grid_tiles Array of model grid tile names\&.
+.IP "\(bu" 2
+i/j_mdl i/j dimensions of model tile\&.
+.IP "\(bu" 2
+latitude_field_mdl ESMF field object that holds the model grid latitude
+.IP "\(bu" 2
+longitude_field_mdl ESMF field object that holds the model grid longitude
+.IP "\(bu" 2
+mdl_field_mdl ESMF field object that holds the model land mask\&.
+.IP "\(bu" 2
+missing Value assigned to undefined points (i\&.e\&., ocean points for a land field)\&.
+.IP "\(bu" 2
+num_tiles Total number of model grid tiles\&.
+.IP "\(bu" 2
+vegt_field_mdl ESMF field object that holds the vegetation type on the model grid\&. 
+.PP
+
+.PP
+Definition in file \fBmodel_grid\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public model_grid::define_model_grid (integer, intent(in) localpet, integer, intent(in) npets)"
+
+.PP
+define model grid 
+.PP
+\fBAuthor\fP
+.RS 4
+gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018
+.RE
+.PP
+Define the model grid from the mosaic and orography files\&. Create the ESMF grid object for the model grid\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIlocalpet\fP this mpi task 
+.br
+ 
+.br
+\fInpets\fP total number of mpi tasks 
+.br
+ 
+.RE
+.PP
+
+.PP
+Definition at line 66 of file model_grid\&.F90\&.
+.SS "subroutine model_grid::get_model_info (character(len=*), intent(in) orog_file, integer(esmf_kind_i4), dimension(idim,jdim), intent(out) mask, real(esmf_kind_r4), dimension(idim,jdim), intent(out) lat2d, real(esmf_kind_r4), dimension(idim,jdim), intent(out) lon2d, integer, intent(in) idim, integer, intent(in) jdim)"
+
+.PP
+Get model information\&. 
+.PP
+\fBAuthor\fP
+.RS 4
+gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018
+.RE
+.PP
+Read model land/sea mask and lat/lon from the orography file\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIorog_file\fP the orography file 
+.br
+\fImask\fP land/sea mask 
+.br
+\fIlat2d\fP latitude 
+.br
+\fIlon2d\fP longitude 
+.br
+\fIidim\fP i dimension of the model tile 
+.br
+\fIjdim\fP j dimension of the model tile 
+.RE
+.PP
+
+.PP
+Definition at line 297 of file model_grid\&.F90\&.
+.SS "subroutine, public model_grid::model_grid_cleanup"
+
+.PP
+model grid cleanup 
+.PP
+\fBAuthor\fP
+.RS 4
+gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018
+.RE
+.PP
+Free up memory associated with this module\&. 
+.PP
+Definition at line 401 of file model_grid\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

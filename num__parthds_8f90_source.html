@@ -87,15 +87,17 @@ $(document).ready(function(){initNavTree('num__parthds_8f90_source.html',''); in
 </div><!--header-->
 <div class="contents">
 <a href="num__parthds_8f90.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="keyword">integer </span><span class="keyword">function </span>num_parthds()</div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; <span class="keywordtype">use </span>omp_lib</div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">!$OMP PARALLEL</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; num_parthds=omp_get_num_threads()</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">!$OMP END PARALLEL</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; <span class="keywordflow">return</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; <span class="keyword">end function </span>num_parthds</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">integer </span><span class="keyword">function </span><a class="code" href="num__parthds_8f90.html#ac3494345203fb1f34de07ceff1019d94">num_parthds</a>()</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="num__parthds_8f90.html#ac3494345203fb1f34de07ceff1019d94">   10</a></span>&#160; <span class="keywordtype">use </span>omp_lib</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">!$OMP PARALLEL</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; <a class="code" href="num__parthds_8f90.html#ac3494345203fb1f34de07ceff1019d94">num_parthds</a>=omp_get_num_threads()</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">!$OMP END PARALLEL</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; <span class="keywordflow">return</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; <span class="keyword">end function </span><a class="code" href="num__parthds_8f90.html#ac3494345203fb1f34de07ceff1019d94">num_parthds</a></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="anum__parthds_8f90_html_ac3494345203fb1f34de07ceff1019d94"><div class="ttname"><a href="num__parthds_8f90.html#ac3494345203fb1f34de07ceff1019d94">num_parthds</a></div><div class="ttdeci">integer function num_parthds()</div><div class="ttdoc">Return the number of omp threads.</div><div class="ttdef"><b>Definition:</b> <a href="num__parthds_8f90_source.html#l00010">num_parthds.f90:10</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

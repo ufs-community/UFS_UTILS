@@ -215,20 +215,20 @@ Private Member Functions</h2></td></tr>
 <p>Like hgrid_ak_rx, return the grid points' cartesians xc and Jacobian matrices, xcd. Garea, the area of each grid cell, is also returned as in hgrid_ak_rx, and a failure flag, ff, raised when a failure occurs anywhere in these calculations.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>x grid index for left-lower corner of the grid at center </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>y grid index for left-lower corner of the grid at center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lx</td><td>center-relative x grid index for left edge of the domain </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ly</td><td>center-relative y grid index for lower edge of the domain </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">nx</td><td>numbers of the grid spaces in x </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ny</td><td>numbers of the grid spaces in y </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>parameters of an ESG mapping </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">k</td><td>parameters of an ESG mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>latitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>longitude define centered mapping </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing grid point </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing grid point </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>grid points' cartesians </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian matrices </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>Jacobian matrices </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlat</td><td>degrees latitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdlon</td><td>degrees longitude of the projection center of the mapping </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pdazi</td><td>azimuth of the orientation of the mapping at its center </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">delx</td><td>central x-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dely</td><td>central y-spacing of the grid in radians </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xc</td><td>grid points' earth-centered unit cartesians </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xcd</td><td>Jacobian matrices, d(xc)/d(xm) </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">garea</td><td>array of grid-cell areas (steradians) </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ff</td><td>failure flag </td></tr>
   </table>
   </dd>
