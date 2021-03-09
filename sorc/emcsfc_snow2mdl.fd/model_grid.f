@@ -1,6 +1,9 @@
 !> @file
 !! @brief Read in data defining the model grid.
-!!
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16        
+
+!> Read in data defining the model grid.
+!!      
 !! program history log:
 !! -  2005-dec-16  gayno   - initial version
 !! -  2007-nov-30  gayno   - improved method for thinning gfs grids.
@@ -9,26 +12,8 @@
 !!                          landmask data in grib2.
 !!
 !! variable definitions:
-!! -  grid_id_mdl    - grib id of model grid, 4-gaussian, 203-egrid
-!! -  i/jpts_mdl     - i/j index of point on full grid
-!! -  imdl           - i-dimension of model grid
-!! -  jmdl           - j-dimension of model grid
-!! -  ijmdl          - total number of model land points
-!! -  kgds_mdl       - holds grib gds info of model grid
-!! -  lats_mdl       - latitudes of model grid points
-!! -  lons_mdl       - longitudes of model grid points
 !! -  lonsperlat     - for global grids, the number of i points
 !!                    in each row (decrease toward pole)
-!! -  lsmask_mdl     - land mask of model grid (0 - non land, 1-land)
-!!                    for global grids run thinned, will contain
-!!                    a modified version of the original mask
-!!                    that has land at all points encompassed by a 
-!!                    thinned point
-!! -  lsmask_mdl_sav - saved copy of land mask of model grid (0 - non land, 1-land)
-!!                    only used for global thinned grids.
-!! -  resol_mdl      - approximate model resolution in km.
-!! -  thinned        - when true, global grids will run thinned
-!!                    (# i points decrease toward pole)
 !!
 !! @author George Gayno  org: w/np2 @date 2005-Dec-16  
  module model_grid
@@ -38,24 +23,33 @@
                                    model_lat_file, &
                                    gfs_lpl_file
 
- integer                        :: grid_id_mdl
- integer                        :: imdl
- integer                        :: jmdl
- integer                        :: ijmdl ! only land points
- integer, allocatable           :: ipts_mdl(:), jpts_mdl(:) 
+ integer                        :: grid_id_mdl !< grib id of model grid, 4-gaussian, 203-egrid
+ integer                        :: imdl !< i-dimension of model grid
+ integer                        :: jmdl !< j-dimension of model grid
+ integer                        :: ijmdl !< total number of model land points
+ integer, allocatable           :: ipts_mdl(:) !< i index of point on full grid
+ integer, allocatable           :: jpts_mdl(:) !< j index of point on full grid
 
- integer                        :: kgds_mdl(200)
- integer, allocatable           :: lonsperlat_mdl (:)
+ integer                        :: kgds_mdl(200) !< holds grib gds info of model grid
+ integer, allocatable           :: lonsperlat_mdl (:) !< Number of longitudes (i-points)
+                                                      !! for each latitude (row).  Used
+                                                      !! for global thinned (reduced) grids.
  
- logical                        :: thinned
+ logical                        :: thinned !< When true, global grids will run thinned
+                                           !! (number of i points decrease toward pole)
 
- real, allocatable              :: lats_mdl    (:)
- real                           :: lat11, latlast
- real                           :: lon11, lonlast
- real, allocatable              :: lons_mdl    (:)
- real, allocatable              :: lsmask_mdl  (:,:)
- real, allocatable              :: lsmask_mdl_sav (:,:)
- real                           :: resol_mdl  ! in km
+ real, allocatable              :: lats_mdl(:) !< Latitudes of model grid points
+ real                           :: lat11 !< Corner point latitude (1,1) of model grid.
+ real                           :: latlast !< Corner point latitude (imdl,jmdl) of model grid.
+ real                           :: lon11 !< Corner point longitude (1,1) of model grid.
+ real                           :: lonlast !< Corner point longitude (imdl,jmdl) of model grid.
+ real, allocatable              :: lons_mdl(:) !<  longitudes of model grid points
+ real, allocatable              :: lsmask_mdl(:,:) !<  land mask of model grid (0 - non land, 1-land) for global
+                                                   !! grids run thinned, will contain a modified version of the original
+                                                   !! mask that has land at all points encompassed by a thinned point
+ real, allocatable              :: lsmask_mdl_sav(:,:) !< saved copy of land mask of model grid (0 - non land, 1-land)
+                                                       !! only used for global thinned grids.
+ real                           :: resol_mdl  !< approximate model resolution in km.
 
  contains
 !>  Read mdl grid.
@@ -572,14 +566,14 @@
  end subroutine read_mdl_grid_info
 
 
-!>   Clean up allocatable arrays. 
+!> Clean up allocatable arrays. 
 !!
 !! This deallocate this module's allocatable array.
 !!
 !! program history log:
 !! 2005-dec-16  gayno    - initial version
 !!
-!! @author   George Gayno org: w/np2 @Date 2005-Dec-16
+!! @author George Gayno org: w/np2 @date Dec 16, 2005
  subroutine model_grid_cleanup
 
  implicit none
