@@ -23,7 +23,6 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "chgres_cube", "index.html", [
-    [ "chgres_cube", "index.html#autotoc_md0", null ],
     [ "Modules", "namespaces.html", [
       [ "Modules List", "namespaces.html", "namespaces_dup" ],
       [ "Module Members", "namespacemembers.html", [
@@ -45,7 +44,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "atmosphere_8F90.html",
-"namespaces.html"
+"namespacesearch__util.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

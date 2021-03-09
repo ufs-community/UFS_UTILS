@@ -1,17 +1,11 @@
 var searchData=
 [
-  ['sea_5fice_5fnesdis_90',['sea_ice_nesdis',['../namespacesnowdat.html#a734f1e4cef57304c9c259ac43da45e6f',1,'snowdat']]],
-  ['skgb2_91',['skgb2',['../grib__utils_8f.html#aef0131ff1bc5f61f551de1345e711fa4',1,'grib_utils.f']]],
-  ['snow2mdl_92',['snow2mdl',['../namespacesnow2mdl.html',1,'']]],
-  ['snow2mdl_2ef_93',['snow2mdl.f',['../snow2mdl_8f.html',1,'']]],
-  ['snow_5fcvr_5fautosnow_94',['snow_cvr_autosnow',['../namespacesnowdat.html#abbbfd531788f2c4a1f8f7ef1bdc67971',1,'snowdat']]],
-  ['snow_5fcvr_5fmdl_95',['snow_cvr_mdl',['../namespacesnow2mdl.html#a62a2df833446034b16ecf1175dabbe76',1,'snow2mdl']]],
-  ['snow_5fcvr_5fnesdis_96',['snow_cvr_nesdis',['../namespacesnowdat.html#aa03524cbcbfdeeaeb75cf47b625541ff',1,'snowdat']]],
-  ['snow_5fcvr_5fthreshold_97',['snow_cvr_threshold',['../namespaceprogram__setup.html#ab11d857a926778a69088ecdd4bdadb8a',1,'program_setup']]],
-  ['snow_5fdep_5fafwa_5fglobal_98',['snow_dep_afwa_global',['../namespacesnowdat.html#ad7b9c6748bbeaa6cb42cd5352e0fc213',1,'snowdat']]],
-  ['snow_5fdep_5fafwa_5fnh_99',['snow_dep_afwa_nh',['../namespacesnowdat.html#a4488bd389568885ac5bfbfe08e0e29ff',1,'snowdat']]],
-  ['snow_5fdep_5fafwa_5fsh_100',['snow_dep_afwa_sh',['../namespacesnowdat.html#a722fde057a02ea62fcf043b4cf96763f',1,'snowdat']]],
-  ['snow_5fdep_5fmdl_101',['snow_dep_mdl',['../namespacesnow2mdl.html#a99b097fe89f3f4d502cb1378e14f3f31',1,'snow2mdl']]],
-  ['snowdat_102',['snowdat',['../namespacesnowdat.html',1,'']]],
-  ['snowdat_2ef_103',['snowdat.f',['../snowdat_8f.html',1,'']]]
+  ['read_5fafwa_5fbinary_83',['read_afwa_binary',['../namespacesnowdat.html#a097b7b0377daf37b721b0c871762e24d',1,'snowdat']]],
+  ['read_5fafwa_5fmask_84',['read_afwa_mask',['../namespacesnowdat.html#a328b01fb9013c27f0093d416f21ab47e',1,'snowdat']]],
+  ['read_5fconfig_5fnml_85',['read_config_nml',['../namespaceprogram__setup.html#a40111d93a5e305839de5e43e78183273',1,'program_setup']]],
+  ['read_5fmdl_5fgrid_5finfo_86',['read_mdl_grid_info',['../namespacemodel__grid.html#aeea3795bb9567fb780907965aeb22970',1,'model_grid']]],
+  ['readafwa_87',['readafwa',['../namespacesnowdat.html#a765361a273d72b796f5e26d893c62692',1,'snowdat']]],
+  ['readautosnow_88',['readautosnow',['../namespacesnowdat.html#acf36a58a332f88be6c9441d8d9578739',1,'snowdat']]],
+  ['readnesdis_89',['readnesdis',['../namespacesnowdat.html#ac2696666ba15fbfd0914e3d5762e7612',1,'snowdat']]],
+  ['resol_5fmdl_90',['resol_mdl',['../namespacemodel__grid.html#ab7dfd22b801fd6f4b7e5610dfa822eab',1,'model_grid']]]
 ];

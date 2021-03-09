@@ -1,13 +1,11 @@
 var searchData=
 [
-  ['lat11_56',['lat11',['../namespacemodel__grid.html#ad0972d7ff73d26be50dec4f189e14d91',1,'model_grid']]],
-  ['lat_5fthreshold_57',['lat_threshold',['../namespaceprogram__setup.html#a2debd7c7f28465b9c8b1dfb4f2419cb5',1,'program_setup']]],
-  ['latlast_58',['latlast',['../namespacemodel__grid.html#a213373c1340ce51c92c712ad3bb10b1e',1,'model_grid']]],
-  ['lats_5fmdl_59',['lats_mdl',['../namespacemodel__grid.html#a3d37d38997e337185d0c3c4827e6e318',1,'model_grid']]],
-  ['lon11_60',['lon11',['../namespacemodel__grid.html#aea370e6e67fcf287150dba07f80851be',1,'model_grid']]],
-  ['lonlast_61',['lonlast',['../namespacemodel__grid.html#a11f76673645c0f419e3cc26b7702b6c9',1,'model_grid']]],
-  ['lons_5fmdl_62',['lons_mdl',['../namespacemodel__grid.html#aee07ec51c9531c1dae1f686434bbd386',1,'model_grid']]],
-  ['lonsperlat_5fmdl_63',['lonsperlat_mdl',['../namespacemodel__grid.html#a1aced7bcf47cad27806604241e101369',1,'model_grid']]],
-  ['lsmask_5fmdl_64',['lsmask_mdl',['../namespacemodel__grid.html#a22316f1c1f0e08906df3cba467443c46',1,'model_grid']]],
-  ['lsmask_5fmdl_5fsav_65',['lsmask_mdl_sav',['../namespacemodel__grid.html#a6cb8b46e98431f9eb6f02605daa35146',1,'model_grid']]]
+  ['kgds_5fafwa_5fglobal_49',['kgds_afwa_global',['../namespacesnowdat.html#ab654724ca678b4fe5c1c2e90cfd086e7',1,'snowdat']]],
+  ['kgds_5fafwa_5fnh_50',['kgds_afwa_nh',['../namespacesnowdat.html#aad4bc2cf308c3fa995f2a77120f84108',1,'snowdat']]],
+  ['kgds_5fafwa_5fnh_5f8th_51',['kgds_afwa_nh_8th',['../namespacesnowdat.html#a28190bdcab2c27e05125f6deffb77d27',1,'snowdat']]],
+  ['kgds_5fafwa_5fsh_52',['kgds_afwa_sh',['../namespacesnowdat.html#a690b903f8572e89fe533d9d498aecb35',1,'snowdat']]],
+  ['kgds_5fafwa_5fsh_5f8th_53',['kgds_afwa_sh_8th',['../namespacesnowdat.html#a4d8fbd4197e5f87576a308975dfac064',1,'snowdat']]],
+  ['kgds_5fautosnow_54',['kgds_autosnow',['../namespacesnowdat.html#aac65115a503d5c047f1d97b821d388ad',1,'snowdat']]],
+  ['kgds_5fmdl_55',['kgds_mdl',['../namespacemodel__grid.html#aa59e9407e8b5aca044018284c75d72f4',1,'model_grid']]],
+  ['kgds_5fnesdis_56',['kgds_nesdis',['../namespacesnowdat.html#ab4589887cd4392698dc5b2ac867fcd35',1,'snowdat']]]
 ];

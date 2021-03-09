@@ -1,11 +1,8 @@
 var searchData=
 [
-  ['kgds_5fafwa_5fglobal_48',['kgds_afwa_global',['../namespacesnowdat.html#ab654724ca678b4fe5c1c2e90cfd086e7',1,'snowdat']]],
-  ['kgds_5fafwa_5fnh_49',['kgds_afwa_nh',['../namespacesnowdat.html#aad4bc2cf308c3fa995f2a77120f84108',1,'snowdat']]],
-  ['kgds_5fafwa_5fnh_5f8th_50',['kgds_afwa_nh_8th',['../namespacesnowdat.html#a28190bdcab2c27e05125f6deffb77d27',1,'snowdat']]],
-  ['kgds_5fafwa_5fsh_51',['kgds_afwa_sh',['../namespacesnowdat.html#a690b903f8572e89fe533d9d498aecb35',1,'snowdat']]],
-  ['kgds_5fafwa_5fsh_5f8th_52',['kgds_afwa_sh_8th',['../namespacesnowdat.html#a4d8fbd4197e5f87576a308975dfac064',1,'snowdat']]],
-  ['kgds_5fautosnow_53',['kgds_autosnow',['../namespacesnowdat.html#aac65115a503d5c047f1d97b821d388ad',1,'snowdat']]],
-  ['kgds_5fmdl_54',['kgds_mdl',['../namespacemodel__grid.html#aa59e9407e8b5aca044018284c75d72f4',1,'model_grid']]],
-  ['kgds_5fnesdis_55',['kgds_nesdis',['../namespacesnowdat.html#ab4589887cd4392698dc5b2ac867fcd35',1,'snowdat']]]
+  ['jafwa_44',['jafwa',['../namespacesnowdat.html#a47a9733356f7be8cfef4e8c6cf6028cc',1,'snowdat']]],
+  ['jautosnow_45',['jautosnow',['../namespacesnowdat.html#a84daadd2e083c04989005b6f151c48fc',1,'snowdat']]],
+  ['jmdl_46',['jmdl',['../namespacemodel__grid.html#a171690707455a43c7f7d8cd0510cf505',1,'model_grid']]],
+  ['jnesdis_47',['jnesdis',['../namespacesnowdat.html#a258a35915d54a844fceceaf3035947e2',1,'snowdat']]],
+  ['jpts_5fmdl_48',['jpts_mdl',['../namespacemodel__grid.html#a0341915dbf28e8a1a503e2386d899be2',1,'model_grid']]]
 ];

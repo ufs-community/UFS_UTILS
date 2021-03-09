@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['program_5fsetup_80',['program_setup',['../namespaceprogram__setup.html',1,'']]],
-  ['program_5fsetup_2ef_81',['program_setup.f',['../program__setup_8f.html',1,'']]]
+  ['output_5fgrib2_80',['output_grib2',['../namespaceprogram__setup.html#ac9c1b20eec2b73f9129fa949d6358cb8',1,'program_setup']]]
 ];

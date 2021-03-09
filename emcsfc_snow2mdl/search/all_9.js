@@ -1,12 +1,13 @@
 var searchData=
 [
-  ['mesh_5fnesdis_66',['mesh_nesdis',['../namespacesnowdat.html#a2e8784c184364cd9ce546098be2bfef2',1,'snowdat']]],
-  ['min_5fsnow_5fdepth_67',['min_snow_depth',['../namespaceprogram__setup.html#a83781bd873dc7dbe2fa36e1ac303a87e',1,'program_setup']]],
-  ['model_5fgrid_68',['model_grid',['../namespacemodel__grid.html',1,'']]],
-  ['model_5fgrid_2ef_69',['model_grid.f',['../model__grid_8f.html',1,'']]],
-  ['model_5fgrid_5fcleanup_70',['model_grid_cleanup',['../namespacemodel__grid.html#ae4b396d49e0e43a5197fe77c75ebfebf',1,'model_grid']]],
-  ['model_5flat_5ffile_71',['model_lat_file',['../namespaceprogram__setup.html#a352945f028557b8d476e2b57a6f56cf7',1,'program_setup']]],
-  ['model_5flon_5ffile_72',['model_lon_file',['../namespaceprogram__setup.html#aa387fab4cd50cd6a9c219d5658e6b64f',1,'program_setup']]],
-  ['model_5flsmask_5ffile_73',['model_lsmask_file',['../namespaceprogram__setup.html#afdafd252dcf257b865d774b76181b840',1,'program_setup']]],
-  ['model_5fsnow_5ffile_74',['model_snow_file',['../namespaceprogram__setup.html#a1b36ac6ae744101bae6e70fcdd6a67c0',1,'program_setup']]]
+  ['lat11_57',['lat11',['../namespacemodel__grid.html#ad0972d7ff73d26be50dec4f189e14d91',1,'model_grid']]],
+  ['lat_5fthreshold_58',['lat_threshold',['../namespaceprogram__setup.html#a2debd7c7f28465b9c8b1dfb4f2419cb5',1,'program_setup']]],
+  ['latlast_59',['latlast',['../namespacemodel__grid.html#a213373c1340ce51c92c712ad3bb10b1e',1,'model_grid']]],
+  ['lats_5fmdl_60',['lats_mdl',['../namespacemodel__grid.html#a3d37d38997e337185d0c3c4827e6e318',1,'model_grid']]],
+  ['lon11_61',['lon11',['../namespacemodel__grid.html#aea370e6e67fcf287150dba07f80851be',1,'model_grid']]],
+  ['lonlast_62',['lonlast',['../namespacemodel__grid.html#a11f76673645c0f419e3cc26b7702b6c9',1,'model_grid']]],
+  ['lons_5fmdl_63',['lons_mdl',['../namespacemodel__grid.html#aee07ec51c9531c1dae1f686434bbd386',1,'model_grid']]],
+  ['lonsperlat_5fmdl_64',['lonsperlat_mdl',['../namespacemodel__grid.html#a1aced7bcf47cad27806604241e101369',1,'model_grid']]],
+  ['lsmask_5fmdl_65',['lsmask_mdl',['../namespacemodel__grid.html#a22316f1c1f0e08906df3cba467443c46',1,'model_grid']]],
+  ['lsmask_5fmdl_5fsav_66',['lsmask_mdl_sav',['../namespacemodel__grid.html#a6cb8b46e98431f9eb6f02605daa35146',1,'model_grid']]]
 ];

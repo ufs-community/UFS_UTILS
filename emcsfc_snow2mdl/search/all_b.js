@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['output_5fgrib2_79',['output_grib2',['../namespaceprogram__setup.html#ac9c1b20eec2b73f9129fa949d6358cb8',1,'program_setup']]]
+  ['nesdis_5flsmask_5ffile_76',['nesdis_lsmask_file',['../namespaceprogram__setup.html#aa4982cca90f48aca8b528c4ec9d291d0',1,'program_setup']]],
+  ['nesdis_5fres_77',['nesdis_res',['../namespacesnowdat.html#a68e975bcc076abd22b677be24e76901c',1,'snowdat']]],
+  ['nesdis_5fsnow_5ffile_78',['nesdis_snow_file',['../namespaceprogram__setup.html#a2bb6c3bb1140614271f7d024232ae6ea',1,'program_setup']]],
+  ['nh_5fclimo_5fcheck_79',['nh_climo_check',['../namespacesnowdat.html#a7416d184ef54d3c2b08079d17b00e7b0',1,'snowdat']]]
 ];

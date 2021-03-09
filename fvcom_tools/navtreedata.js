@@ -23,7 +23,6 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "fvcom_tools", "index.html", [
-    [ "fvcom_tools", "index.html#autotoc_md0", null ],
     [ "fvcom_readme", "md__home_ed_UFS_UTILS_sorc_fvcom_tools_8fd_fvcom_readme.html", null ],
     [ "Modules", "namespaces.html", [
       [ "Modules List", "namespaces.html", "namespaces_dup" ],

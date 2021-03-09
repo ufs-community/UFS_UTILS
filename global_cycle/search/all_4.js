@@ -12,5 +12,6 @@ var searchData=
   ['getarea_26',['getarea',['../sfcsub_8F.html#a6ceacd3364d73e5ec7dd82b8c7518439',1,'sfcsub.F']]],
   ['getscv_27',['getscv',['../sfcsub_8F.html#aab7a81b750bb1df1474b2fd31acc3d3e',1,'sfcsub.F']]],
   ['getsmc_28',['getsmc',['../sfcsub_8F.html#a1be96c82be2d77162f04e328da4b4ae3',1,'sfcsub.F']]],
-  ['getstc_29',['getstc',['../sfcsub_8F.html#a0a71f67d65e7996bdfd3bf1130267b46',1,'sfcsub.F']]]
+  ['getstc_29',['getstc',['../sfcsub_8F.html#a0a71f67d65e7996bdfd3bf1130267b46',1,'sfcsub.F']]],
+  ['global_5fcycle_30',['global_cycle',['../index.html',1,'']]]
 ];
