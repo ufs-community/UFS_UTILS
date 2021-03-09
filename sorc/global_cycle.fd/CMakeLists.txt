@@ -1,3 +1,7 @@
+# This is the CMake file for the global_cycle utility in the UFS_UTILS
+# project.
+#
+# George Gayno
 set(fortran_src
     cycle.f90
     machine.f90
