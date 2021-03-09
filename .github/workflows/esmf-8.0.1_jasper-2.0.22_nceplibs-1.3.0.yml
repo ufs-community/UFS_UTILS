@@ -120,6 +120,8 @@ jobs:
 
     - name: build-ufs-utils
       run: |
+        set -x
+        pwd
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build

@@ -781,7 +781,9 @@
 !!     PS           REAL (IX) SURFACE PRESSURE (PA)                      
 !!   OUTPUT ARGUMENT LIST:                                               
 !!     PM           REAL (IX,KM) MID-LAYER PRESSURE (PA)                 
-!!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)               
+!!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)
+!!
+!! @param localpet ESMF local persistent execution thread  
 !!
 !! @author HANN_MING HENRY JUANG, JUANG, Fanglin Yang, S. Moorthi
  subroutine newpr1(localpet)
