@@ -12,4 +12,6 @@ add_custom_target(fvcom_tools_doc ALL
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Generating API Documentation with Doxygen" VERBATIM)
 
+# Ensure top-level docs have been generated.
+add_dependencies(fvcom_tools_doc doc)
 

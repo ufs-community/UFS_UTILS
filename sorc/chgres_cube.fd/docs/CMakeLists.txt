@@ -12,4 +12,7 @@ add_custom_target(chgres_cube_doc ALL
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Generating API Documentation with Doxygen" VERBATIM)
 
+# Ensure top-level docs have been generated.
+add_dependencies(chgres_cube_doc doc)
+
 

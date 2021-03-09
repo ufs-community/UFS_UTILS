@@ -12,4 +12,5 @@ add_custom_target(sfc_climo_gen_doc ALL
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Generating API Documentation with Doxygen" VERBATIM)
 
-
+# Ensure top-level docs have been generated.
+add_dependencies(sfc_climo_gen_doc doc)
