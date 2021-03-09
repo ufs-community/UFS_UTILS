@@ -1,4 +1,3 @@
-@mainpage
 
 # grid_tools
 

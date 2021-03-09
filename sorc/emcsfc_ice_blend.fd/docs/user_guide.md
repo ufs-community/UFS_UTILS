@@ -1,4 +1,3 @@
-@mainpage
 
 # emcsfc_ice_blend
 

@@ -1,4 +1,3 @@
-@mainpage
 
 # chgres_cube
 

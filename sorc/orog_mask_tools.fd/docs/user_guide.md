@@ -1,4 +1,3 @@
-@mainpage
 
 # orog_mask_tools
 

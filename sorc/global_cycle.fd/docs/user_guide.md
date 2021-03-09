@@ -1,4 +1,3 @@
-@mainpage
 
 # global_cycle
 

@@ -1,4 +1,3 @@
-@mainpage
 
 # vcoord_gen
 

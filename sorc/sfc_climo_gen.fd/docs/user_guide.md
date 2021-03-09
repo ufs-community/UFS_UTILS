@@ -1,4 +1,3 @@
-@mainpage
 
 # sfc_climo_gen
 
