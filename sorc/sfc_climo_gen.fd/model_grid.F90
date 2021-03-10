@@ -19,7 +19,7 @@
 
  integer, public               :: i_mdl !< i dimension of model tile.
  integer, public               :: j_mdl !< j dimension of model tile.
- integer, public               :: ij_mdl !< ???
+ integer, public               :: ij_mdl !< Total number of points on a model tile.
  integer, public               :: num_tiles !< Total number of model grid tiles.
 
  real(kind=4), public          :: missing = -999. !<Value assigned to undefined points
