@@ -4,7 +4,7 @@
 
 !> This program does ???
 !!
-!! @author R. J. Purser
+!! @author Gerard Ketefian
 !! @return 0 for success, error code otherwise
 program global_equiv_resol
 
@@ -181,7 +181,7 @@ end program global_equiv_resol
 !> Check results of netCDF call.
 !!
 !! @param[in] status return code to check
-!! @author R. J. Purser
+!! @author Gerard Ketefian
 subroutine check(status)
   use netcdf
   integer,intent(in) :: status
