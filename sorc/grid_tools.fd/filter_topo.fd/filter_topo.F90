@@ -1,4 +1,11 @@
 !> @file
+!! @brief This program does ???
+!! @author R. J. Purser
+
+!> This program does ???
+!!
+!! @return 0 for success, error code otherwise.
+!! @author R. J. Purser
 program filter_topo
 
 
@@ -208,6 +215,16 @@ contains
 
   end function get_area
 
+  !> ???
+  !!
+  !! @param[in] q ???
+  !! @param[in] ng ???
+  !! @param[in] npx ???
+  !! @param[in] npy ???
+  !! @param[in] isd ???
+  !! @param[in] jsd ???
+  !! @param[in] fill ???
+  !! @author R. J. Purser
   subroutine fill_AGRID_scalar_corners(q, ng, npx, npy, isd, jsd, fill)
     integer, intent(in)  :: ng, npx, npy, isd, jsd
     integer, intent(in)  :: fill
@@ -248,8 +265,16 @@ contains
 
   end subroutine fill_AGRID_scalar_corners
 
-
-  !####################################################################
+  !> ???
+  !!
+  !! @param[in] q ???
+  !! @param[in] ng ???
+  !! @param[in] npx ???
+  !! @param[in] npy ???
+  !! @param[in] isd ???
+  !! @param[in] jsd ???
+  !! @param[in] fill ???
+  !! @author R. J. Purser
   subroutine fill_BGRID_scalar_corners(q, ng, npx, npy, isd, jsd, fill)
     integer, intent(in)  :: ng, npx, npy, isd, jsd
     integer, intent(in)  :: fill
@@ -291,7 +316,16 @@ contains
 
   end subroutine fill_BGRID_scalar_corners
 
-  !####################################################################
+  !> ???
+  !!
+  !! @param[in] x ???
+  !! @param[in] y ???
+  !! @param[in] ng ???
+  !! @param[in] npx ???
+  !! @param[in] npy ???
+  !! @param[in] isd ???
+  !! @param[in] jsd ???
+  !! @author R. J. Purser
   subroutine fill_AGRID_xy_corners(x, y, ng, npx, npy, isd, jsd)
     integer, intent(in)                      :: ng, npx, npy, isd, jsd
     real, DIMENSION(isd:,jsd:,:), intent(INOUT):: x
@@ -314,9 +348,16 @@ contains
 
   end subroutine fill_AGRID_xy_corners
 
-
-
-  !####################################################################
+  !> ???
+  !!
+  !! @param[in] x ???
+  !! @param[in] y ???
+  !! @param[in] ng ???
+  !! @param[in] npx ???
+  !! @param[in] npy ???
+  !! @param[in] isd ???
+  !! @param[in] jsd ???
+  !! @author R. J. Purser
   subroutine fill_DGRID_xy_corners(x, y, ng, npx, npy, isd, jsd)
     integer, intent(in)                      :: ng, npx, npy, isd, jsd
     real, DIMENSION(isd:,jsd:,:), intent(INOUT):: x
@@ -338,7 +379,12 @@ contains
 
   end subroutine fill_DGRID_xy_corners
 
-  !###############################################################
+  !> ???
+  !!
+  !! @param[in] p1 ???
+  !! @param[in] p2 ???
+  !! @param[in] pm ???
+  !! @author R. J. Purser
   subroutine mid_pt_sphere(p1, p2, pm)
     real, intent(IN)  :: p1(2), p2(2)
     real, intent(OUT) :: pm(2)
@@ -352,8 +398,12 @@ contains
 
   end subroutine mid_pt_sphere
 
-
-  !#####################################################################
+  !> ???
+  !!
+  !! @param[in] p1 ???
+  !! @param[in] p2 ???
+  !! @param[in] e ???
+  !! @author R. J. Purser
   subroutine mid_pt3_cart(p1, p2, e)
     real, intent(IN)  :: p1(3), p2(3)
     real, intent(OUT) :: e(3)
@@ -382,6 +432,11 @@ contains
 
   end subroutine mid_pt3_cart
 
+  !> ???
+  !!
+  !! @param[in] p ???
+  !! @param[in] e ???
+  !! @author R. J. Purser
   subroutine latlon2xyz(p, e)
     !
     ! Routine to map (lon, lat) to (x,y,z)
@@ -409,8 +464,13 @@ contains
 
   end subroutine latlon2xyz
 
-
-
+  !> ???
+  !!
+  !! @param[in] np  ???
+  !! @param[in] q ???
+  !! @param[in] xs ???
+  !! @param[in] ys ???
+  !! @author R. J. Purser
   subroutine cart_to_latlon(np, q, xs, ys)
     ! vector version of cart_to_latlon1
     integer, intent(in):: np
@@ -451,7 +511,10 @@ contains
 
   end  subroutine cart_to_latlon
 
-  !#####################################################################
+  !> ???
+  !!
+  !! 
+  !! @author R. J. Purser
   real function cos_angle(p1, p2, p3)
     ! As spherical_angle, but returns the cos(angle)
     !       p3
@@ -498,8 +561,14 @@ contains
 
   end function cos_angle
 
-
-  !#####################################################################
+  !> ???
+  !!
+  !! @param[in] q1 ???
+  !! @param[in] q2 ???
+  !! @param[in] q3 ???
+  !! @param[in] q4 ???
+  !! @param[in] e2 ???
+  !! @author R. J. Purser
   subroutine cell_center2(q1, q2, q3, q4, e2)
     real, intent(in ) :: q1(2), q2(2), q3(2), q4(2)
     real, intent(out) :: e2(2)
@@ -527,8 +596,10 @@ contains
 
   end subroutine cell_center2
 
-
-  !#####################################################################
+  !> ???
+  !!
+  !! @param[in] regional ???
+  !! @author R. J. Purser
   subroutine read_grid_file(regional)
 
     logical, intent(in) :: regional   ! Is this a regional run?
@@ -875,8 +946,10 @@ contains
 
   end subroutine read_grid_file
 
-
-  !#####################################################################
+  !> ???
+  !!
+  !! @param[in] regional ???
+  !! @author R. J. Purser
   subroutine read_topo_file(regional)
 
     logical,intent(in) :: regional   ! Is this a run with a regional domain?
@@ -961,8 +1034,16 @@ contains
 
   end subroutine read_topo_file
 
-  !##############################################################################
-  !--- replace the topo_field
+  !> Replace the topo_field.
+  !!
+  !! @param[in] is ???
+  !! @param[in] ie ???
+  !! @param[in] js ???
+  !! @param[in] je ???
+  !! @param[in] ntiles ???
+  !! @param[in] q ???
+  !! @param[in] regional ???
+  !! @author R. J. Purser
   subroutine write_topo_file(is,ie,js,je,ntiles,q,regional)
      integer, intent(in) :: is,ie,js,je,ntiles                 
      real,    intent(in) :: q(is:ie,js:je,ntiles) 
@@ -1000,9 +1081,17 @@ contains
 
   end subroutine write_topo_file
 
-  !##############################################################################
-  ! this routine fill the halo points for the cubic grid. ioff and joff is used to distinguish
-  ! T, C, E, or N-cell
+  !> This routine fill the halo points for the cubic grid. ioff and
+  !! joff is used to distinguish T, C, E, or N-cell.
+  !!
+  !! @param[in] data  ???
+  !! @param[in] data2 ???
+  !! @param[in] halo ???
+  !! @param[in] ioff ???
+  !! @param[in] joff ???
+  !! @param[in] sign1 ???
+  !! @param[in] sign2 ???
+  !! @author R. J. Purser
   subroutine fill_cubic_grid_halo(data, data2, halo, ioff, joff, sign1, sign2)
     integer, intent(in)                               :: halo
     real, dimension(1-halo:,1-halo:,:), intent(inout) :: data, data2
@@ -1044,7 +1133,38 @@ contains
 
   end subroutine fill_cubic_grid_halo
 
-  !#####################################################################
+  !> ???
+  !!
+  !! @param[in] is ???
+  !! @param[in] ie ???
+  !! @param[in] js ???
+  !! @param[in] je ???
+  !! @param[in] isd ???
+  !! @param[in] ied ???
+  !! @param[in] jsd ???
+  !! @param[in] jed ???
+  !! @param[in] npx ???
+  !! @param[in] npy ???
+  !! @param[in] npx ???
+  !! @param[in] global ???
+  !! @param[in] ntiles ???
+  !! @param[in] grid ???
+  !! @param[in] type ???
+  !! @param[in] stretch ???
+  !! @param[in] fac ???
+  !! @param[in] nested ???
+  !! @param[in] area ???
+  !! @param[in] dxa ???
+  !! @param[in] dya ???
+  !! @param[in] dx ???
+  !! @param[in] dy ???
+  !! @param[in] dxc ???
+  !! @param[in] dyc ???
+  !! @param[in] sin ???
+  !! @param[in] sg ???
+  !! @param[in] phis ???
+  !! @param[in] regional ???
+  !! @author R. J. Purser
   subroutine FV3_zs_filter (is, ie, js, je, isd, ied, jsd, jed, npx, npy, npx_global, ntiles,  &
        grid_type, stretch_fac, nested, area, dxa, dya, dx, dy, dxc, dyc, &
        sin_sg,  phis, regional )
@@ -1096,7 +1216,43 @@ contains
 
   end subroutine FV3_zs_filter
 
-  !#####################################################################
+  !> ???
+  !!
+  !! @param[in] is ???
+  !! @param[in] ie ???
+  !! @param[in] js ???
+  !! @param[in] je ???
+  !! @param[in] isd ???
+  !! @param[in] ied ???
+  !! @param[in] jsd ???
+  !! @param[in] jed ???
+  !! @param[in] npx ???
+  !! @param[in] npy ???
+  !! @param[in] ntiles ???
+  !! @param[in] q ???
+  !! @param[in] area ???
+  !! @param[in] dx ???
+  !! @param[in] dy ???
+  !! @param[in] dxa ???
+  !! @param[in] dya ???
+  !! @param[in] dxc ???
+  !! @param[in] dyc ???
+  !! @param[in] sin ???
+  !! @param[in] sg ???
+  !! @param[in] cd ???
+  !! @param[in] zero ???
+  !! @param[in] ocean ???
+  !! @param[in] check ???
+  !! @param[in] slope ???
+  !! @param[in] filter ???
+  !! @param[in] type ???
+  !! @param[in] grid ???
+  !! @param[in] type ???
+  !! @param[in] mask ???
+  !! @param[in] nested ???
+  !! @param[in] ntmax ???
+  !! @param[in] regional ???
+  !! @author R. J. Purser
   subroutine two_delta_filter(is, ie, js, je, isd, ied, jsd, jed, npx, npy, ntiles, &
        q, area, dx, dy, dxa, dya, dxc, dyc, sin_sg, cd, zero_ocean,  &
         check_slope, filter_type, grid_type, mask, nested, ntmax, regional)
@@ -1376,7 +1532,35 @@ contains
 
   end subroutine two_delta_filter
 
-  !#####################################################################
+  !> ???
+  !!
+  !! @param[in] is ???
+  !! @param[in] ie ???
+  !! @param[in] js ???
+  !! @param[in] je ???
+  !! @param[in] isd ???
+  !! @param[in] ied ???
+  !! @param[in] jsd ???
+  !! @param[in] jed ???
+  !! @param[in] npx ???
+  !! @param[in] npy ???
+  !! @param[in] ntiles ???
+  !! @param[in] q ???
+  !! @param[in] area ???
+  !! @param[in] dx ???
+  !! @param[in] dy ???
+  !! @param[in] dxc ???
+  !! @param[in] dyc ???
+  !! @param[in] sin ???
+  !! @param[in] sg ???
+  !! @param[in] nmax ???
+  !! @param[in] cd ???
+  !! @param[in] zero ???
+  !! @param[in] ocean ???
+  !! @param[in] mask ???
+  !! @param[in] nested ???
+  !! @param[in] regional ???
+  !! @author R. J. Purser
   subroutine del2_cubed_sphere(is, ie, js, je, isd, ied, jsd, jed, npx, npy, ntiles,&
           q, area, dx, dy, dxc, dyc, sin_sg, nmax, cd, zero_ocean, mask, nested, regional)
     integer, intent(in) :: is,  ie,  js,  je
@@ -1474,7 +1658,34 @@ contains
 
   end subroutine del2_cubed_sphere
 
-  !#####################################################################
+  !> ???
+  !!
+  !! @param[in] is ???
+  !! @param[in] ie ???
+  !! @param[in] js ???
+  !! @param[in] je ???
+  !! @param[in] isd ???
+  !! @param[in] ied ???
+  !! @param[in] jsd ???
+  !! @param[in] jed ???
+  !! @param[in] npx ???
+  !! @param[in] npy ???
+  !! @param[in] ntiles ???
+  !! @param[in] q ???
+  !! @param[in] area ???
+  !! @param[in] dx ???
+  !! @param[in] dy ???
+  !! @param[in] dxc ???
+  !! @param[in] dyc ???
+  !! @param[in] sin ???
+  !! @param[in] sg ???
+  !! @param[in] nmax ???
+  !! @param[in] zero ???
+  !! @param[in] ocean ???
+  !! @param[in] mask ???
+  !! @param[in] nested ???
+  !! @param[in] regional ???
+  !! @author R. J. Purser
   subroutine del4_cubed_sphere(is, ie, js, je, isd, ied, jsd, jed, npx, npy, ntiles, &
        q, area, dx, dy, dxc, dyc, sin_sg, nmax, zero_ocean, mask, nested, regional)
     integer, intent(in) :: is,  ie,  js,  je
@@ -1709,7 +1920,11 @@ contains
 
   end subroutine del4_cubed_sphere
 
-  !#####################################################################
+  !> ???
+  !!
+  !! @param[in] status ???
+  !! @param[in] string ???
+  !! @author R. J. Purser
   subroutine handle_err(status, string)
     integer,          intent(in) :: status
     character(len=*), intent(in) :: string
@@ -1724,10 +1939,10 @@ contains
 
   end subroutine  handle_err
 
-
-  !#######################################################################
-  ! reads the namelist file, write namelist to log file,
-
+  !> Reads the namelist file, write namelist to log file.
+  !!
+  !! 
+  !! @author R. J. Purser
   subroutine read_namelist
 
     !  read namelist
@@ -1750,6 +1965,10 @@ contains
 
   end subroutine read_namelist
 
+  !> Check results of netCDF call.
+  !!
+  !! @param[in] status return code to check
+  !! @author R. J. Purser
   subroutine check(status)
   use netcdf
   integer,intent(in) :: status
@@ -1762,9 +1981,10 @@ contains
   endif
   end subroutine check
 
-  !#######################################################################
-  ! compute resolution-dependent values for the filtering.
-
+  !> Compute resolution-dependent values for the filtering.
+  !!
+  !! 
+  !! @author R. J. Purser
   subroutine compute_filter_constants
 
   ! set the given values for various cube resolutions (c48, c96, c192, c384, c768, c1152, c3072)

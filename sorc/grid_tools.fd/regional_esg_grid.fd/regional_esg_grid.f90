@@ -2,7 +2,7 @@
 !! @brief ???
 !! @author R. J. Purser
 
-!! Program which does ???
+!> Program which does ???
 !!
 !! @author R. J. Purser
 !! @return 0 for success, error code otherwise.
@@ -174,6 +174,10 @@ program regional_grid
 
 end program regional_grid
 
+!> Check results of netCDF call.
+!!
+!! @param[in] status return code to check
+!! @author R. J. Purser
 subroutine check(status)
 use netcdf
 integer,intent(in) :: status

@@ -1,7 +1,12 @@
 !> @file
-!=======================================================================
+!! @brief This program does ???
+!! @author R. J. Purser
+
+!> This program does ???
+!!
+!! @author R. J. Purser
+!! @return 0 for success, error code otherwise
 program global_equiv_resol
-!=======================================================================
 
   use netcdf
 
@@ -173,7 +178,10 @@ program global_equiv_resol
 
 end program global_equiv_resol
 
-
+!> Check results of netCDF call.
+!!
+!! @param[in] status return code to check
+!! @author R. J. Purser
 subroutine check(status)
   use netcdf
   integer,intent(in) :: status
