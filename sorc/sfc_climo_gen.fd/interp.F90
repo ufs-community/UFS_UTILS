@@ -1,7 +1,7 @@
 !> @file
 !! @brief Read the input source data and interpolate it to the
 !! model grid.
-!! @author gayno @date 2018
+!! @author George Gayno @date 2018
 
 !> Read the input source data and interpolate it to the
 !! model grid.
@@ -9,7 +9,7 @@
 !! @param[in] localpet this mpi task
 !! @param[in] method interpolation method.defined where mask=1
 !! @param[in] input_file filename of input source data.
-!! @author gayno @date 2018
+!! @author George Gayno @date 2018
  subroutine interp(localpet, method, input_file)
 
  use esmf

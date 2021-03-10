@@ -1,12 +1,12 @@
 !> @file
 !! @brief Defines the model grid.
-!! @author gayno @date 2018
+!! @author George Gayno @date 2018
 
 !> This module defines the model grid.
 !!
 !! Variables named with 'mdl' refer to the model grid.
 !!
-!! @author gayno @date 2018
+!! @author George Gayno @date 2018
  module model_grid
 
  use esmf
@@ -49,7 +49,7 @@
 !!
 !! @param[in] localpet this mpi task      
 !! @param[in] npets total number of mpi tasks      
-!! @author gayno @date 2018
+!! @author George Gayno @date 2018
  subroutine define_model_grid(localpet, npets)
 
  use esmf
@@ -279,7 +279,7 @@
 !! @param[out] lon2d longitude
 !! @param[in] idim i dimension of the model tile
 !! @param[in] jdim j dimension of the model tile
-!! @author gayno @date 2018
+!! @author George Gayno @date 2018
  subroutine get_model_info(orog_file, mask, lat2d, lon2d, idim, jdim)
 
  use esmf
@@ -383,7 +383,7 @@
 !!
 !! Free up memory associated with this module.
 !!
-!! @author gayno @date 2018
+!! @author George Gayno @date 2018
  subroutine model_grid_cleanup
 
  implicit none
