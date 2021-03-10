@@ -5,7 +5,7 @@
 !> This program does ???
 !!
 !! @return 0 for success, error code otherwise.
-!! @author R. J. Purser
+!! @author GFDL Programmer
 program filter_topo
 
 
@@ -91,7 +91,7 @@ contains
   !! @param[in] q2
   !! @param[in] radius
   !! @return ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   real function great_circle_dist( q1, q2, radius )
     real, intent(IN)           :: q1(2), q2(2)
     real, intent(IN), optional :: radius
@@ -132,7 +132,7 @@ contains
   !! @param[in] p2 ???
   !! @param[in] p3 ???
   !! @return ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   real function spherical_angle(p1, p2, p3)
 
     real p1(3), p2(3), p3(3)
@@ -193,7 +193,7 @@ contains
   !! @param[in] p3 ???
   !! @param[in] radius ???
   !! @return area
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   real function get_area(p1, p4, p2, p3, radius)
     !-----------------------------------------------
     real, intent(in), dimension(2):: p1, p2, p3, p4
@@ -246,7 +246,7 @@ contains
   !! @param[in] isd ???
   !! @param[in] jsd ???
   !! @param[in] fill ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine fill_AGRID_scalar_corners(q, ng, npx, npy, isd, jsd, fill)
     integer, intent(in)  :: ng, npx, npy, isd, jsd
     integer, intent(in)  :: fill
@@ -296,7 +296,7 @@ contains
   !! @param[in] isd ???
   !! @param[in] jsd ???
   !! @param[in] fill ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine fill_BGRID_scalar_corners(q, ng, npx, npy, isd, jsd, fill)
     integer, intent(in)  :: ng, npx, npy, isd, jsd
     integer, intent(in)  :: fill
@@ -347,7 +347,7 @@ contains
   !! @param[in] npy ???
   !! @param[in] isd ???
   !! @param[in] jsd ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine fill_AGRID_xy_corners(x, y, ng, npx, npy, isd, jsd)
     integer, intent(in)                      :: ng, npx, npy, isd, jsd
     real, DIMENSION(isd:,jsd:,:), intent(INOUT):: x
@@ -379,7 +379,7 @@ contains
   !! @param[in] npy ???
   !! @param[in] isd ???
   !! @param[in] jsd ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine fill_DGRID_xy_corners(x, y, ng, npx, npy, isd, jsd)
     integer, intent(in)                      :: ng, npx, npy, isd, jsd
     real, DIMENSION(isd:,jsd:,:), intent(INOUT):: x
@@ -406,7 +406,7 @@ contains
   !! @param[in] p1 ???
   !! @param[in] p2 ???
   !! @param[in] pm ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine mid_pt_sphere(p1, p2, pm)
     real, intent(IN)  :: p1(2), p2(2)
     real, intent(OUT) :: pm(2)
@@ -425,7 +425,7 @@ contains
   !! @param[in] p1 ???
   !! @param[in] p2 ???
   !! @param[in] e ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine mid_pt3_cart(p1, p2, e)
     real, intent(IN)  :: p1(3), p2(3)
     real, intent(OUT) :: e(3)
@@ -458,7 +458,7 @@ contains
   !!
   !! @param[in] p ???
   !! @param[in] e ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine latlon2xyz(p, e)
     !
     ! Routine to map (lon, lat) to (x,y,z)
@@ -492,7 +492,7 @@ contains
   !! @param[in] q ???
   !! @param[in] xs ???
   !! @param[in] ys ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine cart_to_latlon(np, q, xs, ys)
     ! vector version of cart_to_latlon1
     integer, intent(in):: np
@@ -539,7 +539,7 @@ contains
   !! @param[in] p2 ???
   !! @param[in] p3 ???
   !! @return ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   real function cos_angle(p1, p2, p3)
     ! As spherical_angle, but returns the cos(angle)
     !       p3
@@ -593,7 +593,7 @@ contains
   !! @param[in] q3 ???
   !! @param[in] q4 ???
   !! @param[in] e2 ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine cell_center2(q1, q2, q3, q4, e2)
     real, intent(in ) :: q1(2), q2(2), q3(2), q4(2)
     real, intent(out) :: e2(2)
@@ -624,7 +624,7 @@ contains
   !> ???
   !!
   !! @param[in] regional ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine read_grid_file(regional)
 
     logical, intent(in) :: regional   ! Is this a regional run?
@@ -974,7 +974,7 @@ contains
   !> ???
   !!
   !! @param[in] regional ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine read_topo_file(regional)
 
     logical,intent(in) :: regional   ! Is this a run with a regional domain?
@@ -1068,7 +1068,7 @@ contains
   !! @param[in] ntiles ???
   !! @param[in] q ???
   !! @param[in] regional ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine write_topo_file(is,ie,js,je,ntiles,q,regional)
      integer, intent(in) :: is,ie,js,je,ntiles                 
      real,    intent(in) :: q(is:ie,js:je,ntiles) 
@@ -1116,7 +1116,7 @@ contains
   !! @param[in] joff ???
   !! @param[in] sign1 ???
   !! @param[in] sign2 ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine fill_cubic_grid_halo(data, data2, halo, ioff, joff, sign1, sign2)
     integer, intent(in)                               :: halo
     real, dimension(1-halo:,1-halo:,:), intent(inout) :: data, data2
@@ -1185,7 +1185,7 @@ contains
   !! @param[in] sin_sg ???
   !! @param[in] phis ???
   !! @param[in] regional ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine FV3_zs_filter (is, ie, js, je, isd, ied, jsd, jed, npx, npy, npx_global, ntiles,  &
        grid_type, stretch_fac, nested, area, dxa, dya, dx, dy, dxc, dyc, &
        sin_sg,  phis, regional )
@@ -1268,7 +1268,7 @@ contains
   !! @param[in] nested ???
   !! @param[in] ntmax ???
   !! @param[in] regional ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine two_delta_filter(is, ie, js, je, isd, ied, jsd, jed, npx, npy, ntiles, &
        q, area, dx, dy, dxa, dya, dxc, dyc, sin_sg, cd, zero_ocean,  &
         check_slope, filter_type, grid_type, mask, nested, ntmax, regional)
@@ -1574,7 +1574,7 @@ contains
   !! @param[in] mask ???
   !! @param[in] nested ???
   !! @param[in] regional ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine del2_cubed_sphere(is, ie, js, je, isd, ied, jsd, jed, npx, npy, ntiles,&
           q, area, dx, dy, dxc, dyc, sin_sg, nmax, cd, zero_ocean, mask, nested, regional)
     integer, intent(in) :: is,  ie,  js,  je
@@ -1697,7 +1697,7 @@ contains
   !! @param[in] mask ???
   !! @param[in] nested ???
   !! @param[in] regional ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine del4_cubed_sphere(is, ie, js, je, isd, ied, jsd, jed, npx, npy, ntiles, &
        q, area, dx, dy, dxc, dyc, sin_sg, nmax, zero_ocean, mask, nested, regional)
     integer, intent(in) :: is,  ie,  js,  je
@@ -1936,7 +1936,7 @@ contains
   !!
   !! @param[in] status ???
   !! @param[in] string ???
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine handle_err(status, string)
     integer,          intent(in) :: status
     character(len=*), intent(in) :: string
@@ -1954,7 +1954,7 @@ contains
   !> Reads the namelist file, write namelist to log file.
   !!
   !! 
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine read_namelist
 
     !  read namelist
@@ -1980,7 +1980,7 @@ contains
   !> Check results of netCDF call.
   !!
   !! @param[in] status return code to check
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine check(status)
   use netcdf
   integer,intent(in) :: status
@@ -1996,7 +1996,7 @@ contains
   !> Compute resolution-dependent values for the filtering.
   !!
   !! 
-  !! @author R. J. Purser
+  !! @author GFDL Programmer
   subroutine compute_filter_constants
 
   ! set the given values for various cube resolutions (c48, c96, c192, c384, c768, c1152, c3072)
