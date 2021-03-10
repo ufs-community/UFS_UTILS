@@ -1,6 +1,23 @@
 !> @file
 !! @brief Write out data in netcdf format
+!! @author Jordan Alpert NOAA/EMC
+
+!> Write out orography file in netcdf format.
 !!
+!! @param[in] im ???
+!! @param[in] jm ???
+!! @param[in] slm ???
+!! @param[in] land_frac ???
+!! @param[in] oro ???
+!! @param[in] orf ???
+!! @param[in] hprime ???
+!! @param[in] ntiles ???
+!! @param[in] tile ???
+!! @param[in] geolon ???
+!! @param[in] geolat ??? 
+!! @param[in] lon ???
+!! @param[in] lat ???
+!! @author Jordan Alpert NOAA/EMC
   subroutine write_netcdf(im, jm, slm, land_frac, oro, orf, hprime, ntiles, tile, geolon, geolat, lon, lat)
     implicit none
     integer, intent(in):: im, jm, ntiles, tile
@@ -193,7 +210,11 @@
       
   end subroutine
 
-!-------------------------------------------------------------------------------
+!> Check NetCDF error code and output the error message.
+!!
+!! @param[in] err NetCDF error code
+!! @param[in] string The NetCDF error message
+!! @author Jordan Alpert NOAA/EMC
   subroutine netcdf_err( err, string )
       integer, intent(in) :: err
       character(len=*), intent(in) :: string

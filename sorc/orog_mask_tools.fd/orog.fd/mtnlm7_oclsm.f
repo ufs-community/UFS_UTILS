@@ -4472,6 +4472,11 @@ cgwv      print 102,l,t2-t1,c
  102  format(' time to check ',i9,' words is ',f10.4,' ',a24)
       return
        end
+
+!> Get the date/time for the system clock.
+!!
+!! @author Mark Iredell
+!! @return timef
       real function timef()
       character(8) :: date
       character(10) :: time
