@@ -85,7 +85,13 @@ program filter_topo
 
 contains
 
-  !#####################################################################
+  !> ???
+  !!
+  !! @param[in] q1
+  !! @param[in] q2
+  !! @param[in] radius
+  !! @return ???
+  !! @author R. J. Purser
   real function great_circle_dist( q1, q2, radius )
     real, intent(IN)           :: q1(2), q2(2)
     real, intent(IN), optional :: radius
@@ -110,16 +116,24 @@ contains
 
   end function great_circle_dist
 
-  !####################################################################
+  !> ???
+  !!
+  !! <pre>
+  !!           p3
+  !!         /
+  !!        /
+  !!       p1 ---> angle
+  !!         \
+  !!          \
+  !!           p2
+  !! </pre>
+  !!
+  !! @param[in] p1 ???
+  !! @param[in] p2 ???
+  !! @param[in] p3 ???
+  !! @return ???
+  !! @author R. J. Purser
   real function spherical_angle(p1, p2, p3)
-
-    !           p3
-    !         /
-    !        /
-    !       p1 ---> angle
-    !         \
-    !          \
-    !           p2
 
     real p1(3), p2(3), p3(3)
 
@@ -171,7 +185,15 @@ contains
   end function spherical_angle
 
 
-  !####################################################################
+  !> ???
+  !!
+  !! @param[in] p1 ???
+  !! @param[in] p4 ???
+  !! @param[in] p2 ???
+  !! @param[in] p3 ???
+  !! @param[in] radius ???
+  !! @return area
+  !! @author R. J. Purser
   real function get_area(p1, p4, p2, p3, radius)
     !-----------------------------------------------
     real, intent(in), dimension(2):: p1, p2, p3, p4
@@ -513,7 +535,10 @@ contains
 
   !> ???
   !!
-  !! 
+  !! @param[in] p1 ???
+  !! @param[in] p2 ???
+  !! @param[in] p3 ???
+  !! @return ???
   !! @author R. J. Purser
   real function cos_angle(p1, p2, p3)
     ! As spherical_angle, but returns the cos(angle)
@@ -1145,13 +1170,10 @@ contains
   !! @param[in] jed ???
   !! @param[in] npx ???
   !! @param[in] npy ???
-  !! @param[in] npx ???
-  !! @param[in] global ???
+  !! @param[in] npx_global ???
   !! @param[in] ntiles ???
-  !! @param[in] grid ???
-  !! @param[in] type ???
-  !! @param[in] stretch ???
-  !! @param[in] fac ???
+  !! @param[in] grid_type ???
+  !! @param[in] stretch_fac ???
   !! @param[in] nested ???
   !! @param[in] area ???
   !! @param[in] dxa ???
@@ -1160,8 +1182,7 @@ contains
   !! @param[in] dy ???
   !! @param[in] dxc ???
   !! @param[in] dyc ???
-  !! @param[in] sin ???
-  !! @param[in] sg ???
+  !! @param[in] sin_sg ???
   !! @param[in] phis ???
   !! @param[in] regional ???
   !! @author R. J. Purser
@@ -1237,17 +1258,12 @@ contains
   !! @param[in] dya ???
   !! @param[in] dxc ???
   !! @param[in] dyc ???
-  !! @param[in] sin ???
-  !! @param[in] sg ???
+  !! @param[in] sin_sg ???
   !! @param[in] cd ???
-  !! @param[in] zero ???
-  !! @param[in] ocean ???
-  !! @param[in] check ???
-  !! @param[in] slope ???
-  !! @param[in] filter ???
-  !! @param[in] type ???
-  !! @param[in] grid ???
-  !! @param[in] type ???
+  !! @param[in] zero_ocean ???
+  !! @param[in] check_slope ???
+  !! @param[in] filter_type ???
+  !! @param[in] grid_type ???
   !! @param[in] mask ???
   !! @param[in] nested ???
   !! @param[in] ntmax ???
@@ -1551,12 +1567,10 @@ contains
   !! @param[in] dy ???
   !! @param[in] dxc ???
   !! @param[in] dyc ???
-  !! @param[in] sin ???
-  !! @param[in] sg ???
+  !! @param[in] sin_sg ???
   !! @param[in] nmax ???
   !! @param[in] cd ???
-  !! @param[in] zero ???
-  !! @param[in] ocean ???
+  !! @param[in] zero_ocean ???
   !! @param[in] mask ???
   !! @param[in] nested ???
   !! @param[in] regional ???
@@ -1677,11 +1691,9 @@ contains
   !! @param[in] dy ???
   !! @param[in] dxc ???
   !! @param[in] dyc ???
-  !! @param[in] sin ???
-  !! @param[in] sg ???
+  !! @param[in] sin_sg ???
   !! @param[in] nmax ???
-  !! @param[in] zero ???
-  !! @param[in] ocean ???
+  !! @param[in] zero_ocean ???
   !! @param[in] mask ???
   !! @param[in] nested ???
   !! @param[in] regional ???
