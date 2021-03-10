@@ -6850,8 +6850,8 @@
 !! @param[in] data The input data.
 !! @param[in] imax "i" dimension of input grid.
 !! @param[in] jmax "j" dimension of input grid.
-!! @param[out] rlnout Latitudes on input data grid.
-!! @param[out] rltout Longitudes on input data grid.
+!! @param[out] rlnout Longitudes on input data grid.
+!! @param[out] rltout Latitudes on input data grid.
 !! @param[out] lmask True, when input data has a mask.
 !! @param[out] rslmsk The mask of the input data grid.
 !! @param[in] gaus Is high-resolution mask on a gaussian grid.
@@ -7343,22 +7343,22 @@
       return
       end
 
-!> ???
+!> Interpolation from lat/lon or gaussian grid to a lat/lon grid.
 !!
-!! @param[in] gauin
-!! @param[in] imxin
-!! @param[in] jmxin
-!! @param[in] regout
-!! @param[in] imxout
-!! @param[in] jmxout
-!! @param[in] wlon
-!! @param[in] rnlat
-!! @param[in] rlnout
-!! @param[in] rltout
-!! @param[in] gaus
-!! @param[in] blno
-!! @param[in] blto
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] gauin Input data.
+!! @param[in] imxin 'i' dimension of input data.
+!! @param[in] jmxin 'j' dimension of input data.
+!! @param[out] regout Output data.
+!! @param[in] imxout 'i' dimension of output data.
+!! @param[in] jmxout 'j' dimension of output data.
+!! @param[in] wlon Longitude of west boundary of input data.
+!! @param[in] rnlat Latitude of north row of input data.
+!! @param[in] rlnout Longitudes on output data grid.
+!! @param[in] rltout Latitudes on output data grid.
+!! @param[in] gaus Is input data on gaussian grid?
+!! @param[in] blno Corner point longitude of input data.
+!! @param[in] blto Corner point latitude of input data.
+!! @author Shrinivas Moorthi
       subroutine ga2la(gauin,imxin,jmxin,regout,imxout,jmxout,
      &                 wlon,rnlat,rlnout,rltout,gaus,blno, blto)
       use machine , only : kind_io8,kind_io4
