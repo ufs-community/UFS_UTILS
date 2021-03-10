@@ -4,11 +4,6 @@
 
 !> This program creates the inland mask and writes it to the orography data files.
 !!
-!! @param[in] cres cubed-sphere resolution (48, 96...)
-!! @param[in] cutoff nonland cutoff
-!! @param[in] rd max recursive depth
-!! @param[in] domain regional (r) or global (g)
-!!
 !! @author Ning Wang
 !! @return 0 for success, error otherwise.
 PROGRAM inland_mask
