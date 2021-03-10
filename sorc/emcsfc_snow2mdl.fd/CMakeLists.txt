@@ -4,17 +4,17 @@
 # George Gayno, Mark Potts
 
 set(fortran_src
-    driver.f
-    grib_utils.f
-    model_grid.f
-    program_setup.f
-    snow2mdl.f
-    snowdat.f)
+    driver.F90
+    grib_utils.F90
+    model_grid.F90
+    program_setup.F90
+    snow2mdl.F90
+    snowdat.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -FR -convert big_endian -assume byterecl")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-form -fdefault-real-8 -fconvert=big-endian")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8 -fconvert=big-endian")
 endif()
 
 set(exe_name emcsfc_snow2mdl)
