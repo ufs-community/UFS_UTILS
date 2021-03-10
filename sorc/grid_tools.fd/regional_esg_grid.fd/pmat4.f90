@@ -1657,8 +1657,8 @@ end subroutine setem
 !!
 !! @param[in] a real quaternion
 !! @param[in] b real quaternion
+!! @return c result
 !! @author R. J. Purser
-!! @return c
 function mulqq(a,b)result(c)!                                         [mulqq]
 implicit none
 real(dp),dimension(0:3),intent(IN ):: a,b
