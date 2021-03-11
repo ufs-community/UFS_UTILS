@@ -1,8 +1,9 @@
-.TH "/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pfun.f90" 3 "Tue Mar 9 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pfun.f90" 3 "Thu Mar 11 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pfun.f90
+/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pfun.f90 \- Routine evaluating useful functions not always available in Fortran\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -55,7 +56,7 @@
 .ti -1c
 .RI "module \fBpfun\fP"
 .br
-.RI "This module is for ??? "
+.RI "This module is for evaluating several useful real-valued functions that are not always available in Fortran compilers\&. "
 .in -1c
 .SS "Functions/Subroutines"
 
@@ -79,19 +80,19 @@
 .ti -1c
 .RI "real(dp) function \fBpfun::atanh_d\fP (t)"
 .br
-.RI "??? "
+.RI "Hyperbolic arc-tangent for double precision real\&. "
 .ti -1c
 .RI "real(sp) function \fBpfun::atanh_s\fP (t)"
 .br
-.RI "??? "
+.RI "Hyperbolic arc-tangent for single precision real\&. "
 .ti -1c
 .RI "real(dp) function \fBpfun::gd_d\fP (x)"
 .br
-.RI "??? "
+.RI "Gudermannian function (related to Mercator map projections) "
 .ti -1c
 .RI "real(sp) function \fBpfun::gd_s\fP (x)"
 .br
-.RI "??? "
+.RI "Gudermannian function (related to Mercator map projections) "
 .ti -1c
 .RI "real(dp) function \fBpfun::gdi_d\fP (y)"
 .br
@@ -103,35 +104,35 @@
 .ti -1c
 .RI "real(dp) function \fBpfun::hav_d\fP (t)"
 .br
-.RI "Haversine function for double precision real\&. "
+.RI "Haversine function for double precision real (for geometry on the sphere)\&. "
 .ti -1c
 .RI "real(sp) function \fBpfun::hav_s\fP (t)"
 .br
-.RI "Haversine function for single precision real\&. "
+.RI "Haversine function for single precision real (for geometry on the sphere)\&. "
 .ti -1c
 .RI "real(dp) function \fBpfun::havh_d\fP (t)"
 .br
-.RI "Hyperbolic-haversine for double precision real\&. "
+.RI "Hyperbolic-haversine for double precision real (for pseudosphere geometry)\&. "
 .ti -1c
 .RI "real(sp) function \fBpfun::havh_s\fP (t)"
 .br
-.RI "Hyperbolic-haversine for single precision real\&. "
+.RI "Hyperbolic-haversine for single precision real (for pseudosphere geometry)\&. "
 .ti -1c
 .RI "real(dp) function \fBpfun::sech_d\fP (x)"
 .br
-.RI "??? "
+.RI "Hyperbolic secant for double precision real\&. "
 .ti -1c
 .RI "real(sp) function \fBpfun::sech_s\fP (x)"
 .br
-.RI "??? "
+.RI "Hyperbolic secant for single precision real\&. "
 .ti -1c
 .RI "real(dp) function \fBpfun::sechs_d\fP (x)"
 .br
-.RI "??? "
+.RI "Hyperbolic secant-squared function (logistic distribution)\&. "
 .ti -1c
 .RI "real(sp) function \fBpfun::sechs_s\fP (x)"
 .br
-.RI "??? "
+.RI "Hyperbolic secant-squared function (logistic distribution)\&. "
 .ti -1c
 .RI "real(dp) function \fBpfun::sinhox_d\fP (x)"
 .br
@@ -147,11 +148,13 @@
 .ti -1c
 .RI "real(dp) function \fBpfun::sinoxm_d\fP (x)"
 .br
-.RI "Evaluate the symmetric real function sin(x)/x-1\&. "
+.RI "Evaluate the symmetric real function sin(x)/x-1, still accurate near x=0\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-??? 
+Routine evaluating useful functions not always available in Fortran\&. 
+
+
 .PP
 \fBAuthor\fP
 .RS 4

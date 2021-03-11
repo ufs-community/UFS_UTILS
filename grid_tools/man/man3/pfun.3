@@ -1,8 +1,8 @@
-.TH "pfun" 3 "Tue Mar 9 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pfun" 3 "Thu Mar 11 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pfun \- This module is for ???  
+pfun \- This module is for evaluating several useful real-valued functions that are not always available in Fortran compilers\&.  
 
 .SH SYNOPSIS
 .br
@@ -72,19 +72,19 @@ pfun \- This module is for ???
 .ti -1c
 .RI "real(dp) function \fBatanh_d\fP (t)"
 .br
-.RI "??? "
+.RI "Hyperbolic arc-tangent for double precision real\&. "
 .ti -1c
 .RI "real(sp) function \fBatanh_s\fP (t)"
 .br
-.RI "??? "
+.RI "Hyperbolic arc-tangent for single precision real\&. "
 .ti -1c
 .RI "real(dp) function \fBgd_d\fP (x)"
 .br
-.RI "??? "
+.RI "Gudermannian function (related to Mercator map projections) "
 .ti -1c
 .RI "real(sp) function \fBgd_s\fP (x)"
 .br
-.RI "??? "
+.RI "Gudermannian function (related to Mercator map projections) "
 .ti -1c
 .RI "real(dp) function \fBgdi_d\fP (y)"
 .br
@@ -96,35 +96,35 @@ pfun \- This module is for ???
 .ti -1c
 .RI "real(dp) function \fBhav_d\fP (t)"
 .br
-.RI "Haversine function for double precision real\&. "
+.RI "Haversine function for double precision real (for geometry on the sphere)\&. "
 .ti -1c
 .RI "real(sp) function \fBhav_s\fP (t)"
 .br
-.RI "Haversine function for single precision real\&. "
+.RI "Haversine function for single precision real (for geometry on the sphere)\&. "
 .ti -1c
 .RI "real(dp) function \fBhavh_d\fP (t)"
 .br
-.RI "Hyperbolic-haversine for double precision real\&. "
+.RI "Hyperbolic-haversine for double precision real (for pseudosphere geometry)\&. "
 .ti -1c
 .RI "real(sp) function \fBhavh_s\fP (t)"
 .br
-.RI "Hyperbolic-haversine for single precision real\&. "
+.RI "Hyperbolic-haversine for single precision real (for pseudosphere geometry)\&. "
 .ti -1c
 .RI "real(dp) function \fBsech_d\fP (x)"
 .br
-.RI "??? "
+.RI "Hyperbolic secant for double precision real\&. "
 .ti -1c
 .RI "real(sp) function \fBsech_s\fP (x)"
 .br
-.RI "??? "
+.RI "Hyperbolic secant for single precision real\&. "
 .ti -1c
 .RI "real(dp) function \fBsechs_d\fP (x)"
 .br
-.RI "??? "
+.RI "Hyperbolic secant-squared function (logistic distribution)\&. "
 .ti -1c
 .RI "real(sp) function \fBsechs_s\fP (x)"
 .br
-.RI "??? "
+.RI "Hyperbolic secant-squared function (logistic distribution)\&. "
 .ti -1c
 .RI "real(dp) function \fBsinhox_d\fP (x)"
 .br
@@ -140,13 +140,13 @@ pfun \- This module is for ???
 .ti -1c
 .RI "real(dp) function \fBsinoxm_d\fP (x)"
 .br
-.RI "Evaluate the symmetric real function sin(x)/x-1\&. "
+.RI "Evaluate the symmetric real function sin(x)/x-1, still accurate near x=0\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-This module is for ??? 
+This module is for evaluating several useful real-valued functions that are not always available in Fortran compilers\&. 
 
-
+These have applications in map transformations, spherical and pseudo-spherical surface geometry, probability distributions, and splines\&.
 .PP
 \fBAuthor\fP
 .RS 4
@@ -163,12 +163,12 @@ Arc-haversine function for double precision real\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-t ??? 
+t arc-haversine function of a 
 .RE
 .PP
 \fBAuthor\fP
@@ -180,7 +180,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 154 of file pfun\&.f90\&.
+Definition at line 157 of file pfun\&.f90\&.
 .PP
 References pietc::u2\&.
 .SS "real(sp) function pfun::ahav_s (real(sp), intent(in) a)"
@@ -190,12 +190,12 @@ Arc-haversine function for single precision real\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP single precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-t ??? 
+t arc-haversine function of a 
 .RE
 .PP
 \fBAuthor\fP
@@ -207,7 +207,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 141 of file pfun\&.f90\&.
+Definition at line 144 of file pfun\&.f90\&.
 .SS "real(dp) function pfun::ahavh_d (real(dp), intent(in) a)"
 
 .PP
@@ -215,12 +215,12 @@ Hyperbolic arc-haversine for double precision real\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-t ??? 
+t hyperbolic arc-haversine of a 
 .RE
 .PP
 \fBAuthor\fP
@@ -232,7 +232,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 182 of file pfun\&.f90\&.
+Definition at line 185 of file pfun\&.f90\&.
 .PP
 References pietc::u2\&.
 .SS "real(sp) function pfun::ahavh_s (real(sp), intent(in) a)"
@@ -247,12 +247,12 @@ The minus sign in the hyperbolic arc-haversine definition\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP single precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-t ??? 
+t hyperbolic arc-haversine of a 
 .RE
 .PP
 \fBAuthor\fP
@@ -264,20 +264,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 169 of file pfun\&.f90\&.
+Definition at line 172 of file pfun\&.f90\&.
 .SS "real(dp) function pfun::atanh_d (real(dp), intent(in) t)"
 
 .PP
-??? 
+Hyperbolic arc-tangent for double precision real\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIt\fP ??? 
+\fIt\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-a ??? 
+a hyperbolic arc-tangent of t 
 .RE
 .PP
 \fBAuthor\fP
@@ -289,22 +289,22 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 213 of file pfun\&.f90\&.
+Definition at line 216 of file pfun\&.f90\&.
 .PP
 References pietc::o2, pietc::o3, pietc::o5, and pietc::u1\&.
 .SS "real(sp) function pfun::atanh_s (real(sp), intent(in) t)"
 
 .PP
-??? 
+Hyperbolic arc-tangent for single precision real\&. (compilers now have this)
 .PP
 \fBParameters\fP
 .RS 4
-\fIt\fP ??? 
+\fIt\fP single precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-a ??? 
+a hyperbolic arc-tangent of t 
 .RE
 .PP
 \fBAuthor\fP
@@ -316,20 +316,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 195 of file pfun\&.f90\&.
+Definition at line 198 of file pfun\&.f90\&.
 .SS "real(dp) function pfun::gd_d (real(dp), intent(in) x)\fC [private]\fP"
 
 .PP
-??? 
+Gudermannian function (related to Mercator map projections) 
 .PP
 \fBParameters\fP
 .RS 4
-\fIx\fP ??? 
+\fIx\fP double precision real argument of function 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-y ??? 
+y Gudermannian function of x 
 .RE
 .PP
 \fBAuthor\fP
@@ -341,20 +341,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 51 of file pfun\&.f90\&.
+Definition at line 54 of file pfun\&.f90\&.
 .SS "real(sp) function pfun::gd_s (real(sp), intent(in) x)\fC [private]\fP"
 
 .PP
-??? 
+Gudermannian function (related to Mercator map projections) 
 .PP
 \fBParameters\fP
 .RS 4
-\fIx\fP ??? 
+\fIx\fP single precision real argument of function 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-y ??? 
+y Gudermannian function of x 
 .RE
 .PP
 \fBAuthor\fP
@@ -366,7 +366,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 38 of file pfun\&.f90\&.
+Definition at line 41 of file pfun\&.f90\&.
 .SS "real(dp) function pfun::gdi_d (real(dp), intent(in) y)\fC [private]\fP"
 
 .PP
@@ -374,12 +374,12 @@ Inverse Gudermannian function for double precision real\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIy\fP ??? 
+\fIy\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-x ??? 
+x inverse Gudermannian function of y 
 .RE
 .PP
 \fBAuthor\fP
@@ -391,7 +391,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 75 of file pfun\&.f90\&.
+Definition at line 78 of file pfun\&.f90\&.
 .SS "real(sp) function pfun::gdi_s (real(sp), intent(in) y)\fC [private]\fP"
 
 .PP
@@ -399,12 +399,12 @@ Inverse Gudermannian function for single precision real\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIy\fP ??? 
+\fIy\fP single precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-x ??? 
+x inverse Gudermannian function of y 
 .RE
 .PP
 \fBAuthor\fP
@@ -416,20 +416,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 63 of file pfun\&.f90\&.
+Definition at line 66 of file pfun\&.f90\&.
 .SS "real(dp) function pfun::hav_d (real(dp), intent(in) t)"
 
 .PP
-Haversine function for double precision real\&. 
+Haversine function for double precision real (for geometry on the sphere)\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIt\fP ??? 
+\fIt\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-a ??? 
+a haversine function of t 
 .RE
 .PP
 \fBAuthor\fP
@@ -441,22 +441,22 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 100 of file pfun\&.f90\&.
+Definition at line 103 of file pfun\&.f90\&.
 .PP
 References pietc::o2\&.
 .SS "real(sp) function pfun::hav_s (real(sp), intent(in) t)\fC [private]\fP"
 
 .PP
-Haversine function for single precision real\&. 
+Haversine function for single precision real (for geometry on the sphere)\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIt\fP ??? 
+\fIt\fP single precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-a ??? 
+a haversine function of t 
 .RE
 .PP
 \fBAuthor\fP
@@ -468,20 +468,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 87 of file pfun\&.f90\&.
+Definition at line 90 of file pfun\&.f90\&.
 .SS "real(dp) function pfun::havh_d (real(dp), intent(in) t)"
 
 .PP
-Hyperbolic-haversine for double precision real\&. 
+Hyperbolic-haversine for double precision real (for pseudosphere geometry)\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIt\fP ??? 
+\fIt\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-a ??? 
+a hyperbolic-haversine function of t 
 .RE
 .PP
 \fBAuthor\fP
@@ -493,13 +493,13 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 128 of file pfun\&.f90\&.
+Definition at line 131 of file pfun\&.f90\&.
 .PP
 References pietc::o2\&.
 .SS "real(sp) function pfun::havh_s (real(sp), intent(in) t)"
 
 .PP
-Hyperbolic-haversine for single precision real\&. 
+Hyperbolic-haversine for single precision real (for pseudosphere geometry)\&. 
 .PP
 \fBNote\fP
 .RS 4
@@ -508,12 +508,12 @@ The minus sign in the hyperbolic-haversine definition\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIt\fP ??? 
+\fIt\fP single precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-a ??? 
+a hyperbolic-haversine function of t 
 .RE
 .PP
 \fBAuthor\fP
@@ -525,20 +525,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 115 of file pfun\&.f90\&.
+Definition at line 118 of file pfun\&.f90\&.
 .SS "real(dp) function pfun::sech_d (real(dp), intent(in) x)"
 
 .PP
-??? 
+Hyperbolic secant for double precision real\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIx\fP ??? 
+\fIx\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-r ??? 
+r hyperbolic secant of x 
 .RE
 .PP
 \fBAuthor\fP
@@ -550,22 +550,22 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 248 of file pfun\&.f90\&.
+Definition at line 251 of file pfun\&.f90\&.
 .PP
 References pietc::u1, and pietc::u2\&.
 .SS "real(sp) function pfun::sech_s (real(sp), intent(in) x)"
 
 .PP
-??? 
+Hyperbolic secant for single precision real\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIx\fP ??? 
+\fIx\fP single precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-t ??? 
+r hyperbolic secant of x 
 .RE
 .PP
 \fBAuthor\fP
@@ -577,20 +577,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 231 of file pfun\&.f90\&.
+Definition at line 234 of file pfun\&.f90\&.
 .SS "real(dp) function pfun::sechs_d (real(dp), intent(in) x)\fC [private]\fP"
 
 .PP
-??? 
+Hyperbolic secant-squared function (logistic distribution)\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIx\fP ??? 
+\fIx\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-r ??? 
+r sech-squared of x 
 .RE
 .PP
 \fBAuthor\fP
@@ -602,20 +602,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 276 of file pfun\&.f90\&.
+Definition at line 279 of file pfun\&.f90\&.
 .SS "real(sp) function pfun::sechs_s (real(sp), intent(in) x)"
 
 .PP
-??? 
+Hyperbolic secant-squared function (logistic distribution)\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIx\fP ??? 
+\fIx\fP single precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-r ??? 
+r sech-squared of x 
 .RE
 .PP
 \fBAuthor\fP
@@ -627,7 +627,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 264 of file pfun\&.f90\&.
+Definition at line 267 of file pfun\&.f90\&.
 .SS "real(dp) function pfun::sinhox_d (real(dp), intent(in) x)"
 
 .PP
@@ -635,12 +635,12 @@ Evaluate the symmetric real function sinh(x)/x\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIx\fP ??? 
+\fIx\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-r ??? 
+r sinh(x)/x 
 .RE
 .PP
 \fBAuthor\fP
@@ -652,22 +652,22 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 342 of file pfun\&.f90\&.
+Definition at line 345 of file pfun\&.f90\&.
 .PP
 References pietc::u1\&.
 .SS "real(dp) function pfun::sinhoxm_d (real(dp), intent(in) x)"
 
 .PP
-Evaluate the symmetric real function sinh(x)/x-1\&. 
+Evaluate the symmetric real function sinh(x)/x-1\&. still accurate near x=0\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIx\fP ??? 
+\fIx\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-r ??? 
+r sinh(x)-1 
 .RE
 .PP
 \fBAuthor\fP
@@ -679,7 +679,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 322 of file pfun\&.f90\&.
+Definition at line 325 of file pfun\&.f90\&.
 .PP
 References pietc::u1\&.
 .SS "real(dp) function pfun::sinox_d (real(dp), intent(in) x)"
@@ -689,12 +689,12 @@ Evaluate the symmetric real function sin(x)/x\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIx\fP ??? 
+\fIx\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-r ??? 
+r sin(x)/x 
 .RE
 .PP
 \fBAuthor\fP
@@ -706,22 +706,22 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 308 of file pfun\&.f90\&.
+Definition at line 311 of file pfun\&.f90\&.
 .PP
 References pietc::u1\&.
 .SS "real(dp) function pfun::sinoxm_d (real(dp), intent(in) x)\fC [private]\fP"
 
 .PP
-Evaluate the symmetric real function sin(x)/x-1\&. 
+Evaluate the symmetric real function sin(x)/x-1, still accurate near x=0\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIx\fP ??? 
+\fIx\fP double precision real argument 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-r ??? 
+r sin(x)/x-1 
 .RE
 .PP
 \fBAuthor\fP
@@ -733,7 +733,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 288 of file pfun\&.f90\&.
+Definition at line 291 of file pfun\&.f90\&.
 .PP
 References pietc::u1\&.
 .SH "Author"
