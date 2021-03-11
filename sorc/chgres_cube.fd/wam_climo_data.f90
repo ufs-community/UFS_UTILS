@@ -13,8 +13,8 @@
 !-----------------------------------------------------------------------
 !> Use moduke for blockdata gtd7bk
 !!
-!! All variables original in blockdata used for this packahe are getting 
-!! from NRLMSISE-00.
+!! All variables originalyl in blockdata used for this packahe are 
+!! getting from NRLMSISE-00.
 !! NRLMSISE-00 is an empirical, global reference atmospheric model of 
 !! the Earth from ground to space. It models the temperatures and densities 
 !! of the atmosphere's components. 
@@ -814,8 +814,10 @@
 
 !-----------------------------------------------------------------------
 !> Use moduke for common blocks 
-!! All variables under this module are original in common block used
-!! for subroutine gettemp and others in this package..
+!!
+!! All variables under this module are originalyl in common block used
+!! for subroutine gettemp and others in this package.
+!!
 !! @author Hann-Ming Henry Juang
    module gettemp_mod
 
