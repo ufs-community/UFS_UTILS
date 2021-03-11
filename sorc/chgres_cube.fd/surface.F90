@@ -3671,7 +3671,7 @@ end subroutine replace_land_sfcparams
  
  end subroutine adjust_soil_levels
 
-!! Set roughness length at land and sea ice. At land, roughness is
+!> Set roughness length at land and sea ice. At land, roughness is
 !! set from a lookup table based on the vegetation type. At sea ice,
 !! roughness is set to 1 cm.
 !!
