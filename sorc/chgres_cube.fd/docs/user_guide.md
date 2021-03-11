@@ -117,7 +117,10 @@ obtained foundation temperature.
 
 # chgres_cube namelist options
 
-Namelist variables with “input” in their name refer to data input to chgres_cube. Namelist variables with “target” in their name refer to the FV3 horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
+Namelist variables with “input” in their name refer to data input to
+chgres_cube. Namelist variables with “target” in their name refer to
+the FV3 horizontal and vertical grid (i.e., the target grid
+chgres_cube is mapping to).
 
 When using GRIB2 data as input to chgres_cube, set namelist as
 follows:
@@ -358,7 +361,8 @@ file. Options are:
 
  - "skip": Don't write to the output file.
  - "set_to_fill": Set to user-specified field value (see column 4).
- - "stop": Force an exception and stop code execution. Use this if you absolutely require a field to be present.
+ - "stop": Force an exception and stop code execution. Use this if you
+   absolutely require a field to be present.
 
 Column 4: If column 3 = "set_to_fill", then this value is used to fill
 in all points in the input field. These values may be overwritten by
