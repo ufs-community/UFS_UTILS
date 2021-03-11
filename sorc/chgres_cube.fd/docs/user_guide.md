@@ -1,14 +1,3 @@
-
-# chgres_cube
-
-Creates cold start initial conditions for FV3 model runs. This is part
-of the [NCEPLIBS UFS_UTILS](https://github.com/NOAA-EMC/UFS_UTILS) project.
-
-This is part of the <a href="../index.html">UFS_UTILS documentation</a>.
-
-The chgres_cube code can be found here:
-https://github.com/NOAA-EMC/UFS_UTILS/tree/develop/sorc/chgres_cube.fd.
-
 # Introduction
 
 The chgres_cube program creates initial condition files to “coldstart”
@@ -16,6 +5,12 @@ the forecast model. The initial conditions are created from either
 Global Forecast System (GFS) gridded binary version 2 (GRIB2), NOAA
 Environmental Modeling System Input/Output (NEMSIO) data, or Network
 Common Data Form (NetCDF) data.
+
+This is part of the [NCEPLIBS
+UFS_UTILS](https://github.com/NOAA-EMC/UFS_UTILS) project.
+
+This user guide is part of the <a href="../index.html">UFS_UTILS
+documentation</a>.
 
 # Where to find GFS GRIB2, NEMSIO and NetCDF data
 
