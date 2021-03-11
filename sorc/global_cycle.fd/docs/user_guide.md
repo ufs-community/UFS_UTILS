@@ -1,6 +1,8 @@
 
 # global_cycle
 
+# Introduction
+
 Updates the GFS surface conditions using external snow and sea ice
 analyses. Updates monthly climatological fields such as plant
 greenness fraction and albedo. Runs as part of the GFS and GDAS
