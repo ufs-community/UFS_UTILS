@@ -175,7 +175,6 @@ C>
 !! @param EFAC
 !! @param BLAT 
 !! @param OUTGRID
-!! @param IFAC
 !! @param EFAC
 !! @param BLAT
 !! @param OUTGRID
@@ -3708,15 +3707,21 @@ C
       RETURN
       END
       
+!> Reverse the east-west and north-south axes
+!! in a two-dimensional array.
+!!
+!! @param [in] im 'i' dimension of the 2-d array.
+!! @param [in] jm 'j' dimension of the 2-d array.
+!! @param [in] numi Not used.
+!! @param [inout] f The two-dimensional array to
+!! be processed.
+!! @param [out] wrk Two-dimensional work array.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE REVERS(IM, JM, numi, F, WRK)
 !
       REAL F(IM,JM), WRK(IM,JM)
       integer numi(jm)
-C
-C     reverse east-west and north-south
-c......  fix this routine up to take numi (*j*)
-C.....   at least have 5 variables ....and keep REVLAT .FALSE.
-       imb2 = im / 2
+      imb2 = im / 2
       do i=1,im*jm
          WRK(i,1) = F(i,1)
       enddo
@@ -3775,10 +3780,16 @@ C.....   at least have 5 variables ....and keep REVLAT .FALSE.
           enddo
         enddo
       end subroutine
+
+!> Print out the maximum and minimum values of
+!! an array.
+!!
+!! @param[in] im The 'i' dimension of the array.
+!! @param[in] jm The 'i' dimension of the array.
+!! @param[in] a The array to check.
+!! @param[in] title Name of the data to be checked.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE minmxj(IM,JM,A,title)
-
-c this routine is using real*4 on the sp
-
       implicit none
 
       real A(IM,JM),rmin,rmax
@@ -3801,10 +3812,19 @@ csela....................................................
 C
       RETURN
       END
+
+!> Print out the maximum and minimum values of
+!! an array. Pass back the i/j location of the
+!! maximum value.
+!!
+!! @param[in] im The 'i' dimension of the array.
+!! @param[in] jm The 'i' dimension of the array.
+!! @param[in] a The array to check.
+!! @param[out] imax 'i' location of maximum
+!! @param[out] jmax 'j' location of maximum
+!! @param[in] title Name of the data to be checked.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE mnmxja(IM,JM,A,imax,jmax,title)
-
-c this routine is using real*4 on the sp
-
       implicit none
 
       real A(IM,JM),rmin,rmax
@@ -3929,16 +3949,13 @@ C  PHYSICAL TO FOURIER TRANSFORM.
           END SELECT
         END SELECT
       END SUBROUTINE
+
+!> Read input global 30-arc second orography data.
+!!
+!! @param[out] glob The orography data.
+!! @param[in] itopo Not used.
+!! @author Jordan Alpert NOAA/EMC
       subroutine read_g(glob,ITOPO)
-!
-! --- if ITOPO = 1 then read gtopo30_gg.fine 43200X21600 30" file
-! --- if ITOPO = 2 then read  topo 30" .DEM tile files 
-! --- in either case, glob will be n Interger*2 array.
-! --- This routine write out a grads ctl file for displaying the 
-! --- tiles in the output working dir.  The glob array can not be 
-! --- acted on with grads, but the tiles can be if lat/lon are reduced slightly
-cc
-      use machine
       implicit none
 cc
       integer*2    glob(360*120,180*120)
@@ -3952,12 +3969,6 @@ cc
       integer*2    idat(ix,jx)
       integer      itopo
 cc
-ccmr  integer*2    m9999 
-ccmr  data         m9999    / -9999 /
-cc
-ccmr  integer      i_count(360*120)
-ccmr  integer      j_max_y(360*120)
-cc
       integer      i,j,inttyp
 cc
       real(kind=8) dloin,dlain,rlon,rlat
@@ -3965,7 +3976,6 @@ cc
       open(235, file="./fort.235", access='direct', recl=43200*21600*2)
       read(235,rec=1)glob
       close(235)
-cc
 cc
       print*,' '
       call maxmin     (glob,360*120*180*120,'global0')
@@ -3988,6 +3998,13 @@ cc
 cc
       return
       end
+!> Print the maximum, mininum, mean and
+!! standard deviation of an array.
+!! 
+!! @param [in] ia The array to be checked.
+!! @param [in] len The number of points to be checked.
+!! @param [in] tile A name associated with the array.
+!! @author Jordan Alpert NOAA/EMC
       subroutine maxmin(ia,len,tile)
 ccmr
       implicit none
@@ -4036,10 +4053,17 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
      &       ' ko9s=',kount,kount_9,kount+kount_9 
       return
       end
+
+!> Print out the maximum and minimum values of
+!! an array and their i/j location. Also print out
+!! the number of undefined points.
+!!
+!! @param[in] im The 'i' dimension of the array.
+!! @param[in] jm The 'i' dimension of the array.
+!! @param[in] a The array to check.
+!! @param[in] title Name of the data to be checked.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE minmaxj(IM,JM,A,title)
-
-c this routine is using real*4 on the sp
-
       implicit none
 
       real(kind=4) A(IM,JM),rmin,rmax,undef
@@ -4081,7 +4105,6 @@ csela....................................................
 C
       RETURN
       END
-
       
       !routine to map (lon, lat) to (x,y,z)
       subroutine latlon2xyz(siz,lon, lat, x, y, z)
@@ -4411,24 +4434,20 @@ C
          
       end subroutine get_xnsum3
       
+!> Report NaNS and NaNQ within an address range for
+!! 8-byte real words.
+!!
+!! This routine prints a single line for each call
+!! and prints a message and returns to the caller on 
+!! detection of the FIRST NaN in the range.  If no NaN values
+!! are found it returns silently.
+!!
+!! @param[in] A Real*8 variable or array
+!! @param[in] L Number of words to scan (length of array)
+!! @param[in] C Distinctive message set in caller to indicate where
+!! the routine was called.
+!! @author Jordan Alpert NOAA/EMC
       subroutine nanc(a,l,c)
-c compiler opt TRAPS= -qinitauto=FF911299 -qflttrap=ov:zero:inv:en -qsig trap
-c or call subroutine below
-c subroutine to report NaNS and NaNQ within an address
-c range for real*8 words.
-c  as written the routine prints a single line for each call
-c  and prints a message and returns to the caller  on detection of the FIRST
-c  NaN in the range.  The message is passed in the  third
-c  argument.  If no NaN values are found it returns silently.
-c  A real*4 version can be created by making A real*4
-
-c    arguments (all are input only)
-c
-c    A   real*8 variable or array
-c    L   number of words to scan (length of array)
-c    C   distinctive message set in caller to indicate where
-c        the routine was called.
-c 
       integer inan1,inan2,inan3,inan4,inaq1,inaq2,inaq3,inaq4
        real word
        integer itest
