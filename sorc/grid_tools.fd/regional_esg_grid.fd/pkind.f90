@@ -1,4 +1,5 @@
 !> @file
+!! @brief standard integer, real, and complex single and double precision kinds 
 module pkind
 integer,parameter:: spi=selected_int_kind(6) !< Single precision integer kind.
 integer,parameter:: dpi=selected_int_kind(12) !< Double precision integer kind.
