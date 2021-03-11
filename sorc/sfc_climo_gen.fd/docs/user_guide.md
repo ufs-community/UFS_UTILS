@@ -1,6 +1,8 @@
 
 # sfc_climo_gen
 
+# Introduction
+
 Creates surface climatological fields, such as vegetation type and
 albedo, for an FV3 grid.
 
