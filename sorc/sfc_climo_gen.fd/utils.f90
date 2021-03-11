@@ -1,4 +1,10 @@
 !> @file
+!! @brief Utilities.
+!! @author George Gayno @date 2018
+
+!> Utilities.
+!!
+!! @author George Gayno @date 2018
 module utils
 
  private
@@ -8,6 +14,11 @@ module utils
 
  contains
 
+ !> Handle netCDF error codes.
+ !!
+ !! @param[in] err NetCDF return code.
+ !! @param[in] string Error message.
+ !! @author George Gayno @date 2018
  subroutine netcdf_err( err, string )
 
  use mpi
@@ -29,6 +40,11 @@ module utils
  return
  end subroutine netcdf_err
 
+ !> Handle errors.
+ !!
+ !! @param[in] string Error message.
+ !! @param[in] rc Error code.
+ !! @author George Gayno @date 2018
  subroutine error_handler(string, rc)
 
  use mpi
