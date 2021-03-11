@@ -1,13 +1,15 @@
 !> @file
 !! @brief Read the input source data and interpolate it to the
 !! model grid.
+!! @author George Gayno @date 2018
+
+!> Read the input source data and interpolate it to the
+!! model grid.
 !!
-!! @author gayno @date 2018
-!!
-!! @param[in] input_flle filename of input source data.
 !! @param[in] localpet this mpi task
 !! @param[in] method interpolation method.defined where mask=1
-!!
+!! @param[in] input_file filename of input source data.
+!! @author George Gayno @date 2018
  subroutine interp(localpet, method, input_file)
 
  use esmf
@@ -259,16 +261,16 @@
 
  end subroutine interp
 
-!> Ensure consistent fields at land ice points
+!> Ensure consistent fields at land ice points.
 !! Land ice is vegetation type 15 (variable landice).
+!! output is Model field.
+!!
+!! @param[in] field Model field before adjustments for land ice.
+!! @param[in] vegt Vegetation type on the model tile.
+!! @param[inout] idim i dimension of model tile.
+!! @param[inout] jdim j dimension of model tile.
+!! @param[in] field_ch Field name.
 !! @author George Gayno NCEP/EMC
-!! Usage: call adjust_for_landice(field, vegt, idim, jdim, field_ch)
-!! output is Model field
-!! @param field         - Model field before adjustments for land ice.
-!! @param field_ch      - Field name.
-!! @param i/jdim        - i/j dimension of model tile.
-!! @param vegt          - Vegetation type on the model tile.
-
  subroutine adjust_for_landice(field, vegt, idim, jdim, field_ch)
 
  use esmf
