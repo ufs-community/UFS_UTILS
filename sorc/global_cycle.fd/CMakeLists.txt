@@ -2,6 +2,7 @@
 # project.
 #
 # George Gayno
+
 set(fortran_src
     cycle.f90
     machine.f90
@@ -33,3 +34,8 @@ if(OpenMP_Fortran_FOUND)
 endif()
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+
+# If doxygen documentation we enabled, build it.
+if(ENABLE_DOCS)
+  add_subdirectory(docs)  
+endif()

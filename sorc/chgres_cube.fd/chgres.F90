@@ -15,6 +15,10 @@
 !! with a multiple of six mpi tasks (an ESMF library requirement for
 !! fv3 cubed sphere grids).
 !!
+!! @note For variable names “input” refers to the data input to the
+!! program (i.e., GRIB2, NEMSIO, NetCDF). “Target” refers to the
+!! target or FV3 model grid.
+!!
 !! @author George Gayno NOAA/EMC
 !! @return 0 for success, error code otherwise.
  program chgres

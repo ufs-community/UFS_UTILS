@@ -1,5 +1,5 @@
 !> @file
-!! @brief Read input data
+!! @brief Read atmospheric and surface data from GRIB2, NEMSIO and NetCDF files.
 !! @author George Gayno NCEP/EMC
 
 !> Read atmospheric, surface and nst data on the input grid.

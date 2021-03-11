@@ -1,19 +1,19 @@
 !> @file
-!! @brief Process atmospheric fields
+!! @brief Process atmospheric fields.
 !! @author George Gayno NCEP/EMC
 
-!> Process atmospheric fields:  Horizontally interpolate input
-!! fields to the target grid.  Adjust surface pressure according to
-!! terrain difference between input and target grids.  Vertically
-!! interpolate to target grid vertical levels.  Processing based on
-!! the spectral GFS version of CHGRES.
+!> Process atmospheric fields. Horizontally interpolate from input to
+!! target FV3 grid using ESMF regridding. Adjust surface pressure
+!! according to terrain differences between input and target
+!! grid. Vertically interpolate to target FV3 grid vertical
+!! levels. Processing based on the spectral GFS version of CHGRES.
 !! 
-!! Variables defined below.  Here "b4adj" indicates fields on the target
-!! grid before vertical adjustment. "target" indicates data on target
-!! grid.  "input" indicates data on input grid. "_s" indicates fields
-!! on the 'south' edge of the grid box.  "_w" indicate fields on the 
-!! 'west' edge of the grid box.  Otherwise, fields are at the center
-!! of the grid box.
+!! For variables "b4adj" indicates fields on the target grid before
+!! vertical adjustment. "target" indicates data on target grid.
+!! "input" indicates data on input grid. "_s" indicates fields on the
+!! 'south' edge of the grid box.  "_w" indicate fields on the 'west'
+!! edge of the grid box.  Otherwise, fields are at the center of the
+!! grid box.
 !!
 !! @author George Gayno NCEP/EMC
  module atmosphere
@@ -107,7 +107,7 @@
 
 !> Driver routine to process for atmospheric fields.
 !!
-!! @param localpet ESMF local persistent execution thread 
+!! @param[in] localpet ESMF local persistent execution thread 
 !! @author George Gayno
  subroutine atmosphere_driver(localpet)
 
@@ -430,9 +430,9 @@
 
  end subroutine atmosphere_driver
 
-!> Create target grid field objects to hold data before vertical interpolation.
-!! These will be defined with the same number of vertical levels as
-!! the input grid.
+!> Create target grid field objects to hold data before vertical
+!! interpolation. These will be defined with the same number of
+!! vertical levels as the input grid.
 !!
 !! @author George Gayno
  subroutine create_atm_b4adj_esmf_fields
@@ -761,7 +761,7 @@
 
  end subroutine convert_winds
 
-!> Compute model level pressures.
+!> Computes 3-D pressure given an adjusted surface pressure.
 !!                                                                       
 !! program history log:                                                  
 !! 2005-04-11  Hann-Ming Henry Juang    hybrid sigma, sigma-p, and sigma-
@@ -789,9 +789,9 @@
 !!     PM           REAL (IX,KM) MID-LAYER PRESSURE (PA)                 
 !!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)
 !!
-!! @param localpet ESMF local persistent execution thread  
+!! @param[in] localpet ESMF local persistent execution thread  
 !!
-!! @author HANN_MING HENRY JUANG, JUANG, Fanglin Yang, S. Moorthi
+!! @author Hann Ming Henry Juang, Juang, Fanglin Yang, S. Moorthi
  subroutine newpr1(localpet)
  implicit none 
 
@@ -890,7 +890,7 @@
 
  end subroutine newpr1 
 
-!> Compute new surface pressure.
+!> Computes adjusted surface pressure given a new terrain height.
 !!
 !! Computes a new surface pressure given a new orography. The new
 !! pressure is computed assuming a hydrostatic balance and a constant
@@ -901,8 +901,8 @@
 !! -  91-10-31  mark iredell
 !! -  2018-apr  adapt for fv3. george gayno
 !!
-!! @param [in] localpet ESMF local persistent execution thread 
-!! @author iredell org: w/nmc23, George Gayno @date 92-10-31
+!! @param[in] localpet ESMF local persistent execution thread 
+!! @author Mark Iredell, George Gayno @date 92-10-31
  subroutine newps(localpet)
 
  implicit none
@@ -1096,7 +1096,9 @@
 
  end subroutine newps
 
-!> Read vertical coordinate information.
+!> Reads model vertical coordinate definition file (as specified by
+!! namelist variable vcoord_file_target_grid).
+!!
 !! @author George Gayno
  subroutine read_vcoord_info
  implicit none
@@ -1239,8 +1241,11 @@
 
  end subroutine horiz_interp_thomp_mp_climo
 
-!> Vertically interpolate thompson microphysics climo tracers to the target
-!! model levels.
+!> Vertically interpolate atmospheric fields to target FV3 grid.
+!!
+!! Vertically interpolate thompson microphysics climo tracers to the
+!! target model levels.
+!!
 !! @author George Gayno
  SUBROUTINE VINTG_THOMP_MP_CLIMO
 
@@ -1588,7 +1593,7 @@
 !! relative humidity is held constant. This routine expects fields
 !! ordered from bottom to top of atmosphere.
 !!
-!! @author Iredell org: W/NMC23 @date 92-10-31
+!! @author Mark Iredell @date 92-10-31
  SUBROUTINE VINTG
  use mpi
 
@@ -1994,9 +1999,6 @@
 !! values z1(1+(i-1)*ixz1+(l-1)*kxz1) and z1(1+(i-1)*ixz1+(l-0)*kxz1)
 !! and may equal the former.
 !!                                                                       
-!! PROGRAM HISTORY LOG:                                                  
-!! - 1999-01-05  MARK IREDELL                                              
-!!                                                                       
 !! @param[in] im integer number of sequences to search                
 !! @param[in] km1 integer number of points in each sequence            
 !! @param[in] ixz1 integer sequence skip number for z1                  
@@ -2154,7 +2156,8 @@
 
  end subroutine compute_zh 
  
-!> Cleanup atmospheric field (before adjustment) objects
+!> Cleanup atmospheric field (before adjustment) objects.
+!!
 !! @author George Gayno
  subroutine cleanup_target_atm_b4adj_data
 

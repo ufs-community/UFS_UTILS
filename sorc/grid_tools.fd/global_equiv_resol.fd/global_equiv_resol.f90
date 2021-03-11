@@ -1,7 +1,19 @@
 !> @file
-!=======================================================================
+!! @brief Compute the global equivalent resolution for regional grids.
+!! @author Gerard Ketefian NOAA/GSL
+
+!> Compute the global equivalent resolution for regional grids
+!! using the average model grid cell size in meters squared.
+!!
+!! - RES(in km) = (360 degrees / 4*CRES) * 111 km
+!!
+!! Using the average cell size the equivalent global resolution is:
+!!
+!! - CRES = NINT((2*PI*RADIUS_OF_EARTH)/(4*AVG_CELL_SIZE)
+!!
+!! @author Gerard Ketefian NOAA/GSL
+!! @return 0 for success, error code otherwise
 program global_equiv_resol
-!=======================================================================
 
   use netcdf
 
@@ -173,7 +185,10 @@ program global_equiv_resol
 
 end program global_equiv_resol
 
-
+!> Check results of netCDF call.
+!!
+!! @param[in] status return code to check
+!! @author Gerard Ketefian NOAA/GSL
 subroutine check(status)
   use netcdf
   integer,intent(in) :: status

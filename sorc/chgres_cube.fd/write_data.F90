@@ -1,5 +1,6 @@
 !> @file
-!! @brief Write model coldstart files.
+!! @brief Writes the tiled and header files expected by the forecast
+!! model.
 !!
 !! @author George Gayno NCEP/EMC
 !!
