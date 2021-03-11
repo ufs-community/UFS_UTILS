@@ -3157,70 +3157,6 @@ C
       RETURN
       END
 
-
-C-----------------------------------------------------------------------
-      SUBROUTINE GL2ANY(IP,KM,G1,IM1,JM1,G2,IM2,JM2,IDRTI,RLON,RLAT)
-C$$$  SUBPROGRAM DOCUMENTATION BLOCK
-C
-C SUBPROGRAM:    GL2GL       INTERPOLATE GAUSSIAN GRID TO GAUSSIAN GRID
-C   PRGMMR: IREDELL          ORG: W/NMC23     DATE: 92-10-31
-C
-C ABSTRACT: LINEARLY INTERPOLATES GAUSSIAN GRID TO GAUSSIAN GRID.
-C
-C PROGRAM HISTORY LOG:
-C   91-10-31  MARK IREDELL
-C
-C USAGE:    CALL GL2GL(IP,KM,G1,IM1,JM1,G2,IM2,JM2)
-C   INPUT ARGUMENT LIST:
-C     IP           INTEGER INTERPOLATION TYPE
-C     KM           INTEGER NUMBER OF LEVELS
-C     G1           REAL (IM1,JM1,KM) INPUT GAUSSIAN FIELD
-C     IM1          INTEGER NUMBER OF INPUT LONGITUDES
-C     JM1          INTEGER NUMBER OF INPUT LATITUDES
-C     IM2          INTEGER NUMBER OF OUTPUT LONGITUDES
-C     JM2          INTEGER NUMBER OF OUTPUT LATITUDES
-C   OUTPUT ARGUMENT LIST:
-C     G2           REAL (IM2,JM2,KM) OUTPUT GAUSSIAN FIELD
-C
-C SUBPROGRAMS CALLED:
-C   IPOLATES     IREDELL'S POLATE FOR SCALAR FIELDS
-C
-C ATTRIBUTES:
-C   LANGUAGE: FORTRAN
-C
-CC$$$
-      REAL G1(IM1,JM1,KM),G2(IM2,JM2,KM)
-      LOGICAL*1 L1(IM1,JM1,KM),L2(IM2,JM2,KM)
-      REAL, intent(in) :: RLAT(IM2,JM2),RLON(IM2,JM2)
-      INTEGER IB1(KM),IB2(KM)
-      INTEGER KGDS1(200),KGDS2(200)
-      INTEGER IDRTI, IDRTO
-      DATA KGDS1/4,0,0,90000,0,0,-90000,193*0/
-      DATA KGDS2/4,0,0,90000,0,0,-90000,193*0/
-      INTEGER IPOPT(20)
-      DATA IPOPT/20*0/
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      KGDS1(1) = IDRTI
-      KGDS2(1) = -1
-      NO = IM2*JM2
-      IF(IM1.NE.IM2.OR.JM1.NE.JM2) THEN
-        IB1=0
-        KGDS1(2)=IM1
-        KGDS1(3)=JM1
-        KGDS1(8)=NINT(-360000./IM1)
-        KGDS1(10)=JM1/2
-        KGDS2(2)=IM2
-        KGDS2(3)=JM2
-        KGDS2(8)=NINT(-360000./IM2)
-        KGDS2(10)=JM2/2
-        CALL IPOLATES(IP,IPOPT,KGDS1,KGDS2,IM1*JM1,IM2*JM2,KM,IB1,L1,G1,
-     &                NO,RLAT,RLON,IB2,L2,G2,IRET)
-      ELSE
-        G2=G1
-      ENDIF
-      END
-
-
       function spherical_distance(theta1,phi1,theta2,phi2)
 
       real, intent(in) :: theta1, phi1, theta2, phi2
@@ -3852,60 +3788,41 @@ C
       RETURN
       END
 
-C-----------------------------------------------------------------------
+!> Perform multiple fast fourier transforms.
+!!
+!! This subprogram performs multiple fast fourier transforms
+!! between complex amplitudes in fourier space and real values
+!! in cyclic physical space.
+!!
+!! Subprograms called (NCEPLIB SP Library):
+!!  - scrft Complex to real fourier transform
+!!  - dcrft Complex to real fourier transform
+!!  - srcft Real to complex fourier transform
+!!  - drcft Real to complex fourier transform
+!!
+!! Program history log:
+!! 1998-12-18  Mark Iredell
+!!
+!! @param[in] imax Integer number of values in the cyclic physical
+!! space. See limitations on imax in remarks below.
+!! @param[in] incw Integer first dimension of the complex amplitude array.
+!! (incw >= imax/2+1).
+!! @param[in] incg Integer first dimension of the real value array.
+!! (incg >= imax).
+!! @param[in] kmax Integer number of transforms to perform.
+!! @param[in] w Complex amplitudes on input if idir>0, and on output
+!! if idir<0.
+!! @param[in] g Real values on input if idir<0, and on output if idir>0.
+!! @param[in] idir Integer direction flag. idir>0 to transform from
+!! fourier to physical space. idir<0 to transform from physical to
+!! fourier space.
+!!
+!! @note The restrictions on imax are that it must be a multiple
+!! of 1 to 25 factors of two, up to 2 factors of three,
+!! and up to 1 factor of five, seven and eleven.
+!!
+!! @author Mark Iredell ORG: W/NMC23 @date 96-02-20
       SUBROUTINE SPFFT1(IMAX,INCW,INCG,KMAX,W,G,IDIR)
-C$$$  SUBPROGRAM DOCUMENTATION BLOCK
-C
-C SUBPROGRAM:  SPFFT1     PERFORM MULTIPLE FAST FOURIER TRANSFORMS
-C   PRGMMR: IREDELL       ORG: W/NMC23       DATE: 96-02-20
-C
-C ABSTRACT: THIS SUBPROGRAM PERFORMS MULTIPLE FAST FOURIER TRANSFORMS
-C           BETWEEN COMPLEX AMPLITUDES IN FOURIER SPACE AND REAL VALUES
-C           IN CYCLIC PHYSICAL SPACE.
-C           SUBPROGRAM SPFFT1 INITIALIZES TRIGONOMETRIC DATA EACH CALL.
-C           USE SUBPROGRAM SPFFT TO SAVE TIME AND INITIALIZE ONCE.
-C           THIS VERSION INVOKES THE IBM ESSL FFT.
-C
-C PROGRAM HISTORY LOG:
-C 1998-12-18  IREDELL
-C
-C USAGE:    CALL SPFFT1(IMAX,INCW,INCG,KMAX,W,G,IDIR)
-C
-C   INPUT ARGUMENT LIST:
-C     IMAX     - INTEGER NUMBER OF VALUES IN THE CYCLIC PHYSICAL SPACE
-C                (SEE LIMITATIONS ON IMAX IN REMARKS BELOW.)
-C     INCW     - INTEGER FIRST DIMENSION OF THE COMPLEX AMPLITUDE ARRAY
-C                (INCW >= IMAX/2+1)
-C     INCG     - INTEGER FIRST DIMENSION OF THE REAL VALUE ARRAY
-C                (INCG >= IMAX)
-C     KMAX     - INTEGER NUMBER OF TRANSFORMS TO PERFORM
-C     W        - COMPLEX(INCW,KMAX) COMPLEX AMPLITUDES IF IDIR>0
-C     G        - REAL(INCG,KMAX) REAL VALUES IF IDIR<0
-C     IDIR     - INTEGER DIRECTION FLAG
-C                IDIR>0 TO TRANSFORM FROM FOURIER TO PHYSICAL SPACE
-C                IDIR<0 TO TRANSFORM FROM PHYSICAL TO FOURIER SPACE
-C
-C   OUTPUT ARGUMENT LIST:
-C     W        - COMPLEX(INCW,KMAX) COMPLEX AMPLITUDES IF IDIR<0
-C     G        - REAL(INCG,KMAX) REAL VALUES IF IDIR>0
-C
-C SUBPROGRAMS CALLED:
-C   SCRFT        IBM ESSL COMPLEX TO REAL FOURIER TRANSFORM
-C   DCRFT        IBM ESSL COMPLEX TO REAL FOURIER TRANSFORM
-C   SRCFT        IBM ESSL REAL TO COMPLEX FOURIER TRANSFORM
-C   DRCFT        IBM ESSL REAL TO COMPLEX FOURIER TRANSFORM
-C
-C ATTRIBUTES:
-C   LANGUAGE: FORTRAN 90
-C
-C REMARKS:
-C   THE RESTRICTIONS ON IMAX ARE THAT IT MUST BE A MULTIPLE
-C   OF 1 TO 25 FACTORS OF TWO, UP TO 2 FACTORS OF THREE,
-C   AND UP TO 1 FACTOR OF FIVE, SEVEN AND ELEVEN.
-C
-C   THIS SUBPROGRAM IS THREAD-SAFE.
-C
-C$$$
         IMPLICIT NONE
         INTEGER,INTENT(IN):: IMAX,INCW,INCG,KMAX,IDIR
         COMPLEX,INTENT(INOUT):: W(INCW,KMAX)
