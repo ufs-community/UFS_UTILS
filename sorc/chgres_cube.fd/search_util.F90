@@ -6,6 +6,11 @@
 !! happen for an isolated lake or island that is unresolved by
 !! the input grid.
 !!
+!! Searches for the nearest valid land/non-land data where the input
+!! and target fv3 land-mask differ. Example: when the target FV3 grid
+!! depicts an island that is not resolved by the input data. If nearby
+!! valid data is not found, a default value is used.
+!!
 !! @author George Gayno NCEP/EMC
  module search_util
 

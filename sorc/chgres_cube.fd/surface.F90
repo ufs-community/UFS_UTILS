@@ -1,5 +1,5 @@
 !> @file
-!! @brief Process surface and nst fields.
+!! @brief Process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields.
 !! @author George Gayno NCEP/EMC
 
 !> Process surface and nst fields. Interpolates fields from the input
@@ -7,6 +7,10 @@
 !! in input and target grid terrain. Rescales soil moisture for soil
 !! type differences between input and target grid. Computes frozen
 !! portion of total soil moisture.
+!!
+!! Assumes the input land data are Noah LSM-based, and the fv3 run
+!! will use the Noah LSM. NSST fields are not available when using
+!! GRIB2 input data.
 !!
 !! Public variables are defined below. "target" indicates field
 !! associated with the target grid. "input" indicates field associated
@@ -295,7 +299,8 @@
 
  end subroutine surface_driver
 
-!> Horizontally interpolate surface fields using esmf routines.
+!> Horizontally interpolate surface fields from input to target FV3
+!> grid using esmf routines.
 !!
 !! @param[in] localpet  ESMF local persistent execution thread
 !!
@@ -3306,8 +3311,9 @@ end subroutine replace_land_sfcparams
 
  END function frh2o
 
-!> Adjust soil moisture for changes in soil type between the input and target grids.
-!! Works for Noah land model only.
+!> Adjust soil moisture for changes in soil type between the input and
+!! target grids. Works for Noah land model only. Required to preserve
+!! latent/sensible heat fluxes.
 !!
 !! @author George Gayno NOAA/EMC
  subroutine rescale_soil_moisture
@@ -3665,10 +3671,9 @@ end subroutine replace_land_sfcparams
  
  end subroutine adjust_soil_levels
 
-!> Set roughness length at land and sea ice.
-!! At land, roughness is set from a lookup table
-!! based on the vegetation type. At sea ice, roughness is
-!! set to 1 cm.
+!! Set roughness length at land and sea ice. At land, roughness is
+!! set from a lookup table based on the vegetation type. At sea ice,
+!! roughness is set to 1 cm.
 !!
 !! @author George Gayno NOAA/EMC
  subroutine roughness
