@@ -83,6 +83,7 @@ $(document).ready(function(){initNavTree('source__grid_8F90.html',''); initResiz
 
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Modules</a> &#124;
 <a href="#func-members">Functions/Subroutines</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -90,144 +91,63 @@ $(document).ready(function(){initNavTree('source__grid_8F90.html',''); initResiz
 </div><!--header-->
 <div class="contents">
 
+<p>Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid.  
+<a href="#details">More...</a></p>
+
 <p><a href="source__grid_8F90_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Modules</h2></td></tr>
+<tr class="memitem:namespacesource__grid"><td class="memItemLeft" align="right" valign="top">module &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html">source_grid</a></td></tr>
+<tr class="memdesc:namespacesource__grid"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:a702829ab745210e1bba937c613e5baf6"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="source__grid_8F90.html#a702829ab745210e1bba937c613e5baf6">source_grid::define_source_grid</a> (localpet, npets, input_file)</td></tr>
-<tr class="memdesc:a702829ab745210e1bba937c613e5baf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">define source grid  <a href="source__grid_8F90.html#a702829ab745210e1bba937c613e5baf6">More...</a><br /></td></tr>
+<tr class="memitem:a702829ab745210e1bba937c613e5baf6"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#a702829ab745210e1bba937c613e5baf6">source_grid::define_source_grid</a> (localpet, npets, input_file)</td></tr>
+<tr class="memdesc:a702829ab745210e1bba937c613e5baf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines esmf grid object for source grid.  <a href="namespacesource__grid.html#a702829ab745210e1bba937c613e5baf6">More...</a><br /></td></tr>
 <tr class="separator:a702829ab745210e1bba937c613e5baf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a287cc73053e3f4782b495ff1a61c8ea2"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="source__grid_8F90.html#a287cc73053e3f4782b495ff1a61c8ea2">source_grid::source_grid_cleanup</a></td></tr>
-<tr class="memdesc:a287cc73053e3f4782b495ff1a61c8ea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">source grid cleanup  <a href="source__grid_8F90.html#a287cc73053e3f4782b495ff1a61c8ea2">More...</a><br /></td></tr>
+<tr class="memitem:a287cc73053e3f4782b495ff1a61c8ea2"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#a287cc73053e3f4782b495ff1a61c8ea2">source_grid::source_grid_cleanup</a></td></tr>
+<tr class="memdesc:a287cc73053e3f4782b495ff1a61c8ea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free up memory associated with this module.  <a href="namespacesource__grid.html#a287cc73053e3f4782b495ff1a61c8ea2">More...</a><br /></td></tr>
 <tr class="separator:a287cc73053e3f4782b495ff1a61c8ea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:aff543ec0172d14deceb73b0b02117971"><td class="memItemLeft" align="right" valign="top"><a id="aff543ec0172d14deceb73b0b02117971"></a>
-integer, dimension(:), allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><b>source_grid::day_of_rec</b></td></tr>
+<tr class="memitem:aff543ec0172d14deceb73b0b02117971"><td class="memItemLeft" align="right" valign="top">integer, dimension(:), allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#aff543ec0172d14deceb73b0b02117971">source_grid::day_of_rec</a></td></tr>
+<tr class="memdesc:aff543ec0172d14deceb73b0b02117971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Day of each time record with respect to Jan 1.  <a href="namespacesource__grid.html#aff543ec0172d14deceb73b0b02117971">More...</a><br /></td></tr>
 <tr class="separator:aff543ec0172d14deceb73b0b02117971"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae12d6f7e531352200ed3027956855dd"><td class="memItemLeft" align="right" valign="top"><a id="aae12d6f7e531352200ed3027956855dd"></a>
-character(len=50), dimension(:), allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><b>source_grid::field_names</b></td></tr>
+<tr class="memitem:aae12d6f7e531352200ed3027956855dd"><td class="memItemLeft" align="right" valign="top">character(len=50), dimension(:), allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#aae12d6f7e531352200ed3027956855dd">source_grid::field_names</a></td></tr>
+<tr class="memdesc:aae12d6f7e531352200ed3027956855dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Names of fields to be processed.  <a href="namespacesource__grid.html#aae12d6f7e531352200ed3027956855dd">More...</a><br /></td></tr>
 <tr class="separator:aae12d6f7e531352200ed3027956855dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe193723dd30b5df8700cd9807d54e64"><td class="memItemLeft" align="right" valign="top"><a id="abe193723dd30b5df8700cd9807d54e64"></a>
-type(esmf_grid), public&#160;</td><td class="memItemRight" valign="bottom"><b>source_grid::grid_src</b></td></tr>
+<tr class="memitem:abe193723dd30b5df8700cd9807d54e64"><td class="memItemLeft" align="right" valign="top">type(esmf_grid), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#abe193723dd30b5df8700cd9807d54e64">source_grid::grid_src</a></td></tr>
+<tr class="memdesc:abe193723dd30b5df8700cd9807d54e64"><td class="mdescLeft">&#160;</td><td class="mdescRight">ESMF grid object for the source grid.  <a href="namespacesource__grid.html#abe193723dd30b5df8700cd9807d54e64">More...</a><br /></td></tr>
 <tr class="separator:abe193723dd30b5df8700cd9807d54e64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3b923bcfe67b81a2ed3883a8c28e2f5"><td class="memItemLeft" align="right" valign="top"><a id="af3b923bcfe67b81a2ed3883a8c28e2f5"></a>
-integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>source_grid::i_src</b></td></tr>
+<tr class="memitem:af3b923bcfe67b81a2ed3883a8c28e2f5"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#af3b923bcfe67b81a2ed3883a8c28e2f5">source_grid::i_src</a></td></tr>
+<tr class="memdesc:af3b923bcfe67b81a2ed3883a8c28e2f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">i dimension of the source grid.  <a href="namespacesource__grid.html#af3b923bcfe67b81a2ed3883a8c28e2f5">More...</a><br /></td></tr>
 <tr class="separator:af3b923bcfe67b81a2ed3883a8c28e2f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad86982abf8a4e8160f2961edc9ff4665"><td class="memItemLeft" align="right" valign="top"><a id="ad86982abf8a4e8160f2961edc9ff4665"></a>
-integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>source_grid::j_src</b></td></tr>
+<tr class="memitem:ad86982abf8a4e8160f2961edc9ff4665"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#ad86982abf8a4e8160f2961edc9ff4665">source_grid::j_src</a></td></tr>
+<tr class="memdesc:ad86982abf8a4e8160f2961edc9ff4665"><td class="mdescLeft">&#160;</td><td class="mdescRight">j dimension of the source grid.  <a href="namespacesource__grid.html#ad86982abf8a4e8160f2961edc9ff4665">More...</a><br /></td></tr>
 <tr class="separator:ad86982abf8a4e8160f2961edc9ff4665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae03297a0d28e5dd7341d8ac146074e2d"><td class="memItemLeft" align="right" valign="top"><a id="ae03297a0d28e5dd7341d8ac146074e2d"></a>
-integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>source_grid::num_fields</b></td></tr>
+<tr class="memitem:ae03297a0d28e5dd7341d8ac146074e2d"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#ae03297a0d28e5dd7341d8ac146074e2d">source_grid::num_fields</a></td></tr>
+<tr class="memdesc:ae03297a0d28e5dd7341d8ac146074e2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of fields in the file.  <a href="namespacesource__grid.html#ae03297a0d28e5dd7341d8ac146074e2d">More...</a><br /></td></tr>
 <tr class="separator:ae03297a0d28e5dd7341d8ac146074e2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65dcbf2c564983d0dc69dff4343355fd"><td class="memItemLeft" align="right" valign="top"><a id="a65dcbf2c564983d0dc69dff4343355fd"></a>
-integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>source_grid::num_records</b></td></tr>
+<tr class="memitem:a65dcbf2c564983d0dc69dff4343355fd"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#a65dcbf2c564983d0dc69dff4343355fd">source_grid::num_records</a></td></tr>
+<tr class="memdesc:a65dcbf2c564983d0dc69dff4343355fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of fields times time records.  <a href="namespacesource__grid.html#a65dcbf2c564983d0dc69dff4343355fd">More...</a><br /></td></tr>
 <tr class="separator:a65dcbf2c564983d0dc69dff4343355fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50a3ec53c2c7c4f94c7cb0272739c580"><td class="memItemLeft" align="right" valign="top"><a id="a50a3ec53c2c7c4f94c7cb0272739c580"></a>
-integer, public&#160;</td><td class="memItemRight" valign="bottom"><b>source_grid::num_time_recs</b></td></tr>
+<tr class="memitem:a50a3ec53c2c7c4f94c7cb0272739c580"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#a50a3ec53c2c7c4f94c7cb0272739c580">source_grid::num_time_recs</a></td></tr>
+<tr class="memdesc:a50a3ec53c2c7c4f94c7cb0272739c580"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of time records.  <a href="namespacesource__grid.html#a50a3ec53c2c7c4f94c7cb0272739c580">More...</a><br /></td></tr>
 <tr class="separator:a50a3ec53c2c7c4f94c7cb0272739c580"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04135c2d1c60864436fe533121753477"><td class="memItemLeft" align="right" valign="top"><a id="a04135c2d1c60864436fe533121753477"></a>
-character(len=75), public&#160;</td><td class="memItemRight" valign="bottom"><b>source_grid::source</b></td></tr>
+<tr class="memitem:a04135c2d1c60864436fe533121753477"><td class="memItemLeft" align="right" valign="top">character(len=75), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesource__grid.html#a04135c2d1c60864436fe533121753477">source_grid::source</a></td></tr>
+<tr class="memdesc:a04135c2d1c60864436fe533121753477"><td class="mdescLeft">&#160;</td><td class="mdescRight">Original source of the data.  <a href="namespacesource__grid.html#a04135c2d1c60864436fe533121753477">More...</a><br /></td></tr>
 <tr class="separator:a04135c2d1c60864436fe533121753477"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>gayno </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2018</dd></dl>
-<p>Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid. Also, sets up the ESMF grid object for the source grid. Source grid is assumed to be global lat/lon.</p>
-<h2><a class="anchor" id="autotoc_md5"></a>
-Public Subroutines:</h2>
-<ul>
-<li><a class="el" href="source__grid_8F90.html#a702829ab745210e1bba937c613e5baf6" title="define source grid">define_source_grid()</a> Defines esmf grid object for source grid. Retrieves date and field information from source file.</li>
-<li><a class="el" href="source__grid_8F90.html#a287cc73053e3f4782b495ff1a61c8ea2" title="source grid cleanup">source_grid_cleanup()</a> Free up memory used in this module.</li>
-</ul>
-<h2><a class="anchor" id="autotoc_md6"></a>
-Public variables:</h2>
-<ul>
-<li>day_of_rec Day of each time record with respect to Jan 1.</li>
-<li>field_names Names of fields to be processed.</li>
-<li>grid_src ESMF grid object for the source grid.</li>
-<li>i_src i/j dimensions of the source grid.</li>
-<li>j_src i/j dimensions of the source grid.</li>
-<li>num_fields Number of fields in the file. Some files have more than one (ex: the 4-component albedo).</li>
-<li>num_records Number of fields times time records.</li>
-<li>num_time_recs Number of time records.</li>
-<li>source Original source of the data. </li>
-</ul>
+<div class="textblock"><p>Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid. </p>
+<dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2018 </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="source__grid_8F90_source.html">source_grid.F90</a>.</p>
-</div><h2 class="groupheader">Function/Subroutine Documentation</h2>
-<a id="a702829ab745210e1bba937c613e5baf6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a702829ab745210e1bba937c613e5baf6">&#9670;&nbsp;</a></span>define_source_grid()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine, public source_grid::define_source_grid </td>
-          <td>(</td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>localpet</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>npets</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">character(len=*), intent(in)&#160;</td>
-          <td class="paramname"><em>input_file</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>define source grid </p>
-<dl class="section author"><dt>Author</dt><dd>gayno </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2018</dd></dl>
-<p>Read date information from input source data file. Create esmf grid object for the source grid.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">localpet</td><td>mpi task number </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">npets</td><td>total number mpi tasks </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">input_file</td><td>file containing the source grid data. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="source__grid_8F90_source.html#l00067">67</a> of file <a class="el" href="source__grid_8F90_source.html">source_grid.F90</a>.</p>
-
-</div>
-</div>
-<a id="a287cc73053e3f4782b495ff1a61c8ea2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a287cc73053e3f4782b495ff1a61c8ea2">&#9670;&nbsp;</a></span>source_grid_cleanup()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine, public source_grid::source_grid_cleanup</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>source grid cleanup </p>
-<dl class="section author"><dt>Author</dt><dd>gayno </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>2018</dd></dl>
-<p>Free up memory associated with this module. </p>
-
-<p class="definition">Definition at line <a class="el" href="source__grid_8F90_source.html#l00400">400</a> of file <a class="el" href="source__grid_8F90_source.html">source_grid.F90</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

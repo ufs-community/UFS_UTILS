@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['model_5fgrid_5fcleanup_32',['model_grid_cleanup',['../model__grid_8F90.html#ab82613aa1b639c003cdb59a592953d7b',1,'model_grid']]]
+  ['get_5fmodel_5finfo_81',['get_model_info',['../namespacemodel__grid.html#acb10237ba4e5bada1d8b61456c4d620b',1,'model_grid']]]
 ];

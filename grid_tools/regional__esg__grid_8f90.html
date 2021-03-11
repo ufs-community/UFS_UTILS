@@ -89,26 +89,87 @@ $(document).ready(function(){initNavTree('regional__esg__grid_8f90.html',''); in
 </div><!--header-->
 <div class="contents">
 
-<p>???  
+<p>Compute geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  
 <a href="#details">More...</a></p>
 
 <p><a href="regional__esg__grid_8f90_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:a4eaa745ba73f3614e5bfbfb2b0fd3a50"><td class="memItemLeft" align="right" valign="top"><a id="a4eaa745ba73f3614e5bfbfb2b0fd3a50"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (status)</td></tr>
+<tr class="memitem:a4eaa745ba73f3614e5bfbfb2b0fd3a50"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="regional__esg__grid_8f90.html#a4eaa745ba73f3614e5bfbfb2b0fd3a50">check</a> (status)</td></tr>
+<tr class="memdesc:a4eaa745ba73f3614e5bfbfb2b0fd3a50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check results of netCDF call.  <a href="regional__esg__grid_8f90.html#a4eaa745ba73f3614e5bfbfb2b0fd3a50">More...</a><br /></td></tr>
 <tr class="separator:a4eaa745ba73f3614e5bfbfb2b0fd3a50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d27396a033fbebf9ad5e56a21048727"><td class="memItemLeft" align="right" valign="top"><a id="a5d27396a033fbebf9ad5e56a21048727"></a>
-program&#160;</td><td class="memItemRight" valign="bottom"><b>regional_grid</b></td></tr>
+<tr class="memitem:a5d27396a033fbebf9ad5e56a21048727"><td class="memItemLeft" align="right" valign="top">program&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="regional__esg__grid_8f90.html#a5d27396a033fbebf9ad5e56a21048727">regional_grid</a></td></tr>
+<tr class="memdesc:a5d27396a033fbebf9ad5e56a21048727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Driver routine to compute geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  <a href="regional__esg__grid_8f90.html#a5d27396a033fbebf9ad5e56a21048727">More...</a><br /></td></tr>
 <tr class="separator:a5d27396a033fbebf9ad5e56a21048727"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>??? </p>
+<div class="textblock"><p>Compute geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid. </p>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="regional__esg__grid_8f90_source.html">regional_esg_grid.f90</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a id="a4eaa745ba73f3614e5bfbfb2b0fd3a50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eaa745ba73f3614e5bfbfb2b0fd3a50">&#9670;&nbsp;</a></span>check()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine check </td>
+          <td>(</td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check results of netCDF call. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">status</td><td>return code to check </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="regional__esg__grid_8f90_source.html#l00191">191</a> of file <a class="el" href="regional__esg__grid_8f90_source.html">regional_esg_grid.f90</a>.</p>
+
+</div>
+</div>
+<a id="a5d27396a033fbebf9ad5e56a21048727"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d27396a033fbebf9ad5e56a21048727">&#9670;&nbsp;</a></span>regional_grid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">program regional_grid</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Driver routine to compute geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid. </p>
+<p>The parameters are:</p><ul>
+<li>Geographic longitude (degrees)</li>
+<li>Geographic latitude (degrees)</li>
+<li>Grid edge 'x' distance (meters)</li>
+<li>Grid edge 'y' distance (meters)</li>
+<li>Area (meters squared)</li>
+<li>Grid vertex 'x' angle with respect to geographic east (degrees)</li>
+<li>Grid vertex 'y' angle with respect to geographic north (degrees) <dl class="section author"><dt>Author</dt><dd>R. J. Purser </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0 for success, error code otherwise. </dd></dl>
+</li>
+</ul>
+
+<p class="definition">Definition at line <a class="el" href="regional__esg__grid_8f90_source.html#l00018">18</a> of file <a class="el" href="regional__esg__grid_8f90_source.html">regional_esg_grid.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="filter__topo_8F90_source.html#l01985">check()</a>, <a class="el" href="pietc_8f90_source.html#l00054">pietc::dtor</a>, and <a class="el" href="pietc_8f90_source.html#l00055">pietc::rtod</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

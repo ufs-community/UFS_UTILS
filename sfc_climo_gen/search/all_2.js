@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['get_5fmodel_5finfo_4',['get_model_info',['../model__grid_8F90.html#acb10237ba4e5bada1d8b61456c4d620b',1,'model_grid']]]
+  ['error_5fhandler_7',['error_handler',['../namespaceutils.html#afcee4326c16609f3c61e647a905477f2',1,'utils']]]
 ];

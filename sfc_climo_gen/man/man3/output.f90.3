@@ -2,7 +2,8 @@
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/sfc_climo_gen.fd/output.f90
+/home/ed/UFS_UTILS/sorc/sfc_climo_gen.fd/output.f90 \- Output model data for a single tile and a single record\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -12,26 +13,33 @@
 .ti -1c
 .RI "subroutine \fBoutput\fP (data_one_tile, lat_one_tile, lon_one_tile, i_mdl, j_mdl, tile, record, time, field_idx)"
 .br
-.RI "output "
+.RI "Output model data for a single tile and a single record in netcdf format\&. "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Output model data for a single tile and a single record\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition in file \fBoutput\&.f90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
 .SS "subroutine output (real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) data_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) lat_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) lon_one_tile, integer, intent(in) i_mdl, integer, intent(in) j_mdl, integer, intent(in) tile, integer, intent(in) record, integer, intent(in) time, integer, intent(in) field_idx)"
 
 .PP
-output 
-.PP
-\fBAuthor\fP
-.RS 4
-gayno 
-.RE
-.PP
-\fBDate\fP
-.RS 4
-2018
-.RE
-.PP
-Output model data for a single tile and a single record in netcdf format\&.
+Output model data for a single tile and a single record in netcdf format\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -54,9 +62,23 @@ Output model data for a single tile and a single record in netcdf format\&.
 \fItime\fP Time period to be output\&. 
 .RE
 .PP
+\fBAuthor\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2018 
+.RE
+.PP
 
 .PP
-Definition at line 21 of file output\&.f90\&.
+Definition at line 20 of file output\&.f90\&.
+.PP
+References source_grid::day_of_rec, source_grid::field_names, model_grid::grid_tiles, program_setup::halo, model_grid::missing, utils::netcdf_err(), source_grid::num_fields, source_grid::num_records, source_grid::num_time_recs, and source_grid::source\&.
+.PP
+Referenced by interp()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

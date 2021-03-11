@@ -89,17 +89,84 @@ $(document).ready(function(){initNavTree('global__equiv__resol_8f90.html',''); i
 </div><!--header-->
 <div class="contents">
 
+<p>Compute the global equivalent resolution for regional grids.  
+<a href="#details">More...</a></p>
+
 <p><a href="global__equiv__resol_8f90_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
-<tr class="memitem:a4eaa745ba73f3614e5bfbfb2b0fd3a50"><td class="memItemLeft" align="right" valign="top"><a id="a4eaa745ba73f3614e5bfbfb2b0fd3a50"></a>
-subroutine&#160;</td><td class="memItemRight" valign="bottom"><b>check</b> (status)</td></tr>
+<tr class="memitem:a4eaa745ba73f3614e5bfbfb2b0fd3a50"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__equiv__resol_8f90.html#a4eaa745ba73f3614e5bfbfb2b0fd3a50">check</a> (status)</td></tr>
+<tr class="memdesc:a4eaa745ba73f3614e5bfbfb2b0fd3a50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check results of netCDF call.  <a href="global__equiv__resol_8f90.html#a4eaa745ba73f3614e5bfbfb2b0fd3a50">More...</a><br /></td></tr>
 <tr class="separator:a4eaa745ba73f3614e5bfbfb2b0fd3a50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7c17106d99b979f5c9b65d79b0faa95"><td class="memItemLeft" align="right" valign="top"><a id="ac7c17106d99b979f5c9b65d79b0faa95"></a>
-program&#160;</td><td class="memItemRight" valign="bottom"><b>global_equiv_resol</b></td></tr>
+<tr class="memitem:ac7c17106d99b979f5c9b65d79b0faa95"><td class="memItemLeft" align="right" valign="top">program&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="global__equiv__resol_8f90.html#ac7c17106d99b979f5c9b65d79b0faa95">global_equiv_resol</a></td></tr>
+<tr class="memdesc:ac7c17106d99b979f5c9b65d79b0faa95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the global equivalent resolution for regional grids using the average model grid cell size in meters squared.  <a href="global__equiv__resol_8f90.html#ac7c17106d99b979f5c9b65d79b0faa95">More...</a><br /></td></tr>
 <tr class="separator:ac7c17106d99b979f5c9b65d79b0faa95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Compute the global equivalent resolution for regional grids. </p>
+<dl class="section author"><dt>Author</dt><dd>Gerard Ketefian NOAA/GSL </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="global__equiv__resol_8f90_source.html">global_equiv_resol.f90</a>.</p>
+</div><h2 class="groupheader">Function/Subroutine Documentation</h2>
+<a id="a4eaa745ba73f3614e5bfbfb2b0fd3a50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eaa745ba73f3614e5bfbfb2b0fd3a50">&#9670;&nbsp;</a></span>check()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine check </td>
+          <td>(</td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check results of netCDF call. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">status</td><td>return code to check </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Gerard Ketefian NOAA/GSL </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="global__equiv__resol_8f90_source.html#l00193">193</a> of file <a class="el" href="global__equiv__resol_8f90_source.html">global_equiv_resol.f90</a>.</p>
+
+</div>
+</div>
+<a id="ac7c17106d99b979f5c9b65d79b0faa95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7c17106d99b979f5c9b65d79b0faa95">&#9670;&nbsp;</a></span>global_equiv_resol()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">program global_equiv_resol</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute the global equivalent resolution for regional grids using the average model grid cell size in meters squared. </p>
+<ul>
+<li>RES(in km) = (360 degrees / 4*CRES) * 111 km</li>
+</ul>
+<p>Using the average cell size the equivalent global resolution is:</p>
+<ul>
+<li>CRES = NINT((2*PI*RADIUS_OF_EARTH)/(4*AVG_CELL_SIZE)</li>
+</ul>
+<dl class="section author"><dt>Author</dt><dd>Gerard Ketefian NOAA/GSL </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0 for success, error code otherwise </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="global__equiv__resol_8f90_source.html#l00016">16</a> of file <a class="el" href="global__equiv__resol_8f90_source.html">global_equiv_resol.f90</a>.</p>
+
+<p class="reference">References <a class="el" href="filter__topo_8F90_source.html#l01985">check()</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

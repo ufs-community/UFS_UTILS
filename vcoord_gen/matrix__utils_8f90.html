@@ -101,7 +101,7 @@ Functions/Subroutines</h2></td></tr>
 <tr class="separator:aca7b6e6ef1458720883a20b4b4184f56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Lower and upper triangular decomposition </p><dl class="section author"><dt>Author</dt><dd>Iredell </dd></dl>
+<div class="textblock"><p>Lower and upper triangular decomposition. </p><dl class="section author"><dt>Author</dt><dd>Mark Iredell </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2008-08-01 </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="matrix__utils_8f90_source.html">matrix_utils.f90</a>.</p>
@@ -154,9 +154,7 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>Iredell </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2008-08-01</dd></dl>
 <p>This subprogram back substitutes to solve decomposed lower and upper triangular matrices as outputted by ludcmp.</p>
-<p>Program history log:</p><ul>
-<li><p class="startli">2008-08-01 Mark Iredell</p>
-<p class="startli">Input argument list: </p><dl class="params"><dt>Parameters</dt><dd>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>real(np,np) LU-decomposed matrix (from ludcmp) </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">n</td><td>integer order of matrix </td></tr>
@@ -169,10 +167,12 @@ Functions/Subroutines</h2></td></tr>
   </table>
   </dd>
 </dl>
-</li>
-</ul>
+<dl class="section author"><dt>Author</dt><dd>Mark Iredell </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2008-08-01 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="matrix__utils_8f90_source.html#l00109">109</a> of file <a class="el" href="matrix__utils_8f90_source.html">matrix_utils.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="matrix__utils_8f90_source.html#l00101">101</a> of file <a class="el" href="matrix__utils_8f90_source.html">matrix_utils.f90</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="vcoord__gen_8f90_source.html#l00153">vcoord_gen()</a>.</p>
 
 </div>
 </div>
@@ -221,9 +221,6 @@ Functions/Subroutines</h2></td></tr>
 </div><div class="memdoc">
 
 <p>This subprogram decomposes a matrix into a product of lower and upper triangular matrices. </p>
-<p>Program history log:</p><ul>
-<li>2008-08-01 Mark Iredell</li>
-</ul>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>- input: a real(np,np) matrix (will be overwritten) output:<ul>
@@ -237,8 +234,12 @@ Functions/Subroutines</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section author"><dt>Author</dt><dd>Mark Iredell </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2008-08-01 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="matrix__utils_8f90_source.html#l00024">24</a> of file <a class="el" href="matrix__utils_8f90_source.html">matrix_utils.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="matrix__utils_8f90_source.html#l00021">21</a> of file <a class="el" href="matrix__utils_8f90_source.html">matrix_utils.f90</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="vcoord__gen_8f90_source.html#l00153">vcoord_gen()</a>.</p>
 
 </div>
 </div>

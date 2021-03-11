@@ -81,24 +81,13 @@ Definition in file \fBinland\&.F90\fP\&.
 .PP
 Deallocate module arrays\&. 
 .PP
-Definition at line 431 of file inland\&.F90\&.
+Definition at line 426 of file inland\&.F90\&.
 .PP
 Referenced by inland_mask()\&.
 .SS "program inland_mask"
 
 .PP
 This program creates the inland mask and writes it to the orography data files\&. 
-.PP
-\fBParameters\fP
-.RS 4
-\fIcres\fP cubed-sphere resolution (48, 96\&.\&.\&.) 
-.br
-\fIcutoff\fP nonland cutoff 
-.br
-\fIrd\fP max recursive depth 
-.br
-\fIdomain\fP regional (r) or global (g)
-.RE
 .PP
 \fBAuthor\fP
 .RS 4
@@ -112,7 +101,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 14 of file inland\&.F90\&.
+Definition at line 9 of file inland\&.F90\&.
 .PP
 References free_mem(), mark_global_inland(), mark_inland_reg(), read_orog(), read_orog_reg(), write_inland(), and write_inland_reg()\&.
 .SS "subroutine inland_mask::mark_global_inland (integer, intent(in) cs_res)"
@@ -134,7 +123,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 85 of file inland\&.F90\&.
+Definition at line 80 of file inland\&.F90\&.
 .PP
 References mark_global_inland_rec_d()\&.
 .PP
@@ -162,7 +151,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 137 of file inland\&.F90\&.
+Definition at line 132 of file inland\&.F90\&.
 .PP
 Referenced by mark_global_inland()\&.
 .SS "subroutine inland_mask::mark_inland_reg (integer, intent(in) cs_res)"
@@ -182,7 +171,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 105 of file inland\&.F90\&.
+Definition at line 100 of file inland\&.F90\&.
 .PP
 References mark_regional_inland_rec_d()\&.
 .PP
@@ -210,7 +199,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 174 of file inland\&.F90\&.
+Definition at line 169 of file inland\&.F90\&.
 .PP
 Referenced by mark_inland_reg()\&.
 .SS "subroutine inland_mask::nc_opchk (integer stat, character(len=*) opname)"
@@ -232,7 +221,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 443 of file inland\&.F90\&.
+Definition at line 438 of file inland\&.F90\&.
 .PP
 Referenced by read_orog(), read_orog_reg(), write_inland(), and write_inland_reg()\&.
 .SS "subroutine inland_mask::read_orog (integer, intent(in) cs_res)"
@@ -252,7 +241,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 208 of file inland\&.F90\&.
+Definition at line 203 of file inland\&.F90\&.
 .PP
 References nc_opchk()\&.
 .PP
@@ -274,7 +263,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 254 of file inland\&.F90\&.
+Definition at line 249 of file inland\&.F90\&.
 .PP
 References nc_opchk()\&.
 .PP
@@ -296,7 +285,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 306 of file inland\&.F90\&.
+Definition at line 301 of file inland\&.F90\&.
 .PP
 References nc_opchk()\&.
 .PP
@@ -318,7 +307,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 368 of file inland\&.F90\&.
+Definition at line 363 of file inland\&.F90\&.
 .PP
 References nc_opchk()\&.
 .PP

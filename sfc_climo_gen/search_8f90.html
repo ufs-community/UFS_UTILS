@@ -89,6 +89,9 @@ $(document).ready(function(){initNavTree('search_8f90.html',''); initResizable()
 </div><!--header-->
 <div class="contents">
 
+<p>Replace undefined values on the model grid with a valid value at a nearby neighbor.  
+<a href="#details">More...</a></p>
+
 <p><a href="search_8f90_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -98,7 +101,8 @@ Functions/Subroutines</h2></td></tr>
 <tr class="separator:acda6493c6d4a2e9ba6e5d80d3852c93c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>gayno </dd></dl>
+<div class="textblock"><p>Replace undefined values on the model grid with a valid value at a nearby neighbor. </p>
+<dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2018 </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="search_8f90_source.html">search.f90</a>.</p>
@@ -157,19 +161,24 @@ Functions/Subroutines</h2></td></tr>
 <p>Undefined values are typically associated with isolated islands where there is no source data. Routine searches a neighborhood with a radius of 100 grid points. If no valid value is found, a default value is used. This routine works for one tile of a cubed sphere grid. It does not consider valid values at adjacent faces. That is a future upgrade.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">idim/jdim</td><td>i/j dimensions of tile </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">tile</td><td>tile number </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mask</td><td>field bitmap. field defined where mask=1 </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">field_name</td><td>field name </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">field</td><td>- input: field before missing values are replaced<ul>
 <li>output: field after missing values are replaced </li>
 </ul>
 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mask</td><td>field bitmap. Field defined where mask=1 </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">idim</td><td>i dimension of tile </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">jdim</td><td>j dimension of tile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tile</td><td>tile number </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">field_name</td><td>field name </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>2018 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="search_8f90_source.html#l00021">21</a> of file <a class="el" href="search_8f90_source.html">search.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="search_8f90_source.html#l00024">24</a> of file <a class="el" href="search_8f90_source.html">search.f90</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="interp_8F90_source.html#l00014">interp()</a>.</p>
 
 </div>
 </div>
