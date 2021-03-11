@@ -1,11 +1,11 @@
 !> @file
-!! @brief Routine evaluating useful functions not always available in Fortran
+!! @brief Routine evaluating useful functions not always available in Fortran.
 !! @author R. J. Purser
 
 !> This module is for evaluating several useful real-valued functions
-!> that are not always available in Fortran compilers. These have applications
-!> in map transformations, spherical and pseudo-spherical surface geometry,
-!> probability distributions, and splines.
+!! that are not always available in Fortran compilers. These have applications
+!! in map transformations, spherical and pseudo-spherical surface geometry,
+!! probability distributions, and splines.
 !!
 !! @author R. J. Purser
 module pfun

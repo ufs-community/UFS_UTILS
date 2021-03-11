@@ -1,5 +1,9 @@
 !> @file
-!! @brief standard integer, real, and complex single and double precision kinds 
+!! @brief Standard integer, real, and complex single and double precision kinds.
+!! @author R. J. Purser
+
+!> Standard integer, real, and complex single and double precision kinds.
+!! @author R. J. Purser
 module pkind
 integer,parameter:: spi=selected_int_kind(6) !< Single precision integer kind.
 integer,parameter:: dpi=selected_int_kind(12) !< Double precision integer kind.
