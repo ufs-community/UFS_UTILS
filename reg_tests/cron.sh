@@ -21,7 +21,7 @@ source sorc/machine-setup.sh
 current_hash=$(git rev-parse HEAD)
 
 if [[ -f "${UFS_UTILS_WORKING_DIR}/prev_hash.txt" ]]; then
-    prev_hash=$(cat ${HPC_HOMEDIR}/prev_hash.txt)
+    prev_hash=$(cat ${UFS_UTILS_WORKING_DIR}/prev_hash.txt)
     if [[ "$current_hash" == "$prev_hash" ]]; then
         echo `date`
         echo ""
@@ -44,7 +44,7 @@ for dir in chgres_cube grid_gen ice_blend snow2mdl; do
     cd ..
 done
 
-
+# Wait for jobs to complete by checking for summary.log
 time=0
 should_wait=true
 while [ "$should_wait" == true ]; do
@@ -77,6 +77,7 @@ else
     mail -s "UFS_UTILS Regression Tests FAILED" ${MAILTO} < reg_test_results.txt
 fi
 
+# Save current hash as previous hash for next time
 echo $current_hash > ${UFS_UTILS_WORKING_DIR}/prev_hash.txt
 
 
