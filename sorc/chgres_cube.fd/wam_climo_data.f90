@@ -12,6 +12,19 @@
 
 !-----------------------------------------------------------------------
 !> Use moduke for blockdata gtd7bk
+!!
+!! All variables original in blockdata used for this packahe are getting 
+!! from NRLMSISE-00.
+!! NRLMSISE-00 is an empirical, global reference atmospheric model of 
+!! the Earth from ground to space. It models the temperatures and densities 
+!! of the atmosphere's components. 
+!! NRL stands for the US Naval Research Laboratory. MSIS stands for mass 
+!! spectrometer and incoherent scatter radar, the two primary data sources 
+!! for development of earlier versions of the model. E indicates that the 
+!! model extends from the ground through exosphere and 00 is the year of 
+!! release in 2000.  Over the years since introduction, NRLMSISE-00 has 
+!! become the standard for international space research. (wikipedia)
+!!
 !! @author Hann-Ming Henry Juang
    module wam_gtd7bk_mod
 !          msise-00 01-feb-02                                           
@@ -801,10 +814,10 @@
 
 !-----------------------------------------------------------------------
 !> Use moduke for common blocks 
+!! All variables under this module are original in common block used
+!! for subroutine gettemp and others in this package..
 !! @author Hann-Ming Henry Juang
    module gettemp_mod
-
-!x----use wam_gtd7bk_mod
 
       real ::   tlb,s,db04,db16,db28,db32,db40,db48,db01,za,t0,z0,    &
                 g0,rl,dd,db14,tr12                                              
@@ -830,16 +843,16 @@
 !> Entry routine to get WAM needed temperature and composition profiles.
 !!
 !! Calculate temperature at each grid point useing nrlmsise00_sub
-!! @param [in] iday(ngay) calendat date 
-!! @param [in] ngay dimension length of iday
-!! @param [in] xlat(nlat) latitudes
-!! @param [in] nlat dimension length of xlat
-!! @param [in] pr(np) pressure in vertical
-!! @param [in] np dimension length of pr
-!! @param [out] temp temperature
-!! @param [out] n_o single oxygen number
-!! @param [out] n_o2 oxygen number
-!! @param [out] n_n2 nitrogen number
+!! @param[in] iday(nday) calendat date 
+!! @param[in] nday dimension length of iday
+!! @param[in] xlat(nlat) latitudes
+!! @param[in] nlat dimension length of xlat
+!! @param[in] pr(np) pressure in vertical
+!! @param[in] np dimension length of pr
+!! @param[out] temp temperature
+!! @param[out] n_o single oxygen number
+!! @param[out] n_o2 oxygen number
+!! @param[out] n_n2 nitrogen number
 !!
 !! @author Hann-Ming Henry Juang  NCEP/EMC
       subroutine gettemp(iday,nday,xlat,nlat,pr,np,temp,n_o,n_o2,n_n2)
@@ -892,62 +905,26 @@
 !-----------------------------------------------------------------------
 !> The nrlmsise-00 subroutine gtd7.
 !!
-!!       Neutral atmosphere empirical model from the surface to lower   
-!!       exosphere                                                      
+!! Neutral atmosphere empirical model from the surface to lower   
+!! exosphere                                                      
 !!                                                                      
-!!       New features:                                                  
-!!         *extensive satellite drag database used in model generation  
-!!         *revised o2 (and o) in lower thermosphere                    
-!!         *additional nonlinear solar activity term                    
-!!         *"anomalous oxygen" number density, output d(9)              
+!! New features:                                                  
+!!         Extensive satellite drag database used in model generation  
+!!         Revised o2 (and o) in lower thermosphere                    
+!!         Additional nonlinear solar activity term                    
+!!         "anomalous oxygen" number density, output d(9)              
 !!          at high altitudes (> 500 km), hot atomic oxygen or ionized  
 !!          oxygen can become appreciable for some ranges of subroutine 
 !!          inputs, thereby affecting drag on satellites and debris. we 
 !!          group these species under the term "anomalous oxygen," since
 !!          their individual variations are not presently separable with
 !!          the drag data used to define this model component.          
-!!                                                                      
-!!       Subroutines for special outputs:                               
-!!                                                                      
-!!       High altitude drag: effective total mass density               
-!!       (subroutine gtd7d, output d(6))                                
-!!          for atmospheric drag calculations at altitudes above 500 km,
-!!          call subroutine gtd7d to compute the "effective total mass  
-!!          density" by including contributions from "anomalous oxygen."
-!!          see "notes on output variables" below on d(6).              
-!!                                                                      
-!!       Pressure grid (subroutine ghp7)                                
-!!         see subroutine ghp7 to specify outputs at a pressure level   
-!!         rather than at an altitude.                                  
-!!                                                                      
-!!       Output in m-3 and kg/m3:   call meters(.true.)                 
-!!                                                                      
-!! input variables:                                                  
-!! @param [in] iyd - year and day as yyddd (day of year from 1 to 365 or 366)
-!!                   (year ignored in current model)                          
-!! @param [in] sec - ut(sec)                                                  
-!! @param [in] alt - altitude(km)                                             
-!! @param [in] glat - geodetic latitude(deg)                                  
-!! @param [in] glong - geodetic longitude(deg)                                
-!! @param [in] stl - local apparent solar time(hrs; see note below)           
-!! @param [in] f107a - 81 day average of f10.7 flux (centered on day ddd)     
-!! @param [in] f107 - daily f10.7 flux for previous day                       
-!! @param [in] ap - magnetic index(daily) or when sw(9)=-1. :                 
-!!                - array containing:                                         
-!!                  (1) daily ap                                              
-!!                  (2) 3 hr ap index for current time                        
-!!                  (3) 3 hr ap index for 3 hrs before current time           
-!!                  (4) 3 hr ap index for 6 hrs before current time           
-!!                  (5) 3 hr ap index for 9 hrs before current time           
-!!                  (6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
-!!                         to current time                                    
-!!                  (7) average of eight 3 hr ap indicies from 36 to 57 hrs pr
-!!                         to current time                                    
-!! @param [in] mass - mass number (only density for selected gas is           
-!!                calculated.  mass 0 is temperature.  mass 48 for all. 
-!!                mass 17 is anomalous o only.)                         
-!!                                                                      
-!!    Notes on input variables:                                         
+!!         And d(6) is the sum of the mass densities of t
+!!         species labeled by indices 1-5 and 7-8 in output variable d. 
+!!         this includes he, o, n2, o2, ar, h, and n but does not includ
+!!         anomalous oxygen (species index 9).                          
+!!
+!! Notes on input variables:                                         
 !!       ut, local time, and longitude are used independently in the    
 !!       model and are not of equal importance for every situation.     
 !!       for the most physically realistic calculation these three      
@@ -966,62 +943,94 @@
 !!       established below 80 km and these parameters should be set to  
 !!       150., 150., and 4. respectively.                               
 !!                                                                      
-!! output variables:                                                 
-!! @param [out] d(1) - he number density(cm-3)                                 
-!! @param [out] d(2) - o number density(cm-3)                                  
-!! @param [out] d(3) - n2 number density(cm-3)                                 
-!! @param [out] d(4) - o2 number density(cm-3)                                 
-!! @param [out] d(5) - ar number density(cm-3)                                 
-!! @param [out] d(6) - total mass density(gm/cm3)                              
-!! @param [out] d(7) - h number density(cm-3)                                  
-!! @param [out] d(8) - n number density(cm-3)                                  
-!! @param [out] d(9) - anomalous oxygen number density(cm-3)                   
-!! @param [out] t(1) - exospheric temperature                                  
-!! @param [out] t(2) - temperature at alt                                      
-!!                                                                      
-!!    Notes on output variables:                                        
+!! Subroutines for special outputs:                               
+!!       High altitude drag: effective total mass density               
+!!       (subroutine gtd7d, output d(6))                                
+!!          for atmospheric drag calculations at altitudes above 500 km,
+!!          call subroutine gtd7d to compute the "effective total mass  
+!!          density" by including contributions from "anomalous oxygen."
+!!          see "notes on output variables" below on d(6).              
+!!       Pressure grid (subroutine ghp7)                                
+!!         see subroutine ghp7 to specify outputs at a pressure level   
+!!         rather than at an altitude.                                  
+!!       Output in m-3 and kg/m3:   call meters(.true.)                 
+!!
+!! Notes on output variables:                                        
 !!       To get output in m-3 and kg/m3:   call meters(.true.)          
-!!                                                                      
 !!       o, h, and n are set to zero below 72.5 km                      
-!!                                                                      
 !!       t(1), exospheric temperature, is set to global average for     
 !!       altitudes below 120 km. the 120 km gradient is left at global  
 !!       average value for altitudes below 72 km.                       
-!!                                                                      
 !!       d(6), total mass density, is not the same for subroutines gtd7 
 !!       and gtd7d                                                      
 !!                                                                      
-!!         subroutine gtd7 -- d(6) is the sum of the mass densities of t
-!!         species labeled by indices 1-5 and 7-8 in output variable d. 
-!!         this includes he, o, n2, o2, ar, h, and n but does not includ
-!!         anomalous oxygen (species index 9).                          
 !!                                                                      
-!!         subroutine gtd7d -- d(6) is the "effective total mass density
-!!         for drag" and is the sum of the mass densities of all species
-!!         in this model, including anomalous oxygen.                   
+!! Switches: the following is for test and special purposes:         
+!! To turn on and off particular variations call tselec(sw),      
+!! where sw is a 25 element array containing 0. for off, 1.       
+!! for on, or 2. for main effects off but cross terms on          
+!! for the following variations                                   
+!!              1  f10.7 effect on mean  
+!!              2  time independent          
+!!              3  symmetrical annual    
+!!              4  symmetrical semiannual    
+!!              5  asymmetrical annual   
+!!              6  asymmetrical semiannual   
+!!              7  diurnal               
+!!              8  semidiurnal               
+!!              9  daily ap             
+!!             10  all ut/long effects       
+!!             11  longitudinal         
+!!             12  ut and mixed ut/long      
+!!             13  mixed ap/ut/long     
+!!             14  terdiurnal                
+!!             15  departures from diffusive equilibrium               
+!!             16  all tinf var         
+!!             17  all tlb var               
+!!             18  all tn1 var           
+!!             19  all s var                
+!!             20  all tn2 var           
+!!             21  all nlb var              
+!!             22  all tn3 var           
+!!             23  turbo scale height var   
 !!                                                                      
-!!    switches: the following is for test and special purposes:         
+!! @param[in] iyd  year and day as yyddd (day of year from 1 to 365 or 366)
+!! @param[in] sec  ut(sec)                                                  
+!! @param[in] alt  altitude(km)                                             
+!! @param[in] glat  geodetic latitude(deg)                                  
+!! @param[in] glong  geodetic longitude(deg)                                
+!! @param[in] stl  local apparent solar time(hrs; see note below)           
+!! @param[in] f107a  81 day average of f10.7 flux (centered on day ddd)     
+!! @param[in] f107  daily f10.7 flux for previous day                       
+!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!!                array containing:                                         
+!!                ap(1) daily ap                                              
+!!                ap(2) 3 hr ap index for current time                        
+!!                ap(3) 3 hr ap index for 3 hrs before current time           
+!!                ap(4) 3 hr ap index for 6 hrs before current time           
+!!                ap(5) 3 hr ap index for 9 hrs before current time           
+!!                ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
+!!                         to current time                                    
+!!                ap(7) average of eight 3 hr ap indicies from 36 to 57 hrs pr
+!!                         to current time                                    
+!! @param[in] mass  mass number (only density for selected gas is           
+!!                calculated.  mass 0 is temperature.  mass 48 for all. 
+!!                mass 17 is anomalous o only.)                         
 !!                                                                      
-!!       To turn on and off particular variations call tselec(sw),      
-!!       where sw is a 25 element array containing 0. for off, 1.       
-!!       for on, or 2. for main effects off but cross terms on          
-!!       for the following variations                                   
-!!              1 - f10.7 effect on mean  2 - time independent          
-!!              3 - symmetrical annual    4 - symmetrical semiannual    
-!!              5 - asymmetrical annual   6 - asymmetrical semiannual   
-!!              7 - diurnal               8 - semidiurnal               
-!!              9 - daily ap             10 - all ut/long effects       
-!!             11 - longitudinal         12 - ut and mixed ut/long      
-!!             13 - mixed ap/ut/long     14 - terdiurnal                
-!!             15 - departures from diffusive equilibrium               
-!!             16 - all tinf var         17 - all tlb var               
-!!             18 - all tn1 var           19 - all s var                
-!!             20 - all tn2 var           21 - all nlb var              
-!!             22 - all tn3 var           23 - turbo scale height var   
+!! @param[out] d   size of 9 with following definition.
+!!              d(1)  he number density(cm-3)                                 
+!!              d(2)  o number density(cm-3)                                  
+!!              d(3)  n2 number density(cm-3)                                 
+!!              d(4)  o2 number density(cm-3)                                 
+!!              d(5)  ar number density(cm-3)                                 
+!!              d(6)  total mass density(gm/cm3)                              
+!!              d(7)  h number density(cm-3)                                  
+!!              d(8)  n number density(cm-3)                                  
+!!              d(9)  anomalous oxygen number density(cm-3)                   
+!! @param[out] t -  size of 2 array with following definition.
+!!              t(1)  exospheric temperature                                  
+!!              t(2)  temperature at alt                                      
 !!                                                                      
-!!       to get current values of sw: call tretrv(sw)                   
-!!        modify all common-statements by use-statements.
-!!
 !! @author Hann-Ming Henry Juang
       subroutine gtd7(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,mass,d,t) 
       use wam_gtd7bk_mod
@@ -1219,67 +1228,54 @@
 !-----------------------------------------------------------------------
 !> The nrlmsise-00 subroutine gtd7d
 !!    
-!!       This subroutine provides effective total mass density for      
-!!       output d(6) which includes contributions from "anomalous       
-!!       oxygen" which can affect satellite drag above 500 km.  this    
-!!       subroutine is part of the distribution package for the         
-!!       neutral atmosphere empirical model from the surface to lower   
-!!       exosphere.  see subroutine gtd7 for more extensive comments.   
+!! This subroutine provides effective total mass density for      
+!! output d(6) which includes contributions from "anomalous       
+!! oxygen" which can affect satellite drag above 500 km.  this    
+!! subroutine is part of the distribution package for the         
+!! neutral atmosphere empirical model from the surface to lower   
+!! exosphere.  see subroutine gtd7 for more extensive comments.   
+!! And d(6) is the "effective total mass density
+!! for drag" and is the sum of the mass densities of all species
+!! in this model, including anomalous oxygen.                   
 !!                                                                      
-!! input variables:                                                  
-!! @param [in] iyd - year and day as yyddd (day of year from 1 to 365 (or 366)
-!!                   (year ignored in current model)                          
-!! @param [in] sec - ut(sec)                                                  
-!! @param [in] alt - altitude(km)                                             
-!! @param [in] glat - geodetic latitude(deg)                                  
-!! @param [in] glong - geodetic longitude(deg)                                
-!! @param [in] stl - local apparent solar time(hrs; see note below)           
-!! @param [in] f107a - 81 day average of f10.7 flux (centered on day ddd)     
-!! @param [in] f107 - daily f10.7 flux for previous day                       
-!! @param [in] ap - magnetic index(daily) or when sw(9)=-1. :                 
-!!                - array containing:                                         
-!!                  (1) daily ap                                              
-!!                  (2) 3 hr ap index for current time                        
-!!                  (3) 3 hr ap index for 3 hrs before current time           
-!!                  (4) 3 hr ap index for 6 hrs before current time           
-!!                  (5) 3 hr ap index for 9 hrs before current time           
-!!                  (6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
+!! @param[in] iyd  year and day as yyddd (day of year from 1 to 365 (or 366)
+!! @param[in] sec  ut(sec)                                                  
+!! @param[in] alt  altitude(km)                                             
+!! @param[in] glat  geodetic latitude(deg)                                  
+!! @param[in] glong  geodetic longitude(deg)                                
+!! @param[in] stl  local apparent solar time(hrs; see note below)           
+!! @param[in] f107a  81 day average of f10.7 flux (centered on day ddd)     
+!! @param[in] f107  daily f10.7 flux for previous day                       
+!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!!                ap array containing:                                         
+!!                ap(1) daily ap                                              
+!!                ap(2) 3 hr ap index for current time                        
+!!                ap(3) 3 hr ap index for 3 hrs before current time           
+!!                ap(4) 3 hr ap index for 6 hrs before current time           
+!!                ap(5) 3 hr ap index for 9 hrs before current time           
+!!                ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
 !!                      to current time                                    
-!!                  (7) average of eight 3 hr ap indicies from 36 to 57 hrs pr
+!!                ap(7) average of eight 3 hr ap indicies from 36 to 57 hrs pr
 !!                      to current time                                    
-!! @param [in] mass - mass number (only density for selected gas is           
-!!                    calculated.  mass 0 is temperature.  mass 48 for all. 
-!!                    mass 17 is anomalous o only.)                         
+!! @param[in] mass  mass number (only density for selected gas is           
+!!                  calculated.  mass 0 is temperature.  mass 48 for all. 
+!!                  mass 17 is anomalous o only.)                         
 !!                                                                      
-!!    Notes on input variables:                                         
-!!       ut, local time, and longitude are used independently in the    
-!!       model and are not of equal importance for every situation.     
-!!       for the most physically realistic calculation these three      
-!!       variables should be consistent (stl=sec/3600+glong/15).        
-!!       the equation of time departures from the above formula         
-!!       for apparent local time can be included if available but       
-!!       are of minor importance.                                       
-!!                                                                      
-!!       f107 and f107a values used to generate the model correspond    
-!!       to the 10.7 cm radio flux at the actual distance of the earth  
-!!       from the sun rather than the radio flux at 1 au.               
-!!                                                                      
-!! output variables:                                                 
-!! @param [out] d density array with length of 9
-!! @param [out] t temperature array with length of 2
+!! @param[out] d density array with length of 9
+!! @param[out] t temperature array with length of 2
 !!              d array contains:
-!!               (1) - he number density(cm-3)                                 
-!!               (2) - o number density(cm-3)                                  
-!!               (3) - n2 number density(cm-3)                                 
-!!               (4) - o2 number density(cm-3)                                 
-!!               (5) - ar number density(cm-3)                                 
-!!               (6) - total mass density(gm/cm3) [includes anomalous oxygen]  
-!!               (7) - h number density(cm-3)                                  
-!!               (8) - n number density(cm-3)                                  
-!!               (9) - anomalous oxygen number density(cm-3)                   
+!!              d(1)  he number density(cm-3)                                 
+!!              d(2)  o number density(cm-3)                                  
+!!              d(3)  n2 number density(cm-3)                                 
+!!              d(4)  o2 number density(cm-3)                                 
+!!              d(5)  ar number density(cm-3)                                 
+!!              d(6)  total mass density(gm/cm3) [includes anomalous oxygen]  
+!!              d(7)  h number density(cm-3)                                  
+!!              d(8)  n number density(cm-3)                                  
+!!              d(9)  anomalous oxygen number density(cm-3)                   
 !!              t array conyains:
-!!               (1) - exospheric temperature                                  
-!!               (2) - temperature at alt                                      
+!!              t(1)  exospheric temperature                                  
+!!              t(2)  temperature at alt                                      
 !!                                                                      
 !! @author Hann-Ming Henry Juang
       subroutine gtd7d(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,mass,d,t)
@@ -1301,40 +1297,40 @@
 !> Find altitude of pressure surface (press) from gtd7             
 !!
 !!    input:                                                            
-!! @param [in] iyd - year and day as yyddd                                    
-!! @param [in] sec - ut(sec)                                                  
-!! @param [in] glat - geodetic latitude(deg)                                  
-!! @param [in] glong - geodetic longitude(deg)                                
-!! @param [in] stl - local apparent solar time(hrs)                           
-!! @param [in] f107a - 3 month average of f10.7 flux                          
-!! @param [in] f107 - daily f10.7 flux for previous day                       
-!! @param [in] ap - magnetic index(daily) or when sw(9)=-1. :                 
-!!                - array containing:                                         
-!!                  (1) daily ap                                              
-!!                  (2) 3 hr ap index for current time                        
-!!                  (3) 3 hr ap index for 3 hrs before current time           
-!!                  (4) 3 hr ap index for 6 hrs before current time           
-!!                  (5) 3 hr ap index for 9 hrs before current time           
-!!                  (6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
+!! @param[in] iyd  year and day as yyddd                                    
+!! @param[in] sec  ut(sec)                                                  
+!! @param[in] glat  geodetic latitude(deg)                                  
+!! @param[in] glong  geodetic longitude(deg)                                
+!! @param[in] stl  local apparent solar time(hrs)                           
+!! @param[in] f107a  3 month average of f10.7 flux                          
+!! @param[in] f107  daily f10.7 flux for previous day                       
+!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!!                array containing:                                         
+!!                ap(1) daily ap                                              
+!!                ap(2) 3 hr ap index for current time                        
+!!                ap(3) 3 hr ap index for 3 hrs before current time           
+!!                ap(4) 3 hr ap index for 6 hrs before current time           
+!!                ap(5) 3 hr ap index for 9 hrs before current time           
+!!                ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
 !!                         to current time                                    
-!!                  (7) average of eight 3 hr ap indicies from 36 to 59 hrs pr
+!!                ap(7) average of eight 3 hr ap indicies from 36 to 59 hrs pr
 !!                         to current time                                    
-!! @param [in] press - pressure level(mb)                                     
+!! @param[in] press  pressure level(mb)                                     
 !!    output:                                                           
-!! @param [out] alt - altitude(km)                                             
-!! @param [out] d density array with length of 8
-!!              d(1) - he number density(cm-3)                                 
-!!              d(2) - o number density(cm-3)                                  
-!!              d(3) - n2 number density(cm-3)                                 
-!!              d(4) - o2 number density(cm-3)                                 
-!!              d(5) - ar number density(cm-3)                                 
-!!              d(6) - total mass density(gm/cm3)                              
-!!              d(7) - h number density(cm-3)                                  
-!!              d(8) - n number density(cm-3)                                  
-!!              d(9) - hot o number density(cm-3)                              
-!! @param [out] t temperature array with length of 2
-!!              t(1) - exospheric temperature                                  
-!!              t(2) - temperature at alt                                      
+!! @param[out] alt  altitude(km)                                             
+!! @param[out] d density array with length of 8
+!!              d(1)  he number density(cm-3)                                 
+!!              d(2)  o number density(cm-3)                                  
+!!              d(3)  n2 number density(cm-3)                                 
+!!              d(4)  o2 number density(cm-3)                                 
+!!              d(5)  ar number density(cm-3)                                 
+!!              d(6)  total mass density(gm/cm3)                              
+!!              d(7)  h number density(cm-3)                                  
+!!              d(8)  n number density(cm-3)                                  
+!!              d(9)  hot o number density(cm-3)                              
+!! @param[out] t temperature array with length of 2
+!!              t(1)  exospheric temperature                                  
+!!              t(2)  temperature at alt                                      
 !!
 !! @author Hann-Ming Henry Juang
       subroutine ghp7(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,d,t,press)
@@ -1400,9 +1396,9 @@
 !-----------------------------------------------------------------------
 !> Calculate latitude variable. 
 !!
-!! @param [in] lat latitude in degree
-!! @param [out] gv gravity
-!! @param [out] reff effective radius
+!! @param[in] lat latitude in degree
+!! @param[out] gv gravity
+!! @param[out] reff effective radius
 !!
 !! @author  Hann-Ming Henry Juang
       subroutine glatf(lat,gv,reff) 
@@ -1422,25 +1418,26 @@
 !! Test if geophysical variables or switches changed and save      
 !! return 0 if unchanged and 1 if changed                          
 !!
-!! @param [in] iyd - year and day as yyddd                                    
-!! @param [in] sec - ut(sec)                                                  
-!! @param [in] glat - geodetic latitude(deg)                                  
-!! @param [in] glong - geodetic longitude(deg)                                
-!! @param [in] stl - local apparent solar time(hrs)                           
-!! @param [in] f107a - 3 month average of f10.7 flux                          
-!! @param [in] f107 - daily f10.7 flux for previous day                       
-!! @param [in] ap - magnetic index(daily) or when sw(9)=-1. :                 
-!!                - array containing:                                         
-!!                  (1) daily ap                                              
-!!                  (2) 3 hr ap index for current time                        
-!!                  (3) 3 hr ap index for 3 hrs before current time           
-!!                  (4) 3 hr ap index for 6 hrs before current time           
-!!                  (5) 3 hr ap index for 9 hrs before current time           
-!!                  (6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
+!! @param[in] iyd  year and day as yyddd                                    
+!! @param[in] sec  ut(sec)                                                  
+!! @param[in] glat  geodetic latitude(deg)                                  
+!! @param[in] glong  geodetic longitude(deg)                                
+!! @param[in] stl  local apparent solar time(hrs)                           
+!! @param[in] f107a  3 month average of f10.7 flux                          
+!! @param[in] f107  daily f10.7 flux for previous day                       
+!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!!                array containing:                                         
+!!                ap(1) daily ap                                              
+!!                ap(2) 3 hr ap index for current time                        
+!!                ap(3) 3 hr ap index for 3 hrs before current time           
+!!                ap(4) 3 hr ap index for 6 hrs before current time           
+!!                ap(5) 3 hr ap index for 9 hrs before current time           
+!!                ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
 !!                         to current time                                    
-!!                  (7) average of eight 3 hr ap indicies from 36 to 59 hrs pr
+!!                ap(7) average of eight 3 hr ap indicies from 36 to 59 hrs pr
 !!                         to current time                                    
-!! @param [in] ic initial point
+!! @param[in] ic initial point
+!! @return vtst7  tested value
 !!
 !! @author Hann-Ming Henry Juang
       function vtst7(iyd,sec,glat,glong,stl,f107a,f107,ap,ic) 
@@ -1494,63 +1491,41 @@
 !!    See gtd7 for more extensive comments                              
 !!    Output in m-3 and kg/m3:   call meters(.true.)                 
 !!                                                                      
-!! input variables:                                                  
-!! @param [in] iyd - year and day as yyddd (day of year from 1 to 365 or 366
-!! @param [in] sec - ut(sec)                                                  
-!! @param [in] alt - altitude(km) (>72.5 km)                                  
-!! @param [in] glat - geodetic latitude(deg)                                  
-!! @param [in] glong - geodetic longitude(deg)                                
-!! @param [in] stl - local apparent solar time(hrs)                           
-!! @param [in] f107a - 3 month average of f10.7 flux                          
-!! @param [in] f107 - daily f10.7 flux for previous day                       
-!! @param [in] ap - magnetic index(daily) or when sw(9)=-1. :                 
-!!                - array containing:                                         
-!!                  (1) daily ap                                              
-!!                  (2) 3 hr ap index for current time                        
-!!                  (3) 3 hr ap index for 3 hrs before current time           
-!!                  (4) 3 hr ap index for 6 hrs before current time           
-!!                  (5) 3 hr ap index for 9 hrs before current time           
-!!                  (6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
+!! @param[in] iyd  year and day as yyddd (day of year from 1 to 365 or 366
+!! @param[in] sec  ut(sec)                                                  
+!! @param[in] alt  altitude(km) (>72.5 km)                                  
+!! @param[in] glat  geodetic latitude(deg)                                  
+!! @param[in] glong  geodetic longitude(deg)                                
+!! @param[in] stl  local apparent solar time(hrs)                           
+!! @param[in] f107a  3 month average of f10.7 flux                          
+!! @param[in] f107  daily f10.7 flux for previous day                       
+!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!!                array containing:                                         
+!!                ap(1) daily ap                                              
+!!                ap(2) 3 hr ap index for current time                        
+!!                ap(3) 3 hr ap index for 3 hrs before current time           
+!!                ap(4) 3 hr ap index for 6 hrs before current time           
+!!                ap(5) 3 hr ap index for 9 hrs before current time           
+!!                ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
 !!                         to current time                                    
-!!                  (7) average of eight 3 hr ap indicies from 36 to 59 hrs pr
+!!                ap(7) average of eight 3 hr ap indicies from 36 to 59 hrs pr
 !!                         to current time                                    
-!! @param [in] mass - mass number (only density for selected gas is
+!! @param[in] mass - mass number (only density for selected gas is
 !!                calculated.  mass 0 is temperature.  mass 48 for all.
 !!                mass 17 is anomalous o only.)
-!!                                                                      
-!!    Notes on input variables:                                         
-!!       ut, local time, and longitude are used independently in the    
-!!       model and are not of equal importance for every situation.     
-!!       for the most physically realistic calculation these three      
-!!       variables should be consistent (stl=sec/3600+glong/15).        
-!!       the equation of time departures from the above formula         
-!!       for apparent local time can be included if available but       
-!!       are of minor importance.                                       
-!!                                                                      
-!!       f107 and f107a values used to generate the model correspond    
-!!       to the 10.7 cm radio flux at the actual distance of the earth  
-!!       from the sun rather than the radio flux at 1 au. the following 
-!!       site provides both classes of values:                          
-!!       ftp://ftp.ngdc.noaa.gov/stp/solar_data/solar_radio/flux/       
-!!                                                                      
-!!       f107, f107a, and ap effects are neither large nor well         
-!!       established below 80 km and these parameters should be set to  
-!!       150., 150., and 4. respectively.                               
-!!                                                                      
-!! output variables:                                                 
-!! @param [out] d density array with length of 8
-!!              d(1) - he number density(cm-3)                                 
-!!              d(2) - o number density(cm-3)                                  
-!!              d(3) - n2 number density(cm-3)                                 
-!!              d(4) - o2 number density(cm-3)                                 
-!!              d(5) - ar number density(cm-3)                                 
-!!              d(6) - total mass density(gm/cm3)                              
-!!              d(7) - h number density(cm-3)                                  
-!!              d(8) - n number density(cm-3)                                  
-!!              d(9) - anomalous oxygen number density(cm-3)
-!! @param [out] t temperature array with length of 2
-!!              t(1) - exospheric temperature                                  
-!!              t(2) - temperature at alt                                      
+!! @param[out] d density array with length of 8
+!!              d(1)  he number density(cm-3)                                 
+!!              d(2)  o number density(cm-3)                                  
+!!              d(3)  n2 number density(cm-3)                                 
+!!              d(4)  o2 number density(cm-3)                                 
+!!              d(5)  ar number density(cm-3)                                 
+!!              d(6)  total mass density(gm/cm3)                              
+!!              d(7)  h number density(cm-3)                                  
+!!              d(8)  n number density(cm-3)                                  
+!!              d(9)  anomalous oxygen number density(cm-3)
+!! @param[out] t temperature array with length of 2
+!!              t(1)  exospheric temperature                                  
+!!              t(2)  temperature at alt                                      
 !!                                                                      
 !! @author Hann-Ming Henry Juang
       subroutine gts7(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,mass,d,t) 
@@ -1937,7 +1912,7 @@
 
 !-----------------------------------------------------------------------
 !> Convert outputs to kg & meters if meter true.
-!! @param [in] meter logical true or false
+!! @param[in] meter logical true or false
 !! @author Hann-Ming Henry Juang
       subroutine meters(meter) 
       use wam_gtd7bk_mod, only: imr
@@ -1950,9 +1925,10 @@
 
 !-----------------------------------------------------------------------
 !> Calculate scale height (km)                                      
-!! @param [in] alt altitude [km]
-!! @param [in] xm  molecular weihjt
-!! @param [in] temp temperature
+!! @param[in] alt altitude [km]
+!! @param[in] xm  molecular weihjt
+!! @param[in] temp temperature
+!! @return scalh scale height
 !!
 !! @author Hann-Ming Henry Juang 
       function scalh(alt,xm,temp) 
@@ -1967,25 +1943,27 @@
 
 !-----------------------------------------------------------------------
 !> Calculate g(l) function for upper thermosphere parameters                                   
-!! @param [in] yrd - year and day as yyddd                                    
-!! @param [in] sec - ut(sec)                                                  
-!! @param [in] lat - geodetic latitude(deg)                                  
-!! @param [in] long - geodetic longitude(deg)                                
-!! @param [in] tloc - local apparent solar time(hrs)                           
-!! @param [in] f107a - 3 month average of f10.7 flux                          
-!! @param [in] f107 - daily f10.7 flux for previous day                       
-!! @param [in] ap - magnetic index(daily) or when sw(9)=-1. :                 
-!!                - array containing:                                         
-!!                  (1) daily ap                                              
-!!                  (2) 3 hr ap index for current time                        
-!!                  (3) 3 hr ap index for 3 hrs before current time           
-!!                  (4) 3 hr ap index for 6 hrs before current time           
-!!                  (5) 3 hr ap index for 9 hrs before current time           
-!!                  (6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
+!! @param[in] yrd  year and day as yyddd                                    
+!! @param[in] sec  ut(sec)                                                  
+!! @param[in] lat  geodetic latitude(deg)                                  
+!! @param[in] long  geodetic longitude(deg)                                
+!! @param[in] tloc  local apparent solar time(hrs)                           
+!! @param[in] f107a  3 month average of f10.7 flux                          
+!! @param[in] f107  daily f10.7 flux for previous day                       
+!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!!                array containing:                                         
+!!                ap(1) daily ap                                              
+!!                ap(2) 3 hr ap index for current time                        
+!!                ap(3) 3 hr ap index for 3 hrs before current time           
+!!                ap(4) 3 hr ap index for 6 hrs before current time           
+!!                ap(5) 3 hr ap index for 9 hrs before current time           
+!!                ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr
 !!                         to current time                                    
-!!                  (7) average of eight 3 hr ap indicies from 36 to 59 hrs pr
+!!                ap(7) average of eight 3 hr ap indicies from 36 to 59 hrs pr
 !!                         to current time                                    
-!! @param [in] p - pressure level(mb)                                     
+!! @param[in] p  pressure level(mb)                                     
+!! @return globe7  version of global
+!!
 !! @author Hann-Ming Henry Juang
       function globe7(yrd,sec,lat,long,tloc,f107a,f107,ap,p) 
       use gettemp_mod, only: tinf=>tinfg,gb,rout,t=>tt,    &
@@ -2218,13 +2196,11 @@
 !!
 !! Output in  sw(25),isw,swc(25)                       
 !! The sw for main terms, swc for cross terms                         
-!!                                                              
 !! To turn on and off particular variations call tselec(sv),      
 !! where sv is a 25 element array containing 0. for off, 1.       
 !! for on, or 2. for main effects off but cross terms on          
-!!                                                                      
 !! To get current values of sw: call tretrv(sw)                   
-!! @param [in] sv array contains switches.
+!! @param[in] sv array contains switches.
 !!                                                                      
 !! @author Hann-Ming Henry Juang
       subroutine tselec(sv) 
@@ -2251,7 +2227,10 @@
 
 !-----------------------------------------------------------------------
 !> Version of globe for lower atmosphere
-!! @param ;in] p pressure (mb)
+!!
+!! @param[in] p pressure (mb)
+!! @return glob7s version of global 
+!!
 !! @author Hann-Ming Henry Juang
       function glob7s(p) 
       use gettemp_mod, only:plg,ctloc,stloc,c2tloc,s2tloc,c3tloc,s3tloc,    &
@@ -2350,19 +2329,22 @@
 !--------------------------------------------------------------------   
 !> Calculate temperature and density profiles.
 !! New lower thermo polynomial 10/30/89                            
-!! @param [in] alt -altitude (km)
-!! @param [in] alb -altitude (km)
-!! @param [in] tinf -initial guess
-!! @param [in] tlb -molecular weight
-!! @param [in] xm -molecular weight
-!! @param [in] alpha -initial guess
-!! @param [in] tz -temperature
-!! @param [in] zlb -altitude (km)
-!! @param [in] s2 -altitude (km)
-!! @param [in] mn1 -size of array zn2 and tn2
-!! @param [in] zn1 -altitude (km)
-!! @param [in] tn1 -temperature
-!! @param [in] tgn1 -end point temperature
+!!
+!! @param[in] alt altitude (km)
+!! @param[in] dlb altitude (km)
+!! @param[in] tinf initial guess
+!! @param[in] tlb molecular weight
+!! @param[in] xm molecular weight
+!! @param[in] alpha initial guess
+!! @param[in] tz temperature
+!! @param[in] zlb altitude (km)
+!! @param[in] s2 altitude (km)
+!! @param[in] mn1 size of array zn2 and tn2
+!! @param[in] zn1 altitude (km)
+!! @param[in] tn1 temperature
+!! @param[in] tgn1 end point temperature
+!! @return densu density
+!!
 !! @author Hann-Ming Henry Juang
       function densu(alt,dlb,tinf,tlb,xm,alpha,tz,zlb,s2,               &
         mn1,zn1,tn1,tgn1)                                               
@@ -2450,18 +2432,21 @@
 
 !--------------------------------------------------------------------   
 !> Calculate temperature and density profiles for lower atmos.     
-!! @param [in] alt -altitude (km)
-!! @param [in] d0 -initial guess
-!! @param [in] xm -molecular weight
-!! @param [out] tz -temperature
-!! @param [in] mn3 -size of array zn3 amd tn3
-!! @param [in] zn3 -altitude (km)
-!! @param [in] tn3 -temperature
-!! @param [in] tgn3 -altitude (km)
-!! @param [in] mn2 -size of array zn2 and tn2
-!! @param [in] zn2 -altitude (km)
-!! @param [in] tn2 -temperature
-!! @param [in] tgn2 -end point temperature
+!!
+!! @param[in] alt altitude (km)
+!! @param[in] d0 initial guess
+!! @param[in] xm molecular weight
+!! @param[out] tz temperature
+!! @param[in] mn3 size of array zn3 amd tn3
+!! @param[in] zn3 altitude (km)
+!! @param[in] tn3 temperature
+!! @param[in] tgn3 altitude (km)
+!! @param[in] mn2 size of array zn2 and tn2
+!! @param[in] zn2 altitude (km)
+!! @param[in] tn2 temperature
+!! @param[in] tgn2 end point temperature
+!! @return densm density
+!!
 !! @author Hann-Ming Henry Juang
       function densm(alt,d0,xm,tz,mn3,zn3,tn3,tgn3,mn2,zn2,tn2,tgn2) 
       use gettemp_mod, only: gsurf,re, &
@@ -2559,13 +2544,13 @@
 !> Calculate 2nd derivatives of cubic spline interp function. 
 !!
 !! Adapted from numerical recipes by press et al.
-!! @param [in] x: arrays of tabulated function in ascending order by x      
-!! @param [in] y: arrays of tabulated function in ascending order by x      
-!! @param [in] n: size of arrays x,y                                          
-!! @param [in] yp1: specified derivatives at x(1)        
-!! @param [in] ypn: specified derivatives at x(n)
+!! @param[in] x arrays of tabulated function in ascending order by x      
+!! @param[in] y arrays of tabulated function in ascending order by x      
+!! @param[in] n size of arrays x,y                                          
+!! @param[in] yp1 specified derivatives at x(1)        
+!! @param[in] ypn specified derivatives at x(n)
 !!              values >= 1e30 signal signal second derivative zero.         
-!! @param [out] y2: output array of second derivatives                         
+!! @param[out] y2 output array of second derivatives                         
 !!
 !! @author Hann-Ming Henry Juang
       subroutine spline(x,y,n,yp1,ypn,y2) 
@@ -2604,12 +2589,12 @@
 !> Calculate cubic spline interp value. 
 !!
 !! Adapted from numerical recipes by press et al.                 
-!! @param [in] xa arrays of tabulated function in ascending order by x    
-!! @param [in] ya: arrays of tabulated function in ascending order by x    
-!! @param [in] y2a: array of second derivatives                               
-!! @param [in] n: size of arrays xa,ya,y2a                                    
-!! @param [in] x: abscissa for interpolation                                  
-!! @param [out] y: output value                                                
+!! @param[in] xa arrays of tabulated function in ascending order by x    
+!! @param[in] ya arrays of tabulated function in ascending order by x    
+!! @param[in] y2a array of second derivatives                               
+!! @param[in] n size of arrays xa,ya,y2a                                    
+!! @param[in] x abscissa for interpolation                                  
+!! @param[out] y output value                                                
 !!
 !! @author Hann-Ming Henry Juang
       subroutine splint(xa,ya,y2a,n,x,y) 
@@ -2639,12 +2624,12 @@
 !-----------------------------------------------------------------------
 !> Integrate cubic spline function.
 !!
-!! @param [in] xa: arrays of tabulated function in ascending order by x    
-!! @param [in] ya: arrays of tabulated function in ascending order by x    
-!! @param [in] y2a: array of second derivatives                               
-!! @param [in] n: size of arrays xa,ya,y2a                                    
-!! @param [in] x: abscissa endpoint for integration                           
-!! @param [out] yi: output value                                                
+!! @param[in] xa arrays of tabulated function in ascending order by x    
+!! @param[in] ya arrays of tabulated function in ascending order by x    
+!! @param[in] y2a array of second derivatives                               
+!! @param[in] n size of arrays xa,ya,y2a                                    
+!! @param[in] x abscissa endpoint for integration                           
+!! @param[out] yi output value                                                
 !!
 !! @author Hann-Ming Henry Juang
       subroutine splini(xa,ya,y2a,n,x,yi) 
@@ -2675,12 +2660,13 @@
 !-----------------------------------------------------------------------
 !> Turbopause correction.
 !!
-!! @param [in] dd - diffusive density                                       
-!! @param [in] dm - full mixed density                                      
-!! @param [in] zhm - transition scale length                                
-!! @param [in] xmm - full mixed molecular weight                            
-!! @param [in] xm  - species molecular weight                               
-!! @param [out] dnet - combined density                                      
+!! @param[in] dd  diffusive density                                       
+!! @param[in] dm  full mixed density                                      
+!! @param[in] zhm  transition scale length                                
+!! @param[in] xmm  full mixed molecular weight                            
+!! @param[in] xm   species molecular weight                               
+!! @return dnet  combined density                                      
+!!
 !! @author Hann-Ming Henry Juang
       function dnet(dd,dm,zhm,xmm,xm) 
       save 
@@ -2709,10 +2695,12 @@
 !-----------------------------------------------------------------------
 !> Chemistry/dissociation correction.
 !!
-!! @param [in] alt - altitude                                                 
-!! @param [in] r - target ratio                                               
-!! @param [in] h1 - transition scale length                                   
-!! @param [in] zh - altitude of 1/2 r                                         
+!! @param[in] alt  altitude                                                 
+!! @param[in] r  target ratio                                               
+!! @param[in] h1  transition scale length                                   
+!! @param[in] zh  altitude of 1/2 r                                         
+!! @return ccor  correction
+!!
 !! @author  Hann-Ming Henry Juang
       function ccor(alt, r,h1,zh) 
       save 
@@ -2733,11 +2721,14 @@
 
 !-----------------------------------------------------------------------
 !> O and O2 chemistry/dissociation correction.
-!! @param [in] alt - altitude                                                 
-!! @param [in] r - target ratio                                               
-!! @param [in] h1 - transition scale length 1                                 
-!! @param [in] zh - altitude of 1/2 r                                         
-!! @param [in] h2 - transition scale length 2                                 
+!!
+!! @param[in] alt  altitude                                                 
+!! @param[in] r  target ratio                                               
+!! @param[in] h1 transition scale length 1                                 
+!! @param[in] zh  altitude of 1/2 r                                         
+!! @param[in] h2  transition scale length 2                                 
+!! @return ccor2  correction
+!!
 !! @author  Hann-Ming Henry Juang
       function ccor2(alt, r,h1,zh,h2) 
       e1=(alt-zh)/h1 
