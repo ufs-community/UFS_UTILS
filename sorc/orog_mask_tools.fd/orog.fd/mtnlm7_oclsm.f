@@ -160,27 +160,27 @@ C>
      &            OUTGRID,INPUTOROG)
       STOP
       END
-!>
-!!  @note  Subroutine TERSUB is undocumented by developer 
-!!         Inserting doxygen framework only including undescribed params
-!! @param IMN
-!! @param JMN 
-!! @param IM
-!! @param JM 
-!! @param NM 
-!! @param NR 
-!! @param NF0
-!! @param NF1
-!! @param NW 
-!! @param EFAC
-!! @param BLAT 
-!! @param OUTGRID
-!! @param EFAC
-!! @param BLAT
-!! @param OUTGRID
-!! @param INPUTOROG
+
+!> Driver routine to compute terrain.
 !!
-!! @author Mark Iredell
+!! @param[in] IMN "i" dimension of the input terrain dataset.
+!! @param[in] JMN "j" dimension of the input terrain dataset.
+!! @param[in] IM "i" dimension of the model grid tile.
+!! @param[in] JM "j" dimension of the model grid tile.
+!! @param[in] NM Spectral truncation.
+!! @param[in] NR Rhomboidal flag.
+!! @param[in] NF0 First order spectral filter parameters.
+!! @param[in] NF1 Second order spectral filter parameters.
+!! @param[in] NW ???
+!! @param[in] EFAC ???
+!! @param[in] BLAT When less than zero, reverse latitude/
+!! longitude for output.
+!! @param[in] OUTGRID The 'grid' file for the model tile.
+!! @param[in] INPUTOROG Input orography/GWD file on gaussian
+!! grid. When specified, will be interpolated to model tile.
+!! When not specified, program will create fields from
+!! raw high-resolution topography data.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &     OUTGRID,INPUTOROG)
 !jaa      use ipfort
