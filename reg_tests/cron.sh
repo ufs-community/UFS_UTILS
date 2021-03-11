@@ -47,7 +47,7 @@ done
 
 time=0
 should_wait=true
-while [ ${should_wait} == "true" ]; do
+while [ "$should_wait" == true ]; do
     sleep 10
     for dir in chgres_cube grid_gen ice_blend snow2mdl; do
         should_wait=false
@@ -58,14 +58,27 @@ while [ ${should_wait} == "true" ]; do
     done
 done
 
+echo "Commit hash: ${current_hash}" >> reg_test_results.txt
+echo "" >> reg_test_results.txt
+
 for dir in chgres_cube grid_gen ice_blend snow2mdl; do
+    success=true
     if grep -qi "FAILED" ${dir}/summary.log; then
+        success=false
         echo "${dir} regression tests FAILED" >> reg_test_results.txt
-        mail -s "UFS_UTILS Regression Tests FAILED" ${MAILTO} < reg_test_results.txt
     else
         echo "${dir} regression tests PASSED" >> reg_test_results.txt
-        mail -s "UFS_UTILS Regression Tests PASSED" ${MAILTO} < reg_test_results.txt
     fi
 done
+
+if [[ "$success" == true ]]; then
+    mail -s "UFS_UTILS Regression Tests PASSED" ${MAILTO} < reg_test_results.txt
+else
+    mail -s "UFS_UTILS Regression Tests FAILED" ${MAILTO} < reg_test_results.txt
+fi
+
+echo $current_hash > ${UFS_UTILS_WORKING_DIR}/prev_hash.txt
+
+
 
 
