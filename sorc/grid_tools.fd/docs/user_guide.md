@@ -1,6 +1,8 @@
 
 # grid_tools
 
+# Introduction
+
 Utilities to filter topography, to create regional extended Schmidt
 gnomonic grids, and to compute the equivalent global resolution of a
 regional grid.

@@ -1,6 +1,8 @@
 
 # emcsfc_snow2mdl
 
+# Introduction
+
 Blends National Ice Center snow cover and Air Force snow depth data to
 create a global depth analysis used to update the GFS snow field once
 per day.

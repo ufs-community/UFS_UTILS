@@ -1,6 +1,8 @@
 
 # emcsfc_ice_blend
 
+# Introduction
+
 Blends National Ice Center sea ice cover and EMC sea ice concentration
 data to create a global sea ice analysis used to update the GFS once
 per day.
