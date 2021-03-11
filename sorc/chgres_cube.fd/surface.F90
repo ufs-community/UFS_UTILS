@@ -1,5 +1,6 @@
 !> @file
-!! @brief Process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields.
+!! @brief Process land, sea/lake ice, open water/Near Sea Surface
+!! Temperature (NSST) fields.
 !! @author George Gayno NCEP/EMC
 
 !> Process surface and nst fields. Interpolates fields from the input
