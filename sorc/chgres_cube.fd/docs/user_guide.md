@@ -1,3 +1,5 @@
+# chgres_cube
+
 # Introduction
 
 The chgres_cube program creates initial condition files to “coldstart”
@@ -12,21 +14,36 @@ UFS_UTILS](https://github.com/NOAA-EMC/UFS_UTILS) project.
 This user guide is part of the <a href="../index.html">UFS_UTILS
 documentation</a>.
 
-# Where to find GFS GRIB2, NEMSIO and NetCDF data
+## Where to find GFS GRIB2, NEMSIO and NetCDF data
 
-## GRIB2
+### GRIB2
 
-- 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.`
+- 0.25-degree data (last 10 days only) - Use the
+  <b>gfs.tHHz.pgrb2.0p25.f000</b> files in subdirectory
+  <b>gfs.YYYYMMDD/HH</b> here:
+  <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>.
 
-- 0.5-degree data - Use the **gfs_4_YYYYMMDD_00HH_000.grb2** file, under **GFS Forecasts 004 (0.5-deg)** here: `NCDC - Global Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>`__. Note: *Tests were not done with the AVN, MRF or analysis data*.
+- 0.5-degree data - Use the <b>gfs_4_YYYYMMDD_00HH_000.grb2</b> file,
+  under <b>GFS Forecasts 004 (0.5-deg)</b> from the NCDC - Global
+  Forecast System
+  <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>. Note:
+  Tests were not done with the AVN, MRF or analysis data.
 
-- 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2 file**, under **GFS Forecasts 003 (1-deg)** here: `NCDC - Global Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>`__. Note: *Tests were not done with the AVN, MRF or analysis data*.
+- 1.0-degree data - Use the <b>gfs_3_YYYYMMDD_00HH_000.grb2 file</b>,
+  under <b>GFS Forecasts 003 (1-deg)</b> from NCDC - Global Forecast
+  System
+  <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>. Note:
+  Tests were not done with the AVN, MRF or analysis data.
 
-## NEMSIO
+### NEMSIO
 
-- T1534 gaussian (last 10 days only) - Use the **gfs.tHHz.atmanl.nemsio** (atmospheric fields) and **gfs.tHHz.sfcanl.nemsio** (surface fields) files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
+- T1534 gaussian (last 10 days only) - Use the
+  <b>gfs.tHHz.atmanl.nemsio</b> (atmospheric fields) and
+  <b>gfs.tHHz.sfcanl.nemsio</b> (surface fields) files in subdirectory
+  gfs.YYYYMMDD/HH from
+  <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>.
 
-## NetCDF
+### NetCDF
 
 - T1534 gaussian (don't have any more details at this time).
 
@@ -63,7 +80,7 @@ Keep this in mind when using GFS GRIB2 data for model initialization:
   2017 to current). May not work with older GFS data. Will not work
   with GRIB2 data from other models.
 
-## Near Sea Surface Temperature (NSST) data and GRIB2 initialization
+### Near Sea Surface Temperature (NSST) data and GRIB2 initialization
 
 The issue with not having NSST data is important. In GFS we use the
 foundation temperature (Tref) and add a diurnal warming/cooling layer
@@ -83,12 +100,13 @@ if the model is being initialized when the ocean is warm and
 initialization is occuring at the peak of the diurnal warming. That
 warm ocean will be baked in for the extent of the run and may spawn
 off a number of fake hurricanes. The user has two options -- either to
-use a spin up cycle to spin up NSST (set **nstf_name** = [2,1,0,0,0]
-in **input.nml** of the model namelist file. This will create a
-diurnal cycle after 24 hours of spin up), or to run the model without
-any NSST option ( set **nstf_name** = [0,0,0,0,0] in **input.nml** of
-the model namelist file. The user will also have to choose one of the
-no NSST physics suite options in **input.nml**).
+use a spin up cycle to spin up NSST (set <b>nstf_name</b> =
+[2,1,0,0,0] in <b>input.nml</b> of the model namelist file. This will
+create a diurnal cycle after 24 hours of spin up), or to run the model
+without any NSST option ( set <b>nstf_name</b> = [0,0,0,0,0] in
+<b>input.nml</b> of the model namelist file. The user will also have
+to choose one of the no NSST physics suite options in
+<b>input.nml</b>).
 
 Note, that neither of these two options will get rid of the underlying
 baked in heating/cooling in the surface temperature fields. For most
@@ -99,7 +117,7 @@ obtained foundation temperature.
 
 # chgres_cube namelist options
 
-Namelist variables with “input” in their name refer to data input to chgres_cube.  Namelist variables with “target” in their name refer to the FV3 horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
+Namelist variables with “input” in their name refer to data input to chgres_cube. Namelist variables with “target” in their name refer to the FV3 horizontal and vertical grid (i.e., the target grid chgres_cube is mapping to).
 
 When using GRIB2 data as input to chgres_cube, set namelist as
 follows:
@@ -168,7 +186,7 @@ When using NEMSIO data as input to chgres_cube, set namelist as follows:
  
  - convert_nst - set to ‘true’ to process NSST fields
  
- - tracers_input - names of tracer records in input file.  For GFDL
+ - tracers_input - names of tracer records in input file. For GFDL
    microphysics, set to
    “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
  
@@ -210,7 +228,7 @@ When using NetCDF data as input to chgres_cube, set namelist as follows:
  
  - convert_nst - set to ‘true’ to process NSST fields
  
- - tracers_input - names of tracer records in input file.  For GFDL
+ - tracers_input - names of tracer records in input file. For GFDL
    microphysics, set to
    “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
  
@@ -244,7 +262,7 @@ https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/
    - CRES_oro_data.tile5.nc
    - CRES_oro_data.tile6.nc
 
- - FV3 surface climatological files - Located under the ./fix_sfc sub-directory.  One file for each tile.  NetCDF format.
+ - FV3 surface climatological files - Located under the ./fix_sfc sub-directory. One file for each tile. NetCDF format.
    - CRES.facsf.tileX.nc (fractional coverage for strong/weak zenith angle dependent albedo)
    - CRES.maximum_snow_albedo.tileX.nc (maximum snow albedo)
    - CRES.slope_type.tileX.nc (slope type)
@@ -254,14 +272,14 @@ https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/
    - CRES.vegetation_greenness.tileX.nc (vegetation greenness)
    - CRES.vegetation_type.tileX.nc (vegetation type)
 
- - FV3 vertical coordinate file.  Text file.  Located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_am.v20191213/
+ - FV3 vertical coordinate file. Text file. Located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_am.v20191213/
    - global_hyblev.l$LEVS.txt
 
- - Input data files.  GRIB2, NEMSIO or NetCDF.  See above section for how to find this data.
+ - Input data files. GRIB2, NEMSIO or NetCDF. See above section for how to find this data.
 
 ## Outputs
 
- - Atmospheric “coldstart” files.  NetCDF.
+ - Atmospheric “coldstart” files. NetCDF.
    - out.atm.tile1.nc
    - out.atm.tile2.nc
    - out.atm.tile3.nc
@@ -269,7 +287,7 @@ https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/
    - out.atm.tile5.nc
    - out.atm.tile6.nc
 
- - Surface/Near Sea Surface Temperature (NSST) “coldstart” files.  NetCDF
+ - Surface/Near Sea Surface Temperature (NSST) “coldstart” files. NetCDF
    - out.sfc.tile1.nc
    - out.sfc.tile1.nc
    - out.sfc.tile1.nc
@@ -279,15 +297,15 @@ https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/
 
 # Running the program stand alone
 
- - Locate your input files.  See above for a list.
+ - Locate your input files. See above for a list.
  
- - Set the namelist for your experiment.  See above for an explanation
+ - Set the namelist for your experiment. See above for an explanation
    of the namelist entries.
  
- - Link the namelist to Fortran unit number 41, i.e. <pre> ln -fs
-   your-namelist-file ./fort.41</pre>
+ - Link the namelist to Fortran unit number 41:
+ <pre> ln -fs your-namelist-file ./fort.41</pre>
  
- - Load any required runtime libraries.  For example, you may need to
+ - Load any required runtime libraries. For example, you may need to
    load libraries for NetCDF and/or your Fortran compiler.
  
  - Run the program with an MPI task count that is a multiple of six.
