@@ -49,11 +49,39 @@
 !
 !  grib code for each parameter - used in subroutines sfccycle and setrmsk.
 !
-      integer kpdtsf,kpdwet,kpdsno,kpdzor,kpdais,kpdtg3,kpdplr,kpdgla,
-     &        kpdmxi,kpdscv,kpdsmc,kpdoro,kpdmsk,kpdstc,kpdacn,kpdveg,
-     &        kpdvet,kpdsot
-     &,       kpdvmn,kpdvmx,kpdslp,kpdabs
-     &,       kpdsnd, kpdabs_0, kpdabs_1, kpdalb(4)
+      integer kpdtsf !< GRIB1 parameter number of skin temperature/SST.
+      integer kpdwet !< GRIB1 parameter number of soil wetness.
+      integer kpdsno !< GRIB1 parameter number of liquid equivalent snow
+                     !! depth.
+      integer kpdzor !< GRIB1 parameter number of physical snow depth.
+      integer kpdais !< GRIB1 parameter number of roughness length.
+      integer kpdtg3 !< GRIB1 parameter number of soil substrate
+                     !! temperature.
+      integer kpdplr !< GRIB1 parameter number of plant resistance.
+      integer kpdgla !< GRIB1 parameter number of glacial ice.
+      integer kpdmxi !< GRIB1 parameter number of maximum ice extent.
+      integer kpdscv !< GRIB1 parameter number of snow cover.
+      integer kpdsmc !< GRIB1 parameter number of soil moisture.
+      integer kpdoro !< GRIB1 parameter number of orography.
+      integer kpdmsk !< GRIB1 parameter number of land mask.
+      integer kpdstc !< GRIB1 parameter number of soil temperature.
+      integer kpdacn !< GRIB1 parameter number of sea ice concentration.
+      integer kpdveg !< GRIB1 parameter number of vegetation greenness.
+      integer kpdvet !< GRIB1 parameter number of vegetation type.
+      integer kpdsot !< GRIB1 parameter number of soil type.
+      integer kpdvmn !< GRIB1 parameter number of minimum vegetation
+                     !! greenness.
+      integer kpdvmx !< GRIB1 parameter number of maximum vegetation
+                     !! greenness.
+      integer kpdslp !< GRIB1 parameter number of slope type.
+      integer kpdabs !< GRIB1 parameter number of maximum snow albedo.
+      integer kpdsnd !< GRIB1 parameter number of physical snow depth.
+      integer kpdabs_0 !< GRIB1 parameter number of legacy maximum snow
+                       !! albedo.
+      integer kpdabs_1 !< GRIB1 parameter number of modis-based 
+                       !! maximum snow albedo.
+      integer kpdalb(4) !< GRIB1 parameter number of 4-component
+                        !! snow-free albedo.
       parameter(kpdtsf=11,  kpdwet=86, kpdsno=65,  kpdzor=83,
 !    1          kpdalb=84,  kpdais=91, kpdtg3=11,  kpdplr=224,
      1          kpdais=91,  kpdtg3=11, kpdplr=224,
@@ -64,14 +92,22 @@
      &          kpdvet=225, kpdsot=224,kpdabs_1=159,
      &          kpdsnd=66 )
 !
-      integer, parameter :: kpdalb_0(4)=(/212,215,213,216/)
-      integer, parameter :: kpdalb_1(4)=(/189,190,191,192/)
-      integer, parameter :: kpdalf(2)=(/214,217/)
-!
-      integer, parameter :: xdata=5000, ydata=2500, mdata=xdata*ydata
-      integer            :: veg_type_landice
-      integer            :: soil_type_landice
-!
+      integer, parameter :: kpdalb_0(4)=(/212,215,213,216/) !< GRIB1 parameter
+                                                         !! numbers for brigleb
+                                                         !! snow-free albedo.
+      integer, parameter :: kpdalb_1(4)=(/189,190,191,192/) !< GRIB1 parameter
+                                                         !! numbers for modis 
+                                                         !! snow-free albedo.
+      integer, parameter :: kpdalf(2)=(/214,217/) !< GRIB1 parameter numbers of
+                                                !! fraction for strongly/weakly
+                                                !! zenith angle dependent albedo.
+      integer, parameter :: xdata=5000 !< Maximum 'i' dimension of input data.
+      integer, parameter :: ydata=2500 !< Maximum 'j' dimension of input data.
+      integer, parameter :: mdata=xdata*ydata !< Maximum number of input data points.
+      integer            :: veg_type_landice !< Vegetation type category at permanent
+                                             !! land-ice points.
+      integer            :: soil_type_landice !< Soil type category at permanent
+                                             !! land-ice points.
       end module sfccyc_module
 
 !> Surface cycling driver routine. Update 'first guess' surface
