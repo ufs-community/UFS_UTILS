@@ -1,7 +1,7 @@
 C> @file
 C> TERRAIN MAKER FOR GLOBAL SPECTRAL MODEL
 C> @author IREDELL @date 92-04-16
-C>
+  
 C> THIS PROGRAM CREATES 7 TERRAIN-RELATED FILES
 C>   COMPUTED FROM THE NAVY 10-MINUTE TERRAIN DATASET.
 C>   THE MODEL PHYSICS GRID PARAMETERS AND SPECTRAL TRUNCATION
@@ -72,7 +72,8 @@ C>  -   SPTEZ      - SPHERICAL TRANSFORM
 C>  -   GBYTES     - UNPACK BITS
 C>
 C>   REMARKS: FORTRAN 9X EXTENSIONS ARE USED.
-C>           
+C>
+C> @return 0 for success, error code otherwise.
       include 'netcdf.inc'
       logical fexist, opened
       integer fsize, ncid, error, id_dim, nx, ny
@@ -1566,27 +1567,27 @@ C
       write(6,*)' Total runtime time= ',tend-tbeg1
       RETURN
       END
-!>
-!! @note undocumented subroutine MAKEMT  
-!! @param ZAVG
-!! @param ZSLM
-!! @param ORO  
-!! @param SLM  
-!! @param VAR  
-!! @param VAR4 
-!! @param GLAT
-!! @param IST 
-!! @param IEN 
-!! @param JST 
-!! @param JEN 
-!! @param IM  
-!! @param JM  
-!! @param IMN 
-!! @param JMN 
-!! @param XLAT
-!! @param numi
+
+!> makemt
 !!
-!! @author unknown, probably Mark Iredell
+!! @param[in] zavg ???
+!! @param[in] zslm ???
+!! @param[in] oro  ???
+!! @param[in] slm  ???
+!! @param[in] var  ???
+!! @param[in] var4 ???
+!! @param[in] glat ???
+!! @param[in] ist ???
+!! @param[in] ien ???
+!! @param[in] jst ???
+!! @param[in] jen ???
+!! @param[in] im  ???
+!! @param[in] jm  ???
+!! @param[in] imn ???
+!! @param[in] jmn ???
+!! @param[in] xlat ???
+!! @param[in] numi ???
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
      1 GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
       DIMENSION GLAT(JMN),XLAT(JM)
@@ -1734,6 +1735,19 @@ C
       RETURN
       END
 
+!> Get index
+!!
+!! @param[in] imn ???
+!! @param[in] jmn ???
+!! @param[in] npts ???
+!! @param[in] lonO ???
+!! @param[in] latO ???
+!! @param[in] delxn ???
+!! @param[out] jst ???
+!! @param[out] jen ???
+!! @param[out] ilist ???
+!! @param[out] numx ???
+!! @author GFDL programmer
       SUBROUTINE get_index(IMN,JMN,npts,lonO,latO,DELXN,
      &           jst,jen,ilist,numx)
         implicit none
@@ -1808,6 +1822,23 @@ C
 
       END   
       
+!> makemt2
+!!
+!! @param[in] zavg ???
+!! @param[in] zslm ???
+!! @param[in] oro ???
+!! @param[in] slm ???
+!! @param[in] land_frac ???
+!! @param[in] var ???
+!! @param[in] var4 ???
+!! @param[in] glat ???
+!! @param[in] im ???
+!! @param[in] jm ???
+!! @param[in] imn ???
+!! @param[in] jmn ???
+!! @param[in] lon_c ???
+!! @param[in] lat_c ???
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,land_frac,VAR,VAR4,
      1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
       implicit none
@@ -1940,7 +1971,25 @@ C
       RETURN
       END
 
-      
+!> makepc
+!!
+!! @param[in] zavg ???
+!! @param[in] zslm ???
+!! @param[in] theta ???
+!! @param[in] gamma ???
+!! @param[in] sigma ???
+!! @param[in] glat ???
+!! @param[in] ist ???
+!! @param[in] ien ???
+!! @param[in] jst ???
+!! @param[in] jen ???
+!! @param[in] im ???
+!! @param[in] jm ???
+!! @param[in] imn ???
+!! @param[in] jmn ???
+!! @param[in] xlat ???
+!! @param[in] numi ???
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1           GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
 C
@@ -2825,6 +2874,36 @@ C
          
       end function get_lat_angle
       
+!> makeoa2
+!!
+!! @param[in] zavg ???
+!! @param[in] zslm  ???
+!! @param[in] var ???
+!! @param[in] glat ???
+!! @param[in] oa4 ???
+!! @param[in] ol ???
+!! @param[in] ioa4 ???
+!! @param[in] elvmax ???
+!! @param[in] oro ???
+!! @param[in] oro1 ???
+!! @param[in] xnsum ???
+!! @param[in] xnsum1 ???
+!! @param[in] xnsum2 ???
+!! @param[in] xnsum3 ???
+!! @param[in] xnsum4, ???
+!! @param[in] im ???
+!! @param[in] jm  ???
+!! @param[in] imn ???
+!! @param[in] jmn ???
+!! @param[in] lon_c ???
+!! @param[in] lat_c ???
+!! @param[in] lon_t ???
+!! @param[in] lat_t ???
+!! @param[in] dx ???
+!! @param[in] dy ???
+!! @param[in] is_south_pole ???
+!! @param[in] is_north_pole ???
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEOA2(ZAVG,zslm,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,dx,dy,
@@ -3802,6 +3881,14 @@ C
       RETURN
       END
 
+!> Convert from a reduced grid to a full grid.
+!!
+!! @param[in] im 'i' dimension of the full grid.
+!! @param[in] jm 'j' dimension of the full grid.
+!! @param[in] numi Number of 'i' points for each
+!! row of the reduced grid.
+!! @param[inout] a The data to be converted.
+!! @author Jordan Alpert NOAA/EMC
       subroutine rg2gg(im,jm,numi,a)
         implicit none
         integer,intent(in):: im,jm,numi(jm)
@@ -3819,6 +3906,15 @@ C
           enddo
         enddo
       end subroutine
+
+!> Convert from a full grid to a reduced grid.
+!!
+!! @param[in] im 'i' dimension of the full grid.
+!! @param[in] jm 'j' dimension of the full grid.
+!! @param[in] numi Number of 'i' points for each
+!! row of the reduced grid.
+!! @param[inout] a The data to be converted.
+!! @author Jordan Alpert NOAA/EMC
       subroutine gg2rg(im,jm,numi,a)
         implicit none
         integer,intent(in):: im,jm,numi(jm)
