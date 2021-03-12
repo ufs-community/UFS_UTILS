@@ -1,15 +1,20 @@
+# This is the CMake build file for the chgres_cube utility in the
+# UFS_UTILS package.
+#
+# George Gayno, Mark Potts
+
 set(fortran_src
     atmosphere.F90
     chgres.F90
     grib2_util.F90
     input_data.F90
     model_grid.F90
-    program_setup.f90
-    search_util.f90
+    program_setup.F90
+    search_util.F90
     static_data.F90
     surface.F90
     thompson_mp_climo_data.F90
-    utils.f90
+    utils.F90
     write_data.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
@@ -38,3 +43,9 @@ if(OpenMP_Fortran_FOUND)
 endif()
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+
+# If doxygen documentation we enabled, build it.
+if(ENABLE_DOCS)
+  add_subdirectory(docs)  
+endif()
+

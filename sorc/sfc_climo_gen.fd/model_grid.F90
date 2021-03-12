@@ -1,34 +1,12 @@
 !> @file
-!! Defines the model grid.
-!! @author gayno @date 2018
-!!
-!! ### Public Subroutines:
-!! - define_model_grid            Defines esmf grid object for the
-!!                              model grid.
-!! - model_grid_cleanup           Free up memory used in this module.
-!!
-!! ### Public variables:
+!! @brief Defines the model grid.
+!! @author George Gayno @date 2018
+
+!> This module defines the model grid.
 !!
 !! Variables named with 'mdl' refer to the model grid.
 !!
-!! - data_field_mdl               ESMF field object that holds the
-!!                              data interpolated to model grid.
-!! - grid_mdl                     ESMF grid object for the model grid.
-!! - grid_tiles                   Array of model grid tile names.
-!! - i/j_mdl                      i/j dimensions of model tile.
-!! - latitude_field_mdl           ESMF field object that holds the
-!!                              model grid latitude
-!! - longitude_field_mdl          ESMF field object that holds the
-!!                              model grid longitude
-!! - mdl_field_mdl                ESMF field object that holds the
-!!                              model land mask.
-!! - missing                      Value assigned to undefined points
-!!                              (i.e., ocean points for a land
-!!                              field).
-!! - num_tiles                    Total number of model grid tiles.
-!! - vegt_field_mdl               ESMF field object that holds the
-!!                              vegetation type on the model grid.
-!! 
+!! @author George Gayno @date 2018
  module model_grid
 
  use esmf
@@ -37,31 +15,41 @@
 
  private
 
- character(len=5), allocatable, public  :: grid_tiles(:)
+ character(len=5), allocatable, public  :: grid_tiles(:) !< Array of model grid tile names.
 
- integer, public               :: i_mdl, j_mdl, ij_mdl, num_tiles
+ integer, public               :: i_mdl !< i dimension of model tile.
+ integer, public               :: j_mdl !< j dimension of model tile.
+ integer, public               :: ij_mdl !< Total number of points on a model tile.
+ integer, public               :: num_tiles !< Total number of model grid tiles.
 
- real(kind=4), public          :: missing = -999.
+ real(kind=4), public          :: missing = -999. !<Value assigned to undefined points
+                                                  !! (i.e., ocean points for a land field).
 
- type(esmf_grid),  public      :: grid_mdl
- type(esmf_field), public      :: data_field_mdl, mask_field_mdl
- type(esmf_field), public      :: latitude_field_mdl, longitude_field_mdl
- type(esmf_field), public      :: vegt_field_mdl
+ type(esmf_grid),  public      :: grid_mdl !< ESMF grid object for the model grid.
+ type(esmf_field), public      :: data_field_mdl !< ESMF field object that holds the
+                                                 !! data interpolated to model grid.
+ type(esmf_field), public      :: mask_field_mdl !< ESMF field object that holds the
+                                                 !! model land mask.
+ type(esmf_field), public      :: latitude_field_mdl !< ESMF field object that holds the
+                                                     !! model grid latitude.
+ type(esmf_field), public      :: longitude_field_mdl !< ESMF field object that holds the
+                                                      !! model grid longitude.
+ type(esmf_field), public      :: vegt_field_mdl !< ESMF field object that holds the
+                                                 !! vegetation type on the model grid.
 
  public                        :: define_model_grid
  public                        :: model_grid_cleanup
 
  contains
 
-!> define model grid
-!! @author gayno @date 2018
+!> Define model grid.
 !!
 !! Define the model grid from the mosaic and orography
-!! files.  Create the ESMF grid object for the model grid.
+!! files. Create the ESMF grid object for the model grid.
 !!
 !! @param[in] localpet this mpi task      
 !! @param[in] npets total number of mpi tasks      
-!!
+!! @author George Gayno @date 2018
  subroutine define_model_grid(localpet, npets)
 
  use esmf
@@ -282,7 +270,6 @@
  end subroutine define_model_grid
 
 !> Get model information
-!! @author gayno @date 2018
 !!
 !! Read model land/sea mask and lat/lon from the orography file.
 !!
@@ -292,7 +279,7 @@
 !! @param[out] lon2d longitude
 !! @param[in] idim i dimension of the model tile
 !! @param[in] jdim j dimension of the model tile
-!!
+!! @author George Gayno @date 2018
  subroutine get_model_info(orog_file, mask, lat2d, lon2d, idim, jdim)
 
  use esmf
@@ -392,11 +379,11 @@
 
  end subroutine get_model_info
 
-!> model grid cleanup
-!! @author gayno @date 2018
+!> Model grid cleanup.
 !!
 !! Free up memory associated with this module.
 !!
+!! @author George Gayno @date 2018
  subroutine model_grid_cleanup
 
  implicit none

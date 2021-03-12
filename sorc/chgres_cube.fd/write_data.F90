@@ -1,16 +1,17 @@
 !> @file
-!! @brief Write model coldstart files.
+!! @brief Writes the tiled and header files expected by the forecast
+!! model.
 !!
-!! @author gayno NCEP/EMC
+!! @author George Gayno NCEP/EMC
 !!
 !! Write out target grid data into appropriate files for
 !! the forecast model.
 !!
 
-!> @brief Writes atmospheric header file in netcdf format
+!> Writes atmospheric header file in netcdf format.
 !!
-!! @author gayno NCEP/EMC
-!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author George Gayno NCEP/EMC
  subroutine write_fv3_atm_header_netcdf(localpet)
 
  use esmf
@@ -79,12 +80,11 @@
 
  end subroutine write_fv3_atm_header_netcdf
 
-!> @brief 
-!! Writes atmospheric fields along the lateral boundary.
-!! For regional grids only.  Output in netcdf format.
+!> Writes atmospheric fields along the lateral boundary.
+!! For regional grids only. Output in netcdf format.
 !!   
-!! @author gayno NCEP/EMC
-!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author George Gayno NCEP/EMC
  subroutine write_fv3_atm_bndy_data_netcdf(localpet)
 
 !---------------------------------------------------------------------------
@@ -1183,14 +1183,14 @@
 
  end subroutine write_fv3_atm_bndy_data_netcdf
 
-!> @brief Write atmospheric coldstart files (netcdf format).
-!!
-!! @author gayno NCEP/EMC
+!> Write atmospheric coldstart files (netcdf format).
 !!
 !! Routine writes tiled files in parallel.  Tile 1 is written by
 !! localpet 0; tile 2 by localpet 1, etc.  The number of pets
 !! must be equal to or greater than the number of tiled files.
 !!
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author George Gayno NCEP/EMC
  subroutine write_fv3_atm_data_netcdf(localpet)
 
  use esmf
@@ -1800,10 +1800,10 @@
 
  end subroutine write_fv3_atm_data_netcdf
 
-!> @brief Writes surface and nst data into a 'coldstart' file (netcdf).
+!> Writes surface and nst data into a 'coldstart' file (netcdf).
 !! 
-!! @author gayno NCEP/EMC
-!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author George Gayno NCEP/EMC
  subroutine write_fv3_sfc_data_netcdf(localpet)
 
  use esmf

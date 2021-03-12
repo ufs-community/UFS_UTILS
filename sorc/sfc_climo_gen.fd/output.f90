@@ -1,9 +1,8 @@
 !> @file
+!! @brief Output model data for a single tile and a single record.
+!! @author George Gayno @date 2018
 
-!> output
-!! @author gayno @date 2018
-!!
-!! Output model data for a single tile and a single
+!> Output model data for a single tile and a single
 !! record in netcdf format.
 !!
 !! @param[in] data_one_tile Data to be output (single tile).
@@ -15,7 +14,7 @@
 !! @param[in] record Record number to be output.
 !! @param[in] tile Tile number.
 !! @param[in] time Time period to be output.
-!!
+!! @author George Gayno @date 2018
  subroutine output(data_one_tile, lat_one_tile, lon_one_tile, i_mdl, j_mdl, &
                    tile, record, time, field_idx)
 
