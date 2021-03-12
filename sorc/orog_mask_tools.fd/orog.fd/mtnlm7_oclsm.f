@@ -2196,6 +2196,21 @@ C
       RETURN
       END
 
+!> makepc2
+!!
+!! @param[in] zavg ???
+!! @param[in] zslm ???
+!! @param[in] theta ???
+!! @param[in] gamma ???
+!! @param[in] sigma ???
+!! @param[in] glat ???
+!! @param[in] im ???
+!! @param[in] jm ???
+!! @param[in] imn ???
+!! @param[in] jmn ???
+!! @param[in] lon_c ???
+!! @param[in] lat_c ???
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1           GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
 C
@@ -2429,6 +2444,33 @@ C
       RETURN
       END
       
+!> makeoa
+!!
+!! @param[in] zavg ???
+!! @param[in] var ???
+!! @param[in] glat ???
+!! @param[in] oa4 ???
+!! @param[in] ol ???
+!! @param[in] ioa4 ???
+!! @param[in] elvmax ???
+!! @param[in] oro ???
+!! @param[in] oro1 ???
+!! @param[in] xnsum ???
+!! @param[in] xnsum1 ???
+!! @param[in] xnsum2 ???
+!! @param[in] xnsum3 ???
+!! @param[in] xnsum4 ???
+!! @param[in] ist ???
+!! @param[in] ien ???
+!! @param[in] jst ???
+!! @param[in] jen ???
+!! @param[in] im  ???
+!! @param[in] jm ???
+!! @param[in] imn ???
+!! @param[in] jmn ???
+!! @param[in] xlat ???
+!! @param[in] numi ???
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEOA(ZAVG,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
@@ -2748,7 +2790,13 @@ C
       RETURN
       END
 
-
+!> Get longitude angle
+!!
+!! @param[in] dx ???
+!! @param[in] lat ???
+!! @param[in] degrad ???
+!! @return get_lon_angle Longitude angle.
+!! @author GFDL programmer
       function get_lon_angle(dx,lat, DEGRAD)
       implicit none
       real dx, lat, DEGRAD
@@ -2760,6 +2808,12 @@ C
          
       end function get_lon_angle
 
+!> Get latitude angle
+!!
+!! @param[in] dy ???
+!! @param[in] degrad ???
+!! @return get_lat_angle ???
+!! @author GFDL programmer
       function get_lat_angle(dy, DEGRAD)
       implicit none
       real dy, DEGRAD
@@ -3156,7 +3210,15 @@ C
 C
       RETURN
       END
-
+ 
+!> Compute a great circle distance
+!!
+!! @param[in] theta1 ???
+!! @param[in] phi1 ???
+!! @param[in] theta2 ???
+!! @param[in] phi2 ???
+!! @return spherical_distance Great circle distance.
+!! @author GFDL programmer
       function spherical_distance(theta1,phi1,theta2,phi2)
 
       real, intent(in) :: theta1, phi1, theta2, phi2
@@ -3176,6 +3238,19 @@ C
 
       end function spherical_distance
       
+!> Get mismatch index
+!!
+!! @param[in] im_in ???
+!! @param[in] jm_in ???
+!! @param[in] geolon_in ???
+!! @param[in] geolat_in ???
+!! @param[in] bitmap_in ???
+!! @param[in] num_out ???
+!! @param[in] lon_out ???
+!! @param[in] lat_out ???
+!! @param[out] iindx ???
+!! @param[out] jindx ???
+!! @author GFDL progammer
       subroutine get_mismatch_index(im_in, jm_in, geolon_in,geolat_in,
      &           bitmap_in,num_out, lon_out,lat_out, iindx, jindx )
       integer, intent(in) :: im_in, jm_in, num_out
@@ -3244,7 +3319,16 @@ C
 
       end subroutine get_mismatch_index
       
-
+!> Interpolate mismatch
+!!
+!! @param[in] im_in ???
+!! @param[in] jm_in ???
+!! @param[in] data_in ???
+!! @param[in] num_out ???
+!! @param[out] data_out ???
+!! @param[in] iindx ???
+!! @param[in] jindx ???
+!! @author GFDL programmer
       subroutine interpolate_mismatch(im_in, jm_in, data_in,
      &                                num_out, data_out, iindx, jindx)
       integer, intent(in) :: im_in, jm_in, num_out
@@ -3258,6 +3342,42 @@ C
 
       end subroutine interpolate_mismatch
       
+!> Makeoa3
+!!
+!! @param[in] zavg ???
+!! @param[in] zslm ???
+!! @param[in] var ???
+!! @param[in] glat ???
+!! @param[in] oa4 ???
+!! @param[in] ol ???
+!! @param[in] ioa4 ???
+!! @param[in] elvmax ???
+!! @param[in] oro ???
+!! @param[in] slm ???
+!! @param[in] oro1 ???
+!! @param[in] xnsum ???
+!! @param[in] xnsum1 ???
+!! @param[in] xnsum2 ???
+!! @param[in] xnsum3 ???
+!! @param[in] xnsum4 ???
+!! @param[in] im ???
+!! @param[in] jm ???
+!! @param[in] imn ???
+!! @param[in] jmn ???
+!! @param[in] lon_c ???
+!! @param[in] lat_c ???
+!! @param[in] lon_t ???
+!! @param[in] lat_t ???
+!! @param[in] is_south_pole ???
+!! @param[in] is_north_pole ???
+!! @param[in] imi ???
+!! @param[in] jmi ???
+!! @param[in] oa_in ???
+!! @param[in] ol_in ???
+!! @param[in] slm_in ???
+!! @param[in] lon_in ???
+!! @param[in] lat_in ???
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEOA3(ZAVG,zslm,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,SLM,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,
@@ -3915,6 +4035,7 @@ cc
 cc
       return
       end
+
 !> Print the maximum, mininum, mean and
 !! standard deviation of an array.
 !! 
@@ -4023,7 +4144,15 @@ C
       RETURN
       END
       
-      !routine to map (lon, lat) to (x,y,z)
+!> Convert from latitude and longitude to x,y,z coordinates.
+!!
+!! @param[in] siz ???
+!! @param[in] lon ???
+!! @param[in] lat ???
+!! @param[out] x ???
+!! @param[out] y ???
+!! @param[out] z ???
+!! @author GFDL programmer
       subroutine latlon2xyz(siz,lon, lat, x, y, z)
       implicit none
       integer, intent(in) :: siz
@@ -4039,6 +4168,13 @@ C
       enddo
       end
 
+!> Compute spherical angle.
+!!
+!! @param[in] v1 ???
+!! @param[in] v2 ???
+!! @param[in] v3 ???
+!! @return spherical_angle Spherical Angle.
+!! @author GFDL programmer
       FUNCTION spherical_angle(v1, v2, v3)
         implicit none
         real, parameter :: EPSLN30 = 1.e-30
@@ -4079,6 +4215,15 @@ C
         return
       END  
       
+!> Check to see if a point is inside a polygon.
+!!
+!! @param[in] lon1 ???
+!! @param[in] lat1 ???
+!! @param[in] npts ???
+!! @param[in] lon2 ???
+!! @param[in] lat2 ???
+!! @return inside_a_polygon ???
+!! @author GFDL programmer
       FUNCTION inside_a_polygon(lon1, lat1, npts, lon2, lat2)
         implicit none
         real, parameter :: EPSLN10 = 1.e-10
@@ -4151,7 +4296,20 @@ C
         
       end
 
-
+!> Get xnsum
+!!
+!! @param[in] lon1  ???
+!! @param[in] lat1  ???
+!! @param[in] lon2  ???
+!! @param[in] lat2  ???
+!! @param[in] imn   ???
+!! @param[in] jmn   ??? 
+!! @param[in] glat  ???
+!! @param[in] zavg  ???
+!! @param[in] zslm  ???
+!! @param[in] delxn  ???
+!! @return get_xnsum ???
+!! @author Jordan Alpert NOAA/EMC
       function get_xnsum(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn)
         implicit none
@@ -4231,7 +4389,22 @@ C
          
       end function get_xnsum  
       
-
+!> Get xnnum2
+!!
+!! @param[in] lon1  ???
+!! @param[in] lat1  ???
+!! @param[in] lon2  ???
+!! @param[in] lat2  ???
+!! @param[in] imn   ???
+!! @param[in] jmn   ??? 
+!! @param[in] glat  ???
+!! @param[in] zavg  ???
+!! @param[in] zslm  ???
+!! @param[in] delxn  ???
+!! @param[in] xnsum1 ???
+!! @param[in] xnsum2 ???
+!! @param[in] hc ???
+!! @author Jordan Alpert NOAA/EMC
       subroutine get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn,xnsum1,xnsum2,HC)
         implicit none
@@ -4299,7 +4472,22 @@ C
          
       end subroutine get_xnsum2 
 
-
+!> Get xnnum3
+!!
+!! @param[in] lon1  ???
+!! @param[in] lat1  ???
+!! @param[in] lon2  ???
+!! @param[in] lat2  ???
+!! @param[in] imn   ???
+!! @param[in] jmn   ??? 
+!! @param[in] glat  ???
+!! @param[in] zavg  ???
+!! @param[in] zslm  ???
+!! @param[in] delxn  ???
+!! @param[in] xnsum1 ???
+!! @param[in] xnsum2 ???
+!! @param[in] hc ???
+!! @author Jordan Alpert NOAA/EMC
       subroutine get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn,xnsum1,xnsum2,HC)
         implicit none
