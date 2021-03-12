@@ -1,7 +1,7 @@
 !> @file
 !! @brief Create orographic (oro_data) files for use by GSL drag suite
 !! @author Michael Toy, NOAA/GSL
-!! @date 2021-01-27
+!! @date 2021-03-12
 !!
 !! Program GSL_ORO_DATA
 !!
@@ -17,8 +17,12 @@
 !! - oa{1,2,3,4} orographic asymmetries of subgrid-scale topography
 !!
 !! Note:  This program works for both the global FV3GFS cubed
-!!        sphere, i.e., for tiles 1 through 6, and for the
-!!        regional lam, i.e., for tile 7
+!!        sphere, i.e., for tiles 1 through 6, (and 7 if nested
+!!        grid) (halo.eq.-999 for no halo), and for the stand-alone
+!!        regional lam (tile 7 and halo.ne.-999)
+!!        If a halo number is given, this is only to specify the
+!!        Cxxx_grid.halox data used for input.  The oro_data files
+!!        are always "halo0" output.
 !!
 !! Based on code by Michael Duda provided by NCAR/MMM
 !!
@@ -26,8 +30,6 @@ program gsl_oro_data
 
 use gsl_oro_data_sm_scale, only: calc_gsl_oro_data_sm_scale
 use gsl_oro_data_lg_scale, only: calc_gsl_oro_data_lg_scale
-use gsl_oro_data_sm_scale_sar, only: calc_gsl_oro_data_sm_scale_sar
-use gsl_oro_data_lg_scale_sar, only: calc_gsl_oro_data_lg_scale_sar
 
 implicit none
 
@@ -35,7 +37,7 @@ implicit none
 character(len=2) :: tile_num   ! tile number entered by user
 character(len=7) :: res_indx   ! grid-resolution index, e.g., 96, 192, 384, 768,
                                ! etc. entered by user
-integer :: tile_num_int
+character(len=4) :: halo       ! halo value entered by user (for input grid data)
 
 logical :: duplicate_oro_data_file   ! flag for whether oro_data_ls file is a duplicate
                    ! of oro_data_ss due to minimum grid size being less than 7.5km
@@ -50,46 +52,22 @@ print *
 print *, "Enter grid-resolution index:"
 read (5,*) res_indx
 print *
+print *, "Enter halo number (-999 for no halo):"
+read (5,*) halo
+print *
 print *, "Creating tile oro_data for tile number: ", tile_num
 print *, "Grid resolution = ", res_indx
+print *, "Halo = ", halo
 print *
 
 
-read(tile_num,*) tile_num_int  ! integer form of tile_num
+call calc_gsl_oro_data_sm_scale(tile_num,res_indx,halo,duplicate_oro_data_file)
 
-if ( tile_num_int.le.6 ) then  ! tile is a global tile
+print *, "duplicate_oro_data_file =", duplicate_oro_data_file
+print *
 
-   call calc_gsl_oro_data_sm_scale(tile_num,res_indx,duplicate_oro_data_file)
-
-   print *, "duplicate_oro_data_file =", duplicate_oro_data_file
-   print *
-
-   if ( .not.duplicate_oro_data_file ) then
-      call calc_gsl_oro_data_lg_scale(tile_num,res_indx)
-   end if
-
-elseif ( tile_num_int.eq.7 ) then  ! tile is a regional tile
-
-   ! print *, "this is a regional tile"
-   ! print *
-
-   call calc_gsl_oro_data_sm_scale_sar(tile_num,res_indx,            &
-                                       duplicate_oro_data_file)
-
-   print *, "duplicate_oro_data_file =", duplicate_oro_data_file
-
-   if ( .not.duplicate_oro_data_file ) then
-      call calc_gsl_oro_data_lg_scale_sar(tile_num,res_indx)
-   end if
-
-else
-
-   print *
-   print *, "Fatal error: ", tile_num, " is not a valid tile number"
-   print *, "Exiting program gsl_oro_data.f90"
-   print *
-   call exit(4)
-
+if ( .not.duplicate_oro_data_file ) then
+   call calc_gsl_oro_data_lg_scale(tile_num,res_indx,halo)
 end if
 
 

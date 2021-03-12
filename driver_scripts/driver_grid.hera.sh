@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -J fv3_grid_driver
-#SBATCH -A fv3-cpu
+#SBATCH -A wrfruc
 #SBATCH --open-mode=truncate
 #SBATCH -o log.fv3_grid_driver
 #SBATCH -e log.fv3_grid_driver
@@ -69,7 +69,7 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=uniform           # 'uniform', 'stretch', 'nest', 
+export gtype=regional_esg      # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
 if [ $gtype = uniform ]; then
   export res=96
@@ -105,7 +105,7 @@ elif [ $gtype = regional_esg ] ; then
                                # direction is related to delx as follows:
                                #    distance = 2*delx*(circumf_Earth/360 deg)
   export dely=0.0585           # Grid spacing (in degrees) in the 'j' direction.
-  export halo=3                # number of row/cols for halo
+  export halo=5                # number of row/cols for halo
 fi
 
 #-----------------------------------------------------------------------
@@ -115,9 +115,12 @@ fi
 #   out_dir  - where files will be placed upon completion.
 #-----------------------------------------------------------------------
 
-export home_dir=$SLURM_SUBMIT_DIR/..
-export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids
+#export home_dir=$SLURM_SUBMIT_DIR/..
+export home_dir=/scratch1/BMC/wrfruc/mtoy/git_local/UFS_UTILS
+#export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
+export TEMP_DIR=/scratch1/BMC/gsd-fv3-dev/NCEPDEV/stmp3/$LOGNAME/fv3_grid.$gtype
+#export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids
+export out_dir=/scratch1/BMC/gsd-fv3-dev/NCEPDEV/stmp3/$LOGNAME/my_grids
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.

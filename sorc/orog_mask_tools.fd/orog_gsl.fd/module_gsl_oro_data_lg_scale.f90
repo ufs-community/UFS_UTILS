@@ -1,7 +1,7 @@
 !> @file
-!! @brief Calculates global large-scale GWD orographic stats
+!! @brief Calculates large-scale GWD orographic stats for FV3GFS grids
 !! @author Michael Toy, NOAA/GSL
-!! @date 2020-12-09
+!! @date 2021-03-12
 !!
 !! This module calculates the parameters required for the subgrid-
 !! scale orographic gravity-wave drag (GWDO) scheme on the FV3
@@ -40,7 +40,7 @@ contains
 
 
 
-subroutine calc_gsl_oro_data_lg_scale(tile_num,res_indx)
+subroutine calc_gsl_oro_data_lg_scale(tile_num,res_indx,halo)
 
 use netcdf
 
@@ -48,6 +48,7 @@ implicit none
 
 character(len=2), intent(in) :: tile_num   ! tile number
 character(len=7), intent(in) :: res_indx   ! grid-resolution index, e.g., 96, 192, 384, etc 
+character(len=4), intent(in) :: halo       ! halo value (for input grid data)
 
 integer :: i,j,ii,jj
 
@@ -100,6 +101,7 @@ real (kind = real_kind), dimension(3) :: lat_blk, lon_blk
 real (kind = real_kind), dimension(3,3) :: HGT_M_coarse
 real (kind = real_kind), allocatable :: HGT_M_coarse_on_fine(:,:)
 integer :: cell_count  ! allows for use of 1D arrays for GWD statistics fields
+integer :: halo_int    ! integer form of halo
 
 logical :: fexist
 
@@ -112,8 +114,14 @@ print *, "Creating oro_data_ls file"
 print *
 
 ! File name for file that contains grid information
-FV3_grid_input_file_name = "C" // trim(res_indx) // "_grid.tile" //  &
-                                  trim(tile_num) // ".nc"
+if ( halo.eq."-999" ) then  ! global or nested tile
+   FV3_grid_input_file_name = "C" // trim(res_indx) // "_grid.tile" //  &
+                                     trim(tile_num) // ".nc"
+else   ! stand-alone regional tile
+   FV3_grid_input_file_name = "C" // trim(res_indx) // "_grid.tile" //  &
+                   trim(tile_num) // ".halo" // trim(halo) // ".nc"
+end if
+
 print *, "Reading from file: ", FV3_grid_input_file_name
 
 ! Check that input file exists -- exit with error message if not
@@ -127,6 +135,16 @@ if (.not.fexist) then
    call exit(4)
 end if
 
+
+! In preparation for reading in grid data, account for existence
+! of halo points
+if ( halo.eq."-999" ) then   ! global or nested tile
+   halo_int = 0
+else
+   read(halo,*) halo_int     ! integer form of halo
+end if
+
+
 ! Open Cxxx_grid netCDF file for input and get dimensions
 err = nf90_open(FV3_grid_input_file_name,nf90_nowrite,ncid_in) 
 call netcdf_err(err, 'opening: '//FV3_grid_input_file_name)
@@ -135,13 +153,13 @@ err = nf90_inq_dimid(ncid_in,'nx',dimid)
 call netcdf_err(err, 'reading nx id')
 err = nf90_inquire_dimension(ncid_in,dimid,len=temp_int)
 call netcdf_err(err, 'reading nx value')
-dimX_FV3 = temp_int/2
+dimX_FV3 = temp_int/2 - 2*halo_int  ! shaving off any halo points from edges
 
 err = nf90_inq_dimid(ncid_in,'ny',dimid)
 call netcdf_err(err, 'reading ny id')
 err = nf90_inquire_dimension(ncid_in,dimid,len=temp_int)
 call netcdf_err(err, 'reading ny value')
-dimY_FV3 = temp_int/2
+dimY_FV3 = temp_int/2 - 2*halo_int  ! shaving off any halo points from edges
 
 print *, "dimX_FV3 =", dimX_FV3  ! number of model cells in x-direction
 print *, "dimY_FV3 =", dimY_FV3  ! number of model cells in y-direction
@@ -151,23 +169,26 @@ print *
 allocate (lat_FV3_raw((2*dimX_FV3+1),(2*dimY_FV3+1)))
 err = nf90_inq_varid(ncid_in,'y',varid)
 call netcdf_err(err, 'reading y id')
-err = nf90_get_var(ncid_in,varid,lat_FV3_raw,start=(/1,1/),    &
-                        count=(/2*dimX_FV3+1,2*dimY_FV3+1/))
+err = nf90_get_var(ncid_in,varid,lat_FV3_raw,                        &
+                   start=(/1+2*halo_int,1+2*halo_int/),              &
+                   count=(/2*dimX_FV3+1,2*dimY_FV3+1/))
 call netcdf_err(err, 'reading y')
 
 allocate (lon_FV3_raw((2*dimX_FV3+1),(2*dimY_FV3+1)))
 err = nf90_inq_varid(ncid_in,'x',varid)
 call netcdf_err(err, 'reading x id')
-err = nf90_get_var(ncid_in,varid,lon_FV3_raw,start=(/1,1/),    &
-                        count=(/2*dimX_FV3+1,2*dimY_FV3+1/))
+err = nf90_get_var(ncid_in,varid,lon_FV3_raw,                        &
+                   start=(/1+2*halo_int,1+2*halo_int/),              &
+                   count=(/2*dimX_FV3+1,2*dimY_FV3+1/))
 call netcdf_err(err, 'reading x')
 
 ! Read in quarter grid-cell areas
 allocate (area_FV3_qtr((2*dimX_FV3),(2*dimY_FV3)))
 err = nf90_inq_varid(ncid_in,'area',varid)
 call netcdf_err(err, 'reading area id')
-err = nf90_get_var(ncid_in,varid,area_FV3_qtr,start=(/1,1/),   &
-                        count=(/2*dimX_FV3,2*dimY_FV3/))
+err = nf90_get_var(ncid_in,varid,area_FV3_qtr,                       &
+                   start=(/1+2*halo_int,1+2*halo_int/),              &
+                   count=(/2*dimX_FV3,2*dimY_FV3/))
 call netcdf_err(err, 'reading area')
 
 ! Calculate lat/lon at mass points (cell-centers)
@@ -743,9 +764,13 @@ end do      ! i = 1,dimX_FV3
 !
 
 
-oro_data_output_file_name = "C" // trim(res_indx) // "_oro_data_ls.tile"   &
-                                // trim(tile_num) // ".nc"
-
+if ( halo.eq."-999" ) then   ! global or nested tile
+   oro_data_output_file_name = "C" // trim(res_indx) // "_oro_data_ls.tile" &
+                                   // trim(tile_num) // ".nc"
+else   ! stand-alone regional tile
+   oro_data_output_file_name = "C" // trim(res_indx) // "_oro_data_ls.tile" &
+                                   // trim(tile_num) // ".halo0.nc"
+end if
 
 ! Open netCDF file for output
 err = nf90_create(oro_data_output_file_name, NF90_CLOBBER, ncid_out)

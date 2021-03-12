@@ -1,8 +1,6 @@
 set(fortran_src
     module_gsl_oro_data_lg_scale.f90
-    module_gsl_oro_data_lg_scale.sar.f90
     module_gsl_oro_data_sm_scale.f90
-    module_gsl_oro_data_sm_scale.sar.f90
     gsl_oro_data.f90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
