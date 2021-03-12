@@ -1,4 +1,14 @@
 !> @file
+!! @brief Find limit
+!! @author Ning Wang
+
+!> Find limit
+!!
+!! @param[in] p1_in ???
+!! @param[in] p2_in ???
+!! @param[out] latmin ???
+!! @param[out] latmax ???
+!! @author Ning Wang
 !#define DIAG
 SUBROUTINE find_limit (p1_in, p2_in, latmin, latmax)
     REAL*8, INTENT(IN) :: p1_in(2), p2_in(2)

@@ -1,5 +1,8 @@
 !> @file
-!! This program computes lake fraction and depth numbers for FV3 cubed sphere 
+!! @brief Compute lake fraction and depth.
+!! @author Ning Wang
+
+!> This program computes lake fraction and depth numbers for FV3 cubed sphere 
 !! grid cells, from a high resolution lat/lon data set.
 !! 
 !! @author Ning Wang @date July 2018
@@ -12,6 +15,7 @@
 !!  - Ning Wang, Apr. 2019: Extended the program to process the same lake data 
 !!                         for FV3 stand-alone regional (SAR) model.
 !!     
+!! @return 0 for successful completion and for error.
 !#define DIAG_N_VERBOSE
 #define ADD_ATT_FOR_NEW_VAR
 PROGRAM lake_frac
@@ -129,6 +133,13 @@ PROGRAM lake_frac
     STOP
 CONTAINS
 
+!> Calculate lake fraction depth
+!!
+!! @param[in] lakestat ???
+!! @param[in] lakedpth ???
+!! @param[out] cs_lakestat ???
+!! @param[out] cs_lakedpth ???
+!! @author Ning Wang
 SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
     INTEGER*1, INTENT(IN) :: lakestat(:)
     INTEGER*2, INTENT(IN) :: lakedpth(:)
@@ -358,7 +369,11 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
 
 END SUBROUTINE cal_lake_frac_depth 
 
- 
+!> Read cubed sphere grid
+!!
+!! @param[in] res ???
+!! @param[out] grid ???
+!! @author Ning Wang
 SUBROUTINE read_cubed_sphere_grid(res, grid) 
     INTEGER, INTENT(IN) :: res
     REAL, INTENT(OUT) :: grid(:,:)
@@ -411,6 +426,14 @@ SUBROUTINE read_cubed_sphere_grid(res, grid)
 
 END SUBROUTINE read_cubed_sphere_grid
 
+!> Read cubed sphere reg grid
+!!
+!! @param[in] res ???
+!! @param[out] grid ???
+!! @param[in] halo_depth ???
+!! @param[out] res_x ???
+!! @param[out] res_y ???
+!! @author Ning Wang
 SUBROUTINE read_cubed_sphere_reg_grid(res, grid, halo_depth, res_x, res_y) 
     INTEGER, INTENT(IN) :: res, halo_depth
     INTEGER, INTENT(OUT) :: res_x, res_y
@@ -471,6 +494,13 @@ SUBROUTINE read_cubed_sphere_reg_grid(res, grid, halo_depth, res_x, res_y)
 
 END SUBROUTINE read_cubed_sphere_reg_grid
 
+!> Read lake data
+!!
+!! @param[in] lakedata_path ???
+!! @param[out] lake_stat ???
+!! @param[out] lake_dpth ???
+!! @param[in] nlat ???
+!! @param[in] nlon ???
 SUBROUTINE read_lakedata(lakedata_path,lake_stat,lake_dpth,nlat,nlon)
     CHARACTER(len=256), INTENT(IN) :: lakedata_path
     INTEGER*1, INTENT(OUT) :: lake_stat(:)
@@ -495,7 +525,12 @@ SUBROUTINE read_lakedata(lakedata_path,lake_stat,lake_dpth,nlat,nlon)
 
 END SUBROUTINE read_lakedata
    
-
+!> Write lake data to oro data.
+!!
+!! @param[in] cs_res ???
+!! @param[in] cs_lakestat ???
+!! @param[in] cs_lakedpth ???
+!! @author Ning Wang
 SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth) 
     USE netcdf 
     INTEGER, INTENT(IN) :: cs_res
@@ -685,6 +720,14 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
   
 END SUBROUTINE write_lakedata_to_orodata
 
+!> write reg lake data to oro data.
+!!
+!! @param[in] cs_res ???
+!! @param[in] tile_x_dim ???
+!! @param[in] tile_y_dim ???
+!! @param[in] cs_lakestat ???
+!! @param[in] cs_lakedpth ???
+!! @author Ning Wang
 SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lakestat, cs_lakedpth) 
     USE netcdf 
     INTEGER, INTENT(IN) :: cs_res, tile_x_dim, tile_y_dim
@@ -887,6 +930,11 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
 
 END SUBROUTINE write_reg_lakedata_to_orodata
 
+!> Check NetCDF error code
+!!
+!! @param[in] stat Error code.
+!! @param[in] opname NetCDF operation that failed.
+!! @author Ning Wang
 SUBROUTINE nc_opchk(stat,opname)
    USE netcdf
    IMPLICIT NONE
