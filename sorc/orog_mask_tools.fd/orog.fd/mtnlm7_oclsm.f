@@ -185,7 +185,6 @@ C> @return 0 for success, error code otherwise.
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &     OUTGRID,INPUTOROG)
 !jaa      use ipfort
-      use machine
       implicit none
       include 'netcdf.inc'
 C
