@@ -857,7 +857,6 @@ C
       tend=timef()
       write(6,*)' Timer 1 time= ',tend-tbeg
                                 !
-! --- CALL MAKEMT(ZAVG,ZSLM,ORO,OCLSM,mskocn,SLM,VAR,VAR4,GLAT,
       if(grid_from_file) then
        tbeg=timef()
          CALL MAKEMT2(ZAVG,ZSLM,ORO,SLM,land_frac,VAR,VAR4,GLAT,
@@ -865,10 +864,10 @@ C
       tend=timef()
       write(6,*)' MAKEMT2 time= ',tend-tbeg
       else
-
         CALL MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,GLAT,
      &   IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
       endif
+
        call minmxj(IM,JM,ORO,'     ORO')
        call minmxj(IM,JM,SLM,'     SLM')
        call minmxj(IM,JM,VAR,'     VAR')
@@ -1567,25 +1566,34 @@ C
       RETURN
       END
 
-!> makemt
+!> Create the orography, land-mask, standard deviation of
+!! orography and the convexity on a model gaussian grid.
+!! This routine was used for the spectral GFS model.
 !!
-!! @param[in] zavg ???
-!! @param[in] zslm ???
-!! @param[in] oro  ???
-!! @param[in] slm  ???
-!! @param[in] var  ???
-!! @param[in] var4 ???
-!! @param[in] glat ???
-!! @param[in] ist ???
-!! @param[in] ien ???
-!! @param[in] jst ???
-!! @param[in] jen ???
-!! @param[in] im "i" dimension of the model grid tile.
-!! @param[in] jm "j" dimension of the model grid tile.
-!! @param[in] imn ???
-!! @param[in] jmn ???
-!! @param[in] xlat ???
-!! @param[in] numi ???
+!! @param[in] zavg The high-resolution input orography dataset.
+!! @param[in] zslm The high-resolution input land-mask dataset.
+!! @param[out] oro Orography on the model grid.
+!! @param[out] slm Land-mask on the model grid.
+!! @param[out] var Standard deviation of orography on the model grid.
+!! @param[out] var4 Convexity on the model grid.
+!! @param[out] glat Latitude of each row of the high-resolution 
+!! orography and land-mask datasets.
+!! @param[out] ist This is the 'i' index of high-resolution data set
+!! at the east edge of the model grid cell.
+!! the high-resolution dataset with respect to the 'east' edge
+!! @param[out] ien This is the 'i' index of high-resolution data set
+!! at the west edge of the model grid cell.
+!! @param[out] jst  This is the 'j' index of high-resolution data set
+!! at the south edge of the model grid cell.
+!! @param[out] jen This is the 'j' index of high-resolution data set
+!! at the north edge of the model grid cell.
+!! @param[in] im "i" dimension of the model grid.
+!! @param[in] jm "j" dimension of the model grid.
+!! @param[in] imn "i" dimension of the hi-res input orog/mask dataset.
+!! @param[in] jmn "j" dimension of the hi-res input orog/mask dataset.
+!! @param[in] xlat The latitude of each row of the model grid.
+!! @param[in] numi For reduced gaussian grids, the number of 'i' points
+!! for each 'j' row.
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
      1 GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
