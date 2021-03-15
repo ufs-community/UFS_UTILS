@@ -1,6 +1,6 @@
 C> @file
 C> @brief This is a limited point version of surface program.
-C> @author M. Iredell, xuli, Hang Lei, George Gayno
+C> @author Shrinivas Moorthi Mark Iredell NOAA/EMC
 
 !> This program runs in two different modes:
 !!
