@@ -38,11 +38,22 @@ cd fix
 
 cd ../reg_tests
 
-for dir in chgres_cube grid_gen ice_blend snow2mdl; do
+for dir in chgres_cube grid_gen; do
     cd $dir
     ./driver.$target.sh
     cd ..
 done
+
+for dir in snow2mdl global_cycle ice_blend; do
+    cd $dir
+    if [[ $MACHINE_ID == "hera" ]] || [[ $MACHINE_ID == "jet" ]] || [[ $MACHINE_ID == "orion" ]]; then
+        sbatch ./driver.$target.sh
+    elif [[ $MACHINE_ID == "wcoss_dell_p3" ]] || [[ $MACHINE_ID == "wcoss_cray" ]]; then
+        cat ./driver.$target.sh | bsub
+    fi
+    cd ..
+done
+
 
 # Wait for jobs to complete by checking for summary.log
 time=0
