@@ -1,6 +1,6 @@
-!> @file
-!! @brief This is a limited point version of surface program.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+C> @file
+C> @brief This is a limited point version of surface program.
+C> @author M. Iredell, xuli, Hang Lei, George Gayno
 
 !> This program runs in two different modes:
 !!
@@ -3859,18 +3859,14 @@
      &                  tg3anl,cvanl ,cvbanl,cvtanl,
      &                  cnpanl,smcanl,stcanl,slianl,scvanl,veganl,
      &                  vetanl,sotanl,alfanl,
-!cwu [+1l] add ()anl for sih, sic
      &                  sihanl,sicanl,
-!clu [+1l] add ()anl for vmn, vmx, slp, abs
      &                  vmnanl,vmxanl,slpanl,absanl,
      &                  tsfclm,tsfcl2,wetclm,snoclm,zorclm,albclm,
      &                  aisclm,
      &                  tg3clm,cvclm ,cvbclm,cvtclm,
      &                  cnpclm,smcclm,stcclm,sliclm,scvclm,vegclm,
      &                  vetclm,sotclm,alfclm,
-!cwu [+1l] add ()clm for sih, sic
      &                  sihclm,sicclm,
-!clu [+1l] add ()clm for vmn, vmx, slp, abs
      &                  vmnclm,vmxclm,slpclm,absclm,
      &                  len,lsoil)
       use machine , only : kind_io8,kind_io4
@@ -4082,25 +4078,19 @@
      &                 slmask,fntsfa,fnweta,fnsnoa,fnzora,fnalba,fnaisa,
      &                 fntg3a,fnscva,fnsmca,fnstca,fnacna,fnvega,
      &                 fnveta,fnsota,
-!clu [+1l] add fn()a for vmn, vmx, slp, abs
      &                 fnvmna,fnvmxa,fnslpa,fnabsa,
      &                 tsfanl,wetanl,snoanl,zoranl,albanl,aisanl,
      &                 tg3anl,cvanl ,cvbanl,cvtanl,
      &                 smcanl,stcanl,slianl,scvanl,acnanl,veganl,
      &                 vetanl,sotanl,alfanl,tsfan0,
-!clu [+1l] add ()anl for vmn, vmx, slp, abs
      &                 vmnanl,vmxanl,slpanl,absanl,
-!cggg snow mods start    &        kpdtsf,kpdwet,kpdsno,kpdzor,kpdalb,kpdais,
      &                 kpdtsf,kpdwet,kpdsno,kpdsnd,kpdzor,kpdalb,kpdais,
-!cggg snow mods end
      &                 kpdtg3,kpdscv,kpdacn,kpdsmc,kpdstc,kpdveg,
      &                 kprvet,kpdsot,kpdalf,
-!clu [+1l] add kpd() for vmn, vmx, slp, abs
      &                 kpdvmn,kpdvmx,kpdslp,kpdabs,
      &                 irttsf,irtwet,irtsno,irtzor,irtalb,irtais,
      &                 irttg3,irtscv,irtacn,irtsmc,irtstc,irtveg,
      &                 irtvet,irtsot,irtalf
-!clu [+1l] add irt() for vmn, vmx, slp, abs
      &,                irtvmn,irtvmx,irtslp,irtabs
      &,                imsk, jmsk, slmskh, outlat, outlon
      &,                gaus, blno, blto, me, lanom)
@@ -4803,17 +4793,13 @@
      &                  tg3fcs,cvfcs ,cvbfcs,cvtfcs,
      &                  cnpfcs,smcfcs,stcfcs,slifcs,aisfcs,
      &                  vegfcs, vetfcs, sotfcs, alffcs,
-!cwu [+1l] add ()fcs for sih, sic
      &                  sihfcs,sicfcs,
-!clu [+1l] add ()fcs for vmn, vmx, slp, abs
      &                  vmnfcs,vmxfcs,slpfcs,absfcs,
      &                  tsfanl,wetanl,snoanl,zoranl,albanl,
      &                  tg3anl,cvanl ,cvbanl,cvtanl,
      &                  cnpanl,smcanl,stcanl,slianl,aisanl,
      &                  veganl, vetanl, sotanl, alfanl,
-!cwu [+1l] add ()anl for sih, sic
      &                  sihanl,sicanl,
-!clu [+1l] add ()anl for vmn, vmx, slp, abs
      &                  vmnanl,vmxanl,slpanl,absanl,
      &                  len,lsoil)
 !
@@ -5686,7 +5672,6 @@
 !! @author Shrinivas Moorthi
 !! @author Xingen Wu
       subroutine newice(slianl,slifcs,tsfanl,tsffcs,len,lsoil,
-!cwu [+1l] add sihnew,sicnew,sihanl,sicanl
      &                   sihnew,sicnew,sihanl,sicanl,      
      &                   albanl,snoanl,zoranl,smcanl,stcanl,
      &                   albsea,snosea,zorsea,smcsea,smcice,
