@@ -173,7 +173,7 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] NF0 First order spectral filter parameters.
 !! @param[in] NF1 Second order spectral filter parameters.
 !! @param[in] NW ???
-!! @param[in] EFAC ???
+!! @param[in] EFAC Factor to adjust orography by its variance.
 !! @param[in] BLAT When less than zero, reverse latitude/
 !! longitude for output.
 !! @param[in] OUTGRID The 'grid' file for the model tile.
@@ -1580,8 +1580,8 @@ C
 !! @param[in] ien ???
 !! @param[in] jst ???
 !! @param[in] jen ???
-!! @param[in] im  ???
-!! @param[in] jm  ???
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
 !! @param[in] imn ???
 !! @param[in] jmn ???
 !! @param[in] xlat ???
@@ -1831,8 +1831,8 @@ C
 !! @param[in] var ???
 !! @param[in] var4 ???
 !! @param[in] glat ???
-!! @param[in] im ???
-!! @param[in] jm ???
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
 !! @param[in] imn ???
 !! @param[in] jmn ???
 !! @param[in] lon_c ???
@@ -1982,8 +1982,8 @@ C
 !! @param[in] ien ???
 !! @param[in] jst ???
 !! @param[in] jen ???
-!! @param[in] im ???
-!! @param[in] jm ???
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
 !! @param[in] imn ???
 !! @param[in] jmn ???
 !! @param[in] xlat ???
@@ -2252,8 +2252,8 @@ C
 !! @param[in] gamma ???
 !! @param[in] sigma ???
 !! @param[in] glat ???
-!! @param[in] im ???
-!! @param[in] jm ???
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
 !! @param[in] imn ???
 !! @param[in] jmn ???
 !! @param[in] lon_c ???
@@ -2496,7 +2496,7 @@ C
 !!
 !! @param[in] zavg ???
 !! @param[in] var ???
-!! @param[in] glat ???
+!! @param[out] glat Latitude of each row of input terrain dataset.
 !! @param[in] oa4 ???
 !! @param[in] ol ???
 !! @param[in] ioa4 ???
@@ -2512,10 +2512,10 @@ C
 !! @param[in] ien ???
 !! @param[in] jst ???
 !! @param[in] jen ???
-!! @param[in] im  ???
-!! @param[in] jm ???
-!! @param[in] imn ???
-!! @param[in] jmn ???
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
+!! @param[in] imn "i" dimension of the input terrain dataset.
+!! @param[in] jmn "j" dimension of the input terrain dataset.
 !! @param[in] xlat ???
 !! @param[in] numi ???
 !! @author Jordan Alpert NOAA/EMC
@@ -2890,8 +2890,8 @@ C
 !! @param[in] xnsum2 ???
 !! @param[in] xnsum3 ???
 !! @param[in] xnsum4, ???
-!! @param[in] im ???
-!! @param[in] jm  ???
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
 !! @param[in] imn ???
 !! @param[in] jmn ???
 !! @param[in] lon_c ???
@@ -3438,8 +3438,8 @@ C
 !! @param[in] xnsum2 ???
 !! @param[in] xnsum3 ???
 !! @param[in] xnsum4 ???
-!! @param[in] im ???
-!! @param[in] jm ???
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
 !! @param[in] imn ???
 !! @param[in] jmn ???
 !! @param[in] lon_c ???
@@ -4498,7 +4498,7 @@ C
 !! @param[in] delxn  ???
 !! @param[in] xnsum1 ???
 !! @param[in] xnsum2 ???
-!! @param[in] hc ???
+!! @param[out] hc Critical height.
 !! @author Jordan Alpert NOAA/EMC
       subroutine get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn,xnsum1,xnsum2,HC)
@@ -4581,7 +4581,7 @@ C
 !! @param[in] delxn  ???
 !! @param[in] xnsum1 ???
 !! @param[in] xnsum2 ???
-!! @param[in] hc ???
+!! @param[in] hc Critical height.
 !! @author Jordan Alpert NOAA/EMC
       subroutine get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn,xnsum1,xnsum2,HC)
