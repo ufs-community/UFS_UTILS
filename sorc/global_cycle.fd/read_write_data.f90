@@ -1080,7 +1080,8 @@ MODULE READ_WRITE_DATA
  !! native grid assumes no pole points, so these are removed.
  !!
  !! @param[in] GSI_FILE Path/name of the GSI file to be read.
- !! @param[in] FILE_TYPE file-type to be read in, 'NST' or 'LND'
+ !! @param[in] FILE_TYPE file-type to be read in, 'NST' or 'LND'.
+ !! @param[in] LSOIL Number of model soil levels.
  !! 
  !! @author George Gayno NOAA/EMC
  SUBROUTINE READ_GSI_DATA(GSI_FILE, FILE_TYPE, LSOIL) 

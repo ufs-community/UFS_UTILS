@@ -40,7 +40,7 @@
 !!                     file.
 !!  - $NST_FILE        Gaussian GSI file which contains NSST
 !!                     TREF increments
-!!  -$LND_FILE         Gaussian GSI file which contains soil state
+!!  - $LND_FILE        Gaussian GSI file which contains soil state
 !!                     increments
 !!  
 !!  OUTPUT FILES:
@@ -283,8 +283,9 @@
  !! @param[in] USE_UFO When true, adjust SST and soil temperature for
  !!            differences between the filtered and unfiltered terrain.
  !! @param[in] DO_NSST When true, process NSST records.
- !! @param[in] ADJT_NST_ONLY When true, only do the NSST update (don't
- !!            call sfcsub component.
+ !! @param[in] DO_SFCCYCLE Call sfccycle routine to update surface fields
+ !! @param[in] DO_LNDINC Read in land increment files, and add increments to
+ !!            soil states.
  !! @param[in] ZSEA1 When running NSST model, this is the lower bound
  !!            of depth of sea temperature.  In whole mm.
  !! @param[in] ZSEA2 When running NSST model, this is the upper bound
@@ -1045,15 +1046,27 @@ ENDIF
 
  END SUBROUTINE ADJUST_NSST
 
+ !> Read in gsi file with soil state  increments (on the gaussian
+ !! grid), interpolate increments to the cubed-sphere tile, and
+ !! add to the soil states. Adapted from adjust_nsst. 
+ !! Currently only coded for soil temperature. Soil moisture will 
+ !! need the model soil moisture paramaters for regridding.
+ !!
+ !! @param[inout] RLA Latitude on the cubed-sphere tile
+ !! @param[inout] RLO Longitude on the cubed-sphere tile
+ !! @param[inout] STC_STATE 
+ !! @param[in] SOILSNOW_TILE Snow mask for land on the cubed-sphere tile
+ !! @param[in] SOILSNOW_FG_TILE First guess snow mask for land on the cubed-sphere tile
+ !! @param[in] LENSFC Number of points on a tile
+ !! @param[in] LSOIL Number of soil layers
+ !! @param[in] IDIM 'I' dimension of a tile
+ !! @param[in] JDIM 'J' dimension of a tile
+ !! @param[in] MYRANK MPI rank number
+ !!
+ !! @author Clara Draper. @date March 2021
 
  SUBROUTINE ADJUST_SOIL(RLA,RLO,STC_STATE,SOILSNOW_TILE, SOILSNOW_FG_TILE, & 
                         LENSFC,LSOIL,IDIM,JDIM, MYRANK) 
-
-!--------------------------------------------------------------------------------
-! USING SOIL  INCREMENTS ALREADY READ IN  (ON THE GAUSSIAN
-! GRID), INTERPOLATE INCREMENTS TO THE CUBED-SPHERE TILE, AND PERFORM
-! REQUIRED SOIL ADJUSTMENTS AND QC.
-!--------------------------------------------------------------------------------
 
  USE GDSWZD_MOD
  USE READ_WRITE_DATA, ONLY : IDIM_GAUS, JDIM_GAUS, &
@@ -2177,8 +2190,14 @@ subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
  return
  end
 
+!> Calculate soil mask for land on model grid. 
+!! Output is 1  - soil, 2 - snow-covered, 0 - land ice or not land.
+!! @param[in] lensfc  Total numberof points for the cubed-sphere tile.
+!! @param[in] smc Model soil moisture.
+!! @param[in] swe Model snow water equivalent
+!! @param[out] mask Output mask. Values are, 1  - soil, 2 - snow-covered, 0 - land ice or not land.
+!! @author Clara Draper @date March 2021
  subroutine calculate_soilsnowmask(smc,swe,lensfc,mask)
- ! calculate soilsnowmask: 1  - soil, 2 - snow-covere, 0 - other
  
   implicit none 
 
