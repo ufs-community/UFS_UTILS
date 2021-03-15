@@ -5,4 +5,5 @@
 
 # Add the test subdirecotries.
 add_subdirectory(chres_cube)
+add_subdirectory(fre-nctools)
 

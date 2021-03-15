@@ -1,8 +1,11 @@
 !> @file
-!! This program creates the inland mask and writes it to the orography data files.
-!! 
+!! @brief Program and associated routines for creating inland mask.
 !! @author Ning Wang @date July 1, 2020
+
+!> This program creates the inland mask and writes it to the orography data files.
 !!
+!! @author Ning Wang
+!! @return 0 for success, error otherwise.
 PROGRAM inland_mask
   USE cs_nb
   IMPLICIT NONE
@@ -20,7 +23,7 @@ PROGRAM inland_mask
   REAL :: cutoff
   CHARACTER(len=1) :: reg
 
-  LOGICAL, ALLOCATABLE :: done(:,:,:) 
+  LOGICAL, ALLOCATABLE :: done(:,:,:)
 
   CALL getarg(0, arg) ! get the program name
   IF (iargc() /= 3 .AND. iargc() /= 4) THEN
@@ -68,6 +71,11 @@ PROGRAM inland_mask
 
 CONTAINS
 
+!> Create inland mask for global grid.
+!!
+!! @param[in] cs_res cubed sphere resolution (48, 96...)
+!!
+!! @author Ning Wang  
 SUBROUTINE mark_global_inland(cs_res)
   INTEGER, INTENT(IN) :: cs_res
  
@@ -83,6 +91,11 @@ SUBROUTINE mark_global_inland(cs_res)
 
 END SUBROUTINE mark_global_inland
 
+!> Create inland mask for regional grid.
+!!
+!! @param[in] cs_res cubed sphere resolution (48, 96...)
+!!
+!! @author Ning Wang
 SUBROUTINE mark_inland_reg(cs_res)
   INTEGER, INTENT(IN) :: cs_res
   INTEGER :: i_seed, j_seed
@@ -107,6 +120,14 @@ SUBROUTINE mark_inland_reg(cs_res)
 
 END SUBROUTINE mark_inland_reg
 
+!> Recursively walk through neighbors marking inland points for global grid.
+!!
+!! @param[in] i cell index
+!! @param[in] j cell index
+!! @param[in] t tile number
+!! @param[in] rd current recursive depth (starts at 0)
+!!
+!! @author Ning Wang
 RECURSIVE SUBROUTINE mark_global_inland_rec_d(i, j, t, rd)
   INTEGER, INTENT(IN) :: i, j, t, rd
 
@@ -136,6 +157,14 @@ RECURSIVE SUBROUTINE mark_global_inland_rec_d(i, j, t, rd)
   
 END SUBROUTINE mark_global_inland_rec_d
 
+!> Recursively walk through neighbors marking inland points for regional grid.
+!!
+!! @param[in] i cell index
+!! @param[in] j cell index
+!! @param[in] t tile face
+!! @param[in] rd current recursive depth (starts at 0)
+!!
+!! @author Ning Wang
 RECURSIVE SUBROUTINE mark_regional_inland_rec_d(i, j, t, rd)
   INTEGER, INTENT(IN) :: i, j, t, rd
 
@@ -165,6 +194,11 @@ RECURSIVE SUBROUTINE mark_regional_inland_rec_d(i, j, t, rd)
   
 END SUBROUTINE mark_regional_inland_rec_d
 
+!> Read in orography (land fraction) data.
+!!
+!! @param[in] cs_res cubed sphere resolution (48, 96...)
+!!
+!! @author Ning Wang
 SUBROUTINE read_orog(cs_res)
   USE netcdf 
   INTEGER, INTENT(IN) :: cs_res
@@ -206,6 +240,11 @@ SUBROUTINE read_orog(cs_res)
 
 END SUBROUTINE read_orog
 
+!> Read in orography (land fraction) data for regional grid.
+!!
+!! @param[in] cs_res cubed sphere resolution (48, 96...)
+!!
+!! @author Ning Wang
 SUBROUTINE read_orog_reg(cs_res)
   USE netcdf 
   INTEGER, INTENT(IN) :: cs_res
@@ -253,6 +292,11 @@ SUBROUTINE read_orog_reg(cs_res)
 
 END SUBROUTINE read_orog_reg
 
+!> Write inland back to the orography data files for global grid
+!!
+!! @param[in] cs_res cubed sphere resolution (48, 96...)
+!!
+!! @author Ning Wang
 SUBROUTINE write_inland(cs_res)
   USE netcdf 
   INTEGER, INTENT(IN) :: cs_res
@@ -310,6 +354,11 @@ SUBROUTINE write_inland(cs_res)
 
 END SUBROUTINE write_inland
 
+!> Write inland back to the orography data files for regional grid.
+!!
+!! @param[in] cs_res cubed sphere resolution (48, 96...)
+!!
+!! @author Ning Wang
 SUBROUTINE write_inland_reg(cs_res)
   USE netcdf 
   INTEGER, INTENT(IN) :: cs_res
@@ -372,12 +421,19 @@ SUBROUTINE write_inland_reg(cs_res)
 
 END SUBROUTINE write_inland_reg
 
+!> Deallocate module arrays
 SUBROUTINE free_mem()
 
   DEALLOCATE(inland, land_frac)
 
 END SUBROUTINE free_mem
 
+!> Check NetCDF return code and print error message.
+!!
+!! @param[in] stat status code returned from NetCDF
+!! @param[in] opname description of NetCDF operation called
+!!
+!! @author Ning Wang
 SUBROUTINE nc_opchk(stat,opname)
    USE netcdf
    IMPLICIT NONE

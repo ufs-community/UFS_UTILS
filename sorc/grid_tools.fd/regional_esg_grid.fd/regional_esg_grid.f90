@@ -1,7 +1,21 @@
 !> @file
-!=============================================================================
+!! @brief Compute geo-referencing parameters for the Extended
+!! Schmidt Gnomonic (ESG) regional grid.
+!! @author R. J. Purser
+
+!> Driver routine to compute geo-referencing parameters for
+!! the Extended Schmidt Gnomonic (ESG) regional grid.
+!! The parameters are:
+!! - Geographic longitude (degrees)
+!! - Geographic latitude (degrees)
+!! - Grid edge 'x' distance (meters)
+!! - Grid edge 'y' distance (meters)
+!! - Area (meters squared)
+!! - Grid vertex 'x' angle with respect to geographic east (degrees)
+!! - Grid vertex 'y' angle with respect to geographic north (degrees)
+!! @author R. J. Purser
+!! @return 0 for success, error code otherwise.
 program regional_grid
-!=============================================================================
 
   use pkind, only: dp
   use pietc, only: dtor,rtod
@@ -169,6 +183,10 @@ program regional_grid
 
 end program regional_grid
 
+!> Check results of netCDF call.
+!!
+!! @param[in] status return code to check
+!! @author R. J. Purser
 subroutine check(status)
 use netcdf
 integer,intent(in) :: status
