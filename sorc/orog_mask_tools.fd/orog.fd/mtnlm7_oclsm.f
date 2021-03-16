@@ -1852,8 +1852,8 @@ C
 !! @param[in] jm "j" dimension of the model grid.
 !! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
 !! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
-!! @param[in] lon_c Longitude on the model tile.
-!! @param[in] lat_c Latitude on the model tile.
+!! @param[in] lon_c Longitude of the model grid corner points.
+!! @param[in] lat_c Latitude on the model grid corner points.
 !! @author GFDL Programmer
       SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,land_frac,VAR,VAR4,
      1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
@@ -2286,8 +2286,8 @@ C
 !! @param[in] jm "j" dimension of the model grid tile.
 !! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
 !! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
-!! @param[in] lon_c Longitude on the model grid tile.
-!! @param[in] lat_c Latitude on the model grid tile.
+!! @param[in] lon_c Longitude of model grid corner points.
+!! @param[in] lat_c Latitude of the model grid corner points.
 !! @author GFDL Programmer
       SUBROUTINE MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1           GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
@@ -2913,36 +2913,42 @@ C
          
       end function get_lat_angle
       
-!> makeoa2
+!> Create orographic asymmetry and orographic length scale on
+!! the model grid.  This routine is used for the spectral
+!! GFS gaussian grid.
 !!
-!! @param[in] zavg ???
-!! @param[in] zslm  ???
-!! @param[in] var ???
-!! @param[in] glat ???
-!! @param[in] oa4 ???
-!! @param[in] ol ???
-!! @param[in] ioa4 ???
-!! @param[in] elvmax ???
-!! @param[in] oro ???
-!! @param[in] oro1 ???
-!! @param[in] xnsum ???
-!! @param[in] xnsum1 ???
-!! @param[in] xnsum2 ???
-!! @param[in] xnsum3 ???
-!! @param[in] xnsum4, ???
+!! @param[in] zavg High-resolution orography data.
+!! @param[in] zslm High-resolution land-mask data.
+!! @param[in] var Standard deviation of orography on the model grid.
+!! @param[out] glat Latitude of each row of input terrain dataset.
+!! @param[out] oa4 Orographic asymmetry on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ol Orographic length scale on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ioa4 Count of oa4 values between certain thresholds.
+!! @param[out] elvmax Maximum elevation within a model grid box.
+!! @param[in] oro Orography on the model grid.
+!! @param[out] oro1 Save array for model grid orography.
+!! @param[out] xnsum Not used.
+!! @param[out] xnsum1 Not used.
+!! @param[out] xnsum2 Not used.
+!! @param[out] xnsum3 Not used.
+!! @param[out] xnsum4 Not used.
 !! @param[in] im "i" dimension of the model grid tile.
 !! @param[in] jm "j" dimension of the model grid tile.
-!! @param[in] imn ???
-!! @param[in] jmn ???
-!! @param[in] lon_c ???
-!! @param[in] lat_c ???
-!! @param[in] lon_t ???
-!! @param[in] lat_t ???
-!! @param[in] dx ???
-!! @param[in] dy ???
-!! @param[in] is_south_pole ???
-!! @param[in] is_north_pole ???
-!! @author Jordan Alpert NOAA/EMC
+!! @param[in] imn "i" dimension of the high-resolution orography and
+!! mask data.
+!! @param[in] jmn "j" dimension of the high-resolution orography and
+!! mask data.
+!! @param[in] lon_c Corner point longitudes of the model grid points.
+!! @param[in] lat_c Corner point latitudes of the model grid points.
+!! @param[in] lon_t Center point longitudes of the model grid points.
+!! @param[in] lat_t Center point latitudes of the model grid points.
+!! @param[in] dx Length of model grid points in the 'x' direction.
+!! @param[in] dy Length of model grid points in the 'y' direction.
+!! @param[in] is_south_pole Is the model point at the south pole?
+!! @param[in] is_north_pole is the model point at the north pole?
+!! @author GFDL Programmer
       SUBROUTINE MAKEOA2(ZAVG,zslm,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,dx,dy,
