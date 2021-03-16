@@ -2876,14 +2876,16 @@ C
       WRITE(6,*) "! MAKEOA EXIT"
 C
       RETURN
-      END
+      END SUBROUTINE MAKEOA
 
-!> Get longitude angle
+!> Convert the 'x' direction distance of a cubed-sphere grid
+!! point to the corresponding distance in longitude.
 !!
-!! @param[in] dx ???
-!! @param[in] lat ???
-!! @param[in] degrad ???
-!! @return get_lon_angle Longitude angle.
+!! @param[in] dx Distance along the 'x' direction of a 
+!! cubed-sphere grid point.
+!! @param[in] lat Latitude of the cubed-sphere point.
+!! @param[in] degrad  Conversion from radians to degrees.
+!! @return get_lon_angle Corresponding distance in longitude.
 !! @author GFDL programmer
       function get_lon_angle(dx,lat, DEGRAD)
       implicit none
@@ -2896,11 +2898,13 @@ C
          
       end function get_lon_angle
 
-!> Get latitude angle
+!> Convert the 'y' direction distance of a cubed-sphere grid
+!! point to the corresponding distance in latitude.
 !!
-!! @param[in] dy ???
-!! @param[in] degrad ???
-!! @return get_lat_angle ???
+!! @param[in] dy Distance along the 'y' direction of a cubed-sphere
+!! point.
+!! @param[in] degrad Conversion from radians to degrees.
+!! @return get_lat_angle Corresponding distance in latitude.
 !! @author GFDL programmer
       function get_lat_angle(dy, DEGRAD)
       implicit none
@@ -3333,14 +3337,14 @@ C
       WRITE(6,*) "! MAKEOA2 EXIT"
 C
       RETURN
-      END
+      END SUBROUTINE MAKEOA2
  
-!> Compute a great circle distance
+!> Compute a great circle distance between two points.
 !!
-!! @param[in] theta1 ???
-!! @param[in] phi1 ???
-!! @param[in] theta2 ???
-!! @param[in] phi2 ???
+!! @param[in] theta1 Longitude of point 1.
+!! @param[in] phi1 Latitude of point 1.
+!! @param[in] theta2 Longitude of point 2.
+!! @param[in] phi2 Latitude of point2.
 !! @return spherical_distance Great circle distance.
 !! @author GFDL programmer
       function spherical_distance(theta1,phi1,theta2,phi2)
