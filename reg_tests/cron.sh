@@ -4,12 +4,12 @@ export MAILTO="kyle.gerheiser@noaa.gov"
 
 export UFS_UTILS_WORKING_DIR=/home/Kyle.Gerheiser/UFS_UTILS-cron
 export UFS_UTILS_HOME_DIR=$PWD/..
+export PROJECT_CODE=nems
+export MACHINE_ID=hera
 
 mkdir -p ${UFS_UTILS_WORKING_DIR}
 cd ${UFS_UTILS_WORKING_DIR}
 rm -rf UFS_UTILS
-
-export MACHINE_ID=hera
 
 cd ${UFS_UTILS_WORKING_DIR}
 
@@ -47,9 +47,9 @@ done
 for dir in snow2mdl global_cycle ice_blend; do
     cd $dir
     if [[ $MACHINE_ID == "hera" ]] || [[ $MACHINE_ID == "jet" ]] || [[ $MACHINE_ID == "orion" ]]; then
-        sbatch ./driver.$target.sh
+        sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $MACHINE_ID == "wcoss_dell_p3" ]] || [[ $MACHINE_ID == "wcoss_cray" ]]; then
-        cat ./driver.$target.sh | bsub
+        cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
     fi
     cd ..
 done
