@@ -1829,23 +1829,26 @@ C
 
       END   
       
-!> makemt2
+!> Create the orography, land-mask, land fraction, standard 
+!! deviation of orography and the convexity on a model 
+!! cubed-sphere tile. This routine is used for the FV3GFS model.
 !!
-!! @param[in] zavg ???
-!! @param[in] zslm ???
-!! @param[in] oro ???
-!! @param[in] slm ???
-!! @param[in] land_frac ???
-!! @param[in] var ???
-!! @param[in] var4 ???
-!! @param[in] glat ???
-!! @param[in] im "i" dimension of the model grid tile.
-!! @param[in] jm "j" dimension of the model grid tile.
-!! @param[in] imn ???
-!! @param[in] jmn ???
-!! @param[in] lon_c ???
-!! @param[in] lat_c ???
-!! @author Jordan Alpert NOAA/EMC
+!! @param[in] zavg The high-resolution input orography dataset.
+!! @param[in] zslm The high-resolution input land-mask dataset.
+!! @param[out] oro Orography on the model tile.
+!! @param[out] slm Land-mask on the model tile.
+!! @param[out] land_frac Land fraction on the model tile.
+!! @param[out] var Standard deviation of orography on the model tile.
+!! @param[out] var4 Convexity on the model tile.
+!! @param[out] glat Latitude of each row of the high-resolution 
+!! orography and land-mask datasets.
+!! @param[in] im "i" dimension of the model grid.
+!! @param[in] jm "j" dimension of the model grid.
+!! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
+!! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
+!! @param[in] lon_c Longitude on the model tile.
+!! @param[in] lat_c Latitude on the model tile.
+!! @author GFDL Programmer
       SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,land_frac,VAR,VAR4,
      1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
       implicit none
