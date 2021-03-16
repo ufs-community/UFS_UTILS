@@ -29,8 +29,8 @@ module list
 set -x
 
 export WORK_DIR=/work/noaa/stmp/$LOGNAME/reg_tests.grid
-QUEUE="${QUEUE:-batch]"
-PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+QUEUE="${QUEUE:-batch}"
+PROJECT_CODE=${PROJECT_CODE:-fv3-cpu}
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
