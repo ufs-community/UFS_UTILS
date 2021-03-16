@@ -30,8 +30,8 @@ module load build.$target.intel
 module list
 
 export OUTDIR=/work/noaa/stmp/$LOGNAME/chgres_reg_tests
-PROJECT_CODE="fv3-cpu"
-QUEUE="debug"
+PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+QUEUE="${QUEUE:-debug}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root

@@ -32,8 +32,8 @@ module load build.$target.$compiler
 module list
 
 export OUTDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/chgres_reg_tests
-PROJECT_CODE="fv3-cpu"
-QUEUE="batch"
+PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+QUEUE="${QUEUE:-batch}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root

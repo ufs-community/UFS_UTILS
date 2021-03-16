@@ -28,8 +28,8 @@ module list
 
 set -x
 
-QUEUE="windfall"
-PROJECT_CODE="emcda"
+QUEUE="${QUEUE:-windfall}"
+PROJECT_CODE="${PROJECT_CODE:-emcda}"
 export WORK_DIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_tests.grid
 
 #-----------------------------------------------------------------------------

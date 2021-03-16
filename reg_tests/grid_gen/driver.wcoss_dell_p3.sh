@@ -26,8 +26,8 @@ module list
 
 set -x
 
-QUEUE="debug"
-PROJECT_CODE="GFS-DEV"
+QUEUE="${QUEUE:-debug}"
+PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
 export WORK_DIR=/gpfs/dell1/stmp/$LOGNAME/reg_tests.grid
 
 #-----------------------------------------------------------------------------

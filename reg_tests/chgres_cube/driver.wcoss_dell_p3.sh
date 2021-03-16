@@ -28,8 +28,8 @@ module load build.$target.intel
 module list
 
 export OUTDIR=/gpfs/dell1/stmp/$LOGNAME/chgres_reg_tests
-QUEUE="debug"
-PROJECT_CODE="GFS-DEV"
+QUEUE="${QUEUE:-debug}"
+PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
