@@ -23,14 +23,6 @@
 !!     used to flag points that flipped from ice to open water.
 !!     To invoke this option, set DONST=.true. and NST_FILE="NULL".
 !!
-!!  4) Perform the NSST TREF adjustment only.  Surface fields are
-!!     only cycled.  To run with this option, set DONST=.true.,
-!!     GSI_FILE to the GSI increment file, and ADJT_NST_ONLY=.true.
-!!     The input cubed-sphere restart files must be those from
-!!     option (3).
-!!
-!!  NOTE: running (3) then (4) is equivalent to running (2).
-!!  
 !!  INPUT FILES:
 !!  - fngrid.$NNN      The cubed-sphere grid file (contains
 !!                     grid point latitude and longitdue).
