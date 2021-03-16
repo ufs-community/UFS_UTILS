@@ -2,10 +2,10 @@
 
 export MAILTO="kyle.gerheiser@noaa.gov"
 
-export UFS_UTILS_WORKING_DIR=/home/Kyle.Gerheiser/UFS_UTILS-cron
+export UFS_UTILS_WORKING_DIR=/home/gkyle/reg_tests
 export UFS_UTILS_HOME_DIR=$PWD/..
 export PROJECT_CODE=nems
-export MACHINE_ID=hera
+export MACHINE_ID=orion
 
 mkdir -p ${UFS_UTILS_WORKING_DIR}
 cd ${UFS_UTILS_WORKING_DIR}
