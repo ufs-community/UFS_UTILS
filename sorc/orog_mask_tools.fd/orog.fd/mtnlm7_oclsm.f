@@ -2520,7 +2520,7 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
       WRITE(6,*) "! MAKE Principal Coord  DONE"
 C
       RETURN
-      END
+      END SUBROUTINE MAKEPC2
       
 !> Create orographic asymmetry and orographic length scale on
 !! the model grid.  This routine is used for the spectral
@@ -2539,10 +2539,14 @@ C
 !! @param[out] oro1 Save array for model grid orography.
 !! @param[out] xnsum Number of high-resolution orography points
 !! higher than the model grid box average.
-!! @param[in] xnsum1 ???
-!! @param[in] xnsum2 ???
-!! @param[in] xnsum3 ???
-!! @param[in] xnsum4 ???
+!! @param[out] xnsum1 Number of high-resolution orography points
+!! higher than the critical height.
+!! @param[out] xnsum2 Total number of high-resolution orography points
+!! within a model grid box.
+!! @param[out] xnsum3 Same as xnsum1, except shifted by half a 
+!! model grid box.
+!! @param[out] xnsum4 Same as xnsum2, except shifted by half a
+!! model grid box.
 !! @param[out] ist This is the 'i' index of high-resolution data set
 !! at the east edge of the model grid cell.
 !! @param[out] ien This is the 'i' index of high-resolution data set
@@ -2918,8 +2922,8 @@ C
       end function get_lat_angle
       
 !> Create orographic asymmetry and orographic length scale on
-!! the model grid.  This routine is used for the spectral
-!! GFS gaussian grid.
+!! the model grid.  This routine is used for the cubed-sphere
+!! grid.
 !!
 !! @param[in] zavg High-resolution orography data.
 !! @param[in] zslm High-resolution land-mask data.
@@ -3470,41 +3474,49 @@ C
 
       end subroutine interpolate_mismatch
       
-!> Makeoa3
+!> Create orographic asymmetry and orographic length scale on
+!! the model grid. This routine is used for the cubed-sphere
+!! grid. The asymmetry and length scales are interpolated
+!! from an existing gfs orography file. The maximum elevation
+!! is computed from the high-resolution orography data.
 !!
-!! @param[in] zavg ???
-!! @param[in] zslm ???
-!! @param[in] var ???
-!! @param[in] glat ???
-!! @param[in] oa4 ???
-!! @param[in] ol ???
-!! @param[in] ioa4 ???
-!! @param[in] elvmax ???
-!! @param[in] oro ???
-!! @param[in] slm ???
-!! @param[in] oro1 ???
-!! @param[in] xnsum ???
-!! @param[in] xnsum1 ???
-!! @param[in] xnsum2 ???
-!! @param[in] xnsum3 ???
-!! @param[in] xnsum4 ???
+!! @param[in] zavg High-resolution orography data.
+!! @param[in] zslm High-resolution land-mask data.  Not used.
+!! @param[in] var Standard deviation of orography on the model grid.
+!! @param[out] glat Latitude of each row of input terrain dataset.
+!! @param[out] oa4 Orographic asymmetry on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ol Orographic length scale on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ioa4 Count of oa4 values between certain thresholds.
+!! @param[out] elvmax Maximum elevation within a model grid box.
+!! @param[in] slm Land-mask on model grid.
+!! @param[in] oro Orography on the model grid.
+!! @param[out] oro1 Save array for model grid orography.
+!! @param[in] xnsum Not used.
+!! @param[in] xnsum1 Not used.
+!! @param[in] xnsum2 Not used.
+!! @param[in] xnsum3 Not used.
+!! @param[in] xnsum4 Not used.
 !! @param[in] im "i" dimension of the model grid tile.
 !! @param[in] jm "j" dimension of the model grid tile.
-!! @param[in] imn ???
-!! @param[in] jmn ???
-!! @param[in] lon_c ???
-!! @param[in] lat_c ???
-!! @param[in] lon_t ???
-!! @param[in] lat_t ???
-!! @param[in] is_south_pole ???
-!! @param[in] is_north_pole ???
-!! @param[in] imi ???
-!! @param[in] jmi ???
-!! @param[in] oa_in ???
-!! @param[in] ol_in ???
-!! @param[in] slm_in ???
-!! @param[in] lon_in ???
-!! @param[in] lat_in ???
+!! @param[in] imn "i" dimension of the high-resolution orography and
+!! mask data.
+!! @param[in] jmn "j" dimension of the high-resolution orography and
+!! mask data.
+!! @param[in] lon_c Corner point longitudes of the model grid points.
+!! @param[in] lat_c Corner point latitudes of the model grid points.
+!! @param[in] lon_t Center point longitudes of the model grid points.
+!! @param[in] lat_t Center point latitudes of the model grid points.
+!! @param[in] is_south_pole Not used.
+!! @param[in] is_north_pole Not used.
+!! @param[in] imi 'i' dimension of input gfs orography data.
+!! @param[in] jmi 'j' dimension of input gfs orography data.
+!! @param[in] oa_in Asymmetry on the input gfs orography data.
+!! @param[in] ol_in Length scales on the input gfs orography data.
+!! @param[in] slm_in Land-sea mask on the input gfs orography data.
+!! @param[in] lon_in Longitude on the input gfs orography data.
+!! @param[in] lat_in Latitude on the input gfs orography data.
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEOA3(ZAVG,zslm,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,SLM,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
@@ -3889,7 +3901,7 @@ C
       WRITE(6,*) "! MAKEOA3 EXIT"
 C
       RETURN
-      END
+      END SUBROUTINE MAKEOA3
       
 !> Reverse the east-west and north-south axes
 !! in a two-dimensional array.
