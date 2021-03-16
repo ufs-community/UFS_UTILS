@@ -13,8 +13,9 @@ rm -rf UFS_UTILS
 
 cd ${UFS_UTILS_WORKING_DIR}
 
-git clone --recursive https://github.com/NOAA-EMC/UFS_UTILS.git >> /dev/null 2>&1
+git clone --recursive https://github.com/kgerheiser/UFS_UTILS.git >> /dev/null 2>&1
 cd UFS_UTILS
+git checkout feature/auto-reg-tests
 
 source sorc/machine-setup.sh
 
