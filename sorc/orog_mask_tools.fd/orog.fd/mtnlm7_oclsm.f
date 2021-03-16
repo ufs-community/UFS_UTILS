@@ -1742,18 +1742,24 @@ C
       RETURN
       END
 
-!> Get index
+!> Determine the location of a cubed-sphere point within
+!! the high-resolution orography data.  The location is
+!! described by the range of i/j indices on the high-res grid.
 !!
-!! @param[in] imn ???
-!! @param[in] jmn ???
-!! @param[in] npts ???
-!! @param[in] lonO ???
-!! @param[in] latO ???
-!! @param[in] delxn ???
-!! @param[out] jst ???
-!! @param[out] jen ???
-!! @param[out] ilist ???
-!! @param[out] numx ???
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data set.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data set.
+!! @param[in] npts Number of vertices to describe the cubed-sphere point.
+!! @param[in] lonO The longitudes of the cubed-sphere vertices.
+!! @param[in] latO The latitudes of the cubed-sphere vertices.
+!! @param[in] delxn Resolution of the high-resolution orography
+!! data set.
+!! @param[out] jst Starting 'j' index on the high-resolution grid.
+!! @param[out] jen Ending 'j' index on the high-resolution grid.
+!! @param[out] ilist List of 'i' indices on the high-resolution grid.
+!! @param[out] numx The number of 'i' indices on the high-resolution
+!! grid.
 !! @author GFDL programmer
       SUBROUTINE get_index(IMN,JMN,npts,lonO,latO,DELXN,
      &           jst,jen,ilist,numx)
@@ -1995,18 +2001,19 @@ C
 !! orography and land-mask datasets.
 !! @param[out] ist This is the 'i' index of high-resolution data set
 !! at the east edge of the model grid cell.
-!! the high-resolution dataset with respect to the 'east' edge
 !! @param[out] ien This is the 'i' index of high-resolution data set
 !! at the west edge of the model grid cell.
 !! @param[out] jst  This is the 'j' index of high-resolution data set
 !! at the south edge of the model grid cell.
 !! @param[out] jen This is the 'j' index of high-resolution data set
+!! at the north edge of the model grid cell.
 !! @param[in] im "i" dimension of the model grid tile.
 !! @param[in] jm "j" dimension of the model grid tile.
 !! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
 !! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
 !! @param[in] xlat The latitude of each row of the model grid.
 !! @param[in] numi For reduced gaussian grids, the number of 'i' points
+!! for each 'j' row.
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1           GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
@@ -2515,32 +2522,42 @@ C
       RETURN
       END
       
-!> makeoa
+!> Create orographic asymmetry and orographic length scale on
+!! the model grid.  This routine is used for the spectral
+!! GFS gaussian grid.
 !!
-!! @param[in] zavg ???
-!! @param[in] var ???
+!! @param[in] zavg The high-resolution input orography dataset.
+!! @param[in] var Standard deviation of orography on the model grid.
 !! @param[out] glat Latitude of each row of input terrain dataset.
-!! @param[in] oa4 ???
-!! @param[in] ol ???
-!! @param[in] ioa4 ???
-!! @param[in] elvmax ???
-!! @param[in] oro ???
-!! @param[in] oro1 ???
-!! @param[in] xnsum ???
+!! @param[out] oa4 Orographic asymmetry on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ol Orographic length scale on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ioa4 Count of oa4 values between certain thresholds.
+!! @param[out] elvmax Maximum elevation on the model grid.
+!! @param[in] oro Orography on the model grid.
+!! @param[out] oro1 Save array for model grid orography.
+!! @param[out] xnsum Number of high-resolution orography points
+!! higher than the model grid box average.
 !! @param[in] xnsum1 ???
 !! @param[in] xnsum2 ???
 !! @param[in] xnsum3 ???
 !! @param[in] xnsum4 ???
-!! @param[in] ist ???
-!! @param[in] ien ???
-!! @param[in] jst ???
-!! @param[in] jen ???
-!! @param[in] im "i" dimension of the model grid tile.
-!! @param[in] jm "j" dimension of the model grid tile.
+!! @param[out] ist This is the 'i' index of high-resolution data set
+!! at the east edge of the model grid cell.
+!! @param[out] ien This is the 'i' index of high-resolution data set
+!! at the west edge of the model grid cell.
+!! @param[out] jst  This is the 'j' index of high-resolution data set
+!! at the south edge of the model grid cell.
+!! @param[out] jen This is the 'j' index of high-resolution data set
+!! at the north edge of the model grid cell.
+!! @param[in] im "i" dimension of the model grid.
+!! @param[in] jm "j" dimension of the model grid.
 !! @param[in] imn "i" dimension of the input terrain dataset.
 !! @param[in] jmn "j" dimension of the input terrain dataset.
-!! @param[in] xlat ???
-!! @param[in] numi ???
+!! @param[in] xlat The latitude of each row of the model grid.
+!! @param[in] numi For reduced gaussian grids, the number of 'i' points
+!! for each 'j' row.
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEOA(ZAVG,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
@@ -4264,12 +4281,12 @@ C
       
 !> Convert from latitude and longitude to x,y,z coordinates.
 !!
-!! @param[in] siz ???
-!! @param[in] lon ???
-!! @param[in] lat ???
-!! @param[out] x ???
-!! @param[out] y ???
-!! @param[out] z ???
+!! @param[in] siz Number of points to convert.
+!! @param[in] lon Longitude of points to convert.
+!! @param[in] lat Latitude of points to convert.
+!! @param[out] x 'x' coordinate of the converted points.
+!! @param[out] y 'y' coordinate of the converted points.
+!! @param[out] z 'z' coordinate of the converted points.
 !! @author GFDL programmer
       subroutine latlon2xyz(siz,lon, lat, x, y, z)
       implicit none
@@ -4333,14 +4350,15 @@ C
         return
       END  
       
-!> Check to see if a point is inside a polygon.
+!> Check if a point is inside a polygon.
 !!
-!! @param[in] lon1 ???
-!! @param[in] lat1 ???
-!! @param[in] npts ???
-!! @param[in] lon2 ???
-!! @param[in] lat2 ???
-!! @return inside_a_polygon ???
+!! @param[in] lon1 Longitude of the point to check.
+!! @param[in] lat1 Latitude of the point to check.
+!! @param[in] npts Number of polygon vertices.
+!! @param[in] lon2 Longitude of the polygon vertices.
+!! @param[in] lat2 Latitude of the polygon vertices.
+!! @return inside_a_polygon When true, point is within
+!! the polygon.
 !! @author GFDL programmer
       FUNCTION inside_a_polygon(lon1, lat1, npts, lon2, lat2)
         implicit none
