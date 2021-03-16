@@ -56,10 +56,8 @@ endif()
 find_package(gfsio REQUIRED)
 find_package(sfcio REQUIRED)
 find_package(w3nco REQUIRED)
-find_package(landsfcutil REQUIRED)
 find_package(bacio REQUIRED)
 find_package(nemsio REQUIRED)
-find_package(nemsiogfs REQUIRED)
 find_package(sigio REQUIRED)
 find_package(sp REQUIRED)
 find_package(ip REQUIRED)
@@ -73,6 +71,15 @@ if(EMC_EXEC_DIR)
   set(exec_dir exec)
 endif()
 
+# If doxygen documentation we enabled, build it. This must come before
+# adding the source code directories; the main documentation build
+# must happen before any of the utility document builds.
+if(ENABLE_DOCS)
+  find_package(Doxygen REQUIRED)
+  set(abs_top_srcdir "${CMAKE_SOURCE_DIR}")
+  add_subdirectory(docs)  
+endif()
+
 add_subdirectory(sorc)
 
 # Run unit tests.
@@ -81,8 +88,3 @@ if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
 
-# If doxygen documentation we enabled, build it.
-if(ENABLE_DOCS)
-  find_package(Doxygen REQUIRED)
-  add_subdirectory(docs)  
-endif()

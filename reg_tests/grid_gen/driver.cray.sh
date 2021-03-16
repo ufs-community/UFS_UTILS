@@ -67,9 +67,16 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J gfdl.regional -W 0:
         -w 'ended(c96.uniform)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/gfdl.regional.sh"
 
 #-----------------------------------------------------------------------------
+# ESG regional grid
+#-----------------------------------------------------------------------------
+
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J esg.regional -W 0:10 -M 2400 \
+        -w 'ended(gfdl.regional)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/esg.regional.sh"
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
-bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(gfdl.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(esg.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
 
 exit

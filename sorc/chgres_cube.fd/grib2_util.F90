@@ -1,6 +1,14 @@
 !> @file
 !! @brief Utilities for use when reading grib2 data.
+!! @author George Gayno NCEP/EMC
+
+!> Utilities for use when reading grib2 data.
 !!
+!! This module contains routines to:
+!! - convert from RH to specific humidity
+!! - convert from omega to dzdt.
+!!
+!! George Gayno NCEP/EMC
 module grib2_util
 
 use esmf
@@ -11,10 +19,11 @@ implicit none
 
 contains 
 
-!> Convert relative humidity to specific humidity
-!! @param [inout]  rh_sphum rel humidity on input. spec hum on output.
-!! @param [in] p   pressure in Pa
-!! @param [in] t   temperature
+!> Convert relative humidity to specific humidity.
+!!
+!! @param[inout] rh_sphum rel humidity on input. spec hum on output.
+!! @param[in] p pressure in Pa
+!! @param[in] t temperature
 !! @author Larissa Reames
 !! @author Jeff Beck
  subroutine rh2spfh(rh_sphum,p,t)
@@ -48,13 +57,14 @@ contains
 
 end subroutine RH2SPFH
 
-!> Convert omega to vertical velocity
-!! @param [inout] omega on input, vertical velocity on output
-!! @param [in] p  pressure
-!! @param [in] t  temperature
-!! @param [in] q  specific humidity
-!! @param [in] clb lower bounds of indices processed by this mpi task
-!! @param [in] cub upper bounds of indices processed by this mpi task
+!> Convert omega to vertical velocity.
+!!
+!! @param[inout] omega on input, vertical velocity on output
+!! @param[in] p pressure
+!! @param[in] t temperature
+!! @param[in] q specific humidity
+!! @param[in] clb lower bounds of indices processed by this mpi task
+!! @param[in] cub upper bounds of indices processed by this mpi task
 !! @author Larissa Reames
 !! @author Jeff Beck
 subroutine convert_omega(omega,p,t,q,clb,cub)
@@ -84,31 +94,5 @@ subroutine convert_omega(omega,p,t,q,clb,cub)
   enddo
 
 end subroutine convert_omega
-
-!> Convert string from lower to uppercase.
-!! @author Clive Page
-!!
-!! Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
-!!
-!! @param[in] strIn   string to convert
-!! @return strOut string in uppercase
-function to_upper(strIn) result(strOut)
-
-     implicit none
-
-     character(len=*), intent(in) :: strIn
-     character(len=len(strIn)) :: strOut
-     integer :: i,j
-
-     do i = 1, len(strIn)
-          j = iachar(strIn(i:i))
-          if (j>= iachar("a") .and. j<=iachar("z") ) then
-               strOut(i:i) = achar(iachar(strIn(i:i))-32)
-          else
-               strOut(i:i) = strIn(i:i)
-          end if
-     end do
-
-end function to_upper
 
  end module grib2_util

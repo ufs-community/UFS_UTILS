@@ -1,9 +1,13 @@
 !> @file
-!! @brief Process static surface data
-!!
-!! Read pre-computed static/climatological data on the fv3 
-!! target grid.  Time interpolate if necessary (for example a
-!! monthly climo field).
+!! @brief Process static surface data.
+!! @author George Gayno NCEP/EMC
+
+!> Reads static surface climatological data for the target FV3 grid
+!! (such as soil type and vegetation type). Time interpolates
+!! time-varying fields, such as monthly plant greenness, to the model
+!! run time. Data for each target FV3 resolution resides in the
+!! ‘fixed’ directory. Set path via the fix_dir_target_grid namelist
+!! variable.
 !!
 !! @author George Gayno NCEP/EMC
  module static_data

@@ -1,8 +1,8 @@
 !> @file
-!! @brief Read input data
+!! @brief Read atmospheric and surface data from GRIB2, NEMSIO and NetCDF files.
 !! @author George Gayno NCEP/EMC
-!!
-!! Read atmospheric, surface and nst data on the input grid.
+
+!> Read atmospheric, surface and nst data on the input grid.
 !! Supported formats include fv3 tiled 'restart' files, fv3 tiled 
 !! 'history' files, fv3 gaussian history files, spectral gfs
 !! gaussian nemsio files, and spectral gfs sigio/sfcio files.
@@ -10,6 +10,7 @@
 !! Public variables are defined below: "input" indicates field
 !! associated with the input grid.
 !!
+!! @author George Gayno NCEP/EMC
  module input_data
 
  use esmf
@@ -100,28 +101,29 @@
  integer, public      :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
                                         !! for 7 layers of soil for the RUC LSM
  
- character(len=50), private, allocatable :: slevs(:)                           
+ character(len=50), private, allocatable :: slevs(:) !< The atmospheric levels in the GRIB2 input file.
 
 ! Fields associated with the nst model.
 
- type(esmf_field), public        :: c_d_input_grid
- type(esmf_field), public        :: c_0_input_grid
- type(esmf_field), public        :: d_conv_input_grid
- type(esmf_field), public        :: dt_cool_input_grid
- type(esmf_field), public        :: ifd_input_grid
- type(esmf_field), public        :: qrain_input_grid
- type(esmf_field), public        :: tref_input_grid  !< reference temperature
- type(esmf_field), public        :: w_d_input_grid
- type(esmf_field), public        :: w_0_input_grid
- type(esmf_field), public        :: xs_input_grid
- type(esmf_field), public        :: xt_input_grid
- type(esmf_field), public        :: xu_input_grid
- type(esmf_field), public        :: xv_input_grid
- type(esmf_field), public        :: xz_input_grid
- type(esmf_field), public        :: xtts_input_grid
- type(esmf_field), public        :: xzts_input_grid
- type(esmf_field), public        :: z_c_input_grid
- type(esmf_field), public        :: zm_input_grid
+ type(esmf_field), public        :: c_d_input_grid   !< Coefficient 2 to calculate d(tz)/d(ts)
+ type(esmf_field), public        :: c_0_input_grid   !< Coefficient 1 to calculate d(tz)/d(ts)
+ type(esmf_field), public        :: d_conv_input_grid   !< Thickness of free convection layer
+ type(esmf_field), public        :: dt_cool_input_grid   !< Sub-layer cooling amount
+ type(esmf_field), public        :: ifd_input_grid   !< Model mode index. 0-diurnal model not
+                                                     !< started; 1-diurnal model started.
+ type(esmf_field), public        :: qrain_input_grid   !< Sensible heat flux due to rainfall
+ type(esmf_field), public        :: tref_input_grid  !< Reference temperature
+ type(esmf_field), public        :: w_d_input_grid   !< Coefficient 4 to calculate d(tz)/d(ts)
+ type(esmf_field), public        :: w_0_input_grid   !< Coefficient 3 to calculate d(tz)/d(ts)
+ type(esmf_field), public        :: xs_input_grid   !< Salinity content in diurnal thermocline layer
+ type(esmf_field), public        :: xt_input_grid   !< Heat content in diurnal thermocline layer
+ type(esmf_field), public        :: xu_input_grid   !< u-current content in diurnal thermocline layer
+ type(esmf_field), public        :: xv_input_grid   !< v-current content in diurnal thermocline layer
+ type(esmf_field), public        :: xz_input_grid   !< Diurnal thermocline layer thickness
+ type(esmf_field), public        :: xtts_input_grid   !< d(xt)/d(ts)
+ type(esmf_field), public        :: xzts_input_grid   !< d(xz)/d(ts)
+ type(esmf_field), public        :: z_c_input_grid   !< Sub-layer cooling thickness
+ type(esmf_field), public        :: zm_input_grid   !< Oceanic mixed layer depth
 
  public :: read_input_atm_data
  public :: cleanup_input_atm_data
@@ -4578,7 +4580,6 @@ else
  subroutine read_input_sfc_grib2_file(localpet)
 
    use wgrib2api
-   use grib2_util, only    : to_upper
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
    use model_grid, only    : input_grid_type
    use search_util
@@ -4591,9 +4592,9 @@ else
    character(len=250)                    :: the_file
    character(len=250)                    :: geo_file
    character(len=20)                     :: vname, vname_file,slev
-
-   character(len=50)                      :: method
-
+   character(len=50)                     :: method
+   character(len=20)                     :: to_upper
+ 
    integer                               :: rc, varnum, iret, i, j,k
    integer                               :: ncid2d, varid, varsize
    integer, parameter                    :: icet_default = 265.0
