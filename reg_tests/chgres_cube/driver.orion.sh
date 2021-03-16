@@ -29,6 +29,8 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
+ulimit -s unlimited
+
 export OUTDIR=/work/noaa/stmp/$LOGNAME/chgres_reg_tests
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 QUEUE="${QUEUE:-debug}"

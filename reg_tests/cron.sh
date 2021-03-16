@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eux
+
 export MAILTO="kyle.gerheiser@noaa.gov"
 
 export UFS_UTILS_WORKING_DIR=/home/gkyle/reg_tests
