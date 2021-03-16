@@ -1981,24 +1981,32 @@ C
       RETURN
       END
 
-!> makepc
+!> Make the principle coordinates - slope of orography, 
+!! anisotropy, angle of mountain range with respect to east.
+!! This routine is used for spectral GFS gaussian grids.
 !!
-!! @param[in] zavg ???
-!! @param[in] zslm ???
-!! @param[in] theta ???
-!! @param[in] gamma ???
-!! @param[in] sigma ???
-!! @param[in] glat ???
-!! @param[in] ist ???
-!! @param[in] ien ???
-!! @param[in] jst ???
-!! @param[in] jen ???
+!! @param[in] zavg The high-resolution input orography dataset.
+!! @param[in] zslm The high-resolution input land-mask dataset.
+!! @param[out] theta Angle of mountain range with respect to
+!! east for each model point.
+!! @param[out] gamma Anisotropy for each model point.
+!! @param[out] sigma Slope of orography for each model point.
+!! @param[out] glat Latitude of each row of the high-resolution 
+!! orography and land-mask datasets.
+!! @param[out] ist This is the 'i' index of high-resolution data set
+!! at the east edge of the model grid cell.
+!! the high-resolution dataset with respect to the 'east' edge
+!! @param[out] ien This is the 'i' index of high-resolution data set
+!! at the west edge of the model grid cell.
+!! @param[out] jst  This is the 'j' index of high-resolution data set
+!! at the south edge of the model grid cell.
+!! @param[out] jen This is the 'j' index of high-resolution data set
 !! @param[in] im "i" dimension of the model grid tile.
 !! @param[in] jm "j" dimension of the model grid tile.
-!! @param[in] imn ???
-!! @param[in] jmn ???
-!! @param[in] xlat ???
-!! @param[in] numi ???
+!! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
+!! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
+!! @param[in] xlat The latitude of each row of the model grid.
+!! @param[in] numi For reduced gaussian grids, the number of 'i' points
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1           GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
@@ -2255,21 +2263,25 @@ C
       RETURN
       END
 
-!> makepc2
+!> Make the principle coordinates - slope of orography, 
+!! anisotropy, angle of mountain range with respect to east.
+!! This routine is used for the FV3GFS cubed-sphere grid.
 !!
-!! @param[in] zavg ???
-!! @param[in] zslm ???
-!! @param[in] theta ???
-!! @param[in] gamma ???
-!! @param[in] sigma ???
-!! @param[in] glat ???
+!! @param[in] zavg The high-resolution input orography dataset.
+!! @param[in] zslm The high-resolution input land-mask dataset.
+!! @param[out] theta Angle of mountain range with respect to
+!! east for each model point.
+!! @param[out] gamma Anisotropy for each model point.
+!! @param[out] sigma Slope of orography for each model point.
+!! @param[out] glat Latitude of each row of the high-resolution 
+!! orography and land-mask datasets.
 !! @param[in] im "i" dimension of the model grid tile.
 !! @param[in] jm "j" dimension of the model grid tile.
-!! @param[in] imn ???
-!! @param[in] jmn ???
-!! @param[in] lon_c ???
-!! @param[in] lat_c ???
-!! @author Jordan Alpert NOAA/EMC
+!! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
+!! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
+!! @param[in] lon_c Longitude on the model grid tile.
+!! @param[in] lat_c Latitude on the model grid tile.
+!! @author GFDL Programmer
       SUBROUTINE MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1           GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
 C
