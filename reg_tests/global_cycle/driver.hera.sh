@@ -19,7 +19,7 @@
 #-----------------------------------------------------------------------------
 
 #SBATCH -J cycle_reg_test
-#SBATCH -A gsienkf
+#SBATCH -A fv3-cpu
 #SBATCH --open-mode=truncate
 #SBATCH -o regression.log
 #SBATCH -e regression.log
@@ -36,8 +36,7 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-#export DATA=/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_tests.cycle
-export DATA=/scratch2/BMC/gsienkf/Clara.Draper/global_cycle_regtest/
+export DATA=/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_tests.cycle
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
