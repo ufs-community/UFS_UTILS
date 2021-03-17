@@ -3370,18 +3370,21 @@ C
 
       end function spherical_distance
       
-!> Get mismatch index
+!> For unmapped land points, find the nearest land point
+!! on the input data and pass back its i/j index.
 !!
-!! @param[in] im_in ???
-!! @param[in] jm_in ???
-!! @param[in] geolon_in ???
-!! @param[in] geolat_in ???
-!! @param[in] bitmap_in ???
-!! @param[in] num_out ???
-!! @param[in] lon_out ???
-!! @param[in] lat_out ???
-!! @param[out] iindx ???
-!! @param[out] jindx ???
+!! @param[in] im_in 'i' dimension of input data.
+!! @param[in] jm_in 'j' dimension of input data.
+!! @param[in] geolon_in Longitude of input data.
+!! @param[in] geolat_in Latitude of input data.
+!! @param[in] bitmap_in Bitmap (mask) of input data.
+!! @param[in] num_out Number of unmapped points.
+!! @param[in] lon_out Longitude of unmapped points.
+!! @param[in] lat_out Latitude of unmapped points.
+!! @param[out] iindx 'i' indices of nearest land points
+!! on the input data.
+!! @param[out] jindx 'j' indices of nearest land points
+!! on the input data.
 !! @author GFDL progammer
       subroutine get_mismatch_index(im_in, jm_in, geolon_in,geolat_in,
      &           bitmap_in,num_out, lon_out,lat_out, iindx, jindx )
@@ -4327,9 +4330,9 @@ C
 
 !> Compute spherical angle.
 !!
-!! @param[in] v1 ???
-!! @param[in] v2 ???
-!! @param[in] v3 ???
+!! @param[in] v1 Vector 1.
+!! @param[in] v2 Vector 2.
+!! @param[in] v3 Vector 3.
 !! @return spherical_angle Spherical Angle.
 !! @author GFDL programmer
       FUNCTION spherical_angle(v1, v2, v3)
