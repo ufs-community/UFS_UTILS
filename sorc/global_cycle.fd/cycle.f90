@@ -8,17 +8,17 @@
 !!  update component in not threaded.
 !!
 !!  There are three main options (which can be called in combination): 
-!!  1) Update the surface fields with sfccylce (do_sfccycle = .true.) 
-!!  2) Update the land states with increments read in from file (do_lndinc = .true.) 
-!!  3) Update the NSST field, several options: 
+!!  1. Update the surface fields with sfccylce (do_sfccycle = .true.) 
+!!  2. Update the land states with increments read in from file (do_lndinc = .true.) 
+!!  3. Update the NSST field, several options: 
 !!
-!!  3a) Update the NSST TREF field using
+!!  3a. Update the NSST TREF field using
 !!     GSI increments on the Gaussian grid.  All other NSST
 !!     fields are cycled.  Invoke this option by setting
 !!     namelist variable DONST=.true. and NST_FILE to 
 !!     the name of the GSI increment file.
 !!  
-!!  3b) Run with NSST, but postpone the TREF update.  
+!!  3b. Run with NSST, but postpone the TREF update.  
 !!     Here all NSST fields are cycled.  But the NSST IFD field is
 !!     used to flag points that flipped from ice to open water.
 !!     To invoke this option, set DONST=.true. and NST_FILE="NULL".
