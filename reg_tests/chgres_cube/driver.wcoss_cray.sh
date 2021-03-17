@@ -27,7 +27,9 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export OUTDIR=/gpfs/hps3/stmp/$LOGNAME/chgres_reg_tests
+export OUTDIR="${WORK_DIR:-/gpfs/hps3/stmp/$LOGNAME}"
+export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
+
 QUEUE="${QUEUE:-debug}"
 PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
 

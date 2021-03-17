@@ -31,7 +31,9 @@ module list
 
 ulimit -s unlimited
 
-export OUTDIR=/work/noaa/stmp/$LOGNAME/chgres_reg_tests
+export OUTDIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
+export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
+
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 QUEUE="${QUEUE:-debug}"
 

@@ -33,7 +33,8 @@ module list
 
 set -x
 
-export DATA=/gpfs/dell1/stmp/$LOGNAME/reg_tests.snow2mdl
+export DATA="${WORK_DIR:-/gpfs/dell1/stmp/$LOGNAME}"
+export DATA="${DATA}/reg-tests/snow2mdl"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.

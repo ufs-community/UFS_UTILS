@@ -37,7 +37,8 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export DATA=/gpfs/dell1/stmp/$LOGNAME/reg_tests.cycle
+export DATA="${WORK_DIR:-/gpfs/dell1/stmp/$LOGNAME}"
+export DATA="${DATA}/reg-tests/global-cycle"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.

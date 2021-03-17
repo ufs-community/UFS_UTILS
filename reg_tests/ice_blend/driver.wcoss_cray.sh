@@ -33,7 +33,8 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export DATA=/gpfs/hps3/stmp/$LOGNAME/reg_tests.ice_blend
+export DATA="${WORK_DIR:-/gpfs/hps3/stmp/$LOGNAME}"
+export DATA="${DATA}/reg-tests/ice-blend"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.

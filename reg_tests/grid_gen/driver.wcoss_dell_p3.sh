@@ -28,7 +28,8 @@ set -x
 
 QUEUE="${QUEUE:-debug}"
 PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
-export WORK_DIR=/gpfs/dell1/stmp/$LOGNAME/reg_tests.grid
+export WORK_DIR="${WORK_DIR:-/gpfs/dell1/stmp/$LOGNAME}"
+export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.

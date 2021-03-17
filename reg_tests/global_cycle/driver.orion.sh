@@ -34,7 +34,8 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export DATA=/work/noaa/stmp/$LOGNAME/reg_tests.cycle
+export DATA="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
+export DATA="${DATA}/reg-tests/global-cycle"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.

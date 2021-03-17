@@ -30,7 +30,8 @@ module list
 
 set -x
 
-export WORK_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_tests.grid
+export WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 QUEUE="${QUEUE:-batch}"
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 
