@@ -4460,20 +4460,29 @@ C
         
       end
 
-!> Get xnsum
+!> Count the number of high-resolution orography points that
+!! are higher than the model grid box average orography height.
 !!
-!! @param[in] lon1  ???
-!! @param[in] lat1  ???
-!! @param[in] lon2  ???
-!! @param[in] lat2  ???
-!! @param[in] imn   ???
-!! @param[in] jmn   ??? 
-!! @param[in] glat  ???
-!! @param[in] zavg  ???
-!! @param[in] zslm  ???
-!! @param[in] delxn  ???
-!! @return get_xnsum ???
-!! @author Jordan Alpert NOAA/EMC
+!! @param[in] lon1 Longitude of corner point 1 of the model 
+!! grid box.
+!! @param[in] lat1 Latitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lon2 Longitude of corner point 2 of the model
+!! grid box.
+!! @param[in] lat2 Latitude of corner point 2 of the model
+!! grid box.
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data.
+!! @param[in] glat Latitude of each row of the high-resolution
+!! orography data.
+!! @param[in] zavg The high-resolution orography.
+!! @param[in] zslm  The high-resolution land mask.
+!! @param[in] delxn Resolution of the high-res orography data.
+!! @return get_xnsum The number of high-res points above the
+!! mean orography.
+!! @author GFDL Programmer
       function get_xnsum(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn)
         implicit none
