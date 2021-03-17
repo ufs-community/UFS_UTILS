@@ -172,7 +172,7 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] NR Rhomboidal flag.
 !! @param[in] NF0 First order spectral filter parameters.
 !! @param[in] NF1 Second order spectral filter parameters.
-!! @param[in] NW ???
+!! @param[in] NW Number of waves.
 !! @param[in] EFAC Factor to adjust orography by its variance.
 !! @param[in] BLAT When less than zero, reverse latitude/
 !! longitude for output.
@@ -4562,22 +4562,34 @@ C
          
       end function get_xnsum  
       
-!> Get xnnum2
+!> Count the number of high-resolution orography points that
+!! are higher than a critical value inside a model grid box
+!! (or a portion of a model grid box). The critical value is a 
+!! function of the standard deviation of orography.
 !!
-!! @param[in] lon1  ???
-!! @param[in] lat1  ???
-!! @param[in] lon2  ???
-!! @param[in] lat2  ???
-!! @param[in] imn   ???
-!! @param[in] jmn   ??? 
-!! @param[in] glat  ???
-!! @param[in] zavg  ???
-!! @param[in] zslm  ???
-!! @param[in] delxn  ???
-!! @param[in] xnsum1 ???
-!! @param[in] xnsum2 ???
+!! @param[in] lon1 Longitude of corner point 1 of the model 
+!! grid box.
+!! @param[in] lat1 Latitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lon2 Longitude of corner point 2 of the model
+!! grid box.
+!! @param[in] lat2 Latitude of corner point 2 of the model
+!! grid box.
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data.
+!! @param[in] glat Latitude of each row of the high-resolution
+!! orography data.
+!! @param[in] zavg The high-resolution orography.
+!! @param[in] zslm  The high-resolution land mask.
+!! @param[in] delxn Resolution of the high-res orography data.
+!! @param[out] xnsum1 The number of high-resolution orography
+!! above the critical value inside a model grid box.
+!! @param[out] xnsum2 The number of high-resolution orography
+!! points inside a model grid box.
 !! @param[out] hc Critical height.
-!! @author Jordan Alpert NOAA/EMC
+!! @author GFDL Programmer
       subroutine get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn,xnsum1,xnsum2,HC)
         implicit none
@@ -4645,22 +4657,35 @@ C
          
       end subroutine get_xnsum2 
 
-!> Get xnnum3
+!> Count the number of high-resolution orography points that
+!! are higher than a critical value inside a model grid box
+!! (or a portion of a model grid box). Unlike routine
+!! get_xnsum2(), this routine does not compute the critical
+!! value. Rather, it is passed in.
 !!
-!! @param[in] lon1  ???
-!! @param[in] lat1  ???
-!! @param[in] lon2  ???
-!! @param[in] lat2  ???
-!! @param[in] imn   ???
-!! @param[in] jmn   ??? 
-!! @param[in] glat  ???
-!! @param[in] zavg  ???
-!! @param[in] zslm  ???
-!! @param[in] delxn  ???
-!! @param[in] xnsum1 ???
-!! @param[in] xnsum2 ???
+!! @param[in] lon1 Longitude of corner point 1 of the model 
+!! grid box.
+!! @param[in] lat1 Latitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lon2 Longitude of corner point 2 of the model
+!! grid box.
+!! @param[in] lat2 Latitude of corner point 2 of the model
+!! grid box.
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data.
+!! @param[in] glat Latitude of each row of the high-resolution
+!! orography data.
+!! @param[in] zavg The high-resolution orography.
+!! @param[in] zslm  The high-resolution land mask.
+!! @param[in] delxn Resolution of the high-res orography data.
+!! @param[out] xnsum1 The number of high-resolution orography
+!! above the critical value inside a model grid box.
+!! @param[out] xnsum2 The number of high-resolution orography
+!! points inside a model grid box.
 !! @param[in] hc Critical height.
-!! @author Jordan Alpert NOAA/EMC
+!! @author GFDL Programmer
       subroutine get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn,xnsum1,xnsum2,HC)
         implicit none
