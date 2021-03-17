@@ -3454,15 +3454,18 @@ C
 
       end subroutine get_mismatch_index
       
-!> Interpolate mismatch
+!> Replace unmapped model land points with the nearest land point on the
+!! input grid.
 !!
-!! @param[in] im_in ???
-!! @param[in] jm_in ???
-!! @param[in] data_in ???
-!! @param[in] num_out ???
-!! @param[out] data_out ???
-!! @param[in] iindx ???
-!! @param[in] jindx ???
+!! @param[in] im_in 'i' dimension of input grid.
+!! @param[in] jm_in 'j' dimension of input grid.
+!! @param[in] data_in Input grid data.
+!! @param[in] num_out Number of unmapped model points.
+!! @param[out] data_out Data on the model tile.
+!! @param[in] iindx 'i' indices of the nearest land points on
+!! the input grid.
+!! @param[in] jindx 'j' indices of the nearest land points on
+!! the input grid.
 !! @author GFDL programmer
       subroutine interpolate_mismatch(im_in, jm_in, data_in,
      &                                num_out, data_out, iindx, jindx)
