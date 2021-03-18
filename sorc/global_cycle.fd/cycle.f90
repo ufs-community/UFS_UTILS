@@ -10,6 +10,12 @@
 !!  There are three main options (which can be called in combination): 
 !!  1. Update the surface fields with sfccylce (do_sfccycle = .true.) 
 !!  2. Update the land states with increments read in from file (do_lndinc = .true.) 
+!!     Designed to work with a land increment file  created by the GSI on the Gaussian 
+!!     grid. The increments are interpolated here to the model grid, using the 
+!!     same method as for the NST increments. Initially implemented for
+!!     applying soil temperature increments calculated from the EnKF 
+!!     assimilation of T2m (but this is not a requirement -  any 
+!!     GSI-generated soil temperature increment file can be applied here). 
 !!  3. Update the NSST field, several options: 
 !!
 !!  3a. Update the NSST TREF field using
@@ -81,13 +87,6 @@
 !!                         Added mpi directives.
 !!  -2020-02-17:  Clara Draper Added soil state increments capability.
 !!
-!!  Program Updates:
-!!  - 2005-02-03:  Iredell   For global_analysis
-!!  - 2014-11-30:  Xu Li     Add nst_anl
-!!  - 2015-05-26:  Hang Lei  Added NEMSIO read/write function in the code
-!!  - 2017-08-08:  Gayno     Modify to work on cubed-sphere grid.
-!!                           Added processing of NSST and TREF update.
-!!                           Added mpi directives.
 !! @author Mark Iredell NOAA/EMC
 !! @return 0 for success, error code otherwise.
  PROGRAM SFC_DRV
@@ -546,7 +545,7 @@ ENDIF
 
     INQUIRE(FILE=trim(LND_FILE), EXIST=file_exists)
     IF (.not. file_exists) then 
-        print *, 'ERROR: land increment update requested, but file does not exist: ', & 
+        print *, 'FATAL ERROR: land increment update requested, but file does not exist: ', & 
                 trim(lnd_file)
         call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
     ENDIF
