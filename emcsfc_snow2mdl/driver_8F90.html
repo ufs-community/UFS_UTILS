@@ -192,14 +192,14 @@ Functions/Subroutines</h2></td></tr>
 <li>92 - model land mask file not grib1 or grib2</li>
 </ul>
 <p>The determination of cover and depth on the model grid depends on the input snow data selected:</p>
-<h3><a class="anchor" id="autotoc_md1"></a>
+<h3><a class="anchor" id="autotoc_md2"></a>
 nam grids:</h3>
 <ol type="1">
 <li>nesdis/ims only - An analysis of snow cover on the model grid is produced. No depth analysis is produced.</li>
 <li>afwa only - An analysis of snow cover and depth on the model grid is produced. Depth is determined from the afwa data. Cover is set to 100% where afwa indicates snow and 0% otherwise.</li>
 <li>nesdis/ims and afwa - An analysis of snow cover and depth on the model grid is produced. Cover is determined by the nesdis/ims data. If cover is greater than user-defined threshold (variable snow_cvr_threshold) the depth is set to the afwa value or a nominal value, whichever is greater. The nominal value is user-defined (varaible min_snow_depth). If cover is less than user- defined threshold, the depth is set to 0, regardless of the afwa depth value.</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md2"></a>
+<h3><a class="anchor" id="autotoc_md3"></a>
 gfs grid:</h3>
 <ol type="1">
 <li>nesdis/ims and autosnow only - An analysis of snow cover and depth on the model grid is produced. <br  />

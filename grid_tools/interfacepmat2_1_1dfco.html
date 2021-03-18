@@ -92,13 +92,13 @@ $(document).ready(function(){initNavTree('interfacepmat2_1_1dfco.html',''); init
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a62df06d29c8e7a91bfe9130140a7e7cf"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1dfco.html#a62df06d29c8e7a91bfe9130140a7e7cf">dfco</a> (na, nb, za, zb, z0, a, b)</td></tr>
-<tr class="memdesc:a62df06d29c8e7a91bfe9130140a7e7cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A.d = B.c (*) In either case, d is the derivative of c.  <a href="interfacepmat2_1_1dfco.html#a62df06d29c8e7a91bfe9130140a7e7cf">More...</a><br /></td></tr>
+<tr class="memdesc:a62df06d29c8e7a91bfe9130140a7e7cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A.d = B.c (*) In either case, d is the derivative (or density) of cumulative c.  <a href="interfacepmat2_1_1dfco.html#a62df06d29c8e7a91bfe9130140a7e7cf">More...</a><br /></td></tr>
 <tr class="separator:a62df06d29c8e7a91bfe9130140a7e7cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf188e9442e31d38463ffa9496e51591"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1dfco.html#acf188e9442e31d38463ffa9496e51591">ddfco</a> (na, nb, za, zb, z0, a, b)</td></tr>
-<tr class="memdesc:acf188e9442e31d38463ffa9496e51591"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1dfco.html#acf188e9442e31d38463ffa9496e51591">More...</a><br /></td></tr>
+<tr class="memdesc:acf188e9442e31d38463ffa9496e51591"><td class="mdescLeft">&#160;</td><td class="mdescRight">Double precision version of dfco for compact differentiation coefficients.  <a href="interfacepmat2_1_1dfco.html#acf188e9442e31d38463ffa9496e51591">More...</a><br /></td></tr>
 <tr class="separator:acf188e9442e31d38463ffa9496e51591"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaef7322a836c43b168e52e72218d5454"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1dfco.html#aaef7322a836c43b168e52e72218d5454">tdfco</a> (xa, xb, a, b)</td></tr>
-<tr class="memdesc:aaef7322a836c43b168e52e72218d5454"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1dfco.html#aaef7322a836c43b168e52e72218d5454">More...</a><br /></td></tr>
+<tr class="memdesc:aaef7322a836c43b168e52e72218d5454"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa.  <a href="interfacepmat2_1_1dfco.html#aaef7322a836c43b168e52e72218d5454">More...</a><br /></td></tr>
 <tr class="separator:aaef7322a836c43b168e52e72218d5454"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -169,7 +169,7 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A.d = B.c (*) In either case, d is the derivative of c. </p>
+<p>Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A.d = B.c (*) In either case, d is the derivative (or density) of cumulative c. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">na</td><td>number of d-points operated on by this row of the A of (*) </td></tr>
@@ -254,16 +254,16 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
+<p>Double precision version of dfco for compact differentiation coefficients. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">na</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nb</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">za</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zb</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">z0</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">na</td><td>number of A coefficients multiplying derivatives </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nb</td><td>number of B coefficients multiplying cumulatives </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">za</td><td>coordinates of the density (d) points </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zb</td><td>coordinates of the cumulative (c) points </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">z0</td><td>nominal point of application of the compact formula </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>the A-coefficients for this scheme </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>the B-coefficients for this scheme </td></tr>
   </table>
   </dd>
 </dl>
@@ -320,20 +320,20 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
+<p>Simplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">xa</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xb</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xa</td><td>coordinates, relative to point of application, of d values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xb</td><td>coordinates, relatuve to point of application, of c values </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>the coefficients, A, for this scheme </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>the coefficients, B, for this scheme </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00257">257</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00258">258</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
 
 </div>
 </div>

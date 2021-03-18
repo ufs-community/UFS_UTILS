@@ -1,4 +1,4 @@
-.TH "pmat2::csb2b" 3 "Thu Mar 11 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::csb2b" 3 "Thu Mar 18 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,7 +12,7 @@ pmat2::csb2b
 .ti -1c
 .RI "subroutine \fBcsb2b\fP (m1, m2, mah1, mah2, mirror2, a)"
 .br
-.RI "??? "
+.RI "Incorporate operand antisymmetry and clip near end-2 of a band matrix\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -22,21 +22,21 @@ Definition at line 63 of file pmat2\&.f90\&.
 .SS "subroutine pmat2::csb2b::csb2b (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mirror2, real(sp), dimension(1\-m1:0,m1\-m2\-mah1:m1\-m2+mah2), intent(inout) a)\fC [private]\fP"
 
 .PP
-??? 
+Incorporate operand antisymmetry and clip near end-2 of a band matrix\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIm1\fP ??? 
+\fIm1\fP Number of rows of matrix A 
 .br
-\fIm2\fP ??? 
+\fIm2\fP Number of columns of matrix A 
 .br
-\fImah1\fP ??? 
+\fImah1\fP Left semi-bandwidths (subdiagonals) of A\&. 
 .br
-\fImah2\fP ??? 
+\fImah2\fP Right semi-bandwidths (superdiagonals) of A\&. 
 .br
-\fImirror2\fP ??? 
+\fImirror2\fP 2*location of symmetry axis relative to end-2 operand element\&. 
 .br
-\fIa\fP ??? 
+\fIa\fP Input operator, output as antisymmetrized and clipped at end-2\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -51,7 +51,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 503 of file pmat2\&.f90\&.
+Definition at line 504 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

@@ -104,6 +104,7 @@ Functions/Subroutines</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Replace undefined values with a valid value. </p>
 <p>This can happen for an isolated lake or island that is unresolved by the input grid.</p>
+<p>Searches for the nearest valid land/non-land data where the input and target fv3 land-mask differ. Example: when the target FV3 grid depicts an island that is not resolved by the input data. If nearby valid data is not found, a default value is used.</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 </div><h2 class="groupheader">Function/Subroutine Documentation</h2>
 <a id="a4a511a55b3ce58a03cc053d19cecc458"></a>
@@ -194,11 +195,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="search__util_8F90_source.html#l00042">42</a> of file <a class="el" href="search__util_8F90_source.html">search_util.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="search__util_8F90_source.html#l00047">47</a> of file <a class="el" href="search__util_8F90_source.html">search_util.F90</a>.</p>
 
-<p class="reference">References <a class="el" href="search__util_8F90_source.html#l00219">sst_guess()</a>.</p>
+<p class="reference">References <a class="el" href="search__util_8F90_source.html#l00224">sst_guess()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00304">surface::interp()</a>, <a class="el" href="input__data_8F90_source.html#l04581">input_data::read_input_sfc_grib2_file()</a>, and <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00310">surface::interp()</a>, <a class="el" href="input__data_8F90_source.html#l04581">input_data::read_input_sfc_grib2_file()</a>, and <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>.</p>
 
 </div>
 </div>
@@ -238,9 +239,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="search__util_8F90_source.html#l00219">219</a> of file <a class="el" href="search__util_8F90_source.html">search_util.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="search__util_8F90_source.html#l00224">224</a> of file <a class="el" href="search__util_8F90_source.html">search_util.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="search__util_8F90_source.html#l00042">search()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="search__util_8F90_source.html#l00047">search()</a>.</p>
 
 </div>
 </div>

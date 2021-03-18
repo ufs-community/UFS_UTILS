@@ -1,4 +1,4 @@
-.TH "pmat2::l1ubb" 3 "Thu Mar 11 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::l1ubb" 3 "Thu Mar 18 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,11 +12,11 @@ pmat2::l1ubb
 .ti -1c
 .RI "subroutine \fBl1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
+.RI "[L]*[D]*[U] factoring of band-matrix [A], modify [B] --> [D**-1]*[B] [L] lower triangular with unit main diagonal [D] diagonal matrix [U] upper triangular with unit main diagonal [B] associated band matrix with same number of rows as [A] lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
 .ti -1c
 .RI "subroutine \fBdl1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "??? "
+.RI "Double precision version of L1UBB\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -26,7 +26,7 @@ Definition at line 66 of file pmat2\&.f90\&.
 .SS "subroutine pmat2::l1ubb::l1ubb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a, real(sp), dimension(m,\-mbh1:mbh2), intent(inout) b)\fC [private]\fP"
 
 .PP
-Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. 
+[L]*[D]*[U] factoring of band-matrix [A], modify [B] --> [D**-1]*[B] [L] lower triangular with unit main diagonal [D] diagonal matrix [U] upper triangular with unit main diagonal [B] associated band matrix with same number of rows as [A] lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -36,13 +36,17 @@ Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace lower t
 .br
 \fIm\fP Number of rows of A and B 
 .br
-\fImah1\fP left half-width of fortran array A 
+\fImah1\fP number of subdiagonals of A 
 .br
-\fImah2\fP right half-width of fortran array A 
+\fImah2\fP number of superdiagonals of A 
 .br
-\fImbh1\fP left half-width of fortran array B 
+\fImbh1\fP number of subdiagonals of B 
 .br
-\fImbh2\fP right half-width of fortran array B 
+\fImbh2\fP number of superdiagonals of B 
+.br
+\fIa\fP Input single precision band matrix A; output factors encoded as [D**-1 * L * D]+[U-I] 
+.br
+\fIb\fP Input single precision band matrix B; output [D**-1 B] 
 .RE
 .PP
 \fBAuthor\fP
@@ -57,29 +61,29 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 715 of file pmat2\&.f90\&.
+Definition at line 737 of file pmat2\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "subroutine pmat2::l1ubb::dl1ubb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a, real(dp), dimension(m,\-mbh1:mbh2), intent(inout) b)\fC [private]\fP"
 
 .PP
-??? 
+Double precision version of L1UBB\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIm\fP ??? 
+\fIm\fP Number of rows of A and B 
 .br
-\fImah1\fP ??? 
+\fImah1\fP left half-width of fortran array A 
 .br
-\fImah2\fP ??? 
+\fImah2\fP right half-width of fortran array A 
 .br
-\fImbh1\fP ??? 
+\fImbh1\fP left half-width of fortran array B 
 .br
-\fImbh2\fP ??? 
+\fImbh2\fP left half-width of fortran array B 
 .br
-\fIa\fP ??? 
+\fIa\fP Input double precision band matrix A; output factors encoded as [D**-1 * L * D]+[U-I] 
 .br
-\fIb\fP ??? 
+\fIb\fP Input double precision band matrix B; output [D**-1 B] 
 .RE
 .PP
 \fBAuthor\fP
@@ -94,7 +98,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 752 of file pmat2\&.f90\&.
+Definition at line 775 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

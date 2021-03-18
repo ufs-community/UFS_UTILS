@@ -23,6 +23,21 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "chgres_cube", "index.html", [
+    [ "Introduction", "index.html#autotoc_md1", [
+      [ "Where to find GFS GRIB2, NEMSIO and NetCDF data", "index.html#autotoc_md2", [
+        [ "GRIB2", "index.html#autotoc_md3", null ],
+        [ "NEMSIO", "index.html#autotoc_md4", null ],
+        [ "NetCDF", "index.html#autotoc_md5", null ]
+      ] ]
+    ] ],
+    [ "Initializing with GRIB2 data - some caveats", "index.html#autotoc_md6", null ],
+    [ "chgres_cube namelist options", "index.html#autotoc_md8", null ],
+    [ "Program inputs and outputs", "index.html#autotoc_md9", [
+      [ "Inputs", "index.html#autotoc_md10", null ],
+      [ "Outputs", "index.html#autotoc_md11", null ]
+    ] ],
+    [ "Running the program stand alone", "index.html#autotoc_md12", null ],
+    [ "Variable Mapping (VARMAP) table", "index.html#autotoc_md13", null ],
     [ "Modules", "namespaces.html", [
       [ "Modules List", "namespaces.html", "namespaces_dup" ],
       [ "Module Members", "namespacemembers.html", [
@@ -44,7 +59,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "atmosphere_8F90.html",
-"namespacesearch__util.html"
+"namespacemembers_vars_s.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

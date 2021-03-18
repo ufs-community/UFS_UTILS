@@ -122,12 +122,13 @@ Functions/Subroutines</h2></td></tr>
 <p>Initialize an FV3 run using history or restart data from another FV3 run, the spectral GFS, and a few other models. Converts atmospheric, surface and nst data.</p>
 <p>This file reads a configuration namelist.</p>
 <p>Link the configuration namelist to ./fort.41. Then run the program with a multiple of six mpi tasks (an ESMF library requirement for fv3 cubed sphere grids).</p>
+<dl class="section note"><dt>Note</dt><dd>For variable names “input” refers to the data input to the program (i.e., GRIB2, NEMSIO, NetCDF). “Target” refers to the target or FV3 model grid.</dd></dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 for success, error code otherwise. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="chgres_8F90_source.html#l00020">20</a> of file <a class="el" href="chgres_8F90_source.html">chgres.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="chgres_8F90_source.html#l00024">24</a> of file <a class="el" href="chgres_8F90_source.html">chgres.F90</a>.</p>
 
-<p class="reference">References <a class="el" href="atmosphere_8F90_source.html#l00111">atmosphere::atmosphere_driver()</a>, <a class="el" href="model__grid_8F90_source.html#l01696">model_grid::cleanup_input_target_grid_data()</a>, <a class="el" href="program__setup_8F90_source.html#l00094">program_setup::convert_atm</a>, <a class="el" href="program__setup_8F90_source.html#l00096">program_setup::convert_sfc</a>, <a class="el" href="model__grid_8F90_source.html#l00117">model_grid::define_input_grid()</a>, <a class="el" href="model__grid_8F90_source.html#l01105">model_grid::define_target_grid()</a>, <a class="el" href="utils_8F90_source.html#l00010">error_handler()</a>, <a class="el" href="program__setup_8F90_source.html#l00153">program_setup::read_setup_namelist()</a>, <a class="el" href="program__setup_8F90_source.html#l00339">program_setup::read_varmap()</a>, and <a class="el" href="surface_8F90_source.html#l00146">surface::surface_driver()</a>.</p>
+<p class="reference">References <a class="el" href="atmosphere_8F90_source.html#l00111">atmosphere::atmosphere_driver()</a>, <a class="el" href="model__grid_8F90_source.html#l01697">model_grid::cleanup_input_target_grid_data()</a>, <a class="el" href="program__setup_8F90_source.html#l00094">program_setup::convert_atm</a>, <a class="el" href="program__setup_8F90_source.html#l00096">program_setup::convert_sfc</a>, <a class="el" href="model__grid_8F90_source.html#l00118">model_grid::define_input_grid()</a>, <a class="el" href="model__grid_8F90_source.html#l01106">model_grid::define_target_grid()</a>, <a class="el" href="utils_8F90_source.html#l00010">error_handler()</a>, <a class="el" href="program__setup_8F90_source.html#l00153">program_setup::read_setup_namelist()</a>, <a class="el" href="program__setup_8F90_source.html#l00339">program_setup::read_varmap()</a>, and <a class="el" href="surface_8F90_source.html#l00151">surface::surface_driver()</a>.</p>
 
 </div>
 </div>

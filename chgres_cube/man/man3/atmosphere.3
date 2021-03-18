@@ -1,8 +1,8 @@
-.TH "atmosphere" 3 "Thu Mar 11 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.TH "atmosphere" 3 "Thu Mar 18 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-atmosphere \- Process atmospheric fields: Horizontally interpolate input fields to the target grid\&.  
+atmosphere \- Process atmospheric fields\&.  
 
 .SH SYNOPSIS
 .br
@@ -45,15 +45,15 @@ atmosphere \- Process atmospheric fields: Horizontally interpolate input fields 
 .ti -1c
 .RI "subroutine \fBnewpr1\fP (localpet)"
 .br
-.RI "Compute model level pressures\&. "
+.RI "Computes 3-D pressure given an adjusted surface pressure\&. "
 .ti -1c
 .RI "subroutine \fBnewps\fP (localpet)"
 .br
-.RI "Compute new surface pressure\&. "
+.RI "Computes adjusted surface pressure given a new terrain height\&. "
 .ti -1c
 .RI "subroutine \fBread_vcoord_info\fP"
 .br
-.RI "Read vertical coordinate information\&. "
+.RI "Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid)\&. "
 .ti -1c
 .RI "subroutine \fBrsearch\fP (IM, KM1, IXZ1, KXZ1, Z1, KM2, IXZ2, KXZ2, Z2, IXL2, KXL2, L2)"
 .br
@@ -69,7 +69,7 @@ atmosphere \- Process atmospheric fields: Horizontally interpolate input fields 
 .ti -1c
 .RI "subroutine \fBvintg_thomp_mp_climo\fP"
 .br
-.RI "Vertically interpolate thompson microphysics climo tracers to the target model levels\&. "
+.RI "Vertically interpolate atmospheric fields to target FV3 grid\&. "
 .in -1c
 .SS "Variables"
 
@@ -197,11 +197,11 @@ atmosphere \- Process atmospheric fields: Horizontally interpolate input fields 
 .in -1c
 .SH "Detailed Description"
 .PP 
-Process atmospheric fields: Horizontally interpolate input fields to the target grid\&. 
+Process atmospheric fields\&. 
 
-Adjust surface pressure according to terrain difference between input and target grids\&. Vertically interpolate to target grid vertical levels\&. Processing based on the spectral GFS version of CHGRES\&.
+Horizontally interpolate from input to target FV3 grid using ESMF regridding\&. Adjust surface pressure according to terrain differences between input and target grid\&. Vertically interpolate to target FV3 grid vertical levels\&. Processing based on the spectral GFS version of CHGRES\&.
 .PP
-Variables defined below\&. Here 'b4adj' indicates fields on the target grid before vertical adjustment\&. 'target' indicates data on target grid\&. 'input' indicates data on input grid\&. '_s' indicates fields on the 'south' edge of the grid box\&. '_w' indicate fields on the 'west' edge of the grid box\&. Otherwise, fields are at the center of the grid box\&.
+For variables 'b4adj' indicates fields on the target grid before vertical adjustment\&. 'target' indicates data on target grid\&. 'input' indicates data on input grid\&. '_s' indicates fields on the 'south' edge of the grid box\&. '_w' indicate fields on the 'west' edge of the grid box\&. Otherwise, fields are at the center of the grid box\&.
 .PP
 \fBAuthor\fP
 .RS 4
@@ -245,7 +245,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1930 of file atmosphere\&.F90\&.
+Definition at line 1933 of file atmosphere\&.F90\&.
 .PP
 References dzdt_b4adj_target_grid, program_setup::num_tracers, pres_b4adj_target_grid, ps_b4adj_target_grid, temp_b4adj_target_grid, terrain_interp_to_target_grid, tracers_b4adj_target_grid, and wind_b4adj_target_grid\&.
 .PP
@@ -262,7 +262,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1955 of file atmosphere\&.F90\&.
+Definition at line 1958 of file atmosphere\&.F90\&.
 .PP
 References delp_target_grid, dzdt_target_grid, program_setup::num_tracers, pres_target_grid, ps_target_grid, qnifa_climo_target_grid, qnwfa_climo_target_grid, temp_target_grid, tracers_target_grid, u_s_target_grid, u_w_target_grid, v_s_target_grid, v_w_target_grid, wind_s_target_grid, wind_target_grid, wind_w_target_grid, and zh_target_grid\&.
 .PP
@@ -279,7 +279,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1841 of file atmosphere\&.F90\&.
+Definition at line 1843 of file atmosphere\&.F90\&.
 .PP
 References error_handler(), levp1_target, program_setup::num_tracers, ps_target_grid, temp_target_grid, model_grid::terrain_target_grid, program_setup::tracers, tracers_target_grid, vcoord_target, and zh_target_grid\&.
 .PP
@@ -347,7 +347,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1131 of file atmosphere\&.F90\&.
+Definition at line 1133 of file atmosphere\&.F90\&.
 .PP
 References thompson_mp_climo_data::cleanup_thomp_mp_climo_input_data(), error_handler(), lev_target, thompson_mp_climo_data::lev_thomp_mp_climo, qnifa_climo_b4adj_target_grid, thompson_mp_climo_data::qnifa_climo_input_grid, qnifa_climo_target_grid, qnwfa_climo_b4adj_target_grid, thompson_mp_climo_data::qnwfa_climo_input_grid, qnwfa_climo_target_grid, model_grid::target_grid, thomp_pres_climo_b4adj_target_grid, and thompson_mp_climo_data::thomp_pres_climo_input_grid\&.
 .PP
@@ -355,7 +355,7 @@ Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::newpr1 (integer, intent(in) localpet)\fC [private]\fP"
 
 .PP
-Compute model level pressures\&. PROGRAM HISTORY LOG: 
+Computes 3-D pressure given an adjusted surface pressure\&. PROGRAM HISTORY LOG: 
 .br
  2005-04-11 HANN_MING HENRY JUANG hybrid sigma, sigma-p, and sigma-
 .IP "\(bu" 2
@@ -417,7 +417,7 @@ INPUT ARGUMENT LIST:
 .PP
 \fBAuthor\fP
 .RS 4
-HANN_MING HENRY JUANG, JUANG, Fanglin Yang, S\&. Moorthi 
+Hann Ming Henry Juang, Juang, Fanglin Yang, S\&. Moorthi 
 .RE
 .PP
 
@@ -430,7 +430,7 @@ Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::newps (integer, intent(in) localpet)\fC [private]\fP"
 
 .PP
-Compute new surface pressure\&. Computes a new surface pressure given a new orography\&. The new pressure is computed assuming a hydrostatic balance and a constant temperature lapse rate\&. Below ground, the lapse rate is assumed to be -6\&.5 k/km\&.
+Computes adjusted surface pressure given a new terrain height\&. Computes a new surface pressure given a new orography\&. The new pressure is computed assuming a hydrostatic balance and a constant temperature lapse rate\&. Below ground, the lapse rate is assumed to be -6\&.5 k/km\&.
 .PP
 program history log:
 .IP "\(bu" 2
@@ -446,7 +446,7 @@ program history log:
 .PP
 \fBAuthor\fP
 .RS 4
-iredell org: w/nmc23, George Gayno 
+Mark Iredell, George Gayno 
 .RE
 .PP
 \fBDate\fP
@@ -464,7 +464,7 @@ Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::read_vcoord_info\fC [private]\fP"
 
 .PP
-Read vertical coordinate information\&. 
+Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid)\&. 
 .PP
 \fBAuthor\fP
 .RS 4
@@ -473,7 +473,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1096 of file atmosphere\&.F90\&.
+Definition at line 1098 of file atmosphere\&.F90\&.
 .PP
 References error_handler(), lev_target, levp1_target, nvcoord_target, program_setup::vcoord_file_target_grid, and vcoord_target\&.
 .PP
@@ -492,14 +492,6 @@ Returned values of 0 or km1 indicate that the given search value
 If a search value is identical to one of the sequence values then the location returned points to the identical value\&. If the sequence is not strictly monotonic and a search value is identical to more than one of the sequence values, then the location returned may point to any of the identical values\&.
 .PP
 to be exact, for each i from 1 to im and for each k from 1 to km2, z=z2(1+(i-1)*ixz2+(k-1)*kxz2) is the search value and l=l2(1+(i-1)*ixl2+(k-1)*kxl2) is the location returned\&. if l=0, then z is less than the start point z1(1+(i-1)*ixz1) for ascending sequences (or greater than for descending sequences)\&. if l=km1, then z is greater than or equal to the end point z1(1+(i-1)*ixz1+(km1-1)*kxz1) for ascending sequences (or less than or equal to for descending sequences)\&. otherwise z is between the values z1(1+(i-1)*ixz1+(l-1)*kxz1) and z1(1+(i-1)*ixz1+(l-0)*kxz1) and may equal the former\&.
-.PP
-PROGRAM HISTORY LOG: 
-.br
-.IP "\(bu" 2
-1999-01-05 MARK IREDELL 
-.br
-
-.PP
 .PP
 \fBParameters\fP
 .RS 4
@@ -578,7 +570,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 1793 of file atmosphere\&.F90\&.
+Definition at line 1795 of file atmosphere\&.F90\&.
 .PP
 Referenced by terp3()\&.
 .SS "subroutine atmosphere::terp3 (integer IM, integer IXZ1, integer IXQ1, integer IXZ2, integer IXQ2, integer NM, integer NXQ1, integer NXQ2, integer KM1, integer KXZ1, integer KXQ1, real(esmf_kind_r8), dimension(1+(im\-1)*ixz1+(km1\-1)*kxz1) Z1, real(esmf_kind_r8), dimension(1+(im\-1)*ixq1+(km1\-1)*kxq1+(nm\-1)*nxq1) Q1, integer KM2, integer KXZ2, integer KXQ2, real(esmf_kind_r8), dimension(1+(im\-1)*ixz2+(km2\-1)*kxz2) Z2, real(esmf_kind_r8), dimension(1+(im\-1)*ixq2+(km2\-1)*kxq2+(nm\-1)*nxq2) Q2)"
@@ -699,7 +691,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 1597 of file atmosphere\&.F90\&.
+Definition at line 1602 of file atmosphere\&.F90\&.
 .PP
 References rsearch()\&.
 .PP
@@ -711,7 +703,7 @@ Vertically interpolate upper-air fields\&. Vertically interpolate upper-air fiel
 .PP
 \fBAuthor\fP
 .RS 4
-IREDELL ORG: W/NMC23 
+Mark Iredell 
 .RE
 .PP
 \fBDate\fP
@@ -721,7 +713,7 @@ IREDELL ORG: W/NMC23
 .PP
 
 .PP
-Definition at line 1363 of file atmosphere\&.F90\&.
+Definition at line 1368 of file atmosphere\&.F90\&.
 .PP
 References dzdt_b4adj_target_grid, dzdt_target_grid, error_handler(), input_data::lev_input, lev_target, program_setup::num_tracers, pres_b4adj_target_grid, pres_target_grid, temp_b4adj_target_grid, temp_target_grid, terp3(), program_setup::tracers, tracers_b4adj_target_grid, tracers_target_grid, wind_b4adj_target_grid, and wind_target_grid\&.
 .PP
@@ -729,7 +721,7 @@ Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::vintg_thomp_mp_climo\fC [private]\fP"
 
 .PP
-Vertically interpolate thompson microphysics climo tracers to the target model levels\&. 
+Vertically interpolate atmospheric fields to target FV3 grid\&. Vertically interpolate thompson microphysics climo tracers to the target model levels\&.
 .PP
 \fBAuthor\fP
 .RS 4
@@ -738,7 +730,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1240 of file atmosphere\&.F90\&.
+Definition at line 1245 of file atmosphere\&.F90\&.
 .PP
 References error_handler(), lev_target, thompson_mp_climo_data::lev_thomp_mp_climo, pres_target_grid, qnifa_climo_b4adj_target_grid, qnifa_climo_target_grid, qnwfa_climo_b4adj_target_grid, qnwfa_climo_target_grid, terp3(), and thomp_pres_climo_b4adj_target_grid\&.
 .PP

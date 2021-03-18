@@ -91,7 +91,7 @@ $(document).ready(function(){initNavTree('surface_8F90.html',''); initResizable(
 </div><!--header-->
 <div class="contents">
 
-<p>Process surface and nst fields.  
+<p>Process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields.  
 <a href="#details">More...</a></p>
 
 <p><a href="surface_8F90_source.html">Go to the source code of this file.</a></p>
@@ -135,7 +135,7 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memdesc:a7a2257539e521c7e72bd2b3c76f72044"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert 1d index to 2d indices.  <a href="namespacesurface.html#a7a2257539e521c7e72bd2b3c76f72044">More...</a><br /></td></tr>
 <tr class="separator:a7a2257539e521c7e72bd2b3c76f72044"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a898a2b475d3a72705c4df5306a200fd5"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesurface.html#a898a2b475d3a72705c4df5306a200fd5">surface::interp</a> (localpet)</td></tr>
-<tr class="memdesc:a898a2b475d3a72705c4df5306a200fd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Horizontally interpolate surface fields using esmf routines.  <a href="namespacesurface.html#a898a2b475d3a72705c4df5306a200fd5">More...</a><br /></td></tr>
+<tr class="memdesc:a898a2b475d3a72705c4df5306a200fd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Horizontally interpolate surface fields from input to target FV3 grid using esmf routines.  <a href="namespacesurface.html#a898a2b475d3a72705c4df5306a200fd5">More...</a><br /></td></tr>
 <tr class="separator:a898a2b475d3a72705c4df5306a200fd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6066474e1059a15a28f475a60c230d35"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesurface.html#a6066474e1059a15a28f475a60c230d35">surface::nst_land_fill</a></td></tr>
 <tr class="memdesc:a6066474e1059a15a28f475a60c230d35"><td class="mdescLeft">&#160;</td><td class="mdescRight">nst is not active at land or sea ice points.  <a href="namespacesurface.html#a6066474e1059a15a28f475a60c230d35">More...</a><br /></td></tr>
@@ -298,7 +298,7 @@ Variables</h2></td></tr>
 <tr class="separator:a6a4d60b4fb8e95d77e3e9f5d6bd58383"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Process surface and nst fields. </p>
+<div class="textblock"><p>Process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>

@@ -1,5 +1,6 @@
 var namespaces_dup =
 [
+    [ "Near Sea Surface Temperature (NSST) data and GRIB2 initialization", "index.html#autotoc_md7", null ],
     [ "atmosphere", "namespaceatmosphere.html", null ],
     [ "grib2_util", "namespacegrib2__util.html", null ],
     [ "input_data", "namespaceinput__data.html", null ],

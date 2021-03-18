@@ -1,4 +1,4 @@
-.TH "search_util" 3 "Thu Mar 11 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.TH "search_util" 3 "Thu Mar 18 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -24,6 +24,8 @@ search_util \- Replace undefined values with a valid value\&.
 Replace undefined values with a valid value\&. 
 
 This can happen for an isolated lake or island that is unresolved by the input grid\&.
+.PP
+Searches for the nearest valid land/non-land data where the input and target fv3 land-mask differ\&. Example: when the target FV3 grid depicts an island that is not resolved by the input data\&. If nearby valid data is not found, a default value is used\&.
 .PP
 \fBAuthor\fP
 .RS 4
@@ -70,7 +72,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 42 of file search_util\&.F90\&.
+Definition at line 47 of file search_util\&.F90\&.
 .PP
 References sst_guess()\&.
 .PP
@@ -94,7 +96,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 219 of file search_util\&.F90\&.
+Definition at line 224 of file search_util\&.F90\&.
 .PP
 Referenced by search()\&.
 .SH "Author"

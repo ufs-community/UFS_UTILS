@@ -1,4 +1,4 @@
-.TH "pmat4" 3 "Thu Mar 11 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4" 3 "Thu Mar 18 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -825,7 +825,7 @@ R\&. J\&. Purser
 .PP
 Definition at line 1974 of file pmat4\&.f90\&.
 .PP
-References pietc::u0, and pietc::u1\&.
+References pkind::dpc, pietc::u0, and pietc::u1\&.
 .SS "real(dp) function pmat4::det_d (real(dp), dimension(:,:), intent(in) a)"
 
 .PP
@@ -897,6 +897,8 @@ R\&. J\&. Purser
 
 .PP
 Definition at line 405 of file pmat4\&.f90\&.
+.PP
+References pkind::dp, and pkind::dpi\&.
 .SS "real(sp) function pmat4::det_s (real(sp), dimension(:,:), intent(in) a)\fC [private]\fP"
 
 .PP
@@ -2517,6 +2519,8 @@ R\&. J\&. Purser
 
 .PP
 Definition at line 2029 of file pmat4\&.f90\&.
+.PP
+References pkind::dpc\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

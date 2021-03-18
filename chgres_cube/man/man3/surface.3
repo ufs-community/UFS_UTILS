@@ -1,4 +1,4 @@
-.TH "surface" 3 "Thu Mar 11 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.TH "surface" 3 "Thu Mar 18 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -53,7 +53,7 @@ surface \- Process surface and nst fields\&.
 .ti -1c
 .RI "subroutine \fBinterp\fP (localpet)"
 .br
-.RI "Horizontally interpolate surface fields using esmf routines\&. "
+.RI "Horizontally interpolate surface fields from input to target FV3 grid using esmf routines\&. "
 .ti -1c
 .RI "subroutine \fBnst_land_fill\fP"
 .br
@@ -273,6 +273,8 @@ Process surface and nst fields\&.
 
 Interpolates fields from the input to target grids\&. Adjusts soil temperature according to differences in input and target grid terrain\&. Rescales soil moisture for soil type differences between input and target grid\&. Computes frozen portion of total soil moisture\&.
 .PP
+Assumes the input land data are Noah LSM-based, and the fv3 run will use the Noah LSM\&. NSST fields are not available when using GRIB2 input data\&.
+.PP
 Public variables are defined below\&. 'target' indicates field associated with the target grid\&. 'input' indicates field associated with the input grid\&.
 .PP
 \fBAuthor\fP
@@ -302,7 +304,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 3558 of file surface\&.F90\&.
+Definition at line 3565 of file surface\&.F90\&.
 .PP
 References error_handler(), model_grid::i_input, model_grid::input_grid, model_grid::j_input, input_data::lsoil_input, model_grid::lsoil_target, input_data::soil_temp_input_grid, input_data::soilm_liq_input_grid, and input_data::soilm_tot_input_grid\&.
 .PP
@@ -319,7 +321,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3482 of file surface\&.F90\&.
+Definition at line 3489 of file surface\&.F90\&.
 .PP
 References error_handler(), model_grid::landmask_target_grid, soil_temp_target_grid, terrain_from_input_grid, model_grid::terrain_target_grid, veg_type_landice_target, and static_data::veg_type_target_grid\&.
 .PP
@@ -336,7 +338,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2517 of file surface\&.F90\&.
+Definition at line 2523 of file surface\&.F90\&.
 .PP
 References program_setup::bb_target, blim, error_handler(), frh2o(), frz_h2o, grav, hlice, model_grid::landmask_target_grid, program_setup::maxsmc_target, program_setup::satpsi_target, soil_temp_target_grid, static_data::soil_type_target_grid, soilm_liq_target_grid, soilm_tot_target_grid, veg_type_landice_target, and static_data::veg_type_target_grid\&.
 .PP
@@ -355,7 +357,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 2790 of file surface\&.F90\&.
+Definition at line 2796 of file surface\&.F90\&.
 .PP
 References static_data::alnsf_target_grid, static_data::alnwf_target_grid, static_data::alvsf_target_grid, static_data::alvwf_target_grid, canopy_mc_target_grid, error_handler(), static_data::facsf_target_grid, static_data::facwf_target_grid, model_grid::landmask_target_grid, static_data::max_veg_greenness_target_grid, static_data::min_veg_greenness_target_grid, static_data::mxsno_albedo_target_grid, static_data::slope_type_target_grid, soil_temp_target_grid, static_data::soil_type_target_grid, soilm_tot_target_grid, static_data::veg_greenness_target_grid, veg_type_landice_target, and static_data::veg_type_target_grid\&.
 .SS "subroutine surface::cleanup_target_nst_data\fC [private]\fP"
@@ -370,7 +372,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 4819 of file surface\&.F90\&.
+Definition at line 4825 of file surface\&.F90\&.
 .PP
 References c_0_target_grid, c_d_target_grid, d_conv_target_grid, dt_cool_target_grid, ifd_target_grid, qrain_target_grid, tref_target_grid, w_0_target_grid, w_d_target_grid, xs_target_grid, xt_target_grid, xtts_target_grid, xu_target_grid, xv_target_grid, xz_target_grid, xzts_target_grid, z_c_target_grid, and zm_target_grid\&.
 .PP
@@ -387,7 +389,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 4783 of file surface\&.F90\&.
+Definition at line 4789 of file surface\&.F90\&.
 .PP
 References canopy_mc_target_grid, f10m_target_grid, ffmm_target_grid, q2m_target_grid, seaice_depth_target_grid, seaice_fract_target_grid, seaice_skin_temp_target_grid, skin_temp_target_grid, snow_depth_target_grid, snow_liq_equiv_target_grid, soil_temp_target_grid, soil_type_from_input_grid, soilm_liq_target_grid, soilm_tot_target_grid, srflag_target_grid, t2m_target_grid, terrain_from_input_grid, terrain_from_input_grid_land, tprcp_target_grid, ustar_target_grid, and z0_target_grid\&.
 .PP
@@ -404,7 +406,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 4610 of file surface\&.F90\&.
+Definition at line 4616 of file surface\&.F90\&.
 .PP
 References c_0_target_grid, c_d_target_grid, d_conv_target_grid, dt_cool_target_grid, error_handler(), ifd_target_grid, qrain_target_grid, model_grid::target_grid, tref_target_grid, w_0_target_grid, w_d_target_grid, xs_target_grid, xt_target_grid, xtts_target_grid, xu_target_grid, xv_target_grid, xz_target_grid, xzts_target_grid, z_c_target_grid, and zm_target_grid\&.
 .PP
@@ -421,7 +423,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 4273 of file surface\&.F90\&.
+Definition at line 4279 of file surface\&.F90\&.
 .PP
 References canopy_mc_target_grid, error_handler(), f10m_target_grid, ffmm_target_grid, lai_target_grid, model_grid::lsoil_target, q2m_target_grid, seaice_depth_target_grid, seaice_fract_target_grid, seaice_skin_temp_target_grid, skin_temp_target_grid, snow_depth_target_grid, snow_liq_equiv_target_grid, soil_temp_target_grid, soil_type_from_input_grid, soilm_liq_target_grid, soilm_tot_target_grid, srflag_target_grid, t2m_target_grid, model_grid::target_grid, terrain_from_input_grid, tprcp_target_grid, ustar_target_grid, and z0_target_grid\&.
 .PP
@@ -465,7 +467,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3177 of file surface\&.F90\&.
+Definition at line 3183 of file surface\&.F90\&.
 .PP
 References blim, frz_h2o, grav, and hlice\&.
 .PP
@@ -495,13 +497,13 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 4754 of file surface\&.F90\&.
+Definition at line 4760 of file surface\&.F90\&.
 .PP
 Referenced by interp()\&.
 .SS "subroutine surface::interp (integer, intent(in) localpet)"
 
 .PP
-Horizontally interpolate surface fields using esmf routines\&. 
+Horizontally interpolate surface fields from input to target FV3 grid using esmf routines\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -515,7 +517,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 304 of file surface\&.F90\&.
+Definition at line 310 of file surface\&.F90\&.
 .PP
 References input_data::c_0_input_grid, c_0_target_grid, input_data::c_d_input_grid, c_d_target_grid, input_data::canopy_mc_input_grid, canopy_mc_target_grid, program_setup::convert_nst, input_data::d_conv_input_grid, d_conv_target_grid, input_data::dt_cool_input_grid, dt_cool_target_grid, error_handler(), program_setup::external_model, input_data::f10m_input_grid, f10m_target_grid, input_data::ffmm_input_grid, ffmm_target_grid, model_grid::i_target, input_data::ifd_input_grid, ifd_target_grid, ij_to_i_j(), model_grid::input_grid, program_setup::input_type, model_grid::j_target, program_setup::lai_from_climo, input_data::lai_input_grid, lai_target_grid, model_grid::landmask_target_grid, input_data::landsea_mask_input_grid, model_grid::latitude_target_grid, model_grid::lsoil_target, input_data::max_veg_greenness_input_grid, static_data::max_veg_greenness_target_grid, input_data::min_veg_greenness_input_grid, static_data::min_veg_greenness_target_grid, program_setup::minmax_vgfrc_from_climo, model_grid::num_tiles_target_grid, input_data::q2m_input_grid, q2m_target_grid, input_data::qrain_input_grid, qrain_target_grid, input_data::seaice_depth_input_grid, seaice_depth_target_grid, input_data::seaice_fract_input_grid, seaice_fract_target_grid, input_data::seaice_skin_temp_input_grid, seaice_skin_temp_target_grid, model_grid::seamask_target_grid, search_util::search(), input_data::skin_temp_input_grid, skin_temp_target_grid, input_data::snow_depth_input_grid, snow_depth_target_grid, input_data::snow_liq_equiv_input_grid, snow_liq_equiv_target_grid, input_data::soil_temp_input_grid, soil_temp_target_grid, soil_type_from_input_grid, input_data::soil_type_input_grid, static_data::soil_type_target_grid, input_data::soilm_tot_input_grid, soilm_tot_target_grid, program_setup::sotyp_from_climo, input_data::srflag_input_grid, srflag_target_grid, static_data::substrate_temp_target_grid, input_data::t2m_input_grid, t2m_target_grid, model_grid::target_grid, terrain_from_input_grid, terrain_from_input_grid_land, input_data::terrain_input_grid, program_setup::tg3_from_soil, input_data::tprcp_input_grid, tprcp_target_grid, input_data::tref_input_grid, tref_target_grid, input_data::ustar_input_grid, ustar_target_grid, input_data::veg_greenness_input_grid, static_data::veg_greenness_target_grid, input_data::veg_type_input_grid, input_data::veg_type_landice_input, veg_type_landice_target, static_data::veg_type_target_grid, program_setup::vgfrc_from_climo, program_setup::vgtyp_from_climo, input_data::w_0_input_grid, w_0_target_grid, input_data::w_d_input_grid, w_d_target_grid, input_data::xs_input_grid, xs_target_grid, input_data::xt_input_grid, xt_target_grid, input_data::xtts_input_grid, xtts_target_grid, input_data::xu_input_grid, xu_target_grid, input_data::xv_input_grid, xv_target_grid, input_data::xz_input_grid, xz_target_grid, input_data::xzts_input_grid, xzts_target_grid, input_data::z0_input_grid, z0_target_grid, input_data::z_c_input_grid, z_c_target_grid, input_data::zm_input_grid, and zm_target_grid\&.
 .PP
@@ -532,7 +534,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 4064 of file surface\&.F90\&.
+Definition at line 4070 of file surface\&.F90\&.
 .PP
 References c_0_target_grid, c_d_target_grid, d_conv_target_grid, dt_cool_target_grid, error_handler(), ifd_target_grid, model_grid::landmask_target_grid, qrain_target_grid, skin_temp_target_grid, tref_target_grid, w_0_target_grid, w_d_target_grid, xs_target_grid, xt_target_grid, xtts_target_grid, xu_target_grid, xv_target_grid, xz_target_grid, xzts_target_grid, z_c_target_grid, and zm_target_grid\&.
 .PP
@@ -549,7 +551,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3729 of file surface\&.F90\&.
+Definition at line 3735 of file surface\&.F90\&.
 .PP
 References static_data::alnsf_target_grid, static_data::alnwf_target_grid, static_data::alvsf_target_grid, static_data::alvwf_target_grid, canopy_mc_target_grid, error_handler(), static_data::facsf_target_grid, static_data::facwf_target_grid, frz_ice, model_grid::landmask_target_grid, static_data::max_veg_greenness_target_grid, static_data::min_veg_greenness_target_grid, static_data::mxsno_albedo_target_grid, seaice_depth_target_grid, seaice_fract_target_grid, seaice_skin_temp_target_grid, skin_temp_target_grid, static_data::slope_type_target_grid, snow_depth_target_grid, snow_liq_equiv_target_grid, soil_temp_target_grid, static_data::soil_type_target_grid, soilm_liq_target_grid, soilm_tot_target_grid, static_data::substrate_temp_target_grid, static_data::veg_greenness_target_grid, veg_type_landice_target, and static_data::veg_type_target_grid\&.
 .PP
@@ -573,13 +575,13 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 2974 of file surface\&.F90\&.
+Definition at line 2980 of file surface\&.F90\&.
 .PP
 References static_data::alnsf_target_grid, static_data::alnwf_target_grid, static_data::alvsf_target_grid, static_data::alvwf_target_grid, canopy_mc_target_grid, error_handler(), static_data::facsf_target_grid, static_data::facwf_target_grid, model_grid::i_target, model_grid::j_target, model_grid::landmask_target_grid, model_grid::lsoil_target, static_data::max_veg_greenness_target_grid, static_data::min_veg_greenness_target_grid, static_data::mxsno_albedo_target_grid, search_util::search(), static_data::slope_type_target_grid, soil_temp_target_grid, static_data::soil_type_target_grid, soilm_tot_target_grid, static_data::veg_greenness_target_grid, and static_data::veg_type_target_grid\&.
 .SS "subroutine surface::rescale_soil_moisture"
 
 .PP
-Adjust soil moisture for changes in soil type between the input and target grids\&. Works for Noah land model only\&.
+Adjust soil moisture for changes in soil type between the input and target grids\&. Works for Noah land model only\&. Required to preserve latent/sensible heat fluxes\&.
 .PP
 \fBAuthor\fP
 .RS 4
@@ -588,7 +590,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3314 of file surface\&.F90\&.
+Definition at line 3321 of file surface\&.F90\&.
 .PP
 References program_setup::drysmc_input, program_setup::drysmc_target, error_handler(), model_grid::landmask_target_grid, program_setup::maxsmc_input, program_setup::maxsmc_target, program_setup::refsmc_input, program_setup::refsmc_target, soil_type_from_input_grid, static_data::soil_type_target_grid, soilm_tot_target_grid, static_data::veg_greenness_target_grid, veg_type_landice_target, static_data::veg_type_target_grid, program_setup::wltsmc_input, and program_setup::wltsmc_target\&.
 .PP
@@ -605,7 +607,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3675 of file surface\&.F90\&.
+Definition at line 3681 of file surface\&.F90\&.
 .PP
 References error_handler(), model_grid::landmask_target_grid, static_data::veg_type_target_grid, and z0_target_grid\&.
 .PP
@@ -627,7 +629,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 146 of file surface\&.F90\&.
+Definition at line 151 of file surface\&.F90\&.
 .PP
 References adjust_soil_levels(), adjust_soilt_for_terrain(), calc_liq_soil_moisture(), program_setup::calc_soil_params_driver(), input_data::cleanup_input_nst_data(), input_data::cleanup_input_sfc_data(), static_data::cleanup_static_fields(), cleanup_target_nst_data(), cleanup_target_sfc_data(), program_setup::convert_nst, create_nst_esmf_fields(), create_surface_esmf_fields(), static_data::get_static_fields(), interp(), nst_land_fill(), qc_check(), input_data::read_input_nst_data(), input_data::read_input_sfc_data(), rescale_soil_moisture(), roughness(), program_setup::sotyp_from_climo, program_setup::vgtyp_from_climo, and write_fv3_sfc_data_netcdf()\&.
 .PP
@@ -639,7 +641,7 @@ Referenced by chgres()\&.
 .PP
 soil 'b' parameter limit 
 .PP
-Definition at line 125 of file surface\&.F90\&.
+Definition at line 130 of file surface\&.F90\&.
 .PP
 Referenced by calc_liq_soil_moisture(), and frh2o()\&.
 .SS "type(esmf_field), public surface::c_0_target_grid"
@@ -647,7 +649,7 @@ Referenced by calc_liq_soil_moisture(), and frh2o()\&.
 .PP
 Coefficient 1 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 75 of file surface\&.F90\&.
+Definition at line 80 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::c_d_target_grid"
@@ -655,7 +657,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 Coefficient 2 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 73 of file surface\&.F90\&.
+Definition at line 78 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::canopy_mc_target_grid"
@@ -663,7 +665,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 canopy moisture content 
 .PP
-Definition at line 31 of file surface\&.F90\&.
+Definition at line 36 of file surface\&.F90\&.
 .PP
 Referenced by check_smois_land(), cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), qc_check(), replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::d_conv_target_grid"
@@ -671,7 +673,7 @@ Referenced by check_smois_land(), cleanup_target_sfc_data(), create_surface_esmf
 .PP
 Thickness of free convection layer\&. 
 .PP
-Definition at line 77 of file surface\&.F90\&.
+Definition at line 82 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::dt_cool_target_grid"
@@ -679,7 +681,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 Sub-layer cooling amount\&. 
 .PP
-Definition at line 79 of file surface\&.F90\&.
+Definition at line 84 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::f10m_target_grid"
@@ -687,7 +689,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 log((z0+10)*1/z0) See sfc_diff\&.f for details 
 .PP
-Definition at line 33 of file surface\&.F90\&.
+Definition at line 38 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::ffmm_target_grid"
@@ -695,7 +697,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 log((z0+z1)*1/z0) See sfc_diff\&.f for details 
 .PP
-Definition at line 36 of file surface\&.F90\&.
+Definition at line 41 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), and write_fv3_sfc_data_netcdf()\&.
 .SS "real, parameter, private surface::frz_h2o = 273\&.15\fC [private]\fP"
@@ -703,7 +705,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 melting pt water 
 .PP
-Definition at line 127 of file surface\&.F90\&.
+Definition at line 132 of file surface\&.F90\&.
 .PP
 Referenced by calc_liq_soil_moisture(), and frh2o()\&.
 .SS "real, parameter, private surface::frz_ice = 271\&.21\fC [private]\fP"
@@ -711,7 +713,7 @@ Referenced by calc_liq_soil_moisture(), and frh2o()\&.
 .PP
 melting pt sea ice 
 .PP
-Definition at line 129 of file surface\&.F90\&.
+Definition at line 134 of file surface\&.F90\&.
 .PP
 Referenced by qc_check()\&.
 .SS "real, parameter, private surface::grav = 9\&.81\fC [private]\fP"
@@ -719,7 +721,7 @@ Referenced by qc_check()\&.
 .PP
 gravity 
 .PP
-Definition at line 131 of file surface\&.F90\&.
+Definition at line 136 of file surface\&.F90\&.
 .PP
 Referenced by calc_liq_soil_moisture(), and frh2o()\&.
 .SS "real, parameter, private surface::hlice = 3\&.335E5\fC [private]\fP"
@@ -727,7 +729,7 @@ Referenced by calc_liq_soil_moisture(), and frh2o()\&.
 .PP
 latent heat of fusion 
 .PP
-Definition at line 133 of file surface\&.F90\&.
+Definition at line 138 of file surface\&.F90\&.
 .PP
 Referenced by calc_liq_soil_moisture(), and frh2o()\&.
 .SS "type(esmf_field), public surface::ifd_target_grid"
@@ -735,7 +737,7 @@ Referenced by calc_liq_soil_moisture(), and frh2o()\&.
 .PP
 Model mode index\&. 0-diurnal model not started; 1-diurnal model started\&. 
 .PP
-Definition at line 81 of file surface\&.F90\&.
+Definition at line 86 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::lai_target_grid"
@@ -743,7 +745,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 leaf area index 
 .PP
-Definition at line 69 of file surface\&.F90\&.
+Definition at line 74 of file surface\&.F90\&.
 .PP
 Referenced by create_surface_esmf_fields(), interp(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::q2m_target_grid"
@@ -751,7 +753,7 @@ Referenced by create_surface_esmf_fields(), interp(), and write_fv3_sfc_data_net
 .PP
 2-m specific humidity 
 .PP
-Definition at line 39 of file surface\&.F90\&.
+Definition at line 44 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::qrain_target_grid"
@@ -759,7 +761,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 Sensible heat flux due to rainfall\&. 
 .PP
-Definition at line 84 of file surface\&.F90\&.
+Definition at line 89 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::seaice_depth_target_grid"
@@ -767,7 +769,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 sea ice depth 
 .PP
-Definition at line 41 of file surface\&.F90\&.
+Definition at line 46 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), qc_check(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::seaice_fract_target_grid"
@@ -775,7 +777,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 sea ice fraction 
 .PP
-Definition at line 43 of file surface\&.F90\&.
+Definition at line 48 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), qc_check(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::seaice_skin_temp_target_grid"
@@ -783,7 +785,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 sea ice skin temperature 
 .PP
-Definition at line 45 of file surface\&.F90\&.
+Definition at line 50 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), qc_check(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::skin_temp_target_grid"
@@ -791,7 +793,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 skin temperature/sst 
 .PP
-Definition at line 47 of file surface\&.F90\&.
+Definition at line 52 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), nst_land_fill(), qc_check(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::snow_depth_target_grid"
@@ -799,7 +801,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 physical snow depth 
 .PP
-Definition at line 53 of file surface\&.F90\&.
+Definition at line 58 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), qc_check(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::snow_liq_equiv_target_grid"
@@ -807,7 +809,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 liquid equiv snow depth 
 .PP
-Definition at line 51 of file surface\&.F90\&.
+Definition at line 56 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), qc_check(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::soil_temp_target_grid"
@@ -815,7 +817,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 3-d soil temperature 
 .PP
-Definition at line 55 of file surface\&.F90\&.
+Definition at line 60 of file surface\&.F90\&.
 .PP
 Referenced by adjust_soilt_for_terrain(), calc_liq_soil_moisture(), check_smois_land(), cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), qc_check(), replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field) surface::soil_type_from_input_grid\fC [private]\fP"
@@ -823,7 +825,7 @@ Referenced by adjust_soilt_for_terrain(), calc_liq_soil_moisture(), check_smois_
 .PP
 soil type interpolated from input grid 
 .PP
-Definition at line 115 of file surface\&.F90\&.
+Definition at line 120 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), and rescale_soil_moisture()\&.
 .SS "type(esmf_field), public surface::soilm_liq_target_grid"
@@ -831,7 +833,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 3-d liquid soil moisture 
 .PP
-Definition at line 57 of file surface\&.F90\&.
+Definition at line 62 of file surface\&.F90\&.
 .PP
 Referenced by calc_liq_soil_moisture(), cleanup_target_sfc_data(), create_surface_esmf_fields(), qc_check(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::soilm_tot_target_grid"
@@ -839,7 +841,7 @@ Referenced by calc_liq_soil_moisture(), cleanup_target_sfc_data(), create_surfac
 .PP
 3-d total soil moisture 
 .PP
-Definition at line 59 of file surface\&.F90\&.
+Definition at line 64 of file surface\&.F90\&.
 .PP
 Referenced by calc_liq_soil_moisture(), check_smois_land(), cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), qc_check(), replace_land_sfcparams(), rescale_soil_moisture(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::srflag_target_grid"
@@ -847,7 +849,7 @@ Referenced by calc_liq_soil_moisture(), check_smois_land(), cleanup_target_sfc_d
 .PP
 snow/rain flag 
 .PP
-Definition at line 49 of file surface\&.F90\&.
+Definition at line 54 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::t2m_target_grid"
@@ -855,7 +857,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 2-m temperatrure 
 .PP
-Definition at line 61 of file surface\&.F90\&.
+Definition at line 66 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field) surface::terrain_from_input_grid\fC [private]\fP"
@@ -863,7 +865,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 terrain height interpolated from input grid 
 .PP
-Definition at line 118 of file surface\&.F90\&.
+Definition at line 123 of file surface\&.F90\&.
 .PP
 Referenced by adjust_soilt_for_terrain(), cleanup_target_sfc_data(), create_surface_esmf_fields(), and interp()\&.
 .SS "type(esmf_field) surface::terrain_from_input_grid_land\fC [private]\fP"
@@ -871,7 +873,7 @@ Referenced by adjust_soilt_for_terrain(), cleanup_target_sfc_data(), create_surf
 .PP
 terrain height interpolated from input grid at all land points 
 .PP
-Definition at line 121 of file surface\&.F90\&.
+Definition at line 126 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), and interp()\&.
 .SS "type(esmf_field), public surface::tprcp_target_grid"
@@ -879,7 +881,7 @@ Referenced by cleanup_target_sfc_data(), and interp()\&.
 .PP
 precip 
 .PP
-Definition at line 63 of file surface\&.F90\&.
+Definition at line 68 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::tref_target_grid"
@@ -887,7 +889,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 reference temperature 
 .PP
-Definition at line 86 of file surface\&.F90\&.
+Definition at line 91 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::ustar_target_grid"
@@ -895,7 +897,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 friction velocity 
 .PP
-Definition at line 65 of file surface\&.F90\&.
+Definition at line 70 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), and write_fv3_sfc_data_netcdf()\&.
 .SS "integer, parameter surface::veg_type_landice_target = 15\fC [private]\fP"
@@ -903,7 +905,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 Vegetation type category that defines permanent land ice points\&. The Noah LSM land ice physics are applied at these points\&. 
 .PP
-Definition at line 24 of file surface\&.F90\&.
+Definition at line 29 of file surface\&.F90\&.
 .PP
 Referenced by adjust_soilt_for_terrain(), calc_liq_soil_moisture(), check_smois_land(), interp(), qc_check(), and rescale_soil_moisture()\&.
 .SS "type(esmf_field), public surface::w_0_target_grid"
@@ -911,7 +913,7 @@ Referenced by adjust_soilt_for_terrain(), calc_liq_soil_moisture(), check_smois_
 .PP
 Coefficient 3 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 90 of file surface\&.F90\&.
+Definition at line 95 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::w_d_target_grid"
@@ -919,7 +921,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 Coefficient 4 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 88 of file surface\&.F90\&.
+Definition at line 93 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::xs_target_grid"
@@ -927,7 +929,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 Salinity content in diurnal thermocline layer\&. 
 .PP
-Definition at line 92 of file surface\&.F90\&.
+Definition at line 97 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::xt_target_grid"
@@ -935,7 +937,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 Heat content in diurnal thermocline layer\&. 
 .PP
-Definition at line 95 of file surface\&.F90\&.
+Definition at line 100 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::xtts_target_grid"
@@ -943,7 +945,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 d(xt)/d(ts) 
 .PP
-Definition at line 106 of file surface\&.F90\&.
+Definition at line 111 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::xu_target_grid"
@@ -951,7 +953,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 u-current content in diurnal thermocline layer 
 .PP
-Definition at line 98 of file surface\&.F90\&.
+Definition at line 103 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::xv_target_grid"
@@ -959,7 +961,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 v-current content in diurnal thermocline layer 
 .PP
-Definition at line 101 of file surface\&.F90\&.
+Definition at line 106 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::xz_target_grid"
@@ -967,7 +969,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 Diurnal thermocline layer thickness\&. 
 .PP
-Definition at line 104 of file surface\&.F90\&.
+Definition at line 109 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::xzts_target_grid"
@@ -975,7 +977,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 d(xz)/d(ts) 
 .PP
-Definition at line 108 of file surface\&.F90\&.
+Definition at line 113 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::z0_target_grid"
@@ -983,7 +985,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 roughness length 
 .PP
-Definition at line 67 of file surface\&.F90\&.
+Definition at line 72 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(), roughness(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::z_c_target_grid"
@@ -991,7 +993,7 @@ Referenced by cleanup_target_sfc_data(), create_surface_esmf_fields(), interp(),
 .PP
 Sub-layer cooling thickness\&. 
 .PP
-Definition at line 110 of file surface\&.F90\&.
+Definition at line 115 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public surface::zm_target_grid"
@@ -999,7 +1001,7 @@ Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst
 .PP
 Oceanic mixed layer depth\&. 
 .PP
-Definition at line 112 of file surface\&.F90\&.
+Definition at line 117 of file surface\&.F90\&.
 .PP
 Referenced by cleanup_target_nst_data(), create_nst_esmf_fields(), interp(), nst_land_fill(), and write_fv3_sfc_data_netcdf()\&.
 .SH "Author"

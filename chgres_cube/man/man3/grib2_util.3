@@ -1,4 +1,4 @@
-.TH "grib2_util" 3 "Thu Mar 11 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.TH "grib2_util" 3 "Thu Mar 18 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -23,14 +23,14 @@ grib2_util \- Utilities for use when reading grib2 data\&.
 .PP 
 Utilities for use when reading grib2 data\&. 
 
-
+This module contains routines to:
+.IP "\(bu" 2
+convert from RH to specific humidity
+.IP "\(bu" 2
+convert from omega to dzdt\&.
 .PP
-\fBAuthor\fP
-.RS 4
+.PP
 George Gayno NCEP/EMC 
-.RE
-.PP
-
 .SH "Function/Subroutine Documentation"
 .PP 
 .SS "subroutine grib2_util::convert_omega (real(esmf_kind_r8), dimension(:,:,:), pointer omega, real(esmf_kind_r8), dimension(:,:,:), pointer p, real(esmf_kind_r8), dimension(:,:,:), pointer t, real(esmf_kind_r8), dimension(:,:,:), pointer q, integer, dimension(3) clb, integer, dimension(3) cub)"
@@ -62,7 +62,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 64 of file grib2_util\&.F90\&.
+Definition at line 71 of file grib2_util\&.F90\&.
 .PP
 Referenced by input_data::read_input_atm_grib2_file()\&.
 .SS "subroutine grib2_util::rh2spfh (real(esmf_kind_r4), dimension(i_input,j_input), intent(inout) rh_sphum, real(esmf_kind_r8), intent(in) p, real(esmf_kind_r8), dimension(i_input,j_input), intent(in) t)"
@@ -88,7 +88,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 24 of file grib2_util\&.F90\&.
+Definition at line 30 of file grib2_util\&.F90\&.
 .PP
 Referenced by input_data::read_input_atm_grib2_file()\&.
 .SH "Author"

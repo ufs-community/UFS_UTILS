@@ -5,6 +5,7 @@ var namespaces_dup =
     [ "pesg", "namespacepesg.html", null ],
     [ "pfun", "namespacepfun.html", null ],
     [ "pietc", "namespacepietc.html", null ],
+    [ "pkind", "namespacepkind.html", null ],
     [ "pmat2", "namespacepmat2.html", null ],
     [ "pmat4", "namespacepmat4.html", null ],
     [ "pmat5", "namespacepmat5.html", null ],

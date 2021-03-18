@@ -1,4 +1,4 @@
-.TH "/home/ed/UFS_UTILS/sorc/chgres_cube.fd/atmosphere.F90" 3 "Thu Mar 11 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/chgres_cube.fd/atmosphere.F90" 3 "Thu Mar 18 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,7 +13,7 @@
 .ti -1c
 .RI "module \fBatmosphere\fP"
 .br
-.RI "Process atmospheric fields: Horizontally interpolate input fields to the target grid\&. "
+.RI "Process atmospheric fields\&. "
 .in -1c
 .SS "Functions/Subroutines"
 
@@ -53,15 +53,15 @@
 .ti -1c
 .RI "subroutine \fBatmosphere::newpr1\fP (localpet)"
 .br
-.RI "Compute model level pressures\&. "
+.RI "Computes 3-D pressure given an adjusted surface pressure\&. "
 .ti -1c
 .RI "subroutine \fBatmosphere::newps\fP (localpet)"
 .br
-.RI "Compute new surface pressure\&. "
+.RI "Computes adjusted surface pressure given a new terrain height\&. "
 .ti -1c
 .RI "subroutine \fBatmosphere::read_vcoord_info\fP"
 .br
-.RI "Read vertical coordinate information\&. "
+.RI "Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid)\&. "
 .ti -1c
 .RI "subroutine \fBatmosphere::rsearch\fP (IM, KM1, IXZ1, KXZ1, Z1, KM2, IXZ2, KXZ2, Z2, IXL2, KXL2, L2)"
 .br
@@ -77,7 +77,7 @@
 .ti -1c
 .RI "subroutine \fBatmosphere::vintg_thomp_mp_climo\fP"
 .br
-.RI "Vertically interpolate thompson microphysics climo tracers to the target model levels\&. "
+.RI "Vertically interpolate atmospheric fields to target FV3 grid\&. "
 .in -1c
 .SS "Variables"
 

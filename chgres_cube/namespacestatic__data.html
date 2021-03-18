@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('namespacestatic__data.html',''); initR
 </div><!--header-->
 <div class="contents">
 
-<p>Read pre-computed static/climatological data on the fv3 target grid.  
+<p>Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type).  
 <a href="namespacestatic__data.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -151,8 +151,8 @@ Variables</h2></td></tr>
 <tr class="separator:a0bd92f571dd7db7c2893b1c08527988c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Read pre-computed static/climatological data on the fv3 target grid. </p>
-<p>Time interpolate if necessary (for example a monthly climo field).</p>
+<div class="textblock"><p>Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type). </p>
+<p>Time interpolates time-varying fields, such as monthly plant greenness, to the model run time. Data for each target FV3 resolution resides in the ‘fixed’ directory. Set path via the fix_dir_target_grid namelist variable.</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 </div><h2 class="groupheader">Function/Subroutine Documentation</h2>
 <a id="a3a6ad318f4d11ae68a6f33dc2fbc6ffc"></a>
@@ -170,11 +170,11 @@ Variables</h2></td></tr>
 <p>Free up memory for fields in this module. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00490">490</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00493">493</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">References <a class="el" href="static__data_8F90_source.html#l00020">alnsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00021">alnwf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00018">alvsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00019">alvwf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00022">facsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00023">facwf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00024">max_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00025">min_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00026">mxsno_albedo_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00027">slope_type_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00028">soil_type_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00029">substrate_temp_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00030">veg_greenness_target_grid</a>, and <a class="el" href="static__data_8F90_source.html#l00031">veg_type_target_grid</a>.</p>
+<p class="reference">References <a class="el" href="static__data_8F90_source.html#l00023">alnsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00024">alnwf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00021">alvsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00022">alvwf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00025">facsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00026">facwf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00027">max_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00028">min_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00029">mxsno_albedo_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00030">slope_type_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00031">soil_type_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00032">substrate_temp_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00033">veg_greenness_target_grid</a>, and <a class="el" href="static__data_8F90_source.html#l00034">veg_type_target_grid</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00146">surface::surface_driver()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00151">surface::surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -204,11 +204,11 @@ Variables</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC <br  />
  </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00044">44</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00047">47</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">References <a class="el" href="static__data_8F90_source.html#l00020">alnsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00021">alnwf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00018">alvsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00019">alvwf_target_grid</a>, <a class="el" href="utils_8F90_source.html#l00010">error_handler()</a>, <a class="el" href="static__data_8F90_source.html#l00022">facsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00023">facwf_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00037">model_grid::i_target</a>, <a class="el" href="model__grid_8F90_source.html#l00040">model_grid::j_target</a>, <a class="el" href="static__data_8F90_source.html#l00024">max_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00025">min_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00026">mxsno_albedo_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00049">model_grid::num_tiles_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00355">read_static_file()</a>, <a class="el" href="static__data_8F90_source.html#l00027">slope_type_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00028">soil_type_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00029">substrate_temp_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00054">model_grid::target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00030">veg_greenness_target_grid</a>, and <a class="el" href="static__data_8F90_source.html#l00031">veg_type_target_grid</a>.</p>
+<p class="reference">References <a class="el" href="static__data_8F90_source.html#l00023">alnsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00024">alnwf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00021">alvsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00022">alvwf_target_grid</a>, <a class="el" href="utils_8F90_source.html#l00010">error_handler()</a>, <a class="el" href="static__data_8F90_source.html#l00025">facsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00026">facwf_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00038">model_grid::i_target</a>, <a class="el" href="model__grid_8F90_source.html#l00041">model_grid::j_target</a>, <a class="el" href="static__data_8F90_source.html#l00027">max_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00028">min_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00029">mxsno_albedo_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00050">model_grid::num_tiles_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00358">read_static_file()</a>, <a class="el" href="static__data_8F90_source.html#l00030">slope_type_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00031">soil_type_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00032">substrate_temp_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00055">model_grid::target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00033">veg_greenness_target_grid</a>, and <a class="el" href="static__data_8F90_source.html#l00034">veg_type_target_grid</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00146">surface::surface_driver()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00151">surface::surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -285,11 +285,11 @@ Variables</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC <br  />
  </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00355">355</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00358">358</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">References <a class="el" href="program__setup_8F90_source.html#l00038">program_setup::cres_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00086">program_setup::cycle_day</a>, <a class="el" href="program__setup_8F90_source.html#l00087">program_setup::cycle_hour</a>, <a class="el" href="program__setup_8F90_source.html#l00085">program_setup::cycle_mon</a>, <a class="el" href="program__setup_8F90_source.html#l00023">program_setup::fix_dir_target_grid</a>, <a class="el" href="utils_8F90_source.html#l00032">netcdf_err()</a>, and <a class="el" href="model__grid_8F90_source.html#l00017">model_grid::tiles_target_grid</a>.</p>
+<p class="reference">References <a class="el" href="program__setup_8F90_source.html#l00038">program_setup::cres_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00086">program_setup::cycle_day</a>, <a class="el" href="program__setup_8F90_source.html#l00087">program_setup::cycle_hour</a>, <a class="el" href="program__setup_8F90_source.html#l00085">program_setup::cycle_mon</a>, <a class="el" href="program__setup_8F90_source.html#l00023">program_setup::fix_dir_target_grid</a>, <a class="el" href="utils_8F90_source.html#l00032">netcdf_err()</a>, and <a class="el" href="model__grid_8F90_source.html#l00018">model_grid::tiles_target_grid</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>.</p>
 
 </div>
 </div>
@@ -308,9 +308,9 @@ Variables</h2></td></tr>
 
 <p>near ir black sky albedo </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00020">20</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00023">23</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -328,9 +328,9 @@ Variables</h2></td></tr>
 
 <p>near ir white sky albedo </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00021">21</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00024">24</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -348,9 +348,9 @@ Variables</h2></td></tr>
 
 <p>visible black sky albedo </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00018">18</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00021">21</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -368,9 +368,9 @@ Variables</h2></td></tr>
 
 <p>visible white sky albedo </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00019">19</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00022">22</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -388,9 +388,9 @@ Variables</h2></td></tr>
 
 <p>fractional coverage for strong zenith angle dependent albedo </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00022">22</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00025">25</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -408,9 +408,9 @@ Variables</h2></td></tr>
 
 <p>fractional coverage for weak zenith angle dependent albedo </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00023">23</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00026">26</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -428,9 +428,9 @@ Variables</h2></td></tr>
 
 <p>maximum annual greenness fraction </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00024">24</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00027">27</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00304">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00310">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -448,9 +448,9 @@ Variables</h2></td></tr>
 
 <p>minimum annual greenness fraction </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00025">25</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00028">28</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00304">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00310">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -468,9 +468,9 @@ Variables</h2></td></tr>
 
 <p>maximum snow albedo </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00026">26</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00029">29</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -488,9 +488,9 @@ Variables</h2></td></tr>
 
 <p>slope type </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00027">27</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00030">30</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -508,9 +508,9 @@ Variables</h2></td></tr>
 
 <p>soil type </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00028">28</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00031">31</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02517">surface::calc_liq_soil_moisture()</a>, <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00304">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, <a class="el" href="surface_8F90_source.html#l03314">surface::rescale_soil_moisture()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02523">surface::calc_liq_soil_moisture()</a>, <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00310">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, <a class="el" href="surface_8F90_source.html#l03321">surface::rescale_soil_moisture()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -528,9 +528,9 @@ Variables</h2></td></tr>
 
 <p>soil subtrate temperature </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00029">29</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00032">32</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00304">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00310">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -548,9 +548,9 @@ Variables</h2></td></tr>
 
 <p>vegetation greenness fraction </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00030">30</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00033">33</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00304">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, <a class="el" href="surface_8F90_source.html#l03314">surface::rescale_soil_moisture()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00310">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, <a class="el" href="surface_8F90_source.html#l03321">surface::rescale_soil_moisture()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>
@@ -568,9 +568,9 @@ Variables</h2></td></tr>
 
 <p>vegetation type </p>
 
-<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00031">31</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="static__data_8F90_source.html#l00034">34</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l03482">surface::adjust_soilt_for_terrain()</a>, <a class="el" href="surface_8F90_source.html#l02517">surface::calc_liq_soil_moisture()</a>, <a class="el" href="surface_8F90_source.html#l02790">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00490">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00044">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00304">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03729">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02974">surface::replace_land_sfcparams()</a>, <a class="el" href="surface_8F90_source.html#l03314">surface::rescale_soil_moisture()</a>, <a class="el" href="surface_8F90_source.html#l03675">surface::roughness()</a>, and <a class="el" href="write__data_8F90_source.html#l01807">write_fv3_sfc_data_netcdf()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l03489">surface::adjust_soilt_for_terrain()</a>, <a class="el" href="surface_8F90_source.html#l02523">surface::calc_liq_soil_moisture()</a>, <a class="el" href="surface_8F90_source.html#l02796">surface::check_smois_land()</a>, <a class="el" href="static__data_8F90_source.html#l00493">cleanup_static_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00310">surface::interp()</a>, <a class="el" href="surface_8F90_source.html#l03735">surface::qc_check()</a>, <a class="el" href="surface_8F90_source.html#l02980">surface::replace_land_sfcparams()</a>, <a class="el" href="surface_8F90_source.html#l03321">surface::rescale_soil_moisture()</a>, <a class="el" href="surface_8F90_source.html#l03681">surface::roughness()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 </div>
 </div>

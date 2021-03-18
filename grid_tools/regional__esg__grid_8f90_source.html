@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('regional__esg__grid_8f90_source.html',
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="regional__esg__grid_8f90.html#a5d27396a033fbebf9ad5e56a21048727">   18</a></span>&#160;<span class="keyword">program</span> <a class="code" href="regional__esg__grid_8f90.html#a5d27396a033fbebf9ad5e56a21048727">regional_grid</a></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keywordtype">use </span>pkind, <span class="keywordtype">only</span>: dp</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keywordtype">use </span><a class="code" href="namespacepkind.html">pkind</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keywordtype">use </span><a class="code" href="namespacepietc.html">pietc</a>, <span class="keywordtype">only</span>: <a class="code" href="namespacepietc.html#a0e5882b8de6720f66db6ce7dd8c2f856">dtor</a>,<a class="code" href="namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463">rtod</a></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keywordtype">use </span><a class="code" href="namespacepesg.html">pesg</a></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keywordtype">use </span>netcdf</div>
@@ -98,20 +98,20 @@ $(document).ready(function(){initNavTree('regional__esg__grid_8f90_source.html',
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keywordtype">implicit none</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;  <span class="comment">! namelist variables</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">  real</span>(dp)                     :: plat,plon,pazi=0.0</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">  real</span>(dp)                     :: delx,dely</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">  real</span>(<a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a>)                     :: plat,plon,pazi=0.0</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">  real</span>(<a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a>)                     :: delx,dely</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keywordtype">integer</span>                      :: lx,ly</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  namelist /regional_grid_nml/ plat,plon,pazi,delx,dely,lx,ly</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">  real</span>(dp),<span class="keywordtype">parameter</span>           :: re=6371000.0</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">  real</span>(dp),<span class="keywordtype">parameter</span>           :: lam=0.8</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">  real</span>(<a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a>),<span class="keywordtype">parameter</span>           :: re=6371000.0</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">  real</span>(<a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a>),<span class="keywordtype">parameter</span>           :: lam=0.8</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;  <span class="keywordtype">integer</span>                      :: nxh,nyh, nx,ny, nxm,nym</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keywordtype">logical</span>                      :: ff</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">  real</span>(dp),<span class="keywordtype">dimension(:,:)</span>,<span class="keywordtype">allocatable</span>:: glat,glon</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keywordtype">  real</span>(dp),<span class="keywordtype">dimension(:,:)</span>,<span class="keywordtype">allocatable</span>:: garea</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">  real</span>(dp),<span class="keywordtype">dimension(:,:)</span>,<span class="keywordtype">allocatable</span>:: dx,dy,angle_dx,angle_dy</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">  real</span>(<a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a>),<span class="keywordtype">dimension(:,:)</span>,<span class="keywordtype">allocatable</span>:: glat,glon</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keywordtype">  real</span>(<a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a>),<span class="keywordtype">dimension(:,:)</span>,<span class="keywordtype">allocatable</span>:: garea</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">  real</span>(<a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a>),<span class="keywordtype">dimension(:,:)</span>,<span class="keywordtype">allocatable</span>:: dx,dy,angle_dx,angle_dy</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <span class="keywordtype">character(len=256)</span>           :: nml_fname</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
@@ -122,9 +122,9 @@ $(document).ready(function(){initNavTree('regional__esg__grid_8f90_source.html',
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keywordtype">integer</span>                      :: dx_varid, dy_varid, angle_dx_varid, angle_dy_varid</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <span class="keywordtype">integer</span>, <span class="keywordtype">dimension(2)</span>        :: dimids</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">  real</span>(dp)                     :: a,k,m_arcx,m_arcy,q</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keywordtype">  real</span>(dp)                     :: m_delx,m_dely, delxre,delyre</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keywordtype">  real</span>(dp)                     :: arcx,arcy</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">  real</span>(<a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a>)                     :: a,k,m_arcx,m_arcy,q</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keywordtype">  real</span>(<a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a>)                     :: m_delx,m_dely, delxre,delyre</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keywordtype">  real</span>(<a class="code" href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">dp</a>)                     :: arcx,arcy</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">!=============================================================================</span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
@@ -268,6 +268,8 @@ $(document).ready(function(){initNavTree('regional__esg__grid_8f90_source.html',
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="keyword">end subroutine </span><a class="code" href="filter__topo_8F90.html#a5873370d008f550eebbd792e402ce3de">check</a></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="anamespacepkind_html_a00714eff0ad48c0f4d25ae66b0419c90"><div class="ttname"><a href="namespacepkind.html#a00714eff0ad48c0f4d25ae66b0419c90">pkind::dp</a></div><div class="ttdeci">integer, parameter dp</div><div class="ttdoc">Double precision real kind.</div><div class="ttdef"><b>Definition:</b> <a href="pkind_8f90_source.html#l00011">pkind.f90:11</a></div></div>
+<div class="ttc" id="anamespacepkind_html"><div class="ttname"><a href="namespacepkind.html">pkind</a></div><div class="ttdoc">Standard integer, real, and complex single and double precision kinds.</div><div class="ttdef"><b>Definition:</b> <a href="pkind_8f90_source.html#l00007">pkind.f90:7</a></div></div>
 <div class="ttc" id="ainterfacepesg_1_1hgrid__ak_html"><div class="ttname"><a href="interfacepesg_1_1hgrid__ak.html">pesg::hgrid_ak</a></div><div class="ttdef"><b>Definition:</b> <a href="pesg_8f90_source.html#l00048">pesg.f90:48</a></div></div>
 <div class="ttc" id="afilter__topo_8F90_html_a5873370d008f550eebbd792e402ce3de"><div class="ttname"><a href="filter__topo_8F90.html#a5873370d008f550eebbd792e402ce3de">check</a></div><div class="ttdeci">subroutine check(status)</div><div class="ttdoc">Check results of netCDF call.</div><div class="ttdef"><b>Definition:</b> <a href="filter__topo_8F90_source.html#l01985">filter_topo.F90:1985</a></div></div>
 <div class="ttc" id="anamespacepietc_html"><div class="ttname"><a href="namespacepietc.html">pietc</a></div><div class="ttdoc">Some of the commonly used constants (pi etc) mainly for double-precision subroutines.</div><div class="ttdef"><b>Definition:</b> <a href="pietc_8f90_source.html#l00014">pietc.f90:14</a></div></div>

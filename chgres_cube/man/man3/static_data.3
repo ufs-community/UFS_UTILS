@@ -1,8 +1,8 @@
-.TH "static_data" 3 "Thu Mar 11 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.TH "static_data" 3 "Thu Mar 18 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-static_data \- Read pre-computed static/climatological data on the fv3 target grid\&.  
+static_data \- Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type)\&.  
 
 .SH SYNOPSIS
 .br
@@ -85,9 +85,9 @@ static_data \- Read pre-computed static/climatological data on the fv3 target gr
 .in -1c
 .SH "Detailed Description"
 .PP 
-Read pre-computed static/climatological data on the fv3 target grid\&. 
+Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type)\&. 
 
-Time interpolate if necessary (for example a monthly climo field)\&.
+Time interpolates time-varying fields, such as monthly plant greenness, to the model run time\&. Data for each target FV3 resolution resides in the ‘fixed’ directory\&. Set path via the fix_dir_target_grid namelist variable\&.
 .PP
 \fBAuthor\fP
 .RS 4
@@ -109,7 +109,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 490 of file static_data\&.F90\&.
+Definition at line 493 of file static_data\&.F90\&.
 .PP
 References alnsf_target_grid, alnwf_target_grid, alvsf_target_grid, alvwf_target_grid, facsf_target_grid, facwf_target_grid, max_veg_greenness_target_grid, min_veg_greenness_target_grid, mxsno_albedo_target_grid, slope_type_target_grid, soil_type_target_grid, substrate_temp_target_grid, veg_greenness_target_grid, and veg_type_target_grid\&.
 .PP
@@ -133,7 +133,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 44 of file static_data\&.F90\&.
+Definition at line 47 of file static_data\&.F90\&.
 .PP
 References alnsf_target_grid, alnwf_target_grid, alvsf_target_grid, alvwf_target_grid, error_handler(), facsf_target_grid, facwf_target_grid, model_grid::i_target, model_grid::j_target, max_veg_greenness_target_grid, min_veg_greenness_target_grid, mxsno_albedo_target_grid, model_grid::num_tiles_target_grid, read_static_file(), slope_type_target_grid, soil_type_target_grid, substrate_temp_target_grid, model_grid::target_grid, veg_greenness_target_grid, and veg_type_target_grid\&.
 .PP
@@ -171,7 +171,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 355 of file static_data\&.F90\&.
+Definition at line 358 of file static_data\&.F90\&.
 .PP
 References program_setup::cres_target_grid, program_setup::cycle_day, program_setup::cycle_hour, program_setup::cycle_mon, program_setup::fix_dir_target_grid, netcdf_err(), and model_grid::tiles_target_grid\&.
 .PP
@@ -183,7 +183,7 @@ Referenced by get_static_fields()\&.
 .PP
 near ir black sky albedo 
 .PP
-Definition at line 20 of file static_data\&.F90\&.
+Definition at line 23 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::qc_check(), surface::replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::alnwf_target_grid"
@@ -191,7 +191,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 near ir white sky albedo 
 .PP
-Definition at line 21 of file static_data\&.F90\&.
+Definition at line 24 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::qc_check(), surface::replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::alvsf_target_grid"
@@ -199,7 +199,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 visible black sky albedo 
 .PP
-Definition at line 18 of file static_data\&.F90\&.
+Definition at line 21 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::qc_check(), surface::replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::alvwf_target_grid"
@@ -207,7 +207,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 visible white sky albedo 
 .PP
-Definition at line 19 of file static_data\&.F90\&.
+Definition at line 22 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::qc_check(), surface::replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::facsf_target_grid"
@@ -215,7 +215,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 fractional coverage for strong zenith angle dependent albedo 
 .PP
-Definition at line 22 of file static_data\&.F90\&.
+Definition at line 25 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::qc_check(), surface::replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::facwf_target_grid"
@@ -223,7 +223,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 fractional coverage for weak zenith angle dependent albedo 
 .PP
-Definition at line 23 of file static_data\&.F90\&.
+Definition at line 26 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::qc_check(), surface::replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::max_veg_greenness_target_grid"
@@ -231,7 +231,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 maximum annual greenness fraction 
 .PP
-Definition at line 24 of file static_data\&.F90\&.
+Definition at line 27 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::interp(), surface::qc_check(), surface::replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::min_veg_greenness_target_grid"
@@ -239,7 +239,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 minimum annual greenness fraction 
 .PP
-Definition at line 25 of file static_data\&.F90\&.
+Definition at line 28 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::interp(), surface::qc_check(), surface::replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::mxsno_albedo_target_grid"
@@ -247,7 +247,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 maximum snow albedo 
 .PP
-Definition at line 26 of file static_data\&.F90\&.
+Definition at line 29 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::qc_check(), surface::replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::slope_type_target_grid"
@@ -255,7 +255,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 slope type 
 .PP
-Definition at line 27 of file static_data\&.F90\&.
+Definition at line 30 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::qc_check(), surface::replace_land_sfcparams(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::soil_type_target_grid"
@@ -263,7 +263,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 soil type 
 .PP
-Definition at line 28 of file static_data\&.F90\&.
+Definition at line 31 of file static_data\&.F90\&.
 .PP
 Referenced by surface::calc_liq_soil_moisture(), surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::interp(), surface::qc_check(), surface::replace_land_sfcparams(), surface::rescale_soil_moisture(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::substrate_temp_target_grid"
@@ -271,7 +271,7 @@ Referenced by surface::calc_liq_soil_moisture(), surface::check_smois_land(), cl
 .PP
 soil subtrate temperature 
 .PP
-Definition at line 29 of file static_data\&.F90\&.
+Definition at line 32 of file static_data\&.F90\&.
 .PP
 Referenced by cleanup_static_fields(), get_static_fields(), surface::interp(), surface::qc_check(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::veg_greenness_target_grid"
@@ -279,7 +279,7 @@ Referenced by cleanup_static_fields(), get_static_fields(), surface::interp(), s
 .PP
 vegetation greenness fraction 
 .PP
-Definition at line 30 of file static_data\&.F90\&.
+Definition at line 33 of file static_data\&.F90\&.
 .PP
 Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::interp(), surface::qc_check(), surface::replace_land_sfcparams(), surface::rescale_soil_moisture(), and write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public static_data::veg_type_target_grid"
@@ -287,7 +287,7 @@ Referenced by surface::check_smois_land(), cleanup_static_fields(), get_static_f
 .PP
 vegetation type 
 .PP
-Definition at line 31 of file static_data\&.F90\&.
+Definition at line 34 of file static_data\&.F90\&.
 .PP
 Referenced by surface::adjust_soilt_for_terrain(), surface::calc_liq_soil_moisture(), surface::check_smois_land(), cleanup_static_fields(), get_static_fields(), surface::interp(), surface::qc_check(), surface::replace_land_sfcparams(), surface::rescale_soil_moisture(), surface::roughness(), and write_fv3_sfc_data_netcdf()\&.
 .SH "Author"

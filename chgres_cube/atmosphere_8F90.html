@@ -99,7 +99,7 @@ $(document).ready(function(){initNavTree('atmosphere_8F90.html',''); initResizab
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Modules</h2></td></tr>
 <tr class="memitem:namespaceatmosphere"><td class="memItemLeft" align="right" valign="top">module &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatmosphere.html">atmosphere</a></td></tr>
-<tr class="memdesc:namespaceatmosphere"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process atmospheric fields: Horizontally interpolate input fields to the target grid. <br /></td></tr>
+<tr class="memdesc:namespaceatmosphere"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process atmospheric fields. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -129,13 +129,13 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memdesc:a38c65833316fd634cb4c3a20daf1d42a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Horizontally interpolate thompson microphysics data to the target model grid.  <a href="namespaceatmosphere.html#a38c65833316fd634cb4c3a20daf1d42a">More...</a><br /></td></tr>
 <tr class="separator:a38c65833316fd634cb4c3a20daf1d42a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a449da9a0abe3032a16345f130761b9d2"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatmosphere.html#a449da9a0abe3032a16345f130761b9d2">atmosphere::newpr1</a> (localpet)</td></tr>
-<tr class="memdesc:a449da9a0abe3032a16345f130761b9d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute model level pressures.  <a href="namespaceatmosphere.html#a449da9a0abe3032a16345f130761b9d2">More...</a><br /></td></tr>
+<tr class="memdesc:a449da9a0abe3032a16345f130761b9d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes 3-D pressure given an adjusted surface pressure.  <a href="namespaceatmosphere.html#a449da9a0abe3032a16345f130761b9d2">More...</a><br /></td></tr>
 <tr class="separator:a449da9a0abe3032a16345f130761b9d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b202a3c172ff40138e91a1bf3194c75"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatmosphere.html#a5b202a3c172ff40138e91a1bf3194c75">atmosphere::newps</a> (localpet)</td></tr>
-<tr class="memdesc:a5b202a3c172ff40138e91a1bf3194c75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute new surface pressure.  <a href="namespaceatmosphere.html#a5b202a3c172ff40138e91a1bf3194c75">More...</a><br /></td></tr>
+<tr class="memdesc:a5b202a3c172ff40138e91a1bf3194c75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes adjusted surface pressure given a new terrain height.  <a href="namespaceatmosphere.html#a5b202a3c172ff40138e91a1bf3194c75">More...</a><br /></td></tr>
 <tr class="separator:a5b202a3c172ff40138e91a1bf3194c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fd431e1f6ab178aa21312b78599d8fd"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatmosphere.html#a7fd431e1f6ab178aa21312b78599d8fd">atmosphere::read_vcoord_info</a></td></tr>
-<tr class="memdesc:a7fd431e1f6ab178aa21312b78599d8fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read vertical coordinate information.  <a href="namespaceatmosphere.html#a7fd431e1f6ab178aa21312b78599d8fd">More...</a><br /></td></tr>
+<tr class="memdesc:a7fd431e1f6ab178aa21312b78599d8fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid).  <a href="namespaceatmosphere.html#a7fd431e1f6ab178aa21312b78599d8fd">More...</a><br /></td></tr>
 <tr class="separator:a7fd431e1f6ab178aa21312b78599d8fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa24ebe3a052a09f6c56de4af72f55d5"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatmosphere.html#aaa24ebe3a052a09f6c56de4af72f55d5">atmosphere::rsearch</a> (IM, KM1, IXZ1, KXZ1, Z1, KM2, IXZ2, KXZ2, Z2, IXL2, KXL2, L2)</td></tr>
 <tr class="memdesc:aaa24ebe3a052a09f6c56de4af72f55d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Search for a surrounding real interval.  <a href="namespaceatmosphere.html#aaa24ebe3a052a09f6c56de4af72f55d5">More...</a><br /></td></tr>
@@ -147,7 +147,7 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memdesc:ac2e8e7011d742763f5e4a790de675e61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vertically interpolate upper-air fields.  <a href="namespaceatmosphere.html#ac2e8e7011d742763f5e4a790de675e61">More...</a><br /></td></tr>
 <tr class="separator:ac2e8e7011d742763f5e4a790de675e61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a528c56e9ed17885c9f73216673b0e0a4"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceatmosphere.html#a528c56e9ed17885c9f73216673b0e0a4">atmosphere::vintg_thomp_mp_climo</a></td></tr>
-<tr class="memdesc:a528c56e9ed17885c9f73216673b0e0a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vertically interpolate thompson microphysics climo tracers to the target model levels.  <a href="namespaceatmosphere.html#a528c56e9ed17885c9f73216673b0e0a4">More...</a><br /></td></tr>
+<tr class="memdesc:a528c56e9ed17885c9f73216673b0e0a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vertically interpolate atmospheric fields to target FV3 grid.  <a href="namespaceatmosphere.html#a528c56e9ed17885c9f73216673b0e0a4">More...</a><br /></td></tr>
 <tr class="separator:a528c56e9ed17885c9f73216673b0e0a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>

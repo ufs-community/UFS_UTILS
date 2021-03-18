@@ -92,13 +92,13 @@ $(document).ready(function(){initNavTree('interfacepmat2_1_1clipb.html',''); ini
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a3a354f2f7fd7222237584d5ec13dd5a1"><td class="memItemLeft" align="right" valign="top">pure subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1clipb.html#a3a354f2f7fd7222237584d5ec13dd5a1">clib</a> (m1, m2, mah1, mah2, a)</td></tr>
-<tr class="memdesc:a3a354f2f7fd7222237584d5ec13dd5a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1clipb.html#a3a354f2f7fd7222237584d5ec13dd5a1">More...</a><br /></td></tr>
+<tr class="memdesc:a3a354f2f7fd7222237584d5ec13dd5a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clip (set to zero) the unused values in a banded matrix representation.  <a href="interfacepmat2_1_1clipb.html#a3a354f2f7fd7222237584d5ec13dd5a1">More...</a><br /></td></tr>
 <tr class="separator:a3a354f2f7fd7222237584d5ec13dd5a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63831c47a7c965d120e2ff4fcc861748"><td class="memItemLeft" align="right" valign="top">pure subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1clipb.html#a63831c47a7c965d120e2ff4fcc861748">clib_c</a> (m1, m2, mah1, mah2, a)</td></tr>
-<tr class="memdesc:a63831c47a7c965d120e2ff4fcc861748"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1clipb.html#a63831c47a7c965d120e2ff4fcc861748">More...</a><br /></td></tr>
+<tr class="memdesc:a63831c47a7c965d120e2ff4fcc861748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clip (set to zero) the unused values in a banded matrix representation.  <a href="interfacepmat2_1_1clipb.html#a63831c47a7c965d120e2ff4fcc861748">More...</a><br /></td></tr>
 <tr class="separator:a63831c47a7c965d120e2ff4fcc861748"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcb065da7c0828a20e54c530ac7b3815"><td class="memItemLeft" align="right" valign="top">pure subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1clipb.html#adcb065da7c0828a20e54c530ac7b3815">clib_d</a> (m1, m2, mah1, mah2, a)</td></tr>
-<tr class="memdesc:adcb065da7c0828a20e54c530ac7b3815"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1clipb.html#adcb065da7c0828a20e54c530ac7b3815">More...</a><br /></td></tr>
+<tr class="memdesc:adcb065da7c0828a20e54c530ac7b3815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clip (set to zero) the unused values in a banded matrix representation.  <a href="interfacepmat2_1_1clipb.html#adcb065da7c0828a20e54c530ac7b3815">More...</a><br /></td></tr>
 <tr class="separator:adcb065da7c0828a20e54c530ac7b3815"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -157,21 +157,21 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
+<p>Clip (set to zero) the unused values in a banded matrix representation. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">m1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">m2</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m1</td><td>number of matrix rows </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m2</td><td>number of matrix columns </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>number of subdiagonals </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>number of superdiagonals </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>single precision matrix elements, stored compactly as rows </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00369">369</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00370">370</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
 
 </div>
 </div>
@@ -227,21 +227,21 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
+<p>Clip (set to zero) the unused values in a banded matrix representation. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">m1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">m2</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m1</td><td>number of matrix rows </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m2</td><td>number of matrix columns </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>number of subdiagonals </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>number of superdiagonals </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>complex matrix elements, stored compactly as rows </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00405">405</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00406">406</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
 
 </div>
 </div>
@@ -297,21 +297,21 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
+<p>Clip (set to zero) the unused values in a banded matrix representation. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">m1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">m2</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m1</td><td>number of matrix rows </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m2</td><td>number of matrix columns </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>number of subdiagonals </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>number of superdiagonals </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>double precision matrix elements, stored compactly as rows </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00387">387</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00388">388</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
 
 </div>
 </div>

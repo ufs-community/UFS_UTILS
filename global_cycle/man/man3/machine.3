@@ -1,4 +1,4 @@
-.TH "machine" 3 "Thu Mar 11 2021" "Version 1.0.0" "global_cycle" \" -*- nroff -*-
+.TH "machine" 3 "Thu Mar 18 2021" "Version 1.0.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -11,40 +11,13 @@ machine \- Holds machine dependent constants for global_cycle\&.
 
 .in +1c
 .ti -1c
-.RI "integer, parameter \fBkind_dbl_prec\fP = 8"
-.br
-.ti -1c
-.RI "integer, parameter \fBkind_evod\fP = 8"
-.br
-.ti -1c
-.RI "integer, parameter \fBkind_integer\fP = 4"
-.br
-.RI "-,,- "
-.ti -1c
 .RI "integer, parameter \fBkind_io4\fP = 4"
 .br
+.RI "Kind type for 4-byte float point variables\&. "
 .ti -1c
 .RI "integer, parameter \fBkind_io8\fP = 8"
 .br
-.ti -1c
-.RI "integer, parameter \fBkind_ior\fP = 8"
-.br
-.ti -1c
-.RI "integer, parameter \fBkind_phys\fP = selected_real_kind(13, 60)"
-.br
-.RI "the '60' maps to 64-bit real "
-.ti -1c
-.RI "integer, parameter \fBkind_rad\fP = selected_real_kind(13, 60)"
-.br
-.RI "the '60' maps to 64-bit real "
-.ti -1c
-.RI "integer, parameter \fBkind_real\fP = 8"
-.br
-.RI "used in cmp_comm "
-.ti -1c
-.RI "real(kind=kind_evod), parameter \fBmprec\fP = 1\&.e\-12"
-.br
-.RI "machine precision to restrict dep "
+.RI "Kind type for 8-byte float point variables\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -60,36 +33,22 @@ Mark Iredell NOAA/EMC
 
 .SH "Variable Documentation"
 .PP 
-.SS "integer, parameter machine::kind_integer = 4"
+.SS "integer, parameter machine::kind_io4 = 4"
 
 .PP
--,,- 
+Kind type for 4-byte float point variables\&. 
 .PP
-Definition at line 20 of file machine\&.f90\&.
-.SS "integer, parameter machine::kind_phys = selected_real_kind(13, 60)"
+Definition at line 11 of file machine\&.f90\&.
+.PP
+Referenced by albocn(), analy(), anomint(), clima(), count(), filanl(), filfcs(), fixrda(), fixrdc(), fixrdg(), ga2la(), gaulat(), getarea(), getscv(), getsmc(), getstc(), hmskrd(), la2ga(), landtyp(), maxmin(), merge(), monitr(), newice(), qcbyfc(), qcmxice(), qcmxmn(), qcsice(), qcsli(), qcsnow(), rof01(), scale(), setlsi(), setrmsk(), setzro(), sfccycle(), snodpth(), snodpth2(), snosfc(), subst(), tsfcor(), and usesgt()\&.
+.SS "integer, parameter machine::kind_io8 = 8"
 
 .PP
-the '60' maps to 64-bit real 
+Kind type for 8-byte float point variables\&. 
 .PP
-Definition at line 18 of file machine\&.f90\&.
-.SS "integer, parameter machine::kind_rad = selected_real_kind(13, 60)"
-
+Definition at line 13 of file machine\&.f90\&.
 .PP
-the '60' maps to 64-bit real 
-.PP
-Definition at line 17 of file machine\&.f90\&.
-.SS "integer, parameter machine::kind_real = 8"
-
-.PP
-used in cmp_comm 
-.PP
-Definition at line 19 of file machine\&.f90\&.
-.SS "real(kind=kind_evod), parameter machine::mprec = 1\&.e\-12"
-
-.PP
-machine precision to restrict dep 
-.PP
-Definition at line 22 of file machine\&.f90\&.
+Referenced by albocn(), analy(), anomint(), clima(), count(), filanl(), filfcs(), fixrda(), fixrdc(), fixrdc_tile(), fixrdg(), ga2la(), gaulat(), getarea(), getscv(), getsmc(), getstc(), hmskrd(), la2ga(), landtyp(), maxmin(), merge(), monitr(), newice(), qcbyfc(), qcmxice(), qcmxmn(), qcsice(), qcsli(), qcsnow(), rof01(), scale(), setlsi(), setrmsk(), setzro(), sfccycle(), snodpth(), snodpth2(), snosfc(), subst(), tsfcor(), and usesgt()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for global_cycle from the source code\&.
