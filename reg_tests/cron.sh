@@ -46,7 +46,7 @@ for dir in chgres_cube grid_gen; do
     ./driver.$target.sh
 
     # Wait for each reg-test to finish before submitting more jobs
-    while [ ! -f "${dir}/summary.log" ]; do
+    while [ ! -f "summary.log" ]; do
         sleep 10
     done
     
