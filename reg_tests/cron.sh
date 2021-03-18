@@ -44,6 +44,12 @@ cd ../reg_tests
 for dir in chgres_cube grid_gen; do
     cd $dir
     ./driver.$target.sh
+
+    # Wait for each reg-test to finish before submitting more jobs
+    while [ ! -f "${dir}/summary.log" ]; do
+        sleep 10
+    done
+    
     cd ..
 done
 
@@ -63,7 +69,7 @@ time=0
 should_wait=true
 while [ "$should_wait" == true ]; do
     sleep 10
-    for dir in chgres_cube grid_gen ice_blend snow2mdl; do
+    for dir in snow2mdl global_cycle ice_blend; do
         should_wait=false
         if [[ ! -f "${dir}/summary.log" ]]; then
             should_wait=true
@@ -75,7 +81,7 @@ done
 echo "Commit hash: ${current_hash}" >> reg_test_results.txt
 echo "" >> reg_test_results.txt
 
-for dir in chgres_cube grid_gen ice_blend snow2mdl; do
+for dir in chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
     success=true
     if grep -qi "FAILED" ${dir}/summary.log; then
         success=false
