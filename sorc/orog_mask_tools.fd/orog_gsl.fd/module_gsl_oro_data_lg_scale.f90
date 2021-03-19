@@ -13,7 +13,9 @@
 !! - stddev      standard deviation of subgrid-scale topograpy
 !! - convexity   convexity (kurtosis) of subgrid-scale topography
 !! - ol{1,2,3,4} orographic effective lengths of subgrid-scale topography
+!!   for 4 orientations: 1-westerly, 2-southerly, 3-southwesterly, 4-northwesterly
 !! - oa{1,2,3,4} orographic asymmetries of subgrid-scale topography
+!!   for 4 orientations: 1-westerly, 2-southerly, 3-southwesterly, 4-northwesterly
 !!
 !! Based on code by Michael Duda provided by NCAR/MMM
 !!

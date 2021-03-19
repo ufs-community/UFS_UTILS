@@ -1,8 +1,10 @@
 This code creates orographic statistics fields required for the orographic drag suite developed by NOAA's Global Systems Laboratory (GSL).  The fields are a subset of the ones calculated by "orog.fd" except that they are calculated in a different manner.  The fields are:
 stddev -- standard deviation of subgrid topography
 convexity -- convexity of subgrid topography
-oa1,oa2,oa3,oa4 -- orographic asymmetry of subgrid topography (for 4 orientations)
-ol1,ol2,ol3,ol4 -- orographic effective length of subgrid topography (for 4 orientations)
+oa1,oa2,oa3,oa4 -- orographic asymmetry of subgrid topography (for 4 orientations:
+     1-westerly, 2-southerly, 3-southwesterly, 4-northwesterly)
+ol1,ol2,ol3,ol4 -- orographic effective length of subgrid topography (for 4 orientations:
+     1-westerly, 2-southerly, 3-southwesterly, 4-northwesterly)
 
 Two Cxxx_oro_data files are created:
    - an "ls" (large-scale) file for the gravity wave drag and blocking schemes of Kim and Doyle (QJRMS, 2005)
