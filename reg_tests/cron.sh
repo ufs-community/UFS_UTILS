@@ -4,18 +4,17 @@ set -eux
 
 export MAILTO="kyle.gerheiser@noaa.gov"
 
-export UFS_UTILS_WORKING_DIR=/work/noaa/stmp/gkyle/reg-tests
 export WORK_DIR=/work/noaa/stmp/gkyle/reg-tests
 export UFS_UTILS_HOME_DIR=$PWD/..
 export PROJECT_CODE=nems
 export MACHINE_ID=orion
 export QUEUE=batch
 
-mkdir -p ${UFS_UTILS_WORKING_DIR}
-cd ${UFS_UTILS_WORKING_DIR}
+mkdir -p ${WORK_DIR}
+cd ${WORK_DIR}
 rm -rf UFS_UTILS
 
-cd ${UFS_UTILS_WORKING_DIR}
+cd ${WORK_DIR}
 
 git clone --recursive https://github.com/kgerheiser/UFS_UTILS.git >> /dev/null 2>&1
 cd UFS_UTILS
@@ -25,8 +24,8 @@ source sorc/machine-setup.sh
 
 current_hash=$(git rev-parse HEAD)
 
-if [[ -f "${UFS_UTILS_WORKING_DIR}/prev_hash.txt" ]]; then
-    prev_hash=$(cat ${UFS_UTILS_WORKING_DIR}/prev_hash.txt)
+if [[ -f "${WORK_DIR}/prev_hash.txt" ]]; then
+    prev_hash=$(cat ${WORK_DIR}/prev_hash.txt)
     if [[ "$current_hash" == "$prev_hash" ]]; then
         echo `date`
         echo ""
@@ -100,7 +99,7 @@ else
 fi
 
 # Save current hash as previous hash for next time
-echo $current_hash > ${UFS_UTILS_WORKING_DIR}/prev_hash.txt
+echo $current_hash > ${WORK_DIR}/prev_hash.txt
 
 
 
