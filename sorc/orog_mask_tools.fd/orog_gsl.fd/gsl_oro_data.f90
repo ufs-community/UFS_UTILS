@@ -26,9 +26,10 @@
 !!
 !! Based on code by Michael Duda provided by NCAR/MMM
 
-!> Brief description of program ???
+!> Brief description of program:  Creates orographic (oro_data) files
+!! needed by the GSL drag suite physics parameterization 
 !!
-!! @author ???
+!! @author Michaei Toy, NOAA/GSL
 !! @return 0 for success, error code otherwise.
 program gsl_oro_data
 

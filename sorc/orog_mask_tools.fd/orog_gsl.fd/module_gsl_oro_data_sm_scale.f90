@@ -22,27 +22,28 @@ module gsl_oro_data_sm_scale
 
 implicit none
 
-integer, parameter :: real_kind = selected_real_kind(6) !< ???
-integer, parameter :: dbl_kind = selected_real_kind(13) !< ???
+integer, parameter :: real_kind = selected_real_kind(6) !< single precision
+integer, parameter :: dbl_kind = selected_real_kind(13) !< double precision
 
-real, parameter :: pi = 3.1415926535897_real_kind !< ???
-integer :: dimX_fine !< ???
-integer :: dimY_fine !< ???
+real, parameter :: pi = 3.1415926535897_real_kind !< pi
+integer :: dimX_fine !< x-dimension of fine grid
+integer :: dimY_fine !< y-dimension of fine grid
 
-real (kind = real_kind), allocatable :: lat1d_fine(:) !< ???
-real (kind = real_kind), allocatable :: lon1d_fine(:) !< ???
+real (kind = real_kind), allocatable :: lat1d_fine(:) !< latitude of fine grid pts
+real (kind = real_kind), allocatable :: lon1d_fine(:) !< longitude of fine grid pts
 
-real (kind = real_kind), parameter :: p5 = 0.5_real_kind !< ???
+real (kind = real_kind), parameter :: p5 = 0.5_real_kind !< one half
 
 contains
 
-!> What does this routine do ???
+!> Subroutine to compute orographic statistics needed for small-scale
+!! orograhic drag (gravity wave and form drag) schemes
 !!
-!! @param[in] tile_num ???
-!! @param[in] res_indx ???
-!! @param[in] halo ???
-!! @param[out] duplicate_oro_data_file ???
-!! @author ???
+!! @param[in] tile_num (tile number)
+!! @param[in] res_indx (resolution)
+!! @param[in] halo (halo number)
+!! @param[out] duplicate_oro_data_file (equals .true. if min grid size <= 7.5km)
+!! @author Michael Toy, NOAA/GSL
 subroutine calc_gsl_oro_data_sm_scale(tile_num,res_indx,halo,        &
                                           duplicate_oro_data_file)
 
@@ -1075,11 +1076,11 @@ deallocate(OL4)
 
 end subroutine calc_gsl_oro_data_sm_scale
 
-!> What does this function do ???
+!> Finds nearest fine-grid i index to the east of a given longitude
 !!
-!! @param[in] lon_in ???
-!! @return nearest_i_east ???
-!! @author ???
+!! @param[in] lon_in longitude (radians)
+!! @return nearest_i_east Nearest grid point i-index east of selected point
+!! @author Michael Toy, NOAA/GSL
 function nearest_i_east(lon_in)
 ! Calculates nearest fine-grid i index to the east of (or on) a given longitude
 implicit none
@@ -1108,11 +1109,11 @@ end if
 
 end function nearest_i_east
 
-!> What does this function do ???
+!> Finds nearest fine-grid i index to the west of a given longitude
 !!
-!! @param[in] lon_in ???
-!! @return nearest_i_west ???
-!! @author ???
+!! @param[in] lon_in longitude (radians)
+!! @return nearest_i_west Nearest grid point i-index west of selected point
+!! @author Michael Toy, NOAA/GSL
 function nearest_i_west(lon_in)
 ! Calculates nearest fine-grid i index to the west of a given longitude
 implicit none
@@ -1141,11 +1142,11 @@ end if
 
 end function nearest_i_west
 
-!> What does this function do ???
+!> Calculates nearest fine-grid j index to the north of a given latitude
 !!
-!! @param[in] lat_in ???
-!! @return nearest_j_north ???
-!! @author ???
+!! @param[in] lat_in Latitude (radians)
+!! @return nearest_j_north Nearest fine-grid j index to the north of a given latitude
+!! @author Michael Toy, NOAA/GSL
 function nearest_j_north(lat_in)
 ! Calculates nearest fine-grid j index to the north of a given latitude
 ! Note:  If the abs(latitude) is greater than pi/2 (90 degrees) then
@@ -1170,11 +1171,11 @@ end if
 
 end function nearest_j_north
 
-!> What does this function do ???
+!> Calculates nearest fine-grid j index to the south of a given latitude
 !!
-!! @param[in] lat_in ???
-!! @return nearest_j_south ???
-!! @author ???
+!! @param[in] lat_in Latitude (radians)
+!! @return nearest_j_south Nearest fine-grid j index to the south of a given latitude
+!! @author Michael Toy, NOAA/GSL
 function nearest_j_south(lat_in)
 ! Calculates nearest fine-grid j index to the south of a given latitude
 ! Note:  If the abs(latitude) is greater than pi/2 (90 degrees) then
@@ -1201,15 +1202,15 @@ end if
 
 end function nearest_j_south
 
-!> What does this function do ???
+!> Interpolates (or extrapolates) linear function y = y(x)
 !! 
-!! @param[in] x ???
-!! @param[in] x1 ???
-!! @param[in] x2 ???
-!! @param[in] y1 ???
-!! @param[in] y2 ???
-!! @return interp_1d ???
-!! @author ???
+!! @param[in] x Input "x" value
+!! @param[in] x1 Known point 1
+!! @param[in] x2 Known point 2
+!! @param[in] y1 Known y(x1)
+!! @param[in] y2 Known y(x2)
+!! @return interp_1d Interpolated y value at x
+!! @author Michael Toy, NOAA/GSL
 function interp_1d(x,x1,x2,y1,y2)
 ! Interpolates (or extrapolates) linear function y = y(x)
 ! to x given y1 = y(x1) and y2 = y(x2)
@@ -1225,11 +1226,11 @@ interp_1d = y1 + slope*(x-x1)
 
 end function interp_1d
 
-!> What does this routine do ???
+!> Returns netCDF error given input err code
 !!
-!! @param[in] err ???
-!! @param[in] string ???
-!! @author ???
+!! @param[in] err Error code from netCDF routine
+!! @param[in] string Portion of error message
+!! @author Michael Toy, NOAA/GSL
 subroutine netcdf_err(err,string)
 
 use netcdf
