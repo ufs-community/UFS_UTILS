@@ -25,7 +25,11 @@
 !!        are always "halo0" output.
 !!
 !! Based on code by Michael Duda provided by NCAR/MMM
+
+!> Brief description of program ???
 !!
+!! @author ???
+!! @return 0 for success, error code otherwise.
 program gsl_oro_data
 
 use gsl_oro_data_sm_scale, only: calc_gsl_oro_data_sm_scale
