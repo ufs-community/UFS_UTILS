@@ -1,11 +1,9 @@
 #!/bin/bash
 
-set -eux
-
-export MAILTO="kyle.gerheiser@noaa.gov"
+export MAILTO=
 
 # Directory to download UFS_UTILS to and run the regression tests
-export WORK_DIR=/work/noaa/stmp/gkyle/ufs-utils-reg-tests
+export WORK_DIR=
 
 export PROJECT_CODE=nems
 export QUEUE=batch
