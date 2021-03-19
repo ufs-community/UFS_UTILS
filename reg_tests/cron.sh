@@ -1,11 +1,13 @@
 #!/bin/bash
 
+set -eux
+
 export MAILTO="kyle.gerheiser@noaa.gov"
 
 # Directory to download UFS_UTILS to and run the regression tests
-export WORK_DIR=
-export PROJECT_CODE=nems
+export WORK_DIR=/work/noaa/stmp/gkyle/ufs-utils-reg-tests
 
+export PROJECT_CODE=nems
 export QUEUE=batch
 
 mkdir -p ${WORK_DIR}
@@ -35,8 +37,17 @@ fi
 
 ./build_all.sh
 
+# Set machine_id variable for running link_fixdirs
+if [[ $target == "wcoss_dell_p3" ]]; then
+    machine_id=dell
+elif [[ $target == "wcoss_cray" ]]; then
+    machine_id=cray
+else
+    machine_id=$target
+fi
+
 cd fix
-./link_fixdirs.sh emc $MACHINE_ID
+./link_fixdirs.sh emc $machine_id
 
 cd ../reg_tests
 
@@ -47,7 +58,7 @@ for dir in chgres_cube grid_gen; do
 done
 
 # Wait chgres_cube and grid_gen to finish before submitting more jobs
-while [ ! -f "chgres_cube/summary.log" ] && [ ! -f "grid_gen/summary.log" ]; do
+while [ ! -f "chgres_cube/summary.log" ] || [ ! -f "grid_gen/summary.log" ]; do
     sleep 10
 done
 
@@ -55,7 +66,7 @@ for dir in snow2mdl global_cycle ice_blend; do
     cd $dir
     if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]]; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
-    elif [[ $MACHINE_ID == "wcoss_dell_p3" ]] || [[ $MACHINE_ID == "wcoss_cray" ]]; then
+    elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
         cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
     fi
     cd ..
@@ -90,9 +101,9 @@ for dir in chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
 done
 
 if [[ "$success" == true ]]; then
-    mail -s "UFS_UTILS Regression Tests PASSED on ${MACHINE_ID}" ${MAILTO} < reg_test_results.txt
+    mail -s "UFS_UTILS Regression Tests PASSED on ${target}" ${MAILTO} < reg_test_results.txt
 else
-    mail -s "UFS_UTILS Regression Tests FAILED on ${MACHINE_ID}" ${MAILTO} < reg_test_results.txt
+    mail -s "UFS_UTILS Regression Tests FAILED on ${target}" ${MAILTO} < reg_test_results.txt
 fi
 
 # Save current hash as previous hash for next time
