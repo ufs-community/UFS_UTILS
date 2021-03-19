@@ -72,19 +72,9 @@ for dir in snow2mdl global_cycle ice_blend; do
     cd ..
 done
 
-
-# Wait for jobs to complete by checking for summary.log
-time=0
-should_wait=true
-while [ "$should_wait" == true ]; do
+# Wait chgres_cube and grid_gen to finish before submitting more jobs
+while [ ! -f "snow2mdl/summary.log" ] || [ ! -f "global_cycle/summary.log" ] || [ ! -f "ice_blend/summary.log" ]; do
     sleep 10
-    for dir in snow2mdl global_cycle ice_blend; do
-        should_wait=false
-        if [[ ! -f "${dir}/summary.log" ]]; then
-            should_wait=true
-            break
-        fi
-    done
 done
 
 echo "Commit hash: ${current_hash}" >> reg_test_results.txt
