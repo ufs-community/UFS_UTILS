@@ -21,25 +21,29 @@ module gsl_oro_data_lg_scale
 
 implicit none
 
-integer, parameter :: real_kind = selected_real_kind(6)
-integer, parameter :: dbl_kind = selected_real_kind(13)
+integer, parameter :: real_kind = selected_real_kind(6) !< ???
+integer, parameter :: dbl_kind = selected_real_kind(13) !< ???
 
-real, parameter :: pi = 3.1415926535897_real_kind
-integer :: dimX_fine, dimY_fine
+real, parameter :: pi = 3.1415926535897_real_kind !< ???
+integer :: dimX_fine !< ???
+integer :: dimY_fine !< ???
 
-real (kind = real_kind), allocatable :: lat1d_fine(:), lon1d_fine(:)
+real (kind = real_kind), allocatable :: lat1d_fine(:) !< ???
+real (kind = real_kind), allocatable :: lon1d_fine(:) !< ???
 
-real (kind = real_kind), parameter :: p5 = 0.5_real_kind
+real (kind = real_kind), parameter :: p5 = 0.5_real_kind !< ???
 
-real (kind = real_kind), allocatable :: HGT_M_fine(:,:)
-real (kind = real_kind), parameter :: HGT_missing = 1.E+10
-
-
+real (kind = real_kind), allocatable :: HGT_M_fine(:,:) !< ???
+real (kind = real_kind), parameter :: HGT_missing = 1.E+10 !< ???
 
 contains
 
-
-
+!> What does this routine do ???
+!!
+!! @param[in] tile_num ???
+!! @param[in] res_indx ???
+!! @param[in] halo ???
+!! @author ???
 subroutine calc_gsl_oro_data_lg_scale(tile_num,res_indx,halo)
 
 use netcdf
@@ -950,12 +954,16 @@ deallocate(OL2)
 deallocate(OL3)
 deallocate(OL4)
 
-
 end subroutine calc_gsl_oro_data_lg_scale
 
-
-
-
+!> What does this routine do ???
+!!
+!! @param[in] s_ii ???
+!! @param[in] e_ii ???
+!! @param[in] s_jj ???
+!! @param[in] e_jj ???
+!! @param[out] hgt ???
+!! @author ???
 subroutine calc_mean_HGT(s_ii,e_ii,s_jj,e_jj,HGT)
 
 ! This subroutine calculates the average terrain height within
@@ -1008,9 +1016,15 @@ HGT = HGT_sum/grid_pt_count
 
 end subroutine calc_mean_HGT
 
-
-
-
+!> What does this routine do ???
+!!
+!! @param[in] lat Latitude of fine grid point.
+!! @param[in] lon_in Longitude of fine grid point.
+!! @param[in] lat_blk Latitudes of neighboring coarse grid points.
+!! @param[in] lon_blk Longitudes of neighboring coarse grid points.
+!! @param[in] hgt_coarse ???
+!! @param[out] hgt_coarse_on_fine ???
+!! @author ???
 subroutine HGT_interpolate(lat,lon_in,lat_blk,lon_blk,HGT_coarse,        &
                                                  HGT_coarse_on_fine)
 
@@ -1137,8 +1151,11 @@ end if
 
 end subroutine HGT_interpolate
 
-
-
+!> What does this function do ???
+!!
+!! @param[in] lon_in ???
+!! @return nearest_i_east ???
+!! @author ???
 function nearest_i_east(lon_in)
 ! Calculates nearest fine-grid i index to the east of (or on) a given longitude
 implicit none
@@ -1167,7 +1184,11 @@ end if
 
 end function nearest_i_east
 
-
+!> What does this function do ???
+!!
+!! @param[in] lon_in ???
+!! @return nearest_i_west ???
+!! @author ???
 function nearest_i_west(lon_in)
 ! Calculates nearest fine-grid i index to the west of a given longitude
 implicit none
@@ -1196,8 +1217,11 @@ end if
 
 end function nearest_i_west
 
-
-
+!> What does this function do ???
+!!
+!! @param[in] lat_in ???
+!! @return nearest_j_north ???
+!! @author ???
 function nearest_j_north(lat_in)
 ! Calculates nearest fine-grid j index to the north of a given latitude
 ! Note:  If the abs(latitude) is greater than pi/2 (90 degrees) then
@@ -1222,7 +1246,11 @@ end if
 
 end function nearest_j_north
 
-
+!> What does this function do ???
+!!
+!! @param[in] lat_in ???
+!! @return nearest_j_south ???
+!! @author ???
 function nearest_j_south(lat_in)
 ! Calculates nearest fine-grid j index to the south of a given latitude
 ! Note:  If the abs(latitude) is greater than pi/2 (90 degrees) then
@@ -1249,7 +1277,15 @@ end if
 
 end function nearest_j_south
 
-
+!> What does this function do ???
+!! 
+!! @param[in] x ???
+!! @param[in] x1 ???
+!! @param[in] x2 ???
+!! @param[in] y1 ???
+!! @param[in] y2 ???
+!! @return interp_1d ???
+!! @author ???
 function interp_1d(x,x1,x2,y1,y2)
 ! Interpolates (or extrapolates) linear function y = y(x)
 ! to x given y1 = y(x1) and y2 = y(x2)
@@ -1265,7 +1301,11 @@ interp_1d = y1 + slope*(x-x1)
 
 end function interp_1d
 
-
+!> What does this routine do ???
+!!
+!! @param[in] err ???
+!! @param[in] string ???
+!! @author ???
 subroutine netcdf_err(err,string)
 
 use netcdf
@@ -1285,7 +1325,5 @@ call exit(4)
 
 return
 end subroutine netcdf_err
-
-
 
 end module gsl_oro_data_lg_scale
