@@ -8,6 +8,9 @@ jobs:
       CC: gcc-9
       FC: gfortran-9
       CXX: g++-9
+      HOMEBREW_CC: gcc-9
+      HOMEBREW_CXX: g++-9
+      HOMEBREW_FC: gfortran-9
     strategy:
       matrix:
         os: [macos-10.15, ubuntu-20.04]
@@ -15,10 +18,6 @@ jobs:
 
     steps:
     - name: install-dependencies
-      env:
-         HOMEBREW_CC=gcc-9
-         HOMEBREW_CXX=g++-9
-         HOMEBREW_FC=gfortran-9
       run: |
         if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
           sudo apt-get update
