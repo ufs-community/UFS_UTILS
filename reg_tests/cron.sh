@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -eux
-
 export MAILTO="kyle.gerheiser@noaa.gov"
 
 export WORK_DIR=/work/noaa/stmp/gkyle/reg-tests
@@ -93,9 +91,9 @@ for dir in chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
 done
 
 if [[ "$success" == true ]]; then
-    mail -s "UFS_UTILS Regression Tests PASSED" ${MAILTO} < reg_test_results.txt
+    mail -s "UFS_UTILS Regression Tests PASSED on ${MACHINE_ID}" ${MAILTO} < reg_test_results.txt
 else
-    mail -s "UFS_UTILS Regression Tests FAILED" ${MAILTO} < reg_test_results.txt
+    mail -s "UFS_UTILS Regression Tests FAILED on ${MACHINE_ID}" ${MAILTO} < reg_test_results.txt
 fi
 
 # Save current hash as previous hash for next time

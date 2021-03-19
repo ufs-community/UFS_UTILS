@@ -9,7 +9,7 @@ file(STRINGS "VERSION" pVersion)
 project(
   ufs_util
   VERSION ${pVersion}
-  LANGUAGES C CXX Fortran)
+  LANGUAGES C Fortran)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # User options.
