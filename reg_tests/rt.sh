@@ -52,12 +52,11 @@ cd ../reg_tests
 for dir in chgres_cube grid_gen; do
     cd $dir
     ./driver.$target.sh
+    # Wait chgres_cube and grid_gen to finish before submitting more jobs
+    while [ ! -f "summary.log" ]; do
+        sleep 10
+    done
     cd ..
-done
-
-# Wait chgres_cube and grid_gen to finish before submitting more jobs
-while [ ! -f "chgres_cube/summary.log" ] || [ ! -f "grid_gen/summary.log" ]; do
-    sleep 10
 done
 
 for dir in snow2mdl global_cycle ice_blend; do
