@@ -34,6 +34,8 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
+ulimit -s unlimited
+
 export DATA="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/global-cycle"
 
