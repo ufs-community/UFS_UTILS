@@ -2,10 +2,10 @@
 
 export MAILTO="kyle.gerheiser@noaa.gov"
 
-export WORK_DIR=/work/noaa/stmp/gkyle/reg-tests
-export UFS_UTILS_HOME_DIR=$PWD/..
+# Directory to download UFS_UTILS to and run the regression tests
+export WORK_DIR=
 export PROJECT_CODE=nems
-export MACHINE_ID=orion
+
 export QUEUE=batch
 
 mkdir -p ${WORK_DIR}
@@ -43,18 +43,17 @@ cd ../reg_tests
 for dir in chgres_cube grid_gen; do
     cd $dir
     ./driver.$target.sh
-
-    # Wait for each test to finish before submitting more jobs
-    while [ ! -f "summary.log" ]; do
-        sleep 10
-    done
-    
     cd ..
+done
+
+# Wait chgres_cube and grid_gen to finish before submitting more jobs
+while [ ! -f "chgres_cube/summary.log" ] && [ ! -f "grid_gen/summary.log" ]; do
+    sleep 10
 done
 
 for dir in snow2mdl global_cycle ice_blend; do
     cd $dir
-    if [[ $MACHINE_ID == "hera" ]] || [[ $MACHINE_ID == "jet" ]] || [[ $MACHINE_ID == "orion" ]]; then
+    if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]]; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $MACHINE_ID == "wcoss_dell_p3" ]] || [[ $MACHINE_ID == "wcoss_cray" ]]; then
         cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
