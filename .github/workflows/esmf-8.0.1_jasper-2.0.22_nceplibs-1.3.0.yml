@@ -15,10 +15,6 @@ jobs:
 
     steps:
     - name: install-dependencies
-      env:
-         HOMEBREW_CC=gcc-9
-         HOMEBREW_CXX=g++-9
-         HOMEBREW_FC=gfortran-9
       run: |
         if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
           sudo apt-get update
