@@ -121,6 +121,8 @@ jobs:
     - name: build-ufs-utils
       run: |
         set -x
+        mpicc --version
+        mpifort --version
         pwd
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
