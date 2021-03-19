@@ -5,6 +5,7 @@ set -eux
 export MAILTO="kyle.gerheiser@noaa.gov"
 
 export UFS_UTILS_WORKING_DIR=/home/gkyle/reg_tests
+export WORK_DIR=/home/gkyle/reg_tests
 export UFS_UTILS_HOME_DIR=$PWD/..
 export PROJECT_CODE=nems
 export MACHINE_ID=orion
