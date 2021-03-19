@@ -7,12 +7,7 @@ jobs:
     env:
       CC: gcc-9
       FC: gfortran-9
-      CXX: g++-9 CC: gcc-9
-      FC: gfortran-9
       CXX: g++-9
-      HOMEBREW_CC: gcc-9
-      HOMEBREW_CXX: g++-9
-      HOMEBREW_FC: gfortran-9
     strategy:
       matrix:
         os: [macos-10.15, ubuntu-20.04]
