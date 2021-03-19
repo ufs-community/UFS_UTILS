@@ -15,6 +15,10 @@ jobs:
 
     steps:
     - name: install-dependencies
+      env:
+         HOMEBREW_CC=gcc-9
+         HOMEBREW_CXX=g++-9
+         HOMEBREW_FC=gfortran-9
       run: |
         if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
           sudo apt-get update
@@ -25,7 +29,7 @@ jobs:
           sudo apt-get install libjpeg-dev
         elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
           brew install doxygen
-          brew install mpich
+          brew install mpich --build-from-source
           brew install netcdf
           brew install wget
           if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
