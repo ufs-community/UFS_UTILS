@@ -153,6 +153,7 @@ jobs:
         make test
         export PATH="/home/runner/.local/bin:$PATH"
         gcovr -r .. --html -o test-coverage.html
+        
     - uses: actions/upload-artifact@v2
       if: ${{ matrix.os == 'ubuntu-20.04' }}
       with:
