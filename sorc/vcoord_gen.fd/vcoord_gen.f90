@@ -1,9 +1,8 @@
 !> @file
-!!
-!! vcoord_gen   Generates hybrid coordinate interface profiles
-!! @author Iredell @date 2008-08-01
-!
-!! This subprogram generates hybrid coordinate interface profiles
+!! @brief Generates hybrid coordinate interface profiles.
+!! @author Mark Iredell @date 2008-08-01
+
+!> This subprogram generates hybrid coordinate interface profiles
 !! from a few given parameters. The hybrid coordinate is intended to start
 !! out at the bottom in pure sigma and end up at the top in pure pressure,
 !! with a smooth transition in between. The pressure thickness is close to
@@ -18,9 +17,6 @@
 !! the constant top pressure (which can be zero) is the top boundary condition.
 !!
 !! The procedure for the calculation is described in the remarks section below.
-!!
-!! Program history log:
-!! -  2008-08-01  Mark Iredell
 !!
 !! @param[in] levs     integer number of levels 
 !! @param[in] lupp     integer number of levels below pupp
@@ -151,7 +147,7 @@
 !! <pre>
 !!     p(psfc)=ak+bk*psfc
 !! </pre>
-!!
+!! @author Mark Iredell @date 2008-08-01
 subroutine vcoord_gen(levs,lupp,pbot,psig,ppre,pupp,ptop,&
                    dpbot,dpsig,dppre,dpupp,dptop,pmin,ak,bk)
   implicit none

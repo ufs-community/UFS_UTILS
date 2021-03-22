@@ -1,10 +1,11 @@
 !> @file
-!!
-!! @brief Create a snow cover and snow depth analysis on a nam
+!! @brief Create a snow cover and snow depth analysis.
+!! @author gayno @date 2005-dec-16
+
+!> Create a snow cover and snow depth analysis on a nam
 !! or global gfs gaussian grid using nesdis/ims snow cover, autosnow snow
 !! cover and/or afwa depth data.
-!! @author gayno @date 2005-dec-16
-!!
+!!      
 !! Program History Log
 !! -  2005-dec-16  gayno     initial version
 !! -  2007-nov-30  gayno     added processing of nam b-grids.
@@ -138,6 +139,8 @@
 !!      defined threshold, the depth is set to 0,
 !!      regardless of the afwa depth value.
 !!
+!! @return 0 for success, error code otherwise.      
+!! @author gayno @date 2005-dec-16
  program driver
 
  use snowdat,       only           : readnesdis, &
