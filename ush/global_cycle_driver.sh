@@ -52,6 +52,7 @@ fi
 
 export DO_SFCCYLE=${DO_SFCCYCLE:-".true."}
 export DO_LNDINC=${DO_LNDINC:-".false."}
+export LND_FILE=${LND_FILE:-"NULL"}
 
 CRES=$(echo $CASE | cut -c 2-)
 JCAP_CASE=$((2*CRES-2))
