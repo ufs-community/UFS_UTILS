@@ -35,7 +35,7 @@ export OUTDIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
 
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-QUEUE=batch
+QUEUE="${QUEUE:-debug}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
