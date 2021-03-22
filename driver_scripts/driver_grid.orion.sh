@@ -70,6 +70,8 @@ module list
 
 export gtype=uniform           # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
+export make_gsl_orog=false     # 'true' if user needs 'oro' files for GSL
+                               # orographic drag suite
 if [ $gtype = uniform ]; then
   export res=96
   export add_lake=false        # Add lake frac and depth to orography data.

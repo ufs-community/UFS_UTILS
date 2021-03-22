@@ -69,8 +69,10 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=regional_esg      # 'uniform', 'stretch', 'nest', 
+export gtype=uniform           # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
+export make_gsl_orog=false     # 'true' if user needs 'oro' files for GSL
+                               # orographic drag suite
 if [ $gtype = uniform ]; then
   export res=96
   export add_lake=false        # Add lake frac and depth to orography data.
@@ -92,7 +94,7 @@ elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
   export jstart_nest=331       # Starting j-direction index of nest grid in parent tile supergrid
   export iend_nest=1402        # Ending i-direction index of nest grid in parent tile supergrid
   export jend_nest=1194        # Ending j-direction index of nest grid in parent tile supergrid
-  export halo=3                # Lateral boundary halo
+  export halo=4                # Lateral boundary halo
 elif [ $gtype = regional_esg ] ; then
   export res=-999              # equivalent resolution is computed
   export target_lon=-97.5      # Center longitude of grid
@@ -105,7 +107,7 @@ elif [ $gtype = regional_esg ] ; then
                                # direction is related to delx as follows:
                                #    distance = 2*delx*(circumf_Earth/360 deg)
   export dely=0.0585           # Grid spacing (in degrees) in the 'j' direction.
-  export halo=5                # number of row/cols for halo
+  export halo=4                # number of row/cols for halo
 fi
 
 #-----------------------------------------------------------------------
