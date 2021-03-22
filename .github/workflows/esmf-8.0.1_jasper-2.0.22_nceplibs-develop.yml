@@ -109,7 +109,7 @@ jobs:
         cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
         make -j2
         make install
-        
+  
     - name: checkout-nceplibs
       uses: actions/checkout@v2
       with:
