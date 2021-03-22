@@ -3,7 +3,12 @@
 !! @author George Gayno NCEP/EMC
 
 !> Utilities for use when reading grib2 data.
-!! @author George Gayno NCEP/EMC
+!!
+!! This module contains routines to:
+!! - convert from RH to specific humidity
+!! - convert from omega to dzdt.
+!!
+!! George Gayno NCEP/EMC
 module grib2_util
 
 use esmf
@@ -14,10 +19,11 @@ implicit none
 
 contains 
 
-!> Convert relative humidity to specific humidity
-!! @param [inout]  rh_sphum rel humidity on input. spec hum on output.
-!! @param [in] p   pressure in Pa
-!! @param [in] t   temperature
+!> Convert relative humidity to specific humidity.
+!!
+!! @param[inout] rh_sphum rel humidity on input. spec hum on output.
+!! @param[in] p pressure in Pa
+!! @param[in] t temperature
 !! @author Larissa Reames
 !! @author Jeff Beck
  subroutine rh2spfh(rh_sphum,p,t)
@@ -51,13 +57,14 @@ contains
 
 end subroutine RH2SPFH
 
-!> Convert omega to vertical velocity
-!! @param [inout] omega on input, vertical velocity on output
-!! @param [in] p  pressure
-!! @param [in] t  temperature
-!! @param [in] q  specific humidity
-!! @param [in] clb lower bounds of indices processed by this mpi task
-!! @param [in] cub upper bounds of indices processed by this mpi task
+!> Convert omega to vertical velocity.
+!!
+!! @param[inout] omega on input, vertical velocity on output
+!! @param[in] p pressure
+!! @param[in] t temperature
+!! @param[in] q specific humidity
+!! @param[in] clb lower bounds of indices processed by this mpi task
+!! @param[in] cub upper bounds of indices processed by this mpi task
 !! @author Larissa Reames
 !! @author Jeff Beck
 subroutine convert_omega(omega,p,t,q,clb,cub)
