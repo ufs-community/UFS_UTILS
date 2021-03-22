@@ -53,6 +53,8 @@ export add_lake=${add_lake:-false}      # add lake fraction and depth.  uniform 
 export lake_cutoff=${lake_cutoff:-0.20} # lake fractions less than lake_cutoff 
                                         # are ignored.
 
+export make_gsl_orog={make_gsl_orog:-false} # when true, create GSL drag suite orog files.
+
 if [ $gtype = uniform ];  then
   echo "Creating global uniform grid"
 elif [ $gtype = stretch ]; then

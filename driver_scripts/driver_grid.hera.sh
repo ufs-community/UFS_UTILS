@@ -117,12 +117,9 @@ fi
 #   out_dir  - where files will be placed upon completion.
 #-----------------------------------------------------------------------
 
-#export home_dir=$SLURM_SUBMIT_DIR/..
-export home_dir=/scratch1/BMC/wrfruc/mtoy/git_local/UFS_UTILS
-#export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export TEMP_DIR=/scratch1/BMC/gsd-fv3-dev/NCEPDEV/stmp3/$LOGNAME/fv3_grid.$gtype
-#export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids
-export out_dir=/scratch1/BMC/gsd-fv3-dev/NCEPDEV/stmp3/$LOGNAME/my_grids
+export home_dir=$SLURM_SUBMIT_DIR/..
+export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
+export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
