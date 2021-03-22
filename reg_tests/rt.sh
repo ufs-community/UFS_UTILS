@@ -5,8 +5,8 @@ export MAILTO=
 # Directory to download UFS_UTILS to and run the regression tests
 export WORK_DIR=
 
-export PROJECT_CODE=nems
-export QUEUE=batch
+export PROJECT_CODE=
+export QUEUE=
 
 mkdir -p ${WORK_DIR}
 cd ${WORK_DIR}
@@ -14,9 +14,8 @@ rm -rf UFS_UTILS
 
 cd ${WORK_DIR}
 
-git clone --recursive https://github.com/kgerheiser/UFS_UTILS.git >> /dev/null 2>&1
+git clone --recursive https://github.com/NOAA-EMC/UFS_UTILS.git
 cd UFS_UTILS
-git checkout feature/auto-reg-tests
 
 source sorc/machine-setup.sh
 
@@ -52,7 +51,7 @@ cd ../reg_tests
 for dir in chgres_cube grid_gen; do
     cd $dir
     ./driver.$target.sh
-    # Wait chgres_cube and grid_gen to finish before submitting more jobs
+    # Wait for job to complete
     while [ ! -f "summary.log" ]; do
         sleep 10
     done
@@ -66,6 +65,10 @@ for dir in snow2mdl global_cycle ice_blend; do
     elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
         cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
     fi
+    # Wait for job to complete
+    while [ ! -f "summary.log" ]; do
+        sleep 10
+    done
     cd ..
 done
 
