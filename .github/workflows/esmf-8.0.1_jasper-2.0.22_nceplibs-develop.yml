@@ -30,7 +30,7 @@ jobs:
           wget http://www.mpich.org/static/downloads/3.3.2/mpich-3.3.2.tar.gz &> /dev/null
           tar -xzf mpich-3.3.2.tar.gz
           pushd mpich-3.3.2
-          ./configure --prefix=/home/runner/mpich
+          ./configure --prefix=$HOME/mpich
           make
           sudo make install
           popd
