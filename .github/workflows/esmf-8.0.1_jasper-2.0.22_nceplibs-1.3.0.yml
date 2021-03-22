@@ -25,22 +25,21 @@ jobs:
     - name: build-mpich
       if: steps.cache-mpich.outputs.cache-hit != 'true'
       run: |
-        if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
-          sudo apt-get install libmpich-dev
-        elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
+        if [[ ${{ matrix.os }} == "macos-10.15" ]]; then
           wget http://www.mpich.org/static/downloads/3.3.2/mpich-3.3.2.tar.gz &> /dev/null
           tar -xzf mpich-3.3.2.tar.gz
           pushd mpich-3.3.2
-          ./configure --prefix=/home/runner/mpich
+          ./configure --prefix=$HOME/mpich
           make
           sudo make install
           popd
         fi
     - name: install-dependencies
       run: |
-        echo "/home/runner/mpich/bin" >> $GITHUB_PATH
+        echo "$HOME/mpich/bin" >> $GITHUB_PATH
         if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
           sudo apt-get update
+          sudo apt-get install libmpich-dev
           sudo apt-get install doxygen
           sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
           sudo apt-get install libpng-dev
