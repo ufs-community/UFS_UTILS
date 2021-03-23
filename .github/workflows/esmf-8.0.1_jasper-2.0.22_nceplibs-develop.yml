@@ -11,10 +11,13 @@ jobs:
     strategy:
       matrix:
         os: [macos-10.15, ubuntu-20.04]
-        compiler: [gcc-9]      
+        compiler: [gcc-9]
+        mpi: [mpich, openmpi]    
 
     steps:
+
     - name: cache-mpich
+      if: ${{ matrix.mpi }} == "mpich"
       id: cache-mpich
       uses: actions/cache@v2
       with:
@@ -22,7 +25,7 @@ jobs:
         key: mpich-${{ runner.os }}-3.3.2-1
 
     - name: build-mpich
-      if: steps.cache-mpich.outputs.cache-hit != 'true'
+      if: steps.cache-mpich.outputs.cache-hit != 'true' && ${{ matrix.mpi }} == "mpich"
       run: |
         if [[ ${{ matrix.os }} == "macos-10.15" ]]; then
           wget http://www.mpich.org/static/downloads/3.3.2/mpich-3.3.2.tar.gz &> /dev/null
@@ -38,15 +41,22 @@ jobs:
       run: |
         if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
           sudo apt-get update
-          sudo apt-get install libmpich-dev
+          if [[ ${{ matrix.mpi }} == "mpich" ]]; then
+            sudo apt-get install libmpich-dev
+          elif [[ ${{ matrix.mpi }} == "openmpi" ]]; then
+            sudo apt-get install libopenmpi-dev
+          fi  
           sudo apt-get install doxygen
           sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
         elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
-          echo "$HOME/mpich/bin" >> $GITHUB_PATH
           brew install doxygen
-          brew install mpich
+          if [[ ${{ matrix.mpi }} ==  "openmpi" ]]; then
+            brew install openmpi
+          elif [[ ${{ matrix.mpi }} == "mpich" ]]; then
+            echo "$HOME/mpich/bin" >> $GITHUB_PATH
+          fi
           brew install netcdf
           brew install wget
           if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
