@@ -44,7 +44,7 @@ jobs:
           if [[ ${{ matrix.mpi }} == "mpich" ]]; then
             sudo apt-get install libmpich-dev
           elif [[ ${{ matrix.mpi }} == "openmpi" ]]; then
-            sudo apt-get install libopenmpi-dev
+            sudo apt-get install libopenmpi-dev openmpi-bin
           fi  
           sudo apt-get install doxygen
           sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
