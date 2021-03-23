@@ -326,6 +326,18 @@ allocate (OL2(dimX_FV3*dimY_FV3))
 allocate (OL3(dimX_FV3*dimY_FV3))
 allocate (OL4(dimX_FV3*dimY_FV3))
 
+! Initialize GWD statistics fields
+std_dev(:) = 0._real_kind
+convexity(:) = 0._real_kind
+OA1(:) = 0._real_kind
+OA2(:) = 0._real_kind
+OA3(:) = 0._real_kind
+OA4(:) = 0._real_kind
+OL1(:) = 0._real_kind
+OL2(:) = 0._real_kind
+OL3(:) = 0._real_kind
+OL4(:) = 0._real_kind
+
 
 
 ! Calculate the minimum coarse grid cell size as implied by the cell area
@@ -630,7 +642,7 @@ do j = 1,dimY_FV3
       ! OL1 -- orographic effective length for Westerly flow
       nw = 0
       nt = 0
-      do jj = jj_m/4, 3*jj_m/4
+      do jj = max(jj_m/4,1), 3*jj_m/4
          ! within central east-west band of box
          do ii = 1, ii_m
             if ( zs(ii,jj) > zs_mean ) nw = nw + 1
@@ -647,7 +659,7 @@ do j = 1,dimY_FV3
       nw = 0
       nt = 0
       do jj = 1, jj_m
-         do ii = ii_m/4, 3*ii_m/4
+         do ii = max(ii_m/4,1), 3*ii_m/4
             ! within central north-south band of box
             if ( zs(ii,jj) > zs_mean ) nw = nw + 1
             nt = nt + 1
