@@ -72,7 +72,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf-${{ runner.os }}-8.0.1-2
+        key: esmf-${{ runner.os }}-${{ matrix.mpi }}-8.0.1-2
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
@@ -83,7 +83,11 @@ jobs:
         wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null && ls -l
         tar zxf ESMF_8_0_1.tar.gz && ls -l
         cd esmf-ESMF_8_0_1
-        export ESMF_COMM=mpich3
+        if [[ ${{ matrix.mpi }} ==  "openmpi" ]]; then
+            export ESMF_COMM=openmpi
+        elif [[ ${{ matrix.mpi }} == "mpich" ]]; then
+            export ESMF_COMM=mpich3
+        fi
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
         export ESMF_INSTALL_MODDIR=mod
