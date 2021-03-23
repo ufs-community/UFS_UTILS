@@ -25,7 +25,7 @@ jobs:
         key: mpich-${{ runner.os }}-3.3.2-1
 
     - name: build-mpich
-      iif: steps.cache-mpich.outputs.cache-hit != 'true' && ${{ matrix.mpi }} == "mpich"
+      if: steps.cache-mpich.outputs.cache-hit != 'true' && ${{ matrix.mpi }} == "mpich"
       run: |
         if [[ ${{ matrix.os }} == "macos-10.15" ]]; then
           wget http://www.mpich.org/static/downloads/3.3.2/mpich-3.3.2.tar.gz &> /dev/null
