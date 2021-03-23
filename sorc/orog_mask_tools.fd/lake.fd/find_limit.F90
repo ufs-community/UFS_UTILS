@@ -72,8 +72,10 @@ END SUBROUTINE find_limit
 !!  xyz = 0.5 * (xyz1+xyz2), xyz = xyz / sqrt(dot(xyz,xyz))
 !!  </pre>
 !!
+!! @param[in] p1 Latitude/longitude of first end point.
+!! @param[in] p2 Latitude/longitude of second end point
+!! @param[out] p Latitude/longitude of the mid-point.
 !! @author Ning Wang @date March, 2006
-!!
 SUBROUTINE middle(p1,p2,p)
      IMPLICIT NONE
 
