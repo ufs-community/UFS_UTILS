@@ -952,14 +952,14 @@
 !> Entry routine to get WAM needed temperature and composition profiles.
 !!
 !! Calculate temperature at each grid point useing nrlmsise00_sub
-!! @param[in] iday(nday) calendat date 
-!! @param[in] nday dimension length of iday
-!! @param[in] xlat(nlat) latitudes
-!! @param[in] nlat dimension length of xlat
-!! @param[in] pr(np) pressure in vertical
-!! @param[in] np dimension length of pr
+!! @param[in] iday  calendat date with array dimension of nday
+!! @param[in] nday  dimension length of iday
+!! @param[in] xlat  latitudes with dimension nlat
+!! @param[in] nlat  dimension length of xlat
+!! @param[in] pr    pressure in vertical with dimension of np
+!! @param[in] np    dimension length of pr
 !! @param[out] temp temperature
-!! @param[out] n_o single oxygen number
+!! @param[out] n_o  single oxygen number
 !! @param[out] n_o2 oxygen number
 !! @param[out] n_n2 nitrogen number
 !!
@@ -1102,15 +1102,15 @@
 !!             22  all tn3 var           
 !!             23  turbo scale height var   
 !!                                                                      
-!! @param[in] iyd  year and day as yyddd (day of year from 1 to 365 or 366)
-!! @param[in] sec  ut(sec)                                                  
-!! @param[in] alt  altitude(km)                                             
-!! @param[in] glat  geodetic latitude(deg)                                  
+!! @param[in] iyd    year and day as yyddd (day of year from 1 to 365 or 366)
+!! @param[in] sec    ut(sec)                                                  
+!! @param[in] alt    altitude(km)                                             
+!! @param[in] glat   geodetic latitude(deg)                                  
 !! @param[in] glong  geodetic longitude(deg)                                
-!! @param[in] stl  local apparent solar time(hrs; see note below)           
+!! @param[in] stl    local apparent solar time(hrs; see note below)           
 !! @param[in] f107a  81 day average of f10.7 flux (centered on day ddd)     
-!! @param[in] f107  daily f10.7 flux for previous day                       
-!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!! @param[in] f107   daily f10.7 flux for previous day                       
+!! @param[in] ap     magnetic index(daily) or when sw(9)=-1. :                 
 !!                array containing:                                         
 !!                ap(1) daily ap                                              
 !!                ap(2) 3 hr ap index for current time                        
@@ -1346,15 +1346,15 @@
 !! for drag" and is the sum of the mass densities of all species
 !! in this model, including anomalous oxygen.                   
 !!                                                                      
-!! @param[in] iyd  year and day as yyddd (day of year from 1 to 365 (or 366)
-!! @param[in] sec  ut(sec)                                                  
-!! @param[in] alt  altitude(km)                                             
-!! @param[in] glat  geodetic latitude(deg)                                  
+!! @param[in] iyd    year and day as yyddd (day of year from 1 to 365 (or 366)
+!! @param[in] sec    ut(sec)                                                  
+!! @param[in] alt    altitude(km)                                             
+!! @param[in] glat   geodetic latitude(deg)                                  
 !! @param[in] glong  geodetic longitude(deg)                                
-!! @param[in] stl  local apparent solar time(hrs; see note below)           
+!! @param[in] stl    local apparent solar time(hrs; see note below)           
 !! @param[in] f107a  81 day average of f10.7 flux (centered on day ddd)     
-!! @param[in] f107  daily f10.7 flux for previous day                       
-!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!! @param[in] f107   daily f10.7 flux for previous day                       
+!! @param[in] ap     magnetic index(daily) or when sw(9)=-1. :                 
 !!                ap array containing:                                         
 !!                ap(1) daily ap                                              
 !!                ap(2) 3 hr ap index for current time                        
@@ -1405,14 +1405,14 @@
 !> Find altitude of pressure surface (press) from gtd7             
 !!
 !!    input:                                                            
-!! @param[in] iyd  year and day as yyddd                                    
-!! @param[in] sec  ut(sec)                                                  
-!! @param[in] glat  geodetic latitude(deg)                                  
+!! @param[in] iyd    year and day as yyddd                                    
+!! @param[in] sec    ut(sec)                                                  
+!! @param[in] glat   geodetic latitude(deg)                                  
 !! @param[in] glong  geodetic longitude(deg)                                
-!! @param[in] stl  local apparent solar time(hrs)                           
+!! @param[in] stl    local apparent solar time(hrs)                           
 !! @param[in] f107a  3 month average of f10.7 flux                          
-!! @param[in] f107  daily f10.7 flux for previous day                       
-!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!! @param[in] f107   daily f10.7 flux for previous day                       
+!! @param[in] ap     magnetic index(daily) or when sw(9)=-1. :                 
 !!                array containing:                                         
 !!                ap(1) daily ap                                              
 !!                ap(2) 3 hr ap index for current time                        
@@ -1425,8 +1425,8 @@
 !!                         to current time                                    
 !! @param[in] press  pressure level(mb)                                     
 !!    output:                                                           
-!! @param[out] alt  altitude(km)                                             
-!! @param[out] d density array with length of 8
+!! @param[out] alt   altitude(km)                                             
+!! @param[out] d     density array with length of 8
 !!              d(1)  he number density(cm-3)                                 
 !!              d(2)  o number density(cm-3)                                  
 !!              d(3)  n2 number density(cm-3)                                 
@@ -1504,8 +1504,8 @@
 !-----------------------------------------------------------------------
 !> Calculate latitude variable. 
 !!
-!! @param[in] lat latitude in degree
-!! @param[out] gv gravity
+!! @param[in] lat   latitude in degree
+!! @param[out] gv   gravity
 !! @param[out] reff effective radius
 !!
 !! @author  Hann-Ming Henry Juang
@@ -1526,14 +1526,14 @@
 !! Test if geophysical variables or switches changed and save      
 !! return 0 if unchanged and 1 if changed                          
 !!
-!! @param[in] iyd  year and day as yyddd                                    
-!! @param[in] sec  ut(sec)                                                  
-!! @param[in] glat  geodetic latitude(deg)                                  
+!! @param[in] iyd    year and day as yyddd                                    
+!! @param[in] sec    ut(sec)                                                  
+!! @param[in] glat   geodetic latitude(deg)                                  
 !! @param[in] glong  geodetic longitude(deg)                                
-!! @param[in] stl  local apparent solar time(hrs)                           
+!! @param[in] stl    local apparent solar time(hrs)                           
 !! @param[in] f107a  3 month average of f10.7 flux                          
-!! @param[in] f107  daily f10.7 flux for previous day                       
-!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!! @param[in] f107   daily f10.7 flux for previous day                       
+!! @param[in] ap     magnetic index(daily) or when sw(9)=-1. :                 
 !!                array containing:                                         
 !!                ap(1) daily ap                                              
 !!                ap(2) 3 hr ap index for current time                        
@@ -1544,7 +1544,7 @@
 !!                         to current time                                    
 !!                ap(7) average of eight 3 hr ap indicies from 36 to 59 hrs pr
 !!                         to current time                                    
-!! @param[in] ic initial point
+!! @param[in] ic  initial point
 !! @return vtst7  tested value
 !!
 !! @author Hann-Ming Henry Juang
@@ -1599,15 +1599,15 @@
 !!    See gtd7 for more extensive comments                              
 !!    Output in m-3 and kg/m3:   call meters(.true.)                 
 !!                                                                      
-!! @param[in] iyd  year and day as yyddd (day of year from 1 to 365 or 366
-!! @param[in] sec  ut(sec)                                                  
-!! @param[in] alt  altitude(km) (>72.5 km)                                  
-!! @param[in] glat  geodetic latitude(deg)                                  
+!! @param[in] iyd    year and day as yyddd (day of year from 1 to 365 or 366
+!! @param[in] sec    ut(sec)                                                  
+!! @param[in] alt    altitude(km) (>72.5 km)                                  
+!! @param[in] glat   geodetic latitude(deg)                                  
 !! @param[in] glong  geodetic longitude(deg)                                
-!! @param[in] stl  local apparent solar time(hrs)                           
+!! @param[in] stl    local apparent solar time(hrs)                           
 !! @param[in] f107a  3 month average of f10.7 flux                          
-!! @param[in] f107  daily f10.7 flux for previous day                       
-!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!! @param[in] f107   daily f10.7 flux for previous day                       
+!! @param[in] ap     magnetic index(daily) or when sw(9)=-1. :                 
 !!                array containing:                                         
 !!                ap(1) daily ap                                              
 !!                ap(2) 3 hr ap index for current time                        
@@ -2033,10 +2033,10 @@
 
 !-----------------------------------------------------------------------
 !> Calculate scale height (km)                                      
-!! @param[in] alt altitude [km]
-!! @param[in] xm  molecular weihjt
+!! @param[in] alt  altitude [km]
+!! @param[in] xm   molecular weihjt
 !! @param[in] temp temperature
-!! @return scalh scale height
+!! @return scalh   scale height
 !!
 !! @author Hann-Ming Henry Juang 
       function scalh(alt,xm,temp) 
@@ -2051,14 +2051,14 @@
 
 !-----------------------------------------------------------------------
 !> Calculate g(l) function for upper thermosphere parameters                                   
-!! @param[in] yrd  year and day as yyddd                                    
-!! @param[in] sec  ut(sec)                                                  
-!! @param[in] lat  geodetic latitude(deg)                                  
-!! @param[in] long  geodetic longitude(deg)                                
-!! @param[in] tloc  local apparent solar time(hrs)                           
+!! @param[in] yrd    year and day as yyddd                                    
+!! @param[in] sec    ut(sec)                                                  
+!! @param[in] lat    geodetic latitude(deg)                                  
+!! @param[in] long   geodetic longitude(deg)                                
+!! @param[in] tloc   local apparent solar time(hrs)                           
 !! @param[in] f107a  3 month average of f10.7 flux                          
-!! @param[in] f107  daily f10.7 flux for previous day                       
-!! @param[in] ap  magnetic index(daily) or when sw(9)=-1. :                 
+!! @param[in] f107   daily f10.7 flux for previous day                       
+!! @param[in] ap     magnetic index(daily) or when sw(9)=-1. :                 
 !!                array containing:                                         
 !!                ap(1) daily ap                                              
 !!                ap(2) 3 hr ap index for current time                        
@@ -2438,19 +2438,19 @@
 !> Calculate temperature and density profiles.
 !! New lower thermo polynomial 10/30/89                            
 !!
-!! @param[in] alt altitude (km)
-!! @param[in] dlb altitude (km)
-!! @param[in] tinf initial guess
-!! @param[in] tlb molecular weight
-!! @param[in] xm molecular weight
+!! @param[in] alt   altitude (km)
+!! @param[in] dlb   altitude (km)
+!! @param[in] tinf  initial guess
+!! @param[in] tlb   molecular weight
+!! @param[in] xm    molecular weight
 !! @param[in] alpha initial guess
-!! @param[in] tz temperature
-!! @param[in] zlb altitude (km)
-!! @param[in] s2 altitude (km)
-!! @param[in] mn1 size of array zn2 and tn2
-!! @param[in] zn1 altitude (km)
-!! @param[in] tn1 temperature
-!! @param[in] tgn1 end point temperature
+!! @param[in] tz    temperature
+!! @param[in] zlb   altitude (km)
+!! @param[in] s2    altitude (km)
+!! @param[in] mn1   size of array zn2 and tn2
+!! @param[in] zn1   altitude (km)
+!! @param[in] tn1   temperature
+!! @param[in] tgn1  end point temperature
 !! @return densu density
 !!
 !! @author Hann-Ming Henry Juang
@@ -2539,17 +2539,17 @@
 !--------------------------------------------------------------------   
 !> Calculate temperature and density profiles for lower atmos.     
 !!
-!! @param[in] alt altitude (km)
-!! @param[in] d0 initial guess
-!! @param[in] xm molecular weight
-!! @param[out] tz temperature
-!! @param[in] mn3 size of array zn3 amd tn3
-!! @param[in] zn3 altitude (km)
-!! @param[in] tn3 temperature
+!! @param[in] alt  altitude (km)
+!! @param[in] d0   initial guess
+!! @param[in] xm   molecular weight
+!! @param[out] tz  temperature
+!! @param[in] mn3  size of array zn3 amd tn3
+!! @param[in] zn3  altitude (km)
+!! @param[in] tn3  temperature
 !! @param[in] tgn3 altitude (km)
-!! @param[in] mn2 size of array zn2 and tn2
-!! @param[in] zn2 altitude (km)
-!! @param[in] tn2 temperature
+!! @param[in] mn2  size of array zn2 and tn2
+!! @param[in] zn2  altitude (km)
+!! @param[in] tn2  temperature
 !! @param[in] tgn2 end point temperature
 !! @return densm density
 !!
@@ -2646,9 +2646,9 @@
 !> Calculate 2nd derivatives of cubic spline interp function. 
 !!
 !! Adapted from numerical recipes by press et al.
-!! @param[in] x arrays of tabulated function in ascending order by x      
-!! @param[in] y arrays of tabulated function in ascending order by x      
-!! @param[in] n size of arrays x,y                                          
+!! @param[in] x   arrays of tabulated function in ascending order by x      
+!! @param[in] y   arrays of tabulated function in ascending order by x      
+!! @param[in] n   size of arrays x,y                                          
 !! @param[in] yp1 specified derivatives at x(1)        
 !! @param[in] ypn specified derivatives at x(n)
 !!              values >= 1e30 signal signal second derivative zero.         
@@ -2691,12 +2691,12 @@
 !> Calculate cubic spline interp value. 
 !!
 !! Adapted from numerical recipes by press et al.                 
-!! @param[in] xa arrays of tabulated function in ascending order by x    
-!! @param[in] ya arrays of tabulated function in ascending order by x    
+!! @param[in] xa  arrays of tabulated function in ascending order by x    
+!! @param[in] ya  arrays of tabulated function in ascending order by x    
 !! @param[in] y2a array of second derivatives                               
-!! @param[in] n size of arrays xa,ya,y2a                                    
-!! @param[in] x abscissa for interpolation                                  
-!! @param[out] y output value                                                
+!! @param[in] n   size of arrays xa,ya,y2a                                    
+!! @param[in] x   abscissa for interpolation                                  
+!! @param[out] y  output value                                                
 !!
 !! @author Hann-Ming Henry Juang
       subroutine splint(xa,ya,y2a,n,x,y) 
@@ -2726,11 +2726,11 @@
 !-----------------------------------------------------------------------
 !> Integrate cubic spline function.
 !!
-!! @param[in] xa arrays of tabulated function in ascending order by x    
-!! @param[in] ya arrays of tabulated function in ascending order by x    
+!! @param[in] xa  arrays of tabulated function in ascending order by x    
+!! @param[in] ya  arrays of tabulated function in ascending order by x    
 !! @param[in] y2a array of second derivatives                               
-!! @param[in] n size of arrays xa,ya,y2a                                    
-!! @param[in] x abscissa endpoint for integration                           
+!! @param[in] n   size of arrays xa,ya,y2a                                    
+!! @param[in] x   abscissa endpoint for integration                           
 !! @param[out] yi output value                                                
 !!
 !! @author Hann-Ming Henry Juang
@@ -2762,12 +2762,12 @@
 !-----------------------------------------------------------------------
 !> Turbopause correction.
 !!
-!! @param[in] dd  diffusive density                                       
-!! @param[in] dm  full mixed density                                      
+!! @param[in] dd   diffusive density                                       
+!! @param[in] dm   full mixed density                                      
 !! @param[in] zhm  transition scale length                                
 !! @param[in] xmm  full mixed molecular weight                            
 !! @param[in] xm   species molecular weight                               
-!! @return dnet  combined density                                      
+!! @return dnet    combined density                                      
 !!
 !! @author Hann-Ming Henry Juang
       function dnet(dd,dm,zhm,xmm,xm) 
@@ -2798,10 +2798,10 @@
 !> Chemistry/dissociation correction.
 !!
 !! @param[in] alt  altitude                                                 
-!! @param[in] r  target ratio                                               
-!! @param[in] h1  transition scale length                                   
-!! @param[in] zh  altitude of 1/2 r                                         
-!! @return ccor  correction
+!! @param[in] r    target ratio                                               
+!! @param[in] h1   transition scale length                                   
+!! @param[in] zh   altitude of 1/2 r                                         
+!! @return ccor    correction
 !!
 !! @author  Hann-Ming Henry Juang
       function ccor(alt, r,h1,zh) 
@@ -2825,8 +2825,8 @@
 !> O and O2 chemistry/dissociation correction.
 !!
 !! @param[in] alt  altitude                                                 
-!! @param[in] r  target ratio                                               
-!! @param[in] h1 transition scale length 1                                 
+!! @param[in] r   target ratio                                               
+!! @param[in] h1  transition scale length 1                                 
 !! @param[in] zh  altitude of 1/2 r                                         
 !! @param[in] h2  transition scale length 2                                 
 !! @return ccor2  correction
