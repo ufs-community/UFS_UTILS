@@ -1,4 +1,16 @@
 !> @file
+!! @brief Geo-reference utilities for a cubed-sphere grid.
+!! @author Ning Wang
+
+!> Given two points on a cubed-sphere grid, compute the
+!! maximum and minimum latitudinal extent of the 
+!! resulting great circle.
+!!
+!! @param[in] p1_in Latitude and longitude of point 1.
+!! @param[in] p2_in Latitude and longitude of point 2.
+!! @param[out] latmin Minimum latitudinal extent.
+!! @param[out] latmax Maximum latitudinal extent.
+!! @author Ning Wang
 !#define DIAG
 SUBROUTINE find_limit (p1_in, p2_in, latmin, latmax)
     REAL*8, INTENT(IN) :: p1_in(2), p2_in(2)
@@ -37,13 +49,12 @@ SUBROUTINE find_limit (p1_in, p2_in, latmin, latmax)
 
 END SUBROUTINE find_limit
 
-!>
-!!  This subroutine computes the latitude and longitude 
-!!  of the middle point between two given ponits.
+!> Compute the latitude and longitude of the middle
+!! point between two given points.
 !!
-!!  There are two formulae available to compute it.
+!! There are two formulae available to compute it.
 !!  
-!!  One derived from a more general m-sect formula:
+!! One derived from a more general m-sect formula:
 !!  <pre>
 !!  xyz = sin((1-f)*theta) / sin(theta) * xyz1 +
 !!        sin(f*theta) /sin(theta) * xyz2 ;
@@ -54,15 +65,17 @@ END SUBROUTINE find_limit
 !!  xyz = 0.5 / sqrt[(1+dot(xyz1,xyz2))/2] * (xyz1+xyz2)
 !!  </pre>
 !!
-!!  and the other one is the normalized middle point of
-!!  the two end points:
+!! and the other one is the normalized middle point of
+!! the two end points:
 !!
 !!  <pre>
 !!  xyz = 0.5 * (xyz1+xyz2), xyz = xyz / sqrt(dot(xyz,xyz))
 !!  </pre>
 !!
-!!  @author Ning Wang @date March, 2006
-!!
+!! @param[in] p1 Latitude/longitude of first end point.
+!! @param[in] p2 Latitude/longitude of second end point
+!! @param[out] p Latitude/longitude of the mid-point.
+!! @author Ning Wang @date March, 2006
 SUBROUTINE middle(p1,p2,p)
      IMPLICIT NONE
 
