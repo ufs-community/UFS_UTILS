@@ -44,16 +44,16 @@
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/gpfs/dell1/stmp/George.Gayno/gdas.init/input
-EXTRACT_DATA=no
+EXTRACT_DATA=yes
 
 RUN_CHGRES=yes
 
 yy=2021
-mm=01
-dd=20
-hh=00
+mm=03
+dd=21
+hh=06
 
-use_v16retro=yes
+use_v16retro=no
 
 LEVS=65
 
@@ -89,14 +89,19 @@ else
     gfs_ver=v13
   elif [ $yy$mm$dd$hh -lt 2019061200 ]; then
     gfs_ver=v14
-  elif [ $yy$mm$dd$hh -lt 2021030100 ]; then  # change this once v16 is implemented.
+  elif [ $yy$mm$dd$hh -lt 2021032100 ]; then
     gfs_ver=v15
+# The way the v16 switch over was done, there is no complete
+# set of v16 or v15 data for 2021032100.  And although
+# v16 was officially implemented 2021032212, the v16 prod 
+# tarballs were archived starting 2021032106.
+  elif [ $yy$mm$dd$hh -lt 2021032106 ]; then
+    set +x
+    echo FATAL ERROR: NO V15 OR V16 DATA FOR 2021032100
+    exit 1
   fi
 
 fi
-
-# This is for Eric's OPS look-alike tarball
-#gfs_ver=v16
 
 export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF
 export LEVS gfs_ver

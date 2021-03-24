@@ -1,8 +1,9 @@
 #!/bin/bash
 
 #----------------------------------------------------------------------
-# Retrieve gfs v16 data from Eric's tarballs, which should match
-# the official OPS v16 tarballs.
+# Retrieve gfs v16 data.  v16 was officially implemented on 12 UTC
+# March 22, 2021.  However, the way the switch over was done,
+# the 'prod' v16 tarballs started March 21, 2021 06Z.
 #----------------------------------------------------------------------
 
 bundle=$1
@@ -27,11 +28,11 @@ hh_m6=$(echo $date10_m6 | cut -c9-10)
 if [ "$bundle" = "gdas" ] || [ "$bundle" = "gfs" ]; then
 
   if [ "$bundle" = "gdas" ] ; then
-    directory=/NCEPDEV/emc-meso/2year/Eric.Rogers/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-    file=com_gfs_para_gdas.${yy}${mm}${dd}_${hh}.gdas_nc.tar
+    directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
+    file=com_gfs_prod_gdas.${yy}${mm}${dd}_${hh}.gdas_nc.tar
   else
-    directory=/NCEPDEV/emc-meso/2year/Eric.Rogers/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-    file=com_gfs_para_gfs.${yy}${mm}${dd}_${hh}.gfs_nca.tar
+    directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
+    file=com_gfs_prod_gfs.${yy}${mm}${dd}_${hh}.gfs_nca.tar
   fi
 
   rm -f ./list.hires*
@@ -55,8 +56,8 @@ if [ "$bundle" = "gdas" ] || [ "$bundle" = "gfs" ]; then
 
   if [ "$bundle" = "gdas" ] ; then
 
-    directory=/NCEPDEV/emc-meso/2year/Eric.Rogers/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-    file=com_gfs_para_gdas.${yy}${mm}${dd}_${hh}.gdas_restart.tar
+    directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
+    file=com_gfs_prod_gdas.${yy}${mm}${dd}_${hh}.gdas_restart.tar
 
     htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias
     rc=$?
@@ -86,8 +87,8 @@ else
 
   group=$bundle
 
-  directory=/NCEPDEV/emc-meso/2year/Eric.Rogers/5year/rh${yy_m6}/${yy_m6}${mm_m6}/${yy_m6}${mm_m6}${dd_m6}
-  file=com_gfs_para_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_${group}.tar
+  directory=/NCEPPROD/hpssprod/runhistory/5year/rh${yy_m6}/${yy_m6}${mm_m6}/${yy_m6}${mm_m6}${dd_m6}
+  file=com_gfs_prod_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_${group}.tar
 
   rm -f ./list*.${group}
   htar -tvf  $directory/$file > ./list1.${group}
