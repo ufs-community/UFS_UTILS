@@ -53,7 +53,7 @@ jobs:
         elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
           brew install doxygen
           if [[ ${{ matrix.mpi }} ==  "openmpi" ]]; then
-            brew install open-mpi --with-cxx-bindings
+            brew install open-mpi
           elif [[ ${{ matrix.mpi }} == "mpich" ]]; then
             echo "$HOME/mpich/bin" >> $GITHUB_PATH
           fi
