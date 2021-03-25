@@ -5,9 +5,9 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     env:
-      CC: gcc-9
-      FC: gfortran-9
-      CXX: g++-9
+      CC: mpicc
+      FC: mpifort
+      CXX: mpicxx
     strategy:
       matrix:
         os: [macos-10.15, ubuntu-20.04]
