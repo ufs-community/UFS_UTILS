@@ -37,7 +37,7 @@ target_link_libraries(
   wgrib2::wgrib2_lib
   wgrib2::wgrib2_api
   MPI::MPI_Fortran
-  MPI::MPI_CXX
+  -lmpi_cxx
   NetCDF::NetCDF_Fortran)
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
