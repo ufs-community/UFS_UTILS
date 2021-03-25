@@ -34,11 +34,11 @@ target_link_libraries(
   sp::sp_d
   w3nco::w3nco_d
   esmf
+  MPI::MPI_CXX
   wgrib2::wgrib2_lib
   wgrib2::wgrib2_api
-  MPI::MPI_Fortran
-  -lmpi_cxx
-  NetCDF::NetCDF_Fortran)
+  NetCDF::NetCDF_Fortran
+  MPI::MPI_Fortran)
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
 endif()
