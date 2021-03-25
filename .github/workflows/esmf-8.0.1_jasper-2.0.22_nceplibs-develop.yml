@@ -158,10 +158,6 @@ jobs:
         path: ufs_utils
 
     - name: build-ufs-utils
-      env:
-        CC: mpicc
-        FC: mpifort
-        CXX: mpicxx
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils

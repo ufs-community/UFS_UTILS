@@ -155,10 +155,6 @@ jobs:
         path: ufs_utils
 
     - name: build-ufs-utils
-      env:
-        CC: mpicc
-        FC: mpifort
-        CXX: mpicxx
       run: |
         set -x
         pwd
