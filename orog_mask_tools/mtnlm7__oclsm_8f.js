@@ -9,7 +9,6 @@ var mtnlm7__oclsm_8f =
     [ "get_xnsum2", "mtnlm7__oclsm_8f.html#a18c367f7d76c7c3d586be9ce028bbb02", null ],
     [ "get_xnsum3", "mtnlm7__oclsm_8f.html#a6d50be662748bf70df0762927f612590", null ],
     [ "gg2rg", "mtnlm7__oclsm_8f.html#a6089afa6ac190f08ef375fee7c689f85", null ],
-    [ "gl2any", "mtnlm7__oclsm_8f.html#a667729d73ce68bb62c54170c845f9e70", null ],
     [ "inside_a_polygon", "mtnlm7__oclsm_8f.html#af10c3a1bba5248b6a97c15b5a3b0cb43", null ],
     [ "interpolate_mismatch", "mtnlm7__oclsm_8f.html#a065d9f691c8d972ccd6513e2789466ff", null ],
     [ "latlon2xyz", "mtnlm7__oclsm_8f.html#a5869b044207f7ecb10fb381ece00732c", null ],

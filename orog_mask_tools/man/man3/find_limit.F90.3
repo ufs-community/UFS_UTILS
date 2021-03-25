@@ -1,8 +1,9 @@
-.TH "/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/lake.fd/find_limit.F90" 3 "Thu Mar 18 2021" "Version 1.0.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/lake.fd/find_limit.F90" 3 "Thu Mar 25 2021" "Version 1.0.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/lake.fd/find_limit.F90
+/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/lake.fd/find_limit.F90 \- Geo-reference utilities for a cubed-sphere grid\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -12,17 +13,60 @@
 .ti -1c
 .RI "subroutine \fBfind_limit\fP (p1_in, p2_in, latmin, latmax)"
 .br
+.RI "Given two points on a cubed-sphere grid, compute the maximum and minimum latitudinal extent of the resulting great circle\&. "
 .ti -1c
 .RI "subroutine \fBmiddle\fP (p1, p2, p)"
 .br
-.RI "This subroutine computes the latitude and longitude of the middle point between two given ponits\&. "
+.RI "Compute the latitude and longitude of the middle point between two given points\&. "
 .in -1c
+.SH "Detailed Description"
+.PP 
+Geo-reference utilities for a cubed-sphere grid\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition in file \fBfind_limit\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
+.SS "subroutine find_limit (real*8, dimension(2), intent(in) p1_in, real*8, dimension(2), intent(in) p2_in, real*8, intent(out) latmin, real*8, intent(out) latmax)"
+
+.PP
+Given two points on a cubed-sphere grid, compute the maximum and minimum latitudinal extent of the resulting great circle\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIp1_in\fP Latitude and longitude of point 1\&. 
+.br
+\fIp2_in\fP Latitude and longitude of point 2\&. 
+.br
+\fIlatmin\fP Minimum latitudinal extent\&. 
+.br
+\fIlatmax\fP Maximum latitudinal extent\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 15 of file find_limit\&.F90\&.
+.PP
+References middle()\&.
+.PP
+Referenced by cal_lake_frac_depth()\&.
 .SS "subroutine middle (real*8, dimension(2), intent(in) p1, real*8, dimension(2), intent(in) p2, real*8, dimension(2), intent(out) p)"
 
 .PP
-This subroutine computes the latitude and longitude of the middle point between two given ponits\&. There are two formulae available to compute it\&.
+Compute the latitude and longitude of the middle point between two given points\&. There are two formulae available to compute it\&.
 .PP
 One derived from a more general m-sect formula: 
 .PP
@@ -53,6 +97,15 @@ and the other one is the normalized middle point of the two end points:
 .fi
 .PP
 .PP
+\fBParameters\fP
+.RS 4
+\fIp1\fP Latitude/longitude of first end point\&. 
+.br
+\fIp2\fP Latitude/longitude of second end point 
+.br
+\fIp\fP Latitude/longitude of the mid-point\&. 
+.RE
+.PP
 \fBAuthor\fP
 .RS 4
 Ning Wang 
@@ -65,7 +118,9 @@ March, 2006
 .PP
 
 .PP
-Definition at line 67 of file find_limit\&.F90\&.
+Definition at line 79 of file find_limit\&.F90\&.
+.PP
+Referenced by find_limit()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for orog_mask_tools from the source code\&.

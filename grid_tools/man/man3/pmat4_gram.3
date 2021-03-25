@@ -1,4 +1,4 @@
-.TH "pmat4::gram" 3 "Thu Mar 18 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::gram" 3 "Thu Mar 25 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -64,7 +64,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1035 of file pmat4\&.f90\&.
+Definition at line 1034 of file pmat4\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
 .SS "subroutine pmat4::gram::gram_s (real(sp), dimension(:,:), intent(in) as, real(sp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(sp), intent(out) det)\fC [private]\fP"
 
 .PP
@@ -88,7 +90,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 968 of file pmat4\&.f90\&.
+Definition at line 967 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::gram::graml_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, integer(spi), intent(out) detsign, real(dp), intent(out) ldet)\fC [private]\fP"
 
 .PP
@@ -114,7 +116,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1107 of file pmat4\&.f90\&.
+Definition at line 1106 of file pmat4\&.f90\&.
+.PP
+References pietc::u0\&.
 .SS "subroutine pmat4::gram::plaingram_d (real(dp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)\fC [private]\fP"
 
 .PP
@@ -134,7 +138,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1218 of file pmat4\&.f90\&.
+Definition at line 1217 of file pmat4\&.f90\&.
+.PP
+References pietc::u0\&.
 .SS "subroutine pmat4::gram::plaingram_s (real(sp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)\fC [private]\fP"
 
 .PP
@@ -154,7 +160,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1183 of file pmat4\&.f90\&.
+Definition at line 1182 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::gram::rowgram (integer(spi), intent(in) m, integer(spi), intent(in) n, real(dp), dimension(m,n), intent(in) a, integer(spi), dimension(n), intent(out) ipiv, real(dp), dimension(m,n), intent(out) tt, real(dp), dimension(n,n), intent(out) b, integer(spi), intent(out) rank)\fC [private]\fP"
 
 .PP
@@ -184,7 +190,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1270 of file pmat4\&.f90\&.
+Definition at line 1269 of file pmat4\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
 
 .SH "Author"
 .PP 

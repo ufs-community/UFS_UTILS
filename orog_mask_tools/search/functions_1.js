@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['enclosure_5fcnvx_53',['enclosure_cnvx',['../enclosure__cnvx_8F90.html#a0235896a27bb16a029a62ef4561f24d8',1,'enclosure_cnvx.F90']]]
+  ['bndry_89',['bndry',['../nb_8F90.html#a7af27e607c043a485adf2649e56d66a9',1,'cs_nb']]],
+  ['bndry_5freg_90',['bndry_reg',['../nb_8F90.html#a99e73c2554abae50e5ed72d37368459c',1,'cs_nb']]]
 ];

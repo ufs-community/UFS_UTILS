@@ -1,4 +1,4 @@
-.TH "pmat5" 3 "Thu Mar 18 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5" 3 "Thu Mar 25 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -245,9 +245,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 844 of file pmat5\&.f90\&.
-.PP
-References pietc::u1, and pietc::u2\&.
+Definition at line 843 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dctocd (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2, real(dp), dimension(3,3), intent(out) dxc2)"
 
 .PP
@@ -271,9 +269,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 875 of file pmat5\&.f90\&.
-.PP
-References pietc::u0, pietc::u1, and pietc::u2\&.
+Definition at line 874 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dctocdd (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2, real(dp), dimension(3,3), intent(out) dxc2, real(dp), dimension(3,3,3), intent(out) ddxc2)"
 
 .PP
@@ -299,9 +295,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 916 of file pmat5\&.f90\&.
-.PP
-References pietc::u0, pietc::u1, and pietc::u2\&.
+Definition at line 915 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dctog (real(dp), dimension(3), intent(in) xe, real(dp), intent(out) dlat, real(dp), intent(out) dlon)"
 
 .PP
@@ -323,9 +317,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 372 of file pmat5\&.f90\&.
-.PP
-References pietc::rtod, and pietc::u0\&.
+Definition at line 371 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dctogr (real(dp), dimension(3), intent(in) xe, real(dp), intent(out) rlat, real(dp), intent(out) rlon)"
 
 .PP
@@ -347,9 +339,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 187 of file pmat5\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 186 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dgrtoc (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe)\fC [private]\fP"
 
 .PP
@@ -371,7 +361,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 224 of file pmat5\&.f90\&.
+Definition at line 223 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dgrtocd (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
 
 .PP
@@ -397,11 +387,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 263 of file pmat5\&.f90\&.
+Definition at line 262 of file pmat5\&.f90\&.
 .PP
-References pietc::u0\&.
-.PP
-Referenced by sgrtocd()\&.
+Referenced by pmat5::grtoc::sgrtocd()\&.
 .SS "subroutine pmat5::dgrtocdd (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon, real(dp), dimension(3), intent(out) ddxedlatdlat, real(dp), dimension(3), intent(out) ddxedlatdlon, real(dp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
 
 .PP
@@ -433,9 +421,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 319 of file pmat5\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 317 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dgtoc (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe)"
 
 .PP
@@ -457,9 +443,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 414 of file pmat5\&.f90\&.
-.PP
-References pietc::dtor\&.
+Definition at line 413 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dgtocd (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
 
 .PP
@@ -485,11 +469,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 455 of file pmat5\&.f90\&.
+Definition at line 454 of file pmat5\&.f90\&.
 .PP
-References pietc::dtor, and pietc::u0\&.
-.PP
-Referenced by sgtocd()\&.
+Referenced by pmat5::gtoc::sgtocd()\&.
 .SS "subroutine pmat5::dgtocdd (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon, real(dp), dimension(3), intent(out) ddxedlatdlat, real(dp), dimension(3), intent(out) ddxedlatdlon, real(dp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
 
 .PP
@@ -521,11 +503,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 512 of file pmat5\&.f90\&.
+Definition at line 510 of file pmat5\&.f90\&.
 .PP
-References pietc::dtor, and pietc::u0\&.
-.PP
-Referenced by sgrtocdd(), and sgtocdd()\&.
+Referenced by pmat5::grtoc::sgrtocdd(), and pmat5::gtoc::sgtocdd()\&.
 .SS "subroutine pmat5::dininmap (real(dp), intent(in) alon0, real(dp), intent(in) alat0, real(dp), dimension(3,3), intent(out) rot3)"
 
 .PP
@@ -547,9 +527,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 83 of file pmat5\&.f90\&.
-.PP
-References pietc::dtor, and pietc::u0\&.
+Definition at line 82 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dinivmap (real(dp), intent(in) alon0, real(dp), intent(in) alat0, real(dp), dimension(3,3), intent(out) rot3)"
 
 .PP
@@ -571,9 +549,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 134 of file pmat5\&.f90\&.
-.PP
-References pietc::dtor, and pietc::u0\&.
+Definition at line 133 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dplrot (real(dp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(dp), dimension(n), intent(inout) x, real(dp), dimension(n), intent(inout) y, real(dp), dimension(n), intent(inout) z)\fC [private]\fP"
 
 .PP
@@ -599,7 +575,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1012 of file pmat5\&.f90\&.
+Definition at line 1011 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::dplroti (real(dp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(dp), dimension(n), intent(inout) x, real(dp), dimension(n), intent(inout) y, real(dp), dimension(n), intent(inout) z)\fC [private]\fP"
 
 .PP
@@ -625,7 +601,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1034 of file pmat5\&.f90\&.
+Definition at line 1033 of file pmat5\&.f90\&.
 .SS "subroutine, public \fBpmat5::frametwist\fP (real(dp), dimension(3), intent(in) xp, real(dp), dimension(3), intent(in) yp, real(dp), dimension(3), intent(in) zp, real(dp), dimension(3), intent(in) xv, real(dp), dimension(3), intent(in) yv, real(dp), dimension(3), intent(in) zv, real(dp), intent(out) twist)"
 
 .PP
@@ -655,7 +631,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 706 of file pmat5\&.f90\&.
+Definition at line 705 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoframem (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3,3), intent(out) orth)\fC [private]\fP"
 
 .PP
@@ -677,11 +653,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 561 of file pmat5\&.f90\&.
+Definition at line 560 of file pmat5\&.f90\&.
 .PP
-References gtoframev()\&.
-.PP
-Referenced by sgtoframem()\&.
+Referenced by pmat5::gtoframe::sgtoframem()\&.
 .SS "subroutine pmat5::gtoframev (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3), intent(out) xp, real(dp), dimension(3), intent(out) yp, real(dp), dimension(3), intent(out) zp)\fC [private]\fP"
 
 .PP
@@ -707,11 +681,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 602 of file pmat5\&.f90\&.
+Definition at line 601 of file pmat5\&.f90\&.
 .PP
-References pietc::u0, and pietc::u1\&.
-.PP
-Referenced by gtoframem(), and sgtoframev()\&.
+Referenced by pmat5::gtoframe::gtoframem(), and pmat5::gtoframe::sgtoframev()\&.
 .SS "subroutine, public \fBpmat5::paraframe\fP (real(dp), dimension(3), intent(in) xp, real(dp), dimension(3), intent(in) yp, real(dp), dimension(3), intent(in) zp, real(dp), dimension(3), intent(out) xv, real(dp), dimension(3), intent(out) yv, real(dp), dimension(3), intent(in) zv)"
 
 .PP
@@ -739,7 +711,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 654 of file pmat5\&.f90\&.
+Definition at line 653 of file pmat5\&.f90\&.
 .SS "subroutine, public \fBpmat5::plctoc\fP (real(sp), intent(in) s, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)"
 
 .PP
@@ -765,7 +737,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1056 of file pmat5\&.f90\&.
+Definition at line 1055 of file pmat5\&.f90\&.
 .SS "subroutine, public \fBpmat5::plrot\fP (real(sp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)"
 
 .PP
@@ -791,7 +763,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 968 of file pmat5\&.f90\&.
+Definition at line 967 of file pmat5\&.f90\&.
 .SS "subroutine, public \fBpmat5::plroti\fP (real(sp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)"
 
 .PP
@@ -817,7 +789,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 990 of file pmat5\&.f90\&.
+Definition at line 989 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sctoc (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2)\fC [private]\fP"
 
 .PP
@@ -839,7 +811,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 723 of file pmat5\&.f90\&.
+Definition at line 722 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sctocd (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2, real(sp), dimension(3,3), intent(out) dxc2)"
 
 .PP
@@ -863,7 +835,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 753 of file pmat5\&.f90\&.
+Definition at line 752 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sctocdd (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2, real(sp), dimension(3,3), intent(out) dxc2, real(sp), dimension(3,3,3), intent(out) ddxc2)"
 
 .PP
@@ -889,7 +861,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 794 of file pmat5\&.f90\&.
+Definition at line 793 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sctog (real(sp), dimension(3), intent(in) xe, real(sp), intent(out) dlat, real(sp), intent(out) dlon)"
 
 .PP
@@ -916,7 +888,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 351 of file pmat5\&.f90\&.
+Definition at line 350 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sctogr (real(sp), dimension(3), intent(in) xe, real(sp), intent(out) rlat, real(sp), intent(out) rlon)"
 
 .PP
@@ -938,7 +910,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 166 of file pmat5\&.f90\&.
+Definition at line 165 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sframetwist (real(sp), dimension(3), intent(in) sxp, real(sp), dimension(3), intent(in) syp, real(sp), dimension(3), intent(in) szp, real(sp), dimension(3), intent(in) sxv, real(sp), dimension(3), intent(in) syv, real(sp), dimension(3), intent(in) szv, real(sp), intent(out) stwist)"
 
 .PP
@@ -968,7 +940,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 680 of file pmat5\&.f90\&.
+Definition at line 679 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sgrtoc (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe)"
 
 .PP
@@ -990,7 +962,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 208 of file pmat5\&.f90\&.
+Definition at line 207 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sgrtocd (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
 
 .PP
@@ -1016,9 +988,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 242 of file pmat5\&.f90\&.
-.PP
-References dgrtocd()\&.
+Definition at line 241 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sgrtocdd (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon, real(sp), dimension(3), intent(out) ddxedlatdlat, real(sp), dimension(3), intent(out) ddxedlatdlon, real(sp), dimension(3), intent(out) ddxedlondlon)"
 
 .PP
@@ -1050,9 +1020,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 288 of file pmat5\&.f90\&.
-.PP
-References dgtocdd()\&.
+Definition at line 286 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sgtoc (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe)"
 
 .PP
@@ -1079,7 +1047,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 396 of file pmat5\&.f90\&.
+Definition at line 395 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sgtocd (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon)"
 
 .PP
@@ -1105,9 +1073,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 434 of file pmat5\&.f90\&.
-.PP
-References dgtocd()\&.
+Definition at line 433 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sgtocdd (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon, real(sp), dimension(3), intent(out) ddxedlatdlat, real(sp), dimension(3), intent(out) ddxedlatdlon, real(sp), dimension(3), intent(out) ddxedlondlon)"
 
 .PP
@@ -1139,9 +1105,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 481 of file pmat5\&.f90\&.
-.PP
-References dgtocdd()\&.
+Definition at line 479 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sgtoframem (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3,3), intent(out) sorth)"
 
 .PP
@@ -1163,9 +1127,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 545 of file pmat5\&.f90\&.
-.PP
-References gtoframem()\&.
+Definition at line 544 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sgtoframev (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3), intent(out) sxp, real(sp), dimension(3), intent(out) syp, real(sp), dimension(3), intent(out) szp)\fC [private]\fP"
 
 .PP
@@ -1191,9 +1153,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 578 of file pmat5\&.f90\&.
-.PP
-References gtoframev()\&.
+Definition at line 577 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sininmap (real(sp), intent(in) alon0, real(sp), intent(in) alat0, real(sp), dimension(3,3), intent(out) rot3)\fC [private]\fP"
 
 .PP
@@ -1220,7 +1180,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 64 of file pmat5\&.f90\&.
+Definition at line 63 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sinivmap (real(sp), intent(in) alon0, real(sp), intent(in) alat0, real(sp), dimension(3,3), intent(out) rot3)"
 
 .PP
@@ -1247,7 +1207,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 105 of file pmat5\&.f90\&.
+Definition at line 104 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::sparaframe (real(sp), dimension(3), intent(in) sxp, real(sp), dimension(3), intent(in) syp, real(sp), dimension(3), intent(in) szp, real(sp), dimension(3), intent(out) sxv, real(sp), dimension(3), intent(out) syv, real(sp), dimension(3), intent(in) szv)"
 
 .PP
@@ -1275,7 +1235,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 632 of file pmat5\&.f90\&.
+Definition at line 631 of file pmat5\&.f90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

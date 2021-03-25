@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['xres_39',['xres',['../nb_8F90.html#af51ba8f325f52f48251bcad67666814f',1,'cs_nb']]]
+  ['tersub_70',['tersub',['../mtnlm7__oclsm_8f.html#abadd243394b9ea0a607cf77d4f3a5254',1,'mtnlm7_oclsm.f']]],
+  ['timef_71',['timef',['../mtnlm7__oclsm_8f.html#a6e5afa4168cab2cdedef3c01e086494f',1,'mtnlm7_oclsm.f']]]
 ];

@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['mprec_75',['mprec',['../machine_8f90.html#a53830af08c38bfdc377520841efd3dab',1,'machine']]]
+  ['nb_5ftile_152',['nb_tile',['../nb_8F90.html#aecec88fcf61e8758e7ecfaf9b20f6646',1,'cs_nb']]],
+  ['nb_5ftile_5fbndry_153',['nb_tile_bndry',['../structcs__nb_1_1nb__tile__idx.html#a6a3ad44e8747514cdc8d5497294d8235',1,'cs_nb::nb_tile_idx']]],
+  ['nb_5ftile_5fnum_154',['nb_tile_num',['../structcs__nb_1_1nb__tile__idx.html#a1c657bd72e795f728f24048500a5a30e',1,'cs_nb::nb_tile_idx']]]
 ];

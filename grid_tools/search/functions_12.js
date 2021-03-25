@@ -1,9 +1,9 @@
 var searchData=
 [
   ['u1lbv_1063',['u1lbv',['../interfacepmat2_1_1u1lbv.html#a6ee501c68bfcdedb311f8974af520923',1,'pmat2::u1lbv::u1lbv()'],['../namespacepmat2.html#abeb68a26386f5149557f0c6723255ac8',1,'pmat2::u1lbv()']]],
-  ['u1lbx_1064',['u1lbx',['../interfacepmat2_1_1u1lbx.html#a7b1989cc0f5cd3871c9855481b07857a',1,'pmat2::u1lbx::u1lbx()'],['../namespacepmat2.html#a9c57ff50135b4d52d496b3bf3ef03741',1,'pmat2::u1lbx()']]],
-  ['u1lby_1065',['u1lby',['../interfacepmat2_1_1u1lby.html#a87ef98d270d5d07a308a7c60f2f9cfc4',1,'pmat2::u1lby::u1lby()'],['../namespacepmat2.html#a0cdf9bd683d2bba2ef9aeca1e7b33564',1,'pmat2::u1lby()']]],
-  ['u1lvb_1066',['u1lvb',['../interfacepmat2_1_1u1lvb.html#a1b1c8606ead84c04c04a4d436fc67fde',1,'pmat2::u1lvb::u1lvb()'],['../namespacepmat2.html#a4fd28b121eca9a3875efe28e534cf3fa',1,'pmat2::u1lvb()']]],
+  ['u1lbx_1064',['u1lbx',['../interfacepmat2_1_1u1lbx.html#a7b1989cc0f5cd3871c9855481b07857a',1,'pmat2::u1lbx::u1lbx()'],['../namespacepmat2.html#a9c57ff50135b4d52d496b3bf3ef03741',1,'pmat2::u1lbx(mx, mah1, mah2, my, a, v)']]],
+  ['u1lby_1065',['u1lby',['../namespacepmat2.html#a0cdf9bd683d2bba2ef9aeca1e7b33564',1,'pmat2::u1lby()'],['../interfacepmat2_1_1u1lby.html#a87ef98d270d5d07a308a7c60f2f9cfc4',1,'pmat2::u1lby::u1lby()']]],
+  ['u1lvb_1066',['u1lvb',['../namespacepmat2.html#a4fd28b121eca9a3875efe28e534cf3fa',1,'pmat2::u1lvb()'],['../interfacepmat2_1_1u1lvb.html#a1b1c8606ead84c04c04a4d436fc67fde',1,'pmat2::u1lvb::u1lvb()']]],
   ['u1lxb_1067',['u1lxb',['../interfacepmat2_1_1u1lxb.html#a8de330710aae7aae4dd2dac1efba1804',1,'pmat2::u1lxb::u1lxb()'],['../namespacepmat2.html#a525d488d7f441175f959b31414310a19',1,'pmat2::u1lxb()']]],
   ['u1lyb_1068',['u1lyb',['../interfacepmat2_1_1u1lyb.html#aab8840e948cdd609aa03070d78af34bc',1,'pmat2::u1lyb::u1lyb()'],['../namespacepmat2.html#a05b96795460e671cfbbf4f40322578b7',1,'pmat2::u1lyb()']]],
   ['udlb_1069',['udlb',['../interfacepmat2_1_1udlb.html#a1fd8ca63703ad48482afa294ca2d6688',1,'pmat2::udlb::udlb()'],['../namespacepmat2.html#a4595ec2cbfa31bae9ea99f8095d55212',1,'pmat2::udlb()']]],

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['write_5finland_37',['write_inland',['../inland_8F90.html#ad288f94eea205f8bbefe728949dcd9bc',1,'inland.F90']]],
-  ['write_5finland_5freg_38',['write_inland_reg',['../inland_8F90.html#a2cda3688f47a34f75fcf47aef8c80ff5',1,'inland.F90']]]
+  ['spfft1_67',['spfft1',['../mtnlm7__oclsm_8f.html#ac63643472eda83948c0b249b611346d6',1,'mtnlm7_oclsm.f']]],
+  ['spherical_5fangle_68',['spherical_angle',['../mtnlm7__oclsm_8f.html#a09845caa8530e4792b7d7dbeac0609b7',1,'mtnlm7_oclsm.f']]],
+  ['spherical_5fdistance_69',['spherical_distance',['../mtnlm7__oclsm_8f.html#af72c017d12f741c8cecd92603d4dfa0c',1,'mtnlm7_oclsm.f']]]
 ];

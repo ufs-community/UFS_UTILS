@@ -1,4 +1,4 @@
-.TH "pmat2::avco" 3 "Thu Mar 18 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::avco" 3 "Thu Mar 25 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,11 +16,11 @@ pmat2::avco
 .ti -1c
 .RI "subroutine \fBdavco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Double precision version of subroutine avco for midpoint interpolation\&. "
+.RI "??? "
 .ti -1c
 .RI "subroutine \fBtavco\fP (xa, xb, a, b)"
 .br
-.RI "Simplified computation of compact midpoint interpolation coefficients\&. "
+.RI "??? "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -61,29 +61,31 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 100 of file pmat2\&.f90\&.
+Definition at line 99 of file pmat2\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "subroutine pmat2::avco::davco (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(dp), dimension(na), intent(in) za, real(dp), dimension(nb), intent(in) zb, real(dp), intent(in) z0, real(dp), dimension(na), intent(out) a, real(dp), dimension(nb), intent(out) b)\fC [private]\fP"
 
 .PP
-Double precision version of subroutine avco for midpoint interpolation\&. 
+??? 
 .PP
 \fBParameters\fP
 .RS 4
-\fIna\fP number of target points involved in formula 
+\fIna\fP ??? 
 .br
-\fInb\fP number of source points involved in formula 
+\fInb\fP ??? 
 .br
-\fIza\fP coordinates of target points 
+\fIza\fP ??? 
 .br
-\fIzb\fP coordinates of source points 
+\fIzb\fP ??? 
 .br
-\fIz0\fP nominal point of application of compact interpolation formula 
+\fIz0\fP ??? 
 .br
-\fIa\fP the coefficients A for this scheme 
+\fIa\fP ??? 
 .br
-\fIb\fP the coefficients B for this scheme 
+\fIb\fP ??? 
 .RE
 .PP
 \fBAuthor\fP
@@ -98,21 +100,23 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 134 of file pmat2\&.f90\&.
+Definition at line 133 of file pmat2\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
 .SS "subroutine pmat2::avco::tavco (real(dp), dimension(:), intent(in) xa, real(dp), dimension(:), intent(in) xb, real(dp), dimension(:), intent(out) a, real(dp), dimension(:), intent(out) b)\fC [private]\fP"
 
 .PP
-Simplified computation of compact midpoint interpolation coefficients\&. 
+??? 
 .PP
 \fBParameters\fP
 .RS 4
-\fIxa\fP coordinates of target points relative to point of application 
+\fIxa\fP ??? 
 .br
-\fIxb\fP coordinates of source points relative to point of application 
+\fIxb\fP ??? 
 .br
-\fIa\fP the coefficients A for this scheme 
+\fIa\fP ??? 
 .br
-\fIb\fP the coefficients B for this scheme 
+\fIb\fP ??? 
 .RE
 .PP
 \fBAuthor\fP
@@ -127,7 +131,9 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 165 of file pmat2\&.f90\&.
+Definition at line 164 of file pmat2\&.f90\&.
+.PP
+References pmat2::davco(), and pmat2::zero\&.
 
 .SH "Author"
 .PP 

@@ -1,4 +1,4 @@
-.TH "pmat2::ldltb" 3 "Thu Mar 18 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::ldltb" 3 "Thu Mar 25 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,11 +12,11 @@ pmat2::ldltb
 .ti -1c
 .RI "subroutine \fBldltb\fP (m, mah1, a)"
 .br
-.RI "[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. "
+.RI "??? "
 .ti -1c
 .RI "subroutine \fBdldltb\fP (m, mah1, a)"
 .br
-.RI "[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. "
+.RI "??? "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -26,15 +26,15 @@ Definition at line 65 of file pmat2\&.f90\&.
 .SS "subroutine pmat2::ldltb::ldltb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(sp), dimension(m,\-mah1:0), intent(inout) a)\fC [private]\fP"
 
 .PP
-[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix\&.
+??? 
 .PP
 \fBParameters\fP
 .RS 4
-\fIm\fP size of symmetric matrix A 
+\fIm\fP ??? 
 .br
-\fImah1\fP semi-bandwidth of matrix A 
+\fImah1\fP ??? 
 .br
-\fIa\fP input lower (left) part of symmetric A; output its factors encoded as [L-I]+[D**-1] 
+\fIa\fP ??? 
 .RE
 .PP
 \fBAuthor\fP
@@ -49,23 +49,21 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 609 of file pmat2\&.f90\&.
+Definition at line 602 of file pmat2\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "subroutine pmat2::ldltb::dldltb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(dp), dimension(m,\-mah1:0), intent(inout) a)\fC [private]\fP"
 
 .PP
-[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix 
+??? 
 .PP
 \fBParameters\fP
 .RS 4
-\fIm\fP size of symmetric matrix A 
+\fIm\fP ??? 
 .br
-\fImah1\fP semi-bandwidth of matrix A 
+\fImah1\fP ??? 
 .br
-\fIa\fP input lower (left) part of symmetric A; output its factors encoded as [L-I]+[D**-1] 
-.br
-\fIa\fP input lower (left) part of symmetric A; output its factors\&. 
+\fIa\fP ??? 
 .RE
 .PP
 \fBAuthor\fP
@@ -80,7 +78,9 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 646 of file pmat2\&.f90\&.
+Definition at line 636 of file pmat2\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
 
 .SH "Author"
 .PP 

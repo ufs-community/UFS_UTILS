@@ -1,4 +1,4 @@
-.TH "pmat4" 3 "Thu Mar 18 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4" 3 "Thu Mar 25 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -512,9 +512,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 132 of file pmat4\&.f90\&.
+Definition at line 131 of file pmat4\&.f90\&.
 .PP
-Referenced by normalized_d()\&.
+Referenced by pmat4::normalized::normalized_d()\&.
 .SS "real(sp) function pmat4::absv_s (real(sp), dimension(:), intent(in) a)\fC [private]\fP"
 
 .PP
@@ -537,9 +537,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 120 of file pmat4\&.f90\&.
+Definition at line 119 of file pmat4\&.f90\&.
 .PP
-Referenced by normalized_s()\&.
+Referenced by pmat4::normalized::normalized_s()\&.
 .SS "real(dp) function, dimension(3) pmat4::axial33_d (real(dp), dimension(3,3), intent(in) b)"
 
 .PP
@@ -562,9 +562,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 459 of file pmat4\&.f90\&.
-.PP
-References pietc::o2\&.
+Definition at line 458 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(3) pmat4::axial33_s (real(sp), dimension(3,3), intent(in) b)"
 
 .PP
@@ -587,7 +585,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 446 of file pmat4\&.f90\&.
+Definition at line 445 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(3,3) pmat4::axial3_d (real(dp), dimension(3), intent(in) a)"
 
 .PP
@@ -610,9 +608,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 433 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 432 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(3,3) pmat4::axial3_s (real(sp), dimension(3), intent(in) a)"
 
 .PP
@@ -635,7 +631,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 420 of file pmat4\&.f90\&.
+Definition at line 419 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::axtoq\fP (real(dp), dimension(3), intent(in) v, real(dp), dimension(0:3), intent(out) q)"
 
 .PP
@@ -655,7 +651,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1613 of file pmat4\&.f90\&.
+Definition at line 1612 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::axtorot\fP (real(dp), dimension(3), intent(in) ax3, real(dp), dimension(3,3), intent(out) orth33)"
 
 .PP
@@ -675,7 +671,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1503 of file pmat4\&.f90\&.
+Definition at line 1502 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::cmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, real(dp), dimension(3), intent(in) vz, real(dp), dimension(3), intent(out) vw)\fC [private]\fP"
 
 .PP
@@ -703,9 +699,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2258 of file pmat4\&.f90\&.
-.PP
-References zmobius()\&.
+Definition at line 2257 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::corral\fP (integer(spi), intent(in) m, integer(spi), intent(in) n, logical, dimension(m,n), intent(in) mask, real(dp), dimension(m,n), intent(in) a, real(dp), dimension(m  ), intent(out) d, real(dp), dimension(m,n), intent(out) aa, real(dp), dimension(  n), intent(out) e)"
 
 .PP
@@ -737,9 +731,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1396 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 1395 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(3) pmat4::cross_product_d (real(dp), dimension(3), intent(in) a, real(dp), dimension(3), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -764,7 +756,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 216 of file pmat4\&.f90\&.
+Definition at line 215 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(3) pmat4::cross_product_s (real(sp), dimension(3), intent(in) a, real(sp), dimension(3), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -789,7 +781,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 203 of file pmat4\&.f90\&.
+Definition at line 202 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::ctoz\fP (real(dp), dimension(3), intent(in) v, complex(dpc), intent(out) z, logical, intent(out) infz)"
 
 .PP
@@ -823,9 +815,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1974 of file pmat4\&.f90\&.
-.PP
-References pkind::dpc, pietc::u0, and pietc::u1\&.
+Definition at line 1973 of file pmat4\&.f90\&.
 .SS "real(dp) function pmat4::det_d (real(dp), dimension(:,:), intent(in) a)"
 
 .PP
@@ -848,9 +838,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 370 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 369 of file pmat4\&.f90\&.
 .SS "integer(spi) function pmat4::det_i (integer(spi), dimension(:,:), intent(in) a)"
 
 .PP
@@ -873,7 +861,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 391 of file pmat4\&.f90\&.
+Definition at line 390 of file pmat4\&.f90\&.
 .SS "integer(dpi) function pmat4::det_id (integer(dpi), dimension(:,:), intent(in) a)\fC [private]\fP"
 
 .PP
@@ -896,9 +884,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 405 of file pmat4\&.f90\&.
-.PP
-References pkind::dp, and pkind::dpi\&.
+Definition at line 404 of file pmat4\&.f90\&.
 .SS "real(sp) function pmat4::det_s (real(sp), dimension(:,:), intent(in) a)\fC [private]\fP"
 
 .PP
@@ -921,7 +907,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 349 of file pmat4\&.f90\&.
+Definition at line 348 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(size(a),size(a)) pmat4::diagn_d (real(dp), dimension(:), intent(in) a)"
 
 .PP
@@ -944,9 +930,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 487 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 486 of file pmat4\&.f90\&.
 .SS "integer(spi) function, dimension(size(a),size(a)) pmat4::diagn_i (integer(spi), dimension(:), intent(in) a)"
 
 .PP
@@ -969,7 +953,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 502 of file pmat4\&.f90\&.
+Definition at line 501 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(size(a),size(a)) pmat4::diagn_s (real(sp), dimension(:), intent(in) a)"
 
 .PP
@@ -992,9 +976,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 472 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 471 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(size(b,1)) pmat4::diagnn_d (real(dp), dimension(:,:), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -1017,7 +999,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 530 of file pmat4\&.f90\&.
+Definition at line 529 of file pmat4\&.f90\&.
 .SS "integer(spi) function, dimension(size(b,1)) pmat4::diagnn_i (integer(spi), dimension(:,:), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -1040,7 +1022,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 544 of file pmat4\&.f90\&.
+Definition at line 543 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(size(b,1)) pmat4::diagnn_s (real(sp), dimension(:,:), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -1063,7 +1045,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 516 of file pmat4\&.f90\&.
+Definition at line 515 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::dlltoxy_d (real(dp), intent(in) rlat, real(dp), intent(in) drlat, real(dp), intent(in) drlon, real(dp), dimension(2), intent(out) x2)"
 
 .PP
@@ -1087,9 +1069,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 901 of file pmat4\&.f90\&.
-.PP
-References pietc::u2\&.
+Definition at line 900 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::dlltoxy_s (real(sp), intent(in) rlat, real(sp), intent(in) drlat, real(sp), intent(in) drlon, real(sp), dimension(2), intent(out) x2)\fC [private]\fP"
 
 .PP
@@ -1113,7 +1093,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 884 of file pmat4\&.f90\&.
+Definition at line 883 of file pmat4\&.f90\&.
 .SS "real(dp) function pmat4::dqarea_d (real(dp), intent(in) rlat, real(dp), intent(in) drlata, real(dp), intent(in) drlona, real(dp), intent(in) drlatb, real(dp), intent(in) drlonb, real(dp), intent(in) drlatc, real(dp), intent(in) drlonc)\fC [private]\fP"
 
 .PP
@@ -1148,7 +1128,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 869 of file pmat4\&.f90\&.
+Definition at line 867 of file pmat4\&.f90\&.
 .SS "real(sp) function pmat4::dqarea_s (real(sp), intent(in) rlat, real(sp), intent(in) drlata, real(sp), intent(in) drlona, real(sp), intent(in) drlatb, real(sp), intent(in) drlonb, real(sp), intent(in) drlatc, real(sp), intent(in) drlonc)"
 
 .PP
@@ -1183,7 +1163,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 849 of file pmat4\&.f90\&.
+Definition at line 847 of file pmat4\&.f90\&.
 .SS "real(dp) function pmat4::dtarea_d (real(dp), intent(in) rlat, real(dp), intent(in) drlata, real(dp), intent(in) drlona, real(dp), intent(in) drlatb, real(dp), intent(in) drlonb)"
 
 .PP
@@ -1214,9 +1194,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 806 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 805 of file pmat4\&.f90\&.
 .SS "real(sp) function pmat4::dtarea_s (real(sp), intent(in) rlat, real(sp), intent(in) drlata, real(sp), intent(in) drlona, real(sp), intent(in) drlatb, real(sp), intent(in) drlonb)\fC [private]\fP"
 
 .PP
@@ -1247,7 +1225,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 773 of file pmat4\&.f90\&.
+Definition at line 772 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::expmat\fP (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), intent(out) detb)"
 
 .PP
@@ -1271,9 +1249,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1683 of file pmat4\&.f90\&.
-.PP
-References pietc::o2, pietc::u0, pietc::u1, and pietc::u2\&.
+Definition at line 1682 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::expmatd (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), dimension(n,n,(n*(n+1))/2), intent(out) bd, real(dp), intent(out) detb, real(dp), dimension((n*(n+1))/2), intent(out) detbd)"
 
 .PP
@@ -1301,9 +1277,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1721 of file pmat4\&.f90\&.
-.PP
-References pietc::o2, pietc::u0, pietc::u1, and pietc::u2\&.
+Definition at line 1720 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::expmatdd (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), dimension(n,n,(n*(n+1))/2), intent(out) bd, real(dp), dimension(n,n,(n*(n+1))/2,(n*(n+1))/2), intent(out) bdd, real(dp), intent(out) detb, real(dp), dimension((n*(n+1))/2), intent(out) detbd, real(dp), dimension((n*(n+1))/2,(n*(n+1))/2), intent(out) detbdd)"
 
 .PP
@@ -1335,9 +1309,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1788 of file pmat4\&.f90\&.
-.PP
-References pietc::o2, pietc::u0, pietc::u1, and pietc::u2\&.
+Definition at line 1787 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::gram_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(dp), intent(out) det)"
 
 .PP
@@ -1363,9 +1335,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1035 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 1034 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::gram_s (real(sp), dimension(:,:), intent(in) as, real(sp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(sp), intent(out) det)"
 
 .PP
@@ -1389,7 +1359,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 968 of file pmat4\&.f90\&.
+Definition at line 967 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::graml_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, integer(spi), intent(out) detsign, real(dp), intent(out) ldet)"
 
 .PP
@@ -1415,9 +1385,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1107 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 1106 of file pmat4\&.f90\&.
 .SS "real(dp) function pmat4::hav_d (real(dp), intent(in) t)"
 
 .PP
@@ -1440,9 +1408,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 929 of file pmat4\&.f90\&.
-.PP
-References pietc::o2\&.
+Definition at line 928 of file pmat4\&.f90\&.
 .SS "real(sp) function pmat4::hav_s (real(sp), intent(in) t)"
 
 .PP
@@ -1465,7 +1431,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 916 of file pmat4\&.f90\&.
+Definition at line 915 of file pmat4\&.f90\&.
 .SS "real(dp) function pmat4::huarea_d (real(dp), intent(in) sa, real(dp), intent(in) sb)\fC [private]\fP"
 
 .PP
@@ -1490,7 +1456,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 636 of file pmat4\&.f90\&.
+Definition at line 635 of file pmat4\&.f90\&.
 .SS "real(sp) function pmat4::huarea_s (real(sp), intent(in) sa, real(sp), intent(in) sb)\fC [private]\fP"
 
 .PP
@@ -1515,7 +1481,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 620 of file pmat4\&.f90\&.
+Definition at line 619 of file pmat4\&.f90\&.
 .SS "integer(spi) function, dimension(3,3) pmat4::identity3_i\fC [private]\fP"
 
 .PP
@@ -1533,7 +1499,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 606 of file pmat4\&.f90\&.
+Definition at line 605 of file pmat4\&.f90\&.
 .SS "integer(spi) function, dimension(n,n) pmat4::identity_i (integer(spi), intent(in) n)\fC [private]\fP"
 
 .PP
@@ -1556,7 +1522,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 594 of file pmat4\&.f90\&.
+Definition at line 593 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(0:3), public \fBpmat4::mulqq\fP (real(dp), dimension(0:3), intent(in) a, real(dp), dimension(0:3), intent(in) b)"
 
 .PP
@@ -1581,7 +1547,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1663 of file pmat4\&.f90\&.
+Definition at line 1662 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::normalize_d (real(dp), dimension(:), intent(inout) v)"
 
 .PP
@@ -1599,9 +1565,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 953 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 952 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::normalize_s (real(sp), dimension(:), intent(inout) v)"
 
 .PP
@@ -1619,7 +1583,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 941 of file pmat4\&.f90\&.
+Definition at line 940 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(size(a)) pmat4::normalized_d (real(dp), dimension(:), intent(in) a)"
 
 .PP
@@ -1642,9 +1606,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 158 of file pmat4\&.f90\&.
-.PP
-References absv_d(), and pietc::u0\&.
+Definition at line 157 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(size(a)) pmat4::normalized_s (real(sp), dimension(:), intent(in) a)\fC [private]\fP"
 
 .PP
@@ -1667,9 +1629,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 144 of file pmat4\&.f90\&.
-.PP
-References absv_s()\&.
+Definition at line 143 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(size(u)) pmat4::orthogonalized_d (real(dp), dimension(:), intent(in) u, real(dp), dimension(:), intent(in) a)\fC [private]\fP"
 
 .PP
@@ -1694,7 +1654,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 188 of file pmat4\&.f90\&.
+Definition at line 187 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(size(u)) pmat4::orthogonalized_s (real(sp), dimension(:), intent(in) u, real(sp), dimension(:), intent(in) a)"
 
 .PP
@@ -1719,7 +1679,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 173 of file pmat4\&.f90\&.
+Definition at line 172 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(size(a),size(b)) pmat4::outer_product_d (real(dp), dimension(:), intent(in) a, real(dp), dimension(:), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -1744,7 +1704,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 290 of file pmat4\&.f90\&.
+Definition at line 289 of file pmat4\&.f90\&.
 .SS "integer(spi) function, dimension(size(a),size(b)) pmat4::outer_product_i (integer(spi), dimension(:), intent(in) a, integer(spi), dimension(:), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -1769,7 +1729,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 306 of file pmat4\&.f90\&.
+Definition at line 305 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(size(a),size(b)) pmat4::outer_product_s (real(sp), dimension(:), intent(in) a, real(sp), dimension(:), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -1794,7 +1754,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 274 of file pmat4\&.f90\&.
+Definition at line 273 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::plaingram_d (real(dp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)"
 
 .PP
@@ -1814,9 +1774,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1218 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 1217 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::plaingram_s (real(sp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)"
 
 .PP
@@ -1836,7 +1794,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1183 of file pmat4\&.f90\&.
+Definition at line 1182 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::qtoax\fP (real(dp), dimension(0:3), intent(in) q, real(dp), dimension(3), intent(out) v)"
 
 .PP
@@ -1856,7 +1814,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1627 of file pmat4\&.f90\&.
+Definition at line 1626 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::qtorot\fP (real(dp), dimension(0:3), intent(in) q, real(dp), dimension(3,3), intent(out) rot)"
 
 .PP
@@ -1876,7 +1834,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1601 of file pmat4\&.f90\&.
+Definition at line 1600 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::qtospin\fP (real(dp), dimension(0:3), intent(in) q, complex(dpc), dimension(2,2), intent(out) cspin)"
 
 .PP
@@ -1896,7 +1854,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1530 of file pmat4\&.f90\&.
+Definition at line 1529 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::rottoax\fP (real(dp), dimension(3,3), intent(in) orth33, real(dp), dimension(3), intent(out) ax3)"
 
 .PP
@@ -1916,7 +1874,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1473 of file pmat4\&.f90\&.
+Definition at line 1472 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::rottoq\fP (real(dp), dimension(3,3), intent(in) rot, real(dp), dimension(0:3), intent(out) q)"
 
 .PP
@@ -1936,9 +1894,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1545 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, pietc::u1, and pietc::u2\&.
+Definition at line 1544 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::rowgram (integer(spi), intent(in) m, integer(spi), intent(in) n, real(dp), dimension(m,n), intent(in) a, integer(spi), dimension(n), intent(out) ipiv, real(dp), dimension(m,n), intent(out) tt, real(dp), dimension(n,n), intent(out) b, integer(spi), intent(out) rank)"
 
 .PP
@@ -1968,9 +1924,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1270 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 1269 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::rowops\fP (integer(spi), intent(in) m, integer(spi), intent(in) n, integer(spi), dimension(n), intent(in) ipiv, real(dp), dimension(m,n), intent(in) tt, real(dp), dimension(m), intent(in) v, real(dp), dimension(m), intent(out) vv)"
 
 .PP
@@ -1998,7 +1952,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1355 of file pmat4\&.f90\&.
+Definition at line 1354 of file pmat4\&.f90\&.
 .SS "real(dp) function pmat4::sarea_d (real(dp), dimension(3), intent(in) v1, real(dp), dimension(3), intent(in) v2, real(dp), dimension(3), intent(in) v3)\fC [private]\fP"
 
 .PP
@@ -2025,9 +1979,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 711 of file pmat4\&.f90\&.
-.PP
-References cyclic(), and pietc::u0\&.
+Definition at line 710 of file pmat4\&.f90\&.
 .SS "real(sp) function pmat4::sarea_s (real(sp), dimension(3), intent(in) v1, real(sp), dimension(3), intent(in) v2, real(sp), dimension(3), intent(in) v3)\fC [private]\fP"
 
 .PP
@@ -2054,9 +2006,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 656 of file pmat4\&.f90\&.
-.PP
-References cyclic()\&.
+Definition at line 655 of file pmat4\&.f90\&.
 .SS "subroutine \fBpmat4::setem\fP (real(dp), intent(in) c, real(dp), intent(in) d, real(dp), intent(in) e, real(dp), intent(in) g, real(dp), dimension(3,3), intent(out) r)\fC [private]\fP"
 
 .PP
@@ -2082,7 +2032,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1644 of file pmat4\&.f90\&.
+Definition at line 1643 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::setmobius\fP (real(dp), dimension(3), intent(in) xc0, real(dp), dimension(3), intent(in) xc1, real(dp), dimension(3), intent(in) xc2, complex(dpc), intent(out) aa, complex(dpc), intent(out) bb, complex(dpc), intent(out) cc, complex(dpc), intent(out) dd)"
 
 .PP
@@ -2112,7 +2062,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2069 of file pmat4\&.f90\&.
+Definition at line 2068 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::spintoq\fP (complex(dpc), dimension(2,2), intent(in) cspin, real(dp), dimension(0:3), intent(out) q)"
 
 .PP
@@ -2132,7 +2082,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1517 of file pmat4\&.f90\&.
+Definition at line 1516 of file pmat4\&.f90\&.
 .SS "real(dp) function pmat4::trace_d (real(dp), dimension(:,:), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -2155,7 +2105,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 570 of file pmat4\&.f90\&.
+Definition at line 569 of file pmat4\&.f90\&.
 .SS "integer(spi) function pmat4::trace_i (integer(spi), dimension(:,:), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -2178,7 +2128,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 582 of file pmat4\&.f90\&.
+Definition at line 581 of file pmat4\&.f90\&.
 .SS "real(sp) function pmat4::trace_s (real(sp), dimension(:,:), intent(in) b)\fC [private]\fP"
 
 .PP
@@ -2201,7 +2151,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 558 of file pmat4\&.f90\&.
+Definition at line 557 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(4) pmat4::triple_cross_product_d (real(dp), dimension(4), intent(in) u, real(dp), dimension(4), intent(in) v, real(dp), dimension(4), intent(in) w)\fC [private]\fP"
 
 .PP
@@ -2228,7 +2178,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 254 of file pmat4\&.f90\&.
+Definition at line 253 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(4) pmat4::triple_cross_product_s (real(sp), dimension(4), intent(in) u, real(sp), dimension(4), intent(in) v, real(sp), dimension(4), intent(in) w)\fC [private]\fP"
 
 .PP
@@ -2255,7 +2205,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 233 of file pmat4\&.f90\&.
+Definition at line 232 of file pmat4\&.f90\&.
 .SS "real(dp) function pmat4::triple_product_d (real(dp), dimension(3), intent(in) a, real(dp), dimension(3), intent(in) b, real(dp), dimension(3), intent(in) c)\fC [private]\fP"
 
 .PP
@@ -2282,7 +2232,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 337 of file pmat4\&.f90\&.
+Definition at line 336 of file pmat4\&.f90\&.
 .SS "real(sp) function pmat4::triple_product_s (real(sp), dimension(3), intent(in) a, real(sp), dimension(3), intent(in) b, real(sp), dimension(3), intent(in) c)\fC [private]\fP"
 
 .PP
@@ -2309,7 +2259,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 323 of file pmat4\&.f90\&.
+Definition at line 322 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::zmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) z, logical, intent(in) infz, complex(dpc), intent(out) w, logical, intent(out) infw)\fC [private]\fP"
 
 .PP
@@ -2341,9 +2291,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2223 of file pmat4\&.f90\&.
+Definition at line 2222 of file pmat4\&.f90\&.
 .PP
-Referenced by cmobius(), and zmobiusi()\&.
+Referenced by pmat4::mobius::cmobius(), and pmat4::mobiusi::zmobiusi()\&.
 .SS "subroutine pmat4::zmobiusi (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) zz, logical, intent(in) infz, complex(dpc), intent(out) zw, logical, intent(out) infw)\fC [private]\fP"
 
 .PP
@@ -2375,9 +2325,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2282 of file pmat4\&.f90\&.
-.PP
-References zmobius()\&.
+Definition at line 2281 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::znfun\fP (integer(spi), intent(in) n, real(dp), intent(in) z, real(dp), intent(out) zn, real(dp), intent(out) znd, real(dp), intent(out) zndd, real(dp), intent(out) znddd)"
 
 .PP
@@ -2405,9 +2353,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1911 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, pietc::u2, and pietc::u3\&.
+Definition at line 1910 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::zntay\fP (integer(spi), intent(in) n, real(dp), intent(in) z, real(dp), intent(out) zn)"
 
 .PP
@@ -2429,9 +2375,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1874 of file pmat4\&.f90\&.
-.PP
-References pietc::u2\&.
+Definition at line 1873 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::zsetmobius (complex(dp), intent(in) z0, logical, intent(in) infz0, complex(dp), intent(in) z1, logical, intent(in) infz1, complex(dp), intent(in) z2, logical, intent(in) infz2, complex(dpc), intent(out) aa, complex(dpc), intent(out) bb, complex(dpc), intent(out) cc, complex(dpc), intent(out) dd)\fC [private]\fP"
 
 .PP
@@ -2467,7 +2411,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2152 of file pmat4\&.f90\&.
+Definition at line 2151 of file pmat4\&.f90\&.
 .SS "subroutine, public \fBpmat4::ztoc\fP (complex(dpc), intent(in) z, logical, intent(in) infz, real(dp), dimension(3), intent(out) v)"
 
 .PP
@@ -2489,7 +2433,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1999 of file pmat4\&.f90\&.
+Definition at line 1998 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::ztocd (complex(dpc), intent(in) z, logical, intent(in) infz, real(dp), dimension(3), intent(out) v, complex(dpc), dimension(3), intent(out) vd)\fC [private]\fP"
 
 .PP
@@ -2518,9 +2462,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2029 of file pmat4\&.f90\&.
-.PP
-References pkind::dpc\&.
+Definition at line 2028 of file pmat4\&.f90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

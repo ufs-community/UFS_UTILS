@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['idx_5finit_55',['idx_init',['../nb_8F90.html#aaae14862ca35fcdae38da182a23a27e7',1,'cs_nb']]],
-  ['idx_5finit_5freg_56',['idx_init_reg',['../nb_8F90.html#ab9cf42e22e061e7a9061472878d87c35',1,'cs_nb']]],
-  ['inland_5fmask_57',['inland_mask',['../inland_8F90.html#a571ea8ce2ce3aa308f70c9fb2bfbfea1',1,'inland.F90']]]
+  ['enclosure_5fcnvx_92',['enclosure_cnvx',['../enclosure__cnvx_8F90.html#a0235896a27bb16a029a62ef4561f24d8',1,'enclosure_cnvx.F90']]]
 ];

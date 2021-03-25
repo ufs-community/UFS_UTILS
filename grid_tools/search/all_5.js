@@ -8,6 +8,6 @@ var searchData=
   ['fill_5fdgrid_5fxy_5fcorners_149',['fill_dgrid_xy_corners',['../filter__topo_8F90.html#aafd368812afe81d30851024b92d310ec',1,'filter_topo.F90']]],
   ['filter_5ftopo_150',['filter_topo',['../filter__topo_8F90.html#a8160043e7e9d4afe2362292926087e3f',1,'filter_topo.F90']]],
   ['filter_5ftopo_2ef90_151',['filter_topo.F90',['../filter__topo_8F90.html',1,'']]],
-  ['frametwist_152',['frametwist',['../interfacepmat5_1_1frametwist.html',1,'pmat5::frametwist'],['../interfacepmat5_1_1frametwist.html#a1810c74f2b72abc08f36c26d20ee664c',1,'pmat5::frametwist::frametwist()'],['../namespacepmat5.html#a003130a328412d6651f2170670c67f33',1,'pmat5::frametwist()']]],
+  ['frametwist_152',['frametwist',['../interfacepmat5_1_1frametwist.html#a1810c74f2b72abc08f36c26d20ee664c',1,'pmat5::frametwist::frametwist()'],['../namespacepmat5.html#a003130a328412d6651f2170670c67f33',1,'pmat5::frametwist(xp, yp, zp, xv, yv, zv, twist)'],['../interfacepmat5_1_1frametwist.html',1,'pmat5::frametwist']]],
   ['fv3_5fzs_5ffilter_153',['fv3_zs_filter',['../filter__topo_8F90.html#a5111612d979bdce0afdc12bc37081dfc',1,'filter_topo.F90']]]
 ];

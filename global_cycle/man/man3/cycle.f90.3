@@ -1,4 +1,4 @@
-.TH "/home/ed/UFS_UTILS/sorc/global_cycle.fd/cycle.f90" 3 "Thu Mar 18 2021" "Version 1.0.0" "global_cycle" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/global_cycle.fd/cycle.f90" 3 "Thu Mar 25 2021" "Version 1.0.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -144,7 +144,7 @@ Xu Li, George Gayno
 .PP
 
 .PP
-Definition at line 579 of file cycle\&.f90\&.
+Definition at line 575 of file cycle\&.f90\&.
 .PP
 References read_write_data::dtref_gaus, dtzm_point(), read_write_data::idim_gaus, read_write_data::jdim_gaus, nsst_water_reset(), remap_coef(), read_write_data::slmsk_gaus, and tf_thaw_set()\&.
 .PP
@@ -174,7 +174,7 @@ Xu Li, George Gayno
 .PP
 
 .PP
-Definition at line 984 of file cycle\&.f90\&.
+Definition at line 983 of file cycle\&.f90\&.
 .SS "subroutine dtzm_point (real, intent(in) XT, real, intent(in) XZ, real, intent(in) DT_COOL, real, intent(in) ZC, real, intent(in) Z1, real, intent(in) Z2, real, intent(out) DTZM)"
 
 .PP
@@ -209,7 +209,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1137 of file cycle\&.f90\&.
+Definition at line 1136 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst()\&.
 .SS "subroutine get_sal_clm (real, dimension(nx*ny), intent(in) xlats_ij, real, dimension(nx*ny), intent(in) xlons_ij, integer, intent(in) ny, integer, intent(in) nx, integer, intent(in) iy, integer, intent(in) im, integer, intent(in) id, integer, intent(in) ih, real, dimension(nx,ny), intent(out) sal_clm)"
@@ -245,7 +245,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1568 of file cycle\&.f90\&.
+Definition at line 1567 of file cycle\&.f90\&.
 .PP
 References read_write_data::get_dim_nc(), get_sal_clm_ta(), get_tim_wei(), and intp_tile()\&.
 .PP
@@ -288,7 +288,7 @@ March 2019
 .PP
 
 .PP
-Definition at line 1628 of file cycle\&.f90\&.
+Definition at line 1627 of file cycle\&.f90\&.
 .PP
 References read_write_data::read_salclm_gfs_nc()\&.
 .PP
@@ -328,7 +328,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1451 of file cycle\&.f90\&.
+Definition at line 1450 of file cycle\&.f90\&.
 .PP
 References read_write_data::get_tf_clm_dim(), get_tf_clm_ta(), get_tim_wei(), and intp_tile()\&.
 .PP
@@ -373,7 +373,7 @@ March 2019
 .PP
 
 .PP
-Definition at line 1520 of file cycle\&.f90\&.
+Definition at line 1519 of file cycle\&.f90\&.
 .PP
 References read_write_data::read_tf_clim_grb()\&.
 .PP
@@ -414,7 +414,7 @@ March 2019
 .PP
 
 .PP
-Definition at line 1761 of file cycle\&.f90\&.
+Definition at line 1760 of file cycle\&.f90\&.
 .PP
 Referenced by get_sal_clm(), and get_tf_clm()\&.
 .SS "subroutine intp_tile (real, dimension(idim_lalo,jdim_lalo), intent(in) tf_lalo, real, dimension(jdim_lalo), intent(in) dlats_lalo, real, dimension(idim_lalo), intent(in) dlons_lalo, integer, intent(in) jdim_lalo, integer, intent(in) idim_lalo, real, dimension(jdim_tile*idim_tile), intent(out) tf_tile, real, dimension(jdim_tile*idim_tile), intent(in) xlats_tile, real, dimension(jdim_tile*idim_tile), intent(in) xlons_tile, integer, intent(in) jdim_tile, integer, intent(in) idim_tile)"
@@ -452,7 +452,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1674 of file cycle\&.f90\&.
+Definition at line 1672 of file cycle\&.f90\&.
 .PP
 References remap_coef()\&.
 .PP
@@ -478,7 +478,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1405 of file cycle\&.f90\&.
+Definition at line 1404 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst()\&.
 .SS "subroutine remap_coef (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) im, integer, intent(in) jm, real, dimension(im), intent(in) lon, real, dimension(jm), intent(in) lat, integer, dimension(is:ie,js:je), intent(out) id1, integer, dimension(is:ie,js:je), intent(out) id2, integer, dimension(is:ie,js:je), intent(out) jdc, real, dimension(is:ie,js:je,4), intent(out) s2c, real, dimension(is:ie,js:je,2), intent(in) agrid)"
@@ -522,7 +522,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1216 of file cycle\&.f90\&.
+Definition at line 1214 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst(), and intp_tile()\&.
 .SS "program sfc_drv"
@@ -704,7 +704,7 @@ OROG_UF \&.\&. Orography unfiltered
 .PP
 Most fields have a blending coefficient\&. This controls the blending of the forecast (first guess) and interpolated climatology or analyzed fields\&. When it is equal to 1\&.0, the pure forecast is used\&. When the coefficient is equal to 0, the pure climatology or analysis is used\&. The default values are set as follows:
 .PP
-Variables Land Sea  Surface temperature Forecast Analysis  Albedo Analysis Analysis  Sea-ice Analysis Analysis  Snow Analysis Forecast (over sea ice)  Roughness Analysis Forecast  Plant resistance Analysis Analysis  Soil moisture Weighted average Analysis  Soil temperature Forecast Analysis  Canopy waver content Forecast Forecast  Convective cloud cover Forecast Forecast  Convective cloud bottm Forecast Forecast  Convective cloud top Forecast Forecast  Vegetation greenness Analysis Analysis  Vegetation type Analysis Analysis  Soil type Analysis Analysis  
+Variables   Land   Sea    Surface temperature   Forecast   Analysis    Albedo   Analysis   Analysis    Sea-ice   Analysis   Analysis    Snow   Analysis   Forecast (over sea ice)    Roughness   Analysis   Forecast    Plant resistance   Analysis   Analysis    Soil moisture   Weighted average   Analysis    Soil temperature   Forecast   Analysis    Canopy waver content   Forecast   Forecast    Convective cloud cover   Forecast   Forecast    Convective cloud bottm   Forecast   Forecast    Convective cloud top   Forecast   Forecast    Vegetation greenness   Analysis   Analysis    Vegetation type   Analysis   Analysis    Soil type   Analysis   Analysis   
 .PP
 \fBParameters\fP
 .RS 4
@@ -756,7 +756,7 @@ Mark Iredell, George Gayno
 .PP
 
 .PP
-Definition at line 287 of file cycle\&.f90\&.
+Definition at line 283 of file cycle\&.f90\&.
 .PP
 References adjust_nsst(), get_sal_clm(), get_tf_clm(), read_write_data::read_data(), read_write_data::read_gsi_data(), read_write_data::read_lat_lon_orog(), sfccycle(), and read_write_data::write_data()\&.
 .PP
@@ -800,7 +800,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1315 of file cycle\&.f90\&.
+Definition at line 1313 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst()\&.
 .SS "real function tfreez (real salinity)"
@@ -830,7 +830,7 @@ tfreez The freezing point of water\&.
 .PP
 
 .PP
-Definition at line 1828 of file cycle\&.f90\&.
+Definition at line 1827 of file cycle\&.f90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for global_cycle from the source code\&.

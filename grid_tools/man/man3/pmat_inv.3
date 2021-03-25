@@ -1,4 +1,4 @@
-.TH "pmat::inv" 3 "Thu Mar 18 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::inv" 3 "Thu Mar 25 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -108,7 +108,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 104 of file pmat\&.f90\&.
+Definition at line 103 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::cinvmtf (complex(dpc), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -128,7 +128,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 191 of file pmat\&.f90\&.
+Definition at line 190 of file pmat\&.f90\&.
+.PP
+References pietc::c1\&.
 .SS "subroutine pmat::inv::clinmmt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b)\fC [private]\fP"
 
 .PP
@@ -148,7 +150,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 253 of file pmat\&.f90\&.
+Definition at line 252 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::clinmmtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -170,7 +172,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 314 of file pmat\&.f90\&.
+Definition at line 313 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::clinmvt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b)\fC [private]\fP"
 
 .PP
@@ -190,7 +192,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 363 of file pmat\&.f90\&.
+Definition at line 362 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::clinmvtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -212,7 +214,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 421 of file pmat\&.f90\&.
+Definition at line 420 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dinvmt (real(dp), dimension(:,:), intent(inout) a)\fC [private]\fP"
 
 .PP
@@ -230,7 +232,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 93 of file pmat\&.f90\&.
+Definition at line 92 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dinvmtf (real(dp), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -250,7 +252,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 154 of file pmat\&.f90\&.
+Definition at line 153 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dlinmmt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b)\fC [private]\fP"
 
 .PP
@@ -270,7 +272,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 241 of file pmat\&.f90\&.
+Definition at line 240 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dlinmmtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -292,7 +294,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 290 of file pmat\&.f90\&.
+Definition at line 289 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dlinmvt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b)\fC [private]\fP"
 
 .PP
@@ -312,7 +314,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 350 of file pmat\&.f90\&.
+Definition at line 349 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dlinmvtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -334,7 +336,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 399 of file pmat\&.f90\&.
+Definition at line 398 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::iinvf (integer(spi), dimension(:,:), intent(inout) imat, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -354,7 +356,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 443 of file pmat\&.f90\&.
+Definition at line 442 of file pmat\&.f90\&.
+.PP
+References pietc::t\&.
 .SS "subroutine pmat::inv::sinvmt (real(sp), dimension(:,:), intent(inout) a)\fC [private]\fP"
 
 .PP
@@ -372,7 +376,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 82 of file pmat\&.f90\&.
+Definition at line 81 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::sinvmtf (real(sp), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -392,7 +396,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 116 of file pmat\&.f90\&.
+Definition at line 115 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::slinmmt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b)\fC [private]\fP"
 
 .PP
@@ -412,7 +416,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 229 of file pmat\&.f90\&.
+Definition at line 228 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::slinmmtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -434,7 +438,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 266 of file pmat\&.f90\&.
+Definition at line 265 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::slinmvt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b)\fC [private]\fP"
 
 .PP
@@ -454,7 +458,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 337 of file pmat\&.f90\&.
+Definition at line 336 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::slinmvtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -476,7 +480,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 377 of file pmat\&.f90\&.
+Definition at line 376 of file pmat\&.f90\&.
 
 .SH "Author"
 .PP 
