@@ -286,6 +286,7 @@
                    ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
 !
  USE READ_WRITE_DATA
+ use machine
 
  IMPLICIT NONE
 
@@ -307,6 +308,10 @@
  INTEGER             :: I, IERR
  INTEGER             :: I_INDEX(LENSFC), J_INDEX(LENSFC)
  INTEGER             :: IDUM(IDIM,JDIM)
+ integer             :: num_parthds, num_threads
+
+ logical             :: lake(lensfc)
+ real(kind=kind_io8) :: min_lakeice, min_seaice
 
  REAL                :: SLMASK(LENSFC), OROG(LENSFC)
  REAL                :: SIHFCS(LENSFC), SICFCS(LENSFC)
@@ -443,6 +448,10 @@
 !--------------------------------------------------------------------------------
 
  IF (.NOT. ADJT_NST_ONLY) THEN
+   num_threads = num_parthds()
+   lake = .false.
+   min_seaice = 0.15
+   min_lakeice = 0.15
    PRINT*
    PRINT*,"CALL SFCCYCLE TO UPDATE SURFACE FIELDS."
    CALL SFCCYCLE(LUGB,LENSFC,LSOIL,SIG1T,DELTSFC,          &
@@ -453,8 +462,9 @@
                TSFFCS,SNOFCS,ZORFCS,ALBFCS,TG3FCS,       &
                CNPFCS,SMCFCS,STCFCS,SLIFCS,AISFCS,       &
                VEGFCS,VETFCS,SOTFCS,ALFFCS,              &
-               CVFCS,CVBFCS,CVTFCS,MYRANK,NLUNIT,        &
+               CVFCS,CVBFCS,CVTFCS,MYRANK,num_threads, NLUNIT,        &
                SZ_NML, INPUT_NML_FILE,                   &
+               lake, min_lakeice, min_seaice, &
                IALB,ISOT,IVEGSRC,TILE_NUM,I_INDEX,J_INDEX)
  ENDIF
 

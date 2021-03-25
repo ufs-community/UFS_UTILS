@@ -7,7 +7,7 @@ set(fortran_src
     cycle.f90
     machine.f90
     num_parthds.f90
-    sfcsub.F
+    ../../ccpp-physics/physics/sfcsub.F
     read_write_data.f90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
