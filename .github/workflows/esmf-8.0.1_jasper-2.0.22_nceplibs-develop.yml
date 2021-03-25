@@ -5,9 +5,9 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     env:
-      CC: mpicc
-      FC: mpifort
-      CXX: mpicxx
+      CC: gcc-9
+      FC: gfortran-9
+      CXX: g++-9
     strategy:
       matrix:
         os: [macos-10.15, ubuntu-20.04]
@@ -163,7 +163,7 @@ jobs:
         cd ufs_utils
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"
-        make -j2
+        make -j2 VERBOSE=1
         make test
         export PATH="/home/runner/.local/bin:$PATH"
         gcovr -r .. --html-details -o test-coverage.html

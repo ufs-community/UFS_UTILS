@@ -162,5 +162,5 @@ jobs:
         cd ufs_utils
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs' -DENABLE_DOCS=On
-        make -j2
+        make -j2 VERBOSE=1
         make test
