@@ -39,7 +39,6 @@ jobs:
 
     - name: install-dependencies
       run: |
-        echo "$HOME/mpich/bin" >> $GITHUB_PATH
         if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
           sudo apt-get update
           if [[ ${{ matrix.mpi }} == "mpich" ]]; then
@@ -54,7 +53,7 @@ jobs:
         elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
           brew install doxygen
           if [[ ${{matrix.mpi}} == "openmpi" ]]; then
-            brew install --with-cxx-bindings open-mpi
+            brew install open-mpi
           elif [[ ${{ matrix.mpi }} == "mpich" ]]; then
             echo "$HOME/mpich/bin" >> $GITHUB_PATH
           fi
