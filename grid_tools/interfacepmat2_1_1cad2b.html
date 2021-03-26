@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('interfacepmat2_1_1cad2b.html',''); ini
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ac55a325625b421d458c65156d027227d"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1cad2b.html#ac55a325625b421d458c65156d027227d">cad2b</a> (m1, m2, mah1, mah2, mirror2, a)</td></tr>
-<tr class="memdesc:ac55a325625b421d458c65156d027227d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incorporate operand symmetry near end-2 of a band matrix operator.  <a href="interfacepmat2_1_1cad2b.html#ac55a325625b421d458c65156d027227d">More...</a><br /></td></tr>
+<tr class="memdesc:ac55a325625b421d458c65156d027227d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Incorporate symmetry and clip near end-2 of a band matrix.  <a href="interfacepmat2_1_1cad2b.html#ac55a325625b421d458c65156d027227d">More...</a><br /></td></tr>
 <tr class="separator:ac55a325625b421d458c65156d027227d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -157,22 +157,22 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Incorporate operand symmetry near end-2 of a band matrix operator. </p>
+<p>Incorporate symmetry and clip near end-2 of a band matrix. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">m1</td><td>Sizes of implied full matrix </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">m2</td><td>Sizes of implied full matrix </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>Left semi-bandwidths of A. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>Right semi-bandwidths of A. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m1</td><td>Number of rows of full matrix A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m2</td><td>Number of columns of implied full matrix A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>Left semi-bandwidths (subdiagonals) of A. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>Right semi-bandwidths (superdiagonals) of A. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">mirror2</td><td>2*location of symmetry axis relative to end-2 operand element. </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>Input as unclipped operator, output as symmetrized and clipped. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>Input operator, output as symmetrized and clipped at end-2. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00475">475</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00476">476</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
 
 </div>
 </div>

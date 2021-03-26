@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('mtnlm7__oclsm_8f.html',''); initResiza
 </div><!--header-->
 <div class="contents">
 
-<p>TERRAIN MAKER FOR GLOBAL SPECTRAL MODEL.  
+<p>Terrain maker for global spectral model.  
 <a href="#details">More...</a></p>
 
 <p><a href="mtnlm7__oclsm_8f_source.html">Go to the source code of this file.</a></p>
@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('mtnlm7__oclsm_8f.html',''); initResiza
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a76595711843c5e5f3c2c92826e759838"><td class="memItemLeft" align="right" valign="top">program&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mtnlm7__oclsm_8f.html#a76595711843c5e5f3c2c92826e759838">__mtnlm7_oclsm.f__</a></td></tr>
-<tr class="memdesc:a76595711843c5e5f3c2c92826e759838"><td class="mdescLeft">&#160;</td><td class="mdescRight">THIS PROGRAM CREATES 7 TERRAIN-RELATED FILES COMPUTED FROM THE NAVY 10-MINUTE TERRAIN DATASET.  <a href="mtnlm7__oclsm_8f.html#a76595711843c5e5f3c2c92826e759838">More...</a><br /></td></tr>
+<tr class="memdesc:a76595711843c5e5f3c2c92826e759838"><td class="mdescLeft">&#160;</td><td class="mdescRight">This program creates 7 terrain-related files computed from the navy 10-minute terrain dataset.  <a href="mtnlm7__oclsm_8f.html#a76595711843c5e5f3c2c92826e759838">More...</a><br /></td></tr>
 <tr class="separator:a76595711843c5e5f3c2c92826e759838"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a769428525e5b18b568caee947d3b82a9"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mtnlm7__oclsm_8f.html#a769428525e5b18b568caee947d3b82a9">get_index</a> (IMN, JMN, npts, lonO, latO, DELXN, jst, jen, ilist, numx)</td></tr>
 <tr class="memdesc:a769428525e5b18b568caee947d3b82a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the location of a cubed-sphere point within the high-resolution orography data.  <a href="mtnlm7__oclsm_8f.html#a769428525e5b18b568caee947d3b82a9">More...</a><br /></td></tr>
@@ -194,8 +194,8 @@ Functions/Subroutines</h2></td></tr>
 <tr class="separator:a6e5afa4168cab2cdedef3c01e086494f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>TERRAIN MAKER FOR GLOBAL SPECTRAL MODEL. </p>
-<dl class="section author"><dt>Author</dt><dd>IREDELL </dd></dl>
+<div class="textblock"><p>Terrain maker for global spectral model. </p>
+<dl class="section author"><dt>Author</dt><dd>Mark Iredell </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>92-04-16 </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="mtnlm7__oclsm_8f_source.html">mtnlm7_oclsm.f</a>.</p>
@@ -212,8 +212,18 @@ Functions/Subroutines</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>THIS PROGRAM CREATES 7 TERRAIN-RELATED FILES COMPUTED FROM THE NAVY 10-MINUTE TERRAIN DATASET. </p>
-<p>THE MODEL PHYSICS GRID PARAMETERS AND SPECTRAL TRUNCATION AND FILTER PARAMETERS ARE READ BY THIS PROGRAM AS INPUT. THE 7 FILES PRODUCED ARE RESPECTIVELY: 1) SEA-LAND MASK ON MODEL PHYSICS GRID 2) GRIDDED OROGRAPHY ON MODEL PHYSICS GRID 3) MOUNTAIN STD DEV ON MODEL PHYSICS GRID 4) SPECTRAL OROGRAPHY IN SPECTRAL DOMAIN 5) UNFILTERED GRIDDED OROGRAPHY ON MODEL PHYSICS GRID 6) GRIB SEA-LAND MASK ON MODEL PHYSICS GRID 7) GRIB GRIDDED OROGRAPHY ON MODEL PHYSICS GRID THE OROGRAPHY IS ONLY FILTERED FOR WAVENUMBERS GREATER THAN NF0. FOR WAVENUMBERS N BETWEEN NF0 AND NF1, THE OROGRAPHY IS FILTERED BY THE FACTOR 1-((N-NF0)/(NF1-NF0))**2. THE FILTERED OROGRAPHY WILL NOT HAVE INFORMATION BEYOND WAVENUMBER NF1.</p>
+<p>This program creates 7 terrain-related files computed from the navy 10-minute terrain dataset. </p>
+<p>The model physics grid parameters and spectral truncation and filter parameters are read by this program as input.</p>
+<p>The 7 files produced are:</p><ol type="1">
+<li>sea-land mask on model physics grid</li>
+<li>gridded orography on model physics grid</li>
+<li>mountain std dev on model physics grid</li>
+<li>spectral orography in spectral domain</li>
+<li>unfiltered gridded orography on model physics grid</li>
+<li>grib sea-land mask on model physics grid</li>
+<li>grib gridded orography on model physics grid</li>
+</ol>
+<p>The orography is only filtered for wavenumbers greater than nf0. For wavenumbers n between nf0 and nf1, the orography is filtered by the factor 1-((n-nf0)/(nf1-nf0))**2. The filtered orography will not have information beyond wavenumber nf1.</p>
 <p>PROGRAM HISTORY LOG:</p><ul>
 <li>92-04-16 IREDELL</li>
 <li>98-02-02 IREDELL FILTER</li>
@@ -257,9 +267,7 @@ Functions/Subroutines</h2></td></tr>
 <li>SPLAT - COMPUTE GAUSSIAN LATITUDES OR EQUALLY-SPACED LATITUDES</li>
 <li>LIBRARY:</li>
 <li>SPTEZ - SPHERICAL TRANSFORM</li>
-<li><p class="startli">GBYTES - UNPACK BITS</p>
-<p class="startli">REMARKS: FORTRAN 9X EXTENSIONS ARE USED.</p>
-</li>
+<li>GBYTES - UNPACK BITS</li>
 </ul>
 </li>
 </ul>

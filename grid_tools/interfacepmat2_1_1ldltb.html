@@ -92,10 +92,10 @@ $(document).ready(function(){initNavTree('interfacepmat2_1_1ldltb.html',''); ini
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a49dd0e7cf1934a3405891268775e3956"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1ldltb.html#a49dd0e7cf1934a3405891268775e3956">ldltb</a> (m, mah1, a)</td></tr>
-<tr class="memdesc:a49dd0e7cf1934a3405891268775e3956"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1ldltb.html#a49dd0e7cf1934a3405891268775e3956">More...</a><br /></td></tr>
+<tr class="memdesc:a49dd0e7cf1934a3405891268775e3956"><td class="mdescLeft">&#160;</td><td class="mdescRight">[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky).  <a href="interfacepmat2_1_1ldltb.html#a49dd0e7cf1934a3405891268775e3956">More...</a><br /></td></tr>
 <tr class="separator:a49dd0e7cf1934a3405891268775e3956"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ceda7f4d15e8dab165b040276291363"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1ldltb.html#a4ceda7f4d15e8dab165b040276291363">dldltb</a> (m, mah1, a)</td></tr>
-<tr class="memdesc:a4ceda7f4d15e8dab165b040276291363"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1ldltb.html#a4ceda7f4d15e8dab165b040276291363">More...</a><br /></td></tr>
+<tr class="memdesc:a4ceda7f4d15e8dab165b040276291363"><td class="mdescLeft">&#160;</td><td class="mdescRight">[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky).  <a href="interfacepmat2_1_1ldltb.html#a4ceda7f4d15e8dab165b040276291363">More...</a><br /></td></tr>
 <tr class="separator:a4ceda7f4d15e8dab165b040276291363"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -142,19 +142,20 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
+<p>[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky). </p>
+<p>[L] is lower triangular with unit main diagonal [D] is a diagonal matrix.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>size of symmetric matrix A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>semi-bandwidth of matrix A </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>input lower (left) part of symmetric A; output its factors encoded as [L-I]+[D**-1] </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00602">602</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00608">608</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
 
 </div>
 </div>
@@ -199,19 +200,19 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky). </p>
+<p>[L] is lower triangular with unit main diagonal [D] is a diagonal matrix </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>size of symmetric matrix A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>semi-bandwidth of matrix A </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>input lower (left) part of symmetric A; output its factors encoded as [L-I]+[D**-1] </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00636">636</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00644">644</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
 
 <p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
 

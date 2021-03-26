@@ -1,4 +1,4 @@
-.TH "pmat2::cad2b" 3 "Thu Mar 25 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::cad2b" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,7 +12,7 @@ pmat2::cad2b
 .ti -1c
 .RI "subroutine \fBcad2b\fP (m1, m2, mah1, mah2, mirror2, a)"
 .br
-.RI "Incorporate operand symmetry near end-2 of a band matrix operator\&. "
+.RI "Incorporate symmetry and clip near end-2 of a band matrix\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -22,21 +22,21 @@ Definition at line 62 of file pmat2\&.f90\&.
 .SS "subroutine pmat2::cad2b::cad2b (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mirror2, real(sp), dimension(1\-m1:0,m1\-m2\-mah1:m1\-m2+mah2), intent(inout) a)\fC [private]\fP"
 
 .PP
-Incorporate operand symmetry near end-2 of a band matrix operator\&. 
+Incorporate symmetry and clip near end-2 of a band matrix\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIm1\fP Sizes of implied full matrix 
+\fIm1\fP Number of rows of full matrix A 
 .br
-\fIm2\fP Sizes of implied full matrix 
+\fIm2\fP Number of columns of implied full matrix A 
 .br
-\fImah1\fP Left semi-bandwidths of A\&. 
+\fImah1\fP Left semi-bandwidths (subdiagonals) of A\&. 
 .br
-\fImah2\fP Right semi-bandwidths of A\&. 
+\fImah2\fP Right semi-bandwidths (superdiagonals) of A\&. 
 .br
 \fImirror2\fP 2*location of symmetry axis relative to end-2 operand element\&. 
 .br
-\fIa\fP Input as unclipped operator, output as symmetrized and clipped\&. 
+\fIa\fP Input operator, output as symmetrized and clipped at end-2\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -51,7 +51,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 475 of file pmat2\&.f90\&.
+Definition at line 476 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

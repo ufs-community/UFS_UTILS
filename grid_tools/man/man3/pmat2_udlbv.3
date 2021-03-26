@@ -1,4 +1,4 @@
-.TH "pmat2::udlbv" 3 "Thu Mar 25 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::udlbv" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,11 +12,11 @@ pmat2::udlbv
 .ti -1c
 .RI "subroutine \fBudlbv\fP (m, mah1, mah2, a, v)"
 .br
-.RI "Back-substitution step of linear inversion involving banded matrix and Vector\&. "
+.RI "Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. "
 .ti -1c
 .RI "subroutine \fBdudlbv\fP (m, mah1, mah2, a, v)"
 .br
-.RI "Back-substitution step of linear inversion involving banded matrix and Vector\&. "
+.RI "Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -26,7 +26,7 @@ Definition at line 70 of file pmat2\&.f90\&.
 .SS "subroutine pmat2::udlbv::udlbv (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(in) a, real(sp), dimension(m), intent(inout) v)\fC [private]\fP"
 
 .PP
-Back-substitution step of linear inversion involving banded matrix and Vector\&. 
+Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. Output vector is [U**-1]*[D**-1]*[L**-1]*v
 .PP
 \fBParameters\fP
 .RS 4
@@ -36,7 +36,7 @@ Back-substitution step of linear inversion involving banded matrix and Vector\&.
 .br
 \fImah2\fP the right half-bandwidth of fortran array A 
 .br
-\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB 
+\fIa\fP encodes the L*D*U factorization of the linear-system matrix, as supplied by subroutine LDUB, in single precision 
 .br
 \fIv\fP input as right-hand-side vector, output as solution vector 
 .RE
@@ -53,13 +53,13 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 872 of file pmat2\&.f90\&.
+Definition at line 891 of file pmat2\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "subroutine pmat2::udlbv::dudlbv (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m,\-mah1:mah2), intent(in) a, real(dp), dimension(m), intent(inout) v)\fC [private]\fP"
 
 .PP
-Back-substitution step of linear inversion involving banded matrix and Vector\&. 
+Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. Output vector is [U**-1]*[D**-1]*[L**-1]*v
 .PP
 \fBParameters\fP
 .RS 4
@@ -69,7 +69,7 @@ Back-substitution step of linear inversion involving banded matrix and Vector\&.
 .br
 \fImah2\fP the right half-bandwidth of fortran array A 
 .br
-\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB 
+\fIa\fP encodes the L*D*U factorization of the linear-system matrix, as supplied by subroutine LDUB, in double precision 
 .br
 \fIv\fP input as right-hand-side vector, output as solution vector 
 .RE
@@ -86,7 +86,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 901 of file pmat2\&.f90\&.
+Definition at line 920 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

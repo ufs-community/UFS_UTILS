@@ -87,79 +87,79 @@ $(document).ready(function(){initNavTree('mtnlm7__oclsm_8f_source.html',''); ini
 </div><!--header-->
 <div class="contents">
 <a href="mtnlm7__oclsm_8f.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">C&gt; @file</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">C&gt; TERRAIN MAKER FOR GLOBAL SPECTRAL MODEL</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">C&gt; @author IREDELL @date 92-04-16</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">C&gt; Terrain maker for global spectral model.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">C&gt; @author Mark Iredell @date 92-04-16</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;  </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">C&gt; THIS PROGRAM CREATES 7 TERRAIN-RELATED FILES</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">C&gt;   COMPUTED FROM THE NAVY 10-MINUTE TERRAIN DATASET.</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">C&gt;   THE MODEL PHYSICS GRID PARAMETERS AND SPECTRAL TRUNCATION</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">C&gt;   AND FILTER PARAMETERS ARE READ BY THIS PROGRAM AS INPUT.</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">C&gt;   THE 7 FILES PRODUCED ARE RESPECTIVELY:</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">C&gt;     1) SEA-LAND MASK ON MODEL PHYSICS GRID</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">C&gt;     2) GRIDDED OROGRAPHY ON MODEL PHYSICS GRID</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">C&gt;     3) MOUNTAIN STD DEV ON MODEL PHYSICS GRID</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">C&gt;     4) SPECTRAL OROGRAPHY IN SPECTRAL DOMAIN</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">C&gt;     5) UNFILTERED GRIDDED OROGRAPHY ON MODEL PHYSICS GRID</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">C&gt;     6) GRIB SEA-LAND MASK ON MODEL PHYSICS GRID</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">C&gt;     7) GRIB GRIDDED OROGRAPHY ON MODEL PHYSICS GRID</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">C&gt;   THE OROGRAPHY IS ONLY FILTERED FOR WAVENUMBERS GREATER THAN NF0.</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">C&gt;   FOR WAVENUMBERS N BETWEEN NF0 AND NF1, THE OROGRAPHY IS FILTERED</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">C&gt;   BY THE FACTOR 1-((N-NF0)/(NF1-NF0))**2.  THE FILTERED OROGRAPHY</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">C&gt;   WILL NOT HAVE INFORMATION BEYOND WAVENUMBER NF1.</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">C&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">C&gt; PROGRAM HISTORY LOG:</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">C&gt; -  92-04-16  IREDELL</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">C&gt; -  98-02-02  IREDELL  FILTER</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">C&gt; -  98-05-31  HONG Modified for subgrid orography used in Kim&#39;s scheme</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">C&gt; -  98-12-31  HONG Modified for high-resolution GTOPO orography</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">C&gt; -  99-05-31  HONG Modified for getting OL4 (mountain fraction)</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">C&gt;  - 00-02-10  Moorthi&#39;s modifications</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">C&gt; -  00-04-11  HONG Modified for reduced grids</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">C&gt; -  00-04-12  Iredell Modified for reduced grids</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">C&gt; -  02-01-07  (*j*) modified for principal axes of orography</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">C&gt;             There are now 14 files, 4 additional for lm mb</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">C&gt;  - 04-04-04  (*j*) re-Test on IST/ilen calc for sea-land mask(*j*)</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">C&gt;  - 04-09-04   minus sign here in MAKEOA IST and IEN as in MAKEMT!</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">C&gt;  - 05-09-05   if test on HK and HLPRIM for GAMMA SQRT</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">C&gt;  - 07-08-07   replace 8&#39; with 30&quot; incl GICE, conintue w/ S-Y. lake slm</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">C&gt;  - 08-08-07  All input 30&quot;, UMD option, and filter as described below</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">C&gt; Quadratic filter applied by default.</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">C&gt; NF0 is normally set to an even value beyond the previous truncation, </span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">C&gt; for example, for jcap=382, NF0=254+2</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">C&gt; NF1 is set as jcap+2 (and/or nearest even), eg., for t382, NF1=382+2=384</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">C&gt; if no filter is desired then NF1=NF0=0 and ORF=ORO</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">C&gt; but if no filter but spectral to grid (with gibbs) then NF1=jcap+2, and NF1=jcap+1</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">C&gt;       </span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">C&gt;   INPUT FILES:</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">C&gt;  -   UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">C&gt;                  SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR),</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">C&gt;                  AND FIRST AND SECOND FILTER PARAMETERS (NF0,NF1).</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">C&gt;                  RESPECTIVELY READ IN FREE FORMAT.</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">C&gt;  -   UNIT235    - GTOPO 30&quot; AVR for ZAVG elevation</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">C&gt;  -   UNIT10     - 30&quot; UMD land (lake) cover mask  see MSKSRC switch</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">C&gt;  -  XUNIT11     - GTOPO AVR</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">C&gt;  -  XUNIT12     - GTOPO STD DEV</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">C&gt;  -  XUNIT13     - GTOPO MAX</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">C&gt;  -   UNIT14     - GTOPO SLM (10&#39; NAVY if switched to get lakes </span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">C&gt;  -   UNIT15     - GICE Grumbine 30&quot; RAMP Antarctica orog IMNx3616</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">C&gt;  -   UNIT25     - Ocean land-sea mask on gaussian grid         </span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">C&gt;</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">C&gt;   OUTPUT FILES:</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">C&gt;  -   UNIT51     - SEA-LAND MASK (IM,JM)</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">C&gt;  -   UNIT52     - GRIDDED OROGRAPHY (IM,JM)</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">C&gt;  -   UNIT54     - SPECTRAL OROGRAPHY ((NM+1)*((NR+1)*NM+2))</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">C&gt;  -   UNIT55     - UNFILTERED GRIDDED OROGRAPHY (IM,JM)</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">C&gt;  -   UNIT57     - GRIB GRIDDED OROGRAPHY (IM,JM)</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">C&gt;</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">C&gt;   SUBPROGRAMS CALLED:</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">C&gt;  -   UNIQUE:</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">C&gt;  -   TERSUB     - MAIN SUBPROGRAM</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">C&gt;  -   SPLAT      - COMPUTE GAUSSIAN LATITUDES OR EQUALLY-SPACED LATITUDES</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">C&gt;  -   LIBRARY:</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">C&gt;  -   SPTEZ      - SPHERICAL TRANSFORM</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">C&gt;  -   GBYTES     - UNPACK BITS</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">C&gt;</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">C&gt;   REMARKS: FORTRAN 9X EXTENSIONS ARE USED.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">C&gt; This program creates 7 terrain-related files computed from the navy</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">C&gt; 10-minute terrain dataset. The model physics grid parameters and</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">C&gt; spectral truncation and filter parameters are read by this program as</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">C&gt; input.</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">C&gt;      </span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">C&gt; The 7 files produced are:</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">C&gt; 1. sea-land mask on model physics grid</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">C&gt; 2. gridded orography on model physics grid</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">C&gt; 3. mountain std dev on model physics grid</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">C&gt; 4. spectral orography in spectral domain</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">C&gt; 5. unfiltered gridded orography on model physics grid</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">C&gt; 6. grib sea-land mask on model physics grid</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">C&gt; 7. grib gridded orography on model physics grid</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">C&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">C&gt; The orography is only filtered for wavenumbers greater than nf0. For</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">C&gt; wavenumbers n between nf0 and nf1, the orography is filtered by the</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">C&gt; factor 1-((n-nf0)/(nf1-nf0))**2. The filtered orography will not have</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">C&gt; information beyond wavenumber nf1.</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">C&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">C&gt; PROGRAM HISTORY LOG:</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">C&gt; -  92-04-16  IREDELL</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">C&gt; -  98-02-02  IREDELL  FILTER</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">C&gt; -  98-05-31  HONG Modified for subgrid orography used in Kim&#39;s scheme</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">C&gt; -  98-12-31  HONG Modified for high-resolution GTOPO orography</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">C&gt; -  99-05-31  HONG Modified for getting OL4 (mountain fraction)</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">C&gt;  - 00-02-10  Moorthi&#39;s modifications</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">C&gt; -  00-04-11  HONG Modified for reduced grids</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">C&gt; -  00-04-12  Iredell Modified for reduced grids</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">C&gt; -  02-01-07  (*j*) modified for principal axes of orography</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">C&gt;             There are now 14 files, 4 additional for lm mb</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">C&gt;  - 04-04-04  (*j*) re-Test on IST/ilen calc for sea-land mask(*j*)</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">C&gt;  - 04-09-04   minus sign here in MAKEOA IST and IEN as in MAKEMT!</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">C&gt;  - 05-09-05   if test on HK and HLPRIM for GAMMA SQRT</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">C&gt;  - 07-08-07   replace 8&#39; with 30&quot; incl GICE, conintue w/ S-Y. lake slm</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">C&gt;  - 08-08-07  All input 30&quot;, UMD option, and filter as described below</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">C&gt; Quadratic filter applied by default.</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">C&gt; NF0 is normally set to an even value beyond the previous truncation, </span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">C&gt; for example, for jcap=382, NF0=254+2</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">C&gt; NF1 is set as jcap+2 (and/or nearest even), eg., for t382, NF1=382+2=384</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">C&gt; if no filter is desired then NF1=NF0=0 and ORF=ORO</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">C&gt; but if no filter but spectral to grid (with gibbs) then NF1=jcap+2, and NF1=jcap+1</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">C&gt;       </span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">C&gt;   INPUT FILES:</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">C&gt;  -   UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">C&gt;                  SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR),</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">C&gt;                  AND FIRST AND SECOND FILTER PARAMETERS (NF0,NF1).</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">C&gt;                  RESPECTIVELY READ IN FREE FORMAT.</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">C&gt;  -   UNIT235    - GTOPO 30&quot; AVR for ZAVG elevation</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">C&gt;  -   UNIT10     - 30&quot; UMD land (lake) cover mask  see MSKSRC switch</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">C&gt;  -  XUNIT11     - GTOPO AVR</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">C&gt;  -  XUNIT12     - GTOPO STD DEV</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">C&gt;  -  XUNIT13     - GTOPO MAX</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">C&gt;  -   UNIT14     - GTOPO SLM (10&#39; NAVY if switched to get lakes </span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">C&gt;  -   UNIT15     - GICE Grumbine 30&quot; RAMP Antarctica orog IMNx3616</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">C&gt;  -   UNIT25     - Ocean land-sea mask on gaussian grid         </span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">C&gt;</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">C&gt;   OUTPUT FILES:</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">C&gt;  -   UNIT51     - SEA-LAND MASK (IM,JM)</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">C&gt;  -   UNIT52     - GRIDDED OROGRAPHY (IM,JM)</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">C&gt;  -   UNIT54     - SPECTRAL OROGRAPHY ((NM+1)*((NR+1)*NM+2))</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">C&gt;  -   UNIT55     - UNFILTERED GRIDDED OROGRAPHY (IM,JM)</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">C&gt;  -   UNIT57     - GRIB GRIDDED OROGRAPHY (IM,JM)</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">C&gt;</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">C&gt;   SUBPROGRAMS CALLED:</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">C&gt;  -   UNIQUE:</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">C&gt;  -   TERSUB     - MAIN SUBPROGRAM</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">C&gt;  -   SPLAT      - COMPUTE GAUSSIAN LATITUDES OR EQUALLY-SPACED LATITUDES</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">C&gt;  -   LIBRARY:</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">C&gt;  -   SPTEZ      - SPHERICAL TRANSFORM</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">C&gt;  -   GBYTES     - UNPACK BITS</span></div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">C&gt;</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">C&gt; @return 0 for success, error code otherwise.</span></div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      include <span class="stringliteral">&#39;netcdf.inc&#39;</span></div>

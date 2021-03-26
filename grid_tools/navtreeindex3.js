@@ -1,7 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"namespacepietc.html#a58eea21cf1bc5b523e8cb3a2e1a29e56":[1,0,4,34],
-"namespacepietc.html#a59ed14f765e2aadca3f681e9ce3a04d1":[1,0,4,60],
 "namespacepietc.html#a5a53b481f932dafb6e5ae85267168fed":[1,0,4,116],
 "namespacepietc.html#a5ad510619e59efe2e25d11238d8d2ab4":[1,0,4,185],
 "namespacepietc.html#a5bf9578724b7dc8d63ab2465fd7a648e":[1,0,4,132],
@@ -249,5 +247,7 @@ var NAVTREEINDEX3 =
 "namespacepmat4.html#ae6a1fd6367b43245e70f59952ffd7a57":[1,0,9,83],
 "namespacepmat4.html#ae6d759d7985b821fc2c878b6792cbdf0":[1,0,9,102],
 "namespacepmat4.html#aed6c0b71d1632c507f4d8519de674d62":[1,0,9,87],
-"namespacepmat4.html#aef0bd16dbf6eb59c5ee127188ac62a95":[1,0,9,64]
+"namespacepmat4.html#aef0bd16dbf6eb59c5ee127188ac62a95":[1,0,9,64],
+"namespacepmat4.html#af2b5d4c9d2a4d8ba9b815a8a50415374":[1,0,9,110],
+"namespacepmat4.html#af4e70c88c7c2ed2a99e4921e19fc3e4b":[1,0,9,40]
 };

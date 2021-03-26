@@ -92,10 +92,10 @@ $(document).ready(function(){initNavTree('interfacepmat2_1_1udlb.html',''); init
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a1fd8ca63703ad48482afa294ca2d6688"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1udlb.html#a1fd8ca63703ad48482afa294ca2d6688">udlb</a> (m, mah1, mah2, a)</td></tr>
-<tr class="memdesc:a1fd8ca63703ad48482afa294ca2d6688"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1udlb.html#a1fd8ca63703ad48482afa294ca2d6688">More...</a><br /></td></tr>
+<tr class="memdesc:a1fd8ca63703ad48482afa294ca2d6688"><td class="mdescLeft">&#160;</td><td class="mdescRight">[U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal  <a href="interfacepmat2_1_1udlb.html#a1fd8ca63703ad48482afa294ca2d6688">More...</a><br /></td></tr>
 <tr class="separator:a1fd8ca63703ad48482afa294ca2d6688"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae189d57b2993465b7d3a5304b8e23ec0"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1udlb.html#ae189d57b2993465b7d3a5304b8e23ec0">dudlb</a> (m, mah1, mah2, a)</td></tr>
-<tr class="memdesc:ae189d57b2993465b7d3a5304b8e23ec0"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1udlb.html#ae189d57b2993465b7d3a5304b8e23ec0">More...</a><br /></td></tr>
+<tr class="memdesc:ae189d57b2993465b7d3a5304b8e23ec0"><td class="mdescLeft">&#160;</td><td class="mdescRight">[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal  <a href="interfacepmat2_1_1udlb.html#ae189d57b2993465b7d3a5304b8e23ec0">More...</a><br /></td></tr>
 <tr class="separator:ae189d57b2993465b7d3a5304b8e23ec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -148,20 +148,20 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
+<p>[U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>number of rows of A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>number of subdiagonals of A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>number of superdiagonals of A </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>Input single precision band matrix A; output its factors encoded as [U-I]+[D**-1]+[L-I] </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00671">671</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00682">682</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
 
 </div>
 </div>
@@ -212,22 +212,22 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
+<p>[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>number of rows of A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>number of subdiagonals of A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>number of superdiagonals of A </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>Input double precision band matrix A; output its factors encoded as [U-I]+[D**-1]+[L-I] </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00689">689</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00703">703</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
 
-<p class="reference">References <a class="el" href="pmat2_8f90_source.html#l00568">pmat2::dldub()</a>.</p>
+<p class="reference">References <a class="el" href="pmat2_8f90_source.html#l00571">pmat2::dldub()</a>.</p>
 
 </div>
 </div>

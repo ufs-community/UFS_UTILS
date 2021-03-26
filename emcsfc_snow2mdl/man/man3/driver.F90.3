@@ -1,4 +1,4 @@
-.TH "/home/ed/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/driver.F90" 3 "Thu Mar 25 2021" "Version 1.0.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/driver.F90" 3 "Fri Mar 26 2021" "Version 1.0.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -39,20 +39,7 @@ Definition in file \fBdriver\&.F90\fP\&.
 .SS "program driver"
 
 .PP
-Create a snow cover and snow depth analysis on a nam or global gfs gaussian grid using nesdis/ims snow cover, autosnow snow cover and/or afwa depth data\&. Program History Log
-.IP "\(bu" 2
-2005-dec-16 gayno initial version
-.IP "\(bu" 2
-2007-nov-30 gayno added processing of nam b-grids\&. improved thinning for gfs grids\&.
-.IP "\(bu" 2
-2008-feb-01 gayno added option to use autosnow data in southern hemisphere\&.
-.IP "\(bu" 2
-2014-feb-14 gayno read grib 1 or grib2 version of nesdis/ims data
-.IP "\(bu" 2
-2014-sep-30 gayno read grib 1 or grib2 version of model lat, lon and mask files\&. convert nh weekly snow climatology to grib 2\&. option to output model depth and cover analysis in grib2\&.
-.PP
-.PP
-The ims snow cover product is now produced by the national ice center, not nesdis\&. however, in this code, references to ims still use the 'nesdis' identifier\&.
+Create a snow cover and snow depth analysis on a nam or global gfs gaussian grid using nesdis/ims snow cover, autosnow snow cover and/or afwa depth data\&. The ims snow cover product is now produced by the national ice center, not nesdis\&. however, in this code, references to ims still use the 'nesdis' identifier\&.
 .PP
 input files, to define model grid, and for runtime configuration:
 .IP "\(bu" 2
@@ -193,6 +180,19 @@ nesdis/ims and autosnow only - An analysis of snow cover and depth on the model 
 afwa only - An analysis of snow cover and depth on the model grid is produced\&. Depth is determined from the afwa data\&. Cover is set to 100% where afwa indicates snow and 0% otherwise\&.
 .IP "3." 4
 nesdis/ims, autosnow and afwa - An analysis of snow cover and depth on the model grid is produced\&. Cover is determined by the ims and autosnow data\&. If cover is greater than user-defined threshold (variable snow_cvr_threshold) the depth is set to the afwa value or a nominal value, whichever is greater\&. The nominal value is user-defined (varaible min_snow_depth)\&. If cover is less than user- defined threshold, the depth is set to 0, regardless of the afwa depth value\&.
+.PP
+.PP
+Program History Log
+.IP "\(bu" 2
+2005-dec-16 gayno initial version
+.IP "\(bu" 2
+2007-nov-30 gayno added processing of nam b-grids\&. improved thinning for gfs grids\&.
+.IP "\(bu" 2
+2008-feb-01 gayno added option to use autosnow data in southern hemisphere\&.
+.IP "\(bu" 2
+2014-feb-14 gayno read grib 1 or grib2 version of nesdis/ims data
+.IP "\(bu" 2
+2014-sep-30 gayno read grib 1 or grib2 version of model lat, lon and mask files\&. convert nh weekly snow climatology to grib 2\&. option to output model depth and cover analysis in grib2\&.
 .PP
 .PP
 \fBReturns\fP

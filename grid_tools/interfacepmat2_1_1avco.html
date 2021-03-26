@@ -95,10 +95,10 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:ae423a113e2c1fb317108a5fc6e35d5a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A.t = B.s (*) Where s is the vector of "source" values, t the staggered "target" values.  <a href="interfacepmat2_1_1avco.html#ae423a113e2c1fb317108a5fc6e35d5a9">More...</a><br /></td></tr>
 <tr class="separator:ae423a113e2c1fb317108a5fc6e35d5a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03b4166e4f18cefccefc311e9073da21"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1avco.html#a03b4166e4f18cefccefc311e9073da21">davco</a> (na, nb, za, zb, z0, a, b)</td></tr>
-<tr class="memdesc:a03b4166e4f18cefccefc311e9073da21"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1avco.html#a03b4166e4f18cefccefc311e9073da21">More...</a><br /></td></tr>
+<tr class="memdesc:a03b4166e4f18cefccefc311e9073da21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Double precision version of subroutine avco for midpoint interpolation.  <a href="interfacepmat2_1_1avco.html#a03b4166e4f18cefccefc311e9073da21">More...</a><br /></td></tr>
 <tr class="separator:a03b4166e4f18cefccefc311e9073da21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8d0ef93b679b473fc4c3ef64b1a602b"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1avco.html#ab8d0ef93b679b473fc4c3ef64b1a602b">tavco</a> (xa, xb, a, b)</td></tr>
-<tr class="memdesc:ab8d0ef93b679b473fc4c3ef64b1a602b"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1avco.html#ab8d0ef93b679b473fc4c3ef64b1a602b">More...</a><br /></td></tr>
+<tr class="memdesc:ab8d0ef93b679b473fc4c3ef64b1a602b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplified computation of compact midpoint interpolation coefficients.  <a href="interfacepmat2_1_1avco.html#ab8d0ef93b679b473fc4c3ef64b1a602b">More...</a><br /></td></tr>
 <tr class="separator:ab8d0ef93b679b473fc4c3ef64b1a602b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -256,16 +256,16 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
+<p>Double precision version of subroutine avco for midpoint interpolation. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">na</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nb</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">za</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">zb</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">z0</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">na</td><td>number of target points involved in formula </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">nb</td><td>number of source points involved in formula </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">za</td><td>coordinates of target points </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">zb</td><td>coordinates of source points </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">z0</td><td>nominal point of application of compact interpolation formula </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">a</td><td>the coefficients A for this scheme </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">b</td><td>the coefficients B for this scheme </td></tr>
   </table>
   </dd>
 </dl>
@@ -324,13 +324,13 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
+<p>Simplified computation of compact midpoint interpolation coefficients. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">xa</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xb</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xa</td><td>coordinates of target points relative to point of application </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xb</td><td>coordinates of source points relative to point of application </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">a</td><td>the coefficients A for this scheme </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">b</td><td>the coefficients B for this scheme </td></tr>
   </table>
   </dd>
 </dl>

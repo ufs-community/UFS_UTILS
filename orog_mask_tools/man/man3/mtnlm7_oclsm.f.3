@@ -1,8 +1,8 @@
-.TH "/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.f" 3 "Thu Mar 25 2021" "Version 1.0.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.f" 3 "Fri Mar 26 2021" "Version 1.0.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.f \- TERRAIN MAKER FOR GLOBAL SPECTRAL MODEL\&.  
+/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.f \- Terrain maker for global spectral model\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,7 +13,7 @@
 .ti -1c
 .RI "program \fB__mtnlm7_oclsm\&.f__\fP"
 .br
-.RI "THIS PROGRAM CREATES 7 TERRAIN-RELATED FILES COMPUTED FROM THE NAVY 10-MINUTE TERRAIN DATASET\&. "
+.RI "This program creates 7 terrain-related files computed from the navy 10-minute terrain dataset\&. "
 .ti -1c
 .RI "subroutine \fBget_index\fP (IMN, JMN, npts, lonO, latO, DELXN, jst, jen, ilist, numx)"
 .br
@@ -141,13 +141,13 @@
 .in -1c
 .SH "Detailed Description"
 .PP 
-TERRAIN MAKER FOR GLOBAL SPECTRAL MODEL\&. 
+Terrain maker for global spectral model\&. 
 
 
 .PP
 \fBAuthor\fP
 .RS 4
-IREDELL 
+Mark Iredell 
 .RE
 .PP
 \fBDate\fP
@@ -163,7 +163,26 @@ Definition in file \fBmtnlm7_oclsm\&.f\fP\&.
 .SS "program __mtnlm7_oclsm\&.f__"
 
 .PP
-THIS PROGRAM CREATES 7 TERRAIN-RELATED FILES COMPUTED FROM THE NAVY 10-MINUTE TERRAIN DATASET\&. THE MODEL PHYSICS GRID PARAMETERS AND SPECTRAL TRUNCATION AND FILTER PARAMETERS ARE READ BY THIS PROGRAM AS INPUT\&. THE 7 FILES PRODUCED ARE RESPECTIVELY: 1) SEA-LAND MASK ON MODEL PHYSICS GRID 2) GRIDDED OROGRAPHY ON MODEL PHYSICS GRID 3) MOUNTAIN STD DEV ON MODEL PHYSICS GRID 4) SPECTRAL OROGRAPHY IN SPECTRAL DOMAIN 5) UNFILTERED GRIDDED OROGRAPHY ON MODEL PHYSICS GRID 6) GRIB SEA-LAND MASK ON MODEL PHYSICS GRID 7) GRIB GRIDDED OROGRAPHY ON MODEL PHYSICS GRID THE OROGRAPHY IS ONLY FILTERED FOR WAVENUMBERS GREATER THAN NF0\&. FOR WAVENUMBERS N BETWEEN NF0 AND NF1, THE OROGRAPHY IS FILTERED BY THE FACTOR 1-((N-NF0)/(NF1-NF0))**2\&. THE FILTERED OROGRAPHY WILL NOT HAVE INFORMATION BEYOND WAVENUMBER NF1\&.
+This program creates 7 terrain-related files computed from the navy 10-minute terrain dataset\&. The model physics grid parameters and spectral truncation and filter parameters are read by this program as input\&.
+.PP
+The 7 files produced are:
+.IP "1." 4
+sea-land mask on model physics grid
+.IP "2." 4
+gridded orography on model physics grid
+.IP "3." 4
+mountain std dev on model physics grid
+.IP "4." 4
+spectral orography in spectral domain
+.IP "5." 4
+unfiltered gridded orography on model physics grid
+.IP "6." 4
+grib sea-land mask on model physics grid
+.IP "7." 4
+grib gridded orography on model physics grid
+.PP
+.PP
+The orography is only filtered for wavenumbers greater than nf0\&. For wavenumbers n between nf0 and nf1, the orography is filtered by the factor 1-((n-nf0)/(nf1-nf0))**2\&. The filtered orography will not have information beyond wavenumber nf1\&.
 .PP
 PROGRAM HISTORY LOG:
 .IP "\(bu" 2
@@ -241,8 +260,6 @@ LIBRARY:
 SPTEZ - SPHERICAL TRANSFORM
 .IP "  \(bu" 4
 GBYTES - UNPACK BITS
-.PP
-REMARKS: FORTRAN 9X EXTENSIONS ARE USED\&.
 .PP
 
 .PP

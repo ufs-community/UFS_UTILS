@@ -92,10 +92,10 @@ $(document).ready(function(){initNavTree('interfacepmat2_1_1ldub.html',''); init
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a556dd6da7c68f34acfc7b9de8e49a775"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1ldub.html#a556dd6da7c68f34acfc7b9de8e49a775">ldub</a> (m, mah1, mah2, a)</td></tr>
-<tr class="memdesc:a556dd6da7c68f34acfc7b9de8e49a775"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute [L]*[D**-1]*[U] decomposition of asymmetric band-matrix.  <a href="interfacepmat2_1_1ldub.html#a556dd6da7c68f34acfc7b9de8e49a775">More...</a><br /></td></tr>
+<tr class="memdesc:a556dd6da7c68f34acfc7b9de8e49a775"><td class="mdescLeft">&#160;</td><td class="mdescRight">[L]*[D]*[U] factoring of single precision band-matrix.  <a href="interfacepmat2_1_1ldub.html#a556dd6da7c68f34acfc7b9de8e49a775">More...</a><br /></td></tr>
 <tr class="separator:a556dd6da7c68f34acfc7b9de8e49a775"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8f80a63e81eb293d4534519a2379e09"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfacepmat2_1_1ldub.html#ac8f80a63e81eb293d4534519a2379e09">dldub</a> (m, mah1, mah2, a)</td></tr>
-<tr class="memdesc:ac8f80a63e81eb293d4534519a2379e09"><td class="mdescLeft">&#160;</td><td class="mdescRight">???  <a href="interfacepmat2_1_1ldub.html#ac8f80a63e81eb293d4534519a2379e09">More...</a><br /></td></tr>
+<tr class="memdesc:ac8f80a63e81eb293d4534519a2379e09"><td class="mdescLeft">&#160;</td><td class="mdescRight">[L]*[D]*[U] factoring of double precision band-matrix.  <a href="interfacepmat2_1_1ldub.html#ac8f80a63e81eb293d4534519a2379e09">More...</a><br /></td></tr>
 <tr class="separator:ac8f80a63e81eb293d4534519a2379e09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -148,18 +148,13 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Compute [L]*[D**-1]*[U] decomposition of asymmetric band-matrix. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>[L]*[D]*[U] factoring of single precision band-matrix. </p>
+<p>[L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>input as the asymmetric band matrix. On output, it contains the [L]*[D**-1]*[U] factorization of the input matrix, where<ul>
-<li>[L] is lower triangular with unit main diagonal</li>
-<li>[D] is a diagonal matrix</li>
-<li>[U] is upper triangular with unit main diagonal </li>
-</ul>
-</td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>The number of rows of array A </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>the left half-bandwidth of fortran array A </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>the right half-bandwidth of fortran array A </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>input as the asymmetric band matrix, [A]. On output, it contains the factors in the encoding, [L-I]+[D**-1]+[U-I], I=identity. </td></tr>
   </table>
   </dd>
 </dl>
@@ -217,20 +212,20 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>??? </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>[L]*[D]*[U] factoring of double precision band-matrix. </p>
+<p>[L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>??? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">a</td><td>??? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">m</td><td>The number of rows of array A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah1</td><td>the left half-bandwidth of fortran array A </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mah2</td><td>the right half-bandwidth of fortran array A </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">a</td><td>input as the asymmetric band matrix, [A]. On output, it contains the factors in the encoding, [L-I]+[D**-1]+[U-I], I=identity. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>R. J. Purser, Tsukasa Fujita (JMA) </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>1999 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00567">567</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pmat2_8f90_source.html#l00570">570</a> of file <a class="el" href="pmat2_8f90_source.html">pmat2.f90</a>.</p>
 
 <p class="reference">References <a class="el" href="pietc_8f90_source.html#l00019">pietc::u0</a>, and <a class="el" href="pietc_8f90_source.html#l00020">pietc::u1</a>.</p>
 

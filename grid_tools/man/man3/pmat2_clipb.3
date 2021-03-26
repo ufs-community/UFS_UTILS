@@ -1,4 +1,4 @@
-.TH "pmat2::clipb" 3 "Thu Mar 25 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::clipb" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,15 +12,15 @@ pmat2::clipb
 .ti -1c
 .RI "pure subroutine \fBclib\fP (m1, m2, mah1, mah2, a)"
 .br
-.RI "??? "
+.RI "Clip (set to zero) the unused values in a banded matrix representation\&. "
 .ti -1c
 .RI "pure subroutine \fBclib_c\fP (m1, m2, mah1, mah2, a)"
 .br
-.RI "??? "
+.RI "Clip (set to zero) the unused values in a banded matrix representation\&. "
 .ti -1c
 .RI "pure subroutine \fBclib_d\fP (m1, m2, mah1, mah2, a)"
 .br
-.RI "??? "
+.RI "Clip (set to zero) the unused values in a banded matrix representation\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -30,19 +30,19 @@ Definition at line 59 of file pmat2\&.f90\&.
 .SS "pure subroutine pmat2::clipb::clib (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m1,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
 
 .PP
-??? 
+Clip (set to zero) the unused values in a banded matrix representation\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIm1\fP ??? 
+\fIm1\fP number of matrix rows 
 .br
-\fIm2\fP ??? 
+\fIm2\fP number of matrix columns 
 .br
-\fImah1\fP ??? 
+\fImah1\fP number of subdiagonals 
 .br
-\fImah2\fP ??? 
+\fImah2\fP number of superdiagonals 
 .br
-\fIa\fP ??? 
+\fIa\fP single precision matrix elements, stored compactly as rows 
 .RE
 .PP
 \fBAuthor\fP
@@ -57,23 +57,23 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 368 of file pmat2\&.f90\&.
+Definition at line 369 of file pmat2\&.f90\&.
 .SS "pure subroutine pmat2::clipb::clib_c (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, complex(dpc), dimension(m1,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
 
 .PP
-??? 
+Clip (set to zero) the unused values in a banded matrix representation\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIm1\fP ??? 
+\fIm1\fP number of matrix rows 
 .br
-\fIm2\fP ??? 
+\fIm2\fP number of matrix columns 
 .br
-\fImah1\fP ??? 
+\fImah1\fP number of subdiagonals 
 .br
-\fImah2\fP ??? 
+\fImah2\fP number of superdiagonals 
 .br
-\fIa\fP ??? 
+\fIa\fP complex matrix elements, stored compactly as rows 
 .RE
 .PP
 \fBAuthor\fP
@@ -88,25 +88,25 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 404 of file pmat2\&.f90\&.
+Definition at line 405 of file pmat2\&.f90\&.
 .PP
 References pietc::c0\&.
 .SS "pure subroutine pmat2::clipb::clib_d (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m1,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
 
 .PP
-??? 
+Clip (set to zero) the unused values in a banded matrix representation\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIm1\fP ??? 
+\fIm1\fP number of matrix rows 
 .br
-\fIm2\fP ??? 
+\fIm2\fP number of matrix columns 
 .br
-\fImah1\fP ??? 
+\fImah1\fP number of subdiagonals 
 .br
-\fImah2\fP ??? 
+\fImah2\fP number of superdiagonals 
 .br
-\fIa\fP ??? 
+\fIa\fP double precision matrix elements, stored compactly as rows 
 .RE
 .PP
 \fBAuthor\fP
@@ -121,7 +121,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 386 of file pmat2\&.f90\&.
+Definition at line 387 of file pmat2\&.f90\&.
 .PP
 References pietc::u0\&.
 

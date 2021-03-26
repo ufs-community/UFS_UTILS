@@ -1,7 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"interfacepsym2_1_1eigensym2.html#a4fa5b26fc1796b8398f031756f62841c":[2,0,6,1,0],
-"interfacepsym2_1_1eigensym2.html#aecba5ed0693b6f83b9eb553bfe9d01b5":[2,0,6,1,1],
 "interfacepsym2_1_1expsym2.html":[2,0,6,2],
 "interfacepsym2_1_1expsym2.html#a0538fbed93ca5ebf63a98118812c2108":[2,0,6,2,0],
 "interfacepsym2_1_1expsym2.html#ac6c2a91a63d5c756abaa9e32c84009cd":[2,0,6,2,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX2 =
 "namespacepietc.html#a52d26edcccb57167fad881e9381642bc":[1,0,4,154],
 "namespacepietc.html#a54ae507b146d830e0f4d4cf97766d122":[1,0,4,151],
 "namespacepietc.html#a57d89085283cb2a7bfd9152324b4b463":[1,0,4,63],
-"namespacepietc.html#a582df1eda80d9b8e7989c7b06fa00f9d":[1,0,4,68]
+"namespacepietc.html#a582df1eda80d9b8e7989c7b06fa00f9d":[1,0,4,68],
+"namespacepietc.html#a58eea21cf1bc5b523e8cb3a2e1a29e56":[1,0,4,34],
+"namespacepietc.html#a59ed14f765e2aadca3f681e9ce3a04d1":[1,0,4,60]
 };

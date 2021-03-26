@@ -1,4 +1,4 @@
-.TH "/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pmat2.f90" 3 "Thu Mar 25 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pmat2.f90" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -113,23 +113,23 @@
 .ti -1c
 .RI "subroutine, public \fBpmat2::cad1b\fP (m1, mah1, mah2, mirror2, a)"
 .br
-.RI "Incorporate operand symmetry near end-1 of a band matrix operator\&. "
+.RI "Incorporate operand symmetry and clip near end-1 of a band matrix operator\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::cad2b\fP (m1, m2, mah1, mah2, mirror2, a)"
 .br
-.RI "Incorporate operand symmetry near end-2 of a band matrix operator\&. "
+.RI "Incorporate symmetry and clip near end-2 of a band matrix\&. "
 .ti -1c
 .RI "pure subroutine \fBpmat2::clib\fP (m1, m2, mah1, mah2, a)"
 .br
-.RI "??? "
+.RI "Clip (set to zero) the unused values in a banded matrix representation\&. "
 .ti -1c
 .RI "pure subroutine \fBpmat2::clib_c\fP (m1, m2, mah1, mah2, a)"
 .br
-.RI "??? "
+.RI "Clip (set to zero) the unused values in a banded matrix representation\&. "
 .ti -1c
 .RI "pure subroutine \fBpmat2::clib_d\fP (m1, m2, mah1, mah2, a)"
 .br
-.RI "??? "
+.RI "Clip (set to zero) the unused values in a banded matrix representation\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::csb1b\fP (m1, mah1, mah2, mirror2, a)"
 .br
@@ -137,23 +137,23 @@
 .ti -1c
 .RI "subroutine, public \fBpmat2::csb2b\fP (m1, m2, mah1, mah2, mirror2, a)"
 .br
-.RI "??? "
+.RI "Incorporate operand antisymmetry and clip near end-2 of a band matrix\&. "
 .ti -1c
 .RI "subroutine \fBpmat2::davco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "??? "
+.RI "Double precision version of subroutine avco for midpoint interpolation\&. "
 .ti -1c
 .RI "subroutine \fBpmat2::ddfco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "??? "
+.RI "Double precision version of dfco for compact differentiation coefficients\&. "
 .ti -1c
 .RI "subroutine \fBpmat2::ddfco2\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "??? "
+.RI "Double precision version of DFCO2 to get 2nd-derivative coefficients\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::dfco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative of c\&. "
+.RI "Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative (or density) of cumulative c\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::dfco2\fP (na, nb, za, zb, z0, a, b)"
 .br
@@ -161,19 +161,19 @@
 .ti -1c
 .RI "subroutine \fBpmat2::dl1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "??? "
+.RI "Double precision version of L1UBB\&. "
 .ti -1c
 .RI "subroutine \fBpmat2::dl1ueb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "??? "
+.RI "Double precision version of L1UEB\&. "
 .ti -1c
 .RI "subroutine \fBpmat2::dldltb\fP (m, mah1, a)"
 .br
-.RI "??? "
+.RI "[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. "
 .ti -1c
 .RI "subroutine \fBpmat2::dldub\fP (m, mah1, mah2, a)"
 .br
-.RI "??? "
+.RI "[L]*[D]*[U] factoring of double precision band-matrix\&. "
 .ti -1c
 .RI "subroutine \fBpmat2::dltdlbv\fP (m, mah1, a, v)"
 .br
@@ -181,15 +181,15 @@
 .ti -1c
 .RI "subroutine \fBpmat2::dudlb\fP (m, mah1, mah2, a)"
 .br
-.RI "??? "
+.RI "[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal "
 .ti -1c
 .RI "subroutine \fBpmat2::dudlbv\fP (m, mah1, mah2, a, v)"
 .br
-.RI "Back-substitution step of linear inversion involving banded matrix and Vector\&. "
+.RI "Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::l1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
+.RI "[L]*[D]*[U] factoring of band-matrix [A], modify [B] --> [D**-1]*[B] [L] lower triangular with unit main diagonal [D] diagonal matrix [U] upper triangular with unit main diagonal [B] associated band matrix with same number of rows as [A] lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::l1ueb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
@@ -197,11 +197,11 @@
 .ti -1c
 .RI "subroutine, public \fBpmat2::ldltb\fP (m, mah1, a)"
 .br
-.RI "??? "
+.RI "[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::ldub\fP (m, mah1, mah2, a)"
 .br
-.RI "Compute [L]*[D**-1]*[U] decomposition of asymmetric band-matrix\&. "
+.RI "[L]*[D]*[U] factoring of single precision band-matrix\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::linbv\fP (m, mah1, mah2, a, v)"
 .br
@@ -209,51 +209,51 @@
 .ti -1c
 .RI "subroutine, public \fBpmat2::ltdlbv\fP (m, mah1, a, v)"
 .br
-.RI "Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) "
+.RI "Like udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) "
 .ti -1c
 .RI "subroutine \fBpmat2::tavco\fP (xa, xb, a, b)"
 .br
-.RI "??? "
+.RI "Simplified computation of compact midpoint interpolation coefficients\&. "
 .ti -1c
 .RI "subroutine \fBpmat2::tdfco\fP (xa, xb, a, b)"
 .br
-.RI "??? "
+.RI "Simplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa\&. "
 .ti -1c
 .RI "subroutine \fBpmat2::tdfco2\fP (xa, xb, a, b)"
 .br
-.RI "??? "
+.RI "Simplified computation of compact 2nd-derivative coefficients\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::u1lbv\fP (m, mah1, mah2, a, v)"
 .br
-.RI "BACk-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. "
+.RI "Back-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::u1lbx\fP (mx, mah1, mah2, my, a, v)"
 .br
-.RI "Special BaCk-substitution step of parallel linear inversion involving Banded matrix and X-right-Vectors\&. "
+.RI "Special back-substitution step of parallel linear inversion involving Banded matrix and X-right-Vectors\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::u1lby\fP (my, mah1, mah2, mx, a, v)"
 .br
-.RI "Special BaCk-substitution step of parallel linear inversion involving Banded matrix and Y-right-Vectors\&. "
+.RI "Special Back-substitution step of parallel linear inversion involving Banded matrix and Y-right-Vectors\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::u1lvb\fP (m, mah1, mah2, v, a)"
 .br
-.RI "Special BaCk-substitution step of linear inversion involving left-Vector and Banded matrix\&. "
+.RI "Special Back-substitution step of linear inversion involving left-Vector and Banded matrix\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::u1lxb\fP (mx, mah1, mah2, my, v, a)"
 .br
-.RI "Special BaCk-substitution step of parallel linear inversion involving Banded matrix and X-left-Vectors\&. "
+.RI "Special Back-substitution step of parallel linear inversion involving Banded matrix and X-left-Vectors\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::u1lyb\fP (my, mah1, mah2, mx, v, a)"
 .br
-.RI "Special BaCk-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. "
+.RI "Special Back-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::udlb\fP (m, mah1, mah2, a)"
 .br
-.RI "??? "
+.RI "[U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal "
 .ti -1c
 .RI "subroutine, public \fBpmat2::udlbv\fP (m, mah1, mah2, a, v)"
 .br
-.RI "Back-substitution step of linear inversion involving banded matrix and Vector\&. "
+.RI "Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. "
 .ti -1c
 .RI "subroutine, public \fBpmat2::udlbx\fP (mx, mah1, mah2, my, a, v)"
 .br
@@ -277,7 +277,7 @@
 .ti -1c
 .RI "subroutine, public \fBpmat2::wrtb\fP (m1, m2, mah1, mah2, a)"
 .br
-.RI "??? "
+.RI "Convenient routine for interactively writing out the real contents of a band matrix\&. "
 .in -1c
 .SS "Variables"
 
@@ -285,7 +285,7 @@
 .ti -1c
 .RI "real(dp), parameter \fBpmat2::zero\fP =0"
 .br
-.RI "??? "
+.RI "Double precision real zero\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 

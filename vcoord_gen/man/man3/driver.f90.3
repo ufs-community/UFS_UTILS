@@ -1,4 +1,4 @@
-.TH "/home/ed/UFS_UTILS/sorc/vcoord_gen.fd/driver.f90" 3 "Thu Mar 25 2021" "Version 1.0.0" "vcoord_gen" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/vcoord_gen.fd/driver.f90" 3 "Fri Mar 26 2021" "Version 1.0.0" "vcoord_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,7 +13,7 @@
 .ti -1c
 .RI "program \fBdriver\fP"
 .br
-.RI "Driver for vcoord_gen\&. "
+.RI "This program generates hybrid coordinate parameters from fields such as surface pressure, model top and the number of vertical levels\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -39,7 +39,7 @@ Definition in file \fBdriver\&.f90\fP\&.
 .SS "program driver"
 
 .PP
-Driver for vcoord_gen\&. 
+This program generates hybrid coordinate parameters from fields such as surface pressure, model top and the number of vertical levels\&. Outputs the 'ak' and 'bk' parameters used by the forecast model to define the hybrid levels\&.
 .PP
 \fBReturns\fP
 .RS 4
@@ -58,7 +58,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 8 of file driver\&.f90\&.
+Definition at line 12 of file driver\&.f90\&.
 .PP
 References vcoord_gen()\&.
 .SH "Author"
