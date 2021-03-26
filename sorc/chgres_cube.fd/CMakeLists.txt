@@ -34,7 +34,6 @@ target_link_libraries(
   sp::sp_d
   w3nco::w3nco_d
   esmf
-  MPI::MPI_CXX
   wgrib2::wgrib2_lib
   wgrib2::wgrib2_api
   NetCDF::NetCDF_Fortran
