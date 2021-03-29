@@ -640,7 +640,6 @@ end subroutine LDLTB
 !! @param[in] mah1 semi-bandwidth of matrix A
 !! @param[inout] a input lower (left) part of symmetric A; output its factors
 !! encoded as [L-I]+[D**-1]
-!! @param[inout] a input lower (left) part of symmetric A; output its factors.
 !! @author R. J. Purser, Tsukasa Fujita (JMA) @date 1999
 subroutine DLDLTB(m,mah1,a) ! Real(dp) version of                   [LDLTB]
 use pietc, only: u0,u1
@@ -720,17 +719,14 @@ end subroutine DUDLB
 !!  lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U],
 !!  replace matrix [B] by [D**-1]*[B].
 !!
-!! @param[inout] a input as band matrix, output as lower and upper triangulars with 1s
-!! implicitly assumed to lie on the main diagonal. The product of these
-!! triangular matrices is [D**-1]*[A], where [D] is a diagonal matrix.
-!! @param[inout] b in as band matrix, out as same but premultiplied by diagonal [D**-1]
 !! @param[in] m Number of rows of A and B
 !! @param[in] mah1 number of subdiagonals of A
 !! @param[in] mah2 number of superdiagonals of A
 !! @param[in] mbh1 number of subdiagonals of B
 !! @param[in] mbh2 number of superdiagonals of B
-!! @param[inout] a Input single precision band matrix A; output factors encoded
-!! as [D**-1 * L * D]+[U-I]
+!! @param[inout] a input as band matrix, output as lower and upper triangulars with 1s
+!! implicitly assumed to lie on the main diagonal. The product of these
+!! triangular matrices is [D**-1]*[A], where [D] is a diagonal matrix.
 !! @param[inout] b Input single precision band matrix B; output [D**-1 B]
 !! @author R. J. Purser, Tsukasa Fujita (JMA) @date 1996
 subroutine L1UBB(m,mah1,mah2,mbh1,mbh2,a,b)!                           [L1UBB] 
