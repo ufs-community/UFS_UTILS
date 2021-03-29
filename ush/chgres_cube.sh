@@ -166,6 +166,7 @@ if [ $OROG_FILES_TARGET_GRID == NULL ]; then
   OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}'_oro_data.tile3.nc","C'${CRES}'_oro_data.tile4.nc"'
   OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}'_oro_data.tile5.nc","C'${CRES}'_oro_data.tile6.nc'
 fi
+WAM_COLD_START=${WAM_COLD_START:-.false.}
 
 #----------------------------------------------------------------------------
 # APRUN - machine specific command to run program.
@@ -224,6 +225,8 @@ cat << EOF > ./fort.41
   regional=$REGIONAL
   halo_bndy=$HALO_BNDY
   halo_blend=$HALO_BLEND
+  wam_cold_start=$WAM_COLD_START
+  wam_start_date=$CDATE
  /
 EOF
 
