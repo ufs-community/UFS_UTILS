@@ -1,5 +1,8 @@
 !> @file
-!! This program computes lake fraction and depth numbers for FV3 cubed sphere 
+!! @brief Compute lake fraction and depth.
+!! @author Ning Wang
+
+!> This program computes lake fraction and depth numbers for FV3 cubed sphere 
 !! grid cells, from a high resolution lat/lon data set.
 !! 
 !! @author Ning Wang @date July 2018
@@ -12,6 +15,7 @@
 !!  - Ning Wang, Apr. 2019: Extended the program to process the same lake data 
 !!                         for FV3 stand-alone regional (SAR) model.
 !!     
+!! @return 0 for successful completion and for error.
 !#define DIAG_N_VERBOSE
 #define ADD_ATT_FOR_NEW_VAR
 PROGRAM lake_frac
@@ -129,6 +133,14 @@ PROGRAM lake_frac
     STOP
 CONTAINS
 
+!> Calculate lake fraction and depth on the model grid from
+!! high-resolution data.
+!!
+!! @param[in] lakestat High-resolution lake status code.
+!! @param[in] lakedpth High-resolution lake depth.
+!! @param[out] cs_lakestat Lake fraction on the model grid.
+!! @param[out] cs_lakedpth Lake depth on the model grid.
+!! @author Ning Wang
 SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
     INTEGER*1, INTENT(IN) :: lakestat(:)
     INTEGER*2, INTENT(IN) :: lakedpth(:)
@@ -358,7 +370,15 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
 
 END SUBROUTINE cal_lake_frac_depth 
 
- 
+!> Read the latitude and longitude for a cubed-sphere
+!! grid from the 'grid' files. For global grids, all
+!! six sides are returned.
+!!
+!! @param[in] res The resolution. Example: '96' for C96.
+!! @param[out] grid Array containing the latitude and
+!! longitude on the 'supergrid'.  Multiple tiles
+!! are concatenated.
+!! @author Ning Wang
 SUBROUTINE read_cubed_sphere_grid(res, grid) 
     INTEGER, INTENT(IN) :: res
     REAL, INTENT(OUT) :: grid(:,:)
@@ -411,6 +431,15 @@ SUBROUTINE read_cubed_sphere_grid(res, grid)
 
 END SUBROUTINE read_cubed_sphere_grid
 
+!> Read the latitude and longitude for a regional grid
+!! from the 'grid' file. 
+!!
+!! @param[in] res Resolution of grid.  Example: '96' for C96.
+!! @param[out] grid Latitude and longitude on the supergrid.
+!! @param[in] halo_depth Lateral halo. Not used.
+!! @param[out] res_x Number of grid points in the 'x' direction.
+!! @param[out] res_y Number of grid points in the 'y' direction.
+!! @author Ning Wang
 SUBROUTINE read_cubed_sphere_reg_grid(res, grid, halo_depth, res_x, res_y) 
     INTEGER, INTENT(IN) :: res, halo_depth
     INTEGER, INTENT(OUT) :: res_x, res_y
@@ -471,6 +500,16 @@ SUBROUTINE read_cubed_sphere_reg_grid(res, grid, halo_depth, res_x, res_y)
 
 END SUBROUTINE read_cubed_sphere_reg_grid
 
+!> Read a high-resolution lake depth dataset, and a corresponding 
+!! lake status dataset which provides a status code on the
+!! reliability of each lake depth point.
+!!
+!! @param[in] lakedata_path Path to the lake depth and lake status
+!! dataset.
+!! @param[out] lake_stat Status code.
+!! @param[out] lake_dpth Lake depth.
+!! @param[in] nlat 'j' dimension of both datasets.
+!! @param[in] nlon 'i' dimension of both datasets.
 SUBROUTINE read_lakedata(lakedata_path,lake_stat,lake_dpth,nlat,nlon)
     CHARACTER(len=256), INTENT(IN) :: lakedata_path
     INTEGER*1, INTENT(OUT) :: lake_stat(:)
@@ -495,7 +534,14 @@ SUBROUTINE read_lakedata(lakedata_path,lake_stat,lake_dpth,nlat,nlon)
 
 END SUBROUTINE read_lakedata
    
-
+!> Write lake depth and fraction to an existing model orography file.
+!! Also, perform some quality control checks on the lake data.
+!! This routine is used for non-regional grids.
+!!
+!! @param[in] cs_res Resolution. Example: '96' for C96.
+!! @param[in] cs_lakestat Lake fraction.
+!! @param[in] cs_lakedpth Lake depth.
+!! @author Ning Wang
 SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth) 
     USE netcdf 
     INTEGER, INTENT(IN) :: cs_res
@@ -685,6 +731,16 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
   
 END SUBROUTINE write_lakedata_to_orodata
 
+!> Write lake depth and fraction to an existing model orography file.
+!! Also, perform some quality control checks on the lake data.
+!! This routine is used for regional grids.
+!!
+!! @param[in] cs_res Resolution. Example: '96' for C96.
+!! @param[in] cs_lakestat Lake fraction.
+!! @param[in] cs_lakedpth Lake depth.
+!! @param[in] tile_x_dim 'x' dimension of the model grid.
+!! @param[in] tile_y_dim 'y' dimension of the model grid.
+!! @author Ning Wang
 SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lakestat, cs_lakedpth) 
     USE netcdf 
     INTEGER, INTENT(IN) :: cs_res, tile_x_dim, tile_y_dim
@@ -887,6 +943,11 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
 
 END SUBROUTINE write_reg_lakedata_to_orodata
 
+!> Check NetCDF error code
+!!
+!! @param[in] stat Error code.
+!! @param[in] opname NetCDF operation that failed.
+!! @author Ning Wang
 SUBROUTINE nc_opchk(stat,opname)
    USE netcdf
    IMPLICIT NONE

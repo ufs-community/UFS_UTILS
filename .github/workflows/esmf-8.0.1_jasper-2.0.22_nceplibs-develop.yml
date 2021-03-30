@@ -24,9 +24,7 @@ jobs:
     - name: build-mpich
       if: steps.cache-mpich.outputs.cache-hit != 'true'
       run: |
-        if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
-          sudo apt-get install libmpich-dev
-        elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
+        if [[ ${{ matrix.os }} == "macos-10.15" ]]; then
           wget http://www.mpich.org/static/downloads/3.3.2/mpich-3.3.2.tar.gz &> /dev/null
           tar -xzf mpich-3.3.2.tar.gz
           pushd mpich-3.3.2
@@ -41,11 +39,13 @@ jobs:
         echo "/home/runner/mpich/bin" >> $GITHUB_PATH
         if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
           sudo apt-get update
+          sudo apt-get install libmpich-dev
           sudo apt-get install doxygen
           sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
         elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
+          echo "$HOME/mpich/bin" >> $GITHUB_PATH
           brew install doxygen
           brew install mpich
           brew install netcdf
@@ -153,10 +153,10 @@ jobs:
         make -j2
         make test
         export PATH="/home/runner/.local/bin:$PATH"
-        gcovr -r .. --html -o test-coverage.html
+        gcovr -r .. --html-details -o test-coverage.html
 
     - uses: actions/upload-artifact@v2
       if: ${{ matrix.os == 'ubuntu-20.04' }}
       with:
         name: test-coverage
-        path: ufs_utils/build/test-coverage.html
+        path: ufs_utils/build/*.html
