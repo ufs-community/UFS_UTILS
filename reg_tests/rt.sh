@@ -43,6 +43,18 @@ else
     machine_id=$target
 fi
 
+if [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
+    prod_machine=`cat /etc/prod`
+    prod_letter=${prod_machine:0:1}
+
+    this_machine=`hostname -s`
+    this_letter=${this_machine:0:1}
+
+    if [[ "${this_letter}" == "${prod_letter}" ]]; then
+        exit 0
+    fi
+fi
+
 cd fix
 ./link_fixdirs.sh emc $machine_id
 
