@@ -22,7 +22,8 @@ module use ${BASE_DIR}/modulefiles
 module load build.$target.intel
 module list
 
-export res=768
+#export res=768
+export res=384
 
 # where the 'grid', 'mosaic' and 'oro' files reside.
 export FIX_FV3=${BASE_DIR}/fix/fix_fv3_gmted2010/C${res}
