@@ -1,8 +1,12 @@
 !> @file
 !!
-!! This is the code to put lake surface temperature and aerial ice
-!! concentration from GLERL-provided FVCOM forecast files (which have
-!! already been mapped to the FV3-LAM grid) into sfc_data.nc.  
+!! @brief This is the code to put lake surface temperature and aerial
+!! ice concentration from GLERL-provided FVCOM forecast files (which
+!! have already been mapped to the FV3-LAM grid) into sfc_data.nc.
+
+!> Put lake surface temperature and aerial ice concentration from
+!! GLERL-provided FVCOM forecast files (which have already been mapped
+!! to the FV3-LAM grid) into sfc_data.nc.
 !!
 !! This script will take two variables from the command line:
 !! 1. Name of FV3 sfc data file (e.g. sfc_data.tile7.halo0.nc)
@@ -12,12 +16,13 @@
 !! names as needed:
 !!   ./fvcom_to_FV3 sfc_data.tile7.halo0.nc fvcom.nc
 !!
-!! Code is strongly based upon Eric James' (ESRL/GSL) work 
-!!  to update HRRR/WRF Great Lakes' temperature data with FVCOM.
-!!  Code also relies heavily on Ming Hu's ncio module.
+!! Code is strongly based upon Eric James' (ESRL/GSL) work to update
+!! HRRR/WRF Great Lakes' temperature data with FVCOM. Code also
+!! relies heavily on Ming Hu's ncio module.
 !!
 !! @author David Wright, University of Michigan and GLERL
 !! @date 17 Aug 2020
+!! @return 0 for success, error code otherwise
 !!
 program process_FVCOM
 

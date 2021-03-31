@@ -1,24 +1,24 @@
- module surface
+!> @file
+!! @brief Process land, sea/lake ice, open water/Near Sea Surface
+!! Temperature (NSST) fields.
+!! @author George Gayno NCEP/EMC
 
-!--------------------------------------------------------------------------
-! Module surface
-!
-! Abstract: Process surface and nst fields.  Interpolates fields from
-!    the input to target grids.  Adjusts soil temperature according
-!    to differences in input and target grid terrain.  Rescales
-!    soil moisture for soil type differences between input and target
-!    grid.  Computes frozen portion of total soil moisture.
-!
-! Public Subroutines:
-! -----------------
-! surface_driver          Driver routine to process surface/nst data
-!
-! Public variables:
-! -----------------
-! Defined below.  "target" indicates field associated with the target grid.
-! "input" indicates field associated with the input grid.
-!
-!--------------------------------------------------------------------------
+!> Process surface and nst fields. Interpolates fields from the input
+!! to target grids. Adjusts soil temperature according to differences
+!! in input and target grid terrain. Rescales soil moisture for soil
+!! type differences between input and target grid. Computes frozen
+!! portion of total soil moisture.
+!!
+!! Assumes the input land data are Noah LSM-based, and the fv3 run
+!! will use the Noah LSM. NSST fields are not available when using
+!! GRIB2 input data.
+!!
+!! Public variables are defined below. "target" indicates field
+!! associated with the target grid. "input" indicates field associated
+!! with the input grid.
+!!
+!! @author George Gayno NCEP/EMC
+ module surface
 
  use esmf
 
@@ -26,97 +26,127 @@
 
  private
 
-! noah land ice option is applied at these vegetation types.
  integer, parameter                 :: veg_type_landice_target = 15
+                                       !< Vegetation type category that
+                                       !< defines permanent land ice points.
+                                       !< The Noah LSM land ice physics
+                                       !< are applied at these points.
 
 ! surface fields (not including nst)
  type(esmf_field), public           :: canopy_mc_target_grid
-                                       ! canopy moisture content
+                                       !< canopy moisture content
  type(esmf_field), public           :: f10m_target_grid
-                                       ! log((z0+10)*1/z0)
-                                       ! See sfc_diff.f for details
+                                       !< log((z0+10)*1/z0)
+                                       !< See sfc_diff.f for details
  type(esmf_field), public           :: ffmm_target_grid
-                                       ! log((z0+z1)*1/z0)
-                                       ! See sfc_diff.f for details
+                                       !< log((z0+z1)*1/z0)
+                                       !< See sfc_diff.f for details
  type(esmf_field), public           :: q2m_target_grid
-                                       ! 2-m specific humidity
+                                       !< 2-m specific humidity
  type(esmf_field), public           :: seaice_depth_target_grid
-                                       ! sea ice depth
+                                       !< sea ice depth
  type(esmf_field), public           :: seaice_fract_target_grid
-                                       ! sea ice fraction
+                                       !< sea ice fraction
  type(esmf_field), public           :: seaice_skin_temp_target_grid
-                                       ! sea ice skin temperature
+                                       !< sea ice skin temperature
  type(esmf_field), public           :: skin_temp_target_grid
-                                       ! skin temperature/sst
+                                       !< skin temperature/sst
  type(esmf_field), public           :: srflag_target_grid
-                                       ! snow/rain flag
+                                       !< snow/rain flag
  type(esmf_field), public           :: snow_liq_equiv_target_grid
-                                       ! liquid equiv snow depth
+                                       !< liquid equiv snow depth
  type(esmf_field), public           :: snow_depth_target_grid
-                                       ! physical snow depth
+                                       !< physical snow depth
  type(esmf_field), public           :: soil_temp_target_grid
-                                       ! 3-d soil temperature
+                                       !< 3-d soil temperature
  type(esmf_field), public           :: soilm_liq_target_grid
-                                       ! 3-d liquid soil moisture
+                                       !< 3-d liquid soil moisture
  type(esmf_field), public           :: soilm_tot_target_grid
-                                       ! 3-d total soil moisture
+                                       !< 3-d total soil moisture
  type(esmf_field), public           :: t2m_target_grid
-                                       ! 2-m temperatrure
+                                       !< 2-m temperatrure
  type(esmf_field), public           :: tprcp_target_grid
-                                       ! precip
+                                       !< precip
  type(esmf_field), public           :: ustar_target_grid
-                                       ! friction velocity
+                                       !< friction velocity
  type(esmf_field), public           :: z0_target_grid
-                                       ! roughness length
+                                       !< roughness length
   type(esmf_field), public           :: lai_target_grid
-                                       ! leaf area index
+                                       !< leaf area index
 
 ! nst fields
  type(esmf_field), public           :: c_d_target_grid
+                                       !< Coefficient 2 to calculate d(tz)/d(ts)
  type(esmf_field), public           :: c_0_target_grid
+                                       !< Coefficient 1 to calculate d(tz)/d(ts)
  type(esmf_field), public           :: d_conv_target_grid
+                                       !< Thickness of free convection layer
  type(esmf_field), public           :: dt_cool_target_grid
+                                       !< Sub-layer cooling amount
  type(esmf_field), public           :: ifd_target_grid
+                                       !< Model mode index. 0-diurnal model not
+                                       !< started; 1-diurnal model started.
  type(esmf_field), public           :: qrain_target_grid
+                                       !< Sensible heat flux due to rainfall
  type(esmf_field), public           :: tref_target_grid
-                                       ! reference temperature
+                                       !< reference temperature
  type(esmf_field), public           :: w_d_target_grid
+                                       !< Coefficient 4 to calculate d(tz)/d(ts)
  type(esmf_field), public           :: w_0_target_grid
+                                       !< Coefficient 3 to calculate d(tz)/d(ts)
  type(esmf_field), public           :: xs_target_grid
+                                       !< Salinity content in diurnal
+                                       !< thermocline layer
  type(esmf_field), public           :: xt_target_grid
+                                       !< Heat content in diurnal thermocline
+                                       !< layer
  type(esmf_field), public           :: xu_target_grid
+                                       !< u-current content in diurnal
+                                       !< thermocline layer
  type(esmf_field), public           :: xv_target_grid
+                                       !< v-current content in diurnal
+                                       !< thermocline layer
  type(esmf_field), public           :: xz_target_grid
+                                       !< Diurnal thermocline layer thickness
  type(esmf_field), public           :: xtts_target_grid
+                                       !< d(xt)/d(ts)
  type(esmf_field), public           :: xzts_target_grid
+                                       !< d(xz)/d(ts)
  type(esmf_field), public           :: z_c_target_grid
+                                       !< Sub-layer cooling thickness
  type(esmf_field), public           :: zm_target_grid
+                                       !< Oceanic mixed layer depth
 
  type(esmf_field)                   :: soil_type_from_input_grid
-                                       ! soil type interpolated from
-                                       ! input grid
+                                       !< soil type interpolated from
+                                       !< input grid
  type(esmf_field)                   :: terrain_from_input_grid
-                                       ! terrain height interpolated
-                                       ! from input grid
+                                       !< terrain height interpolated
+                                       !< from input grid
  type(esmf_field)                   :: terrain_from_input_grid_land
-                                       ! terrain height interpolated
-                                       ! from input grid at all land points 
+                                       !< terrain height interpolated
+                                       !< from input grid at all land points 
 
  real, parameter, private           :: blim        = 5.5
-                                       ! soil 'b' parameter limit
+                                       !< soil 'b' parameter limit
  real, parameter, private           :: frz_h2o     = 273.15
-                                       ! melting pt water
+                                       !< melting pt water
  real, parameter, private           :: frz_ice     = 271.21
-                                       ! melting pt sea ice
+                                       !< melting pt sea ice
  real, parameter, private           :: grav        = 9.81
-                                       ! gravity
+                                       !< gravity
  real, parameter, private           :: hlice       = 3.335E5
-                                       ! latent heat of fusion
+                                       !< latent heat of fusion
 
  public :: surface_driver
 
  contains
 
+!> Driver routine to process surface/nst data
+!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!!
+!! @author George Gayno NCEP/EMC
  subroutine surface_driver(localpet)
 
  use input_data, only                : cleanup_input_sfc_data, &
@@ -270,10 +300,12 @@
 
  end subroutine surface_driver
 
-!---------------------------------------------------------------------------------------------
-! Horizontally interpolate surface fields using esmf routines.
-!---------------------------------------------------------------------------------------------
-
+!> Horizontally interpolate surface fields from input to target FV3
+!> grid using esmf routines.
+!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!!
+!! @author George Gayno NOAA/EMC
  subroutine interp(localpet)
 
  use mpi
@@ -2484,10 +2516,9 @@
 
  end subroutine interp
  
-!---------------------------------------------------------------------------------------------
-! Compute liquid portion of the total soil moisture.
-!---------------------------------------------------------------------------------------------
-
+!> Compute liquid portion of the total soil moisture.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine calc_liq_soil_moisture
 
  use esmf
@@ -2751,14 +2782,16 @@
 !
 !end subroutine check_smois_water
 
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!> Check soil mositure
+!!
 !! When using vegetation type from the input data instead of the orography file, there
 !! are frequently points with ~0 soil moisture at land points. For these points, set 
 !! values in all relevant target grid surface arrays to fill values (done in 
 !! check_smois_land) then run the search routine again to fill with appropriate values 
 !! from nearby points (done in replace_land_sfcparams).
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!! @author Larissa Reames
+!! @author Jeff Beck
 subroutine check_smois_land
 
 use model_grid, only                 : landmask_target_grid
@@ -2932,14 +2965,17 @@ print*,"- CALL FieldGet FOR TARGET GRID FACSF."
  !call search(soilm_target_ptr(clb(1):cub(1),clb(2):cub(2),
 end subroutine check_smois_land
 
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!> Replace bad surface points.
+!!
 !! When using vegetation type from the input data instead of the orography file, there
 !! are frequently points with ~0 soil moisture at land points. For these points, set 
 !! values in all relevant target grid surface arrays to fill values (done in 
 !! check_smois_land) then run the search routine again to fill with appropriate values 
 !! from nearby points (done in replace_land_sfcparams).
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author Larissa Reames
+!! @author Jeff Beck
  subroutine replace_land_sfcparams(localpet)
 
  use search_util
@@ -3119,51 +3155,31 @@ end subroutine check_smois_land
 
 end subroutine replace_land_sfcparams
 
-
+!> Calculate supercooled soil moisture
+!!
+!! Calculate amount of supercooled liquid soil water content if
+!! temperature is below 273.15K. Requires Newton-type iteration to
+!! solve the nonlinear implicit equation given in eqn 17 of Koren et. al
+!! (1999, JGR, VOL 104(D16), 19569-19585).
+!!
+!! New version (June 2001): Much faster and more accurate Newton
+!! iteration achieved by first taking log of eqn cited above -- less than
+!! 4 (typically 1 or 2) iterations achieves convergence. Also, explicit
+!! 1-step solution option for special case of parameter ck=0, which
+!! reduces the original implicit equation to a simpler explicit form,
+!! known as the "Flerchinger eqn". Improved handling of solution in the
+!! limit of freezing point temperature.
+!!
+!! @param[in]  tkelv  Temperature (Kelvin)
+!! @param[in]  smc    Total soil moisture content (volumetric)
+!! @param[in]  sh2O   Liquid soil moisture content (volumetric)
+!! @param[in]  smcmax  Saturation soil moisture content
+!! @param[in]  bexp    Soil type "b" parameter
+!! @param[in]  psis    Saturated soil matric potential
+!! @return     frh2O   Supercooled liquid water content
+!!
+!! @author George Gayno NOAA/EMC @date 2005-05-20
  FUNCTION FRH2O (TKELV,SMC,SH2O,SMCMAX,BEXP,PSIS)
-!$$$  function documentation block
-!
-! function:   frh2o
-!   prgmmr: gayno          org: w/np2     date: 2005-05-20
-!
-! abstract:  calculate supercooled soil moisture
-!
-! program history log:
-! 2005-05-20  gayno    - initial version
-!
-! usage: x = frh2o (tkelv,smc,sh2o,smcmax,bexp,psis)
-!
-!   input argument list: 
-!     tkelv        - temperature (Kelvin)
-!     smc          - total soil moisture content (volumetric)
-!     sh2O         - liquid soil moisture content (volumetric)
-!     smcmax       - saturation soil moisture content
-!     b            - soil type "b" parameter
-!     psis         - saturated soil matric potential
-!
-!   output argument list: 
-!     frh2O        - supercooled liquid water content
-!
-! remarks: stolen from noah lsm code
-!
-!   CALCULATE AMOUNT OF SUPERCOOLED LIQUID SOIL WATER CONTENT IF
-!   TEMPERATURE IS BELOW 273.15K (T0).  REQUIRES NEWTON-TYPE ITERATION TO
-!   SOLVE THE NONLINEAR IMPLICIT EQUATION GIVEN IN EQN 17 OF KOREN ET AL
-!   (1999, JGR, VOL 104(D16), 19569-19585).
-! 
-!   NEW VERSION (JUNE 2001): MUCH FASTER AND MORE ACCURATE NEWTON
-!   ITERATION ACHIEVED BY FIRST TAKING LOG OF EQN CITED ABOVE -- LESS THAN
-!   4 (TYPICALLY 1 OR 2) ITERATIONS ACHIEVES CONVERGENCE.  ALSO, EXPLICIT
-!   1-STEP SOLUTION OPTION FOR SPECIAL CASE OF PARAMETER CK=0, WHICH
-!   REDUCES THE ORIGINAL IMPLICIT EQUATION TO A SIMPLER EXPLICIT FORM,
-!   KNOWN AS THE "FLERCHINGER EQN". IMPROVED HANDLING OF SOLUTION IN THE
-!   LIMIT OF FREEZING POINT TEMPERATURE [AT0.
-!
-! attributes:
-!   language: fortran 90
-!   machine:  IBM SP
-!
-!$$$
 
  use esmf
 
@@ -3296,10 +3312,11 @@ end subroutine replace_land_sfcparams
 
  END function frh2o
 
-!---------------------------------------------------------------------------------------------
-! Adjust soil moisture for changes in soil type between the input and target grids.
-!---------------------------------------------------------------------------------------------
-
+!> Adjust soil moisture for changes in soil type between the input and
+!! target grids. Works for Noah land model only. Required to preserve
+!! latent/sensible heat fluxes.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine rescale_soil_moisture
 
  use esmf
@@ -3464,11 +3481,10 @@ end subroutine replace_land_sfcparams
 
  end subroutine rescale_soil_moisture
 
-!---------------------------------------------------------------------------------------------
-! Adjust soil temperature for changes in terrain height between the input and
-! target grids.
-!---------------------------------------------------------------------------------------------
-
+!> Adjust soil temperature for changes in terrain height between the input and
+!! target grids.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine adjust_soilt_for_terrain
 
  use model_grid, only                : landmask_target_grid,  &
@@ -3539,11 +3555,12 @@ end subroutine replace_land_sfcparams
 
  end subroutine adjust_soilt_for_terrain
 
-!---------------------------------------------------------------------------------------------
-! Adjust soil levels of the input grid if there's a mismatch between input and
-! target grids. Presently can only convert from 9 to 4 levels. 
-!---------------------------------------------------------------------------------------------
- 
+!> Adjust soil levels of the input grid if there is a mismatch between input and
+!! target grids. Presently can only convert from 9 to 4 levels. 
+!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author Larissa Reames
+!! @author Jeff Beck
  subroutine adjust_soil_levels(localpet)
  use model_grid, only       : lsoil_target, i_input, j_input, input_grid
  use input_data, only       : lsoil_input, soil_temp_input_grid, &
@@ -3655,10 +3672,11 @@ end subroutine replace_land_sfcparams
  
  end subroutine adjust_soil_levels
 
-!---------------------------------------------------------------------------------------------
-! Set roughness at land and sea ice.
-!---------------------------------------------------------------------------------------------
- 
+!> Set roughness length at land and sea ice. At land, roughness is
+!! set from a lookup table based on the vegetation type. At sea ice,
+!! roughness is set to 1 cm.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine roughness
 
  use model_grid, only                : landmask_target_grid
@@ -3710,10 +3728,9 @@ end subroutine replace_land_sfcparams
 
  end subroutine roughness
 
-!---------------------------------------------------------------------------------------------
-! QC data before output.
-!---------------------------------------------------------------------------------------------
-
+!> Perform some quality control checks before output.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine qc_check
 
  use model_grid, only                : landmask_target_grid
@@ -4045,11 +4062,10 @@ end subroutine replace_land_sfcparams
 
  end subroutine qc_check
 
-!---------------------------------------------------------------------------------------------
-! nst is not active at land or sea ice points.  Set nst fields to flag values at these
-! points.
-!---------------------------------------------------------------------------------------------
-
+!> nst is not active at land or sea ice points.  Set nst fields to flag values at these
+!! points.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine nst_land_fill
 
  use model_grid, only         : landmask_target_grid
@@ -4256,6 +4272,9 @@ end subroutine replace_land_sfcparams
 
  end subroutine nst_land_fill
 
+!> Create ESMF fields for the target grid surface variables
+!!
+!! @author George Gayno NOAA/EMC
  subroutine create_surface_esmf_fields
 
  use model_grid, only         : target_grid, lsoil_target
@@ -4590,6 +4609,9 @@ end subroutine replace_land_sfcparams
 
  end subroutine create_surface_esmf_fields
 
+!> Create ESMF fields for the target grid nst variables
+!!
+!! @author George Gayno
  subroutine create_nst_esmf_fields
 
  use model_grid, only               : target_grid
@@ -4726,6 +4748,14 @@ end subroutine replace_land_sfcparams
 
  end subroutine create_nst_esmf_fields
 
+!> Convert 1d index to 2d indices.
+!!
+!! @param[in] ij  the 1d index
+!! @param[in] itile  i-dimension of the tile
+!! @param[in] jtile  j-dimension of the tile
+!! @param[out] i  the "i" index
+!! @param[out] j  the "j" index
+!! @author George Gayno NOAA/EMC
  subroutine ij_to_i_j(ij, itile, jtile, i, j)
 
  implicit none
@@ -4751,6 +4781,10 @@ end subroutine replace_land_sfcparams
 
  end subroutine ij_to_i_j
 
+!> Free up memory once the target grid surface fields are
+!! no longer needed.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine cleanup_target_sfc_data
 
  implicit none
@@ -4783,6 +4817,10 @@ end subroutine replace_land_sfcparams
 
  end subroutine cleanup_target_sfc_data
 
+!> Free up memory once the target grid nst fields are
+!! no longer needed.
+!!
+!! @author George Gayno NOAA/EMC
  subroutine cleanup_target_nst_data
 
  implicit none

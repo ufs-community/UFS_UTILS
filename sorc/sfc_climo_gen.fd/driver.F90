@@ -1,6 +1,9 @@
 !> @file
-!!
-!! Reads static surface data on a global lat/lon grid,
+!! @brief Interpolates static surface data from lat/lon grid,
+!! to FV3 model grid.
+!! @author George Gayno
+
+!> Reads static surface data on a global lat/lon grid,
 !! interpolates the data to the fv3 model grid, and outputs the
 !! result in netcdf format.
 !!
@@ -16,6 +19,8 @@
 !!
 !! Outputs surface data on the model tiles in netcdf format.
 !!
+!! @return 0 for success, error code otherwise.
+!! @author George Gayno
  program driver  
 
  use model_grid

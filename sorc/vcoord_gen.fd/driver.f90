@@ -1,4 +1,14 @@
 !> @file
+!! @brief Driver for vcoord_gen.
+!! @author Mark Iredell @date 2008-08-01
+
+!> This program generates hybrid coordinate
+!! parameters from fields such as surface pressure, model top and the
+!! number of vertical levels. Outputs the 'ak' and 'bk' parameters
+!! used by the forecast model to define the hybrid levels.
+!!
+!! @return 0 for success, error code otherwise.
+!! @author Mark Iredell @date 2008-08-01
 program driver
   implicit none
   integer levs,lupp,k

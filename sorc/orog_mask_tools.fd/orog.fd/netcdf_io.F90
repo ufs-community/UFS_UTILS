@@ -1,6 +1,23 @@
 !> @file
-!-------------------------------------------------------------------------------
-! write out data in netcdf format
+!! @brief Write out data in netcdf format
+!! @author Jordan Alpert NOAA/EMC
+
+!> Write out orography file in netcdf format.
+!!
+!! @param[in] im 'i' dimension of a model grid tile.
+!! @param[in] jm 'j' dimension of a model grid tile.
+!! @param[in] slm Land-sea mask.
+!! @param[in] land_frac Land fraction.
+!! @param[in] oro Orography
+!! @param[in] orf Filtered orography. Currently the same as 'oro'.
+!! @param[in] hprime The gravity wave drag fields on the model grid tile.
+!! @param[in] ntiles Number of tiles to output.
+!! @param[in] tile Tile number to output.
+!! @param[in] geolon Longitude on the model grid tile.
+!! @param[in] geolat Latitude on the model grid tile.
+!! @param[in] lon Longitude of the first row of the model grid tile.
+!! @param[in] lat Latitude of the first column of the model grid tile.
+!! @author Jordan Alpert NOAA/EMC GFDL Programmer
   subroutine write_netcdf(im, jm, slm, land_frac, oro, orf, hprime, ntiles, tile, geolon, geolat, lon, lat)
     implicit none
     integer, intent(in):: im, jm, ntiles, tile
@@ -193,7 +210,11 @@
       
   end subroutine
 
-!-------------------------------------------------------------------------------
+!> Check NetCDF error code and output the error message.
+!!
+!! @param[in] err NetCDF error code
+!! @param[in] string The NetCDF error message
+!! @author Jordan Alpert NOAA/EMC
   subroutine netcdf_err( err, string )
       integer, intent(in) :: err
       character(len=*), intent(in) :: string

@@ -1,23 +1,25 @@
 C> @file
-C> TERRAIN MAKER FOR GLOBAL SPECTRAL MODEL
-C> @author IREDELL @date 92-04-16
+C> Terrain maker for global spectral model.
+C> @author Mark Iredell @date 92-04-16
+  
+C> This program creates 7 terrain-related files computed from the navy
+C> 10-minute terrain dataset. The model physics grid parameters and
+C> spectral truncation and filter parameters are read by this program as
+C> input.
+C>      
+C> The 7 files produced are:
+C> 1. sea-land mask on model physics grid
+C> 2. gridded orography on model physics grid
+C> 3. mountain std dev on model physics grid
+C> 4. spectral orography in spectral domain
+C> 5. unfiltered gridded orography on model physics grid
+C> 6. grib sea-land mask on model physics grid
+C> 7. grib gridded orography on model physics grid
 C>
-C> THIS PROGRAM CREATES 7 TERRAIN-RELATED FILES
-C>   COMPUTED FROM THE NAVY 10-MINUTE TERRAIN DATASET.
-C>   THE MODEL PHYSICS GRID PARAMETERS AND SPECTRAL TRUNCATION
-C>   AND FILTER PARAMETERS ARE READ BY THIS PROGRAM AS INPUT.
-C>   THE 7 FILES PRODUCED ARE RESPECTIVELY:
-C>     1) SEA-LAND MASK ON MODEL PHYSICS GRID
-C>     2) GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
-C>     3) MOUNTAIN STD DEV ON MODEL PHYSICS GRID
-C>     4) SPECTRAL OROGRAPHY IN SPECTRAL DOMAIN
-C>     5) UNFILTERED GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
-C>     6) GRIB SEA-LAND MASK ON MODEL PHYSICS GRID
-C>     7) GRIB GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
-C>   THE OROGRAPHY IS ONLY FILTERED FOR WAVENUMBERS GREATER THAN NF0.
-C>   FOR WAVENUMBERS N BETWEEN NF0 AND NF1, THE OROGRAPHY IS FILTERED
-C>   BY THE FACTOR 1-((N-NF0)/(NF1-NF0))**2.  THE FILTERED OROGRAPHY
-C>   WILL NOT HAVE INFORMATION BEYOND WAVENUMBER NF1.
+C> The orography is only filtered for wavenumbers greater than nf0. For
+C> wavenumbers n between nf0 and nf1, the orography is filtered by the
+C> factor 1-((n-nf0)/(nf1-nf0))**2. The filtered orography will not have
+C> information beyond wavenumber nf1.
 C>
 C> PROGRAM HISTORY LOG:
 C> -  92-04-16  IREDELL
@@ -71,8 +73,7 @@ C>  -   LIBRARY:
 C>  -   SPTEZ      - SPHERICAL TRANSFORM
 C>  -   GBYTES     - UNPACK BITS
 C>
-C>   REMARKS: FORTRAN 9X EXTENSIONS ARE USED.
-C>           
+C> @return 0 for success, error code otherwise.
       include 'netcdf.inc'
       logical fexist, opened
       integer fsize, ncid, error, id_dim, nx, ny
@@ -160,11 +161,31 @@ C>
      &            OUTGRID,INPUTOROG)
       STOP
       END
+
+!> Driver routine to compute terrain.
+!!
+!! @param[in] IMN "i" dimension of the input terrain dataset.
+!! @param[in] JMN "j" dimension of the input terrain dataset.
+!! @param[in] IM "i" dimension of the model grid tile.
+!! @param[in] JM "j" dimension of the model grid tile.
+!! @param[in] NM Spectral truncation.
+!! @param[in] NR Rhomboidal flag.
+!! @param[in] NF0 First order spectral filter parameters.
+!! @param[in] NF1 Second order spectral filter parameters.
+!! @param[in] NW Number of waves.
+!! @param[in] EFAC Factor to adjust orography by its variance.
+!! @param[in] BLAT When less than zero, reverse latitude/
+!! longitude for output.
+!! @param[in] OUTGRID The 'grid' file for the model tile.
+!! @param[in] INPUTOROG Input orography/GWD file on gaussian
+!! grid. When specified, will be interpolated to model tile.
+!! When not specified, program will create fields from
+!! raw high-resolution topography data.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &     OUTGRID,INPUTOROG)
 !jaa      use ipfort
       implicit none
-      include 'machine.h'
       include 'netcdf.inc'
 C
       integer                      :: IMN,JMN,IM,JM,NW
@@ -836,7 +857,6 @@ C
       tend=timef()
       write(6,*)' Timer 1 time= ',tend-tbeg
                                 !
-! --- CALL MAKEMT(ZAVG,ZSLM,ORO,OCLSM,mskocn,SLM,VAR,VAR4,GLAT,
       if(grid_from_file) then
        tbeg=timef()
          CALL MAKEMT2(ZAVG,ZSLM,ORO,SLM,land_frac,VAR,VAR4,GLAT,
@@ -844,10 +864,10 @@ C
       tend=timef()
       write(6,*)' MAKEMT2 time= ',tend-tbeg
       else
-
         CALL MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,GLAT,
      &   IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
       endif
+
        call minmxj(IM,JM,ORO,'     ORO')
        call minmxj(IM,JM,SLM,'     SLM')
        call minmxj(IM,JM,VAR,'     VAR')
@@ -1545,8 +1565,37 @@ C
       write(6,*)' Total runtime time= ',tend-tbeg1
       RETURN
       END
+
+!> Create the orography, land-mask, standard deviation of
+!! orography and the convexity on a model gaussian grid.
+!! This routine was used for the spectral GFS model.
+!!
+!! @param[in] zavg The high-resolution input orography dataset.
+!! @param[in] zslm The high-resolution input land-mask dataset.
+!! @param[out] oro Orography on the model grid.
+!! @param[out] slm Land-mask on the model grid.
+!! @param[out] var Standard deviation of orography on the model grid.
+!! @param[out] var4 Convexity on the model grid.
+!! @param[out] glat Latitude of each row of the high-resolution 
+!! orography and land-mask datasets.
+!! @param[out] ist This is the 'i' index of high-resolution data set
+!! at the east edge of the model grid cell.
+!! the high-resolution dataset with respect to the 'east' edge
+!! @param[out] ien This is the 'i' index of high-resolution data set
+!! at the west edge of the model grid cell.
+!! @param[out] jst  This is the 'j' index of high-resolution data set
+!! at the south edge of the model grid cell.
+!! @param[out] jen This is the 'j' index of high-resolution data set
+!! at the north edge of the model grid cell.
+!! @param[in] im "i" dimension of the model grid.
+!! @param[in] jm "j" dimension of the model grid.
+!! @param[in] imn "i" dimension of the hi-res input orog/mask dataset.
+!! @param[in] jmn "j" dimension of the hi-res input orog/mask dataset.
+!! @param[in] xlat The latitude of each row of the model grid.
+!! @param[in] numi For reduced gaussian grids, the number of 'i' points
+!! for each 'j' row.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
-!     SUBROUTINE MAKEMT(ZAVG,ZSLM,ORO,OCLSM,mskocn,SLM,VAR,VAR4,
      1 GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
       DIMENSION GLAT(JMN),XLAT(JM)
 !     REAL*4 OCLSM
@@ -1693,6 +1742,25 @@ C
       RETURN
       END
 
+!> Determine the location of a cubed-sphere point within
+!! the high-resolution orography data.  The location is
+!! described by the range of i/j indices on the high-res grid.
+!!
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data set.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data set.
+!! @param[in] npts Number of vertices to describe the cubed-sphere point.
+!! @param[in] lonO The longitudes of the cubed-sphere vertices.
+!! @param[in] latO The latitudes of the cubed-sphere vertices.
+!! @param[in] delxn Resolution of the high-resolution orography
+!! data set.
+!! @param[out] jst Starting 'j' index on the high-resolution grid.
+!! @param[out] jen Ending 'j' index on the high-resolution grid.
+!! @param[out] ilist List of 'i' indices on the high-resolution grid.
+!! @param[out] numx The number of 'i' indices on the high-resolution
+!! grid.
+!! @author GFDL programmer
       SUBROUTINE get_index(IMN,JMN,npts,lonO,latO,DELXN,
      &           jst,jen,ilist,numx)
         implicit none
@@ -1767,12 +1835,32 @@ C
 
       END   
       
+!> Create the orography, land-mask, land fraction, standard 
+!! deviation of orography and the convexity on a model 
+!! cubed-sphere tile. This routine is used for the FV3GFS model.
+!!
+!! @param[in] zavg The high-resolution input orography dataset.
+!! @param[in] zslm The high-resolution input land-mask dataset.
+!! @param[out] oro Orography on the model tile.
+!! @param[out] slm Land-mask on the model tile.
+!! @param[out] land_frac Land fraction on the model tile.
+!! @param[out] var Standard deviation of orography on the model tile.
+!! @param[out] var4 Convexity on the model tile.
+!! @param[out] glat Latitude of each row of the high-resolution 
+!! orography and land-mask datasets.
+!! @param[in] im "i" dimension of the model grid.
+!! @param[in] jm "j" dimension of the model grid.
+!! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
+!! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
+!! @param[in] lon_c Longitude of the model grid corner points.
+!! @param[in] lat_c Latitude on the model grid corner points.
+!! @author GFDL Programmer
       SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,land_frac,VAR,VAR4,
      1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
-      real  hgt_1d(MAXSUM)     
+      real, dimension(:), allocatable ::  hgt_1d
       integer IM, JM, IMN, JMN
       real GLAT(JMN), GLON(IMN)
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
@@ -1797,6 +1885,7 @@ C
 ! ---  mskocn=1 Use ocean model sea land mask, OK and present,
 ! ---  mskocn=0 dont use Ocean model sea land mask, not OK, not present
       print *,' _____ SUBROUTINE MAKEMT2 '
+      allocate(hgt_1d(MAXSUM))
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
       JM1 = JM - 1
@@ -1892,13 +1981,40 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
          ENDDO
       ENDDO
 !$omp end parallel do
-      WRITE(6,*) "! MAKEMT ORO SLM VAR VAR4 DONE"
+      WRITE(6,*) "! MAKEMT2 ORO SLM VAR VAR4 DONE"
 C
-
+      deallocate(hgt_1d)
       RETURN
       END
 
-      
+!> Make the principle coordinates - slope of orography, 
+!! anisotropy, angle of mountain range with respect to east.
+!! This routine is used for spectral GFS gaussian grids.
+!!
+!! @param[in] zavg The high-resolution input orography dataset.
+!! @param[in] zslm The high-resolution input land-mask dataset.
+!! @param[out] theta Angle of mountain range with respect to
+!! east for each model point.
+!! @param[out] gamma Anisotropy for each model point.
+!! @param[out] sigma Slope of orography for each model point.
+!! @param[out] glat Latitude of each row of the high-resolution 
+!! orography and land-mask datasets.
+!! @param[out] ist This is the 'i' index of high-resolution data set
+!! at the east edge of the model grid cell.
+!! @param[out] ien This is the 'i' index of high-resolution data set
+!! at the west edge of the model grid cell.
+!! @param[out] jst  This is the 'j' index of high-resolution data set
+!! at the south edge of the model grid cell.
+!! @param[out] jen This is the 'j' index of high-resolution data set
+!! at the north edge of the model grid cell.
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
+!! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
+!! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
+!! @param[in] xlat The latitude of each row of the model grid.
+!! @param[in] numi For reduced gaussian grids, the number of 'i' points
+!! for each 'j' row.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1           GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
 C
@@ -2154,6 +2270,25 @@ C
       RETURN
       END
 
+!> Make the principle coordinates - slope of orography, 
+!! anisotropy, angle of mountain range with respect to east.
+!! This routine is used for the FV3GFS cubed-sphere grid.
+!!
+!! @param[in] zavg The high-resolution input orography dataset.
+!! @param[in] zslm The high-resolution input land-mask dataset.
+!! @param[out] theta Angle of mountain range with respect to
+!! east for each model point.
+!! @param[out] gamma Anisotropy for each model point.
+!! @param[out] sigma Slope of orography for each model point.
+!! @param[out] glat Latitude of each row of the high-resolution 
+!! orography and land-mask datasets.
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
+!! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
+!! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
+!! @param[in] lon_c Longitude of model grid corner points.
+!! @param[in] lat_c Latitude of the model grid corner points.
+!! @author GFDL Programmer
       SUBROUTINE MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1           GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
 C
@@ -2385,8 +2520,49 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
       WRITE(6,*) "! MAKE Principal Coord  DONE"
 C
       RETURN
-      END
+      END SUBROUTINE MAKEPC2
       
+!> Create orographic asymmetry and orographic length scale on
+!! the model grid.  This routine is used for the spectral
+!! GFS gaussian grid.
+!!
+!! @param[in] zavg The high-resolution input orography dataset.
+!! @param[in] var Standard deviation of orography on the model grid.
+!! @param[out] glat Latitude of each row of input terrain dataset.
+!! @param[out] oa4 Orographic asymmetry on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ol Orographic length scale on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ioa4 Count of oa4 values between certain thresholds.
+!! @param[out] elvmax Maximum elevation on the model grid.
+!! @param[in] oro Orography on the model grid.
+!! @param[out] oro1 Save array for model grid orography.
+!! @param[out] xnsum Number of high-resolution orography points
+!! higher than the model grid box average.
+!! @param[out] xnsum1 Number of high-resolution orography points
+!! higher than the critical height.
+!! @param[out] xnsum2 Total number of high-resolution orography points
+!! within a model grid box.
+!! @param[out] xnsum3 Same as xnsum1, except shifted by half a 
+!! model grid box.
+!! @param[out] xnsum4 Same as xnsum2, except shifted by half a
+!! model grid box.
+!! @param[out] ist This is the 'i' index of high-resolution data set
+!! at the east edge of the model grid cell.
+!! @param[out] ien This is the 'i' index of high-resolution data set
+!! at the west edge of the model grid cell.
+!! @param[out] jst  This is the 'j' index of high-resolution data set
+!! at the south edge of the model grid cell.
+!! @param[out] jen This is the 'j' index of high-resolution data set
+!! at the north edge of the model grid cell.
+!! @param[in] im "i" dimension of the model grid.
+!! @param[in] jm "j" dimension of the model grid.
+!! @param[in] imn "i" dimension of the input terrain dataset.
+!! @param[in] jmn "j" dimension of the input terrain dataset.
+!! @param[in] xlat The latitude of each row of the model grid.
+!! @param[in] numi For reduced gaussian grids, the number of 'i' points
+!! for each 'j' row.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEOA(ZAVG,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
@@ -2704,9 +2880,17 @@ C
       WRITE(6,*) "! MAKEOA EXIT"
 C
       RETURN
-      END
+      END SUBROUTINE MAKEOA
 
-
+!> Convert the 'x' direction distance of a cubed-sphere grid
+!! point to the corresponding distance in longitude.
+!!
+!! @param[in] dx Distance along the 'x' direction of a 
+!! cubed-sphere grid point.
+!! @param[in] lat Latitude of the cubed-sphere point.
+!! @param[in] degrad  Conversion from radians to degrees.
+!! @return get_lon_angle Corresponding distance in longitude.
+!! @author GFDL programmer
       function get_lon_angle(dx,lat, DEGRAD)
       implicit none
       real dx, lat, DEGRAD
@@ -2718,6 +2902,14 @@ C
          
       end function get_lon_angle
 
+!> Convert the 'y' direction distance of a cubed-sphere grid
+!! point to the corresponding distance in latitude.
+!!
+!! @param[in] dy Distance along the 'y' direction of a cubed-sphere
+!! point.
+!! @param[in] degrad Conversion from radians to degrees.
+!! @return get_lat_angle Corresponding distance in latitude.
+!! @author GFDL programmer
       function get_lat_angle(dy, DEGRAD)
       implicit none
       real dy, DEGRAD
@@ -2729,6 +2921,42 @@ C
          
       end function get_lat_angle
       
+!> Create orographic asymmetry and orographic length scale on
+!! the model grid.  This routine is used for the cubed-sphere
+!! grid.
+!!
+!! @param[in] zavg High-resolution orography data.
+!! @param[in] zslm High-resolution land-mask data.
+!! @param[in] var Standard deviation of orography on the model grid.
+!! @param[out] glat Latitude of each row of input terrain dataset.
+!! @param[out] oa4 Orographic asymmetry on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ol Orographic length scale on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ioa4 Count of oa4 values between certain thresholds.
+!! @param[out] elvmax Maximum elevation within a model grid box.
+!! @param[in] oro Orography on the model grid.
+!! @param[out] oro1 Save array for model grid orography.
+!! @param[out] xnsum Not used.
+!! @param[out] xnsum1 Not used.
+!! @param[out] xnsum2 Not used.
+!! @param[out] xnsum3 Not used.
+!! @param[out] xnsum4 Not used.
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
+!! @param[in] imn "i" dimension of the high-resolution orography and
+!! mask data.
+!! @param[in] jmn "j" dimension of the high-resolution orography and
+!! mask data.
+!! @param[in] lon_c Corner point longitudes of the model grid points.
+!! @param[in] lat_c Corner point latitudes of the model grid points.
+!! @param[in] lon_t Center point longitudes of the model grid points.
+!! @param[in] lat_t Center point latitudes of the model grid points.
+!! @param[in] dx Length of model grid points in the 'x' direction.
+!! @param[in] dy Length of model grid points in the 'y' direction.
+!! @param[in] is_south_pole Is the model point at the south pole?
+!! @param[in] is_north_pole is the model point at the north pole?
+!! @author GFDL Programmer
       SUBROUTINE MAKEOA2(ZAVG,zslm,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,dx,dy,
@@ -3113,72 +3341,16 @@ C
       WRITE(6,*) "! MAKEOA2 EXIT"
 C
       RETURN
-      END
-
-
-C-----------------------------------------------------------------------
-      SUBROUTINE GL2ANY(IP,KM,G1,IM1,JM1,G2,IM2,JM2,IDRTI,RLON,RLAT)
-C$$$  SUBPROGRAM DOCUMENTATION BLOCK
-C
-C SUBPROGRAM:    GL2GL       INTERPOLATE GAUSSIAN GRID TO GAUSSIAN GRID
-C   PRGMMR: IREDELL          ORG: W/NMC23     DATE: 92-10-31
-C
-C ABSTRACT: LINEARLY INTERPOLATES GAUSSIAN GRID TO GAUSSIAN GRID.
-C
-C PROGRAM HISTORY LOG:
-C   91-10-31  MARK IREDELL
-C
-C USAGE:    CALL GL2GL(IP,KM,G1,IM1,JM1,G2,IM2,JM2)
-C   INPUT ARGUMENT LIST:
-C     IP           INTEGER INTERPOLATION TYPE
-C     KM           INTEGER NUMBER OF LEVELS
-C     G1           REAL (IM1,JM1,KM) INPUT GAUSSIAN FIELD
-C     IM1          INTEGER NUMBER OF INPUT LONGITUDES
-C     JM1          INTEGER NUMBER OF INPUT LATITUDES
-C     IM2          INTEGER NUMBER OF OUTPUT LONGITUDES
-C     JM2          INTEGER NUMBER OF OUTPUT LATITUDES
-C   OUTPUT ARGUMENT LIST:
-C     G2           REAL (IM2,JM2,KM) OUTPUT GAUSSIAN FIELD
-C
-C SUBPROGRAMS CALLED:
-C   IPOLATES     IREDELL'S POLATE FOR SCALAR FIELDS
-C
-C ATTRIBUTES:
-C   LANGUAGE: FORTRAN
-C
-CC$$$
-      REAL G1(IM1,JM1,KM),G2(IM2,JM2,KM)
-      LOGICAL*1 L1(IM1,JM1,KM),L2(IM2,JM2,KM)
-      REAL, intent(in) :: RLAT(IM2,JM2),RLON(IM2,JM2)
-      INTEGER IB1(KM),IB2(KM)
-      INTEGER KGDS1(200),KGDS2(200)
-      INTEGER IDRTI, IDRTO
-      DATA KGDS1/4,0,0,90000,0,0,-90000,193*0/
-      DATA KGDS2/4,0,0,90000,0,0,-90000,193*0/
-      INTEGER IPOPT(20)
-      DATA IPOPT/20*0/
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      KGDS1(1) = IDRTI
-      KGDS2(1) = -1
-      NO = IM2*JM2
-      IF(IM1.NE.IM2.OR.JM1.NE.JM2) THEN
-        IB1=0
-        KGDS1(2)=IM1
-        KGDS1(3)=JM1
-        KGDS1(8)=NINT(-360000./IM1)
-        KGDS1(10)=JM1/2
-        KGDS2(2)=IM2
-        KGDS2(3)=JM2
-        KGDS2(8)=NINT(-360000./IM2)
-        KGDS2(10)=JM2/2
-        CALL IPOLATES(IP,IPOPT,KGDS1,KGDS2,IM1*JM1,IM2*JM2,KM,IB1,L1,G1,
-     &                NO,RLAT,RLON,IB2,L2,G2,IRET)
-      ELSE
-        G2=G1
-      ENDIF
-      END
-
-
+      END SUBROUTINE MAKEOA2
+ 
+!> Compute a great circle distance between two points.
+!!
+!! @param[in] theta1 Longitude of point 1.
+!! @param[in] phi1 Latitude of point 1.
+!! @param[in] theta2 Longitude of point 2.
+!! @param[in] phi2 Latitude of point2.
+!! @return spherical_distance Great circle distance.
+!! @author GFDL programmer
       function spherical_distance(theta1,phi1,theta2,phi2)
 
       real, intent(in) :: theta1, phi1, theta2, phi2
@@ -3198,6 +3370,22 @@ C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
       end function spherical_distance
       
+!> For unmapped land points, find the nearest land point
+!! on the input data and pass back its i/j index.
+!!
+!! @param[in] im_in 'i' dimension of input data.
+!! @param[in] jm_in 'j' dimension of input data.
+!! @param[in] geolon_in Longitude of input data.
+!! @param[in] geolat_in Latitude of input data.
+!! @param[in] bitmap_in Bitmap (mask) of input data.
+!! @param[in] num_out Number of unmapped points.
+!! @param[in] lon_out Longitude of unmapped points.
+!! @param[in] lat_out Latitude of unmapped points.
+!! @param[out] iindx 'i' indices of nearest land points
+!! on the input data.
+!! @param[out] jindx 'j' indices of nearest land points
+!! on the input data.
+!! @author GFDL progammer
       subroutine get_mismatch_index(im_in, jm_in, geolon_in,geolat_in,
      &           bitmap_in,num_out, lon_out,lat_out, iindx, jindx )
       integer, intent(in) :: im_in, jm_in, num_out
@@ -3266,7 +3454,19 @@ C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
       end subroutine get_mismatch_index
       
-
+!> Replace unmapped model land points with the nearest land point on the
+!! input grid.
+!!
+!! @param[in] im_in 'i' dimension of input grid.
+!! @param[in] jm_in 'j' dimension of input grid.
+!! @param[in] data_in Input grid data.
+!! @param[in] num_out Number of unmapped model points.
+!! @param[out] data_out Data on the model tile.
+!! @param[in] iindx 'i' indices of the nearest land points on
+!! the input grid.
+!! @param[in] jindx 'j' indices of the nearest land points on
+!! the input grid.
+!! @author GFDL programmer
       subroutine interpolate_mismatch(im_in, jm_in, data_in,
      &                                num_out, data_out, iindx, jindx)
       integer, intent(in) :: im_in, jm_in, num_out
@@ -3280,6 +3480,50 @@ C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
       end subroutine interpolate_mismatch
       
+!> Create orographic asymmetry and orographic length scale on
+!! the model grid. This routine is used for the cubed-sphere
+!! grid. The asymmetry and length scales are interpolated
+!! from an existing gfs orography file. The maximum elevation
+!! is computed from the high-resolution orography data.
+!!
+!! @param[in] zavg High-resolution orography data.
+!! @param[in] zslm High-resolution land-mask data.  Not used.
+!! @param[in] var Standard deviation of orography on the model grid.
+!! @param[out] glat Latitude of each row of input terrain dataset.
+!! @param[out] oa4 Orographic asymmetry on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ol Orographic length scale on the model grid. Four
+!! directional components - W/S/SW/NW
+!! @param[out] ioa4 Count of oa4 values between certain thresholds.
+!! @param[out] elvmax Maximum elevation within a model grid box.
+!! @param[in] slm Land-mask on model grid.
+!! @param[in] oro Orography on the model grid.
+!! @param[out] oro1 Save array for model grid orography.
+!! @param[in] xnsum Not used.
+!! @param[in] xnsum1 Not used.
+!! @param[in] xnsum2 Not used.
+!! @param[in] xnsum3 Not used.
+!! @param[in] xnsum4 Not used.
+!! @param[in] im "i" dimension of the model grid tile.
+!! @param[in] jm "j" dimension of the model grid tile.
+!! @param[in] imn "i" dimension of the high-resolution orography and
+!! mask data.
+!! @param[in] jmn "j" dimension of the high-resolution orography and
+!! mask data.
+!! @param[in] lon_c Corner point longitudes of the model grid points.
+!! @param[in] lat_c Corner point latitudes of the model grid points.
+!! @param[in] lon_t Center point longitudes of the model grid points.
+!! @param[in] lat_t Center point latitudes of the model grid points.
+!! @param[in] is_south_pole Not used.
+!! @param[in] is_north_pole Not used.
+!! @param[in] imi 'i' dimension of input gfs orography data.
+!! @param[in] jmi 'j' dimension of input gfs orography data.
+!! @param[in] oa_in Asymmetry on the input gfs orography data.
+!! @param[in] ol_in Length scales on the input gfs orography data.
+!! @param[in] slm_in Land-sea mask on the input gfs orography data.
+!! @param[in] lon_in Longitude on the input gfs orography data.
+!! @param[in] lat_in Latitude on the input gfs orography data.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE MAKEOA3(ZAVG,zslm,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,SLM,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,
@@ -3663,17 +3907,23 @@ C
       WRITE(6,*) "! MAKEOA3 EXIT"
 C
       RETURN
-      END
+      END SUBROUTINE MAKEOA3
       
+!> Reverse the east-west and north-south axes
+!! in a two-dimensional array.
+!!
+!! @param [in] im 'i' dimension of the 2-d array.
+!! @param [in] jm 'j' dimension of the 2-d array.
+!! @param [in] numi Not used.
+!! @param [inout] f The two-dimensional array to
+!! be processed.
+!! @param [out] wrk Two-dimensional work array.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE REVERS(IM, JM, numi, F, WRK)
 !
       REAL F(IM,JM), WRK(IM,JM)
       integer numi(jm)
-C
-C     reverse east-west and north-south
-c......  fix this routine up to take numi (*j*)
-C.....   at least have 5 variables ....and keep REVLAT .FALSE.
-       imb2 = im / 2
+      imb2 = im / 2
       do i=1,im*jm
          WRK(i,1) = F(i,1)
       enddo
@@ -3698,6 +3948,14 @@ C.....   at least have 5 variables ....and keep REVLAT .FALSE.
       RETURN
       END
 
+!> Convert from a reduced grid to a full grid.
+!!
+!! @param[in] im 'i' dimension of the full grid.
+!! @param[in] jm 'j' dimension of the full grid.
+!! @param[in] numi Number of 'i' points for each
+!! row of the reduced grid.
+!! @param[inout] a The data to be converted.
+!! @author Jordan Alpert NOAA/EMC
       subroutine rg2gg(im,jm,numi,a)
         implicit none
         integer,intent(in):: im,jm,numi(jm)
@@ -3715,6 +3973,15 @@ C.....   at least have 5 variables ....and keep REVLAT .FALSE.
           enddo
         enddo
       end subroutine
+
+!> Convert from a full grid to a reduced grid.
+!!
+!! @param[in] im 'i' dimension of the full grid.
+!! @param[in] jm 'j' dimension of the full grid.
+!! @param[in] numi Number of 'i' points for each
+!! row of the reduced grid.
+!! @param[inout] a The data to be converted.
+!! @author Jordan Alpert NOAA/EMC
       subroutine gg2rg(im,jm,numi,a)
         implicit none
         integer,intent(in):: im,jm,numi(jm)
@@ -3732,10 +3999,16 @@ C.....   at least have 5 variables ....and keep REVLAT .FALSE.
           enddo
         enddo
       end subroutine
+
+!> Print out the maximum and minimum values of
+!! an array.
+!!
+!! @param[in] im The 'i' dimension of the array.
+!! @param[in] jm The 'i' dimension of the array.
+!! @param[in] a The array to check.
+!! @param[in] title Name of the data to be checked.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE minmxj(IM,JM,A,title)
-
-c this routine is using real*4 on the sp
-
       implicit none
 
       real A(IM,JM),rmin,rmax
@@ -3758,10 +4031,19 @@ csela....................................................
 C
       RETURN
       END
+
+!> Print out the maximum and minimum values of
+!! an array. Pass back the i/j location of the
+!! maximum value.
+!!
+!! @param[in] im The 'i' dimension of the array.
+!! @param[in] jm The 'i' dimension of the array.
+!! @param[in] a The array to check.
+!! @param[out] imax 'i' location of maximum
+!! @param[out] jmax 'j' location of maximum
+!! @param[in] title Name of the data to be checked.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE mnmxja(IM,JM,A,imax,jmax,title)
-
-c this routine is using real*4 on the sp
-
       implicit none
 
       real A(IM,JM),rmin,rmax
@@ -3789,60 +4071,41 @@ C
       RETURN
       END
 
-C-----------------------------------------------------------------------
+!> Perform multiple fast fourier transforms.
+!!
+!! This subprogram performs multiple fast fourier transforms
+!! between complex amplitudes in fourier space and real values
+!! in cyclic physical space.
+!!
+!! Subprograms called (NCEPLIB SP Library):
+!!  - scrft Complex to real fourier transform
+!!  - dcrft Complex to real fourier transform
+!!  - srcft Real to complex fourier transform
+!!  - drcft Real to complex fourier transform
+!!
+!! Program history log:
+!! 1998-12-18  Mark Iredell
+!!
+!! @param[in] imax Integer number of values in the cyclic physical
+!! space. See limitations on imax in remarks below.
+!! @param[in] incw Integer first dimension of the complex amplitude array.
+!! (incw >= imax/2+1).
+!! @param[in] incg Integer first dimension of the real value array.
+!! (incg >= imax).
+!! @param[in] kmax Integer number of transforms to perform.
+!! @param[in] w Complex amplitudes on input if idir>0, and on output
+!! if idir<0.
+!! @param[in] g Real values on input if idir<0, and on output if idir>0.
+!! @param[in] idir Integer direction flag. idir>0 to transform from
+!! fourier to physical space. idir<0 to transform from physical to
+!! fourier space.
+!!
+!! @note The restrictions on imax are that it must be a multiple
+!! of 1 to 25 factors of two, up to 2 factors of three,
+!! and up to 1 factor of five, seven and eleven.
+!!
+!! @author Mark Iredell ORG: W/NMC23 @date 96-02-20
       SUBROUTINE SPFFT1(IMAX,INCW,INCG,KMAX,W,G,IDIR)
-C$$$  SUBPROGRAM DOCUMENTATION BLOCK
-C
-C SUBPROGRAM:  SPFFT1     PERFORM MULTIPLE FAST FOURIER TRANSFORMS
-C   PRGMMR: IREDELL       ORG: W/NMC23       DATE: 96-02-20
-C
-C ABSTRACT: THIS SUBPROGRAM PERFORMS MULTIPLE FAST FOURIER TRANSFORMS
-C           BETWEEN COMPLEX AMPLITUDES IN FOURIER SPACE AND REAL VALUES
-C           IN CYCLIC PHYSICAL SPACE.
-C           SUBPROGRAM SPFFT1 INITIALIZES TRIGONOMETRIC DATA EACH CALL.
-C           USE SUBPROGRAM SPFFT TO SAVE TIME AND INITIALIZE ONCE.
-C           THIS VERSION INVOKES THE IBM ESSL FFT.
-C
-C PROGRAM HISTORY LOG:
-C 1998-12-18  IREDELL
-C
-C USAGE:    CALL SPFFT1(IMAX,INCW,INCG,KMAX,W,G,IDIR)
-C
-C   INPUT ARGUMENT LIST:
-C     IMAX     - INTEGER NUMBER OF VALUES IN THE CYCLIC PHYSICAL SPACE
-C                (SEE LIMITATIONS ON IMAX IN REMARKS BELOW.)
-C     INCW     - INTEGER FIRST DIMENSION OF THE COMPLEX AMPLITUDE ARRAY
-C                (INCW >= IMAX/2+1)
-C     INCG     - INTEGER FIRST DIMENSION OF THE REAL VALUE ARRAY
-C                (INCG >= IMAX)
-C     KMAX     - INTEGER NUMBER OF TRANSFORMS TO PERFORM
-C     W        - COMPLEX(INCW,KMAX) COMPLEX AMPLITUDES IF IDIR>0
-C     G        - REAL(INCG,KMAX) REAL VALUES IF IDIR<0
-C     IDIR     - INTEGER DIRECTION FLAG
-C                IDIR>0 TO TRANSFORM FROM FOURIER TO PHYSICAL SPACE
-C                IDIR<0 TO TRANSFORM FROM PHYSICAL TO FOURIER SPACE
-C
-C   OUTPUT ARGUMENT LIST:
-C     W        - COMPLEX(INCW,KMAX) COMPLEX AMPLITUDES IF IDIR<0
-C     G        - REAL(INCG,KMAX) REAL VALUES IF IDIR>0
-C
-C SUBPROGRAMS CALLED:
-C   SCRFT        IBM ESSL COMPLEX TO REAL FOURIER TRANSFORM
-C   DCRFT        IBM ESSL COMPLEX TO REAL FOURIER TRANSFORM
-C   SRCFT        IBM ESSL REAL TO COMPLEX FOURIER TRANSFORM
-C   DRCFT        IBM ESSL REAL TO COMPLEX FOURIER TRANSFORM
-C
-C ATTRIBUTES:
-C   LANGUAGE: FORTRAN 90
-C
-C REMARKS:
-C   THE RESTRICTIONS ON IMAX ARE THAT IT MUST BE A MULTIPLE
-C   OF 1 TO 25 FACTORS OF TWO, UP TO 2 FACTORS OF THREE,
-C   AND UP TO 1 FACTOR OF FIVE, SEVEN AND ELEVEN.
-C
-C   THIS SUBPROGRAM IS THREAD-SAFE.
-C
-C$$$
         IMPLICIT NONE
         INTEGER,INTENT(IN):: IMAX,INCW,INCG,KMAX,IDIR
         COMPLEX,INTENT(INOUT):: W(INCW,KMAX)
@@ -3886,19 +4149,14 @@ C  PHYSICAL TO FOURIER TRANSFORM.
           END SELECT
         END SELECT
       END SUBROUTINE
+
+!> Read input global 30-arc second orography data.
+!!
+!! @param[out] glob The orography data.
+!! @param[in] itopo Not used.
+!! @author Jordan Alpert NOAA/EMC
       subroutine read_g(glob,ITOPO)
-!
-! --- if ITOPO = 1 then read gtopo30_gg.fine 43200X21600 30" file
-! --- if ITOPO = 2 then read  topo 30" .DEM tile files 
-! --- in either case, glob will be n Interger*2 array.
-! --- This routine write out a grads ctl file for displaying the 
-! --- tiles in the output working dir.  The glob array can not be 
-! --- acted on with grads, but the tiles can be if lat/lon are reduced slightly
-cc
       implicit none
-cc
-      include 'machine.h'
-      include 'resevod.h'
 cc
       integer*2    glob(360*120,180*120)
 cc
@@ -3911,12 +4169,6 @@ cc
       integer*2    idat(ix,jx)
       integer      itopo
 cc
-ccmr  integer*2    m9999 
-ccmr  data         m9999    / -9999 /
-cc
-ccmr  integer      i_count(360*120)
-ccmr  integer      j_max_y(360*120)
-cc
       integer      i,j,inttyp
 cc
       real(kind=8) dloin,dlain,rlon,rlat
@@ -3924,7 +4176,6 @@ cc
       open(235, file="./fort.235", access='direct', recl=43200*21600*2)
       read(235,rec=1)glob
       close(235)
-cc
 cc
       print*,' '
       call maxmin     (glob,360*120*180*120,'global0')
@@ -3947,6 +4198,14 @@ cc
 cc
       return
       end
+
+!> Print the maximum, mininum, mean and
+!! standard deviation of an array.
+!! 
+!! @param [in] ia The array to be checked.
+!! @param [in] len The number of points to be checked.
+!! @param [in] tile A name associated with the array.
+!! @author Jordan Alpert NOAA/EMC
       subroutine maxmin(ia,len,tile)
 ccmr
       implicit none
@@ -3995,10 +4254,17 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
      &       ' ko9s=',kount,kount_9,kount+kount_9 
       return
       end
+
+!> Print out the maximum and minimum values of
+!! an array and their i/j location. Also print out
+!! the number of undefined points.
+!!
+!! @param[in] im The 'i' dimension of the array.
+!! @param[in] jm The 'i' dimension of the array.
+!! @param[in] a The array to check.
+!! @param[in] title Name of the data to be checked.
+!! @author Jordan Alpert NOAA/EMC
       SUBROUTINE minmaxj(IM,JM,A,title)
-
-c this routine is using real*4 on the sp
-
       implicit none
 
       real(kind=4) A(IM,JM),rmin,rmax,undef
@@ -4040,9 +4306,16 @@ csela....................................................
 C
       RETURN
       END
-
       
-      !routine to map (lon, lat) to (x,y,z)
+!> Convert from latitude and longitude to x,y,z coordinates.
+!!
+!! @param[in] siz Number of points to convert.
+!! @param[in] lon Longitude of points to convert.
+!! @param[in] lat Latitude of points to convert.
+!! @param[out] x 'x' coordinate of the converted points.
+!! @param[out] y 'y' coordinate of the converted points.
+!! @param[out] z 'z' coordinate of the converted points.
+!! @author GFDL programmer
       subroutine latlon2xyz(siz,lon, lat, x, y, z)
       implicit none
       integer, intent(in) :: siz
@@ -4058,6 +4331,13 @@ C
       enddo
       end
 
+!> Compute spherical angle.
+!!
+!! @param[in] v1 Vector 1.
+!! @param[in] v2 Vector 2.
+!! @param[in] v3 Vector 3.
+!! @return spherical_angle Spherical Angle.
+!! @author GFDL programmer
       FUNCTION spherical_angle(v1, v2, v3)
         implicit none
         real, parameter :: EPSLN30 = 1.e-30
@@ -4098,6 +4378,16 @@ C
         return
       END  
       
+!> Check if a point is inside a polygon.
+!!
+!! @param[in] lon1 Longitude of the point to check.
+!! @param[in] lat1 Latitude of the point to check.
+!! @param[in] npts Number of polygon vertices.
+!! @param[in] lon2 Longitude of the polygon vertices.
+!! @param[in] lat2 Latitude of the polygon vertices.
+!! @return inside_a_polygon When true, point is within
+!! the polygon.
+!! @author GFDL programmer
       FUNCTION inside_a_polygon(lon1, lat1, npts, lon2, lat2)
         implicit none
         real, parameter :: EPSLN10 = 1.e-10
@@ -4170,7 +4460,29 @@ C
         
       end
 
-
+!> Count the number of high-resolution orography points that
+!! are higher than the model grid box average orography height.
+!!
+!! @param[in] lon1 Longitude of corner point 1 of the model 
+!! grid box.
+!! @param[in] lat1 Latitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lon2 Longitude of corner point 2 of the model
+!! grid box.
+!! @param[in] lat2 Latitude of corner point 2 of the model
+!! grid box.
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data.
+!! @param[in] glat Latitude of each row of the high-resolution
+!! orography data.
+!! @param[in] zavg The high-resolution orography.
+!! @param[in] zslm  The high-resolution land mask.
+!! @param[in] delxn Resolution of the high-res orography data.
+!! @return get_xnsum The number of high-res points above the
+!! mean orography.
+!! @author GFDL Programmer
       function get_xnsum(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn)
         implicit none
@@ -4250,7 +4562,34 @@ C
          
       end function get_xnsum  
       
-
+!> Count the number of high-resolution orography points that
+!! are higher than a critical value inside a model grid box
+!! (or a portion of a model grid box). The critical value is a 
+!! function of the standard deviation of orography.
+!!
+!! @param[in] lon1 Longitude of corner point 1 of the model 
+!! grid box.
+!! @param[in] lat1 Latitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lon2 Longitude of corner point 2 of the model
+!! grid box.
+!! @param[in] lat2 Latitude of corner point 2 of the model
+!! grid box.
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data.
+!! @param[in] glat Latitude of each row of the high-resolution
+!! orography data.
+!! @param[in] zavg The high-resolution orography.
+!! @param[in] zslm  The high-resolution land mask.
+!! @param[in] delxn Resolution of the high-res orography data.
+!! @param[out] xnsum1 The number of high-resolution orography
+!! above the critical value inside a model grid box.
+!! @param[out] xnsum2 The number of high-resolution orography
+!! points inside a model grid box.
+!! @param[out] hc Critical height.
+!! @author GFDL Programmer
       subroutine get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn,xnsum1,xnsum2,HC)
         implicit none
@@ -4318,7 +4657,35 @@ C
          
       end subroutine get_xnsum2 
 
-
+!> Count the number of high-resolution orography points that
+!! are higher than a critical value inside a model grid box
+!! (or a portion of a model grid box). Unlike routine
+!! get_xnsum2(), this routine does not compute the critical
+!! value. Rather, it is passed in.
+!!
+!! @param[in] lon1 Longitude of corner point 1 of the model 
+!! grid box.
+!! @param[in] lat1 Latitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lon2 Longitude of corner point 2 of the model
+!! grid box.
+!! @param[in] lat2 Latitude of corner point 2 of the model
+!! grid box.
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data.
+!! @param[in] glat Latitude of each row of the high-resolution
+!! orography data.
+!! @param[in] zavg The high-resolution orography.
+!! @param[in] zslm  The high-resolution land mask.
+!! @param[in] delxn Resolution of the high-res orography data.
+!! @param[out] xnsum1 The number of high-resolution orography
+!! above the critical value inside a model grid box.
+!! @param[out] xnsum2 The number of high-resolution orography
+!! points inside a model grid box.
+!! @param[in] hc Critical height.
+!! @author GFDL Programmer
       subroutine get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,
      &                   glat,zavg,zslm,delxn,xnsum1,xnsum2,HC)
         implicit none
@@ -4370,24 +4737,20 @@ C
          
       end subroutine get_xnsum3
       
+!> Report NaNS and NaNQ within an address range for
+!! 8-byte real words.
+!!
+!! This routine prints a single line for each call
+!! and prints a message and returns to the caller on 
+!! detection of the FIRST NaN in the range.  If no NaN values
+!! are found it returns silently.
+!!
+!! @param[in] A Real*8 variable or array
+!! @param[in] L Number of words to scan (length of array)
+!! @param[in] C Distinctive message set in caller to indicate where
+!! the routine was called.
+!! @author Jordan Alpert NOAA/EMC
       subroutine nanc(a,l,c)
-c compiler opt TRAPS= -qinitauto=FF911299 -qflttrap=ov:zero:inv:en -qsig trap
-c or call subroutine below
-c subroutine to report NaNS and NaNQ within an address
-c range for real*8 words.
-c  as written the routine prints a single line for each call
-c  and prints a message and returns to the caller  on detection of the FIRST
-c  NaN in the range.  The message is passed in the  third
-c  argument.  If no NaN values are found it returns silently.
-c  A real*4 version can be created by making A real*4
-
-c    arguments (all are input only)
-c
-c    A   real*8 variable or array
-c    L   number of words to scan (length of array)
-c    C   distinctive message set in caller to indicate where
-c        the routine was called.
-c 
       integer inan1,inan2,inan3,inan4,inaq1,inaq2,inaq3,inaq4
        real word
        integer itest
@@ -4431,6 +4794,11 @@ cgwv      print 102,l,t2-t1,c
  102  format(' time to check ',i9,' words is ',f10.4,' ',a24)
       return
        end
+
+!> Get the date/time for the system clock.
+!!
+!! @author Mark Iredell
+!! @return timef
       real function timef()
       character(8) :: date
       character(10) :: time

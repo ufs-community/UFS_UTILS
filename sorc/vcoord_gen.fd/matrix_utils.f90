@@ -1,12 +1,9 @@
 !> @file
-!! Lower and upper triangular decomposition
-!! @author Iredell @date 2008-08-01
-!
+!! Lower and upper triangular decomposition.
+!! @author Mark Iredell @date 2008-08-01
+
 !> This subprogram decomposes a matrix into a product of
 !! lower and upper triangular matrices.
-!!
-!! Program history log:
-!! -  2008-08-01  Mark Iredell
 !!
 !! @param[inout] a - input: a real(np,np) matrix (will be overwritten) output:
 !!                 - output real(np,np) LU-decomposed matrix
@@ -19,7 +16,7 @@
 !!              (original A rows are permuted in order i with indx(i))
 !! @param[out] d real determinant permutation (1 or -1, or 0 if singular)
 !!              (determinant is output diagonal product times d)
-!!
+!! @author Mark Iredell @date 2008-08-01
 subroutine ludcmp(a,n,np,indx,d)
   implicit none
   integer,intent(in):: n,np
@@ -92,19 +89,14 @@ end subroutine
 !! This subprogram back substitutes to solve decomposed
 !! lower and upper triangular matrices as outputted by ludcmp.
 !!
-!! Program history log:
-!! -  2008-08-01  Mark Iredell
-!!
-!!   Input argument list:
-!! @param[in] a        real(np,np) LU-decomposed matrix
-!!                     (from ludcmp)
-!! @param[in] n        integer order of matrix
-!! @param[in] np       integer dimension of matrix
-!! @param[in] indx     integer(n) pivot indices (from ludcmp)
+!! @param[in] a real(np,np) LU-decomposed matrix (from ludcmp)
+!! @param[in] n integer order of matrix
+!! @param[in] np integer dimension of matrix
+!! @param[in] indx integer(n) pivot indices (from ludcmp)
 !! @param[inout] b  - input real(n) rhs vector of linear problem (will be overwritten)
 !!                  - output real(n) solution of linear problem 
 !!                    (original A times output B equals original B)
-!!
+!! @author Mark Iredell @date 2008-08-01
 subroutine lubksb(a,n,np,indx,b)
   implicit none
   integer,intent(in):: n,np

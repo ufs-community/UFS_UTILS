@@ -1,3 +1,6 @@
+/** @file
+    @brief Function declarations for computing contacts between tiles.
+*/
 #ifndef GET_CONTACT_
 #define GET_CONTACT_
 /**********************************************************************

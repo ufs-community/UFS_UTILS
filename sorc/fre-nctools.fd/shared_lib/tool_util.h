@@ -1,6 +1,5 @@
 /** @file 
-    This header file provide some utilities routine that will be used in many tools.
-    
+    @brief Function declarations for tool_util.c
     @author Zhi.Liang@noaa.gov
 */
 #ifndef TOOL_UTIL_H_

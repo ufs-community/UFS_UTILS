@@ -1,3 +1,8 @@
+# This is the CMake file for the fvcom_tools utility in the UFS_UTILS
+# project.
+#
+# David Wright
+
 set(fortran_src
    kinds.f90
    module_ncio.f90
@@ -20,3 +25,8 @@ target_link_libraries(
   NetCDF::NetCDF_Fortran)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+
+# If doxygen documentation we enabled, build it.
+if(ENABLE_DOCS)
+  add_subdirectory(docs)  
+endif()
