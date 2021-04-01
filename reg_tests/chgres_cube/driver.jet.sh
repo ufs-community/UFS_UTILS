@@ -5,7 +5,7 @@
 # Run the chgres_cube regression tests on JET.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
-# as appropriate.  To see which HFIP you are authorized to use,
+# as appropriate.  To see which projects you are authorized to use,
 # type "account_params".
 #
 # Invoke the script with no arguments.  A series of daily-
@@ -25,7 +25,9 @@
 set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
 PROJECT_CODE="hfv3gfs"
@@ -40,8 +42,6 @@ QUEUE="debug"
 export HOMEufs=$PWD/../..
 
 export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
-
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
 
 LOG_FILE=regression.log
 SUM_FILE=summary.log
@@ -123,7 +123,7 @@ TEST8=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:05
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d afterok:$TEST8 << EOF
-#!/bin/sh
+#!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
 

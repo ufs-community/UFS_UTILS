@@ -1,13 +1,13 @@
-/*******************************************************************************
-                             create_hgrid.h
+/** @file
+  
   This header file provide interface to create different types of horizontal 
-  grid. geographical grid location, cell length, cell area and rotation
+  grid. Geographical grid location, cell length, cell area and rotation
   angle are returned. All the returned data are on supergrid.
 
-  contact: Zhi.Liang@noaa.gov
+  @author Zhi.Liang@noaa.gov
   Modifications:
   05/10/2020  -- Added multiple nest capability.  Bill Ramstrom, AOML/HRD
-*******************************************************************************/
+*/
 #ifndef CREATE_HGRID_H_
 #define CREATE_HGRID_H_
 
@@ -48,7 +48,7 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
 			         double *angle_dy, double shift_fac, int do_schmidt, double stretch_factor,
 				 double target_lon, double target_lat, int nest_grids,
 				 int parent_tile[MAX_NESTS], int refine_ratio[MAX_NESTS], int istart_nest[MAX_NESTS],
-				 int iend_nest[MAX_NESTS], int jstart_nest[MAX_NESTS], int jend_nest[MAX_NESTS], 
+				 int iend_nest[MAX_NESTS], int jstart_nest[MAX_NESTS], int jend_nest[MAX_NESTS],
 				 int halo );
 void create_f_plane_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnds,
                           int *nlon, int *nlat, double *dlon, double *dlat,

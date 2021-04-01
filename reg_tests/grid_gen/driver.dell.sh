@@ -20,7 +20,9 @@
 #-----------------------------------------------------------------------------
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 set -x
 
@@ -39,7 +41,6 @@ export APRUN=time
 export APRUN_SFC="mpirun -l"
 export OMP_STACKSIZE=2048m
 export machine=WCOSS_DELL_P3
-export NCCMP=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/util/nccmp/nccmp-nc4.7.4/src/nccmp
 export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
 export OMP_NUM_THREADS=24
 
@@ -56,15 +57,22 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.uniform -W 0:15
         -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/c96.uniform.sh"
 
 #-----------------------------------------------------------------------------
-# C96 regional grid
+# GFDL regional grid
 #-----------------------------------------------------------------------------
 
-bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.regional -W 0:10 -x -n 24 -w 'ended(c96.uniform)' \
-        -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/c96.regional.sh"
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J gfdl.regional -W 0:10 -x -n 24 -w 'ended(c96.uniform)' \
+        -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/gfdl.regional.sh"
+
+#-----------------------------------------------------------------------------
+# ESG regional grid
+#-----------------------------------------------------------------------------
+
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J esg.regional -W 0:10 -x -n 24 -w 'ended(gfdl.regional)' \
+        -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/esg.regional.sh"
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "affinity[core(1)]" -R "rusage[mem=100]" -W 0:01 \
-     -w 'ended(c96.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+     -w 'ended(esg.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"

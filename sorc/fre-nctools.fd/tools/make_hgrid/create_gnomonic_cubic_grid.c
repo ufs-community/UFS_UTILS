@@ -1,16 +1,10 @@
-/*******************************************************************************
-                             create_gnomonic_cubic_grid.c
-  This file creates the 6 tiles for a gnomonic projection of a cubed sphere.
-    It also creates nest grids if they are defined.
+/** @file
+    @brief Create gnomonic cubic grids.
   Modifications:
   05/10/2020  -- Added multiple nest capability.  Bill Ramstrom, AOML/HRD
                  Nests can be specified on any parent tile, and can each be different sizes.
                  Nests with different refinement ratios have NOT been tested and should be considered unsupported.
-
-*******************************************************************************/
-
-
-
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -1497,7 +1491,7 @@ void spherical_linear_interpolation(double beta, const double *p1, const double 
 
 
 
-/* void setup_aligned_nest
+/* void setup_aligned_nest */
 
    /*
 

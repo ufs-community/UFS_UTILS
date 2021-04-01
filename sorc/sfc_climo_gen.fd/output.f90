@@ -1,31 +1,24 @@
+!> @file
+!! @brief Output model data for a single tile and a single record.
+!! @author George Gayno @date 2018
+
+!> Output model data for a single tile and a single
+!! record in netcdf format.
+!!
+!! @param[in] data_one_tile Data to be output (single tile).
+!! @param[in] lat_one_tile Latitude of tile.
+!! @param[in] lon_one_tile Longitude of tile.
+!! @param[in] field_idx Index of field within field name array.
+!! @param[in] i_mdl i dimensions of tile.
+!! @param[in] j_mdl j dimensions of tile.
+!! @param[in] record Record number to be output.
+!! @param[in] tile Tile number.
+!! @param[in] time Time period to be output.
+!! @author George Gayno @date 2018
  subroutine output(data_one_tile, lat_one_tile, lon_one_tile, i_mdl, j_mdl, &
                    tile, record, time, field_idx)
 
-!--------------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine: output
-!   prgmmr: gayno             org: w/np2           date: 2018
-!
-! Abstract:  Output model data for a single tile and a single
-!    record in netcdf format.
-!
-! Usage: call output(data_one_tile, lat_one_tile, lon_one_tile, &
-!                    i_mdl, j_mdl, tile, record, &
-!                    time, field_idx)
-!
-!   input argument list:
-!     data_one_tile             Data to be output (single tile).
-!     lat_one_tile              Latitude of tile.
-!     lon_one_tile              Longitude of tile.
-!     field_idx                 Index of field within field name
-!                               array.
-!     i/j_mdl                   i/j dimensions of tile.
-!     record                    Record number to be output.
-!     tile                      Tile number.
-!     time                      Time period to be output.
-!--------------------------------------------------------------------------
-
+ use mpi
  use esmf
  use netcdf
  use utils
@@ -35,8 +28,6 @@
  use program_setup, only           : halo
 
  implicit none
-
- include 'mpif.h'
 
  integer, intent(in)              :: i_mdl, j_mdl, tile
  integer, intent(in)              :: record, time, field_idx
@@ -50,7 +41,7 @@
 
  integer                          :: initialsiz, fsize, error, j
  integer                          :: dim_x, dim_y, id_data
- integer                          :: dim_time, id_times
+ integer                          :: dim_time, id_times, ierr
  integer                          :: header_buffer_val = 16384
  integer                          :: i_out, j_out, id_lat, id_lon
  integer                          :: i_start, i_end, j_start, j_end
@@ -86,7 +77,7 @@
      out_file_with_halo = "./vegetation_type." // grid_tiles(tile) // ".halo.nc"
    case default
      print*,'- FATAL ERROR IN ROUTINE OUTPUT.  UNIDENTIFIED FIELD : ', field_names(field_idx)
-     call mpi_abort(mpi_comm_world, 67)
+     call mpi_abort(mpi_comm_world, 67, ierr)
  end select
 
 !----------------------------------------------------------------------

@@ -1,3 +1,7 @@
+/** @file 
+    @brief Routines to create regular lat/lon, spectral, tripolar
+    and f-plane grids.
+*/ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <complex.h>

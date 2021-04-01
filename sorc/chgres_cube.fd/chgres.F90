@@ -1,14 +1,29 @@
+!> @file
+!! @brief Initialize an FV3 model run.
+!!
+!! @author George Gayno NOAA/EMC
+
+!> Initialize an FV3 model run.
+!!
+!! Initialize an FV3 run using history or restart data from another
+!! FV3 run, the spectral GFS, and a few other models. Converts
+!! atmospheric, surface and nst data.
+!!
+!! This file reads a configuration namelist.
+!!
+!! Link the configuration namelist to ./fort.41. Then run the program
+!! with a multiple of six mpi tasks (an ESMF library requirement for
+!! fv3 cubed sphere grids).
+!!
+!! @note For variable names “input” refers to the data input to the
+!! program (i.e., GRIB2, NEMSIO, NetCDF). “Target” refers to the
+!! target or FV3 model grid.
+!!
+!! @author George Gayno NOAA/EMC
+!! @return 0 for success, error code otherwise.
  program chgres
 
-!-------------------------------------------------------------------------
-! Program CHGRES
-!
-! Abstract: Initialize an FV3 run using history or restart data from
-!   another FV3 run, or the NEMS version of the spectral GFS.  
-!   Converts atmospheric, surface and nst data.
-!
-!-------------------------------------------------------------------------
-
+ use mpi
  use esmf
 
  use atmosphere, only          : atmosphere_driver
@@ -33,8 +48,6 @@
 !-------------------------------------------------------------------------
 ! Initialize mpi and esmf environment.
 !-------------------------------------------------------------------------
-
- include 'mpif.h'
 
  call mpi_init(ierr)
 

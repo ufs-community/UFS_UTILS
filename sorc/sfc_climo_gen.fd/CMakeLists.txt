@@ -1,3 +1,8 @@
+# This is the CMake build file for the sfc_climo_gen utility in the
+# UFS_UTILS package.
+#
+# George Gayno, Mark Potts
+
 set(fortran_src
     driver.F90
     interp.F90
@@ -10,7 +15,7 @@ set(fortran_src
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian")
-elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8 -fconvert=big-endian")
 endif()
 
@@ -23,3 +28,8 @@ target_link_libraries(
   NetCDF::NetCDF_Fortran)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+
+# If doxygen documentation we enabled, build it.
+if(ENABLE_DOCS)
+  add_subdirectory(docs)  
+endif()

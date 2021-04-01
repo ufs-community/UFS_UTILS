@@ -1,3 +1,6 @@
+/** @file
+    @brief Compute gradient terms.
+*/
 #include <math.h>
 #include <stdlib.h>
 #include "constant.h"

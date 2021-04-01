@@ -28,6 +28,8 @@ export CDATE=2019070412
 
 export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
 
+NCCMP=${NCCMP:-$(which nccmp)}
+
 #-----------------------------------------------------------------------------
 # Invoke chgres program.
 #-----------------------------------------------------------------------------
@@ -50,6 +52,9 @@ echo "Ending at: " `date`
 #-----------------------------------------------------------------------------
 
 cd $DATA
+
+mv out.sfc.tile7.nc out.sfc.tile1.nc
+mv out.atm.tile7.nc out.atm.tile1.nc
 
 test_failed=0
 for files in *.nc

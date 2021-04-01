@@ -1,3 +1,7 @@
+/** @file
+    @brief Utility routines used by many tools.
+    @author Zhi.Liang@noaa.gov
+*/
 #include <stdlib.h> 
 #include <stdio.h>
 #include <string.h>
@@ -27,11 +31,10 @@ int round_to_nearest_int(double r)
   return (r > 0.0) ? floor(r + 0.5) : ceil(r - 0.5);
 }
 
-/***************************************************************************
-  void get_file_path(const char *file, char *dir)
+/**
   get the directory where file is located. The dir will be the complate path
   before the last "/". If no "/" exist in file, the path will be current ".".
-***************************************************************************/
+*/
 void get_file_path(const char *file, char *dir)
 {
   int len;
@@ -81,10 +84,9 @@ int get_double_entry(char *line, double *value)
   return num;
 };
 
-/*********************************************************************
-  double spherical_dist(double x1, double y1, double x2, double y2)
+/**
   return distance between spherical grid on the earth
-*********************************************************************/
+*/
 
 double spherical_dist(double x1, double y1, double x2, double y2)
 {
@@ -108,10 +110,9 @@ double spherical_dist(double x1, double y1, double x2, double y2)
 }; /* spherical_dist */
   
 
-/*********************************************************************
-  void double bipolar_dist(double x1, double y1, double x2, double y2)
+/**
   return distance of bipolar grids
-*********************************************************************/
+*/
 double bipolar_dist(double x1, double y1, double x2, double y2,
 		    double bpeq, double bpsp, double bpnp, double rp )
 {
@@ -148,20 +149,17 @@ double bipolar_dist(double x1, double y1, double x2, double y2,
   
 }; /* bipolar_dist */
 
-/*********************************************************************
-  double distant(double a, double b, double met1, double met2)
+/**
   return distant on the earth
-*********************************************************************/
+*/
 double distant(double a, double b, double met1, double met2)
 {
    return fabs(a-b)*D2R*(met1+met2)/2. ;
 }; /* distant */
 
-/*********************************************************************
-   double spherical_area(double x1, double y1, double x2, double y2,
-                   double x3, double y3, double x4, double y4 )            
+/**
    rectangular grid box area
- ********************************************************************/
+ */
 double spherical_area(double x1, double y1, double x2, double y2,
 		      double x3, double y3, double x4, double y4 )
 {
@@ -196,11 +194,9 @@ double spherical_area(double x1, double y1, double x2, double y2,
   return area;
 }; /* spherical_area */
 
-/*********************************************************************
-   double bipolar_area(double x1, double y1, double x2, double y2,
-                       double x3, double y3, double x4, double y4 )            
+/**
    bipolar grid  area
- ********************************************************************/
+ */
 double bipolar_area(double x1, double y1, double x2, double y2,
 			  double x3, double y3, double x4, double y4 )
 {
@@ -239,20 +235,18 @@ double bipolar_area(double x1, double y1, double x2, double y2,
   return area;
 }; /* bipolar_area */
 
-/*********************************************************************
-  double lat_dist(double x1, double x2)
-  distance (in degrees) between points on lat. circle
- ********************************************************************/
+/**
+   distance (in degrees) between points on lat. circle
+*/
   double lat_dist(double x1, double x2)
 {
   return min(fmod(x1-x2+720,360.),fmod(x2-x1+720,360.));
 };
 
 
-/*********************************************************************
-  double bp_lam(double x, double y, double bpeq)
+/**
   find bipolar grid longitude given geo. coordinates
- ********************************************************************/
+*/
   double bp_lam(double x, double y, double bpeq, double rp)
 {
   double bp_lam;
@@ -264,10 +258,9 @@ double bipolar_area(double x1, double y1, double x2, double y2,
   return bp_lam;
 }; /* bp_lam */
 
-/*********************************************************************
-   double bp_phi(double x, double y, double bpsp, double bpnp)
+/**
    find bipolar grid latitude given geo. coordinates
- ********************************************************************/
+*/
    double bp_phi(double x, double y, double bpsp, double bpnp)
 {
   double bp_phi;
@@ -279,10 +272,9 @@ double bipolar_area(double x1, double y1, double x2, double y2,
 }; /* bp_phi */
 
 
-/*********************************************************************
-  void tp_trans(double& lon, double& lat, double lon_ref)
+/**
   calculate tripolar grid
- ********************************************************************/
+*/
 void tp_trans(double *lon, double *lat, double lon_ref, double lon_start, 
 		    double lam0, double bpeq, double bpsp, double bpnp, double rp )
 {
@@ -316,10 +308,9 @@ void tp_trans(double *lon, double *lat, double lon_ref, double lon_start,
   }
 }; /* tp_trans */
 
-/*********************************************************************
-  double Lon_in_range(double lon, double lon_strt)
+/**
   Returns lon_strt <= longitude <= lon_strt+360
- ********************************************************************/
+*/
 double lon_in_range(double lon, double lon_strt)
 {
   double lon_in_range, lon_end;
@@ -345,10 +336,9 @@ double lon_in_range(double lon, double lon_strt)
 }; /* lon_in_range */
 
 
-/*********************************************************************
-   int lon_fix(double *x, double *y, int n_in, double tlon) 
+/**
    fix longitude at pole.
- ********************************************************************/
+*/
 int lon_fix(double *x, double *y, int n_in, double tlon)
 {
   int i, ip, im, n_out;
@@ -414,10 +404,9 @@ int lon_fix(double *x, double *y, int n_in, double tlon)
 }; /* lon_fix */
 
 
-/*********************************************************************
-   void vtx_delete(double *x, double *y, int *n, int n_del)
+/**
    delete vertex
- ********************************************************************/
+*/
 void vtx_delete(double *x, double *y, int *n, int n_del)
 {
   int i;
@@ -430,10 +419,9 @@ void vtx_delete(double *x, double *y, int *n, int n_del)
   (*n)--;
 }; /* vtx_delete */
 
-/*********************************************************************
-   void Vtx_insert(double *x, double *y, int *n, int n_del)
+/**
    insert vertex
- ********************************************************************/
+*/
 void vtx_insert(double *x, double *y, int *n, int n_ins)
 {
   int i;
@@ -452,10 +440,9 @@ void vtx_insert(double *x, double *y, int *n, int n_ins)
     Perform cross products of 3D vectors: e = P1 X P2
     -------------------------------------------------------------------*/
     
-/********************************************************************************
-  void compute_grid_bound(int nb, const couble *bnds, const int *npts, int *grid_size, const char *center_cell)
+/**
   compute the 1-D grid location. This algorithm is developed by Russell Fiedler
-********************************************************************************/
+*/
 double* compute_grid_bound(int nb, const double *bnds, const int *npts, int *grid_size, const char *center)
 {
   int    refine, i, n, np;
@@ -541,8 +528,7 @@ int get_legacy_grid_size(int nb, const double *bnds, const double *dbnds)
 }
 
 
-/********************************************************************************
-  void compute_grid_bound_legacy(int nb, const couble *bnds, const double *dbnds, int *grid_size, const char *center_cell)
+/**
   compute the 1-D grid location, based on the algorithm developed by Ron Pacanowski
 ********************************************************************************/
 double* compute_grid_bound_legacy(int nb, const double *bnds, const double *dbnds, double stretch, int *grid_size, const char *center)

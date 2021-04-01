@@ -1,3 +1,6 @@
+/** @file
+    @brief Routines to perform bilinear interpolation.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -909,16 +912,16 @@ double normalize_great_circle_distance(const double *v1, const double *v2)
 /*   double angle; */
 /*   double px, py, pz, qx, qy, qz, abs_p, abs_q; */
 
-/*   /* vector product between v1 and v2 */
+/* */  /* vector product between v1 and v2 */
 /*   px = v1[1]*v2[2] - v1[2]*v2[1]; */
 /*   py = v1[2]*v2[0] - v1[0]*v2[2]; */
 /*   pz = v1[0]*v2[1] - v1[1]*v2[0]; */
-/*   /* vector product between v1 and v3  */
+/* */  /* vector product between v1 and v3  */
 /*   qx = v1[1]*v3[2] - v1[2]*v3[1]; */
 /*   qy = v1[2]*v3[0] - v1[0]*v3[2]; */
 /*   qz = v1[0]*v3[1] - v1[1]*v3[0]; */
     
-/*   /* angle between p and q */ 
+/* */  /* angle between p and q */ 
 /*   abs_p=px*px+py*py+pz*pz; */
 /*   abs_q=qx*qx+qy*qy+qz*qz; */
 /*   if (abs_p*abs_q==0.) */
@@ -930,7 +933,7 @@ double normalize_great_circle_distance(const double *v1, const double *v2)
 /*   } */
 
 /*   return angle; */
-/* }; /* spherical_angle */
+/* };*/ /* spherical_angle */ 
 
 /*---------------------------------------------------------------------
   double dist2side(v1, v2, point)

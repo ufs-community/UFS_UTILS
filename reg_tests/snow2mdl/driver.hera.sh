@@ -29,8 +29,12 @@
 
 set -x
 
+compiler=${compiler:-"intel"}
+
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.$compiler
+module list
 
 export DATA="/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_tests.snow2mdl"
 
