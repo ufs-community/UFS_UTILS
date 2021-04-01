@@ -1,3 +1,6 @@
+!> @file
+!! @brief Utility routines to compute grid parameters such as size and area.
+!!
 module grid_mod
 
 use mpp_mod, only : mpp_root_pe

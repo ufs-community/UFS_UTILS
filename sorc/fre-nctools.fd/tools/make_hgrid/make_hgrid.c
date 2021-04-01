@@ -1,16 +1,11 @@
-/*
-  Copyright 2011 NOAA Geophysical Fluid Dynamics Lab, Princeton, NJ
-  This program is distributed under the terms of the GNU General Public
-  License. See the file COPYING contained in this directory
+/** @file
 
-  This program generates various types of horizontal grids in netCDF file format
+  @brief This program generates various types of horizontal grids in netCDF file format
 
-  AUTHOR: Zhi Liang (Zhi.Liang@noaa.gov)
-  NOAA Geophysical Fluid Dynamics Lab, Princeton, NJ
-
+  @author Zhi Liang (Zhi.Liang@noaa.gov)
+          NOAA Geophysical Fluid Dynamics Lab, Princeton, NJ
   Modifications:
   05/10/2020  -- Added multiple nest capability.  Bill Ramstrom, AOML/HRD
-
 
 */
 #include <stdlib.h>
@@ -214,7 +209,7 @@ char *usage[] = {
   "                              grid(s) in parent tile supergrid(Fortran index).      ",
   "                                                                                 ",
   "   --iend_nest #              Specify the comma-separated list of ending i-direction index(es) of nest       ",
-  "                              grids in parent tile supergrid(Fortran index).      ",  
+  "                              grids in parent tile supergrid(Fortran index).      ",
   "                                                                                 ",
   "   --jstart_nest #            Specify the comma-separated list of starting j-direction index(es) of nest     ",
   "                              grids in parent tile supergrid(Fortran index).      ",

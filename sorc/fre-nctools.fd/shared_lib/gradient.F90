@@ -1,3 +1,8 @@
+!> @file
+!!
+!! @brief Utility routines to calculate gradient.
+!!
+!! @author Zhi.Liang@noaa.gov
 module gradient_mod
 ! <CONTACT EMAIL="Zhi.Liang@noaa.gov">
 !   Zhi Liang

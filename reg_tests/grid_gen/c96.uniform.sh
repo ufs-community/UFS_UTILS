@@ -8,11 +8,13 @@
 
 set -x
 
-export TMPDIR=${WORK_DIR}/c96.uniform.work
+export TEMP_DIR=${WORK_DIR}/c96.uniform.work
 export out_dir=${WORK_DIR}/c96.uniform
 
 export res=96
 export gtype=uniform
+
+NCCMP=${NCCMP:-$(which nccmp)}
 
 #-----------------------------------------------------------------------
 # Start script.
@@ -35,7 +37,7 @@ echo "Ending at: " `date`
 # Compare output to baseline set of data.
 #-----------------------------------------------------------------------------
 
-cd $out_dir
+cd $out_dir/C96
 
 test_failed=0
 for files in *tile*.nc ./fix_sfc/*tile*.nc

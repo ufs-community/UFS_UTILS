@@ -1,3 +1,6 @@
+/** @file 
+    @brief Utilities to read the mosaic file.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

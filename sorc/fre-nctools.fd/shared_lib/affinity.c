@@ -1,3 +1,6 @@
+/** @file 
+    @brief Set or get CPU affinity.
+*/
 #define _GNU_SOURCE
 
 #include <stdio.h>
@@ -14,7 +17,7 @@ static pid_t gettid(void)
   return syscall(__NR_gettid);
 }
 
-/*
+/** 
  * Returns this thread's CPU affinity, if bound to a single core,
  * or else -1.
  */
@@ -51,7 +54,7 @@ int get_cpu_affinity(void)
 int get_cpu_affinity_(void) { return get_cpu_affinity(); }	/* Fortran interface */
 
 
-/*
+/**
  * Set CPU affinity to one core.
  */
 void set_cpu_affinity( int cpu )

@@ -1,9 +1,8 @@
-/*
-      **** MppDomain.cpp ****
-      MppDomain package
-      NOTE: only mpi is implemented here. if needed, shmem version
-      will be added on in the future.
-      Contact: Zhi.Liang@noaa.gov
+/** @file
+    @brief MppDomain package
+    @note Only mpi is implemented here. If needed, shmem version
+    will be added on in the future.
+    @author Zhi.Liang@noaa.gov
 */
 #include <stdlib.h>
 #include <math.h>
@@ -13,7 +12,7 @@
 /***********************************************************
    global variables
 ***********************************************************/
-int pe, npes, root_pe;
+static int pe, npes, root_pe;
 #define MAX_BUFFER_SIZE 10000000
 double rBuffer[MAX_BUFFER_SIZE];
 double sBuffer[MAX_BUFFER_SIZE];

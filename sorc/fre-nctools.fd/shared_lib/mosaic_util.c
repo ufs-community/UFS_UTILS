@@ -1,3 +1,6 @@
+/** @file 
+    @brief Compute various grid statistics. 
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

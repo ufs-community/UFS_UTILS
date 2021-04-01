@@ -1,0 +1,15 @@
+build/
+install/
+exec/
+
+*.[ao]
+*.mod
+*.so
+*.exe
+*.x
+
+*.swp
+*.o
+emcsfc_ice_blend
+ml01rg2.x
+

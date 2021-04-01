@@ -1,3 +1,6 @@
+/** @file
+    @brief Create conformal cubic grids.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <complex.h>

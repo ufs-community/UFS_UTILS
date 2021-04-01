@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-set -ax
+set -eux
 
 #-------------------------------------------------------------------------------------------------
 # Update surface fields in FV3 restart files on the cubed-sphere grid
