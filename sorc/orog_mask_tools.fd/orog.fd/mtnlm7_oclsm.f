@@ -1,23 +1,25 @@
 C> @file
-C> TERRAIN MAKER FOR GLOBAL SPECTRAL MODEL
-C> @author IREDELL @date 92-04-16
+C> Terrain maker for global spectral model.
+C> @author Mark Iredell @date 92-04-16
   
-C> THIS PROGRAM CREATES 7 TERRAIN-RELATED FILES
-C>   COMPUTED FROM THE NAVY 10-MINUTE TERRAIN DATASET.
-C>   THE MODEL PHYSICS GRID PARAMETERS AND SPECTRAL TRUNCATION
-C>   AND FILTER PARAMETERS ARE READ BY THIS PROGRAM AS INPUT.
-C>   THE 7 FILES PRODUCED ARE RESPECTIVELY:
-C>     1) SEA-LAND MASK ON MODEL PHYSICS GRID
-C>     2) GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
-C>     3) MOUNTAIN STD DEV ON MODEL PHYSICS GRID
-C>     4) SPECTRAL OROGRAPHY IN SPECTRAL DOMAIN
-C>     5) UNFILTERED GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
-C>     6) GRIB SEA-LAND MASK ON MODEL PHYSICS GRID
-C>     7) GRIB GRIDDED OROGRAPHY ON MODEL PHYSICS GRID
-C>   THE OROGRAPHY IS ONLY FILTERED FOR WAVENUMBERS GREATER THAN NF0.
-C>   FOR WAVENUMBERS N BETWEEN NF0 AND NF1, THE OROGRAPHY IS FILTERED
-C>   BY THE FACTOR 1-((N-NF0)/(NF1-NF0))**2.  THE FILTERED OROGRAPHY
-C>   WILL NOT HAVE INFORMATION BEYOND WAVENUMBER NF1.
+C> This program creates 7 terrain-related files computed from the navy
+C> 10-minute terrain dataset. The model physics grid parameters and
+C> spectral truncation and filter parameters are read by this program as
+C> input.
+C>      
+C> The 7 files produced are:
+C> 1. sea-land mask on model physics grid
+C> 2. gridded orography on model physics grid
+C> 3. mountain std dev on model physics grid
+C> 4. spectral orography in spectral domain
+C> 5. unfiltered gridded orography on model physics grid
+C> 6. grib sea-land mask on model physics grid
+C> 7. grib gridded orography on model physics grid
+C>
+C> The orography is only filtered for wavenumbers greater than nf0. For
+C> wavenumbers n between nf0 and nf1, the orography is filtered by the
+C> factor 1-((n-nf0)/(nf1-nf0))**2. The filtered orography will not have
+C> information beyond wavenumber nf1.
 C>
 C> PROGRAM HISTORY LOG:
 C> -  92-04-16  IREDELL
@@ -70,8 +72,6 @@ C>  -   SPLAT      - COMPUTE GAUSSIAN LATITUDES OR EQUALLY-SPACED LATITUDES
 C>  -   LIBRARY:
 C>  -   SPTEZ      - SPHERICAL TRANSFORM
 C>  -   GBYTES     - UNPACK BITS
-C>
-C>   REMARKS: FORTRAN 9X EXTENSIONS ARE USED.
 C>
 C> @return 0 for success, error code otherwise.
       include 'netcdf.inc'
