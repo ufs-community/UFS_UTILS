@@ -392,7 +392,7 @@ for (nn=0; nn < num_nest_grids; nn++) {
   else if( num_nest_grids > 0 ) {
     for (nn=0; nn < num_nest_grids; nn++) {
       if (verbose) {
-	printf("[INFO] Processing setup_aligned_nest for nest %d .  ntiles=%d parent_tile: %d\n", nn, ntiles, parent_tile);
+	printf("[INFO] Processing setup_aligned_nest for nest %d .  ntiles=%d parent_tile: %d\n", nn, ntiles, parent_tile[nn]);
       }
       
       /* Setup aligned nest -- final two arguments are memory locations for data to be returned */
