@@ -8,26 +8,14 @@ export WORK_DIR=
 export PROJECT_CODE=
 export QUEUE=
 
-source sorc/machine-setup.sh
-
-if [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
-    prod_machine=`cat /etc/prod`
-    prod_letter=${prod_machine:0:1}
-
-    this_machine=`hostname -s`
-    this_letter=${this_machine:0:1}
-
-    if [[ "${this_letter}" == "${prod_letter}" ]]; then
-        exit 0
-    fi
-fi
-
 mkdir -p ${WORK_DIR}
 cd ${WORK_DIR}
 rm -rf UFS_UTILS
 
 git clone --recursive https://github.com/NOAA-EMC/UFS_UTILS.git
 cd UFS_UTILS
+
+source sorc/machine-setup.sh
 
 current_hash=$(git rev-parse HEAD)
 
@@ -43,6 +31,19 @@ if [[ -f "${WORK_DIR}/prev_hash.txt" ]]; then
 fi
 
 ./build_all.sh
+
+if [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
+    prod_machine=`cat /etc/prod`
+    prod_letter=${prod_machine:0:1}
+
+    this_machine=`hostname -s`
+    this_letter=${this_machine:0:1}
+
+    # Mars (m), Venus (v)
+    if [[ "${this_letter}" == "${prod_letter}" ]]; then
+        exit 0
+    fi
+fi
 
 # Set machine_id variable for running link_fixdirs
 if [[ $target == "wcoss_dell_p3" ]]; then
