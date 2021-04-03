@@ -21,6 +21,7 @@ void get_grid_v1(int fid, double *xt, double *yt, double *xc, double *yc);
 void get_grid_v2(int fid, int nlon, int nlat, double *xt, double *yt, double *xc, double *yc);
 void get_grid_v3(int fid, int nlon, int nlat, double *xt, double *yt, double *xc, double *yc);
 void get_grid_v4(int fid, int nlon, int nlat, double *xt, double *yt, double *xc, double *yc);
+void get_grid_v5(int fid, double *xt, double *yt, double *xc, double *yc, int ni, int nj);
 
 /***********************************************************************
   void create_grid_from_file( char *file, int *nlon, int *nlat, double *x, double *y, double *dx,
@@ -57,8 +58,10 @@ void create_grid_from_file( char *file, int *nlon, int *nlat, double *x, double 
     yt = (double *)malloc( ni   * nj   *sizeof(double));
 
     fid = mpp_open(file, MPP_READ);
-    if(mpp_dim_exist(fid, "grid_xt") ) 
+    if(mpp_dim_exist(fid, "grid_xt") && mpp_var_exist(fid, "grid_lon") ) 
       get_grid_v1(fid, xt, yt, xc, yc);
+    else if(mpp_dim_exist(fid, "grid_xt") && mpp_var_exist(fid, "grid_xt") )
+      get_grid_v5(fid, xt, yt, xc, yc, ni, nj);
     else if(mpp_dim_exist(fid, "rlon") || mpp_dim_exist(fid, "i") )
       get_grid_v2(fid, ni, nj, xt, yt, xc, yc);
     else if(mpp_dim_exist(fid, "lon") )
@@ -229,6 +232,62 @@ void get_grid_v1(int fid, double *xt, double *yt, double *xc, double *yc)
 
 }
 
+void get_grid_v5(int fid, double *xt, double *yt, double *xc, double *yc, int ni, int nj)
+/* calculated based on grid_xt and grid_yt. We assume cyclic boundary condition
+   in x-direction. The latitude is between -90 and 90. Also assume the grid is regular lat-lon grid.
+*/
+{
+  int vid;
+  double *grid_xt=NULL, *grid_yt=NULL;
+  double x1, x2, is_reverse;
+  int i,j;
+    
+  
+  grid_xt = (double *)malloc(ni*sizeof(double));
+  grid_yt = (double *)malloc(nj*sizeof(double));
+  vid = mpp_get_varid(fid, "grid_xt");
+  mpp_get_var_value(fid, vid, grid_xt);
+  vid = mpp_get_varid(fid, "grid_yt");
+  mpp_get_var_value(fid, vid, grid_yt);
+
+  if(grid_yt[0] >0.)
+    is_reverse = 1;
+  else
+    is_reverse = 0;
+
+  
+  for(j=0; j<nj; j++) for(i=0; i<ni; i++) xt[j*ni+i] = grid_xt[i];
+
+  if(is_reverse)
+    for(j=0; j<nj; j++) for(i=0; i<ni; i++) yt[j*ni+i] = grid_yt[nj-j-1];
+  else
+    for(j=0; j<nj; j++) for(i=0; i<ni; i++) yt[j*ni+i] = grid_yt[j];
+  
+  x1 = grid_xt[ni-1];
+  x2 = grid_xt[0];
+  if(x1 > x2 + 180) x1-=360;
+  xc[0] = 0.5*(x1+x2);
+  xc[ni] = xc[0] + 360.;
+  for(i=1; i<ni; i++) xc[i] = 0.5*(grid_xt[i-1]+grid_xt[i]);
+
+  for(j=1; j<=nj; j++) for(i=0; i<=ni; i++) xc[j*(ni+1)+i] = xc[i];
+
+
+  yc[0] = -90.;
+  yc[nj*(ni+1)] = 90;
+  
+  if(is_reverse) {
+    for(j=1; j<nj; j++) yc[j*(ni+1)] = 0.5*(grid_yt[nj-j-1]+grid_yt[nj-j]);
+  }
+  else {
+    for(j=1; j<nj; j++) yc[j*(ni+1)] = 0.5*(grid_yt[j-1]+grid_yt[j]);
+  }
+
+  for(j=0; j<=nj; j++) for(i=1; i<=ni; i++) yc[j*(ni+1)+i] = yc[j*(ni+1)];
+  
+  
+}
+    
 void get_grid_v2(int fid, int nlon, int nlat, double *xt, double *yt, double *xc, double *yc)
 {
   int vid, i, j;

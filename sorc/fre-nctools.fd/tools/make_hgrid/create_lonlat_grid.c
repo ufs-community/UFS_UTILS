@@ -13,6 +13,7 @@
 #include "tool_util.h"
 #include "constant.h"
 #include "create_hgrid.h"
+#include "create_xgrid.h"
 #define  D2R (M_PI/180.)
 #define  R2D (180./M_PI)
 
@@ -22,7 +23,7 @@
 void set_regular_lonlat_grid( int nxp, int nyp, int isc, int iec, int jsc, int jec, double *xb, double *yb,
 			      double *x, double *y, double *dx, double *dy, double *area, double *angle,
 			      int use_great_circle_algorithm);
-void set_f_plane_grid( int nxp, int nyp, int isc, int iec, int jsc, int jec, double *xb, double *yb, double f_plane_latitude, 
+void set_f_plane_grid( int nxp, int nyp, int isc, int iec, int jsc, int jec, double *xb, double *yb, double f_plane_latitude,
 		       double *x, double *y, double *dx, double *dy, double *area, double *angle);
 double cartesian_dist(double x1, double y1, double x2, double y2, double f_plane_latitude);
 double cartesian_box_area(double x1, double y1, double x2, double y2, double f_plane_latitude);
@@ -51,7 +52,7 @@ void create_regular_lonlat_grid( int *nxbnds, int *nybnds, double *xbnds, double
   double *xb=NULL, *yb=NULL;
   int refine;
   double stretch = 1;
-  
+
   /* use cubic-spline interpolation algorithm to calculate nominal zonal grid location. */
   nxb = *nxbnds;
   nyb = *nybnds;
@@ -74,17 +75,17 @@ void create_regular_lonlat_grid( int *nxbnds, int *nybnds, double *xbnds, double
     printf("%s\n" ,"Note: End point resolutions differ for x-axis. Not suitable for periodic axes");
     printf("%s\n" ,"      See documentation for generating periodic axes when  center = 'c_cell'");
   }
-  
+
   if ( fabs(yb[1] - yb[0] - yb[ny] + yb[ny-1])/(yb[1] - yb[0]) > 1.e-6 ) {
     printf("%d\n",nyp);
     printf("%s\n" ,"Note: End point resolutions differ for y-axis. Not suitable for periodic axes");
     printf("%s\n" ,"      See documentation for generating periodic axes when  center = 'c_cell'");
-  }   
-     
+  }
+
   set_regular_lonlat_grid( nxp, nyp, *isc, *iec, *jsc, *jec, xb, yb, x, y, dx, dy, area, angle_dx, use_great_circle_algorithm);
   free(xb);
   free(yb);
-    
+
 }; /* create_regular_lonlat_grid */
 
 
@@ -114,7 +115,7 @@ void create_simple_cartesian_grid( double *xbnds, double *ybnds, int *nlon, int 
   nx = *nlon;
   ny = *nlat;
   nxp = nx + 1;
-  nyp = ny + 1;  
+  nyp = ny + 1;
   /* use cubic-spline interpolation algorithm to calculate nominal zonal grid location. */
   xb    = (double *)malloc(nxp*sizeof(double));
   grid1 = (double *)malloc(nxb*sizeof(double));
@@ -147,15 +148,15 @@ void create_simple_cartesian_grid( double *xbnds, double *ybnds, int *nlon, int 
 
   nxc = *iec - *isc + 1;
   nyc = *jec - *jsc + 1;
-  
+
   for(n = 0; n< nxc*(nyc+1);     n++) dx[n] = *simple_dx;
   for(n = 0; n< (nxc+1)*nyc;     n++) dy[n] = *simple_dy;
   for(n = 0; n< nxc*nyc;         n++) area[n] = (*simple_dx)*(*simple_dy);
   for(n = 0; n< (nxc+1)*(nyc+1); n++) angle_dx[n] = 0;
-  
+
   free(xb);
   free(yb);
-    
+
 }; /* create_simple_cartesian_grid */
 
 
@@ -172,10 +173,10 @@ void create_spectral_grid( int *nlon, int *nlat, int *isc, int *iec,
   const int itermax = 10;
   const double epsln = 1e-15;
   int ni, nj, nx, ny, nxp, nyp, i, j, converge, iter;
-  double dlon, z, p1, p2, p3, z1, pp, a, b, c, d, sum_wts; 
+  double dlon, z, p1, p2, p3, z1, pp, a, b, c, d, sum_wts;
   double *xb, *yb, *lon, *lonb, *lat, *latb;
   double *sin_hem, *wts_hem, *sin_lat, *wts_lat;
-  
+
   nx = *nlon;
   ny = *nlat;
   nxp = nx + 1;
@@ -257,8 +258,8 @@ void create_spectral_grid( int *nlon, int *nlat, int *isc, int *iec,
   free(sin_hem);
   free(wts_hem);
   free(sin_lat);
-  free(wts_lat); 
-  
+  free(wts_lat);
+
 }; /* create_spectral_grid */
 
 /*******************************************************************************
@@ -266,15 +267,15 @@ void create_spectral_grid( int *nlon, int *nlat, int *isc, int *iec,
                                  double *xb, double *yb, double *x, double *y,
                                  double *dx, double *dy, double *area, double *angle )
    set geographic grid location, calculate grid length, area and rotation angle
-   x and y are on global domain, the other fields are on compute domain 
+   x and y are on global domain, the other fields are on compute domain
 *******************************************************************************/
 void set_regular_lonlat_grid( int nxp, int nyp, int isc, int iec, int jsc, int jec, double *xb, double *yb,
 			      double *x, double *y, double *dx, double *dy, double *area, double *angle,
 			      int use_great_circle_algorithm)
 {
-  int n, i, j;
+  long n, i, j;
   double lon[4], lat[4];
-  
+
   n = 0;
   for(j=0; j<nyp; j++) {
     for(i=0; i<nxp; i++) {
@@ -305,7 +306,7 @@ void set_regular_lonlat_grid( int nxp, int nyp, int isc, int iec, int jsc, int j
 
     nx = nxp-1;
     ny = nyp-1;
-    
+
     /* since make_hgrid is limited to be run on 1 processor, we could assume nx = iec-isc+1 and ny=jec-jsc+1 */
     x_rad  = (double *)malloc(nxp*nyp*sizeof(double));
     y_rad  = (double *)malloc(nxp*nyp*sizeof(double));
@@ -325,11 +326,11 @@ void set_regular_lonlat_grid( int nxp, int nyp, int isc, int iec, int jsc, int j
       }
     }
   }
-  
+
   /* rotation angle */
   n = 0;
   for(j=jsc; j<=jec+1; j++) {
-    for(i=isc; i<=iec+1; i++ ) angle[n++] = 0;   
+    for(i=isc; i<=iec+1; i++ ) angle[n++] = 0;
   }
 
 };  /* set_regular_lonlat_grid */
@@ -355,7 +356,7 @@ void create_tripolar_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnd
   double *xb, *yb;
   double x_poly[20], y_poly[20];
   double stretch = 1;
-  
+
   nxb = *nxbnds;
   nyb = *nybnds;
 
@@ -367,8 +368,8 @@ void create_tripolar_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnd
     xb = compute_grid_bound(nxb, xbnds, nlon, &nx, center);
     yb = compute_grid_bound(nyb, ybnds, nlat, &ny, center);
   }
-  
-  nxp = nx + 1;  
+
+  nxp = nx + 1;
   nyp = ny + 1;
 
   if ( fabs(xb[1] - xb[0] - xb[nx] + xb[nx-1])/(xb[1] - xb[0]) > 1.e-6 ) {
@@ -376,7 +377,7 @@ void create_tripolar_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnd
     printf("%s\n" ,"Note: End point resolutions differ for x-axis. Not suitable for periodic axes");
     printf("%s\n" ,"      See documentation for generating periodic axes when  center = 'c_cell'");
   }
-  
+
   n = 0;
   for(j=0; j<nyp; j++) {
     for(i=0; i<nxp; i++) {
@@ -389,11 +390,11 @@ void create_tripolar_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnd
   j_join = nearest_index(lat_join, yb, nyp);
   lat_join  = yb[j_join];
   lon_start = xbnds[0];
-  lon_end   = xbnds[1];  
+  lon_end   = xbnds[1];
   lon_bpeq = lon_start + 90. ;
   lon_bpnp = lon_start;
   lon_bpsp = lon_start+180.;
-  
+
   if(*lat_join_in != lat_join) {
     if(mpp_pe() == mpp_root_pe() && verbose )printf("NOTE: Change join latitude from %f to %f\n",*lat_join_in, lat_join);
   }
@@ -418,7 +419,7 @@ void create_tripolar_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnd
 	dx[n++] = bipolar_dist(x[j*nxp+i], y[j*nxp+i], x[j*nxp+i+1], y[j*nxp+i+1], lon_bpeq, lon_bpsp, lon_bpnp, rp );
     }
   }
-  
+
   /*   calculate meridinal length */
   n = 0;
   for(j=*jsc;j<=*jec;j++){
@@ -429,7 +430,7 @@ void create_tripolar_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnd
 	dy[n++] = bipolar_dist(x[j*nxp+i], y[j*nxp+i], x[(j+1)*nxp+i], y[(j+1)*nxp+i], lon_bpeq, lon_bpsp, lon_bpnp, rp );
     }
   }
-  
+
   /*define tripolar grid location */
   for(j=j_join;j<nyp;j++) {
     for(i=0;i<nxp;i++) {
@@ -443,7 +444,7 @@ void create_tripolar_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnd
   if(use_great_circle_algorithm) {
     double *cart_x=NULL, *cart_y=NULL, *cart_z=NULL;
     double *x_rad=NULL, *y_rad=NULL;
-    
+
     /* since make_hgrid is limited to be run on 1 processor, we could assume nx = iec-isc+1 and ny=jec-jsc+1 */
     cart_x = (double *)malloc(nxp*nyp*sizeof(double));
     cart_y = (double *)malloc(nxp*nyp*sizeof(double));
@@ -455,17 +456,17 @@ void create_tripolar_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnd
       y_rad[i] = y[i]*D2R;
     }
     latlon2xyz(nxp*nyp, x_rad, y_rad, cart_x, cart_y, cart_z);
-    get_grid_great_circle_area(&nx, &ny, cart_x, cart_y, cart_z, area);
+    get_grid_great_circle_area(&nx, &ny, cart_x, cart_y, area);
     free(x_rad);
     free(y_rad);
     free(cart_x);
     free(cart_y);
     free(cart_z);
   }
-  else { 
+  else {
     for(j=*jsc;j<=*jec;j++){
       for(i=*isc;i<=*iec;i++){
-	if(j < j_join) 
+	if(j < j_join)
 	  area[n++] = box_area(x[j*nxp+i]*D2R, y[j*nxp+i]*D2R, x[(j+1)*nxp+i+1]*D2R, y[(j+1)*nxp+i+1]*D2R);
 	else {
 	  x_poly[0] = x[j*nxp+i]*D2R;       y_poly[0] = y[j*nxp+i]*D2R;
@@ -476,13 +477,13 @@ void create_tripolar_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnd
 	  area[n++] = poly_area(x_poly, y_poly, n_count);
 	}
       }
-    }  
+    }
   }
   /*calculte rotation angle at cell vertex */
   n = 0;
   for(j=*jsc;j<=(*jec)+1;j++){
     for(i=*isc;i<=(*iec)+1;i++){
-      if(j < j_join) 
+      if(j < j_join)
 	angle_dx[n++] = 0.0;
       else {
 	lon_scale = cos(y[j*nxp+i]*D2R);
@@ -493,14 +494,14 @@ void create_tripolar_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnd
       }
     }
   }
-  
+
 }; /* create_tripolar_grid */
 
-void set_f_plane_grid( int nxp, int nyp, int isc, int iec, int jsc, int jec, double *xb, double *yb, double f_plane_latitude, 
+void set_f_plane_grid( int nxp, int nyp, int isc, int iec, int jsc, int jec, double *xb, double *yb, double f_plane_latitude,
 		       double *x, double *y, double *dx, double *dy, double *area, double *angle)
 {
   int n, i, j;
-  
+
   n = 0;
   for(j=0; j<nyp; j++) {
     for(i=0; i<nxp; i++) {
@@ -509,7 +510,7 @@ void set_f_plane_grid( int nxp, int nyp, int isc, int iec, int jsc, int jec, dou
     }
   }
   /* zonal length */
-  
+
   n = 0;
   for(j=jsc; j<=jec+1; j++) {
     for(i=isc; i<=iec; i++ ) {
@@ -524,7 +525,7 @@ void set_f_plane_grid( int nxp, int nyp, int isc, int iec, int jsc, int jec, dou
       dy[n++] = cartesian_dist(x[j*nxp+i], y[j*nxp+i], x[(j+1)*nxp+i], y[(j+1)*nxp+i], f_plane_latitude );
     }
   }
-  
+
   /* cell area */
   n = 0;
   for(j=jsc; j<=jec; j++) {
@@ -536,12 +537,12 @@ void set_f_plane_grid( int nxp, int nyp, int isc, int iec, int jsc, int jec, dou
   /* rotation angle */
   n = 0;
   for(j=jsc; j<=jec+1; j++) {
-    for(i=isc; i<=iec+1; i++ ) angle[n++] = 0;   
+    for(i=isc; i<=iec+1; i++ ) angle[n++] = 0;
   }
-  
+
 }
 
-  
+
 /************************************************************************************/
 void create_f_plane_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnds,
 			  int *nlon, int *nlat, double *dlon, double *dlat,
@@ -553,7 +554,7 @@ void create_f_plane_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnds
   double *xb=NULL, *yb=NULL;
   int refine;
   double stretch = 1;
-  
+
   /* use cubic-spline interpolation algorithm to calculate nominal zonal grid location. */
   nxb = *nxbnds;
   nyb = *nybnds;
@@ -576,17 +577,17 @@ void create_f_plane_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnds
     printf("%s\n" ,"Note: End point resolutions differ for x-axis. Not suitable for periodic axes");
     printf("%s\n" ,"      See documentation for generating periodic axes when  center = 'c_cell'");
   }
-  
+
   if ( fabs(yb[1] - yb[0] - yb[ny] + yb[ny-1])/(yb[1] - yb[0]) > 1.e-6 ) {
     printf("%d\n",nyp);
     printf("%s\n" ,"Note: End point resolutions differ for y-axis. Not suitable for periodic axes");
     printf("%s\n" ,"      See documentation for generating periodic axes when  center = 'c_cell'");
-  }   
-     
+  }
+
   set_f_plane_grid( nxp, nyp, *isc, *iec, *jsc, *jec, xb, yb, f_plane_latitude, x, y, dx, dy, area, angle_dx);
   free(xb);
   free(yb);
-    
+
 }; /* create_f_plane_grid */
 
 
@@ -597,7 +598,7 @@ double cartesian_dist(double x1, double y1, double x2, double y2, double f_plane
 
   if(x1 == x2)
     dist = fabs(y2-y1)*D2R*RADIUS;
-  else if(y1 == y2) 
+  else if(y1 == y2)
     dist = fabs(x2-x1)*D2R*RADIUS*cos(f_plane_latitude*D2R);
   else
     mpp_error("create_lonlat_grid: This is not rectangular grid");
@@ -605,7 +606,7 @@ double cartesian_dist(double x1, double y1, double x2, double y2, double f_plane
   return dist;
 }
 
- 
+
 /* rectangular grid box area for cartesian grid */
 double cartesian_box_area(double x1, double y1, double x2, double y2, double f_plane_latitude)
 {
@@ -620,4 +621,3 @@ double cartesian_box_area(double x1, double y1, double x2, double y2, double f_p
 
   return area;
 }
-
