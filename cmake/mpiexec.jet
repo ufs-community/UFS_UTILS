@@ -6,7 +6,9 @@
 #   $2+ - Executable and its arguments
 #
 
+ACCOUNT=
+
 NP=$1
 shift
 
-srun -n $NP $@
+srun -A $ACCOUNT -n $NP $@
