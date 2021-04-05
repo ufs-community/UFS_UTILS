@@ -89,7 +89,7 @@ for dir in snow2mdl global_cycle ice_blend; do
     while [ ! -f "summary.log" ]; do
         sleep 10
         sleep_time=$((sleep_time+10))
-        if (( $sleep_time > $TIMEOUT_LIMIT )); then
+        if (( sleep_time > TIMEOUT_LIMIT )); then
             echo "Job timed out"
             exit 1
         fi
