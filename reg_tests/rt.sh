@@ -7,6 +7,7 @@ export WORK_DIR=
 
 export PROJECT_CODE=
 export QUEUE=
+TIMEOUT_LIMIT=3600
 
 mkdir -p ${WORK_DIR}
 cd ${WORK_DIR}
@@ -59,12 +60,18 @@ cd fix
 
 cd ../reg_tests
 
+sleep_time=0
 for dir in chgres_cube grid_gen; do
     cd $dir
     ./driver.$target.sh
     # Wait for job to complete
     while [ ! -f "summary.log" ]; do
         sleep 10
+        sleep_time=$((sleep_time+10))
+        if (( $sleep_time > $TIMEOUT_LIMIT )); then
+            echo "Job timed out"
+            exit 1
+        fi
     done
     cd ..
 done
@@ -76,17 +83,20 @@ for dir in snow2mdl global_cycle ice_blend; do
     elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
         cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
     fi
+    
     # Wait for job to complete
+    sleep_time=0
     while [ ! -f "summary.log" ]; do
         sleep 10
+        sleep_time=$((sleep_time+10))
+        if (( $sleep_time > $TIMEOUT_LIMIT )); then
+            echo "Job timed out"
+            exit 1
+        fi
     done
     cd ..
 done
 
-# Wait chgres_cube and grid_gen to finish before submitting more jobs
-while [ ! -f "snow2mdl/summary.log" ] || [ ! -f "global_cycle/summary.log" ] || [ ! -f "ice_blend/summary.log" ]; do
-    sleep 10
-done
 
 echo "Commit hash: ${current_hash}" >> reg_test_results.txt
 echo "" >> reg_test_results.txt
