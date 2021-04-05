@@ -1,6 +1,6 @@
-!> @file
-!! @brief This is a limited point version of surface program.
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+C> @file
+C> @brief This is a limited point version of surface program.
+C> @author Shrinivas Moorthi Mark Iredell NOAA/EMC
 
 !> This program runs in two different modes:
 !!
@@ -49,11 +49,39 @@
 !
 !  grib code for each parameter - used in subroutines sfccycle and setrmsk.
 !
-      integer kpdtsf,kpdwet,kpdsno,kpdzor,kpdais,kpdtg3,kpdplr,kpdgla,
-     &        kpdmxi,kpdscv,kpdsmc,kpdoro,kpdmsk,kpdstc,kpdacn,kpdveg,
-     &        kpdvet,kpdsot
-     &,       kpdvmn,kpdvmx,kpdslp,kpdabs
-     &,       kpdsnd, kpdabs_0, kpdabs_1, kpdalb(4)
+      integer kpdtsf !< GRIB1 parameter number of skin temperature/SST.
+      integer kpdwet !< GRIB1 parameter number of soil wetness.
+      integer kpdsno !< GRIB1 parameter number of liquid equivalent snow
+                     !! depth.
+      integer kpdzor !< GRIB1 parameter number of physical snow depth.
+      integer kpdais !< GRIB1 parameter number of roughness length.
+      integer kpdtg3 !< GRIB1 parameter number of soil substrate
+                     !! temperature.
+      integer kpdplr !< GRIB1 parameter number of plant resistance.
+      integer kpdgla !< GRIB1 parameter number of glacial ice.
+      integer kpdmxi !< GRIB1 parameter number of maximum ice extent.
+      integer kpdscv !< GRIB1 parameter number of snow cover.
+      integer kpdsmc !< GRIB1 parameter number of soil moisture.
+      integer kpdoro !< GRIB1 parameter number of orography.
+      integer kpdmsk !< GRIB1 parameter number of land mask.
+      integer kpdstc !< GRIB1 parameter number of soil temperature.
+      integer kpdacn !< GRIB1 parameter number of sea ice concentration.
+      integer kpdveg !< GRIB1 parameter number of vegetation greenness.
+      integer kpdvet !< GRIB1 parameter number of vegetation type.
+      integer kpdsot !< GRIB1 parameter number of soil type.
+      integer kpdvmn !< GRIB1 parameter number of minimum vegetation
+                     !! greenness.
+      integer kpdvmx !< GRIB1 parameter number of maximum vegetation
+                     !! greenness.
+      integer kpdslp !< GRIB1 parameter number of slope type.
+      integer kpdabs !< GRIB1 parameter number of maximum snow albedo.
+      integer kpdsnd !< GRIB1 parameter number of physical snow depth.
+      integer kpdabs_0 !< GRIB1 parameter number of legacy maximum snow
+                       !! albedo.
+      integer kpdabs_1 !< GRIB1 parameter number of modis-based 
+                       !! maximum snow albedo.
+      integer kpdalb(4) !< GRIB1 parameter number of 4-component
+                        !! snow-free albedo.
       parameter(kpdtsf=11,  kpdwet=86, kpdsno=65,  kpdzor=83,
 !    1          kpdalb=84,  kpdais=91, kpdtg3=11,  kpdplr=224,
      1          kpdais=91,  kpdtg3=11, kpdplr=224,
@@ -64,14 +92,22 @@
      &          kpdvet=225, kpdsot=224,kpdabs_1=159,
      &          kpdsnd=66 )
 !
-      integer, parameter :: kpdalb_0(4)=(/212,215,213,216/)
-      integer, parameter :: kpdalb_1(4)=(/189,190,191,192/)
-      integer, parameter :: kpdalf(2)=(/214,217/)
-!
-      integer, parameter :: xdata=5000, ydata=2500, mdata=xdata*ydata
-      integer            :: veg_type_landice
-      integer            :: soil_type_landice
-!
+      integer, parameter :: kpdalb_0(4)=(/212,215,213,216/) !< GRIB1 parameter
+                                                         !! numbers for brigleb
+                                                         !! snow-free albedo.
+      integer, parameter :: kpdalb_1(4)=(/189,190,191,192/) !< GRIB1 parameter
+                                                         !! numbers for modis 
+                                                         !! snow-free albedo.
+      integer, parameter :: kpdalf(2)=(/214,217/) !< GRIB1 parameter numbers of
+                                                !! fraction for strongly/weakly
+                                                !! zenith angle dependent albedo.
+      integer, parameter :: xdata=5000 !< Maximum 'i' dimension of input data.
+      integer, parameter :: ydata=2500 !< Maximum 'j' dimension of input data.
+      integer, parameter :: mdata=xdata*ydata !< Maximum number of input data points.
+      integer            :: veg_type_landice !< Vegetation type category at permanent
+                                             !! land-ice points.
+      integer            :: soil_type_landice !< Soil type category at permanent
+                                             !! land-ice points.
       end module sfccyc_module
 
 !> Surface cycling driver routine. Update 'first guess' surface
@@ -3823,18 +3859,14 @@
      &                  tg3anl,cvanl ,cvbanl,cvtanl,
      &                  cnpanl,smcanl,stcanl,slianl,scvanl,veganl,
      &                  vetanl,sotanl,alfanl,
-!cwu [+1l] add ()anl for sih, sic
      &                  sihanl,sicanl,
-!clu [+1l] add ()anl for vmn, vmx, slp, abs
      &                  vmnanl,vmxanl,slpanl,absanl,
      &                  tsfclm,tsfcl2,wetclm,snoclm,zorclm,albclm,
      &                  aisclm,
      &                  tg3clm,cvclm ,cvbclm,cvtclm,
      &                  cnpclm,smcclm,stcclm,sliclm,scvclm,vegclm,
      &                  vetclm,sotclm,alfclm,
-!cwu [+1l] add ()clm for sih, sic
      &                  sihclm,sicclm,
-!clu [+1l] add ()clm for vmn, vmx, slp, abs
      &                  vmnclm,vmxclm,slpclm,absclm,
      &                  len,lsoil)
       use machine , only : kind_io8,kind_io4
@@ -4046,25 +4078,19 @@
      &                 slmask,fntsfa,fnweta,fnsnoa,fnzora,fnalba,fnaisa,
      &                 fntg3a,fnscva,fnsmca,fnstca,fnacna,fnvega,
      &                 fnveta,fnsota,
-!clu [+1l] add fn()a for vmn, vmx, slp, abs
      &                 fnvmna,fnvmxa,fnslpa,fnabsa,
      &                 tsfanl,wetanl,snoanl,zoranl,albanl,aisanl,
      &                 tg3anl,cvanl ,cvbanl,cvtanl,
      &                 smcanl,stcanl,slianl,scvanl,acnanl,veganl,
      &                 vetanl,sotanl,alfanl,tsfan0,
-!clu [+1l] add ()anl for vmn, vmx, slp, abs
      &                 vmnanl,vmxanl,slpanl,absanl,
-!cggg snow mods start    &        kpdtsf,kpdwet,kpdsno,kpdzor,kpdalb,kpdais,
      &                 kpdtsf,kpdwet,kpdsno,kpdsnd,kpdzor,kpdalb,kpdais,
-!cggg snow mods end
      &                 kpdtg3,kpdscv,kpdacn,kpdsmc,kpdstc,kpdveg,
      &                 kprvet,kpdsot,kpdalf,
-!clu [+1l] add kpd() for vmn, vmx, slp, abs
      &                 kpdvmn,kpdvmx,kpdslp,kpdabs,
      &                 irttsf,irtwet,irtsno,irtzor,irtalb,irtais,
      &                 irttg3,irtscv,irtacn,irtsmc,irtstc,irtveg,
      &                 irtvet,irtsot,irtalf
-!clu [+1l] add irt() for vmn, vmx, slp, abs
      &,                irtvmn,irtvmx,irtslp,irtabs
      &,                imsk, jmsk, slmskh, outlat, outlon
      &,                gaus, blno, blto, me, lanom)
@@ -4767,17 +4793,13 @@
      &                  tg3fcs,cvfcs ,cvbfcs,cvtfcs,
      &                  cnpfcs,smcfcs,stcfcs,slifcs,aisfcs,
      &                  vegfcs, vetfcs, sotfcs, alffcs,
-!cwu [+1l] add ()fcs for sih, sic
      &                  sihfcs,sicfcs,
-!clu [+1l] add ()fcs for vmn, vmx, slp, abs
      &                  vmnfcs,vmxfcs,slpfcs,absfcs,
      &                  tsfanl,wetanl,snoanl,zoranl,albanl,
      &                  tg3anl,cvanl ,cvbanl,cvtanl,
      &                  cnpanl,smcanl,stcanl,slianl,aisanl,
      &                  veganl, vetanl, sotanl, alfanl,
-!cwu [+1l] add ()anl for sih, sic
      &                  sihanl,sicanl,
-!clu [+1l] add ()anl for vmn, vmx, slp, abs
      &                  vmnanl,vmxanl,slpanl,absanl,
      &                  len,lsoil)
 !
@@ -5650,7 +5672,6 @@
 !! @author Shrinivas Moorthi
 !! @author Xingen Wu
       subroutine newice(slianl,slifcs,tsfanl,tsffcs,len,lsoil,
-!cwu [+1l] add sihnew,sicnew,sihanl,sicanl
      &                   sihnew,sicnew,sihanl,sicanl,      
      &                   albanl,snoanl,zoranl,smcanl,stcanl,
      &                   albsea,snosea,zorsea,smcsea,smcice,
@@ -6850,8 +6871,8 @@
 !! @param[in] data The input data.
 !! @param[in] imax "i" dimension of input grid.
 !! @param[in] jmax "j" dimension of input grid.
-!! @param[out] rlnout Latitudes on input data grid.
-!! @param[out] rltout Longitudes on input data grid.
+!! @param[out] rlnout Longitudes on input data grid.
+!! @param[out] rltout Latitudes on input data grid.
 !! @param[out] lmask True, when input data has a mask.
 !! @param[out] rslmsk The mask of the input data grid.
 !! @param[in] gaus Is high-resolution mask on a gaussian grid.
@@ -7343,22 +7364,22 @@
       return
       end
 
-!> ???
+!> Interpolation from lat/lon or gaussian grid to a lat/lon grid.
 !!
-!! @param[in] gauin
-!! @param[in] imxin
-!! @param[in] jmxin
-!! @param[in] regout
-!! @param[in] imxout
-!! @param[in] jmxout
-!! @param[in] wlon
-!! @param[in] rnlat
-!! @param[in] rlnout
-!! @param[in] rltout
-!! @param[in] gaus
-!! @param[in] blno
-!! @param[in] blto
-!! @author M. Iredell, xuli, Hang Lei, George Gayno
+!! @param[in] gauin Input data.
+!! @param[in] imxin 'i' dimension of input data.
+!! @param[in] jmxin 'j' dimension of input data.
+!! @param[out] regout Output data.
+!! @param[in] imxout 'i' dimension of output data.
+!! @param[in] jmxout 'j' dimension of output data.
+!! @param[in] wlon Longitude of west boundary of input data.
+!! @param[in] rnlat Latitude of north row of input data.
+!! @param[in] rlnout Longitudes on output data grid.
+!! @param[in] rltout Latitudes on output data grid.
+!! @param[in] gaus Is input data on gaussian grid?
+!! @param[in] blno Corner point longitude of input data.
+!! @param[in] blto Corner point latitude of input data.
+!! @author Shrinivas Moorthi
       subroutine ga2la(gauin,imxin,jmxin,regout,imxout,jmxout,
      &                 wlon,rnlat,rlnout,rltout,gaus,blno, blto)
       use machine , only : kind_io8,kind_io4
