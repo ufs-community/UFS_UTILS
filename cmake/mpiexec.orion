@@ -7,8 +7,9 @@
 #
 
 ACCOUNT=
+QOS=debug
 
 NP=$1
 shift
 
-srun -A $ACCOUNT -n $NP $@
+srun -A $ACCOUNT -q $QOS -n $NP $@
