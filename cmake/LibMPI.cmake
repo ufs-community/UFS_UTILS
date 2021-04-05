@@ -95,12 +95,12 @@ function (platform_name RETURN_VARIABLE)
       SITENAME MATCHES "^gaea14" OR
       SITENAME MATCHES "^gaea15" OR
       SITENAME MATCHES "^gaea16" OR
-      SITENAME MATCHES "^gaea9.ncrc.gov)" OR
-      SITENAME MATCHES "^gaea10.ncrc.gov)" OR
-      SITENAME MATCHES "^gaea11.ncrc.gov)" OR
-      SITENAME MATCHES "^gaea12.ncrc.gov)" OR
-      SITENAME MATCHES "^gaea13.ncrc.gov)" OR
-      SITENAME MATCHES "^gaea14.ncrc.gov)" OR
+      SITENAME MATCHES "^gaea9.ncrc.gov" OR
+      SITENAME MATCHES "^gaea10.ncrc.gov" OR
+      SITENAME MATCHES "^gaea11.ncrc.gov" OR
+      SITENAME MATCHES "^gaea12.ncrc.gov" OR
+      SITENAME MATCHES "^gaea13.ncrc.gov" OR
+      SITENAME MATCHES "^gaea14.ncrc.gov" OR
       SITENAME MATCHES "^gaea15.ncrc.gov" OR
       SITENAME MATCHES "^gaea16.ncrc.gov")
 
