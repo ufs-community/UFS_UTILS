@@ -28,8 +28,7 @@ function (platform_name RETURN_VARIABLE)
 
   # Determine platform name from site name...
   site_name (SITENAME)
-
-
+  
   # hera
   if (SITENAME MATCHES "^hfe01" OR
       SITENAME MATCHES "^hfe02" OR
@@ -161,7 +160,6 @@ function (platform_name RETURN_VARIABLE)
     set (${RETURN_VARIABLE} "unknown" PARENT_SCOPE)
 
   endif ()
-
 endfunction ()
 
 #==============================================================================
