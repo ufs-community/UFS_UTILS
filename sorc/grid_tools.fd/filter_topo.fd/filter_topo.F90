@@ -1,6 +1,6 @@
 !> @file
 !! @brief This program does ???
-!! @author R. J. Purser
+!! @author GFDL Programmer
 
 !> This program does ???
 !!
