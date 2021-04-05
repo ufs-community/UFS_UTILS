@@ -13,8 +13,9 @@ mkdir -p ${WORK_DIR}
 cd ${WORK_DIR}
 rm -rf UFS_UTILS
 
-git clone --recursive https://github.com/NOAA-EMC/UFS_UTILS.git
+git clone --recursive https://github.com/kgerheiser/UFS_UTILS.git
 cd UFS_UTILS
+git checkout feature/auto-reg-tests
 
 source sorc/machine-setup.sh
 
@@ -68,7 +69,7 @@ for dir in chgres_cube grid_gen; do
     while [ ! -f "summary.log" ]; do
         sleep 10
         sleep_time=$((sleep_time+10))
-        if (( $sleep_time > $TIMEOUT_LIMIT )); then
+        if (( sleep_time > TIMEOUT_LIMIT )); then
             echo "Job timed out"
             exit 1
         fi
