@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 
 export MAILTO=
 
@@ -70,7 +70,7 @@ for dir in chgres_cube grid_gen; do
         sleep 10
         sleep_time=$((sleep_time+10))
         if (( sleep_time > TIMEOUT_LIMIT )); then
-            echo "Job timed out"
+             mail -s "UFS_UTILS Regression Tests timed out on ${target}" ${MAILTO}
             exit 1
         fi
     done
@@ -91,7 +91,7 @@ for dir in snow2mdl global_cycle ice_blend; do
         sleep 10
         sleep_time=$((sleep_time+10))
         if (( sleep_time > TIMEOUT_LIMIT )); then
-            echo "Job timed out"
+            mail -s "UFS_UTILS Regression Tests timed out on ${target}" ${MAILTO}
             exit 1
         fi
     done
