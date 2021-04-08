@@ -11,6 +11,7 @@ TIMEOUT_LIMIT=3600
 
 mkdir -p ${WORK_DIR}
 cd ${WORK_DIR}
+rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
 git clone --recursive https://github.com/kgerheiser/UFS_UTILS.git
