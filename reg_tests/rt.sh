@@ -1,5 +1,7 @@
 #!/bin/bash -l
 
+ulimit -s unlimited
+
 export MAILTO=
 
 # Directory to download UFS_UTILS to and run the regression tests
