@@ -69,5 +69,6 @@ if(OpenMP_Fortran_FOUND)
   target_link_libraries(ftst_program_setup OpenMP::OpenMP_Fortran)
 endif()
 
-
-
+add_executable(ftst_search_util
+  ftst_search_util.F90)
+add_test(NAME ftst_search_util COMMAND ftst_search_util)
