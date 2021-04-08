@@ -32,6 +32,8 @@ if [[ -f "${WORK_DIR}/prev_hash.txt" ]]; then
     fi
 fi
 
+echo "Started on " `hostname -s` >> ${WORK_DIR}/reg_test_results.txt
+
 ./build_all.sh
 
 if [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
@@ -50,6 +52,7 @@ fi
 # Set machine_id variable for running link_fixdirs
 if [[ $target == "wcoss_dell_p3" ]]; then
     machine_id=dell
+    module load lsf/10.1
 elif [[ $target == "wcoss_cray" ]]; then
     machine_id=cray
 else
@@ -70,12 +73,16 @@ for dir in chgres_cube grid_gen; do
         sleep 10
         sleep_time=$((sleep_time+10))
         if (( sleep_time > TIMEOUT_LIMIT )); then
-             mail -s "UFS_UTILS Regression Tests timed out on ${target}" ${MAILTO}
+             mail -s "UFS_UTILS Regression Tests timed out on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
             exit 1
         fi
     done
     cd ..
 done
+
+if [[ $target == "wcoss_dell_p3" ]]; then
+    module load lsf/10.1
+fi
 
 for dir in snow2mdl global_cycle ice_blend; do
     cd $dir
@@ -91,7 +98,7 @@ for dir in snow2mdl global_cycle ice_blend; do
         sleep 10
         sleep_time=$((sleep_time+10))
         if (( sleep_time > TIMEOUT_LIMIT )); then
-            mail -s "UFS_UTILS Regression Tests timed out on ${target}" ${MAILTO}
+            mail -s "UFS_UTILS Regression Tests timed out on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
             exit 1
         fi
     done
@@ -99,23 +106,23 @@ for dir in snow2mdl global_cycle ice_blend; do
 done
 
 
-echo "Commit hash: ${current_hash}" >> reg_test_results.txt
-echo "" >> reg_test_results.txt
+echo "Commit hash: ${current_hash}" >> ${WORK_DIR}/reg_test_results.txt
+echo "" >> ${WORK_DIR}/reg_test_results.txt
 
 for dir in chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
     success=true
     if grep -qi "FAILED" ${dir}/summary.log; then
         success=false
-        echo "${dir} regression tests FAILED" >> reg_test_results.txt
+        echo "${dir} regression tests FAILED" >> ${WORK_DIR}/reg_test_results.txt
     else
-        echo "${dir} regression tests PASSED" >> reg_test_results.txt
+        echo "${dir} regression tests PASSED" >> ${WORK_DIR}/reg_test_results.txt
     fi
 done
 
 if [[ "$success" == true ]]; then
-    mail -s "UFS_UTILS Regression Tests PASSED on ${target}" ${MAILTO} < reg_test_results.txt
+    mail -s "UFS_UTILS Regression Tests PASSED on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
 else
-    mail -s "UFS_UTILS Regression Tests FAILED on ${target}" ${MAILTO} < reg_test_results.txt
+    mail -s "UFS_UTILS Regression Tests FAILED on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
 fi
 
 # Save current hash as previous hash for next time
