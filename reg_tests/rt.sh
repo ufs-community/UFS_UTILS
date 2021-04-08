@@ -55,6 +55,7 @@ if [[ $target == "wcoss_dell_p3" ]]; then
     module load lsf/10.1
 elif [[ $target == "wcoss_cray" ]]; then
     machine_id=cray
+    module load xt-lsfhpc/9.1.3
 else
     machine_id=$target
 fi
@@ -82,7 +83,10 @@ done
 
 if [[ $target == "wcoss_dell_p3" ]]; then
     module load lsf/10.1
+elif [[ $target == "wcoss_cray" ]]; then
+    module load xt-lsfhpc/9.1.3
 fi
+
 
 for dir in snow2mdl global_cycle ice_blend; do
     cd $dir
