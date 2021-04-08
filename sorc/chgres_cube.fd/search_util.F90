@@ -118,7 +118,7 @@
    case (230) ! soil type on the input grid
      default_value = 11.0
    case default
-     print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field
+     print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field_num
      call mpi_abort(mpi_comm_world, 77, ierr)
  end select
 

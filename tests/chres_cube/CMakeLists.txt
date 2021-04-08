@@ -70,5 +70,13 @@ if(OpenMP_Fortran_FOUND)
 endif()
 
 add_executable(ftst_search_util
+  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/search_util.F90"
   ftst_search_util.F90)
 add_test(NAME ftst_search_util COMMAND ftst_search_util)
+target_link_libraries(
+  ftst_search_util
+  esmf
+  MPI::MPI_Fortran)
+if(OpenMP_Fortran_FOUND)
+  target_link_libraries(ftst_search_util OpenMP::OpenMP_Fortran)
+endif()
