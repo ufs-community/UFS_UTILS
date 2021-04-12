@@ -2,17 +2,17 @@
 
 # Introduction
 
-The chgres_cube program creates initial condition files to “coldstart”
+The program chgres.F90 creates initial condition files to “coldstart”
 the forecast model. The initial conditions are created from either
 Global Forecast System (GFS) gridded binary version 2 (GRIB2), NOAA
 Environmental Modeling System Input/Output (NEMSIO) data, or Network
 Common Data Form (NetCDF) data.
 
-This is part of the [NCEPLIBS
-UFS_UTILS](https://github.com/NOAA-EMC/UFS_UTILS) project.
-
-This user guide is part of the <a href="../index.html">UFS_UTILS
+This document is part of the <a href="../index.html">UFS_UTILS
 documentation</a>.
+
+The chgres_cube program is part of the [NCEPLIBS
+UFS_UTILS](https://github.com/NOAA-EMC/UFS_UTILS) project.
 
 ## Where to find GFS GRIB2, NEMSIO and NetCDF data
 
