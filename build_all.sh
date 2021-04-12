@@ -8,7 +8,6 @@
 
 set -eux
 
-target=hera
 ##compiler=gnu
 ##compiler=intel
 

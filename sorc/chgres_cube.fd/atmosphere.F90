@@ -40,7 +40,9 @@
                                        terrain_target_grid
 
  use program_setup, only             : vcoord_file_target_grid, &
-                                       wam_cold_start, wam_start_date, & 
+                                       wam_cold_start, & 
+                                       cycle_year, cycle_mon,     &
+                                       cycle_day, cycle_hour,     &
                                        regional, &
                                        tracers, num_tracers,      &
                                        num_tracers_input,         & 
@@ -325,7 +327,7 @@
  call vintg
 
  if( wam_cold_start ) then 
-   call vintg_wam (wam_start_date)
+   call vintg_wam (cycle_year,cycle_mon,cycle_day,cycle_hour)
  endif
 
 !-----------------------------------------------------------------------------------
@@ -1364,16 +1366,19 @@
 !! temperature and consoder primary compositions of neutral atmosphere
 !! in term of specific values of oxygen, single oxygen, and ozone.
 !!
-!! @param [in] wam_start_date  initial date as yyyymmddhh
+!! @param [in] year  initial year
+!! @param [in] month  initial month
+!! @param [in] day  initial day
+!! @param [in] hour  initial hour
 !!
 !! @author Hann-Ming Henry Juang NCEP/EMC
- SUBROUTINE VINTG_WAM (WAM_START_DATE)
+ SUBROUTINE VINTG_WAM (YEAR,MONTH,DAY,HOUR)
 
  IMPLICIT NONE
 
  include 'mpif.h'
 
- INTEGER, INTENT(IN)             :: WAM_START_DATE
+ INTEGER, INTENT(IN)             :: YEAR,MONTH,DAY,HOUR
 
  REAL(ESMF_KIND_R8), PARAMETER   :: AMO  = 15.9994  ! molecular weight of o
  REAL(ESMF_KIND_R8), PARAMETER   :: AMO2 = 31.999   !molecular weight of o2
@@ -1407,10 +1412,10 @@
  JDOW = 0
  JDAY = 0
  ICDAY = 0
- IDAT(1)=wam_start_date/1000000     		! year
- IDAT(2)=mod(wam_start_date,1000000)/10000	! month
- IDAT(3)=mod(wam_start_date,10000)/100		! day
- IDAT(5)=mod(wam_start_date,100)		! hour
+ IDAT(1)=year
+ IDAT(2)=month
+ IDAT(3)=day
+ IDAT(5)=hour
  CALL W3DOXDAT(IDAT,JDOW,ICDAY,JDAY)
  print *,"VINTG_WAM: WAM START DATE FOR ICDAY=",ICDAY
 

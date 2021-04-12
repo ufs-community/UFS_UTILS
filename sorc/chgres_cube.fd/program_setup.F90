@@ -82,6 +82,7 @@
  character(len=20), allocatable, public      :: field_var_names(:)  !< The GRIB2 variable name in the varmap table.
  
  
+ integer, public                 :: cycle_year = -999 !< Cycle year.
  integer, public                 :: cycle_mon = -999 !< Cycle month.
  integer, public                 :: cycle_day = -999 !< Cycle day.
  integer, public                 :: cycle_hour = -999 !< Cycle hour.
@@ -94,7 +95,6 @@
  logical, public                 :: convert_atm = .false. !< Convert atmospheric data when true.
  logical, public                 :: convert_nst = .false. !< Convert nst data when true.
  logical, public                 :: convert_sfc = .false. !< Convert sfc data when true.
- integer, public                 :: wam_start_date        !< wam start date.
  logical, public                 :: wam_cold_start = .false. !< wam cold start.
  
  ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
@@ -178,10 +178,10 @@
                    geogrid_file_input_grid, &
                    data_dir_input_grid,     &
                    vcoord_file_target_grid, &
-                   cycle_mon, cycle_day,    &
+                   cycle_year, cycle_mon, cycle_day,    &
                    cycle_hour, convert_atm, &
                    convert_nst, convert_sfc, &
-                   wam_cold_start, wam_start_date, &                     !hmhj
+                   wam_cold_start, &                     !hmhj
                    vgtyp_from_climo, &
                    sotyp_from_climo, &
                    vgfrc_from_climo, &
@@ -262,6 +262,22 @@
    num_tracers_input = num_tracers_input + 1
    print*,"- WILL PROCESS INPUT TRACER ", trim(tracers_input(is))
  enddo
+
+!-------------------------------------------------------------------------
+! Ensure spo, spo2, and spo3 in tracers list if wam ic is on
+!-------------------------------------------------------------------------
+ if( wam_cold_start ) then
+    ierr=3
+    do is = 1, num_tracers
+      if(trim(tracers(is)) == "spo"  ) ierr = ierr - 1
+      if(trim(tracers(is)) == "spo2" ) ierr = ierr - 1
+      if(trim(tracers(is)) == "spo3" ) ierr = ierr - 1
+    enddo
+    if (ierr /= 0) then
+      print*,"-ERROR: spo, spo2, and spo3 should be in tracers namelist"
+      call error_handler("WAM TRACER NAMELIST.", ierr)
+    endif
+ endif  
 
 !-------------------------------------------------------------------------
 ! Ensure program recognizes the input data type.  

@@ -213,6 +213,7 @@ cat << EOF > ./fort.41
   nst_files_input_grid="${NST_FILES_INPUT}"
   grib2_file_input_grid="${GRIB2_FILE_INPUT}"
   varmap_file="${VARMAP_FILE}"
+  cycle_year=$iy
   cycle_mon=$im
   cycle_day=$id
   cycle_hour=$ih
@@ -226,7 +227,6 @@ cat << EOF > ./fort.41
   halo_bndy=$HALO_BNDY
   halo_blend=$HALO_BLEND
   wam_cold_start=$WAM_COLD_START
-  wam_start_date=$CDATE
  /
 EOF
 
