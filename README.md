@@ -103,6 +103,12 @@ documentation build, as well as some markdown files which are part of
 the documentation. It also contains (in the source subdirectory) the
 ReadTheDocs documentation files.
 
+## References
+
+Gayno G., Beck J., Carson L., [Pre-Processing:
+chgres_cube](./docs/20201105-0945a-pre-processing-chgres-cube-gayno-final.pdf),
+UFS MRW App Training, 5 November 2020.
+
 ## Disclaimer
 
 The United States Department of Commerce (DOC) GitHub project code is
