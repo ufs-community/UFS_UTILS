@@ -71,8 +71,15 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J esg.regional -W 0:1
         -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/esg.regional.sh"
 
 #-----------------------------------------------------------------------------
+# Regional GSL gravity wave drag.
+#-----------------------------------------------------------------------------
+
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J reg.gsl.gwd -W 0:08 -x -n 24 -w 'ended(esg.regional)' \
+        -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/regional.gsl.gwd.sh"
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "affinity[core(1)]" -R "rusage[mem=100]" -W 0:01 \
-     -w 'ended(esg.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+     -w 'ended(reg.gsl.gwd)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
