@@ -74,9 +74,16 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J esg.regional -W 0:1
         -w 'ended(gfdl.regional)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/esg.regional.sh"
 
 #-----------------------------------------------------------------------------
+# Regional GSL gravity wave drag.
+#-----------------------------------------------------------------------------
+
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J reg.gsl.gwd -W 0:08 -M 2400 \
+        -w 'ended(esg.regional)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/regional.gsl.gwd.sh"
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
-bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(esg.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(reg.gsl.gwd)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
 
 exit
