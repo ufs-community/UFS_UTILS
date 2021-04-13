@@ -19,22 +19,22 @@
  private
 
  character*200, public         :: afwa_snow_global_file !< global afwa snow file.
- character*150, public         :: afwa_snow_nh_file !< path/name afwa n hemis snow depth
- character*150, public         :: afwa_snow_sh_file !< path/name afwa s hemis snow depth
- character*150, public         :: afwa_lsmask_nh_file !< path/name afwa n hemis land/sea mask
- character*150, public         :: afwa_lsmask_sh_file !< path/name afwa s hemis land/sea mask
- character*150, public         :: autosnow_file !< path/name s hemis autosnow file
- character*150, public         :: climo_qc_file  !< Climatological snow cover
+ character*200, public         :: afwa_snow_nh_file !< path/name afwa n hemis snow depth
+ character*200, public         :: afwa_snow_sh_file !< path/name afwa s hemis snow depth
+ character*200, public         :: afwa_lsmask_nh_file !< path/name afwa n hemis land/sea mask
+ character*200, public         :: afwa_lsmask_sh_file !< path/name afwa s hemis land/sea mask
+ character*200, public         :: autosnow_file !< path/name s hemis autosnow file
+ character*200, public         :: climo_qc_file  !< Climatological snow cover
                                                  !! file. Used to quality control snow data.
- character*150, public         :: gfs_lpl_file  !< GFS gaussian thinned (reduced) grid 
+ character*200, public         :: gfs_lpl_file  !< GFS gaussian thinned (reduced) grid 
                                                 !! definition file.  Contains the number of 
                                                 !! longitudes (i-points) for each latitude (row).
- character*150, public         :: model_lat_file !< path/name lats on the model grid
- character*150, public         :: model_lon_file !< path/name lons on the model grid
- character*150, public         :: model_lsmask_file !< path/name nesdis/ims land mask
- character*150, public         :: model_snow_file !< path/name nesdis/ims snow cover
- character*150, public         :: nesdis_lsmask_file  !< nesdis/ims land mask file
- character*150, public         :: nesdis_snow_file  !< nesdis/ims snow file
+ character*200, public         :: model_lat_file !< path/name lats on the model grid
+ character*200, public         :: model_lon_file !< path/name lons on the model grid
+ character*200, public         :: model_lsmask_file !< path/name nesdis/ims land mask
+ character*200, public         :: model_snow_file !< path/name nesdis/ims snow cover
+ character*200, public         :: nesdis_lsmask_file  !< nesdis/ims land mask file
+ character*200, public         :: nesdis_snow_file  !< nesdis/ims snow file
 
  integer, public               :: grib_century !< date of the final merged snow product that will be placed in grib header.
 

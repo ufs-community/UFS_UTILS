@@ -27,10 +27,12 @@ module load build.$target.intel
 module list
 
 set -x
+ulimit -s unlimited
 
-export WORK_DIR=/work/noaa/stmp/$LOGNAME/reg_tests.grid
-QUEUE="batch"
-PROJECT_CODE="fv3-cpu"
+export WORK_DIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
+export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
+QUEUE="${QUEUE:-batch}"
+PROJECT_CODE=${PROJECT_CODE:-fv3-cpu}
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
