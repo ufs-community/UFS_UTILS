@@ -51,10 +51,15 @@
 !!  - IDIM,JDIM    i/j dimension of a cubed-sphere tile.
 !!  - LUGB         Unit number used in the sfccycle subprogram
 !!                 to read input datasets.
+!!  Next four should match the gfs_physics_nml 
 !!  - LSM          Integer code for LSM (as in GFS_TYPES)
 !!                 1 - Noah
 !!                 (note: added for land_da_adjust layers, however 
 !!                 sfcsub routine (and likely others) assume the noah lsm
+!!  - ISOT         Integer code for soil type data set 
+!!  -              Use statsgo soil type when '1'. Use zobler when '0'.
+!!  - IVEGSRC      Integer code for vegetation type data set 
+!!  -              Use igbp veg type when '1'.  Use sib when '2'.
 !!  - LSOIL        Number of soil layers.
 !!  - IY,IM,ID,IH  Year, month, day, and hour of initial state.
 !!  - FH           Forecast hour
@@ -67,8 +72,6 @@
 !!  -DO_SFCCYCLE    Call sfccycle routine to update surface fields 
 !!  -DO_LNDINC      Read in land increment files, and add increments to 
 !!                  soil states.
-!!  -ISOT           Use statsgo soil type when '1'. Use zobler when '0'.
-!!  -IVEGSRC        Use igbp veg type when '1'.  Use sib when '2'.
 !!  -ZSEA1/2_MM     When running with NSST model, this is the lower/
 !!                 upper bound of depth of sea temperature.  In
 !!                 whole mm.
@@ -100,21 +103,25 @@
  IMPLICIT NONE
 !
  CHARACTER(LEN=3) :: DONST
- INTEGER :: IDIM, JDIM, LSM, LSOIL, LUGB, IY, IM, ID, IH, IALB
- INTEGER :: ISOT, IVEGSRC, LENSFC, ZSEA1_MM, ZSEA2_MM, IERR
+ INTEGER :: IDIM, JDIM, LSM, ISOT, IVEGSRC, LSOIL, LUGB, IY, IM, ID, IH, IALB
+ INTEGER :: LENSFC, ZSEA1_MM, ZSEA2_MM, IERR
  INTEGER :: NPROCS, MYRANK, NUM_THREADS, NUM_PARTHDS, MAX_TASKS
  REAL    :: FH, DELTSFC, ZSEA1, ZSEA2
  LOGICAL :: USE_UFO, DO_NSST, DO_LNDINC, DO_SFCCYCLE
 !
- NAMELIST/NAMCYC/ IDIM,JDIM,LSM,LSOIL,LUGB,IY,IM,ID,IH,FH,    &
-                  DELTSFC,IALB,USE_UFO,DONST,             &
+ NAMELIST/NAMCYC/ IDIM,JDIM,LSM,ISOT,IVEGSRC,LSOIL,     &
+                  LUGB,IY,IM,ID,IH,FH,                  &
+                  DELTSFC,IALB,USE_UFO,DONST,           &
                   DO_SFCCYCLE,ISOT,IVEGSRC,ZSEA1_MM,    &
                   ZSEA2_MM, MAX_TASKS, DO_LNDINC
 !
- DATA IDIM,JDIM,LSM,LSOIL/96,96,1,4/
+ DATA IDIM,JDIM,LSM,ISOT,IVEGSRC,LSOIL/96,96,1,1,1,4/
  DATA IY,IM,ID,IH,FH/1997,8,2,0,0./
  DATA LUGB/51/, DELTSFC/0.0/, IALB/1/, MAX_TASKS/99999/
- DATA ISOT/1/, IVEGSRC/2/, ZSEA1_MM/0/, ZSEA2_MM/0/
+! Draper - note: moved ivegsrc and isot into namelist. 
+!                ivegsrc was hard-wired here as 2, but 
+!                gfs is currently using 1.
+ DATA ZSEA1_MM/0/, ZSEA2_MM/0/
 !
  CALL MPI_INIT(IERR)
  CALL MPI_COMM_SIZE(MPI_COMM_WORLD, NPROCS, IERR)
@@ -159,8 +166,8 @@
  ENDIF
 
  PRINT*
- IF (MYRANK==0) PRINT*,"LUGB,IDIM,JDIM,LSM,LSOIL,DELTSFC,IY,IM,ID,IH,FH: ", &
-              LUGB,IDIM,JDIM,LSM,LSOIL,DELTSFC,IY,IM,ID,IH,FH
+ IF (MYRANK==0) PRINT*,"LUGB,IDIM,JDIM,LSM,ISOT,IVEGSRC,LSOIL,DELTSFC,IY,IM,ID,IH,FH: ", &
+              LUGB,IDIM,JDIM,LSM,ISOT,IVEGSRC,LSOIL,DELTSFC,IY,IM,ID,IH,FH
 
  CALL SFCDRV(LUGB,IDIM,JDIM,LSM,LENSFC,LSOIL,DELTSFC,  &
              IY,IM,ID,IH,FH,IALB,                  &
@@ -269,6 +276,8 @@
  !! @param[in] LENSFC Total numberof points for the cubed-sphere tile
  !! @param[in] LSM Integer code for the land surface model 
  !!            1 - Noah
+ !! @param[in] ISOT Integer code for soil type data set
+ !! @param[in] IVEGSRC Integer code vegetation type dat set
  !! @param[in] LSOIL Number of soil layers
  !! @param[in] DELTSFC Cycling frequency in hours
  !! @param[in] IY Year of initial state
@@ -298,13 +307,13 @@
 !
  USE READ_WRITE_DATA
  USE MPI
- USE LAND_INCREMENTS, ONLY: ADJUST_SOIL,        &
+ USE LAND_INCREMENTS, ONLY: ADD_INCREMENT_SOIL,        &
                             CALCULATE_SOILSNOWMASK, &
                             APPLY_LAND_DA_ADJUSTMENTS
 
  IMPLICIT NONE
 
- INTEGER, INTENT(IN) :: IDIM, JDIM, LSM, LENSFC, LSOIL, IALB
+ INTEGER, INTENT(IN) :: IDIM, JDIM, LSM,LENSFC, LSOIL, IALB
  INTEGER, INTENT(IN) :: LUGB, IY, IM, ID, IH
  INTEGER, INTENT(IN) :: ISOT, IVEGSRC, MYRANK
 
@@ -577,14 +586,14 @@ ENDIF
    STC_BCK = STCFCS
    SMC_BCK = SMCFCS ! not used yet.
 
-   CALL ADJUST_SOIL(RLA,RLO,STCFCS,SOILSNOW_MASK,SOILSNOW_FG_MASK,  & 
+   CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,SOILSNOW_MASK,SOILSNOW_FG_MASK,  & 
         LENSFC,LSOIL,IDIM,JDIM, MYRANK)
 
 !--------------------------------------------------------------------------------
 ! make any necessary adjustments to dependent variables
 !--------------------------------------------------------------------------------
 
-   CALL APPLY_LAND_DA_ADJUSTMENTS('stc', LSM, LENSFC, LSOIL, SMC_BCK, STC_BCK, SMCFCS, STCFCS)
+   CALL APPLY_LAND_DA_ADJUSTMENTS('stc', LSM, ISOT, IVEGSRC,LENSFC, LSOIL, SMC_BCK, STC_BCK, SMCFCS, STCFCS)
 
 !--------------------------------------------------------------------------------
 ! clean up

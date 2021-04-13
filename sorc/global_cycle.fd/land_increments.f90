@@ -2,7 +2,7 @@ module land_increments
 
     private 
 
-    public adjust_soil
+    public add_increment_soil
     public calculate_soilsnowmask 
     public apply_land_da_adjustments
 
@@ -27,7 +27,7 @@ contains
  !!
  !! @author Clara Draper. @date March 2021
 
-subroutine adjust_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile, & 
+subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile, & 
                         lensfc,lsoil,idim,jdim, myrank) 
 
     use gdswzd_mod
@@ -285,7 +285,7 @@ subroutine adjust_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile, &
 
     deallocate(id1, id2, jdc, s2c)
 
-end subroutine adjust_soil
+end subroutine add_increment_soil
 
 !> Calculate soil mask for land on model grid. 
 !! Output is 1  - soil, 2 - snow-covered, 0 - land ice or not land.
@@ -329,36 +329,46 @@ end subroutine calculate_soilsnowmask
 !> @param[in] lensfc Length of land state vector 
 !! @param[in] lsoil Number of soil layers 
 !! @param[in] lsm Integer code for the LSM
+!! @param[in] isot Integer code for the soil type data set
+!! @param[in] ivegsrc Integer code for the vegetation type data set
 !! @param[in] smc_bck Background soil moisture states 
 !! @param[in] stc_bck Background soil temperature states 
 !! @param[inout] smcfcs Analysis soil moisture states 
 !! @param[inout] stcfcs Analysis soil temperature states 
 !! @author Clara Draper @date April 2021
 
-subroutine apply_land_da_adjustments(update_type, lsm, lensfc, lsoil, smc_bck, stc_bck, smc_anl, stc_anl)
+subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, lsoil, smc_bck, stc_bck, smc_anl, stc_anl)
 
     use mpi
+    use set_soilveg_mod, only: set_soilveg
+    use namelist_soilveg
 
     implicit none
  
     character(len=3), intent(in)  :: update_type
-    integer, intent(in)           :: lsm, lensfc, lsoil
+    integer, intent(in)           :: lsm, lensfc, lsoil, isot, ivegsrc
     real, intent(in)              :: smc_bck(lensfc,lsoil), stc_bck(lensfc, lsoil)
     real, intent(inout)           :: smc_anl(lensfc,lsoil), stc_anl(lensfc, lsoil) 
 
     logical                       :: frzn_bck, frzn_anl
 
-    integer                       :: i, j, n_freeze, n_thaw, ierr
+    integer                       :: i, j, n_freeze, n_thaw, ierr, myrank
 
     integer, parameter            :: lsm_noah=1      !< flag for NOAH land surface model 
                                                      !! copied from GFS_typedefs.F90
     real, parameter :: tfreez=273.16 !< con_t0c  in physcons
 
+    call mpi_comm_rank(mpi_comm_world, myrank, ierr) 
 
     if (lsm .NE. lsm_noah) then
         print *, 'FATAL ERROR: apply_land_da_adjustments not coded for models other than noah', lsm
-        call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+        call mpi_abort(mpi_comm_world, 10, ierr)
     endif
+       
+    ! initialise soil properties
+    call set_soilveg(myrank, isot, ivegsrc, 0) ! myrank should be mype (but is not used, so close enough) 
+                                                    ! last argument also not used (intended as a unit to read in over-ride values)
+    print *, 'CSD', maxsmc
 
     select case (update_type) 
 

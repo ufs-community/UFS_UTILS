@@ -9,7 +9,9 @@ set(fortran_src
     num_parthds.f90
     sfcsub.F
     read_write_data.f90
-    land_increments.f90)
+    land_increments.f90
+    set_soilveg.f
+    namelist_soilveg.f)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian")
