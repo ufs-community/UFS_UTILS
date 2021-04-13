@@ -15,14 +15,18 @@
 #      records that describe the model grid.
 #   2) 'oro' files containing land mask, terrain and gravity
 #      wave drag fields.
-#   3) surface climo fields, such as soil type, vegetation
+#   3) 'oro' files ('oro_data_ls' and 'oro_data_ss') specific to
+#      the GSL drag suite physics parameterization (only if
+#      flag make_gsl_orog = true)
+#   4) surface climo fields, such as soil type, vegetation
 #      greenness and albedo.
 #
 # Calls the following scripts:
 #   1) fv3gfs_make_grid.sh (make 'grid' files)
-#   2) fv3gfs_mask_orog.sh (make 'oro' files)
-#   3) fv3gfs_filter_topo.sh (filter topography)
-#   4) sfc_climo_gen.sh (create surface climo fields)
+#   2) fv3gfs_make_orog.sh (make 'oro' files)
+#   3) fv3gfs_make_orog_gsl.sh (make gsl drag 'oro' files)
+#   4) fv3gfs_filter_topo.sh (filter topography)
+#   5) sfc_climo_gen.sh (create surface climo fields)
 #
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
@@ -48,6 +52,8 @@ export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest, regional_gf
 export add_lake=${add_lake:-false}      # add lake fraction and depth.  uniform only.
 export lake_cutoff=${lake_cutoff:-0.20} # lake fractions less than lake_cutoff 
                                         # are ignored.
+
+export make_gsl_orog=${make_gsl_orog:-false} # when true, create GSL drag suite orog files.
 
 if [ $gtype = uniform ];  then
   echo "Creating global uniform grid"
@@ -99,6 +105,7 @@ export home_dir=${home_dir:-"$PWD/../"}
 export script_dir=$home_dir/ush
 export exec_dir=${exec_dir:-"$home_dir/exec"}
 export topo=$home_dir/fix/fix_orog
+export topo_am=$home_dir/fix/fix_am
 
 export NCDUMP=${NCDUMP:-ncdump}
 
@@ -170,9 +177,16 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
   if [ $machine = WCOSS_C ]; then
     touch $TEMP_DIR/orog.file1
+    if [ $make_gsl_orog = true ]; then
+      touch $TEMP_DIR/orog_gsl.file1
+    fi
     tile=1
     while [ $tile -le $ntiles ]; do
       echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo " >>$TEMP_DIR/orog.file1
+      if [ $make_gsl_orog = true ]; then
+        export halo_tmp="-999"  # no halo
+        echo $script_dir/fv3gfs_make_orog_gsl.sh $res $tile $halo_tmp $grid_dir $orog_dir $topo_am >>$TEMP_DIR/orog_gsl.file1
+      fi
       tile=$(( $tile + 1 ))
     done
     aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TEMP_DIR/orog.file1
@@ -181,6 +195,14 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
       exit $err
     fi
     rm $TEMP_DIR/orog.file1
+    if [ $make_gsl_orog = true ]; then
+      aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TEMP_DIR/orog_gsl.file1
+      err=$?
+      if [ $err != 0 ]; then
+        exit $err
+      fi
+      rm $TEMP_DIR/orog_gsl.file1
+    fi
   else
     tile=1
     while [ $tile -le $ntiles ]; do
@@ -193,6 +215,19 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
       err=$?
       if [ $err != 0 ]; then
         exit $err
+      fi
+      if [ $make_gsl_orog = true ]; then
+        set +x
+        echo
+        echo "............ Execute fv3gfs_make_orog_gsl.sh for tile $tile .................."
+        echo 
+        set -x
+        export halo_tmp="-999"  # no halo
+        $script_dir/fv3gfs_make_orog_gsl.sh $res $tile $halo_tmp $grid_dir $orog_dir $topo_am
+        err=$?
+        if [ $err != 0 ]; then
+          exit $err
+        fi
       fi
       tile=$(( $tile + 1 ))
     done
@@ -235,6 +270,9 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
   while [ $tile -le $ntiles ]; do
     cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
     cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}_grid.tile${tile}.nc
+    if [ $make_gsl_orog = true ]; then
+      cp $orog_dir/C${res}_oro_data_*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
+    fi
     tile=`expr $tile + 1 `
   done
 
@@ -449,6 +487,36 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   cp $filter_dir/C${res}_grid.tile${tile}.shave.nc  $out_dir/C${res}_grid.tile${tile}.halo0.nc
  
   cp $grid_dir/C${res}_*mosaic.nc                   $out_dir
+
+
+#----------------------------------------------------------------------------------
+# Now that C${res}_grid.tile${tile}.halo0.nc has been created, we can use it
+# to generate gsl drag suite oro_data files, which are generated only for halo0
+# Note:  This is carried out only if $make_gsl_orog = true
+#----------------------------------------------------------------------------------
+
+  if [ $make_gsl_orog = true ]; then
+    export halo_tmp="0"
+    ln -sf $out_dir/C${res}_grid.tile${tile}.halo0.nc $grid_dir/
+    if [ $machine = WCOSS_C ]; then
+      echo $script_dir/fv3gfs_make_orog_gsl.sh $res $tile $halo_tmp $grid_dir $orog_dir $topo_am >>$TEMP_DIR/orog_gsl.file1
+      aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TEMP_DIR/orog_gsl.file1
+      err=$?
+      rm $TEMP_DIR/orog_gsl.file1
+    else
+      set +x 
+      echo
+      echo "............ Execute fv3gfs_make_orog_gsl.sh for tile $tile .................."
+      echo
+      set -x
+      $script_dir/fv3gfs_make_orog_gsl.sh $res $tile $halo_tmp $grid_dir $orog_dir $topo_am
+      err=$?
+      if [ $err != 0 ]; then
+        exit $err
+      fi
+    fi
+    cp $orog_dir/C${res}_oro_data_*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
+  fi
 
   echo "Grid and orography files are now prepared for regional grid"
 

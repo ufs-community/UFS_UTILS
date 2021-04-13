@@ -77,11 +77,18 @@ TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./esg.regional.sh)
 
 #-----------------------------------------------------------------------------
+# Regional GSL gravity wave drag test.
+#-----------------------------------------------------------------------------
+
+TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./regional.gsl.gwd.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST3 << EOF
+       --open-mode=append -q $QUEUE -d afterok:$TEST4 << EOF
 #!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
