@@ -291,7 +291,7 @@ FNVMXC=${FNVMXC:-${FIXam}/global_shdmax.0.144x0.144.grb}
 FNSLPC=${FNSLPC:-${FIXam}/global_slope.1x1.grb}
 FNMSKH=${FNMSKH:-${FIXam}/global_slmask.t1534.3072.1536.grb}
 NST_FILE=${NST_FILE:-"NULL"}
-LND_FILE=$LND_FILE:-"NULL"}
+LND_SOI_FILE=$LND_SOI_FILE:-"NULL"}
 FNTSFA=${FNTSFA:-${COMIN}/${PREINP}sstgrb${SUFINP}}
 FNACNA=${FNACNA:-${COMIN}/${PREINP}engicegrb${SUFINP}}
 FNSNOA=${FNSNOA:-${COMIN}/${PREINP}snogrb${SUFINP}}
@@ -389,7 +389,7 @@ EOF
 cat << EOF > fort.37
  &NAMSFCD
   NST_FILE="$NST_FILE",
-  LND_FILE="$LND_FILE" 
+  LND_SOI_FILE="$LND_SOI_FILE" 
  /
 EOF
 
