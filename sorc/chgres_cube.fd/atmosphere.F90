@@ -443,9 +443,9 @@
 
  integer                          :: rc, n
 
- allocate(tracers_b4adj_target_grid(num_tracers))
+ allocate(tracers_b4adj_target_grid(num_tracers_input))
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
    print*,"- CALL FieldCreate FOR TARGET GRID TRACER BEFORE ADJUSTMENT ", trim(tracers(n))
    tracers_b4adj_target_grid(n) = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -1419,7 +1419,7 @@
  CALL W3DOXDAT(IDAT,JDOW,ICDAY,JDAY)
  print *,"VINTG_WAM: WAM START DATE FOR ICDAY=",ICDAY
 
-! prepare weifgting function
+! prepare weighting function
  DO K=1,10
    WFUN(K) = (K-1.0) / 9.0
  ENDDO
@@ -1585,7 +1585,6 @@
 
  END SUBROUTINE VINTG_WAM
 
-
 !> Vertically interpolate upper-air fields.
 !!
 !! Vertically interpolate upper-air fields. Wind, temperature,
@@ -1649,8 +1648,8 @@
 
  ALLOCATE(Z1(CLB(1):CUB(1),CLB(2):CUB(2),LEV_INPUT))
  ALLOCATE(Z2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET))
- ALLOCATE(C1(CLB(1):CUB(1),CLB(2):CUB(2),LEV_INPUT,NUM_TRACERS+5))
- ALLOCATE(C2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET,NUM_TRACERS+5))
+ ALLOCATE(C1(CLB(1):CUB(1),CLB(2):CUB(2),LEV_INPUT,NUM_TRACERS_INPUT+5))
+ ALLOCATE(C2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET,NUM_TRACERS_INPUT+5))
 
  Z1 = -LOG(P1PTR)
 
@@ -1689,7 +1688,7 @@
 
  C1(:,:,:,5) =  T1PTR(:,:,:)
 
- DO I = 1, NUM_TRACERS
+ DO I = 1, NUM_TRACERS_INPUT
 
    print*,"- CALL FieldGet FOR 3-D TRACERS ", trim(tracers(i))
    call ESMF_FieldGet(tracers_b4adj_target_grid(i), &
@@ -1710,7 +1709,7 @@
  IM = (CUB(1)-CLB(1)+1) * (CUB(2)-CLB(2)+1)
  KM1= LEV_INPUT
  KM2= LEV_TARGET
- NT=  NUM_TRACERS + 1 ! treat 'z' wind as tracer.
+ NT=  NUM_TRACERS_INPUT + 1 ! treat 'z' wind as tracer.
 
  CALL TERP3(IM,1,1,1,1,4+NT,(IM*KM1),(IM*KM2), &
             KM1,IM,IM,Z1,C1,KM2,IM,IM,Z2,C2)
@@ -1755,7 +1754,7 @@
    ENDDO
  ENDDO
 
- DO II = 1, NUM_TRACERS
+ DO II = 1, NUM_TRACERS_INPUT
 
    print*,"- CALL FieldGet FOR 3-D TRACER ", trim(tracers(ii))
    call ESMF_FieldGet(tracers_target_grid(ii), &
@@ -2179,7 +2178,7 @@
  call ESMF_FieldDestroy(temp_b4adj_target_grid, rc=rc)
  call ESMF_FieldDestroy(terrain_interp_to_target_grid, rc=rc)
 
- do i = 1, num_tracers
+ do i = 1, num_tracers_input
    call ESMF_FieldDestroy(tracers_b4adj_target_grid(i), rc=rc)
  enddo
 

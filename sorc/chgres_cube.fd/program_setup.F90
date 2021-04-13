@@ -95,7 +95,7 @@
  logical, public                 :: convert_atm = .false. !< Convert atmospheric data when true.
  logical, public                 :: convert_nst = .false. !< Convert nst data when true.
  logical, public                 :: convert_sfc = .false. !< Convert sfc data when true.
- logical, public                 :: wam_cold_start = .false. !< wam cold start.
+ logical, public                 :: wam_cold_start = .false. !< When true, cold start for whole atmosphere model.
  
  ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
  ! Default is to use climatology instead
@@ -181,7 +181,7 @@
                    cycle_year, cycle_mon, cycle_day,    &
                    cycle_hour, convert_atm, &
                    convert_nst, convert_sfc, &
-                   wam_cold_start, &                     !hmhj
+                   wam_cold_start, &
                    vgtyp_from_climo, &
                    sotyp_from_climo, &
                    vgfrc_from_climo, &
@@ -253,19 +253,20 @@
  do is = 1, max_tracers
    if (trim(tracers(is)) == "NULL") exit
    num_tracers = num_tracers + 1
-   print*,"- WILL PROCESS TRACER ", trim(tracers(is))
+   print*,"- TRACER NAME IN OUTPUT FILE ", trim(tracers(is))
  enddo
  
  num_tracers_input = 0
  do is = 1, max_tracers
    if (trim(tracers_input(is)) == "NULL") exit
    num_tracers_input = num_tracers_input + 1
-   print*,"- WILL PROCESS INPUT TRACER ", trim(tracers_input(is))
+   print*,"- TRACER NAME IN INPUT FILE ", trim(tracers_input(is))
  enddo
 
 !-------------------------------------------------------------------------
 ! Ensure spo, spo2, and spo3 in tracers list if wam ic is on
 !-------------------------------------------------------------------------
+
  if( wam_cold_start ) then
     ierr=3
     do is = 1, num_tracers
@@ -277,6 +278,7 @@
       print*,"-ERROR: spo, spo2, and spo3 should be in tracers namelist"
       call error_handler("WAM TRACER NAMELIST.", ierr)
     endif
+    print*,"- WAM COLDSTART OPTION IS TURNED ON."
  endif  
 
 !-------------------------------------------------------------------------
