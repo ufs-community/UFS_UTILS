@@ -36,7 +36,8 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-export DATA="/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_tests.snow2mdl"
+export DATA="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+export DATA="${DATA}/reg-tests/snow2mdl"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
