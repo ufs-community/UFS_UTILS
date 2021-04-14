@@ -41,7 +41,7 @@ interface invu;   module procedure sinvu,dinvu,slinuv,dlinuv;  end interface
 
 contains
 
-!> ???
+!> Swap a pair of single precision vectors
 !!
 !! @param[inout] d vector
 !! @param[inout] e vector
@@ -52,7 +52,7 @@ real(sp)                   :: tv(size(d))
 tv = d; d = e; e = tv
 end subroutine sswpvv
 
-!> ???
+!> Swap a pair of double precision vectors
 !!
 !! @param[inout] d vector
 !! @param[inout] e vector
@@ -63,7 +63,7 @@ real(dp)                :: tv(size(d))
 tv = d; d = e; e = tv
 end subroutine dswpvv
 
-!> ???
+!> Swap a pair of complex vectors
 !!
 !! @param[inout] d vector
 !! @param[inout] e vector
@@ -74,7 +74,7 @@ complex(dpc)               :: tv(size(d))
 tv = d; d = e; e = tv
 end subroutine cswpvv
 
-!> Invert matrix
+!> Invert single precision matrix in place
 !!
 !! @param[inout] a matrix
 !! @author R. J. Purser
@@ -85,7 +85,7 @@ call sinvmtf(a,ff)
 if(ff)stop 'In sinvmt; Unable to invert matrix'
 end subroutine sinvmt
 
-!> Invert matrix.
+!> Invert double precision matrix in place.
 !!
 !! @param[inout] a matrix
 !! @author R. J. Purser
@@ -96,7 +96,7 @@ call dinvmtf(a,ff)
 if(ff)stop 'In dinvmt; Unable to invert matrix'
 end subroutine dinvmt
 
-!> Invert matrix.
+!> Invert complex matrix in place.
 !!
 !! @param[inout] a matrix
 !! @author R. J. Purser
@@ -107,7 +107,7 @@ call cinvmtf(a,ff)
 if(ff)stop 'In cinvmt; Unable to invert matrix'
 end subroutine cinvmt
 
-!> Invert matrix (or flag if can't).
+!> Invert a single precision matrix in place, or flag if process fails.
 !!
 !! @param[inout] a matrix
 !! @param[out] ff flag for error condition
@@ -145,7 +145,7 @@ enddo
 do j=m-1,1,-1; l=ipiv(j); call sswpvv(a(:,j),a(:,l)); enddo
 end subroutine sinvmtf
 
-!> Routine dinvmtf to Invert and Permute.
+!> Invert a double precision matrix in place, or flag if process fails
 !!
 !! @param[inout] a matrix
 !! @param[out] ff flag for error condition
@@ -182,7 +182,7 @@ enddo
 do j=m-1,1,-1; l=ipiv(j); call dswpvv(a(:,j),a(:,l)); enddo
 end subroutine dinvmtf
 
-!> Routine cinvmtf to Invert and Permute.
+!> Invert a complex matrix in place, or flag if process fails.
 !!
 !! @param[inout] a matrix
 !! @param[out] ff flag for error condition
@@ -220,10 +220,11 @@ enddo
 do j=m-1,1,-1; l=ipiv(j); call cswpvv(a(:,j),a(:,l)); enddo
 end subroutine cinvmtf
 
-!> ???
+!> Invert linear system with multiple right-hand side vectors.
+!! Single precision version.
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vectors, output solution vectors 
 !! @author R. J. Purser
 subroutine slinmmt(a,b)!                                                 [inv]
 real(sp),dimension(:,:),intent(inout):: a,b
@@ -232,10 +233,11 @@ call slinmmtf(a,b,ff)
 if(ff)stop 'In slinmmt; unable to invert linear system'
 end subroutine slinmmt
 
-!> ???
+!> Invert linear system with multiple right-hand side vectors.
+!! Double precision version
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vectors, output solution vectors
 !! @author R. J. Purser
 subroutine dlinmmt(a,b)!                                                 [inv]
 real(dp),dimension(:,:),intent(inout):: a,b
@@ -244,10 +246,11 @@ call dlinmmtf(a,b,ff)
 if(ff)stop 'In dlinmmt; unable to invert linear system'
 end subroutine dlinmmt
 
-!> ???
+!> Invert complex linear system with multiple right-hand side vectors.
+!! Complex double precision version.
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vectors, output solution vectors
 !! @author R. J. Purser
 subroutine clinmmt(a,b)!                                                 [inv]
 complex(dpc),dimension(:,:),intent(inout):: a,b
@@ -256,10 +259,11 @@ call clinmmtf(a,b,ff)
 if(ff)stop 'In clinmmt; unable to invert linear system'
 end subroutine clinmmt
 
-!> ???
+!> Invert linear system with multiple right-hand side vectors, or flag failure.
+!! Single precision version.
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vectors, output solution vectors
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine slinmmtf(a,b,ff)!                                             [inv]
@@ -280,10 +284,11 @@ endif
 call sudlmm(a,b,ipiv)
 end subroutine slinmmtf
 
-!> ???
+!> Invert linear system with multiple right-hand side vectors, or flag failure.
+!! Double precision version.
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vectors, output solution vectors
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine dlinmmtf(a,b,ff)!                                             [inv]
@@ -304,10 +309,11 @@ endif
 call dudlmm(a,b,ipiv)
 end subroutine dlinmmtf
 
-!> ???
+!> Invert linear system with multiple right-hand side vectors, or flag failure.
+!! Complex double precision version.
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vectors, output solution vectors
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine clinmmtf(a,b,ff)!                                             [inv]
@@ -328,10 +334,11 @@ endif
 call cudlmm(a,b,ipiv)
 end subroutine clinmmtf
 
-!> ???
+!> Invert linear system with single right-hand side vector.
+!! Single precision version.
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vector, output solution vector
 !! @author R. J. Purser
 subroutine slinmvt(a,b)!                                                 [inv]
 real(sp),dimension(:,:),intent(inout):: a
@@ -341,10 +348,11 @@ call slinmvtf(a,b,ff)
 if(ff)stop 'In slinmvt; matrix singular, unable to continue'
 end subroutine slinmvt
 
-!> ???
+!> Invert linear system with single right-hand side vector.
+!! Double precision version.
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vector, output solution vector
 !! @author R. J. Purser
 subroutine dlinmvt(a,b)!                                                 [inv]
 real(dp),dimension(:,:),intent(inout):: a
@@ -354,10 +362,11 @@ call dlinmvtf(a,b,ff)
 if(ff)stop 'In dlinmvt; matrix singular, unable to continue'
 end subroutine dlinmvt
 
-!> ???
+!> Invert linear system with single right-hand side vector.
+!! Complex double precision version.
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vector, output solution vector
 !! @author R. J. Purser
 subroutine clinmvt(a,b)!                                                 [inv]
 complex(dpc),   dimension(:,:),intent(inout):: a
@@ -367,10 +376,10 @@ call clinmvtf(a,b,ff)
 if(ff)stop 'In clinmvt; matrix singular, unable to continue'
 end subroutine clinmvt
 
-!> ???
+!> Invert linear system with single right-hand side vector
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vector, output solution vector
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine slinmvtf(a,b,ff)!                                             [inv]
@@ -389,10 +398,10 @@ endif
 call sudlmv(a,b,ipiv) 
 end subroutine slinmvtf
 
-!> ???
+!> Invert linear system with single right-hand side vector
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vector, output solution vector
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine dlinmvtf(a,b,ff)!                                             [inv]
@@ -411,10 +420,10 @@ endif
 call dudlmv(a,b,ipiv)
 end subroutine dlinmvtf
 
-!> ???
+!> Invert complex linear system with single right-hand side vector
 !!
-!! @param[inout] a ???
-!! @param[inout] b ???
+!! @param[inout] a Invertible system matrix, destroyed on output
+!! @param[inout] b input RHS vector, output solution vector
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine clinmvtf(a,b,ff)!                                             [inv]
@@ -433,10 +442,10 @@ endif
 call cudlmv(a,b,ipiv)
 end subroutine clinmvtf
 
-!> Invert integer square array, imat, if possible, but flag ff=.true.
-!! if not possible. (Determinant of imat must be +1 or -1
+!> Invert integer square matrix, imat, if possible, but flag ff=.true.
+!! if not possible. (Determinant of imat must be +1 or -1)
 !!
-!! @param[inout] imat integer square array
+!! @param[inout] imat integer square matrix
 !! @param[out] ff error flag
 !! @author R. J. Purser
 subroutine iinvf(imat,ff)!                                               [inv]
@@ -457,11 +466,12 @@ if(.not.ff)then
 endif
 end subroutine iinvf
 
-!> ???
+!> Perform L*D*U decomposition, with pivoting, of square matrix.
+!! Single precision version.
 !!
-!! @param[inout] a ???
-!! @param[out] d ???
-!! @param[out] ipiv ???
+!! @param[inout] a input square matrix, output L,D,U factors
+!! @param[out] d determinant sign change indicator (+1 or -1)
+!! @param[out] ipiv vector of pivots
 !! @author R. J. Purser
 subroutine sldum(a,ipiv,d)!                                             [ldum]
 real(sp),    intent(inout) :: a(:,:) 
@@ -472,11 +482,12 @@ call sldumf(a,ipiv,d,ff)
 if(ff)stop 'In sldum; matrix singular, unable to continue'
 end subroutine sldum
 
-!> ???
+!> Perform L*D*U decomposition, with pivoting, of square matrix.
+!! Double precision version.
 !!
-!! @param[inout] a ???
-!! @param[out] d ???
-!! @param[out] ipiv ???
+!! @param[inout] a input square matrix, output L,D,U factors
+!! @param[out] d determinant sign change indicator (+1 or -1)
+!! @param[out] ipiv vector of pivots
 !! @author R. J. Purser
 subroutine dldum(a,ipiv,d)!                                             [ldum]
 real(dp),    intent(inout) :: a(:,:) 
@@ -487,11 +498,12 @@ call dldumf(a,ipiv,d,ff)
 if(ff)stop 'In dldum; matrix singular, unable to continue'
 end subroutine dldum
 
-!> ???
+!> Perform L*D*U decomposition, with pivoting, of square matrix.
+!! Complex double precision version.
 !!
-!! @param[inout] a ???
-!! @param[out] d ???
-!! @param[out] ipiv ???
+!! @param[inout] a input square matrix, output L,D,U factors
+!! @param[out] d determinant sign change indicator (+1 or -1)
+!! @param[out] ipiv vector of pivots
 !! @author R. J. Purser
 subroutine cldum(a,ipiv,d)!                                             [ldum]
 complex(dpc),intent(inout) :: a(:,:) 
@@ -502,11 +514,11 @@ call cldumf(a,ipiv,d,ff)
 if(ff)stop 'In cldum; matrix singular, unable to continue'
 end subroutine cldum
 
-!> Perform l-d-u decomposition of square matrix a in place with
-!! pivoting.
+!> Perform l-d-u decomposition of square matrix a in place with pivoting.
+!! Single precision version.
 !!
-!! @param[inout] a    square matrix to be factorized
-!! @param[out] ipiv array encoding the pivoting sequence
+!! @param[inout] a  square matrix to be factorized
+!! @param[out] ipiv vector encoding the pivoting sequence
 !! @param[out] d    indicator for possible sign change of determinant
 !! @param[out] ff:  failure flag, set to .true. when determinant of a vanishes.
 !! @author R. J. Purser
@@ -569,10 +581,11 @@ do j=1,m-1
 enddo
 end subroutine sldumf
 
-!> ???
+!> Perform l-d-u decomposition of square matrix a in place with pivoting.
+!! Double precision version.
 !!
-!! @param[inout] a    square matrix to be factorized
-!! @param[out] ipiv array encoding the pivoting sequence
+!! @param[inout] a  square matrix to be factorized
+!! @param[out] ipiv vector encoding the pivoting sequence
 !! @param[out] d    indicator for possible sign change of determinant
 !! @param[out] ff:  failure flag, set to .true. when determinant of a vanishes.
 !! @author R. J. Purser
@@ -635,10 +648,11 @@ do j=1,m-1
 enddo
 end subroutine dldumf
 
-!> ???
+!> Perform l-d-u decomposition of square matrix a in place with pivoting.
+!! Complex double precision version.
 !!
-!! @param[inout] a    square matrix to be factorized
-!! @param[out] ipiv array encoding the pivoting sequence
+!! @param[inout] a  square matrix to be factorized
+!! @param[out] ipiv vector encoding the pivoting sequence
 !! @param[out] d    indicator for possible sign change of determinant
 !! @param[out] ff:  failure flag, set to .true. when determinant of a vanishes.
 !! @author R. J. Purser
@@ -710,7 +724,7 @@ end subroutine cldumf
 !! @param[in] a L-D-U factorization of linear system matrux
 !! @param[inout] b rt-hand-sides vectors on input, corresponding
 !! solutions on return
-!! @param[in] ipiv array encoding the pivoting sequence
+!! @param[in] ipiv vector encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine sudlmm(a,b,ipiv)!                                           [udlmm]
 use pietc_s, only: u1
@@ -737,11 +751,14 @@ do k=1,size(b,2) !loop over columns of b
 enddo
 end subroutine sudlmm
 
-!> ???
+!> Use l-u factors in A to back-substitute for several rhs in B, using
+!! ipiv to define the pivoting permutation used in the l-u
+!! decomposition.
 !!
 !! @param[in] a square matrix to be factorized
-!! @param[inout] b ???
-!! @param[in] ipiv array encoding the pivoting sequence
+!! @param[inout] b rt-hand-sides vectors on input, corresponding
+!! solutions on return
+!! @param[in] ipiv vector encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine dudlmm(a,b,ipiv)!                                           [udlmm]
 use pietc, only: u1
@@ -768,11 +785,14 @@ do k=1, size(b,2)!loop over columns of b
 enddo
 end subroutine dudlmm
 
-!> ???
+!> Use l-u factors in A to back-substitute for several rhs in B, using
+!! ipiv to define the pivoting permutation used in the l-u
+!! decomposition.
 !!
 !! @param[in] a square matrix to be factorized
-!! @param[inout] b ???
-!! @param[in] ipiv array encoding the pivoting sequence
+!! @param[inout] b rt-hand-sides vectors on input, corresponding
+!! solutions on return
+!! @param[in] ipiv vector encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine cudlmm(a,b,ipiv)!                                           [udlmm]
 use pietc, only: c1
@@ -803,8 +823,9 @@ end subroutine cudlmm
 !! define the pivoting permutation used in the l-u decomposition.
 !!
 !! @param[in] a L-D-U factorization of linear system matrix
-!! @param[inout] b right-hand-side vector on input, corresponding solution on return
-!! @param[in] ipiv array encoding the pivoting sequence
+!! @param[inout] b right-hand-side vector on input, corresponding
+!! solution on return
+!! @param[in] ipiv vector encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine sudlmv(a,b,ipiv)!                                           [udlmv]
 use pietc_s, only: u1
@@ -829,10 +850,12 @@ do i=m-1,1,-1
 enddo
 end subroutine sudlmv
 
-!> ???
+!> Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to
+!! define the pivoting permutation used in the l-u decomposition.
 !!
 !! @param[in] a square matrix to be factorized
-!! @param[inout] b ???
+!! @param[inout] b right-hand side vector on input, corresponding
+!! solution on return
 !! @param[in] ipiv array encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine dudlmv(a,b,ipiv)!                                           [udlmv]
@@ -858,10 +881,12 @@ do i=m-1,1,-1
 enddo
 end subroutine dudlmv
 
-!> ???
+!> Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to
+!! define the pivoting permutation used in the l-u decomposition.
 !!
 !! @param[in] a square matrix to be factorized
-!! @param[inout] b ???
+!! @param[inout] b right-hand side vector on input, corresponding 
+!! solution on return
 !! @param[in] ipiv array encoding the pivoting sequence
 !! @author R. J. Purser
 subroutine cudlmv(a,b,ipiv)!                                           [udlmv]
@@ -889,8 +914,8 @@ end subroutine cudlmv
 
 !> Cholesky, M -> L*U, U(i,j)=L(j,i)
 !!
-!! @param[in] a matrix
-!! @param[inout] b matrix
+!! @param[in] a symmetric matrix.
+!! @param[inout] b Cholesky factor matrix.
 !! @author R. J. Purser
 subroutine sl1lm(a,b) !                                                 [l1lm]
 real(sp),intent(in   ):: a(:,:)
@@ -902,8 +927,8 @@ end subroutine sl1lm
 
 !> Cholesky, M -> L*U, U(i,j)=L(j,i)
 !!
-!! @param[in] a matrix
-!! @param[inout] b matrix
+!! @param[in] a symmetric matrix.
+!! @param[inout] b Cholesky factor matrix.
 !! @author R. J. Purser
 subroutine dl1lm(a,b) !                                                 [l1lm]
 real(dp),intent(in   ):: a(:,:)
@@ -915,8 +940,8 @@ end subroutine dl1lm
 
 !> Cholesky, M -> L*U, U(i,j)=L(j,i)
 !!
-!! @param[in] a matrix
-!! @param[inout] b matrix
+!! @param[in] a symmetric matrix.
+!! @param[inout] b Cholesky factor matrix.
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine sl1lmf(a,b,ff)!                                              [L1Lm] 
@@ -947,10 +972,10 @@ do j=1,m
 enddo
 end subroutine sl1lmf
 
-!> ???
+!> Cholesky, M -> L*U, U(i,j)=L(j,i)
 !!
-!! @param[in] a matrix
-!! @param[inout] b matrix
+!! @param[in] a symmetric matrix.
+!! @param[inout] b Cholesky factor matrix.
 !! @param[out] ff failure flag
 !! @author R. J. Purser
 subroutine dl1lmf(a,b,ff) !                                             [L1Lm]
@@ -983,9 +1008,9 @@ end subroutine dl1lmf
 
 !> Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i)
 !!
-!! @param[in] a matrix
-!! @param[inout] b matrix
-!! @param[out] d matrix
+!! @param[in] a symmetric matrix.
+!! @param[inout] b output modified cholesky factor, L.
+!! @param[out] d diagonal matrix, D.
 !! @author R. J. Purser
 subroutine sldlm(a,b,d)!                                                [LdLm]
 real(sp),intent(in   ):: a(:,:)
@@ -996,11 +1021,11 @@ call sldlmf(a,b,d,ff)
 if(ff)stop 'In sldlm; matrix singular, unable to continue'
 end subroutine sldlm
 
-!> ???
+!> Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i)
 !!
-!! @param[in] a matrix
-!! @param[inout] b matrix
-!! @param[out] d matrix
+!! @param[in] a symmetric matrix.
+!! @param[inout] b output modified cholesky factor, L.
+!! @param[out] d diagonal matrix, D.
 !! @author R. J. Purser
 subroutine dldlm(a,b,d)!                                                [LdLm]
 real(dp),intent(in   ):: a(:,:)
@@ -1011,11 +1036,11 @@ call dldlmf(a,b,d,ff)
 if(ff)stop 'In dldlm; matrix singular, unable to continue'
 end subroutine dldlm
 
-!> Modified Cholesky decompose Q --> L*D*U
+!> Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i)
 !!
-!! @param[in] a matrix
-!! @param[inout] b matrix
-!! @param[out] d matrix
+!! @param[in] a symmetric matrix
+!! @param[inout] b modified cholesky factor, L.
+!! @param[out] d diagonal matrix, D.
 !! @param[out] ff error flag
 !! @author R. J. Purser
 subroutine sldlmf(a,b,d,ff) !                                           [LDLM]
@@ -1050,9 +1075,9 @@ end subroutine sldlmf
 
 !> Modified Cholesky  Q --> L*D*U, U(i,j)=L(j,i)
 !!
-!! @param[in] a matrix
-!! @param[inout] b matrix
-!! @param[out] d matrix
+!! @param[in] a symmetric matrix.
+!! @param[inout] b modified Cholesky factor, L.
+!! @param[out] d diagonal matrix, D.
 !! @param[out] ff error flag
 !! @author R. J. Purser 
 subroutine dldlmf(a,b,d,ff) !                                           [LDLM]
@@ -1084,27 +1109,28 @@ enddo
 end subroutine dldlmf
 
 !> Invert the upper triangular matrix in place by transposing, calling
-!! invl, and transposing again.
+!! invl, and transposing again. Single precision version.
 !!
-!! @param[inout] a  matrix
+!! @param[inout] a  upper triangular matrix.
 !! @author R. J. Purser
 subroutine sinvu(a)!                                                     [invu]
 real(sp),dimension(:,:),intent(inout):: a
 a=transpose(a); call sinvl(a); a=transpose(a)
 end subroutine sinvu
 
-!> ???
+!> Invert the upper triangular matrix in place by transposing, calling
+!! invl, and transposing again. Double precision version.
 !!
-!! @param[inout] a  matrix
+!! @param[inout] a  upper triangular matrix.
 !! @author R. J. Purser
 subroutine dinvu(a)!                                                     [invu]
 real(dp),dimension(:,:),intent(inout):: a
 a=transpose(a); call dinvl(a); a=transpose(a)
 end subroutine dinvu
 
-!> Invert lower triangular matrix in place.
+!> Invert lower triangular matrix in place. Single precision.
 !!
-!! @param[inout] a  matrix
+!! @param[inout] a  lower triangular matrix.
 !! @author R. J. Purser
 subroutine sinvl(a)!                                                     [invl]
 use pietc_s, only: u0,u1
@@ -1120,9 +1146,9 @@ do j=m,1,-1
 enddo
 end subroutine sinvl
 
-!> ???
+!> Invert lower triangular matrix in place. Double precision.
 !!
-!! @param[inout] a  matrix
+!! @param[inout] a  lower triangular matrix.
 !! @author R. J. Purser
 subroutine dinvl(a)!                                                     [invl]
 use pietc, only: u0,u1
@@ -1139,9 +1165,10 @@ enddo
 end subroutine dinvl
 
 !> Solve linear system involving lower triangular system matrix.
+!! Single precision version.
 !!
-!! @param[in] a matrix
-!! @param[inout] u matrix
+!! @param[in] a lower triangular matrix.
+!! @param[inout] u input RHS vector, output solution vector.
 !! @author R. J. Purser
 subroutine slinlv(a,u)!                                                  [invl]
 real(sp),intent(in   ) :: a(:,:)
@@ -1152,10 +1179,11 @@ if(size(a,1) /= size(a,2) .or. size(a,1) /= size(u))&
 do i=1,size(u); u(i)=(u(i) - sum(u(:i-1)*a(i,:i-1)))/a(i,i); enddo
 end subroutine slinlv
 
-!> ???
+!> Solve linear system involving lower triangular system matrix.
+!! Double precision version.
 !!
-!! @param[in] a matrix
-!! @param[inout] u matrix
+!! @param[in] a lower triangular matrix.
+!! @param[inout] u input RHS vector, output solution vector.
 !! @author R. J. Purser
 subroutine dlinlv(a,u)!                                                  [invl]
 real(dp),intent(in   ) :: a(:,:)
@@ -1167,9 +1195,10 @@ do i=1,size(u); u(i)=(u(i) - sum(u(:i-1)*a(i,:i-1)))/a(i,i); enddo
 end subroutine dlinlv
 
 !> Solve linear system involving upper triangular system matrix.
+!! Single precision version.
 !!
-!! @param[in] a matrix
-!! @param[inout] u matrix
+!! @param[in] a upper triangular matrix.
+!! @param[inout] u input RHS vector, output solution vector.
 !! @author R. J. Purser
 subroutine slinuv(a,u)!                                                  [invu]
 real(sp),intent(in   ) :: a(:,:)
@@ -1180,10 +1209,11 @@ if(size(a,1) /= size(a,2) .or. size(a,1) /= size(u))&
 do i=size(u),1,-1; u(i)=(u(i) - sum(a(i+1:,i)*u(i+1:)))/a(i,i); enddo
 end subroutine slinuv
 
-!> ???
+!> Solve linear system involving upper triangular system matrix.
+!! Double precision version.
 !!
-!! @param[in] a matrix
-!! @param[inout] u matrix
+!! @param[in] a upper triangular matrix.
+!! @param[inout] u input RHS vector, output solution vector.
 !! @author R. J. Purser
 subroutine dlinuv(a,u)!                                                  [invu]
 real(dp), intent(in   ) :: a(:,:)
