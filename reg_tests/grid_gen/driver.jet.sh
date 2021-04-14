@@ -28,9 +28,10 @@ module list
 
 set -x
 
-QUEUE="windfall"
-PROJECT_CODE="emcda"
-export WORK_DIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_tests.grid
+QUEUE="${QUEUE:-windfall}"
+PROJECT_CODE="${PROJECT_CODE:-emcda}"
+export WORK_DIR="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
