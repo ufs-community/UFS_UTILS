@@ -3939,6 +3939,10 @@ end subroutine replace_land_sfcparams
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (veg_greenness_ptr(i,j) <= 0.01) data_ptr(i,j) = 0.0
+   if (data_ptr(i,j) > 0.5) then
+     print*,"- ZERO OUT TARGET GRID CANOPY MOISTURE CONTENT WITH UNREALISTIC VALUES"
+     data_ptr(i,j) = 0.0
+   endif
  enddo
  enddo
 
