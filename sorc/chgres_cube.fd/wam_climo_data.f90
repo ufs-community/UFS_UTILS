@@ -1147,14 +1147,9 @@
 !x-------------------------- isdate,istime,name,   &
 !x------------------------   pavgm,   &
 !x-------------------------  imr
-      use gettemp_mod, only: tlb,s,db04,db16,db28,db32,db40,db48,db01,za,t0, &
-                             z0,g0,rl,dd,db14,tr12,   &
-                             tn1,tn2,tn3,tgn1,tgn2,tgn3, &
-                             pt,pd,ps,pdl,ptl,      &
-                             pma,sam,    &
-                             sw,swc,isw,      &
-                             dm04,dm16,dm28,dm32,dm40,dm01,dm14,   &
-                             gsurf,re
+      use gettemp_mod, only: dd, tn1,tn2,tn3,tgn1,tgn2,tgn3, &
+                             pt,pd,ps,pdl,ptl,pma,sam,sw,isw,&
+                             dm28,gsurf,re
 
 !x    common/gts3c/tlb,s,db04,db16,db28,db32,db40,db48,db01,za,t0,z0    &
 !x     ,g0,rl,dd,db14,tr12                                              
@@ -1389,7 +1384,7 @@
       subroutine gtd7d(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,mass,d,t)
       use wam_gtd7bk_mod, only: imr
 !x----common/metsel/imr 
-      dimension d(9),t(2),ap(7),ds(9),ts(2) 
+      dimension d(9),t(2),ap(7)
       call gtd7(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,mass,d,t) 
 !       total mass density                                              
 !                                                                       
@@ -1549,7 +1544,7 @@
 !!
 !! @author Hann-Ming Henry Juang
       function vtst7(iyd,sec,glat,glong,stl,f107a,f107,ap,ic) 
-      use gettemp_mod, only: sw,swc,isw
+      use gettemp_mod, only: sw,swc
 !x    common/csw/sw(25),swc(25),isw 
       dimension ap(7),iydl(2),secl(2),glatl(2),gll(2),stll(2) 
       dimension fal(2),fl(2),apl(7,2),swl(25,2),swcl(25,2) 
@@ -1642,12 +1637,8 @@
                              imr
 
       use gettemp_mod, only: tlb,s,db04,db16,db28,db32,db40,db48,db01,za,t0, &
-                             z0,g0,rl,dd,db14,tr12,   &
-                             tn1,tn2,tn3,tgn1,tgn2,tgn3, &
-                             pt,pd,ps,pdl,ptl,      &
-                             pma,sam,    &
-                             sw,swc,isw,      &
-                             tinfg,tt,    &
+                             z0,g0,rl,dd,db14,tr12,tn1,tgn1,           &
+                             pt,pd,ps,pdl,ptl,pma,sw,                  &
                              dm04,dm16,dm28,dm32,dm40,dm01,dm14
 !x    common/gts3c/tlb,s,db04,db16,db28,db32,db40,db48,db01,za,t0,z0    &
 !x     ,g0,rl,dd,db14,tr12                                              
@@ -2342,8 +2333,7 @@
 !! @author Hann-Ming Henry Juang
       function glob7s(p) 
       use gettemp_mod, only:plg,ctloc,stloc,c2tloc,s2tloc,c3tloc,s3tloc,    &
-                            day,df,dfa,apd,apdf,apt,long=>xlong,iyr,   &
-                            sw,swc,isw
+                            day,dfa,apdf,apt,long=>xlong,sw,swc     
 !x    common/lpoly/plg(9,4),ctloc,stloc,c2tloc,s2tloc,c3tloc,s3tloc,    &
 !x     day,df,dfa,apd,apdf,apt(4),xlong,iyr                              
 !x    common/csw/sw(25),swc(25),isw 
