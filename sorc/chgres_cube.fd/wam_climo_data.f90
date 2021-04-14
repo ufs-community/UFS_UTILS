@@ -28,7 +28,7 @@
 !! @author Hann-Ming Henry Juang
    module wam_gtd7bk_mod
 !          msise-00 01-feb-02                                           
-!x----common/parm7/
+!
       real :: pt1(50)	!< block space data for temperature
       real :: pt2(50)	!< block space data for temperature
       real :: pt3(50)	!< block space data for temperature
@@ -93,18 +93,18 @@
       real :: pz2(50)	!< block space data for tgn3(1) tgn2(2)
       real :: paa1(50)	!< block space data for semiannual mult sam
       real :: paa2(50) 	!< block space data for semiannual mult sam
-!x----common/lower7/
+!
       real :: ptm(10)	!< block space data for lower boundary
       real :: pdm(10,8)	!< block space data for lower boundary
-!x----common/mavg7/
+!
       real :: pavgm(10) !< block space data for middle atmosphere averages
-!x----common/datim7/
+!
       character*4:: isdate(3)	!< define date
       character*4:: istime(2)	!< define time
       character*4:: name(2) 	!< define data name
-!x----common/metsel/
+!
       integer ::  imr 		!< define version
-!x----common/pres/
+!
       real ::     pr65(2,65)	!< define pressures
       real ::     pr151(2,151) 	!< define pressures
 
@@ -1142,32 +1142,13 @@
 !! @author Hann-Ming Henry Juang
       subroutine gtd7(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,mass,d,t) 
       use wam_gtd7bk_mod
-!x-------------------------- ptm,pdm,     &
-!x-------------------------- isd,ist,nam,   &
-!x-------------------------- isdate,istime,name,   &
-!x------------------------   pavgm,   &
-!x-------------------------  imr
       use gettemp_mod, only: dd, tn1,tn2,tn3,tgn1,tgn2,tgn3, &
                              pt,pd,ps,pdl,ptl,pma,sam,sw,isw,&
                              dm28,gsurf,re
 
-!x    common/gts3c/tlb,s,db04,db16,db28,db32,db40,db48,db01,za,t0,z0    &
-!x     ,g0,rl,dd,db14,tr12                                              
-!x    common/meso7/tn1(5),tn2(4),tn3(5),tgn1(2),tgn2(2),tgn3(2) 
-!x----common/lower7/ptm(10),pdm(10,8) 
-!x====common/parm7/pt(150),pd(150,9),ps(150),pdl(25,2),ptl(100,4),      &
-!x==== pma(100,10),sam(100)                                             
-!x----common/datim7/isd(3),ist(2),nam(2) 
-!x----common/datime/isdate(3),istime(2),name(2) 
-!x    common/csw/sw(25),swc(25),isw 
-!x----common/mavg7/pavgm(10) 
-!x    common/dmix/dm04,dm16,dm28,dm32,dm40,dm01,dm14 
-!x    common/parmb/gsurf,re 
-!x----common/metsel/imr 
-      
       dimension d(9),t(2),ap(7),ds(9),ts(2) 
       dimension zn3(5),zn2(4),sv(25) 
-!x----external gtd7bk 
+!
       save 
       data mn3/5/,zn3/32.5,20.,15.,10.,0./ 
       data mn2/4/,zn2/72.5,55.,45.,32.5/ 
@@ -1203,14 +1184,6 @@
       sam(1:50)=paa1(1:50); sam(51:100)=paa2(1:50)
 !
       if(isw.ne.64999) call tselec(sv) 
-!x     put identification data into common/datime/                      
-!x    do 1 i=1,3 
-!x      isdate(i)=isd(i) 
-!x  1 end do 
-!x    do 2 i=1,2 
-!x      istime(i)=ist(i) 
-!x      name(i)=nam(i) 
-!x  2 end do 
 !                                                                       
 !        test for changed input                                         
       v1=vtst7(iyd,sec,glat,glong,stl,f107a,f107,ap,1) 
@@ -1383,7 +1356,7 @@
 !! @author Hann-Ming Henry Juang
       subroutine gtd7d(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,mass,d,t)
       use wam_gtd7bk_mod, only: imr
-!x----common/metsel/imr 
+!
       dimension d(9),t(2),ap(7)
       call gtd7(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,mass,d,t) 
 !       total mass density                                              
@@ -1439,8 +1412,7 @@
       subroutine ghp7(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,d,t,press)
       use gettemp_mod, only: gsurf,re
       use wam_gtd7bk_mod, only: imr
-!x    common/parmb/gsurf,re 
-!x----common/metsel/imr 
+!
       dimension d(9),t(2),ap(7) 
       save 
       data bm/1.3806e-19/,rgas/831.4/ 
@@ -1545,7 +1517,7 @@
 !! @author Hann-Ming Henry Juang
       function vtst7(iyd,sec,glat,glong,stl,f107a,f107,ap,ic) 
       use gettemp_mod, only: sw,swc
-!x    common/csw/sw(25),swc(25),isw 
+!
       dimension ap(7),iydl(2),secl(2),glatl(2),gll(2),stll(2) 
       dimension fal(2),fl(2),apl(7,2),swl(25,2),swcl(25,2) 
       save 
@@ -1640,16 +1612,6 @@
                              z0,g0,rl,dd,db14,tr12,tn1,tgn1,           &
                              pt,pd,ps,pdl,ptl,pma,sw,                  &
                              dm04,dm16,dm28,dm32,dm40,dm01,dm14
-!x    common/gts3c/tlb,s,db04,db16,db28,db32,db40,db48,db01,za,t0,z0    &
-!x     ,g0,rl,dd,db14,tr12                                              
-!x    common/meso7/tn1(5),tn2(4),tn3(5),tgn1(2),tgn2(2),tgn3(2) 
-!x----common/lower7/ptm(10),pdm(10,8) 
-!x    common/parm7/pt(150),pd(150,9),ps(150),pdl(25,2),ptl(100,4),      &
-!x     pma(100,10),sam(100)                                             
-!x    common/csw/sw(25),swc(25),isw 
-!x    common/ttest/tinfg,tt(15) 
-!x    common/dmix/dm04,dm16,dm28,dm32,dm40,dm01,dm14 
-!x----common/metsel/imr 
 
       dimension zn1(5),alpha(9) 
       dimension d(9),t(2),mt(11),ap(*),altl(8) 
@@ -2015,7 +1977,7 @@
 !! @author Hann-Ming Henry Juang
       subroutine meters(meter) 
       use wam_gtd7bk_mod, only: imr
-!x----common/metsel/imr 
+!
       logical meter 
       save 
       imr=0 
@@ -2032,7 +1994,7 @@
 !! @author Hann-Ming Henry Juang 
       function scalh(alt,xm,temp) 
       use gettemp_mod, only: gsurf,re
-!x    common/parmb/gsurf,re 
+!
       save 
       data rgas/831.4/ 
       g=gsurf/(1.+alt/re)**2 
@@ -2069,10 +2031,6 @@
                              sw,swc,isw,        &
                              plg,ctloc,stloc,c2tloc,s2tloc,c3tloc,s3tloc,    &
                              day,df,dfa,apd,apdf,apt,xlong,iyr
-!x    common/ttest/tinf,t(15) 
-!x    common/csw/sw(25),swc(25),isw 
-!x    common/lpoly/plg(9,4),ctloc,stloc,c2tloc,s2tloc,c3tloc,s3tloc,    &
-!x     day,df,dfa,apd,apdf,apt(4),xlong,iyr                             
       real lat, long 
       dimension p(*),sv(25),ap(*) 
 !---- functions ------
@@ -2304,7 +2262,7 @@
 !! @author Hann-Ming Henry Juang
       subroutine tselec(sv) 
       use gettemp_mod, only: sw,swc,isw
-!x    common/csw/sw(25),swc(25),isw 
+!
       dimension sv(*),sav(25),svv(*) 
       save 
       do 100 i = 1,25 
@@ -2334,11 +2292,8 @@
       function glob7s(p) 
       use gettemp_mod, only:plg,ctloc,stloc,c2tloc,s2tloc,c3tloc,s3tloc,    &
                             day,dfa,apdf,apt,long=>xlong,sw,swc     
-!x    common/lpoly/plg(9,4),ctloc,stloc,c2tloc,s2tloc,c3tloc,s3tloc,    &
-!x     day,df,dfa,apd,apdf,apt(4),xlong,iyr                              
-!x    common/csw/sw(25),swc(25),isw 
       dimension p(*),t(14) 
-!x    real long 
+!
       save 
       data dr/1.72142e-2/,dgtr/1.74533e-2/,pset/2./ 
       data dayl/-1./,p32,p18,p14,p39/4*-1000./ 
@@ -2447,7 +2402,7 @@
       function densu(alt,dlb,tinf,tlb,xm,alpha,tz,zlb,s2,               &
         mn1,zn1,tn1,tgn1)                                               
       use gettemp_mod, only: gsurf,re
-!x    common/parmb/gsurf,re 
+!
       dimension zn1(mn1),tn1(mn1),tgn1(2),xs(5),ys(5),y2out(5) 
 !function
       zeta(zz,zl)=(zz-zl)*(re+zl)/(re+zz) 
@@ -2546,7 +2501,7 @@
 !! @author Hann-Ming Henry Juang
       function densm(alt,d0,xm,tz,mn3,zn3,tn3,tgn3,mn2,zn2,tn2,tgn2) 
       use gettemp_mod, only: gsurf,re
-!x    common/parmb/gsurf,re 
+!
       dimension zn3(mn3),tn3(mn3),tgn3(2),xs(10),ys(10),y2out(10) 
       dimension zn2(mn2),tn2(mn2),tgn2(2) 
 ! function
