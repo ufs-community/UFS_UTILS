@@ -33,7 +33,8 @@ module list
 
 set -x
 
-export DATA=/gpfs/dell1/stmp/$LOGNAME/reg_tests.ice_blend
+export DATA="${WORK_DIR:-/gpfs/dell1/stmp/$LOGNAME}"
+export DATA="${DATA}/reg-tests/ice-blend"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.

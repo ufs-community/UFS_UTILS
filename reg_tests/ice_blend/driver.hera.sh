@@ -36,7 +36,8 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-export DATA="/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_test.ice_blend"
+export DATA="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+export DATA="${DATA}/reg-tests/ice-blend"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
