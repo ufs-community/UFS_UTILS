@@ -25,9 +25,7 @@ module load bacio
 module load sigio
 module load sfcio
 module load nemsio
-module load nemsiogfs
 module load gfsio
-module load landsfcutil
 module load g2
 module load wgrib2
 

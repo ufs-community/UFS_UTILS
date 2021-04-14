@@ -1,3 +1,8 @@
+# This is the CMake file for the global_cycle utility in the UFS_UTILS
+# project.
+#
+# George Gayno
+
 set(fortran_src
     cycle.f90
     machine.f90
@@ -29,3 +34,8 @@ if(OpenMP_Fortran_FOUND)
 endif()
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+
+# If doxygen documentation we enabled, build it.
+if(ENABLE_DOCS)
+  add_subdirectory(docs)  
+endif()
