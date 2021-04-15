@@ -1758,7 +1758,6 @@ end subroutine intp_tile
 !! @param[out] wei2 Weighting of second bounding month
 !! @author Xu Li @date March 2019 
 subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
- use mpi
  implicit none
 
 ! input
@@ -1770,7 +1769,7 @@ subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
 ! local declare
  real :: rjday
  integer :: mon,monend,monm,monp,jdow,jdoy,jday
- integer :: jda(8), ierr
+ integer :: jda(8)
 !
 !dayhf : julian day of the middle of each month
 !
@@ -1804,7 +1803,7 @@ subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
  enddo
 
  print *,'FATAL ERROR in get_tim_wei, wrong rjday',rjday
- call mpi_abort(mpi_comm_world, 13, ierr)
+ call abort
  10     continue
 
  wei1 = (dayhf(mon2)-rjday)/(dayhf(mon2)-dayhf(mon1))
