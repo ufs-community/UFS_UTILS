@@ -35,7 +35,8 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export DATA=/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_tests.cycle
+export DATA="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export DATA="${DATA}/reg-tests/global-cycle"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.

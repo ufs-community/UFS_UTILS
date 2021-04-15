@@ -29,9 +29,11 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
-PROJECT_CODE="hfv3gfs"
-QUEUE="debug"
+export OUTDIR="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
+
+PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
+QUEUE="${QUEUE:-debug}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root

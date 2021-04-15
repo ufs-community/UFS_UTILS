@@ -7,9 +7,9 @@
 module cstgeo ! Constants for orientation and stretching of map
 use pkind, only: sp
 implicit none
-real(sp),dimension(3,3):: rotm !< ???
-real(sp)               :: sc !< ???
-real(sp)               :: sci !< ???
+real(sp),dimension(3,3):: rotm !< Orthogonal rotation matrix
+real(sp)               :: sc !< Schmidt stretching factor
+real(sp)               :: sci !< Schmidt inverse stretching factor
 end module cstgeo
 
 !> Constants for orientation and stretching of map.
@@ -17,9 +17,9 @@ end module cstgeo
 module dcstgeo ! Constants for orientation and stretching of map
 use pkind, only: dp
 implicit none
-real(dp),dimension(3,3):: rotm !< ???
-real(dp)               :: sc !< ???
-real(dp)               :: sci !< ???
+real(dp),dimension(3,3):: rotm !< Orthogonal rotation matrix
+real(dp)               :: sc !< Schmidt stretching factor
+real(dp)               :: sci !< Schmidt inverse stretching factor
 end module dcstgeo
 
 !> Utility routines for orienting the globe and basic geographical mappings.
@@ -54,11 +54,11 @@ contains
 !> Initialize the rotation matrix ROT3 needed to transform standard
 !! earth-centered cartesian components to the alternative cartesian frame
 !! oriented so as to put geographical point (ALAT0,ALON0) on the projection
-!! axis.
+!! axis. Single precision version.
 !!
-!! @param[in] alon0 geographical point
-!! @param[in] alat0 geographical point
-!! @param[out] rot3 rotation matrix
+!! @param[in] alon0 geographical longitude (degrees) of projection center.
+!! @param[in] alat0 geographical latitude (degrees) of projection center.
+!! @param[out] rot3 rotation matrix.
 !! @author R. J. Purser @date 1995
 subroutine sininmap(alon0,alat0,rot3)!                               [ininmap]
 use pietc_s, only: u0,dtor
@@ -73,11 +73,14 @@ rot3(2,1)=-slon0;      rot3(2,2)=clon0;       rot3(2,3)=u0
 rot3(3,1)=clat0*clon0; rot3(3,2)=clat0*slon0; rot3(3,3)=slat0
 end subroutine sininmap
 
-!> ???
+!> Initialize the rotation matrix ROT3 needed to transform standard
+!! earth-centered cartesian components to the alternative cartesian frame
+!! oriented so as to put geographical point (ALAT0,ALON0) on the projection
+!! axis. Double precision version.
 !!
-!! @param[in] alon0 ???
-!! @param[in] alat0 ???
-!! @param[in] rot3 ???
+!! @param[in] alon0 geographical longitude (degrees) of projection center.
+!! @param[in] alat0 geographical latitude (degrees) of projection center.
+!! @param[out] rot3 rotation matrix.
 !! @author R. J. Purser
 subroutine dininmap(alon0,alat0,rot3)!                               [ininmap]
 use pietc, only: u0,dtor
@@ -95,11 +98,11 @@ end subroutine dininmap
 !> Initialize the rotation matrix ROT3 needed to transform standard
 !! earth-centered cartesian components to the alternative cartesian frame
 !! oriented so as to put geographical point (ALAT0,ALON0) at the viewing
-!! nadir.
+!! nadir. Single precision version.
 !!
-!! @param[in] alon0 geographical point
-!! @param[in] alat0 geographical point
-!! @param[out] rot3 rotation matrix
+!! @param[in] alon0 geographical longitude (degrees) of viewing nadir.
+!! @param[in] alat0 geographical latitude (degrees) of viewing nadir.
+!! @param[out] rot3 rotation matrix.
 !! @author R. J. Purser @date 1995
 subroutine sinivmap(alon0,alat0,rot3)!                               [inivmap]
 use pietc_s, only: u0,dtor
@@ -124,11 +127,14 @@ rot3(3,2)=clat0*slon0
 rot3(3,3)=slat0
 end subroutine sinivmap
 
-!> ???
+!> Initialize the rotation matrix ROT3 needed to transform standard
+!! earth-centered cartesian components to the alternative cartesian frame
+!! oriented so as to put geographical point (ALAT0,ALON0) at the viewing
+!! nadir. Double precision version.
 !!
-!! @param[in] alon0 ???
-!! @param[in] alat0 ???
-!! @param[in] rot3 ???
+!! @param[in] alon0 geographical longitude (degrees) of viewing nadir.
+!! @param[in] alat0 geographical latitude (degrees) of viewing nadir.
+!! @param[out] rot3 rotation matrix.
 !! @author R. J. Purser
 subroutine dinivmap(alon0,alat0,rot3)!                               [inivmap]
 use pietc, only: u0,dtor
@@ -157,10 +163,11 @@ end subroutine dinivmap
 !! geographical coordinates refer to latitude and longitude (radians)
 !! and cartesian coordinates are standard earth-centered cartesian
 !! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! Single precision version.
 !!
-!! @param[in] xe three cartesian components
-!! @param[out] rlat radians latitude
-!! @param[out] rlon radians longitude
+!! @param[in] xe Earth-centered cartesian unit 3-vector.
+!! @param[out] rlat radians latitude.
+!! @param[out] rlon radians longitude.
 !! @author R. J. Purser
 subroutine sctogr(xe,rlat,rlon)!                                       [ctogr]
 use pietc_s, only: u0
@@ -177,11 +184,15 @@ else
 endif
 end subroutine sctogr
 
-!> ???
+!> Transform "Cartesian" to "Geographical" coordinates, where the
+!! geographical coordinates refer to latitude and longitude (radians)
+!! and cartesian coordinates are standard earth-centered cartesian
+!! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! Double precision version.
 !!
-!! @param[in] xe
-!! @param[out] rlat
-!! @param[out] rlon
+!! @param[in] xe Earth-centered cartesian unit 3-vector.
+!! @param[out] rlat radians latitude.
+!! @param[out] rlon radians longitude.
 !! @author R. J. Purser
 subroutine dctogr(xe,rlat,rlon)!                                       [ctogr]
 use pietc, only: u0
@@ -198,11 +209,12 @@ else
 endif
 end subroutine dctogr
 
-!> ???
+!> Transform "Geographical" to "Cartesian" coordinates.
+!! Single proecision version.
 !!
-!! @param[in] rlat
-!! @param[in] rlon
-!! @param[out] xe
+!! @param[in] rlat Latitude (radians) of point.
+!! @param[in] rlon Longitude (radians) of point.
+!! @param[out] xe Earth-centered cartesian unit 3-vector of point.
 !! @author R. J. Purser
 subroutine sgrtoc(rlat,rlon,xe)!                                       [grtoc]
 implicit none
@@ -214,11 +226,12 @@ slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine sgrtoc
 
-!> ???
+!> Transform "Geographical" to "Cartesian" coordinates.
+!! Double proecision version.
 !!
-!! @param[in] rlat
-!! @param[in] rlon
-!! @param[out] xe
+!! @param[in] rlat Latitude (radians) of point. 
+!! @param[in] rlon Longitude (radians) of point.
+!! @param[out] xe Earth-centered cartesian unit 3-vector of point.
 !! @author R. J. Purser
 subroutine dgrtoc(rlat,rlon,xe)!                                       [grtoc]
 implicit none
@@ -230,13 +243,15 @@ slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine dgrtoc
 
-!> ???
+!> Transform "Geographical" to "Cartesian" coordinates, together with the
+!! partial derivatives of cartesians wrt latitude and longitude.
+!! Single precision version.
 !!
-!! @param[in] rlat
-!! @param[in] rlon
-!! @param[out] xe
-!! @param[out] dxedlat
-!! @param[out] dxedlon
+!! @param[in] rlat Latitude (radians) of point.
+!! @param[in] rlon Longitude (radians) of point.
+!! @param[out] xe Earth-centered cartesian unit 3-vector of point.
+!! @param[out] dxedlat Derivative, d(xe)/d(rlat).
+!! @param[out] dxedlon Derivative, d(xe)/d(rlon).
 !! @author R. J. Purser
 subroutine sgrtocd(rlat,rlon,xe,dxedlat,dxedlon)!                      [grtoc]
 implicit none
@@ -251,13 +266,15 @@ dxedlat=dxedlat_d
 dxedlon=dxedlon_d
 end subroutine sgrtocd
 
-!> ???
+!> Transform "Geographical" to "Cartesian" coordinates, together with the
+!! partial derivatives of cartesians wrt latitude and longitude.
+!! Double precision version.
 !!
-!! @param[in] rlat
-!! @param[in] rlon
-!! @param[out] xe
-!! @param[out] dxedlat
-!! @param[out] dxedlon
+!! @param[in] rlat Latitude (radians) of point.
+!! @param[in] rlon Longitude (radians) of point.
+!! @param[out] xe Earth-centered cartesian unit 3-vector of point.
+!! @param[out] dxedlat Derivative, d(xe)/d(rlat).
+!! @param[out] dxedlon Derivative, d(xe)/d(rlon).
 !! @author R. J. Purser
 subroutine dgrtocd(rlat,rlon,xe,dxedlat,dxedlon)!                      [grtoc]
 use pietc, only: u0
@@ -272,16 +289,18 @@ dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla
 dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 
 end subroutine dgrtocd
 
-!> ???
+!> Transform "Geographical" to "Cartesian" coordinates, together with the
+!! 1st and 2nd partial derivatives of cartesians wrt latitude and longitude.
+!! Single precision version.
 !!
-!! @param[in] rlat
-!! @param[in] rlon
-!! @param[out] xe
-!! @param[out] dxedlat
-!! @param[out] dxedlon
-!! @param[in] ddxedlatdlat
-!! @param[in] ddxedlatdlon
-!! @param[in] ddxedlondlon
+!! @param[in] rlat Latitude (radians) of point.
+!! @param[in] rlon Longitude (radians) of point.
+!! @param[out] xe Earth-centered cartesian unit 3-vector of point.
+!! @param[out] dxedlat Derivative, d(xe)/d(rlat).
+!! @param[out] dxedlon Derivative, d(xe)/d(rlon).
+!! @param[out] ddxedlatdlat Derivative, d^2(xe)/(d(rlat)d(rlat)).
+!! @param[out] ddxedlatdlon Derivative, d^2(xe)/(d(rlat)d(rlon)).
+!! @param[out] ddxedlondlon Derivative, d^2(xe)/(d(rlon)d(rlon)).
 !! @author R. J. Purser
 subroutine sgrtocdd(rlat,rlon,xe,dxedlat,dxedlon, &!                   [grtoc]
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)
@@ -303,16 +322,18 @@ ddxedlatdlon=ddxedlatdlon_d
 ddxedlondlon=ddxedlondlon_d
 end subroutine sgrtocdd
 
-!> ???
+!> Transform "Geographical" to "Cartesian" coordinates, together with the
+!! 1st and 2nd partial derivatives of cartesians wrt latitude and longitude.
+!! Double precision version.
 !!
-!! @param[in] rlat ???
-!! @param[in] rlon ???
-!! @param[out] xe  ???
-!! @param[out] dxedlat ???
-!! @param[out] dxedlon ???
-!! @param[in] ddxedlatdlat ???
-!! @param[in] ddxedlatdlon ???
-!! @param[in] ddxedlondlon ???
+!! @param[in] rlat Latitude (radians) of point.
+!! @param[in] rlon Longitude (radians) of point.
+!! @param[out] xe  Earth-centered cartesian unit 3-vector of point.
+!! @param[out] dxedlat Derivative, d(xe)/d(rlat).
+!! @param[out] dxedlon Derivative, d(xe)/d(rlon).
+!! @param[out] ddxedlatdlat Derivative, d^2(xe)/(d(rlat)d(rlat)).
+!! @param[out] ddxedlatdlon Derivative, d^2(xe)/(d(rlat)d(rlon)).
+!! @param[out] ddxedlondlon Derivative, d^2(xe)/(d(rlon)d(rlon)).
 !! @author R. J. Purser
 subroutine dgrtocdd(rlat,rlon,xe,dxedlat,dxedlon, &!                   [grtoc]
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)
@@ -342,10 +363,11 @@ end subroutine dgrtocdd
 !! geographical coordinates refer to latitude and longitude (degrees)
 !! and cartesian coordinates are standard earth-centered cartesian
 !! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! Single precision version.
 !!
-!! @param[in] xe three cartesian components
-!! @param[out] dlat degrees latitude
-!! @param[out] dlon degrees longitude
+!! @param[in] xe Earth-centered cartesian unit 3-vector.
+!! @param[out] dlat degrees latitude.
+!! @param[out] dlon degrees longitude.
 !! @author R. J. Purser @date 1994
 subroutine sctog(xe,dlat,dlon)!                                         [ctog]
 use pietc_s, only: u0,rtod
@@ -362,11 +384,15 @@ else
 endif
 end subroutine sctog
 
-!> ???
+!> Transform "Cartesian" to "Geographical" coordinates, where the
+!! geographical coordinates refer to latitude and longitude (degrees)
+!! and cartesian coordinates are standard earth-centered cartesian
+!! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! Double precision version.
 !!
-!! @param[in] xe three cartesian components
-!! @param[out] dlat degrees latitude
-!! @param[out] dlon degrees longitude
+!! @param[in] xe Earth-centered cartesian unit 3-vector.
+!! @param[out] dlat degrees latitude.
+!! @param[out] dlon degrees longitude.
 !! @author R. J. Purser
 subroutine dctog(xe,dlat,dlon)!                                         [ctog]
 use pietc, only: u0,rtod
@@ -387,10 +413,11 @@ end subroutine dctog
 !! geographical coordinates refer to latitude and longitude (degrees)
 !! and cartesian coordinates are standard earth-centered cartesian
 !! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! Single precision version.
 !!
-!! @param[in] dlat degrees latitude
-!! @param[in] dlon degrees longitude
-!! @param[out] xe three cartesian components.
+!! @param[in] dlat degrees latitude.
+!! @param[in] dlon degrees longitude.
+!! @param[out] xe Earth-centered cartesian unit 3-vector.
 !! @author R. J. Purser @date 1994
 subroutine sgtoc(dlat,dlon,xe)!                                         [gtoc]
 use pietc_s, only: dtor
@@ -404,11 +431,15 @@ slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine sgtoc
 
-!> ???
+!> Transform "Geographical" to "Cartesian" coordinates, where the
+!! geographical coordinates refer to latitude and longitude (degrees)
+!! and cartesian coordinates are standard earth-centered cartesian
+!! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! Double precision version.
 !!
-!! @param[in] dlat degrees latitude
-!! @param[in] dlon degrees longitude
-!! @param[out] xe three cartesian components.
+!! @param[in] dlat degrees latitude.
+!! @param[in] dlon degrees longitude.
+!! @param[out] xe cartesian unit 3-vector.
 !! @author R. J. Purser
 subroutine dgtoc(dlat,dlon,xe)!                                         [gtoc]
 use pietc, only: dtor
@@ -421,14 +452,19 @@ sla=sin(rlat);  cla=cos(rlat)
 slo=sin(rlon);  clo=cos(rlon)
 xe(1)=cla*clo; xe(2)=cla*slo; xe(3)=sla
 end subroutine dgtoc
-
-!> ??? 
+ 
+!> Transform "Geographical" to "Cartesian" coordinates, where the
+!! geographical coordinates refer to latitude and longitude (degrees)
+!! and cartesian coordinates are standard earth-centered cartesian
+!! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! Also, return the partial derivatives of xe wrt latitude and longitude.
+!! Single precision version.
 !!
-!! @param[in] dlat degrees latitude
-!! @param[in] dlon degrees longitude
-!! @param[out] xe three cartesian components.
-!! @param[out] dxedlat ???
-!! @param[out] dxedlon ???
+!! @param[in] dlat degrees latitude.
+!! @param[in] dlon degrees longitude.
+!! @param[out] xe cartesian unit 3-vector.
+!! @param[out] dxedlat derivative, d(xe)/d(dlat).
+!! @param[out] dxedlon derivative, d(xe)/d(dlon).
 !! @author R. J. Purser
 subroutine sgtocd(dlat,dlon,xe,dxedlat,dxedlon)!                        [gtoc]
 implicit none
@@ -443,13 +479,18 @@ dxedlat=dxedlat_d
 dxedlon=dxedlon_d
 end subroutine sgtocd
 
-!> ???
+!> Transform "Geographical" to "Cartesian" coordinates, where the
+!! geographical coordinates refer to latitude and longitude (degrees)
+!! and cartesian coordinates are standard earth-centered cartesian
+!! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! Also, return the partial derivatives of xe wrt latitude and longitude.
+!! Double precision version.
 !!
-!! @param[in] dlat degrees latitude
-!! @param[in] dlon degrees longitude
-!! @param[out] xe three cartesian components.
-!! @param[out] dxedlat ???
-!! @param[out] dxedlon ???
+!! @param[in] dlat degrees latitude.
+!! @param[in] dlon degrees longitude.
+!! @param[out] xe cartesian unit 3-vector.
+!! @param[out] dxedlat derivative, d(xe)/d(dlat).
+!! @param[out] dxedlon derivative, d(xe)/d(dlon).
 !! @author R. J. Purser
 subroutine dgtocd(dlat,dlon,xe,dxedlat,dxedlon)!                        [gtoc]
 use pietc, only: u0,dtor
@@ -465,16 +506,22 @@ dxedlat(1)=-sla*clo; dxedlat(2)=-sla*slo; dxedlat(3)=cla; dxedlat=dxedlat*dtor
 dxedlon(1)=-cla*slo; dxedlon(2)= cla*clo; dxedlon(3)=u0 ; dxedlon=dxedlon*dtor
 end subroutine dgtocd
 
-!> ???
+!> Transform "Geographical" to "Cartesian" coordinates, where the
+!! geographical coordinates refer to latitude and longitude (degrees)
+!! and cartesian coordinates are standard earth-centered cartesian
+!! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! Also, return the 1st and 2nd partial derivatives of xe wrt latitude and 
+!! longitude.
+!! Single precision version.
 !!
-!! @param[in] dlat degrees latitude
-!! @param[in] dlon degrees longitude
-!! @param[out] xe three cartesian components.
-!! @param[out] dxedlat ???
-!! @param[out] dxedlon ???
-!! @param[in] ddxedlatdlat ???
-!! @param[in] ddxedlatdlon ???
-!! @param[in] ddxedlondlon ???
+!! @param[in] dlat degrees latitude.
+!! @param[in] dlon degrees longitude.
+!! @param[out] xe cartesian unit 3-vector.
+!! @param[out] dxedlat derivative, d(xe)/d(dlat).
+!! @param[out] dxedlon derivative, d(xe)/d(dlon).
+!! @param[out] ddxedlatdlat derivative, d^2(xe)/(d(dlat)d(dlat)).
+!! @param[out] ddxedlatdlon derivative, d^2(xe)/(d(dlat)d(dlon)).
+!! @param[out] ddxedlondlon derivative, d^2(xe)/(d(dlon)d(dlon)).
 !! @author R. J. Purser
 subroutine sgtocdd(dlat,dlon,xe,dxedlat,dxedlon, &
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)!                           [gtoc]
@@ -496,16 +543,22 @@ ddxedlatdlon=ddxedlatdlon_d
 ddxedlondlon=ddxedlondlon_d
 end subroutine sgtocdd
 
-!> ???
+!> Transform "Geographical" to "Cartesian" coordinates, where the
+!! geographical coordinates refer to latitude and longitude (degrees)
+!! and cartesian coordinates are standard earth-centered cartesian
+!! coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian.
+!! Also, return the 1st and 2nd partial derivatives of xe wrt latitude and 
+!! longitude.
+!! Double precision version.
 !!
-!! @param[in] dlat degrees latitude
-!! @param[in] dlon degrees longitude
-!! @param[out] xe three cartesian components.
-!! @param[out] dxedlat ???
-!! @param[out] dxedlon ???
-!! @param[in] ddxedlatdlat ???
-!! @param[in] ddxedlatdlon ???
-!! @param[in] ddxedlondlon ???
+!! @param[in] dlat degrees latitude.
+!! @param[in] dlon degrees longitude.
+!! @param[out] xe cartesian unit 3-vector.
+!! @param[out] dxedlat d(xe)/d(dlat).
+!! @param[out] dxedlon d(xe)/d(dlon).
+!! @param[out] ddxedlatdlat derivative, d^2(xe)/(d(dlat)d(dlat)).
+!! @param[out] ddxedlatdlon derivative, d^2(xe)/(d(dlat)d(dlon)).
+!! @param[out] ddxedlondlon derivative, d^2(xe)/(d(dlon)d(dlon)).
 !! @author R. J. Purser
 subroutine dgtocdd(dlat,dlon,xe,dxedlat,dxedlon, &
      ddxedlatdlat,ddxedlatdlon,ddxedlondlon)!                           [gtoc]
@@ -535,11 +588,13 @@ ddxedlatdlon=ddxedlatdlon*dtor**2
 ddxedlondlon=ddxedlondlon*dtor**2
 end subroutine dgtocdd
 
-!> ???
+!> From the degree lat and lon (plat and plon) return the standard orthogonal
+!! 3D frame at this location as an orthonormal matrix, orth.
+!! Single precision version.
 !!
-!! @param[in] splat ???
-!! @param[in] splon ???
-!! @param[in] sorth ???
+!! @param[in] splat latitude (degrees) of point.
+!! @param[in] splon longitude (degrees) of point.
+!! @param[out] sorth orthonormal matrix.
 !! @author R. J. Purser
 subroutine sgtoframem(splat,splon,sorth)!                            [gtoframe]
 implicit none
@@ -550,12 +605,13 @@ real(dp),dimension(3,3):: orth
 plat=splat; plon=splon; call gtoframem(plat,plon,orth); sorth=orth
 end subroutine sgtoframem
 
-!> From the degree lat and lo (plat and plon) return the standard orthogonal
+!> From the degree lat and lon (plat and plon) return the standard orthogonal
 !! 3D frame at this location as an orthonormal matrix, orth.
+!! Double precision version.
 !!
-!! @param[in] plat latitude degree
-!! @param[in] plon longitude degree
-!! @param[out] orth orthonormal matrix
+!! @param[in] plat latitude (degrees) of point.
+!! @param[in] plon longitude (degrees) of point.
+!! @param[out] orth orthonormal matrix.
 !! @author R. J. Purser
 subroutine gtoframem(plat,plon,orth)!                                [gtoframe]
 implicit none
@@ -566,13 +622,16 @@ call gtoframev(plat,plon, xp,yp,zp)
 orth(:,1)=xp; orth(:,2)=yp; orth(:,3)=zp
 end subroutine gtoframem
 
-!> ???
+!> Given a geographical point by its degrees lat and lon, plat and
+!! plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in
+!! earth-centered coordinates.
+!! Single precision version.
 !!
-!! @param[in] splat ???
-!! @param[in] splon ???
-!! @param[out] sxp ???
-!! @param[out] syp ???
-!! @param[out] szp ???
+!! @param[in] splat latitude (degrees) of point.
+!! @param[in] splon longitude (degrees) of point.
+!! @param[out] sxp xp unit X-basis vector of cartesian frame.
+!! @param[out] syp yp unit Y-basis vector of cartesian frame.
+!! @param[out] szp zp unit Z-basis vector of cartesian frame.
 !! @author R. J. Purser
 subroutine sgtoframev(splat,splon,sxp,syp,szp)!                       [gtoframe]
 !==============================================================================
@@ -591,12 +650,13 @@ end subroutine sgtoframev
 !> Given a geographical point by its degrees lat and lon, plat and
 !! plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in
 !! earth-centered coordinates.
+!! Double precision version.
 !!
-!! @param[in] plat latitude point
-!! @param[in] plon longitude point
-!! @param[out] xp orthogonal cartesian frame in earth-centered coordinates.
-!! @param[out] yp orthogonal cartesian frame in earth-centered coordinates.
-!! @param[out] zp orthogonal cartesian frame in earth-centered coordinates.
+!! @param[in] plat latitude (degrees) of point.
+!! @param[in] plon longitude (degrees) of point.
+!! @param[out] xp unit X-basis vector of cartesian frame.
+!! @param[out] yp unit Y-basis vector of cartesian frame.
+!! @param[out] zp unit Z-basis vector of cartesian frame.
 !! @author R. J. Purser
 subroutine gtoframev(plat,plon, xp,yp,zp)!                           [gtoframe]
 use pietc, only: u0,u1
@@ -619,14 +679,18 @@ else
 endif
 end subroutine gtoframev
 
-!> ???
+!> Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent
+!! point defined by unit vector, zv, and complete the V-frame cartesian
+!! components, {xv,yv}, that are the result of parallel-transport of {xp,yp}
+!! along the geodesic between P and V.
+!! Single precision version.
 !!
-!! @param[in] sxp ???
-!! @param[in] syp ???
-!! @param[in] szp ???
-!! @param[in] sxv ???
-!! @param[out] syv ???
-!! @param[out] szv  ???
+!! @param[in] sxp reference orthonormal P-frame cartesian X-vector.
+!! @param[in] syp reference orthonormal P-frame cartesian Y-vector.
+!! @param[in] szp reference orthonormal P-frame cartesian Z-vector.
+!! @param[out] sxv V-frame cartesian X-vector.
+!! @param[out] syv V-frame cartesian Y-vector.
+!! @param[in] szv  dependent point zenith, V-frame cartesian Z-vector.
 !! @author R. J. Purser
 subroutine sparaframe(sxp,syp,szp, sxv,syv,szv)!                    [paraframe]
 implicit none
@@ -642,13 +706,14 @@ end subroutine sparaframe
 !! point defined by unit vector, zv, and complete the V-frame cartesian
 !! components, {xv,yv}, that are the result of parallel-transport of {xp,yp}
 !! along the geodesic between P and V.
+!! Double precision version.
 !!
-!! @param[in] xp reference orthonormal frame
-!! @param[in] yp reference orthonormal frame
-!! @param[in] zp reference orthonormal frame
-!! @param[out] zv dependent point
-!! @param[out] xv V-frame cartesian components
-!! @param[out] yv V-frame cartesian components
+!! @param[in] xp reference orthonormal P-frame cartesian X-vector.
+!! @param[in] yp reference orthonormal P-frame cartesian Y-vector.
+!! @param[in] zp reference orthonormal P-frame cartesian Z-vector.
+!! @param[out] xv V-frame cartesian X-vector.
+!! @param[out] yv V-frame cartesian Y-vector.
+!! @param[in] zv dependent point zenith, V-frame cartesian Z-vector.
 !! @author R. J. Purser
 subroutine paraframe(xp,yp,zp, xv,yv,zv)!                           [paraframe]
 use pmat4,  only: cross_product,normalized
@@ -666,15 +731,21 @@ xv=xq*ctheta-yq*stheta
 yv=xq*stheta+yq*ctheta
 end subroutine paraframe
 
-!> ???
+!> Given a principal cartesian orthonormal frame, {xp,yp,zp} (i.e., at P with
+!! Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V
+!! with Earth-centered cartesians zv, find the relative rotation angle, "twist"
+!! by which the frame at V is rotated in the counterclockwise sense relative
+!! to the parallel-transportation of P's frame to V.
+!! Note that, by symmetry, transposing P and V leads to the opposite twist.
+!! Single precision version.
 !!
-!! @param[in] sxp ???
-!! @param[in] syp ???
-!! @param[in] szp ???
-!! @param[in] sxv ???
-!! @param[in] syv ???
-!! @param[in] szv ???
-!! @param[out] stwist ???
+!! @param[in] sxp P-frame cartesian X-vector.
+!! @param[in] syp P-frame cartesian Y-vector.
+!! @param[in] szp P-frame cartesian Z-vector.
+!! @param[in] sxv V-frame cartesian X-vector.
+!! @param[in] syv V-frame cartesian Y-vector.
+!! @param[in] szv V-frame cartesian Z-vector.
+!! @param[out] stwist relative rotation angle (radians) of frames.
 !! @author R. J. Purser
 subroutine sframetwist(sxp,syp,szp, sxv,syv,szv, stwist)!          [frametwist]
 implicit none
@@ -693,14 +764,15 @@ end subroutine sframetwist
 !! by which the frame at V is rotated in the counterclockwise sense relative
 !! to the parallel-transportation of P's frame to V.
 !! Note that, by symmetry, transposing P and V leads to the opposite twist.
+!! Double precision version.
 !!
-!! @param[in] xp cartesian orthonormal frame
-!! @param[in] yp cartesian orthonormal frame
-!! @param[in] zp cartesian orthonormal frame
-!! @param[in] xv ???
-!! @param[in] yv ???
-!! @param[in] zv Earth-centered cartesians
-!! @param[out] twist opposite twist of cartesian orthonormal frame input
+!! @param[in] xp P-frame cartesian X-vector.
+!! @param[in] yp P-frame cartesian Y-vector.
+!! @param[in] zp P-frame cartesian Z-vector.
+!! @param[in] xv V-frame cartesian X-vector.
+!! @param[in] yv V-frame cartesian Y-vector.
+!! @param[in] zv V-frame cartesian Z-vector.
+!! @param[out] twist relative rotation angle (radians) of frames.
 !! @author R. J. Purser
 subroutine frametwist(xp,yp,zp, xv,yv,zv, twist)!                  [frametwist]
 implicit none
@@ -713,11 +785,11 @@ c=dot_product(xv,xxv); s=dot_product(xv,yyv)
 twist=atan2(s,c)
 end subroutine frametwist
 
-!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s.
+!> Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s.
 !!
-!! @param[in] s scaling parameter
-!! @param[inout] xc1 schmidt transformation
-!! @param[inout] xc2 schmidt transformation
+!! @param[in] s Schmidt scaling parameter 
+!! @param[inout] xc1 input cartesian 3-vector
+!! @param[inout] xc2 output cartesian unit 3-vector
 !! @author R. J. Purser
 subroutine sctoc(s,xc1,xc2)!                                       [ctoc_schm]
 use pietc_s, only: u1,u2
@@ -741,13 +813,13 @@ xc2(2)=(aambb*y)*di
 xc2(3)=e*di
 end subroutine sctoc
 
-!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
+!> Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s,
 !! and its jacobian, dxc2.
 !!
-!! @param[in] s scaling
-!! @param[inout] xc1 schmidt transformation
-!! @param[inout] xc2 schmidt transformation
-!! @param[out] dxc2 jacobian
+!! @param[in] s Schmidt scaling parameter.
+!! @param[inout] xc1 input cartesian 3-vector.
+!! @param[inout] xc2 output cartesian unit 3-vector.
+!! @param[out] dxc2 jacobian 1st derivative, d(xc2)/d(xc1).
 !! @author R. J. Purser
 subroutine sctocd(s,xc1,xc2,dxc2)!                                 [ctoc_schm]
 use pietc_s, only: u0,u1,u2
@@ -781,19 +853,19 @@ dxc2(2,3)=ab2*aambb*y*ddi
 dxc2(3,3)=aapbb*di +ab2*e*ddi
 end subroutine sctocd
 
-!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
+!> Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s,
 !! its jacobian, dxc2, and its 2nd derivative, ddxc2.
 !!
-!! @param[in] s scaling
-!! @param[in] xc1 ???
-!! @param[in] xc2 ???
-!! @param[out] dxc2 jacobian
-!! @param[out] ddxc2 2nd derivative
+!! @param[in] s Schmidt scaling parameter.
+!! @param[in] xc1 input cartesian 3-vector.
+!! @param[in] xc2 output cartesian unit 3-vector.
+!! @param[out] dxc2 jacobian 1st derivative, d(xc2)/d(xc1).
+!! @param[out] ddxc2 2nd derivative, d^2(xc2)/(d(xc1)d(xc1)).
 !! @author R. J. Purser
 subroutine sctocdd(s,xc1,xc2,dxc2,ddxc2)!                          [ctoc_schm]
 use pietc_s, only: u0,u1,u2
 implicit none
-real(sp),                 intent(IN   ):: s
+real(sp),                 intent(IN   ):: s 
 real(sp),dimension(3),    intent(INOUT):: xc1,xc2
 real(sp),dimension(3,3),  intent(  OUT):: dxc2
 real(sp),dimension(3,3,3),intent(  OUT):: ddxc2
@@ -834,11 +906,11 @@ ddxc2(2,3,3)=u2*ab2**2*aambb*y*dddi
 ddxc2(3,3,3)=u2*ab2*(aapbb*ddi+ab2*e*dddi)
 end subroutine sctocdd
 
-!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s.
+!> Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s.
 !!
-!! @param[in] s scaling
-!! @param[inout] xc1 schmidt transformation
-!! @param[inout] xc2 schmidt transformation
+!! @param[in] s Schmidt scaling parameter.
+!! @param[inout] xc1 input cartesian 3-vector.
+!! @param[inout] xc2 output cartesian unit 3-vector.
 !! @author R. J. Purser
 subroutine dctoc(s,xc1,xc2)!                                       [ctoc_schm]
 use pietc, only: u1,u2
@@ -863,20 +935,20 @@ xc2(2)=(aambb*y)*di
 xc2(3)=e*di
 end subroutine dctoc
 
-!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
+!> Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s,
 !! and its jacobian, dxc2.
 !!
-!! @param[in] s scaling
-!! @param[inout] xc1 schmidt transformation
-!! @param[inout] xc2 schmidt transformation
-!! @param[out] dxc2 ???
+!! @param[in] s Schmidt scaling parameter.
+!! @param[inout] xc1 input cartesian 3-vector.
+!! @param[inout] xc2 output cartesian unit 3-vector.
+!! @param[out] dxc2 jacobian 1st derivative, d(xc2)/d(xc1).
 !! @author R. J. Purser
 subroutine dctocd(s,xc1,xc2,dxc2)!                                 [ctoc_schm]
 use pietc, only: u0,u1,u2
 implicit none
 real(dp),               intent(IN   ):: s
 real(dp),dimension(3),  intent(INOUT):: xc1,xc2
-real(dp),dimension(3,3),intent(  OUT):: dxc2
+real(dp),dimension(3,3),intent(  OUT):: dxc2 
 real(dp)                             :: x,y,z,a,b,d,e, &
                                         ab2,aa,bb,di,ddi,aapbb,aambb
 x=xc1(1); y=xc1(2); z=xc1(3)
@@ -903,14 +975,14 @@ dxc2(2,3)=ab2*aambb*y*ddi
 dxc2(3,3)=aapbb*di +ab2*e*ddi
 end subroutine dctocd
 
-!> Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s,
+!> Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s,
 !! its jacobian, dxc2, and its 2nd derivative, ddxc2.
 !!
-!! @param[in] s scaling
-!! @param[inout] xc1 schmidt transformation
-!! @param[inout] xc2 schmidt transformation
-!! @param[out] dxc2 jacobian
-!! @param[out] ddxc2 derivative
+!! @param[in] s Schmidt scaling parameter.
+!! @param[inout] xc1 input cartesian 3-vector.
+!! @param[inout] xc2 output cartesian unit 3-vector.
+!! @param[out] dxc2 jacobian 1st derivative, d(xc2)/d(xc1).
+!! @param[out] ddxc2 2nd derivative, d^2(xc2)/(d(xc1)d(xc1)).
 !! @author R. J. Purser
 subroutine dctocdd(s,xc1,xc2,dxc2,ddxc2)!                          [ctoc_schm]
 use pietc, only: u0,u1,u2
@@ -958,11 +1030,11 @@ end subroutine dctocdd
 
 !> Apply a constant rotation to a three dimensional polyline.
 !!
-!! @param[in] rot3 rotation
-!! @param[in] n ???
-!! @param[inout] x input of the three dimensional polyline
-!! @param[inout] y input of the three dimensional polyline
-!! @param[inout] z input of the three dimensional polyline
+!! @param[in] rot3 rotation matrix.
+!! @param[in] n number of points in the polyline.
+!! @param[inout] x cartesian components of the three dimensional polyline.
+!! @param[inout] y cartesian components of the three dimensional polyline.
+!! @param[inout] z cartesian components of the three dimensional polyline.
 !! @author R. J. Purser
 subroutine plrot(rot3,n,x,y,z)!                                        [plrot]
 implicit none
@@ -980,11 +1052,11 @@ end subroutine plrot
 
 !> Invert the rotation of a three-dimensional polyline.
 !!
-!! @param[in] rot3 rotation to be inverted
-!! @param[in] n ???
-!! @param[inout] x input of the three dimensional polyline
-!! @param[inout] y input of the three dimensional polyline
-!! @param[inout] z input of the three dimensional polyline
+!! @param[in] rot3 rotation to be inverted.
+!! @param[in] n number of points in the polyline.
+!! @param[inout] x cartesian components of the three dimensional polyline.
+!! @param[inout] y cartesian components of the three dimensional polyline.
+!! @param[inout] z cartesian components of the three dimensional polyline.
 !! @author R. J. Purser
 subroutine plroti(rot3,n,x,y,z)!                                      [plroti]
 implicit none
@@ -1002,11 +1074,11 @@ end subroutine plroti
 
 !> Apply a constant rotation to a three dimensional polyline.
 !!
-!! @param[in] rot3 rotation to be inverted
-!! @param[in] n ???
-!! @param[inout] x input of the three dimensional polyline
-!! @param[inout] y input of the three dimensional polyline
-!! @param[inout] z input of the three dimensional polyline
+!! @param[in] rot3 rotation matrix.
+!! @param[in] n number of points in the polyline.
+!! @param[inout] x cartesian components of the three dimensional polyline.
+!! @param[inout] y cartesian components of the three dimensional polyline.
+!! @param[inout] z cartesian components of the three dimensional polyline.
 !! @author R. J. Purser
 subroutine dplrot(rot3,n,x,y,z)!                                        [plrot]
 implicit none
@@ -1024,11 +1096,11 @@ end subroutine dplrot
 
 !> Invert the rotation of a three-dimensional polyline.
 !!
-!! @param[in] rot3 rotation to be inverted
-!! @param[in] n ???
-!! @param[inout] x input of the three dimensional polyline
-!! @param[inout] y input of the three dimensional polyline
-!! @param[inout] z input of the three dimensional polyline
+!! @param[in] rot3 rotation to be inverted.
+!! @param[in] n number of points in the polyline.
+!! @param[inout] x cartesian components of the three dimensional polyline.
+!! @param[inout] y cartesian components of the three dimensional polyline.
+!! @param[inout] z cartesian components of the three dimensional polyline.
 !! @author R. J. Purser
 subroutine dplroti(rot3,n,x,y,z)!                                      [plroti]
 implicit none
@@ -1044,13 +1116,13 @@ do k=1,n
 enddo
 end subroutine dplroti
 
-!> Perform schmidt transformation with scaling parameter s to a polyline.
+!> Perform Schmidt transformation with scaling parameter s to a polyline.
 !!
-!! @param[in] s scaling
-!! @param[in] n ???
-!! @param[inout] x input of the three dimensional polyline
-!! @param[inout] y input of the three dimensional polyline
-!! @param[inout] z input of the three dimensional polyline
+!! @param[in] s Schmidt scaling parameter.
+!! @param[in] n number of points in the polyline.
+!! @param[inout] x cartesian components of the three dimensional polyline.
+!! @param[inout] y cartesian components of the three dimensional polyline.
+!! @param[inout] z cartesian components of the three dimensional polyline.
 !! @author R. J. Purser
 subroutine plctoc(s,n,x,y,z)!                                         [plctoc]
 use pietc_s, only: u1
