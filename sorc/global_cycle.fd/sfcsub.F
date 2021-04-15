@@ -3707,12 +3707,10 @@ C> @author Shrinivas Moorthi Mark Iredell NOAA/EMC
                 endif
               enddo
 !
-              if (num_threads == 1) then
-                write(6,*) ' FATAL ERROR: no filling value'
-                write(6,*) ' found in la2ga.'
+              write(6,*) ' FATAL ERROR: no filling value'
+              write(6,*) ' found in la2ga.'
 !               write(6,*) ' i ix jx slmask(i) rslmsk ',
 !    &                       i,ix,jx,slmask(i),rslmsk(ix,jx)
-              endif
               call abort
 !
    71         continue
