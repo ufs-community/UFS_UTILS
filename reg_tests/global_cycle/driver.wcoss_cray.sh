@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run global_cycle regression test on WCOSS-Dell.
+# Run global_cycle regression test on WCOSS-Cray.
 #
 # Set $DATA to your working directory.  Set the project code (BSUB -P)
 # and queue (BSUB -q) as appropriate.
@@ -18,40 +18,42 @@
 #
 #-----------------------------------------------------------------------------
 
-#BSUB -W 00:05
-#BSUB -n 6
-#BSUB -R span[ptile=6]
-#BSUB -x
-#BSUB -o regression.log
-#BSUB -e regression.log
-#BSUB -R "affinity[core(1)]"
-#BSUB -M 2400
-#BSUB -J glc_regt
+#BSUB -oo regression.log
+#BSUB -eo regression.log
 #BSUB -q debug
-#BSUB -P GFS-DEV
-
-set -x
+#BSUB -P GDAS-T2O
+#BSUB -J cycle_regt
+#BSUB -M 2400
+#BSUB -W 00:05
+#BSUB -extsched 'CRAYLINUX[]'
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export DATA=/gpfs/dell1/stmp/$LOGNAME/reg_tests.cycle
+export DATA="${WORK_DIR:-/gpfs/hps3/stmp/$LOGNAME}"
+export DATA="${DATA}/reg-tests/global-cycle"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
-export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/global_cycle
+export NODES=1
 
-export OMP_NUM_THREADS_CY=2
+export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/global_cycle
 
-export APRUNCY="mpirun -l"
+export OMP_NUM_THREADS_CY=4
+
+export KMP_AFFINITY=disabled
+
+export APRUNCY="aprun -n 6 -N 6 -j 1 -d $OMP_NUM_THREADS_CY -cc depth"
 
 export NWPROD=$PWD/../..
 
 export COMOUT=$DATA
+
+export NCCMP=/gpfs/hps3/emc/global/noscrub/George.Gayno/util/netcdf/nccmp
 
 reg_dir=$PWD
 

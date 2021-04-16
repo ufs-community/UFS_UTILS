@@ -28,9 +28,10 @@ module list
 
 set -x
 
-QUEUE="windfall"
-PROJECT_CODE="emcda"
-export WORK_DIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_tests.grid
+QUEUE="${QUEUE:-windfall}"
+PROJECT_CODE="${PROJECT_CODE:-emcda}"
+export WORK_DIR="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
@@ -74,11 +75,18 @@ TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
       --partition=xjet -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./esg.regional.sh)
 
 #-----------------------------------------------------------------------------
+# Regional GSL gravity wave drag.
+#-----------------------------------------------------------------------------
+
+TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
+      --partition=xjet -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./regional.gsl.gwd.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST3 << EOF
+       --open-mode=append -q $QUEUE -d afterok:$TEST4 << EOF
 #!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
