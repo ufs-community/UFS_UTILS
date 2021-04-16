@@ -4,7 +4,6 @@
 !! @author R. J. Purser @date Oct 2005
 
 !> Module for handy vector and matrix operations in Euclidean geometry.
-!! Package for handy vector and matrix operations in Euclidean geometry.
 !! This package is primarily intended for 3D operations and three of the
 !! functions (Cross_product, Triple_product and Axial) do not possess simple
 !! generalizations to a generic number N of dimensions. The others, while
@@ -30,7 +29,7 @@
 !!- Trace:          Trace of given matrix
 !!- Identity:       Identity 3*3 matrix, or identity n*n matrix for a given n
 !!- Sarea:          Spherical area subtended by three vectors, or by lat-lon
-!!                 increments forming a triangle or quadrilateral
+!!                  increments forming a triangle or quadrilateral
 !!- Huarea:         Spherical area subtended by right-angled spherical triangle
 !!   SUBROUTINE:
 !!- Gram:           Right-handed orthogonal basis and rank, nrank. The first 
@@ -111,10 +110,10 @@ interface mobiusi;  module procedure zmobiusi;                  end interface
 
 contains
 
-!> Doing sqrt calculation for absv_s function.
+!> Return the absolute magnitude of a single precision real vector.
 !!
-!! @param[in] a real type input value
-!! @return s result
+!! @param[in] a real type input vector
+!! @return s result, single precision real scalar
 !! @author R. J. Purser
 function absv_s(a)result(s)!                                            [absv]
 implicit none
@@ -123,10 +122,10 @@ real(sp)                        :: s
 s=sqrt(dot_product(a,a))
 end function absv_s
 
-!> Doing sqrt calculation for absv_d function.
+!> Return the absolute magnitude of a double precision real vector.
 !!
-!! @param[in] a real type input value
-!! @return s result
+!! @param[in] a real type input vector
+!! @return s result, double precision real scalar
 !! @author R. J. Purser
 function absv_d(a)result(s)!                                            [absv]
 implicit none
@@ -135,10 +134,10 @@ real(dp)                        :: s
 s=sqrt(dot_product(a,a))
 end function absv_d
 
-!> Doing calculation for normalized_s function.
+!> Return the normalized version of a single precision real vector.
 !!
-!! @param[in] a real type input value
-!! @return b result
+!! @param[in] a real type input vector
+!! @return b result, single precision real vector
 !! @author R. J. Purser
 function normalized_s(a)result(b)!                                [normalized]
 use pietc_s, only: u0
@@ -149,10 +148,10 @@ real(sp)                        :: s
 s=absv_s(a); if(s==u0)then; b=u0;else;b=a/s;endif
 end function normalized_s
 
-!> Doing calculation for normalized_d function.
+!> Return the normalized version of a double precision real vector.
 !!
-!! @param[in] a real type input value
-!! @return b result
+!! @param[in] a real type input vector
+!! @return b result, double precision real vector
 !! @author R. J. Purser
 function normalized_d(a)result(b)!                                [normalized]
 use pietc, only: u0
@@ -163,11 +162,11 @@ real(dp)                        :: s
 s=absv_d(a); if(s==u0)then; b=u0;else;b=a/s;endif
 end function normalized_d
 
-!> Doing calculation for orthogonalized_s function.
+!> Return the part of vector a that is orthogonal to unit vector u.
 !!
-!! @param[in] u real type input value
-!! @param[in] a real type input value
-!! @return b result
+!! @param[in] u real type input unit vector
+!! @param[in] a real type input vector
+!! @return b result, single precision real vector
 !! @author R. J. Purser
 function orthogonalized_s(u,a)result(b)!                      [orthogonalized]
 implicit none
@@ -178,11 +177,11 @@ real(sp)                        :: s
 s=dot_product(u,a); b=a-u*s
 end function orthogonalized_s
 
-!> Doing calculation for orthogonalized_d function.
+!> Return the part of vector a that is orthogonal to unit vector u.
 !!
-!! @param[in] u real type input value
-!! @param[in] a real type input value
-!! @return b result
+!! @param[in] u real type input unit vector
+!! @param[in] a real type input vector
+!! @return b result, double precision real vector
 !! @author R. J. Purser
 function orthogonalized_d(u,a)result(b)!                      [orthogonalized]
 implicit none
@@ -193,11 +192,11 @@ real(dp)                        :: s
 s=dot_product(u,a); b=a-u*s
 end function orthogonalized_d
 
-!> Doing calculation for cross_product_s function.
+!> Return the cross product of two single precision real 3-vectors
 !!
-!! @param[in] a real type input value
-!! @param[in] b real type input value
-!! @return c result
+!! @param[in] a real type input 3-vector
+!! @param[in] b real type input 3-vector
+!! @return c result, single precision real 3-vector
 !! @author R. J. Purser
 function cross_product_s(a,b)result(c)!                        [cross_product]
 implicit none
@@ -206,11 +205,11 @@ real(sp),dimension(3)           :: c
 c(1)=a(2)*b(3)-a(3)*b(2); c(2)=a(3)*b(1)-a(1)*b(3); c(3)=a(1)*b(2)-a(2)*b(1)
 end function cross_product_s
 
-!> Doing calculation for cross_product_d function.
+!> Return the cross product of two double precision real 3-vectors
 !!
-!! @param[in] a real type input value
-!! @param[in] b real type input value
-!! @return c result
+!! @param[in] a real type input 3-vector 
+!! @param[in] b real type input 3-vector 
+!! @return c result, double precision real 3-vector
 !! @author R. J. Purser
 function cross_product_d(a,b)result(c)!                        [cross_product]
 implicit none
@@ -224,10 +223,10 @@ end function cross_product_d
 !! that ordered, {u,v,w,x} form a right-handed quartet
 !! in the generic case (determinant >= 0).
 !!
-!! @param[in] u vector
-!! @param[in] v vector
-!! @param[in] w vector
-!! @return x triple-cross-product vector
+!! @param[in] u real type input 4-vector
+!! @param[in] v real type input 4-vector
+!! @param[in] w real type input 4-vector
+!! @return x result, triple-cross-product 4-vector
 !! @author R. J. Purser
 function triple_cross_product_s(u,v,w)result(x)!               [cross_product]
 implicit none
@@ -243,12 +242,12 @@ x(3)=-uv12*w(4)          +uv14*w(2)-uv24*w(1)
 x(4)=           uv12*w(3)-uv13*w(2)+uv23*w(1)
 end function triple_cross_product_s
 
-!> Doing calculation for triple_cross_product_d function.
+!> Return the triple_cross_product for 4-vectors
 !!
-!! @param[in] u vector
-!! @param[in] v vector
-!! @param[in] w vector
-!! @return x result
+!! @param[in] u real type input 4-vector
+!! @param[in] v real type input 4-vector
+!! @param[in] w real type input 4-vector
+!! @return x result, triple-cross-product 4-vector
 !! @author R. J. Purser
 function triple_cross_product_d(u,v,w)result(x)!               [cross_product]
 implicit none
@@ -264,11 +263,11 @@ x(3)=-uv12*w(4)          +uv14*w(2)-uv24*w(1)
 x(4)=           uv12*w(3)-uv13*w(2)+uv23*w(1)
 end function triple_cross_product_d
 
-!> Doing calculation for outer_product_s function.
+!> Return the outer product matrix of two single precision real vectors
 !!
-!! @param[in] a real type input value
-!! @param[in] b real type input value
-!! @return c result
+!! @param[in] a real type input vector
+!! @param[in] b real type input vector
+!! @return c result, rank-1 matrix outer product
 !! @author R. J. Purser
 function outer_product_s(a,b)result(c)!                        [outer_product]
 implicit none
@@ -280,11 +279,11 @@ nb=size(b)
 do i=1,nb; c(:,i)=a*b(i); enddo
 end function outer_product_s
 
-!> Calculation for outer_product_d function.
+!> Return the outer product matrix of two double precision real vectors
 !!
-!! @param[in] a real type input value
-!! @param[in] b real type input value
-!! @return c result
+!! @param[in] a real type input vector
+!! @param[in] b real type input vector
+!! @return c result, rank-1 matrix outer product
 !! @author R. J. Purser
 function outer_product_d(a,b)result(c)!                        [outer_product]
 implicit none
@@ -296,11 +295,11 @@ nb=size(b)
 do i=1,nb; c(:,i)=a*b(i); enddo
 end function outer_product_d
 
-!> Calculation for outer_product_i function.
+!> Return the outer product matrix of two integer vectors
 !!
-!! @param[in] a input value
-!! @param[in] b input value
-!! @return c result
+!! @param[in] a integer type input vector
+!! @param[in] b integer type input vector
+!! @return c result, rank-1 matrix outer product
 !! @author R. J. Purser
 function outer_product_i(a,b)result(c)!                        [outer_product]
 implicit none
@@ -312,12 +311,12 @@ nb=size(b)
 do i=1,nb; c(:,i)=a*b(i); enddo
 end function outer_product_i
 
-!> Calculation for triple_product_s function.
+!> Return the triple product of three single precision real 3-vectors
 !!
-!! @param[in] a real type input value
-!! @param[in] b real type input value
-!! @param[in] c real type input value
-!! @return tripleproduct result
+!! @param[in] a real type input 3-vector
+!! @param[in] b real type input 3-vector
+!! @param[in] c real type input 3-vector
+!! @return tripleproduct result, scalar triple product
 !! @author R. J. Purser
 function triple_product_s(a,b,c)result(tripleproduct)!        [triple_product]
 implicit none
@@ -326,12 +325,12 @@ real(sp)                         :: tripleproduct
 tripleproduct=dot_product( cross_product(a,b),c )
 end function triple_product_s
 
-!> Calculation for triple_product_d function.
+!> Return the triple product of three double precision real 3-vectors
 !!
-!! @param[in] a real type input value
-!! @param[in] b real type input value
-!! @param[in] c real type input value
-!! @return tripleproduct result
+!! @param[in] a real type input 3-vector
+!! @param[in] b real type input 3-vector
+!! @param[in] c real type input 3-vector
+!! @return tripleproduct result, scalar triple product
 !! @author R. J. Purser
 function triple_product_d(a,b,c)result(tripleproduct)!        [triple_product]
 implicit none
@@ -340,10 +339,10 @@ real(dp)                         :: tripleproduct
 tripleproduct=dot_product( cross_product(a,b),c )
 end function triple_product_d
 
-!> Calculation for det_s function.
+!> Return the determinant of a single precision matrix
 !!
-!! @param[in] a real type input value
-!! @return det result
+!! @param[in] a real type input matrix A
+!! @return det result, determinant of matrix A
 !! @author R. J. Purser
 function det_s(a)result(det)!                                            [det]
 use pietc_s, only: u0
@@ -361,15 +360,15 @@ else
 endif
 end function det_s
 
-!> Calculation for det_d function.
+!> Return the determinant of a double precision matrix
 !!
-!! @param[in] a real type input value
-!! @return det result
+!! @param[in] a real type input matrix A
+!! @return det result, determinant of matrix A
 !! @author R. J. Purser
 function det_d(a)result(det)!                                            [det]
 use pietc, only: u0
 implicit none
-real(dp),dimension(:,:),intent(IN )    ::a
+real(dp),dimension(:,:),intent(IN )    :: a
 real(dp)                               :: det
 real(dp),dimension(size(a,1),size(a,1)):: b
 integer(spi)                           :: n,nrank
@@ -382,24 +381,24 @@ else
 endif
 end function det_d
 
-!> Calculation for det_i function.
+!> Return the determinant of a single precision integer matrix
 !!
-!! @param[in] a real type input value
-!! @return idet result
+!! @param[in] a integer type input matrix A
+!! @return idet result, determinant of matrix A
 !! @author R. J. Purser
 function det_i(a)result(idet)!                                           [det]
 implicit none
-integer(spi), dimension(:,:),intent(IN )    :: a
-integer(spi)                                :: idet
+integer(spi), dimension(:,:),intent(IN ):: a
+integer(spi)                            :: idet
 real(dp),dimension(size(a,1),size(a,2)):: b
 real(dp)                               :: bdet
 b=a; bdet=det(b); idet=nint(bdet)
 end function det_i
 
-!> Calculation for det_id function.
+!> Return the determinant of a double precision integer matrix
 !!
-!! @param[in] a real type input value
-!! @return idet result
+!! @param[in] a integer type input matrix A
+!! @return idet result, determinant of matrix A
 !! @author R. J. Purser
 function det_id(a)result(idet)!                                          [det]
 use pkind, only: dp,dpi
@@ -411,10 +410,11 @@ real(dp)                                :: bdet
 b=a; bdet=det(b); idet=nint(bdet)
 end function det_id
 
-!> Calculation for axial3_s function.
+!> Return the axial "vector", as an antisymmetric matrix, corresponding to
+!! the given 3-vector assuming a right-handed correspondence.
 !!
-!! @param[in] a real type input value
-!! @return b result
+!! @param[in] a real type input 3-vector A
+!! @return b result, antisymmetrix "axial vector" matrix corresponding to A 
 !! @author R. J. Purser
 function axial3_s(a)result(b)!                                         [axial]
 use pietc_s, only: u0
@@ -424,10 +424,11 @@ real(sp),dimension(3,3)          :: b
 b=u0;b(3,2)=a(1);b(1,3)=a(2);b(2,1)=a(3);b(2,3)=-a(1);b(3,1)=-a(2);b(1,2)=-a(3)
 end function axial3_s
 
-!> Calculation for axial3_d function.
+!> Return the axial "vector", as an antisymmetric matrix, corresponding to
+!! the given 3-vector assuming a right-handed correspondence.
 !!
-!! @param[in] a real type input value
-!! @return b result
+!! @param[in] a real type input 3-vector A
+!! @return b result, antisymmetrix "axial vector" matrix corresponding to A
 !! @author R. J. Purser
 function axial3_d(a)result(b)!                                         [axial]
 use pietc, only: u0
@@ -437,10 +438,11 @@ real(dp),dimension(3,3)          :: b
 b=u0;b(3,2)=a(1);b(1,3)=a(2);b(2,1)=a(3);b(2,3)=-a(1);b(3,1)=-a(2);b(1,2)=-a(3)
 end function axial3_d
 
-!> Calculation for axial33_s function.
+!> Return the 3-vector corresponding to the given antisymmetric "axial vector"
+!! matrix, assuming a right-handed correspondence.
 !!
-!! @param[in] b real type input value
-!! @return a result
+!! @param[in] b real type input antisymmetric matrix "axial vector" B
+!! @return a result, 3-vector corresponding to B
 !! @author R. J. Purser
 function axial33_s(b)result(a)!                                        [axial]
 use pietc_s, only: o2
@@ -450,10 +452,11 @@ real(sp),dimension(3)              :: a
 a(1)=(b(3,2)-b(2,3))*o2; a(2)=(b(1,3)-b(3,1))*o2; a(3)=(b(2,1)-b(1,2))*o2
 end function axial33_s
 
-!> Calculation for axial33_d function.
+!> Return the 3-vector corresponding to the given antisymmetric "axial vector"
+!! matrix, assuming a right-handed correspondence.
 !!
-!! @param[in] b real type input value
-!! @return a result
+!! @param[in] b real type input antisymmetric matrix "axial vector" B
+!! @return a result, 3-vector corresponding to B
 !! @author R. J. Purser
 function axial33_d(b)result(a)!                                        [axial]
 use pietc, only: o2
@@ -463,10 +466,11 @@ real(dp),dimension(3)              :: a
 a(1)=(b(3,2)-b(2,3))*o2; a(2)=(b(1,3)-b(3,1))*o2; a(3)=(b(2,1)-b(1,2))*o2
 end function axial33_d
 
-!> Calculation for diagn_s function.
+!> Return the diagonal matrix whose elements are the given vector.
+!! Single precision version.
 !!
-!! @param[in] a real type input value
-!! @return b result
+!! @param[in] a real type input vector A listing the diagonal elements
+!! @return b result, diagonal matrix with the elements of A
 !! @author R. J. Purser
 function diagn_s(a)result(b)!                                           [diag]
 use pietc, only: u0
@@ -478,10 +482,11 @@ n=size(a)
 b=u0; do i=1,n; b(i,i)=a(i); enddo
 end function diagn_s
 
-!> Calculation for diagn_d function.
+!> Return the diagonal matrix whose elements are the given vector.
+!! Double precision version
 !!
-!! @param[in] a real type input value
-!! @return b result
+!! @param[in] a real type input vector A listing the diagonal elements
+!! @return b result, diagonal matrix with the elements of A
 !! @author R. J. Purser
 function diagn_d(a)result(b)!                                           [diag]
 use pietc, only: u0
@@ -493,10 +498,11 @@ n=size(a)
 b=u0; do i=1,n; b(i,i)=a(i); enddo
 end function diagn_d
 
-!> Calculation for diagn_i function.
+!> Return the diagonal matrix whose elements are the given vector.
+!! Integer version.
 !!
-!! @param[in] a input value
-!! @return b result
+!! @param[in] a integer input vector A listing the diagonal elements
+!! @return b result, diagonal matrix with the elements of A
 !! @author R. J. Purser
 function diagn_i(a)result(b)!                                           [diag]
 implicit none
@@ -507,10 +513,11 @@ n=size(a)
 b=0; do i=1,n; b(i,i)=a(i); enddo
 end function diagn_i
 
-!> Calculation for diagnn_s function.
+!> Return the vector whose elements are the diagonal ones of a given matrix.
+!! Single precision version.
 !!
-!! @param[in] b real type input value
-!! @return a result
+!! @param[in] b real type input matrix
+!! @return a result, vector listing the diagonal elements of the given matrix.
 !! @author R. J. Purser
 function diagnn_s(b)result(a)!                                          [diag]
 implicit none
@@ -521,10 +528,11 @@ n=size(b,1)
 do i=1,n; a(i)=b(i,i); enddo
 end function diagnn_s
 
-!> Calculation for diagnn_d function.
+!> Return the vector whose elements are the diagonal ones of a given matrix.
+!! Single precision version.
 !!
-!! @param[in] b real type input value
-!! @return a result
+!! @param[in] b real type input matrix
+!! @return a result, vector listing the diagonal elements of the given matrix.
 !! @author R. J. Purser
 function diagnn_d(b)result(a)!                                          [diag]
 implicit none
@@ -535,10 +543,11 @@ n=size(b,1)
 do i=1,n; a(i)=b(i,i); enddo
 end function diagnn_d
 
-!> Calculation for diagnn_i function.
+!> Return the vector whose elements are the diagonal ones of a given matrix.
+!! Integer version.
 !!
-!! @param[in] b integer type input value
-!! @return a result
+!! @param[in] b integer type input matrix
+!! @return a result, vector listing the diagonal elements of the given matrix.
 !! @author R. J. Purser
 function diagnn_i(b)result(a)!                                          [diag]
 implicit none
@@ -549,10 +558,10 @@ n=size(b,1)
 do i=1,n; a(i)=b(i,i); enddo
 end function diagnn_i
 
-!> Calculation for trace_s function.
+!> Return the trace of a given single precision real matrix
 !!
-!! @param[in] b real type input value
-!! @return s result
+!! @param[in] b real type input matrix B
+!! @return s result, trace, or sum of diagonal elements, of B
 !! @author R. J. Purser
 function trace_s(b)result(s)!                                          [trace]
 implicit none
@@ -561,10 +570,10 @@ real(sp)                           :: s
 s=sum(diag(b))
 end function trace_s
 
-!> Calculation for trace_d function.
+!> Return the trace of a given double precision real matrix
 !!
-!! @param[in] b real type input value
-!! @return s result
+!! @param[in] b real type input matrix B
+!! @return s result, trace, or sum of diagonal elements, of B
 !! @author R. J. Purser
 function trace_d(b)result(s)!                                          [trace]
 implicit none
@@ -573,10 +582,10 @@ real(dp)                           :: s
 s=sum(diag(b))
 end function trace_d
 
-!> Calculation for trace_i function.
+!> Return the trace of a given integer matrix
 !!
-!! @param[in] b input value
-!! @return s result
+!! @param[in] b integer type input matrix B
+!! @return s result, trace, or sum of diagonal elements, of B
 !! @author R. J. Purser
 function trace_i(b)result(s)!                                         [trace]
 implicit none
@@ -585,10 +594,10 @@ integer(spi)                           :: s
 s=sum(diag(b))
 end function trace_i
 
-!> Calculation for identity_i function.
+!> Return the integer identity matrix for a given dimensionality
 !!
-!! @param[in] n input value
-!! @return a result
+!! @param[in] n input integer dimensionality
+!! @return a result, identity matrix of the given dimensionality
 !! @author R. J. Purser
 function identity_i(n)result(a)!                                    [identity]
 implicit none
@@ -598,9 +607,9 @@ integer(spi)               :: i
 a=0; do i=1,n; a(i,i)=1; enddo
 end function identity_i
 
-!> Calculation for identity3_i function.
+!> Return the 3-dimensional integer identity matrix
 !!
-!! @return a result
+!! @return a result, identity matrix in 3 dimensions.
 !! @author R. J. Purser
 function identity3_i()result(a)!                                    [identity]
 implicit none
@@ -610,11 +619,12 @@ a=0; do i=1,3; a(i,i)=1; enddo
 end function identity3_i
 
 !> Spherical area of right-angle triangle whose orthogonal sides have
-!! orthographic projection dimensions, sa and sb.
+!! orthographic projection dimensions, sa and sb, sphere of unit radius.
+!! Single precision version.
 !!
-!! @param[in] sa ???
-!! @param[in] sb ???
-!! @return area 
+!! @param[in] sa orthographic projection of triangle's side A
+!! @param[in] sb orthographic projection of triangle's side B 
+!! @return area (steradians) of the right-angle spherical triangle
 !! @author R. J. Purser
 function huarea_s(sa,sb)result(area)!                                 [huarea]
 implicit none
@@ -626,11 +636,13 @@ cb=sqrt(1-sb**2)
 area=asin(sa*sb/(1+ca*cb))
 end function huarea_s
 
-!> Calculation for huarea_d function.
+!> Spherical area of right-angle triangle whose orthogonal sides have
+!! orthographic projection dimensions, sa and sb, sphere of unit radius.
+!! Double precision version.
 !!
-!! @param[in] sa ???
-!! @param[in] sb ???
-!! @return area 
+!! @param[in] sa orthographic projection of triangle's side A
+!! @param[in] sb orthographic projection of triangle's side B 
+!! @return area (steradians) of the right-angle spherical triangle
 !! @author R. J. Purser
 function huarea_d(sa,sb)result(area)!                                 [huarea]
 implicit none
@@ -680,11 +692,11 @@ area=huarea(a1,b)+huarea(a2,b)
 
 contains
 
-!> Shift switch variable.
+!> Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3.
 !!
-!! @param[inout] u1 real variable to be shifted
-!! @param[inout] u2 real variable to be shifted
-!! @param[inout] u3 real variable to be shifted
+!! @param[inout] u1 real vector to be shifted
+!! @param[inout] u2 real vector to be shifted
+!! @param[inout] u3 real vector to be shifted
 !! @param[inout] d1 real variable to be shifted
 !! @param[inout] d2 real variable to be shifted
 !! @param[inout] d3 real variable to be shifted
@@ -700,11 +712,11 @@ implicit none
    end subroutine cyclic
 end function sarea_s
 
-!> Compute the area of sarea_d, {v1,v2,v3}.
+!> Compute the area of the spherical triangle, {v1,v2,v3}.
 !!
-!! @param[in] v1 area of the spherical triangle
-!! @param[in] v2 area of the spherical triangle
-!! @param[in] v3 area of the spherical triangle
+!! @param[in] v1 unit-3-vector vertex of the spherical triangle
+!! @param[in] v2 unit-3-vector vertex of the spherical triangle
+!! @param[in] v3 unit-3-vector vertex of the spherical triangle
 !! @return area result
 !! @author R. J. Purser
 function sarea_d(v1,v2,v3)result(area)!                                [sarea]
@@ -735,11 +747,11 @@ area=huarea(a1,b)+huarea(a2,b)
 
 contains
 
-!> Shift switch variable.
+!> Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3.
 !!
-!! @param[inout] u1 real variable to be shifted
-!! @param[inout] u2 real variable to be shifted
-!! @param[inout] u3 real variable to be shifted
+!! @param[inout] u1 real vector to be shifted
+!! @param[inout] u2 real vector to be shifted
+!! @param[inout] u3 real vector to be shifted
 !! @param[inout] d1 real variable to be shifted
 !! @param[inout] d2 real variable to be shifted
 !! @param[inout] d3 real variable to be shifted
@@ -761,12 +773,13 @@ end function sarea_d
 !! The computations are designed to give a proportionately accurate area
 !! estimate even when the triangle is very small, provided the B-increment
 !! is not disproportionately small compared to the other two sides.
+!! Single precision version.
 !!
-!! @param[in] rlat latitude
-!! @param[in] drlata latitudes
-!! @param[in] drlona longitudes
-!! @param[in] drlatb latitudes
-!! @param[in] drlonb longitudes
+!! @param[in] rlat latitude of reference point
+!! @param[in] drlata incremental latitude of A 
+!! @param[in] drlona incremental longitude of A
+!! @param[in] drlatb incremental latitude of B
+!! @param[in] drlonb incremental longitude of B
 !! @return area result
 !! @author R. J. Purser
 function dtarea_s(rlat,drlata,drlona,drlatb,drlonb) result(area)!      [sarea]
@@ -793,13 +806,19 @@ sb=sb*cc-cb*sc
 area=huarea(-sa,sb)+huarea(sc,-sa)
 end function dtarea_s
 
-!> Compute the area with dtarea_d.
+!> Compute the area of the spherical triangle with a vertex at latitude
+!! rlat, and two other vertices, A and B, whose incremented latitudes
+!! and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B).
+!! The computations are designed to give a proportionately accurate area
+!! estimate even when the triangle is very small, provided the B-increment
+!! is not disproportionately small compared to the other two sides.
+!! Double precision version.
 !!
-!! @param[in] rlat latitude
-!! @param[in] drlata latitudes
-!! @param[in] drlona longitudes
-!! @param[in] drlatb latitudes
-!! @param[in] drlonb longitudes
+!! @param[in] rlat latitude of reference point
+!! @param[in] drlata incremental latitude of A 
+!! @param[in] drlona incremental longitude of A
+!! @param[in] drlatb incremental latitude of B
+!! @param[in] drlonb incremental longitude of B
 !! @return area result
 !! @author R. J. Purser
 function dtarea_d(rlat,drlata,drlona,drlatb,drlonb) result(area)!      [sarea]
@@ -827,21 +846,22 @@ area=huarea(-sa,sb)+huarea(sc,-sa)
 end function dtarea_d
 
 !> Compute the area of the spherical quadrilateral with a vertex at latitude
-!! rlat, and three other vertices at A, B, and C inturn,
+!! rlat, and three other vertices at A, B, and C in turn,
 !! whose incremented latitudes and longitudes are drlata,drlona (for A),
 !! drlatb,drlonb (for B), and drlatc,drlonc (for C).
 !! The computations are designed to give a proportionately accurate area
 !! estimate even when the quadrilateral is very small, provided the
 !! diagonal making the B-increment is not disproportionately small compared to
 !! the characteristic size of the quadrilateral.
+!! Single precision version.
 !!
-!! @param[in] rlat latitude
-!! @param[in] drlata latitudes
-!! @param[in] drlona longitudes
-!! @param[in] drlatb latitudes
-!! @param[in] drlonb longitudes
-!! @param[in] drlatc latitudes
-!! @param[in] drlonc longitudes
+!! @param[in] rlat latitude of reference point
+!! @param[in] drlata incremental latitude of point A
+!! @param[in] drlona incremental longitude of point A
+!! @param[in] drlatb incremental latitude of point B
+!! @param[in] drlonb incremental longitude of point B
+!! @param[in] drlatc incremental latitude of point C
+!! @param[in] drlonc incremental longitude of point C
 !! @return area result
 !! @author R. J. Purser
 function dqarea_s &!                                                   [sarea]
@@ -853,15 +873,24 @@ area=sarea(rlat,drlata,drlona,drlatb,drlonb)&
     -sarea(rlat,drlatc,drlonc,drlatb,drlonb)
 end function dqarea_s
 
-!> Compute the area using dqarea_d.
+
+!> Compute the area of the spherical quadrilateral with a vertex at latitude
+!! rlat, and three other vertices at A, B, and C in turn,
+!! whose incremented latitudes and longitudes are drlata,drlona (for A),
+!! drlatb,drlonb (for B), and drlatc,drlonc (for C).
+!! The computations are designed to give a proportionately accurate area
+!! estimate even when the quadrilateral is very small, provided the
+!! diagonal making the B-increment is not disproportionately small compared to
+!! the characteristic size of the quadrilateral.
+!! Double precision version.
 !!
-!! @param[in] rlat latitude
-!! @param[in] drlata latitudes
-!! @param[in] drlona longitudes
-!! @param[in] drlatb latitudes
-!! @param[in] drlonb longitudes
-!! @param[in] drlatc latitudes
-!! @param[in] drlonc longitudes
+!! @param[in] rlat latitude of reference point
+!! @param[in] drlata incremental latitude of point A
+!! @param[in] drlona incremental longitude of point A
+!! @param[in] drlatb incremental latitude of point B
+!! @param[in] drlonb incremental longitude of point B
+!! @param[in] drlatc incremental latitude of point C
+!! @param[in] drlonc incremental longitude of point C
 !! @return area
 !! @author R. J. Purser
 function dqarea_d &!                                                   [sarea]
@@ -873,7 +902,10 @@ area=sarea(rlat,drlata,drlona,drlatb,drlonb)&
     -sarea(rlat,drlatc,drlonc,drlatb,drlonb)
 end function dqarea_d
 
-!> Calculate dlltoxy_s.
+!> From a reference latitude, and increments of latitude and longitude,
+!! return the local cartesian 2-vector corresponding to the projection
+!! of the increment onto the tangent plane of the reference point.
+!! Single precision version.
 !!
 !! @param[in] rlat latitude
 !! @param[in] drlat latitude
@@ -890,7 +922,10 @@ clata=cos(rlat+drlat)
 x2=(/clata*sin(drlon),sin(drlat)+u2*sin(rlat)*clata*hav(drlon)/)
 end subroutine dlltoxy_s
 
-!> Calculate dlltoxy_d.
+!> From a reference latitude, and increments of latitude and longitude,
+!! return the local cartesian 2-vector corresponding to the projection
+!! of the increment onto the tangent plane of the reference point.
+!! Double precision version.
 !!
 !! @param[in] rlat latitude
 !! @param[in] drlat latitude
@@ -907,9 +942,9 @@ clata=cos(rlat+drlat)
 x2=(/clata*sin(drlon),sin(drlat)+u2*sin(rlat)*clata*hav(drlon)/)
 end subroutine dlltoxy_d
 
-!> Haversine function.
+!> Haversine function in single precision.
 !!
-!! @param[in] t input
+!! @param[in] t input argument
 !! @return a result
 !! @author R. J. Purser
 function hav_s(t) result(a)!                                             [hav]
@@ -920,9 +955,9 @@ real(sp)            :: a
 a=(sin(t*o2))**2
 end function hav_s
 
-!> Doing hav_d function.
+!> Haversine function in double precision.
 !!
-!! @param[in] t input
+!! @param[in] t input argument
 !! @return a result
 !! @author R. J. Purser
 function hav_d(t) result(a)!                                             [hav]
@@ -933,7 +968,7 @@ real(dp)            :: a
 a=(sin(t*o2))**2
 end function hav_d
 
-!> Normalize the given vector.
+!> Normalize the given single precision real vector.
 !!
 !! @param[inout] v vector
 !! @author R. J. Purser
@@ -945,7 +980,7 @@ real(sp)                           :: s
 s=absv(v); if(s==0)then; v=u0; v(1)=u1; else; v=v/s; endif
 end subroutine normalize_s
 
-!> Doing normalize_d calculation for given vector.
+!> Normalize the given double precision real vector.
 !!
 !! @param[inout] v vector
 !! @author R. J. Purser
@@ -957,12 +992,16 @@ real(dp)                           :: s
 s=absv(v); if(s==u0)then; v=0; v(1)=u1; else; v=v/s; endif
 end subroutine normalize_d
 
-!> ???
+!> Apply a form of Gram-Schmidt orthogonalization process to return as many
+!! normalized orthogonal basis column vectors in matrix B as possible in the
+!! space spanned by the columns of matrix A. The number of columns returned
+!! is the rank, nrank, of A, and the determinant of the projection of A into
+!! the subspace of B is returned as det. 
 !!
-!! @param[in] as ???
-!! @param[out] b ???
-!! @param[out] nrank ???
-!! @param[out] det ???
+!! @param[in] as given matrix A
+!! @param[out] b matrix B containing nrank orthonormal column vectors
+!! @param[out] nrank rank of A
+!! @param[out] det determinant of projection of A into subspace of B
 !! @author R. J. Purser
 subroutine gram_s(as,b,nrank,det)!                                      [gram]
 use pietc_s, only: u0,u1
@@ -1024,12 +1063,16 @@ do k=1,n
 enddo
 end subroutine gram_s
 
-!> ???
+!> Apply a form of Gram-Schmidt orthogonalization process to return as many
+!! normalized orthogonal basis column vectors in matrix B as possible in the
+!! space spanned by the columns of matrix A. The number of columns returned
+!! is the rank, nrank, of A, and the determinant of the projection of A into
+!! the subspace of B is returned as det. 
 !!
-!! @param[in] as ???
-!! @param[out] b ???
-!! @param[out] nrank ???
-!! @param[out] det ???
+!! @param[in] as given matrix A 
+!! @param[out] b matrix B containing nrank orthonormal column vectors 
+!! @param[out] nrank rank of A 
+!! @param[out] det determinant of projection of A into subspace of B 
 !! @author R. J. Purser   
 subroutine gram_d(as,b,nrank,det)!                                      [gram]
 use pietc, only: u0,u1
@@ -1097,11 +1140,11 @@ end subroutine gram_d
 !! as zero (instead of either +1 or -1) and ldet is then just the log of
 !! the nonzero factors found by the process.
 !!
-!! @param[in] as ???
-!! @param[out] b ???
-!! @param[out] nrank ???
-!! @param[out] detsign singular determinant
-!! @param[out] ldet ???
+!! @param[in] as given matrix A
+!! @param[out] b matrix B of orthonormal columns
+!! @param[out] nrank rank of A
+!! @param[out] detsign sign of determinant
+!! @param[out] ldet logarithm of absolute value of determinant
 !! @author R. J. Purser
 subroutine graml_d(as,b,nrank,detsign,ldet)!                            [gram]
 use pietc, only: u0
@@ -1175,9 +1218,10 @@ end subroutine graml_d
 
 
 !> A "plain" (unpivoted) version of Gram-Schmidt, for square matrices only.
+!! Single precision version.
 !!
-!! @param[inout] b matrices
-!! @param[out] nrank result
+!! @param[inout] b input as given matrix, output as orthogonalized vectors
+!! @param[out] nrank effective rank of given matrix
 !! @author R. J. Purser
 subroutine plaingram_s(b,nrank)!                                        [gram]
 use pietc_s, only: u0
@@ -1210,9 +1254,10 @@ enddo
 end subroutine plaingram_s
 
 !> A "plain" (unpivoted) version of Gram-Schmidt, for square matrices only.
+!! Double precision version.
 !!
-!! @param[inout] b matrices
-!! @param[out] nrank result
+!! @param[inout] b input as given matrix, output as orthogonalized vectors
+!! @param[out] nrank effective rank of given matrix
 !! @author R. J. Purser
 subroutine plaingram_d(b,nrank)!                                        [gram]
 use pietc, only: u0
@@ -1258,13 +1303,13 @@ end subroutine plaingram_d
 !! "epsilon" value that is fixed (10**(-13)) and assumes elements of a are
 !! never too different in magnitude from unity, unless they are actually zero.
 !!
-!! @param[in] m ???
-!! @param[in] n ???
-!! @param[in] a rectangular input matrix
+!! @param[in] m number of rows of A
+!! @param[in] n number of columns of A
+!! @param[in] a rectangular input matrix A
 !! @param[out] ipiv pivoting sequence
 !! @param[out] tt row-normalization
 !! @param[out] b orthonormalized rows
-!! @param[in] rank ???
+!! @param[in] rank effective rank of A
 !! @author R. J. Purser
 subroutine rowgram(m,n,a,ipiv,tt,b,rank)!                               [gram]
 use pietc, only: u0,u1
@@ -1344,12 +1389,12 @@ end subroutine rowgram
 !> Apply the row-operations, implied by ipiv and tt returned by rowgram, to
 !! the single column vector, v, to produce the transformed vector vv.
 !!
-!! @param[in] m ???
-!! @param[in] n ???
-!! @param[in] ipiv ???
-!! @param[in] tt ???
-!! @param[in] v vector
-!! @param[out] vv vector
+!! @param[in] m number of rows of matrix tt, dimension of vectors V and VV
+!! @param[in] n number of columns of matrix tt
+!! @param[in] ipiv integer vector encoding the pivoting sequence
+!! @param[in] tt row-normalized matrix provided by subroutine rowgram
+!! @param[in] v input single column vector
+!! @param[out] vv output column vector vector
 !! @author R. J. Purser
 subroutine rowops(m,n,ipiv,tt,v,vv)!                                  [rowops]
 implicit none
@@ -1384,13 +1429,13 @@ end subroutine rowops
 !! together with the rescaled matrix aa such that a = d.aa.e when d and e are
 !! interpreted as diagonal matrices.
 !!
-!! @param[in] m ???
-!! @param[in] n ???
-!! @param[in] mask ???
-!! @param[in] a positive diagonals
-!! @param[out] d positive diagonals
-!! @param[in] aa ???
-!! @param[out] e positive diagonals
+!! @param[in] m number of rows of A
+!! @param[in] n number of columns of A
+!! @param[in] mask logical mask
+!! @param[in] a real rectangular matrix A
+!! @param[out] d positive diagonal matrix of dimension m
+!! @param[in] aa rescaled version of A
+!! @param[out] e positive diagonal matrix of dimension n
 !! @author R. J. Purser   
 subroutine corral(m,n,mask,a,d,aa,e)!                                 [corral]
 use pietc, only: u0,u1
@@ -1508,10 +1553,10 @@ real(dp)               :: d
 ax33=axial(ax3); call expmat(3,ax33,orth33,d)
 end subroutine axtorot
 
-!> Go from the spinor to the quaternion representation.
+!> Go from the complex spinor matrix to the unit quaternion representation.
 !!
-!! @param[in] cspin spinor representation
-!! @param[out] q quaternion representation
+!! @param[in] cspin complex spinor representation
+!! @param[out] q unit quaternion representation
 !! @author R. J. Purser
 subroutine spintoq(cspin,q)!                                         [spintoq]
 implicit none
@@ -1521,9 +1566,9 @@ q(0)=real(cspin(1,1)); q(3)=aimag(cspin(1,1))
 q(2)=real(cspin(2,1)); q(1)=aimag(cspin(2,1))
 end subroutine spintoq
 
-!> Go from the quaternion to the spinor representation.
+!> Go from the unit quaternion to the complex spinor representation.
 !!
-!! @param[in] q quaternion representation
+!! @param[in] q given unit quaternion representation
 !! @param[out] cspin spinor representation
 !! @author R. J. Purser
 subroutine qtospin(q,cspin)!                                          [qtospin]
@@ -1536,9 +1581,9 @@ cspin(1,2)=cmplx(-q(2), q(1))
 cspin(2,2)=cmplx( q(0),-q(3))
 end subroutine qtospin
 
-!> Go from rotation matrix to quaternion representation.
+!> Go from rotation matrix to a corresponding unit quaternion representation.
 !!
-!! @param[in] rot rotation matrix
+!! @param[in] rot given rotation matrix
 !! @param[out] q quaternion representation
 !! @author R. J. Purser
 subroutine rottoq(rot,q)!                                             [rottoq]
@@ -1632,13 +1677,14 @@ call qtorot(q,rot)
 call rottoax(rot,v)
 end subroutine qtoax
 
-!> ???
+!> Given the 4 components of a unit quaternion, return the associated 
+!! 3*3 rotation matrix
 !!
-!! @param[in] c ???
-!! @param[in] d ???
-!! @param[in] e ???
-!! @param[in] g ???
-!! @param[in] r ???
+!! @param[in] c 0th component of given quaternion
+!! @param[in] d 1st component of given quaternion
+!! @param[in] e 2nd component of given quaternion
+!! @param[in] g 3rd component of given quaternion
+!! @param[in] r output 3*3 real rotation matrix
 !! @author R. J. Purser
 subroutine setem(c,d,e,g,r)!                                           [setem]
 implicit none
@@ -1655,9 +1701,9 @@ end subroutine setem
 
 !> Multiply quaternions, a*b, assuming operation performed from right to left.
 !!
-!! @param[in] a real quaternion
-!! @param[in] b real quaternion
-!! @return c result
+!! @param[in] a input quaternion
+!! @param[in] b input quaternion
+!! @return c result quaternion a*b
 !! @author R. J. Purser
 function mulqq(a,b)result(c)!                                         [mulqq]
 implicit none
@@ -1669,15 +1715,15 @@ c(2)=a(0)*b(2) +a(2)*b(0) +a(3)*b(1) -a(1)*b(3)
 c(3)=a(0)*b(3) +a(3)*b(0) +a(1)*b(2) -a(2)*b(1)
 end function mulqq
 
-!> Evaluate the exponential, b, of a matrix, a, of degree n.
+!> Evaluate the exponential, B, of a matrix, A, of degree n.
 !! Apply the iterated squaring method, m times, to the approximation to
-!! exp(a/(2**m)) obtained as a Taylor expansion of degree L
+!! exp(A/(2**m)) obtained as a Taylor expansion of degree L
 !! See Fung, T. C., 2004, Int. J. Numer. Meth. Engng, 59, 1273--1286.
 !!
-!! @param[in] n degree
-!! @param[in] a matrix
-!! @param[out] b exponential matrix of a
-!! @param[out] detb ???
+!! @param[in] n order of square matrix A
+!! @param[in] a input matrix A
+!! @param[out] b matrix B, the exponential of matrix A
+!! @param[out] detb determinant of matrix B
 !! @author R. J. Purser
 subroutine expmat(n,a,b,detb)!                                        [expmat]
 use pietc, only: u0,u1,u2,o2
@@ -1710,12 +1756,12 @@ end subroutine expmat
 
 !> Like expmat, but for the 1st derivatives also.
 !!
-!! @param[in] n degree
-!! @param[in] a matrix
-!! @param[out] b exponential matrix of a
-!! @param[out] bd ???
-!! @param[out] detb ???
-!! @param[out] detbd ???
+!! @param[in] n order of square matrix A
+!! @param[in] a input matrix A
+!! @param[out] b matrix B, the exponential of matrix A
+!! @param[out] bd derivative of B wrt elements of A
+!! @param[out] detb determinant of matrix B
+!! @param[out] detbd derivative of detb wrt elements of A
 !! @author R. J. Purser
 subroutine expmatd(n,a,b,bd,detb,detbd)!                              [expmat]
 use pietc, only: u0,u1,u2,o2
@@ -1775,14 +1821,14 @@ end subroutine expmatd
 
 !> Like expmat, but for the 1st and 2nd derivatives also.
 !!
-!! @param[in] n degree
-!! @param[in] a matrix
-!! @param[out] b exponential matrix of a
-!! @param[out] bd ???
-!! @param[out] bdd ???
-!! @param[out] detb ???
-!! @param[out] detbd ???
-!! @param[out] detbdd ???
+!! @param[in] n order of the matrix A
+!! @param[in] a input matrix A
+!! @param[out] b matrix B, exponential of matrix A
+!! @param[out] bd derivative of B wrt elements of A 
+!! @param[out] bdd 2nd derivative of B wrt elements of A
+!! @param[out] detb determinant of matrix B
+!! @param[out] detbd derivative of detb wrt elements of A
+!! @param[out] detbdd 2nd derivative of detb wrt elements of A
 !! @author R. J. Purser
 subroutine expmatdd(n,a,b,bd,bdd,detb,detbd,detbdd)!                  [expmat]
 use pietc, only: u0,u1,u2,o2
@@ -1864,11 +1910,12 @@ detbd=u0;  do k=1,n; detbd(k)=detb; enddo
 detbdd=u0; do ki=1,n; do kj=1,n; detbdd(ki,kj)=detb; enddo; enddo
 end subroutine expmatdd
 
-!> ???
+!> Evaluate, by Taylor-Maclaurin expansion, the nth-derivative of the 
+!! function, C(z)=cosh(sqrt(2z)), or equiavlently, of C(z)=cos(sqrt(-2z)).
 !!
-!! @param[in] n ???
-!! @param[in] z ???
-!! @param[in] zn ???
+!! @param[in] n integer order of the derivative
+!! @param[in] z real argument
+!! @param[in] zn returned value of the nth derivative
 !! @author R. J. Purser
 subroutine zntay(n,z,zn)!                                              [zntay]
 use pietc, only: u2
@@ -1898,14 +1945,16 @@ enddo
 print'("In zntay;  full complement of iterations used")'
 end subroutine zntay
 
-!> ???
+!> For a given nonnegative integer n and real argument z, evaluate the
+!! nth,...,(n+3)th derivatives, wrt z, of the function C(z) = cosh(sqrt(2z)) 
+!! or, equivalently, of C(z) = cos(sqrt(-2z)), according to the sign of z.
 !!
-!! @param[in] n ???
-!! @param[in] z ???
-!! @param[out] zn ???
-!! @param[out] znd ???
-!! @param[out] zndd ???
-!! @param[out] znddd ???
+!! @param[in] n integer order of the first of the returned derivatives of C.
+!! @param[in] z real input argument in the function C(z)
+!! @param[out] zn nth-derivative of C(z)
+!! @param[out] znd (n+1)th-derivative of C(z)
+!! @param[out] zndd (n+2)th-derivative of C(z)
+!! @param[out] znddd (n+3)th-derivative of C(z)
 !! @author R. J. Purser
 subroutine znfun(n,z,zn,znd,zndd,znddd)!                               [znfun]
 use pietc, only: u0,u2,u3
@@ -1951,7 +2000,7 @@ else
 endif
 end subroutine znfun
       
-!> Utility code for various Mobius transformations. If aa1,bb1,cc1,dd1 are
+!> Utility codes for various Mobius transformations. If aa1,bb1,cc1,dd1 are
 !! the coefficients for one transformation, and aa2,bb2,cc2,dd2 are the 
 !! coefficients for a second one, then the coefficients for the mapping
 !! of a test point, zz, by aa1 etc to zw, followed by a mapping of zw, by
@@ -1966,9 +2015,13 @@ end subroutine znfun
 !!
 !! Note that the determinant of these matrices is always +1.
 !!
-!! @param[in] v matric
-!! @param[out] z ???
-!! @param[out] infz ???
+
+!> Given a cartesian 3-vector representation of a point on the Riemann
+!! unit sphere, return the stereographically equivalent complex number.
+!!
+!! @param[in] v cartesian 3-vector representation of point on Riemann sphere
+!! @param[out] z complex point stereographically equivalent to v
+!! @param[out] infz logical indicator for z being the point at infinity
 !! @author R. J. Purser
 subroutine ctoz(v, z,infz)!                                             [ctoz]
 use pietc, only: u0,u1
@@ -1989,11 +2042,12 @@ endif
 z=z*zzpi
 end subroutine ctoz
    
-!> ???
+!> Given a complex z, return the equivalent cartesian unit 3-vector
+!! associated by the polar stereographic projection 
 !!
-!! @param[in] z ???
-!! @param[in] infz ???
-!! @param[in] v ???
+!! @param[in] z complex input argument
+!! @param[in] infz logical indicator for z being the point at infinity
+!! @param[out] v cartesian unit 3-vector position equivalent to z
 !! @author R. J. Purser
 subroutine ztoc(z,infz, v)!                                             [ztoc]
 implicit none
@@ -2020,10 +2074,10 @@ end subroutine ztoc
 !! @note The derivative for the ideal point at infinity has not been
 !! coded yet.
 !!
-!! @param[in] z complex infinitesimal map displacement
-!! @param[in] infz ???
-!! @param[out] v cartesian vector position
-!! @param[out] vd ???
+!! @param[in] z complex input argument
+!! @param[in] infz logical indicator for z being the point at infinity
+!! @param[out] v cartesian unit 3-vector position equivalent to z
+!! @param[out] vd derivative of cartesian v wrt z
 !! @author R. J. Purser
 subroutine ztocd(z,infz, v,vd)!                                         [ztoc]
 implicit none
@@ -2057,13 +2111,13 @@ end subroutine ztocd
 !! that takes cartesian point, xc0 to the north pole, xc1 to (lat=0,lon=0),
 !! xc2 to the south pole (=complex infinity).
 !!
-!! @param[in] xc0 cartesian point
-!! @param[in] xc1 cartesian point
-!! @param[in] xc2 cartesian point
-!! @param[out] aa Mobius transformation complex coefficients
-!! @param[out] bb Mobius transformation complex coefficients
-!! @param[out] cc Mobius transformation complex coefficients
-!! @param[out] dd Mobius transformation complex coefficients
+!! @param[in] xc0 cartesian point that will map to (0,0,1)
+!! @param[in] xc1 cartesian point that will map to (1,0,0)
+!! @param[in] xc2 cartesian point that will map to (0,0,-1)
+!! @param[out] aa Mobius transformation complex coefficient
+!! @param[out] bb Mobius transformation complex coefficient
+!! @param[out] cc Mobius transformation complex coefficient
+!! @param[out] dd Mobius transformation complex coefficient
 !! @author R. J. Purser
 subroutine setmobius(xc0,xc1,xc2, aa,bb,cc,dd)!                   [setmobius]
 implicit none
@@ -2137,16 +2191,16 @@ end subroutine setmobius
 !! with the logical codes "infzn" that are TRUE if that point is itself
 !! the projection pole (i.e., the South Pole for a north polar stereographic).
 !!
-!! @param[in] z0 polar stereographic point
-!! @param[in] infz0 point at infinity z0
-!! @param[in] z1 polar stereographic point
-!! @param[in] infz1 point at infinity z0
-!! @param[in] z2 polar stereographic point
-!! @param[in] infz2 point at infinity z0
-!! @param[out] aa Mobius transformation complex coefficients
-!! @param[out] bb Mobius transformation complex coefficients
-!! @param[out] cc Mobius transformation complex coefficients
-!! @param[out] dd Mobius transformation complex coefficients
+!! @param[in] z0 complex input point that will map to (0,0)
+!! @param[in] infz0 logical indicator that z0 is the point at infinity
+!! @param[in] z1 complex input point that will map to (1,0)
+!! @param[in] infz1 logical indicator that z1 is the point at infinity
+!! @param[in] z2 complex input point that will map to infinity
+!! @param[in] infz2 logical indicator that z2 is the point at infinity
+!! @param[out] aa Mobius transformation complex coefficient
+!! @param[out] bb Mobius transformation complex coefficient
+!! @param[out] cc Mobius transformation complex coefficient
+!! @param[out] dd Mobius transformation complex coefficient
 !! @author R. J. Purser
 subroutine zsetmobius(z0,infz0, z1,infz1, z2,infz2,  aa,bb,cc,dd)
 implicit none
@@ -2210,14 +2264,14 @@ end subroutine zsetmobius
 !! Infz is .TRUE. only when z is at complex infinity; likewise infw and w.
 !! For these infinite cases, it is important that numerical z==(0,0).
 !!
-!! @param[in] aa Mobius transformation complex coefficients
-!! @param[in] bb Mobius transformation complex coefficients
-!! @param[in] cc Mobius transformation complex coefficients
-!! @param[in] dd Mobius transformation complex coefficients
-!! @param[in] z Mobius transformation complex coefficients
-!! @param[in] infz point at infinity z
-!! @param[out] w Mobius transformation output
-!! @param[out] infw point at infinity w
+!! @param[in] aa Mobius transformation complex coefficient
+!! @param[in] bb Mobius transformation complex coefficient
+!! @param[in] cc Mobius transformation complex coefficient
+!! @param[in] dd Mobius transformation complex coefficient
+!! @param[in] z complex input argument of the Mobius transformation
+!! @param[in] infz logical indicator for z being a point at infinity
+!! @param[out] w complex output of the Mobius transformation 
+!! @param[out] infw logical indicator for w being a point at infinity
 !! @author R. J. Purser
 subroutine zmobius(aa,bb,cc,dd, z,infz, w,infw)!                      [mobius]
 implicit none
@@ -2247,12 +2301,12 @@ end subroutine zmobius
 !> Perform a complex Mobius transformation from cartesian vz to cartesian vw
 !! where the transformation coefficients are the standard aa,bb,cc,dd.
 !!
-!! @param[in] aa Mobius transformation coefficients
-!! @param[in] bb Mobius transformation coefficients
-!! @param[in] cc Mobius transformation coefficients
-!! @param[in] dd Mobius transformation coefficients
-!! @param[in] vz Cartesian vaule
-!! @param[out] vw Cartesian vaule
+!! @param[in] aa Mobius transformation coefficient
+!! @param[in] bb Mobius transformation coefficient
+!! @param[in] cc Mobius transformation coefficient
+!! @param[in] dd Mobius transformation coefficient
+!! @param[in] vz Cartesian unit 3-vector representation of input argument
+!! @param[out] vw Cartesian unit 3-vector representation of output
 !! @author R. J. Purser
 subroutine cmobius(aa,bb,cc,dd, vz,vw)!                               [mobius]
 implicit none
@@ -2269,14 +2323,14 @@ end subroutine cmobius
 !> Perform the inverse of the mobius transformation with coefficients,
 !! {aa,bb,cc,dd}.
 !!
-!! @param[in] aa Mobius transformation coefficients
-!! @param[in] bb Mobius transformation coefficients
-!! @param[in] cc Mobius transformation coefficients
-!! @param[in] dd Mobius transformation coefficients
-!! @param[out] zz ???
-!! @param[out] infz ???
-!! @param[out] zw Inversed output
-!! @param[out] infw ???
+!! @param[in] aa inverse Mobius transformation coefficient
+!! @param[in] bb inverse Mobius transformation coefficient
+!! @param[in] cc inverse Mobius transformation coefficient
+!! @param[in] dd inverse Mobius transformation coefficient
+!! @param[in] zz complex input argument
+!! @param[in] infz logical indicator for zz the point at infinity
+!! @param[out] zw complex output argument
+!! @param[out] infw logical indicator for zw the point at infinity
 !! @author R. J. Purser
 subroutine zmobiusi(aa,bb,cc,dd, zz,infz, zw,infw)                ! [mobiusi]
 implicit none
