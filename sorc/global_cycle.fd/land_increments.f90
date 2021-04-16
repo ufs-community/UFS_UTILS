@@ -65,7 +65,9 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
 
     integer                  :: k, nother, nsnowupd, nnosoilnear, nsoilupd, nsnowchange
     logical                  :: gaus_has_soil
-
+        
+    integer, parameter       :: lsoil_incr=3 ! number of layers to add incrments to
+                                                
     ! this produces the same lat/lon as can be read in from the file
 
     kgds_gaus     = 0
@@ -84,7 +86,8 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
     kgds_gaus(20) = 255        ! oct 5  - not used, set to 255
 
     print*
-    print*,'adjust soils using gsi increments on gaussian grid'
+    print*,'adjust soil temperature using gsi increments on gaussian grid'
+    print*,'adjusting first ', lsoil_incr, ' surface layers only'
 
     !----------------------------------------------------------------------
     ! call gdswzd to compute the lat/lon of each gsi gaussian grid point.
@@ -159,118 +162,117 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
                  ! (no update made here)
     nsoilupd = 0 
 
-    ! do-will skipping above skip close-by grid cells, due to model grid arrangement?
 
     ij_loop : do ij = 1, lensfc
 
-    ! for now,  do not make a temperature update if snow differs  
-    ! between fg and anal (allow correction of snow to 
-    ! address temperature error first) 
+        ! for now,  do not make a temperature update if snow differs  
+        ! between fg and anal (allow correction of snow to 
+        ! address temperature error first) 
 
 
-    mask_tile    = soilsnow_tile(ij)
-    mask_fg_tile = soilsnow_fg_tile(ij)
+        mask_tile    = soilsnow_tile(ij)
+        mask_fg_tile = soilsnow_fg_tile(ij)
 
-    !----------------------------------------------------------------------
-    ! mask: 1  - soil, 2 - snow, 0 - neither
-    !----------------------------------------------------------------------
+        !----------------------------------------------------------------------
+        ! mask: 1  - soil, 2 - snow, 0 - neither
+        !----------------------------------------------------------------------
 
-    if (mask_tile == 0) then ! skip if neither soil nor snow
-     nother = nother + 1
-     cycle ij_loop  
-    endif
+        if (mask_tile == 0) then ! skip if neither soil nor snow
+         nother = nother + 1
+         cycle ij_loop  
+        endif
 
 
-    !  get i,j index on array of (idim,jdim) from known ij
+        !  get i,j index on array of (idim,jdim) from known ij
 
-    jtile = (ij-1) / idim + 1
-    itile = mod(ij,idim)
-    if (itile==0) itile = idim
+        jtile = (ij-1) / idim + 1
+        itile = mod(ij,idim)
+        if (itile==0) itile = idim
 
-    !----------------------------------------------------------------------
-    ! if the snow analysis has chnaged to occurence of snow, skip the 
-    ! temperature analysis
-    !----------------------------------------------------------------------
+        !----------------------------------------------------------------------
+        ! if the snow analysis has chnaged to occurence of snow, skip the 
+        ! temperature analysis
+        !----------------------------------------------------------------------
 
-    if ((mask_fg_tile == 2 .and. mask_tile == 1) .or. (mask_fg_tile == 1 .and. mask_tile == 2) ) then
-     nsnowchange = nsnowchange + 1
-     cycle ij_loop  
-    endif
+        if ((mask_fg_tile == 2 .and. mask_tile == 1) .or. (mask_fg_tile == 1 .and. mask_tile == 2) ) then
+         nsnowchange = nsnowchange + 1
+         cycle ij_loop  
+        endif
 
-    !----------------------------------------------------------------------
-    !  do update to soil temperature grid cells, using bilinear interp 
-    !----------------------------------------------------------------------
+        !----------------------------------------------------------------------
+        !  do update to soil temperature grid cells, using bilinear interp 
+        !----------------------------------------------------------------------
 
-    if (mask_tile == 1) then
-       ! these are the four nearest grid cells on the gaus grid
-       igaus   = id1(itile,jtile)
-       jgaus   = jdc(itile,jtile)
-       igausp1 = id2(itile,jtile)
-       jgausp1 = jdc(itile,jtile)+1
+        if (mask_tile == 1) then
+           ! these are the four nearest grid cells on the gaus grid
+           igaus   = id1(itile,jtile)
+           jgaus   = jdc(itile,jtile)
+           igausp1 = id2(itile,jtile)
+           jgausp1 = jdc(itile,jtile)+1
 
-    ! make sure gaus grid has soil nearby 
-       gaus_has_soil = .false.
-       if (soilsnow_gaus(igaus,jgaus)     == 1 .or. &
-           soilsnow_gaus(igausp1,jgaus)   == 1 .or. &
-           soilsnow_gaus(igausp1,jgausp1) == 1 .or. &
-           soilsnow_gaus(igaus,jgausp1)   == 1)  gaus_has_soil = .true. 
-       
-       if (.not. gaus_has_soil) then
-         nnosoilnear = nnosoilnear + 1 
-         cycle ij_loop 
-       endif
+        ! make sure gaus grid has soil nearby 
+           gaus_has_soil = .false.
+           if (soilsnow_gaus(igaus,jgaus)     == 1 .or. &
+               soilsnow_gaus(igausp1,jgaus)   == 1 .or. &
+               soilsnow_gaus(igausp1,jgausp1) == 1 .or. &
+               soilsnow_gaus(igaus,jgausp1)   == 1)  gaus_has_soil = .true. 
+           
+           if (.not. gaus_has_soil) then
+             nnosoilnear = nnosoilnear + 1 
+             cycle ij_loop 
+           endif
 
-    ! calcualate weighted increment over nearby grid cells that have soil
+        ! calcualate weighted increment over nearby grid cells that have soil
 
-    ! Draper: to-do, code adding increments to soil moisture. 
-    !         will require converting to soil wetness index first 
-    !         (need to add soil properties to the increment file)
+        ! Draper: to-do, code adding increments to soil moisture. 
+        !         will require converting to soil wetness index first 
+        !         (need to add soil properties to the increment file)
 
-       nsoilupd = nsoilupd + 1 
+           nsoilupd = nsoilupd + 1 
 
-       stc_inc = 0.0
-       wsum  = 0.0
+           stc_inc = 0.0
+           wsum  = 0.0
 
-       if (soilsnow_gaus(igaus,jgaus) == 1) then
-         do k = 1, lsoil
-             stc_inc(k)  = stc_inc(k) + (s2c(itile,jtile,1) * stc_inc_gaus(k,igaus,jgaus))
-         enddo
-         wsum  = wsum + s2c(itile,jtile,1)
-       endif
+           if (soilsnow_gaus(igaus,jgaus) == 1) then
+             do k = 1, lsoil_incr
+                 stc_inc(k)  = stc_inc(k) + (s2c(itile,jtile,1) * stc_inc_gaus(k,igaus,jgaus))
+             enddo
+             wsum  = wsum + s2c(itile,jtile,1)
+           endif
 
-       if (soilsnow_gaus(igausp1,jgaus) == 1) then
-         do k = 1, lsoil
-             stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,2) * stc_inc_gaus(k,igausp1,jgaus))
-         enddo
-         wsum  = wsum + s2c(itile,jtile,2)
-       endif
+           if (soilsnow_gaus(igausp1,jgaus) == 1) then
+             do k = 1, lsoil_incr
+                 stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,2) * stc_inc_gaus(k,igausp1,jgaus))
+             enddo
+             wsum  = wsum + s2c(itile,jtile,2)
+           endif
 
-       if (soilsnow_gaus(igausp1,jgausp1) == 1) then
-         do k = 1, lsoil
-             stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,3) * stc_inc_gaus(k,igausp1,jgausp1))
-         enddo
-         wsum  = wsum + s2c(itile,jtile,3)
-       endif
+           if (soilsnow_gaus(igausp1,jgausp1) == 1) then
+             do k = 1, lsoil_incr
+                 stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,3) * stc_inc_gaus(k,igausp1,jgausp1))
+             enddo
+             wsum  = wsum + s2c(itile,jtile,3)
+           endif
 
-       if (soilsnow_gaus(igaus,jgausp1) == 1) then
-         do k = 1, lsoil
-             stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,4) * stc_inc_gaus(k,igaus,jgausp1))
-         enddo
-         wsum  = wsum + s2c(itile,jtile,4)
-       endif
+           if (soilsnow_gaus(igaus,jgausp1) == 1) then
+             do k = 1, lsoil_incr
+                 stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,4) * stc_inc_gaus(k,igaus,jgausp1))
+             enddo
+             wsum  = wsum + s2c(itile,jtile,4)
+           endif
 
-    ! add increment
-       do k = 1, lsoil
-         stc_inc(k) = stc_inc(k) / wsum
-         stc_state(ij,k) = stc_state(ij,k) + stc_inc(k)
-    ! todo, apply some bounds
-       enddo
+        ! add increment
+           do k = 1, lsoil_incr
+             stc_inc(k) = stc_inc(k) / wsum
+             stc_state(ij,k) = stc_state(ij,k) + stc_inc(k)
+        ! todo, apply some bounds?
+           enddo
 
-    elseif(mask_tile==2) then
-       !print *,  'csd2', rlo(ij), rla(ij) 
-       nsnowupd = nsnowupd + 1 
+        elseif(mask_tile==2) then
+           !print *,  'csd2', rlo(ij), rla(ij) 
+           nsnowupd = nsnowupd + 1 
 
-    endif ! if soil/snow point
+        endif ! if soil/snow point
 
     enddo ij_loop
 

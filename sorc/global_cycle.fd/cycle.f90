@@ -56,10 +56,6 @@
 !!                 1 - Noah
 !!                 (note: added for land_da_adjust layers, however 
 !!                 sfcsub routine (and likely others) assume the noah lsm
-!!  - ISOT         Integer code for soil type data set 
-!!  -              Use statsgo soil type when '1'. Use zobler when '0'.
-!!  - IVEGSRC      Integer code for vegetation type data set 
-!!  -              Use igbp veg type when '1'.  Use sib when '2'.
 !!  - LSOIL        Number of soil layers.
 !!  - IY,IM,ID,IH  Year, month, day, and hour of initial state.
 !!  - FH           Forecast hour
@@ -72,7 +68,9 @@
 !!  -DO_SFCCYCLE    Call sfccycle routine to update surface fields 
 !!  -DO_LNDINC      Read in land increment files, and add increments to 
 !!                  soil states.
-!!  -ZSEA1/2_MM     When running with NSST model, this is the lower/
+!!  - ISOT         Use statsgo soil type when '1'. Use zobler when '0'.
+!!  - IVEGSRC      Use igbp veg type when '1'.  Use sib when '2'.
+!!  - ZSEA1/2_MM   When running with NSST model, this is the lower/
 !!                 upper bound of depth of sea temperature.  In
 !!                 whole mm.
 !!  - MAX_TASKS    Normally, program should be run with a number of mpi 
@@ -103,25 +101,21 @@
  IMPLICIT NONE
 !
  CHARACTER(LEN=3) :: DONST
- INTEGER :: IDIM, JDIM, LSM, ISOT, IVEGSRC, LSOIL, LUGB, IY, IM, ID, IH, IALB
- INTEGER :: LENSFC, ZSEA1_MM, ZSEA2_MM, IERR
+ INTEGER :: IDIM, JDIM, LSM, LSOIL, LUGB, IY, IM, ID, IH, IALB
+ INTEGER :: ISOT, IVEGSRC, LENSFC, ZSEA1_MM, ZSEA2_MM, IERR
  INTEGER :: NPROCS, MYRANK, NUM_THREADS, NUM_PARTHDS, MAX_TASKS
  REAL    :: FH, DELTSFC, ZSEA1, ZSEA2
  LOGICAL :: USE_UFO, DO_NSST, DO_LNDINC, DO_SFCCYCLE
 !
- NAMELIST/NAMCYC/ IDIM,JDIM,LSM,ISOT,IVEGSRC,LSOIL,     &
-                  LUGB,IY,IM,ID,IH,FH,                  &
-                  DELTSFC,IALB,USE_UFO,DONST,           &
-                  DO_SFCCYCLE,ISOT,IVEGSRC,ZSEA1_MM,    &
+ NAMELIST/NAMCYC/ IDIM,JDIM,LSM,LSOIL,LUGB,IY,IM,ID,IH,FH,&
+                  DELTSFC,IALB,USE_UFO,DONST,             &
+                  DO_SFCCYCLE,ISOT,IVEGSRC,ZSEA1_MM,      &
                   ZSEA2_MM, MAX_TASKS, DO_LNDINC
 !
- DATA IDIM,JDIM,LSM,ISOT,IVEGSRC,LSOIL/96,96,1,1,1,4/
+ DATA IDIM,JDIM,LSM,LSOIL/96,96,1,4/
  DATA IY,IM,ID,IH,FH/1997,8,2,0,0./
  DATA LUGB/51/, DELTSFC/0.0/, IALB/1/, MAX_TASKS/99999/
-! Draper - note: moved ivegsrc and isot into namelist. 
-!                ivegsrc was hard-wired here as 2, but 
-!                gfs is currently using 1.
- DATA ZSEA1_MM/0/, ZSEA2_MM/0/
+ DATA ISOT/1/, IVEGSRC/2/, ZSEA1_MM/0/, ZSEA2_MM/0/
 !
  CALL MPI_INIT(IERR)
  CALL MPI_COMM_SIZE(MPI_COMM_WORLD, NPROCS, IERR)
@@ -276,8 +270,6 @@
  !! @param[in] LENSFC Total numberof points for the cubed-sphere tile
  !! @param[in] LSM Integer code for the land surface model 
  !!            1 - Noah
- !! @param[in] ISOT Integer code for soil type data set
- !! @param[in] IVEGSRC Integer code vegetation type dat set
  !! @param[in] LSOIL Number of soil layers
  !! @param[in] DELTSFC Cycling frequency in hours
  !! @param[in] IY Year of initial state
