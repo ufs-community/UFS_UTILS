@@ -3,15 +3,21 @@
 ! Ed Hartnett 2/16/21
 
 program ftst_program_setup
+  use mpi
   use esmf
   use netcdf
   use program_setup
   implicit none
   integer :: is
+  integer :: my_rank, nprocs
+  integer :: ierr
 
-  print*, "Starting test of program_setup."
+  call mpi_init(ierr)
+  call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
+  call MPI_Comm_size(MPI_COMM_WORLD, nprocs, ierr)
 
-  print*, "testing read_setup_namelist with file fort.41..."
+  if (my_rank .eq. 0) print*, "Starting test of program_setup."
+  if (my_rank .eq. 0) print*, "testing read_setup_namelist with file fort.41..."
   call read_setup_namelist()
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 12) stop 4
   if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 5
@@ -43,9 +49,9 @@ program ftst_program_setup
      tracers(is) = "NULL"
      tracers_input(is) = "NULL"
   enddo
-  print*, "OK"
+  if (my_rank .eq. 0) print*, "OK"
 
-  print*, "testing read_setup_namelist with config_fv3_tiled..."
+  if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_fv3_tiled..."
   call read_setup_namelist("config_fv3_tiled.nml")
   if (cycle_mon .ne. 10 .or. cycle_day .ne. 3 .or. cycle_hour .ne. 0) stop 34
   if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 35
@@ -73,14 +79,14 @@ program ftst_program_setup
      tracers(is) = "NULL"
      tracers_input(is) = "NULL"
   enddo
-  print*, "OK"
+  if (my_rank .eq. 0) print*, "OK"
 
   ! Reading this namelist fails for some reason.
   ! print*, "testing read_setup_namelist with config_fv3_tiled_warm_restart..."
   ! call read_setup_namelist("config_fv3_tiled_warm_restart.nml")
   ! print*, "OK"
 
-  print*, "testing read_setup_namelist with config_gaussian_nemsio..."
+  if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_gaussian_nemsio..."
   call read_setup_namelist("config_gaussian_nemsio.nml")
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 12) stop 74
   if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 75
@@ -98,7 +104,6 @@ program ftst_program_setup
   if (atm_weight_file .ne. "NULL") stop 88
   if (trim(input_type) .ne. "gaussian_nemsio") stop 89
   if (trim(external_model) .ne. "GFS") stop 90
-  print *,num_tracers
   if (num_tracers .ne. 7) stop 21
   if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr" .or. &
        tracers(4) .ne. "ice_wat" .or. tracers(5) .ne. "rainwat" .or. tracers(6) .ne. "snowwat" .or. &
@@ -113,9 +118,9 @@ program ftst_program_setup
      tracers(is) = "NULL"
      tracers_input(is) = "NULL"
   enddo
-  print*, "OK"
+  if (my_rank .eq. 0) print*, "OK"
 
-  print*, "testing read_setup_namelist with config_spectral_sigio..."
+  if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_spectral_sigio..."
   call read_setup_namelist("config_spectral_sigio.nml")
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 17 .or. cycle_hour .ne. 0) stop 114
   if (.not. convert_atm .or. .not. convert_sfc .or. convert_nst) stop 115
@@ -143,9 +148,9 @@ program ftst_program_setup
      tracers(is) = "NULL"
      tracers_input(is) = "NULL"
   enddo
-  print*, "OK"
+  if (my_rank .eq. 0) print*, "OK"
 
-  print*, "testing read_setup_namelist with config_gfs_grib2..."
+  if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_gfs_grib2..."
   call read_setup_namelist("config_gfs_grib2.nml")
   if (cycle_mon .ne. 11 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 0) stop 94
   if (.not. convert_atm .or. .not. convert_sfc .or. convert_nst) stop 95
@@ -177,7 +182,9 @@ program ftst_program_setup
      tracers(is) = "NULL"
      tracers_input(is) = "NULL"
   enddo
-  print*, "OK"
+  if (my_rank .eq. 0) print*, "OK"
 
-  print*, "SUCCESS!"
+  if (my_rank .eq. 0) print*, "SUCCESS!"
+
+ call mpi_finalize(ierr)  
 end program ftst_program_setup

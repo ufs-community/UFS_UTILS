@@ -26,6 +26,6 @@ set_target_properties(${lib_name} PROPERTIES Fortran_MODULE_DIRECTORY ${module_d
 target_include_directories(${lib_name} PUBLIC $<BUILD_INTERFACE:${module_dir}>)
 
 # If doxygen documentation we enabled, build it.
-if(ENABLE_DOCS)
-  add_subdirectory(docs)
-endif()
+#if(ENABLE_DOCS)
+#  add_subdirectory(docs)
+#endif()

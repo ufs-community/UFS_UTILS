@@ -34,7 +34,10 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export DATA="/work/noaa/stmp/$LOGNAME/reg_test.ice_blend"
+ulimit -s unlimited
+
+export DATA="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
+export DATA="${DATA}/reg-tests/ice-blend"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
