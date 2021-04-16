@@ -1,3 +1,7 @@
+!> @file
+!! @brief Routines for applyng land DA increments
+!! @author Clara Draper ESRL/PSL
+
 module land_increments 
 
     private 
@@ -337,22 +341,26 @@ end subroutine calculate_soilsnowmask
 !! @param[inout] stcfcs Analysis soil temperature states 
 !! @author Clara Draper @date April 2021
 
-subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, lsoil, smc_bck, stc_bck, smc_anl, stc_anl)
+subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, lsoil, rsoiltype, smc_bck, slc_bck,stc_bck, smc_anl, slc_anl, stc_anl)
 
     use mpi
     use set_soilveg_mod, only: set_soilveg
     use namelist_soilveg
+    use sflx_snippet,    only: frh2o
 
     implicit none
  
     character(len=3), intent(in)  :: update_type
     integer, intent(in)           :: lsm, lensfc, lsoil, isot, ivegsrc
-    real, intent(in)              :: smc_bck(lensfc,lsoil), stc_bck(lensfc, lsoil)
-    real, intent(inout)           :: smc_anl(lensfc,lsoil), stc_anl(lensfc, lsoil) 
+    real, intent(in)              :: rsoiltype(lensfc) ! soil types, as real
+    real, intent(in)              :: smc_bck(lensfc,lsoil), slc_bck(lensfc,lsoil), stc_bck(lensfc, lsoil)
+    real, intent(inout)           :: smc_anl(lensfc,lsoil), slc_anl(lensfc,lsoil), stc_anl(lensfc, lsoil) 
 
     logical                       :: frzn_bck, frzn_anl
 
-    integer                       :: i, j, n_freeze, n_thaw, ierr, myrank
+    integer                       :: i, l, n_freeze, n_thaw, ierr, myrank, soiltype
+
+    real                          :: slc_new
 
     integer, parameter            :: lsm_noah=1      !< flag for NOAH land surface model 
                                                      !! copied from GFS_typedefs.F90
@@ -368,7 +376,6 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, lso
     ! initialise soil properties
     call set_soilveg(myrank, isot, ivegsrc, 0) ! myrank should be mype (but is not used, so close enough) 
                                                     ! last argument also not used (intended as a unit to read in over-ride values)
-    print *, 'CSD', maxsmc
 
     select case (update_type) 
 
@@ -379,9 +386,10 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, lso
         n_thaw = 0 
         
         do i=1,lensfc 
-          do j = 1, lsoil
-               frzn_bck = (stc_bck(i,j) .LT. tfreez ) 
-               frzn_anl = (stc_anl(i,j) .LT. tfreez ) 
+          do l = 1, lsoil
+            if (smc_bck(i,l) < 1.0) then ! if soil location
+               frzn_bck = (stc_bck(i,l) .LT. tfreez ) 
+               frzn_anl = (stc_anl(i,l) .LT. tfreez ) 
 
                if (frzn_bck .EQ. frzn_anl) then 
                     cycle 
@@ -390,7 +398,15 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, lso
                else 
                     n_freeze = n_freeze + 1 
                endif 
+
                ! make adjustment (same routine for both)
+               soiltype = int(rsoiltype(i))
+               ! bb and maxsmc are in the namelist_soilveg, need soiltype index
+               call frh2o(stc_anl(i,l), smc_anl(i,l),slc_anl(i,l), maxsmc(soiltype), & 
+                          bb(soiltype), satpsi(soiltype),slc_new)
+
+               slc_anl(i,l) = max( min( slc_new, smc_anl(i,l)), 0.0 )
+            endif 
           enddo
         enddo 
         
@@ -399,7 +415,6 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, lso
     case default 
         print *, 'FATAL ERROR: apply_land_da_adjustments not code for variable', lsm
         call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
-
     end select 
 
 end subroutine apply_land_da_adjustments 

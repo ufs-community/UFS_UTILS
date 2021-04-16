@@ -9,9 +9,7 @@ set(fortran_src
     num_parthds.f90
     sfcsub.F
     read_write_data.f90
-    land_increments.f90
-    set_soilveg.f
-    namelist_soilveg.f)
+    land_increments.f90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian")
@@ -24,6 +22,8 @@ endif()
 
 set(exe_name global_cycle)
 add_executable(${exe_name} ${fortran_src})
+add_dependencies(${exe_name} noah_lsm_routines)
+
 target_link_libraries(
   ${exe_name}
   w3nco::w3nco_d
@@ -31,7 +31,9 @@ target_link_libraries(
   ip::ip_d
   sp::sp_d
   MPI::MPI_Fortran
-  NetCDF::NetCDF_Fortran)
+  NetCDF::NetCDF_Fortran
+  noah_lsm_routines)
+
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
 endif()
@@ -40,5 +42,5 @@ install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)
-  add_subdirectory(docs)  
+  add_subdirectory(docs)
 endif()

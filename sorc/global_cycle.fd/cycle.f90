@@ -358,7 +358,7 @@
  REAL                :: SIG1T(LENSFC) !< The sigma level 1 temperature for a
                                       !! dead start. Set to zero for non-dead
                                       !! start.
- REAL, ALLOCATABLE   :: STC_BCK(:,:), SMC_BCK(:,:)
+ REAL, ALLOCATABLE   :: STC_BCK(:,:), SMC_BCK(:,:), SLC_BCK(:,:)
  REAL, ALLOCATABLE   :: SLIFCS_FG(:)
  INTEGER, ALLOCATABLE :: SOILSNOW_FG_MASK(:), SOILSNOW_MASK(:)
 
@@ -437,7 +437,7 @@ IF (DO_LNDINC) THEN
    PRINT*," APPLYING LAND INCREMENTS FROM THE GSI" 
    ALLOCATE(SOILSNOW_FG_MASK(LENSFC))
    ALLOCATE(SOILSNOW_MASK(LENSFC))
-   ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL)) 
+   ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
 ENDIF
 
 !--------------------------------------------------------------------------------
@@ -585,6 +585,7 @@ ENDIF
 ! store background states 
    STC_BCK = STCFCS
    SMC_BCK = SMCFCS ! not used yet.
+   SLC_BCK = SLCFCS ! not used yet.
 
    CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,SOILSNOW_MASK,SOILSNOW_FG_MASK,  & 
         LENSFC,LSOIL,IDIM,JDIM, MYRANK)
@@ -593,7 +594,8 @@ ENDIF
 ! make any necessary adjustments to dependent variables
 !--------------------------------------------------------------------------------
 
-   CALL APPLY_LAND_DA_ADJUSTMENTS('stc', LSM, ISOT, IVEGSRC,LENSFC, LSOIL, SMC_BCK, STC_BCK, SMCFCS, STCFCS)
+   CALL APPLY_LAND_DA_ADJUSTMENTS('stc', LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
+        SOTFCS,SMC_BCK, SLC_BCK,STC_BCK, SMCFCS, SLCFCS,STCFCS)
 
 !--------------------------------------------------------------------------------
 ! clean up
@@ -601,7 +603,7 @@ ENDIF
 
    ! to do - save and write out  STC_INC? (soil temperature increments)
    DEALLOCATE(SOILSNOW_FG_MASK, SOILSNOW_MASK) 
-
+   DEALLOCATE(STC_BCK, SMC_BCK, SLC_BCK)
 
  ENDIF 
 !--------------------------------------------------------------------------------
