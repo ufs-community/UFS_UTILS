@@ -3,6 +3,9 @@
 #
 # George Gayno, Lin Gan, Ed Hartnett
 
+# Include cmake to allow parallel I/O tests.
+include (LibMPI)
+
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
@@ -51,7 +54,6 @@ add_executable(ftst_program_setup "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/input
   "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/search_util.F90"
   "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.F90"
   ftst_program_setup.F90)
-add_test(NAME ftst_program_setup COMMAND ftst_program_setup)
 target_link_libraries(
   ftst_program_setup
   nemsio::nemsio
@@ -68,6 +70,12 @@ target_link_libraries(
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(ftst_program_setup OpenMP::OpenMP_Fortran)
 endif()
+
+# Cause test to be run with MPI.
+add_mpi_test(ftst_program_setup
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_program_setup
+  NUMPROCS 4
+  TIMEOUT 60)
 
 add_executable(ftst_search_util
   "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/search_util.F90"
