@@ -17,12 +17,12 @@ Utility | Programmer(s)
 chgres_cube | George Gayno, Jeff Beck, Larissa Reames
 emcsfc_ice_blend | George Gayno
 emcsfc_snow2mdl | George Gayno
-fvcom_tools | David Wright, University of Michigan
-global_cycle | George Gayno, Shrinivas Moorthi
-grid_tools | R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), GFDL programmer (topo filtering code).
+fvcom_tools | David Wright, University of Michigan, Ming Hu, GSD/AMB
+global_cycle | George Gayno, Shrinivas Moorthi, Mark Iredell, Xu Li, Hang Lei
+grid_tools | R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), Tsukasa Fujita, JMA (pmat2), GFDL programmer (topo filtering code).
 orog_mask_tools | Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
 sfc_climo_gen | George Gayno
-vcoord_gen | Fanglin Yang
+vcoord_gen | Fanglin Yang, Mark Iredell
 
 UFS_UTILS Code managers: George Gayno, Kyle Gerheiser
 
@@ -102,6 +102,12 @@ The docs directory contains the control file for the doxygen
 documentation build, as well as some markdown files which are part of
 the documentation. It also contains (in the source subdirectory) the
 ReadTheDocs documentation files.
+
+## References
+
+Gayno G., Beck J., Carson L., [Pre-Processing:
+chgres_cube](./docs/20201105-0945a-pre-processing-chgres-cube-gayno-final.pdf),
+UFS MRW App Training, 5 November 2020.
 
 ## Disclaimer
 

@@ -1,6 +1,7 @@
 set(fortran_src
-    mtnlm7_oclsm.f
-    netcdf_io.F90)
+    module_gsl_oro_data_lg_scale.f90
+    module_gsl_oro_data_sm_scale.f90
+    gsl_oro_data.f90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
@@ -11,17 +12,10 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   endif()
 endif()
 
-set(exe_name orog)
+set(exe_name orog_gsl)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
-  bacio::bacio_4
-  w3nco::w3nco_d
-  ip::ip_d
-  sp::sp_d
   NetCDF::NetCDF_Fortran)
-if(OpenMP_Fortran_FOUND)
-  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
-endif()
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})

@@ -6,20 +6,6 @@
 !! or global gfs gaussian grid using nesdis/ims snow cover, autosnow snow
 !! cover and/or afwa depth data.
 !!      
-!! Program History Log
-!! -  2005-dec-16  gayno     initial version
-!! -  2007-nov-30  gayno     added processing of nam b-grids.
-!!                          improved thinning for gfs grids.
-!! -  2008-feb-01  gayno     added option to use autosnow data
-!!                          in southern hemisphere.
-!! -  2014-feb-14  gayno     read grib 1 or grib2 version of nesdis/ims
-!!                          data
-!! -  2014-sep-30  gayno     read grib 1 or grib2 version of model
-!!                          lat, lon and mask files.  convert
-!!                          nh weekly snow climatology to grib 2.
-!!                          option to output model depth and cover 
-!!                          analysis in grib2.
-!!
 !! The ims snow cover product is now produced by the national
 !! ice center, not nesdis.  however, in this code, references
 !! to ims still use the "nesdis" identifier.
@@ -138,6 +124,20 @@
 !!      min_snow_depth).  If cover is less than user-
 !!      defined threshold, the depth is set to 0,
 !!      regardless of the afwa depth value.
+!!
+!! Program History Log
+!! -  2005-dec-16  gayno     initial version
+!! -  2007-nov-30  gayno     added processing of nam b-grids.
+!!                          improved thinning for gfs grids.
+!! -  2008-feb-01  gayno     added option to use autosnow data
+!!                          in southern hemisphere.
+!! -  2014-feb-14  gayno     read grib 1 or grib2 version of nesdis/ims
+!!                          data
+!! -  2014-sep-30  gayno     read grib 1 or grib2 version of model
+!!                          lat, lon and mask files.  convert
+!!                          nh weekly snow climatology to grib 2.
+!!                          option to output model depth and cover 
+!!                          analysis in grib2.
 !!
 !! @return 0 for success, error code otherwise.      
 !! @author gayno @date 2005-dec-16
