@@ -215,10 +215,13 @@
 
  end subroutine search
 
-!> Set sst values based on latitude.
+!> Set default sst values based on latitude.
 !!
-!! @param latitude latitude input
-!! @param sst sst guess value to be set
+!! Based loosely on the average annual SST
+!! values from ./fix_am/cfs_oi2sst1x1monclim19822001.grb
+!!
+!! @param [in] latitude Latitude in degrees
+!! @param [out] sst Default SST in Kelvin
 !! @author George Gayno NCEP/EMC
  subroutine sst_guess(latitude, sst)
 
@@ -231,10 +234,13 @@
  real(esmf_kind_r8), intent(out) :: sst
 
  if (latitude >= 60.0) then
-   sst = 273.16
+   sst = 273.16   ! SST in Kelvin
  elseif (abs(latitude) <= 30.0) then
-   sst = 300.0
- else
+   sst = 300.0    ! SST in Kelvin
+ else ! Assume linear change with latitude
+      ! between 30 and 60 degrees. The
+      ! "-0.8947" is the 'slope' and the
+      ! '326.84 K' is the 'y intercept'.
    sst = (-0.8947) * abs(latitude) + 326.84
  endif
 
