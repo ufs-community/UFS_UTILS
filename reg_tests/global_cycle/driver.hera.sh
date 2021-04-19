@@ -2,14 +2,14 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run global_cycle regression test on Hera.
+# Run global_cycle consistency test on Hera.
 #
 # Set $DATA to your working directory.  Set the project code (SBATCH -A)
 # and queue (SBATCH -q) as appropriate.
 #
 # Invoke the script as follows:  sbatch $script
 #
-# Log output is placed in regression.log.  A summary is
+# Log output is placed in consistency.log.  A summary is
 # placed in summary.log
 #
 # The test fails when its output does not match the baseline files
