@@ -220,6 +220,12 @@
 !! Based loosely on the average annual SST
 !! values from ./fix_am/cfs_oi2sst1x1monclim19822001.grb
 !!
+!! The temperature in the polar and tropical regions
+!! is set to 273.16/300 Kelvin. Polar regions are
+!! poleward of 60 degrees. Tropical regions are within
+!! 30 degrees of the equator. In mid-latitudes, a
+!! linear change with latitude is used. 
+!!
 !! @param [in] latitude Latitude in degrees
 !! @param [out] sst Default SST in Kelvin
 !! @author George Gayno NCEP/EMC
@@ -229,19 +235,27 @@
 
  implicit none
 
+ real(esmf_kind_r8), parameter :: sst_polar_in_kelvin = 273.16 !< Default SST in polar
+                                                               !! regions.
+ real(esmf_kind_r8), parameter :: sst_tropical_in_kelvin = 300.0 !< Default SST in
+                                                                 !! tropical regions.
+ real(esmf_kind_r8), parameter :: polar_latitude = 60.0 !< Latitude in degrees defining polar regions.
+ real(esmf_kind_r8), parameter :: tropical_latitude = 30.0 !< Latitude in degrees defining tropical regions.
+ real(esmf_kind_r8), parameter :: dsst_dlat = -0.8947 !< Change in SST per latitude in
+                                                      !! mid-latitudes.
+ real(esmf_kind_r8), parameter :: sst_y_intercept = 326.84 !< y intercept for the linear
+                                                           !! change of SST in mid-latitudes.
+ 
  real(esmf_kind_r8), intent(in)  :: latitude
 
  real(esmf_kind_r8), intent(out) :: sst
 
- if (latitude >= 60.0) then
-   sst = 273.16   ! SST in Kelvin
- elseif (abs(latitude) <= 30.0) then
-   sst = 300.0    ! SST in Kelvin
- else ! Assume linear change with latitude
-      ! between 30 and 60 degrees. The
-      ! "-0.8947" is the 'slope' and the
-      ! '326.84 K' is the 'y intercept'.
-   sst = (-0.8947) * abs(latitude) + 326.84
+ if (latitude >= polar_latitude) then
+   sst = sst_polar_in_kelvin
+ elseif (abs(latitude) <= tropical_latitude) then
+   sst = sst_tropical_in_kelvin
+ else
+   sst = dsst_dlat * abs(latitude) + sst_y_intercept
  endif
 
  end subroutine sst_guess
