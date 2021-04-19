@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run the chgres_cube regression tests on WCOSS-Cray.
+# Run the chgres_cube consistency tests on WCOSS-Cray.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE as
 # appropriate. 
