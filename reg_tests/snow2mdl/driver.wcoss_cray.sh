@@ -2,14 +2,14 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run snow2mdl regression test on WCOSS-Cray.
+# Run snow2mdl consistency test on WCOSS-Cray.
 #
 # Set $DATA to your working directory.  Set the project code (BSUB -P)
 # and queue (BSUB -q) as appropriate.
 #
 # Invoke the script as follows:  cat $script | bsub
 #
-# Log output is placed in regression.log.  A summary is
+# Log output is placed in consistency.log.  A summary is
 # placed in summary.log
 #
 # The test fails when its output does not match the baseline file
@@ -19,8 +19,8 @@
 #-----------------------------------------------------------------------------
 
 #BSUB -W 0:02
-#BSUB -o regression.log
-#BSUB -e regression.log
+#BSUB -o consistency.log
+#BSUB -e consistency.log
 #BSUB -J s2m_regt
 #BSUB -q debug
 #BSUB -R "rusage[mem=2000]"
