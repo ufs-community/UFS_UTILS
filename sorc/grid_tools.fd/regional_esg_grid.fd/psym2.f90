@@ -26,7 +26,7 @@ interface sqrtsym2d_t; module procedure sqrtsym2d_t;          end interface
 interface expsym2;     module procedure expsym2,expsym2d;     end interface
 interface expsym2d_e;  module procedure expsym2d_e;           end interface
 interface expsym2d_t;  module procedure expsym2d_t;           end interface
-interface logsym2;     module procedure logsym2,logsym2d;  end interface
+interface logsym2;     module procedure logsym2,logsym2d;     end interface
 interface id2222;      module procedure id2222;               end interface
 interface chol2;       module procedure chol2;                end interface
 
@@ -284,11 +284,11 @@ do i=1,2; oo(i,i)=exp(oo(i,i)); enddo
 expem=matmul(vv,matmul(oo,transpose(vv)))
 end subroutine expsym2
 
-!> Sub Process for process symmetric 2*2 matrix.
+!> Get the exp of a symmetric 2*2 matrix, and its symmetric derivative.
 !!
 !! @param[in] x symmetric 2*2 positive-definite matrix
-!! @param[out] z ???
-!! @param[out] zd symmetric derivative
+!! @param[out] z exp of symmetric 2*2 matrix x
+!! @param[out] zd symmetric derivative wrt x of exp of x
 !! @author R. J. Purser
 subroutine expsym2d(x,z,zd)!                                         [expsym2]
 implicit none
@@ -306,11 +306,12 @@ endif
 z=z*exp(trxh)
 end subroutine expsym2d
 
-!> Sub Process for process symmetric 2*2 matrix.
+!> Get the exponential and its symmetric derivative for a symmetric 2*2 matrix
+!! using eigen-decomposition.
 !!
 !! @param[in] x symmetric 2*2 positive-definite matrix
-!! @param[out] z ???
-!! @param[out] zd symmetric derivative
+!! @param[out] z exp of symmetrix matrix x
+!! @param[out] zd symmetric derivative of z wrt x
 !! @author R. J. Purser
 subroutine expsym2d_e(x,z,zd)!                                    [expsym2d_e]
 implicit none
@@ -429,9 +430,10 @@ zd(:,:,2,2)=matmul(vv,matmul(d22*pqr,transpose(vv)))
 zd(:,:,2,1)=zd(:,:,1,2)
 end subroutine logsym2d
 
-!> General routine for Effective identity.
+!> General routine for a symmetrized 4th-rank tensor that acts as
+!! an effective identity for operations on symmetric matrices.
 !!
-!! @param[out] em ???
+!! @param[out] em symmetrized effective identity in space of symmetrix matrices.
 !! @author R. J. Purser
 subroutine id2222(em)!                                                [id2222]
 implicit none
