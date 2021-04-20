@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run grid generation regression tests on WCOSS-Cray.
+# Run grid generation consistency tests on WCOSS-Cray.
 #
 # Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
 # as appropriate.
@@ -36,7 +36,7 @@ export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 #-----------------------------------------------------------------------------
 
 export home_dir=$PWD/../..
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"
 export APRUN_SFC="aprun -j 1 -n 24 -N 24"

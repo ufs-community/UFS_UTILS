@@ -74,7 +74,7 @@ directory):
 - sfc_climo_gen
 - vcoord_gen
 
-The reg_tests directory contains the regression test code.
+The reg_tests directory contains the consistency test code.
 
 The fix directory is where we set links to directories containing
 large, static data files used by UFS_UTILS programs.
@@ -96,7 +96,7 @@ create a model grid on officially supported HPC platforms.
 
 The modulefiles directory contains modules loaded when building
 UFS_UTILS on supported HPC platforms.  They are also loaded at runtime
-by utility and regression test scripts.
+by utility and consistency test scripts.
 
 The docs directory contains the control file for the doxygen
 documentation build, as well as some markdown files which are part of

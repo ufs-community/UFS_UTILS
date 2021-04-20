@@ -4,7 +4,7 @@ ulimit -s unlimited
 
 export MAILTO=
 
-# Directory to download UFS_UTILS to and run the regression tests
+# Directory to download UFS_UTILS to and run the consistency tests
 export WORK_DIR=
 
 export PROJECT_CODE=
@@ -76,7 +76,7 @@ for dir in chgres_cube grid_gen; do
         sleep 10
         sleep_time=$((sleep_time+10))
         if (( sleep_time > TIMEOUT_LIMIT )); then
-             mail -s "UFS_UTILS Regression Tests timed out on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
+             mail -s "UFS_UTILS Consistency Tests timed out on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
             exit 1
         fi
     done
@@ -104,7 +104,7 @@ for dir in snow2mdl global_cycle ice_blend; do
         sleep 10
         sleep_time=$((sleep_time+10))
         if (( sleep_time > TIMEOUT_LIMIT )); then
-            mail -s "UFS_UTILS Regression Tests timed out on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
+            mail -s "UFS_UTILS Consistency Tests timed out on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
             exit 1
         fi
     done
@@ -119,16 +119,16 @@ for dir in chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
     success=true
     if grep -qi "FAILED" ${dir}/summary.log; then
         success=false
-        echo "${dir} regression tests FAILED" >> ${WORK_DIR}/reg_test_results.txt
+        echo "${dir} consistency tests FAILED" >> ${WORK_DIR}/reg_test_results.txt
     else
-        echo "${dir} regression tests PASSED" >> ${WORK_DIR}/reg_test_results.txt
+        echo "${dir} consistency tests PASSED" >> ${WORK_DIR}/reg_test_results.txt
     fi
 done
 
 if [[ "$success" == true ]]; then
-    mail -s "UFS_UTILS Regression Tests PASSED on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
+    mail -s "UFS_UTILS Consistency Tests PASSED on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
 else
-    mail -s "UFS_UTILS Regression Tests FAILED on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
+    mail -s "UFS_UTILS Consistency Tests FAILED on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
 fi
 
 # Save current hash as previous hash for next time
