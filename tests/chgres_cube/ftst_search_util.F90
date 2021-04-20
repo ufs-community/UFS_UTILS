@@ -5,6 +5,8 @@
 ! replaced with a valid neighboring value. Second, a missing
 ! value is replaced by a default value. This can happen
 ! for an isolated island located far from a valid neighbor.
+!
+! author: George Gayno (george.gayno@noaa.gov)
 
  use mpi
  use esmf
@@ -145,12 +147,13 @@
    call search (field_updated, mask_default, idim, jdim, tile, field_num, &
                 latitude, terrain_land, soilt_climo)
 
-   if (field_updated(2,2) /= default_field_val(i)) then
-     print*,'TEST FAILED ',field_updated(2,2), default_field_val(i)
+   if (abs(field_updated(2,2)-default_field_val(i)) > 0.00001) then
+     print*,'TEST FAILED '
+     print*,'VALUE SHOULD BE:', default_sst_val(i) 
+     print*,'VALUE FROM TEST:', field_updated(2,2)
      stop 4
    else
-
-   print*,'OK'
+     print*,'OK'
    endif
 
  enddo
@@ -165,12 +168,15 @@
    latitude(2,2) = latitude_sst(i)
 
    print*,'CHECK DEFAULT LOGIC FOR FIELD NUMBER ',field_num
+   print*,'AT LATITUDE ',latitude_sst(i)
 
    call search (field_updated, mask_default, idim, jdim, tile, field_num, &
                 latitude, terrain_land, soilt_climo)
 
    if (abs(field_updated(2,2)-default_sst_val(i)) > 0.00001) then
-     print*,'TEST FAILED ', field_updated(2,2),default_sst_val(i) 
+     print*,'TEST FAILED '
+     print*,'SST SHOULD BE:', default_sst_val(i) 
+     print*,'SST FROM TEST:', field_updated(2,2)
      stop 5
    else
 
