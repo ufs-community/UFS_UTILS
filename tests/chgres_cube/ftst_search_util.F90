@@ -15,7 +15,8 @@
  integer, parameter :: idim = 3
  integer, parameter :: jdim = 3
  integer, parameter :: tile = 1
- integer, parameter :: num_default_tests = 21
+ integer, parameter :: num_default_tests = 20
+ integer, parameter :: num_default_sst_tests = 4
 
  integer :: field_num, ierr, i
  integer(esmf_kind_i8) :: mask_search1(idim,jdim)
@@ -24,11 +25,13 @@
  integer :: default_field_num(num_default_tests)
 
  real(esmf_kind_r8) :: default_field_val(num_default_tests)
+ real(esmf_kind_r8) :: default_sst_val(num_default_sst_tests)
  real(esmf_kind_r8) :: field_default(idim,jdim)
  real(esmf_kind_r8) :: field_updated(idim,jdim)
  real(esmf_kind_r8) :: field_search1(idim,jdim)
  real(esmf_kind_r8) :: field_search2(idim,jdim)
  real(esmf_kind_r8) :: latitude(idim,jdim)
+ real(esmf_kind_r8) :: latitude_sst(num_default_sst_tests)
  real(esmf_kind_r8) :: terrain_land(idim,jdim)
  real(esmf_kind_r8) :: soilt_climo(idim,jdim)
 
@@ -55,10 +58,11 @@
 
  data field_default/0., 0., 0.,  0., -9999.9, 0.,  0., 0., 0./
 
-! The complete list of field numbers the default search
-! works for.
+! A list of field numbers the default search
+! works for. SST is handled with separate data statements
+! below.
 
- data default_field_num /0, 1, 7, 11, 21, &
+ data default_field_num /0, 1, 7, 21, &
                          30, 65, 66, 83, 85, &
                          86, 91, 92, 223, 224, &
                          225, 226, 227, 228, 229, 230/
@@ -67,10 +71,19 @@
 ! search routine for each field value. If the returned
 ! value does not match this value, the test fails.
 
- data default_field_val /0.0, 1.0, 75.0, 300.0, 265.0, &
+ data default_field_val /0.0, 1.0, 75.0, 265.0, &
                          30.0, 0.0, 0.0, 0.01, 280.0, &
                          0.18, 0.0, 1.0, 0.0, 2.0, &
                          -99999.9, 0.5, 0.5, 0.5, 1.0, 11.0/
+
+! For SST, test the default for four latitudes to ensure
+! all 'if' branches of routine 'sst_guess' are invoked.
+! If the returned value does not match "default_sst_val",
+! the test failes.
+
+ data default_sst_val /273.16, 286.5785, 300.0, 273.16/
+
+ data latitude_sst /75.0, 45.0, 0.0, -65.0/
 
 !--------------------------------------------------------
 ! These variables are used for the two search option 
@@ -135,6 +148,30 @@
    if (field_updated(2,2) /= default_field_val(i)) then
      print*,'TEST FAILED ',field_updated(2,2), default_field_val(i)
      stop 4
+   else
+
+   print*,'OK'
+   endif
+
+ enddo
+
+ print*,'Run tests to check default logic for SST.'
+
+ do i = 1, num_default_sst_tests
+
+   field_num = 11
+   field_updated = field_default
+
+   latitude(2,2) = latitude_sst(i)
+
+   print*,'CHECK DEFAULT LOGIC FOR FIELD NUMBER ',field_num
+
+   call search (field_updated, mask_default, idim, jdim, tile, field_num, &
+                latitude, terrain_land, soilt_climo)
+
+   if (abs(field_updated(2,2)-default_sst_val(i)) > 0.00001) then
+     print*,'TEST FAILED ', field_updated(2,2),default_sst_val(i) 
+     stop 5
    else
 
    print*,'OK'
