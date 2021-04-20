@@ -47,7 +47,7 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/chgres_cube
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE $SUM_FILE
 

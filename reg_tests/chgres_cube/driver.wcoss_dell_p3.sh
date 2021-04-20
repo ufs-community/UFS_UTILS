@@ -43,7 +43,7 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 
 SUM_FILE=summary.log
 

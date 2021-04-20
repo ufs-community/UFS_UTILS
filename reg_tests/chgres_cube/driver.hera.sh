@@ -47,7 +47,7 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE $SUM_FILE
 

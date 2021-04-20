@@ -21,8 +21,8 @@
 #SBATCH -J cycle_reg_test
 #SBATCH -A fv3-cpu
 #SBATCH --open-mode=truncate
-#SBATCH -o regression.log
-#SBATCH -e regression.log
+#SBATCH -o consistency.log
+#SBATCH -e consistency.log
 #SBATCH --nodes=1 --ntasks-per-node=6
 #SBATCH -q debug
 #SBATCH -t 00:05:00

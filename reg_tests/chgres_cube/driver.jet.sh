@@ -45,7 +45,7 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE $SUM_FILE
 
