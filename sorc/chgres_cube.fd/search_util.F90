@@ -230,7 +230,7 @@
 
  real(esmf_kind_r8), intent(out) :: sst
 
- if (latitude >= 60.0) then
+ if (abs(latitude) >= 60.0) then
    sst = 273.16
  elseif (abs(latitude) <= 30.0) then
    sst = 300.0
