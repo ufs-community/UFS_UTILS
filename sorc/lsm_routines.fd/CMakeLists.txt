@@ -4,3 +4,7 @@
 # Clara Draper
 
 add_subdirectory(noah.fd)
+
+if(ENABLE_DOCS)
+  add_subdirectory(docs)
+endif()
