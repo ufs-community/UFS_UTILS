@@ -5,8 +5,8 @@
 !> This program does ???
 !!
 !! @return 0 for success, error code otherwise.
-!! @author S-J Lin (GFDL) for filtering algorithm(s) and Zhi Liang
-!! (GFDL) who packaged it into a standalone application.
+!! @author S-J Lin (GFDL) for filtering algorithm(s)
+!! @author Zhi Liang (GFDL) who packaged it into a standalone application.
 program filter_topo
 
 
