@@ -3,9 +3,8 @@
 #
 # George Gayno, Mark Potts
 
-set(fortran_src
+set(lib_src
     atmosphere.F90
-    chgres.F90
     grib2_util.F90
     input_data.F90
     model_grid.F90
@@ -17,6 +16,8 @@ set(fortran_src
     utils.F90
     write_data.F90)
 
+set(exe_src chgres.F90)
+
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
@@ -24,9 +25,13 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
 endif()
 
 set(exe_name chgres_cube)
-add_executable(${exe_name} ${fortran_src})
+
+add_library(chgres_cube_lib STATIC ${lib_src})
+add_executable(${exe_name} ${exe_src})
+
 target_link_libraries(
-  ${exe_name}
+  chgres_cube_lib
+  PUBLIC
   nemsio::nemsio
   sfcio::sfcio
   sigio::sigio
@@ -38,9 +43,12 @@ target_link_libraries(
   wgrib2::wgrib2_api
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
+
 if(OpenMP_Fortran_FOUND)
-  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
+  target_link_libraries(${exe_name} PUBLIC OpenMP::OpenMP_Fortran)
 endif()
+
+target_link_libraries(${exe_name} PRIVATE chgres_cube_lib)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
 

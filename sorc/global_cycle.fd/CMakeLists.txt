@@ -3,12 +3,13 @@
 #
 # George Gayno
 
-set(fortran_src
-    cycle.f90
+set(lib_src
     machine.f90
     num_parthds.f90
     sfcsub.F
     read_write_data.f90)
+
+set(exe_src cycle.f90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian")
@@ -20,18 +21,25 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
 endif()
 
 set(exe_name global_cycle)
-add_executable(${exe_name} ${fortran_src})
+
+add_library(global_cycle_lib ${lib_src})
+add_executable(${exe_name} ${exe_src})
+
 target_link_libraries(
-  ${exe_name}
+  global_cycle_lib
+  PUBLIC
   w3nco::w3nco_d
   bacio::bacio_4
   ip::ip_d
   sp::sp_d
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
+
 if(OpenMP_Fortran_FOUND)
-  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
+  target_link_libraries(global_cycle_lib PUBLIC OpenMP::OpenMP_Fortran)
 endif()
+
+target_link_libraries(${exe_name} PRIVATE global_cycle_lib)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
 
