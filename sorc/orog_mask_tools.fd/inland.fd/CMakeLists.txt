@@ -7,7 +7,7 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-range-check")
 endif()
 
-add_library(inland_lib ${lib_src})
+add_library(inland_lib STATIC ${lib_src})
 add_executable(inland ${exe_src})
 
 set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")

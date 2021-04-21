@@ -1,7 +1,7 @@
 # This is the CMake build file for the emcsfc_snow2mdl utility in the
 # UFS_UTILS package.
 #
-# George Gayno, Mark Potts
+# George Gayno, Mark Potts, Kyle Gerheiser
 
 set(lib_src
     grib_utils.F90
@@ -20,7 +20,7 @@ endif()
 
 set(exe_name emcsfc_snow2mdl)
 
-add_library(snow2mdl_lib ${lib_src})
+add_library(snow2mdl_lib STATIC ${lib_src})
 add_executable(${exe_name} ${exe_src})
 
 set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")

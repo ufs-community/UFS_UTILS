@@ -18,7 +18,7 @@ endif()
 
 set(exe_name vcoord_gen)
 
-add_library(vcoord_gen_lib ${lib_src})
+add_library(vcoord_gen_lib STATIC ${lib_src})
 add_executable(${exe_name} ${exe_src})
 
 set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")

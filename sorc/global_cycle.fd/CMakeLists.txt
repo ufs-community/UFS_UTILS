@@ -22,7 +22,7 @@ endif()
 
 set(exe_name global_cycle)
 
-add_library(global_cycle_lib ${lib_src})
+add_library(global_cycle_lib STATIC ${lib_src})
 add_executable(${exe_name} ${exe_src})
 
 set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
