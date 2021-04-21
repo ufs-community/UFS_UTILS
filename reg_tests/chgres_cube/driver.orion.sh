@@ -2,14 +2,14 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run the chgres_cube regression tests on Orion.
+# Run the chgres_cube consistency tests on Orion.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
 # type "saccount_params".
 #
 # Invoke the script with no arguments.  A series of daily-chained
-# regression tests will be submitted.  To check the queue, type:
+# consistency tests will be submitted.  To check the queue, type:
 # "squeue -u $LOGNAME".
 #
 # The run output will be stored in OUTDIR.  Log output from the suite
@@ -47,7 +47,7 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/chgres_cube
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE $SUM_FILE
 
