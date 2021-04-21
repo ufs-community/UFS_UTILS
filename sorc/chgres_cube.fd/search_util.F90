@@ -118,7 +118,7 @@
    case (230) ! soil type on the input grid
      default_value = 11.0
    case default
-     print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field
+     print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field_num
      call mpi_abort(mpi_comm_world, 77, ierr)
  end select
 
@@ -230,7 +230,7 @@
 
  real(esmf_kind_r8), intent(out) :: sst
 
- if (latitude >= 60.0) then
+ if (abs(latitude) >= 60.0) then
    sst = 273.16
  elseif (abs(latitude) <= 30.0) then
    sst = 300.0
