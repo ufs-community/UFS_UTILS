@@ -5394,6 +5394,7 @@ if (localpet == 0) then
      do j = 1, j_input
        do i = 1, i_input
          if (slmsk_save(i,j) == 0_esmf_kind_i4 ) dummy3d(i,j,k) = tsk_save(i,j)
+         if (slmsk_save(i,j) == 1_esmf_kind_i4 .and. dummy3d(i,j,k) > 350.0_esmf_kind_r8) dummy3d(i,j,k) = tsk_save(i,j)
          if (slmsk_save(i,j) == 2_esmf_kind_i4 ) dummy3d(i,j,k) = icet_default
        enddo
      enddo
