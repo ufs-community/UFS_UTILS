@@ -43,13 +43,11 @@ add_mpi_test(ftst_program_setup
   NUMPROCS 4
   TIMEOUT 60)
 
-add_executable(ftst_search_util
-  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/search_util.F90"
-  ftst_search_util.F90)
+add_executable(ftst_search_util ftst_search_util.F90)
 target_link_libraries(
   ftst_search_util
-  esmf
-  MPI::MPI_Fortran)
+  chgres_cube_lib)
+
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(ftst_search_util OpenMP::OpenMP_Fortran)
 endif()
