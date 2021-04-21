@@ -1,7 +1,7 @@
 # This is the CMake file for the global_cycle utility in the UFS_UTILS
 # project.
 #
-# George Gayno
+# George Gayno, Kyle Gerheiser
 
 set(lib_src
     machine.f90
@@ -24,6 +24,10 @@ set(exe_name global_cycle)
 
 add_library(global_cycle_lib ${lib_src})
 add_executable(${exe_name} ${exe_src})
+
+set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
+set_target_properties(global_cycle_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
+target_include_directories(global_cycle_lib INTERFACE ${mod_dir})
 
 target_link_libraries(
   global_cycle_lib

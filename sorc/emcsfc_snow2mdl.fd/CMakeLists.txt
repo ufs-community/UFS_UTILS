@@ -23,6 +23,10 @@ set(exe_name emcsfc_snow2mdl)
 add_library(snow2mdl_lib ${lib_src})
 add_executable(${exe_name} ${exe_src})
 
+set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
+set_target_properties(snow2mdl_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
+target_include_directories(snow2mdl_lib INTERFACE ${mod_dir})
+
 target_link_libraries(snow2mdl_lib
   PUBLIC
   g2::g2_d

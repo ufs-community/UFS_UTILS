@@ -13,6 +13,10 @@ endif()
 add_library(lakefrac_lib STATIC ${lib_src})
 add_executable(lakefrac ${exe_src})
 
+set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
+set_target_properties(lakefrac_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
+target_include_directories(lakefrac_lib INTERFACE ${mod_dir})
+
 target_link_libraries(
   lakefrac_lib
   PUBLIC

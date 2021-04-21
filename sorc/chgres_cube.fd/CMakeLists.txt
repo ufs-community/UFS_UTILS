@@ -1,7 +1,7 @@
 # This is the CMake build file for the chgres_cube utility in the
 # UFS_UTILS package.
 #
-# George Gayno, Mark Potts
+# George Gayno, Mark Potts, Kyle Gerheiser
 
 set(lib_src
     atmosphere.F90
@@ -28,6 +28,10 @@ set(exe_name chgres_cube)
 
 add_library(chgres_cube_lib STATIC ${lib_src})
 add_executable(${exe_name} ${exe_src})
+
+set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
+set_target_properties(chgres_cube_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
+target_include_directories(chgres_cube_lib INTERFACE ${mod_dir})
 
 target_link_libraries(
   chgres_cube_lib

@@ -15,6 +15,10 @@ set(exe_name orog)
 add_library(orog_lib STATIC ${lib_src})
 add_executable(${exe_name} mtnlm7_oclsm.f)
 
+set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
+set_target_properties(orog_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
+target_include_directories(orog_lib INTERFACE ${mod_dir})
+
 target_link_libraries(
   orog_lib
   PUBLIC
