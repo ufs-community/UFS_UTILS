@@ -50,7 +50,7 @@ find_package(MPI 3.1 REQUIRED C Fortran)
 find_package(ESMF MODULE REQUIRED)
 
 if(OPENMP)
-  find_package(OpenMP 5.0 REQUIRED COMPONENTS Fortran)
+  find_package(OpenMP 4.5 REQUIRED COMPONENTS Fortran)
 endif()
 
 find_package(gfsio 1.4.0 REQUIRED)
