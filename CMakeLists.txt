@@ -45,8 +45,8 @@ if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
 endif()
 
 # Find packages.
-find_package(NetCDF 4.7.4 REQUIRED C Fortran)
-find_package(MPI 3.1 REQUIRED C Fortran)
+find_package(NetCDF 4.3.3 REQUIRED C Fortran)
+find_package(MPI 3.0 REQUIRED C Fortran)
 find_package(ESMF MODULE REQUIRED)
 
 if(OPENMP)
