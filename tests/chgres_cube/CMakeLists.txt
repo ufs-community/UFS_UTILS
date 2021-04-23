@@ -27,6 +27,8 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/config_gfs_grib2.nml ${CMAKE_CURRENT_BINARY_DIR}/config_gfs_grib2.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/config_spectral_sigio.nml ${CMAKE_CURRENT_BINARY_DIR}/config_spectral_sigio.nml)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/GFSphys_varmap.txt ${CMAKE_CURRENT_BINARY_DIR}//data/GFSphys_varmap.txt)
 
 add_executable(ftst_utils ftst_utils.F90)
 add_test(NAME ftst_utils COMMAND ftst_utils)
