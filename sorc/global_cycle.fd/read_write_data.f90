@@ -1656,7 +1656,7 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
   write(*,*) ' sstclm : ',file_sst
   call baopenr(lu_sst,trim(file_sst),iret)
   if (iret /= 0 ) then
-     write(6,*)'read_tf_clm_grb:  ***error*** opening sst file'
+     write(6,*)'FATAL ERROR in read_tf_clm_grb: error opening sst file.'
      CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
@@ -1683,13 +1683,13 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
 ! read in the analysis
   call getgb(lu_sst,0,jf,j,jpds,jgds,kf,k,kpds,kgds,lb,f,iret)
   if (iret /= 0) then
-     write(6,*)'read_tf_clm_grb:  ***error*** reading sst analysis data record'
+     write(6,*)'FATAL ERROR in read_tf_clm_grb: error reading sst analysis data record.'
      deallocate(lb,f)
      CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
   if ( (nlat_sst /= mlat_sst) .or. (nlon_sst /= mlon_sst) ) then
-     write(6,*)'read_rtg_org:  inconsistent dimensions.  mlat_sst,mlon_sst=',&
+     write(6,*)'FATAL ERROR in read_rtg_org:  inconsistent dimensions.  mlat_sst,mlon_sst=',&
           mlat_sst,mlon_sst,' -versus- nlat_sst,nlon_sst=',nlat_sst,nlon_sst
      deallocate(lb,f)
      CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
@@ -1746,7 +1746,7 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
 
   call baclose(lu_sst,iret)
   if (iret /= 0 ) then
-     write(6,*)'read_tf_clm_grb:  ***error*** close sst file'
+     write(6,*)'FATAL ERROR in read_tf_clm_grb: error closing sst file.'
      CALL MPI_ABORT(MPI_COMM_WORLD, 121, ierr)
   endif
   
@@ -1782,7 +1782,7 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
 ! open sst analysis file (grib)
   call baopenr(lu_sst,trim(file_sst),iret)
   if (iret /= 0 ) then
-     write(6,*)'get_tf_clm_dim:  ***error*** opening sst file'
+     write(6,*)'FATAL ERROR in get_tf_clm_dim: error opening sst file.'
      CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
@@ -1802,7 +1802,7 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
 
   call baclose(lu_sst,iret)
   if (iret /= 0 ) then
-     write(6,*)'get_tf_clm_dim:  ***error*** close sst file'
+     write(6,*)'FATAL ERROR in get_tf_clm_dim: error closing sst file.'
      CALL MPI_ABORT(MPI_COMM_WORLD, 121, ierr)
   endif
 end subroutine get_tf_clm_dim
@@ -1940,6 +1940,7 @@ subroutine nc_check(status)
   integer :: ierr
 
   if(status /= nf90_noerr) then
+    print *, 'FATAL ERROR:'
     print *, trim(nf90_strerror(status))
     CALL MPI_ABORT(MPI_COMM_WORLD, 122, ierr)
   end if
