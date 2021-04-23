@@ -155,9 +155,8 @@
                                        read_input_nst_data
 
  use program_setup, only             : calc_soil_params_driver, &
-                                       convert_nst, &
-                                       vgtyp_from_climo, &
-                                       sotyp_from_climo
+                                       convert_nst
+                                  
  use static_data, only               :  get_static_fields, &
                                        cleanup_static_fields
 
