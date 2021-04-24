@@ -20,7 +20,7 @@
 
  use esmf
 
- use input_data, only                : lev_input, &
+ use atm_input_data_mod, only                : lev_input, &
                                        levp1_input, &
                                        tracers_input_grid, &
                                        dzdt_input_grid, &
@@ -51,6 +51,8 @@
                                        qnwfa_climo_input_grid, &
                                        thomp_pres_climo_input_grid, &
                                        lev_thomp_mp_climo
+
+ use chgres_cube_utils_mod, only: error_handler, to_upper
 
  implicit none
 
@@ -110,7 +112,8 @@
  subroutine atmosphere_driver(localpet)
 
  use mpi
-
+ use write_data_mod, only: write_fv3_atm_bndy_data_netcdf, write_fv3_atm_header_netcdf, write_fv3_atm_data_netcdf
+ 
  implicit none
 
  integer, intent(in)                :: localpet

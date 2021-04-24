@@ -8,6 +8,15 @@
 !! the forecast model.
 !!
 
+module write_data_mod
+  use chgres_cube_utils_mod, only: error_handler, netcdf_err
+  implicit none
+
+  private
+  public :: write_fv3_atm_header_netcdf
+  public :: write_fv3_sfc_data_netcdf, write_fv3_atm_bndy_data_netcdf, write_fv3_atm_data_netcdf
+
+  contains
 !> Writes atmospheric header file in netcdf format.
 !!
 !! @param[in] localpet  ESMF local persistent execution thread
@@ -3156,3 +3165,4 @@
  return
 
  end subroutine write_fv3_sfc_data_netcdf
+end module write_data_mod

@@ -8,6 +8,7 @@
 !! @author George Gayno NCEP/EMC
  module program_setup
 
+ use chgres_cube_utils_mod, only: error_handler, to_lower
  implicit none
 
  private

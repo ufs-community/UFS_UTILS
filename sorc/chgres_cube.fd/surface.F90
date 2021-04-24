@@ -21,7 +21,10 @@
  module surface
 
  use esmf
-
+   
+ use chgres_cube_utils_mod, only: error_handler
+ use write_data_mod, only: write_fv3_sfc_data_netcdf
+ 
  implicit none
 
  private
@@ -149,10 +152,8 @@
 !! @author George Gayno NCEP/EMC
  subroutine surface_driver(localpet)
 
- use input_data, only                : cleanup_input_sfc_data, &
-                                       cleanup_input_nst_data, &
-                                       read_input_sfc_data, &
-                                       read_input_nst_data
+ use sfc_input_data_mod, only: cleanup_input_sfc_data, read_input_sfc_data
+ use nst_input_data_mod, only: read_input_nst_data, cleanup_input_nst_data
 
  use program_setup, only             : calc_soil_params_driver, &
                                        convert_nst
@@ -310,7 +311,7 @@
  use mpi
  use esmf
 
- use input_data, only                : canopy_mc_input_grid,  &
+ use input_data_mod, only                : canopy_mc_input_grid,  &
                                        f10m_input_grid,  &
                                        ffmm_input_grid,  &
                                        landsea_mask_input_grid, &
@@ -3562,7 +3563,7 @@ end subroutine replace_land_sfcparams
 !! @author Jeff Beck
  subroutine adjust_soil_levels(localpet)
  use model_grid, only       : lsoil_target, i_input, j_input, input_grid
- use input_data, only       : lsoil_input, soil_temp_input_grid, &
+ use input_data_mod, only       : lsoil_input, soil_temp_input_grid, &
                               soilm_liq_input_grid, soilm_tot_input_grid
  implicit none
  integer, intent(in)                   :: localpet

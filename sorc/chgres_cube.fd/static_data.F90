@@ -11,7 +11,7 @@
 !!
 !! @author George Gayno NCEP/EMC
  module static_data
-
+ use chgres_cube_utils_mod, only: error_handler, netcdf_err  
  use esmf
 
  implicit none

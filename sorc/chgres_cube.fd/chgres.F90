@@ -38,6 +38,7 @@
                                  cleanup_input_target_grid_data
 
  use surface, only             : surface_driver
+ use chgres_cube_utils_mod, only: error_handler
 
  implicit none
 

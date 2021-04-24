@@ -4,13 +4,12 @@
 ! Lin Gan NCEP/EMC
  
 program ftst_utils
-
+ use chgres_cube_utils_mod
  
  implicit none
 
  logical                          :: match_result
 
- character(len=12)                :: to_upper
  character(len=12)                :: test_input_char_1, test_input_char_2, u_st_base, l_st_base
 
  u_st_base="STAGGERLOCCE"

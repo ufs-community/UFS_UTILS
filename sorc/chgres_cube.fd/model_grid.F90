@@ -10,6 +10,7 @@
 
  use esmf
  use ESMF_LogPublicMod
+ use chgres_cube_utils_mod, only: error_handler, netcdf_err
 
  implicit none
 
