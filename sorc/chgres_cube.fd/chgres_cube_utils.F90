@@ -1,6 +1,7 @@
 !> @file
-!! @brief Contains utility routines.
-!!
+!! @brief Utility routines for handling errors and manipulating strings
+
+!> Module for uility routines across chgres_cube
 module chgres_cube_utils_mod
 
 contains

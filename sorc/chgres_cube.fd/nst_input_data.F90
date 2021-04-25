@@ -75,6 +75,9 @@ module nst_input_data_mod
   type(esmf_field), public        :: z_c_input_grid   !< Sub-layer cooling thickness
   type(esmf_field), public        :: zm_input_grid   !< Oceanic mixed layer depth
 
+  integer, public      :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
+                                         !! for 7 layers of soil for the RUC LSM
+
 contains
 
   !> Driver to read input grid nst data.

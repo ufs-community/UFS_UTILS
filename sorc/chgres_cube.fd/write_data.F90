@@ -27,7 +27,7 @@ module write_data_mod
 
  use netcdf
 
- use atmosphere, only : nvcoord_target, &
+ use atm_target_data_mod, only : nvcoord_target, &
                         vcoord_target,  &
                         levp1_target
 
@@ -114,7 +114,7 @@ module write_data_mod
  use esmf
  use netcdf
 
- use atmosphere, only            : lev_target, levp1_target, &
+ use atm_target_data_mod, only            : lev_target, levp1_target, &
                                    dzdt_target_grid, &
                                    ps_target_grid, &
                                    tracers_target_grid, &
@@ -1210,7 +1210,7 @@ module write_data_mod
                                      use_thomp_mp_climo, &
                                      regional
 
- use atmosphere, only              : lev_target, &
+ use atm_target_data_mod, only:      lev_target, &
                                      levp1_target, &
                                      ps_target_grid, &
                                      zh_target_grid, &
@@ -1827,7 +1827,7 @@ module write_data_mod
  use program_setup, only         : convert_nst, halo=>halo_bndy, &
                                    regional, lai_from_climo
 
- use surface, only               : canopy_mc_target_grid,  &
+ use sfc_target_data_mod, only: canopy_mc_target_grid,  &
                                    f10m_target_grid, &
                                    ffmm_target_grid, &
                                    q2m_target_grid,   &

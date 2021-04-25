@@ -18,6 +18,8 @@ set(lib_src
     sfc_input_data.F90
     atm_input_data.F90
     chgres_cube_utils.F90
+    atm_target_data.F90
+    sfc_target_data.F90
     write_data.F90)
 
 set(exe_src chgres.F90)

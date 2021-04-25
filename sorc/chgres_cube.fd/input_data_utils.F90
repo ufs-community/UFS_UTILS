@@ -24,11 +24,6 @@ module input_data_utils_mod
   public :: read_fv3_grid_data_netcdf
   public :: handle_grib_error
 
-  integer, public      :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
-  !! for 7 layers of soil for the RUC LSM
-
-  type(ESMF_Field), public :: terrain_input_grid
-
 contains
 
   !> Read a record from a netcdf file

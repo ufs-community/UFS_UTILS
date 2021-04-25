@@ -88,8 +88,10 @@ module sfc_input_data_mod
   type(esmf_field), public        :: max_veg_greenness_input_grid !< shdmax
   type(esmf_field), public        :: min_veg_greenness_input_grid !< shdmin
 
-  integer, public      :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
-  !! for 7 layers of soil for the RUC LSM
+  
+  type(esmf_field), public        :: terrain_input_grid !< terrain height
+  integer,          public        :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
+                                                    !! for 7 layers of soil for the RUC LSM
 
 contains
 
