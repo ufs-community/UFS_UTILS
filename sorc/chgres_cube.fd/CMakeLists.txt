@@ -12,12 +12,12 @@ set(lib_src
     static_data.F90
     surface.F90
     thompson_mp_climo_data.F90
-    input_data.f90
+    input_data.F90
     input_data_utils.F90
     nst_input_data.F90
     sfc_input_data.F90
     atm_input_data.F90
-    utils.F90
+    chgres_cube_utils.F90
     write_data.F90)
 
 set(exe_src chgres.F90)
