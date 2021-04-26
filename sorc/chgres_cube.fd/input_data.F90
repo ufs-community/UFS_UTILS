@@ -5391,15 +5391,6 @@ if (localpet == 0) then
    vname = "soilt"
    vname_file = ":TSOIL:"
    call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
-   !do k=1,lsoil_input
-   !  do j = 1, j_input
-   !    do i = 1, i_input
-   !      if (slmsk_save(i,j) == 0_esmf_kind_i4 ) dummy3d(i,j,k) = tsk_save(i,j)
-   !      if (slmsk_save(i,j) == 1_esmf_kind_i4 .and. dummy3d(i,j,k) > 350.0_esmf_kind_r8) dummy3d(i,j,k) = tsk_save(i,j)
-   !      if (slmsk_save(i,j) == 2_esmf_kind_i4 ) dummy3d(i,j,k) = icet_default
-   !    enddo
-   !  enddo
-   !enddo
    call check_soilt(dummy3d,slmsk_save,tsk_save)
    print*,'soilt ',maxval(dummy3d),minval(dummy3d)
 
