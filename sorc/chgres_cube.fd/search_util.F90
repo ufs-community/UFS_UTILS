@@ -215,18 +215,18 @@
 
  end subroutine search
 
-!> Set default sst values based on latitude.
+!> Set default Sea Surface Temperature (SST) based on latitude.
 !!
 !! Based loosely on the average annual SST
 !! values from ./fix_am/cfs_oi2sst1x1monclim19822001.grb
 !!
 !! The temperature in the polar and tropical regions
-!! is set to 273.16/300 Kelvin. Polar regions are
-!! poleward of 60 degrees. Tropical regions are within
-!! 30 degrees of the equator. In mid-latitudes, a
-!! linear change with latitude is used. 
+!! is set to 273.16 and 300.0 Kelvin respectively. Polar 
+!! regions are poleward of 60 degrees. Tropical regions
+!! are within 30 degrees of the equator. In mid-latitudes,
+!! a linear change with latitude is used. 
 !!
-!! @param [in] latitude Latitude in degrees
+!! @param [in] latitude Latitude in decimal degrees
 !! @param [out] sst Default SST in Kelvin
 !! @author George Gayno NCEP/EMC
  subroutine sst_guess(latitude, sst)
@@ -235,27 +235,29 @@
 
  implicit none
 
- real(esmf_kind_r8), parameter :: sst_polar_in_kelvin = 273.16 !< Default SST in polar
+ real(esmf_kind_r8), parameter :: SST_POLAR_IN_KELVIN = 273.16 !< Default SST in polar
                                                                !! regions.
- real(esmf_kind_r8), parameter :: sst_tropical_in_kelvin = 300.0 !< Default SST in
+ real(esmf_kind_r8), parameter :: SST_TROPICAL_IN_KELVIN = 300.0 !< Default SST in
                                                                  !! tropical regions.
- real(esmf_kind_r8), parameter :: polar_latitude = 60.0 !< Latitude in degrees defining polar regions.
- real(esmf_kind_r8), parameter :: tropical_latitude = 30.0 !< Latitude in degrees defining tropical regions.
- real(esmf_kind_r8), parameter :: dsst_dlat = -0.8947 !< Change in SST per latitude in
+ real(esmf_kind_r8), parameter :: POLAR_LATITUDE = 60.0 !< Latitude in decimal degrees 
+                                                        !! defining polar regions.
+ real(esmf_kind_r8), parameter :: TROPICAL_LATITUDE = 30.0 !< Latitude in decimal degrees 
+                                                           !! defining tropical regions.
+ real(esmf_kind_r8), parameter :: DSST_DLAT = -0.8947 !< Change in SST per latitude in
                                                       !! mid-latitudes.
- real(esmf_kind_r8), parameter :: sst_y_intercept = 326.84 !< y intercept for the linear
+ real(esmf_kind_r8), parameter :: SST_Y_INTERCEPT = 326.84 !< y intercept for the linear
                                                            !! change of SST in mid-latitudes.
  
  real(esmf_kind_r8), intent(in)  :: latitude
 
  real(esmf_kind_r8), intent(out) :: sst
 
- if (abs(latitude) >= polar_latitude) then
-   sst = sst_polar_in_kelvin
- elseif (abs(latitude) <= tropical_latitude) then
-   sst = sst_tropical_in_kelvin
+ if (abs(latitude) >= POLAR_LATITUDE) then
+   sst = SST_POLAR_IN_KELVIN
+ elseif (abs(latitude) <= TROPICAL_LATITUDE) then
+   sst = SST_TROPICAL_IN_KELVIN
  else
-   sst = dsst_dlat * abs(latitude) + sst_y_intercept
+   sst = DSST_DLAT * abs(latitude) + SST_Y_INTERCEPT
  endif
 
  end subroutine sst_guess
