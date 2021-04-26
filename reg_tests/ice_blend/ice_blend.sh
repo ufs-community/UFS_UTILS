@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #-----------------------------------------------------------------------------
-# Run ice_blend regression test.  This script called from it machine-specific
+# Run ice_blend consistency test.  This script called from it machine-specific
 # driver script.
 #-----------------------------------------------------------------------------
 

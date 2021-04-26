@@ -810,7 +810,7 @@
  use netcdf
  use wgrib2api
  use program_setup, only       : grib2_file_input_grid, data_dir_input_grid, &
-                                  fix_dir_input_grid, external_model
+                                  fix_dir_input_grid
  implicit none
 
  character(len=500)           :: the_file, temp_file
@@ -826,7 +826,7 @@
  real(esmf_kind_r8)                    :: deltalon, dx
  integer                               :: ncid,id_var, id_dim
  real(esmf_kind_r8), pointer           :: lat_src_ptr(:,:), lon_src_ptr(:,:)
- character(len=10000)            :: cmdline_msg, temp_msg, temp_msg2
+ character(len=10000)            :: temp_msg
  character(len=10)              :: temp_num = 'NA'
 
  num_tiles_input_grid = 1

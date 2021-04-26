@@ -53,7 +53,7 @@ real(dp),parameter:: phi=1.61803398874989484820458683436563811772030917980576286
 real(dp),parameter:: euler=0.57721566490153286060651209008240243104215933593992359880e0_dp !< Euler-Mascheroni constant.
 real(dp),parameter:: dtor=pi/180 !< Degrees to radians
 real(dp),parameter:: rtod=180/pi !< radians to degrees
-! Sines of all main fractions of 90 degrees (down to ninths): !< ???
+! Sines of all main fractions of 90 degrees (down to ninths): 
 real(dp),parameter:: s10=.173648177666930348851716626769314796000375677184069387236241e0_dp !< sine(10 deg)
 real(dp),parameter:: s11=.195090322016128267848284868477022240927691617751954807754502e0_dp !< sine(90/8 deg)
 real(dp),parameter:: s13=.222520933956314404288902564496794759466355568764544955311987e0_dp !< sine(90/7 deg)
