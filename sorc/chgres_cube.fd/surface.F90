@@ -155,9 +155,8 @@
                                        read_input_nst_data
 
  use program_setup, only             : calc_soil_params_driver, &
-                                       convert_nst, &
-                                       vgtyp_from_climo, &
-                                       sotyp_from_climo
+                                       convert_nst
+                                  
  use static_data, only               :  get_static_fields, &
                                        cleanup_static_fields
 
@@ -2935,7 +2934,7 @@ print*,"- CALL FieldGet FOR TARGET GRID FACSF."
  do i =clb(1),cub(1)
    do j = clb(2),cub(2)
      if (landmask_ptr(i,j)==1 .and. soilm_target_ptr(i,j,1) < 0.001 .and. nint(veg_type_target_ptr(i,j)) /= veg_type_landice_target) then !.and. &
-         WRITE(*,'(a,2i5,a,2i3)'), " CORRECTING G.P. ",i,j," PARAMS FROM SEA TO LAND &
+         WRITE(*,'(a,2i5,a,2i3)') " CORRECTING G.P. ",i,j," PARAMS FROM SEA TO LAND &
                     VALUES; curr stype,vtype=",  nint(soil_type_target_ptr(i,j)),nint(veg_type_target_ptr(i,j))
          ! Set values to missing so that search function can then replace 
          ! them with nearby point values (see replace_land_sfcparams)
