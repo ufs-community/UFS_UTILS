@@ -6039,11 +6039,11 @@ if (localpet == 0) then
  real(esmf_kind_r8)                      :: d2r
 
  integer                                 :: varnum_u, varnum_v, vlev, & !ncid, id_var, &
-                                            error, iret, i,istr
+                                            error, iret, istr
 
  character(len=20)                       :: vname
  character(len=50)                       :: method_u, method_v
- character(len=250)                      :: file_coord, cmdline_msg
+ character(len=250)                      :: file_coord
  character(len=10000)                    :: temp_msg
 
  d2r=acos(-1.0_esmf_kind_r8) / 180.0_esmf_kind_r8

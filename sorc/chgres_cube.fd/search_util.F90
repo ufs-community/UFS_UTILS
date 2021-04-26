@@ -118,7 +118,7 @@
    case (230) ! soil type on the input grid
      default_value = 11.0
    case default
-     print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field
+     print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field_num
      call mpi_abort(mpi_comm_world, 77, ierr)
  end select
 
@@ -215,10 +215,19 @@
 
  end subroutine search
 
-!> Set sst values based on latitude.
+!> Set default Sea Surface Temperature (SST) based on latitude.
 !!
-!! @param latitude latitude input
-!! @param sst sst guess value to be set
+!! Based loosely on the average annual SST
+!! values from ./fix_am/cfs_oi2sst1x1monclim19822001.grb
+!!
+!! The temperature in the polar and tropical regions
+!! is set to 273.16 and 300.0 Kelvin respectively. Polar 
+!! regions are poleward of 60 degrees. Tropical regions
+!! are within 30 degrees of the equator. In mid-latitudes,
+!! a linear change with latitude is used. 
+!!
+!! @param [in] latitude Latitude in decimal degrees
+!! @param [out] sst Default SST in Kelvin
 !! @author George Gayno NCEP/EMC
  subroutine sst_guess(latitude, sst)
 
@@ -226,16 +235,29 @@
 
  implicit none
 
+ real(esmf_kind_r8), parameter :: SST_POLAR_IN_KELVIN = 273.16 !< Default SST in polar
+                                                               !! regions.
+ real(esmf_kind_r8), parameter :: SST_TROPICAL_IN_KELVIN = 300.0 !< Default SST in
+                                                                 !! tropical regions.
+ real(esmf_kind_r8), parameter :: POLAR_LATITUDE = 60.0 !< Latitude in decimal degrees 
+                                                        !! defining polar regions.
+ real(esmf_kind_r8), parameter :: TROPICAL_LATITUDE = 30.0 !< Latitude in decimal degrees 
+                                                           !! defining tropical regions.
+ real(esmf_kind_r8), parameter :: DSST_DLAT = -0.8947 !< Change in SST per latitude in
+                                                      !! mid-latitudes.
+ real(esmf_kind_r8), parameter :: SST_Y_INTERCEPT = 326.84 !< y intercept for the linear
+                                                           !! change of SST in mid-latitudes.
+ 
  real(esmf_kind_r8), intent(in)  :: latitude
 
  real(esmf_kind_r8), intent(out) :: sst
 
- if (latitude >= 60.0) then
-   sst = 273.16
- elseif (abs(latitude) <= 30.0) then
-   sst = 300.0
+ if (abs(latitude) >= POLAR_LATITUDE) then
+   sst = SST_POLAR_IN_KELVIN
+ elseif (abs(latitude) <= TROPICAL_LATITUDE) then
+   sst = SST_TROPICAL_IN_KELVIN
  else
-   sst = (-0.8947) * abs(latitude) + 326.84
+   sst = DSST_DLAT * abs(latitude) + SST_Y_INTERCEPT
  endif
 
  end subroutine sst_guess
