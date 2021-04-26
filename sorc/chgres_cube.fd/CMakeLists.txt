@@ -1,11 +1,10 @@
 # This is the CMake build file for the chgres_cube utility in the
 # UFS_UTILS package.
 #
-# George Gayno, Mark Potts
+# George Gayno, Mark Potts, Kyle Gerheiser
 
-set(fortran_src
+set(lib_src
     atmosphere.F90
-    chgres.F90
     grib2_util.F90
     input_data.F90
     model_grid.F90
@@ -17,6 +16,8 @@ set(fortran_src
     utils.F90
     write_data.F90)
 
+set(exe_src chgres.F90)
+
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
@@ -24,9 +25,17 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
 endif()
 
 set(exe_name chgres_cube)
-add_executable(${exe_name} ${fortran_src})
+
+add_library(chgres_cube_lib STATIC ${lib_src})
+add_executable(${exe_name} ${exe_src})
+
+set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
+set_target_properties(chgres_cube_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
+target_include_directories(chgres_cube_lib INTERFACE ${mod_dir})
+
 target_link_libraries(
-  ${exe_name}
+  chgres_cube_lib
+  PUBLIC
   nemsio::nemsio
   sfcio::sfcio
   sigio::sigio
@@ -38,9 +47,12 @@ target_link_libraries(
   wgrib2::wgrib2_api
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
+
 if(OpenMP_Fortran_FOUND)
-  target_link_libraries(${exe_name} OpenMP::OpenMP_Fortran)
+  target_link_libraries(${exe_name} PUBLIC OpenMP::OpenMP_Fortran)
 endif()
+
+target_link_libraries(${exe_name} PRIVATE chgres_cube_lib)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
 
