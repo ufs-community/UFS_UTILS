@@ -47,7 +47,7 @@ endif()
 # Find packages.
 find_package(NetCDF 4.7.3 REQUIRED C Fortran)
 find_package(MPI REQUIRED C Fortran)
-find_package(ESMF 8.0.0 MODULE REQUIRED)
+find_package(ESMF 8.0.0 REQUIRED)
 
 if(OPENMP)
   find_package(OpenMP REQUIRED COMPONENTS Fortran)
