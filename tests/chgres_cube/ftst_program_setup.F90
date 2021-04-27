@@ -124,6 +124,7 @@ program ftst_program_setup
   if (trim(sfc_files_input_grid(4)) .ne. "20190706.120000.sfc_data.tile4.nc") stop 180
   if (trim(sfc_files_input_grid(5)) .ne. "20190706.120000.sfc_data.tile5.nc") stop 180
   if (trim(sfc_files_input_grid(6)) .ne. "20190706.120000.sfc_data.tile6.nc") stop 180
+  if (trim(input_type) .ne. "restart") stop 89
   if (num_tracers .ne. 7) stop 173
   if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr" .or. &
        tracers(4) .ne. "ice_wat" .or. tracers(5) .ne. "rainwat" .or. tracers(6) .ne. "snowwat" .or. &
