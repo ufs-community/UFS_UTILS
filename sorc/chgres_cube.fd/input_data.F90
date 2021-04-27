@@ -6612,17 +6612,22 @@ end subroutine quicksort
 
 subroutine check_soilt(soilt, landmask, skint)
   implicit none
-  real(esmf_kind_r8), intent(inout) ::  soilt(lsoil_input,i_input,j_input)
+  real(esmf_kind_r8), intent(inout) ::  soilt(i_input,j_input,lsoil_input)
   real(esmf_kind_r8), intent(in)    ::  skint(i_input,j_input)
   integer(esmf_kind_i4), intent(in)    ::  landmask(i_input,j_input)
   
   integer                           :: i, j, k
+
   do k=1,lsoil_input
     do j = 1, j_input
       do i = 1, i_input
-        if (landmask(i,j) == 0_esmf_kind_i4 ) soilt(i,j,k) = skint(i,j)
-        if (landmask(i,j) == 1_esmf_kind_i4 .and. soilt(i,j,k) > 350.0_esmf_kind_r8) soilt(i,j,k) = skint(i,j)
-        if (landmask(i,j) == 2_esmf_kind_i4 ) soilt(i,j,k) = icet_default
+        if (landmask(i,j) == 0_esmf_kind_i4 ) then 
+          soilt(i,j,k) = skint(i,j)
+        else if (landmask(i,j) == 1_esmf_kind_i4 .and. soilt(i,j,k) > 350.0_esmf_kind_r8) then 
+          soilt(i,j,k) = skint(i,j)
+        else if (landmask(i,j) == 2_esmf_kind_i4 ) then 
+          soilt(i,j,k) = icet_default
+        endif
       enddo
     enddo
   enddo
