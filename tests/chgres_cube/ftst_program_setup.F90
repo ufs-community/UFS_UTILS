@@ -84,6 +84,16 @@ program ftst_program_setup
   ! Reading this namelist fails for some reason.
   print*, "testing read_setup_namelist with config_fv3_tiled_warm_restart..."
   call read_setup_namelist("config_fv3_tiled_warm_restart.nml")
+  if (cycle_mon .ne. 7 .or. cycle_day .ne. 6 .or. cycle_hour .ne. 12) stop 64
+  if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 65
+  if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 66  
+  if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/C96_mosaic.nc") stop 77
+  if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/fix_sfc") stop 78
+  if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/") stop 79
+  ! if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 80
+  ! if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.nemsio") stop 81
+  ! if (trim(atm_files_input_grid(1)) .ne. 'gfs.t12z.atmf000.nemsio') stop 82
+  ! if (trim(sfc_files_input_grid(1)) .ne. 'gfs.t12z.sfcf000.nemsio') stop 83
   print*, "OK"
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_gaussian_nemsio..."
