@@ -81,7 +81,6 @@ program ftst_program_setup
   enddo
   if (my_rank .eq. 0) print*, "OK"
 
-  ! Reading this namelist fails for some reason.
   print*, "testing read_setup_namelist with config_fv3_tiled_warm_restart..."
   call read_setup_namelist("config_fv3_tiled_warm_restart.nml")
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 6 .or. cycle_hour .ne. 12) stop 64
