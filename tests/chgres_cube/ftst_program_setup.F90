@@ -94,7 +94,6 @@ program ftst_program_setup
   if (trim(mosaic_file_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C384/C384_mosaic.nc") stop 71
   if (trim(orog_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C384/") stop 72
   if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.restart") stop 73
-
   if (trim(orog_files_target_grid(1)) .ne. "C96_oro_data.tile1.nc") stop 176
   if (trim(orog_files_target_grid(2)) .ne. "C96_oro_data.tile2.nc") stop 176
   if (trim(orog_files_target_grid(3)) .ne. "C96_oro_data.tile3.nc") stop 176
