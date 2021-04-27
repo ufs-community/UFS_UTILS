@@ -87,13 +87,29 @@ program ftst_program_setup
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 6 .or. cycle_hour .ne. 12) stop 64
   if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 65
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 66  
-  if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/C96_mosaic.nc") stop 77
-  if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/fix_sfc") stop 78
-  if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/") stop 79
-  ! if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 80
-  ! if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.nemsio") stop 81
+  if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/C96_mosaic.nc") stop 67
+  if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/fix_sfc") stop 68
+  if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/") stop 69
+  if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 70
+  if (trim(mosaic_file_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C384/C384_mosaic.nc") stop 71
+  if (trim(orog_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C384/") stop 72
+  if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.restart") stop 73
   ! if (trim(atm_files_input_grid(1)) .ne. 'gfs.t12z.atmf000.nemsio') stop 82
   ! if (trim(sfc_files_input_grid(1)) .ne. 'gfs.t12z.sfcf000.nemsio') stop 83
+  if (num_tracers .ne. 7) stop 173
+  if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr" .or. &
+       tracers(4) .ne. "ice_wat" .or. tracers(5) .ne. "rainwat" .or. tracers(6) .ne. "snowwat" .or. &
+       tracers(7) .ne. "graupel") stop 174
+  if (tracers_input(1) .ne. "sphum" .or. tracers_input(2) .ne. "liq_wat" .or. &
+       tracers_input(3) .ne. "o3mr" .or. tracers_input(4) .ne. "ice_wat" .or. &
+       tracers_input(5) .ne. "rainwat" .or. tracers_input(6) .ne. "snowwat" .or. &
+       tracers_input(7) .ne. "graupel") stop 175
+
+  ! Reset the tracers array.
+  do is = 1, max_tracers
+     tracers(is) = "NULL"
+     tracers_input(is) = "NULL"
+  enddo
   print*, "OK"
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_gaussian_nemsio..."
