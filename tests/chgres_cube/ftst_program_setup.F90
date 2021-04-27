@@ -96,9 +96,35 @@ program ftst_program_setup
   if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.restart") stop 73
 
   if (trim(orog_files_target_grid(1)) .ne. "C96_oro_data.tile1.nc") stop 176
-! ,"C96_oro_data.tile2.nc","C96_oro_data.tile3.nc","C96_oro_data.tile4.nc","C96_oro_data.tile5.nc","C96_oro_data.tile6.nc"
-  ! if (trim(atm_files_input_grid(1)) .ne. 'gfs.t12z.atmf000.nemsio') stop 82
-  ! if (trim(sfc_files_input_grid(1)) .ne. 'gfs.t12z.sfcf000.nemsio') stop 83
+  if (trim(orog_files_target_grid(2)) .ne. "C96_oro_data.tile2.nc") stop 176
+  if (trim(orog_files_target_grid(3)) .ne. "C96_oro_data.tile3.nc") stop 176
+  if (trim(orog_files_target_grid(4)) .ne. "C96_oro_data.tile4.nc") stop 176
+  if (trim(orog_files_target_grid(5)) .ne. "C96_oro_data.tile5.nc") stop 176
+  if (trim(orog_files_target_grid(6)) .ne. "C96_oro_data.tile6.nc") stop 176
+  if (trim(orog_files_input_grid(1)) .ne. "C384_oro_data.tile1.nc") stop 177
+  if (trim(orog_files_input_grid(2)) .ne. "C384_oro_data.tile2.nc") stop 177
+  if (trim(orog_files_input_grid(3)) .ne. "C384_oro_data.tile3.nc") stop 177
+  if (trim(orog_files_input_grid(4)) .ne. "C384_oro_data.tile4.nc") stop 177
+  if (trim(orog_files_input_grid(5)) .ne. "C384_oro_data.tile5.nc") stop 177
+  if (trim(orog_files_input_grid(6)) .ne. "C384_oro_data.tile6.nc") stop 177
+  if (trim(atm_core_files_input_grid(1)) .ne. "20190706.120000.fv_core.res.tile1.nc") stop 178
+  if (trim(atm_core_files_input_grid(2)) .ne. "20190706.120000.fv_core.res.tile2.nc") stop 178
+  if (trim(atm_core_files_input_grid(3)) .ne. "20190706.120000.fv_core.res.tile3.nc") stop 178
+  if (trim(atm_core_files_input_grid(4)) .ne. "20190706.120000.fv_core.res.tile4.nc") stop 178
+  if (trim(atm_core_files_input_grid(5)) .ne. "20190706.120000.fv_core.res.tile5.nc") stop 178
+  if (trim(atm_core_files_input_grid(6)) .ne. "20190706.120000.fv_core.res.tile6.nc") stop 178
+  if (trim(atm_tracer_files_input_grid(1)) .ne. "20190706.120000.fv_tracer.res.tile1.nc") stop 179
+  if (trim(atm_tracer_files_input_grid(2)) .ne. "20190706.120000.fv_tracer.res.tile2.nc") stop 179
+  if (trim(atm_tracer_files_input_grid(3)) .ne. "20190706.120000.fv_tracer.res.tile3.nc") stop 179
+  if (trim(atm_tracer_files_input_grid(4)) .ne. "20190706.120000.fv_tracer.res.tile4.nc") stop 179
+  if (trim(atm_tracer_files_input_grid(5)) .ne. "20190706.120000.fv_tracer.res.tile5.nc") stop 179
+  if (trim(atm_tracer_files_input_grid(6)) .ne. "20190706.120000.fv_tracer.res.tile6.nc") stop 179
+  if (trim(sfc_files_input_grid(1)) .ne. "20190706.120000.sfc_data.tile1.nc") stop 180
+  if (trim(sfc_files_input_grid(2)) .ne. "20190706.120000.sfc_data.tile2.nc") stop 180
+  if (trim(sfc_files_input_grid(3)) .ne. "20190706.120000.sfc_data.tile3.nc") stop 180
+  if (trim(sfc_files_input_grid(4)) .ne. "20190706.120000.sfc_data.tile4.nc") stop 180
+  if (trim(sfc_files_input_grid(5)) .ne. "20190706.120000.sfc_data.tile5.nc") stop 180
+  if (trim(sfc_files_input_grid(6)) .ne. "20190706.120000.sfc_data.tile6.nc") stop 180
   if (num_tracers .ne. 7) stop 173
   if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr" .or. &
        tracers(4) .ne. "ice_wat" .or. tracers(5) .ne. "rainwat" .or. tracers(6) .ne. "snowwat" .or. &
