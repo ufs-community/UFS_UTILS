@@ -48,6 +48,8 @@
 
  private
 
+ public :: check_soilt
+
 ! Fields associated with the atmospheric model.
 
  type(esmf_field), public              :: dzdt_input_grid       !< vert velocity
