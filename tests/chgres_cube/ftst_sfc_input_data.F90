@@ -34,16 +34,15 @@
 
 !--------------------------------------------------------
 ! These variables are used to test all three functions of
-! the check_soilt routine (i.e., replace water point soil 
+! the check_soilt routine (i.e., replace water point 
 ! temperature and excessive land point soil temperature 
 ! with skin temperature and store a default ice column
-! temperature in the soil temperature array since this
-! array isn't available in grib2 files)
+! temperature in the soil temperature array at sea ice
+! points since this array isn't available in grib2 files)
 !--------------------------------------------------------
 
-! Definition of the mask. The '1' indicates an isolated
-! island or lake depending on the field type and '2' 
-! indicates sea ice.
+! Definition of the mask. The '0' indicates open water, '1' 
+! any land point, and '2' sea ice.
 
  mask = reshape((/0, 1, 0,  0, 0, 1, 0, 0, 2/),(/3,3/))
 

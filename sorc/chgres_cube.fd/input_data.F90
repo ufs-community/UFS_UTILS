@@ -6603,7 +6603,14 @@ recursive subroutine quicksort(a, first, last)
   if (j+1 < last)  call quicksort(a, j+1, last)
 end subroutine quicksort
 
-!> Check for and replace erroneous values in soil temperature.
+!> Check for and replace certain values in soil temperature.
+!> At open water points (landmask=0) use skin temperature as
+!> a filler value. At land points (landmask=1) with excessive
+!> soil temperature, replace soil temperature with skin temperature. 
+!> In GEFSv12.0 data there are some erroneous missing values at
+!> land points which this corrects. At sea ice points (landmask=2),
+!> store a default ice column temperature because grib2 files do not 
+!> have ice column temperature which FV3 expects at these points.
 !!
 !! @param soilt    [inout] 3-dimensional soil temperature arrray
 !! @param landmask [in]    landmask of the input grid
