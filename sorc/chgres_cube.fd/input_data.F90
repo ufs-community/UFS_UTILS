@@ -71,7 +71,7 @@
  integer, public                 :: veg_type_landice_input = 15 !< NOAH land ice option
                                                                 !< defined at this veg type.
                                                                 !< Default is igbp.
- integer, parameter              :: icet_default = 265.0    !< Default value of soil and skin
+ integer, parameter              :: ICET_DEFAULT = 265.0    !< Default value of soil and skin
                                                             !< temperature (K) over ice.
  type(esmf_field), public        :: canopy_mc_input_grid    !< canopy moist content
  type(esmf_field), public        :: f10m_input_grid         !< log((z0+10)*1/z0)
@@ -6633,7 +6633,7 @@ subroutine check_soilt(soilt, landmask, skint)
         else if (landmask(i,j) == 1_esmf_kind_i4 .and. soilt(i,j,k) > 350.0_esmf_kind_r8) then 
           soilt(i,j,k) = skint(i,j)
         else if (landmask(i,j) == 2_esmf_kind_i4 ) then 
-          soilt(i,j,k) = icet_default
+          soilt(i,j,k) = ICET_DEFAULT
         endif
       enddo
     enddo
