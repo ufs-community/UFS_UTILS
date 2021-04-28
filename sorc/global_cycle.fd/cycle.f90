@@ -1802,7 +1802,7 @@ subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
     endif
  enddo
 
- print *,'wrong rjday',rjday
+ print *,'FATAL ERROR in get_tim_wei, wrong rjday',rjday
  call abort
  10     continue
 

@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run grid generation regression tests on WCOSS-Dell.
+# Run grid generation consistency tests on WCOSS-Dell.
 #
 # Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
 # as appropriate. 
@@ -26,15 +26,16 @@ module list
 
 set -x
 
-QUEUE="debug"
-PROJECT_CODE="GFS-DEV"
-export WORK_DIR=/gpfs/dell1/stmp/$LOGNAME/reg_tests.grid
+QUEUE="${QUEUE:-debug}"
+PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
+export WORK_DIR="${WORK_DIR:-/gpfs/dell1/stmp/$LOGNAME}"
+export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 export home_dir=$PWD/../..
 export APRUN=time
@@ -71,8 +72,15 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J esg.regional -W 0:1
         -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/esg.regional.sh"
 
 #-----------------------------------------------------------------------------
+# Regional GSL gravity wave drag.
+#-----------------------------------------------------------------------------
+
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J reg.gsl.gwd -W 0:08 -x -n 24 -w 'ended(esg.regional)' \
+        -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/regional.gsl.gwd.sh"
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "affinity[core(1)]" -R "rusage[mem=100]" -W 0:01 \
-     -w 'ended(esg.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+     -w 'ended(reg.gsl.gwd)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"

@@ -4,6 +4,6 @@
 # Ed Hartnett 2/11/21
 
 # Add the test subdirecotries.
-add_subdirectory(chres_cube)
+add_subdirectory(chgres_cube)
 add_subdirectory(fre-nctools)
 

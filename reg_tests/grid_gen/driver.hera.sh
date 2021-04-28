@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run grid generation regression tests on Hera.
+# Run grid generation consistency tests on Hera.
 #
 # Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
@@ -30,15 +30,16 @@ module list
 
 set -x
 
-export WORK_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_tests.grid
-QUEUE="batch"
-PROJECT_CODE="fv3-cpu"
+export WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
+QUEUE="${QUEUE:-batch}"
+PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 export home_dir=$PWD/../..
 export APRUN=time
@@ -76,11 +77,18 @@ TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./esg.regional.sh)
 
 #-----------------------------------------------------------------------------
+# Regional GSL gravity wave drag test.
+#-----------------------------------------------------------------------------
+
+TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./regional.gsl.gwd.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST3 << EOF
+       --open-mode=append -q $QUEUE -d afterok:$TEST4 << EOF
 #!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF

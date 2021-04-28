@@ -1,7 +1,10 @@
 # This is the cmake build file for the tests directory of the
 # UFS_UTILS project.
 #
-# George Gayno, Lin Gan, Ed Hartnett
+# George Gayno, Lin Gan, Ed Hartnett, Larissa Reames
+
+# Include cmake to allow parallel I/O tests.
+include (LibMPI)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
@@ -25,51 +28,41 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/config_spectral_sigio.nml ${CMAKE_CURRENT_BINARY_DIR}/config_spectral_sigio.nml)
 
-add_executable(ftst_utils "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.F90" ftst_utils.F90)
+add_executable(ftst_utils ftst_utils.F90)
 add_test(NAME ftst_utils COMMAND ftst_utils)
-target_link_libraries(
-  ftst_utils
-  nemsio::nemsio
-  sfcio::sfcio
-  sigio::sigio
-  bacio::bacio_4
-  sp::sp_d
-  w3nco::w3nco_d
-  esmf
-  wgrib2::wgrib2_lib
-  wgrib2::wgrib2_api
-  MPI::MPI_Fortran
-  MPI::MPI_CXX
-  NetCDF::NetCDF_Fortran)
+target_link_libraries(ftst_utils
+  chgres_cube_lib)
+
+add_executable(ftst_program_setup ftst_program_setup.F90)
+target_link_libraries(ftst_program_setup
+  chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(ftst_program_setup
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_program_setup
+  NUMPROCS 4
+  TIMEOUT 60)
+
+add_executable(ftst_search_util ftst_search_util.F90)
+target_link_libraries(ftst_search_util chgres_cube_lib)
+
 if(OpenMP_Fortran_FOUND)
-  target_link_libraries(ftst_utils OpenMP::OpenMP_Fortran)
+  target_link_libraries(ftst_search_util OpenMP::OpenMP_Fortran)
 endif()
 
-add_executable(ftst_program_setup "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/input_data.F90"
-  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/model_grid.F90"
-  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/program_setup.F90"
-  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/grib2_util.F90"
-  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/search_util.F90"
-  "${CMAKE_SOURCE_DIR}/sorc/chgres_cube.fd/utils.F90"
-  ftst_program_setup.F90)
-add_test(NAME ftst_program_setup COMMAND ftst_program_setup)
-target_link_libraries(
-  ftst_program_setup
-  nemsio::nemsio
-  sfcio::sfcio
-  sigio::sigio
-  bacio::bacio_4
-  sp::sp_d
-  w3nco::w3nco_d
-  esmf
-  MPI::MPI_CXX
-  wgrib2::wgrib2_lib
-  wgrib2::wgrib2_api
-  MPI::MPI_Fortran
-  NetCDF::NetCDF_Fortran)
-if(OpenMP_Fortran_FOUND)
-  target_link_libraries(ftst_program_setup OpenMP::OpenMP_Fortran)
-endif()
+# Cause test to be run with MPI. The search routine was
+# written to work on a single task. So set NUMPROCS to 1.
+add_mpi_test(ftst_search_util
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_search_util
+  NUMPROCS 1
+  TIMEOUT 60)
 
+add_executable(ftst_sfc_input_data ftst_sfc_input_data.F90)
+target_link_libraries(ftst_sfc_input_data
+  chgres_cube_lib)
 
-
+# Cause test to be run with MPI.
+add_mpi_test(ftst_sfc_input_data
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_sfc_input_data
+  NUMPROCS 4
+  TIMEOUT 60)
