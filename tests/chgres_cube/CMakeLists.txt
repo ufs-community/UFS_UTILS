@@ -1,7 +1,7 @@
 # This is the cmake build file for the tests directory of the
 # UFS_UTILS project.
 #
-# George Gayno, Lin Gan, Ed Hartnett
+# George Gayno, Lin Gan, Ed Hartnett, Larissa Reames
 
 # Include cmake to allow parallel I/O tests.
 include (LibMPI)
@@ -57,4 +57,14 @@ endif()
 add_mpi_test(ftst_search_util
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_search_util
   NUMPROCS 1
+  TIMEOUT 60)
+
+add_executable(ftst_sfc_input_data ftst_sfc_input_data.F90)
+target_link_libraries(ftst_sfc_input_data
+  chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(ftst_sfc_input_data
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_sfc_input_data
+  NUMPROCS 4
   TIMEOUT 60)
