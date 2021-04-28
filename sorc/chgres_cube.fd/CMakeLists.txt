@@ -24,6 +24,11 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8 -fconvert=big-endian")
 endif()
 
+# Turn on this argument mismatch flag for gfortran10.
+if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10)
+   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
+endif()
+
 set(exe_name chgres_cube)
 
 add_library(chgres_cube_lib STATIC ${lib_src})
