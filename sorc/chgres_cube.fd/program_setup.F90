@@ -467,6 +467,13 @@ end subroutine get_var_cond
 !! characteristics to the physical properties of soils</a>. Water
 !! Resour. Res.,20, 682–690.
 !!
+!! The parameters in this subroutine were copied from
+!! https://github.com/HelinWei-NOAA/ccpp-physics/blob/master/physics/set_soilveg.f
+!! values need to be kept in sync with set_soilveg.f.
+!!
+!! For more information about these parameters see
+!! https://github.com/HelinWei-NOAA/ccpp-physics/blob/master/physics/sflx.f.
+!!
 !! @param [in] localpet  ESMF local persistent execution thread
 !! @author George Gayno NCEP/EMC
  subroutine calc_soil_params_driver(localpet)
@@ -502,6 +509,7 @@ end subroutine get_var_cond
  real, allocatable         :: satpsi(:)
  real, allocatable         :: satdw(:)
 
+! using stasgo table
  data bb_statsgo /4.05, 4.26, 4.74, 5.33, 5.33, 5.25, &
             6.77, 8.72, 8.17, 10.73, 10.39, 11.55, &
             5.25, -9.99, 4.05, 4.26/
