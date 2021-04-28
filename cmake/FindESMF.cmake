@@ -107,7 +107,7 @@ if (ESMF_FOUND)
     string(STRIP "${ESMF_F90ESMFLINKRPATHS} ${ESMF_F90ESMFLINKPATHS} ${ESMF_F90LINKPATHS} ${ESMF_F90LINKLIBS} ${ESMF_F90LINKOPTS}" ESMF_INTERFACE_LINK_LIBRARIES)
   endif()
 
-  message(STATUS "Found ESMF library: ${esmf_lib} (found version \"${ESMF_VERSION}\")")
+  message(STATUS "Found ESMF library: ${esmf_lib}")
   if(ESMF_BETA_RELEASE)
     message(STATUS "Detected ESMF Beta snapshot ${ESMF_BETA_SNAPSHOT}")
   endif()
