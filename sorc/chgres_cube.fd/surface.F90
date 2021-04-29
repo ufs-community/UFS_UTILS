@@ -137,6 +137,10 @@
                                        !< gravity
  real, parameter, private           :: hlice       = 3.335E5
                                        !< latent heat of fusion
+                                       
+ type fieldptr
+  type(esmf_field), pointer :: f
+ end type fieldptr
 
  public :: surface_driver
 
@@ -389,6 +393,7 @@
  integer                            :: i, j, ij, rc, tile
  integer                            :: clb_target(2), cub_target(2)
  integer                            :: isrctermprocessing
+ integer                            :: num_fields
  integer(esmf_kind_i4), pointer     :: unmapped_ptr(:)
  integer(esmf_kind_i4), pointer     :: mask_input_ptr(:,:)
  integer(esmf_kind_i4), pointer     :: mask_target_ptr(:,:)
@@ -450,6 +455,8 @@
  type(esmf_routehandle)             :: regrid_nonland
  type(esmf_routehandle)             :: regrid_seaice
  type(esmf_routehandle)             :: regrid_water
+ 
+ type(fieldptr), allocatable        :: fields_to_regrid, target_fields
 
 !-----------------------------------------------------------------------
 ! Interpolate fieids that do not require 'masked' interpolation.
@@ -919,69 +926,80 @@
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
-  
- print*,"- CALL FieldGet FOR TARGET grid soil temperature over seaice."
- call ESMF_FieldGet(soil_temp_target_grid, &
-                    farrayPtr=soil_temp_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
+ 
+!!!! Commenting out and replacing with a regrid_many subroutine 
+! print*,"- CALL FieldGet FOR TARGET grid soil temperature over seaice."
+! call ESMF_FieldGet(soil_temp_target_grid, &
+!                    farrayPtr=soil_temp_target_ptr, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldGet", rc)!
+!
+! print*,"- CALL Field_Regrid for sea ice depth."
+! call ESMF_FieldRegrid(seaice_depth_input_grid, &
+!                       seaice_depth_target_grid, &
+!                       routehandle=regrid_seaice, &
+!                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldRegrid", rc)
+!
+! print*,"- CALL FieldGet FOR TARGET grid sea ice depth."
+! call ESMF_FieldGet(seaice_depth_target_grid, &
+!                    farrayPtr=seaice_depth_target_ptr, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldGet", rc)
+!
+! print*,"- CALL Field_Regrid for snow depth."
+! call ESMF_FieldRegrid(snow_depth_input_grid, &
+!                       snow_depth_target_grid, &
+!                       routehandle=regrid_seaice, &
+!                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldRegrid", rc)
+!
+! print*,"- CALL FieldGet FOR TARGET grid snow depth."
+! call ESMF_FieldGet(snow_depth_target_grid, &
+!                    farrayPtr=snow_depth_target_ptr, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldGet", rc)
+!
+! print*,"- CALL Field_Regrid for snow liq equiv."
+! call ESMF_FieldRegrid(snow_liq_equiv_input_grid, &
+!                       snow_liq_equiv_target_grid, &
+!                       routehandle=regrid_seaice, &
+!                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldRegrid", rc)
+!
+! print*,"- CALL FieldGet FOR TARGET grid snow liq equiv."
+! call ESMF_FieldGet(snow_liq_equiv_target_grid, &
+!                    farrayPtr=snow_liq_equiv_target_ptr, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldGet", rc)
+!
+! print*,"- CALL Field_Regrid for sea ice skin temp."
+! call ESMF_FieldRegrid(seaice_skin_temp_input_grid, &
+!                       seaice_skin_temp_target_grid, &
+!                       routehandle=regrid_seaice, &
+!                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldRegrid", rc)
+!
+! print*,"- CALL FieldGet FOR TARGET grid sea ice skin temp."
+! call ESMF_FieldGet(seaice_skin_temp_target_grid, &
+!                    farrayPtr=seaice_skin_temp_target_ptr, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldGet", rc)
 
- print*,"- CALL Field_Regrid for sea ice depth."
- call ESMF_FieldRegrid(seaice_depth_input_grid, &
-                       seaice_depth_target_grid, &
-                       routehandle=regrid_seaice, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL FieldGet FOR TARGET grid sea ice depth."
- call ESMF_FieldGet(seaice_depth_target_grid, &
-                    farrayPtr=seaice_depth_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- print*,"- CALL Field_Regrid for snow depth."
- call ESMF_FieldRegrid(snow_depth_input_grid, &
-                       snow_depth_target_grid, &
-                       routehandle=regrid_seaice, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL FieldGet FOR TARGET grid snow depth."
- call ESMF_FieldGet(snow_depth_target_grid, &
-                    farrayPtr=snow_depth_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- print*,"- CALL Field_Regrid for snow liq equiv."
- call ESMF_FieldRegrid(snow_liq_equiv_input_grid, &
-                       snow_liq_equiv_target_grid, &
-                       routehandle=regrid_seaice, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL FieldGet FOR TARGET grid snow liq equiv."
- call ESMF_FieldGet(snow_liq_equiv_target_grid, &
-                    farrayPtr=snow_liq_equiv_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- print*,"- CALL Field_Regrid for sea ice skin temp."
- call ESMF_FieldRegrid(seaice_skin_temp_input_grid, &
-                       seaice_skin_temp_target_grid, &
-                       routehandle=regrid_seaice, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL FieldGet FOR TARGET grid sea ice skin temp."
- call ESMF_FieldGet(seaice_skin_temp_target_grid, &
-                    farrayPtr=seaice_skin_temp_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
+ num_fields_regrid = 4
+ allocate(fields_to_regrid(4))
+ allocate(target_fields(4))
+ fields_to_regrid(:)%p => (/seaice_depth_input_grid,snow_depth_input_grid, &
+                      snow_liq_equiv_input_grid,skin_temp_input_grid/)
+ target_fields(:)%p => (/seaice_depth_target_grid,snow_depth_target_grid, &
+                snow_liq_equiv_target_grid,skin_temp_target_grid/)
+ call regrid_many(fields_to_regrid,target_fields,num_fields_regrid,regrd_seaice)
+ deallocate(fields_to_regrid,target_fields)
+ 
  l = lbound(unmapped_ptr)
  u = ubound(unmapped_ptr)
 
@@ -4779,6 +4797,36 @@ end subroutine replace_land_sfcparams
  return
 
  end subroutine ij_to_i_j
+ 
+ subroutine regrid_many(fields_pre,fields_post,post_ptrs, num_field,route)
+ 
+ implicit none
+ 
+ use esmf
+ 
+ integer, intent(in)                        :: num_field
+ type(esmf_routehandle), intent(in)         :: route
+ type(field_ptr), intent(in)                :: fields_pre(num_field), fields_post(num_field)
+ real(esmf_kind_r8), pointer, intent(inout) :: post_ptrs(num_field)
+ 
+ integer :: i, rc
+ 
+ do i = 1, num_field
+
+   call ESMF_FieldRegrid(fields_pre(i), &
+               fields_post(i)%f, &
+               routehandle=route, &
+               termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
+    
+   call ESMF_FieldGet(fields_post(i)%f, &
+            farrayPtr=post_ptrs(i), rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)!
+ end do
+ 
+ end subroutine regrid_many
 
 !> Free up memory once the target grid surface fields are
 !! no longer needed.
