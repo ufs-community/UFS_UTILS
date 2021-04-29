@@ -54,13 +54,13 @@ if(OPENMP)
 endif()
 
 find_package(sfcio 1.4.0 REQUIRED)
-find_package(w3nco 2.3.0 REQUIRED)
+find_package(w3nco 2.4.0 REQUIRED)
 find_package(bacio 2.4.0 REQUIRED)
-find_package(nemsio 2.4.0 REQUIRED)
-find_package(sigio 2.2.0 REQUIRED)
+find_package(nemsio 2.5.0 REQUIRED)
+find_package(sigio 2.3.0 REQUIRED)
 find_package(sp 2.3.3 REQUIRED)
-find_package(ip 3.2.0 REQUIRED)
-find_package(g2 3.3.0 REQUIRED)
+find_package(ip 3.3.3 REQUIRED)
+find_package(g2 3.4.0 REQUIRED)
 find_package(wgrib2 2.0.8 REQUIRED)
 
 # EMC requires executables in ./exec
