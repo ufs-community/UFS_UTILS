@@ -72,6 +72,19 @@ if (ESMF_FOUND)
     endif()
   endforeach()
 
+  # Construct ESMF_VERSION from ESMF_VERSION_STRING_GIT
+  if(ESMF_FOUND)
+    # ESMF_VERSION_MAJOR and ESMF_VERSION_MINOR are defined in ESMFMKFILE
+    set(ESMF_VERSION 0)
+    set(ESMF_VERSION_PATCH ${ESMF_VERSION_REVISION})
+    set(ESMF_BETA_RELEASE FALSE)
+    if(ESMF_VERSION_BETASNAPSHOT MATCHES "^('T')$")
+      set(ESMF_BETA_RELEASE TRUE)
+      string(REGEX REPLACE ".*beta_snapshot_*\([0-9]*\).*" "\\1" ESMF_BETA_SNAPSHOT "${ESMF_VERSION_STRING_GIT}")
+    endif()
+    set(ESMF_VERSION "${ESMF_VERSION_MAJOR}.${ESMF_VERSION_MINOR}.${ESMF_VERSION_PATCH}")
+  endif()
+
   separate_arguments(ESMF_F90COMPILEPATHS NATIVE_COMMAND ${ESMF_F90COMPILEPATHS})
   foreach (ITEM ${ESMF_F90COMPILEPATHS})
      string(REGEX REPLACE "^-I" "" ITEM "${ITEM}")
@@ -87,14 +100,16 @@ if (ESMF_FOUND)
     find_library(esmf_lib NAMES esmf_fullylinked PATHS ${ESMF_LIBSDIR})
     if(esmf_lib MATCHES "esmf_lib-NOTFOUND")
       message(FATAL_ERROR "Neither the dynamic nor the static ESMF library was found")
-    else()
-      message(STATUS "Found ESMF library: ${esmf_lib}")
     endif()
     set(ESMF_INTERFACE_LINK_LIBRARIES "")
   else()
     # When linking the static library, also need the ESMF linker flags; strip any leading/trailing whitespaces
     string(STRIP "${ESMF_F90ESMFLINKRPATHS} ${ESMF_F90ESMFLINKPATHS} ${ESMF_F90LINKPATHS} ${ESMF_F90LINKLIBS} ${ESMF_F90LINKOPTS}" ESMF_INTERFACE_LINK_LIBRARIES)
-    message(STATUS "Found ESMF library: ${esmf_lib}")
+  endif()
+
+  message(STATUS "Found ESMF library: ${esmf_lib}")
+  if(ESMF_BETA_RELEASE)
+    message(STATUS "Detected ESMF Beta snapshot ${ESMF_BETA_SNAPSHOT}")
   endif()
 
   set_target_properties(esmf PROPERTIES
@@ -103,3 +118,13 @@ if (ESMF_FOUND)
     INTERFACE_LINK_LIBRARIES "${ESMF_INTERFACE_LINK_LIBRARIES}")
 
 endif()
+
+## Finalize find_package
+include(FindPackageHandleStandardArgs)
+
+find_package_handle_standard_args( ${CMAKE_FIND_PACKAGE_NAME}
+    REQUIRED_VARS ESMF_LIBSDIR
+                  ESMF_INTERFACE_LINK_LIBRARIES
+                  ESMF_F90COMPILEPATHS
+    VERSION_VAR ESMF_VERSION
+    HANDLE_COMPONENTS )
