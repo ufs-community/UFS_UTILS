@@ -68,3 +68,9 @@ add_mpi_test(ftst_sfc_input_data
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_sfc_input_data
   NUMPROCS 4
   TIMEOUT 60)
+
+add_executable(ftst_sort ftst_sort.F90)
+target_link_libraries(ftst_sort
+  chgres_cube_lib)
+
+add_test(NAME ftst_sort COMMAND ftst_sort)
