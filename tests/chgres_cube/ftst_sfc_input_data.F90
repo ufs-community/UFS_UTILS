@@ -1,7 +1,10 @@
  program test_sfc_input_data
 
-! Test sfc_input_data. For now only one test is performed
-! on the subroutine soilt_check using a sample 3x3 matrix.
+! Test sfc_input_data. Tests include:
+!
+! subroutine soilt_check using a sample 3x3 matrix
+!
+! subroutine cnwat_check using a sample 3x3 matrix
 !
 ! author: Larissa Reames (larissa.reames@noaa.gov)
 
@@ -19,8 +22,15 @@
                                        soilt_updated(:,:,:), &
                                        soilt_correct(:,:,:)
  real(esmf_kind_r8), allocatable    :: skint(:,:)
+ real(esmf_kind_r4), allocatable    :: cnwat_bad(:,:), &
+                                       cnwat_updated(:,:), &
+                                       cnwat_correct(:,:)
 
  call mpi_init(ierr)
+
+!--------------------------------------------------------!
+!------------------- CHECK_SOILT TEST -------------------!
+!--------------------------------------------------------!
 
  lsoil_input = 2
  i_input = 3
@@ -80,14 +90,54 @@
  call check_soilt(soilt_updated,mask,skint)
 
  if (any(soilt_updated /= soilt_correct)) then
-   print*,'TEST FAILED '
-   print*,'ARRAY SHOULD BE:', soilt_correct
-   print*,'ARRAY FROM TEST:', soilt_updated
+   print*,'SOILT TEST FAILED '
+   print*,'SOILT ARRAY SHOULD BE:', soilt_correct
+   print*,'SOILT ARRAY FROM TEST:', soilt_updated
    stop 2
+ else
+   print*, 'SOILT TEST SUCCEEDED. CONTINUING'
  endif
+ deallocate(mask,skint,soilt_bad,soilt_updated,soilt_correct)
+
+!--------------------------------------------------------!
+!------------------- CHECK_CNWAT TEST -------------------!
+!--------------------------------------------------------!
+
+ i_input = 3
+ j_input = 3
+
+ allocate(cnwat_bad(i_input,j_input))
+ allocate(cnwat_updated(i_input,j_input))
+ allocate(cnwat_correct(i_input,j_input))
+
+! Canopy water content array with some values that are too high. 
+! This will be the input array for check_cnwat
+ cnwat_bad = reshape((/999.0, 0.3, 0.4, 0.1, 0.3, 999.0, 999.0, 0.3, 0.15/), &
+                 (/3,3/))
+
+! Corrected canopy water content array that should be passed
+! back from check_cnwat.
+ cnwat_correct = reshape((/0.0, 0.3, 0.4, 0.1, 0.3, 0.0, 0.0, 0.3, 0.15/), &
+                 (/3,3/))
+
+ print*,"Starting test of check_cnwat subroutine."
+
+ cnwat_updated = cnwat_bad
+ call check_cnwat(cnwat_updated)
+
+ if (any(cnwat_updated /= cnwat_correct)) then
+   print*,'CNWAT TEST FAILED '
+   print*,'CNWAT ARRAY SHOULD BE:', cnwat_correct
+   print*,'CNWAT ARRAY FROM TEST:', cnwat_updated
+   stop 2
+ else
+   print*, 'CNWAT TEST SUCCEEDED.'
+ endif
+ deallocate(cnwat_bad,cnwat_updated,cnwat_correct)
 
  call mpi_finalize(ierr)
 
  print*,"SUCCESS!"
+
 
  end program test_sfc_input_data
