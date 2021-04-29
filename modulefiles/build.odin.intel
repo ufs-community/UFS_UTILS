@@ -18,14 +18,12 @@ setenv NETCDF /opt/cray/pe/netcdf-hdf5parallel/4.6.3.2/INTEL/19.0
 #module use /oldscratch/ywang/external/NCEPLIBS_SRW/modules
 module use /oldscratch/ywang/external/NCEPLIBS_SRWv2.0/modules
 module load w3nco
-module load w3emc
 module load sp
 module load ip
 module load bacio
 module load sigio
 module load sfcio
 module load nemsio
-module load gfsio
 module load g2
 module load wgrib2
 
