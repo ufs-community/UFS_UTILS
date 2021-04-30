@@ -1,4 +1,4 @@
-.TH "pmat4::cross_product" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::cross_product" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,15 +12,15 @@ pmat4::cross_product
 .ti -1c
 .RI "real(dp) function, dimension(3) \fBcross_product_d\fP (a, b)"
 .br
-.RI "Doing calculation for cross_product_d function\&. "
+.RI "Return the cross product of two double precision real 3-vectors\&. "
 .ti -1c
 .RI "real(sp) function, dimension(3) \fBcross_product_s\fP (a, b)"
 .br
-.RI "Doing calculation for cross_product_s function\&. "
+.RI "Return the cross product of two single precision real 3-vectors\&. "
 .ti -1c
 .RI "real(dp) function, dimension(4) \fBtriple_cross_product_d\fP (u, v, w)"
 .br
-.RI "Doing calculation for triple_cross_product_d function\&. "
+.RI "Return the triple_cross_product for 4-vectors\&. "
 .ti -1c
 .RI "real(sp) function, dimension(4) \fBtriple_cross_product_s\fP (u, v, w)"
 .br
@@ -28,24 +28,24 @@ pmat4::cross_product
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 65 of file pmat4\&.f90\&.
+Definition at line 64 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "real(dp) function, dimension(3) pmat4::cross_product::cross_product_d (real(dp), dimension(3), intent(in) a, real(dp), dimension(3), intent(in) b)\fC [private]\fP"
 
 .PP
-Doing calculation for cross_product_d function\&. 
+Return the cross product of two double precision real 3-vectors\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP real type input value 
+\fIa\fP real type input 3-vector 
 .br
-\fIb\fP real type input value 
+\fIb\fP real type input 3-vector 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-c result 
+c result, double precision real 3-vector 
 .RE
 .PP
 \fBAuthor\fP
@@ -59,18 +59,18 @@ Definition at line 215 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(3) pmat4::cross_product::cross_product_s (real(sp), dimension(3), intent(in) a, real(sp), dimension(3), intent(in) b)\fC [private]\fP"
 
 .PP
-Doing calculation for cross_product_s function\&. 
+Return the cross product of two single precision real 3-vectors\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP real type input value 
+\fIa\fP real type input 3-vector 
 .br
-\fIb\fP real type input value 
+\fIb\fP real type input 3-vector 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-c result 
+c result, single precision real 3-vector 
 .RE
 .PP
 \fBAuthor\fP
@@ -84,20 +84,20 @@ Definition at line 202 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(4) pmat4::cross_product::triple_cross_product_d (real(dp), dimension(4), intent(in) u, real(dp), dimension(4), intent(in) v, real(dp), dimension(4), intent(in) w)\fC [private]\fP"
 
 .PP
-Doing calculation for triple_cross_product_d function\&. 
+Return the triple_cross_product for 4-vectors\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIu\fP vector 
+\fIu\fP real type input 4-vector 
 .br
-\fIv\fP vector 
+\fIv\fP real type input 4-vector 
 .br
-\fIw\fP vector 
+\fIw\fP real type input 4-vector 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-x result 
+x result, triple-cross-product 4-vector 
 .RE
 .PP
 \fBAuthor\fP
@@ -115,16 +115,16 @@ Deliver the triple-cross-product, x, of the three 4-vectors, u, v, w, with the s
 .PP
 \fBParameters\fP
 .RS 4
-\fIu\fP vector 
+\fIu\fP real type input 4-vector 
 .br
-\fIv\fP vector 
+\fIv\fP real type input 4-vector 
 .br
-\fIw\fP vector 
+\fIw\fP real type input 4-vector 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-x triple-cross-product vector 
+x result, triple-cross-product 4-vector 
 .RE
 .PP
 \fBAuthor\fP

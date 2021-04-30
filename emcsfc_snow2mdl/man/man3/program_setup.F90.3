@@ -1,8 +1,8 @@
-.TH "/home/ed/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/program_setup.F90" 3 "Fri Mar 26 2021" "Version 1.0.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/program_setup.F90" 3 "Fri Apr 30 2021" "Version 1.3.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/program_setup.F90 \- This module reads in data from the program's configuration\&.  
+/home/ed/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/program_setup.F90 \- This module reads in data from the program's configuration\&. namelist\&.  
 
 .SH SYNOPSIS
 .br
@@ -27,11 +27,11 @@
 
 .in +1c
 .ti -1c
-.RI "character *150, public \fBprogram_setup::afwa_lsmask_nh_file\fP"
+.RI "character *200, public \fBprogram_setup::afwa_lsmask_nh_file\fP"
 .br
 .RI "path/name afwa n hemis land/sea mask "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::afwa_lsmask_sh_file\fP"
+.RI "character *200, public \fBprogram_setup::afwa_lsmask_sh_file\fP"
 .br
 .RI "path/name afwa s hemis land/sea mask "
 .ti -1c
@@ -39,23 +39,23 @@
 .br
 .RI "global afwa snow file\&. "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::afwa_snow_nh_file\fP"
+.RI "character *200, public \fBprogram_setup::afwa_snow_nh_file\fP"
 .br
 .RI "path/name afwa n hemis snow depth "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::afwa_snow_sh_file\fP"
+.RI "character *200, public \fBprogram_setup::afwa_snow_sh_file\fP"
 .br
 .RI "path/name afwa s hemis snow depth "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::autosnow_file\fP"
+.RI "character *200, public \fBprogram_setup::autosnow_file\fP"
 .br
 .RI "path/name s hemis autosnow file "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::climo_qc_file\fP"
+.RI "character *200, public \fBprogram_setup::climo_qc_file\fP"
 .br
 .RI "Climatological snow cover file\&. "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::gfs_lpl_file\fP"
+.RI "character *200, public \fBprogram_setup::gfs_lpl_file\fP"
 .br
 .RI "GFS gaussian thinned (reduced) grid definition file\&. "
 .ti -1c
@@ -87,27 +87,27 @@
 .br
 .RI "minimum snow depth in meters at model points with coverage exceeding threshold\&. "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::model_lat_file\fP"
+.RI "character *200, public \fBprogram_setup::model_lat_file\fP"
 .br
 .RI "path/name lats on the model grid "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::model_lon_file\fP"
+.RI "character *200, public \fBprogram_setup::model_lon_file\fP"
 .br
 .RI "path/name lons on the model grid "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::model_lsmask_file\fP"
+.RI "character *200, public \fBprogram_setup::model_lsmask_file\fP"
 .br
 .RI "path/name nesdis/ims land mask "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::model_snow_file\fP"
+.RI "character *200, public \fBprogram_setup::model_snow_file\fP"
 .br
 .RI "path/name nesdis/ims snow cover "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::nesdis_lsmask_file\fP"
+.RI "character *200, public \fBprogram_setup::nesdis_lsmask_file\fP"
 .br
 .RI "nesdis/ims land mask file "
 .ti -1c
-.RI "character *150, public \fBprogram_setup::nesdis_snow_file\fP"
+.RI "character *200, public \fBprogram_setup::nesdis_snow_file\fP"
 .br
 .RI "nesdis/ims snow file "
 .ti -1c
@@ -121,9 +121,9 @@
 .in -1c
 .SH "Detailed Description"
 .PP 
-This module reads in data from the program's configuration\&. 
+This module reads in data from the program's configuration\&. namelist\&. 
 
-namelist\&. 
+
 .PP
 \fBAuthor\fP
 .RS 4

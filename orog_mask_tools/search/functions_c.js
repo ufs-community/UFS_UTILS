@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['tersub_142',['tersub',['../mtnlm7__oclsm_8f.html#abadd243394b9ea0a607cf77d4f3a5254',1,'mtnlm7_oclsm.f']]],
-  ['timef_143',['timef',['../mtnlm7__oclsm_8f.html#a6e5afa4168cab2cdedef3c01e086494f',1,'mtnlm7_oclsm.f']]]
+  ['spfft1_175',['spfft1',['../mtnlm7__oclsm_8f.html#ac63643472eda83948c0b249b611346d6',1,'mtnlm7_oclsm.f']]],
+  ['spherical_5fangle_176',['spherical_angle',['../mtnlm7__oclsm_8f.html#a09845caa8530e4792b7d7dbeac0609b7',1,'mtnlm7_oclsm.f']]],
+  ['spherical_5fdistance_177',['spherical_distance',['../mtnlm7__oclsm_8f.html#af72c017d12f741c8cecd92603d4dfa0c',1,'mtnlm7_oclsm.f']]]
 ];

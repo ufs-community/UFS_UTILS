@@ -1,4 +1,4 @@
-.TH "pmat5::plctoc" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::plctoc" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,7 +12,7 @@ pmat5::plctoc
 .ti -1c
 .RI "subroutine \fBplctoc\fP (s, n, x, y, z)"
 .br
-.RI "Perform schmidt transformation with scaling parameter s to a polyline\&. "
+.RI "Perform Schmidt transformation with scaling parameter s to a polyline\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -22,19 +22,19 @@ Definition at line 51 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::plctoc::plctoc (real(sp), intent(in) s, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)\fC [private]\fP"
 
 .PP
-Perform schmidt transformation with scaling parameter s to a polyline\&. 
+Perform Schmidt transformation with scaling parameter s to a polyline\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIs\fP scaling 
+\fIs\fP Schmidt scaling parameter\&. 
 .br
-\fIn\fP ??? 
+\fIn\fP number of points in the polyline\&. 
 .br
-\fIx\fP input of the three dimensional polyline 
+\fIx\fP cartesian components of the three dimensional polyline\&. 
 .br
-\fIy\fP input of the three dimensional polyline 
+\fIy\fP cartesian components of the three dimensional polyline\&. 
 .br
-\fIz\fP input of the three dimensional polyline 
+\fIz\fP cartesian components of the three dimensional polyline\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -44,7 +44,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1055 of file pmat5\&.f90\&.
+Definition at line 1128 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 

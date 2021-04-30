@@ -1,4 +1,4 @@
-.TH "pmat5::gtoc" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::gtoc" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,15 +12,15 @@ pmat5::gtoc
 .ti -1c
 .RI "subroutine \fBdgtoc\fP (dlat, dlon, xe)"
 .br
-.RI "??? "
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
 .ti -1c
 .RI "subroutine \fBdgtocd\fP (dlat, dlon, xe, dxedlat, dxedlon)"
 .br
-.RI "??? "
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
 .ti -1c
 .RI "subroutine \fBdgtocdd\fP (dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
 .br
-.RI "??? "
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
 .ti -1c
 .RI "subroutine \fBsgtoc\fP (dlat, dlon, xe)"
 .br
@@ -28,11 +28,11 @@ pmat5::gtoc
 .ti -1c
 .RI "subroutine \fBsgtocd\fP (dlat, dlon, xe, dxedlat, dxedlon)"
 .br
-.RI "??? "
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
 .ti -1c
 .RI "subroutine \fBsgtocdd\fP (dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
 .br
-.RI "??? "
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -42,15 +42,15 @@ Definition at line 41 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoc::dgtoc (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe)\fC [private]\fP"
 
 .PP
-??? 
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIdlat\fP degrees latitude 
+\fIdlat\fP degrees latitude\&. 
 .br
-\fIdlon\fP degrees longitude 
+\fIdlon\fP degrees longitude\&. 
 .br
-\fIxe\fP three cartesian components\&. 
+\fIxe\fP cartesian unit 3-vector\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -60,25 +60,23 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 413 of file pmat5\&.f90\&.
-.PP
-References pietc::dtor\&.
+Definition at line 445 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoc::dgtocd (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
 
 .PP
-??? 
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the partial derivatives of xe wrt latitude and longitude\&. Double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIdlat\fP degrees latitude 
+\fIdlat\fP degrees latitude\&. 
 .br
-\fIdlon\fP degrees longitude 
+\fIdlon\fP degrees longitude\&. 
 .br
-\fIxe\fP three cartesian components\&. 
+\fIxe\fP cartesian unit 3-vector\&. 
 .br
-\fIdxedlat\fP ??? 
+\fIdxedlat\fP derivative, d(xe)/d(dlat)\&. 
 .br
-\fIdxedlon\fP ??? 
+\fIdxedlon\fP derivative, d(xe)/d(dlon)\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -88,31 +86,29 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 454 of file pmat5\&.f90\&.
-.PP
-References pietc::dtor, and pietc::u0\&.
+Definition at line 496 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoc::dgtocdd (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon, real(dp), dimension(3), intent(out) ddxedlatdlat, real(dp), dimension(3), intent(out) ddxedlatdlon, real(dp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
 
 .PP
-??? 
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the 1st and 2nd partial derivatives of xe wrt latitude and longitude\&. Double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIdlat\fP degrees latitude 
+\fIdlat\fP degrees latitude\&. 
 .br
-\fIdlon\fP degrees longitude 
+\fIdlon\fP degrees longitude\&. 
 .br
-\fIxe\fP three cartesian components\&. 
+\fIxe\fP cartesian unit 3-vector\&. 
 .br
-\fIdxedlat\fP ??? 
+\fIdxedlat\fP d(xe)/d(dlat)\&. 
 .br
-\fIdxedlon\fP ??? 
+\fIdxedlon\fP d(xe)/d(dlon)\&. 
 .br
-\fIddxedlatdlat\fP ??? 
+\fIddxedlatdlat\fP derivative, d^2(xe)/(d(dlat)d(dlat))\&. 
 .br
-\fIddxedlatdlon\fP ??? 
+\fIddxedlatdlon\fP derivative, d^2(xe)/(d(dlat)d(dlon))\&. 
 .br
-\fIddxedlondlon\fP ??? 
+\fIddxedlondlon\fP derivative, d^2(xe)/(d(dlon)d(dlon))\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -122,21 +118,19 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 510 of file pmat5\&.f90\&.
-.PP
-References pietc::dtor, and pietc::u0\&.
+Definition at line 565 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoc::sgtoc (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe)\fC [private]\fP"
 
 .PP
-Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. 
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIdlat\fP degrees latitude 
+\fIdlat\fP degrees latitude\&. 
 .br
-\fIdlon\fP degrees longitude 
+\fIdlon\fP degrees longitude\&. 
 .br
-\fIxe\fP three cartesian components\&. 
+\fIxe\fP Earth-centered cartesian unit 3-vector\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -151,23 +145,23 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 395 of file pmat5\&.f90\&.
+Definition at line 423 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoc::sgtocd (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
 
 .PP
-??? 
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the partial derivatives of xe wrt latitude and longitude\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIdlat\fP degrees latitude 
+\fIdlat\fP degrees latitude\&. 
 .br
-\fIdlon\fP degrees longitude 
+\fIdlon\fP degrees longitude\&. 
 .br
-\fIxe\fP three cartesian components\&. 
+\fIxe\fP cartesian unit 3-vector\&. 
 .br
-\fIdxedlat\fP ??? 
+\fIdxedlat\fP derivative, d(xe)/d(dlat)\&. 
 .br
-\fIdxedlon\fP ??? 
+\fIdxedlon\fP derivative, d(xe)/d(dlon)\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -177,31 +171,29 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 433 of file pmat5\&.f90\&.
-.PP
-References pmat5::dgtocd()\&.
+Definition at line 470 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoc::sgtocdd (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon, real(sp), dimension(3), intent(out) ddxedlatdlat, real(sp), dimension(3), intent(out) ddxedlatdlon, real(sp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
 
 .PP
-??? 
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the 1st and 2nd partial derivatives of xe wrt latitude and longitude\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIdlat\fP degrees latitude 
+\fIdlat\fP degrees latitude\&. 
 .br
-\fIdlon\fP degrees longitude 
+\fIdlon\fP degrees longitude\&. 
 .br
-\fIxe\fP three cartesian components\&. 
+\fIxe\fP cartesian unit 3-vector\&. 
 .br
-\fIdxedlat\fP ??? 
+\fIdxedlat\fP derivative, d(xe)/d(dlat)\&. 
 .br
-\fIdxedlon\fP ??? 
+\fIdxedlon\fP derivative, d(xe)/d(dlon)\&. 
 .br
-\fIddxedlatdlat\fP ??? 
+\fIddxedlatdlat\fP derivative, d^2(xe)/(d(dlat)d(dlat))\&. 
 .br
-\fIddxedlatdlon\fP ??? 
+\fIddxedlatdlon\fP derivative, d^2(xe)/(d(dlat)d(dlon))\&. 
 .br
-\fIddxedlondlon\fP ??? 
+\fIddxedlondlon\fP derivative, d^2(xe)/(d(dlon)d(dlon))\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -211,9 +203,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 479 of file pmat5\&.f90\&.
-.PP
-References pmat5::dgtocdd()\&.
+Definition at line 528 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 

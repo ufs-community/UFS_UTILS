@@ -1,4 +1,4 @@
-.TH "pmat::l1lm" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::l1lm" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,7 +16,7 @@ pmat::l1lm
 .ti -1c
 .RI "subroutine \fBdl1lmf\fP (a, b, ff)"
 .br
-.RI "??? "
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
 .ti -1c
 .RI "subroutine \fBsl1lm\fP (a, b)"
 .br
@@ -38,9 +38,9 @@ Cholesky, M -> L*U, U(i,j)=L(j,i)
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP matrix 
+\fIa\fP symmetric matrix\&. 
 .br
-\fIb\fP matrix 
+\fIb\fP Cholesky factor matrix\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -50,17 +50,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 908 of file pmat\&.f90\&.
+Definition at line 934 of file pmat\&.f90\&.
 .SS "subroutine pmat::l1lm::dl1lmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-??? 
+Cholesky, M -> L*U, U(i,j)=L(j,i) 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP matrix 
+\fIa\fP symmetric matrix\&. 
 .br
-\fIb\fP matrix 
+\fIb\fP Cholesky factor matrix\&. 
 .br
 \fIff\fP failure flag 
 .RE
@@ -72,9 +72,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 956 of file pmat\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 982 of file pmat\&.f90\&.
 .SS "subroutine pmat::l1lm::sl1lm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b)\fC [private]\fP"
 
 .PP
@@ -82,9 +80,9 @@ Cholesky, M -> L*U, U(i,j)=L(j,i)
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP matrix 
+\fIa\fP symmetric matrix\&. 
 .br
-\fIb\fP matrix 
+\fIb\fP Cholesky factor matrix\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -94,7 +92,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 895 of file pmat\&.f90\&.
+Definition at line 921 of file pmat\&.f90\&.
 .SS "subroutine pmat::l1lm::sl1lmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -102,9 +100,9 @@ Cholesky, M -> L*U, U(i,j)=L(j,i)
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP matrix 
+\fIa\fP symmetric matrix\&. 
 .br
-\fIb\fP matrix 
+\fIb\fP Cholesky factor matrix\&. 
 .br
 \fIff\fP failure flag 
 .RE
@@ -116,9 +114,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 922 of file pmat\&.f90\&.
-.PP
-References pietc::f\&.
+Definition at line 948 of file pmat\&.f90\&.
 
 .SH "Author"
 .PP 

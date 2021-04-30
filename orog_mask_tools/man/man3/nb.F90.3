@@ -1,9 +1,8 @@
-.TH "/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/inland.fd/nb.F90" 3 "Fri Mar 26 2021" "Version 1.0.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/inland.fd/nb.F90" 3 "Fri Apr 30 2021" "Version 1.3.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/inland.fd/nb.F90 \- This module contains the subroutines that find the adjacent neighbors of a given cell, in a cubed sphere grid\&.  
-
+/home/ed/UFS_UTILS/sorc/orog_mask_tools.fd/inland.fd/nb.F90
 .SH SYNOPSIS
 .br
 .PP
@@ -69,9 +68,7 @@
 .in -1c
 .SH "Detailed Description"
 .PP 
-This module contains the subroutines that find the adjacent neighbors of a given cell, in a cubed sphere grid\&. 
-
-Each neighbor is in the form of (i,j,tile)\&.
+This module contains the subroutines that find the adjacent neighbors of a given cell, in a cubed sphere grid\&. Each neighbor is in the form of (i,j,tile)\&.
 .PP
 \fBAuthor\fP
 .RS 4
@@ -112,7 +109,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 106 of file nb\&.F90\&.
+Definition at line 107 of file nb\&.F90\&.
 .SS "integer function cs_nb::bndry_reg (integer i, integer j)"
 
 .PP
@@ -137,7 +134,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 140 of file nb\&.F90\&.
+Definition at line 141 of file nb\&.F90\&.
 .SS "subroutine cs_nb::idx_init (integer cres_in)"
 
 .PP
@@ -161,7 +158,7 @@ Initialize inter-panel neighbor index for global grid\&.
           2
       Figure 1. Boundary numbers.fi
 .PP
-
+ 
 .br
 .PP
 \fBAuthor\fP
@@ -171,7 +168,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 48 of file nb\&.F90\&.
+Definition at line 49 of file nb\&.F90\&.
 .SS "subroutine cs_nb::idx_init_reg (integer, intent(in) xres_in, integer, intent(in) yres_in)"
 
 .PP
@@ -191,7 +188,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 91 of file nb\&.F90\&.
+Definition at line 92 of file nb\&.F90\&.
 .SS "subroutine cs_nb::neighbors (integer tile, integer i, integer j, type(\fBnb_gp_idx\fP) nb)"
 
 .PP
@@ -232,7 +229,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 192 of file nb\&.F90\&.
+Definition at line 193 of file nb\&.F90\&.
 .SS "subroutine cs_nb::neighbors_reg (integer i, integer j, type(\fBnb_gp_idx\fP) nb)"
 
 .PP
@@ -254,7 +251,7 @@ Ning Wang
 .PP
 
 .PP
-Definition at line 393 of file nb\&.F90\&.
+Definition at line 394 of file nb\&.F90\&.
 .SH "Variable Documentation"
 .PP 
 .SS "integer cs_nb::cres"

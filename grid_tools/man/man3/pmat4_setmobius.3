@@ -1,4 +1,4 @@
-.TH "pmat4::setmobius" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::setmobius" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -20,7 +20,7 @@ pmat4::setmobius
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 108 of file pmat4\&.f90\&.
+Definition at line 107 of file pmat4\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "subroutine pmat4::setmobius::setmobius (real(dp), dimension(3), intent(in) xc0, real(dp), dimension(3), intent(in) xc1, real(dp), dimension(3), intent(in) xc2, complex(dpc), intent(out) aa, complex(dpc), intent(out) bb, complex(dpc), intent(out) cc, complex(dpc), intent(out) dd)\fC [private]\fP"
@@ -30,19 +30,19 @@ Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*
 .PP
 \fBParameters\fP
 .RS 4
-\fIxc0\fP cartesian point 
+\fIxc0\fP cartesian point that will map to (0,0,1) 
 .br
-\fIxc1\fP cartesian point 
+\fIxc1\fP cartesian point that will map to (1,0,0) 
 .br
-\fIxc2\fP cartesian point 
+\fIxc2\fP cartesian point that will map to (0,0,-1) 
 .br
-\fIaa\fP Mobius transformation complex coefficients 
+\fIaa\fP Mobius transformation complex coefficient 
 .br
-\fIbb\fP Mobius transformation complex coefficients 
+\fIbb\fP Mobius transformation complex coefficient 
 .br
-\fIcc\fP Mobius transformation complex coefficients 
+\fIcc\fP Mobius transformation complex coefficient 
 .br
-\fIdd\fP Mobius transformation complex coefficients 
+\fIdd\fP Mobius transformation complex coefficient 
 .RE
 .PP
 \fBAuthor\fP
@@ -52,7 +52,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2068 of file pmat4\&.f90\&.
+Definition at line 2123 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "subroutine pmat4::setmobius::zsetmobius (complex(dp), intent(in) z0, logical, intent(in) infz0, complex(dp), intent(in) z1, logical, intent(in) infz1, complex(dp), intent(in) z2, logical, intent(in) infz2, complex(dpc), intent(out) aa, complex(dpc), intent(out) bb, complex(dpc), intent(out) cc, complex(dpc), intent(out) dd)\fC [private]\fP"
@@ -62,25 +62,25 @@ Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*
 .PP
 \fBParameters\fP
 .RS 4
-\fIz0\fP polar stereographic point 
+\fIz0\fP complex input point that will map to (0,0) 
 .br
-\fIinfz0\fP point at infinity z0 
+\fIinfz0\fP logical indicator that z0 is the point at infinity 
 .br
-\fIz1\fP polar stereographic point 
+\fIz1\fP complex input point that will map to (1,0) 
 .br
-\fIinfz1\fP point at infinity z0 
+\fIinfz1\fP logical indicator that z1 is the point at infinity 
 .br
-\fIz2\fP polar stereographic point 
+\fIz2\fP complex input point that will map to infinity 
 .br
-\fIinfz2\fP point at infinity z0 
+\fIinfz2\fP logical indicator that z2 is the point at infinity 
 .br
-\fIaa\fP Mobius transformation complex coefficients 
+\fIaa\fP Mobius transformation complex coefficient 
 .br
-\fIbb\fP Mobius transformation complex coefficients 
+\fIbb\fP Mobius transformation complex coefficient 
 .br
-\fIcc\fP Mobius transformation complex coefficients 
+\fIcc\fP Mobius transformation complex coefficient 
 .br
-\fIdd\fP Mobius transformation complex coefficients 
+\fIdd\fP Mobius transformation complex coefficient 
 .RE
 .PP
 \fBAuthor\fP
@@ -90,7 +90,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2151 of file pmat4\&.f90\&.
+Definition at line 2206 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

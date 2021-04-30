@@ -1,4 +1,4 @@
-.TH "pmat5::ctoc_schm" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::ctoc_schm" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,27 +12,27 @@ pmat5::ctoc_schm
 .ti -1c
 .RI "subroutine \fBdctoc\fP (s, xc1, xc2)"
 .br
-.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s\&. "
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s\&. "
 .ti -1c
 .RI "subroutine \fBdctocd\fP (s, xc1, xc2, dxc2)"
 .br
-.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. "
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. "
 .ti -1c
 .RI "subroutine \fBdctocdd\fP (s, xc1, xc2, dxc2, ddxc2)"
 .br
-.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. "
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. "
 .ti -1c
 .RI "subroutine \fBsctoc\fP (s, xc1, xc2)"
 .br
-.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s\&. "
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s\&. "
 .ti -1c
 .RI "subroutine \fBsctocd\fP (s, xc1, xc2, dxc2)"
 .br
-.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. "
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. "
 .ti -1c
 .RI "subroutine \fBsctocdd\fP (s, xc1, xc2, dxc2, ddxc2)"
 .br
-.RI "Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. "
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -42,15 +42,15 @@ Definition at line 47 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::ctoc_schm::dctoc (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2)\fC [private]\fP"
 
 .PP
-Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s\&. 
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIs\fP scaling 
+\fIs\fP Schmidt scaling parameter\&. 
 .br
-\fIxc1\fP schmidt transformation 
+\fIxc1\fP input cartesian 3-vector\&. 
 .br
-\fIxc2\fP schmidt transformation 
+\fIxc2\fP output cartesian unit 3-vector\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -60,23 +60,21 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 843 of file pmat5\&.f90\&.
-.PP
-References pietc::u1, and pietc::u2\&.
+Definition at line 916 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::ctoc_schm::dctocd (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2, real(dp), dimension(3,3), intent(out) dxc2)\fC [private]\fP"
 
 .PP
-Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. 
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIs\fP scaling 
+\fIs\fP Schmidt scaling parameter\&. 
 .br
-\fIxc1\fP schmidt transformation 
+\fIxc1\fP input cartesian 3-vector\&. 
 .br
-\fIxc2\fP schmidt transformation 
+\fIxc2\fP output cartesian unit 3-vector\&. 
 .br
-\fIdxc2\fP ??? 
+\fIdxc2\fP jacobian 1st derivative, d(xc2)/d(xc1)\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -86,25 +84,23 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 874 of file pmat5\&.f90\&.
-.PP
-References pietc::u0, pietc::u1, and pietc::u2\&.
+Definition at line 947 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::ctoc_schm::dctocdd (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2, real(dp), dimension(3,3), intent(out) dxc2, real(dp), dimension(3,3,3), intent(out) ddxc2)\fC [private]\fP"
 
 .PP
-Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. 
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIs\fP scaling 
+\fIs\fP Schmidt scaling parameter\&. 
 .br
-\fIxc1\fP schmidt transformation 
+\fIxc1\fP input cartesian 3-vector\&. 
 .br
-\fIxc2\fP schmidt transformation 
+\fIxc2\fP output cartesian unit 3-vector\&. 
 .br
-\fIdxc2\fP jacobian 
+\fIdxc2\fP jacobian 1st derivative, d(xc2)/d(xc1)\&. 
 .br
-\fIddxc2\fP derivative 
+\fIddxc2\fP 2nd derivative, d^2(xc2)/(d(xc1)d(xc1))\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -114,21 +110,19 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 915 of file pmat5\&.f90\&.
-.PP
-References pietc::u0, pietc::u1, and pietc::u2\&.
+Definition at line 988 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::ctoc_schm::sctoc (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2)\fC [private]\fP"
 
 .PP
-Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s\&. 
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIs\fP scaling parameter 
+\fIs\fP Schmidt scaling parameter 
 .br
-\fIxc1\fP schmidt transformation 
+\fIxc1\fP input cartesian 3-vector 
 .br
-\fIxc2\fP schmidt transformation 
+\fIxc2\fP output cartesian unit 3-vector 
 .RE
 .PP
 \fBAuthor\fP
@@ -138,21 +132,21 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 722 of file pmat5\&.f90\&.
+Definition at line 795 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::ctoc_schm::sctocd (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2, real(sp), dimension(3,3), intent(out) dxc2)\fC [private]\fP"
 
 .PP
-Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. 
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIs\fP scaling 
+\fIs\fP Schmidt scaling parameter\&. 
 .br
-\fIxc1\fP schmidt transformation 
+\fIxc1\fP input cartesian 3-vector\&. 
 .br
-\fIxc2\fP schmidt transformation 
+\fIxc2\fP output cartesian unit 3-vector\&. 
 .br
-\fIdxc2\fP jacobian 
+\fIdxc2\fP jacobian 1st derivative, d(xc2)/d(xc1)\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -162,23 +156,23 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 752 of file pmat5\&.f90\&.
+Definition at line 825 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::ctoc_schm::sctocdd (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2, real(sp), dimension(3,3), intent(out) dxc2, real(sp), dimension(3,3,3), intent(out) ddxc2)\fC [private]\fP"
 
 .PP
-Evaluate schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. 
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIs\fP scaling 
+\fIs\fP Schmidt scaling parameter\&. 
 .br
-\fIxc1\fP ??? 
+\fIxc1\fP input cartesian 3-vector\&. 
 .br
-\fIxc2\fP ??? 
+\fIxc2\fP output cartesian unit 3-vector\&. 
 .br
-\fIdxc2\fP jacobian 
+\fIdxc2\fP jacobian 1st derivative, d(xc2)/d(xc1)\&. 
 .br
-\fIddxc2\fP 2nd derivative 
+\fIddxc2\fP 2nd derivative, d^2(xc2)/(d(xc1)d(xc1))\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -188,7 +182,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 793 of file pmat5\&.f90\&.
+Definition at line 866 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 

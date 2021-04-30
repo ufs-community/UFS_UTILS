@@ -1,4 +1,4 @@
-.TH "program_setup" 3 "Fri Mar 26 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.TH "program_setup" 3 "Fri Apr 30 2021" "Version 1.3.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -326,7 +326,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 631 of file program_setup\&.F90\&.
+Definition at line 641 of file program_setup\&.F90\&.
 .PP
 Referenced by calc_soil_params_driver()\&.
 .SS "subroutine, public program_setup::calc_soil_params_driver (integer, intent(in) localpet)"
@@ -342,6 +342,10 @@ The original source for soil properties is here:
 .PP
 Cosby, B\&. J\&., G\&. M\&. Hornberger, R\&. B\&. Clapp, and T\&. R\&. Ginn, 1984: \fCA statistical exploration of the relationships of soil moisture characteristics to the physical properties of soils\fP\&. Water Resour\&. Res\&.,20, 682–690\&.
 .PP
+The parameters in this subroutine were copied from https://github.com/HelinWei-NOAA/ccpp-physics/blob/master/physics/set_soilveg.f values need to be kept in sync with set_soilveg\&.f\&.
+.PP
+For more information about these parameters see https://github.com/HelinWei-NOAA/ccpp-physics/blob/master/physics/sflx.f\&.
+.PP
 \fBParameters\fP
 .RS 4
 \fIlocalpet\fP ESMF local persistent execution thread 
@@ -354,7 +358,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 472 of file program_setup\&.F90\&.
+Definition at line 480 of file program_setup\&.F90\&.
 .PP
 References bb_target, calc_soil_params(), drysmc_input, drysmc_target, input_type, maxsmc_input, maxsmc_target, refsmc_input, refsmc_target, satpsi_target, wltsmc_input, and wltsmc_target\&.
 .PP
@@ -386,7 +390,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 407 of file program_setup\&.F90\&.
+Definition at line 409 of file program_setup\&.F90\&.
 .PP
 References chgres_var_names, field_var_names, missing_var_methods, and missing_var_values\&.
 .PP
@@ -408,7 +412,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 152 of file program_setup\&.F90\&.
+Definition at line 153 of file program_setup\&.F90\&.
 .PP
 References atm_core_files_input_grid, atm_files_input_grid, atm_tracer_files_input_grid, atm_weight_file, convert_atm, convert_nst, convert_sfc, cres_target_grid, cycle_day, cycle_hour, cycle_mon, data_dir_input_grid, error_handler(), external_model, fix_dir_input_grid, fix_dir_target_grid, geogrid_file_input_grid, grib2_file_input_grid, halo_blend, halo_bndy, input_type, lai_from_climo, max_tracers, minmax_vgfrc_from_climo, mosaic_file_input_grid, mosaic_file_target_grid, nsoill_out, nst_files_input_grid, num_tracers, num_tracers_input, orog_dir_input_grid, orog_dir_target_grid, orog_files_input_grid, orog_files_target_grid, regional, sfc_files_input_grid, sotyp_from_climo, tg3_from_soil, thomp_mp_climo_file, to_lower(), tracers, tracers_input, use_thomp_mp_climo, varmap_file, vcoord_file_target_grid, vgfrc_from_climo, and vgtyp_from_climo\&.
 .PP
@@ -427,7 +431,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 338 of file program_setup\&.F90\&.
+Definition at line 339 of file program_setup\&.F90\&.
 .PP
 References chgres_var_names, error_handler(), field_var_names, input_type, missing_var_methods, missing_var_values, num_tracers, read_from_input, thomp_mp_climo_file, tracers_input, and varmap_file\&.
 .PP
@@ -569,7 +573,7 @@ The model that the input data is derived from\&. Current supported options are: 
 .PP
 Definition at line 54 of file program_setup\&.F90\&.
 .PP
-Referenced by model_grid::define_input_grid(), model_grid::define_input_grid_grib2(), surface::interp(), and read_setup_namelist()\&.
+Referenced by model_grid::define_input_grid(), surface::interp(), and read_setup_namelist()\&.
 .SS "character(len=20), dimension(:), allocatable, public program_setup::field_var_names"
 
 .PP
@@ -841,7 +845,7 @@ If false, interpolate soil type from the input data to the target grid instead o
 .PP
 Definition at line 104 of file program_setup\&.F90\&.
 .PP
-Referenced by surface::interp(), input_data::read_input_sfc_grib2_file(), read_setup_namelist(), and surface::surface_driver()\&.
+Referenced by surface::interp(), input_data::read_input_sfc_grib2_file(), and read_setup_namelist()\&.
 .SS "logical, public program_setup::tg3_from_soil = \&.false\&."
 
 .PP
@@ -913,7 +917,7 @@ If false, interpolate vegetation type from the input data to the target grid ins
 .PP
 Definition at line 100 of file program_setup\&.F90\&.
 .PP
-Referenced by surface::interp(), input_data::read_input_sfc_grib2_file(), read_setup_namelist(), and surface::surface_driver()\&.
+Referenced by surface::interp(), input_data::read_input_sfc_grib2_file(), and read_setup_namelist()\&.
 .SS "real, dimension(:), allocatable, public program_setup::wltsmc_input"
 
 .PP

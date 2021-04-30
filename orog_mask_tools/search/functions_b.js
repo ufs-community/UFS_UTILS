@@ -1,6 +1,11 @@
 var searchData=
 [
-  ['spfft1_139',['spfft1',['../mtnlm7__oclsm_8f.html#ac63643472eda83948c0b249b611346d6',1,'mtnlm7_oclsm.f']]],
-  ['spherical_5fangle_140',['spherical_angle',['../mtnlm7__oclsm_8f.html#a09845caa8530e4792b7d7dbeac0609b7',1,'mtnlm7_oclsm.f']]],
-  ['spherical_5fdistance_141',['spherical_distance',['../mtnlm7__oclsm_8f.html#af72c017d12f741c8cecd92603d4dfa0c',1,'mtnlm7_oclsm.f']]]
+  ['read_5fcubed_5fsphere_5fgrid_167',['read_cubed_sphere_grid',['../lakefrac_8F90.html#aa841d26daa073f2aabb69280f766116f',1,'lakefrac.F90']]],
+  ['read_5fcubed_5fsphere_5freg_5fgrid_168',['read_cubed_sphere_reg_grid',['../lakefrac_8F90.html#ab01a9f78d5379416b21c702586ceeb25',1,'lakefrac.F90']]],
+  ['read_5fg_169',['read_g',['../mtnlm7__oclsm_8f.html#a5c6879e7eac4e636da7a9ca4f45cbadf',1,'mtnlm7_oclsm.f']]],
+  ['read_5flakedata_170',['read_lakedata',['../lakefrac_8F90.html#a42212ca41cc31b8185941580e198a49c',1,'lakefrac.F90']]],
+  ['read_5forog_171',['read_orog',['../inland_8F90.html#a13256f272bbba4fb4f4763cf5ac1db03',1,'inland.F90']]],
+  ['read_5forog_5freg_172',['read_orog_reg',['../inland_8F90.html#a88b7651035e3c2abae99216ddf9e9619',1,'inland.F90']]],
+  ['revers_173',['revers',['../mtnlm7__oclsm_8f.html#a03310f2d7922aab7f39b22448fc8ec2f',1,'mtnlm7_oclsm.f']]],
+  ['rg2gg_174',['rg2gg',['../mtnlm7__oclsm_8f.html#a77b3e5e25f53c7c59daa7639c0b2dc2b',1,'mtnlm7_oclsm.f']]]
 ];

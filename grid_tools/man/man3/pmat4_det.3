@@ -1,4 +1,4 @@
-.TH "pmat4::det" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::det" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,38 +12,38 @@ pmat4::det
 .ti -1c
 .RI "real(dp) function \fBdet_d\fP (a)"
 .br
-.RI "Calculation for det_d function\&. "
+.RI "Return the determinant of a double precision matrix\&. "
 .ti -1c
 .RI "integer(spi) function \fBdet_i\fP (a)"
 .br
-.RI "Calculation for det_i function\&. "
+.RI "Return the determinant of a single precision integer matrix\&. "
 .ti -1c
 .RI "integer(dpi) function \fBdet_id\fP (a)"
 .br
-.RI "Calculation for det_id function\&. "
+.RI "Return the determinant of a double precision integer matrix\&. "
 .ti -1c
 .RI "real(sp) function \fBdet_s\fP (a)"
 .br
-.RI "Calculation for det_s function\&. "
+.RI "Return the determinant of a single precision matrix\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 73 of file pmat4\&.f90\&.
+Definition at line 72 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "real(dp) function pmat4::det::det_d (real(dp), dimension(:,:), intent(in) a)\fC [private]\fP"
 
 .PP
-Calculation for det_d function\&. 
+Return the determinant of a double precision matrix\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP real type input value 
+\fIa\fP real type input matrix A 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-det result 
+det result, determinant of matrix A 
 .RE
 .PP
 \fBAuthor\fP
@@ -54,21 +54,19 @@ R\&. J\&. Purser
 
 .PP
 Definition at line 369 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
 .SS "integer(spi) function pmat4::det::det_i (integer(spi), dimension(:,:), intent(in) a)\fC [private]\fP"
 
 .PP
-Calculation for det_i function\&. 
+Return the determinant of a single precision integer matrix\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP real type input value 
+\fIa\fP integer type input matrix A 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-idet result 
+idet result, determinant of matrix A 
 .RE
 .PP
 \fBAuthor\fP
@@ -82,16 +80,16 @@ Definition at line 390 of file pmat4\&.f90\&.
 .SS "integer(dpi) function pmat4::det::det_id (integer(dpi), dimension(:,:), intent(in) a)\fC [private]\fP"
 
 .PP
-Calculation for det_id function\&. 
+Return the determinant of a double precision integer matrix\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP real type input value 
+\fIa\fP integer type input matrix A 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-idet result 
+idet result, determinant of matrix A 
 .RE
 .PP
 \fBAuthor\fP
@@ -102,21 +100,19 @@ R\&. J\&. Purser
 
 .PP
 Definition at line 404 of file pmat4\&.f90\&.
-.PP
-References pkind::dp, and pkind::dpi\&.
 .SS "real(sp) function pmat4::det::det_s (real(sp), dimension(:,:), intent(in) a)\fC [private]\fP"
 
 .PP
-Calculation for det_s function\&. 
+Return the determinant of a single precision matrix\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP real type input value 
+\fIa\fP real type input matrix A 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-det result 
+det result, determinant of matrix A 
 .RE
 .PP
 \fBAuthor\fP

@@ -1,4 +1,4 @@
-.TH "pmat4::mobius" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::mobius" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -20,7 +20,7 @@ pmat4::mobius
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 109 of file pmat4\&.f90\&.
+Definition at line 108 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "subroutine pmat4::mobius::cmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, real(dp), dimension(3), intent(in) vz, real(dp), dimension(3), intent(out) vw)\fC [private]\fP"
@@ -30,17 +30,17 @@ Perform a complex Mobius transformation from cartesian vz to cartesian vw where 
 .PP
 \fBParameters\fP
 .RS 4
-\fIaa\fP Mobius transformation coefficients 
+\fIaa\fP Mobius transformation coefficient 
 .br
-\fIbb\fP Mobius transformation coefficients 
+\fIbb\fP Mobius transformation coefficient 
 .br
-\fIcc\fP Mobius transformation coefficients 
+\fIcc\fP Mobius transformation coefficient 
 .br
-\fIdd\fP Mobius transformation coefficients 
+\fIdd\fP Mobius transformation coefficient 
 .br
-\fIvz\fP Cartesian vaule 
+\fIvz\fP Cartesian unit 3-vector representation of input argument 
 .br
-\fIvw\fP Cartesian vaule 
+\fIvw\fP Cartesian unit 3-vector representation of output 
 .RE
 .PP
 \fBAuthor\fP
@@ -50,9 +50,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2257 of file pmat4\&.f90\&.
-.PP
-References pmat4::zmobius()\&.
+Definition at line 2312 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::mobius::zmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) z, logical, intent(in) infz, complex(dpc), intent(out) w, logical, intent(out) infw)\fC [private]\fP"
 
 .PP
@@ -60,21 +58,21 @@ Perform a complex Mobius transformation from (z,infz) to (w,infw) where the tran
 .PP
 \fBParameters\fP
 .RS 4
-\fIaa\fP Mobius transformation complex coefficients 
+\fIaa\fP Mobius transformation complex coefficient 
 .br
-\fIbb\fP Mobius transformation complex coefficients 
+\fIbb\fP Mobius transformation complex coefficient 
 .br
-\fIcc\fP Mobius transformation complex coefficients 
+\fIcc\fP Mobius transformation complex coefficient 
 .br
-\fIdd\fP Mobius transformation complex coefficients 
+\fIdd\fP Mobius transformation complex coefficient 
 .br
-\fIz\fP Mobius transformation complex coefficients 
+\fIz\fP complex input argument of the Mobius transformation 
 .br
-\fIinfz\fP point at infinity z 
+\fIinfz\fP logical indicator for z being a point at infinity 
 .br
-\fIw\fP Mobius transformation output 
+\fIw\fP complex output of the Mobius transformation 
 .br
-\fIinfw\fP point at infinity w 
+\fIinfw\fP logical indicator for w being a point at infinity 
 .RE
 .PP
 \fBAuthor\fP
@@ -84,7 +82,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2222 of file pmat4\&.f90\&.
+Definition at line 2277 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

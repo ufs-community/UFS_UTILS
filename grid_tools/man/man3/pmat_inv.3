@@ -1,4 +1,4 @@
-.TH "pmat::inv" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::inv" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,79 +12,79 @@ pmat::inv
 .ti -1c
 .RI "subroutine \fBcinvmt\fP (a)"
 .br
-.RI "Invert matrix\&. "
+.RI "Invert complex matrix in place\&. "
 .ti -1c
 .RI "subroutine \fBcinvmtf\fP (a, ff)"
 .br
-.RI "Routine cinvmtf to Invert and Permute\&. "
+.RI "Invert a complex matrix in place, or flag if process fails\&. "
 .ti -1c
 .RI "subroutine \fBclinmmt\fP (a, b)"
 .br
-.RI "??? "
+.RI "Invert complex linear system with multiple right-hand side vectors\&. "
 .ti -1c
 .RI "subroutine \fBclinmmtf\fP (a, b, ff)"
 .br
-.RI "??? "
+.RI "Invert linear system with multiple right-hand side vectors, or flag failure\&. "
 .ti -1c
 .RI "subroutine \fBclinmvt\fP (a, b)"
 .br
-.RI "??? "
+.RI "Invert linear system with single right-hand side vector\&. "
 .ti -1c
 .RI "subroutine \fBclinmvtf\fP (a, b, ff)"
 .br
-.RI "??? "
+.RI "Invert complex linear system with single right-hand side vector\&. "
 .ti -1c
 .RI "subroutine \fBdinvmt\fP (a)"
 .br
-.RI "Invert matrix\&. "
+.RI "Invert double precision matrix in place\&. "
 .ti -1c
 .RI "subroutine \fBdinvmtf\fP (a, ff)"
 .br
-.RI "Routine dinvmtf to Invert and Permute\&. "
+.RI "Invert a double precision matrix in place, or flag if process fails\&. "
 .ti -1c
 .RI "subroutine \fBdlinmmt\fP (a, b)"
 .br
-.RI "??? "
+.RI "Invert linear system with multiple right-hand side vectors\&. "
 .ti -1c
 .RI "subroutine \fBdlinmmtf\fP (a, b, ff)"
 .br
-.RI "??? "
+.RI "Invert linear system with multiple right-hand side vectors, or flag failure\&. "
 .ti -1c
 .RI "subroutine \fBdlinmvt\fP (a, b)"
 .br
-.RI "??? "
+.RI "Invert linear system with single right-hand side vector\&. "
 .ti -1c
 .RI "subroutine \fBdlinmvtf\fP (a, b, ff)"
 .br
-.RI "??? "
+.RI "Invert linear system with single right-hand side vector\&. "
 .ti -1c
 .RI "subroutine \fBiinvf\fP (imat, ff)"
 .br
-.RI "Invert integer square array, imat, if possible, but flag ff=\&.true\&. "
+.RI "Invert integer square matrix, imat, if possible, but flag ff=\&.true\&. "
 .ti -1c
 .RI "subroutine \fBsinvmt\fP (a)"
 .br
-.RI "Invert matrix\&. "
+.RI "Invert single precision matrix in place\&. "
 .ti -1c
 .RI "subroutine \fBsinvmtf\fP (a, ff)"
 .br
-.RI "Invert matrix (or flag if can't)\&. "
+.RI "Invert a single precision matrix in place, or flag if process fails\&. "
 .ti -1c
 .RI "subroutine \fBslinmmt\fP (a, b)"
 .br
-.RI "??? "
+.RI "Invert linear system with multiple right-hand side vectors\&. "
 .ti -1c
 .RI "subroutine \fBslinmmtf\fP (a, b, ff)"
 .br
-.RI "??? "
+.RI "Invert linear system with multiple right-hand side vectors, or flag failure\&. "
 .ti -1c
 .RI "subroutine \fBslinmvt\fP (a, b)"
 .br
-.RI "??? "
+.RI "Invert linear system with single right-hand side vector\&. "
 .ti -1c
 .RI "subroutine \fBslinmvtf\fP (a, b, ff)"
 .br
-.RI "??? "
+.RI "Invert linear system with single right-hand side vector\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -94,7 +94,7 @@ Definition at line 31 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::cinvmt (complex(dpc), dimension(:,:), intent(inout) a)\fC [private]\fP"
 
 .PP
-Invert matrix\&. 
+Invert complex matrix in place\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -108,11 +108,11 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 103 of file pmat\&.f90\&.
+Definition at line 104 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::cinvmtf (complex(dpc), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-Routine cinvmtf to Invert and Permute\&. 
+Invert a complex matrix in place, or flag if process fails\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -128,19 +128,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 190 of file pmat\&.f90\&.
-.PP
-References pietc::c1\&.
+Definition at line 191 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::clinmmt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b)\fC [private]\fP"
 
 .PP
-??? 
+Invert complex linear system with multiple right-hand side vectors\&. Complex double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vectors, output solution vectors 
 .RE
 .PP
 \fBAuthor\fP
@@ -150,17 +148,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 252 of file pmat\&.f90\&.
+Definition at line 256 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::clinmmtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-??? 
+Invert linear system with multiple right-hand side vectors, or flag failure\&. Complex double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vectors, output solution vectors 
 .br
 \fIff\fP failure flag 
 .RE
@@ -172,17 +170,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 313 of file pmat\&.f90\&.
+Definition at line 320 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::clinmvt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b)\fC [private]\fP"
 
 .PP
-??? 
+Invert linear system with single right-hand side vector\&. Complex double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vector, output solution vector 
 .RE
 .PP
 \fBAuthor\fP
@@ -192,17 +190,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 362 of file pmat\&.f90\&.
+Definition at line 372 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::clinmvtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-??? 
+Invert complex linear system with single right-hand side vector\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vector, output solution vector 
 .br
 \fIff\fP failure flag 
 .RE
@@ -214,11 +212,11 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 420 of file pmat\&.f90\&.
+Definition at line 430 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dinvmt (real(dp), dimension(:,:), intent(inout) a)\fC [private]\fP"
 
 .PP
-Invert matrix\&. 
+Invert double precision matrix in place\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -232,11 +230,11 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 92 of file pmat\&.f90\&.
+Definition at line 93 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dinvmtf (real(dp), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-Routine dinvmtf to Invert and Permute\&. 
+Invert a double precision matrix in place, or flag if process fails\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -252,17 +250,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 153 of file pmat\&.f90\&.
+Definition at line 154 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dlinmmt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b)\fC [private]\fP"
 
 .PP
-??? 
+Invert linear system with multiple right-hand side vectors\&. Double precision version
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vectors, output solution vectors 
 .RE
 .PP
 \fBAuthor\fP
@@ -272,17 +270,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 240 of file pmat\&.f90\&.
+Definition at line 243 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dlinmmtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-??? 
+Invert linear system with multiple right-hand side vectors, or flag failure\&. Double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vectors, output solution vectors 
 .br
 \fIff\fP failure flag 
 .RE
@@ -294,17 +292,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 289 of file pmat\&.f90\&.
+Definition at line 295 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dlinmvt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b)\fC [private]\fP"
 
 .PP
-??? 
+Invert linear system with single right-hand side vector\&. Double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vector, output solution vector 
 .RE
 .PP
 \fBAuthor\fP
@@ -314,17 +312,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 349 of file pmat\&.f90\&.
+Definition at line 358 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::dlinmvtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-??? 
+Invert linear system with single right-hand side vector\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vector, output solution vector 
 .br
 \fIff\fP failure flag 
 .RE
@@ -336,15 +334,15 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 398 of file pmat\&.f90\&.
+Definition at line 408 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::iinvf (integer(spi), dimension(:,:), intent(inout) imat, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-Invert integer square array, imat, if possible, but flag ff=\&.true\&. if not possible\&. (Determinant of imat must be +1 or -1
+Invert integer square matrix, imat, if possible, but flag ff=\&.true\&. if not possible\&. (Determinant of imat must be +1 or -1)
 .PP
 \fBParameters\fP
 .RS 4
-\fIimat\fP integer square array 
+\fIimat\fP integer square matrix 
 .br
 \fIff\fP error flag 
 .RE
@@ -356,13 +354,11 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 442 of file pmat\&.f90\&.
-.PP
-References pietc::t\&.
+Definition at line 452 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::sinvmt (real(sp), dimension(:,:), intent(inout) a)\fC [private]\fP"
 
 .PP
-Invert matrix\&. 
+Invert single precision matrix in place\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -376,11 +372,11 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 81 of file pmat\&.f90\&.
+Definition at line 82 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::sinvmtf (real(sp), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-Invert matrix (or flag if can't)\&. 
+Invert a single precision matrix in place, or flag if process fails\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -396,17 +392,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 115 of file pmat\&.f90\&.
+Definition at line 116 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::slinmmt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b)\fC [private]\fP"
 
 .PP
-??? 
+Invert linear system with multiple right-hand side vectors\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vectors, output solution vectors 
 .RE
 .PP
 \fBAuthor\fP
@@ -416,17 +412,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 228 of file pmat\&.f90\&.
+Definition at line 230 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::slinmmtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-??? 
+Invert linear system with multiple right-hand side vectors, or flag failure\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vectors, output solution vectors 
 .br
 \fIff\fP failure flag 
 .RE
@@ -438,17 +434,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 265 of file pmat\&.f90\&.
+Definition at line 270 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::slinmvt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b)\fC [private]\fP"
 
 .PP
-??? 
+Invert linear system with single right-hand side vector\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vector, output solution vector 
 .RE
 .PP
 \fBAuthor\fP
@@ -458,17 +454,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 336 of file pmat\&.f90\&.
+Definition at line 344 of file pmat\&.f90\&.
 .SS "subroutine pmat::inv::slinmvtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-??? 
+Invert linear system with single right-hand side vector\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP ??? 
+\fIa\fP Invertible system matrix, destroyed on output 
 .br
-\fIb\fP ??? 
+\fIb\fP input RHS vector, output solution vector 
 .br
 \fIff\fP failure flag 
 .RE
@@ -480,7 +476,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 376 of file pmat\&.f90\&.
+Definition at line 386 of file pmat\&.f90\&.
 
 .SH "Author"
 .PP 

@@ -1,4 +1,4 @@
-.TH "snowdat" 3 "Fri Mar 26 2021" "Version 1.0.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "snowdat" 3 "Fri Apr 30 2021" "Version 1.3.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -246,7 +246,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 1122 of file snowdat\&.F90\&.
+Definition at line 1123 of file snowdat\&.F90\&.
 .PP
 References bad_afwa_nh, bad_afwa_sh, kgds_afwa_nh, kgds_afwa_sh, snow_dep_afwa_nh, and snow_dep_afwa_sh\&.
 .PP
@@ -297,7 +297,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 850 of file snowdat\&.F90\&.
+Definition at line 851 of file snowdat\&.F90\&.
 .PP
 References program_setup::climo_qc_file, grib2_free(), grib2_null(), program_setup::grib_century, program_setup::grib_day, program_setup::grib_month, and program_setup::grib_year\&.
 .PP
@@ -338,7 +338,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 1230 of file snowdat\&.F90\&.
+Definition at line 1231 of file snowdat\&.F90\&.
 .PP
 Referenced by readafwa()\&.
 .SS "subroutine snowdat::read_afwa_mask (character*(*), intent(in) file_name, logical*1, dimension(\fBiafwa\fP,\fBjafwa\fP), intent(out) bitmap_afwa)"
@@ -372,7 +372,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 1313 of file snowdat\&.F90\&.
+Definition at line 1314 of file snowdat\&.F90\&.
 .PP
 Referenced by readafwa()\&.
 .SS "subroutine snowdat::readafwa"
@@ -412,7 +412,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 531 of file snowdat\&.F90\&.
+Definition at line 532 of file snowdat\&.F90\&.
 .PP
 References afwa_check(), program_setup::afwa_lsmask_nh_file, program_setup::afwa_lsmask_sh_file, afwa_res, program_setup::afwa_snow_global_file, program_setup::afwa_snow_nh_file, program_setup::afwa_snow_sh_file, bad_afwa_global, bad_afwa_nh, bad_afwa_sh, bitmap_afwa_global, bitmap_afwa_nh, bitmap_afwa_sh, grib_check(), iafwa, jafwa, kgds_afwa_global, kgds_afwa_nh, kgds_afwa_nh_8th, kgds_afwa_sh, kgds_afwa_sh_8th, nh_climo_check(), read_afwa_binary(), read_afwa_mask(), snow_dep_afwa_global, snow_dep_afwa_nh, snow_dep_afwa_sh, use_global_afwa, use_nh_afwa, and use_sh_afwa\&.
 .PP
@@ -447,7 +447,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 117 of file snowdat\&.F90\&.
+Definition at line 118 of file snowdat\&.F90\&.
 .PP
 References program_setup::autosnow_file, autosnow_res, bitmap_autosnow, gdt_to_gds(), grib2_free(), grib2_null(), iautosnow, jautosnow, kgds_autosnow, snow_cvr_autosnow, and use_autosnow\&.
 .PP
@@ -481,7 +481,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 222 of file snowdat\&.F90\&.
+Definition at line 223 of file snowdat\&.F90\&.
 .PP
 References bad_nesdis, bitmap_nesdis, gdt_to_gds(), grib2_free(), grib2_null(), grib_check(), inesdis, jnesdis, kgds_nesdis, mesh_nesdis, program_setup::nesdis_lsmask_file, nesdis_res, program_setup::nesdis_snow_file, nh_climo_check(), sea_ice_nesdis, snow_cvr_nesdis, and use_nesdis\&.
 .PP

@@ -1,4 +1,4 @@
-.TH "pmat::ldlm" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::ldlm" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,7 +12,7 @@ pmat::ldlm
 .ti -1c
 .RI "subroutine \fBdldlm\fP (a, b, d)"
 .br
-.RI "??? "
+.RI "Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) "
 .ti -1c
 .RI "subroutine \fBdldlmf\fP (a, b, d, ff)"
 .br
@@ -24,7 +24,7 @@ pmat::ldlm
 .ti -1c
 .RI "subroutine \fBsldlmf\fP (a, b, d, ff)"
 .br
-.RI "Modified Cholesky decompose Q --> L*D*U\&. "
+.RI "Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -34,15 +34,15 @@ Definition at line 38 of file pmat\&.f90\&.
 .SS "subroutine pmat::ldlm::dldlm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, real(dp), dimension(:), intent(out) d)\fC [private]\fP"
 
 .PP
-??? 
+Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP matrix 
+\fIa\fP symmetric matrix\&. 
 .br
-\fIb\fP matrix 
+\fIb\fP output modified cholesky factor, L\&. 
 .br
-\fId\fP matrix 
+\fId\fP diagonal matrix, D\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -52,7 +52,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1005 of file pmat\&.f90\&.
+Definition at line 1031 of file pmat\&.f90\&.
 .SS "subroutine pmat::ldlm::dldlmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, real(dp), dimension(:), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -60,11 +60,11 @@ Modified Cholesky Q --> L*D*U, U(i,j)=L(j,i)
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP matrix 
+\fIa\fP symmetric matrix\&. 
 .br
-\fIb\fP matrix 
+\fIb\fP modified Cholesky factor, L\&. 
 .br
-\fId\fP matrix 
+\fId\fP diagonal matrix, D\&. 
 .br
 \fIff\fP error flag 
 .RE
@@ -76,9 +76,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1058 of file pmat\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 1084 of file pmat\&.f90\&.
 .SS "subroutine pmat::ldlm::sldlm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, real(sp), dimension(:), intent(out) d)\fC [private]\fP"
 
 .PP
@@ -86,11 +84,11 @@ Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i)
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP matrix 
+\fIa\fP symmetric matrix\&. 
 .br
-\fIb\fP matrix 
+\fIb\fP output modified cholesky factor, L\&. 
 .br
-\fId\fP matrix 
+\fId\fP diagonal matrix, D\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -100,19 +98,19 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 990 of file pmat\&.f90\&.
+Definition at line 1016 of file pmat\&.f90\&.
 .SS "subroutine pmat::ldlm::sldlmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, real(sp), dimension(:), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
-Modified Cholesky decompose Q --> L*D*U\&. 
+Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) 
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP matrix 
+\fIa\fP symmetric matrix 
 .br
-\fIb\fP matrix 
+\fIb\fP modified cholesky factor, L\&. 
 .br
-\fId\fP matrix 
+\fId\fP diagonal matrix, D\&. 
 .br
 \fIff\fP error flag 
 .RE
@@ -124,9 +122,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1021 of file pmat\&.f90\&.
-.PP
-References pietc::f\&.
+Definition at line 1047 of file pmat\&.f90\&.
 
 .SH "Author"
 .PP 

@@ -1,4 +1,4 @@
-.TH "/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/psym2.f90" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/psym2.f90" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -74,11 +74,11 @@
 .ti -1c
 .RI "subroutine \fBpsym2::expsym2d\fP (x, z, zd)"
 .br
-.RI "Sub Process for process symmetric 2*2 matrix\&. "
+.RI "Get the exp of a symmetric 2*2 matrix, and its symmetric derivative\&. "
 .ti -1c
 .RI "subroutine \fBpsym2::expsym2d_e\fP (x, z, zd)"
 .br
-.RI "Sub Process for process symmetric 2*2 matrix\&. "
+.RI "Get the exponential and its symmetric derivative for a symmetric 2*2 matrix using eigen-decomposition\&. "
 .ti -1c
 .RI "subroutine \fBpsym2::expsym2d_t\fP (x, z, zd)"
 .br
@@ -86,7 +86,7 @@
 .ti -1c
 .RI "subroutine, public \fBpsym2::id2222\fP (em)"
 .br
-.RI "General routine for Effective identity\&. "
+.RI "General routine for a symmetrized 4th-rank tensor that acts as an effective identity for operations on symmetric matrices\&. "
 .ti -1c
 .RI "subroutine, public \fBpsym2::invsym2\fP (em, z)"
 .br

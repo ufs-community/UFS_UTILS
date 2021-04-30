@@ -1,4 +1,4 @@
-.TH "pmat4::corral" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::corral" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,7 +16,7 @@ pmat4::corral
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 92 of file pmat4\&.f90\&.
+Definition at line 91 of file pmat4\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "subroutine pmat4::corral::corral (integer(spi), intent(in) m, integer(spi), intent(in) n, logical, dimension(m,n), intent(in) mask, real(dp), dimension(m,n), intent(in) a, real(dp), dimension(m  ), intent(out) d, real(dp), dimension(m,n), intent(out) aa, real(dp), dimension(  n), intent(out) e)\fC [private]\fP"
@@ -26,19 +26,19 @@ Find positive diagonals D and E and a Lagrange multiplier F that minimize the ro
 .PP
 \fBParameters\fP
 .RS 4
-\fIm\fP ??? 
+\fIm\fP number of rows of A 
 .br
-\fIn\fP ??? 
+\fIn\fP number of columns of A 
 .br
-\fImask\fP ??? 
+\fImask\fP logical mask 
 .br
-\fIa\fP positive diagonals 
+\fIa\fP real rectangular matrix A 
 .br
-\fId\fP positive diagonals 
+\fId\fP positive diagonal matrix of dimension m 
 .br
-\fIaa\fP ??? 
+\fIaa\fP rescaled version of A 
 .br
-\fIe\fP positive diagonals 
+\fIe\fP positive diagonal matrix of dimension n 
 .RE
 .PP
 \fBAuthor\fP
@@ -50,9 +50,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1395 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 1441 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

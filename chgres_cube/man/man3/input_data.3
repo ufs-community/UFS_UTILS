@@ -1,4 +1,4 @@
-.TH "input_data" 3 "Fri Mar 26 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.TH "input_data" 3 "Fri Apr 30 2021" "Version 1.3.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,6 +14,10 @@ input_data \- Read atmospheric, surface and nst data on the input grid\&.
 .RI "subroutine \fBcalcalpha_rotlatlon\fP (latgrid, longrid, cenlat, cenlon, alpha)"
 .br
 .RI "Calculate rotation angle for rotated latlon grids\&. "
+.ti -1c
+.RI "subroutine, public \fBcheck_soilt\fP (soilt, landmask, skint)"
+.br
+.RI "Check for and replace certain values in soil temperature\&. "
 .ti -1c
 .RI "subroutine, public \fBcleanup_input_atm_data\fP"
 .br
@@ -170,6 +174,10 @@ input_data \- Read atmospheric, surface and nst data on the input grid\&.
 .RI "type(esmf_field), public \fBffmm_input_grid\fP"
 .br
 .RI "log((z0+z1)*1/z0) See sfc_diff\&.f for details\&. "
+.ti -1c
+.RI "integer, parameter \fBicet_default\fP = 265\&.0"
+.br
+.RI "Default value of soil and skin temperature (K) over ice\&. "
 .ti -1c
 .RI "type(esmf_field), public \fBifd_input_grid\fP"
 .br
@@ -408,11 +416,37 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6303 of file input_data\&.F90\&.
+Definition at line 6300 of file input_data\&.F90\&.
 .PP
 References model_grid::i_input, and model_grid::j_input\&.
 .PP
 Referenced by read_winds()\&.
+.SS "subroutine, public input_data::check_soilt (real(esmf_kind_r8), dimension(i_input,j_input,\fBlsoil_input\fP), intent(inout) soilt, integer(esmf_kind_i4), dimension(i_input,j_input), intent(in) landmask, real(esmf_kind_r8), dimension(i_input,j_input), intent(in) skint)"
+
+.PP
+Check for and replace certain values in soil temperature\&. At open water points (landmask=0) use skin temperature as a filler value\&. At land points (landmask=1) with excessive soil temperature, replace soil temperature with skin temperature\&. In GEFSv12\&.0 data there are some erroneous missing values at land points which this corrects\&. At sea ice points (landmask=2), store a default ice column temperature because grib2 files do not have ice column temperature which FV3 expects at these points\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIsoilt\fP [inout] 3-dimensional soil temperature arrray 
+.br
+\fIlandmask\fP [in] landmask of the input grid 
+.br
+\fIskint\fP [in] 2-dimensional skin temperature array 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Larissa Reames CIMMS/NSSL 
+.RE
+.PP
+
+.PP
+Definition at line 6621 of file input_data\&.F90\&.
+.PP
+References model_grid::i_input, icet_default, model_grid::j_input, and lsoil_input\&.
+.PP
+Referenced by read_input_sfc_grib2_file()\&.
 .SS "subroutine, public input_data::cleanup_input_atm_data"
 
 .PP
@@ -427,7 +461,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6476 of file input_data\&.F90\&.
+Definition at line 6473 of file input_data\&.F90\&.
 .PP
 References dzdt_input_grid, program_setup::num_tracers, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, tracers_input_grid, and wind_input_grid\&.
 .PP
@@ -446,7 +480,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6501 of file input_data\&.F90\&.
+Definition at line 6498 of file input_data\&.F90\&.
 .PP
 References c_0_input_grid, c_d_input_grid, d_conv_input_grid, dt_cool_input_grid, ifd_input_grid, landsea_mask_input_grid, qrain_input_grid, tref_input_grid, w_0_input_grid, w_d_input_grid, xs_input_grid, xt_input_grid, xtts_input_grid, xu_input_grid, xv_input_grid, xz_input_grid, xzts_input_grid, z_c_input_grid, and zm_input_grid\&.
 .PP
@@ -465,7 +499,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6534 of file input_data\&.F90\&.
+Definition at line 6531 of file input_data\&.F90\&.
 .PP
 References canopy_mc_input_grid, program_setup::convert_nst, f10m_input_grid, ffmm_input_grid, program_setup::lai_from_climo, lai_input_grid, landsea_mask_input_grid, max_veg_greenness_input_grid, min_veg_greenness_input_grid, program_setup::minmax_vgfrc_from_climo, q2m_input_grid, seaice_depth_input_grid, seaice_fract_input_grid, seaice_skin_temp_input_grid, skin_temp_input_grid, snow_depth_input_grid, snow_liq_equiv_input_grid, soil_temp_input_grid, soil_type_input_grid, soilm_liq_input_grid, soilm_tot_input_grid, srflag_input_grid, t2m_input_grid, terrain_input_grid, tprcp_input_grid, ustar_input_grid, veg_greenness_input_grid, veg_type_input_grid, program_setup::vgfrc_from_climo, and z0_input_grid\&.
 .PP
@@ -484,7 +518,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6186 of file input_data\&.F90\&.
+Definition at line 6183 of file input_data\&.F90\&.
 .PP
 References error_handler(), model_grid::latitude_input_grid, model_grid::longitude_input_grid, u_input_grid, v_input_grid, and wind_input_grid\&.
 .PP
@@ -519,7 +553,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6262 of file input_data\&.F90\&.
+Definition at line 6259 of file input_data\&.F90\&.
 .PP
 References model_grid::i_input, and model_grid::j_input\&.
 .PP
@@ -557,7 +591,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6352 of file input_data\&.F90\&.
+Definition at line 6349 of file input_data\&.F90\&.
 .PP
 References error_handler(), and program_setup::read_from_input\&.
 .PP
@@ -576,7 +610,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 633 of file input_data\&.F90\&.
+Definition at line 637 of file input_data\&.F90\&.
 .PP
 References dzdt_input_grid, error_handler(), model_grid::input_grid, lev_input, program_setup::num_tracers, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, v_input_grid, and wind_input_grid\&.
 .PP
@@ -602,7 +636,7 @@ Jili Dong NOAA/EMC
 .PP
 
 .PP
-Definition at line 6585 of file input_data\&.F90\&.
+Definition at line 6582 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_atm_grib2_file()\&.
 .SS "subroutine input_data::read_fv3_grid_data_netcdf (character(len=*), intent(in) FIELD, integer, intent(in) TILE_NUM, integer, intent(in) IMO, integer, intent(in) JMO, integer, intent(in) LMO, real(esmf_kind_r8), dimension(imo,jmo), intent(out), optional SFCDATA, real(esmf_kind_r8), dimension(imo,jmo,lmo), intent(out), optional SFCDATA_3D)\fC [private]\fP"
@@ -636,7 +670,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 5980 of file input_data\&.F90\&.
+Definition at line 5978 of file input_data\&.F90\&.
 .PP
 References program_setup::data_dir_input_grid, netcdf_err(), and program_setup::sfc_files_input_grid\&.
 .PP
@@ -670,7 +704,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6414 of file input_data\&.F90\&.
+Definition at line 6411 of file input_data\&.F90\&.
 .PP
 References error_handler(), program_setup::get_var_cond(), handle_grib_error(), model_grid::i_input, and model_grid::j_input\&.
 .PP
@@ -694,7 +728,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 141 of file input_data\&.F90\&.
+Definition at line 145 of file input_data\&.F90\&.
 .PP
 References program_setup::input_type, read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .PP
@@ -718,7 +752,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1221 of file input_data\&.F90\&.
+Definition at line 1225 of file input_data\&.F90\&.
 .PP
 References program_setup::atm_files_input_grid, convert_winds(), program_setup::data_dir_input_grid, dpres_input_grid, dzdt_input_grid, error_handler(), model_grid::i_input, init_atm_esmf_fields(), model_grid::input_grid, model_grid::j_input, lev_input, levp1_input, program_setup::num_tracers, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
 .PP
@@ -742,7 +776,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1763 of file input_data\&.F90\&.
+Definition at line 1767 of file input_data\&.F90\&.
 .PP
 References program_setup::atm_files_input_grid, convert_winds(), program_setup::data_dir_input_grid, dpres_input_grid, dzdt_input_grid, error_handler(), model_grid::i_input, init_atm_esmf_fields(), model_grid::input_grid, model_grid::j_input, lev_input, levp1_input, netcdf_err(), program_setup::num_tracers, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
 .PP
@@ -766,7 +800,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 968 of file input_data\&.F90\&.
+Definition at line 972 of file input_data\&.F90\&.
 .PP
 References program_setup::atm_files_input_grid, convert_winds(), program_setup::data_dir_input_grid, dzdt_input_grid, error_handler(), model_grid::i_input, init_atm_esmf_fields(), model_grid::j_input, lev_input, levp1_input, program_setup::num_tracers, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
 .PP
@@ -795,7 +829,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 729 of file input_data\&.F90\&.
+Definition at line 733 of file input_data\&.F90\&.
 .PP
 References program_setup::atm_files_input_grid, convert_winds(), program_setup::data_dir_input_grid, dzdt_input_grid, error_handler(), model_grid::i_input, init_atm_esmf_fields(), model_grid::j_input, lev_input, levp1_input, program_setup::num_tracers, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
 .PP
@@ -819,7 +853,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 2438 of file input_data\&.F90\&.
+Definition at line 2442 of file input_data\&.F90\&.
 .PP
 References grib2_util::convert_omega(), convert_winds(), program_setup::data_dir_input_grid, dzdt_input_grid, error_handler(), program_setup::get_var_cond(), program_setup::grib2_file_input_grid, handle_grib_error(), model_grid::i_input, init_atm_esmf_fields(), model_grid::inv_file, model_grid::j_input, lev_input, levp1_input, pres_input_grid, ps_input_grid, quicksort(), read_winds(), grib2_util::rh2spfh(), slevs, temp_input_grid, terrain_input_grid, program_setup::tracers, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
 .PP
@@ -850,7 +884,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1504 of file input_data\&.F90\&.
+Definition at line 1508 of file input_data\&.F90\&.
 .PP
 References program_setup::atm_core_files_input_grid, program_setup::atm_tracer_files_input_grid, convert_winds(), program_setup::data_dir_input_grid, dpres_input_grid, dzdt_input_grid, error_handler(), model_grid::i_input, init_atm_esmf_fields(), model_grid::input_grid, model_grid::j_input, lev_input, levp1_input, netcdf_err(), model_grid::num_tiles_input_grid, program_setup::num_tracers, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
 .PP
@@ -880,7 +914,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 2147 of file input_data\&.F90\&.
+Definition at line 2151 of file input_data\&.F90\&.
 .PP
 References program_setup::atm_files_input_grid, convert_winds(), program_setup::data_dir_input_grid, dpres_input_grid, dzdt_input_grid, error_handler(), model_grid::i_input, init_atm_esmf_fields(), model_grid::input_grid, model_grid::j_input, lev_input, levp1_input, netcdf_err(), model_grid::num_tiles_input_grid, program_setup::num_tracers, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
 .PP
@@ -904,7 +938,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 211 of file input_data\&.F90\&.
+Definition at line 215 of file input_data\&.F90\&.
 .PP
 References c_0_input_grid, c_d_input_grid, d_conv_input_grid, dt_cool_input_grid, error_handler(), ifd_input_grid, model_grid::input_grid, program_setup::input_type, qrain_input_grid, read_input_nst_nemsio_file(), read_input_nst_netcdf_file(), tref_input_grid, w_0_input_grid, w_d_input_grid, xs_input_grid, xt_input_grid, xtts_input_grid, xu_input_grid, xv_input_grid, xz_input_grid, xzts_input_grid, z_c_input_grid, and zm_input_grid\&.
 .PP
@@ -933,7 +967,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 5705 of file input_data\&.F90\&.
+Definition at line 5702 of file input_data\&.F90\&.
 .PP
 References c_0_input_grid, c_d_input_grid, d_conv_input_grid, program_setup::data_dir_input_grid, dt_cool_input_grid, error_handler(), model_grid::i_input, ifd_input_grid, program_setup::input_type, model_grid::j_input, program_setup::nst_files_input_grid, qrain_input_grid, program_setup::sfc_files_input_grid, tref_input_grid, w_0_input_grid, w_d_input_grid, xs_input_grid, xt_input_grid, xtts_input_grid, xu_input_grid, xv_input_grid, xz_input_grid, xzts_input_grid, z_c_input_grid, and zm_input_grid\&.
 .PP
@@ -957,7 +991,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 5421 of file input_data\&.F90\&.
+Definition at line 5418 of file input_data\&.F90\&.
 .PP
 References c_0_input_grid, c_d_input_grid, d_conv_input_grid, dt_cool_input_grid, error_handler(), model_grid::i_input, ifd_input_grid, program_setup::input_type, model_grid::j_input, lsoil_input, model_grid::num_tiles_input_grid, qrain_input_grid, read_fv3_grid_data_netcdf(), tref_input_grid, w_0_input_grid, w_d_input_grid, xs_input_grid, xt_input_grid, xtts_input_grid, xu_input_grid, xv_input_grid, xz_input_grid, xzts_input_grid, z_c_input_grid, and zm_input_grid\&.
 .PP
@@ -981,7 +1015,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 373 of file input_data\&.F90\&.
+Definition at line 377 of file input_data\&.F90\&.
 .PP
 References canopy_mc_input_grid, error_handler(), f10m_input_grid, ffmm_input_grid, model_grid::input_grid, program_setup::input_type, program_setup::lai_from_climo, lai_input_grid, landsea_mask_input_grid, lsoil_input, max_veg_greenness_input_grid, min_veg_greenness_input_grid, program_setup::minmax_vgfrc_from_climo, q2m_input_grid, read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), read_input_sfc_restart_file(), seaice_depth_input_grid, seaice_fract_input_grid, seaice_skin_temp_input_grid, skin_temp_input_grid, snow_depth_input_grid, snow_liq_equiv_input_grid, soil_temp_input_grid, soil_type_input_grid, soilm_liq_input_grid, soilm_tot_input_grid, srflag_input_grid, t2m_input_grid, terrain_input_grid, tprcp_input_grid, ustar_input_grid, veg_greenness_input_grid, veg_type_input_grid, program_setup::vgfrc_from_climo, and z0_input_grid\&.
 .PP
@@ -1005,7 +1039,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 3553 of file input_data\&.F90\&.
+Definition at line 3557 of file input_data\&.F90\&.
 .PP
 References canopy_mc_input_grid, program_setup::data_dir_input_grid, error_handler(), f10m_input_grid, ffmm_input_grid, model_grid::i_input, model_grid::j_input, landsea_mask_input_grid, lsoil_input, q2m_input_grid, seaice_depth_input_grid, seaice_fract_input_grid, seaice_skin_temp_input_grid, program_setup::sfc_files_input_grid, skin_temp_input_grid, snow_depth_input_grid, snow_liq_equiv_input_grid, soil_temp_input_grid, soil_type_input_grid, soilm_liq_input_grid, soilm_tot_input_grid, srflag_input_grid, t2m_input_grid, terrain_input_grid, tprcp_input_grid, ustar_input_grid, veg_type_input_grid, and z0_input_grid\&.
 .PP
@@ -1034,7 +1068,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 3204 of file input_data\&.F90\&.
+Definition at line 3208 of file input_data\&.F90\&.
 .PP
 References canopy_mc_input_grid, program_setup::data_dir_input_grid, error_handler(), f10m_input_grid, ffmm_input_grid, model_grid::i_input, model_grid::j_input, landsea_mask_input_grid, lsoil_input, q2m_input_grid, seaice_depth_input_grid, seaice_fract_input_grid, seaice_skin_temp_input_grid, program_setup::sfc_files_input_grid, skin_temp_input_grid, snow_depth_input_grid, snow_liq_equiv_input_grid, soil_temp_input_grid, soil_type_input_grid, soilm_liq_input_grid, soilm_tot_input_grid, srflag_input_grid, t2m_input_grid, terrain_input_grid, tprcp_input_grid, ustar_input_grid, veg_type_input_grid, and z0_input_grid\&.
 .PP
@@ -1063,7 +1097,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 2980 of file input_data\&.F90\&.
+Definition at line 2984 of file input_data\&.F90\&.
 .PP
 References canopy_mc_input_grid, program_setup::data_dir_input_grid, error_handler(), f10m_input_grid, ffmm_input_grid, model_grid::i_input, model_grid::j_input, landsea_mask_input_grid, lsoil_input, q2m_input_grid, seaice_depth_input_grid, seaice_fract_input_grid, seaice_skin_temp_input_grid, program_setup::sfc_files_input_grid, skin_temp_input_grid, snow_depth_input_grid, snow_liq_equiv_input_grid, soil_temp_input_grid, soil_type_input_grid, soilm_liq_input_grid, soilm_tot_input_grid, srflag_input_grid, t2m_input_grid, terrain_input_grid, tprcp_input_grid, ustar_input_grid, veg_type_input_grid, veg_type_landice_input, and z0_input_grid\&.
 .PP
@@ -1085,9 +1119,9 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 4580 of file input_data\&.F90\&.
+Definition at line 4584 of file input_data\&.F90\&.
 .PP
-References canopy_mc_input_grid, error_handler(), f10m_input_grid, ffmm_input_grid, handle_grib_error(), model_grid::input_grid_type, lai_input_grid, landsea_mask_input_grid, lsoil_input, max_veg_greenness_input_grid, min_veg_greenness_input_grid, netcdf_err(), q2m_input_grid, read_grib_soil(), seaice_depth_input_grid, seaice_fract_input_grid, seaice_skin_temp_input_grid, search_util::search(), skin_temp_input_grid, snow_depth_input_grid, snow_liq_equiv_input_grid, soil_temp_input_grid, soil_type_input_grid, soilm_liq_input_grid, soilm_tot_input_grid, program_setup::sotyp_from_climo, srflag_input_grid, t2m_input_grid, terrain_input_grid, tprcp_input_grid, ustar_input_grid, veg_greenness_input_grid, veg_type_input_grid, veg_type_landice_input, program_setup::vgtyp_from_climo, and z0_input_grid\&.
+References canopy_mc_input_grid, check_soilt(), error_handler(), f10m_input_grid, ffmm_input_grid, handle_grib_error(), model_grid::input_grid_type, lai_input_grid, landsea_mask_input_grid, lsoil_input, max_veg_greenness_input_grid, min_veg_greenness_input_grid, netcdf_err(), q2m_input_grid, read_grib_soil(), seaice_depth_input_grid, seaice_fract_input_grid, seaice_skin_temp_input_grid, search_util::search(), skin_temp_input_grid, snow_depth_input_grid, snow_liq_equiv_input_grid, soil_temp_input_grid, soil_type_input_grid, soilm_liq_input_grid, soilm_tot_input_grid, program_setup::sotyp_from_climo, srflag_input_grid, t2m_input_grid, terrain_input_grid, tprcp_input_grid, ustar_input_grid, veg_greenness_input_grid, veg_type_input_grid, veg_type_landice_input, program_setup::vgtyp_from_climo, and z0_input_grid\&.
 .PP
 Referenced by read_input_sfc_data()\&.
 .SS "subroutine input_data::read_input_sfc_netcdf_file (integer, intent(in) localpet)\fC [private]\fP"
@@ -1109,7 +1143,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 4219 of file input_data\&.F90\&.
+Definition at line 4223 of file input_data\&.F90\&.
 .PP
 References canopy_mc_input_grid, program_setup::data_dir_input_grid, error_handler(), f10m_input_grid, ffmm_input_grid, model_grid::i_input, program_setup::input_type, model_grid::j_input, landsea_mask_input_grid, lsoil_input, netcdf_err(), model_grid::num_tiles_input_grid, program_setup::orog_dir_input_grid, program_setup::orog_files_input_grid, q2m_input_grid, read_fv3_grid_data_netcdf(), seaice_depth_input_grid, seaice_fract_input_grid, seaice_skin_temp_input_grid, program_setup::sfc_files_input_grid, skin_temp_input_grid, snow_depth_input_grid, snow_liq_equiv_input_grid, soil_temp_input_grid, soil_type_input_grid, soilm_liq_input_grid, soilm_tot_input_grid, srflag_input_grid, t2m_input_grid, terrain_input_grid, tprcp_input_grid, ustar_input_grid, veg_type_input_grid, and z0_input_grid\&.
 .PP
@@ -1133,7 +1167,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 3902 of file input_data\&.F90\&.
+Definition at line 3906 of file input_data\&.F90\&.
 .PP
 References canopy_mc_input_grid, program_setup::data_dir_input_grid, error_handler(), f10m_input_grid, ffmm_input_grid, model_grid::i_input, model_grid::j_input, landsea_mask_input_grid, lsoil_input, netcdf_err(), model_grid::num_tiles_input_grid, program_setup::orog_dir_input_grid, program_setup::orog_files_input_grid, q2m_input_grid, read_fv3_grid_data_netcdf(), seaice_depth_input_grid, seaice_fract_input_grid, seaice_skin_temp_input_grid, program_setup::sfc_files_input_grid, skin_temp_input_grid, snow_depth_input_grid, snow_liq_equiv_input_grid, soil_temp_input_grid, soil_type_input_grid, soilm_liq_input_grid, soilm_tot_input_grid, srflag_input_grid, t2m_input_grid, terrain_input_grid, tprcp_input_grid, ustar_input_grid, veg_type_input_grid, and z0_input_grid\&.
 .PP
@@ -1163,7 +1197,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6027 of file input_data\&.F90\&.
+Definition at line 6024 of file input_data\&.F90\&.
 .PP
 References calcalpha_rotlatlon(), error_handler(), program_setup::fix_dir_input_grid, program_setup::get_var_cond(), gridrot(), handle_grib_error(), model_grid::input_grid_type, lev_input, and slevs\&.
 .PP
@@ -1175,7 +1209,7 @@ Referenced by read_input_atm_grib2_file()\&.
 .PP
 Coefficient 1 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 109 of file input_data\&.F90\&.
+Definition at line 112 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::c_d_input_grid"
@@ -1183,7 +1217,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 Coefficient 2 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 108 of file input_data\&.F90\&.
+Definition at line 111 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::canopy_mc_input_grid"
@@ -1191,7 +1225,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 canopy moist content 
 .PP
-Definition at line 73 of file input_data\&.F90\&.
+Definition at line 76 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::d_conv_input_grid"
@@ -1199,7 +1233,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 Thickness of free convection layer\&. 
 .PP
-Definition at line 110 of file input_data\&.F90\&.
+Definition at line 113 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field) input_data::dpres_input_grid\fC [private]\fP"
@@ -1207,7 +1241,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 pressure thickness 
 .PP
-Definition at line 54 of file input_data\&.F90\&.
+Definition at line 56 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .SS "type(esmf_field), public input_data::dt_cool_input_grid"
@@ -1215,7 +1249,7 @@ Referenced by read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_net
 .PP
 Sub-layer cooling amount\&. 
 .PP
-Definition at line 111 of file input_data\&.F90\&.
+Definition at line 114 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::dzdt_input_grid"
@@ -1223,7 +1257,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 vert velocity 
 .PP
-Definition at line 53 of file input_data\&.F90\&.
+Definition at line 55 of file input_data\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_atm_esmf_fields(), read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .SS "type(esmf_field), public input_data::f10m_input_grid"
@@ -1231,7 +1265,7 @@ Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_at
 .PP
 log((z0+10)*1/z0) 
 .PP
-Definition at line 74 of file input_data\&.F90\&.
+Definition at line 77 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::ffmm_input_grid"
@@ -1239,15 +1273,23 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 log((z0+z1)*1/z0) See sfc_diff\&.f for details\&. 
 .PP
-Definition at line 75 of file input_data\&.F90\&.
+Definition at line 78 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
+.SS "integer, parameter input_data::icet_default = 265\&.0\fC [private]\fP"
+
+.PP
+Default value of soil and skin temperature (K) over ice\&. 
+.PP
+Definition at line 74 of file input_data\&.F90\&.
+.PP
+Referenced by check_soilt()\&.
 .SS "type(esmf_field), public input_data::ifd_input_grid"
 
 .PP
 Model mode index\&. 0-diurnal model not started; 1-diurnal model started\&. 
 .PP
-Definition at line 112 of file input_data\&.F90\&.
+Definition at line 115 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::lai_input_grid"
@@ -1255,7 +1297,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 leaf area index 
 .PP
-Definition at line 97 of file input_data\&.F90\&.
+Definition at line 100 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), and read_input_sfc_grib2_file()\&.
 .SS "type(esmf_field), public input_data::landsea_mask_input_grid"
@@ -1263,7 +1305,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 land sea mask; 0-water, 1-land, 2-ice 
 .PP
-Definition at line 77 of file input_data\&.F90\&.
+Definition at line 80 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "integer, public input_data::lev_input"
@@ -1271,7 +1313,7 @@ Referenced by cleanup_input_nst_data(), cleanup_input_sfc_data(), surface::inter
 .PP
 number of atmospheric layers 
 .PP
-Definition at line 64 of file input_data\&.F90\&.
+Definition at line 66 of file input_data\&.F90\&.
 .PP
 Referenced by atmosphere::create_atm_b4adj_esmf_fields(), init_atm_esmf_fields(), read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), read_input_atm_tiled_history_file(), read_winds(), and atmosphere::vintg()\&.
 .SS "integer, public input_data::levp1_input"
@@ -1279,7 +1321,7 @@ Referenced by atmosphere::create_atm_b4adj_esmf_fields(), init_atm_esmf_fields()
 .PP
 number of atmos layer interfaces 
 .PP
-Definition at line 65 of file input_data\&.F90\&.
+Definition at line 67 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .SS "integer, public input_data::lsoil_input =4"
@@ -1287,15 +1329,15 @@ Referenced by read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_net
 .PP
 number of soil layers, no longer hardwired to allow for 7 layers of soil for the RUC LSM 
 .PP
-Definition at line 101 of file input_data\&.F90\&.
+Definition at line 104 of file input_data\&.F90\&.
 .PP
-Referenced by surface::adjust_soil_levels(), read_input_nst_netcdf_file(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
+Referenced by surface::adjust_soil_levels(), check_soilt(), read_input_nst_netcdf_file(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::max_veg_greenness_input_grid"
 
 .PP
 shdmax 
 .PP
-Definition at line 98 of file input_data\&.F90\&.
+Definition at line 101 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), and read_input_sfc_grib2_file()\&.
 .SS "type(esmf_field), public input_data::min_veg_greenness_input_grid"
@@ -1303,7 +1345,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 shdmin 
 .PP
-Definition at line 99 of file input_data\&.F90\&.
+Definition at line 102 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), and read_input_sfc_grib2_file()\&.
 .SS "type(esmf_field), public input_data::pres_input_grid"
@@ -1311,7 +1353,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 3-d pressure 
 .PP
-Definition at line 55 of file input_data\&.F90\&.
+Definition at line 57 of file input_data\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_atm_esmf_fields(), read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .SS "type(esmf_field), public input_data::ps_input_grid"
@@ -1319,7 +1361,7 @@ Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_at
 .PP
 surface pressure 
 .PP
-Definition at line 56 of file input_data\&.F90\&.
+Definition at line 58 of file input_data\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_atm_esmf_fields(), read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .SS "type(esmf_field), public input_data::q2m_input_grid"
@@ -1327,7 +1369,7 @@ Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_at
 .PP
 2-m spec hum 
 .PP
-Definition at line 79 of file input_data\&.F90\&.
+Definition at line 82 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::qrain_input_grid"
@@ -1335,7 +1377,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 Sensible heat flux due to rainfall\&. 
 .PP
-Definition at line 114 of file input_data\&.F90\&.
+Definition at line 117 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::seaice_depth_input_grid"
@@ -1343,7 +1385,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 sea ice depth 
 .PP
-Definition at line 80 of file input_data\&.F90\&.
+Definition at line 83 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::seaice_fract_input_grid"
@@ -1351,7 +1393,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 sea ice fraction 
 .PP
-Definition at line 81 of file input_data\&.F90\&.
+Definition at line 84 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::seaice_skin_temp_input_grid"
@@ -1359,7 +1401,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 sea ice skin temp 
 .PP
-Definition at line 82 of file input_data\&.F90\&.
+Definition at line 85 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::skin_temp_input_grid"
@@ -1367,7 +1409,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 skin temp/sst 
 .PP
-Definition at line 83 of file input_data\&.F90\&.
+Definition at line 86 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "character(len=50), dimension(:), allocatable, private input_data::slevs\fC [private]\fP"
@@ -1375,7 +1417,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 The atmospheric levels in the GRIB2 input file\&. 
 .PP
-Definition at line 104 of file input_data\&.F90\&.
+Definition at line 107 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_atm_grib2_file(), and read_winds()\&.
 .SS "type(esmf_field), public input_data::snow_depth_input_grid"
@@ -1383,7 +1425,7 @@ Referenced by read_input_atm_grib2_file(), and read_winds()\&.
 .PP
 snow dpeth 
 .PP
-Definition at line 84 of file input_data\&.F90\&.
+Definition at line 87 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::snow_liq_equiv_input_grid"
@@ -1391,7 +1433,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 snow liq equiv depth 
 .PP
-Definition at line 85 of file input_data\&.F90\&.
+Definition at line 88 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::soil_temp_input_grid"
@@ -1399,7 +1441,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 3-d soil temp 
 .PP
-Definition at line 86 of file input_data\&.F90\&.
+Definition at line 89 of file input_data\&.F90\&.
 .PP
 Referenced by surface::adjust_soil_levels(), cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::soil_type_input_grid"
@@ -1407,7 +1449,7 @@ Referenced by surface::adjust_soil_levels(), cleanup_input_sfc_data(), surface::
 .PP
 soil type 
 .PP
-Definition at line 87 of file input_data\&.F90\&.
+Definition at line 90 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::soilm_liq_input_grid"
@@ -1415,7 +1457,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 3-d liquid soil moisture 
 .PP
-Definition at line 88 of file input_data\&.F90\&.
+Definition at line 91 of file input_data\&.F90\&.
 .PP
 Referenced by surface::adjust_soil_levels(), cleanup_input_sfc_data(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::soilm_tot_input_grid"
@@ -1423,7 +1465,7 @@ Referenced by surface::adjust_soil_levels(), cleanup_input_sfc_data(), read_inpu
 .PP
 3-d total soil moisture 
 .PP
-Definition at line 89 of file input_data\&.F90\&.
+Definition at line 92 of file input_data\&.F90\&.
 .PP
 Referenced by surface::adjust_soil_levels(), cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::srflag_input_grid"
@@ -1431,7 +1473,7 @@ Referenced by surface::adjust_soil_levels(), cleanup_input_sfc_data(), surface::
 .PP
 snow/rain flag 
 .PP
-Definition at line 90 of file input_data\&.F90\&.
+Definition at line 93 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::t2m_input_grid"
@@ -1439,7 +1481,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 2-m temperature 
 .PP
-Definition at line 91 of file input_data\&.F90\&.
+Definition at line 94 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::temp_input_grid"
@@ -1447,7 +1489,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 temperature 
 .PP
-Definition at line 58 of file input_data\&.F90\&.
+Definition at line 60 of file input_data\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_atm_esmf_fields(), read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .SS "type(esmf_field), public input_data::terrain_input_grid"
@@ -1455,7 +1497,7 @@ Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_at
 .PP
 terrain height 
 .PP
-Definition at line 57 of file input_data\&.F90\&.
+Definition at line 59 of file input_data\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), cleanup_input_sfc_data(), init_atm_esmf_fields(), surface::interp(), read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), read_input_atm_tiled_history_file(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::tprcp_input_grid"
@@ -1463,7 +1505,7 @@ Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), cleanup
 .PP
 precip 
 .PP
-Definition at line 92 of file input_data\&.F90\&.
+Definition at line 95 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), dimension(:), allocatable, public input_data::tracers_input_grid"
@@ -1471,7 +1513,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 tracers 
 .PP
-Definition at line 62 of file input_data\&.F90\&.
+Definition at line 64 of file input_data\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_atm_esmf_fields(), read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .SS "type(esmf_field), public input_data::tref_input_grid"
@@ -1479,7 +1521,7 @@ Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_at
 .PP
 Reference temperature\&. 
 .PP
-Definition at line 115 of file input_data\&.F90\&.
+Definition at line 118 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field) input_data::u_input_grid\fC [private]\fP"
@@ -1487,7 +1529,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 u/v wind at grid 
 .PP
-Definition at line 59 of file input_data\&.F90\&.
+Definition at line 61 of file input_data\&.F90\&.
 .PP
 Referenced by convert_winds(), init_atm_esmf_fields(), read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .SS "type(esmf_field), public input_data::ustar_input_grid"
@@ -1495,7 +1537,7 @@ Referenced by convert_winds(), init_atm_esmf_fields(), read_input_atm_gaussian_n
 .PP
 fric velocity 
 .PP
-Definition at line 93 of file input_data\&.F90\&.
+Definition at line 96 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field) input_data::v_input_grid\fC [private]\fP"
@@ -1503,7 +1545,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 box center 
 .PP
-Definition at line 60 of file input_data\&.F90\&.
+Definition at line 62 of file input_data\&.F90\&.
 .PP
 Referenced by convert_winds(), init_atm_esmf_fields(), read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .SS "type(esmf_field), public input_data::veg_greenness_input_grid"
@@ -1511,7 +1553,7 @@ Referenced by convert_winds(), init_atm_esmf_fields(), read_input_atm_gaussian_n
 .PP
 vegetation fraction 
 .PP
-Definition at line 96 of file input_data\&.F90\&.
+Definition at line 99 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), and read_input_sfc_grib2_file()\&.
 .SS "type(esmf_field), public input_data::veg_type_input_grid"
@@ -1519,7 +1561,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 vegetation type 
 .PP
-Definition at line 94 of file input_data\&.F90\&.
+Definition at line 97 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "integer, public input_data::veg_type_landice_input = 15"
@@ -1527,7 +1569,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 NOAH land ice option defined at this veg type\&. Default is igbp\&. 
 .PP
-Definition at line 69 of file input_data\&.F90\&.
+Definition at line 71 of file input_data\&.F90\&.
 .PP
 Referenced by surface::interp(), read_input_sfc_gfs_sfcio_file(), and read_input_sfc_grib2_file()\&.
 .SS "type(esmf_field), public input_data::w_0_input_grid"
@@ -1535,7 +1577,7 @@ Referenced by surface::interp(), read_input_sfc_gfs_sfcio_file(), and read_input
 .PP
 Coefficient 3 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 117 of file input_data\&.F90\&.
+Definition at line 120 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::w_d_input_grid"
@@ -1543,7 +1585,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 Coefficient 4 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 116 of file input_data\&.F90\&.
+Definition at line 119 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::wind_input_grid"
@@ -1551,7 +1593,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 3-component wind 
 .PP
-Definition at line 61 of file input_data\&.F90\&.
+Definition at line 63 of file input_data\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), convert_winds(), and init_atm_esmf_fields()\&.
 .SS "type(esmf_field), public input_data::xs_input_grid"
@@ -1559,7 +1601,7 @@ Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), convert
 .PP
 Salinity content in diurnal thermocline layer\&. 
 .PP
-Definition at line 118 of file input_data\&.F90\&.
+Definition at line 121 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::xt_input_grid"
@@ -1567,7 +1609,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 Heat content in diurnal thermocline layer\&. 
 .PP
-Definition at line 119 of file input_data\&.F90\&.
+Definition at line 122 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::xtts_input_grid"
@@ -1575,7 +1617,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 d(xt)/d(ts) 
 .PP
-Definition at line 123 of file input_data\&.F90\&.
+Definition at line 126 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::xu_input_grid"
@@ -1583,7 +1625,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 u-current content in diurnal thermocline layer 
 .PP
-Definition at line 120 of file input_data\&.F90\&.
+Definition at line 123 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::xv_input_grid"
@@ -1591,7 +1633,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 v-current content in diurnal thermocline layer 
 .PP
-Definition at line 121 of file input_data\&.F90\&.
+Definition at line 124 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::xz_input_grid"
@@ -1599,7 +1641,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 Diurnal thermocline layer thickness\&. 
 .PP
-Definition at line 122 of file input_data\&.F90\&.
+Definition at line 125 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::xzts_input_grid"
@@ -1607,7 +1649,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 d(xz)/d(ts) 
 .PP
-Definition at line 124 of file input_data\&.F90\&.
+Definition at line 127 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::z0_input_grid"
@@ -1615,7 +1657,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 roughness length 
 .PP
-Definition at line 95 of file input_data\&.F90\&.
+Definition at line 98 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .SS "type(esmf_field), public input_data::z_c_input_grid"
@@ -1623,7 +1665,7 @@ Referenced by cleanup_input_sfc_data(), surface::interp(), read_input_sfc_data()
 .PP
 Sub-layer cooling thickness\&. 
 .PP
-Definition at line 125 of file input_data\&.F90\&.
+Definition at line 128 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SS "type(esmf_field), public input_data::zm_input_grid"
@@ -1631,7 +1673,7 @@ Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data()
 .PP
 Oceanic mixed layer depth\&. 
 .PP
-Definition at line 126 of file input_data\&.F90\&.
+Definition at line 129 of file input_data\&.F90\&.
 .PP
 Referenced by cleanup_input_nst_data(), surface::interp(), read_input_nst_data(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .SH "Author"

@@ -1,4 +1,4 @@
-.TH "pmat4::identity" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::identity" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,25 +12,25 @@ pmat4::identity
 .ti -1c
 .RI "integer(spi) function, dimension(3, 3) \fBidentity3_i\fP ()"
 .br
-.RI "Calculation for identity3_i function\&. "
+.RI "Return the 3-dimensional integer identity matrix\&. "
 .ti -1c
 .RI "integer(spi) function, dimension(n, n) \fBidentity_i\fP (n)"
 .br
-.RI "Calculation for identity_i function\&. "
+.RI "Return the integer identity matrix for a given dimensionality\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 80 of file pmat4\&.f90\&.
+Definition at line 79 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "integer(spi) function, dimension(3,3) pmat4::identity::identity3_i\fC [private]\fP"
 
 .PP
-Calculation for identity3_i function\&. 
+Return the 3-dimensional integer identity matrix\&. 
 .PP
 \fBReturns\fP
 .RS 4
-a result 
+a result, identity matrix in 3 dimensions\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -40,20 +40,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 605 of file pmat4\&.f90\&.
+Definition at line 615 of file pmat4\&.f90\&.
 .SS "integer(spi) function, dimension(n,n) pmat4::identity::identity_i (integer(spi), intent(in) n)\fC [private]\fP"
 
 .PP
-Calculation for identity_i function\&. 
+Return the integer identity matrix for a given dimensionality\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIn\fP input value 
+\fIn\fP input integer dimensionality 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-a result 
+a result, identity matrix of the given dimensionality 
 .RE
 .PP
 \fBAuthor\fP
@@ -63,7 +63,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 593 of file pmat4\&.f90\&.
+Definition at line 603 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

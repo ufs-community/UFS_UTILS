@@ -1,4 +1,4 @@
-.TH "psym2::expsym2d_e" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "psym2::expsym2d_e" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,7 +12,7 @@ psym2::expsym2d_e
 .ti -1c
 .RI "subroutine \fBexpsym2d_e\fP (x, z, zd)"
 .br
-.RI "Sub Process for process symmetric 2*2 matrix\&. "
+.RI "Get the exponential and its symmetric derivative for a symmetric 2*2 matrix using eigen-decomposition\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -22,15 +22,15 @@ Definition at line 27 of file psym2\&.f90\&.
 .SS "subroutine psym2::expsym2d_e::expsym2d_e (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
 
 .PP
-Sub Process for process symmetric 2*2 matrix\&. 
+Get the exponential and its symmetric derivative for a symmetric 2*2 matrix using eigen-decomposition\&. 
 .PP
 \fBParameters\fP
 .RS 4
 \fIx\fP symmetric 2*2 positive-definite matrix 
 .br
-\fIz\fP ??? 
+\fIz\fP exp of symmetrix matrix x 
 .br
-\fIzd\fP symmetric derivative 
+\fIzd\fP symmetric derivative of z wrt x 
 .RE
 .PP
 \fBAuthor\fP
@@ -40,9 +40,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 315 of file psym2\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 317 of file psym2\&.f90\&.
 
 .SH "Author"
 .PP 

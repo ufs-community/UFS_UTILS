@@ -1,4 +1,4 @@
-.TH "pmat::udlmm" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::udlmm" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,19 +12,19 @@ pmat::udlmm
 .ti -1c
 .RI "subroutine \fBcudlmm\fP (a, b, ipiv)"
 .br
-.RI "??? "
+.RI "Use l-u factors in A to back-substitute for several rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. "
 .ti -1c
 .RI "subroutine \fBcudlmv\fP (a, b, ipiv)"
 .br
-.RI "??? "
+.RI "Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. "
 .ti -1c
 .RI "subroutine \fBdudlmm\fP (a, b, ipiv)"
 .br
-.RI "??? "
+.RI "Use l-u factors in A to back-substitute for several rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. "
 .ti -1c
 .RI "subroutine \fBdudlmv\fP (a, b, ipiv)"
 .br
-.RI "??? "
+.RI "Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. "
 .ti -1c
 .RI "subroutine \fBsudlmm\fP (a, b, ipiv)"
 .br
@@ -42,15 +42,15 @@ Definition at line 29 of file pmat\&.f90\&.
 .SS "subroutine pmat::udlmm::cudlmm (complex(dpc), dimension(:,:), intent(in) a, complex(dpc), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fC [private]\fP"
 
 .PP
-??? 
+Use l-u factors in A to back-substitute for several rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
 .PP
 \fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
-\fIb\fP ??? 
+\fIb\fP rt-hand-sides vectors on input, corresponding solutions on return 
 .br
-\fIipiv\fP array encoding the pivoting sequence 
+\fIipiv\fP vector encoding the pivoting sequence 
 .RE
 .PP
 \fBAuthor\fP
@@ -60,19 +60,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 777 of file pmat\&.f90\&.
-.PP
-References pietc::c1\&.
+Definition at line 798 of file pmat\&.f90\&.
 .SS "subroutine pmat::udlmm::cudlmv (complex(dpc), dimension(:,:), intent(in) a, complex(dpc), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fC [private]\fP"
 
 .PP
-??? 
+Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
 .PP
 \fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
-\fIb\fP ??? 
+\fIb\fP right-hand side vector on input, corresponding solution on return 
 .br
 \fIipiv\fP array encoding the pivoting sequence 
 .RE
@@ -84,21 +82,19 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 867 of file pmat\&.f90\&.
-.PP
-References pietc::c1\&.
+Definition at line 893 of file pmat\&.f90\&.
 .SS "subroutine pmat::udlmm::dudlmm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fC [private]\fP"
 
 .PP
-??? 
+Use l-u factors in A to back-substitute for several rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
 .PP
 \fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
-\fIb\fP ??? 
+\fIb\fP rt-hand-sides vectors on input, corresponding solutions on return 
 .br
-\fIipiv\fP array encoding the pivoting sequence 
+\fIipiv\fP vector encoding the pivoting sequence 
 .RE
 .PP
 \fBAuthor\fP
@@ -108,19 +104,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 746 of file pmat\&.f90\&.
-.PP
-References pietc::u1\&.
+Definition at line 764 of file pmat\&.f90\&.
 .SS "subroutine pmat::udlmm::dudlmv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fC [private]\fP"
 
 .PP
-??? 
+Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
 .PP
 \fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
-\fIb\fP ??? 
+\fIb\fP right-hand side vector on input, corresponding solution on return 
 .br
 \fIipiv\fP array encoding the pivoting sequence 
 .RE
@@ -132,9 +126,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 838 of file pmat\&.f90\&.
-.PP
-References pietc::u1\&.
+Definition at line 862 of file pmat\&.f90\&.
 .SS "subroutine pmat::udlmm::sudlmm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fC [private]\fP"
 
 .PP
@@ -146,7 +138,7 @@ Use l-u factors in A to back-substitute for several rhs in B, using ipiv to defi
 .br
 \fIb\fP rt-hand-sides vectors on input, corresponding solutions on return 
 .br
-\fIipiv\fP array encoding the pivoting sequence 
+\fIipiv\fP vector encoding the pivoting sequence 
 .RE
 .PP
 \fBAuthor\fP
@@ -156,7 +148,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 715 of file pmat\&.f90\&.
+Definition at line 730 of file pmat\&.f90\&.
 .SS "subroutine pmat::udlmm::sudlmv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fC [private]\fP"
 
 .PP
@@ -168,7 +160,7 @@ Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the
 .br
 \fIb\fP right-hand-side vector on input, corresponding solution on return 
 .br
-\fIipiv\fP array encoding the pivoting sequence 
+\fIipiv\fP vector encoding the pivoting sequence 
 .RE
 .PP
 \fBAuthor\fP
@@ -178,7 +170,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 809 of file pmat\&.f90\&.
+Definition at line 831 of file pmat\&.f90\&.
 
 .SH "Author"
 .PP 

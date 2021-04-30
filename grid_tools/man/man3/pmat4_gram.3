@@ -1,4 +1,4 @@
-.TH "pmat4::gram" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::gram" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,11 +12,11 @@ pmat4::gram
 .ti -1c
 .RI "subroutine \fBgram_d\fP (as, b, nrank, \fBdet\fP)"
 .br
-.RI "??? "
+.RI "Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. "
 .ti -1c
 .RI "subroutine \fBgram_s\fP (as, b, nrank, \fBdet\fP)"
 .br
-.RI "??? "
+.RI "Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. "
 .ti -1c
 .RI "subroutine \fBgraml_d\fP (as, b, nrank, detsign, ldet)"
 .br
@@ -36,23 +36,23 @@ pmat4::gram
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 88 of file pmat4\&.f90\&.
+Definition at line 87 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "subroutine pmat4::gram::gram_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(dp), intent(out) det)\fC [private]\fP"
 
 .PP
-??? 
+Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. The number of columns returned is the rank, nrank, of A, and the determinant of the projection of A into the subspace of B is returned as det\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIas\fP ??? 
+\fIas\fP given matrix A 
 .br
-\fIb\fP ??? 
+\fIb\fP matrix B containing nrank orthonormal column vectors 
 .br
-\fInrank\fP ??? 
+\fInrank\fP rank of A 
 .br
-\fIdet\fP ??? 
+\fIdet\fP determinant of projection of A into subspace of B 
 .RE
 .PP
 \fBAuthor\fP
@@ -64,23 +64,21 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1034 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 1078 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::gram::gram_s (real(sp), dimension(:,:), intent(in) as, real(sp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(sp), intent(out) det)\fC [private]\fP"
 
 .PP
-??? 
+Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. The number of columns returned is the rank, nrank, of A, and the determinant of the projection of A into the subspace of B is returned as det\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIas\fP ??? 
+\fIas\fP given matrix A 
 .br
-\fIb\fP ??? 
+\fIb\fP matrix B containing nrank orthonormal column vectors 
 .br
-\fInrank\fP ??? 
+\fInrank\fP rank of A 
 .br
-\fIdet\fP ??? 
+\fIdet\fP determinant of projection of A into subspace of B 
 .RE
 .PP
 \fBAuthor\fP
@@ -90,7 +88,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 967 of file pmat4\&.f90\&.
+Definition at line 1007 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::gram::graml_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, integer(spi), intent(out) detsign, real(dp), intent(out) ldet)\fC [private]\fP"
 
 .PP
@@ -98,15 +96,15 @@ A version of gram_d where the determinant information is returned in logarithmic
 .PP
 \fBParameters\fP
 .RS 4
-\fIas\fP ??? 
+\fIas\fP given matrix A 
 .br
-\fIb\fP ??? 
+\fIb\fP matrix B of orthonormal columns 
 .br
-\fInrank\fP ??? 
+\fInrank\fP rank of A 
 .br
-\fIdetsign\fP singular determinant 
+\fIdetsign\fP sign of determinant 
 .br
-\fIldet\fP ??? 
+\fIldet\fP logarithm of absolute value of determinant 
 .RE
 .PP
 \fBAuthor\fP
@@ -116,19 +114,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1106 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 1150 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::gram::plaingram_d (real(dp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)\fC [private]\fP"
 
 .PP
-A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. 
+A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. Double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIb\fP matrices 
+\fIb\fP input as given matrix, output as orthogonalized vectors 
 .br
-\fInrank\fP result 
+\fInrank\fP effective rank of given matrix 
 .RE
 .PP
 \fBAuthor\fP
@@ -138,19 +134,17 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1217 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 1263 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::gram::plaingram_s (real(sp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)\fC [private]\fP"
 
 .PP
-A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. 
+A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIb\fP matrices 
+\fIb\fP input as given matrix, output as orthogonalized vectors 
 .br
-\fInrank\fP result 
+\fInrank\fP effective rank of given matrix 
 .RE
 .PP
 \fBAuthor\fP
@@ -160,7 +154,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1182 of file pmat4\&.f90\&.
+Definition at line 1227 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::gram::rowgram (integer(spi), intent(in) m, integer(spi), intent(in) n, real(dp), dimension(m,n), intent(in) a, integer(spi), dimension(n), intent(out) ipiv, real(dp), dimension(m,n), intent(out) tt, real(dp), dimension(n,n), intent(out) b, integer(spi), intent(out) rank)\fC [private]\fP"
 
 .PP
@@ -168,11 +162,11 @@ Without changing (tall) rectangular input matrix a, perform pivoted gram- Schmid
 .PP
 \fBParameters\fP
 .RS 4
-\fIm\fP ??? 
+\fIm\fP number of rows of A 
 .br
-\fIn\fP ??? 
+\fIn\fP number of columns of A 
 .br
-\fIa\fP rectangular input matrix 
+\fIa\fP rectangular input matrix A 
 .br
 \fIipiv\fP pivoting sequence 
 .br
@@ -180,7 +174,7 @@ Without changing (tall) rectangular input matrix a, perform pivoted gram- Schmid
 .br
 \fIb\fP orthonormalized rows 
 .br
-\fIrank\fP ??? 
+\fIrank\fP effective rank of A 
 .RE
 .PP
 \fBAuthor\fP
@@ -190,9 +184,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1269 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 1315 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

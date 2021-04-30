@@ -1,4 +1,4 @@
-.TH "/home/ed/UFS_UTILS/sorc/chgres_cube.fd/utils.F90" 3 "Fri Mar 26 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/chgres_cube.fd/utils.F90" 3 "Fri Apr 30 2021" "Version 1.3.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -50,7 +50,7 @@ General error handler\&.
 .PP
 
 .PP
-Definition at line 9 of file utils\&.F90\&.
+Definition at line 10 of file utils\&.F90\&.
 .PP
 Referenced by surface::adjust_soil_levels(), surface::adjust_soilt_for_terrain(), atmosphere::atmosphere_driver(), surface::calc_liq_soil_moisture(), surface::check_smois_land(), chgres(), atmosphere::compute_zh(), atmosphere::convert_winds(), input_data::convert_winds(), atmosphere::create_atm_b4adj_esmf_fields(), atmosphere::create_atm_esmf_fields(), surface::create_nst_esmf_fields(), surface::create_surface_esmf_fields(), model_grid::define_input_grid_gaussian(), model_grid::define_input_grid_gfs_grib2(), model_grid::define_input_grid_grib2(), model_grid::define_input_grid_mosaic(), model_grid::define_target_grid(), model_grid::get_model_latlons(), model_grid::get_model_mask_terrain(), static_data::get_static_fields(), input_data::handle_grib_error(), atmosphere::horiz_interp_thomp_mp_climo(), input_data::init_atm_esmf_fields(), surface::interp(), atmosphere::newpr1(), atmosphere::newps(), surface::nst_land_fill(), surface::qc_check(), input_data::read_grib_soil(), input_data::read_input_atm_gaussian_nemsio_file(), input_data::read_input_atm_gaussian_netcdf_file(), input_data::read_input_atm_gfs_gaussian_nemsio_file(), input_data::read_input_atm_gfs_sigio_file(), input_data::read_input_atm_grib2_file(), input_data::read_input_atm_restart_file(), input_data::read_input_atm_tiled_history_file(), input_data::read_input_nst_data(), input_data::read_input_nst_nemsio_file(), input_data::read_input_nst_netcdf_file(), input_data::read_input_sfc_data(), input_data::read_input_sfc_gaussian_nemsio_file(), input_data::read_input_sfc_gfs_gaussian_nemsio_file(), input_data::read_input_sfc_gfs_sfcio_file(), input_data::read_input_sfc_grib2_file(), input_data::read_input_sfc_netcdf_file(), input_data::read_input_sfc_restart_file(), program_setup::read_setup_namelist(), thompson_mp_climo_data::read_thomp_mp_climo_data(), program_setup::read_varmap(), atmosphere::read_vcoord_info(), input_data::read_winds(), surface::replace_land_sfcparams(), surface::rescale_soil_moisture(), surface::roughness(), atmosphere::vintg(), atmosphere::vintg_thomp_mp_climo(), write_fv3_atm_bndy_data_netcdf(), write_fv3_atm_data_netcdf(), and write_fv3_sfc_data_netcdf()\&.
 .SS "subroutine netcdf_err (integer, intent(in) err, character(len=*), intent(in) string)"
@@ -67,7 +67,7 @@ Error handler for netcdf\&.
 .PP
 
 .PP
-Definition at line 31 of file utils\&.F90\&.
+Definition at line 32 of file utils\&.F90\&.
 .PP
 Referenced by model_grid::define_input_grid_gaussian(), model_grid::define_input_grid_grib2(), model_grid::define_input_grid_mosaic(), model_grid::define_target_grid(), model_grid::get_model_latlons(), model_grid::get_model_mask_terrain(), input_data::read_fv3_grid_data_netcdf(), input_data::read_input_atm_gaussian_netcdf_file(), input_data::read_input_atm_restart_file(), input_data::read_input_atm_tiled_history_file(), input_data::read_input_sfc_grib2_file(), input_data::read_input_sfc_netcdf_file(), input_data::read_input_sfc_restart_file(), static_data::read_static_file(), thompson_mp_climo_data::read_thomp_mp_climo_data(), write_fv3_atm_bndy_data_netcdf(), write_fv3_atm_data_netcdf(), write_fv3_atm_header_netcdf(), and write_fv3_sfc_data_netcdf()\&.
 .SS "subroutine to_lower (character(len=*), intent(inout) strIn)"
@@ -89,7 +89,7 @@ Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
 .PP
 
 .PP
-Definition at line 84 of file utils\&.F90\&.
+Definition at line 85 of file utils\&.F90\&.
 .PP
 Referenced by program_setup::read_setup_namelist()\&.
 .SS "character(len=len(strin)) function to_upper (character(len=*), intent(in) strIn)"
@@ -116,7 +116,7 @@ strOut string in uppercase
 .PP
 
 .PP
-Definition at line 59 of file utils\&.F90\&.
+Definition at line 60 of file utils\&.F90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

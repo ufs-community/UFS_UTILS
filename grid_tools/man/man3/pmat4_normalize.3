@@ -1,4 +1,4 @@
-.TH "pmat4::normalize" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::normalize" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,21 +12,21 @@ pmat4::normalize
 .ti -1c
 .RI "subroutine \fBnormalize_d\fP (v)"
 .br
-.RI "Doing normalize_d calculation for given vector\&. "
+.RI "Normalize the given double precision real vector\&. "
 .ti -1c
 .RI "subroutine \fBnormalize_s\fP (v)"
 .br
-.RI "Normalize the given vector\&. "
+.RI "Normalize the given single precision real vector\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 87 of file pmat4\&.f90\&.
+Definition at line 86 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "subroutine pmat4::normalize::normalize_d (real(dp), dimension(:), intent(inout) v)\fC [private]\fP"
 
 .PP
-Doing normalize_d calculation for given vector\&. 
+Normalize the given double precision real vector\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -40,13 +40,11 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 952 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 988 of file pmat4\&.f90\&.
 .SS "subroutine pmat4::normalize::normalize_s (real(sp), dimension(:), intent(inout) v)\fC [private]\fP"
 
 .PP
-Normalize the given vector\&. 
+Normalize the given single precision real vector\&. 
 .PP
 \fBParameters\fP
 .RS 4
@@ -60,7 +58,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 940 of file pmat4\&.f90\&.
+Definition at line 976 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

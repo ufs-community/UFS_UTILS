@@ -1,4 +1,4 @@
-.TH "pmat4::orthogonalized" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::orthogonalized" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,32 +12,32 @@ pmat4::orthogonalized
 .ti -1c
 .RI "real(dp) function, dimension(size(u)) \fBorthogonalized_d\fP (u, a)"
 .br
-.RI "Doing calculation for orthogonalized_d function\&. "
+.RI "Return the part of vector a that is orthogonal to unit vector u\&. "
 .ti -1c
 .RI "real(sp) function, dimension(size(u)) \fBorthogonalized_s\fP (u, a)"
 .br
-.RI "Doing calculation for orthogonalized_s function\&. "
+.RI "Return the part of vector a that is orthogonal to unit vector u\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 63 of file pmat4\&.f90\&.
+Definition at line 62 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "real(dp) function, dimension(size(u)) pmat4::orthogonalized::orthogonalized_d (real(dp), dimension(:), intent(in) u, real(dp), dimension(:), intent(in) a)\fC [private]\fP"
 
 .PP
-Doing calculation for orthogonalized_d function\&. 
+Return the part of vector a that is orthogonal to unit vector u\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIu\fP real type input value 
+\fIu\fP real type input unit vector 
 .br
-\fIa\fP real type input value 
+\fIa\fP real type input vector 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-b result 
+b result, double precision real vector 
 .RE
 .PP
 \fBAuthor\fP
@@ -51,18 +51,18 @@ Definition at line 187 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(size(u)) pmat4::orthogonalized::orthogonalized_s (real(sp), dimension(:), intent(in) u, real(sp), dimension(:), intent(in) a)\fC [private]\fP"
 
 .PP
-Doing calculation for orthogonalized_s function\&. 
+Return the part of vector a that is orthogonal to unit vector u\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIu\fP real type input value 
+\fIu\fP real type input unit vector 
 .br
-\fIa\fP real type input value 
+\fIa\fP real type input vector 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-b result 
+b result, single precision real vector 
 .RE
 .PP
 \fBAuthor\fP

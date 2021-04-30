@@ -1,4 +1,4 @@
-.TH "pmat5::paraframe" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::paraframe" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,7 +16,7 @@ pmat5::paraframe
 .ti -1c
 .RI "subroutine \fBsparaframe\fP (sxp, syp, szp, sxv, syv, szv)"
 .br
-.RI "??? "
+.RI "Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -26,21 +26,21 @@ Definition at line 45 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::paraframe::paraframe (real(dp), dimension(3), intent(in) xp, real(dp), dimension(3), intent(in) yp, real(dp), dimension(3), intent(in) zp, real(dp), dimension(3), intent(out) xv, real(dp), dimension(3), intent(out) yv, real(dp), dimension(3), intent(in) zv)\fC [private]\fP"
 
 .PP
-Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. 
+Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. Double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIxp\fP reference orthonormal frame 
+\fIxp\fP reference orthonormal P-frame cartesian X-vector\&. 
 .br
-\fIyp\fP reference orthonormal frame 
+\fIyp\fP reference orthonormal P-frame cartesian Y-vector\&. 
 .br
-\fIzp\fP reference orthonormal frame 
+\fIzp\fP reference orthonormal P-frame cartesian Z-vector\&. 
 .br
-\fIzv\fP dependent point 
+\fIxv\fP V-frame cartesian X-vector\&. 
 .br
-\fIxv\fP V-frame cartesian components 
+\fIyv\fP V-frame cartesian Y-vector\&. 
 .br
-\fIyv\fP V-frame cartesian components 
+\fIzv\fP dependent point zenith, V-frame cartesian Z-vector\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -50,27 +50,27 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 653 of file pmat5\&.f90\&.
+Definition at line 719 of file pmat5\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "subroutine pmat5::paraframe::sparaframe (real(sp), dimension(3), intent(in) sxp, real(sp), dimension(3), intent(in) syp, real(sp), dimension(3), intent(in) szp, real(sp), dimension(3), intent(out) sxv, real(sp), dimension(3), intent(out) syv, real(sp), dimension(3), intent(in) szv)\fC [private]\fP"
 
 .PP
-??? 
+Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIsxp\fP ??? 
+\fIsxp\fP reference orthonormal P-frame cartesian X-vector\&. 
 .br
-\fIsyp\fP ??? 
+\fIsyp\fP reference orthonormal P-frame cartesian Y-vector\&. 
 .br
-\fIszp\fP ??? 
+\fIszp\fP reference orthonormal P-frame cartesian Z-vector\&. 
 .br
-\fIsxv\fP ??? 
+\fIsxv\fP V-frame cartesian X-vector\&. 
 .br
-\fIsyv\fP ??? 
+\fIsyv\fP V-frame cartesian Y-vector\&. 
 .br
-\fIszv\fP ??? 
+\fIszv\fP dependent point zenith, V-frame cartesian Z-vector\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -80,7 +80,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 631 of file pmat5\&.f90\&.
+Definition at line 696 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 

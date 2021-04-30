@@ -1,4 +1,4 @@
-.TH "pmat4::qtospin" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::qtospin" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,21 +12,21 @@ pmat4::qtospin
 .ti -1c
 .RI "subroutine \fBqtospin\fP (q, cspin)"
 .br
-.RI "Go from the quaternion to the spinor representation\&. "
+.RI "Go from the unit quaternion to the complex spinor representation\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 96 of file pmat4\&.f90\&.
+Definition at line 95 of file pmat4\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "subroutine pmat4::qtospin::qtospin (real(dp), dimension(0:3), intent(in) q, complex(dpc), dimension(2,2), intent(out) cspin)\fC [private]\fP"
 
 .PP
-Go from the quaternion to the spinor representation\&. 
+Go from the unit quaternion to the complex spinor representation\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIq\fP quaternion representation 
+\fIq\fP given unit quaternion representation 
 .br
 \fIcspin\fP spinor representation 
 .RE
@@ -38,7 +38,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1529 of file pmat4\&.f90\&.
+Definition at line 1575 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

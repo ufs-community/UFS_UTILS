@@ -1,4 +1,4 @@
-.TH "pmat4::znfun" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::znfun" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,31 +12,31 @@ pmat4::znfun
 .ti -1c
 .RI "subroutine \fBznfun\fP (n, z, zn, znd, zndd, znddd)"
 .br
-.RI "??? "
+.RI "For a given nonnegative integer n and real argument z, evaluate the nth,\&.\&.\&.,(n+3)th derivatives, wrt z, of the function C(z) = cosh(sqrt(2z)) or, equivalently, of C(z) = cos(sqrt(-2z)), according to the sign of z\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 105 of file pmat4\&.f90\&.
+Definition at line 104 of file pmat4\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
 .SS "subroutine pmat4::znfun::znfun (integer(spi), intent(in) n, real(dp), intent(in) z, real(dp), intent(out) zn, real(dp), intent(out) znd, real(dp), intent(out) zndd, real(dp), intent(out) znddd)\fC [private]\fP"
 
 .PP
-??? 
+For a given nonnegative integer n and real argument z, evaluate the nth,\&.\&.\&.,(n+3)th derivatives, wrt z, of the function C(z) = cosh(sqrt(2z)) or, equivalently, of C(z) = cos(sqrt(-2z)), according to the sign of z\&. 
 .PP
 \fBParameters\fP
 .RS 4
-\fIn\fP ??? 
+\fIn\fP integer order of the first of the returned derivatives of C\&. 
 .br
-\fIz\fP ??? 
+\fIz\fP real input argument in the function C(z) 
 .br
-\fIzn\fP ??? 
+\fIzn\fP nth-derivative of C(z) 
 .br
-\fIznd\fP ??? 
+\fIznd\fP (n+1)th-derivative of C(z) 
 .br
-\fIzndd\fP ??? 
+\fIzndd\fP (n+2)th-derivative of C(z) 
 .br
-\fIznddd\fP ??? 
+\fIznddd\fP (n+3)th-derivative of C(z) 
 .RE
 .PP
 \fBAuthor\fP
@@ -46,9 +46,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1910 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, pietc::u2, and pietc::u3\&.
+Definition at line 1960 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

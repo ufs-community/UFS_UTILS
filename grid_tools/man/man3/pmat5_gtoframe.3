@@ -1,4 +1,4 @@
-.TH "pmat5::gtoframe" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::gtoframe" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,7 +12,7 @@ pmat5::gtoframe
 .ti -1c
 .RI "subroutine \fBgtoframem\fP (plat, plon, orth)"
 .br
-.RI "From the degree lat and lo (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
+.RI "From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
 .ti -1c
 .RI "subroutine \fBgtoframev\fP (plat, plon, xp, yp, zp)"
 .br
@@ -20,11 +20,11 @@ pmat5::gtoframe
 .ti -1c
 .RI "subroutine \fBsgtoframem\fP (splat, splon, sorth)"
 .br
-.RI "??? "
+.RI "From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
 .ti -1c
 .RI "subroutine \fBsgtoframev\fP (splat, splon, sxp, syp, szp)"
 .br
-.RI "??? "
+.RI "Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -34,15 +34,15 @@ Definition at line 43 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoframe::gtoframem (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3,3), intent(out) orth)\fC [private]\fP"
 
 .PP
-From the degree lat and lo (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. 
+From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. Double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIplat\fP latitude degree 
+\fIplat\fP latitude (degrees) of point\&. 
 .br
-\fIplon\fP longitude degree 
+\fIplon\fP longitude (degrees) of point\&. 
 .br
-\fIorth\fP orthonormal matrix 
+\fIorth\fP orthonormal matrix\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -52,25 +52,23 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 560 of file pmat5\&.f90\&.
-.PP
-References pmat5::gtoframev()\&.
+Definition at line 617 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoframe::gtoframev (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3), intent(out) xp, real(dp), dimension(3), intent(out) yp, real(dp), dimension(3), intent(out) zp)\fC [private]\fP"
 
 .PP
-Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. 
+Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. Double precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIplat\fP latitude point 
+\fIplat\fP latitude (degrees) of point\&. 
 .br
-\fIplon\fP longitude point 
+\fIplon\fP longitude (degrees) of point\&. 
 .br
-\fIxp\fP orthogonal cartesian frame in earth-centered coordinates\&. 
+\fIxp\fP unit X-basis vector of cartesian frame\&. 
 .br
-\fIyp\fP orthogonal cartesian frame in earth-centered coordinates\&. 
+\fIyp\fP unit Y-basis vector of cartesian frame\&. 
 .br
-\fIzp\fP orthogonal cartesian frame in earth-centered coordinates\&. 
+\fIzp\fP unit Z-basis vector of cartesian frame\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -80,21 +78,19 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 601 of file pmat5\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
+Definition at line 662 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoframe::sgtoframem (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3,3), intent(out) sorth)\fC [private]\fP"
 
 .PP
-??? 
+From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIsplat\fP ??? 
+\fIsplat\fP latitude (degrees) of point\&. 
 .br
-\fIsplon\fP ??? 
+\fIsplon\fP longitude (degrees) of point\&. 
 .br
-\fIsorth\fP ??? 
+\fIsorth\fP orthonormal matrix\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -104,25 +100,23 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 544 of file pmat5\&.f90\&.
-.PP
-References pmat5::gtoframem()\&.
+Definition at line 600 of file pmat5\&.f90\&.
 .SS "subroutine pmat5::gtoframe::sgtoframev (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3), intent(out) sxp, real(sp), dimension(3), intent(out) syp, real(sp), dimension(3), intent(out) szp)\fC [private]\fP"
 
 .PP
-??? 
+Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIsplat\fP ??? 
+\fIsplat\fP latitude (degrees) of point\&. 
 .br
-\fIsplon\fP ??? 
+\fIsplon\fP longitude (degrees) of point\&. 
 .br
-\fIsxp\fP ??? 
+\fIsxp\fP xp unit X-basis vector of cartesian frame\&. 
 .br
-\fIsyp\fP ??? 
+\fIsyp\fP yp unit Y-basis vector of cartesian frame\&. 
 .br
-\fIszp\fP ??? 
+\fIszp\fP zp unit Z-basis vector of cartesian frame\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -132,9 +126,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 577 of file pmat5\&.f90\&.
-.PP
-References pmat5::gtoframev()\&.
+Definition at line 637 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 

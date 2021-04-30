@@ -1,4 +1,4 @@
-.TH "pmat4::diag" 3 "Fri Mar 26 2021" "Version 1.0.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::diag" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,46 +12,46 @@ pmat4::diag
 .ti -1c
 .RI "real(dp) function, dimension(size(a), size(a)) \fBdiagn_d\fP (a)"
 .br
-.RI "Calculation for diagn_d function\&. "
+.RI "Return the diagonal matrix whose elements are the given vector\&. "
 .ti -1c
 .RI "integer(spi) function, dimension(size(a), size(a)) \fBdiagn_i\fP (a)"
 .br
-.RI "Calculation for diagn_i function\&. "
+.RI "Return the diagonal matrix whose elements are the given vector\&. "
 .ti -1c
 .RI "real(sp) function, dimension(size(a), size(a)) \fBdiagn_s\fP (a)"
 .br
-.RI "Calculation for diagn_s function\&. "
+.RI "Return the diagonal matrix whose elements are the given vector\&. "
 .ti -1c
 .RI "real(dp) function, dimension(size(b, 1)) \fBdiagnn_d\fP (b)"
 .br
-.RI "Calculation for diagnn_d function\&. "
+.RI "Return the vector whose elements are the diagonal ones of a given matrix\&. "
 .ti -1c
 .RI "integer(spi) function, dimension(size(b, 1)) \fBdiagnn_i\fP (b)"
 .br
-.RI "Calculation for diagnn_i function\&. "
+.RI "Return the vector whose elements are the diagonal ones of a given matrix\&. "
 .ti -1c
 .RI "real(sp) function, dimension(size(b, 1)) \fBdiagnn_s\fP (b)"
 .br
-.RI "Calculation for diagnn_s function\&. "
+.RI "Return the vector whose elements are the diagonal ones of a given matrix\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 76 of file pmat4\&.f90\&.
+Definition at line 75 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
 .SS "real(dp) function, dimension(size(a),size(a)) pmat4::diag::diagn_d (real(dp), dimension(:), intent(in) a)\fC [private]\fP"
 
 .PP
-Calculation for diagn_d function\&. 
+Return the diagonal matrix whose elements are the given vector\&. Double precision version
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP real type input value 
+\fIa\fP real type input vector A listing the diagonal elements 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-b result 
+b result, diagonal matrix with the elements of A 
 .RE
 .PP
 \fBAuthor\fP
@@ -61,22 +61,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 486 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 492 of file pmat4\&.f90\&.
 .SS "integer(spi) function, dimension(size(a),size(a)) pmat4::diag::diagn_i (integer(spi), dimension(:), intent(in) a)\fC [private]\fP"
 
 .PP
-Calculation for diagn_i function\&. 
+Return the diagonal matrix whose elements are the given vector\&. Integer version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP input value 
+\fIa\fP integer input vector A listing the diagonal elements 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-b result 
+b result, diagonal matrix with the elements of A 
 .RE
 .PP
 \fBAuthor\fP
@@ -86,20 +84,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 501 of file pmat4\&.f90\&.
+Definition at line 508 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(size(a),size(a)) pmat4::diag::diagn_s (real(sp), dimension(:), intent(in) a)\fC [private]\fP"
 
 .PP
-Calculation for diagn_s function\&. 
+Return the diagonal matrix whose elements are the given vector\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIa\fP real type input value 
+\fIa\fP real type input vector A listing the diagonal elements 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-b result 
+b result, diagonal matrix with the elements of A 
 .RE
 .PP
 \fBAuthor\fP
@@ -109,22 +107,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 471 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
+Definition at line 476 of file pmat4\&.f90\&.
 .SS "real(dp) function, dimension(size(b,1)) pmat4::diag::diagnn_d (real(dp), dimension(:,:), intent(in) b)\fC [private]\fP"
 
 .PP
-Calculation for diagnn_d function\&. 
+Return the vector whose elements are the diagonal ones of a given matrix\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIb\fP real type input value 
+\fIb\fP real type input matrix 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-a result 
+a result, vector listing the diagonal elements of the given matrix\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -134,20 +130,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 529 of file pmat4\&.f90\&.
+Definition at line 538 of file pmat4\&.f90\&.
 .SS "integer(spi) function, dimension(size(b,1)) pmat4::diag::diagnn_i (integer(spi), dimension(:,:), intent(in) b)\fC [private]\fP"
 
 .PP
-Calculation for diagnn_i function\&. 
+Return the vector whose elements are the diagonal ones of a given matrix\&. Integer version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIb\fP integer type input value 
+\fIb\fP integer type input matrix 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-a result 
+a result, vector listing the diagonal elements of the given matrix\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -157,20 +153,20 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 543 of file pmat4\&.f90\&.
+Definition at line 553 of file pmat4\&.f90\&.
 .SS "real(sp) function, dimension(size(b,1)) pmat4::diag::diagnn_s (real(sp), dimension(:,:), intent(in) b)\fC [private]\fP"
 
 .PP
-Calculation for diagnn_s function\&. 
+Return the vector whose elements are the diagonal ones of a given matrix\&. Single precision version\&.
 .PP
 \fBParameters\fP
 .RS 4
-\fIb\fP real type input value 
+\fIb\fP real type input matrix 
 .RE
 .PP
 \fBReturns\fP
 .RS 4
-a result 
+a result, vector listing the diagonal elements of the given matrix\&. 
 .RE
 .PP
 \fBAuthor\fP
@@ -180,7 +176,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 515 of file pmat4\&.f90\&.
+Definition at line 523 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

@@ -1,4 +1,4 @@
-.TH "/home/ed/UFS_UTILS/sorc/chgres_cube.fd/input_data.F90" 3 "Fri Mar 26 2021" "Version 1.0.0" "chgres_cube" \" -*- nroff -*-
+.TH "/home/ed/UFS_UTILS/sorc/chgres_cube.fd/input_data.F90" 3 "Fri Apr 30 2021" "Version 1.3.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,6 +22,10 @@
 .RI "subroutine \fBinput_data::calcalpha_rotlatlon\fP (latgrid, longrid, cenlat, cenlon, alpha)"
 .br
 .RI "Calculate rotation angle for rotated latlon grids\&. "
+.ti -1c
+.RI "subroutine, public \fBinput_data::check_soilt\fP (soilt, landmask, skint)"
+.br
+.RI "Check for and replace certain values in soil temperature\&. "
 .ti -1c
 .RI "subroutine, public \fBinput_data::cleanup_input_atm_data\fP"
 .br
@@ -178,6 +182,10 @@
 .RI "type(esmf_field), public \fBinput_data::ffmm_input_grid\fP"
 .br
 .RI "log((z0+z1)*1/z0) See sfc_diff\&.f for details\&. "
+.ti -1c
+.RI "integer, parameter \fBinput_data::icet_default\fP = 265\&.0"
+.br
+.RI "Default value of soil and skin temperature (K) over ice\&. "
 .ti -1c
 .RI "type(esmf_field), public \fBinput_data::ifd_input_grid\fP"
 .br
