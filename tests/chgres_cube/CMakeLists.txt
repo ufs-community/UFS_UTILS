@@ -68,4 +68,4 @@ add_executable(ftst_sort ftst_sort.F90)
 target_link_libraries(ftst_sort
   chgres_cube_lib)
 
-add_test(NAME ftst_sort COMMAND ftst_sort)
+add_test(NAME chgres_cube-ftst_sort COMMAND ftst_sort)
