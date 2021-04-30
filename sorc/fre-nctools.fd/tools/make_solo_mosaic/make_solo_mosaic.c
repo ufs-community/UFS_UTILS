@@ -1,3 +1,6 @@
+/** @file
+    @brief Generate mosaic information between tiles.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -78,7 +81,7 @@ main (int argc, char *argv[])
   int contact_tile1_jstart[MAXCONTACT], contact_tile1_jend[MAXCONTACT];
   int contact_tile2_istart[MAXCONTACT], contact_tile2_iend[MAXCONTACT];
   int contact_tile2_jstart[MAXCONTACT], contact_tile2_jend[MAXCONTACT];
-  char mosaic_name[128] = "solo_mosaic";
+  char mosaic_name[STRING] = "solo_mosaic";
   char grid_descriptor[128] = "";
   int c, i, n, m, l, errflg;
   

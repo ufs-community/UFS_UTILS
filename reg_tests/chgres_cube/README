@@ -1,18 +1,19 @@
-This series of regression tests must be run before any
+This series of consistency tests must be run before any
 changes to the chgres_cube program are merged to the
 main line of development.  Any test failures must
 be resolved or explained before merging.
 
-To run the regression tests:
+To run the consistency tests:
 
 1) Build chgres_cube program.  Go to ./sorc and
-   invoke 'build_chgres_cube.sh' with no arguments.
+   invoke 'build_all.sh' with no arguments.
 2) Invoke driver script for your machine.  See script
    prolog for details.  Supported machines are:
    - Hera (driver.hera.sh)
    - WCOSS-Cray (driver.cray.sh)
    - WCOSS-Dell (driver.dell.sh)
    - Jet (driver.jet.sh)
+   - Orion (driver.orion.sh)
 
 A series of daisy-chained tests will run.  A test fails 
 if the output files differ from the baseline set of files

@@ -1,4 +1,11 @@
- MODULE READ_WRITE_DATA
+!> @file
+!! @brief Contains utility routines that read and write data.
+!! 
+!! @author Xu Li, Hang Lei, George Gayno NOAA/EMC
+
+!> This module contains routines that read and write data.
+!! @author Xu Li, Hang Lei, George Gayno NOAA/EMC
+MODULE READ_WRITE_DATA
 
  USE NETCDF
 
@@ -28,11 +35,15 @@
    REAL, ALLOCATABLE :: ZM(:)
  END TYPE NSST_DATA
 
- INTEGER, PUBLIC              :: IDIM_GAUS, JDIM_GAUS
+ INTEGER, PUBLIC              :: IDIM_GAUS !< 'i' dimension of GSI gaussian
+                                           !! grid.
+ INTEGER, PUBLIC              :: JDIM_GAUS !< 'j' dimension of GSI gaussian
+                                           !! grid.
+ INTEGER, ALLOCATABLE, PUBLIC :: SLMSK_GAUS(:,:) !< GSI land mask on the
+                                                 !! gaussian grid.
 
- INTEGER, ALLOCATABLE, PUBLIC :: SLMSK_GAUS(:,:)
-
- REAL, ALLOCATABLE, PUBLIC    :: DTREF_GAUS(:,:)
+ REAL, ALLOCATABLE, PUBLIC    :: DTREF_GAUS(:,:) !< GSI foundation temperature
+                                                 !! increment on the gaussian grid.
 
  PUBLIC :: READ_DATA
  PUBLIC :: READ_GSI_DATA
@@ -43,6 +54,57 @@
 
  CONTAINS
 
+   !> Write out all surface records - and nsst records if selected -
+   !! on a single cubed-sphere tile to a model restart file (in netcdf).
+   !! 
+   !! @note The model restart files contain an additional snow field -
+   !! snow cover (snocvr). That field is required for bit identical
+   !! reproducability. If that record does not exist, the model will
+   !! compute it as an initialization step. Because this program does not
+   !! contain the snow cover algorithm, it will let the model compute it.
+   !!
+   !! @param[in] slifcs Land-sea mask.
+   !! @param[in] tsffcs Skin temperature.
+   !! @param[in] snofcs Liquid-equivalent snow depth.
+   !! @param[in] tg3fcs Soil substrate temperature.
+   !! @param[in] zorfcs Roughness length.
+   !! @param[in] albfcs Snow-free albedo.
+   !! @param[in] alffcs Fractional coverage for strong/weak zenith angle
+   !! dependent albedo.
+   !! @param[in] vegfcs Vegetation greenness.
+   !! @param[in] cnpfcs Plant canopy moisture content.
+   !! @param[in] f10m log((z0+10)/z0). See model routine sfc_diff.f for
+   !! details.
+   !! @param[in] t2m Two-meter air temperature.
+   !! @param[in] q2m Two-meter specific humidity.
+   !! @param[in] vetfcs Vegetation type.
+   !! @param[in] sotfcs Soil type.
+   !! @param[in] ustar Friction velocity.
+   !! @param[in] fmm log((z0+z1)/z0). See model routine sfc_diff.f for
+   !! details.
+   !! @param[in] fhh log(ztmax+z1)/ztmax).  See model routine sfc_diff.f for
+   !! details.
+   !! @param[in] sicfcs Sea ice concentraton.
+   !! @param[in] sihfcs Sea ice depth.
+   !! @param[in] sitfcs Sea ice temperature.
+   !! @param[in] tprcp Precipitation.
+   !! @param[in] srflag Snow/rain flag.
+   !! @param[in] swdfcs Physical snow depth.
+   !! @param[in] vmnfcs Minimum vegetation greenness.
+   !! @param[in] vmxfcs Maximum vegetation greenness.
+   !! @param[in] slpfcs Slope type.
+   !! @param[in] absfcs Maximum snow albedo.
+   !! @param[in] slcfcs Liquid portion of volumetric soil moisture.
+   !! @param[in] smcfcs Total volumetric soil moisture.
+   !! @param[in] stcfcs Soil temperature.
+   !! @param[in] idim 'i' dimension of a tile.
+   !! @param[in] jdim 'j' dimension of a tile.
+   !! @param[in] lensfc Total number of points on a tile.
+   !! @param[in] lsoil Number of soil layers.
+   !! @param[in] do_nsst When true, nsst fields were processed.
+   !! @param[in] nsst Data structure containing nsst fields.
+   !!
+   !! @author George Gayno NOAA/EMC
  subroutine write_data(slifcs,tsffcs,snofcs,tg3fcs,zorfcs, &
                        albfcs,alffcs,vegfcs,cnpfcs,f10m, &
                        t2m,q2m,vetfcs,sotfcs,ustar,fmm,fhh, &
@@ -51,17 +113,8 @@
                        absfcs,slcfcs,smcfcs,stcfcs,&
                        idim,jdim,lensfc,lsoil,do_nsst,nsst)
 
-!------------------------------------------------------------------
-! Write out all surface records - and nsst records if selected -
-! to a netcdf file.  
-! 
-! Note: the model restart files contain an additional snow field -
-! snow cover (snocvr).  That field is required for bit identical
-! reproducability.  If that record does not exist, the model
-! will compute it as an initialization step.  Because this
-! program does not contain the snow cover algorithm, it will
-! let the model compute it.
-!------------------------------------------------------------------
+
+ use mpi
 
  implicit none
 
@@ -117,8 +170,6 @@
  real(kind=4)                :: times
  real(kind=4), allocatable   :: lsoil_data(:), x_data(:), y_data(:)
  real(kind=8), allocatable   :: dum2d(:,:), dum3d(:,:,:)
-
- include "mpif.h"
 
  call mpi_comm_rank(mpi_comm_world, myrank, error)
 
@@ -844,18 +895,25 @@
 
  end subroutine write_data
 
+ !> Read latitude and longitude for the cubed-sphere tile from the
+ !! 'grid' file.  Read the filtered and unfiltered orography from
+ !! the 'orography' file.
+ !!
+ !! @param[in] IDIM 'i' dimension of cubed-sphere tile.
+ !! @param[in] JDIM 'j' dimension of cubed-sphere tile.
+ !! @param[in] IJDIM Total number of points on the cubed-sphere tile.
+ !! @param[out] RLA Latitude on the cubed-sphere tile.
+ !! @param[out] RLO Longitude on the cubed-sphere tile.
+ !! @param[out] OROG Filtered orography.
+ !! @param[out] OROG_UF Unfiltered orography.
+ !! @param[out] TILE_NUM Cubed-sphere tile number
+ !! @author George Gayno NOAA/EMC
  SUBROUTINE READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,&
                               TILE_NUM,IDIM,JDIM,IJDIM)
 
-!--------------------------------------------------------------
-! READ LATITUDE, LONGITUDE, FILTERED OROGRAPHY, AND
-! UNFILTERED OROGRAPHY FOR THE CUBED-SPHERE TILE FROM
-! THE "GRID" FILE.
-!--------------------------------------------------------------
+ USE MPI
 
  IMPLICIT NONE
-
- include "mpif.h"
 
  INTEGER, INTENT(IN)    :: IDIM, JDIM, IJDIM
 
@@ -901,7 +959,7 @@
  IF ((NX/2) /= IDIM .OR. (NY/2) /= JDIM) THEN
    PRINT*,'FATAL ERROR: DIMENSIONS IN FILE: ',(NX/2),(NY/2)
    PRINT*,'DO NOT MATCH GRID DIMENSIONS: ',IDIM,JDIM
-   CALL MPI_ABORT(MPI_COMM_WORLD, 130)
+   CALL MPI_ABORT(MPI_COMM_WORLD, 130, ERROR)
  ENDIF
 
  ALLOCATE(GEOLON(NX+1,NY+1))
@@ -978,40 +1036,43 @@
 
  END SUBROUTINE READ_LAT_LON_OROG
 
+ !> If a NetCDF call returns an error, print out a user-supplied
+ !! message and the NetCDF library message.  Then stop processing.
+ !!
+ !! @param[in] ERR NetCDF error code.
+ !! @param[in] STRING User-defined error message.
+ !! @author George Gayno NOAA/EMC
  SUBROUTINE NETCDF_ERR( ERR, STRING )
 
-!--------------------------------------------------------------
-! IF AT NETCDF CALL RETURNS AN ERROR, PRINT OUT A MESSAGE
-! AND STOP PROCESSING.
-!--------------------------------------------------------------
+ USE MPI
 
  IMPLICIT NONE
-
- include 'mpif.h'
 
  INTEGER, INTENT(IN) :: ERR
  CHARACTER(LEN=*), INTENT(IN) :: STRING
  CHARACTER(LEN=80) :: ERRMSG
+ INTEGER :: IRET
 
  IF( ERR == NF90_NOERR )RETURN
  ERRMSG = NF90_STRERROR(ERR)
  PRINT*,''
  PRINT*,'FATAL ERROR: ', TRIM(STRING), ': ', TRIM(ERRMSG)
  PRINT*,'STOP.'
- CALL MPI_ABORT(MPI_COMM_WORLD, 999)
+ CALL MPI_ABORT(MPI_COMM_WORLD, 999, IRET)
 
  RETURN
  END SUBROUTINE NETCDF_ERR
 
+ !> Read file from the GSI containing the foundation temperature
+ !! increments and mask.
+ !!
+ !! The data is in NetCDF and on a gaussian grid. The grid contains two
+ !! extra rows for each pole. The interpolation from gaussian to
+ !! native grid assumes no pole points, so these are removed.
+ !!
+ !! @param[in] GSI_FILE Path/name of the GSI file to be read.
+ !! @author George Gayno NOAA/EMC
  SUBROUTINE READ_GSI_DATA(GSI_FILE)
-
-!-----------------------------------------------------------------
-! READ FILE FROM THE GSI CONTAINING THE FOUNDATION TEMPERATURE
-! INCREMENTS AND MASK.  DATA IS IN NETCDF AND ON A GAUSSIAN GRID. 
-! THE GRID CONTAINS TWO EXTRA ROWS FOR EACH POLE.  THE 
-! INTERPOLATION FROM GAUSSIAN TO NATIVE GRID ASSUMES NO POLE
-! POINTS, SO THESE ARE REMOVED.  
-!-----------------------------------------------------------------
 
  IMPLICIT NONE
 
@@ -1071,6 +1132,51 @@
 
  END SUBROUTINE READ_GSI_DATA
 
+ !> Read the first guess surface records and nsst records (if
+ !! selected) for a single cubed-sphere tile.
+ !!
+ !! @param[in] LSOIL Number of soil layers.
+ !! @param[in] LENSFC Total number of points on a tile.
+ !! @param[in] DO_NSST When true, nsst fields are read.
+ !! @param[out] TSFFCS Skin Temperature.
+ !! @param[out] SMCFCS Total volumetric soil moisture.
+ !! @param[out] SNOFCS Liquid-equivalent snow depth.
+ !! @param[out] STCFCS Soil temperature.
+ !! @param[out] TG3FCS Soil substrate temperature.
+ !! @param[out] ZORFCS Roughness length.
+ !! @param[out] CVFCS Cloud cover.
+ !! @param[out] CVBFCS Cloud base.
+ !! @param[out] CVTFCS Cloud top.
+ !! @param[out] ALBFCS Snow-free albedo.
+ !! @param[out] SLIFCS Land-sea mask including ice flag.
+ !! @param[out] VEGFCS Vegetation greenness.
+ !! @param[out] CNPFCS Plant canopy moisture content.
+ !! @param[out] F10M log((z0+10)/z0). See model routine sfc_diff.f for details.
+ !! @param[out] VETFCS Vegetation type.
+ !! @param[out] SOTFCS Soil type.
+ !! @param[out] ALFFCS Fractional coverage for strong/weak zenith angle
+ !! dependent albedo.
+ !! @param[out] USTAR Friction velocity.
+ !! @param[out] FMM log((z0+z1)/z0). See model routine sfc_diff.f for details.
+ !! @param[out] FHH log((ztmax+z1)/ztmax). See model routine sfc_diff.f for
+ !! details.
+ !! @param[out] SIHFCS Sea ice depth.
+ !! @param[out] SICFCS Sea ice concentration.
+ !! @param[out] SITFCS Sea ice temperature.
+ !! @param[out] TPRCP Precipitation.
+ !! @param[out] SRFLAG Snow/rain flag.
+ !! @param[out] SWDFCS Physical snow depth.
+ !! @param[out] VMNFCS Minimum vegetation greenness.
+ !! @param[out] VMXFCS Maximum vegetation greenness.
+ !! @param[out] SLCFCS Liquid portion of volumetric soil moisture.
+ !! @param[out] SLPFCS Slope type.
+ !! @param[out] ABSFCS Maximum snow albedo.
+ !! @param[out] T2M Two-meter air temperature.
+ !! @param[out] Q2M Two-meter specific humidity.
+ !! @param[out] SLMASK Land-sea mask without ice flag.
+ !! @param[out] ZSOIL Soil layer thickness.
+ !! @param[out] NSST Data structure containing nsst fields.
+ !! @author George Gayno NOAA/EMC
  SUBROUTINE READ_DATA(TSFFCS,SMCFCS,SNOFCS,STCFCS, &
                       TG3FCS,ZORFCS, &
                       CVFCS,CVBFCS,CVTFCS,ALBFCS, &
@@ -1082,15 +1188,9 @@
                       VMNFCS,VMXFCS,SLCFCS, &
                       SLPFCS,ABSFCS,T2M,Q2M,SLMASK, &
                       ZSOIL,LSOIL,LENSFC,DO_NSST,NSST)
-
-!-----------------------------------------------------------------
-! READ THE FIRST GUESS SURFACE RECORDS AND NSST RECORDS (IF
-! SELECTED) FOR A SINGLE CUBED-SPHERE TILE.
-!-----------------------------------------------------------------
+ USE MPI
 
  IMPLICIT NONE
-
- include "mpif.h"
 
  INTEGER, INTENT(IN)       :: LSOIL, LENSFC
 
@@ -1123,7 +1223,7 @@
 
  INTEGER                   :: ERROR, NCID, MYRANK
  INTEGER                   :: IDIM, JDIM, ID_DIM
- INTEGER                   :: ID_VAR
+ INTEGER                   :: ID_VAR, IERR
 
  REAL(KIND=8), ALLOCATABLE :: DUMMY(:,:), DUMMY3D(:,:,:)
 
@@ -1151,7 +1251,7 @@
 
  IF ((IDIM*JDIM) /= LENSFC) THEN
    PRINT*,'FATAL ERROR: DIMENSIONS WRONG.'
-   CALL MPI_ABORT(MPI_COMM_WORLD, 88)
+   CALL MPI_ABORT(MPI_COMM_WORLD, 88, IERR)
  ENDIF
 
  ALLOCATE(DUMMY(IDIM,JDIM))
@@ -1501,48 +1601,27 @@
 
  END SUBROUTINE READ_DATA
  
+ !> Read a GRIB1 sst climatological analysis file.
+ !!
+ !! Read the sst analysis and save it as an expanded and
+ !! transposed array.
+ !!
+ !! @note The data is stored from north to south, but this 
+ !! routine flips the poles. 
+ !!   
+ !! @param[in] file_sst File name of the sst file.
+ !! @param[in] mlat_sst 'j' dimension of the sst data.
+ !! @param[in] mlon_sst 'i' dimension of the sst data.
+ !! @param[in] mon The month of the year.
+ !! @param[out] sst The sst analysis data.
+ !! @param[out] rlats_sst The latitudes of the sst data points.
+ !! @param[out] rlons_sst The longitudes of the sst data points.
+ !! @author Xu Li NOAA/EMC @date 2019-03-13
 subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,mon)
 
-!                .      .    .                                       .
-! abstrac:    read_tf_clim_grb :  read grib1 sst analysis
-!   prgmmr: xu li            org: np23                date: 2019-03-13
-!
-! abstract: read sst analysis (grib format) and save it as expanded and transposed array
-!
-!     subroutine rdgrbsst must be compiled with the ncep w3 library
-!     and the bacio library.
-!
-!
-! program history log:
-!
-!   input argument list:
-!     file_sst - file name of grib sst file
-!     mon      - month number
-!     mlat_sst,mlon_sst
-!   output:
-!     rlats_sst
-!     rlons_sst
-!     sst
-!
-!   argument list defined by this reading:
-!     sst - sst field
-!     note: (1) the data is stored from north to south originally in grib format,
-!             but is stored from south to north with this reading routine
-!     nlat_sst  - latitudinal dimension of sst
-!     nlon_sst  - longitudinal dimension of sst
-!     xsst0 - latitude of origin
-!     ysst0 - longitude of origin
-!     dres  - lat/lon increment
-!
-!     call subs: getgbh, getgb
-!
-! attributes:
-!   language: f90
-!
-!$$$
-  implicit none
+  use mpi
 
-  include "mpif.h"
+  implicit none
 
 ! declare passed variables and arrays
   character(*)                       , intent(in   ) :: file_sst
@@ -1558,14 +1637,17 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
 ! declare local variables and arrays
   logical(1), allocatable, dimension(:)    ::  lb
 
-  integer :: nlat_sst,nlon_sst
+  integer :: nlat_sst !< Latitudinal dimension of the sst data.
+  integer :: nlon_sst !< Longitudinal dimension of the sst data.
   integer :: iret,ni,nj
-  integer :: mscan,kb1
+  integer :: mscan,kb1,ierr
   integer :: jincdir,i,iincdir,kb2,kb3,kf,kg,k,j,jf
   integer, dimension(22):: jgds,kgds
   integer, dimension(25):: jpds,kpds
 
-  real :: xsst0,ysst0,dres
+  real :: xsst0 !< Latitude of the origin.
+  real :: ysst0 !< Longitude of the origin.
+  real :: dres  !< Latitude/longitude increment.
   real, allocatable, dimension(:) :: f
   
 !************+******************************************************************************
@@ -1574,8 +1656,8 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
   write(*,*) ' sstclm : ',file_sst
   call baopenr(lu_sst,trim(file_sst),iret)
   if (iret /= 0 ) then
-     write(6,*)'read_tf_clm_grb:  ***error*** opening sst file'
-     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+     write(6,*)'FATAL ERROR in read_tf_clm_grb: error opening sst file.'
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
 ! define sst variables for read
@@ -1601,16 +1683,16 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
 ! read in the analysis
   call getgb(lu_sst,0,jf,j,jpds,jgds,kf,k,kpds,kgds,lb,f,iret)
   if (iret /= 0) then
-     write(6,*)'read_tf_clm_grb:  ***error*** reading sst analysis data record'
+     write(6,*)'FATAL ERROR in read_tf_clm_grb: error reading sst analysis data record.'
      deallocate(lb,f)
-     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
   if ( (nlat_sst /= mlat_sst) .or. (nlon_sst /= mlon_sst) ) then
-     write(6,*)'read_rtg_org:  inconsistent dimensions.  mlat_sst,mlon_sst=',&
+     write(6,*)'FATAL ERROR in read_rtg_org:  inconsistent dimensions.  mlat_sst,mlon_sst=',&
           mlat_sst,mlon_sst,' -versus- nlat_sst,nlon_sst=',nlat_sst,nlon_sst
      deallocate(lb,f)
-     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
 !
@@ -1664,35 +1746,23 @@ subroutine read_tf_clim_grb(file_sst,sst,rlats_sst,rlons_sst,mlat_sst,mlon_sst,m
 
   call baclose(lu_sst,iret)
   if (iret /= 0 ) then
-     write(6,*)'read_tf_clm_grb:  ***error*** close sst file'
-     CALL MPI_ABORT(MPI_COMM_WORLD, 121)
+     write(6,*)'FATAL ERROR in read_tf_clm_grb: error closing sst file.'
+     CALL MPI_ABORT(MPI_COMM_WORLD, 121, ierr)
   endif
   
 end subroutine read_tf_clim_grb
 
+!> Get the i/j dimensions of RTG SST climatology file.
+!! The file is GRIB1.
+!!
+!! @param[in] file_sst File name of the sst file.
+!! @param[in] mlat_sst The 'j' dimension of the data.
+!! @param[in] mlon_sst The 'i' dimension of the data.
+!! @author Xu Li NOAA/EMC @date 2019-03-13
 subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
-!                .      .    .                                       .
-! abstract:   get_tf_clm_dim :  get dimension of rtg sst climatology
-!   prgmmr: xu li            org: np23                date: 2019-03-13
-!
-!
-! program history log:
-!
-!   input argument list:
-!     file_sst - file name of grib sst file
-! output
-!     mlat_sst,mlon_sst
-!
-!     call subs: getgbh
-!
-! attributes:
-!   language: f90
-!   machine:  ibm rs/6000 sp
-!
-!$$$
-  implicit none
+  use mpi
 
-  include "mpif.h"
+  implicit none
 
 ! declare passed variables and arrays
   character(*)                                   , intent(in ) :: file_sst
@@ -1703,7 +1773,7 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
 
   integer :: iret
   integer :: mscan,kb1
-  integer :: kf,kg,k,j
+  integer :: kf,kg,k,j,ierr
   integer, dimension(22):: jgds,kgds
   integer, dimension(25):: jpds,kpds
 
@@ -1712,8 +1782,8 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
 ! open sst analysis file (grib)
   call baopenr(lu_sst,trim(file_sst),iret)
   if (iret /= 0 ) then
-     write(6,*)'get_tf_clm_dim:  ***error*** opening sst file'
-     CALL MPI_ABORT(MPI_COMM_WORLD, 111)
+     write(6,*)'FATAL ERROR in get_tf_clm_dim: error opening sst file.'
+     CALL MPI_ABORT(MPI_COMM_WORLD, 111, ierr)
   endif
 
 ! define sst variables for read
@@ -1732,13 +1802,23 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
 
   call baclose(lu_sst,iret)
   if (iret /= 0 ) then
-     write(6,*)'get_tf_clm_dim:  ***error*** close sst file'
-     CALL MPI_ABORT(MPI_COMM_WORLD, 121)
+     write(6,*)'FATAL ERROR in get_tf_clm_dim: error closing sst file.'
+     CALL MPI_ABORT(MPI_COMM_WORLD, 121, ierr)
   endif
 end subroutine get_tf_clm_dim
 
+!> Read the woa05 salinity monthly climatology file.
+!! The file is NetCDF.
+!!
+!! @param[in] filename The name of the climatology file.
+!! @param[in] nlat The 'j' dimension of the data in the file.
+!! @param[in] nlon The 'i' dimension of the data in the file.
+!! @param[in] itime The monthly record to read.
+!! @param[out] xlats The latitude of the data points.
+!! @param[out] xlons The longitude of the data points.
+!! @param[out] sal The salinity.
+!! @author Xu Li NOAA/EMC
 subroutine read_salclm_gfs_nc(filename,sal,xlats,xlons,nlat,nlon,itime)
-! abstract: read woa05 salinity monthly climatology  (netcdf)
   use netcdf
   implicit none
   
@@ -1808,8 +1888,13 @@ subroutine read_salclm_gfs_nc(filename,sal,xlats,xlons,nlat,nlon,itime)
 
 end subroutine read_salclm_gfs_nc
 
+!> Get the i/j dimensions of the data from a NetCDF file.
+!!
+!! @param[in] filename Name of the file to be read.
+!! @param[out] nlat 'j' dimension of the data in the file.
+!! @param[out] nlon 'i' dimension of the data in the file.
+!! @author Xu Li NOAA/EMC
 subroutine get_dim_nc(filename,nlat,nlon)
-! abstract: get dimensions of sal array
   use netcdf
   implicit none
   
@@ -1841,17 +1926,23 @@ subroutine get_dim_nc(filename,nlat,nlon)
 
 end subroutine get_dim_nc
 
+!> Check the NetCDF status code. If there is an error,
+!! print the library error message and stop processing.
+!!
+!! @param[in] status NetCDF status code.
+!! @author Xu Li NOAA/EMC
 subroutine nc_check(status)
 
+  use mpi
   use netcdf
 
-  include "mpif.h"
-
   integer, intent ( in) :: status
+  integer :: ierr
 
   if(status /= nf90_noerr) then
+    print *, 'FATAL ERROR:'
     print *, trim(nf90_strerror(status))
-    CALL MPI_ABORT(MPI_COMM_WORLD, 122)
+    CALL MPI_ABORT(MPI_COMM_WORLD, 122, ierr)
   end if
 end subroutine nc_check
 

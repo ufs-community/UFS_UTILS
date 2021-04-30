@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run the chgres_cube regression tests on JET.
+# Run the chgres_cube consistency tests on JET.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
@@ -24,18 +24,16 @@
 
 set -x
 
-source /apps/lmod/lmod/init/sh
-module purge
-module load intel/15.0.3.187
-module load impi/2018.4.274
-module load szip
-module load hdf5
-module load netcdf/4.2.1.1
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+module use ../../modulefiles
+module load build.$target.intel
 module list
 
-export OUTDIR=/mnt/lfs3/projects/emcda/$LOGNAME/stmp/chgres_reg_tests
-PROJECT_CODE="emcda"
-QUEUE="windfall"
+export OUTDIR="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
+
+PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
+QUEUE="${QUEUE:-debug}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
@@ -45,11 +43,9 @@ QUEUE="windfall"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/mnt/lfs3/projects/emcda/George.Gayno/reg_tests/chgres_cube
+export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
 
-export NCCMP=/apps/nccmp/1.8.2.1/intel/18.0.3.222/bin/nccmp
-
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE $SUM_FILE
 
@@ -63,6 +59,7 @@ rm -fr $OUTDIR
 # Initialize C96 using FV3 warm restart files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1
 TEST1=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.restart.sh)
 
@@ -70,6 +67,7 @@ TEST1=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10
 # Initialize C192 using FV3 tiled history files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1
 TEST2=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c192.fv3.history \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c192.fv3.history.sh)
 
@@ -77,6 +75,7 @@ TEST2=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10
 # Initialize C96 using FV3 gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1
 TEST3=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.nemsio \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./c96.fv3.nemsio.sh)
 
@@ -84,6 +83,7 @@ TEST3=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10
 # Initialize C96 using spectral GFS sigio/sfcio files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=6   # should match cpus-per-task
 TEST4=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=3 --cpus-per-task=6 -t 0:15:00 \
       -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./c96.gfs.sigio.sh)
 
@@ -91,6 +91,7 @@ TEST4=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=3 --cpus-
 # Initialize C96 using spectral GFS gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1
 TEST5=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.nemsio \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST4 ./c96.gfs.nemsio.sh)
 
@@ -98,16 +99,33 @@ TEST5=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10
 # Initialize regional C96 using FV3 gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
+export OMP_NUM_THREADS=1
 TEST6=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.regional \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST5 ./c96.regional.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize C96 using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+export OMP_NUM_THREADS=1
+TEST7=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST6 ./c96.fv3.netcdf.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize C192 using GFS GRIB2 data.
+#-----------------------------------------------------------------------------
+
+export OMP_NUM_THREADS=1
+TEST8=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.gfs.grib2 \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST7 ./c192.gfs.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST6 << EOF
-#!/bin/sh
+       --open-mode=append -q $QUEUE -d afterok:$TEST8 << EOF
+#!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
 

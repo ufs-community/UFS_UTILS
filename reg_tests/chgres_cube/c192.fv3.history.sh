@@ -29,7 +29,9 @@ export TRACERS_INPUT='"spfh","clwmr","o3mr"'
 
 export CDATE=2018100300
 
-export OMP_NUM_THREADS_CY=1
+export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
+
+NCCMP=${NCCMP:-$(which nccmp)}
 
 #-----------------------------------------------------------------------------
 # Invoke chgres program.
@@ -41,7 +43,8 @@ ${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
-  echo "<<< C96 FV3 GAUSSIAN NEMSIO TEST FAILED. <<<"
+  set +x
+  echo "<<< C192 FV3 HISTORY TEST FAILED. <<<"
   exit $iret
 fi
 

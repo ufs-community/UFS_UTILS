@@ -1,41 +1,15 @@
- module source_grid
+!> @file
+!! @brief Read grid specs, date information and land/sea mask for
+!! the source data that will be interpolated to the model grid.
+!! @author George Gayno @date 2018
 
-!--------------------------------------------------------------------------
-! module documentation block
-!
-! Module: source_grid
-!   pgrmmr: gayno           org: w/np2           date: 2018
-!
-! Abstract: Read grid specs, date information and land/sea mask for
-!    the source data that will be interpolated to the model grid.
-!    Also, sets up the ESMF grid object for the source grid.
-!    Source grid is assumed to be global lat/lon.
-!
-! Usage:  use source_grid
-!
-! Public Subroutines:
-! -------------------
-! define_source_grid           Defines esmf grid object for source
-!                              grid.  Retrieves date and field
-!                              information from source file.
-! source_grid_cleanup          Free up memory used in this module.
-!
-! Public variables:
-! -----------------
-!
-! day_of_rec                   Day of each time record with
-!                              respect to Jan 1.
-! field_names                  Names of fields to be processed.
-! grid_src                     ESMF grid object for the source grid.
-! i/j_src                      i/j dimensions of the source grid.
-! num_fields                   Number of fields in the file. Some
-!                              files have more than one (ex: 
-!                              the 4-component albedo).
-! num_records                  Number of fields times time records.
-! num_time_recs                Number of time records.
-! source                       Original source of the data.
-!
-!------------------------------------------------------------------
+!> Read grid specs, date information and land/sea mask for
+!! the source data that will be interpolated to the model grid.
+!! Also, sets up the ESMF grid object for the source grid.
+!! Source grid is assumed to be global lat/lon.
+!!
+!! @author George Gayno @date 2018
+module source_grid
 
  use esmf
  use utils
@@ -44,46 +18,42 @@
 
  private 
 
- character(len=50), allocatable, public :: field_names(:)
- character(len=75), public              :: source
+ character(len=50), allocatable, public :: field_names(:) !< Names of fields to be processed.
+ character(len=75), public              :: source !< Original source of the data.
 
- integer, public               :: i_src, j_src, num_records
- integer, public               :: num_time_recs
- integer, public               :: num_fields
- integer, allocatable, public  :: day_of_rec(:)
+ integer, public               :: i_src !< i dimension of the source grid.
+ integer, public               :: j_src !< j dimension of the source grid.
+ integer, public               :: num_records !< Number of fields times time records.
+ integer, public               :: num_time_recs !< Number of time records.
+ integer, public               :: num_fields !< Number of fields in the file. Some
+                                             !! files have more than one (ex: 
+                                             !! the 4-component albedo).
+ integer, allocatable, public  :: day_of_rec(:) !< Day of each time record with
+                                                !! respect to Jan 1.
 
- type(esmf_grid), public       :: grid_src
+ type(esmf_grid), public       :: grid_src !< ESMF grid object for the source grid.
 
  public                        :: define_source_grid
  public                        :: source_grid_cleanup
 
  contains
 
+ !> Defines esmf grid object for source grid. Retrieves date and field
+ !! information from source file.
+ !!
+ !! Read date information from input source data file.
+ !! Create esmf grid object for the source grid.
+ !!
+ !! @param[in] localpet mpi task number
+ !! @param[in] npets total number mpi tasks
+ !! @param[in] input_file file containing the source grid data.
+ !! @author George Gayno @date 2018
  subroutine define_source_grid(localpet, npets, input_file)
 
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine: define source grid
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Read date information from input source data file.
-!    Create esmf grid object for the source grid.
-!
-! Usage:  call define_source_grid(localpet, npets, input_file)
-!
-!   input argument list:
-!     localpet               mpi task number
-!     npets                  total number mpi tasks
-!     input_file             file containing the source grid data.
-!
-!-----------------------------------------------------------------------
-
+ use mpi
  use netcdf
 
  implicit none
-
- include 'mpif.h'
 
  character(len=*), intent(in)     :: input_file
 
@@ -247,7 +217,7 @@
                                     regDecomp=(/1,npets/),  &
                                     name="source_grid", &
                                     indexflag=ESMF_INDEX_GLOBAL, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN GridCreateNoPeriDim.", rc)
 
  else
@@ -264,7 +234,7 @@
                                     regDecomp=(/1,npets/),  &
                                     name="source_grid", &
                                     indexflag=ESMF_INDEX_GLOBAL, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN GridCreate1PeriDim.", rc)
 
  endif
@@ -275,12 +245,12 @@
                                staggerloc=ESMF_STAGGERLOC_CENTER, &
                                name="source grid land mask", &
                                rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate.", rc)
 
  print*,"- CALL FieldScatter FOR SOURCE GRID MASK."
  call ESMF_FieldScatter(mask_field, mask_global, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter.", rc)
 
  print*,"- CALL GridAddItem FOR SOURCE GRID MASK."
@@ -288,7 +258,7 @@
                        itemflag=ESMF_GRIDITEM_MASK, &
                        staggerloc=ESMF_STAGGERLOC_CENTER, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridAddItem.", rc)
 
  print*,"- CALL GridGetItem FOR SOURCE GRID MASK."
@@ -299,7 +269,7 @@
                        totalLBound=clb,  &
                        totalUBound=cub, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetItem", rc)
  
  print*,"- CALL FieldGet FOR SOURCE GRID LANDMASK."
@@ -307,7 +277,7 @@
  call ESMF_FieldGet(mask_field, &
                     farrayPtr=mask_field_ptr,  &
                     rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet.", rc)
 
  do j = clb(2), cub(2)
@@ -324,7 +294,7 @@
 
  print*,"- CALL FieldDestroy FOR SOURCE GRID LAND MASK."
  call ESMF_FieldDestroy(mask_field,rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldDestroy.", rc)
 
 ! Set lat/lons of grid points
@@ -332,7 +302,7 @@
  print*,"- CALL GridAddCoord FOR SOURCE GRID CENTER LOCATION."
  call ESMF_GridAddCoord(grid_src, &
                         staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridAddCoord.", rc)
 
  print*,"- CALL GridGetCoord FOR SOURCE GRID CENTER LONGITUDE."
@@ -341,7 +311,7 @@
                         staggerLoc=ESMF_STAGGERLOC_CENTER, &
                         coordDim=1, &
                         farrayPtr=lon_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord.", rc)
 
  print*,"- CALL GridGetCoord FOR SOURCE GRID CENTER LATITUDE."
@@ -350,7 +320,7 @@
                         staggerLoc=ESMF_STAGGERLOC_CENTER, &
                         coordDim=2, &
                         farrayPtr=lat_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord.", rc)
 
  do j = clb(2), cub(2)
@@ -365,7 +335,7 @@
  call ESMF_GridAddCoord(grid_src, &
                         staggerloc=ESMF_STAGGERLOC_CORNER, &
                         rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridAddCoord.", rc)
 
  print*,"- CALL GridGetCoord FOR SOURCE GRID CORNER LONGITUDE."
@@ -375,7 +345,7 @@
                         coordDim=1, &
                         farrayPtr=lon_corner_ptr, &
                         rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord.", rc)
 
  print*,"- CALL GridGetCoord FOR SOURCE GRID CORNER LATITUDE."
@@ -387,7 +357,7 @@
                         computationalUBound=cub_corner, &
                         farrayPtr=lat_corner_ptr, &
                         rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord.", rc)
 
  do j = clb_corner(2), cub_corner(2)
@@ -405,20 +375,11 @@
 
  end subroutine define_source_grid
 
+ !> Free up memory associated with this module.
+ !!
+ !! @author George Gayno @date 2018 
  subroutine source_grid_cleanup
 
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine: source grid cleanup
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Free up memory associated with this module.
-!
-! Usage:  call source_grid_cleanup
-!
-!-----------------------------------------------------------------------
- 
  implicit none
 
  integer  :: rc

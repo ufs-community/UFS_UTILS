@@ -1,12 +1,12 @@
-/*******************************************************************************
-                             create_hgrid.h
+/** @file
+  
   This header file provide interface to create different types of horizontal 
-  grid. geographical grid location, cell length, cell area and rotation
+  grid. Geographical grid location, cell length, cell area and rotation
   angle are returned. All the returned data are on supergrid.
 
-  contact: Zhi.Liang@noaa.gov
+  @author Zhi.Liang@noaa.gov
 
-*******************************************************************************/
+*/
 #ifndef CREATE_HGRID_H_
 #define CREATE_HGRID_H_
 void create_regular_lonlat_grid( int *nxbnds, int *nybnds, double *xbnds, double *ybnds,

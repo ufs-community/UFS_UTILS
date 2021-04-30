@@ -1,24 +1,27 @@
- program driver
-  
-!-------------------------------------------------------------------------
-!  program documentation block
-!
-! Abstract: Reads static surface data on a global lat/lon grid,
-!   interpolates the data to the fv3 model grid, and outputs the
-!   result in netcdf format.
-!
-! Program execution is controlled by variables defined in the
-! program configuration namelist (see module program_setup for
-! details).
-!
-! Requires the following input files:
-!   1) Model mosaic file (netcdf)
-!   2) Model orography files (netcdf)
-!   3) Model grid files (netcdf)
-!   4) Source data file on global lat/lon grid (netcdf)
-!
-! Outputs surface data on the model tiles in netcdf format.
-!-------------------------------------------------------------------------
+!> @file
+!! @brief Interpolates static surface data from lat/lon grid,
+!! to FV3 model grid.
+!! @author George Gayno
+
+!> Reads static surface data on a global lat/lon grid,
+!! interpolates the data to the fv3 model grid, and outputs the
+!! result in netcdf format.
+!!
+!! Program execution is controlled by variables defined in the
+!! program configuration namelist (see module program_setup for
+!! details).
+!!
+!! Requires the following input files:
+!!   1) Model mosaic file (netcdf)
+!!   2) Model orography files (netcdf)
+!!   3) Model grid files (netcdf)
+!!   4) Source data file on global lat/lon grid (netcdf)
+!!
+!! Outputs surface data on the model tiles in netcdf format.
+!!
+!! @return 0 for success, error code otherwise.
+!! @author George Gayno
+ program driver  
 
  use model_grid
  use source_grid
@@ -43,17 +46,17 @@
 
  print*,"- INITIALIZE ESMF"
  call ESMF_Initialize(rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("INITIALIZING ESMF", rc)
 
  print*,"- CALL VMGetGlobal"
  call ESMF_VMGetGlobal(vm, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN VMGetGlobal.", rc)
 
  print*,"- CALL VMGet"
  call ESMF_VMGet(vm, localPet=localpet, petCount=npets, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN VMGet.", rc)
 
  print*,'- NPETS IS  ',npets

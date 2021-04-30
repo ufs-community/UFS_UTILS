@@ -1,29 +1,22 @@
- module atmosphere
+!> @file
+!! @brief Process atmospheric fields.
+!! @author George Gayno NCEP/EMC
 
-!--------------------------------------------------------------------------
-! Module atmosphere
-!
-! Abstract: Process atmospheric fields:  Horizontally interpolate input
-!    fields to the target grid.  Adjust surface pressure according to
-!    terrain difference between input and target grids.  Vertically
-!    interpolate to target grid vertical levels.  Processing based on
-!    the spectral GFS version of CHGRES.
-!
-! Public Subroutines:
-! -------------------
-! atmosphere driver            Driver routine for processing atmospheric
-!                              fields
-!
-! Public variables:
-! -----------------
-! Variables defined below.  Here "b4adj" indicates fields on the target
-! grid before vertical adjustment. "target" indicates data on target
-! grid.  "input" indicates data on input grid. "_s" indicates fields
-! on the 'south' edge of the grid box.  "_w" indicate fields on the 
-! 'west' edge of the grid box.  Otherwise, fields are at the center
-! of the grid box.
-!
-!--------------------------------------------------------------------------
+!> Process atmospheric fields. Horizontally interpolate from input to
+!! target FV3 grid using ESMF regridding. Adjust surface pressure
+!! according to terrain differences between input and target
+!! grid. Vertically interpolate to target FV3 grid vertical
+!! levels. Processing based on the spectral GFS version of CHGRES.
+!! 
+!! For variables "b4adj" indicates fields on the target grid before
+!! vertical adjustment. "target" indicates data on target grid.
+!! "input" indicates data on input grid. "_s" indicates fields on the
+!! 'south' edge of the grid box.  "_w" indicate fields on the 'west'
+!! edge of the grid box.  Otherwise, fields are at the center of the
+!! grid box.
+!!
+!! @author George Gayno NCEP/EMC
+ module atmosphere
 
  use esmf
 
@@ -47,78 +40,78 @@
                                        terrain_target_grid
 
  use program_setup, only             : vcoord_file_target_grid, &
-                                       regional,                &
+                                       regional, &
                                        tracers, num_tracers,      &
-                                       atm_weight_file
+                                       atm_weight_file, &
+                                       use_thomp_mp_climo
+
+ use thompson_mp_climo_data, only    : read_thomp_mp_climo_data,  &
+                                       cleanup_thomp_mp_climo_input_data, &
+                                       qnifa_climo_input_grid, &
+                                       qnwfa_climo_input_grid, &
+                                       thomp_pres_climo_input_grid, &
+                                       lev_thomp_mp_climo
 
  implicit none
 
  private
 
- integer, public                    :: lev_target       ! num vertical levels
- integer, public                    :: levp1_target     ! num levels plus 1
- integer, public                    :: nvcoord_target   ! num vertical coordinate
-                                                        ! variables
+ integer, public                    :: lev_target       !< num vertical levels
+ integer, public                    :: levp1_target     !< num levels plus 1
+ integer, public                    :: nvcoord_target   !< num vertical coordinate variables
 
- real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  ! vertical coordinate
+ real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  !< vertical coordinate
 
- type(esmf_field), public               :: delp_target_grid
-                                           ! pressure thickness
- type(esmf_field), public               :: dzdt_target_grid
-                                           ! vertical velocity
- type(esmf_field)                       :: dzdt_b4adj_target_grid
-                                           ! vertical vel before vert adj
- type(esmf_field), allocatable, public  :: tracers_target_grid(:)
-                                           ! tracers
- type(esmf_field), allocatable          :: tracers_b4adj_target_grid(:)
-                                           ! tracers before vert adj
- type(esmf_field), public               :: ps_target_grid
-                                           ! surface pressure
- type(esmf_field)                       :: ps_b4adj_target_grid
-                                           ! sfc pres before terrain adj
- type(esmf_field)                       :: pres_target_grid
-                                           ! 3-d pressure
- type(esmf_field)                       :: pres_b4adj_target_grid
-                                           ! 3-d pres before terrain adj
- type(esmf_field), public               :: temp_target_grid
-                                           ! temperautre
- type(esmf_field)                       :: temp_b4adj_target_grid
-                                           ! temp before vert adj
- type(esmf_field)                       :: terrain_interp_to_target_grid 
-                                           ! Input grid terrain
-                                           ! interpolated to target grid.   
- type(esmf_field), public               :: u_s_target_grid
-                                           ! u-wind, 'south' edge
- type(esmf_field), public               :: v_s_target_grid
-                                           ! v-wind, 'south' edge
- type(esmf_field)                       :: wind_target_grid
-                                           ! 3-d wind, grid box center
- type(esmf_field)                       :: wind_b4adj_target_grid  
-                                           ! 3-d wind before vert adj
- type(esmf_field)                       :: wind_s_target_grid
-                                           ! 3-d wind, 'south' edge
- type(esmf_field), public               :: u_w_target_grid
-                                           ! u-wind, 'west' edge
- type(esmf_field), public               :: v_w_target_grid
-                                           ! v-wind, 'west' edge
- type(esmf_field)                       :: wind_w_target_grid
-                                           ! 3-d wind, 'west' edge
- type(esmf_field), public               :: zh_target_grid
-                                           ! 3-d height
+ type(esmf_field), public               :: delp_target_grid !< pressure thickness
+ type(esmf_field), public               :: dzdt_target_grid !< vertical velocity
+ type(esmf_field)                       :: dzdt_b4adj_target_grid !< vertical vel before vert adj
+ type(esmf_field), allocatable, public  :: tracers_target_grid(:) !< tracers
+ type(esmf_field), allocatable          :: tracers_b4adj_target_grid(:) !< tracers before vert adj
+ type(esmf_field), public               :: ps_target_grid !< surface pressure
+ type(esmf_field)                       :: ps_b4adj_target_grid !< sfc pres before terrain adj
+ type(esmf_field)                       :: pres_target_grid !< 3-d pressure
+ type(esmf_field)                       :: pres_b4adj_target_grid !< 3-d pres before terrain adj
+ type(esmf_field), public               :: temp_target_grid !< temperautre
+ type(esmf_field)                       :: temp_b4adj_target_grid !< temp before vert adj
+ type(esmf_field)                       :: terrain_interp_to_target_grid !< Input grid terrain interpolated to target grid.   
+ type(esmf_field), public               :: u_s_target_grid !< u-wind, 'south' edge
+ type(esmf_field), public               :: v_s_target_grid !< v-wind, 'south' edge
+ type(esmf_field)                       :: wind_target_grid !< 3-d wind, grid box center
+ type(esmf_field)                       :: wind_b4adj_target_grid !< 3-d wind before vert adj
+ type(esmf_field)                       :: wind_s_target_grid !< 3-d wind, 'south' edge
+ type(esmf_field), public               :: u_w_target_grid !< u-wind, 'west' edge
+ type(esmf_field), public               :: v_w_target_grid !< v-wind, 'west' edge
+ type(esmf_field)                       :: wind_w_target_grid !< 3-d wind, 'west' edge
+ type(esmf_field), public               :: zh_target_grid !< 3-d height
+
+! Fields associated with thompson microphysics climatological tracers.
+
+ type(esmf_field)                       :: qnifa_climo_b4adj_target_grid !< number concentration of ice
+                                           !! friendly aerosols before vert adj
+ type(esmf_field), public               :: qnifa_climo_target_grid !< number concentration of ice
+                                           !! friendly aerosols on target 
+                                           !! horiz/vert grid.
+ type(esmf_field)                       :: qnwfa_climo_b4adj_target_grid !< number concentration of water
+                                           !! friendly aerosols before vert adj
+ type(esmf_field), public               :: qnwfa_climo_target_grid !< number concentration of water
+                                           !! friendly aerosols on target 
+                                           !! horiz/vert grid.
+ type(esmf_field)                       :: thomp_pres_climo_b4adj_target_grid !< pressure of each level on
+                                           !! target grid
 
  public :: atmosphere_driver
 
  contains
 
-!-----------------------------------------------------------------------------------
-! Driver routine for atmospheric fields.
-!-----------------------------------------------------------------------------------
-
+!> Driver routine to process for atmospheric fields.
+!!
+!! @param[in] localpet ESMF local persistent execution thread 
+!! @author George Gayno
  subroutine atmosphere_driver(localpet)
 
- implicit none
+ use mpi
 
- include 'mpif.h'
+ implicit none
 
  integer, intent(in)                :: localpet
 
@@ -136,7 +129,7 @@
  real(esmf_kind_r8), parameter      :: exponent = rd*lapse/grav
  real(esmf_kind_r8), parameter      :: one_over_exponent = 1.0 / exponent
 
- real(esmf_kind_r8), pointer        :: psptr(:,:)
+ real(esmf_kind_r8), pointer        :: psptr(:,:), tempptr(:,:,:)
 
 !-----------------------------------------------------------------------------------
 ! Read atmospheric fields on the input grid.
@@ -171,7 +164,7 @@
                            atm_weight_file, &
                            routehandle=regrid_bl, &
                            srctermprocessing=isrctermprocessing, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldSMMStore", rc)
 
  else
@@ -182,12 +175,11 @@
 
    call ESMF_FieldRegridStore(temp_input_grid, &
                               temp_b4adj_target_grid, &
-                              polemethod=ESMF_POLEMETHOD_NONE, &
+                              polemethod=ESMF_POLEMETHOD_ALLAVG, &
                               srctermprocessing=isrctermprocessing, &
-                              extrapmethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                               routehandle=regrid_bl, &
                               regridmethod=method, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegridStore", rc)
 
  endif
@@ -198,7 +190,7 @@
                        routehandle=regrid_bl, &
                        termorderflag=ESMF_TERMORDER_SRCSEQ, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
  print*,"- CALL Field_Regrid FOR PRESSURE."
@@ -207,7 +199,7 @@
                        routehandle=regrid_bl, &
                        termorderflag=ESMF_TERMORDER_SRCSEQ, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
  do n = 1, num_tracers
@@ -216,8 +208,9 @@
                          tracers_b4adj_target_grid(n), &
                          routehandle=regrid_bl, &
                          termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegrid", rc)
+      
  enddo
 
  print*,"- CALL Field_Regrid FOR VERTICAL VELOCITY."
@@ -225,14 +218,32 @@
                        dzdt_b4adj_target_grid, &
                        routehandle=regrid_bl, &
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
+    
+ nullify(tempptr)
+ print*,"- CALL FieldGet FOR INPUT GRID VERTICAL VEL."
+ call ESMF_FieldGet(dzdt_input_grid, &
+                    farrayPtr=tempptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+    
+ print*, "MIN MAX W INPUT = ", minval(tempptr), maxval(tempptr)
 
+ nullify(tempptr)
+ print*,"- CALL FieldGet FOR VERTICAL VEL B4ADJ."
+ call ESMF_FieldGet(dzdt_b4adj_target_grid, &
+                    farrayPtr=tempptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+    
+ print*, "MIN MAX W B4ADJ = ", minval(tempptr), maxval(tempptr)
+ 
  nullify(psptr)
  print*,"- CALL FieldGet FOR INPUT SURFACE PRESSURE."
  call ESMF_FieldGet(ps_input_grid, &
                     farrayPtr=psptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
 !------------------------------------------------------------------------------------
@@ -247,14 +258,14 @@
                        routehandle=regrid_bl, &
                        termorderflag=ESMF_TERMORDER_SRCSEQ, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
  nullify(psptr)
  print*,"- CALL FieldGet FOR INPUT SURFACE PRESSURE B4ADJ."
  call ESMF_FieldGet(ps_b4adj_target_grid, &
                     farrayPtr=psptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  psptr = p0 * psptr**one_over_exponent
@@ -265,7 +276,7 @@
                        routehandle=regrid_bl, &
                        termorderflag=ESMF_TERMORDER_SRCSEQ, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegrid", rc)
 
  print*,"- CALL Field_Regrid FOR 3-D WIND."
@@ -273,12 +284,12 @@
                        wind_b4adj_target_grid, &
                        routehandle=regrid_bl, &
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegrid", rc)
 
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_bl, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegridRelease", rc)
 
 !-----------------------------------------------------------------------------------
@@ -333,12 +344,12 @@
  print*,"- CALL FieldRegridStore FOR 3D-WIND WEST EDGE."
  call ESMF_FieldRegridStore(wind_target_grid, &
                             wind_w_target_grid, &
-                            polemethod=ESMF_POLEMETHOD_NONE, &
+                            polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
-                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             routehandle=regrid_bl, &
+                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             regridmethod=method, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
 
  print*,"- CALL Field_Regrid FOR 3-D WIND WEST EDGE."
@@ -346,12 +357,12 @@
                        wind_w_target_grid, &
                        routehandle=regrid_bl, &
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_bl, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridRelease", rc)
 
  isrctermprocessing = 1
@@ -360,12 +371,12 @@
  print*,"- CALL FieldRegridStore FOR 3D-WIND SOUTH EDGE."
  call ESMF_FieldRegridStore(wind_target_grid, &
                             wind_s_target_grid, &
-                            polemethod=ESMF_POLEMETHOD_NONE, &
+                            polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
-                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             routehandle=regrid_bl, &
+                            extrapMethod=ESMF_EXTRAPMETHOD_NEAREST_STOD, &
                             regridmethod=method, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
 
  print*,"- CALL Field_Regrid FOR 3-D WIND SOUTH EDGE."
@@ -373,12 +384,12 @@
                        wind_s_target_grid, &
                        routehandle=regrid_bl, &
                        termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_bl, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridRelease", rc)
 
 !-----------------------------------------------------------------------------------
@@ -386,6 +397,16 @@
 !-----------------------------------------------------------------------------------
 
  call convert_winds
+ 
+!-----------------------------------------------------------------------------------
+! If selected, process thompson microphysics climatological fields.
+!-----------------------------------------------------------------------------------
+
+ if (use_thomp_mp_climo) then
+   call read_thomp_mp_climo_data
+   call horiz_interp_thomp_mp_climo
+   call vintg_thomp_mp_climo
+ endif 
 
 !-----------------------------------------------------------------------------------
 ! Write target data to file.
@@ -403,11 +424,11 @@
 
  end subroutine atmosphere_driver
 
-!-----------------------------------------------------------------------------------
-! Create target grid field objects to hold data before vertical interpolation.
-! These will be defined with the same number of vertical levels as the input grid.
-!-----------------------------------------------------------------------------------
-
+!> Create target grid field objects to hold data before vertical
+!! interpolation. These will be defined with the same number of
+!! vertical levels as the input grid.
+!!
+!! @author George Gayno
  subroutine create_atm_b4adj_esmf_fields
 
  implicit none
@@ -423,7 +444,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_input/), rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldCreate", rc)
  enddo
 
@@ -433,7 +454,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET GRID PRESSURE BEFORE ADJUSTMENT."
@@ -442,7 +463,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET GRID VERTICAL VELOCITY BEFORE ADJUSTMENT."
@@ -451,7 +472,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_input/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET GRID UNSTAGGERED WINDS BEFORE ADJUSTMENT."
@@ -460,29 +481,28 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1,1/), &
                                    ungriddedUBound=(/lev_input,3/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET TERRAIN."
  terrain_interp_to_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET SURFACE PRESSURE BEFORE ADJUSTMENT."
  ps_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  end subroutine create_atm_b4adj_esmf_fields
 
-!-----------------------------------------------------------------------------------
-! Create target grid field objects.
-!-----------------------------------------------------------------------------------
-
+!> Create target grid field objects.
+!!
+!! @author George Gayno
  subroutine create_atm_esmf_fields
 
  implicit none
@@ -492,13 +512,13 @@
  allocate(tracers_target_grid(num_tracers))
 
  do n = 1, num_tracers
-    print*,"- CALL FieldCreate FOR TARGET GRID TRACERS ", trim(tracers(n))
+    print*,"- CALL FieldCreate FOR TARGET GRID TRACERS ", trim(tracers(n))    
     tracers_target_grid(n) = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_target/), rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldCreate", rc)
  enddo
 
@@ -508,7 +528,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET GRID PRESSURE."
@@ -517,7 +537,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET GRID VERTICAL VELOCITY."
@@ -526,7 +546,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET GRID DELP."
@@ -535,7 +555,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET HEIGHT."
@@ -544,7 +564,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/levp1_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET UNSTAGGERED 3D-WIND."
@@ -553,7 +573,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    ungriddedLBound=(/1,1/), &
                                    ungriddedUBound=(/lev_target,3/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET U_S."
@@ -562,7 +582,7 @@
                                    staggerloc=ESMF_STAGGERLOC_EDGE2, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET V_S."
@@ -571,7 +591,7 @@
                                    staggerloc=ESMF_STAGGERLOC_EDGE2, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET 3D-WIND_S."
@@ -580,7 +600,7 @@
                                    staggerloc=ESMF_STAGGERLOC_EDGE2, &
                                    ungriddedLBound=(/1,1/), &
                                    ungriddedUBound=(/lev_target,3/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET U_W."
@@ -589,7 +609,7 @@
                                    staggerloc=ESMF_STAGGERLOC_EDGE1, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET V_W."
@@ -598,7 +618,7 @@
                                    staggerloc=ESMF_STAGGERLOC_EDGE1, &
                                    ungriddedLBound=(/1/), &
                                    ungriddedUBound=(/lev_target/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET 3D-WIND_W."
@@ -607,18 +627,21 @@
                                    staggerloc=ESMF_STAGGERLOC_EDGE1, &
                                    ungriddedLBound=(/1,1/), &
                                    ungriddedUBound=(/lev_target,3/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET SURFACE PRESSURE."
  ps_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  end subroutine create_atm_esmf_fields
 
+!> Convert 3-d component winds to u and v.
+!!
+!! @author George Gayno
  subroutine convert_winds
  
  implicit none
@@ -644,31 +667,31 @@
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=windptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR U_S."
  call ESMF_FieldGet(u_s_target_grid, &
                     farrayPtr=uptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR V_S."
  call ESMF_FieldGet(v_s_target_grid, &
                     farrayPtr=vptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR LATITUDE_S."
  call ESMF_FieldGet(latitude_s_target_grid, &
                     farrayPtr=latptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR LONGITUDE_S."
  call ESMF_FieldGet(longitude_s_target_grid, &
                     farrayPtr=lonptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  do i = clb(1), cub(1)
@@ -683,37 +706,38 @@
      enddo
    enddo
  enddo
+ 
 
  print*,"- CALL FieldGet FOR 3-D WIND_W."
  call ESMF_FieldGet(wind_w_target_grid, &
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=windptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR U_W."
  call ESMF_FieldGet(u_w_target_grid, &
                     farrayPtr=uptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR V_W."
  call ESMF_FieldGet(v_w_target_grid, &
                     farrayPtr=vptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR LATITUDE_W."
  call ESMF_FieldGet(latitude_w_target_grid, &
                     farrayPtr=latptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR LONGITUDE_W."
  call ESMF_FieldGet(longitude_w_target_grid, &
                     farrayPtr=lonptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  do i = clb(1), cub(1)
@@ -731,44 +755,38 @@
 
  end subroutine convert_winds
 
+!> Computes 3-D pressure given an adjusted surface pressure.
+!!                                                                       
+!! PROGRAM HISTORY LOG:                                                  
+!! 2005-04-11  HANN_MING HENRY JUANG    hybrid sigma, sigma-p, and sigma-
+!! - PRGMMR: JUANG          ORG: W/NMC23     DATE: 2005-04-11            
+!! - PRGMMR: Fanglin Yang   ORG: W/NMC23     DATE: 2006-11-28            
+!! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2006-12-12            
+!! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2007-01-02            
+!!                                                                       
+!!   INPUT ARGUMENT LIST:                                                
+!!     IM           INTEGER NUMBER OF POINTS TO COMPUTE                  
+!!     KM           INTEGER NUMBER OF LEVELS                             
+!!     IDVC         INTEGER VERTICAL COORDINATE ID                       
+!!                  (1 FOR SIGMA AND 2 FOR HYBRID)                       
+!!     IDSL         INTEGER TYPE OF SIGMA STRUCTURE                      
+!!                  (1 FOR PHILLIPS OR 2 FOR MEAN)                       
+!!     NVCOORD      INTEGER NUMBER OF VERTICAL COORDINATES               
+!!     VCOORD       REAL (KM+1,NVCOORD) VERTICAL COORDINATE VALUES       
+!!                  FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE               
+!!                  FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B      
+!!                  FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE
+!!                     AK  REAL (KM+1) HYBRID INTERFACE A                
+!!                     BK  REAL (KM+1) HYBRID INTERFACE B                
+!!     PS           REAL (IX) SURFACE PRESSURE (PA)                      
+!!   OUTPUT ARGUMENT LIST:                                               
+!!     PM           REAL (IX,KM) MID-LAYER PRESSURE (PA)                 
+!!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)
+!!
+!! @param[in] localpet ESMF local persistent execution thread  
+!!
+!! @author Hann Ming Henry Juang, Juang, Fanglin Yang, S. Moorthi
  subroutine newpr1(localpet)
-!$$$  SUBPROGRAM DOCUMENTATION BLOCK                                    
-!                                                                       
-! SUBPROGRAM:    NEWPR1      COMPUTE MODEL PRESSURES                    
-!   PRGMMR: JUANG          ORG: W/NMC23     DATE: 2005-04-11            
-!   PRGMMR: Fanglin Yang   ORG: W/NMC23     DATE: 2006-11-28            
-!   PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2006-12-12            
-!   PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2007-01-02            
-!                                                                       
-! ABSTRACT: COMPUTE MODEL PRESSURES.                                    
-!                                                                       
-! PROGRAM HISTORY LOG:                                                  
-! 2005-04-11  HANN_MING HENRY JUANG    hybrid sigma, sigma-p, and sigma-
-!                                                                       
-! USAGE:    CALL NEWPR1(IM,IX,KM,KMP,IDVC,IDSL,NVCOORD,VCOORD,PP,TP,QP,P
-!   INPUT ARGUMENT LIST:                                                
-!     IM           INTEGER NUMBER OF POINTS TO COMPUTE                  
-!     KM           INTEGER NUMBER OF LEVELS                             
-!     IDVC         INTEGER VERTICAL COORDINATE ID                       
-!                  (1 FOR SIGMA AND 2 FOR HYBRID)                       
-!     IDSL         INTEGER TYPE OF SIGMA STRUCTURE                      
-!                  (1 FOR PHILLIPS OR 2 FOR MEAN)                       
-!     NVCOORD      INTEGER NUMBER OF VERTICAL COORDINATES               
-!     VCOORD       REAL (KM+1,NVCOORD) VERTICAL COORDINATE VALUES       
-!                  FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE               
-!                  FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B      
-!                  FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE
-!                     AK  REAL (KM+1) HYBRID INTERFACE A                
-!                     BK  REAL (KM+1) HYBRID INTERFACE B                
-!     PS           REAL (IX) SURFACE PRESSURE (PA)                      
-!   OUTPUT ARGUMENT LIST:                                               
-!     PM           REAL (IX,KM) MID-LAYER PRESSURE (PA)                 
-!     DP           REAL (IX,KM) LAYER DELTA PRESSURE (PA)               
-!                                                                       
-! ATTRIBUTES:                                                           
-!   LANGUAGE: FORTRAN                                                   
-!                                                                       
-!C$$$                                                                   
  implicit none 
 
  integer, intent(in) :: localpet
@@ -798,7 +816,7 @@
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=pptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR DELP."
@@ -806,17 +824,17 @@
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=delp_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR SURFACE PRESSURE AFTER ADJUSTMENT"
  call ESMF_FieldGet(ps_target_grid, &
                     farrayPtr=psptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  allocate(pi(clb(1):cub(1),clb(2):cub(2),1:levp1_target))
-
+ 
  if(idvc.eq.2) then
    do k=1,levp1_target
      ak = vcoord_target(k,1) 
@@ -866,23 +884,20 @@
 
  end subroutine newpr1 
 
+!> Computes adjusted surface pressure given a new terrain height.
+!!
+!! Computes a new surface pressure given a new orography. The new
+!! pressure is computed assuming a hydrostatic balance and a constant
+!! temperature lapse rate. Below ground, the lapse rate is assumed to
+!! be -6.5 k/km.
+!!
+!! program history log:
+!! -  91-10-31  mark iredell
+!! -  2018-apr  adapt for fv3. george gayno
+!!
+!! @param[in] localpet ESMF local persistent execution thread 
+!! @author Mark Iredell, George Gayno @date 92-10-31
  subroutine newps(localpet)
-
-!$$$  subprogram documentation block
-!
-! subprogram:    newps       compute new surface pressure
-!   prgmmr: iredell          org: w/nmc23     date: 92-10-31
-!
-! abstract: computes a new surface pressure given a new orography.
-!   the new pressure is computed assuming a hydrostatic balance
-!   and a constant temperature lapse rate.  below ground, the
-!   lapse rate is assumed to be -6.5 k/km.
-!
-! program history log:
-!   91-10-31  mark iredell
-!   2018-apr  adapt for fv3. george gayno
-!
-!c$$$
 
  implicit none
 
@@ -926,7 +941,7 @@
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=pptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  if(localpet==0) then
@@ -936,9 +951,9 @@
  print*,"- CALL FieldGet FOR TEMPERATURE"
  call ESMF_FieldGet(temp_b4adj_target_grid, &
                     farrayPtr=tptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-
+    
 ! Find specific humidity in the array of tracer fields.
 
  do ii = 1, num_tracers
@@ -948,31 +963,31 @@
  print*,"- CALL FieldGet FOR SPECIFIC HUMIDITY"
  call ESMF_FieldGet(tracers_b4adj_target_grid(ii), &
                     farrayPtr=qptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-
+    
  print*,"- CALL FieldGet FOR SURFACE PRESSURE BEFORE ADJUSTMENT"
  call ESMF_FieldGet(ps_b4adj_target_grid, &
                     farrayPtr=psptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR SURFACE PRESSURE AFTER ADJUSTMENT"
  call ESMF_FieldGet(ps_target_grid, &
                     farrayPtr=psnewptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR OLD TERRAIN"
  call ESMF_FieldGet(terrain_interp_to_target_grid, &
                     farrayPtr=zsptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR NEW TERRAIN"
  call ESMF_FieldGet(terrain_target_grid, &
                     farrayPtr=zsnewptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  allocate(zu(clb(1):cub(1),clb(2):cub(2)))
@@ -1046,6 +1061,7 @@
 ! Compute surface pressure over the top.
 !-----------------------------------------------------------------------------------
 
+
  if(ls.gt.0) then
    k=cub(3)
    gamma=0
@@ -1074,12 +1090,11 @@
 
  end subroutine newps
 
+!> Reads model vertical coordinate definition file (as specified by
+!! namelist variable vcoord_file_target_grid).
+!!
+!! @author George Gayno
  subroutine read_vcoord_info
-
-!---------------------------------------------------------------------------------
-! Read vertical coordinate information.
-!---------------------------------------------------------------------------------
-
  implicit none
 
  integer                    :: istat, n, k
@@ -1105,46 +1120,254 @@
  endif
 
  print*
- do k = 1, levp1_target
-   print*,'VCOORD FOR LEV ', k, 'IS: ', vcoord_target(k,:)
- enddo
-
+ 
  close(14)
 
  end subroutine read_vcoord_info
 
- SUBROUTINE VINTG
-!$$$  SUBPROGRAM DOCUMENTATION BLOCK
-!
-! SUBPROGRAM:    VINTG       VERTICALLY INTERPOLATE UPPER-AIR FIELDS
-!   PRGMMR: IREDELL          ORG: W/NMC23     DATE: 92-10-31
-!
-! ABSTRACT: VERTICALLY INTERPOLATE UPPER-AIR FIELDS.
-!   WIND, TEMPERATURE, HUMIDITY AND OTHER TRACERS ARE INTERPOLATED.
-!   THE INTERPOLATION IS CUBIC LAGRANGIAN IN LOG PRESSURE
-!   WITH A MONOTONIC CONSTRAINT IN THE CENTER OF THE DOMAIN.
-!   IN THE OUTER INTERVALS IT IS LINEAR IN LOG PRESSURE.
-!   OUTSIDE THE DOMAIN, FIELDS ARE GENERALLY HELD CONSTANT,
-!   EXCEPT FOR TEMPERATURE AND HUMIDITY BELOW THE INPUT DOMAIN,
-!   WHERE THE TEMPERATURE LAPSE RATE IS HELD FIXED AT -6.5 K/KM AND
-!   THE RELATIVE HUMIDITY IS HELD CONSTANT.  THIS ROUTINE EXPECTS
-!   FIELDS ORDERED FROM BOTTOM TO TOP OF ATMOSPHERE.
-!
-! PROGRAM HISTORY LOG:
-!   91-10-31  MARK IREDELL
-!
-! USAGE:    CALL VINTG
-!
-! SUBPROGRAMS CALLED:
-!   TERP3        CUBICALLY INTERPOLATE IN ONE DIMENSION
-!
-! ATTRIBUTES:
-!   LANGUAGE: FORTRAN
-!
-!
- IMPLICIT NONE
+!> Horizontally interpolate thompson microphysics data to the target
+!! model grid.
+!!
+!! @author George Gayno
+ subroutine horiz_interp_thomp_mp_climo
 
- include 'mpif.h'
+ implicit none
+
+ integer  :: isrctermprocessing, rc
+
+ type(esmf_regridmethod_flag)       :: method
+ type(esmf_routehandle)             :: regrid_bl
+
+ isrctermprocessing=1
+
+ print*,"- CALL FieldCreate FOR TARGET GRID THOMP CLIMO QNIFA BEFORE ADJUSTMENT."
+ qnifa_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR TARGET GRID THOMP CLIMO QNWFA BEFORE ADJUSTMENT."
+ qnwfa_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR TARGET GRID THOMP CLIMO PRESSURE BEFORE ADJUSTMENT."
+ thomp_pres_climo_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_thomp_mp_climo/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR TARGET GRID THOMP CLIMO QNIFA."
+ qnifa_climo_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_target/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR TARGET GRID THOMP CLIMO QNWFA."
+ qnwfa_climo_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_target/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldRegridStore FOR THOMPSON CLIMO FIELDS."
+
+ method=ESMF_REGRIDMETHOD_BILINEAR
+
+ call ESMF_FieldRegridStore(qnifa_climo_input_grid, &
+                            qnifa_climo_b4adj_target_grid, &
+                            polemethod=ESMF_POLEMETHOD_ALLAVG, &
+                            srctermprocessing=isrctermprocessing, &
+                            routehandle=regrid_bl, &
+                            regridmethod=method, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldRegridStore", rc)
+
+ print*,"- CALL Field_Regrid FOR THOMP CLIMO QNIFA."
+ call ESMF_FieldRegrid(qnifa_climo_input_grid, &
+                       qnifa_climo_b4adj_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
+
+ print*,"- CALL Field_Regrid FOR THOMP CLIMO QNWFA."
+ call ESMF_FieldRegrid(qnwfa_climo_input_grid, &
+                       qnwfa_climo_b4adj_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
+
+ print*,"- CALL Field_Regrid FOR THOMP PRESSURE."
+ call ESMF_FieldRegrid(thomp_pres_climo_input_grid, &
+                       thomp_pres_climo_b4adj_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
+
+ print*,"- CALL FieldRegridRelease."
+ call ESMF_FieldRegridRelease(routehandle=regrid_bl, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldRegridRelease", rc)
+
+!-----------------------------------------------------------------------------------
+! Free up input data memory.
+!-----------------------------------------------------------------------------------
+
+ call cleanup_thomp_mp_climo_input_data
+
+ end subroutine horiz_interp_thomp_mp_climo
+
+!> Vertically interpolate atmospheric fields to target FV3 grid.
+!!
+!! Vertically interpolate thompson microphysics climo tracers to the
+!! target model levels.
+!!
+!! @author George Gayno
+ SUBROUTINE VINTG_THOMP_MP_CLIMO
+
+ implicit none
+
+ INTEGER                         :: CLB(3), CUB(3), RC
+ INTEGER                         :: IM, KM1, KM2, NT
+ INTEGER                         :: I, J, K
+
+ REAL(ESMF_KIND_R8), ALLOCATABLE :: Z1(:,:,:), Z2(:,:,:)
+ REAL(ESMF_KIND_R8), ALLOCATABLE :: C1(:,:,:,:),C2(:,:,:,:)
+
+ REAL(ESMF_KIND_R8), POINTER     :: QNIFA1PTR(:,:,:)       ! input
+ REAL(ESMF_KIND_R8), POINTER     :: QNIFA2PTR(:,:,:)       ! target
+ REAL(ESMF_KIND_R8), POINTER     :: QNWFA1PTR(:,:,:)       ! input
+ REAL(ESMF_KIND_R8), POINTER     :: QNWFA2PTR(:,:,:)       ! target
+ REAL(ESMF_KIND_R8), POINTER     :: P1PTR(:,:,:)       ! input pressure
+ REAL(ESMF_KIND_R8), POINTER     :: P2PTR(:,:,:)       ! target pressure
+
+ print*,"- VERTICALY INTERPOLATE THOMP MP CLIMO TRACERS."
+
+ print*,"- CALL FieldGet FOR 3-D THOMP PRES."
+ call ESMF_FieldGet(thomp_pres_climo_b4adj_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=p1ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+! The '1'/'2' arrays hold fields before/after interpolation.  
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ NT=  2  ! number of thomp tracers
+
+ ALLOCATE(Z1(CLB(1):CUB(1),CLB(2):CUB(2),lev_thomp_mp_climo))
+ ALLOCATE(Z2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET))
+ ALLOCATE(C1(CLB(1):CUB(1),CLB(2):CUB(2),lev_thomp_mp_climo,NT))
+ ALLOCATE(C2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET,NT))
+
+ Z1 = -LOG(P1PTR)
+
+ print*,"- CALL FieldGet FOR 3-D ADJUSTED PRESS"
+ call ESMF_FieldGet(pres_target_grid, &
+                    farrayPtr=P2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ Z2 = -LOG(P2PTR)
+
+!print*,'pres check 1 ', p1ptr(clb(1),clb(2),:)
+!print*,'pres check 2 ', p2ptr(clb(1),clb(2),:)
+
+ print*,"- CALL FieldGet FOR qnifa before vertical adjustment."
+ call ESMF_FieldGet(qnifa_climo_b4adj_target_grid, &
+                    farrayPtr=QNIFA1PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ C1(:,:,:,1) =  QNIFA1PTR(:,:,:)
+
+ print*,"- CALL FieldGet FOR qnwfa before vertical adjustment."
+ call ESMF_FieldGet(qnwfa_climo_b4adj_target_grid, &
+                    farrayPtr=QNWFA1PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ C1(:,:,:,2) =  QNWFA1PTR(:,:,:)
+
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+!  PERFORM LAGRANGIAN ONE-DIMENSIONAL INTERPOLATION
+!  THAT IS 4TH-ORDER IN INTERIOR, 2ND-ORDER IN OUTSIDE INTERVALS
+!  AND 1ST-ORDER FOR EXTRAPOLATION.
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ IM = (CUB(1)-CLB(1)+1) * (CUB(2)-CLB(2)+1)
+ KM1= LEV_THOMP_MP_CLIMO
+ KM2= LEV_TARGET
+
+ CALL TERP3(IM,1,1,1,1,NT,(IM*KM1),(IM*KM2), &
+            KM1,IM,IM,Z1,C1,KM2,IM,IM,Z2,C2)
+
+ print*,"- CALL FieldGet FOR ADJUSTED climo qnifa."
+ call ESMF_FieldGet(qnifa_climo_target_grid, &
+                    farrayPtr=QNIFA2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR ADJUSTED climo qnwfa."
+ call ESMF_FieldGet(qnwfa_climo_target_grid, &
+                    farrayPtr=QNWFA2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ DO K=1,LEV_TARGET
+   DO I=CLB(1),CUB(1)
+   DO J=CLB(2),CUB(2)
+     QNIFA2PTR(I,J,K) = C2(I,J,K,1)
+     QNWFA2PTR(I,J,K) = C2(I,J,K,2)
+   ENDDO
+   ENDDO
+ ENDDO
+
+ DEALLOCATE (Z1, Z2, C1, C2)
+
+ call ESMF_FieldDestroy(qnifa_climo_b4adj_target_grid, rc=rc)
+ call ESMF_FieldDestroy(qnwfa_climo_b4adj_target_grid, rc=rc)
+ call ESMF_FieldDestroy(thomp_pres_climo_b4adj_target_grid, rc=rc)
+
+ END SUBROUTINE VINTG_THOMP_MP_CLIMO
+
+!> Vertically interpolate upper-air fields.
+!!
+!! Vertically interpolate upper-air fields. Wind, temperature,
+!! humidity and other tracers are interpolated. The interpolation is
+!! cubic lagrangian in log pressure with a monotonic constraint in the
+!! center of the domain. In the outer intervals it is linear in log
+!! pressure. Outside the domain, fields are generally held constant,
+!! except for temperature and humidity below the input domain, where
+!! the temperature lapse rate is held fixed at -6.5 k/km and the
+!! relative humidity is held constant. This routine expects fields
+!! ordered from bottom to top of atmosphere.
+!!
+!! @author Mark Iredell @date 92-10-31
+ SUBROUTINE VINTG
+ use mpi
+
+ IMPLICIT NONE
 
  REAL(ESMF_KIND_R8), PARAMETER   :: DLTDZ=-6.5E-3*287.05/9.80665
  REAL(ESMF_KIND_R8), PARAMETER   :: DLPVDRT=-2.5E6/461.50
@@ -1180,7 +1403,7 @@
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=p1ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1199,7 +1422,7 @@
  print*,"- CALL FieldGet FOR 3-D ADJUSTED PRESS"
  call ESMF_FieldGet(pres_target_grid, &
                     farrayPtr=P2PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  Z2 = -LOG(P2PTR)
@@ -1207,25 +1430,26 @@
  print*,"- CALL FieldGet FOR 3-D WIND."
  call ESMF_FieldGet(wind_b4adj_target_grid, &
                     farrayPtr=WIND1PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  C1(:,:,:,1) =  WIND1PTR(:,:,:,1)
  C1(:,:,:,2) =  WIND1PTR(:,:,:,2)
  C1(:,:,:,3) =  WIND1PTR(:,:,:,3)
-
+ 
  print*,"- CALL FieldGet FOR VERTICAL VELOCITY."
  call ESMF_FieldGet(dzdt_b4adj_target_grid, &
                     farrayPtr=DZDT1PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  C1(:,:,:,4) =  DZDT1PTR(:,:,:)
+ print*,"MIN MAX W TARGETB4 IN VINTG = ", minval(DZDT1PTR(:,:,:)), maxval(DZDT1PTR(:,:,:))
 
  print*,"- CALL FieldGet FOR 3-D TEMP."
  call ESMF_FieldGet(temp_b4adj_target_grid, &
                     farrayPtr=T1PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  C1(:,:,:,5) =  T1PTR(:,:,:)
@@ -1235,7 +1459,7 @@
    print*,"- CALL FieldGet FOR 3-D TRACERS ", trim(tracers(i))
    call ESMF_FieldGet(tracers_b4adj_target_grid(i), &
                       farrayPtr=Q1PTR, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
           call error_handler("IN FieldGet", rc)
 
    C1(:,:,:,5+I) =  Q1PTR(:,:,:)
@@ -1255,7 +1479,6 @@
 
  CALL TERP3(IM,1,1,1,1,4+NT,(IM*KM1),(IM*KM2), &
             KM1,IM,IM,Z1,C1,KM2,IM,IM,Z2,C2)
-
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  COPY OUTPUT WIND, TEMPERATURE, HUMIDITY AND OTHER TRACERS
 !  EXCEPT BELOW THE INPUT DOMAIN, LET TEMPERATURE INCREASE WITH A FIXED
@@ -1265,19 +1488,19 @@
  print*,"- CALL FieldGet FOR 3-D ADJUSTED TEMP."
  call ESMF_FieldGet(temp_target_grid, &
                     farrayPtr=T2PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR ADJUSTED VERTICAL VELOCITY."
  call ESMF_FieldGet(dzdt_target_grid, &
                     farrayPtr=DZDT2PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR 3-D ADJUSTED WIND."
  call ESMF_FieldGet(wind_target_grid, &
                     farrayPtr=WIND2PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  DO K=1,LEV_TARGET
@@ -1302,7 +1525,7 @@
    print*,"- CALL FieldGet FOR 3-D TRACER ", trim(tracers(ii))
    call ESMF_FieldGet(tracers_target_grid(ii), &
                       farrayPtr=Q2PTR, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
           call error_handler("IN FieldGet", rc)
 
    IF (TRIM(TRACERS(II)) == "sphum") THEN  ! specific humidity
@@ -1338,61 +1561,44 @@
 
  END SUBROUTINE VINTG
 
+!> Cubically interpolate in one dimension.
+!!                                                                       
+!! Interpolate field(s) in one dimension along the column(s). The
+!! interpolation is cubic lagrangian with a monotonic constraint in
+!! the center of the domain. In the outer intervals it is linear.
+!! Outside the domain, fields are held constant.
+!!                                                                       
+!! PROGRAM HISTORY LOG:                                                  
+!! -  98-05-01  MARK IREDELL                                              
+!! - 1999-01-04  IREDELL  USE ESSL SEARCH                                  
+!!                                                                       
+!! @param[in] im integer number of columns                            
+!! @param[in] ixz1 integer column skip number for z1                    
+!! @param[in] ixq1 integer column skip number for q1                    
+!! @param[in] ixz2 integer column skip number for z2                    
+!! @param[in] ixq2 integer column skip number for q2                    
+!! @param[in] nm integer number of fields per column                  
+!! @param[in] nxq1 integer field skip number for q1                     
+!! @param[in] nxq2 integer field skip number for q2                     
+!! @param[in] km1 integer number of input points                       
+!! @param[in] kxz1 integer point skip number for z1                     
+!! @param[in] kxq1 integer point skip number for q1                     
+!! @param[in] z1 real (1+(im-1)*ixz1+(km1-1)*kxz1)                    
+!!                  input coordinate values in which to interpolate      
+!!                  (z1 must be strictly monotonic in either direction)  
+!! @param[in] q1 real (1+(im-1)*ixq1+(km1-1)*kxq1+(nm-1)*nxq1)        
+!!                  input fields to interpolate                          
+!! @param[in] km2 integer number of output points                      
+!! @param[in] kxz2 integer point skip number for z2                     
+!! @param[in] kxq2 integer point skip number for q2                     
+!! @param[in] z2 real (1+(im-1)*ixz2+(km2-1)*kxz2)                    
+!!                  output coordinate values to which to interpolate     
+!!                  (z2 need not be monotonic)                           
+!! @param[out] q2 real (1+(im-1)*ixq2+(km2-1)*kxq2+(nm-1)*nxq2)        
+!!                  output interpolated fields                           
+!! @author Mark Iredell @date 98-05-01            
  SUBROUTINE TERP3(IM,IXZ1,IXQ1,IXZ2,IXQ2,NM,NXQ1,NXQ2,             &
                   KM1,KXZ1,KXQ1,Z1,Q1,KM2,KXZ2,KXQ2,Z2,Q2)      
-!$$$  SUBPROGRAM DOCUMENTATION BLOCK                                    
-!                                                                       
-! SUBPROGRAM:    TERP3       CUBICALLY INTERPOLATE IN ONE DIMENSION     
-!   PRGMMR: IREDELL          ORG: W/NMC23     DATE: 98-05-01            
-!                                                                       
-! ABSTRACT: INTERPOLATE FIELD(S) IN ONE DIMENSION ALONG THE COLUMN(S).  
-!   THE INTERPOLATION IS CUBIC LAGRANGIAN WITH A MONOTONIC CONSTRAINT   
-!   IN THE CENTER OF THE DOMAIN.  IN THE OUTER INTERVALS IT IS LINEAR.  
-!   OUTSIDE THE DOMAIN, FIELDS ARE HELD CONSTANT.                       
-!                                                                       
-! PROGRAM HISTORY LOG:                                                  
-!   98-05-01  MARK IREDELL                                              
-! 1999-01-04  IREDELL  USE ESSL SEARCH                                  
-!                                                                       
-! USAGE:    CALL TERP3(IM,IXZ1,IXQ1,IXZ2,IXQ2,NM,NXQ1,NXQ2,             
-!    &                 KM1,KXZ1,KXQ1,Z1,Q1,KM2,KXZ2,KXQ2,Z2,Q2,J2)      
-!   INPUT ARGUMENT LIST:                                                
-!     IM           INTEGER NUMBER OF COLUMNS                            
-!     IXZ1         INTEGER COLUMN SKIP NUMBER FOR Z1                    
-!     IXQ1         INTEGER COLUMN SKIP NUMBER FOR Q1                    
-!     IXZ2         INTEGER COLUMN SKIP NUMBER FOR Z2                    
-!     IXQ2         INTEGER COLUMN SKIP NUMBER FOR Q2                    
-!     NM           INTEGER NUMBER OF FIELDS PER COLUMN                  
-!     NXQ1         INTEGER FIELD SKIP NUMBER FOR Q1                     
-!     NXQ2         INTEGER FIELD SKIP NUMBER FOR Q2                     
-!     KM1          INTEGER NUMBER OF INPUT POINTS                       
-!     KXZ1         INTEGER POINT SKIP NUMBER FOR Z1                     
-!     KXQ1         INTEGER POINT SKIP NUMBER FOR Q1                     
-!     Z1           REAL (1+(IM-1)*IXZ1+(KM1-1)*KXZ1)                    
-!                  INPUT COORDINATE VALUES IN WHICH TO INTERPOLATE      
-!                  (Z1 MUST BE STRICTLY MONOTONIC IN EITHER DIRECTION)  
-!     Q1           REAL (1+(IM-1)*IXQ1+(KM1-1)*KXQ1+(NM-1)*NXQ1)        
-!                  INPUT FIELDS TO INTERPOLATE                          
-!     KM2          INTEGER NUMBER OF OUTPUT POINTS                      
-!     KXZ2         INTEGER POINT SKIP NUMBER FOR Z2                     
-!     KXQ2         INTEGER POINT SKIP NUMBER FOR Q2                     
-!     Z2           REAL (1+(IM-1)*IXZ2+(KM2-1)*KXZ2)                    
-!                  OUTPUT COORDINATE VALUES TO WHICH TO INTERPOLATE     
-!                  (Z2 NEED NOT BE MONOTONIC)                           
-!                                                                       
-!   OUTPUT ARGUMENT LIST:                                               
-!     Q2           REAL (1+(IM-1)*IXQ2+(KM2-1)*KXQ2+(NM-1)*NXQ2)        
-!                  OUTPUT INTERPOLATED FIELDS                           
-!     J2           REAL (1+(IM-1)*IXQ2+(KM2-1)*KXQ2+(NM-1)*NXQ2)        
-!                  OUTPUT INTERPOLATED FIELDS CHANGE WRT Z2             
-!                                                                       
-! SUBPROGRAMS CALLED:                                                   
-!   RSEARCH      SEARCH FOR A SURROUNDING REAL INTERVAL                 
-!                                                                       
-! ATTRIBUTES:                                                           
-!   LANGUAGE: FORTRAN                                                   
-!                                                                       
-!C$$$                                                                   
       IMPLICIT NONE 
       INTEGER IM,IXZ1,IXQ1,IXZ2,IXQ2,NM,NXQ1,NXQ2 
       INTEGER KM1,KXZ1,KXQ1,KM2,KXZ2,KXQ2 
@@ -1410,7 +1616,7 @@
 !     REAL(ESMF_KIND_R8) :: J2S 
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-!  FIND THE SURROUNDING INPUT INTERVAL FOR EACH OUTPUT POINT.           
+!  FIND THE SURROUNDING INPUT INTERVAL FOR EACH OUTPUT POINT.
       CALL RSEARCH(IM,KM1,IXZ1,KXZ1,Z1,KM2,IXZ2,KXZ2,Z2,1,IM,K1S) 
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -1422,7 +1628,6 @@
 !$OMP PARALLEL DO DEFAULT(PRIVATE) SHARED(IM,IXZ1,IXQ1,IXZ2), &
 !$OMP& SHARED(IXQ2,NM,NXQ1,NXQ2,KM1,KXZ1,KXQ1,Z1,Q1,KM2,KXZ2), &
 !$OMP& SHARED(KXQ2,Z2,Q2,K1S)
-                                                                        
       DO K2=1,KM2 
         DO I=1,IM 
           K1=K1S(I,K2) 
@@ -1490,6 +1695,7 @@
                          ONE/(Z1D-Z1C)                                  
           ENDIF 
         ENDDO 
+
 !  INTERPOLATE.                                                         
         DO N=1,NM 
           DO I=1,IM 
@@ -1529,77 +1735,63 @@
 
  END SUBROUTINE TERP3 
 
+!> Search for a surrounding real interval.
+!!                                                                       
+!! This subprogram searches monotonic sequences of real numbers for
+!! intervals that surround a given search set of real numbers. The
+!! sequences may be monotonic in either direction; the real numbers
+!! may be single or double precision; the input sequences and sets and
+!! the output locations may be arbitrarily dimensioned.
+!!                                                                       
+!! If the array z1 is dimensioned (im,km1), then the skip numbers are
+!! ixz1=1 and kxz1=im; if it is dimensioned (km1,im), then the skip
+!! numbers are ixz1=km1 and kxz1=1; if it is dimensioned (im,jm,km1),
+!! then the skip numbers are ixz1=1 and kxz1=im*jm; etcetera. Similar
+!! examples apply to the skip numbers for z2 and l2.
+!!                                                                       
+!! Returned values of 0 or km1 indicate that the given search value    
+!! is outside the range of the sequence. 
+!!                                                                       
+!! If a search value is identical to one of the sequence values then
+!! the location returned points to the identical value. If the
+!! sequence is not strictly monotonic and a search value is identical
+!! to more than one of the sequence values, then the location returned
+!! may point to any of the identical values.
+!!                                                                       
+!! to be exact, for each i from 1 to im and for each k from 1 to km2,
+!! z=z2(1+(i-1)*ixz2+(k-1)*kxz2) is the search value and
+!! l=l2(1+(i-1)*ixl2+(k-1)*kxl2) is the location returned.  if l=0,
+!! then z is less than the start point z1(1+(i-1)*ixz1) for ascending
+!! sequences (or greater than for descending sequences).  if l=km1,
+!! then z is greater than or equal to the end point
+!! z1(1+(i-1)*ixz1+(km1-1)*kxz1) for ascending sequences (or less than
+!! or equal to for descending sequences).  otherwise z is between the
+!! values z1(1+(i-1)*ixz1+(l-1)*kxz1) and z1(1+(i-1)*ixz1+(l-0)*kxz1)
+!! and may equal the former.
+!!                                                                       
+!! @param[in] im integer number of sequences to search                
+!! @param[in] km1 integer number of points in each sequence            
+!! @param[in] ixz1 integer sequence skip number for z1                  
+!! @param[in] kxz1 integer point skip number for z1                     
+!! @param[in] z1 real (1+(im-1)*ixz1+(km1-1)*kxz1)                    
+!!                  sequence values to search                            
+!!                  (z1 must be monotonic in either direction)           
+!! @param[in] km2 integer number of points to search for               
+!!                  in each respective sequence                          
+!! @param[in] ixz2 integer sequence skip number for z2                  
+!! @param[in] kxz2 integer point skip number for z2                     
+!! @param[in] z2 real (1+(im-1)*ixz2+(km2-1)*kxz2)                    
+!!                  set of values to search for                          
+!!                  (z2 need not be monotonic)                           
+!! @param[in] ixl2 integer sequence skip number for l2                  
+!! @param[in] kxl2 integer point skip number for l2                     
+!!                                                                       
+!! @param[out] l2 integer (1+(im-1)*ixl2+(km2-1)*kxl2)                 
+!!                  interval locations having values from 0 to km1       
+!!                  (z2 will be between z1(l2) and z1(l2+1))             
+!!                                                                       
+!! @author Mark Iredell @date 98-05-01            
  SUBROUTINE RSEARCH(IM,KM1,IXZ1,KXZ1,Z1,KM2,IXZ2,KXZ2,Z2,IXL2,KXL2,L2)
-!$$$  SUBPROGRAM DOCUMENTATION BLOCK                                    
-!                                                                       
-! SUBPROGRAM:    RSEARCH     SEARCH FOR A SURROUNDING REAL INTERVAL     
-!   PRGMMR: IREDELL          ORG: W/NMC23     DATE: 98-05-01            
-!                                                                       
-! ABSTRACT: THIS SUBPROGRAM SEARCHES MONOTONIC SEQUENCES OF REAL NUMBERS
-!   FOR INTERVALS THAT SURROUND A GIVEN SEARCH SET OF REAL NUMBERS.     
-!   THE SEQUENCES MAY BE MONOTONIC IN EITHER DIRECTION; THE REAL NUMBERS
-!   MAY BE SINGLE OR DOUBLE PRECISION; THE INPUT SEQUENCES AND SETS     
-!   AND THE OUTPUT LOCATIONS MAY BE ARBITRARILY DIMENSIONED.            
-!                                                                       
-! PROGRAM HISTORY LOG:                                                  
-! 1999-01-05  MARK IREDELL                                              
-!                                                                       
-! USAGE:    CALL RSEARCH(IM,KM1,IXZ1,KXZ1,Z1,KM2,IXZ2,KXZ2,Z2,IXL2,KXL2,
-!    &                   L2)                                            
-!   INPUT ARGUMENT LIST:                                                
-!     IM           INTEGER NUMBER OF SEQUENCES TO SEARCH                
-!     KM1          INTEGER NUMBER OF POINTS IN EACH SEQUENCE            
-!     IXZ1         INTEGER SEQUENCE SKIP NUMBER FOR Z1                  
-!     KXZ1         INTEGER POINT SKIP NUMBER FOR Z1                     
-!     Z1           REAL (1+(IM-1)*IXZ1+(KM1-1)*KXZ1)                    
-!                  SEQUENCE VALUES TO SEARCH                            
-!                  (Z1 MUST BE MONOTONIC IN EITHER DIRECTION)           
-!     KM2          INTEGER NUMBER OF POINTS TO SEARCH FOR               
-!                  IN EACH RESPECTIVE SEQUENCE                          
-!     IXZ2         INTEGER SEQUENCE SKIP NUMBER FOR Z2                  
-!     KXZ2         INTEGER POINT SKIP NUMBER FOR Z2                     
-!     Z2           REAL (1+(IM-1)*IXZ2+(KM2-1)*KXZ2)                    
-!                  SET OF VALUES TO SEARCH FOR                          
-!                  (Z2 NEED NOT BE MONOTONIC)                           
-!     IXL2         INTEGER SEQUENCE SKIP NUMBER FOR L2                  
-!     KXL2         INTEGER POINT SKIP NUMBER FOR L2                     
-!                                                                       
-!   OUTPUT ARGUMENT LIST:                                               
-!     L2           INTEGER (1+(IM-1)*IXL2+(KM2-1)*KXL2)                 
-!                  INTERVAL LOCATIONS HAVING VALUES FROM 0 TO KM1       
-!                  (Z2 WILL BE BETWEEN Z1(L2) AND Z1(L2+1))             
-!                                                                       
-! REMARKS:                                                              
-!   IF THE ARRAY Z1 IS DIMENSIONED (IM,KM1), THEN THE SKIP NUMBERS ARE  
-!   IXZ1=1 AND KXZ1=IM; IF IT IS DIMENSIONED (KM1,IM), THEN THE SKIP    
-!   NUMBERS ARE IXZ1=KM1 AND KXZ1=1; IF IT IS DIMENSIONED (IM,JM,KM1),  
-!   THEN THE SKIP NUMBERS ARE IXZ1=1 AND KXZ1=IM*JM; ETCETERA.          
-!   SIMILAR EXAMPLES APPLY TO THE SKIP NUMBERS FOR Z2 AND L2.           
-!                                                                       
-!   RETURNED VALUES OF 0 OR KM1 INDICATE THAT THE GIVEN SEARCH VALUE    
-!   IS OUTSIDE THE RANGE OF THE SEQUENCE.                               
-!                                                                       
-!   IF A SEARCH VALUE IS IDENTICAL TO ONE OF THE SEQUENCE VALUES        
-!   THEN THE LOCATION RETURNED POINTS TO THE IDENTICAL VALUE.           
-!   IF THE SEQUENCE IS NOT STRICTLY MONOTONIC AND A SEARCH VALUE IS     
-!   IDENTICAL TO MORE THAN ONE OF THE SEQUENCE VALUES, THEN THE         
-!   LOCATION RETURNED MAY POINT TO ANY OF THE IDENTICAL VALUES.         
-!                                                                       
-!   TO BE EXACT, FOR EACH I FROM 1 TO IM AND FOR EACH K FROM 1 TO KM2,  
-!   Z=Z2(1+(I-1)*IXZ2+(K-1)*KXZ2) IS THE SEARCH VALUE AND               
-!   L=L2(1+(I-1)*IXL2+(K-1)*KXL2) IS THE LOCATION RETURNED.             
-!   IF L=0, THEN Z IS LESS THAN THE START POINT Z1(1+(I-1)*IXZ1)        
-!   FOR ASCENDING SEQUENCES (OR GREATER THAN FOR DESCENDING SEQUENCES). 
-!   IF L=KM1, THEN Z IS GREATER THAN OR EQUAL TO THE END POINT          
-!   Z1(1+(I-1)*IXZ1+(KM1-1)*KXZ1) FOR ASCENDING SEQUENCES               
-!   (OR LESS THAN OR EQUAL TO FOR DESCENDING SEQUENCES).                
-!   OTHERWISE Z IS BETWEEN THE VALUES Z1(1+(I-1)*IXZ1+(L-1)*KXZ1) AND   
-!   Z1(1+(I-1)*IXZ1+(L-0)*KXZ1) AND MAY EQUAL THE FORMER.               
-!                                                                       
-! ATTRIBUTES:                                                           
-!   LANGUAGE: FORTRAN                                                   
-!                                                                       
-!                                                                   
  IMPLICIT NONE 
 
  INTEGER,INTENT(IN)    :: IM,KM1,IXZ1,KXZ1,KM2,IXZ2,KXZ2,IXL2,KXL2 
@@ -1608,23 +1800,24 @@
  REAL(ESMF_KIND_R8),INTENT(IN) :: Z1(1+(IM-1)*IXZ1+(KM1-1)*KXZ1) 
  REAL(ESMF_KIND_R8),INTENT(IN) :: Z2(1+(IM-1)*IXZ2+(KM2-1)*KXZ2) 
 
- INTEGER                       :: I,K2,L 
+ INTEGER                       :: I,K2,L
 
  REAL(ESMF_KIND_R8)            :: Z 
 
+  
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  FIND THE SURROUNDING INPUT INTERVAL FOR EACH OUTPUT POINT.          
  DO I=1,IM 
    IF (Z1(1+(I-1)*IXZ1).LE.Z1(1+(I-1)*IXZ1+(KM1-1)*KXZ1)) THEN 
 !  INPUT COORDINATE IS MONOTONICALLY ASCENDING.                        
-     DO K2=1,KM2 
-       Z=Z2(1+(I-1)*IXZ2+(K2-1)*KXZ2) 
+     DO K2=1,KM2
+       Z=Z2(1+(I-1)*IXZ2+(K2-1)*KXZ2)
        L=0 
        DO 
          IF(Z.LT.Z1(1+(I-1)*IXZ1+L*KXZ1)) EXIT 
          L=L+1 
          IF(L.EQ.KM1) EXIT 
-       ENDDO 
+       ENDDO
        L2(1+(I-1)*IXL2+(K2-1)*KXL2)=L 
      ENDDO 
    ELSE 
@@ -1636,7 +1829,7 @@
          IF(Z.GT.Z1(1+(I-1)*IXZ1+L*KXZ1)) EXIT 
          L=L+1 
          IF(L.EQ.KM1) EXIT 
-       ENDDO 
+       ENDDO
        L2(1+(I-1)*IXL2+(K2-1)*KXL2)=L 
      ENDDO 
    ENDIF 
@@ -1644,6 +1837,8 @@
                                                                         
  END SUBROUTINE RSEARCH 
 
+!> Compute vertical level height
+!! @author George Gayno
  subroutine compute_zh
 
  implicit none 
@@ -1668,25 +1863,25 @@
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=psptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR TERRAIN HEIGHT"
  call ESMF_FieldGet(terrain_target_grid, &
                     farrayPtr=zhsfcptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR HEIGHT"
  call ESMF_FieldGet(zh_target_grid, &
                     farrayPtr=zhptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR TEMPERATURE"
  call ESMF_FieldGet(temp_target_grid, &
                     farrayPtr=tptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  do ii = 1, num_tracers
@@ -1696,7 +1891,7 @@
  print*,"- CALL FieldGet FOR SPECIFIC HUMIDITY"
  call ESMF_FieldGet(tracers_target_grid(ii), &
                     farrayPtr=qptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  grd = grav/rdgas 
@@ -1730,7 +1925,10 @@
  deallocate(pe0, pn0)
 
  end subroutine compute_zh 
-
+ 
+!> Cleanup atmospheric field (before adjustment) objects.
+!!
+!! @author George Gayno
  subroutine cleanup_target_atm_b4adj_data
 
  implicit none
@@ -1754,6 +1952,8 @@
 
  end subroutine cleanup_target_atm_b4adj_data
 
+!> Cleanup target grid atmospheric field objects.
+!! @author George Gayno
  subroutine cleanup_target_atm_data
 
  implicit none
@@ -1781,6 +1981,14 @@
  enddo
 
  deallocate(tracers_target_grid)
+
+ if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
+   call ESMF_FieldDestroy(qnifa_climo_target_grid, rc=rc)
+ endif
+
+ if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
+   call ESMF_FieldDestroy(qnwfa_climo_target_grid, rc=rc)
+ endif
 
  end subroutine cleanup_target_atm_data
 

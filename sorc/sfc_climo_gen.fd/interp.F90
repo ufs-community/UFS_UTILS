@@ -1,32 +1,25 @@
- subroutine interp(localpet, method, input_file)
+!> @file
+!! @brief Read the input source data and interpolate it to the
+!! model grid.
+!! @author George Gayno @date 2018
 
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine:  interp
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Read the input source data and interpolate it to the
-!    model grid. 
-!
-! Usage:  call interp(localpet, method, input_file)
-!
-!   input argument list:
-!     input_flle          filename of input source data.
-!     localpet            this mpi task
-!     method              interpolation method.defined where mask=1
-!
-!-----------------------------------------------------------------------
+!> Read the input source data and interpolate it to the
+!! model grid.
+!!
+!! @param[in] localpet this mpi task
+!! @param[in] method interpolation method.defined where mask=1
+!! @param[in] input_file filename of input source data.
+!! @author George Gayno @date 2018
+ subroutine interp(localpet, method, input_file)
 
  use esmf
  use netcdf
  use model_grid
  use source_grid
  use utils
+ use mpi
 
  implicit none
-
- include 'mpif.h'
 
  character(len=*), intent(in)       :: input_file
 
@@ -46,10 +39,13 @@
  real(esmf_kind_r4), allocatable    :: data_src_global(:,:)
  real(esmf_kind_r4), allocatable    :: data_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: vegt_mdl_one_tile(:,:)
+ real(esmf_kind_r4), allocatable    :: lat_mdl_one_tile(:,:)
+ real(esmf_kind_r4), allocatable    :: lon_mdl_one_tile(:,:)
 
  type(esmf_regridmethod_flag),intent(in) :: method
  type(esmf_field)                        :: data_field_src
  type(esmf_routehandle)                  :: regrid_data
+ type(esmf_polemethod_flag)              :: pole
  
  print*,"- CALL FieldCreate FOR SOURCE GRID DATA."
  data_field_src = ESMF_FieldCreate(grid_src, &
@@ -58,7 +54,7 @@
                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
                                   name="source data", &
                                   rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldGet FOR SOURCE GRID DATA."
@@ -66,7 +62,7 @@
  call ESMF_FieldGet(data_field_src, &
                     farrayPtr=data_src_ptr,  &
                     rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR MODEL GRID DATA."
@@ -76,7 +72,7 @@
                     computationalLBound=clb_mdl, &
                     computationalUBound=cub_mdl, &
                     rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  if (localpet == 0) then
@@ -92,9 +88,13 @@
  if (localpet == 0) then
    allocate(data_mdl_one_tile(i_mdl,j_mdl))
    allocate(mask_mdl_one_tile(i_mdl,j_mdl))
+   allocate(lat_mdl_one_tile(i_mdl,j_mdl))
+   allocate(lon_mdl_one_tile(i_mdl,j_mdl))
  else
    allocate(data_mdl_one_tile(0,0))
    allocate(mask_mdl_one_tile(0,0))
+   allocate(lat_mdl_one_tile(0,0))
+   allocate(lon_mdl_one_tile(0,0))
  endif
 
  record = 0
@@ -114,12 +114,18 @@
 
    print*,"- CALL FieldScatter FOR SOURCE GRID DATA."
    call ESMF_FieldScatter(data_field_src, data_src_global, rootPet=0, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter.", rc)
 
    isrctermprocessing = 1
 
    if (record == 1) then
+
+     if (method == ESMF_REGRIDMETHOD_BILINEAR) then
+       pole = ESMF_POLEMETHOD_ALLAVG
+     else
+       pole = ESMF_POLEMETHOD_NONE
+     endif
 
      print*,"- CALL FieldRegridStore."
      nullify(unmapped_ptr)
@@ -127,7 +133,7 @@
                             data_field_mdl, &
                             srcmaskvalues=(/0/), &
                             dstmaskvalues=(/0/), &
-                            polemethod=ESMF_POLEMETHOD_NONE, &
+                            polemethod=pole, &                     
                             unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
                             normtype=ESMF_NORMTYPE_FRACAREA, &
                             srctermprocessing=isrctermprocessing, &
@@ -135,7 +141,7 @@
                             regridmethod=method, &
                             unmappedDstList=unmapped_ptr,  &
                             rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldRegridStore.", rc)
 
    endif
@@ -146,7 +152,7 @@
                          routehandle=regrid_data, &
                          termorderflag=ESMF_TERMORDER_SRCSEQ, &
                          rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegrid.", rc)
  
 !-----------------------------------------------------------------------
@@ -192,21 +198,31 @@
 
    OUTPUT_LOOP : do tile = 1, num_tiles
 
+     print*,"- CALL FieldGather FOR MODEL LATITUDE."
+     call ESMF_FieldGather(latitude_field_mdl, lat_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather.", rc)
+
+     print*,"- CALL FieldGather FOR MODEL LONGITUDE."
+     call ESMF_FieldGather(longitude_field_mdl, lon_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather.", rc)
+
      print*,"- CALL FieldGather FOR MODEL GRID DATA."
      call ESMF_FieldGather(data_field_mdl, data_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather.", rc)
 
      print*,"- CALL FieldGather FOR MODEL GRID LAND MASK."
      call ESMF_FieldGather(mask_field_mdl, mask_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather.", rc)
 
      select case (trim(field_names(n)))
        case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type')
          print*,"- CALL FieldGather FOR MODEL GRID VEG TYPE."
          call ESMF_FieldGather(vegt_field_mdl, vegt_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-         if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+         if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
             call error_handler("IN FieldGather.", rc)
      end select
 
@@ -218,13 +234,13 @@
            call adjust_for_landice (data_mdl_one_tile, vegt_mdl_one_tile, i_mdl, j_mdl, field_names(n))
        end select
        where(mask_mdl_one_tile == 0) data_mdl_one_tile = missing
-       call output (data_mdl_one_tile, i_mdl, j_mdl, tile, record, t, n)
+       call output (data_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, tile, record, t, n)
      endif
 
      if (field_names(n) == 'vegetation_type') then
        print*,"- CALL FieldScatter FOR MODEL GRID VEGETATION TYPE."
        call ESMF_FieldScatter(vegt_field_mdl, data_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-       if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+       if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
           call error_handler("IN FieldScatter.", rc)
      endif
 
@@ -238,43 +254,29 @@
  status=nf90_close(ncid)
 
  deallocate(data_mdl_one_tile, mask_mdl_one_tile)
- deallocate(data_src_global)
+ deallocate(data_src_global, lat_mdl_one_tile, lon_mdl_one_tile)
 
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_data, rc=rc)
 
  end subroutine interp
 
+!> Ensure consistent fields at land ice points.
+!! Land ice is vegetation type 15 (variable landice).
+!! output is Model field.
+!!
+!! @param[in] field Model field before adjustments for land ice.
+!! @param[in] vegt Vegetation type on the model tile.
+!! @param[inout] idim i dimension of model tile.
+!! @param[inout] jdim j dimension of model tile.
+!! @param[in] field_ch Field name.
+!! @author George Gayno NCEP/EMC
  subroutine adjust_for_landice(field, vegt, idim, jdim, field_ch)
 
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine:  adjust for landice
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract:  Ensure consistent fields at land ice points.
-!   Land ice is vegetation type 15 (variable landice).
-!
-! Usage:  call adjust_for_landice(field, vegt, idim, jdim, field_ch)
-!
-!   input argument list:
-!     field               Model field before adjustments for
-!                         land ice.
-!     field_ch            Field name
-!     i/jdim              i/j dimension of model tile.
-!     vegt                Vegetation type on the model tile
-!
-!   output argument list:
-!     field               Model field after adjustments for
-!                         land ice.
-!-----------------------------------------------------------------------
-
  use esmf
+ use mpi
 
  implicit none
-
- include 'mpif.h'
 
  character(len=*), intent(in)      :: field_ch
 
@@ -285,7 +287,7 @@
 
  integer, parameter                :: landice=15
 
- integer                           :: i, j
+ integer                           :: i, j, ierr
 
  real                              :: landice_value
 
@@ -341,7 +343,7 @@
      enddo
    case default
      print*,'- FATAL ERROR IN ROUTINE ADJUST_FOR_LANDICE.  UNIDENTIFIED FIELD : ', field_ch
-     call mpi_abort(mpi_comm_world, 57)
+     call mpi_abort(mpi_comm_world, 57, ierr)
  end select
 
  end subroutine adjust_for_landice

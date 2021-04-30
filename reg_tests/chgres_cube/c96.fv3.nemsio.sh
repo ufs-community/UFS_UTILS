@@ -20,7 +20,9 @@ export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
 
 export CDATE=2019070412
 
-export OMP_NUM_THREADS_CY=1
+export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
+
+NCCMP=${NCCMP:-$(which nccmp)}
 
 #-----------------------------------------------------------------------------
 # Invoke chgres program.
@@ -32,6 +34,7 @@ ${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
+  set +x
   echo "<<< C96 FV3 GAUSSIAN NEMSIO TEST FAILED. <<<"
   exit $iret
 fi

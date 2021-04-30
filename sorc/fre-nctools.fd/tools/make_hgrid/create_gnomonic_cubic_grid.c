@@ -1,3 +1,6 @@
+/** @file
+    @brief Create gnomonic cubic grids.
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -1228,7 +1231,7 @@ void spherical_linear_interpolation(double beta, const double *p1, const double 
 
 
 
-/* void setup_aligned_nest
+/* void setup_aligned_nest */
 
 /*
 

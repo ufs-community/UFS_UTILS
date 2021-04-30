@@ -18,13 +18,15 @@ export ATM_FILES_INPUT=gfnanl.gdas.2017071700
 export SFC_FILES_INPUT=sfnanl.gdas.2017071700
 export NST_FILES_INPUT=nsnanl.gdas.2017071700
 export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
-export INPUT_TYPE="gfs_gaussian"
+export INPUT_TYPE="gfs_gaussian_nemsio"
 
 # dont start/end with double quotes.
 export TRACERS_TARGET='"sphum","liq_wat","o3mr"'
 export TRACERS_INPUT='"spfh","clwmr","o3mr"'
 export CDATE=2017071700
-export OMP_NUM_THREADS_CY=1
+export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
+
+NCCMP=${NCCMP:-$(which nccmp)}
 
 #-----------------------------------------------------------------------------
 # Invoke chgres program.
@@ -36,6 +38,7 @@ ${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
+  set +x
   echo "<<< C96 GFS GAUSSIAN NEMSIO TEST FAILED. <<<"
   exit $iret
 fi

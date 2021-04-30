@@ -1,41 +1,13 @@
- module model_grid
+!> @file
+!! @brief Defines the model grid.
+!! @author George Gayno @date 2018
 
-!--------------------------------------------------------------------------
-! module documentation block
-!
-! Module: model grid
-!   pgrmmr: gayno           org: w/np2           date: 2018
-!
-! Abstract: Defines the model grid.
-!
-! Usage:  use model_grid 
-!
-! Public Subroutines:
-! -------------------
-! define_model_grid            Defines esmf grid object for the
-!                              model grid.
-! model_grid_cleanup           Free up memory used in this module.
-!
-! Public variables:
-! -----------------
-!
-! Variables named with 'mdl' refer to the model grid.
-!
-! data_field_mdl               ESMF field object that holds the
-!                              data interpolated to model grid.
-! grid_mdl                     ESMF grid object for the model grid.
-! grid_tiles                   Array of model grid tile names.
-! i/j_mdl                      i/j dimensions of model tile.
-! mdl_field_mdl                ESMF field object that holds the
-!                              model land mask.
-! missing                      Value assigned to undefined points
-!                              (i.e., ocean points for a land
-!                              field).
-! num_tiles                    Total number of model grid tiles.
-! vegt_field_mdl               ESMF field object that holds the
-!                              vegetation type on the model grid.
-! 
-!-----------------------------------------------------------------------
+!> This module defines the model grid.
+!!
+!! Variables named with 'mdl' refer to the model grid.
+!!
+!! @author George Gayno @date 2018
+ module model_grid
 
  use esmf
 
@@ -43,43 +15,48 @@
 
  private
 
- character(len=5), allocatable, public  :: grid_tiles(:)
+ character(len=5), allocatable, public  :: grid_tiles(:) !< Array of model grid tile names.
 
- integer, public               :: i_mdl, j_mdl, ij_mdl, num_tiles
+ integer, public               :: i_mdl !< i dimension of model tile.
+ integer, public               :: j_mdl !< j dimension of model tile.
+ integer, public               :: ij_mdl !< Total number of points on a model tile.
+ integer, public               :: num_tiles !< Total number of model grid tiles.
 
- real(kind=4), public          :: missing = -999.
+ real(kind=4), public          :: missing = -999. !<Value assigned to undefined points
+                                                  !! (i.e., ocean points for a land field).
 
- type(esmf_grid),  public      :: grid_mdl
- type(esmf_field), public      :: data_field_mdl, mask_field_mdl
- type(esmf_field), public      :: vegt_field_mdl
+ type(esmf_grid),  public      :: grid_mdl !< ESMF grid object for the model grid.
+ type(esmf_field), public      :: data_field_mdl !< ESMF field object that holds the
+                                                 !! data interpolated to model grid.
+ type(esmf_field), public      :: mask_field_mdl !< ESMF field object that holds the
+                                                 !! model land mask.
+ type(esmf_field), public      :: latitude_field_mdl !< ESMF field object that holds the
+                                                     !! model grid latitude.
+ type(esmf_field), public      :: longitude_field_mdl !< ESMF field object that holds the
+                                                      !! model grid longitude.
+ type(esmf_field), public      :: vegt_field_mdl !< ESMF field object that holds the
+                                                 !! vegetation type on the model grid.
 
  public                        :: define_model_grid
  public                        :: model_grid_cleanup
 
  contains
 
+!> Define model grid.
+!!
+!! Define the model grid from the mosaic and orography
+!! files. Create the ESMF grid object for the model grid.
+!!
+!! @param[in] localpet this mpi task      
+!! @param[in] npets total number of mpi tasks      
+!! @author George Gayno @date 2018
  subroutine define_model_grid(localpet, npets)
-
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine: define model grid
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Define the model grid from the mosaic and orography
-!   files.  Create the ESMF grid object for the model grid.
-!
-! Usage:  define_model_grid(localpet, npets)
-!
-!   input argument list:
-!     localpet               this mpi task      
-!     npets                  total number of mpi tasks      
-!-----------------------------------------------------------------------
 
  use esmf
  use netcdf
  use program_setup 
  use utils
+ use mpi
 
  implicit none
 
@@ -88,13 +65,16 @@
  character(len=500)               :: the_file
 
  integer                          :: error, id_dim, id_tiles, ncid
- integer                          :: id_grid_tiles
+ integer                          :: id_grid_tiles, ierr
  integer                          :: extra, rc, tile
  integer, allocatable             :: decomptile(:,:)
 
- integer, allocatable             :: mask_mdl_one_tile(:,:)
+ integer(esmf_kind_i4), allocatable :: mask_mdl_one_tile(:,:)
  integer(esmf_kind_i4), pointer   :: mask_field_mdl_ptr(:,:)
  integer(esmf_kind_i4), pointer   :: mask_mdl_ptr(:,:)
+
+ real(esmf_kind_r4), allocatable  :: latitude_one_tile(:,:)
+ real(esmf_kind_r4), allocatable  :: longitude_one_tile(:,:)
 
 !-----------------------------------------------------------------------
 ! Get the number of tiles from the mosaic file.
@@ -124,7 +104,7 @@
  if (mod(npets,num_tiles) /= 0) then
    print*,'- FATAL ERROR: MUST RUN THIS PROGRAM WITH A TASK COUNT THAT'
    print*,'- IS A MULTIPLE OF THE NUMBER OF TILES.'
-   call mpi_abort
+   call mpi_abort(mpi_comm_world, 44, ierr)
  endif
 
 !-----------------------------------------------------------------------
@@ -172,7 +152,7 @@
                                   indexflag=ESMF_INDEX_GLOBAL, &
                                   tileFilePath=trim(orog_dir_mdl), &
                                   rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridCreateMosaic", rc)
 
  print*,"- CALL FieldCreate FOR DATA INTERPOLATED TO MODEL GRID."
@@ -181,7 +161,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="data on model grid", &
                                    rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR VEGETATION TYPE INTERPOLATED TO MODEL GRID."
@@ -190,7 +170,25 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="veg type on model grid", &
                                    rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR MODEL GRID LATITUDE."
+ latitude_field_mdl = ESMF_FieldCreate(grid_mdl, &
+                                   typekind=ESMF_TYPEKIND_R4, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="latitude on model grid", &
+                                   rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR MODEL GRID LONGITUDE."
+ longitude_field_mdl = ESMF_FieldCreate(grid_mdl, &
+                                   typekind=ESMF_TYPEKIND_R4, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="longitude on model grid", &
+                                   rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
 !-----------------------------------------------------------------------
@@ -203,7 +201,7 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="model grid land mask", &
                                    rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldGet FOR MODEL GRID LANDMASK."
@@ -211,34 +209,51 @@
  call ESMF_FieldGet(mask_field_mdl, &
                     farrayPtr=mask_field_mdl_ptr,  &
                     rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  if (localpet == 0) then
    allocate(mask_mdl_one_tile(i_mdl,j_mdl))
+   allocate(latitude_one_tile(i_mdl,j_mdl))
+   allocate(longitude_one_tile(i_mdl,j_mdl))
  else
    allocate(mask_mdl_one_tile(0,0))
+   allocate(latitude_one_tile(0,0))
+   allocate(longitude_one_tile(0,0))
  endif
 
  do tile = 1, num_tiles
    if (localpet == 0) then
      the_file = trim(orog_dir_mdl) // trim(orog_files_mdl(tile))
-     call get_model_mask(trim(the_file), mask_mdl_one_tile, i_mdl, j_mdl)
+     call get_model_info(trim(the_file), mask_mdl_one_tile, & 
+                         latitude_one_tile, longitude_one_tile, i_mdl, j_mdl)
    endif
+
    print*,"- CALL FieldScatter FOR MODEL GRID MASK. TILE IS: ", tile
    call ESMF_FieldScatter(mask_field_mdl, mask_mdl_one_tile, rootpet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
+
+   print*,"- CALL FieldScatter FOR MODEL LATITUDE. TILE IS: ", tile
+   call ESMF_FieldScatter(latitude_field_mdl, latitude_one_tile, rootpet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", rc)
+
+   print*,"- CALL FieldScatter FOR MODEL LONGITUDE. TILE IS: ", tile
+   call ESMF_FieldScatter(longitude_field_mdl, longitude_one_tile, rootpet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", rc)
+
  enddo
 
- deallocate(mask_mdl_one_tile)
+ deallocate(mask_mdl_one_tile, latitude_one_tile, longitude_one_tile)
 
  print*,"- CALL GridAddItem FOR MODEL GRID."
  call ESMF_GridAddItem(grid_mdl, &
                        itemflag=ESMF_GRIDITEM_MASK, &
                        staggerloc=ESMF_STAGGERLOC_CENTER, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridAddItem", rc)
 
  print*,"- CALL GridGetItem FOR MODEL GRID."
@@ -247,33 +262,25 @@
                        itemflag=ESMF_GRIDITEM_MASK, &
                        farrayPtr=mask_mdl_ptr, &
                        rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__line__,file=__file__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetItem", rc)
 
  mask_mdl_ptr = mask_field_mdl_ptr
 
  end subroutine define_model_grid
 
- subroutine get_model_mask(orog_file, mask, idim, jdim)
-
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine: get model mask
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Read model land/sea mask from the orography file.
-!
-! Usage:  call get_model_mask(orog_file, mask, idim, jdim)
-!
-!   input argument list:
-!     orog_file              the orography file
-!     i/jdim                 i/j dimension of the model tile
-!
-!   output argument list:
-!     mask                   land/sea mask
-!
-!-----------------------------------------------------------------------
+!> Get model information
+!!
+!! Read model land/sea mask and lat/lon from the orography file.
+!!
+!! @param[in] orog_file the orography file
+!! @param[out] mask land/sea mask
+!! @param[out] lat2d latitude
+!! @param[out] lon2d longitude
+!! @param[in] idim i dimension of the model tile
+!! @param[in] jdim j dimension of the model tile
+!! @author George Gayno @date 2018
+ subroutine get_model_info(orog_file, mask, lat2d, lon2d, idim, jdim)
 
  use esmf
  use netcdf
@@ -286,16 +293,19 @@
  integer, intent(in)                :: idim, jdim
  integer(esmf_kind_i4), intent(out) :: mask(idim,jdim)
 
- integer                            :: error, lat, lon
+ real(esmf_kind_r4), intent(out)    :: lat2d(idim,jdim)
+ real(esmf_kind_r4), intent(out)    :: lon2d(idim,jdim)
+
+ integer                            :: error, lat, lon, i, j
  integer                            :: ncid, id_dim, id_var
 
  real(kind=4), allocatable          :: dummy(:,:)
 
- print*,"- READ MODEL LAND MASK FILE"
+ print*,"- READ MODEL OROGRAPHY FILE"
 
- print*,'- OPEN LAND MASK FILE: ', orog_file
+ print*,'- OPEN FILE: ', orog_file
  error=nf90_open(orog_file,nf90_nowrite,ncid)
- call netcdf_err(error, "OPENING MODEL LAND MASK FILE")
+ call netcdf_err(error, "OPENING MODEL OROGRAPHY FILE")
 
  print*,"- READ I-DIMENSION"
  error=nf90_inq_dimid(ncid, 'lon', id_dim)
@@ -317,33 +327,64 @@
 
  allocate(dummy(idim,jdim))
 
- print*,"- READ LAND MASK"
- error=nf90_inq_varid(ncid, 'slmsk', id_var)
- call netcdf_err(error, "READING SLMSK ID")
+!-----------------------------------------------------------------------
+! If the lake maker was used, there will be a 'lake_frac' record.
+! In that case, land/non-land is determined by 'land_frac'.
+!
+! If the lake maker was not used, use 'slmsk', which is defined
+! as the nint(land_frac).
+!-----------------------------------------------------------------------
+
+ error=nf90_inq_varid(ncid, 'lake_frac', id_var)
+ if (error /= 0) then
+   print*,"- READ LAND MASK (SLMSK)"
+   error=nf90_inq_varid(ncid, 'slmsk', id_var)
+   call netcdf_err(error, "READING SLMSK ID")
+   error=nf90_get_var(ncid, id_var, dummy)
+   call netcdf_err(error, "READING SLMSK")
+   mask = nint(dummy)
+ else
+   print*,"- READ LAND FRACTION"
+   error=nf90_inq_varid(ncid, 'land_frac', id_var)
+   call netcdf_err(error, "READING LAND_FRAC ID")
+   error=nf90_get_var(ncid, id_var, dummy)
+   call netcdf_err(error, "READING LAND_FRAC")
+   mask = 0
+   do j = 1, lat
+   do i = 1, lon
+     if (dummy(i,j) > 0.0) then
+       mask(i,j) = 1
+     endif
+   enddo
+   enddo
+ endif
+
+ print*,"- READ LATITUDE"
+ error=nf90_inq_varid(ncid, 'geolat', id_var)
+ call netcdf_err(error, "READING GEOLAT ID")
  error=nf90_get_var(ncid, id_var, dummy)
- call netcdf_err(error, "READING SLMSK")
+ call netcdf_err(error, "READING GEOLAT")
+ lat2d=dummy
+
+ print*,"- READ LONGITUDE"
+ error=nf90_inq_varid(ncid, 'geolon', id_var)
+ call netcdf_err(error, "READING GEOLON ID")
+ error=nf90_get_var(ncid, id_var, dummy)
+ call netcdf_err(error, "READING GEOLON")
+ lon2d=dummy
 
  error = nf90_close(ncid)
 
- mask = nint(dummy)
-
  deallocate (dummy)
 
- end subroutine get_model_mask
+ end subroutine get_model_info
 
+!> Model grid cleanup.
+!!
+!! Free up memory associated with this module.
+!!
+!! @author George Gayno @date 2018
  subroutine model_grid_cleanup
-
-!-----------------------------------------------------------------------
-!  subroutine documentation block
-!
-! Subroutine: model grid cleanup
-!   prgmmr: gayno          org: w/np2           date: 2018
-!
-! Abstract: Free up memory associated with this module.
-!
-! Usage:  call model_grid_cleanup
-!
-!-----------------------------------------------------------------------
 
  implicit none
 
@@ -360,6 +401,12 @@
 
  print*,"- CALL FieldDestroy FOR MODEL GRID VEGETATION TYPE."
  call ESMF_FieldDestroy(vegt_field_mdl,rc=rc)
+
+ print*,"- CALL FieldDestroy FOR MODEL GRID LATITUDE."
+ call ESMF_FieldDestroy(latitude_field_mdl,rc=rc)
+
+ print*,"- CALL FieldDestroy FOR MODEL GRID LONGITUDE."
+ call ESMF_FieldDestroy(longitude_field_mdl,rc=rc)
 
  end subroutine model_grid_cleanup
 

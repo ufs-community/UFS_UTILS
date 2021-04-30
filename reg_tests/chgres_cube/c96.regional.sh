@@ -26,7 +26,9 @@ export HALO_BNDY=4
 
 export CDATE=2019070412
 
-export OMP_NUM_THREADS_CY=1
+export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
+
+NCCMP=${NCCMP:-$(which nccmp)}
 
 #-----------------------------------------------------------------------------
 # Invoke chgres program.
@@ -38,6 +40,7 @@ ${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
+  set +x
   echo "<<< C96 REGIONAL TEST FAILED. <<<"
   exit $iret
 fi
@@ -49,6 +52,9 @@ echo "Ending at: " `date`
 #-----------------------------------------------------------------------------
 
 cd $DATA
+
+mv out.sfc.tile7.nc out.sfc.tile1.nc
+mv out.atm.tile7.nc out.atm.tile1.nc
 
 test_failed=0
 for files in *.nc

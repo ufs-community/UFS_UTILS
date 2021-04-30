@@ -1,14 +1,87 @@
+C> @file
+C> @brief This is a limited point version of surface program.
+C> @author Shrinivas Moorthi Mark Iredell NOAA/EMC
+
+!> This program runs in two different modes:
+!!
+!!  1.  analysis mode (fh=0.)
+!!      this program merges climatology, analysis and forecast guess to create
+!!      new surface fields.  if analysis file is given, the program
+!!      uses it if date of the analysis matches with iy,im,id,ih (see note
+!!      below).
+!!
+!!  2.  forecast mode (fh.gt.0.)
+!!      this program interpolates climatology to the date corresponding to the
+!!      forecast hour.  if surface analysis file is given, for the corresponding
+!!      dates, the program will use it.
+!!
+!! if the date of the analysis does not match given iy,im,id,ih, (and fh),
+!! the program searches an old analysis by going back 6 hours, then 12 hours,
+!! then one day upto nrepmx days (parameter statement in the subrotine fixrd.
+!! now defined as 8).  this allows the user to provide non-daily analysis to
+!! be used.  if matching field is not found, the forecast guess will be used.
+!!
+!! use of a combined earlier surface analyses and current analysis is
+!! not allowed (as was done in the old version for snow analysis in which
+!! old snow analysis is used in combination with initial guess), except
+!! for sea surface temperature.  for sst anolmaly interpolation, you need to
+!! set lanom=.true. and must provide sst analysis at initial time.
+!!
+!! if you want to do complex merging of past and present surface field analysis,
+!! you need to create a separate file that contains daily surface field.
+!!
+!! for a dead start, do not supply fnbgsi or set fnbgsi='        '
+!!
+!! - lugb           is the unit number used in this subprogram
+!! - len ...        number of points on which sfccyc operates
+!! - lsoil .. 	  number of soil layers (2 as of april, 1994)
+!! - iy,im,id,ih .. year, month, day, and hour of initial state.
+!! - fh ..          forecast hour
+!! - rla, rlo --    latitude and longitudes of the len points
+!! - sig1t .. sigma level 1 temperature for dead start.  should be on gaussian
+!!           grid.  if not dead start, no need for dimension but set to zero
+!!           as in the example below.
+!!      
+!! @author M. Iredell, xuli, Hang Lei, George Gayno
       module sfccyc_module
       implicit none
       save
 !
 !  grib code for each parameter - used in subroutines sfccycle and setrmsk.
 !
-      integer kpdtsf,kpdwet,kpdsno,kpdzor,kpdais,kpdtg3,kpdplr,kpdgla,
-     &        kpdmxi,kpdscv,kpdsmc,kpdoro,kpdmsk,kpdstc,kpdacn,kpdveg,
-     &        kpdvet,kpdsot
-     &,       kpdvmn,kpdvmx,kpdslp,kpdabs
-     &,       kpdsnd, kpdabs_0, kpdabs_1, kpdalb(4)
+      integer kpdtsf !< GRIB1 parameter number of skin temperature/SST.
+      integer kpdwet !< GRIB1 parameter number of soil wetness.
+      integer kpdsno !< GRIB1 parameter number of liquid equivalent snow
+                     !! depth.
+      integer kpdzor !< GRIB1 parameter number of physical snow depth.
+      integer kpdais !< GRIB1 parameter number of roughness length.
+      integer kpdtg3 !< GRIB1 parameter number of soil substrate
+                     !! temperature.
+      integer kpdplr !< GRIB1 parameter number of plant resistance.
+      integer kpdgla !< GRIB1 parameter number of glacial ice.
+      integer kpdmxi !< GRIB1 parameter number of maximum ice extent.
+      integer kpdscv !< GRIB1 parameter number of snow cover.
+      integer kpdsmc !< GRIB1 parameter number of soil moisture.
+      integer kpdoro !< GRIB1 parameter number of orography.
+      integer kpdmsk !< GRIB1 parameter number of land mask.
+      integer kpdstc !< GRIB1 parameter number of soil temperature.
+      integer kpdacn !< GRIB1 parameter number of sea ice concentration.
+      integer kpdveg !< GRIB1 parameter number of vegetation greenness.
+      integer kpdvet !< GRIB1 parameter number of vegetation type.
+      integer kpdsot !< GRIB1 parameter number of soil type.
+      integer kpdvmn !< GRIB1 parameter number of minimum vegetation
+                     !! greenness.
+      integer kpdvmx !< GRIB1 parameter number of maximum vegetation
+                     !! greenness.
+      integer kpdslp !< GRIB1 parameter number of slope type.
+      integer kpdabs !< GRIB1 parameter number of maximum snow albedo.
+      integer kpdsnd !< GRIB1 parameter number of physical snow depth.
+      integer kpdabs_0 !< GRIB1 parameter number of legacy maximum snow
+                       !! albedo.
+      integer kpdabs_1 !< GRIB1 parameter number of modis-based 
+                       !! maximum snow albedo.
+      integer kpdalb(4) !< GRIB1 parameter number of 4-component
+                        !! snow-free albedo.
       parameter(kpdtsf=11,  kpdwet=86, kpdsno=65,  kpdzor=83,
 !    1          kpdalb=84,  kpdais=91, kpdtg3=11,  kpdplr=224,
      1          kpdais=91,  kpdtg3=11, kpdplr=224,
@@ -19,15 +92,86 @@
      &          kpdvet=225, kpdsot=224,kpdabs_1=159,
      &          kpdsnd=66 )
 !
-      integer, parameter :: kpdalb_0(4)=(/212,215,213,216/)
-      integer, parameter :: kpdalb_1(4)=(/189,190,191,192/)
-      integer, parameter :: kpdalf(2)=(/214,217/)
-!
-      integer, parameter :: xdata=5000, ydata=2500, mdata=xdata*ydata
-      integer            :: veg_type_landice
-      integer            :: soil_type_landice
-!
+      integer, parameter :: kpdalb_0(4)=(/212,215,213,216/) !< GRIB1 parameter
+                                                         !! numbers for brigleb
+                                                         !! snow-free albedo.
+      integer, parameter :: kpdalb_1(4)=(/189,190,191,192/) !< GRIB1 parameter
+                                                         !! numbers for modis 
+                                                         !! snow-free albedo.
+      integer, parameter :: kpdalf(2)=(/214,217/) !< GRIB1 parameter numbers of
+                                                !! fraction for strongly/weakly
+                                                !! zenith angle dependent albedo.
+      integer, parameter :: xdata=5000 !< Maximum 'i' dimension of input data.
+      integer, parameter :: ydata=2500 !< Maximum 'j' dimension of input data.
+      integer, parameter :: mdata=xdata*ydata !< Maximum number of input data points.
+      integer            :: veg_type_landice !< Vegetation type category at permanent
+                                             !! land-ice points.
+      integer            :: soil_type_landice !< Soil type category at permanent
+                                             !! land-ice points.
       end module sfccyc_module
+
+!> Surface cycling driver routine. Update 'first guess' surface
+!! fields with either analysis or climatological data.
+!!
+!! @param[in] lugb Fortran unit number used to read data files.
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @param[in] sig1t Sigma level 1 temperature for dead start.
+!! @param[in] deltsfc Cycling frequency in hours.
+!! @param[in] iy Year of initial state.
+!! @param[in] im Month of initial state.
+!! @param[in] id Day of initial state.
+!! @param[in] ih Hour of initial state.
+!! @param[in] fh Forecast hour.
+!! @param[in] rla Latitude of model points.
+!! @param[in] rlo Longitude of model points.
+!! @param[in] slmask Model land-sea mask without ice flag.
+!! @param[in] orog Filtered orography on model grid.
+!! @param[in] orog_uf Unfiltered orography on model grid.
+!! @param[in] use_ufo When true, adjust sst and soil substrate
+!! temperature for differences between filtered and unfiltered terrain.
+!! @param[in] nst_anl Set to true when using nst model.
+!! @param[inout] sihfcs Sea ice thickness on model grid.
+!! @param[inout] sicfcs Sea ice concentration on model grid.
+!! @param[inout] sitfcs Sea ice skin temperature on model grid.
+!! @param[inout] swdfcs Physical snow depth on model grid.
+!! @param[inout] slcfcs Liquid portion of volumentric soil moisture on 
+!! model grid.
+!! @param[inout] vmnfcs Minimum greenness fraction of model grid.
+!! @param[inout] vmxfcs Maximum greenness fraction of model grid.
+!! @param[inout] slpfcs Slope type on model grid.
+!! @param[inout] absfcs Maximum snow albedo on model grid.
+!! @param[inout] tsffcs Skin temperature/SST on model grid.
+!! @param[inout] snofcs Liquid equivalent snow depth on model grid.
+!! @param[inout] zorfcs Roughness length on model grid.
+!! @param[inout] albfcs Snow-free albedo on model grid.
+!! @param[inout] tg3fcs Soil substrate temperature on model grid.
+!! @param[inout] cnpfcs Canopy moisture content on model grid.
+!! @param[inout] smcfcs Total volumetric soil moisture on model grid.
+!! @param[inout] stcfcs Soil/ice depth temperature on model grid.
+!! @param[inout] slifcs Model land-sea mask including ice flag.
+!! @param[inout] aisfcs Model ice mask.
+!! @param[inout] vegfcs Vegetation greenness on model grid.
+!! @param[inout] vetfcs Vegetation type on model grid.
+!! @param[inout] sotfcs Soil type on model grid.
+!! @param[inout] alffcs Fraction for strongly and weakly
+!! zenith angle dependent albedo on model grid.
+!! @param[inout] cvfcs Convective cloud cover on model grid.
+!! @param[inout] cvbfcs Convective cloud base on model grid.
+!! @param[inout] cvtfcs Convective cloud top on model grid.
+!! @param[in] me MPI task number.
+!! @param[in] nlunit Program namelist unit number.
+!! @param[in] sz_nml Dimension of input_nml_file.
+!! @param[in] input_nml_file Name of program namelist file.
+!! @param[in] ialb Use modis albedo when '1'. Use brigleb when '0'.
+!! @param[in] isot When '1', use statsgo soil type.  When '0' use
+!! zobler soil type.
+!! @param[in] ivegsrc When '1', use igbp vegetation type.  When '2'
+!! use sib vegetation type.
+!! @param[in] tile_num_ch Model tile number to process.
+!! @param[in] i_index The 'i' indices of the model grid to process.
+!! @param[in] j_index The 'j' indices of the model grid to process.
+!! @author Shrinivas Moorthi
       subroutine sfccycle(lugb,len,lsoil,sig1t,deltsfc
      &,                   iy,im,id,ih,fh
      &,                   rla, rlo, slmask,orog,orog_uf,use_ufo,nst_anl
@@ -129,52 +273,6 @@
       character(len=*), intent(in) :: input_nml_file(sz_nml)
 
       integer num_parthds
-!
-!  this is a limited point version of surface program.
-!
-!  this program runs in two different modes:
-!
-!  1.  analysis mode (fh=0.)
-!
-!      this program merges climatology, analysis and forecast guess to create
-!      new surface fields.  if analysis file is given, the program
-!      uses it if date of the analysis matches with iy,im,id,ih (see note
-!      below).
-!
-!  2.  forecast mode (fh.gt.0.)
-!
-!      this program interpolates climatology to the date corresponding to the
-!      forecast hour.  if surface analysis file is given, for the corresponding
-!      dates, the program will use it.
-!
-!   note:
-!
-!      if the date of the analysis does not match given iy,im,id,ih, (and fh),
-!      the program searches an old analysis by going back 6 hours, then 12 hours,
-!      then one day upto nrepmx days (parameter statement in the subrotine fixrd.
-!      now defined as 8).  this allows the user to provide non-daily analysis to
-!      be used.  if matching field is not found, the forecast guess will be used.
-!
-!      use of a combined earlier surface analyses and current analysis is
-!      not allowed (as was done in the old version for snow analysis in which
-!      old snow analysis is used in combination with initial guess), except
-!      for sea surface temperature.  for sst anolmaly interpolation, you need to
-!      set lanom=.true. and must provide sst analysis at initial time.
-!
-!      if you want to do complex merging of past and present surface field analysis,
-!      you need to create a separate file that contains daily surface field.
-!
-!      for a dead start, do not supply fnbgsi or set fnbgsi='        '
-!
-!  lugb           is the unit number used in this subprogram
-!  len ...        number of points on which sfccyc operates
-!  lsoil .. 	  number of soil layers (2 as of april, 1994)
-!  iy,im,id,ih .. year, month, day, and hour of initial state.
-!  fh ..          forecast hour
-!  rla, rlo --    latitude and longitudes of the len points
-!  sig1t .. sigma level 1 temperature for dead start.  should be on gaussian
-!           grid.  if not dead start, no need for dimension but set to zero
-!           as in the example below.
 !
 !  variable naming conventions:
 !
@@ -2517,6 +2615,14 @@
 !     if(lprnt) print *,' tsffcsf=',tsffcs(iprnt)
       return
       end subroutine sfccycle 
+
+!> Counts the number of model points that are snow covered land,
+!! snow-free land, open water, sea ice, and snow covered sea ice.
+!!
+!! @param[in] slimsk The land-sea-ice mask.
+!! @param[in] sno Snow
+!! @param[in] ijmax Number of model points to process.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine count(slimsk,sno,ijmax)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -2569,6 +2675,17 @@
 !     if(lprnt) print *,' tsffcsf=',tsffcs(iprnt)
       return
       end
+
+!> Determine the maximum and minimum values of a surface field
+!! at snow-free and snow covered land, open water, and 
+!! snow-free and snow covered sea ice.
+!!
+!! @param[in] lfld The name of the surface field to monitory.
+!! @param[in] fld The surface field to monitor.
+!! @param[in] slimsk Land-sea-ice mask.
+!! @param[in] sno Snow.
+!! @param[in] ijmax Number of model points to process.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine monitr(lfld,fld,slimsk,sno,ijmax)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -2633,6 +2750,14 @@
 !
       return
       end
+
+!> Compute day of the year based on month and day.
+!!
+!! @param[in] iyr Year.
+!! @param[in] imo Month.
+!! @param[in] idy Day.
+!! @param[out] ldy Day of the year.
+!! @author Mark Iredell NOAA/EMC
       subroutine dayoyr(iyr,imo,idy,ldy)
       implicit none
       integer ldy,i,idy,iyr,imo
@@ -2648,6 +2773,22 @@
       enddo
       return
       end
+
+!> Read a high-resolution land mask. It will be used
+!! as a surrogate for GRIB input data without a bitmap.
+!! This is NOT the model land mask. This mask file is GRIB1.
+!!
+!! @param[in] lugb Fortran unit number of the mask file.
+!! @param[out] imsk 'i' dimension of the mask.
+!! @param[out] jmsk 'j' dimension of the mask.
+!! @param[in] fnmskh Name of the mask file.
+!! @param[in] kpds5 GRIB1 parameter number for mask.
+!! @param[out] slmskh The high-resolution mask.
+!! @param[out] gausm When true, mask is on a gaussian grid.
+!! @param[out] blnmsk Corner point longitude of the mask grid.
+!! @param[out] bltmsk Corner point latitude of the mask grid.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine hmskrd(lugb,imsk,jmsk,fnmskh,
      &                  kpds5,slmskh,gausm,blnmsk,bltmsk,me)
       use machine , only : kind_io8,kind_io4
@@ -2681,6 +2822,21 @@
 !
       return
       end
+
+!> Read a GRIB1 file.  Return the requested data record
+!! and some grid specifications.
+!!
+!! @param[in] lugb Fortran unit number of the grib file.
+!! @param[inout] idim "i" dimension of the data.
+!! @param[inout] jdim "j" dimension of the data.
+!! @param[in] fngrib Name of the grib file.
+!! @param[in] kpds5 The grib1 parameter number for the requested field.
+!! @param[out] gdata The requested data.
+!! @param[out] gaus When true, grid is gaussian.
+!! @param[out] blno Corner point longitude of grid.
+!! @param[out] blto Corner point latitude of grid.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine fixrdg(lugb,idim,jdim,fngrib,
      &                  kpds5,gdata,gaus,blno,blto,me)
       use machine      , only : kind_io8,kind_io4
@@ -2718,8 +2874,8 @@
       close(lugb)
       call baopenr(lugb,fngrib,iret)
       if (iret .ne. 0) then
-        write(6,*) ' error in opening file ',trim(fngrib)
-        print *,'error in opening file ',trim(fngrib)
+        write(6,*) ' FATAL ERROR: in opening file ',trim(fngrib)
+        print *,'FATAL ERROR: in opening file ',trim(fngrib)
         call abort
       endif
       if (me .eq. 0) write(6,*) ' file ',trim(fngrib),
@@ -2746,7 +2902,7 @@
       kpds0(4)=-1
       kpds0(18)=-1
       if(iret.ne.0) then
-        write(6,*) ' error in getgbh. iret: ', iret
+        write(6,*) ' FATAL ERROR: in getgbh. iret: ', iret
         if (iret == 99) write(6,*) ' field not found.'
         call abort
       endif
@@ -2765,13 +2921,13 @@
         data8 = real(data4, kind=kind_io8)
         deallocate(data4)
       else
-        write(0,*)' Invalid w3kindreal --- aborting'
+        write(0,*)' FATAL ERROR: Invalid w3kindreal '
         call abort
       endif
 !
       if(jret == 0) then
         if(ndata.eq.0) then
-          write(6,*) ' error in getgb'
+          write(6,*) ' FATAL ERROR: in getgb'
           write(6,*) ' kpds=',kpds
           write(6,*) ' kgds=',kgds
           call abort
@@ -2787,7 +2943,7 @@
       else
         if (me ==. 0) write(6,*) 'idim,jdim=',idim,jdim
      &,                ' gaus=',gaus,' blno=',blno,' blto=',blto
-        write(6,*) ' error in getgb : jret=',jret
+        write(6,*) ' FATAL ERROR in getgb : jret=',jret
         write(6,*) ' kpds(13)=',kpds(13),' kpds(15)=',kpds(15)
         call abort
       endif
@@ -2796,6 +2952,21 @@
       deallocate(lbms)
       return
       end
+
+!> For a given GRIB1 grid description section array, determine
+!! some grid specifications.
+!!
+!! @param[in] kgds GRIB1 grid description section array.
+!! @param[out] dlat Grid resolution in the 'j' direction.
+!! @param[out] dlon Grid resolution in the 'i' direction.
+!! @param[out] rslat Latitude of the southern row of data.
+!! @param[out] rnlat Latitude of the northern row of data.
+!! @param[out] wlon Longitude of the western column of data.
+!! @param[out] elon Longitude of the eastern column of data.
+!! @param[out] ijordr When false, adjacent points in the 'i' direction
+!! are consecutive.  Otherwise, 'j' points are consecutive.
+!! @param[in] me MPI rank number.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine getarea(kgds,dlat,dlon,rslat,rnlat,wlon,elon,ijordr
      &,                  me)
       use machine , only : kind_io8,kind_io4
@@ -2860,18 +3031,15 @@
         return
 !
       elseif(kgds(1).eq.1) then                  !  mercator projection
-        write(6,*) 'mercator grid'
-        write(6,*) 'cannot process'
+        write(6,*) 'FATAL ERROR: cannot process mercator grid.'
         call abort
 !
       elseif(kgds(1).eq.2) then                  !  gnomonic projection
-        write(6,*) 'gnomonic grid'
-        write(6,*) 'error!! gnomonic projection not coded'
+        write(6,*) 'FATAL ERROR: cannot process gnomonic grid.'
         call abort
 !
       elseif(kgds(1).eq.3) then                  !  lambert conformal
-        write(6,*) 'lambert conformal'
-        write(6,*) 'cannot process'
+        write(6,*) 'FATAL ERROR: cannot process lambert conf grid.'
         call abort
       elseif(kgds(1).eq.4) then                  !  gaussian grid
 !
@@ -2913,39 +3081,52 @@
         return
 !
       elseif(kgds(1).eq.5) then                  !  polar strereographic
-        write(6,*) 'polar stereographic grid'
-        write(6,*) 'cannot process'
+        write(6,*) 'FATAL ERROR: cannot process'
+        write(6,*) 'polar stereographic grid.'
         call abort
         return
 !
       elseif(kgds(1).eq.13) then                 !  oblique lambert conformal
-        write(6,*) 'oblique lambert conformal grid'
-        write(6,*) 'cannot process'
+        write(6,*) 'FATAL ERROR: cannot process'
+        write(6,*) 'oblique lambert conformal grid.'
         call abort
 !
       elseif(kgds(1).eq.50) then                 !  spherical coefficient
-        write(6,*) 'spherical coefficient'
-        write(6,*) 'cannot process'
+        write(6,*) 'FATAL ERROR: cannot process'
+        write(6,*) 'spherical coefficient grid.'
         call abort
         return
 !
       elseif(kgds(1).eq.90) then                 !  space view perspective
 !                                                  (orthographic grid)
-        write(6,*) 'space view perspective grid'
-        write(6,*) 'cannot process'
+        write(6,*) 'FATAL ERROR: cannot process'
+        write(6,*) 'space view perspective grid.'
         call abort
         return
 !
       else                                       !  unknown projection.  abort.
-        write(6,*) 'error!! unknown map projection'
+        write(6,*) 'FATAL ERROR: unknown map projection'
         write(6,*) 'kgds(1)=',kgds(1)
-        print *,'error!! unknown map projection'
+        print *,'FATAL ERROR: unknown map projection'
         print *,'kgds(1)=',kgds(1)
         call abort
       endif
 !
       return
       end
+
+!> Take an array of data on a lat/lon based grid and rearrange
+!! it so the corner point is in the 'lower left' and adjacent
+!! points in the 'i' direction are consecutive.
+!!
+!! @param[inout] data The data to be adjusted.
+!! @param[in] imax 'i' dimension of data.
+!! @param[in] jmax 'j' dimension of data.
+!! @param[in] dlon Delta longitude of the data.
+!! @param[in] dlat Delta latitude of the data.
+!! @param[in] ijordr When false, adjacent points in the 'i' direction
+!! are consecutive.  Otherwise, 'j' points are consecutive.
+!! @author Shrinivas Moorthi
       subroutine subst(data,imax,jmax,dlon,dlat,ijordr)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -3006,6 +3187,26 @@
       endif
       return
       end
+
+!> Interpolate data from a lat/lon grid to the model grid.
+!!
+!! @param[in] regin Input data.
+!! @param[in] imxin 'i' dimension of input data.
+!! @param[in] jmxin 'j' dimension of input data.
+!! @param[in] rinlon
+!! @param[in] rinlat
+!! @param[in] rlon
+!! @param[in] rlat
+!! @param[in] inttyp
+!! @param[out] gauout The interpolated data on the model grid.
+!! @param[in] len Number of model points to process.
+!! @param[in] lmask
+!! @param[in] rslmsk
+!! @param[in] slmask Model land-sea-ice mask.
+!! @param[in] outlat Latitudes on the model grid.
+!! @param[in] outlon Longitudes on the model grid.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorth
       subroutine la2ga(regin,imxin,jmxin,rinlon,rinlat,rlon,rlat,inttyp,
      &                 gauout,len,lmask,rslmsk,slmask
      &,                outlat, outlon,me)
@@ -3458,9 +3659,8 @@
             i2 = iindx2(i)
             if(wrk(i) .eq. 0.0) then
               if(.not.lmask) then
-                if (num_threads == 1)
-     &            write(6,*) ' la2ga called with lmask=.true. but bad',
-     &                     ' rslmsk or slmask given'
+                write(6,*) ' FATAL ERROR: la2ga called with lmask=true'
+                write(6,*) ' But bad rslmsk or slmask given.'
                 call abort
               endif
               ifill(it) = ifill(it) + 1
@@ -3507,11 +3707,10 @@
                 endif
               enddo
 !
-              if (num_threads == 1) then
-                write(6,*) ' error!!! no filling value found in la2ga'
+              write(6,*) ' FATAL ERROR: no filling value'
+              write(6,*) ' found in la2ga.'
 !               write(6,*) ' i ix jx slmask(i) rslmsk ',
 !    &                       i,ix,jx,slmask(i),rslmsk(ix,jx)
-              endif
               call abort
 !
    71         continue
@@ -3543,6 +3742,13 @@
 !
       return
       end subroutine la2ga
+
+!> Compute the maxmimum and minimum of a field.
+!!
+!! @param[in] f The field to check.
+!! @param[in] imax The horizontal dimension of the field.
+!! @param[in] kmax Number of vertical levels of the field.
+!! @author Shrinivas Moorthi
       subroutine maxmin(f,imax,kmax)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -3575,23 +3781,87 @@
 !
       return
       end
+
+!> Fill in analysis arrays with climatology before reading analysis
+!! data.
+!!
+!! @param[out] tsfanl Skin temperature/SST analysis on model grid.
+!! @param[out] tsfan2 Skin temperature/SST analysis on model grid
+!! at time minus deltsfc.
+!! @param[out] wetanl Soil wetness analysis on model grid.
+!! @param[out] snoanl Liquid equivalent snow depth analysis on model grid.
+!! @param[out] zoranl Roughness length analysis on model grid.
+!! @param[out] albanl Snow-free albedo analysis on model grid.
+!! @param[out] aisanl Sea ice mask analysis on model grid.
+!! @param[out] tg3anl Soil substrate temperature analysis on model grid.
+!! @param[out] cvanl Convective cloud cover analysis on model grid.
+!! @param[out] cvbanl Convective cloud base analysis on model grid.
+!! @param[out] cvtanl Convective cloud top analysis on model grid.
+!! @param[out] cnpanl Canopy water content analysis on model grid.
+!! @param[out] smcanl Soil moisture analysis on model grid.
+!! @param[out] stcanl Soil temperature analysis on model grid.
+!! @param[out] slianl Land-sea-ice mask analysis on model grid.
+!! @param[out] scvanl Snow cover analysis on model grid.
+!! @param[out] veganl Vegetation greenness analysis on model grid.
+!! @param[out] vetanl Vegetation type analysis on model grid.
+!! @param[out] sotanl Soil type analysis on model grid.
+!! @param[out] alfanl Fraction for strongly and weakly zenith
+!! angle dependent albedo analysis on model grid.
+!! @param[out] sihanl Sea ice depth analysis on model grid.
+!! @param[out] sicanl Sea ice concentration analysis on model grid.
+!! @param[out] vmnanl Minimum vegetation greenness analysis on model
+!! grid.
+!! @param[out] vmxanl Maximum vegetation greenness analysis on model
+!! grid.
+!! @param[out] slpanl Slope type analysis on model grid.
+!! @param[out] absanl Maximum snow albedo analysis on model grid.
+!! @param[in] tsfclm Climatological skin temperature/SST on model grid.
+!! @param[in] tsfcl2 Climatological skin temperature/SST on model grid
+!! at time minus deltsfc.
+!! @param[in] wetclm Climatological soil wetness on model grid.
+!! @param[in] snoclm Climatological liquid equivalent snow depth on model grid.
+!! @param[in] zorclm Climatological roughness length on model grid.
+!! @param[in] albclm Climatological snow-free albedo on model grid.
+!! @param[in] aisclm Climatological sea ice mask on model grid.
+!! @param[in] tg3clm Climatological soil substrate temperature on model
+!! grid.
+!! @param[in] cvclm Climatological convective cloud cover on model grid.
+!! @param[in] cvbclm Climatological convective cloud base on model grid.
+!! @param[in] cvtclm Climatological convective cloud top on model grid.
+!! @param[in] cnpclm Climatological canopy water content on model grid.
+!! @param[in] smcclm Climatological soil moisture on model grid.
+!! @param[in] stcclm Climatologcial soil temperature on model grid.
+!! @param[in] sliclm Climatological model land-sea-ice mask.
+!! @param[in] scvclm Climatological snow cover on model grid.
+!! @param[in] vegclm Climatological vegetation greenness on model grid.
+!! @param[in] vetclm Climatological vegetation type on model grid.
+!! @param[in] sotclm Climatological soil type on model grid.
+!! @param[in] alfclm Climatological fraction for strongly and weakly
+!! zenith angle dependent albedo on model grid.
+!! @param[in] sihclm Climatological sea ice depth on the model grid.
+!! @param[in] sicclm Climatological sea ice concentration on the model grid.
+!! @param[in] vmnclm Climatological minimum vegetation greenness on
+!! model grid.
+!! @param[in] vmxclm Climatological maximum vegetation greenness on
+!! model grid.
+!! @param[in] slpclm Climatological slope type on model grid.
+!! @param[in] absclm Climatological maximum snow albedo on model grid.
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @author Shrinivas Moorthi
       subroutine filanl(tsfanl,tsfan2,wetanl,snoanl,zoranl,albanl,
      &                  aisanl,
      &                  tg3anl,cvanl ,cvbanl,cvtanl,
      &                  cnpanl,smcanl,stcanl,slianl,scvanl,veganl,
      &                  vetanl,sotanl,alfanl,
-!cwu [+1l] add ()anl for sih, sic
      &                  sihanl,sicanl,
-!clu [+1l] add ()anl for vmn, vmx, slp, abs
      &                  vmnanl,vmxanl,slpanl,absanl,
      &                  tsfclm,tsfcl2,wetclm,snoclm,zorclm,albclm,
      &                  aisclm,
      &                  tg3clm,cvclm ,cvbclm,cvtclm,
      &                  cnpclm,smcclm,stcclm,sliclm,scvclm,vegclm,
      &                  vetclm,sotclm,alfclm,
-!cwu [+1l] add ()clm for sih, sic
      &                  sihclm,sicclm,
-!clu [+1l] add ()clm for vmn, vmx, slp, abs
      &                  vmnclm,vmxclm,slpclm,absclm,
      &                  len,lsoil)
       use machine , only : kind_io8,kind_io4
@@ -3672,29 +3942,150 @@
 !
       return
       end
+
+!> Read analysis fields.
+!!
+!! @param[in] lugb Fortran unit number for analysis files.
+!! @param[in] iy Cycle year.
+!! @param[in] im Cycle month.
+!! @param[in] id Cycle day.
+!! @param[in] ih Cycle hour.
+!! @param[in] fh Forecast hour.
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @param[in] slmask Model land-sea mask.
+!! @param[in] fntsfa SST analysis file.
+!! @param[in] fnweta Soil wetness analysis file.
+!! @param[in] fnsnoa Snow analysis file
+!! @param[in] fnzora Roughness length analysis file.
+!! @param[in] fnalba Snow-free albedo analysis file.
+!! @param[in] fnaisa Sea ice mask analysis file.
+!! @param[in] fntg3a Soil substrate analysis file.
+!! @param[in] fnscva Snow cover analysis file.
+!! @param[in] fnsmca Soil moisture analysis file.
+!! @param[in] fnstca Soil temperature analysis file.
+!! @param[in] fnacna Sea ice concentration analysis file.
+!! @param[in] fnvega Vegetation greenness analysis file.
+!! @param[in] fnveta Vegetation type analysis file.
+!! @param[in] fnsota Soil type analysis file.
+!! @param[in] fnvmna Minimum vegetation greenness analysis file.
+!! @param[in] fnvmxa Maximum vegetation greenness analysis file.
+!! @param[in] fnslpa Slope type analysis file.
+!! @param[in] fnabsa Maximum snow albedo analysis file.
+!! @param[out] tsfanl Skin temperature/SST analysis on model grid.
+!! @param[out] wetanl Soil wetness analysis on model grid.
+!! @param[out] snoanl Snow analysis on model grid.
+!! @param[out] zoranl Roughness length analysis on model grid.
+!! @param[out] albanl Snow-free albedo analysis on model grid.
+!! @param[out] aisanl Sea ice mask analysis on model grid.
+!! @param[out] tg3anl Soil substrate analysis on model grid.
+!! @param[out] cvanl Convective cloud cover analysis on model grid.
+!! @param[out] cvbanl Convective cloud base analysis on model grid.
+!! @param[out] cvtanl Convective cloud top analysis on model grid.
+!! @param[out] smcanl Soil moisture analysis on model grid.
+!! @param[out] stcanl Soil temperature analysis on model grid.
+!! @param[out] slianl Not used.
+!! @param[out] scvanl Snow cover analysis on model grid.
+!! @param[out] acnanl Sea ice concentration analysis on model grid.
+!! @param[out] veganl Vegetation greenness analysis on model grid.
+!! @param[out] vetanl Vegetation type analysis on model grid.
+!! @param[out] sotanl Soil type analysis on model grid.
+!! @param[out] alfanl Analysis of fraction for strongly and 
+!! weakly zenith angle dependent albedo on model grid.
+!! @param[out] tsfan0 SST analysis at forecast hour 0 on model grid.
+!! @param[out] vmnanl Minimum vegetation greenness analysis on model
+!! grid.
+!! @param[out] vmxanl Maximum vegetation greenness analysis on model
+!! grid.
+!! @param[out] slpanl Slope type analysis on model grid.
+!! @param[out] absanl Maximum snow albedo analysis on model grid.
+!! @param[in] kpdtsf Grib parameter number of skin temperature/SST.
+!! @param[in] kpdwet Grib parameter number of soil wetness.
+!! @param[in] kpdsno Grib parameter number of liquid equivalent snow
+!! depth.
+!! @param[in] kpdsnd Grib parameter number of physical snow depth.
+!! @param[in] kpdzor Grib parameter number of roughness length.
+!! @param[in] kpdalb Grib parameter number of snow-free albedo.
+!! @param[in] kpdais Grib parameter number of sea ice mask.
+!! @param[in] kpdtg3 Grib parameter number of soil substrate
+!! temperature.
+!! @param[in] kpdscv Grib parameter number of snow cover.
+!! @param[in] kpdacn Grib parameter number of sea ice concentration.
+!! @param[in] kpdsmc Grib parameter number of soil moisture.
+!! @param[in] kpdstc Grib parameter number of soil temperature.
+!! @param[in] kpdveg Grib parameter number of vegetation greenness.
+!! @param[in] kprvet Grib parameter number of vegetation type.
+!! @param[in] kpdsot Grib parameter number of soil type.
+!! @param[in] kpdalf Grib parameter number for fraction for strongly 
+!! and weakly zenith angle dependent albedo.
+!! @param[in] kpdvmn Grib parameter number of minimum vegetation
+!! greenness.
+!! @param[in] kpdvmx Grib parameter number of maximum vegetation
+!! greenness.
+!! @param[in] kpdslp Grib parameter number of slope type.
+!! @param[in] kpdabs Grib parameter number of maximum snow albedo.
+!! @param[out] irttsf Return code from read of skin temperature/SST 
+!! analysis file.
+!! @param[out] irtwet Return code from read of soil wetness analysis
+!! file.
+!! @param[out] irtsno Return code from read of snow analysis file.
+!! @param[out] irtzor Return code from read of roughness length file.
+!! @param[out] irtalb Return code from read of snow-free albedo analysis file.
+!! @param[out] irtais Return code from read of ice mask analysis file.
+!! @param[out] irttg3 Return code from read of soil substrate
+!! temperature analysis file.
+!! @param[out] irtscv Return code from read of snow cover analysis file.
+!! @param[out] irtacn Return code from read of sea ice concentration
+!! analysis file.
+!! @param[out] irtsmc Return code from read of soil moisture analysis
+!! file.
+!! @param[out] irtstc Return code from read of soil temperature analysis 
+!! file.
+!! @param[out] irtveg Return code from read of vegetation greenness 
+!! analysis file.
+!! @param[out] irtvet Return code from read of vegetation type analysis
+!! file.
+!! @param[out] irtsot Return code from read of soil type analysis file.
+!! @param[out] irtalf Return code from read of file containing fraction
+!! for strongly and weakly zenith angle dependent albedo.
+!! @param[out] irtvmn Return code from read of minimum vegetation
+!! greenness analysis file.
+!! @param[out] irtvmx Return code from read of maximum vegetation
+!! greenness analysis file.
+!! @param[out] irtslp Return code from read of slope type analysis file.
+!! @param[out] irtabs Return code from read of maximum snow albedo
+!! analysis file.
+!! @param[in] imsk 'i' dimension of the high-res mask used for
+!! analysis data without a bitmap.
+!! @param[in] jmsk 'j' dimension of the high-res mask used for
+!! analysis data without a bitmap.
+!! @param[in] slmskh The high-resolution mask used for 
+!! analysis data without a bitmap.
+!! @param[in] outlat Model latitudes
+!! @param[in] outlon Model longitudes
+!! @param[in] gaus When true, the high-res mask is on a gaussian grid.
+!! @param[in] blno Corner point longitude of the high-res mask.
+!! @param[in] blto Corner point latitude of the high-res mask.
+!! @param[in] me MPI task number.
+!! @param[in] lanom When true, do sst anomaly interpolation.
+!! @author Shrinivas Moorthi
       subroutine analy(lugb,iy,im,id,ih,fh,len,lsoil,
      &                 slmask,fntsfa,fnweta,fnsnoa,fnzora,fnalba,fnaisa,
      &                 fntg3a,fnscva,fnsmca,fnstca,fnacna,fnvega,
      &                 fnveta,fnsota,
-!clu [+1l] add fn()a for vmn, vmx, slp, abs
      &                 fnvmna,fnvmxa,fnslpa,fnabsa,
      &                 tsfanl,wetanl,snoanl,zoranl,albanl,aisanl,
      &                 tg3anl,cvanl ,cvbanl,cvtanl,
      &                 smcanl,stcanl,slianl,scvanl,acnanl,veganl,
      &                 vetanl,sotanl,alfanl,tsfan0,
-!clu [+1l] add ()anl for vmn, vmx, slp, abs
      &                 vmnanl,vmxanl,slpanl,absanl,
-!cggg snow mods start    &        kpdtsf,kpdwet,kpdsno,kpdzor,kpdalb,kpdais,
      &                 kpdtsf,kpdwet,kpdsno,kpdsnd,kpdzor,kpdalb,kpdais,
-!cggg snow mods end
      &                 kpdtg3,kpdscv,kpdacn,kpdsmc,kpdstc,kpdveg,
      &                 kprvet,kpdsot,kpdalf,
-!clu [+1l] add kpd() for vmn, vmx, slp, abs
      &                 kpdvmn,kpdvmx,kpdslp,kpdabs,
      &                 irttsf,irtwet,irtsno,irtzor,irtalb,irtais,
      &                 irttg3,irtscv,irtacn,irtsmc,irtstc,irtveg,
      &                 irtvet,irtsot,irtalf
-!clu [+1l] add irt() for vmn, vmx, slp, abs
      &,                irtvmn,irtvmx,irtslp,irtabs
      &,                imsk, jmsk, slmskh, outlat, outlon
      &,                gaus, blno, blto, me, lanom)
@@ -3750,7 +4141,7 @@
      &,             outlat, outlon, me)
         irttsf = iret
         if(iret == 1) then
-          write(6,*) 't surface analysis read error'
+          write(6,*) 'FATAL ERROR: t surface analysis read error.'
           call abort
         elseif(iret == -1) then
           if (me == 0) then
@@ -3776,11 +4167,13 @@
      &,             imsk, jmsk, slmskh, gaus,blno, blto
      &,             outlat, outlon, me)
         if(iret == 1) then
-          write(6,*) 't surface at ft=0 analysis read error'
+          write(6,*) 'FATAL ERROR: t surface at ft=0 analysis'
+          write(6,*) 'read error.'
           call abort
         elseif(iret == -1) then
           if (me == 0) then
-            write(6,*) 'could not find t surface analysis at ft=0'
+            write(6,*) 'FATAL ERROR: Could not find t surface'
+            write(6,*) 'analysis at ft=0.'
           endif
           call abort
         else
@@ -3803,7 +4196,7 @@
      &,              outlat, outlon, me)
           irtalb=iret
           if(iret.eq.1) then
-            write(6,*) 'albedo analysis read error'
+            write(6,*) 'FATAL ERROR: Albedo analysis read error.'
             call abort
           elseif(iret.eq.-1) then
             if (me .eq. 0) then
@@ -3834,7 +4227,7 @@
      &,              outlat, outlon, me)
           irtalf=iret
           if(iret.eq.1) then
-            write(6,*) 'albedo analysis read error'
+            write(6,*) 'FATAL ERROR: Albedo analysis read error.'
             call abort
           elseif(iret.eq.-1) then
             if (me .eq. 0) then
@@ -3865,7 +4258,7 @@
      &,            outlat, outlon, me)
         irtwet=iret
         if(iret.eq.1) then
-          write(6,*) 'bucket wetness analysis read error'
+          write(6,*) 'FATAL ERROR: Bucket wetness analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -3887,7 +4280,8 @@
      &,            outlat, outlon, me)
         irtsmc=iret
         if(iret.eq.1) then
-          write(6,*) 'layer soil wetness analysis read error'
+          write(6,*) 'FATAL ERROR: Layer soil wetness analysis'
+          write(6,*) 'read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -3922,8 +4316,8 @@
 !cggg the grib parameter id number.
         call baopenr(lugb,fnsnoa,iret)
         if (iret .ne. 0) then
-          write(6,*) ' error in opening file ',trim(fnsnoa)
-          print *,'error in opening file ',trim(fnsnoa)
+          write(6,*) 'FATAL ERROR: in opening file ',trim(fnsnoa)
+          print *,'FATAL ERROR: in opening file ',trim(fnsnoa)
           call abort
         endif
         lugi=0
@@ -3935,8 +4329,9 @@
      &              lskip,kpds,kgds,iret)
         close(lugb)
         if (iret .ne. 0) then
-          write(6,*) ' error reading header of file: ',trim(fnsnoa)
-          print *,'error reading header of file: ',trim(fnsnoa)
+          write(6,*) ' FATAL ERROR: Reading header'
+          write(6,*) ' of file: ',trim(fnsnoa)
+          print *,'FATAL ERROR: Reading header of file: ',trim(fnsnoa)
           call abort
         endif
         if (kgds(1) == 4) then  ! gaussian data is depth
@@ -3955,7 +4350,7 @@
 !cggg snow mods end
         irtscv=iret
         if(iret.eq.1) then
-          write(6,*) 'snow depth analysis read error'
+          write(6,*) 'FATAL ERROR: snow depth analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -3977,7 +4372,7 @@
      &,            outlat, outlon, me)
         irtsno=iret
         if(iret.eq.1) then
-          write(6,*) 'snow cover analysis read error'
+          write(6,*) 'FATAL ERROR: snow cover analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4006,7 +4401,8 @@
      &,            outlat, outlon, me)
         irtacn=iret
         if(iret.eq.1) then
-          write(6,*) 'ice concentration analysis read error'
+          write(6,*) 'FATAL ERROR: ice concentration'
+          write(6,*) 'analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4025,7 +4421,7 @@
      &,            outlat, outlon, me)
         irtais=iret
         if(iret.eq.1) then
-          write(6,*) 'ice mask analysis read error'
+          write(6,*) 'FATAL ERROR: ice mask analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4053,7 +4449,7 @@
      &,            outlat, outlon, me)
         irtzor=iret
         if(iret.eq.1) then
-          write(6,*) 'roughness analysis read error'
+          write(6,*) 'FATAL ERROR: roughness analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4082,7 +4478,7 @@
      &,            outlat, outlon, me)
         irttg3=iret
         if(iret.eq.1) then
-          write(6,*) 'deep soil tmp analysis read error'
+          write(6,*) 'FATAL ERROR: deep soil tmp analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4105,7 +4501,7 @@
      &,            outlat, outlon, me)
         irtstc=iret
         if(iret.eq.1) then
-          write(6,*) 'layer soil tmp analysis read error'
+          write(6,*) 'FATAL ERROR: layer soil tmp analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4134,7 +4530,8 @@
      &,            outlat, outlon, me)
         irtveg=iret
         if(iret.eq.1) then
-          write(6,*) 'vegetation cover analysis read error'
+          write(6,*) 'FATAL ERROR: vegetation cover analysis'
+          write(6,*) 'read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4144,7 +4541,7 @@
           write(6,*) 'forecast guess will be used'
           endif
         else
-          if (me .eq. 0) print *,'gegetation cover analysis provided.'
+          if (me .eq. 0) print *,'vegetation cover analysis provided.'
         endif
       else
         if (me .eq. 0) then
@@ -4163,7 +4560,7 @@
      &,            outlat, outlon, me)
         irtvet=iret
         if(iret.eq.1) then
-          write(6,*) 'vegetation type analysis read error'
+          write(6,*) 'FATAL ERROR: vegetation type analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4192,7 +4589,7 @@
      &,            outlat, outlon, me)
         irtsot=iret
         if(iret.eq.1) then
-          write(6,*) 'soil type analysis read error'
+          write(6,*) 'FATAL ERROR: soil type analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4223,7 +4620,7 @@
      &,            outlat, outlon, me)
         irtvmn=iret
         if(iret.eq.1) then
-          write(6,*) 'shdmin analysis read error'
+          write(6,*) 'FATAL ERROR: shdmin analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4253,7 +4650,7 @@
      &,            outlat, outlon, me)
         irtvmx=iret
         if(iret.eq.1) then
-          write(6,*) 'shdmax analysis read error'
+          write(6,*) 'FATAL ERROR: shdmax analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4283,7 +4680,7 @@
      &,            outlat, outlon, me)
         irtslp=iret
         if(iret.eq.1) then
-          write(6,*) 'slope type analysis read error'
+          write(6,*) 'FATAL ERROR: slope type analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4313,7 +4710,7 @@
      &,            outlat, outlon, me)
         irtabs=iret
         if(iret.eq.1) then
-          write(6,*) 'snoalb analysis read error'
+          write(6,*) 'FATAL ERROR: snoalb analysis read error.'
           call abort
         elseif(iret.eq.-1) then
           if (me .eq. 0) then
@@ -4336,21 +4733,74 @@
 !
       return
       end
+
+!> Fill in model grid guess arrays with analysis values if this is a dead start.
+!! All fields are on the model grid.
+!!
+!! @param[out] tsffcs First guess skin temperature/SST analysis.
+!! @param[out] wetfcs First guess soil wetness.
+!! @param[out] snofcs First guess liquid equivalent snow depth.
+!! @param[out] zorfcs First guess roughness length.
+!! @param[out] albfcs First guess snow-free albedo.
+!! @param[out] tg3fcs First guess soil substrate temperature.
+!! @param[out] cvfcs First guess cloud cover.
+!! @param[out] cvbfcs First guess convective cloud bottom.
+!! @param[out] cvtfcs First guess convective cloud top.
+!! @param[out] cnpfcs First guess canopy water content.
+!! @param[out] smcfcs First guess soil moisture.
+!! @param[out] stcfcs First guess soil temperature.
+!! @param[out] slifcs First guess land-sea-ice mask.
+!! @param[out] aisfcs First guess sea ice mask.
+!! @param[out] vegfcs First guess vegetation greenness.
+!! @param[out] vetfcs First guess vegetation type.
+!! @param[out] sotfcs First guess soil type.
+!! @param[out] alffcs First guess of fraction for strongly and
+!! weakly zenith angle dependent albedo.
+!! @param[out] sihfcs First guess sea ice depth.
+!! @param[out] sicfcs First guess sea ice concentration.
+!! @param[out] vmnfcs First guess minimum greenness fraction.
+!! @param[out] vmxfcs First guess maximum greenness fraction.
+!! @param[out] slpfcs First guess slope type.
+!! @param[out] absfcs First guess maximum snow albedo analysis.
+!! @param[in] tsfanl Skin temperature/SST analysis.
+!! @param[in] wetanl Soil wetness analysis.
+!! @param[in] snoanl Liquid equivalent snow depth analysis.
+!! @param[in] zoranl Roughness length analysis.
+!! @param[in] albanl Snow-free albedo analysis.
+!! @param[in] tg3anl Soil substrate temperature analysis.
+!! @param[in] cvanl Convective cloud cover analysis.
+!! @param[in] cvbanl Convective cloud base analysis.
+!! @param[in] cvtanl Convective cloud top analysis.
+!! @param[in] cnpanl Canopy water content analysis.
+!! @param[in] smcanl Soil moisture analysis.
+!! @param[in] stcanl Soil temperature analysis.
+!! @param[in] slianl Land-sea-ice mask analysis.
+!! @param[in] aisanl Sea ice mask analysis.
+!! @param[in] veganl Vegetation greenness analysis.
+!! @param[in] vetanl Vegetation type analysis.
+!! @param[in] sotanl Soil type analysis.
+!! @param[in] alfanl Analysis of fraction for strongly and weakly
+!! zenith angle dependent albedo.
+!! @param[in] sihanl Sea ice depth analysis.
+!! @param[in] sicanl Sea ice concentration analysis.
+!! @param[in] vmnanl Minimum greenness fraction analysis.
+!! @param[in] vmxanl Maximum greenness fraction analysis.
+!! @param[in] slpanl Slope type analysis.
+!! @param[in] absanl Maximum snow albedo analysis.
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @author Shrinivas Moorthi
       subroutine filfcs(tsffcs,wetfcs,snofcs,zorfcs,albfcs,
      &                  tg3fcs,cvfcs ,cvbfcs,cvtfcs,
      &                  cnpfcs,smcfcs,stcfcs,slifcs,aisfcs,
      &                  vegfcs, vetfcs, sotfcs, alffcs,
-!cwu [+1l] add ()fcs for sih, sic
      &                  sihfcs,sicfcs,
-!clu [+1l] add ()fcs for vmn, vmx, slp, abs
      &                  vmnfcs,vmxfcs,slpfcs,absfcs,
      &                  tsfanl,wetanl,snoanl,zoranl,albanl,
      &                  tg3anl,cvanl ,cvbanl,cvtanl,
      &                  cnpanl,smcanl,stcanl,slianl,aisanl,
      &                  veganl, vetanl, sotanl, alfanl,
-!cwu [+1l] add ()anl for sih, sic
      &                  sihanl,sicanl,
-!clu [+1l] add ()anl for vmn, vmx, slp, abs
      &                  vmnanl,vmxanl,slpanl,absanl,
      &                  len,lsoil)
 !
@@ -4428,34 +4878,15 @@
 !
       return
       end
-      subroutine bktges(smcfcs,slianl,stcfcs,len,lsoil)
-!
-      use machine , only : kind_io8,kind_io4
-      implicit none
-      integer i,j,len,lsoil,k
-      real (kind=kind_io8) smcfcs(len,lsoil), stcfcs(len,lsoil),
-     &                     slianl(len)
-!
-!  note that smfcs comes in with the original unit (cm?) (not grib file)
-!
-      do i = 1, len
-        smcfcs(i,1) = (smcfcs(i,1)/150.) * .37 + .1
-      enddo
-      do k = 2, lsoil
-        do i = 1, len
-          smcfcs(i,k) = smcfcs(i,1)
-        enddo
-      enddo
-      if(lsoil.gt.2) then
-        do k = 3, lsoil
-          do i = 1, len
-            stcfcs(i,k) = stcfcs(i,2)
-          enddo
-        enddo
-      endif
-!
-      return
-      end
+
+!> Round a field up to one or down to zero.
+!!
+!! @param[inout] aisfld The field to adjust.
+!! @param[in] len Number of model points to process.
+!! @param[in] op Operation on field.
+!! @param[in] crit Critical value above/below the 
+!! field is rounded.
+!! @author Shrinivas Moorthi
       subroutine rof01(aisfld,len,op,crit)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -4496,12 +4927,24 @@
           endif
         enddo
       else
-        write(6,*) ' illegal operator in rof01.  op=',op
+        write(6,*) 'FATAL ERROR: Illegal operator'
+        write(6,*) 'in rof01.  op=',op
         call abort
       endif
 !
       return
       end
+
+!> Adjust skin temperature or SST for terrain.
+!!
+!! @param[inout] tsfc Skin temperature/SST
+!! @param[in] orog Orography height.
+!! @param[in] slmask Model land-sea mask.
+!! @param[in] umask When '0' adjust SST, when '1' adjust skin
+!! temperature.
+!! @param[in] len Number of model points to process.
+!! @param[in] rlapse Standard atmospheric lapse rate.
+!! @author Shrinivas Moorthi
       subroutine tsfcor(tsfc,orog,slmask,umask,len,rlapse)
 !
       use machine , only : kind_io8,kind_io4
@@ -4517,6 +4960,21 @@
       enddo
       return
       end
+
+!> Estimate snow depth at glacial, land and sea ice points.
+!!
+!! @param[in] scvanl Snow cover.
+!! @param[in] slianl Land-sea-ice mask.
+!! @param[in] tsfanl Skin temperature.
+!! @param[in] snoclm Climatological snow depth.
+!! @param[in] glacir Permanent glacial point when '1'.
+!! @param[in] snwmax Maximum snow depth.
+!! @param[in] snwmin Minimum snow depth.
+!! @param[in] landice When true, point is permanent land ice.
+!! @param[in] len Number of model points to process.
+!! @param[out] snoanl Snow depth.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi
       subroutine snodpth(scvanl,slianl,tsfanl,snoclm,
      &                   glacir,snwmax,snwmin,landice,len,snoanl, me)
       use machine , only : kind_io8,kind_io4
@@ -4571,6 +5029,166 @@
       enddo
       return
       end subroutine snodpth
+
+!> Blend the model forecast (or first guess) fields with the
+!! analysis/climatology.  The forecast/first guess variables
+!! are named with "fcs".  The analysis/climatology variables
+!! are named with "anl". On output, the blended fields are
+!! stored in the "anl" variables.
+!!
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @param[in] iy Cycle year.
+!! @param[in] im Cycle month.
+!! @param[in] id Cycle day.
+!! @param[in] ih Cycle hour.
+!! @param[in] fh Forecast hour.
+!! @param[in] deltsfc Cycling frequency in hours.
+!! @param[in] sihfcs First guess sea ice depth.
+!! @param[in] sicfcs First guess sea ice concentration.
+!! @param[in] vmnfcs First guess minimum vegetation greenness.
+!! @param[in] vmxfcs First guess maximum vegetation greenness.
+!! @param[in] slpfcs First guess slope type.
+!! @param[in] absfcs First guess maximum snow albedo.
+!! @param[in] tsffcs First guess skin temperature/SST.
+!! @param[in] wetfcs First guess soil wetness.
+!! @param[in] snofcs First guess liquid equivalent snow depth.
+!! @param[in] zorfcs First guess roughness length.
+!! @param[in] albfcs First guess snow free albedo.
+!! @param[in] aisfcs First guess ice.
+!! @param[in] cvfcs First guess convective cloud cover.
+!! @param[in] cvbfcs First guess convective cloud bottom.
+!! @param[in] cvtfcs First guess convective cloud top.
+!! @param[in] cnpfcs First guess canopy water content.
+!! @param[in] smcfcs First guess soil moisture.
+!! @param[in] stcfcs First guess soil/ice temperature.
+!! @param[in] slifcs First guess land-sea-ice mask.
+!! @param[in] vegfcs First guess vegetation greenness.
+!! @param[in] vetfcs First guess vegetation type.
+!! @param[in] sotfcs First guess soil type.
+!! @param[in] alffcs First guess strong/weak zenith angle
+!! dependent albedo.
+!! @param[inout] sihanl Blended sea ice depth.
+!! @param[inout] sicanl Blended sea ice concentration.
+!! @param[inout] vmnanl Blended minimum vegetation greenness.
+!! @param[inout] vmxanl Blended maximum vegetation greenness.
+!! @param[inout] slpanl Blended slope type.
+!! @param[inout] absanl Blended maximum snow albedo.
+!! @param[inout] tsfanl Blended skin temperature/SST.
+!! @param[inout] tsfan2 Not used.
+!! @param[inout] wetanl Blended soil wetness.
+!! @param[inout] snoanl Blended liquid equivalent snow depth.
+!! @param[inout] zoranl Blended roughness length.
+!! @param[inout] albanl Blended snow-free albedo.
+!! @param[inout] aisanl Blended ice.
+!! @param[inout] cvanl Blended convective cloud cover.
+!! @param[inout] cvbanl Blended convective cloud base.
+!! @param[inout] cvtanl Blended convective cloud top.
+!! @param[inout] cnpanl Blended canopy moisture content.
+!! @param[inout] smcanl Blended soil moisture.
+!! @param[inout] stcanl Blended soil/ice temperature.
+!! @param[inout] slianl Blended land-sea-ice mask.
+!! @param[inout] veganl Blended vegetation greenness.
+!! @param[inout] vetanl Blended vegetation type.
+!! @param[inout] sotanl Blended soil type.
+!! @param[inout] alfanl Blended strong/weak zenith angle
+!! dependent albedo.
+!! @param[in] ctsfl Merging coefficient for skin temperature.
+!! @param[in] calbl Merging coefficient for snow-free albedo at land
+!! points.
+!! @param[in] caisl Merging coefficient for sea ice at land points.
+!! @param[in] csnol Merging coefficient for snow at land points.
+!! @param[in] csmcl Merging coefficient for soil moisture at land
+!! points.
+!! @param[in] czorl Merging coefficient for roughness length at land
+!! points.
+!! @param[in] cstcl Merging coefficient for soil temperature at land
+!! points.
+!! @param[in] cvegl Merging coefficient for vegetation greenness at land
+!! points.
+!! @param[in] ctsfs Merging coefficient for SST.
+!! @param[in] calbs Merging coefficient for snow-free albedo at water
+!! points.
+!! @param[in] caiss Merging coefficient for sea ice at water points.
+!! @param[in] csnos Merging coefficient for snow at water points.
+!! @param[in] csmcs Merging coefficient for soil moisture at water
+!! points.
+!! @param[in] czors Merging coefficient for roughness length at water
+!! points.
+!! @param[in] cstcs Merging coefficient for sea ice temperature at water
+!! points.
+!! @param[in] cvegs Merging coefficient for vegetation greenness at
+!! water points.
+!! @param[in] ccv Merging coefficient for convective cloud cover.
+!! @param[in] ccvb Merging coefficient for covective cloud bottom.
+!! @param[in] ccvt Merging coefficient for covective cloud top.
+!! @param[in] ccnp Merging coefficient for canopy moisture.
+!! @param[in] cvetl Merging coefficient for vegetation type at land
+!! points.
+!! @param[in] cvets Merging coefficient for vegetation type at water
+!! points.
+!! @param[in] csotl Merging coefficient for soil type at land points.
+!! @param[in] csots Merging coefficient for soil type at water points.
+!! @param[in] calfl Merging coefficient for strong/weak zenith
+!! angle dependent albedo at land points.
+!! @param[in] calfs Merging coefficient for strong/weak zenith
+!! angle dependent albedo at water points.
+!! @param[in] csihl Merging coefficient for sea ice depth at land
+!! points.
+!! @param[in] csihs Merging coefficient for sea ice depth at water
+!! points.
+!! @param[in] csicl Merging coefficient for sea ice concentration at 
+!! land points.
+!! @param[in] csics Merging coefficient for sea ice concentration at
+!! water points.
+!! @param[in] cvmnl Merging coefficient for minimum vegetation greenness
+!! at land points. 
+!! @param[in] cvmns Merging coefficient for minimum vegetation greenness
+!! at water points.
+!! @param[in] cvmxl Merging coefficient for maximum vegetation greenness
+!! at land points.
+!! @param[in] cvmxs Merging coefficient for maximum vegetation greenness
+!! at water points.
+!! @param[in] cslpl  Merging coefficient for slope type at land points.
+!! @param[in] cslps Merging coefficient for slope type at water points.
+!! @param[in] cabsl Merging coefficient for maximum snow albedo at land
+!! points.
+!! @param[in] cabss Merging coefficient for maximum snow albedo at
+!! water points.
+!! @param[in] irttsf Return code from read of skin temperature/SST 
+!! analysis file.
+!! @param[in] irtwet Return code from read of soil wetness analysis
+!! file.
+!! @param[in] irtsno Return code from read of snow analysis file.
+!! @param[in] irtzor Return code from read of roughness length file.
+!! @param[in] irtalb Return code from read of snow-free albedo analysis file.
+!! @param[in] irtais Return code from read of ice mask analysis file.
+!! @param[in] irttg3 Return code from read of soil substrate
+!! temperature analysis file.
+!! @param[in] irtscv Return code from read of snow cover analysis file.
+!! @param[in] irtacn Return code from read of sea ice concentration
+!! analysis file.
+!! @param[in] irtsmc Return code from read of soil moisture analysis
+!! file.
+!! @param[in] irtstc Return code from read of soil temperature analysis 
+!! file.
+!! @param[in] irtveg Return code from read of vegetation greenness 
+!! analysis file.
+!! @param[in] irtvmn Return code from read of minimum vegetation
+!! greenness analysis file.
+!! @param[in] irtvmx Return code from read of maximum vegetation
+!! greenness analysis file.
+!! @param[in] irtslp Return code from read of slope type analysis file.
+!! @param[in] irtabs Return code from read of maximum snow albedo
+!! analysis file.
+!! @param[in] irtvet Return code from read of vegetation type analysis
+!! file.
+!! @param[in] irtsot Return code from read of soil type analysis file.
+!! @param[in] irtalf Return code from read of file containing fraction
+!! for strongly and weakly zenith angle dependent albedo.
+!! @param[in] landice Permanent land ice flag.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi
       subroutine merge(len,lsoil,iy,im,id,ih,fh,deltsfc,
      &                 sihfcs,sicfcs,
      &                 vmnfcs,vmxfcs,slpfcs,absfcs,
@@ -5022,8 +5640,40 @@
 !$omp end parallel do
       return
       end subroutine merge
+
+!> Adjust surface fields when ice melts or forms.
+!!
+!! @param[in] slianl Land-sea-ice mask.
+!! @param[in] slifcs First guess land-sea-ice mask.
+!! @param[out] tsfanl Skin temperature/SST.
+!! @param[in] tsffcs First guess skin temperature/SST.
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @param[in] sihnew Sea ice depth for new ice.
+!! @param[in] sicnew Sea ice concentration for new ice.
+!! @param[out] sihanl Sea ice depth.
+!! @param[out] sicanl Sea ice concentration.
+!! @param[out] albanl Snow-free albedo.
+!! @param[out] snoanl Liquid equivalent snow depth.
+!! @param[out] zoranl Roughness length.
+!! @param[out] smcanl Soil moisture 
+!! @param[out] stcanl Soil temperature
+!! @param[in] albsea Albedo at open water.
+!! @param[in] snosea Snow at open water.
+!! @param[in] zorsea Roughness length at open water.
+!! @param[in] smcsea Soil moisture at open water.
+!! @param[in] smcice Soil moisture at ice.
+!! @param[in] tsfmin SST at open water.
+!! @param[in] tsfice Skin temperature at ice.
+!! @param[in] albice Ice albedo.
+!! @param[in] zorice Roughness length of ice.
+!! @param[in] tgice Freezing point of salt water.
+!! @param[in] rla Model latitudes.
+!! @param[in] rlo Model longitudes.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi
+!! @author Xingen Wu
       subroutine newice(slianl,slifcs,tsfanl,tsffcs,len,lsoil,
-!cwu [+1l] add sihnew,sicnew,sihanl,sicanl
      &                   sihnew,sicnew,sihanl,sicanl,      
      &                   albanl,snoanl,zoranl,smcanl,stcanl,
      &                   albsea,snosea,zorsea,smcsea,smcice,
@@ -5054,7 +5704,7 @@
       do i=1,len
         if(slifcs(i).ne.slianl(i)) then
           if(slifcs(i).eq.1..or.slianl(i).eq.1.) then
-            print *,'inconsistency in slifcs or slianl'
+            print *,'FATAL ERROR: Inconsistency in slifcs or slianl'
             print 910,rla(i),rlo(i),slifcs(i),slianl(i),
      &                tsffcs(i),tsfanl(i)
   910       format(2x,'at lat=',f5.1,' lon=',f5.1,' slifcs=',f4.1,
@@ -5118,6 +5768,18 @@
 !
       return
       end
+
+!> Quality control snow at the model points.
+!!
+!! @param[out] snoanl Model snow to be qc'd.
+!! @param[in] slmask Land-sea-ice mask.
+!! @param[in] aisanl Ice mask.
+!! @param[in] glacir Permanent glacial point when '1'.
+!! @param[in] len Number of model points to process.
+!! @param[in] snoval Minimum snow depth at glacial points.
+!! @param[in] landice Is the point permanent land ice?
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi
       subroutine qcsnow(snoanl,slmask,aisanl,glacir,len,snoval,
      &                  landice,me)
       use machine , only : kind_io8,kind_io4
@@ -5164,6 +5826,21 @@
       endif
       return
       end subroutine qcsnow
+
+!> Check the sea ice cover mask against the land-sea mask.
+!!
+!! @param[out] ais Sea ice cover mask.
+!! @param[in] glacir Glacial flag
+!! @param[in] amxice Maximum ice extent.
+!! @param[in] aicice Ice indicator.
+!! @param[in] aicsea Open water indicator.
+!! @param[in] sllnd Land indicator.
+!! @param[in] slmask Land-sea-ice mask.
+!! @param[in] rla Model latitudes
+!! @param[in] rlo Model longitudes
+!! @param[in] len Number of model points to process.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi
       subroutine qcsice(ais,glacir,amxice,aicice,aicsea,sllnd,slmask,
      &                  rla,rlo,len,me)
       use machine , only : kind_io8,kind_io4
@@ -5182,7 +5859,8 @@
       kount1 = 0
       do i=1,len
         if(ais(i).ne.aicice.and.ais(i).ne.aicsea) then
-          print *,'sea ice mask not ',aicice,' or ',aicsea
+          print *,'FATAL ERROR: sea ice'
+          print *,'mask not ',aicice,' or ',aicsea
           print *,'ais(i),aicice,aicsea,rla(i),rlo(i,=',
      &             ais(i),aicice,aicsea,rla(i),rlo(i)
           call abort
@@ -5263,6 +5941,15 @@
 !     enddo
       return
       end
+
+!> Set land-sea-ice mask at sea ice.
+!!
+!! @param[in] slmask The model mask on input.
+!! @param[in] aisfld The ice mask on the model grid.
+!! @param[in] len Number of model points to process.
+!! @param[in] aicice Ice concentration theshold for an ice point.
+!! @param[out] slifld The model mask with sea ice added.
+!! @author Shrinivas Moorthi
       subroutine setlsi(slmask,aisfld,len,aicice,slifld)
 !
       use machine , only : kind_io8,kind_io4
@@ -5281,6 +5968,13 @@
       enddo
       return
       end
+
+!> Multiply a field by a scaling factor.
+!!
+!! @param[inout] fld The field to scale.
+!! @param[in] len Number of model points to process.
+!! @param[in] scl Scaling factor.
+!! @author Shrinivas Moorthi
       subroutine scale(fld,len,scl)
 !
       use machine , only : kind_io8,kind_io4
@@ -5292,6 +5986,38 @@
       enddo
       return
       end
+
+!> Range check a field.  The check is a function of whether the
+!! point is land, water or ice.
+!!
+!! @param[in] ttl Name of field.
+!! @param[inout] fld The field array to be ranged checked.
+!! @param[in] slimsk The land-sea-ice mask.
+!! @param[in] sno Snow.
+!! @param[in] iceflg When true, check ice points.
+!! @param[in] fldlmx Maximum allowable value at snow-free land.
+!! @param[in] fldlmn Minimum allowable value at snow-free land.
+!! @param[in] fldomx Maximum allowable value at open water.
+!! @param[in] fldomn Minimum allowable value at open water.
+!! @param[in] fldimx Maximum allowable value at snow-free ice.
+!! @param[in] fldimn Minimum allowable value at snow-free ice.
+!! @param[in] fldjmx Maximum allowable value at snow covered ice.
+!! @param[in] fldjmn Minimum allowable value at snow covered ice.
+!! @param[in] fldsmx Maximum allowable value at snow covered land.
+!! @param[in] fldsmn Minimum allowable value at snow covered land.
+!! @param[in] epsfld Difference from the max/min allowable
+!! value at which the field is updated.
+!! @param[in] rla Latitude of the points to process.
+!! @param[in] rlo Longitude of the points to process.
+!! @param[in] len Number of points to process.
+!! @param[in] mode When '1', update the field.  When not '1', run
+!! routine in diagnostic mode.
+!! @param[in] percrit Critical percentage of 'bad' points required
+!! for abort.
+!! @param[in] lgchek When true, abort when a critical percentage of points
+!! are outside acceptable range.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine qcmxmn(ttl,fld,slimsk,sno,iceflg,
      &                  fldlmx,fldlmn,fldomx,fldomn,fldimx,fldimn,
      &                  fldjmx,fldjmn,fldsmx,fldsmn,epsfld,
@@ -5709,6 +6435,13 @@
 !
       return
       end
+
+!> Set a field to zero if it is less than a threshold.
+!!
+!! @param[inout] fld Field to set.
+!! @param[in] eps Threshold.
+!! @param[in] len Number of model points to process.
+!! @author Shrinivas Moorthi
       subroutine setzro(fld,eps,len)
 !
       use machine , only : kind_io8,kind_io4
@@ -5720,6 +6453,13 @@
       enddo
       return
       end
+
+!> Set snow cover flag based on snow depth.
+!!
+!! @param[in] snofld Snow depth.
+!! @param[out] scvfld Snow cover.
+!! @param[in] len Number of model points to process.
+!! @author Shrinivas Moorthi
       subroutine getscv(snofld,scvfld,len)
 !
       use machine , only : kind_io8,kind_io4
@@ -5733,6 +6473,17 @@
       enddo
       return
       end
+
+!> Set soil temperature and sea ice column temperature.
+!!
+!! @param[in] tsffld Skin temperature/SST.
+!! @param[in] tg3fld Soil substrate temperature.
+!! @param[in] slifld Land-sea-ice mask.
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @param[out] stcfld Soil/sea ice column temperature.
+!! @param[in] tsfimx Freezing point of sea water.
+!! @author Shrinivas Moorthi
       subroutine getstc(tsffld,tg3fld,slifld,len,lsoil,stcfld,tsfimx)
 !
       use machine , only : kind_io8,kind_io4
@@ -5766,6 +6517,15 @@
       endif
       return
       end
+
+!> Set soil moisture from soil wetness.
+!!
+!! @param[in] wetfld Soil wetness
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @param[out] smcfld Soil moisture.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi
       subroutine getsmc(wetfld,len,lsoil,smcfld,me)
 !
       use machine , only : kind_io8,kind_io4
@@ -5784,6 +6544,19 @@
       enddo
       return
       end
+
+!> Set soil temperature and sea ice column temperature for
+!! a dead start.
+!!
+!! @param[in] sig1t Sigma level 1 temperature for dead start.
+!! @param[in] slianl Land-sea-ice mask.
+!! @param[in] tg3anl Soil substrate temperature.
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @param[out] tsfanl Skin temperature.
+!! @param[out] stcanl Soil/sea ice column temperature.
+!! @param[in] tsfimx Freezing point of sea water.
+!! @author Shrinivas Moorthi
       subroutine usesgt(sig1t,slianl,tg3anl,len,lsoil,tsfanl,stcanl,
      &                  tsfimx)
 !
@@ -5807,6 +6580,16 @@
 !
       return
       end
+
+!> Check skin temperature at points with snow. If it is
+!! above a threshold, reset it to that value.
+!!
+!! @param[in] snoanl Snow.
+!! @param[inout] tsfanl Skin temperature at the model points.
+!! @param[in] tsfsmx Maximum allowable skin temperature at snow points.
+!! @param[in] len Number of model points to process.
+!! @param[in] me MPI rank 
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine snosfc(snoanl,tsfanl,tsfsmx,len,me)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -5831,6 +6614,14 @@
       endif
       return
       end
+
+!> Set the albedo at open water points.
+!!
+!! @param[inout] albclm Albedo.
+!! @param[in] slmask The land-sea-ice mask.
+!! @param[in] albomx The albedo at open water.
+!! @param[in] len Number of model points to process.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine albocn(albclm,slmask,albomx,len)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -5847,6 +6638,14 @@
       enddo
       return
       end
+
+!> Quality control maximum ice extent.
+!!
+!! @param[in] glacir Glacial flag
+!! @param[out] amxice Maximum ice extent.
+!! @param[in] len Number of model points to process.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi
       subroutine qcmxice(glacir,amxice,len,me)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -5867,6 +6666,15 @@
       endif
       return
       end
+
+!> Check consistency between the forecast and analysis
+!! land-sea-ice mask.
+!!
+!! @param[in] slianl Analysis mask.
+!! @param[inout] slifcs Forecast mask.
+!! @param[in] len Number of model points to process.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi
       subroutine qcsli(slianl,slifcs,len,me)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -5905,6 +6713,7 @@
       endif
       return
       end
+
 !     subroutine nntprt(data,imax,fact)
 !     real (kind=kind_io8) data(imax)
 !     ilast=0
@@ -5930,6 +6739,30 @@
 !1111 format(80i1)
 !     return
 !     end
+
+!> Quality control analysis fields using the first guess.
+!!
+!! @param[in] tsffcs First guess skin temperature/SST.
+!! @param[in] snofcs First guess snow.
+!! @param[in] qctsfs Surface temperature above which no snow
+!! allowed.
+!! @param[in] qcsnos Snow depth above which snow must exits.
+!! @param[in] qctsfi SST above which sea ice is not allowed.
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @param[out] snoanl Snow analysis.
+!! @param[in] aisanl Ice mask.
+!! @param[in] slianl Land-sea-ice mask.
+!! @param[out] tsfanl Skin temperature/SST analysis.
+!! @param[in] albanl Snow-free albedo analysis.
+!! @param[in] zoranl Roughness length analysis.
+!! @param[in] smcanl Soil moisture analysis.
+!! @param[in] smcclm Soil moisture climatology.
+!! @param[in] tsfsmx Not used.
+!! @param[in] albomx Snow-free albedo at open water.
+!! @param[in] zoromx Roughness length at open water.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi
       subroutine qcbyfc(tsffcs,snofcs,qctsfs,qcsnos,qctsfi,
      &                  len,lsoil,snoanl,aisanl,slianl,tsfanl,albanl,
      &                  zoranl,smcanl,
@@ -6026,6 +6859,32 @@
 !
       return
       end
+
+!> Set the mask for the input data. (Not the model mask).
+!! The mask is determined from the input data bitmap or by
+!! interpolating a high-resolution mask to the input
+!! data grid.  Note: not all data has a mask.
+!!
+!! @param[in] kpds5 Grib parameter number.
+!! @param[in] slmask High-resolution mask.
+!! @param[in] igaul "i" dimension of the high-res mask.
+!! @param[in] jgaul "j" dimension of the high-res mask.
+!! @param[in] wlon Longitude of 'west' boundary of input data.
+!! @param[in] rnlat Latitude of north row of input data.
+!! @param[in] data The input data.
+!! @param[in] imax "i" dimension of input grid.
+!! @param[in] jmax "j" dimension of input grid.
+!! @param[out] rlnout Longitudes on input data grid.
+!! @param[out] rltout Latitudes on input data grid.
+!! @param[out] lmask True, when input data has a mask.
+!! @param[out] rslmsk The mask of the input data grid.
+!! @param[in] gaus Is high-resolution mask on a gaussian grid.
+!! @param[in] blno Corner point longitude of the high-res mask.
+!! @param[in] blto Corner point longitude of the high-res mask.
+!! @param[in] kgds1 Grib indicator for grid type.
+!! @param[in] kpds4 Grib indicator for bitmap.
+!! @param[in] lbms Bitmap of input data.
+!! @author Shrinivas Moorthi
       subroutine setrmsk(kpds5,slmask,igaul,jgaul,wlon,rnlat,
      &                   data,imax,jmax,rlnout,rltout,lmask,rslmsk
      &,                  gaus,blno, blto, kgds1, kpds4, lbms)
@@ -6070,6 +6929,8 @@
          rltout(j) = rnlat + (j-1) * dlat
         enddo
       else                           ! grib file on some other grid
+        write(6,*) ' FATAL ERROR: Mask data on'
+        write(6,*) ' unsupported grid.'
         call abort
       endif
       dlon = 360.0 / imax
@@ -6507,6 +7368,23 @@
 !
       return
       end
+
+!> Interpolation from lat/lon or gaussian grid to a lat/lon grid.
+!!
+!! @param[in] gauin Input data.
+!! @param[in] imxin 'i' dimension of input data.
+!! @param[in] jmxin 'j' dimension of input data.
+!! @param[out] regout Output data.
+!! @param[in] imxout 'i' dimension of output data.
+!! @param[in] jmxout 'j' dimension of output data.
+!! @param[in] wlon Longitude of west boundary of input data.
+!! @param[in] rnlat Latitude of north row of input data.
+!! @param[in] rlnout Longitudes on output data grid.
+!! @param[in] rltout Latitudes on output data grid.
+!! @param[in] gaus Is input data on gaussian grid?
+!! @param[in] blno Corner point longitude of input data.
+!! @param[in] blto Corner point latitude of input data.
+!! @author Shrinivas Moorthi
       subroutine ga2la(gauin,imxin,jmxin,regout,imxout,jmxout,
      &                 wlon,rnlat,rlnout,rltout,gaus,blno, blto)
       use machine , only : kind_io8,kind_io4
@@ -6753,6 +7631,15 @@ cjfe
 !
       return
       end
+
+!> Set vegetation, soil and slope type at undefined model points.
+!!
+!! @param[inout] vegtype Vegetation type
+!! @param[inout] soiltype Soil type
+!! @param[inout] slptype Slope type
+!! @param[in] slmask Land-sea-ice mask.
+!! @param[in] len Number of model points to process.
+!! @author Shrinivas Moorthi
       subroutine landtyp(vegtype,soiltype,slptype,slmask,len)
       use machine , only : kind_io8,kind_io4
       implicit none
@@ -6771,6 +7658,12 @@ cjfe
       enddo
       return
       end subroutine landtyp
+
+!> Calculate gaussian latitudes.
+!!
+!! @param[out] gaul Gaussian latitudes
+!! @param[in] k Number of latitudes
+!! @author Shrinivas Moorthi
       subroutine gaulat(gaul,k)
 !
       use machine , only : kind_io8,kind_io4
@@ -6794,7 +7687,15 @@ cjfe
  6000 format(//5x,'error in gauaw'//)
       stop
       end
-!-----------------------------------------------------------------------
+
+!> Add initial SST anomaly to date interpolated climatology
+!!
+!! @param[in] tsfan0 Skin temperature/SST analysis at initial time.
+!! @param[in] tsfclm Skin temperature/SST climatology.
+!! @param[in] tsfcl0 Skin temperature/SST climatology at initial time.
+!! @param[out] tsfanl Updated skin temperature/SST.
+!! @param[in] len Number of model points to process.
+!! @author Shrinivas Moorthi
       subroutine anomint(tsfan0,tsfclm,tsfcl0,tsfanl,len)
 !
       use machine , only : kind_io8,kind_io4
@@ -6812,6 +7713,118 @@ cjfe
       enddo
       return
       end
+
+!> Driver routine that reads in climatological data for a given time,
+!! and, if necessary, interpolates it to the model grid.
+!!
+!! @param[in] lugb Fortran unit number of GRIB1 climatological data.
+!! @param[in] iy Cycle year.
+!! @param[in] im Cycle month.
+!! @param[in] id Cycle day.
+!! @param[in] ih Cycle hour.
+!! @param[in] fh Forecast hour.
+!! @param[in] len Number of model points to process.
+!! @param[in] lsoil Number of soil layers.
+!! @param[in] slmask Model land-sea-ice mask.
+!! @param[in] fntsfc Climatological SST file.
+!! @param[in] fnwetc Climatological soil wetness file.
+!! @param[in] fnsnoc Climatological snow depth file.
+!! @param[in] fnzorc Climatological roughness length file. Or 'igbp' 
+!! to use igbp vegetation type lookup table. Or 'sib' to use sib 
+!! vegeation type lookup table.
+!! @param[in] fnalbc Climatological snow-free albedo file.
+!! @param[in] fnaisc Climatological sea ice mask file.
+!! @param[in] fntg3c Climatological soil substrate temperature file.
+!! @param[in] fnscvc Climatological snow cover file.
+!! @param[in] fnsmcc Climatological soil moisture file.
+!! @param[in] fnstcc Climatological soil temperature file.
+!! @param[in] fnacnc Climatological sea ice concentration file.
+!! @param[in] fnvegc Climatological vegetation greenness file.
+!! @param[in] fnvetc Climatological vegetation type file.
+!! @param[in] fnsotc Climatological soil type file.
+!! @param[in] fnvmnc Climatological minimum vegetation greenness file.
+!! @param[in] fnvmxc Climatological maximum vegetation greenness file.
+!! @param[in] fnslpc Climatological slope type file.
+!! @param[in] fnabsc Climatological maximum snow albedo file.
+!! @param[out] tsfclm Climatological skin temperature/SST on model grid.
+!! @param[out] tsfcl2 Climatological skin temperature/SST on model grid
+!! at time minus deltsfc.
+!! @param[out] wetclm Climatological soil wetness on model grid.
+!! @param[out] snoclm Climatological liquid equivalent snow depth on model grid.
+!! @param[out] zorclm Climatological roughness length on model grid.
+!! @param[out] albclm Climatological snow-free albedo on model grid.
+!! @param[out] aisclm Climatological sea ice mask on model grid.
+!! @param[out] tg3clm Climatological soil substrate temperature on model
+!! grid.
+!! @param[out] cvclm Climatological convective cloud cover on model grid.
+!! @param[out] cvbclm Climatological convective cloud base on model grid.
+!! @param[out] cvtclm Climatological convective cloud top on model grid.
+!! @param[out] cnpclm Climatological canopy water content on model grid.
+!! @param[out] smcclm Climatological soil moisture on model grid.
+!! @param[out] stcclm Climatologcial soil temperature on model grid.
+!! @param[out] sliclm Climatological model land-sea-ice mask.
+!! @param[out] scvclm Climatological snow cover on model grid.
+!! @param[out] acnclm Climatological sea ice concentration on model grid.
+!! @param[out] vegclm Climatological vegetation greenness on model grid.
+!! @param[out] vetclm Climatological vegetation type on model grid.
+!! @param[out] sotclm Climatological soil type on model grid.
+!! @param[out] alfclm Climatological fraction for strongly and weakly
+!! zenith angle dependent albedo on model grid.
+!! @param[out] vmnclm Climatological minimum vegetation greenness on
+!! model grid.
+!! @param[out] vmxclm Climatological maximum vegetation greenness on
+!! model grid.
+!! @param[out] slpclm Climatological slope type on model grid.
+!! @param[out] absclm Climatological maximum snow albedo on model grid.
+!! @param[in] kpdtsf Grib parameter number of skin temperature/SST.
+!! @param[in] kpdwet Grib parameter number of soil wetness.
+!! @param[in] kpdsno Grib parameter number of liquid equivalent snow
+!! depth.
+!! @param[in] kpdzor Grib parameter number of roughness length.
+!! @param[in] kpdalb Grib parameter number of snow-free albedo.
+!! @param[in] kpdais Grib parameter number of sea ice mask.
+!! @param[in] kpdtg3 Grib parameter number of soil substrate
+!! temperature.
+!! @param[in] kpdscv Grib parameter number of snow cover.
+!! @param[in] kpdacn Grib parameter number of sea ice concentration.
+!! @param[in] kpdsmc Grib parameter number of soil moisture.
+!! @param[in] kpdstc Grib parameter number of soil temperature.
+!! @param[in] kpdveg Grib parameter number of vegetation greenness.
+!! @param[in] kpdvet Grib parameter number of vegetation type.
+!! @param[in] kpdsot Grib parameter number of soil type.
+!! @param[in] kpdalf Grib parameter number for fraction for strongly 
+!! and weakly zenith angle dependent albedo.
+!! @param[in] tsfcl0 Climatological SST at forecast
+!! hour 0.
+!! @param[in] kpdvmn Grib parameter number of minimum vegetation
+!! greenness.
+!! @param[in] kpdvmx Grib parameter number of maximum vegetation
+!! greenness.
+!! @param[in] kpdslp Grib parameter number of slope type.
+!! @param[in] kpdabs Grib parameter number of maximum snow albedo.
+!! @param[in] deltsfc Cycling frequency in hours.
+!! @param[in] lanom When true, do sst anomaly interpolation.
+!! @param[in] imsk 'i' dimension of the high-res mask used for
+!! climatological data without a bitmap.
+!! @param[in] jmsk 'j' dimension of the high-res mask used for
+!! climatological data without a bitmap.
+!! @param[in] slmskh The high-resolution mask used for 
+!! climatological data without a bitmap.
+!! @param[in] outlat Model latitudes
+!! @param[in] outlon Model longitudes
+!! @param[in] gaus When true, the high-res mask is on a gaussian grid.
+!! @param[in] blno Corner point longitude of the high-res mask.
+!! @param[in] blto Corner point latitude of the high-res mask.
+!! @param[in] me MPI task number.
+!! @param[in] lprnt Turn of diagnostic print.
+!! @param[in] iprnt Index of diagnotic print point.
+!! @param[in] fnalbc2 File containing climatological fraction for
+!! strongly and weakly zenith angle dependent albedo.
+!! @param[in] ialb Use modis albedo when '1'. Use brigleb when '0'.
+!! @param[in] tile_num_ch Model tile number to process.
+!! @param[in] i_index The 'i' indices of the model grid to process.
+!! @param[in] j_index The 'j' indices of the model grid to process.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine clima(lugb,iy,im,id,ih,fh,len,lsoil,
      &                 slmask,fntsfc,fnwetc,fnsnoc,fnzorc,fnalbc,fnaisc,
      &                 fntg3c,fnscvc,fnsmcc,fnstcc,fnacnc,fnvegc,
@@ -7019,7 +8032,7 @@ cjfe
                go to 10
             endif
           enddo
-          print *,'wrong rjday',rjday
+          print *,'FATAL ERROR: Wrong rjday',rjday
           call abort
    10     continue
           wei1m = (dayhf(mon2)-rjday)/(dayhf(mon2)-dayhf(mon1))
@@ -7098,7 +8111,7 @@ cjfe
             go to 20
          endif
       enddo
-      print *,'wrong rjday',rjday
+      print *,'FATAL ERROR: Wrong rjday',rjday
       call abort
    20 continue
       wei1m = (dayhf(mon2)-rjday)/(dayhf(mon2)-dayhf(mon1))
@@ -7122,7 +8135,7 @@ cjfe
           go to 30
         endif
       enddo
-      print *,'wrong rjday',rjday
+      print *,'FATAL ERROR: Wrong rjday',rjday
       call abort
    30 continue
       wei1s = (dayhf(sea2)-rjday)/(dayhf(sea2)-dayhf(sea1))
@@ -7146,7 +8159,7 @@ cjfe
           go to 31
         endif
       enddo
-      print *,'wrong rjday',rjday
+      print *,'FATAL ERROR: Wrong rjday',rjday
       call abort
    31 continue
       wei1y = (dayhf(hyr2)-rjday)/(dayhf(hyr2)-dayhf(hyr1))
@@ -7235,7 +8248,7 @@ cjfe
           if (me .eq. 0) write(6,*) 'climatological vegetation',
      &                              ' type read in.'
         elseif(index(fnsmcc,'soilmgldas') /= 0) then ! new soil moisture climo
-          if (me .eq. 0) write(6,*) 'fatal error: must choose'
+          if (me .eq. 0) write(6,*) 'FATAL ERROR: must choose'
           if (me .eq. 0) write(6,*) 'climatological veg type when'
           if (me .eq. 0) write(6,*) 'using new gldas soil moisture.'
           call abort
@@ -7450,7 +8463,8 @@ cjfe
               deallocate(slmask_noice)
             endif
           else
-            write(6,*) 'climatological soil wetness file not given'
+            write(6,*) 'FATAL ERROR: climatological soil'
+            write(6,*) 'wetness file not given.'
             call abort
           endif
 !
@@ -7483,7 +8497,8 @@ cjfe
      &,                 imsk, jmsk, slmskh, gaus,blno, blto
      &,                 outlat, outlon, me)
           else
-            write(6,*) 'climatological ice cover file not given'
+            write(6,*) 'FATAL ERROR: climatological ice'
+            write(6,*) 'cover file not given.'
             call abort
           endif
 !
@@ -7719,7 +8734,8 @@ cjfe
               deallocate(slmask_noice)
             endif
           else
-            write(6,*) 'climatological soil wetness file not given'
+            write(6,*) 'FATAL ERROR: climatological soil'
+            write(6,*) 'wetness file not given.'
             call abort
           endif
 !
@@ -7737,7 +8753,8 @@ cjfe
      &,                 imsk, jmsk, slmskh, gaus,blno, blto
      &,                 outlat, outlon, me)
           else
-            write(6,*) 'climatological ice cover file not given'
+            write(6,*) 'FATAL ERROR: climatological ice cover'
+            write(6,*) 'file not given.'
             call abort
           endif
 !
@@ -7804,7 +8821,10 @@ cjfe
 ! set to point at the proper vegetation type file.
       if (fnzorc(1:3) == 'sib') then
         if (fnvetc(1:4) == '   ') then
-          if (me==0) write(6,*) "must choose sib veg type climo file"
+          if (me==0) then
+            write(6,*) " FATAL ERROR: Must choose sib"
+            write(6,*) " veg type climo file."
+          endif
           call abort
         endif
         zorclm = 0.0
@@ -7816,7 +8836,10 @@ cjfe
         enddo
       elseif(fnzorc(1:4) == 'igbp') then
         if (fnvetc(1:4) == '   ') then
-          if (me == 0) write(6,*) "must choose igbp veg type climo file"
+          if (me == 0) then
+            write(6,*) " FATAL ERROR: Must choose igbp"
+            write(6,*) " veg type climo file."
+          endif
           call abort
         endif
         zorclm = 0.0
@@ -7982,6 +9005,22 @@ cjfe
 !
       return
       end subroutine clima
+
+!> Reads in climatological data on the model grid tile for
+!! a given month. Unlike fixrdc, this routine assumes
+!! the input data is already interpolated to the model tile.
+!! The climatological data must be NetCDF.
+!!
+!! @param[in] filename_raw The name of the climatological file.
+!! @param[in] tile_num_ch The tile number to be processed.
+!! @param[in] i_index The 'i' indices of the model grid to process.
+!! @param[in] j_index The 'j' indices of the model grid to process.
+!! @param[in] kpds Parameter code for the data.
+!! @param[out] var The climatological data on the model grid.
+!! @param[in] mon Which month of data to read.
+!! @param[in] npts Number of model points to process.
+!! @param[in] me MPI task number.
+!! @author George Gayno NOAA/EMC
       subroutine fixrdc_tile(filename_raw, tile_num_ch,
      &                       i_index, j_index, kpds,
      &                       var, mon, npts, me)
@@ -8056,7 +9095,7 @@ cjfe
         case(256:257)
           error=nf90_inq_varid(ncid, 'vegetation_greenness', id_var)
         case default
-          print*,'fatal error in fixrdc_tile of sfcsub.F.'
+          print*,'FATAL ERROR in fixrdc_tile of sfcsub.F.'
           print*,'unknown variable.'
           call abort
       end select
@@ -8119,6 +9158,11 @@ cjfe
       return
 
       end subroutine fixrdc_tile
+
+!> Print the error message for a given netCDF return code.
+!!
+!! @param[in] error
+!! @author Xu Li NOAA/EMC
       subroutine netcdf_err(error)
 
       use netcdf
@@ -8128,10 +9172,36 @@ cjfe
       character(len=256) :: errmsg
 
       errmsg = nf90_strerror(error)
-      print*,'fatal error in sfcsub.F: ', trim(errmsg)
+      print*,'FATAL ERROR in sfcsub.F: ', trim(errmsg)
       call abort
 
       end subroutine netcdf_err
+
+!> Read in grib1 climatology data for a specific month and
+!! and horizontally interpolate to the model grid.
+!!
+!! @param[in] lugb Fortran unit number of the grib1 climatology data file.
+!! @param[in] fngrib The name of the grib1 climatology data file.
+!! @param[in] kpds5 The grib1 parameter number of the requested data.
+!! @param[in] kpds7 The grib1 level indicator of the requested data.
+!! @param[in] mon The requested month.
+!! @param[in] slmask Model land-sea-ice mask.
+!! @param[out] gdata The climatology data interpolated to the model grid.
+!! @param[in] len The number of model points to process.
+!! @param[in] iret Return code. '0' is success.
+!! @param[in] imsk 'i' dimension of the high-res mask used for input
+!! data without a bitmap.
+!! @param[in] jmsk 'j' dimension of the high-res mask used for input
+!! data without a bitmap.
+!! @param[in] slmskh The high-resolution mask used for input
+!! data witouth a bitmap.
+!! @param[in] gaus When true, the high-res mask is on a gaussian grid.
+!! @param[in] blno Corner point longitude of the high-res mask.
+!! @param[in] blto Corner point latitude of the high-res mask.
+!! @param[in] outlat Model latitudes.
+!! @param[in] outlon Model longitudes.
+!! @param[in] me MPI task number
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine fixrdc(lugb,fngrib,kpds5,kpds7,mon,slmask,
      &                 gdata,len,iret
      &,                imsk, jmsk, slmskh, gaus,blno, blto
@@ -8143,11 +9213,6 @@ cjfe
      &        jmsk,len,lugb,kpds5,mon,lskip,lgrib,ndata,lugi,me,kmami
      &,       jj,w3kindreal,w3kindint
       real (kind=kind_io8) wlon,elon,rnlat,dlat,dlon,rslat,blno,blto
-!
-!   read in grib climatology files and interpolate to the input
-!   grid.  grib files should allow all the necessary parameters
-!   to be extracted from the description records.
-!
 !
       character*500 fngrib
 !     character*80 fngrib, asgnstr
@@ -8185,8 +9250,8 @@ cjfe
       close(lugb)
       call baopenr(lugb,fngrib,iret)
       if (iret .ne. 0) then
-        write(6,*) ' error in opening file ',trim(fngrib)
-        print *,'error in opening file ',trim(fngrib)
+        write(6,*) ' FATAL ERROR: in opening file ',trim(fngrib)
+        print *,'FATAL ERROR: in opening file ',trim(fngrib)
         call abort
       endif
       if (me .eq. 0) write(6,*) ' file ',trim(fngrib),
@@ -8213,7 +9278,7 @@ cjfe
       kpds0(4)  = -1
       kpds0(18) = -1
       if(iret.ne.0) then
-        write(6,*) ' error in getgbh. iret: ', iret
+        write(6,*) ' FATAL ERROR: in getgbh. iret: ', iret
         if (iret==99) write(6,*) ' field not found.'
         call abort
       endif
@@ -8240,7 +9305,7 @@ cjfe
      &              (kpds(i),i=8,11)
       if(jret.eq.0) then
         if(ndata.eq.0) then
-          write(6,*) ' error in getgb'
+          write(6,*) ' FATAL ERROR: in getgb.'
           write(6,*) ' kpds=',kpds
           write(6,*) ' kgds=',kgds
           call abort
@@ -8257,7 +9322,7 @@ cjfe
         enddo
         if (me .eq. 0) write(6,*) 'imax,jmax,ijmax=',imax,jmax,ijmax
       else
-        write(6,*) ' error in getgb - jret=', jret
+        write(6,*) ' FATAL ERROR: in getgb - jret=', jret
         call abort
       endif
 !
@@ -8308,6 +9373,36 @@ cjfe
       deallocate(lbms)
       return
       end subroutine fixrdc
+
+!> Read in grib1 analysis data for the requested date and
+!! horizontally interpolate to the model grid.  If data not found
+!! for the requested date, a backwards search is performed.
+!!
+!! @param[in] lugb Fortran unit number of the grib1 analysis data file.
+!! @param[in] fngrib The name of the grib1 analysis data file.
+!! @param[in] kpds5 The grib1 parameter number of the requested data.
+!! @param[in] slmask Model land-sea-ice mask.
+!! @param[in] iy Year.
+!! @param[in] im Month.
+!! @param[in] id Day.
+!! @param[in] ih Hour.
+!! @param[in] fh Forecast hour.
+!! @param[out] gdata The analysis data interpolated to the model grid.
+!! @param[in] len The number of model points to process.
+!! @param[in] iret Return code. '0' is success.
+!! @param[in] imsk 'i' dimension of the high-res mask used for input analysis
+!! data without a bitmap.
+!! @param[in] jmsk 'j' dimension of the high-res mask used for input analysis
+!! data without a bitmap.
+!! @param[in] slmskh The high-resolution mask used for input analysis
+!! data witouth a bitmap.
+!! @param[in] gaus When true, the high-res mask is on a gaussian grid.
+!! @param[in] blno Corner point longitude of the high-res mask.
+!! @param[in] blto Corner point latitude of the high-res mask.
+!! @param[in] outlat Model latitudes.
+!! @param[in] outlon Model longitudes.
+!! @param[in] me MPI task number
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine fixrda(lugb,fngrib,kpds5,slmask,
      &                  iy,im,id,ih,fh,gdata,len,iret
      &,                 imsk, jmsk, slmskh, gaus,blno, blto
@@ -8321,10 +9416,6 @@ cjfe
      &        monend,jy,iy4,kmami,iret2,jj,w3kindreal,w3kindint
       real (kind=kind_io8) rnlat,rslat,wlon,elon,dlon,dlat,fh,blno,
      &                     rjday,blto
-!
-!   read in grib climatology/analysis files and interpolate to the input
-!   dates and the grid.  grib files should allow all the necessary parameters
-!   to be extracted from the description records.
 !
 !  nrepmx:  max number of days for going back date search
 !  nvalid:  analysis later than (current date - nvalid) is regarded as
@@ -8414,8 +9505,8 @@ cjfe
       close(lugb)
       call baopenr(lugb,fngrib,iret)
       if (iret .ne. 0) then
-        write(6,*) ' error in opening file ',trim(fngrib)
-        print *,'error in opening file ',trim(fngrib)
+        write(6,*) ' FATAL ERROR: in opening file ',trim(fngrib)
+        print *,' FATAL ERROR: in opening file ',trim(fngrib)
         call abort
       endif
       if (me .eq. 0) write(6,*) ' file ',trim(fngrib),
@@ -8441,7 +9532,7 @@ cjfe
       kpds0(4)=-1
       kpds0(18)=-1
       if(iret.ne.0) then
-        write(6,*) ' error in getgbh. iret: ', iret
+        write(6,*) ' FATAL ERROR: in getgbh. iret: ', iret
         if(iret==99) write(6,*) ' field not found.'
         call abort
       endif
@@ -8485,7 +9576,7 @@ cjfe
      &              (kpds(i),i=8,11)
       if(jret.eq.0) then
         if(ndata.eq.0) then
-          write(6,*) ' error in getgb'
+          write(6,*) ' FATAL ERROR: in getgb.'
           write(6,*) ' kpds=',kpds
           write(6,*) ' kgds=',kgds
           call abort
@@ -8627,6 +9718,15 @@ cjfe
       deallocate(data8)
       return
       end subroutine fixrda
+
+!> Ensure deep snow pack at permanent glacial points.
+!!
+!! @param[in] glacir Glacial flag
+!! @param[in] snwmax Deep snow pack depth
+!! @param[inout] snoanl Model snow
+!! @param[in] len Number of model points to process.
+!! @param[in] me MPI task number.
+!! @author Shrinivas Moorthi NOAA/EMC
       subroutine snodpth2(glacir,snwmax,snoanl, len, me)
       use machine , only : kind_io8,kind_io4
       implicit none

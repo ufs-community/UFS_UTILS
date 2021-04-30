@@ -1,8 +1,0 @@
-#%Module#####################################################
-## Module file for fre-nctools
-#############################################################
-module load intel/15.0.3.187
-module load impi/5.0.3.048  
-module load szip/2.1
-module load hdf5/1.8.9
-module load netcdf/4.2.1.1
