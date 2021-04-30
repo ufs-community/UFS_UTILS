@@ -64,8 +64,8 @@ add_mpi_test(chgres_cube-ftst_sfc_input_data
   NUMPROCS 4
   TIMEOUT 60)
 
-add_executable(ftst_sort ftst_sort.F90)
-target_link_libraries(ftst_sort
+add_executable(ftst_quicksort ftst_quicksort.F90)
+target_link_libraries(ftst_quicksort
   chgres_cube_lib)
 
-add_test(NAME chgres_cube-ftst_sort COMMAND ftst_sort)
+add_test(NAME chgres_cube-ftst_quicksort COMMAND ftst_quicksort)
