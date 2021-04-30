@@ -1,4 +1,4 @@
- program quicksort
+ program quick_sort
 
 ! Test the quicksort function of the chgres_cube program.
 ! The routine sorts numbers in ascending order. Sort
@@ -28,4 +28,4 @@
 
  print*,"SUCCESS!"
 
- end program quicksort
+ end program quick_sort
