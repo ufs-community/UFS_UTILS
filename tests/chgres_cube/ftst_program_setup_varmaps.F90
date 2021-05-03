@@ -9,6 +9,7 @@ program ftst_program_setup_varmaps
   integer :: my_rank, nprocs
   integer, parameter :: MAX_NAME_LEN = 20
   integer, parameter :: EXPECTED_NUM_VARS = 23
+  integer, parameter :: EXPECTED_NUM_TRACERS = 7
   character(len=MAX_NAME_LEN) :: expected_var_names(EXPECTED_NUM_VARS) = [character(len=20):: 'dzdt', 'sphum', 'liq_wat', &
        'o3mr', 'ice_wat', 'rainwat', 'snowwat', 'graupel', 'vtype', 'sotype', 'vfrac', 'fricv', 'sfcr', 'tprcp', &
        'ffmm', 'f10m', 'soilw', 'soill', 'soilt', 'cnwat', 'hice', 'weasd', 'snod']
@@ -20,6 +21,8 @@ program ftst_program_setup_varmaps
        'set_to_fill', 'set_to_fill', 'set_to_fill', 'stop', 'set_to_fill', 'stop', 'set_to_fill', 'set_to_fill', 'set_to_fill', 'set_to_fill']
   real :: expected_missing_var_values(EXPECTED_NUM_VARS) = (/ 0.0, 1E-7, 0.0, 1E-7, 0.0, 0.0, 0.0, 0.0, 0.0, &
        0.0, 0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.5, 0.0, 0.0 /)
+  character(len=MAX_NAME_LEN) :: expected_tracers_input(EXPECTED_NUM_TRACERS) = [character(len=20):: 'sphum', 'liq_wat', &
+       'o3mr', 'ice_wat', 'rainwat', 'snowwat', 'graupel']
   integer :: i
   integer :: ierr
 
@@ -43,6 +46,10 @@ program ftst_program_setup_varmaps
      if (trim(missing_var_methods(i)) .ne. trim(expected_missing_var_methods(i))) stop 5
      if (missing_var_values(i) .ne. expected_missing_var_values(i)) stop 6
      if (read_from_input(i) .neqv. .true.) stop 7
+  end do
+  if (num_tracers .ne. EXPECTED_NUM_TRACERS) stop 10
+  do i = 1, EXPECTED_NUM_TRACERS
+     if (trim(tracers_input(i)) .ne. trim(expected_tracers_input(i))) stop 11
   end do
   if (my_rank .eq. 0) print*, "OK"
   
