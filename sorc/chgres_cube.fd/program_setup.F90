@@ -346,9 +346,11 @@
 !! * stop
 !!
 !! The var_type is one of:
-!! * T - tracer
-!! * D - ???
-!! * S - ???
+!! * T - tracer.
+!! * D - variables processed by atmosphere subroutine that are not
+!! tracers.
+!! * S - variables processed by surface subroutine that are not
+!! tracers.
 !!
 !! @author Larissa Reames
 !! @author Jeff Beck
