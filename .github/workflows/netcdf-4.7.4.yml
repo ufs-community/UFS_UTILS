@@ -117,7 +117,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/hdf5
-        key: hdf5-${{ runner.os }}-1.10.7-mpich-3.3.2
+        key: hdf5-${{ runner.os }}-1.10.7
 
     - name: build-hdf5
       if: steps.cache-hdf5.outputs.cache-hit != 'true'
@@ -132,6 +132,25 @@ jobs:
         sudo make install
         popd
           
+    - name: cache-netcdf-c
+      id: cache-netcdf-c
+      uses: actions/cache@v2
+      with:
+        path: ~/netcdf-c
+        key: netcdf-c-${{ runner.os }}-4.7.4
+
+    - name: build-netcdf-c
+      if: steps.cache-netcdf-c.outputs.cache-hit != 'true'
+      run: |
+        set -x
+        export CC=mpicc
+        wget https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.7.4.tar.gz &> /dev/null
+        tar -xzf netcdf-c-4.7.4.tar.gz
+        pushd netcdf-c-4.7.4
+        ./configure --prefix=${HOME}/netcdf-c --disable-dap --disable-utilities
+        make -j
+        sudo make install
+        popd
 
     - name: checkout-nceplibs
       uses: actions/checkout@v2
