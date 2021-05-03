@@ -27,6 +27,7 @@ jobs:
 
     - name: test-intel
       run: |
+        source /opt/intel/oneapi/setvars.sh
         icc --version
         ifort --version
         mpiicc --version
