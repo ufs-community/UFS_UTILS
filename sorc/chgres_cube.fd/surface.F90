@@ -33,88 +33,88 @@
                                        !< are applied at these points.
 
 ! surface fields (not including nst)
- type(esmf_field), public           :: canopy_mc_target_grid
+ type(esmf_field), public, target   :: canopy_mc_target_grid
                                        !< canopy moisture content
- type(esmf_field), public           :: f10m_target_grid
+ type(esmf_field), public, target   :: f10m_target_grid
                                        !< log((z0+10)*1/z0)
                                        !< See sfc_diff.f for details
- type(esmf_field), public           :: ffmm_target_grid
+ type(esmf_field), public, target   :: ffmm_target_grid
                                        !< log((z0+z1)*1/z0)
                                        !< See sfc_diff.f for details
- type(esmf_field), public           :: q2m_target_grid
+ type(esmf_field), public, target   :: q2m_target_grid
                                        !< 2-m specific humidity
- type(esmf_field), public           :: seaice_depth_target_grid
+ type(esmf_field), public, target   :: seaice_depth_target_grid
                                        !< sea ice depth
- type(esmf_field), public           :: seaice_fract_target_grid
+ type(esmf_field), public, target   :: seaice_fract_target_grid
                                        !< sea ice fraction
- type(esmf_field), public           :: seaice_skin_temp_target_grid
+ type(esmf_field), public, target   :: seaice_skin_temp_target_grid
                                        !< sea ice skin temperature
- type(esmf_field), public           :: skin_temp_target_grid
+ type(esmf_field), public, target   :: skin_temp_target_grid
                                        !< skin temperature/sst
- type(esmf_field), public           :: srflag_target_grid
+ type(esmf_field), public, target   :: srflag_target_grid
                                        !< snow/rain flag
- type(esmf_field), public           :: snow_liq_equiv_target_grid
+ type(esmf_field), public, target   :: snow_liq_equiv_target_grid
                                        !< liquid equiv snow depth
- type(esmf_field), public           :: snow_depth_target_grid
+ type(esmf_field), public, target   :: snow_depth_target_grid
                                        !< physical snow depth
- type(esmf_field), public           :: soil_temp_target_grid
+ type(esmf_field), public, target   :: soil_temp_target_grid
                                        !< 3-d soil temperature
- type(esmf_field), public           :: soilm_liq_target_grid
+ type(esmf_field), public, target   :: soilm_liq_target_grid
                                        !< 3-d liquid soil moisture
- type(esmf_field), public           :: soilm_tot_target_grid
+ type(esmf_field), public, target   :: soilm_tot_target_grid
                                        !< 3-d total soil moisture
- type(esmf_field), public           :: t2m_target_grid
+ type(esmf_field), public, target   :: t2m_target_grid
                                        !< 2-m temperatrure
- type(esmf_field), public           :: tprcp_target_grid
+ type(esmf_field), public, target   :: tprcp_target_grid
                                        !< precip
- type(esmf_field), public           :: ustar_target_grid
+ type(esmf_field), public, target   :: ustar_target_grid
                                        !< friction velocity
- type(esmf_field), public           :: z0_target_grid
+ type(esmf_field), public, target   :: z0_target_grid
                                        !< roughness length
-  type(esmf_field), public           :: lai_target_grid
+  type(esmf_field), public, target   :: lai_target_grid
                                        !< leaf area index
 
 ! nst fields
- type(esmf_field), public           :: c_d_target_grid
+ type(esmf_field), public, target   :: c_d_target_grid
                                        !< Coefficient 2 to calculate d(tz)/d(ts)
- type(esmf_field), public           :: c_0_target_grid
+ type(esmf_field), public, target   :: c_0_target_grid
                                        !< Coefficient 1 to calculate d(tz)/d(ts)
- type(esmf_field), public           :: d_conv_target_grid
+ type(esmf_field), public, target   :: d_conv_target_grid
                                        !< Thickness of free convection layer
- type(esmf_field), public           :: dt_cool_target_grid
+ type(esmf_field), public, target   :: dt_cool_target_grid
                                        !< Sub-layer cooling amount
- type(esmf_field), public           :: ifd_target_grid
+ type(esmf_field), public, target   :: ifd_target_grid
                                        !< Model mode index. 0-diurnal model not
                                        !< started; 1-diurnal model started.
- type(esmf_field), public           :: qrain_target_grid
+ type(esmf_field), public, target   :: qrain_target_grid
                                        !< Sensible heat flux due to rainfall
- type(esmf_field), public           :: tref_target_grid
+ type(esmf_field), public, target   :: tref_target_grid
                                        !< reference temperature
- type(esmf_field), public           :: w_d_target_grid
+ type(esmf_field), public, target   :: w_d_target_grid
                                        !< Coefficient 4 to calculate d(tz)/d(ts)
- type(esmf_field), public           :: w_0_target_grid
+ type(esmf_field), public, target   :: w_0_target_grid
                                        !< Coefficient 3 to calculate d(tz)/d(ts)
- type(esmf_field), public           :: xs_target_grid
+ type(esmf_field), public, target   :: xs_target_grid
                                        !< Salinity content in diurnal
                                        !< thermocline layer
- type(esmf_field), public           :: xt_target_grid
+ type(esmf_field), public, target   :: xt_target_grid
                                        !< Heat content in diurnal thermocline
                                        !< layer
- type(esmf_field), public           :: xu_target_grid
+ type(esmf_field), public, target   :: xu_target_grid
                                        !< u-current content in diurnal
                                        !< thermocline layer
- type(esmf_field), public           :: xv_target_grid
+ type(esmf_field), public, target   :: xv_target_grid
                                        !< v-current content in diurnal
                                        !< thermocline layer
- type(esmf_field), public           :: xz_target_grid
+ type(esmf_field), public, target   :: xz_target_grid
                                        !< Diurnal thermocline layer thickness
- type(esmf_field), public           :: xtts_target_grid
+ type(esmf_field), public, target   :: xtts_target_grid
                                        !< d(xt)/d(ts)
- type(esmf_field), public           :: xzts_target_grid
+ type(esmf_field), public, target   :: xzts_target_grid
                                        !< d(xz)/d(ts)
- type(esmf_field), public           :: z_c_target_grid
+ type(esmf_field), public, target   :: z_c_target_grid
                                        !< Sub-layer cooling thickness
- type(esmf_field), public           :: zm_target_grid
+ type(esmf_field), public, target   :: zm_target_grid
                                        !< Oceanic mixed layer depth
 
  type(esmf_field)                   :: soil_type_from_input_grid
@@ -141,6 +141,10 @@
  type fieldptr
   type(esmf_field), pointer :: f
  end type fieldptr
+
+ type realptr
+   real(esmf_kind_r8), pointer :: p(:,:)
+ end type realptr
 
  public :: surface_driver
 
@@ -390,10 +394,11 @@
  integer, intent(in)                :: localpet
 
  integer                            :: l(1), u(1)
- integer                            :: i, j, ij, rc, tile
+ integer                            :: i, j, ij, rc, tile,k
  integer                            :: clb_target(2), cub_target(2)
  integer                            :: isrctermprocessing
  integer                            :: num_fields
+ integer, allocatable               :: search_nums(:)
  integer(esmf_kind_i4), pointer     :: unmapped_ptr(:)
  integer(esmf_kind_i4), pointer     :: mask_input_ptr(:,:)
  integer(esmf_kind_i4), pointer     :: mask_target_ptr(:,:)
@@ -456,7 +461,8 @@
  type(esmf_routehandle)             :: regrid_seaice
  type(esmf_routehandle)             :: regrid_water
  
- type(fieldptr), allocatable        :: fields_to_regrid, target_fields
+ type(fieldptr), allocatable        :: fields_to_regrid(:), target_fields(:)
+ type(realptr), allocatable         :: target_ptrs(:)
 
 !-----------------------------------------------------------------------
 ! Interpolate fieids that do not require 'masked' interpolation.
@@ -927,12 +933,12 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
  
-!!!! Commenting out and replacing with a regrid_many subroutine 
-! print*,"- CALL FieldGet FOR TARGET grid soil temperature over seaice."
-! call ESMF_FieldGet(soil_temp_target_grid, &
-!                    farrayPtr=soil_temp_target_ptr, rc=rc)
-! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!    call error_handler("IN FieldGet", rc)!
+! Commenting out and replacing with a regrid_many subroutine 
+ print*,"- CALL FieldGet FOR TARGET grid soil temperature over seaice."
+ call ESMF_FieldGet(soil_temp_target_grid, &
+                    farrayPtr=soil_temp_target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)!
 !
 ! print*,"- CALL Field_Regrid for sea ice depth."
 ! call ESMF_FieldRegrid(seaice_depth_input_grid, &
@@ -990,34 +996,51 @@
 ! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
 !    call error_handler("IN FieldGet", rc)
 
- num_fields_regrid = 4
- allocate(fields_to_regrid(4))
- allocate(target_fields(4))
- fields_to_regrid(:)%p => (/seaice_depth_input_grid,snow_depth_input_grid, &
-                      snow_liq_equiv_input_grid,skin_temp_input_grid/)
- target_fields(:)%p => (/seaice_depth_target_grid,snow_depth_target_grid, &
-                snow_liq_equiv_target_grid,skin_temp_target_grid/)
- call regrid_many(fields_to_regrid,target_fields,num_fields_regrid,regrd_seaice)
- deallocate(fields_to_regrid,target_fields)
+ num_fields = 4
+ allocate(fields_to_regrid(num_fields))
+ allocate(target_fields(num_fields))
+ allocate(target_ptrs(num_fields))
+ allocate(search_nums(num_fields))
+
+ target_fields(1)%f=>seaice_depth_target_grid
+ target_fields(2)%f=>snow_depth_target_grid
+ target_fields(3)%f=>snow_liq_equiv_target_grid
+ target_fields(4)%f=>seaice_skin_temp_target_grid
+ fields_to_regrid(1)%f=>seaice_depth_input_grid
+ fields_to_regrid(2)%f=>snow_depth_input_grid
+ fields_to_regrid(3)%f=>snow_liq_equiv_input_grid
+ fields_to_regrid(4)%f=>seaice_skin_temp_input_grid   
+ target_ptrs(1)%p=>seaice_depth_target_ptr
+ target_ptrs(2)%p=>snow_depth_target_ptr
+ target_ptrs(3)%p=>snow_liq_equiv_target_ptr
+ target_ptrs(4)%p=>seaice_skin_temp_target_ptr
+ search_nums = (/92,66,65,21/)
+
+ call regrid_many(fields_to_regrid,target_fields,target_ptrs,num_fields, regrid_seaice)
+ deallocate(fields_to_regrid)
  
  l = lbound(unmapped_ptr)
  u = ubound(unmapped_ptr)
 
  do ij = l(1), u(1)
    call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
-   seaice_depth_target_ptr(i,j) = -9999.9 
-   snow_depth_target_ptr(i,j) = -9999.9 
-   snow_liq_equiv_target_ptr(i,j) = -9999.9 
-   seaice_skin_temp_target_ptr(i,j) = -9999.9 
-   soil_temp_target_ptr(i,j,:) = -9999.9
+   !seaice_depth_target_ptr(i,j) = -9999.9 
+   !snow_depth_target_ptr(i,j) = -9999.9 
+   !snow_liq_equiv_target_ptr(i,j) = -9999.9 
+   !seaice_skin_temp_target_ptr(i,j) = -9999.9 
+   !soil_temp_target_ptr(i,j,:) = -9999.9
+   do k = 1,num_fields
+     target_ptrs(i)%p(i,j) = -9999.9
+   end do
  enddo
+ deallocate(target_ptrs)
 
  do tile = 1, num_tiles_target_grid
 
-   print*,"- CALL FieldGather FOR TARGET GRID SEAICE DEPTH TILE: ", tile
-   call ESMF_FieldGather(seaice_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", rc)
+   !print*,"- CALL FieldGather FOR TARGET GRID SEAICE DEPTH TILE: ", tile
+   !call ESMF_FieldGather(seaice_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+   !if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   !   call error_handler("IN FieldGather", rc)
 
    print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
    call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
@@ -1030,56 +1053,58 @@
      
      where(mask_target_one_tile == 1) mask_target_one_tile = 0
      where(mask_target_one_tile == 2) mask_target_one_tile = 1
-     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 92)
+    ! call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 92)
    endif
 
-   print*,"- CALL FieldScatter FOR TARGET GRID SEAICE DEPTH TILE: ", tile
-   call ESMF_FieldScatter(seaice_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldScatter", rc)
+   !print*,"- CALL FieldScatter FOR TARGET GRID SEAICE DEPTH TILE: ", tile
+   !call ESMF_FieldScatter(seaice_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+   !if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   !   call error_handler("IN FieldScatter", rc)
 
-   print*,"- CALL FieldGather FOR TARGET GRID SNOW DEPTH TILE: ", tile
-   call ESMF_FieldGather(snow_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", rc)
-
-   if (localpet == 0) then
-     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 66)
-   endif
-
-   print*,"- CALL FieldScatter FOR TARGET GRID SNOW DEPTH TILE: ", tile
-   call ESMF_FieldScatter(snow_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldScatter", rc)
-
-   print*,"- CALL FieldGather FOR TARGET GRID SNOW LIQ EQUIV TILE: ", tile
-   call ESMF_FieldGather(snow_liq_equiv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", rc)
-
-   if (localpet == 0) then
-     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 65)
-   endif
-
-   print*,"- CALL FieldScatter FOR TARGET GRID SNOW LIQ EQUIV TILE: ", tile
-   call ESMF_FieldScatter(snow_liq_equiv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldScatter", rc)
-
-   print*,"- CALL FieldGather FOR TARGET GRID SEAICE SKIN TEMP: ", tile
-   call ESMF_FieldGather(seaice_skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", rc)
-
-   if (localpet == 0) then
-     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 21)
-   endif
-
-   print*,"- CALL FieldScatter FOR TARGET GRID SEAICE SKIN TEMP: ", tile
-   call ESMF_FieldScatter(seaice_skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldScatter", rc)
-
+   call search_many(num_fields,target_fields,data_one_tile, mask_target_one_tile,i_target,j_target,tile,search_nums,localpet)
+   deallocate(target_fields)
+!   print*,"- CALL FieldGather FOR TARGET GRID SNOW DEPTH TILE: ", tile
+!   call ESMF_FieldGather(snow_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGather", rc)
+!
+!   if (localpet == 0) then
+!     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 66)
+!   endif
+!
+!   print*,"- CALL FieldScatter FOR TARGET GRID SNOW DEPTH TILE: ", tile
+!   call ESMF_FieldScatter(snow_depth_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldScatter", rc)
+!
+!   print*,"- CALL FieldGather FOR TARGET GRID SNOW LIQ EQUIV TILE: ", tile
+!   call ESMF_FieldGather(snow_liq_equiv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGather", rc)
+!
+!   if (localpet == 0) then
+!     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 65)
+!   endif
+!
+!   print*,"- CALL FieldScatter FOR TARGET GRID SNOW LIQ EQUIV TILE: ", tile
+!   call ESMF_FieldScatter(snow_liq_equiv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldScatter", rc)
+!
+!   print*,"- CALL FieldGather FOR TARGET GRID SEAICE SKIN TEMP: ", tile
+!   call ESMF_FieldGather(seaice_skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGather", rc)
+!
+!   if (localpet == 0) then
+!     call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 21)
+!   endif
+!
+!   print*,"- CALL FieldScatter FOR TARGET GRID SEAICE SKIN TEMP: ", tile
+!   call ESMF_FieldScatter(seaice_skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldScatter", rc)
+!
    print*,"- CALL FieldGather FOR TARGET GRID SEAICE COLUMN TEMP: ", tile
    call ESMF_FieldGather(soil_temp_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1132,325 +1157,414 @@
                             unmappedDstList=unmapped_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
- 
- print*,"- CALL Field_Regrid for skin temperature over water."
- call ESMF_FieldRegrid(skin_temp_input_grid, &
-                       skin_temp_target_grid, &
-                       routehandle=regrid_water, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL FieldGet FOR TARGET skin temperature."
- call ESMF_FieldGet(skin_temp_target_grid, &
-                    farrayPtr=skin_temp_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- print*,"- CALL Field_Regrid for z0 over water."
- call ESMF_FieldRegrid(z0_input_grid, &
-                       z0_target_grid, &
-                       routehandle=regrid_water, &
-                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegrid", rc)
-
- print*,"- CALL FieldGet FOR TARGET z0."
- call ESMF_FieldGet(z0_target_grid, &
-                    farrayPtr=z0_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- l = lbound(unmapped_ptr)
- u = ubound(unmapped_ptr)
-
- do ij = l(1), u(1)
-   call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
-   skin_temp_target_ptr(i,j) = -9999.9 
-   z0_target_ptr(i,j)        = -9999.9 
- enddo
 
  if (convert_nst) then
+   num_fields = 20
+ else 
+   num_fields = 4
+ endif
 
-   print*,"- CALL Field_Regrid for c_d over water."
-   call ESMF_FieldRegrid(c_d_input_grid, &
-                         c_d_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
+ allocate(fields_to_regrid(num_fields))
+ allocate(target_fields(num_fields))
+ allocate(target_ptrs(num_fields))
+ allocate(search_nums(num_fields))
 
-   print*,"- CALL Field_Regrid for c_0 over water."
-   call ESMF_FieldRegrid(c_0_input_grid, &
-                         c_0_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
 
-   print*,"- CALL Field_Regrid for d_conv over water."
-   call ESMF_FieldRegrid(d_conv_input_grid, &
-                         d_conv_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
+ target_fields(1)%f=>skin_temp_target_grid
+ target_fields(2)%f=>z0_target_grid
+ fields_to_regrid(1)%f=>skin_temp_target_grid
+ fields_to_regrid(2)%f=>z0_input_grid
+ target_ptrs(1)%p=>skin_temp_target_ptr
+ target_ptrs(2)%p=>z0_target_ptr
+ if (convert_nst) then
 
-   print*,"- CALL Field_Regrid for dt_cool over water."
-   call ESMF_FieldRegrid(dt_cool_input_grid, &
-                         dt_cool_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
+   target_fields(3)%f=>c_d_target_grid
+   target_fields(4)%f=>c_0_target_grid
+   target_fields(5)%f=>d_conv_target_grid
+   target_fields(6)%f=>dt_cool_target_grid
+   target_fields(7)%f=>ifd_target_grid
+   target_fields(8)%f=>qrain_target_grid
+   target_fields(9)%f=>tref_target_grid
+   target_fields(10)%f=>w_d_target_grid
+   target_fields(11)%f=>w_0_target_grid
+   target_fields(12)%f=>xs_target_grid
+   target_fields(13)%f=>xt_target_grid
+   target_fields(14)%f=>xu_target_grid
+   target_fields(15)%f=>xv_target_grid
+   target_fields(16)%f=>xz_target_grid
+   target_fields(17)%f=>xtts_target_grid
+   target_fields(18)%f=>xzts_target_grid
+   target_fields(19)%f=>z_c_target_grid
+   target_fields(20)%f=>zm_target_grid
 
-   print*,"- CALL Field_Regrid for ifd over water."
-   call ESMF_FieldRegrid(ifd_input_grid, &
-                         ifd_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
+   fields_to_regrid(3)%f=>c_d_input_grid
+   fields_to_regrid(4)%f=>c_0_input_grid
+   fields_to_regrid(5)%f=>d_conv_input_grid
+   fields_to_regrid(6)%f=>dt_cool_input_grid
+   fields_to_regrid(7)%f=>ifd_input_grid
+   fields_to_regrid(8)%f=>qrain_input_grid
+   fields_to_regrid(9)%f=>tref_input_grid
+   fields_to_regrid(10)%f=>w_d_input_grid
+   fields_to_regrid(11)%f=>w_0_input_grid
+   fields_to_regrid(12)%f=>xs_input_grid
+   fields_to_regrid(13)%f=>xt_input_grid
+   fields_to_regrid(14)%f=>xu_input_grid
+   fields_to_regrid(15)%f=>xv_input_grid
+   fields_to_regrid(16)%f=>xz_input_grid
+   fields_to_regrid(17)%f=>xtts_input_grid
+   fields_to_regrid(18)%f=>xzts_input_grid
+   fields_to_regrid(19)%f=>z_c_input_grid
+   fields_to_regrid(20)%f=>zm_input_grid
 
-   print*,"- CALL Field_Regrid for qrain over water."
-   call ESMF_FieldRegrid(qrain_input_grid, &
-                         qrain_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
+   target_ptrs(3)%p=>c_d_target_ptr
+   target_ptrs(4)%p=>c_0_target_ptr
+   target_ptrs(5)%p=>d_conv_target_ptr
+   target_ptrs(6)%p=>dt_cool_target_ptr
+   target_ptrs(7)%p=>ifd_target_ptr
+   target_ptrs(8)%p=>qrain_target_ptr
+   target_ptrs(9)%p=>tref_target_ptr
+   target_ptrs(10)%p=>w_d_target_ptr
+   target_ptrs(11)%p=>w_0_target_ptr
+   target_ptrs(12)%p=>xs_target_ptr
+   target_ptrs(13)%p=>xt_target_ptr
+   target_ptrs(14)%p=>xu_target_ptr
+   target_ptrs(15)%p=>xv_target_ptr
+   target_ptrs(16)%p=>xz_target_ptr
+   target_ptrs(17)%p=>xtts_target_ptr
+   target_ptrs(18)%p=>xzts_target_ptr
+   target_ptrs(19)%p=>z_c_target_ptr
+   target_ptrs(20)%p=>zm_target_ptr
+   search_nums(:)=(/11,83,0,0,0,0,1,0,11,0,0,0,0,0,0,30,0,0,0,0/)
+ else
+   search_nums(:)=(/11,83/)
+ endif
 
-   print*,"- CALL Field_Regrid for tref over water."
-   call ESMF_FieldRegrid(tref_input_grid, &
-                         tref_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
+ call regrid_many(fields_to_regrid,target_fields,target_ptrs,num_fields,regrid_water)
+ deallocate(fields_to_regrid)
 
-   print*,"- CALL Field_Regrid for w_d over water."
-   call ESMF_FieldRegrid(w_d_input_grid, &
-                         w_d_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-   print*,"- CALL Field_Regrid for w_0 over water."
-   call ESMF_FieldRegrid(w_0_input_grid, &
-                         w_0_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-   print*,"- CALL Field_Regrid for xs over water."
-   call ESMF_FieldRegrid(xs_input_grid, &
-                         xs_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-   print*,"- CALL Field_Regrid for xt over water."
-   call ESMF_FieldRegrid(xt_input_grid, &
-                         xt_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-   print*,"- CALL Field_Regrid for xu over water."
-   call ESMF_FieldRegrid(xu_input_grid, &
-                         xu_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-   print*,"- CALL Field_Regrid for xv over water."
-   call ESMF_FieldRegrid(xv_input_grid, &
-                         xv_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-   print*,"- CALL Field_Regrid for xz over water."
-   call ESMF_FieldRegrid(xz_input_grid, &
-                         xz_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-   print*,"- CALL Field_Regrid for xtts over water."
-   call ESMF_FieldRegrid(xtts_input_grid, &
-                         xtts_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-   print*,"- CALL Field_Regrid for xzts over water."
-   call ESMF_FieldRegrid(xzts_input_grid, &
-                         xzts_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-   print*,"- CALL Field_Regrid for z_c over water."
-   call ESMF_FieldRegrid(z_c_input_grid, &
-                         z_c_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-   print*,"- CALL Field_Regrid for zm over water."
-   call ESMF_FieldRegrid(zm_input_grid, &
-                         zm_target_grid, &
-                         routehandle=regrid_water, &
-                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldRegrid", rc)
-
-! Tag unmapped points
-
-   print*,"- CALL FieldGet FOR TARGET c_d."
-   call ESMF_FieldGet(c_d_target_grid, &
-                      farrayPtr=c_d_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET c_0."
-   call ESMF_FieldGet(c_0_target_grid, &
-                      farrayPtr=c_0_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET d_conv."
-   call ESMF_FieldGet(d_conv_target_grid, &
-                      farrayPtr=d_conv_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET dt_cool."
-   call ESMF_FieldGet(dt_cool_target_grid, &
-                      farrayPtr=dt_cool_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET ifd."
-   call ESMF_FieldGet(ifd_target_grid, &
-                      farrayPtr=ifd_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   ifd_target_ptr = float(nint(ifd_target_ptr))
-
-   print*,"- CALL FieldGet FOR TARGET qrain."
-   call ESMF_FieldGet(qrain_target_grid, &
-                      farrayPtr=qrain_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET tref."
-   call ESMF_FieldGet(tref_target_grid, &
-                      farrayPtr=tref_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET w_d."
-   call ESMF_FieldGet(w_d_target_grid, &
-                      farrayPtr=w_d_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET w_0."
-   call ESMF_FieldGet(w_0_target_grid, &
-                      farrayPtr=w_0_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET xs."
-   call ESMF_FieldGet(xs_target_grid, &
-                      farrayPtr=xs_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET xt."
-   call ESMF_FieldGet(xt_target_grid, &
-                      farrayPtr=xt_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET xu."
-   call ESMF_FieldGet(xu_target_grid, &
-                      farrayPtr=xu_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET xv."
-   call ESMF_FieldGet(xv_target_grid, &
-                      farrayPtr=xv_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET xz."
-   call ESMF_FieldGet(xz_target_grid, &
-                      farrayPtr=xz_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET xtts."
-   call ESMF_FieldGet(xtts_target_grid, &
-                      farrayPtr=xtts_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET xzts."
-   call ESMF_FieldGet(xzts_target_grid, &
-                      farrayPtr=xzts_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET z_c."
-   call ESMF_FieldGet(z_c_target_grid, &
-                      farrayPtr=z_c_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
-
-   print*,"- CALL FieldGet FOR TARGET zm."
-   call ESMF_FieldGet(zm_target_grid, &
-                      farrayPtr=zm_target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
+! print*,"- CALL Field_Regrid for skin temperature over water."
+! call ESMF_FieldRegrid(skin_temp_input_grid, &
+!                       skin_temp_target_grid, &
+!                       routehandle=regrid_water, &
+!                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldRegrid", rc)
+!
+! print*,"- CALL FieldGet FOR TARGET skin temperature."
+! call ESMF_FieldGet(skin_temp_target_grid, &
+!                    farrayPtr=skin_temp_target_ptr, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldGet", rc)
+!
+! print*,"- CALL Field_Regrid for z0 over water."
+! call ESMF_FieldRegrid(z0_input_grid, &
+!                       z0_target_grid, &
+!                       routehandle=regrid_water, &
+!                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldRegrid", rc)
+!
+! print*,"- CALL FieldGet FOR TARGET z0."
+! call ESMF_FieldGet(z0_target_grid, &
+!                    farrayPtr=z0_target_ptr, rc=rc)
+! if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldGet", rc)
+!
+! l = lbound(unmapped_ptr)
+! u = ubound(unmapped_ptr)
+!
+! do ij = l(1), u(1)
+!   call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
+!   skin_temp_target_ptr(i,j) = -9999.9 
+!   z0_target_ptr(i,j)        = -9999.9 
+! enddo
+!
+! if (convert_nst) then
+!
+!   print*,"- CALL Field_Regrid for c_d over water."
+!   call ESMF_FieldRegrid(c_d_input_grid, &
+!                         c_d_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for c_0 over water."
+!   call ESMF_FieldRegrid(c_0_input_grid, &
+!                         c_0_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for d_conv over water."
+!   call ESMF_FieldRegrid(d_conv_input_grid, &
+!                         d_conv_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for dt_cool over water."
+!   call ESMF_FieldRegrid(dt_cool_input_grid, &
+!                         dt_cool_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for ifd over water."
+!   call ESMF_FieldRegrid(ifd_input_grid, &
+!                         ifd_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for qrain over water."
+!   call ESMF_FieldRegrid(qrain_input_grid, &
+!                         qrain_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for tref over water."
+!   call ESMF_FieldRegrid(tref_input_grid, &
+!                         tref_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for w_d over water."
+!   call ESMF_FieldRegrid(w_d_input_grid, &
+!                         w_d_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for w_0 over water."
+!   call ESMF_FieldRegrid(w_0_input_grid, &
+!                         w_0_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for xs over water."
+!   call ESMF_FieldRegrid(xs_input_grid, &
+!                         xs_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for xt over water."
+!   call ESMF_FieldRegrid(xt_input_grid, &
+!                         xt_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for xu over water."
+!   call ESMF_FieldRegrid(xu_input_grid, &
+!                         xu_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for xv over water."
+!   call ESMF_FieldRegrid(xv_input_grid, &
+!                         xv_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for xz over water."
+!   call ESMF_FieldRegrid(xz_input_grid, &
+!                         xz_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for xtts over water."
+!   call ESMF_FieldRegrid(xtts_input_grid, &
+!                         xtts_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for xzts over water."
+!   call ESMF_FieldRegrid(xzts_input_grid, &
+!                         xzts_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for z_c over water."
+!   call ESMF_FieldRegrid(z_c_input_grid, &
+!                         z_c_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!   print*,"- CALL Field_Regrid for zm over water."
+!   call ESMF_FieldRegrid(zm_input_grid, &
+!                         zm_target_grid, &
+!                         routehandle=regrid_water, &
+!                         termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldRegrid", rc)
+!
+!! Tag unmapped points
+!
+!   print*,"- CALL FieldGet FOR TARGET c_d."
+!   call ESMF_FieldGet(c_d_target_grid, &
+!                      farrayPtr=c_d_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET c_0."
+!   call ESMF_FieldGet(c_0_target_grid, &
+!                      farrayPtr=c_0_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET d_conv."
+!   call ESMF_FieldGet(d_conv_target_grid, &
+!                      farrayPtr=d_conv_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET dt_cool."
+!   call ESMF_FieldGet(dt_cool_target_grid, &
+!                      farrayPtr=dt_cool_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET ifd."
+!   call ESMF_FieldGet(ifd_target_grid, &
+!                      farrayPtr=ifd_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   ifd_target_ptr = float(nint(ifd_target_ptr))
+!
+!   print*,"- CALL FieldGet FOR TARGET qrain."
+!   call ESMF_FieldGet(qrain_target_grid, &
+!                      farrayPtr=qrain_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET tref."
+!   call ESMF_FieldGet(tref_target_grid, &
+!                      farrayPtr=tref_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET w_d."
+!   call ESMF_FieldGet(w_d_target_grid, &
+!                      farrayPtr=w_d_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET w_0."
+!   call ESMF_FieldGet(w_0_target_grid, &
+!                      farrayPtr=w_0_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET xs."
+!   call ESMF_FieldGet(xs_target_grid, &
+!                      farrayPtr=xs_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET xt."
+!   call ESMF_FieldGet(xt_target_grid, &
+!                      farrayPtr=xt_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET xu."
+!   call ESMF_FieldGet(xu_target_grid, &
+!                      farrayPtr=xu_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET xv."
+!   call ESMF_FieldGet(xv_target_grid, &
+!                      farrayPtr=xv_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET xz."
+!   call ESMF_FieldGet(xz_target_grid, &
+!                      farrayPtr=xz_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET xtts."
+!   call ESMF_FieldGet(xtts_target_grid, &
+!                      farrayPtr=xtts_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET xzts."
+!   call ESMF_FieldGet(xzts_target_grid, &
+!                      farrayPtr=xzts_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET z_c."
+!   call ESMF_FieldGet(z_c_target_grid, &
+!                      farrayPtr=z_c_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+!
+!   print*,"- CALL FieldGet FOR TARGET zm."
+!   call ESMF_FieldGet(zm_target_grid, &
+!                      farrayPtr=zm_target_ptr, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGet", rc)
+   if (convert_nst) ifd_target_ptr = float(nint(ifd_target_ptr))
 
    do ij = l(1), u(1)
      call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
-     c_d_target_ptr(i,j) = -9999.9 
-     c_0_target_ptr(i,j) = -9999.9 
-     d_conv_target_ptr(i,j) = -9999.9 
-     dt_cool_target_ptr(i,j) = -9999.9 
-     ifd_target_ptr(i,j) = -9999.9 
-     qrain_target_ptr(i,j) = -9999.9 
-     tref_target_ptr(i,j) = -9999.9 
-     w_d_target_ptr(i,j) = -9999.9 
-     w_0_target_ptr(i,j) = -9999.9 
-     xs_target_ptr(i,j) = -9999.9 
-     xt_target_ptr(i,j) = -9999.9 
-     xu_target_ptr(i,j) = -9999.9 
-     xv_target_ptr(i,j) = -9999.9 
-     xz_target_ptr(i,j) = -9999.9 
-     xtts_target_ptr(i,j) = -9999.9 
-     xzts_target_ptr(i,j) = -9999.9 
-     z_c_target_ptr(i,j) = -9999.9 
-     zm_target_ptr(i,j) = -9999.9 
+    
+!     c_d_target_ptr(i,j) = -9999.9 
+!     c_0_target_ptr(i,j) = -9999.9 
+!     d_conv_target_ptr(i,j) = -9999.9 
+!     dt_cool_target_ptr(i,j) = -9999.9 
+!     ifd_target_ptr(i,j) = -9999.9 
+!     qrain_target_ptr(i,j) = -9999.9 
+!     tref_target_ptr(i,j) = -9999.9 
+!     w_d_target_ptr(i,j) = -9999.9 
+!     w_0_target_ptr(i,j) = -9999.9 
+!     xs_target_ptr(i,j) = -9999.9 
+!     xt_target_ptr(i,j) = -9999.9 
+!     xu_target_ptr(i,j) = -9999.9 
+!     xv_target_ptr(i,j) = -9999.9 
+!     xz_target_ptr(i,j) = -9999.9 
+!     xtts_target_ptr(i,j) = -9999.9 
+!     xzts_target_ptr(i,j) = -9999.9 
+!     z_c_target_ptr(i,j) = -9999.9 
+!     zm_target_ptr(i,j) = -9999.9 
+     do k = 1, num_fields
+       target_ptrs(k)%p(i,j) = -9999.9
+     end do
    enddo
-
- endif
+ deallocate(target_ptrs)
+ !endif
 
  if (localpet == 0) then
    allocate(latitude_one_tile(i_target,j_target))
@@ -1462,10 +1576,10 @@
 
 ! skin temp
 
-   print*,"- CALL FieldGather FOR TARGET GRID SKIN TEMPERATURE TILE: ", tile
-   call ESMF_FieldGather(skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", rc)
+!   print*,"- CALL FieldGather FOR TARGET GRID SKIN TEMPERATURE TILE: ", tile
+!   call ESMF_FieldGather(skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGather", rc)
 
    print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
    call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
@@ -1481,323 +1595,328 @@
      allocate(water_target_one_tile(i_target,j_target))
      water_target_one_tile = 0
      where(mask_target_one_tile == 0) water_target_one_tile = 1
-     call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 11, &
-                 latitude=latitude_one_tile)
    endif
-
-   print*,"- CALL FieldScatter FOR TARGET GRID SKIN TEMP: ", tile
-   call ESMF_FieldScatter(skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldScatter", rc)
-
-! z0
-
-   print*,"- CALL FieldGather FOR TARGET GRID Z0 TILE: ", tile
-   call ESMF_FieldGather(z0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", rc)
-
-   if (localpet == 0) then
-     call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 83)
-   endif
-
-   print*,"- CALL FieldScatter FOR TARGET GRID Z0: ", tile
-   call ESMF_FieldScatter(z0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldScatter", rc)
-
-   if (convert_nst) then
-
-! c_d
-
-     print*,"- CALL FieldGather FOR TARGET GRID C_D TILE: ", tile
-     call ESMF_FieldGather(c_d_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID C_D: ", tile
-     call ESMF_FieldScatter(c_d_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! c_0
-
-     print*,"- CALL FieldGather FOR TARGET GRID C_0 TILE: ", tile
-     call ESMF_FieldGather(c_0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID C_0: ", tile
-     call ESMF_FieldScatter(c_0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! d_conv
-
-     print*,"- CALL FieldGather FOR TARGET GRID D_CONV TILE: ", tile
-     call ESMF_FieldGather(d_conv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID D_CONV: ", tile
-     call ESMF_FieldScatter(d_conv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! dt_cool
-
-     print*,"- CALL FieldGather FOR TARGET GRID DT_COOL TILE: ", tile
-     call ESMF_FieldGather(dt_cool_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID DT_COOL: ", tile
-     call ESMF_FieldScatter(dt_cool_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! ifd
-
-     print*,"- CALL FieldGather FOR TARGET GRID IFD TILE: ", tile
-     call ESMF_FieldGather(ifd_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 1)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID IFD: ", tile
-     call ESMF_FieldScatter(ifd_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! qrain
-
-     print*,"- CALL FieldGather FOR TARGET GRID QRAIN TILE: ", tile
-     call ESMF_FieldGather(qrain_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID QRAIN: ", tile
-     call ESMF_FieldScatter(qrain_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! tref
-
-     print*,"- CALL FieldGather FOR TARGET GRID TREF TILE: ", tile
-     call ESMF_FieldGather(tref_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 11, &
-                   latitude=latitude_one_tile)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID TREF: ", tile
-     call ESMF_FieldScatter(tref_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! w_d
-
-     print*,"- CALL FieldGather FOR TARGET GRID W_D TILE: ", tile
-     call ESMF_FieldGather(w_d_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID W_D: ", tile
-     call ESMF_FieldScatter(w_d_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! w_0
-
-     print*,"- CALL FieldGather FOR TARGET GRID W_0 TILE: ", tile
-     call ESMF_FieldGather(w_0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID W_0: ", tile
-     call ESMF_FieldScatter(w_0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! xs
-
-     print*,"- CALL FieldGather FOR TARGET GRID XS TILE: ", tile
-     call ESMF_FieldGather(xs_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID XS: ", tile
-     call ESMF_FieldScatter(xs_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! xt
-
-     print*,"- CALL FieldGather FOR TARGET GRID XT TILE: ", tile
-     call ESMF_FieldGather(xt_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID XT: ", tile
-     call ESMF_FieldScatter(xt_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! xu
-
-     print*,"- CALL FieldGather FOR TARGET GRID XU TILE: ", tile
-     call ESMF_FieldGather(xu_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID XU: ", tile
-     call ESMF_FieldScatter(xu_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! xv
-
-     print*,"- CALL FieldGather FOR TARGET GRID XV TILE: ", tile
-     call ESMF_FieldGather(xv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID XV: ", tile
-     call ESMF_FieldScatter(xv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! xz
-
-     print*,"- CALL FieldGather FOR TARGET GRID XZ TILE: ", tile
-     call ESMF_FieldGather(xz_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 30)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID XZ: ", tile
-     call ESMF_FieldScatter(xz_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! xtts
-
-     print*,"- CALL FieldGather FOR TARGET GRID XTTS TILE: ", tile
-     call ESMF_FieldGather(xtts_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID XTTS: ", tile
-     call ESMF_FieldScatter(xtts_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! xzts
-
-     print*,"- CALL FieldGather FOR TARGET GRID XZTS TILE: ", tile
-     call ESMF_FieldGather(xzts_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID XZTS: ", tile
-     call ESMF_FieldScatter(xzts_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! z_c
-
-     print*,"- CALL FieldGather FOR TARGET GRID Z_C TILE: ", tile
-     call ESMF_FieldGather(z_c_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID Z_C: ", tile
-     call ESMF_FieldScatter(z_c_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-! zm 
-
-     print*,"- CALL FieldGather FOR TARGET GRID ZM TILE: ", tile
-     call ESMF_FieldGather(zm_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
-     endif
-
-     print*,"- CALL FieldScatter FOR TARGET GRID ZM: ", tile
-     call ESMF_FieldScatter(zm_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldScatter", rc)
-
-   endif
+   !  call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 11, &
+   !              latitude=latitude_one_tile)
+   !endif
+
+   call search_many(num_fields,target_fields,data_one_tile, water_target_one_tile,& 
+                    i_target,j_target,tile,search_nums,localpet,latitude=latitude_one_tile)
+   deallocate(target_fields)
+
+!   print*,"- CALL FieldScatter FOR TARGET GRID SKIN TEMP: ", tile
+!   call ESMF_FieldScatter(skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldScatter", rc)
+!
+!! z0
+!
+!   print*,"- CALL FieldGather FOR TARGET GRID Z0 TILE: ", tile
+!   call ESMF_FieldGather(z0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldGather", rc)
+!
+!   if (localpet == 0) then
+!     call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 83)
+!   endif
+!
+!   print*,"- CALL FieldScatter FOR TARGET GRID Z0: ", tile
+!   call ESMF_FieldScatter(z0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldScatter", rc)
+!
+!   if (convert_nst) then
+!
+!! c_d
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID C_D TILE: ", tile
+!     call ESMF_FieldGather(c_d_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID C_D: ", tile
+!     call ESMF_FieldScatter(c_d_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! c_0
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID C_0 TILE: ", tile
+!     call ESMF_FieldGather(c_0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID C_0: ", tile
+!     call ESMF_FieldScatter(c_0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! d_conv
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID D_CONV TILE: ", tile
+!     call ESMF_FieldGather(d_conv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID D_CONV: ", tile
+!     call ESMF_FieldScatter(d_conv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! dt_cool
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID DT_COOL TILE: ", tile
+!     call ESMF_FieldGather(dt_cool_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID DT_COOL: ", tile
+!     call ESMF_FieldScatter(dt_cool_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! ifd
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID IFD TILE: ", tile
+!     call ESMF_FieldGather(ifd_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 1)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID IFD: ", tile
+!     call ESMF_FieldScatter(ifd_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! qrain
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID QRAIN TILE: ", tile
+!     call ESMF_FieldGather(qrain_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID QRAIN: ", tile
+!     call ESMF_FieldScatter(qrain_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! tref
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID TREF TILE: ", tile
+!     call ESMF_FieldGather(tref_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 11, &
+!                   latitude=latitude_one_tile)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID TREF: ", tile
+!     call ESMF_FieldScatter(tref_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! w_d
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID W_D TILE: ", tile
+!     call ESMF_FieldGather(w_d_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID W_D: ", tile
+!     call ESMF_FieldScatter(w_d_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! w_0
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID W_0 TILE: ", tile
+!     call ESMF_FieldGather(w_0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID W_0: ", tile
+!     call ESMF_FieldScatter(w_0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! xs
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID XS TILE: ", tile
+!     call ESMF_FieldGather(xs_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID XS: ", tile
+!     call ESMF_FieldScatter(xs_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! xt
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID XT TILE: ", tile
+!     call ESMF_FieldGather(xt_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID XT: ", tile
+!     call ESMF_FieldScatter(xt_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! xu
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID XU TILE: ", tile
+!     call ESMF_FieldGather(xu_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID XU: ", tile
+!     call ESMF_FieldScatter(xu_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! xv
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID XV TILE: ", tile
+!     call ESMF_FieldGather(xv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID XV: ", tile
+!     call ESMF_FieldScatter(xv_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! xz
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID XZ TILE: ", tile
+!     call ESMF_FieldGather(xz_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 30)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID XZ: ", tile
+!     call ESMF_FieldScatter(xz_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! xtts
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID XTTS TILE: ", tile
+!     call ESMF_FieldGather(xtts_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID XTTS: ", tile
+!     call ESMF_FieldScatter(xtts_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! xzts
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID XZTS TILE: ", tile
+!     call ESMF_FieldGather(xzts_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID XZTS: ", tile
+!     call ESMF_FieldScatter(xzts_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! z_c
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID Z_C TILE: ", tile
+!     call ESMF_FieldGather(z_c_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID Z_C: ", tile
+!     call ESMF_FieldScatter(z_c_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!! zm 
+!
+!     print*,"- CALL FieldGather FOR TARGET GRID ZM TILE: ", tile
+!     call ESMF_FieldGather(zm_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldGather", rc)
+!
+!     if (localpet == 0) then
+!       call search(data_one_tile, water_target_one_tile, i_target, j_target, tile, 0)
+!     endif
+!
+!     print*,"- CALL FieldScatter FOR TARGET GRID ZM: ", tile
+!     call ESMF_FieldScatter(zm_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
+!     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!        call error_handler("IN FieldScatter", rc)
+!
+!   endif
 
    if (localpet == 0) deallocate(water_target_one_tile)
 
@@ -4800,20 +4919,20 @@ end subroutine replace_land_sfcparams
  
  subroutine regrid_many(fields_pre,fields_post,post_ptrs, num_field,route)
  
+ use esmf 
+
  implicit none
  
- use esmf
- 
- integer, intent(in)                        :: num_field
- type(esmf_routehandle), intent(in)         :: route
- type(field_ptr), intent(in)                :: fields_pre(num_field), fields_post(num_field)
- real(esmf_kind_r8), pointer, intent(inout) :: post_ptrs(num_field)
+ integer, intent(in)                   :: num_field
+ type(esmf_routehandle), intent(inout) :: route
+ type(fieldptr), intent(in)            :: fields_pre(num_field), fields_post(num_field)
+ type(realptr), intent(inout)          :: post_ptrs(num_field)
  
  integer :: i, rc
  
  do i = 1, num_field
 
-   call ESMF_FieldRegrid(fields_pre(i), &
+   call ESMF_FieldRegrid(fields_pre(i)%f, &
                fields_post(i)%f, &
                routehandle=route, &
                termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
@@ -4821,12 +4940,52 @@ end subroutine replace_land_sfcparams
     call error_handler("IN FieldRegrid", rc)
     
    call ESMF_FieldGet(fields_post(i)%f, &
-            farrayPtr=post_ptrs(i), rc=rc)
+            farrayPtr=post_ptrs(i)%p, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)!
  end do
  
  end subroutine regrid_many
+
+ subroutine search_many(num_field,target_fields,field_data,mask,i_search,j_search,tile,search_nums,localpet,latitude)
+
+ use model_grid, only                  : i_target,j_target
+ use search_util
+
+ implicit none
+
+ integer, intent(in)                         :: num_field
+ type(fieldptr), intent(inout)               :: target_fields(num_field)
+ real(esmf_kind_r8), intent(inout)           :: field_data(i_target,j_target)
+ real(esmf_kind_r8), intent(inout), optional :: latitude(i_target,j_target)
+ integer(esmf_kind_i8), intent(inout)        :: mask(i_target,j_target)
+ 
+ integer, intent(in)             :: i_search,j_search,tile,localpet
+ integer, intent(inout)          :: search_nums(num_field)
+
+ integer :: k, rc
+
+ do k = 1,num_field
+   print*,"- CALL FieldGather FOR TARGET GRID SNOW DEPTH TILE: ", tile
+   call ESMF_FieldGather(target_fields(k)%f, field_data, rootPet=0,tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", rc)
+
+   if (localpet == 0) then
+     if (present(latitude)) then
+       call search(field_data, mask, i_search, j_search, tile,search_nums(k),latitude=latitude)
+     else
+       call search(field_data, mask, i_search, j_search, tile,search_nums(k))
+     endif
+   endif
+
+   print*,"- CALL FieldScatter FOR TARGET GRID SNOW DEPTH TILE: ", tile
+   call ESMF_FieldScatter(target_fields(k)%f, field_data, rootPet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+ end do
+
+ end subroutine search_many
 
 !> Free up memory once the target grid surface fields are
 !! no longer needed.
