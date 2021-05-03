@@ -1,6 +1,10 @@
 name: intel
 on: [push, pull_request]
 
+defaults:
+  run:
+    shell: bash -ieo pipefail {0}
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -27,7 +31,6 @@ jobs:
 
     - name: test-intel
       run: |
-        source /opt/intel/oneapi/setvars.sh
         icc --version
         ifort --version
         mpiicc --version
