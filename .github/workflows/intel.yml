@@ -1,0 +1,26 @@
+name: intel
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    env:
+      CC: icc
+      FC: ifort
+      CXX: icpc
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+
+    steps:
+
+    - name: install-intel
+      run:
+        cd /tmp
+        wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+        sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+        rm GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+        echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+        sudo apt update
+        sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
+
