@@ -117,7 +117,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/hdf5
-        key: hdf5-${{ runner.os }}-1.10.7
+        key: hdf5-${{ runner.os }}-1.10.7-1
 
     - name: build-hdf5
       if: steps.cache-hdf5.outputs.cache-hit != 'true'
@@ -143,6 +143,7 @@ jobs:
       if: steps.cache-netcdf-c.outputs.cache-hit != 'true'
       run: |
         set -x
+        ls -l ${HOME}/hdf5
         export CC=mpicc
         export CPPFLAGS=-I${HOME}/hdf5/include
         export LDFLAGS=-I${HOME}/hdf5/lib
