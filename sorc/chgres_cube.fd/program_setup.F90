@@ -330,8 +330,25 @@
 
  end subroutine read_setup_namelist
 
-!> Reads the variable mapping table, which is
-!! required for initializing with GRIB2 data.
+!> Reads the variable mapping table, which is required for
+!! initializing with GRIB2 data.
+!!
+!! The varmap files has entries that look like this:
+!!
+!! <pre>dzdt dzdt set_to_fill 0 D</pre>
+!!
+!! These are the chgres_var_name, field_var_name, missing_var_method,
+!! missing_var_value, var_type.
+!!
+!! The missing_var_method is one of:
+!! * set_to_fill
+!! * skip
+!! * stop
+!!
+!! The var_type is one of:
+!! * T - tracer
+!! * D - ???
+!! * S - ???
 !!
 !! @author Larissa Reames
 !! @author Jeff Beck
