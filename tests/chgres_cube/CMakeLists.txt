@@ -36,12 +36,15 @@ target_link_libraries(ftst_utils chgres_cube_lib)
 
 add_executable(ftst_program_setup ftst_program_setup.F90)
 target_link_libraries(ftst_program_setup chgres_cube_lib)
-
-# Cause test to be run with MPI.
 add_mpi_test(chgres_cube-ftst_program_setup
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_program_setup
-  NUMPROCS 4
-  TIMEOUT 60)
+  NUMPROCS 4 TIMEOUT 60)
+
+add_executable(ftst_program_setup_varmaps ftst_program_setup_varmaps.F90)
+target_link_libraries(ftst_program_setup_varmaps chgres_cube_lib)
+add_mpi_test(chgres_cube-ftst_program_setup_varmaps
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_program_setup_varmaps
+  NUMPROCS 4 TIMEOUT 60)
 
 add_executable(ftst_search_util ftst_search_util.F90)
 target_link_libraries(ftst_search_util chgres_cube_lib)

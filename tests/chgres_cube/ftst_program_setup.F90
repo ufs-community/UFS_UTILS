@@ -238,11 +238,6 @@ program ftst_program_setup
   enddo
   if (my_rank .eq. 0) print*, "OK"
 
-  if (my_rank .eq. 0) print*, "testing read_varmap with GFSphys_varmap.txt..."
-  varmap_file = "data/GFSphys_varmap.txt"
-  call read_varmap()
-  if (my_rank .eq. 0) print*, "OK"
-  
   if (my_rank .eq. 0) print*, "SUCCESS!"
 
  call mpi_finalize(ierr)  
