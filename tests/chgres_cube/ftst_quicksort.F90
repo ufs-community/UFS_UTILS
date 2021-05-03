@@ -3,6 +3,8 @@
 ! Test the quicksort function of the chgres_cube program.
 ! The routine sorts numbers in ascending order. Sort
 ! an array of pressure levels in millibars.
+!
+! @author George Gayno NOAA/EMC
 
  use input_data
 
@@ -25,6 +27,8 @@
  if (pressure_in_mb(3) /= sorted_pressure_in_mb(3)) stop 4
  if (pressure_in_mb(4) /= sorted_pressure_in_mb(4)) stop 5
  if (pressure_in_mb(5) /= sorted_pressure_in_mb(5)) stop 6
+
+ print*,"OK"
 
  print*,"SUCCESS!"
 
