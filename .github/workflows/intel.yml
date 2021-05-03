@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 defaults:
   run:
-    shell: bash -ieo pipefail {0}
+    shell: bash -lieo pipefail {0}
 
 jobs:
   build:
@@ -27,10 +27,11 @@ jobs:
         echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
         sudo apt update
         sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
-        echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
+        echo "source /opt/intel/oneapi/setvars.sh" >> "~/.bash_profile"
 
     - name: test-intel
       run: |
+        cat ~/.bash_profile
         icc --version
         ifort --version
         mpiicc --version
