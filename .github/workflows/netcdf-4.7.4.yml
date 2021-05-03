@@ -116,7 +116,7 @@ jobs:
       id: cache-hdf5
       uses: actions/cache@v2
       with:
-        path: ~/hdf5
+        path: ${HOME}/hdf5
         key: hdf5-${{ runner.os }}-1.10.7-1
 
     - name: build-hdf5
@@ -131,6 +131,7 @@ jobs:
         make
         sudo make install
         popd
+        ls -l ${HOME}/hdf5
           
     - name: cache-netcdf-c
       id: cache-netcdf-c
