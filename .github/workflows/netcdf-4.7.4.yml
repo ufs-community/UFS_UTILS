@@ -1,4 +1,4 @@
-name: esmf-8.0.1_jasper-2.0.22_nceplibs-develop
+name: netcdf-4.7.4
 on: [push, pull_request]
 
 jobs:
