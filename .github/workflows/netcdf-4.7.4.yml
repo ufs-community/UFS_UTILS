@@ -167,6 +167,8 @@ jobs:
       if: steps.cache-netcdf-fortran.outputs.cache-hit != 'true'
       run: |
         set -x
+        ls -l ${HOME}/netcdf-c
+        ls -l ${HOME}/netcdf-c/lib
         export CC=mpicc
         export FC=mpifort
         export CPPFLAGS=-I${HOME}/netcdf-c/include
