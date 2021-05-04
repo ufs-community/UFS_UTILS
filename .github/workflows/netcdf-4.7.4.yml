@@ -174,7 +174,7 @@ jobs:
         wget https://github.com/Unidata/netcdf-fortran/archive/v4.5.3.tar.gz &> /dev/null
         tar -xzf v4.5.3.tar.gz
         pushd netcdf-fortran-4.5.3
-        ./configure --prefix=/home/runner/netcdf-fortran
+        ./configure --prefix=${HOME}/netcdf-fortran
         make -j
         sudo make install
         popd
