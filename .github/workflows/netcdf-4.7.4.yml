@@ -169,6 +169,7 @@ jobs:
         set -x
         ls -l ${HOME}/netcdf-c
         ls -l ${HOME}/netcdf-c/lib
+        export PATH="${HOME}/netcdf-c/bin:$PATH"
         export CC=mpicc
         export FC=mpifort
         export CPPFLAGS=-I${HOME}/netcdf-c/include
