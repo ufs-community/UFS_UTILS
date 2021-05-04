@@ -205,14 +205,8 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
-        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf-fortran' -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"
+        export PATH="${HOME}/netcdf/bin:$PATH"
+        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' 
         make -j2
         make test
-        export PATH="/home/runner/.local/bin:$PATH"
-        gcovr -r .. --html-details -o test-coverage.html
 
-    - uses: actions/upload-artifact@v2
-      if: ${{ matrix.os == 'ubuntu-20.04' }}
-      with:
-        name: test-coverage
-        path: ufs_utils/build/*.html
