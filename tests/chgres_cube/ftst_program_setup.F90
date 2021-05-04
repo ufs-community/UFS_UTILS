@@ -52,7 +52,7 @@ program ftst_program_setup
   if (my_rank .eq. 0) print*, "OK"
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_fv3_tiled..."
-  call read_setup_namelist("config_fv3_tiled.nml")
+  call read_setup_namelist("data/config_fv3_tiled.nml")
   if (cycle_mon .ne. 10 .or. cycle_day .ne. 3 .or. cycle_hour .ne. 0) stop 34
   if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 35
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 36
@@ -82,7 +82,7 @@ program ftst_program_setup
   if (my_rank .eq. 0) print*, "OK"
 
   print*, "testing read_setup_namelist with config_fv3_tiled_warm_restart..."
-  call read_setup_namelist("config_fv3_tiled_warm_restart.nml")
+  call read_setup_namelist("data/config_fv3_tiled_warm_restart.nml")
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 6 .or. cycle_hour .ne. 12) stop 64
   if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 65
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 66  
@@ -141,7 +141,7 @@ program ftst_program_setup
   print*, "OK"
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_gaussian_nemsio..."
-  call read_setup_namelist("config_gaussian_nemsio.nml")
+  call read_setup_namelist("data/config_gaussian_nemsio.nml")
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 12) stop 74
   if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 75
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 76
@@ -175,7 +175,7 @@ program ftst_program_setup
   if (my_rank .eq. 0) print*, "OK"
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_spectral_sigio..."
-  call read_setup_namelist("config_spectral_sigio.nml")
+  call read_setup_namelist("data/config_spectral_sigio.nml")
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 17 .or. cycle_hour .ne. 0) stop 114
   if (.not. convert_atm .or. .not. convert_sfc .or. convert_nst) stop 115
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 116
@@ -205,7 +205,7 @@ program ftst_program_setup
   if (my_rank .eq. 0) print*, "OK"
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_gfs_grib2..."
-  call read_setup_namelist("config_gfs_grib2.nml")
+  call read_setup_namelist("data/config_gfs_grib2.nml")
   if (cycle_mon .ne. 11 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 0) stop 94
   if (.not. convert_atm .or. .not. convert_sfc .or. convert_nst) stop 95
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 96
