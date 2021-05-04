@@ -1,6 +1,6 @@
 !> @file
 !! @brief Read atmospheric and surface data from GRIB2, NEMSIO and NetCDF files.
-!! @author George Gayno NCEP/EMC
+!! @author George Gayno, Kyle Gerheiser NCEP/EMC
 
 !> Read nst data on the input grid.
 !! Supported formats include fv3 tiled 'restart' files, fv3 tiled 
@@ -10,7 +10,7 @@
 !! Public variables are defined below: "input" indicates field
 !! associated with the input grid.
 !!
-!! @author George Gayno NCEP/EMC
+!! @author George Gayno, Kyle Gerheiser NCEP/EMC
 module nst_input_data_mod
   use esmf
   use netcdf

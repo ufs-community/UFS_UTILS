@@ -1,13 +1,13 @@
 !> @file
 !! @brief Shared routines and data for atmosphere, surface, and nst input_data modules.
-!! @author George Gayno NCEP/EMC
+!! @author George Gayno, Kyle Gerheiser NCEP/EMC
 
 !> Common routines for input data modules.
 !!
 !! Public variables are defined below: "input" indicates field
 !! associated with the input grid.
 !!
-!! @author George Gayno NCEP/EMC
+!! @author George Gayno, Kyle Gerheiser NCEP/EMC
 module input_data_utils_mod
   use esmf
   use netcdf
