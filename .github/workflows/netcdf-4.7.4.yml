@@ -130,7 +130,6 @@ jobs:
         make
         sudo make install
         popd
-        ls -l ${HOME}/hdf5
           
     - name: build-netcdf-c
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
