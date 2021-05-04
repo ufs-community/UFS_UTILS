@@ -170,11 +170,10 @@ jobs:
         ls -l ${HOME}/netcdf-c/lib
         export PATH="${HOME}/netcdf-c/bin:$PATH"
         nc-config --libs --static
-        export LIBS=`nc-config --libs --static`
         export CC=mpicc
         export FC=mpifort
         export CPPFLAGS=-I${HOME}/netcdf-c/include
-        export LDFLAGS=-L${HOME}/netcdf-c/lib
+        export LDFLAGS=`nc-config --libs --static`
         wget https://github.com/Unidata/netcdf-fortran/archive/v4.5.3.tar.gz &> /dev/null
         tar -xzf v4.5.3.tar.gz
         pushd netcdf-fortran-4.5.3
