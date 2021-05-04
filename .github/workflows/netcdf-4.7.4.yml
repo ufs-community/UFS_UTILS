@@ -174,6 +174,7 @@ jobs:
         export FC=mpifort
         export CPPFLAGS=-I${HOME}/netcdf-c/include
         export LDFLAGS=`nc-config --libs --static`
+        export LDFLAGS="-L${HOME}/hdf5/lib $LDFLAGS"
         wget https://github.com/Unidata/netcdf-fortran/archive/v4.5.3.tar.gz &> /dev/null
         tar -xzf v4.5.3.tar.gz
         pushd netcdf-fortran-4.5.3
