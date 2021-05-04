@@ -6,7 +6,7 @@
 !
 ! @author George Gayno NOAA/EMC
 
- use input_data
+ use input_data_utils_mod
 
  implicit none
 

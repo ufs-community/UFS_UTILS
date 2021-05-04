@@ -21,7 +21,8 @@
  module surface
 
  use esmf
-
+ use input_data_utils_mod, only: terrain_input_grid
+ 
  implicit none
 
  private
@@ -149,11 +150,9 @@
 !! @author George Gayno NCEP/EMC
  subroutine surface_driver(localpet)
 
- use input_data, only                : cleanup_input_sfc_data, &
-                                       cleanup_input_nst_data, &
-                                       read_input_sfc_data, &
-                                       read_input_nst_data
-
+ use sfc_input_data_mod, only:  read_input_sfc_data, cleanup_input_sfc_data
+ use nst_input_data_mod, only: read_input_nst_data, cleanup_input_nst_data
+ 
  use program_setup, only             : calc_soil_params_driver, &
                                        convert_nst
                                   
@@ -310,7 +309,7 @@
  use mpi
  use esmf
 
- use input_data, only                : canopy_mc_input_grid,  &
+ use sfc_input_data_mod, only        : canopy_mc_input_grid,  &
                                        f10m_input_grid,  &
                                        ffmm_input_grid,  &
                                        landsea_mask_input_grid, &
@@ -330,7 +329,13 @@
                                        ustar_input_grid,  &
                                        veg_type_input_grid, &
                                        z0_input_grid, &
-                                       c_d_input_grid, &
+                                       veg_type_landice_input, &
+                                       veg_greenness_input_grid, &
+                                       max_veg_greenness_input_grid, &
+                                       min_veg_greenness_input_grid, &
+                                       lai_input_grid
+
+ use nst_input_data_mod, only:         c_d_input_grid, &
                                        c_0_input_grid, &
                                        d_conv_input_grid, &
                                        dt_cool_input_grid, &
@@ -347,12 +352,10 @@
                                        xtts_input_grid, &
                                        xzts_input_grid, &
                                        z_c_input_grid, &
-                                       zm_input_grid, terrain_input_grid, &
-                                       veg_type_landice_input, &
-                                       veg_greenness_input_grid, &
-                                       max_veg_greenness_input_grid, &
-                                       min_veg_greenness_input_grid, &
-                                       lai_input_grid
+                                       zm_input_grid
+
+ use input_data_utils_mod, only: terrain_input_grid
+ 
 
  use model_grid, only                : input_grid, target_grid, &
                                        i_target, j_target, &
@@ -3562,7 +3565,7 @@ end subroutine replace_land_sfcparams
 !! @author Jeff Beck
  subroutine adjust_soil_levels(localpet)
  use model_grid, only       : lsoil_target, i_input, j_input, input_grid
- use input_data, only       : lsoil_input, soil_temp_input_grid, &
+ use sfc_input_data_mod, only       : lsoil_input, soil_temp_input_grid, &
                               soilm_liq_input_grid, soilm_tot_input_grid
  implicit none
  integer, intent(in)                   :: localpet

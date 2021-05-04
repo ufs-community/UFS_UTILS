@@ -20,7 +20,7 @@
 
  use esmf
 
- use input_data, only                : lev_input, &
+ use atm_input_data_mod, only        : lev_input, &
                                        levp1_input, &
                                        tracers_input_grid, &
                                        dzdt_input_grid, &
@@ -28,7 +28,6 @@
                                        wind_input_grid,   &
                                        temp_input_grid,   &
                                        pres_input_grid,   &
-                                       terrain_input_grid, &
                                        read_input_atm_data, &
                                        cleanup_input_atm_data
 
@@ -51,6 +50,8 @@
                                        qnwfa_climo_input_grid, &
                                        thomp_pres_climo_input_grid, &
                                        lev_thomp_mp_climo
+
+ use input_data_utils_mod, only: terrain_input_grid
 
  implicit none
 

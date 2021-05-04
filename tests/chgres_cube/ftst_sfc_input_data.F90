@@ -7,7 +7,7 @@
 
  use mpi
  use esmf
- use input_data
+ use sfc_input_data_mod
  use model_grid
 
  implicit none
