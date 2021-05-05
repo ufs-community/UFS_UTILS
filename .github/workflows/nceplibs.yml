@@ -183,7 +183,7 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd nceplibs
         mkdir build && cd build
-        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
+        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/netcdf' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
         make -j2
        
     - name: checkout-ufs-utils
