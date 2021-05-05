@@ -20,6 +20,8 @@
  integer, parameter :: num_default_tests = 20
  integer, parameter :: num_default_sst_tests = 4
 
+ real, parameter :: EPSILON=0.00001
+
  integer :: field_num, ierr, i
  integer(esmf_kind_i8) :: mask_search1(idim,jdim)
  integer(esmf_kind_i8) :: mask_search2(idim,jdim)
@@ -116,10 +118,7 @@
 
  call search (field_updated, mask_search1, idim, jdim, tile, field_num)
 
- if (field_updated(2,2) /= field_updated(1,1)) then
-   print*,'TEST FAILED ',field_updated(2,2), field_updated(1,1)
-   stop 2
- endif
+ if (abs(field_updated(2,2) - field_updated(1,1)) > EPSILON) stop 2
 
  print*,'Run test 2 to check search logic.'
 
@@ -128,12 +127,7 @@
 
  call search (field_updated, mask_search2, idim, jdim, tile, field_num)
 
- if (field_updated(2,2) /= field_updated(3,3)) then
-   print*,'TEST FAILED ',field_updated(2,2), field_updated(3,3)
-   stop 3
- else
-   print*,'OK'
- endif
+ if (abs(field_updated(2,2) - field_updated(3,3)) > EPSILON) stop 3
 
  print*,'Run tests to check default logic.'
 
@@ -147,14 +141,7 @@
    call search (field_updated, mask_default, idim, jdim, tile, field_num, &
                 latitude, terrain_land, soilt_climo)
 
-   if (abs(field_updated(2,2)-default_field_val(i)) > 0.00001) then
-     print*,'TEST FAILED '
-     print*,'VALUE SHOULD BE:', default_sst_val(i) 
-     print*,'VALUE FROM TEST:', field_updated(2,2)
-     stop 4
-   else
-     print*,'OK'
-   endif
+   if (abs(field_updated(2,2)-default_field_val(i)) > EPSILON) stop 4
 
  enddo
 
@@ -173,15 +160,7 @@
    call search (field_updated, mask_default, idim, jdim, tile, field_num, &
                 latitude, terrain_land, soilt_climo)
 
-   if (abs(field_updated(2,2)-default_sst_val(i)) > 0.00001) then
-     print*,'TEST FAILED '
-     print*,'SST SHOULD BE:', default_sst_val(i) 
-     print*,'SST FROM TEST:', field_updated(2,2)
-     stop 5
-   else
-
-   print*,'OK'
-   endif
+   if (abs(field_updated(2,2)-default_sst_val(i)) > EPSILON) stop 5
 
  enddo
 
