@@ -28,6 +28,7 @@ jobs:
         sudo apt update
         sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
         echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
+        sudo apt-get install doxygen
 
     - name: cache-netcdf
       id: cache-netcdf
