@@ -62,7 +62,7 @@ jobs:
           cd openmpi-4.1.1
           if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx
-          elif [[ ${{ matrix.os }} == "macos-10.15" ]]; 
+          elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx --enable-two-level-namespace
           fi
           make -j2
