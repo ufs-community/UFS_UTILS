@@ -14,30 +14,30 @@
 
  implicit none
 
- integer, parameter :: idim = 3
- integer, parameter :: jdim = 3
- integer, parameter :: tile = 1
- integer, parameter :: num_default_tests = 20
- integer, parameter :: num_default_sst_tests = 4
+ integer, parameter :: IDIM = 3
+ integer, parameter :: JDIM = 3
+ integer, parameter :: TILE = 1
+ integer, parameter :: NUM_DEFAULT_TESTS = 20
+ integer, parameter :: NUM_DEFAULT_SST_TESTS = 4
 
  real, parameter :: EPSILON=0.00001
 
  integer :: field_num, ierr, i, j, ii, jj
- integer(esmf_kind_i8) :: mask_search1(idim,jdim)
- integer(esmf_kind_i8) :: mask_search2(idim,jdim)
- integer(esmf_kind_i8) :: mask_default(idim,jdim)
- integer :: default_field_num(num_default_tests)
+ integer(esmf_kind_i8) :: mask_search1(IDIM,JDIM)
+ integer(esmf_kind_i8) :: mask_search2(IDIM,JDIM)
+ integer(esmf_kind_i8) :: mask_default(IDIM,JDIM)
+ integer :: default_field_num(NUM_DEFAULT_TESTS)
 
- real(esmf_kind_r8) :: default_field_val(num_default_tests)
- real(esmf_kind_r8) :: default_sst_val(num_default_sst_tests)
- real(esmf_kind_r8) :: field_default(idim,jdim)
- real(esmf_kind_r8) :: field_updated(idim,jdim)
- real(esmf_kind_r8) :: field_search1(idim,jdim)
- real(esmf_kind_r8) :: field_search2(idim,jdim)
- real(esmf_kind_r8) :: latitude(idim,jdim)
- real(esmf_kind_r8) :: latitude_sst(num_default_sst_tests)
- real(esmf_kind_r8) :: terrain_land(idim,jdim)
- real(esmf_kind_r8) :: soilt_climo(idim,jdim)
+ real(esmf_kind_r8) :: default_field_val(NUM_DEFAULT_TESTS)
+ real(esmf_kind_r8) :: default_sst_val(NUM_DEFAULT_SST_TESTS)
+ real(esmf_kind_r8) :: field_default(IDIM,JDIM)
+ real(esmf_kind_r8) :: field_updated(IDIM,JDIM)
+ real(esmf_kind_r8) :: field_search1(IDIM,JDIM)
+ real(esmf_kind_r8) :: field_search2(IDIM,JDIM)
+ real(esmf_kind_r8) :: latitude(IDIM,JDIM)
+ real(esmf_kind_r8) :: latitude_sst(NUM_DEFAULT_SST_TESTS)
+ real(esmf_kind_r8) :: terrain_land(IDIM,JDIM)
+ real(esmf_kind_r8) :: soilt_climo(IDIM,JDIM)
 
 !--------------------------------------------------------
 ! These variables are used to test the 'default'
@@ -116,14 +116,14 @@
  field_num = 226 ! veg greenness
  field_updated = field_search1
 
- call search (field_updated, mask_search1, idim, jdim, tile, field_num)
+ call search (field_updated, mask_search1, IDIM, JDIM, TILE, field_num)
 
- do j = 1, jdim
- do i = 1, idim
+ do j = 1, JDIM
+ do i = 1, IDIM
    if (i==2 .and.j==2) then ! Check the replaced value.
      if (abs(field_updated(i,j) - field_updated(1,1)) > EPSILON) stop 2
    else ! Ensure other values are unchanged.
-     if (abs(field_updated(i,j) - field_search1(i,j)) > EPSILON) stop 7
+     if (abs(field_updated(i,j) - field_search1(i,j)) > EPSILON) stop 3
    endif
  enddo
  enddo
@@ -133,36 +133,36 @@
  field_num = 226
  field_updated = field_search2
 
- call search (field_updated, mask_search2, idim, jdim, tile, field_num)
+ call search (field_updated, mask_search2, IDIM, JDIM, TILE, field_num)
 
- do j = 1, jdim
- do i = 1, idim
+ do j = 1, JDIM
+ do i = 1, IDIM
    if (i==3 .and.j==3) then ! Check the replaced value.
-     if (abs(field_updated(i,j) - field_updated(3,3)) > EPSILON) stop 12
+     if (abs(field_updated(i,j) - field_updated(3,3)) > EPSILON) stop 4
    else ! Ensure other values are unchanged.
-     if (abs(field_updated(i,j) - field_search2(i,j)) > EPSILON) stop 17
+     if (abs(field_updated(i,j) - field_search2(i,j)) > EPSILON) stop 5
    endif
  enddo
  enddo
 
  print*,'Run tests to check default logic.'
 
- do i = 1, num_default_tests
+ do i = 1, NUM_DEFAULT_TESTS
 
    field_num = default_field_num(i)
    field_updated = field_default
  
    print*,'CHECK DEFAULT LOGIC FOR FIELD NUMBER ',field_num
 
-   call search (field_updated, mask_default, idim, jdim, tile, field_num, &
+   call search (field_updated, mask_default, IDIM, JDIM, TILE, field_num, &
                 latitude, terrain_land, soilt_climo)
 
-   do jj = 1, jdim
-   do ii = 1, idim
+   do jj = 1, JDIM
+   do ii = 1, IDIM
      if (ii==2 .and. jj==2) then ! Check the replaced value.
-       if (abs(field_updated(ii,jj)-default_field_val(i)) > EPSILON) stop 24
+       if (abs(field_updated(ii,jj)-default_field_val(i)) > EPSILON) stop 6
      else ! Ensure other values are unchanged.
-       if (abs(field_updated(ii,jj) - field_default(ii,jj)) > EPSILON) stop 77
+       if (abs(field_updated(ii,jj) - field_default(ii,jj)) > EPSILON) stop 7
      endif
    enddo
    enddo
@@ -171,7 +171,7 @@
 
  print*,'Run tests to check default logic for SST.'
 
- do i = 1, num_default_sst_tests
+ do i = 1, NUM_DEFAULT_SST_TESTS
 
    field_num = 11
    field_updated = field_default
@@ -181,15 +181,15 @@
    print*,'CHECK DEFAULT LOGIC FOR FIELD NUMBER ',field_num
    print*,'AT LATITUDE ',latitude_sst(i)
 
-   call search (field_updated, mask_default, idim, jdim, tile, field_num, &
+   call search (field_updated, mask_default, IDIM, JDIM, TILE, field_num, &
                 latitude, terrain_land, soilt_climo)
 
-   do jj = 1, jdim
-   do ii = 1, idim
+   do jj = 1, JDIM
+   do ii = 1, IDIM
      if (ii==2 .and. jj==2) then ! Check the replaced value.
-       if (abs(field_updated(ii,jj) - default_sst_val(i)) > EPSILON) stop 28
+       if (abs(field_updated(ii,jj) - default_sst_val(i)) > EPSILON) stop 8
      else ! Ensure other values are unchanged.
-       if (abs(field_updated(ii,jj) - field_default(ii,jj)) > EPSILON) stop 78
+       if (abs(field_updated(ii,jj) - field_default(ii,jj)) > EPSILON) stop 9
      endif
    enddo
    enddo
