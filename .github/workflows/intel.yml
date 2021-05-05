@@ -161,6 +161,7 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
+        export NETCDF=${HOME}/netcdf
         cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf' -DENABLE_DOCS=On
         make -j2
         ctest --rerun-failed --output-on-failure

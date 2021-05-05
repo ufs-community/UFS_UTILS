@@ -27,7 +27,7 @@ jobs:
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
         elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
-          brew update
+            brew update
           brew install doxygen
           brew install wget
           if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
@@ -209,6 +209,9 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
+        export CC=mpicc
+        export CXX=mpicxx
+        export FC=mpifort
         cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"
         make -j2
         ctest --rerun-failed --output-on-failure
