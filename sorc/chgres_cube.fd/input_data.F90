@@ -56,8 +56,8 @@
  type(esmf_field), public              :: ps_input_grid         !< surface pressure
  type(esmf_field), public              :: terrain_input_grid    !< terrain height
  type(esmf_field), public              :: temp_input_grid       !< temperature
- type(esmf_field)                      :: u_input_grid          !< u/v wind at grid
- type(esmf_field)                      :: v_input_grid          !< box center
+ type(esmf_field), public              :: u_input_grid          !< u/v wind at grid
+ type(esmf_field), public              :: v_input_grid          !< box center
  type(esmf_field), public              :: wind_input_grid       !< 3-component wind
  type(esmf_field), allocatable, public :: tracers_input_grid(:) !< tracers
 
@@ -134,6 +134,7 @@
  public :: cleanup_input_nst_data
  public :: check_soilt
  public :: quicksort
+ public :: convert_winds
  
  contains
 
