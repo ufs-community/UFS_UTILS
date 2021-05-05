@@ -2,11 +2,10 @@
 !! @brief Writes the tiled and header files expected by the forecast
 !! model.
 !!
-!! @author George Gayno NCEP/EMC
-!!
 !! Write out target grid data into appropriate files for
 !! the forecast model.
 !!
+!! @author George Gayno NCEP/EMC
 
 !> Writes atmospheric header file in netcdf format.
 !!

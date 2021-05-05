@@ -42,6 +42,12 @@ add_mpi_test(chgres_cube-ftst_program_setup
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_program_setup
   NUMPROCS 4 TIMEOUT 60)
 
+add_executable(ftst_write_data ftst_write_data.F90)
+target_link_libraries(ftst_write_data chgres_cube_lib)
+add_mpi_test(chgres_cube-ftst_write_data
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_write_data
+  NUMPROCS 4 TIMEOUT 60)
+
 add_executable(ftst_program_setup_varmaps ftst_program_setup_varmaps.F90)
 target_link_libraries(ftst_program_setup_varmaps chgres_cube_lib)
 add_mpi_test(chgres_cube-ftst_program_setup_varmaps
