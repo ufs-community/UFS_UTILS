@@ -39,7 +39,8 @@ jobs:
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        set -x
+        mpiicc --version
+        source /opt/intel/oneapi/setvars.sh
         export CC=mpiicc
         wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
         tar -xzf hdf5-1.10.7.tar.gz
@@ -53,7 +54,6 @@ jobs:
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
         set -x
-        ls -l ${HOME}/netcdf
         export CC=mpiicc
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
@@ -69,10 +69,7 @@ jobs:
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
         set -x
-        ls -l ${HOME}/netcdf
-        ls -l ${HOME}/netcdf/lib
         export PATH="${HOME}/netcdf/bin:$PATH"
-        nc-config --libs --static
         export CC=mpiicc
         export FC=mpiifort
         export CPPFLAGS=-I${HOME}/netcdf/include
@@ -108,13 +105,8 @@ jobs:
         export ESMF_COMPILER=intel
         export ESMF_INSTALL_PREFIX=~/esmf
         export ESMF_NETCDF=split
-        if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then 
-          export ESMF_NETCDF_INCLUDE=/usr/include
-          export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
-        elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
-          export ESMF_NETCDF_INCLUDE=/usr/local/include
-          export ESMF_NETCDF_LIBPATH=/usr/local/lib
-        fi
+        export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
+        export ESMF_NETCDF_LIBPATH=${HOME}/netcdf/lib
         make -j2
         make install
 
@@ -171,13 +163,10 @@ jobs:
     - name: build-ufs-utils
       run: |
         set -x
-        mpicc --version
-        mpifort --version
-        pwd
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs' -DENABLE_DOCS=On
+        cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf' -DENABLE_DOCS=On
         make -j2
         make test
 
