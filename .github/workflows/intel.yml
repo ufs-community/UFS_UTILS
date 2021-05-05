@@ -30,11 +30,11 @@ jobs:
         echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
 
     - name: cache-netcdf
-       id: cache-netcdf
-       uses: actions/cache@v2
-       with:
-         path: ~/netcdf
-         key: netcdf-c-${{ runner.os }}-4.7.4-intel
+      id: cache-netcdf
+      uses: actions/cache@v2
+      with:
+        path: ~/netcdf
+        key: netcdf-c-${{ runner.os }}-4.7.4-intel
 
      - name: build-hdf5
        if: steps.cache-netcdf.outputs.cache-hit != 'true'
