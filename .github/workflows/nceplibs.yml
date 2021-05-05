@@ -20,14 +20,13 @@ jobs:
 
     - name: install-dependencies
       run: |
-        echo "/home/runner/mpich/bin" >> $GITHUB_PATH
+        echo "$HOME/mpi/bin" >> $GITHUB_PATH
         if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
           sudo apt-get update
           sudo apt-get install doxygen
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
         elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
-          echo "$HOME/mpich/bin" >> $GITHUB_PATH
           brew update
           brew install doxygen
           brew install wget
