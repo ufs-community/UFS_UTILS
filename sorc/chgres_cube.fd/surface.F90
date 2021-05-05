@@ -4916,7 +4916,15 @@ end subroutine replace_land_sfcparams
  return
 
  end subroutine ij_to_i_j
- 
+
+!> Regrid multiple ESMF fields from input to target grid
+!!
+!! @param[in] fields_pre  Length num_field array of ptrs to input ESMF fields
+!! @param[in] fields_post  Length num_field array of ptrs to target ESMF fields
+!! @param[inout] post_ptrs  Length num_field array of ptrs to ESMF target field pointers
+!! @param[in] num_field  Number of fields to process
+!! @param[inout] route  Route handle to saved ESMF regridding instructions
+!! @author Larissa Reames, OU CIMMS/NOAA/NSSL
  subroutine regrid_many(fields_pre,fields_post,post_ptrs, num_field,route)
  
  use esmf 
@@ -4947,6 +4955,20 @@ end subroutine replace_land_sfcparams
  
  end subroutine regrid_many
 
+!> Execute the search function for multple fields
+!!
+!! @param[in] num_field  Number of fields to process.
+!! @param[inout] target_fields  Length num_field array of ptrs to target ESMF fields.
+!! @param[inout] field_data  A real array of size i_target,j_target to temporarily hold data for searching
+!! @param[inout] mask  An integer array of size i_target,j_target that holds masked (0) and unmasked (1) 
+!!                     values indicating where to execute search (only at unmasked points).
+!! @param[in] i_search  First (east-west) index of unmapped points to replace.
+!! @param[in] j_search  Second (north-south) index of unmapped points to replace.
+!! @param[in] tile  Current cubed sphere tile.
+!! @param[inout] search_nums  Array length num_field holding search field numbers corresponding to each field provided for searching.
+!! @param[in] localpet  ESMF local persistent execution thread.
+!! @param[in][optional] latitude  A real array size i_target,j_target of latitude on the target grid 
+!! @author Larissa Reames, OU CIMMS/NOAA/NSSL
  subroutine search_many(num_field,target_fields,field_data,mask,i_search,j_search,tile,search_nums,localpet,latitude)
 
  use model_grid, only                  : i_target,j_target
