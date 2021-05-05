@@ -27,7 +27,7 @@ jobs:
         echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
         sudo apt update
         sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
-        echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
+        echo "source /opt/intel/oneapi/setvars.sh" >> ~/.profile
 
     - name: cache-netcdf
       id: cache-netcdf
@@ -166,5 +166,5 @@ jobs:
         mkdir build && cd build
         cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf' -DENABLE_DOCS=On
         make -j2
-        make test
+        ctest --rerun-failed --output-on-failure
 
