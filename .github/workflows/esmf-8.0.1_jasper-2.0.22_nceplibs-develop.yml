@@ -152,7 +152,7 @@ jobs:
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0" -DCMAKE_BUILD_TYPE=Debug
         make -j2
-        make test
+        ctest --rerun-failed --output-on-failure
         export PATH="/home/runner/.local/bin:$PATH"
         gcovr -r .. --html-details -o test-coverage.html
 
