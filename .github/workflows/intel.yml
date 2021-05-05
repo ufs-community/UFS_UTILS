@@ -110,7 +110,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: jasper-${{ runner.os }}-2.0.22
+        key: jasper-${{ runner.os }}-2.0.22-intel
 
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
@@ -136,7 +136,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/nceplibs
-        key: nceplibs-${{ runner.os }}-1.3.0
+        key: nceplibs-${{ runner.os }}-1.3.0-intel
 
     - name: build-nceplibs
       if: steps.cache-nceplibs.outputs.cache-hit != 'true'
