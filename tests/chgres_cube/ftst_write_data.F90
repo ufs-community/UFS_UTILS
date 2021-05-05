@@ -8,7 +8,7 @@ program ftst_write_data
   use atmosphere, only : nvcoord_target, vcoord_target, levp1_target
   implicit none
   integer :: my_rank, nprocs
-  character(*), parameter :: FILE_NAME = "./gfs_ctrl.nc"
+  character(*), parameter :: FILE_NAME = "gfs_ctrl.nc"
   integer :: ncid
   integer :: nvars, ngatts, ndims, unlimdimid, file_format
   integer, parameter :: NUM_VCOORD = 10, NUM_LEVP1 = 10
