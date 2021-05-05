@@ -22,7 +22,7 @@
 
  real, parameter :: EPSILON=0.00001
 
- integer :: field_num, ierr, i
+ integer :: field_num, ierr, i, j, ii, jj
  integer(esmf_kind_i8) :: mask_search1(idim,jdim)
  integer(esmf_kind_i8) :: mask_search2(idim,jdim)
  integer(esmf_kind_i8) :: mask_default(idim,jdim)
@@ -118,7 +118,15 @@
 
  call search (field_updated, mask_search1, idim, jdim, tile, field_num)
 
- if (abs(field_updated(2,2) - field_updated(1,1)) > EPSILON) stop 2
+ do j = 1, jdim
+ do i = 1, idim
+   if (i==2 .and.j==2) then ! Check the replaced value.
+     if (abs(field_updated(i,j) - field_updated(1,1)) > EPSILON) stop 2
+   else ! Ensure other values are unchanged.
+     if (abs(field_updated(i,j) - field_search1(i,j)) > EPSILON) stop 7
+   endif
+ enddo
+ enddo
 
  print*,'Run test 2 to check search logic.'
 
@@ -127,7 +135,15 @@
 
  call search (field_updated, mask_search2, idim, jdim, tile, field_num)
 
- if (abs(field_updated(2,2) - field_updated(3,3)) > EPSILON) stop 3
+ do j = 1, jdim
+ do i = 1, idim
+   if (i==3 .and.j==3) then ! Check the replaced value.
+     if (abs(field_updated(i,j) - field_updated(3,3)) > EPSILON) stop 12
+   else ! Ensure other values are unchanged.
+     if (abs(field_updated(i,j) - field_search2(i,j)) > EPSILON) stop 17
+   endif
+ enddo
+ enddo
 
  print*,'Run tests to check default logic.'
 
@@ -141,7 +157,15 @@
    call search (field_updated, mask_default, idim, jdim, tile, field_num, &
                 latitude, terrain_land, soilt_climo)
 
-   if (abs(field_updated(2,2)-default_field_val(i)) > EPSILON) stop 4
+   do jj = 1, jdim
+   do ii = 1, idim
+     if (ii==2 .and. jj==2) then ! Check the replaced value.
+       if (abs(field_updated(ii,jj)-default_field_val(i)) > EPSILON) stop 24
+     else ! Ensure other values are unchanged.
+       if (abs(field_updated(ii,jj) - field_default(ii,jj)) > EPSILON) stop 77
+     endif
+   enddo
+   enddo
 
  enddo
 
@@ -160,7 +184,15 @@
    call search (field_updated, mask_default, idim, jdim, tile, field_num, &
                 latitude, terrain_land, soilt_climo)
 
-   if (abs(field_updated(2,2)-default_sst_val(i)) > EPSILON) stop 5
+   do jj = 1, jdim
+   do ii = 1, idim
+     if (ii==2 .and. jj==2) then ! Check the replaced value.
+       if (abs(field_updated(ii,jj) - default_sst_val(i)) > EPSILON) stop 28
+     else ! Ensure other values are unchanged.
+       if (abs(field_updated(ii,jj) - field_default(ii,jj)) > EPSILON) stop 78
+     endif
+   enddo
+   enddo
 
  enddo
 
