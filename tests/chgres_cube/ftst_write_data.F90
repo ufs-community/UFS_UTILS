@@ -66,7 +66,7 @@ program ftst_write_data
         vcoord_target(j, i) = i + j
      end do
   end do
-  call write_fv3_atm_header_netcdf(0)
+  call write_fv3_atm_header_netcdf(my_rank)
 
   ! Now open the file with netCDF to check it.
   call handle_err(nf90_open(FILE_NAME, nf90_nowrite, ncid))
