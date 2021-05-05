@@ -39,7 +39,7 @@
 
  if (localpet /= 0) return
 
- outfile="./gfs_ctrl.nc"
+ outfile="gfs_ctrl.nc"
 
  print*,"- WRITE ATMOSPHERIC HEADER FILE: ", trim(outfile)
 
