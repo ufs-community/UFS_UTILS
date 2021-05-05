@@ -48,8 +48,6 @@
 
  private
 
- public :: check_soilt
-
 ! Fields associated with the atmospheric model.
 
  type(esmf_field), public              :: dzdt_input_grid       !< vert velocity
@@ -134,6 +132,8 @@
  public :: cleanup_input_sfc_data
  public :: read_input_nst_data
  public :: cleanup_input_nst_data
+ public :: check_soilt
+ public :: quicksort
  
  contains
 
@@ -4600,7 +4600,6 @@ else
  
    integer                               :: rc, varnum, iret, i, j,k
    integer                               :: ncid2d, varid, varsize
-   !integer, parameter                    :: icet_default = 265.0
 
    logical                               :: exist, rap_latlon
 
