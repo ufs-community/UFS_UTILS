@@ -28,7 +28,6 @@ jobs:
         sudo apt update
         sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
         echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
-        echo "source /opt/intel/oneapi/setvars.sh" >> ~/.profile
 
     - name: cache-netcdf
       id: cache-netcdf
@@ -45,9 +44,8 @@ jobs:
         tar -xzf hdf5-1.10.7.tar.gz
         pushd hdf5-1.10.7
         ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests
-        make
-        sudo make install
-        popd
+        make -j2
+        make install
            
     - name: build-netcdf-c
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
@@ -60,9 +58,8 @@ jobs:
         tar -xzf netcdf-c-4.7.4.tar.gz
         pushd netcdf-c-4.7.4
         ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities
-        make -j
-        sudo make install
-        popd
+        make -j2
+        make install
 
     - name: build-netcdf-fortran
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
@@ -77,9 +74,8 @@ jobs:
         tar -xzf v4.5.3.tar.gz
         pushd netcdf-fortran-4.5.3
         ./configure --prefix=${HOME}/netcdf
-        make -j
-        sudo make install
-        popd
+        make -j2
+        make install
 
     - name: cache-esmf
       id: cache-esmf
