@@ -50,7 +50,6 @@ jobs:
     - name: build-netcdf-c
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        set -x
         export CC=mpiicc
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
@@ -64,7 +63,7 @@ jobs:
     - name: build-netcdf-fortran
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        set -x
+        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${HOME}/netcdf/lib"
         export PATH="${HOME}/netcdf/bin:$PATH"
         export CC=mpiicc
         export FC=mpiifort
