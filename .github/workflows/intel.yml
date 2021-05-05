@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 defaults:
   run:
-    shell: bash -lieo pipefail {0}
+    shell: bash -leo pipefail {0}
 
 jobs:
   build:
