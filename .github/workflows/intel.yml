@@ -77,6 +77,11 @@ jobs:
         make -j2
         make install
 
+    - name: netcdf-check
+      if: ${{ failure() }}
+      run: |
+        cat /home/runner/work/UFS_UTILS/UFS_UTILS/netcdf-fortran-4.5.3/config.log
+
     - name: cache-esmf
       id: cache-esmf
       uses: actions/cache@v2
