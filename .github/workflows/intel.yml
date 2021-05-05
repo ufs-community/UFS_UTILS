@@ -75,12 +75,7 @@ jobs:
         pushd netcdf-fortran-4.5.3
         ./configure --prefix=${HOME}/netcdf
         make -j2
-        make install
-
-    - name: netcdf-check
-      if: ${{ failure() }}
-      run: |
-        cat /home/runner/work/UFS_UTILS/UFS_UTILS/netcdf-fortran-4.5.3/config.log
+        sudo env “PATH=$PATH” make install
 
     - name: cache-esmf
       id: cache-esmf
@@ -108,7 +103,7 @@ jobs:
         export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
         export ESMF_NETCDF_LIBPATH=${HOME}/netcdf/lib
         make -j2
-        make install
+        sudo env “PATH=$PATH” make install
 
     - name: cache-jasper
       id: cache-jasper
@@ -128,7 +123,7 @@ jobs:
         mkdir build-jasper && cd build-jasper
         cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
         make -j2
-        make install
+        sudo env “PATH=$PATH”make install
 
     - name: checkout-nceplibs
       uses: actions/checkout@v2
