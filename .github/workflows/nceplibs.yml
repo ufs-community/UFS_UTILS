@@ -58,7 +58,7 @@ jobs:
           make install
         elif [[ ${{ matrix.mpi_type }} == "openmpi" ]]; then
           wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.1.tar.gz
-          tar -xzf openmpi-4.1.1.tar.bz2
+          tar -xzf openmpi-4.1.1.tar.gz
           cd openmpi-4.1.1
           if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx
