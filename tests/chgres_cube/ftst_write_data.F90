@@ -68,28 +68,28 @@ program ftst_write_data
   end do
   call write_fv3_atm_header_netcdf(my_rank)
 
-  ! Now open the file with netCDF to check it.
-  call handle_err(nf90_open(FILE_NAME, nf90_nowrite, ncid))
+  ! ! Now open the file with netCDF to check it.
+  ! call handle_err(nf90_open(FILE_NAME, nf90_nowrite, ncid))
 
-  ! Check some stuff out.
-  call handle_err(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
-  if (ndims /= 2 .or. nvars /= 2 .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
-       file_format /= nf90_format_netcdf4_classic) stop 2
+  ! ! Check some stuff out.
+  ! call handle_err(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
+  ! if (ndims /= 2 .or. nvars /= 2 .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
+  !      file_format /= nf90_format_netcdf4_classic) stop 2
 
-  ! Check the data.
-  call handle_err(nf90_get_var(ncid, 2, data_in))
-  ! print *, vcoord_target
-  ! print *, "data_in"
-  ! print *, data_in
-  ! do i=1, nvcoord_target
-  !    do j=1, levp1_target
-  !       print *, j, i, vcoord_target(j, i), data_in(NUM_LEVP1 - j - 1, NUM_VCOORD - i - 1)
-  !       if (vcoord_target(j, i) .ne. data_in(NUM_LEVP1 - j - 1, NUM_VCOORD - i - 1)) stop 3
-  !    end do
-  ! end do
+  ! ! Check the data.
+  ! call handle_err(nf90_get_var(ncid, 2, data_in))
+  ! ! print *, vcoord_target
+  ! ! print *, "data_in"
+  ! ! print *, data_in
+  ! ! do i=1, nvcoord_target
+  ! !    do j=1, levp1_target
+  ! !       print *, j, i, vcoord_target(j, i), data_in(NUM_LEVP1 - j - 1, NUM_VCOORD - i - 1)
+  ! !       if (vcoord_target(j, i) .ne. data_in(NUM_LEVP1 - j - 1, NUM_VCOORD - i - 1)) stop 3
+  ! !    end do
+  ! ! end do
 
-  ! Close the file. 
-  call handle_err(nf90_close(ncid))
+  ! ! Close the file. 
+  ! call handle_err(nf90_close(ncid))
   
 
   deallocate(vcoord_target)
