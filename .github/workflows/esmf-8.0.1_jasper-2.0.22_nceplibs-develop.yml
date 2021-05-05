@@ -98,8 +98,8 @@ jobs:
       run: |
         set -x
         export PATH="${HOME}/netcdf/bin:$PATH"
-        export CC=mpiicc
-        export FC=mpiifort
+        export CC=mpicc
+        export FC=mpifort
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
         wget https://github.com/Unidata/netcdf-fortran/archive/v4.5.3.tar.gz &> /dev/null
