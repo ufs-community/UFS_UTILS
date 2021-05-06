@@ -220,7 +220,7 @@ jobs:
         gcovr -r .. --html-details -o test-coverage.html
 
     - uses: actions/upload-artifact@v2
-      if: ${{ matrix.os == 'ubuntu-20.04' }}
+      if: ${{ matrix.os == 'ubuntu-20.04' }} && ${{ matrix.nceplibs_version  == "1.3.0" }} && ${{ matrix.mpi_type == "mpich" }}
       with:
         name: test-coverage
         path: ufs_utils/build/*.html
