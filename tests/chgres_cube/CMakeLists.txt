@@ -83,5 +83,5 @@ target_link_libraries(ftst_convert_winds chgres_cube_lib)
 # Cause test to be run with MPI.
 add_mpi_test(chgres_cube-ftst_convert_winds
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_convert_winds
-  NUMPROCS 1
+  NUMPROCS 3
   TIMEOUT 60)
