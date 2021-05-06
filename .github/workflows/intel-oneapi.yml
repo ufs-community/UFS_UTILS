@@ -87,7 +87,6 @@ jobs:
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
-        set -x
         pushd ~
         export ESMF_DIR=~/esmf-ESMF_8_0_1
         wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null
@@ -115,8 +114,6 @@ jobs:
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
       run: |
-        set -x
-        pwd
         wget https://github.com/jasper-software/jasper/archive/version-2.0.25.tar.gz &> /dev/null
         tar zxf version-2.0.25.tar.gz
         cd jasper-version-2.0.25
@@ -141,7 +138,6 @@ jobs:
     - name: build-nceplibs
       if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
-        set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.3.0.tar.gz &> /dev/null
         tar zxf v1.3.0.tar.gz
@@ -155,13 +151,19 @@ jobs:
       with: 
         path: ufs_utils
 
-    - name: build-ufs-utils
+    - name: build
       run: |
-        set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
         cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf' -DENABLE_DOCS=On
         make -j2
-        ctest --rerun-failed --output-on-failure
+    
+    - name: test
+      cd ufs_utils/build
+      ctest --rerun-failed --output-on-failure
+
+    
+    - name: test-ufs-utils
+
 

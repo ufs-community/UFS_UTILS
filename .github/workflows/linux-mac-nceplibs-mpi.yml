@@ -202,7 +202,7 @@ jobs:
       with: 
         path: ufs_utils
 
-    - name: build-ufs-utils
+    - name: build
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
@@ -212,14 +212,20 @@ jobs:
         export FC=mpifort
         cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"
         make -j2
-        which mpirun
+
+    - name: test
+      run: |
+        cd ufs_utils/build
         # Oversubscribe for OpenMPI to run more processes than CPUs
         export OMPI_MCA_rmaps_base_oversubscribe=1
         ctest --rerun-failed --output-on-failure
         export PATH="/home/runner/.local/bin:$PATH"
         gcovr -r .. --html-details -o test-coverage.html
 
+
+
     - uses: actions/upload-artifact@v2
+      # Upload just one copy of test coverage
       if: ${{ matrix.os == 'ubuntu-20.04' }} && ${{ matrix.nceplibs_version  == '1.3.0' }} && ${{ matrix.mpi_type == 'mpich' }}
       with:
         name: test-coverage
