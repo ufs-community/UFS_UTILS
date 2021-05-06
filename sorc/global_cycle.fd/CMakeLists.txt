@@ -10,6 +10,8 @@ set(lib_src
     read_write_data.f90
     land_increments.f90)
 
+set(exe_src cycle.f90)
+
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
@@ -23,6 +25,8 @@ set(exe_name global_cycle)
 
 add_library(global_cycle_lib STATIC ${lib_src})
 add_executable(${exe_name} ${exe_src})
+
+add_dependencies(${exe_name} noah_lsm_routines)
 
 set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
 set_target_properties(global_cycle_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
