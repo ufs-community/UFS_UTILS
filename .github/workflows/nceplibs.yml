@@ -46,7 +46,7 @@ jobs:
         key: mpi-${{ matrix.mpi_type }}-${{ runner.os }}
 
     - name: build-mpi
-      if: steps.cache-mpich.outputs.cache-hit != 'true'
+      if: steps.cache-mpi.outputs.cache-hit != 'true'
       run: |
         if [[ ${{ matrix.mpi_type}} == "mpich" ]]; then
           wget http://www.mpich.org/static/downloads/3.3.2/mpich-3.3.2.tar.gz
