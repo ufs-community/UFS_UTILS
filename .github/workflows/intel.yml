@@ -147,7 +147,7 @@ jobs:
         tar zxf v1.3.0.tar.gz && ls -l
         cd NCEPLIBS-1.3.0
         mkdir build && cd build
-        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
+        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/netcdf' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
         make -j2
        
     - name: checkout-ufs-utils
@@ -161,7 +161,6 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
-        export NETCDF=${HOME}/netcdf
         cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf' -DENABLE_DOCS=On
         make -j2
         ctest --rerun-failed --output-on-failure
