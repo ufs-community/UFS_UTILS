@@ -121,7 +121,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf-${{ runner.os }}-${{ matrix.mpi_type }}-8.0.1
+        key: esmf-${{ runner.os }}-${{ matrix.mpi_type }}-${{ matrix.netcdf_version }}-8.0.1
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
@@ -160,7 +160,7 @@ jobs:
       run: |
         set -x
         pwd
-        wget https://github.com/jasper-software/jasper/archive/version-2.0.22.tar.gz &> /dev/null
+        wget https://github.com/jasper-software/jasper/archive/version-2.0.25.tar.gz &> /dev/null
         tar zxf version-2.0.25.tar.gz
         cd jasper-version-2.0.25
         mkdir build-jasper && cd build-jasper

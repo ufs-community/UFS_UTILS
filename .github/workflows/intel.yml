@@ -82,7 +82,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf-${{ runner.os }}-8.0.1-2-intel
+        key: esmf-${{ runner.os }}-8.0.1-intel
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
@@ -119,7 +119,7 @@ jobs:
         pwd
         wget https://github.com/jasper-software/jasper/archive/version-2.0.25.tar.gz &> /dev/null
         tar zxf version-2.0.25.tar.gz
-        cd jasper-version-2.0.22
+        cd jasper-version-2.0.25
         mkdir build-jasper && cd build-jasper
         cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
         make -j2
