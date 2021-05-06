@@ -403,7 +403,7 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, &
                frzn_bck = (stc_bck(i,l) .LT. tfreez ) 
                frzn_anl = (stc_anl(i,l) .LT. tfreez ) 
 
-               if (frzn_bck .EQ. frzn_anl) then 
+               if (frzn_bck .eqv. frzn_anl) then 
                     cycle 
                elseif (frzn_bck .and. .not. frzn_anl) then
                     n_thaw = n_thaw + 1 
