@@ -388,15 +388,15 @@ c-----------------------------
 ! 100     CONTINUE
 !         CLOSE(59)
 
-         IF (DEFINED_SOIL .GT. MAX_SOILTYP) THEN
+         IF (DEFINED_SOIL .GT. 30) THEN
             WRITE(0,*) 'Warning: DEFINED_SOIL too large in namelist'
             STOP 222
          ENDIF
-         IF (DEFINED_VEG .GT. MAX_VEGTYP) THEN
+         IF (DEFINED_VEG .GT. 30) THEN
             WRITE(0,*) 'Warning: DEFINED_VEG too large in namelist'
             STOP 222
          ENDIF
-         IF (DEFINED_SLOPE .GT. MAX_SLOPETYP) THEN
+         IF (DEFINED_SLOPE .GT. 30) THEN
             WRITE(0,*) 'Warning: DEFINED_SLOPE too large in namelist'
             STOP 222
          ENDIF
