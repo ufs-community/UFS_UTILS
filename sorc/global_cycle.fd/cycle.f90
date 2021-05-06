@@ -1912,6 +1912,15 @@ subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
 
  end subroutine get_tim_wei
 
+ !> Compute the freezing point of water as a function of salinity.
+ !!
+ !! Constants taken from Gill, 1982.
+ !!
+ !! @date 21 September 1994.
+ !! @author Robert Grumbine
+ !!
+ !! @param [in] salinity The salinity.
+ !! @return tfreez The freezing point of water.
  real function tfreez(salinity)
 
  implicit none
