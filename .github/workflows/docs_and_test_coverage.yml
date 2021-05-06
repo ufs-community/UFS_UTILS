@@ -76,7 +76,7 @@ jobs:
         key: nceplibs-${{ runner.os }}-1.3.0
 
     - name: build-nceplibs
-      if: steps.cache-nceplibs-develop.outputs.cache-hit != 'true'
+      if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
         wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.3.0.tar.gz &> /dev/null
         tar zxf v1.3.0.tar.gz

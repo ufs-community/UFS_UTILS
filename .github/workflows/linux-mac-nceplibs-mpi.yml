@@ -23,12 +23,10 @@ jobs:
         echo "$HOME/mpi/bin" >> $GITHUB_PATH
         if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
           sudo apt-get update
-          sudo apt-get install doxygen
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
         elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
             brew update
-          brew install doxygen
           brew install wget
           if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
             sudo ln -sf /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
