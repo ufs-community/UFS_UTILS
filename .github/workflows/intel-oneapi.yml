@@ -164,7 +164,4 @@ jobs:
         cd ufs_utils/build
         ctest --rerun-failed --output-on-failure
 
-    
-    - name: test-ufs-utils
-
 
