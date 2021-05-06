@@ -1,6 +1,8 @@
 name: linux-intel-oneapi
 on: [push, pull_request]
 
+# Use custom shell with -l so .bash_profile is sourced which loads intel/oneapi/setvars.sh
+# without having to do it in manually every step
 defaults:
   run:
     shell: bash -leo pipefail {0}
@@ -18,6 +20,7 @@ jobs:
 
     steps:
 
+    # See https://software.intel.com/content/www/us/en/develop/articles/oneapi-repo-instructions.html
     - name: install-intel
       run: |
         cd /tmp
@@ -28,7 +31,6 @@ jobs:
         sudo apt update
         sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
         echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
-        sudo apt-get install doxygen
 
     - name: cache-netcdf
       id: cache-netcdf
@@ -156,7 +158,7 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf' -DENABLE_DOCS=On
+        cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf'
         make -j2
     
     - name: test
