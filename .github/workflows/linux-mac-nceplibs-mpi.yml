@@ -1,6 +1,10 @@
 name: linux-mac-mpi-nceplibs
 on: [push, pull_request]
 
+defaults:
+  run:
+    shell: bash -exo pipefail {0}
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}

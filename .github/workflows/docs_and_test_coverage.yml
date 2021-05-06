@@ -1,6 +1,10 @@
 name: docs and test coverage
 on: [push, pull_request]
 
+defaults:
+  run:
+    shell: bash -exo pipefail {0}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -108,8 +112,6 @@ jobs:
         ctest --rerun-failed --output-on-failure
         export PATH="/home/runner/.local/bin:$PATH"
         gcovr -r .. --html-details -o test-coverage.html
-
-
 
     - uses: actions/upload-artifact@v2
       # Upload just one copy
