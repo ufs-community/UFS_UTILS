@@ -1,4 +1,4 @@
-name: linux-mac-nceplibs-mpi
+name: build-linux-mac-mpi-nceplibs
 on: [push, pull_request]
 
 jobs:

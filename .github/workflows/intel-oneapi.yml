@@ -1,4 +1,4 @@
-name: linux-intel-oneapi
+name: build-linux-intel-oneapi
 on: [push, pull_request]
 
 defaults:
