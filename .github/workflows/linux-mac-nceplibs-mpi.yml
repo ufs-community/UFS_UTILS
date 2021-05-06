@@ -210,7 +210,7 @@ jobs:
         export CC=mpicc
         export CXX=mpicxx
         export FC=mpifort
-        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"
+        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' -DCMAKE_BUILD_TYPE=Debug
         make -j2
 
     - name: test
@@ -220,13 +220,3 @@ jobs:
         export OMPI_MCA_rmaps_base_oversubscribe=1
         ctest --rerun-failed --output-on-failure
         export PATH="/home/runner/.local/bin:$PATH"
-        gcovr -r .. --html-details -o test-coverage.html
-
-
-
-    - uses: actions/upload-artifact@v2
-      # Upload just one copy of test coverage
-      if: ${{ matrix.os == 'ubuntu-20.04' }} && ${{ matrix.nceplibs_version  == '1.3.0' }} && ${{ matrix.mpi_type == 'mpich' }}
-      with:
-        name: test-coverage
-        path: ufs_utils/build/*.html
