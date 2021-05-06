@@ -8,10 +8,6 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      CC: gcc-9
-      FC: gfortran-9
-      CXX: g++-9
 
     steps:
 
