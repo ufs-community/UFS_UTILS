@@ -25,14 +25,12 @@ module use /work/00315/tg455890/stampede2/regional_fv3/NCEPLIBS_SRWv2.0/modules
 module load esmf/8.0.0
 
 module load w3nco
-module load w3emc
 module load sp
 module load ip
 module load bacio
 module load sigio
 module load sfcio
 module load nemsio
-module load gfsio
 module load g2
 module load wgrib2
 
