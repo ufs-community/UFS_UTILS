@@ -160,8 +160,9 @@ jobs:
         make -j2
     
     - name: test
-      cd ufs_utils/build
-      ctest --rerun-failed --output-on-failure
+      run: |
+        cd ufs_utils/build
+        ctest --rerun-failed --output-on-failure
 
     
     - name: test-ufs-utils
