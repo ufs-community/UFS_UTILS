@@ -13,6 +13,10 @@
 
 !> \ingroup Noah_LSM
 !! This subroutine initializes soil and vegetation.
+!! @param[in] me PE 
+!! @param[in] isot Soil type
+!! @param[in] ivet Vegetation type
+!! @param[in] nlunit Not used
       subroutine set_soilveg(me,isot,ivet,nlunit)
       use namelist_soilveg
       implicit none

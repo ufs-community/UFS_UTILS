@@ -19,13 +19,6 @@
 !! the soil temp at the midpoint of the layer. However, testing shows 
 !! the affects of these approximations is small (O(0.001 m3/m3)).
 !!
-!! @param[in] tkelv soil temperature
-!! @param[in] smc soil moisture (total)
-!! @param[in] sh2m liquid soil temperature input
-!! @param[in] smcmax soil porosity
-!! @param[in] bexp b exponent parameter
-!! @param[in] psis  saturated soil matric potential
-!! @param[out] liqwat revised liquid soil moisture
 
       subroutine frh2o                                                  &
 !  ---  inputs:
@@ -71,14 +64,12 @@
 !  ---  constant parameters:
 
 ! this block added for snippet
-      use physcons,   only : con_t0c
-      use machine,    only : kind_phys
 
       implicit none
 
-      real (kind=kind_phys), parameter :: gs2     = 9.81        !< con_g in snowpack, frh2o
-      real (kind=kind_phys), parameter :: tfreez  = con_t0c     !< con_t0c =273.16
-      real (kind=kind_phys), parameter :: lsubf   = 3.335e5     !< con_hfus=3.3358e+5
+      real, parameter :: gs2     = 9.81        !< con_g in snowpack, frh2o
+      real, parameter :: tfreez  = 2.7315e+2
+      real, parameter :: lsubf   = 3.335e5     !< con_hfus=3.3358e+5
 ! end block added for snippet
 
       real, parameter :: ck    = 8.0

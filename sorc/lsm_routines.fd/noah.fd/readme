@@ -5,10 +5,8 @@ The copied versions are from:  https://github.com/NCAR/ccpp-physics -b master, c
 (used this version, as is formatted for doxygen. output zero diff to version in the global_workflow). 
 
 Files directly copied:
-machine.F  
 namelist_soilveg.f  
-physcons.F90
-set_soilveg.f 
+set_soilveg.f   -> needed some changes for doxygen
 
 sflx_snippet.f is a snippet of the file sflx.F, with minor changes to compil, and to enable frh2o routine to be called externally.
 

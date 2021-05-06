@@ -6,8 +6,6 @@
 set(fortran_src
     set_soilveg.f
     namelist_soilveg.f
-    machine.F
-    physcons.F90
     sflx_snippet.f)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
