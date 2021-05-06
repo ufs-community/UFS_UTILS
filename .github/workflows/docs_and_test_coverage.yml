@@ -99,7 +99,7 @@ jobs:
         export CC=mpicc
         export CXX=mpicxx
         export FC=mpifort
-        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"
+        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DCMAKE_BUILD_TYPE=Debug -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"
         make -j2
 
     - name: test

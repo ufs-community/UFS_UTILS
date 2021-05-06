@@ -210,7 +210,7 @@ jobs:
         export CC=mpicc
         export CXX=mpicxx
         export FC=mpifort
-        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' -DCMAKE_BUILD_TYPE=Debug
+        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf'
         make -j2
 
     - name: test
