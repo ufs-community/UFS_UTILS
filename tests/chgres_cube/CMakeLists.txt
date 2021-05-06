@@ -76,3 +76,12 @@ target_link_libraries(ftst_quicksort
   chgres_cube_lib)
 
 add_test(NAME chgres_cube-ftst_quicksort COMMAND ftst_quicksort)
+
+add_executable(ftst_convert_winds ftst_convert_winds.F90)
+target_link_libraries(ftst_convert_winds chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_convert_winds
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_convert_winds
+  NUMPROCS 3
+  TIMEOUT 60)
