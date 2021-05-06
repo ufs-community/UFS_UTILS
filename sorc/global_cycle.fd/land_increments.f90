@@ -332,15 +332,19 @@ end subroutine calculate_soilsnowmask
 !! been done in sfc_sub). For Noah-MP, will call into the model code 
 !! to use same routines / code as in the model. 
 
-!> @param[in] lensfc Length of land state vector 
-!! @param[in] lsoil Number of soil layers 
+!> @param[in] update_type Code for variable being updated (options: 'stc' - soil temperature)
 !! @param[in] lsm Integer code for the LSM
 !! @param[in] isot Integer code for the soil type data set
 !! @param[in] ivegsrc Integer code for the vegetation type data set
+!! @param[in] lensfc Length of land state vector 
+!! @param[in] lsoil Number of soil layers 
+!! @param[in] rsoiltype rsoiltype Array of input soil types
 !! @param[in] smc_bck Background soil moisture states 
+!! @param[in] slc_bck Background liquid soil moisture states 
 !! @param[in] stc_bck Background soil temperature states 
-!! @param[inout] smcfcs Analysis soil moisture states 
-!! @param[inout] stcfcs Analysis soil temperature states 
+!! @param[inout] smc_anl Analysis soil moisture states 
+!! @param[inout] slc_anl Analysis liquid soil moisture states 
+!! @param[inout] stc_anl Analysis soil temperature states 
 !! @author Clara Draper @date April 2021
 
 subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, lsoil, rsoiltype, smc_bck, slc_bck,stc_bck, smc_anl, slc_anl, stc_anl)
