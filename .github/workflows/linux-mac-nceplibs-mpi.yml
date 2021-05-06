@@ -186,7 +186,7 @@ jobs:
         key: nceplibs-${{ matrix.nceplibs_version }}-${{ runner.os }}-${{ matrix.mpi_type }}-${{ hashFiles('nceplibs/hash.txt') }}
 
     - name: build-nceplibs
-      if: steps.cache-nceplibs-develop.outputs.cache-hit != 'true'
+      if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
         set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk
