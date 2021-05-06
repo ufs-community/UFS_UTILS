@@ -1,4 +1,4 @@
-name: intel
+name: linux-intel-oneapi
 on: [push, pull_request]
 
 defaults:
