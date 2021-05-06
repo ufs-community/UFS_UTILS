@@ -7,26 +7,30 @@
 include (LibMPI)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8 -fconvert=big-endian")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8")
 endif()
 
 include_directories(${PROJECT_SOURCE_DIR})
 
-# Copy necessary test files.
+# Copy necessary test files from the source data directory to the
+# build data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/config_fv3_tiled.nml)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled_warm_restart.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled_warm_restart.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_fv3_tiled_warm_restart.nml ${CMAKE_CURRENT_BINARY_DIR}/config_fv3_tiled_warm_restart.nml)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gaussian_nemsio.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/config_gaussian_nemsio.nml)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gfs_grib2.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gfs_grib2.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_gfs_grib2.nml ${CMAKE_CURRENT_BINARY_DIR}/config_gfs_grib2.nml)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_spectral_sigio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_spectral_sigio.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_spectral_sigio.nml ${CMAKE_CURRENT_BINARY_DIR}/config_spectral_sigio.nml)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/GFSphys_varmap.txt ${CMAKE_CURRENT_BINARY_DIR}/data/GFSphys_varmap.txt)
+# This one does not end up in the data directory.
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
 
 add_executable(ftst_utils ftst_utils.F90)
 add_test(NAME chgres_cube-ftst_utils COMMAND ftst_utils)
@@ -34,12 +38,15 @@ target_link_libraries(ftst_utils chgres_cube_lib)
 
 add_executable(ftst_program_setup ftst_program_setup.F90)
 target_link_libraries(ftst_program_setup chgres_cube_lib)
-
-# Cause test to be run with MPI.
 add_mpi_test(chgres_cube-ftst_program_setup
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_program_setup
-  NUMPROCS 4
-  TIMEOUT 60)
+  NUMPROCS 4 TIMEOUT 60)
+
+add_executable(ftst_program_setup_varmaps ftst_program_setup_varmaps.F90)
+target_link_libraries(ftst_program_setup_varmaps chgres_cube_lib)
+add_mpi_test(chgres_cube-ftst_program_setup_varmaps
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_program_setup_varmaps
+  NUMPROCS 4 TIMEOUT 60)
 
 add_executable(ftst_search_util ftst_search_util.F90)
 target_link_libraries(ftst_search_util chgres_cube_lib)
@@ -63,3 +70,9 @@ add_mpi_test(chgres_cube-ftst_sfc_input_data
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_sfc_input_data
   NUMPROCS 4
   TIMEOUT 60)
+
+add_executable(ftst_quicksort ftst_quicksort.F90)
+target_link_libraries(ftst_quicksort
+  chgres_cube_lib)
+
+add_test(NAME chgres_cube-ftst_quicksort COMMAND ftst_quicksort)
