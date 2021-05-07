@@ -1,16 +1,20 @@
-name: debug-docs-test_coverage
+name: netcdf-versions
 on: [push, pull_request]
 
 defaults:
   run:
     shell: bash -exo pipefail {0}
+  strategy:
+      matrix:
+        os: [ubuntu-latest]
+        compiler: [gcc-9]
+        netcdf_version: [4.7.4, 4.8.0]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-
     - name: install-dependencies
       run: |
           sudo apt-get update
@@ -18,8 +22,53 @@ jobs:
           sudo apt-get install doxygen
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
-          sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
-          python3 -m pip install gcovr
+
+    - name: cache-netcdf
+      id: cache-netcdf
+      uses: actions/cache@v2
+      with:
+        path: ~/netcdf
+        key: netcdf-c-${{ runner.os }}-mpich-${{ matrix.netcdf_version }}
+
+    - name: build-hdf5
+      if: steps.cache-netcdf.outputs.cache-hit != 'true'
+      run: |
+        export CC=mpicc
+        wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
+        tar -xzf hdf5-1.10.7.tar.gz
+        pushd hdf5-1.10.7
+        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests
+        make -j2
+        make install
+           
+    - name: build-netcdf-c
+      if: steps.cache-netcdf.outputs.cache-hit != 'true'
+      run: |
+        export CC=mpicc
+        export CPPFLAGS=-I${HOME}/netcdf/include
+        export LDFLAGS=-L${HOME}/netcdf/lib
+        wget https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-${{ matrix.netcdf_version }}.tar.gz &> /dev/null
+        tar -xzf netcdf-c-${{ matrix.netcdf_version }}.tar.gz
+        cd netcdf-c-${{ matrix.netcdf_version }}
+        ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities
+        make -j2
+        make install
+
+    - name: build-netcdf-fortran
+      if: steps.cache-netcdf.outputs.cache-hit != 'true'
+      run: |
+        set -x
+        export PATH="${HOME}/netcdf/bin:$PATH"
+        export CC=mpicc
+        export FC=mpifort
+        export CPPFLAGS=-I${HOME}/netcdf/include
+        export LDFLAGS=-L${HOME}/netcdf/lib
+        wget https://github.com/Unidata/netcdf-fortran/archive/v4.5.3.tar.gz &> /dev/null
+        tar -xzf v4.5.3.tar.gz
+        pushd netcdf-fortran-4.5.3
+        ./configure --prefix=${HOME}/netcdf
+        make -j2
+        make install
 
     - name: cache-esmf
       id: cache-esmf
@@ -43,8 +92,8 @@ jobs:
         export ESMF_COMPILER=gfortran
         export ESMF_INSTALL_PREFIX=~/esmf
         export ESMF_NETCDF=split
-        export ESMF_NETCDF_INCLUDE=/usr/include
-        export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
+        export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
+        export ESMF_NETCDF_LIBPATH=${HOME}/netcdf/lib
         make -j2
         make install
 
