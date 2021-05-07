@@ -4,14 +4,16 @@ on: [push, pull_request]
 defaults:
   run:
     shell: bash -exo pipefail {0}
-  strategy:
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
       matrix:
         os: [ubuntu-latest]
         netcdf_version: [4.8.0]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
 
     steps:
     - name: install-dependencies
