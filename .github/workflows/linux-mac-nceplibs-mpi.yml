@@ -221,4 +221,3 @@ jobs:
         # Oversubscribe for OpenMPI to run more processes than CPUs
         export OMPI_MCA_rmaps_base_oversubscribe=1
         ctest --rerun-failed --output-on-failure
-        export PATH="/home/runner/.local/bin:$PATH"
