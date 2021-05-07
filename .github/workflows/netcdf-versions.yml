@@ -7,7 +7,6 @@ defaults:
   strategy:
       matrix:
         os: [ubuntu-latest]
-        compiler: [gcc-9]
         netcdf_version: [4.8.0]
 
 jobs:
