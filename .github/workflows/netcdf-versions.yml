@@ -146,18 +146,10 @@ jobs:
         export CC=mpicc
         export CXX=mpicxx
         export FC=mpifort
-        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DCMAKE_BUILD_TYPE=Debug -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"
+        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DCMAKE_BUILD_TYPE=Debug 
         make -j2
 
     - name: test
       run: |
         cd ufs_utils/build
         ctest --rerun-failed --output-on-failure
-        export PATH="/home/runner/.local/bin:$PATH"
-        gcovr -r .. --html-details -o test-coverage.html
-
-    - uses: actions/upload-artifact@v2
-      if: ${{ matrix.os == 'ubuntu-20.04' }} && ${{ matrix.nceplibs_version  == '1.3.0' }} && ${{ matrix.mpi_type == 'mpich' }}
-      with:
-        name: test-coverage
-        path: ufs_utils/build/*.html
