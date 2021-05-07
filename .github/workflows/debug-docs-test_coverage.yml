@@ -6,7 +6,7 @@ defaults:
     shell: bash -exo pipefail {0}
 
 jobs:
-  build-and-test:
+  debug-build-and-test:
     runs-on: ubuntu-latest
 
     steps:

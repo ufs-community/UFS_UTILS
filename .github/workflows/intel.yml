@@ -8,7 +8,7 @@ defaults:
     shell: bash -leo pipefail {0}
 
 jobs:
-  build-and-test:
+  intel-build-and-test:
     runs-on: ${{ matrix.os }}
     env:
       CC: icc

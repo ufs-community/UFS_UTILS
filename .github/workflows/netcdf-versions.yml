@@ -6,7 +6,7 @@ defaults:
     shell: bash -exo pipefail {0}
     
 jobs:
-  build-and-test:
+  netcdf-build-and-test:
     runs-on: ubuntu-latest
 
     strategy:
