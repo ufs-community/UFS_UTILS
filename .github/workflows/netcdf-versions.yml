@@ -130,7 +130,7 @@ jobs:
         cd NCEPLIBS-1.3.0
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         mkdir build && cd build
-        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
+        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/netcdf' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
         make -j2
        
     - name: checkout-ufs-utils
@@ -146,7 +146,7 @@ jobs:
         export CC=mpicc
         export CXX=mpicxx
         export FC=mpifort
-        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DCMAKE_BUILD_TYPE=Debug 
+        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' -DCMAKE_BUILD_TYPE=Debug 
         make -j2
 
     - name: test
