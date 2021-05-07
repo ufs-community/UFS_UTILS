@@ -6,7 +6,7 @@ defaults:
     shell: bash -exo pipefail {0}
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ${{ matrix.os }}
     env:
       CC: gcc-9
