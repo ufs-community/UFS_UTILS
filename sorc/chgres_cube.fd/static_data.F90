@@ -114,7 +114,8 @@
  print*,"- CALL FieldCreate FOR TARGET GRID SOIL TYPE."
  soil_type_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
-                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=error)
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                     name="soil_type_target_grid", rc=error)
  if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", error)
 
