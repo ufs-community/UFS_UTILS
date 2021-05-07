@@ -75,7 +75,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/netcdf
-        key: netcdf-c-${{ runner.os }}-${{ matrix.mpi_type }}-${{ matrix.netcdf_version }}
+        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}-${{ matrix.mpi_type }}
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
@@ -122,7 +122,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf-${{ runner.os }}-${{ matrix.mpi_type }}-${{ matrix.netcdf_version }}-8.0.1
+        key: esmf--8.0.1-${{ runner.os }}-${{ matrix.mpi_type }}-netcdf-${{ matrix.netcdf_version }}
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
@@ -154,7 +154,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: jasper-${{ runner.os }}-2.0.25
+        key: jasper-2.0.25-${{ runner.os }}
 
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
