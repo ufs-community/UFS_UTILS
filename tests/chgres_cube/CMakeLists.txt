@@ -14,21 +14,23 @@ endif()
 
 include_directories(${PROJECT_SOURCE_DIR})
 
-# Copy necessary test files.
+# Copy necessary test files from the source data directory to the
+# build data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/config_fv3_tiled.nml)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled_warm_restart.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled_warm_restart.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_fv3_tiled_warm_restart.nml ${CMAKE_CURRENT_BINARY_DIR}/config_fv3_tiled_warm_restart.nml)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gaussian_nemsio.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/config_gaussian_nemsio.nml)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gfs_grib2.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gfs_grib2.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_gfs_grib2.nml ${CMAKE_CURRENT_BINARY_DIR}/config_gfs_grib2.nml)
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/config_spectral_sigio.nml ${CMAKE_CURRENT_BINARY_DIR}/config_spectral_sigio.nml)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_spectral_sigio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_spectral_sigio.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/GFSphys_varmap.txt ${CMAKE_CURRENT_BINARY_DIR}/data/GFSphys_varmap.txt)
+# This one does not end up in the data directory.
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
 
 add_executable(ftst_utils ftst_utils.F90)
 add_test(NAME chgres_cube-ftst_utils COMMAND ftst_utils)
@@ -74,3 +76,12 @@ target_link_libraries(ftst_quicksort
   chgres_cube_lib)
 
 add_test(NAME chgres_cube-ftst_quicksort COMMAND ftst_quicksort)
+
+add_executable(ftst_convert_winds ftst_convert_winds.F90)
+target_link_libraries(ftst_convert_winds chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_convert_winds
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_convert_winds
+  NUMPROCS 3
+  TIMEOUT 60)
