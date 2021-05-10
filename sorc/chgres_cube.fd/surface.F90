@@ -479,10 +479,11 @@
       call error_handler("IN FieldBundleGet", rc)  
  
  allocate(dozero(num_fields))
- dozero = (/.True., .True., .True., .True., .True., .True., .True./)  
+ dozero(:) = .True.  
 
- call regrid_many(bundle_all_input,bundle_all_target,num_fields,regrid_bl_no_mask,dozero,.False.,0)
+ call regrid_many(bundle_all_input,bundle_all_target,num_fields,regrid_bl_no_mask,dozero,.False.)
  deallocate(dozero) 
+
  call ESMF_FieldBundleDestroy(bundle_all_target,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleDestroy", rc)  
@@ -908,7 +909,7 @@
  u = ubound(unmapped_ptr)
  
  call regrid_many(bundle_seaice_input,bundle_seaice_target,num_fields,regrid_seaice,dozero, &
-                  .True.,u(1)-l(1), unmapped_ptr=unmapped_ptr, u=u(1), l=l(1) )
+                  .True.,unmapped_ptr=unmapped_ptr )
  deallocate(dozero)                 
  call ESMF_FieldBundleDestroy(bundle_seaice_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -982,7 +983,6 @@
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
 
-
  if (convert_nst) then
 
    call ESMF_FieldBundleAdd(bundle_water_target, (/c_d_target_grid,c_0_target_grid,d_conv_target_grid, &
@@ -1021,9 +1021,8 @@
    dozero(:) = .True.
  endif
 
- if(localpet==0) print*, "num unmapped = ",  u(1)-l(1)
  call regrid_many(bundle_water_input,bundle_water_target,num_fields,regrid_water,dozero, &
-                  .True.,u(1)-l(1), unmapped_ptr=unmapped_ptr, u=u(1), l=l(1),resetifd=.True.)
+                  .True.,  unmapped_ptr=unmapped_ptr, resetifd=.True.)
  deallocate(dozero)                 
  call ESMF_FieldBundleDestroy(bundle_water_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1118,15 +1117,14 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleGet", rc)
  
-
  allocate(search_nums(num_fields))
  allocate(dozero(num_fields))
 
  search_nums = (/223,66,65/)
  dozero=(/.True.,.False.,.False./)
-
+ 
  call regrid_many(bundle_allland_input,bundle_allland_target,num_fields,regrid_all_land,dozero, &
-                  .True.,u(1)-l(1), unmapped_ptr=unmapped_ptr, u=u(1), l=l(1))
+                  .True., unmapped_ptr=unmapped_ptr)
  deallocate(dozero)
  call ESMF_FieldBundleDestroy(bundle_allland_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1229,7 +1227,7 @@
  dozero(:) = .False.
 
  call regrid_many(bundle_landice_input,bundle_landice_target,num_fields,regrid_landice,dozero, &
-                  .True.,u(1)-l(1), unmapped_ptr=unmapped_ptr, u=u(1), l=l(1) )  
+                  .True., unmapped_ptr=unmapped_ptr )  
  deallocate(dozero)                                
  call ESMF_FieldBundleDestroy(bundle_landice_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1424,7 +1422,7 @@
  endif
 
  call regrid_many(bundle_nolandice_input,bundle_nolandice_target,num_fields,regrid_land,dozero, &
-                  .True.,u(1)-l(1), unmapped_ptr=unmapped_ptr, u=u(1), l=l(1))
+                  .True., unmapped_ptr=unmapped_ptr)
  deallocate(dozero)
  call ESMF_FieldBundleDestroy(bundle_nolandice_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -3797,13 +3795,15 @@ end subroutine replace_land_sfcparams
 !!
 !! @param[in] bundle_pre  ESMF fieldBundle on input grid
 !! @param[in] bundle_post  ESMF fieldBundle on target grid
-!! @param[inout] post_ptrs  Length num_field array of ptrs to ESMF target field pointers
 !! @param[in] num_field  Number of fields in target field pointer
 !! @param[inout] route  Route handle to saved ESMF regridding instructions
-
+!! @param[in]  dozero  Logical length num_field for whether field should be zeroed out before regridding
+!! @param[in]  doreplace Logical indicating wehther to set unmapped locations to missing value for searching and replacing later
+!! @param[inout]  unmapped_ptr (optional) Pointer to unmapped points from FieldRegrid
+!! @param[in]  resetifd (optional) Logical for whether to reset ifd (only for water where nst data is used)
 !! @author Larissa Reames, OU CIMMS/NOAA/NSSL
  subroutine regrid_many(bundle_pre,bundle_post, num_field,route,dozero,doreplace, &
-                        n_unmap, unmapped_ptr, u, l,resetifd)
+                        unmapped_ptr,resetifd)
  
  use esmf  
  use program_setup, only                : convert_nst
@@ -3811,13 +3811,12 @@ end subroutine replace_land_sfcparams
 
  implicit none
  
- integer, intent(in)                    :: num_field,n_unmap
+ integer, intent(in)                    :: num_field
  type(esmf_routehandle), intent(inout)  :: route
  type(esmf_fieldbundle), intent(in)     :: bundle_pre, bundle_post
  logical, intent(in)                    :: dozero(num_field), doreplace 
  logical, intent(in), optional       :: resetifd
- integer, intent(in), optional          :: u, l
- integer(esmf_kind_i4), intent(inout), optional  :: unmapped_ptr(n_unmap)
+ integer(esmf_kind_i4), intent(inout), optional  :: unmapped_ptr(:)
  
  type(esmf_field)                       :: field_pre,field_post
  real(esmf_kind_r8), pointer            :: tmp_ptr(:,:)
@@ -3825,11 +3824,16 @@ end subroutine replace_land_sfcparams
  type(realptr_3d),allocatable           :: ptr_3d(:)
  logical                                :: is2d(num_field)
  character(len=50)                      :: fname
- integer :: i, j, k, ij, ind_2d, ind_3d, rc, ndims,n2d, n3d,localpet
+ integer :: i, j, k, ij, ind_2d, ind_3d, rc, ndims,n2d, n3d,localpet, l(1), u(1)
  type(esmf_vm) :: vm
 
  ind_2d = 0
  ind_3d = 0
+
+ if(present(unmapped_ptr)) then
+   l = lbound(unmapped_ptr)
+   u = ubound(unmapped_ptr)
+ endif
  
  do i = 1, num_field
    call ESMF_FieldBundleGet(bundle_pre,i,field_pre,rc=rc)
@@ -3913,7 +3917,7 @@ end subroutine replace_land_sfcparams
      endif
    end do
  
-   do ij = l, u
+   do ij = l(1), u(1)
      call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
      do k = 1,n2d
        ptr_2d(k)%p(i,j) = -9999.9
@@ -3931,15 +3935,16 @@ end subroutine replace_land_sfcparams
 !!
 !! @param[in] num_field  Number of fields to process.
 !! @param[inout] bundle_target  ESMF FieldBundle holding target fields to search
-!! @param[inout] field_data  A real array of size i_target,j_target to temporarily hold data for searching
+!! @param[inout] field_data_2d  A real array of size i_target,j_target to temporarily hold data for searching
 !! @param[inout] mask  An integer array of size i_target,j_target that holds masked (0) and unmasked (1) 
 !!                     values indicating where to execute search (only at unmasked points).
 !! @param[in] tile  Current cubed sphere tile.
-!! @param[inout] search_nums  Array length num_field holding search field numbers corresponding to each field provided for searching.
-!! @param[in] localpet  ESMF local persistent execution thread.
-!! @param[in] (optional) latitude  A real array size i_target,j_target of latitude on the target grid 
-!! @param[in] (optional) terrain_land  A real array size i_target,j_target of terrain height (m) on the target grid 
-!! @param[in] (optional) soilt_climo  A real array size i_target,j_target of climatological soil type on the target grid 
+!! @param[inout]  search_nums  Array length num_field holding search field numbers corresponding to each field provided for searching.
+!! @param[in]  localpet  ESMF local persistent execution thread.
+!! @param[in]  latitude  (optional) A real array size i_target,j_target of latitude on the target grid 
+!! @param[in]  terrain_land  (optional) A real array size i_target,j_target of terrain height (m) on the target grid 
+!! @param[in]  soilt_climo  (optional) A real array size i_target,j_target of climatological soil type on the target grid 
+!! @param[in]  field_data_3d (optional) An empty real array of size i_target,j_target,lsoil_target to temporarily hold soil data for searching 
 !! @author Larissa Reames, OU CIMMS/NOAA/NSSL
  subroutine search_many(num_field,bundle_target,field_data_2d,mask, tile, &
                          search_nums,localpet,latitude,terrain_land,soilt_climo,&
@@ -4002,10 +4007,9 @@ end subroutine replace_land_sfcparams
              print*, "search5"
              field_data_2d = soilt_climo
            endif !check field value   
-         else
-           print*, "search6"
-           call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k))
          endif !sotype from target grid
+       else
+         call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k))
        endif !if present  
      endif !localpet
      call ESMF_FieldScatter(temp_field, field_data_2d, rootPet=0, tile=tile,rc=rc)
