@@ -163,6 +163,8 @@ jobs:
     
     - name: test
       run: |
+        cd ufs_utils/build/tests/chgres_cube/data
+        wget https://ftp.emc.ncep.noaa.gov/static_fields/public/UFS/ufs_utils/unit_tests/chgres_cube/gfs.v16.sfc.history.nc
         cd ufs_utils/build
         ctest --rerun-failed --output-on-failure
 

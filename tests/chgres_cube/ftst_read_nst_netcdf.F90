@@ -110,8 +110,8 @@
 
  input_type = "gaussian_netcdf"
  num_tiles_input_grid = 1
- data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/tests/chgres_cube/data/"
- sfc_files_input_grid(1) = "sfc.nc"
+ data_dir_input_grid = "data/"
+ sfc_files_input_grid(1) = "gfs.v16.sfc.history.nc"
 
  polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
  input_grid = ESMF_GridCreate1PeriDim(minIndex=(/1,1/), &
