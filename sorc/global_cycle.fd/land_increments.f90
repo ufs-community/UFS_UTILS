@@ -367,7 +367,8 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, &
 
     logical                       :: frzn_bck, frzn_anl
 
-    integer                       :: i, l, n_freeze, n_thaw, ierr, myrank, soiltype
+    integer                       :: i, l, n_freeze, n_thaw, ierr 
+    integer                       :: myrank, soiltype, iret
 
     real                          :: slc_new
 
