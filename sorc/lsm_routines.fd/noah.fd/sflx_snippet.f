@@ -1,7 +1,7 @@
-!> @file
-!! @brief Snippets of noah model from sflx.F needed for land DA updates 
-!! 
-!! @author Clara Draper
+C> @file
+C! @brief Snippets of noah model from sflx.F needed for land DA updates 
+C! 
+C! @author Clara Draper
       module sflx_snippet
 
       private
