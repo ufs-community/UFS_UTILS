@@ -85,3 +85,12 @@ add_mpi_test(chgres_cube-ftst_convert_winds
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_convert_winds
   NUMPROCS 3
   TIMEOUT 60)
+
+add_executable(ftst_surface_interp ftst_surface_interp.F90)
+target_link_libraries(ftst_surface_interp chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_surface_interp
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_interp
+  NUMPROCS 1
+  TIMEOUT 60)

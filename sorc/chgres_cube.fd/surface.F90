@@ -139,6 +139,9 @@
                                        !< latent heat of fusion
 
  public :: surface_driver
+ public :: create_surface_esmf_fields
+ public :: interp
+ public :: cleanup_target_sfc_data
 
  contains
 
@@ -596,7 +599,7 @@
                        farrayPtr=mask_input_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetItem", rc)
-    
+
   if (localpet == 0) then
    allocate(data_one_tile(i_target,j_target))
    allocate(data_one_tile_3d(i_target,j_target,lsoil_target))

@@ -135,6 +135,7 @@
  public :: check_soilt
  public :: quicksort
  public :: convert_winds
+ public :: init_sfc_esmf_fields
  
  contains
 
@@ -382,7 +383,7 @@
 
  integer                         :: rc
 
- call init_sfc_esmf_fields
+ call init_sfc_esmf_fields()
 
 !-------------------------------------------------------------------------------
 ! Read the tiled 'warm' restart files.
@@ -530,7 +531,10 @@
     call error_handler("IN FieldCreate", rc)
  
  end subroutine init_atm_esmf_fields
- 
+
+!> Create surface input grid esmf fields
+!!
+!! @author George Gayno NCEP/EMC 
  subroutine init_sfc_esmf_fields
  
  implicit none
@@ -733,7 +737,7 @@
     call error_handler("IN FieldCreate", rc)
  endif
  
- end subroutine init_atm_esmf_fields
+ end subroutine init_sfc_esmf_fields
 
 !> Read input atmospheric data from spectral gfs (old sigio format).
 !! 

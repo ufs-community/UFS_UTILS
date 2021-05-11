@@ -34,6 +34,7 @@
  type(esmf_field), public           :: veg_type_target_grid !< vegetation type
 
  public :: get_static_fields
+ public :: create_static_fields
  public :: cleanup_static_fields
 
  contains

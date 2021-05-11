@@ -15,24 +15,29 @@
                         latitude_input_grid, &
                         longitude_input_grid, &
                         i_target, j_target, &
-                        target_grid, &
+                        target_grid, num_tiles_target_grid, &
                         latitude_target_grid, &
                         longitude_target_grid, &
                         landmask_target_grid, &
-                        terrain_target_grid
+                        seamask_target_grid, &
+                        terrain_target_grid, &
+                        cleanup_input_target_grid_data
 
  use static_data, only: create_static_fields, &
                         soil_type_target_grid, &
-                        veg_type_target_grid
+                        veg_type_target_grid, &
+                        cleanup_static_fields
  
  use surface, only : create_surface_esmf_fields, &
-                     interp
+                     interp, &
+                     cleanup_target_sfc_data
  
  use input_data, only : init_sfc_esmf_fields, &
                         soil_type_input_grid, &
                         veg_type_input_grid, &
                         landsea_mask_input_grid, &
-                        terrain_input_grid
+                        terrain_input_grid, &
+                        cleanup_input_sfc_data
 
  implicit none
 
@@ -42,25 +47,33 @@
  integer, parameter           :: JPTS_TARGET=5
 
  real, parameter              :: EPSILON=0.0001
+ real(esmf_kind_r8)           :: deltalon
 
  integer                      :: clb(4), cub(4)
  integer                      :: ierr, localpet, npets, rc
  integer                      :: i, j, k
 
- real(esmf_kind_r8), allocatable  :: lati_input(:,:), lon_input(:,:)
- real(esmf_kind_i8), allocatable  :: mask_input(:,:), mask_target(:,:)
+ integer(esmf_kind_i8), pointer   :: mask_target_ptr(:,:)
+ real(esmf_kind_r8), allocatable  :: latitude(:,:), longitude(:,:)
+ real(esmf_kind_r8), allocatable  :: mask_input(:,:)
+ integer(esmf_kind_i8), allocatable  :: mask_target(:,:), &
+                                     seamask_target(:,:)
  real(esmf_kind_r8), allocatable  :: sotyp_input(:,:), & 
                                      vgtyp_input(:,:), &
                                      terrain_input(:,:)
  real(esmf_kind_r8), allocatable  :: sotyp_correct(:,:), & 
                                      sotyp_target(:,:), &
+                                     vgtyp_target(:,:), &
                                      vgtyp_correct(:,:), &
                                      terrain_correct(:,:)
-
+ real(esmf_kind_r8), pointer      :: lon_ptr(:,:), &
+                                     lat_ptr(:,:)
+ real(esmf_kind_r8), pointer      :: lon_corner_ptr(:,:), &
+                                     lat_corner_ptr(:,:)
  type(esmf_vm)                :: vm
  type(esmf_polekind_flag)     :: polekindflag(2)
 
- print*,"Starting test of convert_winds."
+ print*,"Starting test of surface interp."
 
  call mpi_init(ierr)
 
@@ -69,6 +82,9 @@
  call ESMF_VMGetGlobal(vm, rc=ierr)
 
  call ESMF_VMGet(vm, localPet=localpet, petCount=npets, rc=ierr)
+
+ sotyp_from_climo = .False.
+ vgtyp_from_climo = .False.
 
  i_input = IPTS_INPUT
  j_input = JPTS_INPUT
@@ -84,7 +100,91 @@
                                    regDecomp=(/1,npets/),  &
                                    indexflag=ESMF_INDEX_GLOBAL, rc=rc)
 
- latitude_input_grid = ESMF_FieldCreate(input_grid, &
+ allocate(latitude(i_input,j_input))
+ allocate(longitude(i_input,j_input))  
+                                
+ deltalon = 360.0_esmf_kind_r8 / real(i_input,kind=esmf_kind_r8)
+ do i = 1, i_input
+   longitude(i,:) = real((i-1),kind=esmf_kind_r8) * deltalon
+ enddo
+
+ do j = 1, j_input
+   latitude(:,j) = 90.0-real((j-1),kind=esmf_kind_r8) * deltalon
+ end do
+
+ call ESMF_GridAddCoord(input_grid, &
+                        staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridAddCoord", rc)
+
+ call ESMF_GridGetCoord(input_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CENTER, &
+                        coordDim=1, &
+                        farrayPtr=lon_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridGetCoord", rc)
+
+ print*,"- CALL GridGetCoord FOR INPUT GRID Y-COORD."
+ call ESMF_GridGetCoord(input_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CENTER, &
+                        coordDim=2, &
+                        computationalLBound=clb, &
+                        computationalUBound=cub, &
+                        farrayPtr=lat_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridGetCoord", rc)
+
+ do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     lon_ptr(i,j) = longitude(i,j)
+     if (lon_ptr(i,j) > 360.0_esmf_kind_r8) lon_ptr(i,j) = lon_ptr(i,j) - 360.0_esmf_kind_r8
+     lat_ptr(i,j) = latitude(i,j)
+   enddo
+ enddo
+ nullify(lat_ptr,lon_ptr)
+
+ print*,"- CALL GridAddCoord FOR INPUT GRID."
+ call ESMF_GridAddCoord(input_grid, &
+                        staggerloc=ESMF_STAGGERLOC_CORNER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridAddCoord", rc)
+
+  print*,"- CALL GridGetCoord FOR INPUT GRID X-COORD."
+ call ESMF_GridGetCoord(input_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CORNER, &
+                        coordDim=1, &
+                        farrayPtr=lon_corner_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridGetCoord", rc)
+
+ print*,"- CALL GridGetCoord FOR INPUT GRID Y-COORD."
+ call ESMF_GridGetCoord(input_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CORNER, &
+                        coordDim=2, &
+                        computationalLBound=clb, &
+                        computationalUBound=cub, &
+                        farrayPtr=lat_corner_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridGetCoord", rc)
+
+ do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     lon_corner_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
+     if (lon_corner_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_ptr(i,j) = & 
+                                                   lon_corner_ptr(i,j) - 360.0_esmf_kind_r8
+     if (j == 1) then
+       lat_corner_ptr(i,j) = -90.0_esmf_kind_r8
+       cycle
+     endif
+     if (j == j_input+1) then
+       lat_corner_ptr(i,j) = +90.0_esmf_kind_r8
+       cycle
+     endif
+     lat_corner_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
+   enddo
+ enddo
+
+  latitude_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="input_grid_latitude", &
@@ -95,52 +195,36 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="input_grid_longitude", &
                                    rc=rc)
- allocate(latitude(i_input,j_input))
- allocate(longitude(i_input,j_input))  
-                                
- deltalon = 360.0_esmf_kind_r8 / real(i_input,kind=esmf_kind_r8)
- do i = 1, i_input
-   longitude(i,:) = real((i-1),kind=esmf_kind_r8) * deltalon
- enddo
 
- allocate(slat(j_input))
- allocate(wlat(j_input))
- call splat(4, j_input, slat, wlat)
-
- do i = 1, j_input
-   latitude(:,i) = 90.0_esmf_kind_r8 - (acos(slat(i))* 180.0_esmf_kind_r8 / &
-                  (4.0_esmf_kind_r8*atan(1.0_esmf_kind_r8)))
- enddo   
- 
  call ESMF_FieldScatter(longitude_input_grid, longitude, rootpet=0, rc=rc)
- call ESMF_FieldScatter(latitude_input_grid, latitude, rootpet=0, rc=rc)     
+ call ESMF_FieldScatter(latitude_input_grid, latitude, rootpet=0, rc=rc)
+ deallocate(latitude, longitude) 
+ nullify(lat_corner_ptr, lon_corner_ptr)
+
+ call init_sfc_esmf_fields()
  
- deallocate(latitude,longitude)                           
+ allocate(mask_input(i_input,j_input))
+ allocate(sotyp_input(i_input,j_input))
+ allocate(vgtyp_input(i_input,j_input))
+ allocate(terrain_input(i_input,j_input))
  
- call init_esmf_sfc_fields
+ mask_input = reshape((/0,1,1,1, 0,1,1,1, 0,1,1,0/),(/i_input,j_input/))
+ sotyp_input = reshape((/0.,16.,4.,16.,  0.,3.,5.,16.,   0.,3.,5.,0./),(/i_input,j_input/))
+ vgtyp_input = reshape((/0.,15.,5.,15.,  0.,5.,6.,15.,  0.,5.,6.,0./),(/i_input,j_input/))
+ terrain_input = reshape((/0.,20.,20.,20.,  0.,20.,20.,20., 0.,20., 20.,0./),(/i_input,j_input/))
  
- allocate(mask(i_input,j_input))
- allocate(sotyp(i_input,j_input))
- allocate(vgtyp(i_input,j_input))
- allocate(terrain(i_input,j_input))
+ call ESMF_FieldScatter(landsea_mask_input_grid,mask_input,rootpet=0,rc=rc)
+ call ESMF_FieldScatter(soil_type_input_grid,sotyp_input,rootpet=0,rc=rc)
+ call ESMF_FieldScatter(veg_type_input_grid,vgtyp_input,rootpet=0,rc=rc)
+ call ESMF_FieldScatter(terrain_input_grid,terrain_input,rootpet=0,rc=rc)
  
- mask_input = reshape((/0,0,0, 1,1,1, 1,1,1, 1,1,0/),(/i_input,j_input/))
- sotyp_input = reshape((/0.,0.,0., 16.,3.,3., 4.,5.,5., 16.,16.,0./),(/i_input,j_input/))
- vgtyp_input = reshape((/0.,0.,0., 15.,5.,5., 5.,6., 6., 15.,15.,0./),(/i_input,j_input/))
- terrain = reshape((/0.,0.,0., 20.,20.,20., 20.,20.,20., 20.,20.,0/),(/i_input,j_input/))
- 
- call ESMF_FieldScatter(landsea_mask_input_grid,mask,rootpet=0,rc=rc)
- call ESMF_FieldScatter(sotyp_input_grid,sotyp,rootpet=0,rc=rc)
- call ESMF_FieldScatter(vgtyp_input_grid,vgtyp,rootpet=0,rc=rc)
- call ESMF_FieldScatter(terrain_input_grid,terrain,rootpet=0,rc=rc)
- 
- deallocate(mask,sotyp,vgtyp,terrain)
+ deallocate(mask_input,sotyp_input,vgtyp_input,terrain_input)
 
  i_target = IPTS_TARGET
  j_target = JPTS_TARGET
 
  polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
-
+ num_tiles_target_grid = 1
  target_grid = ESMF_GridCreate1PeriDim(minIndex=(/1,1/), &
                                    maxIndex=(/i_target,j_target/), &
                                    polekindflag=polekindflag, &
@@ -149,6 +233,86 @@
                                    coordSys=ESMF_COORDSYS_SPH_DEG, &
                                    regDecomp=(/1,npets/),  &
                                    indexflag=ESMF_INDEX_GLOBAL, rc=rc)
+
+ allocate(latitude(i_target,j_target))
+ allocate(longitude(i_target,j_target))  
+                                
+ deltalon = 360.0_esmf_kind_r8 / real(i_target,kind=esmf_kind_r8)
+ do i = 1, i_target
+   longitude(i,:) = real((i-1),kind=esmf_kind_r8) * deltalon
+ enddo
+
+ do i = 1, j_target
+   latitude(:,i) = 90.0_esmf_kind_r8 - real((i-1),kind=esmf_kind_r8) * deltalon
+ enddo            
+
+  call ESMF_GridAddCoord(target_grid, &
+                        staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridAddCoord", rc)
+
+ call ESMF_GridGetCoord(target_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CENTER, &
+                        coordDim=1, &
+                        farrayPtr=lon_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridGetCoord", rc)
+
+ call ESMF_GridGetCoord(target_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CENTER, &
+                        coordDim=2, &
+                        computationalLBound=clb, &
+                        computationalUBound=cub, &
+                        farrayPtr=lat_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridGetCoord", rc)
+
+ do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     lon_ptr(i,j) = longitude(i,j)
+     if (lon_ptr(i,j) > 360.0_esmf_kind_r8) lon_ptr(i,j) = lon_ptr(i,j) -360.0_esmf_kind_r8
+     lat_ptr(i,j) = latitude(i,j)
+   enddo
+ enddo
+ nullify(lat_ptr,lon_ptr)
+
+ call ESMF_GridAddCoord(target_grid, &
+                        staggerloc=ESMF_STAGGERLOC_CORNER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridAddCoord", rc)
+
+ call ESMF_GridGetCoord(target_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CORNER, &
+                        coordDim=1, &
+                        farrayPtr=lon_corner_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridGetCoord", rc)
+
+ call ESMF_GridGetCoord(target_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CORNER, &
+                        coordDim=2, &
+                        computationalLBound=clb, &
+                        computationalUBound=cub, &
+                        farrayPtr=lat_corner_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN GridGetCoord", rc)
+
+ do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     lon_corner_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
+     if (lon_corner_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_ptr(i,j) = &
+                                                   lon_corner_ptr(i,j) -360.0_esmf_kind_r8
+     if (j == 1) then
+       lat_corner_ptr(i,j) = -90.0_esmf_kind_r8
+       cycle
+     endif
+     if (j == j_target+1) then
+       lat_corner_ptr(i,j) = +90.0_esmf_kind_r8
+       cycle
+     endif
+     lat_corner_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
+   enddo
+ enddo
 
  latitude_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -161,59 +325,81 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="input_grid_longitude", &
                                    rc=rc)
- 
- allocate(latitude(i_target,j_target))
- allocate(longitude(i_target,j_target))  
-                                
- deltalon = 360.0_esmf_kind_r8 / real(i_input,kind=esmf_kind_r8)
- do i = 1, i_input
-   longitude(i,:) = real((i-1),kind=esmf_kind_r8) * deltalon
- enddo
 
- allocate(slat(j_input))
- allocate(wlat(j_input))
- call splat(4, j_input, slat, wlat)
+ call ESMF_FieldScatter(longitude_target_grid, longitude, rootpet=0, rc=rc)
+ call ESMF_FieldScatter(latitude_target_grid, latitude, rootpet=0, rc=rc)
+ deallocate(latitude, longitude)
+ nullify(lat_corner_ptr, lon_corner_ptr)
 
- do i = 1, j_input
-   latitude(:,i) = 90.0_esmf_kind_r8 - (acos(slat(i))* 180.0_esmf_kind_r8 / &
-                  (4.0_esmf_kind_r8*atan(1.0_esmf_kind_r8)))
- enddo            
- 
- call create_surface_esmf_fields
- call create_static_fields
- deallocate(mask_target, sotyp_target, sotyp_correct)
+  print*,"- CALL FieldCreate FOR TARGET GRID LANDMASK."
+ landmask_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_I8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="target_grid_landmask", rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate",rc)
 
- allocate(mask_target(i_target,j_target))
- allocate(sotyp_target(i_target,j_target))
- allocate(sotyp_correct(i_target,j_target))
+ print*,"- CALL FieldCreate FOR TARGET GRID SEAMASK."
+ seamask_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_I8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="target_grid_seamask", rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate", rc)
  
- mask_target = reshape((/0,0,0,0,0, 0,0,0,0,0, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1,  &
-                           1,1,1,1,1, 1,1,1,0,0, 1,1,1,0,0/),(/i_target,j_target/))
- !vgtyp_correct = reshape((/0.,0.,0.,0.,0., 0.,0.,0.,0.,0., 15., 15., 5., 5., 5., &
- !                        15., 15., 6., 5., 5., 15., 15., 15., 6., 6., 15., 15., 15., 6., 6., &
- !                        15., 15., 15., 0., 0., 15., 15., 15., 0., 0./),(/i_target,j_target/))
- sotyp_correct = reshape((/0.,0.,0.,0.,0., 0.,0.,0.,0.,0., 16., 16., 3., 3., 3., &
-                         16., 16., 5., 3., 3., 16., 16., 16., 5., 5., 16., 16., 16., 5., 5., &
-                         16., 16., 16., 0., 0., 16., 16., 16., 0., 0./),(/i_target,j_target/))
- 
- call ESMF_FieldScatter(landmask_target_grid,mask,rootpet=0,rc=rc)
- call ESMF_FieldScatter(sotyp_target_grid,sotyp,rootpet=0,rc=rc)
+ call create_surface_esmf_fields()
+ call create_static_fields()
 
+ if (localpet==0) then
+   allocate(mask_target(i_target,j_target))
+   allocate(seamask_target(i_target,j_target))
+   allocate(sotyp_target(i_target,j_target))
+   allocate(vgtyp_target(i_target,j_target))
+   allocate(sotyp_correct(i_target,j_target))
+ else
+   allocate(mask_target(0,0))
+   allocate(seamask_target(0,0))
+   allocate(sotyp_target(0,0))
+   allocate(vgtyp_target(0,0))
+   allocate(sotyp_correct(0,0))
+ endif
+
+ if (localpet == 0) then 
+   mask_target(:,1) = (/0,0,1,1,1,1,1,1/) 
+   mask_target(:,2) = (/0,0,1,1,1,1,1,1/)
+   mask_target(:,3) = (/0,0,1,1,1,1,1,1/)
+   mask_target(:,4) = (/0,0,1,1,1,1,0,0/)
+   mask_target(:,5) = (/0,0,1,1,1,1,0,0/)
+   !vgtyp_correct = reshape((/0., 0.,15.,15.,15.,15.,15.,15., &  
+   !                          0., 0.,15.,15.,15.,15.,15.,15., &
+   !                          0., 0., 5., 6., 6.,15.,15.,15., &
+   !                          0., 0., 5., 5., 6., 5., 0., 0., &
+   !                          0., 0., 5., 5., 5., 5., 0., 0. /),(/i_target,j_target/))
+   sotyp_correct = reshape((/0., 0.,16.,16.,16.,16.,16.,16., &
+                             0., 0.,16.,16.,16.,16.,16.,16., &
+                             0., 0., 3., 5., 5.,16.,16.,16., &
+                             0., 0., 3., 3., 5., 3., 0., 0., &
+                             0., 0., 3., 3., 3., 3., 0., 0. /),(/i_target,j_target/))
+   seamask_target = 0
+   where(mask_target .eq. 0) seamask_target = 1
+ endif
+
+ call ESMF_FieldScatter(landmask_target_grid,mask_target,rootpet=0,rc=rc)
+ call ESMF_FieldScatter(seamask_target_grid,seamask_target,rootpet=0,rc=rc)
 
 ! Call the routine to unit test.
  call interp(localpet)
 
-
- call ESMF_FieldGather(sotyp_target_grid, sotyp_target, rootPet=0, rc=rc)
-
+ call ESMF_FieldGather(soil_type_target_grid, sotyp_target, rootPet=0, rc=rc)
+ call ESMF_FieldGather(veg_type_target_grid,vgtyp_target,rootPet=0,rc=rc)
  if (localpet==0) then
- 
+
    print*,"Check results."
 
-   if any((abs(sotyp_target - sotyp_correct)) > EPSILON) then
+   if (any((abs(sotyp_target - sotyp_correct)) > EPSILON)) then
      print*,'TEST FAILED '
-     print*,'ARRAY SHOULD BE:', soityp_correct
-     print*,'ARRAY FROM TEST:', soilt_updated
+     print*,'ARRAY SHOULD BE:', sotyp_correct
+     print*,'ARRAY FROM TEST:', sotyp_target
      stop 2
    endif
    
@@ -223,9 +409,13 @@
 
  deallocate(mask_target, sotyp_target, sotyp_correct)
 
+ call cleanup_static_fields
+ call cleanup_input_sfc_data
+ call cleanup_target_sfc_data
+ call cleanup_input_target_grid_data
  call ESMF_finalize(endflag=ESMF_END_KEEPMPI)
  call mpi_finalize(rc)
 
  print*,"SUCCESS!"
 
- end program winds
+ end program surface_interp
