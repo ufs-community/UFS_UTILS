@@ -142,7 +142,7 @@
 
  input_type = "gaussian_netcdf"
  num_tiles_input_grid = 1
- data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/tests/chgres_cube/data/"
+ data_dir_input_grid = "data/"
  sfc_files_input_grid(1) = "gfs.v16.sfc2.history.nc"
 
  polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
