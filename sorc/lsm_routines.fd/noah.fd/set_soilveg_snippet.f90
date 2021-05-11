@@ -19,8 +19,11 @@ contains
 !! parameters needed in global_cycle/land_increment.f90 
 !! @param[in] isot Soil type
 !! @param[in] ivet Vegetation type
-!! @param[out] 
-subroutine set_soilveg(isot,ivet, maxsmc, bb, satpsi, iret)
+!! @param[out] maxsmc Maximum soil moisture for each soil type
+!! @param[out] bb B exponent for each soil type
+!! @param[out] satpsi Saturated matric potential for each soil type
+!! @param[out] iret Return integer
+subroutine set_soilveg(isot,ivet, maxsmc, bb, satpsi, iret) 
   implicit none
 
   integer, intent(in) :: isot,ivet

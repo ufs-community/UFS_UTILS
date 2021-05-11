@@ -1,7 +1,7 @@
-C> @file
-C! @brief Snippets of noah model from sflx.F needed for land DA updates 
-C! 
-C! @author Clara Draper
+!> @file
+!! @brief Snippets of noah model from sflx.F needed for land DA updates 
+!! 
+!! @author Clara Draper
       module sflx_snippet
 
       private
@@ -18,8 +18,13 @@ C! @author Clara Draper
 !! routine is being called using stc, but in sflx.F it is called using 
 !! the soil temp at the midpoint of the layer. However, testing shows 
 !! the affects of these approximations is small (O(0.001 m3/m3)).
-!!
-
+!! @param[in] tkelv Soil temperature in K
+!! @param[in] smc Soil moisture 
+!! @param[in] sh2o Input liquid soil moisture
+!! @param[in] smcmax Max soil moisture
+!! @param[in] bexp B exponent 
+!! @param[in] psis Saturated matric potential
+!! @param[out]  liqwat Output liquid soil moisture
       subroutine frh2o                                                  &
 !  ---  inputs:
      &     ( tkelv, smc, sh2o, smcmax, bexp, psis,                      &
@@ -77,8 +82,7 @@ C! @author Clara Draper
       real, parameter :: error = 0.005
 
 !  ---  inputs:
-      real, intent(in) :: tkelv, smc, sh2o, smcmax,   
-     &       bexp, psis
+      real, intent(in) :: tkelv, smc, sh2o, smcmax, bexp, psis
 
 !  ---  outputs:
       real, intent(out) :: liqwat
@@ -128,8 +132,8 @@ C! @author Clara Draper
           do while ( (nlog < 10) .and. (kcount == 0) )
             nlog = nlog + 1
 
-            df = alog( (psis*gs2/lsubf) * ( (1.0 + ck*swl)**2.0 )       &
-     &         * (smcmax/(smc-swl))**bx ) - alog(-(tkelv-tfreez)/tkelv)
+            df = alog( (psis*gs2/lsubf) * ( (1.0 + ck*swl)**2.0 )      &
+              * (smcmax/(smc-swl))**bx ) - alog(-(tkelv-tfreez)/tkelv)
 
             denom = 2.0*ck/(1.0 + ck*swl) + bx/(smc - swl)
             swlk  = swl - df/denom
@@ -162,8 +166,8 @@ C! @author Clara Draper
 !           apply physical bounds to flerchinger solution
 
         if (kcount == 0) then
-          fk = ( ( (lsubf/(gs2*(-psis)))                                &
-     &       * ((tkelv-tfreez)/tkelv) )**(-1/bx) ) * smcmax
+          fk = ( ( (lsubf/(gs2*(-psis)))                   & 
+            * ((tkelv-tfreez)/tkelv) )**(-1/bx) ) * smcmax
 
           fk = max( fk, 0.02 )
 
