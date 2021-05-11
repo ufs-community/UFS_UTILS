@@ -1,11 +1,15 @@
-!>\file namelist_soilveg.f
+C> @file
+C> @brief Module holding variables for Noah LSM
+C> @author ? 
 
-!>\ingroup Noah_LSM
       module namelist_soilveg
       implicit none
       save
 
-! hard-coded to pass compilation test
+!> Routine copied from noah LSM, small edits for Doxygen compilation 
+!! Clara Draper, May, 2021.
+
+! Draper, hard-coded to git testing
       !INTEGER, PARAMETER ::  MAX_SLOPETYP = 30 
       !INTEGER, PARAMETER :: MAX_SOILTYP = 30 
       !INTEGER, PARAMETER ::  MAX_VEGTYP = 30 

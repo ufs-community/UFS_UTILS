@@ -63,7 +63,7 @@
 !
 !  ---  constant parameters:
 
-! this block added for snippet
+! this block added from physconst.f for snippet
 
       implicit none
 

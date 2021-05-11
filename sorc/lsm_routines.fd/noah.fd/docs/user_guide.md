@@ -8,14 +8,14 @@ For the NOAH model, in the current code routines not labelled public/private, wi
 
 The files were checked out from https://github.com/NCAR/ccpp-physics -b master, commit 08b72bc1c23c48a823626d81f8e0a398685a35a3 (dated May, 2021).
 
-Files unchanged from checkout:
-machine.F
+Files used from the checkout:
 namelist_soilveg.f
+set_soilveg.f      
+sflx.F
+machine.F
 physcons.F90
-set_soilveg.f
 
-Files changed from checkout:
-sflx_snippet.f is a snippet of the file sflx.F, with minor changes to compile, and to enable the frh2o routine to be called externally.
+sflx_snippet.f is a snippet of the file sflx.F, with minor changes to compile, and to enable the frh2o routine to be called externally. Copied values from physcons and machine into sflx_snippet. 
 
 This document is part of the <a href="../index.html">UFS_UTILS documentation.</a> 
 

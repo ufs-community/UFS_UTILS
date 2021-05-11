@@ -1,6 +1,9 @@
-!> \file set_soilveg.f
+C> @file
+C> @brief Routine to set soil and veg params for Noah LSM
+C> @author ? 
 
-!> This module contains set_soilveg subroutine.
+!> Routine copied from noah LSM, small edits for Doxygen compilation 
+!! Clara Draper, May, 2021.
       module set_soilveg_mod
 
       implicit none
@@ -11,8 +14,7 @@
 
       contains
 
-!> \ingroup Noah_LSM
-!! This subroutine initializes soil and vegetation.
+!> This subroutine initializes soil and vegetation.
 !! @param[in] me PE 
 !! @param[in] isot Soil type
 !! @param[in] ivet Vegetation type
