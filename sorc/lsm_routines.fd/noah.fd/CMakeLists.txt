@@ -4,8 +4,7 @@
 # Clara Draper
 
 set(fortran_src
-    set_soilveg.f
-    namelist_soilveg.f
+    set_soilveg_snippet.f90
     sflx_snippet.f)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")

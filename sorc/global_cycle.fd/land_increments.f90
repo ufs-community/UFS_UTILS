@@ -352,8 +352,7 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, &
                  lsoil, rsoiltype, smc_bck, slc_bck,stc_bck, smc_anl, slc_anl, stc_anl)
 
     use mpi
-    use set_soilveg_mod, only: set_soilveg
-    use namelist_soilveg
+    use set_soilveg_snippet_mod, only: set_soilveg
     use sflx_snippet,    only: frh2o
 
     implicit none
@@ -374,7 +373,8 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, &
 
     integer, parameter            :: lsm_noah=1      !< flag for NOAH land surface model 
                                                      !! copied from GFS_typedefs.F90
-    real, parameter :: tfreez=273.16 !< con_t0c  in physcons
+    real, parameter               :: tfreez=273.16 !< con_t0c  in physcons
+    real, dimension(30)           :: maxsmc, bb, satpsi
 
     call mpi_comm_rank(mpi_comm_world, myrank, ierr) 
 
@@ -384,10 +384,11 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, &
     endif
        
     ! initialise soil properties
-    call set_soilveg(myrank, isot, ivegsrc, 0) ! myrank should be mype
-                                               ! (but is not used, so close enough) 
-                                               ! last argument also not used 
-                                               ! (intended as a unit to read in over-ride values)
+    call set_soilveg(isot, ivegsrc, maxsmc, bb, satpsi, iret) 
+    if (iret < 0) then
+        print *, 'FATAL ERROR: problem in set_soilveg'
+        call mpi_abort(mpi_comm_world, 10, ierr)
+    endif
 
     select case (update_type) 
 
