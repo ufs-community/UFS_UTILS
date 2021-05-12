@@ -29,7 +29,6 @@ UFS_UTILS Code managers: George Gayno, Kyle Gerheiser
 ## Prerequisites
 
 This package requires the following NCEPLIBS packages:
- - [NCEPLIBS-gfsio](https://github.com/NOAA-EMC/NCEPLIBS-gfsio)
  - [NCEPLIBS-sfcio](https://github.com/NOAA-EMC/NCEPLIBS-sfcio)
  - [NCEPLIBS-w3nco](https://github.com/NOAA-EMC/NCEPLIBS-w3nco)
  - [NCEPLIBS-bacio](https://github.com/NOAA-EMC/NCEPLIBS-bacio)
@@ -37,7 +36,6 @@ This package requires the following NCEPLIBS packages:
  - [NCEPLIBS-sigio](https://github.com/NOAA-EMC/NCEPLIBS-sigio)
  - [NCEPLIBS-sp](https://github.com/NOAA-EMC/NCEPLIBS-sp)
  - [NCEPLIBS-ip](https://github.com/NOAA-EMC/NCEPLIBS-ip)
- - [NCEPLIBS-w3emc](https://github.com/NOAA-EMC/NCEPLIBS-w3emc)
  - [NCEPLIBS-g2](https://github.com/NOAA-EMC/NCEPLIBS-g2)
  - [NCEPLIBS-wgrib2](https://github.com/NOAA-EMC/NCEPLIBS-wgrib2)
 
@@ -74,7 +72,7 @@ directory):
 - sfc_climo_gen
 - vcoord_gen
 
-The reg_tests directory contains the regression test code.
+The reg_tests directory contains the consistency test code.
 
 The fix directory is where we set links to directories containing
 large, static data files used by UFS_UTILS programs.
@@ -96,7 +94,7 @@ create a model grid on officially supported HPC platforms.
 
 The modulefiles directory contains modules loaded when building
 UFS_UTILS on supported HPC platforms.  They are also loaded at runtime
-by utility and regression test scripts.
+by utility and consistency test scripts.
 
 The docs directory contains the control file for the doxygen
 documentation build, as well as some markdown files which are part of

@@ -330,8 +330,27 @@
 
  end subroutine read_setup_namelist
 
-!> Reads the variable mapping table, which is
-!! required for initializing with GRIB2 data.
+!> Reads the variable mapping table, which is required for
+!! initializing with GRIB2 data.
+!!
+!! The varmap files has entries that look like this:
+!!
+!! <pre>dzdt dzdt set_to_fill 0 D</pre>
+!!
+!! These are the chgres_var_name, field_var_name, missing_var_method,
+!! missing_var_value, var_type.
+!!
+!! The missing_var_method is one of:
+!! * set_to_fill
+!! * skip
+!! * stop
+!!
+!! The var_type is one of:
+!! * T - tracer.
+!! * D - variables processed by atmosphere subroutine that are not
+!! tracers.
+!! * S - variables processed by surface subroutine that are not
+!! tracers.
 !!
 !! @author Larissa Reames
 !! @author Jeff Beck
@@ -467,6 +486,13 @@ end subroutine get_var_cond
 !! characteristics to the physical properties of soils</a>. Water
 !! Resour. Res.,20, 682–690.
 !!
+!! The parameters in this subroutine were copied from
+!! https://github.com/HelinWei-NOAA/ccpp-physics/blob/master/physics/set_soilveg.f
+!! values need to be kept in sync with set_soilveg.f.
+!!
+!! For more information about these parameters see
+!! https://github.com/HelinWei-NOAA/ccpp-physics/blob/master/physics/sflx.f.
+!!
 !! @param [in] localpet  ESMF local persistent execution thread
 !! @author George Gayno NCEP/EMC
  subroutine calc_soil_params_driver(localpet)
@@ -502,6 +528,7 @@ end subroutine get_var_cond
  real, allocatable         :: satpsi(:)
  real, allocatable         :: satdw(:)
 
+! using stasgo table
  data bb_statsgo /4.05, 4.26, 4.74, 5.33, 5.33, 5.25, &
             6.77, 8.72, 8.17, 10.73, 10.39, 11.55, &
             5.25, -9.99, 4.05, 4.26/

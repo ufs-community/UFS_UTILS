@@ -52,7 +52,7 @@ program ftst_program_setup
   if (my_rank .eq. 0) print*, "OK"
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_fv3_tiled..."
-  call read_setup_namelist("config_fv3_tiled.nml")
+  call read_setup_namelist("data/config_fv3_tiled.nml")
   if (cycle_mon .ne. 10 .or. cycle_day .ne. 3 .or. cycle_hour .ne. 0) stop 34
   if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 35
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 36
@@ -81,13 +81,67 @@ program ftst_program_setup
   enddo
   if (my_rank .eq. 0) print*, "OK"
 
-  ! Reading this namelist fails for some reason.
-  ! print*, "testing read_setup_namelist with config_fv3_tiled_warm_restart..."
-  ! call read_setup_namelist("config_fv3_tiled_warm_restart.nml")
-  ! print*, "OK"
+  print*, "testing read_setup_namelist with config_fv3_tiled_warm_restart..."
+  call read_setup_namelist("data/config_fv3_tiled_warm_restart.nml")
+  if (cycle_mon .ne. 7 .or. cycle_day .ne. 6 .or. cycle_hour .ne. 12) stop 64
+  if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 65
+  if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 66  
+  if (trim(mosaic_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/C96_mosaic.nc") stop 67
+  if (trim(fix_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/fix_sfc") stop 68
+  if (trim(orog_dir_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/") stop 69
+  if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt") stop 70
+  if (trim(mosaic_file_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C384/C384_mosaic.nc") stop 71
+  if (trim(orog_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C384/") stop 72
+  if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.restart") stop 73
+  if (trim(orog_files_target_grid(1)) .ne. "C96_oro_data.tile1.nc") stop 176
+  if (trim(orog_files_target_grid(2)) .ne. "C96_oro_data.tile2.nc") stop 176
+  if (trim(orog_files_target_grid(3)) .ne. "C96_oro_data.tile3.nc") stop 176
+  if (trim(orog_files_target_grid(4)) .ne. "C96_oro_data.tile4.nc") stop 176
+  if (trim(orog_files_target_grid(5)) .ne. "C96_oro_data.tile5.nc") stop 176
+  if (trim(orog_files_target_grid(6)) .ne. "C96_oro_data.tile6.nc") stop 176
+  if (trim(orog_files_input_grid(1)) .ne. "C384_oro_data.tile1.nc") stop 177
+  if (trim(orog_files_input_grid(2)) .ne. "C384_oro_data.tile2.nc") stop 177
+  if (trim(orog_files_input_grid(3)) .ne. "C384_oro_data.tile3.nc") stop 177
+  if (trim(orog_files_input_grid(4)) .ne. "C384_oro_data.tile4.nc") stop 177
+  if (trim(orog_files_input_grid(5)) .ne. "C384_oro_data.tile5.nc") stop 177
+  if (trim(orog_files_input_grid(6)) .ne. "C384_oro_data.tile6.nc") stop 177
+  if (trim(atm_core_files_input_grid(1)) .ne. "20190706.120000.fv_core.res.tile1.nc") stop 178
+  if (trim(atm_core_files_input_grid(2)) .ne. "20190706.120000.fv_core.res.tile2.nc") stop 178
+  if (trim(atm_core_files_input_grid(3)) .ne. "20190706.120000.fv_core.res.tile3.nc") stop 178
+  if (trim(atm_core_files_input_grid(4)) .ne. "20190706.120000.fv_core.res.tile4.nc") stop 178
+  if (trim(atm_core_files_input_grid(5)) .ne. "20190706.120000.fv_core.res.tile5.nc") stop 178
+  if (trim(atm_core_files_input_grid(6)) .ne. "20190706.120000.fv_core.res.tile6.nc") stop 178
+  if (trim(atm_tracer_files_input_grid(1)) .ne. "20190706.120000.fv_tracer.res.tile1.nc") stop 179
+  if (trim(atm_tracer_files_input_grid(2)) .ne. "20190706.120000.fv_tracer.res.tile2.nc") stop 179
+  if (trim(atm_tracer_files_input_grid(3)) .ne. "20190706.120000.fv_tracer.res.tile3.nc") stop 179
+  if (trim(atm_tracer_files_input_grid(4)) .ne. "20190706.120000.fv_tracer.res.tile4.nc") stop 179
+  if (trim(atm_tracer_files_input_grid(5)) .ne. "20190706.120000.fv_tracer.res.tile5.nc") stop 179
+  if (trim(atm_tracer_files_input_grid(6)) .ne. "20190706.120000.fv_tracer.res.tile6.nc") stop 179
+  if (trim(sfc_files_input_grid(1)) .ne. "20190706.120000.sfc_data.tile1.nc") stop 180
+  if (trim(sfc_files_input_grid(2)) .ne. "20190706.120000.sfc_data.tile2.nc") stop 180
+  if (trim(sfc_files_input_grid(3)) .ne. "20190706.120000.sfc_data.tile3.nc") stop 180
+  if (trim(sfc_files_input_grid(4)) .ne. "20190706.120000.sfc_data.tile4.nc") stop 180
+  if (trim(sfc_files_input_grid(5)) .ne. "20190706.120000.sfc_data.tile5.nc") stop 180
+  if (trim(sfc_files_input_grid(6)) .ne. "20190706.120000.sfc_data.tile6.nc") stop 180
+  if (trim(input_type) .ne. "restart") stop 89
+  if (num_tracers .ne. 7) stop 173
+  if (tracers(1) .ne. "sphum" .or. tracers(2) .ne. "liq_wat" .or. tracers(3) .ne. "o3mr" .or. &
+       tracers(4) .ne. "ice_wat" .or. tracers(5) .ne. "rainwat" .or. tracers(6) .ne. "snowwat" .or. &
+       tracers(7) .ne. "graupel") stop 174
+  if (tracers_input(1) .ne. "sphum" .or. tracers_input(2) .ne. "liq_wat" .or. &
+       tracers_input(3) .ne. "o3mr" .or. tracers_input(4) .ne. "ice_wat" .or. &
+       tracers_input(5) .ne. "rainwat" .or. tracers_input(6) .ne. "snowwat" .or. &
+       tracers_input(7) .ne. "graupel") stop 175
+
+  ! Reset the tracers array.
+  do is = 1, max_tracers
+     tracers(is) = "NULL"
+     tracers_input(is) = "NULL"
+  enddo
+  print*, "OK"
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_gaussian_nemsio..."
-  call read_setup_namelist("config_gaussian_nemsio.nml")
+  call read_setup_namelist("data/config_gaussian_nemsio.nml")
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 12) stop 74
   if (.not. convert_atm .or. .not. convert_sfc .or. .not. convert_nst) stop 75
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 76
@@ -121,7 +175,7 @@ program ftst_program_setup
   if (my_rank .eq. 0) print*, "OK"
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_spectral_sigio..."
-  call read_setup_namelist("config_spectral_sigio.nml")
+  call read_setup_namelist("data/config_spectral_sigio.nml")
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 17 .or. cycle_hour .ne. 0) stop 114
   if (.not. convert_atm .or. .not. convert_sfc .or. convert_nst) stop 115
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 116
@@ -151,7 +205,7 @@ program ftst_program_setup
   if (my_rank .eq. 0) print*, "OK"
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_gfs_grib2..."
-  call read_setup_namelist("config_gfs_grib2.nml")
+  call read_setup_namelist("data/config_gfs_grib2.nml")
   if (cycle_mon .ne. 11 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 0) stop 94
   if (.not. convert_atm .or. .not. convert_sfc .or. convert_nst) stop 95
   if (regional .ne. 0 .or. halo_bndy .ne. 0 .or. halo_blend .ne. 0) stop 96
