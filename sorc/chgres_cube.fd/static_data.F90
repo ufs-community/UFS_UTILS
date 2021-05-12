@@ -390,7 +390,10 @@
  error = nf90_close(ncid)
 
  end subroutine read_static_file
- 
+
+!> Create ESMF fields for static target grid data
+!!
+!! @author George Gayno NCEP/EMC
  subroutine create_static_fields
  
  use model_grid, only               : target_grid

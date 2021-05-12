@@ -37,6 +37,7 @@
                         veg_type_input_grid, &
                         landsea_mask_input_grid, &
                         terrain_input_grid, &
+                        t2m_input_grid, &
                         cleanup_input_sfc_data
 
  implicit none
@@ -60,7 +61,8 @@
                                      seamask_target(:,:)
  real(esmf_kind_r8), allocatable  :: sotyp_input(:,:), & 
                                      vgtyp_input(:,:), &
-                                     terrain_input(:,:)
+                                     terrain_input(:,:), &
+                                     t2m_input(:,:)
  real(esmf_kind_r8), allocatable  :: sotyp_correct(:,:), & 
                                      sotyp_target(:,:), &
                                      vgtyp_target(:,:), &
@@ -91,25 +93,20 @@
 
  polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
 
- input_grid = ESMF_GridCreate1PeriDim(minIndex=(/1,1/), &
-                                   maxIndex=(/i_input,j_input/), &
-                                   polekindflag=polekindflag, &
-                                   periodicDim=1, &
-                                   poleDim=2,  &
-                                   coordSys=ESMF_COORDSYS_SPH_DEG, &
-                                   regDecomp=(/1,npets/),  &
+ input_grid = ESMF_GridCreateNoPeriDim(maxIndex=(/i_input,j_input/), &
                                    indexflag=ESMF_INDEX_GLOBAL, rc=rc)
 
  allocate(latitude(i_input,j_input))
  allocate(longitude(i_input,j_input))  
                                 
- deltalon = 360.0_esmf_kind_r8 / real(i_input,kind=esmf_kind_r8)
+ !deltalon = 360.0_esmf_kind_r8 / real(i_input,kind=esmf_kind_r8)
+ deltalon = 2.0_esmf_kind_r8
  do i = 1, i_input
-   longitude(i,:) = real((i-1),kind=esmf_kind_r8) * deltalon
+   longitude(i,:) = 90+real((i-1),kind=esmf_kind_r8) * deltalon
  enddo
 
  do j = 1, j_input
-   latitude(:,j) = 90.0-real((j-1),kind=esmf_kind_r8) * deltalon
+   latitude(:,j) = 35.0-real((j-1),kind=esmf_kind_r8) * deltalon
  end do
 
  call ESMF_GridAddCoord(input_grid, &
@@ -169,18 +166,28 @@
 
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     lon_corner_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
-     if (lon_corner_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_ptr(i,j) = & 
-                                                   lon_corner_ptr(i,j) - 360.0_esmf_kind_r8
-     if (j == 1) then
-       lat_corner_ptr(i,j) = -90.0_esmf_kind_r8
-       cycle
+     !lon_corner_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
+     !if (lon_corner_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_ptr(i,j) = lon_corner_ptr(i,j) - 360.0_esmf_kind_r8
+     !if (j == 1) then
+     !  lat_corner_ptr(i,j) = -90.0_esmf_kind_r8
+     !  cycle
+     !endif
+     !if (j == j_input+1) then
+     !  lat_corner_ptr(i,j) = +90.0_esmf_kind_r8
+     !  cycle
+     !endif
+     !lat_corner_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
+     if (i == i_input+1) then
+       lon_corner_ptr(i,j) = longitude(i_input,1) + (0.5_esmf_kind_r8*deltalon)
+     else
+       lon_corner_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
      endif
+
      if (j == j_input+1) then
-       lat_corner_ptr(i,j) = +90.0_esmf_kind_r8
-       cycle
+       lat_corner_ptr(i,j) = latitude(1,j_input) +(0.5_esmf_kind_r8*deltalon)
+     else
+       lat_corner_ptr(i,j) = latitude(1,j) -(0.5_esmf_kind_r8*deltalon)
      endif
-     lat_corner_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
    enddo
  enddo
 
@@ -207,43 +214,42 @@
  allocate(sotyp_input(i_input,j_input))
  allocate(vgtyp_input(i_input,j_input))
  allocate(terrain_input(i_input,j_input))
+ allocate(t2m_input(i_input,j_input))
  
  mask_input = reshape((/0,1,1,1, 0,1,1,1, 0,1,1,0/),(/i_input,j_input/))
  sotyp_input = reshape((/0.,16.,4.,16.,  0.,3.,5.,16.,   0.,3.,5.,0./),(/i_input,j_input/))
  vgtyp_input = reshape((/0.,15.,5.,15.,  0.,5.,6.,15.,  0.,5.,6.,0./),(/i_input,j_input/))
  terrain_input = reshape((/0.,20.,20.,20.,  0.,20.,20.,20., 0.,20., 20.,0./),(/i_input,j_input/))
+ t2m_input(:,:) = 295.0
+ t2m_input(3,3) = 290.0
  
  call ESMF_FieldScatter(landsea_mask_input_grid,mask_input,rootpet=0,rc=rc)
  call ESMF_FieldScatter(soil_type_input_grid,sotyp_input,rootpet=0,rc=rc)
  call ESMF_FieldScatter(veg_type_input_grid,vgtyp_input,rootpet=0,rc=rc)
  call ESMF_FieldScatter(terrain_input_grid,terrain_input,rootpet=0,rc=rc)
+ call ESMF_FieldScatter(t2m_input_grid,t2m_input,rootpet=0,rc=rc)
  
  deallocate(mask_input,sotyp_input,vgtyp_input,terrain_input)
 
  i_target = IPTS_TARGET
  j_target = JPTS_TARGET
 
- polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
+ !polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
  num_tiles_target_grid = 1
- target_grid = ESMF_GridCreate1PeriDim(minIndex=(/1,1/), &
-                                   maxIndex=(/i_target,j_target/), &
-                                   polekindflag=polekindflag, &
-                                   periodicDim=1, &
-                                   poleDim=2,  &
-                                   coordSys=ESMF_COORDSYS_SPH_DEG, &
-                                   regDecomp=(/1,npets/),  &
+ target_grid = ESMF_GridCreate1PeriDim(maxIndex=(/i_target,j_target/), &
                                    indexflag=ESMF_INDEX_GLOBAL, rc=rc)
 
  allocate(latitude(i_target,j_target))
  allocate(longitude(i_target,j_target))  
                                 
  deltalon = 360.0_esmf_kind_r8 / real(i_target,kind=esmf_kind_r8)
+ deltalon = 0.5
  do i = 1, i_target
-   longitude(i,:) = real((i-1),kind=esmf_kind_r8) * deltalon
+   longitude(i,:) = 91.0_esmf_kind_r8 + real((i-1),kind=esmf_kind_r8) * deltalon
  enddo
 
  do i = 1, j_target
-   latitude(:,i) = 90.0_esmf_kind_r8 - real((i-1),kind=esmf_kind_r8) * deltalon
+   latitude(:,i) = 34.0_esmf_kind_r8 - real((i-1),kind=esmf_kind_r8) * deltalon
  enddo            
 
   call ESMF_GridAddCoord(target_grid, &
@@ -299,18 +305,29 @@
 
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     lon_corner_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
-     if (lon_corner_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_ptr(i,j) = &
-                                                   lon_corner_ptr(i,j) -360.0_esmf_kind_r8
-     if (j == 1) then
-       lat_corner_ptr(i,j) = -90.0_esmf_kind_r8
-       cycle
+     !lon_corner_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
+     !if (lon_corner_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_ptr(i,j) = &
+     !                                              lon_corner_ptr(i,j) -360.0_esmf_kind_r8
+     !if (j == 1) then
+     !  lat_corner_ptr(i,j) = -90.0_esmf_kind_r8
+     !  cycle
+     !endif
+     !if (j == j_target+1) then
+     !  lat_corner_ptr(i,j) = +90.0_esmf_kind_r8
+     !  cycle
+     !endif
+     !lat_corner_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
+     if (i == i_target+1) then
+       lon_corner_ptr(i,j) = longitude(i_input,1) + (0.5_esmf_kind_r8*deltalon)
+     else
+       lon_corner_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
      endif
+
      if (j == j_target+1) then
-       lat_corner_ptr(i,j) = +90.0_esmf_kind_r8
-       cycle
+       lat_corner_ptr(i,j) = latitude(1,j_input) +(0.5_esmf_kind_r8*deltalon)
+     else
+       lat_corner_ptr(i,j) = latitude(1,j) -(0.5_esmf_kind_r8*deltalon)
      endif
-     lat_corner_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
    enddo
  enddo
 
@@ -370,16 +387,16 @@
    mask_target(:,3) = (/0,0,1,1,1,1,1,1/)
    mask_target(:,4) = (/0,0,1,1,1,1,0,0/)
    mask_target(:,5) = (/0,0,1,1,1,1,0,0/)
-   !vgtyp_correct = reshape((/0., 0.,15.,15.,15.,15.,15.,15., &  
-   !                          0., 0.,15.,15.,15.,15.,15.,15., &
-   !                          0., 0., 5., 6., 6.,15.,15.,15., &
-   !                          0., 0., 5., 5., 6., 5., 0., 0., &
-   !                          0., 0., 5., 5., 5., 5., 0., 0. /),(/i_target,j_target/))
-   sotyp_correct = reshape((/0., 0.,16.,16.,16.,16.,16.,16., &
-                             0., 0.,16.,16.,16.,16.,16.,16., &
-                             0., 0., 3., 5., 5.,16.,16.,16., &
-                             0., 0., 3., 3., 5., 3., 0., 0., &
-                             0., 0., 3., 3., 3., 3., 0., 0. /),(/i_target,j_target/))
+   !vgtyp_correct = reshape((/0., 0., 5.,15.,15., 5., 6., 5., &  
+   !                          0., 0., 5., 5., 6., 6., 6., 6., &
+   !                          0., 0., 5., 5., 6., 6., 6., 6., &
+   !                          0., 0., 5., 5., 5., 6., 0., 0., &
+   !                          0., 0., 5., 5., 5., 6., 0., 0. /),(/i_target,j_target/))
+   sotyp_correct = reshape((/0., 0., 3.,16.,16., 4., 5., 4., &
+                             0., 0., 3., 3., 5., 5., 5., 5., &
+                             0., 0., 3., 3., 5., 5., 5., 5., &
+                             0., 0., 3., 3., 3., 5., 0., 0., &
+                             0., 0., 3., 3., 3., 5., 0., 0. /),(/i_target,j_target/))
    seamask_target = 0
    where(mask_target .eq. 0) seamask_target = 1
  endif
@@ -391,7 +408,6 @@
  call interp(localpet)
 
  call ESMF_FieldGather(soil_type_target_grid, sotyp_target, rootPet=0, rc=rc)
- call ESMF_FieldGather(veg_type_target_grid,vgtyp_target,rootPet=0,rc=rc)
  if (localpet==0) then
 
    print*,"Check results."
