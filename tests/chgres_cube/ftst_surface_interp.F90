@@ -88,6 +88,10 @@
  sotyp_from_climo = .False.
  vgtyp_from_climo = .False.
 
+ !--------------------------------------------------------------------!
+ !----------------- Setup Input Grid & Coordinates -------------------!
+ !--------------------------------------------------------------------!
+ 
  i_input = IPTS_INPUT
  j_input = JPTS_INPUT
 
@@ -98,8 +102,10 @@
 
  allocate(latitude(i_input,j_input))
  allocate(longitude(i_input,j_input))  
-                                
- !deltalon = 360.0_esmf_kind_r8 / real(i_input,kind=esmf_kind_r8)
+          
+ ! This is a random regional grid. I tried a global grid here but it had an unstable
+ ! solution.
+ 
  deltalon = 2.0_esmf_kind_r8
  do i = 1, i_input
    longitude(i,:) = 90+real((i-1),kind=esmf_kind_r8) * deltalon
@@ -139,7 +145,8 @@
    enddo
  enddo
  nullify(lat_ptr,lon_ptr)
-
+ 
+! Create staggered coordinates for conservative regridding
  print*,"- CALL GridAddCoord FOR INPUT GRID."
  call ESMF_GridAddCoord(input_grid, &
                         staggerloc=ESMF_STAGGERLOC_CORNER, rc=rc)
@@ -166,17 +173,6 @@
 
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     !lon_corner_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
-     !if (lon_corner_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_ptr(i,j) = lon_corner_ptr(i,j) - 360.0_esmf_kind_r8
-     !if (j == 1) then
-     !  lat_corner_ptr(i,j) = -90.0_esmf_kind_r8
-     !  cycle
-     !endif
-     !if (j == j_input+1) then
-     !  lat_corner_ptr(i,j) = +90.0_esmf_kind_r8
-     !  cycle
-     !endif
-     !lat_corner_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
      if (i == i_input+1) then
        lon_corner_ptr(i,j) = longitude(i_input,1) + (0.5_esmf_kind_r8*deltalon)
      else
@@ -208,41 +204,42 @@
  deallocate(latitude, longitude) 
  nullify(lat_corner_ptr, lon_corner_ptr)
 
+ !Initializes surface ESMF fields
  call init_sfc_esmf_fields()
  
+ !Allocate and fill in the fields on the input grid that we need to create soil type
  allocate(mask_input(i_input,j_input))
  allocate(sotyp_input(i_input,j_input))
  allocate(vgtyp_input(i_input,j_input))
  allocate(terrain_input(i_input,j_input))
- allocate(t2m_input(i_input,j_input))
  
  mask_input = reshape((/0,1,1,1, 0,1,1,1, 0,1,1,0/),(/i_input,j_input/))
  sotyp_input = reshape((/0.,16.,4.,16.,  0.,3.,5.,16.,   0.,3.,5.,0./),(/i_input,j_input/))
  vgtyp_input = reshape((/0.,15.,5.,15.,  0.,5.,6.,15.,  0.,5.,6.,0./),(/i_input,j_input/))
  terrain_input = reshape((/0.,20.,20.,20.,  0.,20.,20.,20., 0.,20., 20.,0./),(/i_input,j_input/))
- t2m_input(:,:) = 295.0
- t2m_input(3,3) = 290.0
  
  call ESMF_FieldScatter(landsea_mask_input_grid,mask_input,rootpet=0,rc=rc)
  call ESMF_FieldScatter(soil_type_input_grid,sotyp_input,rootpet=0,rc=rc)
  call ESMF_FieldScatter(veg_type_input_grid,vgtyp_input,rootpet=0,rc=rc)
  call ESMF_FieldScatter(terrain_input_grid,terrain_input,rootpet=0,rc=rc)
- call ESMF_FieldScatter(t2m_input_grid,t2m_input,rootpet=0,rc=rc)
  
  deallocate(mask_input,sotyp_input,vgtyp_input,terrain_input)
 
+ !--------------------------------------------------------------------!
+ !---------------- Setup Target Grid & Coordinates -------------------!
+ !--------------------------------------------------------------------!
+ 
  i_target = IPTS_TARGET
  j_target = JPTS_TARGET
 
- !polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
  num_tiles_target_grid = 1
  target_grid = ESMF_GridCreate1PeriDim(maxIndex=(/i_target,j_target/), &
                                    indexflag=ESMF_INDEX_GLOBAL, rc=rc)
 
  allocate(latitude(i_target,j_target))
  allocate(longitude(i_target,j_target))  
-                                
- deltalon = 360.0_esmf_kind_r8 / real(i_target,kind=esmf_kind_r8)
+
+ ! Regional grid that fits within the input regional grid but with smaller grid cells
  deltalon = 0.5
  do i = 1, i_target
    longitude(i,:) = 91.0_esmf_kind_r8 + real((i-1),kind=esmf_kind_r8) * deltalon
@@ -303,20 +300,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN GridGetCoord", rc)
 
+ ! Create staggered coordinates for regional target grid
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     !lon_corner_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
-     !if (lon_corner_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_ptr(i,j) = &
-     !                                              lon_corner_ptr(i,j) -360.0_esmf_kind_r8
-     !if (j == 1) then
-     !  lat_corner_ptr(i,j) = -90.0_esmf_kind_r8
-     !  cycle
-     !endif
-     !if (j == j_target+1) then
-     !  lat_corner_ptr(i,j) = +90.0_esmf_kind_r8
-     !  cycle
-     !endif
-     !lat_corner_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))
      if (i == i_target+1) then
        lon_corner_ptr(i,j) = longitude(i_input,1) + (0.5_esmf_kind_r8*deltalon)
      else
@@ -348,6 +334,9 @@
  deallocate(latitude, longitude)
  nullify(lat_corner_ptr, lon_corner_ptr)
 
+ ! Create the fields for the target grid land and seamask since these would normally
+ ! be created in the appropriate model_grid  subroutine
+ 
   print*,"- CALL FieldCreate FOR TARGET GRID LANDMASK."
  landmask_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_I8, &
@@ -364,10 +353,13 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldCreate", rc)
  
+ ! Initialize other surface fields on the target grid
  call create_surface_esmf_fields()
  call create_static_fields()
 
-
+ ! Create masks on the target grid and the correcte (expected) soil type on the target grid
+ ! to check against what returns from interp
+ 
  allocate(mask_target(i_target,j_target))
  allocate(seamask_target(i_target,j_target))
  allocate(sotyp_target(i_target,j_target))
@@ -391,7 +383,6 @@
                           0., 0., 3., 3., 3., 5., 0., 0. /),(/i_target,j_target/))
  seamask_target = 0
  where(mask_target .eq. 0) seamask_target = 1
-
 
  call ESMF_FieldScatter(landmask_target_grid,mask_target,rootpet=0,rc=rc)
  call ESMF_FieldScatter(seamask_target_grid,seamask_target,rootpet=0,rc=rc)
