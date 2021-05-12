@@ -22,6 +22,9 @@
                         lev_input, &
                         levp1_input, &
                         temp_input_grid, &
+                        dzdt_input_grid, &
+                        ps_input_grid, &
+                        pres_input_grid, &
                         tracers_input_grid
 
  use program_setup, only : input_type, &
@@ -45,12 +48,15 @@
  real :: expected_values_spfh(NUM_VALUES)
  real :: expected_values_clwmr(NUM_VALUES)
  real :: expected_values_o3mr(NUM_VALUES)
+ real :: expected_values_dzdt(NUM_VALUES)
+ real :: expected_values_ps(NUM_VALUES)
 
  type(esmf_polekind_flag)     :: polekindflag(2)
  type(esmf_vm)                :: vm
 
  integer :: n, rc, localpet, npets
 
+ real(esmf_kind_r8), allocatable  :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable  :: data3d_one_tile(:,:,:)
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
@@ -63,6 +69,8 @@
  data expected_values_spfh / 0.01331, 3.754e-06 /
  data expected_values_clwmr / 0.0, 0.0 /
  data expected_values_o3mr / 6.2015e-08, 2.632e-07 /
+ data expected_values_dzdt / 0.0, 0.0 /
+ data expected_values_ps / 100971.7454, 100941.9350 /
 
  print*,"Starting test of read_input_atm_netcdf_file."
 
@@ -126,14 +134,16 @@
  if (levp1_input /= EXPECTED_LEVP1_INPUT) stop 3
 
  allocate(data3d_one_tile(i_input,j_input,lev_input))
+ allocate(data_one_tile(i_input,j_input))
+
+ call ESMF_FieldGather(pres_input_grid, data3d_one_tile, rootPet=0, rc=rc)
+ print*,'3d pres ',data3d_one_tile(1,1,:)
 
  call ESMF_FieldGather(temp_input_grid, data3d_one_tile, rootPet=0, rc=rc)
-
  if (abs(data3d_one_tile(1,1,1) - expected_values_tmp(1)) > EPSILON) stop 4
  if (abs(data3d_one_tile(i_input,j_input,lev_input) - expected_values_tmp(2)) > EPSILON) stop 5
 
  do n = 1, num_tracers
-
    call ESMF_FieldGather(tracers_input_grid(n), data3d_one_tile, rootPet=0, rc=rc)
    print*,'tracer ',n,tracers_input(n),data3d_one_tile(1,1,1),data3d_one_tile(i_input,j_input,lev_input)
    if (trim(tracers_input(n)) == 'spfh') then
@@ -150,15 +160,20 @@
      if (abs(data3d_one_tile(1,1,1) - expected_values_o3mr(1)) > EPSILON_SMALL) stop 10
      if (abs(data3d_one_tile(i_input,j_input,lev_input) - expected_values_o3mr(2)) > EPSILON_SMALL) stop 11
    endif
-
-
-
-
  enddo
+
+ call ESMF_FieldGather(dzdt_input_grid, data3d_one_tile, rootPet=0, rc=rc)
+ if (abs(data3d_one_tile(1,1,1) - expected_values_dzdt(1)) > EPSILON) stop 14
+ if (abs(data3d_one_tile(i_input,j_input,lev_input) - expected_values_dzdt(2)) > EPSILON) stop 15
+
+ call ESMF_FieldGather(ps_input_grid, data_one_tile, rootPet=0, rc=rc)
+ print*,'ps ',data_one_tile(1,1),data_one_tile(i_input,j_input)
+ if (abs(data_one_tile(1,1) - expected_values_ps(1)) > EPSILON) stop 16
+ if (abs(data_one_tile(i_input,j_input) - expected_values_ps(2)) > EPSILON) stop 17
 
  print*,"OK"
 
- deallocate(latitude, longitude)
+ deallocate(latitude, longitude, data3d_one_tile, data_one_tile)
 
  call ESMF_finalize(endflag=ESMF_END_KEEPMPI)
 
