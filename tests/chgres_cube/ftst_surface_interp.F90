@@ -367,63 +367,53 @@
  call create_surface_esmf_fields()
  call create_static_fields()
 
- if (localpet==0) then
-   allocate(mask_target(i_target,j_target))
-   allocate(seamask_target(i_target,j_target))
-   allocate(sotyp_target(i_target,j_target))
-   allocate(vgtyp_target(i_target,j_target))
-   allocate(sotyp_correct(i_target,j_target))
- else
-   allocate(mask_target(0,0))
-   allocate(seamask_target(0,0))
-   allocate(sotyp_target(0,0))
-   allocate(vgtyp_target(0,0))
-   allocate(sotyp_correct(0,0))
- endif
 
- if (localpet == 0) then 
-   mask_target(:,1) = (/0,0,1,1,1,1,1,1/) 
-   mask_target(:,2) = (/0,0,1,1,1,1,1,1/)
-   mask_target(:,3) = (/0,0,1,1,1,1,1,1/)
-   mask_target(:,4) = (/0,0,1,1,1,1,0,0/)
-   mask_target(:,5) = (/0,0,1,1,1,1,0,0/)
-   !vgtyp_correct = reshape((/0., 0., 5.,15.,15., 5., 6., 5., &  
-   !                          0., 0., 5., 5., 6., 6., 6., 6., &
-   !                          0., 0., 5., 5., 6., 6., 6., 6., &
-   !                          0., 0., 5., 5., 5., 6., 0., 0., &
-   !                          0., 0., 5., 5., 5., 6., 0., 0. /),(/i_target,j_target/))
-   sotyp_correct = reshape((/0., 0., 3.,16.,16., 4., 5., 4., &
-                             0., 0., 3., 3., 5., 5., 5., 5., &
-                             0., 0., 3., 3., 5., 5., 5., 5., &
-                             0., 0., 3., 3., 3., 5., 0., 0., &
-                             0., 0., 3., 3., 3., 5., 0., 0. /),(/i_target,j_target/))
-   seamask_target = 0
-   where(mask_target .eq. 0) seamask_target = 1
- endif
+ allocate(mask_target(i_target,j_target))
+ allocate(seamask_target(i_target,j_target))
+ allocate(sotyp_target(i_target,j_target))
+ allocate(sotyp_correct(i_target,j_target))
+
+ mask_target(:,1) = (/0,0,1,1,1,1,1,1/) 
+ mask_target(:,2) = (/0,0,1,1,1,1,1,1/)
+ mask_target(:,3) = (/0,0,1,1,1,1,1,1/)
+ mask_target(:,4) = (/0,0,1,1,1,1,0,0/)
+ mask_target(:,5) = (/0,0,1,1,1,1,0,0/)
+   
+!vgtyp_correct = reshape((/0., 0., 5.,15.,15., 5., 6., 5., &  
+!                          0., 0., 5., 5., 6., 6., 6., 6., &
+!                          0., 0., 5., 5., 6., 6., 6., 6., &
+!                          0., 0., 5., 5., 5., 6., 0., 0., &
+!                          0., 0., 5., 5., 5., 6., 0., 0. /),(/i_target,j_target/))
+ sotyp_correct = reshape((/0., 0., 3.,16.,16., 4., 5., 4., &
+        				  0., 0., 3., 3., 5., 5., 5., 5., &
+                          0., 0., 3., 3., 5., 5., 5., 5., &
+                          0., 0., 3., 3., 3., 5., 0., 0., &
+                          0., 0., 3., 3., 3., 5., 0., 0. /),(/i_target,j_target/))
+ seamask_target = 0
+ where(mask_target .eq. 0) seamask_target = 1
+
 
  call ESMF_FieldScatter(landmask_target_grid,mask_target,rootpet=0,rc=rc)
  call ESMF_FieldScatter(seamask_target_grid,seamask_target,rootpet=0,rc=rc)
 
-! Call the routine to unit test.
+ !Call the routine to unit test.
  call interp(localpet)
 
  call ESMF_FieldGather(soil_type_target_grid, sotyp_target, rootPet=0, rc=rc)
- if (localpet==0) then
 
-   print*,"Check results."
+ print*,"Check results."
 
-   if (any((abs(sotyp_target - sotyp_correct)) > EPSILON)) then
-     print*,'TEST FAILED '
-     print*,'ARRAY SHOULD BE:', sotyp_correct
-     print*,'ARRAY FROM TEST:', sotyp_target
-     stop 2
-   endif
-   
+ if (any((abs(sotyp_target - sotyp_correct)) > EPSILON)) then
+   print*,'TEST FAILED '
+   print*,'ARRAY SHOULD BE:', sotyp_correct
+   print*,'ARRAY FROM TEST:', sotyp_target
+   stop 2
  endif
+
  
  print*,"OK"
 
- deallocate(mask_target, sotyp_target, sotyp_correct)
+ deallocate(mask_target, sotyp_target, sotyp_correct,seamask_target)
 
  call cleanup_static_fields
  call cleanup_input_sfc_data
