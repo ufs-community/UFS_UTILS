@@ -52,8 +52,10 @@
 #      x/y grid spacing - "delx/y", and halo.
 #   8) Set working directory - TEMP_DIR - and path to the repository
 #      clone - home_dir.
-#   9) Submit script: "sbatch $script".
-#  10) All files will be placed in "out_dir".
+#   9) Check settings for 'make_gsl_orog' and 'veg_type_src'
+#      below.
+#  10) Submit script: "sbatch $script".
+#  11) All files will be placed in "out_dir".
 #
 #-----------------------------------------------------------------------
 
@@ -68,12 +70,20 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export VEG_FILE=/work/noaa/da/ggayno/save/ufs_utils.git/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.05.nc
-
-export gtype=regional_esg           # 'uniform', 'stretch', 'nest', 
+export gtype=regional_esg      # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
+
 export make_gsl_orog=false     # 'true' if user needs 'oro' files for GSL
                                # orographic drag suite
+
+export veg_type_src="igbp.0.05" # For viirs-based vegetation type data, set to:
+                                # 1) "viirs.igbp.0.05" for global 5km data
+                                # 2) "viirs.igbp.0.1" for global 10km data
+                                # 3) "viirs.igbp.0.03" for global 3km data
+                                # 4) "viirs.igbp.conus.0.01" for regional 1km data
+
+#export VEG_FILE=/work/noaa/da/ggayno/save/ufs_utils.git/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.05.nc
+
 if [ $gtype = uniform ]; then
   export res=96
   export add_lake=false        # Add lake frac and depth to orography data.
