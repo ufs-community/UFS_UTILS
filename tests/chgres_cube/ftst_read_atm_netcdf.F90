@@ -25,6 +25,8 @@
                         dzdt_input_grid, &
                         ps_input_grid, &
                         pres_input_grid, &
+                        wind_input_grid, &
+                        terrain_input_grid, &
                         tracers_input_grid
 
  use program_setup, only : input_type, &
@@ -50,6 +52,11 @@
  real :: expected_values_o3mr(NUM_VALUES)
  real :: expected_values_dzdt(NUM_VALUES)
  real :: expected_values_ps(NUM_VALUES)
+ real :: expected_values_pres(NUM_VALUES)
+ real :: expected_values_xwind(NUM_VALUES)
+ real :: expected_values_ywind(NUM_VALUES)
+ real :: expected_values_zwind(NUM_VALUES)
+ real :: expected_values_terrain(NUM_VALUES)
 
  type(esmf_polekind_flag)     :: polekindflag(2)
  type(esmf_vm)                :: vm
@@ -58,12 +65,12 @@
 
  real(esmf_kind_r8), allocatable  :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable  :: data3d_one_tile(:,:,:)
+ real(esmf_kind_r8), allocatable  :: data4d_one_tile(:,:,:,:)
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
 
 ! The expected values were determined by the checking
 ! the input NetCDF history file using 'ncdump'.
-! The two values are the first and last corner points.
 
  data expected_values_tmp / 301.6022, 182.6277 /
  data expected_values_spfh / 0.01331, 3.754e-06 /
@@ -71,6 +78,11 @@
  data expected_values_o3mr / 6.2015e-08, 2.632e-07 /
  data expected_values_dzdt / 0.0, 0.0 /
  data expected_values_ps / 100971.7454, 100941.9350 /
+ data expected_values_pres / 100846.9917, 1.30199 /
+ data expected_values_xwind / -5.9860, -10.2035 /
+ data expected_values_ywind / -2.8133, -0.99638 /
+ data expected_values_zwind / 0.0, 0.0 /
+ data expected_values_terrain / 0.0, 0.0 /
 
  print*,"Starting test of read_input_atm_netcdf_file."
 
@@ -118,6 +130,9 @@
                                    name="input_grid_longitude", &
                                    rc=rc)
 
+! Using the north pole/greenwich simplifies the comparison
+! of u/v winds with the x/y/z components.
+
  allocate(latitude(i_input,j_input))
  allocate(longitude(i_input,j_input))
  latitude=90.0
@@ -133,11 +148,9 @@
  if (lev_input /= EXPECTED_LEV_INPUT) stop 2
  if (levp1_input /= EXPECTED_LEVP1_INPUT) stop 3
 
+ allocate(data4d_one_tile(i_input,j_input,lev_input,3))
  allocate(data3d_one_tile(i_input,j_input,lev_input))
  allocate(data_one_tile(i_input,j_input))
-
- call ESMF_FieldGather(pres_input_grid, data3d_one_tile, rootPet=0, rc=rc)
- print*,'3d pres ',data3d_one_tile(1,1,:)
 
  call ESMF_FieldGather(temp_input_grid, data3d_one_tile, rootPet=0, rc=rc)
  if (abs(data3d_one_tile(1,1,1) - expected_values_tmp(1)) > EPSILON) stop 4
@@ -145,10 +158,7 @@
 
  do n = 1, num_tracers
    call ESMF_FieldGather(tracers_input_grid(n), data3d_one_tile, rootPet=0, rc=rc)
-   print*,'tracer ',n,tracers_input(n),data3d_one_tile(1,1,1),data3d_one_tile(i_input,j_input,lev_input)
    if (trim(tracers_input(n)) == 'spfh') then
-     print*,'spfh ',data3d_one_tile(1,1,1),expected_values_spfh(1)
-     print*,'spfh ',data3d_one_tile(i_input,j_input,lev_input),expected_values_spfh(2)
      if (abs(data3d_one_tile(1,1,1) - expected_values_spfh(1)) > EPSILON) stop 6
      if (abs(data3d_one_tile(i_input,j_input,lev_input) - expected_values_spfh(2)) > EPSILON_SMALL) stop 7
    endif
@@ -167,13 +177,28 @@
  if (abs(data3d_one_tile(i_input,j_input,lev_input) - expected_values_dzdt(2)) > EPSILON) stop 15
 
  call ESMF_FieldGather(ps_input_grid, data_one_tile, rootPet=0, rc=rc)
- print*,'ps ',data_one_tile(1,1),data_one_tile(i_input,j_input)
  if (abs(data_one_tile(1,1) - expected_values_ps(1)) > EPSILON) stop 16
  if (abs(data_one_tile(i_input,j_input) - expected_values_ps(2)) > EPSILON) stop 17
 
+ call ESMF_FieldGather(pres_input_grid, data3d_one_tile, rootPet=0, rc=rc)
+ if (abs(data3d_one_tile(1,1,1) - expected_values_pres(1)) > EPSILON) stop 18
+ if (abs(data3d_one_tile(i_input,j_input,lev_input) - expected_values_pres(2)) > EPSILON) stop 19
+
+ call ESMF_FieldGather(wind_input_grid, data4d_one_tile, rootPet=0, rc=rc)
+ if (abs(data4d_one_tile(1,1,1,1) - expected_values_xwind(1)) > EPSILON) stop 20
+ if (abs(data4d_one_tile(1,1,lev_input,1) - expected_values_xwind(2)) > EPSILON) stop 21
+ if (abs(data4d_one_tile(1,1,1,2) - expected_values_ywind(1)) > EPSILON) stop 22
+ if (abs(data4d_one_tile(1,1,lev_input,2) - expected_values_ywind(2)) > EPSILON) stop 23
+ if (abs(data4d_one_tile(1,1,1,3) - expected_values_zwind(1)) > EPSILON) stop 24
+ if (abs(data4d_one_tile(1,1,lev_input,3) - expected_values_zwind(2)) > EPSILON) stop 25
+
+ call ESMF_FieldGather(terrain_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (abs(data_one_tile(1,1) - expected_values_terrain(1)) > EPSILON) stop 26
+ if (abs(data_one_tile(i_input,j_input) - expected_values_terrain(2)) > EPSILON) stop 27
+
  print*,"OK"
 
- deallocate(latitude, longitude, data3d_one_tile, data_one_tile)
+ deallocate(latitude, longitude, data4d_one_tile, data3d_one_tile, data_one_tile)
 
  call ESMF_finalize(endflag=ESMF_END_KEEPMPI)
 
