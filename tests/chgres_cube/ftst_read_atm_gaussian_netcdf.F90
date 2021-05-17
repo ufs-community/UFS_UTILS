@@ -1,6 +1,7 @@
- program readatmnetcdf
+ program read_atm_gaussian_netcdf
 
-! Unit test for the 
+! Unit test for the "read_input_atm_gaussian_netcdf_file"
+! routine of chgres_cube.
 !
 ! Reads a 9x9 version of the GFS v16 NetCDF atmospheric history 
 ! file. This smaller version of the full file was created
@@ -38,8 +39,9 @@
 
  implicit none
 
- integer, parameter :: EXPECTED_LEV_INPUT=127
- integer, parameter :: EXPECTED_LEVP1_INPUT=128
+ integer, parameter :: EXPECTED_LEV_INPUT=127 ! Number of vertical layers.
+ integer, parameter :: EXPECTED_LEVP1_INPUT=128 ! Number of vertical layer
+                                                ! interfaces.
 
  integer, parameter :: NUM_VALUES=2
 
@@ -72,19 +74,20 @@
 ! The expected values were determined by the checking
 ! the input NetCDF history file using 'ncdump'.
 
- data expected_values_tmp / 301.6022, 182.6277 /
- data expected_values_spfh / 0.01331, 3.754e-06 /
- data expected_values_clwmr / 0.0, 0.0 /
- data expected_values_o3mr / 6.2015e-08, 2.632e-07 /
- data expected_values_dzdt / 0.0, 0.0 /
- data expected_values_ps / 100971.7454, 100941.9350 /
- data expected_values_pres / 100846.9917, 1.30199 /
- data expected_values_xwind / -5.9860, -10.2035 /
- data expected_values_ywind / -2.8133, -0.99638 /
- data expected_values_zwind / 0.0, 0.0 /
- data expected_values_terrain / 0.0, 0.0 /
+ data expected_values_tmp / 301.6022, 182.6277 / ! Temperature
+ data expected_values_spfh / 0.01331, 3.754e-06 / ! Specific humidity
+ data expected_values_clwmr / 0.0, 0.0 / ! Cloud liquid water
+ data expected_values_o3mr / 6.2015e-08, 2.632e-07 / ! Ozone
+ data expected_values_dzdt / 0.0, 0.0 / ! Vertical velocity
+ data expected_values_ps / 100971.7454, 100941.9350 / ! Surface pressure in
+                                                      ! Pascals.
+ data expected_values_pres / 100846.9917, 1.30199 / ! 3-d pressure in Pascals.
+ data expected_values_xwind / -5.9860, -10.2035 / ! 'x' component wind
+ data expected_values_ywind / -2.8133, -0.99638 / ! 'y' component wind
+ data expected_values_zwind / 0.0, 0.0 / ! 'z' component wind
+ data expected_values_terrain / 0.0, 0.0 / ! Terrain height.
 
- print*,"Starting test of read_input_atm_netcdf_file."
+ print*,"Starting test of read_input_atm_gaussian_netcdf_file."
 
  call mpi_init(rc)
 
@@ -206,4 +209,4 @@
 
  print*,"SUCCESS!"
 
- end program readatmnetcdf
+ end program read_atm_gaussian_netcdf
