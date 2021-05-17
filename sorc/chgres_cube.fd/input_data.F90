@@ -56,6 +56,7 @@
  type(esmf_field), public              :: ps_input_grid         !< surface pressure
  type(esmf_field), public              :: terrain_input_grid    !< terrain height
  type(esmf_field), public              :: temp_input_grid       !< temperature
+
  type(esmf_field), public              :: u_input_grid          !< u/v wind at grid
  type(esmf_field), public              :: v_input_grid          !< box center
  type(esmf_field), public              :: wind_input_grid       !< 3-component wind
@@ -133,6 +134,7 @@
  public :: read_input_nst_data
  public :: cleanup_input_nst_data
  public :: check_soilt
+ public :: check_cnwat
  public :: quicksort
  public :: convert_winds
  public :: init_sfc_esmf_fields
@@ -5253,6 +5255,7 @@ if (localpet == 0) then
         dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     endif
+   call check_cnwat(dummy2d)
    dummy2d_8= real(dummy2d,esmf_kind_r8)
    print*,'cnwat ',maxval(dummy2d),minval(dummy2d)
  endif
@@ -6653,4 +6656,27 @@ subroutine check_soilt(soilt, landmask, skint)
     enddo
   enddo
 end subroutine check_soilt
+
+!> When using GEFS data, some points on the target grid have 
+!> unreasonable canpy moisture content, so zero out any 
+!> locations with unrealistic canopy moisture values (>0.5).
+!!
+!! @param cnwat [input] 2-dimensional canopy moisture content
+!! @author Larissa Reames CIMMS/NSSL
+
+subroutine check_cnwat(cnwat)
+  implicit none 
+  real(esmf_kind_r4), intent(inout) :: cnwat(i_input,j_input)
+  
+  real(esmf_kind_r4)                :: max_cnwat = 0.5
+  
+  integer :: i, j
+
+  do i = 1,i_input
+    do j = 1,j_input
+      if (cnwat(i,j) .gt. max_cnwat) cnwat(i,j) = 0.0_esmf_kind_r4
+    enddo
+  enddo
+end subroutine check_cnwat
+
  end module input_data
