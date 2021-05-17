@@ -4860,6 +4860,7 @@ end subroutine replace_land_sfcparams
  call ESMF_FieldDestroy(srflag_target_grid, rc=rc)
  call ESMF_FieldDestroy(skin_temp_target_grid, rc=rc)
  call ESMF_FieldDestroy(canopy_mc_target_grid, rc=rc)
+ call ESMF_FieldDestroy(lai_target_grid,rc=rc)
  call ESMF_FieldDestroy(z0_target_grid, rc=rc)
  call ESMF_FieldDestroy(terrain_from_input_grid, rc=rc)
  call ESMF_FieldDestroy(terrain_from_input_grid_land, rc=rc)

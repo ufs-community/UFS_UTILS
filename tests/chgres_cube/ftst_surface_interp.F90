@@ -205,7 +205,7 @@
  nullify(lat_corner_ptr, lon_corner_ptr)
 
  !Initializes surface ESMF fields
- call init_sfc_esmf_fields()
+ call init_sfc_esmf_fields
  
  !Allocate and fill in the fields on the input grid that we need to create soil type
  allocate(mask_input(i_input,j_input))
@@ -377,10 +377,10 @@
 !                          0., 0., 5., 5., 5., 6., 0., 0., &
 !                          0., 0., 5., 5., 5., 6., 0., 0. /),(/i_target,j_target/))
  sotyp_correct = reshape((/0., 0., 3.,16.,16., 4., 5., 4., &
-        				  0., 0., 3., 3., 5., 5., 5., 5., &
-                          0., 0., 3., 3., 5., 5., 5., 5., &
-                          0., 0., 3., 3., 3., 5., 0., 0., &
-                          0., 0., 3., 3., 3., 5., 0., 0. /),(/i_target,j_target/))
+                           0., 0., 3., 3., 5., 5., 5., 5., &
+                           0., 0., 3., 3., 5., 5., 5., 5., &
+                           0., 0., 3., 3., 3., 5., 0., 0., &
+                           0., 0., 3., 3., 3., 5., 0., 0. /),(/i_target,j_target/))
  seamask_target = 0
  where(mask_target .eq. 0) seamask_target = 1
 
