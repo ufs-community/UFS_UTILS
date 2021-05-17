@@ -242,11 +242,11 @@
  ! Regional grid that fits within the input regional grid but with smaller grid cells
  deltalon = 0.5
  do i = 1, i_target
-   longitude(i,:) = 91.0_esmf_kind_r8 + real((i-1),kind=esmf_kind_r8) * deltalon
+   longitude(i,:) = 91.1_esmf_kind_r8 + real((i-1),kind=esmf_kind_r8) * deltalon
  enddo
 
  do i = 1, j_target
-   latitude(:,i) = 34.0_esmf_kind_r8 - real((i-1),kind=esmf_kind_r8) * deltalon
+   latitude(:,i) = 34.1_esmf_kind_r8 - real((i-1),kind=esmf_kind_r8) * deltalon
  enddo            
 
   call ESMF_GridAddCoord(target_grid, &
@@ -371,16 +371,16 @@
  mask_target(:,4) = (/0,0,1,1,1,1,0,0/)
  mask_target(:,5) = (/0,0,1,1,1,1,0,0/)
    
-!vgtyp_correct = reshape((/0., 0., 5.,15.,15., 5., 6., 5., &  
+!vgtyp_correct = reshape((/0., 0., 15.,15.,5., 5., 5., 5., &  
 !                          0., 0., 5., 5., 6., 6., 6., 6., &
 !                          0., 0., 5., 5., 6., 6., 6., 6., &
-!                          0., 0., 5., 5., 5., 6., 0., 0., &
-!                          0., 0., 5., 5., 5., 6., 0., 0. /),(/i_target,j_target/))
- sotyp_correct = reshape((/0., 0., 3.,16.,16., 4., 5., 4., &
+!                          0., 0., 5., 5., 6., 6., 0., 0., &
+!                          0., 0., 5., 5., 6., 6., 0., 0. /),(/i_target,j_target/))
+ sotyp_correct = reshape((/0., 0.,16.,16., 4., 4., 4., 4., &
                            0., 0., 3., 3., 5., 5., 5., 5., &
                            0., 0., 3., 3., 5., 5., 5., 5., &
-                           0., 0., 3., 3., 3., 5., 0., 0., &
-                           0., 0., 3., 3., 3., 5., 0., 0. /),(/i_target,j_target/))
+                           0., 0., 3., 3., 5., 5., 0., 0., &
+                           0., 0., 3., 3., 5., 5., 0., 0. /),(/i_target,j_target/))
  seamask_target = 0
  where(mask_target .eq. 0) seamask_target = 1
 
