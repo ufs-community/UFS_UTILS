@@ -135,12 +135,6 @@
  endif
  deallocate(cnwat_bad,cnwat_updated,cnwat_correct)
 
- deallocate(mask)
- deallocate(skint)
- deallocate(soilt_bad)
- deallocate(soilt_updated)
- deallocate(soilt_correct)
-
  call mpi_finalize(ierr)
 
  print*,"SUCCESS!"
