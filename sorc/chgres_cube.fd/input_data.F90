@@ -48,8 +48,6 @@
 
  private
 
- public :: check_soilt, check_cnwat
-
 ! Fields associated with the atmospheric model.
 
  type(esmf_field), public              :: dzdt_input_grid       !< vert velocity
@@ -58,6 +56,7 @@
  type(esmf_field), public              :: ps_input_grid         !< surface pressure
  type(esmf_field), public              :: terrain_input_grid    !< terrain height
  type(esmf_field), public              :: temp_input_grid       !< temperature
+
  type(esmf_field), public              :: u_input_grid          !< u/v wind at grid
  type(esmf_field), public              :: v_input_grid          !< box center
  type(esmf_field), public              :: wind_input_grid       !< 3-component wind
@@ -72,7 +71,7 @@
                                                                 !< defined at this veg type.
                                                                 !< Default is igbp.
  integer, parameter              :: ICET_DEFAULT = 265.0    !< Default value of soil and skin
-                                                            !< temperature (K) over ice.
+                                                       e     !< temperature (K) over ice.
  type(esmf_field), public        :: canopy_mc_input_grid    !< canopy moist content
  type(esmf_field), public        :: f10m_input_grid         !< log((z0+10)*1/z0)
  type(esmf_field), public        :: ffmm_input_grid         !< log((z0+z1)*1/z0)
@@ -135,6 +134,7 @@
  public :: read_input_nst_data
  public :: cleanup_input_nst_data
  public :: check_soilt
+ public :: check_cnwat
  public :: quicksort
  public :: convert_winds
  
