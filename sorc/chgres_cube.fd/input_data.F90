@@ -71,7 +71,7 @@
                                                                 !< defined at this veg type.
                                                                 !< Default is igbp.
  integer, parameter              :: ICET_DEFAULT = 265.0    !< Default value of soil and skin
-                                                       e     !< temperature (K) over ice.
+                                                            !< temperature (K) over ice.
  type(esmf_field), public        :: canopy_mc_input_grid    !< canopy moist content
  type(esmf_field), public        :: f10m_input_grid         !< log((z0+10)*1/z0)
  type(esmf_field), public        :: ffmm_input_grid         !< log((z0+z1)*1/z0)
