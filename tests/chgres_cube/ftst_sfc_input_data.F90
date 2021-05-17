@@ -86,12 +86,6 @@
    stop 2
  endif
 
- deallocate(mask)
- deallocate(skint)
- deallocate(soilt_bad)
- deallocate(soilt_updated)
- deallocate(soilt_correct)
-
  call mpi_finalize(ierr)
 
  print*,"SUCCESS!"

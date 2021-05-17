@@ -1700,7 +1700,9 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  integer                                :: rc
 
  print*,"- DESTROY MODEL DATA."
-
+ 
+ call ESMF_FieldDestroy(latitude_input_grid,rc=rc)
+ call ESMF_FieldDestroy(longitude_input_grid,rc=rc)
  if (ESMF_FieldIsCreated(latitude_s_input_grid)) then
    call ESMF_FieldDestroy(latitude_s_input_grid, rc=rc)
  endif

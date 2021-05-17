@@ -17,6 +17,8 @@ include_directories(${PROJECT_SOURCE_DIR})
 # Copy necessary test files from the source data directory to the
 # build data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/files.txt ${CMAKE_CURRENT_BINARY_DIR}/data/files.txt)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled_warm_restart.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled_warm_restart.nml)
@@ -92,5 +94,22 @@ target_link_libraries(ftst_surface_interp chgres_cube_lib)
 # Cause test to be run with MPI.
 add_mpi_test(chgres_cube-ftst_surface_interp
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_interp
+  NUMPROCS 1
+  TIMEOUT 60)
+add_executable(ftst_read_sfc_netcdf ftst_read_sfc_netcdf.F90)
+target_link_libraries(ftst_read_sfc_netcdf chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_read_sfc_netcdf
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_sfc_netcdf
+  NUMPROCS 1
+  TIMEOUT 60)
+
+add_executable(ftst_read_nst_netcdf ftst_read_nst_netcdf.F90)
+target_link_libraries(ftst_read_nst_netcdf chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_read_nst_netcdf
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_nst_netcdf
   NUMPROCS 1
   TIMEOUT 60)
