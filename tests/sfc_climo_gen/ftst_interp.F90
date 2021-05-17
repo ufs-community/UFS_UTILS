@@ -1,8 +1,9 @@
  program test_input
 
 ! Unit test for the 'interp' routine. Read and 
-! interpolate a field of vegetation type and
-! check against known values.
+! interpolate a field of vegetation type to a 
+! small FV3 regional grid. Check the result against
+! known values.
 
  use program_setup, only : mosaic_file_mdl, &
                            orog_dir_mdl, &
@@ -31,13 +32,10 @@
 
  call mpi_init(rc)
 
- print*,"- INITIALIZE ESMF"
  call ESMF_Initialize(rc=rc)
 
- print*,"- CALL VMGetGlobal"
  call ESMF_VMGetGlobal(vm, rc=rc)
 
- print*,"- CALL VMGet"
  call ESMF_VMGet(vm, localPet=localpet, petCount=npets, rc=rc)
 
  mosaic_file_mdl="/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/tests/sfc_climo_gen/data/C450_mosaic.nc"
@@ -49,11 +47,15 @@
  input_vegetation_type_file="/scratch1/NCEPDEV/da/George.Gayno/noscrub/viirs.veg/vegetation_type.viirs.igbp.0.1.nc"
  call define_source_grid(localpet, npets, input_vegetation_type_file)
 
+! Call sfc_climo_gen routine.
+
  method=ESMF_REGRIDMETHOD_NEAREST_STOD
  call interp(localpet, method, input_vegetation_type_file)
 
  allocate(vegt_mdl_one_tile(i_mdl,j_mdl))
  call ESMF_FieldGather(vegt_field_mdl, vegt_mdl_one_tile, rootPet=0, tile=1, rc=rc)
+
+! Check against expected values.
 
  if (vegt_mdl_one_tile(10,24) /= expected_values(1)) stop 2
  if (vegt_mdl_one_tile(28,27) /= expected_values(2)) stop 3
