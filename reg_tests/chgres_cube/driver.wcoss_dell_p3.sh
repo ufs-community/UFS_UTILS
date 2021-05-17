@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run the chgres_cube regression tests on WCOSS-Dell.
+# Run the chgres_cube consistency tests on WCOSS-Dell.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
 # as appropriate.
@@ -27,9 +27,11 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export OUTDIR=/gpfs/dell1/stmp/$LOGNAME/chgres_reg_tests
-QUEUE="debug"
-PROJECT_CODE="GFS-DEV"
+export OUTDIR="${WORK_DIR:-/gpfs/dell1/stmp/$LOGNAME}"
+export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
+
+QUEUE="${QUEUE:-debug}"
+PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
@@ -41,7 +43,7 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 
 SUM_FILE=summary.log
 

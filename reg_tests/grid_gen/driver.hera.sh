@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run grid generation regression tests on Hera.
+# Run grid generation consistency tests on Hera.
 #
 # Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
@@ -30,15 +30,16 @@ module list
 
 set -x
 
-export WORK_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/reg_tests.grid
-QUEUE="batch"
-PROJECT_CODE="fv3-cpu"
+export WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
+QUEUE="${QUEUE:-batch}"
+PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 export home_dir=$PWD/../..
 export APRUN=time

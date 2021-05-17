@@ -86,7 +86,7 @@
 
  implicit none
 
- character*150           :: fngrib
+ character*256           :: fngrib
 
  integer                 :: i, j, ij, jj
  integer                 :: ii, iii, istart, iend, imid

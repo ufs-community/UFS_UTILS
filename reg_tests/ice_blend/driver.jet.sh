@@ -2,14 +2,14 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run ice_blend regression test on Jet.
+# Run ice_blend consistency test on Jet.
 #
 # Set $DATA to your working directory.  Set the project code (SBATCH -A)
 # and queue (SBATCH -q) as appropriate.
 #
 # Invoke the script as follows:  sbatch $script
 #
-# Log output is placed in regression.log.  A summary is
+# Log output is placed in consistency.log.  A summary is
 # placed in summary.log
 #
 # The test fails when its output does not match the baseline file
@@ -23,8 +23,8 @@
 #SBATCH --time 0:01
 #SBATCH --account=emcda
 #SBATCH --job-name=ice_blnd
-#SBATCH -o regression.log
-#SBATCH -e regression.log
+#SBATCH -o consistency.log
+#SBATCH -e consistency.log
 
 set -x
 
@@ -33,7 +33,8 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export DATA="/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_test.ice_blend"
+export DATA="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export DATA="${DATA}/reg-tests/ice-blend"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.

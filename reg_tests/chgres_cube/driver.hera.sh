@@ -2,14 +2,14 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run the chgres_cube regression tests on Hera.
+# Run the chgres_cube consistency tests on Hera.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
 # type "account_params".
 #
 # Invoke the script with no arguments.  A series of daily-chained
-# regression tests will be submitted.  To check the queue, type:
+# consistency tests will be submitted.  To check the queue, type:
 # "squeue -u USERNAME".
 #
 # The run output will be stored in OUTDIR.  Log output from the suite
@@ -31,9 +31,11 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-export OUTDIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/chgres_reg_tests
-PROJECT_CODE="fv3-cpu"
-QUEUE="batch"
+export OUTDIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
+
+PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+QUEUE="${QUEUE:-batch}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
@@ -45,7 +47,7 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE $SUM_FILE
 
