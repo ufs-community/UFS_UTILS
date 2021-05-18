@@ -38,13 +38,13 @@
 
  call ESMF_VMGet(vm, localPet=localpet, petCount=npets, rc=rc)
 
- mosaic_file_mdl="/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/tests/sfc_climo_gen/data/C450_mosaic.nc"
- orog_dir_mdl="/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/tests/sfc_climo_gen/data"
+ mosaic_file_mdl="data/C450_mosaic.nc"
+ orog_dir_mdl="data"
  orog_files_mdl="C450_oro_data.tile7.nc"
 
  call define_model_grid(localpet, npets)
 
- input_vegetation_type_file="/scratch1/NCEPDEV/da/George.Gayno/noscrub/viirs.veg/vegetation_type.viirs.igbp.0.1.nc"
+ input_vegetation_type_file="data/vegetation_type.viirs.igbp.0.1.nc"
  call define_source_grid(localpet, npets, input_vegetation_type_file)
 
 ! Call sfc_climo_gen routine.
