@@ -66,8 +66,6 @@ module use ../modulefiles
 module load build.$target.intel
 module list
 
-#export VEG_FILE=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.05.nc
-
 #-----------------------------------------------------------------------
 # Set grid specs here.
 #-----------------------------------------------------------------------

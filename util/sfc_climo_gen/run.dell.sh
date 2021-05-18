@@ -1,6 +1,9 @@
 #!/bin/bash
 
-! Run the sfc_climo_gen program stand-alone on Dell.
+#------------------------------------------------------------
+# Run the sfc_climo_gen program stand-alone on Dell using
+# pre-exiting 'grid' and 'orography files.
+#------------------------------------------------------------
 
 #BSUB -oo log
 #BSUB -eo log
@@ -15,36 +18,52 @@
 
 set -x
 
-export BASE_DIR=$LS_SUBCWD/../../..
+export BASE_DIR=$LS_SUBCWD/../..
 
 source ${BASE_DIR}/sorc/machine-setup.sh > /dev/null 2>&1
 module use ${BASE_DIR}/modulefiles
 module load build.$target.intel
 module list
 
-#export res=768
+#-------------------------------------
+# Set model resolution.
+#-------------------------------------
+
 export res=384
 
-# where the 'grid', 'mosaic' and 'oro' files reside.
+#-------------------------------------
+# Where the model "grid", "mosaic" and "oro" files reside.
+#-------------------------------------
+
 export FIX_FV3=${BASE_DIR}/fix/fix_fv3_gmted2010/C${res}
 
-# uncomment for regional grid
+#-------------------------------------
+# Uncomment for regional grids.
+#-------------------------------------
+
 ##HALO=3
 ##export GRIDTYPE=regional
 
-# use global 0.05-degree viirs data
-export VEG_FILE=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.05.nc
-# use global 0.03-degree viirs data
-##export VEG_FILE=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.03.nc
-# use conus 0.01-degree viirs data (do not use for global fv3 grids).
-##export VEG_FILE=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.conus.0.01.nc
+#-------------------------------------
+# Choose which virrs data to use.
+#-------------------------------------
 
-# set working directory and directory where output files will reside.
+export veg_type_src="viirs.igbp.0.05"    # Use global 0.05-degree viirs data
+#export veg_type_src="viirs.igbp.0.1"     # Use global 0.1-degree viirs data
+#export veg_type_src="viirs.igbp.0.03"   # Use global 0.03-degree viirs data
+#export veg_type_src="viirs.igbp.conus.0.01"   # Use CONUS 0.01-degree virrs data. Do not
+                                               # use for global grids.
+
+#-------------------------------------
+# Set working directory and directory where output files will be saved.
+#-------------------------------------
 
 export WORK_DIR=/gpfs/dell1/stmp/$LOGNAME/work.sfc
 export SAVE_DIR=/gpfs/dell1/stmp/$LOGNAME/sfc.C${res}
 
+#-------------------------------------
 # Should not have to touch anything below here.
+#-------------------------------------
 
 if [[ $GRIDTYPE = "regional" ]]; then
   HALO=$(( $HALO + 1 ))
