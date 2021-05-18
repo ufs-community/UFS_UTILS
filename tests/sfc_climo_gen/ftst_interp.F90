@@ -62,6 +62,9 @@
  if (vegt_mdl_one_tile(17,4) /= expected_values(3)) stop 4
  if (vegt_mdl_one_tile(27,13) /= expected_values(4)) stop 5
 
+ call source_grid_cleanup
+ call model_grid_cleanup
+
  deallocate(vegt_mdl_one_tile)
 
  call ESMF_finalize(endflag=ESMF_END_KEEPMPI)
