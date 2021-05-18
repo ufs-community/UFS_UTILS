@@ -62,7 +62,7 @@ TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_
 #-----------------------------------------------------------------------------
 
 TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.viirs.vegt \
-      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c96.viirs.vegt.sh)
+      --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c96.viirs.vegt.sh)
 
 #-----------------------------------------------------------------------------
 # GFDL regional grid
