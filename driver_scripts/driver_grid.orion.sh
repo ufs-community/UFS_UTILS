@@ -82,8 +82,6 @@ export veg_type_src="igbp.0.05" # For viirs-based vegetation type data, set to:
                                 # 3) "viirs.igbp.0.03" for global 3km data
                                 # 4) "viirs.igbp.conus.0.01" for regional 1km data
 
-#export VEG_FILE=/work/noaa/da/ggayno/save/ufs_utils.git/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.05.nc
-
 if [ $gtype = uniform ]; then
   export res=96
   export add_lake=false        # Add lake frac and depth to orography data.

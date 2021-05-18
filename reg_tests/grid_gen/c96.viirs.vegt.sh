@@ -14,7 +14,7 @@ export out_dir=${WORK_DIR}/c96.viirs.vegt
 
 export res=96
 export gtype=uniform
-export VEG_TYPE_FILE=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/fv3.vegt.new.tundra.netcdf/fix_sfc_climo/vegetation_type.viirs.igbp.0.05.nc
+export veg_type_src="viirs.igbp.0.05"
 
 NCCMP=${NCCMP:-$(which nccmp)}
 
