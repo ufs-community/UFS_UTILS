@@ -56,8 +56,9 @@
  type(esmf_field), public              :: ps_input_grid         !< surface pressure
  type(esmf_field), public              :: terrain_input_grid    !< terrain height
  type(esmf_field), public              :: temp_input_grid       !< temperature
- type(esmf_field)                      :: u_input_grid          !< u/v wind at grid
- type(esmf_field)                      :: v_input_grid          !< box center
+
+ type(esmf_field), public              :: u_input_grid          !< u/v wind at grid
+ type(esmf_field), public              :: v_input_grid          !< box center
  type(esmf_field), public              :: wind_input_grid       !< 3-component wind
  type(esmf_field), allocatable, public :: tracers_input_grid(:) !< tracers
 
@@ -69,7 +70,8 @@
  integer, public                 :: veg_type_landice_input = 15 !< NOAH land ice option
                                                                 !< defined at this veg type.
                                                                 !< Default is igbp.
-
+ integer, parameter              :: ICET_DEFAULT = 265.0    !< Default value of soil and skin
+                                                            !< temperature (K) over ice.
  type(esmf_field), public        :: canopy_mc_input_grid    !< canopy moist content
  type(esmf_field), public        :: f10m_input_grid         !< log((z0+10)*1/z0)
  type(esmf_field), public        :: ffmm_input_grid         !< log((z0+z1)*1/z0)
@@ -131,6 +133,10 @@
  public :: cleanup_input_sfc_data
  public :: read_input_nst_data
  public :: cleanup_input_nst_data
+ public :: check_soilt
+ public :: check_cnwat
+ public :: quicksort
+ public :: convert_winds
  
  contains
 
@@ -4597,15 +4603,14 @@ else
  
    integer                               :: rc, varnum, iret, i, j,k
    integer                               :: ncid2d, varid, varsize
-   integer, parameter                    :: icet_default = 265.0
 
    logical                               :: exist, rap_latlon
 
    real(esmf_kind_r4)                    :: value
 
-   real(esmf_kind_r4), allocatable       :: dummy2d(:,:),tsk_save(:,:),icec_save(:,:)
+   real(esmf_kind_r4), allocatable       :: dummy2d(:,:),icec_save(:,:)
    real(esmf_kind_r4), allocatable       :: dummy1d(:)
-   real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:),dummy2d_82(:,:)
+   real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:),dummy2d_82(:,:),tsk_save(:,:)
    real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy3d_stype(:,:,:)
    integer(esmf_kind_i4), allocatable    :: slmsk_save(:,:)
    integer(esmf_kind_i8), allocatable    :: dummy2d_i(:,:)
@@ -4834,7 +4839,7 @@ if (localpet == 0) then
    print*,"- READ SKIN TEMPERATURE."
    rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
    if (rc <= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
-   tsk_save(:,:) = dummy2d
+   tsk_save(:,:) = real(dummy2d,esmf_kind_r8)
    dummy2d_8 = real(dummy2d,esmf_kind_r8)
    do j = 1, j_input
      do i = 1, i_input
@@ -5236,6 +5241,7 @@ if (localpet == 0) then
         dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     endif
+   call check_cnwat(dummy2d)
    dummy2d_8= real(dummy2d,esmf_kind_r8)
    print*,'cnwat ',maxval(dummy2d),minval(dummy2d)
  endif
@@ -5390,14 +5396,7 @@ if (localpet == 0) then
    vname = "soilt"
    vname_file = ":TSOIL:"
    call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
-   do k=1,lsoil_input
-     do j = 1, j_input
-       do i = 1, i_input
-         if (slmsk_save(i,j) == 0_esmf_kind_i4 ) dummy3d(i,j,k) = tsk_save(i,j)
-         if (slmsk_save(i,j) == 2_esmf_kind_i4 ) dummy3d(i,j,k) = icet_default
-       enddo
-     enddo
-   enddo
+   call check_soilt(dummy3d,slmsk_save,tsk_save)
    print*,'soilt ',maxval(dummy3d),minval(dummy3d)
 
    deallocate(tsk_save, slmsk_save)
@@ -6606,5 +6605,64 @@ recursive subroutine quicksort(a, first, last)
   if (first < i-1) call quicksort(a, first, i-1)
   if (j+1 < last)  call quicksort(a, j+1, last)
 end subroutine quicksort
+
+!> Check for and replace certain values in soil temperature.
+!> At open water points (landmask=0) use skin temperature as
+!> a filler value. At land points (landmask=1) with excessive
+!> soil temperature, replace soil temperature with skin temperature. 
+!> In GEFSv12.0 data there are some erroneous missing values at
+!> land points which this corrects. At sea ice points (landmask=2),
+!> store a default ice column temperature because grib2 files do not 
+!> have ice column temperature which FV3 expects at these points.
+!!
+!! @param soilt    [inout] 3-dimensional soil temperature arrray
+!! @param landmask [in]    landmask of the input grid
+!! @param skint    [in]    2-dimensional skin temperature array
+!! @author Larissa Reames CIMMS/NSSL
+
+subroutine check_soilt(soilt, landmask, skint)
+  implicit none
+  real(esmf_kind_r8), intent(inout) ::  soilt(i_input,j_input,lsoil_input)
+  real(esmf_kind_r8), intent(in)    ::  skint(i_input,j_input)
+  integer(esmf_kind_i4), intent(in)    ::  landmask(i_input,j_input)
+  
+  integer                           :: i, j, k
+
+  do k=1,lsoil_input
+    do j = 1, j_input
+      do i = 1, i_input
+        if (landmask(i,j) == 0_esmf_kind_i4 ) then 
+          soilt(i,j,k) = skint(i,j)
+        else if (landmask(i,j) == 1_esmf_kind_i4 .and. soilt(i,j,k) > 350.0_esmf_kind_r8) then 
+          soilt(i,j,k) = skint(i,j)
+        else if (landmask(i,j) == 2_esmf_kind_i4 ) then 
+          soilt(i,j,k) = ICET_DEFAULT
+        endif
+      enddo
+    enddo
+  enddo
+end subroutine check_soilt
+
+!> When using GEFS data, some points on the target grid have 
+!> unreasonable canpy moisture content, so zero out any 
+!> locations with unrealistic canopy moisture values (>0.5).
+!!
+!! @param cnwat [input] 2-dimensional canopy moisture content
+!! @author Larissa Reames CIMMS/NSSL
+
+subroutine check_cnwat(cnwat)
+  implicit none 
+  real(esmf_kind_r4), intent(inout) :: cnwat(i_input,j_input)
+  
+  real(esmf_kind_r4)                :: max_cnwat = 0.5
+  
+  integer :: i, j
+
+  do i = 1,i_input
+    do j = 1,j_input
+      if (cnwat(i,j) .gt. max_cnwat) cnwat(i,j) = 0.0_esmf_kind_r4
+    enddo
+  enddo
+end subroutine check_cnwat
 
  end module input_data
