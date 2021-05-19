@@ -139,6 +139,9 @@
                                        !< latent heat of fusion
 
  public :: surface_driver
+ public :: create_nst_esmf_fields
+ public :: nst_land_fill
+ public :: cleanup_target_nst_data
 
  contains
 
@@ -4007,6 +4010,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID C_D."
  c_d_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='c_d', &
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4014,6 +4018,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID C_0."
  c_0_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='c_0', &
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4021,6 +4026,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID D_CONV."
  d_conv_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='d_conv',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4028,6 +4034,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID DT_COOL."
  dt_cool_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='dt_cool',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4035,6 +4042,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID IFD."
  ifd_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='ifd',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4042,6 +4050,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID QRAIN."
  qrain_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='qrain',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4049,6 +4058,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID TREF."
  tref_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='tref',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4056,6 +4066,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID W_D."
  w_d_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='w_d',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4063,6 +4074,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID W_0."
  w_0_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='w_0',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4070,6 +4082,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID XS."
  xs_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='xs',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4077,6 +4090,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID XT."
  xt_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='xt',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4084,6 +4098,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID XU."
  xu_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='xu',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4091,6 +4106,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID XV."
  xv_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='xv',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4098,6 +4114,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID XZ."
  xz_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='xz',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4105,6 +4122,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID XTTS."
  xtts_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='xtts',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4112,6 +4130,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID XZTS."
  xzts_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='xzts',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4119,6 +4138,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID Z_C."
  z_c_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='z_c',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
@@ -4126,6 +4146,7 @@
  print*,"- CALL FieldCreate FOR TARGET GRID ZM."
  zm_target_grid = ESMF_FieldCreate(target_grid, &
                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name='zm',&
                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
