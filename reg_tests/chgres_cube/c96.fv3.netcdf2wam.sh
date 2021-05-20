@@ -15,9 +15,10 @@ rm -fr $DATA
 export FIXfv3=${HOMEreg}/fix/C96
 export COMIN=${HOMEreg}/input_data/fv3.netcdf
 export ATM_FILES_INPUT=gfs.t00z.atmf000.nc
-export SFC_FILES_INPUT=gfs.t00z.sfcf000.nc
 export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
 export INPUT_TYPE="gaussian_netcdf"
+export CONVERT_SFC=".false."
+export CONVERT_NST=".false."
 
 export CDATE=2020020200
 
@@ -59,8 +60,7 @@ for files in *.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-#   $NCCMP -dmfqS $files $HOMEreg/baseline_data/c96_fv3_netcdf2wam/$files
-    $NCCMP -dmfqS $files /scratch1/NCEPDEV/global/Henry.Juang/baseline_data/c96_fv3_netcdf2wam/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c96_fv3_netcdf2wam/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1

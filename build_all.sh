@@ -8,8 +8,7 @@
 
 set -eux
 
-##compiler=gnu
-##compiler=intel
+#compiler=gnu
 
 target=${target:-"NULL"}
 compiler=${compiler:-"intel"}

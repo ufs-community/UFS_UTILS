@@ -124,7 +124,7 @@ TEST8=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:05
 #-----------------------------------------------------------------------------
 
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST9=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf2wam \
+TEST9=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=2 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf2wam \
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST8 ./c96.fv3.netcdf2wam.sh)
 
 #-----------------------------------------------------------------------------
