@@ -3539,6 +3539,9 @@
 
  integer(esmf_kind_i8), pointer     :: mask_ptr(:,:)
  integer                            :: rc,i
+ integer, PARAMETER                 :: num_nst_fields_minus2 = 16
+ integer, PARAMETER                 :: xz_fill = 30.0
+ integer, PARAMETER                 :: nst_fill = 0.0
 
  real(esmf_kind_r8), pointer        :: data_ptr(:,:)
  real(esmf_kind_r8), pointer        :: skint_ptr(:,:)
@@ -3586,9 +3589,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
 
- where(mask_ptr /= 0) data_ptr = 30.0
+ where(mask_ptr /= 0) data_ptr = xz_fill
 
- do i = 1,16
+ do i = 1,num_nst_fields_minus2
    
    call ESMF_FieldBundleGet(nst_bundle,i,temp_field,rc=rc)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
@@ -3598,7 +3601,7 @@
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
      call error_handler("IN FieldGet", rc)
      
-   where(mask_ptr /= 0) data_ptr = 0.0
+   where(mask_ptr /= 0) data_ptr = nst_fill
 
  enddo
 
