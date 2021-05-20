@@ -2290,18 +2290,20 @@
 !!
 !! @author Hann-Ming Henry Juang
       function glob7s(p) 
+      use mpi
       use gettemp_mod, only:plg,ctloc,stloc,c2tloc,s2tloc,c3tloc,s3tloc,    &
                             day,dfa,apdf,apt,long=>xlong,sw,swc     
       dimension p(*),t(14) 
 !
+      integer :: rc
       save 
       data dr/1.72142e-2/,dgtr/1.74533e-2/,pset/2./ 
       data dayl/-1./,p32,p18,p14,p39/4*-1000./ 
       if(p(100).eq.0) p(100)=pset 
       if(p(100).ne.pset) then 
         write(6,900) pset,p(100) 
-  900   format(1x,'wrong parameter set for glob7s',3f10.1) 
-        stop 
+  900   format(1x,'FATAL ERROR: Wrong parameter set for glob7s',3f10.1) 
+        call mpi_abort(mpi_comm_world, 999, rc)
       endif 
       do 10 j=1,14 
         t(j)=0. 
