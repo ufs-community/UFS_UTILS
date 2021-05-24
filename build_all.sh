@@ -8,6 +8,8 @@
 
 set -eux
 
+#compiler=gnu
+
 target=${target:-"NULL"}
 compiler=${compiler:-"intel"}
 
@@ -27,7 +29,8 @@ else
  set -x
 fi
 
-CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON"
+#CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON -DENABLE_DOCS=ON"
+ CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON"
 
 rm -fr ./build
 mkdir ./build && cd ./build

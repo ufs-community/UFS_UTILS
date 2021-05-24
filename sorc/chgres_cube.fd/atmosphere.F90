@@ -40,8 +40,12 @@
                                        terrain_target_grid
 
  use program_setup, only             : vcoord_file_target_grid, &
+                                       wam_cold_start, & 
+                                       cycle_year, cycle_mon,     &
+                                       cycle_day, cycle_hour,     &
                                        regional, &
                                        tracers, num_tracers,      &
+                                       num_tracers_input,         & 
                                        atm_weight_file, &
                                        use_thomp_mp_climo
 
@@ -202,7 +206,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
    print*,"- CALL Field_Regrid FOR TRACER ", trim(tracers(n))
    call ESMF_FieldRegrid(tracers_input_grid(n), &
                          tracers_b4adj_target_grid(n), &
@@ -322,6 +326,10 @@
 
  call vintg
 
+ if( wam_cold_start ) then 
+   call vintg_wam (cycle_year,cycle_mon,cycle_day,cycle_hour)
+ endif
+
 !-----------------------------------------------------------------------------------
 ! Compute height.
 !-----------------------------------------------------------------------------------
@@ -435,9 +443,9 @@
 
  integer                          :: rc, n
 
- allocate(tracers_b4adj_target_grid(num_tracers))
+ allocate(tracers_b4adj_target_grid(num_tracers_input))
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
    print*,"- CALL FieldCreate FOR TARGET GRID TRACER BEFORE ADJUSTMENT ", trim(tracers(n))
    tracers_b4adj_target_grid(n) = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -757,9 +765,9 @@
 
 !> Computes 3-D pressure given an adjusted surface pressure.
 !!                                                                       
-!! PROGRAM HISTORY LOG:                                                  
-!! 2005-04-11  HANN_MING HENRY JUANG    hybrid sigma, sigma-p, and sigma-
-!! - PRGMMR: JUANG          ORG: W/NMC23     DATE: 2005-04-11            
+!! program history log:                                                  
+!! 2005-04-11  Hann-Ming Henry Juang    hybrid sigma, sigma-p, and sigma-
+!! - PRGMMR: Henry Juang    ORG: W/NMC23     DATE: 2005-04-11            
 !! - PRGMMR: Fanglin Yang   ORG: W/NMC23     DATE: 2006-11-28            
 !! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2006-12-12            
 !! - PRGMMR: S. Moorthi     ORG: NCEP/EMC    DATE: 2007-01-02            
@@ -1351,6 +1359,232 @@
 
  END SUBROUTINE VINTG_THOMP_MP_CLIMO
 
+
+!> Vertically extend model top into thermosphere for whole atmosphere model.
+!!
+!! Use climatological data to extent model top into thermosphere for
+!! temperature and consoder primary compositions of neutral atmosphere
+!! in term of specific values of oxygen, single oxygen, and ozone.
+!!
+!! @param [in] year  initial year
+!! @param [in] month  initial month
+!! @param [in] day  initial day
+!! @param [in] hour  initial hour
+!!
+!! @author Hann-Ming Henry Juang NCEP/EMC
+ SUBROUTINE VINTG_WAM (YEAR,MONTH,DAY,HOUR)
+
+ IMPLICIT NONE
+
+ include 'mpif.h'
+
+ INTEGER, INTENT(IN)             :: YEAR,MONTH,DAY,HOUR
+
+ REAL(ESMF_KIND_R8), PARAMETER   :: AMO  = 15.9994  ! molecular weight of o
+ REAL(ESMF_KIND_R8), PARAMETER   :: AMO2 = 31.999   !molecular weight of o2
+ REAL(ESMF_KIND_R8), PARAMETER   :: AMN2 = 28.013   !molecular weight of n2
+
+ REAL(ESMF_KIND_R8)              :: COE,WFUN(10),DEGLAT,HOLD
+ REAL(ESMF_KIND_R8)              :: SUMMASS,QVMASS,O3MASS
+ INTEGER                         :: I, J, K, II, CLB(3), CUB(3), RC, KREF
+ INTEGER                         :: IDAT(8),JDOW,JDAY,ICDAY
+
+ REAL(ESMF_KIND_R8), ALLOCATABLE :: TEMP(:),ON(:),O2N(:),N2N(:),PRMB(:)
+        
+ REAL(ESMF_KIND_R8), POINTER     :: LATPTR(:,:)        ! output latitude
+ REAL(ESMF_KIND_R8), POINTER     :: P1PTR(:,:,:)       ! input pressure
+ REAL(ESMF_KIND_R8), POINTER     :: P2PTR(:,:,:)       ! output pressure
+ REAL(ESMF_KIND_R8), POINTER     :: DZDT2PTR(:,:,:)    ! output vvel
+ REAL(ESMF_KIND_R8), POINTER     :: T2PTR(:,:,:)       ! output temperature
+ REAL(ESMF_KIND_R8), POINTER     :: Q2PTR(:,:,:)       ! output tracer
+ REAL(ESMF_KIND_R8), POINTER     :: QVPTR(:,:,:)       ! output tracer
+ REAL(ESMF_KIND_R8), POINTER     :: QOPTR(:,:,:)       ! output tracer
+ REAL(ESMF_KIND_R8), POINTER     :: O2PTR(:,:,:)       ! output tracer
+ REAL(ESMF_KIND_R8), POINTER     :: O3PTR(:,:,:)       ! output tracer
+ REAL(ESMF_KIND_R8), POINTER     :: WIND2PTR(:,:,:,:)  ! output wind (x,y,z components)
+ 
+! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ print*,"VINTG_WAM:- VERTICALY EXTEND FIELDS FOR WAM COLD START."
+
+! prepare date
+ IDAT = 0
+ JDOW = 0
+ JDAY = 0
+ ICDAY = 0
+ IDAT(1)=year
+ IDAT(2)=month
+ IDAT(3)=day
+ IDAT(5)=hour
+ CALL W3DOXDAT(IDAT,JDOW,ICDAY,JDAY)
+ print *,"VINTG_WAM: WAM START DATE FOR ICDAY=",ICDAY
+
+! prepare weighting function
+ DO K=1,10
+   WFUN(K) = (K-1.0) / 9.0
+ ENDDO
+
+ ALLOCATE(TEMP(LEV_TARGET))
+ ALLOCATE(PRMB(LEV_TARGET))
+ ALLOCATE(  ON(LEV_TARGET))
+ ALLOCATE( O2N(LEV_TARGET))
+ ALLOCATE( N2N(LEV_TARGET))
+
+! p1 (pascal)
+ print*,"VINTG_WAM:- CALL FieldGet FOR 3-D PRES."
+ call ESMF_FieldGet(pres_b4adj_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=p1ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+!print*,"VINTG_WAM: p1ptr ",(p1ptr(1,1,k),k=1,LEV_INPUT)
+
+! p2 (pascal)
+ print*,"VINTG_WAM:- CALL FieldGet FOR 3-D ADJUSTED PRESS"
+ call ESMF_FieldGet(pres_target_grid, &
+                    farrayPtr=P2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+!print*,"VINTG_WAM: p2ptr ",(p2ptr(1,1,k),k=1,LEV_TARGET)
+
+! latitude in degree
+ print*,"VINTG_WAM - CALL FieldGet FOR LATITUDE_S."
+ call ESMF_FieldGet(latitude_s_target_grid, &
+                    farrayPtr=LATPTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+!print*,"VINTG_WAM: latptr ",(latptr(1,j),j=clb(2),cub(2))
+
+! temp
+ print*,"VINTG_WAM:- CALL FieldGet FOR 3-D ADJUSTED TEMP."
+ call ESMF_FieldGet(temp_target_grid, &
+                    farrayPtr=T2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+! dzdt
+ print*,"VINTG_WAM:- CALL FieldGet FOR ADJUSTED VERTICAL VELOCITY."
+ call ESMF_FieldGet(dzdt_target_grid, &
+                    farrayPtr=DZDT2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+! wind
+ print*,"VINTG_WAM:- CALL FieldGet FOR 3-D ADJUSTED WIND."
+ call ESMF_FieldGet(wind_target_grid, &
+                    farrayPtr=WIND2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+!
+! determine vertical blending point and modified extrapolation values
+!
+ DO I=CLB(1),CUB(1)
+   DO J=CLB(2),CUB(2)
+
+     DO K=1,LEV_TARGET
+       IF(P2PTR(I,J,K).le.P1PTR(I,J,LEV_INPUT)) THEN
+         KREF     =K-1
+!x       print*,'VINTG_WAM: KREF P1 P2 ',KREF,P1PTR(I,J,LEV_INPUT),P2PTR(I,J,K)
+         GO TO 11
+       ENDIF
+     ENDDO
+ 11  CONTINUE
+!
+     DO K=KREF,LEV_TARGET
+       COE = P2PTR(I,J,K) / P2PTR(I,J,KREF)
+       WIND2PTR(I,J,K,1) = COE*WIND2PTR(I,J,K,1)
+       WIND2PTR(I,J,K,2) = COE*WIND2PTR(I,J,K,2)
+       WIND2PTR(I,J,K,3) = COE*WIND2PTR(I,J,K,3)
+       DZDT2PTR(I,J,K)   = COE*DZDT2PTR(I,J,K)
+     ENDDO
+
+   ENDDO
+ ENDDO
+
+! 
+! point necessary tracers
+!
+ DO II = 1, NUM_TRACERS
+
+   print*,"VINTG_WAM:- CALL FieldGet FOR 3-D TRACER ", trim(tracers(ii))
+   call ESMF_FieldGet(tracers_target_grid(ii), &
+                      farrayPtr=Q2PTR, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+          call error_handler("IN FieldGet", rc)
+
+   DO J=CLB(2),CUB(2)
+     DO I=CLB(1),CUB(1)
+       DO K=1,LEV_TARGET
+         IF(P2PTR(I,J,K).le.P1PTR(I,J,LEV_INPUT)) THEN
+           KREF     =K-1
+           GO TO 22
+         ENDIF
+       ENDDO
+ 22    CONTINUE
+!
+       DO K=KREF,LEV_TARGET
+         COE = MIN(1.0, P2PTR(I,J,K) / P2PTR(I,J,KREF) )
+         Q2PTR(I,J,K) = COE * Q2PTR(I,J,K)
+       ENDDO
+     ENDDO
+   ENDDO
+
+   IF (TRIM(TRACERS(II)) == "sphum") QVPTR => Q2PTR
+   IF (TRIM(TRACERS(II)) == "spo"  ) QOPTR => Q2PTR
+   IF (TRIM(TRACERS(II)) == "spo2" ) O2PTR => Q2PTR
+   IF (TRIM(TRACERS(II)) == "spo3" ) O3PTR => Q2PTR
+
+ ENDDO
+
+!
+! obtained wam gases distribution and temperature profile
+!
+ DO I=CLB(1),CUB(1)
+   DO J=CLB(2),CUB(2)
+!
+     DEGLAT = LATPTR(I,J)
+     DO K=1,LEV_TARGET
+       PRMB(K) = P2PTR(I,J,K) * 0.01
+     ENDDO
+     CALL GETTEMP(ICDAY,1,DEGLAT,1,PRMB,LEV_TARGET,TEMP,ON,O2N,N2N)
+!
+     DO K=1,LEV_TARGET
+       SUMMASS = ON(K)*AMO+O2N(K)*AMO2+N2N(K)*AMN2
+       QVMASS  = SUMMASS*QVPTR(I,J,K)/(1.-QVPTR(I,J,K))
+       SUMMASS = SUMMASS+QVMASS
+       O3MASS  = SUMMASS*O3PTR(I,J,K)
+       SUMMASS = SUMMASS+O3MASS
+       HOLD    = 1.0 / SUMMASS
+       QOPTR(I,J,K) = ON (K)*AMO *HOLD
+       O2PTR(I,J,K) = O2N(K)*AMO2*HOLD
+       O3PTR(I,J,K) = O3MASS * HOLD
+       QVPTR(I,J,K) = QVMASS * HOLD
+     ENDDO
+!
+     DO K=1,LEV_TARGET
+       IF(P2PTR(I,J,K).le.P1PTR(I,J,LEV_INPUT)) THEN
+         KREF     =K-1
+         GO TO 33
+       ENDIF
+     ENDDO
+ 33  CONTINUE
+!
+     DO K=KREF,LEV_TARGET
+       T2PTR(I,J,K) = TEMP(K)
+     ENDDO
+     DO K=KREF-10,KREF-1
+       T2PTR(I,J,K) = WFUN(K-KREF+11)  * TEMP(K) + &
+                 (1.- WFUN(K-KREF+11)) * T2PTR(I,J,K)
+     ENDDO
+   ENDDO
+ ENDDO
+
+ DEALLOCATE (TEMP, PRMB, ON, O2N, N2N)
+
+ END SUBROUTINE VINTG_WAM
+
 !> Vertically interpolate upper-air fields.
 !!
 !! Vertically interpolate upper-air fields. Wind, temperature,
@@ -1414,8 +1648,8 @@
 
  ALLOCATE(Z1(CLB(1):CUB(1),CLB(2):CUB(2),LEV_INPUT))
  ALLOCATE(Z2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET))
- ALLOCATE(C1(CLB(1):CUB(1),CLB(2):CUB(2),LEV_INPUT,NUM_TRACERS+5))
- ALLOCATE(C2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET,NUM_TRACERS+5))
+ ALLOCATE(C1(CLB(1):CUB(1),CLB(2):CUB(2),LEV_INPUT,NUM_TRACERS_INPUT+5))
+ ALLOCATE(C2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET,NUM_TRACERS_INPUT+5))
 
  Z1 = -LOG(P1PTR)
 
@@ -1454,7 +1688,7 @@
 
  C1(:,:,:,5) =  T1PTR(:,:,:)
 
- DO I = 1, NUM_TRACERS
+ DO I = 1, NUM_TRACERS_INPUT
 
    print*,"- CALL FieldGet FOR 3-D TRACERS ", trim(tracers(i))
    call ESMF_FieldGet(tracers_b4adj_target_grid(i), &
@@ -1475,7 +1709,7 @@
  IM = (CUB(1)-CLB(1)+1) * (CUB(2)-CLB(2)+1)
  KM1= LEV_INPUT
  KM2= LEV_TARGET
- NT=  NUM_TRACERS + 1 ! treat 'z' wind as tracer.
+ NT=  NUM_TRACERS_INPUT + 1 ! treat 'z' wind as tracer.
 
  CALL TERP3(IM,1,1,1,1,4+NT,(IM*KM1),(IM*KM2), &
             KM1,IM,IM,Z1,C1,KM2,IM,IM,Z2,C2)
@@ -1520,7 +1754,7 @@
    ENDDO
  ENDDO
 
- DO II = 1, NUM_TRACERS
+ DO II = 1, NUM_TRACERS_INPUT
 
    print*,"- CALL FieldGet FOR 3-D TRACER ", trim(tracers(ii))
    call ESMF_FieldGet(tracers_target_grid(ii), &
@@ -1944,7 +2178,7 @@
  call ESMF_FieldDestroy(temp_b4adj_target_grid, rc=rc)
  call ESMF_FieldDestroy(terrain_interp_to_target_grid, rc=rc)
 
- do i = 1, num_tracers
+ do i = 1, num_tracers_input
    call ESMF_FieldDestroy(tracers_b4adj_target_grid(i), rc=rc)
  enddo
 

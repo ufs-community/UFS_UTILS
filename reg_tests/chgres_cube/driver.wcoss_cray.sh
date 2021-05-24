@@ -128,9 +128,18 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c192.gfs.grib2 -M 1
         -w 'ended(c96.fv3.netcdf)' "export NODES=1; $PWD/c192.gfs.grib2.sh"
 
 #-----------------------------------------------------------------------------
+# Initialize C96 WAM IC using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+export OMP_NUM_THREADS=1
+export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.fv3.netcdf2wam -M 1000 -W 0:15 -extsched 'CRAYLINUX[]' \
+        -w 'ended(c192.gfs.grib2)' "export NODES=2; $PWD/c96.fv3.netcdf2wam.sh"
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
-bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(c192.gfs.grib2)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(c96.fv3.netcdf2wam)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
 
 exit
