@@ -118,10 +118,18 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c192.gfs.grib2 -W 0
         -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/c192.gfs.grib2.sh"
 
 #-----------------------------------------------------------------------------
+# Initialize C96 WAM IC using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+export OMP_NUM_THREADS=1
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.fv3.netcdf2wam -W 0:15 -x -n 12 -w 'ended(c192.gfs.grib2)' \
+        -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/c96.fv3.netcdf2wam.sh"
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "affinity[core(1)]" -R "rusage[mem=100]" -W 0:01 \
-     -w 'ended(c192.gfs.grib2)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+     -w 'ended(c96.fv3.netcdf2wam)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
 
 exit
