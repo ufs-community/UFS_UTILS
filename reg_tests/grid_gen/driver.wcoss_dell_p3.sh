@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run grid generation regression tests on WCOSS-Dell.
+# Run grid generation consistency tests on WCOSS-Dell.
 #
 # Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
 # as appropriate. 
@@ -35,7 +35,7 @@ export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 export home_dir=$PWD/../..
 export APRUN=time

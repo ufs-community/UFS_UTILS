@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run the chgres_cube regression tests on WCOSS-Dell.
+# Run the chgres_cube consistency tests on WCOSS-Dell.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
 # as appropriate.
@@ -43,7 +43,7 @@ export HOMEufs=$PWD/../..
 
 export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 
 SUM_FILE=summary.log
 
