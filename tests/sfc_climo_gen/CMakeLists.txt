@@ -18,6 +18,8 @@ include_directories(${PROJECT_SOURCE_DIR})
 # build data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/files.txt ${CMAKE_CURRENT_BINARY_DIR}/data/files.txt)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 
 add_executable(ftst_interp ftst_interp.F90)
 target_link_libraries(ftst_interp sfc_climo_gen_lib)
