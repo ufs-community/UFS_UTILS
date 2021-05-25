@@ -6,7 +6,7 @@
 ! file. This smaller version of the full file was created
 ! because the full file is too big for Github. The
 ! data read from the file is compared to expected
-! values as determined by nemsio library utilities.
+! values as determined by nemsio data dump utilities.
 !
 ! Author George Gayno
 
@@ -60,7 +60,7 @@
  real(esmf_kind_r8), allocatable    :: data_one_tile_3d(:,:,:)
 
 ! The expected values were determined by checking
-! the input nemsio file using nemsio library utilities.
+! the input nemsio file using nemsio data dump utilities.
 
  real :: landsea_mask_expected_values(NUM_VALUES) ! land-sea mask
  real :: terrain_expected_values(NUM_VALUES) ! terrain height
@@ -95,35 +95,35 @@
  real :: z0_expected_values(NUM_VALUES) ! roughness length
 
  data landsea_mask_expected_values /0.0, 0.0/
- data terrain_expected_values / 2.0, 2.0 /
- data soilm_liq1_expected_values / 3.8, 3.8 /
- data soilm_liq2_expected_values / 3.9, 3.9 /
- data soilm_liq3_expected_values / 4.0, 4.0 /
- data soilm_liq4_expected_values / 4.1, 4.1 /
- data soilm_tot1_expected_values / 4.2, 4.2 /
- data soilm_tot2_expected_values / 4.3, 4.3 /
- data soilm_tot3_expected_values / 4.4, 4.4 /
- data soilm_tot4_expected_values / 4.5, 4.5 /
- data soil_temp1_expected_values / 4.6, 4.6 /
- data soil_temp2_expected_values / 4.7, 4.7 /
- data soil_temp3_expected_values / 4.8, 4.8 /
- data soil_temp4_expected_values / 4.9, 4.9/
- data seaice_fract_expected_values / 2.2, 2.2 /
+ data terrain_expected_values / 100.0, 100.0 /
+ data soilm_liq1_expected_values / 0.05, 0.05 /
+ data soilm_liq2_expected_values / 0.15, 0.15 /
+ data soilm_liq3_expected_values / 0.25, 0.25 /
+ data soilm_liq4_expected_values / 0.35, 0.35 /
+ data soilm_tot1_expected_values / 0.1, 0.1 /
+ data soilm_tot2_expected_values / 0.2, 0.2 /
+ data soilm_tot3_expected_values / 0.3, 0.3 /
+ data soilm_tot4_expected_values / 0.4, 0.4 /
+ data soil_temp1_expected_values / 265.0, 265.0 /
+ data soil_temp2_expected_values / 275.0, 275.0 /
+ data soil_temp3_expected_values / 285.0, 285.0 /
+ data soil_temp4_expected_values / 295.0, 295.0 /
+ data seaice_fract_expected_values / 0.75, 0.75 /
  data seaice_depth_expected_values / 2.3, 2.3/
- data seaice_skin_temp_expected_values / 2.4, 2.4 /
+ data seaice_skin_temp_expected_values / 265.0, 265.0 /
  data snow_liq_equiv_expected_values / 2.5, 2.5 /
  data snow_depth_expected_values / 2600.0, 2600.0 /
- data veg_type_expected_values / 2.7, 2.7 /
- data soil_type_expected_values / 2.8, 2.8 /
- data t2m_expected_values / 2.9, 2.9 /
+ data veg_type_expected_values / 14.0, 14.0 /
+ data soil_type_expected_values / 4.0, 4.0 /
+ data t2m_expected_values / 300.0, 300.0 /
  data q2m_expected_values / 3.0, 3.0 /
  data tprcp_expected_values / 3.1, 3.1 /
  data f10m_expected_values / 3.5, 3.5 /
  data ffmm_expected_values / 3.2, 3.2 /
  data ustar_expected_values / 3.3, 3.3 /
  data srflag_expected_values / 0.0, 0.0/
- data skin_temp_expected_values / 3.4, 3.4 /
- data canopy_mc_expected_values / 3.6, 3.6 /
+ data skin_temp_expected_values / 305.0, 305.0 /
+ data canopy_mc_expected_values / 0.5, 0.5 /
  data z0_expected_values / 370.0, 370.0 /
 
  print*,"Starting test of read_input_sfc_gaussian_nemsio_file."
@@ -141,8 +141,8 @@
 
  input_type = "gaussian_nemsio"
  num_tiles_input_grid = 1
- data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/unit_tests"
- sfc_files_input_grid(1) = "test.nemsio"
+ data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/unit_tests/surface"
+ sfc_files_input_grid(1) = "gfs.v15.sfc.nemsio"
 
  polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
  input_grid = ESMF_GridCreate1PeriDim(minIndex=(/1,1/), &
