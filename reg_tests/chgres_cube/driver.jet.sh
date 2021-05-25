@@ -120,11 +120,19 @@ TEST8=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:05
       -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST7 ./c192.gfs.grib2.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize C96 WAM IC using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST9=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=2 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf2wam \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST8 ./c96.fv3.netcdf2wam.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST8 << EOF
+       --open-mode=append -q $QUEUE -d afterok:$TEST9 << EOF
 #!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
