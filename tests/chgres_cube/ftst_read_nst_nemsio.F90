@@ -3,10 +3,10 @@
 ! Unit test for the read_input_nst_nemsio_file routine. 
 !
 ! Reads a 9x9 version of the GFS nemsio surface history 
-! file. This smaller version was created becasue the 
+! file. This smaller version was created because the 
 ! full file is too big for Github. The data read from the
 ! file is compared to expected values as determined by
-! the nemsio library utilities.
+! the nemsio data dump utilities.
 !
 ! Author George Gayno
 
@@ -80,7 +80,7 @@
  data d_conv_expected_values / 0.3, 0.3 /
  data ifd_expected_values / 1.0, 1.0 /
  data qrain_expected_values / 0.7, 0.7 /
- data tref_expected_values / 0.8, 0.8 /
+ data tref_expected_values / 275.0, 275.0 /
  data wd_expected_values / 1.0, 1.0 /
  data w0_expected_values / 0.9, 0.9 /
  data xs_expected_values / 1.1, 1.1 /
@@ -108,8 +108,8 @@
 
  input_type = "gaussian_nemsio"
  num_tiles_input_grid = 1
- data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/unit_tests"
- sfc_files_input_grid(1) = "test.nemsio"
+ data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/unit_tests/surface"
+ sfc_files_input_grid(1) = "gfs.v15.sfc.nemsio"
 
  polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
  input_grid = ESMF_GridCreate1PeriDim(minIndex=(/1,1/), &
