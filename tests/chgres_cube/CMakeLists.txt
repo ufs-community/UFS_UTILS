@@ -114,3 +114,12 @@ add_mpi_test(chgres_cube-ftst_read_nst_netcdf
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_nst_netcdf
   NUMPROCS 1
   TIMEOUT 60)
+
+add_executable(ftst_read_atm_gaussian_netcdf ftst_read_atm_gaussian_netcdf.F90)
+target_link_libraries(ftst_read_atm_gaussian_netcdf chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_read_atm_gaussian_netcdf
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_atm_gaussian_netcdf
+  NUMPROCS 1
+  TIMEOUT 60)
