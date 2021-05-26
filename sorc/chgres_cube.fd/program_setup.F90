@@ -82,6 +82,7 @@
  character(len=20), allocatable, public      :: field_var_names(:)  !< The GRIB2 variable name in the varmap table.
  
  
+ integer, public                 :: cycle_year = -999 !< Cycle year.
  integer, public                 :: cycle_mon = -999 !< Cycle month.
  integer, public                 :: cycle_day = -999 !< Cycle day.
  integer, public                 :: cycle_hour = -999 !< Cycle hour.
@@ -94,6 +95,7 @@
  logical, public                 :: convert_atm = .false. !< Convert atmospheric data when true.
  logical, public                 :: convert_nst = .false. !< Convert nst data when true.
  logical, public                 :: convert_sfc = .false. !< Convert sfc data when true.
+ logical, public                 :: wam_cold_start = .false. !< When true, cold start for whole atmosphere model.
  
  ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
  ! Default is to use climatology instead
@@ -176,9 +178,10 @@
                    geogrid_file_input_grid, &
                    data_dir_input_grid,     &
                    vcoord_file_target_grid, &
-                   cycle_mon, cycle_day,    &
+                   cycle_year, cycle_mon, cycle_day,    &
                    cycle_hour, convert_atm, &
                    convert_nst, convert_sfc, &
+                   wam_cold_start, &
                    vgtyp_from_climo, &
                    sotyp_from_climo, &
                    vgfrc_from_climo, &
@@ -250,15 +253,33 @@
  do is = 1, max_tracers
    if (trim(tracers(is)) == "NULL") exit
    num_tracers = num_tracers + 1
-   print*,"- WILL PROCESS TRACER ", trim(tracers(is))
+   print*,"- TRACER NAME IN OUTPUT FILE ", trim(tracers(is))
  enddo
  
  num_tracers_input = 0
  do is = 1, max_tracers
    if (trim(tracers_input(is)) == "NULL") exit
    num_tracers_input = num_tracers_input + 1
-   print*,"- WILL PROCESS INPUT TRACER ", trim(tracers_input(is))
+   print*,"- TRACER NAME IN INPUT FILE ", trim(tracers_input(is))
  enddo
+
+!-------------------------------------------------------------------------
+! Ensure spo, spo2, and spo3 in tracers list if wam ic is on
+!-------------------------------------------------------------------------
+
+ if( wam_cold_start ) then
+    ierr=3
+    do is = 1, num_tracers
+      if(trim(tracers(is)) == "spo"  ) ierr = ierr - 1
+      if(trim(tracers(is)) == "spo2" ) ierr = ierr - 1
+      if(trim(tracers(is)) == "spo3" ) ierr = ierr - 1
+    enddo
+    if (ierr /= 0) then
+      print*,"-ERROR: spo, spo2, and spo3 should be in tracers namelist"
+      call error_handler("WAM TRACER NAMELIST.", ierr)
+    endif
+    print*,"- WAM COLDSTART OPTION IS TURNED ON."
+ endif  
 
 !-------------------------------------------------------------------------
 ! Ensure program recognizes the input data type.  
@@ -370,7 +391,7 @@ subroutine read_varmap
      call error_handler("OPENING VARIABLE MAPPING FILE", istat)
    endif
 
-   num_tracers = 0
+   num_tracers_input = 0
    nvars = 0
 
    !Loop over lines of file to count the number of variables
@@ -397,8 +418,8 @@ subroutine read_varmap
                            missing_var_methods(k), missing_var_values(k), var_type(k)
      if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
      if(trim(var_type(k))=='T') then
-       num_tracers = num_tracers + 1
-       tracers_input(num_tracers)=chgres_var_names(k)
+       num_tracers_input = num_tracers_input + 1
+       tracers_input(num_tracers_input)=chgres_var_names(k)
        if ((trim(chgres_var_names(k)) == "ice_aero" .or. trim(chgres_var_names(k)) == "liq_aero") .and. &
            trim(thomp_mp_climo_file) .ne. "NULL" .and. trim(input_type) == "grib2") then
            call error_handler("VARMAP TABLE CONTAINS TRACER ENTRIES FOR THOMPSON AEROSOLS liq_aero or "// &
@@ -408,6 +429,7 @@ subroutine read_varmap
      endif
     enddo
    close(14)
+   num_tracers = num_tracers_input
  endif
 end subroutine read_varmap
 
