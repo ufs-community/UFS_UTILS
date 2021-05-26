@@ -29,7 +29,7 @@ jobs:
         key: esmf-8.1.0-${{ runner.os }}
 
     - name: build-esmf
-      #if: steps.cache-esmf.outputs.cache-hit != 'true'
+      if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         pushd ~
         export ESMF_DIR=~/esmf-ESMF_8_1_0
