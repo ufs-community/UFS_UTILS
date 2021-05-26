@@ -160,4 +160,5 @@ jobs:
         wget -i files.txt
         cd ../../..
         export LSAN_OPTIONS=suppressions=../../../LSanSuppress.supp
+        export ASAN_OPTIONS=suppressions=../../../ASanSuppress.supp
         ctest --rerun-failed --output-on-failure
