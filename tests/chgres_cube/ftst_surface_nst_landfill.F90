@@ -140,7 +140,7 @@
                           dt_cool_target_grid,ifd_target_grid,qrain_target_grid,&
                           w_d_target_grid,w_0_target_grid,xs_target_grid,xt_target_grid,&
                           xu_target_grid,xv_target_grid,xtts_target_grid,xzts_target_grid,&
-                          z_c_target_grid, zm_target_grid/) rc=rc)
+                          z_c_target_grid, zm_target_grid/), rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldBundleCreate", rc)
 
