@@ -48,8 +48,9 @@ program ftst_program_setup_varmaps
      if (read_from_input(i) .neqv. .true.) stop 7
   end do
   if (num_tracers .ne. EXPECTED_NUM_TRACERS) stop 10
+  if (num_tracers_input .ne. EXPECTED_NUM_TRACERS) stop 11
   do i = 1, EXPECTED_NUM_TRACERS
-     if (trim(tracers_input(i)) .ne. trim(expected_tracers_input(i))) stop 11
+     if (trim(tracers_input(i)) .ne. trim(expected_tracers_input(i))) stop 12
   end do
   if (my_rank .eq. 0) print*, "OK"
   

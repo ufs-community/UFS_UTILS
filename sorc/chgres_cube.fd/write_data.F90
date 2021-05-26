@@ -1399,6 +1399,7 @@
    call netcdf_err(error, 'DEFINING DELP COORD' )
 
    do n = 1, num_tracers
+     if (localpet==0) print*, "write to file tracer ", trim(tracers(n))
      error = nf90_def_var(ncid, tracers(n), NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_tracers(n))
      call netcdf_err(error, 'DEFINING TRACERS' )
      error = nf90_put_att(ncid, id_tracers(n), "coordinates", "geolon geolat")
