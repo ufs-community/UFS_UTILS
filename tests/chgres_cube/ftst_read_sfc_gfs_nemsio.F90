@@ -141,7 +141,7 @@
 
  input_type = "gfs_gaussian_nemsio"
  num_tiles_input_grid = 1
- data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/unit_tests/surface.v14"
+ data_dir_input_grid = "data"
  sfc_files_input_grid(1) = "gfs.v14.sfc.history.nemsio"
 
  polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
