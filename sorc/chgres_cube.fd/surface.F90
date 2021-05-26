@@ -141,6 +141,8 @@
  public :: surface_driver
  public :: create_nst_esmf_fields
  public :: interp
+ public :: create_surface_esmf_fields
+ public :: cleanup_target_sfc_data
  public :: nst_land_fill
  public :: cleanup_target_nst_data
 
