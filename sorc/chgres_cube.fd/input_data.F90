@@ -27,7 +27,7 @@
                                     convert_nst, &
                                     orog_dir_input_grid, &
                                     orog_files_input_grid, &
-                                    tracers_input, num_tracers, &
+                                    tracers_input, num_tracers_input, &
                                     input_type, tracers, &
                                     get_var_cond, read_from_input, &
                                     geogrid_file_input_grid, &
@@ -56,6 +56,7 @@
  type(esmf_field), public              :: ps_input_grid         !< surface pressure
  type(esmf_field), public              :: terrain_input_grid    !< terrain height
  type(esmf_field), public              :: temp_input_grid       !< temperature
+
  type(esmf_field), public              :: u_input_grid          !< u/v wind at grid
  type(esmf_field), public              :: v_input_grid          !< box center
  type(esmf_field), public              :: wind_input_grid       !< 3-component wind
@@ -133,6 +134,7 @@
  public :: read_input_nst_data
  public :: cleanup_input_nst_data
  public :: check_soilt
+ public :: check_cnwat
  public :: quicksort
  public :: convert_winds
  
@@ -674,9 +676,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
- allocate(tracers_input_grid(num_tracers))
+ allocate(tracers_input_grid(num_tracers_input))
 
- do i = 1, num_tracers
+ do i = 1, num_tracers_input
    print*,"- CALL FieldCreate FOR INPUT GRID TRACER ", trim(tracers_input(i))
    tracers_input_grid(i) = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -773,7 +775,7 @@
  lev_input = sighead%levs
  levp1_input = lev_input + 1
 
- if (num_tracers /= sighead%ntrac) then
+ if (num_tracers_input /= sighead%ntrac) then
    call error_handler("WRONG NUMBER OF TRACERS EXPECTED.", 99)
  endif
 
@@ -835,7 +837,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
- do k = 1, num_tracers
+ do k = 1, num_tracers_input
 
    if (localpet == 0) then
      call sptezm(0,sighead%jcap,4,i_input, j_input, lev_input, sigdata%q(:,:,k), dummy3d, 1)
@@ -1050,7 +1052,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
      call error_handler("IN FieldScatter", rc)
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
 
    if (localpet == 0) then
      print*,"- READ ", trim(tracers_input(n))
@@ -1312,7 +1314,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
 
    if (localpet == 0) then
      print*,"- READ ", trim(tracers_input(n))
@@ -1684,7 +1686,7 @@
    call netcdf_err(error, 'opening: '//trim(tilefile) )
  endif
 
- do i = 1, num_tracers
+ do i = 1, num_tracers_input
 
    if (localpet < num_tiles_input_grid) then
      error=nf90_inq_varid(ncid, tracers_input(i), id_var)
@@ -2004,7 +2006,7 @@
 
 ! tracers
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
 
    if (myrank <= max_procs-1) then
      error=nf90_inq_varid(ncid, tracers_input(n), id_var)
@@ -2210,7 +2212,7 @@
  error = nf90_close(ncid)
 
  print*,'- FILE HAS ', num_tracers_file, ' TRACERS.'
- print*,'- WILL PROCESS ', num_tracers, ' TRACERS.'
+ print*,'- WILL PROCESS ', num_tracers_input, ' TRACERS.'
 
 !---------------------------------------------------------------------------
 ! Initialize esmf atmospheric fields.
@@ -2263,7 +2265,7 @@
       call error_handler("IN FieldScatter", rc)
  enddo
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
 
    if (localpet < num_tiles_input_grid) then
      print*,"- READ ", trim(tracers_input(n))
@@ -2456,10 +2458,10 @@
                                           trac_names_grib_1(ntrac_max), &
                                           trac_names_grib_2(ntrac_max), &
                                           trac_names_vmap(ntrac_max), &
-                                          tracers_input_grib_1(num_tracers), &
-                                          tracers_input_grib_2(num_tracers), &
+                                          tracers_input_grib_1(num_tracers_input), &
+                                          tracers_input_grib_2(num_tracers_input), &
                                           tmpstr, & 
-                                          method, tracers_input_vmap(num_tracers), &
+                                          method, tracers_input_vmap(num_tracers_input), &
                                           tracers_default(ntrac_max), vname2
  character (len=500)                   :: metadata
 
@@ -2638,7 +2640,8 @@
    if (localpet == 0) print*,"- FILE CONTAINS CLWMR."
  endif
    
- do n = 1, num_tracers
+ print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
+ do n = 1, num_tracers_input
 
    vname = tracers_input(n)
 
@@ -2651,7 +2654,9 @@
 
  enddo
 
- if (localpet==0) print*, "- NUMBER OF TRACERS TO BE PROCESSED = ", num_tracers
+ if (localpet==0) then
+    print*, "- NUMBER OF TRACERS IN THE INPUT FILE = ", num_tracers_input
+ endif
 
 !---------------------------------------------------------------------------
 ! Initialize esmf atmospheric fields.
@@ -2693,7 +2698,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
 
    if (localpet == 0) print*,"- READ ", trim(tracers_input_vmap(n))
    vname = tracers_input_vmap(n)
@@ -2867,8 +2872,8 @@ if (.not. isnative) then
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
  
-    if (localpet == 0) print*,"- CALL FieldGet FOR TRACERS."
-    do n=1,num_tracers
+  if (localpet == 0) print*,"- CALL FieldGet FOR TRACERS."
+  do n=1,num_tracers_input
     nullify(qptr)
     call ESMF_FieldGet(tracers_input_grid(n), &
             farrayPtr=qptr, rc=rc)
@@ -5239,6 +5244,7 @@ if (localpet == 0) then
         dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     endif
+   call check_cnwat(dummy2d)
    dummy2d_8= real(dummy2d,esmf_kind_r8)
    print*,'cnwat ',maxval(dummy2d),minval(dummy2d)
  endif
@@ -6484,7 +6490,7 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
  call ESMF_FieldDestroy(wind_input_grid, rc=rc)
  call ESMF_FieldDestroy(ps_input_grid, rc=rc)
 
- do n = 1, num_tracers
+ do n = 1, num_tracers_input
    call ESMF_FieldDestroy(tracers_input_grid(n), rc=rc)
  enddo
  deallocate(tracers_input_grid)
@@ -6639,4 +6645,27 @@ subroutine check_soilt(soilt, landmask, skint)
     enddo
   enddo
 end subroutine check_soilt
+
+!> When using GEFS data, some points on the target grid have 
+!> unreasonable canpy moisture content, so zero out any 
+!> locations with unrealistic canopy moisture values (>0.5).
+!!
+!! @param cnwat [input] 2-dimensional canopy moisture content
+!! @author Larissa Reames CIMMS/NSSL
+
+subroutine check_cnwat(cnwat)
+  implicit none 
+  real(esmf_kind_r4), intent(inout) :: cnwat(i_input,j_input)
+  
+  real(esmf_kind_r4)                :: max_cnwat = 0.5
+  
+  integer :: i, j
+
+  do i = 1,i_input
+    do j = 1,j_input
+      if (cnwat(i,j) .gt. max_cnwat) cnwat(i,j) = 0.0_esmf_kind_r4
+    enddo
+  enddo
+end subroutine check_cnwat
+
  end module input_data
