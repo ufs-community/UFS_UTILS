@@ -391,7 +391,7 @@ subroutine read_varmap
      call error_handler("OPENING VARIABLE MAPPING FILE", istat)
    endif
 
-   num_tracers = 0
+   num_tracers_input = 0
    nvars = 0
 
    !Loop over lines of file to count the number of variables
@@ -418,8 +418,8 @@ subroutine read_varmap
                            missing_var_methods(k), missing_var_values(k), var_type(k)
      if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
      if(trim(var_type(k))=='T') then
-       num_tracers = num_tracers + 1
-       tracers_input(num_tracers)=chgres_var_names(k)
+       num_tracers_input = num_tracers_input + 1
+       tracers_input(num_tracers_input)=chgres_var_names(k)
        if ((trim(chgres_var_names(k)) == "ice_aero" .or. trim(chgres_var_names(k)) == "liq_aero") .and. &
            trim(thomp_mp_climo_file) .ne. "NULL" .and. trim(input_type) == "grib2") then
            call error_handler("VARMAP TABLE CONTAINS TRACER ENTRIES FOR THOMPSON AEROSOLS liq_aero or "// &
@@ -429,6 +429,7 @@ subroutine read_varmap
      endif
     enddo
    close(14)
+   num_tracers = num_tracers_input
  endif
 end subroutine read_varmap
 
