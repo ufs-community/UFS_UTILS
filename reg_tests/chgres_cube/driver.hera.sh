@@ -2,14 +2,14 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run the chgres_cube regression tests on Hera.
+# Run the chgres_cube consistency tests on Hera.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
 # type "account_params".
 #
 # Invoke the script with no arguments.  A series of daily-chained
-# regression tests will be submitted.  To check the queue, type:
+# consistency tests will be submitted.  To check the queue, type:
 # "squeue -u USERNAME".
 #
 # The run output will be stored in OUTDIR.  Log output from the suite
@@ -45,9 +45,7 @@ QUEUE="${QUEUE:-batch}"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube.public.v2
-
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.3.051/bin/nccmp
+export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
