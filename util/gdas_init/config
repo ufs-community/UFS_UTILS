@@ -47,7 +47,7 @@
 #
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/gpfs/dell1/stmp/George.Gayno/gdas.init/input
+EXTRACT_DIR=/gpfs/dell1/stmp/$USER/gdas.init/input
 EXTRACT_DATA=yes
 
 RUN_CHGRES=yes
@@ -68,7 +68,7 @@ CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
 
-OUTDIR=/gpfs/dell1/stmp/George.Gayno/gdas.init/output
+OUTDIR=/gpfs/dell1/stmp/$USER/gdas.init/output
 
 #---------------------------------------------------------
 # Dont touch anything below here.
