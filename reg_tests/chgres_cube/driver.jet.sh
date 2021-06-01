@@ -47,7 +47,6 @@ export HDF5_DISABLE_VERSION_CHECK=2
 export HOMEufs=$PWD/../..
 
 export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
-
 export NCCMP=nccmp
 
 LOG_FILE=consistency.log
@@ -67,7 +66,7 @@ rm -fr $OUTDIR
 LOG_FILE=consistency.log01
 export OMP_NUM_THREADS=1
 TEST1=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
-      -o $LOG_FILE -e $LOG_FILE ./c96.fv3.restart.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./c96.fv3.restart.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C192 using FV3 tiled history files.
@@ -76,7 +75,7 @@ TEST1=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10
 LOG_FILE=consistency.log02
 export OMP_NUM_THREADS=1
 TEST2=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c192.fv3.history \
-      -o $LOG_FILE -e $LOG_FILE ./c192.fv3.history.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./c192.fv3.history.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using FV3 gaussian nemsio files.
@@ -85,7 +84,7 @@ TEST2=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10
 LOG_FILE=consistency.log03
 export OMP_NUM_THREADS=1
 TEST3=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.nemsio \
-      -o $LOG_FILE -e $LOG_FILE ./c96.fv3.nemsio.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./c96.fv3.nemsio.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using spectral GFS sigio/sfcio files.
@@ -94,7 +93,7 @@ TEST3=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10
 LOG_FILE=consistency.log04
 export OMP_NUM_THREADS=6   # should match cpus-per-task
 TEST4=$(sbatch --parsable --partition=xjet --nodes=4 --ntasks-per-node=3 --cpus-per-task=6 -t 0:20:00 \
-      -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio -o $LOG_FILE -e $LOG_FILE ./c96.gfs.sigio.sh)
+      --exclusive -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio -o $LOG_FILE -e $LOG_FILE ./c96.gfs.sigio.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using spectral GFS gaussian nemsio files.
@@ -103,7 +102,7 @@ TEST4=$(sbatch --parsable --partition=xjet --nodes=4 --ntasks-per-node=3 --cpus-
 LOG_FILE=consistency.log05
 export OMP_NUM_THREADS=1
 TEST5=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.nemsio \
-      -o $LOG_FILE -e $LOG_FILE ./c96.gfs.nemsio.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./c96.gfs.nemsio.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize regional C96 using FV3 gaussian nemsio files.
@@ -112,7 +111,7 @@ TEST5=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10
 LOG_FILE=consistency.log06
 export OMP_NUM_THREADS=1
 TEST6=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.regional \
-      -o $LOG_FILE -e $LOG_FILE ./c96.regional.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./c96.regional.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using FV3 gaussian netcdf files.
@@ -121,7 +120,7 @@ TEST6=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:10
 LOG_FILE=consistency.log07
 export OMP_NUM_THREADS=1
 TEST7=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf \
-      -o $LOG_FILE -e $LOG_FILE ./c96.fv3.netcdf.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./c96.fv3.netcdf.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C192 using GFS GRIB2 data.
@@ -130,7 +129,7 @@ TEST7=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10
 LOG_FILE=consistency.log08
 export OMP_NUM_THREADS=1
 TEST8=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.gfs.grib2 \
-      -o $LOG_FILE -e $LOG_FILE ./c192.gfs.grib2.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./c192.gfs.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 25-KM USING GFS GRIB2 files.
@@ -139,7 +138,7 @@ TEST8=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:05
 LOG_FILE=consistency.log09
 export OMP_NUM_THREADS=1   # should match cpus-per-task
 TEST9=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.grib2.conus \
-      -o $LOG_FILE -e $LOG_FILE ./25km.conus.gfs.grib2.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./25km.conus.gfs.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GFS PHYSICS.
@@ -148,7 +147,7 @@ TEST9=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:05
 LOG_FILE=consistency.log10
 export OMP_NUM_THREADS=1   # should match cpus-per-task
 TEST10=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=2 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 3km.conus.hrrr.gfssdf.grib2.conus \
-      -o $LOG_FILE -e $LOG_FILE ./3km.conus.hrrr.gfssdf.grib2.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./3km.conus.hrrr.gfssdf.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GSD PHYSICS AND SFC VARS FROM FILE.
@@ -157,7 +156,7 @@ TEST10=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=2 -t 0:1
 LOG_FILE=consistency.log11
 export OMP_NUM_THREADS=1   # should match cpus-per-task
 TEST11=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=3 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 3km.conus.hrrr.newsfc.grib2.conus \
-      -o $LOG_FILE -e $LOG_FILE ./3km.conus.hrrr.newsfc.grib2.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./3km.conus.hrrr.newsfc.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM USING NAM GRIB2 file WITH GFS PHYSICS .
@@ -166,7 +165,7 @@ TEST11=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=3 -t 0:1
 LOG_FILE=consistency.log12
 export OMP_NUM_THREADS=1   # should match cpus-per-task
 TEST12=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.nam.grib2.conus \
-      -o $LOG_FILE -e $LOG_FILE ./13km.conus.nam.grib2.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./13km.conus.nam.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM USING RAP GRIB2 file WITH GSD PHYSICS .
@@ -175,7 +174,7 @@ TEST12=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:0
 LOG_FILE=consistency.log13
 export OMP_NUM_THREADS=1   # should match cpus-per-task
 TEST13=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.rap.grib2.conus \
-      -o $LOG_FILE -e $LOG_FILE ./13km.conus.rap.grib2.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./13km.conus.rap.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM NA USING NCEI GFS GRIB2 file WITH GFS PHYSICS .
@@ -184,7 +183,7 @@ TEST13=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:0
 LOG_FILE=consistency.log14
 export OMP_NUM_THREADS=1   # should match cpus-per-task
 TEST14=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=2 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 13km.na.gfs.ncei.grib2.conus \
-      -o $LOG_FILE -e $LOG_FILE ./13km.na.gfs.ncei.grib2.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./13km.na.gfs.ncei.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 WAM IC using FV3 gaussian netcdf files.
@@ -193,7 +192,7 @@ TEST14=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=2 -t 0:1
 LOG_FILE=consistency.log15
 export OMP_NUM_THREADS=1   # should match cpus-per-task
 TEST15=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=2 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf2wam \
-      -o $LOG_FILE -e $LOG_FILE ./c96.fv3.netcdf2wam.sh)
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./c96.fv3.netcdf2wam.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
