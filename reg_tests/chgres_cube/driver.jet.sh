@@ -2,13 +2,13 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run the chgres_cube regression tests on JET.
+# Run the chgres_cube consistency tests on JET.
 #
 # Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
 # type "account_params".
 #
-# Invoke the script with no arguments.  A series of daily-
+# Invoke the script with no arguments.  A series of daisy-
 # chained jobs will be submitted.  To check the queue, type:
 # "squeue -u USERNAME".
 #
@@ -47,7 +47,6 @@ export HDF5_DISABLE_VERSION_CHECK=2
 export HOMEufs=$PWD/../..
 
 export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
-export NCCMP=nccmp
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
