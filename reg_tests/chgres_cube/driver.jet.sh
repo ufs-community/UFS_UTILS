@@ -55,7 +55,7 @@ rm -f $LOG_FILE* $SUM_FILE
 export OMP_STACKSIZE=1024M
 
 export APRUN=srun
-
+export NCCMP=${NCCMP:-nccmp}
 rm -fr $OUTDIR
 
 #-----------------------------------------------------------------------------

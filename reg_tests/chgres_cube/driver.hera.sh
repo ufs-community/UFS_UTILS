@@ -45,8 +45,8 @@ QUEUE="${QUEUE:-batch}"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
-
+#export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
+export HOMEreg=/scratch1/BMC/gsd-fv3/Larissa.Reames/chgres_cube/reg_tests
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE* $SUM_FILE
@@ -54,7 +54,7 @@ rm -f $LOG_FILE* $SUM_FILE
 export OMP_STACKSIZE=1024M
 
 export APRUN=srun
-
+export NCCMP=${NCCMP:-nccmp}
 rm -fr $OUTDIR
 
 #-----------------------------------------------------------------------------
