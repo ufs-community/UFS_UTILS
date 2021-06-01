@@ -26,16 +26,18 @@ set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
-module load build.$target
+module load build.$target.intel
 module list
 
-export OUTDIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/chgres_reg_tests
+export OUTDIR="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
 
-PROJECT_CODE="hfv3gfs"
+PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
+QUEUE="${QUEUE:-debug}"
 
-QUEUE="batch"
 export machine="jet"
 export HDF5_DISABLE_VERSION_CHECK=2
+
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
 # directory of your UFS_UTILS clone.  HOMEreg contains the input data
@@ -44,11 +46,11 @@ export HDF5_DISABLE_VERSION_CHECK=2
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube.public.v2
+export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
 
 export NCCMP=nccmp
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE* $SUM_FILE
 
@@ -56,9 +58,7 @@ export OMP_STACKSIZE=1024M
 
 export APRUN=srun
 
-#rm -fr $OUTDIR
-mkdir $OUTDIR
-
+rm -fr $OUTDIR
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using FV3 warm restart files.
@@ -185,6 +185,15 @@ LOG_FILE=regression.log14
 export OMP_NUM_THREADS=1   # should match cpus-per-task
 TEST14=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=2 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 13km.na.gfs.ncei.grib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./13km.na.gfs.ncei.grib2.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize C96 WAM IC using FV3 gaussian netcdf files.
+#-----------------------------------------------------------------------------
+
+LOG_FILE=regression.log15
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST15=$(sbatch --parsable --partition=xjet --ntasks-per-node=12 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf2wam \
+      -o $LOG_FILE -e $LOG_FILE ./c96.fv3.netcdf2wam.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
