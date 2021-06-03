@@ -1,8 +1,8 @@
-.TH "pmat2::ldltb" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::ldltb" 3 "Thu Jun 3 2021" "Version 1.4.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::ldltb
+pmat2::ldltb \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,23 +12,23 @@ pmat2::ldltb
 .ti -1c
 .RI "subroutine \fBldltb\fP (m, mah1, a)"
 .br
-.RI "[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. "
+.RI "\fI[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. \fP"
 .ti -1c
 .RI "subroutine \fBdldltb\fP (m, mah1, a)"
 .br
-.RI "[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. "
+.RI "\fI[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 65 of file pmat2\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::ldltb::ldltb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(sp), dimension(m,\-mah1:0), intent(inout) a)\fC [private]\fP"
+.SS "subroutine pmat2::ldltb::ldltb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(sp), dimension(m,-mah1:0), intent(inout)a)\fC [private]\fP"
 
 .PP
 [L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIm\fP size of symmetric matrix A 
 .br
@@ -37,27 +37,27 @@ Definition at line 65 of file pmat2\&.f90\&.
 \fIa\fP input lower (left) part of symmetric A; output its factors encoded as [L-I]+[D**-1] 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate\fP
+\fBDate:\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 609 of file pmat2\&.f90\&.
+Definition at line 608 of file pmat2\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat2::ldltb::dldltb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(dp), dimension(m,\-mah1:0), intent(inout) a)\fC [private]\fP"
+.SS "subroutine pmat2::ldltb::dldltb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(dp), dimension(m,-mah1:0), intent(inout)a)\fC [private]\fP"
 
 .PP
 [L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIm\fP size of symmetric matrix A 
 .br
@@ -66,19 +66,19 @@ Definition at line 609 of file pmat2\&.f90\&.
 \fIa\fP input lower (left) part of symmetric A; output its factors encoded as [L-I]+[D**-1] 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate\fP
+\fBDate:\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 645 of file pmat2\&.f90\&.
+Definition at line 644 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

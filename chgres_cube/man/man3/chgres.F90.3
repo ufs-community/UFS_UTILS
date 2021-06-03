@@ -1,8 +1,10 @@
-.TH "/home/ed/UFS_UTILS/sorc/chgres_cube.fd/chgres.F90" 3 "Fri Apr 30 2021" "Version 1.3.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/chgres_cube.fd/chgres.F90" 3 "Thu Jun 3 2021" "Version 1.4.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/chgres_cube.fd/chgres.F90 \- Initialize an FV3 model run\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/chgres_cube.fd/chgres.F90 \- 
+.PP
+Initialize an FV3 model run\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,7 +15,7 @@
 .ti -1c
 .RI "program \fBchgres\fP"
 .br
-.RI "Initialize an FV3 model run\&. "
+.RI "\fIInitialize an FV3 model run\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -21,7 +23,7 @@ Initialize an FV3 model run\&.
 
 
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
@@ -31,7 +33,7 @@ George Gayno NOAA/EMC
 Definition in file \fBchgres\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "program chgres"
+.SS "program chgres ()"
 
 .PP
 Initialize an FV3 model run\&. Initialize an FV3 run using history or restart data from another FV3 run, the spectral GFS, and a few other models\&. Converts atmospheric, surface and nst data\&.
@@ -40,17 +42,17 @@ This file reads a configuration namelist\&.
 .PP
 Link the configuration namelist to \&./fort\&.41\&. Then run the program with a multiple of six mpi tasks (an ESMF library requirement for fv3 cubed sphere grids)\&.
 .PP
-\fBNote\fP
+\fBNote:\fP
 .RS 4
 For variable names “input” refers to the data input to the program (i\&.e\&., GRIB2, NEMSIO, NetCDF)\&. “Target” refers to the target or FV3 model grid\&.
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
 .PP
-\fBReturns\fP
+\fBReturns:\fP
 .RS 4
 0 for success, error code otherwise\&. 
 .RE
@@ -59,7 +61,7 @@ George Gayno NOAA/EMC
 .PP
 Definition at line 24 of file chgres\&.F90\&.
 .PP
-References atmosphere::atmosphere_driver(), model_grid::cleanup_input_target_grid_data(), program_setup::convert_atm, program_setup::convert_sfc, model_grid::define_input_grid(), model_grid::define_target_grid(), error_handler(), program_setup::read_setup_namelist(), program_setup::read_varmap(), and surface::surface_driver()\&.
+References atmosphere::atmosphere_driver(), model_grid::cleanup_input_target_grid_data(), model_grid::define_input_grid(), model_grid::define_target_grid(), error_handler(), program_setup::read_setup_namelist(), program_setup::read_varmap(), and surface::surface_driver()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

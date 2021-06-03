@@ -1,8 +1,8 @@
-.TH "module_nwp::nwp_type" 3 "Fri Apr 30 2021" "Version 1.3.0" "fvcom_tools" \" -*- nroff -*-
+.TH "module_nwp::nwp_type" 3 "Thu Jun 3 2021" "Version 1.4.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-module_nwp::nwp_type
+module_nwp::nwp_type \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -14,87 +14,99 @@ Inherited by \fBmodule_nwp::fcst_nwp\fP\&.
 .ti -1c
 .RI "character(len=6) \fBdatatype\fP"
 .br
-.RI "Data type\&. "
+.RI "\fIData type\&. \fP"
 .ti -1c
 .RI "character(len=20), allocatable \fBdimnameew\fP"
 .br
-.RI "East/West dimension name\&. "
+.RI "\fIEast/West dimension name\&. \fP"
 .ti -1c
 .RI "character(len=20), allocatable \fBdimnamens\fP"
 .br
-.RI "North/South dimension name\&. "
+.RI "\fINorth/South dimension name\&. \fP"
 .ti -1c
 .RI "character(len=20), allocatable \fBdimnametime\fP"
 .br
-.RI "Time dimension name\&. "
+.RI "\fITime dimension name\&. \fP"
 .ti -1c
 .RI "integer \fBi_ice\fP"
 .br
-.RI "Index of ice var\&. "
+.RI "\fIIndex of ice var\&. \fP"
 .ti -1c
 .RI "integer \fBi_icet\fP"
 .br
-.RI "Index of ice temp var\&. "
+.RI "\fIIndex of ice temp var\&. \fP"
 .ti -1c
 .RI "integer \fBi_mask\fP"
 .br
-.RI "Is var visible (always 1)\&. "
+.RI "\fIIs var visible (always 1)\&. \fP"
 .ti -1c
 .RI "integer \fBi_sfct\fP"
 .br
-.RI "Index of sst temp var\&. "
+.RI "\fIIndex of sst temp var\&. \fP"
 .ti -1c
 .RI "integer \fBi_sst\fP"
 .br
-.RI "Index of sst var\&. "
+.RI "\fIIndex of sst var\&. \fP"
 .ti -1c
 .RI "character(len=20), allocatable \fBlatname\fP"
 .br
-.RI "Latitude name\&. "
+.RI "\fILatitude name\&. \fP"
 .ti -1c
 .RI "character(len=20), allocatable \fBlonname\fP"
 .br
-.RI "Longitude name\&. "
+.RI "\fILongitude name\&. \fP"
 .ti -1c
 .RI "integer \fBnumvar\fP"
 .br
-.RI "Number of variabls\&. "
+.RI "\fINumber of variabls\&. \fP"
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_ice\fP"
+.RI "real(r_kind), dimension(:,:,:), 
 .br
-.RI "Over water ice concentration 3D array\&. "
+allocatable \fBnwp_ice\fP"
+.br
+.RI "\fIOver water ice concentration 3D array\&. \fP"
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_icet\fP"
+.RI "real(r_kind), dimension(:,:,:), 
 .br
-.RI "Ice skin temperature 3D array\&. "
+allocatable \fBnwp_icet\fP"
+.br
+.RI "\fIIce skin temperature 3D array\&. \fP"
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_mask\fP"
+.RI "real(r_kind), dimension(:,:,:), 
 .br
-.RI "Land/water mask 3D array\&. "
+allocatable \fBnwp_mask\fP"
+.br
+.RI "\fILand/water mask 3D array\&. \fP"
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_sfct\fP"
+.RI "real(r_kind), dimension(:,:,:), 
 .br
-.RI "Skin temperature 3D array\&. "
+allocatable \fBnwp_sfct\fP"
+.br
+.RI "\fISkin temperature 3D array\&. \fP"
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_sst\fP"
+.RI "real(r_kind), dimension(:,:,:), 
 .br
-.RI "SST 3D array\&. "
+allocatable \fBnwp_sst\fP"
+.br
+.RI "\fISST 3D array\&. \fP"
 .ti -1c
-.RI "character(len=20), dimension(:), allocatable \fBvarnames\fP"
+.RI "character(len=20), dimension(:), 
 .br
-.RI "Variable names\&. "
+allocatable \fBvarnames\fP"
+.br
+.RI "\fIVariable names\&. \fP"
 .ti -1c
 .RI "integer \fBxlat\fP"
 .br
-.RI "Number of latitudes\&. "
+.RI "\fINumber of latitudes\&. \fP"
 .ti -1c
 .RI "integer \fBxlon\fP"
 .br
-.RI "Number of longitudes\&. "
+.RI "\fINumber of longitudes\&. \fP"
 .ti -1c
 .RI "integer \fBxtime\fP"
 .br
-.RI "Number of times\&. "
+.RI "\fINumber of times\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 

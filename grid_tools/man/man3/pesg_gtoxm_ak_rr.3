@@ -1,8 +1,8 @@
-.TH "pesg::gtoxm_ak_rr" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::gtoxm_ak_rr" 3 "Thu Jun 3 2021" "Version 1.4.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::gtoxm_ak_rr
+pesg::gtoxm_ak_rr \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,23 +12,23 @@ pesg::gtoxm_ak_rr
 .ti -1c
 .RI "subroutine \fBgtoxm_ak_rr_g\fP (A, K, plat, plon, pazi, delx, dely, lat, lon, xm, ff)"
 .br
-.RI "Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. "
+.RI "\fIGiven the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. \fP"
 .ti -1c
 .RI "subroutine \fBgtoxm_ak_rr_m\fP (A, K, plat, plon, pazi, lat, lon, xm, ff)"
 .br
-.RI "Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. "
+.RI "\fIGiven the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 49 of file pesg\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::gtoxm_ak_rr::gtoxm_ak_rr_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), intent(in) lat, real(dp), intent(in) lon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::gtoxm_ak_rr::gtoxm_ak_rr_g (real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), intent(in)pazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), intent(in)lat, real(dp), intent(in)lon, real(dp), dimension(2), intent(out)xm, logical, intent(out)ff)\fC [private]\fP"
 
 .PP
 Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. If the transformation is invalid, return a \&.true\&. failure flag\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIa\fP parameter of the ESG mapping 
 .br
@@ -53,20 +53,22 @@ Given the map specification (angles in radians), the grid spacing (in map-space 
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1932 of file pesg\&.f90\&.
-.SS "subroutine pesg::gtoxm_ak_rr::gtoxm_ak_rr_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) lat, real(dp), intent(in) lon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
+Definition at line 1930 of file pesg\&.f90\&.
+.PP
+Referenced by pesg::gtoxm_ak_dd_g()\&.
+.SS "subroutine pesg::gtoxm_ak_rr::gtoxm_ak_rr_m (real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), intent(in)pazi, real(dp), intent(in)lat, real(dp), intent(in)lon, real(dp), dimension(2), intent(out)xm, logical, intent(out)ff)\fC [private]\fP"
 
 .PP
 Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. If the transformation is invalid, return a \&.true\&. failure flag\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIa\fP parameters of an ESG mapping 
 .br
@@ -87,14 +89,16 @@ Given the map specification (angles in radians), the grid spacing (in map-space 
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1887 of file pesg\&.f90\&.
+Definition at line 1886 of file pesg\&.f90\&.
+.PP
+Referenced by pesg::gtoxm_ak_dd_m(), and pesg::gtoxm_ak_rr_g()\&.
 
 .SH "Author"
 .PP 

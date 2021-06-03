@@ -1,8 +1,8 @@
-.TH "pmat5::ininmap" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::ininmap" 3 "Thu Jun 3 2021" "Version 1.4.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat5::ininmap
+pmat5::ininmap \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,23 +12,23 @@ pmat5::ininmap
 .ti -1c
 .RI "subroutine \fBdininmap\fP (alon0, alat0, rot3)"
 .br
-.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. "
+.RI "\fIInitialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. \fP"
 .ti -1c
 .RI "subroutine \fBsininmap\fP (alon0, alat0, rot3)"
 .br
-.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. "
+.RI "\fIInitialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 34 of file pmat5\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat5::ininmap::dininmap (real(dp), intent(in) alon0, real(dp), intent(in) alat0, real(dp), dimension(3,3), intent(out) rot3)\fC [private]\fP"
+.SS "subroutine pmat5::ininmap::dininmap (real(dp), intent(in)alon0, real(dp), intent(in)alat0, real(dp), dimension(3,3), intent(out)rot3)\fC [private]\fP"
 
 .PP
 Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. Double precision version\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIalon0\fP geographical longitude (degrees) of projection center\&. 
 .br
@@ -37,20 +37,20 @@ Initialize the rotation matrix ROT3 needed to transform standard earth-centered 
 \fIrot3\fP rotation matrix\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 86 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::ininmap::sininmap (real(sp), intent(in) alon0, real(sp), intent(in) alat0, real(sp), dimension(3,3), intent(out) rot3)\fC [private]\fP"
+Definition at line 85 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::ininmap::sininmap (real(sp), intent(in)alon0, real(sp), intent(in)alat0, real(sp), dimension(3,3), intent(out)rot3)\fC [private]\fP"
 
 .PP
 Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. Single precision version\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIalon0\fP geographical longitude (degrees) of projection center\&. 
 .br
@@ -59,19 +59,19 @@ Initialize the rotation matrix ROT3 needed to transform standard earth-centered 
 \fIrot3\fP rotation matrix\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
-\fBDate\fP
+\fBDate:\fP
 .RS 4
 1995 
 .RE
 .PP
 
 .PP
-Definition at line 64 of file pmat5\&.f90\&.
+Definition at line 63 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 

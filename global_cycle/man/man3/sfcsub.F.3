@@ -1,19 +1,21 @@
-.TH "/home/ed/UFS_UTILS/sorc/global_cycle.fd/sfcsub.F" 3 "Fri Apr 30 2021" "Version 1.3.0" "global_cycle" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/global_cycle.fd/sfcsub.F" 3 "Thu Jun 3 2021" "Version 1.4.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/global_cycle.fd/sfcsub.F \- This is a limited point version of surface program\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/global_cycle.fd/sfcsub.F \- 
+.PP
+This is a limited point version of surface program\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Modules"
+.SS "Data Types"
 
 .in +1c
 .ti -1c
 .RI "module \fBsfccyc_module\fP"
 .br
-.RI "This program runs in two different modes: "
+.RI "\fIThis program runs in two different modes: \fP"
 .in -1c
 .SS "Functions/Subroutines"
 
@@ -21,319 +23,179 @@
 .ti -1c
 .RI "subroutine \fBalbocn\fP (albclm, slmask, albomx, len)"
 .br
-.RI "Set the albedo at open water points\&. "
+.RI "\fISet the albedo at open water points\&. \fP"
 .ti -1c
 .RI "subroutine \fBanaly\fP (lugb, iy, im, id, ih, fh, len, lsoil, slmask, fntsfa, fnweta, fnsnoa, fnzora, fnalba, fnaisa, fntg3a, fnscva, fnsmca, fnstca, fnacna, fnvega, fnveta, fnsota, fnvmna, fnvmxa, fnslpa, fnabsa, tsfanl, wetanl, snoanl, zoranl, albanl, aisanl, tg3anl, cvanl, cvbanl, cvtanl, smcanl, stcanl, slianl, scvanl, acnanl, veganl, vetanl, sotanl, alfanl, tsfan0, vmnanl, vmxanl, slpanl, absanl, kpdtsf, kpdwet, kpdsno, kpdsnd, kpdzor, kpdalb, kpdais, kpdtg3, kpdscv, kpdacn, kpdsmc, kpdstc, kpdveg, kprvet, kpdsot, kpdalf, kpdvmn, kpdvmx, kpdslp, kpdabs, irttsf, irtwet, irtsno, irtzor, irtalb, irtais, irttg3, irtscv, irtacn, irtsmc, irtstc, irtveg, irtvet, irtsot, irtalf, irtvmn, irtvmx, irtslp, irtabs, imsk, jmsk, slmskh, outlat, outlon, gaus, blno, blto, me, lanom)"
 .br
-.RI "Read analysis fields\&. "
+.RI "\fIRead analysis fields\&. \fP"
 .ti -1c
 .RI "subroutine \fBanomint\fP (tsfan0, tsfclm, tsfcl0, tsfanl, len)"
 .br
-.RI "Add initial SST anomaly to date interpolated climatology\&. "
+.RI "\fIAdd initial SST anomaly to date interpolated climatology\&. \fP"
 .ti -1c
 .RI "subroutine \fBclima\fP (lugb, iy, im, id, ih, fh, len, lsoil, slmask, fntsfc, fnwetc, fnsnoc, fnzorc, fnalbc, fnaisc, fntg3c, fnscvc, fnsmcc, fnstcc, fnacnc, fnvegc, fnvetc, fnsotc, fnvmnc, fnvmxc, fnslpc, fnabsc, tsfclm, tsfcl2, wetclm, snoclm, zorclm, albclm, aisclm, tg3clm, cvclm, cvbclm, cvtclm, cnpclm, smcclm, stcclm, sliclm, scvclm, acnclm, vegclm, vetclm, sotclm, alfclm, vmnclm, vmxclm, slpclm, absclm, kpdtsf, kpdwet, kpdsno, kpdzor, kpdalb, kpdais, kpdtg3, kpdscv, kpdacn, kpdsmc, kpdstc, kpdveg, kpdvet, kpdsot, kpdalf, tsfcl0, kpdvmn, kpdvmx, kpdslp, kpdabs, deltsfc, lanom, imsk, jmsk, slmskh, outlat, outlon, gaus, blno, blto, me, lprnt, iprnt, fnalbc2, ialb, tile_num_ch, i_index, j_index)"
 .br
-.RI "Driver routine that reads in climatological data for a given time, and, if necessary, interpolates it to the model grid\&. "
+.RI "\fIDriver routine that reads in climatological data for a given time, and, if necessary, interpolates it to the model grid\&. \fP"
 .ti -1c
 .RI "subroutine \fBcount\fP (slimsk, sno, ijmax)"
 .br
-.RI "Counts the number of model points that are snow covered land, snow-free land, open water, sea ice, and snow covered sea ice\&. "
+.RI "\fICounts the number of model points that are snow covered land, snow-free land, open water, sea ice, and snow covered sea ice\&. \fP"
 .ti -1c
 .RI "subroutine \fBdayoyr\fP (iyr, imo, idy, ldy)"
 .br
-.RI "Compute day of the year based on month and day\&. "
+.RI "\fICompute day of the year based on month and day\&. \fP"
 .ti -1c
 .RI "subroutine \fBfilanl\fP (tsfanl, tsfan2, wetanl, snoanl, zoranl, albanl, aisanl, tg3anl, cvanl, cvbanl, cvtanl, cnpanl, smcanl, stcanl, slianl, scvanl, veganl, vetanl, sotanl, alfanl, sihanl, sicanl, vmnanl, vmxanl, slpanl, absanl, tsfclm, tsfcl2, wetclm, snoclm, zorclm, albclm, aisclm, tg3clm, cvclm, cvbclm, cvtclm, cnpclm, smcclm, stcclm, sliclm, scvclm, vegclm, vetclm, sotclm, alfclm, sihclm, sicclm, vmnclm, vmxclm, slpclm, absclm, len, lsoil)"
 .br
-.RI "Fill in analysis arrays with climatology before reading analysis data\&. "
+.RI "\fIFill in analysis arrays with climatology before reading analysis data\&. \fP"
 .ti -1c
 .RI "subroutine \fBfilfcs\fP (tsffcs, wetfcs, snofcs, zorfcs, albfcs, tg3fcs, cvfcs, cvbfcs, cvtfcs, cnpfcs, smcfcs, stcfcs, slifcs, aisfcs, vegfcs, vetfcs, sotfcs, alffcs, sihfcs, sicfcs, vmnfcs, vmxfcs, slpfcs, absfcs, tsfanl, wetanl, snoanl, zoranl, albanl, tg3anl, cvanl, cvbanl, cvtanl, cnpanl, smcanl, stcanl, slianl, aisanl, veganl, vetanl, sotanl, alfanl, sihanl, sicanl, vmnanl, vmxanl, slpanl, absanl, len, lsoil)"
 .br
-.RI "Fill in model grid guess arrays with analysis values if this is a dead start\&. "
+.RI "\fIFill in model grid guess arrays with analysis values if this is a dead start\&. \fP"
 .ti -1c
 .RI "subroutine \fBfixrda\fP (lugb, fngrib, kpds5, slmask, iy, im, id, ih, fh, gdata, len, iret, imsk, jmsk, slmskh, gaus, blno, blto, outlat, outlon, me)"
 .br
-.RI "Read in grib1 analysis data for the requested date and horizontally interpolate to the model grid\&. "
+.RI "\fIRead in grib1 analysis data for the requested date and horizontally interpolate to the model grid\&. \fP"
 .ti -1c
 .RI "subroutine \fBfixrdc\fP (lugb, fngrib, kpds5, kpds7, mon, slmask, gdata, len, iret, imsk, jmsk, slmskh, gaus, blno, blto, outlat, outlon, me)"
 .br
-.RI "Read in grib1 climatology data for a specific month and and horizontally interpolate to the model grid\&. "
+.RI "\fIRead in grib1 climatology data for a specific month and and horizontally interpolate to the model grid\&. \fP"
 .ti -1c
 .RI "subroutine \fBfixrdc_tile\fP (filename_raw, tile_num_ch, i_index, j_index, kpds, var, mon, npts, me)"
 .br
-.RI "Reads in climatological data on the model grid tile for a given month\&. "
+.RI "\fIReads in climatological data on the model grid tile for a given month\&. \fP"
 .ti -1c
 .RI "subroutine \fBfixrdg\fP (lugb, idim, jdim, fngrib, kpds5, gdata, gaus, blno, blto, me)"
 .br
-.RI "Read a GRIB1 file\&. "
+.RI "\fIRead a GRIB1 file\&. \fP"
 .ti -1c
 .RI "subroutine \fBga2la\fP (gauin, imxin, jmxin, regout, imxout, jmxout, wlon, rnlat, rlnout, rltout, gaus, blno, blto)"
 .br
-.RI "Interpolation from lat/lon or gaussian grid to a lat/lon grid\&. "
+.RI "\fIInterpolation from lat/lon or gaussian grid to a lat/lon grid\&. \fP"
 .ti -1c
 .RI "subroutine \fBgaulat\fP (gaul, k)"
 .br
-.RI "Calculate gaussian latitudes\&. "
+.RI "\fICalculate gaussian latitudes\&. \fP"
 .ti -1c
 .RI "subroutine \fBgetarea\fP (kgds, dlat, dlon, rslat, rnlat, wlon, elon, ijordr, me)"
 .br
-.RI "For a given GRIB1 grid description section array, determine some grid specifications\&. "
+.RI "\fIFor a given GRIB1 grid description section array, determine some grid specifications\&. \fP"
 .ti -1c
 .RI "subroutine \fBgetscv\fP (snofld, scvfld, len)"
 .br
-.RI "Set snow cover flag based on snow depth\&. "
+.RI "\fISet snow cover flag based on snow depth\&. \fP"
 .ti -1c
 .RI "subroutine \fBgetsmc\fP (wetfld, len, lsoil, smcfld, me)"
 .br
-.RI "Set soil moisture from soil wetness\&. "
+.RI "\fISet soil moisture from soil wetness\&. \fP"
 .ti -1c
 .RI "subroutine \fBgetstc\fP (tsffld, tg3fld, slifld, len, lsoil, stcfld, tsfimx)"
 .br
-.RI "Set soil temperature and sea ice column temperature\&. "
+.RI "\fISet soil temperature and sea ice column temperature\&. \fP"
 .ti -1c
 .RI "subroutine \fBhmskrd\fP (lugb, imsk, jmsk, fnmskh, kpds5, slmskh, gausm, blnmsk, bltmsk, me)"
 .br
-.RI "Read a high-resolution land mask\&. "
+.RI "\fIRead a high-resolution land mask\&. \fP"
 .ti -1c
 .RI "subroutine \fBla2ga\fP (regin, imxin, jmxin, rinlon, rinlat, rlon, rlat, inttyp, gauout, len, lmask, rslmsk, slmask, outlat, outlon, me)"
 .br
-.RI "Interpolate data from a lat/lon grid to the model grid\&. "
+.RI "\fIInterpolate data from a lat/lon grid to the model grid\&. \fP"
 .ti -1c
 .RI "subroutine \fBlandtyp\fP (vegtype, soiltype, slptype, slmask, len)"
 .br
-.RI "Set vegetation, soil and slope type at undefined model points\&. "
+.RI "\fISet vegetation, soil and slope type at undefined model points\&. \fP"
 .ti -1c
 .RI "subroutine \fBmaxmin\fP (f, imax, kmax)"
 .br
-.RI "Compute the maxmimum and minimum of a field\&. "
+.RI "\fICompute the maxmimum and minimum of a field\&. \fP"
 .ti -1c
 .RI "subroutine \fBmerge\fP (len, lsoil, iy, im, id, ih, fh, deltsfc, sihfcs, sicfcs, vmnfcs, vmxfcs, slpfcs, absfcs, tsffcs, wetfcs, snofcs, zorfcs, albfcs, aisfcs, cvfcs, cvbfcs, cvtfcs, cnpfcs, smcfcs, stcfcs, slifcs, vegfcs, vetfcs, sotfcs, alffcs, sihanl, sicanl, vmnanl, vmxanl, slpanl, absanl, tsfanl, tsfan2, wetanl, snoanl, zoranl, albanl, aisanl, cvanl, cvbanl, cvtanl, cnpanl, smcanl, stcanl, slianl, veganl, vetanl, sotanl, alfanl, ctsfl, calbl, caisl, csnol, csmcl, czorl, cstcl, cvegl, ctsfs, calbs, caiss, csnos, csmcs, czors, cstcs, cvegs, ccv, ccvb, ccvt, ccnp, cvetl, cvets, csotl, csots, calfl, calfs, csihl, csihs, csicl, csics, cvmnl, cvmns, cvmxl, cvmxs, cslpl, cslps, cabsl, cabss, irttsf, irtwet, irtsno, irtzor, irtalb, irtais, irttg3, irtscv, irtacn, irtsmc, irtstc, irtveg, irtvmn, irtvmx, irtslp, irtabs, irtvet, irtsot, irtalf, landice, me)"
 .br
-.RI "Blend the model forecast (or first guess) fields with the analysis/climatology\&. "
+.RI "\fIBlend the model forecast (or first guess) fields with the analysis/climatology\&. \fP"
 .ti -1c
 .RI "subroutine \fBmonitr\fP (lfld, fld, slimsk, sno, ijmax)"
 .br
-.RI "Determine the maximum and minimum values of a surface field at snow-free and snow covered land, open water, and snow-free and snow covered sea ice\&. "
+.RI "\fIDetermine the maximum and minimum values of a surface field at snow-free and snow covered land, open water, and snow-free and snow covered sea ice\&. \fP"
 .ti -1c
 .RI "subroutine \fBnetcdf_err\fP (error)"
 .br
-.RI "Print the error message for a given netCDF return code\&. "
+.RI "\fIPrint the error message for a given netCDF return code\&. \fP"
 .ti -1c
 .RI "subroutine \fBnewice\fP (slianl, slifcs, tsfanl, tsffcs, len, lsoil, sihnew, sicnew, sihanl, sicanl, albanl, snoanl, zoranl, smcanl, stcanl, albsea, snosea, zorsea, smcsea, smcice, tsfmin, tsfice, albice, zorice, tgice, rla, rlo, me)"
 .br
-.RI "Adjust surface fields when ice melts or forms\&. "
+.RI "\fIAdjust surface fields when ice melts or forms\&. \fP"
 .ti -1c
 .RI "subroutine \fBqcbyfc\fP (tsffcs, snofcs, qctsfs, qcsnos, qctsfi, len, lsoil, snoanl, aisanl, slianl, tsfanl, albanl, zoranl, smcanl, smcclm, tsfsmx, albomx, zoromx, me)"
 .br
-.RI "Quality control analysis fields using the first guess\&. "
+.RI "\fIQuality control analysis fields using the first guess\&. \fP"
 .ti -1c
 .RI "subroutine \fBqcmxice\fP (glacir, amxice, len, me)"
 .br
-.RI "Quality control maximum ice extent\&. "
+.RI "\fIQuality control maximum ice extent\&. \fP"
 .ti -1c
 .RI "subroutine \fBqcmxmn\fP (ttl, fld, slimsk, sno, iceflg, fldlmx, fldlmn, fldomx, fldomn, fldimx, fldimn, fldjmx, fldjmn, fldsmx, fldsmn, epsfld, rla, rlo, len, mode, percrit, lgchek, me)"
 .br
-.RI "Range check a field\&. "
+.RI "\fIRange check a field\&. \fP"
 .ti -1c
 .RI "subroutine \fBqcsice\fP (ais, glacir, amxice, aicice, aicsea, sllnd, slmask, rla, rlo, len, me)"
 .br
-.RI "Check the sea ice cover mask against the land-sea mask\&. "
+.RI "\fICheck the sea ice cover mask against the land-sea mask\&. \fP"
 .ti -1c
 .RI "subroutine \fBqcsli\fP (slianl, slifcs, len, me)"
 .br
-.RI "Check consistency between the forecast and analysis land-sea-ice mask\&. "
+.RI "\fICheck consistency between the forecast and analysis land-sea-ice mask\&. \fP"
 .ti -1c
 .RI "subroutine \fBqcsnow\fP (snoanl, slmask, aisanl, glacir, len, snoval, landice, me)"
 .br
-.RI "Quality control snow at the model points\&. "
+.RI "\fIQuality control snow at the model points\&. \fP"
 .ti -1c
 .RI "subroutine \fBrof01\fP (aisfld, len, op, crit)"
 .br
-.RI "Round a field up to one or down to zero\&. "
+.RI "\fIRound a field up to one or down to zero\&. \fP"
 .ti -1c
 .RI "subroutine \fBscale\fP (fld, len, scl)"
 .br
-.RI "Multiply a field by a scaling factor\&. "
+.RI "\fIMultiply a field by a scaling factor\&. \fP"
 .ti -1c
 .RI "subroutine \fBsetlsi\fP (slmask, aisfld, len, aicice, slifld)"
 .br
-.RI "Set land-sea-ice mask at sea ice\&. "
+.RI "\fISet land-sea-ice mask at sea ice\&. \fP"
 .ti -1c
 .RI "subroutine \fBsetrmsk\fP (kpds5, slmask, igaul, jgaul, wlon, rnlat, data, imax, jmax, rlnout, rltout, lmask, rslmsk, gaus, blno, blto, kgds1, kpds4, lbms)"
 .br
-.RI "Set the mask for the input data\&. "
+.RI "\fISet the mask for the input data\&. \fP"
 .ti -1c
 .RI "subroutine \fBsetzro\fP (fld, eps, len)"
 .br
-.RI "Set a field to zero if it is less than a threshold\&. "
+.RI "\fISet a field to zero if it is less than a threshold\&. \fP"
 .ti -1c
 .RI "subroutine \fBsfccycle\fP (lugb, len, lsoil, sig1t, deltsfc, iy, im, id, ih, fh, rla, rlo, slmask, orog, orog_uf, use_ufo, nst_anl, sihfcs, sicfcs, sitfcs, swdfcs, slcfcs, vmnfcs, vmxfcs, slpfcs, absfcs, tsffcs, snofcs, zorfcs, albfcs, tg3fcs, cnpfcs, smcfcs, stcfcs, slifcs, aisfcs, vegfcs, vetfcs, sotfcs, alffcs, cvfcs, cvbfcs, cvtfcs, me, nlunit, sz_nml, input_nml_file, ialb, isot, ivegsrc, tile_num_ch, i_index, j_index)"
 .br
-.RI "Surface cycling driver routine\&. "
+.RI "\fISurface cycling driver routine\&. \fP"
 .ti -1c
 .RI "subroutine \fBsnodpth\fP (scvanl, slianl, tsfanl, snoclm, glacir, snwmax, snwmin, landice, len, snoanl, me)"
 .br
-.RI "Estimate snow depth at glacial, land and sea ice points\&. "
+.RI "\fIEstimate snow depth at glacial, land and sea ice points\&. \fP"
 .ti -1c
 .RI "subroutine \fBsnodpth2\fP (glacir, snwmax, snoanl, len, me)"
 .br
-.RI "Ensure deep snow pack at permanent glacial points\&. "
+.RI "\fIEnsure deep snow pack at permanent glacial points\&. \fP"
 .ti -1c
 .RI "subroutine \fBsnosfc\fP (snoanl, tsfanl, tsfsmx, len, me)"
 .br
-.RI "Check skin temperature at points with snow\&. "
+.RI "\fICheck skin temperature at points with snow\&. \fP"
 .ti -1c
 .RI "subroutine \fBsubst\fP (data, imax, jmax, dlon, dlat, ijordr)"
 .br
-.RI "Take an array of data on a lat/lon based grid and rearrange it so the corner point is in the 'lower left' and adjacent points in the 'i' direction are consecutive\&. "
+.RI "\fITake an array of data on a lat/lon based grid and rearrange it so the corner point is in the 'lower left' and adjacent points in the 'i' direction are consecutive\&. \fP"
 .ti -1c
 .RI "subroutine \fBtsfcor\fP (tsfc, orog, slmask, umask, len, rlapse)"
 .br
-.RI "Adjust skin temperature or SST for terrain\&. "
+.RI "\fIAdjust skin temperature or SST for terrain\&. \fP"
 .ti -1c
 .RI "subroutine \fBusesgt\fP (sig1t, slianl, tg3anl, len, lsoil, tsfanl, stcanl, tsfimx)"
 .br
-.RI "Set soil temperature and sea ice column temperature for a dead start\&. "
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdabs\fP"
-.br
-.RI "GRIB1 parameter number of maximum snow albedo\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdabs_0\fP"
-.br
-.RI "GRIB1 parameter number of legacy maximum snow albedo\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdabs_1\fP"
-.br
-.RI "GRIB1 parameter number of modis-based maximum snow albedo\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdacn\fP"
-.br
-.RI "GRIB1 parameter number of sea ice concentration\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdais\fP"
-.br
-.RI "GRIB1 parameter number of roughness length\&. "
-.ti -1c
-.RI "integer, dimension(4) \fBsfccyc_module::kpdalb\fP"
-.br
-.RI "GRIB1 parameter number of 4-component snow-free albedo\&. "
-.ti -1c
-.RI "integer, dimension(4), parameter \fBsfccyc_module::kpdalb_0\fP =(/212,215,213,216/)"
-.br
-.RI "GRIB1 parameter numbers for brigleb snow-free albedo\&. "
-.ti -1c
-.RI "integer, dimension(4), parameter \fBsfccyc_module::kpdalb_1\fP =(/189,190,191,192/)"
-.br
-.RI "GRIB1 parameter numbers for modis snow-free albedo\&. "
-.ti -1c
-.RI "integer, dimension(2), parameter \fBsfccyc_module::kpdalf\fP =(/214,217/)"
-.br
-.RI "GRIB1 parameter numbers of fraction for strongly/weakly zenith angle dependent albedo\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdgla\fP"
-.br
-.RI "GRIB1 parameter number of glacial ice\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdmsk\fP"
-.br
-.RI "GRIB1 parameter number of land mask\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdmxi\fP"
-.br
-.RI "GRIB1 parameter number of maximum ice extent\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdoro\fP"
-.br
-.RI "GRIB1 parameter number of orography\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdplr\fP"
-.br
-.RI "GRIB1 parameter number of plant resistance\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdscv\fP"
-.br
-.RI "GRIB1 parameter number of snow cover\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdslp\fP"
-.br
-.RI "GRIB1 parameter number of slope type\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdsmc\fP"
-.br
-.RI "GRIB1 parameter number of soil moisture\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdsnd\fP"
-.br
-.RI "GRIB1 parameter number of physical snow depth\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdsno\fP"
-.br
-.RI "GRIB1 parameter number of liquid equivalent snow depth\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdsot\fP"
-.br
-.RI "GRIB1 parameter number of soil type\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdstc\fP"
-.br
-.RI "GRIB1 parameter number of soil temperature\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdtg3\fP"
-.br
-.RI "GRIB1 parameter number of soil substrate temperature\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdtsf\fP"
-.br
-.RI "GRIB1 parameter number of skin temperature/SST\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdveg\fP"
-.br
-.RI "GRIB1 parameter number of vegetation greenness\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdvet\fP"
-.br
-.RI "GRIB1 parameter number of vegetation type\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdvmn\fP"
-.br
-.RI "GRIB1 parameter number of minimum vegetation greenness\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdvmx\fP"
-.br
-.RI "GRIB1 parameter number of maximum vegetation greenness\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdwet\fP"
-.br
-.RI "GRIB1 parameter number of soil wetness\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::kpdzor\fP"
-.br
-.RI "GRIB1 parameter number of physical snow depth\&. "
-.ti -1c
-.RI "integer, parameter \fBsfccyc_module::mdata\fP =xdata*ydata"
-.br
-.RI "Maximum number of input data points\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::soil_type_landice\fP"
-.br
-.RI "Soil type category at permanent land-ice points\&. "
-.ti -1c
-.RI "integer \fBsfccyc_module::veg_type_landice\fP"
-.br
-.RI "Vegetation type category at permanent land-ice points\&. "
-.ti -1c
-.RI "integer, parameter \fBsfccyc_module::xdata\fP =5000"
-.br
-.RI "Maximum 'i' dimension of input data\&. "
-.ti -1c
-.RI "integer, parameter \fBsfccyc_module::ydata\fP =2500"
-.br
-.RI "Maximum 'j' dimension of input data\&. "
+.RI "\fISet soil temperature and sea ice column temperature for a dead start\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -341,7 +203,7 @@ This is a limited point version of surface program\&.
 
 
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi Mark Iredell NOAA/EMC 
 .RE
@@ -349,14 +211,166 @@ Shrinivas Moorthi Mark Iredell NOAA/EMC
 
 .PP
 Definition in file \fBsfcsub\&.F\fP\&.
+.SH "Data Type Documentation"
+.PP 
+.SH "module sfccyc_module"
+.PP 
+This program runs in two different modes: 
+
+
+.IP "1." 4
+analysis mode (fh=0\&.) this program merges climatology, analysis and forecast guess to create new surface fields\&. if analysis file is given, the program uses it if date of the analysis matches with iy,im,id,ih (see note below)\&.
+.IP "2." 4
+forecast mode (fh\&.gt\&.0\&.) this program interpolates climatology to the date corresponding to the forecast hour\&. if surface analysis file is given, for the corresponding dates, the program will use it\&.
+.PP
+.PP
+if the date of the analysis does not match given iy,im,id,ih, (and fh), the program searches an old analysis by going back 6 hours, then 12 hours, then one day upto nrepmx days (parameter statement in the subrotine fixrd\&. now defined as 8)\&. this allows the user to provide non-daily analysis to be used\&. if matching field is not found, the forecast guess will be used\&.
+.PP
+use of a combined earlier surface analyses and current analysis is not allowed (as was done in the old version for snow analysis in which old snow analysis is used in combination with initial guess), except for sea surface temperature\&. for sst anolmaly interpolation, you need to set lanom=\&.true\&. and must provide sst analysis at initial time\&.
+.PP
+if you want to do complex merging of past and present surface field analysis, you need to create a separate file that contains daily surface field\&.
+.PP
+for a dead start, do not supply fnbgsi or set fnbgsi=' '
+.PP
+.IP "\(bu" 2
+lugb is the unit number used in this subprogram
+.IP "\(bu" 2
+len \&.\&.\&. number of points on which sfccyc operates
+.IP "\(bu" 2
+lsoil \&.\&. number of soil layers (2 as of april, 1994)
+.IP "\(bu" 2
+iy,im,id,ih \&.\&. year, month, day, and hour of initial state\&.
+.IP "\(bu" 2
+fh \&.\&. forecast hour
+.IP "\(bu" 2
+rla, rlo -- latitude and longitudes of the len points
+.IP "\(bu" 2
+sig1t \&.\&. sigma level 1 temperature for dead start\&. should be on gaussian grid\&. if not dead start, no need for dimension but set to zero as in the example below\&.
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+M\&. Iredell, xuli, Hang Lei, George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 46 of file sfcsub\&.F\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+integer \fIkpdabs\fP GRIB1 parameter number of maximum snow albedo\&. 
+.br
+.PP
+integer \fIkpdabs_0\fP GRIB1 parameter number of legacy maximum snow albedo\&. 
+.br
+.PP
+integer \fIkpdabs_1\fP GRIB1 parameter number of modis-based maximum snow albedo\&. 
+.br
+.PP
+integer \fIkpdacn\fP GRIB1 parameter number of sea ice concentration\&. 
+.br
+.PP
+integer \fIkpdais\fP GRIB1 parameter number of roughness length\&. 
+.br
+.PP
+integer, dimension(4) \fIkpdalb\fP GRIB1 parameter number of 4-component snow-free albedo\&. 
+.br
+.PP
+integer, dimension(4), parameter \fIkpdalb_0\fP GRIB1 parameter numbers for brigleb snow-free albedo\&. 
+.br
+.PP
+integer, dimension(4), parameter \fIkpdalb_1\fP GRIB1 parameter numbers for modis snow-free albedo\&. 
+.br
+.PP
+integer, dimension(2), parameter \fIkpdalf\fP GRIB1 parameter numbers of fraction for strongly/weakly zenith angle dependent albedo\&. 
+.br
+.PP
+integer \fIkpdgla\fP GRIB1 parameter number of glacial ice\&. 
+.br
+.PP
+integer \fIkpdmsk\fP GRIB1 parameter number of land mask\&. 
+.br
+.PP
+integer \fIkpdmxi\fP GRIB1 parameter number of maximum ice extent\&. 
+.br
+.PP
+integer \fIkpdoro\fP GRIB1 parameter number of orography\&. 
+.br
+.PP
+integer \fIkpdplr\fP GRIB1 parameter number of plant resistance\&. 
+.br
+.PP
+integer \fIkpdscv\fP GRIB1 parameter number of snow cover\&. 
+.br
+.PP
+integer \fIkpdslp\fP GRIB1 parameter number of slope type\&. 
+.br
+.PP
+integer \fIkpdsmc\fP GRIB1 parameter number of soil moisture\&. 
+.br
+.PP
+integer \fIkpdsnd\fP GRIB1 parameter number of physical snow depth\&. 
+.br
+.PP
+integer \fIkpdsno\fP GRIB1 parameter number of liquid equivalent snow depth\&. 
+.br
+.PP
+integer \fIkpdsot\fP GRIB1 parameter number of soil type\&. 
+.br
+.PP
+integer \fIkpdstc\fP GRIB1 parameter number of soil temperature\&. 
+.br
+.PP
+integer \fIkpdtg3\fP GRIB1 parameter number of soil substrate temperature\&. 
+.br
+.PP
+integer \fIkpdtsf\fP GRIB1 parameter number of skin temperature/SST\&. 
+.br
+.PP
+integer \fIkpdveg\fP GRIB1 parameter number of vegetation greenness\&. 
+.br
+.PP
+integer \fIkpdvet\fP GRIB1 parameter number of vegetation type\&. 
+.br
+.PP
+integer \fIkpdvmn\fP GRIB1 parameter number of minimum vegetation greenness\&. 
+.br
+.PP
+integer \fIkpdvmx\fP GRIB1 parameter number of maximum vegetation greenness\&. 
+.br
+.PP
+integer \fIkpdwet\fP GRIB1 parameter number of soil wetness\&. 
+.br
+.PP
+integer \fIkpdzor\fP GRIB1 parameter number of physical snow depth\&. 
+.br
+.PP
+integer, parameter \fImdata\fP Maximum number of input data points\&. 
+.br
+.PP
+integer \fIsoil_type_landice\fP Soil type category at permanent land-ice points\&. 
+.br
+.PP
+integer \fIveg_type_landice\fP Vegetation type category at permanent land-ice points\&. 
+.br
+.PP
+integer, parameter \fIxdata\fP Maximum 'i' dimension of input data\&. 
+.br
+.PP
+integer, parameter \fIydata\fP Maximum 'j' dimension of input data\&. 
+.br
+.PP
+.RE
+.PP
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine albocn (real (kind=kind_io8), dimension(len,4) albclm, real (kind=kind_io8), dimension(len) slmask, real (kind=kind_io8) albomx, integer len)"
+.SS "subroutine albocn (real (kind=kind_io8), dimension(len,4)albclm, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8)albomx, integerlen)"
 
 .PP
 Set the albedo at open water points\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIalbclm\fP Albedo\&. 
 .br
@@ -367,24 +381,22 @@ Set the albedo at open water points\&.
 \fIlen\fP Number of model points to process\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 6626 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 6625 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine analy (integer lugb, integer iy, integer im, integer id, integer ih, real (kind=kind_io8) fh, integer len, integer lsoil, real (kind=kind_io8), dimension(len) slmask, character*500 fntsfa, character*500 fnweta, character*500 fnsnoa, character*500 fnzora, character*500 fnalba, character*500 fnaisa, character*500 fntg3a, character*500 fnscva, character*500 fnsmca, character*500 fnstca, character*500 fnacna, character*500 fnvega, character*500 fnveta, character*500 fnsota, character*500 fnvmna, character*500 fnvmxa, character*500 fnslpa, character*500 fnabsa, real (kind=kind_io8), dimension(len) tsfanl, real (kind=kind_io8), dimension(len) wetanl, real (kind=kind_io8), dimension(len) snoanl, real (kind=kind_io8), dimension(len) zoranl, real (kind=kind_io8), dimension(len,4) albanl, real (kind=kind_io8), dimension(len) aisanl, real (kind=kind_io8), dimension(len) tg3anl, real (kind=kind_io8), dimension (len) cvanl, real (kind=kind_io8), dimension(len) cvbanl, real (kind=kind_io8), dimension(len) cvtanl, real (kind=kind_io8), dimension(len,lsoil) smcanl, real (kind=kind_io8), dimension(len,lsoil) stcanl, real (kind=kind_io8), dimension(len) slianl, real (kind=kind_io8), dimension(len) scvanl, real (kind=kind_io8), dimension(len) acnanl, real (kind=kind_io8), dimension(len) veganl, real (kind=kind_io8), dimension(len) vetanl, real (kind=kind_io8), dimension(len) sotanl, real (kind=kind_io8), dimension(len,2) alfanl, real (kind=kind_io8), dimension(len) tsfan0, real (kind=kind_io8), dimension(len) vmnanl, real (kind=kind_io8), dimension(len) vmxanl, real (kind=kind_io8), dimension(len) slpanl, real (kind=kind_io8), dimension(len) absanl, integer kpdtsf, integer kpdwet, integer kpdsno, integer kpdsnd, integer kpdzor, integer, dimension(4) kpdalb, integer kpdais, integer kpdtg3, integer kpdscv, integer kpdacn, integer kpdsmc, integer kpdstc, integer kpdveg, integer kprvet, integer kpdsot, integer, dimension(2) kpdalf, integer kpdvmn, integer kpdvmx, integer kpdslp, integer kpdabs, integer irttsf, integer irtwet, integer irtsno, integer irtzor, integer irtalb, integer irtais, integer irttg3, integer irtscv, integer irtacn, integer irtsmc, integer irtstc, integer irtveg, integer irtvet, integer irtsot, integer irtalf, integer irtvmn, integer irtvmx, integer irtslp, integer irtabs, integer imsk, integer jmsk, real (kind=kind_io8), dimension(imsk,jmsk) slmskh, real (kind=kind_io8), dimension(len) outlat, real (kind=kind_io8), dimension(len) outlon, logical gaus, real (kind=kind_io8) blno, real (kind=kind_io8) blto, integer me, logical lanom)"
+.SS "subroutine analy (lugb, iy, im, id, ih, real (kind=kind_io8)fh, len, lsoil, real (kind=kind_io8), dimension(len)slmask, character*500fntsfa, character*500fnweta, character*500fnsnoa, character*500fnzora, character*500fnalba, character*500fnaisa, character*500fntg3a, character*500fnscva, character*500fnsmca, character*500fnstca, character*500fnacna, character*500fnvega, character*500fnveta, character*500fnsota, fnvmna, fnvmxa, fnslpa, fnabsa, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)wetanl, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension(len)tg3anl, real (kind=kind_io8), dimension (len)cvanl, real (kind=kind_io8), dimension(len)cvbanl, real (kind=kind_io8), dimension(len)cvtanl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)scvanl, real (kind=kind_io8), dimension(len)acnanl, real (kind=kind_io8), dimension(len)veganl, real (kind=kind_io8), dimension(len)vetanl, real (kind=kind_io8), dimension(len)sotanl, real (kind=kind_io8), dimension(len,2)alfanl, real (kind=kind_io8), dimension(len)tsfan0, vmnanl, vmxanl, slpanl, absanl, kpdtsf, kpdwet, kpdsno, kpdsnd, kpdzor, integer, dimension(4)kpdalb, kpdais, kpdtg3, kpdscv, kpdacn, kpdsmc, kpdstc, kpdveg, kprvet, kpdsot, integer, dimension(2)kpdalf, kpdvmn, kpdvmx, kpdslp, kpdabs, irttsf, irtwet, integerirtsno, integerirtzor, integerirtalb, integerirtais, integerirttg3, integerirtscv, integerirtacn, integerirtsmc, integerirtstc, integerirtveg, integerirtvet, integerirtsot, integerirtalf, irtvmn, irtvmx, irtslp, irtabs, imsk, jmsk, real (kind=kind_io8), dimension(imsk,jmsk)slmskh, real (kind=kind_io8), dimension(len)outlat, real (kind=kind_io8), dimension(len)outlon, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, integerme, logicallanom)"
 
 .PP
 Read analysis fields\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlugb\fP Fortran unit number for analysis files\&. 
 .br
@@ -587,24 +599,24 @@ Read analysis fields\&.
 \fIlanom\fP When true, do sst anomaly interpolation\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 4092 of file sfcsub\&.F\&.
+Definition at line 4072 of file sfcsub\&.F\&.
 .PP
-References fixrda(), machine::kind_io4, and machine::kind_io8\&.
+References fixrda()\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine anomint (real (kind=kind_io8), dimension(len) tsfan0, real (kind=kind_io8), dimension(len) tsfclm, real (kind=kind_io8), dimension(len) tsfcl0, real (kind=kind_io8), dimension(len) tsfanl, integer len)"
+.SS "subroutine anomint (real (kind=kind_io8), dimension(len)tsfan0, real (kind=kind_io8), dimension(len)tsfclm, real (kind=kind_io8), dimension(len)tsfcl0, real (kind=kind_io8), dimension(len)tsfanl, integerlen)"
 
 .PP
 Add initial SST anomaly to date interpolated climatology\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fItsfan0\fP Skin temperature/SST analysis at initial time\&. 
 .br
@@ -617,24 +629,22 @@ Add initial SST anomaly to date interpolated climatology\&.
 \fIlen\fP Number of model points to process\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 7700 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 7699 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine clima (integer lugb, integer iy, integer im, integer id, integer ih, real (kind=kind_io8) fh, integer len, integer lsoil, real (kind=kind_io8), dimension(len) slmask, character*500 fntsfc, character*500 fnwetc, character*500 fnsnoc, character*500 fnzorc, character*500 fnalbc, character*500 fnaisc, character*500 fntg3c, character*500 fnscvc, character*500 fnsmcc, character*500 fnstcc, character*500 fnacnc, character*500 fnvegc, character*500 fnvetc, character*500 fnsotc, character*500 fnvmnc, character*500 fnvmxc, character*500 fnslpc, character*500 fnabsc, real (kind=kind_io8), dimension(len) tsfclm, real (kind=kind_io8), dimension(len) tsfcl2, real (kind=kind_io8), dimension(len) wetclm, real (kind=kind_io8), dimension(len) snoclm, real (kind=kind_io8), dimension(len) zorclm, real (kind=kind_io8), dimension(len,4) albclm, real (kind=kind_io8), dimension(len) aisclm, real (kind=kind_io8), dimension(len) tg3clm, real (kind=kind_io8), dimension (len) cvclm, real (kind=kind_io8), dimension(len) cvbclm, real (kind=kind_io8), dimension(len) cvtclm, real (kind=kind_io8), dimension(len) cnpclm, real (kind=kind_io8), dimension(len,lsoil) smcclm, real (kind=kind_io8), dimension(len,lsoil) stcclm, real (kind=kind_io8), dimension(len) sliclm, real (kind=kind_io8), dimension(len) scvclm, real (kind=kind_io8), dimension(len) acnclm, real (kind=kind_io8), dimension(len) vegclm, real (kind=kind_io8), dimension(len) vetclm, real (kind=kind_io8), dimension(len) sotclm, real (kind=kind_io8), dimension(len,2) alfclm, real (kind=kind_io8), dimension(len) vmnclm, real (kind=kind_io8), dimension(len) vmxclm, real (kind=kind_io8), dimension(len) slpclm, real (kind=kind_io8), dimension(len) absclm, integer kpdtsf, integer kpdwet, integer kpdsno, integer kpdzor, integer, dimension(4) kpdalb, integer kpdais, integer kpdtg3, integer kpdscv, integer kpdacn, integer kpdsmc, integer kpdstc, integer kpdveg, integer kpdvet, integer kpdsot, integer, dimension(2) kpdalf, real (kind=kind_io8), dimension(len) tsfcl0, integer kpdvmn, integer kpdvmx, integer kpdslp, integer kpdabs, real (kind=kind_io8) deltsfc, logical lanom, integer imsk, integer jmsk, real (kind=kind_io8), dimension(imsk,jmsk) slmskh, real (kind=kind_io8), dimension(len) outlat, real (kind=kind_io8), dimension(len) outlon, logical gaus, real (kind=kind_io8) blno, real (kind=kind_io8) blto, integer me, logical lprnt, integer iprnt, character*500 fnalbc2, integer ialb, character(len=*), intent(in) tile_num_ch, integer, dimension(len), intent(in) i_index, integer, dimension(len), intent(in) j_index)"
+.SS "subroutine clima (integerlugb, integeriy, integerim, integerid, integerih, real (kind=kind_io8)fh, integerlen, integerlsoil, real (kind=kind_io8), dimension(len)slmask, character*500fntsfc, character*500fnwetc, character*500fnsnoc, character*500fnzorc, character*500fnalbc, character*500fnaisc, character*500fntg3c, character*500fnscvc, character*500fnsmcc, character*500fnstcc, character*500fnacnc, character*500fnvegc, character*500fnvetc, character*500fnsotc, character*500fnvmnc, character*500fnvmxc, character*500fnslpc, character*500fnabsc, real (kind=kind_io8), dimension(len)tsfclm, real (kind=kind_io8), dimension(len)tsfcl2, real (kind=kind_io8), dimension(len)wetclm, real (kind=kind_io8), dimension(len)snoclm, real (kind=kind_io8), dimension(len)zorclm, real (kind=kind_io8), dimension(len,4)albclm, real (kind=kind_io8), dimension(len)aisclm, real (kind=kind_io8), dimension(len)tg3clm, real (kind=kind_io8), dimension (len)cvclm, real (kind=kind_io8), dimension(len)cvbclm, real (kind=kind_io8), dimension(len)cvtclm, real (kind=kind_io8), dimension(len)cnpclm, real (kind=kind_io8), dimension(len,lsoil)smcclm, real (kind=kind_io8), dimension(len,lsoil)stcclm, real (kind=kind_io8), dimension(len)sliclm, real (kind=kind_io8), dimension(len)scvclm, real (kind=kind_io8), dimension(len)acnclm, real (kind=kind_io8), dimension(len)vegclm, real (kind=kind_io8), dimension(len)vetclm, real (kind=kind_io8), dimension(len)sotclm, real (kind=kind_io8), dimension(len,2)alfclm, real (kind=kind_io8), dimension(len)vmnclm, real (kind=kind_io8), dimension(len)vmxclm, real (kind=kind_io8), dimension(len)slpclm, real (kind=kind_io8), dimension(len)absclm, integerkpdtsf, integerkpdwet, integerkpdsno, integerkpdzor, integer, dimension(4)kpdalb, integerkpdais, integerkpdtg3, integerkpdscv, integerkpdacn, integerkpdsmc, integerkpdstc, integerkpdveg, integerkpdvet, integerkpdsot, integer, dimension(2)kpdalf, real (kind=kind_io8), dimension(len)tsfcl0, integerkpdvmn, integerkpdvmx, integerkpdslp, integerkpdabs, real (kind=kind_io8)deltsfc, logicallanom, integerimsk, integerjmsk, real (kind=kind_io8), dimension(imsk,jmsk)slmskh, real (kind=kind_io8), dimension(len)outlat, real (kind=kind_io8), dimension(len)outlon, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, integerme, logicallprnt, integeriprnt, character*500fnalbc2, integerialb, character(len=*), intent(in)tile_num_ch, integer, dimension(len), intent(in)i_index, integer, dimension(len), intent(in)j_index)"
 
 .PP
 Driver routine that reads in climatological data for a given time, and, if necessary, interpolates it to the model grid\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlugb\fP Fortran unit number of GRIB1 climatological data\&. 
 .br
@@ -817,24 +827,24 @@ Driver routine that reads in climatological data for a given time, and, if neces
 \fIj_index\fP The 'j' indices of the model grid to process\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 7846 of file sfcsub\&.F\&.
+Definition at line 7828 of file sfcsub\&.F\&.
 .PP
-References fixrdc(), fixrdc_tile(), machine::kind_io4, and machine::kind_io8\&.
+References fixrdc(), and fixrdc_tile()\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine count (real (kind=kind_io8), dimension(1) slimsk, real (kind=kind_io8), dimension(1) sno, integer ijmax)"
+.SS "subroutine count (real (kind=kind_io8), dimension(1)slimsk, real (kind=kind_io8), dimension(1)sno, integerijmax)"
 
 .PP
 Counts the number of model points that are snow covered land, snow-free land, open water, sea ice, and snow covered sea ice\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIslimsk\fP The land-sea-ice mask\&. 
 .br
@@ -843,24 +853,22 @@ Counts the number of model points that are snow covered land, snow-free land, op
 \fIijmax\fP Number of model points to process\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 2627 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 2626 of file sfcsub\&.F\&.
 .PP
 Referenced by fixrdc_tile(), and read_write_data::read_salclm_gfs_nc()\&.
-.SS "subroutine dayoyr (integer iyr, integer imo, integer idy, integer ldy)"
+.SS "subroutine dayoyr (integeriyr, integerimo, integeridy, integerldy)"
 
 .PP
 Compute day of the year based on month and day\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIiyr\fP Year\&. 
 .br
@@ -871,20 +879,20 @@ Compute day of the year based on month and day\&.
 \fIldy\fP Day of the year\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Mark Iredell NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 2762 of file sfcsub\&.F\&.
-.SS "subroutine filanl (real (kind=kind_io8), dimension(len) tsfanl, real (kind=kind_io8), dimension(len) tsfan2, real (kind=kind_io8), dimension(len) wetanl, real (kind=kind_io8), dimension(len) snoanl, real (kind=kind_io8), dimension(len) zoranl, real (kind=kind_io8), dimension(len,4) albanl, real (kind=kind_io8), dimension(len) aisanl, real (kind=kind_io8), dimension(len) tg3anl, real (kind=kind_io8), dimension (len) cvanl, real (kind=kind_io8), dimension(len) cvbanl, real (kind=kind_io8), dimension(len) cvtanl, real (kind=kind_io8), dimension(len) cnpanl, real (kind=kind_io8), dimension(len,lsoil) smcanl, real (kind=kind_io8), dimension(len,lsoil) stcanl, real (kind=kind_io8), dimension(len) slianl, real (kind=kind_io8), dimension(len) scvanl, real (kind=kind_io8), dimension(len) veganl, real (kind=kind_io8), dimension(len) vetanl, real (kind=kind_io8), dimension(len) sotanl, real (kind=kind_io8), dimension(len,2) alfanl, real (kind=kind_io8), dimension(len) sihanl, real (kind=kind_io8), dimension(len) sicanl, real (kind=kind_io8), dimension(len) vmnanl, real (kind=kind_io8), dimension(len) vmxanl, real (kind=kind_io8), dimension(len) slpanl, real (kind=kind_io8), dimension(len) absanl, real (kind=kind_io8), dimension(len) tsfclm, real (kind=kind_io8), dimension(len) tsfcl2, real (kind=kind_io8), dimension(len) wetclm, real (kind=kind_io8), dimension(len) snoclm, real (kind=kind_io8), dimension(len) zorclm, real (kind=kind_io8), dimension(len,4) albclm, real (kind=kind_io8), dimension(len) aisclm, real (kind=kind_io8), dimension(len) tg3clm, real (kind=kind_io8), dimension (len) cvclm, real (kind=kind_io8), dimension(len) cvbclm, real (kind=kind_io8), dimension(len) cvtclm, real (kind=kind_io8), dimension(len) cnpclm, real (kind=kind_io8), dimension(len,lsoil) smcclm, real (kind=kind_io8), dimension(len,lsoil) stcclm, real (kind=kind_io8), dimension(len) sliclm, real (kind=kind_io8), dimension(len) scvclm, real (kind=kind_io8), dimension(len) vegclm, real (kind=kind_io8), dimension(len) vetclm, real (kind=kind_io8), dimension(len) sotclm, real (kind=kind_io8), dimension(len,2) alfclm, real (kind=kind_io8), dimension(len) sihclm, real (kind=kind_io8), dimension(len) sicclm, real (kind=kind_io8), dimension(len) vmnclm, real (kind=kind_io8), dimension(len) vmxclm, real (kind=kind_io8), dimension(len) slpclm, real (kind=kind_io8), dimension(len) absclm, integer len, integer lsoil)"
+Definition at line 2761 of file sfcsub\&.F\&.
+.SS "subroutine filanl (real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)tsfan2, real (kind=kind_io8), dimension(len)wetanl, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension(len)tg3anl, real (kind=kind_io8), dimension (len)cvanl, real (kind=kind_io8), dimension(len)cvbanl, real (kind=kind_io8), dimension(len)cvtanl, real (kind=kind_io8), dimension(len)cnpanl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)scvanl, real (kind=kind_io8), dimension(len)veganl, real (kind=kind_io8), dimension(len)vetanl, real (kind=kind_io8), dimension(len)sotanl, real (kind=kind_io8), dimension(len,2)alfanl, sihanl, sicanl, vmnanl, vmxanl, slpanl, absanl, real (kind=kind_io8), dimension(len)tsfclm, real (kind=kind_io8), dimension(len)tsfcl2, real (kind=kind_io8), dimension(len)wetclm, real (kind=kind_io8), dimension(len)snoclm, real (kind=kind_io8), dimension(len)zorclm, real (kind=kind_io8), dimension(len,4)albclm, real (kind=kind_io8), dimension(len)aisclm, real (kind=kind_io8), dimension(len)tg3clm, real (kind=kind_io8), dimension (len)cvclm, real (kind=kind_io8), dimension(len)cvbclm, real (kind=kind_io8), dimension(len)cvtclm, real (kind=kind_io8), dimension(len)cnpclm, real (kind=kind_io8), dimension(len,lsoil)smcclm, real (kind=kind_io8), dimension(len,lsoil)stcclm, real (kind=kind_io8), dimension(len)sliclm, real (kind=kind_io8), dimension(len)scvclm, real (kind=kind_io8), dimension(len)vegclm, real (kind=kind_io8), dimension(len)vetclm, real (kind=kind_io8), dimension(len)sotclm, real (kind=kind_io8), dimension(len,2)alfclm, sihclm, sicclm, vmnclm, vmxclm, slpclm, absclm, integerlen, integerlsoil)"
 
 .PP
 Fill in analysis arrays with climatology before reading analysis data\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fItsfanl\fP Skin temperature/SST analysis on model grid\&. 
 .br
@@ -995,24 +1003,22 @@ Fill in analysis arrays with climatology before reading analysis data\&.
 \fIlsoil\fP Number of soil layers\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 3867 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 3852 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine filfcs (real (kind=kind_io8), dimension(len) tsffcs, real (kind=kind_io8), dimension(len) wetfcs, real (kind=kind_io8), dimension(len) snofcs, real (kind=kind_io8), dimension(len) zorfcs, real (kind=kind_io8), dimension(len,4) albfcs, real (kind=kind_io8), dimension(len) tg3fcs, real (kind=kind_io8), dimension (len) cvfcs, real (kind=kind_io8), dimension(len) cvbfcs, real (kind=kind_io8), dimension(len) cvtfcs, real (kind=kind_io8), dimension(len) cnpfcs, real (kind=kind_io8), dimension(len,lsoil) smcfcs, real (kind=kind_io8), dimension(len,lsoil) stcfcs, real (kind=kind_io8), dimension(len) slifcs, real (kind=kind_io8), dimension(len) aisfcs, real (kind=kind_io8), dimension(len) vegfcs, real (kind=kind_io8), dimension(len) vetfcs, real (kind=kind_io8), dimension(len) sotfcs, real (kind=kind_io8), dimension(len,2) alffcs, real (kind=kind_io8), dimension(len) sihfcs, real (kind=kind_io8), dimension(len) sicfcs, real (kind=kind_io8), dimension(len) vmnfcs, real (kind=kind_io8), dimension(len) vmxfcs, real (kind=kind_io8), dimension(len) slpfcs, real (kind=kind_io8), dimension(len) absfcs, real (kind=kind_io8), dimension(len) tsfanl, real (kind=kind_io8), dimension(len) wetanl, real (kind=kind_io8), dimension(len) snoanl, real (kind=kind_io8), dimension(len) zoranl, real (kind=kind_io8), dimension(len,4) albanl, real (kind=kind_io8), dimension(len) tg3anl, real (kind=kind_io8), dimension (len) cvanl, real (kind=kind_io8), dimension(len) cvbanl, real (kind=kind_io8), dimension(len) cvtanl, real (kind=kind_io8), dimension(len) cnpanl, real (kind=kind_io8), dimension(len,lsoil) smcanl, real (kind=kind_io8), dimension(len,lsoil) stcanl, real (kind=kind_io8), dimension(len) slianl, real (kind=kind_io8), dimension(len) aisanl, real (kind=kind_io8), dimension(len) veganl, real (kind=kind_io8), dimension(len) vetanl, real (kind=kind_io8), dimension(len) sotanl, real (kind=kind_io8), dimension(len,2) alfanl, real (kind=kind_io8), dimension(len) sihanl, real (kind=kind_io8), dimension(len) sicanl, real (kind=kind_io8), dimension(len) vmnanl, real (kind=kind_io8), dimension(len) vmxanl, real (kind=kind_io8), dimension(len) slpanl, real (kind=kind_io8), dimension(len) absanl, integer len, integer lsoil)"
+.SS "subroutine filfcs (real (kind=kind_io8), dimension(len)tsffcs, real (kind=kind_io8), dimension(len)wetfcs, real (kind=kind_io8), dimension(len)snofcs, real (kind=kind_io8), dimension(len)zorfcs, real (kind=kind_io8), dimension(len,4)albfcs, real (kind=kind_io8), dimension(len)tg3fcs, real (kind=kind_io8), dimension (len)cvfcs, real (kind=kind_io8), dimension(len)cvbfcs, real (kind=kind_io8), dimension(len)cvtfcs, real (kind=kind_io8), dimension(len)cnpfcs, real (kind=kind_io8), dimension(len,lsoil)smcfcs, real (kind=kind_io8), dimension(len,lsoil)stcfcs, real (kind=kind_io8), dimension(len)slifcs, real (kind=kind_io8), dimension(len)aisfcs, real (kind=kind_io8), dimension(len)vegfcs, real (kind=kind_io8), dimension(len)vetfcs, real (kind=kind_io8), dimension(len)sotfcs, real (kind=kind_io8), dimension(len,2)alffcs, sihfcs, sicfcs, vmnfcs, vmxfcs, slpfcs, absfcs, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)wetanl, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)tg3anl, real (kind=kind_io8), dimension (len)cvanl, real (kind=kind_io8), dimension(len)cvbanl, real (kind=kind_io8), dimension(len)cvtanl, real (kind=kind_io8), dimension(len)cnpanl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension(len)veganl, real (kind=kind_io8), dimension(len)vetanl, real (kind=kind_io8), dimension(len)sotanl, real (kind=kind_io8), dimension(len,2)alfanl, sihanl, sicanl, vmnanl, vmxanl, slpanl, absanl, integerlen, integerlsoil)"
 
 .PP
 Fill in model grid guess arrays with analysis values if this is a dead start\&. All fields are on the model grid\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fItsffcs\fP First guess skin temperature/SST analysis\&. 
 .br
@@ -1115,24 +1121,22 @@ Fill in model grid guess arrays with analysis values if this is a dead start\&. 
 \fIlsoil\fP Number of soil layers\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 4806 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 4793 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine fixrda (integer lugb, character*500 fngrib, integer kpds5, real (kind=kind_io8), dimension(len) slmask, integer iy, integer im, integer id, integer ih, real (kind=kind_io8) fh, real (kind=kind_io8), dimension(len) gdata, integer len, integer iret, integer imsk, integer jmsk, real (kind=kind_io8), dimension(imsk,jmsk) slmskh, logical gaus, real (kind=kind_io8) blno, real (kind=kind_io8) blto, real (kind=kind_io8), dimension(len) outlat, real (kind=kind_io8), dimension(len) outlon, integer me)"
+.SS "subroutine fixrda (integerlugb, character*500fngrib, integerkpds5, real (kind=kind_io8), dimension(len)slmask, integeriy, integerim, integerid, integerih, real (kind=kind_io8)fh, real (kind=kind_io8), dimension(len)gdata, integerlen, integeriret, integerimsk, integerjmsk, real (kind=kind_io8), dimension(imsk,jmsk)slmskh, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, real (kind=kind_io8), dimension(len)outlat, real (kind=kind_io8), dimension(len)outlon, integerme)"
 
 .PP
 Read in grib1 analysis data for the requested date and horizontally interpolate to the model grid\&. If data not found for the requested date, a backwards search is performed\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlugb\fP Fortran unit number of the grib1 analysis data file\&. 
 .br
@@ -1177,24 +1181,24 @@ Read in grib1 analysis data for the requested date and horizontally interpolate 
 \fIme\fP MPI task number 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 9410 of file sfcsub\&.F\&.
+Definition at line 9406 of file sfcsub\&.F\&.
 .PP
-References getarea(), machine::kind_io4, machine::kind_io8, la2ga(), sfccyc_module::mdata, setrmsk(), and subst()\&.
+References getarea(), la2ga(), setrmsk(), and subst()\&.
 .PP
 Referenced by analy()\&.
-.SS "subroutine fixrdc (integer lugb, character*500 fngrib, integer kpds5, integer, intent(in) kpds7, integer mon, real (kind=kind_io8), dimension(len) slmask, real (kind=kind_io8), dimension(len) gdata, integer len, integer iret, integer imsk, integer jmsk, real (kind=kind_io8), dimension(imsk,jmsk) slmskh, logical gaus, real (kind=kind_io8) blno, real (kind=kind_io8) blto, real (kind=kind_io8), dimension(len) outlat, real (kind=kind_io8), dimension(len) outlon, integer me)"
+.SS "subroutine fixrdc (integerlugb, character*500fngrib, integerkpds5, integer, intent(in)kpds7, integermon, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)gdata, integerlen, integeriret, integerimsk, integerjmsk, real (kind=kind_io8), dimension(imsk,jmsk)slmskh, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, real (kind=kind_io8), dimension(len)outlat, real (kind=kind_io8), dimension(len)outlon, integerme)"
 
 .PP
 Read in grib1 climatology data for a specific month and and horizontally interpolate to the model grid\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlugb\fP Fortran unit number of the grib1 climatology data file\&. 
 .br
@@ -1233,24 +1237,24 @@ Read in grib1 climatology data for a specific month and and horizontally interpo
 \fIme\fP MPI task number 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 9209 of file sfcsub\&.F\&.
+Definition at line 9205 of file sfcsub\&.F\&.
 .PP
-References getarea(), machine::kind_io4, machine::kind_io8, la2ga(), sfccyc_module::mdata, setrmsk(), and subst()\&.
+References getarea(), la2ga(), setrmsk(), and subst()\&.
 .PP
 Referenced by clima(), and sfccycle()\&.
-.SS "subroutine fixrdc_tile (character(len=*), intent(in) filename_raw, character(len=*), intent(in) tile_num_ch, integer, dimension(npts), intent(in) i_index, integer, dimension(npts), intent(in) j_index, integer, intent(in) kpds, real(kind_io8), dimension(npts), intent(out) var, integer, intent(in) mon, integer, intent(in) npts, integer, intent(in) me)"
+.SS "subroutine fixrdc_tile (character(len=*), intent(in)filename_raw, character(len=*), intent(in)tile_num_ch, integer, dimension(npts), intent(in)i_index, integer, dimension(npts), intent(in)j_index, integer, intent(in)kpds, real(kind_io8), dimension(npts), intent(out)var, integer, intent(in)mon, integer, intent(in)npts, integer, intent(in)me)"
 
 .PP
 Reads in climatological data on the model grid tile for a given month\&. Unlike fixrdc, this routine assumes the input data is already interpolated to the model tile\&. The climatological data must be NetCDF\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIfilename_raw\fP The name of the climatological file\&. 
 .br
@@ -1271,24 +1275,24 @@ Reads in climatological data on the model grid tile for a given month\&. Unlike 
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 9027 of file sfcsub\&.F\&.
+Definition at line 9024 of file sfcsub\&.F\&.
 .PP
-References count(), machine::kind_io8, and netcdf_err()\&.
+References count(), and netcdf_err()\&.
 .PP
 Referenced by clima()\&.
-.SS "subroutine fixrdg (integer lugb, integer idim, integer jdim, character*(*) fngrib, integer kpds5, real (kind=kind_io8), dimension(idim*jdim) gdata, logical gaus, real (kind=kind_io8) blno, real (kind=kind_io8) blto, integer me)"
+.SS "subroutine fixrdg (integerlugb, integeridim, integerjdim, character*(*)fngrib, integerkpds5, real (kind=kind_io8), dimension(idim*jdim)gdata, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, integerme)"
 
 .PP
 Read a GRIB1 file\&. Return the requested data record and some grid specifications\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlugb\fP Fortran unit number of the grib file\&. 
 .br
@@ -1311,24 +1315,22 @@ Read a GRIB1 file\&. Return the requested data record and some grid specificatio
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 2842 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, machine::kind_io8, and sfccyc_module::mdata\&.
+Definition at line 2840 of file sfcsub\&.F\&.
 .PP
 Referenced by hmskrd()\&.
-.SS "subroutine ga2la (real (kind=kind_io8), dimension (imxin,jmxin) gauin, integer imxin, integer jmxin, real (kind=kind_io8), dimension(imxout,jmxout) regout, integer imxout, integer jmxout, real (kind=kind_io8) wlon, real (kind=kind_io8) rnlat, real (kind=kind_io8), dimension(imxout) rlnout, real (kind=kind_io8), dimension(jmxout) rltout, logical gaus, real (kind=kind_io8) blno, real (kind=kind_io8) blto)"
+.SS "subroutine ga2la (real (kind=kind_io8), dimension (imxin,jmxin)gauin, integerimxin, integerjmxin, real (kind=kind_io8), dimension(imxout,jmxout)regout, integerimxout, integerjmxout, real (kind=kind_io8)wlon, real (kind=kind_io8)rnlat, real (kind=kind_io8), dimension(imxout)rlnout, real (kind=kind_io8), dimension(jmxout)rltout, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto)"
 
 .PP
 Interpolation from lat/lon or gaussian grid to a lat/lon grid\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIgauin\fP Input data\&. 
 .br
@@ -1357,46 +1359,44 @@ Interpolation from lat/lon or gaussian grid to a lat/lon grid\&.
 \fIblto\fP Corner point latitude of input data\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 7390 of file sfcsub\&.F\&.
+Definition at line 7388 of file sfcsub\&.F\&.
 .PP
-References machine::kind_io4, and machine::kind_io8\&.
+References num_parthds()\&.
 .PP
 Referenced by setrmsk()\&.
-.SS "subroutine gaulat (real (kind=kind_io8), dimension(k) gaul, integer k)"
+.SS "subroutine gaulat (real (kind=kind_io8), dimension(k)gaul, integerk)"
 
 .PP
 Calculate gaussian latitudes\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIgaul\fP Gaussian latitudes 
 .br
 \fIk\fP Number of latitudes 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 7668 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
-.SS "subroutine getarea (integer, dimension(22) kgds, real (kind=kind_io8) dlat, real (kind=kind_io8) dlon, real (kind=kind_io8) rslat, real (kind=kind_io8) rnlat, real (kind=kind_io8) wlon, real (kind=kind_io8) elon, logical ijordr, integer me)"
+Definition at line 7667 of file sfcsub\&.F\&.
+.SS "subroutine getarea (integer, dimension(22)kgds, real (kind=kind_io8)dlat, real (kind=kind_io8)dlon, real (kind=kind_io8)rslat, real (kind=kind_io8)rnlat, real (kind=kind_io8)wlon, real (kind=kind_io8)elon, logicalijordr, integerme)"
 
 .PP
 For a given GRIB1 grid description section array, determine some grid specifications\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIkgds\fP GRIB1 grid description section array\&. 
 .br
@@ -1417,24 +1417,22 @@ For a given GRIB1 grid description section array, determine some grid specificat
 \fIme\fP MPI rank number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 2972 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 2970 of file sfcsub\&.F\&.
 .PP
 Referenced by fixrda(), and fixrdc()\&.
-.SS "subroutine getscv (real (kind=kind_io8), dimension(len) snofld, real (kind=kind_io8), dimension(len) scvfld, integer len)"
+.SS "subroutine getscv (real (kind=kind_io8), dimension(len)snofld, real (kind=kind_io8), dimension(len)scvfld, integerlen)"
 
 .PP
 Set snow cover flag based on snow depth\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIsnofld\fP Snow depth\&. 
 .br
@@ -1443,24 +1441,22 @@ Set snow cover flag based on snow depth\&.
 \fIlen\fP Number of model points to process\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 6464 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 6463 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine getsmc (real (kind=kind_io8), dimension(len) wetfld, integer len, integer lsoil, real (kind=kind_io8), dimension(len,lsoil) smcfld, integer me)"
+.SS "subroutine getsmc (real (kind=kind_io8), dimension(len)wetfld, integerlen, integerlsoil, real (kind=kind_io8), dimension(len,lsoil)smcfld, integerme)"
 
 .PP
 Set soil moisture from soil wetness\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIwetfld\fP Soil wetness 
 .br
@@ -1473,24 +1469,22 @@ Set soil moisture from soil wetness\&.
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 6530 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 6529 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine getstc (real (kind=kind_io8), dimension(len) tsffld, real (kind=kind_io8), dimension(len) tg3fld, real (kind=kind_io8), dimension(len) slifld, integer len, integer lsoil, real (kind=kind_io8), dimension(len,lsoil) stcfld, real (kind=kind_io8) tsfimx)"
+.SS "subroutine getstc (real (kind=kind_io8), dimension(len)tsffld, real (kind=kind_io8), dimension(len)tg3fld, real (kind=kind_io8), dimension(len)slifld, integerlen, integerlsoil, real (kind=kind_io8), dimension(len,lsoil)stcfld, real (kind=kind_io8)tsfimx)"
 
 .PP
 Set soil temperature and sea ice column temperature\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fItsffld\fP Skin temperature/SST\&. 
 .br
@@ -1507,24 +1501,22 @@ Set soil temperature and sea ice column temperature\&.
 \fItsfimx\fP Freezing point of sea water\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 6488 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 6487 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle(), and usesgt()\&.
-.SS "subroutine hmskrd (integer lugb, integer imsk, integer jmsk, character*500 fnmskh, integer kpds5, real (kind=kind_io8), dimension(mdata) slmskh, logical gausm, real (kind=kind_io8) blnmsk, real (kind=kind_io8) bltmsk, integer me)"
+.SS "subroutine hmskrd (integerlugb, integerimsk, integerjmsk, character*500fnmskh, integerkpds5, real (kind=kind_io8), dimension(mdata)slmskh, logicalgausm, real (kind=kind_io8)blnmsk, real (kind=kind_io8)bltmsk, integerme)"
 
 .PP
 Read a high-resolution land mask\&. It will be used as a surrogate for GRIB input data without a bitmap\&. This is NOT the model land mask\&. This mask file is GRIB1\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlugb\fP Fortran unit number of the mask file\&. 
 .br
@@ -1547,24 +1539,24 @@ Read a high-resolution land mask\&. It will be used as a surrogate for GRIB inpu
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 2794 of file sfcsub\&.F\&.
+Definition at line 2792 of file sfcsub\&.F\&.
 .PP
-References fixrdg(), machine::kind_io4, machine::kind_io8, sfccyc_module::mdata, sfccyc_module::xdata, and sfccyc_module::ydata\&.
+References fixrdg()\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine la2ga (real (kind=kind_io8), dimension (imxin,jmxin) regin, integer imxin, integer jmxin, real (kind=kind_io8), dimension(imxin) rinlon, real (kind=kind_io8), dimension(jmxin) rinlat, real (kind=kind_io8) rlon, real (kind=kind_io8) rlat, integer inttyp, real (kind=kind_io8), dimension(len) gauout, integer len, logical lmask, real (kind=kind_io8), dimension(imxin,jmxin) rslmsk, real (kind=kind_io8), dimension(len) slmask, real (kind=kind_io8), dimension(len) outlat, real (kind=kind_io8), dimension(len) outlon, integer me)"
+.SS "subroutine la2ga (real (kind=kind_io8), dimension (imxin,jmxin)regin, integerimxin, integerjmxin, real (kind=kind_io8), dimension(imxin)rinlon, real (kind=kind_io8), dimension(jmxin)rinlat, real (kind=kind_io8)rlon, real (kind=kind_io8)rlat, integerinttyp, real (kind=kind_io8), dimension(len)gauout, integerlen, logicallmask, real (kind=kind_io8), dimension(imxin,jmxin)rslmsk, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)outlat, real (kind=kind_io8), dimension(len)outlon, integerme)"
 
 .PP
 Interpolate data from a lat/lon grid to the model grid\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIregin\fP Input data\&. 
 .br
@@ -1599,24 +1591,24 @@ Interpolate data from a lat/lon grid to the model grid\&.
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorth 
 .RE
 .PP
 
 .PP
-Definition at line 3213 of file sfcsub\&.F\&.
+Definition at line 3210 of file sfcsub\&.F\&.
 .PP
-References machine::kind_io4, and machine::kind_io8\&.
+References num_parthds()\&.
 .PP
 Referenced by fixrda(), and fixrdc()\&.
-.SS "subroutine landtyp (real (kind=kind_io8), dimension(len) vegtype, real (kind=kind_io8), dimension(len) soiltype, real (kind=kind_io8), dimension(len) slptype, real (kind=kind_io8), dimension(len) slmask, integer len)"
+.SS "subroutine landtyp (real (kind=kind_io8), dimension(len)vegtype, real (kind=kind_io8), dimension(len)soiltype, real (kind=kind_io8), dimension(len)slptype, real (kind=kind_io8), dimension(len)slmask, integerlen)"
 
 .PP
 Set vegetation, soil and slope type at undefined model points\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIvegtype\fP Vegetation type 
 .br
@@ -1629,24 +1621,22 @@ Set vegetation, soil and slope type at undefined model points\&.
 \fIlen\fP Number of model points to process\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 7644 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 7643 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine maxmin (real (kind=kind_io8), dimension(imax,kmax) f, integer imax, integer kmax)"
+.SS "subroutine maxmin (real (kind=kind_io8), dimension(imax,kmax)f, integerimax, integerkmax)"
 
 .PP
 Compute the maxmimum and minimum of a field\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIf\fP The field to check\&. 
 .br
@@ -1655,22 +1645,20 @@ Compute the maxmimum and minimum of a field\&.
 \fIkmax\fP Number of vertical levels of the field\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 3753 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
-.SS "subroutine merge (integer len, integer lsoil, integer iy, integer im, integer id, integer ih, real (kind=kind_io8) fh, real (kind=kind_io8) deltsfc, real (kind=kind_io8), dimension(len) sihfcs, real (kind=kind_io8), dimension(len) sicfcs, real (kind=kind_io8), dimension(len) vmnfcs, real (kind=kind_io8), dimension(len) vmxfcs, real (kind=kind_io8), dimension(len) slpfcs, real (kind=kind_io8), dimension(len) absfcs, real (kind=kind_io8), dimension(len) tsffcs, real (kind=kind_io8), dimension(len) wetfcs, real (kind=kind_io8), dimension(len) snofcs, real (kind=kind_io8), dimension(len) zorfcs, real (kind=kind_io8), dimension(len,4) albfcs, real (kind=kind_io8), dimension(len) aisfcs, real (kind=kind_io8), dimension (len) cvfcs, real (kind=kind_io8), dimension(len) cvbfcs, real (kind=kind_io8), dimension(len) cvtfcs, real (kind=kind_io8), dimension(len) cnpfcs, real (kind=kind_io8), dimension(len,lsoil) smcfcs, real (kind=kind_io8), dimension(len,lsoil) stcfcs, real (kind=kind_io8), dimension(len) slifcs, real (kind=kind_io8), dimension(len) vegfcs, real (kind=kind_io8), dimension(len) vetfcs, real (kind=kind_io8), dimension(len) sotfcs, real (kind=kind_io8), dimension(len,2) alffcs, real (kind=kind_io8), dimension(len) sihanl, real (kind=kind_io8), dimension(len) sicanl, real (kind=kind_io8), dimension(len) vmnanl, real (kind=kind_io8), dimension(len) vmxanl, real (kind=kind_io8), dimension(len) slpanl, real (kind=kind_io8), dimension(len) absanl, real (kind=kind_io8), dimension(len) tsfanl, real (kind=kind_io8), dimension(len) tsfan2, real (kind=kind_io8), dimension(len) wetanl, real (kind=kind_io8), dimension(len) snoanl, real (kind=kind_io8), dimension(len) zoranl, real (kind=kind_io8), dimension(len,4) albanl, real (kind=kind_io8), dimension(len) aisanl, real (kind=kind_io8), dimension (len) cvanl, real (kind=kind_io8), dimension(len) cvbanl, real (kind=kind_io8), dimension(len) cvtanl, real (kind=kind_io8), dimension(len) cnpanl, real (kind=kind_io8), dimension(len,lsoil) smcanl, real (kind=kind_io8), dimension(len,lsoil) stcanl, real (kind=kind_io8), dimension(len) slianl, real (kind=kind_io8), dimension(len) veganl, real (kind=kind_io8), dimension(len) vetanl, real (kind=kind_io8), dimension(len) sotanl, real (kind=kind_io8), dimension(len,2) alfanl, real (kind=kind_io8) ctsfl, real (kind=kind_io8) calbl, real (kind=kind_io8) caisl, real (kind=kind_io8) csnol, real (kind=kind_io8), dimension(lsoil) csmcl, real (kind=kind_io8) czorl, real (kind=kind_io8), dimension(lsoil) cstcl, real (kind=kind_io8) cvegl, real (kind=kind_io8) ctsfs, real (kind=kind_io8) calbs, real (kind=kind_io8) caiss, real (kind=kind_io8) csnos, real (kind=kind_io8), dimension(lsoil) csmcs, real (kind=kind_io8) czors, real (kind=kind_io8), dimension(lsoil) cstcs, real (kind=kind_io8) cvegs, real (kind=kind_io8) ccv, real (kind=kind_io8) ccvb, real (kind=kind_io8) ccvt, real (kind=kind_io8) ccnp, real (kind=kind_io8) cvetl, real (kind=kind_io8) cvets, real (kind=kind_io8) csotl, real (kind=kind_io8) csots, real (kind=kind_io8) calfl, real (kind=kind_io8) calfs, real (kind=kind_io8) csihl, real (kind=kind_io8) csihs, real (kind=kind_io8) csicl, real (kind=kind_io8) csics, real (kind=kind_io8) cvmnl, real (kind=kind_io8) cvmns, real (kind=kind_io8) cvmxl, real (kind=kind_io8) cvmxs, real (kind=kind_io8) cslpl, real (kind=kind_io8) cslps, real (kind=kind_io8) cabsl, real (kind=kind_io8) cabss, integer irttsf, integer irtwet, integer irtsno, integer irtzor, integer irtalb, integer irtais, integer irttg3, integer irtscv, integer irtacn, integer irtsmc, integer irtstc, integer irtveg, integer irtvmn, integer irtvmx, integer irtslp, integer irtabs, integer irtvet, integer irtsot, integer irtalf, logical, intent(in) landice, integer me)"
+Definition at line 3752 of file sfcsub\&.F\&.
+.SS "subroutine merge (integerlen, integerlsoil, integeriy, integerim, integerid, integerih, real (kind=kind_io8)fh, real (kind=kind_io8)deltsfc, real (kind=kind_io8), dimension(len)sihfcs, real (kind=kind_io8), dimension(len)sicfcs, real (kind=kind_io8), dimension(len)vmnfcs, real (kind=kind_io8), dimension(len)vmxfcs, real (kind=kind_io8), dimension(len)slpfcs, real (kind=kind_io8), dimension(len)absfcs, real (kind=kind_io8), dimension(len)tsffcs, real (kind=kind_io8), dimension(len)wetfcs, real (kind=kind_io8), dimension(len)snofcs, real (kind=kind_io8), dimension(len)zorfcs, real (kind=kind_io8), dimension(len,4)albfcs, real (kind=kind_io8), dimension(len)aisfcs, real (kind=kind_io8), dimension (len)cvfcs, real (kind=kind_io8), dimension(len)cvbfcs, real (kind=kind_io8), dimension(len)cvtfcs, real (kind=kind_io8), dimension(len)cnpfcs, real (kind=kind_io8), dimension(len,lsoil)smcfcs, real (kind=kind_io8), dimension(len,lsoil)stcfcs, real (kind=kind_io8), dimension(len)slifcs, real (kind=kind_io8), dimension(len)vegfcs, real (kind=kind_io8), dimension(len)vetfcs, real (kind=kind_io8), dimension(len)sotfcs, real (kind=kind_io8), dimension(len,2)alffcs, real (kind=kind_io8), dimension(len)sihanl, real (kind=kind_io8), dimension(len)sicanl, real (kind=kind_io8), dimension(len)vmnanl, real (kind=kind_io8), dimension(len)vmxanl, real (kind=kind_io8), dimension(len)slpanl, real (kind=kind_io8), dimension(len)absanl, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)tsfan2, real (kind=kind_io8), dimension(len)wetanl, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension (len)cvanl, real (kind=kind_io8), dimension(len)cvbanl, real (kind=kind_io8), dimension(len)cvtanl, real (kind=kind_io8), dimension(len)cnpanl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)veganl, real (kind=kind_io8), dimension(len)vetanl, real (kind=kind_io8), dimension(len)sotanl, real (kind=kind_io8), dimension(len,2)alfanl, real (kind=kind_io8)ctsfl, real (kind=kind_io8)calbl, real (kind=kind_io8)caisl, real (kind=kind_io8)csnol, real (kind=kind_io8), dimension(lsoil)csmcl, real (kind=kind_io8)czorl, real (kind=kind_io8), dimension(lsoil)cstcl, real (kind=kind_io8)cvegl, real (kind=kind_io8)ctsfs, real (kind=kind_io8)calbs, real (kind=kind_io8)caiss, real (kind=kind_io8)csnos, real (kind=kind_io8), dimension(lsoil)csmcs, real (kind=kind_io8)czors, real (kind=kind_io8), dimension(lsoil)cstcs, real (kind=kind_io8)cvegs, real (kind=kind_io8)ccv, real (kind=kind_io8)ccvb, real (kind=kind_io8)ccvt, real (kind=kind_io8)ccnp, real (kind=kind_io8)cvetl, real (kind=kind_io8)cvets, real (kind=kind_io8)csotl, real (kind=kind_io8)csots, real (kind=kind_io8)calfl, real (kind=kind_io8)calfs, real (kind=kind_io8)csihl, real (kind=kind_io8)csihs, real (kind=kind_io8)csicl, real (kind=kind_io8)csics, real (kind=kind_io8)cvmnl, real (kind=kind_io8)cvmns, real (kind=kind_io8)cvmxl, real (kind=kind_io8)cvmxs, real (kind=kind_io8)cslpl, real (kind=kind_io8)cslps, real (kind=kind_io8)cabsl, real (kind=kind_io8)cabss, integerirttsf, integerirtwet, integerirtsno, integerirtzor, integerirtalb, integerirtais, integerirttg3, integerirtscv, integerirtacn, integerirtsmc, integerirtstc, integerirtveg, integerirtvmn, integerirtvmx, integerirtslp, integerirtabs, integerirtvet, integerirtsot, integerirtalf, logical, intent(in)landice, integerme)"
 
 .PP
 Blend the model forecast (or first guess) fields with the analysis/climatology\&. The forecast/first guess variables are named with 'fcs'\&. The analysis/climatology variables are named with 'anl'\&. On output, the blended fields are stored in the 'anl' variables\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlen\fP Number of model points to process\&. 
 .br
@@ -1901,24 +1889,24 @@ Blend the model forecast (or first guess) fields with the analysis/climatology\&
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 5215 of file sfcsub\&.F\&.
+Definition at line 5192 of file sfcsub\&.F\&.
 .PP
-References machine::kind_io4, machine::kind_io8, sfccyc_module::soil_type_landice, and sfccyc_module::veg_type_landice\&.
+References num_parthds()\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine monitr (character(len=*) lfld, real (kind=kind_io8), dimension(ijmax) fld, real (kind=kind_io8), dimension(ijmax) slimsk, real (kind=kind_io8), dimension(ijmax) sno, integer ijmax)"
+.SS "subroutine monitr (character(len=*)lfld, real (kind=kind_io8), dimension(ijmax)fld, real (kind=kind_io8), dimension(ijmax)slimsk, real (kind=kind_io8), dimension(ijmax)sno, integerijmax)"
 
 .PP
 Determine the maximum and minimum values of a surface field at snow-free and snow covered land, open water, and snow-free and snow covered sea ice\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlfld\fP The name of the surface field to monitory\&. 
 .br
@@ -1931,44 +1919,42 @@ Determine the maximum and minimum values of a surface field at snow-free and sno
 \fIijmax\fP Number of model points to process\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 2690 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 2689 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine netcdf_err (integer, intent(in) error)"
+.SS "subroutine netcdf_err (integer, intent(in)error)"
 
 .PP
 Print the error message for a given netCDF return code\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIerror\fP 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Xu Li NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 9167 of file sfcsub\&.F\&.
+Definition at line 9166 of file sfcsub\&.F\&.
 .PP
-Referenced by fixrdc_tile()\&.
-.SS "subroutine newice (real (kind=kind_io8), dimension(len) slianl, real (kind=kind_io8), dimension(len) slifcs, real (kind=kind_io8), dimension(len) tsfanl, real (kind=kind_io8), dimension(len) tsffcs, integer len, integer lsoil, real (kind=kind_io8) sihnew, real (kind=kind_io8) sicnew, real (kind=kind_io8), dimension(len) sihanl, real (kind=kind_io8), dimension(len) sicanl, real (kind=kind_io8), dimension(len,4) albanl, real (kind=kind_io8), dimension(len) snoanl, real (kind=kind_io8), dimension(len) zoranl, real (kind=kind_io8), dimension(len,lsoil) smcanl, real (kind=kind_io8), dimension(len,lsoil) stcanl, real (kind=kind_io8) albsea, real (kind=kind_io8) snosea, real (kind=kind_io8) zorsea, real (kind=kind_io8) smcsea, real (kind=kind_io8) smcice, real (kind=kind_io8) tsfmin, real (kind=kind_io8) tsfice, real (kind=kind_io8) albice, real (kind=kind_io8) zorice, real (kind=kind_io8) tgice, real (kind=kind_io8), dimension(len) rla, real (kind=kind_io8), dimension(len) rlo, integer me)"
+Referenced by fixrdc_tile(), read_write_data::read_data(), read_write_data::read_gsi_data(), read_write_data::read_lat_lon_orog(), and read_write_data::write_data()\&.
+.SS "subroutine newice (real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)slifcs, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)tsffcs, integerlen, integerlsoil, sihnew, sicnew, real (kind=kind_io8), dimension(len)sihanl, real (kind=kind_io8), dimension(len)sicanl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8)albsea, real (kind=kind_io8)snosea, real (kind=kind_io8)zorsea, real (kind=kind_io8)smcsea, real (kind=kind_io8)smcice, real (kind=kind_io8)tsfmin, real (kind=kind_io8)tsfice, real (kind=kind_io8)albice, real (kind=kind_io8)zorice, real (kind=kind_io8)tgice, real (kind=kind_io8), dimension(len)rla, real (kind=kind_io8), dimension(len)rlo, integerme)"
 
 .PP
 Adjust surface fields when ice melts or forms\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIslianl\fP Land-sea-ice mask\&. 
 .br
@@ -2027,7 +2013,7 @@ Adjust surface fields when ice melts or forms\&.
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .PP
@@ -2036,17 +2022,15 @@ Xingen Wu
 .PP
 
 .PP
-Definition at line 5682 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 5676 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine qcbyfc (real (kind=kind_io8), dimension(len) tsffcs, real (kind=kind_io8), dimension(len) snofcs, real (kind=kind_io8) qctsfs, real (kind=kind_io8) qcsnos, real (kind=kind_io8) qctsfi, integer len, integer lsoil, real (kind=kind_io8), dimension(len) snoanl, real (kind=kind_io8), dimension(len) aisanl, real (kind=kind_io8), dimension(len) slianl, real (kind=kind_io8), dimension(len) tsfanl, real (kind=kind_io8), dimension(len,4) albanl, real (kind=kind_io8), dimension(len) zoranl, real (kind=kind_io8), dimension(len,lsoil) smcanl, real (kind=kind_io8), dimension(len,lsoil) smcclm, real (kind=kind_io8) tsfsmx, real (kind=kind_io8) albomx, real (kind=kind_io8) zoromx, integer me)"
+.SS "subroutine qcbyfc (real (kind=kind_io8), dimension(len)tsffcs, real (kind=kind_io8), dimension(len)snofcs, real (kind=kind_io8)qctsfs, real (kind=kind_io8)qcsnos, real (kind=kind_io8)qctsfi, integerlen, integerlsoil, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)smcclm, real (kind=kind_io8)tsfsmx, real (kind=kind_io8)albomx, real (kind=kind_io8)zoromx, integerme)"
 
 .PP
 Quality control analysis fields using the first guess\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fItsffcs\fP First guess skin temperature/SST\&. 
 .br
@@ -2087,24 +2071,22 @@ Quality control analysis fields using the first guess\&.
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 6770 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 6766 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine qcmxice (real (kind=kind_io8), dimension(len) glacir, real (kind=kind_io8), dimension(len) amxice, integer len, integer me)"
+.SS "subroutine qcmxice (real (kind=kind_io8), dimension(len)glacir, real (kind=kind_io8), dimension(len)amxice, integerlen, integerme)"
 
 .PP
 Quality control maximum ice extent\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIglacir\fP Glacial flag 
 .br
@@ -2115,24 +2097,22 @@ Quality control maximum ice extent\&.
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 6650 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 6649 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine qcmxmn (character*8 ttl, real (kind=kind_io8), dimension(len) fld, real (kind=kind_io8), dimension(len) slimsk, real (kind=kind_io8), dimension(len) sno, logical, dimension(len) iceflg, real (kind=kind_io8) fldlmx, real (kind=kind_io8) fldlmn, real (kind=kind_io8) fldomx, real (kind=kind_io8) fldomn, real (kind=kind_io8) fldimx, real (kind=kind_io8) fldimn, real (kind=kind_io8) fldjmx, real (kind=kind_io8) fldjmn, real (kind=kind_io8) fldsmx, real (kind=kind_io8) fldsmn, real (kind=kind_io8) epsfld, real (kind=kind_io8), dimension(len) rla, real (kind=kind_io8), dimension(len) rlo, integer len, integer mode, real (kind=kind_io8) percrit, logical lgchek, integer me)"
+.SS "subroutine qcmxmn (character*8ttl, real (kind=kind_io8), dimension(len)fld, real (kind=kind_io8), dimension(len)slimsk, real (kind=kind_io8), dimension(len)sno, logical, dimension(len)iceflg, real (kind=kind_io8)fldlmx, real (kind=kind_io8)fldlmn, real (kind=kind_io8)fldomx, real (kind=kind_io8)fldomn, real (kind=kind_io8)fldimx, real (kind=kind_io8)fldimn, real (kind=kind_io8)fldjmx, real (kind=kind_io8)fldjmn, real (kind=kind_io8)fldsmx, real (kind=kind_io8)fldsmn, real (kind=kind_io8)epsfld, real (kind=kind_io8), dimension(len)rla, real (kind=kind_io8), dimension(len)rlo, integerlen, integermode, real (kind=kind_io8)percrit, logicallgchek, integerme)"
 
 .PP
 Range check a field\&. The check is a function of whether the point is land, water or ice\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIttl\fP Name of field\&. 
 .br
@@ -2181,24 +2161,24 @@ Range check a field\&. The check is a function of whether the point is land, wat
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 6025 of file sfcsub\&.F\&.
+Definition at line 6021 of file sfcsub\&.F\&.
 .PP
-References machine::kind_io4, and machine::kind_io8\&.
+References num_parthds()\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine qcsice (real (kind=kind_io8), dimension(len) ais, real (kind=kind_io8), dimension(len) glacir, real (kind=kind_io8), dimension(len) amxice, real (kind=kind_io8) aicice, real (kind=kind_io8) aicsea, real (kind=kind_io8) sllnd, real (kind=kind_io8), dimension(len) slmask, real (kind=kind_io8), dimension(len) rla, real (kind=kind_io8), dimension(len) rlo, integer len, integer me)"
+.SS "subroutine qcsice (real (kind=kind_io8), dimension(len)ais, real (kind=kind_io8), dimension(len)glacir, real (kind=kind_io8), dimension(len)amxice, real (kind=kind_io8)aicice, real (kind=kind_io8)aicsea, real (kind=kind_io8)sllnd, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)rla, real (kind=kind_io8), dimension(len)rlo, integerlen, integerme)"
 
 .PP
 Check the sea ice cover mask against the land-sea mask\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIais\fP Sea ice cover mask\&. 
 .br
@@ -2223,24 +2203,22 @@ Check the sea ice cover mask against the land-sea mask\&.
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 5846 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 5844 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine qcsli (real (kind=kind_io8), dimension(len) slianl, real (kind=kind_io8), dimension(len) slifcs, integer len, integer me)"
+.SS "subroutine qcsli (real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)slifcs, integerlen, integerme)"
 
 .PP
 Check consistency between the forecast and analysis land-sea-ice mask\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIslianl\fP Analysis mask\&. 
 .br
@@ -2251,24 +2229,22 @@ Check consistency between the forecast and analysis land-sea-ice mask\&.
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 6679 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 6678 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine qcsnow (real (kind=kind_io8), dimension(len) snoanl, real (kind=kind_io8), dimension(len) slmask, real (kind=kind_io8), dimension(len) aisanl, real (kind=kind_io8), dimension(len) glacir, integer len, real (kind=kind_io8) snoval, logical, intent(in) landice, integer me)"
+.SS "subroutine qcsnow (real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension(len)glacir, integerlen, real (kind=kind_io8)snoval, logical, intent(in)landice, integerme)"
 
 .PP
 Quality control snow at the model points\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIsnoanl\fP Model snow to be qc'd\&. 
 .br
@@ -2287,24 +2263,22 @@ Quality control snow at the model points\&.
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 5785 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 5783 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine rof01 (real (kind=kind_io8), dimension(len) aisfld, integer len, character*2 op, real (kind=kind_io8) crit)"
+.SS "subroutine rof01 (real (kind=kind_io8), dimension(len)aisfld, integerlen, character*2op, real (kind=kind_io8)crit)"
 
 .PP
 Round a field up to one or down to zero\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIaisfld\fP The field to adjust\&. 
 .br
@@ -2315,24 +2289,22 @@ Round a field up to one or down to zero\&.
 \fIcrit\fP Critical value above/below the field is rounded\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 4891 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 4890 of file sfcsub\&.F\&.
 .PP
 Referenced by setrmsk(), and sfccycle()\&.
-.SS "subroutine scale (real (kind=kind_io8), dimension(len) fld, integer len, real (kind=kind_io8) scl)"
+.SS "subroutine scale (real (kind=kind_io8), dimension(len)fld, integerlen, real (kind=kind_io8)scl)"
 
 .PP
 Multiply a field by a scaling factor\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIfld\fP The field to scale\&. 
 .br
@@ -2341,24 +2313,22 @@ Multiply a field by a scaling factor\&.
 \fIscl\fP Scaling factor\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 5979 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 5978 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine setlsi (real (kind=kind_io8), dimension(len) slmask, real (kind=kind_io8), dimension(len) aisfld, integer len, real (kind=kind_io8) aicice, real (kind=kind_io8), dimension(len) slifld)"
+.SS "subroutine setlsi (real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)aisfld, integerlen, real (kind=kind_io8)aicice, real (kind=kind_io8), dimension(len)slifld)"
 
 .PP
 Set land-sea-ice mask at sea ice\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIslmask\fP The model mask on input\&. 
 .br
@@ -2371,24 +2341,22 @@ Set land-sea-ice mask at sea ice\&.
 \fIslifld\fP The model mask with sea ice added\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 5954 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 5953 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine setrmsk (integer kpds5, real (kind=kind_io8), dimension(igaul,jgaul) slmask, integer igaul, integer jgaul, real (kind=kind_io8) wlon, real (kind=kind_io8) rnlat, real (kind=kind_io8), dimension(imax,jmax) data, integer imax, integer jmax, real (kind=kind_io8), dimension(imax) rlnout, real (kind=kind_io8), dimension(jmax) rltout, logical lmask, real (kind=kind_io8), dimension(imax,jmax) rslmsk, logical gaus, real (kind=kind_io8) blno, real (kind=kind_io8) blto, integer kgds1, integer, intent(in) kpds4, logical*1, dimension(imax,jmax), intent(in) lbms)"
+.SS "subroutine setrmsk (integerkpds5, real (kind=kind_io8), dimension(igaul,jgaul)slmask, integerigaul, integerjgaul, real (kind=kind_io8)wlon, real (kind=kind_io8)rnlat, real (kind=kind_io8), dimension(imax,jmax)data, integerimax, integerjmax, real (kind=kind_io8), dimension(imax)rlnout, real (kind=kind_io8), dimension(jmax)rltout, logicallmask, real (kind=kind_io8), dimension(imax,jmax)rslmsk, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, integerkgds1, integer, intent(in)kpds4, logical*1, dimension(imax,jmax), intent(in)lbms)"
 
 .PP
 Set the mask for the input data\&. (Not the model mask)\&. The mask is determined from the input data bitmap or by interpolating a high-resolution mask to the input data grid\&. Note: not all data has a mask\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIkpds5\fP Grib parameter number\&. 
 .br
@@ -2429,24 +2397,24 @@ Set the mask for the input data\&. (Not the model mask)\&. The mask is determine
 \fIlbms\fP Bitmap of input data\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 6891 of file sfcsub\&.F\&.
+Definition at line 6888 of file sfcsub\&.F\&.
 .PP
-References ga2la(), machine::kind_io4, machine::kind_io8, sfccyc_module::kpdabs, sfccyc_module::kpdacn, sfccyc_module::kpdais, sfccyc_module::kpdalb, sfccyc_module::kpdalf, sfccyc_module::kpdgla, sfccyc_module::kpdmxi, sfccyc_module::kpdscv, sfccyc_module::kpdslp, sfccyc_module::kpdsmc, sfccyc_module::kpdsnd, sfccyc_module::kpdsno, sfccyc_module::kpdsot, sfccyc_module::kpdtg3, sfccyc_module::kpdtsf, sfccyc_module::kpdveg, sfccyc_module::kpdvet, sfccyc_module::kpdvmn, sfccyc_module::kpdvmx, sfccyc_module::kpdwet, sfccyc_module::kpdzor, and rof01()\&.
+References ga2la(), and rof01()\&.
 .PP
 Referenced by fixrda(), and fixrdc()\&.
-.SS "subroutine setzro (real (kind=kind_io8), dimension(len) fld, real (kind=kind_io8) eps, integer len)"
+.SS "subroutine setzro (real (kind=kind_io8), dimension(len)fld, real (kind=kind_io8)eps, integerlen)"
 
 .PP
 Set a field to zero if it is less than a threshold\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIfld\fP Field to set\&. 
 .br
@@ -2455,24 +2423,22 @@ Set a field to zero if it is less than a threshold\&.
 \fIlen\fP Number of model points to process\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 6446 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 6445 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine sfccycle (integer lugb, integer len, integer lsoil, real (kind=kind_io8), dimension(len) sig1t, real (kind=kind_io8) deltsfc, integer iy, integer im, integer id, integer ih, real (kind=kind_io8) fh, real (kind=kind_io8), dimension(len) rla, real (kind=kind_io8), dimension(len) rlo, real (kind=kind_io8), dimension(len) slmask, real (kind=kind_io8), dimension(len) orog, real (kind=kind_io8), dimension(len) orog_uf, logical use_ufo, logical nst_anl, real (kind=kind_io8), dimension(len) sihfcs, real (kind=kind_io8), dimension(len) sicfcs, real (kind=kind_io8), dimension(len) sitfcs, real (kind=kind_io8), dimension(len) swdfcs, real (kind=kind_io8), dimension(len,lsoil) slcfcs, real (kind=kind_io8), dimension(len) vmnfcs, real (kind=kind_io8), dimension(len) vmxfcs, real (kind=kind_io8), dimension(len) slpfcs, real (kind=kind_io8), dimension(len) absfcs, real (kind=kind_io8), dimension(len) tsffcs, real (kind=kind_io8), dimension(len) snofcs, real (kind=kind_io8), dimension(len) zorfcs, real (kind=kind_io8), dimension(len,4) albfcs, real (kind=kind_io8), dimension(len) tg3fcs, real (kind=kind_io8), dimension(len) cnpfcs, real (kind=kind_io8), dimension(len,lsoil) smcfcs, real (kind=kind_io8), dimension(len,lsoil) stcfcs, real (kind=kind_io8), dimension(len) slifcs, real (kind=kind_io8), dimension(len) aisfcs, real (kind=kind_io8), dimension(len) vegfcs, real (kind=kind_io8), dimension(len) vetfcs, real (kind=kind_io8), dimension(len) sotfcs, real (kind=kind_io8), dimension(len,2) alffcs, real (kind=kind_io8), dimension (len) cvfcs, real (kind=kind_io8), dimension(len) cvbfcs, real (kind=kind_io8), dimension(len) cvtfcs, integer me, integer nlunit, integer sz_nml, character(len=*), dimension(sz_nml), intent(in) input_nml_file, integer ialb, integer isot, integer ivegsrc, character(len=*), intent(in) tile_num_ch, integer, dimension(len), intent(in) i_index, integer, dimension(len), intent(in) j_index)"
+.SS "subroutine sfccycle (integerlugb, integerlen, integerlsoil, real (kind=kind_io8), dimension(len)sig1t, real (kind=kind_io8)deltsfc, integeriy, integerim, integerid, integerih, real (kind=kind_io8)fh, real (kind=kind_io8), dimension(len)rla, real (kind=kind_io8), dimension(len)rlo, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)orog, real (kind=kind_io8), dimension(len)orog_uf, logicaluse_ufo, logicalnst_anl, real (kind=kind_io8), dimension(len)sihfcs, real (kind=kind_io8), dimension(len)sicfcs, real (kind=kind_io8), dimension(len)sitfcs, real (kind=kind_io8), dimension(len)swdfcs, real (kind=kind_io8), dimension(len,lsoil)slcfcs, real (kind=kind_io8), dimension(len)vmnfcs, real (kind=kind_io8), dimension(len)vmxfcs, real (kind=kind_io8), dimension(len)slpfcs, real (kind=kind_io8), dimension(len)absfcs, real (kind=kind_io8), dimension(len)tsffcs, real (kind=kind_io8), dimension(len)snofcs, real (kind=kind_io8), dimension(len)zorfcs, real (kind=kind_io8), dimension(len,4)albfcs, real (kind=kind_io8), dimension(len)tg3fcs, real (kind=kind_io8), dimension(len)cnpfcs, real (kind=kind_io8), dimension(len,lsoil)smcfcs, real (kind=kind_io8), dimension(len,lsoil)stcfcs, real (kind=kind_io8), dimension(len)slifcs, real (kind=kind_io8), dimension(len)aisfcs, real (kind=kind_io8), dimension(len)vegfcs, real (kind=kind_io8), dimension(len)vetfcs, real (kind=kind_io8), dimension(len)sotfcs, real (kind=kind_io8), dimension(len,2)alffcs, real (kind=kind_io8), dimension (len)cvfcs, real (kind=kind_io8), dimension(len)cvbfcs, real (kind=kind_io8), dimension(len)cvtfcs, integerme, integernlunit, integersz_nml, character(len=*), dimension(sz_nml), intent(in)input_nml_file, integerialb, integerisot, integerivegsrc, character(len=*), intent(in)tile_num_ch, integer, dimension(len), intent(in)i_index, integer, dimension(len), intent(in)j_index)"
 
 .PP
 Surface cycling driver routine\&. Update 'first guess' surface fields with either analysis or climatological data\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlugb\fP Fortran unit number used to read data files\&. 
 .br
@@ -2581,24 +2547,24 @@ Surface cycling driver routine\&. Update 'first guess' surface fields with eithe
 \fIj_index\fP The 'j' indices of the model grid to process\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 187 of file sfcsub\&.F\&.
+Definition at line 175 of file sfcsub\&.F\&.
 .PP
-References albocn(), analy(), anomint(), clima(), filanl(), filfcs(), fixrdc(), getscv(), getsmc(), getstc(), hmskrd(), machine::kind_io4, machine::kind_io8, sfccyc_module::kpdabs, sfccyc_module::kpdabs_0, sfccyc_module::kpdabs_1, sfccyc_module::kpdacn, sfccyc_module::kpdais, sfccyc_module::kpdalb, sfccyc_module::kpdalb_0, sfccyc_module::kpdalb_1, sfccyc_module::kpdalf, sfccyc_module::kpdgla, sfccyc_module::kpdmsk, sfccyc_module::kpdmxi, sfccyc_module::kpdscv, sfccyc_module::kpdslp, sfccyc_module::kpdsmc, sfccyc_module::kpdsnd, sfccyc_module::kpdsno, sfccyc_module::kpdsot, sfccyc_module::kpdstc, sfccyc_module::kpdtg3, sfccyc_module::kpdtsf, sfccyc_module::kpdveg, sfccyc_module::kpdvet, sfccyc_module::kpdvmn, sfccyc_module::kpdvmx, sfccyc_module::kpdwet, sfccyc_module::kpdzor, landtyp(), sfccyc_module::mdata, merge(), monitr(), newice(), qcbyfc(), qcmxice(), qcmxmn(), qcsice(), qcsli(), qcsnow(), rof01(), scale(), setlsi(), setzro(), snodpth(), snodpth2(), snosfc(), sfccyc_module::soil_type_landice, tsfcor(), usesgt(), and sfccyc_module::veg_type_landice\&.
+References albocn(), analy(), anomint(), clima(), filanl(), filfcs(), fixrdc(), getscv(), getsmc(), getstc(), hmskrd(), landtyp(), merge(), monitr(), newice(), qcbyfc(), qcmxice(), qcmxmn(), qcsice(), qcsli(), qcsnow(), rof01(), scale(), setlsi(), setzro(), snodpth(), snodpth2(), snosfc(), tsfcor(), and usesgt()\&.
 .PP
 Referenced by sfcdrv()\&.
-.SS "subroutine snodpth (real (kind=kind_io8), dimension(len) scvanl, real (kind=kind_io8), dimension(len) slianl, real (kind=kind_io8), dimension(len) tsfanl, real (kind=kind_io8), dimension(len) snoclm, real (kind=kind_io8), dimension(len) glacir, real (kind=kind_io8) snwmax, real (kind=kind_io8) snwmin, logical, intent(in) landice, integer len, real (kind=kind_io8), dimension(len) snoanl, integer me)"
+.SS "subroutine snodpth (real (kind=kind_io8), dimension(len)scvanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)snoclm, real (kind=kind_io8), dimension(len)glacir, real (kind=kind_io8)snwmax, real (kind=kind_io8)snwmin, logical, intent(in)landice, integerlen, real (kind=kind_io8), dimension(len)snoanl, integerme)"
 
 .PP
 Estimate snow depth at glacial, land and sea ice points\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIscvanl\fP Snow cover\&. 
 .br
@@ -2623,24 +2589,22 @@ Estimate snow depth at glacial, land and sea ice points\&.
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 4980 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 4978 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine snodpth2 (real (kind=kind_io8), dimension(len) glacir, real (kind=kind_io8) snwmax, real (kind=kind_io8), dimension(len) snoanl, integer len, integer me)"
+.SS "subroutine snodpth2 (real (kind=kind_io8), dimension(len)glacir, real (kind=kind_io8)snwmax, real (kind=kind_io8), dimension(len)snoanl, integerlen, integerme)"
 
 .PP
 Ensure deep snow pack at permanent glacial points\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIglacir\fP Glacial flag 
 .br
@@ -2653,24 +2617,22 @@ Ensure deep snow pack at permanent glacial points\&.
 \fIme\fP MPI task number\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 9731 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 9730 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine snosfc (real (kind=kind_io8), dimension(len) snoanl, real (kind=kind_io8), dimension(len) tsfanl, real (kind=kind_io8) tsfsmx, integer len, integer me)"
+.SS "subroutine snosfc (real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8)tsfsmx, integerlen, integerme)"
 
 .PP
 Check skin temperature at points with snow\&. If it is above a threshold, reset it to that value\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIsnoanl\fP Snow\&. 
 .br
@@ -2683,24 +2645,22 @@ Check skin temperature at points with snow\&. If it is above a threshold, reset 
 \fIme\fP MPI rank 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 6594 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 6593 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine subst (real (kind=kind_io8), dimension(imax,jmax) data, integer imax, integer jmax, real (kind=kind_io8) dlon, real (kind=kind_io8) dlat, logical ijordr)"
+.SS "subroutine subst (real (kind=kind_io8), dimension(imax,jmax)data, integerimax, integerjmax, real (kind=kind_io8)dlon, real (kind=kind_io8)dlat, logicalijordr)"
 
 .PP
 Take an array of data on a lat/lon based grid and rearrange it so the corner point is in the 'lower left' and adjacent points in the 'i' direction are consecutive\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIdata\fP The data to be adjusted\&. 
 .br
@@ -2715,24 +2675,22 @@ Take an array of data on a lat/lon based grid and rearrange it so the corner poi
 \fIijordr\fP When false, adjacent points in the 'i' direction are consecutive\&. Otherwise, 'j' points are consecutive\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 3131 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 3130 of file sfcsub\&.F\&.
 .PP
 Referenced by fixrda(), and fixrdc()\&.
-.SS "subroutine tsfcor (real (kind=kind_io8), dimension(len) tsfc, real (kind=kind_io8), dimension(len) orog, real (kind=kind_io8), dimension(len) slmask, real (kind=kind_io8) umask, integer len, real (kind=kind_io8) rlapse)"
+.SS "subroutine tsfcor (real (kind=kind_io8), dimension(len)tsfc, real (kind=kind_io8), dimension(len)orog, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8)umask, integerlen, real (kind=kind_io8)rlapse)"
 
 .PP
 Adjust skin temperature or SST for terrain\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fItsfc\fP Skin temperature/SST 
 .br
@@ -2747,24 +2705,22 @@ Adjust skin temperature or SST for terrain\&.
 \fIrlapse\fP Standard atmospheric lapse rate\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 4949 of file sfcsub\&.F\&.
-.PP
-References machine::kind_io4, and machine::kind_io8\&.
+Definition at line 4948 of file sfcsub\&.F\&.
 .PP
 Referenced by sfccycle()\&.
-.SS "subroutine usesgt (real (kind=kind_io8), dimension(len) sig1t, real (kind=kind_io8), dimension(len) slianl, real (kind=kind_io8), dimension(len) tg3anl, integer len, integer lsoil, real (kind=kind_io8), dimension(len) tsfanl, real (kind=kind_io8), dimension(len,lsoil) stcanl, real (kind=kind_io8) tsfimx)"
+.SS "subroutine usesgt (real (kind=kind_io8), dimension(len)sig1t, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)tg3anl, integerlen, integerlsoil, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8)tsfimx)"
 
 .PP
 Set soil temperature and sea ice column temperature for a dead start\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIsig1t\fP Sigma level 1 temperature for dead start\&. 
 .br
@@ -2783,16 +2739,16 @@ Set soil temperature and sea ice column temperature for a dead start\&.
 \fItsfimx\fP Freezing point of sea water\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 Shrinivas Moorthi 
 .RE
 .PP
 
 .PP
-Definition at line 6562 of file sfcsub\&.F\&.
+Definition at line 6560 of file sfcsub\&.F\&.
 .PP
-References getstc(), machine::kind_io4, and machine::kind_io8\&.
+References getstc()\&.
 .PP
 Referenced by sfccycle()\&.
 .SH "Author"

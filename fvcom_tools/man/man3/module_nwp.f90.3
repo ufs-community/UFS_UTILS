@@ -1,8 +1,10 @@
-.TH "/home/ed/UFS_UTILS/sorc/fvcom_tools.fd/module_nwp.f90" 3 "Fri Apr 30 2021" "Version 1.3.0" "fvcom_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/module_nwp.f90" 3 "Thu Jun 3 2021" "Version 1.4.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/fvcom_tools.fd/module_nwp.f90 \- Defines FV3LAM and FVCOM forecast data structure\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/module_nwp.f90 \- 
+.PP
+Defines FV3LAM and FVCOM forecast data structure\&.  
 
 .SH SYNOPSIS
 .br
@@ -14,44 +16,12 @@
 .RI "type \fBmodule_nwp::fcst_nwp\fP"
 .br
 .ti -1c
-.RI "type \fBmodule_nwp::nwp_type\fP"
-.br
-.in -1c
-.SS "Modules"
-
-.in +1c
-.ti -1c
 .RI "module \fBmodule_nwp\fP"
 .br
-.RI "This module defines FV3LAM and FVCOM forecast data structure and the method to read and write observations from and to those data structures\&. "
-.in -1c
-.SS "Functions/Subroutines"
-
-.in +1c
+.RI "\fIThis module defines FV3LAM and FVCOM forecast data structure and the method to read and write observations from and to those data structures\&. \fP"
 .ti -1c
-.RI "subroutine \fBmodule_nwp::finish_nwp\fP (this)"
+.RI "type \fBmodule_nwp::nwp_type\fP"
 .br
-.RI "Finish and deallocate\&. "
-.ti -1c
-.RI "subroutine \fBmodule_nwp::initial_nwp\fP (this, itype)"
-.br
-.RI "This subroutine defines the number of variables and their names for each NWP data type\&. "
-.ti -1c
-.RI "subroutine \fBmodule_nwp::list_initial_nwp\fP (this)"
-.br
-.RI "This subroutine lists the setup for NWP data that was done by the initial_nwp subroutine\&. "
-.ti -1c
-.RI "subroutine \fBmodule_nwp::read_nwp\fP (this, filename, itype, numlon, numlat, numtimes, time_to_get, mask, sst, ice, sfcT, iceT)"
-.br
-.RI "This subroutine initializes arrays to receive the NWP data, and opens the file and gets the data\&. "
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "type(ncio) \fBmodule_nwp::ncdata\fP"
-.br
-.RI "Wrapper object for netCDF data file\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -59,12 +29,12 @@ Defines FV3LAM and FVCOM forecast data structure\&.
 
 
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 David Wright, University of Michigan and GLERL, 
 .RE
 .PP
-\fBDate\fP
+\fBDate:\fP
 .RS 4
 17 Aug 2020 
 .RE

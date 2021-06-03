@@ -1,8 +1,10 @@
-.TH "module_nwp" 3 "Fri Apr 30 2021" "Version 1.3.0" "fvcom_tools" \" -*- nroff -*-
+.TH "module_nwp" 3 "Thu Jun 3 2021" "Version 1.4.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-module_nwp \- This module defines FV3LAM and FVCOM forecast data structure and the method to read and write observations from and to those data structures\&.  
+module_nwp \- 
+.PP
+This module defines FV3LAM and FVCOM forecast data structure and the method to read and write observations from and to those data structures\&.  
 
 .SH SYNOPSIS
 .br
@@ -17,33 +19,33 @@ module_nwp \- This module defines FV3LAM and FVCOM forecast data structure and t
 .RI "type \fBnwp_type\fP"
 .br
 .in -1c
-.SS "Functions/Subroutines"
+.SS "Private Member Functions"
 
 .in +1c
 .ti -1c
 .RI "subroutine \fBfinish_nwp\fP (this)"
 .br
-.RI "Finish and deallocate\&. "
+.RI "\fIFinish and deallocate\&. \fP"
 .ti -1c
 .RI "subroutine \fBinitial_nwp\fP (this, itype)"
 .br
-.RI "This subroutine defines the number of variables and their names for each NWP data type\&. "
+.RI "\fIThis subroutine defines the number of variables and their names for each NWP data type\&. \fP"
 .ti -1c
 .RI "subroutine \fBlist_initial_nwp\fP (this)"
 .br
-.RI "This subroutine lists the setup for NWP data that was done by the initial_nwp subroutine\&. "
+.RI "\fIThis subroutine lists the setup for NWP data that was done by the initial_nwp subroutine\&. \fP"
 .ti -1c
 .RI "subroutine \fBread_nwp\fP (this, filename, itype, numlon, numlat, numtimes, time_to_get, mask, sst, ice, sfcT, iceT)"
 .br
-.RI "This subroutine initializes arrays to receive the NWP data, and opens the file and gets the data\&. "
+.RI "\fIThis subroutine initializes arrays to receive the NWP data, and opens the file and gets the data\&. \fP"
 .in -1c
-.SS "Variables"
+.SS "Private Attributes"
 
 .in +1c
 .ti -1c
-.RI "type(\fBncio\fP) \fBncdata\fP"
+.RI "type(ncio) \fBncdata\fP"
 .br
-.RI "Wrapper object for netCDF data file\&. "
+.RI "\fIWrapper object for netCDF data file\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -53,81 +55,89 @@ It is used by ingest_FVCOM\&.f90\&.
 .PP
 This script is strongly based upon Eric James' (ESRL/GSL) work with HRRR/WRF to get FVCOM data into the model\&.
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 David Wright, University of Michigan and GLERL, 
 .RE
 .PP
-\fBDate\fP
+\fBDate:\fP
 .RS 4
 17 Aug 2020 
 .RE
 .PP
 
-.SH "Function/Subroutine Documentation"
+.PP
+Definition at line 15 of file module_nwp\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine module_nwp::finish_nwp (class(\fBfcst_nwp\fP) this)\fC [private]\fP"
+.SS "subroutine module_nwp::finish_nwp (class(\fBfcst_nwp\fP)this)\fC [private]\fP"
 
 .PP
 Finish and deallocate\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIthis\fP \fBfcst_nwp\fP object 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 David Wright, University of Michigan and GLERL 
 .RE
 .PP
 
 .PP
-Definition at line 280 of file module_nwp\&.f90\&.
-.SS "subroutine module_nwp::initial_nwp (class(\fBfcst_nwp\fP) this, character(len=6), intent(in) itype)\fC [private]\fP"
+Definition at line 279 of file module_nwp\&.f90\&.
+.PP
+Referenced by module_nwp::fcst_nwp::finish()\&.
+.SS "subroutine module_nwp::initial_nwp (class(\fBfcst_nwp\fP)this, character(len=6), intent(in)itype)\fC [private]\fP"
 
 .PP
 This subroutine defines the number of variables and their names for each NWP data type\&. The indices of the variables are also defined for later reference\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIthis\fP \fBfcst_nwp\fP object 
 .br
 \fIitype\fP either ' FVCOM' or 'FV3LAM'\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 David Wright, University of Michigan and GLERL 
 .RE
 .PP
 
 .PP
-Definition at line 80 of file module_nwp\&.f90\&.
-.SS "subroutine module_nwp::list_initial_nwp (class(\fBfcst_nwp\fP) this)\fC [private]\fP"
+Definition at line 79 of file module_nwp\&.f90\&.
+.PP
+Referenced by module_nwp::fcst_nwp::initial()\&.
+.SS "subroutine module_nwp::list_initial_nwp (class(\fBfcst_nwp\fP)this)\fC [private]\fP"
 
 .PP
 This subroutine lists the setup for NWP data that was done by the initial_nwp subroutine\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIthis\fP \fBfcst_nwp\fP object 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 David Wright, University of Michigan and GLERL 
 .RE
 .PP
 
 .PP
-Definition at line 164 of file module_nwp\&.f90\&.
-.SS "subroutine module_nwp::read_nwp (class(\fBfcst_nwp\fP) this, character(len=*), intent(in) filename, character(len=5), intent(in) itype, integer, intent(inout) numlon, integer, intent(inout) numlat, integer, intent(inout) numtimes, integer, intent(in) time_to_get, real(r_kind), dimension(:,:), intent(inout) mask, real(r_kind), dimension(:,:), intent(inout) sst, real(r_kind), dimension(:,:), intent(inout) ice, real(r_kind), dimension(:,:), intent(inout) sfcT, real(r_kind), dimension(:,:), intent(inout) iceT)\fC [private]\fP"
+Definition at line 163 of file module_nwp\&.f90\&.
+.PP
+Referenced by module_nwp::fcst_nwp::list_initial()\&.
+.SS "subroutine module_nwp::read_nwp (class(\fBfcst_nwp\fP)this, character(len=*), intent(in)filename, character(len=5), intent(in)itype, integer, intent(inout)numlon, integer, intent(inout)numlat, integer, intent(inout)numtimes, integer, intent(in)time_to_get, real(r_kind), dimension(:,:), intent(inout)mask, real(r_kind), dimension(:,:), intent(inout)sst, real(r_kind), dimension(:,:), intent(inout)ice, real(r_kind), dimension(:,:), intent(inout)sfcT, real(r_kind), dimension(:,:), intent(inout)iceT)\fC [private]\fP"
 
 .PP
 This subroutine initializes arrays to receive the NWP data, and opens the file and gets the data\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIthis\fP \fBfcst_nwp\fP ojbect 
 .br
@@ -154,26 +164,25 @@ This subroutine initializes arrays to receive the NWP data, and opens the file a
 \fIiceT\fP Ice Skin Temperature
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 David Wright, University of Michigan and GLERL 
 .RE
 .PP
 
 .PP
-Definition at line 202 of file module_nwp\&.f90\&.
+Definition at line 201 of file module_nwp\&.f90\&.
 .PP
-References ncdata\&.
-.SH "Variable Documentation"
+Referenced by module_nwp::fcst_nwp::read_n()\&.
+.SH "Field Documentation"
 .PP 
-.SS "type(\fBncio\fP) module_nwp::ncdata\fC [private]\fP"
+.SS "type(ncio) module_nwp::ncdata\fC [private]\fP"
 
 .PP
 Wrapper object for netCDF data file\&. 
 .PP
 Definition at line 67 of file module_nwp\&.f90\&.
-.PP
-Referenced by read_nwp()\&.
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for fvcom_tools from the source code\&.

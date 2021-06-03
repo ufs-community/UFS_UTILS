@@ -1,8 +1,9 @@
-.TH "/home/ed/UFS_UTILS/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90" 3 "Fri Apr 30 2021" "Version 1.3.0" "emcsfc_ice_blend" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90" 3 "Thu Jun 3 2021" "Version 1.4.0" "emcsfc_ice_blend" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90 \- Create blended ice product for gfs/gdas cycles\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90 \- 
+Create blended ice product for gfs/gdas cycles\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,7 +14,7 @@
 .ti -1c
 .RI "program \fBemcsfc_ice_blend\fP"
 .br
-.RI "Create a global 5-minute blended ice concentration dataset for use by GDAS/GFS\&. "
+.RI "\fICreate a global 5-minute blended ice concentration dataset for use by GDAS/GFS\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -21,12 +22,12 @@ Create blended ice product for gfs/gdas cycles\&.
 
 
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
 .PP
-\fBDate\fP
+\fBDate:\fP
 .RS 4
 2014-03-20 
 .RE
@@ -36,7 +37,7 @@ George Gayno NCEP/EMC
 Definition in file \fBemcsfc_ice_blend\&.f90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "program emcsfc_ice_blend"
+.SS "program emcsfc_ice_blend ()"
 
 .PP
 Create a global 5-minute blended ice concentration dataset for use by GDAS/GFS\&. This blend is created from National Ice Center Interactive Multisensor Snow and Ice Mapping System (IMS) data, and the NCEP/MMAB global 5-minute ice concentration data\&.
@@ -54,9 +55,7 @@ fort\&.11 - NH IMS ice data, interpolated to the 5-minute grid (grib 2)
 .IP "\(bu" 2
 fort\&.15 - global 5-minute MMAB ice concentration file (grib 2)
 .IP "\(bu" 2
-fort\&.17 - global 5-minute MMAB land mask file (grib 2)\&. 
-.br
-
+fort\&.17 - global 5-minute MMAB land mask file (grib 2)\&.
 .PP
 .PP
 output files:
@@ -116,8 +115,7 @@ If IMS and MMAB indicate a point as water, then
 .IP "  \(bu" 4
 The blended value is set to zero if the IMS concentration is less than 50%\&.
 .IP "  \(bu" 4
-If the IMS concentration is >=50%, then the neighboring 5-minute data is checked for ice\&. 
-.br
+If the IMS concentration is >=50%, then the neighboring 5-minute data is checked for ice\&.
 .IP "    \(bu" 6
 If the 5-minute point is ice free, but at least one of its neighbors has ice, the blended value is set to the IMS ice concentration\&. Examination of the 5-minute showed isolated open water points within large areas of ice\&. This logic attempts to remove these likely wrong points\&.
 .IP "    \(bu" 6
@@ -130,12 +128,12 @@ If (i) is false, then the blended value is set to the 5-minute value or 15%, whi
 .PP
 In the SH, the blended value is simply the 5-minute ice concentration at 'water' points\&. 'Coast' and 'land' points are bitmapped out\&.
 .PP
-\fBReturns\fP
+\fBReturns:\fP
 .RS 4
 0 for success, error code otherwise\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE

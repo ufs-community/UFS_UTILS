@@ -1,8 +1,8 @@
-.TH "pmat2::udlby" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::udlby" 3 "Thu Jun 3 2021" "Version 1.4.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::udlby
+pmat2::udlby \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,19 +12,19 @@ pmat2::udlby
 .ti -1c
 .RI "subroutine \fBudlby\fP (my, mah1, mah2, mx, a, v)"
 .br
-.RI "Back-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. "
+.RI "\fIBack-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 72 of file pmat2\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::udlby::udlby (integer(spi), intent(in) my, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mx, real(sp), dimension(my,\-mah1:mah2), intent(in) a, real(sp), dimension(mx,my), intent(inout) v)\fC [private]\fP"
+.SS "subroutine pmat2::udlby::udlby (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(my,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)\fC [private]\fP"
 
 .PP
 Back-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fImy\fP the number of rows assumed for A and length of Y-vectors stored in V 
 .br
@@ -39,19 +39,19 @@ Back-substitution step of parallel linear inversion involving Banded matrix and 
 \fIv\fP input as right-hand-side vectors, output as solution vectors 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate\fP
+\fBDate:\fP
 .RS 4
 1994 
 .RE
 .PP
 
 .PP
-Definition at line 1040 of file pmat2\&.f90\&.
+Definition at line 1039 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

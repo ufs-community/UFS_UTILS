@@ -1,8 +1,8 @@
-.TH "pmat4::identity" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::identity" 3 "Thu Jun 3 2021" "Version 1.4.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat4::identity
+pmat4::identity \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,60 +10,64 @@ pmat4::identity
 
 .in +1c
 .ti -1c
-.RI "integer(spi) function, dimension(3, 3) \fBidentity3_i\fP ()"
+.RI "integer(spi) function, 
 .br
-.RI "Return the 3-dimensional integer identity matrix\&. "
+dimension(3, 3) \fBidentity3_i\fP ()"
+.br
+.RI "\fIReturn the 3-dimensional integer identity matrix\&. \fP"
 .ti -1c
-.RI "integer(spi) function, dimension(n, n) \fBidentity_i\fP (n)"
+.RI "integer(spi) function, 
 .br
-.RI "Return the integer identity matrix for a given dimensionality\&. "
+dimension(n, n) \fBidentity_i\fP (n)"
+.br
+.RI "\fIReturn the integer identity matrix for a given dimensionality\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 79 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "integer(spi) function, dimension(3,3) pmat4::identity::identity3_i\fC [private]\fP"
+.SS "integer(spi) function, dimension(3,3) pmat4::identity::identity3_i ()\fC [private]\fP"
 
 .PP
 Return the 3-dimensional integer identity matrix\&. 
 .PP
-\fBReturns\fP
+\fBReturns:\fP
 .RS 4
 a result, identity matrix in 3 dimensions\&. 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 615 of file pmat4\&.f90\&.
-.SS "integer(spi) function, dimension(n,n) pmat4::identity::identity_i (integer(spi), intent(in) n)\fC [private]\fP"
+Definition at line 614 of file pmat4\&.f90\&.
+.SS "integer(spi) function, dimension(n,n) pmat4::identity::identity_i (integer(spi), intent(in)n)\fC [private]\fP"
 
 .PP
 Return the integer identity matrix for a given dimensionality\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIn\fP input integer dimensionality 
 .RE
 .PP
-\fBReturns\fP
+\fBReturns:\fP
 .RS 4
 a result, identity matrix of the given dimensionality 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 603 of file pmat4\&.f90\&.
+Definition at line 602 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

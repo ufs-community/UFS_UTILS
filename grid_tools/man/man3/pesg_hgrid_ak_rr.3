@@ -1,8 +1,8 @@
-.TH "pesg::hgrid_ak_rr" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::hgrid_ak_rr" 3 "Thu Jun 3 2021" "Version 1.4.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::hgrid_ak_rr
+pesg::hgrid_ak_rr \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,25 +12,25 @@ pesg::hgrid_ak_rr
 .ti -1c
 .RI "subroutine \fBhgrid_ak_rr\fP (lx, ly, nx, ny, A, K, plat, plon, pazi, delx, dely, glat, glon, garea, ff)"
 .br
-.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. "
+.RI "\fIUse a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. \fP"
 .ti -1c
 .RI "subroutine \fBhgrid_ak_rr_c\fP (lx, ly, nx, ny, a, k, plat, plon, pazi, delx, dely, glat, glon, garea, dx, dy, angle_dx, angle_dy, ff)"
 .br
-.RI "Use a and k as the parameters of an extended Schmidt-transformed gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. "
+.RI "\fIUse a and k as the parameters of an extended Schmidt-transformed gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 44 of file pesg\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::hgrid_ak_rr::hgrid_ak_rr (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::hgrid_ak_rr::hgrid_ak_rr (integer(spi), intent(in)lx, integer(spi), intent(in)ly, integer(spi), intent(in)nx, integer(spi), intent(in)ny, real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), intent(in)pazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)glon, real(dp), dimension(lx:lx+nx-1,ly:ly+ny-1), intent(out)garea, logical, intent(out)ff)\fC [private]\fP"
 
 .PP
 Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. Assume the radius of the earth is unity, and using the central mapping point as the coordinate origin, set up the grid with central x-spacing delx and y-spacing dely\&. The grid index location of the left-lower corner of the domain is (lx,ly) (typically both NEGATIVE)\&. The numbers of the grid spaces in x and y directions are nx and ny\&. (Note that, for a centered rectangular grid lx and ly are negative and, in magnitude, half the values of nx and ny respectively\&.) Return the latitude and longitude, in radians again, of the grid points thus defined in the arrays, glat and glon, and return a rectangular array, garea, of dimensions nx-1 by ny-1, that contains the areas of each of the grid cells
 .PP
 If all goes well, return a lowered failure flag, ff=\&.false\&. \&. But if, for some reason, it is not possible to complete this task, return the raised failure flag, ff=\&.TRUE\&. \&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlx\fP center-relative grid index in x of left edge of the domain 
 .br
@@ -63,17 +63,17 @@ If all goes well, return a lowered failure flag, ff=\&.false\&. \&. But if, for 
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1220 of file pesg\&.f90\&.
+Definition at line 1218 of file pesg\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::hgrid_ak_rr::hgrid_ak_rr_c (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny  ), intent(out) dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny\-1), intent(out) dy, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) angle_dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) angle_dy, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::hgrid_ak_rr::hgrid_ak_rr_c (integer(spi), intent(in)lx, integer(spi), intent(in)ly, integer(spi), intent(in)nx, integer(spi), intent(in)ny, real(dp), intent(in)a, real(dp), intent(in)k, real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), intent(in)pazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)glon, real(dp), dimension(lx:lx+nx-1,ly:ly+ny-1), intent(out)garea, real(dp), dimension(lx:lx+nx-1,ly:ly+ny  ), intent(out)dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny-1), intent(out)dy, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)angle_dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)angle_dy, logical, intent(out)ff)\fC [private]\fP"
 
 .PP
 Use a and k as the parameters of an extended Schmidt-transformed gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. Using the central mapping point as the coordinate origin, set up the grid with central x-spacing delx and y-spacing dely in nondimensional units, (i\&.e\&., as if the earth had unit radius) and with the location of the left- lower corner of the grid at center-relative grid index pair, (lx,ly) and with the number of the grid spaces in x and y directions given by nx and ny\&. (Note that, for a centered rectangular grid lx and ly are negative and, in magnitude, half the values of nx and ny respectively\&.) Return the latitude and longitude, again, in radians, of the grid pts thus defined in the arrays, glat and glon; return a rectangular array, garea, of dimensions nx-1 by ny-1, that contains the areas of each of the grid cells in nondimensional 'steradian' units\&.
@@ -82,7 +82,7 @@ In this version, these grid cell areas are computed by 2D integrating the scalar
 .PP
 if all goes well, return a \&.FALSE\&. failure flag, ff\&. If, for some reason, it is not possible to complete this task, return the failure flag as \&.TRUE\&.
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIlx\fP center-relative x grid index for left edge of the domain 
 .br
@@ -123,14 +123,16 @@ if all goes well, return a \&.FALSE\&. failure flag, ff\&. If, for some reason, 
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1337 of file pesg\&.f90\&.
+Definition at line 1335 of file pesg\&.f90\&.
+.PP
+Referenced by pesg::hgrid_ak_c(), and pesg::hgrid_ak_dd_c()\&.
 
 .SH "Author"
 .PP 

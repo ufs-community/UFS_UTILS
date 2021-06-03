@@ -1,8 +1,9 @@
-.TH "/home/ed/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/driver.F90" 3 "Fri Apr 30 2021" "Version 1.3.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/driver.F90" 3 "Thu Jun 3 2021" "Version 1.4.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/home/ed/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/driver.F90 \- Create a snow cover and snow depth analysis\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/driver.F90 \- 
+Create a snow cover and snow depth analysis\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,7 +14,7 @@
 .ti -1c
 .RI "program \fBdriver\fP"
 .br
-.RI "Create a snow cover and snow depth analysis on a nam or global gfs gaussian grid using nesdis/ims snow cover, autosnow snow cover and/or afwa depth data\&. "
+.RI "\fICreate a snow cover and snow depth analysis on a nam or global gfs gaussian grid using nesdis/ims snow cover, autosnow snow cover and/or afwa depth data\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -21,12 +22,12 @@ Create a snow cover and snow depth analysis\&.
 
 
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 gayno 
 .RE
 .PP
-\fBDate\fP
+\fBDate:\fP
 .RS 4
 2005-dec-16 
 .RE
@@ -36,7 +37,7 @@ gayno
 Definition in file \fBdriver\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "program driver"
+.SS "program driver ()"
 
 .PP
 Create a snow cover and snow depth analysis on a nam or global gfs gaussian grid using nesdis/ims snow cover, autosnow snow cover and/or afwa depth data\&. The ims snow cover product is now produced by the national ice center, not nesdis\&. however, in this code, references to ims still use the 'nesdis' identifier\&.
@@ -73,8 +74,7 @@ autosnow sh snow cover data (grib 2)
 nesdis/ims weekly nh snow cover climatology (grib 2) (used to qc input snow data)\&.
 .PP
 .PP
-output files: 
-.br
+output files:
 .IP "\(bu" 2
 snow cover and depth on the model grid (grib1 or grib2)
 .PP
@@ -95,9 +95,7 @@ exit states (non-zero condition is fatal):
 .IP "\(bu" 2
 50 - error converting to grib2 grid description template
 .IP "\(bu" 2
-53 - bad nesdis/ims data\&. 
-.br
-
+53 - bad nesdis/ims data\&.
 .IP "\(bu" 2
 54 - bad input snow data selection
 .IP "\(bu" 2
@@ -163,7 +161,9 @@ exit states (non-zero condition is fatal):
 .PP
 .PP
 The determination of cover and depth on the model grid depends on the input snow data selected:
+.PP
 .SS "nam grids:"
+.PP
 .IP "1." 4
 nesdis/ims only - An analysis of snow cover on the model grid is produced\&. No depth analysis is produced\&.
 .IP "2." 4
@@ -171,11 +171,11 @@ afwa only - An analysis of snow cover and depth on the model grid is produced\&.
 .IP "3." 4
 nesdis/ims and afwa - An analysis of snow cover and depth on the model grid is produced\&. Cover is determined by the nesdis/ims data\&. If cover is greater than user-defined threshold (variable snow_cvr_threshold) the depth is set to the afwa value or a nominal value, whichever is greater\&. The nominal value is user-defined (varaible min_snow_depth)\&. If cover is less than user- defined threshold, the depth is set to 0, regardless of the afwa depth value\&.
 .PP
+.PP
 .SS "gfs grid:"
+.PP
 .IP "1." 4
-nesdis/ims and autosnow only - An analysis of snow cover and depth on the model grid is produced\&. 
-.br
- Cover is determined from the ims and autosnow data\&. If cover is greater than the user-defined threshold (variable snow_cvr_threshold), the the depth is set to the user-defined default depth (variable min_snow_depth)\&.
+nesdis/ims and autosnow only - An analysis of snow cover and depth on the model grid is produced\&. Cover is determined from the ims and autosnow data\&. If cover is greater than the user-defined threshold (variable snow_cvr_threshold), the the depth is set to the user-defined default depth (variable min_snow_depth)\&.
 .IP "2." 4
 afwa only - An analysis of snow cover and depth on the model grid is produced\&. Depth is determined from the afwa data\&. Cover is set to 100% where afwa indicates snow and 0% otherwise\&.
 .IP "3." 4
@@ -195,19 +195,17 @@ Program History Log
 2014-sep-30 gayno read grib 1 or grib2 version of model lat, lon and mask files\&. convert nh weekly snow climatology to grib 2\&. option to output model depth and cover analysis in grib2\&.
 .PP
 .PP
-\fBReturns\fP
+\fBReturns:\fP
 .RS 4
 0 for success, error code otherwise\&. 
-.br
- 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 gayno 
 .RE
 .PP
-\fBDate\fP
+\fBDate:\fP
 .RS 4
 2005-dec-16 
 .RE

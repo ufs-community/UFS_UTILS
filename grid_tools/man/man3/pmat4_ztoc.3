@@ -1,8 +1,8 @@
-.TH "pmat4::ztoc" 3 "Fri Apr 30 2021" "Version 1.3.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::ztoc" 3 "Thu Jun 3 2021" "Version 1.4.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat4::ztoc
+pmat4::ztoc \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,23 +12,23 @@ pmat4::ztoc
 .ti -1c
 .RI "subroutine \fBztoc\fP (z, infz, v)"
 .br
-.RI "Given a complex z, return the equivalent cartesian unit 3-vector associated by the polar stereographic projection\&. "
+.RI "\fIGiven a complex z, return the equivalent cartesian unit 3-vector associated by the polar stereographic projection\&. \fP"
 .ti -1c
 .RI "subroutine \fBztocd\fP (z, infz, v, vd)"
 .br
-.RI "The convention adopted for the complex derivative is that, for a complex infinitesimal map displacement, delta_z, the corresponding infinitesimal change of cartesian vector position is delta_v given by: delta_v = Real(vd*delta_z)\&. "
+.RI "\fIThe convention adopted for the complex derivative is that, for a complex infinitesimal map displacement, delta_z, the corresponding infinitesimal change of cartesian vector position is delta_v given by: delta_v = Real(vd*delta_z)\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 106 of file pmat4\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat4::ztoc::ztoc (complex(dpc), intent(in) z, logical, intent(in) infz, real(dp), dimension(3), intent(out) v)\fC [private]\fP"
+.SS "subroutine pmat4::ztoc::ztoc (complex(dpc), intent(in)z, logical, intent(in)infz, real(dp), dimension(3), intent(out)v)\fC [private]\fP"
 
 .PP
 Given a complex z, return the equivalent cartesian unit 3-vector associated by the polar stereographic projection\&. 
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIz\fP complex input argument 
 .br
@@ -37,27 +37,27 @@ Given a complex z, return the equivalent cartesian unit 3-vector associated by t
 \fIv\fP cartesian unit 3-vector position equivalent to z 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2053 of file pmat4\&.f90\&.
+Definition at line 2052 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat4::ztoc::ztocd (complex(dpc), intent(in) z, logical, intent(in) infz, real(dp), dimension(3), intent(out) v, complex(dpc), dimension(3), intent(out) vd)\fC [private]\fP"
+.SS "subroutine pmat4::ztoc::ztocd (complex(dpc), intent(in)z, logical, intent(in)infz, real(dp), dimension(3), intent(out)v, complex(dpc), dimension(3), intent(out)vd)\fC [private]\fP"
 
 .PP
 The convention adopted for the complex derivative is that, for a complex infinitesimal map displacement, delta_z, the corresponding infinitesimal change of cartesian vector position is delta_v given by: delta_v = Real(vd*delta_z)\&. Thus, by a kind of Cauchy-Riemann relation, Imag(vd)=v CROSS Real(vd)\&.
 .PP
-\fBNote\fP
+\fBNote:\fP
 .RS 4
 The derivative for the ideal point at infinity has not been coded yet\&.
 .RE
 .PP
-\fBParameters\fP
+\fBParameters:\fP
 .RS 4
 \fIz\fP complex input argument 
 .br
@@ -68,14 +68,14 @@ The derivative for the ideal point at infinity has not been coded yet\&.
 \fIvd\fP derivative of cartesian v wrt z 
 .RE
 .PP
-\fBAuthor\fP
+\fBAuthor:\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2083 of file pmat4\&.f90\&.
+Definition at line 2082 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 
