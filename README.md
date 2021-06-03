@@ -104,8 +104,8 @@ documentation build, as well as some markdown files which are part of
 the documentation. It also contains (in the source subdirectory) the
 ReadTheDocs documentation files.
 
-The cmake directory contains package find utilities and utilities to
-run units tests on some supported machines.
+The cmake directory contains CMake package find utilities, and utilities to
+run units tests on some supported HPC platforms.
 
 ## References
 
