@@ -12,24 +12,16 @@ FIX_FV3=$UFS_DIR/fix
 FIX_ORO=${FIX_FV3}/fix_fv3_gmted2010
 FIX_AM=${FIX_FV3}/fix_am
 
-date10=$yy$mm$dd$hh
-yy=$(echo $date10 | cut -c1-4)
-mm=$(echo $date10 | cut -c5-6)
-dd=$(echo $date10 | cut -c7-8)
-hh=$(echo $date10 | cut -c9-10)
+WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
-YMDH=${yy}${mm}${dd}.${hh}0000
-
-WORKDIR=$OUTDIR/work.$MEMBER
-
-if [ ${MEMBER} == 'hires' ]; then
+if [ "${MEMBER}" = "gdas" ] || [ "${MEMBER}" = "gfs" ]; then
   CTAR=${CRES_HIRES}
-  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
-  RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
-  OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos
-  ATMFILE="gdas.t${hh}z.atmanl.nemsio"
-  SFCFILE="gdas.t${hh}z.sfcanl.nemsio"
-  NSTFILE="gdas.t${hh}z.nstanl.nemsio"
+  INPUT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}"
+  RADSTAT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}"
+  OUTDIR=$OUTDIR/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos
+  ATMFILE="${MEMBER}.t${hh}z.atmanl.nemsio"
+  SFCFILE="${MEMBER}.t${hh}z.sfcanl.nemsio"
+  NSTFILE="${MEMBER}.t${hh}z.nstanl.nemsio"
 else  
   CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
@@ -87,10 +79,12 @@ do
   mv out.sfc.${tile}.nc  ${OUTDIR}/INPUT/sfc_data.${tile}.nc 
 done
 
-if [ ${MEMBER} == 'hires' ]; then
+if [ "${MEMBER}" = "gdas" ]; then
   cp ${RADSTAT_DATA_DIR}/*radstat* $OUTDIR
   cp ${RADSTAT_DATA_DIR}/*abias* $OUTDIR
   touch $OUTDIR/gdas.t${hh}z.loginc.txt
+elif [ "${MEMBER}" = "gfs" ]; then
+  touch $OUTDIR/gfs.t${hh}z.loginc.txt
 else
   touch $OUTDIR/enkfgdas.t${hh}z.loginc.txt
 fi
