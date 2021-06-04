@@ -1,7 +1,27 @@
 #!/bin/bash
 
+copy_data()
+{
+
+mkdir -p $SAVEDIR
+cp gfs_ctrl.nc $SAVEDIR
+
+for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
+do
+  cp out.atm.${tile}.nc  ${SAVEDIR}/gfs_data.${tile}.nc
+  cp out.sfc.${tile}.nc  ${SAVEDIR}/sfc_data.${tile}.nc 
+done
+}
+
 #---------------------------------------------------------------------------
-# Run chgres using gfs v15 data as input.
+# Run chgres for gdas/enkf members using v16 parallel data as input.
+# The enkf data is not saved.  So the coldstart files for all
+# 80 members are simply copies of a single run of chgres using the
+# gdas warm restart files as input.
+#
+# The gfs tarballs only have the netcdf history files.  To run 
+# chgres_cube for the gfs member using the history files, the
+# run_chgres.v16.sh script is used.
 #---------------------------------------------------------------------------
 
 set -x
@@ -22,27 +42,32 @@ YMDH=${yy}${mm}${dd}.${hh}0000
 
 WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
-if [ ${MEMBER} == 'gdas' ]; then
+if [ ${MEMBER} == 'hires' ]; then
   CINP=${CINP:-"C768"}
   CTAR=${CRES_HIRES}
-  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
-  RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
-  OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos
 else  
-  CINP=${CINP:-"C384"}
+  CINP=${CINP:-"C768"}
   CTAR=${CRES_ENKF}
-  INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/mem${MEMBER}/RESTART"
-  RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
-  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}
+fi
+
+# Some parallel tarballs have 'atmos' in their directory path.  And
+# some do not.
+
+if [ -d "${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/atmos/RESTART" ]; then
+  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/atmos/RESTART"
+else
+  INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
+fi
+
+if [ -d "${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}/atmos" ]; then
+  RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}/atmos"
+else
+  RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
 fi
 
 rm -fr $WORKDIR
 mkdir -p $WORKDIR
 cd $WORKDIR
-
-rm -fr $OUTDIR
-mkdir -p $OUTDIR
-mkdir -p $OUTDIR/INPUT
 
 cat << EOF > fort.41
 
@@ -77,19 +102,25 @@ if [ $rc != 0 ]; then
   exit $rc
 fi
 
-mv gfs_ctrl.nc ${OUTDIR}/INPUT
-
-for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
-do
-  mv out.atm.${tile}.nc  ${OUTDIR}/INPUT/gfs_data.${tile}.nc
-  mv out.sfc.${tile}.nc  ${OUTDIR}/INPUT/sfc_data.${tile}.nc 
-done
-
-if [ ${MEMBER} == 'gdas' ]; then
-  cp ${RADSTAT_DATA_DIR}/* $OUTDIR
-  touch $OUTDIR/gdas.t${hh}z.loginc.txt
-else
-  touch $OUTDIR/enkfgdas.t${hh}z.loginc.txt
+if [ ${MEMBER} == 'hires' ]; then
+  SAVEDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos/INPUT
+  copy_data
+  cp $RADSTAT_DATA_DIR/*abias* $SAVEDIR/..
+  cp $RADSTAT_DATA_DIR/*radstat $SAVEDIR/..
+  touch $SAVEDIR/../gdas.t${hh}z.loginc.txt
+else  
+  MEMBER=1
+  while [ $MEMBER -le 80 ]; do
+  if [ $MEMBER -lt 10 ]; then
+    MEMBER_CH="00${MEMBER}"
+  else
+    MEMBER_CH="0${MEMBER}"
+  fi
+  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER_CH}/INPUT
+  copy_data
+  touch $SAVEDIR/../enkfgdas.t${hh}z.loginc.txt
+  MEMBER=$(( $MEMBER + 1 ))
+  done
 fi
 
 rm -fr $WORKDIR
