@@ -4,8 +4,9 @@
 #
 # Run the chgres_cube consistency tests on WCOSS-Cray.
 #
-# Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE as
-# appropriate. 
+# Set WORK_DIR to a general working location outside the UFS_UTILS directory.
+# The exact working directory (OUTDIR) will be WORK_DIR/reg_tests/chgres-cube.
+# Set the PROJECT_CODE and QUEUE as appropriate. 
 #
 # Invoke the script with no arguments.   A series of daily-
 # chained jobs will be submitted.  To check the queue, type: "bjobs".

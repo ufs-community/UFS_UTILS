@@ -4,9 +4,10 @@
 #
 # Run the chgres_cube consistency tests on JET.
 #
-# Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
-# as appropriate.  To see which projects you are authorized to use,
-# type "account_params".
+# Set WORK_DIR to a general working location outside the UFS_UTILS directory.
+# The exact working directory (OUTDIR) will be WORK_DIR/reg_tests/chgres-cube. 
+# Set the PROJECT_CODE and QUEUE as appropriate.  To see which projects you 
+#are authorized to use, type "account_params".
 #
 # Invoke the script with no arguments.  A series of daisy-
 # chained jobs will be submitted.  To check the queue, type:

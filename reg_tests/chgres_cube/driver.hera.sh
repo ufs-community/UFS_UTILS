@@ -4,9 +4,10 @@
 #
 # Run the chgres_cube consistency tests on Hera.
 #
-# Set OUTDIR to your working directory.  Set the PROJECT_CODE and QUEUE
-# as appropriate.  To see which projects you are authorized to use,
-# type "account_params".
+# Set WORK_DIR to a general working location outside the UFS_UTILS directory.
+# The exact working directory (OUTDIR) will be WORK_DIR/reg_tests/chgres-cube. 
+# Set the PROJECT_CODE and QUEUE as appropriate.  To see which projects you 
+# are authorized to use, type "account_params".
 #
 # Invoke the script with no arguments.  A series of daily-chained
 # consistency tests will be submitted.  To check the queue, type:
@@ -45,8 +46,8 @@ QUEUE="${QUEUE:-batch}"
 
 export HOMEufs=$PWD/../..
 
-#export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
-export HOMEreg=/scratch1/BMC/gsd-fv3/Larissa.Reames/chgres_cube/reg_tests
+export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
+
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
 rm -f $LOG_FILE* $SUM_FILE
