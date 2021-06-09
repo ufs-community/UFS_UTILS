@@ -62,6 +62,7 @@ find_package(sp 2.3.3 REQUIRED)
 find_package(ip 3.3.3 REQUIRED)
 find_package(g2 3.4.0 REQUIRED)
 find_package(wgrib2 2.0.8 REQUIRED)
+find_package(sigio 2.3.0 REQUIRED)
 
 # EMC requires executables in ./exec
 set(exec_dir bin)
