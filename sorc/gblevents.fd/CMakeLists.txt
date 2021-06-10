@@ -51,3 +51,7 @@ install(EXPORT gblevents-exports
   NAMESPACE gblevents::
   FILE gblevents-targets.cmake
   DESTINATION ${CONFIG_INSTALL_DESTINATION})
+
+if(ENABLE_DOCS)
+  add_subdirectory(docs)  
+endif()
