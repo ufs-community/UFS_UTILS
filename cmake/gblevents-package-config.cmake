@@ -8,7 +8,7 @@ find_dependency(nemsio CONFIG)
 find_dependency(sigio CONFIG)
 find_dependency(NetCDF COMPONENTS Fortran)
 
-get_target_property(@PROJECT_NAME@_BUILD_TYPES @PROJECT_NAME@::@PROJECT_NAME@_4 IMPORTED_CONFIGURATIONS)
+get_target_property(gblevents_BUILD_TYPES gblevents::gblevents IMPORTED_CONFIGURATIONS)
 
 check_required_components("gblevents")
 
