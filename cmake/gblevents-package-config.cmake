@@ -12,5 +12,5 @@ get_target_property(gblevents_BUILD_TYPES gblevents::gblevents IMPORTED_CONFIGUR
 
 check_required_components("gblevents")
 
-get_target_property(location @PROJECT_NAME@::@PROJECT_NAME@_4 LOCATION)
+get_target_property(location gblevents::gblevents LOCATION)
 message(STATUS "Found gblevents: ${location} (found version \"@PROJECT_VERSION@\")")
