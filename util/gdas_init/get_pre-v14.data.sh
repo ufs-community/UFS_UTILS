@@ -12,7 +12,7 @@ bundle=$1
 
 set -x
 
-if [ $bundle = 'hires' ]; then
+if [ "$bundle" = "gdas" ]; then
 
   mkdir -p $EXTRACT_DIR/gdas.${yy}${mm}${dd}/${hh}
   cd $EXTRACT_DIR/gdas.${yy}${mm}${dd}/${hh}
@@ -43,7 +43,26 @@ if [ $bundle = 'hires' ]; then
   rc=$?
   [ $rc != 0 ] && exit $rc
 
-elif [ $bundle = 'enkf' ]; then
+elif [ "$bundle" = "gfs" ]; then
+
+  mkdir -p $EXTRACT_DIR/gfs.${yy}${mm}${dd}/${hh}
+  cd $EXTRACT_DIR/gfs.${yy}${mm}${dd}/${hh}
+
+  directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
+  if [ $gfs_ver = 'v12' ]; then
+    file=com_gfs_prod_gfs.${yy}${mm}${dd}${hh}.anl.tar
+  else
+    file=com2_gfs_prod_gfs.${yy}${mm}${dd}${hh}.anl.tar
+  fi
+
+  htar -xvf $directory/$file ./gfs.t${hh}z.sanl
+  rc=$?
+  [ $rc != 0 ] && exit $rc
+  htar -xvf $directory/$file ./gfs.t${hh}z.sfcanl
+  rc=$?
+  [ $rc != 0 ] && exit $rc
+
+elif [ "$bundle" = "enkf" ]; then
 
 #----------------------------------------------------------------------
 # Get the enkf tiled restart files for all members.

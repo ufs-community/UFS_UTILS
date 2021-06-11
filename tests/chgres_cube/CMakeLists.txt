@@ -98,6 +98,15 @@ add_mpi_test(chgres_cube-ftst_convert_winds
 #  NUMPROCS 1
 #  TIMEOUT 60)
 
+add_executable(ftst_read_sfc_nemsio ftst_read_sfc_nemsio.F90)
+target_link_libraries(ftst_read_sfc_nemsio chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_read_sfc_nemsio
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_sfc_nemsio
+  NUMPROCS 1
+  TIMEOUT 60)
+
 add_executable(ftst_read_sfc_netcdf ftst_read_sfc_netcdf.F90)
 target_link_libraries(ftst_read_sfc_netcdf chgres_cube_lib)
 

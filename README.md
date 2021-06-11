@@ -4,7 +4,7 @@
 Utilities for the NCEP models. This is part of the
 [NCEPLIBS](https://github.com/NOAA-EMC/NCEPLIBS) project.
 
-Documentation for the chgres_cube utility can be found at
+Documentation for chgres_cube and other utilities can be found at
 https://noaa-emcufs-utils.readthedocs.io/en/latest/.
 
 Complete documentation can be found at
@@ -17,6 +17,7 @@ Utility | Programmer(s)
 chgres_cube | George Gayno, Jeff Beck, Larissa Reames
 emcsfc_ice_blend | George Gayno
 emcsfc_snow2mdl | George Gayno
+fre-nctools | GFDL progammer
 fvcom_tools | David Wright, University of Michigan, Ming Hu, GSD/AMB
 global_cycle | George Gayno, Shrinivas Moorthi, Mark Iredell, Xu Li, Hang Lei
 grid_tools | R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), Tsukasa Fujita, JMA (pmat2), GFDL programmer (topo filtering code).
@@ -28,7 +29,7 @@ UFS_UTILS Code managers: George Gayno, Kyle Gerheiser
 
 ## Prerequisites
 
-This package requires the following NCEPLIBS packages:
+This package uses the [hpc-stack](https://github.com/NOAA-EMC/hpc-stack) for the following NCEPLIBS packages:
  - [NCEPLIBS-sfcio](https://github.com/NOAA-EMC/NCEPLIBS-sfcio)
  - [NCEPLIBS-w3nco](https://github.com/NOAA-EMC/NCEPLIBS-w3nco)
  - [NCEPLIBS-bacio](https://github.com/NOAA-EMC/NCEPLIBS-bacio)
@@ -39,13 +40,15 @@ This package requires the following NCEPLIBS packages:
  - [NCEPLIBS-g2](https://github.com/NOAA-EMC/NCEPLIBS-g2)
  - [NCEPLIBS-wgrib2](https://github.com/NOAA-EMC/NCEPLIBS-wgrib2)
 
-This package also requires:
+And for the following third party libraries:
 
  - [netcdf-c Library](https://github.com/Unidata/netcdf-c)
  - [netcdf-fortran Library](https://github.com/Unidata/netcdf-fortran)
  - [ESMF](https://github.com/esmf-org/esmf)
  - [Jasper](https://github.com/jasper-software/jasper)
- 
+ - [Zlib](www.zlib.net)
+ - [HDF5](https://www.hdfgroup.org/solutions/hdf5/)
+ - [PNG](http://www.libpng.org/pub/png/)
 
 ## Installing
 
@@ -100,6 +103,9 @@ The docs directory contains the control file for the doxygen
 documentation build, as well as some markdown files which are part of
 the documentation. It also contains (in the source subdirectory) the
 ReadTheDocs documentation files.
+
+The cmake directory contains CMake package find utilities, and utilities to
+run units tests on some supported HPC platforms.
 
 ## References
 
