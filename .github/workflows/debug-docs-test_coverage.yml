@@ -105,8 +105,6 @@ jobs:
         cd ufs_utils/build/tests/chgres_cube/data
         wget -i files.txt
         cd ../../..
-        export LSAN_OPTIONS=suppressions=../../../LSanSuppress.supp 
-        export ASAN_OPTIONS=suppressions=../../../ASanSuppress.supp
         ctest --rerun-failed --output-on-failure
         export PATH="/home/runner/.local/bin:$PATH"
         gcovr -r .. --html-details -o test-coverage.html
