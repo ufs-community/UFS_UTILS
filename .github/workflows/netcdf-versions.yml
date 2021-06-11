@@ -86,7 +86,6 @@ jobs:
         tar zxf ESMF_8_0_1.tar.gz
         cd esmf-ESMF_8_0_1
         export ESMF_COMM=mpich3
-        export ESMF_BOPT=g
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
         export ESMF_INSTALL_MODDIR=mod
@@ -95,10 +94,6 @@ jobs:
         export ESMF_NETCDF=split
         export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
         export ESMF_NETCDF_LIBPATH=${HOME}/netcdf/lib
-        export ESMF_F90LINKOPTS=-fsanitize=address
-        export ESMF_CXXLINKOPTS=-fsanitize=address
-        export ESMF_F90COMPILEOPTS="-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls"
-        export ESMF_CXXCOMPILEOPTS="-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls"
         make -j2
         make install
 
@@ -159,6 +154,4 @@ jobs:
         cd ufs_utils/build/tests/chgres_cube/data
         wget -i files.txt
         cd ../../..
-        export LSAN_OPTIONS=suppressions=../../../LSanSuppress.supp
-        export ASAN_OPTIONS=suppressions=../../../ASanSuppress.supp
         ctest --rerun-failed --output-on-failure
