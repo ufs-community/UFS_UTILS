@@ -10,7 +10,6 @@ set -eux
 
 target=${target:-"NULL"}
 compiler=${compiler:-"intel"}
-
 export MOD_PATH
 
 if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then

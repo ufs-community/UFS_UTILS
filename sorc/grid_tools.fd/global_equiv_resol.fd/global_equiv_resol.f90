@@ -144,7 +144,7 @@ program global_equiv_resol
   WRITE(*,530) "  min_cell_size = ", min_cell_size
   WRITE(*,530) "  max_cell_size = ", max_cell_size
   WRITE(*,530) "  avg_cell_size = ", avg_cell_size
-530 FORMAT(A, G10.4)
+530 FORMAT(A, G11.4)
 !
 !=======================================================================
 !
