@@ -1700,7 +1700,9 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  integer                                :: rc
 
  print*,"- DESTROY MODEL DATA."
-
+ 
+ call ESMF_FieldDestroy(latitude_input_grid,rc=rc)
+ call ESMF_FieldDestroy(longitude_input_grid,rc=rc)
  if (ESMF_FieldIsCreated(latitude_s_input_grid)) then
    call ESMF_FieldDestroy(latitude_s_input_grid, rc=rc)
  endif
@@ -1715,11 +1717,19 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  endif
  call ESMF_FieldDestroy(landmask_target_grid, rc=rc)
  call ESMF_FieldDestroy(latitude_target_grid, rc=rc)
- call ESMF_FieldDestroy(latitude_s_target_grid, rc=rc)
- call ESMF_FieldDestroy(latitude_w_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(latitude_s_target_grid)) then
+   call ESMF_FieldDestroy(latitude_s_target_grid, rc=rc)
+ endif
+ if (ESMF_FieldIsCreated(latitude_w_target_grid)) then
+   call ESMF_FieldDestroy(latitude_w_target_grid, rc=rc)
+ endif
  call ESMF_FieldDestroy(longitude_target_grid, rc=rc)
- call ESMF_FieldDestroy(longitude_s_target_grid, rc=rc)
- call ESMF_FieldDestroy(longitude_w_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(longitude_s_target_grid)) then
+   call ESMF_FieldDestroy(longitude_s_target_grid, rc=rc)
+ endif
+ if (ESMF_FieldIsCreated(longitude_w_target_grid)) then
+   call ESMF_FieldDestroy(longitude_w_target_grid, rc=rc)
+ endif
  call ESMF_FieldDestroy(seamask_target_grid, rc=rc)
  call ESMF_FieldDestroy(terrain_target_grid, rc=rc)
  call ESMF_GridDestroy(input_grid, rc=rc)
