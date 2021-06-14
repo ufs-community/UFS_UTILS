@@ -24,7 +24,8 @@ CRES=${CRES:-96}
 # FIXufs  - Location of ufs_utils root fixed data directory.
 # FIXfv3  - Location of target grid orography and 'grid' files.
 # FIXsfc  - Location of target grid surface climatological files.
-# FIXam   - Location of vertical coordinate definition file for target grid.
+# FIXam   - Location of vertical coordinate definition file for target grid 
+#           and RAP grib2 input grid lat/lon definition file.
 #----------------------------------------------------------------------------
 
 ufs_ver=${ufs_ver:-v1.0.0}
@@ -124,6 +125,9 @@ COMIN=${COMIN:-$PWD}
 #
 # TRACERS_INPUT - List of input atmospheric tracer records to be processed.
 #                 Not used for 'grib2' INPUT_TYPE.
+#
+# GEOGRID_FILE_INPUT - Geogrid file corresponding to input model data. Only used 
+#                     for 'grib2' INPUT_TYPE. OPTIONAL. Default: NULL.
 #----------------------------------------------------------------------------
 
 ATM_FILES_INPUT=${ATM_FILES_INPUT:-NULL}
@@ -133,6 +137,7 @@ SFC_FILES_INPUT=${SFC_FILES_INPUT:-NULL}
 NST_FILES_INPUT=${NST_FILES_INPUT:-NULL}
 GRIB2_FILE_INPUT=${GRIB2_FILE_INPUT:-NULL}
 TRACERS_INPUT=${TRACERS_INPUT:-'"spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"'}
+GEOGRID_FILE_INPUT=${GEOGRID_FILE_INPUT:-NULL}
 
 #----------------------------------------------------------------------------
 #
@@ -150,6 +155,8 @@ TRACERS_INPUT=${TRACERS_INPUT:-'"spfh","clwmr","o3mr","icmr","rwmr","snmr","grle
 #
 # OROG_FILES_TARGET_GRID - Orography file(s) for target grid.  Assumed to
 #                          be located in FIXfv3.
+#
+# THOMPSON_AEROSOL_FILE = Location of Thompson aerosol climatology file.
 #----------------------------------------------------------------------------
 
 VARMAP_FILE=${VARMAP_FILE:-NULL}
@@ -166,7 +173,49 @@ if [ $OROG_FILES_TARGET_GRID == NULL ]; then
   OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}'_oro_data.tile3.nc","C'${CRES}'_oro_data.tile4.nc"'
   OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}'_oro_data.tile5.nc","C'${CRES}'_oro_data.tile6.nc'
 fi
+
+THOMPSON_AEROSOL_FILE=${THOMPSON_AEROSOL_FILE:-NULL}
+
 WAM_COLD_START=${WAM_COLD_START:-.false.}
+
+#----------------------------------------------------------------------------
+#  ST_CLIMO - Use soil type from climatology. Valid options: .true. or .false.
+#             Only used for 'grib2' INPUT_TYPE. Default: .true.
+#
+#  VT_CLIMO - Use vegetation type from climatology. Valid Options: .true. or
+#             .false. . Only used for 'grib2' INPUT_TYPE. Default: .true.
+#
+#  VF_CLIMO - Use vegetation fraction from climatology. Valid options: .true.
+#             or .false. . Only used for 'grib2' INPUT_TYPE. Default: .true.
+#
+#  TG3_SOIL - Use tg3 from input soil. Valid options: .true. or .false. .
+#              Only used for 'grib2' INPUT_TYPE. Default: .false.
+#
+#  LAI_CLIMO - Use leaf area index from climatology. Valid options: .true. or
+#             .false. . Only used for 'grib2' INPUT_TYPE. Default: .true.
+#
+#  EXTERNAL_MODEL - Name of source model for input data. Only used for 'grib2'
+#                   INPUT_TYPE. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. 
+#                   Default: 'GFS'
+#
+#  NSOILL_OUT - Number of soil levels desired in output. Only used for 'grib2'
+#               INPUT_TYPE. Valid options 9 or 4. Cannot be 9 if input data
+#               only has 4. Default: 4
+#----------------------------------------------------------------------------
+
+ST_CLIMO=${SOTYP_FROM_CLIMO:-.true.}
+
+VT_CLIMO=${VGTYP_FROM_CLIMO:-.true.}
+
+VF_CLIMO=${VGFRC_FROM_CLIMO:-.true.}
+
+TG3_SOIL=${TG3_FROM_SOIL:-.false.}
+
+LAI_CLIMO=${LAI_FROM_CLIMO:-true.}
+
+EXTERNAL_MODEL=${EXTERNAL_MODEL:-"GFS"}
+
+NSOILL_OUT=${NSOILL_OUT:-4}
 
 #----------------------------------------------------------------------------
 # APRUN - machine specific command to run program.
@@ -200,6 +249,7 @@ cat << EOF > ./fort.41
   mosaic_file_target_grid="${MOSAIC_FILE_TARGET_GRID}"
   fix_dir_target_grid="${FIXsfc}"
   orog_dir_target_grid="${FIXfv3}"
+  fix_dir_input_grid="${FIXam}"
   orog_files_target_grid="${OROG_FILES_TARGET_GRID}"
   vcoord_file_target_grid="${VCOORD_FILE}"
   mosaic_file_input_grid="${MOSAIC_FILE_INPUT_GRID}"
@@ -212,6 +262,7 @@ cat << EOF > ./fort.41
   sfc_files_input_grid="${SFC_FILES_INPUT}"
   nst_files_input_grid="${NST_FILES_INPUT}"
   grib2_file_input_grid="${GRIB2_FILE_INPUT}"
+  geogrid_file_input_grid="${GEOGRID_FILE_INPUT}"
   varmap_file="${VARMAP_FILE}"
   cycle_year=$iy
   cycle_mon=$im
@@ -226,6 +277,15 @@ cat << EOF > ./fort.41
   regional=$REGIONAL
   halo_bndy=$HALO_BNDY
   halo_blend=$HALO_BLEND
+  sotyp_from_climo=$ST_CLIMO
+  vgtyp_from_climo=$VT_CLIMO
+  vgfrc_from_climo=$VF_CLIMO
+  minmax_vgfrc_from_climo=$VF_CLIMO
+  tg3_from_soil=$TG3_SOIL
+  lai_from_climo=$LAI_CLIMO
+  external_model="${EXTERNAL_MODEL}"
+  nsoill_out=$NSOILL_OUT
+  thomp_mp_climo_file="${THOMPSON_AEROSOL_FILE}"
   wam_cold_start=$WAM_COLD_START
  /
 EOF
