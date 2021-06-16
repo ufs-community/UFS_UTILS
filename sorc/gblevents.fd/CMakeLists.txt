@@ -1,12 +1,4 @@
 
-if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_C_FLAGS "-g ${CMAKE_C_FLAGS}")
-  set(CMAKE_C_FLAGS_RELEASE "-O3")
-elseif(CMAKE_C_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
-  set(CMAKE_C_FLAGS "-ggdb ${CMAKE_C_FLAGS}")
-  set(CMAKE_C_FLAGS_RELEASE "-O3")
-endif()
-
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
