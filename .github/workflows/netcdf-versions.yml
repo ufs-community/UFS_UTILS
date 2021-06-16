@@ -78,7 +78,7 @@ jobs:
         key: esmf-8.0.1-${{ runner.os }}-netcdf-${{ matrix.netcdf_version }}
 
     - name: build-esmf
-      if: steps.cache-esmf.outputs.cache-hit != 'true'
+      #if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         pushd ~
         export ESMF_DIR=~/esmf-ESMF_8_0_1
