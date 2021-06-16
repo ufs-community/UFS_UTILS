@@ -135,17 +135,22 @@
                                -999.9,   30.0,   30.0, -999.9, &
                                -999.9, -999.9, -999.9, -999.9/),(/i_target,j_target/))
  
- nst_bundle = ESMF_FieldBundleCreate(name="nst_bundle", rc=rc)
+ nst_bundle = ESMF_FieldBundleCreate(name="nst_bundle", fieldlist= &
+                        (/c_d_target_grid,c_0_target_grid,d_conv_target_grid, &
+                          dt_cool_target_grid,ifd_target_grid,qrain_target_grid,&
+                          w_d_target_grid,w_0_target_grid,xs_target_grid,xt_target_grid,&
+                          xu_target_grid,xv_target_grid,xtts_target_grid,xzts_target_grid,&
+                          z_c_target_grid, zm_target_grid/), rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldBundleCreate", rc)
 
- call ESMF_FieldBundleAdd(nst_bundle, (/c_d_target_grid,c_0_target_grid,d_conv_target_grid, &
-                          dt_cool_target_grid,ifd_target_grid,qrain_target_grid,&
-                          w_d_target_grid,w_0_target_grid,xs_target_grid,xt_target_grid,&
-                          xu_target_grid,xv_target_grid,xtts_target_grid,xzts_target_grid, &
-                          z_c_target_grid, zm_target_grid/), rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-      call error_handler("IN FieldBundleAdd", rc) 
+ !call ESMF_FieldBundleAdd(nst_bundle, (/c_d_target_grid,c_0_target_grid,d_conv_target_grid, &
+ !                         dt_cool_target_grid,ifd_target_grid,qrain_target_grid,&
+ !                         w_d_target_grid,w_0_target_grid,xs_target_grid,xt_target_grid,&
+ !                         xu_target_grid,xv_target_grid,xtts_target_grid,xzts_target_grid, &
+ !                         z_c_target_grid, zm_target_grid/), rc=rc)
+ !  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+ !     call error_handler("IN FieldBundleAdd", rc) 
 
  do i = 1,16
    call ESMF_FieldBundleGet(nst_bundle,i,tmp_field,rc=rc)
