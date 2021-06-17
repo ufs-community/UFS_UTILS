@@ -6,4 +6,4 @@
 # Add the test subdirecotries.
 add_subdirectory(chgres_cube)
 add_subdirectory(fre-nctools)
-
+add_subdirectory(global_cycle)
