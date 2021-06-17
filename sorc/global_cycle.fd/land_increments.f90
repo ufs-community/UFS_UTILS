@@ -34,6 +34,7 @@ contains
 subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile, & 
                         lensfc,lsoil,idim,jdim, myrank) 
 
+    use utils
     use gdswzd_mod
     use read_write_data, only : idim_gaus, jdim_gaus, &
                              stc_inc_gaus, soilsnow_gaus 

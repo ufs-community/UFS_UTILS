@@ -8,6 +8,7 @@ set(lib_src
     num_parthds.f90
     sfcsub.F
     read_write_data.f90
+    utils.F90
     land_increments.f90)
 
 set(exe_src cycle.f90)
