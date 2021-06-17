@@ -415,7 +415,7 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, &
                endif 
 
                ! make adjustment (same routine for both)
-               soiltype = int(rsoiltype(i))
+               soiltype = nint(rsoiltype(i))
                ! bb and maxsmc are in the namelist_soilveg, need soiltype index
                call frh2o(stc_anl(i,l), smc_anl(i,l),slc_anl(i,l), maxsmc(soiltype), & 
                           bb(soiltype), satpsi(soiltype),slc_new)
