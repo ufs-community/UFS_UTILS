@@ -1,4 +1,4 @@
-.TH "input_data" 3 "Thu Jun 3 2021" "Version 1.4.0" "chgres_cube" \" -*- nroff -*-
+.TH "input_data" 3 "Mon Jun 21 2021" "Version 1.5.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -44,6 +44,10 @@ Read atmospheric, surface and nst data on the input grid\&.
 .RI "subroutine \fBhandle_grib_error\fP (vname, lev, method, value, varnum, iret, var, var8, var3d)"
 .br
 .RI "\fIHandle GRIB2 read error based on the user selected method in the varmap file\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBinit_sfc_esmf_fields\fP"
+.br
+.RI "\fICreate surface input grid esmf fields\&. \fP"
 .ti -1c
 .RI "recursive subroutine, public \fBquicksort\fP (a, first, last)"
 .br
@@ -436,7 +440,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6305 of file input_data\&.F90\&.
+Definition at line 6318 of file input_data\&.F90\&.
 .PP
 Referenced by read_winds()\&.
 .SS "subroutine, public input_data::check_cnwat (real(esmf_kind_r4), dimension(i_input,j_input), intent(inout)cnwat)"
@@ -456,7 +460,7 @@ Larissa Reames CIMMS/NSSL
 .PP
 
 .PP
-Definition at line 6656 of file input_data\&.F90\&.
+Definition at line 6669 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_sfc_grib2_file()\&.
 .SS "subroutine, public input_data::check_soilt (real(esmf_kind_r8), dimension(i_input,j_input,\fBlsoil_input\fP), intent(inout)soilt, integer(esmf_kind_i4), dimension(i_input,j_input), intent(in)landmask, real(esmf_kind_r8), dimension(i_input,j_input), intent(in)skint)"
@@ -480,7 +484,7 @@ Larissa Reames CIMMS/NSSL
 .PP
 
 .PP
-Definition at line 6626 of file input_data\&.F90\&.
+Definition at line 6639 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_sfc_grib2_file()\&.
 .SS "subroutine, public input_data::cleanup_input_atm_data ()"
@@ -495,7 +499,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6478 of file input_data\&.F90\&.
+Definition at line 6491 of file input_data\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver()\&.
 .SS "subroutine, public input_data::cleanup_input_nst_data ()"
@@ -510,7 +514,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6503 of file input_data\&.F90\&.
+Definition at line 6516 of file input_data\&.F90\&.
 .PP
 Referenced by surface::surface_driver()\&.
 .SS "subroutine, public input_data::cleanup_input_sfc_data ()"
@@ -525,7 +529,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6536 of file input_data\&.F90\&.
+Definition at line 6549 of file input_data\&.F90\&.
 .PP
 Referenced by surface::surface_driver()\&.
 .SS "subroutine, public input_data::convert_winds ()"
@@ -540,7 +544,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6188 of file input_data\&.F90\&.
+Definition at line 6201 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .SS "subroutine input_data::gridrot (real(esmf_kind_r4), intent(in)lov, real(esmf_kind_r4), intent(in)latin1, real(esmf_kind_r4), intent(in)latin2, real(esmf_kind_r8), dimension(i_input,j_input), intent(in)lon, real(esmf_kind_r4), dimension(i_input,j_input), intent(inout)rot)\fC [private]\fP"
@@ -573,7 +577,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6264 of file input_data\&.F90\&.
+Definition at line 6277 of file input_data\&.F90\&.
 .PP
 Referenced by read_winds()\&.
 .SS "subroutine input_data::handle_grib_error (character(len=20), intent(in)vname, character(len=20), intent(in)lev, character(len=20), intent(in)method, real(esmf_kind_r4), intent(in)value, integer, intent(in)varnum, integer, intent(inout)iret, real(esmf_kind_r4), dimension(:,:), intent(inout), optionalvar, real(esmf_kind_r8), dimension(:,:), intent(inout), optionalvar8, real(esmf_kind_r8), dimension(:,:,:), intent(inout), optionalvar3d)"
@@ -609,7 +613,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6354 of file input_data\&.F90\&.
+Definition at line 6367 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -626,11 +630,28 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 639 of file input_data\&.F90\&.
+Definition at line 446 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
 Referenced by read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+.SS "subroutine, public input_data::init_sfc_esmf_fields ()"
+
+.PP
+Create surface input grid esmf fields\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 540 of file input_data\&.F90\&.
+.PP
+References error_handler()\&.
+.PP
+Referenced by read_input_sfc_data()\&.
 .SS "recursive subroutine, public input_data::quicksort (real*8, dimension(*)a, integerfirst, integerlast)"
 
 .PP
@@ -652,7 +673,7 @@ Jili Dong NOAA/EMC
 .PP
 
 .PP
-Definition at line 6587 of file input_data\&.F90\&.
+Definition at line 6600 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_atm_grib2_file()\&.
 .SS "subroutine input_data::read_fv3_grid_data_netcdf (character(len=*), intent(in)FIELD, integer, intent(in)TILE_NUM, integer, intent(in)IMO, integer, intent(in)JMO, integer, intent(in)LMO, real(esmf_kind_r8), dimension(imo,jmo), intent(out), optionalSFCDATA, real(esmf_kind_r8), dimension(imo,jmo,lmo), intent(out), optionalSFCDATA_3D)\fC [private]\fP"
@@ -684,7 +705,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 5982 of file input_data\&.F90\&.
+Definition at line 5995 of file input_data\&.F90\&.
 .PP
 References netcdf_err()\&.
 .PP
@@ -716,7 +737,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6416 of file input_data\&.F90\&.
+Definition at line 6429 of file input_data\&.F90\&.
 .PP
 References error_handler(), program_setup::get_var_cond(), and handle_grib_error()\&.
 .PP
@@ -738,7 +759,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 147 of file input_data\&.F90\&.
+Definition at line 148 of file input_data\&.F90\&.
 .PP
 References read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .PP
@@ -760,7 +781,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1227 of file input_data\&.F90\&.
+Definition at line 1240 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), and init_atm_esmf_fields()\&.
 .PP
@@ -782,7 +803,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1769 of file input_data\&.F90\&.
+Definition at line 1782 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), init_atm_esmf_fields(), and netcdf_err()\&.
 .PP
@@ -804,7 +825,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 974 of file input_data\&.F90\&.
+Definition at line 987 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), and init_atm_esmf_fields()\&.
 .PP
@@ -831,7 +852,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 735 of file input_data\&.F90\&.
+Definition at line 748 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), and init_atm_esmf_fields()\&.
 .PP
@@ -853,7 +874,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 2444 of file input_data\&.F90\&.
+Definition at line 2457 of file input_data\&.F90\&.
 .PP
 References grib2_util::convert_omega(), atmosphere::convert_winds(), error_handler(), program_setup::get_var_cond(), handle_grib_error(), init_atm_esmf_fields(), quicksort(), read_winds(), and grib2_util::rh2spfh()\&.
 .PP
@@ -880,7 +901,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1510 of file input_data\&.F90\&.
+Definition at line 1523 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), init_atm_esmf_fields(), and netcdf_err()\&.
 .PP
@@ -907,7 +928,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 2153 of file input_data\&.F90\&.
+Definition at line 2166 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), init_atm_esmf_fields(), and netcdf_err()\&.
 .PP
@@ -929,7 +950,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 217 of file input_data\&.F90\&.
+Definition at line 218 of file input_data\&.F90\&.
 .PP
 References error_handler(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .PP
@@ -956,7 +977,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 5707 of file input_data\&.F90\&.
+Definition at line 5720 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -978,7 +999,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 5423 of file input_data\&.F90\&.
+Definition at line 5436 of file input_data\&.F90\&.
 .PP
 References error_handler(), and read_fv3_grid_data_netcdf()\&.
 .PP
@@ -1000,9 +1021,9 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 379 of file input_data\&.F90\&.
+Definition at line 380 of file input_data\&.F90\&.
 .PP
-References error_handler(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
+References init_sfc_esmf_fields(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .PP
 Referenced by surface::surface_driver()\&.
 .SS "subroutine input_data::read_input_sfc_gaussian_nemsio_file (integer, intent(in)localpet)\fC [private]\fP"
@@ -1022,7 +1043,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 3562 of file input_data\&.F90\&.
+Definition at line 3575 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -1049,7 +1070,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 3213 of file input_data\&.F90\&.
+Definition at line 3226 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -1076,7 +1097,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 2989 of file input_data\&.F90\&.
+Definition at line 3002 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -1098,7 +1119,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 4589 of file input_data\&.F90\&.
+Definition at line 4602 of file input_data\&.F90\&.
 .PP
 References check_cnwat(), check_soilt(), error_handler(), program_setup::get_var_cond(), handle_grib_error(), netcdf_err(), read_grib_soil(), search_util::search(), and to_upper()\&.
 .PP
@@ -1120,7 +1141,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 4228 of file input_data\&.F90\&.
+Definition at line 4241 of file input_data\&.F90\&.
 .PP
 References error_handler(), netcdf_err(), and read_fv3_grid_data_netcdf()\&.
 .PP
@@ -1142,7 +1163,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 3911 of file input_data\&.F90\&.
+Definition at line 3924 of file input_data\&.F90\&.
 .PP
 References error_handler(), netcdf_err(), and read_fv3_grid_data_netcdf()\&.
 .PP
@@ -1172,7 +1193,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6029 of file input_data\&.F90\&.
+Definition at line 6042 of file input_data\&.F90\&.
 .PP
 References calcalpha_rotlatlon(), error_handler(), program_setup::get_var_cond(), gridrot(), and handle_grib_error()\&.
 .PP

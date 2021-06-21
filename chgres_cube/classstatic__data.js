@@ -1,6 +1,7 @@
 var classstatic__data =
 [
     [ "cleanup_static_fields", "classstatic__data.html#a3a6ad318f4d11ae68a6f33dc2fbc6ffc", null ],
+    [ "create_static_fields", "classstatic__data.html#aeb4ec10a3aa09ae6fae0d5fd4dad5ad6", null ],
     [ "get_static_fields", "classstatic__data.html#aa310502eb6a2d97f82fb41196b00f4d7", null ],
     [ "read_static_file", "classstatic__data.html#aff2a5a5fa372950e606431e9ee777e65", null ],
     [ "alnsf_target_grid", "classstatic__data.html#a75974bdb40579172b8c79eba07ac9936", null ],

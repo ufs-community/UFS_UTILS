@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.5"/>
-<title>chgres_cube: /scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/chgres_cube.fd/model_grid.F90 Source File</title>
+<title>chgres_cube: /gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/chgres_cube.fd/model_grid.F90 Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">chgres_cube
-   &#160;<span id="projectnumber">1.4.0</span>
+   &#160;<span id="projectnumber">1.5.0</span>
    </div>
   </td>
  </tr>
@@ -1700,34 +1700,44 @@ $(document).ready(function(){initNavTree('model__grid_8F90_source.html','');});
 <div class="line"><a name="l01700"></a><span class="lineno"> 1700</span>&#160; <span class="keywordtype">integer</span>                                :: rc</div>
 <div class="line"><a name="l01701"></a><span class="lineno"> 1701</span>&#160;</div>
 <div class="line"><a name="l01702"></a><span class="lineno"> 1702</span>&#160; print*,<span class="stringliteral">&quot;- DESTROY MODEL DATA.&quot;</span></div>
-<div class="line"><a name="l01703"></a><span class="lineno"> 1703</span>&#160;</div>
-<div class="line"><a name="l01704"></a><span class="lineno"> 1704</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(latitude_s_input_grid)) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01705"></a><span class="lineno"> 1705</span>&#160;   call esmf_fielddestroy(latitude_s_input_grid, rc=rc)</div>
-<div class="line"><a name="l01706"></a><span class="lineno"> 1706</span>&#160; <span class="keywordflow">endif</span></div>
-<div class="line"><a name="l01707"></a><span class="lineno"> 1707</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(latitude_w_input_grid)) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01708"></a><span class="lineno"> 1708</span>&#160;   call esmf_fielddestroy(latitude_w_input_grid, rc=rc)</div>
-<div class="line"><a name="l01709"></a><span class="lineno"> 1709</span>&#160; <span class="keywordflow">endif</span></div>
-<div class="line"><a name="l01710"></a><span class="lineno"> 1710</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(longitude_s_input_grid)) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01711"></a><span class="lineno"> 1711</span>&#160;   call esmf_fielddestroy(longitude_s_input_grid, rc=rc)</div>
-<div class="line"><a name="l01712"></a><span class="lineno"> 1712</span>&#160; <span class="keywordflow">endif</span></div>
-<div class="line"><a name="l01713"></a><span class="lineno"> 1713</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(longitude_w_input_grid)) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l01714"></a><span class="lineno"> 1714</span>&#160;   call esmf_fielddestroy(longitude_w_input_grid, rc=rc)</div>
-<div class="line"><a name="l01715"></a><span class="lineno"> 1715</span>&#160; <span class="keywordflow">endif</span></div>
-<div class="line"><a name="l01716"></a><span class="lineno"> 1716</span>&#160; call esmf_fielddestroy(landmask_target_grid, rc=rc)</div>
-<div class="line"><a name="l01717"></a><span class="lineno"> 1717</span>&#160; call esmf_fielddestroy(latitude_target_grid, rc=rc)</div>
-<div class="line"><a name="l01718"></a><span class="lineno"> 1718</span>&#160; call esmf_fielddestroy(latitude_s_target_grid, rc=rc)</div>
-<div class="line"><a name="l01719"></a><span class="lineno"> 1719</span>&#160; call esmf_fielddestroy(latitude_w_target_grid, rc=rc)</div>
-<div class="line"><a name="l01720"></a><span class="lineno"> 1720</span>&#160; call esmf_fielddestroy(longitude_target_grid, rc=rc)</div>
-<div class="line"><a name="l01721"></a><span class="lineno"> 1721</span>&#160; call esmf_fielddestroy(longitude_s_target_grid, rc=rc)</div>
-<div class="line"><a name="l01722"></a><span class="lineno"> 1722</span>&#160; call esmf_fielddestroy(longitude_w_target_grid, rc=rc)</div>
-<div class="line"><a name="l01723"></a><span class="lineno"> 1723</span>&#160; call esmf_fielddestroy(seamask_target_grid, rc=rc)</div>
-<div class="line"><a name="l01724"></a><span class="lineno"> 1724</span>&#160; call esmf_fielddestroy(terrain_target_grid, rc=rc)</div>
-<div class="line"><a name="l01725"></a><span class="lineno"> 1725</span>&#160; call esmf_griddestroy(input_grid, rc=rc)</div>
-<div class="line"><a name="l01726"></a><span class="lineno"> 1726</span>&#160; call esmf_griddestroy(target_grid, rc=rc)</div>
-<div class="line"><a name="l01727"></a><span class="lineno"> 1727</span>&#160;</div>
-<div class="line"><a name="l01728"></a><span class="lineno"> 1728</span>&#160;<span class="keyword"> end subroutine </span><a class="code" href="classmodel__grid.html#a200bf9a04e0664c70a004ef2e4684f68">cleanup_input_target_grid_data</a></div>
-<div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160;</div>
-<div class="line"><a name="l01730"></a><span class="lineno"> 1730</span>&#160;<span class="keyword"> end module </span><a class="code" href="classmodel__grid.html">model_grid</a></div>
+<div class="line"><a name="l01703"></a><span class="lineno"> 1703</span>&#160; </div>
+<div class="line"><a name="l01704"></a><span class="lineno"> 1704</span>&#160; call esmf_fielddestroy(latitude_input_grid,rc=rc)</div>
+<div class="line"><a name="l01705"></a><span class="lineno"> 1705</span>&#160; call esmf_fielddestroy(longitude_input_grid,rc=rc)</div>
+<div class="line"><a name="l01706"></a><span class="lineno"> 1706</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(latitude_s_input_grid)) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l01707"></a><span class="lineno"> 1707</span>&#160;   call esmf_fielddestroy(latitude_s_input_grid, rc=rc)</div>
+<div class="line"><a name="l01708"></a><span class="lineno"> 1708</span>&#160; <span class="keywordflow">endif</span></div>
+<div class="line"><a name="l01709"></a><span class="lineno"> 1709</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(latitude_w_input_grid)) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l01710"></a><span class="lineno"> 1710</span>&#160;   call esmf_fielddestroy(latitude_w_input_grid, rc=rc)</div>
+<div class="line"><a name="l01711"></a><span class="lineno"> 1711</span>&#160; <span class="keywordflow">endif</span></div>
+<div class="line"><a name="l01712"></a><span class="lineno"> 1712</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(longitude_s_input_grid)) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l01713"></a><span class="lineno"> 1713</span>&#160;   call esmf_fielddestroy(longitude_s_input_grid, rc=rc)</div>
+<div class="line"><a name="l01714"></a><span class="lineno"> 1714</span>&#160; <span class="keywordflow">endif</span></div>
+<div class="line"><a name="l01715"></a><span class="lineno"> 1715</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(longitude_w_input_grid)) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l01716"></a><span class="lineno"> 1716</span>&#160;   call esmf_fielddestroy(longitude_w_input_grid, rc=rc)</div>
+<div class="line"><a name="l01717"></a><span class="lineno"> 1717</span>&#160; <span class="keywordflow">endif</span></div>
+<div class="line"><a name="l01718"></a><span class="lineno"> 1718</span>&#160; call esmf_fielddestroy(landmask_target_grid, rc=rc)</div>
+<div class="line"><a name="l01719"></a><span class="lineno"> 1719</span>&#160; call esmf_fielddestroy(latitude_target_grid, rc=rc)</div>
+<div class="line"><a name="l01720"></a><span class="lineno"> 1720</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(latitude_s_target_grid)) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l01721"></a><span class="lineno"> 1721</span>&#160;   call esmf_fielddestroy(latitude_s_target_grid, rc=rc)</div>
+<div class="line"><a name="l01722"></a><span class="lineno"> 1722</span>&#160; <span class="keywordflow">endif</span></div>
+<div class="line"><a name="l01723"></a><span class="lineno"> 1723</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(latitude_w_target_grid)) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l01724"></a><span class="lineno"> 1724</span>&#160;   call esmf_fielddestroy(latitude_w_target_grid, rc=rc)</div>
+<div class="line"><a name="l01725"></a><span class="lineno"> 1725</span>&#160; <span class="keywordflow">endif</span></div>
+<div class="line"><a name="l01726"></a><span class="lineno"> 1726</span>&#160; call esmf_fielddestroy(longitude_target_grid, rc=rc)</div>
+<div class="line"><a name="l01727"></a><span class="lineno"> 1727</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(longitude_s_target_grid)) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l01728"></a><span class="lineno"> 1728</span>&#160;   call esmf_fielddestroy(longitude_s_target_grid, rc=rc)</div>
+<div class="line"><a name="l01729"></a><span class="lineno"> 1729</span>&#160; <span class="keywordflow">endif</span></div>
+<div class="line"><a name="l01730"></a><span class="lineno"> 1730</span>&#160; <span class="keywordflow">if</span> (esmf_fieldiscreated(longitude_w_target_grid)) <span class="keywordflow">then</span></div>
+<div class="line"><a name="l01731"></a><span class="lineno"> 1731</span>&#160;   call esmf_fielddestroy(longitude_w_target_grid, rc=rc)</div>
+<div class="line"><a name="l01732"></a><span class="lineno"> 1732</span>&#160; <span class="keywordflow">endif</span></div>
+<div class="line"><a name="l01733"></a><span class="lineno"> 1733</span>&#160; call esmf_fielddestroy(seamask_target_grid, rc=rc)</div>
+<div class="line"><a name="l01734"></a><span class="lineno"> 1734</span>&#160; call esmf_fielddestroy(terrain_target_grid, rc=rc)</div>
+<div class="line"><a name="l01735"></a><span class="lineno"> 1735</span>&#160; call esmf_griddestroy(input_grid, rc=rc)</div>
+<div class="line"><a name="l01736"></a><span class="lineno"> 1736</span>&#160; call esmf_griddestroy(target_grid, rc=rc)</div>
+<div class="line"><a name="l01737"></a><span class="lineno"> 1737</span>&#160;</div>
+<div class="line"><a name="l01738"></a><span class="lineno"> 1738</span>&#160;<span class="keyword"> end subroutine </span><a class="code" href="classmodel__grid.html#a200bf9a04e0664c70a004ef2e4684f68">cleanup_input_target_grid_data</a></div>
+<div class="line"><a name="l01739"></a><span class="lineno"> 1739</span>&#160;</div>
+<div class="line"><a name="l01740"></a><span class="lineno"> 1740</span>&#160;<span class="keyword"> end module </span><a class="code" href="classmodel__grid.html">model_grid</a></div>
 <div class="ttc" id="classmodel__grid_html_a4860abf33f2f55ecd58fb5728df2c455"><div class="ttname"><a href="classmodel__grid.html#a4860abf33f2f55ecd58fb5728df2c455">model_grid::get_model_mask_terrain</a></div><div class="ttdeci">subroutine get_model_mask_terrain(orog_file, idim, jdim, mask, terrain)</div><div class="ttdoc">Read the model land mask and terrain for a single tile from the orography file. </div><div class="ttdef"><b>Definition:</b> <a href="model__grid_8F90_source.html#l01629">model_grid.F90:1629</a></div></div>
 <div class="ttc" id="classmodel__grid_html_a200bf9a04e0664c70a004ef2e4684f68"><div class="ttname"><a href="classmodel__grid.html#a200bf9a04e0664c70a004ef2e4684f68">model_grid::cleanup_input_target_grid_data</a></div><div class="ttdeci">subroutine, public cleanup_input_target_grid_data</div><div class="ttdoc">Deallocate all esmf grid objects. </div><div class="ttdef"><b>Definition:</b> <a href="model__grid_8F90_source.html#l01696">model_grid.F90:1696</a></div></div>
 <div class="ttc" id="classmodel__grid_html_a38d6df86387042b345ecb97ea72185ba"><div class="ttname"><a href="classmodel__grid.html#a38d6df86387042b345ecb97ea72185ba">model_grid::define_input_grid_gfs_grib2</a></div><div class="ttdeci">subroutine define_input_grid_gfs_grib2(localpet, npets)</div><div class="ttdoc">Define input grid object for GFS grib2 data. </div><div class="ttdef"><b>Definition:</b> <a href="model__grid_8F90_source.html#l00618">model_grid.F90:618</a></div></div>

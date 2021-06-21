@@ -1,4 +1,4 @@
-.TH "surface" 3 "Thu Jun 3 2021" "Version 1.4.0" "chgres_cube" \" -*- nroff -*-
+.TH "surface" 3 "Mon Jun 21 2021" "Version 1.5.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,11 +29,15 @@ Process surface and nst fields\&.
 .br
 .RI "\fIFree up memory once the target grid nst fields are no longer needed\&. \fP"
 .ti -1c
+.RI "subroutine, public \fBcleanup_target_sfc_data\fP"
+.br
+.RI "\fIFree up memory once the target grid surface fields are no longer needed\&. \fP"
+.ti -1c
 .RI "subroutine, public \fBcreate_nst_esmf_fields\fP"
 .br
 .RI "\fICreate ESMF fields for the target grid nst variables\&. \fP"
 .ti -1c
-.RI "subroutine \fBcreate_surface_esmf_fields\fP"
+.RI "subroutine, public \fBcreate_surface_esmf_fields\fP"
 .br
 .RI "\fICreate ESMF fields for the target grid surface variables\&. \fP"
 .ti -1c
@@ -45,7 +49,7 @@ Process surface and nst fields\&.
 .br
 .RI "\fIConvert 1d index to 2d indices\&. \fP"
 .ti -1c
-.RI "subroutine \fBinterp\fP (localpet)"
+.RI "subroutine, public \fBinterp\fP (localpet)"
 .br
 .RI "\fIHorizontally interpolate surface fields from input to target FV3 grid using esmf routines\&. \fP"
 .ti -1c
@@ -221,14 +225,6 @@ Process surface and nst fields\&.
 .br
 .RI "\fIOceanic mixed layer depth\&. \fP"
 .in -1c
-.SS "Private Member Functions"
-
-.in +1c
-.ti -1c
-.RI "subroutine \fBcleanup_target_sfc_data\fP"
-.br
-.RI "\fIFree up memory once the target grid surface fields are no longer needed\&. \fP"
-.in -1c
 .SS "Private Attributes"
 
 .in +1c
@@ -308,7 +304,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 3029 of file surface\&.F90\&.
+Definition at line 3083 of file surface\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -325,7 +321,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2953 of file surface\&.F90\&.
+Definition at line 3007 of file surface\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -342,7 +338,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2503 of file surface\&.F90\&.
+Definition at line 2557 of file surface\&.F90\&.
 .PP
 References error_handler(), and frh2o()\&.
 .PP
@@ -359,10 +355,10 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 4181 of file surface\&.F90\&.
+Definition at line 4236 of file surface\&.F90\&.
 .PP
 Referenced by surface_driver()\&.
-.SS "subroutine surface::cleanup_target_sfc_data ()\fC [private]\fP"
+.SS "subroutine, public surface::cleanup_target_sfc_data ()"
 
 .PP
 Free up memory once the target grid surface fields are no longer needed\&. 
@@ -374,7 +370,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 4145 of file surface\&.F90\&.
+Definition at line 4199 of file surface\&.F90\&.
 .PP
 Referenced by surface_driver()\&.
 .SS "subroutine, public surface::create_nst_esmf_fields ()"
@@ -389,12 +385,12 @@ George Gayno
 .PP
 
 .PP
-Definition at line 3954 of file surface\&.F90\&.
+Definition at line 4008 of file surface\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
 Referenced by surface_driver()\&.
-.SS "subroutine surface::create_surface_esmf_fields ()"
+.SS "subroutine, public surface::create_surface_esmf_fields ()"
 
 .PP
 Create ESMF fields for the target grid surface variables\&. 
@@ -406,7 +402,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3617 of file surface\&.F90\&.
+Definition at line 3671 of file surface\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -450,7 +446,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2647 of file surface\&.F90\&.
+Definition at line 2701 of file surface\&.F90\&.
 .PP
 Referenced by calc_liq_soil_moisture()\&.
 .SS "subroutine surface::ij_to_i_j (integer(esmf_kind_i4), intent(in)ij, integer, intent(in)itile, integer, intent(in)jtile, integer, intent(out)i, integer, intent(out)j)"
@@ -478,10 +474,10 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 4116 of file surface\&.F90\&.
+Definition at line 4170 of file surface\&.F90\&.
 .PP
 Referenced by interp()\&.
-.SS "subroutine surface::interp (integer, intent(in)localpet)"
+.SS "subroutine, public surface::interp (integer, intent(in)localpet)"
 
 .PP
 Horizontally interpolate surface fields from input to target FV3 grid using esmf routines\&. 
@@ -498,7 +494,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 290 of file surface\&.F90\&.
+Definition at line 293 of file surface\&.F90\&.
 .PP
 References error_handler(), ij_to_i_j(), and search_util::search()\&.
 .PP
@@ -515,7 +511,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3534 of file surface\&.F90\&.
+Definition at line 3588 of file surface\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -532,7 +528,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3199 of file surface\&.F90\&.
+Definition at line 3253 of file surface\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -549,7 +545,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2785 of file surface\&.F90\&.
+Definition at line 2839 of file surface\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -566,7 +562,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3145 of file surface\&.F90\&.
+Definition at line 3199 of file surface\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -588,7 +584,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 153 of file surface\&.F90\&.
+Definition at line 156 of file surface\&.F90\&.
 .PP
 References adjust_soil_levels(), adjust_soilt_for_terrain(), calc_liq_soil_moisture(), program_setup::calc_soil_params_driver(), input_data::cleanup_input_nst_data(), input_data::cleanup_input_sfc_data(), static_data::cleanup_static_fields(), cleanup_target_nst_data(), cleanup_target_sfc_data(), create_nst_esmf_fields(), create_surface_esmf_fields(), static_data::get_static_fields(), interp(), nst_land_fill(), qc_check(), input_data::read_input_nst_data(), input_data::read_input_sfc_data(), rescale_soil_moisture(), roughness(), and write_fv3_sfc_data_netcdf()\&.
 .PP

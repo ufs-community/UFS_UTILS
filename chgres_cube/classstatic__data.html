@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">chgres_cube
-   &#160;<span id="projectnumber">1.4.0</span>
+   &#160;<span id="projectnumber">1.5.0</span>
    </div>
   </td>
  </tr>
@@ -117,6 +117,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3a6ad318f4d11ae68a6f33dc2fbc6ffc"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstatic__data.html#a3a6ad318f4d11ae68a6f33dc2fbc6ffc">cleanup_static_fields</a></td></tr>
 <tr class="memdesc:a3a6ad318f4d11ae68a6f33dc2fbc6ffc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free up memory for fields in this module.  <a href="#a3a6ad318f4d11ae68a6f33dc2fbc6ffc">More...</a><br/></td></tr>
 <tr class="separator:a3a6ad318f4d11ae68a6f33dc2fbc6ffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb4ec10a3aa09ae6fae0d5fd4dad5ad6"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstatic__data.html#aeb4ec10a3aa09ae6fae0d5fd4dad5ad6">create_static_fields</a></td></tr>
+<tr class="memdesc:aeb4ec10a3aa09ae6fae0d5fd4dad5ad6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create ESMF fields for static target grid data.  <a href="#aeb4ec10a3aa09ae6fae0d5fd4dad5ad6">More...</a><br/></td></tr>
+<tr class="separator:aeb4ec10a3aa09ae6fae0d5fd4dad5ad6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa310502eb6a2d97f82fb41196b00f4d7"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstatic__data.html#aa310502eb6a2d97f82fb41196b00f4d7">get_static_fields</a> (localpet)</td></tr>
 <tr class="memdesc:aa310502eb6a2d97f82fb41196b00f4d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Driver routine to read/time interpolate static/climo fields on the fv3 target grid.  <a href="#aa310502eb6a2d97f82fb41196b00f4d7">More...</a><br/></td></tr>
 <tr class="separator:aa310502eb6a2d97f82fb41196b00f4d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,9 +195,33 @@ Data Fields</h2></td></tr>
 <p>Free up memory for fields in this module. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="static__data_8F90_source.html#l00492">492</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p>Definition at line <a class="el" href="static__data_8F90_source.html#l00508">508</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00153">surface::surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface::surface_driver()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aeb4ec10a3aa09ae6fae0d5fd4dad5ad6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public static_data::create_static_fields </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create ESMF fields for static target grid data. </p>
+<dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
+
+<p>Definition at line <a class="el" href="static__data_8F90_source.html#l00397">397</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+
+<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
+
+<p>Referenced by <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>.</p>
 
 </div>
 </div>
@@ -221,11 +248,11 @@ Data Fields</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="static__data_8F90_source.html#l00046">46</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p>Definition at line <a class="el" href="static__data_8F90_source.html#l00047">47</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
-<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="static__data_8F90_source.html#l00355">read_static_file()</a>.</p>
+<p>References <a class="el" href="static__data_8F90_source.html#l00397">create_static_fields()</a>, <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="static__data_8F90_source.html#l00260">read_static_file()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00153">surface::surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface::surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -298,11 +325,11 @@ Data Fields</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="static__data_8F90_source.html#l00355">355</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
+<p>Definition at line <a class="el" href="static__data_8F90_source.html#l00260">260</a> of file <a class="el" href="static__data_8F90_source.html">static_data.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00031">netcdf_err()</a>.</p>
 
-<p>Referenced by <a class="el" href="static__data_8F90_source.html#l00046">get_static_fields()</a>.</p>
+<p>Referenced by <a class="el" href="static__data_8F90_source.html#l00047">get_static_fields()</a>.</p>
 
 </div>
 </div>
@@ -532,7 +559,7 @@ Data Fields</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this module was generated from the following file:<ul>
-<li>/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/chgres_cube.fd/<a class="el" href="static__data_8F90_source.html">static_data.F90</a></li>
+<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/chgres_cube.fd/<a class="el" href="static__data_8F90_source.html">static_data.F90</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

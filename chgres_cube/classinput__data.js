@@ -10,6 +10,7 @@ var classinput__data =
     [ "gridrot", "classinput__data.html#a55b92f16c0f91d452b090abaec08f1c4", null ],
     [ "handle_grib_error", "classinput__data.html#aa364de59c00461c87ce9de2d376d090d", null ],
     [ "init_atm_esmf_fields", "classinput__data.html#aab62a053fb944fdec1bfe78394461d0a", null ],
+    [ "init_sfc_esmf_fields", "classinput__data.html#a1fabb7a2619ff1ecd6cdcf5259ba82d0", null ],
     [ "quicksort", "classinput__data.html#a35c8c89e28fe9ba7898ab4191ab033a8", null ],
     [ "read_fv3_grid_data_netcdf", "classinput__data.html#a7a47bad81feafd99285271b7d746215e", null ],
     [ "read_grib_soil", "classinput__data.html#a527526cfc31d731e9c0f62fae106f37a", null ],

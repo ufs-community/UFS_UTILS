@@ -1,4 +1,4 @@
-.TH "static_data" 3 "Thu Jun 3 2021" "Version 1.4.0" "chgres_cube" \" -*- nroff -*-
+.TH "static_data" 3 "Mon Jun 21 2021" "Version 1.5.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,6 +16,10 @@ Reads static surface climatological data for the target FV3 grid (such as soil t
 .RI "subroutine, public \fBcleanup_static_fields\fP"
 .br
 .RI "\fIFree up memory for fields in this module\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBcreate_static_fields\fP"
+.br
+.RI "\fICreate ESMF fields for static target grid data\&. \fP"
 .ti -1c
 .RI "subroutine, public \fBget_static_fields\fP (localpet)"
 .br
@@ -113,9 +117,26 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 492 of file static_data\&.F90\&.
+Definition at line 508 of file static_data\&.F90\&.
 .PP
 Referenced by surface::surface_driver()\&.
+.SS "subroutine, public static_data::create_static_fields ()"
+
+.PP
+Create ESMF fields for static target grid data\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 397 of file static_data\&.F90\&.
+.PP
+References error_handler()\&.
+.PP
+Referenced by get_static_fields()\&.
 .SS "subroutine, public static_data::get_static_fields (integer, intent(in)localpet)"
 
 .PP
@@ -133,9 +154,9 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 46 of file static_data\&.F90\&.
+Definition at line 47 of file static_data\&.F90\&.
 .PP
-References error_handler(), and read_static_file()\&.
+References create_static_fields(), error_handler(), and read_static_file()\&.
 .PP
 Referenced by surface::surface_driver()\&.
 .SS "subroutine static_data::read_static_file (character(len=*), intent(in)field, integer, intent(in)i_target, integer, intent(in)j_target, integer, intent(in)tile, real(esmf_kind_r8), dimension(i_target,j_target), intent(out)data_one_tile, real(esmf_kind_r8), dimension(i_target,j_target), intent(out), optionalmax_data_one_tile, real(esmf_kind_r8), dimension(i_target,j_target), intent(out), optionalmin_data_one_tile)"
@@ -167,7 +188,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 355 of file static_data\&.F90\&.
+Definition at line 260 of file static_data\&.F90\&.
 .PP
 References netcdf_err()\&.
 .PP
