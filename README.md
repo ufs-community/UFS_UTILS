@@ -26,7 +26,7 @@ sfc_climo_gen | George Gayno
 gblevents | Hang Lei
 vcoord_gen | Fanglin Yang, Mark Iredell
 
-UFS_UTILS Code managers: George Gayno, Kyle Gerheiser
+UFS_UTILS Code managers: George Gayno, Kyle Gerheiser, Jeff Beck, Larissa Reames
 
 ## Prerequisites
 
