@@ -156,7 +156,8 @@ C> @return 0 for success, error code otherwise.
          
       endif         
          
-      
+      write(*,*)'DEBUG: CALL TERSUB'
+ 
       CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &            OUTGRID,INPUTOROG)
       STOP
@@ -184,20 +185,17 @@ C> @return 0 for success, error code otherwise.
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &     OUTGRID,INPUTOROG)
-!jaa      use ipfort
       implicit none
       include 'netcdf.inc'
 C
-      integer                      :: IMN,JMN,IM,JM,NW
+      integer                      :: IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW
       character(len=*), intent(in) :: OUTGRID
       character(len=*), intent(in) :: INPUTOROG
-      integer :: NR,NF0,NF1
       real, parameter :: MISSING_VALUE=-9999.
       real, PARAMETER :: PI=3.1415926535897931
       integer :: efac, blat
       integer, PARAMETER :: NMT=14
       INTEGER ZSLMX(2700,1350)
-      integer NM
       logical LATLONGRID
       INTEGER,allocatable::  ZAVG(:,:),ZSLM(:,:)
       REAL(4),allocatable::  GICE(:,:),OCLSM(:,:)
@@ -244,6 +242,9 @@ C
       real    WWW
       real :: timef,tbeg,tend,tbeg1
       logical :: output_binary
+
+      write(*,*)'DEBUG: in SUBROUTINE TERSUB'
+
       output_binary = .false.
       tbeg1=timef()
       tbeg=timef()
