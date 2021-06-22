@@ -1559,7 +1559,7 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
 
   real(esmf_kind_r8), parameter    :: pi = 3.14159265359
-  real(esmf_kind_r8), parameter    :: R =  6370000.0
+  real(esmf_kind_r8), parameter    :: R =  6371200.0
   real(esmf_kind_r8), parameter    :: bearingInDegrees = 135.0
 
   integer                           :: i, j
