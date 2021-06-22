@@ -29,7 +29,11 @@ https://github.com/NOAA-EMC/UFS_UTILS.
 - <a href="fvcom_tools/index.html">fvcom_tools</a> - Replaces lake
   surface and lake ice temperature along with aerial ice concentration
   generated from the Great Lakes Operational Forecast System (GLOFS)
-  in an FV3 surface restart file. 
+  in an FV3 surface restart file.
+
+- <a href="gblevents/index.html">gblevents</a> -
+  Prepares observational prepbufr reports for subsequent quality
+  control and analysis programs.
  
 - <a href="global_cycle/index.html">global_cycle</a> -
   Updates the GFS surface conditions using external snow and sea ice
