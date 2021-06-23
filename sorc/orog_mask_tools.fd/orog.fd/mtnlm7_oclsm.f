@@ -191,24 +191,34 @@ C
       integer                      :: IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW
       character(len=*), intent(in) :: OUTGRID
       character(len=*), intent(in) :: INPUTOROG
+
       real, parameter :: MISSING_VALUE=-9999.
       real, PARAMETER :: PI=3.1415926535897931
-      integer :: efac, blat
       integer, PARAMETER :: NMT=14
+
+      integer :: efac, blat
+      integer :: zsave1,zsave2,itopo,kount
+      integer :: kount2,islmx,jslmx,oldslm,msksrc,mskocn,notocn
+      integer IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM)
+      integer IWORK(IM,JM,4)
       INTEGER ZSLMX(2700,1350)
-      logical LATLONGRID
-      INTEGER,allocatable::  ZAVG(:,:),ZSLM(:,:)
-      REAL(4),allocatable::  GICE(:,:),OCLSM(:,:)
-      real :: DEGRAD
+      INTEGER KPDS(200),KGDS(200)
       integer*1,allocatable:: UMD(:,:)
       integer*1 i3save
       integer*2 glob(IMN,JMN), i2save
-      logical grid_from_file
-      INTEGER KPDS(200),KGDS(200), zsave1,zsave2,itopo,kount
-      INTEGER kount2,islmx,jslmx,oldslm,msksrc,mskocn,notocn
+      INTEGER,allocatable::  ZAVG(:,:),ZSLM(:,:)
+      integer i, j, nx, ny, ncid, js, jn, iw, ie, k
+      integer it,jt,i1,error,id_dim,id_var,nx_in,ny_in
+      integer i_south_pole,j_south_pole,i_north_pole,j_north_pole
+      integer fsize,wgta,IN,INW,INE,IS,ISW,ISE,M,N,IMT,IRET
+      integer numi(jm),ios,iosg,latg2,istat
+      integer  maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
+      integer lonsperlat(jm/2),itest,jtest
+
+      REAL(4),allocatable::  GICE(:,:),OCLSM(:,:)
+      real :: DEGRAD
       REAL COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2)
       REAL XLON(IM)
-      LOGICAL is_south_pole(IM,JM), is_north_pole(IM,JM)
       REAL GEOLON(IM,JM),GEOLAT(IM,JM)
       REAL, allocatable :: tmpvar(:,:)
       REAL GEOLON_C(IM+1,JM+1),GEOLAT_C(IM+1,JM+1)
@@ -217,30 +227,26 @@ C
       REAL land_frac(IM,JM)
       REAL THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM)
       REAL WZ4(IM,JM),VAR4(IM,JM),OA(IM,JM,4),OL(IM,JM,4),SLMI(IM,JM)
-      integer IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM)
-      integer IWORK(IM,JM,4)
       real    WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM)
       real    WORK5(IM,JM),WORK6(IM,JM),GLAT(JMN)
-      LOGICAL SPECTR, REVLAT, FILTER
-      logical fexist
       real HPRIME(IM,JM,14)
       real oaa(4),ola(4),sumdif,avedif,alon,alat
       real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
       real, allocatable :: slm_in(:,:), lon_in(:,:), lat_in(:,:)
-      integer numi(jm),ios,iosg,latg2,istat
-      integer  maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
-      integer lonsperlat(jm/2),itest,jtest
-      integer i, j, nx, ny, ncid, js, jn, iw, ie, k
-      integer it,jt,i1,error,id_dim,id_var,nx_in,ny_in
-      integer i_south_pole,j_south_pole,i_north_pole,j_north_pole
       real    maxlat, minlat
-      logical opened
-      logical LB(IM*JM)
-      integer fsize,wgta,IN,INW,INE,IS,ISW,ISE,M,N,IMT,IRET
-      complex ffj(im/2+1)
       real    dlat,PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF
       real    WWW
       real :: timef,tbeg,tend,tbeg1
+
+      complex ffj(im/2+1)
+
+      logical LATLONGRID
+      logical grid_from_file
+      LOGICAL is_south_pole(IM,JM), is_north_pole(IM,JM)
+      LOGICAL SPECTR, REVLAT, FILTER
+      logical fexist
+      logical opened
+      logical LB(IM*JM)
       logical :: output_binary
 
       write(*,*)'DEBUG: in SUBROUTINE TERSUB'
