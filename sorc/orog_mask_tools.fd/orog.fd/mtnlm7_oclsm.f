@@ -156,7 +156,7 @@ C> @return 0 for success, error code otherwise.
          
       endif         
          
-      write(*,*)'DEBUG: CALL TERSUB'
+      write(*,*)'DEBUG: CALL TERSUB 2'
  
       CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &            OUTGRID,INPUTOROG)
@@ -196,24 +196,24 @@ C
       real, PARAMETER :: PI=3.1415926535897931
       integer, PARAMETER :: NMT=14
 
-      integer :: efac, blat
-      integer :: zsave1,zsave2,itopo,kount
+      integer :: efac,blat,zsave1,zsave2,itopo,kount
       integer :: kount2,islmx,jslmx,oldslm,msksrc,mskocn,notocn
-      integer IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM)
-      integer IWORK(IM,JM,4)
-      INTEGER ZSLMX(2700,1350)
-      INTEGER KPDS(200),KGDS(200)
+      integer :: IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM)
+      integer :: IWORK(IM,JM,4)
+      INTEGER :: ZSLMX(2700,1350)
+      INTEGER :: KPDS(200),KGDS(200)
       integer*1,allocatable:: UMD(:,:)
       integer*1 i3save
-      integer*2 glob(IMN,JMN), i2save
+      integer*2 glob(IMN,JMN)
+      integer*2 i2save
       INTEGER,allocatable::  ZAVG(:,:),ZSLM(:,:)
-      integer i, j, nx, ny, ncid, js, jn, iw, ie, k
-      integer it,jt,i1,error,id_dim,id_var,nx_in,ny_in
-      integer i_south_pole,j_south_pole,i_north_pole,j_north_pole
-      integer fsize,wgta,IN,INW,INE,IS,ISW,ISE,M,N,IMT,IRET
-      integer numi(jm),ios,iosg,latg2,istat
-      integer  maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
-      integer lonsperlat(jm/2),itest,jtest
+      integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,i1,error,id_dim
+      integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
+      integer :: M,N,IMT,IRET,ios,iosg,latg2,istat,itest,jtest
+      integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
+      integer :: numi(jm)
+      integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
+      integer :: lonsperlat(jm/2)
 
       REAL(4),allocatable::  GICE(:,:),OCLSM(:,:)
       real :: DEGRAD
