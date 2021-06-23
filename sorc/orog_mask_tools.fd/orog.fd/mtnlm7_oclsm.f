@@ -206,36 +206,32 @@ C
       integer(1) :: i3save
       integer(2) :: i2save
 
-      integer :: IST(IM,jm),IEN(IM,jm)
-      integer :: JST(JM),JEN(JM)
-      integer :: IWORK(IM,JM,4)
-      integer :: ZSLMX(2700,1350)
-      integer :: KPDS(200),KGDS(200)
-      integer :: numi(jm)
-      integer :: lonsperlat(jm/2)
-      integer(2) :: glob(IMN,JMN)
+      integer, allocatable :: JST(:),JEN(:),KPDS(:),KGDS(:),numi(:)
+      integer, allocatable :: lonsperlat(:)
 
+      integer, allocatable :: IST(:,:),IEN(:,:),ZSLMX(:,:)
       integer, allocatable :: ZAVG(:,:),ZSLM(:,:)
+      integer, allocatable :: IWORK(:,:,:)
       integer(1), allocatable :: UMD(:,:)
-
+      integer(2), allocatable :: glob(:,:)
 
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
       real :: dlat,PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
       real :: sumdif,avedif,alon,alat
 
-      real :: COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2)
-      real :: XLON(IM)
-      real :: GEOLON(IM,JM),GEOLAT(IM,JM)
-      real :: GEOLON_C(IM+1,JM+1),GEOLAT_C(IM+1,JM+1)
-      real :: DX(IM,JM),DY(IM,JM)
-      real :: SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),ORS(NW),ORF(IM,JM)
-      real :: land_frac(IM,JM)
-      real :: THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM)
-      real :: WZ4(IM,JM),VAR4(IM,JM),OA(IM,JM,4),OL(IM,JM,4),SLMI(IM,JM)
-      real :: WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM)
-      real :: WORK5(IM,JM),WORK6(IM,JM),GLAT(JMN)
-      real :: HPRIME(IM,JM,14)
-      real :: oaa(4),ola(4)
+      real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
+      real, allocatable :: XLON(:),ORS(:),oaa(:),ola(:),GLAT(:)
+
+      real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
+      real, allocatable :: GEOLAT(:,:),GEOLAT_C(:,:),DY(:,:)
+      real, allocatable :: SLM(:,:),ORO(:,:),VAR(:,:),ORF(:,:)
+      real, allocatable :: land_frac(:,:)
+      real, allocatable :: THETA(:,:),GAMMA(:,:),SIGMA(:,:),ELVMAX(:,:)
+      real, allocatable :: WZ4(:,:),VAR4(:,:),SLMI(:,:)
+      real, allocatable :: WORK1(:,:),WORK2(:,:),WORK3(:,:),WORK4(:,:)
+      real, allocatable :: WORK5(:,:),WORK6(:,:)
+
+      real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
 
       real, allocatable :: tmpvar(:,:)
       real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
@@ -256,12 +252,33 @@ C
       tbeg1=timef()
       tbeg=timef()
       fsize = 65536
+! integers
+      allocate (JST(JM),JEN(JM),KPDS(200),KGDS(200),numi(jm))
+      allocate (lonsperlat(jm/2))
+      allocate (IST(IM,jm),IEN(IM,jm),ZSLMX(2700,1350))
+      allocate (glob(IMN,JMN))
+      allocate (IWORK(IM,JM,4))
 
-       allocate (ZAVG(IMN,JMN))
-       allocate (ZSLM(IMN,JMN))
-       allocate (GICE(IMN+1,3601))
-       allocate (UMD(IMN,JMN))
-       allocate (OCLSM(IM,JM))
+! reals
+      allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2))
+      allocate (XLON(IM),ORS(NW),oaa(4),ola(4),GLAT(JMN))
+
+      allocate (GEOLON(IM,JM),GEOLON_C(IM+1,JM+1),DX(IM,JM))
+      allocate (GEOLAT(IM,JM),GEOLAT_C(IM+1,JM+1),DY(IM,JM))
+      allocate (SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),ORF(IM,JM))
+      allocate (land_frac(IM,JM))
+      allocate (THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM))
+      allocate (WZ4(IM,JM),VAR4(IM,JM),SLMI(IM,JM))
+      allocate (WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM))
+      allocate (WORK5(IM,JM),WORK6(IM,JM))
+
+      allocate (OA(IM,JM,4),OL(IM,JM,4),HPRIME(IM,JM,14))
+
+      allocate (ZAVG(IMN,JMN))
+      allocate (ZSLM(IMN,JMN))
+      allocate (GICE(IMN+1,3601))
+      allocate (UMD(IMN,JMN))
+      allocate (OCLSM(IM,JM))
 
 !
 !  SET CONSTANTS AND ZERO FIELDS
