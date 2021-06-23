@@ -156,7 +156,7 @@ C> @return 0 for success, error code otherwise.
          
       endif         
          
-      write(*,*)'DEBUG: CALL TERSUB 2'
+      write(*,*)'DEBUG: CALL TERSUB 3'
  
       CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &            OUTGRID,INPUTOROG)
@@ -198,56 +198,57 @@ C
 
       integer :: efac,blat,zsave1,zsave2,itopo,kount
       integer :: kount2,islmx,jslmx,oldslm,msksrc,mskocn,notocn
-      integer :: IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM)
-      integer :: IWORK(IM,JM,4)
-      INTEGER :: ZSLMX(2700,1350)
-      INTEGER :: KPDS(200),KGDS(200)
-      integer*1,allocatable:: UMD(:,:)
-      integer*1 i3save
-      integer*2 glob(IMN,JMN)
-      integer*2 i2save
-      INTEGER,allocatable::  ZAVG(:,:),ZSLM(:,:)
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,i1,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
       integer :: M,N,IMT,IRET,ios,iosg,latg2,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
-      integer :: numi(jm)
       integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
-      integer :: lonsperlat(jm/2)
+      integer(1) :: i3save
+      integer(2) :: i2save
 
-      REAL(4),allocatable::  GICE(:,:),OCLSM(:,:)
-      real :: DEGRAD
-      REAL COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2)
-      REAL XLON(IM)
-      REAL GEOLON(IM,JM),GEOLAT(IM,JM)
-      REAL, allocatable :: tmpvar(:,:)
-      REAL GEOLON_C(IM+1,JM+1),GEOLAT_C(IM+1,JM+1)
-      REAL DX(IM,JM),DY(IM,JM)
-      REAL SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),ORS(NW),ORF(IM,JM)
-      REAL land_frac(IM,JM)
-      REAL THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM)
-      REAL WZ4(IM,JM),VAR4(IM,JM),OA(IM,JM,4),OL(IM,JM,4),SLMI(IM,JM)
-      real    WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM)
-      real    WORK5(IM,JM),WORK6(IM,JM),GLAT(JMN)
-      real HPRIME(IM,JM,14)
-      real oaa(4),ola(4),sumdif,avedif,alon,alat
+      integer :: IST(IM,jm),IEN(IM,jm)
+      integer :: JST(JM),JEN(JM)
+      integer :: IWORK(IM,JM,4)
+      integer :: ZSLMX(2700,1350)
+      integer :: KPDS(200),KGDS(200)
+      integer :: numi(jm)
+      integer :: lonsperlat(jm/2)
+      integer(2) :: glob(IMN,JMN)
+
+      integer, allocatable :: ZAVG(:,:),ZSLM(:,:)
+      integer(1), allocatable :: UMD(:,:)
+
+
+      real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
+      real :: dlat,PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
+      real :: sumdif,avedif,alon,alat
+
+      real :: COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2)
+      real :: XLON(IM)
+      real :: GEOLON(IM,JM),GEOLAT(IM,JM)
+      real :: GEOLON_C(IM+1,JM+1),GEOLAT_C(IM+1,JM+1)
+      real :: DX(IM,JM),DY(IM,JM)
+      real :: SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),ORS(NW),ORF(IM,JM)
+      real :: land_frac(IM,JM)
+      real :: THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM)
+      real :: WZ4(IM,JM),VAR4(IM,JM),OA(IM,JM,4),OL(IM,JM,4),SLMI(IM,JM)
+      real :: WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM)
+      real :: WORK5(IM,JM),WORK6(IM,JM),GLAT(JMN)
+      real :: HPRIME(IM,JM,14)
+      real :: oaa(4),ola(4)
+
+      real, allocatable :: tmpvar(:,:)
       real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
       real, allocatable :: slm_in(:,:), lon_in(:,:), lat_in(:,:)
-      real    maxlat, minlat
-      real    dlat,PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF
-      real    WWW
-      real :: timef,tbeg,tend,tbeg1
+      real(4), allocatable::  GICE(:,:),OCLSM(:,:)
 
-      complex ffj(im/2+1)
+      complex :: ffj(im/2+1)
 
-      logical LATLONGRID
-      logical grid_from_file
-      LOGICAL is_south_pole(IM,JM), is_north_pole(IM,JM)
-      LOGICAL SPECTR, REVLAT, FILTER
-      logical fexist
-      logical opened
-      logical LB(IM*JM)
-      logical :: output_binary
+      logical :: LATLONGRID,grid_from_file,output_binary,fexist,opened
+      logical :: SPECTR, REVLAT, FILTER
+
+      logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
+      logical :: LB(IM*JM)
 
       write(*,*)'DEBUG: in SUBROUTINE TERSUB'
 
