@@ -37,7 +37,7 @@ FIX_FV3=${FIX_FV3:-/scratch4/NCEPDEV/global/save/glopara/git/fv3gfs/fix/fix_fv3_
 input_sfc_climo_dir=${input_sfc_climo_dir:?}
 mosaic_file=${mosaic_file:-$FIX_FV3/C${res}_mosaic.nc}
 HALO=${HALO:-0}
-veg_type_src=${veg_type_src:-"igbp.0.05"}
+veg_type_src=${veg_type_src:-"modis.igbp.0.05"}
 VEG_TYPE_FILE=${VEG_TYPE_FILE:-${input_sfc_climo_dir}/vegetation_type.${veg_type_src}.nc}
 
 if [ ! -d $SAVE_DIR ]; then
