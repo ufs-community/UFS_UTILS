@@ -21,7 +21,7 @@ program global_equiv_resol
 
   integer, parameter :: dp = kind(1.0d0)
   real(dp), parameter :: pi_geom = 4.0*atan(1.0), &
-                         radius_Earth = 6371000.0
+                         radius_Earth = 6371200.0
 
   character(len=256) :: grid_fn
   integer :: ncid, nxSG_dimid, nySG_dimid, dASG_varid, num_args
