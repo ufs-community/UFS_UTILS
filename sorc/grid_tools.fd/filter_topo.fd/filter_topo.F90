@@ -25,7 +25,7 @@ program filter_topo
   integer, parameter :: XDir=1
   integer, parameter :: YDir=2
   real, parameter :: pi = 3.14159265358979323846d0
-  real, parameter :: radius = 6371.d03
+  real, parameter :: radius = 6371200.0
   real, parameter ::  big_number=1.d8
   real, parameter :: tiny_number=1.d-8
 

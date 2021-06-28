@@ -30,7 +30,7 @@ program regional_grid
   integer                      :: lx,ly
   namelist /regional_grid_nml/ plat,plon,pazi,delx,dely,lx,ly
 
-  real(dp),parameter           :: re=6371000.0
+  real(dp),parameter           :: re=6371200.0
   real(dp),parameter           :: lam=0.8
 
   integer                      :: nxh,nyh, nx,ny, nxm,nym
