@@ -490,6 +490,8 @@ C----  30" sea land mask. 0 are water (lake or ocean)
         enddo
        enddo
            END SELECT
+
+      deallocate (UMD)
 ! ---
 ! ---  Fixing an error in the topo 30" data set at pole (-9999).  
             do i=1,imn
@@ -526,6 +528,9 @@ C       print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID'
 !
 !    This code assumes that lat runs from north to south for gg!
 !
+
+      deallocate(lonsperlat)
+
       print *,' SPECTR=',SPECTR,' REVLAT=',REVLAT,' ** with GICE-07 **'
       IF (SPECTR) THEN
         CALL SPLAT(4,JM,COSCLT,WGTCLT)
@@ -617,14 +622,9 @@ C
          enddo
          enddo
        endif
-!      print *,
-!     & ' After GICE ZAVG(1,2)=',ZAVG(1,2),ZSLM(1,2)
-!      print *,
-!     & ' After GICE ZAVG(1,12)=',ZAVG(1,12),ZSLM(1,12)
-!      print *,
-!     & ' After GICE ZAVG(1,52)=',ZAVG(1,52),ZSLM(1,52)
-!      print *,
-!     & ' After GICE ZAVG(1,112)=',ZAVG(1,112),ZSLM(1,112)
+
+      deallocate (GICE)
+
 !C
 C     COMPUTE MOUNTAIN DATA : ORO SLM VAR (Std Dev) OC
 C
@@ -927,7 +927,7 @@ C
          CALL MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
      1            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
        endif
-        
+       
        call minmxj(IM,JM,THETA,'   THETA')
        call minmxj(IM,JM,GAMMA,'   GAMMA')
        call minmxj(IM,JM,SIGMA,'   SIGMA')
@@ -1060,13 +1060,25 @@ C
      2            IM,JM,IMN,JMN,geolon_c,geolat_c,
      3            geolon,geolat,is_south_pole,is_north_pole,nx_in,ny_in,
      4            oa_in,ol_in,slm_in,lon_in,lat_in)
-         endif  
+
+           deallocate(oa_in,ol_in,slm_in,lon_in,lat_in)
+
+         endif
        else
          CALL MAKEOA(ZAVG,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,
      1            WORK1,WORK2,WORK3,WORK4,
      2            WORK5,WORK6,
      3            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
        endif
+
+!      Deallocate 1d vars
+       deallocate(JST,JEN)
+
+!      Deallocate 2d vars
+       deallocate (ZSLM)
+       deallocate (ZAVG)
+
+
        tbeg=timef()
        call minmxj(IM,JM,OA,'      OA')
        call minmxj(IM,JM,OL,'      OL')
@@ -1553,6 +1565,9 @@ C
       print *,' ELVMAX: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
       endif ! output_binary
 C
+      deallocate(KPDS,KGDS)
+
+
       DELXN = 360./IM
       do i=1,im
         xlon(i) = DELXN*(i-1)
@@ -1582,10 +1597,10 @@ C
       print *,' wrote netcdf file out.oro.tile?.nc'
 
       print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
-      deallocate (ZAVG)
-      deallocate (ZSLM)
-      deallocate (UMD)
-      deallocate (GICE)
+
+!     Deallocate 1d vars
+      deallocate(numi)
+
       tend=timef()
       write(6,*)' Total runtime time= ',tend-tbeg1
       RETURN
@@ -3047,6 +3062,7 @@ C     IN A GRID BOX
           ELVMAX(I,J) = ZMAX(I,J) 
         ENDDO
       ENDDO
+      print *,'debug check 1'
 
 ! --- # of peaks > ZAVG value and ZMAX(IM,JM) -- ORO is already avg.
 ! ---  to JM or to JM1
