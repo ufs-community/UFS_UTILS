@@ -217,9 +217,10 @@ jobs:
 
     - name: test
       run: |
-        cd ufs_utils/build/tests/chgres_cube/data
-        wget -i files.txt
-        cd ../../..
+        cd ufs_utils/build/tests
+        wget -i ./chgres_cube/data/files.txt -P ./chgres_cube/data
+        wget -i ./sfc_climo_gen/data/files.txt -P ./sfc_climo_gen/data
+        cd ../
         # Oversubscribe for OpenMPI to run more processes than CPUs
         export OMPI_MCA_rmaps_base_oversubscribe=1
         ctest --rerun-failed --output-on-failure

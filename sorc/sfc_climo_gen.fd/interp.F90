@@ -259,6 +259,9 @@
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_data, rc=rc)
 
+ print*,"- CALL FieldDestroy."
+ call ESMF_FieldDestroy(data_field_src, rc=rc)
+
  end subroutine interp
 
 !> Ensure consistent fields at land ice points.
