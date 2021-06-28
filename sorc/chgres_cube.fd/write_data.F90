@@ -1,22 +1,17 @@
-!--------------------------------------------------------------------------
-! Module: write_data
-!
-! Abstract: Write out target grid data into appropriate files for
-!    the forecast model.
-!
-! Main Subroutines:
-! -------------------
-! write_fv3_atm_header_netcdf      Writes atmospheric header file,
-!                                  netcdf format.
-! write_fv3_atm_bndy_data_netcdf   Writes atmospheric fields along the
-!                                  lateral boundary.  For regional grids.
-!                                  netcdf format.
-! write_fv3_atm_data_netcdf        Writes atmospheric data into a 
-!                                  'coldstart' file (netcdf)
-! write_fv3_sfc_data_netcdf        Writes surface and nst data into a 
-!                                  'coldstart' file (netcdf)
-!--------------------------------------------------------------------------
+!> @file
+!! @brief Writes the tiled and header files expected by the forecast
+!! model.
+!!
+!! @author George Gayno NCEP/EMC
+!!
+!! Write out target grid data into appropriate files for
+!! the forecast model.
+!!
 
+!> Writes atmospheric header file in netcdf format.
+!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author George Gayno NCEP/EMC
  subroutine write_fv3_atm_header_netcdf(localpet)
 
  use esmf
@@ -85,6 +80,11 @@
 
  end subroutine write_fv3_atm_header_netcdf
 
+!> Writes atmospheric fields along the lateral boundary.
+!! For regional grids only. Output in netcdf format.
+!!   
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author George Gayno NCEP/EMC
  subroutine write_fv3_atm_bndy_data_netcdf(localpet)
 
 !---------------------------------------------------------------------------
@@ -1183,14 +1183,14 @@
 
  end subroutine write_fv3_atm_bndy_data_netcdf
 
-!---------------------------------------------------------------------------
-! Write atmospheric coldstart files.
-!
-! Routine write tiled files in parallel.  Tile 1 is written by
-! localpet 0; tile 2 by localpet 1, etc.  The number of pets
-! must be equal to or greater than the number of tiled files.
-!---------------------------------------------------------------------------
-
+!> Write atmospheric coldstart files (netcdf format).
+!!
+!! Routine writes tiled files in parallel.  Tile 1 is written by
+!! localpet 0; tile 2 by localpet 1, etc.  The number of pets
+!! must be equal to or greater than the number of tiled files.
+!!
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author George Gayno NCEP/EMC
  subroutine write_fv3_atm_data_netcdf(localpet)
 
  use esmf
@@ -1198,7 +1198,8 @@
 
  use program_setup, only           : halo=>halo_bndy, &
                                      input_type, tracers, num_tracers, &
-                                     use_thomp_mp_climo
+                                     use_thomp_mp_climo, &
+                                     regional
 
  use atmosphere, only              : lev_target, &
                                      levp1_target, &
@@ -1283,7 +1284,11 @@
  HEADER : if (localpet < num_tiles_target_grid) then
 
    tile = localpet + 1
-   WRITE(OUTFILE, '(A, I1, A)') 'out.atm.tile', tile, '.nc'
+   if (regional > 0) then
+       outfile = "out.atm.tile7.nc"
+   else
+       WRITE(OUTFILE, '(A, I1, A)') 'out.atm.tile', tile, '.nc'
+   endif
 
 !--- open the file
    error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
@@ -1394,6 +1399,7 @@
    call netcdf_err(error, 'DEFINING DELP COORD' )
 
    do n = 1, num_tracers
+     if (localpet==0) print*, "write to file tracer ", trim(tracers(n))
      error = nf90_def_var(ncid, tracers(n), NF90_FLOAT, (/dim_lon,dim_lat,dim_lev/), id_tracers(n))
      call netcdf_err(error, 'DEFINING TRACERS' )
      error = nf90_put_att(ncid, id_tracers(n), "coordinates", "geolon geolat")
@@ -1530,6 +1536,7 @@
  if (localpet < num_tiles_target_grid) then
    dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   print*,"MIN MAX W AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_w, dum3d)
    call netcdf_err(error, 'WRITING VERTICAL VELOCITY RECORD' )
  endif
@@ -1680,6 +1687,7 @@
  if (localpet < num_tiles_target_grid) then
    dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:jp1_end,:)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   print*,"MIN MAX US AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_u_s, dum3d)
    call netcdf_err(error, 'WRITING U_S RECORD' )
  endif
@@ -1696,6 +1704,7 @@
  if (localpet < num_tiles_target_grid) then
    dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:jp1_end,:)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   print*,"MIN MAX VS AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_v_s, dum3d)
    call netcdf_err(error, 'WRITING V_S RECORD' )
  endif
@@ -1760,6 +1769,7 @@
  if (localpet < num_tiles_target_grid) then
    dum3d(:,:,:) = data_one_tile_3d(i_start:ip1_end,j_start:j_end,:)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   print*,"MIN MAX UW AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_u_w, dum3d)
    call netcdf_err(error, 'WRITING U_W RECORD' )
  endif
@@ -1776,6 +1786,7 @@
  if (localpet < num_tiles_target_grid) then
    dum3d(:,:,:) = data_one_tile_3d(i_start:ip1_end,j_start:j_end,:)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
+   print*,"MIN MAX VW AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_v_w, dum3d)
    call netcdf_err(error, 'WRITING V_W RECORD' )
  endif
@@ -1790,9 +1801,10 @@
 
  end subroutine write_fv3_atm_data_netcdf
 
-!-------------------------------------------------------------------------------
-!-------------------------------------------------------------------------------
-
+!> Writes surface and nst data into a 'coldstart' file (netcdf).
+!! 
+!! @param[in] localpet  ESMF local persistent execution thread
+!! @author George Gayno NCEP/EMC
  subroutine write_fv3_sfc_data_netcdf(localpet)
 
  use esmf
@@ -1804,7 +1816,8 @@
                                    longitude_target_grid, &
                                    i_target, j_target, lsoil_target
 
- use program_setup, only         : convert_nst, halo=>halo_bndy
+ use program_setup, only         : convert_nst, halo=>halo_bndy, &
+                                   regional, lai_from_climo
 
  use surface, only               : canopy_mc_target_grid,  &
                                    f10m_target_grid, &
@@ -1824,6 +1837,7 @@
                                    tprcp_target_grid, &
                                    ustar_target_grid, &
                                    z0_target_grid, &
+                                   lai_target_grid, &
                                    c_d_target_grid, &
                                    c_0_target_grid, &
                                    d_conv_target_grid, &
@@ -1880,6 +1894,7 @@
  integer                        :: id_fice, id_tisfc, id_tprcp
  integer                        :: id_srflag, id_snwdph, id_shdmin
  integer                        :: id_shdmax, id_slope, id_snoalb
+ integer                        :: id_lai
  integer                        :: id_stc, id_smc, id_slc
  integer                        :: id_tref, id_z_c, id_c_0
  integer                        :: id_c_d, id_w_0, id_w_d
@@ -1947,7 +1962,11 @@
 
    LOCAL_PET : if (localpet == 0) then
 
-     WRITE(OUTFILE, '(A, I1, A)') 'out.sfc.tile', tile, '.nc'
+     if (regional > 0) then
+       outfile = "out.sfc.tile7.nc"
+     else
+       WRITE(OUTFILE, '(A, I1, A)') 'out.sfc.tile', tile, '.nc'
+     endif
 
 !--- open the file
      error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
@@ -2293,6 +2312,17 @@
      call netcdf_err(error, 'DEFINING SNOALB UNITS' )
      error = nf90_put_att(ncid, id_snoalb, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SNOALB COORD' )
+     
+     if (.not. lai_from_climo) then
+     error = nf90_def_var(ncid, 'lai', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_lai)
+     call netcdf_err(error, 'DEFINING LAI' )
+     error = nf90_put_att(ncid, id_lai, "long_name", "lai")
+     call netcdf_err(error, 'DEFINING LAI LONG NAME' )
+     error = nf90_put_att(ncid, id_lai, "units", "none")
+     call netcdf_err(error, 'DEFINING LAI UNITS' )
+     error = nf90_put_att(ncid, id_lai, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING LAI COORD' )
+   endif
 
      error = nf90_def_var(ncid, 'stc', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_stc)
      call netcdf_err(error, 'DEFINING STC' )
@@ -2580,7 +2610,20 @@
      error = nf90_put_var( ncid, id_snoalb, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING MAX SNOW ALBEDO RECORD' )
    endif
+   
+   if (.not. lai_from_climo) then
+     print*,"- CALL FieldGather FOR TARGET GRID LEAF AREA INDEX FOR TILE: ", tile
+     call ESMF_FieldGather(lai_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
 
+     if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_lai, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+     call netcdf_err(error, 'WRITING LEAF AREA INDEX RECORD' )
+     endif
+   endif
+   
    print*,"- CALL FieldGather FOR TARGET GRID SOIL TYPE FOR TILE: ", tile
    call ESMF_FieldGather(soil_type_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &

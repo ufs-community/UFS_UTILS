@@ -1,0 +1,27 @@
+&config
+  mosaic_file_target_grid="/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/C96_mosaic.nc"
+  fix_dir_target_grid="/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96/fix_sfc"
+  orog_dir_target_grid="/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C96"
+  orog_files_target_grid="C96_oro_data.tile1.nc","C96_oro_data.tile2.nc","C96_oro_data.tile3.nc","C96_oro_data.tile4.nc","C96_oro_data.tile5.nc","C96_oro_data.tile6.nc"
+  vcoord_file_target_grid="/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l64.txt"
+  mosaic_file_input_grid="/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C384/C384_mosaic.nc"
+  orog_dir_input_grid="/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/fix/C384"
+  orog_files_input_grid="C384_oro_data.tile1.nc","C384_oro_data.tile2.nc","C384_oro_data.tile3.nc","C384_oro_data.tile4.nc","C384_oro_data.tile5.nc","C384_oro_data.tile6.nc"
+  data_dir_input_grid="/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/fv3.restart"
+  atm_core_files_input_grid="20190706.120000.fv_core.res.tile1.nc","20190706.120000.fv_core.res.tile2.nc","20190706.120000.fv_core.res.tile3.nc","20190706.120000.fv_core.res.tile4.nc","20190706.120000.fv_core.res.tile5.nc","20190706.120000.fv_core.res.tile6.nc","20190706.120000.fv_core.res.nc"
+  atm_tracer_files_input_grid="20190706.120000.fv_tracer.res.tile1.nc","20190706.120000.fv_tracer.res.tile2.nc","20190706.120000.fv_tracer.res.tile3.nc","20190706.120000.fv_tracer.res.tile4.nc","20190706.120000.fv_tracer.res.tile5.nc","20190706.120000.fv_tracer.res.tile6.nc"
+  sfc_files_input_grid="20190706.120000.sfc_data.tile1.nc","20190706.120000.sfc_data.tile2.nc","20190706.120000.sfc_data.tile3.nc","20190706.120000.sfc_data.tile4.nc","20190706.120000.sfc_data.tile5.nc","20190706.120000.sfc_data.tile6.nc"
+  cycle_mon=07
+  cycle_day=06
+  cycle_hour=12
+  convert_atm=.true.
+  convert_sfc=.true.
+  convert_nst=.true.
+  input_type="restart"
+  tracers="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
+  tracers_input="sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
+  regional=0
+  halo_bndy=0
+  halo_blend=0
+ /
+ 

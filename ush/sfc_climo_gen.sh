@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/bash
 
 #-------------------------------------------------------------------------
 # Run sfc_climo_gen program to create surface fixed fields,
@@ -12,7 +12,7 @@
 #
 # BASE_DIR                      Location of your repository.
 # input_sfc_climo_dir           Location of raw input surface climo data
-# EXEC_DIR                      Location of program executable
+# exec_dir                      Location of program executable
 # FIX_DIR                       Location of 'grid' and 'orog' files
 # GRIDTYPE                      Flag to invoke logic for global nests
 #                               and regional grids.  Valid values are
@@ -25,16 +25,13 @@
 # WORK_DIR                      Temporary working directory
 #-------------------------------------------------------------------------
 
-set -x
-
-ulimit -s unlimited
-ulimit -a
+set -eux
 
 res=${res:-96}
 WORK_DIR=${WORK_DIR:-/scratch3/NCEPDEV/stmp1/$LOGNAME/sfc_climo_gen.C${res}}
 SAVE_DIR=${SAVE_DIR:-$WORK_DIR}
 BASE_DIR=${BASE_DIR:?}
-EXEC_DIR=${EXEC_DIR:-$BASE_DIR/exec}
+exec_dir=${exec_dir:-$BASE_DIR/exec}
 GRIDTYPE=${GRIDTYPE:-NULL}
 FIX_FV3=${FIX_FV3:-/scratch4/NCEPDEV/global/save/glopara/git/fv3gfs/fix/fix_fv3_gmted2010/C${res}}
 input_sfc_climo_dir=${input_sfc_climo_dir:?}
@@ -80,7 +77,7 @@ vegetation_greenness_method="bilinear"
 EOF
 
 APRUN_SFC=${APRUN_SFC:-"aprun -j 1 -n 6 -N 6"}
-$APRUN_SFC $EXEC_DIR/sfc_climo_gen
+$APRUN_SFC $exec_dir/sfc_climo_gen
 
 rc=$?
 

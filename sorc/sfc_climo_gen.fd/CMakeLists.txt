@@ -1,5 +1,9 @@
-set(fortran_src
-    driver.F90
+# This is the CMake build file for the sfc_climo_gen utility in the
+# UFS_UTILS package.
+#
+# George Gayno, Mark Potts, Kyle Gerheiser
+
+set(lib_src
     interp.F90
     model_grid.F90
     output.f90
@@ -8,18 +12,35 @@ set(fortran_src
     source_grid.F90
     utils.f90)
 
+set(exe_src driver.F90)
+
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian")
-elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8 -fconvert=big-endian")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8")
 endif()
 
 set(exe_name sfc_climo_gen)
-add_executable(${exe_name} ${fortran_src})
+
+add_library(sfc_climo_gen_lib STATIC ${lib_src})
+add_executable(${exe_name} ${exe_src})
+
+set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
+set_target_properties(orog_gsl_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
+target_include_directories(orog_gsl_lib INTERFACE ${mod_dir})
+
 target_link_libraries(
-  ${exe_name}
+  sfc_climo_gen_lib
+  PUBLIC
   esmf
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
 
+target_link_libraries(${exe_name} PRIVATE sfc_climo_gen_lib)
+
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+
+# If doxygen documentation we enabled, build it.
+if(ENABLE_DOCS)
+  add_subdirectory(docs)  
+endif()

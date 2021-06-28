@@ -8,7 +8,7 @@
 
 set -x
 
-export TMPDIR=${WORK_DIR}/gfdl.regional.work
+export TEMP_DIR=${WORK_DIR}/gfdl.regional.work
 export out_dir=${WORK_DIR}/gfdl.regional
 
 export res=96                # global resolution in which grid is embedded.
@@ -22,6 +22,8 @@ export jstart_nest=37        # Starting j-direction index of nest grid in parent
 export iend_nest=166         # Ending i-direction index of nest grid in parent tile supergrid
 export jend_nest=164         # Ending j-direction index of nest grid in parent tile supergrid
 export halo=3
+
+NCCMP=${NCCMP:-$(which nccmp)}
 
 #-----------------------------------------------------------------------
 # Start script.
@@ -42,15 +44,7 @@ echo "Ending at: " `date`
 
 #-----------------------------------------------------------------------------
 # Compare output to baseline set of data.
-#
-# Note: orion's nccmp utility does not work with the netcdf
-# required to run ufs_utils.  So swap it.
 #-----------------------------------------------------------------------------
-
-if [[ "$machine" = "ORION" ]] ;then
-  module unload netcdfp/4.7.4.release
-  module load netcdf/4.7.2
-fi
 
 cd $out_dir/C424
 

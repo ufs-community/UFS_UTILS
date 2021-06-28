@@ -1,120 +1,121 @@
+!> @file
+!! @brief Create blended ice product for gfs/gdas cycles.
+!!
+!! @author George Gayno NCEP/EMC
+!! @date 2014-03-20
+
+!> Create a global 5-minute blended ice concentration 
+!! dataset for use by GDAS/GFS. This blend is created
+!! from National Ice Center Interactive Multisensor
+!! Snow and Ice Mapping System (IMS) data, and the 
+!! NCEP/MMAB global 5-minute ice concentration data.
+!!
+!! Program History Log
+!! -  2014-03-20  Initial version.
+!! -  2014-10-20  Use grib2 for all i/o.  Mask out 'land' points
+!!               in the blended analysis using a bitmap
+!!               instead of the '1.57' flag.
+!!
+!! input files:
+!!   -   fort.11 - NH IMS ice data, interpolated to the 5-minute grid  (grib 2)
+!!   -   fort.15 - global 5-minute MMAB ice concentration file (grib 2)
+!!   -   fort.17 - global 5-minute MMAB land mask file (grib 2).  
+!!
+!! output files:
+!!   -   fort.51 - global 5-minute blended ice concentration file (grib 2)
+!!
+!! condition codes:
+!! -   0 - normal run
+!! -   1 - bad open of 5-minute MMAB land mask file
+!! -   2 - bad read of 5-minute MMAB land mask grib record
+!! -   5 - bad open of IMS ice file
+!! -   7 - bad read of IMS ice grib record
+!! -   8 - bad open of 5-minute MMAB ice concentration file
+!! -   9 - bad read of 5-minute MMAB ice concentration grib header
+!! -  10 - bad read of 5-minute MMAB ice concentration grib record
+!! -  16 - bad open of 5-minute blended ice concentration file
+!! -  17 - bad write of 5-minute blended ice concentration file
+!!
+!! This program creates a sea ice concentration file 
+!! suitable for use by the GFS global cycle program. The 5-minute
+!! ice concentration file from MMAB can't be used 'as is' because
+!! the MMAB data can't give a reliable analysis for small
+!! lakes now resolved by the GFS land mask.
+!!
+!! This program creates an ice concentration file on the same
+!! 5-minute grid as the MMAB data using IMS data from the National
+!! Ice Center to fill in small lakes.  The IMS data is NH only and
+!! is a yes/no flag (not a concentration).  The IMS data is on
+!! a 4km polar stereographic grid and must be interpolated to the
+!! MMAB 5-minute grid (NCEP grid 173) before ingest to this program.
+!! This interpolation may be done using copygb2 as follows:
+!!
+!! <pre>
+!! grid173="0 0 0 0 0 0 0 0 4320 2160 0 0 89958000 42000 48 -89958000 359958000 83000 83000 0"
+!! copygb2 -x -i3 -g "$grid173" ims.icec.grib2 ims.icec.5min.grib2
+!! </pre>
+!!
+!! When using the "budget" interpolation option (-i3), the 
+!! IMS yes/no flag will be converted to a pseudo ice concentration.
+!!
+!! The IMS data contains a land/water mask.  Ice concentration is only
+!! specified at 'water' points.
+!!
+!! The 5-minute data mask contains 'land', 'coast' and
+!! 'water' points.  Ice concentration is specified at 'coast'
+!! and 'water', but 'coast' points have error and are not used here.
+!! 
+!! The blending process is as follows in the NH:
+!!    1. If IMS indicates 'land', then the blended value is set to 'land'
+!!        and is bitmapped out.
+!!    2. If the IMS is 'water', and the MMAB data point
+!!        is 'coast' or 'land', the IMS ice concentration is used
+!!        as the blended value.
+!!    3. If IMS and MMAB indicate a point as water, then
+!!        - The blended value is set to zero if the IMS concentration is less
+!!            than 50%. 
+!!        - If the IMS concentration is >=50%, then the neighboring
+!!            5-minute data is checked for ice.  
+!!            * If the 5-minute point is ice free, but at least one 
+!!              of its neighbors has ice, the blended value is set to
+!!              the IMS ice concentration. Examination of the 5-minute
+!!              showed isolated open water points within large areas of
+!!              ice.  This logic attempts to remove these likely wrong points.
+!!            * If (i) is false, then the blended value is set to
+!!              the 5-minute value or 15%, whichever is greater.  15%
+!!              is the lower threshold in the MMAB 5-minute product.
+!!
+!! In the SH, the blended value is simply the 5-minute ice concentration
+!! at 'water' points.  'Coast' and 'land' points are bitmapped out.
+!!
+!! @return 0 for success, error code otherwise.
+!! @author George Gayno NCEP/EMC
  program emcsfc_ice_blend
-!$$$  main program documentation block
-!
-! program:  emcsfc_ice_blend           create blended ice product 
-!                                      for gfs/gdas cycles
-!
-! prgmmr: gayno         org: emc               date: 2014-03-20
-!
-! abstract:  Create a global 5-minute blended ice concentration 
-!            dataset for use by GDAS/GFS.  This blend is created
-!            from National Ice Center Interactive Multisensor
-!            Snow and Ice Mapping System (IMS) data, and the 
-!            NCEP/MMAB global 5-minute ice concentration data.
-!
-! program history log:
-!   2014-03-20  Initial version.
-!   2014-10-20  Use grib2 for all i/o.  Mask out 'land' points
-!               in the blended analysis using a bitmap
-!               instead of the '1.57' flag.
-!
-! usage:
-!   input files:
-!      fort.11 - NH IMS ice data, interpolated to the 5-minute grid  (grib 2)
-!      fort.15 - global 5-minute MMAB ice concentration file (grib 2)
-!      fort.17 - global 5-minute MMAB land mask file (grib 2).  
-!
-!   output files:
-!      fort.51 - global 5-minute blended ice concentration file (grib 2)
-!
-! condition codes:
-!    0 - normal run
-!    1 - bad open of 5-minute MMAB land mask file
-!    2 - bad read of 5-minute MMAB land mask grib record
-!    5 - bad open of IMS ice file
-!    7 - bad read of IMS ice grib record
-!    8 - bad open of 5-minute MMAB ice concentration file
-!    9 - bad read of 5-minute MMAB ice concentration grib header
-!   10 - bad read of 5-minute MMAB ice concentration grib record
-!   16 - bad open of 5-minute blended ice concentration file
-!   17 - bad write of 5-minute blended ice concentration file
-!
-! comments:
-!   This program creates a sea ice concentration file 
-!   suitable for use by the GFS global cycle program.  The 5-minute
-!   ice concentration file from MMAB can't be used 'as is' because
-!   the MMAB data can't give a reliable analysis for small
-!   lakes now resolved by the GFS land mask.
-!
-!   This program creates an ice concentration file on the same
-!   5-minute grid as the MMAB data using IMS data from the National
-!   Ice Center to fill in small lakes.  The IMS data is NH only and
-!   is a yes/no flag (not a concentration).  The IMS data is on
-!   a 4km polar stereographic grid and must be interpolated to the
-!   MMAB 5-minute grid (NCEP grid 173) before ingest to this program.
-!   This interpolation may be done using copygb2 as follows:
-!
-!   grid173="0 0 0 0 0 0 0 0 4320 2160 0 0 89958000 42000 48 -89958000 359958000 83000 83000 0"
-!   copygb2 -x -i3 -g "$grid173" ims.icec.grib2 ims.icec.5min.grib2
-!
-!   When using the "budget" interpolation option (-i3), the 
-!   IMS yes/no flag will be converted to a pseudo ice concentration.
-!
-!   The IMS data contains a land/water mask.  Ice concentration is only
-!   specified at 'water' points.
-!
-!   The 5-minute data mask contains 'land', 'coast' and
-!   'water' points.  Ice concentration is specified at 'coast'
-!   and 'water', but 'coast' points have error and are not used here.
-!   
-!   The blending process is as follows in the NH:
-!      (1) If IMS indicates 'land', then the blended value is set to 'land'
-!          and is bitmapped out.
-!      (2) If the IMS is 'water', and the MMAB data point
-!          is 'coast' or 'land', the IMS ice concentration is used
-!          as the blended value.
-!      (3) If IMS and MMAB indicate a point as water, then
-!          (a) The blended value is set to zero if the IMS concentration is less
-!              than 50%. 
-!          (b) If the IMS concentration is >=50%, then the neighboring
-!              5-minute data is checked for ice.  
-!              (i) If the 5-minute point is ice free, but at least one 
-!                  of its neighbors has ice, the blended value is set to
-!                  the IMS ice concentration. Examination of the 5-minute
-!                  showed isolated open water points within large areas of
-!                  ice.  This logic attempts to remove these likely wrong points.
-!              (ii) If (i) is false, then the blended value is set to
-!                   the 5-minute value or 15%, whichever is greater.  15%
-!                   is the lower threshold in the MMAB 5-minute product.
-!   In the SH, the blended value is simply the 5-minute ice concentration
-!   at 'water' points.  'Coast' and 'land' points are bitmapped out.
-!
-! attributes:
-!   language: f90
-!   machine: NCEP WCOSS
-!
-!$$$
 
  use grib_mod  ! grib 2 libraries
 
  implicit none
 
- type(gribfield)        :: ims, mask, mmab
-
+ type(gribfield)        :: ims !< ims is Ice Mapping System 5-min grid date
+ type(gribfield)        :: mask !< data mask
+ type(gribfield)        :: mmab !< NCEP/MMAB global 5-minute ice concentration data
  character(len=200)     :: infile, outfile
-
- integer, parameter     :: imax=4320
- integer, parameter     :: jmax=2160
-
- integer                :: i,j, istat, iunit
+ integer, parameter     :: imax=4320 !< Constant value on i dim.
+ integer, parameter     :: jmax=2160 !< Constant value on j dim.
+ integer                :: i,j, istat, iunit !< j search position of a file
  integer                :: ii, iii, jj, jjj, count
- integer                :: lugi
- integer                :: jdisc, jgdtn, jpdtn, k
- integer                :: jids(200), jgdt(200), jpdt(200)
+ integer                :: lugi !< set to 0 - no grib index file
+ integer                :: jdisc !< jdisc set to 2 - search for discipline
+ integer                :: jgdtn !< jpdtn search for product definition template number
+ integer                :: jpdtn !< jgdtn search for grid definition template number; 0 - lat/lon grid
+ integer                :: k
+ integer                :: jids(200) !< jids array of values in identification section, set to wildcard
+ integer                :: jgdt(200) !< jgdt array of values in grid definition template 3.m
+ integer                :: jpdt(200) !< jpdt array of values in product definition template 4.n
  integer, allocatable   :: mask_5min(:,:), mask_ims(:,:)
 
  logical*1, allocatable :: lbms_ims(:,:)
- logical                :: unpack
+ logical                :: unpack !< unpack switch for unpack data
 
  real, allocatable      :: dummy(:,:)
  real, allocatable      :: ice_ims(:,:), ice_5min(:,:), ice_blend(:,:)

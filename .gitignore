@@ -1,0 +1,13 @@
+build/
+install/
+exec/
+lib/
+
+*.[ao]
+*.mod
+*.so
+*.exe
+*.x
+
+*.swp
+*.o

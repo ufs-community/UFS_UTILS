@@ -1,0 +1,40 @@
+#%Module#####################################################
+## Build and run module for Stampede
+#############################################################
+
+module purge
+
+module load libfabric/1.7.0
+module load git/2.24.1
+module load autotools/1.1
+module load xalt/2.8
+module load TACC
+
+module load python3/3.7.0
+module load intel/18.0.2
+module load cmake/3.16.1
+module load impi/18.0.2
+module load pnetcdf/1.11.0
+module load netcdf/4.6.2
+module li
+
+setenv NETCDF /opt/apps/intel18/netcdf/4.6.2/x86_64
+
+#module use /work/00315/tg455890/stampede2/regional_fv3/ufs_testing/INSTALL/modules
+module use /work/00315/tg455890/stampede2/regional_fv3/NCEPLIBS_SRWv2.0/modules
+module load esmf/8.0.0
+
+module load w3nco
+module load sp
+module load ip
+module load bacio
+module load sigio
+module load sfcio
+module load nemsio
+module load g2
+module load wgrib2
+
+#setenv ESMFMKFILE /work/00315/tg455890/stampede2/regional_fv3/NCEPLIBS_SRWv2.0/lib64/esmf.mk
+
+setenv CMAKE_Fortran_COMPILER ifort
+setenv CMAKE_C_COMPILER icc

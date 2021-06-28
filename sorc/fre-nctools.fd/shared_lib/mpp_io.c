@@ -1,3 +1,7 @@
+/** @file
+    @brief Utility routines to read/write netcdf.
+    @author Zhi.Liang@noaa.gov
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

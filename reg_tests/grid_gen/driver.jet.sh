@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run grid generation regression tests on Jet.
+# Run grid generation consistency tests on Jet.
 #
 # Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
@@ -22,26 +22,28 @@
 #-----------------------------------------------------------------------------
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 set -x
 
-QUEUE="windfall"
-PROJECT_CODE="emcda"
-export WORK_DIR=/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_tests.grid
+QUEUE="${QUEUE:-windfall}"
+PROJECT_CODE="${PROJECT_CODE:-emcda}"
+export WORK_DIR="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 export home_dir=$PWD/../..
 export APRUN=time
 export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export machine=JET
-export NCCMP=/apps/nccmp/1.8.5/intel/18.0.5.274/bin/nccmp
 export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/grid_gen/baseline_data
 
 ulimit -a
@@ -66,11 +68,25 @@ TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
       --partition=xjet -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
+# ESG regional grid
+#-----------------------------------------------------------------------------
+
+TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional \
+      --partition=xjet -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./esg.regional.sh)
+
+#-----------------------------------------------------------------------------
+# Regional GSL gravity wave drag.
+#-----------------------------------------------------------------------------
+
+TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
+      --partition=xjet -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./regional.gsl.gwd.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST2 << EOF
-#!/bin/sh
+       --open-mode=append -q $QUEUE -d afterok:$TEST4 << EOF
+#!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF
