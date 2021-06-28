@@ -86,7 +86,7 @@ integer :: nu, nd, nw, nt
 real (kind = real_kind) :: ratio
 
 
-real, parameter :: ae = 6371220._real_kind   ! Earth radius in meters
+real, parameter :: ae = 6371200._real_kind   ! Earth radius in meters
 
 character(len=35)  :: FV3_grid_input_file_name
 character(len=150) :: fine_topo_source_file_name

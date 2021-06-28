@@ -151,7 +151,9 @@ jobs:
 
     - name: test
       run: |
-        cd ufs_utils/build/tests/chgres_cube/data
-        wget -i files.txt
-        cd ../../..
+        cd ufs_utils/build/tests
+        wget -i ./chgres_cube/data/files.txt -P ./chgres_cube/data
+        wget -i ./sfc_climo_gen/data/files.txt -P ./sfc_climo_gen/data
+        cd ../
+        export LSAN_OPTIONS=suppressions=LSanSuppress.supp
         ctest --rerun-failed --output-on-failure

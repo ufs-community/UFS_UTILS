@@ -2896,7 +2896,7 @@ C
       real dx, lat, DEGRAD
       
       real get_lon_angle
-         real, parameter :: RADIUS = 6371000
+         real, parameter :: RADIUS = 6371200
 
          get_lon_angle = 2*asin( sin(dx/RADIUS*0.5)/cos(lat) )*DEGRAD
          
@@ -2915,7 +2915,7 @@ C
       real dy, DEGRAD
       
       real get_lat_angle
-         real, parameter :: RADIUS = 6371000
+         real, parameter :: RADIUS = 6371200
 
          get_lat_angle = dy/RADIUS*DEGRAD
          

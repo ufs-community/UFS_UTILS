@@ -33,6 +33,8 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 # This one does not end up in the data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 
 add_executable(ftst_utils ftst_utils.F90)
 add_test(NAME chgres_cube-ftst_utils COMMAND ftst_utils)
@@ -122,6 +124,15 @@ target_link_libraries(ftst_read_nst_netcdf chgres_cube_lib)
 # Cause test to be run with MPI.
 add_mpi_test(chgres_cube-ftst_read_nst_netcdf
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_nst_netcdf
+  NUMPROCS 1
+  TIMEOUT 60)
+
+add_executable(ftst_read_nst_nemsio ftst_read_nst_nemsio.F90)
+target_link_libraries(ftst_read_nst_nemsio chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_read_nst_nemsio
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_nst_nemsio
   NUMPROCS 1
   TIMEOUT 60)
 
