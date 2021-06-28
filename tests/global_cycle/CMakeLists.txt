@@ -14,6 +14,9 @@ endif()
 
 include_directories(${PROJECT_SOURCE_DIR})
 
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
+
 add_executable(ftst_land_increments ftst_land_increments.F90)
 target_link_libraries(ftst_land_increments global_cycle_lib)
 
