@@ -258,9 +258,6 @@ C
       allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2))
       allocate (XLON(IM),ORS(NW),oaa(4),ola(4),GLAT(JMN))
 
-      allocate (WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM))
-      allocate (WORK5(IM,JM),WORK6(IM,JM))
-
       allocate (ZAVG(IMN,JMN))
       allocate (ZSLM(IMN,JMN))
       allocate (UMD(IMN,JMN))
@@ -390,6 +387,8 @@ C
 C
 ! --- ZSLM initialize with all land 1, ocean 0
       ZSLM=1
+! --- ZAVG initialize from glob
+      ZAVG=glob
 
            SELECTCASE(MSKSRC)
 C----  30" sea land mask. 0 are water (lake or ocean)
@@ -412,7 +411,7 @@ C----  30" sea land mask. 0 are water (lake or ocean)
         UMD(it,J) = i3save
        enddo
        enddo
-! ---   UMD slmsk with 30" lakes  and set ZAVG from glob
+! ---   UMD slmsk with 30" lakes
           do j=1,jmn
           do i=1,imn
            if ( UMD(i,j) .eq. 0 ) ZSLM(i,j) = 0
@@ -430,7 +429,7 @@ C----  30" sea land mask. 0 are water (lake or ocean)
           oldslm = ZSLM(IMN,j)
         do i=1,imn
           i1 = i + 1
-! ---    slmsk with 10' lakes  and set ZAVG from 30" glob
+! ---    slmsk with 10' lakes
             if ( glob(i,j) .eq. -9999 ) then 
                ZSLM(i,j) = 0
                kount = kount + 1
@@ -453,7 +452,7 @@ C----  30" sea land mask. 0 are water (lake or ocean)
        enddo
 ! ---
               CASE(-1)
-      print *,' ***** set ZAVG and slm from 30" glob, MSKSRC=',MSKSRC
+      print *,' ***** set slm from 30" glob, MSKSRC=',MSKSRC
          kount = 0
          kount2 = 0
        do j=1,jmn
@@ -924,6 +923,8 @@ C     COMPUTE MOUNTAIN DATA : OA OL
 C
        allocate (IWORK(IM,JM,4))
        allocate (OA(IM,JM,4),OL(IM,JM,4),HPRIME(IM,JM,14))
+       allocate (WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM))
+       allocate (WORK5(IM,JM),WORK6(IM,JM))
 
        call minmxj(IM,JM,ORO,'     ORO')
        print*, "inputorog=", trim(INPUTOROG)
@@ -1060,6 +1061,7 @@ C
 !      Deallocate 2d vars
        deallocate (ZSLM,ZAVG)
        deallocate (dx,dy)
+       deallocate (WORK2,WORK3,WORK4,WORK5,WORK6)
 
 !      Deallocate 3d vars
        deallocate(IWORK)
@@ -1394,6 +1396,9 @@ C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
         ORS=0.
         ORF=ORO
       ENDIF
+
+      deallocate (WORK1)
+
        call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
       print *,' ELVMAX(',itest,jtest,')=',ELVMAX(itest,jtest)
       print *,' after spectral filter is applied'
