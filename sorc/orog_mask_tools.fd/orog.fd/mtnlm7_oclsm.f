@@ -156,8 +156,6 @@ C> @return 0 for success, error code otherwise.
          
       endif         
          
-      write(*,*)'DEBUG: CALL TERSUB 3'
- 
       CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &            OUTGRID,INPUTOROG)
       STOP
@@ -246,8 +244,6 @@ C
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
       logical :: LB(IM*JM)
 
-      write(*,*)'DEBUG: in SUBROUTINE TERSUB'
-
       output_binary = .false.
       tbeg1=timef()
       tbeg=timef()
@@ -257,7 +253,6 @@ C
       allocate (lonsperlat(jm/2))
       allocate (IST(IM,jm),IEN(IM,jm),ZSLMX(2700,1350))
       allocate (glob(IMN,JMN))
-      allocate (IWORK(IM,JM,4))
 
 ! reals
       allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2))
@@ -272,13 +267,9 @@ C
       allocate (WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM))
       allocate (WORK5(IM,JM),WORK6(IM,JM))
 
-      allocate (OA(IM,JM,4),OL(IM,JM,4),HPRIME(IM,JM,14))
-
       allocate (ZAVG(IMN,JMN))
       allocate (ZSLM(IMN,JMN))
-      allocate (GICE(IMN+1,3601))
       allocate (UMD(IMN,JMN))
-      allocate (OCLSM(IM,JM))
 
 !
 !  SET CONSTANTS AND ZERO FIELDS
@@ -397,8 +388,8 @@ C
        print *,' UBOUND ZAVG=',UBOUND(ZAVG)
        print *,' UBOUND glob=',UBOUND(glob)
        print *,' UBOUND ZSLM=',UBOUND(ZSLM)
-       print *,' UBOUND GICE=',UBOUND(GICE)
-       print *,' UBOUND OCLSM=',UBOUND(OCLSM)
+       print *,' UBOUND GICE=',IMN+1,3601
+       print *,' UBOUND OCLSM=',IM,JM
 !
 ! ---  0 is ocean and 1 is land for slm
 !
@@ -491,7 +482,8 @@ C----  30" sea land mask. 0 are water (lake or ocean)
        enddo
            END SELECT
 
-      deallocate (UMD)
+!     Deallocate 2dvars
+      deallocate (ZSLMX,UMD,glob)
 ! ---
 ! ---  Fixing an error in the topo 30" data set at pole (-9999).  
             do i=1,imn
@@ -529,8 +521,6 @@ C       print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID'
 !    This code assumes that lat runs from north to south for gg!
 !
 
-      deallocate(lonsperlat)
-
       print *,' SPECTR=',SPECTR,' REVLAT=',REVLAT,' ** with GICE-07 **'
       IF (SPECTR) THEN
         CALL SPLAT(4,JM,COSCLT,WGTCLT)
@@ -549,9 +539,9 @@ C       print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID'
           XLAT(J) = 90.0 - RCLT(J) * DEGRAD
         ENDDO
       ENDIF
+
+      allocate (GICE(IMN+1,3601))
 !
-c      print *,' cosclt=',cosclt
-!       print *,' RCLT(1)=',RCLT(1)
        sumdif = 0.
        DO J = JM/2,2,-1
        DIFFX(J) = xlat(J) - XLAT(j-1)
@@ -625,6 +615,7 @@ C
 
       deallocate (GICE)
 
+      allocate (OCLSM(IM,JM))
 !C
 C     COMPUTE MOUNTAIN DATA : ORO SLM VAR (Std Dev) OC
 C
@@ -939,6 +930,9 @@ C --- check for nands in above
 C
 C     COMPUTE MOUNTAIN DATA : OA OL
 C
+       allocate (IWORK(IM,JM,4))
+       allocate (OA(IM,JM,4),OL(IM,JM,4),HPRIME(IM,JM,14))
+
        call minmxj(IM,JM,ORO,'     ORO')
        print*, "inputorog=", trim(INPUTOROG)
        if(grid_from_file) then
@@ -1061,7 +1055,7 @@ C
      3            geolon,geolat,is_south_pole,is_north_pole,nx_in,ny_in,
      4            oa_in,ol_in,slm_in,lon_in,lat_in)
 
-           deallocate(oa_in,ol_in,slm_in,lon_in,lat_in)
+           deallocate(oa_in,ol_in,slm_in,lon_in,lat_in,dx,dy)
 
          endif
        else
@@ -1071,13 +1065,12 @@ C
      3            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
        endif
 
-!      Deallocate 1d vars
-       deallocate(JST,JEN)
-
 !      Deallocate 2d vars
        deallocate (ZSLM)
        deallocate (ZAVG)
 
+!      Deallocate 3d vars
+       deallocate(IWORK)
 
        tbeg=timef()
        call minmxj(IM,JM,OA,'      OA')
@@ -1565,9 +1558,6 @@ C
       print *,' ELVMAX: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
       endif ! output_binary
 C
-      deallocate(KPDS,KGDS)
-
-
       DELXN = 360./IM
       do i=1,im
         xlon(i) = DELXN*(i-1)
@@ -1599,7 +1589,8 @@ C
       print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
 
 !     Deallocate 1d vars
-      deallocate(numi)
+      deallocate(JST,JEN,KPDS,KGDS,numi,lonsperlat)
+      deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,ORS,oaa,ola,GLAT)
 
       tend=timef()
       write(6,*)' Total runtime time= ',tend-tbeg1
@@ -3062,7 +3053,6 @@ C     IN A GRID BOX
           ELVMAX(I,J) = ZMAX(I,J) 
         ENDDO
       ENDDO
-      print *,'debug check 1'
 
 ! --- # of peaks > ZAVG value and ZMAX(IM,JM) -- ORO is already avg.
 ! ---  to JM or to JM1
