@@ -33,6 +33,8 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 # This one does not end up in the data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 
 add_executable(ftst_utils ftst_utils.F90)
 add_test(NAME chgres_cube-ftst_utils COMMAND ftst_utils)
