@@ -258,8 +258,6 @@ C
       allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2))
       allocate (XLON(IM),ORS(NW),oaa(4),ola(4),GLAT(JMN))
 
-      allocate (GEOLON(IM,JM),GEOLON_C(IM+1,JM+1),DX(IM,JM))
-      allocate (GEOLAT(IM,JM),GEOLAT_C(IM+1,JM+1),DY(IM,JM))
       allocate (SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),ORF(IM,JM))
       allocate (land_frac(IM,JM))
       allocate (THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM))
@@ -276,7 +274,7 @@ C
 !
       DEGRAD = 180./PI
       SPECTR = NM .GT. 0     ! if NM <=0 grid is assumed lat/lon
-      FILTER = .TRUE.        ! Spectr Filter defaults true and set by NF1 & NF0
+      FILTER = .TRUE.        ! Spectr Filter defaults true and set by NF1 
 !     MSKSRC = 0             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
       MSKSRC = 1             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
       REVLAT = BLAT .LT. 0   ! Reverse latitude/longitude for output
@@ -395,7 +393,7 @@ C
 !
 C
 ! --- ZSLM initialize with all land 1, ocean 0
-!     ZSLM=1
+!      ZSLM=1
       do j=1,jmn
       do i=1,imn
       zslm(i,j)=1
@@ -427,7 +425,6 @@ C----  30" sea land mask. 0 are water (lake or ocean)
           do j=1,jmn
           do i=1,imn
            if ( UMD(i,j) .eq. 0 ) ZSLM(i,j) = 0
-           ZAVG(i,j) = glob(i,j)
           enddo
           enddo
 ! --- Global land in slm plus lakes on 30" grid and elev set over globe
@@ -443,7 +440,6 @@ C----  30" sea land mask. 0 are water (lake or ocean)
         do i=1,imn
           i1 = i + 1
 ! ---    slmsk with 10' lakes  and set ZAVG from 30" glob
-        ZAVG(i,j) = glob(i,j)
             if ( glob(i,j) .eq. -9999 ) then 
                ZSLM(i,j) = 0
                kount = kount + 1
@@ -473,7 +469,6 @@ C----  30" sea land mask. 0 are water (lake or ocean)
         do i=1,imn
           i1 = i + 1
 ! ---   UMD slmsk with 10' lakes  and set ZAVG from 30" glob
-        ZAVG(i,j) = glob(i,j)
             if ( glob(i,j) .eq. -9999 ) then 
                ZSLM(i,j) = 0
                kount = kount + 1
@@ -679,6 +674,9 @@ C
       if (mskocn .eq. 1)then
       print *,' LSM:',OCLSM(1,1),OCLSM(50,50),OCLSM(75,75),OCLSM(IM,JM)
       endif
+
+      allocate (GEOLON(IM,JM),GEOLON_C(IM+1,JM+1),DX(IM,JM))
+      allocate (GEOLAT(IM,JM),GEOLAT_C(IM+1,JM+1),DY(IM,JM))
 
 !--- reading grid file.
       grid_from_file = .false.
@@ -1055,7 +1053,7 @@ C
      3            geolon,geolat,is_south_pole,is_north_pole,nx_in,ny_in,
      4            oa_in,ol_in,slm_in,lon_in,lat_in)
 
-           deallocate(oa_in,ol_in,slm_in,lon_in,lat_in,dx,dy)
+           deallocate(oa_in,ol_in,slm_in,lon_in,lat_in)
 
          endif
        else
@@ -1066,8 +1064,8 @@ C
        endif
 
 !      Deallocate 2d vars
-       deallocate (ZSLM)
-       deallocate (ZAVG)
+       deallocate (ZSLM,ZAVG)
+       deallocate (dx,dy)
 
 !      Deallocate 3d vars
        deallocate(IWORK)
@@ -1591,6 +1589,10 @@ C
 !     Deallocate 1d vars
       deallocate(JST,JEN,KPDS,KGDS,numi,lonsperlat)
       deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,ORS,oaa,ola,GLAT)
+
+!     Deallocate 2d vars
+      deallocate (GEOLON,GEOLON_C,GEOLAT,GEOLAT_C)
+
 
       tend=timef()
       write(6,*)' Total runtime time= ',tend-tbeg1
