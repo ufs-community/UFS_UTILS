@@ -391,12 +391,7 @@ C
 !
 C
 ! --- ZSLM initialize with all land 1, ocean 0
-!      ZSLM=1
-      do j=1,jmn
-      do i=1,imn
-      zslm(i,j)=1
-      enddo
-      enddo
+      ZSLM=1
 
            SELECTCASE(MSKSRC)
 C----  30" sea land mask. 0 are water (lake or ocean)
