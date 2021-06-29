@@ -267,7 +267,7 @@ C
 !
       DEGRAD = 180./PI
       SPECTR = NM .GT. 0     ! if NM <=0 grid is assumed lat/lon
-      FILTER = .TRUE.        ! Spectr Filter defaults true and set by NF1 
+      FILTER = .TRUE.        ! Spectr Filter defaults true and set by NF1 & NF0
 !     MSKSRC = 0             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
       MSKSRC = 1             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
       REVLAT = BLAT .LT. 0   ! Reverse latitude/longitude for output
@@ -467,7 +467,6 @@ C----  30" sea land mask. 0 are water (lake or ocean)
        enddo
            END SELECT
 
-!     Deallocate 2dvars
       deallocate (ZSLMX,UMD,glob)
 ! ---
 ! ---  Fixing an error in the topo 30" data set at pole (-9999).  
@@ -909,7 +908,7 @@ C
          CALL MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
      1            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
        endif
-       
+
        call minmxj(IM,JM,THETA,'   THETA')
        call minmxj(IM,JM,GAMMA,'   GAMMA')
        call minmxj(IM,JM,SIGMA,'   SIGMA')
