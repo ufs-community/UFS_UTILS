@@ -225,7 +225,7 @@ C
       real, allocatable :: SLM(:,:),ORO(:,:),VAR(:,:),ORF(:,:)
       real, allocatable :: land_frac(:,:)
       real, allocatable :: THETA(:,:),GAMMA(:,:),SIGMA(:,:),ELVMAX(:,:)
-      real, allocatable :: WZ4(:,:),VAR4(:,:),SLMI(:,:)
+      real, allocatable :: VAR4(:,:),SLMI(:,:)
       real, allocatable :: WORK1(:,:),WORK2(:,:),WORK3(:,:),WORK4(:,:)
       real, allocatable :: WORK5(:,:),WORK6(:,:)
 
@@ -258,8 +258,6 @@ C
       allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2))
       allocate (XLON(IM),ORS(NW),oaa(4),ola(4),GLAT(JMN))
 
-      allocate (THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM))
-      allocate (WZ4(IM,JM),VAR4(IM,JM),SLMI(IM,JM))
       allocate (WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM))
       allocate (WORK5(IM,JM),WORK6(IM,JM))
 
@@ -603,7 +601,7 @@ C
 
       deallocate (GICE)
 
-      allocate (OCLSM(IM,JM))
+      allocate (OCLSM(IM,JM),SLMI(IM,JM))
 !C
 C     COMPUTE MOUNTAIN DATA : ORO SLM VAR (Std Dev) OC
 C
@@ -670,7 +668,7 @@ C
 
       allocate (GEOLON(IM,JM),GEOLON_C(IM+1,JM+1),DX(IM,JM))
       allocate (GEOLAT(IM,JM),GEOLAT_C(IM+1,JM+1),DY(IM,JM))
-      allocate (SLM(IM,JM),ORO(IM,JM),VAR(IM,JM))
+      allocate (SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),VAR4(IM,JM))
       allocate (land_frac(IM,JM))
 
 !--- reading grid file.
@@ -901,6 +899,7 @@ C   check antarctic pole
 C
 C ===  Compute mtn principal coord HTENSR: THETA,GAMMA,SIGMA
 C
+      allocate (THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM))
        if(grid_from_file) then       
       tbeg=timef()
          CALL MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
@@ -1190,6 +1189,8 @@ C
       print *,' SLM(itest,jtest)=',slm(itest,jtest),itest,jtest
       print *,' ORO(itest,jtest)=',oro(itest,jtest),itest,jtest
 
+      deallocate(SLMI)
+
 C  REMOVE ISOLATED POINTS
       DO J=2,JM-1
         JN=J-1
@@ -1345,6 +1346,7 @@ C
 ! --- if no filter is desired then NF1=NF0=0 and ORF=ORO
 ! --- if no filter but spectral to grid (with gibbs) then NF1=jcap+2, and NF1=jcap+1
 !
+      deallocate(VAR4)
       allocate (ORF(IM,JM))
       IF ( NF1 - NF0 .eq. 0 ) FILTER=.FALSE.
       print *,' NF1, NF0, FILTER=',NF1,NF0,FILTER
@@ -1589,6 +1591,7 @@ C
 !     Deallocate 2d vars
       deallocate (GEOLON,GEOLON_C,GEOLAT,GEOLAT_C)
       deallocate (SLM,ORO,VAR,ORF,land_frac)
+      deallocate (THETA,GAMMA,SIGMA,ELVMAX)
 
 
       tend=timef()
