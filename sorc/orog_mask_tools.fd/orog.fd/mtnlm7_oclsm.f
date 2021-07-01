@@ -209,9 +209,10 @@ C
 
       integer, allocatable :: IST(:,:),IEN(:,:),ZSLMX(:,:)
       integer, allocatable :: ZAVG(:,:),ZSLM(:,:)
-      integer, allocatable :: IWORK(:,:,:)
       integer(1), allocatable :: UMD(:,:)
       integer(2), allocatable :: glob(:,:)
+
+      integer, allocatable :: IWORK(:,:,:)
 
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
       real :: dlat,PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
@@ -228,13 +229,13 @@ C
       real, allocatable :: VAR4(:,:),SLMI(:,:)
       real, allocatable :: WORK1(:,:),WORK2(:,:),WORK3(:,:),WORK4(:,:)
       real, allocatable :: WORK5(:,:),WORK6(:,:)
-
-      real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
-
       real, allocatable :: tmpvar(:,:)
-      real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
       real, allocatable :: slm_in(:,:), lon_in(:,:), lat_in(:,:)
       real(4), allocatable::  GICE(:,:),OCLSM(:,:)
+
+      real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
+      real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
+
 
       complex :: ffj(im/2+1)
 
