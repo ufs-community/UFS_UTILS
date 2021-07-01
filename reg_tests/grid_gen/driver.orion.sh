@@ -58,32 +58,39 @@ TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_
       -o $LOG_FILE -e $LOG_FILE ./c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
+# C96 uniform grid using viirs vegetation type data.
+#-----------------------------------------------------------------------------
+
+TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.viirs.vegt \
+      --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c96.viirs.vegt.sh)
+
+#-----------------------------------------------------------------------------
 # GFDL regional grid
 #-----------------------------------------------------------------------------
 
-TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J gfdl.regional \
-      --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./gfdl.regional.sh)
+TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J gfdl.regional \
+      --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
 # ESG regional grid
 #-----------------------------------------------------------------------------
 
-TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional \
-      --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./esg.regional.sh)
+TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional \
+      --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./esg.regional.sh)
 
 #-----------------------------------------------------------------------------
 # Regional grid with GSL gravity wave drag fields.
 #-----------------------------------------------------------------------------
 
-TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
-      --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./regional.gsl.gwd.sh)
+TEST5=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
+      --open-mode=append -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST4 ./regional.gsl.gwd.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST4 << EOF
+       --open-mode=append -q $QUEUE -d afterok:$TEST5 << EOF
 #!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF

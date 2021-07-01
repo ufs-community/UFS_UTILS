@@ -63,32 +63,39 @@ TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_
       -o $LOG_FILE -e $LOG_FILE ./c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
+# C96 uniform grid using viirs vegetation data.
+#-----------------------------------------------------------------------------
+
+TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.viirs.vegt \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./c96.viirs.vegt.sh)
+
+#-----------------------------------------------------------------------------
 # gfdl regional grid
 #-----------------------------------------------------------------------------
 
-TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J gfdl.regional \
-      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST1 ./gfdl.regional.sh)
+TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J gfdl.regional \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
 # esg regional grid
 #-----------------------------------------------------------------------------
 
-TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional \
-      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST2 ./esg.regional.sh)
+TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./esg.regional.sh)
 
 #-----------------------------------------------------------------------------
 # Regional GSL gravity wave drag test.
 #-----------------------------------------------------------------------------
 
-TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
-      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST3 ./regional.gsl.gwd.sh)
+TEST5=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
+      -o $LOG_FILE -e $LOG_FILE -d afterok:$TEST4 ./regional.gsl.gwd.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST4 << EOF
+       --open-mode=append -q $QUEUE -d afterok:$TEST5 << EOF
 #!/bin/bash
 grep -a '<<<' $LOG_FILE  > $SUM_FILE
 EOF

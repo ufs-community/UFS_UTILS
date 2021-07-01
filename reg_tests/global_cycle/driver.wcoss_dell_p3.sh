@@ -2,33 +2,21 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run global_cycle regression test on WCOSS-Dell.
+# Run global_cycle consistency tests on WCOSS-Dell.
 #
-# Set $DATA to your working directory.  Set the project code (BSUB -P)
-# and queue (BSUB -q) as appropriate.
+# Set $WORK_DIR to your working directory.  Set the project code 
+# and queue as appropriate.
 #
-# Invoke the script as follows:  cat $script | bsub
+# Invoke the script from the command line as follows: ./$script
 #
-# Log output is placed in regression.log.  A summary is
-# placed in summary.log
+# Log output is placed in consistency.log??.  A summary is
+# placed in summary.log.
 #
-# The test fails when its output does not match the baseline files
+# A test fails when its output does not match the baseline files
 # as determined by the 'nccmp' utility.  This baseline files are
 # stored in HOMEreg.
 #
 #-----------------------------------------------------------------------------
-
-#BSUB -W 00:05
-#BSUB -n 6
-#BSUB -R span[ptile=6]
-#BSUB -x
-#BSUB -o regression.log
-#BSUB -e regression.log
-#BSUB -R "affinity[core(1)]"
-#BSUB -M 2400
-#BSUB -J glc_regt
-#BSUB -q debug
-#BSUB -P GFS-DEV
 
 set -x
 
@@ -37,12 +25,16 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export DATA="${WORK_DIR:-/gpfs/dell1/stmp/$LOGNAME}"
-export DATA="${DATA}/reg-tests/global-cycle"
+WORK_DIR="${WORK_DIR:-/gpfs/dell1/stmp/$LOGNAME}"
+
+PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
+QUEUE="${QUEUE:-debug}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
+
+DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
 export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/global_cycle
 
@@ -52,12 +44,22 @@ export APRUNCY="mpirun -l"
 
 export NWPROD=$PWD/../..
 
-export COMOUT=$DATA
-
 reg_dir=$PWD
 
-./C768.fv3gfs.sh
+LOG_FILE=consistency.log01
+export DATA="${DATA_DIR}/test1"
+export COMOUT=$DATA
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.fv3gfs -W 0:05 -x -n 6 \
+        -M 2400 -R "span[ptile=6]" -R "affinity[core(1)]" "$PWD/C768.fv3gfs.sh"
 
-cp $DATA/summary.log  $reg_dir
+LOG_FILE=consistency.log02
+export DATA="${DATA_DIR}/test2"
+export COMOUT=$DATA
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.lndinc -W 0:05 -x -n 6 \
+        -M 2400 -R "span[ptile=6]" -R "affinity[core(1)]" "$PWD/C768.lndinc.sh"
+
+LOG_FILE=consistency.log
+bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "affinity[core(1)]" -R "rusage[mem=100]" -W 0:01 \
+     -w 'ended(c768.*)' "grep -a '<<<' "${LOG_FILE}*" >> summary.log"
 
 exit
