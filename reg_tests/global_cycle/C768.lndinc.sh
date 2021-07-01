@@ -28,14 +28,19 @@ export FNSNOA=$COMIN/gdas.t00z.snogrb_t1534.3072.1536
 export FNACNA=$COMIN/gdas.t00z.seaice.5min.blend.grb
 export NST_FILE=$COMIN/gdas.t00z.dtfanl.nc
 
+export LND_SOI_FILE=$COMIN/sfcincr_gsi
+
 export JCAP=1534
 export LONB=3072
 export LATB=1536
 
 export FIXgsm=$BASE_GSM/fix/fix_am
 
-export DONST="YES"
+export DONST="NO"
 export use_ufo=.true.
+
+export DO_SFCCYCLE=".FALSE." 
+export DO_LNDINC=".TRUE." 
 
 export VERBOSE=YES
 export CYCLVARS=FSNOL=-2.,FSNOS=99999.,
@@ -45,7 +50,7 @@ $BASE_GSM/ush/global_cycle_driver.sh
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< C768 GLOBAL CYCLE TEST FAILED. >>>"
+  echo "<<< C768 LANDINC CYCLE TEST FAILED. >>>"
   exit $iret
 fi
 
@@ -56,7 +61,7 @@ for files in *tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c768.fv3gfs/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c768.lndinc/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -68,12 +73,12 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo
   echo "*********************************"
-  echo "<<< C768 GLOBAL CYCLE TEST FAILED. >>>"
+  echo "<<< C768 LANDINC CYCLE TEST FAILED. >>>"
   echo "*********************************"
 else
   echo
   echo "*********************************"
-  echo "<<< C768 GLOBAL CYCLE TEST PASSED. >>>"
+  echo "<<< C768 LANDINC CYCLE TEST PASSED. >>>"
   echo "*********************************"
 fi
 

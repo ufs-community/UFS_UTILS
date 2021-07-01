@@ -59,4 +59,9 @@ https://github.com/NOAA-EMC/UFS_UTILS.
   top and the number of vertical levels. Outputs the 'ak' and 'bk'
   parameters used by the forecast model to define the hybrid levels.
 
+- <a href="lsm_routines/index.html">lsm_routines</a> - Land surface 
+  model-specific routines that are utilised elsewhere within UFS_UTILS.
+  Currently, contains the routines required by global_cycle to 
+  perform data assimilation updates to land model states
+
 
