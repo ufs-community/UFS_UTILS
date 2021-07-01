@@ -45,12 +45,14 @@ export FNACNA=${FNACNA:-$DMPDIR/$CDATE/$CDUMP/${CDUMP}.t${cyc}z.seaice.5min.blen
 export CYCLVARS=${CYCLVARS:-"FSNOL=-2.,FSNOS=99999.,"}
 
 if [ $DONST = "YES" ]; then
-    export GSI_FILE=${GSI_FILE:-$COMOUT/dtfanl.nc}
-    export ADJT_NST_ONLY=${ADJT_NST_ONLY:-".false."}
+    export NST_FILE=${NST_FILE:-$COMOUT/dtfanl.nc}
 else
-    export GSI_FILE="NULL"
-    export ADJT_NST_ONLY=".false."
+    export NST_FILE="NULL"
 fi
+
+export DO_SFCCYLE=${DO_SFCCYCLE:-".true."}
+export DO_LNDINC=${DO_LNDINC:-".false."}
+export LND_SOI_FILE=${LND_SOI_FILE:-"NULL"}
 
 CRES=$(echo $CASE | cut -c 2-)
 JCAP_CASE=$((2*CRES-2))
