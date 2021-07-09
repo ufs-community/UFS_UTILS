@@ -61,11 +61,18 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.uniform -W 0:15
         -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/c96.uniform.sh"
 
 #-----------------------------------------------------------------------------
+# C96 uniform grid using viirs vegetation type data.
+#-----------------------------------------------------------------------------
+
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.viirs.vegt -W 0:15 -M 2400 \
+        -w 'ended(c96.uniform)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/c96.viirs.vegt.sh"
+
+#-----------------------------------------------------------------------------
 # gfdl regional grid
 #-----------------------------------------------------------------------------
 
 bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J gfdl.regional -W 0:10 -M 2400 \
-        -w 'ended(c96.uniform)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/gfdl.regional.sh"
+        -w 'ended(c96.viirs.vegt)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/gfdl.regional.sh"
 
 #-----------------------------------------------------------------------------
 # ESG regional grid

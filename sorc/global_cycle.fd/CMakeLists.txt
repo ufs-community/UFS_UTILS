@@ -7,7 +7,9 @@ set(lib_src
     machine.f90
     num_parthds.f90
     sfcsub.F
-    read_write_data.f90)
+    read_write_data.f90
+    utils.F90
+    land_increments.f90)
 
 set(exe_src cycle.f90)
 
@@ -25,6 +27,8 @@ set(exe_name global_cycle)
 add_library(global_cycle_lib STATIC ${lib_src})
 add_executable(${exe_name} ${exe_src})
 
+add_dependencies(${exe_name} noah_lsm_routines)
+
 set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
 set_target_properties(global_cycle_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
 target_include_directories(global_cycle_lib INTERFACE ${mod_dir})
@@ -37,7 +41,8 @@ target_link_libraries(
   ip::ip_d
   sp::sp_d
   MPI::MPI_Fortran
-  NetCDF::NetCDF_Fortran)
+  NetCDF::NetCDF_Fortran
+  noah_lsm_routines)
 
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(global_cycle_lib PUBLIC OpenMP::OpenMP_Fortran)

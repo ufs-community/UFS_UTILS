@@ -26,7 +26,7 @@ export COMIN=$HOMEreg/input_data
 export FNTSFA=$COMIN/gdas.t00z.rtgssthr.grb
 export FNSNOA=$COMIN/gdas.t00z.snogrb_t1534.3072.1536
 export FNACNA=$COMIN/gdas.t00z.seaice.5min.blend.grb
-export GSI_FILE=$COMIN/gdas.t00z.dtfanl.nc
+export NST_FILE=$COMIN/gdas.t00z.dtfanl.nc
 
 export JCAP=1534
 export LONB=3072
@@ -40,14 +40,12 @@ export use_ufo=.true.
 export VERBOSE=YES
 export CYCLVARS=FSNOL=-2.,FSNOS=99999.,
 
-
 $BASE_GSM/ush/global_cycle_driver.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< GLOBAL CYCLE TEST FAILED. <<<"
-  echo "<<< GLOBAL CYCLE TEST FAILED. <<<"  > ./summary.log
+  echo "<<< C768 GLOBAL CYCLE TEST FAILED. >>>"
   exit $iret
 fi
 
@@ -58,7 +56,7 @@ for files in *tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c768.fv3gfs/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -70,15 +68,13 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo
   echo "*********************************"
-  echo "<<< GLOBAL CYCLE TEST FAILED. >>>"
+  echo "<<< C768 GLOBAL CYCLE TEST FAILED. >>>"
   echo "*********************************"
-  echo "<<< GLOBAL CYCLE TEST FAILED. >>>" > ./summary.log
 else
   echo
   echo "*********************************"
-  echo "<<< GLOBAL CYCLE TEST PASSED. >>>"
+  echo "<<< C768 GLOBAL CYCLE TEST PASSED. >>>"
   echo "*********************************"
-  echo "<<< GLOBAL CYCLE TEST PASSED. >>>" > ./summary.log
 fi
 
 exit

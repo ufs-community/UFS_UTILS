@@ -26,8 +26,8 @@ add_library(sfc_climo_gen_lib STATIC ${lib_src})
 add_executable(${exe_name} ${exe_src})
 
 set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
-set_target_properties(orog_gsl_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
-target_include_directories(orog_gsl_lib INTERFACE ${mod_dir})
+set_target_properties(sfc_climo_gen_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
+target_include_directories(sfc_climo_gen_lib INTERFACE ${mod_dir})
 
 target_link_libraries(
   sfc_climo_gen_lib
