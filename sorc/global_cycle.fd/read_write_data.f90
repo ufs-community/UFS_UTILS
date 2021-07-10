@@ -42,8 +42,17 @@ MODULE READ_WRITE_DATA
  INTEGER, ALLOCATABLE, PUBLIC :: SLMSK_GAUS(:,:) !< GSI land mask on the
                                                  !! gaussian grid.
 
+ INTEGER, ALLOCATABLE, PUBLIC :: SOILSNOW_GAUS(:,:) !< GSI soil / snow mask for land on the
+                                                    !! gaussian grid. 
+                                                    !! 1 - soil, 2 - snow, 0 - not land
+
  REAL, ALLOCATABLE, PUBLIC    :: DTREF_GAUS(:,:) !< GSI foundation temperature
                                                  !! increment on the gaussian grid.
+
+ REAL, ALLOCATABLE, PUBLIC    :: STC_INC_GAUS(:,:,:) !< GSI soil temperature increments 
+                                                     !! on the gaussian grid. 
+                                                      
+
 
  PUBLIC :: READ_DATA
  PUBLIC :: READ_GSI_DATA
@@ -1063,20 +1072,25 @@ MODULE READ_WRITE_DATA
  RETURN
  END SUBROUTINE NETCDF_ERR
 
- !> Read file from the GSI containing the foundation temperature
- !! increments and mask.
+ !> Read increment file from the GSI containing either the foundation 
+ !! temperature increments and mask, or the soil increments. 
  !!
  !! The data is in NetCDF and on a gaussian grid. The grid contains two
  !! extra rows for each pole. The interpolation from gaussian to
  !! native grid assumes no pole points, so these are removed.
  !!
  !! @param[in] GSI_FILE Path/name of the GSI file to be read.
+ !! @param[in] FILE_TYPE file-type to be read in, 'NST' or 'LND'.
+ !! @param[in] LSOIL Number of model soil levels.
+ !! 
  !! @author George Gayno NOAA/EMC
- SUBROUTINE READ_GSI_DATA(GSI_FILE)
+ SUBROUTINE READ_GSI_DATA(GSI_FILE, FILE_TYPE, LSOIL) 
 
  IMPLICIT NONE
 
  CHARACTER(LEN=*), INTENT(IN)     :: GSI_FILE
+ CHARACTER(LEN=3), INTENT(IN)     :: FILE_TYPE 
+ INTEGER, INTENT(IN), OPTIONAL    :: LSOIL
 
  INTEGER                          :: ERROR, ID_DIM, NCID
  INTEGER                          :: ID_VAR, J
@@ -1085,6 +1099,11 @@ MODULE READ_WRITE_DATA
 
  REAL(KIND=8), ALLOCATABLE        :: DUMMY(:,:)
 
+ CHARACTER(LEN=1)                 :: K_CH
+ CHARACTER(LEN=10)                :: INCVAR
+ CHARACTER(LEN=80)                :: err_msg
+ INTEGER                          :: K, I 
+
  PRINT*
  PRINT*, "READ INPUT GSI DATA FROM: "//TRIM(GSI_FILE)
 
@@ -1092,41 +1111,84 @@ MODULE READ_WRITE_DATA
  CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(GSI_FILE) )
 
  ERROR=NF90_INQ_DIMID(NCID, 'latitude', ID_DIM)
- CALL NETCDF_ERR(ERROR, 'READING latitude' )
+ CALL NETCDF_ERR(ERROR, 'READING latitude ID' )
  ERROR=NF90_INQUIRE_DIMENSION(NCID,ID_DIM,LEN=JDIM_GAUS)
- CALL NETCDF_ERR(ERROR, 'READING latitude' )
+ CALL NETCDF_ERR(ERROR, 'READING latitude length' )
  JDIM_GAUS = JDIM_GAUS - 2  ! WILL IGNORE POLE POINTS
  
  ERROR=NF90_INQ_DIMID(NCID, 'longitude', ID_DIM)
- CALL NETCDF_ERR(ERROR, 'READING longitude' )
+ CALL NETCDF_ERR(ERROR, 'READING longitude ID' )
  ERROR=NF90_INQUIRE_DIMENSION(NCID,ID_DIM,LEN=IDIM_GAUS)
- CALL NETCDF_ERR(ERROR, 'READING longitude' )
+ CALL NETCDF_ERR(ERROR, 'READING longitude length' )
 
- ALLOCATE(DUMMY(IDIM_GAUS,JDIM_GAUS+2))
- ALLOCATE(DTREF_GAUS(IDIM_GAUS,JDIM_GAUS))
+ IF (FILE_TYPE=='NST') then
+     ALLOCATE(DUMMY(IDIM_GAUS,JDIM_GAUS+2))
+     ALLOCATE(DTREF_GAUS(IDIM_GAUS,JDIM_GAUS))
 
- ERROR=NF90_INQ_VARID(NCID, "dtf", ID_VAR)
- CALL NETCDF_ERR(ERROR, 'READING dtf ID' )
- ERROR=NF90_GET_VAR(NCID, ID_VAR, DUMMY)
- CALL NETCDF_ERR(ERROR, 'READING dtf' )
+     ERROR=NF90_INQ_VARID(NCID, "dtf", ID_VAR)
+     CALL NETCDF_ERR(ERROR, 'READING dtf ID' )
+     ERROR=NF90_GET_VAR(NCID, ID_VAR, DUMMY)
+     CALL NETCDF_ERR(ERROR, 'READING dtf' )
 
- ALLOCATE(IDUMMY(IDIM_GAUS,JDIM_GAUS+2))
- ALLOCATE(SLMSK_GAUS(IDIM_GAUS,JDIM_GAUS))
+     ALLOCATE(IDUMMY(IDIM_GAUS,JDIM_GAUS+2))
+     ALLOCATE(SLMSK_GAUS(IDIM_GAUS,JDIM_GAUS))
 
- ERROR=NF90_INQ_VARID(NCID, "msk", ID_VAR)
- CALL NETCDF_ERR(ERROR, 'READING msk ID' )
- ERROR=NF90_GET_VAR(NCID, ID_VAR, IDUMMY)
- CALL NETCDF_ERR(ERROR, 'READING msk' )
+     ERROR=NF90_INQ_VARID(NCID, "msk", ID_VAR)
+     CALL NETCDF_ERR(ERROR, 'READING msk ID' )
+     ERROR=NF90_GET_VAR(NCID, ID_VAR, IDUMMY)
+     CALL NETCDF_ERR(ERROR, 'READING msk' )
 
-! REMOVE POLE POINTS.
+    ! REMOVE POLE POINTS.
 
- DO J = 1, JDIM_GAUS
-   SLMSK_GAUS(:,J) = IDUMMY(:,J+1)
-   DTREF_GAUS(:,J) = DUMMY(:,J+1)
- ENDDO
+     DO J = 1, JDIM_GAUS
+       SLMSK_GAUS(:,J) = IDUMMY(:,J+1)
+       DTREF_GAUS(:,J) = DUMMY(:,J+1)
+     ENDDO
 
- DEALLOCATE(DUMMY)
- DEALLOCATE(IDUMMY)
+ ELSEIF (FILE_TYPE=='LND') then 
+
+     ALLOCATE(DUMMY(IDIM_GAUS,JDIM_GAUS+2))
+     ALLOCATE(STC_INC_GAUS(LSOIL,IDIM_GAUS,JDIM_GAUS))
+
+     ! read in soil temperature increments in each layer
+     DO K = 1, LSOIL
+         WRITE(K_CH, '(I1)') K
+
+         INCVAR = "soilt"//K_CH//"_inc"
+         ERROR=NF90_INQ_VARID(NCID, INCVAR, ID_VAR)
+         err_msg = "reading "//INCVAR//" ID" 
+         CALL NETCDF_ERR(ERROR, trim(err_msg))
+         ERROR=NF90_GET_VAR(NCID, ID_VAR, DUMMY)
+         err_msg = "reading "//INCVAR//" data"
+         CALL NETCDF_ERR(ERROR, err_msg) 
+
+         DO J = 1, JDIM_GAUS
+           STC_INC_GAUS(K,:,J) = DUMMY(:,J+1)
+         ENDDO
+     ENDDO
+
+     ALLOCATE(IDUMMY(IDIM_GAUS,JDIM_GAUS+2))
+     ALLOCATE(SOILSNOW_GAUS(IDIM_GAUS,JDIM_GAUS))
+
+     ERROR=NF90_INQ_VARID(NCID, "soilsnow_mask", ID_VAR)
+     CALL NETCDF_ERR(ERROR, 'READING soilsnow_mask ID' )
+     ERROR=NF90_GET_VAR(NCID, ID_VAR, IDUMMY)
+     CALL NETCDF_ERR(ERROR, 'READING soilsnow_mask' )
+
+    ! REMOVE POLE POINTS.
+
+     DO J = 1, JDIM_GAUS
+       SOILSNOW_GAUS(:,J) = IDUMMY(:,J+1)
+     ENDDO
+
+
+ ELSE 
+    print *, 'WARNING: FILE_TYPE', FILE_TYPE, 'not recognised.', &      
+                ', no increments read in'  
+ ENDIF
+
+ IF(ALLOCATED(DUMMY)) DEALLOCATE(DUMMY)
+ IF(ALLOCATED(IDUMMY)) DEALLOCATE(IDUMMY)
 
  ERROR = NF90_CLOSE(NCID)
 

@@ -20,16 +20,16 @@ hh_d=$(echo $date10 | cut -c9-10)
 
 YMDH=${yy}${mm}${dd}.${hh}0000
 
-WORKDIR=$OUTDIR/work.$MEMBER
+WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
-if [ ${MEMBER} == 'hires' ]; then
-  CINP=C768
+if [ ${MEMBER} == 'gdas' ]; then
+  CINP=${CINP:-"C768"}
   CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
   OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos
 else  
-  CINP=C384
+  CINP=${CINP:-"C384"}
   CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/mem${MEMBER}/RESTART"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
@@ -85,7 +85,7 @@ do
   mv out.sfc.${tile}.nc  ${OUTDIR}/INPUT/sfc_data.${tile}.nc 
 done
 
-if [ ${MEMBER} == 'hires' ]; then
+if [ ${MEMBER} == 'gdas' ]; then
   cp ${RADSTAT_DATA_DIR}/* $OUTDIR
   touch $OUTDIR/gdas.t${hh}z.loginc.txt
 else

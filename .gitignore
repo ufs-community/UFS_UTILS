@@ -1,6 +1,7 @@
 build/
 install/
 exec/
+lib/
 
 *.[ao]
 *.mod
@@ -10,6 +11,3 @@ exec/
 
 *.swp
 *.o
-emcsfc_ice_blend
-ml01rg2.x
-

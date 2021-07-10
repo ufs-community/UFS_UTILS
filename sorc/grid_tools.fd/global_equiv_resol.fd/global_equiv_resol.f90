@@ -21,7 +21,7 @@ program global_equiv_resol
 
   integer, parameter :: dp = kind(1.0d0)
   real(dp), parameter :: pi_geom = 4.0*atan(1.0), &
-                         radius_Earth = 6371000.0
+                         radius_Earth = 6371200.0
 
   character(len=256) :: grid_fn
   integer :: ncid, nxSG_dimid, nySG_dimid, dASG_varid, num_args
@@ -144,7 +144,7 @@ program global_equiv_resol
   WRITE(*,530) "  min_cell_size = ", min_cell_size
   WRITE(*,530) "  max_cell_size = ", max_cell_size
   WRITE(*,530) "  avg_cell_size = ", avg_cell_size
-530 FORMAT(A, G10.4)
+530 FORMAT(A, G11.4)
 !
 !=======================================================================
 !

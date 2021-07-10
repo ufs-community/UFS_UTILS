@@ -58,10 +58,17 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.uniform -W 0:15
         -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/c96.uniform.sh"
 
 #-----------------------------------------------------------------------------
+# C96 uniform grid using viirs vegetation type data.
+#-----------------------------------------------------------------------------
+
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.viirs.vegt -W 0:15 -x -n 24 -w 'ended(c96.uniform)' \
+        -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/c96.viirs.vegt.sh"
+
+#-----------------------------------------------------------------------------
 # GFDL regional grid
 #-----------------------------------------------------------------------------
 
-bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J gfdl.regional -W 0:10 -x -n 24 -w 'ended(c96.uniform)' \
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J gfdl.regional -W 0:10 -x -n 24 -w 'ended(c96.viirs.vegt)' \
         -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/gfdl.regional.sh"
 
 #-----------------------------------------------------------------------------

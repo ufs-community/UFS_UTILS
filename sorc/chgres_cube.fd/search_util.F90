@@ -117,6 +117,8 @@
      default_value = 1.0
    case (230) ! soil type on the input grid
      default_value = 11.0
+   case (231) ! soil type at land ice points
+     default_value = 16.0
    case default
      print*,'- FATAL ERROR.  UNIDENTIFIED FIELD NUMBER : ', field_num
      call mpi_abort(mpi_comm_world, 77, ierr)

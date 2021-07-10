@@ -2,44 +2,37 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run global_cycle regression test on WCOSS-Cray.
+# Run global_cycle consistency tests on WCOSS-Cray.
 #
-# Set $DATA to your working directory.  Set the project code (BSUB -P)
-# and queue (BSUB -q) as appropriate.
+# Set $WORK_DIR to your working directory. Set the project code nd
+# and queue as appropriate.
 #
-# Invoke the script as follows:  cat $script | bsub
+# Invoke the script as follows:  ./$script
 #
-# Log output is placed in regression.log.  A summary is
+# Log output is placed in consistency.log??.  A summary is
 # placed in summary.log
 #
-# The test fails when its output does not match the baseline files
+# A test fails when its output does not match the baseline files
 # as determined by the 'nccmp' utility.  This baseline files are
 # stored in HOMEreg.
 #
 #-----------------------------------------------------------------------------
-
-#BSUB -oo regression.log
-#BSUB -eo regression.log
-#BSUB -q debug
-#BSUB -P GDAS-T2O
-#BSUB -J cycle_regt
-#BSUB -M 2400
-#BSUB -W 00:05
-#BSUB -extsched 'CRAYLINUX[]'
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export DATA="${WORK_DIR:-/gpfs/hps3/stmp/$LOGNAME}"
-export DATA="${DATA}/reg-tests/global-cycle"
+WORK_DIR="${WORK_DIR:-/gpfs/hps3/stmp/$LOGNAME}"
+
+PROJECT_CODE="${PROJECT_CODE:-GDAS-T2O}"
+QUEUE="${QUEUE:-debug}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
-export NODES=1
+DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
 export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/global_cycle
 
@@ -57,8 +50,20 @@ export NCCMP=/gpfs/hps3/emc/global/noscrub/George.Gayno/util/netcdf/nccmp
 
 reg_dir=$PWD
 
-./C768.fv3gfs.sh
+LOG_FILE=consistency.log01
+export DATA="${DATA_DIR}/test1"
+export COMOUT=$DATA
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.fv3gfs -M 2400 -W 0:05 \
+        -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/C768.fv3gfs.sh"
 
-cp $DATA/summary.log  $reg_dir
+LOG_FILE=consistency.log02
+export DATA="${DATA_DIR}/test2"
+export COMOUT=$DATA
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.lndinc -M 2400 -W 0:05 \
+        -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/C768.lndinc.sh"
+
+LOG_FILE=consistency.log
+bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 \
+     -w 'ended(c768.*)' "grep -a '<<<' "${LOG_FILE}*" >> summary.log"
 
 exit

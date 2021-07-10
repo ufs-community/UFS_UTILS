@@ -79,6 +79,7 @@ module source_grid
  real(esmf_kind_r8), pointer      :: lat_corner_ptr(:,:)
  real(esmf_kind_r8), pointer      :: lon_corner_ptr(:,:)
  real                             :: lon_extent
+ real(esmf_kind_r4)               :: missing
 
  type(esmf_field)                 :: mask_field
  type(esmf_polekind_flag)         :: polekindflag(2)
@@ -193,6 +194,16 @@ module source_grid
    allocate(mask_global(0,0))
  endif
 
+!--------------------------------------------------------------------------
+! Read in missing value.  This is used to mask out data at non-land
+! points.
+!--------------------------------------------------------------------------
+
+ status = nf90_inq_varid(ncid, field_names(1), varid)
+ call netcdf_err(status, "READING FIELD 1 ID")
+ status=nf90_get_att(ncid, varid, 'missing_value', missing)
+ call netcdf_err(status, "READING MISSING VALUE")
+
  status = nf90_close(ncid)
 
 !--------------------------------------------------------------------------
@@ -282,7 +293,7 @@ module source_grid
 
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     if (mask_field_ptr(i,j) < -1.0) then
+     if ( abs(mask_field_ptr(i,j)-missing) < 0.001) then
        mask_ptr(i,j) = 0
      else
        mask_ptr(i,j) = 1
