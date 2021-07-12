@@ -842,7 +842,7 @@ C
 !         call netcdf_err(error, 'inquire data of dy from file '
 !     &                   //trim(OUTGRID) )
 !         dy(1:IM+1,1:JM) = tmpvar(1:nx+1:2,2:ny:2)
-!         deallocate(tmpvar)         
+         deallocate(tmpvar)         
       endif
       tend=timef()
       write(6,*)' Timer 1 time= ',tend-tbeg
@@ -1042,7 +1042,11 @@ C
      3            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
        endif
 
+!      Deallocate 1d vars
+       deallocate(IST,IEN)
+
 !      Deallocate 2d vars
+       deallocate(IST,IEN)
        deallocate (ZSLM,ZAVG)
        deallocate (dx,dy)
        deallocate (WORK2,WORK3,WORK4,WORK5,WORK6)
@@ -1578,6 +1582,7 @@ C
       deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,ORS,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
+      deallocate (OCLSM)
       deallocate (GEOLON,GEOLON_C,GEOLAT,GEOLAT_C)
       deallocate (SLM,ORO,VAR,ORF,land_frac)
       deallocate (THETA,GAMMA,SIGMA,ELVMAX)
