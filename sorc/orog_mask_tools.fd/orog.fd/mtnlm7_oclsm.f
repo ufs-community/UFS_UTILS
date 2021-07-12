@@ -79,8 +79,6 @@ C> @return 0 for success, error code otherwise.
       integer fsize, ncid, error, id_dim, nx, ny
       character(len=256) :: OUTGRID = "none"
       character(len=256) :: INPUTOROG = "none"
-      logical            :: do_oa = .true. ! create oa and ol data.
-      logical            :: grid_from_file = .true.
       integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT,NW
       fsize=65536
       READ(5,*) MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
@@ -215,8 +213,8 @@ C
       integer, allocatable :: IWORK(:,:,:)
 
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
-      real :: dlat,PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
-      real :: sumdif,avedif,alon,alat
+      real :: PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
+      real :: sumdif,avedif
 
       real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
       real, allocatable :: XLON(:),ORS(:),oaa(:),ola(:),GLAT(:)
@@ -239,7 +237,7 @@ C
 
       complex :: ffj(im/2+1)
 
-      logical :: LATLONGRID,grid_from_file,output_binary,fexist,opened
+      logical :: grid_from_file,output_binary,fexist,opened
       logical :: SPECTR, REVLAT, FILTER
 
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
@@ -578,20 +576,6 @@ C
                 ZSLM(i,j) = 1
            endif
          endif
-!jaa           ALON = float(i-1) * 360./float(IMN)
-!jaa           ALAT = glat(j)
-!           if(  ZAVG(i,j) .ne. zsave1 .and. i .lt. 3 )
-!    & print *,' antarctica change to ZAVG(i=',i,'j=',j,')=',
-!    &    ZAVG(i,j),ZSLM(i,j),' from originally:',zsave1,zsave2
-!     &write(6,151)i,j,ZAVG(i,j),ZSLM(i,j),zsave1,zsave2,ALAT,ALON
-!  151 format(1x,'antarctica ZAVG(i=',i3,' j=',i3,')=',i5,i3,
-!     &' orig:',i5,i3,' Lat=',f8.3,f9.3,'E')
-!jaa            if(  ZAVG(i,j) .ne. zsave1 ) then 
-!jaa          if ( i .le. 1201 .and. i .gt. 1200 )then
-!jaa      write(6,152)i,j,ZAVG(i,j),ZSLM(i,j),zsave1,zsave2,ALAT,ALON,
-!jaa     &      GICE(i,j)
-!jaa          endif
-!jaa            endif
   152 format(1x,' ZAVG(i=',i4,' j=',i4,')=',i5,i3,
      &' orig:',i5,i4,' Lat=',f7.3,f8.2,'E',' GICE=',f8.1)
          enddo
