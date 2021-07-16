@@ -1042,9 +1042,6 @@ C
      3            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
        endif
 
-!      Deallocate 1d vars
-       deallocate(IST,IEN)
-
 !      Deallocate 2d vars
        deallocate(IST,IEN)
        deallocate (ZSLM,ZAVG)
