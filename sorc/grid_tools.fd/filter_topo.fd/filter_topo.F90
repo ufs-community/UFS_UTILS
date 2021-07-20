@@ -43,10 +43,10 @@ program filter_topo
   logical :: nested = .false. &
             ,regional = .false.
   integer :: grid_type = 0 ! gnomonic_ed
-  character(len=128) :: topo_file = "orog"
+  character(len=512) :: topo_file = "orog"
   character(len=128) :: topo_field = "orog_filt"
   character(len=128) :: mask_field = "slmsk"
-  character(len=128) :: grid_file = "atmos_mosaic.nc"
+  character(len=512) :: grid_file = "atmos_mosaic.nc"
   namelist /filter_topo_nml/ topo_file, topo_field, mask_field, grid_file, zero_ocean, &
        zs_filter, stretch_fac, res, nested, grid_type, regional
 
@@ -635,7 +635,7 @@ contains
     real    :: g1(2), g2(2), g3(2), g4(2), g5(2)
     real    :: p1(3), p3(3)
     real    :: p_lL(2), p_uL(2), p_lR(2), p_uR(2)
-    character(len=256) :: tile_file
+    character(len=512) :: tile_file
     real, allocatable, dimension(:,:)   :: tmpvar, geolon_c_nest, geolat_c_nest
     real, allocatable, dimension(:,:,:) :: geolon_c, geolat_c
     real, allocatable, dimension(:,:,:) :: geolon_t, geolat_t, cos_sg, grid3
@@ -1947,7 +1947,7 @@ contains
        errmsg = nf_strerror(status)
        errmsg = trim(errmsg)//trim(string)
        print *, trim(errmsg)
-       stop 'Stopped'
+       error stop 'Stopped'
     endif
 
   end subroutine  handle_err
