@@ -58,7 +58,7 @@ if(OPENMP)
   find_package(OpenMP REQUIRED COMPONENTS Fortran)
 endif()
 
-set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
+#set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
 
 if(NOT TARGET gfsio_4)
   find_package(gfsio REQUIRED)

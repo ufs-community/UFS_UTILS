@@ -29,7 +29,12 @@ elif [[ -d /glade ]] ; then
 	module load module_base.cheyenne 
 elif [[ -d /lustre && -d /ncrc ]] ; then
     # We are on GAEA.
-	module load module_base.gaea 
+	module load module_base.gaea
+##---------------------------------------------------------------------------
+elif [[ -d /apps/prod ]]; then
+
+    # We are on WCOSS2/Acorn
+	module load module_base.acorn
 else
     echo WARNING: UNKNOWN PLATFORM 
 fi
