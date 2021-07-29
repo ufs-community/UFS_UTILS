@@ -6727,6 +6727,7 @@ SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
 ! Extra code was added to handle the more general case. 
 ! Blah-Blah:  Punch line: it is embarrassingly convoluted!!!
 !
+! NCL code for pressure level interpolation
 !                                                ! input types
       INTEGER NPIN,NPOUT,LINLOG,IER
       DOUBLE PRECISION PPIN(NPIN),XXIN(NPIN),PPOUT(NPOUT),XMSG
