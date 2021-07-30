@@ -6728,21 +6728,23 @@ end subroutine check_cnwat
 !> caution. The routine is mostly for GFSV16 combined grib2 input when spfh has
 !> missing levels in low and mid troposphere from U/T/HGT/DZDT. 
 !!
-!! @param ppin     [in] 1d input pres levs
-!! @param xxin     [in] 1d input tracer
-!! @param npin     [in] number of input levs 
-!! @param ppout    [in] 1d target pres levs 
-!! @param xxout    [out] 1d interpolated tracer
-!! @param npout    [in] number of target levs 
-!! @param linlog   [in] interp method.1:linear;not 1:log;neg:extrp allowed
-!! @param xmsg     [in] fill values of missing levels (-999.0)
-!! @param ier      [out] error status. non 0: failed interpolation
-!! @author NCL code for pressure level interpolation
-!! @author adopted by Jili Dong EMC for chgres_cube 
+!! @param [in] ppin  1d input pres levs
+!! @param [in] xxin  1d input tracer
+!! @param [in] npin  number of input levs 
+!! @param [in] ppout 1d target pres levs 
+!! @param [out] xxout 1d interpolated tracer
+!! @param [in] npout number of target levs 
+!! @param [in] linlog interp method.1:linear;not 1:log;neg:extrp allowed
+!! @param [in] xmsg  fill values of missing levels (-999.0)
+!! @param [out] ier  error status. non 0: failed interpolation
+!! @author Jili Dong NCEP/EMC  
+!! @Date 2021/07/30
 
 SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
                       ,LINLOG,XMSG,IER)
       IMPLICIT NONE
+
+! NCL code for pressure level interpolation
 !
 ! This code was designed for one simple task. It has since
 ! been mangled and abused for assorted reasons. For example,
