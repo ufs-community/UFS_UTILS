@@ -6734,7 +6734,7 @@ end subroutine check_cnwat
 !! @param ppout    [in] 1d target pres levs 
 !! @param xxout    [out] 1d interpolated tracer
 !! @param npout    [in] number of target levs 
-!! @param linlog   [in] interpolation method. 1:linear; not 1:log  
+!! @param linlog   [in] interp method.1:linear;not 1:log;neg:extrp allowed
 !! @param xmsg     [in] fill values of missing levels (-999.0)
 !! @param ier      [out] error status. non 0: failed interpolation
 !! @author NCL code for pressure level interpolation
