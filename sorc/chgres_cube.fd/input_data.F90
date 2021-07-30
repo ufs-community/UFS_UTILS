@@ -6738,7 +6738,7 @@ end subroutine check_cnwat
 !! @param [in] xmsg  fill values of missing levels (-999.0)
 !! @param [out] ier  error status. non 0: failed interpolation
 !! @author Jili Dong NCEP/EMC  
-!! @Date 2021/07/30
+!! @date 2021/07/30
 
 SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
                       ,LINLOG,XMSG,IER)
