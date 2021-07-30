@@ -2769,9 +2769,13 @@
          do ii = 1, i_input
              dummy3d_col_in=dummy3d(ii,jj,:)
              call dint2p(rlevs,dummy3d_col_in,lev_input,rlevs,dummy3d_col_out,    &
-                        lev_input, 1, intrp_missing, intrp_ier) 
+                        lev_input, 2, intrp_missing, intrp_ier) 
              if (intrp_ier .gt. 0) then
                print *,'intrp failed'
+               stop
+             endif
+             if (any(dummy3d_col_out .eq. intrp_missing)) then
+               print *,'intrp failed and no extrt performed'
                stop
              endif
 ! zero out negative tracers from interpolation/extrapolation
@@ -6714,6 +6718,28 @@ subroutine check_cnwat(cnwat)
   enddo
 end subroutine check_cnwat
 
+
+
+
+!> Pressure to presure vertical interpolation for tracers with linear or lnP
+!> interpolation. Input tracers on pres levels are interpolated 
+!> to the target output pressure levels. The matching levels of input and 
+!> output will keep the same. Extrapolation is also allowed but needs
+!> caution. The routine is mostly for GFSV16 combined grib2 input when spfh has
+!> missing levels in low and mid troposphere from U/T/HGT/DZDT. 
+!!
+!! @param ppin     [in] 1d input pres levs
+!! @param xxin     [in] 1d input tracer
+!! @param npin     [in] number of input levs 
+!! @param ppout    [in] 1d target pres levs 
+!! @param xxout    [out] 1d interpolated tracer
+!! @param npout    [in] number of target levs 
+!! @param linlog   [in] interpolation method. 1:linear; not 1:log  
+!! @param xmsg     [in] fill values of missing levels (-999.0)
+!! @param ier      [out] error status. non 0: failed interpolation
+!! @author NCL code for pressure level interpolation
+!! @author adopted by Jili Dong EMC for chgres_cube 
+
 SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
                       ,LINLOG,XMSG,IER)
       IMPLICIT NONE
@@ -6727,7 +6753,6 @@ SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
 ! Extra code was added to handle the more general case. 
 ! Blah-Blah:  Punch line: it is embarrassingly convoluted!!!
 !
-! NCL code for pressure level interpolation
 !                                                ! input types
       INTEGER NPIN,NPOUT,LINLOG,IER
       real*8 PPIN(NPIN),XXIN(NPIN),PPOUT(NPOUT),XMSG
