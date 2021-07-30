@@ -104,7 +104,6 @@ elif [[ -d /apps/prod ]]; then
     target=acorn
 
     module purge
-    source /apps/prod/lmodules/startLmod
     module load envvar/1.0
 else
     echo WARNING: UNKNOWN PLATFORM 1>&2

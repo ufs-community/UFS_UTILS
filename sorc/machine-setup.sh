@@ -84,7 +84,6 @@ elif [[ -d /apps/prod ]]; then
     target=acorn
 
     module purge
-    source /apps/prod/lmodules/startLmod
     module load envvar/1.0
 
 elif [[ -d /glade ]] ; then
