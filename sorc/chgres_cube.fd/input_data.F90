@@ -138,6 +138,7 @@
  public :: quicksort
  public :: convert_winds
  public :: init_sfc_esmf_fields
+ public :: dint2p
  
  contains
 
