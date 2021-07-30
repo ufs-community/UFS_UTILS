@@ -6843,13 +6843,13 @@ SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
           DO NP = 1,NPOUT
               DO NL = 1,NLMAX - 1
                   IF (POUT(NP).LT.P(NL) .AND. POUT(NP).GT.P(NL+1)) THEN
-                      PA = DLOG(P(NL))
-                      PB = DLOG(POUT(NP))
+                      PA = LOG(P(NL))
+                      PB = LOG(POUT(NP))
 ! special case: In case someome inadvertently enter p=0.
                       if (p(nl+1).gt.0.d0) then
-                          PC = DLOG(P(NL+1))
+                          PC = LOG(P(NL+1))
                       else
-                          PC = DLOG(1.d-4)
+                          PC = LOG(1.d-4)
                       end if
 
                       SLOPE = (X(NL)-X(NL+1))/ (PA-PC)
@@ -6870,9 +6870,9 @@ SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
                           SLOPE = (X(2)-X(1))/ (P(2)-P(1))
                           XOUT(NP) = X(1) + SLOPE* (POUT(NP)-P(1))
                       ELSE
-                          PA = DLOG(P(2))
-                          PB = DLOG(POUT(NP))
-                          PC = DLOG(P(1))
+                          PA = LOG(P(2))
+                          PB = LOG(POUT(NP))
+                          PC = LOG(P(1))
                           SLOPE = (X(2)-X(1))/ (PA-PC)
                           XOUT(NP) = X(1) + SLOPE* (PB-PC)
                       END IF
@@ -6883,9 +6883,9 @@ SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
                           SLOPE = (X(N1)-X(N2))/ (P(N1)-P(N2))
                           XOUT(NP) = X(N1) + SLOPE* (POUT(NP)-P(N1))
                       ELSE
-                          PA = DLOG(P(N1))
-                          PB = DLOG(POUT(NP))
-                          PC = DLOG(P(N2))
+                          PA = LOG(P(N1))
+                          PB = LOG(POUT(NP))
+                          PC = LOG(P(N2))
                           SLOPE = (X(N1)-X(N2))/ (PA-PC)
                           XOUT(NP) = X(N1) + SLOPE* (PB-PC)
                       END IF
