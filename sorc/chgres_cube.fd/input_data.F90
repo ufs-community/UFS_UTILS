@@ -6730,17 +6730,17 @@ SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
 ! NCL code for pressure level interpolation
 !                                                ! input types
       INTEGER NPIN,NPOUT,LINLOG,IER
-      DOUBLE PRECISION PPIN(NPIN),XXIN(NPIN),PPOUT(NPOUT),XMSG
+      real*8 PPIN(NPIN),XXIN(NPIN),PPOUT(NPOUT),XMSG
                                                 ! output
-      DOUBLE PRECISION XXOUT(NPOUT)
+      real*8 XXOUT(NPOUT)
                                                 ! work
-      DOUBLE PRECISION PIN(NPIN),XIN(NPIN),P(NPIN),X(NPIN)
-      DOUBLE PRECISION POUT(NPOUT),XOUT(NPOUT)
+      real*8 PIN(NPIN),XIN(NPIN),P(NPIN),X(NPIN)
+      real*8 POUT(NPOUT),XOUT(NPOUT)
 
 ! local
       INTEGER J1,NP,NL,NIN,NLMAX,NPLVL,NLSAVE,NP1,NO1,N1,N2,LOGLIN,   &
              NLSTRT
-      DOUBLE PRECISION SLOPE,PA,PB,PC
+      real*8 SLOPE,PA,PB,PC
 
       LOGLIN = ABS(LINLOG)
 
