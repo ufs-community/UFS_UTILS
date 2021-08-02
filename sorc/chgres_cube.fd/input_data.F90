@@ -2771,14 +2771,9 @@
              dummy3d_col_in=dummy3d(ii,jj,:)
              call dint2p(rlevs,dummy3d_col_in,lev_input,rlevs,dummy3d_col_out,    &
                         lev_input, 2, intrp_missing, intrp_ier) 
-             if (intrp_ier .gt. 0) then
-               print *,'intrp failed'
-               stop
-             endif
-             if (any(dummy3d_col_out .eq. intrp_missing)) then
-               print *,'intrp failed and no extrt performed'
-               stop
-             endif
+             if (intrp_ier .gt. 0) call error_handler("intrp faile",intrp_ier)
+             if (any(dummy3d_col_out .eq. intrp_missing)) call   &
+               error_handler("pres out of range and no extrt performed",1) 
 ! zero out negative tracers from interpolation/extrapolation
              where(dummy3d_col_out .lt. 0.0)  dummy3d_col_out = 0.0
              dummy3d(ii,jj,:)=dummy3d_col_out
@@ -6915,7 +6910,8 @@ SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
                           PB = LOG(POUT(NP))
                           PC = LOG(P(N2))
                           SLOPE = (X(N1)-X(N2))/ (PA-PC)
-                          XOUT(NP) = X(N1) + SLOPE* (PB-PC)
+                          !XOUT(NP) = X(N1) + SLOPE* (PB-PC) !bug fixed below
+                          XOUT(NP) = X(N1) + SLOPE* (PB-PA)
                       END IF
                   END IF
               END DO
