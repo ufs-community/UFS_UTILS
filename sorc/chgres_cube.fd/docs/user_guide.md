@@ -361,6 +361,7 @@ file. Options are:
 
  - "skip": Don't write to the output file.
  - "set_to_fill": Set to user-specified field value (see column 4).
+ - "intrp": LnP interpolation to missing levels. No extrapolation allowd.
  - "stop": Force an exception and stop code execution. Use this if you
    absolutely require a field to be present.
 

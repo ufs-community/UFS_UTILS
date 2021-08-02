@@ -382,6 +382,7 @@ Column 2: Name of the variable in the output “coldstart” files. Unimplemente
 Column 3: Behavior when the code can't find the variable in the input file. Options are:
 
       * "skip": Don't write to the output file.
+      * "intrp": LnP interpolation to missing levels. No extrapolation allowd.
       * "set_to_fill": Set to user-specified field value (see column 4).
       * "stop": Force an exception and stop code execution. Use this if you absolutely require a field to be present.
 
