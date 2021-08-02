@@ -5,7 +5,7 @@
  implicit none
 
  integer, parameter :: npin = 5
- integer, parameter :: npout1 = 4,npout2 = 5
+ integer, parameter :: npout1 = 4,npout2 = 6
  real, parameter    :: eps=1E-4
 
  integer :: ier, linlog
@@ -21,7 +21,7 @@
  data xxin /1., -999.0, 2., -999.0, 3. /
 ! output pressure levels and variable
  data ppout1 /850., 700., 600., 400./
- data ppout2 /850., 700., 600., 400., 200/
+ data ppout2 /850., 700., 600., 400., 200., 100./
 
 
  xmsg = -999.0
@@ -50,6 +50,8 @@
  if (xxout2(3) /= 2.25) stop 23
  if (xxout2(4) /= 2.75) stop 24
  if (xxout2(5) /= 3.25) stop 25
+ if (xxout2(6) /= 3.5) stop 26
+
 
 
 ! lnP interpolation; no extrapolation
@@ -76,6 +78,8 @@
  if (abs(xxout2(3)-2.18193) .gt. eps) stop 43
  if (abs(xxout2(4)-2.66047) .gt. eps) stop 44
  if (abs(xxout2(5)-3.47854) .gt. eps) stop 45
+ if (abs(xxout2(6)-4.29661) .gt. eps) stop 46
+
 
 
 
