@@ -10,33 +10,40 @@ bundle=$1
 
 set -x
 
-if [ $bundle = 'hires' ]; then
+if [ "$bundle" = "gdas" ] || [ "$bundle" = "gfs" ] ; then
 
-  mkdir -p $EXTRACT_DIR/gdas.${yy}${mm}${dd}/${hh}
-  cd $EXTRACT_DIR/gdas.${yy}${mm}${dd}/${hh}
+  mkdir -p $EXTRACT_DIR/${bundle}.${yy}${mm}${dd}/${hh}
+  cd $EXTRACT_DIR/${bundle}.${yy}${mm}${dd}/${hh}
 
   directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-  file=gpfs_hps_nco_ops_com_gfs_prod_gdas.${yy}${mm}${dd}${hh}.tar
+  if [ "$bundle" = "gdas" ] ; then
+    file=gpfs_hps_nco_ops_com_gfs_prod_gdas.${yy}${mm}${dd}${hh}.tar
+  else
+    file=gpfs_hps_nco_ops_com_gfs_prod_gfs.${yy}${mm}${dd}${hh}.anl.tar
+  fi
 
-  htar -xvf $directory/$file ./gdas.t${hh}z.radstat
+  if [ "$bundle" = "gdas" ] ; then
+    htar -xvf $directory/$file ./gdas.t${hh}z.radstat
+    rc=$?
+    [ $rc != 0 ] && exit $rc
+    htar -xvf $directory/$file ./gdas.t${hh}z.abias_air
+    rc=$?
+    [ $rc != 0 ] && exit $rc
+    htar -xvf $directory/$file ./gdas.t${hh}z.abias
+    rc=$?
+    [ $rc != 0 ] && exit $rc
+    htar -xvf $directory/$file ./gdas.t${hh}z.abias_pc
+    rc=$?
+    [ $rc != 0 ] && exit $rc
+  fi
+
+  htar -xvf $directory/$file ./${bundle}.t${hh}z.atmanl.nemsio
   rc=$?
   [ $rc != 0 ] && exit $rc
-  htar -xvf $directory/$file ./gdas.t${hh}z.abias_air
+  htar -xvf $directory/$file ./${bundle}.t${hh}z.nstanl.nemsio
   rc=$?
   [ $rc != 0 ] && exit $rc
-  htar -xvf $directory/$file ./gdas.t${hh}z.abias
-  rc=$?
-  [ $rc != 0 ] && exit $rc
-  htar -xvf $directory/$file ./gdas.t${hh}z.abias_pc
-  rc=$?
-  [ $rc != 0 ] && exit $rc
-  htar -xvf $directory/$file ./gdas.t${hh}z.atmanl.nemsio
-  rc=$?
-  [ $rc != 0 ] && exit $rc
-  htar -xvf $directory/$file ./gdas.t${hh}z.nstanl.nemsio
-  rc=$?
-  [ $rc != 0 ] && exit $rc
-  htar -xvf $directory/$file ./gdas.t${hh}z.sfcanl.nemsio
+  htar -xvf $directory/$file ./${bundle}.t${hh}z.sfcanl.nemsio
   rc=$?
   [ $rc != 0 ] && exit $rc
 

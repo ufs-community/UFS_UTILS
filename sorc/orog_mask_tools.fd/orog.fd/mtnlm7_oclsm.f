@@ -79,8 +79,6 @@ C> @return 0 for success, error code otherwise.
       integer fsize, ncid, error, id_dim, nx, ny
       character(len=256) :: OUTGRID = "none"
       character(len=256) :: INPUTOROG = "none"
-      logical            :: do_oa = .true. ! create oa and ol data.
-      logical            :: grid_from_file = .true.
       integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT,NW
       fsize=65536
       READ(5,*) MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
@@ -156,7 +154,6 @@ C> @return 0 for success, error code otherwise.
          
       endif         
          
-      
       CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &            OUTGRID,INPUTOROG)
       STOP
@@ -184,76 +181,85 @@ C> @return 0 for success, error code otherwise.
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &     OUTGRID,INPUTOROG)
-!jaa      use ipfort
       implicit none
       include 'netcdf.inc'
 C
-      integer                      :: IMN,JMN,IM,JM,NW
+      integer                      :: IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW
       character(len=*), intent(in) :: OUTGRID
       character(len=*), intent(in) :: INPUTOROG
-      integer :: NR,NF0,NF1
+
       real, parameter :: MISSING_VALUE=-9999.
       real, PARAMETER :: PI=3.1415926535897931
-      integer :: efac, blat
       integer, PARAMETER :: NMT=14
-      INTEGER ZSLMX(2700,1350)
-      integer NM
-      logical LATLONGRID
-      INTEGER,allocatable::  ZAVG(:,:),ZSLM(:,:)
-      REAL(4),allocatable::  GICE(:,:),OCLSM(:,:)
-      real :: DEGRAD
-      integer*1,allocatable:: UMD(:,:)
-      integer*1 i3save
-      integer*2 glob(IMN,JMN), i2save
-      logical grid_from_file
-      INTEGER KPDS(200),KGDS(200), zsave1,zsave2,itopo,kount
-      INTEGER kount2,islmx,jslmx,oldslm,msksrc,mskocn,notocn
-      REAL COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2)
-      REAL XLON(IM)
-      LOGICAL is_south_pole(IM,JM), is_north_pole(IM,JM)
-      REAL GEOLON(IM,JM),GEOLAT(IM,JM)
-      REAL, allocatable :: tmpvar(:,:)
-      REAL GEOLON_C(IM+1,JM+1),GEOLAT_C(IM+1,JM+1)
-      REAL DX(IM,JM),DY(IM,JM)
-      REAL SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),ORS(NW),ORF(IM,JM)
-      REAL land_frac(IM,JM)
-      REAL THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM)
-      REAL WZ4(IM,JM),VAR4(IM,JM),OA(IM,JM,4),OL(IM,JM,4),SLMI(IM,JM)
-      integer IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM)
-      integer IWORK(IM,JM,4)
-      real    WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM)
-      real    WORK5(IM,JM),WORK6(IM,JM),GLAT(JMN)
-      LOGICAL SPECTR, REVLAT, FILTER
-      logical fexist
-      real HPRIME(IM,JM,14)
-      real oaa(4),ola(4),sumdif,avedif,alon,alat
-      real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
+
+      integer :: efac,blat,zsave1,zsave2,itopo,kount
+      integer :: kount2,islmx,jslmx,oldslm,msksrc,mskocn,notocn
+      integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,i1,error,id_dim
+      integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
+      integer :: M,N,IMT,IRET,ios,iosg,latg2,istat,itest,jtest
+      integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
+      integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
+      integer(1) :: i3save
+      integer(2) :: i2save
+
+      integer, allocatable :: JST(:),JEN(:),KPDS(:),KGDS(:),numi(:)
+      integer, allocatable :: lonsperlat(:)
+
+      integer, allocatable :: IST(:,:),IEN(:,:),ZSLMX(:,:)
+      integer, allocatable :: ZAVG(:,:),ZSLM(:,:)
+      integer(1), allocatable :: UMD(:,:)
+      integer(2), allocatable :: glob(:,:)
+
+      integer, allocatable :: IWORK(:,:,:)
+
+      real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
+      real :: PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
+      real :: sumdif,avedif
+
+      real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
+      real, allocatable :: XLON(:),ORS(:),oaa(:),ola(:),GLAT(:)
+
+      real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
+      real, allocatable :: GEOLAT(:,:),GEOLAT_C(:,:),DY(:,:)
+      real, allocatable :: SLM(:,:),ORO(:,:),VAR(:,:),ORF(:,:)
+      real, allocatable :: land_frac(:,:)
+      real, allocatable :: THETA(:,:),GAMMA(:,:),SIGMA(:,:),ELVMAX(:,:)
+      real, allocatable :: VAR4(:,:),SLMI(:,:)
+      real, allocatable :: WORK1(:,:),WORK2(:,:),WORK3(:,:),WORK4(:,:)
+      real, allocatable :: WORK5(:,:),WORK6(:,:)
+      real, allocatable :: tmpvar(:,:)
       real, allocatable :: slm_in(:,:), lon_in(:,:), lat_in(:,:)
-      integer numi(jm),ios,iosg,latg2,istat
-      integer  maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
-      integer lonsperlat(jm/2),itest,jtest
-      integer i, j, nx, ny, ncid, js, jn, iw, ie, k
-      integer it,jt,i1,error,id_dim,id_var,nx_in,ny_in
-      integer i_south_pole,j_south_pole,i_north_pole,j_north_pole
-      real    maxlat, minlat
-      logical opened
-      logical LB(IM*JM)
-      integer fsize,wgta,IN,INW,INE,IS,ISW,ISE,M,N,IMT,IRET
-      complex ffj(im/2+1)
-      real    dlat,PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF
-      real    WWW
-      real :: timef,tbeg,tend,tbeg1
-      logical :: output_binary
+      real(4), allocatable::  GICE(:,:),OCLSM(:,:)
+
+      real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
+      real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
+
+
+      complex :: ffj(im/2+1)
+
+      logical :: grid_from_file,output_binary,fexist,opened
+      logical :: SPECTR, REVLAT, FILTER
+
+      logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
+      logical :: LB(IM*JM)
+
       output_binary = .false.
       tbeg1=timef()
       tbeg=timef()
       fsize = 65536
+! integers
+      allocate (JST(JM),JEN(JM),KPDS(200),KGDS(200),numi(jm))
+      allocate (lonsperlat(jm/2))
+      allocate (IST(IM,jm),IEN(IM,jm),ZSLMX(2700,1350))
+      allocate (glob(IMN,JMN))
 
-       allocate (ZAVG(IMN,JMN))
-       allocate (ZSLM(IMN,JMN))
-       allocate (GICE(IMN+1,3601))
-       allocate (UMD(IMN,JMN))
-       allocate (OCLSM(IM,JM))
+! reals
+      allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2))
+      allocate (XLON(IM),ORS(NW),oaa(4),ola(4),GLAT(JMN))
+
+      allocate (ZAVG(IMN,JMN))
+      allocate (ZSLM(IMN,JMN))
+      allocate (UMD(IMN,JMN))
 
 !
 !  SET CONSTANTS AND ZERO FIELDS
@@ -372,19 +378,16 @@ C
        print *,' UBOUND ZAVG=',UBOUND(ZAVG)
        print *,' UBOUND glob=',UBOUND(glob)
        print *,' UBOUND ZSLM=',UBOUND(ZSLM)
-       print *,' UBOUND GICE=',UBOUND(GICE)
-       print *,' UBOUND OCLSM=',UBOUND(OCLSM)
+       print *,' UBOUND GICE=',IMN+1,3601
+       print *,' UBOUND OCLSM=',IM,JM
 !
 ! ---  0 is ocean and 1 is land for slm
 !
 C
 ! --- ZSLM initialize with all land 1, ocean 0
-!     ZSLM=1
-      do j=1,jmn
-      do i=1,imn
-      zslm(i,j)=1
-      enddo
-      enddo
+      ZSLM=1
+! --- ZAVG initialize from glob
+      ZAVG=glob
 
            SELECTCASE(MSKSRC)
 C----  30" sea land mask. 0 are water (lake or ocean)
@@ -407,11 +410,10 @@ C----  30" sea land mask. 0 are water (lake or ocean)
         UMD(it,J) = i3save
        enddo
        enddo
-! ---   UMD slmsk with 30" lakes  and set ZAVG from glob
+! ---   UMD slmsk with 30" lakes
           do j=1,jmn
           do i=1,imn
            if ( UMD(i,j) .eq. 0 ) ZSLM(i,j) = 0
-           ZAVG(i,j) = glob(i,j)
           enddo
           enddo
 ! --- Global land in slm plus lakes on 30" grid and elev set over globe
@@ -426,8 +428,7 @@ C----  30" sea land mask. 0 are water (lake or ocean)
           oldslm = ZSLM(IMN,j)
         do i=1,imn
           i1 = i + 1
-! ---    slmsk with 10' lakes  and set ZAVG from 30" glob
-        ZAVG(i,j) = glob(i,j)
+! ---    slmsk with 10' lakes
             if ( glob(i,j) .eq. -9999 ) then 
                ZSLM(i,j) = 0
                kount = kount + 1
@@ -450,14 +451,13 @@ C----  30" sea land mask. 0 are water (lake or ocean)
        enddo
 ! ---
               CASE(-1)
-      print *,' ***** set ZAVG and slm from 30" glob, MSKSRC=',MSKSRC
+      print *,' ***** set slm from 30" glob, MSKSRC=',MSKSRC
          kount = 0
          kount2 = 0
        do j=1,jmn
         do i=1,imn
           i1 = i + 1
 ! ---   UMD slmsk with 10' lakes  and set ZAVG from 30" glob
-        ZAVG(i,j) = glob(i,j)
             if ( glob(i,j) .eq. -9999 ) then 
                ZSLM(i,j) = 0
                kount = kount + 1
@@ -465,6 +465,8 @@ C----  30" sea land mask. 0 are water (lake or ocean)
         enddo
        enddo
            END SELECT
+
+      deallocate (ZSLMX,UMD,glob)
 ! ---
 ! ---  Fixing an error in the topo 30" data set at pole (-9999).  
             do i=1,imn
@@ -501,6 +503,7 @@ C       print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID'
 !
 !    This code assumes that lat runs from north to south for gg!
 !
+
       print *,' SPECTR=',SPECTR,' REVLAT=',REVLAT,' ** with GICE-07 **'
       IF (SPECTR) THEN
         CALL SPLAT(4,JM,COSCLT,WGTCLT)
@@ -519,9 +522,9 @@ C       print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID'
           XLAT(J) = 90.0 - RCLT(J) * DEGRAD
         ENDDO
       ENDIF
+
+      allocate (GICE(IMN+1,3601))
 !
-c      print *,' cosclt=',cosclt
-!       print *,' RCLT(1)=',RCLT(1)
        sumdif = 0.
        DO J = JM/2,2,-1
        DIFFX(J) = xlat(J) - XLAT(j-1)
@@ -573,33 +576,15 @@ C
                 ZSLM(i,j) = 1
            endif
          endif
-!jaa           ALON = float(i-1) * 360./float(IMN)
-!jaa           ALAT = glat(j)
-!           if(  ZAVG(i,j) .ne. zsave1 .and. i .lt. 3 )
-!    & print *,' antarctica change to ZAVG(i=',i,'j=',j,')=',
-!    &    ZAVG(i,j),ZSLM(i,j),' from originally:',zsave1,zsave2
-!     &write(6,151)i,j,ZAVG(i,j),ZSLM(i,j),zsave1,zsave2,ALAT,ALON
-!  151 format(1x,'antarctica ZAVG(i=',i3,' j=',i3,')=',i5,i3,
-!     &' orig:',i5,i3,' Lat=',f8.3,f9.3,'E')
-!jaa            if(  ZAVG(i,j) .ne. zsave1 ) then 
-!jaa          if ( i .le. 1201 .and. i .gt. 1200 )then
-!jaa      write(6,152)i,j,ZAVG(i,j),ZSLM(i,j),zsave1,zsave2,ALAT,ALON,
-!jaa     &      GICE(i,j)
-!jaa          endif
-!jaa            endif
   152 format(1x,' ZAVG(i=',i4,' j=',i4,')=',i5,i3,
      &' orig:',i5,i4,' Lat=',f7.3,f8.2,'E',' GICE=',f8.1)
          enddo
          enddo
        endif
-!      print *,
-!     & ' After GICE ZAVG(1,2)=',ZAVG(1,2),ZSLM(1,2)
-!      print *,
-!     & ' After GICE ZAVG(1,12)=',ZAVG(1,12),ZSLM(1,12)
-!      print *,
-!     & ' After GICE ZAVG(1,52)=',ZAVG(1,52),ZSLM(1,52)
-!      print *,
-!     & ' After GICE ZAVG(1,112)=',ZAVG(1,112),ZSLM(1,112)
+
+      deallocate (GICE)
+
+      allocate (OCLSM(IM,JM),SLMI(IM,JM))
 !C
 C     COMPUTE MOUNTAIN DATA : ORO SLM VAR (Std Dev) OC
 C
@@ -663,6 +648,11 @@ C
       if (mskocn .eq. 1)then
       print *,' LSM:',OCLSM(1,1),OCLSM(50,50),OCLSM(75,75),OCLSM(IM,JM)
       endif
+
+      allocate (GEOLON(IM,JM),GEOLON_C(IM+1,JM+1),DX(IM,JM))
+      allocate (GEOLAT(IM,JM),GEOLAT_C(IM+1,JM+1),DY(IM,JM))
+      allocate (SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),VAR4(IM,JM))
+      allocate (land_frac(IM,JM))
 
 !--- reading grid file.
       grid_from_file = .false.
@@ -852,7 +842,7 @@ C
 !         call netcdf_err(error, 'inquire data of dy from file '
 !     &                   //trim(OUTGRID) )
 !         dy(1:IM+1,1:JM) = tmpvar(1:nx+1:2,2:ny:2)
-!         deallocate(tmpvar)         
+         deallocate(tmpvar)         
       endif
       tend=timef()
       write(6,*)' Timer 1 time= ',tend-tbeg
@@ -892,6 +882,7 @@ C   check antarctic pole
 C
 C ===  Compute mtn principal coord HTENSR: THETA,GAMMA,SIGMA
 C
+      allocate (THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM))
        if(grid_from_file) then       
       tbeg=timef()
          CALL MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
@@ -902,7 +893,7 @@ C
          CALL MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
      1            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
        endif
-        
+
        call minmxj(IM,JM,THETA,'   THETA')
        call minmxj(IM,JM,GAMMA,'   GAMMA')
        call minmxj(IM,JM,SIGMA,'   SIGMA')
@@ -914,6 +905,11 @@ C --- check for nands in above
 C
 C     COMPUTE MOUNTAIN DATA : OA OL
 C
+       allocate (IWORK(IM,JM,4))
+       allocate (OA(IM,JM,4),OL(IM,JM,4),HPRIME(IM,JM,14))
+       allocate (WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM))
+       allocate (WORK5(IM,JM),WORK6(IM,JM))
+
        call minmxj(IM,JM,ORO,'     ORO')
        print*, "inputorog=", trim(INPUTOROG)
        if(grid_from_file) then
@@ -1035,13 +1031,26 @@ C
      2            IM,JM,IMN,JMN,geolon_c,geolat_c,
      3            geolon,geolat,is_south_pole,is_north_pole,nx_in,ny_in,
      4            oa_in,ol_in,slm_in,lon_in,lat_in)
-         endif  
+
+           deallocate(oa_in,ol_in,slm_in,lon_in,lat_in)
+
+         endif
        else
          CALL MAKEOA(ZAVG,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,
      1            WORK1,WORK2,WORK3,WORK4,
      2            WORK5,WORK6,
      3            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
        endif
+
+!      Deallocate 2d vars
+       deallocate(IST,IEN)
+       deallocate (ZSLM,ZAVG)
+       deallocate (dx,dy)
+       deallocate (WORK2,WORK3,WORK4,WORK5,WORK6)
+
+!      Deallocate 3d vars
+       deallocate(IWORK)
+
        tbeg=timef()
        call minmxj(IM,JM,OA,'      OA')
        call minmxj(IM,JM,OL,'      OL')
@@ -1166,6 +1175,8 @@ C
             endif
       print *,' SLM(itest,jtest)=',slm(itest,jtest),itest,jtest
       print *,' ORO(itest,jtest)=',oro(itest,jtest),itest,jtest
+
+      deallocate(SLMI)
 
 C  REMOVE ISOLATED POINTS
       DO J=2,JM-1
@@ -1322,6 +1333,8 @@ C
 ! --- if no filter is desired then NF1=NF0=0 and ORF=ORO
 ! --- if no filter but spectral to grid (with gibbs) then NF1=jcap+2, and NF1=jcap+1
 !
+      deallocate(VAR4)
+      allocate (ORF(IM,JM))
       IF ( NF1 - NF0 .eq. 0 ) FILTER=.FALSE.
       print *,' NF1, NF0, FILTER=',NF1,NF0,FILTER
       IF (FILTER) THEN
@@ -1368,6 +1381,9 @@ C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
         ORS=0.
         ORF=ORO
       ENDIF
+
+      deallocate (WORK1)
+
        call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
       print *,' ELVMAX(',itest,jtest,')=',ELVMAX(itest,jtest)
       print *,' after spectral filter is applied'
@@ -1557,10 +1573,18 @@ C
       print *,' wrote netcdf file out.oro.tile?.nc'
 
       print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
-      deallocate (ZAVG)
-      deallocate (ZSLM)
-      deallocate (UMD)
-      deallocate (GICE)
+
+!     Deallocate 1d vars
+      deallocate(JST,JEN,KPDS,KGDS,numi,lonsperlat)
+      deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,ORS,oaa,ola,GLAT)
+
+!     Deallocate 2d vars
+      deallocate (OCLSM)
+      deallocate (GEOLON,GEOLON_C,GEOLAT,GEOLAT_C)
+      deallocate (SLM,ORO,VAR,ORF,land_frac)
+      deallocate (THETA,GAMMA,SIGMA,ELVMAX)
+
+
       tend=timef()
       write(6,*)' Total runtime time= ',tend-tbeg1
       RETURN
@@ -2896,7 +2920,7 @@ C
       real dx, lat, DEGRAD
       
       real get_lon_angle
-         real, parameter :: RADIUS = 6371000
+         real, parameter :: RADIUS = 6371200
 
          get_lon_angle = 2*asin( sin(dx/RADIUS*0.5)/cos(lat) )*DEGRAD
          
@@ -2915,7 +2939,7 @@ C
       real dy, DEGRAD
       
       real get_lat_angle
-         real, parameter :: RADIUS = 6371000
+         real, parameter :: RADIUS = 6371200
 
          get_lat_angle = dy/RADIUS*DEGRAD
          

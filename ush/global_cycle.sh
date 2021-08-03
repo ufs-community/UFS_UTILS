@@ -94,7 +94,7 @@
 #     FNMSKH        Input high resolution land mask GRIB file.  Use to set mask for
 #                   some of the input climatology fields.  This is NOT the model mask.
 #                   Defaults to ${FIXam}/seaice_newland.grb
-#     GSI_FILE      GSI file on the gaussian grid containing NST increments.
+#     NST_FILE      GSI file on the gaussian grid containing NST increments.
 #                   Defaults to NULL (no file).
 #     FNTSFA        Input SST analysis GRIB file.
 #                   Defaults to ${COMIN}/${PREINP}sstgrb${SUFINP}
@@ -143,10 +143,8 @@
 #     use_ufo       Adjust sst and soil substrate temperature for differences
 #                   between the filtered and unfiltered terrain.  Default is true.
 #     DONST         Process NST records when using NST model.  Default is 'no'.
-#     ADJT_NSST_
-#     ONLY          When .true. only do the NSST update (don't call the sfcsub
-#                   component).  Default is .false. - call sfcsub and update
-#                   NSST.
+#     DO_SFCCYCLE   Call sfcsub routine 
+#     DO_LNDINC     Call routine to update soil states with increment files
 #     zsea1/zsea2   When running with NST model, this is the lower/upper bound
 #                   of depth of sea temperature.  In whole mm.
 #     MAX_TASKS_CY  Normally, program should be run with a number of mpi tasks
@@ -267,7 +265,8 @@ IVEGSRC=${IVEGSRC:-1}
 CYCLVARS=${CYCLVARS:-""}
 use_ufo=${use_ufo:-.true.}
 DONST=${DONST:-"NO"}
-ADJT_NST_ONLY=${ADJT_NST_ONLY:-.false.}
+DO_SFCCYCLE=${DO_SFCCYCLE:-.true.}
+DO_LNDINC=${DO_LNDINC:-.false.}
 zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
 MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
@@ -291,7 +290,8 @@ FNVMNC=${FNVMNC:-${FIXam}/global_shdmin.0.144x0.144.grb}
 FNVMXC=${FNVMXC:-${FIXam}/global_shdmax.0.144x0.144.grb}
 FNSLPC=${FNSLPC:-${FIXam}/global_slope.1x1.grb}
 FNMSKH=${FNMSKH:-${FIXam}/global_slmask.t1534.3072.1536.grb}
-GSI_FILE=${GSI_FILE:-"NULL"}
+NST_FILE=${NST_FILE:-"NULL"}
+LND_SOI_FILE=${LND_SOI_FILE:-"NULL"}
 FNTSFA=${FNTSFA:-${COMIN}/${PREINP}sstgrb${SUFINP}}
 FNACNA=${FNACNA:-${COMIN}/${PREINP}engicegrb${SUFINP}}
 FNSNOA=${FNSNOA:-${COMIN}/${PREINP}snogrb${SUFINP}}
@@ -381,14 +381,15 @@ cat << EOF > fort.36
   idim=$CRES, jdim=$CRES, lsoil=$LSOIL,
   iy=$iy, im=$im, id=$id, ih=$ih, fh=$FHOUR,
   deltsfc=$DELTSFC,ialb=$IALB,use_ufo=$use_ufo,donst=$DONST,
-  adjt_nst_only=$ADJT_NST_ONLY,isot=$ISOT,ivegsrc=$IVEGSRC,
+  do_sfccycle=$DO_SFCCYCLE,do_lndinc=$DO_LNDINC,isot=$ISOT,ivegsrc=$IVEGSRC,
   zsea1_mm=$zsea1,zsea2_mm=$zsea2,MAX_TASKS=$MAX_TASKS_CY
  /
 EOF
 
 cat << EOF > fort.37
  &NAMSFCD
-  GSI_FILE="$GSI_FILE",
+  NST_FILE="$NST_FILE",
+  LND_SOI_FILE="$LND_SOI_FILE" 
  /
 EOF
 
