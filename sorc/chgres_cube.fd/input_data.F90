@@ -2503,6 +2503,8 @@
  real(esmf_kind_r8), allocatable       :: dummy3d_col_in(:),dummy3d_col_out(:)
  real(esmf_kind_r8), parameter         :: intrp_missing = -999.0 
  integer                               :: is_missing, intrp_ier
+ real(esmf_kind_r4), parameter         :: lev_no_tr_fill = 20000.0
+
 
  
  tracers(:) = "NULL"
@@ -2745,6 +2747,8 @@
           dummy2d = intrp_missing 
           is_missing = 1 
         else
+          if (rlevs(vlev) .gt. lev_no_tr_fill) call error_handler("no fill for tracer at "// & 
+             slevs(vlev), 1)                          
           call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
           if (iret==1) then ! missing_var_method == skip or no entry
             if (trim(vname2)=="_1_0:" .or. trim(vname2) == "_1_1:" .or.  &
