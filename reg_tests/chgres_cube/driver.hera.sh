@@ -46,9 +46,7 @@ QUEUE="${QUEUE:-batch}"
 
 export HOMEufs=$PWD/../..
 
-#export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
-export HOMEreg=/scratch1/BMC/gsd-fv3/Larissa.Reames/chgres_cube/reg_tests
-export OUTDIR=$HOMEreg/tests_out
+export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
