@@ -2483,10 +2483,11 @@
  integer                               :: ii,jj
  integer                               :: rc, clb(3), cub(3)
  integer                               :: vlev, iret,varnum
-
+ integer                               :: all_empty, o3n
  integer                               :: len_str
- logical                               :: lret
+ integer                               :: is_missing, intrp_ier, done_print
 
+ logical                               :: lret
  logical                               :: conv_omega=.false., &
                                           hasspfh=.true., &
                                           isnative=.false.
@@ -2502,9 +2503,8 @@
  real(esmf_kind_r8), parameter         :: p0 = 100000.0
  real(esmf_kind_r8), allocatable       :: dummy3d_col_in(:),dummy3d_col_out(:)
  real(esmf_kind_r8), parameter         :: intrp_missing = -999.0 
- integer                               :: is_missing, intrp_ier
  real(esmf_kind_r4), parameter         :: lev_no_tr_fill = 20000.0
-
+ real(esmf_kind_r4), parameter         :: lev_no_o3_fill = 40000.0
 
  
  tracers(:) = "NULL"
@@ -2674,6 +2674,7 @@
    tracers_input_grib_2(n) = trac_names_grib_2(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
    tracers(n)=tracers_default(i)
+   if(trim(tracers(n)) .eq. "o3mr") o3n = n
 
  enddo
 
@@ -2737,23 +2738,44 @@
    if (localpet == 0) then
      vname = trim(tracers_input_grib_1(n))
      vname2 = trim(tracers_input_grib_2(n))
-     
+     iret = grb2_inq(the_file,inv_file,vname,lvl_str_space,vname2)
+
+     ! Check to see if file has any data for this tracer
+     if (iret == 0) then
+       all_empty = 1
+     else
+       all_empty = 0
+     endif
+ 
      is_missing = 0
      do vlev = 1, lev_input
       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),vname2,data2=dummy2d)
      
       if (iret <= 0) then
-        if (trim(method) .eq. 'intrp') then
+        if (trim(method) .eq. 'intrp' .and. all_empty == 0) then
           dummy2d = intrp_missing 
           is_missing = 1 
         else
-          if (rlevs(vlev) .gt. lev_no_tr_fill) call error_handler("no fill for tracer at "// & 
-             slevs(vlev), 1)                          
+          ! Abort if input data has some data for current tracer, but has
+          ! missing data below 200 mb/ above 400mb
+            if (all_empty == 0 .and. n == o3n) then
+              if (rlevs(vlev) .lt. lev_no_o3_fill) &
+                call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev))//&
+                  ". SET MISSING VARIABLE CONDITION TO 'INTRP' TO AVOID THIS ERROR", 1)
+            elseif (all_empty == 0 .and. n .ne. o3n) then 
+              if (rlevs(vlev) .gt. lev_no_tr_fill) &
+                call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev))//&
+                  ". SET MISSING VARIABLE CONDITION TO 'INTRP' TO AVOID THIS ERROR.", 1)
+            endif 
+          ! If entire array is empty and method is set to intrp, switch method
+          ! to fill
+          if (trim(method) .eq. 'intrp' .and. all_empty == 1) method='set_to_fill' 
+
           call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
           if (iret==1) then ! missing_var_method == skip or no entry
             if (trim(vname2)=="_1_0:" .or. trim(vname2) == "_1_1:" .or.  &
                 trim(vname2) == ":14:192:") then
-              call error_handler("READING IN "//trim(vname)//" AT LEVEL "//trim(slevs(vlev))&
+              call error_handler("READING IN "//trim(tracers(n))//" AT LEVEL "//trim(slevs(vlev))&
                         //". SET A FILL VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
             endif
           endif
@@ -2769,22 +2791,31 @@
      enddo
 ! Jili Dong interpolation for missing levels 
      if (is_missing .gt. 0 .and. trim(method) .eq. 'intrp') then
-         print *,'intrp tracer '//trim(vname)
+       print *,'intrp tracer '//trim(tracers(n))
+       done_print = 0
        do jj = 1, j_input
          do ii = 1, i_input
              dummy3d_col_in=dummy3d(ii,jj,:)
              call dint2p(rlevs,dummy3d_col_in,lev_input,rlevs,dummy3d_col_out,    &
                         lev_input, 2, intrp_missing, intrp_ier) 
-             if (intrp_ier .gt. 0) call error_handler("intrp faile",intrp_ier)
-             if (any(dummy3d_col_out .eq. intrp_missing)) call   &
-               error_handler("pres out of range and no extrt performed",1) 
+             if (intrp_ier .gt. 0) call error_handler("Interpolation failed.",intrp_ier)
+             if (any(dummy3d_col_out .eq. intrp_missing)) then 
+               if (done_print .eq. 0) then
+                 print*, "Pressure out of range of existing data. Defaulting to fill value."
+                 done_print = 1
+               endif
+               where(dummy3d_col_out .eq. intrp_missing) dummy3d_col_out = value
+             endif
 ! zero out negative tracers from interpolation/extrapolation
              where(dummy3d_col_out .lt. 0.0)  dummy3d_col_out = 0.0
              dummy3d(ii,jj,:)=dummy3d_col_out
-         end do
-       end do
-     end if 
-   endif
+         end do !ii do
+       end do !jj do
+       do vlev = 1, lev_input
+         print*,'tracer af intrp',vlev, maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
+       enddo
+     end if !if intrp
+   endif !localpet == 0
 
    if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT ", trim(tracers_input_vmap(n))
    call ESMF_FieldScatter(tracers_input_grid(n), dummy3d, rootpet=0, rc=rc)
@@ -6446,6 +6477,10 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
     call error_handler("READING "//trim(vname)// " at level "//lev//". TO MAKE THIS NON- &
                         FATAL, CHANGE STOP TO SKIP FOR THIS VARIABLE IN YOUR VARMAP &
                         FILE.", iret)
+  elseif (trim(method) == "intrp") then
+    print*, "WARNING: ,"//trim(vname)//" NOT AVAILABLE AT LEVEL "//trim(lev)// &
+          ". WILL INTERPOLATE INTERSPERSED MISSING LEVELS AND/OR FILL MISSING"//&
+          " LEVELS AT EDGES."
   else
     call error_handler("ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
                        " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN,"// &
