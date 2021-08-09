@@ -4,28 +4,19 @@
 #
 # Run global_cycle consistency test on Hera.
 #
-# Set $DATA to your working directory.  Set the project code (SBATCH -A)
-# and queue (SBATCH -q) as appropriate.
+# Set $WORK_DIR to your working directory.  Set the project code 
+# and queue as appropriate.
 #
-# Invoke the script as follows:  sbatch $script
+# Invoke the script from the command line as follows:  ./$script
 #
-# Log output is placed in consistency.log.  A summary is
+# Log output is placed in consistency.log??.  A summary is
 # placed in summary.log
 #
-# The test fails when its output does not match the baseline files
+# A test fails when its output does not match the baseline files
 # as determined by the 'nccmp' utility.  This baseline files are
 # stored in HOMEreg.
 #
 #-----------------------------------------------------------------------------
-
-#SBATCH -J cycle_reg_test
-#SBATCH -A fv3-cpu
-#SBATCH --open-mode=truncate
-#SBATCH -o consistency.log
-#SBATCH -e consistency.log
-#SBATCH --nodes=1 --ntasks-per-node=6
-#SBATCH -q debug
-#SBATCH -t 00:05:00
 
 set -x
 
@@ -36,12 +27,16 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-export DATA="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
-export DATA="${DATA}/reg-tests/global-cycle"
+WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+
+PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+QUEUE="${QUEUE:-batch}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
+
+DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
 export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/global_cycle
 
@@ -51,12 +46,26 @@ export APRUNCY="srun"
 
 export NWPROD=$PWD/../..
 
-export COMOUT=$DATA
-
 reg_dir=$PWD
 
-./C768.fv3gfs.sh
+LOG_FILE=consistency.log01
+export DATA="${DATA_DIR}/test1"
+export COMOUT=$DATA
+TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c768.fv3gfs \
+      -o $LOG_FILE -e $LOG_FILE ./C768.fv3gfs.sh)
 
-cp $DATA/summary.log  $reg_dir
+LOG_FILE=consistency.log02
+export DATA="${DATA_DIR}/test2"
+export COMOUT=$DATA
+TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c768.lndinc \
+      -o $LOG_FILE -e $LOG_FILE ./C768.lndinc.sh)
+
+LOG_FILE=consistency.log
+sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
+      --open-mode=append -q $QUEUE -d\
+      afterok:$TEST1:$TEST2 << EOF
+#!/bin/bash
+grep -a '<<<' ${LOG_FILE}*  > summary.log
+EOF
 
 exit

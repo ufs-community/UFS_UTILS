@@ -10,7 +10,6 @@ set -eux
 
 target=${target:-"NULL"}
 compiler=${compiler:-"intel"}
-
 export MOD_PATH
 
 if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
@@ -28,6 +27,7 @@ else
 fi
 
 CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON"
+#CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON -DENABLE_DOCS=ON"
 
 rm -fr ./build
 mkdir ./build && cd ./build
