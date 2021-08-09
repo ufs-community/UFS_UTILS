@@ -33,8 +33,8 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
 ##---------------------------------------------------------------------------
 elif [[ -d /apps/prod ]]; then
 
-    # We are on WCOSS2/Acorn
-	module load module_base.acorn
+    # We are on WCOSS2
+	module load module_base.wcoss2
 else
     echo WARNING: UNKNOWN PLATFORM 
 fi

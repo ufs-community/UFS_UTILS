@@ -1,5 +1,5 @@
 #%Module#####################################################
-## Build and run module for Acorn
+## Build and run module for WCOSS2
 #############################################################
 #module list
 module purge

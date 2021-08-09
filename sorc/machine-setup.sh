@@ -80,8 +80,8 @@ elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
 ##---------------------------------------------------------------------------
 elif [[ -d /apps/prod ]]; then
 
-    # We are on WCOSS2/Acorn
-    target=acorn
+    # We are on WCOSS2
+    target=wcoss2
 
     module purge
     module load envvar/1.0
