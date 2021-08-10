@@ -2767,8 +2767,7 @@
                 call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev))//&
                   ". SET MISSING VARIABLE CONDITION TO 'INTRP' TO AVOID THIS ERROR.", 1)
             endif 
-          ! If entire array is empty and method is set to intrp, switch method
-          ! to fill
+          ! If entire array is empty and method is set to intrp, switch method to fill
           if (trim(method) .eq. 'intrp' .and. all_empty == 1) method='set_to_fill' 
 
           call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
@@ -2780,7 +2779,7 @@
             endif
           endif
         endif ! method intrp
-      endif
+      endif !iret<=0
       
       if (n==1 .and. .not. hasspfh) then 
         call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
@@ -2788,32 +2787,41 @@
 
        print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
        dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-     enddo
+     enddo !vlev
 ! Jili Dong interpolation for missing levels 
      if (is_missing .gt. 0 .and. trim(method) .eq. 'intrp') then
        print *,'intrp tracer '//trim(tracers(n))
        done_print = 0
        do jj = 1, j_input
          do ii = 1, i_input
-             dummy3d_col_in=dummy3d(ii,jj,:)
-             call dint2p(rlevs,dummy3d_col_in,lev_input,rlevs,dummy3d_col_out,    &
+           dummy3d_col_in=dummy3d(ii,jj,:)
+           call dint2p(rlevs,dummy3d_col_in,lev_input,rlevs,dummy3d_col_out,    &
                         lev_input, 2, intrp_missing, intrp_ier) 
-             if (intrp_ier .gt. 0) call error_handler("Interpolation failed.",intrp_ier)
-             if (any(dummy3d_col_out .eq. intrp_missing)) then 
-               if (done_print .eq. 0) then
-                 print*, "Pressure out of range of existing data. Defaulting to fill value."
-                 done_print = 1
-               endif
-               where(dummy3d_col_out .eq. intrp_missing) dummy3d_col_out = value
-             endif
-! zero out negative tracers from interpolation/extrapolation
-             where(dummy3d_col_out .lt. 0.0)  dummy3d_col_out = 0.0
-             dummy3d(ii,jj,:)=dummy3d_col_out
-         end do !ii do
-       end do !jj do
-       do vlev = 1, lev_input
-         print*,'tracer af intrp',vlev, maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
+           if (intrp_ier .gt. 0) call error_handler("Interpolation failed.",intrp_ier)
+           ! zero out negative tracers from interpolation/extrapolation
+           where(dummy3d_col_out .lt. 0.0)  dummy3d_col_out = 0.0
+           dummy3d(ii,jj,:)=dummy3d_col_out
+         enddo
        enddo
+       do vlev=1,lev_input
+         dummy2d = dummy3d(:,:,n) 
+         if (any(dummy2d .eq. intrp_missing)) then 
+           ! If we're outside the appropriate region, don't fill but error instead
+           if (n == o3n .and. rlevs(vlev) .lt. lev_no_o3_fill) then
+             call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev)),1)
+           elseif (n .ne. o3n .and. rlevs(vlev) .gt. lev_no_tr_fill) then
+             call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev)),1)
+           else ! we're okay to fill missing data with provided fill value
+             if (done_print .eq. 0) then
+               print*, "Pressure out of range of existing data. Defaulting to fill value."
+               done_print = 1
+             end if !done print
+             where(dummy2d .eq. intrp_missing) dummy2d = value
+             dummy3d(:,:,vlev) = dummy2d
+           end if !n & lev
+         endif ! intrp_missing
+         print*,'tracer af intrp',vlev, maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
+       end do !nlevs do
      end if !if intrp
    endif !localpet == 0
 
