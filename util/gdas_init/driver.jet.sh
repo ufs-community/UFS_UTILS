@@ -135,7 +135,7 @@ if [ $RUN_CHGRES == yes ]; then
       ;;
     v14)
       sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-      -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v14.chgres.sh ${CDUMP}
+      -o log.${CDUMP} -e log.${CDUMP} --partition=${PARTITION} ${DEPEND} run_v14.chgres.sh ${CDUMP}
       ;;
     v15)
       if [ "$CDUMP" = "gdas" ]; then
@@ -189,7 +189,7 @@ if [ $RUN_CHGRES == yes ]; then
             ;;
           v14)
               sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
-              -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v14.chgres.sh ${MEMBER_CH}
+              -o log.${MEMBER_CH} -e log.${MEMBER_CH} --partition=${PARTITION} ${DEPEND} run_v14.chgres.sh ${MEMBER_CH}
             ;;
           v15)
               sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
