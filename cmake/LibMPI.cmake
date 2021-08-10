@@ -154,7 +154,11 @@ function (platform_name RETURN_VARIABLE)
     
 
     set (${RETURN_VARIABLE} "stampede" PARENT_SCOPE)
-          
+
+  elseif (SITENAME MATCHES "^s4-submit.ssec.wisc.edu")
+
+    set (${RETURN_VARIABLE} "s4" PARENT_SCOPE)
+
   else ()
 
     set (${RETURN_VARIABLE} "unknown" PARENT_SCOPE)
