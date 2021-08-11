@@ -2798,8 +2798,6 @@
            call dint2p(rlevs,dummy3d_col_in,lev_input,rlevs,dummy3d_col_out,    &
                         lev_input, 2, intrp_missing, intrp_ier) 
            if (intrp_ier .gt. 0) call error_handler("Interpolation failed.",intrp_ier)
-           ! zero out negative tracers from interpolation/extrapolation
-           where(dummy3d_col_out .lt. 0.0)  dummy3d_col_out = 0.0
            dummy3d(ii,jj,:)=dummy3d_col_out
          enddo
        enddo
@@ -2820,6 +2818,8 @@
              dummy3d(:,:,vlev) = dummy2d
            end if !n & lev
          endif ! intrp_missing
+         ! zero out negative tracers from interpolation/extrapolation
+         where(dummy3d(:,:,vlev) .lt. 0.0)  dummy3d(:,:,vlev) = 0.0
          print*,'tracer af intrp',vlev, maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
        end do !nlevs do
      end if !if intrp
