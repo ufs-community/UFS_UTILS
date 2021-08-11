@@ -4,6 +4,8 @@
 # Driver script for running on Jet.
 #
 # Edit the 'config' file before running.
+#
+# Adjust the project code and queue as necessary.
 #---------------------------------------------------------------------
 
 set -x
@@ -131,7 +133,7 @@ if [ $RUN_CHGRES == yes ]; then
       export OMP_STACKSIZE=1024M
       sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} --cpus-per-task=$OMP_NUM_THREADS \
         -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_pre-v14.chgres.sh ${CDUMP}
+        -o log.${CDUMP} -e log.${CDUMP} --partition=${PARTITION} ${DEPEND} run_pre-v14.chgres.sh ${CDUMP}
       ;;
     v14)
       sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
@@ -140,10 +142,10 @@ if [ $RUN_CHGRES == yes ]; then
     v15)
       if [ "$CDUMP" = "gdas" ]; then
         sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.sh ${CDUMP}
+        -o log.${CDUMP} -e log.${CDUMP} --partition=${PARTITION} ${DEPEND} run_v15.chgres.sh ${CDUMP}
       else
         sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.gfs.sh
+        -o log.${CDUMP} -e log.${CDUMP} --partition=${PARTITION} ${DEPEND} run_v15.chgres.gfs.sh
       fi
       ;;
     v16retro)
@@ -185,7 +187,7 @@ if [ $RUN_CHGRES == yes ]; then
               export OMP_STACKSIZE=1024M
               sbatch --parsable --ntasks-per-node=12 --nodes=1 --cpus-per-task=$OMP_NUM_THREADS \
                -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
-               -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_pre-v14.chgres.sh ${MEMBER_CH}
+               -o log.${MEMBER_CH} -e log.${MEMBER_CH} --partition=${PARTITION} ${DEPEND} run_pre-v14.chgres.sh ${MEMBER_CH}
             ;;
           v14)
               sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
@@ -193,7 +195,7 @@ if [ $RUN_CHGRES == yes ]; then
             ;;
           v15)
               sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
-              -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v15.chgres.sh ${MEMBER_CH}
+              -o log.${MEMBER_CH} -e log.${MEMBER_CH} --partition=${PARTITION} ${DEPEND} run_v15.chgres.sh ${MEMBER_CH}
             ;;
           v16)
               sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
@@ -203,7 +205,7 @@ if [ $RUN_CHGRES == yes ]; then
         MEMBER=$(( $MEMBER + 1 ))
       done
 
-    fi # v16 retro?
+    fi # Is this v16 retro?
 
   fi  # which CDUMP?
 
