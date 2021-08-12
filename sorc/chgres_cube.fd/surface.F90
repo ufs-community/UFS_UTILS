@@ -3249,8 +3249,8 @@
    tmp_ptr = float(nint(tmp_ptr))
  endif
  
- n2d = count(is2d(:) == .True.)
- n3d = count(is2d(:) == .False.)
+ n2d = count(is2d(:))
+ n3d = count(.not.is2d(:))
  if(localpet==0) print*, is2d(:) 
  if (doreplace) then
    allocate(ptr_2d(n2d))
