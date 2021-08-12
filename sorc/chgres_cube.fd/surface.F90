@@ -141,11 +141,14 @@
 
  type realptr_2d
    real(esmf_kind_r8), pointer :: p(:,:)
+                                       !< array of 2d pointers
  end type realptr_2d
- 
+                                       !< pointer to hold array of 2d pointers 
   type realptr_3d
    real(esmf_kind_r8), pointer :: p(:,:,:)
+                                       !< array of 3d pointers
  end type realptr_3d
+                                       !< pointer to hold array of 3d pointers
 
  public :: surface_driver
  public :: create_nst_esmf_fields
