@@ -404,6 +404,7 @@
  real(esmf_kind_r8), pointer        :: srflag_target_ptr(:,:)
  real(esmf_kind_r8), pointer        :: terrain_from_input_ptr(:,:)
  real(esmf_kind_r8), pointer        :: veg_type_target_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: soil_type_target_ptr(:,:)
  real(esmf_kind_r8), pointer        :: landmask_input_ptr(:,:)
  real(esmf_kind_r8), pointer        :: veg_type_input_ptr(:,:)
  real(esmf_kind_r8), allocatable    :: veg_type_target_one_tile(:,:)
@@ -1322,16 +1323,37 @@
  
  
  if (.not. sotyp_from_climo) then 
-   call ESMF_FieldBundleAdd(bundle_nolandice_target, (/soil_type_target_grid/), rc=rc)
+!   call ESMF_FieldBundleAdd(bundle_nolandice_target, (/soil_type_target_grid/), rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldBundleAdd", rc)
+!   call ESMF_FieldBundleAdd(bundle_nolandice_input, (/soil_type_input_grid/), rc=rc)
+!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!      call error_handler("IN FieldBundleAdd", rc)
+   print*,"- CALL Field_Regrid ."
+   call ESMF_FieldRegrid(soil_type_input_grid, &
+                         soil_type_target_grid, &
+                         routehandle=regrid_land, &
+                         zeroregion=ESMF_REGION_SELECT, &
+                         termorderflag=ESMF_TERMORDER_SRCSEQ,  rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldBundleAdd", rc)
-   call ESMF_FieldBundleAdd(bundle_nolandice_input, (/soil_type_input_grid/), rc=rc)
+      call error_handler("IN FieldRegrid", rc)
+    
+   call ESMF_FieldGet(soil_type_target_grid, &
+                    farrayPtr=soil_type_target_ptr, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldBundleAdd", rc)
-   call ESMF_FieldBundleGet(bundle_nolandice_target,fieldCount=num_fields,rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldBundleGet", rc)
-   sotyp_ind = num_fields
+      call error_handler("IN FieldGet", rc)
+    
+   l = lbound(unmapped_ptr)
+   u = ubound(unmapped_ptr)
+
+   do ij = l(1), u(1)
+     call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
+     soil_type_target_ptr(i,j) = -9999.9 
+   enddo
+ !  call ESMF_FieldBundleGet(bundle_nolandice_target,fieldCount=num_fields,rc=rc)
+ !  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ !     call error_handler("IN FieldBundleGet", rc)
+ !  sotyp_ind = 3
  endif
  
  if (.not. vgfrc_from_climo) then 
@@ -1392,10 +1414,10 @@
  search_nums(1:5) = (/85,7,224,85,86/)
  dozero(1:5) = (/.False.,.False.,.True.,.True.,.False./)
  
- if (.not.sotyp_from_climo) then
-   search_nums(sotyp_ind) = 226
-   dozero(sotyp_ind) = .False.
- endif
+ !if (.not.sotyp_from_climo) then
+ !  search_nums(sotyp_ind) = 226
+ !  dozero(sotyp_ind) = .False.
+ !endif
  
  if (.not. vgfrc_from_climo) then
    search_nums(vgfrc_ind) = 224
@@ -1474,6 +1496,22 @@
      print*,"- CALL FieldScatter FOR TARGET GRID SUBSTRATE TEMPERATURE, TILE: ", tile
      call ESMF_FieldScatter(substrate_temp_target_grid, data_one_tile_3d(:,:,lsoil_target), rootPet=0, tile=tile, rc=rc)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldScatter", rc)
+   endif
+   
+   if (.not. sotyp_from_climo) then
+     print*,"- CALL FieldGather FOR SOIL TYPE TARGET GRID LAND, TILE: ",tile
+     call ESMF_FieldGather(soil_type_target_grid, data_one_tile,rootPet=0,tile=tile, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+        call error_handler("IN FieldGather", rc)
+
+     if (localpet == 0) then
+       call search(data_one_tile, mask_target_one_tile, i_target, j_target,tile,226)
+     endif
+
+     print*,"- CALL FieldScatter FOR SOIL TYPE TARGET GRID, TILE: ", tile
+     call ESMF_FieldScatter(soil_type_target_grid,data_one_tile,rootPet=0,tile=tile,rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldScatter", rc)
    endif
 
