@@ -158,7 +158,13 @@ add_executable(ftst_surface_nst_landfill ftst_surface_nst_landfill.F90)
 target_link_libraries(ftst_surface_nst_landfill chgres_cube_lib)
 
 # Cause test to be run with MPI.
-add_mpi_test(chgres_cube-ftst_surface_nst_landfill
-  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_nst_landfill
+add_mpi_test(chgres_cube-ftst_surface_regrid_many
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_regrid_many
+  NUMPROCS 1
+  TIMEOUT 60)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_surface_regrid_many
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_regrid_many
   NUMPROCS 1
   TIMEOUT 60)
