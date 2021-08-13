@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #-----------------------------------------------------------------------------
-# Invoke chgres to create 25-km CONUS coldstart files using GFS GRIB2 data
-# as input.  The coldstart files are then compared to baseline files
-# using the 'nccmp' utility.  This script is run by the machine specific 
-# driver script.
+# Invoke chgres to create 25-km CONUS coldstart files using GFS 
+# PGRIB2+BGRIB2 data as input.  The coldstart files are then compared to
+# baseline files using the 'nccmp' utility.  This script is run by the
+# This script is run by the machine specific driver script.
 #-----------------------------------------------------------------------------
 
 set -x
@@ -42,7 +42,7 @@ ${HOMEufs}/ush/chgres_cube.sh
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< 25-km CONUS GFS GRIB2 TEST FAILED. <<<"
+  echo "<<< 25-km CONUS GFS PGRIB2+BGRIB2 TEST FAILED. >>>"
   exit $iret
 fi
 
@@ -78,9 +78,9 @@ done
 
 set +x
 if [ $test_failed -ne 0 ]; then
-  echo "<<< 25-KM CONUS GFS GRIB2 TEST FAILED. >>>"
+  echo "<<< 25-KM CONUS GFS PGRIB2+BGRIB2 TEST FAILED. >>>"
 else
-  echo "<<< 25-KM CONUS GFS GRIB2 TEST PASSED. >>>"
+  echo "<<< 25-KM CONUS GFS PGRIB2+BGRIB2 TEST PASSED. >>>"
 fi
 
 exit 0

@@ -190,7 +190,7 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J chgres15 -W 0:15 -x
         -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/c96.fv3.netcdf2wam.sh"
 
 #-----------------------------------------------------------------------------
-# Initialize CONUS 25-KM USING GFS GRIB2 files.
+# Initialize CONUS 25-KM USING GFS PGRIB2+BGRIB2 files.
 #-----------------------------------------------------------------------------
 
 LOG_FILE=consistency.log16
