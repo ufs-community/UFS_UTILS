@@ -581,7 +581,9 @@ ENDIF
     ! SNOW INCREMENTS
     ! do snow first, as temperature updates will use snow analaysis
     IF (DO_SNO_INC) THEN
-
+    ! updates are made to snow depth only over land (and not-land ice).
+    ! SWE is then updated from the snow depth analysis, using the model
+    ! forecast density
 
        !--------------------------------------------------------------------------------
        ! read increments in
