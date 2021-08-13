@@ -25,8 +25,8 @@ contains
  !! @param[inout] RLA Latitude on the cubed-sphere tile
  !! @param[inout] RLO Longitude on the cubed-sphere tile
  !! @param[inout] STC_STATE
- !! @param[in] LANDINC_TILE Land mask for increments on the cubed-sphere tile
- !! @param[in] LANDINC_TILE_FG First guess land mask for increments on the cubed-sphere tile
+ !! @param[in] SOILSNOW_TILE Land mask for increments on the cubed-sphere tile
+ !! @param[in] SOILSNOW_TILE_FG First guess land mask for increments on the cubed-sphere tile
  !! @param[in] LENSFC Number of land points on a tile
  !! @param[in] LSOIL Number of soil layers
  !! @param[in] IDIM 'I' dimension of a tile
