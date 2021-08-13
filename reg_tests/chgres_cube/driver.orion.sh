@@ -203,7 +203,7 @@ TEST15=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:10:00 -A $PROJECT
 
 LOG_FILE16=${LOG_FILE}16
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST10=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.pbgrib2 \
+TEST16=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.pbgrib2 \
       --open-mode=append -o $LOG_FILE16 -e $LOG_FILE16 ./25km.conus.gfs.pbgrib2.sh)
 
 #-----------------------------------------------------------------------------
