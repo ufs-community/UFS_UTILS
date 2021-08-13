@@ -200,7 +200,7 @@ TEST15=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=2 -t 0:1
 
 LOG_FILE=consistency.log16
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST9=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.pbgrib2.conus \
+TEST16=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.pbgrib2.conus \
       --exclusive -o $LOG_FILE -e $LOG_FILE ./25km.conus.gfs.pbgrib2.sh)
 
 #-----------------------------------------------------------------------------
