@@ -15,12 +15,14 @@
                         i_target, j_target, &
                         target_grid, num_tiles_target_grid, &
                         latitude_target_grid, &
-                        longitude_target_grid, &
+                        longitude_target_grid
 
- use static_data, only: soil_type_target_grid, &
-                        veg_type_target_grid, &
+ use input_data, only: t2m_input_grid, &
+                       q2m_input_grid
  
- use surface, only : regrid_many
+ use surface, only : regrid_many, &
+                     t2m_target_grid, &
+                     q2m_target_grid
 
 
  implicit none
@@ -36,6 +38,7 @@
  integer                      :: clb(4), cub(4)
  integer                      :: ierr, localpet, npets, rc
  integer                      :: i, j, k, num_fields
+ integer                      :: isrctermprocessing
 
  real(esmf_kind_r8), allocatable  :: latitude(:,:), longitude(:,:)
  real(esmf_kind_r8), allocatable  :: q2m_input(:,:), & 
@@ -43,7 +46,7 @@
  real(esmf_kind_r8), allocatable  :: q2m_correct(:,:), & 
                                      q2m_target(:,:), &
                                      t2m_target(:,:), &
-                                     t2m_correct(:,:), &
+                                     t2m_correct(:,:)
  real(esmf_kind_r8), pointer      :: lon_ptr(:,:), &
                                      lat_ptr(:,:)
  type(esmf_vm)                    :: vm
@@ -62,9 +65,6 @@
  call ESMF_VMGetGlobal(vm, rc=ierr)
 
  call ESMF_VMGet(vm, localPet=localpet, petCount=npets, rc=ierr)
-
- sotyp_from_climo = .False.
- vgtyp_from_climo = .False.
 
  !--------------------------------------------------------------------!
  !----------------- Setup Input Grid & Coordinates -------------------!
@@ -130,30 +130,34 @@
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="input_grid_latitude", &
                                    rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate", rc)
 
  longitude_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="input_grid_longitude", &
                                    rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate", rc)
 
  call ESMF_FieldScatter(longitude_input_grid, longitude, rootpet=0, rc=rc)
  call ESMF_FieldScatter(latitude_input_grid, latitude, rootpet=0, rc=rc)
  deallocate(latitude, longitude) 
- nullify(lat_corner_ptr, lon_corner_ptr)
 
  !Initializes input ESMF fields
  t2m_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   name="input_grid_t2m", &
-                                   rc=rc)
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate", rc)
+
  q2m_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   name="
-                                   input_grid_q2m", &
-                                   rc=rc)
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate", rc)
+
  !Allocate and fill in the fields on the input grid that we need to create soil type
  allocate(t2m_input(i_input,j_input))
  allocate(q2m_input(i_input,j_input))
@@ -237,6 +241,21 @@
  call ESMF_FieldScatter(latitude_target_grid, latitude, rootpet=0, rc=rc)
  deallocate(latitude, longitude)
 
+ ! Create target t2m and q2m fields
+ t2m_target_grid = ESMF_FieldCreate(target_grid, &
+                                    typekind=ESMF_TYPEKIND_R8, &
+                                     name="t2m_target_grid", &
+                                    staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate", rc)
+
+ q2m_target_grid = ESMF_FieldCreate(target_grid, &
+                                    typekind=ESMF_TYPEKIND_R8, &
+                                     name="q2m_target_grid", &
+                                    staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldCreate", rc)
+
  ! Create masks on the target grid and the correct (expected) soil type on the target grid
  ! to check against what returns from interp
  
@@ -246,19 +265,47 @@
  allocate(q2m_target(i_target,j_target))
 
    
- t2m_correct =   reshape((/0., 0., 15.,15.,5., 5., 5., 5., &  
-                           0., 0., 5., 5., 6., 6., 6., 6., &
-                           0., 0., 5., 5., 6., 6., 6., 6., &
-                           0., 0., 5., 5., 6., 6., 0., 0., &
-                           0., 0., 5., 5., 6., 6., 0., 0. /),(/i_target,j_target/))
- q2m_correct =   reshape((/0., 0.,16.,16., 4., 4., 4., 4., &
-                           0., 0., 3., 3., 5., 5., 5., 5., &
-                           0., 0., 3., 3., 5., 5., 5., 5., &
-                           0., 0., 3., 3., 5., 5., 0., 0., &
-                           0., 0., 3., 3., 5., 5., 0., 0. /),(/i_target,j_target/))
+ !t2m_correct =   reshape((/0., 0., 15.,15.,5., 5., 5., 5., &  
+ !                          0., 0., 5., 5., 6., 6., 6., 6., &
+ !                          0., 0., 5., 5., 6., 6., 6., 6., &
+ !                          0., 0., 5., 5., 6., 6., 0., 0., &
+ !                          0., 0., 5., 5., 6., 6., 0., 0. /),(/i_target,j_target/))
+ t2m_correct = reshape((/ 292.000000000000,        292.000000000000,&
+   292.000000000000,        292.000000000000,        294.000000000000,&
+   294.000000000000,        294.000000000000,        294.000000000000,&
+   293.000000000000,        293.000000000000,        293.000000000000,&
+   293.000000000000,        295.000000000000,        295.000000000000,&
+   295.000000000000,        295.000000000000,        293.000000000000,&
+   293.000000000000,        293.000000000000,        293.000000000000,&
+   295.000000000000,        295.000000000000,        295.000000000000,&
+   295.000000000000,        293.000000000000,        293.000000000000,&
+   293.000000000000,        293.000000000000,        295.000000000000,&
+   295.000000000000,        295.000000000000,        295.000000000000,&
+   293.000000000000,        293.000000000000,        293.000000000000,&
+   293.000000000000,        295.000000000000,        295.000000000000,&
+   295.000000000000,        295.000000000000/),(/i_target,j_target/))
+ !q2m_correct =   reshape((/0., 0.,16.,16., 4., 4., 4., 4., &
+ !                          0., 0., 3., 3., 5., 5., 5., 5., &
+ !                          0., 0., 3., 3., 5., 5., 5., 5., &
+ !                          0., 0., 3., 3., 5., 5., 0., 0., &
+ !                          0., 0., 3., 3., 5., 5., 0., 0. /),(/i_target,j_target/))
+ q2m_correct = reshape((/ 7.000000000000000E-004,  7.000000000000000E-004,&
+  7.000000000000000E-004,  7.000000000000000E-004,  8.000000000000000E-004,&
+  8.000000000000000E-004,  8.000000000000000E-004,  8.000000000000000E-004,&
+  8.000000000000000E-004,  8.000000000000000E-004,  8.000000000000000E-004,&
+  8.000000000000000E-004,  9.000000000000000E-004,  9.000000000000000E-004,&
+  9.000000000000000E-004,  9.000000000000000E-004,  8.000000000000000E-004,&
+  8.000000000000000E-004,  8.000000000000000E-004,  8.000000000000000E-004,&
+  9.000000000000000E-004,  9.000000000000000E-004,  9.000000000000000E-004,&
+  9.000000000000000E-004,  8.000000000000000E-004,  8.000000000000000E-004,&
+  8.000000000000000E-004,  8.000000000000000E-004,  9.000000000000000E-004,&
+  9.000000000000000E-004,  9.000000000000000E-004,  9.000000000000000E-004,&
+  8.000000000000000E-004,  8.000000000000000E-004,  8.000000000000000E-004,&
+  8.000000000000000E-004,  9.000000000000000E-004,  9.000000000000000E-004,&
+  9.000000000000000E-004,  9.000000000000000E-004/),(/i_target,j_target/))
 
 
- method=ESMF_REGRIDMETHOD_BILINEAR
+ method=ESMF_REGRIDMETHOD_NEAREST_STOD
 
  isrctermprocessing = 1
 
@@ -304,7 +351,8 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleDestroy", rc) 
 
- call ESMF_FieldGather(soil_type_target_grid, sotyp_target, rootPet=0, rc=rc)
+ call ESMF_FieldGather(t2m_target_grid, t2m_target, rootPet=0, rc=rc)
+ call ESMF_FieldGather(q2m_target_grid, q2m_target, rootPet=0, rc=rc)
 
  print*,"Check results."
 

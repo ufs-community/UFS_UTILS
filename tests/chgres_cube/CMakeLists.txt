@@ -33,8 +33,6 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 # This one does not end up in the data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 
 add_executable(ftst_utils ftst_utils.F90)
 add_test(NAME chgres_cube-ftst_utils COMMAND ftst_utils)
@@ -90,25 +88,6 @@ add_mpi_test(chgres_cube-ftst_convert_winds
   NUMPROCS 3
   TIMEOUT 60)
 
-add_executable(ftst_read_sfc_gfs_nemsio ftst_read_sfc_gfs_nemsio.F90)
-target_link_libraries(ftst_read_sfc_gfs_nemsio chgres_cube_lib)
-
-# Cause test to be run with MPI.
-add_mpi_test(chgres_cube-ftst_read_sfc_gfs_nemsio
-  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_sfc_gfs_nemsio
-  NUMPROCS 1
-  TIMEOUT 60)
-
-# Comment out this unit test until ESMF memory leaks are solved
-# add_executable(ftst_surface_interp ftst_surface_interp.F90)
-# target_link_libraries(ftst_surface_interp chgres_cube_lib)
-
-# Cause test to be run with MPI.
-# add_mpi_test(chgres_cube-ftst_surface_interp
-#  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_interp
-#  NUMPROCS 1
-#  TIMEOUT 60)
-
 add_executable(ftst_read_sfc_nemsio ftst_read_sfc_nemsio.F90)
 target_link_libraries(ftst_read_sfc_nemsio chgres_cube_lib)
 
@@ -136,15 +115,6 @@ add_mpi_test(chgres_cube-ftst_read_nst_netcdf
   NUMPROCS 1
   TIMEOUT 60)
 
-add_executable(ftst_read_nst_nemsio ftst_read_nst_nemsio.F90)
-target_link_libraries(ftst_read_nst_nemsio chgres_cube_lib)
-
-# Cause test to be run with MPI.
-add_mpi_test(chgres_cube-ftst_read_nst_nemsio
-  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_nst_nemsio
-  NUMPROCS 1
-  TIMEOUT 60)
-
 add_executable(ftst_read_atm_gaussian_netcdf ftst_read_atm_gaussian_netcdf.F90)
 target_link_libraries(ftst_read_atm_gaussian_netcdf chgres_cube_lib)
 
@@ -158,10 +128,13 @@ add_executable(ftst_surface_nst_landfill ftst_surface_nst_landfill.F90)
 target_link_libraries(ftst_surface_nst_landfill chgres_cube_lib)
 
 # Cause test to be run with MPI.
-add_mpi_test(chgres_cube-ftst_surface_regrid_many
-  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_regrid_many
+add_mpi_test(chgres_cube-ftst_surface_nst_landfill
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_nst_landfill
   NUMPROCS 1
   TIMEOUT 60)
+
+add_executable(ftst_surface_regrid_many ftst_surface_regrid_many.F90)
+target_link_libraries(ftst_surface_regrid_many chgres_cube_lib)
 
 # Cause test to be run with MPI.
 add_mpi_test(chgres_cube-ftst_surface_regrid_many

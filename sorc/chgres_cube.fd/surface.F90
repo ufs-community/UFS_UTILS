@@ -157,6 +157,7 @@
  public :: cleanup_target_sfc_data
  public :: nst_land_fill
  public :: cleanup_target_nst_data
+ public :: regrid_many
 
  contains
 
