@@ -1,4 +1,7 @@
-set(fortran_src
+set(lib_src
+    utils.F90)
+
+set(exe_src
     filter_topo.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
@@ -8,9 +11,19 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
 endif()
 
 set(exe_name filter_topo)
-add_executable(${exe_name} ${fortran_src})
+
+add_library(filter_topo_lib STATIC ${lib_src})
+add_executable(${exe_name} ${exe_src})
+
+set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
+set_target_properties(filter_topo_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
+target_include_directories(filter_topo_lib INTERFACE ${mod_dir})
+
 target_link_libraries(
-  ${exe_name}
+  filter_topo_lib
+  PUBLIC
   NetCDF::NetCDF_Fortran)
+
+target_link_libraries(${exe_name} PRIVATE filter_topo_lib)
 
 install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
