@@ -1200,6 +1200,8 @@ MODULE READ_WRITE_DATA
  !! @param[in] LSOIL Number of soil layers.
  !! @param[in] LENSFC Total number of points on a tile.
  !! @param[in] DO_NSST When true, nsst fields are read.
+ !! @param[in] INC_FILE When true, read from an increment file.
+ !!                     False reads from a restart file.
  !! @param[out] TSFFCS Skin Temperature.
  !! @param[out] SMCFCS Total volumetric soil moisture.
  !! @param[out] SWEFCS Snow water equivalent.
