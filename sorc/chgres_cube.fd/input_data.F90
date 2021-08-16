@@ -2459,7 +2459,8 @@
 
  use wgrib2api
  
- use grib2_util, only                   : rh2spfh, convert_omega
+ use grib2_util, only                   : rh2spfh, rh2spfh_gfs, convert_omega
+ use program_setup, only         : use_rh, calrh 
 
  implicit none
 
@@ -2607,7 +2608,7 @@
  if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
  iret = grb2_inq(the_file,inv_file,trim(trac_names_grib_1(1)),trac_names_grib_2(1),lvl_str_space)
 
- if (iret <= 0) then
+ if (iret <= 0 .or. use_rh) then
    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
    if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
    hasspfh = .false.
@@ -2782,7 +2783,13 @@
       endif !iret<=0
       
       if (n==1 .and. .not. hasspfh) then 
-        call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        if (calrh .eq. 0) then
+          call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        else if (calrh .eq. 1) then
+          call rh2spfh_gfs(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        else
+          call error_handler("calrh option not supported",1)
+        end if
       endif
 
        print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
