@@ -145,7 +145,6 @@ end subroutine RH2SPFH_GFS
 
 !> Compute saturation vapor pressure 
 !!
-!! @param[out] fpvsnew(real, intent(in) t) saturation vapor pressure in Pascals 
 !! @param[in] t temperature in Kelvin
 !! @author N Phillips  
 
