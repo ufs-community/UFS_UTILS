@@ -96,7 +96,6 @@ end subroutine RH2SPFH_NAM
 !!
 !! @param[inout] rh_sphum rel humidity on input. spec hum on output.
 !! @param[in] p pressure in Pa
-!! @param fpvsnew(real, intent(in) t) function 
 !! @param[in] t temperature
 !! @author Jili Dong NCEP/EMC 
  subroutine rh2spfh_gfs(rh_sphum,p,t)
@@ -146,7 +145,7 @@ end subroutine RH2SPFH_GFS
 
 !> Compute saturation vapor pressure 
 !!
-!! @param[out] fpvsnew saturation vapor pressure in Pascals 
+!! @param[out] fpvsnew(real, intent(in) t) saturation vapor pressure in Pascals 
 !! @param[in] t temperature in Kelvin
 !! @author N Phillips  
 
