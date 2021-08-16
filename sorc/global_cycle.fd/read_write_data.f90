@@ -1197,47 +1197,47 @@ MODULE READ_WRITE_DATA
  !> Read the first guess surface records and nsst records (if
  !! selected) for a single cubed-sphere tile.
  !!
- !! @param[in] LSOIL Number of soil layers.
+ !! @param[inout] LSOIL Number of soil layers.
  !! @param[in] LENSFC Total number of points on a tile.
  !! @param[in] DO_NSST When true, nsst fields are read.
  !! @param[out, optional] TSFFCS Skin Temperature.
  !! @param[out, optional] SMCFCS Total volumetric soil moisture.
  !! @param[out, optional] SWEFCS Snow water equivalent.
- !! @param[out][optional] STCFCS Soil temperature.
- !! @param[out][optional] TG3FCS Soil substrate temperature.
- !! @param[out][optional] ZORFCS Roughness length.
- !! @param[out][optional] CVFCS Cloud cover.
- !! @param[out][optional] CVBFCS Cloud base.
- !! @param[out][optional] CVTFCS Cloud top.
- !! @param[out][optional] ALBFCS Snow-free albedo.
- !! @param[out][optional] SLIFCS Land-sea mask including ice flag.
- !! @param[out][optional] VEGFCS Vegetation greenness.
- !! @param[out][optional] CNPFCS Plant canopy moisture content.
- !! @param[out][optional] F10M log((z0+10)/z0). See model routine sfc_diff.f for details.
- !! @param[out][optional] VETFCS Vegetation type.
- !! @param[out][optional] SOTFCS Soil type.
- !! @param[out][optional] ALFFCS Fractional coverage for strong/weak zenith angle
+ !! @param[out, optional] STCFCS Soil temperature.
+ !! @param[out, optional] TG3FCS Soil substrate temperature.
+ !! @param[out, optional] ZORFCS Roughness length.
+ !! @param[out, optional] CVFCS Cloud cover.
+ !! @param[out, optional] CVBFCS Cloud base.
+ !! @param[out, optional] CVTFCS Cloud top.
+ !! @param[out, optional] ALBFCS Snow-free albedo.
+ !! @param[out, optional] SLIFCS Land-sea mask including ice flag.
+ !! @param[out, optional] VEGFCS Vegetation greenness.
+ !! @param[out, optional] CNPFCS Plant canopy moisture content.
+ !! @param[out, optional] F10M log((z0+10)/z0). See model routine sfc_diff.f for details.
+ !! @param[out, optional] VETFCS Vegetation type.
+ !! @param[out, optional] SOTFCS Soil type.
+ !! @param[out, optional] ALFFCS Fractional coverage for strong/weak zenith angle
  !! dependent albedo.
- !! @param[out][optional] USTAR Friction velocity.
- !! @param[out][optional] FMM log((z0+z1)/z0). See model routine sfc_diff.f for details.
- !! @param[out][optional] FHH log((ztmax+z1)/ztmax). See model routine sfc_diff.f for
+ !! @param[out, optional] USTAR Friction velocity.
+ !! @param[out, optional] FMM log((z0+z1)/z0). See model routine sfc_diff.f for details.
+ !! @param[out, optional] FHH log((ztmax+z1)/ztmax). See model routine sfc_diff.f for
  !! details.
- !! @param[out][optional] SIHFCS Sea ice depth.
- !! @param[out][optional] SICFCS Sea ice concentration.
- !! @param[out][optional] SITFCS Sea ice temperature.
- !! @param[out][optional] TPRCP Precipitation.
- !! @param[out][optional] SRFLAG Snow/rain flag.
- !! @param[out][optional] SNDFCS Snow depth.
- !! @param[out][optional] VMNFCS Minimum vegetation greenness.
- !! @param[out][optional] VMXFCS Maximum vegetation greenness.
- !! @param[out][optional] SLCFCS Liquid portion of volumetric soil moisture.
- !! @param[out][optional] SLPFCS Slope type.
- !! @param[out][optional] ABSFCS Maximum snow albedo.
- !! @param[out][optional] T2M Two-meter air temperature.
- !! @param[out][optional] Q2M Two-meter specific humidity.
- !! @param[out][optional] SLMASK Land-sea mask without ice flag.
- !! @param[out][optional] ZSOIL Soil layer thickness.
- !! @param[out][optional] NSST Data structure containing nsst fields.
+ !! @param[out, optional] SIHFCS Sea ice depth.
+ !! @param[out, optional] SICFCS Sea ice concentration.
+ !! @param[out, optional] SITFCS Sea ice temperature.
+ !! @param[out, optional] TPRCP Precipitation.
+ !! @param[out, optional] SRFLAG Snow/rain flag.
+ !! @param[out, optional] SNDFCS Snow depth.
+ !! @param[out, optional] VMNFCS Minimum vegetation greenness.
+ !! @param[out, optional] VMXFCS Maximum vegetation greenness.
+ !! @param[out, optional] SLCFCS Liquid portion of volumetric soil moisture.
+ !! @param[out, optional] SLPFCS Slope type.
+ !! @param[out, optional] ABSFCS Maximum snow albedo.
+ !! @param[out, optional] T2M Two-meter air temperature.
+ !! @param[out, optional] Q2M Two-meter specific humidity.
+ !! @param[out, optional] SLMASK Land-sea mask without ice flag.
+ !! @param[out, optional] ZSOIL Soil layer thickness.
+ !! @param[out, optional] NSST Data structure containing nsst fields.
  !! @author George Gayno NOAA/EMC
  SUBROUTINE READ_DATA(LSOIL,LENSFC,DO_NSST,INC_FILE,TSFFCS,SMCFCS,SWEFCS,STCFCS, &
                       TG3FCS,ZORFCS, &
@@ -1254,7 +1254,7 @@ MODULE READ_WRITE_DATA
 
  IMPLICIT NONE
 
- INTEGER, INTENT(IN)       :: LSOIL, LENSFC
+ INTEGER, INTENT(INOUT)       :: LSOIL, LENSFC ! made inout as doxygen insisted on having one non-optional out parameter.
  LOGICAL, INTENT(IN)       :: DO_NSST, INC_FILE
 
  REAL, OPTIONAL, INTENT(OUT)         :: CVFCS(LENSFC), CVBFCS(LENSFC)
