@@ -13,5 +13,6 @@ var searchData=
   ['udlmm',['udlmm',['../interfacepmat_1_1udlmm.html',1,'pmat']]],
   ['udlvb',['udlvb',['../interfacepmat2_1_1udlvb.html',1,'pmat2']]],
   ['udlxb',['udlxb',['../interfacepmat2_1_1udlxb.html',1,'pmat2']]],
-  ['udlyb',['udlyb',['../interfacepmat2_1_1udlyb.html',1,'pmat2']]]
+  ['udlyb',['udlyb',['../interfacepmat2_1_1udlyb.html',1,'pmat2']]],
+  ['utils',['utils',['../classutils.html',1,'']]]
 ];

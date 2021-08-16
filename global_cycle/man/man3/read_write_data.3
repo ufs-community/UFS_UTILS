@@ -1,4 +1,4 @@
-.TH "read_write_data" 3 "Mon Jun 21 2021" "Version 1.5.0" "global_cycle" \" -*- nroff -*-
+.TH "read_write_data" 3 "Mon Aug 16 2021" "Version 1.6.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -40,9 +40,9 @@ This module contains routines that read and write data\&.
 .br
 .RI "\fIRead the first guess surface records and nsst records (if selected) for a single cubed-sphere tile\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBread_gsi_data\fP (GSI_FILE)"
+.RI "subroutine, public \fBread_gsi_data\fP (GSI_FILE, FILE_TYPE, LSOIL)"
 .br
-.RI "\fIRead file from the GSI containing the foundation temperature increments and mask\&. \fP"
+.RI "\fIRead increment file from the GSI containing either the foundation temperature increments and mask, or the soil increments\&. \fP"
 .ti -1c
 .RI "subroutine, public \fBread_lat_lon_orog\fP (RLA, RLO, OROG, OROG_UF, TILE_NUM, IDIM, JDIM, IJDIM)"
 .br
@@ -83,6 +83,18 @@ allocatable, public \fBdtref_gaus\fP"
 allocatable, public \fBslmsk_gaus\fP"
 .br
 .RI "\fIGSI land mask on the gaussian grid\&. \fP"
+.ti -1c
+.RI "integer, dimension(:,:), 
+.br
+allocatable, public \fBsoilsnow_gaus\fP"
+.br
+.RI "\fIGSI soil / snow mask for land on the gaussian grid\&. \fP"
+.ti -1c
+.RI "real, dimension(:,:,:), 
+.br
+allocatable, public \fBstc_inc_gaus\fP"
+.br
+.RI "\fIGSI soil temperature increments on the gaussian grid\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -188,7 +200,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1897 of file read_write_data\&.f90\&.
+Definition at line 1959 of file read_write_data\&.f90\&.
 .PP
 References nc_check()\&.
 .PP
@@ -219,7 +231,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1762 of file read_write_data\&.f90\&.
+Definition at line 1824 of file read_write_data\&.f90\&.
 .PP
 Referenced by get_tf_clm()\&.
 .SS "subroutine read_write_data::nc_check (integer, intent(in)status)"
@@ -239,7 +251,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1934 of file read_write_data\&.f90\&.
+Definition at line 1996 of file read_write_data\&.f90\&.
 .PP
 Referenced by get_dim_nc(), and read_salclm_gfs_nc()\&.
 .SS "subroutine read_write_data::netcdf_err (integer, intent(in)ERR, character(len=*), intent(in)STRING)"
@@ -261,7 +273,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1045 of file read_write_data\&.f90\&.
+Definition at line 1054 of file read_write_data\&.f90\&.
 .SS "subroutine, public read_write_data::read_data (real, dimension(lensfc), intent(out)TSFFCS, real, dimension(lensfc,lsoil), intent(out)SMCFCS, real, dimension(lensfc), intent(out)SNOFCS, real, dimension(lensfc,lsoil), intent(out)STCFCS, real, dimension(lensfc), intent(out)TG3FCS, real, dimension(lensfc), intent(out)ZORFCS, real, dimension(lensfc), intent(out)CVFCS, real, dimension(lensfc), intent(out)CVBFCS, real, dimension(lensfc), intent(out)CVTFCS, real, dimension(lensfc,4), intent(out)ALBFCS, real, dimension(lensfc), intent(out)SLIFCS, real, dimension(lensfc), intent(out)VEGFCS, real, dimension(lensfc), intent(out)CNPFCS, real, dimension(lensfc), intent(out)F10M, real, dimension(lensfc), intent(out)VETFCS, real, dimension(lensfc), intent(out)SOTFCS, real, dimension(lensfc,2), intent(out)ALFFCS, real, dimension(lensfc), intent(out)USTAR, real, dimension(lensfc), intent(out)FMM, real, dimension(lensfc), intent(out)FHH, real, dimension(lensfc), intent(out)SIHFCS, real, dimension(lensfc), intent(out)SICFCS, real, dimension(lensfc), intent(out)SITFCS, real, dimension(lensfc), intent(out)TPRCP, real, dimension(lensfc), intent(out)SRFLAG, real, dimension(lensfc), intent(out)SWDFCS, real, dimension(lensfc), intent(out)VMNFCS, real, dimension(lensfc), intent(out)VMXFCS, real, dimension(lensfc,lsoil), intent(out)SLCFCS, real, dimension(lensfc), intent(out)SLPFCS, real, dimension(lensfc), intent(out)ABSFCS, real, dimension(lensfc), intent(out)T2M, real, dimension(lensfc), intent(out)Q2M, real, dimension(lensfc), intent(out)SLMASK, real(kind=4), dimension(lsoil), intent(out)ZSOIL, integer, intent(in)LSOIL, integer, intent(in)LENSFC, logical, intent(in)DO_NSST, type(\fBnsst_data\fP)NSST)"
 
 .PP
@@ -355,19 +367,23 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1180 of file read_write_data\&.f90\&.
+Definition at line 1242 of file read_write_data\&.f90\&.
 .PP
 References netcdf_err()\&.
 .PP
 Referenced by sfcdrv()\&.
-.SS "subroutine, public read_write_data::read_gsi_data (character(len=*), intent(in)GSI_FILE)"
+.SS "subroutine, public read_write_data::read_gsi_data (character(len=*), intent(in)GSI_FILE, character(len=3), intent(in)FILE_TYPE, integer, intent(in), optionalLSOIL)"
 
 .PP
-Read file from the GSI containing the foundation temperature increments and mask\&. The data is in NetCDF and on a gaussian grid\&. The grid contains two extra rows for each pole\&. The interpolation from gaussian to native grid assumes no pole points, so these are removed\&.
+Read increment file from the GSI containing either the foundation temperature increments and mask, or the soil increments\&. The data is in NetCDF and on a gaussian grid\&. The grid contains two extra rows for each pole\&. The interpolation from gaussian to native grid assumes no pole points, so these are removed\&.
 .PP
 \fBParameters:\fP
 .RS 4
 \fIGSI_FILE\fP Path/name of the GSI file to be read\&. 
+.br
+\fIFILE_TYPE\fP file-type to be read in, 'NST' or 'LND'\&. 
+.br
+\fILSOIL\fP Number of model soil levels\&.
 .RE
 .PP
 \fBAuthor:\fP
@@ -377,7 +393,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1075 of file read_write_data\&.f90\&.
+Definition at line 1087 of file read_write_data\&.f90\&.
 .PP
 References netcdf_err()\&.
 .PP
@@ -413,7 +429,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 911 of file read_write_data\&.f90\&.
+Definition at line 920 of file read_write_data\&.f90\&.
 .PP
 References netcdf_err()\&.
 .PP
@@ -447,7 +463,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1821 of file read_write_data\&.f90\&.
+Definition at line 1883 of file read_write_data\&.f90\&.
 .PP
 References count(), and nc_check()\&.
 .PP
@@ -491,7 +507,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1620 of file read_write_data\&.f90\&.
+Definition at line 1682 of file read_write_data\&.f90\&.
 .PP
 Referenced by get_tf_clm_ta()\&.
 .SS "subroutine, public read_write_data::write_data (real, dimension(lensfc), intent(in)slifcs, real, dimension(lensfc), intent(in)tsffcs, real, dimension(lensfc), intent(in)snofcs, real, dimension(lensfc), intent(in)tg3fcs, real, dimension(lensfc), intent(in)zorfcs, real, dimension(lensfc,4), intent(in)albfcs, real, dimension(lensfc,2), intent(in)alffcs, real, dimension(lensfc), intent(in)vegfcs, real, dimension(lensfc), intent(in)cnpfcs, real, dimension(lensfc), intent(in)f10m, real, dimension(lensfc), intent(in)t2m, real, dimension(lensfc), intent(in)q2m, real, dimension(lensfc), intent(in)vetfcs, real, dimension(lensfc), intent(in)sotfcs, real, dimension(lensfc), intent(in)ustar, real, dimension(lensfc), intent(in)fmm, real, dimension(lensfc), intent(in)fhh, real, dimension(lensfc), intent(in)sicfcs, real, dimension(lensfc), intent(in)sihfcs, real, dimension(lensfc), intent(in)sitfcs, real, dimension(lensfc), intent(in)tprcp, real, dimension(lensfc), intent(in)srflag, real, dimension(lensfc), intent(in)swdfcs, real, dimension(lensfc), intent(in)vmnfcs, real, dimension(lensfc), intent(in)vmxfcs, real, dimension(lensfc), intent(in)slpfcs, real, dimension(lensfc), intent(in)absfcs, real, dimension(lensfc,lsoil), intent(in)slcfcs, real, dimension(lensfc,lsoil), intent(in)smcfcs, real, dimension(lensfc,lsoil), intent(in)stcfcs, integer, intent(in)idim, integer, intent(in)jdim, integer, intent(in)lensfc, integer, intent(in)lsoil, logical, intent(in)do_nsst, type(\fBnsst_data\fP)nsst)"
@@ -586,7 +602,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 108 of file read_write_data\&.f90\&.
+Definition at line 117 of file read_write_data\&.f90\&.
 .PP
 References netcdf_err()\&.
 .PP
@@ -598,7 +614,7 @@ Referenced by sfcdrv()\&.
 .PP
 GSI foundation temperature increment on the gaussian grid\&. 
 .PP
-Definition at line 45 of file read_write_data\&.f90\&.
+Definition at line 49 of file read_write_data\&.f90\&.
 .SS "integer, public read_write_data::idim_gaus"
 
 .PP
@@ -617,6 +633,18 @@ Definition at line 40 of file read_write_data\&.f90\&.
 GSI land mask on the gaussian grid\&. 
 .PP
 Definition at line 42 of file read_write_data\&.f90\&.
+.SS "integer, dimension(:,:), allocatable, public read_write_data::soilsnow_gaus"
+
+.PP
+GSI soil / snow mask for land on the gaussian grid\&. 1 - soil, 2 - snow, 0 - not land 
+.PP
+Definition at line 45 of file read_write_data\&.f90\&.
+.SS "real, dimension(:,:,:), allocatable, public read_write_data::stc_inc_gaus"
+
+.PP
+GSI soil temperature increments on the gaussian grid\&. 
+.PP
+Definition at line 52 of file read_write_data\&.f90\&.
 
 .SH "Author"
 .PP 

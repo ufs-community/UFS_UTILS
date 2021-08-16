@@ -1,8 +1,8 @@
-.TH "/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.f" 3 "Mon Jun 21 2021" "Version 1.5.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/gpfs/dell1/stmp/George.Gayno/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.f" 3 "Mon Aug 16 2021" "Version 1.6.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.f \- 
+/gpfs/dell1/stmp/George.Gayno/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.f \- 
 .PP
 Terrain maker for global spectral model\&.  
 
@@ -310,7 +310,7 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 1764 of file mtnlm7_oclsm\&.f\&.
+Definition at line 1788 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by makemt2(), makeoa2(), makeoa3(), and makepc2()\&.
 .SS "real function get_lat_angle (realdy, realDEGRAD)"
@@ -337,7 +337,7 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 2913 of file mtnlm7_oclsm\&.f\&.
+Definition at line 2937 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by makeoa2()\&.
 .SS "real function get_lon_angle (realdx, reallat, realDEGRAD)"
@@ -366,7 +366,7 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 2894 of file mtnlm7_oclsm\&.f\&.
+Definition at line 2918 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by makeoa2()\&.
 .SS "subroutine get_mismatch_index (integer, intent(in)im_in, integer, intent(in)jm_in, real, dimension(im_in,jm_in), intent(in)geolon_in, real, dimension(im_in,jm_in), intent(in)geolat_in, logical*1, dimension(im_in,jm_in), intent(in)bitmap_in, integer, intent(in)num_out, real, dimension(num_out), intent(in)lon_out, real, dimension(num_out), intent(in)lat_out, integer, dimension(num_out), intent(out)iindx, integer, dimension(num_out), intent(out)jindx)"
@@ -404,7 +404,7 @@ GFDL progammer
 .PP
 
 .PP
-Definition at line 3389 of file mtnlm7_oclsm\&.f\&.
+Definition at line 3413 of file mtnlm7_oclsm\&.f\&.
 .PP
 References spherical_distance()\&.
 .PP
@@ -449,7 +449,7 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 4486 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4510 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by makeoa2()\&.
 .SS "subroutine get_xnsum2 (reallon1, reallat1, reallon2, reallat2, integerIMN, integerJMN, real, dimension(jmn)glat, integer, dimension(imn,jmn)zavg, integer, dimension(imn,jmn)zslm, realdelxn, real, intent(out)xnsum1, real, intent(out)xnsum2, real, intent(out)HC)"
@@ -493,7 +493,7 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 4593 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4617 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by makeoa2()\&.
 .SS "subroutine get_xnsum3 (reallon1, reallat1, reallon2, reallat2, integerIMN, integerJMN, real, dimension(jmn)glat, integer, dimension(imn,jmn)zavg, integer, dimension(imn,jmn)zslm, realdelxn, real, intent(out)xnsum1, real, intent(out)xnsum2, realHC)"
@@ -537,7 +537,7 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 4689 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4713 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by makeoa2()\&.
 .SS "subroutine gg2rg (integer, intent(in)im, integer, intent(in)jm, integer, dimension(jm), intent(in)numi, real, dimension(im,jm), intent(inout)a)"
@@ -563,7 +563,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 3985 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4009 of file mtnlm7_oclsm\&.f\&.
 .SS "logical function inside_a_polygon (reallon1, reallat1, integernpts, real, dimension(npts)lon2, real, dimension(npts)lat2)"
 
 .PP
@@ -594,7 +594,7 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 4391 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4415 of file mtnlm7_oclsm\&.f\&.
 .PP
 References latlon2xyz(), and spherical_angle()\&.
 .PP
@@ -628,7 +628,7 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 3470 of file mtnlm7_oclsm\&.f\&.
+Definition at line 3494 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by makeoa3()\&.
 .SS "subroutine latlon2xyz (integer, intent(in)siz, real, dimension(siz), intent(in)lon, real, dimension(siz), intent(in)lat, real, dimension(siz), intent(out)x, real, dimension(siz), intent(out)y, real, dimension(siz), intent(out)z)"
@@ -658,7 +658,7 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 4319 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4343 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by inside_a_polygon()\&.
 .SS "subroutine makemt (integer, dimension(imn,jmn)ZAVG, integer, dimension(imn,jmn)ZSLM, dimension(im,jm)ORO, dimension(im,jm)SLM, dimension(im,jm)VAR, dimension(im,jm)VAR4, dimension(jmn)GLAT, dimension(im,jm)IST, dimension(im,jm)IEN, dimension(jm)JST, dimension(jm)JEN, IM, JM, IMN, JMN, dimension(jm)XLAT, dimension(jm)numi)"
@@ -710,7 +710,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 1598 of file mtnlm7_oclsm\&.f\&.
+Definition at line 1622 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by tersub()\&.
 .SS "subroutine makemt2 (integer, dimension(imn,jmn)ZAVG, integer, dimension(imn,jmn)ZSLM, real, dimension(im,jm)ORO, real, dimension(im,jm)SLM, real, dimension(im,jm)land_frac, real, dimension(im,jm)VAR, real, dimension(im,jm)VAR4, real, dimension(jmn)GLAT, integerIM, integerJM, integerIMN, integerJMN, real, dimension(im+1,jm+1)lon_c, real, dimension(im+1,jm+1)lat_c)"
@@ -756,7 +756,7 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 1858 of file mtnlm7_oclsm\&.f\&.
+Definition at line 1882 of file mtnlm7_oclsm\&.f\&.
 .PP
 References get_index(), and inside_a_polygon()\&.
 .PP
@@ -824,7 +824,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 2566 of file mtnlm7_oclsm\&.f\&.
+Definition at line 2590 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by tersub()\&.
 .SS "subroutine makeoa2 (integer, dimension(imn,jmn)ZAVG, integer, dimension(imn,jmn)zslm, real, dimension(im,jm)VAR, real, dimension(jmn)GLAT, real, dimension(im,jm,4)OA4, real, dimension(im,jm,4)OL, integer, dimension(im,jm,4)IOA4, real, dimension(im,jm)ELVMAX, real, dimension(im,jm)ORO, real, dimension(im,jm)oro1, real, dimension(im,jm)XNSUM, real, dimension(im,jm)XNSUM1, real, dimension(im,jm)XNSUM2, real, dimension(im,jm)XNSUM3, real, dimension(im,jm)XNSUM4, integerIM, integerJM, integerIMN, integerJMN, real, dimension(im+1,jm+1)lon_c, real, dimension(im+1,jm+1)lat_c, real, dimension(im,jm)lon_t, real, dimension(im,jm)lat_t, real, dimension(im,jm)dx, real, dimension(im,jm)dy, logical, dimension(im,jm)is_south_pole, logical, dimension(im,jm)is_north_pole)"
@@ -896,7 +896,7 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 2960 of file mtnlm7_oclsm\&.f\&.
+Definition at line 2984 of file mtnlm7_oclsm\&.f\&.
 .PP
 References get_index(), get_lat_angle(), get_lon_angle(), get_xnsum(), get_xnsum2(), get_xnsum3(), and inside_a_polygon()\&.
 .PP
@@ -982,7 +982,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 3527 of file mtnlm7_oclsm\&.f\&.
+Definition at line 3551 of file mtnlm7_oclsm\&.f\&.
 .PP
 References get_index(), get_mismatch_index(), inside_a_polygon(), and interpolate_mismatch()\&.
 .PP
@@ -1034,7 +1034,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 2018 of file mtnlm7_oclsm\&.f\&.
+Definition at line 2042 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by tersub()\&.
 .SS "subroutine makepc2 (integer, dimension(imn,jmn)ZAVG, integer, dimension(imn,jmn)ZSLM, real, dimension(im,jm)THETA, real, dimension(im,jm)GAMMA, real, dimension(im,jm)SIGMA, real, dimension(jmn)GLAT, integerIM, integerJM, integerIMN, integerJMN, real, dimension(im+1,jm+1)lon_c, real, dimension(im+1,jm+1)lat_c)"
@@ -1076,7 +1076,7 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 2292 of file mtnlm7_oclsm\&.f\&.
+Definition at line 2316 of file mtnlm7_oclsm\&.f\&.
 .PP
 References get_index(), and inside_a_polygon()\&.
 .PP
@@ -1102,7 +1102,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4209 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4233 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by read_g()\&.
 .SS "subroutine minmaxj (integerIM, integerJM, real(kind=4), dimension(im,jm)A, character*8title)"
@@ -1128,7 +1128,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4267 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4291 of file mtnlm7_oclsm\&.f\&.
 .SS "subroutine minmxj (integerIM, integerJM, real, dimension(im,jm)A, character*8title)"
 
 .PP
@@ -1152,7 +1152,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4011 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4035 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by tersub()\&.
 .SS "subroutine mnmxja (integerIM, integerJM, real, dimension(im,jm)A, integerimax, integerjmax, character*8title)"
@@ -1182,7 +1182,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4046 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4070 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by tersub()\&.
 .SS "subroutine nanc (a, l, character*(*)c)"
@@ -1206,7 +1206,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4753 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4777 of file mtnlm7_oclsm\&.f\&.
 .SS "subroutine read_g (integer*2, dimension(360*120,180*120)glob, integerITOPO)"
 
 .PP
@@ -1226,7 +1226,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4158 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4182 of file mtnlm7_oclsm\&.f\&.
 .PP
 References maxmin()\&.
 .PP
@@ -1256,7 +1256,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 3922 of file mtnlm7_oclsm\&.f\&.
+Definition at line 3946 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by tersub()\&.
 .SS "subroutine rg2gg (integer, intent(in)im, integer, intent(in)jm, integer, dimension(jm), intent(in)numi, real, dimension(im,jm), intent(inout)a)"
@@ -1282,7 +1282,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 3959 of file mtnlm7_oclsm\&.f\&.
+Definition at line 3983 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by tersub()\&.
 .SS "subroutine spfft1 (integer, intent(in)IMAX, integer, intent(in)INCW, integer, intent(in)INCG, integer, intent(in)KMAX, complex, dimension(incw,kmax), intent(inout)W, real, dimension(incg,kmax), intent(inout)G, integer, intent(in)IDIR)"
@@ -1337,7 +1337,7 @@ Mark Iredell ORG: W/NMC23
 .PP
 
 .PP
-Definition at line 4108 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4132 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by tersub()\&.
 .SS "real function spherical_angle (real, dimension(3)v1, real, dimension(3)v2, real, dimension(3)v3)"
@@ -1366,7 +1366,7 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 4341 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4365 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by inside_a_polygon()\&.
 .SS "real function spherical_distance (real, intent(in)theta1, real, intent(in)phi1, real, intent(in)theta2, real, intent(in)phi2)"
@@ -1397,7 +1397,7 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 3354 of file mtnlm7_oclsm\&.f\&.
+Definition at line 3378 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by get_mismatch_index()\&.
 .SS "subroutine tersub (integerIMN, integerJMN, integerIM, integerJM, integerNM, integerNR, integerNF0, integerNF1, integerNW, integerEFAC, integerBLAT, character(len=*), intent(in)OUTGRID, character(len=*), intent(in)INPUTOROG)"
@@ -1441,7 +1441,7 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 185 of file mtnlm7_oclsm\&.f\&.
+Definition at line 182 of file mtnlm7_oclsm\&.f\&.
 .PP
 References makemt(), makemt2(), makeoa(), makeoa2(), makeoa3(), makepc(), makepc2(), minmxj(), mnmxja(), netcdf_err(), read_g(), revers(), rg2gg(), spfft1(), timef(), and write_netcdf()\&.
 .PP
@@ -1463,7 +1463,7 @@ timef
 .PP
 
 .PP
-Definition at line 4802 of file mtnlm7_oclsm\&.f\&.
+Definition at line 4826 of file mtnlm7_oclsm\&.f\&.
 .PP
 Referenced by tersub()\&.
 .SH "Author"

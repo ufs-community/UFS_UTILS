@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">global_cycle
-   &#160;<span id="projectnumber">1.5.0</span>
+   &#160;<span id="projectnumber">1.6.0</span>
    </div>
   </td>
  </tr>
@@ -135,9 +135,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af6a34f0a44711ced5cb6dc76c6ea5cad"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classread__write__data.html#af6a34f0a44711ced5cb6dc76c6ea5cad">read_data</a> (TSFFCS, SMCFCS, SNOFCS, STCFCS, TG3FCS, ZORFCS, CVFCS, CVBFCS, CVTFCS, ALBFCS, SLIFCS, VEGFCS, CNPFCS, F10M, VETFCS, SOTFCS, ALFFCS, USTAR, FMM, FHH, SIHFCS, SICFCS, SITFCS, TPRCP, SRFLAG, SWDFCS, VMNFCS, VMXFCS, SLCFCS, SLPFCS, ABSFCS, T2M, Q2M, SLMASK, ZSOIL, LSOIL, LENSFC, DO_NSST, NSST)</td></tr>
 <tr class="memdesc:af6a34f0a44711ced5cb6dc76c6ea5cad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the first guess surface records and nsst records (if selected) for a single cubed-sphere tile.  <a href="#af6a34f0a44711ced5cb6dc76c6ea5cad">More...</a><br/></td></tr>
 <tr class="separator:af6a34f0a44711ced5cb6dc76c6ea5cad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75f8a86da8a53c85f32e7cb29c38bdde"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classread__write__data.html#a75f8a86da8a53c85f32e7cb29c38bdde">read_gsi_data</a> (GSI_FILE)</td></tr>
-<tr class="memdesc:a75f8a86da8a53c85f32e7cb29c38bdde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read file from the GSI containing the foundation temperature increments and mask.  <a href="#a75f8a86da8a53c85f32e7cb29c38bdde">More...</a><br/></td></tr>
-<tr class="separator:a75f8a86da8a53c85f32e7cb29c38bdde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d1969abebaa42aa2fcf733fc62ac656"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classread__write__data.html#a6d1969abebaa42aa2fcf733fc62ac656">read_gsi_data</a> (GSI_FILE, FILE_TYPE, LSOIL)</td></tr>
+<tr class="memdesc:a6d1969abebaa42aa2fcf733fc62ac656"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read increment file from the GSI containing either the foundation temperature increments and mask, or the soil increments.  <a href="#a6d1969abebaa42aa2fcf733fc62ac656">More...</a><br/></td></tr>
+<tr class="separator:a6d1969abebaa42aa2fcf733fc62ac656"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbd3cdb1d3b5cc358acfb427e8269220"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classread__write__data.html#acbd3cdb1d3b5cc358acfb427e8269220">read_lat_lon_orog</a> (RLA, RLO, OROG, OROG_UF, TILE_NUM, IDIM, JDIM, IJDIM)</td></tr>
 <tr class="memdesc:acbd3cdb1d3b5cc358acfb427e8269220"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read latitude and longitude for the cubed-sphere tile from the 'grid' file.  <a href="#acbd3cdb1d3b5cc358acfb427e8269220">More...</a><br/></td></tr>
 <tr class="separator:acbd3cdb1d3b5cc358acfb427e8269220"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,6 +167,14 @@ allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><a class=
 allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classread__write__data.html#ad2b83239d88d44b0ba2cc7e2579bc1bc">slmsk_gaus</a></td></tr>
 <tr class="memdesc:ad2b83239d88d44b0ba2cc7e2579bc1bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">GSI land mask on the gaussian grid.  <a href="#ad2b83239d88d44b0ba2cc7e2579bc1bc">More...</a><br/></td></tr>
 <tr class="separator:ad2b83239d88d44b0ba2cc7e2579bc1bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4059afb89bc1698e4d8a8b150ed04dab"><td class="memItemLeft" align="right" valign="top">integer, dimension(:,:), <br class="typebreak"/>
+allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classread__write__data.html#a4059afb89bc1698e4d8a8b150ed04dab">soilsnow_gaus</a></td></tr>
+<tr class="memdesc:a4059afb89bc1698e4d8a8b150ed04dab"><td class="mdescLeft">&#160;</td><td class="mdescRight">GSI soil / snow mask for land on the gaussian grid.  <a href="#a4059afb89bc1698e4d8a8b150ed04dab">More...</a><br/></td></tr>
+<tr class="separator:a4059afb89bc1698e4d8a8b150ed04dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67d6b10871e4cacea3222d135d03f6c1"><td class="memItemLeft" align="right" valign="top">real, dimension(:,:,:), <br class="typebreak"/>
+allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classread__write__data.html#a67d6b10871e4cacea3222d135d03f6c1">stc_inc_gaus</a></td></tr>
+<tr class="memdesc:a67d6b10871e4cacea3222d135d03f6c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">GSI soil temperature increments on the gaussian grid.  <a href="#a67d6b10871e4cacea3222d135d03f6c1">More...</a><br/></td></tr>
+<tr class="separator:a67d6b10871e4cacea3222d135d03f6c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This module contains routines that read and write data. </p>
@@ -347,11 +355,11 @@ zm</td>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Xu Li NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01897">1897</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01959">1959</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
-<p>References <a class="el" href="read__write__data_8f90_source.html#l01934">nc_check()</a>.</p>
+<p>References <a class="el" href="read__write__data_8f90_source.html#l01996">nc_check()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01567">get_sal_clm()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01560">get_sal_clm()</a>.</p>
 
 </div>
 </div>
@@ -398,9 +406,9 @@ zm</td>
 <dl class="section author"><dt>Author</dt><dd>Xu Li NOAA/EMC </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2019-03-13 </dd></dl>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01762">1762</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01824">1824</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01450">get_tf_clm()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01443">get_tf_clm()</a>.</p>
 
 </div>
 </div>
@@ -428,9 +436,9 @@ zm</td>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Xu Li NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01934">1934</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01996">1996</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
-<p>Referenced by <a class="el" href="read__write__data_8f90_source.html#l01897">get_dim_nc()</a>, and <a class="el" href="read__write__data_8f90_source.html#l01821">read_salclm_gfs_nc()</a>.</p>
+<p>Referenced by <a class="el" href="read__write__data_8f90_source.html#l01959">get_dim_nc()</a>, and <a class="el" href="read__write__data_8f90_source.html#l01883">read_salclm_gfs_nc()</a>.</p>
 
 </div>
 </div>
@@ -469,7 +477,7 @@ zm</td>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01045">1045</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01054">1054</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
 </div>
 </div>
@@ -766,15 +774,15 @@ zm</td>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01180">1180</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01242">1242</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
 <p>References <a class="el" href="sfcsub_8F_source.html#l09166">netcdf_err()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00283">sfcdrv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a75f8a86da8a53c85f32e7cb29c38bdde"></a>
+<a class="anchor" id="a6d1969abebaa42aa2fcf733fc62ac656"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -782,27 +790,45 @@ zm</td>
           <td class="memname">subroutine, public read_write_data::read_gsi_data </td>
           <td>(</td>
           <td class="paramtype">character(len=*), intent(in)&#160;</td>
-          <td class="paramname"><em>GSI_FILE</em></td><td>)</td>
+          <td class="paramname"><em>GSI_FILE</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">character(len=3), intent(in)&#160;</td>
+          <td class="paramname"><em>FILE_TYPE</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in), optional&#160;</td>
+          <td class="paramname"><em>LSOIL</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Read file from the GSI containing the foundation temperature increments and mask. </p>
+<p>Read increment file from the GSI containing either the foundation temperature increments and mask, or the soil increments. </p>
 <p>The data is in NetCDF and on a gaussian grid. The grid contains two extra rows for each pole. The interpolation from gaussian to native grid assumes no pole points, so these are removed.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">GSI_FILE</td><td>Path/name of the GSI file to be read. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">FILE_TYPE</td><td>file-type to be read in, 'NST' or 'LND'. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">LSOIL</td><td>Number of model soil levels.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01075">1075</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01087">1087</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
 <p>References <a class="el" href="sfcsub_8F_source.html#l09166">netcdf_err()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00283">sfcdrv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
 
 </div>
 </div>
@@ -883,11 +909,11 @@ zm</td>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l00911">911</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l00920">920</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
 <p>References <a class="el" href="sfcsub_8F_source.html#l09166">netcdf_err()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00283">sfcdrv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
 
 </div>
 </div>
@@ -961,11 +987,11 @@ zm</td>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Xu Li NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01821">1821</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01883">1883</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
-<p>References <a class="el" href="sfcsub_8F_source.html#l02626">count()</a>, and <a class="el" href="read__write__data_8f90_source.html#l01934">nc_check()</a>.</p>
+<p>References <a class="el" href="sfcsub_8F_source.html#l02626">count()</a>, and <a class="el" href="read__write__data_8f90_source.html#l01996">nc_check()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01627">get_sal_clm_ta()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01620">get_sal_clm_ta()</a>.</p>
 
 </div>
 </div>
@@ -1041,9 +1067,9 @@ zm</td>
 <dl class="section author"><dt>Author</dt><dd>Xu Li NOAA/EMC </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2019-03-13 </dd></dl>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01620">1620</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l01682">1682</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01519">get_tf_clm_ta()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01512">get_tf_clm_ta()</a>.</p>
 
 </div>
 </div>
@@ -1320,11 +1346,11 @@ zm</td>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l00108">108</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l00117">117</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
 <p>References <a class="el" href="sfcsub_8F_source.html#l09166">netcdf_err()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00283">sfcdrv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
 
 </div>
 </div>
@@ -1341,7 +1367,7 @@ zm</td>
 
 <p>GSI foundation temperature increment on the gaussian grid. </p>
 
-<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l00045">45</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l00049">49</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
 
 </div>
 </div>
@@ -1393,8 +1419,41 @@ zm</td>
 
 </div>
 </div>
+<a class="anchor" id="a4059afb89bc1698e4d8a8b150ed04dab"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer, dimension(:,:), allocatable, public read_write_data::soilsnow_gaus</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>GSI soil / snow mask for land on the gaussian grid. </p>
+<p>1 - soil, 2 - snow, 0 - not land </p>
+
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l00045">45</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a67d6b10871e4cacea3222d135d03f6c1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">real, dimension(:,:,:), allocatable, public read_write_data::stc_inc_gaus</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>GSI soil temperature increments on the gaussian grid. </p>
+
+<p>Definition at line <a class="el" href="read__write__data_8f90_source.html#l00052">52</a> of file <a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this module was generated from the following file:<ul>
-<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/global_cycle.fd/<a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a></li>
+<li>/gpfs/dell1/stmp/George.Gayno/UFS_UTILS/sorc/global_cycle.fd/<a class="el" href="read__write__data_8f90_source.html">read_write_data.f90</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

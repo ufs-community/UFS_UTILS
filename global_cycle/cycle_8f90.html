@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.5"/>
-<title>global_cycle: /gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/global_cycle.fd/cycle.f90 File Reference</title>
+<title>global_cycle: /gpfs/dell1/stmp/George.Gayno/UFS_UTILS/sorc/global_cycle.fd/cycle.f90 File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">global_cycle
-   &#160;<span id="projectnumber">1.5.0</span>
+   &#160;<span id="projectnumber">1.6.0</span>
    </div>
   </td>
  </tr>
@@ -145,15 +145,12 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:af8c1e8a1a1b952babdabb8122a4e2fda"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cycle_8f90.html#af8c1e8a1a1b952babdabb8122a4e2fda">nsst_water_reset</a> (nsst, ij, tf_thaw)</td></tr>
 <tr class="memdesc:af8c1e8a1a1b952babdabb8122a4e2fda"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the first guess was sea ice, but the analysis is open water, reset all nsst variables.  <a href="#af8c1e8a1a1b952babdabb8122a4e2fda">More...</a><br/></td></tr>
 <tr class="separator:af8c1e8a1a1b952babdabb8122a4e2fda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6450955873434d0143c7c117b0997d65"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cycle_8f90.html#a6450955873434d0143c7c117b0997d65">remap_coef</a> (is, ie, js, je, im, jm, lon, lat, id1, id2, jdc, s2c, agrid)</td></tr>
-<tr class="memdesc:a6450955873434d0143c7c117b0997d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the weights and index of the grids used in the bilinear interpolation.  <a href="#a6450955873434d0143c7c117b0997d65">More...</a><br/></td></tr>
-<tr class="separator:a6450955873434d0143c7c117b0997d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ccda063fdf438966bca8efde5c6cd03"><td class="memItemLeft" align="right" valign="top">program&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cycle_8f90.html#a9ccda063fdf438966bca8efde5c6cd03">sfc_drv</a></td></tr>
 <tr class="memdesc:a9ccda063fdf438966bca8efde5c6cd03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stand alone surface/NSST cycle driver for the cubed-sphere grid.  <a href="#a9ccda063fdf438966bca8efde5c6cd03">More...</a><br/></td></tr>
 <tr class="separator:a9ccda063fdf438966bca8efde5c6cd03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9922bc28a60bdf96a49a8380aa9288f"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cycle_8f90.html#af9922bc28a60bdf96a49a8380aa9288f">sfcdrv</a> (LUGB, IDIM, JDIM, LENSFC, LSOIL, DELTSFC, IY, IM, ID, IH, FH, IALB, USE_UFO, DO_NSST, ADJT_NST_ONLY, ZSEA1, ZSEA2, ISOT, IVEGSRC, MYRANK)</td></tr>
-<tr class="memdesc:af9922bc28a60bdf96a49a8380aa9288f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Driver routine for updating the surface fields.  <a href="#af9922bc28a60bdf96a49a8380aa9288f">More...</a><br/></td></tr>
-<tr class="separator:af9922bc28a60bdf96a49a8380aa9288f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3ea62f4d55bc30538dab621490a365b"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cycle_8f90.html#ac3ea62f4d55bc30538dab621490a365b">sfcdrv</a> (LUGB, IDIM, JDIM, LSM, LENSFC, LSOIL, DELTSFC, IY, IM, ID, IH, FH, IALB, USE_UFO, DO_NSST, DO_SFCCYCLE, DO_LNDINC, ZSEA1, ZSEA2, ISOT, IVEGSRC, MYRANK)</td></tr>
+<tr class="memdesc:ac3ea62f4d55bc30538dab621490a365b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Driver routine for updating the surface fields.  <a href="#ac3ea62f4d55bc30538dab621490a365b">More...</a><br/></td></tr>
+<tr class="separator:ac3ea62f4d55bc30538dab621490a365b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade32d73a7d3d2ee2e9813674aea1f797"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cycle_8f90.html#ade32d73a7d3d2ee2e9813674aea1f797">tf_thaw_set</a> (tf_ij, mask_ij, itile, jtile, tice, tclm, tf_thaw, nx, ny, nset_thaw_s, nset_thaw_i, nset_thaw_c)</td></tr>
 <tr class="memdesc:ade32d73a7d3d2ee2e9813674aea1f797"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the background reference temperature (tf) for points where the ice has just melted.  <a href="#ade32d73a7d3d2ee2e9813674aea1f797">More...</a><br/></td></tr>
 <tr class="separator:ade32d73a7d3d2ee2e9813674aea1f797"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -334,11 +331,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Xu Li, George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l00575">575</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l00672">672</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>References <a class="el" href="cycle_8f90_source.html#l01136">dtzm_point()</a>, <a class="el" href="cycle_8f90_source.html#l01404">nsst_water_reset()</a>, <a class="el" href="cycle_8f90_source.html#l01214">remap_coef()</a>, <a class="el" href="cycle_8f90_source.html#l01313">tf_thaw_set()</a>, and <a class="el" href="cycle_8f90_source.html#l01827">tfreez()</a>.</p>
+<p>References <a class="el" href="cycle_8f90_source.html#l01234">dtzm_point()</a>, <a class="el" href="cycle_8f90_source.html#l01397">nsst_water_reset()</a>, <a class="el" href="utils_8F90_source.html#l00038">utils::remap_coef()</a>, <a class="el" href="cycle_8f90_source.html#l01306">tf_thaw_set()</a>, and <a class="el" href="cycle_8f90_source.html#l01822">tfreez()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00283">sfcdrv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
 
 </div>
 </div>
@@ -398,7 +395,7 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Xu Li, George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l00983">983</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01081">1081</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
 </div>
 </div>
@@ -472,9 +469,9 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>Xu Li </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2015 </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01136">1136</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01234">1234</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00575">adjust_nsst()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00672">adjust_nsst()</a>.</p>
 
 </div>
 </div>
@@ -561,11 +558,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Xu Li </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01567">1567</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01560">1560</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>References <a class="el" href="read__write__data_8f90_source.html#l01897">read_write_data::get_dim_nc()</a>, <a class="el" href="cycle_8f90_source.html#l01627">get_sal_clm_ta()</a>, <a class="el" href="cycle_8f90_source.html#l01760">get_tim_wei()</a>, and <a class="el" href="cycle_8f90_source.html#l01672">intp_tile()</a>.</p>
+<p>References <a class="el" href="read__write__data_8f90_source.html#l01959">read_write_data::get_dim_nc()</a>, <a class="el" href="cycle_8f90_source.html#l01620">get_sal_clm_ta()</a>, <a class="el" href="cycle_8f90_source.html#l01755">get_tim_wei()</a>, and <a class="el" href="cycle_8f90_source.html#l01665">intp_tile()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00283">sfcdrv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
 
 </div>
 </div>
@@ -653,11 +650,11 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>Xu Li </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>March 2019 </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01627">1627</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01620">1620</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>References <a class="el" href="read__write__data_8f90_source.html#l01821">read_write_data::read_salclm_gfs_nc()</a>.</p>
+<p>References <a class="el" href="read__write__data_8f90_source.html#l01883">read_write_data::read_salclm_gfs_nc()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01567">get_sal_clm()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01560">get_sal_clm()</a>.</p>
 
 </div>
 </div>
@@ -751,11 +748,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Xu Li </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01450">1450</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01443">1443</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>References <a class="el" href="read__write__data_8f90_source.html#l01762">read_write_data::get_tf_clm_dim()</a>, <a class="el" href="cycle_8f90_source.html#l01519">get_tf_clm_ta()</a>, <a class="el" href="cycle_8f90_source.html#l01760">get_tim_wei()</a>, and <a class="el" href="cycle_8f90_source.html#l01672">intp_tile()</a>.</p>
+<p>References <a class="el" href="read__write__data_8f90_source.html#l01824">read_write_data::get_tf_clm_dim()</a>, <a class="el" href="cycle_8f90_source.html#l01512">get_tf_clm_ta()</a>, <a class="el" href="cycle_8f90_source.html#l01755">get_tim_wei()</a>, and <a class="el" href="cycle_8f90_source.html#l01665">intp_tile()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00283">sfcdrv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
 
 </div>
 </div>
@@ -851,11 +848,11 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>Xu Li </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>March 2019 </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01519">1519</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01512">1512</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>References <a class="el" href="read__write__data_8f90_source.html#l01620">read_write_data::read_tf_clim_grb()</a>.</p>
+<p>References <a class="el" href="read__write__data_8f90_source.html#l01682">read_write_data::read_tf_clim_grb()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01450">get_tf_clm()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01443">get_tf_clm()</a>.</p>
 
 </div>
 </div>
@@ -936,9 +933,9 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>Xu Li </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>March 2019 </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01760">1760</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01755">1755</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01567">get_sal_clm()</a>, and <a class="el" href="cycle_8f90_source.html#l01450">get_tf_clm()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01560">get_sal_clm()</a>, and <a class="el" href="cycle_8f90_source.html#l01443">get_tf_clm()</a>.</p>
 
 </div>
 </div>
@@ -1033,11 +1030,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Xu Li </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01672">1672</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01665">1665</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>References <a class="el" href="cycle_8f90_source.html#l01214">remap_coef()</a>.</p>
+<p>References <a class="el" href="utils_8F90_source.html#l00038">utils::remap_coef()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01567">get_sal_clm()</a>, and <a class="el" href="cycle_8f90_source.html#l01450">get_tf_clm()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l01560">get_sal_clm()</a>, and <a class="el" href="cycle_8f90_source.html#l01443">get_tf_clm()</a>.</p>
 
 </div>
 </div>
@@ -1082,127 +1079,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Xu Li </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01404">1404</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01397">1397</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00575">adjust_nsst()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6450955873434d0143c7c117b0997d65"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine remap_coef </td>
-          <td>(</td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>is</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>ie</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>js</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>je</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>im</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>jm</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real, dimension(im), intent(in)&#160;</td>
-          <td class="paramname"><em>lon</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real, dimension(jm), intent(in)&#160;</td>
-          <td class="paramname"><em>lat</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, dimension(is:ie,js:je), intent(out)&#160;</td>
-          <td class="paramname"><em>id1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, dimension(is:ie,js:je), intent(out)&#160;</td>
-          <td class="paramname"><em>id2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer, dimension(is:ie,js:je), intent(out)&#160;</td>
-          <td class="paramname"><em>jdc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real, dimension(is:ie,js:je,4), intent(out)&#160;</td>
-          <td class="paramname"><em>s2c</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real, dimension(is:ie,js:je,2), intent(in)&#160;</td>
-          <td class="paramname"><em>agrid</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Generate the weights and index of the grids used in the bilinear interpolation. </p>
-<p>This routine was taken from the forecast model - ./atmos_cubed_sphere/tools/fv_treat_da_inc.f90.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">is</td><td>Start index in x-direction of the source array. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ie</td><td>End index in x-direction of the source array. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">js</td><td>Start index in y-direction of the source array. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">je</td><td>End index in y-direction of the source array. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">im</td><td>x-dimension of the source array. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">jm</td><td>y-dimension of the source array. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lon</td><td>1-d array of longitudes (in radians). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lat</td><td>1-d array of latitudes (in radians). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">agrid</td><td>2-d array for lon [agrid(:,:,1)] &amp; lat [agrid(:,:,2)] (in radians). </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">s2c</td><td>Bi-linear interpolation weights of the four nearby grids of the source array. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">id1</td><td>Index 1 in x-direction of the nearby grids of the source array. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">id2</td><td>Index 2 in x-direction of the nearby grids of the source array. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">jdc</td><td>Index in y-direction of the nearby grid of the source array. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section author"><dt>Author</dt><dd>Xu Li </dd></dl>
-
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01214">1214</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
-
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00575">adjust_nsst()</a>, and <a class="el" href="cycle_8f90_source.html#l01672">intp_tile()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00672">adjust_nsst()</a>.</p>
 
 </div>
 </div>
@@ -1221,17 +1100,21 @@ Functions/Subroutines</h2></td></tr>
 
 <p>Stand alone surface/NSST cycle driver for the cubed-sphere grid. </p>
 <p>Each cubed-sphere tile runs independently on its own mpi task. The surface update component runs with threads. The NSST update component in not threaded.</p>
-<p>The program can be run in the following ways: 1) Update the surface fields only. NSST fields are not processed. Invoke this option by setting namelist variable DONST=.false. Output files only contain surface fields.</p>
-<p>2) Update the surface fields and NSST TREF field using GSI increments on the Gaussian grid. All other NSST fields are cycled. Invoke this option by setting namelist variable DONST=.true. and GSI_FILE to the name of the GSI increment file.</p>
-<p>3) Update surface and run with NSST, but postpone the TREF update. Here all NSST fields are cycled. But the NSST IFD field is used to flag points that flipped from ice to open water. To invoke this option, set DONST=.true. and GSI_FILE="NULL".</p>
-<p>4) Perform the NSST TREF adjustment only. Surface fields are only cycled. To run with this option, set DONST=.true., GSI_FILE to the GSI increment file, and ADJT_NST_ONLY=.true. The input cubed-sphere restart files must be those from option (3).</p>
-<p>NOTE: running (3) then (4) is equivalent to running (2).</p>
+<p>There are three main options (which can be called in combination):</p>
+<ol type="1">
+<li>Update the surface fields with sfccylce (do_sfccycle = .true.)</li>
+<li>Update the land states with increments read in from file (do_lndinc = .true.) Designed to work with a land increment file created by the GSI on the Gaussian grid. The increments are interpolated here to the model grid, using the same method as for the NST increments. Initially implemented for applying soil temperature increments calculated from the EnKF assimilation of T2m (but this is not a requirement - any GSI-generated soil temperature increment file can be applied here).</li>
+<li>Update the NSST field, several options:</li>
+</ol>
+<p>3a. Update the NSST TREF field using GSI increments on the Gaussian grid. All other NSST fields are cycled. Invoke this option by setting namelist variable DONST=.true. and NST_FILE to the name of the GSI increment file.</p>
+<p>3b. Run with NSST, but postpone the TREF update. Here all NSST fields are cycled. But the NSST IFD field is used to flag points that flipped from ice to open water. To invoke this option, set DONST=.true. and NST_FILE="NULL".</p>
 <p>INPUT FILES:</p>
 <ul>
 <li>fngrid.$NNN The cubed-sphere grid file (contains grid point latitude and longitdue).</li>
 <li>fnorog.$NNN The cubed-sphere orography file (contains land mask and orography).</li>
 <li>fnbgsi.$NNN The cubed-sphere input sfc/nsst restart file.</li>
-<li>$GSI_FILE Gaussian GSI file which contains NSST TREF increments</li>
+<li>$NST_FILE Gaussian GSI file which contains NSST TREF increments</li>
+<li>$LND_SNO_FILE Gaussian GSI file which contains soil state increments</li>
 </ul>
 <p>OUTPUT FILES:</p>
 <ul>
@@ -1241,38 +1124,30 @@ Functions/Subroutines</h2></td></tr>
 <p>NAMELIST VARIABLE DEFINITIONS:</p>
 <ul>
 <li>IDIM,JDIM i/j dimension of a cubed-sphere tile.</li>
-<li>LUGB Unit number used in the sfccycle subprogram to read input datasets.</li>
+<li>LUGB Unit number used in the sfccycle subprogram to read input datasets. Next four should match the gfs_physics_nml</li>
+<li>LSM Integer code for LSM (as in GFS_TYPES) 1 - Noah (note: added for land_da_adjust layers, however sfcsub routine (and likely others) assume the noah lsm</li>
 <li>LSOIL Number of soil layers.</li>
 <li>IY,IM,ID,IH Year, month, day, and hour of initial state.</li>
 <li>FH Forecast hour</li>
 <li>DELTSFC Cycling frequency in hours.</li>
 <li>IALB Use modis albedo when '1'. Use brigleb when '0'.</li>
-<li>USE_UFO Adjust sst and soil substrate temperature for differences between the filtered and unfiltered terrain.</li>
-<li>DONST Process NSST records.</li>
-<li>ADJT_NST_ONLY When true, only do the NSST update (don't call sfcsub component).</li>
+<li>USE_UFO Adjust sst and soil substrate temperature for differences between the filtered and unfiltered terrain. -DONST Process NSST records. -DO_SFCCYCLE Call sfccycle routine to update surface fields -DO_LNDINC Read in land increment files, and add increments to soil states.</li>
 <li>ISOT Use statsgo soil type when '1'. Use zobler when '0'.</li>
 <li>IVEGSRC Use igbp veg type when '1'. Use sib when '2'.</li>
 <li>ZSEA1/2_MM When running with NSST model, this is the lower/ upper bound of depth of sea temperature. In whole mm.</li>
-<li>MAX_TASKS Normally, program should be run with a number of mpi tasks equal to the number of cubed-sphere tiles being processed. However, the current parallel scripts may over-specify the number of tasks. Set this variable to not process any ranks &gt; (max_tasks-1).</li>
-<li>GSI_FILE Path/name of the gaussian GSI file which contains NSST TREF increments.</li>
+<li>MAX_TASKS Normally, program should be run with a number of mpi tasks equal to the number of cubed-sphere tiles being processed. However, the current parallel scripts may over-specify the number of tasks. Set this variable to not process any ranks &gt; (max_tasks-1). -NST_FILE path/name of the gaussian GSI file which contains NSST TREF increments. -LND_SOI_FILE path/name of the gaussian GSI file which contains soil state increments.</li>
 </ul>
-<p>Program Updates:</p>
-<ul>
-<li>2005-02-03: Iredell For global_analysis</li>
-<li>2014-11-30: Xu Li Add nst_anl</li>
-<li>2015-05-26: Hang Lei Added NEMSIO read/write function in the code</li>
-<li>2017-08-08: Gayno Modify to work on cubed-sphere grid. Added processing of NSST and TREF update. Added mpi directives. <dl class="section author"><dt>Author</dt><dd>Mark Iredell NOAA/EMC </dd></dl>
+<p>-2005-02-03: Iredell for global_analysis -2014-11-30: xuli add nst_anl -2015-05-26: Hang Lei Added NEMSIO read/write function in the code -2017-08-08: Gayno Modify to work on cubed-sphere grid. Added processing of NSST and TREF update. Added mpi directives. -2020-02-17: Clara Draper Added soil state increments capability.</p>
+<dl class="section author"><dt>Author</dt><dd>Mark Iredell NOAA/EMC </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 for success, error code otherwise. </dd></dl>
-</li>
-</ul>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l00089">89</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l00097">97</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>References <a class="el" href="num__parthds_8f90_source.html#l00009">num_parthds()</a>, and <a class="el" href="cycle_8f90_source.html#l00283">sfcdrv()</a>.</p>
+<p>References <a class="el" href="num__parthds_8f90_source.html#l00009">num_parthds()</a>, and <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="af9922bc28a60bdf96a49a8380aa9288f"></a>
+<a class="anchor" id="ac3ea62f4d55bc30538dab621490a365b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1293,6 +1168,12 @@ Functions/Subroutines</h2></td></tr>
           <td></td>
           <td class="paramtype">integer, intent(in)&#160;</td>
           <td class="paramname"><em>JDIM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>LSM</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1364,7 +1245,13 @@ Functions/Subroutines</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">logical, intent(in)&#160;</td>
-          <td class="paramname"><em>ADJT_NST_ONLY</em>, </td>
+          <td class="paramname"><em>DO_SFCCYCLE</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, intent(in)&#160;</td>
+          <td class="paramname"><em>DO_LNDINC</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1419,7 +1306,7 @@ Functions/Subroutines</h2></td></tr>
 <ul>
 <li>OROG .. Orography</li>
 <li>ALB .. Snow-free albedo</li>
-<li>SNO .. Liquid-equivalent snow depth</li>
+<li>SNO .. Liquid-equivalent snow depth (SWE)</li>
 <li>ZOR .. Surface roughness length</li>
 <li>VET .. Vegetation type</li>
 <li>TSF .. Surface skin temperature. Sea surface temp. over ocean.</li>
@@ -1488,6 +1375,7 @@ Functions/Subroutines</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">IDIM</td><td>'i' dimension of the cubed-sphere tile </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">JDIM</td><td>'j' dimension of the cubed-sphere tile </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">LENSFC</td><td>Total numberof points for the cubed-sphere tile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">LSM</td><td>Integer code for the land surface model 1 - Noah </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">LSOIL</td><td>Number of soil layers </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">DELTSFC</td><td>Cycling frequency in hours </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">IY</td><td>Year of initial state </td></tr>
@@ -1498,7 +1386,8 @@ Functions/Subroutines</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">IALB</td><td>Use modis albedo when '1'. Use brigleb when '0'. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">USE_UFO</td><td>When true, adjust SST and soil temperature for differences between the filtered and unfiltered terrain. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">DO_NSST</td><td>When true, process NSST records. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ADJT_NST_ONLY</td><td>When true, only do the NSST update (don't call sfcsub component. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">DO_SFCCYCLE</td><td>Call sfccycle routine to update surface fields </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">DO_LNDINC</td><td>Read in land increment files, and add increments to soil states. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ZSEA1</td><td>When running NSST model, this is the lower bound of depth of sea temperature. In whole mm. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ZSEA2</td><td>When running NSST model, this is the upper bound of depth of sea temperature. In whole mm. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ISOT</td><td>Use STATSGO soil type when '1'. Use Zobler when '0'. </td></tr>
@@ -1509,11 +1398,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Mark Iredell, George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l00283">283</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l00295">295</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>References <a class="el" href="cycle_8f90_source.html#l00575">adjust_nsst()</a>, <a class="el" href="cycle_8f90_source.html#l01567">get_sal_clm()</a>, <a class="el" href="cycle_8f90_source.html#l01450">get_tf_clm()</a>, <a class="el" href="read__write__data_8f90_source.html#l01180">read_write_data::read_data()</a>, <a class="el" href="read__write__data_8f90_source.html#l01075">read_write_data::read_gsi_data()</a>, <a class="el" href="read__write__data_8f90_source.html#l00911">read_write_data::read_lat_lon_orog()</a>, <a class="el" href="sfcsub_8F_source.html#l00175">sfccycle()</a>, and <a class="el" href="read__write__data_8f90_source.html#l00108">read_write_data::write_data()</a>.</p>
+<p>References <a class="el" href="land__increments_8f90_source.html#l00034">land_increments::add_increment_soil()</a>, <a class="el" href="cycle_8f90_source.html#l00672">adjust_nsst()</a>, <a class="el" href="land__increments_8f90_source.html#l00352">land_increments::apply_land_da_adjustments()</a>, <a class="el" href="land__increments_8f90_source.html#l00305">land_increments::calculate_soilsnowmask()</a>, <a class="el" href="cycle_8f90_source.html#l01560">get_sal_clm()</a>, <a class="el" href="cycle_8f90_source.html#l01443">get_tf_clm()</a>, <a class="el" href="read__write__data_8f90_source.html#l01242">read_write_data::read_data()</a>, <a class="el" href="read__write__data_8f90_source.html#l01087">read_write_data::read_gsi_data()</a>, <a class="el" href="read__write__data_8f90_source.html#l00920">read_write_data::read_lat_lon_orog()</a>, <a class="el" href="sfcsub_8F_source.html#l00175">sfccycle()</a>, and <a class="el" href="read__write__data_8f90_source.html#l00117">read_write_data::write_data()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00089">sfc_drv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00097">sfc_drv()</a>.</p>
 
 </div>
 </div>
@@ -1621,9 +1510,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Xu Li </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01313">1313</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01306">1306</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00575">adjust_nsst()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00672">adjust_nsst()</a>.</p>
 
 </div>
 </div>
@@ -1653,9 +1542,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>tfreez The freezing point of water. </dd></dl>
 
-<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01827">1827</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
+<p>Definition at line <a class="el" href="cycle_8f90_source.html#l01822">1822</a> of file <a class="el" href="cycle_8f90_source.html">cycle.f90</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00575">adjust_nsst()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00672">adjust_nsst()</a>, and <a class="el" href="land__increments_8f90_source.html#l00352">land_increments::apply_land_da_adjustments()</a>.</p>
 
 </div>
 </div>

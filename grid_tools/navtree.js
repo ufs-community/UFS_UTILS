@@ -23,10 +23,10 @@ var NAVTREEINDEX =
 [
 "annotated.html",
 "classpmat5.html#a0ab365448bc120e2e47f6e5caaf2cd1a",
-"interfacepfun_1_1sech.html",
-"interfacepmat5_1_1plroti.html",
-"pietc_8f90.html#aaf59c9bcf264de2d31c9b01ebcfef75d",
-"pietc__s_8f90.html#aed88ac48df98d4b20946c3a4f455986c"
+"interfacepfun_1_1atanh.html#a69517925b9443ce8bfa7d549c6f43984",
+"interfacepmat5_1_1ininmap.html#abf455bc6bd0c29b61754960b53e8fb30",
+"pietc_8f90.html#aa0c941809aa68996b652843685a9433e",
+"pietc__s_8f90.html#ae127340bf7abcbe6bf05ad8f86bbe334"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['nested',['nested',['../classutils.html#aeb1687b2bf37a75327268e2b19e0ff78',1,'utils']]],
   ['normalize',['normalize',['../interfacepmat4_1_1normalize.html',1,'pmat4']]],
   ['normalize_5fd',['normalize_d',['../interfacepmat4_1_1normalize.html#a0e97d1c0ce14237b2b2ac3f3ce908f4d',1,'pmat4::normalize::normalize_d()'],['../classpmat4.html#ac0d1be13ba1560f58f812bc6b81d998c',1,'pmat4::normalize_d()']]],
   ['normalize_5fs',['normalize_s',['../interfacepmat4_1_1normalize.html#a125e1f3f3574d5d7d8976ad4de3940dd',1,'pmat4::normalize::normalize_s()'],['../classpmat4.html#ac1b8cee865a9391009abccaf9f7cfd50',1,'pmat4::normalize_s()']]],

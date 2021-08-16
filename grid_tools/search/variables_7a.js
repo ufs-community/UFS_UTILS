@@ -112,5 +112,6 @@ var searchData=
   ['z347',['z347',['../pietc_8f90.html#a11b5a7daffa81eecc573147e407df1df',1,'pietc::z347()'],['../pietc__s_8f90.html#ae68a00fac6a3cc400e79db13280b7dc8',1,'pietc_s::z347()']]],
   ['z349',['z349',['../pietc_8f90.html#af82e6daf64caa3880e7f9462a58ef185',1,'pietc::z349()'],['../pietc__s_8f90.html#a79b507b74c0331fafd8e4fc789d755ee',1,'pietc_s::z349()']]],
   ['z350',['z350',['../pietc_8f90.html#a2389cd56c4999e1a32d9ac98483f04ac',1,'pietc::z350()'],['../pietc__s_8f90.html#aa1620605d76075d3d45dd5afb7519ce1',1,'pietc_s::z350()']]],
-  ['zero',['zero',['../classpmat2.html#a22095c65d2859b45208b56d1733bf71c',1,'pmat2']]]
+  ['zero',['zero',['../classpmat2.html#a22095c65d2859b45208b56d1733bf71c',1,'pmat2']]],
+  ['zero_5focean',['zero_ocean',['../classutils.html#ab731343353e3c68060807456bc5b6e25',1,'utils']]]
 ];

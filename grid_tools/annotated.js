@@ -11,5 +11,6 @@ var annotated =
     [ "pmat2", "classpmat2.html", "classpmat2" ],
     [ "pmat4", "classpmat4.html", "classpmat4" ],
     [ "pmat5", "classpmat5.html", "classpmat5" ],
-    [ "psym2", "classpsym2.html", "classpsym2" ]
+    [ "psym2", "classpsym2.html", "classpsym2" ],
+    [ "utils", "classutils.html", "classutils" ]
 ];

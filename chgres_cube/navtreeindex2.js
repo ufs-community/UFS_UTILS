@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"wam__climo__data_8f90.html#a7e384899c10dfba33b36c1457b0ad48e":[0,0,1,17],
 "wam__climo__data_8f90.html#a839803bb3f9c651f723b457a8b569646":[0,0,1,52],
 "wam__climo__data_8f90.html#a840ecb80f72b31cefaa1266b4c65d108":[0,0,10,5],
 "wam__climo__data_8f90.html#a84a51a18a6e3998dfa5d8369b33d6815":[0,0,10,30],

@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">chgres_cube
-   &#160;<span id="projectnumber">1.5.0</span>
+   &#160;<span id="projectnumber">1.6.0</span>
    </div>
   </td>
  </tr>
@@ -298,6 +298,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <ul>
 <li>"skip": Don't write to the output file.</li>
 <li>"set_to_fill": Set to user-specified field value (see column 4).</li>
+<li>"intrp": LnP interpolation to missing levels. No extrapolation allowd.</li>
 <li>"stop": Force an exception and stop code execution. Use this if you absolutely require a field to be present.</li>
 </ul>
 <p>Column 4: If column 3 = "set_to_fill", then this value is used to fill in all points in the input field. These values may be overwritten by the code before output depending on the variable (especially for surface variables).</p>

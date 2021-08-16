@@ -28,6 +28,8 @@ var searchData=
   ['gram_5fs',['gram_s',['../interfacepmat4_1_1gram.html#a3d5540c4a9a67523e3ef85b431b213a7',1,'pmat4::gram::gram_s()'],['../classpmat4.html#aade64d36f392c897af58d41439fd3901',1,'pmat4::gram_s()']]],
   ['graml_5fd',['graml_d',['../interfacepmat4_1_1gram.html#a7bcd28377941ae9b77b1900ad6eed5ed',1,'pmat4::gram::graml_d()'],['../classpmat4.html#a258deaab20439a12318abdf11bcfb21c',1,'pmat4::graml_d()']]],
   ['great_5fcircle_5fdist',['great_circle_dist',['../filter__topo_8F90.html#ab7efdbd3670acafb99d01346069d7c53',1,'filter_topo.F90']]],
+  ['grid_5ffile',['grid_file',['../classutils.html#a66fef4a7e26a8d6cd8896fde50d69fe4',1,'utils']]],
+  ['grid_5ftype',['grid_type',['../classutils.html#a80d365fe7e244336b4deba2fbe720758',1,'utils']]],
   ['grtoc',['grtoc',['../interfacepmat5_1_1grtoc.html',1,'pmat5']]],
   ['gtoc',['gtoc',['../interfacepmat5_1_1gtoc.html',1,'pmat5']]],
   ['gtoframe',['gtoframe',['../interfacepmat5_1_1gtoframe.html',1,'pmat5']]],
@@ -39,8 +41,8 @@ var searchData=
   ['gtoxm_5fak_5frr',['gtoxm_ak_rr',['../interfacepesg_1_1gtoxm__ak__rr.html',1,'pesg']]],
   ['gtoxm_5fak_5frr_5fg',['gtoxm_ak_rr_g',['../interfacepesg_1_1gtoxm__ak__rr.html#a6eaa19a4e531fdc6fccb2fe9b3154443',1,'pesg::gtoxm_ak_rr::gtoxm_ak_rr_g()'],['../classpesg.html#a50c059ec290acbbd18d3be0a0a873517',1,'pesg::gtoxm_ak_rr_g()']]],
   ['gtoxm_5fak_5frr_5fm',['gtoxm_ak_rr_m',['../interfacepesg_1_1gtoxm__ak__rr.html#a11e3d13ce4dc1c0ca5afcc890d2b0da1',1,'pesg::gtoxm_ak_rr::gtoxm_ak_rr_m()'],['../classpesg.html#ac0a284cc4ec645ebfe7ef4c01c18b930',1,'pesg::gtoxm_ak_rr_m()']]],
-  ['guessak_5fgeo',['guessak_geo',['../interfacepesg_1_1guessak__geo.html',1,'pesg']]],
   ['guessak_5fgeo',['guessak_geo',['../interfacepesg_1_1guessak__geo.html#ab956aa430e69602167fd715e75f85d29',1,'pesg::guessak_geo::guessak_geo()'],['../classpesg.html#ae76f750095dd1ba202e985abe4e487e8',1,'pesg::guessak_geo()']]],
+  ['guessak_5fgeo',['guessak_geo',['../interfacepesg_1_1guessak__geo.html',1,'pesg']]],
   ['guessak_5fmap',['guessak_map',['../interfacepesg_1_1guessak__map.html#a9e8b6c869d7c64a90e8d2482bf72c137',1,'pesg::guessak_map::guessak_map()'],['../classpesg.html#a475335b2f115cf7ddde8854249f4aaba',1,'pesg::guessak_map()']]],
   ['guessak_5fmap',['guessak_map',['../interfacepesg_1_1guessak__map.html',1,'pesg']]]
 ];

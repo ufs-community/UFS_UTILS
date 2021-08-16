@@ -31,5 +31,6 @@ var searchData=
   ['sci',['sci',['../pmat5_8f90.html#addbe59e962ad38732efb4adda0ec7b7f',1,'cstgeo::sci()'],['../pmat5_8f90.html#a25d603dde5cb470f72b8dacbabbc8efd',1,'dcstgeo::sci()']]],
   ['sp',['sp',['../pkind_8f90.html#a727a82a16402d4f765f2e806e0e9dbd2',1,'pkind']]],
   ['spc',['spc',['../pkind_8f90.html#a67080eb2b326d447c1b48c0afac26aa8',1,'pkind']]],
-  ['spi',['spi',['../pkind_8f90.html#a8b510d5ba4b6a0d899e2ded9ea9c8bf0',1,'pkind']]]
+  ['spi',['spi',['../pkind_8f90.html#a8b510d5ba4b6a0d899e2ded9ea9c8bf0',1,'pkind']]],
+  ['stretch_5ffac',['stretch_fac',['../classutils.html#aad5ae4657c154fc643cf21e2cfe25bf5',1,'utils']]]
 ];
