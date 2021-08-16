@@ -1200,9 +1200,9 @@ MODULE READ_WRITE_DATA
  !! @param[in] LSOIL Number of soil layers.
  !! @param[in] LENSFC Total number of points on a tile.
  !! @param[in] DO_NSST When true, nsst fields are read.
- !! @param[out] [optional] TSFFCS Skin Temperature.
- !! @param[out] [optional] SMCFCS Total volumetric soil moisture.
- !! @param[out] [optional] SWEFCS Snow water equivalent.
+ !! @param[out, optional] TSFFCS Skin Temperature.
+ !! @param[out, optional] SMCFCS Total volumetric soil moisture.
+ !! @param[out, optional] SWEFCS Snow water equivalent.
  !! @param[out][optional] STCFCS Soil temperature.
  !! @param[out][optional] TG3FCS Soil substrate temperature.
  !! @param[out][optional] ZORFCS Roughness length.
