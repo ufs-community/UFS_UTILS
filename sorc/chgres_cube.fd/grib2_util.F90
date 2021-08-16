@@ -96,7 +96,7 @@ end subroutine RH2SPFH_NAM
 !!
 !! @param[inout] rh_sphum rel humidity on input. spec hum on output.
 !! @param[in] p pressure in Pa
-!! @param function fpvsnew(real, intent(in) t) 
+!! @param fpvsnew(real, intent(in) t) function 
 !! @param[in] t temperature
 !! @author Jili Dong NCEP/EMC 
  subroutine rh2spfh_gfs(rh_sphum,p,t)
