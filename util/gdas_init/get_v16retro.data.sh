@@ -22,10 +22,14 @@ if [ "$MEMBER" = "gfs" ]; then
     directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro1e/${yy}${mm}${dd}${hh}
   elif [ ${yy}${mm}${dd}${hh} -lt 2019111000 ]; then
     directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro2e/${yy}${mm}${dd}${hh}
-  elif [ ${yy}${mm}${dd}${hh} -lt 2020122206 ]; then
+  elif [ ${yy}${mm}${dd}${hh} -le 2020122200 ]; then
     directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16rt2/${yy}${mm}${dd}${hh}
+  elif [ ${yy}${mm}${dd}${hh} -le 2021032506 ]; then
+    directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16rt2n/${yy}${mm}${dd}${hh}
   else
-    directory=/NCEPDEV/emc-global/5year/emc.gloparadev/WCOSS_D/gfsv16/v16rt2n/${yy}${mm}${dd}${hh}
+    set +x
+    echo NO DATA FOR ${yy}${mm}${dd}${hh}
+    exit 3
   fi
 
   file=gfs_netcdfa.tar
@@ -65,10 +69,14 @@ else
    directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro1e/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
   elif [ $date10_m6 -lt 2019101700 ]; then
    directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro2e/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
-  elif [ $date10_m6 -lt 2020122200 ]; then
+  elif [ $date10_m6 -lt 2020122212 ]; then
    directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16rt2/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
+  elif [ $date10_m6 -le 2021032500 ]; then
+   directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16rt2n/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
   else
-   directory=/NCEPDEV/emc-global/5year/emc.gloparadev/WCOSS_D/gfsv16/v16rt2n/${yy_m6}${mm_m6}${dd_m6}${hh_m6}
+    set +x
+    echo NO DATA FOR $date10_m6
+    exit 3
   fi
 
 #----------------------------------------------------------------------
@@ -106,10 +114,14 @@ else
     directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro1e/${yy}${mm}${dd}${hh}
   elif [ ${yy}${mm}${dd}${hh} -lt 2019101706 ]; then
     directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16retro2e/${yy}${mm}${dd}${hh}
-  elif [ ${yy}${mm}${dd}${hh} -lt 2020122206 ]; then
+  elif [ ${yy}${mm}${dd}${hh} -lt 2020122218 ]; then
     directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16rt2/${yy}${mm}${dd}${hh}
+  elif [ ${yy}${mm}${dd}${hh} -le 2021032506 ]; then
+    directory=/NCEPDEV/emc-global/5year/emc.glopara/WCOSS_D/gfsv16/v16rt2n/${yy}${mm}${dd}${hh}
   else
-    directory=/NCEPDEV/emc-global/5year/emc.gloparadev/WCOSS_D/gfsv16/v16rt2n/${yy}${mm}${dd}${hh}
+    set +x
+    echo NO DATA FOR ${yy}${mm}${dd}${hh}
+    exit 3
   fi
 
   file=gdas_restarta.tar
