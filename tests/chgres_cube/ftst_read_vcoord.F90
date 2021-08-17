@@ -1,5 +1,23 @@
  program vcoord
 
+! Test the 'read_vcoord_info' routine, which reads
+! the 'global_hyblev' files. These files contain
+! the definition of the model vertical hybrid levels.
+! The levels are defined by two coefficients 'ak'
+! and 'bk' as follows:
+!
+! pressure(level) = ak + (bk * surface pressure)
+!
+! The 'read_vcoord_info' routine returns the
+! number of vertical levels, the number of level
+! interfaces (# of levels plus 1), the number of 
+! level coordinates (two for 'ak' and 'bk') and
+! the 'ak' and 'bk' values. All are compared to
+! expected values. The sample 'global_hyblev'
+! file is set by variable "vcoord_file_target_grid'.
+!
+! @author George Gayno
+
  use atmosphere, only : read_vcoord_info, &
                         vcoord_target, &
                         nvcoord_target, &
@@ -12,12 +30,12 @@
 
  integer :: j
 
- integer, parameter :: LEV_TARGET_EXPECTED=28
- integer, parameter :: LEVP1_TARGET_EXPECTED=29
- integer, parameter :: NVCOORD_TARGET_EXPECTED=2
+ integer, parameter :: LEV_TARGET_EXPECTED=28    ! number of levels.
+ integer, parameter :: LEVP1_TARGET_EXPECTED=29  ! number of level interfaces.
+ integer, parameter :: NVCOORD_TARGET_EXPECTED=2 ! number of level coordinates.
 
- real :: VCOORD_AK_EXPECTED(LEVP1_TARGET_EXPECTED)
- real :: VCOORD_BK_EXPECTED(LEVP1_TARGET_EXPECTED)
+ real :: VCOORD_AK_EXPECTED(LEVP1_TARGET_EXPECTED) ! 'ak' values for each interface.
+ real :: VCOORD_BK_EXPECTED(LEVP1_TARGET_EXPECTED) ! 'bk' values for each interface.
 
  data VCOORD_AK_EXPECTED /.000,    .009, 11.635,  &
                            86.457, 292.577,  701.453, &
@@ -52,7 +70,6 @@
  if (nvcoord_target /= NVCOORD_TARGET_EXPECTED) stop 6
 
  do j = 1, levp1_target
-   print*,'j is ',j 
    if (vcoord_target(j,1) /= VCOORD_AK_EXPECTED(j)) stop 8
    if (vcoord_target(j,2) /= VCOORD_BK_EXPECTED(j)) stop 10
  enddo
