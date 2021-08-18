@@ -1279,7 +1279,8 @@ MODULE READ_WRITE_DATA
  REAL, OPTIONAL, INTENT(OUT)         :: STCFCS(LENSFC,LSOIL)
  REAL(KIND=4), OPTIONAL, INTENT(OUT) :: ZSOIL(LSOIL)
 
- TYPE(NSST_DATA), OPTIONAL, INTENT(OUT)            :: NSST
+ TYPE(NSST_DATA), OPTIONAL           :: NSST ! intent(out) will crash 
+                                             ! because subtypes are allocated in main.
 
  CHARACTER(LEN=50)         :: FNBGSI
  CHARACTER(LEN=3)          :: RANKCH
