@@ -40,8 +40,6 @@
 !!                     TREF increments
 !!  - $LND_SOI_FILE    Gaussian GSI file which contains soil state
 !!                     increments
-!!  - $LND_SNO_FILE    JEDI file which contains soil state
-!!                     increments on native model grid
 !!  
 !!  OUTPUT FILES:
 !!  - fnbgso.$NNN        The updated sfc/nsst restart file.
@@ -86,8 +84,6 @@
 !!  -NST_FILE       path/name of the gaussian GSI file which contains NSST
 !!                 TREF increments.
 !!  -LND_SOI_FILE  path/name of the gaussian GSI file which contains soil
-!!                 state increments.
-!!  -LND_SNO_FILE  path/name of the JEDI increment file which contains snow
 !!                 state increments.
 !!
 !!  -2005-02-03:  Iredell   for global_analysis
@@ -327,7 +323,7 @@
 
  CHARACTER(LEN=5)    :: TILE_NUM
  CHARACTER(LEN=500)  :: NST_FILE
- CHARACTER(LEN=500)  :: LND_SOI_FILE, LND_SNO_FILE
+ CHARACTER(LEN=500)  :: LND_SOI_FILE
  CHARACTER(LEN=4)    :: INPUT_NML_FILE(SZ_NML)
 
  INTEGER             :: I, IERR
@@ -376,12 +372,12 @@
  
  DATA NST_FILE/'NULL'/
  DATA LND_SOI_FILE/'NULL'/
- DATA LND_SNO_FILE/'NULL'/
- 
- NAMELIST/NAMSFCD/ NST_FILE, LND_SOI_FILE, LND_SNO_FILE
 
  DO_SOI_INC = .FALSE.
  DO_SNO_INC = .FALSE.
+ 
+ NAMELIST/NAMSFCD/ NST_FILE, LND_SOI_FILE, DO_SNO_INC
+
 
  SIG1T = 0.0            ! Not a dead start!
 
@@ -447,10 +443,10 @@ IF (DO_LNDINC) THEN
        ALLOCATE(LANDINC_MASK_FG(LENSFC))
    ENDIF
    ! FOR NOW, CODE SO CAN DO BOTH, BUT MIGHT NEED TO THINK ABOUT THIS SOME MORE.
-   IF  (TRIM(LND_SNO_FILE) .NE. "NULL") THEN
+   IF  (DO_SNO_INC) THEN
        ! ideally, would check here that sfcsub snow DA update is not also requested
        ! but latter is controlled by fnsol, which is read in within that routine.
-       DO_SNO_INC = .TRUE.
+       ! should be done at script level.
        PRINT*
        PRINT*," APPLYING SNOW INCREMENTS FROM JEDI"
        ALLOCATE(SND_BCK(LENSFC), SND_INC(LENSFC), SWE_BCK(LENSFC))

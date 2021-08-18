@@ -267,6 +267,7 @@ use_ufo=${use_ufo:-.true.}
 DONST=${DONST:-"NO"}
 DO_SFCCYCLE=${DO_SFCCYCLE:-.true.}
 DO_LNDINC=${DO_LNDINC:-.false.}
+DO_SNO_INC=${DO_SNO_INC:-.false.}
 zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
 MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
@@ -292,7 +293,6 @@ FNSLPC=${FNSLPC:-${FIXam}/global_slope.1x1.grb}
 FNMSKH=${FNMSKH:-${FIXam}/global_slmask.t1534.3072.1536.grb}
 NST_FILE=${NST_FILE:-"NULL"}
 LND_SOI_FILE=${LND_SOI_FILE:-"NULL"}
-LND_SNO_FILE=${LND_SNO_FILE:-"NULL"}
 FNTSFA=${FNTSFA:-${COMIN}/${PREINP}sstgrb${SUFINP}}
 FNACNA=${FNACNA:-${COMIN}/${PREINP}engicegrb${SUFINP}}
 FNSNOA=${FNSNOA:-${COMIN}/${PREINP}snogrb${SUFINP}}
@@ -390,8 +390,8 @@ EOF
 cat << EOF > fort.37
  &NAMSFCD
   NST_FILE="$NST_FILE",
-  LND_SOI_FILE="$LND_SOI_FILE" 
-  LND_SNO_FILE="$LND_SNO_FILE" 
+  LND_SOI_FILE="$LND_SOI_FILE",
+  DO_SNO_INC=$DO_SNO_INC
  /
 EOF
 

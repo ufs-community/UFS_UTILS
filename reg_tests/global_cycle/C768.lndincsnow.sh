@@ -8,6 +8,7 @@
 set -x
 
 NCCMP=${NCCMP:-$(which nccmp)}
+LN=${LN:-$(which ln)}
 
 export MAX_TASKS_CY=6
 
@@ -28,8 +29,7 @@ export FNSNOA=$COMIN/gdas.t00z.snogrb_t1534.3072.1536
 export FNACNA=$COMIN/gdas.t00z.seaice.5min.blend.grb
 export NST_FILE=$COMIN/gdas.t00z.dtfanl.nc
 
-export LND_SOI_FILE=$COMIN/sfcincr_gsi
-
+export DO_SNO_INC=.true.
 export JCAP=1534
 export LONB=3072
 export LATB=1536
@@ -43,7 +43,14 @@ export DO_SFCCYCLE=".FALSE."
 export DO_LNDINC=".TRUE." 
 
 export VERBOSE=YES
-export CYCLVARS=FSNOL=-2.,FSNOS=99999.,
+export CYCLVARS=FSNOL=99999.,FSNOS=99999.,
+
+# stage increment files 
+
+for file in xainc.001 xainc.002 xainc.003 xainc.004 xainc.005 xainc.006
+do
+  $LN $HOMEreg/input_data/$file $DATA/$file
+done
 
 $BASE_GSM/ush/global_cycle_driver.sh
 
@@ -61,7 +68,7 @@ for files in *tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c768.lndinc/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c768.lndincsnow/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
