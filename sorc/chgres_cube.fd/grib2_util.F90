@@ -147,42 +147,14 @@ end subroutine RH2SPFH_GFS
 !!
 !! @param[in] t temperature in Kelvin
 !! @return fpvsnew Saturation vapor pressure
-!! @author N Phillips  
+!! @author N Phillips w/NMC2X2  
+!! @date 30 dec 82
 
 !
 !-------------------------------------------------------------------------------------
 !
       elemental function fpvsnew(t)
-!$$$     Subprogram Documentation Block
 !
-! Subprogram: fpvsnew         Compute saturation vapor pressure
-!   Author: N Phillips            w/NMC2X2   Date: 30 dec 82
-!
-! Abstract: Compute saturation vapor pressure from the temperature.
-!   A linear interpolation is done between values in a lookup table
-!   computed in gpvs. See documentation for fpvsx for details.
-!   Input values outside table range are reset to table extrema.
-!   The interpolation accuracy is almost 6 decimal places.
-!   On the Cray, fpvs is about 4 times faster than exact calculation.
-!   This function should be expanded inline in the calling routine.
-!
-! Program History Log:
-!   91-05-07  Iredell             made into inlinable function
-!   94-12-30  Iredell             expand table
-! 1999-03-01  Iredell             f90 module
-! 2001-02-26  Iredell             ice phase
-!
-! Usage:   pvs=fpvsnew(t)
-!
-!   Input argument list:
-!     t          Real(krealfp) temperature in Kelvin
-!
-!   Output argument list:
-!     fpvsnew       Real(krealfp) saturation vapor pressure in Pascals
-!
-! Attributes:
-!   Language: Fortran 90.
-!$$$
       implicit none
       integer,parameter:: nxpvs=7501
       real,parameter:: con_ttp     =2.7316e+2 ! temp at H2O 3pt
