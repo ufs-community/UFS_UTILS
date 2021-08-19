@@ -198,12 +198,21 @@ TEST15=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:10:00 -A $PROJECT
       --open-mode=append -o $LOG_FILE15 -e $LOG_FILE15 ./13km.na.gfs.ncei.grib2.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize CONUS 25-KM USING GFS PGRIB2+BGRIB2 files.
+#-----------------------------------------------------------------------------
+
+LOG_FILE16=${LOG_FILE}16
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST16=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.pbgrib2 \
+      --open-mode=append -o $LOG_FILE16 -e $LOG_FILE16 ./25km.conus.gfs.pbgrib2.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE \
-       -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14:$TEST15 << EOF
+       -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14:$TEST15:$TEST16 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF

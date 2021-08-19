@@ -19,11 +19,12 @@ emcsfc_ice_blend | George Gayno
 emcsfc_snow2mdl | George Gayno
 fre-nctools | GFDL progammer
 fvcom_tools | David Wright, University of Michigan, Ming Hu, GSD/AMB
+gblevents | Hang Lei
+gdas_init | George Gayno
 global_cycle | George Gayno, Shrinivas Moorthi, Mark Iredell, Xu Li, Hang Lei
 grid_tools | R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), Tsukasa Fujita, JMA (pmat2), GFDL programmer (topo filtering code).
 orog_mask_tools | Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
 sfc_climo_gen | George Gayno
-gblevents | Hang Lei
 vcoord_gen | Fanglin Yang, Mark Iredell
 
 UFS_UTILS Code managers: George Gayno, Kyle Gerheiser, Jeff Beck, Larissa Reames
@@ -70,6 +71,7 @@ directory):
 - emcsfc_snow2mdl
 - fre-nctools
 - fvcom_tools
+- gblevents
 - global_cycle
 - grid_tools
 - orog_mask_tools

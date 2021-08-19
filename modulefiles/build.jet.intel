@@ -2,6 +2,7 @@
 ## Build and run module for Jet
 #############################################################
 module load cmake/3.16.1
+module load hpss
 
 module use /lfs4/HFIP/hfv3gfs/nwprod/hpc-stack/libs/modulefiles/stack
 module load hpc/1.1.0
@@ -23,3 +24,4 @@ module load sfcio/1.4.1
 module load nemsio/2.5.2
 module load g2/3.4.1
 module load wgrib2/2.0.8
+module load prod_util/1.2.2
