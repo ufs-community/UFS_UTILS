@@ -370,14 +370,14 @@
 ! increments.
 !--------------------------------------------------------------------------------
  
- DATA NST_FILE/'NULL'/
- DATA LND_SOI_FILE/'NULL'/
- DATA DO_SNO_INC/.FALSE./
-
- DO_SOI_INC = .FALSE.
- 
  NAMELIST/NAMSFCD/ NST_FILE, LND_SOI_FILE, DO_SNO_INC
 
+ DATA NST_FILE/'NULL'/
+ DATA LND_SOI_FILE/'NULL'/
+
+ DO_SNO_INC = .FALSE.
+ DO_SOI_INC = .FALSE.
+ 
 
  SIG1T = 0.0            ! Not a dead start!
 
