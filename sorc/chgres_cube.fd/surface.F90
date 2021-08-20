@@ -1217,11 +1217,11 @@
  allocate(dozero(num_fields))
  
  if (sotyp_from_climo) then
-   search_nums = (/21,7/)
+   search_nums = (/21,7,21/)
    dozero(:)=.False.
  else
-   search_nums = (/21,7,231/)
-   dozero(:)=(/.False.,.False.,.True./)
+   search_nums = (/21,7,21,231/)
+   dozero(:)=(/.False.,.False.,.False.,.True./)
  endif
 
  call regrid_many(bundle_landice_input,bundle_landice_target,num_fields,regrid_landice,dozero, &

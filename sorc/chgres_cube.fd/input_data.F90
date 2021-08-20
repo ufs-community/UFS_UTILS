@@ -6492,7 +6492,7 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
   else
     call error_handler("ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
                        " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN,"// &
-                       " , skip, or stop.", 1)
+                       " , intrp, skip, or stop.", 1)
   endif
 
 end subroutine handle_grib_error
