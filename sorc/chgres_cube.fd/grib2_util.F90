@@ -17,6 +17,11 @@ use model_grid, only      : i_input, j_input
 
 implicit none
 
+public :: rh2spfh_gfs
+public :: rh2spfh_nam
+public :: fpvsnew 
+
+
 contains 
 
 !> Convert relative humidity to specific humidity.
@@ -177,7 +182,7 @@ end subroutine RH2SPFH_GFS
       real,parameter:: xponbi=-dldti/con_rv+heati/(con_rv*con_ttp)
       real tr,w,pvl,pvi
       real fpvsnew
-      real,intent(in):: t
+      real(esmf_kind_r8),intent(in):: t
       integer jx
       real  xj,x,tbpvs(nxpvs),xp1
       real xmin,xmax,xinc,c2xpvs,c1xpvs
