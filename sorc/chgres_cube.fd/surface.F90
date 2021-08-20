@@ -158,6 +158,7 @@
  public :: nst_land_fill
  public :: cleanup_target_nst_data
  public :: regrid_many
+ public :: search_many
 
  contains
 
@@ -1193,8 +1194,20 @@
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
  call ESMF_FieldBundleAdd(bundle_landice_input, (/skin_temp_input_grid, terrain_input_grid,&
-                          soil_temp_input_grid/), rc=rc)                          
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+                          soil_temp_input_grid/), rc=rc)                       
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldBundleAdd", rc)
+ 
+ if (.not. sotyp_from_climo) then
+   call ESMF_FieldBundleAdd(bundle_landice_input, (/soil_type_input_grid/),rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldBundleAdd", rc)
+   call ESMF_FieldBundleAdd(bundle_landice_target,(/soil_type_target_grid/),rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldBundleAdd", rc)
+ endif  
+
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
  call ESMF_FieldBundleGet(bundle_landice_target,fieldCount=num_fields,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1202,9 +1215,14 @@
 
  allocate(search_nums(num_fields))
  allocate(dozero(num_fields))
-
- search_nums = (/21,7/)
- dozero(:) = .False.
+ 
+ if (sotyp_from_climo) then
+   search_nums = (/21,7/)
+   dozero(:)=.False.
+ else
+   search_nums = (/21,7,231/)
+   dozero(:)=(/.False.,.False.,.True./)
+ endif
 
  call regrid_many(bundle_landice_input,bundle_landice_target,num_fields,regrid_landice,dozero, &
                   .True., unmapped_ptr=unmapped_ptr )  
@@ -1241,23 +1259,6 @@
 
    call search_many(num_fields,bundle_landice_target,data_one_tile, land_target_one_tile,& 
                     tile,search_nums,localpet,terrain_land=data_one_tile2,field_data_3d=data_one_tile_3d)
-
-   if (.not. sotyp_from_climo) then
-     print*,"- CALL FieldGather FOR SOIL TYPE TARGET GRID LAND, TILE: ",tile
-     call ESMF_FieldGather(soil_type_target_grid, data_one_tile,rootPet=0,tile=tile, rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-        call error_handler("IN FieldGather", rc)
-
-     if (localpet == 0) then
-       call search(data_one_tile, mask_target_one_tile, i_target, j_target,tile,231)
-     endif
-
-     print*,"- CALL FieldScatter FOR SOIL TYPE TARGET GRID, TILE: ", tile
-     call ESMF_FieldScatter(soil_type_target_grid,data_one_tile,rootPet=0,tile=tile,rc=rc)
-     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-        call error_handler("IN FieldScatter", rc)
-   endif
-
  enddo
 
  deallocate (veg_type_target_one_tile)
@@ -3380,6 +3381,8 @@
  type(esmf_field)                :: temp_field
  character(len=50)               :: fname
  integer, parameter              :: SOTYP_LAND_FIELD_NUM = 224
+ integer, parameter              :: SST_FIELD_NUM = 11
+ integer, parameter              :: TERRAIN_FIELD_NUM= 7
  integer :: j,k, rc, ndims
 
  do k = 1,num_field
@@ -3396,10 +3399,10 @@
        if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldGather", rc)
      if (localpet == 0) then 
-       if (present(latitude)) then
+       if (present(latitude) .and. search_nums(k).eq.SST_FIELD_NUM) then
          print*, "search1"
          call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k),latitude=latitude)
-       elseif (present(terrain_land)) then
+       elseif (present(terrain_land) .and. search_nums(k) .eq. TERRAIN_FIELD_NUM) then
          print*, "search2"
          call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k),terrain_land=terrain_land)
        elseif (search_nums(k) .eq. SOTYP_LAND_FIELD_NUM) then    
