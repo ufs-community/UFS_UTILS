@@ -75,6 +75,12 @@ add_mpi_test(chgres_cube-ftst_sfc_input_data
   NUMPROCS 4
   TIMEOUT 60)
 
+add_executable(ftst_dint2p ftst_dint2p.F90)
+target_link_libraries(ftst_dint2p
+  chgres_cube_lib)
+
+add_test(NAME chgres_cube-ftst_dint2p COMMAND ftst_dint2p)
+
 add_executable(ftst_quicksort ftst_quicksort.F90)
 target_link_libraries(ftst_quicksort
   chgres_cube_lib)
