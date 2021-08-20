@@ -104,6 +104,7 @@
                                            !! target grid
 
  public :: atmosphere_driver
+ public :: read_vcoord_info
 
  contains
 
