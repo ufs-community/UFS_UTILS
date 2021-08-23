@@ -95,7 +95,6 @@
  logical, public                 :: convert_atm = .false. !< Convert atmospheric data when true.
  logical, public                 :: convert_nst = .false. !< Convert nst data when true.
  logical, public                 :: convert_sfc = .false. !< Convert sfc data when true.
- logical, public                 :: use_rh = .true. !< for grib2, use rh (if true) or spfh (if false)                 
  logical, public                 :: wam_cold_start = .false. !< When true, cold start for whole atmosphere model.
  
  ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
@@ -182,7 +181,6 @@
                    cycle_year, cycle_mon, cycle_day,    &
                    cycle_hour, convert_atm, &
                    convert_nst, convert_sfc, &
-                   use_rh,      &
                    wam_cold_start, &
                    vgtyp_from_climo, &
                    sotyp_from_climo, &
