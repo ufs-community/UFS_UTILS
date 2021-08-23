@@ -2611,7 +2611,8 @@
       iret = grb2_inq(the_file,inv_file,':SPFH:',slevs(vlev))
       if (iret <= 0) then
         use_rh = .TRUE.
-        if (localpet == 0) print*,':SPFH:'//slevs(vlev)//' not existing. Use RH instead.'
+        if (localpet == 0) print*, ':SPFH on level '//trim(slevs(vlev))//' does not exist. & 
+           Will read in RH and convert to SPFH instead.'                                                   
         exit
       end if
      end do
