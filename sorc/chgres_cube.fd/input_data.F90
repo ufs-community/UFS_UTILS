@@ -2460,7 +2460,7 @@
  use wgrib2api
  
  use grib2_util, only                   : rh2spfh, rh2spfh_gfs, convert_omega
- use program_setup, only         : use_rh, calrh 
+ use program_setup, only         : use_rh 
 
  implicit none
 
@@ -2783,12 +2783,12 @@
       endif !iret<=0
       
       if (n==1 .and. .not. hasspfh) then 
-        if (calrh .eq. 0) then
-          call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
-        else if (calrh .eq. 1) then
+        if (trim(external_model) .eq. 'GFS') then
+          print *,'CALRH GFS'
           call rh2spfh_gfs(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
-        else
-          call error_handler("calrh option not supported",1)
+        else 
+          print *,'CALRH non-GFS'
+          call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
         end if
       endif
 

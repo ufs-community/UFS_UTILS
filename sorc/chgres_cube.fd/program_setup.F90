@@ -88,7 +88,6 @@
  integer, public                 :: cycle_hour = -999 !< Cycle hour.
  integer, public                 :: regional = 0 !<  For regional target grids.  When '1' remove boundary halo region from atmospheric/surface data and
                                                  !! output atmospheric boundary file. When '2' output boundary file only. Default is '0' (global grids).
- integer, public                 :: calrh = 0 !< rh to spfh calculation. 0:original; 1: GFSv15/16                                         
  integer, public                 :: halo_bndy = 0 !< Number of row/cols of lateral halo, where pure lateral bndy conditions are applied (regional target grids).
  integer, public                 :: halo_blend = 0 !< Number of row/cols of blending halo, where model tendencies and lateral boundary tendencies are applied. Regional target grids only.
  integer, public                 :: nsoill_out = 4 !<  Number of soil levels desired in the output data. chgres_cube can interpolate from 9 input to 4 output levels. DEFAULT: 4.
@@ -96,7 +95,7 @@
  logical, public                 :: convert_atm = .false. !< Convert atmospheric data when true.
  logical, public                 :: convert_nst = .false. !< Convert nst data when true.
  logical, public                 :: convert_sfc = .false. !< Convert sfc data when true.
- logical, public                 :: use_rh = .false. !< for grib2, use rh (if true) or spfh (if false)                 
+ logical, public                 :: use_rh = .true. !< for grib2, use rh (if true) or spfh (if false)                 
  logical, public                 :: wam_cold_start = .false. !< When true, cold start for whole atmosphere model.
  
  ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
@@ -183,7 +182,7 @@
                    cycle_year, cycle_mon, cycle_day,    &
                    cycle_hour, convert_atm, &
                    convert_nst, convert_sfc, &
-                   use_rh, calrh,      &
+                   use_rh,      &
                    wam_cold_start, &
                    vgtyp_from_climo, &
                    sotyp_from_climo, &
