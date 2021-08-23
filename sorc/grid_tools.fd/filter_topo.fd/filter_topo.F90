@@ -1151,9 +1151,9 @@ contains
   !! regional standalone grid. Halo points are needed for dxc and dyc
   !! calculation.
   !!
-  !! @param[in] data  ???
-  !! @param[in] halo ???
-  !! @author Ratko
+  !! @param[in,out] data - field to be extrapolated
+  !! @param[in] halo - number of halo rows/columns
+  !! @author Ratko Vasic (NCEP/EMC)
   subroutine fill_regional_halo(data, halo)
     integer, intent(in)                               :: halo
     real, dimension(1-halo:,1-halo:,:), intent(inout) :: data
