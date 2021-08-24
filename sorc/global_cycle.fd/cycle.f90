@@ -20,7 +20,6 @@
 !!   2b. A land increment file created by JEDI, on the native model grid 
 !!      (cube sphere tiles). This is currently implemented for snow depth 
 !!      updates for the Noah model. 
- 
 !!  3. Update the NSST field, several options:
 !!
 !!  3a. Update the NSST TREF field using
