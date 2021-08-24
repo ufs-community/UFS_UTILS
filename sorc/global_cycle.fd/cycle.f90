@@ -10,12 +10,17 @@
 !!  There are three main options (which can be called in combination):
 !!  1. Update the surface fields with sfccylce (do_sfccycle = .true.)
 !!  2. Update the land states with increments read in from file (do_lndinc = .true.)
-!!     Designed to work with a land increment file  created by the GSI on the Gaussian
+!!     Designed to work with either: 
+!!   2a. A land increment file  created by the GSI on the Gaussian
 !!     grid. The increments are interpolated here to the model grid, using the
-!!     same method as for the NST increments. Initially implemented for
+!!     same method as for the NST increments. This is currently implemented for
 !!     applying soil temperature increments calculated from the EnKF
 !!     assimilation of T2m (but this is not a requirement -  any
 !!     GSI-generated soil temperature increment file can be applied here).
+!!   2b. A land increment file created by JEDI, on the native model grid 
+!!      (cube sphere tiles). This is currently implemented for snow depth 
+!!      updates for the Noah model. 
+ 
 !!  3. Update the NSST field, several options:
 !!
 !!  3a. Update the NSST TREF field using
@@ -40,6 +45,9 @@
 !!                     TREF increments
 !!  - $LND_SOI_FILE    Gaussian GSI file which contains soil state
 !!                     increments
+!!  - xainc.$NNN       The cubed-sphere increment file (contains 
+!!                     increments calculated by JEDI on the native 
+!!                     model grid). 
 !!  
 !!  OUTPUT FILES:
 !!  - fnbgso.$NNN        The updated sfc/nsst restart file.
