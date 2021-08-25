@@ -1044,6 +1044,12 @@ contains
       call fill_cubic_grid_halo(mask, mask, ng, 0, 0, 1, 1)
     endif
 
+    if( regional ) then
+      call fill_regional_halo(oro, ng)
+      oro(:,:,:) = max(oro(:,:,:),0.)
+      call fill_regional_halo(mask, ng)
+      mask(:,:,:) = min(max(mask(:,:,:),0.),1.)
+    endif
 
 
   end subroutine read_topo_file
@@ -1159,10 +1165,10 @@ contains
     real, dimension(1-halo:,1-halo:,:), intent(inout) :: data
     integer :: h, i_st, i_ed, j_st, j_ed
 
-    i_st=1
-    i_ed=npx
-    j_st=1
-    j_ed=npy
+    i_st=lbound(data,1)+halo
+    i_ed=ubound(data,1)-halo
+    j_st=lbound(data,2)+halo
+    j_ed=ubound(data,2)-halo
 
     do h = 1, halo
       data(i_st:i_ed, j_st-1   , :) = 2* data(i_st:i_ed, j_st     , :) - data(i_st:i_ed, j_st+1   , :)! north
@@ -1334,8 +1340,6 @@ contains
     integer:: i,j, nt, t
     integer:: is1, ie2, js1, je2
 
-    a2 = 0.
-
     if ( .not. nested .and. grid_type<3 ) then
        is1 = max(3,is-1);  ie2 = min(npx-2,ie+2)
        js1 = max(3,js-1);  je2 = min(npy-2,je+2)
@@ -1484,6 +1488,20 @@ contains
                      +      ((2.*dya(i,npy,t)+dya(i,npy+1,t))*q(i,npy,t)-dya(i,npy,t)*q(i,npy+1,t))/&
                            (dya(i,npy,t)+dya(i,npy+1,t)))
                 a2(i,npy+1) = c3*q(i,npy,t) + c2*q(i,npy+1,t) + c1*q(i,npy+2,t)
+             enddo
+          endif
+
+          if ( regional .and. grid_type<3 ) then
+             do i=is,ie
+                a2(i,0) = c1*q(i,-2,t) + c2*q(i,-1,t) + c3*q(i,0,t)
+                a2(i,2) = c3*q(i,1,t) + c2*q(i,2,t) + c1*q(i,3,t)
+                a2(i,1) = 0.5*(a2(i,0) + a2(i,2))
+             enddo
+
+             do i=is,ie
+                a2(i,npy-1) = c1*q(i,npy-3,t) + c2*q(i,npy-2,t) + c3*q(i,npy-1,t)
+                a2(i,npy+1) = c3*q(i,npy,t) + c2*q(i,npy+1,t) + c1*q(i,npy+2,t)
+                a2(i,npy) = 0.5*(a2(i,npy-1)+a2(i,npy+1))
              enddo
           endif
 
