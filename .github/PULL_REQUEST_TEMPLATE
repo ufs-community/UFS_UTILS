@@ -16,9 +16,12 @@ One or more paragraphs describing the problem, solution, and required changes.
 ## TESTS CONDUCTED: 
 Explicitly state what tests were run on these changes, or if any are still pending (for README or other text-only changes, just put "None required". Make note of the compilers used, the platform/machine, and other relevant details as necessary. For more complicated changes, or those resulting in scientific changes, please be explicit!
 
+Please specify if the relevant consistency tests were run and whether they succeeded.  If baselines need to be updated as a result of this PR, please specify the machine(s) and path to the new files.
+
 ## DEPENDENCIES:
 Add any links to external PRs. For example:
-- NOAA-EMC/UFS_UTILS/pull/<pr_number>
+
+NOAA-EMC/UFS_UTILS/pull/<pr_number>
 
 ## DOCUMENTATION:
 If this PR is contributing new capabilities that need to be documented, please also include updates to the RST files in the ufs-srweather-app or ufs-mrweather-app repositories (docs/UsersGuide/source) as supporting material.
