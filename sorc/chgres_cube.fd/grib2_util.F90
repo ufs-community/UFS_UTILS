@@ -18,13 +18,15 @@ use model_grid, only      : i_input, j_input
 implicit none
 
 public :: rh2spfh_gfs
-public :: rh2spfh_nam
 public :: fpvsnew 
 
 
 contains 
 
 !> Convert relative humidity to specific humidity.
+!> Calculation of saturation water vapor pressure is based on
+!> Brock and Richardson 2001 (Meterological Measurement 
+!> Systems, p. 86, equation 5.1) 
 !!
 !! @param[inout] rh_sphum rel humidity on input. spec hum on output.
 !! @param[in] p pressure in Pa
@@ -62,42 +64,13 @@ contains
 
 end subroutine RH2SPFH
 
-
-
-!> Convert relative humidity to specific humidity (NAM formula)
-!!
-!! @param[inout] rh_sphum rel humidity on input. spec hum on output.
-!! @param[in] p pressure in Pa
-!! @param[in] t temperature
-!! @author Jili Dong NCEP/EMC 
- subroutine rh2spfh_nam(rh_sphum,p,t)
-
-  implicit none
-
- real, parameter :: PQ0=379.90516
- real, parameter :: A2=17.2693882
- real, parameter :: A3=273.16
- real, parameter :: A4=35.86
-
-
-  real(esmf_kind_r4), intent(inout), dimension(i_input,j_input) ::rh_sphum
-  real(esmf_kind_r8), intent(in)                  :: p, t(i_input,j_input)
-
-  real, dimension(i_input,j_input)  :: QC, rh 
-
-  print*,"- CONVERT RH TO SPFH AT LEVEL ", p
-
-  rh = rh_sphum
-
-  QC = PQ0/P*EXP(A2*(T-A3)/(T-A4))
-
-  !print *, 'T = ', T, ' RH = ', RH, ' P = ', P
-  rh_sphum = rh*QC/100.0 
-  !print *, 'q = ', sphum
-
-end subroutine RH2SPFH_NAM
-
 !> Convert relative humidity to specific humidity (GFS formula)
+!> Calculation of saturation water vapor pressure is based on
+!> GFS function fvpsnew (Phillips 1982). The model does account for the variation of the
+!> latent heat of condensation with temperature. A linear interpolation is done
+!> between values in a calculated lookup table. Ice and water are considered
+!> separately. This option provides a consistent conversion for GFS grib2 data
+!> to be ingested.
 !!
 !! @param[inout] rh_sphum rel humidity on input. spec hum on output.
 !! @param[in] p pressure in Pa
