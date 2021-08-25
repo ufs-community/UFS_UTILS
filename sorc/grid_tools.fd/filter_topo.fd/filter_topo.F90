@@ -1223,7 +1223,7 @@ contains
     real, intent(IN):: sin_sg(4,isd:ied,jsd:jed,ntiles)
     real, intent(IN):: stretch_fac
     logical, intent(IN) :: nested, regional
-    real, intent(inout):: phis(isd:ied,jsd,jed,ntiles)
+    real, intent(inout):: phis(isd:ied,jsd:jed,ntiles)
     real:: cd2
     integer mdim, n_del2, n_del4
 
@@ -1333,6 +1333,8 @@ contains
     real:: smax, m_slope, fac
     integer:: i,j, nt, t
     integer:: is1, ie2, js1, je2
+
+    a2 = 0.
 
     if ( .not. nested .and. grid_type<3 ) then
        is1 = max(3,is-1);  ie2 = min(npx-2,ie+2)
