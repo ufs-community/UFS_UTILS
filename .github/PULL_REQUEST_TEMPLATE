@@ -2,7 +2,7 @@
 
 - You may delete any sections labeled "optional".
 
-- If you are unclear on what should be written here, see https://github.com/wrf-model/WRF/wiki/Making-a-good-pull-request-message for some guidance. 
+- If you are unclear on what should be written here, see https://github.com/NOAA-EMC/UFS_UTILS/wiki/9.-Creating-a-Pull-Request for some guidance. 
 
 - The title of this pull request should be a brief summary (ideally less than 100 characters) of the changes included in this PR. Please also include the branch to which this PR is being issued.
 
@@ -19,7 +19,7 @@ Explicitly state what tests were run on these changes, or if any are still pendi
 Please specify if the relevant consistency tests were run and whether they succeeded.  If baselines need to be updated as a result of this PR, please specify the machine(s) and path(s) to the new files.
 
 ## DEPENDENCIES:
-Add any links to external PRs. For example:
+Add any links to pending PRs that are required prior to merging this PR. For example:
 
 NOAA-EMC/UFS_UTILS/pull/<pr_number>
 
