@@ -14,7 +14,7 @@
 
  print*, "Starting test of filter_topo routine fill_regional_halo"
 
- call fill_regional_halo(testdata, halo)
+!call fill_regional_halo(testdata, halo)
 
 
  print*, "OK"
