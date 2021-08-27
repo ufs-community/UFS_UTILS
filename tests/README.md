@@ -20,8 +20,7 @@ output, such as "Starting test of ..."
 compared to expected values. If wrong values are
 returned, the test should stop with a bad status.
 - If the test is successful, that message
-should be printed to standard output, i.e.,
-print*,"SUCCESS!"
+should be printed to standard output, i.e., print*,"SUCCESS!"
 
 ### HOW TO COMPILE THE TEST UNDER CMAKE. 
 
@@ -74,9 +73,12 @@ for assistance.
 ### RUNNING THE TESTS:
 
 Tests will automatically be run by Github actions upon each commit.
-To run the tests locally, do a 'make test' or 'ctests --verbose' after
-the 'make install' command. When using 'make test', the standard
-output from the tests will be in your build directory - ./build/Testing/Temporary.
+
+To run the tests locally, invoke one of the following after the `make install`:
+- `make test` (Standard output for all tests sent to ./build/Testing/Temporary)
+- `ctest --verbose` (Standard output for all tests to standard output)
+- `ctest -R test_name` (Standard output for one test to standard output)
+
 For the parallel tests to run locally, update the machine-specific
 "mpi_exec" script under [cmake](../cmake) with your run account and queue.
 
