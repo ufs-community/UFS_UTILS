@@ -58,7 +58,7 @@ add_mpi_test(filter_topo-ftst_read_namelist
 Input data such as small text files may be placed in a ./data
 sub-directory. The CMakeLists.txt file should then be updated
 to copy this data to the run directory. For example, if
-you test needs an input namelist (called input.nml), use the
+your test needs an input namelist (called input.nml), use the
 following command:
 
 ```
@@ -76,8 +76,8 @@ Tests will automatically be run by Github actions upon each commit.
 
 To run the tests locally, invoke one of the following after the `make install`:
 - `make test` (Standard output for all tests sent to ./build/Testing/Temporary)
-- `ctest --verbose` (Standard output for all tests to standard output)
-- `ctest -R test_name` (Standard output for one test to standard output)
+- `ctest --verbose` (Standard output for all tests sent to the screen)
+- `ctest -R test_name` (Standard output for one test sent to the screen)
 
 For the parallel tests to run locally, update the machine-specific
 "mpi_exec" script under [cmake](../cmake) with your run account and queue.
