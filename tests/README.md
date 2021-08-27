@@ -78,3 +78,9 @@ To run the tests locally, do a 'make test' after the 'make install'
 command. For the parallel tests to run locally, update the
 machine-specific "mpi_exec" script under UFS_UTILS/cmake with your
 run account and queue.
+
+The standard output from the tests will be in your build directory - ./build/Testing/Temporary
+
+### QUESTIONS
+
+Please contact the repository managers: https://github.com/NOAA-EMC/UFS_UTILS/wiki
