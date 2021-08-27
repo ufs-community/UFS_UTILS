@@ -23,14 +23,16 @@ returned, the test should stop with a bad status.
 should be printed to standard output, i.e.,
 print*,"SUCCESS!"
 
-## HOW TO COMPILE THE TEST UNDER CMAKE. 
+### HOW TO COMPILE THE TEST UNDER CMAKE. 
 
 The above test is compiled and run with these
 statements in the CMakeLists.txt file. For more
 details, see ./filter_topo/CMakeLists.txt.
 
 This statement names the unit test executable:
-  add_executable(ftst_read_filter_topo_nml ftst_readnml.F90)
+```
+add_executable(ftst_read_filter_topo_nml ftst_readnml.F90)
+```
 
 This maps in the program library to the unit test. Other than the driver,
 all ufs_utils program modules are compiled in a library.
@@ -47,7 +49,7 @@ The above is for a serial test. To run an mpi-based test, use this command:
     EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_filter_topo_nml
     NUMPROCS 4 TIMEOUT 60)
 
-TESTS WITH INPUT DATA:
+### TESTS WITH INPUT DATA:
 
 Input data such as small text files may be placed in a ./data
 sub-directory. The CMakeLists.txt file should then be updated
@@ -62,7 +64,7 @@ Do not add large, binary input data to the ./data sub-directory. If
 your test requires these data, contact the repository managers
 for assistance.
 
-RUNNING THE TESTS:
+### RUNNING THE TESTS:
 
 Tests will automatically be run by Github actions upon each commit.
 To run the tests locally, do a 'make test' after the 'make install'
