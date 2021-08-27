@@ -10,9 +10,9 @@ The name of the unit test source file shall begin with
 "ftst_" (for Fortran) or "tst_" (for C/C++).
 
 A unit test shall have the following components.
-For an example, see ./filter_topo/ftst_readnml.F90
+For an example, see [ftst_readnml.F90](filter_topo/ftst_readnml.F90).
 
-- A prolog describing the test and its author.
+- A prologue describing the test and its author.
 - The test should begin with a print to standard
 output, such as "Starting test of ..."
 - A call to the function or routine to be tested.
@@ -27,14 +27,14 @@ print*,"SUCCESS!"
 
 The above test is compiled and run with these
 statements in the CMakeLists.txt file. For more
-details, see ./filter_topo/CMakeLists.txt.
+details, see [CMakeLists.txt](filter_topo/CMakeLists.txt).
 
 This statement names the unit test executable:
 ```
 add_executable(ftst_read_filter_topo_nml ftst_readnml.F90)
 ```
 
-This maps in the program library to the unit test. Other than the driver,
+This maps the program library to the unit test. Other than the driver,
 all ufs_utils program modules are compiled in a library.
 ```
 target_link_libraries(ftst_read_filter_topo_nml filter_topo_lib)
@@ -74,12 +74,11 @@ for assistance.
 ### RUNNING THE TESTS:
 
 Tests will automatically be run by Github actions upon each commit.
-To run the tests locally, do a 'make test' after the 'make install'
-command. For the parallel tests to run locally, update the
-machine-specific "mpi_exec" script under UFS_UTILS/cmake with your
-run account and queue.
-
-The standard output from the tests will be in your build directory - ./build/Testing/Temporary
+To run the tests locally, do a 'make test' or 'ctests --verbose' after
+the 'make install' command. When using 'make test', the standard
+output from the tests will be in your build directory - ./build/Testing/Temporary.
+For the parallel tests to run locally, update the machine-specific
+"mpi_exec" script under [cmake](../cmake) with your run account and queue.
 
 ### QUESTIONS
 
