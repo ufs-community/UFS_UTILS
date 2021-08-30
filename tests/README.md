@@ -16,11 +16,15 @@ For an example, see [ftst_readnml.F90](filter_topo/ftst_readnml.F90).
 - The test should begin with a print to standard
 output, such as "Starting test of ..."
 - A call to the function or routine to be tested.
-- Output from the function or routine should be 
+- Output from the function or routine must be 
 compared to expected values. If wrong values are
-returned, the test should stop with a bad status.
-- If the test is successful, that message
-should be printed to standard output, i.e., print*,"SUCCESS!"
+returned, the test must stop with a non-zero exit code.
+- If the test is successful, the test must return an
+exit code of 0. And this message should be printed to
+standard output: print*,"SUCCESS!"
+
+**The test must never rely on human inspection of results - it should
+be fully automated.**
 
 ### HOW TO COMPILE THE TEST UNDER CMAKE. 
 
@@ -66,7 +70,7 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/input.nml ${CMAKE_CURRENT_BINARY_DIR}/input.nml)
 ```
 
-Do not add large, binary input data to the ./data sub-directory. If
+**Do not** add large, binary input data to the ./data sub-directory. If
 your test requires these data, contact the repository managers
 for assistance.
 
