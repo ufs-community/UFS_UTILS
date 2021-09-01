@@ -83,6 +83,13 @@ target_link_libraries(ftst_dint2p
 
 add_test(NAME chgres_cube-ftst_dint2p COMMAND ftst_dint2p)
 
+add_executable(ftst_rh2spfh_gfs ftst_rh2spfh_gfs.F90)
+target_link_libraries(ftst_rh2spfh_gfs
+  chgres_cube_lib)
+
+add_test(NAME chgres_cube-ftst_rh2spfh_gfs COMMAND ftst_rh2spfh_gfs)
+
+
 add_executable(ftst_quicksort ftst_quicksort.F90)
 target_link_libraries(ftst_quicksort
   chgres_cube_lib)
