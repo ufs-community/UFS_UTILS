@@ -1400,6 +1400,16 @@ contains
                 a1(npx+1) = c3*q(npx,j,t) + c2*q(npx+1,j,t) + c1*q(npx+2,j,t)
              endif
 
+             if ( regional .and. grid_type<3 ) then
+                a1(0) = c1*q(-1,j,t) + c2*q(-1,j,t) + c3*q(0,j,t)
+                a1(2) = c3*q(1,j,t) + c2*q(2,j,t) + c1*q(3,j,t)
+                a1(1) = 0.5*(a1(0) + a1(2))
+
+                a1(npx-1) = c1*q(npx-3,j,t) + c2*q(npx-2,j,t) + c3*q(npx-1,j,t)
+                a1(npx+1) = c3*q(npx,j,t) + c2*q(npx+1,j,t) + c1*q(npx+2,j,t)
+                a1(npx) = 0.5*(a1(npx-1)+a1(npx+1))
+             endif
+
              if ( filter_type == 0 ) then
                 do i=is-1, ie+1
                    if( abs(3.*(a1(i)+a1(i+1)-2.*q(i,j,t))) > abs(a1(i)-a1(i+1)) ) then
