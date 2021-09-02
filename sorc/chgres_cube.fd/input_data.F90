@@ -2459,7 +2459,7 @@
 
  use wgrib2api
  
- use grib2_util, only                   : rh2spfh, convert_omega
+ use grib2_util, only                   : rh2spfh, rh2spfh_gfs, convert_omega
 
  implicit none
 
@@ -2490,7 +2490,9 @@
  logical                               :: lret
  logical                               :: conv_omega=.false., &
                                           hasspfh=.true., &
-                                          isnative=.false.
+                                          isnative=.false., &
+                                          use_rh=.false. 
+                                          
 
  real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
@@ -2603,11 +2605,23 @@
      if (localpet==0) print*, "- LEVEL AFTER SORT = ",slevs(i)
    enddo
  endif
+
+! Is SPFH on full levels Jili Dong
+     do vlev = 1, lev_input
+      iret = grb2_inq(the_file,inv_file,':SPFH:',slevs(vlev))
+      if (iret <= 0) then
+        use_rh = .TRUE.
+        if (localpet == 0) print*, ':SPFH on level '//trim(slevs(vlev))//' does not exist. & 
+           Will read in RH and convert to SPFH instead.'                                                   
+        exit
+      end if
+     end do
+
  
  if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
  iret = grb2_inq(the_file,inv_file,trim(trac_names_grib_1(1)),trac_names_grib_2(1),lvl_str_space)
 
- if (iret <= 0) then
+ if (iret <= 0 .or. use_rh) then
    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
    if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
    hasspfh = .false.
@@ -2782,7 +2796,13 @@
       endif !iret<=0
       
       if (n==1 .and. .not. hasspfh) then 
-        call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        if (trim(external_model) .eq. 'GFS') then
+          print *,'CALRH GFS'
+          call rh2spfh_gfs(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        else 
+          print *,'CALRH non-GFS'
+          call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        end if
       endif
 
        print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
