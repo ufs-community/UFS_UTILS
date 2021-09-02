@@ -22,6 +22,11 @@ contains
  !! Currently only coded for soil temperature. Soil moisture will
  !! need the model soil moisture paramaters for regridding.
  !!
+ !!  Does not make a temperature update if snow differ
+ !!  between fg and anal (allow correction of snow to
+ !!  address temperature error first), or if snow is present 
+ !!  (will eventually updating of snow temperature in this case)
+ !!
  !! @param[inout] RLA Latitude on the cubed-sphere tile
  !! @param[inout] RLO Longitude on the cubed-sphere tile
  !! @param[inout] STC_STATE
@@ -170,10 +175,6 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
 
     ij_loop : do ij = 1, lensfc
 
-        ! for now,  do not make a temperature update if snow differ
-        ! between fg and anal (allow correction of snow to
-        ! address temperature error first)
-
         mask_tile    = soilsnow_tile(ij)
         mask_fg_tile = soilsnow_fg_tile(ij)
 
@@ -273,6 +274,7 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
         ! todo, apply some bounds?
            enddo
 
+        ! don't update soil states if snow present.
         elseif(mask_tile==2) then
            nsnowupd = nsnowupd + 1
 
@@ -285,7 +287,7 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
     write(*,'(a,i8)') ' (not updated) soil grid cells, no soil nearby on gsi grid = ',nnosoilnear
     write(*,'(a,i8)') ' (not updated) soil grid cells, change in presence of snow = ', nsnowchange
     write(*,'(a,i8)') ' (not updated yet) snow grid cells = ', nsnowupd
-    write(*,'(a,i8)') ' grid cells, without soil of snow = ', nother
+    write(*,'(a,i8)') ' grid cells, without soil or snow = ', nother
 
     nother = 0 ! grid cells not land
     nsnowupd = 0  ! grid cells where no temp upd made, because snow occurence changed
@@ -297,9 +299,9 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
 
 end subroutine add_increment_soil
 
- !> Add soil snow depth increment to model snow depth state,
- !! and limit output to be non-genative. JEDI increments are
- !! calculated globall, so must be screend to land-only locations 
+ !> Add snow depth increment to model snow depth state,
+ !! and limit output to be non-negative. JEDI increments are
+ !! calculated globally, so must be screened to land-only locations 
  !! here.
  !!
  !! @param[in] lensfc Number of land points on this tile

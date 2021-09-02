@@ -33,9 +33,17 @@ contains
        real, intent(out)   :: density(lensfc)
 
        real :: dens_mean
+       integer :: n
 
         ! density = swe/snd
-        density = swe/snd
+        do n =1,lensfc
+                if (snd(n) > 0.001 ) then
+                        density(n) = swe(n)/snd(n)
+                else 
+                        density(n)=0.1 
+                endif 
+        enddo
+
         where (density < 0.0001) density = 0.1
 
         ! calculate mean density of snow over land
