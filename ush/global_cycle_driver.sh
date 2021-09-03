@@ -53,6 +53,7 @@ fi
 export DO_SFCCYLE=${DO_SFCCYCLE:-".true."}
 export DO_LNDINC=${DO_LNDINC:-".false."}
 export LND_SOI_FILE=${LND_SOI_FILE:-"NULL"}
+export DO_SNO_INC=${DO_SNO_INC:-".false."}
 
 CRES=$(echo $CASE | cut -c 2-)
 JCAP_CASE=$((2*CRES-2))
@@ -75,6 +76,9 @@ for n in $(seq 1 $ntiles); do
   ln -fs $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc  $DATA/fnbgso.00$n
   ln -fs $FIXfv3/C${CRES}/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
   ln -fs $FIXfv3/C${CRES}/C${CRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
+  if [[ "$DO_SNO_INC" == ".true." ]] ; then  
+        ln -fs $COMIN/$PDY.${cyc}0000.xainc.tile${n}.nc      $DATA/xainc.00$n
+  fi
 done
 
 $CYCLESH
