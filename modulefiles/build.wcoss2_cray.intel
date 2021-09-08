@@ -29,5 +29,5 @@ module load ip/3.3.3
 module load g2/3.4.1
 module load wgrib2/2.0.8
 
-# for mpiexec command??
-##module load cray-pals/1.0.12
+# for mpiexec command
+module load cray-pals/1.0.12
