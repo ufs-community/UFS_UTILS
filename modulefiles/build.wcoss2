@@ -33,8 +33,9 @@ module load libjpeg/9c
 #module load cce/12.0.1
 #module load gcc/10.3.0
 #module list
-export HPC_OPT=/apps/ops/para/libs
-module load wgrib2/2.0.8
+#export HPC_OPT=/apps/ops/para/libs
+#module load wgrib2/2.0.8
+module load wgrib2/2.0.8_mpi
 #export HPC_OPT=/apps/ops/prod/libs
 #export Jasper_ROOT=$JASPER_ROOT #"/usrx/local/prod/packages/gnu/4.8.5/jasper/1.900.29"
 #export WGRIB2_INCLUDES=$WGRIB2_INC
@@ -42,8 +43,9 @@ module load wgrib2/2.0.8
 #module unload netcdf
 #module load netcdf-hdf5parallel/4.7.4
 #module list
-module unload netcdf
-module load netcdf-hdf5parallel/4.7.4
+#module unload netcdf
+#module load netcdf-hdf5parallel/4.7.4
+module load netcdf/4.7.4
 module load esmf/8.1.0
 
 ##export wgrib2_ROOT=/gpfs/dell1/nco/ops/nwpara/lib/wgrib2/v2.0.8/ips/18.0.1
