@@ -4,7 +4,7 @@
 
  program fill_halo
 
- use utils
+!use utils
 
  implicit none
 
