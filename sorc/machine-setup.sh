@@ -131,6 +131,14 @@ elif [[ "$(hostname)" =~ "odin" ]]; then
 elif [[ -d /work/00315 && -d /scratch/00315 ]] ; then
     target=stampede
     module purge
+elif [[ -d /data/prod ]] ; then
+    # We are on SSEC S4
+    if ( ! eval module help > /dev/null 2>&1 ) ; then
+        echo load the module command 1>&2
+        source /usr/share/lmod/lmod/init/$__ms_shell
+    fi
+    target=s4
+    module purge
 else
     echo WARNING: UNKNOWN PLATFORM 1>&2
 fi

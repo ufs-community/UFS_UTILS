@@ -205,6 +205,16 @@ bsub -e $LOG_FILE15 -o $LOG_FILE15 -q $QUEUE -P $PROJECT_CODE -J chgres15 -M 100
         "export NODES=2; $PWD/c96.fv3.netcdf2wam.sh"
 
 #-----------------------------------------------------------------------------
+# Initialize CONUS 25-KM USING GFS PGRIB2+BGRIB2 files.
+#-----------------------------------------------------------------------------
+
+LOG_FILE16=${LOG_FILE}16
+export OMP_NUM_THREADS=1
+export APRUN="aprun -j 1 -n 6 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+bsub -e $LOG_FILE16 -o $LOG_FILE16 -q $QUEUE -P $PROJECT_CODE -J chgres16 -M 1000 -W 0:05 -extsched 'CRAYLINUX[]' \
+        "export NODES=1; $PWD/25km.conus.gfs.pbgrib2.sh"
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 

@@ -1,8 +1,10 @@
 #!/bin/bash
 
 #------------------------------------------------------------------
-# Run global_cycle for a C768 test case.  Compare output
-# to a baseline set of files using the 'nccmp' utility.
+# Run global_cycle for a C768 case to test the ingest and
+# application of soil temperature increments from the GSI.  
+# Compare output to a baseline set of files using the 'nccmp' 
+# utility.
 #------------------------------------------------------------------
 
 set -x
@@ -50,7 +52,7 @@ $BASE_GSM/ush/global_cycle_driver.sh
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< C768 LANDINC CYCLE TEST FAILED. >>>"
+  echo "<<< C768 LANDINC SOILT CYCLE TEST FAILED. >>>"
   exit $iret
 fi
 
@@ -61,7 +63,7 @@ for files in *tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c768.lndinc/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c768.lndincsoil/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -72,14 +74,14 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo
-  echo "*********************************"
-  echo "<<< C768 LANDINC CYCLE TEST FAILED. >>>"
-  echo "*********************************"
+  echo "*****************************************"
+  echo "<<< C768 LANDINC SOILT CYCLE TEST FAILED. >>>"
+  echo "*****************************************"
 else
   echo
-  echo "*********************************"
-  echo "<<< C768 LANDINC CYCLE TEST PASSED. >>>"
-  echo "*********************************"
+  echo "*****************************************"
+  echo "<<< C768 LANDINC SOILT CYCLE TEST PASSED. >>>"
+  echo "*****************************************"
 fi
 
 exit
