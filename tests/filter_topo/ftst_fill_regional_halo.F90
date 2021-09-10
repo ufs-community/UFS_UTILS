@@ -4,7 +4,7 @@
 
  program fill_halo
 
-!use utils
+ use utils
 
  implicit none
 
@@ -50,5 +50,7 @@
  else
   stop 22
  endif
+
+ deallocate(testdata)
 
  end program fill_halo
