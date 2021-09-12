@@ -402,7 +402,7 @@ void create_gnomonic_cubic_grid( char* grid_type, int *nlon, int *nlat, double *
       if (verbose) {
         fprintf(stderr,
                 "[INFO] Processing setup_aligned_nest for nest %ld . ntiles=%d parent_tile: %ld\n",
-                nn, ntiles, parent_tile);
+                nn, ntiles, parent_tile[nn]);
       }
       /* Setup aligned nest -- final two arguments are memory locations for data to be returned */
       /* The pointer arithmetic is complicated */
