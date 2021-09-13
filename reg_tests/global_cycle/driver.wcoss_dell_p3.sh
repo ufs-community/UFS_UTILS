@@ -28,7 +28,7 @@ module list
 WORK_DIR="${WORK_DIR:-/gpfs/dell1/stmp/$LOGNAME}"
 
 PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
-QUEUE="${QUEUE:-debug}"
+QUEUE="${QUEUE:-dev}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
@@ -55,8 +55,14 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.fv3gfs -W 0:05
 LOG_FILE=consistency.log02
 export DATA="${DATA_DIR}/test2"
 export COMOUT=$DATA
-bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.lndinc -W 0:05 -x -n 6 \
-        -M 2400 -R "span[ptile=6]" -R "affinity[core(1)]" "$PWD/C768.lndinc.sh"
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.lndincsoil -W 0:05 -x -n 6 \
+        -M 2400 -R "span[ptile=6]" -R "affinity[core(1)]" "$PWD/C768.lndincsoil.sh"
+
+LOG_FILE=consistency.log03
+export DATA="${DATA_DIR}/test3"
+export COMOUT=$DATA
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.lndincsnow -W 0:05 -x -n 6 \
+        -M 2400 -R "span[ptile=6]" -R "affinity[core(1)]" "$PWD/C768.lndincsnow.sh"
 
 LOG_FILE=consistency.log
 bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "affinity[core(1)]" -R "rusage[mem=100]" -W 0:01 \

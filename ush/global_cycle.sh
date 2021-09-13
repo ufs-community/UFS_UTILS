@@ -145,6 +145,7 @@
 #     DONST         Process NST records when using NST model.  Default is 'no'.
 #     DO_SFCCYCLE   Call sfcsub routine 
 #     DO_LNDINC     Call routine to update soil states with increment files
+#     DO_SNO_INC    Call routine to update snow states with increment files
 #     zsea1/zsea2   When running with NST model, this is the lower/upper bound
 #                   of depth of sea temperature.  In whole mm.
 #     MAX_TASKS_CY  Normally, program should be run with a number of mpi tasks
@@ -267,6 +268,7 @@ use_ufo=${use_ufo:-.true.}
 DONST=${DONST:-"NO"}
 DO_SFCCYCLE=${DO_SFCCYCLE:-.true.}
 DO_LNDINC=${DO_LNDINC:-.false.}
+DO_SNO_INC=${DO_SNO_INC:-.false.}
 zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
 MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
@@ -389,7 +391,8 @@ EOF
 cat << EOF > fort.37
  &NAMSFCD
   NST_FILE="$NST_FILE",
-  LND_SOI_FILE="$LND_SOI_FILE" 
+  LND_SOI_FILE="$LND_SOI_FILE",
+  DO_SNO_INC=$DO_SNO_INC
  /
 EOF
 
