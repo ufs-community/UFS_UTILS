@@ -12,7 +12,7 @@
 #define MAXENTRY  512
 #define NVAR     2048
 #define NFILE    32
-#define MAXDIM   10
+#define MAXDIM   20
 /* constants for grid type and grid location */
 #define ZERO   0
 #define NINETY 1
@@ -70,13 +70,17 @@ typedef struct {
   int    interp_method; /* indicate which remapping method will be used to do regridding. */
   int    cell_measures;
   int    cell_methods;
+  int    use_volume;
   int    area_vid;
   int    area_fid;
   int    area_has_taxis;
   int    area_has_naxis;
+  int    area_has_zaxis;
   double area_missing;
   char   area_name[STRING];
-  
+  int    do_regrid;
+  int    is_axis_data;
+  int    dimsize[5];  
 } Var_config;
 
 typedef struct {
@@ -94,6 +98,8 @@ typedef struct {
 typedef struct {
   char name[STRING];
   char bndname[STRING];
+  char orig_name[STRING];
+  char orig_bndname[STRING];
   int  dimid;
   int  vid;
   int  bndid;
@@ -101,6 +107,7 @@ typedef struct {
   nc_type type;
   char cart; 
   int  bndtype;
+  int  is_defined;
   double *bnddata;
   double *data; 
 } Axis_config;
@@ -112,6 +119,7 @@ typedef struct {
   int ndim;
   Axis_config  *axis;
   int has_tavg_info;
+  nc_type tavg_type;
   int has_cell_measure_att;
   int id_t1, id_t2, id_dt;
   double *t1, *t2, *dt;

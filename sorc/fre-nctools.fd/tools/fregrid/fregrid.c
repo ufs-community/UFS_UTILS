@@ -37,7 +37,8 @@ char *usage[] = {
   "          [--center_y] [--check_conserve] [--weight_file weight_file]                 ",
   "          [--weight_field --weight_field] [--dst_vgrid dst_vgrid]                     ",
   "          [--extrapolate] [--stop_crit #] [--standard_dimension]                      ",
-  "          [--associated_file_dir dir]                                                 ",
+  "          [--associated_file_dir dir] [--format format]                               ",
+  "          [--deflation #] [--shuffle 1|0]                                             ",
   "                                                                                      ",
   "fregrid remaps data (scalar or vector) from input_mosaic onto                         ",
   "output_mosaic.  Note that the target grid also could be specified                     ",
@@ -51,6 +52,8 @@ char *usage[] = {
   "to latlon grid. Alternative schemes can be added if needed. fregrid                   ",
   "expects NetCDF format input. scalar_field and/or u_field/v_field must                 ",
   "be specified. u_fld and v_fld must be paired together.                                ",
+  "If using NetCDF4, output will have the same deflation and shuffle settings            ",
+  "unless specified.                                                                     ",
   "                                                                                      ",
   "fregrid takes the following flags:                                                    ",
   "                                                                                      ",
@@ -207,13 +210,24 @@ char *usage[] = {
   "                              longitude and latitude axis will be 'lon' and 'lat'.    ",
   "                              'lon_bnd' and 'lat_bnd' will be longitude and latitude  ",
   "                              bound name. The dimension of lon_bounds is (2,nlon) and ",
-  "                              the dimension of lat_bounds is (2,nlat).                "
+  "                              the dimension of lat_bounds is (2,nlat).                ",
   "                                                                                      ",
   "--associated_file_dir dir     Specify the path of the associated files                ",
   "                                                                                      ",
   "--debug                       Will print out memory usage and running time            ",
   "                                                                                      ",
+  "--format                      netcdf file format. Valid values are 'netcdf4',         ",
+  "                              'netcdf4_classic', '64bit_offset', 'classic'. When      ",
+  "                              format is not specified, will use the format of         ",
+  "                              input_file.                                             ",
+  "                                                                                      ",
   "--nthreads #                  Specify number of OpenMP threads.                       ",
+  "                                                                                      ",
+  "--deflation #                 If using NetCDF4 , use deflation of level #.            ",
+  "                              Defaults to input file settings.                        ",
+  "                                                                                      ",
+  "--shuffle #                   If using NetCDF4 , use shuffle if 1 and don't use if 0  ",
+  "                              Defaults to input file settings.                        ",
   "                                                                                      ",
   "  Example 1: Remap C48 data onto N45 grid.                                            ",          
   "             (use GFDL-CM3 data as example)                                           ",
@@ -232,6 +246,8 @@ char *usage[] = {
 #define EPSLN10  (1.e-10)
 const double D2R = M_PI/180.;
 char tagname[] = "$Name: bronx-10_performance_z1l $";
+
+extern int in_format; //declared in mpp_io.c
 
 int main(int argc, char* argv[])
 {
@@ -277,6 +293,9 @@ int main(int argc, char* argv[])
   unsigned int  finer_step = 0;
   int     debug = 0;
   int     great_circle_algorithm_in, great_circle_algorithm_out;
+  int     deflation = -1;
+  int     shuffle = -1;
+  char    *format=NULL;
   
   char          wt_file_obj[512];
   char          *weight_file=NULL;
@@ -300,7 +319,7 @@ int main(int argc, char* argv[])
   Interp_config *interp     = NULL;   /* store remapping information */
   int save_weight_only      = 0;
   int nthreads = 1;
-
+  
   double time_get_in_grid=0, time_get_out_grid=0, time_get_input=0;
   double time_setup_interp=0, time_do_interp=0, time_write=0;
   clock_t time_start, time_end;
@@ -348,6 +367,9 @@ int main(int argc, char* argv[])
     {"debug",             no_argument,     NULL, 'P'},
     {"nthreads",         required_argument, NULL, 'Q'},
     {"associated_file_dir", required_argument, NULL, 'R'},
+    {"deflation",        required_argument, NULL, 'S'},
+    {"shuffle",          required_argument, NULL, 'T'},
+    {"format",           required_argument, NULL, 'U'},
     {"help",             no_argument,       NULL, 'h'},
     {0, 0, 0, 0},
   };  
@@ -491,6 +513,15 @@ int main(int argc, char* argv[])
     case 'R':
       associated_file_dir = optarg;
       break;
+    case 'S':
+      deflation = atoi(optarg);
+      break;
+    case 'T':
+      shuffle = atoi(optarg);
+	break;
+    case 'U':
+      format = optarg;
+      break;
     case '?':
       errflg++;
       break;
@@ -532,7 +563,8 @@ int main(int argc, char* argv[])
   }
   else
     mpp_error("fregrid: interp_method must be 'conserve_order1', 'conserve_order2', 'conserve_order2_monotonic'  or 'bilinear'");
-      
+
+  save_weight_only = 0;
   if( nfiles == 0) {
     if(nvector > 0 || nscalar > 0 || nvector2 > 0)
       mpp_error("fregrid: when --input_file is not specified, --scalar_field, --u_field and --v_field should also not be specified");
@@ -585,6 +617,11 @@ int main(int argc, char* argv[])
     else if(grid_type == BGRID)
       opcode |= BGRID;
   }
+
+  if (shuffle < -1 || shuffle > 1)
+    mpp_error("fregrid: shuffle must be 0 (off) or 1 (on)");
+  if (deflation < -1 || deflation > 9)
+    mpp_error("fregrid: deflation must be between 0 (off) and 9");
   
   /* define history to be the history in the grid file */
   strcpy(history,argv[0]);
@@ -721,7 +758,7 @@ int main(int argc, char* argv[])
   }
   
   if(remap_file) set_remap_file(ntiles_out, mosaic_out, remap_file, interp, &opcode, save_weight_only);  
-  
+
   if(!save_weight_only) {
     file_in   = (File_config *)malloc(ntiles_in *sizeof(File_config));
     file_out  = (File_config *)malloc(ntiles_out*sizeof(File_config));
@@ -730,17 +767,7 @@ int main(int argc, char* argv[])
       file2_in   = (File_config *)malloc(ntiles_in *sizeof(File_config));
       file2_out  = (File_config *)malloc(ntiles_out*sizeof(File_config));
     }
-    if(nscalar > 0) {
-      scalar_in  = (Field_config *)malloc(ntiles_in *sizeof(Field_config));
-      scalar_out = (Field_config *)malloc(ntiles_out *sizeof(Field_config));
-    }
-    if(nvector > 0) {
-      u_in  = (Field_config *)malloc(ntiles_in *sizeof(Field_config));
-      u_out = (Field_config *)malloc(ntiles_out *sizeof(Field_config));    
-      v_in  = (Field_config *)malloc(ntiles_in *sizeof(Field_config));
-      v_out = (Field_config *)malloc(ntiles_out *sizeof(Field_config));
-    }
-  
+
     set_mosaic_data_file(ntiles_in, mosaic_in, dir_in, file_in,  input_file[0]);
     set_mosaic_data_file(ntiles_out, mosaic_out, dir_out, file_out, output_file[0]);
 
@@ -757,17 +784,22 @@ int main(int argc, char* argv[])
       set_mosaic_data_file(ntiles_out, mosaic_out, dir_out, file2_out, output_file[1]);    
     }
 
-    for(n=0; n<ntiles_in; n++) file_in[n].fid = mpp_open(file_in[n].name, MPP_READ);
+    //Open the input files. Save the nc format of the first one.
+    int in_format_0 = -1;
+    for (n = 0; n < ntiles_in; n++) {
+      file_in[n].fid = mpp_open(file_in[n].name, MPP_READ);
+      if(n == 0) in_format_0 = in_format;
+    }
 
     nscalar_orig = nscalar;
     /* filter field with interp_method = "none"  */
     nscalar = 0;
     for(n=0; n<nscalar_orig; n++) {
       int vid;
-      char remap_method[STRING];
 
       vid = mpp_get_varid(file_in[0].fid, scalar_name[n]);
       if(mpp_var_att_exist(file_in[0].fid, vid, "interp_method")) {
+        char remap_method[STRING] = "";
         mpp_get_var_att(file_in[0].fid, vid, "interp_method", remap_method);
         if(strcmp(remap_method, "none") && strcmp(remap_method, "NONE") && strcmp(remap_method, "None")) {
           strcpy(scalar_name_remap[nscalar], scalar_name[n]);
@@ -779,6 +811,26 @@ int main(int argc, char* argv[])
           nscalar++;
       }
     }
+
+    /* when there is no scalar and vector to remap, simply return */
+    if(nscalar == 0 && nvector == 0) {
+      if(mpp_pe() == mpp_root_pe()) printf("NOTE from fregrid: no scalar and vector field need to be regridded.\n");
+      mpp_end();
+      return 0;   
+    }
+    
+    if(nscalar > 0) {
+      scalar_in  = (Field_config *)malloc(ntiles_in *sizeof(Field_config));
+      scalar_out = (Field_config *)malloc(ntiles_out *sizeof(Field_config));
+    }
+    if(nvector > 0) {
+      mpp_error("fregrid: currently does not support vertical interpolation, contact developer");
+      u_in  = (Field_config *)malloc(ntiles_in *sizeof(Field_config));
+      u_out = (Field_config *)malloc(ntiles_out *sizeof(Field_config));    
+      v_in  = (Field_config *)malloc(ntiles_in *sizeof(Field_config));
+      v_out = (Field_config *)malloc(ntiles_out *sizeof(Field_config));
+    }
+  
     set_field_struct ( ntiles_in,   scalar_in,   nscalar, scalar_name_remap[0], file_in);
     set_field_struct ( ntiles_out,  scalar_out,  nscalar, scalar_name_remap[0], file_out);
     set_field_struct ( ntiles_in,   u_in,        nvector, u_name[0], file_in);
@@ -796,9 +848,20 @@ int main(int argc, char* argv[])
 		       kbegin, kend, lbegin, lend, opcode, associated_file_dir);
 
     set_weight_inf( ntiles_in, grid_in, weight_file, weight_field, file_in->has_cell_measure_att);
+
+    //If the netcdf format was specified as an input argument, use that format. Otherwise
+    // use the format from the first ( tile 0) input file.
+    if(format != NULL) {
+      set_in_format(format);
+    }else if (in_format_0 >= 0){
+      reset_in_format( in_format_0);
+    }else{
+      printf("WARNING: fregrid could not set in_format");
+    }
     
     set_output_metadata(ntiles_in, nfiles, file_in, file2_in, scalar_in, u_in, v_in,
-			ntiles_out, file_out, file2_out, scalar_out, u_out, v_out, grid_out, &vgrid_out, history, tagname, opcode);
+			ntiles_out, file_out, file2_out, scalar_out, u_out, v_out, grid_out, &vgrid_out, history, tagname, opcode,
+			deflation, shuffle);
 
     if(debug) print_mem_usage("After set_output_metadata");
     /* when the interp_method specified through command line is CONSERVE_ORDER1, but the interp_method in the source file
@@ -834,8 +897,29 @@ int main(int argc, char* argv[])
   */
 
   if(debug) time_start = clock();
-   if( opcode & BILINEAR ) /* bilinear interpolation from cubic to lalon */
-     setup_bilinear_interp(ntiles_in, grid_in, ntiles_out, grid_out, interp, opcode );
+  if( opcode & BILINEAR ) {  /* bilinear interpolation from cubic to lalon */
+    double dlon_in, dlat_in;
+    double lonbegin_in, latbegin_in;
+    /* when dlon_in is 0, bilinear_interp will use the default 2*M_PI */
+    if(fabs(lonend-lonbegin-360) < EPSLN10)
+      dlon_in = M_PI+M_PI;
+    else
+      dlon_in = (lonend-lonbegin)*D2R;
+    if(fabs(latend-latbegin-180) < EPSLN10)
+      dlat_in = M_PI;
+    else
+      dlat_in = (latend-latbegin)*D2R;
+    if(fabs(lonbegin) < EPSLN10)
+      lonbegin_in = 0.0;
+    else
+      lonbegin_in = lonbegin*D2R;
+    if(fabs(latbegin+90) < EPSLN10)
+      latbegin_in = -0.5*M_PI;
+    else
+      latbegin_in = latbegin*D2R;
+    
+    setup_bilinear_interp(ntiles_in, grid_in, ntiles_out, grid_out, interp, opcode, dlon_in, dlat_in, lonbegin_in, latbegin_in );
+  }
    else
      setup_conserve_interp(ntiles_in, grid_in, ntiles_out, grid_out, interp, opcode);
    if(debug) {
@@ -891,6 +975,7 @@ int main(int argc, char* argv[])
     /* first interp scalar variable */
     for(l=0; l<nscalar; l++) {
       if( !scalar_in->var[l].has_taxis && m>0) continue;
+      if( !scalar_in->var[l].do_regrid ) continue;
       level_t = m + scalar_in->var[l].lstart;
       /*--- to reduce memory usage, we are only do remapping for on horizontal level one time */
       for(level_n =0; level_n < scalar_in->var[l].nn; level_n++) {
