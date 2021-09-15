@@ -9,6 +9,7 @@
 !! @author Zhi Liang (GFDL) who packaged it into a standalone application.
 program filter_topo
 
+  use utils
 
   implicit none
 
@@ -25,10 +26,9 @@ program filter_topo
   integer, parameter :: XDir=1
   integer, parameter :: YDir=2
   real, parameter :: pi = 3.14159265358979323846d0
-  real, parameter :: radius = 6371.d03
+  real, parameter :: radius = 6371200.0
   real, parameter ::  big_number=1.d8
   real, parameter :: tiny_number=1.d-8
-
 
   real:: cd4        ! Dimensionless coeff for del-4 difussion (with FCT)
   real:: peak_fac   ! overshoot factor for the mountain peak
@@ -36,21 +36,6 @@ program filter_topo
 
   integer :: n_del2_weak
 
-  logical :: zs_filter = .true. 
-  logical :: zero_ocean = .true.          ! if true, no diffusive flux into water/ocean area 
-  real    :: res = 48.                    ! real value of the 'c' resolution
-  real    :: stretch_fac = 1.0
-  logical :: nested = .false. &
-            ,regional = .false.
-  integer :: grid_type = 0 ! gnomonic_ed
-  character(len=128) :: topo_file = "orog"
-  character(len=128) :: topo_field = "orog_filt"
-  character(len=128) :: mask_field = "slmsk"
-  character(len=128) :: grid_file = "atmos_mosaic.nc"
-  namelist /filter_topo_nml/ topo_file, topo_field, mask_field, grid_file, zero_ocean, &
-       zs_filter, stretch_fac, res, nested, grid_type, regional
-
-  integer :: stdunit = 6 
   integer :: ntiles = 0
 
   real da_min
@@ -635,7 +620,7 @@ contains
     real    :: g1(2), g2(2), g3(2), g4(2), g5(2)
     real    :: p1(3), p3(3)
     real    :: p_lL(2), p_uL(2), p_lR(2), p_uR(2)
-    character(len=256) :: tile_file
+    character(len=512) :: tile_file
     real, allocatable, dimension(:,:)   :: tmpvar, geolon_c_nest, geolat_c_nest
     real, allocatable, dimension(:,:,:) :: geolon_c, geolat_c
     real, allocatable, dimension(:,:,:) :: geolon_t, geolat_t, cos_sg, grid3
@@ -1932,51 +1917,6 @@ contains
 
 
   end subroutine del4_cubed_sphere
-
-  !> ???
-  !!
-  !! @param[in] status ???
-  !! @param[in] string ???
-  !! @author GFDL Programmer
-  subroutine handle_err(status, string)
-    integer,          intent(in) :: status
-    character(len=*), intent(in) :: string
-    character(len=256) :: errmsg
-
-    if (status .ne. nf_noerr) then
-       errmsg = nf_strerror(status)
-       errmsg = trim(errmsg)//trim(string)
-       print *, trim(errmsg)
-       stop 'Stopped'
-    endif
-
-  end subroutine  handle_err
-
-  !> Reads the namelist file, write namelist to log file.
-  !!
-  !! 
-  !! @author GFDL Programmer
-  subroutine read_namelist
-
-    !  read namelist
-    integer :: unit=7, io_status
-    logical :: opened
-
-    do
-       inquire( unit=unit, opened=opened )
-       if( .NOT.opened )exit
-       unit = unit + 1
-       if( unit.EQ.100 )call handle_err(-1, 'Unable to locate unit number.' )
-    end do
-    open( unit=unit, file='input.nml', iostat=io_status )
-    read( unit,filter_topo_nml, iostat=io_status )
-    close(unit)
-
-    if (io_status > 0) call handle_err(-1, 'Error reading input.nml')
-
-    write (stdunit, nml=filter_topo_nml)  
-
-  end subroutine read_namelist
 
   !> Check results of netCDF call.
   !!
