@@ -2,14 +2,14 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run global_cycle regression test on Jet.
+# Run global_cycle consistency test on Jet.
 #
 # Set $DATA to your working directory.  Set the project code (SBATCH -A)
 # and queue (SBATCH -q) as appropriate.
 #
 # Invoke the script as follows:  sbatch $script
 #
-# Log output is placed in regression.log.  A summary is
+# Log output is placed in consistency.log.  A summary is
 # placed in summary.log
 #
 # The test fails when its output does not match the baseline files
@@ -21,8 +21,8 @@
 #SBATCH -J cycle_reg_test
 #SBATCH -A emcda
 #SBATCH --open-mode=truncate
-#SBATCH -o regression.log
-#SBATCH -e regression.log
+#SBATCH -o consistency.log
+#SBATCH -e consistency.log
 #SBATCH --nodes=1 --ntasks-per-node=6
 #SBATCH --partition=xjet
 #SBATCH -q windfall
@@ -35,7 +35,8 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export DATA=/lfs4/HFIP/emcda/$LOGNAME/stmp/reg_tests.cycle
+export DATA="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export DATA="${DATA}/reg-tests/global-cycle"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.

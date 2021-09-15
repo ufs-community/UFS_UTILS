@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run grid generation regression tests on WCOSS-Cray.
+# Run grid generation consistency tests on WCOSS-Cray.
 #
 # Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
 # as appropriate.
@@ -26,16 +26,17 @@ module list
 
 set -x
 
-QUEUE="debug"
-PROJECT_CODE="GFS-DEV"
-export WORK_DIR=/gpfs/hps3/stmp/$LOGNAME/reg_tests.grid
+QUEUE="${QUEUE:-debug}"
+PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
+export WORK_DIR="${WORK_DIR:-/gpfs/hps3/stmp/$LOGNAME}"
+export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
 export home_dir=$PWD/../..
-LOG_FILE=regression.log
+LOG_FILE=consistency.log
 SUM_FILE=summary.log
 export APRUN="aprun -n 1 -N 1 -j 1 -d 1 -cc depth"
 export APRUN_SFC="aprun -j 1 -n 24 -N 24"
@@ -74,9 +75,16 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J esg.regional -W 0:1
         -w 'ended(gfdl.regional)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/esg.regional.sh"
 
 #-----------------------------------------------------------------------------
+# Regional GSL gravity wave drag.
+#-----------------------------------------------------------------------------
+
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J reg.gsl.gwd -W 0:08 -M 2400 \
+        -w 'ended(esg.regional)' -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/regional.gsl.gwd.sh"
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
-bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(esg.regional)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
+bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 -w 'ended(reg.gsl.gwd)' "grep -a '<<<' $LOG_FILE >> $SUM_FILE"
 
 exit
