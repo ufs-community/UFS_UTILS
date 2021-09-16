@@ -46,7 +46,7 @@ module load wgrib2/2.0.8_mpi
 #module unload netcdf
 #module load netcdf-hdf5parallel/4.7.4
 module load netcdf/4.7.4
-module load esmf/8.1.0
+module load esmf/8.0.1
 
 ##export wgrib2_ROOT=/gpfs/dell1/nco/ops/nwpara/lib/wgrib2/v2.0.8/ips/18.0.1
 #module load wgrib2/2.0.8
