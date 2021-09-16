@@ -17,8 +17,7 @@ program ftst_land_increments
  real, parameter :: EPSILON=0.001
 
  real, allocatable :: rsoiltype(:)
- real, allocatable :: smc_bck(:,:)
- real, allocatable :: slc_bck(:,:)
+ integer, allocatable :: mask(:)
  real, allocatable :: stc_bck(:,:)
  real, allocatable :: smc_anl(:,:)
  real, allocatable :: slc_anl(:,:)
@@ -37,8 +36,7 @@ program ftst_land_increments
  lensfc= 3  ! Number of test points.
  
  allocate(rsoiltype(lensfc))      ! Soil type.
- allocate(smc_bck(lensfc,lsoil))  ! Background total soil moisture.
- allocate(slc_bck(lensfc,lsoil))  ! Background liquid soil moisture.
+ allocate(mask(lensfc))           ! Land mask
  allocate(stc_bck(lensfc,lsoil))  ! Background soil temperature (K).
  allocate(smc_anl(lensfc,lsoil))  ! Analyzed total soil moisture.
  allocate(slc_anl(lensfc,lsoil))  ! Analyzed liquid soil moisture.
@@ -50,8 +48,7 @@ program ftst_land_increments
 ! be unchanged and equal.
 
  rsoiltype(1) = 5.
- smc_bck(1,:) = .25
- slc_bck(1,:) = .25
+ mask(1) = 1
  stc_bck(1,:) =  280.0
 
  smc_anl(1,:) = .25
@@ -64,8 +61,7 @@ program ftst_land_increments
 ! be adjusted to equal the total soil moisture.
 
  rsoiltype(2) = 5.
- smc_bck(2,:) = .25
- slc_bck(2,:) = .23
+ mask(2) = 1
  stc_bck(2,:) =  270.0
 
  smc_anl(2,:) = .25
@@ -77,17 +73,15 @@ program ftst_land_increments
 ! moisture.
 
  rsoiltype(3) = 5.
- smc_bck(3,:) = .25
- slc_bck(3,:) = .25
+ mask(3) = 1
  stc_bck(3,:) =  274.0
 
  smc_anl(3,:) = .25
  slc_anl(3,:) = .25
  stc_anl(3,:) =  271.0
 
- call apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, &
-           lsoil, rsoiltype, smc_bck, slc_bck,stc_bck, smc_anl, slc_anl, stc_anl)
-
+ call apply_land_da_adjustments_stc(lsm, isot, ivegsrc,lensfc, &
+           lsoil, rsoiltype, mask, stc_bck, stc_anl, smc_anl, slc_anl)
 
  do l = 1, lsoil
    if (abs(smc_anl(1,l) - 0.25) > EPSILON) stop 2
@@ -106,7 +100,7 @@ program ftst_land_increments
 
  call mpi_finalize(ierr)
 
- deallocate(rsoiltype,smc_bck,slc_bck,stc_bck,smc_anl,slc_anl,stc_anl)
+ deallocate(rsoiltype,stc_bck,smc_anl,slc_anl,stc_anl,mask)
 
  if (my_rank .eq. 0) print*, "OK"
  if (my_rank .eq. 0) print*, "SUCCESS!"
