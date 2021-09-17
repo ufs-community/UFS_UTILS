@@ -748,6 +748,9 @@ contains
       call fill_cubic_grid_halo(geolat_c, geolat_c, ng, 1, 1, 1, 1)    
       if(.not. nested) call fill_bgrid_scalar_corners(geolon_c, ng, npx, npy, isd, jsd, XDir)
       if(.not. nested) call fill_bgrid_scalar_corners(geolat_c, ng, npx, npy, isd, jsd, YDir)
+    else
+      call fill_regional_halo(geolon_c, ng)
+      call fill_regional_halo(geolat_c, ng)
     endif
 
     !--- compute grid cell center
@@ -1041,6 +1044,12 @@ contains
       call fill_cubic_grid_halo(mask, mask, ng, 0, 0, 1, 1)
     endif
 
+    if( regional ) then
+      call fill_regional_halo(oro, ng)
+      oro(:,:,:) = max(oro(:,:,:),0.)
+      call fill_regional_halo(mask, ng)
+      mask(:,:,:) = min(max(mask(:,:,:),0.),1.)
+    endif
 
 
   end subroutine read_topo_file
@@ -1184,7 +1193,7 @@ contains
     real, intent(IN):: sin_sg(4,isd:ied,jsd:jed,ntiles)
     real, intent(IN):: stretch_fac
     logical, intent(IN) :: nested, regional
-    real, intent(inout):: phis(isd:ied,jsd,jed,ntiles)
+    real, intent(inout):: phis(isd:ied,jsd:jed,ntiles)
     real:: cd2
     integer mdim, n_del2, n_del4
 
@@ -1391,6 +1400,16 @@ contains
                 a1(npx+1) = c3*q(npx,j,t) + c2*q(npx+1,j,t) + c1*q(npx+2,j,t)
              endif
 
+             if ( regional .and. grid_type<3 ) then
+                a1(0) = c1*q(-1,j,t) + c2*q(-1,j,t) + c3*q(0,j,t)
+                a1(2) = c3*q(1,j,t) + c2*q(2,j,t) + c1*q(3,j,t)
+                a1(1) = 0.5*(a1(0) + a1(2))
+
+                a1(npx-1) = c1*q(npx-3,j,t) + c2*q(npx-2,j,t) + c3*q(npx-1,j,t)
+                a1(npx+1) = c3*q(npx,j,t) + c2*q(npx+1,j,t) + c1*q(npx+2,j,t)
+                a1(npx) = 0.5*(a1(npx-1)+a1(npx+1))
+             endif
+
              if ( filter_type == 0 ) then
                 do i=is-1, ie+1
                    if( abs(3.*(a1(i)+a1(i+1)-2.*q(i,j,t))) > abs(a1(i)-a1(i+1)) ) then
@@ -1443,6 +1462,20 @@ contains
                      +      ((2.*dya(i,npy,t)+dya(i,npy+1,t))*q(i,npy,t)-dya(i,npy,t)*q(i,npy+1,t))/&
                            (dya(i,npy,t)+dya(i,npy+1,t)))
                 a2(i,npy+1) = c3*q(i,npy,t) + c2*q(i,npy+1,t) + c1*q(i,npy+2,t)
+             enddo
+          endif
+
+          if ( regional .and. grid_type<3 ) then
+             do i=is,ie
+                a2(i,0) = c1*q(i,-2,t) + c2*q(i,-1,t) + c3*q(i,0,t)
+                a2(i,2) = c3*q(i,1,t) + c2*q(i,2,t) + c1*q(i,3,t)
+                a2(i,1) = 0.5*(a2(i,0) + a2(i,2))
+             enddo
+
+             do i=is,ie
+                a2(i,npy-1) = c1*q(i,npy-3,t) + c2*q(i,npy-2,t) + c3*q(i,npy-1,t)
+                a2(i,npy+1) = c3*q(i,npy,t) + c2*q(i,npy+1,t) + c1*q(i,npy+2,t)
+                a2(i,npy) = 0.5*(a2(i,npy-1)+a2(i,npy+1))
              enddo
           endif
 
