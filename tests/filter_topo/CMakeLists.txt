@@ -21,3 +21,7 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 add_executable(ftst_read_filter_topo_nml ftst_readnml.F90)
 add_test(NAME filter_topo-ftst_read_namelist COMMAND ftst_read_filter_topo_nml)
 target_link_libraries(ftst_read_filter_topo_nml filter_topo_lib)
+
+add_executable(ftst_fill_regional_halo ftst_fill_regional_halo.F90)
+add_test(NAME filter_topo-ftst_fill_regional_halo COMMAND ftst_fill_regional_halo)
+target_link_libraries(ftst_fill_regional_halo filter_topo_lib)
