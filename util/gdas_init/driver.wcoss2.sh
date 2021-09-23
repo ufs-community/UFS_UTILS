@@ -121,46 +121,50 @@ if [ $RUN_CHGRES == yes ]; then
 
   QUEUE=dev
   NODES=1
-  TASKS_PER_NODE=12
+  TASKS_PER_NODE=24
   WALLT="0:15:00"
   MEM=75GB
   if [ $CRES_HIRES == 'C768' ] ; then
-    NODES=5
+    MEM=175GB
   elif [ $CRES_HIRES == 'C1152' ] ; then
-    NODES=8
+    MEM=350GB
+    NODES=1
+    TASKS_PER_NODE=48
     WALLT="0:20:00"
   fi
   (( NCPUS = TASKS_PER_NODE * 2 ))
-  (( TASKS = NODES * TASKS_PER_NODE))
+  (( TASKS = NODES * TASKS_PER_NODE ))
   export APRUN="mpiexec -n $TASKS -ppn $TASKS_PER_NODE --cpu-bind core"
   case $gfs_ver in
     v12 | v13)
       export OMP_NUM_THREADS=4
       export OMP_STACKSIZE=1024M
-      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} --cpus-per-task=$OMP_NUM_THREADS \
-        -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_pre-v14.chgres.sh ${CDUMP}
+      export OMP_PLACES=cores
+      export APRUN="$APRUN --depth 2"
+      (( NCPUS = NCPUS * OMP_NUM_THREADS ))
+      qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=${OMP_NUM_THREADS}:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+      -N chgres_${CDUMP} -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} -- ${this_dir}/run_pre-v14.chgres.sh ${CDUMP}
       ;;
     v14)
-      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-      -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v14.chgres.sh ${CDUMP}
+      qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+      -N chgres_${CDUMP} -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} -- ${this_dir}/run_v14.chgres.sh ${CDUMP}
       ;;
     v15)
       if [ "$CDUMP" = "gdas" ]; then
-        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.sh ${CDUMP}
+        qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+        -N chgres_${CDUMP} -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} -- ${this_dir}/run_v15.chgres.sh ${CDUMP}
       else
-        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.gfs.sh
+        qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+        -N chgres_${CDUMP} -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} ${this_dir}/run_v15.chgres.gfs.sh
       fi
       ;;
     v16retro)
       if [ "$CDUMP" = "gdas" ] ; then
-        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v16retro.chgres.sh hires
+        qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+        -N chgres_${CDUMP} -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} -- ${this_dir}/run_v16retro.chgres.sh hires
       else
-        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v16.chgres.sh ${CDUMP}
+        qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+        -N chgres_${CDUMP} -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} -- ${this_dir}/run_v16.chgres.sh ${CDUMP}
       fi
       ;;
     v16)
@@ -172,16 +176,32 @@ if [ $RUN_CHGRES == yes ]; then
   if [ "$CDUMP" = "gdas" ]; then
 
     WALLT="0:15:00"
+    MEM=75GB
+    NODES=1
+    TASKS_PER_NODE=12
+    (( NCPUS = TASKS_PER_NODE * 2 ))
+    (( TASKS = NODES * TASKS_PER_NODE))
+    export APRUN="mpiexec -n $TASKS -ppn $TASKS_PER_NODE --cpu-bind core"
 
     if [ "$gfs_ver" = "v16retro" ]; then
 
-      sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_enkf \
-      -o log.enkf -e log.enkf ${DEPEND} run_v16retro.chgres.sh enkf
+      qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+      -N chgres_enkf -o log.enkf -e log.enkf ${DEPEND} -- ${this_dir}/run_v16retro.chgres.sh enkf
 
     else
 
+      case $gfs_ver in # use threads for v12/13 data.
+        v12 | v13)
+         export OMP_NUM_THREADS=2
+         export OMP_STACKSIZE=1024M
+         export OMP_PLACES=cores
+         export APRUN="$APRUN --depth 2"
+         (( NCPUS = NCPUS * OMP_NUM_THREADS ))
+        ;;
+      esac
+
       MEMBER=1
-      while [ $MEMBER -le 80 ]; do
+      while [ $MEMBER -le 04 ]; do
         if [ $MEMBER -lt 10 ]; then
           MEMBER_CH="00${MEMBER}"
         else
@@ -189,23 +209,20 @@ if [ $RUN_CHGRES == yes ]; then
         fi
         case $gfs_ver in
           v12 | v13)
-              export OMP_NUM_THREADS=2
-              export OMP_STACKSIZE=1024M
-              sbatch --parsable --ntasks-per-node=12 --nodes=1 --cpus-per-task=$OMP_NUM_THREADS \
-               -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
-               -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_pre-v14.chgres.sh ${MEMBER_CH}
+              qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=${OMP_NUM_THREADS}:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+              -N chgres_${MEMBER_CH} -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} -- ${this_dir}/run_pre-v14.chgres.sh ${MEMBER_CH}
             ;;
           v14)
-              sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
-              -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v14.chgres.sh ${MEMBER_CH}
+              qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+             -N chgres_${MEMBER_CH} -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} -- ${this_dir}/run_v14.chgres.sh ${MEMBER_CH}
             ;;
           v15)
-              sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
-              -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v15.chgres.sh ${MEMBER_CH}
+              qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+             -N chgres_${MEMBER_CH} -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} -- ${this_dir}/run_v15.chgres.sh ${MEMBER_CH}
             ;;
           v16)
-              sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
-              -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v16.chgres.sh ${MEMBER_CH}
+              qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+             -N chgres_${MEMBER_CH} -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} -- ${this_dir}/run_v16.chgres.sh ${MEMBER_CH}
             ;;
         esac
         MEMBER=$(( $MEMBER + 1 ))
