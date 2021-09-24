@@ -24,7 +24,7 @@
 #PBS -N iceb_regt
 #PBS -q debug
 #PBS -A GFS-DEV
-#PBS -l select=1:ncpus=2:mem=2500MB
+#PBS -l select=1:ncpus=1:mem=2500MB
 
 cd $PBS_O_WORKDIR
 

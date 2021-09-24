@@ -13,9 +13,12 @@
 #PBS -A GFS-DEV
 #PBS -N grid_fv3
 #PBS -l walltime=00:10:00
-#PBS -l select=1:ncpus=48
+#PBS -l select=1:ncpus=24:mem=75GB
 
 set -x
+
+# Adjust according to the PBS -l statement.
+export APRUN_SFC="mpiexec -n 24 -ppn 24 -cpu-bind core"
 
 export BASE_DIR=$PBS_O_WORKDIR/../..
 
@@ -72,7 +75,6 @@ if [[ $GRIDTYPE = "regional" ]]; then
 fi
 
 export input_sfc_climo_dir=${BASE_DIR}/fix/fix_sfc_climo
-export APRUN_SFC="mpiexec -n 24 -ppn 24"
 
 ulimit -a
 ulimit -s unlimited
