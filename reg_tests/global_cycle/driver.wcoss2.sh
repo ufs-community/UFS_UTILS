@@ -43,7 +43,7 @@ export HOMEreg=/lfs/h2/emc/eib/noscrub/George.Gayno/ufs_utils.git/reg_tests/glob
 export OMP_NUM_THREADS_CY=2
 export OMP_PLACES=cores
 
-export APRUNCY="mpiexec -n 6 -ppn 6 --cpu-bind core --depth 2"
+export APRUNCY="mpiexec -n 6 -ppn 6 --cpu-bind core --depth ${OMP_NUM_THREADS_CY}"
 
 export NWPROD=$PWD/../..
 
@@ -55,20 +55,20 @@ rm -f ${LOG_FILE}*
 export DATA="${DATA_DIR}/test1"
 export COMOUT=$DATA
 TEST1=$(qsub -V -o ${LOG_FILE}01 -e ${LOG_FILE}01 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c768.fv3gfs -l select=1:ncpus=24:mem=8GB $PWD/C768.fv3gfs.sh)
+        -N c768.fv3gfs -l select=1:ncpus=12:mem=8GB $PWD/C768.fv3gfs.sh)
 
 export DATA="${DATA_DIR}/test2"
 export COMOUT=$DATA
 TEST2=$(qsub -V -o ${LOG_FILE}02 -e ${LOG_FILE}02 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c768.lndincsoil -l select=1:ncpus=24:mem=1GB $PWD/C768.lndincsoil.sh)
+        -N c768.lndincsoil -l select=1:ncpus=12:mem=1GB $PWD/C768.lndincsoil.sh)
 
 export DATA="${DATA_DIR}/test3"
 export COMOUT=$DATA
 TEST3=$(qsub -V -o ${LOG_FILE}03 -e ${LOG_FILE}03 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c768.lndincsnow -l select=1:ncpus=24:mem=1GB $PWD/C768.lndincsnow.sh)
+        -N c768.lndincsnow -l select=1:ncpus=12:mem=1GB $PWD/C768.lndincsnow.sh)
 
 qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
-        -N cycle_summary -l select=1:ncpus=2:mem=100MB -W depend=afterok:$TEST1:$TEST2:$TEST3 << EOF
+        -N cycle_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST1:$TEST2:$TEST3 << EOF
 #!/bin/bash
 cd $reg_dir
 grep -a '<<<' ${LOG_FILE}??  > summary.log

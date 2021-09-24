@@ -65,7 +65,7 @@ this_dir=$PWD
 LOG_FILE=consistency.log01
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST1=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c96.fv3.restart -l select=1:ncpus=12:ompthreads=1:mem=10GB $PWD/c96.fv3.restart.sh)
+        -N c96.fv3.restart -l select=1:ncpus=6:ompthreads=1:mem=10GB $PWD/c96.fv3.restart.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C192 using FV3 tiled history files.
@@ -74,7 +74,7 @@ TEST1=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime
 LOG_FILE=consistency.log02
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST2=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c192.fv3.history -l select=1:ncpus=12:ompthreads=1:mem=10GB $PWD/c192.fv3.history.sh)
+        -N c192.fv3.history -l select=1:ncpus=6:ompthreads=1:mem=10GB $PWD/c192.fv3.history.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using FV3 gaussian nemsio files.
@@ -83,7 +83,7 @@ TEST2=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime
 LOG_FILE=consistency.log03
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST3=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c96.fv3.nemsio -l select=1:ncpus=12:ompthreads=1:mem=45GB $PWD/c96.fv3.nemsio.sh)
+        -N c96.fv3.nemsio -l select=1:ncpus=6:ompthreads=1:mem=45GB $PWD/c96.fv3.nemsio.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using spectral GFS sigio/sfcio files.
@@ -93,7 +93,7 @@ LOG_FILE=consistency.log04
 export OMP_PLACES=cores
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core --depth 4"
 TEST4=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:10:00 \
-        -N c96.gfs.sigio -l select=1:ncpus=48:ompthreads=4:mem=45GB $PWD/c96.gfs.sigio.sh)
+        -N c96.gfs.sigio -l select=1:ncpus=24:ompthreads=4:mem=45GB $PWD/c96.gfs.sigio.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using spectral GFS gaussian nemsio files.
@@ -102,7 +102,7 @@ TEST4=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime
 LOG_FILE=consistency.log05
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST5=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c96.gfs.nemsio -l select=1:ncpus=12:ompthreads=1:mem=35GB $PWD/c96.gfs.nemsio.sh)
+        -N c96.gfs.nemsio -l select=1:ncpus=6:ompthreads=1:mem=35GB $PWD/c96.gfs.nemsio.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize regional C96 using FV3 gaussian nemsio files.
@@ -111,7 +111,7 @@ TEST5=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime
 LOG_FILE=consistency.log06
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST6=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c96.regional -l select=1:ncpus=12:ompthreads=1:mem=35GB $PWD/c96.regional.sh)
+        -N c96.regional -l select=1:ncpus=6:ompthreads=1:mem=35GB $PWD/c96.regional.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using FV3 gaussian netcdf files.
@@ -120,7 +120,7 @@ TEST6=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime
 LOG_FILE=consistency.log07
 export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
 TEST7=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c96.fv3.netcdf -l select=1:ncpus=24:ompthreads=1:mem=80GB $PWD/c96.fv3.netcdf.sh)
+        -N c96.fv3.netcdf -l select=1:ncpus=12:ompthreads=1:mem=80GB $PWD/c96.fv3.netcdf.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize global C192 using GFS GRIB2 files.
@@ -129,7 +129,7 @@ TEST7=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime
 LOG_FILE=consistency.log08
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST8=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c192.gfs.grib2 -l select=1:ncpus=12:ompthreads=1:mem=15GB $PWD/c192.gfs.grib2.sh)
+        -N c192.gfs.grib2 -l select=1:ncpus=6:ompthreads=1:mem=15GB $PWD/c192.gfs.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 25-KM USING GFS GRIB2 files.
@@ -138,7 +138,7 @@ TEST8=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime
 LOG_FILE=consistency.log09
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST9=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N 25km.conus.gfs.grib2.conus -l select=1:ncpus=12:ompthreads=1:mem=15GB $PWD/25km.conus.gfs.grib2.sh)
+        -N 25km.conus.gfs.grib2.conus -l select=1:ncpus=6:ompthreads=1:mem=15GB $PWD/25km.conus.gfs.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GFS PHYSICS.
@@ -147,7 +147,7 @@ TEST9=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime
 LOG_FILE=consistency.log10
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST10=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N 3km.conus.hrrr.gfssdf.grib2.conus -l select=1:ncpus=12:ompthreads=1:mem=40GB $PWD/3km.conus.hrrr.gfssdf.grib2.sh)
+        -N 3km.conus.hrrr.gfssdf.grib2.conus -l select=1:ncpus=6:ompthreads=1:mem=40GB $PWD/3km.conus.hrrr.gfssdf.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GSD PHYSICS AND SFC VARS FROM FILE.
@@ -156,7 +156,7 @@ TEST10=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
 LOG_FILE=consistency.log11
 export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
 TEST11=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N 3km.conus.hrrr.newsfc.grib2.conus -l select=1:ncpus=24:ompthreads=1:mem=50GB $PWD/3km.conus.hrrr.newsfc.grib2.sh)
+        -N 3km.conus.hrrr.newsfc.grib2.conus -l select=1:ncpus=12:ompthreads=1:mem=50GB $PWD/3km.conus.hrrr.newsfc.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM USING NAM GRIB2 file WITH GFS PHYSICS .
@@ -165,7 +165,7 @@ TEST11=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
 LOG_FILE=consistency.log12
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST12=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N 13km.conus.nam.grib2.conus -l select=1:ncpus=12:ompthreads=1:mem=15GB $PWD/13km.conus.nam.grib2.sh)
+        -N 13km.conus.nam.grib2.conus -l select=1:ncpus=6:ompthreads=1:mem=15GB $PWD/13km.conus.nam.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM USING RAP GRIB2 file WITH GSD PHYSICS .
@@ -174,7 +174,7 @@ TEST12=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
 LOG_FILE=consistency.log13
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST13=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N 13km.conus.rap.grib2.conus -l select=1:ncpus=12:ompthreads=1:mem=15GB $PWD/13km.conus.rap.grib2.sh)
+        -N 13km.conus.rap.grib2.conus -l select=1:ncpus=6:ompthreads=1:mem=15GB $PWD/13km.conus.rap.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM NA USING NCEI GFS GRIB2 file WITH GFS PHYSICS .
@@ -183,7 +183,7 @@ TEST13=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
 LOG_FILE=consistency.log14
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST14=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N 13km.na.gfs.ncei.grib2.conus -l select=1:ncpus=12:ompthreads=1:mem=15GB $PWD/13km.na.gfs.ncei.grib2.sh)
+        -N 13km.na.gfs.ncei.grib2.conus -l select=1:ncpus=6:ompthreads=1:mem=15GB $PWD/13km.na.gfs.ncei.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize C96 WAM IC using FV3 gaussian netcdf files.
@@ -201,7 +201,7 @@ TEST15=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
 LOG_FILE=consistency.log16
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST16=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N 25km.conus.gfs.pbgrib2.conus -l select=1:ncpus=12:ompthreads=1:mem=15GB $PWD/25km.conus.gfs.pbgrib2.sh)
+        -N 25km.conus.gfs.pbgrib2.conus -l select=1:ncpus=6:ompthreads=1:mem=15GB $PWD/25km.conus.gfs.pbgrib2.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
@@ -209,7 +209,7 @@ TEST16=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
 
 LOG_FILE=consistency.log
 qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
-        -N chgres_summary -l select=1:ncpus=2:mem=100MB \
+        -N chgres_summary -l select=1:ncpus=1:mem=100MB \
         -W depend=afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14:$TEST15:$TEST16 << EOF
 #!/bin/bash
 cd ${this_dir}
