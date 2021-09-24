@@ -6,7 +6,7 @@
 #PBS -A GFS-DEV
 #PBS -l walltime=00:05:00
 #PBS -N make_grid
-#PBS -l select=1:ncpus=48
+#PBS -l select=1:ncpus=24:mem=100GB
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on WCOSS2.
@@ -141,8 +141,9 @@ export out_dir=/lfs/h2/emc/stmp/$LOGNAME/my_grids
 set -x
 
 export APRUN=time
-export APRUN_SFC="mpiexec -n 24 -ppn 24"
+export APRUN_SFC="mpiexec -n 24 -ppn 24 -cpu-bind core"
 export OMP_NUM_THREADS=24 # orog code worked best with 24 threads.
+export OMP_PLACES=cores
 export OMP_STACKSIZE=2048m
 export machine=WCOSS2_CRAY
 
