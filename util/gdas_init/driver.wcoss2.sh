@@ -201,7 +201,7 @@ if [ $RUN_CHGRES == yes ]; then
       esac
 
       MEMBER=1
-      while [ $MEMBER -le 04 ]; do
+      while [ $MEMBER -le 80 ]; do
         if [ $MEMBER -lt 10 ]; then
           MEMBER_CH="00${MEMBER}"
         else
