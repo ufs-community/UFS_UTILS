@@ -1441,6 +1441,7 @@ contains
     if(status /= nf90_NoErr) call this%handle_err(status)
     do i=1,nDims
        dimname="       "
+       write(*,*) 'dimids(i) = ', dimids(i)
        status = nf90_inquire_dimension(ncid, dimids(i), dimname, len = ndim)
        if (status /= nf90_noerr) call this%handle_err(status)
        ends(i)=ndim

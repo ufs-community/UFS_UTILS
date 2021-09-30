@@ -43,7 +43,7 @@ module module_nwp
       character(len=20), allocatable :: dimnameNS !< North/South dimension name.
       character(len=20), allocatable :: dimnameTIME !< Time dimension name.
 
-      real(r_kind), allocatable :: nwp_mask(:,:,:) !< Land/water mask 3D array
+      real(r_kind), allocatable :: nwp_mask(:,:) !< Land/water mask 3D array
       real(r_kind), allocatable :: nwp_sst(:,:,:) !< SST 3D array
       real(r_kind), allocatable :: nwp_ice(:,:,:) !< Over water ice concentration 3D array
       real(r_kind), allocatable :: nwp_sfcT(:,:,:) !< Skin temperature 3D array
@@ -228,7 +228,8 @@ module module_nwp
 
 !        Allocate all the arrays to receive data
 
-         allocate(this%nwp_mask(this%xlon,this%xlat,this%xtime))
+!         allocate(this%nwp_mask(this%xlon,this%xlat,this%xtime))
+         allocate(this%nwp_mask(this%xlon,this%xlat))
          allocate(this%nwp_sst(this%xlon,this%xlat,this%xtime))
          allocate(this%nwp_ice(this%xlon,this%xlat,this%xtime))
          allocate(this%nwp_sfcT(this%xlon,this%xlat,this%xtime))
@@ -236,11 +237,10 @@ module module_nwp
 
 !        Get variables from the data file, but only if the variable is
 !        defined for that data type.
-
          if (this%i_mask .gt. 0) then
             call ncdata%get_var(this%varnames(this%i_mask),this%xlon,  &
-                                this%xlat,this%xtime,this%nwp_mask)
-            mask = this%nwp_mask(:,:,1)
+                                this%xlat,this%nwp_mask)
+            mask = this%nwp_mask(:,:)
          end if
          if (this%i_sst .gt. 0) then
             call ncdata%get_var(this%varnames(this%i_sst),this%xlon,  &

@@ -8,13 +8,14 @@
 !! GLERL-provided FVCOM forecast files (which have already been mapped
 !! to the FV3-LAM grid) into sfc_data.nc.
 !!
-!! This script will take two variables from the command line:
+!! This script will take three variables from the command line:
 !! 1. Name of FV3 sfc data file (e.g. sfc_data.tile7.halo0.nc)
 !! 2. Name of FVCOM data file (e.g. fvcom.nc)
-!!
+!! 3. Time index value of desired time from FVCOM data file
+!!    (e.g. 1 would return the 1st time index)
 !! To run the script, use the following example, modifying file
 !! names as needed:
-!!   ./fvcom_to_FV3 sfc_data.tile7.halo0.nc fvcom.nc
+!!   ./fvcom_to_FV3 sfc_data.tile7.halo0.nc fvcom.nc 1
 !!
 !! Code is strongly based upon Eric James' (ESRL/GSL) work to update
 !! HRRR/WRF Great Lakes' temperature data with FVCOM. Code also
@@ -53,6 +54,7 @@ program process_FVCOM
    integer :: lbclon, lbclat, lbctimes
    integer :: i, j, t1, t2
    integer :: num_args, ix
+   integer :: inputFVCOMsel
 
    real :: rad2deg = 180.0/3.1415926
    real :: userDX, userDY, CEN_LAT, CEN_LON
@@ -63,6 +65,7 @@ program process_FVCOM
 
    character(len=180) :: fv3file
    character(len=180) :: fvcomfile
+   character(len=180) :: inputFVCOMselStr
    character(len=180), dimension(:), allocatable :: args
 
    real(r_kind), allocatable :: fv3ice(:,:), fv3sst(:,:)
@@ -96,13 +99,18 @@ if(mype==0) then
    do ix = 1, num_args
        call get_command_argument(ix,args(ix))
    end do
-
+! fv3file: location of UFS grid
+! fvcomfile: location of FVCOM data file
+! inputFVCOMtimes: length of time dim in FVCOM file
+! inputFVCOMsel: time index to use
    fv3file=trim(args(1))
    write(*,*) trim(fv3file)
    fvcomfile=trim(args(2))    
    write(*,*) trim(fvcomfile)
+   inputFVCOMselStr=trim(args(3))
+   read(inputFVCOMselStr,*) inputFVCOMsel
+   write(*,*) 'select index = ', inputFVCOMsel
 
-   t2 = 1
 !  Obtain grid parameters
 
    workPath='./'
@@ -134,6 +142,9 @@ if(mype==0) then
 !  Read fv3 sfc_data.nc before update
 
 !   fv3file='sfc_data.nc'
+!   fv3times: length of time dimension of UFS atmospheric grid (should be 1)
+!   t1: index of time dimension to pull (should be 1)
+   fv3times=1  
    t1=1
 
    call fcst%initial('FV3LAM')
@@ -148,6 +159,9 @@ if(mype==0) then
 !  Read FVCOM input datasets
 
 !   fvcomfile='fvcom.nc'
+!   lbctimes: length of time dimension of FVCOM input data (command line input)
+!   t2: index of time dimension to pull from FVCOM (command line input) 
+   t2=inputFVCOMsel
 ! Space infront of ' FVCOM' below is important!!
    call fcst%initial(' FVCOM')
    call fcst%list_initial
@@ -157,16 +171,23 @@ if(mype==0) then
 !  Check that the dimensions match
 
    if (lbclon .ne. nlon .or. lbclat .ne. nlat) then
-      write(*,*) 'ERROR: FVCOM/FV3 dimensions do not match:'
+     write(*,*) 'ERROR: FVCOM/FV3 dimensions do not match:'
      write(*,*) 'lbclon: ', lbclon
      write(*,*) 'nlon: ', nlon
      write(*,*) 'lbclat: ', lbclat
      write(*,*) 'nlat: ', nlat
-     stop 135
+     stop 'error'
    endif
 
    write(*,*) 'lbctimes: ', lbctimes
    write(*,*) 'time to use: ', t2
+
+   if (t2 .gt. lbctimes) then
+     write(*,*) 'ERROR: Requested time dimension out of range'
+     write(*,*) 'Length of time dimension: ', lbctimes
+     write(*,*) 'Time index to use: ', t2
+     stop 'error'
+   endif
 
 !  Update with FVCOM fields and process
 !   ice cover data. Ice fraction is set
