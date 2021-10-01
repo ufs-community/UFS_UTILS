@@ -49,6 +49,8 @@ export NWPROD=$PWD/../..
 
 reg_dir=$PWD
 
+export NCCMP=/lfs/h2/emc/eib/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
+
 LOG_FILE=consistency.log
 rm -f ${LOG_FILE}*
 

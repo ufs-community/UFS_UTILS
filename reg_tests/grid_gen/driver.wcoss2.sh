@@ -38,6 +38,8 @@ PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
+export NCCMP=/lfs/h2/emc/eib/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
+
 LOG_FILE=consistency.log
 rm -f ${LOG_FILE}
 SUM_FILE=summary.log
