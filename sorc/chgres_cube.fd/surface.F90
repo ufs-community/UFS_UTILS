@@ -3285,11 +3285,13 @@
    endif
  enddo
  
- if (present(resetifd) .and. resetifd .and. convert_nst) then 
-   call ESMF_FieldGet(ifd_target_grid,farrayPtr=tmp_ptr,rc=rc)
-    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldGet", rc)
-   tmp_ptr = float(nint(tmp_ptr))
+ if (present(resetifd)) then
+   if( resetifd .and. convert_nst) then 
+     call ESMF_FieldGet(ifd_target_grid,farrayPtr=tmp_ptr,rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+     tmp_ptr = float(nint(tmp_ptr))
+   endif
  endif
  
  n2d = count(is2d(:))
