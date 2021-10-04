@@ -14,7 +14,7 @@ if(WGRIB2_API_LIB)
   set(second_lib ${WGRIB2_LIB})
 else()
   # Makefile build. Only need libwgrib2.a
-  set(FIRST_LIB ${WGRIB2_LIB})
+  set(first_lib ${WGRIB2_LIB})
   set(second_lib "")
 endif()
 
