@@ -86,6 +86,17 @@ To run the tests locally, invoke one of the following after the `make install`:
 For the parallel tests to run locally, update the machine-specific
 "mpi_exec" script under [cmake](../cmake) with your run account and queue.
 
+### EXAMPLE UNIT TEST:
+
+An example unit test, ftst_example.F90, exists in the tests/chgres_cube directory
+and is currently compiled and run with existing tests
+
+This simple test checks whether the routine rh2spfh in chgres_cube.fd/grib2_util.F90
+is working correctly, and contains detailed comments explaining what each section 
+of the test does. It also prompts the user to create additional lines of code to 
+test one more subroutine from grib2_util.F90. Use this to get started understanding
+the unit test framework.
+
 ### QUESTIONS
 
 Please contact the repository managers: https://github.com/NOAA-EMC/UFS_UTILS/wiki
