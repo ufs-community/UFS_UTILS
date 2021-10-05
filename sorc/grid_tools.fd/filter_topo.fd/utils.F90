@@ -60,6 +60,42 @@
 
  end subroutine read_namelist
 
+!> This routine extrapolate geolat_c and geolon_c halo points for the
+!! regional standalone grid. Halo points are needed for dxc and dyc
+!! calculation.
+!!
+!! @param[in,out] data - field to be extrapolated
+!! @param[in] halo - number of halo rows/columns
+!! @author Ratko Vasic (NCEP/EMC)
+  subroutine fill_regional_halo(data, halo)
+    integer, intent(in)                               :: halo
+    real, dimension(1-halo:,1-halo:,:), intent(inout) :: data
+    integer :: h, i_st, i_ed, j_st, j_ed
+
+    i_st=lbound(data,1)+halo
+    i_ed=ubound(data,1)-halo
+    j_st=lbound(data,2)+halo
+    j_ed=ubound(data,2)-halo
+
+    do h = 1, halo
+      data(i_st:i_ed, j_st-1   , :) = 2* data(i_st:i_ed, j_st     , :) - data(i_st:i_ed, j_st+1   , :)! north
+      data(i_st:i_ed, j_ed+1   , :) = 2* data(i_st:i_ed, j_ed     , :) - data(i_st:i_ed, j_ed-1   , :)! south
+      data(i_st-1   , j_st:j_ed, :) = 2* data(i_st     , j_st:j_ed, :) - data(i_st+1   , j_st:j_ed, :)! east
+      data(i_ed+1   , j_st:j_ed, :) = 2* data(i_ed     , j_st:j_ed, :) - data(i_ed-1   , j_st:j_ed, :)! west
+
+      data(i_st-1, j_st-1, :) = (data(i_st-1, j_st, :) + data(i_st, j_st-1, :))*0.5  !NW Corner
+      data(i_ed+1, j_st-1, :) = (data(i_ed+1, j_st, :) + data(i_ed, j_st-1, :))*0.5  !NE Corner
+      data(i_st-1, j_ed+1, :) = (data(i_st-1, j_ed, :) + data(i_st, j_ed+1, :))*0.5  !SW Corner
+      data(i_ed+1, j_ed+1, :) = (data(i_ed+1, j_ed, :) + data(i_ed, j_ed+1, :))*0.5  !SE Corner
+
+      i_st=i_st-1
+      i_ed=i_ed+1
+      j_st=j_st-1
+      j_ed=j_ed+1
+    enddo
+
+  end subroutine fill_regional_halo
+
 !> Prints an error message to standard output,
 !! then halts program execution with a
 !! bad status.
