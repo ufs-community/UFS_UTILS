@@ -56,15 +56,31 @@ program ftst_example
  ! incorrect value is passed back, the test fails and an error is returned.
  !-------------------------------------------------------------------------
 
- if ( any(abs(spfh_returned - spfh_correct) .lt. EPS)) then
-   print*, "RH2SPFH TEST PASSED. SUCCESS!"
- else
-   print*, "RH2SPFH TEST FAILED."
-   print*, "TEST RETURNED VALUE OF ", spfh_returned
-   print*, "RETURNED VALUE EXPECT TO BE ", spfh_correct
+ if ( any(abs(spfh_returned - spfh_correct) .gt. EPS)) then 
    stop 1
+   print*, "RH2SPFH TEST FAILED."
  endif
+
+ !-------------------------------------------------------------------------
+ ! If you are trying to debug a test failure, code like the commented
+ ! section below might prove useful.
+ !-------------------------------------------------------------------------
+
+ ! if ( any(abs(spfh_returned - spfh_correct) .lt. EPS)) then
+ !   print*, "RH2SPFH TEST PASSED. SUCCESS!"
+ ! else
+ !   print*, "RH2SPFH TEST FAILED."
+ !   print*, "TEST RETURNED VALUE OF ", spfh_returned
+ !   print*, "RETURNED VALUE EXPECT TO BE ", spfh_correct
+ !   stop 1
+ ! endif
+
+ !-------------------------------------------------------------------------
+ ! Make sure to deallocate any and all allocatable arrays that you use
+ !-------------------------------------------------------------------------
+
  deallocate(rh_spfh,spfh_correct,rh_orig,spfh_returned,t)
+
  ! -------------------------------------------------------------------------
  ! You can test multiple subroutines (units) in any test file. This would
  ! be a good place to test the other subroutine in grib2_util, 
