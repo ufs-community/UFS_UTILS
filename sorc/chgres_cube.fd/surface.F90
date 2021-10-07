@@ -471,7 +471,7 @@
  allocate(dozero(num_fields))
  dozero(:) = .True.  
 
- call regrid_many(bundle_all_input,bundle_all_target,num_fields,regrid_bl_no_mask,dozero,.False.)
+ call regrid_many(bundle_all_input,bundle_all_target,num_fields,regrid_bl_no_mask,dozero)
  deallocate(dozero) 
 
  call ESMF_FieldBundleDestroy(bundle_all_target,rc=rc)
@@ -890,7 +890,7 @@
  u = ubound(unmapped_ptr)
  
  call regrid_many(bundle_seaice_input,bundle_seaice_target,num_fields,regrid_seaice,dozero, &
-                  .True.,unmapped_ptr=unmapped_ptr )
+                  unmapped_ptr=unmapped_ptr )
  deallocate(dozero)                 
  call ESMF_FieldBundleDestroy(bundle_seaice_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1003,7 +1003,7 @@
  endif
 
  call regrid_many(bundle_water_input,bundle_water_target,num_fields,regrid_water,dozero, &
-                  .True.,  unmapped_ptr=unmapped_ptr, resetifd=.True.)
+                  unmapped_ptr=unmapped_ptr, resetifd=.True.)
  deallocate(dozero)                 
  call ESMF_FieldBundleDestroy(bundle_water_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1105,7 +1105,7 @@
  dozero=(/.True.,.False.,.False./)
  
  call regrid_many(bundle_allland_input,bundle_allland_target,num_fields,regrid_all_land,dozero, &
-                  .True., unmapped_ptr=unmapped_ptr)
+                  unmapped_ptr=unmapped_ptr)
  deallocate(dozero)
  call ESMF_FieldBundleDestroy(bundle_allland_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1225,7 +1225,7 @@
  endif
 
  call regrid_many(bundle_landice_input,bundle_landice_target,num_fields,regrid_landice,dozero, &
-                  .True., unmapped_ptr=unmapped_ptr )  
+                  unmapped_ptr=unmapped_ptr )  
  deallocate(dozero)                                
  call ESMF_FieldBundleDestroy(bundle_landice_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1439,7 +1439,7 @@
  endif
 
  call regrid_many(bundle_nolandice_input,bundle_nolandice_target,num_fields,regrid_land,dozero, &
-                  .True., unmapped_ptr=unmapped_ptr)
+                  unmapped_ptr=unmapped_ptr)
  deallocate(dozero)
  call ESMF_FieldBundleDestroy(bundle_nolandice_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -3207,11 +3207,10 @@
 !! @param[in] num_field  Number of fields in target field pointer
 !! @param[inout] route  Route handle to saved ESMF regridding instructions
 !! @param[in]  dozero  Logical length num_field for whether field should be zeroed out before regridding
-!! @param[in]  doreplace Logical indicating wehther to set unmapped locations to missing value for searching and replacing later
 !! @param[inout]  unmapped_ptr (optional) Pointer to unmapped points from FieldRegrid
 !! @param[in]  resetifd (optional) Logical for whether to reset ifd (only for water where nst data is used)
 !! @author Larissa Reames, OU CIMMS/NOAA/NSSL
- subroutine regrid_many(bundle_pre,bundle_post, num_field,route,dozero,doreplace, &
+ subroutine regrid_many(bundle_pre,bundle_post, num_field,route,dozero, &
                         unmapped_ptr,resetifd)
  
  use esmf  
@@ -3223,7 +3222,7 @@
  integer, intent(in)                    :: num_field
  type(esmf_routehandle), intent(inout)  :: route
  type(esmf_fieldbundle), intent(in)     :: bundle_pre, bundle_post
- logical, intent(in)                    :: dozero(num_field), doreplace 
+ logical, intent(in)                    :: dozero(num_field)
  logical, intent(in), optional       :: resetifd
  integer(esmf_kind_i4), intent(inout), optional  :: unmapped_ptr(:)
  
@@ -3297,7 +3296,7 @@
  n2d = count(is2d(:))
  n3d = count(.not.is2d(:))
  if(localpet==0) print*, is2d(:) 
- if (doreplace) then
+ if (present(unmapped_ptr)) then
    allocate(ptr_2d(n2d))
    if (n3d .ne. 0) allocate(ptr_3d(n3d))
    do i=1, num_field

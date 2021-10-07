@@ -341,7 +341,7 @@
  dozero(:) = .True. 
   
  !Call the routine to unit test.
- call regrid_many(bundle_all_input,bundle_all_target,num_fields,regrid_bl_no_mask,dozero,.False.)
+ call regrid_many(bundle_all_input,bundle_all_target,num_fields,regrid_bl_no_mask,dozero)
  deallocate(dozero) 
 
  call ESMF_FieldBundleDestroy(bundle_all_target,rc=rc)
