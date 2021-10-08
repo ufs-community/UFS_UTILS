@@ -26,7 +26,7 @@ module list
 WORK_DIR="${WORK_DIR:-/gpfs/hps3/stmp/$LOGNAME}"
 
 PROJECT_CODE="${PROJECT_CODE:-GDAS-T2O}"
-QUEUE="${QUEUE:-debug}"
+QUEUE="${QUEUE:-dev}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
@@ -59,8 +59,14 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.fv3gfs -M 2400
 LOG_FILE=consistency.log02
 export DATA="${DATA_DIR}/test2"
 export COMOUT=$DATA
-bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.lndinc -M 2400 -W 0:05 \
-        -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/C768.lndinc.sh"
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.lndincsoil -M 2400 -W 0:05 \
+        -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/C768.lndincsoil.sh"
+
+LOG_FILE=consistency.log03
+export DATA="${DATA_DIR}/test3"
+export COMOUT=$DATA
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c768.lndincsnow -M 2400 -W 0:05 \
+        -extsched 'CRAYLINUX[]' "export NODES=1; $PWD/C768.lndincsnow.sh"
 
 LOG_FILE=consistency.log
 bsub -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J summary -R "rusage[mem=100]" -W 0:01 \

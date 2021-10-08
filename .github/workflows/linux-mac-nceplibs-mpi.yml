@@ -75,7 +75,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/netcdf
-        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}-${{ matrix.mpi_type }}
+        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}-${{ matrix.mpi_type }}3
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
@@ -84,7 +84,7 @@ jobs:
         wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
         tar -xzf hdf5-1.10.7.tar.gz
         pushd hdf5-1.10.7
-        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests
+        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests --disable-shared --enable-static
         make -j2
         make install
            
@@ -97,7 +97,7 @@ jobs:
         wget https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-${{ matrix.netcdf_version }}.tar.gz &> /dev/null
         tar -xzf netcdf-c-${{ matrix.netcdf_version }}.tar.gz
         cd netcdf-c-${{ matrix.netcdf_version }}
-        ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities
+        ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities --disable-shared
         make -j2
         make install
 
@@ -110,10 +110,11 @@ jobs:
         export FC=mpifort
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
+        export LIBS=`nc-config --libs`
         wget https://github.com/Unidata/netcdf-fortran/archive/v4.5.3.tar.gz &> /dev/null
         tar -xzf v4.5.3.tar.gz
         pushd netcdf-fortran-4.5.3
-        ./configure --prefix=${HOME}/netcdf
+        ./configure --prefix=${HOME}/netcdf --disable-shared
         make -j2
         make install
 
@@ -122,7 +123,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf--8.0.1-${{ runner.os }}-${{ matrix.mpi_type }}-netcdf-${{ matrix.netcdf_version }}
+        key: esmf--8.0.1-${{ runner.os }}-${{ matrix.mpi_type }}-netcdf-${{ matrix.netcdf_version }}3
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
@@ -146,6 +147,7 @@ jobs:
         export ESMF_NETCDF=split
         export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
         export ESMF_NETCDF_LIBPATH=${HOME}/netcdf/lib
+        export ESMF_NETCDF_LIBS="-lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lz"
         make -j2
         make install
 
@@ -154,7 +156,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: jasper-2.0.25-${{ runner.os }}
+        key: jasper-2.0.25-${{ runner.os }}3
 
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
@@ -165,7 +167,7 @@ jobs:
         tar zxf version-2.0.25.tar.gz
         cd jasper-version-2.0.25
         mkdir build-jasper && cd build-jasper
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper -DJAS_ENABLE_SHARED=OFF
         make -j2
         make install
 
@@ -187,7 +189,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/nceplibs
-        key: nceplibs-${{ matrix.nceplibs_version }}-${{ runner.os }}-${{ matrix.mpi_type }}-${{ hashFiles('nceplibs/hash.txt') }}
+        key: nceplibs-${{ matrix.nceplibs_version }}-${{ runner.os }}-${{ matrix.mpi_type }}-${{ hashFiles('nceplibs/hash.txt') }}3
 
     - name: build-nceplibs
       if: steps.cache-nceplibs.outputs.cache-hit != 'true'
@@ -213,6 +215,11 @@ jobs:
         export CC=mpicc
         export CXX=mpicxx
         export FC=mpifort
+        # Findwgrib2 in module form does not search <libname>-version
+        # as NCEPLIBS installs it
+        export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
+        export DYLD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
+        export wgrib2_ROOT=`find ~/nceplibs -type d -maxdepth 1 -iname "wgrib2*"`
         cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf'
         make -j2
 
