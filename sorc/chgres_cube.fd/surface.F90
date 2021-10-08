@@ -3401,26 +3401,37 @@
         call error_handler("IN FieldGather", rc)
      if (localpet == 0) then 
        if (present(latitude) .and. search_nums(k).eq.SST_FIELD_NUM) then
+         ! Sea surface temperatures; pass latitude field to search
          print*, "search1"
          call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k),latitude=latitude)
        elseif (present(terrain_land) .and. search_nums(k) .eq. TERRAIN_FIELD_NUM) then
+         ! Terrain height; pass optional climo terrain array to search
          print*, "search2"
          call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k),terrain_land=terrain_land)
-       elseif (search_nums(k) .eq. SOTYP_LAND_FIELD_NUM) then    
+       elseif (search_nums(k) .eq. SOTYP_LAND_FIELD_NUM) then
+         ! Soil type over land    
          if (fname .eq. "soil_type_target_grid") then
+           ! Soil type over land when interpolating input data to target grid
+           ! *with* the intention of retaining interpolated data in output
            print*, "search3"
            call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k),soilt_climo=soilt_climo)
          elseif (present(soilt_climo)) then
            if (maxval(field_data_2d) > 0 .and. (trim(external_model) .ne. "GFS" .or. trim(input_type) .ne. "grib2")) then
+             ! Soil type over land when interpolating input data to target grid
+             ! *without* the intention of retaining data in output file
              print*, "search4"
-             ! If soil type from the input grid has any non-zero points then soil type must exist for use
              call search(field_data_2d, mask, i_target, j_target, tile, search_nums(k))
-           else ! Otherwise, just set the data on the "target" grid to the soil climatology
+           else 
+             ! If no soil type field exists in input data (e.g., GFS grib2) then don't search
+             ! but simply set data to the climo field. This may result in
+             ! somewhat inaccurate soil moistures as no scaling will occur 
              print*, "search5"
              field_data_2d = soilt_climo
            endif !check field value   
          endif !sotype from target grid
        else
+         ! Any field that doesn't require any of the special treatments or
+         ! passing of additional variables as in those above
          call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k))
        endif !if present  
      endif !localpet
@@ -3428,6 +3439,7 @@
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldScatter", rc)
    else
+     ! Process 3d fields soil temperature, moisture, and liquid
      print*, "FieldGather"
      call ESMF_FieldGather(temp_field,field_data_3d,rootPet=0,tile=tile,rc=rc)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
