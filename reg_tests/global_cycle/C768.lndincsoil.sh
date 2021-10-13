@@ -9,6 +9,12 @@
 
 set -x
 
+echo got here
+echo $commit_num
+
+exit
+
+
 NCCMP=${NCCMP:-$(which nccmp)}
 
 export MAX_TASKS_CY=6

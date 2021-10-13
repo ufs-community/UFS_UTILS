@@ -34,6 +34,10 @@ QUEUE="${QUEUE:-dev}"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
+source check.sh
+
+exit
+
 DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
 export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/global_cycle
