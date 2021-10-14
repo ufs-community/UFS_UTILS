@@ -40,9 +40,14 @@ PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
 # and baseline data for each test.
 #-----------------------------------------------------------------------------
 
+#export UPDATE_BASELINE="FALSE"
+export UPDATE_BASELINE="TRUE"
+
+source ../check.sh
+
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
+export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube.test
 
 SUM_FILE=summary.log
 
@@ -62,6 +67,9 @@ LOG_FILE=consistency.log01
 export OMP_NUM_THREADS=1
 bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J chgres01 -W 0:05 -x -n 6 \
         -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/25km.conus.gfs.grib2.sh"
+
+
+exit
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GFS PHYSICS.

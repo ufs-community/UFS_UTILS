@@ -18,7 +18,7 @@ fi
 
 mkdir -p $base_dir_commit
 
-for files in *tile*.nc
+for files in *.nc
 do
   if [ -f $files ]; then
     cp $files $base_dir_commit

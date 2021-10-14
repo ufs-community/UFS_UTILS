@@ -37,7 +37,7 @@ QUEUE="${QUEUE:-dev}"
 #export UPDATE_BASELINE="FALSE"
 export UPDATE_BASELINE="TRUE"
 
-source check.sh
+source ../check.sh
 
 DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
