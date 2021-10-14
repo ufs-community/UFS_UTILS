@@ -71,7 +71,7 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< C768 GLOBAL CYCLE TEST FAILED. >>>"
   echo "*********************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $BASE_GSM/reg_tests/update.sh $HOMEreg "c768.fv3gfs" $commit_num
+    $BASE_GSM/reg_tests/update_baseline.sh $HOMEreg "c768.fv3gfs" $commit_num
   fi
 else
   echo

@@ -80,7 +80,7 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< 25-KM CONUS GFS PGRIB2+BGRIB2 TEST FAILED. >>>"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $HOMEufs/reg_tests/update.sh $HOMEreg "25km_conus_gfs_pbgrib2" $commit_num
+    $HOMEufs/reg_tests/update_baseline.sh $HOMEreg "25km_conus_gfs_pbgrib2" $commit_num
   fi
 else
   echo "<<< 25-KM CONUS GFS PGRIB2+BGRIB2 TEST PASSED. >>>"

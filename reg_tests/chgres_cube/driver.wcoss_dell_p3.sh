@@ -43,7 +43,7 @@ PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
 #export UPDATE_BASELINE="FALSE"
 export UPDATE_BASELINE="TRUE"
 
-source ../check.sh
+source ../get_hash.sh
 
 export HOMEufs=$PWD/../..
 
