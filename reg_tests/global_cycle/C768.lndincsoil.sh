@@ -9,12 +9,6 @@
 
 set -x
 
-echo got here
-echo $commit_num
-
-exit
-
-
 NCCMP=${NCCMP:-$(which nccmp)}
 
 export MAX_TASKS_CY=6
@@ -83,6 +77,9 @@ if [ $test_failed -ne 0 ]; then
   echo "*****************************************"
   echo "<<< C768 LANDINC SOILT CYCLE TEST FAILED. >>>"
   echo "*****************************************"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $BASE_GSM/reg_tests/global_cycle/update.sh $HOMEreg "c768.lndincsoil" $commit_num
+  fi
 else
   echo
   echo "*****************************************"
