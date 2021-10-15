@@ -43,7 +43,7 @@ export DATA="${DATA}/reg-tests/snow2mdl"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
-export HOMEreg=/lfs/h2/emc/eib/noscrub/George.Gayno/ufs_utils.git/reg_tests/snow2mdl
+export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 
 rm -fr $DATA

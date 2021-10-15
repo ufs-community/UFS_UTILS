@@ -45,7 +45,7 @@ QUEUE="${QUEUE:-dev}"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/lfs/h2/emc/eib/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
+export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
@@ -53,7 +53,7 @@ rm -f $LOG_FILE* $SUM_FILE
 
 export OMP_STACKSIZE=1024M
 
-export NCCMP=/lfs/h2/emc/eib/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
+export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
 #export NCCMP=${NCCMP:-nccmp}
 rm -fr $OUTDIR
 

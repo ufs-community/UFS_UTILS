@@ -38,7 +38,7 @@ PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
-export NCCMP=/lfs/h2/emc/eib/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
+export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
 
 LOG_FILE=consistency.log
 rm -f ${LOG_FILE}
@@ -50,7 +50,7 @@ export OMP_STACKSIZE=2048m
 export OMP_NUM_THREADS=30 # orog code uses threads
 export OMP_PLACES=cores
 export machine=WCOSS2
-export HOMEreg=/lfs/h2/emc/eib/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
+export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
 this_dir=$PWD
 
 ulimit -a

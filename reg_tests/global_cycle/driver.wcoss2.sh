@@ -38,7 +38,7 @@ QUEUE="${QUEUE:-dev}"
 
 DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
-export HOMEreg=/lfs/h2/emc/eib/noscrub/George.Gayno/ufs_utils.git/reg_tests/global_cycle
+export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/global_cycle
 
 export OMP_NUM_THREADS_CY=2
 export OMP_PLACES=cores
@@ -49,7 +49,7 @@ export NWPROD=$PWD/../..
 
 reg_dir=$PWD
 
-export NCCMP=/lfs/h2/emc/eib/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
+export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
 
 LOG_FILE=consistency.log
 rm -f ${LOG_FILE}*
