@@ -25,8 +25,8 @@ target_link_libraries(
   gfsio_4
   nemsiogfs
   nemsio
-  sigio_4
-  sfcio_4
+  sigio
+  sfcio
   landsfcutil_d
   ip_d
   sp_d

@@ -64,7 +64,7 @@ if(NOT TARGET gfsio_4)
   find_package(gfsio REQUIRED)
 endif()
 
-if(NOT TARGET sfcio_4)
+if(NOT TARGET sfcio)
   find_package(sfcio REQUIRED)
 endif()
 
@@ -88,7 +88,7 @@ if(NOT TARGET nemsiogfs)
   find_package(nemsiogfs REQUIRED)
 endif()
 
-if(NOT TARGET sigio_4)
+if(NOT TARGET sigio)
   find_package(sigio REQUIRED)
 endif()
 
