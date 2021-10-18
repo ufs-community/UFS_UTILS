@@ -36,9 +36,14 @@ QUEUE="${QUEUE:-batch}"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
+#export UPDATE_BASELINE="FALSE"
+export UPDATE_BASELINE="TRUE"
+
+source ../get_hash.sh
+
 DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/global_cycle
+export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/global_cycle.test
 
 export OMP_NUM_THREADS_CY=2
 

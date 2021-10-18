@@ -44,9 +44,14 @@ QUEUE="${QUEUE:-batch}"
 # and baseline data for each test.
 #-----------------------------------------------------------------------------
 
+#export UPDATE_BASELINE="FALSE"
+export UPDATE_BASELINE="TRUE"
+
+source ../get_hash.sh
+
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
+export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube.test
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
@@ -66,6 +71,9 @@ LOG_FILE=consistency.log01
 export OMP_NUM_THREADS=1   # should match cpus-per-task
 TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.restart.sh)
+
+
+exit
 
 #-----------------------------------------------------------------------------
 # Initialize C192 using FV3 tiled history files.
