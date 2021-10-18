@@ -1,7 +1,7 @@
 ## HOW TO CREATE A UNIT TEST.
 
 Unit tests should test only small parts of a program. For example,
-a single routine or function.
+a single routine or function, or multiple closely-linked routines.
 
 Source code for a test shall be placed in a program
 specific directory under ./tests.
