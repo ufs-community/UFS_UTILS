@@ -431,6 +431,16 @@ module module_nwp
 
       end subroutine finish_nwp
 
+      !> This subroutine searches the FVCOM 'Times' variable
+      !!  and returns the matching index
+      !!
+      !! @param this fcst_nwp ojbect
+      !! @param[in] filename netcdf file name
+      !! @param[in] itype either ' FVCOM' or 'FV3LAM'
+      !! @param[in] instr string of requested time
+      !! @param[out] outindex int index that matches instr
+      !!
+      !! @author David Wright, University of Michigan and GLERL
       subroutine get_time_ind_nwp(this,filename,instr,outindex)
 
          class(fcst_nwp) :: this
@@ -468,8 +478,9 @@ module module_nwp
             outindex = -999
             deallocate(this%times)
             call ncdata%close
-            write(*,*) 'Supplied time not found in file: ', trim(instr)
-            stop 'Error in supplied time or times available in FVCOM file'
+            write(*,*) 'WARNING: Supplied time not found in file: ', trim(instr)
+            write(*,*) 'Stoppping fvcom_to_FV3 and proceeding without using FVCOM data'
+            stop
          end if
 
          deallocate(this%times)
