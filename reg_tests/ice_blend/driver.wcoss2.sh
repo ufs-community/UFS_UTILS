@@ -43,7 +43,7 @@ export DATA="${DATA}/reg-tests/ice-blend"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
-export HOMEreg=/lfs/h2/emc/eib/noscrub/George.Gayno/ufs_utils.git/reg_tests/ice_blend
+export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/ice_blend
 export HOMEgfs=$PBS_O_WORKDIR/../..
 
 rm -fr $DATA

@@ -29,6 +29,7 @@
 cd $PBS_O_WORKDIR
 
 source ../../modulefiles/modulefile.global_emcsfc_snow2mdl.wcoss2_cray
+module load libjpeg
 module load grib_util/1.2.2
 module load wgrib2/2.0.8
 module list
@@ -42,7 +43,7 @@ export DATA="${DATA}/reg-tests/snow2mdl"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
-export HOMEreg=/lfs/h2/emc/eib/noscrub/George.Gayno/ufs_utils.git/reg_tests/snow2mdl
+export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 
 rm -fr $DATA
