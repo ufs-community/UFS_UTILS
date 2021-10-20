@@ -235,6 +235,7 @@ module module_nwp
       !! @param this fcst_nwp ojbect
       !! @param[in] filename netcdf file name
       !! @param[in] itype either ' FVCOM' or 'FV3LAM'
+      !! @param[in] wcstart either 'warm' or 'cold'.
       !! @param[inout] numlon number of grid points in x-direction
       !! @param[inout] numlat number of grid poinst in y-direction
       !! @param[inout] numtimes length of time dimension
@@ -244,6 +245,7 @@ module module_nwp
       !! @param[inout] ice Ice concentration (%)
       !! @param[inout] sfcT Skin Temperature
       !! @param[inout] iceT Ice Skin Temperature
+      !! @param[inout] sfcTl Skin Temperature in restart file
       !!
       !! @author David Wright, University of Michigan and GLERL
       subroutine read_nwp(this,filename,itype,wcstart,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT,sfcTl)
