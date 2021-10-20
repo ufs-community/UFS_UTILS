@@ -8,15 +8,19 @@
 !! GLERL-provided FVCOM forecast files (which have already been mapped
 !! to the FV3-LAM grid) into sfc_data.nc.
 !!
-!! This script will take three variables from the command line:
+!! This script will take four variables from the command line:
 !! 1. Name of FV3 sfc data file (e.g. sfc_data.tile7.halo0.nc)
 !! 2. Name of FVCOM data file (e.g. fvcom.nc)
-!! 3. Time index value of desired time from FVCOM data file
-!!    (e.g. 1 would return the 1st time index)
+!! 3. "warm" or "cold" start. "warm" start will read in
+!!    sfc_data.nc files generated from a restart of UFS-SRW.
+!!    "cold" start will read in sfc_data.nc files generated
+!!    from chgres_cube.
+!! 4. String of time slice to use in the fvcom.nc file. This string
+!!    should match exactly what is in the Times variable of the .nc file.
 !! To run the script, use the following example, modifying file
 !! names as needed:
-!!   ./fvcom_to_FV3 sfc_data.tile7.halo0.nc fvcom.nc 1
-!!
+!!   ./fvcom_to_FV3 sfc_data.tile7.halo0.nc fvcom.nc cold \
+!!     2020-01-31T18:00:00.000000
 !! Code is strongly based upon Eric James' (ESRL/GSL) work to update
 !! HRRR/WRF Great Lakes' temperature data with FVCOM. Code also
 !! relies heavily on Ming Hu's ncio module.
