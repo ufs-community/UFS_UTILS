@@ -438,7 +438,6 @@ module module_nwp
       !!
       !! @param this fcst_nwp ojbect
       !! @param[in] filename netcdf file name
-      !! @param[in] itype either ' FVCOM' or 'FV3LAM'
       !! @param[in] instr string of requested time
       !! @param[out] outindex int index that matches instr
       !!
@@ -455,8 +454,8 @@ module module_nwp
          integer :: foundind
          integer :: k,i
  
-!        Open the file using module_ncio.f90 code, and find the number of
-!        lat/lon points
+!        Open the file using module_ncio.f90 code, and find the length of
+!        time in the file
          call ncdata%open(trim(filename),'r',200)
          call ncdata%get_dim(this%dimnameTIME,this%xtime)
          call ncdata%get_dim(this%dimnameDATE,this%datelen)
