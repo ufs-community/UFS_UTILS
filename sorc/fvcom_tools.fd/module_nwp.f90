@@ -382,6 +382,8 @@ module module_nwp
       !> Finish and deallocate.
       !!
       !! @param this fcst_nwp object
+      !! @param[in] itype either ' FVCOM' or 'FV3LAM'
+      !! @param[in] wcstart either 'warm' or 'cold'.
       !! @author David Wright, University of Michigan and GLERL
       subroutine finish_nwp(this,itype,wcstart)
 
