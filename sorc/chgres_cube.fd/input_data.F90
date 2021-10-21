@@ -4797,7 +4797,7 @@ else
    allocate(dummy2d_8(0,0))
    allocate(dummy2d_82(0,0))
    allocate(dummy2d(0,0))
-
+   allocate(slmsk_save(0,0))
  endif
  
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -4861,7 +4861,7 @@ if (localpet == 0) then
    slmsk_save = nint(dummy2d)
   
    deallocate(icec_save)
- endif
+ endif ! localpet == 0
 
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
  call ESMF_FieldScatter(landsea_mask_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
@@ -5033,7 +5033,8 @@ if (localpet == 0) then
          endif
        enddo
      enddo
-   endif
+     deallocate(dummy1d)
+   endif ! localpet == 0
    
    if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR" .and. .not. rap_latlon) & 
      .or. (rc < 0 .and. (trim(to_upper(external_model)) == "HRRR" .or. rap_latlon))) then
@@ -5074,7 +5075,7 @@ if (localpet == 0) then
    print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
    deallocate(dummy2d_i)
    deallocate(dummy3d_stype)
- endif
+ endif ! localpet == 0
   
 
  print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
@@ -5486,11 +5487,13 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
- print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
+ print*,"- CALL FieldScatter FOR INPUT SOIL TYPE."
  call ESMF_FieldScatter(soil_type_input_grid, dummy2d_82, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
-    
+
+ deallocate(dummy2d_82)
+
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
  call ESMF_FieldScatter(landsea_mask_input_grid,real(slmsk_save,esmf_kind_r8),rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
@@ -5511,8 +5514,10 @@ if (localpet == 0) then
    call check_soilt(dummy3d,slmsk_save,tsk_save)
    print*,'soilt ',maxval(dummy3d),minval(dummy3d)
 
-   deallocate(tsk_save, slmsk_save)
+   deallocate(tsk_save)
  endif
+
+ deallocate(slmsk_save)
 
  print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
  call ESMF_FieldScatter(soil_temp_input_grid, dummy3d, rootpet=0, rc=rc)
