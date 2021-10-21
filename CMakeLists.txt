@@ -56,6 +56,7 @@ if(OPENMP)
   find_package(OpenMP REQUIRED COMPONENTS Fortran)
 endif()
 
+# Find the NCEPLIBS packages we need.
 find_package(sfcio 1.4.0 REQUIRED)
 find_package(w3nco 2.4.0 REQUIRED)
 find_package(bacio 2.4.0 REQUIRED)
@@ -66,6 +67,16 @@ find_package(ip 3.3.3 REQUIRED)
 find_package(g2 3.4.0 REQUIRED)
 find_package(wgrib2 2.0.8 REQUIRED)
 find_package(sigio 2.3.0 REQUIRED)
+
+# The name of the bacio library changed with the 2.5.0 release. The
+# "_4" was removed from the library and include directory name in the
+# bacio-2.5.0 release. Set a name variable to be used in the rest of
+# the cmake build.
+if(bacio_VERSION GREATER_EQUAL 2.5.0)
+  set(bacio_name bacio)
+else()
+  set(bacio_name bacio_4)
+endif()
 
 # EMC requires executables in ./exec
 set(exec_dir bin)

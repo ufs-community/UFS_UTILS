@@ -1,3 +1,7 @@
+# This is the CMake file for the orog.fd directory in UFS_UTILS.
+#
+# Mark Potts, Kyle Gerheiser, Rahul Mahajan, Ed Hartnett
+
 set(lib_src netcdf_io.F90)
 set(exe_src mtnlm7_oclsm.f)
 
@@ -22,7 +26,7 @@ target_include_directories(orog_lib INTERFACE ${mod_dir})
 target_link_libraries(
   orog_lib
   PUBLIC
-  bacio::bacio_4
+  bacio::${bacio_name}
   w3nco::w3nco_d
   ip::ip_d
   sp::sp_d

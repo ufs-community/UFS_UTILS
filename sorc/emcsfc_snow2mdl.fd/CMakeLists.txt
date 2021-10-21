@@ -32,7 +32,7 @@ target_link_libraries(snow2mdl_lib
   g2::g2_d
   ip::ip_d
   sp::sp_d
-  bacio::bacio_4
+  bacio::${bacio_name}
   w3nco::w3nco_d)
 
 if(OpenMP_Fortran_FOUND)

@@ -37,7 +37,7 @@ target_link_libraries(
   global_cycle_lib
   PUBLIC
   w3nco::w3nco_d
-  bacio::bacio_4
+  bacio::${bacio_name}
   ip::ip_d
   sp::sp_d
   MPI::MPI_Fortran

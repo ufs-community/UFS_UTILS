@@ -45,7 +45,7 @@ target_link_libraries(
   nemsio::nemsio
   sfcio::sfcio
   sigio::sigio
-  bacio::bacio_4
+  bacio::${bacio_name}
   sp::sp_d
   w3nco::w3nco_d
   esmf
