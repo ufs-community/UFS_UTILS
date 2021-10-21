@@ -23,8 +23,7 @@ export APRUN_SFC="mpiexec -n 24 -ppn 24 -cpu-bind core"
 export BASE_DIR=$PBS_O_WORKDIR/../..
 
 source ${BASE_DIR}/sorc/machine-setup.sh > /dev/null 2>&1
-module use ${BASE_DIR}/modulefiles
-module load build.$target.intel
+source ${BASE_DIR}/modulefiles/build.$target.intel
 module list
 
 #-------------------------------------

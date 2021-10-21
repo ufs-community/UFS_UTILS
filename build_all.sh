@@ -20,8 +20,12 @@ if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
 else
  set +x
  source ./sorc/machine-setup.sh
- module use ./modulefiles
- module load build.$target.$compiler > /dev/null
+ if [[ "$target" == "wcoss2_cray" ]];then
+   source ./modulefiles/build.$target.$compiler
+ else
+   module use ./modulefiles
+   module load build.$target.$compiler > /dev/null
+ fi
  module list
  set -x
 fi
