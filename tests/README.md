@@ -99,4 +99,4 @@ the unit test framework.
 
 ### QUESTIONS
 
-Please contact the repository managers: https://github.com/NOAA-EMC/UFS_UTILS/wiki
+Please contact the repository managers: https://github.com/ufs-community/UFS_UTILS/wiki
