@@ -6,7 +6,7 @@ Utilities for the NCEP models. This is part of the
 [NCEPLIBS](https://github.com/NOAA-EMC/NCEPLIBS) project.
 
 The UFS_UTILS code can be found here:
-https://github.com/NOAA-EMC/UFS_UTILS.
+https://github.com/ufs-community/UFS_UTILS.
 
 ## The Utilities
 

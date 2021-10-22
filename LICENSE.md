@@ -2,7 +2,7 @@ Copyright 2020 National Oceanic and Atmospheric Administration (by assignment fr
  
 The ufs_utils code incorporated in the Unified Forecast System (UFS) was jointly developed by the 
 National Oceanic and Atmospheric Administration and the I. M. Systems Group. The gold standard copy
-of the Code will be maintained by NOAA at https://github.com/NOAA-EMC/UFS_UTILS
+of the Code will be maintained by NOAA at https://github.com/ufs-community/UFS_UTILS
  
 The National Oceanic and Atmospheric Administration is releasing this code under the GNU Lesser 
 General Public License v3.0 (the "License"); you may not use this code except in compliance 
