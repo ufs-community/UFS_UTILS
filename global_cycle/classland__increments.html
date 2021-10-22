@@ -102,7 +102,8 @@ $(document).ready(function(){initNavTree('classland__increments.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">land_increments Module Reference</div>  </div>
 </div><!--header-->
@@ -110,20 +111,88 @@ $(document).ready(function(){initNavTree('classland__increments.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ae260c4c211018b060db3dfb15fdf74d6"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classland__increments.html#ae260c4c211018b060db3dfb15fdf74d6">add_increment_snow</a> (snd_inc, mask, lensfc, snd)</td></tr>
+<tr class="memdesc:ae260c4c211018b060db3dfb15fdf74d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add snow depth increment to model snow depth state, and limit output to be non-negative.  <a href="#ae260c4c211018b060db3dfb15fdf74d6">More...</a><br/></td></tr>
+<tr class="separator:ae260c4c211018b060db3dfb15fdf74d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af307e07315cbcac6e88643185ae2224f"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classland__increments.html#af307e07315cbcac6e88643185ae2224f">add_increment_soil</a> (rla, rlo, stc_state, soilsnow_tile, soilsnow_fg_tile, lensfc, lsoil, idim, jdim, myrank)</td></tr>
 <tr class="memdesc:af307e07315cbcac6e88643185ae2224f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read in gsi file with soil state increments (on the gaussian grid), interpolate increments to the cubed-sphere tile, and add to the soil states.  <a href="#af307e07315cbcac6e88643185ae2224f">More...</a><br/></td></tr>
 <tr class="separator:af307e07315cbcac6e88643185ae2224f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9c693046ab2f13f5b46054c6c80a8cb"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classland__increments.html#ac9c693046ab2f13f5b46054c6c80a8cb">apply_land_da_adjustments</a> (update_type, lsm, isot, ivegsrc, lensfc, lsoil, rsoiltype, smc_bck, slc_bck, stc_bck, smc_anl, slc_anl, stc_anl)</td></tr>
-<tr class="memdesc:ac9c693046ab2f13f5b46054c6c80a8cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make adjustments to dependent variables after applying land increments.  <a href="#ac9c693046ab2f13f5b46054c6c80a8cb">More...</a><br/></td></tr>
-<tr class="separator:ac9c693046ab2f13f5b46054c6c80a8cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea08e5894ec920bf1fea02e7e324ccbb"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classland__increments.html#aea08e5894ec920bf1fea02e7e324ccbb">calculate_soilsnowmask</a> (smc, swe, lensfc, mask)</td></tr>
-<tr class="memdesc:aea08e5894ec920bf1fea02e7e324ccbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate soil mask for land on model grid.  <a href="#aea08e5894ec920bf1fea02e7e324ccbb">More...</a><br/></td></tr>
-<tr class="separator:aea08e5894ec920bf1fea02e7e324ccbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46cacafd29fb14ec2945614634e35478"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classland__increments.html#a46cacafd29fb14ec2945614634e35478">apply_land_da_adjustments_snd</a> (lsm, lensfc, mask, swe_bck, snd_bck, snd_anl, swe_adj)</td></tr>
+<tr class="memdesc:a46cacafd29fb14ec2945614634e35478"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make adjustments to dependent variables after applying land increments.  <a href="#a46cacafd29fb14ec2945614634e35478">More...</a><br/></td></tr>
+<tr class="separator:a46cacafd29fb14ec2945614634e35478"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40c5427f348282048617597ba4f08549"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classland__increments.html#a40c5427f348282048617597ba4f08549">apply_land_da_adjustments_stc</a> (lsm, isot, ivegsrc, lensfc, lsoil, rsoiltype, mask, stc_bck, stc_anl, smc_adj, slc_adj)</td></tr>
+<tr class="memdesc:a40c5427f348282048617597ba4f08549"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make adjustments to dependent variables after applying land increments.  <a href="#a40c5427f348282048617597ba4f08549">More...</a><br/></td></tr>
+<tr class="separator:a40c5427f348282048617597ba4f08549"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af965fc620e3a6d871e762d0adc67f386"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classland__increments.html#af965fc620e3a6d871e762d0adc67f386">calculate_landinc_mask</a> (smc, swe, vtype, lensfc, veg_type_landice, mask)</td></tr>
+<tr class="memdesc:af965fc620e3a6d871e762d0adc67f386"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate soil mask for land on model grid.  <a href="#af965fc620e3a6d871e762d0adc67f386">More...</a><br/></td></tr>
+<tr class="separator:af965fc620e3a6d871e762d0adc67f386"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ad787f5e08101bfd383fcd6abfece6695"><td class="memItemLeft" align="right" valign="top">integer, parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classland__increments.html#ad787f5e08101bfd383fcd6abfece6695">lsm_noah</a> =1</td></tr>
+<tr class="memdesc:ad787f5e08101bfd383fcd6abfece6695"><td class="mdescLeft">&#160;</td><td class="mdescRight">flag for NOAH land surface model copied from GFS_typedefs.F90  <a href="#ad787f5e08101bfd383fcd6abfece6695">More...</a><br/></td></tr>
+<tr class="separator:ad787f5e08101bfd383fcd6abfece6695"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="land__increments_8f90_source.html#l00005">5</a> of file <a class="el" href="land__increments_8f90_source.html">land_increments.f90</a>.</p>
 </div><h2 class="groupheader">Member Function/Subroutine Documentation</h2>
+<a class="anchor" id="ae260c4c211018b060db3dfb15fdf74d6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public land_increments::add_increment_snow </td>
+          <td>(</td>
+          <td class="paramtype">real, dimension(lensfc), intent(in)&#160;</td>
+          <td class="paramname"><em>snd_inc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, dimension(lensfc), intent(in)&#160;</td>
+          <td class="paramname"><em>mask</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>lensfc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real, dimension(lensfc), intent(inout)&#160;</td>
+          <td class="paramname"><em>snd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add snow depth increment to model snow depth state, and limit output to be non-negative. </p>
+<p>JEDI increments are calculated globally, so must be screened to land-only locations here.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">lensfc</td><td>Number of land points on this tile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">snd_inc</td><td>Soil depth increments </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mask</td><td>Land mask for increments </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">snd</td><td>Soil depth background (in), and analysis (out)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Clara Draper. </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>August 2021 </dd></dl>
+
+<p>Definition at line <a class="el" href="land__increments_8f90_source.html#l00314">314</a> of file <a class="el" href="land__increments_8f90_source.html">land_increments.f90</a>.</p>
+
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00304">sfcdrv()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="af307e07315cbcac6e88643185ae2224f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -198,14 +267,15 @@ Public Member Functions</h2></td></tr>
 
 <p>Read in gsi file with soil state increments (on the gaussian grid), interpolate increments to the cubed-sphere tile, and add to the soil states. </p>
 <p>Adapted from adjust_nsst. Currently only coded for soil temperature. Soil moisture will need the model soil moisture paramaters for regridding.</p>
+<p>Does not make a temperature update if snow differ between fg and anal (allow correction of snow to address temperature error first), or if snow is present (will eventually updating of snow temperature in this case)</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in,out]</td><td class="paramname">RLA</td><td>Latitude on the cubed-sphere tile </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">RLO</td><td>Longitude on the cubed-sphere tile </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">STC_STATE</td><td></td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">SOILSNOW_TILE</td><td>Snow mask for land on the cubed-sphere tile </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">SOILSNOW_FG_TILE</td><td>First guess snow mask for land on the cubed-sphere tile </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">LENSFC</td><td>Number of points on a tile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">SOILSNOW_TILE</td><td>Land mask for increments on the cubed-sphere tile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">SOILSNOW_FG_TILE</td><td>First guess land mask for increments on the cubed-sphere tile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">LENSFC</td><td>Number of land points on a tile </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">LSOIL</td><td>Number of soil layers </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">IDIM</td><td>'I' dimension of a tile </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">JDIM</td><td>'J' dimension of a tile </td></tr>
@@ -216,27 +286,98 @@ Public Member Functions</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>Clara Draper. </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>March 2021 </dd></dl>
 
-<p>Definition at line <a class="el" href="land__increments_8f90_source.html#l00034">34</a> of file <a class="el" href="land__increments_8f90_source.html">land_increments.f90</a>.</p>
+<p>Definition at line <a class="el" href="land__increments_8f90_source.html#l00043">43</a> of file <a class="el" href="land__increments_8f90_source.html">land_increments.f90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00038">utils::remap_coef()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00304">sfcdrv()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ac9c693046ab2f13f5b46054c6c80a8cb"></a>
+<a class="anchor" id="a46cacafd29fb14ec2945614634e35478"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">subroutine, public land_increments::apply_land_da_adjustments </td>
+          <td class="memname">subroutine, public land_increments::apply_land_da_adjustments_snd </td>
           <td>(</td>
-          <td class="paramtype">character(len=3), intent(in)&#160;</td>
-          <td class="paramname"><em>update_type</em>, </td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>lsm</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>lensfc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, dimension(lensfc), intent(in)&#160;</td>
+          <td class="paramname"><em>mask</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real, dimension(lensfc), intent(in)&#160;</td>
+          <td class="paramname"><em>swe_bck</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real, dimension(lensfc), intent(in)&#160;</td>
+          <td class="paramname"><em>snd_bck</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real, dimension(lensfc), intent(in)&#160;</td>
+          <td class="paramname"><em>snd_anl</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real, dimension(lensfc), intent(inout)&#160;</td>
+          <td class="paramname"><em>swe_adj</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Make adjustments to dependent variables after applying land increments. </p>
+<p>These adjustments are model-dependent, and are currently only coded for Noah LSM. Here: adjust SWE to be consistent with updated SND, using snow density from the forecast. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">lsm</td><td>Integer code for the LSM </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lensfc</td><td>Number of land points for this tile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mask</td><td>Land mask for increments </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">swe_bck</td><td>Background SWE </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">snd_bck</td><td>Background snow depth </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">snd_anl</td><td>Analysis snow depth </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">swe_adj</td><td>SWE to be adjusted </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Clara Draper </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>August 2021 </dd></dl>
+
+<p>Definition at line <a class="el" href="land__increments_8f90_source.html#l00482">482</a> of file <a class="el" href="land__increments_8f90_source.html">land_increments.f90</a>.</p>
+
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00304">sfcdrv()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a40c5427f348282048617597ba4f08549"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public land_increments::apply_land_da_adjustments_stc </td>
+          <td>(</td>
           <td class="paramtype">integer, intent(in)&#160;</td>
           <td class="paramname"><em>lsm</em>, </td>
         </tr>
@@ -273,14 +414,8 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(lensfc,lsoil), intent(in)&#160;</td>
-          <td class="paramname"><em>smc_bck</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real, dimension(lensfc,lsoil), intent(in)&#160;</td>
-          <td class="paramname"><em>slc_bck</em>, </td>
+          <td class="paramtype">integer, dimension(lensfc), intent(in)&#160;</td>
+          <td class="paramname"><em>mask</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -291,20 +426,20 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(lensfc,lsoil), intent(inout)&#160;</td>
-          <td class="paramname"><em>smc_anl</em>, </td>
+          <td class="paramtype">real, dimension(lensfc, lsoil), intent(in)&#160;</td>
+          <td class="paramname"><em>stc_anl</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">real, dimension(lensfc,lsoil), intent(inout)&#160;</td>
-          <td class="paramname"><em>slc_anl</em>, </td>
+          <td class="paramname"><em>smc_adj</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real, dimension(lensfc, lsoil), intent(inout)&#160;</td>
-          <td class="paramname"><em>stc_anl</em>&#160;</td>
+          <td class="paramtype">real, dimension(lensfc,lsoil), intent(inout)&#160;</td>
+          <td class="paramname"><em>slc_adj</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -315,42 +450,40 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Make adjustments to dependent variables after applying land increments. </p>
-<p>These adjustments are model-dependent, and are currently only coded for Noah LSM. For Noah LSM, copy relevent code blocks from model code (same as has been done in sfc_sub). For Noah-MP, will call into the model code to use same routines / code as in the model. </p>
+<p>These adjustments are model-dependent, and are currently only coded for Noah LSM. For Noah LSM, copy relevent code blocks from model code (same as has been done in sfc_sub). Here: adjust (frozen) soil moisture to be consistent with changes in soil temperature from DA </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">update_type</td><td>Code for variable being updated (options: 'stc' - soil temperature) </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">lsm</td><td>Integer code for the LSM </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">isot</td><td>Integer code for the soil type data set </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ivegsrc</td><td>Integer code for the vegetation type data set </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lensfc</td><td>Length of land state vector </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lensfc</td><td>Number of land points for this tile </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">lsoil</td><td>Number of soil layers </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">rsoiltype</td><td>rsoiltype Array of input soil types </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">smc_bck</td><td>Background soil moisture states </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">slc_bck</td><td>Background liquid soil moisture states </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">rsoiltype</td><td>Array of input soil types </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mask</td><td>Mask indicating surface type </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">stc_bck</td><td>Background soil temperature states </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">smc_anl</td><td>Analysis soil moisture states </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">slc_anl</td><td>Analysis liquid soil moisture states </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">stc_anl</td><td>Analysis soil temperature states </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">stc_anl</td><td>Analysis soil temperature states </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">smc_adj</td><td>Soil moisture state to be adjusted </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">slc_adj</td><td>Liquid soil moisture states to be adjusted </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Clara Draper </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>April 2021 </dd></dl>
 
-<p>Definition at line <a class="el" href="land__increments_8f90_source.html#l00352">352</a> of file <a class="el" href="land__increments_8f90_source.html">land_increments.f90</a>.</p>
+<p>Definition at line <a class="el" href="land__increments_8f90_source.html#l00394">394</a> of file <a class="el" href="land__increments_8f90_source.html">land_increments.f90</a>.</p>
 
-<p>References <a class="el" href="cycle_8f90_source.html#l01822">tfreez()</a>.</p>
+<p>References <a class="el" href="cycle_8f90_source.html#l01904">tfreez()</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00304">sfcdrv()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aea08e5894ec920bf1fea02e7e324ccbb"></a>
+<a class="anchor" id="af965fc620e3a6d871e762d0adc67f386"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">subroutine, public land_increments::calculate_soilsnowmask </td>
+          <td class="memname">subroutine, public land_increments::calculate_landinc_mask </td>
           <td>(</td>
           <td class="paramtype">real, dimension(lensfc), intent(in)&#160;</td>
           <td class="paramname"><em>smc</em>, </td>
@@ -364,8 +497,20 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">real, dimension(lensfc), intent(in)&#160;</td>
+          <td class="paramname"><em>vtype</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">integer, intent(in)&#160;</td>
           <td class="paramname"><em>lensfc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>veg_type_landice</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -382,27 +527,54 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Calculate soil mask for land on model grid. </p>
-<p>Output is 1 - soil, 2 - snow-covered, 0 - land ice or not land. </p>
+<p>Output is 1 - soil, 2 - snow-covered, 0 - land ice, -1 not land.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">lensfc</td><td>Total numberof points for the cubed-sphere tile. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lensfc</td><td>Number of land points for this tile </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">veg_type_landice</td><td>Value of vegetion class that indicates land-ice </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">smc</td><td>Model soil moisture. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">swe</td><td>Model snow water equivalent </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">mask</td><td>Output mask: 1 - soil, 2 - snow-covered, 0 - land ice or not land. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">vtype</td><td>Model vegetation type </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">mask</td><td>Land mask for increments </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Clara Draper </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>March 2021 </dd></dl>
 
-<p>Definition at line <a class="el" href="land__increments_8f90_source.html#l00305">305</a> of file <a class="el" href="land__increments_8f90_source.html">land_increments.f90</a>.</p>
+<p>Definition at line <a class="el" href="land__increments_8f90_source.html#l00344">344</a> of file <a class="el" href="land__increments_8f90_source.html">land_increments.f90</a>.</p>
 
-<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00295">sfcdrv()</a>.</p>
+<p>Referenced by <a class="el" href="cycle_8f90_source.html#l00304">sfcdrv()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Field Documentation</h2>
+<a class="anchor" id="ad787f5e08101bfd383fcd6abfece6695"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer, parameter land_increments::lsm_noah =1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>flag for NOAH land surface model copied from GFS_typedefs.F90 </p>
+
+<p>Definition at line <a class="el" href="land__increments_8f90_source.html#l00015">15</a> of file <a class="el" href="land__increments_8f90_source.html">land_increments.f90</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this module was generated from the following file:<ul>
-<li>/gpfs/dell1/stmp/George.Gayno/UFS_UTILS/sorc/global_cycle.fd/<a class="el" href="land__increments_8f90_source.html">land_increments.f90</a></li>
+<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/global_cycle.fd/<a class="el" href="land__increments_8f90_source.html">land_increments.f90</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

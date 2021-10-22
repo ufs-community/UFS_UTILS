@@ -1,8 +1,8 @@
-.TH "/gpfs/dell1/stmp/George.Gayno/UFS_UTILS/sorc/global_cycle.fd/cycle.f90" 3 "Mon Aug 16 2021" "Version 1.6.0" "global_cycle" \" -*- nroff -*-
+.TH "/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/global_cycle.fd/cycle.f90" 3 "Fri Oct 22 2021" "Version 1.6.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/gpfs/dell1/stmp/George.Gayno/UFS_UTILS/sorc/global_cycle.fd/cycle.f90 \- 
+/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/global_cycle.fd/cycle.f90 \- 
 Update surface and NSST fields\&.  
 
 .SH SYNOPSIS
@@ -141,7 +141,7 @@ Xu Li, George Gayno
 .PP
 
 .PP
-Definition at line 672 of file cycle\&.f90\&.
+Definition at line 754 of file cycle\&.f90\&.
 .PP
 References dtzm_point(), nsst_water_reset(), utils::remap_coef(), tf_thaw_set(), and tfreez()\&.
 .PP
@@ -171,7 +171,7 @@ Xu Li, George Gayno
 .PP
 
 .PP
-Definition at line 1081 of file cycle\&.f90\&.
+Definition at line 1163 of file cycle\&.f90\&.
 .SS "subroutine dtzm_point (real, intent(in)XT, real, intent(in)XZ, real, intent(in)DT_COOL, real, intent(in)ZC, real, intent(in)Z1, real, intent(in)Z2, real, intent(out)DTZM)"
 
 .PP
@@ -206,7 +206,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1234 of file cycle\&.f90\&.
+Definition at line 1316 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst()\&.
 .SS "subroutine get_sal_clm (real, dimension(nx*ny), intent(in)xlats_ij, real, dimension(nx*ny), intent(in)xlons_ij, integer, intent(in)ny, integer, intent(in)nx, integer, intent(in)iy, integer, intent(in)im, integer, intent(in)id, integer, intent(in)ih, real, dimension(nx,ny), intent(out)sal_clm)"
@@ -242,7 +242,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1560 of file cycle\&.f90\&.
+Definition at line 1642 of file cycle\&.f90\&.
 .PP
 References read_write_data::get_dim_nc(), get_sal_clm_ta(), get_tim_wei(), and intp_tile()\&.
 .PP
@@ -285,7 +285,7 @@ March 2019
 .PP
 
 .PP
-Definition at line 1620 of file cycle\&.f90\&.
+Definition at line 1702 of file cycle\&.f90\&.
 .PP
 References read_write_data::read_salclm_gfs_nc()\&.
 .PP
@@ -325,7 +325,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1443 of file cycle\&.f90\&.
+Definition at line 1525 of file cycle\&.f90\&.
 .PP
 References read_write_data::get_tf_clm_dim(), get_tf_clm_ta(), get_tim_wei(), and intp_tile()\&.
 .PP
@@ -370,7 +370,7 @@ March 2019
 .PP
 
 .PP
-Definition at line 1512 of file cycle\&.f90\&.
+Definition at line 1594 of file cycle\&.f90\&.
 .PP
 References read_write_data::read_tf_clim_grb()\&.
 .PP
@@ -411,7 +411,7 @@ March 2019
 .PP
 
 .PP
-Definition at line 1755 of file cycle\&.f90\&.
+Definition at line 1837 of file cycle\&.f90\&.
 .PP
 Referenced by get_sal_clm(), and get_tf_clm()\&.
 .SS "subroutine intp_tile (real, dimension(idim_lalo,jdim_lalo), intent(in)tf_lalo, real, dimension(jdim_lalo), intent(in)dlats_lalo, real, dimension(idim_lalo), intent(in)dlons_lalo, integer, intent(in)jdim_lalo, integer, intent(in)idim_lalo, real, dimension(jdim_tile*idim_tile), intent(out)tf_tile, real, dimension(jdim_tile*idim_tile), intent(in)xlats_tile, real, dimension(jdim_tile*idim_tile), intent(in)xlons_tile, integer, intent(in)jdim_tile, integer, intent(in)idim_tile)"
@@ -449,7 +449,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1665 of file cycle\&.f90\&.
+Definition at line 1747 of file cycle\&.f90\&.
 .PP
 References utils::remap_coef()\&.
 .PP
@@ -475,7 +475,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1397 of file cycle\&.f90\&.
+Definition at line 1479 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst()\&.
 .SS "program sfc_drv ()"
@@ -487,7 +487,7 @@ There are three main options (which can be called in combination):
 .IP "1." 4
 Update the surface fields with sfccylce (do_sfccycle = \&.true\&.)
 .IP "2." 4
-Update the land states with increments read in from file (do_lndinc = \&.true\&.) Designed to work with a land increment file created by the GSI on the Gaussian grid\&. The increments are interpolated here to the model grid, using the same method as for the NST increments\&. Initially implemented for applying soil temperature increments calculated from the EnKF assimilation of T2m (but this is not a requirement - any GSI-generated soil temperature increment file can be applied here)\&.
+Update the land states with increments read in from file (do_lndinc = \&.true\&.) Designed to work with either: 2a\&. A land increment file created by the GSI on the Gaussian grid\&. The increments are interpolated here to the model grid, using the same method as for the NST increments\&. This is currently implemented for applying soil temperature increments calculated from the EnKF assimilation of T2m (but this is not a requirement - any GSI-generated soil temperature increment file can be applied here)\&. 2b\&. A land increment file created by JEDI, on the native model grid (cube sphere tiles)\&. This is currently implemented for snow depth updates for the Noah model\&.
 .IP "3." 4
 Update the NSST field, several options:
 .PP
@@ -506,7 +506,9 @@ fnbgsi\&.$NNN The cubed-sphere input sfc/nsst restart file\&.
 .IP "\(bu" 2
 $NST_FILE Gaussian GSI file which contains NSST TREF increments
 .IP "\(bu" 2
-$LND_SNO_FILE Gaussian GSI file which contains soil state increments
+$LND_SOI_FILE Gaussian GSI file which contains soil state increments
+.IP "\(bu" 2
+xainc\&.$NNN The cubed-sphere increment file (contains increments calculated by JEDI on the native model grid)\&.
 .PP
 .PP
 OUTPUT FILES:
@@ -535,7 +537,7 @@ DELTSFC Cycling frequency in hours\&.
 .IP "\(bu" 2
 IALB Use modis albedo when '1'\&. Use brigleb when '0'\&.
 .IP "\(bu" 2
-USE_UFO Adjust sst and soil substrate temperature for differences between the filtered and unfiltered terrain\&. -DONST Process NSST records\&. -DO_SFCCYCLE Call sfccycle routine to update surface fields -DO_LNDINC Read in land increment files, and add increments to soil states\&.
+USE_UFO Adjust sst and soil substrate temperature for differences between the filtered and unfiltered terrain\&. -DONST Process NSST records\&. -DO_SFCCYCLE Call sfccycle routine to update surface fields -DO_LNDINC Read in land increment files, and add increments to relevant states\&. -DO_SOI_INC Do land increments to soil states\&. -DO_SNO_INC Do land increments to snow states\&.
 .IP "\(bu" 2
 ISOT Use statsgo soil type when '1'\&. Use zobler when '0'\&.
 .IP "\(bu" 2
@@ -560,7 +562,7 @@ Mark Iredell NOAA/EMC
 .PP
 
 .PP
-Definition at line 97 of file cycle\&.f90\&.
+Definition at line 106 of file cycle\&.f90\&.
 .PP
 References num_parthds(), and sfcdrv()\&.
 .SS "subroutine sfcdrv (integer, intent(in)LUGB, integer, intent(in)IDIM, integer, intent(in)JDIM, integer, intent(in)LSM, integer, intent(in)LENSFC, integer, intent(in)LSOIL, real, intent(in)DELTSFC, integer, intent(in)IY, integer, intent(in)IM, integer, intent(in)ID, integer, intent(in)IH, real, intent(in)FH, integer, intent(in)IALB, logical, intent(in)USE_UFO, logical, intent(in)DO_NSST, logical, intent(in)DO_SFCCYCLE, logical, intent(in)DO_LNDINC, real, intent(in)ZSEA1, real, intent(in)ZSEA2, integer, intent(in)ISOT, integer, intent(in)IVEGSRC, integer, intent(in)MYRANK)"
@@ -587,7 +589,7 @@ OROG \&.\&. Orography
 .IP "\(bu" 2
 ALB \&.\&. Snow-free albedo
 .IP "\(bu" 2
-SNO \&.\&. Liquid-equivalent snow depth (SWE)
+SWE \&.\&. Snow water equivalent
 .IP "\(bu" 2
 ZOR \&.\&. Surface roughness length
 .IP "\(bu" 2
@@ -621,7 +623,7 @@ SIH \&.\&. Sea ice thickness
 .IP "\(bu" 2
 SIC \&.\&. Sea ice concentration
 .IP "\(bu" 2
-SWD \&.\&. Actual snow depth
+SND \&.\&. Snow depth
 .IP "\(bu" 2
 SLC \&.\&. Liquid soil moisture (LSOIL layers)
 .IP "\(bu" 2
@@ -680,7 +682,7 @@ Variables Land Sea  Surface temperature Forecast Analysis Albedo Analysis Analys
 .br
 \fIDO_SFCCYCLE\fP Call sfccycle routine to update surface fields 
 .br
-\fIDO_LNDINC\fP Read in land increment files, and add increments to soil states\&. 
+\fIDO_LNDINC\fP Read in land increment files, and add increments to requested states\&. 
 .br
 \fIZSEA1\fP When running NSST model, this is the lower bound of depth of sea temperature\&. In whole mm\&. 
 .br
@@ -700,9 +702,9 @@ Mark Iredell, George Gayno
 .PP
 
 .PP
-Definition at line 295 of file cycle\&.f90\&.
+Definition at line 304 of file cycle\&.f90\&.
 .PP
-References land_increments::add_increment_soil(), adjust_nsst(), land_increments::apply_land_da_adjustments(), land_increments::calculate_soilsnowmask(), get_sal_clm(), get_tf_clm(), read_write_data::read_data(), read_write_data::read_gsi_data(), read_write_data::read_lat_lon_orog(), sfccycle(), and read_write_data::write_data()\&.
+References land_increments::add_increment_snow(), land_increments::add_increment_soil(), adjust_nsst(), land_increments::apply_land_da_adjustments_snd(), land_increments::apply_land_da_adjustments_stc(), land_increments::calculate_landinc_mask(), get_sal_clm(), get_tf_clm(), read_write_data::read_data(), read_write_data::read_gsi_data(), read_write_data::read_lat_lon_orog(), sfccycle(), and read_write_data::write_data()\&.
 .PP
 Referenced by sfc_drv()\&.
 .SS "subroutine tf_thaw_set (real, dimension(nx*ny), intent(in)tf_ij, integer, dimension(nx*ny), intent(in)mask_ij, integer, intent(in)itile, integer, intent(in)jtile, real, intent(in)tice, real, intent(in)tclm, real, intent(out)tf_thaw, integer, intent(in)nx, integer, intent(in)ny, integer, intent(inout)nset_thaw_s, integer, intent(inout)nset_thaw_i, integer, intent(inout)nset_thaw_c)"
@@ -744,7 +746,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1306 of file cycle\&.f90\&.
+Definition at line 1388 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst()\&.
 .SS "real function tfreez (realsalinity)"
@@ -774,9 +776,9 @@ tfreez The freezing point of water\&.
 .PP
 
 .PP
-Definition at line 1822 of file cycle\&.f90\&.
+Definition at line 1904 of file cycle\&.f90\&.
 .PP
-Referenced by adjust_nsst(), and land_increments::apply_land_da_adjustments()\&.
+Referenced by adjust_nsst(), and land_increments::apply_land_da_adjustments_stc()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for global_cycle from the source code\&.

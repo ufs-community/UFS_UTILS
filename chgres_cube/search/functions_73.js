@@ -2,6 +2,7 @@ var searchData=
 [
   ['scalh',['scalh',['../wam__climo__data_8f90.html#a38a4030496d7ad5e89480444e7952df5',1,'wam_climo_data.f90']]],
   ['search',['search',['../classsearch__util.html#a4a511a55b3ce58a03cc053d19cecc458',1,'search_util']]],
+  ['search_5fmany',['search_many',['../classsurface.html#a3b0d48d8c08655b2f2e1050050543a33',1,'surface']]],
   ['spline',['spline',['../wam__climo__data_8f90.html#a9fb12537c97e20c3a73e1dfdc7d60060',1,'wam_climo_data.f90']]],
   ['splini',['splini',['../wam__climo__data_8f90.html#ae253f31ca84d4f22f498a60b5cace125',1,'wam_climo_data.f90']]],
   ['splint',['splint',['../wam__climo__data_8f90.html#a04a3b53fc281e9b91b7c6c89b2b69b19',1,'wam_climo_data.f90']]],

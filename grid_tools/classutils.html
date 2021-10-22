@@ -114,6 +114,9 @@ $(document).ready(function(){initNavTree('classutils.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a3104e7e7b180787408ded9cfe521b7b8"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classutils.html#a3104e7e7b180787408ded9cfe521b7b8">fill_regional_halo</a> (data, halo)</td></tr>
+<tr class="memdesc:a3104e7e7b180787408ded9cfe521b7b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This routine extrapolate geolat_c and geolon_c halo points for the regional standalone grid.  <a href="#a3104e7e7b180787408ded9cfe521b7b8">More...</a><br/></td></tr>
+<tr class="separator:a3104e7e7b180787408ded9cfe521b7b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a970642bec191e4bb7ee405787c192122"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classutils.html#a970642bec191e4bb7ee405787c192122">handle_err</a> (status, string)</td></tr>
 <tr class="memdesc:a970642bec191e4bb7ee405787c192122"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints an error message to standard output, then halts program execution with a bad status.  <a href="#a970642bec191e4bb7ee405787c192122">More...</a><br/></td></tr>
 <tr class="separator:a970642bec191e4bb7ee405787c192122"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,6 +163,47 @@ Data Fields</h2></td></tr>
 
 <p>Definition at line <a class="el" href="utils_8F90_source.html#l00008">8</a> of file <a class="el" href="utils_8F90_source.html">utils.F90</a>.</p>
 </div><h2 class="groupheader">Member Function/Subroutine Documentation</h2>
+<a class="anchor" id="a3104e7e7b180787408ded9cfe521b7b8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine utils::fill_regional_halo </td>
+          <td>(</td>
+          <td class="paramtype">real, dimension(1-halo:,1-halo:,:), intent(inout)&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>halo</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This routine extrapolate geolat_c and geolon_c halo points for the regional standalone grid. </p>
+<p>Halo points are needed for dxc and dyc calculation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">data</td><td>- field to be extrapolated </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">halo</td><td>- number of halo rows/columns </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Ratko Vasic (NCEP/EMC) </dd></dl>
+
+<p>Definition at line <a class="el" href="utils_8F90_source.html#l00070">70</a> of file <a class="el" href="utils_8F90_source.html">utils.F90</a>.</p>
+
+<p>Referenced by <a class="el" href="filter__topo_8F90_source.html#l00614">read_grid_file()</a>, and <a class="el" href="filter__topo_8F90_source.html#l00967">read_topo_file()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a970642bec191e4bb7ee405787c192122"></a>
 <div class="memitem">
 <div class="memproto">
@@ -194,9 +238,9 @@ Data Fields</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL Programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="utils_8F90_source.html#l00070">70</a> of file <a class="el" href="utils_8F90_source.html">utils.F90</a>.</p>
+<p>Definition at line <a class="el" href="utils_8F90_source.html#l00106">106</a> of file <a class="el" href="utils_8F90_source.html">utils.F90</a>.</p>
 
-<p>Referenced by <a class="el" href="filter__topo_8F90_source.html#l00614">read_grid_file()</a>, <a class="el" href="utils_8F90_source.html#l00036">read_namelist()</a>, <a class="el" href="filter__topo_8F90_source.html#l00964">read_topo_file()</a>, and <a class="el" href="filter__topo_8F90_source.html#l01058">write_topo_file()</a>.</p>
+<p>Referenced by <a class="el" href="filter__topo_8F90_source.html#l00614">read_grid_file()</a>, <a class="el" href="utils_8F90_source.html#l00036">read_namelist()</a>, <a class="el" href="filter__topo_8F90_source.html#l00967">read_topo_file()</a>, and <a class="el" href="filter__topo_8F90_source.html#l01067">write_topo_file()</a>.</p>
 
 </div>
 </div>
@@ -219,7 +263,7 @@ Data Fields</h2></td></tr>
 
 <p>Definition at line <a class="el" href="utils_8F90_source.html#l00036">36</a> of file <a class="el" href="utils_8F90_source.html">utils.F90</a>.</p>
 
-<p>References <a class="el" href="utils_8F90_source.html#l00070">handle_err()</a>.</p>
+<p>References <a class="el" href="utils_8F90_source.html#l00106">handle_err()</a>.</p>
 
 <p>Referenced by <a class="el" href="filter__topo_8F90_source.html#l00010">filter_topo()</a>.</p>
 
@@ -388,7 +432,7 @@ Data Fields</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this module was generated from the following file:<ul>
-<li>/gpfs/dell1/stmp/George.Gayno/UFS_UTILS/sorc/grid_tools.fd/filter_topo.fd/<a class="el" href="utils_8F90_source.html">utils.F90</a></li>
+<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/grid_tools.fd/filter_topo.fd/<a class="el" href="utils_8F90_source.html">utils.F90</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

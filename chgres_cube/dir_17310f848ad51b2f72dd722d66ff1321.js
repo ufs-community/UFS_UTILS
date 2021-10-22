@@ -23,6 +23,8 @@ var dir_17310f848ad51b2f72dd722d66ff1321 =
       [ "static_data", "classstatic__data.html", "classstatic__data" ]
     ] ],
     [ "surface.F90", "surface_8F90.html", [
+      [ "realptr_2d", "structsurface_1_1realptr__2d.html", "structsurface_1_1realptr__2d" ],
+      [ "realptr_3d", "structsurface_1_1realptr__3d.html", "structsurface_1_1realptr__3d" ],
       [ "surface", "classsurface.html", "classsurface" ]
     ] ],
     [ "thompson_mp_climo_data.F90", "thompson__mp__climo__data_8F90.html", [

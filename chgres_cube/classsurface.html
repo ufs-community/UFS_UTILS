@@ -102,6 +102,7 @@ $(document).ready(function(){initNavTree('classsurface.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Data Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Data Fields</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
@@ -113,6 +114,13 @@ $(document).ready(function(){initNavTree('classsurface.html','');});
 <p>Process surface and nst fields.  
  <a href="classsurface.html#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Data Types</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsurface_1_1realptr__2d.html">realptr_2d</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">type &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structsurface_1_1realptr__3d.html">realptr_3d</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae4bf53bef0b16e89d6344df2b6aa1888"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsurface.html#ae4bf53bef0b16e89d6344df2b6aa1888">adjust_soil_levels</a> (localpet)</td></tr>
@@ -151,12 +159,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a232ef616dae3429cdd609b34ed59dcb1"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsurface.html#a232ef616dae3429cdd609b34ed59dcb1">qc_check</a></td></tr>
 <tr class="memdesc:a232ef616dae3429cdd609b34ed59dcb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform some quality control checks before output.  <a href="#a232ef616dae3429cdd609b34ed59dcb1">More...</a><br/></td></tr>
 <tr class="separator:a232ef616dae3429cdd609b34ed59dcb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c687bf7da96c3c512b13a6a7eab4b99"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsurface.html#a5c687bf7da96c3c512b13a6a7eab4b99">regrid_many</a> (bundle_pre, bundle_post, num_field, route, dozero, unmapped_ptr, resetifd)</td></tr>
+<tr class="memdesc:a5c687bf7da96c3c512b13a6a7eab4b99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Regrid multiple ESMF fields from input to target grid.  <a href="#a5c687bf7da96c3c512b13a6a7eab4b99">More...</a><br/></td></tr>
+<tr class="separator:a5c687bf7da96c3c512b13a6a7eab4b99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63fb2a0ed00bdec5e4f0b3360a5709a6"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsurface.html#a63fb2a0ed00bdec5e4f0b3360a5709a6">rescale_soil_moisture</a></td></tr>
 <tr class="memdesc:a63fb2a0ed00bdec5e4f0b3360a5709a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust soil moisture for changes in soil type between the input and target grids.  <a href="#a63fb2a0ed00bdec5e4f0b3360a5709a6">More...</a><br/></td></tr>
 <tr class="separator:a63fb2a0ed00bdec5e4f0b3360a5709a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab18f8cebd46379b7b81a69829326eed0"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsurface.html#ab18f8cebd46379b7b81a69829326eed0">roughness</a></td></tr>
 <tr class="memdesc:ab18f8cebd46379b7b81a69829326eed0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set roughness length at land and sea ice.  <a href="#ab18f8cebd46379b7b81a69829326eed0">More...</a><br/></td></tr>
 <tr class="separator:ab18f8cebd46379b7b81a69829326eed0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b0d48d8c08655b2f2e1050050543a33"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsurface.html#a3b0d48d8c08655b2f2e1050050543a33">search_many</a> (num_field, bundle_target, field_data_2d, mask, tile, search_nums, localpet, latitude, terrain_land, soilt_climo, field_data_3d)</td></tr>
+<tr class="memdesc:a3b0d48d8c08655b2f2e1050050543a33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the search function for multple fields.  <a href="#a3b0d48d8c08655b2f2e1050050543a33">More...</a><br/></td></tr>
+<tr class="separator:a3b0d48d8c08655b2f2e1050050543a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0707121ff6af9350608125b1750e32f5"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsurface.html#a0707121ff6af9350608125b1750e32f5">surface_driver</a> (localpet)</td></tr>
 <tr class="memdesc:a0707121ff6af9350608125b1750e32f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Driver routine to process surface/nst data.  <a href="#a0707121ff6af9350608125b1750e32f5">More...</a><br/></td></tr>
 <tr class="separator:a0707121ff6af9350608125b1750e32f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -340,11 +354,11 @@ Private Attributes</h2></td></tr>
 <dd>
 Jeff Beck </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l03083">3083</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l02070">2070</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -364,11 +378,11 @@ Jeff Beck </dd></dl>
 <p>Adjust soil temperature for changes in terrain height between the input and target grids. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l03007">3007</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l01994">1994</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -388,11 +402,11 @@ Jeff Beck </dd></dl>
 <p>Compute liquid portion of the total soil moisture. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l02557">2557</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l01544">1544</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="surface_8F90_source.html#l02701">frh2o()</a>.</p>
+<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="surface_8F90_source.html#l01688">frh2o()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -412,9 +426,9 @@ Jeff Beck </dd></dl>
 <p>Free up memory once the target grid nst fields are no longer needed. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l04236">4236</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l03504">3504</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -434,9 +448,9 @@ Jeff Beck </dd></dl>
 <p>Free up memory once the target grid surface fields are no longer needed. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l04199">4199</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l03467">3467</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -456,11 +470,11 @@ Jeff Beck </dd></dl>
 <p>Create ESMF fields for the target grid nst variables. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l04008">4008</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l03016">3016</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -480,11 +494,11 @@ Jeff Beck </dd></dl>
 <p>Create ESMF fields for the target grid surface variables. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l03671">3671</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l02658">2658</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -554,9 +568,9 @@ Jeff Beck </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2005-05-20 </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l02701">2701</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l01688">1688</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l02557">calc_liq_soil_moisture()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l01544">calc_liq_soil_moisture()</a>.</p>
 
 </div>
 </div>
@@ -615,9 +629,9 @@ Jeff Beck </dd></dl>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l04170">4170</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l03178">3178</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00293">interp()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00306">interp()</a>, and <a class="el" href="surface_8F90_source.html#l03213">regrid_many()</a>.</p>
 
 </div>
 </div>
@@ -644,11 +658,11 @@ Jeff Beck </dd></dl>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l00293">293</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l00306">306</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, <a class="el" href="surface_8F90_source.html#l04170">ij_to_i_j()</a>, and <a class="el" href="search__util_8F90_source.html#l00046">search_util::search()</a>.</p>
+<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, <a class="el" href="surface_8F90_source.html#l03178">ij_to_i_j()</a>, <a class="el" href="surface_8F90_source.html#l03213">regrid_many()</a>, <a class="el" href="search__util_8F90_source.html#l00046">search_util::search()</a>, and <a class="el" href="surface_8F90_source.html#l03359">search_many()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -669,11 +683,11 @@ Jeff Beck </dd></dl>
 <p>Set nst fields to flag values at these points.</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l03588">3588</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l02575">2575</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -693,11 +707,88 @@ Jeff Beck </dd></dl>
 <p>Perform some quality control checks before output. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l03253">3253</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l02240">2240</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5c687bf7da96c3c512b13a6a7eab4b99"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public surface::regrid_many </td>
+          <td>(</td>
+          <td class="paramtype">type(esmf_fieldbundle), intent(in)&#160;</td>
+          <td class="paramname"><em>bundle_pre</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">type(esmf_fieldbundle), intent(in)&#160;</td>
+          <td class="paramname"><em>bundle_post</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>num_field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">type(esmf_routehandle), intent(inout)&#160;</td>
+          <td class="paramname"><em>route</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, dimension(num_field), intent(in)&#160;</td>
+          <td class="paramname"><em>dozero</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(esmf_kind_i4), dimension(:), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>unmapped_ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">logical, intent(in), optional&#160;</td>
+          <td class="paramname"><em>resetifd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Regrid multiple ESMF fields from input to target grid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">bundle_pre</td><td>ESMF fieldBundle on input grid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">bundle_post</td><td>ESMF fieldBundle on target grid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">num_field</td><td>Number of fields in target field pointer </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">route</td><td>Route handle to saved ESMF regridding instructions </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">dozero</td><td>Logical length num_field for whether field should be zeroed out before regridding </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">unmapped_ptr</td><td>(optional) Pointer to unmapped points from FieldRegrid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">resetifd</td><td>(optional) Logical for whether to reset ifd (only for water where nst data is used) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Larissa Reames, OU CIMMS/NOAA/NSSL </dd></dl>
+
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l03213">3213</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+
+<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="surface_8F90_source.html#l03178">ij_to_i_j()</a>.</p>
+
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00306">interp()</a>.</p>
 
 </div>
 </div>
@@ -718,11 +809,11 @@ Jeff Beck </dd></dl>
 <p>Works for Noah land model only. Required to preserve latent/sensible heat fluxes.</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l02839">2839</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l01826">1826</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
 
 </div>
 </div>
@@ -743,11 +834,116 @@ Jeff Beck </dd></dl>
 <p>At land, roughness is set from a lookup table based on the vegetation type. At sea ice, roughness is set to 1 cm.</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l03199">3199</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l02186">2186</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00156">surface_driver()</a>.</p>
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface_driver()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3b0d48d8c08655b2f2e1050050543a33"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public surface::search_many </td>
+          <td>(</td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>num_field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">type(esmf_fieldbundle), intent(inout)&#160;</td>
+          <td class="paramname"><em>bundle_target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_r8), dimension(i_target,j_target), intent(inout)&#160;</td>
+          <td class="paramname"><em>field_data_2d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer(esmf_kind_i8), dimension(i_target,j_target), intent(inout)&#160;</td>
+          <td class="paramname"><em>mask</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>tile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, dimension(num_field), intent(inout)&#160;</td>
+          <td class="paramname"><em>search_nums</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">integer, intent(in)&#160;</td>
+          <td class="paramname"><em>localpet</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_r8), dimension(i_target,j_target), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>latitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_r8), dimension(i_target,j_target), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>terrain_land</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_r8), dimension(i_target,j_target), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>soilt_climo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_r8), dimension(i_target,j_target,lsoil_target), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>field_data_3d</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Execute the search function for multple fields. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">num_field</td><td>Number of fields to process. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">bundle_target</td><td>ESMF FieldBundle holding target fields to search </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">field_data_2d</td><td>A real array of size i_target,j_target to temporarily hold data for searching </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">mask</td><td>An integer array of size i_target,j_target that holds masked (0) and unmasked (1) values indicating where to execute search (only at unmasked points). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">tile</td><td>Current cubed sphere tile. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">search_nums</td><td>Array length num_field holding search field numbers corresponding to each field provided for searching. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">localpet</td><td>ESMF local persistent execution thread. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">latitude</td><td>(optional) A real array size i_target,j_target of latitude on the target grid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">terrain_land</td><td>(optional) A real array size i_target,j_target of terrain height (m) on the target grid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">soilt_climo</td><td>(optional) A real array size i_target,j_target of climatological soil type on the target grid </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">field_data_3d</td><td>(optional) An empty real array of size i_target,j_target,lsoil_target to temporarily hold soil data for searching </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Larissa Reames, OU CIMMS/NOAA/NSSL </dd></dl>
+
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l03359">3359</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+
+<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="search__util_8F90_source.html#l00046">search_util::search()</a>.</p>
+
+<p>Referenced by <a class="el" href="surface_8F90_source.html#l00306">interp()</a>.</p>
 
 </div>
 </div>
@@ -774,9 +970,9 @@ Jeff Beck </dd></dl>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="surface_8F90_source.html#l00156">156</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p>Definition at line <a class="el" href="surface_8F90_source.html#l00170">170</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p>References <a class="el" href="surface_8F90_source.html#l03083">adjust_soil_levels()</a>, <a class="el" href="surface_8F90_source.html#l03007">adjust_soilt_for_terrain()</a>, <a class="el" href="surface_8F90_source.html#l02557">calc_liq_soil_moisture()</a>, <a class="el" href="program__setup_8F90_source.html#l00520">program_setup::calc_soil_params_driver()</a>, <a class="el" href="input__data_8F90_source.html#l06596">input_data::cleanup_input_nst_data()</a>, <a class="el" href="input__data_8F90_source.html#l06629">input_data::cleanup_input_sfc_data()</a>, <a class="el" href="static__data_8F90_source.html#l00508">static_data::cleanup_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l04236">cleanup_target_nst_data()</a>, <a class="el" href="surface_8F90_source.html#l04199">cleanup_target_sfc_data()</a>, <a class="el" href="surface_8F90_source.html#l04008">create_nst_esmf_fields()</a>, <a class="el" href="surface_8F90_source.html#l03671">create_surface_esmf_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">static_data::get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00293">interp()</a>, <a class="el" href="surface_8F90_source.html#l03588">nst_land_fill()</a>, <a class="el" href="surface_8F90_source.html#l03253">qc_check()</a>, <a class="el" href="input__data_8F90_source.html#l00219">input_data::read_input_nst_data()</a>, <a class="el" href="input__data_8F90_source.html#l00381">input_data::read_input_sfc_data()</a>, <a class="el" href="surface_8F90_source.html#l02839">rescale_soil_moisture()</a>, <a class="el" href="surface_8F90_source.html#l03199">roughness()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
+<p>References <a class="el" href="surface_8F90_source.html#l02070">adjust_soil_levels()</a>, <a class="el" href="surface_8F90_source.html#l01994">adjust_soilt_for_terrain()</a>, <a class="el" href="surface_8F90_source.html#l01544">calc_liq_soil_moisture()</a>, <a class="el" href="program__setup_8F90_source.html#l00520">program_setup::calc_soil_params_driver()</a>, <a class="el" href="input__data_8F90_source.html#l06621">input_data::cleanup_input_nst_data()</a>, <a class="el" href="input__data_8F90_source.html#l06654">input_data::cleanup_input_sfc_data()</a>, <a class="el" href="static__data_8F90_source.html#l00508">static_data::cleanup_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l03504">cleanup_target_nst_data()</a>, <a class="el" href="surface_8F90_source.html#l03467">cleanup_target_sfc_data()</a>, <a class="el" href="surface_8F90_source.html#l03016">create_nst_esmf_fields()</a>, <a class="el" href="surface_8F90_source.html#l02658">create_surface_esmf_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00047">static_data::get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00306">interp()</a>, <a class="el" href="surface_8F90_source.html#l02575">nst_land_fill()</a>, <a class="el" href="surface_8F90_source.html#l02240">qc_check()</a>, <a class="el" href="input__data_8F90_source.html#l00219">input_data::read_input_nst_data()</a>, <a class="el" href="input__data_8F90_source.html#l00381">input_data::read_input_sfc_data()</a>, <a class="el" href="surface_8F90_source.html#l01826">rescale_soil_moisture()</a>, <a class="el" href="surface_8F90_source.html#l02186">roughness()</a>, and <a class="el" href="write__data_8F90_source.html#l01808">write_fv3_sfc_data_netcdf()</a>.</p>
 
 <p>Referenced by <a class="el" href="chgres_8F90_source.html#l00024">chgres()</a>.</p>
 
@@ -1594,7 +1790,7 @@ Jeff Beck </dd></dl>
 </div>
 </div>
 <hr/>The documentation for this module was generated from the following file:<ul>
-<li>/gpfs/dell1/stmp/George.Gayno/UFS_UTILS/sorc/chgres_cube.fd/<a class="el" href="surface_8F90_source.html">surface.F90</a></li>
+<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/chgres_cube.fd/<a class="el" href="surface_8F90_source.html">surface.F90</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

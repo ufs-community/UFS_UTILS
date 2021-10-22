@@ -1,5 +1,6 @@
 var classutils =
 [
+    [ "fill_regional_halo", "classutils.html#a3104e7e7b180787408ded9cfe521b7b8", null ],
     [ "handle_err", "classutils.html#a970642bec191e4bb7ee405787c192122", null ],
     [ "read_namelist", "classutils.html#ac90e26fad77fd27d0910be99d80bab73", null ],
     [ "grid_file", "classutils.html#a66fef4a7e26a8d6cd8896fde50d69fe4", null ],

@@ -113,12 +113,18 @@ $(document).ready(function(){initNavTree('classgrib2__util.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af996d692ab1b4d7a573276686d94aaa5"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgrib2__util.html#af996d692ab1b4d7a573276686d94aaa5">convert_omega</a> (omega, p, t, q, clb, cub)</td></tr>
-<tr class="memdesc:af996d692ab1b4d7a573276686d94aaa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert omega to vertical velocity.  <a href="#af996d692ab1b4d7a573276686d94aaa5">More...</a><br/></td></tr>
-<tr class="separator:af996d692ab1b4d7a573276686d94aaa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e4de6a31e8b229216d5f97108683739"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgrib2__util.html#a0e4de6a31e8b229216d5f97108683739">rh2spfh</a> (rh_sphum, p, t)</td></tr>
-<tr class="memdesc:a0e4de6a31e8b229216d5f97108683739"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert relative humidity to specific humidity.  <a href="#a0e4de6a31e8b229216d5f97108683739">More...</a><br/></td></tr>
-<tr class="separator:a0e4de6a31e8b229216d5f97108683739"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6b929a42b20e3a5dbef3b30024f1c43"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgrib2__util.html#ab6b929a42b20e3a5dbef3b30024f1c43">convert_omega</a> (omega, p, t, q, clb, cub)</td></tr>
+<tr class="memdesc:ab6b929a42b20e3a5dbef3b30024f1c43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert omega to vertical velocity.  <a href="#ab6b929a42b20e3a5dbef3b30024f1c43">More...</a><br/></td></tr>
+<tr class="separator:ab6b929a42b20e3a5dbef3b30024f1c43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a014ba8acc9b41fc25ccb40c9bd2900d3"><td class="memItemLeft" align="right" valign="top">elemental real function, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgrib2__util.html#a014ba8acc9b41fc25ccb40c9bd2900d3">fpvsnew</a> (t)</td></tr>
+<tr class="memdesc:a014ba8acc9b41fc25ccb40c9bd2900d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute saturation vapor pressure.  <a href="#a014ba8acc9b41fc25ccb40c9bd2900d3">More...</a><br/></td></tr>
+<tr class="separator:a014ba8acc9b41fc25ccb40c9bd2900d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4a2b2171e318712bd819dffa1648fa0"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgrib2__util.html#ab4a2b2171e318712bd819dffa1648fa0">rh2spfh</a> (rh_sphum, p, t)</td></tr>
+<tr class="memdesc:ab4a2b2171e318712bd819dffa1648fa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert relative humidity to specific humidity.  <a href="#ab4a2b2171e318712bd819dffa1648fa0">More...</a><br/></td></tr>
+<tr class="separator:ab4a2b2171e318712bd819dffa1648fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4d873e3a137ec2abcaeb7f735b021ae"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgrib2__util.html#ac4d873e3a137ec2abcaeb7f735b021ae">rh2spfh_gfs</a> (rh_sphum, p, t)</td></tr>
+<tr class="memdesc:ac4d873e3a137ec2abcaeb7f735b021ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert relative humidity to specific humidity (GFS formula) Calculation of saturation water vapor pressure is based on GFS function fvpsnew (Phillips 1982).  <a href="#ac4d873e3a137ec2abcaeb7f735b021ae">More...</a><br/></td></tr>
+<tr class="separator:ac4d873e3a137ec2abcaeb7f735b021ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Utilities for use when reading grib2 data. </p>
@@ -131,12 +137,12 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="grib2__util_8F90_source.html#l00012">12</a> of file <a class="el" href="grib2__util_8F90_source.html">grib2_util.F90</a>.</p>
 </div><h2 class="groupheader">Member Function/Subroutine Documentation</h2>
-<a class="anchor" id="af996d692ab1b4d7a573276686d94aaa5"></a>
+<a class="anchor" id="ab6b929a42b20e3a5dbef3b30024f1c43"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">subroutine grib2_util::convert_omega </td>
+          <td class="memname">subroutine, public grib2_util::convert_omega </td>
           <td>(</td>
           <td class="paramtype">real(esmf_kind_r8), dimension(:,:,:), pointer&#160;</td>
           <td class="paramname"><em>omega</em>, </td>
@@ -195,18 +201,49 @@ Public Member Functions</h2></td></tr>
 <dd>
 Jeff Beck </dd></dl>
 
-<p>Definition at line <a class="el" href="grib2__util_8F90_source.html#l00070">70</a> of file <a class="el" href="grib2__util_8F90_source.html">grib2_util.F90</a>.</p>
+<p>Definition at line <a class="el" href="grib2__util_8F90_source.html#l00217">217</a> of file <a class="el" href="grib2__util_8F90_source.html">grib2_util.F90</a>.</p>
 
 <p>Referenced by <a class="el" href="input__data_8F90_source.html#l02458">input_data::read_input_atm_grib2_file()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a0e4de6a31e8b229216d5f97108683739"></a>
+<a class="anchor" id="a014ba8acc9b41fc25ccb40c9bd2900d3"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">subroutine grib2_util::rh2spfh </td>
+          <td class="memname">elemental real function, public grib2_util::fpvsnew </td>
+          <td>(</td>
+          <td class="paramtype">real(esmf_kind_r8), intent(in)&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute saturation vapor pressure. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>temperature in Kelvin </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>fpvsnew Saturation vapor pressure </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>N Phillips w/NMC2X2 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>30 dec 82 </dd></dl>
+
+<p>Definition at line <a class="el" href="grib2__util_8F90_source.html#l00135">135</a> of file <a class="el" href="grib2__util_8F90_source.html">grib2_util.F90</a>.</p>
+
+<p>Referenced by <a class="el" href="grib2__util_8F90_source.html#l00080">rh2spfh_gfs()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab4a2b2171e318712bd819dffa1648fa0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public grib2_util::rh2spfh </td>
           <td>(</td>
           <td class="paramtype">real(esmf_kind_r4), dimension(i_input,j_input), intent(inout)&#160;</td>
           <td class="paramname"><em>rh_sphum</em>, </td>
@@ -232,9 +269,10 @@ Jeff Beck </dd></dl>
 </div><div class="memdoc">
 
 <p>Convert relative humidity to specific humidity. </p>
+<p>Calculation of saturation water vapor pressure is based on Brock and Richardson 2001 (Meterological Measurement Systems, p. 86, equation 5.1)</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">rh_sphum</td><td>rel humidity on input. spec hum on output. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">rh_sphum</td><td>rel humidity (%) on input. spec hum (kg/kg) on output. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>pressure in Pa </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>temperature </td></tr>
   </table>
@@ -244,14 +282,64 @@ Jeff Beck </dd></dl>
 <dd>
 Jeff Beck </dd></dl>
 
-<p>Definition at line <a class="el" href="grib2__util_8F90_source.html#l00029">29</a> of file <a class="el" href="grib2__util_8F90_source.html">grib2_util.F90</a>.</p>
+<p>Definition at line <a class="el" href="grib2__util_8F90_source.html#l00037">37</a> of file <a class="el" href="grib2__util_8F90_source.html">grib2_util.F90</a>.</p>
+
+<p>Referenced by <a class="el" href="input__data_8F90_source.html#l02458">input_data::read_input_atm_grib2_file()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac4d873e3a137ec2abcaeb7f735b021ae"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine, public grib2_util::rh2spfh_gfs </td>
+          <td>(</td>
+          <td class="paramtype">real(esmf_kind_r4), dimension(i_input,j_input), intent(inout)&#160;</td>
+          <td class="paramname"><em>rh_sphum</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_r8), intent(in)&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_r8), dimension(i_input,j_input), intent(in)&#160;</td>
+          <td class="paramname"><em>t</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert relative humidity to specific humidity (GFS formula) Calculation of saturation water vapor pressure is based on GFS function fvpsnew (Phillips 1982). </p>
+<p>The model does account for the variation of the latent heat of condensation with temperature. A linear interpolation is done between values in a calculated lookup table. Ice and water are considered separately. This option provides a consistent conversion for GFS grib2 data to be ingested.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">rh_sphum</td><td>rel humidity on input. spec hum on output. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p</td><td>pressure in Pa </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t</td><td>temperature </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Jili Dong NCEP/EMC </dd></dl>
+
+<p>Definition at line <a class="el" href="grib2__util_8F90_source.html#l00080">80</a> of file <a class="el" href="grib2__util_8F90_source.html">grib2_util.F90</a>.</p>
+
+<p>References <a class="el" href="grib2__util_8F90_source.html#l00135">fpvsnew()</a>.</p>
 
 <p>Referenced by <a class="el" href="input__data_8F90_source.html#l02458">input_data::read_input_atm_grib2_file()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this module was generated from the following file:<ul>
-<li>/gpfs/dell1/stmp/George.Gayno/UFS_UTILS/sorc/chgres_cube.fd/<a class="el" href="grib2__util_8F90_source.html">grib2_util.F90</a></li>
+<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/chgres_cube.fd/<a class="el" href="grib2__util_8F90_source.html">grib2_util.F90</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

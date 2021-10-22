@@ -1,5 +1,7 @@
 var classsurface =
 [
+    [ "realptr_2d", "structsurface_1_1realptr__2d.html", "structsurface_1_1realptr__2d" ],
+    [ "realptr_3d", "structsurface_1_1realptr__3d.html", "structsurface_1_1realptr__3d" ],
     [ "adjust_soil_levels", "classsurface.html#ae4bf53bef0b16e89d6344df2b6aa1888", null ],
     [ "adjust_soilt_for_terrain", "classsurface.html#a7592ccae34fbacf04fe5f69ffac4aeb6", null ],
     [ "calc_liq_soil_moisture", "classsurface.html#ac5e2bc59e4d2fa0c063c0dff2d059111", null ],
@@ -12,8 +14,10 @@ var classsurface =
     [ "interp", "classsurface.html#ae8b708efb5c1abfda4a2efc48bef83dd", null ],
     [ "nst_land_fill", "classsurface.html#a37509f4fa66fcf75ee97f82cb99927b9", null ],
     [ "qc_check", "classsurface.html#a232ef616dae3429cdd609b34ed59dcb1", null ],
+    [ "regrid_many", "classsurface.html#a5c687bf7da96c3c512b13a6a7eab4b99", null ],
     [ "rescale_soil_moisture", "classsurface.html#a63fb2a0ed00bdec5e4f0b3360a5709a6", null ],
     [ "roughness", "classsurface.html#ab18f8cebd46379b7b81a69829326eed0", null ],
+    [ "search_many", "classsurface.html#a3b0d48d8c08655b2f2e1050050543a33", null ],
     [ "surface_driver", "classsurface.html#a0707121ff6af9350608125b1750e32f5", null ],
     [ "blim", "classsurface.html#a8504e69c586b0d22fd77f08056996bec", null ],
     [ "c_0_target_grid", "classsurface.html#afc623359d48c417c2f86e71ea9cc8f2b", null ],

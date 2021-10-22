@@ -1,4 +1,4 @@
-.TH "utils" 3 "Mon Aug 16 2021" "Version 1.6.0" "grid_tools" \" -*- nroff -*-
+.TH "utils" 3 "Fri Oct 22 2021" "Version 1.6.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,6 +12,10 @@ Module that contains general utility routines\&.
 .SS "Public Member Functions"
 
 .in +1c
+.ti -1c
+.RI "subroutine \fBfill_regional_halo\fP (data, halo)"
+.br
+.RI "\fIThis routine extrapolate geolat_c and geolon_c halo points for the regional standalone grid\&. \fP"
 .ti -1c
 .RI "subroutine \fBhandle_err\fP (status, string)"
 .br
@@ -81,6 +85,28 @@ GFDL programmer
 Definition at line 8 of file utils\&.F90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
+.SS "subroutine utils::fill_regional_halo (real, dimension(1-halo:,1-halo:,:), intent(inout)data, integer, intent(in)halo)"
+
+.PP
+This routine extrapolate geolat_c and geolon_c halo points for the regional standalone grid\&. Halo points are needed for dxc and dyc calculation\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdata\fP - field to be extrapolated 
+.br
+\fIhalo\fP - number of halo rows/columns 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ratko Vasic (NCEP/EMC) 
+.RE
+.PP
+
+.PP
+Definition at line 70 of file utils\&.F90\&.
+.PP
+Referenced by read_grid_file(), and read_topo_file()\&.
 .SS "subroutine utils::handle_err (integer, intent(in)status, character(len=*), intent(in)string)"
 
 .PP
@@ -100,7 +126,7 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 70 of file utils\&.F90\&.
+Definition at line 106 of file utils\&.F90\&.
 .PP
 Referenced by read_grid_file(), read_namelist(), read_topo_file(), and write_topo_file()\&.
 .SS "subroutine utils::read_namelist ()"

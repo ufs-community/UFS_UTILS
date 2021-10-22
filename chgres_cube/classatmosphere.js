@@ -10,7 +10,7 @@ var classatmosphere =
     [ "horiz_interp_thomp_mp_climo", "classatmosphere.html#a38c65833316fd634cb4c3a20daf1d42a", null ],
     [ "newpr1", "classatmosphere.html#a449da9a0abe3032a16345f130761b9d2", null ],
     [ "newps", "classatmosphere.html#a5b202a3c172ff40138e91a1bf3194c75", null ],
-    [ "read_vcoord_info", "classatmosphere.html#a7fd431e1f6ab178aa21312b78599d8fd", null ],
+    [ "read_vcoord_info", "classatmosphere.html#a599eba98c80c6385ff414a999f90e58c", null ],
     [ "rsearch", "classatmosphere.html#aaa24ebe3a052a09f6c56de4af72f55d5", null ],
     [ "terp3", "classatmosphere.html#acc4e65688bda454688a6f571d6939ae7", null ],
     [ "vintg", "classatmosphere.html#ac2e8e7011d742763f5e4a790de675e61", null ],

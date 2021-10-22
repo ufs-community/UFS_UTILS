@@ -1,4 +1,4 @@
-.TH "atmosphere" 3 "Mon Aug 16 2021" "Version 1.6.0" "chgres_cube" \" -*- nroff -*-
+.TH "atmosphere" 3 "Fri Oct 22 2021" "Version 1.6.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -20,6 +20,10 @@ Process atmospheric fields\&.
 .RI "subroutine \fBcreate_atm_b4adj_esmf_fields\fP"
 .br
 .RI "\fICreate target grid field objects to hold data before vertical interpolation\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBread_vcoord_info\fP"
+.br
+.RI "\fIReads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid)\&. \fP"
 .ti -1c
 .RI "subroutine \fBterp3\fP (IM, IXZ1, IXQ1, IXZ2, IXQ2, NM, NXQ1, NXQ2, KM1, KXZ1, KXQ1, Z1, Q1, KM2, KXZ2, KXQ2, Z2, Q2)"
 .br
@@ -132,10 +136,6 @@ allocatable, public \fBvcoord_target\fP"
 .RI "subroutine \fBnewps\fP (localpet)"
 .br
 .RI "\fIComputes adjusted surface pressure given a new terrain height\&. \fP"
-.ti -1c
-.RI "subroutine \fBread_vcoord_info\fP"
-.br
-.RI "\fIReads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid)\&. \fP"
 .ti -1c
 .RI "subroutine \fBrsearch\fP (IM, KM1, IXZ1, KXZ1, Z1, KM2, IXZ2, KXZ2, Z2, IXL2, KXL2, L2)"
 .br
@@ -250,7 +250,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 114 of file atmosphere\&.F90\&.
+Definition at line 115 of file atmosphere\&.F90\&.
 .PP
 References input_data::cleanup_input_atm_data(), cleanup_target_atm_b4adj_data(), cleanup_target_atm_data(), compute_zh(), convert_winds(), create_atm_b4adj_esmf_fields(), create_atm_esmf_fields(), error_handler(), horiz_interp_thomp_mp_climo(), newpr1(), newps(), input_data::read_input_atm_data(), thompson_mp_climo_data::read_thomp_mp_climo_data(), read_vcoord_info(), vintg(), vintg_thomp_mp_climo(), vintg_wam(), write_fv3_atm_bndy_data_netcdf(), write_fv3_atm_data_netcdf(), and write_fv3_atm_header_netcdf()\&.
 .PP
@@ -267,7 +267,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 2166 of file atmosphere\&.F90\&.
+Definition at line 2167 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::cleanup_target_atm_data ()\fC [private]\fP"
@@ -282,7 +282,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 2191 of file atmosphere\&.F90\&.
+Definition at line 2192 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::compute_zh ()\fC [private]\fP"
@@ -297,7 +297,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 2076 of file atmosphere\&.F90\&.
+Definition at line 2077 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -314,7 +314,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 653 of file atmosphere\&.F90\&.
+Definition at line 654 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -331,7 +331,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 440 of file atmosphere\&.F90\&.
+Definition at line 441 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -348,7 +348,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 514 of file atmosphere\&.F90\&.
+Definition at line 515 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -365,7 +365,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1140 of file atmosphere\&.F90\&.
+Definition at line 1141 of file atmosphere\&.F90\&.
 .PP
 References thompson_mp_climo_data::cleanup_thomp_mp_climo_input_data(), and error_handler()\&.
 .PP
@@ -398,7 +398,7 @@ Hann Ming Henry Juang, Juang, Fanglin Yang, S\&. Moorthi
 .PP
 
 .PP
-Definition at line 797 of file atmosphere\&.F90\&.
+Definition at line 798 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -432,12 +432,12 @@ Mark Iredell, George Gayno
 .PP
 
 .PP
-Definition at line 908 of file atmosphere\&.F90\&.
+Definition at line 909 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
 Referenced by atmosphere_driver()\&.
-.SS "subroutine atmosphere::read_vcoord_info ()\fC [private]\fP"
+.SS "subroutine, public atmosphere::read_vcoord_info ()"
 
 .PP
 Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid)\&. 
@@ -449,7 +449,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1105 of file atmosphere\&.F90\&.
+Definition at line 1106 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -506,7 +506,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 2028 of file atmosphere\&.F90\&.
+Definition at line 2029 of file atmosphere\&.F90\&.
 .PP
 Referenced by terp3()\&.
 .SS "subroutine atmosphere::terp3 (integerIM, integerIXZ1, integerIXQ1, integerIXZ2, integerIXQ2, integerNM, integerNXQ1, integerNXQ2, integerKM1, integerKXZ1, integerKXQ1, real(esmf_kind_r8), dimension(1+(im-1)*ixz1+(km1-1)*kxz1)Z1, real(esmf_kind_r8), dimension(1+(im-1)*ixq1+(km1-1)*kxq1+(nm-1)*nxq1)Q1, integerKM2, integerKXZ2, integerKXQ2, real(esmf_kind_r8), dimension(1+(im-1)*ixz2+(km2-1)*kxz2)Z2, real(esmf_kind_r8), dimension(1+(im-1)*ixq2+(km2-1)*kxq2+(nm-1)*nxq2)Q2)"
@@ -572,7 +572,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 1834 of file atmosphere\&.F90\&.
+Definition at line 1835 of file atmosphere\&.F90\&.
 .PP
 References rsearch()\&.
 .PP
@@ -594,7 +594,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 1601 of file atmosphere\&.F90\&.
+Definition at line 1602 of file atmosphere\&.F90\&.
 .PP
 References error_handler(), and terp3()\&.
 .PP
@@ -611,7 +611,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1252 of file atmosphere\&.F90\&.
+Definition at line 1253 of file atmosphere\&.F90\&.
 .PP
 References error_handler(), and terp3()\&.
 .PP
@@ -639,7 +639,7 @@ Hann-Ming Henry Juang NCEP/EMC
 .PP
 
 .PP
-Definition at line 1375 of file atmosphere\&.F90\&.
+Definition at line 1376 of file atmosphere\&.F90\&.
 .PP
 References error_handler(), and gettemp()\&.
 .PP

@@ -1,4 +1,4 @@
-.TH "read_write_data" 3 "Mon Aug 16 2021" "Version 1.6.0" "global_cycle" \" -*- nroff -*-
+.TH "read_write_data" 3 "Fri Oct 22 2021" "Version 1.6.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -36,7 +36,7 @@ This module contains routines that read and write data\&.
 .br
 .RI "\fIIf a NetCDF call returns an error, print out a user-supplied message and the NetCDF library message\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBread_data\fP (TSFFCS, SMCFCS, SNOFCS, STCFCS, TG3FCS, ZORFCS, CVFCS, CVBFCS, CVTFCS, ALBFCS, SLIFCS, VEGFCS, CNPFCS, F10M, VETFCS, SOTFCS, ALFFCS, USTAR, FMM, FHH, SIHFCS, SICFCS, SITFCS, TPRCP, SRFLAG, SWDFCS, VMNFCS, VMXFCS, SLCFCS, SLPFCS, ABSFCS, T2M, Q2M, SLMASK, ZSOIL, LSOIL, LENSFC, DO_NSST, NSST)"
+.RI "subroutine, public \fBread_data\fP (LSOIL, LENSFC, DO_NSST, INC_FILE, TSFFCS, SMCFCS, SWEFCS, STCFCS, TG3FCS, ZORFCS, CVFCS, CVBFCS, CVTFCS, ALBFCS, VEGFCS, SLIFCS, CNPFCS, F10M, VETFCS, SOTFCS, ALFFCS, USTAR, FMM, FHH, SIHFCS, SICFCS, SITFCS, TPRCP, SRFLAG, SNDFCS, VMNFCS, VMXFCS, SLCFCS, SLPFCS, ABSFCS, T2M, Q2M, SLMASK, ZSOIL, NSST)"
 .br
 .RI "\fIRead the first guess surface records and nsst records (if selected) for a single cubed-sphere tile\&. \fP"
 .ti -1c
@@ -56,7 +56,7 @@ This module contains routines that read and write data\&.
 .br
 .RI "\fIRead a GRIB1 sst climatological analysis file\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBwrite_data\fP (slifcs, tsffcs, snofcs, tg3fcs, zorfcs, albfcs, alffcs, vegfcs, cnpfcs, f10m, t2m, q2m, vetfcs, sotfcs, ustar, fmm, fhh, sicfcs, sihfcs, sitfcs, tprcp, srflag, swdfcs, vmnfcs, vmxfcs, slpfcs, absfcs, slcfcs, smcfcs, stcfcs, idim, jdim, lensfc, lsoil, do_nsst, nsst)"
+.RI "subroutine, public \fBwrite_data\fP (slifcs, tsffcs, swefcs, tg3fcs, zorfcs, albfcs, alffcs, vegfcs, cnpfcs, f10m, t2m, q2m, vetfcs, sotfcs, ustar, fmm, fhh, sicfcs, sihfcs, sitfcs, tprcp, srflag, swdfcs, vmnfcs, vmxfcs, slpfcs, absfcs, slcfcs, smcfcs, stcfcs, idim, jdim, lensfc, lsoil, do_nsst, nsst)"
 .br
 .RI "\fIWrite out all surface records - and nsst records if selected - on a single cubed-sphere tile to a model restart file (in netcdf)\&. \fP"
 .in -1c
@@ -200,7 +200,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1959 of file read_write_data\&.f90\&.
+Definition at line 2029 of file read_write_data\&.f90\&.
 .PP
 References nc_check()\&.
 .PP
@@ -231,7 +231,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1824 of file read_write_data\&.f90\&.
+Definition at line 1894 of file read_write_data\&.f90\&.
 .PP
 Referenced by get_tf_clm()\&.
 .SS "subroutine read_write_data::nc_check (integer, intent(in)status)"
@@ -251,7 +251,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1996 of file read_write_data\&.f90\&.
+Definition at line 2066 of file read_write_data\&.f90\&.
 .PP
 Referenced by get_dim_nc(), and read_salclm_gfs_nc()\&.
 .SS "subroutine read_write_data::netcdf_err (integer, intent(in)ERR, character(len=*), intent(in)STRING)"
@@ -274,7 +274,7 @@ George Gayno NOAA/EMC
 
 .PP
 Definition at line 1054 of file read_write_data\&.f90\&.
-.SS "subroutine, public read_write_data::read_data (real, dimension(lensfc), intent(out)TSFFCS, real, dimension(lensfc,lsoil), intent(out)SMCFCS, real, dimension(lensfc), intent(out)SNOFCS, real, dimension(lensfc,lsoil), intent(out)STCFCS, real, dimension(lensfc), intent(out)TG3FCS, real, dimension(lensfc), intent(out)ZORFCS, real, dimension(lensfc), intent(out)CVFCS, real, dimension(lensfc), intent(out)CVBFCS, real, dimension(lensfc), intent(out)CVTFCS, real, dimension(lensfc,4), intent(out)ALBFCS, real, dimension(lensfc), intent(out)SLIFCS, real, dimension(lensfc), intent(out)VEGFCS, real, dimension(lensfc), intent(out)CNPFCS, real, dimension(lensfc), intent(out)F10M, real, dimension(lensfc), intent(out)VETFCS, real, dimension(lensfc), intent(out)SOTFCS, real, dimension(lensfc,2), intent(out)ALFFCS, real, dimension(lensfc), intent(out)USTAR, real, dimension(lensfc), intent(out)FMM, real, dimension(lensfc), intent(out)FHH, real, dimension(lensfc), intent(out)SIHFCS, real, dimension(lensfc), intent(out)SICFCS, real, dimension(lensfc), intent(out)SITFCS, real, dimension(lensfc), intent(out)TPRCP, real, dimension(lensfc), intent(out)SRFLAG, real, dimension(lensfc), intent(out)SWDFCS, real, dimension(lensfc), intent(out)VMNFCS, real, dimension(lensfc), intent(out)VMXFCS, real, dimension(lensfc,lsoil), intent(out)SLCFCS, real, dimension(lensfc), intent(out)SLPFCS, real, dimension(lensfc), intent(out)ABSFCS, real, dimension(lensfc), intent(out)T2M, real, dimension(lensfc), intent(out)Q2M, real, dimension(lensfc), intent(out)SLMASK, real(kind=4), dimension(lsoil), intent(out)ZSOIL, integer, intent(in)LSOIL, integer, intent(in)LENSFC, logical, intent(in)DO_NSST, type(\fBnsst_data\fP)NSST)"
+.SS "subroutine, public read_write_data::read_data (integer, intent(in)LSOIL, integer, intent(in)LENSFC, logical, intent(in)DO_NSST, logical, intent(in)INC_FILE, real, dimension(lensfc), intent(out), optionalTSFFCS, real, dimension(lensfc,lsoil), intent(out), optionalSMCFCS, real, dimension(lensfc), intent(out), optionalSWEFCS, real, dimension(lensfc,lsoil), intent(out), optionalSTCFCS, real, dimension(lensfc), intent(out), optionalTG3FCS, real, dimension(lensfc), intent(out), optionalZORFCS, real, dimension(lensfc), intent(out), optionalCVFCS, real, dimension(lensfc), intent(out), optionalCVBFCS, real, dimension(lensfc), intent(out), optionalCVTFCS, real, dimension(lensfc,4), intent(out), optionalALBFCS, real, dimension(lensfc), intent(out), optionalVEGFCS, real, dimension(lensfc), intent(out), optionalSLIFCS, real, dimension(lensfc), intent(out), optionalCNPFCS, real, dimension(lensfc), intent(out), optionalF10M, real, dimension(lensfc), intent(out), optionalVETFCS, real, dimension(lensfc), intent(out), optionalSOTFCS, real, dimension(lensfc,2), intent(out), optionalALFFCS, real, dimension(lensfc), intent(out), optionalUSTAR, real, dimension(lensfc), intent(out), optionalFMM, real, dimension(lensfc), intent(out), optionalFHH, real, dimension(lensfc), intent(out), optionalSIHFCS, real, dimension(lensfc), intent(out), optionalSICFCS, real, dimension(lensfc), intent(out), optionalSITFCS, real, dimension(lensfc), intent(out), optionalTPRCP, real, dimension(lensfc), intent(out), optionalSRFLAG, real, dimension(lensfc), intent(out), optionalSNDFCS, real, dimension(lensfc), intent(out), optionalVMNFCS, real, dimension(lensfc), intent(out), optionalVMXFCS, real, dimension(lensfc,lsoil), intent(out), optionalSLCFCS, real, dimension(lensfc), intent(out), optionalSLPFCS, real, dimension(lensfc), intent(out), optionalABSFCS, real, dimension(lensfc), intent(out), optionalT2M, real, dimension(lensfc), intent(out), optionalQ2M, real, dimension(lensfc), intent(out), optionalSLMASK, real(kind=4), dimension(lsoil), intent(out), optionalZSOIL, type(\fBnsst_data\fP), optionalNSST)"
 
 .PP
 Read the first guess surface records and nsst records (if selected) for a single cubed-sphere tile\&. 
@@ -287,11 +287,13 @@ Read the first guess surface records and nsst records (if selected) for a single
 .br
 \fIDO_NSST\fP When true, nsst fields are read\&. 
 .br
+\fIINC_FILE\fP When true, read from an increment file\&. False reads from a restart file\&. 
+.br
 \fITSFFCS\fP Skin Temperature\&. 
 .br
 \fISMCFCS\fP Total volumetric soil moisture\&. 
 .br
-\fISNOFCS\fP Liquid-equivalent snow depth\&. 
+\fISWEFCS\fP Snow water equivalent\&. 
 .br
 \fISTCFCS\fP Soil temperature\&. 
 .br
@@ -337,7 +339,7 @@ Read the first guess surface records and nsst records (if selected) for a single
 .br
 \fISRFLAG\fP Snow/rain flag\&. 
 .br
-\fISWDFCS\fP Physical snow depth\&. 
+\fISNDFCS\fP Snow depth\&. 
 .br
 \fIVMNFCS\fP Minimum vegetation greenness\&. 
 .br
@@ -367,7 +369,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1242 of file read_write_data\&.f90\&.
+Definition at line 1244 of file read_write_data\&.f90\&.
 .PP
 References netcdf_err()\&.
 .PP
@@ -463,7 +465,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1883 of file read_write_data\&.f90\&.
+Definition at line 1953 of file read_write_data\&.f90\&.
 .PP
 References count(), and nc_check()\&.
 .PP
@@ -507,10 +509,10 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1682 of file read_write_data\&.f90\&.
+Definition at line 1752 of file read_write_data\&.f90\&.
 .PP
 Referenced by get_tf_clm_ta()\&.
-.SS "subroutine, public read_write_data::write_data (real, dimension(lensfc), intent(in)slifcs, real, dimension(lensfc), intent(in)tsffcs, real, dimension(lensfc), intent(in)snofcs, real, dimension(lensfc), intent(in)tg3fcs, real, dimension(lensfc), intent(in)zorfcs, real, dimension(lensfc,4), intent(in)albfcs, real, dimension(lensfc,2), intent(in)alffcs, real, dimension(lensfc), intent(in)vegfcs, real, dimension(lensfc), intent(in)cnpfcs, real, dimension(lensfc), intent(in)f10m, real, dimension(lensfc), intent(in)t2m, real, dimension(lensfc), intent(in)q2m, real, dimension(lensfc), intent(in)vetfcs, real, dimension(lensfc), intent(in)sotfcs, real, dimension(lensfc), intent(in)ustar, real, dimension(lensfc), intent(in)fmm, real, dimension(lensfc), intent(in)fhh, real, dimension(lensfc), intent(in)sicfcs, real, dimension(lensfc), intent(in)sihfcs, real, dimension(lensfc), intent(in)sitfcs, real, dimension(lensfc), intent(in)tprcp, real, dimension(lensfc), intent(in)srflag, real, dimension(lensfc), intent(in)swdfcs, real, dimension(lensfc), intent(in)vmnfcs, real, dimension(lensfc), intent(in)vmxfcs, real, dimension(lensfc), intent(in)slpfcs, real, dimension(lensfc), intent(in)absfcs, real, dimension(lensfc,lsoil), intent(in)slcfcs, real, dimension(lensfc,lsoil), intent(in)smcfcs, real, dimension(lensfc,lsoil), intent(in)stcfcs, integer, intent(in)idim, integer, intent(in)jdim, integer, intent(in)lensfc, integer, intent(in)lsoil, logical, intent(in)do_nsst, type(\fBnsst_data\fP)nsst)"
+.SS "subroutine, public read_write_data::write_data (real, dimension(lensfc), intent(in)slifcs, real, dimension(lensfc), intent(in)tsffcs, real, dimension(lensfc), intent(in)swefcs, real, dimension(lensfc), intent(in)tg3fcs, real, dimension(lensfc), intent(in)zorfcs, real, dimension(lensfc,4), intent(in)albfcs, real, dimension(lensfc,2), intent(in)alffcs, real, dimension(lensfc), intent(in)vegfcs, real, dimension(lensfc), intent(in)cnpfcs, real, dimension(lensfc), intent(in)f10m, real, dimension(lensfc), intent(in)t2m, real, dimension(lensfc), intent(in)q2m, real, dimension(lensfc), intent(in)vetfcs, real, dimension(lensfc), intent(in)sotfcs, real, dimension(lensfc), intent(in)ustar, real, dimension(lensfc), intent(in)fmm, real, dimension(lensfc), intent(in)fhh, real, dimension(lensfc), intent(in)sicfcs, real, dimension(lensfc), intent(in)sihfcs, real, dimension(lensfc), intent(in)sitfcs, real, dimension(lensfc), intent(in)tprcp, real, dimension(lensfc), intent(in)srflag, real, dimension(lensfc), intent(in)swdfcs, real, dimension(lensfc), intent(in)vmnfcs, real, dimension(lensfc), intent(in)vmxfcs, real, dimension(lensfc), intent(in)slpfcs, real, dimension(lensfc), intent(in)absfcs, real, dimension(lensfc,lsoil), intent(in)slcfcs, real, dimension(lensfc,lsoil), intent(in)smcfcs, real, dimension(lensfc,lsoil), intent(in)stcfcs, integer, intent(in)idim, integer, intent(in)jdim, integer, intent(in)lensfc, integer, intent(in)lsoil, logical, intent(in)do_nsst, type(\fBnsst_data\fP)nsst)"
 
 .PP
 Write out all surface records - and nsst records if selected - on a single cubed-sphere tile to a model restart file (in netcdf)\&. 
@@ -526,7 +528,7 @@ The model restart files contain an additional snow field - snow cover (snocvr)\&
 .br
 \fItsffcs\fP Skin temperature\&. 
 .br
-\fIsnofcs\fP Liquid-equivalent snow depth\&. 
+\fIswefcs\fP Snow water equivalent 
 .br
 \fItg3fcs\fP Soil substrate temperature\&. 
 .br
