@@ -42,6 +42,7 @@ target_include_directories(chgres_cube_lib INTERFACE ${mod_dir})
 target_link_libraries(
   chgres_cube_lib
   PUBLIC
+  g2::g2_d
   nemsio::nemsio
   sfcio::sfcio
   sigio::sigio

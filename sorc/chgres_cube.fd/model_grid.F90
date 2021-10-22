@@ -617,6 +617,7 @@
 !! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_gfs_grib2(localpet, npets)
 
+ use grib_mod
  use wgrib2api
  use mpi
  use program_setup, only       : data_dir_input_grid, &
@@ -629,7 +630,10 @@
  character(len=250)               :: the_file
 
  integer                          :: i, j, rc, clb(2), cub(2)
- integer                          :: ierr
+ integer                          :: lugb, ierr
+ integer :: k, jdisc, jgdtn, jpdtn, lugi
+ integer :: jids(200), jgdt(200), jpdt(200)
+ logical :: unpack
 
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
@@ -640,9 +644,15 @@
  real(esmf_kind_r8), pointer      :: lon_corner_src_ptr(:,:)
  real(esmf_kind_r8)               :: deltalon
 
+ real :: lat11, lon11, dx, dy
+
  type(esmf_polekind_flag)         :: polekindflag(2)
 
+ type(gribfield)                  :: gfld
+
  print*,"- DEFINE INPUT GRID OBJECT FOR INPUT GRIB2 DATA."
+
+ print*,'got here '
 
  num_tiles_input_grid = 1
 
@@ -651,6 +661,55 @@
    print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
    rc=grb2_mk_inv(the_file,inv_file)
    if (rc /=0) call error_handler("OPENING GRIB2 FILE",rc)
+ endif
+
+ if (localpet == 0) then
+
+   lugb=12
+   call baopenr(lugb,the_file,rc)
+   print*,'after g2 open ',rc
+
+ j       = 0      ! search at beginning of file
+ lugi    = 0      ! no grib index file
+ jdisc   = 0      ! search for discipline - meterological products
+ jpdtn   = 0      ! search for product definition template number
+ jgdtn   = 0      ! search for grid definition template number; 0 - lat/lon grid
+ jids    = -9999  ! array of values in identification section, set to wildcard
+ jgdt    = -9999  ! array of values in grid definition template 3.m
+ jpdt    = -9999  ! array of values in product definition template 4.n
+ unpack  = .false. ! unpack data
+   
+  call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+  print*,'after getgb2 ', gfld%igdtmpl
+  i_input = gfld%igdtmpl(8) ! oct 31-34
+  j_input = gfld%igdtmpl(9) ! oct 35-38
+ 
+  dx = float( gfld%igdtmpl(17) )/ 1.e6 
+  dy = float( gfld%igdtmpl(18) )/ 1.e6 
+
+  print*,'after getgb2 ', dx, dy
+
+! I think wgrib2 flips the n/s poles by default.
+! So for now, follow that convention.
+! I don't think the g2 library does that.
+! lat11 = float(gfld%igdtmpl(12))/1.e6
+! do j = 1, j_input
+!   print*,'lat ', j, lat11 - (float(j-1)*dy)
+! enddo
+
+! Follow wgrib2 convention.
+  lat11 = -(float(gfld%igdtmpl(12))/1.e6)
+  do j = 1, j_input
+    print*,'lat ', j, lat11 + (float(j-1)*dy)
+  enddo
+
+  lon11 = float(gfld%igdtmpl(13))/1.e6
+  do i = 1, i_input
+    print*,'lon ', i, lon11 + (float(i-1)*dx)
+  enddo
+
  endif
 
 ! Wait for localpet 0 to create inventory
@@ -698,10 +757,12 @@
  
  do i = 1, i_input
    longitude(i,:) = real(lon4(i,:),kind=esmf_kind_r8) 
+   print*,'lon orig ',i,longitude(i,1)
  enddo
 
  do i = 1, j_input
    latitude(:,i) = real(lat4(:,i),kind=esmf_kind_r8) 
+   print*,'lat orig ',i, latitude(1,i)
  enddo
 
  deallocate(lat4, lon4)
