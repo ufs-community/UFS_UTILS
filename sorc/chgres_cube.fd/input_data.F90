@@ -72,33 +72,33 @@
                                                                 !< Default is igbp.
  integer, parameter              :: ICET_DEFAULT = 265.0    !< Default value of soil and skin
                                                             !< temperature (K) over ice.
- type(esmf_field), public        :: canopy_mc_input_grid    !< canopy moist content
- type(esmf_field), public        :: f10m_input_grid         !< log((z0+10)*1/z0)
- type(esmf_field), public        :: ffmm_input_grid         !< log((z0+z1)*1/z0)
+ type(esmf_field), public :: canopy_mc_input_grid    !< canopy moist content
+ type(esmf_field), public :: f10m_input_grid         !< log((z0+10)*1/z0)
+ type(esmf_field), public :: ffmm_input_grid         !< log((z0+z1)*1/z0)
                                                             !! See sfc_diff.f for details.
- type(esmf_field), public        :: landsea_mask_input_grid !< land sea mask;
+ type(esmf_field), public :: landsea_mask_input_grid !< land sea mask;
                                                             !! 0-water, 1-land, 2-ice
- type(esmf_field), public        :: q2m_input_grid          !< 2-m spec hum
- type(esmf_field), public        :: seaice_depth_input_grid !< sea ice depth
- type(esmf_field), public        :: seaice_fract_input_grid !< sea ice fraction
- type(esmf_field), public        :: seaice_skin_temp_input_grid  !< sea ice skin temp
- type(esmf_field), public        :: skin_temp_input_grid    !< skin temp/sst
- type(esmf_field), public        :: snow_depth_input_grid   !< snow dpeth
- type(esmf_field), public        :: snow_liq_equiv_input_grid !< snow liq equiv depth
- type(esmf_field), public        :: soil_temp_input_grid    !< 3-d soil temp
- type(esmf_field), public        :: soil_type_input_grid    !< soil type
- type(esmf_field), public        :: soilm_liq_input_grid    !< 3-d liquid soil moisture
- type(esmf_field), public        :: soilm_tot_input_grid    !< 3-d total soil moisture
- type(esmf_field), public        :: srflag_input_grid       !< snow/rain flag
- type(esmf_field), public        :: t2m_input_grid          !< 2-m temperature
- type(esmf_field), public        :: tprcp_input_grid        !< precip
- type(esmf_field), public        :: ustar_input_grid        !< fric velocity
- type(esmf_field), public        :: veg_type_input_grid     !< vegetation type
- type(esmf_field), public        :: z0_input_grid           !< roughness length
- type(esmf_field), public        :: veg_greenness_input_grid !< vegetation fraction
- type(esmf_field), public        :: lai_input_grid          !< leaf area index
- type(esmf_field), public        :: max_veg_greenness_input_grid !< shdmax
- type(esmf_field), public        :: min_veg_greenness_input_grid !< shdmin
+ type(esmf_field), public :: q2m_input_grid          !< 2-m spec hum
+ type(esmf_field), public :: seaice_depth_input_grid !< sea ice depth
+ type(esmf_field), public :: seaice_fract_input_grid !< sea ice fraction
+ type(esmf_field), public :: seaice_skin_temp_input_grid  !< sea ice skin temp
+ type(esmf_field), public :: skin_temp_input_grid    !< skin temp/sst
+ type(esmf_field), public :: snow_depth_input_grid   !< snow dpeth
+ type(esmf_field), public :: snow_liq_equiv_input_grid !< snow liq equiv depth
+ type(esmf_field), public :: soil_temp_input_grid    !< 3-d soil temp
+ type(esmf_field), public :: soil_type_input_grid    !< soil type
+ type(esmf_field), public :: soilm_liq_input_grid    !< 3-d liquid soil moisture
+ type(esmf_field), public :: soilm_tot_input_grid    !< 3-d total soil moisture
+ type(esmf_field), public :: srflag_input_grid       !< snow/rain flag
+ type(esmf_field), public :: t2m_input_grid          !< 2-m temperature
+ type(esmf_field), public :: tprcp_input_grid        !< precip
+ type(esmf_field), public :: ustar_input_grid        !< fric velocity
+ type(esmf_field), public :: veg_type_input_grid     !< vegetation type
+ type(esmf_field), public :: z0_input_grid           !< roughness length
+ type(esmf_field), public :: veg_greenness_input_grid !< vegetation fraction
+ type(esmf_field), public :: lai_input_grid          !< leaf area index
+ type(esmf_field), public :: max_veg_greenness_input_grid !< shdmax
+ type(esmf_field), public :: min_veg_greenness_input_grid !< shdmin
 
  integer, public      :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
                                         !! for 7 layers of soil for the RUC LSM
@@ -107,25 +107,25 @@
 
 ! Fields associated with the nst model.
 
- type(esmf_field), public        :: c_d_input_grid   !< Coefficient 2 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: c_0_input_grid   !< Coefficient 1 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: d_conv_input_grid   !< Thickness of free convection layer
- type(esmf_field), public        :: dt_cool_input_grid   !< Sub-layer cooling amount
- type(esmf_field), public        :: ifd_input_grid   !< Model mode index. 0-diurnal model not
+ type(esmf_field), public :: c_d_input_grid   !< Coefficient 2 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: c_0_input_grid   !< Coefficient 1 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: d_conv_input_grid   !< Thickness of free convection layer
+ type(esmf_field), public :: dt_cool_input_grid   !< Sub-layer cooling amount
+ type(esmf_field), public :: ifd_input_grid   !< Model mode index. 0-diurnal model not
                                                      !< started; 1-diurnal model started.
- type(esmf_field), public        :: qrain_input_grid   !< Sensible heat flux due to rainfall
- type(esmf_field), public        :: tref_input_grid  !< Reference temperature
- type(esmf_field), public        :: w_d_input_grid   !< Coefficient 4 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: w_0_input_grid   !< Coefficient 3 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: xs_input_grid   !< Salinity content in diurnal thermocline layer
- type(esmf_field), public        :: xt_input_grid   !< Heat content in diurnal thermocline layer
- type(esmf_field), public        :: xu_input_grid   !< u-current content in diurnal thermocline layer
- type(esmf_field), public        :: xv_input_grid   !< v-current content in diurnal thermocline layer
- type(esmf_field), public        :: xz_input_grid   !< Diurnal thermocline layer thickness
- type(esmf_field), public        :: xtts_input_grid   !< d(xt)/d(ts)
- type(esmf_field), public        :: xzts_input_grid   !< d(xz)/d(ts)
- type(esmf_field), public        :: z_c_input_grid   !< Sub-layer cooling thickness
- type(esmf_field), public        :: zm_input_grid   !< Oceanic mixed layer depth
+ type(esmf_field), public :: qrain_input_grid   !< Sensible heat flux due to rainfall
+ type(esmf_field), public :: tref_input_grid  !< Reference temperature
+ type(esmf_field), public :: w_d_input_grid   !< Coefficient 4 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: w_0_input_grid   !< Coefficient 3 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: xs_input_grid   !< Salinity content in diurnal thermocline layer
+ type(esmf_field), public :: xt_input_grid   !< Heat content in diurnal thermocline layer
+ type(esmf_field), public :: xu_input_grid   !< u-current content in diurnal thermocline layer
+ type(esmf_field), public :: xv_input_grid   !< v-current content in diurnal thermocline layer
+ type(esmf_field), public :: xz_input_grid   !< Diurnal thermocline layer thickness
+ type(esmf_field), public :: xtts_input_grid   !< d(xt)/d(ts)
+ type(esmf_field), public :: xzts_input_grid   !< d(xz)/d(ts)
+ type(esmf_field), public :: z_c_input_grid   !< Sub-layer cooling thickness
+ type(esmf_field), public :: zm_input_grid   !< Oceanic mixed layer depth
 
  public :: read_input_atm_data
  public :: cleanup_input_atm_data
@@ -4797,7 +4797,7 @@ else
    allocate(dummy2d_8(0,0))
    allocate(dummy2d_82(0,0))
    allocate(dummy2d(0,0))
-
+   allocate(slmsk_save(0,0))
  endif
  
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -4861,7 +4861,7 @@ if (localpet == 0) then
    slmsk_save = nint(dummy2d)
   
    deallocate(icec_save)
- endif
+ endif ! localpet == 0
 
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
  call ESMF_FieldScatter(landsea_mask_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
@@ -5033,7 +5033,8 @@ if (localpet == 0) then
          endif
        enddo
      enddo
-   endif
+     deallocate(dummy1d)
+   endif ! localpet == 0
    
    if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR" .and. .not. rap_latlon) & 
      .or. (rc < 0 .and. (trim(to_upper(external_model)) == "HRRR" .or. rap_latlon))) then
@@ -5074,7 +5075,7 @@ if (localpet == 0) then
    print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
    deallocate(dummy2d_i)
    deallocate(dummy3d_stype)
- endif
+ endif ! localpet == 0
   
 
  print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
@@ -5486,11 +5487,13 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
- print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
+ print*,"- CALL FieldScatter FOR INPUT SOIL TYPE."
  call ESMF_FieldScatter(soil_type_input_grid, dummy2d_82, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
-    
+
+ deallocate(dummy2d_82)
+
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
  call ESMF_FieldScatter(landsea_mask_input_grid,real(slmsk_save,esmf_kind_r8),rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
@@ -5511,8 +5514,10 @@ if (localpet == 0) then
    call check_soilt(dummy3d,slmsk_save,tsk_save)
    print*,'soilt ',maxval(dummy3d),minval(dummy3d)
 
-   deallocate(tsk_save, slmsk_save)
+   deallocate(tsk_save)
  endif
+
+ deallocate(slmsk_save)
 
  print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
  call ESMF_FieldScatter(soil_temp_input_grid, dummy3d, rootpet=0, rc=rc)
@@ -6512,7 +6517,7 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
   else
     call error_handler("ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
                        " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN,"// &
-                       " , skip, or stop.", 1)
+                       " , intrp, skip, or stop.", 1)
   endif
 
 end subroutine handle_grib_error

@@ -407,12 +407,12 @@ Running the program stand alone
 Making changes to the chgres_cube program
 -----------------------------------------
 
-chgres_cube is part of the UFS_UTILS repository (https://github.com/NOAA-EMC/UFS_UTILS). When wanting to contribute to this repository developers shall follow the Gitflow software development process
+chgres_cube is part of the UFS_UTILS repository (https://github.com/ufs-community/UFS_UTILS). When wanting to contribute to this repository developers shall follow the Gitflow software development process
 
       * Developers shall create their own fork of the UFS_UTILS repository
       * Developers shall create a ‘feature’ branch off ‘develop’ in their fork for all changes.
       * Developers shall open an issue and reference it in all commits.
 
-For more details, see the UFS_UTILS wiki page: https://github.com/NOAA-EMC/UFS_UTILS/wiki
+For more details, see the UFS_UTILS wiki page: https://github.com/ufs-community/UFS_UTILS/wiki
 
 Changes that support current or future NCEP operations will be given priority for inclusion into the authoritative repository.

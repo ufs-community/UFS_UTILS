@@ -17,9 +17,10 @@ use model_grid, only      : i_input, j_input
 
 implicit none
 
+public :: rh2spfh
+public :: convert_omega
 public :: rh2spfh_gfs
 public :: fpvsnew 
-
 
 contains 
 
@@ -28,7 +29,7 @@ contains
 !> Brock and Richardson 2001 (Meterological Measurement 
 !> Systems, p. 86, equation 5.1) 
 !!
-!! @param[inout] rh_sphum rel humidity on input. spec hum on output.
+!! @param[inout] rh_sphum rel humidity (%) on input. spec hum (kg/kg) on output.
 !! @param[in] p pressure in Pa
 !! @param[in] t temperature
 !! @author Larissa Reames
@@ -59,7 +60,7 @@ contains
   !print *, 'q = ', sphum
   
   !if (P .eq. 100000.0) THEN
-  ! print *, 'T = ', T, ' RH = ', RH, ' P = ', P, ' es = ', es, ' e = ', e, ' q = ', sphum
+  !print *, 'T = ', t, ' RH = ', rh, ' P = ', p, ' es = ', es, ' e = ', e, ' q = ', rh_sphum
   !end if
 
 end subroutine RH2SPFH
