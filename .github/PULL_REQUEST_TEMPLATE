@@ -2,7 +2,7 @@
 
 - You may delete any sections labeled "optional".
 
-- If you are unclear on what should be written here, see https://github.com/NOAA-EMC/UFS_UTILS/wiki/9.-Creating-a-Pull-Request for some guidance. 
+- If you are unclear on what should be written here, see https://github.com/ufs-community/UFS_UTILS/wiki/9.-Creating-a-Pull-Request for some guidance. 
 
 - The title of this pull request should be a brief summary (ideally less than 100 characters) of the changes included in this PR. Please also include the branch to which this PR is being issued.
 
@@ -19,7 +19,7 @@ State whether the contingency tests were run or are pending, and if they were al
 ## DEPENDENCIES:
 Add any links to pending PRs that are required prior to merging this PR. For example:
 
-NOAA-EMC/UFS_UTILS/pull/<pr_number>
+ufs-community/UFS_UTILS/pull/<pr_number>
 
 ## DOCUMENTATION:
 If this PR is contributing new capabilities that need to be documented, please also include updates to the RST files in the docs/source directory as supporting material.
