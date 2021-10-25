@@ -649,6 +649,8 @@
 
  print*,"- DEFINE INPUT GRID OBJECT FOR INPUT GRIB2 DATA."
 
+ print*,'model grid - gfs latlon'
+
  num_tiles_input_grid = 1
 
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
@@ -670,7 +672,8 @@
  call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
- print*,'after getgb2 ', gfld%igdtmpl
+ print*,'after getgb2 temp num ', gfld%igdtnum
+ print*,'after getgb2 template ', gfld%igdtmpl
  
  call baclose(lugb, rc)
 
@@ -680,7 +683,7 @@
  deltalon = float( gfld%igdtmpl(17) )/ 1.e6 
  deltalat = float( gfld%igdtmpl(18) )/ 1.e6 
 
- print*,'after getgb2 ', deltalon, deltalat
+!print*,'after getgb2 ', deltalon, deltalat
 
  allocate(longitude(i_input,j_input))
  allocate(latitude(i_input,j_input))
@@ -838,6 +841,8 @@
  subroutine define_input_grid_grib2(localpet, npets)
 
  use mpi
+ use grib_mod
+ use gdswzd_mod
  use netcdf
  use wgrib2api
  use program_setup, only       : grib2_file_input_grid, data_dir_input_grid, &
@@ -860,11 +865,61 @@
  character(len=10000)            :: temp_msg
  character(len=10)              :: temp_num = 'NA'
 
+ integer :: k, jdisc, jgdtn, jpdtn, lugb, lugi
+ integer :: jids(200), jgdt(200), jpdt(200)
+ integer :: kgds(200), ni, nj, nret
+ real :: res
+ real, allocatable :: rlat(:,:), rlon(:,:),xpts(:,:),ypts(:,:)
+ logical :: unpack
+
+ type(gribfield)                  :: gfld
+
  num_tiles_input_grid = 1
 
  !inv_file = "chgres.inv"
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
  temp_file = trim(fix_dir_input_grid)//"/latlon_grid3.32769.nc"
+
+!!!!!!
+
+ lugb=12
+ call baopenr(lugb,the_file,error)
+ print*,'after g2 open ',error
+
+ j       = 0      ! search at beginning of file
+ lugi    = 0      ! no grib index file
+ jdisc   = 0      ! search for discipline - meterological products
+ jpdtn   = 0      ! search for product definition template number
+ jgdtn   = -1     ! search for grid definition template number
+ jids    = -9999  ! array of values in identification section, set to wildcard
+ jgdt    = -9999  ! array of values in grid definition template 3.m
+ jpdt    = -9999  ! array of values in product definition template 4.n
+ unpack  = .true. ! unpack data
+   
+ call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, error)
+
+ print*,'after getgb2 temp num ', gfld%igdtnum
+ print*,'after getgb2 template ', gfld%igdtmpl
+
+ call baclose(lugb,error)
+ 
+ kgds = 0
+ call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds, ni, nj, res)
+
+ print*,'after conversion kgds 1 ',ni, nj
+ print*,'after conversion kgds 2 ',kgds(1:25)
+ 
+ allocate(rlat(ni,nj))
+ allocate(rlon(ni,nj))
+ allocate(xpts(ni,nj))
+ allocate(ypts(ni,nj))
+
+ call gdswzd(kgds,0,(ni*nj),-9999.,xpts,ypts,rlon,rlat,nret)
+ print*,'after gdswzd nret ',nret
+ print*,'after gdswzd lat/lon ', rlat(1,1),rlon(1,1)
+
+!!!!!
 
  call ESMF_FieldGather(latitude_target_grid, lat_target, rootPet=0, tile=1, rc=error)
  if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -890,6 +945,8 @@
   if (trim(temp_num)=="3.32769" .or. trim(temp_num)=="32769") then
 
      input_grid_type = "rotated_latlon"
+
+     print*,'model grid - rotated lat lon'
 
      error=nf90_open(trim(temp_file),nf90_nowrite,ncid)
      call netcdf_err(error, 'opening: '//trim(temp_file))
@@ -919,8 +976,14 @@
 
  elseif (temp_num == "3.0" .or. temp_num == "3.30" .or. temp_num=="30" .or. temp_num == "0") then
 
-    if (temp_num =="3.0" .or. temp_num == "0") input_grid_type = "latlon"
-    if (temp_num =="3.30" .or. temp_num=='30') input_grid_type = "lambert"
+    if (temp_num =="3.0" .or. temp_num == "0") then
+      input_grid_type = "latlon"
+      print*,'model grid - latlon'
+    endif
+    if (temp_num =="3.30" .or. temp_num=='30')then
+      input_grid_type = "lambert"
+      print*,'model grid - lambert'
+    endif
 
      error = grb2_inq(the_file,inv_file,':PRES:',':surface:',nx=i_input, ny=j_input, &
                 lat=latitude_one_tile, lon=longitude_one_tile)
@@ -1767,5 +1830,70 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  call ESMF_GridDestroy(target_grid, rc=rc)
 
  end subroutine cleanup_input_target_grid_data
+
+ subroutine gdt_to_gds(igdtnum, igdstmpl, igdtlen, kgds, ni, nj, res)
+
+ implicit none
+
+ integer, intent(in   )  :: igdtnum, igdtlen, igdstmpl(igdtlen)
+ integer, intent(  out)  :: kgds(200), ni, nj
+ integer                 :: iscale
+
+ real,    intent(  out)  :: res
+
+ kgds=0
+
+ if (igdtnum.eq.32769) then        ! rot lat/lon b grid
+
+     iscale=igdstmpl(10)*igdstmpl(11)
+     if (iscale == 0) iscale = 1e6
+     kgds(1)=205                    ! oct 6,     rotated lat/lon for Non-E
+                                    !            Stagger grid
+     kgds(2)=igdstmpl(8)            ! octs 7-8,  Ni
+     ni = kgds(2)
+     kgds(3)=igdstmpl(9)            ! octs 9-10, Nj
+     nj = kgds(3)
+     kgds(4)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of
+                                                            ! 1st grid point
+     kgds(5)=nint(float(igdstmpl(13))/float(iscale)*1000.)  ! octs 14-16, Lon of
+                                                            ! 1st grid point
+
+     kgds(6)=0                      ! oct 17, resolution and component flags
+     if (igdstmpl(1)==2 ) kgds(6)=64
+     if ( btest(igdstmpl(14),4).OR.btest(igdstmpl(14),5) )  kgds(6)=kgds(6)+128
+     if ( btest(igdstmpl(14),3) ) kgds(6)=kgds(6)+8
+
+     kgds(7)=nint(float(igdstmpl(20))/float(iscale)*1000.)+90000 ! octs 18-20,
+                                                                 ! Lat of cent of rotation
+     kgds(8)=nint(float(igdstmpl(21))/float(iscale)*1000.)       ! octs 21-23,
+                                                                 ! Lon of cent of rotation
+     kgds(9)=nint(float(igdstmpl(17))/float(iscale)*1000.)       ! octs 24-25,
+                                                                 ! Di
+     kgds(10)=nint(float(igdstmpl(18))/float(iscale)*1000.)      ! octs 26-27,
+                                                                 ! Dj
+
+     kgds(11) = 0                   ! oct 28, scan mode
+     if (btest(igdstmpl(19),7)) kgds(11) = 128
+     if (btest(igdstmpl(19),6)) kgds(11) = kgds(11) +  64
+     if (btest(igdstmpl(19),5)) kgds(11) = kgds(11) +  32
+
+     kgds(12)=nint(float(igdstmpl(15))/float(iscale)*1000.) ! octs 29-31, Lat of
+                                                            ! last grid point
+     kgds(13)=nint(float(igdstmpl(16))/float(iscale)*1000.) ! octs 32-34, Lon of
+                                                            ! last grid point
+
+     kgds(19)=0    ! oct 4, # vert coordinate parameters
+     kgds(20)=255  ! oct 5, used for thinned grids, set to 255
+
+     res = ((float(kgds(9)) / 1000.0) + (float(kgds(10)) / 1000.0)) &
+             * 0.5 * 111.0
+
+   else
+      print*,'grid not defined'
+
+
+ endif
+
+ end subroutine gdt_to_gds
 
  end module model_grid
