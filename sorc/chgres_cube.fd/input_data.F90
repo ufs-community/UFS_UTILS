@@ -2457,6 +2457,7 @@
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_grib2_file(localpet)
 
+ use mpi
  use wgrib2api
  
  use grib2_util, only                   : rh2spfh, rh2spfh_gfs, convert_omega
@@ -2531,6 +2532,21 @@
 
  print*,"- READ ATMOS DATA FROM GRIB2 FILE: ", trim(the_file)
  print*,"- USE INVENTORY FILE ", inv_file
+ 
+! After model_grid is converted, the inventory file will need
+! to be created in input_data temporarily.
+
+ inquire(file=inv_file,exist=lret)
+ if (.not.lret) then
+ if (localpet == 0) then
+   print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
+   rc=grb2_mk_inv(the_file,inv_file)
+   if (rc /=0) call error_handler("OPENING GRIB2 FILE",rc)
+ endif
+ endif
+
+! Wait for localpet 0 to create inventory
+ call mpi_barrier(mpi_comm_world, rc)
 
  print*,"- OPEN FILE."
  inquire(file=the_file,exist=lret)

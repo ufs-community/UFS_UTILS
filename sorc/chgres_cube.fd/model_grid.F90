@@ -618,8 +618,6 @@
  subroutine define_input_grid_gfs_grib2(localpet, npets)
 
  use grib_mod
- use wgrib2api
- use mpi
  use program_setup, only       : data_dir_input_grid, &
                                  grib2_file_input_grid
 
@@ -637,14 +635,13 @@
 
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
- real(esmf_kind_r4), allocatable  :: lat4(:,:), lon4(:,:)
  real(esmf_kind_r8), pointer      :: lat_src_ptr(:,:)
  real(esmf_kind_r8), pointer      :: lon_src_ptr(:,:)
  real(esmf_kind_r8), pointer      :: lat_corner_src_ptr(:,:)
  real(esmf_kind_r8), pointer      :: lon_corner_src_ptr(:,:)
- real(esmf_kind_r8)               :: deltalon
+ real(esmf_kind_r8)               :: deltalat, deltalon
 
- real :: lat11, lon11, dx, dy
+ real :: lat11, lon11
 
  type(esmf_polekind_flag)         :: polekindflag(2)
 
@@ -652,22 +649,13 @@
 
  print*,"- DEFINE INPUT GRID OBJECT FOR INPUT GRIB2 DATA."
 
- print*,'got here '
-
  num_tiles_input_grid = 1
 
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
- if (localpet == 0) then
-   print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
-   rc=grb2_mk_inv(the_file,inv_file)
-   if (rc /=0) call error_handler("OPENING GRIB2 FILE",rc)
- endif
 
- if (localpet == 0) then
-
-   lugb=12
-   call baopenr(lugb,the_file,rc)
-   print*,'after g2 open ',rc
+ lugb=12
+ call baopenr(lugb,the_file,rc)
+ print*,'after g2 open ',rc
 
  j       = 0      ! search at beginning of file
  lugi    = 0      ! no grib index file
@@ -679,17 +667,23 @@
  jpdt    = -9999  ! array of values in product definition template 4.n
  unpack  = .false. ! unpack data
    
-  call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+ call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-  print*,'after getgb2 ', gfld%igdtmpl
-  i_input = gfld%igdtmpl(8) ! oct 31-34
-  j_input = gfld%igdtmpl(9) ! oct 35-38
+ print*,'after getgb2 ', gfld%igdtmpl
  
-  dx = float( gfld%igdtmpl(17) )/ 1.e6 
-  dy = float( gfld%igdtmpl(18) )/ 1.e6 
+ call baclose(lugb, rc)
 
-  print*,'after getgb2 ', dx, dy
+ i_input = gfld%igdtmpl(8) ! oct 31-34
+ j_input = gfld%igdtmpl(9) ! oct 35-38
+ 
+ deltalon = float( gfld%igdtmpl(17) )/ 1.e6 
+ deltalat = float( gfld%igdtmpl(18) )/ 1.e6 
+
+ print*,'after getgb2 ', deltalon, deltalat
+
+ allocate(longitude(i_input,j_input))
+ allocate(latitude(i_input,j_input))
 
 ! I think wgrib2 flips the n/s poles by default.
 ! So for now, follow that convention.
@@ -702,22 +696,15 @@
 ! Follow wgrib2 convention.
   lat11 = -(float(gfld%igdtmpl(12))/1.e6)
   do j = 1, j_input
-    print*,'lat ', j, lat11 + (float(j-1)*dy)
+    print*,'lat ', j, lat11 + (float(j-1)*deltalat)
+    latitude(:,j) = lat11 + (float(j-1)*deltalat)
   enddo
 
   lon11 = float(gfld%igdtmpl(13))/1.e6
   do i = 1, i_input
-    print*,'lon ', i, lon11 + (float(i-1)*dx)
+    print*,'lon ', i, lon11 + (float(i-1)*deltalon)
+    longitude(i,:) = lon11 + (float(i-1)*deltalon)
   enddo
-
- endif
-
-! Wait for localpet 0 to create inventory
- call mpi_barrier(mpi_comm_world, ierr)
-
- rc = grb2_inq(the_file,inv_file,':PRES:',':surface:',nx=i_input, ny=j_input, &
-    lat=lat4, lon=lon4)
- if (rc /= 1) call error_handler("READING GRIB2 FILE", rc)
 
  ip1_input = i_input + 1
  jp1_input = j_input + 1
@@ -751,23 +738,6 @@
                                    name="input_grid_longitude", rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
    call error_handler("IN FieldCreate", rc)
- 
- allocate(longitude(i_input,j_input))
- allocate(latitude(i_input,j_input))
- 
- do i = 1, i_input
-   longitude(i,:) = real(lon4(i,:),kind=esmf_kind_r8) 
-   print*,'lon orig ',i,longitude(i,1)
- enddo
-
- do i = 1, j_input
-   latitude(:,i) = real(lat4(:,i),kind=esmf_kind_r8) 
-   print*,'lat orig ',i, latitude(1,i)
- enddo
-
- deallocate(lat4, lon4)
-
- deltalon = abs(longitude(2,1)-longitude(1,1))
  
  print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  call ESMF_FieldScatter(longitude_input_grid, longitude, rootpet=0, rc=rc)
