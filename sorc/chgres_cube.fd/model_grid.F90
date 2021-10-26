@@ -923,6 +923,28 @@
  print*,'after gdswzd lat/lon ni/nj', rlat(ni,nj),rlon(ni,nj)
  print*,'after gdswzd lat/lon mid  ', rlat(ni/2,nj/2),rlon(ni/2,nj/2)
 
+ deallocate(rlat,rlon,xpts,ypts)
+
+ allocate(rlat(ni+1,nj+1))
+ allocate(rlon(ni+1,nj+1))
+ allocate(xpts(ni+1,nj+1))
+ allocate(ypts(ni+1,nj+1))
+
+ do j = 1, nj+1
+ do i = 1, ni+1
+   xpts(i,j) = float(i) - 0.5
+   ypts(i,j) = float(j) - 0.5
+ enddo
+ enddo
+
+ call gdswzd(kgds,1,((ni+1)*(nj+1)),-9999.,xpts,ypts,rlon,rlat,nret)
+ print*,'after gdswzd nret ',nret
+ print*,'after gdswzd corner lat/lon 11', rlat(1,1),rlon(1,1)
+ print*,'after gdswzd corner lat/lon ni/11', rlat(ni+1,1),rlon(ni+1,1)
+ print*,'after gdswzd corner lat/lon 11/nj', rlat(1,nj+1),rlon(1,nj+1)
+ print*,'after gdswzd corner lat/lon ni/nj', rlat(ni+1,nj+1),rlon(ni+1,nj+1)
+ print*,'after gdswzd corner lat/lon mid  ', rlat(ni/2,nj/2),rlon(ni/2,nj/2)
+
 !!!!!
 
  call ESMF_FieldGather(latitude_target_grid, lat_target, rootPet=0, tile=1, rc=error)
