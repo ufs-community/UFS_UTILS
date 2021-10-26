@@ -917,7 +917,11 @@
 
  call gdswzd(kgds,0,(ni*nj),-9999.,xpts,ypts,rlon,rlat,nret)
  print*,'after gdswzd nret ',nret
- print*,'after gdswzd lat/lon ', rlat(1,1),rlon(1,1)
+ print*,'after gdswzd lat/lon 11', rlat(1,1),rlon(1,1)
+ print*,'after gdswzd lat/lon ni/11', rlat(ni,1),rlon(ni,1)
+ print*,'after gdswzd lat/lon 11/nj', rlat(1,nj),rlon(1,nj)
+ print*,'after gdswzd lat/lon ni/nj', rlat(ni,nj),rlon(ni,nj)
+ print*,'after gdswzd lat/lon mid  ', rlat(ni/2,nj/2),rlon(ni/2,nj/2)
 
 !!!!!
 
@@ -974,6 +978,16 @@
      error=nf90_get_var(ncid, id_var, longitude_one_tile)
      call netcdf_err(error, 'reading field' )
 
+   print*,'after netcdf lat/lon 11', latitude_one_tile(1,1),longitude_one_tile(1,1)
+   print*,'after netcdf lat/lon ni/11',  &
+           latitude_one_tile(ni,1),longitude_one_tile(ni,1)
+   print*,'after netcdf lat/lon 11/nj',  &
+           latitude_one_tile(1,nj),longitude_one_tile(1,nj)
+   print*,'after netcdf lat/lon ni/nj', &
+           latitude_one_tile(ni,nj),longitude_one_tile(ni,nj)
+   print*,'after netcdf lat/lon mid  ', &
+           latitude_one_tile(ni/2,nj/2),longitude_one_tile(ni/2,nj/2)
+
  elseif (temp_num == "3.0" .or. temp_num == "3.30" .or. temp_num=="30" .or. temp_num == "0") then
 
     if (temp_num =="3.0" .or. temp_num == "0") then
@@ -992,6 +1006,16 @@
 
    if (localpet==0) print*, "from file lon(1:10,1) = ", longitude_one_tile(1:10,1)
    if (localpet==0) print*, "from file lat(1,1:10) = ", latitude_one_tile(1,1:10)
+   print*,'after wgrib2 lat/lon 11', latitude_one_tile(1,1),longitude_one_tile(1,1)
+   print*,'after wgrib2 lat/lon ni/11',  &
+           latitude_one_tile(ni,1),longitude_one_tile(ni,1)
+   print*,'after wgrib2 lat/lon 11/nj',  &
+           latitude_one_tile(1,nj),longitude_one_tile(1,nj)
+   print*,'after wgrib2 lat/lon ni/nj', &
+           latitude_one_tile(ni,nj),longitude_one_tile(ni,nj)
+   print*,'after wgrib2 lat/lon mid  ', &
+           latitude_one_tile(ni/2,nj/2),longitude_one_tile(ni/2,nj/2)
+
  elseif (temp_num=="NA") then
    error = 0
    call error_handler("Grid template number cannot be read from the input file. Please " //&
@@ -1863,9 +1887,9 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
      if ( btest(igdstmpl(14),4).OR.btest(igdstmpl(14),5) )  kgds(6)=kgds(6)+128
      if ( btest(igdstmpl(14),3) ) kgds(6)=kgds(6)+8
 
-     kgds(7)=nint(float(igdstmpl(20))/float(iscale)*1000.)+90000 ! octs 18-20,
+     kgds(7)=nint(float(igdstmpl(15))/float(iscale)*1000.)       ! octs 18-20,
                                                                  ! Lat of cent of rotation
-     kgds(8)=nint(float(igdstmpl(21))/float(iscale)*1000.)       ! octs 21-23,
+     kgds(8)=nint(float(igdstmpl(16))/float(iscale)*1000.)       ! octs 21-23,
                                                                  ! Lon of cent of rotation
      kgds(9)=nint(float(igdstmpl(17))/float(iscale)*1000.)       ! octs 24-25,
                                                                  ! Di
@@ -1877,9 +1901,9 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
      if (btest(igdstmpl(19),6)) kgds(11) = kgds(11) +  64
      if (btest(igdstmpl(19),5)) kgds(11) = kgds(11) +  32
 
-     kgds(12)=nint(float(igdstmpl(15))/float(iscale)*1000.) ! octs 29-31, Lat of
+     kgds(12)=nint(float(igdstmpl(20))/float(iscale)*1000.) ! octs 29-31, Lat of
                                                             ! last grid point
-     kgds(13)=nint(float(igdstmpl(16))/float(iscale)*1000.) ! octs 32-34, Lon of
+     kgds(13)=nint(float(igdstmpl(21))/float(iscale)*1000.) ! octs 32-34, Lon of
                                                             ! last grid point
 
      kgds(19)=0    ! oct 4, # vert coordinate parameters
@@ -1888,8 +1912,40 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
      res = ((float(kgds(9)) / 1000.0) + (float(kgds(10)) / 1000.0)) &
              * 0.5 * 111.0
 
+   elseif(igdtnum==30) then
+
+     kgds(1)=3                      ! oct 6,     lambert conformal
+     kgds(2)=igdstmpl(8)            ! octs 7-8,  Ni
+     ni = kgds(2)
+     kgds(3)=igdstmpl(9)            ! octs 9-10, Nj
+     nj = kgds(3)
+
+     iscale = 1e6
+     kgds(4) = nint(float(igdstmpl(10))/1000.0)
+     kgds(5) = nint(float(igdstmpl(11))/1000.0)
+
+     kgds(6)=0                      ! oct 17, resolution and component flags
+     if (igdstmpl(1)==2 ) kgds(6)=64
+     if ( btest(igdstmpl(12),4).OR.btest(igdstmpl(12),5) )  kgds(6)=kgds(6)+128
+     if ( btest(igdstmpl(12),3) ) kgds(6)=kgds(6)+8
+
+     kgds(7) = nint(float(igdstmpl(14))/1000.0)
+     kgds(8) = nint(float(igdstmpl(15))/1000.0)
+     kgds(9) = nint(float(igdstmpl(16))/1000.0)
+     kgds(10) = 0 
+
+     kgds(11) = 0                   ! oct 28, scan mode
+     if (btest(igdstmpl(18),7)) kgds(11) = 128
+     if (btest(igdstmpl(18),6)) kgds(11) = kgds(11) +  64
+     if (btest(igdstmpl(18),5)) kgds(11) = kgds(11) +  32
+
+     kgds(12) = nint(float(igdstmpl(19))/1000.0)
+     kgds(13) = nint(float(igdstmpl(20))/1000.0)
+     kgds(14) = -90
+     kgds(15) = 0
+
    else
-      print*,'grid not defined'
+      print*,'grid not defined', igdtnum
 
 
  endif
