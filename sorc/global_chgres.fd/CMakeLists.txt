@@ -22,7 +22,6 @@ set(exe_name global_chgres)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
-  gfsio_4
   nemsiogfs
   nemsio
   sigio

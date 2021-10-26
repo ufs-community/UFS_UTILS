@@ -23,9 +23,8 @@ module load bacio/${bacio_ver:-2.4.1}
 module load ip/${ip_ver:-3.3.3}
 module load sfcio/${sfcio_ver:-1.4.1}
 module load sigio/${sigio_ver:-2.3.2}
-module load gfsio/${gfsio_ver:-1.4.1}
 module load landsfcutil/${landsfcutil_ver:-2.4.1}
-module load nemsiogfs/${nemsiogfs_ver:-2.5.3}
+#module load nemsiogfs/${nemsiogfs_ver:-2.5.3}
 module load g2/${g2_ver:-3.4.5}
 module load jasper/${jasper_ver:-2.0.25}
 module load libpng/${libpng_ver:-1.6.37}
