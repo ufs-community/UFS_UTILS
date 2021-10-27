@@ -870,6 +870,7 @@
  integer :: kgds(200), ni, nj, nret
  real :: res
  real, allocatable :: rlat(:,:), rlon(:,:),xpts(:,:),ypts(:,:)
+ real, allocatable :: rlatc(:,:), rlonc(:,:)
  logical :: unpack
 
  type(gribfield)                  :: gfld
@@ -916,6 +917,11 @@
  allocate(ypts(ni,nj))
 
  call gdswzd(kgds,0,(ni*nj),-9999.,xpts,ypts,rlon,rlat,nret)
+
+ if (kgds(1) == 205) then
+   where (rlon > 180.0) rlon = rlon - 360.0
+ endif
+
  print*,'after gdswzd nret ',nret
  print*,'after gdswzd lat/lon 11', rlat(1,1),rlon(1,1)
  print*,'after gdswzd lat/lon ni/11', rlat(ni,1),rlon(ni,1)
@@ -923,10 +929,10 @@
  print*,'after gdswzd lat/lon ni/nj', rlat(ni,nj),rlon(ni,nj)
  print*,'after gdswzd lat/lon mid  ', rlat(ni/2,nj/2),rlon(ni/2,nj/2)
 
- deallocate(rlat,rlon,xpts,ypts)
+ deallocate(xpts,ypts)
 
- allocate(rlat(ni+1,nj+1))
- allocate(rlon(ni+1,nj+1))
+ allocate(rlatc(ni+1,nj+1))
+ allocate(rlonc(ni+1,nj+1))
  allocate(xpts(ni+1,nj+1))
  allocate(ypts(ni+1,nj+1))
 
@@ -937,13 +943,16 @@
  enddo
  enddo
 
- call gdswzd(kgds,1,((ni+1)*(nj+1)),-9999.,xpts,ypts,rlon,rlat,nret)
+ call gdswzd(kgds,1,((ni+1)*(nj+1)),-9999.,xpts,ypts,rlonc,rlatc,nret)
+ if (kgds(1) == 205) then
+   where (rlonc > 180.0) rlonc = rlonc - 360.0
+ endif
  print*,'after gdswzd nret ',nret
- print*,'after gdswzd corner lat/lon 11', rlat(1,1),rlon(1,1)
- print*,'after gdswzd corner lat/lon ni/11', rlat(ni+1,1),rlon(ni+1,1)
- print*,'after gdswzd corner lat/lon 11/nj', rlat(1,nj+1),rlon(1,nj+1)
- print*,'after gdswzd corner lat/lon ni/nj', rlat(ni+1,nj+1),rlon(ni+1,nj+1)
- print*,'after gdswzd corner lat/lon mid  ', rlat(ni/2,nj/2),rlon(ni/2,nj/2)
+ print*,'after gdswzd corner lat/lon 11', rlatc(1,1),rlonc(1,1)
+ print*,'after gdswzd corner lat/lon ni/11', rlatc(ni+1,1),rlonc(ni+1,1)
+ print*,'after gdswzd corner lat/lon 11/nj', rlatc(1,nj+1),rlonc(1,nj+1)
+ print*,'after gdswzd corner lat/lon ni/nj', rlatc(ni+1,nj+1),rlonc(ni+1,nj+1)
+ print*,'after gdswzd corner lat/lon mid  ', rlatc(ni/2,nj/2),rlonc(ni/2,nj/2)
 
 !!!!!
 
@@ -1129,8 +1138,15 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
     do j = clb(2),cub(2)
       do i = clb(1), cub(1)
-        lon_src_ptr(i,j)=real(longitude_one_tile(i,j),esmf_kind_r8)
-        lat_src_ptr(i,j)=real(latitude_one_tile(i,j),esmf_kind_r8)
+!       lon_src_ptr(i,j)=real(longitude_one_tile(i,j),esmf_kind_r8)
+!       lat_src_ptr(i,j)=real(latitude_one_tile(i,j),esmf_kind_r8)
+        lon_src_ptr(i,j)=rlon(i,j)
+        lat_src_ptr(i,j)=rlat(i,j)
+        if (abs(rlon(i,j)-longitude_one_tile(i,j)) > 0.1 .or. &
+            abs(rlat(i,j)-latitude_one_tile(i,j)) > 0.1) then
+          print*,'lat/lon diff ', rlon(i,j), longitude_one_tile(i,j), &
+                   rlat(i,j),latitude_one_tile(i,j)
+        endif
       enddo
     enddo
 
@@ -1203,6 +1219,19 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
        call get_cell_corners(real(latitude_one_tile,esmf_kind_r8), &
                             real(longitude_one_tile, esmf_kind_r8), &
                             lat_src_ptr, lon_src_ptr, dx, clb, cub)
+
+       do j = clb(2),cub(2)
+         do i = clb(1), cub(1)
+        if (abs(rlonc(i,j)-lon_src_ptr(i,j)) > 0.1 .or. &
+            abs(rlatc(i,j)-lat_src_ptr(i,j)) > 0.1) then
+          print*,'lat/lon corn diff ', rlonc(i,j), lon_src_ptr(i,j), &
+                   rlatc(i,j),lat_src_ptr(i,j)
+        endif
+          lon_src_ptr(i,j)=rlonc(i,j)
+          lat_src_ptr(i,j)=rlatc(i,j)
+        enddo
+       enddo
+
      endif
   elseif (trim(input_grid_type) == "rotated_latlon") then !Read the corner coords from file
 
@@ -1221,10 +1250,18 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
     do j = clb(2),cub(2)
       do i = clb(1), cub(1)
-        lon_src_ptr(i,j)=real(lon_corners(i,j),esmf_kind_r8)
-        lat_src_ptr(i,j)=real(lat_corners(i,j),esmf_kind_r8)
+!       lon_src_ptr(i,j)=real(lon_corners(i,j),esmf_kind_r8)
+!       lat_src_ptr(i,j)=real(lat_corners(i,j),esmf_kind_r8)
+        lon_src_ptr(i,j)=rlonc(i,j)
+        lat_src_ptr(i,j)=rlatc(i,j)
+        if (abs(rlonc(i,j)-lon_corners(i,j)) > 0.1 .or. &
+            abs(rlatc(i,j)-lat_corners(i,j)) > 0.1) then
+          print*,'lat/lon corn diff ', rlonc(i,j), lon_corners(i,j), &
+                   rlatc(i,j),lat_corners(i,j)
+        endif
       enddo
     enddo
+
 
     error= nf90_close(ncid)
   endif
@@ -1703,6 +1740,8 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
   real(esmf_kind_r8), parameter    :: bearingInDegrees = 135.0
 
   integer                           :: i, j
+
+  print*,'in routine get_cell_corners'
 
   d = sqrt((dx**2.0_esmf_kind_r8)/2.0_esmf_kind_r8)
 
