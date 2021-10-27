@@ -11,8 +11,8 @@
 ! Author David Wright
 
 
- use module_ncio!, only: ncio
- use module_nwp!, only: fcst_nwp
+ use module_ncio, only: ncio
+ use module_nwp, only: fcst_nwp
 
  implicit none
 
