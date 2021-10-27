@@ -1,4 +1,0 @@
-[submodule "cmake"]
-	path = cmake
-	url = https://github.com/XianwuXue-NOAA/CMakeModules.git
-	branch = feature/port2acorn_gefsv12
