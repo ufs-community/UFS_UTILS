@@ -17,6 +17,8 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/sfcdata_unittest.nc ${CMAKE_CURRENT_BINARY_DIR}/sfcdata_unittest.nc)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/fvcom_unittest.nc ${CMAKE_CURRENT_BINARY_DIR}/fvcom_unittest.nc)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 
 add_executable(ftst_readfvcomnetcdf ftst_readfvcomnetcdf.F90)
 add_test(NAME fvcom_tools-ftst_readfvcomnetcdf COMMAND ftst_readfvcomnetcdf)
