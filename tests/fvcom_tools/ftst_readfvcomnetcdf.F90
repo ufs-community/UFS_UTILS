@@ -122,7 +122,7 @@
  call fcst%get_time_ind(trim(fvcomfile),inputFVCOMselStr,t2)
 !If second time index is not returned, stop
  if  (abs(t2 - t2_expected) > EPSILON) stop 11
- call fcst%read_n(trim(fvcomfile),'FVCOM',wcstart,lbclon,lbclat,lbctimes,t2,lbcmask,lbcsst,lbcice,lbcsfcT,lbciceT,fv3sfcTl)
+ call fcst%read_n(trim(fvcomfile),' FVCOM',wcstart,lbclon,lbclat,lbctimes,t2,lbcmask,lbcsst,lbcice,lbcsfcT,lbciceT,fv3sfcTl)
  call fcst%finish(' FVCOM',wcstart)
 !If variables in fvcom file do not match expected, stop
  if (abs(lbcmask(1,1) - lbcmask_expected(1)) > EPSILON) stop 12
