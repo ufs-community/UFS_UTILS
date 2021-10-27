@@ -5,7 +5,7 @@
 Introduction
 ****************************
 
-The Unified Forecast Systems (UFS) Utilities repository contains pre-processing programs for the UFS weather model.  These programs set up the model grid and create coldstart initial conditions. The repository is hosted on `Github <https://github.com/NOAA-EMC/UFS_UTILS>`_.  Information on checking out the code and making changes to it is available on the repository `wiki page <https://github.com/NOAA-EMC/UFS_UTILS/wiki>`_.
+The Unified Forecast Systems (UFS) Utilities repository contains pre-processing programs for the UFS weather model.  These programs set up the model grid and create coldstart initial conditions. The repository is hosted on `Github <https://github.com/ufs-community/UFS_UTILS>`_.  Information on checking out the code and making changes to it is available on the repository `wiki page <https://github.com/ufs-community/UFS_UTILS/wiki>`_.
 
 ***********************************
 Grid Generation

@@ -199,3 +199,7 @@ add_mpi_test(chgres_cube-ftst_surface_search_many
 add_executable(ftst_read_vcoord ftst_read_vcoord.F90)
 target_link_libraries(ftst_read_vcoord chgres_cube_lib)
 add_test(NAME chgres_cube-ftst_read_vcoord COMMAND ftst_read_vcoord)
+
+add_executable(ftst_example ftst_example.F90)
+target_link_libraries(ftst_example chgres_cube_lib)
+add_test(NAME chgres_cube-ftst_example COMMAND ftst_example)
