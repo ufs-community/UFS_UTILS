@@ -4713,6 +4713,7 @@ else
 !! @author Larissa Reames 
  subroutine read_input_sfc_grib2_file(localpet)
 
+   use grib_mod
    use wgrib2api
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
    use model_grid, only    : input_grid_type
@@ -4743,6 +4744,11 @@ else
    integer(esmf_kind_i4), allocatable    :: slmsk_save(:,:)
    integer(esmf_kind_i8), allocatable    :: dummy2d_i(:,:)
    
+   integer :: lugb
+    integer :: jdisc, jgdtn, jpdtn, lugi
+   integer :: jids(200), jgdt(200), jpdt(200), num_soil
+   logical :: unpack
+   type(gribfield)                  :: gfld
     
    rap_latlon = trim(to_upper(external_model))=="RAP" .and. trim(input_grid_type) == "rotated_latlon"
 
@@ -4761,6 +4767,58 @@ else
    print*, "- FILE HAS ", lsoil_input, " SOIL LEVELS"
    if (lsoil_input <= 0) call error_handler("COUNTING SOIL LEVELS.", rc)
    
+   if (localpet == 0) then
+
+     print*,'got here soil levels'
+
+     lugb=12
+     call baopenr(lugb,the_file,rc)
+     print*,'after g2 open ',rc
+
+     j       = 0      ! search at beginning of file
+     lugi    = 0      ! no grib index file
+     jdisc   = -1     ! search for discipline - meterological products
+     jpdtn   = -1     ! search for product definition template number
+     jgdtn   = -1     ! search for grid definition template number; 0 - lat/lon grid
+     jids    = -9999  ! array of values in identification section, set to wildcard
+     jgdt    = -9999  ! array of values in grid definition template 3.m
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     unpack  = .false. ! unpack data
+
+    num_soil = 0
+    rc = 0
+    do while (rc == 0) 
+    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+    if (gfld%discipline == 2) then ! disciple - land products
+      if (gfld%ipdtnum == 0) then ! analysis or forecast at single level.
+        if (gfld%ipdtmpl(1) == 0 .and. gfld%ipdtmpl(2) == 2) then  ! soil temp
+                                                                  ! octs 10 and 11
+          if (gfld%ipdtmpl(10) == 106 .and. gfld%ipdtmpl(13) == 106) then  ! a layer
+                                                                           ! octs 23 and 29
+            print*,'soil layer ',k
+            num_soil = num_soil + 1
+          endif
+        endif
+      endif
+    endif
+    
+    print*,'after getgb2 rc       ', rc
+    print*,'after getgb2 j k      ', j, k
+    print*,'after getgb2 temp num ', gfld%ipdtnum
+    print*,'after getgb2 template ', gfld%ipdtmpl
+
+    j = k
+
+    enddo
+
+    call baclose(lugb, rc)
+
+    print*,'getgb2 found this number of soil layers ',num_soil
+
+   endif
+
  !We need to recreate the soil fields if we have something other than 4 levels
    if (lsoil_input /= 4) then
    
