@@ -31,8 +31,7 @@ module load libpng/${libpng_ver:-1.6.37}
 module load libjpeg/${libjpeg_ver:-9c}
 
 module load wgrib2/${wgrib2_ver:-2.0.8}
-
+module load hdf5/${hdf5_ver:-1.10.6}
 module load netcdf/${netcdf_ver:-4.7.4}
 module load esmf/${esmf_ver:-8.0.1}
-
 module list
