@@ -4813,7 +4813,7 @@ else
 
     enddo
 
-    call baclose(lugb, rc)
+!   call baclose(lugb, rc)
 
     print*,'getgb2 found this number of soil layers ',num_soil
 
@@ -4884,6 +4884,19 @@ else
    rc = grb2_inq(the_file, inv_file, ':HGT:',':surface:', data2=dummy2d)
    if (rc /= 1) call error_handler("READING TERRAIN.", rc)
    print*,'orog ',maxval(dummy2d),minval(dummy2d)
+ 
+     j = 1
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 3  ! oct 10 - param cat - mass field
+     jpdt(2) = 5  ! oct 11 - param number - geop height
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+    print*,'getgb2 orog ',rc, maxval(gfld%fld),minval(gfld%fld)
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT TERRAIN."
@@ -4898,6 +4911,19 @@ if (localpet == 0) then
    !dummy2d = dummy2d(i_input:1:-1,j_input:1:-1)
    print*,'icec ',maxval(dummy2d),minval(dummy2d)
    icec_save = dummy2d
+ 
+     jdisc   = 10     ! search for discipline - ocean products
+     j = 1
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 2  ! oct 10 - param cat - ice
+     jpdt(2) = 0  ! oct 11 - param number - ice cover
+     unpack=.true.
+    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+    print*,'getgb2 icec ',rc, maxval(gfld%fld),minval(gfld%fld)
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SEAICE FRACTION."
@@ -4935,6 +4961,31 @@ if (localpet == 0) then
    slmsk_save = nint(dummy2d)
   
    deallocate(icec_save)
+
+     jdisc   = 2     ! search for discipline - land products
+     j = 1
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+     jpdt(2) = 218  ! oct 11 - param number - land nearest neighbor
+     unpack=.true.
+    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+    print*,'getgb2 landnn ',rc, maxval(gfld%fld),minval(gfld%fld)
+
+     jdisc   = 2     ! search for discipline - land products
+     j = 1
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+     jpdt(2) = 0  ! oct 11 - param number - land cover (fraction)
+     unpack=.true.
+    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+    print*,'getgb2 land ',rc, maxval(gfld%fld),minval(gfld%fld)
+
  endif ! localpet == 0
 
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
@@ -4947,6 +4998,20 @@ if (localpet == 0) then
    rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
    if (rc /= 1) call error_handler("READING SEAICE SKIN TEMP.", rc)
    print*,'ti ',maxval(dummy2d),minval(dummy2d)
+
+     jdisc   = 0     ! search for discipline - meteo products
+     j = 1
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - temperature
+     jpdt(2) = 0  ! oct 11 - param number - temperature
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+    print*,'getgb2 ti ',rc, maxval(gfld%fld),minval(gfld%fld)
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SEAICE SKIN TEMPERATURE."
@@ -4974,6 +5039,20 @@ if (localpet == 0) then
      enddo
    enddo
   print*,'weasd ',maxval(dummy2d),minval(dummy2d)
+
+     jdisc   = 0     ! search for discipline - meteo products
+     j = 1
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 1  ! oct 10 - param cat - moisture
+     jpdt(2) = 13  ! oct 11 - param number - weasd
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+    print*,'getgb2 weasd ',rc, maxval(gfld%fld),minval(gfld%fld)
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
