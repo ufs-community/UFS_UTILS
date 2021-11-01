@@ -6771,6 +6771,7 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc,lugb)
 
     integer :: j, k, jdisc, jgdtn, jpdtn, lugi
    integer :: lugb, jids(200), jgdt(200), jpdt(200)
+   integer :: iscale1, iscale2
    logical :: unpack
    type(gribfield)                  :: gfld
 
@@ -6811,7 +6812,7 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc,lugb)
     dummy3d(:,:,i) = real(dummy2d,esmf_kind_r8)
   end do    
 
-  if (vname == 'soilt') then
+  if (vname == 'soilt' .or. vname == 'soilw') then
      lugi = 0
      jdisc   = 2     ! search for discipline - land products
      j = 1
@@ -6821,7 +6822,8 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc,lugb)
      jgdtn   = -1
      jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
      jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-     jpdt(2) = 2  ! oct 11 - param number - temp
+     if (vname == 'soilt') jpdt(2) = 2  ! oct 11 - param number - temp
+     if (vname == 'soilw') jpdt(2) = 192  ! oct 11 - param number - tot soilm
      jpdt(10) = 106
      jpdt(13) = 106
      unpack=.true.
@@ -6829,7 +6831,13 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc,lugb)
       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-      print*,'getgb2 soilt ',rc, i, maxval(gfld%fld),minval(gfld%fld)
+      print*,'getgb2 ',trim(vname), rc, i, &
+             maxval(gfld%fld),minval(gfld%fld)
+      iscale1 = 10 ** gfld%ipdtmpl(11)
+      iscale2 = 10 ** gfld%ipdtmpl(14)
+      print*,'getgb2 top of soil layer in m ', float(gfld%ipdtmpl(12))/float(iscale1)
+      print*,'getgb2 bot of soil layer in m ', float(gfld%ipdtmpl(15))/float(iscale2)
+      j = k
     enddo
 
  endif
