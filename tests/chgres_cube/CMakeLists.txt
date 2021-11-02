@@ -114,15 +114,15 @@ add_mpi_test(chgres_cube-ftst_read_sfc_gfs_nemsio
   NUMPROCS 1
   TIMEOUT 60)
 
-# Comment out this unit test until ESMF memory leaks are solved
-# add_executable(ftst_surface_interp ftst_surface_interp.F90)
-# target_link_libraries(ftst_surface_interp chgres_cube_lib)
-
-# Cause test to be run with MPI.
-# add_mpi_test(chgres_cube-ftst_surface_interp
-#  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_interp
-#  NUMPROCS 1
-#  TIMEOUT 60)
+## Comment out this unit test until ESMF memory leaks are solved
+## add_executable(ftst_surface_interp ftst_surface_interp.F90)
+## target_link_libraries(ftst_surface_interp chgres_cube_lib)
+##
+## Cause test to be run with MPI.
+## add_mpi_test(chgres_cube-ftst_surface_interp
+##  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_interp
+##  NUMPROCS 1
+##  TIMEOUT 60)
 
 add_executable(ftst_read_sfc_nemsio ftst_read_sfc_nemsio.F90)
 target_link_libraries(ftst_read_sfc_nemsio chgres_cube_lib)
@@ -178,6 +178,28 @@ add_mpi_test(chgres_cube-ftst_surface_nst_landfill
   NUMPROCS 1
   TIMEOUT 60)
 
+add_executable(ftst_surface_regrid_many ftst_surface_regrid_many.F90)
+target_link_libraries(ftst_surface_regrid_many chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_surface_regrid_many
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_regrid_many
+  NUMPROCS 1
+  TIMEOUT 60)
+
+add_executable(ftst_surface_search_many ftst_surface_search_many.F90)
+target_link_libraries(ftst_surface_search_many chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_surface_search_many
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_search_many
+  NUMPROCS 1
+  TIMEOUT 60)
+
 add_executable(ftst_read_vcoord ftst_read_vcoord.F90)
 target_link_libraries(ftst_read_vcoord chgres_cube_lib)
 add_test(NAME chgres_cube-ftst_read_vcoord COMMAND ftst_read_vcoord)
+
+add_executable(ftst_example ftst_example.F90)
+target_link_libraries(ftst_example chgres_cube_lib)
+add_test(NAME chgres_cube-ftst_example COMMAND ftst_example)
