@@ -4730,7 +4730,7 @@ else
    character(len=50)                     :: method
    character(len=20)                     :: to_upper
  
-   integer                               :: rc, varnum, iret, i, j,k
+   integer                               :: rc, rc2, varnum, iret, i, j,k
    integer                               :: ncid2d, varid, varsize
 
    logical                               :: exist, rap_latlon
@@ -4894,6 +4894,7 @@ else
      unpack=.true.
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
+    if (rc /= 0) call error_handler("READING TERRAIN.", rc)
 
     print*,'getgb2 orog ',rc, maxval(gfld%fld),minval(gfld%fld)
 
@@ -4921,6 +4922,7 @@ if (localpet == 0) then
      unpack=.true.
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
+    if (rc /= 0) call error_handler("READING SEAICE FRACTION.", rc)
 
     print*,'getgb2 icec ',rc, maxval(gfld%fld),minval(gfld%fld)
 
@@ -4969,22 +4971,29 @@ if (localpet == 0) then
      jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
      jpdt(2) = 218  ! oct 11 - param number - land nearest neighbor
      unpack=.true.
-    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-    print*,'getgb2 landnn ',rc, maxval(gfld%fld),minval(gfld%fld)
+     if (rc == 0) then
 
-     jdisc   = 2     ! search for discipline - land products
-     j = 1
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-     jpdt(2) = 0  ! oct 11 - param number - land cover (fraction)
-     unpack=.true.
-    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+       print*,'getgb2 landnn ',rc, maxval(gfld%fld),minval(gfld%fld)
+
+     else
+
+       jdisc   = 2     ! search for discipline - land products
+       j = 1
+      jpdt    = -9999  ! array of values in product definition template 4.n
+      jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+      jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+      jpdt(2) = 0  ! oct 11 - param number - land cover (fraction)
+      unpack=.true.
+      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
+      if (rc /= 0) call error_handler("READING LANDSEA MASK.", rc)
+    
+      print*,'getgb2 land ',rc, maxval(gfld%fld),minval(gfld%fld)
 
-    print*,'getgb2 land ',rc, maxval(gfld%fld),minval(gfld%fld)
+    endif
 
  endif ! localpet == 0
 
@@ -5009,6 +5018,7 @@ if (localpet == 0) then
      unpack=.true.
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
+    if (rc /= 0) call error_handler("READING SEAICE SKIN TEMP.", rc)
 
     print*,'getgb2 ti ',rc, maxval(gfld%fld),minval(gfld%fld)
 
@@ -5050,6 +5060,7 @@ if (localpet == 0) then
      unpack=.true.
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
+     if (rc /= 0) call error_handler("READING SNOW LIQUID EQUIVALENT.", rc)
 
     print*,'getgb2 weasd ',rc, maxval(gfld%fld),minval(gfld%fld)
 
@@ -5080,6 +5091,7 @@ if (localpet == 0) then
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
+   if (rc /= 0) call error_handler("READING SNOW DEPTH.", rc)
     gfld%fld = gfld%fld * 1000.0
     print*,'getgb2 snod ',rc, maxval(gfld%fld),minval(gfld%fld)
 
@@ -5109,6 +5121,7 @@ if (localpet == 0) then
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
+   if (rc /= 0) call error_handler("READING T2M.", rc)
     print*,'getgb2 t2m ',rc, maxval(gfld%fld),minval(gfld%fld)
 
  endif
@@ -5135,6 +5148,7 @@ if (localpet == 0) then
      unpack=.true.
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
+   if (rc /=0) call error_handler("READING Q2M.", rc)
 
     print*,'getgb2 q2m ',rc, maxval(gfld%fld),minval(gfld%fld)
 
@@ -5176,6 +5190,7 @@ if (localpet == 0) then
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
+   if (rc /= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
     print*,'getgb2 skint ',rc, maxval(gfld%fld),minval(gfld%fld)
 
  endif
@@ -5199,7 +5214,22 @@ if (localpet == 0) then
    rc = grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
    print*,'after wgrib2 soil type ',rc,maxval(dummy2d),minval(dummy2d)
 
+     jdisc   = 2     ! search for discipline - land products
+     j = 1
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 3  ! oct 10 - param cat - soil products
+     jpdt(2) = 0  ! oct 11 - param number - soil type
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc2)
+
+!  if (rc2 /= 0 ) call error_handler("READING soil type", rc2)
+    print*,'getgb2 soil type ', rc2, maxval(gfld%fld),minval(gfld%fld)
+
    !failed => rc = 0
+   !cggg with g2, this should be rc /= 0.
    if (rc <= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon) .and. geo_file .ne. "NULL")  then
      ! Some HRRR and RAP files don't have dominant soil type in the output, but the geogrid files
      ! do, so this gives users the option to provide the geogrid file and use input soil
@@ -5329,7 +5359,25 @@ if (localpet == 0) then
            PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
      endif
      if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
-      print*,'vfrac ',maxval(dummy2d),minval(dummy2d)   
+      print*,'wgrib2 vfrac ',maxval(dummy2d),minval(dummy2d)   
+
+     jdisc   = 2     ! search for discipline - land products
+     j = 1
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+     jpdt(2) = 4  ! oct 11 - param number - vegetation
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+    if (rc /= 0 ) call error_handler("READING VEGETATION FRACTION", rc)
+    
+    if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
+    print*,'getgb2 vfrac ', maxval(gfld%fld),minval(gfld%fld)
+
+
    endif
 
  
@@ -5348,19 +5396,48 @@ if (localpet == 0) then
                loc=varnum)
      vname=":VEG:"
      rc= grb2_inq(the_file, inv_file, vname,slev,'n=1106:',data2=dummy2d)
+     print*,'wgrib2 min veg 1106 ',rc
 
      if (rc <= 0) then
        rc= grb2_inq(the_file, inv_file, vname,slev,'n=1102:',data2=dummy2d)
+     print*,'wgrib2 min veg 1102 ',rc
        if (rc <= 0) then
          rc= grb2_inq(the_file, inv_file, vname,slev,'n=1152:',data2=dummy2d)
+     print*,'wgrib2 min veg 1152 ',rc
          if (rc<=0) call error_handler("COULD NOT FIND MIN VEGETATION FRACTION IN FILE. &
            PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
        endif
      endif
      if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
-     print*,'vfrac min',maxval(dummy2d),minval(dummy2d)
+     print*,'wgrib2 vfrac min',maxval(dummy2d),minval(dummy2d)
 
+     jdisc   = 2     ! search for discipline - land products
+     j = 1105
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+     jpdt(2) = 4  ! oct 11 - param number - vegetation
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+     if (rc /= 0) then
+       j = 1101
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+              unpack, k, gfld, rc)
+       if (rc /= 0) then
+         j = 1151
+         call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+                unpack, k, gfld, rc)
+         if (rc/=0) call error_handler("COULD NOT FIND MIN VEGETATION FRACTION IN FILE. &
+           PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+       endif
      endif
+    
+     if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
+     print*,'getgb2 vfrac min ', maxval(gfld%fld),minval(gfld%fld)
+
+   endif
 
    print*,"- CALL FieldScatter FOR INPUT GRID MIN VEG GREENNESS."
    call ESMF_FieldScatter(min_veg_greenness_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0, rc=rc)
@@ -5385,7 +5462,33 @@ if (localpet == 0) then
        endif
      endif
      if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
-     print*,'vfrac max',maxval(dummy2d),minval(dummy2d)
+     print*,'wgrib2 vfrac max',maxval(dummy2d),minval(dummy2d)
+
+     jdisc   = 2     ! search for discipline - land products
+     j = 1106
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+     jpdt(2) = 4  ! oct 11 - param number - vegetation
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+     if (rc /= 0) then
+       j = 1102
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+              unpack, k, gfld, rc)
+       if (rc /= 0) then
+         j = 1152
+         call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+                unpack, k, gfld, rc)
+         if (rc <= 0) call error_handler("COULD NOT FIND MAX VEGETATION FRACTION IN FILE. &
+            PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+       endif
+     endif
+    
+     if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
+     print*,'getgb2 vfrac max ', maxval(gfld%fld),minval(gfld%fld)
 
    endif !localpet==0
 
@@ -5668,6 +5771,7 @@ if (localpet == 0) then
        if (.not. vgtyp_from_climo) then
          call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
        else
+        print*,'got here veg type'
       do j = 1, j_input
         do i = 1, i_input
           dummy2d(i,j) = 0.0_esmf_kind_r4
@@ -6830,6 +6934,8 @@ subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc,lugb)
     do i = 1,lsoil_input
       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
+
+      if (rc /= 0) call error_handler("in read_grib_soil", rc)
 
       print*,'getgb2 ',trim(vname), rc, i, &
              maxval(gfld%fld),minval(gfld%fld)
