@@ -5507,15 +5507,33 @@ if (localpet == 0) then
                loc=varnum)
      vname=":var0_7_198:"
      rc= grb2_inq(the_file, inv_file, vname,slev,':n=1108:',data2=dummy2d)
+     print*,'wgrib2 lai 1108 ',rc
      if (rc <=0) then
        rc= grb2_inq(the_file, inv_file, vname,slev,':n=1104:',data2=dummy2d)
+     print*,'wgrib2 lai 1104 ',rc
        if (rc <=0) then
          rc= grb2_inq(the_file, inv_file, vname,slev,':n=1154:',data2=dummy2d)
+     print*,'wgrib2 lai 1154 ',rc
          if (rc <= 0) call error_handler("COULD NOT FIND LAI IN FILE. &
             PLEASE SET LAI_FROM_CLIMO=.TRUE. . EXITING",rc)
        endif
      endif
-      print*,'lai',maxval(dummy2d),minval(dummy2d)
+      print*,'wgrib2 lai',maxval(dummy2d),minval(dummy2d)
+
+     jdisc   = 0     ! search for discipline - meteo products
+     j = 0
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 7  ! oct 10 - param cat - thermo stability indices
+     jpdt(2) = 198  ! oct 11 - param number - lai
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0 ) call error_handler("READING LAI", rc)
+     print*,'getgb2 lai ', maxval(gfld%fld),minval(gfld%fld)
+
    endif !localpet==0
 
    print*,"- CALL FieldScatter FOR INPUT GRID LAI."
@@ -5674,7 +5692,22 @@ if (localpet == 0) then
     endif
    call check_cnwat(dummy2d)
    dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'cnwat ',maxval(dummy2d),minval(dummy2d)
+   print*,'wgrib2 cnwat ',maxval(dummy2d),minval(dummy2d)
+
+     jdisc   = 2     ! search for discipline - land products
+     j = 0
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+     jpdt(2) = 13 ! oct 11 - param number - canopy water
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0 ) call error_handler("READING CNWAT", rc)
+     print*,'getgb2 cnwat ', maxval(gfld%fld),minval(gfld%fld)
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID CANOPY MOISTURE CONTENT."
@@ -5703,8 +5736,23 @@ if (localpet == 0) then
       dummy2d(:,:) = dummy2d(:,:)*10.0
     endif
    dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'sfcr ',maxval(dummy2d),minval(dummy2d)
+   print*,'wgrib2 sfcr ',maxval(dummy2d),minval(dummy2d)
    
+     jdisc   = 2     ! search for discipline - land products
+     j = 0
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+     jpdt(2) = 1  ! oct 11 - param number - surface roughness
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     gfld%fld = gfld%fld * 10.0 ! Grib files have z0 (m), but fv3 expects z0(cm)
+     if (rc /= 0 ) call error_handler("READING SFCR", rc)
+     print*,'getgb2 sfcr ', maxval(gfld%fld),minval(gfld%fld)
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID Z0."
@@ -5783,6 +5831,23 @@ if (localpet == 0) then
      endif !not find :anl:
    endif !not find hour fcst:
    
+     jdisc   = 2     ! search for discipline - land products
+     j = 0
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+     jpdt(2) = 198  ! oct 11 - param number - vegetation type
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0 ) call error_handler("READING VGTYP", rc)
+     print*,'getgb2 vgtyp ', maxval(gfld%fld),minval(gfld%fld)
+
+
+
+
    if (trim(external_model) .ne. "GFS") then
    do j = 1, j_input
      do i = 1,i_input
