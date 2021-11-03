@@ -4713,6 +4713,7 @@ else
 !! @author Larissa Reames 
  subroutine read_input_sfc_grib2_file(localpet)
 
+   use mpi
    use grib_mod
    use wgrib2api
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
@@ -4755,25 +4756,15 @@ else
    the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
    geo_file = trim(geogrid_file_input_grid)
    
-   
    print*,"- READ SFC DATA FROM GRIB2 FILE: ", trim(the_file)
-   inquire(file=the_file,exist=exist)
-   if (.not.exist) then
-     iret = 1
-     call error_handler("OPENING GRIB2 FILE.", iret)
-   end if
 
-   lsoil_input = grb2_inq(the_file, inv_file, ':TSOIL:',' below ground:')
-   print*, "- FILE HAS ", lsoil_input, " SOIL LEVELS"
-   if (lsoil_input <= 0) call error_handler("COUNTING SOIL LEVELS.", rc)
-   
+! Determine the number of soil layers in file.
+
    if (localpet == 0) then
-
-     print*,'got here soil levels'
 
      lugb=12
      call baopenr(lugb,the_file,rc)
-     print*,'after g2 open ',rc
+     if (rc /= 0) call error_handler("ERROR OPENING GRIB2 FILE.", rc)
 
      j       = 0      ! search at beginning of file
      lugi    = 0      ! no grib index file
@@ -4785,39 +4776,36 @@ else
      jpdt    = -9999  ! array of values in product definition template 4.n
      unpack  = .false. ! unpack data
 
-    num_soil = 0
-    rc = 0
-    do while (rc == 0) 
-    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     lsoil_input = 0
+     rc = 0
+     do while (rc == 0) 
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-    if (gfld%discipline == 2) then ! disciple - land products
-      if (gfld%ipdtnum == 0) then ! analysis or forecast at single level.
-        if (gfld%ipdtmpl(1) == 0 .and. gfld%ipdtmpl(2) == 2) then  ! soil temp
-                                                                  ! octs 10 and 11
-          if (gfld%ipdtmpl(10) == 106 .and. gfld%ipdtmpl(13) == 106) then  ! a layer
-                                                                           ! octs 23 and 29
-            print*,'soil layer ',k
-            num_soil = num_soil + 1
-          endif
-        endif
-      endif
-    endif
+       if (gfld%discipline == 2) then ! discipline - land products
+         if (gfld%ipdtnum == 0) then  ! prod template number - analysis or forecast at single level.
+           if (gfld%ipdtmpl(1) == 0 .and. gfld%ipdtmpl(2) == 2) then  ! soil temp
+                                                                      ! octs 10 and 11
+             if (gfld%ipdtmpl(10) == 106 .and. gfld%ipdtmpl(13) == 106) then  ! A layer. octs
+                                                                              ! 23 and 29.              
+               lsoil_input = lsoil_input + 1
+             endif
+           endif
+         endif
+       endif
     
-    print*,'after getgb2 rc       ', rc
-    print*,'after getgb2 j k      ', j, k
-    print*,'after getgb2 temp num ', gfld%ipdtnum
-    print*,'after getgb2 template ', gfld%ipdtmpl
-
-    j = k
+      j = k
 
     enddo
 
-!   call baclose(lugb, rc)
+    print*, "- FILE HAS ", lsoil_input, " SOIL LEVELS."
+    if (lsoil_input == 0) call error_handler("COUNTING SOIL LEVELS.", rc)
 
-    print*,'getgb2 found this number of soil layers ',num_soil
+  endif ! localpet == 0
 
-   endif
+  call MPI_BARRIER(MPI_COMM_WORLD, rc)
+  call MPI_BCAST(lsoil_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
 
  !We need to recreate the soil fields if we have something other than 4 levels
    if (lsoil_input /= 4) then
@@ -5923,6 +5911,8 @@ if (localpet == 0) then
  deallocate(dummy3d)
  deallocate(dummy2d_8)
  
+ if (localpet == 0) call baclose(lugb, rc)
+
  end subroutine read_input_sfc_grib2_file
    
 !> Read nst data from these netcdf formatted fv3 files: tiled history,
