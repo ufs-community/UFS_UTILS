@@ -5690,7 +5690,9 @@ if (localpet == 0) then
         dummy2d(:,:) = 0.0_esmf_kind_r4
       endif
     endif
+
    call check_cnwat(dummy2d)
+
    dummy2d_8= real(dummy2d,esmf_kind_r8)
    print*,'wgrib2 cnwat ',maxval(dummy2d),minval(dummy2d)
 
@@ -5705,8 +5707,11 @@ if (localpet == 0) then
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-     if (rc /= 0 ) call error_handler("READING CNWAT", rc)
-     print*,'getgb2 cnwat ', maxval(gfld%fld),minval(gfld%fld)
+     if (rc /= 0 ) then
+        print*, "getgb2 did not find cnwat in file."
+     else
+       print*,'getgb2 cnwat ', maxval(gfld%fld),minval(gfld%fld)
+     endif
 
  endif
 
@@ -5749,9 +5754,12 @@ if (localpet == 0) then
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-     gfld%fld = gfld%fld * 10.0 ! Grib files have z0 (m), but fv3 expects z0(cm)
-     if (rc /= 0 ) call error_handler("READING SFCR", rc)
-     print*,'getgb2 sfcr ', maxval(gfld%fld),minval(gfld%fld)
+     if (rc /= 0 ) then
+       print*, "getgb2 did not find sfcr in file."
+     else
+       gfld%fld = gfld%fld * 10.0 ! Grib files have z0 (m), but fv3 expects z0(cm)
+       print*,'getgb2 sfcr ', maxval(gfld%fld),minval(gfld%fld)
+     endif
 
  endif
 
@@ -5842,11 +5850,11 @@ if (localpet == 0) then
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-     if (rc /= 0 ) call error_handler("READING VGTYP", rc)
-     print*,'getgb2 vgtyp ', maxval(gfld%fld),minval(gfld%fld)
-
-
-
+     if (rc /= 0 ) then
+       print*,'getgb2 could not find vgtyp'
+     else
+       print*,'getgb2 vgtyp ', maxval(gfld%fld),minval(gfld%fld)
+     endif
 
    if (trim(external_model) .ne. "GFS") then
    do j = 1, j_input
