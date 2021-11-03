@@ -1138,10 +1138,10 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
     do j = clb(2),cub(2)
       do i = clb(1), cub(1)
-!       lon_src_ptr(i,j)=real(longitude_one_tile(i,j),esmf_kind_r8)
-!       lat_src_ptr(i,j)=real(latitude_one_tile(i,j),esmf_kind_r8)
-        lon_src_ptr(i,j)=rlon(i,j)
-        lat_src_ptr(i,j)=rlat(i,j)
+        lon_src_ptr(i,j)=real(longitude_one_tile(i,j),esmf_kind_r8)
+        lat_src_ptr(i,j)=real(latitude_one_tile(i,j),esmf_kind_r8)
+!       lon_src_ptr(i,j)=rlon(i,j)
+!       lat_src_ptr(i,j)=rlat(i,j)
         if (abs(rlon(i,j)-longitude_one_tile(i,j)) > 0.1 .or. &
             abs(rlat(i,j)-latitude_one_tile(i,j)) > 0.1) then
           print*,'lat/lon diff ', rlon(i,j), longitude_one_tile(i,j), &
@@ -1227,8 +1227,8 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
           print*,'lat/lon corn diff ', rlonc(i,j), lon_src_ptr(i,j), &
                    rlatc(i,j),lat_src_ptr(i,j)
         endif
-          lon_src_ptr(i,j)=rlonc(i,j)
-          lat_src_ptr(i,j)=rlatc(i,j)
+!         lon_src_ptr(i,j)=rlonc(i,j)
+!         lat_src_ptr(i,j)=rlatc(i,j)
         enddo
        enddo
 
@@ -1250,10 +1250,10 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 
     do j = clb(2),cub(2)
       do i = clb(1), cub(1)
-!       lon_src_ptr(i,j)=real(lon_corners(i,j),esmf_kind_r8)
-!       lat_src_ptr(i,j)=real(lat_corners(i,j),esmf_kind_r8)
-        lon_src_ptr(i,j)=rlonc(i,j)
-        lat_src_ptr(i,j)=rlatc(i,j)
+        lon_src_ptr(i,j)=real(lon_corners(i,j),esmf_kind_r8)
+        lat_src_ptr(i,j)=real(lat_corners(i,j),esmf_kind_r8)
+!       lon_src_ptr(i,j)=rlonc(i,j)
+!       lat_src_ptr(i,j)=rlatc(i,j)
         if (abs(rlonc(i,j)-lon_corners(i,j)) > 0.1 .or. &
             abs(rlatc(i,j)-lat_corners(i,j)) > 0.1) then
           print*,'lat/lon corn diff ', rlonc(i,j), lon_corners(i,j), &
