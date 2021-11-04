@@ -4738,7 +4738,8 @@ else
 
    real(esmf_kind_r4)                    :: value
 
-   real(esmf_kind_r4), allocatable       :: dummy2d(:,:),icec_save(:,:)
+   real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
+   real(esmf_kind_r8), allocatable       :: icec_save(:,:)
    real(esmf_kind_r4), allocatable       :: dummy1d(:)
    real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:),dummy2d_82(:,:),tsk_save(:,:)
    real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy3d_stype(:,:,:)
@@ -4868,56 +4869,77 @@ else
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
  if (localpet == 0) then
-   print*,"- READ TERRAIN."
-   rc = grb2_inq(the_file, inv_file, ':HGT:',':surface:', data2=dummy2d)
-   if (rc /= 1) call error_handler("READING TERRAIN.", rc)
-   print*,'orog ',maxval(dummy2d),minval(dummy2d)
- 
-     j = 1
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 3  ! oct 10 - param cat - mass field
-     jpdt(2) = 5  ! oct 11 - param number - geop height
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
-     unpack=.true.
-    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, rc)
-    if (rc /= 0) call error_handler("READING TERRAIN.", rc)
 
-    print*,'getgb2 orog ',rc, maxval(gfld%fld),minval(gfld%fld)
+   print*,"- READ TERRAIN."
+!  rc = grb2_inq(the_file, inv_file, ':HGT:',':surface:', data2=dummy2d)
+!  if (rc /= 1) call error_handler("READING TERRAIN.", rc)
+!  print*,'wgrib2 orog ',maxval(dummy2d),minval(dummy2d)
+ 
+   j = 1
+   jpdt    = -9999  ! array of values in product definition template 4.n
+   jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+   jpdt(1) = 3  ! oct 10 - param cat - mass field
+   jpdt(2) = 5  ! oct 11 - param number - geop height
+   jpdt(10) = 1 ! oct 23 - type of level - ground surface
+   unpack=.true.
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+   if (rc /= 0) call error_handler("READING TERRAIN.", rc)
+
+   print*,'getgb2 orog ', maxval(gfld%fld),minval(gfld%fld)
+   dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+   print*,'reshape orog ', maxval(dummy2d_8),minval(dummy2d_8)
+   
+! temporary code. wgrib flips the pole of gfs data.
+   if (trim(external_model) == "GFS") then
+     dummy2d_82 = dummy2d_8
+     do j = 1, j_input
+       dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+     enddo
+   endif 
 
  endif
 
  print*,"- CALL FieldScatter FOR INPUT TERRAIN."
- call ESMF_FieldScatter(terrain_input_grid, real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ call ESMF_FieldScatter(terrain_input_grid, dummy2d_8, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
     
 if (localpet == 0) then
    print*,"- READ SEAICE FRACTION."
-   rc = grb2_inq(the_file, inv_file, ':ICEC:',':surface:', data2=dummy2d)
-   if (rc /= 1) call error_handler("READING SEAICE FRACTION.", rc)
-   !dummy2d = dummy2d(i_input:1:-1,j_input:1:-1)
-   print*,'icec ',maxval(dummy2d),minval(dummy2d)
-   icec_save = dummy2d
+!  rc = grb2_inq(the_file, inv_file, ':ICEC:',':surface:', data2=dummy2d)
+!  if (rc /= 1) call error_handler("READING SEAICE FRACTION.", rc)
+!  print*,'wgrib2 icec ',maxval(dummy2d),minval(dummy2d)
+!  icec_save = dummy2d
  
-     jdisc   = 10     ! search for discipline - ocean products
-     j = 1
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 2  ! oct 10 - param cat - ice
-     jpdt(2) = 0  ! oct 11 - param number - ice cover
-     unpack=.true.
-    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+   jdisc   = 10     ! search for discipline - ocean products
+   j = 0
+   jpdt    = -9999  ! array of values in product definition template 4.n
+   jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+   jpdt(1) = 2  ! oct 10 - param cat - ice
+   jpdt(2) = 0  ! oct 11 - param number - ice cover
+   unpack=.true.
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
-    if (rc /= 0) call error_handler("READING SEAICE FRACTION.", rc)
+   if (rc /= 0) call error_handler("READING SEAICE FRACTION.", rc)
 
-    print*,'getgb2 icec ',rc, maxval(gfld%fld),minval(gfld%fld)
+   print*,'getgb2 icec ',rc, maxval(gfld%fld),minval(gfld%fld)
+   dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+ 
+! temporary code. wgrib flips the pole of gfs data.
+   if (trim(external_model) == "GFS") then
+     dummy2d_82 = dummy2d_8
+     do j = 1, j_input
+       dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+     enddo
+   endif 
+
+   icec_save = dummy2d_8
 
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SEAICE FRACTION."
- call ESMF_FieldScatter(seaice_fract_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ call ESMF_FieldScatter(seaice_fract_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
@@ -4931,29 +4953,29 @@ if (localpet == 0) then
 
  if (localpet == 0) then
    print*,"- READ LANDSEA MASK."
-   rc = grb2_inq(the_file, inv_file, ':LANDN:',':surface:', data2=dummy2d)
+!  rc = grb2_inq(the_file, inv_file, ':LANDN:',':surface:', data2=dummy2d)
 
-   if (rc /= 1) then 
-     rc = grb2_inq(the_file, inv_file, ':LAND:',':surface:', data2=dummy2d)
-     if (rc /= 1) call error_handler("READING LANDSEA MASK.", rc)
-   endif
+!  if (rc /= 1) then 
+!    rc = grb2_inq(the_file, inv_file, ':LAND:',':surface:', data2=dummy2d)
+!    if (rc /= 1) call error_handler("READING LANDSEA MASK.", rc)
+!  endif
 
-   do j = 1, j_input
-     do i = 1, i_input
-       if(dummy2d(i,j) < 0.5_esmf_kind_r4) dummy2d(i,j)=0.0_esmf_kind_r4
-       if(icec_save(i,j) > 0.15_esmf_kind_r4) then 
-         !if (dummy2d(i,j) == 0.0_esmf_kind_r4) print*, "CONVERTING WATER TO SEA/LAKE ICE AT ", i, j
-         dummy2d(i,j) = 2.0_esmf_kind_r4
-       endif
-     enddo
-   enddo
+!  do j = 1, j_input
+!    do i = 1, i_input
+!      if(dummy2d(i,j) < 0.5_esmf_kind_r4) dummy2d(i,j)=0.0_esmf_kind_r4
+!      if(icec_save(i,j) > 0.15_esmf_kind_r4) then 
+!        !if (dummy2d(i,j) == 0.0_esmf_kind_r4) print*, "CONVERTING WATER TO SEA/LAKE ICE AT ", i, j
+!        dummy2d(i,j) = 2.0_esmf_kind_r4
+!      endif
+!    enddo
+!  enddo
 
-   slmsk_save = nint(dummy2d)
+!  slmsk_save = nint(dummy2d)
   
-   deallocate(icec_save)
+!  deallocate(icec_save)
 
      jdisc   = 2     ! search for discipline - land products
-     j = 1
+     j = 0
      jpdt    = -9999  ! array of values in product definition template 4.n
      jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
      jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
@@ -4969,35 +4991,58 @@ if (localpet == 0) then
      else
 
        jdisc   = 2     ! search for discipline - land products
-       j = 1
-      jpdt    = -9999  ! array of values in product definition template 4.n
-      jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-      jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-      jpdt(2) = 0  ! oct 11 - param number - land cover (fraction)
-      unpack=.true.
-      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, rc)
-      if (rc /= 0) call error_handler("READING LANDSEA MASK.", rc)
+       j = 0
+       jpdt    = -9999  ! array of values in product definition template 4.n
+       jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+       jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+       jpdt(2) = 0  ! oct 11 - param number - land cover (fraction)
+       unpack=.true.
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+              unpack, k, gfld, rc)
+       if (rc /= 0) call error_handler("READING LANDSEA MASK.", rc)
     
-      print*,'getgb2 land ',rc, maxval(gfld%fld),minval(gfld%fld)
+       print*,'getgb2 land ',rc, maxval(gfld%fld),minval(gfld%fld)
 
     endif
+
+    dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+ 
+! temporary code. wgrib flips the pole of gfs data.
+    if (trim(external_model) == "GFS") then
+      dummy2d_82 = dummy2d_8
+      do j = 1, j_input
+        dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+      enddo
+    endif 
+
+    do j = 1, j_input
+      do i = 1, i_input
+        if(dummy2d_8(i,j) < 0.5_esmf_kind_r8) dummy2d_8(i,j)=0.0
+        if(icec_save(i,j) > 0.15_esmf_kind_r8) then 
+          dummy2d_8(i,j) = 2.0_esmf_kind_r8
+        endif
+      enddo
+    enddo
+
+   slmsk_save = nint(dummy2d_8)
+
+   deallocate(icec_save)
 
  endif ! localpet == 0
 
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
- call ESMF_FieldScatter(landsea_mask_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ call ESMF_FieldScatter(landsea_mask_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
    print*,"- READ SEAICE SKIN TEMPERATURE."
-   rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
-   if (rc /= 1) call error_handler("READING SEAICE SKIN TEMP.", rc)
-   print*,'ti ',maxval(dummy2d),minval(dummy2d)
+!  rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
+!  if (rc /= 1) call error_handler("READING SEAICE SKIN TEMP.", rc)
+!  print*,'ti ',maxval(dummy2d),minval(dummy2d)
 
      jdisc   = 0     ! search for discipline - meteo products
-     j = 1
+     j = 0
      jpdt    = -9999  ! array of values in product definition template 4.n
      jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
      jpdt(1) = 0  ! oct 10 - param cat - temperature
@@ -5010,10 +5055,20 @@ if (localpet == 0) then
 
     print*,'getgb2 ti ',rc, maxval(gfld%fld),minval(gfld%fld)
 
+    dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+! temporary code. wgrib flips the pole of gfs data.
+    if (trim(external_model) == "GFS") then
+      dummy2d_82 = dummy2d_8
+      do j = 1, j_input
+        dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+      enddo
+    endif 
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SEAICE SKIN TEMPERATURE."
- call ESMF_FieldScatter(seaice_skin_temp_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ call ESMF_FieldScatter(seaice_skin_temp_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
@@ -5025,21 +5080,21 @@ if (localpet == 0) then
 
  if (localpet == 0) then
    print*,"- READ SNOW LIQUID EQUIVALENT."
-   rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:',':anl:',data2=dummy2d)
-   if (rc /= 1) then 
-     rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:','hour fcst:',data2=dummy2d)
-     if (rc /= 1) call error_handler("READING SNOW LIQUID EQUIVALENT.", rc)
-   endif
-   do j = 1, j_input
-     do i = 1, i_input
-       if(slmsk_save(i,j) == 0) dummy2d(i,j) = 0.0_esmf_kind_r4
-       if(dummy2d(i,j) == grb2_UNDEFINED) dummy2d(i,j) = 0.0_esmf_kind_r4
-     enddo
-   enddo
-  print*,'weasd ',maxval(dummy2d),minval(dummy2d)
+!  rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:',':anl:',data2=dummy2d)
+!  if (rc /= 1) then 
+!    rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:','hour fcst:',data2=dummy2d)
+!    if (rc /= 1) call error_handler("READING SNOW LIQUID EQUIVALENT.", rc)
+!  endif
+!  do j = 1, j_input
+!    do i = 1, i_input
+!      if(slmsk_save(i,j) == 0) dummy2d(i,j) = 0.0_esmf_kind_r4
+!      if(dummy2d(i,j) == grb2_UNDEFINED) dummy2d(i,j) = 0.0_esmf_kind_r4
+!    enddo
+!  enddo
+! print*,'weasd ',maxval(dummy2d),minval(dummy2d)
 
      jdisc   = 0     ! search for discipline - meteo products
-     j = 1
+     j = 0
      jpdt    = -9999  ! array of values in product definition template 4.n
      jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
      jpdt(1) = 1  ! oct 10 - param cat - moisture
@@ -5052,10 +5107,26 @@ if (localpet == 0) then
 
     print*,'getgb2 weasd ',rc, maxval(gfld%fld),minval(gfld%fld)
 
+    dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+! temporary code. wgrib flips the pole of gfs data.
+    if (trim(external_model) == "GFS") then
+      dummy2d_82 = dummy2d_8
+      do j = 1, j_input
+        dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+      enddo
+    endif 
+
+   do j = 1, j_input
+     do i = 1, i_input
+       if(slmsk_save(i,j) == 0) dummy2d_8(i,j) = 0.0
+     enddo
+   enddo
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
- call ESMF_FieldScatter(snow_liq_equiv_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ call ESMF_FieldScatter(snow_liq_equiv_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
