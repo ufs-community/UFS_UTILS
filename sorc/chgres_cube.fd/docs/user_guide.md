@@ -11,8 +11,8 @@ Common Data Form (NetCDF) data.
 This document is part of the <a href="../index.html">UFS_UTILS
 documentation</a>.
 
-The chgres_cube program is part of the [NCEPLIBS
-UFS_UTILS](https://github.com/NOAA-EMC/UFS_UTILS) project.
+The chgres_cube program is part of the
+[UFS_UTILS](https://github.com/ufs-community/UFS_UTILS) project.
 
 ## Where to find GFS GRIB2, NEMSIO and NetCDF data
 
