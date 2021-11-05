@@ -31,23 +31,35 @@ module module_nwp
       integer :: xlat !< Number of latitudes.
       integer :: xlon !< Number of longitudes.
       integer :: xtime !< Number of times.
+      integer :: datelen !< Length of date string.
       integer :: i_mask !< Is var visible (always 1).
       integer :: i_sst !< Index of sst var.
       integer :: i_ice !< Index of ice var.
       integer :: i_sfcT !< Index of sst temp var.
       integer :: i_iceT !< Index of ice temp var.
+      integer :: i_sfcTl !< Index of sfcTl
       character(len=20), allocatable :: varnames(:) !< Variable names.
       character(len=20), allocatable :: latname !< Latitude name.
       character(len=20), allocatable :: lonname !< Longitude name.
       character(len=20), allocatable :: dimnameEW !< East/West dimension name.
       character(len=20), allocatable :: dimnameNS !< North/South dimension name.
       character(len=20), allocatable :: dimnameTIME !< Time dimension name.
+      character(len=20), allocatable :: dimnameDATE !< String dimension name.
+      character(len=1), allocatable :: times(:,:) !< Array of times in FVCOM.
 
-      real(r_kind), allocatable :: nwp_mask(:,:,:) !< Land/water mask 3D array
-      real(r_kind), allocatable :: nwp_sst(:,:,:) !< SST 3D array
-      real(r_kind), allocatable :: nwp_ice(:,:,:) !< Over water ice concentration 3D array
-      real(r_kind), allocatable :: nwp_sfcT(:,:,:) !< Skin temperature 3D array
-      real(r_kind), allocatable :: nwp_iceT(:,:,:)  !< Ice skin temperature 3D array
+      real(r_kind), allocatable :: nwp_mask_c(:,:) !< cold start land/water mask 3d array
+      real(r_kind), allocatable :: nwp_sst_c(:,:,:) !< cold start sst 3d array
+      real(r_kind), allocatable :: nwp_ice_c(:,:,:) !< cold start over water ice concentration 3d array
+      real(r_kind), allocatable :: nwp_sfct_c(:,:,:) !< cold start skin temperature 3d array
+      real(r_kind), allocatable :: nwp_icet_c(:,:,:)  !< cold start ice skin temperature 3d array
+
+      real(r_kind), allocatable :: nwp_mask_w(:,:) !< warm start land/water mask 3d array
+      real(r_kind), allocatable :: nwp_sst_w(:,:) !< warm start sst 3d array
+      real(r_kind), allocatable :: nwp_ice_w(:,:) !< warm start over water ice concentration 3d array
+      real(r_kind), allocatable :: nwp_sfct_w(:,:) !< warm start skin temperature 3d array
+      real(r_kind), allocatable :: nwp_icet_w(:,:)  !< warm start ice skin temperature 3d array
+      real(r_kind), allocatable :: nwp_sfctl_w(:,:) !< warm start skin temperature 3d array
+
    end type nwp_type
 
    type, extends(nwp_type) :: fcst_nwp
@@ -61,6 +73,7 @@ module module_nwp
          procedure :: initial => initial_nwp !< Defines vars and names. @return
          procedure :: list_initial => list_initial_nwp !< List the setup. @return
          procedure :: read_n => read_nwp !< Initialize arrays, get data. @return
+         procedure :: get_time_ind => get_time_ind_nwp !< Get time ind. @return
          procedure :: finish => finish_nwp !< Finish and deallocate. @return
    end type fcst_nwp
 
@@ -75,11 +88,13 @@ module module_nwp
      !!
      !! @param this fcst_nwp object
      !! @param[in] itype either ' FVCOM' or 'FV3LAM'.
+     !! @param[in] wcstart either 'warm' or 'cold'.
      !! @author David Wright, University of Michigan and GLERL
-      subroutine initial_nwp(this,itype)
+      subroutine initial_nwp(this,itype,wcstart)
          class(fcst_nwp) :: this
 
          character(len=6), intent(in) :: itype
+         character(len=4), intent(in) :: wcstart
 
 !        FVCOM grid
          if (itype==' FVCOM') then
@@ -106,13 +121,46 @@ module module_nwp
             allocate(this%dimnameEW)
             allocate(this%dimnameNS)
             allocate(this%dimnameTIME)
+            allocate(this%dimnameDATE)
             this%dimnameEW = 'lon'
             this%dimnameNS = 'lat'
             this%dimnameTIME = 'Time'
+            this%dimnameDATE = 'DateStrLen'
 
 !        FV3LAM grid
 
-         else if (trim(itype)=='FV3LAM') then
+         else if (trim(itype)=='FV3LAM' .AND. wcstart=='warm') then
+            this%datatype = itype
+            this%numvar = 6
+
+            this%i_mask = 1
+            this%i_sst = 2
+            this%i_ice = 3
+            this%i_iceT = 4
+            this%i_sfcT = 5
+            this%i_sfcTl= 6
+
+            allocate(this%varnames(this%numvar))
+            this%varnames(1) = 'slmsk'
+            this%varnames(2) = 'tsea'
+            this%varnames(3) = 'fice'
+            this%varnames(4) = 'tisfc'
+            this%varnames(5) = 'tsfc'
+            this%varnames(6) = 'tsfcl'
+
+            allocate(this%latname)
+            allocate(this%lonname)
+            this%latname = 'yaxis_1'
+            this%lonname = 'xaxis_1'
+
+            allocate(this%dimnameEW)
+            allocate(this%dimnameNS)
+            allocate(this%dimnameTIME)
+            this%dimnameEW = 'xaxis_1'
+            this%dimnameNS = 'yaxis_1'
+            this%dimnameTIME = 'Time'
+
+         else if (trim(itype)=='FV3LAM' .AND. wcstart=='cold') then
             this%datatype = itype
             this%numvar = 4
 
@@ -168,9 +216,9 @@ module module_nwp
 
          write(*,*) 'List initial setup for ', this%datatype
          write(*,*) 'number of variables ', this%numvar
-         write(*,*) 'variable index: mask, sst, ice, sfcT'
+         write(*,*) 'variable index: mask, sst, ice, sfcT, sfcTl'
          write(*,'(15x,10I3)') this%i_mask, this%i_sst, this%i_ice, &
-      &      this%i_sfcT
+      &      this%i_sfcT, this%i_sfcTl
          write(*,*) 'variable name:'
          do k=1,this%numvar
             write(*,*) k,trim(this%varnames(k))
@@ -187,6 +235,7 @@ module module_nwp
       !! @param this fcst_nwp ojbect
       !! @param[in] filename netcdf file name
       !! @param[in] itype either ' FVCOM' or 'FV3LAM'
+      !! @param[in] wcstart either 'warm' or 'cold'.
       !! @param[inout] numlon number of grid points in x-direction
       !! @param[inout] numlat number of grid poinst in y-direction
       !! @param[inout] numtimes length of time dimension
@@ -196,20 +245,22 @@ module module_nwp
       !! @param[inout] ice Ice concentration (%)
       !! @param[inout] sfcT Skin Temperature
       !! @param[inout] iceT Ice Skin Temperature
+      !! @param[inout] sfcTl Skin Temperature in restart file
       !!
       !! @author David Wright, University of Michigan and GLERL
-      subroutine read_nwp(this,filename,itype,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT)
+      subroutine read_nwp(this,filename,itype,wcstart,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT,sfcTl)
 
          class(fcst_nwp) :: this
 
-         character(len=5), intent(in) :: itype
+         character(len=6), intent(in) :: itype
          character(len=*), intent(in) :: filename
+         character(len=4), intent(in) :: wcstart
 
          integer, intent(in) :: time_to_get
          integer, intent(inout) :: numlon, numlat, numtimes
 !         real(r_single), intent(inout) :: mask(:,:), sst(:,:), ice(:,:), sfcT(:,:)
          real(r_kind), intent(inout) :: mask(:,:),sst(:,:),ice(:,:),sfcT(:,:) &
-                                        ,iceT(:,:)
+                                        ,iceT(:,:),sfcTl(:,:)
 
 !        Open the file using module_ncio.f90 code, and find the number of
 !        lat/lon points
@@ -227,42 +278,100 @@ module module_nwp
          numtimes = this%xtime
 
 !        Allocate all the arrays to receive data
-
-         allocate(this%nwp_mask(this%xlon,this%xlat,this%xtime))
-         allocate(this%nwp_sst(this%xlon,this%xlat,this%xtime))
-         allocate(this%nwp_ice(this%xlon,this%xlat,this%xtime))
-         allocate(this%nwp_sfcT(this%xlon,this%xlat,this%xtime))
-         allocate(this%nwp_iceT(this%xlon,this%xlat,this%xtime))
+         if (wcstart == 'cold' .OR. itype == ' FVCOM') then
+            allocate(this%nwp_mask_c(this%xlon,this%xlat))
+            allocate(this%nwp_sst_c(this%xlon,this%xlat,this%xtime))
+            allocate(this%nwp_ice_c(this%xlon,this%xlat,this%xtime))
+            allocate(this%nwp_sfcT_c(this%xlon,this%xlat,this%xtime))
+            allocate(this%nwp_iceT_c(this%xlon,this%xlat,this%xtime))
 
 !        Get variables from the data file, but only if the variable is
 !        defined for that data type.
 
-         if (this%i_mask .gt. 0) then
-            call ncdata%get_var(this%varnames(this%i_mask),this%xlon,  &
-                                this%xlat,this%xtime,this%nwp_mask)
-            mask = this%nwp_mask(:,:,1)
-         end if
-         if (this%i_sst .gt. 0) then
-            call ncdata%get_var(this%varnames(this%i_sst),this%xlon,  &
-                                this%xlat,this%xtime,this%nwp_sst)
-            sst = this%nwp_sst(:,:,time_to_get)
-         end if
-         if (this%i_ice .gt. 0) then
-            call ncdata%get_var(this%varnames(this%i_ice),this%xlon,  &
-                                this%xlat,this%xtime,this%nwp_ice)
-            ice = this%nwp_ice(:,:,time_to_get)
-         end if
-         if (this%i_sfcT .gt. 0) then
-            call ncdata%get_var(this%varnames(this%i_sfcT),this%xlon,  &
-                                this%xlat,this%xtime,this%nwp_sfcT)
-            sfcT = this%nwp_sfcT(:,:,time_to_get)
-         end if
-         if (this%i_iceT .gt. 0) then
-             call ncdata%get_var(this%varnames(this%i_iceT),this%xlon,  &
-                                this%xlat,this%xtime,this%nwp_iceT)
-            iceT = this%nwp_iceT(:,:,time_to_get)
-         end if 
+            write(*,*) 'itype = ', itype
+            write(*,*) 'wcstart = ', wcstart
+            write(*,*) 'xlat = ', this%xlat
+            write(*,*) 'xlon = ', this%xlon
+            write(*,*) 'xtime = ', this%xtime
 
+            if (this%i_mask .gt. 0) then
+               call ncdata%get_var(this%varnames(this%i_mask),this%xlon,  &
+                                   this%xlat,this%nwp_mask_c)
+               mask = this%nwp_mask_c(:,:)
+            end if
+            if (this%i_sst .gt. 0) then
+               write(*,*) 'get sst for cold or FVCOM'
+               call ncdata%get_var(this%varnames(this%i_sst),this%xlon,  &
+                                   this%xlat,this%xtime,this%nwp_sst_c)
+               sst = this%nwp_sst_c(:,:,time_to_get)
+            end if
+            if (this%i_ice .gt. 0) then
+               call ncdata%get_var(this%varnames(this%i_ice),this%xlon,  &
+                                   this%xlat,this%xtime,this%nwp_ice_c)
+               ice = this%nwp_ice_c(:,:,time_to_get)
+            end if
+            if (this%i_sfcT .gt. 0) then
+               call ncdata%get_var(this%varnames(this%i_sfcT),this%xlon,  &
+                                   this%xlat,this%xtime,this%nwp_sfcT_c)
+               sfcT = this%nwp_sfcT_c(:,:,time_to_get)
+            end if
+            if (this%i_iceT .gt. 0) then
+                call ncdata%get_var(this%varnames(this%i_iceT),this%xlon,  &
+                                    this%xlat,this%xtime,this%nwp_iceT_c)
+                iceT = this%nwp_iceT_c(:,:,time_to_get)
+            end if 
+         else if (wcstart == 'warm') then
+            allocate(this%nwp_mask_w(this%xlon,this%xlat))
+            allocate(this%nwp_sst_w(this%xlon,this%xlat))
+            allocate(this%nwp_ice_w(this%xlon,this%xlat))
+            allocate(this%nwp_sfcT_w(this%xlon,this%xlat))
+            allocate(this%nwp_iceT_w(this%xlon,this%xlat))
+            allocate(this%nwp_sfcTl_w(this%xlon,this%xlat))
+!        Get variables from the data file, but only if the variable is
+!        defined for that data type.
+      
+            write(*,*) 'itype = ', itype
+            write(*,*) 'wcstart =', wcstart
+            write(*,*) 'xlat = ', this%xlat
+            write(*,*) 'xlon = ', this%xlon
+            write(*,*) 'xtime = ', this%xtime
+
+
+
+            if (this%i_mask .gt. 0) then
+               call ncdata%get_var(this%varnames(this%i_mask),this%xlon,  &
+                                   this%xlat,this%nwp_mask_w)
+               mask = this%nwp_mask_w(:,:)
+            end if
+            if (this%i_sst .gt. 0) then
+               call ncdata%get_var(this%varnames(this%i_sst),this%xlon,  &
+                                   this%xlat,this%nwp_sst_w)
+               sst = this%nwp_sst_w(:,:)
+            end if
+            if (this%i_ice .gt. 0) then
+               call ncdata%get_var(this%varnames(this%i_ice),this%xlon,  &
+                                   this%xlat,this%nwp_ice_w)
+               ice = this%nwp_ice_w(:,:)
+            end if
+            if (this%i_sfcT .gt. 0) then
+               call ncdata%get_var(this%varnames(this%i_sfcT),this%xlon,  &
+                                   this%xlat,this%nwp_sfcT_w)
+               sfcT = this%nwp_sfcT_w(:,:)
+            end if
+            if (this%i_iceT .gt. 0) then
+                call ncdata%get_var(this%varnames(this%i_iceT),this%xlon,  &
+                                    this%xlat,this%nwp_iceT_w)
+                iceT = this%nwp_iceT_w(:,:)
+            end if 
+            if (this%i_sfcTl .gt. 0) then
+               call ncdata%get_var(this%varnames(this%i_sfcTl),this%xlon,  &
+                                   this%xlat,this%nwp_sfcTl_w)
+               sfcTl = this%nwp_sfcTl_w(:,:)
+            end if
+         else
+            write(*,*) 'Choose either "warm" or "cold" for file'
+            stop 'Error in wcstart. Check spelling or if variable was assigned'
+         end if
 !        Close the netCDF file.
 
          call ncdata%close
@@ -275,10 +384,14 @@ module module_nwp
       !> Finish and deallocate.
       !!
       !! @param this fcst_nwp object
+      !! @param[in] itype either ' FVCOM' or 'FV3LAM'
+      !! @param[in] wcstart either 'warm' or 'cold'.
       !! @author David Wright, University of Michigan and GLERL
-      subroutine finish_nwp(this)
+      subroutine finish_nwp(this,itype,wcstart)
 
          class(fcst_nwp) :: this
+         character(len=6), intent(in) :: itype
+         character(len=4), intent(in) :: wcstart
 
          type(nwpbase), pointer :: thisobs,thisobsnext
 
@@ -288,11 +401,21 @@ module module_nwp
          deallocate(this%dimnameEW)
          deallocate(this%dimnameNS)
          deallocate(this%dimnameTIME)
-         deallocate(this%nwp_mask)
-         deallocate(this%nwp_sst)
-         deallocate(this%nwp_ice)
-         deallocate(this%nwp_sfcT)
-         deallocate(this%nwp_iceT)
+         if (wcstart == 'cold' .OR. itype==' FVCOM') then
+            deallocate(this%nwp_mask_c)
+            deallocate(this%nwp_sst_c)
+            deallocate(this%nwp_ice_c)
+            deallocate(this%nwp_sfcT_c)
+            deallocate(this%nwp_iceT_c)
+         else if (wcstart == 'warm') then
+            deallocate(this%nwp_mask_w)
+            deallocate(this%nwp_sst_w)
+            deallocate(this%nwp_ice_w)
+            deallocate(this%nwp_sfcT_w)
+            deallocate(this%nwp_iceT_w)
+         else
+            write(*,*) 'no deallocation'
+         end if
 
          thisobs => this%head
          if(.NOT.associated(thisobs)) then
@@ -311,5 +434,61 @@ module module_nwp
          write(*,*) ' '
 
       end subroutine finish_nwp
+
+      !> This subroutine searches the FVCOM 'Times' variable
+      !!  and returns the matching index
+      !!
+      !! @param this fcst_nwp ojbect
+      !! @param[in] filename netcdf file name
+      !! @param[in] instr string of requested time
+      !! @param[out] outindex int index that matches instr
+      !!
+      !! @author David Wright, University of Michigan and GLERL
+      subroutine get_time_ind_nwp(this,filename,instr,outindex)
+
+         class(fcst_nwp) :: this
+
+         character(len=*), intent(in) :: filename
+         character(len=*), intent(in) :: instr
+         integer, intent(out) :: outindex
+
+         character(len=26) :: temp
+         integer :: foundind
+         integer :: k,i
+ 
+!        Open the file using module_ncio.f90 code, and find the length of
+!        time in the file
+         call ncdata%open(trim(filename),'r',200)
+         call ncdata%get_dim(this%dimnameTIME,this%xtime)
+         call ncdata%get_dim(this%dimnameDATE,this%datelen)
+         write(*,*) 'xtime = ', this%xtime
+         write(*,*) 'datelen = ', this%datelen
+         allocate(this%times(this%datelen,this%xtime))
+         call ncdata%get_var('Times',this%datelen,this%xtime,this%times)
+
+         foundind = 0
+
+         do k=1,this%xtime,1
+            do i = 1,len(temp),1
+               temp(i:i) = this%times(i,k)
+            end do
+            if (trim(temp) == trim(instr)) then !If times are equal return k
+              outindex = k
+              foundind = 1
+            end if
+         end do
+         if (foundind == 0) then
+            outindex = -999
+            deallocate(this%times)
+            call ncdata%close
+            write(*,*) 'WARNING: Supplied time not found in file: ', trim(instr)
+            write(*,*) 'Stoppping fvcom_to_FV3 and proceeding without using FVCOM data'
+            stop
+         end if
+
+         deallocate(this%times)
+         call ncdata%close
+
+      end subroutine get_time_ind_nwp
 
 end module module_nwp
