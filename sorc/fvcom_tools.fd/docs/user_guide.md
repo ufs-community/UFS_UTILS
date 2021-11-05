@@ -11,8 +11,5 @@ restart file. See [fvcom documentation](@ref fvcom_readme).
 This document is part of the <a href="../index.html">UFS_UTILS
 documentation</a>.
 
-The fvcom_tools program is part of the [NCEPLIBS
-UFS_UTILS](https://github.com/NOAA-EMC/UFS_UTILS) project.
-
-
-
+The fvcom_tools program is part of the
+[UFS_UTILS](https://github.com/ufs-community/UFS_UTILS) project.
