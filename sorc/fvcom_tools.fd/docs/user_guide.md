@@ -13,9 +13,9 @@ documentation</a>.
 The fvcom_tools program is part of the
 [UFS_UTILS](https://github.com/ufs-community/UFS_UTILS) project.
 
-# NOTE
+## NOTE
 
-That the variables in the input files must reside on 
+The variables in the input files must reside on 
 the same grid. This means data from FVCOM must be horizontally 
 interpolated to the FV3 grid. This routine will also force a 
 minimum ice concentration of 15%. If ice concentration is less 
@@ -23,11 +23,11 @@ than 15% in FVCOM, it will be set to 0% to avoid FV3 from
 changing values less than 15% to 15% and generating unrealistic 
 lake ice temperatures.
 
-# Library Dependencies:
+## Library Dependencies:
 
 Installation depends on the netCDF library and cmake.
 
-# Running
+## Running
 
 This routine will take four variables from the command line:
 1. Name of FV3 sfc data file (e.g. sfc_data.tile7.halo0.nc)
@@ -51,8 +51,6 @@ This routine is *strongly* based upon Eric James' (ESRL/GSL) work
 to update HRRR/WRF Great Lakes' temperature data with FVCOM.
 It also relies heavily on Ming Hu's (ESRL/GSL) ncio module.
 
-# For more information, please contact:
+## For more information, please contact:
 
-David Wright
-University of Michigan and GLERL
-dmwright@umich.edu
+David Wright, University of Michigan and GLERL: dmwright@umich.edu
