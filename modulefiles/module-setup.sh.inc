@@ -97,6 +97,14 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
       source /etc/profile
       unset __ms_source_etc_profile
     fi
+##---------------------------------------------------------------------------
+elif [[ -d /apps/prod ]]; then
+
+    # We are on WCOSS2
+    target=wcoss2
+
+    module purge
+    module load envvar/1.0
 else
     echo WARNING: UNKNOWN PLATFORM 1>&2
 fi

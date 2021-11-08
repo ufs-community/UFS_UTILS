@@ -23,14 +23,13 @@ add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
   nemsio
-  sfcio_4
-  sigio_4
+  sfcio
+  sigio
   bacio_4
   sp_d
   w3nco_d
   esmf
-  wgrib2::wgrib2_api
-  wgrib2::wgrib2_lib
+  wgrib2::wgrib2
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
 if(OpenMP_Fortran_FOUND)

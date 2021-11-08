@@ -77,6 +77,15 @@ elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
     fi
     target=wcoss_dell_p3
     module purge 
+##---------------------------------------------------------------------------
+elif [[ -d /apps/prod ]]; then
+
+    # We are on WCOSS2
+    target=wcoss2
+
+    module purge
+    module load envvar/1.0
+
 elif [[ -d /glade ]] ; then
     # We are on NCAR Yellowstone
     if ( ! eval module help > /dev/null 2>&1 ) ; then

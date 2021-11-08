@@ -58,13 +58,9 @@ if(OPENMP)
   find_package(OpenMP REQUIRED COMPONENTS Fortran)
 endif()
 
-set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
+#set(CMAKE_FIND_PACKAGE_PREFER_CONFIG true)
 
-if(NOT TARGET gfsio_4)
-  find_package(gfsio REQUIRED)
-endif()
-
-if(NOT TARGET sfcio_4)
+if(NOT TARGET sfcio)
   find_package(sfcio REQUIRED)
 endif()
 
@@ -84,11 +80,11 @@ if(NOT TARGET nemsio)
   find_package(nemsio REQUIRED)
 endif()
 
-if(NOT TARGET nemsiogfs)
-  find_package(nemsiogfs REQUIRED)
-endif()
+#if(NOT TARGET nemsiogfs)
+#  find_package(nemsiogfs REQUIRED)
+#endif()
 
-if(NOT TARGET sigio_4)
+if(NOT TARGET sigio)
   find_package(sigio REQUIRED)
 endif()
 
