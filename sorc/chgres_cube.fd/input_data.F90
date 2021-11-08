@@ -5629,24 +5629,28 @@ if (localpet == 0) then
     call error_handler("IN FieldScatter", rc)
     
  if (localpet == 0) then
+
    print*,"- READ TPRCP."
    vname="tprcp"
    slev=":surface:" 
    call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-    vname=":TPRCP:"              
-   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-   if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+!  vname=":TPRCP:"              
+!  rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+!  print*,'wgrib2 tprcp ', rc, maxval(dummy2d),minval(dummy2d)
+
+! No test data contained this field. So could not test with g2 library.
+   rc = 1
+   if (rc /= 0) then
+      call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
+        dummy2d_8 = 0.0
       endif
-    endif
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'tprcp ',maxval(dummy2d),minval(dummy2d)
+   endif
+   print*,'tprcp ',maxval(dummy2d_8),minval(dummy2d_8)
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID TPRCP."
@@ -5655,24 +5659,30 @@ if (localpet == 0) then
     call error_handler("IN FieldScatter", rc)
  
  if (localpet == 0) then
+
    print*,"- READ FFMM."
    vname="ffmm"
    slev=":surface:" 
    call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-    vname=":FFMM:"               
-    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-    if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+
+!   vname=":FFMM:"               
+!   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+!   print*,'wgrib2 ffmm ',rc,maxval(dummy2d),minval(dummy2d)
+
+! No sample data contained this field, so could not test g2lib.
+    rc = 1
+    if (rc /= 0) then
+      call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
+        dummy2d_8(:,:) = 0.0
       endif
     endif
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'ffmm ',maxval(dummy2d),minval(dummy2d)
+    print*,'ffmm ',maxval(dummy2d_8),minval(dummy2d_8)
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID FFMM"
