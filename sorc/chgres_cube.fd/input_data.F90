@@ -5733,44 +5733,71 @@ if (localpet == 0) then
     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
+
+!  print*,"- READ CANOPY MOISTURE CONTENT."
+!  vname="cnwat"
+!  slev=":surface:" 
+!  call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+!                        loc=varnum)  
+!   vname=":CNWAT:"              
+!   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+!   if (rc <= 0) then
+!     call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+!     if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+!       print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL"//&
+!                  " REPLACED WITH CLIMO. SET A FILL "// &
+!                     "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+!       dummy2d(:,:) = 0.0_esmf_kind_r4
+!     endif
+!   endif
+
+!  call check_cnwat(dummy2d)
+
+!  dummy2d_8= real(dummy2d,esmf_kind_r8)
+!  print*,'wgrib2 cnwat ',maxval(dummy2d),minval(dummy2d)
+
    print*,"- READ CANOPY MOISTURE CONTENT."
    vname="cnwat"
    slev=":surface:" 
    call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-    vname=":CNWAT:"              
-    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-    if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL"//&
+   jdisc   = 2     ! search for discipline - land products
+   j = 0
+   jpdt    = -9999  ! array of values in product definition template 4.n
+   jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+   jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+   jpdt(2) = 13 ! oct 11 - param number - canopy water
+   jpdt(10) = 1 ! oct 23 - type of level - ground surface
+   unpack=.true.
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+           unpack, k, gfld, rc)
+
+   if (rc /= 0 ) then
+     jpdt(2) = 196 ! oct 11 - param number - canopy water
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+           unpack, k, gfld, rc)
+   endif
+
+   if (rc == 0 ) then
+     print*,'getgb2 cnwat ', maxval(gfld%fld),minval(gfld%fld)
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     where(dummy2d_8 > 0.5) dummy2d_8 = 0.0 ! replaces call to check_cnwat
+   else
+     call handle_grib_error(vname, slev ,method,value,varnum,rc, var8= dummy2d_8)
+     if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
-      endif
-    endif
-
-   call check_cnwat(dummy2d)
-
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'wgrib2 cnwat ',maxval(dummy2d),minval(dummy2d)
-
-     jdisc   = 2     ! search for discipline - land products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-     jpdt(2) = 13 ! oct 11 - param number - canopy water
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
-     unpack=.true.
-     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, rc)
-
-     if (rc /= 0 ) then
-        print*, "getgb2 did not find cnwat in file."
-     else
-       print*,'getgb2 cnwat ', maxval(gfld%fld),minval(gfld%fld)
      endif
+   endif
+
+! temporary code. wgrib flips the pole of gfs data.
+   if (trim(external_model) == "GFS") then
+     dummy2d_82 = dummy2d_8
+     do j = 1, j_input
+       dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+     enddo
+   endif 
 
  endif
 
@@ -6952,13 +6979,13 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
     read_from_input(varnum) = .false.
     iret = 1
   elseif (trim(method) == "set_to_fill") then
-    print*, "WARNING: ,", trim(vname), " NOT AVILABLE AT LEVEL ", trim(lev), &
+    print*, "WARNING: ,", trim(vname), " NOT AVAILABLE AT LEVEL ", trim(lev), &
            ". SETTING EQUAL TO FILL VALUE OF ", value
     if(present(var)) var(:,:) = value
     if(present(var8)) var8(:,:) = value
     if(present(var3d)) var3d(:,:,:) = value
   elseif (trim(method) == "set_to_NaN") then
-    print*, "WARNING: ,", trim(vname), " NOT AVILABLE AT LEVEL ", trim(lev), &
+    print*, "WARNING: ,", trim(vname), " NOT AVAILABLE AT LEVEL ", trim(lev), &
            ". SETTING EQUAL TO NaNs"
     if(present(var)) var(:,:) = ieee_value(var,IEEE_QUIET_NAN)
     if(present(var8)) var8(:,:) = ieee_value(var8,IEEE_QUIET_NAN)
