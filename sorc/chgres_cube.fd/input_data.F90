@@ -5180,11 +5180,12 @@ if (localpet == 0) then
     call error_handler("IN FieldScatter", rc)
     
  if (localpet == 0) then
-   print*,"- READ T2M."
-   rc = grb2_inq(the_file, inv_file, ':TMP:',':2 m above ground:',data2=dummy2d)
-   if (rc <= 0) call error_handler("READING T2M.", rc)
 
-   print*,'t2m ',maxval(dummy2d),minval(dummy2d)
+   print*,"- READ T2M."
+!  rc = grb2_inq(the_file, inv_file, ':TMP:',':2 m above ground:',data2=dummy2d)
+!  if (rc <= 0) call error_handler("READING T2M.", rc)
+
+!  print*,'t2m ',maxval(dummy2d),minval(dummy2d)
 
      jdisc   = 0     ! search for discipline - meteo products
      j = 1
@@ -5199,12 +5200,22 @@ if (localpet == 0) then
              unpack, k, gfld, rc)
 
    if (rc /= 0) call error_handler("READING T2M.", rc)
-    print*,'getgb2 t2m ',rc, maxval(gfld%fld),minval(gfld%fld)
+   print*,'getgb2 t2m ',rc, maxval(gfld%fld),minval(gfld%fld)
+
+    dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+! temporary code. wgrib flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
 
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID T2M."
- call ESMF_FieldScatter(t2m_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0,rc=rc)
+ call ESMF_FieldScatter(t2m_input_grid, dummy2d_8, rootpet=0,rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
