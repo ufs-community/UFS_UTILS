@@ -5767,19 +5767,21 @@ if (localpet == 0) then
    slev=":10 m above ground:" 
    call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-    vname=":F10M:"               
-    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-    if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+!   vname=":F10M:"               
+!   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+
+    rc = -1 ! None of the test cases have this record. Can't test with g2lib.
+    if (rc /= 0) then
+      call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
+        dummy2d_8(:,:) = 0.0
       endif
     endif
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'f10m ',maxval(dummy2d),minval(dummy2d)
+    print*,'f10m ',maxval(dummy2d_8),minval(dummy2d_8)
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID F10M."
