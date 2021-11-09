@@ -5602,24 +5602,63 @@ if (localpet == 0) then
 
  endif
  if (localpet == 0) then
+
+!  print*,"- READ SEAICE DEPTH."
+!  vname="hice"
+!  slev=":surface:" 
+!  call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+!                        loc=varnum)                 
+!  vname=":ICETK:"
+!  rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+!  if (rc <= 0) then
+!     call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+!     if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+!       print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
+!                  " REPLACED WITH CLIMO. SET A FILL "// &
+!                     "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+!       dummy2d(:,:) = 0.0_esmf_kind_r4
+!     endif
+!   endif
+!  dummy2d_8= real(dummy2d,esmf_kind_r8)
+!  print*,'wgrib2 icetk ',maxval(dummy2d),minval(dummy2d)
+
    print*,"- READ SEAICE DEPTH."
    vname="hice"
    slev=":surface:" 
    call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)                 
-   vname=":ICETK:"
-   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-   if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
+
+     jdisc   = 10     ! search for discipline - ocean products
+     j = 0
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 2  ! oct 10 - param cat - ice
+     jpdt(2) = 1  ! oct 11 - param number - thickness
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0 ) then
+       call handle_grib_error(vname, slev ,method,value,varnum,rc,var8=dummy2d_8)
+       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
-      endif
-    endif
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'hice ',maxval(dummy2d),minval(dummy2d)
+         dummy2d_8(:,:) = 0.0
+       endif
+     else
+       print*,'getgb2 icetk ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     endif
+
+! temporary code. wgrib flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
 
  endif
 
