@@ -5132,12 +5132,12 @@ if (localpet == 0) then
 
  if (localpet == 0) then
    print*,"- READ SNOW DEPTH."
-   rc = grb2_inq(the_file, inv_file, ':SNOD:',':surface:', data2=dummy2d)
-   if (rc /= 1) call error_handler("READING SNOW DEPTH.", rc)
-   where(dummy2d == grb2_UNDEFINED) dummy2d = 0.0_esmf_kind_r4
-   dummy2d = dummy2d*1000.0 ! Grib2 files have snow depth in (m), fv3 expects it in mm
-   where(slmsk_save == 0) dummy2d = 0.0_esmf_kind_r4
-  print*,'snod ',maxval(dummy2d),minval(dummy2d)
+!  rc = grb2_inq(the_file, inv_file, ':SNOD:',':surface:', data2=dummy2d)
+!  if (rc /= 1) call error_handler("READING SNOW DEPTH.", rc)
+!  where(dummy2d == grb2_UNDEFINED) dummy2d = 0.0_esmf_kind_r4
+!  dummy2d = dummy2d*1000.0 ! Grib2 files have snow depth in (m), fv3 expects it in mm
+!  where(slmsk_save == 0) dummy2d = 0.0_esmf_kind_r4
+! print*,'snod ',maxval(dummy2d),minval(dummy2d)
 
      jdisc   = 0     ! search for discipline - meteo products
      j = 1
@@ -5150,14 +5150,32 @@ if (localpet == 0) then
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-   if (rc /= 0) call error_handler("READING SNOW DEPTH.", rc)
-    gfld%fld = gfld%fld * 1000.0
-    print*,'getgb2 snod ',rc, maxval(gfld%fld),minval(gfld%fld)
+   if (rc /= 0) then
+     call error_handler("READING SNOW DEPTH.", rc)
+   else
+     gfld%fld = gfld%fld * 1000.0
+     print*,'getgb2 snod ',rc, maxval(gfld%fld),minval(gfld%fld)
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+   endif
+
+! temporary code. wgrib flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
+
+   do j = 1, j_input
+     do i = 1, i_input
+       if(slmsk_save(i,j) == 0) dummy2d_8(i,j) = 0.0
+     enddo
+   enddo
 
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SNOW DEPTH."
- call ESMF_FieldScatter(snow_depth_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ call ESMF_FieldScatter(snow_depth_input_grid,dummy2d_8,rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
     
