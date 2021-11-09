@@ -5324,19 +5324,19 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
     
- if (localpet == 0) dummy2d = 0.0
+ if (localpet == 0) dummy2d_8 = 0.0
  
  print*,"- CALL FieldScatter FOR INPUT GRID SRFLAG"
- call ESMF_FieldScatter(srflag_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0,rc=rc)
+ call ESMF_FieldScatter(srflag_input_grid,dummy2d_8, rootpet=0,rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
    print*,"- READ SOIL TYPE."
-   slev=":surface:" 
-   vname=":SOTYP:"                                     
-   rc = grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-   print*,'after wgrib2 soil type ',rc,maxval(dummy2d),minval(dummy2d)
+!  slev=":surface:" 
+!  vname=":SOTYP:"                                     
+!  rc = grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+!  print*,'after wgrib2 soil type ',rc,maxval(dummy2d),minval(dummy2d)
 
      jdisc   = 2     ! search for discipline - land products
      j = 1
@@ -5347,14 +5347,23 @@ if (localpet == 0) then
      jpdt(10) = 1 ! oct 23 - type of level - ground surface
      unpack=.true.
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, rc2)
+             unpack, k, gfld, rc)
 
-!  if (rc2 /= 0 ) call error_handler("READING soil type", rc2)
-    print*,'getgb2 soil type ', rc2, maxval(gfld%fld),minval(gfld%fld)
+   if (rc == 0 ) then
+     print*,'getgb2 soil type ', rc, maxval(gfld%fld),minval(gfld%fld)
 
-   !failed => rc = 0
-   !cggg with g2, this should be rc /= 0.
-   if (rc <= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon) .and. geo_file .ne. "NULL")  then
+     dummy2d = reshape(gfld%fld , (/i_input,j_input/))
+   
+! temporary code. wgrib flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_8 = dummy2d
+       do j = 1, j_input
+         dummy2d(:,j) = dummy2d_8(:,j_input-j+1)
+       enddo
+     endif 
+   endif
+
+   if (rc /= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon) .and. geo_file .ne. "NULL")  then
      ! Some HRRR and RAP files don't have dominant soil type in the output, but the geogrid files
      ! do, so this gives users the option to provide the geogrid file and use input soil
      ! type 
@@ -5388,7 +5397,6 @@ if (localpet == 0) then
 
      print*, "CLOSE GEOGRID FILE "
      iret = nf90_close(ncid2d)
-   
      
      ! There's an issue with the geogrid file containing soil type water at land points. 
      ! This correction replaces the soil type at these points with the soil type with
@@ -5405,12 +5413,13 @@ if (localpet == 0) then
      deallocate(dummy1d)
    endif ! failed
    
-   if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR" .and. .not. rap_latlon) & 
-     .or. (rc < 0 .and. (trim(to_upper(external_model)) == "HRRR" .or. rap_latlon))) then
+   if ((rc /= 0 .and. trim(to_upper(external_model)) /= "HRRR" .and. .not. rap_latlon) & 
+     .or. (rc /= 0 .and. (trim(to_upper(external_model)) == "HRRR" .or. rap_latlon))) then
      if (.not. sotyp_from_climo) then
        call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET SOTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
      else
        vname = "sotyp"
+       slev = "surface"
        call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                            loc=varnum)  
        call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
