@@ -5210,9 +5210,9 @@ if (localpet == 0) then
 
  if (localpet == 0) then
    print*,"- READ Q2M."
-   rc = grb2_inq(the_file, inv_file, ':SPFH:',':2 m above ground:',data2=dummy2d)
-   if (rc <=0) call error_handler("READING Q2M.", rc)
-   print*,'q2m ',maxval(dummy2d),minval(dummy2d)
+!  rc = grb2_inq(the_file, inv_file, ':SPFH:',':2 m above ground:',data2=dummy2d)
+!  if (rc <=0) call error_handler("READING Q2M.", rc)
+!  print*,'q2m ',maxval(dummy2d),minval(dummy2d)
 
      jdisc   = 0     ! search for discipline - meteo products
      j = 1
@@ -5229,10 +5229,20 @@ if (localpet == 0) then
 
     print*,'getgb2 q2m ',rc, maxval(gfld%fld),minval(gfld%fld)
 
+    dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+! temporary code. wgrib flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID Q2M."
- call ESMF_FieldScatter(q2m_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0,rc=rc)
+ call ESMF_FieldScatter(q2m_input_grid,dummy2d_8, rootpet=0,rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
     
