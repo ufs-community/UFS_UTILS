@@ -5259,23 +5259,24 @@ if (localpet == 0) then
     
  if (localpet == 0) then
    print*,"- READ SKIN TEMPERATURE."
-   rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
-   if (rc <= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
-   print*,'skint ',maxval(dummy2d),minval(dummy2d)
-   tsk_save(:,:) = real(dummy2d,esmf_kind_r8)
-   dummy2d_8 = real(dummy2d,esmf_kind_r8)
-   do j = 1, j_input
-     do i = 1, i_input
-       if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) < 271.2) then
+
+!   rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
+!  if (rc <= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
+!  print*,'skint ',maxval(dummy2d),minval(dummy2d)
+!  tsk_save(:,:) = real(dummy2d,esmf_kind_r8)
+!  dummy2d_8 = real(dummy2d,esmf_kind_r8)
+!  do j = 1, j_input
+!    do i = 1, i_input
+!      if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) < 271.2) then
 !        print*,'too cool SST ',i,j,dummy2d(i,j)
-         dummy2d(i,j) = 271.2
-       endif
-       if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) > 310.) then
+!        dummy2d(i,j) = 271.2
+!      endif
+!      if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) > 310.) then
 !        print*,'too hot SST ',i,j,dummy2d(i,j)
-         dummy2d(i,j) = 310.0
-       endif
-     enddo
-   enddo
+!        dummy2d(i,j) = 310.0
+!      endif
+!    enddo
+!  enddo
 
      jdisc   = 0     ! search for discipline - meteo products
      j = 1
@@ -5291,10 +5292,35 @@ if (localpet == 0) then
    if (rc /= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
     print*,'getgb2 skint ',rc, maxval(gfld%fld),minval(gfld%fld)
 
+    dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+   
+! temporary code. wgrib flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
+
+    tsk_save(:,:) = dummy2d_8
+
+   do j = 1, j_input
+     do i = 1, i_input
+       if(slmsk_save(i,j) == 0 .and. dummy2d_8(i,j) < 271.2) then
+!        print*,'too cool SST ',i,j,dummy2d_8(i,j)
+         dummy2d_8(i,j) = 271.2
+       endif
+       if(slmsk_save(i,j) == 0 .and. dummy2d_8(i,j) > 310.) then
+!        print*,'too hot SST ',i,j,dummy2d_8(i,j)
+         dummy2d_8(i,j) = 310.0
+       endif
+     enddo
+   enddo
+
  endif
 
  print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
- call ESMF_FieldScatter(skin_temp_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
+ call ESMF_FieldScatter(skin_temp_input_grid,dummy2d_8,rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
     
