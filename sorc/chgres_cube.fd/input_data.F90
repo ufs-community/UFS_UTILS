@@ -5468,34 +5468,36 @@ if (localpet == 0) then
  
  if (.not. vgfrc_from_climo) then  
    if (localpet == 0) then
+
      print*,"- READ VEG FRACTION."
      vname="vfrac"
      slev=":surface:" 
      call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                loc=varnum)                 
-     !! Changing these for GSD internal runs using new HRRR files
-     vname=":VEG:"
-     rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
+
+!    !! Changing these for GSD internal runs using new HRRR files
+!    vname=":VEG:"
+!    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
      
-     if (rc > 1) then
-       rc= grb2_inq(the_file, inv_file, vname,slev,'n=1105:', data2=dummy2d)
-       if (rc <= 0) then
-         rc= grb2_inq(the_file, inv_file, vname,slev,'n=1101:', data2=dummy2d)
-         if (rc <= 0) then
-           rc= grb2_inq(the_file, inv_file, vname,slev,'n=1151:', data2=dummy2d)
-           if (rc <= 0) call error_handler("COULD NOT DETERMINE VEGETATION FRACTION IN FILE.  &
-             RECORD NUMBERS MAY HAVE CHANGED. PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
-         endif
-       endif
-     elseif (rc <= 0) then 
-       call error_handler("COULD NOT FIND VEGETATION FRACTION IN FILE.  &
-           PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
-     endif
-     if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
-      print*,'wgrib2 vfrac ',maxval(dummy2d),minval(dummy2d)   
+!    if (rc > 1) then
+!      rc= grb2_inq(the_file, inv_file, vname,slev,'n=1105:', data2=dummy2d)
+!      if (rc <= 0) then
+!        rc= grb2_inq(the_file, inv_file, vname,slev,'n=1101:', data2=dummy2d)
+!        if (rc <= 0) then
+!          rc= grb2_inq(the_file, inv_file, vname,slev,'n=1151:', data2=dummy2d)
+!          if (rc <= 0) call error_handler("COULD NOT DETERMINE VEGETATION FRACTION IN FILE.  &
+!            RECORD NUMBERS MAY HAVE CHANGED. PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
+!        endif
+!      endif
+!    elseif (rc <= 0) then 
+!      call error_handler("COULD NOT FIND VEGETATION FRACTION IN FILE.  &
+!          PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
+!    endif
+!    if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
+!     print*,'wgrib2 vfrac ',maxval(dummy2d),minval(dummy2d)   
 
      jdisc   = 2     ! search for discipline - land products
-     j = 1
+     j = 0
      jpdt    = -9999  ! array of values in product definition template 4.n
      jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
      jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
@@ -5505,17 +5507,28 @@ if (localpet == 0) then
     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-    if (rc /= 0 ) call error_handler("READING VEGETATION FRACTION", rc)
-    
-    if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
-    print*,'getgb2 vfrac ', maxval(gfld%fld),minval(gfld%fld)
+    if (rc /= 0 )then
+       call error_handler("COULD NOT FIND VEGETATION FRACTION IN FILE.  &
+           PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
+    else
+      if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
+      print*,'getgb2 vfrac ', maxval(gfld%fld),minval(gfld%fld)
+      dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
 
+! temporary code. wgrib flips the pole of gfs data.
+      if (trim(external_model) == "GFS") then
+        dummy2d_82 = dummy2d_8
+        do j = 1, j_input
+          dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+        enddo
+      endif 
+
+    endif ! localpet 0
 
    endif
 
- 
    print*,"- CALL FieldScatter FOR INPUT GRID VEG GREENNESS."
-   call ESMF_FieldScatter(veg_greenness_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0, rc=rc)
+   call ESMF_FieldScatter(veg_greenness_input_grid,dummy2d_8, rootpet=0, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
   endif
