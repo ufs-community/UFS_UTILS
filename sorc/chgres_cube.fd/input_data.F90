@@ -4715,7 +4715,7 @@ else
 
    use mpi
    use grib_mod
-   use wgrib2api
+!  use wgrib2api
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
    use model_grid, only    : input_grid_type
    use search_util
@@ -6137,30 +6137,31 @@ if (localpet == 0) then
    slev=":surface:" 
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                          loc=varnum)
+
    !Note: sometimes the grib files don't have this one named. Searching for this string
    !      ensures that the data is found when it exists
                  
-   vname="var2_2"   
-   rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,' hour fcst:', data2=dummy2d)
-   print*,'after wgrib2 vtype 1st try ',rc,maxval(dummy2d),minval(dummy2d)
-   if (rc <= 0) then
-     rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
-     print*,'after wgrib2 vtype 2nd try ',rc,maxval(dummy2d),minval(dummy2d)
-     if (rc <= 0) then
-       if (.not. vgtyp_from_climo) then
-         call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
-       else
-        print*,'got here veg type'
-      do j = 1, j_input
-        do i = 1, i_input
-          dummy2d(i,j) = 0.0_esmf_kind_r4
-          if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
-          dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
-      enddo
-      enddo    
-       endif ! replace_vgtyp
-     endif !not find :anl:
-   endif !not find hour fcst:
+!   vname="var2_2"   
+!  rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,' hour fcst:', data2=dummy2d)
+!  print*,'after wgrib2 vtype 1st try ',rc,maxval(dummy2d),minval(dummy2d)
+!  if (rc <= 0) then
+!    rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
+!    print*,'after wgrib2 vtype 2nd try ',rc,maxval(dummy2d),minval(dummy2d)
+!    if (rc <= 0) then
+!      if (.not. vgtyp_from_climo) then
+!        call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
+!      else
+!       print*,'got here veg type'
+!     do j = 1, j_input
+!       do i = 1, i_input
+!         dummy2d(i,j) = 0.0_esmf_kind_r4
+!         if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
+!         dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
+!     enddo
+!     enddo    
+!      endif ! replace_vgtyp
+!    endif !not find :anl:
+!  endif !not find hour fcst:
    
      jdisc   = 2     ! search for discipline - land products
      j = 0
@@ -6174,9 +6175,27 @@ if (localpet == 0) then
              unpack, k, gfld, rc)
 
      if (rc /= 0 ) then
-       print*,'getgb2 could not find vgtyp'
-     else
+       if (.not. vgtyp_from_climo) then
+         call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
+       else ! Set input veg type at land ice from soil moisture flag (1.0).
+         do j = 1, j_input
+          do i = 1, i_input
+            dummy2d(i,j) = 0.0_esmf_kind_r4
+            if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
+            dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
+          enddo
+         enddo    
+       endif
+     else  ! found vtype in file.
        print*,'getgb2 vgtyp ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d = reshape(gfld%fld , (/i_input,j_input/))
+! temporary code. wgrib flips the pole of gfs data.
+       if (trim(external_model) == "GFS") then
+         dummy2d_8 = dummy2d
+         do j = 1, j_input
+           dummy2d(:,j) = dummy2d_8(:,j_input-j+1)
+         enddo
+       endif 
      endif
 
    if (trim(external_model) .ne. "GFS") then
@@ -6196,9 +6215,11 @@ if (localpet == 0) then
      enddo
    enddo
    endif     
+
    dummy2d_8= real(dummy2d,esmf_kind_r8)
    print*,'vgtyp ',maxval(dummy2d),minval(dummy2d)
  endif !localpet
+
  deallocate(dummy2d)
 
  print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
