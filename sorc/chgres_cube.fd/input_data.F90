@@ -4715,11 +4715,9 @@ else
 
    use mpi
    use grib_mod
-!  use wgrib2api
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
    use model_grid, only    : input_grid_type
    use search_util
-
 
    implicit none
 
@@ -4727,17 +4725,19 @@ else
 
    character(len=250)                    :: the_file
    character(len=250)                    :: geo_file
-   character(len=20)                     :: vname, vname_file,slev
+   character(len=20)                     :: vname, vname_file, slev
    character(len=50)                     :: method
    character(len=20)                     :: to_upper
  
-   integer                               :: rc, rc2, varnum, iret, i, j,k
+   integer                               :: rc, varnum, iret, i, j,k
    integer                               :: ncid2d, varid, varsize
+   integer                               :: lugb, lugi
+   integer                               :: jdisc, jgdtn, jpdtn
+   integer                               :: jids(200), jgdt(200), jpdt(200)
 
-   logical                               :: exist, rap_latlon
+   logical                               :: rap_latlon, unpack
 
    real(esmf_kind_r4)                    :: value
-
    real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
    real(esmf_kind_r8), allocatable       :: icec_save(:,:)
    real(esmf_kind_r4), allocatable       :: dummy1d(:)
@@ -4746,11 +4746,7 @@ else
    integer(esmf_kind_i4), allocatable    :: slmsk_save(:,:)
    integer(esmf_kind_i8), allocatable    :: dummy2d_i(:,:)
    
-   integer :: lugb
-    integer :: jdisc, jgdtn, jpdtn, lugi
-   integer :: jids(200), jgdt(200), jpdt(200), num_soil
-   logical :: unpack
-   type(gribfield)                  :: gfld
+   type(gribfield)                       :: gfld
     
    rap_latlon = trim(to_upper(external_model))=="RAP" .and. trim(input_grid_type) == "rotated_latlon"
 
@@ -4796,19 +4792,20 @@ else
          endif
        endif
     
-      j = k
+       j = k
 
-    enddo
+     enddo
 
-    print*, "- FILE HAS ", lsoil_input, " SOIL LEVELS."
-    if (lsoil_input == 0) call error_handler("COUNTING SOIL LEVELS.", rc)
+     print*, "- FILE HAS ", lsoil_input, " SOIL LEVELS."
+     if (lsoil_input == 0) call error_handler("COUNTING SOIL LEVELS.", rc)
 
-  endif ! localpet == 0
+   endif ! localpet == 0
 
-  call MPI_BARRIER(MPI_COMM_WORLD, rc)
-  call MPI_BCAST(lsoil_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
+   call MPI_BARRIER(MPI_COMM_WORLD, rc)
+   call MPI_BCAST(lsoil_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
 
- !We need to recreate the soil fields if we have something other than 4 levels
+ ! We need to recreate the soil fields if we have something other than 4 levels
+
    if (lsoil_input /= 4) then
    
      call ESMF_FieldDestroy(soil_temp_input_grid, rc=rc)
@@ -4843,105 +4840,98 @@ else
         call error_handler("IN FieldCreate", rc)
    
    endif
-
- if (localpet == 0) then
-   allocate(dummy2d(i_input,j_input))
-   allocate(slmsk_save(i_input,j_input))
-   allocate(dummy2d_i(i_input,j_input))
-   allocate(tsk_save(i_input,j_input))
-   allocate(icec_save(i_input,j_input))
-   allocate(dummy2d_8(i_input,j_input))
-   allocate(dummy2d_82(i_input,j_input))
-   allocate(dummy3d(i_input,j_input,lsoil_input))
-   allocate(dummy3d_stype(i_input,j_input,16))
-   allocate(dummy1d(16))
- else
-   allocate(dummy3d(0,0,0))
-   allocate(dummy2d_8(0,0))
-   allocate(dummy2d_82(0,0))
-   allocate(dummy2d(0,0))
-   allocate(slmsk_save(0,0))
- endif
+ 
+   if (localpet == 0) then
+     allocate(dummy2d(i_input,j_input))
+     allocate(slmsk_save(i_input,j_input))
+     allocate(dummy2d_i(i_input,j_input))
+     allocate(tsk_save(i_input,j_input))
+     allocate(icec_save(i_input,j_input))
+     allocate(dummy2d_8(i_input,j_input))
+     allocate(dummy2d_82(i_input,j_input))
+     allocate(dummy3d(i_input,j_input,lsoil_input))
+     allocate(dummy3d_stype(i_input,j_input,16))
+     allocate(dummy1d(16))
+   else
+     allocate(dummy3d(0,0,0))
+     allocate(dummy2d_8(0,0))
+     allocate(dummy2d_82(0,0))
+     allocate(dummy2d(0,0))
+     allocate(slmsk_save(0,0))
+   endif
  
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  ! These variables are always in grib files, or are required, so no need to check for them 
  ! in the varmap table. If they can't be found in the input file, then stop the program.
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- if (localpet == 0) then
+   if (localpet == 0) then
 
-   print*,"- READ TERRAIN."
-!  rc = grb2_inq(the_file, inv_file, ':HGT:',':surface:', data2=dummy2d)
-!  if (rc /= 1) call error_handler("READING TERRAIN.", rc)
-!  print*,'wgrib2 orog ',maxval(dummy2d),minval(dummy2d)
+     print*,"- READ TERRAIN."
  
-   j = 1
-   jpdt    = -9999  ! array of values in product definition template 4.n
-   jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-   jpdt(1) = 3  ! oct 10 - param cat - mass field
-   jpdt(2) = 5  ! oct 11 - param number - geop height
-   jpdt(10) = 1 ! oct 23 - type of level - ground surface
-   unpack=.true.
-   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, rc)
-   if (rc /= 0) call error_handler("READING TERRAIN.", rc)
+     j = 0
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 3  ! oct 10 - param cat - mass field
+     jpdt(2) = 5  ! oct 11 - param number - geop height
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+               unpack, k, gfld, rc)
+     if (rc /= 0) call error_handler("READING TERRAIN.", rc)
 
-   print*,'getgb2 orog ', maxval(gfld%fld),minval(gfld%fld)
-   dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-   print*,'reshape orog ', maxval(dummy2d_8),minval(dummy2d_8)
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     print*,'orog ', maxval(dummy2d_8),minval(dummy2d_8)
    
-! temporary code. wgrib flips the pole of gfs data.
-   if (trim(external_model) == "GFS") then
-     dummy2d_82 = dummy2d_8
-     do j = 1, j_input
-       dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-     enddo
-   endif 
+! Temporary code. wgrib2 flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
 
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT TERRAIN."
- call ESMF_FieldScatter(terrain_input_grid, dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT TERRAIN."
+   call ESMF_FieldScatter(terrain_input_grid, dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
-if (localpet == 0) then
-   print*,"- READ SEAICE FRACTION."
-!  rc = grb2_inq(the_file, inv_file, ':ICEC:',':surface:', data2=dummy2d)
-!  if (rc /= 1) call error_handler("READING SEAICE FRACTION.", rc)
-!  print*,'wgrib2 icec ',maxval(dummy2d),minval(dummy2d)
-!  icec_save = dummy2d
- 
-   jdisc   = 10     ! search for discipline - ocean products
-   j = 0
-   jpdt    = -9999  ! array of values in product definition template 4.n
-   jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-   jpdt(1) = 2  ! oct 10 - param cat - ice
-   jpdt(2) = 0  ! oct 11 - param number - ice cover
-   unpack=.true.
-   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, rc)
-   if (rc /= 0) call error_handler("READING SEAICE FRACTION.", rc)
+   if (localpet == 0) then
 
-   print*,'getgb2 icec ',rc, maxval(gfld%fld),minval(gfld%fld)
-   dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     print*,"- READ SEAICE FRACTION."
+ 
+     jdisc   = 10     ! search for discipline - ocean products
+     j = 0
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 2  ! oct 10 - param cat - ice
+     jpdt(2) = 0  ! oct 11 - param number - ice cover
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+               unpack, k, gfld, rc)
+     if (rc /= 0) call error_handler("READING SEAICE FRACTION.", rc)
+
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     print*,'icec ', maxval(dummy2d_8),minval(dummy2d_8)
  
 ! temporary code. wgrib flips the pole of gfs data.
-   if (trim(external_model) == "GFS") then
-     dummy2d_82 = dummy2d_8
-     do j = 1, j_input
-       dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-     enddo
-   endif 
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
 
-   icec_save = dummy2d_8
+     icec_save = dummy2d_8
 
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID SEAICE FRACTION."
- call ESMF_FieldScatter(seaice_fract_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID SEAICE FRACTION."
+   call ESMF_FieldScatter(seaice_fract_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
 !----------------------------------------------------------------------------------
 ! GFS v14 and v15.2 grib data has two land masks.  LANDN is created by
@@ -4951,28 +4941,9 @@ if (localpet == 0) then
 ! '2' based on ice concentration.
 !----------------------------------------------------------------------------------
 
- if (localpet == 0) then
-   print*,"- READ LANDSEA MASK."
-!  rc = grb2_inq(the_file, inv_file, ':LANDN:',':surface:', data2=dummy2d)
+   if (localpet == 0) then
 
-!  if (rc /= 1) then 
-!    rc = grb2_inq(the_file, inv_file, ':LAND:',':surface:', data2=dummy2d)
-!    if (rc /= 1) call error_handler("READING LANDSEA MASK.", rc)
-!  endif
-
-!  do j = 1, j_input
-!    do i = 1, i_input
-!      if(dummy2d(i,j) < 0.5_esmf_kind_r4) dummy2d(i,j)=0.0_esmf_kind_r4
-!      if(icec_save(i,j) > 0.15_esmf_kind_r4) then 
-!        !if (dummy2d(i,j) == 0.0_esmf_kind_r4) print*, "CONVERTING WATER TO SEA/LAKE ICE AT ", i, j
-!        dummy2d(i,j) = 2.0_esmf_kind_r4
-!      endif
-!    enddo
-!  enddo
-
-!  slmsk_save = nint(dummy2d)
-  
-!  deallocate(icec_save)
+     print*,"- READ LANDSEA MASK."
 
      jdisc   = 2     ! search for discipline - land products
      j = 0
@@ -4986,7 +4957,7 @@ if (localpet == 0) then
 
      if (rc == 0) then
 
-       print*,'getgb2 landnn ',rc, maxval(gfld%fld),minval(gfld%fld)
+       print*,'landnn ', maxval(gfld%fld),minval(gfld%fld)
 
      else
 
@@ -5001,39 +4972,39 @@ if (localpet == 0) then
               unpack, k, gfld, rc)
        if (rc /= 0) call error_handler("READING LANDSEA MASK.", rc)
     
-       print*,'getgb2 land ',rc, maxval(gfld%fld),minval(gfld%fld)
+       print*,'land ', maxval(gfld%fld),minval(gfld%fld)
 
-    endif
+     endif
 
-    dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
  
-! temporary code. wgrib flips the pole of gfs data.
-    if (trim(external_model) == "GFS") then
-      dummy2d_82 = dummy2d_8
-      do j = 1, j_input
-        dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-      enddo
-    endif 
+! Temporary code. wgrib2 flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
 
-    do j = 1, j_input
-      do i = 1, i_input
-        if(dummy2d_8(i,j) < 0.5_esmf_kind_r8) dummy2d_8(i,j)=0.0
-        if(icec_save(i,j) > 0.15_esmf_kind_r8) then 
-          dummy2d_8(i,j) = 2.0_esmf_kind_r8
-        endif
-      enddo
-    enddo
+     do j = 1, j_input
+       do i = 1, i_input
+         if(dummy2d_8(i,j) < 0.5_esmf_kind_r8) dummy2d_8(i,j)=0.0
+         if(icec_save(i,j) > 0.15_esmf_kind_r8) then 
+           dummy2d_8(i,j) = 2.0_esmf_kind_r8
+         endif
+       enddo
+     enddo
 
-   slmsk_save = nint(dummy2d_8)
+     slmsk_save = nint(dummy2d_8)
 
-   deallocate(icec_save)
+     deallocate(icec_save)
 
- endif ! localpet == 0
+   endif ! read land mask
 
- print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
- call ESMF_FieldScatter(landsea_mask_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
+   call ESMF_FieldScatter(landsea_mask_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
    print*,"- READ SEAICE SKIN TEMPERATURE."
