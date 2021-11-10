@@ -5536,87 +5536,52 @@ else
 
    endif !minmax_vgfrc_from_climo
  
- if (.not. lai_from_climo) then
+   if (.not. lai_from_climo) then
 
-   if (localpet == 0) then
-     print*,"- READ LAI."
-     vname="lai"
-     slev=":surface:"
-     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
-               loc=varnum)
+     if (localpet == 0) then
 
-!    vname=":var0_7_198:"
-!    rc= grb2_inq(the_file, inv_file, vname,slev,':n=1108:',data2=dummy2d)
-!    print*,'wgrib2 lai 1108 ',rc
-!    if (rc <=0) then
-!      rc= grb2_inq(the_file, inv_file, vname,slev,':n=1104:',data2=dummy2d)
-!    print*,'wgrib2 lai 1104 ',rc
-!      if (rc <=0) then
-!        rc= grb2_inq(the_file, inv_file, vname,slev,':n=1154:',data2=dummy2d)
-!    print*,'wgrib2 lai 1154 ',rc
-!        if (rc <= 0) call error_handler("COULD NOT FIND LAI IN FILE. &
-!           PLEASE SET LAI_FROM_CLIMO=.TRUE. . EXITING",rc)
-!      endif
-!    endif
-!     print*,'wgrib2 lai',maxval(dummy2d),minval(dummy2d)
+       print*,"- READ LAI."
 
-     jdisc   = 0     ! search for discipline - meteo products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 7  ! oct 10 - param cat - thermo stability indices
-     jpdt(2) = 198  ! oct 11 - param number - lai
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
-     unpack=.true.
-     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+       jdisc   = 0     ! search for discipline - meteo products
+       j = 0
+       jpdt    = -9999  ! array of values in product definition template 4.n
+       jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+       jpdt(1) = 7  ! oct 10 - param cat - thermo stability indices
+       jpdt(2) = 198  ! oct 11 - param number - lai
+       jpdt(10) = 1 ! oct 23 - type of level - ground surface
+       unpack=.true.
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-     if (rc /= 0) call error_handler("COULD NOT FIND LAI IN FILE. &
-           PLEASE SET LAI_FROM_CLIMO=.TRUE. . EXITING",rc)
-     print*,'getgb2 lai ', maxval(gfld%fld),minval(gfld%fld)
-     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+       if (rc /= 0) call error_handler("COULD NOT FIND LAI IN FILE. &
+             PLEASE SET LAI_FROM_CLIMO=.TRUE. . EXITING",rc)
 
-! temporary code. wgrib flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
+       print*,'lai ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
 
-   endif !localpet==0
+! Temporary code. wgrib2 flips the pole of gfs data.
+       if (trim(external_model) == "GFS") then
+         dummy2d_82 = dummy2d_8
+         do j = 1, j_input
+           dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+         enddo
+       endif 
 
-   print*,"- CALL FieldScatter FOR INPUT GRID LAI."
-   call ESMF_FieldScatter(lai_input_grid,dummy2d_8,rootpet=0, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-      call error_handler("IN FieldScatter", rc)
+     endif !localpet==0
 
- endif
- if (localpet == 0) then
+     print*,"- CALL FieldScatter FOR INPUT GRID LAI."
+     call ESMF_FieldScatter(lai_input_grid,dummy2d_8,rootpet=0, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+        call error_handler("IN FieldScatter", rc)
 
-!  print*,"- READ SEAICE DEPTH."
-!  vname="hice"
-!  slev=":surface:" 
-!  call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
-!                        loc=varnum)                 
-!  vname=":ICETK:"
-!  rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-!  if (rc <= 0) then
-!     call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-!     if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-!       print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
-!                  " REPLACED WITH CLIMO. SET A FILL "// &
-!                     "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-!       dummy2d(:,:) = 0.0_esmf_kind_r4
-!     endif
-!   endif
-!  dummy2d_8= real(dummy2d,esmf_kind_r8)
-!  print*,'wgrib2 icetk ',maxval(dummy2d),minval(dummy2d)
+   endif ! lai
 
-   print*,"- READ SEAICE DEPTH."
-   vname="hice"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+   if (localpet == 0) then
+
+     print*,"- READ SEAICE DEPTH."
+     vname="hice"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)                 
 
      jdisc   = 10     ! search for discipline - ocean products
@@ -5639,7 +5604,7 @@ else
          dummy2d_8(:,:) = 0.0
        endif
      else
-       print*,'getgb2 icetk ', maxval(gfld%fld),minval(gfld%fld)
+       print*,'hice ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
      endif
 
@@ -5651,42 +5616,40 @@ else
        enddo
      endif 
 
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID SEAICE DEPTH."
- call ESMF_FieldScatter(seaice_depth_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID SEAICE DEPTH."
+   call ESMF_FieldScatter(seaice_depth_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
- if (localpet == 0) then
+   if (localpet == 0) then
 
-   print*,"- READ TPRCP."
-   vname="tprcp"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+     print*,"- READ TPRCP."
+     vname="tprcp"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-!  vname=":TPRCP:"              
-!  rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-!  print*,'wgrib2 tprcp ', rc, maxval(dummy2d),minval(dummy2d)
 
 ! No test data contained this field. So could not test with g2 library.
-   rc = 1
-   if (rc /= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
-                   " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
-                      "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d_8 = 0.0
-      endif
-   endif
-   print*,'tprcp ',maxval(dummy2d_8),minval(dummy2d_8)
- endif
+     rc = 1
+     if (rc /= 0) then
+        call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+        if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
+                     " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
+                        "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+          dummy2d_8 = 0.0
+        endif
+     endif
+     print*,'tprcp ',maxval(dummy2d_8),minval(dummy2d_8)
 
- print*,"- CALL FieldScatter FOR INPUT GRID TPRCP."
- call ESMF_FieldScatter(tprcp_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   endif ! tprcp
+
+   print*,"- CALL FieldScatter FOR INPUT GRID TPRCP."
+   call ESMF_FieldScatter(tprcp_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
  
  if (localpet == 0) then
 
