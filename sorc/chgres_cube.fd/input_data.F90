@@ -5006,11 +5006,9 @@ else
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldScatter", rc)
 
- if (localpet == 0) then
-   print*,"- READ SEAICE SKIN TEMPERATURE."
-!  rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
-!  if (rc /= 1) call error_handler("READING SEAICE SKIN TEMP.", rc)
-!  print*,'ti ',maxval(dummy2d),minval(dummy2d)
+   if (localpet == 0) then
+
+     print*,"- READ SEAICE SKIN TEMPERATURE."
 
      jdisc   = 0     ! search for discipline - meteo products
      j = 0
@@ -5020,28 +5018,28 @@ else
      jpdt(2) = 0  ! oct 11 - param number - temperature
      jpdt(10) = 1 ! oct 23 - type of level - ground surface
      unpack=.true.
-    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
-    if (rc /= 0) call error_handler("READING SEAICE SKIN TEMP.", rc)
+     if (rc /= 0) call error_handler("READING SEAICE SKIN TEMP.", rc)
 
-    print*,'getgb2 ti ',rc, maxval(gfld%fld),minval(gfld%fld)
+     print*,'ti ',maxval(gfld%fld),minval(gfld%fld)
 
-    dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
 
-! temporary code. wgrib flips the pole of gfs data.
-    if (trim(external_model) == "GFS") then
-      dummy2d_82 = dummy2d_8
-      do j = 1, j_input
-        dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-      enddo
-    endif 
+! Temporary code. wgrib2 flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
 
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID SEAICE SKIN TEMPERATURE."
- call ESMF_FieldScatter(seaice_skin_temp_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID SEAICE SKIN TEMPERATURE."
+   call ESMF_FieldScatter(seaice_skin_temp_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+     call error_handler("IN FieldScatter", rc)
 
 !----------------------------------------------------------------------------------
 ! Read snow fields.  Zero out at non-land points and undefined points (points
@@ -5049,20 +5047,9 @@ else
 ! in mm.
 !----------------------------------------------------------------------------------
 
- if (localpet == 0) then
-   print*,"- READ SNOW LIQUID EQUIVALENT."
-!  rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:',':anl:',data2=dummy2d)
-!  if (rc /= 1) then 
-!    rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:','hour fcst:',data2=dummy2d)
-!    if (rc /= 1) call error_handler("READING SNOW LIQUID EQUIVALENT.", rc)
-!  endif
-!  do j = 1, j_input
-!    do i = 1, i_input
-!      if(slmsk_save(i,j) == 0) dummy2d(i,j) = 0.0_esmf_kind_r4
-!      if(dummy2d(i,j) == grb2_UNDEFINED) dummy2d(i,j) = 0.0_esmf_kind_r4
-!    enddo
-!  enddo
-! print*,'weasd ',maxval(dummy2d),minval(dummy2d)
+   if (localpet == 0) then
+
+     print*,"- READ SNOW LIQUID EQUIVALENT."
 
      jdisc   = 0     ! search for discipline - meteo products
      j = 0
@@ -5072,34 +5059,34 @@ else
      jpdt(2) = 13  ! oct 11 - param number - weasd
      jpdt(10) = 1 ! oct 23 - type of level - ground surface
      unpack=.true.
-    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
      if (rc /= 0) call error_handler("READING SNOW LIQUID EQUIVALENT.", rc)
 
-    print*,'getgb2 weasd ',rc, maxval(gfld%fld),minval(gfld%fld)
+     print*,'weasd ', maxval(gfld%fld),minval(gfld%fld)
 
-    dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
 
-! temporary code. wgrib flips the pole of gfs data.
-    if (trim(external_model) == "GFS") then
-      dummy2d_82 = dummy2d_8
-      do j = 1, j_input
-        dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-      enddo
-    endif 
+! Temporary code. wgrib2 flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
 
-   do j = 1, j_input
-     do i = 1, i_input
-       if(slmsk_save(i,j) == 0) dummy2d_8(i,j) = 0.0
+     do j = 1, j_input
+       do i = 1, i_input
+         if(slmsk_save(i,j) == 0) dummy2d_8(i,j) = 0.0
+       enddo
      enddo
-   enddo
 
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
- call ESMF_FieldScatter(snow_liq_equiv_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
+   call ESMF_FieldScatter(snow_liq_equiv_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
    print*,"- READ SNOW DEPTH."
