@@ -5758,80 +5758,59 @@ else
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
      call error_handler("IN FieldScatter", rc)
 
- if (localpet == 0) then
+   if (localpet == 0) then
 
-!  print*,"- READ CANOPY MOISTURE CONTENT."
-!  vname="cnwat"
-!  slev=":surface:" 
-!  call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
-!                        loc=varnum)  
-!   vname=":CNWAT:"              
-!   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-!   if (rc <= 0) then
-!     call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-!     if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-!       print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL"//&
-!                  " REPLACED WITH CLIMO. SET A FILL "// &
-!                     "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-!       dummy2d(:,:) = 0.0_esmf_kind_r4
-!     endif
-!   endif
-
-!  call check_cnwat(dummy2d)
-
-!  dummy2d_8= real(dummy2d,esmf_kind_r8)
-!  print*,'wgrib2 cnwat ',maxval(dummy2d),minval(dummy2d)
-
-   print*,"- READ CANOPY MOISTURE CONTENT."
-   vname="cnwat"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+     print*,"- READ CANOPY MOISTURE CONTENT."
+     vname="cnwat"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-   jdisc   = 2     ! search for discipline - land products
-   j = 0
-   jpdt    = -9999  ! array of values in product definition template 4.n
-   jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-   jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-   jpdt(2) = 13 ! oct 11 - param number - canopy water
-   jpdt(10) = 1 ! oct 23 - type of level - ground surface
-   unpack=.true.
-   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-           unpack, k, gfld, rc)
 
-   if (rc /= 0 ) then
-     jpdt(2) = 196 ! oct 11 - param number - canopy water
+     jdisc   = 2     ! search for discipline - land products
+     j = 0
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+     jpdt(2) = 13 ! oct 11 - param number - canopy water
+     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     unpack=.true.
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-           unpack, k, gfld, rc)
-   endif
+             unpack, k, gfld, rc)
 
-   if (rc == 0 ) then
-     print*,'getgb2 cnwat ', maxval(gfld%fld),minval(gfld%fld)
-     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-     where(dummy2d_8 > 0.5) dummy2d_8 = 0.0 ! replaces call to check_cnwat
-   else
-     call handle_grib_error(vname, slev ,method,value,varnum,rc, var8= dummy2d_8)
-     if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+     if (rc /= 0 ) then
+       jpdt(2) = 196 ! oct 11 - param number - canopy water
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+     endif
+
+     if (rc == 0 ) then
+       print*,'cnwat ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+       call check_cnwat(dummy2d_8)
+     else
+       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
          dummy2d_8 = 0.0
+       endif
      endif
+
+! Temporary code. wgrib2 flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
+
    endif
 
-! temporary code. wgrib flips the pole of gfs data.
-   if (trim(external_model) == "GFS") then
-     dummy2d_82 = dummy2d_8
-     do j = 1, j_input
-       dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-     enddo
-   endif 
-
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID CANOPY MOISTURE CONTENT."
- call ESMF_FieldScatter(canopy_mc_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID CANOPY MOISTURE CONTENT."
+   call ESMF_FieldScatter(canopy_mc_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
 
@@ -7366,15 +7345,15 @@ end subroutine check_soilt
 
 subroutine check_cnwat(cnwat)
   implicit none 
-  real(esmf_kind_r4), intent(inout) :: cnwat(i_input,j_input)
+  real(esmf_kind_r8), intent(inout) :: cnwat(i_input,j_input)
   
-  real(esmf_kind_r4)                :: max_cnwat = 0.5
+  real(esmf_kind_r8)                :: max_cnwat = 0.5
   
   integer :: i, j
 
   do i = 1,i_input
     do j = 1,j_input
-      if (cnwat(i,j) .gt. max_cnwat) cnwat(i,j) = 0.0_esmf_kind_r4
+      if (cnwat(i,j) .gt. max_cnwat) cnwat(i,j) = 0.0_esmf_kind_r8
     enddo
   enddo
 end subroutine check_cnwat
