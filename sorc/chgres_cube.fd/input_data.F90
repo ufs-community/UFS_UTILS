@@ -5651,63 +5651,40 @@ else
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldScatter", rc)
  
- if (localpet == 0) then
+   if (localpet == 0) then
 
-   print*,"- READ FFMM."
-   vname="ffmm"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+     print*,"- READ FFMM."
+     vname="ffmm"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
 
-!   vname=":FFMM:"               
-!   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-!   print*,'wgrib2 ffmm ',rc,maxval(dummy2d),minval(dummy2d)
-
 ! No sample data contained this field, so could not test g2lib.
-    rc = 1
-    if (rc /= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
+     rc = 1
+     if (rc /= 0) then
+       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d_8(:,:) = 0.0
-      endif
-    endif
-    print*,'ffmm ',maxval(dummy2d_8),minval(dummy2d_8)
+         dummy2d_8(:,:) = 0.0
+       endif
+     endif
+     print*,'ffmm ',maxval(dummy2d_8),minval(dummy2d_8)
 
+   endif ! ffmm
 
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID FFMM"
- call ESMF_FieldScatter(ffmm_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID FFMM"
+   call ESMF_FieldScatter(ffmm_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
- if (localpet == 0) then
-!  print*,"- READ USTAR."
-!  vname="fricv"
-!  slev=":surface:" 
-!  call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
-!                        loc=varnum)  
-!   vname=":FRICV:"              
-!   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-!   if (rc <= 0) then
-!     call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-!     if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-!       print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL "//&
-!                  "REPLACED WITH CLIMO. SET A FILL "// &
-!                     "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-!       dummy2d(:,:) = 0.0_esmf_kind_r4
-!     endif
-!   endif
-!  dummy2d_8= real(dummy2d,esmf_kind_r8)
-!  print*,'wgrib2 fricv ',maxval(dummy2d),minval(dummy2d)
+   if (localpet == 0) then
 
-   print*,"- READ USTAR."
-   vname="fricv"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+     print*,"- READ USTAR."
+     vname="fricv"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
 
      jdisc   = 0     ! search for discipline - meteo products
@@ -5727,10 +5704,10 @@ else
      endif
 
      if (rc == 0) then
-       print*,'getgb2 fricv ', maxval(gfld%fld),minval(gfld%fld)
+       print*,'fricv ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
      else
-       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8= dummy2d_8)
+       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
        if (rc==1) then ! missing_var_method == skip or no entry in varmap table
          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL "//&
                    "REPLACED WITH CLIMO. SET A FILL "// &
@@ -5740,47 +5717,46 @@ else
      endif
 
 ! temporary code. wgrib flips the pole of gfs data.
-    if (trim(external_model) == "GFS") then
-      dummy2d_82 = dummy2d_8
-      do j = 1, j_input
-        dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-      enddo
-    endif 
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
 
- endif
+   endif ! ustar
 
- print*,"- CALL FieldScatter FOR INPUT GRID USTAR"
- call ESMF_FieldScatter(ustar_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID USTAR"
+   call ESMF_FieldScatter(ustar_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+     call error_handler("IN FieldScatter", rc)
 
- if (localpet == 0) then
-   print*,"- READ F10M."
-   vname="f10m"
-   slev=":10 m above ground:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+   if (localpet == 0) then
+
+     print*,"- READ F10M."
+     vname="f10m"
+     slev=":10 m above ground:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-!   vname=":F10M:"               
-!   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
 
-    rc = -1 ! None of the test cases have this record. Can't test with g2lib.
-    if (rc /= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
+     rc = -1 ! None of the test cases have this record. Can't test with g2lib.
+     if (rc /= 0) then
+       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d_8(:,:) = 0.0
-      endif
-    endif
-    print*,'f10m ',maxval(dummy2d_8),minval(dummy2d_8)
+         dummy2d_8(:,:) = 0.0
+       endif
+     endif
+     print*,'f10m ',maxval(dummy2d_8),minval(dummy2d_8)
 
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID F10M."
- call ESMF_FieldScatter(f10m_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID F10M."
+   call ESMF_FieldScatter(f10m_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
 
