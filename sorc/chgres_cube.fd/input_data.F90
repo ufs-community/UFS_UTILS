@@ -4844,14 +4844,11 @@ else
    if (localpet == 0) then
      allocate(dummy2d(i_input,j_input))
      allocate(slmsk_save(i_input,j_input))
-     allocate(dummy2d_i(i_input,j_input))
      allocate(tsk_save(i_input,j_input))
      allocate(icec_save(i_input,j_input))
      allocate(dummy2d_8(i_input,j_input))
      allocate(dummy2d_82(i_input,j_input))
      allocate(dummy3d(i_input,j_input,lsoil_input))
-     allocate(dummy3d_stype(i_input,j_input,16))
-     allocate(dummy1d(16))
    else
      allocate(dummy3d(0,0,0))
      allocate(dummy2d_8(0,0))
@@ -5204,44 +5201,27 @@ else
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldScatter", rc)
     
- if (localpet == 0) then
-   print*,"- READ SKIN TEMPERATURE."
+   if (localpet == 0) then
 
-!   rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
-!  if (rc <= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
-!  print*,'skint ',maxval(dummy2d),minval(dummy2d)
-!  tsk_save(:,:) = real(dummy2d,esmf_kind_r8)
-!  dummy2d_8 = real(dummy2d,esmf_kind_r8)
-!  do j = 1, j_input
-!    do i = 1, i_input
-!      if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) < 271.2) then
-!        print*,'too cool SST ',i,j,dummy2d(i,j)
-!        dummy2d(i,j) = 271.2
-!      endif
-!      if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) > 310.) then
-!        print*,'too hot SST ',i,j,dummy2d(i,j)
-!        dummy2d(i,j) = 310.0
-!      endif
-!    enddo
-!  enddo
+     print*,"- READ SKIN TEMPERATURE."
 
      jdisc   = 0     ! search for discipline - meteo products
-     j = 1
+     j = 0
      jpdt    = -9999  ! array of values in product definition template 4.n
      jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
      jpdt(1) = 0  ! oct 10 - param cat - temperature
      jpdt(2) = 0  ! oct 11 - param number - temperature
      jpdt(10) = 1 ! oct 23 - type of level - ground surface
      unpack=.true.
-    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-   if (rc /= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
-    print*,'getgb2 skint ',rc, maxval(gfld%fld),minval(gfld%fld)
+     if (rc /= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
+     print*,'skint ', maxval(gfld%fld),minval(gfld%fld)
 
-    dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
    
-! temporary code. wgrib flips the pole of gfs data.
+! Temporary code. wgrib2 flips the pole of gfs data.
      if (trim(external_model) == "GFS") then
        dummy2d_82 = dummy2d_8
        do j = 1, j_input
@@ -5249,106 +5229,106 @@ else
        enddo
      endif 
 
-    tsk_save(:,:) = dummy2d_8
+     tsk_save(:,:) = dummy2d_8
 
-   do j = 1, j_input
-     do i = 1, i_input
-       if(slmsk_save(i,j) == 0 .and. dummy2d_8(i,j) < 271.2) then
-!        print*,'too cool SST ',i,j,dummy2d_8(i,j)
-         dummy2d_8(i,j) = 271.2
-       endif
-       if(slmsk_save(i,j) == 0 .and. dummy2d_8(i,j) > 310.) then
-!        print*,'too hot SST ',i,j,dummy2d_8(i,j)
-         dummy2d_8(i,j) = 310.0
-       endif
+     do j = 1, j_input
+       do i = 1, i_input
+        if(slmsk_save(i,j) == 0 .and. dummy2d_8(i,j) < 271.2) then
+!         print*,'too cool SST ',i,j,dummy2d_8(i,j)
+          dummy2d_8(i,j) = 271.2
+        endif
+        if(slmsk_save(i,j) == 0 .and. dummy2d_8(i,j) > 310.) then
+!         print*,'too hot SST ',i,j,dummy2d_8(i,j)
+          dummy2d_8(i,j) = 310.0
+        endif
+       enddo
      enddo
-   enddo
 
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
- call ESMF_FieldScatter(skin_temp_input_grid,dummy2d_8,rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
+   call ESMF_FieldScatter(skin_temp_input_grid,dummy2d_8,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
- if (localpet == 0) dummy2d_8 = 0.0
- 
- print*,"- CALL FieldScatter FOR INPUT GRID SRFLAG"
- call ESMF_FieldScatter(srflag_input_grid,dummy2d_8, rootpet=0,rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+! srflag not in files. Set to zero.
 
- if (localpet == 0) then
-   print*,"- READ SOIL TYPE."
-!  slev=":surface:" 
-!  vname=":SOTYP:"                                     
-!  rc = grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-!  print*,'after wgrib2 soil type ',rc,maxval(dummy2d),minval(dummy2d)
+   if (localpet == 0) dummy2d_8 = 0.0
+ 
+   print*,"- CALL FieldScatter FOR INPUT GRID SRFLAG"
+   call ESMF_FieldScatter(srflag_input_grid,dummy2d_8, rootpet=0,rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+
+   if (localpet == 0) then
+
+     print*,"- READ SOIL TYPE."
 
      jdisc   = 2     ! search for discipline - land products
-     j = 1
+     j = 0
      jpdt    = -9999  ! array of values in product definition template 4.n
      jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
      jpdt(1) = 3  ! oct 10 - param cat - soil products
      jpdt(2) = 0  ! oct 11 - param number - soil type
      jpdt(10) = 1 ! oct 23 - type of level - ground surface
      unpack=.true.
-    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-   if (rc == 0 ) then
-     print*,'getgb2 soil type ', rc, maxval(gfld%fld),minval(gfld%fld)
-
-     dummy2d = reshape(gfld%fld , (/i_input,j_input/))
+     if (rc == 0 ) then
+       print*,'soil type ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d = reshape(gfld%fld , (/i_input,j_input/))
    
-! temporary code. wgrib flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_8 = dummy2d
-       do j = 1, j_input
-         dummy2d(:,j) = dummy2d_8(:,j_input-j+1)
-       enddo
-     endif 
-   endif
+! Temporary code. wgrib2 flips the pole of gfs data.
+       if (trim(external_model) == "GFS") then
+         dummy2d_8 = dummy2d
+         do j = 1, j_input
+           dummy2d(:,j) = dummy2d_8(:,j_input-j+1)
+         enddo
+       endif 
+     endif
 
-   if (rc /= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon) .and. geo_file .ne. "NULL")  then
+     if (rc /= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon) .and. geo_file .ne. "NULL")  then
      ! Some HRRR and RAP files don't have dominant soil type in the output, but the geogrid files
      ! do, so this gives users the option to provide the geogrid file and use input soil
      ! type 
-     print*, "OPEN GEOGRID FILE ", trim(geo_file)
-     rc = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
-     call netcdf_err(rc,"READING GEOGRID FILE")
+       print*, "OPEN GEOGRID FILE ", trim(geo_file)
+       rc = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
+       call netcdf_err(rc,"READING GEOGRID FILE")
 
-     print*, "INQURE ABOUT DIM IDS"
-     rc = nf90_inq_dimid(ncid2d,"west_east",varid)
-     call netcdf_err(rc,"READING west_east DIMENSION FROM GEOGRID FILE")
+       print*, "INQURE ABOUT DIM IDS"
+       rc = nf90_inq_dimid(ncid2d,"west_east",varid)
+       call netcdf_err(rc,"READING west_east DIMENSION FROM GEOGRID FILE")
      
-     rc = nf90_inquire_dimension(ncid2d,varid,len=varsize)
-     call netcdf_err(rc,"READING west_east DIMENSION SIZE")
-     if (varsize .ne. i_input) call error_handler ("GEOGRID FILE GRID SIZE DIFFERS FROM INPUT DATA.", -1)
+       rc = nf90_inquire_dimension(ncid2d,varid,len=varsize)
+       call netcdf_err(rc,"READING west_east DIMENSION SIZE")
+       if (varsize .ne. i_input) call error_handler ("GEOGRID FILE GRID SIZE DIFFERS FROM INPUT DATA.", -1)
         
-     print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
-     rc = nf90_inq_varid(ncid2d,"SCT_DOM",varid)
-     call netcdf_err(rc,"FINDING SCT_DOM IN GEOGRID FILE")
+       print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
+       rc = nf90_inq_varid(ncid2d,"SCT_DOM",varid)
+       call netcdf_err(rc,"FINDING SCT_DOM IN GEOGRID FILE")
      
-     print*, "READ SOIL TYPE FROM GEOGRID FILE "
-     rc = nf90_get_var(ncid2d,varid,dummy2d)
-     call netcdf_err(rc,"READING SCT_DOM FROM FILE")
+       print*, "READ SOIL TYPE FROM GEOGRID FILE "
+       rc = nf90_get_var(ncid2d,varid,dummy2d)
+       call netcdf_err(rc,"READING SCT_DOM FROM FILE")
        
-     print*, "INQUIRE ABOUT SOIL TYPE FRACTIONS FROM GEOGRID FILE"
-     rc = nf90_inq_varid(ncid2d,"SOILCTOP",varid)
-     call netcdf_err(rc,"FINDING SOILCTOP IN GEOGRID FILE")
+       print*, "INQUIRE ABOUT SOIL TYPE FRACTIONS FROM GEOGRID FILE"
+       rc = nf90_inq_varid(ncid2d,"SOILCTOP",varid)
+       call netcdf_err(rc,"FINDING SOILCTOP IN GEOGRID FILE")
      
-     print*, "READ SOIL TYPE FRACTIONS FROM GEOGRID FILE "
-     rc = nf90_get_var(ncid2d,varid,dummy3d_stype)
-     call netcdf_err(rc,"READING SCT_DOM FROM FILE")
+       allocate(dummy3d_stype(i_input,j_input,16))
+       print*, "READ SOIL TYPE FRACTIONS FROM GEOGRID FILE "
+       rc = nf90_get_var(ncid2d,varid,dummy3d_stype)
+       call netcdf_err(rc,"READING SCT_DOM FROM FILE")
 
-     print*, "CLOSE GEOGRID FILE "
-     iret = nf90_close(ncid2d)
+       print*, "CLOSE GEOGRID FILE "
+       iret = nf90_close(ncid2d)
      
      ! There's an issue with the geogrid file containing soil type water at land points. 
      ! This correction replaces the soil type at these points with the soil type with
      ! the next highest fractional coverage.
-     do j = 1, j_input
+       allocate(dummy1d(16))
+       do j = 1, j_input
        do i = 1, i_input
          if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
            dummy1d(:) = dummy3d_stype(i,j,:)
@@ -5356,57 +5336,59 @@ else
            dummy2d(i,j) = real(MAXLOC(dummy1d, 1),esmf_kind_r4)
          endif
        enddo
-     enddo
-     deallocate(dummy1d)
-   endif ! failed
+       enddo
+       deallocate(dummy1d)
+       deallocate(dummy3d_stype)
+     endif ! failed
    
-   if ((rc /= 0 .and. trim(to_upper(external_model)) /= "HRRR" .and. .not. rap_latlon) & 
-     .or. (rc /= 0 .and. (trim(to_upper(external_model)) == "HRRR" .or. rap_latlon))) then
-     if (.not. sotyp_from_climo) then
-       call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET SOTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
-     else
-       vname = "sotyp"
-       slev = "surface"
-       call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                           loc=varnum)  
-       call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-       if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
-          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL NOT "//&
-                     "SCALE SOIL MOISTURE FOR DIFFERENCES IN SOIL TYPE. "
-          dummy2d(:,:) = -99999.0_esmf_kind_r4
+     if ((rc /= 0 .and. trim(to_upper(external_model)) /= "HRRR" .and. .not. rap_latlon) & 
+       .or. (rc /= 0 .and. (trim(to_upper(external_model)) == "HRRR" .or. rap_latlon))) then
+       if (.not. sotyp_from_climo) then
+         call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET SOTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
+       else
+         vname = "sotyp"
+         slev = "surface"
+         call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+                             loc=varnum)  
+         call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+         if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
+            print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL NOT "//&
+                       "SCALE SOIL MOISTURE FOR DIFFERENCES IN SOIL TYPE. "
+            dummy2d(:,:) = -99999.0_esmf_kind_r4
+         endif
        endif
      endif
-   endif
    
    ! In the event that the soil type on the input grid still contains mismatches between 
    ! soil type and landmask, this correction is a last-ditch effort to replace these points
    ! with soil type from a nearby land point.
-   if (.not. sotyp_from_climo) then
-     do j = 1, j_input
-     do i = 1, i_input
-       if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9   
-     enddo
-     enddo
-   
-     dummy2d_8 = real(dummy2d,esmf_kind_r8)
-     dummy2d_i(:,:) = 0
-     where(slmsk_save == 1) dummy2d_i = 1
-   
-     call search(dummy2d_8,dummy2d_i,i_input,j_input,1,230)
-   else
-      dummy2d_8=real(dummy2d,esmf_kind_r8)
-   endif
-   
-   print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
-   deallocate(dummy2d_i)
-   deallocate(dummy3d_stype)
- endif ! localpet == 0
-  
 
- print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
- call ESMF_FieldScatter(soil_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+     if (.not. sotyp_from_climo) then
+       do j = 1, j_input
+       do i = 1, i_input
+         if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9   
+       enddo
+       enddo
+
+       allocate(dummy2d_i(i_input,j_input))
+       dummy2d_8 = real(dummy2d,esmf_kind_r8)
+       dummy2d_i(:,:) = 0
+       where(slmsk_save == 1) dummy2d_i = 1
+   
+       call search(dummy2d_8,dummy2d_i,i_input,j_input,1,230)
+       deallocate(dummy2d_i)
+     else
+       dummy2d_8=real(dummy2d,esmf_kind_r8)
+     endif
+   
+     print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
+
+   endif ! read of soil type
+  
+   print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
+   call ESMF_FieldScatter(soil_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     
  ! Begin variables whose presence in grib2 files varies, but no climatological
