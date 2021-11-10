@@ -5812,34 +5812,12 @@ else
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldScatter", rc)
 
- if (localpet == 0) then
+   if (localpet == 0) then
 
-!  print*,"- READ Z0."
-!  vname="sfcr"
-!  slev=":surface:" 
-!  call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
-!                        loc=varnum)  
-!   vname=":SFCR:"               
-!   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-!   if (rc <= 0) then
-!     call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-!     if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-!       print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
-!                  " REPLACED WITH CLIMO. SET A FILL "// &
-!                     "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-!       dummy2d(:,:) = 0.0_esmf_kind_r4
-!     endif
-!   else
-      ! Grib files have z0 (m), but fv3 expects z0(cm)
-!     dummy2d(:,:) = dummy2d(:,:)*10.0
-!   endif
-!  dummy2d_8= real(dummy2d,esmf_kind_r8)
-!  print*,'wgrib2 sfcr ',maxval(dummy2d),minval(dummy2d)
-   
-   print*,"- READ Z0."
-   vname="sfcr"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+     print*,"- READ Z0."
+     vname="sfcr"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
 
      jdisc   = 2     ! search for discipline - land products
@@ -5863,24 +5841,24 @@ else
        endif
      else
        gfld%fld = gfld%fld * 10.0 ! Grib files have z0 (m), but fv3 expects z0(cm)
-       print*,'getgb2 sfcr ', maxval(gfld%fld),minval(gfld%fld)
+       print*,'sfcr ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
      endif
 
-! temporary code. wgrib flips the pole of gfs data.
-   if (trim(external_model) == "GFS") then
-     dummy2d_82 = dummy2d_8
-     do j = 1, j_input
-       dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-     enddo
-   endif 
+! Temporary code. wgrib2 flips the pole of gfs data.
+     if (trim(external_model) == "GFS") then
+       dummy2d_82 = dummy2d_8
+       do j = 1, j_input
+         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
+       enddo
+     endif 
 
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID Z0."
- call ESMF_FieldScatter(z0_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID Z0."
+   call ESMF_FieldScatter(z0_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
  
  if (localpet == 0) then
