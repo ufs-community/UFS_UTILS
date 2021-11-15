@@ -4742,7 +4742,7 @@ else
    real(esmf_kind_r8), allocatable       :: icec_save(:,:)
    real(esmf_kind_r4), allocatable       :: dummy1d(:)
    real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:),dummy2d_82(:,:),tsk_save(:,:)
-   real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy3d_stype(:,:,:)
+   real(esmf_kind_r8), allocatable       :: dummy2d_83(:,:), dummy3d(:,:,:), dummy3d_stype(:,:,:)
    integer(esmf_kind_i4), allocatable    :: slmsk_save(:,:)
    integer(esmf_kind_i8), allocatable    :: dummy2d_i(:,:)
    
@@ -5390,6 +5390,8 @@ else
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldScatter", rc)
 
+   deallocate(dummy2d)
+
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     
  ! Begin variables whose presence in grib2 files varies, but no climatological
  ! data is available, so we have to account for values in the varmap table
@@ -5900,37 +5902,9 @@ else
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
    call error_handler("IN FieldGather", rc)
 
- if (localpet == 0) then
-   print*,"- READ VEG TYPE."
-   vname="vtype"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                         loc=varnum)
+   if (localpet == 0) then
 
-   !Note: sometimes the grib files don't have this one named. Searching for this string
-   !      ensures that the data is found when it exists
-                 
-!   vname="var2_2"   
-!  rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,' hour fcst:', data2=dummy2d)
-!  print*,'after wgrib2 vtype 1st try ',rc,maxval(dummy2d),minval(dummy2d)
-!  if (rc <= 0) then
-!    rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
-!    print*,'after wgrib2 vtype 2nd try ',rc,maxval(dummy2d),minval(dummy2d)
-!    if (rc <= 0) then
-!      if (.not. vgtyp_from_climo) then
-!        call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
-!      else
-!       print*,'got here veg type'
-!     do j = 1, j_input
-!       do i = 1, i_input
-!         dummy2d(i,j) = 0.0_esmf_kind_r4
-!         if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
-!         dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
-!     enddo
-!     enddo    
-!      endif ! replace_vgtyp
-!    endif !not find :anl:
-!  endif !not find hour fcst:
+     print*,"- READ VEG TYPE."
    
      jdisc   = 2     ! search for discipline - land products
      j = 0
@@ -5949,59 +5923,61 @@ else
        else ! Set input veg type at land ice from soil moisture flag (1.0).
          do j = 1, j_input
           do i = 1, i_input
-            dummy2d(i,j) = 0.0_esmf_kind_r4
-            if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
-            dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
+            dummy2d_8(i,j) = 0.0
+            if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &  ! land ice indicated by
+                                                                    ! soil moisture flag of '1'.
+            dummy2d_8(i,j) = real(veg_type_landice_input,esmf_kind_r8)
           enddo
          enddo    
        endif
      else  ! found vtype in file.
-       print*,'getgb2 vgtyp ', maxval(gfld%fld),minval(gfld%fld)
-       dummy2d = reshape(gfld%fld , (/i_input,j_input/))
-! temporary code. wgrib flips the pole of gfs data.
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+! Temporary code. wgrib2 flips the pole of gfs data.
        if (trim(external_model) == "GFS") then
-         dummy2d_8 = dummy2d
+         allocate(dummy2d_83(i_input,j_input))
+         dummy2d_83 = dummy2d_8
          do j = 1, j_input
-           dummy2d(:,j) = dummy2d_8(:,j_input-j+1)
+           dummy2d_8(:,j) = dummy2d_83(:,j_input-j+1)
          enddo
+         deallocate(dummy2d_83)
        endif 
+
      endif
 
-   if (trim(external_model) .ne. "GFS") then
-   do j = 1, j_input
-     do i = 1,i_input
-     if (dummy2d(i,j) == 15.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
-       if (dummy3d(i,j,1) < 0.6) then 
-       dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
-       elseif (dummy3d(i,j,1) > 0.99) then
-          slmsk_save(i,j) = 0
-        dummy2d(i,j) = 0.0_esmf_kind_r4
-        dummy2d_82(i,j) = 0.0_esmf_kind_r8
-       endif
-     elseif (dummy2d(i,j) == 17.0_esmf_kind_r4 .and. slmsk_save(i,j)==0) then
-       dummy2d(i,j) = 0.0_esmf_kind_r4
-     endif
-     enddo
-   enddo
-   endif     
+     if (trim(external_model) .ne. "GFS") then
+       do j = 1, j_input
+       do i = 1,i_input
+         if (dummy2d_8(i,j) == 15.0_esmf_kind_r8 .and. slmsk_save(i,j) == 1) then
+           if (dummy3d(i,j,1) < 0.6) then 
+             dummy2d_8(i,j) = real(veg_type_landice_input,esmf_kind_r8)
+           elseif (dummy3d(i,j,1) > 0.99) then
+             slmsk_save(i,j) = 0
+             dummy2d_8(i,j) = 0.0_esmf_kind_r8
+             dummy2d_82(i,j) = 0.0_esmf_kind_r8
+           endif
+         elseif (dummy2d_8(i,j) == 17.0_esmf_kind_r8 .and. slmsk_save(i,j)==0) then
+           dummy2d_8(i,j) = 0.0_esmf_kind_r8
+         endif
+       enddo
+       enddo
+     endif     
 
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'vgtyp ',maxval(dummy2d),minval(dummy2d)
- endif !localpet
+     print*,'vgtyp ',maxval(dummy2d_8),minval(dummy2d_8)
 
- deallocate(dummy2d)
+   endif ! read veg type
 
- print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
- call ESMF_FieldScatter(veg_type_input_grid, dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
+   call ESMF_FieldScatter(veg_type_input_grid, dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
- print*,"- CALL FieldScatter FOR INPUT SOIL TYPE."
- call ESMF_FieldScatter(soil_type_input_grid, dummy2d_82, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT SOIL TYPE."
+   call ESMF_FieldScatter(soil_type_input_grid, dummy2d_82, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
- deallocate(dummy2d_82)
+   deallocate(dummy2d_82)
 
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
  call ESMF_FieldScatter(landsea_mask_input_grid,real(slmsk_save,esmf_kind_r8),rootpet=0, rc=rc)
