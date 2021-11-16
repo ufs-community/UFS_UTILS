@@ -6615,21 +6615,22 @@ else
 !> Read winds from a grib2 file.  Rotate winds
 !! to be earth relative if necessary.
 !!
-!! @param [in] file  grib2 file to be read
+!! @param [in] g2file  grib2 file to be read
 !! @param [in] inv   grib2 inventory file
 !! @param [inout] u  u-component wind
 !! @param [inout] v  v-component wind
 !! @param[in] localpet  ESMF local persistent execution thread
 !! @author Larissa Reames
- subroutine read_winds(file,inv,u,v,localpet)
+ subroutine read_winds(g2file,inv,u,v,localpet)
 
+ use grib_mod
  use wgrib2api
  use netcdf
  use program_setup, only      : get_var_cond, fix_dir_input_grid
  use model_grid, only         : input_grid_type
  implicit none
 
- character(len=250), intent(in)          :: file
+ character(len=250), intent(in)          :: g2file
  character(len=10), intent(in)            :: inv
  integer, intent(in)                     :: localpet
  real(esmf_kind_r8), intent(inout), allocatable :: u(:,:,:),v(:,:,:)
@@ -6643,11 +6644,17 @@ else
 
  integer                                 :: varnum_u, varnum_v, vlev, & !ncid, id_var, &
                                             error, iret, istr
+ integer                                 :: j, k, lugb, lugi, jgdtn, jpdtn
+ integer                                 :: jdisc, jids(200), jgdt(200), jpdt(200)
 
  character(len=20)                       :: vname
  character(len=50)                       :: method_u, method_v
  character(len=250)                      :: file_coord
  character(len=10000)                    :: temp_msg
+
+ logical                                 :: unpack
+
+ type(gribfield)                         :: gfld
 
  d2r=acos(-1.0_esmf_kind_r8) / 180.0_esmf_kind_r8
  if (localpet==0) then
@@ -6667,71 +6674,68 @@ else
  call get_var_cond(vname,this_miss_var_method=method_v, this_miss_var_value=value_v, &
                        loc=varnum_v)
 
- if (trim(input_grid_type)=="rotated_latlon") then
-   print*,"- CALL FieldGather FOR INPUT GRID LONGITUDE"
-   call ESMF_FieldGather(longitude_input_grid, lon, rootPet=0, tile=1, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", error)
-   print*,"- CALL FieldGather FOR INPUT GRID LATITUDE"
-   call ESMF_FieldGather(latitude_input_grid, lat, rootPet=0, tile=1, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ print*,"- CALL FieldGather FOR INPUT GRID LONGITUDE"
+ call ESMF_FieldGather(longitude_input_grid, lon, rootPet=0, tile=1, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather", error)
 
-   if (localpet==0) then
-     print*,"- CALCULATE ROTATION ANGLE FOR ROTATED_LATLON INPUT GRID"
-     error = grb2_inq(file, inv,grid_desc=temp_msg)
-     !1:0:grid_template=32769:winds(grid):
-     !   I am not an Arakawa E-grid.
-     !   I am rotated but have no rotation angle.
-     !   I am staggered. What am I?
-     !   (953 x 834) units 1e-06 input WE:SN output WE:SN res 56
-     !   lat0 -10.590603 lat-center 54.000000 dlat 121.813000
-     !   lon0 220.914154 lon-center 254.000000 dlon 121.813000 #points=794802
-
-      istr = index(temp_msg, "lat-center ") + len("lat_center ")
-      read(temp_msg(istr:istr+9),"(F8.5)") latin1
-      istr = index(temp_msg, "lon-center ") + len("lon-center ")
-      read(temp_msg(istr:istr+10),"(F9.6)") lov
-
-      print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
-      call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha)
-      print*, " alpha min/max = ",MINVAL(alpha),MAXVAL(alpha)
-   endif
- elseif (trim(input_grid_type) == "lambert") then
-   !# NG this has been edited to correctly calculate gridrot for Lambert grids
-   !  Previously was incorrectly using polar-stereographic formation
-   print*,"- CALL FieldGather FOR INPUT GRID LONGITUDE"
-   call ESMF_FieldGather(longitude_input_grid, lon, rootPet=0, tile=1, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ print*,"- CALL FieldGather FOR INPUT GRID LATITUDE"
+ call ESMF_FieldGather(latitude_input_grid, lat, rootPet=0, tile=1, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather", error)
 
-   if (localpet==0) then
-     error = grb2_inq(file, inv,grid_desc=temp_msg)
-     !1:0:grid_template=30:winds(grid):
-     !   Lambert Conformal: (1799 x 1059) input WE:SN output WE:SN res 8
-     !   Lat1 21.138123 Lon1 237.280472 LoV 262.500000
-     !   LatD 38.500000 Latin1 38.500000 Latin2 38.500000
-     !   LatSP 0.000000 LonSP 0.000000
-     !   North Pole (1799 x 1059) Dx 3000.000000 m Dy 3000.000000 m mode 8
+ if (localpet==0) then
 
-   istr = index(temp_msg, "LoV ") + len("LoV ")
-   read(temp_msg(istr:istr+10),"(F9.6)") lov
-   istr = index(temp_msg, "Latin1 ") + len("Latin1 ")
-   read(temp_msg(istr:istr+9),"(F8.5)") latin1
-   istr = index(temp_msg, "Latin2 ") + len("Latin2 ")
-   read(temp_msg(istr:istr+9),"(F8.5)") latin2
+   print*,'got here in winds ',trim(g2file)
+   lugb=13
+   lugi=0
+   call baopenr(lugb,g2file,iret)
+   if (iret /= 0) call error_handler("ERROR OPENING GRIB2 FILE.", iret)
 
+   jdisc   = 0     ! search for discipline - meteorological products
+   j = 0           ! search at beginning of file.
+   jpdt    = -9999  ! array of values in product definition template 4.n
+   jids    = -9999  ! array of values in identification section, set to wildcard
+   jgdt    = -9999  ! array of values in grid definition template 3.m
+   jgdtn   = -1     ! search for any grid definition number.
+   jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+   unpack=.false.
+
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+    
+   if (iret /= 0) call error_handler("ERROR READING GRIB2 FILE.", iret)
+
+   print*,'grid def template number ',gfld%igdtnum
+   print*,'grid def template        ',gfld%igdtmpl
+   
+   if (gfld%igdtnum == 32769) then
+
+     latin1 = float(gfld%igdtmpl(15))/1.0E6
+     lov = float(gfld%igdtmpl(16))/1.0E6
+
+     print*,'getgb2 rotated lat/lon ',latin1,lov
+     print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
+     call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha)
+     print*, " alpha min/max = ",MINVAL(alpha),MAXVAL(alpha)
+
+   elseif (gfld%igdtnum == 30) then
+
+     lov = float(gfld%igdtmpl(14))/1.0E6
+     latin1 = float(gfld%igdtmpl(19))/1.0E6
+     latin2 = float(gfld%igdtmpl(20))/1.0E6
+
+     print*,'getgb2 lambert ',lov,latin1,latin2
      print*, "- CALL GRIDROT for LC grid with lov,latin1/2 = ",lov,latin1,latin2
      call gridrot(lov,latin1,latin2,lon,alpha)
      print*, " alpha min/max = ",MINVAL(alpha),MAXVAL(alpha)
-   endif
- endif
 
- if (localpet==0) then
+   endif
+
    do vlev = 1, lev_input
 
      vname = ":UGRD:"
-     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=u_tmp)
+     iret = grb2_inq(g2file,inv,vname,slevs(vlev),data2=u_tmp)
      if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
         if (iret==1) then ! missing_var_method == skip
@@ -6741,7 +6745,7 @@ else
      endif
 
      vname = ":VGRD:"
-     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=v_tmp)
+     iret = grb2_inq(g2file,inv,vname,slevs(vlev),data2=v_tmp)
      if (iret <= 0) then
         call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
         if (iret==1) then ! missing_var_method == skip
