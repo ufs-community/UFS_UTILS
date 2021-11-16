@@ -5861,35 +5861,31 @@ else
    call ESMF_FieldScatter(z0_input_grid,dummy2d_8, rootpet=0, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldScatter", rc)
-    
  
- if (localpet == 0) then
-   print*,"- READ LIQUID SOIL MOISTURE."
-   vname = "soill"
-   vname_file = ":SOILL:"
-   call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc,lugb) !!! NEEDTO HANDLE 
-                                                                      !!! SOIL LEVELS
-   print*,'soill ',maxval(dummy3d),minval(dummy3d)
- endif
+   if (localpet == 0) then
+     print*,"- READ LIQUID SOIL MOISTURE."
+     vname = "soill"
+     vname_file = ":SOILL:"
+     call read_grib_soil(vname,vname_file,lugb, dummy3d) !!! NEED TO HANDLE 
+                                                         !!! SOIL LEVELS
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT LIQUID SOIL MOISTURE."
- call ESMF_FieldScatter(soilm_liq_input_grid, dummy3d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT LIQUID SOIL MOISTURE."
+   call ESMF_FieldScatter(soilm_liq_input_grid, dummy3d, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
  
- if (localpet == 0) then
-   print*,"- READ TOTAL SOIL MOISTURE."
-   vname = "soilw"
-   !vname_file = "var2_2_1_7_0_192"  !Some files don't recognize this as soilw,so use
-   vname_file = "var2_2_1_"         ! the var number instead
-   call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc,lugb)
-   print*,'soilm ',maxval(dummy3d),minval(dummy3d)
- endif
+   if (localpet == 0) then
+     print*,"- READ TOTAL SOIL MOISTURE."
+     vname = "soilw"
+     vname_file = "var2_2_1_"         ! the var number instead
+     call read_grib_soil(vname,vname_file,lugb,dummy3d)
+   endif
  
- print*,"- CALL FieldScatter FOR INPUT TOTAL SOIL MOISTURE."
- call ESMF_FieldScatter(soilm_tot_input_grid, dummy3d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT TOTAL SOIL MOISTURE."
+   call ESMF_FieldScatter(soilm_tot_input_grid, dummy3d, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
 !----------------------------------------------------------------------------------------
 ! Vegetation type is not available in some files.  However, it is needed to identify
@@ -5897,10 +5893,10 @@ else
 ! '1'. Use this flag as a temporary solution.
 !----------------------------------------------------------------------------------------
 
- print*, "- CALL FieldGather for INPUT SOIL TYPE."
- call ESMF_FieldGather(soil_type_input_grid, dummy2d_82, rootPet=0, tile=1, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-   call error_handler("IN FieldGather", rc)
+   print*, "- CALL FieldGather for INPUT SOIL TYPE."
+   call ESMF_FieldGather(soil_type_input_grid, dummy2d_82, rootPet=0, tile=1, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then
 
@@ -5979,10 +5975,10 @@ else
 
    deallocate(dummy2d_82)
 
- print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
- call ESMF_FieldScatter(landsea_mask_input_grid,real(slmsk_save,esmf_kind_r8),rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
+   call ESMF_FieldScatter(landsea_mask_input_grid,real(slmsk_save,esmf_kind_r8),rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
 !---------------------------------------------------------------------------------
 ! At open water (slmsk==0), the soil temperature array is not used and set
@@ -5991,28 +5987,26 @@ else
 ! in the grib data, so set to a default value.
 !---------------------------------------------------------------------------------
 
- if (localpet == 0) then
-   print*,"- READ SOIL TEMPERATURE."
-   vname = "soilt"
-   vname_file = ":TSOIL:"
-   call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc,lugb)
-   call check_soilt(dummy3d,slmsk_save,tsk_save)
-   print*,'soilt ',maxval(dummy3d),minval(dummy3d)
+   if (localpet == 0) then
+     print*,"- READ SOIL TEMPERATURE."
+     vname = "soilt"
+     vname_file = ":TSOIL:"
+     call read_grib_soil(vname,vname_file,lugb,dummy3d)
+     call check_soilt(dummy3d,slmsk_save,tsk_save)
+     deallocate(tsk_save)
+   endif
 
-   deallocate(tsk_save)
- endif
+   deallocate(slmsk_save)
 
- deallocate(slmsk_save)
+   print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
+   call ESMF_FieldScatter(soil_temp_input_grid, dummy3d, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
- print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
- call ESMF_FieldScatter(soil_temp_input_grid, dummy3d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
-
- deallocate(dummy3d)
- deallocate(dummy2d_8)
+   deallocate(dummy3d)
+   deallocate(dummy2d_8)
  
- if (localpet == 0) call baclose(lugb, rc)
+   if (localpet == 0) call baclose(lugb, rc)
 
  end subroutine read_input_sfc_grib2_file
    
@@ -7011,107 +7005,115 @@ end subroutine handle_grib_error
 
 !> Read soil temperature and soil moisture fields from a GRIB2 file.
 !!
-!! @param [in] the_file      grib2 file name
-!! @param [in] inv_file      grib2 inventory file name
 !! @param [in] vname         variable name in varmap table
 !! @param [in] vname_file    variable name in grib2 file
+!! @param [in] lugb          logical unit number for surface grib2 file
 !! @param [inout] dummy3d    array of soil data
-!! @param [out] rc           read error status code
 !! @author George Gayno NCEP/EMC   
-subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc,lugb)
+ subroutine read_grib_soil(vname, vname_file, lugb, dummy3d)
   
-  use grib_mod
-  use wgrib2api
-  implicit none
-  
-  character(len=*), intent(in)            :: the_file, inv_file
-  character(len=20), intent(in)           :: vname,vname_file
-  
-  integer, intent(out)                    :: rc
-  
-  real(esmf_kind_r8), intent(inout)       :: dummy3d(:,:,:)
-  
-  real(esmf_kind_r4), allocatable         :: dummy2d(:,:)
-  real(esmf_kind_r4)                      :: value
-  integer                                 :: varnum,i
-  character(len=50)                       :: slevs(lsoil_input)
-  character(len=50)                       :: method
+ use grib_mod
 
-    integer :: j, k, jdisc, jgdtn, jpdtn, lugi
-   integer :: lugb, jids(200), jgdt(200), jpdt(200)
-   integer :: iscale1, iscale2
-   logical :: unpack
-   type(gribfield)                  :: gfld
+ implicit none
+  
+ character(len=20), intent(in)           :: vname,vname_file
+  
+ integer, intent(in)                     :: lugb
 
-  allocate(dummy2d(i_input,j_input))
+ real(esmf_kind_r8), intent(inout)       :: dummy3d(:,:,:)
+  
+ character(len=50)                       :: slevs(lsoil_input)
+ character(len=50)                       :: method
 
-  if(lsoil_input == 4) then
+ integer                                 :: varnum, i, j, jj, k, rc, rc2
+ integer                                 :: jdisc, jgdtn, jpdtn, lugi
+ integer                                 :: jids(200), jgdt(200), jpdt(200)
+ integer                                 :: iscale1, iscale2
+
+ logical                                 :: unpack
+
+ real(esmf_kind_r4), allocatable         :: dummy2d(:,:), dummy2d_2(:,:)
+ real(esmf_kind_r4)                      :: value
+
+ type(gribfield)                         :: gfld
+
+ allocate(dummy2d(i_input,j_input))
+ allocate(dummy2d_2(i_input,j_input))
+
+ if(lsoil_input == 4) then
     slevs = (/character(24)::':0-0.1 m below ground:', ':0.1-0.4 m below ground:', &
                              ':0.4-1 m below ground:', ':1-2 m below ground:'/)
-  elseif(lsoil_input == 9) then
+ elseif(lsoil_input == 9) then
     slevs = (/character(26)::':0-0 m below ground',':0.01-0.01 m below ground:',':0.04-0.04 m below ground:', &
         ':0.1-0.1 m below ground:',':0.3-0.3 m below ground:',':0.6-0.6 m below ground:', &
         ':1-1 m below ground:',':1.6-1.6 m below ground:',':3-3 m below ground:'/)
-  else
+ else
     rc = -1
     call error_handler("reading soil levels. File must have 4 or 9 soil levels.", rc)
-  endif
- 
-  call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
-                         loc=varnum)
-  do i = 1,lsoil_input
-    if (vname_file=="var2_2_1_") then
-      rc = grb2_inq(the_file,inv_file,vname_file,"_0_192:",slevs(i),data2=dummy2d)
-    else
-      rc = grb2_inq(the_file,inv_file,vname_file,slevs(i),data2=dummy2d)
-    endif
-    if (rc <= 0) then
-      call handle_grib_error(vname_file, slevs(i),method,value,varnum,rc,var=dummy2d)
-      if (rc==1 .and. trim(vname) /= "soill") then 
-        ! missing_var_method == skip or no entry in varmap table
-        call error_handler("READING IN "//trim(vname)//". SET A FILL "// &
-                      "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",rc)
-      elseif (rc==1) then
-        dummy3d(:,:,:) = 0.0_esmf_kind_r8
-        exit
-      endif
-    endif
-
-    dummy3d(:,:,i) = real(dummy2d,esmf_kind_r8)
-  end do    
-
-  if (vname == 'soilt' .or. vname == 'soilw') then
-     lugi = 0
-     jdisc   = 2     ! search for discipline - land products
-     j = 1
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jids    = -9999  ! array of values in identification section, set to wildcard
-     jgdt    = -9999  ! array of values in grid definition template 3.m
-     jgdtn   = -1
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-     if (vname == 'soilt') jpdt(2) = 2  ! oct 11 - param number - temp
-     if (vname == 'soilw') jpdt(2) = 192  ! oct 11 - param number - tot soilm
-     jpdt(10) = 106
-     jpdt(13) = 106
-     unpack=.true.
-    do i = 1,lsoil_input
-      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, rc)
-
-      if (rc /= 0) call error_handler("in read_grib_soil", rc)
-
-      print*,'getgb2 ',trim(vname), rc, i, &
-             maxval(gfld%fld),minval(gfld%fld)
-      iscale1 = 10 ** gfld%ipdtmpl(11)
-      iscale2 = 10 ** gfld%ipdtmpl(14)
-      print*,'getgb2 top of soil layer in m ', float(gfld%ipdtmpl(12))/float(iscale1)
-      print*,'getgb2 bot of soil layer in m ', float(gfld%ipdtmpl(15))/float(iscale2)
-      j = k
-    enddo
-
  endif
+ 
+ call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+                         loc=varnum)
 
+ lugi = 0        ! unit number for index file
+ jdisc   = 2     ! search for discipline - land products
+ j = 0           ! search at beginning of file.
+ jpdt    = -9999  ! array of values in product definition template 4.n
+ jids    = -9999  ! array of values in identification section, set to wildcard
+ jgdt    = -9999  ! array of values in grid definition template 3.m
+ jgdtn   = -1     ! search for any grid definition number.
+ jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
+ jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
+ if (trim(vname) == 'soilt') jpdt(2) = 2  ! oct 11 - param number - soil temp
+ if (trim(vname) == 'soilw') jpdt(2) = 192  ! oct 11 - param number - total soilm
+ if (trim(vname) == 'soill') then
+   jpdt(1) = 3 ! oct 10 - soil products
+   jpdt(2) = 192  ! oct 11 - param number - liquid soilm
+ endif
+ jpdt(10) = 106 ! oct 23 - depth below ground 
+ jpdt(13) = 106 ! oct 29 - depth below ground
+ unpack=.true.
+
+ do i = 1,lsoil_input
+
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc2)
+
+   if (rc2 /= 0) then  ! record not found.
+     call handle_grib_error(vname_file, slevs(i),method,value,varnum,rc,var=dummy2d)
+     if (rc==1 .and. trim(vname) /= "soill") then 
+       ! missing_var_method == skip or no entry in varmap table
+       call error_handler("READING IN "//trim(vname)//". SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",rc)
+     elseif (rc==1) then
+       dummy3d(:,:,:) = 0.0_esmf_kind_r8
+       return
+     endif
+   endif
+
+   if (rc2 == 0) then ! record found. 
+     iscale1 = 10 ** gfld%ipdtmpl(11)
+     iscale2 = 10 ** gfld%ipdtmpl(14)
+!    print*,'getgb2 top of soil layer in m ', float(gfld%ipdtmpl(12))/float(iscale1)
+!    print*,'getgb2 bot of soil layer in m ', float(gfld%ipdtmpl(15))/float(iscale2)
+     dummy2d = reshape(gfld%fld, (/i_input,j_input/) )
+   endif 
+
+   j = k
+
+! Temporary code. wgrib2 flips the pole of gfs data.
+   if (trim(external_model) == "GFS") then
+     dummy2d_2 = dummy2d
+     do jj = 1, j_input
+       dummy2d(:,jj) = dummy2d_2(:,j_input-jj+1)
+     enddo
+   endif
+
+   dummy3d(:,:,i) = real(dummy2d,esmf_kind_r8)
+
+ enddo
+
+ deallocate(dummy2d_2)
  deallocate(dummy2d)
 
  end subroutine read_grib_soil
