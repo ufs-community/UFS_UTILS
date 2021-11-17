@@ -2459,6 +2459,7 @@
 
  use mpi
  use wgrib2api
+ use grib_mod
  
  use grib2_util, only                   : rh2spfh, rh2spfh_gfs, convert_omega
 
@@ -2487,6 +2488,13 @@
  integer                               :: all_empty, o3n
  integer                               :: len_str
  integer                               :: is_missing, intrp_ier, done_print
+
+ integer :: lugb, lugi, jdisc, jpdt(200), jgdt(200), iscale
+ integer :: jids(200), jpdtn, jgdtn, octet23, octet29
+
+ logical :: unpack
+   type(gribfield)                       :: gfld
+ 
 
  logical                               :: lret
  logical                               :: conv_omega=.false., &
@@ -2530,6 +2538,74 @@
 
  the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
 
+ if (localpet == 0) then
+
+   lugb=14
+   lugi=0
+   call baopenr(lugb,the_file,iret)
+   if (iret /= 0) call error_handler("ERROR OPENING GRIB2 FILE.", iret)
+
+   jdisc   = 0     ! search for discipline - meteorological products
+   j = 0           ! search at beginning of file.
+   jpdt    = -9999  ! array of values in product definition template 4.n
+   jids    = -9999  ! array of values in identification section, set to wildcard
+   jgdt    = -9999  ! array of values in grid definition template 3.m
+   jgdtn   = -1     ! search for any grid definition number.
+   jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+     jpdt(1) = 0  ! oct 10 - param cat - mass field
+     jpdt(2) = 0  ! oct 11 - param number - geop height
+     jpdt(10) = 105 ! oct 23 - type of level - ground surface
+     jpdt(12) = 10 ! oct 23 - type of level - ground surface
+!  unpack=.true.
+   unpack=.false.
+
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+   print*,'getgb2 check of hybrid ',iret,maxval(gfld%fld),minval(gfld%fld)
+    
+   if (iret == 0) then  ! hybrid
+     octet23 = 105
+     octet29 = 255
+   else
+     octet23 = 100
+     octet29 = 255
+   endif
+
+!  if (iret /= 0) call error_handler("ERROR READING GRIB2 FILE.", iret)
+
+     lev_input = 0
+     iret = 0
+     j = 0
+     jpdt = -9999
+     do
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret /= 0) exit
+
+       if (gfld%discipline == 0) then ! discipline - land products
+         if (gfld%ipdtnum == 0) then  ! prod template number - analysis or forecast at single level.
+           if (gfld%ipdtmpl(1) == 2 .and. gfld%ipdtmpl(2) == 2) then  ! uwind
+                                                                      ! octs 10 and 11
+             if (gfld%ipdtmpl(10) == octet23 .and. gfld%ipdtmpl(13) == octet29) then  
+               lev_input = lev_input + 1
+               iscale = 10 ** gfld%ipdtmpl(11)
+               print*,'getgb2 found uwind at level ',float(gfld%ipdtmpl(12))/float(iscale)
+             endif
+           endif
+         endif
+       endif
+    
+       j = k
+
+     enddo
+    
+     print*,'getgb2 found this number of levels ',lev_input
+
+ endif
+
  print*,"- READ ATMOS DATA FROM GRIB2 FILE: ", trim(the_file)
  print*,"- USE INVENTORY FILE ", inv_file
  
@@ -2555,6 +2631,8 @@
  print*,"- READ VERTICAL COORDINATE."
  iret = grb2_inq(the_file,inv_file,":var0_2","_0_0:",":10 hybrid level:")
   
+ print*,'got here check of coordinate ',iret
+
  if (iret <= 0) then
    lvl_str = "mb:" 
    lvl_str_space = " mb:"
@@ -6753,6 +6831,8 @@ else
                           "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
         endif
       endif
+
+      print*,'got here wind layer ',vlev,slevs(vlev)
 
       if (trim(input_grid_type) == "latlon") then
         if (external_model == 'UKMET') then
