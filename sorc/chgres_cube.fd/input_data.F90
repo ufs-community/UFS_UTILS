@@ -2491,6 +2491,7 @@
 
  integer :: lugb, lugi, jdisc, jpdt(200), jgdt(200), iscale
  integer :: jids(200), jpdtn, jgdtn, octet23, octet29
+ integer :: count_spfh, count_rh
 
  logical :: unpack
    type(gribfield)                       :: gfld
@@ -2503,7 +2504,8 @@
                                           use_rh=.false. 
                                           
 
- real(esmf_kind_r8), allocatable       :: rlevs(:)
+ real                                  :: rlevs_hold(1000)
+ real(esmf_kind_r8), allocatable       :: rlevs(:), rlevs2(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
  real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
                                           u_tmp_3d(:,:,:), v_tmp_3d(:,:,:)
@@ -2574,6 +2576,7 @@
 
 !  if (iret /= 0) call error_handler("ERROR READING GRIB2 FILE.", iret)
 
+     rlevs_hold = -999.9
      lev_input = 0
      iret = 0
      j = 0
@@ -2592,7 +2595,8 @@
              if (gfld%ipdtmpl(10) == octet23 .and. gfld%ipdtmpl(13) == octet29) then  
                lev_input = lev_input + 1
                iscale = 10 ** gfld%ipdtmpl(11)
-               print*,'getgb2 found uwind at level ',float(gfld%ipdtmpl(12))/float(iscale)
+               rlevs_hold(lev_input) = float(gfld%ipdtmpl(12))/float(iscale)
+               print*,'getgb2 found uwind at level ',rlevs_hold(lev_input)
              endif
            endif
          endif
@@ -2678,6 +2682,18 @@
 
  call quicksort(rlevs,1,lev_input)
 
+ if (localpet == 0) then
+
+   allocate(rlevs2(lev_input))
+   do i = 1, lev_input
+     rlevs2(i) = rlevs_hold(i)
+   enddo
+
+   call quicksort(rlevs2,1,lev_input)
+   print*,'getgb2 after sort ',rlevs2
+
+ endif
+
  if (.not. isnative) then
    do i = 1,lev_input
      write(slevs(i),"(F20.10)") rlevs(i)/100.0
@@ -2711,12 +2727,68 @@
       end if
      end do
 
+! check to see if spfh exists at all the same levels as ugrd.
+
+  if (localpet == 0) then
+
+     jpdt = -9999
+     jpdt(1) = 1  ! oct 10 - param cat - moisture
+     jpdt(2) = 0  ! oct 11 - param number - spec hum
+     if (isnative) then
+       jpdt(10) = 105 ! oct 23 - type of level
+     else
+       jpdt(10) = 100
+     endif
+     unpack=.false.
+
+     count_spfh=0
+     do vlev = 1, lev_input
+
+       j = 0
+       jpdt(12) = nint(rlevs_hold(vlev) )
+
+       print*,'in spfh loop ',vlev,jpdt(1:28)
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         count_spfh = count_spfh + 1
+       endif
+
+     enddo
+
+     print*,'getgb2 found ',count_spfh, ' levels of spfh. lev_input ',lev_input
+
+     jpdt(1) = 1  ! oct 10 - param cat - moisture
+     jpdt(2) = 1  ! oct 11 - param number - rel hum
+     count_rh=0
+     do vlev = 1, lev_input
+
+       j = 0
+       jpdt(12) = nint(rlevs_hold(vlev) )
+
+       print*,'in rh loop ',vlev,jpdt(1:28)
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         count_rh = count_rh + 1
+       endif
+
+     enddo
+
+     print*,'getgb2 found ',count_rh, ' levels of rh. lev_input ',lev_input
+
+  endif
  
  if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
+! this returns the number of levels of spfh.
  iret = grb2_inq(the_file,inv_file,trim(trac_names_grib_1(1)),trac_names_grib_2(1),lvl_str_space)
+ print*,'after check 1 ',iret,trim(trac_names_grib_1(1)),trac_names_grib_2(1),lvl_str_space
 
  if (iret <= 0 .or. use_rh) then
    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
+   print*,'after check 2 ',iret,':var0_2','_1_1:',lvl_str_space
    if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
    hasspfh = .false.
    trac_names_grib_2(1)='_1_1:'
