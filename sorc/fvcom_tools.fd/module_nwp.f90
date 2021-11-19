@@ -152,7 +152,7 @@ module module_nwp
             this%varnames(4) = 'tisfc'
             this%varnames(5) = 'tsfc'
             this%varnames(6) = 'tsfcl'
-            this%varnames(7) = 'zorl'
+            this%varnames(7) = 'zorli'
 
             allocate(this%latname)
             allocate(this%lonname)
@@ -257,7 +257,7 @@ module module_nwp
       !! @param[inout] zorl Surface roughness length
       !!
       !! @author David Wright, University of Michigan and GLERL
-      subroutine read_nwp(this,filename,itype,wcstart,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT,sfcTl, zorl)
+      subroutine read_nwp(this,filename,itype,wcstart,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT,sfcTl,zorl)
 
          class(fcst_nwp) :: this
 
