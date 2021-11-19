@@ -2491,7 +2491,8 @@
 
  integer :: lugb, lugi, jdisc, jpdt(200), jgdt(200), iscale
  integer :: jids(200), jpdtn, jgdtn, octet23, octet29
- integer :: count_spfh, count_rh
+ integer :: count_spfh, count_rh, count_icmr, count_scliwc, count_cice
+ integer :: count_rwmr, count_scllwc
 
  logical :: unpack
    type(gribfield)                       :: gfld
@@ -2779,6 +2780,20 @@
 
      print*,'getgb2 found ',count_rh, ' levels of rh. lev_input ',lev_input
 
+!    if (count_spfh /= lev_input) then
+!      use_rh = .true.
+!    endif
+
+!    if (count_spfh == 0 .or. use_rh) then
+!      if (count_rh == 0) then
+!        call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", 2)
+!      endif
+!      hasspfh = .false.
+!      print*,"- FILE CONTAINS RH."
+!    else
+!      print*,"- FILE CONTAINS SPFH."
+!    endif
+
   endif
  
  if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
@@ -2797,8 +2812,89 @@
    if (localpet == 0) print*,"- FILE CONTAINS SPFH."
  endif
  
+  if (localpet == 0) then
+
+     jpdt = -9999
+     if (isnative) then
+       jpdt(10) = 105 ! oct 23 - type of level
+     else
+       jpdt(10) = 100
+     endif
+     unpack=.false.
+
+     count_icmr=0
+     count_scliwc=0
+     count_cice=0
+     count_rwmr=0
+     count_scllwc=0
+
+     do vlev = 1, lev_input
+
+       j = 0
+       jpdt(1) = 1  ! oct 10 - param cat - moisture
+       jpdt(2) = 23 ! oct 11 - param number - icmr
+       jpdt(12) = nint(rlevs_hold(vlev) )
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         count_icmr = count_icmr + 1
+       endif
+
+       j = 0
+       jpdt(1) = 1  ! oct 10 - param cat - moisture
+       jpdt(2) = 84 ! oct 11 - param number - scliwc
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         count_scliwc = count_scliwc + 1
+       endif
+
+       j = 0
+       jpdt(1) = 6  ! oct 10 - param cat - clouds
+       jpdt(2) = 0  ! oct 11 - param number - cice
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         count_cice = count_cice + 1
+       endif
+
+       j = 0
+       jpdt(1) = 1  ! oct 10 - param cat - moisture
+       jpdt(2) = 24  ! oct 11 - param number - rwmr
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         count_rwmr = count_rwmr + 1
+       endif
+
+       j = 0
+       jpdt(1) = 1  ! oct 10 - param cat - moisture
+       jpdt(2) = 83  ! oct 11 - param number - scllwc
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         count_scllwc = count_scllwc + 1
+       endif
+
+     enddo
+
+     print*,'getgb2 found ',count_icmr,   ' levels of icmr.'
+     print*,'getgb2 found ',count_scliwc, ' levels of scliwc.'
+     print*,'getgb2 found ',count_cice,   ' levels of cice.'
+     print*,'getgb2 found ',count_rwmr,   ' levels of rwmr.'
+     print*,'getgb2 found ',count_scllwc, ' levels of scllwc.'
+
+  endif
+
  if (localpet == 0) print*,"- FIND ICMR, SCLIWC, OR CICE IN FILE"
  iret = grb2_inq(the_file,inv_file,trac_names_grib_1(4),trac_names_grib_2(4),lvl_str_space)
+ print*,'wgrib2 found ',iret, 'levels of icmr.'
 
  if (iret <= 0) then
    vname = trac_names_vmap(4)
@@ -2806,8 +2902,10 @@
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                        this_field_var_name=tmpstr,loc=varnum)
    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_84:',lvl_str_space)
+   print*,'wgrib2 found ',iret, 'levels of scliwc.'
    if (iret <= 0) then
      iret = grb2_inq(the_file,inv_file, ':var0_2','_6_0:',lvl_str_space)
+     print*,'wgrib2 found ',iret, 'levels of cice.'
      if (iret <= 0 ) then 
        call handle_grib_error(vname, slevs(1),method,value,varnum,rc,var=dummy2d)
      else
@@ -2824,6 +2922,7 @@
  
  if (localpet == 0) print*,"- FIND CLWMR or SCLLWC IN FILE"
  iret = grb2_inq(the_file,inv_file,trac_names_grib_1(5),trac_names_grib_2(5),lvl_str_space)
+ print*,'wgrib2 found ',iret, 'levels of clwmr/rwmr.'
 
  if (iret <= 0) then
    vname = trac_names_vmap(5)
@@ -2831,6 +2930,7 @@
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                        this_field_var_name=tmpstr,loc=varnum)
    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_83:',lvl_str_space)
+   print*,'wgrib2 found ',iret, 'levels of scllwc.'
    if (iret <= 0) then 
       call handle_grib_error(vname, slevs(1),method,value,varnum,rc,var=dummy2d)
    elseif (iret <=0 .and. rc .ne. 1) then
