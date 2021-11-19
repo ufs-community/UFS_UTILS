@@ -277,14 +277,15 @@ if(mype==0) then
    call geo%replace_var("fice",NLON,NLAT,fv3ice)
    call geo%replace_var("slmsk",NLON,NLAT,fv3mask)
    call geo%replace_var("tisfc",NLON,NLAT,fv3iceT)
-   call geo%replace_var("zorl",NLON,NLAT,fv3zorl)
 
    if (wcstart == 'cold') then
 ! Add_New_Var takes names of (Variable,Dim1,Dim2,Dim3,Long_Name,Units)
+      call geo%replace_var("zorl",NLON,NLAT,fv3zorl)
       call geo%add_new_var('glmsk','xaxis_1','yaxis_1','Time','glmsk','none')
       call geo%replace_var('glmsk',NLON,NLAT,lbcmask)
    end if
    if (wcstart == 'warm') then
+      call geo%replace_var("zorli",NLON,NLAT,fv3zorl)
       call geo%replace_var("tsfc",NLON,NLAT,fv3sfcT)
       call geo%replace_var("tsfcl",NLON,NLAT,fv3sfcTl)
       call geo%add_new_var('glmsk','xaxis_1','yaxis_1','glmsk','none')
