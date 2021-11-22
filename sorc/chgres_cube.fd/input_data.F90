@@ -2489,6 +2489,8 @@
  integer                               :: len_str
  integer                               :: is_missing, intrp_ier, done_print
 
+ integer :: trac_names_oct10(ntrac_max), tracers_input_oct10(num_tracers_input)
+ integer :: trac_names_oct11(ntrac_max), tracers_input_oct11(num_tracers_input)
  integer :: lugb, lugi, jdisc, jpdt(200), jgdt(200), iscale
  integer :: jids(200), jpdtn, jgdtn, octet23, octet29
  integer :: count_spfh, count_rh, count_icmr, count_scliwc, count_cice
@@ -2503,6 +2505,9 @@
                                           hasspfh=.true., &
                                           isnative=.false., &
                                           use_rh=.false. 
+
+ logical :: use_rh2=.false.
+ logical :: hasspfh2=.true.
                                           
 
  real                                  :: rlevs_hold(1000)
@@ -2530,6 +2535,10 @@
  trac_names_grib_2 = (/"_1_0:   ", "_1_22:  ",  "_14_192:", "_1_23:  ", "_1_24:  ","_1_25:  ", \
                        "_1_32:  ", "_6_1:   ",  "_6_29:  ", "_1_100: ", "_6_28:  ","_13_193:", \
                        "_13_192:", "_2_2:   "/)
+
+ trac_names_oct10 = (/1,  1,  14,  1,  1,  1,  1, 6,  6,   1,  6,  13,  13, 2 /)
+ trac_names_oct11 = (/0, 22, 192, 23, 24, 25, 32, 1, 29, 100, 28, 193, 192, 2 /)
+
  trac_names_vmap = (/"sphum   ", "liq_wat ", "o3mr    ", "ice_wat ", &
                      "rainwat ", "snowwat ", "graupel ", "cld_amt ", "ice_nc  ", &
                      "rain_nc ", "water_nc", "liq_aero", "ice_aero", &
@@ -2780,19 +2789,21 @@
 
      print*,'getgb2 found ',count_rh, ' levels of rh. lev_input ',lev_input
 
-!    if (count_spfh /= lev_input) then
-!      use_rh = .true.
-!    endif
+     if (count_spfh /= lev_input) then
+       use_rh2 = .true.
+     endif
 
-!    if (count_spfh == 0 .or. use_rh) then
-!      if (count_rh == 0) then
-!        call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", 2)
-!      endif
-!      hasspfh = .false.
-!      print*,"- FILE CONTAINS RH."
-!    else
-!      print*,"- FILE CONTAINS SPFH."
-!    endif
+     if (count_spfh == 0 .or. use_rh2) then
+       if (count_rh == 0) then
+         call error_handler("getgb2 READING ATMOSPHERIC WATER VAPOR VARIABLE.", 2)
+       endif
+       hasspfh2 = .false.
+       trac_names_oct10(1) = 1
+       trac_names_oct11(1) = 1
+       print*,"- getgb2 FILE CONTAINS RH."
+     else
+       print*,"- getgb2 FILE CONTAINS SPFH."
+     endif
 
   endif
  
@@ -2890,6 +2901,40 @@
      print*,'getgb2 found ',count_rwmr,   ' levels of rwmr.'
      print*,'getgb2 found ',count_scllwc, ' levels of scllwc.'
 
+     if (count_icmr == 0) then
+       print*, "getgb2 no icmr, check for scliwc"
+       if (count_scliwc == 0) then
+         print*, "getgb2 no scliwc, check for cice"
+         if (count_cice == 0) then
+           print*,'getgb2 no cice. call handle_grib_error'
+         else
+           trac_names_oct10(4) = 6
+           trac_names_oct11(4) = 0
+           if (localpet == 0) print*,"- getgb2 FILE CONTAINS CICE."
+         endif
+       else
+         trac_names_oct10(4) = 1
+         trac_names_oct11(4) = 84
+         if (localpet == 0) print*,"- getgb2 FILE CONTAINS SCLIWC."
+       endif
+     else
+       if (localpet == 0) print*,"- getgb2 FILE CONTAINS ICMR."
+     endif
+
+     if (count_rwmr == 0) then
+       print*, "getgb2 no rwmr/clwmr, check for scllwc"
+       if (count_scllwc == 0) then
+         print*, "getgb2 no scllwc"
+!        add call to grib error handler.
+       else
+         trac_names_oct10(4) = 1
+         trac_names_oct11(4) = 83
+         if (localpet == 0) print*,"- getgb2 FILE CONTAINS SCLLWC."
+       endif
+     else
+       if (localpet == 0) print*,"- getgb2 FILE CONTAINS CLWMR."
+     endif
+
   endif
 
  if (localpet == 0) print*,"- FIND ICMR, SCLIWC, OR CICE IN FILE"
@@ -2956,10 +3001,21 @@
    tracers(n)=tracers_default(i)
    if(trim(tracers(n)) .eq. "o3mr") o3n = n
 
+   tracers_input_oct10(n) = trac_names_oct10(i)
+   tracers_input_oct11(n) = trac_names_oct11(i)
+
  enddo
 
  if (localpet==0) then
     print*, "- NUMBER OF TRACERS IN THE INPUT FILE = ", num_tracers_input
+    print*,'tracers_input_vmap   ', tracers_input_vmap(1:num_tracers_input)
+    print*,'tracers              ', tracers(1:num_tracers_input)
+    print*,'tracers_input_grib_1 ', tracers_input_grib_1(1:num_tracers_input)
+    print*,'tracers_input_grib_2 ', tracers_input_grib_2(1:num_tracers_input)
+    print*,'tracers oct10        ', tracers_input_oct10(1:num_tracers_input)
+    print*,'tracers oct11        ', tracers_input_oct11(1:num_tracers_input)
+    print*,'use_rh wgrib2/getgb2 ', use_rh, use_rh2
+    print*,'hasspfh wgrib2/getgb2 ', hasspfh, hasspfh2
  endif
 
 !---------------------------------------------------------------------------
