@@ -3456,6 +3456,7 @@ if (.not. isnative) then
 else
    ! For native files, read in pressure field directly from file but don't flip levels
    if (localpet == 0) then
+
     print*,"- READ PRESSURE."
     vname = ":PRES:"
     do vlev = 1, lev_input
@@ -3464,9 +3465,42 @@ else
         call error_handler("READING IN PRESSURE AT LEVEL "//trim(slevs(vlev)),iret)
       endif
       dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-      print*,'pres check after read ',vlev, dummy3d(1,1,vlev)
+      print*,'wgrib2 pres check after read ',vlev,maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
     enddo
-  endif
+
+    jdisc   = 0     ! search for discipline - meteorological products
+    j = 0           ! search at beginning of file.
+    jpdt    = -9999  ! array of values in product definition template 4.n
+    jids    = -9999  ! array of values in identification section, set to wildcard
+    jgdt    = -9999  ! array of values in grid definition template 3.m
+    jgdtn   = -1     ! search for any grid definition number.
+    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+    jpdt(1) = 3  ! oct 10 - param cat - mass
+    jpdt(2) = 0  ! oct 11 - param number - pressure
+    jpdt(10) = 105 ! oct 23 - type of level - hybrid
+    unpack=.true.
+
+    do vlev = 1, lev_input
+      jpdt(12) = nint(rlevs2(vlev) )
+      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+      print*,'getgb2 pres check after rread ',vlev,maxval(gfld%fld),minval(gfld%fld)
+
+      dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
+
+! Temporary code. wgrib2 flips the pole of gfs data.
+      if (trim(external_model) == "GFS") then
+        dum2d_2 = dum2d_1
+        do jj = 1, j_input
+          dum2d_1(:,jj) = dum2d_2(:,j_input-jj+1)
+        enddo
+       endif
+
+!      dummy3d(:,:,vlev) = dum2d_1
+
+    enddo
+
+  endif  ! localpet == 0
 
   if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT GRID PRESSURE."
   call ESMF_FieldScatter(pres_input_grid, dummy3d, rootpet=0, rc=rc)
