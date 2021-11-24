@@ -8,7 +8,7 @@ Documentation for chgres_cube and other utilities can be found at
 https://noaa-emcufs-utils.readthedocs.io/en/latest/.
 
 Complete documentation can be found at
-https://noaa-emc.github.io/UFS_UTILS/.
+https://ufs-community.github.io/UFS_UTILS/.
 
 ## Authors
 
