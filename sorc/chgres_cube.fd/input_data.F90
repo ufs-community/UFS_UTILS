@@ -3228,7 +3228,7 @@
  
  deallocate(dummy3d_col_in, dummy3d_col_out)
  
-call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet)
+call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet,isnative,rlevs2)
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT U-WIND."
  call ESMF_FieldScatter(u_input_grid, u_tmp_3d, rootpet=0, rc=rc)
@@ -7145,7 +7145,7 @@ else
 !! @param [inout] v  v-component wind
 !! @param[in] localpet  ESMF local persistent execution thread
 !! @author Larissa Reames
- subroutine read_winds(g2file,inv,u,v,localpet)
+ subroutine read_winds(g2file,inv,u,v,localpet,isnative,rlevs2)
 
  use grib_mod
  use wgrib2api
@@ -7158,17 +7158,20 @@ else
  character(len=10), intent(in)            :: inv
  integer, intent(in)                     :: localpet
  real(esmf_kind_r8), intent(inout), allocatable :: u(:,:,:),v(:,:,:)
+ real(esmf_kind_r8), intent(in), dimension(lev_input) :: rlevs2
+ logical, intent(in) :: isnative
 
  real(esmf_kind_r4), dimension(i_input,j_input)  :: alpha
  real(esmf_kind_r8), dimension(i_input,j_input)  :: lon, lat
  real(esmf_kind_r4), allocatable                 :: u_tmp(:,:),v_tmp(:,:)
+ real(esmf_kind_r8), allocatable                 :: dum2d(:,:)
  real(esmf_kind_r4), dimension(i_input,j_input)  :: ws,wd
  real(esmf_kind_r4)                      :: value_u, value_v,lov,latin1,latin2
  real(esmf_kind_r8)                      :: d2r
 
  integer                                 :: varnum_u, varnum_v, vlev, & !ncid, id_var, &
                                             error, iret, istr
- integer                                 :: j, k, lugb, lugi, jgdtn, jpdtn
+ integer                                 :: j, jj, k, lugb, lugi, jgdtn, jpdtn
  integer                                 :: jdisc, jids(200), jgdt(200), jpdt(200)
 
  character(len=20)                       :: vname
@@ -7256,6 +7259,17 @@ else
 
    endif
 
+   if (isnative) then
+     jpdt(10) = 105 ! oct 23 - type of level
+   else
+     jpdt(10) = 100
+   endif
+   unpack=.true.
+
+   allocate(dum2d(i_input,j_input))
+     allocate(u_tmp(i_input,j_input))
+     allocate(v_tmp(i_input,j_input))
+
    do vlev = 1, lev_input
 
      vname = ":UGRD:"
@@ -7266,7 +7280,30 @@ else
           call error_handler("READING IN U AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
                         "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
         endif
+     else
+       print*,'wgrib2 u wind ',vlev,maxval(u_tmp),minval(u_tmp)
      endif
+
+     jpdt(1) = 2  ! oct 10 - param cat - momentum
+     jpdt(2) = 2  ! oct 11 - param number - u-wind
+     jpdt(12) = nint(rlevs2(vlev) )
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+     if (iret == 0) then
+       print*,'getgb2 u wind ',vlev,maxval(gfld%fld),minval(gfld%fld)
+     endif
+
+     dum2d = reshape(gfld%fld, (/i_input,j_input/) )
+
+! Temporary code. wgrib2 flips the pole of gfs data.
+!    if (trim(external_model) == "GFS") then
+!      do jj = 1, j_input
+!        u_tmp(:,jj) = dum2d(:,j_input-jj+1)
+!      enddo
+!    else
+!      u_tmp(:,:) = dum2d
+!    endif
 
      vname = ":VGRD:"
      iret = grb2_inq(g2file,inv,vname,slevs(vlev),data2=v_tmp)
@@ -7276,9 +7313,30 @@ else
           call error_handler("READING IN V AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
                           "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
         endif
+     else
+       print*,'wgrib2 v wind ',vlev,maxval(v_tmp),minval(v_tmp)
       endif
 
-      print*,'got here wind layer ',vlev,slevs(vlev)
+     jpdt(2) = 3  ! oct 11 - param number - v-wind
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+     if (iret == 0) then
+       print*,'getgb2 v wind ',vlev,maxval(gfld%fld),minval(gfld%fld)
+     endif
+
+     dum2d = reshape(gfld%fld, (/i_input,j_input/) )
+
+! Temporary code. wgrib2 flips the pole of gfs data.
+!    if (trim(external_model) == "GFS") then
+!      do jj = 1, j_input
+!        v_tmp(:,jj) = dum2d(:,j_input-jj+1)
+!      enddo
+!    else
+!      v_tmp(:,:) = dum2d
+!    endif
+
+     deallocate(dum2d)
 
       if (trim(input_grid_type) == "latlon") then
         if (external_model == 'UKMET') then
