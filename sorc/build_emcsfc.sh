@@ -14,15 +14,11 @@ do
   module purge
   USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}
   if [ $USE_PREINST_LIBS = true ]; then
-    export MOD_PATH
-    source ../modulefiles/modulefile.global_${prog}.${target}             > /dev/null 2>&1
+    module use ../modulefiles
+    module load modulefile.global_${prog}.${target}             > /dev/null 2>&1
   else
     export MOD_PATH=${cwd}/lib/modulefiles
-    if [ $target = wcoss_cray ]; then
-      source ../modulefiles/modulefile.global_${prog}.${target}_userlib   > /dev/null 2>&1
-    else
-      source ../modulefiles/modulefile.global_${prog}.${target}           > /dev/null 2>&1
-    fi
+    source ../modulefiles/modulefile.global_${prog}.${target}           > /dev/null 2>&1
   fi
   module list
   cd ${cwd}/${prog}.fd
@@ -30,4 +26,5 @@ do
   cd $cwd
 done
 
+set +x
 echo; echo DONE BUILDING EMCSFC PROGRAMS
