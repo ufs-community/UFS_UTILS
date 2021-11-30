@@ -28,7 +28,8 @@
 
 cd $PBS_O_WORKDIR
 
-source ../../modulefiles/modulefile.global_emcsfc_ice_blend.wcoss2_cray
+module use ../../modulefiles
+module load modulefile.global_emcsfc_ice_blend.wcoss2
 module load libjpeg
 module load grib_util/1.2.3
 module load wgrib2/2.0.8

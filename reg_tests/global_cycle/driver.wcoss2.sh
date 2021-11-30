@@ -20,7 +20,8 @@
 
 set -x
 
-source  ../../modulefiles/fv3gfs/global_cycle.wcoss2_cray
+module use ../../modulefiles/fv3gfs
+module load global_cycle.wcoss2
 # for mpiexec command
 module load cray-pals/1.0.12
 module list
