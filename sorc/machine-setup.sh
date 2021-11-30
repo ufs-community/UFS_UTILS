@@ -29,7 +29,7 @@ if [[ -d /lfs3 ]] ; then
     module purge
     module use /lfs4/HFIP/hfv3gfs/nwprod/NCEPLIBS/modulefiles
 elif [[ -d /lfs/h1 ]]; then
-    target=wcoss2_cray
+    target=wcoss2
     module purge
 elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
