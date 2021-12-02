@@ -28,7 +28,7 @@ if [[ -d /lfs3 ]] ; then
     target=jet
     module purge
 elif [[ -d /lfs/h1 ]] ; then
-    target=wcoss2_cray
+    target=wcoss2
     module purge
 elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
