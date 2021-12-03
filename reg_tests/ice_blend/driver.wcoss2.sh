@@ -29,7 +29,8 @@
 cd $PBS_O_WORKDIR
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target.intel
+module use ../../modulefiles
+module load build.$target.intel
 module load grib_util/1.2.3
 module list
 

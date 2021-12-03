@@ -23,7 +23,8 @@ set -x
 compiler=${compiler:-"intel"}
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target.$compiler
+module use ../../modulefiles
+module load build.$target.$compiler
 module list
 
 WORK_DIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
