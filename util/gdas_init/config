@@ -47,7 +47,7 @@
 #
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/lfs4/HFIP/emcda/$USER/stmp/gdas.init/input
+EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
 EXTRACT_DATA=yes
 
 RUN_CHGRES=no
@@ -68,7 +68,7 @@ CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
 
-OUTDIR=/lfs4/HFIP/emcda/$USER/stmp/gdas.init/output
+OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
 
 #---------------------------------------------------------
 # Dont touch anything below here.

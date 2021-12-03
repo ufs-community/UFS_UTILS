@@ -6,7 +6,7 @@
 #PBS -N vcoord
 #PBS -q debug
 #PBS -A GFS-DEV
-#PBS -l select=1:ncpus=1:mem=1MB
+#PBS -l select=1:ncpus=1:mem=20MB
 
 #-------------------------------------------------------------------------------
 #
@@ -25,7 +25,8 @@ cd $PBS_O_WORKDIR
 set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
-source ../../modulefiles/build.$target.intel
+module use ../../modulefiles
+module load build.$target.intel
 module list
 
 outfile="./global_hyblev.txt"
