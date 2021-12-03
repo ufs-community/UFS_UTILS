@@ -1,33 +1,72 @@
-#!/bin/bash
+help([[
+Load environment to compile UFS_UTILS on WCOSS2
+]])
 
-## Build and run module for WCOSS2-Cray
+envvar_ver=os.getenv("envvar_ver") or "1.0"
+load(pathJoin("envvar", envvar_ver))
 
-module load envvar/${envvar_ver:-1.0}
-module load cmake/${cmake_ver:-3.20.2}
+cmake_ver=os.getenv("cmake_ver") or "3.20.2"
+load(pathJoin("cmake", cmake_ver))
 
-module load PrgEnv-intel/${PrgEnv_intel_ver:-8.1.0}
-module load craype/${craype_ver:-2.7.8}
-module load intel/${intel_ver:-19.1.3.304}
-module load cray-mpich/${cray_mpich_ver:-8.1.7}
+PrgEnv_intel_ver=os.getenv("PrgEnv_intel_ver") or "8.1.0"
+load(pathJoin("PrgEnv-intel", PrgEnv_intel_ver))
 
-module load libjpeg/${libjpeg_ver:-9c}
-module load jasper/${jasper_ver:-2.0.25}
-module load zlib/${zlib_ver:-1.2.11}
-module load libpng/${libpng_ver:-1.6.37}
+craype_ver=os.getenv("craype_ver") or "2.7.8"
+load(pathJoin("craype", craype_ver))
 
-module load hdf5/${hdf5_ver:-1.10.6}
-module load netcdf/${netcdf_ver:-4.7.4}
-module load esmf/${esmf_ver:-8.1.1}
+intel_ver=os.getenv("intel_ver") or "19.1.3.304"
+load(pathJoin("intel", intel_ver))
 
-module load bacio/${bacio_ver:-2.4.1}
-module load sfcio/${sfcio_ver:-1.4.1}
-module load w3nco/${w3nco_ver:-2.4.1}
-module load nemsio/${nemsio_ver:-2.5.2}
-module load sigio/${sigio_ver:-2.3.2}
-module load sp/${sp_ver:-2.3.3}
-module load ip/${ip_ver:-3.3.3}
-module load g2/${g2_ver:-3.4.1}
-module load wgrib2/${wgrib2_ver:-2.0.8}
+cray_mpich_ver=os.getenv("cray_mpich_ver") or "8.1.7"
+load(pathJoin("cray-mpich", cray_mpich_ver))
 
-# for mpiexec command
-module load cray-pals/${cray_pals_ver:-1.0.12}
+libjpeg_ver=os.getenv("libjpeg_ver") or "9c"
+load(pathJoin("libjpeg", libjpeg_ver))
+
+zlib_ver=os.getenv("zlib_ver") or "1.2.11"
+load(pathJoin("zlib", zlib_ver))
+
+libpng_ver=os.getenv("libpng_ver") or "1.6.37"
+load(pathJoin("libpng", libpng_ver))
+
+hdf5_ver=os.getenv("hdf5_ver") or "1.10.6"
+load(pathJoin("hdf5", hdf5_ver))
+
+netcdf_ver=os.getenv("netcdf_ver") or "4.7.4"
+load(pathJoin("netcdf", netcdf_ver))
+
+esmf_ver=os.getenv("esmf_ver") or "8.1.1"
+load(pathJoin("esmf", esmf_ver))
+
+bacio_ver=os.getenv("bacio_ver") or "2.4.1"
+load(pathJoin("bacio", bacio_ver))
+
+sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
+load(pathJoin("sfcio", sfcio_ver))
+
+w3nco_ver=os.getenv("w3nco_ver") or "2.4.1"
+load(pathJoin("w3nco", w3nco_ver))
+
+nemsio_ver=os.getenv("nemsio_ver") or "2.5.2"
+load(pathJoin("nemsio", nemsio_ver))
+
+sigio_ver=os.getenv("sigio_ver") or "2.3.2"
+load(pathJoin("sigio", sigio_ver))
+
+sp_ver=os.getenv("sp_ver") or "2.3.3"
+load(pathJoin("sp", sp_ver))
+
+ip_ver=os.getenv("ip_ver") or "3.3.3"
+load(pathJoin("ip", ip_ver))
+
+g2_ver=os.getenv("g2_ver") or "3.4.1"
+load(pathJoin("g2", g2_ver))
+
+wgrib2_ver=os.getenv("wgrib2_ver") or "2.0.8"
+load(pathJoin("wgrib2", wgrib2_ver))
+
+-- for mpiexec command
+cray_pals_ver=os.getenv("cray_pals_ver") or "1.0.12"
+load(pathJoin("cray-pals", cray_pals_ver))
+
+whatis("Description: UFS_UTILS build environment")
