@@ -46,7 +46,7 @@ export COPYGB=/lfs4/HFIP/emcda/George.Gayno/ufs_utils.git/jet_port/grib_util/cop
 export COPYGB2=/lfs4/HFIP/emcda/George.Gayno/ufs_utils.git/jet_port/grib_util/copygb2
 export CNVGRIB=/apps/cnvgrib/1.4.0/bin/cnvgrib
 
-export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/ice_blend
+export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ice_blend
 export HOMEgfs=$PWD/../..
 
 rm -fr $DATA
