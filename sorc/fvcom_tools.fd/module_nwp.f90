@@ -39,6 +39,7 @@ module module_nwp
       integer :: i_iceT !< Index of ice temp var.
       integer :: i_sfcTl !< Index of sfcTl
       integer :: i_zorl !< Index of surface roughness
+      integer :: i_hice !< Index of ice thickness
       character(len=20), allocatable :: varnames(:) !< Variable names.
       character(len=20), allocatable :: latname !< Latitude name.
       character(len=20), allocatable :: lonname !< Longitude name.
@@ -54,6 +55,7 @@ module module_nwp
       real(r_kind), allocatable :: nwp_sfct_c(:,:,:) !< cold start skin temperature 3d array
       real(r_kind), allocatable :: nwp_icet_c(:,:,:)  !< cold start ice skin temperature 3d array
       real(r_kind), allocatable :: nwp_zorl_c(:,:,:) !< cold start surface roughness
+      real(r_kind), allocatable :: nwp_hice_c(:,:,:) !< cold start ice thickness
 
       real(r_kind), allocatable :: nwp_mask_w(:,:) !< warm start land/water mask 3d array
       real(r_kind), allocatable :: nwp_sst_w(:,:) !< warm start sst 3d array
@@ -62,6 +64,7 @@ module module_nwp
       real(r_kind), allocatable :: nwp_icet_w(:,:)  !< warm start ice skin temperature 3d array
       real(r_kind), allocatable :: nwp_sfctl_w(:,:) !< warm start skin temperature 3d array
       real(r_kind), allocatable :: nwp_zorl_w(:,:) !< warm start surface roughness
+      real(r_kind), allocatable :: nwp_hice_w(:,:) !< warm start ice thickness
 
    end type nwp_type
 
@@ -102,12 +105,13 @@ module module_nwp
 !        FVCOM grid
          if (itype==' FVCOM') then
             this%datatype = itype
-            this%numvar = 4
+            this%numvar = 5
 
             this%i_mask = 1
             this%i_sst = 2
             this%i_ice = 3
             this%i_iceT = 4
+            this%i_hice = 5
             this%i_sfcT = 0
             this%i_zorl = 0
 
@@ -116,6 +120,7 @@ module module_nwp
             this%varnames(2) = 'tsfc'
             this%varnames(3) = 'aice'
             this%varnames(4) = 'tisfc'
+            this%varnames(5) = 'vice'
 
             allocate(this%latname)
             allocate(this%lonname)
@@ -135,7 +140,7 @@ module module_nwp
 
          else if (trim(itype)=='FV3LAM' .AND. wcstart=='warm') then
             this%datatype = itype
-            this%numvar = 7
+            this%numvar = 8
 
             this%i_mask = 1
             this%i_sst = 2
@@ -144,6 +149,7 @@ module module_nwp
             this%i_sfcT = 5
             this%i_sfcTl= 6
             this%i_zorl = 7
+            this%i_hice = 8
 
             allocate(this%varnames(this%numvar))
             this%varnames(1) = 'slmsk'
@@ -153,6 +159,7 @@ module module_nwp
             this%varnames(5) = 'tsfc'
             this%varnames(6) = 'tsfcl'
             this%varnames(7) = 'zorli'
+            this%varnames(8) = 'hice'
 
             allocate(this%latname)
             allocate(this%lonname)
@@ -168,13 +175,14 @@ module module_nwp
 
          else if (trim(itype)=='FV3LAM' .AND. wcstart=='cold') then
             this%datatype = itype
-            this%numvar = 5
+            this%numvar = 6
 
             this%i_mask = 1
             this%i_sst = 2
             this%i_ice = 3
             this%i_iceT = 4
             this%i_zorl = 5
+            this%i_hice = 6
             this%i_sfcT = 0
 
             allocate(this%varnames(this%numvar))
@@ -183,6 +191,7 @@ module module_nwp
             this%varnames(3) = 'fice'
             this%varnames(4) = 'tisfc'
             this%varnames(5) = 'zorl'
+            this%varnames(6) = 'hice'
 
             allocate(this%latname)
             allocate(this%lonname)
@@ -255,9 +264,10 @@ module module_nwp
       !! @param[inout] iceT Ice Skin Temperature
       !! @param[inout] sfcTl Skin Temperature in restart file
       !! @param[inout] zorl Surface roughness length
+      !! @param[inout] hice Ice thickness
       !!
       !! @author David Wright, University of Michigan and GLERL
-      subroutine read_nwp(this,filename,itype,wcstart,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT,sfcTl,zorl)
+      subroutine read_nwp(this,filename,itype,wcstart,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT,sfcTl,zorl,hice)
 
          class(fcst_nwp) :: this
 
@@ -269,7 +279,7 @@ module module_nwp
          integer, intent(inout) :: numlon, numlat, numtimes
 !         real(r_single), intent(inout) :: mask(:,:), sst(:,:), ice(:,:), sfcT(:,:)
          real(r_kind), intent(inout) :: mask(:,:),sst(:,:),ice(:,:),sfcT(:,:) &
-                                        ,iceT(:,:),sfcTl(:,:),zorl(:,:)
+                                        ,iceT(:,:),sfcTl(:,:),zorl(:,:),hice(:,:)
 
 !        Open the file using module_ncio.f90 code, and find the number of
 !        lat/lon points
@@ -294,6 +304,7 @@ module module_nwp
             allocate(this%nwp_sfcT_c(this%xlon,this%xlat,this%xtime))
             allocate(this%nwp_iceT_c(this%xlon,this%xlat,this%xtime))
             allocate(this%nwp_zorl_c(this%xlon,this%xlat,this%xtime))
+            allocate(this%nwp_hice_c(this%xlon,this%xlat,this%xtime))
 
 !        Get variables from the data file, but only if the variable is
 !        defined for that data type.
@@ -335,6 +346,11 @@ module module_nwp
                                     this%xlat,this%xtime,this%nwp_zorl_c)
                 zorl = this%nwp_zorl_c(:,:,time_to_get)
             end if 
+            if (this%i_hice .gt. 0) then
+                call ncdata%get_var(this%varnames(this%i_hice),this%xlon,  &
+                                    this%xlat,this%xtime,this%nwp_hice_c)
+                hice = this%nwp_hice_c(:,:,time_to_get)
+            end if 
  
          else if (wcstart == 'warm') then
             allocate(this%nwp_mask_w(this%xlon,this%xlat))
@@ -344,6 +360,7 @@ module module_nwp
             allocate(this%nwp_iceT_w(this%xlon,this%xlat))
             allocate(this%nwp_sfcTl_w(this%xlon,this%xlat))
             allocate(this%nwp_zorl_w(this%xlon,this%xlat))
+            allocate(this%nwp_hice_w(this%xlon,this%xlat))
 !        Get variables from the data file, but only if the variable is
 !        defined for that data type.
       
@@ -352,8 +369,6 @@ module module_nwp
             write(*,*) 'xlat = ', this%xlat
             write(*,*) 'xlon = ', this%xlon
             write(*,*) 'xtime = ', this%xtime
-
-
 
             if (this%i_mask .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_mask),this%xlon,  &
@@ -389,6 +404,11 @@ module module_nwp
                 call ncdata%get_var(this%varnames(this%i_zorl),this%xlon,  &
                                     this%xlat,this%nwp_zorl_w)
                 zorl = this%nwp_zorl_w(:,:)
+            end if 
+            if (this%i_hice .gt. 0) then
+                call ncdata%get_var(this%varnames(this%i_hice),this%xlon,  &
+                                    this%xlat,this%nwp_hice_w)
+                hice = this%nwp_hice_w(:,:)
             end if 
 
          else
@@ -431,6 +451,7 @@ module module_nwp
             deallocate(this%nwp_sfcT_c)
             deallocate(this%nwp_iceT_c)
             deallocate(this%nwp_zorl_c)
+            deallocate(this%nwp_hice_c)
          else if (wcstart == 'warm') then
             deallocate(this%nwp_mask_w)
             deallocate(this%nwp_sst_w)
@@ -438,6 +459,7 @@ module module_nwp
             deallocate(this%nwp_sfcT_w)
             deallocate(this%nwp_iceT_w)
             deallocate(this%nwp_zorl_w)
+            deallocate(this%nwp_hice_w)
          else
             write(*,*) 'no deallocation'
          end if
