@@ -46,7 +46,7 @@ QUEUE="${QUEUE:-batch}"
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/chgres_cube
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/chgres_cube
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log

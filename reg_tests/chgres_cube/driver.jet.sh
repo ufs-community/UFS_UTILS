@@ -47,7 +47,7 @@ export HDF5_DISABLE_VERSION_CHECK=2
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/chgres_cube
+export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/chgres_cube
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
