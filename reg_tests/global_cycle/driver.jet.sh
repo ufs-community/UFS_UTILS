@@ -36,7 +36,7 @@ QUEUE="${QUEUE:-batch}"
 
 export DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
-export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/global_cycle
+export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/global_cycle
 
 export OMP_NUM_THREADS_CY=2
 

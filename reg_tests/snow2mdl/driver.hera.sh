@@ -45,7 +45,7 @@ export DATA="${DATA}/reg-tests/snow2mdl"
 
 rm -fr $DATA
 
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/snow2mdl
+export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 export WGRIB=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/wgrib
 export WGRIB2=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/wgrib2
