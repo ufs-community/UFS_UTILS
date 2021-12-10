@@ -2494,7 +2494,7 @@
  integer :: lugb, lugi, jdisc, jpdt(200), jgdt(200), iscale
  integer :: jids(200), jpdtn, jgdtn, octet23, octet29
  integer :: count_spfh, count_rh, count_icmr, count_scliwc, count_cice
- integer :: count_rwmr, count_scllwc
+ integer :: count_rwmr, count_scllwc, count
 
  logical :: unpack
    type(gribfield)                       :: gfld
@@ -3112,6 +3112,43 @@
 
  do n = 1, num_tracers_input
 
+   if (localpet==0) then
+
+     jdisc   = 0     ! search for discipline - meteorological products
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jids    = -9999  ! array of values in identification section, set to wildcard
+     jgdt    = -9999  ! array of values in grid definition template 3.m
+     jgdtn   = -1     ! search for any grid definition number.
+     jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+     unpack = .false.
+
+     count = 0
+
+     do vlev = 1, lev_input
+
+       j = 0
+       jpdt(1) = tracers_input_oct10(n)
+       jpdt(2) = tracers_input_oct11(n)
+       jpdt(12) = nint(rlevs_hold(vlev) )
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         count = count + 1
+       endif
+
+     enddo
+
+     print*,'getgb2 tracer loop ',n, tracers_input_oct10(n), &
+     tracers_input_oct11(n), count
+
+   endif ! local pet
+
+ enddo ! getgb2 loop
+
+ do n = 1, num_tracers_input
+
    if (localpet == 0) print*,"- READ ", trim(tracers_input_vmap(n))
    vname = tracers_input_vmap(n)
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
@@ -3134,11 +3171,14 @@
      else
        all_empty = 0
      endif
+
+     print*,'wgrib2 tracer loop ',vname,vname2,iret,all_empty
+
  
      is_missing = 0
      do vlev = 1, lev_input
       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),vname2,data2=dummy2d)
-     
+
       if (iret <= 0) then
         if (trim(method) .eq. 'intrp' .and. all_empty == 0) then
           dummy2d = intrp_missing 
@@ -3168,6 +3208,9 @@
           endif
         endif ! method intrp
       endif !iret<=0
+
+      print*,'wgrib2 tracer vlev loop ', &
+              vname,vname2,slevs(vlev),iret,maxval(dummy2d),minval(dummy2d)
       
       if (n==1 .and. .not. hasspfh) then 
         if (trim(external_model) .eq. 'GFS') then
