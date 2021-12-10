@@ -224,7 +224,7 @@ if(mype==0) then
               !If ice in FVCOM, but not in FV3-LAM, change to ice
               if (lbcice(i,j) > 0. .and. fv3mask(i,j) == 0.) then
                 fv3mask(i,j) = 2.
-                fv3zorl(i,j) = 1.
+                fv3zorl(i,j) = 1.1
               endif
               !If ice in FV3-LAM and not FVCOM, remove it from FV3-LAM
               if (fv3mask(i,j) == 2. .and. lbcice(i,j) == 0.) then
