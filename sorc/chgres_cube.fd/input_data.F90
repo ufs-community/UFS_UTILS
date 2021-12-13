@@ -3112,6 +3112,18 @@
 
  do n = 1, num_tracers_input
 
+   if (localpet == 0) print*,"- getgb2 READ ", trim(tracers_input_vmap(n))
+
+   vname = tracers_input_vmap(n)
+   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+                       this_field_var_name=tmpstr,loc=varnum)
+!  if (n==1 .and. .not. hasspfh2) then 
+!       print*,"- getgb2 CALL FieldGather TEMPERATURE." 
+!       call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
+!       if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!       call error_handler("IN FieldGet", rc) 
+!  endif
+
    if (localpet==0) then
 
      jdisc   = 0     ! search for discipline - meteorological products
@@ -3140,21 +3152,53 @@
 
      enddo
 
-     print*,'getgb2 tracer loop ',n, tracers_input_oct10(n), &
+     ! Check to see if file has any data for this tracer
+     if (count == 0) then
+       all_empty = 1
+     else
+       all_empty = 0
+     endif
+
+     print*,'getgb2 tracer count loop ',n, tracers_input_oct10(n), &
      tracers_input_oct11(n), count
+
+     unpack=.true.
+     do vlev = 1, lev_input
+
+       j = 0
+       jpdt(1) = tracers_input_oct10(n)
+       jpdt(2) = tracers_input_oct11(n)
+       jpdt(12) = nint(rlevs_hold(vlev) )
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         dummy2d = reshape(gfld%fld, (/i_input,j_input/) )
+!  Temporary code. wgrib2 flips the pole of gfs data.
+         if (trim(external_model) == "GFS") then
+           dum2d_2 = dummy2d
+           do jj = 1, j_input
+             dummy2d(:,jj) = dum2d_2(:,j_input-jj+1)
+           enddo
+         endif
+         print*,'getgb2 tracer read loop ',vlev,jpdt(1),jpdt(2),jpdt(12),maxval(dummy2d),minval(dummy2d)
+       endif
+
+     enddo
 
    endif ! local pet
 
- enddo ! getgb2 loop
+ enddo ! getgb2 tracer loop
 
  do n = 1, num_tracers_input
 
-   if (localpet == 0) print*,"- READ ", trim(tracers_input_vmap(n))
+   if (localpet == 0) print*,"- wgrib2 READ ", trim(tracers_input_vmap(n))
    vname = tracers_input_vmap(n)
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                        this_field_var_name=tmpstr,loc=varnum)
    if (n==1 .and. .not. hasspfh) then 
-        print*,"- CALL FieldGather TEMPERATURE." 
+        print*,"- wgrib2 CALL FieldGather TEMPERATURE." 
         call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
         if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGet", rc) 
@@ -3178,6 +3222,8 @@
      is_missing = 0
      do vlev = 1, lev_input
       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),vname2,data2=dummy2d)
+
+         print*,'wgrib2 tracer read loop ',vlev,vname,vname2,slevs(vlev),maxval(dummy2d),minval(dummy2d)
 
       if (iret <= 0) then
         if (trim(method) .eq. 'intrp' .and. all_empty == 0) then
@@ -3225,6 +3271,7 @@
        print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
        dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
      enddo !vlev
+
 ! Jili Dong interpolation for missing levels 
      if (is_missing .gt. 0 .and. trim(method) .eq. 'intrp') then
        print *,'intrp tracer '//trim(tracers(n))
