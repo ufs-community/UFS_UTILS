@@ -3205,9 +3205,42 @@
    endif
    
    if (localpet == 0) then
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! g2lib count number of tracers.
+     jdisc   = 0     ! search for discipline - meteorological products
+     jpdt    = -9999  ! array of values in product definition template 4.n
+     jids    = -9999  ! array of values in identification section, set to wildcard
+     jgdt    = -9999  ! array of values in grid definition template 3.m
+     jgdtn   = -1     ! search for any grid definition number.
+     jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+     unpack = .false.
+
+     count = 0
+
+     do vlev = 1, lev_input
+
+       j = 0
+       jpdt(1) = tracers_input_oct10(n)
+       jpdt(2) = tracers_input_oct11(n)
+       jpdt(12) = nint(rlevs_hold(vlev) )
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         count = count + 1
+       endif
+
+     enddo
+     iret=count
+
+! wgrib2 count number of tracers.
      vname = trim(tracers_input_grib_1(n))
      vname2 = trim(tracers_input_grib_2(n))
-     iret = grb2_inq(the_file,inv_file,vname,lvl_str_space,vname2)
+!    iret = grb2_inq(the_file,inv_file,vname,lvl_str_space,vname2)
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
      ! Check to see if file has any data for this tracer
      if (iret == 0) then
