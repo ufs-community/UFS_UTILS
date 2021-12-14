@@ -3220,6 +3220,11 @@
      jgdtn   = -1     ! search for any grid definition number.
      jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
      unpack = .false.
+     if (isnative) then
+       jpdt(10) = 105 ! oct 23 - type of level
+     else
+       jpdt(10) = 100
+     endif
 
      count = 0
 
@@ -3228,7 +3233,7 @@
        j = 0
        jpdt(1) = tracers_input_oct10(n)
        jpdt(2) = tracers_input_oct11(n)
-       jpdt(12) = nint(rlevs_hold(vlev) )
+       jpdt(12) = nint(rlevs2(vlev) )
 
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
