@@ -3133,6 +3133,11 @@
      jgdtn   = -1     ! search for any grid definition number.
      jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
      unpack = .false.
+     if (isnative) then
+       jpdt(10) = 105 ! oct 23 - type of level
+     else
+       jpdt(10) = 100
+     endif
 
      count = 0
 
@@ -3141,7 +3146,7 @@
        j = 0
        jpdt(1) = tracers_input_oct10(n)
        jpdt(2) = tracers_input_oct11(n)
-       jpdt(12) = nint(rlevs_hold(vlev) )
+       jpdt(12) = nint(rlevs2(vlev) )
 
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
@@ -3168,7 +3173,7 @@
        j = 0
        jpdt(1) = tracers_input_oct10(n)
        jpdt(2) = tracers_input_oct11(n)
-       jpdt(12) = nint(rlevs_hold(vlev) )
+       jpdt(12) = nint(rlevs2(vlev) )
 
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
@@ -3182,7 +3187,7 @@
              dummy2d(:,jj) = dum2d_2(:,j_input-jj+1)
            enddo
          endif
-         print*,'getgb2 tracer read loop ',vlev,jpdt(1),jpdt(2),jpdt(12),maxval(dummy2d),minval(dummy2d)
+         print*,'getgb2 tracer read loop ',vname,vlev,jpdt(1),jpdt(2),jpdt(12),maxval(dummy2d),minval(dummy2d)
        endif
 
      enddo
@@ -3249,14 +3254,14 @@
        all_empty = 0
      endif
 
-     print*,'wgrib2 tracer loop ',vname,vname2,iret,all_empty
+!    print*,'wgrib2 tracer loop ',vname,vname2,iret,all_empty
 
  
      is_missing = 0
      do vlev = 1, lev_input
       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),vname2,data2=dummy2d)
 
-         print*,'wgrib2 tracer read loop ',vlev,vname,vname2,slevs(vlev),maxval(dummy2d),minval(dummy2d)
+      if(iret>0)   print*,'wgrib2 tracer read loop ',trim(tracers_input_vmap(n)),vlev,slevs(vlev),maxval(dummy2d),minval(dummy2d)
 
       if (iret <= 0) then
         if (trim(method) .eq. 'intrp' .and. all_empty == 0) then
@@ -3288,8 +3293,8 @@
         endif ! method intrp
       endif !iret<=0
 
-      print*,'wgrib2 tracer vlev loop ', &
-              vname,vname2,slevs(vlev),iret,maxval(dummy2d),minval(dummy2d)
+!     print*,'wgrib2 tracer vlev loop ', &
+!             vname,vname2,slevs(vlev),iret,maxval(dummy2d),minval(dummy2d)
       
       if (n==1 .and. .not. hasspfh) then 
         if (trim(external_model) .eq. 'GFS') then
@@ -3301,7 +3306,7 @@
         end if
       endif
 
-       print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
+!      print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
        dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
      enddo !vlev
 
