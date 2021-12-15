@@ -2474,8 +2474,6 @@
                                           trac_names_grib_1(ntrac_max), &
                                           trac_names_grib_2(ntrac_max), &
                                           trac_names_vmap(ntrac_max), &
-                                          tracers_input_grib_1(num_tracers_input), &
-                                          tracers_input_grib_2(num_tracers_input), &
                                           tmpstr, & 
                                           method, tracers_input_vmap(num_tracers_input), &
                                           tracers_default(ntrac_max), vname2
@@ -2508,7 +2506,6 @@
 
  character(len=50), allocatable :: slevs2(:)
  logical :: use_rh2=.false.
- logical :: hasspfh2=.true.
  logical :: conv_omega2=.false.
  real(esmf_kind_r8), allocatable :: dum2d_1(:,:), dum2d_2(:,:)
                                           
@@ -2816,7 +2813,7 @@
        if (count_rh == 0) then
          call error_handler("getgb2 READING ATMOSPHERIC WATER VAPOR VARIABLE.", 2)
        endif
-       hasspfh2 = .false.
+       hasspfh = .false.
        trac_names_oct10(1) = 1
        trac_names_oct11(1) = 1
        print*,"- getgb2 FILE CONTAINS RH."
@@ -2825,22 +2822,9 @@
      endif
 
   endif
- 
- if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
-! this returns the number of levels of spfh.
- iret = grb2_inq(the_file,inv_file,trim(trac_names_grib_1(1)),trac_names_grib_2(1),lvl_str_space)
- print*,'after check 1 ',iret,trim(trac_names_grib_1(1)),trac_names_grib_2(1),lvl_str_space
 
- if (iret <= 0 .or. use_rh) then
-   iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
-   print*,'after check 2 ',iret,':var0_2','_1_1:',lvl_str_space
-   if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
-   hasspfh = .false.
-   trac_names_grib_2(1)='_1_1:'
-   if (localpet == 0) print*,"- FILE CONTAINS RH."
- else
-   if (localpet == 0) print*,"- FILE CONTAINS SPFH."
- endif
+  call MPI_BARRIER(MPI_COMM_WORLD, rc)
+  call MPI_BCAST(hasspfh,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
  
   if (localpet == 0) then
 
@@ -3014,8 +2998,6 @@
 
    i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
 
-   tracers_input_grib_1(n) = trac_names_grib_1(i)
-   tracers_input_grib_2(n) = trac_names_grib_2(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
    tracers(n)=tracers_default(i)
    if(trim(tracers(n)) .eq. "o3mr") o3n = n
@@ -3029,12 +3011,10 @@
     print*, "- NUMBER OF TRACERS IN THE INPUT FILE = ", num_tracers_input
     print*,'tracers_input_vmap   ', tracers_input_vmap(1:num_tracers_input)
     print*,'tracers              ', tracers(1:num_tracers_input)
-    print*,'tracers_input_grib_1 ', tracers_input_grib_1(1:num_tracers_input)
-    print*,'tracers_input_grib_2 ', tracers_input_grib_2(1:num_tracers_input)
     print*,'tracers oct10        ', tracers_input_oct10(1:num_tracers_input)
     print*,'tracers oct11        ', tracers_input_oct11(1:num_tracers_input)
     print*,'use_rh wgrib2/getgb2 ', use_rh, use_rh2
-    print*,'hasspfh wgrib2/getgb2 ', hasspfh, hasspfh2
+    print*,'hasspfh               ', hasspfh
  endif
 
 !---------------------------------------------------------------------------
@@ -3116,10 +3096,14 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
+! Read tracers
+
  do n = 1, num_tracers_input
 
    if (localpet == 0) print*,"- wgrib2 READ ", trim(tracers_input_vmap(n))
+
    vname = tracers_input_vmap(n)
+
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                        this_field_var_name=tmpstr,loc=varnum)
    if (n==1 .and. .not. hasspfh) then 
@@ -3131,8 +3115,6 @@
    
    if (localpet == 0) then
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! g2lib count number of tracers.
      jdisc   = 0     ! search for discipline - meteorological products
      jpdt    = -9999  ! array of values in product definition template 4.n
      jids    = -9999  ! array of values in identification section, set to wildcard
@@ -3165,21 +3147,12 @@
      enddo
      iret=count
 
-! wgrib2 count number of tracers.
-     vname = trim(tracers_input_grib_1(n))
-     vname2 = trim(tracers_input_grib_2(n))
-!    iret = grb2_inq(the_file,inv_file,vname,lvl_str_space,vname2)
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
      ! Check to see if file has any data for this tracer
      if (iret == 0) then
        all_empty = 1
      else
        all_empty = 0
      endif
-
-!    print*,'wgrib2 tracer loop ',vname,vname2,iret,all_empty
  
      is_missing = 0
 
@@ -3205,9 +3178,6 @@
          endif
        endif
 
-!     iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),vname2,data2=dummy2d)
-!     if(iret>0)   print*,'wgrib2 tracer read loop ',trim(tracers_input_vmap(n)),vlev,slevs(vlev),maxval(dummy2d),minval(dummy2d)
-
       if (iret /= 0) then
         if (trim(method) .eq. 'intrp' .and. all_empty == 0) then
           dummy2d = intrp_missing 
@@ -3229,8 +3199,9 @@
 
           call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
           if (iret==1) then ! missing_var_method == skip or no entry
-            if (trim(vname2)=="_1_0:" .or. trim(vname2) == "_1_1:" .or.  &
-                trim(vname2) == ":14:192:") then
+            if ( (tracers_input_oct10(n) == 1 .and. tracers_input_oct11(n) == 0) .or. &  ! spec humidity
+                 (tracers_input_oct10(n) == 1 .and. tracers_input_oct11(n) == 1) .or. &  ! rel humidity
+                 (tracers_input_oct10(n) == 14 .and. tracers_input_oct11(n) == 192) ) then ! ozone
               call error_handler("READING IN "//trim(tracers(n))//" AT LEVEL "//trim(slevs(vlev))&
                         //". SET A FILL VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
             endif
@@ -3238,9 +3209,6 @@
         endif ! method intrp
       endif !iret<=0
 
-!     print*,'wgrib2 tracer vlev loop ', &
-!             vname,vname2,slevs(vlev),iret,maxval(dummy2d),minval(dummy2d)
-      
       if (n==1 .and. .not. hasspfh) then 
         if (trim(external_model) .eq. 'GFS') then
           print *,'CALRH GFS'
