@@ -2471,8 +2471,6 @@
 
  character(len=300)                    :: the_file
  character(len=20)                     :: vlevtyp, vname, lvl_str,lvl_str_space, &
-                                          trac_names_grib_1(ntrac_max), &
-                                          trac_names_grib_2(ntrac_max), &
                                           trac_names_vmap(ntrac_max), &
                                           tmpstr, & 
                                           method, tracers_input_vmap(num_tracers_input), &
@@ -2527,15 +2525,7 @@
 
  
  tracers(:) = "NULL"
- !trac_names_grib = (/":SPFH:",":CLWR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
- !              ":TCDC:", ":NCCICE:",":SPNCR:", ":NCONCD:",":PMTF:",":PMTC:",":TKE:"/)
- trac_names_grib_1 = (/":var0_2", ":var0_2",  ":var0_2",  ":var0_2",  ":var0_2",":var0_2", \
-                       ":var0_2", ":var0_2", ":var0_2", ":var0_2", ":var0_2",":var0_2", \
-                       ":var0_2", ":var0_2"/)
- trac_names_grib_2 = (/"_1_0:   ", "_1_22:  ",  "_14_192:", "_1_23:  ", "_1_24:  ","_1_25:  ", \
-                       "_1_32:  ", "_6_1:   ",  "_6_29:  ", "_1_100: ", "_6_28:  ","_13_193:", \
-                       "_13_192:", "_2_2:   "/)
-
+ 
  trac_names_oct10 = (/1,  1,  14,  1,  1,  1,  1, 6,  6,   1,  6,  13,  13, 2 /)
  trac_names_oct11 = (/0, 22, 192, 23, 24, 25, 32, 1, 29, 100, 28, 193, 192, 2 /)
 
@@ -2939,57 +2929,6 @@
      endif
 
   endif
-
- if (localpet == 0) print*,"- FIND ICMR, SCLIWC, OR CICE IN FILE"
- iret = grb2_inq(the_file,inv_file,trac_names_grib_1(4),trac_names_grib_2(4),lvl_str_space)
- print*,'wgrib2 found ',iret, 'levels of icmr.'
-
- if (iret <= 0) then
-   vname = trac_names_vmap(4)
-   print*, "vname = ", vname
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                       this_field_var_name=tmpstr,loc=varnum)
-   iret = grb2_inq(the_file,inv_file, ':var0_2','_1_84:',lvl_str_space)
-   print*,'wgrib2 found ',iret, 'levels of scliwc.'
-   if (iret <= 0) then
-     iret = grb2_inq(the_file,inv_file, ':var0_2','_6_0:',lvl_str_space)
-     print*,'wgrib2 found ',iret, 'levels of cice.'
-     if (iret <= 0 ) then 
-       call handle_grib_error(vname, slevs(1),method,value,varnum,rc,var=dummy2d)
-     else
-       trac_names_grib_2(4) = '_6_0'
-       if (localpet == 0) print*,"- FILE CONTAINS CICE."
-     endif     
-   else
-     trac_names_grib_2(4)='_1_84:'
-     if (localpet == 0) print*,"- FILE CONTAINS SCLIWC."
-   endif
- else
-   if (localpet == 0) print*,"- FILE CONTAINS ICMR."
- endif
- 
- if (localpet == 0) print*,"- FIND CLWMR or SCLLWC IN FILE"
- iret = grb2_inq(the_file,inv_file,trac_names_grib_1(5),trac_names_grib_2(5),lvl_str_space)
- print*,'wgrib2 found ',iret, 'levels of clwmr/rwmr.'
-
- if (iret <= 0) then
-   vname = trac_names_vmap(5)
-   print*, "vname = ", vname
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                       this_field_var_name=tmpstr,loc=varnum)
-   iret = grb2_inq(the_file,inv_file, ':var0_2','_1_83:',lvl_str_space)
-   print*,'wgrib2 found ',iret, 'levels of scllwc.'
-   if (iret <= 0) then 
-      call handle_grib_error(vname, slevs(1),method,value,varnum,rc,var=dummy2d)
-   elseif (iret <=0 .and. rc .ne. 1) then
-     call error_handler("READING CLOUD WATER VARIABLE.", iret)
-   else
-     trac_names_grib_2(4)='_1_83:'
-     if (localpet == 0) print*,"- FILE CONTAINS SCLLWC."
-   endif
- else
-   if (localpet == 0) print*,"- FILE CONTAINS CLWMR."
- endif
    
  print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
  do n = 1, num_tracers_input
