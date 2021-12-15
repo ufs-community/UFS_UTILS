@@ -3064,22 +3064,8 @@
 !----------------------------------------------------------------------------------
  
  if (localpet == 0) then
+
    print*,"- READ TEMPERATURE."
-   vname = ":TMP:"   
-    do vlev = 1, lev_input
-      iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
-      if (iret<=0) then 
-        call error_handler("READING IN TEMPERATURE AT LEVEL "//trim(slevs(vlev)),iret)
-      endif
-      dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-      print*,'temp check after read ',vlev,maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
-    enddo
-
- endif
-
- if (localpet == 0) then
-
-   print*,"- getgb2 READ TEMPERATURE."
 
    jdisc   = 0     ! search for discipline - meteorological products
    j = 0           ! search at beginning of file.
@@ -3088,39 +3074,42 @@
    jgdt    = -9999  ! array of values in grid definition template 3.m
    jgdtn   = -1     ! search for any grid definition number.
    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
-   jpdt(1) = 0  ! oct 10 - param cat - temperature
-   jpdt(2) = 0  ! oct 11 - param number - temperature
+   jpdt(1) = 0      ! Sect 4/oct 10 - param category - temperature
+   jpdt(2) = 0      ! Sect 4/oct 11 - param number - temperature
 
    if (isnative) then
-     jpdt(10) = 105 ! oct 23 - type of level
+     jpdt(10) = 105 ! Sect 4/oct 23 - type of level - hybrid
    else
-     jpdt(10) = 100
+     jpdt(10) = 100 ! Sect 4/oct 23 - type of level - isobaric
    endif
+
    unpack=.true.
 
-    do vlev = 1, lev_input
+   do vlev = 1, lev_input
 
-      jpdt(12) = nint(rlevs2(vlev) )
+     jpdt(12) = nint(rlevs2(vlev))
 
-      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
-      print*,'getgb2 read temperature for level ',jpdt(12),maxval(gfld%fld),minval(gfld%fld)
+     if (iret /= 0) then 
+       call error_handler("READING IN TEMPERATURE AT LEVEL "//trim(slevs2(vlev)),iret)
+     endif
 
-      dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
+     dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
 
 ! Temporary code. wgrib2 flips the pole of gfs data.
-      if (trim(external_model) == "GFS") then
-        dum2d_2 = dum2d_1
-        do jj = 1, j_input
-          dum2d_1(:,jj) = dum2d_2(:,j_input-jj+1)
-        enddo
-       endif
+     if (trim(external_model) == "GFS") then
+       dum2d_2 = dum2d_1
+       do jj = 1, j_input
+         dum2d_1(:,jj) = dum2d_2(:,j_input-jj+1)
+       enddo
+      endif
 
-!      dummy3d(:,:,vlev) = dum2d_1
+      dummy3d(:,:,vlev) = dum2d_1
 
-    enddo
+   enddo
 
- endif
+ endif ! Read of temperature
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT GRID TEMPERATURE."
  call ESMF_FieldScatter(temp_input_grid, dummy3d, rootpet=0, rc=rc)
