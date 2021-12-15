@@ -2506,6 +2506,7 @@
                                           isnative=.false., &
                                           use_rh=.false. 
 
+ character(len=50), allocatable :: slevs2(:)
  logical :: use_rh2=.false.
  logical :: hasspfh2=.true.
  logical :: conv_omega2=.false.
@@ -2702,7 +2703,17 @@
    enddo
 
    call quicksort(rlevs2,1,lev_input)
-   print*,'getgb2 after sort ',rlevs2
+
+   allocate(slevs2(lev_input))
+   do i = 1, lev_input
+     if (isnative) then
+       write(slevs2(i), '(i6)') nint(rlevs2(i))
+       slevs2(i) = trim(slevs2(i)) // " hybrid"
+     else
+       write(slevs2(i), '(f11.2)') rlevs2(i)
+       slevs2(i) = trim(slevs2(i)) // " Pa"
+     endif
+   enddo
 
  endif
 
@@ -2725,6 +2736,12 @@
 
      slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
      if (localpet==0) print*, "- LEVEL AFTER SORT = ",slevs(i)
+   enddo
+ endif
+
+ if(localpet == 0) then
+   do i = 1,lev_input
+     print*, "- test LEVEL AFTER SORT = ",trim(slevs(i)),trim(slevs2(i))
    enddo
  endif
 
