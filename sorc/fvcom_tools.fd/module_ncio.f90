@@ -85,7 +85,10 @@ module module_ncio
      procedure :: replace_var_nc_char_3d !< Replace 3D character type variable. @return
      procedure :: handle_err !< Handle netCDF errors. @return
      procedure :: convert_theta2t_2dgrid !< Convert theta T (Kelvin) to T (deg C). @return
-     procedure :: add_new_var => add_new_var_3d      !< Add a new 3d variable to output file. @return
+     generic   :: add_new_var => add_new_var_2d, &
+          add_new_var_3d !< Add a new 2d or 3d variable to ouput file. @return
+     procedure :: add_new_var_2d !< Add a new 2d variable to output file. @return
+     procedure :: add_new_var_3d !< Add a new 3d variable to output file. @return
   end type ncio
 
 contains
@@ -1306,10 +1309,10 @@ contains
           field(:,j)=temp(istart:iend)
        enddo
        !
-       if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
-       endif
+!       if(this%debug_level>100) then
+!          write(*,*) trim(thissubname),' show samples:'
+!          write(*,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
+!       endif
     else
        write(*,*) trim(thissubname),' ERROR: dimension does not match.'
        write(*,*) nd1,this%ends(1),nd2,this%ends(2)
@@ -1362,12 +1365,12 @@ contains
           enddo
        enddo
        !
-       if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          do k=1,nd3
-             write(*,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
-          enddo
-       endif
+!       if(this%debug_level>100) then
+!          write(*,*) trim(thissubname),' show samples:'
+!          do k=1,nd3
+!             write(*,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
+!          enddo
+!       endif
     else
        write(*,*) trim(thissubname),' ERROR: dimension does not match.'
        write(*,*) nd1,this%ends(1),nd2,this%ends(2),nd3,this%ends(3)
@@ -1441,6 +1444,7 @@ contains
     if(status /= nf90_NoErr) call this%handle_err(status)
     do i=1,nDims
        dimname="       "
+       write(*,*) 'dimids(i) = ', dimids(i)
        status = nf90_inquire_dimension(ncid, dimids(i), dimname, len = ndim)
        if (status /= nf90_noerr) call this%handle_err(status)
        ends(i)=ndim
@@ -2271,10 +2275,10 @@ contains
           field(:,j)=temp(istart:iend)
        enddo
        !
-       if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) field(1,1)
-       endif
+!       if(this%debug_level>100) then
+!          write(*,*) trim(thissubname),' show samples:'
+!          write(*,*) field(1,1)
+!       endif
     else
        write(*,*) trim(thissubname),' ERROR: dimension does not match.'
        write(*,*) nd1,this%ends(1),nd2,this%ends(2)
@@ -2327,10 +2331,10 @@ contains
           enddo
        enddo
        !
-       if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) field(1,1,1)
-       endif
+!       if(this%debug_level>100) then
+!          write(*,*) trim(thissubname),' show samples:'
+!          write(*,*) field(1,1,1)
+!       endif
     else
        write(*,*) trim(thissubname),' ERROR: dimension does not match.'
        write(*,*) nd1,this%ends(1),nd2,this%ends(2),nd3,this%ends(3)
@@ -2541,5 +2545,48 @@ contains
     if (status /= nf90_noerr) call this%handle_err(status)
 
   end subroutine add_new_var_3d
+
+  !> Add a new variable to sfc_data.nc with dimensions (yaxis_1,
+  !! xaxis_1).
+  !!
+  !! @param this instance of an ncio class
+  !! @param[in] varname Name of variable to be created in netcdf file
+  !! @param[in] dname1 1st dimension name
+  !! @param[in] dname2 2nd dimension name
+  !! @param[in] lname long name output for netcdf variable
+  !! @param[in] units units to use in netcdf variable
+  !!
+  !! @author David.M.Wright org: UM/GLERL @date 2021-10-07
+  subroutine add_new_var_2d(this,varname,dname1,dname2,lname,units)
+    implicit none
+    !
+    class(ncio) :: this
+    character(len=*),intent(in) :: varname,dname1,dname2  &
+         ,lname,units
+    integer :: status, ncid, dim1id, dim2id, varid
+
+    status = nf90_redef(this%ncid) !Enter Define Mode
+    if (status /= nf90_noerr) call this%handle_err(status)
+
+    status = nf90_inq_dimid(this%ncid, dname1, dim1id)
+    if (status /= nf90_noerr) call this%handle_err(status)
+    status = nf90_inq_dimid(this%ncid, dname2, dim2id)
+    if (status /= nf90_noerr) call this%handle_err(status)
+
+    status = nf90_def_var(this%ncid, varname, nf90_double, &
+         (/ dim1id, dim2id /), varid)
+    if (status /= nf90_noerr) call this%handle_err(status)
+
+    status = nf90_put_att(this%ncid, varid, 'long_name', lname)
+    if (status /= nf90_noerr) call this%handle_err(status)
+    status = nf90_put_att(this%ncid, varid, 'units', units)
+    if (status /= nf90_noerr) call this%handle_err(status)
+
+    status = nf90_enddef(this%ncid) !Exit Define Mode and
+    ! return to Data Mode
+    if (status /= nf90_noerr) call this%handle_err(status)
+
+  end subroutine add_new_var_2d
+
 
 end module module_ncio

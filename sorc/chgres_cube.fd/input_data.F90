@@ -72,33 +72,33 @@
                                                                 !< Default is igbp.
  integer, parameter              :: ICET_DEFAULT = 265.0    !< Default value of soil and skin
                                                             !< temperature (K) over ice.
- type(esmf_field), public        :: canopy_mc_input_grid    !< canopy moist content
- type(esmf_field), public        :: f10m_input_grid         !< log((z0+10)*1/z0)
- type(esmf_field), public        :: ffmm_input_grid         !< log((z0+z1)*1/z0)
+ type(esmf_field), public :: canopy_mc_input_grid    !< canopy moist content
+ type(esmf_field), public :: f10m_input_grid         !< log((z0+10)*1/z0)
+ type(esmf_field), public :: ffmm_input_grid         !< log((z0+z1)*1/z0)
                                                             !! See sfc_diff.f for details.
- type(esmf_field), public        :: landsea_mask_input_grid !< land sea mask;
+ type(esmf_field), public :: landsea_mask_input_grid !< land sea mask;
                                                             !! 0-water, 1-land, 2-ice
- type(esmf_field), public        :: q2m_input_grid          !< 2-m spec hum
- type(esmf_field), public        :: seaice_depth_input_grid !< sea ice depth
- type(esmf_field), public        :: seaice_fract_input_grid !< sea ice fraction
- type(esmf_field), public        :: seaice_skin_temp_input_grid  !< sea ice skin temp
- type(esmf_field), public        :: skin_temp_input_grid    !< skin temp/sst
- type(esmf_field), public        :: snow_depth_input_grid   !< snow dpeth
- type(esmf_field), public        :: snow_liq_equiv_input_grid !< snow liq equiv depth
- type(esmf_field), public        :: soil_temp_input_grid    !< 3-d soil temp
- type(esmf_field), public        :: soil_type_input_grid    !< soil type
- type(esmf_field), public        :: soilm_liq_input_grid    !< 3-d liquid soil moisture
- type(esmf_field), public        :: soilm_tot_input_grid    !< 3-d total soil moisture
- type(esmf_field), public        :: srflag_input_grid       !< snow/rain flag
- type(esmf_field), public        :: t2m_input_grid          !< 2-m temperature
- type(esmf_field), public        :: tprcp_input_grid        !< precip
- type(esmf_field), public        :: ustar_input_grid        !< fric velocity
- type(esmf_field), public        :: veg_type_input_grid     !< vegetation type
- type(esmf_field), public        :: z0_input_grid           !< roughness length
- type(esmf_field), public        :: veg_greenness_input_grid !< vegetation fraction
- type(esmf_field), public        :: lai_input_grid          !< leaf area index
- type(esmf_field), public        :: max_veg_greenness_input_grid !< shdmax
- type(esmf_field), public        :: min_veg_greenness_input_grid !< shdmin
+ type(esmf_field), public :: q2m_input_grid          !< 2-m spec hum
+ type(esmf_field), public :: seaice_depth_input_grid !< sea ice depth
+ type(esmf_field), public :: seaice_fract_input_grid !< sea ice fraction
+ type(esmf_field), public :: seaice_skin_temp_input_grid  !< sea ice skin temp
+ type(esmf_field), public :: skin_temp_input_grid    !< skin temp/sst
+ type(esmf_field), public :: snow_depth_input_grid   !< snow dpeth
+ type(esmf_field), public :: snow_liq_equiv_input_grid !< snow liq equiv depth
+ type(esmf_field), public :: soil_temp_input_grid    !< 3-d soil temp
+ type(esmf_field), public :: soil_type_input_grid    !< soil type
+ type(esmf_field), public :: soilm_liq_input_grid    !< 3-d liquid soil moisture
+ type(esmf_field), public :: soilm_tot_input_grid    !< 3-d total soil moisture
+ type(esmf_field), public :: srflag_input_grid       !< snow/rain flag
+ type(esmf_field), public :: t2m_input_grid          !< 2-m temperature
+ type(esmf_field), public :: tprcp_input_grid        !< precip
+ type(esmf_field), public :: ustar_input_grid        !< fric velocity
+ type(esmf_field), public :: veg_type_input_grid     !< vegetation type
+ type(esmf_field), public :: z0_input_grid           !< roughness length
+ type(esmf_field), public :: veg_greenness_input_grid !< vegetation fraction
+ type(esmf_field), public :: lai_input_grid          !< leaf area index
+ type(esmf_field), public :: max_veg_greenness_input_grid !< shdmax
+ type(esmf_field), public :: min_veg_greenness_input_grid !< shdmin
 
  integer, public      :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
                                         !! for 7 layers of soil for the RUC LSM
@@ -107,25 +107,25 @@
 
 ! Fields associated with the nst model.
 
- type(esmf_field), public        :: c_d_input_grid   !< Coefficient 2 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: c_0_input_grid   !< Coefficient 1 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: d_conv_input_grid   !< Thickness of free convection layer
- type(esmf_field), public        :: dt_cool_input_grid   !< Sub-layer cooling amount
- type(esmf_field), public        :: ifd_input_grid   !< Model mode index. 0-diurnal model not
+ type(esmf_field), public :: c_d_input_grid   !< Coefficient 2 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: c_0_input_grid   !< Coefficient 1 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: d_conv_input_grid   !< Thickness of free convection layer
+ type(esmf_field), public :: dt_cool_input_grid   !< Sub-layer cooling amount
+ type(esmf_field), public :: ifd_input_grid   !< Model mode index. 0-diurnal model not
                                                      !< started; 1-diurnal model started.
- type(esmf_field), public        :: qrain_input_grid   !< Sensible heat flux due to rainfall
- type(esmf_field), public        :: tref_input_grid  !< Reference temperature
- type(esmf_field), public        :: w_d_input_grid   !< Coefficient 4 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: w_0_input_grid   !< Coefficient 3 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: xs_input_grid   !< Salinity content in diurnal thermocline layer
- type(esmf_field), public        :: xt_input_grid   !< Heat content in diurnal thermocline layer
- type(esmf_field), public        :: xu_input_grid   !< u-current content in diurnal thermocline layer
- type(esmf_field), public        :: xv_input_grid   !< v-current content in diurnal thermocline layer
- type(esmf_field), public        :: xz_input_grid   !< Diurnal thermocline layer thickness
- type(esmf_field), public        :: xtts_input_grid   !< d(xt)/d(ts)
- type(esmf_field), public        :: xzts_input_grid   !< d(xz)/d(ts)
- type(esmf_field), public        :: z_c_input_grid   !< Sub-layer cooling thickness
- type(esmf_field), public        :: zm_input_grid   !< Oceanic mixed layer depth
+ type(esmf_field), public :: qrain_input_grid   !< Sensible heat flux due to rainfall
+ type(esmf_field), public :: tref_input_grid  !< Reference temperature
+ type(esmf_field), public :: w_d_input_grid   !< Coefficient 4 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: w_0_input_grid   !< Coefficient 3 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: xs_input_grid   !< Salinity content in diurnal thermocline layer
+ type(esmf_field), public :: xt_input_grid   !< Heat content in diurnal thermocline layer
+ type(esmf_field), public :: xu_input_grid   !< u-current content in diurnal thermocline layer
+ type(esmf_field), public :: xv_input_grid   !< v-current content in diurnal thermocline layer
+ type(esmf_field), public :: xz_input_grid   !< Diurnal thermocline layer thickness
+ type(esmf_field), public :: xtts_input_grid   !< d(xt)/d(ts)
+ type(esmf_field), public :: xzts_input_grid   !< d(xz)/d(ts)
+ type(esmf_field), public :: z_c_input_grid   !< Sub-layer cooling thickness
+ type(esmf_field), public :: zm_input_grid   !< Oceanic mixed layer depth
 
  public :: read_input_atm_data
  public :: cleanup_input_atm_data
@@ -138,6 +138,7 @@
  public :: quicksort
  public :: convert_winds
  public :: init_sfc_esmf_fields
+ public :: dint2p
  
  contains
 
@@ -2458,7 +2459,7 @@
 
  use wgrib2api
  
- use grib2_util, only                   : rh2spfh, convert_omega
+ use grib2_util, only                   : rh2spfh, rh2spfh_gfs, convert_omega
 
  implicit none
 
@@ -2479,15 +2480,19 @@
  character (len=500)                   :: metadata
 
  integer                               :: i, j, k, n, lvl_str_space_len
+ integer                               :: ii,jj
  integer                               :: rc, clb(3), cub(3)
  integer                               :: vlev, iret,varnum
-
+ integer                               :: all_empty, o3n
  integer                               :: len_str
- logical                               :: lret
+ integer                               :: is_missing, intrp_ier, done_print
 
+ logical                               :: lret
  logical                               :: conv_omega=.false., &
                                           hasspfh=.true., &
-                                          isnative=.false.
+                                          isnative=.false., &
+                                          use_rh=.false. 
+                                          
 
  real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
@@ -2498,7 +2503,11 @@
                                           uptr(:,:,:), vptr(:,:,:)
  real(esmf_kind_r4)                    :: value
  real(esmf_kind_r8), parameter         :: p0 = 100000.0
- 
+ real(esmf_kind_r8), allocatable       :: dummy3d_col_in(:),dummy3d_col_out(:)
+ real(esmf_kind_r8), parameter         :: intrp_missing = -999.0 
+ real(esmf_kind_r4), parameter         :: lev_no_tr_fill = 20000.0
+ real(esmf_kind_r4), parameter         :: lev_no_o3_fill = 40000.0
+
  
  tracers(:) = "NULL"
  !trac_names_grib = (/":SPFH:",":CLWR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
@@ -2550,6 +2559,9 @@
 
  allocate(slevs(lev_input))
  allocate(rlevs(lev_input))
+ allocate(dummy3d_col_in(lev_input))
+ allocate(dummy3d_col_out(lev_input))
+
  levp1_input = lev_input + 1
     
 ! Get the vertical levels, and search string by sequential reads
@@ -2593,11 +2605,23 @@
      if (localpet==0) print*, "- LEVEL AFTER SORT = ",slevs(i)
    enddo
  endif
+
+! Is SPFH on full levels Jili Dong
+     do vlev = 1, lev_input
+      iret = grb2_inq(the_file,inv_file,':SPFH:',slevs(vlev))
+      if (iret <= 0) then
+        use_rh = .TRUE.
+        if (localpet == 0) print*, ':SPFH on level '//trim(slevs(vlev))//' does not exist. & 
+           Will read in RH and convert to SPFH instead.'                                                   
+        exit
+      end if
+     end do
+
  
  if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
  iret = grb2_inq(the_file,inv_file,trim(trac_names_grib_1(1)),trac_names_grib_2(1),lvl_str_space)
 
- if (iret <= 0) then
+ if (iret <= 0 .or. use_rh) then
    iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
    if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
    hasspfh = .false.
@@ -2664,6 +2688,7 @@
    tracers_input_grib_2(n) = trac_names_grib_2(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
    tracers(n)=tracers_default(i)
+   if(trim(tracers(n)) .eq. "o3mr") o3n = n
 
  enddo
 
@@ -2727,29 +2752,98 @@
    if (localpet == 0) then
      vname = trim(tracers_input_grib_1(n))
      vname2 = trim(tracers_input_grib_2(n))
-     
+     iret = grb2_inq(the_file,inv_file,vname,lvl_str_space,vname2)
+
+     ! Check to see if file has any data for this tracer
+     if (iret == 0) then
+       all_empty = 1
+     else
+       all_empty = 0
+     endif
+ 
+     is_missing = 0
      do vlev = 1, lev_input
       iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),vname2,data2=dummy2d)
      
       if (iret <= 0) then
-        call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
-        if (iret==1) then ! missing_var_method == skip or no entry
-          if (trim(vname2)=="_1_0:" .or. trim(vname2) == "_1_1:" .or.  &
-              trim(vname2) == ":14:192:") then
-            call error_handler("READING IN "//trim(vname)//" AT LEVEL "//trim(slevs(vlev))&
-                      //". SET A FILL VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+        if (trim(method) .eq. 'intrp' .and. all_empty == 0) then
+          dummy2d = intrp_missing 
+          is_missing = 1 
+        else
+          ! Abort if input data has some data for current tracer, but has
+          ! missing data below 200 mb/ above 400mb
+            if (all_empty == 0 .and. n == o3n) then
+              if (rlevs(vlev) .lt. lev_no_o3_fill) &
+                call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev))//&
+                  ". SET MISSING VARIABLE CONDITION TO 'INTRP' TO AVOID THIS ERROR", 1)
+            elseif (all_empty == 0 .and. n .ne. o3n) then 
+              if (rlevs(vlev) .gt. lev_no_tr_fill) &
+                call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev))//&
+                  ". SET MISSING VARIABLE CONDITION TO 'INTRP' TO AVOID THIS ERROR.", 1)
+            endif 
+          ! If entire array is empty and method is set to intrp, switch method to fill
+          if (trim(method) .eq. 'intrp' .and. all_empty == 1) method='set_to_fill' 
+
+          call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
+          if (iret==1) then ! missing_var_method == skip or no entry
+            if (trim(vname2)=="_1_0:" .or. trim(vname2) == "_1_1:" .or.  &
+                trim(vname2) == ":14:192:") then
+              call error_handler("READING IN "//trim(tracers(n))//" AT LEVEL "//trim(slevs(vlev))&
+                        //". SET A FILL VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+            endif
           endif
-        endif
-      endif
+        endif ! method intrp
+      endif !iret<=0
       
       if (n==1 .and. .not. hasspfh) then 
-        call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        if (trim(external_model) .eq. 'GFS') then
+          print *,'CALRH GFS'
+          call rh2spfh_gfs(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        else 
+          print *,'CALRH non-GFS'
+          call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        end if
       endif
 
        print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
        dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-     enddo
-   endif
+     enddo !vlev
+! Jili Dong interpolation for missing levels 
+     if (is_missing .gt. 0 .and. trim(method) .eq. 'intrp') then
+       print *,'intrp tracer '//trim(tracers(n))
+       done_print = 0
+       do jj = 1, j_input
+         do ii = 1, i_input
+           dummy3d_col_in=dummy3d(ii,jj,:)
+           call dint2p(rlevs,dummy3d_col_in,lev_input,rlevs,dummy3d_col_out,    &
+                        lev_input, 2, intrp_missing, intrp_ier) 
+           if (intrp_ier .gt. 0) call error_handler("Interpolation failed.",intrp_ier)
+           dummy3d(ii,jj,:)=dummy3d_col_out
+         enddo
+       enddo
+       do vlev=1,lev_input
+         dummy2d = dummy3d(:,:,n) 
+         if (any(dummy2d .eq. intrp_missing)) then 
+           ! If we're outside the appropriate region, don't fill but error instead
+           if (n == o3n .and. rlevs(vlev) .lt. lev_no_o3_fill) then
+             call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev)),1)
+           elseif (n .ne. o3n .and. rlevs(vlev) .gt. lev_no_tr_fill) then
+             call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev)),1)
+           else ! we're okay to fill missing data with provided fill value
+             if (done_print .eq. 0) then
+               print*, "Pressure out of range of existing data. Defaulting to fill value."
+               done_print = 1
+             end if !done print
+             where(dummy2d .eq. intrp_missing) dummy2d = value
+             dummy3d(:,:,vlev) = dummy2d
+           end if !n & lev
+         endif ! intrp_missing
+         ! zero out negative tracers from interpolation/extrapolation
+         where(dummy3d(:,:,vlev) .lt. 0.0)  dummy3d(:,:,vlev) = 0.0
+         print*,'tracer af intrp',vlev, maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
+       end do !nlevs do
+     end if !if intrp
+   endif !localpet == 0
 
    if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT ", trim(tracers_input_vmap(n))
    call ESMF_FieldScatter(tracers_input_grid(n), dummy3d, rootpet=0, rc=rc)
@@ -2757,6 +2851,8 @@
       call error_handler("IN FieldScatter", rc)
 
  enddo
+ 
+ deallocate(dummy3d_col_in, dummy3d_col_out)
  
 call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet)
 
@@ -4701,7 +4797,7 @@ else
    allocate(dummy2d_8(0,0))
    allocate(dummy2d_82(0,0))
    allocate(dummy2d(0,0))
-
+   allocate(slmsk_save(0,0))
  endif
  
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -4765,7 +4861,7 @@ if (localpet == 0) then
    slmsk_save = nint(dummy2d)
   
    deallocate(icec_save)
- endif
+ endif ! localpet == 0
 
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
  call ESMF_FieldScatter(landsea_mask_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
@@ -4937,7 +5033,8 @@ if (localpet == 0) then
          endif
        enddo
      enddo
-   endif
+     deallocate(dummy1d)
+   endif ! localpet == 0
    
    if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR" .and. .not. rap_latlon) & 
      .or. (rc < 0 .and. (trim(to_upper(external_model)) == "HRRR" .or. rap_latlon))) then
@@ -4978,7 +5075,7 @@ if (localpet == 0) then
    print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
    deallocate(dummy2d_i)
    deallocate(dummy3d_stype)
- endif
+ endif ! localpet == 0
   
 
  print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
@@ -5390,11 +5487,13 @@ if (localpet == 0) then
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
 
- print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
+ print*,"- CALL FieldScatter FOR INPUT SOIL TYPE."
  call ESMF_FieldScatter(soil_type_input_grid, dummy2d_82, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldScatter", rc)
-    
+
+ deallocate(dummy2d_82)
+
  print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
  call ESMF_FieldScatter(landsea_mask_input_grid,real(slmsk_save,esmf_kind_r8),rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
@@ -5415,8 +5514,10 @@ if (localpet == 0) then
    call check_soilt(dummy3d,slmsk_save,tsk_save)
    print*,'soilt ',maxval(dummy3d),minval(dummy3d)
 
-   deallocate(tsk_save, slmsk_save)
+   deallocate(tsk_save)
  endif
+
+ deallocate(slmsk_save)
 
  print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
  call ESMF_FieldScatter(soil_temp_input_grid, dummy3d, rootpet=0, rc=rc)
@@ -6409,10 +6510,14 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
     call error_handler("READING "//trim(vname)// " at level "//lev//". TO MAKE THIS NON- &
                         FATAL, CHANGE STOP TO SKIP FOR THIS VARIABLE IN YOUR VARMAP &
                         FILE.", iret)
+  elseif (trim(method) == "intrp") then
+    print*, "WARNING: ,"//trim(vname)//" NOT AVAILABLE AT LEVEL "//trim(lev)// &
+          ". WILL INTERPOLATE INTERSPERSED MISSING LEVELS AND/OR FILL MISSING"//&
+          " LEVELS AT EDGES."
   else
     call error_handler("ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
                        " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN,"// &
-                       " , skip, or stop.", 1)
+                       " , intrp, skip, or stop.", 1)
   endif
 
 end subroutine handle_grib_error
@@ -6680,5 +6785,230 @@ subroutine check_cnwat(cnwat)
     enddo
   enddo
 end subroutine check_cnwat
+
+
+
+
+!> Pressure to presure vertical interpolation for tracers with linear or lnP
+!> interpolation. Input tracers on pres levels are interpolated 
+!> to the target output pressure levels. The matching levels of input and 
+!> output will keep the same. Extrapolation is also allowed but needs
+!> caution. The routine is mostly for GFSV16 combined grib2 input when spfh has
+!> missing levels in low and mid troposphere from U/T/HGT/DZDT. 
+!!
+!! @param [in] ppin  1d input pres levs
+!! @param [in] xxin  1d input tracer
+!! @param [in] npin  number of input levs 
+!! @param [in] ppout 1d target pres levs 
+!! @param [out] xxout 1d interpolated tracer
+!! @param [in] npout number of target levs 
+!! @param [in] linlog interp method.1:linear;not 1:log;neg:extrp allowed
+!! @param [in] xmsg  fill values of missing levels (-999.0)
+!! @param [out] ier  error status. non 0: failed interpolation
+!! @author Jili Dong NCEP/EMC  
+!! @date 2021/07/30
+
+SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
+                      ,LINLOG,XMSG,IER)
+      IMPLICIT NONE
+
+! NCL code for pressure level interpolation
+!
+! This code was designed for one simple task. It has since
+! been mangled and abused for assorted reasons. For example,
+! early gfortran compilers had some issues with automatic arrays.
+! Hence, the C-Wrapper was used to create 'work' arrays which
+! were then passed to this code.  The original focused (non-NCL) 
+! task was to handle PPIN & PPOUT that had the same 'monotonicity.' 
+! Extra code was added to handle the more general case. 
+! Blah-Blah:  Punch line: it is embarrassingly convoluted!!!
+!
+!                                                ! input types
+      INTEGER NPIN,NPOUT,LINLOG,IER
+      real*8 PPIN(NPIN),XXIN(NPIN),PPOUT(NPOUT),XMSG
+                                                ! output
+      real*8 XXOUT(NPOUT)
+                                                ! work
+      real*8 PIN(NPIN),XIN(NPIN),P(NPIN),X(NPIN)
+      real*8 POUT(NPOUT),XOUT(NPOUT)
+
+! local
+      INTEGER J1,NP,NL,NIN,NLMAX,NPLVL,NLSAVE,NP1,NO1,N1,N2,LOGLIN,   &
+             NLSTRT
+      real*8 SLOPE,PA,PB,PC
+
+      LOGLIN = ABS(LINLOG)
+
+! error check: enough points: pressures consistency?
+
+      IER = 0
+      IF (NPOUT.GT.0) THEN
+          DO NP = 1,NPOUT
+              XXOUT(NP) = XMSG
+          END DO
+      END IF
+! Jili Dong input levels have to be the same as output levels:
+! we only interpolate for levels with missing variables
+!      IF (.not. all(PPIN .eq. PPOUT)) IER = IER+1
+
+      IF (NPIN.LT.2 .OR. NPOUT.LT.1) IER = IER + 1
+
+      IF (IER.NE.0) THEN
+!          PRINT *,'INT2P: error exit: ier=',IER
+          RETURN
+      END IF
+
+! should *input arrays* be reordered? want p(1) > p(2) > p(3) etc
+! so that it will match order for which code was originally designed
+! copy to 'work'  arrays
+
+      NP1 = 0
+      NO1 = 0
+      IF (PPIN(1).LT.PPIN(2)) THEN
+          NP1 = NPIN + 1
+      END IF
+      IF (PPOUT(1).LT.PPOUT(2)) THEN
+          NO1 = NPOUT + 1
+      END IF
+
+      DO NP = 1,NPIN
+          PIN(NP) = PPIN(ABS(NP1-NP))
+          XIN(NP) = XXIN(ABS(NP1-NP))
+      END DO
+
+      DO NP = 1,NPOUT
+          POUT(NP) = PPOUT(ABS(NO1-NP))
+      END DO
+
+! eliminate XIN levels with missing data. 
+! .   This can happen with observational data.
+
+      NL = 0
+      DO NP = 1,NPIN
+          IF (XIN(NP).NE.XMSG .AND. PIN(NP).NE.XMSG) THEN
+              NL = NL + 1
+              P(NL) = PIN(NP)
+              X(NL) = XIN(NP)
+          END IF
+      END DO
+      NLMAX = NL
+
+                                                ! all missing data
+      IF (NLMAX.LT.2) THEN
+          IER = IER + 1000
+          PRINT *,'INT2P: ier=',IER
+          RETURN
+      END IF
+
+! ===============> pressure in decreasing order <================
+! perform the interpolation  [pin(1)>pin(2)>...>pin(npin)]
+!                                                      ( p ,x)
+! ------------------------- p(nl+1), x(nl+1)   example (200,5)
+! .
+! ------------------------- pout(np), xout(np)         (250,?)
+! .
+! ------------------------- p(nl)  , x(nl)             (300,10)
+
+
+! exact p-level matches
+      NLSTRT = 1
+      NLSAVE = 1
+      DO NP = 1,NPOUT
+          XOUT(NP) = XMSG
+          DO NL = NLSTRT,NLMAX
+              IF (POUT(NP).EQ.P(NL)) THEN
+                  XOUT(NP) = X(NL)
+                  NLSAVE = NL + 1
+                  GO TO 10
+              END IF
+          END DO
+   10     NLSTRT = NLSAVE
+      END DO
+
+      IF (LOGLIN.EQ.1) THEN
+          DO NP = 1,NPOUT
+              DO NL = 1,NLMAX - 1
+                  IF (POUT(NP).LT.P(NL) .AND. POUT(NP).GT.P(NL+1)) THEN
+                      SLOPE = (X(NL)-X(NL+1))/ (P(NL)-P(NL+1))
+                      XOUT(NP) = X(NL+1) + SLOPE* (POUT(NP)-P(NL+1))
+                  END IF
+              END DO
+          END DO
+      ELSE
+          DO NP = 1,NPOUT
+              DO NL = 1,NLMAX - 1
+                  IF (POUT(NP).LT.P(NL) .AND. POUT(NP).GT.P(NL+1)) THEN
+                      PA = LOG(P(NL))
+                      PB = LOG(POUT(NP))
+! special case: In case someome inadvertently enter p=0.
+                      if (p(nl+1).gt.0.d0) then
+                          PC = LOG(P(NL+1))
+                      else
+                          PC = LOG(1.d-4)
+                      end if
+
+                      SLOPE = (X(NL)-X(NL+1))/ (PA-PC)
+                      XOUT(NP) = X(NL+1) + SLOPE* (PB-PC)
+                  END IF
+              END DO
+          END DO
+      END IF
+
+! extrapolate?
+! . use the 'last' valid slope for extrapolating
+
+      IF (LINLOG.LT.0) THEN
+          DO NP = 1,NPOUT
+              DO NL = 1,NLMAX
+                  IF (POUT(NP).GT.P(1)) THEN
+                      IF (LOGLIN.EQ.1) THEN
+                          SLOPE = (X(2)-X(1))/ (P(2)-P(1))
+                          XOUT(NP) = X(1) + SLOPE* (POUT(NP)-P(1))
+                      ELSE
+                          PA = LOG(P(2))
+                          PB = LOG(POUT(NP))
+                          PC = LOG(P(1))
+                          SLOPE = (X(2)-X(1))/ (PA-PC)
+                          XOUT(NP) = X(1) + SLOPE* (PB-PC)
+                      END IF
+                  ELSE IF (POUT(NP).LT.P(NLMAX)) THEN
+                      N1 = NLMAX
+                      N2 = NLMAX - 1
+                      IF (LOGLIN.EQ.1) THEN
+                          SLOPE = (X(N1)-X(N2))/ (P(N1)-P(N2))
+                          XOUT(NP) = X(N1) + SLOPE* (POUT(NP)-P(N1))
+                      ELSE
+                          PA = LOG(P(N1))
+                          PB = LOG(POUT(NP))
+                          PC = LOG(P(N2))
+                          SLOPE = (X(N1)-X(N2))/ (PA-PC)
+                          !XOUT(NP) = X(N1) + SLOPE* (PB-PC) !bug fixed below
+                          XOUT(NP) = X(N1) + SLOPE* (PB-PA)
+                      END IF
+                  END IF
+              END DO
+          END DO
+      END IF
+
+! place results in the return array;
+! .   possibly .... reverse to original order
+
+      if (NO1.GT.0) THEN
+          DO NP = 1,NPOUT
+             n1 = ABS(NO1-NP)
+             PPOUT(NP) = POUT(n1)
+             XXOUT(NP) = XOUT(n1)
+          END DO
+      ELSE
+          DO NP = 1,NPOUT
+             PPOUT(NP) = POUT(NP)
+             XXOUT(NP) = XOUT(NP)
+          END DO
+      END IF
+
+
+      RETURN
+      END SUBROUTINE DINT2P
+
 
  end module input_data

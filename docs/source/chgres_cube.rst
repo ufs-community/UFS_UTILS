@@ -382,6 +382,7 @@ Column 2: Name of the variable in the output “coldstart” files. Unimplemente
 Column 3: Behavior when the code can't find the variable in the input file. Options are:
 
       * "skip": Don't write to the output file.
+      * "intrp": LnP interpolation to missing levels. No extrapolation allowd.
       * "set_to_fill": Set to user-specified field value (see column 4).
       * "stop": Force an exception and stop code execution. Use this if you absolutely require a field to be present.
 
@@ -406,12 +407,12 @@ Running the program stand alone
 Making changes to the chgres_cube program
 -----------------------------------------
 
-chgres_cube is part of the UFS_UTILS repository (https://github.com/NOAA-EMC/UFS_UTILS). When wanting to contribute to this repository developers shall follow the Gitflow software development process
+chgres_cube is part of the UFS_UTILS repository (https://github.com/ufs-community/UFS_UTILS). When wanting to contribute to this repository developers shall follow the Gitflow software development process
 
       * Developers shall create their own fork of the UFS_UTILS repository
       * Developers shall create a ‘feature’ branch off ‘develop’ in their fork for all changes.
       * Developers shall open an issue and reference it in all commits.
 
-For more details, see the UFS_UTILS wiki page: https://github.com/NOAA-EMC/UFS_UTILS/wiki
+For more details, see the UFS_UTILS wiki page: https://github.com/ufs-community/UFS_UTILS/wiki
 
 Changes that support current or future NCEP operations will be given priority for inclusion into the authoritative repository.
