@@ -66,6 +66,7 @@ program process_FVCOM
    real :: truelat1, truelat2, stdlon, lat1, lon1, r_earth
    real :: knowni, knownj, dx
    real :: one, pi, deg2rad
+   real :: zero
 
    character(len=180) :: fv3file
    character(len=180) :: fvcomfile
@@ -99,6 +100,7 @@ program process_FVCOM
 !
 if(mype==0) then
 
+   zero = 0.0
 !  Get file names from command line arguements
    num_args = command_argument_count()
    allocate(args(num_args))
@@ -229,7 +231,7 @@ if(mype==0) then
               !If ice in FV3-LAM and not FVCOM, remove it from FV3-LAM
               if (fv3mask(i,j) == 2. .and. lbcice(i,j) == 0.) then
                 fv3mask(i,j) = 0.
-                fv3zorl(i,j) = 0.
+                fv3zorl(i,j) = zero / zero !Use Fill_Value
               endif
               fv3sst(i,j) = lbcsst(i,j) + 273.15
               fv3sfcT(i,j) = lbcsst(i,j) + 273.15
@@ -261,7 +263,7 @@ if(mype==0) then
               !If ice in FV3-LAM and not FVCOM, remove it from FV3-LAM
               if (fv3mask(i,j) == 2. .and. lbcice(i,j) == 0.) then
                 fv3mask(i,j) = 0.
-                fv3zorl(i,j) = 0.
+                fv3zorl(i,j) = zero / zero !Use Fill_Value
               endif
               fv3sst(i,j) = lbcsst(i,j) + 273.15
               fv3sfcT(i,j) = lbcsst(i,j) + 273.15
