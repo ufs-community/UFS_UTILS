@@ -2503,7 +2503,6 @@
                                           use_rh=.false. 
 
  character(len=50), allocatable :: slevs2(:)
- logical :: use_rh2=.false.
  logical :: conv_omega2=.false.
  real(esmf_kind_r8), allocatable :: dum2d_1(:,:), dum2d_2(:,:)
                                           
@@ -2732,17 +2731,6 @@
    enddo
  endif
 
-! Is SPFH on full levels Jili Dong
-     do vlev = 1, lev_input
-      iret = grb2_inq(the_file,inv_file,':SPFH:',slevs(vlev))
-      if (iret <= 0) then
-        use_rh = .TRUE.
-        if (localpet == 0) print*, ':SPFH on level '//trim(slevs(vlev))//' does not exist. & 
-           Will read in RH and convert to SPFH instead.'                                                   
-        exit
-      end if
-     end do
-
 ! check to see if spfh exists at all the same levels as ugrd.
 
   if (localpet == 0) then
@@ -2796,10 +2784,10 @@
      print*,'getgb2 found ',count_rh, ' levels of rh. lev_input ',lev_input
 
      if (count_spfh /= lev_input) then
-       use_rh2 = .true.
+       use_rh = .true.
      endif
 
-     if (count_spfh == 0 .or. use_rh2) then
+     if (count_spfh == 0 .or. use_rh) then
        if (count_rh == 0) then
          call error_handler("getgb2 READING ATMOSPHERIC WATER VAPOR VARIABLE.", 2)
        endif
@@ -2952,7 +2940,7 @@
     print*,'tracers              ', tracers(1:num_tracers_input)
     print*,'tracers oct10        ', tracers_input_oct10(1:num_tracers_input)
     print*,'tracers oct11        ', tracers_input_oct11(1:num_tracers_input)
-    print*,'use_rh wgrib2/getgb2 ', use_rh, use_rh2
+    print*,'use_rh               ', use_rh
     print*,'hasspfh               ', hasspfh
  endif
 
