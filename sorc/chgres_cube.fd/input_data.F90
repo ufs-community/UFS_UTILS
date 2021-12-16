@@ -2568,6 +2568,7 @@
    if (iret == 0) then  ! hybrid
      octet23 = 105
      octet29 = 255
+     isnative=.true.
    else
      octet23 = 100
      octet29 = 255
@@ -2609,6 +2610,8 @@
 
  endif
 
+ call MPI_BCAST(isnative,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
+
  print*,"- READ ATMOS DATA FROM GRIB2 FILE: ", trim(the_file)
  print*,"- USE INVENTORY FILE ", inv_file
  
@@ -2640,7 +2643,6 @@
    lvl_str = "mb:" 
    lvl_str_space = " mb:"
    lvl_str_space_len = 4
-   isnative = .false.
    iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
    lev_input=iret
    if (localpet == 0) print*,"- DATA IS ON ", lev_input, " ISOBARIC LEVELS."
@@ -2648,7 +2650,6 @@
    lvl_str = " level:"
    lvl_str_space = " hybrid "
    lvl_str_space_len = 7
-   isnative = .true.
    iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space, " level:")
    if (iret < 0) call error_handler("READING VERTICAL LEVEL TYPE.", iret)
    lev_input=iret
@@ -3209,19 +3210,8 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet,isnative,rlevs2)
     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
+
    print*,"- READ SURFACE PRESSURE."
-   vname = ":var0_2"
-   vname2 = "_3_0:"
-   vlevtyp = ":surface:"
-   iret = grb2_inq(the_file,inv_file,vname,vname2,vlevtyp,data2=dummy2d)
-   if (iret <= 0) call error_handler("READING SURFACE PRESSURE RECORD.", iret)
-   dummy2d_8 = real(dummy2d,esmf_kind_r8)
-   print*,'wgrib2 read surface pres ', maxval(dummy2d_8),minval(dummy2d_8)
- endif
-
- if (localpet == 0) then
-
-   print*,"- getgb2 READ SURFACE PRESSURE."
    jdisc   = 0     ! search for discipline - meteorological products
    j = 0           ! search at beginning of file.
    jpdt    = -9999  ! array of values in product definition template 4.n
@@ -3229,26 +3219,25 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet,isnative,rlevs2)
    jgdt    = -9999  ! array of values in grid definition template 3.m
    jgdtn   = -1     ! search for any grid definition number.
    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
-   jpdt(1) = 3  ! oct 10 - param cat - mass
-   jpdt(2) = 0  ! oct 11 - param number - pressure
-   jpdt(10) = 1  ! oct 23 - type of level - surface
+   jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
+   jpdt(2) = 0      ! Sect4/oct 11 - param number - pressure
+   jpdt(10) = 1     ! Sect4/oct 23 - type of level - ground surface
    unpack=.true.
 
    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
-   if (iret /= 0) call error_handler("getgb2 READING SURFACE PRESSURE RECORD.", iret)
-   print*,'getgb2 read surface pres ', maxval(gfld%fld),minval(gfld%fld)
+   if (iret /= 0) call error_handler("READING SURFACE PRESSURE RECORD.", iret)
 
-!  dummy2d_8 = reshape(gfld%fld, (/i_input,j_input/) )
+   dummy2d_8 = reshape(gfld%fld, (/i_input,j_input/) )
 ! Temporary code. wgrib2 flips the pole of gfs data.
-!     if (trim(external_model) == "GFS") then
-!       dum2d_2 = dummy2d_8
-!       do jj = 1, j_input
-!         dummy2d_8(:,jj) = dum2d_2(:,j_input-jj+1)
-!       enddo
-!     endif
+   if (trim(external_model) == "GFS") then
+     dum2d_2 = dummy2d_8
+     do jj = 1, j_input
+       dummy2d_8(:,jj) = dum2d_2(:,j_input-jj+1)
+     enddo
+   endif
 
- endif
+ endif ! Read surface pressure
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT GRID SURFACE PRESSURE."
  call ESMF_FieldScatter(ps_input_grid, dummy2d_8, rootpet=0, rc=rc)
