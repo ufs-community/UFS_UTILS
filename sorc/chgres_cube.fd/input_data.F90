@@ -3319,20 +3319,11 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet,isnative,rlevs2)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
- if (localpet == 0) then
-   print*,"- wgrib2 READ TERRAIN."
-   vname = ":var0_2"
-    vname2 = "_3_5:"
-   vlevtyp = ":surface:"
-   iret = grb2_inq(the_file,inv_file,vname,vname2,vlevtyp,data2=dummy2d)
-   if (iret <= 0) call error_handler("READING TERRAIN HEIGHT RECORD.", iret)
-   dummy2d_8 = real(dummy2d,esmf_kind_r8)
-   print*,'wgrib2 read terrain height ', maxval(dummy2d_8),minval(dummy2d_8)
- endif
+! Read terrain
 
  if (localpet == 0) then
 
-   print*,"- getgb2 READ TERRAIN."
+   print*,"- READ TERRAIN."
    jdisc   = 0     ! search for discipline - meteorological products
    j = 0           ! search at beginning of file.
    jpdt    = -9999  ! array of values in product definition template 4.n
@@ -3340,27 +3331,25 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet,isnative,rlevs2)
    jgdt    = -9999  ! array of values in grid definition template 3.m
    jgdtn   = -1     ! search for any grid definition number.
    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
-   jpdt(1) = 3  ! oct 10 - param cat - mass
-   jpdt(2) = 5  ! oct 11 - param number - geopotential height
-   jpdt(10) = 1  ! oct 23 - type of level - surface
+   jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
+   jpdt(2) = 5      ! Sect4/oct 11 - param number - geopotential height
+   jpdt(10) = 1     ! Sect4/oct 23 - type of level - ground surface
    unpack=.true.
 
    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
-   if (iret /= 0) call error_handler("getgb2 READING TERRAIN HEIGHT RECORD.", iret)
-   print*,'getgb2 read terrain height ', maxval(gfld%fld),minval(gfld%fld)
+   if (iret /= 0) call error_handler("READING TERRAIN HEIGHT RECORD.", iret)
 
-!  dummy2d_8 = reshape(gfld%fld, (/i_input,j_input/) )
+   dummy2d_8 = reshape(gfld%fld, (/i_input,j_input/) )
 ! Temporary code. wgrib2 flips the pole of gfs data.
-!     if (trim(external_model) == "GFS") then
-!       dum2d_2 = dummy2d_8
-!       do jj = 1, j_input
-!         dummy2d_8(:,jj) = dum2d_2(:,j_input-jj+1)
-!       enddo
-!     endif
+   if (trim(external_model) == "GFS") then
+     dum2d_2 = dummy2d_8
+     do jj = 1, j_input
+       dummy2d_8(:,jj) = dum2d_2(:,j_input-jj+1)
+     enddo
+   endif
 
- endif
-
+ endif ! read of terrain.
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT GRID TERRAIN."
  call ESMF_FieldScatter(terrain_input_grid, dummy2d_8, rootpet=0, rc=rc)
