@@ -2503,7 +2503,6 @@
                                           use_rh=.false. 
 
  character(len=50), allocatable :: slevs2(:)
- logical :: conv_omega2=.false.
  real(esmf_kind_r8), allocatable :: dum2d_1(:,:), dum2d_2(:,:)
                                           
 
@@ -3244,37 +3243,11 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet,isnative,rlevs2)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
- if (localpet == 0) then
-   print*,"- wgrib2 READ DZDT."
-   vname = "dzdt"
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                         loc=varnum)
-   vname = ":var0_2"
-   vname2 = "_2_9:"
-   do vlev = 1, lev_input
-     iret = grb2_inq(the_file,inv_file,vname,vname2,slevs(vlev),data2=dummy2d)
-     if (iret <= 0 ) then
-       print*,"DZDT not available at level ", trim(slevs(vlev)), " so checking for VVEL"
-       vname2 = "_2_8:"
-       iret = grb2_inq(the_file,inv_file,vname,vname2,slevs(vlev),data2=dummy2d)
-       if (iret <= 0) then
-        call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
-        if (iret==1) then ! missing_var_method == skip 
-          cycle
-        endif
-       else
-        conv_omega = .true.
-       endif
-       
-     endif
-     print*,'wgrib2 dzdt ',trim(slevs(vlev)), maxval(dummy2d),minval(dummy2d)
-     dummy3d(:,:,vlev) = dummy2d
-   enddo
- endif
+! Read dzdt.
 
  if (localpet == 0) then
 
-   print*,"- getgb2 READ DZDT."
+   print*,"- READ DZDT."
    vname = "dzdt"
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                          loc=varnum)
@@ -3286,58 +3259,60 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet,isnative,rlevs2)
    jgdt    = -9999  ! array of values in grid definition template 3.m
    jgdtn   = -1     ! search for any grid definition number.
    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
-   jpdt(1) = 2  ! oct 10 - param cat - momentum
-   jpdt(2) = 9  ! oct 11 - param number - dzdt
+   jpdt(1) = 2      ! Sect4/oct 10 - param category - momentum
+   jpdt(2) = 9      ! Sect4/oct 11 - param number - dzdt
 
    if (isnative) then
-     jpdt(10) = 105 ! oct 23 - type of level
+     jpdt(10) = 105 ! Sect4/oct 23 - type of level - hybrid
    else
-     jpdt(10) = 100
+     jpdt(10) = 100 ! Sect4/oct 23 - type of level - isobaric
    endif
+
    unpack=.true.
 
    do vlev = 1, lev_input
 
-      jpdt(12) = nint(rlevs2(vlev) )
+     jpdt(12) = nint(rlevs2(vlev) )
 
-      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
-      if (iret /= 0) then
-!       print*,'getgb2 did not find dzdt for level ',jpdt(12)
-        jpdt(2) = 8  ! oct 11 - param number - omega
-        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-              unpack, k, gfld, iret)
-        if (iret /= 0) then
-          call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var8=dum2d_1)
-          if (iret==1) then ! missing_var_method == skip 
-            cycle
-          endif
-        else
-          conv_omega2 = .true.
-!         conv_omega = .true.
-          dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
-        endif
-
-      else ! found data
-        dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
-      endif
-
-      print*,'getgb2 dzdt is ',jpdt(12),maxval(dum2d_1),minval(dum2d_1)
+     if (iret /= 0) then ! dzdt not found, look for omega.
+       print*,"DZDT not available at level ", trim(slevs(vlev)), " so checking for VVEL"
+       jpdt(2) = 8  ! Sect4/oct 11 - parameter number - omega
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+       if (iret /= 0) then
+         call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var8=dum2d_1)
+         if (iret==1) then ! missing_var_method == skip 
+           cycle
+         endif
+       else
+         conv_omega = .true.
+         dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
+       endif
+     else ! found dzdt
+       dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
+     endif
 
 ! Temporary code. wgrib2 flips the pole of gfs data.
-      if (trim(external_model) == "GFS") then
-        dum2d_2 = dum2d_1
-        do jj = 1, j_input
-          dum2d_1(:,jj) = dum2d_2(:,j_input-jj+1)
-        enddo
-      endif
+     if (trim(external_model) == "GFS") then
+       dum2d_2 = dum2d_1
+       do jj = 1, j_input
+         dum2d_1(:,jj) = dum2d_2(:,j_input-jj+1)
+       enddo
+     endif
 
-!     dummy3d(:,:,vlev) = dum2d_1
+     dummy3d(:,:,vlev) = dum2d_1
 
    enddo
 
- endif
+ endif ! Read of dzdt
+
+! This variable needs to be availabe on all tasks. The original
+! code has a bug. To make comparisons easier, keep the bug 
+! for now.  Uncomment to fix bug.
+!call MPI_BCAST(conv_omega,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT DZDT."
  call ESMF_FieldScatter(dzdt_input_grid, dummy3d, rootpet=0, rc=rc)
