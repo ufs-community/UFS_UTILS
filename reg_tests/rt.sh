@@ -16,7 +16,7 @@ cd ${WORK_DIR}
 rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
-git clone --recursive https://github.com/NOAA-EMC/UFS_UTILS.git
+git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
 cd UFS_UTILS
 
 source sorc/machine-setup.sh

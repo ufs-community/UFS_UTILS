@@ -36,7 +36,7 @@ QUEUE="${QUEUE:-batch}"
 
 export DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
-export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/global_cycle
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/global_cycle
 
 export OMP_NUM_THREADS_CY=2
 

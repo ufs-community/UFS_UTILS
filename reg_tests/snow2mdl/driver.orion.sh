@@ -45,7 +45,7 @@ export DATA="${DATA}/reg-tests/snow2mdl"
 
 rm -fr $DATA
 
-export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/snow2mdl
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 export WGRIB=/apps/contrib/NCEPLIBS/orion/utils/grib_util.v1.2.0/exec/wgrib
 export WGRIB2=/apps/contrib/NCEPLIBS/orion/utils/grib_util.v1.2.0/exec/wgrib2
