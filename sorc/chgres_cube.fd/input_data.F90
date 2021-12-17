@@ -3196,7 +3196,7 @@
  
  deallocate(dummy3d_col_in, dummy3d_col_out)
  
-call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet,isnative,rlevs2)
+ call read_winds(u_tmp_3d,v_tmp_3d,localpet,isnative,rlevs2,lugb)
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT U-WIND."
  call ESMF_FieldScatter(u_input_grid, u_tmp_3d, rootpet=0, rc=rc)
@@ -7059,27 +7059,25 @@ else ! is native coordinate (hybrid).
 !> Read winds from a grib2 file.  Rotate winds
 !! to be earth relative if necessary.
 !!
-!! @param [in] g2file  grib2 file to be read
-!! @param [in] inv   grib2 inventory file
 !! @param [inout] u  u-component wind
 !! @param [inout] v  v-component wind
 !! @param[in] localpet  ESMF local persistent execution thread
+!! @param[in] rlevs2 Array of atmospheric level values
+!! @param[in] lugb Logical unit number of GRIB2 file.
 !! @author Larissa Reames
- subroutine read_winds(g2file,inv,u,v,localpet,isnative,rlevs2)
+ subroutine read_winds(u,v,localpet,isnative,rlevs2,lugb)
 
  use grib_mod
- use wgrib2api
- use netcdf
- use program_setup, only      : get_var_cond, fix_dir_input_grid
- use model_grid, only         : input_grid_type
+ use program_setup, only      : get_var_cond
+
  implicit none
 
- character(len=250), intent(in)          :: g2file
- character(len=10), intent(in)            :: inv
- integer, intent(in)                     :: localpet
- real(esmf_kind_r8), intent(inout), allocatable :: u(:,:,:),v(:,:,:)
+ integer, intent(in)                                  :: localpet, lugb
+
+ logical, intent(in)                                  :: isnative
+
+ real(esmf_kind_r8), intent(inout), allocatable       :: u(:,:,:),v(:,:,:)
  real(esmf_kind_r8), intent(in), dimension(lev_input) :: rlevs2
- logical, intent(in) :: isnative
 
  real(esmf_kind_r4), dimension(i_input,j_input)  :: alpha
  real(esmf_kind_r8), dimension(i_input,j_input)  :: lon, lat
@@ -7089,15 +7087,13 @@ else ! is native coordinate (hybrid).
  real(esmf_kind_r4)                      :: value_u, value_v,lov,latin1,latin2
  real(esmf_kind_r8)                      :: d2r
 
- integer                                 :: varnum_u, varnum_v, vlev, & !ncid, id_var, &
-                                            error, iret, istr
- integer                                 :: j, jj, k, lugb, lugi, jgdtn, jpdtn
+ integer                                 :: varnum_u, varnum_v, vlev, &
+                                            error, iret
+ integer                                 :: j, jj, k, lugi, jgdtn, jpdtn
  integer                                 :: jdisc, jids(200), jgdt(200), jpdt(200)
 
  character(len=20)                       :: vname
  character(len=50)                       :: method_u, method_v
- character(len=250)                      :: file_coord
- character(len=10000)                    :: temp_msg
 
  logical                                 :: unpack
 
@@ -7112,8 +7108,6 @@ else ! is native coordinate (hybrid).
    allocate(v(0,0,0))
  endif
 
- file_coord = trim(fix_dir_input_grid)//"/latlon_grid3.32769.nc"
- 
  vname = "u"
  call get_var_cond(vname,this_miss_var_method=method_u, this_miss_var_value=value_u, &
                        loc=varnum_u)
@@ -7133,12 +7127,7 @@ else ! is native coordinate (hybrid).
 
  if (localpet==0) then
 
-   print*,'got here in winds ',trim(g2file)
-   lugb=13
-   lugi=0
-   call baopenr(lugb,g2file,iret)
-   if (iret /= 0) call error_handler("ERROR OPENING GRIB2 FILE.", iret)
-
+   lugi    = 0     ! index file unit number
    jdisc   = 0     ! search for discipline - meteorological products
    j = 0           ! search at beginning of file.
    jpdt    = -9999  ! array of values in product definition template 4.n
@@ -7153,37 +7142,31 @@ else ! is native coordinate (hybrid).
     
    if (iret /= 0) call error_handler("ERROR READING GRIB2 FILE.", iret)
 
-   print*,'grid def template number ',gfld%igdtnum
-   print*,'grid def template        ',gfld%igdtmpl
-   
-   if (gfld%igdtnum == 32769) then
+   if (gfld%igdtnum == 32769) then ! grid definition template number - rotated lat/lon grid
 
      latin1 = float(gfld%igdtmpl(15))/1.0E6
      lov = float(gfld%igdtmpl(16))/1.0E6
 
-     print*,'getgb2 rotated lat/lon ',latin1,lov
      print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
      call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha)
-     print*, " alpha min/max = ",MINVAL(alpha),MAXVAL(alpha)
 
-   elseif (gfld%igdtnum == 30) then
+   elseif (gfld%igdtnum == 30) then ! grid definition template number - lambert conformal grid.
 
      lov = float(gfld%igdtmpl(14))/1.0E6
      latin1 = float(gfld%igdtmpl(19))/1.0E6
      latin2 = float(gfld%igdtmpl(20))/1.0E6
 
-     print*,'getgb2 lambert ',lov,latin1,latin2
      print*, "- CALL GRIDROT for LC grid with lov,latin1/2 = ",lov,latin1,latin2
      call gridrot(lov,latin1,latin2,lon,alpha)
-     print*, " alpha min/max = ",MINVAL(alpha),MAXVAL(alpha)
 
    endif
 
    if (isnative) then
-     jpdt(10) = 105 ! oct 23 - type of level
+     jpdt(10) = 105 ! Sec4/oct 23 - type of level - hybrid
    else
-     jpdt(10) = 100
+     jpdt(10) = 100 ! Sec4/oct 23 - type of level - isobaric
    endif
+
    unpack=.true.
 
    allocate(dum2d(i_input,j_input))
@@ -7194,9 +7177,9 @@ else ! is native coordinate (hybrid).
 
      vname = ":UGRD:"
 
-     jpdt(1) = 2  ! oct 10 - param cat - momentum
-     jpdt(2) = 2  ! oct 11 - param number - u-wind
-     jpdt(12) = nint(rlevs2(vlev) )
+     jpdt(1) = 2  ! Sec4/oct 10 - parameter category - momentum
+     jpdt(2) = 2  ! Sec4/oct 11 - parameter number - u-wind
+     jpdt(12) = nint(rlevs2(vlev)) ! Sect4/octs 25-28 - scaled value of fixed surface.
 
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
@@ -7220,39 +7203,33 @@ else ! is native coordinate (hybrid).
      endif
 
      vname = ":VGRD:"
-     iret = grb2_inq(g2file,inv,vname,slevs(vlev),data2=v_tmp)
-     if (iret <= 0) then
-        call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
-        if (iret==1) then ! missing_var_method == skip
-          call error_handler("READING IN V AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
-                          "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
-        endif
-     else
-       print*,'wgrib2 v wind ',vlev,maxval(v_tmp),minval(v_tmp)
-      endif
 
-     jpdt(2) = 3  ! oct 11 - param number - v-wind
+     jpdt(2) = 3  ! Sec4/oct 11 - parameter number - v-wind
 
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
-     if (iret == 0) then
-       print*,'getgb2 v wind ',vlev,maxval(gfld%fld),minval(gfld%fld)
-     endif
 
-     dum2d = reshape(gfld%fld, (/i_input,j_input/) )
-
+     if (iret /= 0) then
+        call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
+        if (iret==1) then ! missing_var_method == skip
+          call error_handler("READING IN V AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
+                        "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+        endif
+     else
+       dum2d = reshape(gfld%fld, (/i_input,j_input/) )
 ! Temporary code. wgrib2 flips the pole of gfs data.
-!    if (trim(external_model) == "GFS") then
-!      do jj = 1, j_input
-!        v_tmp(:,jj) = dum2d(:,j_input-jj+1)
-!      enddo
-!    else
-!      v_tmp(:,:) = dum2d
-!    endif
+       if (trim(external_model) == "GFS") then
+         do jj = 1, j_input
+           v_tmp(:,jj) = dum2d(:,j_input-jj+1)
+         enddo
+       else
+         v_tmp(:,:) = dum2d
+       endif
+     endif
 
      deallocate(dum2d)
 
-      if (trim(input_grid_type) == "latlon") then
+      if (gfld%igdtnum == 0) then ! grid definition template number - lat/lon grid
         if (external_model == 'UKMET') then
           u(:,:,vlev) = u_tmp
           v(:,:,vlev) = (v_tmp(:,2:jp1_input) + v_tmp(:,1:j_input))/2
@@ -7260,7 +7237,7 @@ else ! is native coordinate (hybrid).
           u(:,:,vlev) = u_tmp
           v(:,:,vlev) = v_tmp
         endif
-      else if (trim(input_grid_type) == "rotated_latlon") then
+      else if (gfld%igdtnum == 32769) then ! grid definition template number - rotated lat/lon grid
         ws = sqrt(u_tmp**2 + v_tmp**2)
         wd = atan2(-u_tmp,-v_tmp) / d2r ! calculate grid-relative wind direction
         wd = wd + alpha + 180.0 ! Rotate from grid- to earth-relative direction
