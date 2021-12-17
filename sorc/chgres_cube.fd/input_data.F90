@@ -7187,22 +7187,12 @@ else ! is native coordinate (hybrid).
    unpack=.true.
 
    allocate(dum2d(i_input,j_input))
-     allocate(u_tmp(i_input,j_input))
-     allocate(v_tmp(i_input,j_input))
+   allocate(u_tmp(i_input,j_input))
+   allocate(v_tmp(i_input,j_input))
 
    do vlev = 1, lev_input
 
      vname = ":UGRD:"
-     iret = grb2_inq(g2file,inv,vname,slevs(vlev),data2=u_tmp)
-     if (iret <= 0) then
-        call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
-        if (iret==1) then ! missing_var_method == skip
-          call error_handler("READING IN U AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
-                        "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
-        endif
-     else
-       print*,'wgrib2 u wind ',vlev,maxval(u_tmp),minval(u_tmp)
-     endif
 
      jpdt(1) = 2  ! oct 10 - param cat - momentum
      jpdt(2) = 2  ! oct 11 - param number - u-wind
@@ -7210,20 +7200,24 @@ else ! is native coordinate (hybrid).
 
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
-     if (iret == 0) then
-       print*,'getgb2 u wind ',vlev,maxval(gfld%fld),minval(gfld%fld)
-     endif
 
-     dum2d = reshape(gfld%fld, (/i_input,j_input/) )
-
+     if (iret /= 0) then
+        call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
+        if (iret==1) then ! missing_var_method == skip
+          call error_handler("READING IN U AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
+                        "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+        endif
+     else
+       dum2d = reshape(gfld%fld, (/i_input,j_input/) )
 ! Temporary code. wgrib2 flips the pole of gfs data.
-!    if (trim(external_model) == "GFS") then
-!      do jj = 1, j_input
-!        u_tmp(:,jj) = dum2d(:,j_input-jj+1)
-!      enddo
-!    else
-!      u_tmp(:,:) = dum2d
-!    endif
+       if (trim(external_model) == "GFS") then
+         do jj = 1, j_input
+           u_tmp(:,jj) = dum2d(:,j_input-jj+1)
+         enddo
+       else
+         u_tmp(:,:) = dum2d
+       endif
+     endif
 
      vname = ":VGRD:"
      iret = grb2_inq(g2file,inv,vname,slevs(vlev),data2=v_tmp)
