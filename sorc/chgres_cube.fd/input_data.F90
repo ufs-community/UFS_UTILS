@@ -3359,6 +3359,7 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet,isnative,rlevs2)
  deallocate(dummy2d, dummy2d_8)
  
 if (.not. isnative) then
+
   !---------------------------------------------------------------------------
   ! Flip 'z' indices to all 3-d variables.  Data is read in from model
   ! top to surface.  This program expects surface to model top.
@@ -3442,20 +3443,13 @@ if (.not. isnative) then
         lev_input)),minval(presptr(clb(1):cub(1),clb(2):cub(2),lev_input))
    endif
  
-else
-   ! For native files, read in pressure field directly from file but don't flip levels
+else ! is native coordinate (hybrid).
+
+! For native files, read in pressure field directly from file but don't flip levels
+
    if (localpet == 0) then
 
     print*,"- READ PRESSURE."
-    vname = ":PRES:"
-    do vlev = 1, lev_input
-      iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
-      if (iret<=0) then
-        call error_handler("READING IN PRESSURE AT LEVEL "//trim(slevs(vlev)),iret)
-      endif
-      dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-      print*,'wgrib2 pres check after read ',vlev,maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
-    enddo
 
     jdisc   = 0     ! search for discipline - meteorological products
     j = 0           ! search at beginning of file.
@@ -3464,16 +3458,19 @@ else
     jgdt    = -9999  ! array of values in grid definition template 3.m
     jgdtn   = -1     ! search for any grid definition number.
     jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
-    jpdt(1) = 3  ! oct 10 - param cat - mass
-    jpdt(2) = 0  ! oct 11 - param number - pressure
-    jpdt(10) = 105 ! oct 23 - type of level - hybrid
+    jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
+    jpdt(2) = 0      ! Sect4/oct 11 - param number - pressure
+    jpdt(10) = 105   ! Sect4/oct 23 - type of level - hybrid
     unpack=.true.
 
     do vlev = 1, lev_input
+
       jpdt(12) = nint(rlevs2(vlev) )
       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
-      print*,'getgb2 pres check after rread ',vlev,maxval(gfld%fld),minval(gfld%fld)
+      if (iret /= 0) then
+        call error_handler("READING IN PRESSURE AT LEVEL "//trim(slevs(vlev)),iret)
+      endif
 
       dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
 
@@ -3485,7 +3482,7 @@ else
         enddo
        endif
 
-!      dummy3d(:,:,vlev) = dum2d_1
+       dummy3d(:,:,vlev) = dum2d_1
 
     enddo
 
@@ -3495,7 +3492,9 @@ else
   call ESMF_FieldScatter(pres_input_grid, dummy3d, rootpet=0, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
+
  endif
+
  deallocate(dummy3d) 
  
 !---------------------------------------------------------------------------
