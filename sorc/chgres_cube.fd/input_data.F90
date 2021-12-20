@@ -2465,6 +2465,7 @@
  integer, intent(in)                   :: localpet
  
  integer, parameter                    :: ntrac_max=14
+ integer, parameter                    :: max_levs=1000
 
  character(len=300)                    :: the_file
  character(len=20)                     :: vname, &
@@ -2487,19 +2488,16 @@
  integer :: count_spfh, count_rh, count_icmr, count_scliwc, count_cice
  integer :: count_rwmr, count_scllwc, count
 
- logical :: unpack
-   type(gribfield)                       :: gfld
- 
 
  logical                               :: conv_omega=.false., &
                                           hasspfh=.true., &
                                           isnative=.false., &
-                                          use_rh=.false. 
+                                          use_rh=.false. , unpack
 
  real(esmf_kind_r8), allocatable :: dum2d_1(:,:), dum2d_2(:,:)
                                           
 
- real                                  :: rlevs_hold(1000)
+ real                                  :: rlevs_hold(max_levs)
  real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
  real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
@@ -2514,6 +2512,7 @@
  real(esmf_kind_r4), parameter         :: lev_no_tr_fill = 20000.0
  real(esmf_kind_r4), parameter         :: lev_no_o3_fill = 40000.0
 
+ type(gribfield)                       :: gfld
  
  tracers(:) = "NULL"
  
@@ -2524,6 +2523,7 @@
                      "rainwat ", "snowwat ", "graupel ", "cld_amt ", "ice_nc  ", &
                      "rain_nc ", "water_nc", "liq_aero", "ice_aero", &
                      "sgs_tke "/)
+
  tracers_default = (/"sphum   ", "liq_wat ", "o3mr    ", "ice_wat ", &
                      "rainwat ", "snowwat ", "graupel ", "cld_amt ", "ice_nc  ", &
                      "rain_nc ", "water_nc", "liq_aero", "ice_aero", &
@@ -2540,73 +2540,76 @@
    call baopenr(lugb,the_file,iret)
    if (iret /= 0) call error_handler("ERROR OPENING GRIB2 FILE.", iret)
 
-   jdisc   = 0     ! search for discipline - meteorological products
-   j = 0           ! search at beginning of file.
-   jpdt    = -9999  ! array of values in product definition template 4.n
-   jids    = -9999  ! array of values in identification section, set to wildcard
-   jgdt    = -9999  ! array of values in grid definition template 3.m
-   jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - mass field
-     jpdt(2) = 0  ! oct 11 - param number - geop height
-     jpdt(10) = 105 ! oct 23 - type of level - ground surface
-     jpdt(12) = 10 ! oct 23 - type of level - ground surface
+   jdisc   = 0     ! Search for discipline - meteorological products
+   j = 0           ! Search at beginning of file.
+   jpdt    = -9999  ! Array of values in product definition template, set to wildcard
+   jids    = -9999  ! Array of values in identification section, set to wildcard
+   jgdt    = -9999  ! Array of values in grid definition template, set to wildcard
+   jgdtn   = -1     ! Search for any grid definition number.
+   jpdtn   =  0     ! Search for product def template number 0 - anl or fcst.
+
+! First, check for the vertical coordinate. If temperture at the 10 hybrid
+! level is found, hybrid coordinates are assumed. Otherwise, data is on
+! isobaric levels.
+
+   jpdt(1) = 0      ! Sect4/oct 10 - param category - temperature field
+   jpdt(2) = 0      ! Sect4/oct 11 - param number - temperature
+   jpdt(10) = 105   ! Sect4/oct 23 - type of level - hybrid
+   jpdt(12) = 10    ! oct 23 - type of level - value of hybrid level
    unpack=.false.
 
    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
-
-   print*,'getgb2 check of hybrid ',iret,maxval(gfld%fld),minval(gfld%fld)
     
-   if (iret == 0) then  ! hybrid
+   if (iret == 0) then  ! data is on hybrid levels
      octet23 = 105
      octet29 = 255
      isnative=.true.
-   else
+   else                 ! data is on isobaric levels
      octet23 = 100
      octet29 = 255
    endif
 
-!  if (iret /= 0) call error_handler("ERROR READING GRIB2 FILE.", iret)
+! Now count the number of vertical levels by searching for u-wind.
+! Store the value of each level.
 
-     rlevs_hold = -999.9
-     lev_input = 0
-     iret = 0
-     j = 0
-     jpdt = -9999
-     do
+   rlevs_hold = -999.9
+   lev_input = 0
+   iret = 0
+   j = 0
+   jpdt = -9999
 
-       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+   do
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
-       if (iret /= 0) exit
+     if (iret /= 0) exit
 
-       if (gfld%discipline == 0) then ! discipline - land products
-         if (gfld%ipdtnum == 0) then  ! prod template number - analysis or forecast at single level.
-           if (gfld%ipdtmpl(1) == 2 .and. gfld%ipdtmpl(2) == 2) then  ! uwind
-                                                                      ! octs 10 and 11
-             if (gfld%ipdtmpl(10) == octet23 .and. gfld%ipdtmpl(13) == octet29) then  
-               lev_input = lev_input + 1
-               iscale = 10 ** gfld%ipdtmpl(11)
-               rlevs_hold(lev_input) = float(gfld%ipdtmpl(12))/float(iscale)
-               print*,'getgb2 found uwind at level ',rlevs_hold(lev_input)
-             endif
+     if (gfld%discipline == 0) then ! Discipline - meteorological products
+       if (gfld%ipdtnum == 0) then  ! Product definition template number -
+                                    ! analysis or forecast at single level.
+         if (gfld%ipdtmpl(1) == 2 .and. gfld%ipdtmpl(2) == 2) then  ! u-wind
+                                                                    ! Sect4/octs 10 and 11.
+           if (gfld%ipdtmpl(10) == octet23 .and. gfld%ipdtmpl(13) == octet29) then  
+                                                                    ! Sect4 octs 23 and 29.
+                                                                    ! Hybrid or isobaric.
+             lev_input = lev_input + 1
+             iscale = 10 ** gfld%ipdtmpl(11)
+             rlevs_hold(lev_input) = float(gfld%ipdtmpl(12))/float(iscale)
            endif
          endif
        endif
+     endif
     
-       j = k
-
-     enddo
-    
-     print*,'getgb2 found this number of levels ',lev_input
+     j = k
+   enddo
 
  endif
 
  call mpi_barrier(MPI_COMM_WORLD, iret)
  call MPI_BCAST(isnative,1,MPI_LOGICAL,0,MPI_COMM_WORLD,iret)
  call MPI_BCAST(lev_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,iret)
- call MPI_BCAST(rlevs_hold,1000,MPI_INTEGER,0,MPI_COMM_WORLD,iret)
+ call MPI_BCAST(rlevs_hold, max_levs, MPI_INTEGER,0,MPI_COMM_WORLD,iret)
 
  allocate(slevs(lev_input))
  allocate(rlevs(lev_input))
@@ -2617,98 +2620,90 @@
 
 ! Jili Dong add sort to re-order isobaric levels.
 
+ do i = 1, lev_input
+   rlevs(i) = rlevs_hold(i)
+ enddo
 
-   do i = 1, lev_input
-     rlevs(i) = rlevs_hold(i)
-   enddo
+ call quicksort(rlevs,1,lev_input)
 
-   call quicksort(rlevs,1,lev_input)
-
-   do i = 1, lev_input
-     if (isnative) then
-       write(slevs(i), '(i6)') nint(rlevs(i))
-       slevs(i) = trim(slevs(i)) // " hybrid"
-     else
-       write(slevs(i), '(f11.2)') rlevs(i)
-       slevs(i) = trim(slevs(i)) // " Pa"
-     endif
-   enddo
+ do i = 1, lev_input
+   if (isnative) then
+     write(slevs(i), '(i6)') nint(rlevs(i))
+     slevs(i) = trim(slevs(i)) // " hybrid"
+   else
+     write(slevs(i), '(f11.2)') rlevs(i)
+     slevs(i) = trim(slevs(i)) // " Pa"
+   endif
+ enddo
 
  if(localpet == 0) then
    do i = 1,lev_input
-     print*, "- test LEVEL AFTER SORT = ",trim(slevs(i))
+     print*, "- LEVEL AFTER SORT = ",trim(slevs(i))
    enddo
  endif
 
-! check to see if spfh exists at all the same levels as ugrd.
+! Check to see if specfic humidity exists at all the same levels as ugrd.
 
-  if (localpet == 0) then
+ if (localpet == 0) then
+   
+   jpdt = -9999
+   jpdt(1) = 1  ! Sect4/oct 10 - param category - moisture
+   jpdt(2) = 0  ! Sect4/oct 11 - param number - specific humidity
+   if (isnative) then
+     jpdt(10) = 105 ! Sect4/oct 23 - type of level - hybrid
+   else
+     jpdt(10) = 100 ! Sect4/oct 23 - type of level - isobaric
+   endif
+   unpack=.false.
 
-     jpdt = -9999
-     jpdt(1) = 1  ! oct 10 - param cat - moisture
-     jpdt(2) = 0  ! oct 11 - param number - spec hum
-     if (isnative) then
-       jpdt(10) = 105 ! oct 23 - type of level
-     else
-       jpdt(10) = 100
-     endif
-     unpack=.false.
+   count_spfh=0
 
-     count_spfh=0
-     do vlev = 1, lev_input
+   do vlev = 1, lev_input
+     j = 0
+     jpdt(12) = nint(rlevs(vlev))
 
-       j = 0
-       jpdt(12) = nint(rlevs_hold(vlev) )
-
-       print*,'in spfh loop ',vlev,jpdt(1:28)
-       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
-       if (iret == 0) then
-         count_spfh = count_spfh + 1
-       endif
+     if (iret == 0) then
+       count_spfh = count_spfh + 1
+     endif
 
-     enddo
+   enddo
 
-     print*,'getgb2 found ',count_spfh, ' levels of spfh. lev_input ',lev_input
+   jpdt(1) = 1  ! Sec4/oct 10 - param category - moisture
+   jpdt(2) = 1  ! Sec4/oct 11 - param number - rel humidity
+   count_rh=0
 
-     jpdt(1) = 1  ! oct 10 - param cat - moisture
-     jpdt(2) = 1  ! oct 11 - param number - rel hum
-     count_rh=0
-     do vlev = 1, lev_input
+   do vlev = 1, lev_input
+     j = 0
+     jpdt(12) = nint(rlevs(vlev))
 
-       j = 0
-       jpdt(12) = nint(rlevs_hold(vlev) )
-
-       print*,'in rh loop ',vlev,jpdt(1:28)
-       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
-       if (iret == 0) then
-         count_rh = count_rh + 1
-       endif
-
-     enddo
-
-     print*,'getgb2 found ',count_rh, ' levels of rh. lev_input ',lev_input
-
-     if (count_spfh /= lev_input) then
-       use_rh = .true.
+     if (iret == 0) then
+       count_rh = count_rh + 1
      endif
+   enddo
 
-     if (count_spfh == 0 .or. use_rh) then
-       if (count_rh == 0) then
-         call error_handler("getgb2 READING ATMOSPHERIC WATER VAPOR VARIABLE.", 2)
-       endif
-       hasspfh = .false.
-       trac_names_oct10(1) = 1
-       trac_names_oct11(1) = 1
-       print*,"- getgb2 FILE CONTAINS RH."
-     else
-       print*,"- getgb2 FILE CONTAINS SPFH."
+   if (count_spfh /= lev_input) then
+     use_rh = .true.
+   endif
+
+   if (count_spfh == 0 .or. use_rh) then
+     if (count_rh == 0) then
+       call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", 2)
      endif
+     hasspfh = .false.  ! Will read rh and convert to specific humidity.
+     trac_names_oct10(1) = 1
+     trac_names_oct11(1) = 1
+     print*,"- FILE CONTAINS RH."
+   else
+     print*,"- FILE CONTAINS SPFH."
+   endif
 
-  endif
+ endif
 
   call MPI_BARRIER(MPI_COMM_WORLD, rc)
   call MPI_BCAST(hasspfh,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
