@@ -384,8 +384,6 @@
 
  integer, intent(in)             :: localpet
 
- integer                         :: rc
-
  call init_sfc_esmf_fields()
 
 !-------------------------------------------------------------------------------
@@ -2458,7 +2456,6 @@
  subroutine read_input_atm_grib2_file(localpet)
 
  use mpi
- use wgrib2api
  use grib_mod
  
  use grib2_util, only                   : rh2spfh, rh2spfh_gfs, convert_omega
@@ -2470,19 +2467,17 @@
  integer, parameter                    :: ntrac_max=14
 
  character(len=300)                    :: the_file
- character(len=20)                     :: vlevtyp, vname, lvl_str,lvl_str_space, &
+ character(len=20)                     :: vname, &
                                           trac_names_vmap(ntrac_max), &
                                           tmpstr, & 
                                           method, tracers_input_vmap(num_tracers_input), &
-                                          tracers_default(ntrac_max), vname2
- character (len=500)                   :: metadata
+                                          tracers_default(ntrac_max)
 
- integer                               :: i, j, k, n, lvl_str_space_len
+ integer                               :: i, j, k, n
  integer                               :: ii,jj
  integer                               :: rc, clb(3), cub(3)
  integer                               :: vlev, iret,varnum
  integer                               :: all_empty, o3n
- integer                               :: len_str
  integer                               :: is_missing, intrp_ier, done_print
 
  integer :: trac_names_oct10(ntrac_max), tracers_input_oct10(num_tracers_input)
@@ -2496,18 +2491,16 @@
    type(gribfield)                       :: gfld
  
 
- logical                               :: lret
  logical                               :: conv_omega=.false., &
                                           hasspfh=.true., &
                                           isnative=.false., &
                                           use_rh=.false. 
 
- character(len=50), allocatable :: slevs2(:)
  real(esmf_kind_r8), allocatable :: dum2d_1(:,:), dum2d_2(:,:)
                                           
 
  real                                  :: rlevs_hold(1000)
- real(esmf_kind_r8), allocatable       :: rlevs(:), rlevs2(:)
+ real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
  real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
                                           u_tmp_3d(:,:,:), v_tmp_3d(:,:,:)
@@ -2538,6 +2531,8 @@
 
  the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
 
+ print*,"- READ ATMOS DATA FROM GRIB2 FILE: ", trim(the_file)
+
  if (localpet == 0) then
 
    lugb=14
@@ -2556,7 +2551,6 @@
      jpdt(2) = 0  ! oct 11 - param number - geop height
      jpdt(10) = 105 ! oct 23 - type of level - ground surface
      jpdt(12) = 10 ! oct 23 - type of level - ground surface
-!  unpack=.true.
    unpack=.false.
 
    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
@@ -2609,50 +2603,10 @@
 
  endif
 
- call MPI_BCAST(isnative,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
-
- print*,"- READ ATMOS DATA FROM GRIB2 FILE: ", trim(the_file)
- print*,"- USE INVENTORY FILE ", inv_file
- 
-! After model_grid is converted, the inventory file will need
-! to be created in input_data temporarily.
-
- inquire(file=inv_file,exist=lret)
- if (.not.lret) then
- if (localpet == 0) then
-   print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
-   rc=grb2_mk_inv(the_file,inv_file)
-   if (rc /=0) call error_handler("OPENING GRIB2 FILE",rc)
- endif
- endif
-
-! Wait for localpet 0 to create inventory
- call mpi_barrier(mpi_comm_world, rc)
-
- print*,"- OPEN FILE."
- inquire(file=the_file,exist=lret)
- if (.not.lret) call error_handler("OPENING GRIB2 ATM FILE.", iret)
-
- print*,"- READ VERTICAL COORDINATE."
- iret = grb2_inq(the_file,inv_file,":var0_2","_0_0:",":10 hybrid level:")
-  
- print*,'got here check of coordinate ',iret
-
- if (iret <= 0) then
-   lvl_str = "mb:" 
-   lvl_str_space = " mb:"
-   lvl_str_space_len = 4
-   iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
-   lev_input=iret
-   if (localpet == 0) print*,"- DATA IS ON ", lev_input, " ISOBARIC LEVELS."
- else
-   lvl_str = " level:"
-   lvl_str_space = " hybrid "
-   lvl_str_space_len = 7
-   iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space, " level:")
-   if (iret < 0) call error_handler("READING VERTICAL LEVEL TYPE.", iret)
-   lev_input=iret
- endif
+ call mpi_barrier(MPI_COMM_WORLD, iret)
+ call MPI_BCAST(isnative,1,MPI_LOGICAL,0,MPI_COMM_WORLD,iret)
+ call MPI_BCAST(lev_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,iret)
+ call MPI_BCAST(rlevs_hold,1000,MPI_INTEGER,0,MPI_COMM_WORLD,iret)
 
  allocate(slevs(lev_input))
  allocate(rlevs(lev_input))
@@ -2660,74 +2614,29 @@
  allocate(dummy3d_col_out(lev_input))
 
  levp1_input = lev_input + 1
-    
-! Get the vertical levels, and search string by sequential reads
-
- do i = 1,lev_input
-   iret=grb2_inq(the_file,inv_file,':UGRD:',trim(lvl_str),sequential=i-1,desc=metadata)
-   if (iret.ne.1) call error_handler(" IN SEQUENTIAL FILE READ.", iret)
-    
-   j = index(metadata,':UGRD:') + len(':UGRD:')
-   k = index(metadata,trim(lvl_str_space)) + len(trim(lvl_str_space))-1
-
-   read(metadata(j:k),*) rlevs(i)
-
-   slevs(i) = metadata(j-1:k) 
-   if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
-   if (localpet==0) print*, "- LEVEL = ", slevs(i)
- enddo
 
 ! Jili Dong add sort to re-order isobaric levels.
 
- call quicksort(rlevs,1,lev_input)
 
- if (localpet == 0) then
-
-   allocate(rlevs2(lev_input))
    do i = 1, lev_input
-     rlevs2(i) = rlevs_hold(i)
+     rlevs(i) = rlevs_hold(i)
    enddo
 
-   call quicksort(rlevs2,1,lev_input)
+   call quicksort(rlevs,1,lev_input)
 
-   allocate(slevs2(lev_input))
    do i = 1, lev_input
      if (isnative) then
-       write(slevs2(i), '(i6)') nint(rlevs2(i))
-       slevs2(i) = trim(slevs2(i)) // " hybrid"
+       write(slevs(i), '(i6)') nint(rlevs(i))
+       slevs(i) = trim(slevs(i)) // " hybrid"
      else
-       write(slevs2(i), '(f11.2)') rlevs2(i)
-       slevs2(i) = trim(slevs2(i)) // " Pa"
+       write(slevs(i), '(f11.2)') rlevs(i)
+       slevs(i) = trim(slevs(i)) // " Pa"
      endif
    enddo
 
- endif
-
- if (.not. isnative) then
-   do i = 1,lev_input
-     write(slevs(i),"(F20.10)") rlevs(i)/100.0
-     len_str = len_trim(slevs(i))
-
-     do while (slevs(i)(len_str:len_str) .eq. '0')
-      slevs(i) = slevs(i)(:len_str-1)
-      len_str = len_str - 1
-     end do
-
-     if (slevs(i)(len_str:len_str) .eq. '.') then
-     slevs(i) = slevs(i)(:len_str-1)
-     len_str = len_str - 1
-     end if
-
-     slevs(i) = trim(slevs(i))
-
-     slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
-     if (localpet==0) print*, "- LEVEL AFTER SORT = ",slevs(i)
-   enddo
- endif
-
  if(localpet == 0) then
    do i = 1,lev_input
-     print*, "- test LEVEL AFTER SORT = ",trim(slevs(i)),trim(slevs2(i))
+     print*, "- test LEVEL AFTER SORT = ",trim(slevs(i))
    enddo
  endif
 
@@ -2994,12 +2903,12 @@
 
    do vlev = 1, lev_input
 
-     jpdt(12) = nint(rlevs2(vlev))
+     jpdt(12) = nint(rlevs(vlev))
 
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
      if (iret /= 0) then 
-       call error_handler("READING IN TEMPERATURE AT LEVEL "//trim(slevs2(vlev)),iret)
+       call error_handler("READING IN TEMPERATURE AT LEVEL "//trim(slevs(vlev)),iret)
      endif
 
      dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
@@ -3062,7 +2971,7 @@
        j = 0
        jpdt(1) = tracers_input_oct10(n)
        jpdt(2) = tracers_input_oct11(n)
-       jpdt(12) = nint(rlevs2(vlev) )
+       jpdt(12) = nint(rlevs(vlev) )
 
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
@@ -3089,7 +2998,7 @@
        j = 0
        jpdt(1) = tracers_input_oct10(n)
        jpdt(2) = tracers_input_oct11(n)
-       jpdt(12) = nint(rlevs2(vlev) )
+       jpdt(12) = nint(rlevs(vlev) )
 
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
@@ -3196,7 +3105,7 @@
  
  deallocate(dummy3d_col_in, dummy3d_col_out)
  
- call read_winds(u_tmp_3d,v_tmp_3d,localpet,isnative,rlevs2,lugb)
+ call read_winds(u_tmp_3d,v_tmp_3d,localpet,isnative,rlevs,lugb)
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT U-WIND."
  call ESMF_FieldScatter(u_input_grid, u_tmp_3d, rootpet=0, rc=rc)
@@ -3272,7 +3181,7 @@
 
    do vlev = 1, lev_input
 
-     jpdt(12) = nint(rlevs2(vlev) )
+     jpdt(12) = nint(rlevs(vlev) )
 
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
@@ -3465,7 +3374,7 @@ else ! is native coordinate (hybrid).
 
     do vlev = 1, lev_input
 
-      jpdt(12) = nint(rlevs2(vlev) )
+      jpdt(12) = nint(rlevs(vlev) )
       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
       if (iret /= 0) then
