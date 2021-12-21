@@ -2705,122 +2705,116 @@
 
  endif
 
-  call MPI_BARRIER(MPI_COMM_WORLD, rc)
-  call MPI_BCAST(hasspfh,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
+ call MPI_BARRIER(MPI_COMM_WORLD, rc)
+ call MPI_BCAST(hasspfh,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
  
-  if (localpet == 0) then
+! Search for and count the number of tracers in the file.
 
-     jpdt = -9999
-     if (isnative) then
-       jpdt(10) = 105 ! oct 23 - type of level
-     else
-       jpdt(10) = 100
+ if (localpet == 0) then
+
+   jpdt = -9999
+   if (isnative) then
+     jpdt(10) = 105 ! Sect4/oct 23 - type of level - hybrid
+   else
+     jpdt(10) = 100 ! Sect4/oct 23 - type of level - isobaric
+   endif
+   unpack=.false.
+
+   count_icmr=0
+   count_scliwc=0
+   count_cice=0
+   count_rwmr=0
+   count_scllwc=0
+
+   do vlev = 1, lev_input
+
+     j = 0
+     jpdt(1) = 1  ! Sect4/oct 10 - param category - moisture
+     jpdt(2) = 23 ! Sect4/oct 11 - param number - ice water mixing ratio
+     jpdt(12) = nint(rlevs(vlev))
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret == 0) then
+       count_icmr = count_icmr + 1
      endif
-     unpack=.false.
 
-     count_icmr=0
-     count_scliwc=0
-     count_cice=0
-     count_rwmr=0
-     count_scllwc=0
+     j = 0
+     jpdt(1) = 1  ! Sect4/oct 10 - param category - moisture
+     jpdt(2) = 84 ! Sect4/oct 11 - param number - cloud ice water content.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+           unpack, k, gfld, iret)
 
-     do vlev = 1, lev_input
+     if (iret == 0) then
+       count_scliwc = count_scliwc + 1
+     endif
 
-       j = 0
-       jpdt(1) = 1  ! oct 10 - param cat - moisture
-       jpdt(2) = 23 ! oct 11 - param number - icmr
-       jpdt(12) = nint(rlevs_hold(vlev) )
-
-       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     j = 0
+     jpdt(1) = 6  ! Sect4/oct 10 - param category - clouds
+     jpdt(2) = 0  ! Sect4/oct 11 - param number - cloud ice
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
-       if (iret == 0) then
-         count_icmr = count_icmr + 1
-       endif
+     if (iret == 0) then
+       count_cice = count_cice + 1
+     endif
 
-       j = 0
-       jpdt(1) = 1  ! oct 10 - param cat - moisture
-       jpdt(2) = 84 ! oct 11 - param number - scliwc
-       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     j = 0
+     jpdt(1) = 1   ! Sect4/oct 10 - param category - moisture
+     jpdt(2) = 24  ! Sect4/oct 11 - param number - rain mixing ratio
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
-       if (iret == 0) then
-         count_scliwc = count_scliwc + 1
-       endif
+     if (iret == 0) then
+       count_rwmr = count_rwmr + 1
+     endif
 
-       j = 0
-       jpdt(1) = 6  ! oct 10 - param cat - clouds
-       jpdt(2) = 0  ! oct 11 - param number - cice
-       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+     j = 0
+     jpdt(1) = 1   ! Sect4/oct 10 - param category - moisture
+     jpdt(2) = 83  ! Sect4/oct 11 - param number - specific cloud liquid
+                   ! water content.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
-       if (iret == 0) then
-         count_cice = count_cice + 1
-       endif
+     if (iret == 0) then
+       count_scllwc = count_scllwc + 1
+     endif
 
-       j = 0
-       jpdt(1) = 1  ! oct 10 - param cat - moisture
-       jpdt(2) = 24  ! oct 11 - param number - rwmr
-       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, iret)
+   enddo
 
-       if (iret == 0) then
-         count_rwmr = count_rwmr + 1
-       endif
-
-       j = 0
-       jpdt(1) = 1  ! oct 10 - param cat - moisture
-       jpdt(2) = 83  ! oct 11 - param number - scllwc
-       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, iret)
-
-       if (iret == 0) then
-         count_scllwc = count_scllwc + 1
-       endif
-
-     enddo
-
-     print*,'getgb2 found ',count_icmr,   ' levels of icmr.'
-     print*,'getgb2 found ',count_scliwc, ' levels of scliwc.'
-     print*,'getgb2 found ',count_cice,   ' levels of cice.'
-     print*,'getgb2 found ',count_rwmr,   ' levels of rwmr.'
-     print*,'getgb2 found ',count_scllwc, ' levels of scllwc.'
-
-     if (count_icmr == 0) then
-       print*, "getgb2 no icmr, check for scliwc"
-       if (count_scliwc == 0) then
-         print*, "getgb2 no scliwc, check for cice"
-         if (count_cice == 0) then
-           print*,'getgb2 no cice. call handle_grib_error'
-         else
-           trac_names_oct10(4) = 6
-           trac_names_oct11(4) = 0
-           if (localpet == 0) print*,"- getgb2 FILE CONTAINS CICE."
-         endif
+   if (count_icmr == 0) then
+     if (count_scliwc == 0) then
+       if (count_cice == 0) then
+         print*,'- FILE DOES NOT CONTAIN CICE.'
        else
-         trac_names_oct10(4) = 1
-         trac_names_oct11(4) = 84
-         if (localpet == 0) print*,"- getgb2 FILE CONTAINS SCLIWC."
+         trac_names_oct10(4) = 6 ! Sect4/oct 10 - param category - clouds
+         trac_names_oct11(4) = 0 ! Sect4/oct 11 - param number - cloud ice
+         print*,"- FILE CONTAINS CICE."
        endif
      else
-       if (localpet == 0) print*,"- getgb2 FILE CONTAINS ICMR."
+       trac_names_oct10(4) = 1  ! Sect4/oct 10 - param category - moisture
+       trac_names_oct11(4) = 84 ! Sect4/oct 11 - param number - cloud ice water content.
+       print*,"- FILE CONTAINS SCLIWC."
      endif
+   else
+     print*,"- FILE CONTAINS ICMR."
+   endif ! count of icmr
 
-     if (count_rwmr == 0) then
-       print*, "getgb2 no rwmr/clwmr, check for scllwc"
-       if (count_scllwc == 0) then
-         print*, "getgb2 no scllwc"
-!        add call to grib error handler.
-       else
-         trac_names_oct10(4) = 1
-         trac_names_oct11(4) = 83
-         if (localpet == 0) print*,"- getgb2 FILE CONTAINS SCLLWC."
-       endif
+   if (count_rwmr == 0) then
+     if (count_scllwc == 0) then
+       print*,"- FILE DOES NOT CONTAIN SCLLWC."
      else
-       if (localpet == 0) print*,"- getgb2 FILE CONTAINS CLWMR."
+       trac_names_oct10(4) = 1  ! Sect4/oct 10 - param category - moisture
+       trac_names_oct11(4) = 83 ! Sect4/oct 11 - param number - specific cloud liquid
+                                ! water content.
+       print*,"- FILE CONTAINS SCLLWC."
      endif
+   else
+     print*,"- FILE CONTAINS CLWMR."
+   endif
 
-  endif
+ endif ! count of tracers/localpet = 0
    
  print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
  do n = 1, num_tracers_input
