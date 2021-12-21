@@ -2477,9 +2477,8 @@
  integer                               :: i, j, k, n
  integer                               :: ii,jj
  integer                               :: rc, clb(3), cub(3)
- integer                               :: vlev, iret,varnum
- integer                               :: all_empty, o3n
- integer                               :: is_missing, intrp_ier, done_print
+ integer                               :: vlev, iret,varnum, o3n
+ integer                               :: intrp_ier, done_print
 
  integer :: trac_names_oct10(ntrac_max), tracers_input_oct10(num_tracers_input)
  integer :: trac_names_oct11(ntrac_max), tracers_input_oct11(num_tracers_input)
@@ -2492,7 +2491,8 @@
  logical                               :: conv_omega=.false., &
                                           hasspfh=.true., &
                                           isnative=.false., &
-                                          use_rh=.false. , unpack
+                                          use_rh=.false. , unpack, &
+                                          all_empty, is_missing
 
  real(esmf_kind_r8), allocatable :: dum2d_1(:,:), dum2d_2(:,:)
                                           
@@ -2816,6 +2816,10 @@
 
  endif ! count of tracers/localpet = 0
    
+ call MPI_BARRIER(MPI_COMM_WORLD, rc)
+ call MPI_BCAST(trac_names_oct10,ntrac_max,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
+ call MPI_BCAST(trac_names_oct11,ntrac_max,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
+ 
  print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
  do n = 1, num_tracers_input
 
@@ -2831,16 +2835,6 @@
    tracers_input_oct11(n) = trac_names_oct11(i)
 
  enddo
-
- if (localpet==0) then
-    print*, "- NUMBER OF TRACERS IN THE INPUT FILE = ", num_tracers_input
-    print*,'tracers_input_vmap   ', tracers_input_vmap(1:num_tracers_input)
-    print*,'tracers              ', tracers(1:num_tracers_input)
-    print*,'tracers oct10        ', tracers_input_oct10(1:num_tracers_input)
-    print*,'tracers oct11        ', tracers_input_oct11(1:num_tracers_input)
-    print*,'use_rh               ', use_rh
-    print*,'hasspfh               ', hasspfh
- endif
 
 !---------------------------------------------------------------------------
 ! Initialize esmf atmospheric fields.
@@ -2874,9 +2868,9 @@
 
    jdisc   = 0     ! search for discipline - meteorological products
    j = 0           ! search at beginning of file.
-   jpdt    = -9999  ! array of values in product definition template 4.n
+   jpdt    = -9999  ! array of values in product definition template, set to wildcard
    jids    = -9999  ! array of values in identification section, set to wildcard
-   jgdt    = -9999  ! array of values in grid definition template 3.m
+   jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
    jpdt(1) = 0      ! Sect 4/oct 10 - param category - temperature
@@ -2925,32 +2919,32 @@
 
  do n = 1, num_tracers_input
 
-   if (localpet == 0) print*,"- wgrib2 READ ", trim(tracers_input_vmap(n))
+   if (localpet == 0) print*,"- READ ", trim(tracers_input_vmap(n))
 
    vname = tracers_input_vmap(n)
-
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                        this_field_var_name=tmpstr,loc=varnum)
+
    if (n==1 .and. .not. hasspfh) then 
-        print*,"- wgrib2 CALL FieldGather TEMPERATURE." 
-        call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
-        if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGet", rc) 
+     print*,"- CALL FieldGather TEMPERATURE." 
+     call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGet", rc) 
    endif
    
    if (localpet == 0) then
 
      jdisc   = 0     ! search for discipline - meteorological products
-     jpdt    = -9999  ! array of values in product definition template 4.n
+     jpdt    = -9999  ! array of values in product definition template, set to wildcard
      jids    = -9999  ! array of values in identification section, set to wildcard
-     jgdt    = -9999  ! array of values in grid definition template 3.m
+     jgdt    = -9999  ! array of values in grid definition template, set to wildcard
      jgdtn   = -1     ! search for any grid definition number.
      jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
      unpack = .false.
      if (isnative) then
-       jpdt(10) = 105 ! oct 23 - type of level
+       jpdt(10) = 105 ! Sect4/oct 23 - type of level - hybrid
      else
-       jpdt(10) = 100
+       jpdt(10) = 100 ! Sect4/oct 23 - type of level - isobaric
      endif
 
      count = 0
@@ -2960,7 +2954,7 @@
        j = 0
        jpdt(1) = tracers_input_oct10(n)
        jpdt(2) = tracers_input_oct11(n)
-       jpdt(12) = nint(rlevs(vlev) )
+       jpdt(12) = nint(rlevs(vlev))
 
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
@@ -2974,12 +2968,12 @@
 
      ! Check to see if file has any data for this tracer
      if (iret == 0) then
-       all_empty = 1
+       all_empty = .true.
      else
-       all_empty = 0
+       all_empty = .false.
      endif
  
-     is_missing = 0
+     is_missing = .false.
 
      do vlev = 1, lev_input
 
@@ -3001,26 +2995,24 @@
              dummy2d(:,jj) = dum2d_2(:,j_input-jj+1)
            enddo
          endif
-       endif
-
-      if (iret /= 0) then
-        if (trim(method) .eq. 'intrp' .and. all_empty == 0) then
+       else ! did not find data.
+        if (trim(method) .eq. 'intrp' .and. .not.all_empty) then
           dummy2d = intrp_missing 
-          is_missing = 1 
+          is_missing = .true.
         else
           ! Abort if input data has some data for current tracer, but has
           ! missing data below 200 mb/ above 400mb
-            if (all_empty == 0 .and. n == o3n) then
+            if (.not.all_empty .and. n == o3n) then
               if (rlevs(vlev) .lt. lev_no_o3_fill) &
                 call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev))//&
                   ". SET MISSING VARIABLE CONDITION TO 'INTRP' TO AVOID THIS ERROR", 1)
-            elseif (all_empty == 0 .and. n .ne. o3n) then 
+            elseif (.not.all_empty .and. n .ne. o3n) then 
               if (rlevs(vlev) .gt. lev_no_tr_fill) &
                 call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev))//&
                   ". SET MISSING VARIABLE CONDITION TO 'INTRP' TO AVOID THIS ERROR.", 1)
             endif 
           ! If entire array is empty and method is set to intrp, switch method to fill
-          if (trim(method) .eq. 'intrp' .and. all_empty == 1) method='set_to_fill' 
+          if (trim(method) .eq. 'intrp' .and. all_empty) method='set_to_fill' 
 
           call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
           if (iret==1) then ! missing_var_method == skip or no entry
@@ -3036,21 +3028,21 @@
 
       if (n==1 .and. .not. hasspfh) then 
         if (trim(external_model) .eq. 'GFS') then
-          print *,'CALRH GFS'
+          print *,'- CALL CALRH GFS'
           call rh2spfh_gfs(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
         else 
-          print *,'CALRH non-GFS'
+          print *,'- CALL CALRH non-GFS'
           call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
         end if
       endif
 
-!      print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
        dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
+
      enddo !vlev
 
 ! Jili Dong interpolation for missing levels 
-     if (is_missing .gt. 0 .and. trim(method) .eq. 'intrp') then
-       print *,'intrp tracer '//trim(tracers(n))
+     if (is_missing .and. trim(method) .eq. 'intrp') then
+       print *,'- INTERPOLATE TRACER '//trim(tracers(n))
        done_print = 0
        do jj = 1, j_input
          do ii = 1, i_input
@@ -3080,7 +3072,7 @@
          endif ! intrp_missing
          ! zero out negative tracers from interpolation/extrapolation
          where(dummy3d(:,:,vlev) .lt. 0.0)  dummy3d(:,:,vlev) = 0.0
-         print*,'tracer af intrp',vlev, maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
+!        print*,'tracer af intrp',vlev, maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
        end do !nlevs do
      end if !if intrp
    endif !localpet == 0
@@ -3111,9 +3103,9 @@
    print*,"- READ SURFACE PRESSURE."
    jdisc   = 0     ! search for discipline - meteorological products
    j = 0           ! search at beginning of file.
-   jpdt    = -9999  ! array of values in product definition template 4.n
+   jpdt    = -9999  ! array of values in product definition template, set to wildcard
    jids    = -9999  ! array of values in identification section, set to wildcard
-   jgdt    = -9999  ! array of values in grid definition template 3.m
+   jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
    jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
