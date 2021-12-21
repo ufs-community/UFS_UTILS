@@ -2479,14 +2479,14 @@
  integer                               :: rc, clb(3), cub(3)
  integer                               :: vlev, iret,varnum, o3n
  integer                               :: intrp_ier, done_print
-
- integer :: trac_names_oct10(ntrac_max), tracers_input_oct10(num_tracers_input)
- integer :: trac_names_oct11(ntrac_max), tracers_input_oct11(num_tracers_input)
- integer :: lugb, lugi, jdisc, jpdt(200), jgdt(200), iscale
- integer :: jids(200), jpdtn, jgdtn, octet23, octet29
- integer :: count_spfh, count_rh, count_icmr, count_scliwc, count_cice
- integer :: count_rwmr, count_scllwc, count
-
+ integer                               :: trac_names_oct10(ntrac_max)
+ integer                               :: tracers_input_oct10(num_tracers_input)
+ integer                               :: trac_names_oct11(ntrac_max)
+ integer                               :: tracers_input_oct11(num_tracers_input)
+ integer                               :: lugb, lugi, jdisc, jpdt(200), jgdt(200), iscale
+ integer                               :: jids(200), jpdtn, jgdtn, octet23, octet29
+ integer                               :: count_spfh, count_rh, count_icmr, count_scliwc
+ integer                               :: count_cice, count_rwmr, count_scllwc, count
 
  logical                               :: conv_omega=.false., &
                                           hasspfh=.true., &
@@ -2494,10 +2494,10 @@
                                           use_rh=.false. , unpack, &
                                           all_empty, is_missing
 
- real(esmf_kind_r8), allocatable :: dum2d_1(:,:), dum2d_2(:,:)
+ real(esmf_kind_r8), allocatable       :: dum2d_1(:,:), dum2d_2(:,:)
                                           
 
- real                                  :: rlevs_hold(max_levs)
+ real(esmf_kind_r8)                    :: rlevs_hold(max_levs)
  real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
  real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
@@ -3144,9 +3144,9 @@
 
    jdisc   = 0     ! search for discipline - meteorological products
    j = 0           ! search at beginning of file.
-   jpdt    = -9999  ! array of values in product definition template 4.n
+   jpdt    = -9999  ! array of values in product definition template, set to wildcard
    jids    = -9999  ! array of values in identification section, set to wildcard
-   jgdt    = -9999  ! array of values in grid definition template 3.m
+   jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
    jpdt(1) = 2      ! Sect4/oct 10 - param category - momentum
@@ -3162,7 +3162,7 @@
 
    do vlev = 1, lev_input
 
-     jpdt(12) = nint(rlevs(vlev) )
+     jpdt(12) = nint(rlevs(vlev))
 
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
@@ -3216,9 +3216,9 @@
    print*,"- READ TERRAIN."
    jdisc   = 0     ! search for discipline - meteorological products
    j = 0           ! search at beginning of file.
-   jpdt    = -9999  ! array of values in product definition template 4.n
+   jpdt    = -9999  ! array of values in product definition template, set to wildcard
    jids    = -9999  ! array of values in identification section, set to wildcard
-   jgdt    = -9999  ! array of values in grid definition template 3.m
+   jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
    jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
@@ -3343,9 +3343,9 @@ else ! is native coordinate (hybrid).
 
     jdisc   = 0     ! search for discipline - meteorological products
     j = 0           ! search at beginning of file.
-    jpdt    = -9999  ! array of values in product definition template 4.n
+    jpdt    = -9999  ! array of values in product definition template, set to wildcard
     jids    = -9999  ! array of values in identification section, set to wildcard
-    jgdt    = -9999  ! array of values in grid definition template 3.m
+    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
     jgdtn   = -1     ! search for any grid definition number.
     jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
     jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
@@ -3355,7 +3355,7 @@ else ! is native coordinate (hybrid).
 
     do vlev = 1, lev_input
 
-      jpdt(12) = nint(rlevs(vlev) )
+      jpdt(12) = nint(rlevs(vlev))
       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
       if (iret /= 0) then
@@ -3385,7 +3385,7 @@ else ! is native coordinate (hybrid).
 
  endif
 
- deallocate(dummy3d) 
+ deallocate(dummy3d, dum2d_1, dum2d_2) 
  
 !---------------------------------------------------------------------------
 ! Convert from 2-d to 3-d component winds.
@@ -6952,10 +6952,12 @@ else ! is native coordinate (hybrid).
 !! @param [inout] u  u-component wind
 !! @param [inout] v  v-component wind
 !! @param[in] localpet  ESMF local persistent execution thread
-!! @param[in] rlevs2 Array of atmospheric level values
+!! @param[in] isnative When true, data on hybrid levels. Otherwise
+!!            data is on isobaric levels.
+!! @param[in] rlevs Array of atmospheric level values
 !! @param[in] lugb Logical unit number of GRIB2 file.
 !! @author Larissa Reames
- subroutine read_winds(u,v,localpet,isnative,rlevs2,lugb)
+ subroutine read_winds(u,v,localpet,isnative,rlevs,lugb)
 
  use grib_mod
  use program_setup, only      : get_var_cond
@@ -6967,7 +6969,7 @@ else ! is native coordinate (hybrid).
  logical, intent(in)                                  :: isnative
 
  real(esmf_kind_r8), intent(inout), allocatable       :: u(:,:,:),v(:,:,:)
- real(esmf_kind_r8), intent(in), dimension(lev_input) :: rlevs2
+ real(esmf_kind_r8), intent(in), dimension(lev_input) :: rlevs
 
  real(esmf_kind_r4), dimension(i_input,j_input)  :: alpha
  real(esmf_kind_r8), dimension(i_input,j_input)  :: lon, lat
@@ -7020,9 +7022,9 @@ else ! is native coordinate (hybrid).
    lugi    = 0     ! index file unit number
    jdisc   = 0     ! search for discipline - meteorological products
    j = 0           ! search at beginning of file.
-   jpdt    = -9999  ! array of values in product definition template 4.n
+   jpdt    = -9999  ! array of values in product definition template, set to wildcard
    jids    = -9999  ! array of values in identification section, set to wildcard
-   jgdt    = -9999  ! array of values in grid definition template 3.m
+   jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
    unpack=.false.
@@ -7069,7 +7071,7 @@ else ! is native coordinate (hybrid).
 
      jpdt(1) = 2  ! Sec4/oct 10 - parameter category - momentum
      jpdt(2) = 2  ! Sec4/oct 11 - parameter number - u-wind
-     jpdt(12) = nint(rlevs2(vlev)) ! Sect4/octs 25-28 - scaled value of fixed surface.
+     jpdt(12) = nint(rlevs(vlev)) ! Sect4/octs 25-28 - scaled value of fixed surface.
 
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
