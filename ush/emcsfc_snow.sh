@@ -52,8 +52,8 @@ if [[ "$VERBOSE" == YES ]]; then
 fi
 
 #-----------------------------------------------------------------------
-# the "postmsg", "startmsg" and "prep_step" utilities
-# are only used in ncep ops when the "prod_util" module is loaded.
+# The "startmsg" and "prep_step" utilities are only
+# used in ncep ops when the "prod_util" module is loaded.
 #-----------------------------------------------------------------------
 
 use_prod_util=`echo $UTILROOT`
@@ -144,10 +144,7 @@ $WGRIB2 ${IMS_FILE}
 rc1=$?
 
 if ((rc1 != 0));then 
-  msg="WARNING: ${pgm} detects corrupt IMS data. Can not run."
-  if test "$use_prod_util" = "true" ; then
-    postmsg "$jlogfile" "$msg"
-  fi
+  echo "WARNING: ${pgm} detects corrupt IMS data. Can not run."
   exit $rc1
 fi
 
@@ -220,16 +217,10 @@ eval $SNOW2MDLEXEC  >> $pgmout 2> errfile
 rc2=$?
 
 if ((rc2!= 0));then 
-  msg="WARNING: ${pgm} completed abnormally."
-  if test "$use_prod_util" = "true" ; then
-    postmsg "$jlogfile" "$msg"
-  fi
+  echo "WARNING: ${pgm} completed abnormally."
   exit $rc2
 else
-  msg="${pgm} completed normally."
-  if test "$use_prod_util" = "true" ; then
-    postmsg "$jlogfile" "$msg"
-  fi
+  echo "${pgm} completed normally."
   if test "$SENDCOM" = "YES"
   then
     cp $MODEL_SNOW_FILE  $COMOUT
