@@ -128,7 +128,7 @@
  tracers(6)="snowwat"
  tracers(7)="graupel"
 
- varmap_file ="/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/parm/varmap_tables/GFSphys_var_map.txt"
+ varmap_file ="./data/GFSphys_varmap.txt"
  call read_varmap
 
  latitude_input_grid = ESMF_FieldCreate(input_grid, &
