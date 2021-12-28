@@ -48,6 +48,12 @@ add_mpi_test(chgres_cube-ftst_read_atm_grib2
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_atm_grib2
   NUMPROCS 1 TIMEOUT 60)
 
+add_executable(ftst_read_sfc_grib2 ftst_read_sfc_grib2.F90)
+target_link_libraries(ftst_read_sfc_grib2 chgres_cube_lib)
+add_mpi_test(chgres_cube-ftst_read_sfc_grib2
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_sfc_grib2
+  NUMPROCS 1 TIMEOUT 60)
+
 add_executable(ftst_program_setup ftst_program_setup.F90)
 target_link_libraries(ftst_program_setup chgres_cube_lib)
 add_mpi_test(chgres_cube-ftst_program_setup
