@@ -3436,6 +3436,8 @@ else ! is native coordinate (hybrid).
   
  endif
  
+ if (localpet == 0) call baclose(lugb, rc)
+
  end subroutine read_input_atm_grib2_file
 
 !> Read input grid surface data from a spectral gfs gaussian sfcio
