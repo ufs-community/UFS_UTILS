@@ -7,7 +7,8 @@
                             levp1_input, &
                             temp_input_grid, tracers_input_grid, &
                             dzdt_input_grid, pres_input_grid, &
-                            ps_input_grid
+                            ps_input_grid, wind_input_grid, &
+                            terrain_input_grid
 
  use program_setup, only :  input_type, data_dir_input_grid, &
                             grib2_file_input_grid, &
@@ -42,6 +43,7 @@
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
  real(esmf_kind_r8), allocatable  :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable  :: data3d_one_tile(:,:,:)
+ real(esmf_kind_r8), allocatable  :: data4d_one_tile(:,:,:,:)
 
  real :: expected_values_tmp(NUM_VALUES)
  real :: expected_values_sphum(NUM_VALUES)
@@ -54,6 +56,10 @@
  real :: expected_values_dzdt(NUM_VALUES)
  real :: expected_values_pres(NUM_VALUES)
  real :: expected_values_ps(NUM_VALUES)
+ real :: expected_values_terrain(NUM_VALUES)
+ real :: expected_values_xwind(NUM_VALUES)
+ real :: expected_values_ywind(NUM_VALUES)
+ real :: expected_values_zwind(NUM_VALUES)
 
 ! The expected values were determined by the checking
 ! the input GRIB2 file using stand-alone 'wgrib2'.
@@ -69,6 +75,10 @@
  data expected_values_dzdt / 8.48e-03, 0.0 / ! Vertical velocity
  data expected_values_pres / 100000.0, 100.0 / ! 3-d pressure
  data expected_values_ps / 100662.9, 100662.9 / ! Surface pressure
+ data expected_values_terrain / 5.973e-2, 5.973e-2 / ! Terrain height
+ data expected_values_xwind / -6.3605, 7.3208 / ! x-component wind
+ data expected_values_ywind / -0.1167, -5.1422 / ! y-component wind
+ data expected_values_zwind / 0.0, 0.0 / ! z-component wind
 
  print*,"Starting test of read_atm_grib2_file."
 
@@ -150,6 +160,7 @@
  if (levp1_input /= EXPECTED_LEVP1_INPUT) stop 3
 
  allocate(data3d_one_tile(i_input,j_input,lev_input))
+ allocate(data4d_one_tile(i_input,j_input,lev_input,3))
  allocate(data_one_tile(i_input,j_input))
 
  i_check(1) = i_input/2
@@ -204,10 +215,21 @@
  if (abs(data3d_one_tile(i_check(1),j_check(1),k_check(1)) - expected_values_pres(1)) > EPSILON) stop 22
  if (abs(data3d_one_tile(i_check(2),j_check(2),k_check(2)) - expected_values_pres(2)) > EPSILON) stop 23
 
- call ESMF_FieldGather(ps_input_grid, data_one_tile, rootPet=0, rc=rc)
- if (abs(data_one_tile(i_check(1),j_check(1)) - expected_values_ps(1)) > EPSILON) stop 24
+ call ESMF_FieldGather(wind_input_grid, data4d_one_tile, rootPet=0, rc=rc)
+ if (abs(data4d_one_tile(i_check(1),j_check(1),k_check(1),1) - expected_values_xwind(1)) > EPSILON) stop 24
+ if (abs(data4d_one_tile(i_check(2),j_check(2),k_check(2),1) - expected_values_xwind(2)) > EPSILON) stop 25
+ if (abs(data4d_one_tile(i_check(1),j_check(1),k_check(1),2) - expected_values_ywind(1)) > EPSILON) stop 26
+ if (abs(data4d_one_tile(i_check(2),j_check(2),k_check(2),2) - expected_values_ywind(2)) > EPSILON) stop 27
+ if (abs(data4d_one_tile(i_check(1),j_check(1),k_check(1),3) - expected_values_zwind(1)) > EPSILON) stop 28
+ if (abs(data4d_one_tile(i_check(2),j_check(2),k_check(2),3) - expected_values_zwind(2)) > EPSILON) stop 29
 
- deallocate(latitude, longitude, data3d_one_tile, data_one_tile)
+ call ESMF_FieldGather(ps_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (abs(data_one_tile(i_check(1),j_check(1)) - expected_values_ps(1)) > EPSILON) stop 32
+
+ call ESMF_FieldGather(terrain_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (abs(data_one_tile(i_check(1),j_check(1)) - expected_values_terrain(1)) > EPSILON) stop 34
+
+ deallocate(latitude, longitude, data3d_one_tile, data4d_one_tile, data_one_tile)
 
  call ESMF_finalize(endflag=ESMF_END_KEEPMPI)
 
