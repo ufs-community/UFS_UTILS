@@ -1,5 +1,14 @@
  program read_atm_grib2
 
+! Unit test for the "read_input_atm_grib2_file"
+! routine of chgres_cube.
+!
+! Reads a 0.5-degree GFS GRIB2 file. The data read
+! from the file is compared to expected values as
+! determined from the 'wgrib2' stand-alone utility.
+!
+! Author George Gayno
+
  use esmf
 
  use input_data, only    :  read_input_atm_data, &
@@ -27,11 +36,11 @@
 
  type(esmf_polekind_flag)     :: polekindflag(2)
 
- integer, parameter :: EXPECTED_LEV_INPUT=31 ! Number of vertical layers.
+ integer, parameter :: EXPECTED_LEV_INPUT=31   ! Number of vertical layers.
  integer, parameter :: EXPECTED_LEVP1_INPUT=32 ! Number of vertical layer
-                                                ! interfaces.
+                                               ! interfaces.
 
- integer, parameter :: NUM_VALUES=2
+ integer, parameter :: NUM_VALUES=2 ! Number of values compared per record.
 
  real, parameter    :: EPSILON=0.0001
  real, parameter    :: EPSILON_SMALL=0.0000001
@@ -93,6 +102,7 @@
  external_model="GFS"
  input_type="grib2"
  data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/gfs.grib2"
+!data_dir_input_grid = "/data"
  grib2_file_input_grid = "gfs.t00z.pgrb2.0p50.f000"
 
  i_input = 720
@@ -154,7 +164,11 @@
  call ESMF_FieldScatter(longitude_input_grid, longitude, rootpet=0, rc=rc)
  call ESMF_FieldScatter(latitude_input_grid, latitude, rootpet=0, rc=rc)
 
+! Call the chgres_cube read routine.
+
  call read_input_atm_data(localpet)
+
+! Compare what was read to expected values.
 
  if (lev_input /= EXPECTED_LEV_INPUT) stop 2
  if (levp1_input /= EXPECTED_LEVP1_INPUT) stop 3
@@ -162,6 +176,8 @@
  allocate(data3d_one_tile(i_input,j_input,lev_input))
  allocate(data4d_one_tile(i_input,j_input,lev_input,3))
  allocate(data_one_tile(i_input,j_input))
+
+! The i/j/k of the points to be checked.
 
  i_check(1) = i_input/2
  j_check(1) = j_input/2
