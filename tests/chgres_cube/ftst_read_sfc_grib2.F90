@@ -1,5 +1,12 @@
  program read_sfc_grib2
 
+! Unit test for the read_input_sfc_grib2_file routine.
+!
+! Reads a GFS GRIB2 file and compares the output
+! to expected values.
+!
+! Author George Gayno
+
  use esmf
 
  use input_data, only      : read_input_sfc_data, &
@@ -13,7 +20,19 @@
                              seaice_depth_input_grid, &
                              seaice_skin_temp_input_grid, &
                              snow_liq_equiv_input_grid, &
-                             snow_depth_input_grid
+                             snow_depth_input_grid, &
+                             veg_type_input_grid, &
+                             soil_type_input_grid, &
+                             t2m_input_grid, &
+                             q2m_input_grid, &
+                             tprcp_input_grid, &
+                             f10m_input_grid, &
+                             ffmm_input_grid, &
+                             ustar_input_grid, &
+                             srflag_input_grid, &
+                             skin_temp_input_grid, &
+                             canopy_mc_input_grid, &
+                             z0_input_grid
 
  use program_setup, only   : external_model, data_dir_input_grid, &
                              grib2_file_input_grid, varmap_file, &
@@ -64,6 +83,18 @@
  real :: seaice_skin_temp_expected_values(NUM_VALUES) ! sea ice skin temperature
  real :: snow_liq_equiv_expected_values(NUM_VALUES) ! liquid equivalent snow depth
  real :: snow_depth_expected_values(NUM_VALUES) ! physical snow depth
+ real :: veg_type_expected_values(NUM_VALUES) ! vegetation type
+ real :: soil_type_expected_values(NUM_VALUES) ! soil type
+ real :: t2m_expected_values(NUM_VALUES) ! two-meter temperature
+ real :: q2m_expected_values(NUM_VALUES) ! two-meter specific humidity
+ real :: tprcp_expected_values(NUM_VALUES) ! precipitation
+ real :: f10m_expected_values(NUM_VALUES) ! log((z0+10)*l/z0)
+ real :: ffmm_expected_values(NUM_VALUES) ! log((z0+z1)*l/z0)
+ real :: ustar_expected_values(NUM_VALUES) ! friction velocity
+ real :: srflag_expected_values(NUM_VALUES) ! snow/rain flag
+ real :: skin_temp_expected_values(NUM_VALUES) ! skin temperature
+ real :: canopy_mc_expected_values(NUM_VALUES) ! canopy moisture content
+ real :: z0_expected_values(NUM_VALUES) ! roughness length
 
  data terrain_expected_values / 2775.4197, 5.97e-02 /
  data soilm_liq1_expected_values / 0.00, 0.00 /
@@ -84,6 +115,18 @@
  data seaice_skin_temp_expected_values / 235.8585, 243.8585/
  data snow_liq_equiv_expected_values / 120.0, 37.0 /
  data snow_depth_expected_values / 1200.0, 110.0/
+ data veg_type_expected_values / 15.0, 0.0 /
+ data soil_type_expected_values / -99999.0, -99999.0 /
+ data t2m_expected_values / 238.1991, 247.2991 /
+ data q2m_expected_values / 0.00016, 0.00035 /
+ data tprcp_expected_values / 0.0, 0.0 /
+ data f10m_expected_values / 0.0, 0.0/
+ data ffmm_expected_values / 0.0, 0.0 /
+ data ustar_expected_values / 0.0, 0.0 /
+ data srflag_expected_values / 0.0, 0.0/
+ data skin_temp_expected_values / 235.8585, 243.8585 /
+ data canopy_mc_expected_values / 0.0, 0.0 /
+ data z0_expected_values / 0.01, 0.01 /
 
  print*,"Starting test of read_atm_grib2_file."
 
@@ -221,10 +264,80 @@
 
  call ESMF_FieldGather(snow_depth_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   print*,'snod 11 ',data_one_tile(1,1)
-   print*,'snod 1ast ',data_one_tile(i_input,j_input)
    if (abs(data_one_tile(1,1) - snow_depth_expected_values(1)) > EPSILON) stop 49
    if (abs(data_one_tile(i_input,j_input) - snow_depth_expected_values(2)) > EPSILON) stop 50
+ endif
+
+ call ESMF_FieldGather(veg_type_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - veg_type_expected_values(1)) > EPSILON) stop 51
+   if (abs(data_one_tile(i_input,j_input) - veg_type_expected_values(2)) > EPSILON) stop 52
+ endif
+
+ call ESMF_FieldGather(soil_type_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - soil_type_expected_values(1)) > EPSILON) stop 53
+   if (abs(data_one_tile(i_input,j_input) - soil_type_expected_values(2)) > EPSILON) stop 54
+ endif
+
+ call ESMF_FieldGather(t2m_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - t2m_expected_values(1)) > EPSILON) stop 55
+   if (abs(data_one_tile(i_input,j_input) - t2m_expected_values(2)) > EPSILON) stop 56
+ endif
+
+ call ESMF_FieldGather(q2m_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - q2m_expected_values(1)) > EPSILON) stop 57
+   if (abs(data_one_tile(i_input,j_input) - q2m_expected_values(2)) > EPSILON) stop 58
+ endif
+
+ call ESMF_FieldGather(tprcp_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - tprcp_expected_values(1)) > EPSILON) stop 59
+   if (abs(data_one_tile(i_input,j_input) - tprcp_expected_values(2)) > EPSILON) stop 60
+ endif
+
+ call ESMF_FieldGather(f10m_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - f10m_expected_values(1)) > EPSILON) stop 61
+   if (abs(data_one_tile(i_input,j_input) - f10m_expected_values(2)) > EPSILON) stop 62
+ endif
+
+ call ESMF_FieldGather(ffmm_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - ffmm_expected_values(1)) > EPSILON) stop 63
+   if (abs(data_one_tile(i_input,j_input) - ffmm_expected_values(2)) > EPSILON) stop 64
+ endif
+
+ call ESMF_FieldGather(ustar_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - ustar_expected_values(1)) > EPSILON) stop 65
+   if (abs(data_one_tile(i_input,j_input) - ustar_expected_values(2)) > EPSILON) stop 66
+ endif
+
+ call ESMF_FieldGather(srflag_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - srflag_expected_values(1)) > EPSILON) stop 67
+   if (abs(data_one_tile(i_input,j_input) - srflag_expected_values(2)) > EPSILON) stop 68
+ endif
+
+ call ESMF_FieldGather(skin_temp_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - skin_temp_expected_values(1)) > EPSILON) stop 69
+   if (abs(data_one_tile(i_input,j_input) - skin_temp_expected_values(2)) > EPSILON) stop 70
+ endif
+
+ call ESMF_FieldGather(canopy_mc_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - canopy_mc_expected_values(1)) > EPSILON) stop 71
+   if (abs(data_one_tile(i_input,j_input) - canopy_mc_expected_values(2)) > EPSILON) stop 72
+ endif
+
+ call ESMF_FieldGather(z0_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - z0_expected_values(1)) > EPSILON) stop 73
+   if (abs(data_one_tile(i_input,j_input) - z0_expected_values(2)) > EPSILON) stop 74
  endif
 
  deallocate (data_one_tile, data_one_tile_3d)
