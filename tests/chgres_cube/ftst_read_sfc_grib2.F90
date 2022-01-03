@@ -7,7 +7,13 @@
                              terrain_input_grid, &
                              soilm_liq_input_grid, &
                              soilm_tot_input_grid, &
-                             soil_temp_input_grid
+                             soil_temp_input_grid, &
+                             landsea_mask_input_grid, &
+                             seaice_fract_input_grid, &
+                             seaice_depth_input_grid, &
+                             seaice_skin_temp_input_grid, &
+                             snow_liq_equiv_input_grid, &
+                             snow_depth_input_grid
 
  use program_setup, only   : external_model, data_dir_input_grid, &
                              grib2_file_input_grid, varmap_file, &
@@ -39,6 +45,7 @@
 ! The expected values were determined by checking
 ! the input GRIB2 file using wgrib2.
 
+ real :: landsea_mask_expected_values(NUM_VALUES) ! land-sea mask
  real :: terrain_expected_values(NUM_VALUES) ! terrain height
  real :: soilm_liq1_expected_values(NUM_VALUES) ! layer 1 liquid soil moisture
  real :: soilm_liq2_expected_values(NUM_VALUES) ! layer 2 liquid soil moisture
@@ -52,6 +59,11 @@
  real :: soil_temp2_expected_values(NUM_VALUES) ! layer 2 soil temperature
  real :: soil_temp3_expected_values(NUM_VALUES) ! layer 3 soil temperature
  real :: soil_temp4_expected_values(NUM_VALUES) ! layer 4 soil temperature
+ real :: seaice_fract_expected_values(NUM_VALUES) ! sea ice fraction
+ real :: seaice_depth_expected_values(NUM_VALUES) ! sea ice depth
+ real :: seaice_skin_temp_expected_values(NUM_VALUES) ! sea ice skin temperature
+ real :: snow_liq_equiv_expected_values(NUM_VALUES) ! liquid equivalent snow depth
+ real :: snow_depth_expected_values(NUM_VALUES) ! physical snow depth
 
  data terrain_expected_values / 2775.4197, 5.97e-02 /
  data soilm_liq1_expected_values / 0.00, 0.00 /
@@ -66,6 +78,12 @@
  data soil_temp2_expected_values / 228.5099, 265.0 /
  data soil_temp3_expected_values / 225.7600, 265.0 /
  data soil_temp4_expected_values / 228.1500, 265.0 /
+ data landsea_mask_expected_values / 1.0, 2.0 /
+ data seaice_fract_expected_values / 0.0, 1.0 /
+ data seaice_depth_expected_values / 1.5, 1.5/
+ data seaice_skin_temp_expected_values / 235.8585, 243.8585/
+ data snow_liq_equiv_expected_values / 120.0, 37.0 /
+ data snow_depth_expected_values / 1200.0, 110.0/
 
  print*,"Starting test of read_atm_grib2_file."
 
@@ -161,8 +179,6 @@
 
  call ESMF_FieldGather(soil_temp_input_grid, data_one_tile_3d, rootPet=0, rc=rc)
  if (localpet == 0) then
-   print*,'soilm 11 ',data_one_tile_3d(1,1,:)
-   print*,'soilm 1ast ',data_one_tile_3d(i_input,j_input,:)
    if (abs(data_one_tile_3d(1,1,1) - soil_temp1_expected_values(1)) > EPSILON) stop 30
    if (abs(data_one_tile_3d(i_input,j_input,1) - soil_temp1_expected_values(2)) > EPSILON) stop 31
    if (abs(data_one_tile_3d(1,1,2) - soil_temp2_expected_values(1)) > EPSILON) stop 32
@@ -171,6 +187,44 @@
    if (abs(data_one_tile_3d(i_input,j_input,3) - soil_temp3_expected_values(2)) > EPSILON) stop 35
    if (abs(data_one_tile_3d(1,1,4) - soil_temp4_expected_values(1)) > EPSILON) stop 36
    if (abs(data_one_tile_3d(i_input,j_input,4) - soil_temp4_expected_values(2)) > EPSILON) stop 37
+ endif
+
+ call ESMF_FieldGather(landsea_mask_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - landsea_mask_expected_values(1)) > EPSILON) stop 39
+   if (abs(data_one_tile(i_input,j_input) - landsea_mask_expected_values(2)) > EPSILON) stop 40
+ endif
+
+ call ESMF_FieldGather(seaice_fract_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - seaice_fract_expected_values(1)) > EPSILON) stop 41
+   if (abs(data_one_tile(i_input,j_input) - seaice_fract_expected_values(2)) > EPSILON) stop 42
+ endif
+
+ call ESMF_FieldGather(seaice_depth_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - seaice_depth_expected_values(1)) > EPSILON) stop 43
+   if (abs(data_one_tile(i_input,j_input) - seaice_depth_expected_values(2)) > EPSILON) stop 44
+ endif
+
+ call ESMF_FieldGather(seaice_skin_temp_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - seaice_skin_temp_expected_values(1)) > EPSILON) stop 45
+   if (abs(data_one_tile(i_input,j_input) - seaice_skin_temp_expected_values(2)) > EPSILON) stop 46
+ endif
+
+ call ESMF_FieldGather(snow_liq_equiv_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   if (abs(data_one_tile(1,1) - snow_liq_equiv_expected_values(1)) > EPSILON) stop 47
+   if (abs(data_one_tile(i_input,j_input) - snow_liq_equiv_expected_values(2)) > EPSILON) stop 48
+ endif
+
+ call ESMF_FieldGather(snow_depth_input_grid, data_one_tile, rootPet=0, rc=rc)
+ if (localpet == 0) then
+   print*,'snod 11 ',data_one_tile(1,1)
+   print*,'snod 1ast ',data_one_tile(i_input,j_input)
+   if (abs(data_one_tile(1,1) - snow_depth_expected_values(1)) > EPSILON) stop 49
+   if (abs(data_one_tile(i_input,j_input) - snow_depth_expected_values(2)) > EPSILON) stop 50
  endif
 
  deallocate (data_one_tile, data_one_tile_3d)
