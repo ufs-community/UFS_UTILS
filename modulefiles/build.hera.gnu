@@ -14,7 +14,7 @@ module load hpc-mpich/3.3.2
 module load netcdf/4.7.4
 module load esmf/8_1_0_beta_snapshot_27
 module load bacio/2.4.1
-module load g2/3.4.1
+module load g2/3.4.3
 module load ip/3.3.3
 module load nemsio/2.5.2
 module load sp/2.3.3
