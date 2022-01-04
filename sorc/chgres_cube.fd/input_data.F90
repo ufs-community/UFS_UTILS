@@ -5110,11 +5110,12 @@ else ! is native coordinate (hybrid).
      unpack  = .false. ! unpack data
 
      lsoil_input = 0
-     rc = 0
-     do while (rc == 0) 
+     do
 
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
+
+       if (rc /= 0) exit
 
        if (gfld%discipline == 2) then ! discipline - land products
          if (gfld%ipdtnum == 0) then  ! prod template number - analysis or forecast at single level.
