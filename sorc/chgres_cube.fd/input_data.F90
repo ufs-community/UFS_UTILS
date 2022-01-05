@@ -5101,12 +5101,12 @@ else ! is native coordinate (hybrid).
 
      j       = 0      ! search at beginning of file
      lugi    = 0      ! no grib index file
-     jdisc   = -1     ! search for discipline - meterological products
-     jpdtn   = -1     ! search for product definition template number
-     jgdtn   = -1     ! search for grid definition template number; 0 - lat/lon grid
+     jdisc   = -1     ! search for any discipline
+     jpdtn   = -1     ! search for any product definition template number
+     jgdtn   = -1     ! search for any grid definition template number
      jids    = -9999  ! array of values in identification section, set to wildcard
-     jgdt    = -9999  ! array of values in grid definition template 3.m
-     jpdt    = -9999  ! array of values in product definition template 4.n
+     jgdt    = -9999  ! array of values in grid definition template, set to wildcard
+     jpdt    = -9999  ! array of values in product definition template, set to wildcard
      unpack  = .false. ! unpack data
 
      lsoil_input = 0
@@ -5120,9 +5120,9 @@ else ! is native coordinate (hybrid).
        if (gfld%discipline == 2) then ! discipline - land products
          if (gfld%ipdtnum == 0) then  ! prod template number - analysis or forecast at single level.
            if (gfld%ipdtmpl(1) == 0 .and. gfld%ipdtmpl(2) == 2) then  ! soil temp
-                                                                      ! octs 10 and 11
-             if (gfld%ipdtmpl(10) == 106 .and. gfld%ipdtmpl(13) == 106) then  ! A layer. octs
-                                                                              ! 23 and 29.              
+                                                                      ! Sect4/octs 10 and 11
+             if (gfld%ipdtmpl(10) == 106 .and. gfld%ipdtmpl(13) == 106) then  ! Sect4/octs 23/29.
+                                                                              ! Layer below ground.
                lsoil_input = lsoil_input + 1
              endif
            endif
@@ -5204,11 +5204,12 @@ else ! is native coordinate (hybrid).
      print*,"- READ TERRAIN."
  
      j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 3  ! oct 10 - param cat - mass field
-     jpdt(2) = 5  ! oct 11 - param number - geop height
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 0  ! Search for discipline 0 - meteorological products
+     jpdt    = -9999  ! array of values in product definition template, set to wildcard.
+     jpdtn   = 0  ! search for product definition template number 0 - anl or fcst.
+     jpdt(1) = 3  ! Sec4/oct 10 - param cat - mass field
+     jpdt(2) = 5  ! Sec4/oct 11 - param number - geopotential height
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
                unpack, k, gfld, rc)
@@ -5236,12 +5237,13 @@ else ! is native coordinate (hybrid).
 
      print*,"- READ SEAICE FRACTION."
  
-     jdisc   = 10     ! search for discipline - ocean products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 2  ! oct 10 - param cat - ice
-     jpdt(2) = 0  ! oct 11 - param number - ice cover
+     jdisc   = 10 ! Search for discipline - ocean products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = 0  ! Search for product def template number 0 - anl or fcst.
+     jpdt    = -9999  ! Array of values in Sec 4 product definition template;
+                      ! Initialize to wildcard.
+     jpdt(1) = 2  ! Sec4/oct 10 - parameter category - ice
+     jpdt(2) = 0  ! Sec4/oct 11 - parameter number - ice cover
      unpack=.true.
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
                unpack, k, gfld, rc)
@@ -5279,12 +5281,12 @@ else ! is native coordinate (hybrid).
 
      print*,"- READ LANDSEA MASK."
 
-     jdisc   = 2     ! search for discipline - land products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-     jpdt(2) = 218  ! oct 11 - param number - land nearest neighbor
+     jdisc   = 2  ! Search for discipline - land products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = 0  ! Search for product definition template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec 4.
+     jpdt(1) = 0      ! Sec4/oct 10 - parameter category - veg/biomass
+     jpdt(2) = 218    ! Sec4/oct 11 - parameter number - land nearest neighbor
      unpack=.true.
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
@@ -5295,12 +5297,12 @@ else ! is native coordinate (hybrid).
 
      else
 
-       jdisc   = 2     ! search for discipline - land products
-       j = 0
-       jpdt    = -9999  ! array of values in product definition template 4.n
-       jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-       jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-       jpdt(2) = 0  ! oct 11 - param number - land cover (fraction)
+       jdisc   = 2  ! Search for discipline - land products
+       j = 0        ! Search at beginning of file.
+       jpdtn   = 0  ! Search for product def template number 0 - anl or fcst.
+       jpdt    = -9999  ! Initialize array of values in product definition template - Sec 4.
+       jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+       jpdt(2) = 0  ! Sec4/oct 11 - parameter number - land cover (fraction)
        unpack=.true.
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
               unpack, k, gfld, rc)
@@ -5344,13 +5346,13 @@ else ! is native coordinate (hybrid).
 
      print*,"- READ SEAICE SKIN TEMPERATURE."
 
-     jdisc   = 0     ! search for discipline - meteo products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - temperature
-     jpdt(2) = 0  ! oct 11 - param number - temperature
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 0  ! Search for discipline - meteorological products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = 0  ! Search for product definition template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 0  ! Sec4/oct 10 - parameter category - temperature
+     jpdt(2) = 0  ! Sec4/oct 11 - parameter number - temperature
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
@@ -5385,14 +5387,15 @@ else ! is native coordinate (hybrid).
 
      print*,"- READ SNOW LIQUID EQUIVALENT."
 
-     jdisc   = 0     ! search for discipline - meteo products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 1  ! oct 10 - param cat - moisture
-     jpdt(2) = 13  ! oct 11 - param number - weasd
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 0 ! Search for discipline - meteorological products
+     j = 0       ! Search at beginning of file.
+     jpdtn   = 0 ! Search for product definition template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 1  ! Sec4/oct 10 - parameter category - moisture
+     jpdt(2) = 13 ! Sec4/oct 11 - parameter number - liquid equiv snow depth
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
      if (rc /= 0) call error_handler("READING SNOW LIQUID EQUIVALENT.", rc)
@@ -5426,14 +5429,15 @@ else ! is native coordinate (hybrid).
 
      print*,"- READ SNOW DEPTH."
 
-     jdisc   = 0     ! search for discipline - meteo products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 1  ! oct 10 - param cat - moisture
-     jpdt(2) = 11  ! oct 11 - param number - snow depth
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 0  ! Search for discipline - meteorological products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = 0  ! Search for product definition template number 0 - anl or fcst.
+     jpdt    = -9999 ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 1  ! Sec4/oct 10 - parameter category - moisture
+     jpdt(2) = 11 ! Sec4/oct 11 - parameter number - snow depth
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
@@ -5470,15 +5474,16 @@ else ! is native coordinate (hybrid).
 
      print*,"- READ T2M."
 
-     jdisc   = 0     ! search for discipline - meteo products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - temperature
-     jpdt(2) = 0  ! oct 11 - param number - temperature
-     jpdt(10) = 103 ! oct 23 - type of level - above ground surface
-     jpdt(12) = 2 ! octs 25-28 - 2 meters
+     jdisc   = 0 ! Search for discipline - meteorological products
+     j = 0       ! Search at beginning of file.
+     jpdtn   = 0 ! Search for product def template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 0    ! Sec4/oct 10 - parameter category - temperature
+     jpdt(2) = 0    ! Sec4/oct 11 - parameter number - temperature
+     jpdt(10) = 103 ! Sec4/oct 23 - type of level - height above ground surface
+     jpdt(12) = 2   ! Sec4/octs 25-28 - 2 meters above ground.
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
@@ -5506,15 +5511,16 @@ else ! is native coordinate (hybrid).
 
      print*,"- READ Q2M."
 
-     jdisc   = 0     ! search for discipline - meteo products
-     j = 1
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 1  ! oct 10 - param cat - moisture
-     jpdt(2) = 0  ! oct 11 - param number - spec hum
-     jpdt(10) = 103 ! oct 23 - type of level - above ground surface
-     jpdt(12) = 2 ! octs 25-28 - 2 meters
+     jdisc   = 0  ! Search for discipline - meteorological products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = 0  ! Search for product definition template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 1  ! Sec4/oct 10 - parameter category - moisture
+     jpdt(2) = 0  ! Sec4/oct 11 - parameter number - specific humidity
+     jpdt(10) = 103 ! Sec4/oct 23 - type of level - height above ground surface
+     jpdt(12) = 2 ! Sec4/octs 25-28 - 2 meters above ground.
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
      if (rc /=0) call error_handler("READING Q2M.", rc)
@@ -5542,14 +5548,15 @@ else ! is native coordinate (hybrid).
 
      print*,"- READ SKIN TEMPERATURE."
 
-     jdisc   = 0     ! search for discipline - meteo products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - temperature
-     jpdt(2) = 0  ! oct 11 - param number - temperature
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 0  ! Search for discipline - meteorological products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = 0  ! Search for product definition template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 0  ! Sec4/oct 10 - parameter category - temperature
+     jpdt(2) = 0  ! Sec4/oct 11 - parameter number - temperature
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
@@ -5601,14 +5608,15 @@ else ! is native coordinate (hybrid).
 
      print*,"- READ SOIL TYPE."
 
-     jdisc   = 2     ! search for discipline - land products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 3  ! oct 10 - param cat - soil products
-     jpdt(2) = 0  ! oct 11 - param number - soil type
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 2  ! Search for discipline - land products
+     j = 0        ! Search at beginning of file
+     jpdtn   = 0  ! Search for product definition template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 3  ! Sec4/oct 10 - parameter category - soil products
+     jpdt(2) = 0  ! Sec4/oct 11 - parameter number - soil type
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
@@ -5740,14 +5748,15 @@ else ! is native coordinate (hybrid).
 
        print*,"- READ VEG FRACTION."
 
-       jdisc   = 2     ! search for discipline - land products
-       j = 0
-       jpdt    = -9999  ! array of values in product definition template 4.n
-       jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-       jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-       jpdt(2) = 4  ! oct 11 - param number - vegetation
-       jpdt(10) = 1 ! oct 23 - type of level - ground surface
+       jdisc   = 2  ! Search for discipline - land products
+       j = 0        ! Search at beginning of file.
+       jpdtn   = 0  ! Search for product definition template number 0 - anl or fcst.
+       jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+       jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+       jpdt(2) = 4  ! Sec4/oct 11 - parameter number - vegetation
+       jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
        unpack=.true.
+
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
                unpack, k, gfld, rc)
 
@@ -5783,15 +5792,16 @@ else ! is native coordinate (hybrid).
 
        print*,"- READ MIN VEG FRACTION."
 
-       jdisc   = 2     ! search for discipline - land products
+       jdisc   = 2  ! Search for discipline - land products
        j = 1105 ! grib2 file does not distinguish between the various veg
                 ! fractions. Need to search using record number.
-       jpdt    = -9999  ! array of values in product definition template 4.n
-       jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-       jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-       jpdt(2) = 4  ! oct 11 - param number - vegetation
-       jpdt(10) = 1 ! oct 23 - type of level - ground surface
+       jpdtn   = 0  ! Search for product definition template number 0 - anl or fcst.
+       jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+       jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+       jpdt(2) = 4  ! Sec4/oct 11 - parameter number - vegetation
+       jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
        unpack=.true.
+
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
                unpack, k, gfld, rc)
 
@@ -5831,14 +5841,15 @@ else ! is native coordinate (hybrid).
 
        print*,"- READ MAX VEG FRACTION."
 
-       jdisc   = 2     ! search for discipline - land products
+       jdisc   = 2  ! Search for discipline - land products
        j = 1106 ! Have to search by record number.
-       jpdt    = -9999  ! array of values in product definition template 4.n
-       jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-       jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-       jpdt(2) = 4  ! oct 11 - param number - vegetation
-       jpdt(10) = 1 ! oct 23 - type of level - ground surface
+       jpdtn   = 0  ! Search for product def template number 0 - anl or fcst.
+       jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+       jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+       jpdt(2) = 4  ! Sec4/oct 11 - parameter number - vegetation
+       jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
        unpack=.true.
+
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
                unpack, k, gfld, rc)
        if (rc /= 0) then
@@ -5881,14 +5892,15 @@ else ! is native coordinate (hybrid).
 
        print*,"- READ LAI."
 
-       jdisc   = 0     ! search for discipline - meteo products
-       j = 0
-       jpdt    = -9999  ! array of values in product definition template 4.n
-       jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-       jpdt(1) = 7  ! oct 10 - param cat - thermo stability indices
-       jpdt(2) = 198  ! oct 11 - param number - lai
-       jpdt(10) = 1 ! oct 23 - type of level - ground surface
+       jdisc   = 0  ! Search for discipline - meteorological products
+       j = 0        ! Search at beginning of file.
+       jpdtn   = 0  ! Search for product def template number 0 - anl or fcst.
+       jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+       jpdt(1) = 7   ! Sec4/oct 10 - parameter category - thermo stability indices
+       jpdt(2) = 198 ! Sec4/oct 11 - parameter number - leaf area index
+       jpdt(10) = 1  ! Sec4/oct 23 - type of level - ground surface
        unpack=.true.
+
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
@@ -5923,14 +5935,15 @@ else ! is native coordinate (hybrid).
      call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)                 
 
-     jdisc   = 10     ! search for discipline - ocean products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 2  ! oct 10 - param cat - ice
-     jpdt(2) = 1  ! oct 11 - param number - thickness
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 10  ! Search for discipline - ocean products
+     j = 0         ! Search at beginning of file.
+     jpdtn   = 0   ! Search for product def template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+     jpdt(1) = 2  ! Sec4/oct 10 - parameter category - ice
+     jpdt(2) = 1  ! Sec4/oct 11 - parameter number - thickness
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
@@ -6026,14 +6039,15 @@ else ! is native coordinate (hybrid).
      call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
 
-     jdisc   = 0     ! search for discipline - meteo products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 2  ! oct 10 - param cat - momentum
-     jpdt(2) = 30  ! oct 11 - param number - friction vel.
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 0  ! Search for discipline - meteorological products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = 0  ! Search for product def template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+     jpdt(1) = 2  ! Sec4/oct 10 - parameter category - momentum
+     jpdt(2) = 30 ! Sec4/oct 11 - parameter number - friction velocity
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
      if (rc /= 0) then
@@ -6105,19 +6119,20 @@ else ! is native coordinate (hybrid).
      call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
 
-     jdisc   = 2     ! search for discipline - land products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-     jpdt(2) = 13 ! oct 11 - param number - canopy water
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 2  ! Search for discipline - land products
+     j = 0        ! Search from beginning of file
+     jpdtn   = 0  ! Search for product def template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+     jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+     jpdt(2) = 13 ! Sec4/oct 11 - parameter number - canopy water
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
      if (rc /= 0 ) then
-       jpdt(2) = 196 ! oct 11 - param number - canopy water
+       jpdt(2) = 196 ! Sec4/oct 11 - param number - canopy water
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
      endif
@@ -6159,14 +6174,15 @@ else ! is native coordinate (hybrid).
      call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
 
-     jdisc   = 2     ! search for discipline - land products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-     jpdt(2) = 1  ! oct 11 - param number - surface roughness
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 2  ! Search for discipline - land products
+     j = 0        ! Search from beginning of file.
+     jpdtn   = 0  ! Search for product def template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+     jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+     jpdt(2) = 1  ! Sec4/oct 11 - parameter number - surface roughness
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
@@ -6239,14 +6255,15 @@ else ! is native coordinate (hybrid).
 
      print*,"- READ VEG TYPE."
    
-     jdisc   = 2     ! search for discipline - land products
-     j = 0
-     jpdt    = -9999  ! array of values in product definition template 4.n
-     jpdtn   = 0  ! search for product def template number 0 - anl or fcst.
-     jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
-     jpdt(2) = 198  ! oct 11 - param number - vegetation type
-     jpdt(10) = 1 ! oct 23 - type of level - ground surface
+     jdisc   = 2  ! Search for discipline - land products
+     j = 0        ! Search from beginning of file.
+     jpdtn   = 0  ! Search for product def template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+     jpdt(1) = 0   ! Sec4/oct 10 - parameter category - veg/biomass
+     jpdt(2) = 198 ! Sec4/oct 11 - parameter number - vegetation type
+     jpdt(10) = 1  ! Sec4/oct 23 - type of level - ground surface
      unpack=.true.
+
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
