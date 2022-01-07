@@ -173,10 +173,10 @@ jobs:
 
     - name: checkout-nceplibs
       run: |
-        git clone https://github.com/NOAA-EMC/NCEPLIBS.git nceplibs
+        git clone https://github.com/GeorgeGayno-NOAA/NCEPLIBS.git nceplibs
         cd nceplibs
         if [[ ${{ matrix.nceplibs_version }} == "1.3.0" ]]; then
-          git checkout v1.3.0
+          git checkout g2-v3.4.3
         fi
 
     - name: get-git-hash
