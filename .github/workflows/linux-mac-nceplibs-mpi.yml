@@ -175,9 +175,7 @@ jobs:
       run: |
         git clone https://github.com/GeorgeGayno-NOAA/NCEPLIBS.git nceplibs
         cd nceplibs
-        if [[ ${{ matrix.nceplibs_version }} == "1.3.0" ]]; then
           git checkout g2-v3.4.3
-        fi
 
     - name: get-git-hash
       run: |
