@@ -184,13 +184,6 @@ jobs:
         cd nceplibs
         git rev-parse HEAD > hash.txt
         
-    - name: cache-nceplibs 
-      id: cache-nceplibs
-      uses: actions/cache@v2
-      with:
-        path: ~/nceplibs
-        key: nceplibs-${{ matrix.nceplibs_version }}-${{ runner.os }}-${{ matrix.mpi_type }}-${{ hashFiles('nceplibs/hash.txt') }}3
-
     - name: build-nceplibs
       if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
