@@ -137,15 +137,15 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/nceplibs
-        key: nceplibs-1.3.0-${{ runner.os }}-intel3
+        key: nceplibs-1.4.0-${{ runner.os }}-intel3
 
     - name: build-nceplibs
       if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
-        wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.3.0.tar.gz &> /dev/null
-        tar zxf v1.3.0.tar.gz
-        cd NCEPLIBS-1.3.0
+        wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.4.0.tar.gz &> /dev/null
+        tar zxf v1.4.0.tar.gz
+        cd NCEPLIBS-1.4.0
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/netcdf' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
         make -j2
