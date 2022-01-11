@@ -44,10 +44,12 @@ QUEUE="${QUEUE:-batch}"
 # and baseline data for each test.
 #-----------------------------------------------------------------------------
 
-#export UPDATE_BASELINE="FALSE"
-export UPDATE_BASELINE="TRUE"
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
 
-source ../get_hash.sh
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
 
 export HOMEufs=$PWD/../..
 

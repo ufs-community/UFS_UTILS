@@ -36,10 +36,12 @@ QUEUE="${QUEUE:-batch}"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
-#export UPDATE_BASELINE="FALSE"
-export UPDATE_BASELINE="TRUE"
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
 
-source ../get_hash.sh
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
 
 DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
