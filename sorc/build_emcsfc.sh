@@ -11,7 +11,7 @@ fi
 
 for prog in emcsfc_ice_blend emcsfc_snow2mdl
 do
-  module purge
+  module reset
   USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}
   if [ $USE_PREINST_LIBS = true ]; then
     module use ../modulefiles

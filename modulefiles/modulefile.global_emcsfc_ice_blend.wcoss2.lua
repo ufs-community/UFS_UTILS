@@ -2,13 +2,10 @@ help([[
 Load environment to compile UFS_UTILS emcsfc_ice_blend on WCOSS2
 ]])
 
-envvar_ver=os.getenv("envvar_ver") or "1.0"
-load(pathJoin("envvar", envvar_ver))
-
 PrgEnv_intel_ver=os.getenv("PrgEnv_intel_ver") or "8.1.0"
 load(pathJoin("PrgEnv-intel", PrgEnv_intel_ver))
 
-craype_ver=os.getenv("craype_ver") or "2.7.8"
+craype_ver=os.getenv("craype_ver") or "2.7.10"
 load(pathJoin("craype", craype_ver))
 
 intel_ver=os.getenv("intel_ver") or "19.1.3.304"
@@ -20,7 +17,7 @@ load(pathJoin("w3nco", w3nco_ver))
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.1"
+g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
 
 jasper_ver=os.getenv("jasper_ver") or "2.0.25"
