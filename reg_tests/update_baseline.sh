@@ -21,7 +21,7 @@ fi
 
 mkdir -p $base_dir_commit
 
-for files in *.nc snogrb_model
+for files in *.nc snogrb_model seaice.5min.blend
 do
   if [ -f $files ]; then
     cp $files $base_dir_commit
