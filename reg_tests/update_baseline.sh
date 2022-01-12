@@ -21,7 +21,7 @@ fi
 
 mkdir -p $base_dir_commit
 
-for files in *.nc
+for files in *.nc snogrb_model
 do
   if [ -f $files ]; then
     cp $files $base_dir_commit

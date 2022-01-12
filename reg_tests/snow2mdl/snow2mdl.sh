@@ -31,7 +31,7 @@ fi
 
 test_failed=0
 
-cmp ${DATA}/snogrb_model $HOMEreg/baseline_data/snogrb_model
+cmp ${DATA}/snogrb_model $HOMEreg/baseline_data/t1534/snogrb_model
 iret=$?
 if [ $iret -ne 0 ]; then
   test_failed=1
@@ -44,6 +44,10 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< SNOW2MDL TEST FAILED. >>>"
   echo "*********************************"
   echo "<<< SNOW2MDL TEST FAILED. >>>" > ./summary.log
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    cd $DATA
+    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "t1534" $commit_num
+  fi
 else
   echo
   echo "*********************************"
