@@ -44,9 +44,17 @@ QUEUE="${QUEUE:-batch}"
 # and baseline data for each test.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export HOMEufs=$PWD/../..
 
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/chgres_cube
+#export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests.test/chgres_cube
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
