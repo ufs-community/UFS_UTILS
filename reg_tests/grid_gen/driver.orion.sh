@@ -46,6 +46,14 @@ export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export OMP_NUM_THREADS=24
 export machine=ORION
+
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/grid_gen/baseline_data
 
 rm -fr $WORK_DIR
