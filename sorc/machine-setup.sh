@@ -29,7 +29,7 @@ if [[ -d /lfs3 ]] ; then
     module purge
 elif [[ -d /lfs/h1 ]] ; then
     target=wcoss2
-    module purge
+    module reset
 elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then

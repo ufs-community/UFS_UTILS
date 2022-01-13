@@ -2,16 +2,13 @@ help([[
 Load environment to compile UFS_UTILS on WCOSS2
 ]])
 
-envvar_ver=os.getenv("envvar_ver") or "1.0"
-load(pathJoin("envvar", envvar_ver))
-
 cmake_ver=os.getenv("cmake_ver") or "3.20.2"
 load(pathJoin("cmake", cmake_ver))
 
 PrgEnv_intel_ver=os.getenv("PrgEnv_intel_ver") or "8.1.0"
 load(pathJoin("PrgEnv-intel", PrgEnv_intel_ver))
 
-craype_ver=os.getenv("craype_ver") or "2.7.8"
+craype_ver=os.getenv("craype_ver") or "2.7.10"
 load(pathJoin("craype", craype_ver))
 
 intel_ver=os.getenv("intel_ver") or "19.1.3.304"
@@ -59,7 +56,7 @@ load(pathJoin("sp", sp_ver))
 ip_ver=os.getenv("ip_ver") or "3.3.3"
 load(pathJoin("ip", ip_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.1"
+g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
 
 wgrib2_ver=os.getenv("wgrib2_ver") or "2.0.8"
