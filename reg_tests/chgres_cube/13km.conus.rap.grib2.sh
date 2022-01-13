@@ -90,6 +90,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< 13-km CONUS RAP W/ GSD PHYSICS AND SFC FROM FILE GRIB2 TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $HOMEufs/reg_tests/update_baseline.sh $HOMEreg "13km_conus_rap_grib2" $commit_num
+  fi
 else
   echo "<<< 13-km CONUS RAP W/ GSD PHYSICS AND SFC FROM FILE GRIB2 TEST PASSED. >>>"
 fi
