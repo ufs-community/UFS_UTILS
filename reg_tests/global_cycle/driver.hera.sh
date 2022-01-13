@@ -45,7 +45,7 @@ fi
 
 DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/global_cycle.test
+export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/global_cycle
 
 export OMP_NUM_THREADS_CY=2
 
