@@ -1920,11 +1920,11 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
 !! to the grib2 grid description sections.
 !!
 !! @param [in] igdtnum grib2 grid description template number
-!! @param [in] igdtlen length of grib2 grid description template
+!! @param [in] igdstmpl length of grib2 grid description template
 !! @param [in] igdtlen array of grib2 grid description template octets.
 !! @param [out] kgds array of grib1 grid description octets.
 !! @param [out] ni i-dimension of grid
-!! @param [out] ni j-dimension of grid
+!! @param [out] nj j-dimension of grid
 !! @param [out] res resolution of grid in km
 !! @author George Gayno NCEP/EMC   
  subroutine gdt_to_gds(igdtnum, igdstmpl, igdtlen, kgds, ni, nj, res)
