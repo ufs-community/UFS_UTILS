@@ -49,7 +49,7 @@ fi
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube.test
+export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
 
 SUM_FILE=summary.log
 

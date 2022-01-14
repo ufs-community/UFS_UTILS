@@ -49,7 +49,7 @@ export APRUN=time
 export APRUN_SFC="mpirun -l"
 export OMP_STACKSIZE=2048m
 export machine=WCOSS_DELL_P3
-export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen.test/baseline_data
+export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
 export OMP_NUM_THREADS=24
 
 rm -fr $WORK_DIR
@@ -63,9 +63,6 @@ ulimit -s unlimited
 
 bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J c96.uniform -W 0:15 -x -n 24 \
         -R "span[ptile=24]" -R "affinity[core(1):distribute=balance]" "$PWD/c96.uniform.sh"
-
-
-exit
 
 #-----------------------------------------------------------------------------
 # C96 uniform grid using viirs vegetation type data.
