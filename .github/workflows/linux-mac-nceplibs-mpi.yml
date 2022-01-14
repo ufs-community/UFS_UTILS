@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: [macos-10.15, ubuntu-20.04]
         compiler: [gcc-9]
-        nceplibs_version: [develop, 1.3.0]
+        nceplibs_version: [develop, 1.4.0]
         mpi_type: [mpich, openmpi]
         netcdf_version: [4.7.4]
 
@@ -175,7 +175,7 @@ jobs:
       run: |
         git clone https://github.com/NOAA-EMC/NCEPLIBS.git nceplibs
         cd nceplibs
-        if [[ ${{ matrix.nceplibs_version }} == "1.3.0" ]]; then
+        if [[ ${{ matrix.nceplibs_version }} == "1.4.0" ]]; then
           git checkout v1.4.0
         fi
 
