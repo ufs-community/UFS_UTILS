@@ -340,6 +340,7 @@
    if (abs(data_one_tile(i_input,j_input) - z0_expected_values(2)) > EPSILON) stop 74
  endif
 
+ deallocate (latitude, longitude)
  deallocate (data_one_tile, data_one_tile_3d)
 
  call ESMF_finalize(endflag=ESMF_END_KEEPMPI)
