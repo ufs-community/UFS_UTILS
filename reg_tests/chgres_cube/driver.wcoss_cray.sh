@@ -60,29 +60,29 @@ export KMP_AFFINITY=disabled
 
 LOG_FILE1=${LOG_FILE}01
 export OMP_NUM_THREADS=1
-export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
-bsub -e $LOG_FILE1 -o $LOG_FILE1 -q $QUEUE -P $PROJECT_CODE -J chgres01 -M 3000 -W 0:15 -extsched 'CRAYLINUX[]' \
-        "export NODES=2; $PWD/25km.conus.gfs.grib2.sh"
+export APRUN="aprun -j 1 -n 6 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+bsub -e $LOG_FILE1 -o $LOG_FILE1 -q $QUEUE -P $PROJECT_CODE -J chgres01 -M 1000 -W 0:05 -extsched 'CRAYLINUX[]' \
+        "export NODES=1; $PWD/25km.conus.gfs.grib2.sh"
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GFS PHYSICS.
 #-----------------------------------------------------------------------------
 
-#LOG_FILE2=${LOG_FILE}02
-#export OMP_NUM_THREADS=1
-#export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
-#bsub -e $LOG_FILE2 -o $LOG_FILE2 -q $QUEUE -P $PROJECT_CODE -J chgres02 -M 3000 -W 0:30 -extsched 'CRAYLINUX[]' \
-#        "export NODES=2; $PWD/3km.conus.hrrr.gfssdf.grib2.sh"
+LOG_FILE2=${LOG_FILE}02
+export OMP_NUM_THREADS=1
+export APRUN="aprun -j 1 -n 6 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+bsub -e $LOG_FILE2 -o $LOG_FILE2 -q $QUEUE -P $PROJECT_CODE -J chgres02 -M 1000 -W 0:07 -extsched 'CRAYLINUX[]' \
+        "export NODES=1; $PWD/3km.conus.hrrr.gfssdf.grib2.sh"
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GSD PHYSICS AND SFC VARS FROM FILE.
 #-----------------------------------------------------------------------------
 
-#LOG_FILE3=${LOG_FILE}03
-#export OMP_NUM_THREADS=1
-#export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
-#bsub -e $LOG_FILE3 -o $LOG_FILE3 -q $QUEUE -P $PROJECT_CODE -J chgres03 -M 1000 -W 0:15 -extsched 'CRAYLINUX[]' \
-#        "export NODES=2; $PWD/3km.conus.hrrr.newsfc.grib2.sh"
+LOG_FILE3=${LOG_FILE}03
+export OMP_NUM_THREADS=1
+export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+bsub -e $LOG_FILE3 -o $LOG_FILE3 -q $QUEUE -P $PROJECT_CODE -J chgres03 -M 1000 -W 0:07 -extsched 'CRAYLINUX[]' \
+        "export NODES=2; $PWD/3km.conus.hrrr.newsfc.grib2.sh"
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM USING NAM GRIB2 file WITH GFS PHYSICS .
@@ -90,19 +90,19 @@ bsub -e $LOG_FILE1 -o $LOG_FILE1 -q $QUEUE -P $PROJECT_CODE -J chgres01 -M 3000 
 
 LOG_FILE4=${LOG_FILE}04
 export OMP_NUM_THREADS=1
-export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
-bsub -e $LOG_FILE4 -o $LOG_FILE4 -q $QUEUE -P $PROJECT_CODE -J chgres04 -M 1000 -W 0:20 -extsched 'CRAYLINUX[]' \
-        "export NODES=2; $PWD/13km.conus.nam.grib2.sh"
+export APRUN="aprun -j 1 -n 6 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+bsub -e $LOG_FILE4 -o $LOG_FILE4 -q $QUEUE -P $PROJECT_CODE -J chgres04 -M 1000 -W 0:07 -extsched 'CRAYLINUX[]' \
+        "export NODES=1; $PWD/13km.conus.nam.grib2.sh"
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM USING RAP GRIB2 file WITH GSD PHYSICS .
 #-----------------------------------------------------------------------------
 
-#LOG_FILE5=${LOG_FILE}05
-#export OMP_NUM_THREADS=1
-#export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
-#bsub -e $LOG_FILE5 -o $LOG_FILE5 -q $QUEUE -P $PROJECT_CODE -J chgres05 -M 1000 -W 0:30 -extsched 'CRAYLINUX[]' \
-#        "export NODES=2; $PWD/13km.conus.rap.grib2.sh"
+LOG_FILE5=${LOG_FILE}05
+export OMP_NUM_THREADS=1
+export APRUN="aprun -j 1 -n 6 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+bsub -e $LOG_FILE5 -o $LOG_FILE5 -q $QUEUE -P $PROJECT_CODE -J chgres05 -M 1000 -W 0:07 -extsched 'CRAYLINUX[]' \
+        "export NODES=1; $PWD/13km.conus.rap.grib2.sh"
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM NA USING NCEI GFS GRIB2 file WITH GFS PHYSICS .
@@ -110,9 +110,9 @@ bsub -e $LOG_FILE4 -o $LOG_FILE4 -q $QUEUE -P $PROJECT_CODE -J chgres04 -M 1000 
 
 LOG_FILE6=${LOG_FILE}06
 export OMP_NUM_THREADS=1
-export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
-bsub -e $LOG_FILE6 -o $LOG_FILE6 -q $QUEUE -P $PROJECT_CODE -J chgres06 -M 1000 -W 0:20 -extsched 'CRAYLINUX[]' \
-        "export NODES=2; $PWD/13km.na.gfs.ncei.grib2.sh"
+export APRUN="aprun -j 1 -n 6 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+bsub -e $LOG_FILE6 -o $LOG_FILE6 -q $QUEUE -P $PROJECT_CODE -J chgres06 -M 1000 -W 0:07 -extsched 'CRAYLINUX[]' \
+        "export NODES=1; $PWD/13km.na.gfs.ncei.grib2.sh"
 
 #-----------------------------------------------------------------------------
 # Initialize C96 using FV3 warm restart files.
@@ -190,9 +190,9 @@ bsub -e $LOG_FILE13 -o $LOG_FILE13 -q $QUEUE -P $PROJECT_CODE -J chgres13 -M 100
 
 LOG_FILE14=${LOG_FILE}14
 export OMP_NUM_THREADS=1
-export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
-bsub -e $LOG_FILE14 -o $LOG_FILE14 -q $QUEUE -P $PROJECT_CODE -J chgres14 -M 1000 -W 0:20 -extsched 'CRAYLINUX[]' \
-        "export NODES=2; $PWD/c192.gfs.grib2.sh"
+export APRUN="aprun -j 1 -n 6 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+bsub -e $LOG_FILE14 -o $LOG_FILE14 -q $QUEUE -P $PROJECT_CODE -J chgres14 -M 1000 -W 0:05 -extsched 'CRAYLINUX[]' \
+        "export NODES=1; $PWD/c192.gfs.grib2.sh"
 
 #-----------------------------------------------------------------------------
 # Initialize C96 WAM IC using FV3 gaussian netcdf files.
@@ -208,11 +208,11 @@ bsub -e $LOG_FILE15 -o $LOG_FILE15 -q $QUEUE -P $PROJECT_CODE -J chgres15 -M 100
 # Initialize CONUS 25-KM USING GFS PGRIB2+BGRIB2 files.
 #-----------------------------------------------------------------------------
 
-#LOG_FILE16=${LOG_FILE}16
-#export OMP_NUM_THREADS=1
-#export APRUN="aprun -j 1 -n 12 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
-#bsub -e $LOG_FILE16 -o $LOG_FILE16 -q $QUEUE -P $PROJECT_CODE -J chgres16 -M 1000 -W 0:20 -extsched 'CRAYLINUX[]' \
-#        "export NODES=2; $PWD/25km.conus.gfs.pbgrib2.sh"
+LOG_FILE16=${LOG_FILE}16
+export OMP_NUM_THREADS=1
+export APRUN="aprun -j 1 -n 6 -N 6 -d ${OMP_NUM_THREADS} -cc depth"
+bsub -e $LOG_FILE16 -o $LOG_FILE16 -q $QUEUE -P $PROJECT_CODE -J chgres16 -M 1000 -W 0:05 -extsched 'CRAYLINUX[]' \
+        "export NODES=1; $PWD/25km.conus.gfs.pbgrib2.sh"
 
 #-----------------------------------------------------------------------------
 # Create summary log.
