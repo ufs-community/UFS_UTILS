@@ -34,6 +34,13 @@ QUEUE="${QUEUE:-batch}"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
 export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/global_cycle
