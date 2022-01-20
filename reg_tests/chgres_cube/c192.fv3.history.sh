@@ -72,6 +72,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< C192 FV3 HISTORY TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $HOMEufs/reg_tests/update_baseline.sh $HOMEreg "c192_fv3_history" $commit_num
+  fi
 else
   echo "<<< C192 FV3 HISTORY TEST PASSED. >>>"
 fi
