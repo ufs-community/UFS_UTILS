@@ -38,6 +38,13 @@ PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
 
 LOG_FILE=consistency.log

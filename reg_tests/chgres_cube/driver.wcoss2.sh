@@ -43,6 +43,13 @@ QUEUE="${QUEUE:-dev}"
 # and baseline data for each test.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export HOMEufs=$PWD/../..
 
 export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
