@@ -1,3 +1,10 @@
+!> @file
+!! @brief Write a SCRIP format file
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module writes a SCRIP format file
+!! @author Denise.Worthen@noaa.gov
+
 module scripgrid
 
   use gengrid_kinds, only: dbl_kind,int_kind,CM
@@ -16,7 +23,14 @@ module scripgrid
   public write_scripgrid
 
   contains
-
+!> Write a SCRIP grid file
+!!
+!! @param[in]  fname  the file name to write
+!! @param[in]  cstagger  the name of the stagger location
+!! @param[in]  imask (optional)  the land mask values
+!!
+!! @author Denise.Worthen@noaa.gov
+  
   subroutine write_scripgrid(fname,cstagger, imask)
 
    character(len=*), intent(in) :: fname

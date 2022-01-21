@@ -15,7 +15,7 @@ export MOD_PATH
 if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
  unset -f module
  set +x
- source ./modulefiles/build.$target > /dev/null 
+ source ./modulefiles/build.$target > /dev/null
  set -x
 else
  set +x

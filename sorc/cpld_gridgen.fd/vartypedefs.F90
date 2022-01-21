@@ -1,27 +1,39 @@
+!> @file
+!! @brief Define the variables for output
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module defines the attributes for variables written to the tripole, cice and scrip grid files
+!! @author Denise.Worthen@noaa.gov
+
 module vartypedefs
 
   use charstrings, only : CL, CM, CS
 
   implicit none
 
-  integer, parameter :: maxvars = 20
+  integer, parameter :: maxvars = 20    !< The maximum number of variables written to a file
 
   type :: vardefs
-    character(len=CM)   ::  var_name
-    character(len=CM)   :: long_name
-    character(len=CM)   :: unit_name
-    character(len= 2)   ::  var_type
-    character(len=CM)   ::  vertices
+    character(len=CM)   ::  var_name    !< A variable name
+    character(len=CM)   :: long_name    !< A variable's long name
+    character(len=CM)   :: unit_name    !< A variable's unit
+    character(len= 2)   ::  var_type    !< A variable's type
+    character(len=CM)   ::  vertices    !< A variable's vertices
   end type vardefs
 
-  type(vardefs) ::    fixvars(maxvars)
-  type(vardefs) ::   cicevars(maxvars)
-  type(vardefs) ::  scripvars(maxvars)
+  type(vardefs) ::    fixvars(maxvars)  !< Attribute definitions for the variables written to the master tripole file
+  type(vardefs) ::   cicevars(maxvars)  !< Attribute definitions for the variables written to the CICE grid file
+  type(vardefs) ::  scripvars(maxvars)  !< Attribute definitions for the variables written to any SCRIP file
 
   contains
 
+!> Define the variables written to the tripole grid file
+!!
+!! @author Denise.Worthen@noaa.gov
+
   subroutine fixvars_typedefine
 
+  ! local variables
   integer :: ii = 0
   
    !default
@@ -117,9 +129,13 @@ module vartypedefs
    fixvars(ii)%unit_name = 'degrees_north'
 
  end subroutine fixvars_typedefine
+!> Define the variables written to the CICE grid file
+!!
+!! @author Denise.Worthen@noaa.gov
 
  subroutine cicevars_typedefine
 
+  ! local variables
   integer :: ii = 0
 
    !default
@@ -158,9 +174,13 @@ module vartypedefs
    cicevars(ii)%var_type  = 'i4'
 
  end subroutine cicevars_typedefine
+!> Define the variables written to any SCRIP grid file
+!!
+!! @author Denise.Worthen@noaa.gov
 
  subroutine scripvars_typedefine
 
+  ! local variables
   integer :: ii = 0
 
    !default

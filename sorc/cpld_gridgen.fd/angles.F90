@@ -1,3 +1,12 @@
+!> @file
+!! @brief Determine the rotation angle on center and
+!! corner points
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module finds the rotation angle for at both center and corner points
+!! It utilizes the MOM6 function modulo_around_point
+!! @author Denise.Worthen@noaa.gov
+
 module angles
 
   use gengrid_kinds, only : dbl_kind, int_kind
@@ -10,7 +19,9 @@ module angles
   implicit none
 
   contains
-
+!> Find the rotation angle on corner grid (Bu) points using the full MOM6 supergrid
+!!
+!! @author Denise.Worthen@noaa.gov
   subroutine find_angq
 
     ! local variables
@@ -25,7 +36,6 @@ module angles
     real(dbl_kind) :: lonB(2,2)  ! The longitude of a point, shifted to have about the same value.
     real(dbl_kind) :: lon_scale = 0.0
   
-    real(dbl_kind) :: modulo_around_point
 !---------------------------------------------------------------------
 ! to find angleq on seam, replicate supergrid values across seam
 !---------------------------------------------------------------------
@@ -117,6 +127,9 @@ module angles
 
   end subroutine find_angq
 
+!> Find the rotation angle on center (Ct) grid points
+!!
+!! @author Denise.Worthen@noaa.gov
   subroutine find_ang
 
     ! local variables
@@ -129,7 +142,6 @@ module angles
     real(dbl_kind) :: lonB(2,2)  ! The longitude of a point, shifted to have about the same value.
     real(dbl_kind) :: lon_scale = 0.0
   
-    real(dbl_kind) :: modulo_around_point
 !---------------------------------------------------------------------
 ! rotation angle for "use_bugs" = false case from MOM6
 ! src/initialization/MOM_shared_initialization.F90 but allow for not
@@ -166,22 +178,27 @@ module angles
       enddo ; enddo
 
   end subroutine find_ang
-end module angles
-
 ! -----------------------------------------------------------------------------
 !> Return the modulo value of x in an interval [xc-(Lx/2) xc+(Lx/2)]
 !! If Lx<=0, then it returns x without applying modulo arithmetic.
-function modulo_around_point(x, xc, Lx) result(x_mod)
-  use gengrid_kinds, only : dbl_kind
+!!
+!! From src/initialization/MOM_shared_initialization.F90:
+!! @param[in] x   Value to which to apply modulo arithmetic
+!! @param[in] xc  Center of modulo range
+!! @param[in] Lx  Modulo range width
+!! @return x_mod  Value x shifted by an integer multiple of Lx to be close to xc
+  function modulo_around_point(x, xc, Lx) result(x_mod)
+    use gengrid_kinds, only : dbl_kind
 
-  real(dbl_kind), intent(in) :: x  !< Value to which to apply modulo arithmetic
-  real(dbl_kind), intent(in) :: xc !< Center of modulo range
-  real(dbl_kind), intent(in) :: Lx !< Modulo range width
-  real(dbl_kind) :: x_mod          !< x shifted by an integer multiple of Lx to be close to xc.
+    real(dbl_kind), intent(in) :: x
+    real(dbl_kind), intent(in) :: xc
+    real(dbl_kind), intent(in) :: Lx
+    real(dbl_kind) :: x_mod
 
-  if (Lx > 0.0) then
-    x_mod = modulo(x - (xc - 0.5*Lx), Lx) + (xc - 0.5*Lx)
-  else
-    x_mod = x
-  endif
-end function modulo_around_point
+    if (Lx > 0.0) then
+      x_mod = modulo(x - (xc - 0.5*Lx), Lx) + (xc - 0.5*Lx)
+    else
+      x_mod = x
+    endif
+  end function modulo_around_point
+end module angles

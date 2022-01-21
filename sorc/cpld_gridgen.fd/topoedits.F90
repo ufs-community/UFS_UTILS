@@ -1,8 +1,16 @@
+!> @file
+!! @brief Add required topo-edits to adjust the run-time MOM6 land mask
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module adds the required topo edits to a file for use by MOM6 at run time
+!!
+!! @author Denise.Worthen@noaa.gov
+
 module topoedits
 
   use gengrid_kinds, only: real_kind,int_kind
-  use grdvars,       only: ni,nj,nv,mastertask
-  use grdvars,       only: wet4
+  use grdvars,       only: ni,nj,mastertask
+  use grdvars,       only: wet4,dp4,minimum_depth,maximum_depth,masking_depth
   use charstrings,   only: logmsg,history
   use netcdf
 
@@ -10,13 +18,22 @@ module topoedits
   private
 
   public add_topoedits
+  public apply_topoedits
 
   contains
-
+!> Read the existing topoedits file, append required topoedits and write a new topoedits file. Use the new topoedits
+!! to adjust the land mask used in subsequent steps to match the land mask which will be created at run time
+!!
+!! @param[in]  fsrc the existing topoedits file name
+!! @param[out] fdst the modified topoedits file name
+!!
+!! @author Denise.Worthen@noaa.gov
+  
   subroutine add_topoedits(fsrc,fdst)
 
    character(len=*), intent(in) :: fsrc, fdst
 
+   ! local variables
    integer :: rc,id,i,j,ii,jj,ncid,dimid,idimid,dim1(1)
    integer :: cnt1=0, cnt2=0, icnt
    integer(int_kind), allocatable, dimension(:) :: ieds1, jeds1, ieds2, jeds2
@@ -134,6 +151,77 @@ module topoedits
      print '(a,2i4,a)', 'switch point ',ii+1,jj+1,' from ocean->land at runtime'
    end if
   end do
+  deallocate(ieds1, jeds1, zeds1)
+  deallocate(ieds2, jeds2, zeds2)
 
   end subroutine add_topoedits
+
+!> Read the topoedits file and adjust the bathymetry. Apply limits to bathymetry.
+!!
+!! @param[in]  fsrc the topoedits file name
+!!
+!! @author Denise.Worthen@noaa.gov
+
+  subroutine apply_topoedits(fsrc)
+
+   character(len=*), intent(in) :: fsrc
+
+   ! local variables
+   integer :: rc,ncid,id,dimid,i,j,ii,jj,cnt1
+   integer(int_kind), allocatable, dimension(:) :: ieds1, jeds1
+   real(real_kind), allocatable, dimension(:)   :: zeds1
+
+   logical :: file_exists
+!---------------------------------------------------------------------
+! read and apply topo edits file, if any
+!---------------------------------------------------------------------
+
+   inquire(file=trim(fsrc),exist=file_exists)
+   if (file_exists) then
+      rc = nf90_open(trim(fsrc), nf90_nowrite, ncid)
+      print '(a)','using topo edits file '//trim(fsrc)//' to adjust bathymetry '
+
+      rc = nf90_inq_dimid(ncid, 'nEdits', dimid)
+      rc = nf90_inquire_dimension(ncid, dimid, len=cnt1)
+      rc = nf90_close(ncid)
+
+      ! return the existing values
+      allocate(ieds1(cnt1))
+      allocate(jeds1(cnt1))
+      allocate(zeds1(cnt1))
+
+      rc = nf90_open(fsrc, nf90_nowrite, ncid)
+      rc = nf90_inq_varid(ncid, 'iEdit', id)
+      rc = nf90_get_var(ncid, id, ieds1)
+      rc = nf90_inq_varid(ncid, 'jEdit', id)
+      rc = nf90_get_var(ncid, id, jeds1)
+      rc = nf90_inq_varid(ncid, 'zEdit', id)
+      rc = nf90_get_var(ncid, id, zeds1)
+      rc = nf90_close(ncid)
+
+      ! apply topo edits from file
+      do i = 1,cnt1
+        ii = ieds1(i); jj = jeds1(i)
+        print '(a,3i5,f8.2,a,f8.2)', 'Ocean topography edit: ', i, ii+1, jj+1 , dp4(ii+1,jj+1), '->', abs(zeds1(i))
+        dp4(ii+1,jj+1) = abs(zeds1(i))
+      end do
+      deallocate(ieds1, jeds1, zeds1)
+   end if
+
+!---------------------------------------------------------------------
+! limit topography
+!---------------------------------------------------------------------
+
+   print '(a)', 'Applying topo limits to ensure that min_depth < D(x,y) < max_depth '
+   print '(a, f8.2)', 'Using min_depth = ',minimum_depth
+   print '(a, f8.2)', 'Using max_depth = ',maximum_depth
+   do j = 1,nj
+     do i = 1,ni
+      if(dp4(i,j) > min(minimum_depth,masking_depth))then
+        dp4(i,j) = min( max(dp4(i,j), minimum_depth), maximum_depth)
+      end if
+     end do
+   end do
+
+  end subroutine apply_topoedits
 end module topoedits

@@ -2,137 +2,22 @@
 !! @brief Generate fixed grid files required for coupled model
 !!
 !! @author Denise.Worthen@noaa.gov
-!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!! This code generates files the fixed grid and land mask file for the CICE
-!! model on the MOM6 tripole grid. It also generates a fixed grid file which
-!! contains all the vertice locations on the tripole grid. This fixed grid
-!! file is used to create the interpolation weights for regridding between
-!! various combinations of tripole and rectilinear grids.
-!!
-!! information on MOM6 supergrid can be found at
-!! https://gist.github.com/adcroft/c1e207024fe1189b43dddc5f1fe7dd6c
-!!
-!! also: https://mom6.readthedocs.io/en/latest/api/generated/modules/mom_grid.html
-!!
-!! also:
-!! MOM_grid_initialize.F90 :
-!!  MOM6 variable geoLonBu <==> CICE variable ulon
-!!  MOM6 variable geoLatBu <==> CICE variable ulat
-!!  MOM6 variable     dxCv <==> CICE variable htn
-!!  MOM6 variable     dyCu <==> CICE variable hte
-!!
-!! MOM6 code snippets follow:
-!!
-!! from MOM_grid_initialize.F90  (tmpZ = x)
-!!  do J=G%JsdB,G%JedB ; do I=G%IsdB,G%IedB ; i2 = 2*I ; j2 = 2*J
-!!    G%geoLonBu(I,J) = tmpZ(i2,j2)
-!! so....
-!!          ulon(I,J) = x(i2,j2)
-!!
-!! from MOM_grid_initialize.F90  (tmpZ = y)
-!!  do J=G%JsdB,G%JedB ; do I=G%IsdB,G%IedB ; i2 = 2*I ; j2 = 2*J
-!!    G%geoLatBu(I,J) = tmpZ(i2,j2)
-!! so....
-!!          ulat(I,J) = y(i2,j2)
-!!
-!! from MOM_grid_initialize.F90  (tmpV = dx)
-!!  do J=G%JsdB,G%JedB ; do i=G%isd,G%ied ; i2 = 2*i ; j2 = 2*j
-!!    dxCv(i,J) = tmpV(i2-1,j2) + tmpV(i2,j2)
-!! so....
-!!     htn(i,J) =   dx(i2-1,j2) +   dx(i2,j2)
-!!
-!! from MOM_grid_initialize.F90  (tmpU = dy)
-!!  do J=G%JsdB,G%JedB ; do i=G%isd,G%ied ; i2 = 2*i ; j2 = 2*j
-!!    dyCu(I,j) = tmpU(i2,j2-1) + tmpU(i2,j2)
-!! so....
-!!     hte(I,j) =   dy(i2,j2-1) +   dy(i2,j2)
-!!
-!! rotation angle on supergrid vertices can be found
-!! using the formula in MOM_shared_initialization.F90, accounting
-!! for indexing difference between reduced grid and super grid
-!!
-!!
-!!         SuperGrid                 Reduced grid
-!!
-!!  i-1,j+1         i+1,j+1
-!!     X-------X-------X             I-1,J      I,J
-!!     |       |       |                X-------X
-!!     |       |       |                |       |
-!!     |       | i,j   |                |   T   |
-!!     X-------X-------X                |       |
-!!     |       |       |                X-------X
-!!     |       |       |             I-1,J-1   I,J-1
-!!     |       |       |
-!!     X-------X-------X
-!!  i-1,j-1         i+1,j-1
-!!
-!! so that in angle formulae
-!!         I==>i+1,I-1==>i-1
-!!         J==>j+1,J-1==>j-1
-!!
-!! CICE expects angle to be XY -> LatLon so change the sign from MOM6 value
-!! This has been determined from the HYCOM code: ALL/cice/src/grid2cice.f
-!!
-!!            anglet(i,j) =    -pang(i+i0,  j+j0)   !radians
-!!c           pang is from lon-lat to x-y, but anglet is the reverse
-!!
-!! where anglet is the angle variable being written to the CICE grid file
-!! and pang is HYCOM's own rotation angle.
-!!
-!! Area of the T-grid cell is obtained as in MOM_grid_initialize where
-!! tmpV = dx on SG and tmpU is dy on SG
-!!
-!!    dxT(i,j) = tmpV(i2-1,j2-1) + tmpV(i2,j2-1)
-!!    dyT(i,j) = tmpU(i2-1,j2-1) + tmpU(i2-1,j2)
-!!
-!! This code utilizes a "seam flip" to obtain the required values across
-!! the tripole seam. If ipL an ipR are the i-indices of the pole along the
-!! last j-row of the reduced grid, then:
-!!
-!! ipL-1     ipL    ipL+1       ipR-1     ipR    ipR+1
-!!    x-------x-------x     |||    x-------x-------x
-!!
-!! Fold over; ipL must align with ipR
-!!
-!!  ipR+1     ipR    ipR-1
-!!     x-------x-------x
-!!  ipL-1     ipL    ipL+1
-!!     x-------x-------x
-!!
-!!
-!! SCRIP requires that the vertices be ordered counter-clockwise so that
-!! the center grid point is always to the left of the vertex. Here,
-!! Vertices are defined counter-clockwise from upper right. Ct-grid vertices
-!! are located on the Bu grid; Cu vertices on the Cv grid, Cv vertices on the Cu
-!! grid and Bu vertices on the Ct grid. For example, for the Ct-grid, the vertices
-!! are:
-!!             Vertex #2             Vertex #1
-!!             Bu(i-1,j)             Bu(i,j)
-!!                         Ct(i,j)
-!!           Bu(i-1,j-1)             Bu(i,j-1)
-!!             Vertex #3             Vertex #4
-!!
-!! so that the vertices of any Ct(i,j) are found as off-sets of the i,j index on the
-!! Bu grid
-!!
-!!     iVertCt(4) = (/0, -1, -1, 0/)
-!!     jVertCt(4) = (/0, 0, -1, -1/)
-!!
-!! Careful examination of the Cu,Cv and Bu grids lead to similar definitions for the
-!! i,j offsets required to extract the other grid stragger vertices locations, all of
-!! which can be defined in terms of the iVertCt and jVertCt values
-!!
-!! Special treatment is require at the bottom of the grid, where the verticies of the
-!! Ctand Cu grid must be set manually (note, these points are on land.) The top of
-!! the grid also requires special treatment because the required verticies are located
-!! across the tripole seam. This is accomplished by creating 1-d arrays which hold
-!! the Ct and Cu grid point locations across the matched seam.
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+!> Generate fixed grid files required for coupled model using the MOM6 super grid file and ocean mask file. It creates
+!! a master grid file which is then used to create subsequent files which are required to create the fix and IC
+!! files required for the S2S or S2SW application.
+!!
+!! This executable created with this source code runs within the shell scrip cpld_gridgen.sh in ../../ush, which
+!! utilizes both NCO (netCDF Operators) and ESMF command line functions. The shell script creates a run-time grid.nml
+!! from grid.nml.IN
+!!
+!! @author Denise.Worthen@noaa.gov
+!! @return 0 for success, error code otherwise.
 program gen_fixgrid
 
   use ESMF
+  ! ?workflows keep failing because of esmf version
+  use ESMF_RegridWeightGenMod
 
   use grdvars
   use inputnml
@@ -144,7 +29,7 @@ program gen_fixgrid
   use tripolegrid,       only: write_tripolegrid
   use cicegrid,          only: write_cicegrid
   use scripgrid,         only: write_scripgrid
-  use topoedits,         only: add_topoedits
+  use topoedits,         only: add_topoedits, apply_topoedits
   use charstrings,       only: logmsg, res, dirsrc, dirout, atmres, fv3dir, editsfile
   use charstrings,       only: maskfile, maskname, topofile, toponame, editsfile, staggerlocs, cdate, history
   use debugprint,        only: checkseam, checkxlatlon, checkpoint
@@ -152,12 +37,13 @@ program gen_fixgrid
 
   implicit none
 
+  ! local variables
   real(dbl_kind) :: dxT, dyT
 
   real(kind=dbl_kind), parameter :: pi = 3.14159265358979323846_dbl_kind
   real(kind=dbl_kind), parameter :: deg2rad = pi/180.0_dbl_kind
 
-    real(real_kind), allocatable, dimension(:,:) :: ww3dpth
+  real(real_kind), allocatable, dimension(:,:) :: ww3dpth
   integer(int_kind), allocatable, dimension(:,:) :: ww3mask
 
   character(len=CL) :: fsrc, fdst, fwgt
@@ -172,8 +58,7 @@ program gen_fixgrid
   type(ESMF_RegridMethod_Flag) :: method
   type(ESMF_VM) :: vm
 
-  !WW3 mod_def
-  real(real_kind)   :: lat_cutoff = 88.0
+  !WW3 file format for mod_def generation
   character(len= 6) :: i4fmt = '(i4.4)'
   character(len=CS) :: form1
   character(len=CS) :: form2
@@ -257,6 +142,7 @@ program gen_fixgrid
     if(rc .ne. 0)print '(a)', 'nf90_open = '//trim(nf90_strerror(rc))
   end if
 
+  wet4 = 0.0; wet8 = 0.0
   rc = nf90_inq_varid(ncid,  trim(maskname), id)
   rc = nf90_inquire_variable(ncid, id, xtype=xtype)
   if(xtype .eq. 5)rc = nf90_get_var(ncid,      id,  wet4)
@@ -280,6 +166,7 @@ program gen_fixgrid
     if(rc .ne. 0)print '(a)', 'nf90_open = '//trim(nf90_strerror(rc))
   end if
 
+  dp4 = 0.0; dp8 = 0.0
   rc = nf90_inq_varid(ncid,  trim(toponame), id)
   rc = nf90_inquire_variable(ncid, id, xtype=xtype)
   if(xtype .eq. 5)rc = nf90_get_var(ncid,      id,  dp4)
@@ -293,7 +180,7 @@ program gen_fixgrid
 
   if(editmask)then
 !---------------------------------------------------------------------
-! apply topoedits run time mask changes
+!  apply topoedits run time mask changes if required for this config
 !---------------------------------------------------------------------
 
    if(trim(editsfile)  == 'none')then
@@ -305,6 +192,16 @@ program gen_fixgrid
    fdst = trim(dirout)//'/'//'ufs.'//trim(editsfile)
    call add_topoedits(fsrc,fdst)
   endif
+
+!---------------------------------------------------------------------
+! MOM6 reads the depth file, applies the topo edits and then adjusts
+! depth using masking_depth and min/max depth. This call mimics
+! MOM6 routines apply_topography_edits_from_file and limit_topography
+!---------------------------------------------------------------------
+
+   fsrc = trim(dirsrc)//'/'//trim(editsfile)
+   if(editmask)fsrc = trim(dirout)//'/'//'ufs.'//trim(editsfile)
+  call apply_topoedits(fsrc)
 
 !---------------------------------------------------------------------
 ! read MOM6 supergrid file
@@ -536,17 +433,21 @@ program gen_fixgrid
 
   write(cnx,i4fmt)nx
   write(form1,'(a)')'('//trim(cnx)//'f14.8)'
-  write(form2,'(a)')'('//trim(cnx)//'i4)'
+  write(form2,'(a)')'('//trim(cnx)//'i2)'
 
   allocate(ww3mask(1:ni,1:nj)); ww3mask = wet4
   allocate(ww3dpth(1:ni,1:nj)); ww3dpth = dp4
 
-  where(latCt .ge. lat_cutoff)ww3mask = 3
+  where(latCt .ge. maximum_lat)ww3mask = 3
+  !close last row
+  ww3mask(:,nj) = 3
 
   open(unit=21,file=trim(dirout)//'/'//'ww3.mx'//trim(res)//'_x.inp',form='formatted')
   open(unit=22,file=trim(dirout)//'/'//'ww3.mx'//trim(res)//'_y.inp',form='formatted')
   open(unit=23,file=trim(dirout)//'/'//'ww3.mx'//trim(res)//'_bottom.inp',form='formatted')
   open(unit=24,file=trim(dirout)//'/'//'ww3.mx'//trim(res)//'_mapsta.inp',form='formatted')
+  ! cice0 .ne. cicen requires obstruction map, should be initialized as zeros (w3grid,ln3032)
+  open(unit=25,file=trim(dirout)//'/'//'ww3.mx'//trim(res)//'_obstr.inp',form='formatted')
 
   do j = 1,nj
    write( 21,trim(form1))lonCt(:,j)
@@ -555,9 +456,12 @@ program gen_fixgrid
   do j = 1,nj
    write( 23,trim(form1))ww3dpth(:,j)
    write( 24,trim(form2))ww3mask(:,j)
+   !'obsx' and 'obsy' arrays ???
+   write( 25,trim(form2))ww3mask(:,j)*0
+   write( 25,trim(form2))ww3mask(:,j)*0
   end do
 
-  close(21); close(22); close(23); close(24)
+  close(21); close(22); close(23); close(24); close(25)
   deallocate(ww3mask); deallocate(ww3dpth)
 
 !---------------------------------------------------------------------

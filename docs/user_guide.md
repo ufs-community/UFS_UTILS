@@ -64,4 +64,6 @@ https://github.com/ufs-community/UFS_UTILS.
   Currently, contains the routines required by global_cycle to 
   perform data assimilation updates to land model states
 
+- <a href="cpld_gridgen/index.html">cpld_gridgen</a> - Utility to 
+  create the Fix and IC files for the S2SW and S2S applications 
 

@@ -1,384 +1,173 @@
-# chgres_cube
+# cpldgrid_gen
 
 # Introduction
 
-The program chgres.F90 creates initial condition files to “coldstart”
-the forecast model. The initial conditions are created from either
-Global Forecast System (GFS) gridded binary version 2 (GRIB2), NOAA
-Environmental Modeling System Input/Output (NEMSIO) data, or Network
-Common Data Form (NetCDF) data.
+The cpld_gengrid program and associated script related functions create the files required for Fix and IC files for the coupled model.
 
 This document is part of the <a href="../index.html">UFS_UTILS
 documentation</a>.
 
-The chgres_cube program is part of the
+The cpld_gengrid program is part of the
 [UFS_UTILS](https://github.com/ufs-community/UFS_UTILS) project.
 
-## Where to find GFS GRIB2, NEMSIO and NetCDF data
+## Creating Fix and IC files required for the Coupled Model
 
-### GRIB2
+For the UFS coupled model application S2S or S2SW, the following fix files are required:
 
-- 0.25-degree data (last 10 days only) - Use the
-  <b>gfs.tHHz.pgrb2.0p25.f000</b> files in subdirectory
-  <b>gfs.YYYYMMDD/HH</b> here:
-  <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>.
+- The CICE6 grid and mask file
 
-- 0.5-degree data - Use the <b>gfs_4_YYYYMMDD_00HH_000.grb2</b> file,
-  under <b>GFS Forecasts 004 (0.5-deg)</b> from the NCDC - Global
-  Forecast System
-  <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>. Note:
-  Tests were not done with the AVN, MRF or analysis data.
+- The mesh file for the desired OCN/ICE resolution, which is identical for MOM6 and CICE6.
 
-- 1.0-degree data - Use the <b>gfs_3_YYYYMMDD_00HH_000.grb2 file</b>,
-  under <b>GFS Forecasts 003 (1-deg)</b> from NCDC - Global Forecast
-  System
-  <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>. Note:
-  Tests were not done with the AVN, MRF or analysis data.
+- The mapped ocean mask on the FV3 tiles
 
-### NEMSIO
+- The ESMF regridding weights required to create the CICE6 IC from CPC (SIS2) reanalysis.
 
-- T1534 gaussian (last 10 days only) - Use the
-  <b>gfs.tHHz.atmanl.nemsio</b> (atmospheric fields) and
-  <b>gfs.tHHz.sfcanl.nemsio</b> (surface fields) files in subdirectory
-  gfs.YYYYMMDD/HH from
-  <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>.
+- The ESMF regridding weights required to remap the CICE6 or MOM6 output from tripole grid to a rectilinear grid (optional).
 
-### NetCDF
+Since MOM6 creates the model grid at runtime (including adjusting the land mask, if required), the required files for CICE and UFSAtm must be created in a pre-processing step using only the MOM6 supergrid, topography and land mask files as input. This allows the mapped ocean mask (used for creating of the ATM ICs) and the CICE6 grid and mask files to be consistent with the run-time configuration of MOM6.
 
-- T1534 gaussian (don't have any more details at this time).
+## Background:
 
-# Initializing with GRIB2 data - some caveats
+### MOM6 grids
 
-Keep this in mind when using GFS GRIB2 data for model initialization:
+The MOM6 supergrid contains a MOM6 grid at twice the desired resolution. The indexing of the supergrid vs the reduced grid is: 
 
-- GRIB2 data does not contain the fields needed for the Near Sea
-  Surface Temperature (NSST) scheme. See the next section for options
-  on running the forecast model in this situation.
 
-- Data is coarse (in vertical and horizontal) compared to the NCEP
-  operational GFS . May not provide a good initialization (especially
-  for the surface). Recommendations:
+            Super Grid               Reduced Grid
 
- - C96 - use 0.25, 0.5 or 1.0-degree GRIB2 data
- - C192 - use 0.25 or 0.5-degree GRIB2 data
- - C384 - use 0.25-degree GRIB2 data
- - C768 - try the 0.25-degree GRIB2 data. But it may not work well.
 
-- Sea/lake ice thickness and column temperatures are not
-  available. So, nominal values of 1.5 m and 265 K are used.
+        I-1,J+1     I+1,J+1
+           X─────X─────X            I-1,J   i,j
+           │     │     │               X─────X
+           │     │     │               │     │
+           │    i│j    │               │  T  │
+           X─────X─────X               │     │
+           │     │     │               X─────X
+           │     │     │          I-1,J-1    I,J-1
+           │     │     │
+           X─────X─────X
+        I-1,J-1     I+1,J-1
 
-- Soil moisture in the GRIB2 files is created using bilinear
-  interpolation and, therefore, may be a mixture of values from
-  different soil types. Could result in poor latent/sensible heat
-  fluxes.
 
-- Ozone is not available at all isobaric levels. Missing levels are
-  set to a nominal value defined in the variable mapping (VARMAP) file
-  (1E-07).
+MOM6 uses an Arakawa C grid. Within cpld_gridgen, these are referred to as "stagger" locations, and named as follows:
 
-- Only tested with GRIB2 data from GFS v14 and v15 (from 12z July 19,
-  2017 to current). May not work with older GFS data. Will not work
-  with GRIB2 data from other models.
+                 Bu────Cv─────Bu
+                 │            │
+                 │            │
+                 Cu    Ct     Cu
+                 │            │
+                 │            │
+                 Bu────Cv─────Bu
 
-### Near Sea Surface Temperature (NSST) data and GRIB2 initialization
 
-The issue with not having NSST data is important. In GFS we use the
-foundation temperature (Tref) and add a diurnal warming/cooling layer
-using NSST. This is the surface temperature that is passed to the
-atmospheric boundary layer. This is a critical feature, especially
-when we are doing Data Assimilation.
+### Rotation angles
 
-When using NEMSIO or NetCDF data to initialize the model, both the
-foundation and surface temperature are available and the atmospheric
-model should be run using the NSST option as this will properly
-account for in the forward run of the model.
+For the tripole grid, a rotation angle is defined to translate vectors to/from the grid (i-j) orientation from/to true E-W. The rotation angle is calculated at run-time in MOM6 (src/initialization/MOM_shared_initialization.F90). However, CICE6 requires a rotation at the corner (``Bu``) grid points, which for points along the tripole seam requires values on the other side of the tripole fold. In cpld_gridgen, these values are found by "flipping over" the values on the last row of the MOM6 super-grid. If ``ipL`` and ``ipR`` are the i-indices of the poles along the last j-row:
 
-In GRIB2 files only the Tsfc is stored and that is set as foundation
-temperature as well. So the diurnal heating / cooling is baked into
-the initial condition for the extent of the run. This can be critical
-if the model is being initialized when the ocean is warm and
-initialization is occuring at the peak of the diurnal warming. That
-warm ocean will be baked in for the extent of the run and may spawn
-off a number of fake hurricanes. The user has two options -- either to
-use a spin up cycle to spin up NSST (set <b>nstf_name</b> =
-[2,1,0,0,0] in <b>input.nml</b> of the model namelist file. This will
-create a diurnal cycle after 24 hours of spin up), or to run the model
-without any NSST option ( set <b>nstf_name</b> = [0,0,0,0,0] in
-<b>input.nml</b> of the model namelist file. The user will also have
-to choose one of the no NSST physics suite options in
-<b>input.nml</b>).
 
-Note, that neither of these two options will get rid of the underlying
-baked in heating/cooling in the surface temperature fields. For most
-cases this may not be an issue, but where it is then the user will
-either have to initialize the model with NEMSIO or NetCDF data, or
-replace the surface temperature in the GRIB2 fields with independently
-obtained foundation temperature.
+                ipL-1     ipL    ipL+1            ipR-1     ipR    ipR+1
+                   x-------x-------x     |||        x-------x-------x
 
-# chgres_cube namelist options
+then after folding along the tripole seam, ``ipL`` and ``ipR`` must align:
 
-Namelist variables with “input” in their name refer to data input to
-chgres_cube. Namelist variables with “target” in their name refer to
-the FV3 horizontal and vertical grid (i.e., the target grid
-chgres_cube is mapping to).
 
-When using GRIB2 data as input to chgres_cube, set namelist as
-follows:
+                               ipR+1     ipR    ipR-1
+                                  x-------x-------x
+                               ipL-1     ipL    ipL+1
+                                  x-------x-------x
 
- - fix_dir_target_grid - Path to the tiled FV3 surface climatological
-   files (such as albedo).
+
+Using the folded seam, the values required for calculating the rotation angle on the ``Bu`` grid points are available and can be calculated in the same way as MOM6 calculates rotation angles for the ``Ct`` grid points. 
+
+### SCRIP format files
+
+For calculating interpolation weights using ESMF, a SCRIP file needs to be provided. A SCIP file contains the both the grid locations of any stagger grid location (e.g. ``Ct``) and the associated grid vertices for that point. As seen from the above diagram, for the ``Ct`` points, those grid vertices are given by the ``Bu`` grid locations. 
+
+SCRIP requires that the vertices be ordered counter-clockwise so that the center grid point is always to the left of the vertex. In cpld_gridgen, vertices are defined counter-clockwise from upper right. ``Ct`` vertices are located on the ``Bu`` grid (as shown above), ``Cu`` vertices on the ``Cv`` grid, ``Cv`` vertices on the ``Cu`` grid and ``Bu`` vertices on the ``Ct`` grid. For example, for the ``Ct`` grid, the vertices are:
  
- - mosaic_file_target_grid - Path and name of the FV3 mosaic file.
- 
- - orog_dir_target_grid - directory containing the tiled FV3 orography
-   and grid files (NetCDF).
- 
- - orog_files_target_grid - names of the six tiled FV3 orography
-   files.
- 
- - vcoord_file_target_grid - path and name of the model vertical
-   coordinate definition file (“global_hyblev.l$LEVS.txt).
- 
- - data_dir_input_grid - directory containing the GRIB2 initial
-   conditions data
- 
- - grib2_file_input_grid - name of the GRIB2 input data file
- 
- - varmap_file - path and name of the variable mapping (VARMAP) table.
-   See below for details on this table.
- 
- - input_type - input data type. Set to ‘grib2’
- 
- - cycle_mon/day/hour - month/day/hour of your model initialization
- 
- - convert_atm - set to ‘true’ to process the atmospheric fields
- 
- - convert_sfc - set to ‘true’ to process the surface fields
+             Vertex #2             Vertex #1
+             Bu(i-1,j)             Bu(i,j)
+                         Ct(i,j)
+           Bu(i-1,j-1)             Bu(i,j-1)
+             Vertex #3             Vertex #4
 
-When using NEMSIO data as input to chgres_cube, set namelist as follows:
 
- - fix_dir_target_grid - Path to the tiled FV3 surface climatological
-   files (such as albedo).
- 
- - mosaic_file_target_grid - Path and name of the FV3 mosaic file.
- 
- - orog_dir_target_grid - directory containing the tiled FV3 orography
-   and grid files (NetCDF).
- 
- - orog_files_target_grid - names of the six tiled FV3 orography
-   files.
- 
- - vcoord_file_target_grid - path and name of the model vertical
-   coordinate definition file (“global_hyblev.l$LEVS.txt).
- 
- - data_dir_input_grid - directory containing the NEMSIO input data
- 
- - atm_files_input_grid - name of the NEMSIO input atmospheric data
-   file
- 
- - sfc_files_input_grid - name of the NEMSIO input surface/Near Sea
-   Surface Temperature (NSST) data file
- 
- - input_type - input data type. Set to ‘gaussian_nemsio’.
- 
- - cycle_mon/day/hour - month/day/hour of your model run
- 
- - convert_atm - set to ‘true’ to process the atmospheric fields
- 
- - convert_sfc - set to ‘true’ to process the surface fields
- 
- - convert_nst - set to ‘true’ to process NSST fields
- 
- - tracers_input - names of tracer records in input file. For GFDL
-   microphysics, set to
-   “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
- 
- - tracers - names of tracer records in output file expected by model.
-   For GFDL microphysics, set to
-   “sphum”,”liq_wat”,”o3mr”,”ice_wat”,”rainwat”,”snowwat”,”graupel”.
- 
-When using NetCDF data as input to chgres_cube, set namelist as follows:
+so that the vertices for the ``Ct`` grid are found as off-sets of the i,j index of the ``Bu`` grid
 
- - fix_dir_target_grid - Path to the tiled FV3 surface climatological
-   files (such as albedo).
- 
- - mosaic_file_target_grid - Path and name of the FV3 mosaic file.
- 
- - orog_dir_target_grid - directory containing the tiled FV3 orography
-   and grid files (NetCDF).
- 
- - orog_files_target_grid - names of the six tiled FV3 orography
-   files.
- 
- - vcoord_file_target_grid - path and name of the model vertical
-   coordinate definition file (“global_hyblev.l$LEVS.txt).
- 
- - data_dir_input_grid - directory containing the NetCDF input data
- 
- - atm_files_input_grid - name of the NetCDF input atmospheric data
-   file
- 
- - sfc_files_input_grid - name of the NetCDF input surface/Near Sea
-   Surface Temperature (NSST) data file
- 
- - input_type - input data type. Set to ‘gaussian_netcdf’.
- 
- - cycle_mon/day/hour - month/day/hour of your model run
- 
- - convert_atm - set to ‘true’ to process the atmospheric fields
- 
- - convert_sfc - set to ‘true’ to process the surface fields
- 
- - convert_nst - set to ‘true’ to process NSST fields
- 
- - tracers_input - names of tracer records in input file. For GFDL
-   microphysics, set to
-   “spfh”,”clwmr”,”o3mr”,”icmr”,”rwmr”,”snmr”,”grle”.
- 
- - tracers - names of tracer records in output file expected by model.
-   For GFDL microphysics, set to
-   “sphum”,”liq_wat”,”o3mr”,”ice_wat”,”rainwat”,”snowwat”,”graupel”.
+     iVertCt(4) = (/0, -1, -1,  0/)
+     jVertCt(4) = (/0,  0, -1, -1/)
+     
+Careful examination of the remaining stagger locations lead to similar definitions for the i,j offsets required to extract the vertices, all of which can be defined in terms of the ``iVertCt`` and ``jVertCt`` values.
 
-# Program inputs and outputs
+Special treatment is require at the bottom of the grid, where the vertices of the ``Ct`` and ``Cu`` grid must be set manually (note, these points are on land.) The top of the grid also requires special treatment because the required vertices are located across the tripole seam. This is accomplished by creating 1-d arrays which hold the ``Ct`` and ``Cu`` grid point locations across the matched seam.
 
-## Inputs
 
-The following four sets of files are located here:
-https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/
+## Generating the grid files
 
- - FV3 mosaic file - (NetCDF format)
-   - CRES_mosaic.nc
+The cpld_gridgen program and associated script related functions perform the following tasks:
 
- - FV3 grid files - (NetCDF format)
-   - CRES_grid.tile1.nc
-   - CRES_grid.tile2.nc
-   - CRES_grid.tile3.nc
-   - CRES_grid.tile4.nc
-   - CRES_grid.tile5.nc
-   - CRES_grid.tile6.nc
+1. read the MOM6 supergrid and ocean mask file and optionally creates the required *topo_edits* file if the land mask for MOM6 is to be changed at runtime.
+2. create a master grid file containing all stagger locations of the grid fully defined
+3. create the CICE6 grid variables and writes the required CICE6 grid file
+4. create a SCRIP file for the center stagger (``Ct``) grid points and a second SCRIP file also containing the land mask
+5. create the ESMF conservative regridding weights to map the ocean mask to the FV3 tiles and write the mapped mask to 6 tile files
+6. create the ESMF regridding weights to map the 1/4 CICE6 restart file to a lower resolution tripole grid 
+7. optionally call a routine to generate ESMF regridding weights to map the tripole grid to a set of rectilinear grids
+8. use the command line command *ESMF_Scrip2Unstruct* to generate the ocean mesh from the SCRIP file containing the land mask (item 4)
+9. use an NCO command line command to generate the CICE6 land mask file from the CICE6 grid file
 
- - FV3 orography files - (NetCDF format)
-   - CRES_oro_data.tile1.nc
-   - CRES_oro_data.tile2.nc
-   - CRES_oro_data.tile3.nc
-   - CRES_oro_data.tile4.nc
-   - CRES_oro_data.tile5.nc
-   - CRES_oro_data.tile6.nc
+## The generated files
 
- - FV3 surface climatological files - Located under the ./fix_sfc sub-directory. One file for each tile. NetCDF format.
-   - CRES.facsf.tileX.nc (fractional coverage for strong/weak zenith angle dependent albedo)
-   - CRES.maximum_snow_albedo.tileX.nc (maximum snow albedo)
-   - CRES.slope_type.tileX.nc (slope type)
-   - CRES.snowfree_albedo.tileX.nc (snow-free albedo)
-   - CRES.soil_type.tileX.nc (soil type)
-   - CRES.subtrate_temperature.tileX.nc (soil substrate temperature)
-   - CRES.vegetation_greenness.tileX.nc (vegetation greenness)
-   - CRES.vegetation_type.tileX.nc (vegetation type)
+The exact list of files produced by the *cpld_gridgen.sh* script will vary depending on several factors. For example, if the *DO_POSTWGHTS* flag is true, then a SCRIP format file will be produced for each rectilinear destination grid desired and a file containing the regridding weights to map from the center ``Ct`` stagger point to the rectilinear grid will also be written. Because both MOM6 and CICE6 velocity variables are located at ``Cu``,``Cv`` or ``Bu`` locations, additional files will also be created to regrid from the velocity stagger locations to the center ``Ct`` location. If an OCN/ICE grid resolution less than 1/4 degree is chosen, then a file containing regridding weights from the 1/4 degree grid to a lower resolution grid will also be written. Note also that multiple intermediate SCRIP format files may be produced depending on the options chosen.
 
- - FV3 vertical coordinate file. Text file. Located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_am.v20191213/
-   - global_hyblev.l$LEVS.txt
+<br>
 
- - Input data files. GRIB2, NEMSIO or NetCDF. See above section for how to find this data.
+* Executing the script for the 1/4 deg OCN/ICE resolution will result in the following files being produced in the output location:
 
-## Outputs
 
- - Atmospheric “coldstart” files. NetCDF.
-   - out.atm.tile1.nc
-   - out.atm.tile2.nc
-   - out.atm.tile3.nc
-   - out.atm.tile4.nc
-   - out.atm.tile5.nc
-   - out.atm.tile6.nc
+<table>
+<caption id="foutmx025">Output files for 1/4 deg</caption>
+<tr><th>File name                      <th>Description                              <th>Function
+<tr><td row=1>tripole.mx025.nc         <td>master grid file                         <td>Creating all subsequent grid or mapping files
+<tr><td row=2>grid_cice_NEMS_mx025.nc  <td>the CICE grid file                       <td>used at runtime by CICE6
+<tr><td row=3>kmtu_cice_NEMS_mx025.nc  <td>the CICE mask file                       <td>used at runtime by CICE6
+<tr><td row=4>mesh.mx025.nc            <td>the ocean and ice mesh file              <td>used at runtime by CICE6, MOM6, and CMEPS
+<tr><td row=5>C384.mx025.tile[1-6].nc  <td>the mapped ocean mask on the ATM tiles   <td>used to create ATM ICs consistent with the <br>                                                                                           fractional grid
+</table>
+    
+<br>
+   
+* If the optional post-weights are generated, the following files will be produced in the output location: 
+    
 
- - Surface/Near Sea Surface Temperature (NSST) “coldstart” files. NetCDF
-   - out.sfc.tile1.nc
-   - out.sfc.tile1.nc
-   - out.sfc.tile1.nc
-   - out.sfc.tile1.nc
-   - out.sfc.tile1.nc
-   - out.sfc.tile1.nc
+<table>
+<caption id="foutpost">Optional post-weights files for 1/4deg</caption>
+<tr><th>File name                                                                       <th>Function
+<tr><td row=1>tripole.mx025.[Cu][Cv][Bu].to.Ct.bilinear.nc                              <td>the ESMF weights for mapping OCN or ICE <br>                                                                                              output fields from the various stagger <br>                                                                                               locations on the tripole grid to the <br>                                                                                                 center (Ct) stagger location on the <br>
+                                                                                            same tripole grid using bilinear mapping
+<tr><td row=2>tripole.mx025.Ct.to.rect.[destination resolution].[bilinear][conserve].nc <td>the ESMF weights for mapping variables <br>                                                                                               on the center (Ct) stagger location on <br>                                                                                               the tripole grid to a rectilinear grid <br>                                                                                               with [destination resolution] using <br>                                                                                                  either bilinear or conservative mapping
+</table>
+    
+<br>
 
-# Running the program stand alone
-
- - Locate your input files. See above for a list.
- 
- - Set the namelist for your experiment. See above for an explanation
-   of the namelist entries.
- 
- - Link the namelist to Fortran unit number 41:
- <pre> ln -fs your-namelist-file ./fort.41</pre>
- 
- - Load any required runtime libraries. For example, you may need to
-   load libraries for NetCDF and/or your Fortran compiler.
- 
- - Run the program with an MPI task count that is a multiple of six.
-   This is an ESMF library requirement when processing a six-tiled
-   global grid.
-
-# Variable Mapping (VARMAP) table
-
-The VARMAP table, set in the chgres_cube namelist (variable
-varmap_file), controls how chgres_cube handles variables that might be
-missing from the GRIB2 files. Since there are so many different
-versions of GRIB2 files, it's often uncertain what fields are
-available even if you know what source model the data is coming from.
-Each file contains the following: (Note, only the GFS physics suite is
-currently supported.)
-
-Column 1: Name the code searches for in the table. Do not change.
-Some definitions:
-
- - dzdt - vertical velocity
- - sphum - specific humidity
- - liq_wat - liquid water mixing ratio
- - o3mr - ozone mixing ratio
- - ice_wat - ice water mixing ratio
- - rainwat - rain water mixing ratio
- - snowwat - snow water mixing ratio
- - graupel - graupel mixing ratio
- - vtype - vegetation type
- - sotype - soil type
- - vfrac - plant greenness fraction
- - fricv - friction velocity
- - sfcr - roughness length
- - tprcp - precipitation rate
- - ffmm - surface exchange coefficient for momentum
- - ffhh - surface exchange coefficient for heat
- - f10m - log((sfcr+10)/sfcr)
- - soilw - total volumetric soil moisture
- - soill - liquid volumetric soil moisture
- - soilt - soil column temperature
- - cnwat - plant canopy water content
- - hice - sea/lake ice thickness
- - weasd - snow liquid equivalent
- - snod - physical snow depth
-
-Column 2: Name of the variable in the output “coldstart”
-files. Unimplemented.
-
-Column 3: Behavior when the code can't find the variable in the input
-file. Options are:
-
- - "skip": Don't write to the output file.
- - "set_to_fill": Set to user-specified field value (see column 4).
- - "intrp": LnP interpolation to missing levels. No extrapolation allowd.
- - "stop": Force an exception and stop code execution. Use this if you
-   absolutely require a field to be present.
-
-Column 4: If column 3 = "set_to_fill", then this value is used to fill
-in all points in the input field. These values may be overwritten by
-the code before output depending on the variable (especially for
-surface variables).
-
-Column 5: Variable type descriptor. Variable names designated as
-tracers are used to populate the list of tracers to read from the
-GRIB2 file and write to output, so make sure all tracers you wish to
-read have an entry. Note that if you wish to add a tracer name that is
-not already included in the appropriate VARMAP file, this will require
-modification of the chgres_cube code. Valid choices are:
-
- - “T”: 3-dimensional tracer array
- - “D”: 3-dimensional non-tracer array
- - “S”: 2-dimensional surface array
-
+* If a resolution other than 1/4 degree is used in *cpld_gridgen.sh*, the following file will be produced in the output location: 
+    
+    
+<table>
+<caption id="foutcice6">Output files for CICE6 IC creation at tripole destination resolution</caption>
+<tr><th>File name                                                               <th>Function
+<tr><td row=1>tripole.mx025.Ct.to.mx[destination resolution].Ct.neareststod.nc  <td>the ESMF weights for mapping the 1/4 CICE ICs to <br>
+                                                                                    a tripole [destination resolution] using nearest <br>                                                                                     source-to-destination mapping
+</table>
+    
+<br>
+    
+* If run-time land mask changes for MOM6 are requested, the following file will be produced in the output location:
+    
+    
+<table>
+<caption id="fouttopo">Output files for run-time modification of MOM6 land mask</caption>
+<tr><th>File name                       <th>Function
+<tr><td row=1>ufs.[Default filename].nc <td>Topo-edits required for UFS application. These are appended to the existing default topo <br>                                             edits file and implemented at run time with the parameter flag <br>                                                                       ``ALLOW_LANDMASK_CHANGES=true``. All files produced by the *cpld_gridgen.sh* will be <br>                                                 consistent with this run-time land mask.
+</table>
 

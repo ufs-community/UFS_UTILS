@@ -1,22 +1,31 @@
+!> @file
+!! @brief Create the ESMF weights for post
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module creates the ESMF weights used to remap from the tripole grid to a rectilinear grid
+!! @author Denise.Worthen@noaa.gov
 module postwgts
 
   use ESMF
+  ! ?workflows keep failing because of esmf version
+  use ESMF_RegridWeightGenMod
 
   use gengrid_kinds, only : CL,CM,CS
   use grdvars,       only : nv, mastertask
   use charstrings,   only : dirout, res, staggerlocs, logmsg
-  use debugprint,    only : ChkErr
   use netcdf
 
   implicit none
 
-  character(*), parameter :: u_FILE_u  = &
-       __FILE__
-
   contains
-
+!> Create the ESMF weights files to remap velocity points from their native stagger location to the center
+!! (Ct) location. Create the ESMF weights file to remap from the Ct location to a rectilinear grid
+!!
+!! @author Denise.Worthen@noaa.gov
+  
   subroutine make_postwgts
 
+  ! local variables
   character(len=CL) :: fsrc, fdst, fwgt
   character(len= 2) :: cstagger
 
@@ -69,7 +78,8 @@ module postwgts
                         weightFile=trim(fwgt), regridmethod=method, &
                         ignoreDegenerate=.true., &
                         unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
-   if (chkerr(rc,__LINE__,u_FILE_u)) return
+   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+     line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
   end do
 
 !---------------------------------------------------------------------
@@ -97,7 +107,8 @@ module postwgts
                            weightFile=trim(fwgt), regridmethod=method, &
                            ignoreDegenerate=.true., &
                            unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
-      if (chkerr(rc,__LINE__,u_FILE_u)) return
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+        line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
      end do
   end do
 

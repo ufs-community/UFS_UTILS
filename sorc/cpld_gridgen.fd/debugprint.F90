@@ -1,3 +1,10 @@
+!> @file
+!! @brief Print debugging information
+!! @author Denise.Worthen@noaa.gov
+!!
+!> Print values for debugging
+!! @author Denise.Worthen@noaa.gov
+
 module debugprint
 
   use esmf,    only : ESMF_LogFoundError, ESMF_LOGERR_PASSTHRU
@@ -10,17 +17,17 @@ module debugprint
   implicit none
   private
 
-  public :: ChkErr
-
   public :: checkseam, checkxlatlon, checkpoint
  
-  character(len=*),parameter :: u_FILE_u =  __FILE__
-
   contains
-
+!> Print values across the tripole seam
+!!
+!! @author Denise.Worthen@noaa.gov
+  
   subroutine checkseam
 
-  integer :: j,i1,i2
+   ! local variables
+   integer :: j,i1,i2
 
     j = nj
     i1 = ipole(1); i2 = ipole(2)+1
@@ -93,9 +100,14 @@ module debugprint
     print *,lonCt(i1+3,j),lonCt(i2-3,j)
     print *
   end subroutine checkseam
-
+  
+  !> Print values near the poles and along the domain edges
+  !!
+  !! @author Denise.Worthen@noaa.gov
+  
   subroutine checkxlatlon
  
+  ! local variables
   integer :: i
 
     print *,'============== Ct grid ==============='
@@ -150,9 +162,14 @@ module debugprint
     print *
 
   end subroutine checkxlatlon
-
+  
+!> Print values at specified point
+!!
+!! @author Denise.Worthen@noaa.gov
+  
   subroutine checkpoint
 
+   ! local variables
    integer :: i,j
 
     ! check
@@ -227,17 +244,4 @@ module debugprint
  !   print *,minval(latBu_vert),maxval(latBu_vert)
  !   print *,minval(lonBu_vert),maxval(lonBu_vert)
   end subroutine checkpoint
-
-  !> Returns true if ESMF_LogFoundError() determines that rc is an error code. Otherwise false.
-  logical function ChkErr(rc, line, file)
-    integer, intent(in) :: rc            !< return code to check
-    integer, intent(in) :: line          !< Integer source line number
-    character(len=*), intent(in) :: file !< User-provided source file name
-    integer :: lrc
-    ChkErr = .false.
-    lrc = rc
-    if (ESMF_LogFoundError(rcToCheck=lrc, msg=ESMF_LOGERR_PASSTHRU, line=line, file=file)) then
-       ChkErr = .true.
-    endif
-  end function ChkErr
 end module debugprint
