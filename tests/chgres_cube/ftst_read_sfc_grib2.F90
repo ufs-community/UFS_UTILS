@@ -140,8 +140,8 @@
 
  external_model="GFS"
  input_type="grib2"
-!data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/gfs.grib2"
- data_dir_input_grid = "data"
+ data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/gfs.grib2"
+!data_dir_input_grid = "data"
  grib2_file_input_grid = "gfs.t00z.pgrb2.0p50.f000"
 
  i_input = 720
@@ -192,152 +192,152 @@
 
  call ESMF_FieldGather(terrain_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - terrain_expected_values(1)) > EPSILON) stop 6
-   if (abs(data_one_tile(i_input,j_input) - terrain_expected_values(2)) > EPSILON) stop 8
+   if (abs(data_one_tile(1,j_input) - terrain_expected_values(1)) > EPSILON) stop 6
+   if (abs(data_one_tile(i_input,1) - terrain_expected_values(2)) > EPSILON) stop 8
  endif
 
  call ESMF_FieldGather(soilm_liq_input_grid, data_one_tile_3d, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile_3d(1,1,1) - soilm_liq1_expected_values(1)) > EPSILON) stop 10
-   if (abs(data_one_tile_3d(i_input,j_input,1) - soilm_liq1_expected_values(2)) > EPSILON) stop 11
-   if (abs(data_one_tile_3d(1,1,2) - soilm_liq2_expected_values(1)) > EPSILON) stop 12
-   if (abs(data_one_tile_3d(i_input,j_input,2) - soilm_liq2_expected_values(2)) > EPSILON) stop 13
-   if (abs(data_one_tile_3d(1,1,3) - soilm_liq3_expected_values(1)) > EPSILON) stop 14
-   if (abs(data_one_tile_3d(i_input,j_input,3) - soilm_liq3_expected_values(2)) > EPSILON) stop 15
-   if (abs(data_one_tile_3d(1,1,4) - soilm_liq4_expected_values(1)) > EPSILON) stop 16
-   if (abs(data_one_tile_3d(i_input,j_input,4) - soilm_liq4_expected_values(2)) > EPSILON) stop 17
+   if (abs(data_one_tile_3d(1,j_input,1) - soilm_liq1_expected_values(1)) > EPSILON) stop 10
+   if (abs(data_one_tile_3d(i_input,1,1) - soilm_liq1_expected_values(2)) > EPSILON) stop 11
+   if (abs(data_one_tile_3d(1,j_input,2) - soilm_liq2_expected_values(1)) > EPSILON) stop 12
+   if (abs(data_one_tile_3d(i_input,1,2) - soilm_liq2_expected_values(2)) > EPSILON) stop 13
+   if (abs(data_one_tile_3d(1,j_input,3) - soilm_liq3_expected_values(1)) > EPSILON) stop 14
+   if (abs(data_one_tile_3d(i_input,1,3) - soilm_liq3_expected_values(2)) > EPSILON) stop 15
+   if (abs(data_one_tile_3d(1,j_input,4) - soilm_liq4_expected_values(1)) > EPSILON) stop 16
+   if (abs(data_one_tile_3d(i_input,1,4) - soilm_liq4_expected_values(2)) > EPSILON) stop 17
  endif
 
  call ESMF_FieldGather(soilm_tot_input_grid, data_one_tile_3d, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile_3d(1,1,1) - soilm_tot1_expected_values(1)) > EPSILON) stop 20
-   if (abs(data_one_tile_3d(i_input,j_input,1) - soilm_tot1_expected_values(2)) > EPSILON) stop 21
-   if (abs(data_one_tile_3d(1,1,2) - soilm_tot2_expected_values(1)) > EPSILON) stop 22
-   if (abs(data_one_tile_3d(i_input,j_input,2) - soilm_tot2_expected_values(2)) > EPSILON) stop 23
-   if (abs(data_one_tile_3d(1,1,3) - soilm_tot3_expected_values(1)) > EPSILON) stop 24
-   if (abs(data_one_tile_3d(i_input,j_input,3) - soilm_tot3_expected_values(2)) > EPSILON) stop 25
-   if (abs(data_one_tile_3d(1,1,4) - soilm_tot4_expected_values(1)) > EPSILON) stop 26
-   if (abs(data_one_tile_3d(i_input,j_input,4) - soilm_tot4_expected_values(2)) > EPSILON) stop 27
+   if (abs(data_one_tile_3d(1,j_input,1) - soilm_tot1_expected_values(1)) > EPSILON) stop 20
+   if (abs(data_one_tile_3d(i_input,1,1) - soilm_tot1_expected_values(2)) > EPSILON) stop 21
+   if (abs(data_one_tile_3d(1,j_input,2) - soilm_tot2_expected_values(1)) > EPSILON) stop 22
+   if (abs(data_one_tile_3d(i_input,1,2) - soilm_tot2_expected_values(2)) > EPSILON) stop 23
+   if (abs(data_one_tile_3d(1,j_input,3) - soilm_tot3_expected_values(1)) > EPSILON) stop 24
+   if (abs(data_one_tile_3d(i_input,1,3) - soilm_tot3_expected_values(2)) > EPSILON) stop 25
+   if (abs(data_one_tile_3d(1,j_input,4) - soilm_tot4_expected_values(1)) > EPSILON) stop 26
+   if (abs(data_one_tile_3d(i_input,1,4) - soilm_tot4_expected_values(2)) > EPSILON) stop 27
  endif
 
  call ESMF_FieldGather(soil_temp_input_grid, data_one_tile_3d, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile_3d(1,1,1) - soil_temp1_expected_values(1)) > EPSILON) stop 30
-   if (abs(data_one_tile_3d(i_input,j_input,1) - soil_temp1_expected_values(2)) > EPSILON) stop 31
-   if (abs(data_one_tile_3d(1,1,2) - soil_temp2_expected_values(1)) > EPSILON) stop 32
-   if (abs(data_one_tile_3d(i_input,j_input,2) - soil_temp2_expected_values(2)) > EPSILON) stop 33
-   if (abs(data_one_tile_3d(1,1,3) - soil_temp3_expected_values(1)) > EPSILON) stop 34
-   if (abs(data_one_tile_3d(i_input,j_input,3) - soil_temp3_expected_values(2)) > EPSILON) stop 35
-   if (abs(data_one_tile_3d(1,1,4) - soil_temp4_expected_values(1)) > EPSILON) stop 36
-   if (abs(data_one_tile_3d(i_input,j_input,4) - soil_temp4_expected_values(2)) > EPSILON) stop 37
+   if (abs(data_one_tile_3d(1,j_input,1) - soil_temp1_expected_values(1)) > EPSILON) stop 30
+   if (abs(data_one_tile_3d(i_input,1,1) - soil_temp1_expected_values(2)) > EPSILON) stop 31
+   if (abs(data_one_tile_3d(1,j_input,2) - soil_temp2_expected_values(1)) > EPSILON) stop 32
+   if (abs(data_one_tile_3d(i_input,1,2) - soil_temp2_expected_values(2)) > EPSILON) stop 33
+   if (abs(data_one_tile_3d(1,j_input,3) - soil_temp3_expected_values(1)) > EPSILON) stop 34
+   if (abs(data_one_tile_3d(i_input,1,3) - soil_temp3_expected_values(2)) > EPSILON) stop 35
+   if (abs(data_one_tile_3d(1,j_input,4) - soil_temp4_expected_values(1)) > EPSILON) stop 36
+   if (abs(data_one_tile_3d(i_input,1,4) - soil_temp4_expected_values(2)) > EPSILON) stop 37
  endif
 
  call ESMF_FieldGather(landsea_mask_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - landsea_mask_expected_values(1)) > EPSILON) stop 39
-   if (abs(data_one_tile(i_input,j_input) - landsea_mask_expected_values(2)) > EPSILON) stop 40
+   if (abs(data_one_tile(1,j_input) - landsea_mask_expected_values(1)) > EPSILON) stop 39
+   if (abs(data_one_tile(i_input,1) - landsea_mask_expected_values(2)) > EPSILON) stop 40
  endif
 
  call ESMF_FieldGather(seaice_fract_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - seaice_fract_expected_values(1)) > EPSILON) stop 41
-   if (abs(data_one_tile(i_input,j_input) - seaice_fract_expected_values(2)) > EPSILON) stop 42
+   if (abs(data_one_tile(1,j_input) - seaice_fract_expected_values(1)) > EPSILON) stop 41
+   if (abs(data_one_tile(i_input,1) - seaice_fract_expected_values(2)) > EPSILON) stop 42
  endif
 
  call ESMF_FieldGather(seaice_depth_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - seaice_depth_expected_values(1)) > EPSILON) stop 43
-   if (abs(data_one_tile(i_input,j_input) - seaice_depth_expected_values(2)) > EPSILON) stop 44
+   if (abs(data_one_tile(1,j_input) - seaice_depth_expected_values(1)) > EPSILON) stop 43
+   if (abs(data_one_tile(i_input,1) - seaice_depth_expected_values(2)) > EPSILON) stop 44
  endif
 
  call ESMF_FieldGather(seaice_skin_temp_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - seaice_skin_temp_expected_values(1)) > EPSILON) stop 45
-   if (abs(data_one_tile(i_input,j_input) - seaice_skin_temp_expected_values(2)) > EPSILON) stop 46
+   if (abs(data_one_tile(1,j_input) - seaice_skin_temp_expected_values(1)) > EPSILON) stop 45
+   if (abs(data_one_tile(i_input,1) - seaice_skin_temp_expected_values(2)) > EPSILON) stop 46
  endif
 
  call ESMF_FieldGather(snow_liq_equiv_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - snow_liq_equiv_expected_values(1)) > EPSILON) stop 47
-   if (abs(data_one_tile(i_input,j_input) - snow_liq_equiv_expected_values(2)) > EPSILON) stop 48
+   if (abs(data_one_tile(1,j_input) - snow_liq_equiv_expected_values(1)) > EPSILON) stop 47
+   if (abs(data_one_tile(i_input,1) - snow_liq_equiv_expected_values(2)) > EPSILON) stop 48
  endif
 
  call ESMF_FieldGather(snow_depth_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - snow_depth_expected_values(1)) > EPSILON) stop 49
-   if (abs(data_one_tile(i_input,j_input) - snow_depth_expected_values(2)) > EPSILON) stop 50
+   if (abs(data_one_tile(1,j_input) - snow_depth_expected_values(1)) > EPSILON) stop 49
+   if (abs(data_one_tile(i_input,1) - snow_depth_expected_values(2)) > EPSILON) stop 50
  endif
 
  call ESMF_FieldGather(veg_type_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - veg_type_expected_values(1)) > EPSILON) stop 51
-   if (abs(data_one_tile(i_input,j_input) - veg_type_expected_values(2)) > EPSILON) stop 52
+   if (abs(data_one_tile(1,j_input) - veg_type_expected_values(1)) > EPSILON) stop 51
+   if (abs(data_one_tile(i_input,1) - veg_type_expected_values(2)) > EPSILON) stop 52
  endif
 
  call ESMF_FieldGather(soil_type_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - soil_type_expected_values(1)) > EPSILON) stop 53
-   if (abs(data_one_tile(i_input,j_input) - soil_type_expected_values(2)) > EPSILON) stop 54
+   if (abs(data_one_tile(1,j_input) - soil_type_expected_values(1)) > EPSILON) stop 53
+   if (abs(data_one_tile(i_input,1) - soil_type_expected_values(2)) > EPSILON) stop 54
  endif
 
  call ESMF_FieldGather(t2m_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - t2m_expected_values(1)) > EPSILON) stop 55
-   if (abs(data_one_tile(i_input,j_input) - t2m_expected_values(2)) > EPSILON) stop 56
+   if (abs(data_one_tile(1,j_input) - t2m_expected_values(1)) > EPSILON) stop 55
+   if (abs(data_one_tile(i_input,1) - t2m_expected_values(2)) > EPSILON) stop 56
  endif
 
  call ESMF_FieldGather(q2m_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - q2m_expected_values(1)) > EPSILON) stop 57
-   if (abs(data_one_tile(i_input,j_input) - q2m_expected_values(2)) > EPSILON) stop 58
+   if (abs(data_one_tile(1,j_input) - q2m_expected_values(1)) > EPSILON) stop 57
+   if (abs(data_one_tile(i_input,1) - q2m_expected_values(2)) > EPSILON) stop 58
  endif
 
  call ESMF_FieldGather(tprcp_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - tprcp_expected_values(1)) > EPSILON) stop 59
-   if (abs(data_one_tile(i_input,j_input) - tprcp_expected_values(2)) > EPSILON) stop 60
+   if (abs(data_one_tile(1,j_input) - tprcp_expected_values(1)) > EPSILON) stop 59
+   if (abs(data_one_tile(i_input,1) - tprcp_expected_values(2)) > EPSILON) stop 60
  endif
 
  call ESMF_FieldGather(f10m_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - f10m_expected_values(1)) > EPSILON) stop 61
-   if (abs(data_one_tile(i_input,j_input) - f10m_expected_values(2)) > EPSILON) stop 62
+   if (abs(data_one_tile(1,j_input) - f10m_expected_values(1)) > EPSILON) stop 61
+   if (abs(data_one_tile(i_input,1) - f10m_expected_values(2)) > EPSILON) stop 62
  endif
 
  call ESMF_FieldGather(ffmm_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - ffmm_expected_values(1)) > EPSILON) stop 63
-   if (abs(data_one_tile(i_input,j_input) - ffmm_expected_values(2)) > EPSILON) stop 64
+   if (abs(data_one_tile(1,j_input) - ffmm_expected_values(1)) > EPSILON) stop 63
+   if (abs(data_one_tile(i_input,1) - ffmm_expected_values(2)) > EPSILON) stop 64
  endif
 
  call ESMF_FieldGather(ustar_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - ustar_expected_values(1)) > EPSILON) stop 65
-   if (abs(data_one_tile(i_input,j_input) - ustar_expected_values(2)) > EPSILON) stop 66
+   if (abs(data_one_tile(1,j_input) - ustar_expected_values(1)) > EPSILON) stop 65
+   if (abs(data_one_tile(i_input,1) - ustar_expected_values(2)) > EPSILON) stop 66
  endif
 
  call ESMF_FieldGather(srflag_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - srflag_expected_values(1)) > EPSILON) stop 67
-   if (abs(data_one_tile(i_input,j_input) - srflag_expected_values(2)) > EPSILON) stop 68
+   if (abs(data_one_tile(1,j_input) - srflag_expected_values(1)) > EPSILON) stop 67
+   if (abs(data_one_tile(i_input,1) - srflag_expected_values(2)) > EPSILON) stop 68
  endif
 
  call ESMF_FieldGather(skin_temp_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - skin_temp_expected_values(1)) > EPSILON) stop 69
-   if (abs(data_one_tile(i_input,j_input) - skin_temp_expected_values(2)) > EPSILON) stop 70
+   if (abs(data_one_tile(1,j_input) - skin_temp_expected_values(1)) > EPSILON) stop 69
+   if (abs(data_one_tile(i_input,1) - skin_temp_expected_values(2)) > EPSILON) stop 70
  endif
 
  call ESMF_FieldGather(canopy_mc_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - canopy_mc_expected_values(1)) > EPSILON) stop 71
-   if (abs(data_one_tile(i_input,j_input) - canopy_mc_expected_values(2)) > EPSILON) stop 72
+   if (abs(data_one_tile(1,j_input) - canopy_mc_expected_values(1)) > EPSILON) stop 71
+   if (abs(data_one_tile(i_input,1) - canopy_mc_expected_values(2)) > EPSILON) stop 72
  endif
 
  call ESMF_FieldGather(z0_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (localpet == 0) then
-   if (abs(data_one_tile(1,1) - z0_expected_values(1)) > EPSILON) stop 73
-   if (abs(data_one_tile(i_input,j_input) - z0_expected_values(2)) > EPSILON) stop 74
+   if (abs(data_one_tile(1,j_input) - z0_expected_values(1)) > EPSILON) stop 73
+   if (abs(data_one_tile(i_input,1) - z0_expected_values(2)) > EPSILON) stop 74
  endif
 
  deallocate (latitude, longitude)

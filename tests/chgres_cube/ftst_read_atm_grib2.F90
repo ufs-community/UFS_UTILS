@@ -101,8 +101,8 @@
 
  external_model="GFS"
  input_type="grib2"
-!data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/gfs.grib2"
- data_dir_input_grid = "data/"
+ data_dir_input_grid = "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/gfs.grib2"
+!data_dir_input_grid = "data/"
  grib2_file_input_grid = "gfs.t00z.pgrb2.0p50.f000"
 
  i_input = 720
@@ -180,11 +180,11 @@
 ! The i/j/k of the points to be checked.
 
  i_check(1) = i_input/2
- j_check(1) = j_input/2
+ j_check(1) = 182
  k_check(1) = 1
 
  i_check(2) = i_input/2
- j_check(2) = j_input/2
+ j_check(2) = 182
  k_check(2) = lev_input
 
  call ESMF_FieldGather(temp_input_grid, data3d_one_tile, rootPet=0, rc=rc)

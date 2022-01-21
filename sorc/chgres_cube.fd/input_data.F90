@@ -2494,7 +2494,7 @@
                                           use_rh=.false. , unpack, &
                                           all_empty, is_missing
 
- real(esmf_kind_r8), allocatable       :: dum2d_1(:,:), dum2d_2(:,:)
+ real(esmf_kind_r8), allocatable       :: dum2d_1(:,:)
                                           
 
  real(esmf_kind_r8)                    :: rlevs_hold(max_levs)
@@ -2847,13 +2847,11 @@
    allocate(dummy2d_8(i_input,j_input))
    allocate(dummy3d(i_input,j_input,lev_input))
    allocate(dum2d_1(i_input,j_input))
-   allocate(dum2d_2(i_input,j_input))
  else
    allocate(dummy2d(0,0))
    allocate(dummy2d_8(0,0))
    allocate(dummy3d(0,0,0))
    allocate(dum2d_1(0,0))
-   allocate(dum2d_2(0,0))
  endif
 
 !----------------------------------------------------------------------------------
@@ -2896,15 +2894,7 @@
 
      dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
 
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dum2d_2 = dum2d_1
-       do jj = 1, j_input
-         dum2d_1(:,jj) = dum2d_2(:,j_input-jj+1)
-       enddo
-      endif
-
-      dummy3d(:,:,vlev) = dum2d_1
+     dummy3d(:,:,vlev) = dum2d_1
 
    enddo
 
@@ -2988,13 +2978,6 @@
 
        if (iret == 0) then ! found data
          dummy2d = reshape(gfld%fld, (/i_input,j_input/) )
-!  Temporary code. wgrib2 flips the pole of gfs data.
-         if (trim(external_model) == "GFS") then
-           dum2d_2 = dummy2d
-           do jj = 1, j_input
-             dummy2d(:,jj) = dum2d_2(:,j_input-jj+1)
-           enddo
-         endif
        else ! did not find data.
         if (trim(method) .eq. 'intrp' .and. .not.all_empty) then
           dummy2d = intrp_missing 
@@ -3118,13 +3101,6 @@
    if (iret /= 0) call error_handler("READING SURFACE PRESSURE RECORD.", iret)
 
    dummy2d_8 = reshape(gfld%fld, (/i_input,j_input/) )
-! Temporary code. wgrib2 flips the pole of gfs data.
-   if (trim(external_model) == "GFS") then
-     dum2d_2 = dummy2d_8
-     do jj = 1, j_input
-       dummy2d_8(:,jj) = dum2d_2(:,j_input-jj+1)
-     enddo
-   endif
 
  endif ! Read surface pressure
 
@@ -3185,14 +3161,6 @@
        dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
      endif
 
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dum2d_2 = dum2d_1
-       do jj = 1, j_input
-         dum2d_1(:,jj) = dum2d_2(:,j_input-jj+1)
-       enddo
-     endif
-
      dummy3d(:,:,vlev) = dum2d_1
 
    enddo
@@ -3231,13 +3199,6 @@
    if (iret /= 0) call error_handler("READING TERRAIN HEIGHT RECORD.", iret)
 
    dummy2d_8 = reshape(gfld%fld, (/i_input,j_input/) )
-! Temporary code. wgrib2 flips the pole of gfs data.
-   if (trim(external_model) == "GFS") then
-     dum2d_2 = dummy2d_8
-     do jj = 1, j_input
-       dummy2d_8(:,jj) = dum2d_2(:,j_input-jj+1)
-     enddo
-   endif
 
  endif ! read of terrain.
 
@@ -3364,15 +3325,7 @@ else ! is native coordinate (hybrid).
 
       dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
 
-! Temporary code. wgrib2 flips the pole of gfs data.
-      if (trim(external_model) == "GFS") then
-        dum2d_2 = dum2d_1
-        do jj = 1, j_input
-          dum2d_1(:,jj) = dum2d_2(:,j_input-jj+1)
-        enddo
-       endif
-
-       dummy3d(:,:,vlev) = dum2d_1
+      dummy3d(:,:,vlev) = dum2d_1
 
     enddo
 
@@ -3385,7 +3338,7 @@ else ! is native coordinate (hybrid).
 
  endif
 
- deallocate(dummy3d, dum2d_1, dum2d_2) 
+ deallocate(dummy3d, dum2d_1) 
  
 !---------------------------------------------------------------------------
 ! Convert from 2-d to 3-d component winds.
@@ -5078,7 +5031,7 @@ else ! is native coordinate (hybrid).
    real(esmf_kind_r8), allocatable       :: icec_save(:,:)
    real(esmf_kind_r4), allocatable       :: dummy1d(:)
    real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:),dummy2d_82(:,:),tsk_save(:,:)
-   real(esmf_kind_r8), allocatable       :: dummy2d_83(:,:), dummy3d(:,:,:), dummy3d_stype(:,:,:)
+   real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy3d_stype(:,:,:)
    integer(esmf_kind_i4), allocatable    :: slmsk_save(:,:)
    integer(esmf_kind_i8), allocatable    :: dummy2d_i(:,:)
    
@@ -5216,16 +5169,8 @@ else ! is native coordinate (hybrid).
      if (rc /= 0) call error_handler("READING TERRAIN.", rc)
 
      dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-     print*,'orog ', maxval(dummy2d_8),minval(dummy2d_8)
+!    print*,'orog ', maxval(dummy2d_8),minval(dummy2d_8)
    
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
-
    endif
 
    print*,"- CALL FieldScatter FOR INPUT TERRAIN."
@@ -5250,16 +5195,8 @@ else ! is native coordinate (hybrid).
      if (rc /= 0) call error_handler("READING SEAICE FRACTION.", rc)
 
      dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-     print*,'icec ', maxval(dummy2d_8),minval(dummy2d_8)
+!    print*,'icec ', maxval(dummy2d_8),minval(dummy2d_8)
  
-! temporary code. wgrib flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
-
      icec_save = dummy2d_8
 
    endif
@@ -5308,20 +5245,12 @@ else ! is native coordinate (hybrid).
               unpack, k, gfld, rc)
        if (rc /= 0) call error_handler("READING LANDSEA MASK.", rc)
     
-       print*,'land ', maxval(gfld%fld),minval(gfld%fld)
+!      print*,'land ', maxval(gfld%fld),minval(gfld%fld)
 
      endif
 
      dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
  
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
-
      do j = 1, j_input
        do i = 1, i_input
          if(dummy2d_8(i,j) < 0.5_esmf_kind_r8) dummy2d_8(i,j)=0.0
@@ -5358,17 +5287,9 @@ else ! is native coordinate (hybrid).
              unpack, k, gfld, rc)
      if (rc /= 0) call error_handler("READING SEAICE SKIN TEMP.", rc)
 
-     print*,'ti ',maxval(gfld%fld),minval(gfld%fld)
+!    print*,'ti ',maxval(gfld%fld),minval(gfld%fld)
 
      dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
 
    endif
 
@@ -5400,17 +5321,9 @@ else ! is native coordinate (hybrid).
              unpack, k, gfld, rc)
      if (rc /= 0) call error_handler("READING SNOW LIQUID EQUIVALENT.", rc)
 
-     print*,'weasd ', maxval(gfld%fld),minval(gfld%fld)
+!    print*,'weasd ', maxval(gfld%fld),minval(gfld%fld)
 
      dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
 
      do j = 1, j_input
        do i = 1, i_input
@@ -5445,17 +5358,9 @@ else ! is native coordinate (hybrid).
        call error_handler("READING SNOW DEPTH.", rc)
      else
        gfld%fld = gfld%fld * 1000.0
-       print*,'snod ', maxval(gfld%fld),minval(gfld%fld)
+!      print*,'snod ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
      endif
-
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
 
      do j = 1, j_input
      do i = 1, i_input
@@ -5488,17 +5393,9 @@ else ! is native coordinate (hybrid).
              unpack, k, gfld, rc)
 
      if (rc /= 0) call error_handler("READING T2M.", rc)
-     print*,'t2m ', maxval(gfld%fld),minval(gfld%fld)
+!    print*,'t2m ', maxval(gfld%fld),minval(gfld%fld)
 
      dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
 
    endif
 
@@ -5525,17 +5422,9 @@ else ! is native coordinate (hybrid).
              unpack, k, gfld, rc)
      if (rc /=0) call error_handler("READING Q2M.", rc)
 
-     print*,'q2m ',maxval(gfld%fld),minval(gfld%fld)
+!    print*,'q2m ',maxval(gfld%fld),minval(gfld%fld)
 
      dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
 
    endif
 
@@ -5561,17 +5450,9 @@ else ! is native coordinate (hybrid).
              unpack, k, gfld, rc)
 
      if (rc /= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
-     print*,'skint ', maxval(gfld%fld),minval(gfld%fld)
+!    print*,'skint ', maxval(gfld%fld),minval(gfld%fld)
 
      dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-   
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
 
      tsk_save(:,:) = dummy2d_8
 
@@ -5621,16 +5502,9 @@ else ! is native coordinate (hybrid).
              unpack, k, gfld, rc)
 
      if (rc == 0 ) then
-       print*,'soil type ', maxval(gfld%fld),minval(gfld%fld)
+!      print*,'soil type ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d = reshape(gfld%fld , (/i_input,j_input/))
-   
-! Temporary code. wgrib2 flips the pole of gfs data.
-       if (trim(external_model) == "GFS") then
-         dummy2d_8 = dummy2d
-         do j = 1, j_input
-           dummy2d(:,j) = dummy2d_8(:,j_input-j+1)
-         enddo
-       endif 
+
      endif
 
      if (rc /= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon) .and. geo_file .ne. "NULL")  then
@@ -5765,16 +5639,9 @@ else ! is native coordinate (hybrid).
            PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
        else
          if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
-         print*,'vfrac ', maxval(gfld%fld),minval(gfld%fld)
+!        print*,'vfrac ', maxval(gfld%fld),minval(gfld%fld)
          dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
 
-! Temporary code. wgrib2 flips the pole of gfs data.
-         if (trim(external_model) == "GFS") then
-           dummy2d_82 = dummy2d_8
-           do j = 1, j_input
-             dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-           enddo
-         endif 
        endif
 
      endif ! localpet 0
@@ -5822,14 +5689,6 @@ else ! is native coordinate (hybrid).
        print*,'vfrac min ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
 
-! Temporary code. wgrib2 flips the pole of gfs data.
-       if (trim(external_model) == "GFS") then
-         dummy2d_82 = dummy2d_8
-         do j = 1, j_input
-           dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-         enddo
-       endif 
-
      endif ! localpet == 0
 
      print*,"- CALL FieldScatter FOR INPUT GRID MIN VEG GREENNESS."
@@ -5866,16 +5725,8 @@ else ! is native coordinate (hybrid).
        endif
     
        if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
-       print*,'vfrac max ', maxval(gfld%fld),minval(gfld%fld)
+!      print*,'vfrac max ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-
-! Temporary code. wgrib2 flips the pole of gfs data.
-       if (trim(external_model) == "GFS") then
-         dummy2d_82 = dummy2d_8
-         do j = 1, j_input
-           dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-         enddo
-       endif 
 
      endif !localpet==0
 
@@ -5907,16 +5758,8 @@ else ! is native coordinate (hybrid).
        if (rc /= 0) call error_handler("COULD NOT FIND LAI IN FILE. &
              PLEASE SET LAI_FROM_CLIMO=.TRUE. . EXITING",rc)
 
-       print*,'lai ', maxval(gfld%fld),minval(gfld%fld)
+!      print*,'lai ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-
-! Temporary code. wgrib2 flips the pole of gfs data.
-       if (trim(external_model) == "GFS") then
-         dummy2d_82 = dummy2d_8
-         do j = 1, j_input
-           dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-         enddo
-       endif 
 
      endif !localpet==0
 
@@ -5956,17 +5799,9 @@ else ! is native coordinate (hybrid).
          dummy2d_8(:,:) = 0.0
        endif
      else
-       print*,'hice ', maxval(gfld%fld),minval(gfld%fld)
+!      print*,'hice ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
      endif
-
-! temporary code. wgrib flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
 
    endif
 
@@ -6057,7 +5892,7 @@ else ! is native coordinate (hybrid).
      endif
 
      if (rc == 0) then
-       print*,'fricv ', maxval(gfld%fld),minval(gfld%fld)
+!      print*,'fricv ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
      else
        call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
@@ -6068,14 +5903,6 @@ else ! is native coordinate (hybrid).
          dummy2d_8(:,:) = 0.0
        endif
      endif
-
-! temporary code. wgrib flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
 
    endif ! ustar
 
@@ -6151,14 +5978,6 @@ else ! is native coordinate (hybrid).
        endif
      endif
 
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
-
    endif
 
    print*,"- CALL FieldScatter FOR INPUT GRID CANOPY MOISTURE CONTENT."
@@ -6196,17 +6015,9 @@ else ! is native coordinate (hybrid).
        endif
      else
        gfld%fld = gfld%fld * 10.0 ! Grib files have z0 (m), but fv3 expects z0(cm)
-       print*,'sfcr ', maxval(gfld%fld),minval(gfld%fld)
+!      print*,'sfcr ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
      endif
-
-! Temporary code. wgrib2 flips the pole of gfs data.
-     if (trim(external_model) == "GFS") then
-       dummy2d_82 = dummy2d_8
-       do j = 1, j_input
-         dummy2d_8(:,j) = dummy2d_82(:,j_input-j+1)
-       enddo
-     endif 
 
    endif
 
@@ -6282,17 +6093,6 @@ else ! is native coordinate (hybrid).
        endif
      else  ! found vtype in file.
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-
-! Temporary code. wgrib2 flips the pole of gfs data.
-       if (trim(external_model) == "GFS") then
-         allocate(dummy2d_83(i_input,j_input))
-         dummy2d_83 = dummy2d_8
-         do j = 1, j_input
-           dummy2d_8(:,j) = dummy2d_83(:,j_input-j+1)
-         enddo
-         deallocate(dummy2d_83)
-       endif 
-
      endif
 
      if (trim(external_model) .ne. "GFS") then
@@ -6313,7 +6113,7 @@ else ! is native coordinate (hybrid).
        enddo
      endif     
 
-     print*,'vgtyp ',maxval(dummy2d_8),minval(dummy2d_8)
+!    print*,'vgtyp ',maxval(dummy2d_8),minval(dummy2d_8)
 
    endif ! read veg type
 
@@ -7104,14 +6904,7 @@ else ! is native coordinate (hybrid).
         endif
      else
        dum2d = reshape(gfld%fld, (/i_input,j_input/) )
-! Temporary code. wgrib2 flips the pole of gfs data.
-       if (trim(external_model) == "GFS") then
-         do jj = 1, j_input
-           u_tmp(:,jj) = dum2d(:,j_input-jj+1)
-         enddo
-       else
-         u_tmp(:,:) = dum2d
-       endif
+       u_tmp(:,:) = dum2d
      endif
 
      vname = ":VGRD:"
@@ -7129,14 +6922,7 @@ else ! is native coordinate (hybrid).
         endif
      else
        dum2d = reshape(gfld%fld, (/i_input,j_input/) )
-! Temporary code. wgrib2 flips the pole of gfs data.
-       if (trim(external_model) == "GFS") then
-         do jj = 1, j_input
-           v_tmp(:,jj) = dum2d(:,j_input-jj+1)
-         enddo
-       else
-         v_tmp(:,:) = dum2d
-       endif
+       v_tmp(:,:) = dum2d
      endif
 
      deallocate(dum2d)
@@ -7423,13 +7209,12 @@ end subroutine handle_grib_error
 
  logical                                 :: unpack
 
- real(esmf_kind_r4), allocatable         :: dummy2d(:,:), dummy2d_2(:,:)
+ real(esmf_kind_r4), allocatable         :: dummy2d(:,:)
  real(esmf_kind_r4)                      :: value
 
  type(gribfield)                         :: gfld
 
  allocate(dummy2d(i_input,j_input))
- allocate(dummy2d_2(i_input,j_input))
 
  if(lsoil_input == 4) then
     slevs = (/character(24)::':0-0.1 m below ground:', ':0.1-0.4 m below ground:', &
@@ -7492,19 +7277,10 @@ end subroutine handle_grib_error
 
    j = k
 
-! Temporary code. wgrib2 flips the pole of gfs data.
-   if (trim(external_model) == "GFS") then
-     dummy2d_2 = dummy2d
-     do jj = 1, j_input
-       dummy2d(:,jj) = dummy2d_2(:,j_input-jj+1)
-     enddo
-   endif
-
    dummy3d(:,:,i) = real(dummy2d,esmf_kind_r8)
 
  enddo
 
- deallocate(dummy2d_2)
  deallocate(dummy2d)
 
  end subroutine read_grib_soil
