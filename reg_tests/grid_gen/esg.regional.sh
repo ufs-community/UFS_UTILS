@@ -61,6 +61,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< ESG REGIONAL TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $home_dir/reg_tests/update_baseline.sh "${HOMEreg}/.." "esg.regional" $commit_num
+  fi
 else
   echo "<<< ESG REGIONAL TEST PASSED. >>>"
 fi

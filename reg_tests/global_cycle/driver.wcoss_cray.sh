@@ -32,6 +32,13 @@ QUEUE="${QUEUE:-dev}"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
 export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/global_cycle

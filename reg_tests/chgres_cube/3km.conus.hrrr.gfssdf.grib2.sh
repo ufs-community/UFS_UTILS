@@ -30,8 +30,8 @@ export HALO_BNDY=4
 export CDATE=2019080100
 export EXTERNAL_MODEL="HRRR"
 export NSOILL_OUT=4
-export TRACERS_TARGET="NULL"
-export TRACERS_INPUT="NULL"
+export TRACERS_TARGET='"NULL"'
+export TRACERS_INPUT='"NULL"'
 export GEOGRID_FILE_INPUT=${HOMEufs}/fix/fix_am/geo_em.d01.nc_HRRRX
 
 export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
@@ -84,6 +84,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< 3-km CONUS HRRR W/ GFS PHYSICS GRIB2 TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $HOMEufs/reg_tests/update_baseline.sh $HOMEreg "3km_conus_hrrr_gfssdf_grib2" $commit_num
+  fi
 else
   echo "<<< 3-km CONUS HRRR W/ GFS PHYSICS GRIB2 TEST PASSED. >>>"
 fi
