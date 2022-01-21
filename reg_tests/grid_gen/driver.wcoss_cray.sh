@@ -35,6 +35,13 @@ export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export home_dir=$PWD/../..
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
