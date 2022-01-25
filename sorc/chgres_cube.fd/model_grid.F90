@@ -127,13 +127,16 @@
      trim(input_type) == "gfs_sigio" .or. &
      trim(input_type) == "gaussian_netcdf") then
    call define_input_grid_gaussian(localpet, npets)
- elseif (trim(external_model) == "GFS" .and. trim(input_type) == "grib2") then
-   call define_input_grid_gfs_grib2(localpet,npets)
+!elseif (trim(external_model) == "GFS" .and. trim(input_type) == "grib2") then
+!  call define_input_grid_gfs_grib2(localpet,npets)
  elseif (trim(input_type) == "grib2") then
-   call define_input_grid_grib2(localpet,npets)
+   call define_input_grid_grib2_gg(localpet,npets)
+!  call define_input_grid_grib2(localpet,npets)
  else
    call define_input_grid_mosaic(localpet, npets)
  endif
+
+ call abort
 
  end subroutine define_input_grid
 
@@ -839,6 +842,84 @@
 
  end subroutine define_input_grid_gfs_grib2
  
+ subroutine define_input_grid_grib2_gg(localpet,npets)
+
+ use mpi
+ use grib_mod
+ use gdswzd_mod
+ use program_setup, only       : grib2_file_input_grid, data_dir_input_grid
+
+ implicit none
+
+ integer, intent(in)          :: localpet, npets
+
+ character(len=500)           :: the_file
+
+ integer :: j, k, jdisc, jgdtn, jpdtn, lugb, lugi
+ integer :: jids(200), jgdt(200), jpdt(200), error
+ integer :: ni, nj, kgds(200), nret
+
+ logical :: unpack
+
+ real    :: res
+ real, allocatable :: rlon(:,:),rlat(:,:),xpts(:,:),ypts(:,:)
+
+ type(gribfield)                  :: gfld
+
+ the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
+
+ lugb=12
+
+ if (localpet == 0) then
+ call baopenr(lugb,the_file,error)
+ print*,'after g2 open ',error
+
+ j       = 0      ! search at beginning of file
+ lugi    = 0      ! no grib index file
+ jdisc   = 0      ! search for discipline - meterological products
+ jpdtn   = 0      ! search for product definition template number
+ jgdtn   = -1     ! search for grid definition template number
+ jids    = -9999  ! array of values in identification section, set to wildcard
+ jgdt    = -9999  ! array of values in grid definition template 3.m
+ jpdt    = -9999  ! array of values in product definition template 4.n
+ unpack  = .true. ! unpack data
+   
+ call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, error)
+
+ print*,'after getgb2 temp num ', gfld%igdtnum
+ print*,'after getgb2 template ', gfld%igdtmpl
+
+ call baclose(lugb,error)
+
+ kgds = 0
+ call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds, ni, nj, res)
+
+ print*,'after conversion kgds 1 ',ni, nj
+ print*,'after conversion kgds 2 ',kgds(1:25)
+
+ allocate(rlat(ni,nj))
+ allocate(rlon(ni,nj))
+ allocate(xpts(ni,nj))
+ allocate(ypts(ni,nj))
+
+ call gdswzd(kgds,0,(ni*nj),-9999.,xpts,ypts,rlon,rlat,nret)
+
+ print*,'after gdswzd nret ',nret
+
+ print*,'after gdswzd lat/lon 11', rlat(1,1),rlon(1,1)
+ print*,'after gdswzd lat/lon ni/11', rlat(ni,1),rlon(ni,1)
+ print*,'after gdswzd lat/lon 11/nj', rlat(1,nj),rlon(1,nj)
+ print*,'after gdswzd lat/lon ni/nj', rlat(ni,nj),rlon(ni,nj)
+ print*,'after gdswzd lat/lon mid  ', rlat(ni/2,nj/2),rlon(ni/2,nj/2)
+
+ endif
+
+ call MPI_BARRIER(MPI_COMM_WORLD, error)
+ stop
+
+ end subroutine define_input_grid_grib2_gg
+
 !> Define input grid object for non-GFS grib2 data.
 !!
 !! @param [in] localpet ESMF local persistent execution thread 
@@ -930,12 +1011,16 @@
  endif
 
  print*,'after gdswzd nret ',nret
+
+ if (localpet) then
  print*,'after gdswzd lat/lon 11', rlat(1,1),rlon(1,1)
  print*,'after gdswzd lat/lon ni/11', rlat(ni,1),rlon(ni,1)
  print*,'after gdswzd lat/lon 11/nj', rlat(1,nj),rlon(1,nj)
  print*,'after gdswzd lat/lon ni/nj', rlat(ni,nj),rlon(ni,nj)
  print*,'after gdswzd lat/lon mid  ', rlat(ni/2,nj/2),rlon(ni/2,nj/2)
+ endif
 
+ 
  deallocate(xpts,ypts)
 
  allocate(rlatc(ni+1,nj+1))
@@ -954,13 +1039,18 @@
  if (kgds(1) == 205) then
    where (rlonc > 180.0) rlonc = rlonc - 360.0
  endif
+
+ if (localpet) then
  print*,'after gdswzd nret ',nret
  print*,'after gdswzd corner lat/lon 11', rlatc(1,1),rlonc(1,1)
  print*,'after gdswzd corner lat/lon ni/11', rlatc(ni+1,1),rlonc(ni+1,1)
  print*,'after gdswzd corner lat/lon 11/nj', rlatc(1,nj+1),rlonc(1,nj+1)
  print*,'after gdswzd corner lat/lon ni/nj', rlatc(ni+1,nj+1),rlonc(ni+1,nj+1)
  print*,'after gdswzd corner lat/lon mid  ', rlatc(ni/2,nj/2),rlonc(ni/2,nj/2)
+ endif
 
+
+ call abort
 !!!!!
 
  call ESMF_FieldGather(latitude_target_grid, lat_target, rootPet=0, tile=1, rc=error)
@@ -2023,8 +2113,41 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
      kgds(14) = -90
      kgds(15) = 0
 
+   elseif(igdtnum==0) then  ! lat/lon grid
+
+     iscale=igdstmpl(10)*igdstmpl(11)
+     if (iscale == 0) iscale = 1e6
+     kgds(1)=0                   ! oct 6
+     kgds(2)=igdstmpl(8)         ! octs 7-8, Ni
+     ni = kgds(2)
+     kgds(3)=igdstmpl(9)         ! octs 9-10, Nj
+     nj = kgds(3)
+     kgds(4)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of 1st grid point
+     kgds(5)=nint(float(igdstmpl(13))/float(iscale)*1000.)  ! octs 14-16, Lon of 1st grid point
+
+     kgds(6)=0                   ! oct 17, resolution and component flags
+     if (igdstmpl(1)==2 ) kgds(6)=64
+     if ( btest(igdstmpl(14),4).OR.btest(igdstmpl(14),5) ) kgds(6)=kgds(6)+128
+     if ( btest(igdstmpl(14),3) ) kgds(6)=kgds(6)+8
+
+     kgds(7)=nint(float(igdstmpl(15))/float(iscale)*1000.)  ! octs 18-20, Lat of last grid point
+     kgds(8)=nint(float(igdstmpl(16))/float(iscale)*1000.)  ! octs 21-23, Lon of last grid point
+     kgds(9)=nint(float(igdstmpl(17))/float(iscale)*1000.)  ! octs 24-25, di
+     kgds(10)=nint(float(igdstmpl(18))/float(iscale)*1000.) ! octs 26-27, dj
+
+     kgds(11) = 0              ! oct 28, scan mode
+     if (btest(igdstmpl(19),7)) kgds(11) = 128
+     if (btest(igdstmpl(19),6)) kgds(11) = kgds(11) +  64
+     if (btest(igdstmpl(19),5)) kgds(11) = kgds(11) +  32
+
+     kgds(12)=0      ! octs 29-32, reserved
+     kgds(19)=0      ! oct 4, # vert coordinate parameters
+     kgds(20)=255    ! oct 5, used for thinned grids, set to 255
+
    else
       print*,'grid not defined', igdtnum
+
+      call abort
 
 
  endif
