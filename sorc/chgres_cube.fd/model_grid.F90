@@ -136,8 +136,6 @@
    call define_input_grid_mosaic(localpet, npets)
  endif
 
- call abort
-
  end subroutine define_input_grid
 
 !> Define grid object for input data on global gaussian grids.
@@ -844,6 +842,7 @@
  
  subroutine define_input_grid_grib2_gg(localpet,npets)
 
+ use wgrib2api
  use mpi
  use grib_mod
  use gdswzd_mod
@@ -855,14 +854,25 @@
 
  character(len=500)           :: the_file
 
- integer :: j, k, jdisc, jgdtn, jpdtn, lugb, lugi
- integer :: jids(200), jgdt(200), jpdt(200), error
- integer :: ni, nj, kgds(200), nret
+ integer :: i, j, k, jdisc, jgdtn, jpdtn, lugb, lugi
+ integer :: jids(200), jgdt(200), jpdt(200), rc
+ integer :: kgds(200), nret, clb(2), cub(2)
 
  logical :: unpack
 
  real    :: res
  real, allocatable :: rlon(:,:),rlat(:,:),xpts(:,:),ypts(:,:)
+ real, allocatable :: rlon_corner(:,:),rlat_corner(:,:)
+ real(esmf_kind_r8), allocatable  :: latitude(:,:)
+ real(esmf_kind_r8), allocatable  :: longitude(:,:)
+ real(esmf_kind_r8), allocatable  :: latitude_corner(:,:)
+ real(esmf_kind_r8), allocatable  :: longitude_corner(:,:)
+ real(esmf_kind_r8), pointer      :: lat_src_ptr(:,:)
+ real(esmf_kind_r8), pointer      :: lat_corner_src_ptr(:,:)
+ real(esmf_kind_r8), pointer      :: lon_src_ptr(:,:)
+ real(esmf_kind_r8), pointer      :: lon_corner_src_ptr(:,:)
+
+ type(esmf_polekind_flag)         :: polekindflag(2)
 
  type(gribfield)                  :: gfld
 
@@ -870,9 +880,8 @@
 
  lugb=12
 
- if (localpet == 0) then
- call baopenr(lugb,the_file,error)
- print*,'after g2 open ',error
+ call baopenr(lugb,the_file,rc)
+ print*,'after g2 open ',rc
 
  j       = 0      ! search at beginning of file
  lugi    = 0      ! no grib index file
@@ -885,38 +894,222 @@
  unpack  = .true. ! unpack data
    
  call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, error)
+             unpack, k, gfld, rc)
 
- print*,'after getgb2 temp num ', gfld%igdtnum
- print*,'after getgb2 template ', gfld%igdtmpl
+ if (localpet == 0)then
+   print*,'after getgb2 temp num ', gfld%igdtnum
+   print*,'after getgb2 template ', gfld%igdtmpl
+ endif
 
- call baclose(lugb,error)
+ call baclose(lugb,rc)
 
  kgds = 0
- call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds, ni, nj, res)
+ call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds, i_input, j_input, res)
 
- print*,'after conversion kgds 1 ',ni, nj
- print*,'after conversion kgds 2 ',kgds(1:25)
+ if (localpet == 0) then
+   print*,'after conversion kgds ni/nj ',i_input, j_input
+   print*,'after conversion kgds   ',kgds(1:25)
+ endif
 
- allocate(rlat(ni,nj))
- allocate(rlon(ni,nj))
- allocate(xpts(ni,nj))
- allocate(ypts(ni,nj))
+ allocate(rlat(i_input,j_input))
+ allocate(rlon(i_input,j_input))
+ allocate(rlat_corner(i_input,j_input))
+ allocate(rlon_corner(i_input,j_input))
+ allocate(xpts(i_input,j_input))
+ allocate(ypts(i_input,j_input))
 
- call gdswzd(kgds,0,(ni*nj),-9999.,xpts,ypts,rlon,rlat,nret)
+ call gdswzd(kgds,0,(i_input*j_input),-9999.,xpts,ypts,rlon,rlat,nret)
 
  print*,'after gdswzd nret ',nret
 
- print*,'after gdswzd lat/lon 11', rlat(1,1),rlon(1,1)
- print*,'after gdswzd lat/lon ni/11', rlat(ni,1),rlon(ni,1)
- print*,'after gdswzd lat/lon 11/nj', rlat(1,nj),rlon(1,nj)
- print*,'after gdswzd lat/lon ni/nj', rlat(ni,nj),rlon(ni,nj)
- print*,'after gdswzd lat/lon mid  ', rlat(ni/2,nj/2),rlon(ni/2,nj/2)
+ if (localpet == 0) then
+   print*,'after gdswzd lat/lon 11', rlat(1,1),rlon(1,1)
+   print*,'after gdswzd lat/lon ni/11', rlat(i_input,1),rlon(i_input,1)
+   print*,'after gdswzd lat/lon 11/nj', rlat(1,j_input),rlon(1,j_input)
+   print*,'after gdswzd lat/lon ni/nj', rlat(i_input,j_input),rlon(i_input,j_input)
+   print*,'after gdswzd lat/lon mid  ', rlat(i_input/2,j_input/2),rlon(i_input/2,j_input/2)
+ endif
+
+ xpts = xpts - 0.5
+ ypts = ypts - 0.5
+
+ call gdswzd(kgds,1,(i_input*j_input),-9999.,xpts,ypts,rlon_corner,rlat_corner,nret)
+
+ print*,'after gdswzd corner nret ',nret
+
+ if (localpet == 0) then
+   print*,'after gdswzd lat/lon corner 11', rlat_corner(1,1),rlon_corner(1,1)
+   print*,'after gdswzd lat/lon corner ni/11', rlat_corner(i_input,1),rlon_corner(i_input,1)
+   print*,'after gdswzd lat/lon corner 11/nj', rlat_corner(1,j_input),rlon_corner(1,j_input)
+   print*,'after gdswzd lat/lon corner ni/nj', rlat_corner(i_input,j_input),rlon_corner(i_input,j_input)
+   print*,'after gdswzd lat/lon corner mid  ', rlat_corner(i_input/2,j_input/2),rlon_corner(i_input/2,j_input/2)
+ endif
+
+
+ if (gfld%igdtnum == 0) then ! gfs lat/lon data
+
+   print*,"- CALL GridCreate1PeriDim FOR INPUT GRID."
+
+   polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
+
+   input_grid = ESMF_GridCreate1PeriDim(minIndex=(/1,1/), &
+                                    maxIndex=(/i_input,j_input/), &
+                                    polekindflag=polekindflag, &
+                                    periodicDim=1, &
+                                    poleDim=2,  &
+                                    coordSys=ESMF_COORDSYS_SPH_DEG, &
+                                    regDecomp=(/1,npets/),  &
+                                    indexflag=ESMF_INDEX_GLOBAL, rc=rc)
+
+ else
+
+   print*,"- CALL GridCreateNoPeriDim FOR INPUT GRID."
+
+   input_grid = ESMF_GridCreateNoPeriDim(maxIndex=(/i_input,j_input/), & 
+                                  indexflag=ESMF_INDEX_GLOBAL, &
+                                  rc=rc)
 
  endif
 
- call MPI_BARRIER(MPI_COMM_WORLD, error)
- stop
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN GridCreate1PeriDim", rc)
+
+ print*,"- CALL FieldCreate FOR INPUT GRID LATITUDE."
+ latitude_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="input_grid_latitude", rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR INPUT GRID LONGITUDE."
+ longitude_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="input_grid_longitude", rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN FieldCreate", rc)
+
+ allocate(latitude(i_input,j_input))
+ allocate(longitude(i_input,j_input))
+
+ latitude = rlat
+ longitude = rlon
+
+ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
+ call ESMF_FieldScatter(longitude_input_grid, longitude, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ print*,"- CALL FieldScatter FOR INPUT GRID LATITUDE."
+ call ESMF_FieldScatter(latitude_input_grid, latitude, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ print*,"- CALL GridAddCoord FOR INPUT GRID."
+ call ESMF_GridAddCoord(input_grid, &
+                        staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN GridAddCoord", rc)
+
+ print*,"- CALL GridGetCoord FOR INPUT GRID X-COORD."
+ nullify(lon_src_ptr)
+ call ESMF_GridGetCoord(input_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CENTER, &
+                        coordDim=1, &
+                        farrayPtr=lon_src_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN GridGetCoord", rc)
+
+ print*,"- CALL GridGetCoord FOR INPUT GRID Y-COORD."
+ nullify(lat_src_ptr)
+ call ESMF_GridGetCoord(input_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CENTER, &
+                        coordDim=2, &
+                        computationalLBound=clb, &
+                        computationalUBound=cub, &
+                        farrayPtr=lat_src_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN GridGetCoord", rc)
+
+ do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     lon_src_ptr(i,j) = longitude(i,j)
+     if (lon_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_src_ptr(i,j) = lon_src_ptr(i,j) - 360.0_esmf_kind_r8
+     lat_src_ptr(i,j) = latitude(i,j)
+   enddo
+ enddo
+
+ ip1_input = i_input + 1
+ jp1_input = j_input + 1
+
+ if (gfld%igdtnum == 0) then ! gfs lat/lon data
+
+   allocate(latitude_corner(i_input,jp1_input))
+   allocate(longitude_corner(i_input,jp1_input))
+
+   latitude_corner(:,1:j_input) = rlat_corner
+   latitude_corner(:,jp1_input) = -(latitude_corner(:,1))
+   longitude_corner(:,1:j_input) = rlon_corner
+   longitude_corner(:,jp1_input) = longitude_corner(:,j_input)
+
+   if (localpet == 0) then
+     do j = 1, jp1_input
+       print*,'lat corner ',j, latitude_corner(1,j)
+     enddo
+   endif
+
+ else
+
+   allocate(latitude_corner(i_input,j_input))
+   allocate(longitude_corner(i_input,j_input))
+
+   latitude_corner = rlat_corner
+   longitude_corner = rlon_corner
+
+ endif
+
+ print*,"- CALL GridAddCoord FOR INPUT GRID."
+ call ESMF_GridAddCoord(input_grid, &
+                        staggerloc=ESMF_STAGGERLOC_CORNER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN GridAddCoord", rc)
+
+ print*,"- CALL GridGetCoord FOR INPUT GRID X-COORD."
+ nullify(lon_corner_src_ptr)
+ call ESMF_GridGetCoord(input_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CORNER, &
+                        coordDim=1, &
+                        farrayPtr=lon_corner_src_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN GridGetCoord", rc)
+
+ print*,"- CALL GridGetCoord FOR INPUT GRID Y-COORD."
+ nullify(lat_corner_src_ptr)
+ call ESMF_GridGetCoord(input_grid, &
+                        staggerLoc=ESMF_STAGGERLOC_CORNER, &
+                        coordDim=2, &
+                        computationalLBound=clb, &
+                        computationalUBound=cub, &
+                        farrayPtr=lat_corner_src_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN GridGetCoord", rc)
+
+ do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     lon_corner_src_ptr(i,j) = longitude_corner(i,j)
+     if (lon_corner_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_src_ptr(i,j) = lon_corner_src_ptr(i,j) - 360.0_esmf_kind_r8
+     lat_corner_src_ptr(i,j) = latitude_corner(i,j)
+   enddo
+ enddo
+
+ if (localpet == 0) then
+   print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
+   rc=grb2_mk_inv(the_file,inv_file)
+   if (rc /=0) call error_handler("OPENING GRIB2 FILE using wgrib2",rc)
+ endif
+
+ call MPI_BARRIER(MPI_COMM_WORLD, rc)
 
  end subroutine define_input_grid_grib2_gg
 
@@ -2122,7 +2315,8 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
      ni = kgds(2)
      kgds(3)=igdstmpl(9)         ! octs 9-10, Nj
      nj = kgds(3)
-     kgds(4)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of 1st grid point
+!    kgds(4)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of 1st grid point
+     kgds(7)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of 1st grid point
      kgds(5)=nint(float(igdstmpl(13))/float(iscale)*1000.)  ! octs 14-16, Lon of 1st grid point
 
      kgds(6)=0                   ! oct 17, resolution and component flags
@@ -2130,7 +2324,8 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
      if ( btest(igdstmpl(14),4).OR.btest(igdstmpl(14),5) ) kgds(6)=kgds(6)+128
      if ( btest(igdstmpl(14),3) ) kgds(6)=kgds(6)+8
 
-     kgds(7)=nint(float(igdstmpl(15))/float(iscale)*1000.)  ! octs 18-20, Lat of last grid point
+!    kgds(7)=nint(float(igdstmpl(15))/float(iscale)*1000.)  ! octs 18-20, Lat of last grid point
+     kgds(4)=nint(float(igdstmpl(15))/float(iscale)*1000.)  ! octs 18-20, Lat of last grid point
      kgds(8)=nint(float(igdstmpl(16))/float(iscale)*1000.)  ! octs 21-23, Lon of last grid point
      kgds(9)=nint(float(igdstmpl(17))/float(iscale)*1000.)  ! octs 24-25, di
      kgds(10)=nint(float(igdstmpl(18))/float(iscale)*1000.) ! octs 26-27, dj
