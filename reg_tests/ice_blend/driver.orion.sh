@@ -43,13 +43,20 @@ export DATA="${DATA}/reg-tests/ice-blend"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export WGRIB=/apps/contrib/NCEPLIBS/orion/utils/grib_util.v1.2.0/exec/wgrib
 export WGRIB2=/apps/contrib/NCEPLIBS/orion/utils/grib_util.v1.2.0/exec/wgrib2
 export COPYGB=/apps/contrib/NCEPLIBS/lib/NCEPLIBS-grib_util/v1.1.1/exec/copygb
 export COPYGB2=/apps/contrib/NCEPLIBS/orion/utils/grib_util.v1.2.0/exec/copygb2
 export CNVGRIB=/apps/contrib/NCEPLIBS/orion/utils/grib_util.v1.2.0/exec/cnvgrib
 
-export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/ice_blend
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ice_blend
 export HOMEgfs=$PWD/../..
 
 rm -fr $DATA

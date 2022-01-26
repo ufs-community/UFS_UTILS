@@ -66,6 +66,7 @@ program process_FVCOM
    real :: truelat1, truelat2, stdlon, lat1, lon1, r_earth
    real :: knowni, knownj, dx
    real :: one, pi, deg2rad
+   real :: zero
 
    character(len=180) :: fv3file
    character(len=180) :: fvcomfile
@@ -76,9 +77,11 @@ program process_FVCOM
    real(r_kind), allocatable :: fv3ice(:,:), fv3sst(:,:)
    real(r_kind), allocatable :: fv3sfcT(:,:), fv3mask(:,:)
    real(r_kind), allocatable :: fv3iceT(:,:), fv3sfcTl(:,:)
+   real(r_kind), allocatable :: fv3zorl(:,:), fv3hice(:,:)
    real(r_kind), allocatable :: lbcice(:,:), lbcsst(:,:)
    real(r_kind), allocatable :: lbcsfcT(:,:), lbcmask(:,:)
-   real(r_kind), allocatable :: lbciceT(:,:)   
+   real(r_kind), allocatable :: lbciceT(:,:), lbczorl(:,:)
+   real(r_kind), allocatable :: lbchice(:,:)   
 
 !  Declare namelists
 !  SETUP (general control namelist) :
@@ -97,6 +100,7 @@ program process_FVCOM
 !
 if(mype==0) then
 
+   zero = 0.0
 !  Get file names from command line arguements
    num_args = command_argument_count()
    allocate(args(num_args))
@@ -140,13 +144,16 @@ if(mype==0) then
    allocate(fv3mask(nlon,nlat))
    allocate(fv3iceT(nlon,nlat))
    allocate(fv3sfcTl(nlon,nlat))
+   allocate(fv3zorl(nlon,nlat))
+   allocate(fv3hice(nlon,nlat))
 
    allocate(lbcice(nlon,nlat))
    allocate(lbcsfcT(nlon,nlat))
    allocate(lbcsst(nlon,nlat))
    allocate(lbcmask(nlon,nlat))
    allocate(lbciceT(nlon,nlat))
-
+   allocate(lbczorl(nlon,nlat))
+   allocate(lbchice(nlon,nlat))
 !  Read fv3 sfc_data.nc before update
 
 !   fv3file='sfc_data.nc'
@@ -157,7 +164,7 @@ if(mype==0) then
 
    call fcst%initial('FV3LAM',wcstart)
    call fcst%list_initial
-   call fcst%read_n(trim(fv3file),'FV3LAM',wcstart,fv3lon,fv3lat,fv3times,t1,fv3mask,fv3sst,fv3ice,fv3sfcT,fv3iceT,fv3sfcTl)
+   call fcst%read_n(trim(fv3file),'FV3LAM',wcstart,fv3lon,fv3lat,fv3times,t1,fv3mask,fv3sst,fv3ice,fv3sfcT,fv3iceT,fv3sfcTl,fv3zorl,fv3hice)
    call fcst%finish('FV3LAM',wcstart)
 
 
@@ -176,7 +183,7 @@ if(mype==0) then
    t2=indexFVCOMsel
    write(*,*) 'time asked for =', trim(inputFVCOMselStr)
    write(*,*) 'time index selected = ', t2
-   call fcst%read_n(trim(fvcomfile),' FVCOM',wcstart,lbclon,lbclat,lbctimes,t2,lbcmask,lbcsst,lbcice,lbcsfcT,lbciceT,fv3sfcTl)
+   call fcst%read_n(trim(fvcomfile),' FVCOM',wcstart,lbclon,lbclat,lbctimes,t2,lbcmask,lbcsst,lbcice,lbcsfcT,lbciceT,fv3sfcTl,lbczorl,lbchice)
    call fcst%finish(' FVCOM',wcstart)
 
 !  Check that the dimensions match
@@ -207,19 +214,24 @@ if(mype==0) then
    if (wcstart == 'warm') then
      do j=1,nlat
         do i=1,nlon
-           if (lbcmask(i,j) > 0. .and. lbcsst(i,j) .ge. -90.0) then
+           if (lbcmask(i,j) > 0. .and. lbcsst(i,j) .ge. -90.0) then !GL Points
               !If ice fraction below 15%, set to 0
               if (lbcice(i,j) < 0.15) then
                 lbcice(i,j) = 0.0
+                lbchice(i,j) = 0.0 !remove ice thickness
               endif
               fv3ice(i,j) = lbcice(i,j)
+              fv3hice(i,j) = lbchice(i,j)
+
               !If ice in FVCOM, but not in FV3-LAM, change to ice
               if (lbcice(i,j) > 0. .and. fv3mask(i,j) == 0.) then
                 fv3mask(i,j) = 2.
+                fv3zorl(i,j) = 1.1
               endif
               !If ice in FV3-LAM and not FVCOM, remove it from FV3-LAM
               if (fv3mask(i,j) == 2. .and. lbcice(i,j) == 0.) then
                 fv3mask(i,j) = 0.
+                fv3zorl(i,j) = zero / zero !Use Fill_Value
               endif
               fv3sst(i,j) = lbcsst(i,j) + 273.15
               fv3sfcT(i,j) = lbcsst(i,j) + 273.15
@@ -239,15 +251,19 @@ if(mype==0) then
               !If ice fraction below 15%, set to 0
               if (lbcice(i,j) < 0.15) then
                 lbcice(i,j) = 0.0
+                lbchice(i,j) = 0.0 !remove ice thickness
               endif
               fv3ice(i,j) = lbcice(i,j)
+              fv3hice(i,j) = lbchice(i,j)
               !If ice in FVCOM, but not in FV3-LAM, change to ice
               if (lbcice(i,j) > 0. .and. fv3mask(i,j) == 0.) then
                 fv3mask(i,j) = 2.
+                fv3zorl(i,j) = 1.1
               endif
               !If ice in FV3-LAM and not FVCOM, remove it from FV3-LAM
               if (fv3mask(i,j) == 2. .and. lbcice(i,j) == 0.) then
                 fv3mask(i,j) = 0.
+                fv3zorl(i,j) = zero / zero !Use Fill_Value
               endif
               fv3sst(i,j) = lbcsst(i,j) + 273.15
               fv3sfcT(i,j) = lbcsst(i,j) + 273.15
@@ -270,13 +286,15 @@ if(mype==0) then
    call geo%replace_var("fice",NLON,NLAT,fv3ice)
    call geo%replace_var("slmsk",NLON,NLAT,fv3mask)
    call geo%replace_var("tisfc",NLON,NLAT,fv3iceT)
-
+   call geo%replace_var("hice",NLON,NLAT,fv3hice)
    if (wcstart == 'cold') then
 ! Add_New_Var takes names of (Variable,Dim1,Dim2,Dim3,Long_Name,Units)
+      call geo%replace_var("zorl",NLON,NLAT,fv3zorl)
       call geo%add_new_var('glmsk','xaxis_1','yaxis_1','Time','glmsk','none')
       call geo%replace_var('glmsk',NLON,NLAT,lbcmask)
    end if
    if (wcstart == 'warm') then
+      call geo%replace_var("zorli",NLON,NLAT,fv3zorl)
       call geo%replace_var("tsfc",NLON,NLAT,fv3sfcT)
       call geo%replace_var("tsfcl",NLON,NLAT,fv3sfcTl)
       call geo%add_new_var('glmsk','xaxis_1','yaxis_1','glmsk','none')

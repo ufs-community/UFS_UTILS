@@ -69,6 +69,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< C96 GFS SIGIO TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $HOMEufs/reg_tests/update_baseline.sh $HOMEreg "c96_gfs_sigio" $commit_num
+  fi
 else
   echo "<<< C96 GFS SIGIO TEST PASSED. >>>"
 fi
