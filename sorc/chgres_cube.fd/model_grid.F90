@@ -863,6 +863,7 @@
  real    :: res
  real, allocatable :: rlon(:,:),rlat(:,:),xpts(:,:),ypts(:,:)
  real, allocatable :: rlon_corner(:,:),rlat_corner(:,:)
+ real, allocatable :: xpts_corner(:,:),ypts_corner(:,:)
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
  real(esmf_kind_r8), allocatable  :: latitude_corner(:,:)
@@ -903,6 +904,17 @@
 
  call baclose(lugb,rc)
 
+ if (gfld%igdtnum == 0) then
+   input_grid_type = 'latlon'
+ elseif (gfld%igdtnum == 30) then
+   input_grid_type = 'lambert'
+ elseif (gfld%igdtnum == 32769) then
+   input_grid_type = 'rotated_latlon'
+ else
+   print*,'grid not supported'
+   call abort
+ endif
+
  kgds = 0
  call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds, i_input, j_input, res)
 
@@ -911,14 +923,26 @@
    print*,'after conversion kgds   ',kgds(1:25)
  endif
 
+ ip1_input = i_input + 1
+ jp1_input = j_input + 1
+
  allocate(rlat(i_input,j_input))
  allocate(rlon(i_input,j_input))
- allocate(rlat_corner(i_input,j_input))
- allocate(rlon_corner(i_input,j_input))
  allocate(xpts(i_input,j_input))
  allocate(ypts(i_input,j_input))
+ allocate(rlat_corner(ip1_input,jp1_input))
+ allocate(rlon_corner(ip1_input,jp1_input))
+ allocate(xpts_corner(ip1_input,jp1_input))
+ allocate(ypts_corner(ip1_input,jp1_input))
 
- call gdswzd(kgds,0,(i_input*j_input),-9999.,xpts,ypts,rlon,rlat,nret)
+ do j = 1, j_input
+ do i = 1, i_input
+   xpts(i,j) = float(i)
+   ypts(i,j) = float(j)
+ enddo
+ enddo
+
+ call gdswzd(kgds,1,(i_input*j_input),-9999.,xpts,ypts,rlon,rlat,nret)
 
  print*,'after gdswzd nret ',nret
 
@@ -930,21 +954,25 @@
    print*,'after gdswzd lat/lon mid  ', rlat(i_input/2,j_input/2),rlon(i_input/2,j_input/2)
  endif
 
- xpts = xpts - 0.5
- ypts = ypts - 0.5
+ do j = 1, jp1_input
+ do i = 1, ip1_input
+   xpts_corner(i,j) = float(i) - 0.5
+   ypts_corner(i,j) = float(j) - 0.5
+ enddo
+ enddo
 
- call gdswzd(kgds,1,(i_input*j_input),-9999.,xpts,ypts,rlon_corner,rlat_corner,nret)
+ call gdswzd(kgds,1,(ip1_input*jp1_input),-9999.,xpts_corner,ypts_corner,rlon_corner,rlat_corner,nret)
 
  print*,'after gdswzd corner nret ',nret
 
  if (localpet == 0) then
    print*,'after gdswzd lat/lon corner 11', rlat_corner(1,1),rlon_corner(1,1)
-   print*,'after gdswzd lat/lon corner ni/11', rlat_corner(i_input,1),rlon_corner(i_input,1)
-   print*,'after gdswzd lat/lon corner 11/nj', rlat_corner(1,j_input),rlon_corner(1,j_input)
-   print*,'after gdswzd lat/lon corner ni/nj', rlat_corner(i_input,j_input),rlon_corner(i_input,j_input)
+   print*,'after gdswzd lat/lon corner ni/11', rlat_corner(ip1_input,1),rlon_corner(ip1_input,1)
+   print*,'after gdswzd lat/lon corner 11/nj', rlat_corner(1,jp1_input),rlon_corner(1,jp1_input)
+   print*,'after gdswzd lat/lon corner ni/nj', rlat_corner(ip1_input,jp1_input),rlon_corner(ip1_input,jp1_input)
    print*,'after gdswzd lat/lon corner mid  ', rlat_corner(i_input/2,j_input/2),rlon_corner(i_input/2,j_input/2)
+   print*,'after gdswzd max/min corner ',maxval(rlat_corner),minval(rlat_corner),maxval(rlon_corner),minval(rlon_corner)
  endif
-
 
  if (gfld%igdtnum == 0) then ! gfs lat/lon data
 
@@ -1040,34 +1068,11 @@
    enddo
  enddo
 
- ip1_input = i_input + 1
- jp1_input = j_input + 1
+ allocate(latitude_corner(ip1_input,jp1_input))
+ allocate(longitude_corner(ip1_input,jp1_input))
 
- if (gfld%igdtnum == 0) then ! gfs lat/lon data
-
-   allocate(latitude_corner(i_input,jp1_input))
-   allocate(longitude_corner(i_input,jp1_input))
-
-   latitude_corner(:,1:j_input) = rlat_corner
-   latitude_corner(:,jp1_input) = -(latitude_corner(:,1))
-   longitude_corner(:,1:j_input) = rlon_corner
-   longitude_corner(:,jp1_input) = longitude_corner(:,j_input)
-
-   if (localpet == 0) then
-     do j = 1, jp1_input
-       print*,'lat corner ',j, latitude_corner(1,j)
-     enddo
-   endif
-
- else
-
-   allocate(latitude_corner(i_input,j_input))
-   allocate(longitude_corner(i_input,j_input))
-
-   latitude_corner = rlat_corner
-   longitude_corner = rlon_corner
-
- endif
+ latitude_corner = rlat_corner
+ longitude_corner = rlon_corner
 
  print*,"- CALL GridAddCoord FOR INPUT GRID."
  call ESMF_GridAddCoord(input_grid, &
