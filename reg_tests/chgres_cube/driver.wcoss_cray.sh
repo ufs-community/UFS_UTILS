@@ -42,6 +42,13 @@ PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
 
 export HOMEufs=$PWD/../..
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
 
 LOG_FILE=consistency.log

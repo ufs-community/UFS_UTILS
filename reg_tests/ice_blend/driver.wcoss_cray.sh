@@ -40,6 +40,13 @@ export DATA="${DATA}/reg-tests/ice-blend"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export WGRIB=/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.5/exec/wgrib
 export WGRIB2=/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.5/exec/wgrib2
 export COPYGB2=/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.5/exec/copygb2
