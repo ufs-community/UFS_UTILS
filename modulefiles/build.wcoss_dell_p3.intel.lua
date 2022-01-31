@@ -16,7 +16,7 @@ prepend_path("MODULEPATH", "/usrx/local/nceplibs/dev/hpc-stack/libs/hpc-stack/mo
 hpc_ver=os.getenv("hpc_ver") or "1.1.0"
 load(pathJoin("hpc", hpc_ver))
 
-ips_ver=os.getenv("ips_ver") or "18.0.1.163"
+ips_ver=os.getenv("ips_ver") or "18.0.5.274"
 load(pathJoin("hpc-ips", ips_ver))
 
 impi_ver=os.getenv("impi_ver") or "18.0.1"
@@ -34,16 +34,16 @@ load(pathJoin("hdf5", hdf5_ver))
 netcdf_ver=os.getenv("netcdf_ver") or "4.7.4"
 load(pathJoin("netcdf", netcdf_ver))
 
-nccmp_ver=os.getenv("nccmp_ver") or "1.8.7.0"
+nccmp_ver=os.getenv("nccmp_ver") or "1.8.9.0"
 load(pathJoin("nccmp", nccmp_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8_1_0_beta_snapshot_27"
+esmf_ver=os.getenv("esmf_ver") or "8_2_0"
 load(pathJoin("esmf", esmf_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.1"
+g2_ver=os.getenv("g2_ver") or "3.4.2"
 load(pathJoin("g2", g2_ver))
 
 ip_ver=os.getenv("ip_ver") or "3.3.3"
