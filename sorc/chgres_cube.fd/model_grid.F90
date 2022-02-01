@@ -842,6 +842,7 @@
  
  subroutine define_input_grid_grib2_gg(localpet,npets)
 
+ use netcdf
  use wgrib2api
  use mpi
  use grib_mod
@@ -857,12 +858,19 @@
  integer :: i, j, k, jdisc, jgdtn, jpdtn, lugb, lugi
  integer :: jids(200), jgdt(200), jpdt(200), rc
  integer :: kgds(200), nret, clb(2), cub(2)
+ integer :: error, ncid, dim_i, dim_ip1, dim_j, dim_jp1
+ integer :: fsize=65536
+ integer :: header_buffer_val = 16384
+ integer :: id_gridlat, id_gridlon, id_gridrot
+ integer :: id_gridlat_corners, id_gridlon_corners
+ integer :: i_super, j_super, dim_i_super, dim_j_super
 
  logical :: unpack
 
  real    :: res
  real, allocatable :: rlon(:,:),rlat(:,:),xpts(:,:),ypts(:,:)
  real, allocatable :: rlon_corner(:,:),rlat_corner(:,:)
+ real, allocatable :: rlon_super(:,:),rlat_super(:,:)
  real, allocatable :: xpts_corner(:,:),ypts_corner(:,:)
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
@@ -965,6 +973,12 @@
 
  print*,'after gdswzd corner nret ',nret
 
+ i_super = 2 * i_input + 1
+ j_super = 2 * j_input + 1
+
+ allocate(rlon_super(i_super,j_super))
+ allocate(rlat_super(i_super,j_super))
+
  if (localpet == 0) then
    print*,'after gdswzd lat/lon corner 11', rlat_corner(1,1),rlon_corner(1,1)
    print*,'after gdswzd lat/lon corner ni/11', rlat_corner(ip1_input,1),rlon_corner(ip1_input,1)
@@ -972,6 +986,55 @@
    print*,'after gdswzd lat/lon corner ni/nj', rlat_corner(ip1_input,jp1_input),rlon_corner(ip1_input,jp1_input)
    print*,'after gdswzd lat/lon corner mid  ', rlat_corner(i_input/2,j_input/2),rlon_corner(i_input/2,j_input/2)
    print*,'after gdswzd max/min corner ',maxval(rlat_corner),minval(rlat_corner),maxval(rlon_corner),minval(rlon_corner)
+   ncid = 34
+   error = nf90_create("./latlon.nc", IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
+                       ncid, initialsize=0, chunksize=fsize)
+   call netcdf_err(error, 'CREATING FILE=latlon.nc' )
+
+   error = nf90_def_dim(ncid, 'ny', j_input, dim_j)
+   call netcdf_err(error, 'DEFINING j DIMENSION' )
+
+   error = nf90_def_dim(ncid, 'nx', i_input, dim_i)
+   call netcdf_err(error, 'DEFINING i DIMENSION' )
+
+   error = nf90_def_dim(ncid, 'ny_stag', jp1_input, dim_jp1)
+   call netcdf_err(error, 'DEFINING jp1 DIMENSION' )
+
+   error = nf90_def_dim(ncid, 'nx_stag', ip1_input, dim_ip1)
+   call netcdf_err(error, 'DEFINING ip1 DIMENSION' )
+
+   error = nf90_def_var(ncid, 'gridlat', NF90_FLOAT, (/dim_i,dim_j/), id_gridlat)
+   call netcdf_err(error, 'DEFINING gridlat' )
+
+   error = nf90_def_var(ncid, 'gridlon', NF90_FLOAT, (/dim_i,dim_j/), id_gridlon)
+   call netcdf_err(error, 'DEFINING gridlon' )
+
+   error = nf90_def_var(ncid, 'gridrot', NF90_FLOAT, (/dim_i,dim_j/), id_gridrot)
+   call netcdf_err(error, 'DEFINING gridrot' )
+
+   error = nf90_def_var(ncid, 'gridlat_corners', NF90_FLOAT, (/dim_ip1,dim_jp1/), id_gridlat_corners)
+   call netcdf_err(error, 'DEFINING gridlat_corners' )
+
+   error = nf90_def_var(ncid, 'gridlon_corners', NF90_FLOAT, (/dim_ip1,dim_jp1/), id_gridlon_corners)
+   call netcdf_err(error, 'DEFINING gridlon_corners' )
+
+   error = nf90_enddef(ncid, header_buffer_val,4,0,4)
+   call netcdf_err(error, 'DEFINING HEADER' )
+
+   error = nf90_put_var(ncid, id_gridlat, real(rlat,4) )
+   call netcdf_err(error, 'writing gridlat' )
+
+   error = nf90_put_var(ncid, id_gridlon, real(rlon,4) )
+   call netcdf_err(error, 'writing gridlon' )
+
+   error = nf90_put_var(ncid, id_gridlat_corners, real(rlat_corner,4) )
+   call netcdf_err(error, 'writing gridlat_corner' )
+
+   error = nf90_put_var(ncid, id_gridlon_corners, real(rlon_corner,4) )
+   call netcdf_err(error, 'writing gridlon_corner' )
+
+   error = nf90_close(ncid)
+
  endif
 
  if (gfld%igdtnum == 0) then ! gfs lat/lon data
@@ -1210,7 +1273,7 @@
 
  print*,'after gdswzd nret ',nret
 
- if (localpet) then
+ if (localpet == 0) then
  print*,'after gdswzd lat/lon 11', rlat(1,1),rlon(1,1)
  print*,'after gdswzd lat/lon ni/11', rlat(ni,1),rlon(ni,1)
  print*,'after gdswzd lat/lon 11/nj', rlat(1,nj),rlon(1,nj)
@@ -1246,6 +1309,7 @@
  print*,'after gdswzd corner lat/lon ni/nj', rlatc(ni+1,nj+1),rlonc(ni+1,nj+1)
  print*,'after gdswzd corner lat/lon mid  ', rlatc(ni/2,nj/2),rlonc(ni/2,nj/2)
  endif
+
 
 
  call abort
