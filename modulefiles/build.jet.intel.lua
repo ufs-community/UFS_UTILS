@@ -28,7 +28,7 @@ load(pathJoin("netcdf", netcdf_ver))
 nccmp_ver=os.getenv("nccmp_ver") or "1.8.7.0"
 load(pathJoin("nccmp", nccmp_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8_1_0_beta_snapshot_27"
+esmf_ver=os.getenv("esmf_ver") or "8_2_0"
 load(pathJoin("esmf", esmf_ver))
 
 w3nco_ver=os.getenv("w3nco_ver") or "2.4.1"
