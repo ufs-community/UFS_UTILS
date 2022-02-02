@@ -6801,7 +6801,7 @@ else ! is native coordinate (hybrid).
 
  integer                                 :: varnum_u, varnum_v, vlev, &
                                             error, iret
- integer                                 :: j, jj, k, lugi, jgdtn, jpdtn
+ integer                                 :: j, k, lugi, jgdtn, jpdtn
  integer                                 :: jdisc, jids(200), jgdt(200), jpdt(200)
 
  character(len=20)                       :: vname
@@ -7202,7 +7202,7 @@ end subroutine handle_grib_error
  character(len=50)                       :: slevs(lsoil_input)
  character(len=50)                       :: method
 
- integer                                 :: varnum, i, j, jj, k, rc, rc2
+ integer                                 :: varnum, i, j, k, rc, rc2
  integer                                 :: jdisc, jgdtn, jpdtn, lugi
  integer                                 :: jids(200), jgdt(200), jpdt(200)
  integer                                 :: iscale1, iscale2
