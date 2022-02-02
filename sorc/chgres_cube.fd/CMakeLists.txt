@@ -47,7 +47,6 @@ target_link_libraries(
   sfcio::sfcio
   sigio::sigio
   bacio::bacio_4
-  ip::ip_d
   sp::sp_d
   w3nco::w3nco_d
   esmf
