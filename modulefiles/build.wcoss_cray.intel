@@ -31,9 +31,7 @@ setenv ZLIB_ROOT /usrx/local/prod/zlib/1.2.7/intel/haswell
 setenv PNG_ROOT /usrx/local/prod/png/1.2.49/intel/haswell
 setenv Jasper_ROOT /usrx/local/prod/jasper/1.900.1/intel/haswell
 
-module use /gpfs/hps3/emc/nems/noscrub/emc.nemspara/soft/modulefiles
-#module load esmf/8.0.0
-setenv ESMFMKFILE /gpfs/hps3/emc/nems/noscrub/emc.nemspara/soft/esmf/8.0.0/lib/esmf.mk
+module load esmf/820
 setenv NETCDF /opt/cray/netcdf/4.3.3.1/INTEL/14.0
 module rm gcc
 module load gcc/6.3.0
