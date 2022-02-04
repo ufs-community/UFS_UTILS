@@ -6144,7 +6144,7 @@ if (localpet == 0) then
 
  use wgrib2api
  use netcdf
- use program_setup, only      : get_var_cond, fix_dir_input_grid
+ use program_setup, only      : get_var_cond
  use model_grid, only         : input_grid_type
  implicit none
 
@@ -6165,7 +6165,6 @@ if (localpet == 0) then
 
  character(len=20)                       :: vname
  character(len=50)                       :: method_u, method_v
- character(len=250)                      :: file_coord
  character(len=10000)                    :: temp_msg
 
  d2r=acos(-1.0_esmf_kind_r8) / 180.0_esmf_kind_r8
@@ -6176,8 +6175,6 @@ if (localpet == 0) then
    allocate(u(0,0,0))
    allocate(v(0,0,0))
  endif
-
- file_coord = trim(fix_dir_input_grid)//"/latlon_grid3.32769.nc"
  
  vname = "u"
  call get_var_cond(vname,this_miss_var_method=method_u, this_miss_var_value=value_u, &
