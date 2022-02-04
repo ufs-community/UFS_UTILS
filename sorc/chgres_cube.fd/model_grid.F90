@@ -986,6 +986,12 @@
    print*,'after gdswzd lat/lon corner ni/nj', rlat_corner(ip1_input,jp1_input),rlon_corner(ip1_input,jp1_input)
    print*,'after gdswzd lat/lon corner mid  ', rlat_corner(i_input/2,j_input/2),rlon_corner(i_input/2,j_input/2)
    print*,'after gdswzd max/min corner ',maxval(rlat_corner),minval(rlat_corner),maxval(rlon_corner),minval(rlon_corner)
+
+ if (gfld%igdtnum == 32769) then
+   where(rlon > 180.0) rlon = rlon - 360.0
+   where(rlon_corner > 180.0) rlon_corner = rlon_corner -  360.0
+ endif
+
    ncid = 34
    error = nf90_create("./latlon.nc", IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
                        ncid, initialsize=0, chunksize=fsize)
