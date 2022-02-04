@@ -607,7 +607,7 @@
 
  end subroutine define_input_grid_mosaic
 
-!> Define input grid object for non-GFS grib2 data.
+!> Define input grid object for grib2 input data.
 !!
 !! @param [in] localpet ESMF local persistent execution thread 
 !! @param [in] npets  Number of persistent execution threads
@@ -661,47 +661,43 @@
 
  lugb=12
 
+ print*,"- OPEN AND READ INPUT DATA GRIB2 FILE: ", trim(the_file)
  call baopenr(lugb,the_file,rc)
- print*,'after g2 open ',rc
+ if (rc /= 0) call error_handler("OPENING FILE", rc)
 
- j       = 0      ! search at beginning of file
- lugi    = 0      ! no grib index file
- jdisc   = 0      ! search for discipline - meterological products
- jpdtn   = 0      ! search for product definition template number
- jgdtn   = -1     ! search for grid definition template number
- jids    = -9999  ! array of values in identification section, set to wildcard
- jgdt    = -9999  ! array of values in grid definition template 3.m
- jpdt    = -9999  ! array of values in product definition template 4.n
- unpack  = .true. ! unpack data
+! Read the first record and get the grid definition template.
+
+ j       = 0      ! Search at beginning of file
+ lugi    = 0      ! No grib index file
+ jdisc   = -1     ! Search for any discipline
+ jpdtn   = -1     ! Search for any product definition template number
+ jgdtn   = -1     ! Search for any grid definition template number
+ jids    = -9999  ! Array of values in identification section, set to wildcard.
+ jgdt    = -9999  ! Array of values in grid definition template, set to wildcard.
+ jpdt    = -9999  ! Array of values in product definition template, set to wildcard.
+ unpack  = .false. ! unpack data
    
  call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
-
- if (localpet == 0)then
-   print*,'after getgb2 temp num ', gfld%igdtnum
-   print*,'after getgb2 template ', gfld%igdtmpl
- endif
+ if (rc /= 0) call error_handler("DEGRIBBING INPUT FILE.", rc)
 
  call baclose(lugb,rc)
 
  if (gfld%igdtnum == 0) then
+   print*,"- INPUT DATA ON LAT/LON GRID."
    input_grid_type = 'latlon'
  elseif (gfld%igdtnum == 30) then
+   print*,"- INPUT DATA ON LAMBERT CONFORMAL GRID."
    input_grid_type = 'lambert'
  elseif (gfld%igdtnum == 32769) then
+   print*,"- INPUT DATA ON ROTATED LAT/LON GRID."
    input_grid_type = 'rotated_latlon'
  else
-   print*,'grid not supported'
-   call abort
+   call error_handler("INPUT GRID TEMPLATE NOT SUPPORTED.", 2)
  endif
 
  kgds = 0
  call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds, i_input, j_input, res)
-
- if (localpet == 0) then
-   print*,'after conversion kgds ni/nj ',i_input, j_input
-   print*,'after conversion kgds   ',kgds(1:25)
- endif
 
  ip1_input = i_input + 1
  jp1_input = j_input + 1
@@ -722,9 +718,14 @@
  enddo
  enddo
 
+ print*,"- COMPUTE GRID CELL CENTER COORDINATES."
  call gdswzd(kgds,1,(i_input*j_input),-9999.,xpts,ypts,rlon,rlat,nret)
 
- print*,'after gdswzd nret ',nret
+ if (nret /= (i_input*j_input)) then
+   call error_handler("GDSWZD RETURNED WRONG NUMBER OF POINTS.", 2)
+ endif
+
+ deallocate(xpts, ypts)
 
  if (localpet == 0) then
    print*,'after gdswzd lat/lon 11', rlat(1,1),rlon(1,1)
@@ -741,9 +742,14 @@
  enddo
  enddo
 
+ print*,"- COMPUTE GRID CELL CORNER COORDINATES."
  call gdswzd(kgds,1,(ip1_input*jp1_input),-9999.,xpts_corner,ypts_corner,rlon_corner,rlat_corner,nret)
 
- print*,'after gdswzd corner nret ',nret
+ if (nret /= (ip1_input*jp1_input)) then
+   call error_handler("GDSWZD RETURNED WRONG NUMBER OF POINTS.", 2)
+ endif
+
+ deallocate(xpts_corner, ypts_corner)
 
  if (localpet == 0) then
    print*,'after gdswzd lat/lon corner 11', rlat_corner(1,1),rlon_corner(1,1)
@@ -859,6 +865,8 @@
  latitude = rlat
  longitude = rlon
 
+ deallocate (rlat, rlon)
+
  print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  call ESMF_FieldScatter(longitude_input_grid, longitude, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -903,11 +911,15 @@
    enddo
  enddo
 
+ deallocate(latitude, longitude)
+
  allocate(latitude_corner(ip1_input,jp1_input))
  allocate(longitude_corner(ip1_input,jp1_input))
 
  latitude_corner = rlat_corner
  longitude_corner = rlon_corner
+
+ deallocate (rlat_corner, rlon_corner)
 
  print*,"- CALL GridAddCoord FOR INPUT GRID."
  call ESMF_GridAddCoord(input_grid, &
@@ -942,6 +954,8 @@
      lat_corner_src_ptr(i,j) = latitude_corner(i,j)
    enddo
  enddo
+
+ deallocate(latitude_corner, longitude_corner)
 
  if (localpet == 0) then
    print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
