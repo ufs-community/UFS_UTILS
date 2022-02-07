@@ -41,6 +41,13 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS_DEBUG "-O1 -ggdb -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans -ffpe-trap=invalid,zero,overflow -fbounds-check -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls")
 endif()
 
+if(APPLE)
+  # The linker on macOS does not include `common symbols` by default.
+  # Passing the -c flag includes them and fixes an error with undefined symbols.
+  set(CMAKE_Fortran_ARCHIVE_FINISH "<CMAKE_RANLIB> -c <TARGET>")
+  set(CMAKE_C_ARCHIVE_FINISH "<CMAKE_RANLIB> -c <TARGET>")
+endif()
+
 if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -traceback")
   set(CMAKE_C_FLAGS_RELEASE "-O2")
