@@ -16,8 +16,6 @@
 program gen_fixgrid
 
   use ESMF
-  ! ?workflows keep failing because of esmf version
-  use ESMF_RegridWeightGenMod
 
   use grdvars
   use inputnml

@@ -54,7 +54,7 @@ if [ $RESNAME = 400 ]; then
   export MOSAICRES=C48
   export NPX=48
   export TOPOGFILE=ocean_topog.nc
-  export EDITSFILE=''
+  export EDITSFILE='none'
 fi
 
 if [ $RESNAME = 100 ]; then
