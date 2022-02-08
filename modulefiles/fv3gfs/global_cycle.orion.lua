@@ -2,24 +2,27 @@ help([[
 Load environment to compile UFS_UTILS global_cycle on Orion
 ]])
 
-intel_ver=os.getenv("intel_ver") or "2020"
-load(pathJoin("intel", intel_ver))
+prepend_path("MODULEPATH", "/apps/contrib/NCEP/libs/hpc-stack/modulefiles/stack")
 
-cray_mpich_ver=os.getenv("cray_mpich_ver") or "2020"
-load(pathJoin("impi", cray_mpich_ver))
+hpc_ver=os.getenv("hpc_ver") or "1.1.0"
+load(pathJoin("hpc", hpc_ver))
 
-prepend_path("MODULEPATH", "/apps/contrib/NCEPLIBS/orion/modulefiles")
+hpc_intel_ver=os.getenv("hpc_intel_ver") or "2018.4"
+load(pathJoin("hpc-intel", hpc_intel_ver))
 
-w3nco_ver=os.getenv("w3nco_ver") or "2.1.0"
+hpc_intel_ver=os.getenv("impi_ver") or "2018.4"
+load(pathJoin("hpc-impi", impi_ver))
+
+w3nco_ver=os.getenv("w3nco_ver") or "2.4.1"
 load(pathJoin("w3nco", w3nco_ver))
 
-ip_ver=os.getenv("ip_ver") or "3.1.0"
+ip_ver=os.getenv("ip_ver") or "3.3.3"
 load(pathJoin("ip", ip_ver))
 
-sp_ver=os.getenv("sp_ver") or "2.0.3"
+sp_ver=os.getenv("sp_ver") or "2.3.3"
 load(pathJoin("sp", sp_ver))
 
-bacio_ver=os.getenv("bacio_ver") or "2.2.0"
+bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
 prepend_path("MODULEPATH", "/apps/contrib/NCEPLIBS/lib/modulefiles")
