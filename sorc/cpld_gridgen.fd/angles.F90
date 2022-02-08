@@ -35,11 +35,11 @@ module angles
     real(dbl_kind) :: pi_720deg ! One quarter the conversion factor from degrees to radians.
     real(dbl_kind) :: lonB(2,2)  ! The longitude of a point, shifted to have about the same value.
     real(dbl_kind) :: lon_scale = 0.0
-  
+
 !---------------------------------------------------------------------
 ! to find angleq on seam, replicate supergrid values across seam
 !---------------------------------------------------------------------
-  
+
      angq = 0.0
     xsgp1 = 0.0; ysgp1 = 0.0
     !pole on supergrid
@@ -52,10 +52,10 @@ module angles
      if(y(i,j) .eq. sg_maxlat)ipolesg(2) = i
     enddo
     if(mastertask .and. debug)print *,'poles found at ',ipolesg
-  
+
     xsgp1(:,0:ny) = x(:,0:ny)
     ysgp1(:,0:ny) = y(:,0:ny)
-    
+
     !check
     do i = ipolesg(1)-5,ipolesg(1)+5
      i2 = ipolesg(2)+(ipolesg(1)-i)+1
