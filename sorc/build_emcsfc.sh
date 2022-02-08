@@ -11,7 +11,6 @@ fi
 
 for prog in emcsfc_ice_blend emcsfc_snow2mdl
 do
-  module reset
   USE_PREINST_LIBS=${USE_PREINST_LIBS:-"true"}
   if [ $USE_PREINST_LIBS = true ]; then
     module use ../modulefiles
@@ -24,6 +23,7 @@ do
   cd ${cwd}/${prog}.fd
   ./make.sh
   cd $cwd
+  module unload modulefile.global_${prog}.${target} > /dev/null 2>&1
 done
 
 set +x
