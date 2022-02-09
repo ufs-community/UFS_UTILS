@@ -3,6 +3,50 @@
 #
 # George Gayno, Lin Gan, Ed Hartnett, Larissa Reames
 
+set(SFCGEN_URL "https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/sfc_climo_gen")
+
+set(MOSAIC_FILE "C450_mosaic.nc")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/data/${MOSAIC_FILE}")
+  file(DOWNLOAD
+    ${SFCGEN_URL}/${MOSAIC_FILE}
+    ${CMAKE_CURRENT_BINARY_DIR}/data/${MOSAIC_FILE}
+    SHOW_PROGRESS
+    INACTIVITY_TIMEOUT 30
+    )
+endif()
+
+set(GRID_FILE "C450_grid.tile7.nc")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/data/${GRID_FILE}")
+  file(DOWNLOAD
+    ${SFCGEN_URL}/${GRID_FILE}
+    ${CMAKE_CURRENT_BINARY_DIR}/data/${GRID_FILE}
+    SHOW_PROGRESS
+    INACTIVITY_TIMEOUT 30
+    )
+endif()
+
+set(ORO_FILE "C450_oro_data.tile7.nc")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/data/${ORO_FILE}")
+  file(DOWNLOAD
+    ${SFCGEN_URL}/${ORO_FILE}
+    ${CMAKE_CURRENT_BINARY_DIR}/data/${ORO_FILE}
+    SHOW_PROGRESS
+    INACTIVITY_TIMEOUT 30
+    )
+endif()
+
+set(SFCGEN2_URL "https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/GFS/fix/fix_sfc_climo")
+
+set(VEG_FILE "vegetation_type.viirs.igbp.0.1.nc")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/data/${VEG_FILE}")
+  file(DOWNLOAD
+    ${SFCGEN2_URL}/${VEG_FILE}
+    ${CMAKE_CURRENT_BINARY_DIR}/data/${VEG_FILE}
+    SHOW_PROGRESS
+    INACTIVITY_TIMEOUT 30
+    )
+endif()
+
 # Include cmake to allow parallel I/O tests.
 include (LibMPI)
 
@@ -16,8 +60,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 # Copy necessary test files from the source data directory to the
 # build data directory.
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/data/files.txt ${CMAKE_CURRENT_BINARY_DIR}/data/files.txt)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 

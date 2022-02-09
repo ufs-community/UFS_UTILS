@@ -3,6 +3,58 @@
 #
 # George Gayno, Lin Gan, Ed Hartnett, Larissa Reames
 
+set(CHGRES_URL "https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/chgres_cube")
+
+set(V16SFC_FILE "gfs.v16.sfc.history.nc")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/data/${V16SFC_FILE}")
+  file(DOWNLOAD
+    ${CHGRES_URL}/${V16SFC_FILE}
+    ${CMAKE_CURRENT_BINARY_DIR}/data/${V16SFC_FILE}
+    SHOW_PROGRESS
+    INACTIVITY_TIMEOUT 30
+    )
+endif()
+
+set(V16SFC_FILE2 "gfs.v16.sfc2.history.nc")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/data/${V16SFC_FILE2}")
+  file(DOWNLOAD
+    ${CHGRES_URL}/${V16SFC_FILE2}
+    ${CMAKE_CURRENT_BINARY_DIR}/data/${V16SFC_FILE2}
+    SHOW_PROGRESS
+    INACTIVITY_TIMEOUT 30
+    )
+endif()
+
+set(V16ATM_FILE "gfs.v16.atm.history.nc")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/data/${V16ATM_FILE}")
+  file(DOWNLOAD
+    ${CHGRES_URL}/${V16ATM_FILE}
+    ${CMAKE_CURRENT_BINARY_DIR}/data/${V16ATM_FILE}
+    SHOW_PROGRESS
+    INACTIVITY_TIMEOUT 30
+    )
+endif()
+
+set(V14SFC_FILE "gfs.v14.sfc.history.nemsio")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/data/${V14SFC_FILE}")
+  file(DOWNLOAD
+    ${CHGRES_URL}/${V14SFC_FILE}
+    ${CMAKE_CURRENT_BINARY_DIR}/data/${V14SFC_FILE}
+    SHOW_PROGRESS
+    INACTIVITY_TIMEOUT 30
+    )
+endif()
+
+set(V15SFC_FILE "gfs.v15.sfc.history.nemsio")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/data/${V15SFC_FILE}")
+  file(DOWNLOAD
+    ${CHGRES_URL}/${V15SFC_FILE}
+    ${CMAKE_CURRENT_BINARY_DIR}/data/${V15SFC_FILE}
+    SHOW_PROGRESS
+    INACTIVITY_TIMEOUT 30
+    )
+endif()
+
 # Include cmake to allow parallel I/O tests.
 include (LibMPI)
 
@@ -16,8 +68,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 # Copy necessary test files from the source data directory to the
 # build data directory.
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/data/files.txt ${CMAKE_CURRENT_BINARY_DIR}/data/files.txt)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
