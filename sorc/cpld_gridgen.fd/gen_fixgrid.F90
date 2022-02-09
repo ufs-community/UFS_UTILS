@@ -199,7 +199,7 @@ program gen_fixgrid
 
    fsrc = trim(dirsrc)//'/'//trim(editsfile)
    if(editmask)fsrc = trim(dirout)//'/'//'ufs.'//trim(editsfile)
-  call apply_topoedits(fsrc)
+   call apply_topoedits(fsrc)
 
 !---------------------------------------------------------------------
 ! read MOM6 supergrid file
