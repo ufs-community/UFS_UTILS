@@ -6,7 +6,8 @@
 ! Author Denise Worthen 2/08/2022
 
   program ftst_find_angq
-
+ 
+  use grdvars,       only : x,y,xsgp1,ysgp1,angq
   use angles,        only : find_angq
 
   implicit none
@@ -32,9 +33,9 @@
   real(kind=4) :: sgy(0:nx,0:ny)
 
   ! supergrid x,y and angles on corners
-  real(kind=8) :: x(0:nx,0:ny), y(0:nx,0:ny), angq(0:nx,0:ny)
+  allocate (x(0:nx,0:ny), y(0:nx,0:ny), angq(0:nx,0:ny))
   ! supergrid "plus 1" arrays
-  real(kind=8) :: xsgp1(0:nx,0:ny+1), ysgp1(0:nx,0:ny+1)
+  allocate (xsgp1(0:nx,0:ny+1), ysgp1(0:nx,0:ny+1))
 
  data sgy &
          /-85.00,  -85.00,  -85.00,  -85.00,  -85.00,  -85.00,  -85.00,  -85.00,  -85.00,  -85.00,&
@@ -182,6 +183,7 @@ data sgx &
   if (sumdelta == 0.0) then
     print *,'OK'
     print *,'SUCCESS!'
+    deallocate(x,y,xsgp1,ysgp1,angq)
   else
     print *,'ftst_find_angq failed'
     stop 1
