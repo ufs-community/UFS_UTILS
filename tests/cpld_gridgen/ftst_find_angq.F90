@@ -7,32 +7,34 @@
 
   program ftst_find_angq
 
-  use grdvars,       only : ni,nj,nx,ny
-  use grdvars,       only : x,y,xsgp1,ysgp1,sg_maxlat
-  use grdvars,       only : angq,anglet
-  use grdvars,       only : mastertask, debug
   use angles,        only : find_angq
 
   implicit none
 
   integer :: i,j,i1, i2
 
+  logical :: mastertask = .false.
+  logical :: debug = .false.
+
+  ! reduced (output) grid dimensions
+  integer, parameter :: ni = 12, nj = 7
+  ! supergrid dimensions
+  integer, parameter :: nx = 2*ni, ny = 2*nj
+
   ! pole locations on SG
   integer :: ipolesg(2)
-  real(kind=4) :: delta(15)
-  real(kind=4) :: sumdelta
+  real(kind=8) :: delta(15)
+  real(kind=8) :: sumdelta
+  real(kind=8) :: sg_maxlat
 
-  ! non-allocatable array required to use data statement
-  real(kind=4) :: sgx(0:24,0:14)
-  real(kind=4) :: sgy(0:24,0:14)
+  ! test supergrid values
+  real(kind=4) :: sgx(0:nx,0:ny)
+  real(kind=4) :: sgy(0:nx,0:ny)
 
-  ni = 12
-  nj = 7
-  nx = 2*ni
-  ny = 2*nj
-
-  allocate(  x(0:nx,0:ny),    y(0:nx,0:ny), angq(0:nx,0:ny) )
-  allocate( xsgp1(0:nx,0:ny+1), ysgp1(0:nx,0:ny+1) )
+  ! supergrid x,y and angles on corners
+  real(kind=8) :: x(0:nx,0:ny), y(0:nx,0:ny), angq(0:nx,0:ny)
+  ! supergrid "plus 1" arrays
+  real(kind=8) :: xsgp1(0:nx,0:ny+1), ysgp1(0:nx,0:ny+1)
 
  data sgy &
          /-85.00,  -85.00,  -85.00,  -85.00,  -85.00,  -85.00,  -85.00,  -85.00,  -85.00,  -85.00,&
@@ -133,8 +135,6 @@ data sgx &
   x = sgx
   y = sgy
 
-  mastertask = .false.
-  debug = .false.
   sg_maxlat = maxval(y)
 
   !pole on supergrid
@@ -169,6 +169,7 @@ data sgx &
   delta( 9) = ysgp1(i1+1,j)-ysgp1(i2-1,j)
   delta(10) = ysgp1(i1+2,j)-ysgp1(i2-2,j)
   ! check angq match across seam
+  j = ny
   delta(11)=angq(i1-2,j)-angq(i2-2,j)
   delta(12)=angq(i1-1,j)-angq(i2-1,j)
   delta(13)=angq(i1,  j)-angq(i2,  j)
@@ -182,8 +183,8 @@ data sgx &
     print *,'OK'
     print *,'SUCCESS!'
   else
-    stop 1
     print *,'ftst_find_angq failed'
+    stop 1
   endif
 
   end program ftst_find_angq
