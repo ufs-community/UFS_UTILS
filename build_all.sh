@@ -26,7 +26,11 @@ else
  set -x
 fi
 
-CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON"
+CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON -DBUILD_TESTING=OFF"
+if [[ "$target" == "hera" || "$target" == "orion" || "$target" == "wcoss_cray" || "$target" == "wcoss_dell_p3" ]]; then
+  CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON -DBUILD_TESTING=ON"
+fi
+
 #CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DEMC_EXEC_DIR=ON -DENABLE_DOCS=ON"
 
 rm -fr ./build
