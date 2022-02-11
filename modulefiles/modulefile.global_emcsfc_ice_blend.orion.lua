@@ -7,7 +7,7 @@ prepend_path("MODULEPATH", "/apps/contrib/NCEP/libs/hpc-stack/modulefiles/stack"
 hpc_ver=os.getenv("hpc_ver") or "1.1.0"
 load(pathJoin("hpc", hpc_ver))
 
-hpc_intel_ver=os.getenv("hpc_intel_ver") or "2020.2"
+hpc_intel_ver=os.getenv("hpc_intel_ver") or "2018.4"
 load(pathJoin("hpc-intel", hpc_intel_ver))
 
 w3nco_ver=os.getenv("w3nco_ver") or "2.4.1"
@@ -16,7 +16,7 @@ load(pathJoin("w3nco", w3nco_ver))
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.4"
+g2_ver=os.getenv("g2_ver") or "3.4.3"
 load(pathJoin("g2", g2_ver))
 
 jasper_ver=os.getenv("jasper_ver") or "2.0.25"
