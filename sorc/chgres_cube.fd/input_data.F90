@@ -3167,10 +3167,7 @@
 
  endif ! Read of dzdt
 
-! This variable needs to be availabe on all tasks. The original
-! code has a bug. To make comparisons easier, keep the bug 
-! for now.  Uncomment to fix bug.
-!call MPI_BCAST(conv_omega,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
+ call mpi_bcast(conv_omega,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT DZDT."
  call ESMF_FieldScatter(dzdt_input_grid, dummy3d, rootpet=0, rc=rc)
@@ -3384,7 +3381,7 @@ else ! is native coordinate (hybrid).
                     farrayPtr=presptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-    
+
   call convert_omega(wptr,presptr,tptr,qptr,clb,cub)
   
  endif
