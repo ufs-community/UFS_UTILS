@@ -1800,7 +1800,7 @@
  use program_setup, only         : convert_nst, halo=>halo_bndy, &
                                    regional, lai_from_climo
 
- use surface, only               : canopy_mc_target_grid,  &
+ use sfc_target_data, only       : canopy_mc_target_grid,  &
                                    f10m_target_grid, &
                                    ffmm_target_grid, &
                                    q2m_target_grid,   &

@@ -12,6 +12,7 @@ set(lib_src
     program_setup.F90
     search_util.F90
     static_data.F90
+    sfc_target_data.F90
     surface.F90
     thompson_mp_climo_data.F90
     wam_climo_data.f90
