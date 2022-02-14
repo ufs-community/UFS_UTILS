@@ -105,18 +105,9 @@
  use esmf
  use netcdf
 
- use atmosphere, only            : lev_target, levp1_target, &
-                                   dzdt_target_grid, &
-                                   ps_target_grid, &
-                                   tracers_target_grid, &
-                                   u_s_target_grid, &
-                                   v_s_target_grid, &
-                                   u_w_target_grid, &
-                                   v_w_target_grid, &
-                                   temp_target_grid, &
-                                   zh_target_grid, &
-                                   qnifa_climo_target_grid, &
-                                   qnwfa_climo_target_grid
+ use atm_target_data
+
+ use atmosphere, only            : lev_target, levp1_target
 
  use model_grid, only            : i_target, ip1_target, j_target, jp1_target
 
@@ -1201,20 +1192,10 @@
                                      use_thomp_mp_climo, &
                                      regional
 
+ use atm_target_data
+
  use atmosphere, only              : lev_target, &
-                                     levp1_target, &
-                                     ps_target_grid, &
-                                     zh_target_grid, &
-                                     dzdt_target_grid, &
-                                     qnifa_climo_target_grid, &
-                                     qnwfa_climo_target_grid, &
-                                     tracers_target_grid, &
-                                     temp_target_grid, &
-                                     delp_target_grid, &
-                                     u_s_target_grid,   &
-                                     v_s_target_grid,   &
-                                     u_w_target_grid,   &
-                                     v_w_target_grid
+                                     levp1_target
 
  use model_grid, only              : num_tiles_target_grid, &
                                      i_target, j_target, &
