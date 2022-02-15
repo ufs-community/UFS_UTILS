@@ -29,11 +29,11 @@
                                            !! friendly aerosols on target
                                            !! horiz/vert grid.
 
- public :: cleanup_atm_target_data
+ public :: cleanup_atmosphere_target_data
 
  contains
 
- subroutine cleanup_atm_target_data
+ subroutine cleanup_atmosphere_target_data
 
  use program_setup, only      : num_tracers
 
@@ -69,6 +69,6 @@
 
  if (allocated (vcoord_target)) deallocate(vcoord_target)
 
- end subroutine cleanup_atm_target_data
+ end subroutine cleanup_atmosphere_target_data
 
  end module atm_target_data

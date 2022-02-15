@@ -20,7 +20,14 @@
 
  use esmf
 
- use atm_target_data
+ use atm_target_data, only           : lev_target, levp1_target, nvcoord_target, &
+                                       vcoord_target, delp_target_grid, &
+                                       dzdt_target_grid, ps_target_grid, &
+                                       temp_target_grid, tracers_target_grid, &
+                                       u_s_target_grid, v_s_target_grid, &
+                                       u_w_target_grid, v_w_target_grid, &
+                                       zh_target_grid, qnwfa_climo_target_grid, &
+                                       qnifa_climo_target_grid
 
  use input_data, only                : lev_input, &
                                        levp1_input, &
@@ -2175,6 +2182,8 @@
 !! @author George Gayno
  subroutine cleanup_target_atm_data
 
+ use atm_target_data, only : cleanup_atmosphere_target_data
+
  implicit none
 
  integer                     :: rc
@@ -2184,8 +2193,9 @@
  call ESMF_FieldDestroy(wind_target_grid, rc=rc)
  call ESMF_FieldDestroy(wind_s_target_grid, rc=rc)
  call ESMF_FieldDestroy(wind_w_target_grid, rc=rc)
+ call ESMF_FieldDestroy(pres_target_grid, rc=rc)
 
- call cleanup_atm_target_data
+ call cleanup_atmosphere_target_data
 
  end subroutine cleanup_target_atm_data
 
