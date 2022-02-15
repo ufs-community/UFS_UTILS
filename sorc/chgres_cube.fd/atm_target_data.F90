@@ -6,6 +6,12 @@
 
  private
 
+ integer, public                    :: lev_target       !< num vertical levels
+ integer, public                    :: levp1_target     !< num levels plus 1
+ integer, public                    :: nvcoord_target   !< num vertical coordinate variables
+
+ real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  !< vertical coordinate
+
  type(esmf_field), public               :: delp_target_grid !< pressure thickness
  type(esmf_field), public               :: dzdt_target_grid !< vertical velocity
  type(esmf_field), public               :: ps_target_grid !< surface pressure
@@ -35,23 +41,23 @@
 
  integer                     :: i, rc
 
- print*,"- DESTROY LOCAL TARGET GRID ATMOSPHERIC FIELDS."
+ print*,"- DESTROY TARGET GRID ATMOSPHERIC FIELDS."
 
- call ESMF_FieldDestroy(delp_target_grid, rc=rc)
- call ESMF_FieldDestroy(dzdt_target_grid, rc=rc)
- call ESMF_FieldDestroy(ps_target_grid, rc=rc)
- call ESMF_FieldDestroy(temp_target_grid, rc=rc)
- call ESMF_FieldDestroy(u_s_target_grid, rc=rc)
- call ESMF_FieldDestroy(v_s_target_grid, rc=rc)
- call ESMF_FieldDestroy(u_w_target_grid, rc=rc)
- call ESMF_FieldDestroy(v_w_target_grid, rc=rc)
- call ESMF_FieldDestroy(zh_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(delp_target_grid)) call ESMF_FieldDestroy(delp_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(dzdt_target_grid)) call ESMF_FieldDestroy(dzdt_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(ps_target_grid))   call ESMF_FieldDestroy(ps_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(temp_target_grid)) call ESMF_FieldDestroy(temp_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(u_s_target_grid))  call ESMF_FieldDestroy(u_s_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(v_s_target_grid)) call ESMF_FieldDestroy(v_s_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(u_w_target_grid)) call ESMF_FieldDestroy(u_w_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(v_w_target_grid)) call ESMF_FieldDestroy(v_w_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(zh_target_grid))  call ESMF_FieldDestroy(zh_target_grid, rc=rc)
 
  do i = 1, num_tracers
-   call ESMF_FieldDestroy(tracers_target_grid(i), rc=rc)
+   if (ESMF_FieldIsCreated(tracers_target_grid(i))) call ESMF_FieldDestroy(tracers_target_grid(i), rc=rc)
  enddo
 
- deallocate(tracers_target_grid)
+ if (allocated (tracers_target_grid)) deallocate(tracers_target_grid)
 
  if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
    call ESMF_FieldDestroy(qnifa_climo_target_grid, rc=rc)
@@ -60,6 +66,8 @@
  if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
    call ESMF_FieldDestroy(qnwfa_climo_target_grid, rc=rc)
  endif
+
+ if (allocated (vcoord_target)) deallocate(vcoord_target)
 
  end subroutine cleanup_atm_target_data
 

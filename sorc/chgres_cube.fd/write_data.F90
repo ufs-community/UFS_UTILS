@@ -1,3 +1,14 @@
+ module write_data
+
+ private
+
+ public :: write_fv3_atm_header_netcdf
+ public :: write_fv3_atm_bndy_data_netcdf
+ public :: write_fv3_atm_data_netcdf
+ public :: write_fv3_sfc_data_netcdf
+
+ contains
+
 !> @file
 !! @brief Writes the tiled and header files expected by the forecast
 !! model.
@@ -18,7 +29,7 @@
 
  use netcdf
 
- use atmosphere, only : nvcoord_target, &
+ use atm_target_data, only : nvcoord_target, &
                         vcoord_target,  &
                         levp1_target
 
@@ -106,8 +117,6 @@
  use netcdf
 
  use atm_target_data
-
- use atmosphere, only            : lev_target, levp1_target
 
  use model_grid, only            : i_target, ip1_target, j_target, jp1_target
 
@@ -1194,8 +1203,6 @@
 
  use atm_target_data
 
- use atmosphere, only              : lev_target, &
-                                     levp1_target
 
  use model_grid, only              : num_tiles_target_grid, &
                                      i_target, j_target, &
@@ -3138,3 +3145,5 @@
  return
 
  end subroutine write_fv3_sfc_data_netcdf
+
+ end module write_data

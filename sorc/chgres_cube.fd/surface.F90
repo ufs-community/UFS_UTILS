@@ -24,6 +24,8 @@
 
  use sfc_target_data
 
+ use write_data, only : write_fv3_sfc_data_netcdf
+
  implicit none
 
  private

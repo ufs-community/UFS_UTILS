@@ -58,15 +58,13 @@
                                        thomp_pres_climo_input_grid, &
                                        lev_thomp_mp_climo
 
+ use write_data, only                : write_fv3_atm_header_netcdf, &
+                                       write_fv3_atm_bndy_data_netcdf, &
+                                       write_fv3_atm_data_netcdf
+
  implicit none
 
  private
-
- integer, public                    :: lev_target       !< num vertical levels
- integer, public                    :: levp1_target     !< num levels plus 1
- integer, public                    :: nvcoord_target   !< num vertical coordinate variables
-
- real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  !< vertical coordinate
 
  type(esmf_field)                       :: dzdt_b4adj_target_grid !< vertical vel before vert adj
  type(esmf_field), allocatable          :: tracers_b4adj_target_grid(:) !< tracers before vert adj
