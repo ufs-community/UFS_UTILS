@@ -22,7 +22,25 @@
 
  use esmf
 
- use sfc_target_data
+ use surface_target_data, only : canopy_mc_target_grid, t2m_target_grid, &
+                                 q2m_target_grid, tprcp_target_grid, &
+                                 f10m_target_grid, seaice_fract_target_grid, &
+                                 ffmm_target_grid, ustar_target_grid, &
+                                 srflag_target_grid, soil_temp_target_grid, &
+                                 seaice_depth_target_grid, snow_liq_equiv_target_grid, &
+                                 seaice_skin_temp_target_grid, skin_temp_target_grid, &
+                                 snow_depth_target_grid, z0_target_grid, &
+                                 c_d_target_grid, c_0_target_grid, &
+                                 d_conv_target_grid, dt_cool_target_grid, &
+                                 ifd_target_grid, qrain_target_grid, &
+                                 tref_target_grid, w_d_target_grid, &
+                                 w_0_target_grid, xs_target_grid, &
+                                 xt_target_grid, xu_target_grid, &
+                                 xv_target_grid, xz_target_grid, &
+                                 xtts_target_grid, xzts_target_grid, &
+                                 z_c_target_grid, zm_target_grid, &
+                                 soilm_tot_target_grid, lai_target_grid, &
+                                 soilm_liq_target_grid
 
  use write_data, only : write_fv3_sfc_data_netcdf
 
@@ -74,7 +92,6 @@
  public :: interp
  public :: create_surface_esmf_fields
  public :: nst_land_fill
- public :: cleanup_target_nst_data
  public :: regrid_many
  public :: search_many
 
@@ -97,6 +114,8 @@
                                   
  use static_data, only               :  get_static_fields, &
                                        cleanup_static_fields
+
+ use surface_target_data, only       : cleanup_target_nst_data
 
  implicit none
 
@@ -3384,11 +3403,13 @@
 !! @author George Gayno NOAA/EMC
  subroutine cleanup_all_target_sfc_data
 
+ use surface_target_data, only : cleanup_target_sfc_data
+
  implicit none
 
  integer                     :: rc
 
- print*,"- DESTROY TARGET GRID SURFACE FIELDS."
+ print*,"- DESTROY LOCAL TARGET GRID SURFACE FIELDS."
 
  call ESMF_FieldDestroy(terrain_from_input_grid, rc=rc)
  call ESMF_FieldDestroy(terrain_from_input_grid_land, rc=rc)

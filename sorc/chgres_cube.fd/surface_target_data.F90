@@ -1,4 +1,12 @@
- module sfc_target_data
+!> @file
+!! @brief Define target grid surface data variables.
+!! @author George Gayno NCEP/EMC
+
+!> Module to hold ESMF fields associated
+!! with the target grid surface data.
+!!
+!! @author George Gayno NCEP/EMC
+ module surface_target_data
 
  use esmf
 
@@ -8,87 +16,88 @@
 
 ! surface fields (not including nst)
  type(esmf_field), public   :: canopy_mc_target_grid
-                                       !< canopy moisture content
+                                       !< Canopy moisture content.
  type(esmf_field), public   :: f10m_target_grid
                                        !< log((z0+10)*1/z0)
-                                       !< See sfc_diff.f for details
+                                       !< See sfc_diff.f for details.
  type(esmf_field), public   :: ffmm_target_grid
                                        !< log((z0+z1)*1/z0)
-                                       !< See sfc_diff.f for details
+                                       !< See sfc_diff.f for details.
  type(esmf_field), public   :: q2m_target_grid
-                                       !< 2-m specific humidity
+                                       !< 2-m specific humidity.
  type(esmf_field), public   :: seaice_depth_target_grid
-                                       !< sea ice depth
+                                       !< Sea ice depth.
  type(esmf_field), public   :: seaice_fract_target_grid
-                                       !< sea ice fraction
+                                       !< Sea ice fraction.
  type(esmf_field), public   :: seaice_skin_temp_target_grid
-                                       !< sea ice skin temperature
+                                       !< Sea ice skin temperature.
  type(esmf_field), public   :: skin_temp_target_grid
-                                       !< skin temperature/sst
+                                       !< Skin temperature/sst.
  type(esmf_field), public   :: srflag_target_grid
-                                       !< snow/rain flag
+                                       !< Snow/rain flag.
  type(esmf_field), public   :: snow_liq_equiv_target_grid
-                                       !< liquid equiv snow depth
+                                       !< Liquid equivalent snow depth.
  type(esmf_field), public   :: snow_depth_target_grid
-                                       !< physical snow depth
+                                       !< Physical snow depth.
  type(esmf_field), public   :: soil_temp_target_grid
-                                       !< 3-d soil temperature
+                                       !< 3-d soil temperature.
  type(esmf_field), public   :: soilm_liq_target_grid
-                                       !< 3-d liquid soil moisture
+                                       !< 3-d liquid soil moisture.
  type(esmf_field), public   :: soilm_tot_target_grid
-                                       !< 3-d total soil moisture
+                                       !< 3-d total soil moisture.
  type(esmf_field), public   :: t2m_target_grid
-                                       !< 2-m temperatrure
+                                       !< 2-m temperatrure.
  type(esmf_field), public   :: tprcp_target_grid
-                                       !< precip
+                                       !< Precipitation.
  type(esmf_field), public   :: ustar_target_grid
-                                       !< friction velocity
+                                       !< Friction velocity.
  type(esmf_field), public   :: z0_target_grid
-                                       !< roughness length
+                                       !< Roughness length.
  type(esmf_field), public   :: lai_target_grid
-                                       !< leaf area index module sfc_target_data
+                                       !< Leaf area index.
+
 ! nst fields
  type(esmf_field), public   :: c_d_target_grid
-                                       !< Coefficient 2 to calculate d(tz)/d(ts)
+                                       !< Coefficient 2 to calculate d(tz)/d(ts).
  type(esmf_field), public   :: c_0_target_grid
-                                       !< Coefficient 1 to calculate d(tz)/d(ts)
+                                       !< Coefficient 1 to calculate d(tz)/d(ts).
  type(esmf_field), public   :: d_conv_target_grid
-                                       !< Thickness of free convection layer
+                                       !< Thickness of free convection layer.
  type(esmf_field), public   :: dt_cool_target_grid
-                                       !< Sub-layer cooling amount
+                                       !< Sub-layer cooling amount.
  type(esmf_field), public   :: ifd_target_grid
                                        !< Model mode index. 0-diurnal model not
                                        !< started; 1-diurnal model started.
  type(esmf_field), public   :: qrain_target_grid
-                                       !< Sensible heat flux due to rainfall
+                                       !< Sensible heat flux due to rainfall.
  type(esmf_field), public   :: tref_target_grid
-                                       !< reference temperature
+                                       !< Reference temperature.
  type(esmf_field), public   :: w_d_target_grid
-                                       !< Coefficient 4 to calculate d(tz)/d(ts)
+                                       !< Coefficient 4 to calculate d(tz)/d(ts).
  type(esmf_field), public   :: w_0_target_grid
-                                       !< Coefficient 3 to calculate d(tz)/d(ts)
+                                       !< Coefficient 3 to calculate d(tz)/d(ts).
  type(esmf_field), public   :: xs_target_grid
                                        !< Salinity content in diurnal
-                                       !< thermocline layer
+                                       !< thermocline layer.
  type(esmf_field), public   :: xt_target_grid
                                        !< Heat content in diurnal thermocline
-                                       !< layer
+                                       !< layer.
  type(esmf_field), public   :: xu_target_grid
                                        !< u-current content in diurnal
-                                       !< thermocline layer
+                                       !< thermocline layer.
  type(esmf_field), public   :: xv_target_grid
                                        !< v-current content in diurnal
-                                       !< thermocline layer
+                                       !< thermocline layer.
  type(esmf_field), public   :: xz_target_grid
-                                       !< Diurnal thermocline layer thickness
+                                       !< Diurnal thermocline layer thickness.
  type(esmf_field), public   :: xtts_target_grid
-                                       !< d(xt)/d(ts)
+                                       !< d(xt)/d(ts).
  type(esmf_field), public   :: xzts_target_grid
-                                       !< d(xz)/d(ts)
+                                       !< d(xz)/d(ts).
  type(esmf_field), public   :: z_c_target_grid
-                                       !< Sub-layer cooling thickness
+                                       !< Sub-layer cooling thickness.
  type(esmf_field), public   :: zm_target_grid
-                                       !< Oceanic mixed layer depth
+                                       !< Oceanic mixed layer depth.
 
  public :: cleanup_target_nst_data
  public :: cleanup_target_sfc_data
@@ -161,4 +170,4 @@
 
  end subroutine cleanup_target_nst_data
 
- end module sfc_target_data
+ end module surface_target_data

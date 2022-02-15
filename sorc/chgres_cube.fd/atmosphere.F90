@@ -420,7 +420,7 @@
 ! Free up memory.
 !-----------------------------------------------------------------------------------
 
- call cleanup_target_atm_data
+ call cleanup_all_target_atm_data
 
  end subroutine atmosphere_driver
 
@@ -2180,7 +2180,7 @@
 
 !> Cleanup target grid atmospheric field objects.
 !! @author George Gayno
- subroutine cleanup_target_atm_data
+ subroutine cleanup_all_target_atm_data
 
  use atmosphere_target_data, only : cleanup_atmosphere_target_data
 
@@ -2197,6 +2197,6 @@
 
  call cleanup_atmosphere_target_data
 
- end subroutine cleanup_target_atm_data
+ end subroutine cleanup_all_target_atm_data
 
  end module atmosphere
