@@ -5,7 +5,7 @@
 
 set(lib_src
     atmosphere.F90
-    atm_target_data.F90
+    atmosphere_target_data.F90
     grib2_util.F90
     input_data.F90
     model_grid.F90

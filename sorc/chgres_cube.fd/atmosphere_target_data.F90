@@ -1,4 +1,4 @@
- module atm_target_data
+ module atmosphere_target_data
 
  use esmf
 
@@ -71,4 +71,4 @@
 
  end subroutine cleanup_atmosphere_target_data
 
- end module atm_target_data
+ end module atmosphere_target_data

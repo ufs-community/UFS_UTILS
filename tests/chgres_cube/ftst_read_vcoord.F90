@@ -18,7 +18,7 @@
 !
 ! @author George Gayno
 
- use atm_target_data, only : vcoord_target, &
+ use atmosphere_target_data, only : vcoord_target, &
                              nvcoord_target, &
                              lev_target, &
                              levp1_target

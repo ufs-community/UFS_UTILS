@@ -20,7 +20,7 @@
 
  use esmf
 
- use atm_target_data, only           : lev_target, levp1_target, nvcoord_target, &
+ use atmosphere_target_data, only    : lev_target, levp1_target, nvcoord_target, &
                                        vcoord_target, delp_target_grid, &
                                        dzdt_target_grid, ps_target_grid, &
                                        temp_target_grid, tracers_target_grid, &
@@ -2182,7 +2182,7 @@
 !! @author George Gayno
  subroutine cleanup_target_atm_data
 
- use atm_target_data, only : cleanup_atmosphere_target_data
+ use atmosphere_target_data, only : cleanup_atmosphere_target_data
 
  implicit none
 

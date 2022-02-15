@@ -29,9 +29,9 @@
 
  use netcdf
 
- use atm_target_data, only : nvcoord_target, &
-                        vcoord_target,  &
-                        levp1_target
+ use atmosphere_target_data, only : nvcoord_target, &
+                                    vcoord_target,  &
+                                    levp1_target
 
  use program_setup, only : num_tracers, use_thomp_mp_climo
 
@@ -116,7 +116,7 @@
  use esmf
  use netcdf
 
- use atm_target_data
+ use atmosphere_target_data
 
  use model_grid, only            : i_target, ip1_target, j_target, jp1_target
 
@@ -1201,7 +1201,7 @@
                                      use_thomp_mp_climo, &
                                      regional
 
- use atm_target_data
+ use atmosphere_target_data
 
 
  use model_grid, only              : num_tiles_target_grid, &
