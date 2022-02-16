@@ -9,13 +9,13 @@ jobs:
   matrix-build-and-test:
     runs-on: ${{ matrix.os }}
     env:
-      CC: gcc-9
-      FC: gfortran-9
-      CXX: g++-9
+      CC: gcc-10
+      FC: gfortran-10
+      CXX: g++-10
     strategy:
       matrix:
         os: [macos-10.15, ubuntu-20.04]
-        compiler: [gcc-9]
+        compiler: [gcc-10]
         nceplibs_version: [develop, 1.4.0]
         mpi_type: [mpich, openmpi]
         netcdf_version: [4.7.4]
