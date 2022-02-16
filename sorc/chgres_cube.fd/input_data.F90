@@ -1782,7 +1782,7 @@
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_gaussian_netcdf_file(localpet)
 
- use mpi
+ use mpi_f08
 
  implicit none
 
@@ -2166,7 +2166,7 @@
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_tiled_history_file(localpet)
 
- use mpi
+ use mpi_f08
 
  implicit none
 
@@ -2457,7 +2457,7 @@
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_grib2_file(localpet)
 
- use mpi
+ use mpi_f08
  use wgrib2api
  
  use grib2_util, only                   : rh2spfh, rh2spfh_gfs, convert_omega

@@ -2290,7 +2290,7 @@
 !!
 !! @author Hann-Ming Henry Juang
       function glob7s(p) 
-      use mpi
+      use mpi_f08
       use gettemp_mod, only:plg,ctloc,stloc,c2tloc,s2tloc,c3tloc,s3tloc,    &
                             day,dfa,apdf,apt,long=>xlong,sw,swc     
       dimension p(*),t(14) 

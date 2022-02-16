@@ -45,7 +45,7 @@
 !! @author George Gayno NCEP/EMC
  subroutine search (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)
 
- use mpi
+ use mpi_f08
  use esmf
 
  implicit none

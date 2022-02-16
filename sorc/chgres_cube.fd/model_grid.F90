@@ -618,7 +618,7 @@
  subroutine define_input_grid_gfs_grib2(localpet, npets)
 
  use wgrib2api
- use mpi
+ use mpi_f08
  use program_setup, only       : data_dir_input_grid, &
                                  grib2_file_input_grid
 
@@ -806,7 +806,7 @@
 !! @author Jeff Beck
  subroutine define_input_grid_grib2(localpet, npets)
 
- use mpi
+ use mpi_f08
  use netcdf
  use wgrib2api
  use program_setup, only       : grib2_file_input_grid, data_dir_input_grid, &

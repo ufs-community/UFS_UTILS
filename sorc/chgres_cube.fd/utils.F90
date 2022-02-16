@@ -8,7 +8,7 @@
 !! @param[in] rc      error status code
  subroutine error_handler(string, rc)
 
- use mpi
+ use mpi_f08
 
  implicit none
 
@@ -30,7 +30,7 @@
 !! @param[in] string  error message
  subroutine netcdf_err( err, string )
 
- use mpi
+ use mpi_f08
  use netcdf
 
  implicit none
