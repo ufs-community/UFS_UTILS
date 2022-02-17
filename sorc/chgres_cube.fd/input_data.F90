@@ -2457,6 +2457,7 @@
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_grib2_file(localpet)
 
+ use mpi
  use wgrib2api
  
  use grib2_util, only                   : rh2spfh, rh2spfh_gfs, convert_omega
@@ -2909,6 +2910,8 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet)
    enddo
  endif
 
+ call mpi_bcast(conv_omega,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
+
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT DZDT."
  call ESMF_FieldScatter(dzdt_input_grid, dummy3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -3081,7 +3084,7 @@ else
                     farrayPtr=presptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-    
+
   call convert_omega(wptr,presptr,tptr,qptr,clb,cub)
   
  endif
