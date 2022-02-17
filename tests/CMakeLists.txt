@@ -24,7 +24,7 @@ function(PULL_DATA THE_URL THE_FILE)
 endfunction()
 
 # Add the test subdirecotries.
-#add_subdirectory(fvcom_tools)
+add_subdirectory(fvcom_tools)
 add_subdirectory(filter_topo)
 add_subdirectory(chgres_cube)
 add_subdirectory(fre-nctools)
