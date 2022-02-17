@@ -121,14 +121,14 @@ contains
     elseif(action=="w" .or. action=="W") then
        status = nf90_open(path = trim(filename), mode = nf90_write, ncid = ncid)
     else
-       write(*,*) 'unknow action :', action
+       write(6,*) 'unknow action :', action
        stop 123
     endif
     if (status /= nf90_noerr) call this%handle_err(status)
     this%ncid=ncid
 
     if(this%debug_level>0) then
-       write(*,*) '>>> open file: ',trim(this%filename)
+       write(6,*) '>>> open file: ',trim(this%filename)
     endif
 
   end subroutine open_nc
@@ -280,8 +280,8 @@ contains
     ilength=nd1
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
-       write(*,*) (field(i),i=1,min(nd1,10))
+       write(6,*) trim(thissubname),' show samples:'
+       write(6,*) (field(i),i=1,min(nd1,10))
     endif
 
     call this%replace_var_nc_char(varname,ilength,field)
@@ -325,8 +325,8 @@ contains
     enddo
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
-       write(*,*) field(1,1)
+       write(6,*) trim(thissubname),' show samples:'
+       write(6,*) field(1,1)
     endif
     !
     call this%replace_var_nc_char(varname,ilength,temp)
@@ -377,8 +377,8 @@ contains
     enddo
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
-       write(*,*) field(1,1,1)
+       write(6,*) trim(thissubname),' show samples:'
+       write(6,*) field(1,1,1)
     endif
 
     call this%replace_var_nc_char(varname,ilength,temp)
@@ -439,7 +439,7 @@ contains
     if(xtype==NF90_CHAR) then
        this%xtype=xtype
     else
-       write(*,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_INT,' but read in ',xtype
+       write(6,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_INT,' but read in ',xtype
        stop 123
     endif
 
@@ -458,7 +458,7 @@ contains
        this%ends(i)=ends(i)
        this%dimname(i)=trim(dimname)
        if(this%ends(i) < 1) then
-          write(*,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
+          write(6,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
           stop 1234
        endif
     enddo
@@ -466,7 +466,7 @@ contains
     length3d=length2d*ends(3)
     length4d=length3d*ends(4)
     if(ilength .ne. length4d) then
-       write(*,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
+       write(6,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
        stop 123
     endif
     !
@@ -476,18 +476,18 @@ contains
             count = ends(1:4))
        if(status /= nf90_NoErr) call this%handle_err(status)
     else
-       write(*,*) trim(thissubname),'Error: too many dimensions:',nDims
+       write(6,*) trim(thissubname),'Error: too many dimensions:',nDims
        stop 1234
     endif
     !
     if(this%debug_level>0) then
-       write(*,'(a,a)') '>>>replace variable: ',trim(varname)
+       write(6,'(a,a)') '>>>replace variable: ',trim(varname)
     endif
     if(this%debug_level>10) then
-       write(*,'(8x,a,I10)') 'data type : ',this%xtype
-       write(*,'(8x,a,I10)') 'dimension size: ',this%nDims
+       write(6,'(8x,a,I10)') 'data type : ',this%xtype
+       write(6,'(8x,a,I10)') 'dimension size: ',this%nDims
        do i=1,this%nDims
-          write(*,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
+          write(6,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
        enddo
     endif
     !
@@ -520,8 +520,8 @@ contains
     ilength=nd1
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
-       write(*,*) (field(i),i=1,min(nd1,10))
+       write(6,*) trim(thissubname),' show samples:'
+       write(6,*) (field(i),i=1,min(nd1,10))
     endif
     !
     call this%replace_var_nc_real(varname,ilength,field)
@@ -565,8 +565,8 @@ contains
     enddo
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
-       write(*,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
+       write(6,*) trim(thissubname),' show samples:'
+       write(6,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
     endif
 
     call this%replace_var_nc_real(varname,ilength,temp)
@@ -620,9 +620,9 @@ contains
     enddo
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
+       write(6,*) trim(thissubname),' show samples:'
        do k=1,nd3
-          write(*,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
+          write(6,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
        enddo
     endif
 
@@ -684,7 +684,7 @@ contains
     if(xtype==NF90_FLOAT) then
        this%xtype=xtype
     else
-       write(*,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_INT,' but read in ',xtype
+       write(6,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_INT,' but read in ',xtype
        stop 123
     endif
 
@@ -703,7 +703,7 @@ contains
        this%ends(i)=ends(i)
        this%dimname(i)=trim(dimname)
        if(this%ends(i) < 1) then
-          write(*,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
+          write(6,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
           stop 1234
        endif
     enddo
@@ -711,7 +711,7 @@ contains
     length3d=length2d*ends(3)
     length4d=length3d*ends(4)
     if(ilength .ne. length4d) then
-       write(*,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
+       write(6,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
        stop 123
     endif
     !
@@ -721,18 +721,18 @@ contains
             count = ends(1:4))
        if(status /= nf90_NoErr) call this%handle_err(status)
     else
-       write(*,*) trim(thissubname),'Error: too many dimensions:',nDims
+       write(6,*) trim(thissubname),'Error: too many dimensions:',nDims
        stop 1234
     endif
     !
     if(this%debug_level>0) then
-       write(*,'(a,a)') '>>>replace variable: ',trim(varname)
+       write(6,'(a,a)') '>>>replace variable: ',trim(varname)
     endif
     if(this%debug_level>10) then
-       write(*,'(8x,a,I10)') 'data type : ',this%xtype
-       write(*,'(8x,a,I10)') 'dimension size: ',this%nDims
+       write(6,'(8x,a,I10)') 'data type : ',this%xtype
+       write(6,'(8x,a,I10)') 'dimension size: ',this%nDims
        do i=1,this%nDims
-          write(*,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
+          write(6,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
        enddo
     endif
     !
@@ -767,8 +767,8 @@ contains
     ilength=nd1
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
-       write(*,*) (field(i),i=1,min(nd1,10))
+       write(6,*) trim(thissubname),' show samples:'
+       write(6,*) (field(i),i=1,min(nd1,10))
     endif
     !
     call this%replace_var_nc_double(varname,ilength,field)
@@ -815,8 +815,8 @@ contains
     enddo
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
-       write(*,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
+       write(6,*) trim(thissubname),' show samples:'
+       write(6,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
     endif
 
     call this%replace_var_nc_double(varname,ilength,temp)
@@ -870,9 +870,9 @@ contains
     enddo
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
+       write(6,*) trim(thissubname),' show samples:'
        do k=1,nd3
-          write(*,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
+          write(6,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
        enddo
     endif
 
@@ -935,7 +935,7 @@ contains
     if(xtype==NF90_DOUBLE) then
        this%xtype=xtype
     else
-       write(*,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_INT,' but read in ',xtype
+       write(6,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_INT,' but read in ',xtype
        stop 123
     endif
 
@@ -954,7 +954,7 @@ contains
        this%ends(i)=ends(i)
        this%dimname(i)=trim(dimname)
        if(this%ends(i) < 1) then
-          write(*,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
+          write(6,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
           stop 1234
        endif
     enddo
@@ -962,7 +962,7 @@ contains
     length3d=length2d*ends(3)
     length4d=length3d*ends(4)
     if(ilength .ne. length4d) then
-       write(*,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
+       write(6,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
        stop 123
     endif
     !
@@ -972,18 +972,18 @@ contains
             count = ends(1:4))
        if(status /= nf90_NoErr) call this%handle_err(status)
     else
-       write(*,*) trim(thissubname),'Error: too many dimensions:',nDims
+       write(6,*) trim(thissubname),'Error: too many dimensions:',nDims
        stop 1234
     endif
     !
     if(this%debug_level>0) then
-       write(*,'(a,a)') '>>>replace variable: ',trim(varname)
+       write(6,'(a,a)') '>>>replace variable: ',trim(varname)
     endif
     if(this%debug_level>10) then
-       write(*,'(8x,a,I10)') 'data type : ',this%xtype
-       write(*,'(8x,a,I10)') 'dimension size: ',this%nDims
+       write(6,'(8x,a,I10)') 'data type : ',this%xtype
+       write(6,'(8x,a,I10)') 'dimension size: ',this%nDims
        do i=1,this%nDims
-          write(*,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
+          write(6,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
        enddo
     endif
     !
@@ -1015,8 +1015,8 @@ contains
     ilength=nd1
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
-       write(*,*) (field(i),i=1,min(nd1,10))
+       write(6,*) trim(thissubname),' show samples:'
+       write(6,*) (field(i),i=1,min(nd1,10))
     endif
 
     call this%replace_var_nc_int(varname,ilength,field)
@@ -1063,8 +1063,8 @@ contains
     enddo
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
-       write(*,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
+       write(6,*) trim(thissubname),' show samples:'
+       write(6,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
     endif
 
     call this%replace_var_nc_int(varname,ilength,temp)
@@ -1115,9 +1115,9 @@ contains
     enddo
     !
     if(this%debug_level>100) then
-       write(*,*) trim(thissubname),' show samples:'
+       write(6,*) trim(thissubname),' show samples:'
        do k=1,nd3
-          write(*,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
+          write(6,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
        enddo
     endif
 
@@ -1179,7 +1179,7 @@ contains
     if(xtype==NF90_INT) then
        this%xtype=xtype
     else
-       write(*,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_INT,' but read in ',xtype
+       write(6,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_INT,' but read in ',xtype
        stop 123
     endif
 
@@ -1198,7 +1198,7 @@ contains
        this%ends(i)=ends(i)
        this%dimname(i)=trim(dimname)
        if(this%ends(i) < 1) then
-          write(*,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
+          write(6,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
           stop 1234
        endif
     enddo
@@ -1206,7 +1206,7 @@ contains
     length3d=length2d*ends(3)
     length4d=length3d*ends(4)
     if(ilength .ne. length4d) then
-       write(*,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
+       write(6,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
        stop 123
     endif
     !
@@ -1216,18 +1216,18 @@ contains
             count = ends(1:4))
        if(status /= nf90_NoErr) call this%handle_err(status)
     else
-       write(*,*) trim(thissubname),'Error: too many dimensions:',nDims
-       stop 1234
+       write(6,*) trim(thissubname),'Error: too many dimensions:',nDims
+       stop 1634
     endif
     !
     if(this%debug_level>0) then
-       write(*,'(a,a)') '>>>replace variable: ',trim(varname)
+       write(6,'(a,a)') '>>>replace variable: ',trim(varname)
     endif
     if(this%debug_level>10) then
-       write(*,'(8x,a,I10)') 'data type : ',this%xtype
-       write(*,'(8x,a,I10)') 'dimension size: ',this%nDims
+       write(6,'(8x,a,I10)') 'data type : ',this%xtype
+       write(6,'(8x,a,I10)') 'dimension size: ',this%nDims
        do i=1,this%nDims
-          write(*,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
+          write(6,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
        enddo
     endif
     !
@@ -1261,11 +1261,11 @@ contains
     !
     if(nd1==this%ends(1)) then
        if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) (field(i),i=1,min(nd1,10))
+          write(6,*) trim(thissubname),' show samples:'
+          write(6,*) (field(i),i=1,min(nd1,10))
        endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
     endif
     !
   end subroutine get_var_nc_double_1d
@@ -1314,8 +1314,8 @@ contains
 !          write(*,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
 !       endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
-       write(*,*) nd1,this%ends(1),nd2,this%ends(2)
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) nd1,this%ends(1),nd2,this%ends(2)
     endif
     deallocate(temp)
     !
@@ -1372,8 +1372,8 @@ contains
 !          enddo
 !       endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
-       write(*,*) nd1,this%ends(1),nd2,this%ends(2),nd3,this%ends(3)
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) nd1,this%ends(1),nd2,this%ends(2),nd3,this%ends(3)
     endif
     deallocate(temp)
     !
@@ -1431,7 +1431,7 @@ contains
     if(xtype==NF90_DOUBLE) then
        this%xtype=xtype
     else
-       write(*,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_DOUBLE,' but read in ',xtype
+       write(6,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_DOUBLE,' but read in ',xtype
        stop 123
     endif
 
@@ -1444,14 +1444,14 @@ contains
     if(status /= nf90_NoErr) call this%handle_err(status)
     do i=1,nDims
        dimname="       "
-       write(*,*) 'dimids(i) = ', dimids(i)
+       write(6,*) 'dimids(i) = ', dimids(i)
        status = nf90_inquire_dimension(ncid, dimids(i), dimname, len = ndim)
        if (status /= nf90_noerr) call this%handle_err(status)
        ends(i)=ndim
        this%ends(i)=ends(i)
        this%dimname(i)=trim(dimname)
        if(this%ends(i) < 1) then
-          write(*,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
+          write(6,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
           stop 1234
        endif
     enddo
@@ -1459,7 +1459,7 @@ contains
     length3d=length2d*ends(3)
     length4d=length3d*ends(4)
     if(ilength .ne. length4d) then
-       write(*,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
+       write(6,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
        stop 123
     endif
     !
@@ -1469,18 +1469,18 @@ contains
             count = ends(1:4))
        if(status /= nf90_NoErr) call this%handle_err(status)
     else
-       write(*,*) trim(thissubname),'Error: too many dimensions:',nDims
+       write(6,*) trim(thissubname),'Error: too many dimensions:',nDims
        stop 1234
     endif
     !
     if(this%debug_level>0) then
-       write(*,'(a,a)') '>>>read in variable: ',trim(varname)
+       write(6,'(a,a)') '>>>read in variable: ',trim(varname)
     endif
     if(this%debug_level>10) then
-       write(*,'(a,I10)') '        data type : ',this%xtype
-       write(*,'(a,I10)')'        dimension size: ',this%nDims
+       write(6,'(a,I10)') '        data type : ',this%xtype
+       write(6,'(a,I10)')'        dimension size: ',this%nDims
        do i=1,this%nDims
-          write(*,'(a,I5,I10,2x,a)') '        rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
+          write(6,'(a,I5,I10,2x,a)') '        rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
        enddo
     endif
     !
@@ -1514,11 +1514,11 @@ contains
     !
     if(nd1==this%ends(1)) then
        if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) (field(i),i=1,min(nd1,10))
+          write(6,*) trim(thissubname),' show samples:'
+          write(6,*) (field(i),i=1,min(nd1,10))
        endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
     endif
     !
   end subroutine get_var_nc_real_1d
@@ -1566,12 +1566,12 @@ contains
        enddo
        !
        if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
+          write(6,*) trim(thissubname),' show samples:'
+          write(6,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
        endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
-       write(*,*) nd1,this%ends(1),nd2,this%ends(2)
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) nd1,this%ends(1),nd2,this%ends(2)
     endif
     deallocate(temp)
     !
@@ -1622,14 +1622,14 @@ contains
        enddo
        !
        if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
+          write(6,*) trim(thissubname),' show samples:'
           do k=1,nd3
-             write(*,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
+             write(6,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
           enddo
        endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
-       write(*,*) nd1,this%ends(1),nd2,this%ends(2),nd3,this%ends(3)
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) nd1,this%ends(1),nd2,this%ends(2),nd3,this%ends(3)
     endif
     deallocate(temp)
     !
@@ -1690,7 +1690,7 @@ contains
     if(xtype==NF90_FLOAT) then
        this%xtype=xtype
     else
-       write(*,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_FLOAT,' but read in ',xtype
+       write(6,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_FLOAT,' but read in ',xtype
        stop 123
     endif
 
@@ -1709,7 +1709,7 @@ contains
        this%ends(i)=ends(i)
        this%dimname(i)=trim(dimname)
        if(this%ends(i) < 1) then
-          write(*,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
+          write(6,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
           stop 1234
        endif
     enddo
@@ -1717,7 +1717,7 @@ contains
     length3d=length2d*ends(3)
     length4d=length3d*ends(4)
     if(ilength .ne. length4d) then
-       write(*,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
+       write(6,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
        stop 123
     endif
     !
@@ -1727,18 +1727,18 @@ contains
             count = ends(1:4))
        if(status /= nf90_NoErr) call this%handle_err(status)
     else
-       write(*,*) trim(thissubname),'Error: too many dimensions:',nDims
+       write(6,*) trim(thissubname),'Error: too many dimensions:',nDims
        stop 1234
     endif
     !
     if(this%debug_level>0) then
-       write(*,'(a,a)') '>>>read in variable: ',trim(varname)
+       write(6,'(a,a)') '>>>read in variable: ',trim(varname)
     endif
     if(this%debug_level>10) then
-       write(*,'(8x,a,I10)') 'data type : ',this%xtype
-       write(*,'(8x,a,I10)') 'dimension size: ',this%nDims
+       write(6,'(8x,a,I10)') 'data type : ',this%xtype
+       write(6,'(8x,a,I10)') 'dimension size: ',this%nDims
        do i=1,this%nDims
-          write(*,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
+          write(6,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
        enddo
     endif
     !
@@ -1772,11 +1772,11 @@ contains
     !
     if(nd1==this%ends(1)) then
        if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) (field(i),i=1,min(nd1,10))
+          write(6,*) trim(thissubname),' show samples:'
+          write(6,*) (field(i),i=1,min(nd1,10))
        endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
     endif
     !
   end subroutine get_var_nc_int_1d
@@ -1824,12 +1824,12 @@ contains
        enddo
        !
        if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
+          write(6,*) trim(thissubname),' show samples:'
+          write(6,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
        endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
-       write(*,*) nd1,this%ends(1),nd2,this%ends(2)
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) nd1,this%ends(1),nd2,this%ends(2)
     endif
     deallocate(temp)
     !
@@ -1880,14 +1880,14 @@ contains
        enddo
        !
        if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
+          write(6,*) trim(thissubname),' show samples:'
           do k=1,nd3
-             write(*,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
+             write(6,*) 'k,max,min:',k,maxval(field(:,:,k)),minval(field(:,:,k))
           enddo
        endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
-       write(*,*) nd1,this%ends(1),nd2,this%ends(2),nd3,this%ends(3)
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) nd1,this%ends(1),nd2,this%ends(2),nd3,this%ends(3)
     endif
     deallocate(temp)
     !
@@ -1948,7 +1948,7 @@ contains
     if(xtype==NF90_INT) then
        this%xtype=xtype
     else
-       write(*,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_INT,' but read in ',xtype
+       write(6,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_INT,' but read in ',xtype
        stop 123
     endif
 
@@ -1967,7 +1967,7 @@ contains
        this%ends(i)=ends(i)
        this%dimname(i)=trim(dimname)
        if(this%ends(i) < 1) then
-          write(*,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
+          write(6,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
           stop 1234
        endif
     enddo
@@ -1975,7 +1975,7 @@ contains
     length3d=length2d*ends(3)
     length4d=length3d*ends(4)
     if(ilength .ne. length4d) then
-       write(*,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
+       write(6,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
        stop 123
     endif
     !
@@ -1985,18 +1985,18 @@ contains
             count = ends(1:4))
        if(status /= nf90_NoErr) call this%handle_err(status)
     else
-       write(*,*) trim(thissubname),'Error: too many dimensions:',nDims
+       write(6,*) trim(thissubname),'Error: too many dimensions:',nDims
        stop 1234
     endif
     !
     if(this%debug_level>0) then
-       write(*,'(a,a)') '>>>read in variable: ',trim(varname)
+       write(6,'(a,a)') '>>>read in variable: ',trim(varname)
     endif
     if(this%debug_level>10) then
-       write(*,'(8x,a,I10)') 'data type : ',this%xtype
-       write(*,'(8x,a,I10)') 'dimension size: ',this%nDims
+       write(6,'(8x,a,I10)') 'data type : ',this%xtype
+       write(6,'(8x,a,I10)') 'dimension size: ',this%nDims
        do i=1,this%nDims
-          write(*,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
+          write(6,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
        enddo
     endif
     !
@@ -2030,11 +2030,11 @@ contains
     !
     if(nd1==this%ends(1)) then
        if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) (field(i),i=1,min(nd1,10))
+          write(6,*) trim(thissubname),' show samples:'
+          write(6,*) (field(i),i=1,min(nd1,10))
        endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
     endif
     !
   end subroutine get_var_nc_short_1d
@@ -2082,12 +2082,12 @@ contains
        enddo
        !
        if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
+          write(6,*) trim(thissubname),' show samples:'
+          write(6,*) 'max,min:',maxval(field(:,:)),minval(field(:,:))
        endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
-       write(*,*) nd1,this%ends(1),nd2,this%ends(2)
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) nd1,this%ends(1),nd2,this%ends(2)
     endif
     deallocate(temp)
     !
@@ -2145,7 +2145,7 @@ contains
     if(xtype==NF90_SHORT) then
        this%xtype=xtype
     else
-       write(*,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_SHORT,' but read in ',xtype
+       write(6,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_SHORT,' but read in ',xtype
        stop 123
     endif
 
@@ -2164,7 +2164,7 @@ contains
        this%ends(i)=ends(i)
        this%dimname(i)=trim(dimname)
        if(this%ends(i) < 1) then
-          write(*,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
+          write(6,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
           stop 1234
        endif
     enddo
@@ -2172,7 +2172,7 @@ contains
     length3d=length2d*ends(3)
     length4d=length3d*ends(4)
     if(ilength .ne. length4d) then
-       write(*,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
+       write(6,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
        stop 123
     endif
     !
@@ -2182,18 +2182,18 @@ contains
             count = ends(1:4))
        if(status /= nf90_NoErr) call this%handle_err(status)
     else
-       write(*,*) trim(thissubname),'Error: too many dimensions:',nDims
+       write(6,*) trim(thissubname),'Error: too many dimensions:',nDims
        stop 1234
     endif
     !
     if(this%debug_level>0) then
-       write(*,'(a,a)') '>>>read in variable: ',trim(varname)
+       write(6,'(a,a)') '>>>read in variable: ',trim(varname)
     endif
     if(this%debug_level>10) then
-       write(*,'(8x,a,I10)') 'data type : ',this%xtype
-       write(*,'(8x,a,I10)') 'dimension size: ',this%nDims
+       write(6,'(8x,a,I10)') 'data type : ',this%xtype
+       write(6,'(8x,a,I10)') 'dimension size: ',this%nDims
        do i=1,this%nDims
-          write(*,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
+          write(6,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
        enddo
     endif
     !
@@ -2227,11 +2227,11 @@ contains
     !
     if(nd1==this%ends(1)) then
        if(this%debug_level>100) then
-          write(*,*) trim(thissubname),' show samples:'
-          write(*,*) (field(i),i=1,min(nd1,10))
+          write(6,*) trim(thissubname),' show samples:'
+          write(6,*) (field(i),i=1,min(nd1,10))
        endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
     endif
     !
   end subroutine get_var_nc_char_1d
@@ -2280,8 +2280,8 @@ contains
 !          write(*,*) field(1,1)
 !       endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
-       write(*,*) nd1,this%ends(1),nd2,this%ends(2)
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) nd1,this%ends(1),nd2,this%ends(2)
     endif
     deallocate(temp)
     !
@@ -2336,8 +2336,8 @@ contains
 !          write(*,*) field(1,1,1)
 !       endif
     else
-       write(*,*) trim(thissubname),' ERROR: dimension does not match.'
-       write(*,*) nd1,this%ends(1),nd2,this%ends(2),nd3,this%ends(3)
+       write(6,*) trim(thissubname),' ERROR: dimension does not match.'
+       write(6,*) nd1,this%ends(1),nd2,this%ends(2),nd3,this%ends(3)
     endif
     deallocate(temp)
     !
@@ -2398,7 +2398,7 @@ contains
     if(xtype==NF90_CHAR) then
        this%xtype=xtype
     else
-       write(*,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_CHAR,' but read in ',xtype
+       write(6,*) trim(thissubname),' ERROR: wrong data type, expect ',NF90_CHAR,' but read in ',xtype
        stop 123
     endif
 
@@ -2417,7 +2417,7 @@ contains
        this%ends(i)=ends(i)
        this%dimname(i)=trim(dimname)
        if(this%ends(i) < 1) then
-          write(*,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
+          write(6,*) trim(thissubname),' Error, ends dimension should larger than 0 :', ends(i)
           stop 1234
        endif
     enddo
@@ -2425,7 +2425,7 @@ contains
     length3d=length2d*ends(3)
     length4d=length3d*ends(4)
     if(ilength .ne. length4d) then
-       write(*,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
+       write(6,*) trim(thissubname),'ERROR: ',ilength,' should equal to ',length4d
        stop 123
     endif
     !
@@ -2435,18 +2435,18 @@ contains
             count = ends(1:4))
        if(status /= nf90_NoErr) call this%handle_err(status)
     else
-       write(*,*) trim(thissubname),'Error: too many dimensions:',nDims
+       write(6,*) trim(thissubname),'Error: too many dimensions:',nDims
        stop 1234
     endif
     !
     if(this%debug_level>0) then
-       write(*,'(a,a)') '>>>read in variable: ',trim(varname)
+       write(6,'(a,a)') '>>>read in variable: ',trim(varname)
     endif
     if(this%debug_level>10) then
-       write(*,'(8x,a,I10)') 'data type : ',this%xtype
-       write(*,'(8x,a,I10)') 'dimension size: ',this%nDims
+       write(6,'(8x,a,I10)') 'data type : ',this%xtype
+       write(6,'(8x,a,I10)') 'dimension size: ',this%nDims
        do i=1,this%nDims
-          write(*,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
+          write(6,'(8x,a,I5,I10,2x,a)') 'rank, ends, name=',i,this%ends(i),trim(this%dimname(i))
        enddo
     endif
     !
