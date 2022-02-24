@@ -1828,6 +1828,7 @@
                                    seaice_skin_temp_target_grid, &
                                    skin_temp_target_grid, &
                                    soil_temp_target_grid, &
+                                   ice_temp_target_grid, &
                                    soilm_liq_target_grid, &
                                    soilm_tot_target_grid, &
                                    srflag_target_grid, &
@@ -1894,7 +1895,7 @@
  integer                        :: id_fice, id_tisfc, id_tprcp
  integer                        :: id_srflag, id_snwdph, id_shdmin
  integer                        :: id_shdmax, id_slope, id_snoalb
- integer                        :: id_lai
+ integer                        :: id_lai, id_stc_ice
  integer                        :: id_stc, id_smc, id_slc
  integer                        :: id_tref, id_z_c, id_c_0
  integer                        :: id_c_d, id_w_0, id_w_d
@@ -2350,6 +2351,15 @@
      call netcdf_err(error, 'DEFINING SLC UNITS' )
      error = nf90_put_att(ncid, id_slc, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SLC COORD' )
+
+     error = nf90_def_var(ncid, 'stc_ice', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_stc_ice)
+     call netcdf_err(error, 'DEFINING STC_ICE' )
+     error = nf90_put_att(ncid, id_stc_ice, "long_name", "stc_ice")
+     call netcdf_err(error, 'DEFINING STC_ICE LONG NAME' )
+     error = nf90_put_att(ncid, id_stc_ice, "units", "none")
+     call netcdf_err(error, 'DEFINING STC_ICE UNITS' )
+     error = nf90_put_att(ncid, id_stc_ice, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING STC_ICE COORD' )
 
      if (convert_nst) then
 
@@ -2900,6 +2910,19 @@
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
      error = nf90_put_var( ncid, id_canopy, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING CANOPY MC RECORD' )
+   endif
+
+! ice temperature 
+
+   print*,"- CALL FieldGather FOR TARGET GRID sea ice TEMPERATURE FOR TILE: ", tile
+   call ESMF_FieldGather(ice_temp_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum3d(:,:,:) = data_one_tile_3d(istart:iend, jstart:jend,:)
+     error = nf90_put_var( ncid, id_stc_ice, dum3d, start=(/1,1,1,1/), count=(/i_target_out,j_target_out,lsoil_target,1/))
+     call netcdf_err(error, 'WRITING sea ice TEMP RECORD' )
    endif
 
 ! soil temperature 

@@ -59,6 +59,8 @@
                                        !< physical snow depth
  type(esmf_field), public   :: soil_temp_target_grid
                                        !< 3-d soil temperature
+ type(esmf_field), public   :: ice_temp_target_grid
+                                       !< 3-d soil temperature
  type(esmf_field), public   :: soilm_liq_target_grid
                                        !< 3-d liquid soil moisture
  type(esmf_field), public   :: soilm_tot_target_grid
@@ -2953,6 +2955,24 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET GRID sea ice column TEMPERATURE."
+ ice_temp_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="ice_temp_target_grid", &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lsoil_target/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET grid ice temp"
+ call ESMF_FieldGet(ice_temp_target_grid, &
+                    farrayPtr=target_ptr_3d, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr_3d = init_val
 
  print*,"- CALL FieldCreate FOR TARGET GRID SOIL TEMPERATURE."
  soil_temp_target_grid = ESMF_FieldCreate(target_grid, &
