@@ -6341,7 +6341,7 @@ end subroutine read_winds
  integer                         :: i, j, k, rc
 
  real(esmf_kind_r8)              :: latrad, lonrad
- real(esmf_kind_r8), pointer     :: windptr(:,:,:,:)
+!real(esmf_kind_r8), pointer     :: windptr(:,:,:,:)
  real(esmf_kind_r8), pointer     :: xptr(:,:,:)
  real(esmf_kind_r8), pointer     :: yptr(:,:,:)
  real(esmf_kind_r8), pointer     :: zptr(:,:,:)

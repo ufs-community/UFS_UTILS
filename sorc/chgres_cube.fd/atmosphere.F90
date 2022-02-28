@@ -86,17 +86,17 @@
  type(esmf_field)                       :: xwind_target_grid !< 3-d wind, grid box center
  type(esmf_field)                       :: ywind_target_grid !< 3-d wind, grid box center
  type(esmf_field)                       :: zwind_target_grid !< 3-d wind, grid box center
- type(esmf_field)                       :: wind_b4adj_target_grid !< 3-d wind before vert adj
+!type(esmf_field)                       :: wind_b4adj_target_grid !< 3-d wind before vert adj
  type(esmf_field)                       :: xwind_b4adj_target_grid !< 3-d wind before vert adj
  type(esmf_field)                       :: ywind_b4adj_target_grid !< 3-d wind before vert adj
  type(esmf_field)                       :: zwind_b4adj_target_grid !< 3-d wind before vert adj
- type(esmf_field)                       :: wind_s_target_grid !< 3-d wind, 'south' edge
+!type(esmf_field)                       :: wind_s_target_grid !< 3-d wind, 'south' edge
  type(esmf_field)                       :: xwind_s_target_grid !< 3-d wind, 'south' edge
  type(esmf_field)                       :: ywind_s_target_grid !< 3-d wind, 'south' edge
  type(esmf_field)                       :: zwind_s_target_grid !< 3-d wind, 'south' edge
  type(esmf_field), public               :: u_w_target_grid !< u-wind, 'west' edge
  type(esmf_field), public               :: v_w_target_grid !< v-wind, 'west' edge
- type(esmf_field)                       :: wind_w_target_grid !< 3-d wind, 'west' edge
+!type(esmf_field)                       :: wind_w_target_grid !< 3-d wind, 'west' edge
  type(esmf_field)                       :: xwind_w_target_grid !< 3-d wind, 'west' edge
  type(esmf_field)                       :: ywind_w_target_grid !< 3-d wind, 'west' edge
  type(esmf_field)                       :: zwind_w_target_grid !< 3-d wind, 'west' edge
@@ -774,14 +774,14 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
- print*,"- CALL FieldCreate FOR TARGET 3D-WIND_S."
- wind_s_target_grid = ESMF_FieldCreate(target_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_EDGE2, &
-                                   ungriddedLBound=(/1,1/), &
-                                   ungriddedUBound=(/lev_target,3/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+!print*,"- CALL FieldCreate FOR TARGET 3D-WIND_S."
+!wind_s_target_grid = ESMF_FieldCreate(target_grid, &
+!                                  typekind=ESMF_TYPEKIND_R8, &
+!                                  staggerloc=ESMF_STAGGERLOC_EDGE2, &
+!                                  ungriddedLBound=(/1,1/), &
+!                                  ungriddedUBound=(/lev_target,3/), rc=rc)
+!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!   call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET U_W."
  u_w_target_grid = ESMF_FieldCreate(target_grid, &
@@ -828,14 +828,14 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
- print*,"- CALL FieldCreate FOR TARGET 3D-WIND_W."
- wind_w_target_grid = ESMF_FieldCreate(target_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_EDGE1, &
-                                   ungriddedLBound=(/1,1/), &
-                                   ungriddedUBound=(/lev_target,3/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
+!print*,"- CALL FieldCreate FOR TARGET 3D-WIND_W."
+!wind_w_target_grid = ESMF_FieldCreate(target_grid, &
+!                                  typekind=ESMF_TYPEKIND_R8, &
+!                                  staggerloc=ESMF_STAGGERLOC_EDGE1, &
+!                                  ungriddedLBound=(/1,1/), &
+!                                  ungriddedUBound=(/lev_target,3/), rc=rc)
+!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!   call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET SURFACE PRESSURE."
  ps_target_grid = ESMF_FieldCreate(target_grid, &
@@ -860,7 +860,7 @@
  real(esmf_kind_r8), pointer     :: lonptr(:,:)
  real(esmf_kind_r8), pointer     :: uptr(:,:,:)
  real(esmf_kind_r8), pointer     :: vptr(:,:,:)
- real(esmf_kind_r8), pointer     :: windptr(:,:,:,:)
+!real(esmf_kind_r8), pointer     :: windptr(:,:,:,:)
  real(esmf_kind_r8), pointer     :: xwindptr(:,:,:)
  real(esmf_kind_r8), pointer     :: ywindptr(:,:,:)
  real(esmf_kind_r8), pointer     :: zwindptr(:,:,:)
@@ -872,13 +872,13 @@
 
  print*,'- CONVERT WINDS.'
 
- print*,"- CALL FieldGet FOR 3-D WIND_S."
- call ESMF_FieldGet(wind_s_target_grid, &
-                    computationalLBound=clb, &
-                    computationalUBound=cub, &
-                    farrayPtr=windptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
+!print*,"- CALL FieldGet FOR 3-D WIND_S."
+!call ESMF_FieldGet(wind_s_target_grid, &
+!                   computationalLBound=clb, &
+!                   computationalUBound=cub, &
+!                   farrayPtr=windptr, rc=rc)
+!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!   call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR xwind_S."
  call ESMF_FieldGet(xwind_s_target_grid, &
@@ -940,13 +940,13 @@
  enddo
  
 
- print*,"- CALL FieldGet FOR 3-D WIND_W."
- call ESMF_FieldGet(wind_w_target_grid, &
-                    computationalLBound=clb, &
-                    computationalUBound=cub, &
-                    farrayPtr=windptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
+!print*,"- CALL FieldGet FOR 3-D WIND_W."
+!call ESMF_FieldGet(wind_w_target_grid, &
+!                   computationalLBound=clb, &
+!                   computationalUBound=cub, &
+!                   farrayPtr=windptr, rc=rc)
+!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!   call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR xwind_w."
  call ESMF_FieldGet(xwind_w_target_grid, &
@@ -2507,11 +2507,11 @@
  call ESMF_FieldDestroy(xwind_target_grid, rc=rc)
  call ESMF_FieldDestroy(ywind_target_grid, rc=rc)
  call ESMF_FieldDestroy(zwind_target_grid, rc=rc)
- call ESMF_FieldDestroy(wind_s_target_grid, rc=rc)
+!call ESMF_FieldDestroy(wind_s_target_grid, rc=rc)
  call ESMF_FieldDestroy(xwind_s_target_grid, rc=rc)
  call ESMF_FieldDestroy(ywind_s_target_grid, rc=rc)
  call ESMF_FieldDestroy(zwind_s_target_grid, rc=rc)
- call ESMF_FieldDestroy(wind_w_target_grid, rc=rc)
+!call ESMF_FieldDestroy(wind_w_target_grid, rc=rc)
  call ESMF_FieldDestroy(xwind_w_target_grid, rc=rc)
  call ESMF_FieldDestroy(ywind_w_target_grid, rc=rc)
  call ESMF_FieldDestroy(zwind_w_target_grid, rc=rc)
