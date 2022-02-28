@@ -853,7 +853,7 @@
  
  implicit none
 
- integer                         :: clb(4), cub(4)
+ integer                         :: clb(3), cub(3)
  integer                         :: i, j, k, rc
 
  real(esmf_kind_r8), pointer     :: latptr(:,:)
@@ -882,6 +882,8 @@
 
  print*,"- CALL FieldGet FOR xwind_S."
  call ESMF_FieldGet(xwind_s_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
                     farrayPtr=xwindptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
@@ -950,6 +952,8 @@
 
  print*,"- CALL FieldGet FOR xwind_w."
  call ESMF_FieldGet(xwind_w_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
                     farrayPtr=xwindptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
