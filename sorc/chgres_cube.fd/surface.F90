@@ -848,7 +848,7 @@
 
  print*,"- CALL FieldRegridStore for 3d seaice fields."
  call ESMF_FieldRegridStore(soil_temp_input_grid, &
-                            soil_temp_target_grid, &
+                            ice_temp_target_grid, &
                             srcmaskvalues=(/0/), &
                             dstmaskvalues=(/0/), &
                             polemethod=ESMF_POLEMETHOD_NONE, &
@@ -869,7 +869,7 @@
       call error_handler("IN FieldBundleCreate", rc)
  call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_target_grid, &
                           snow_liq_equiv_target_grid, seaice_skin_temp_target_grid, &
-                          soil_temp_target_grid/), rc=rc)
+                          ice_temp_target_grid/), rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
  call ESMF_FieldBundleAdd(bundle_seaice_input, (/seaice_depth_input_grid, snow_depth_input_grid, &
