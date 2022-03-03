@@ -13,7 +13,7 @@ export FFLAGS="$INCS -O3 -fp-model precise -r8 -convert big_endian -traceback -g
 export OMPFLAG=-qopenmp
 export LDFLG=-qopenmp
 
-export LIBSM="${W3NCO_LIBd} ${BACIO_LIB4} ${IP_LIBd} ${SP_LIBd} -L${NETCDF_LIBRARIES} -lnetcdf -lnetcdff"
+export LIBSM="${W3NCO_LIBd} ${BACIO_LIB4} ${IP_LIBd} ${SP_LIBd} -L${NETCDF_LIBRARIES} -lnetcdff -lnetcdf -L${HDF5_LIBRARIES} -lhdf5_hl -lhdf5 ${ZLIB_LIB}"
 
 make -f Makefile clean
 make -f Makefile

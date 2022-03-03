@@ -2,9 +2,9 @@ help([[
 Load environment to compile UFS_UTILS global_cycle on Orion
 ]])
 
-prepend_path("MODULEPATH", "/apps/contrib/NCEP/libs/hpc-stack/modulefiles/stack")
+prepend_path("MODULEPATH", "/apps/contrib/NCEP/libs/hpc-stack-gfsv16/modulefiles/stack")
 
-hpc_ver=os.getenv("hpc_ver") or "1.1.0"
+hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
 
 hpc_intel_ver=os.getenv("hpc_intel_ver") or "2018.4"
@@ -25,12 +25,14 @@ load(pathJoin("sp", sp_ver))
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-prepend_path("MODULEPATH", "/apps/contrib/NCEPLIBS/lib/modulefiles")
+hdf5_ver=os.getenv("hdf5_ver") or "1.10.6"
+load(pathJoin("hdf5", hdf5_ver))
 
-netcdf_ver=os.getenv("netcdf_ver") or "4.7.4.release"
-load(pathJoin("netcdfp", netcdf_ver))
-setenv("NETCDF_INCLUDE","${NETCDF_FFLAGS}")
-setenv("NETCDF_LDFLAGS_F","-L${NETCDF}/lib -lnetcdf -lnetcdff -L${HDF5}/lib -lhdf5")
+zlib_ver=os.getenv("zlib_ver") or "1.2.11"
+load(pathJoin("zlib", zlib_ver))
+
+netcdf_ver=os.getenv("netcdf_ver") or "4.7.4"
+load(pathJoin("netcdf", netcdf_ver))
 
 setenv("FCMP","mpiifort")
 
