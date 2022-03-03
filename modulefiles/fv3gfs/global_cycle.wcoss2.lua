@@ -16,8 +16,6 @@ load(pathJoin("cray-mpich", cray_mpich_ver))
 
 netcdf_ver=os.getenv("netcdf_ver") or "4.7.4"
 load(pathJoin("netcdf", netcdf_ver))
-setenv("NETCDF_INCLUDE","-I${NETCDF_INCLUDES}")
-setenv("NETCDF_LDFLAGS_F","-L${NETCDF_LIBRARIES} -lnetcdf -lnetcdff")
 
 w3nco_ver=os.getenv("w3nco_ver") or "2.4.1"
 load(pathJoin("w3nco", w3nco_ver))
