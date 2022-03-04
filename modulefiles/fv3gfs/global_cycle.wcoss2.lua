@@ -14,6 +14,12 @@ load(pathJoin("intel", intel_ver))
 cray_mpich_ver=os.getenv("cray_mpich_ver") or "8.1.9"
 load(pathJoin("cray-mpich", cray_mpich_ver))
 
+hdf5_ver=os.getenv("hdf5_ver") or "1.10.6"
+load(pathJoin("hdf5", hdf5_ver))
+
+zlib_ver=os.getenv("zlib_ver") or "1.2.11"
+load(pathJoin("zlib", zlib_ver))
+
 netcdf_ver=os.getenv("netcdf_ver") or "4.7.4"
 load(pathJoin("netcdf", netcdf_ver))
 
