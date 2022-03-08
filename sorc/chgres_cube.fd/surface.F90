@@ -60,7 +60,7 @@
  type(esmf_field), public   :: soil_temp_target_grid
                                        !< 3-d soil temperature
  type(esmf_field), public   :: ice_temp_target_grid
-                                       !< 3-d soil temperature
+                                       !< 3-d sea ice column temperature
  type(esmf_field), public   :: soilm_liq_target_grid
                                        !< 3-d liquid soil moisture
  type(esmf_field), public   :: soilm_tot_target_grid
@@ -73,6 +73,10 @@
                                        !< friction velocity
  type(esmf_field), public   :: z0_target_grid
                                        !< roughness length
+ type(esmf_field), public   :: z0_ice_target_grid
+                                       !< roughness length at sea ice
+ type(esmf_field), public   :: z0_water_target_grid
+                                       !< roughness length at open water
   type(esmf_field), public   :: lai_target_grid
                                        !< leaf area index
 
@@ -959,7 +963,7 @@
  bundle_water_input = ESMF_FieldBundleCreate(name="water input", rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
- call ESMF_FieldBundleAdd(bundle_water_target, (/skin_temp_target_grid, z0_target_grid/), rc=rc)
+ call ESMF_FieldBundleAdd(bundle_water_target, (/skin_temp_target_grid, z0_water_target_grid/), rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
  call ESMF_FieldBundleAdd(bundle_water_input, (/skin_temp_input_grid, z0_input_grid/), rc=rc)  
@@ -2197,6 +2201,7 @@
 
  real                               :: z0_igbp(20)
  real(esmf_kind_r8), pointer        :: data_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: data_ptr2(:,:)
  real(esmf_kind_r8), pointer        :: veg_type_ptr(:,:)
 
  data z0_igbp /1.089, 2.653, 0.854, 0.826, 0.800, 0.050,  &
@@ -2224,10 +2229,16 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+ print*,"- CALL FieldGet FOR TARGET GRID Z0 ICE."
+ call ESMF_FieldGet(z0_ice_target_grid, &
+                    farrayPtr=data_ptr2, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 2) then
-     data_ptr(i,j) = 1.0
+     data_ptr2(i,j) = 1.0
    elseif (landmask_ptr(i,j) == 1) then
      data_ptr(i,j) = z0_igbp(nint(veg_type_ptr(i,j))) * 100.0
    endif
@@ -2918,6 +2929,38 @@
 
  print*,"- INITIALIZE TARGET grid z0."
  call ESMF_FieldGet(z0_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET GRID Z0_ICE."
+ z0_ice_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="z0_ice_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET grid z0_ice."
+ call ESMF_FieldGet(z0_ice_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET GRID Z0_WATER."
+ z0_water_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="z0_water_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET grid z0_water."
+ call ESMF_FieldGet(z0_water_target_grid, &
                     farrayPtr=target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)

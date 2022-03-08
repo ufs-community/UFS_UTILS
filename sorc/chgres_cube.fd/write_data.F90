@@ -1838,6 +1838,8 @@
                                    tprcp_target_grid, &
                                    ustar_target_grid, &
                                    z0_target_grid, &
+                                   z0_ice_target_grid, &
+                                   z0_water_target_grid, &
                                    lai_target_grid, &
                                    c_d_target_grid, &
                                    c_0_target_grid, &
@@ -1886,7 +1888,8 @@
  integer                        :: id_slmsk, id_time
  integer                        :: id_lat, id_lon
  integer                        :: id_tsea, id_sheleg, id_tg3
- integer                        :: id_zorl, id_alvsf, id_alvwf
+ integer                        :: id_zorl, id_zorl_ice, id_alvsf, id_alvwf
+ integer                        :: id_zorl_water
  integer                        :: id_alnsf, id_alnwf, id_vfrac
  integer                        :: id_canopy, id_f10m, id_t2m
  integer                        :: id_q2m, id_vtype, id_stype
@@ -2079,6 +2082,24 @@
      call netcdf_err(error, 'DEFINING ZORL UNITS' )
      error = nf90_put_att(ncid, id_zorl, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ZORL COORD' )
+
+     error = nf90_def_var(ncid, 'zorl_ice', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl_ice)
+     call netcdf_err(error, 'DEFINING ZORL_ICE' )
+     error = nf90_put_att(ncid, id_zorl_ice, "long_name", "zorl_ice")
+     call netcdf_err(error, 'DEFINING ZORL_ICE LONG NAME' )
+     error = nf90_put_att(ncid, id_zorl_ice, "units", "none")
+     call netcdf_err(error, 'DEFINING ZORL_ICE UNITS' )
+     error = nf90_put_att(ncid, id_zorl_ice, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ZORL_ICE COORD' )
+
+     error = nf90_def_var(ncid, 'zorl_water', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl_water)
+     call netcdf_err(error, 'DEFINING ZORL_WATER' )
+     error = nf90_put_att(ncid, id_zorl_water, "long_name", "zorl_water")
+     call netcdf_err(error, 'DEFINING ZORL_WATER LONG NAME' )
+     error = nf90_put_att(ncid, id_zorl_water, "units", "none")
+     call netcdf_err(error, 'DEFINING ZORL_WATER UNITS' )
+     error = nf90_put_att(ncid, id_zorl_water, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ZORL_WATER COORD' )
 
      error = nf90_def_var(ncid, 'alvsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alvsf)
      call netcdf_err(error, 'DEFINING ALVSF' )
@@ -2608,6 +2629,28 @@
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
      error = nf90_put_var( ncid, id_zorl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING Z0 RECORD' )
+   endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID Z0_ICE FOR TILE: ", tile
+   call ESMF_FieldGather(z0_ice_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_zorl_ice, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+     call netcdf_err(error, 'WRITING Z0_ICE RECORD' )
+   endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID Z0_WATER FOR TILE: ", tile
+   call ESMF_FieldGather(z0_water_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_zorl_water, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+     call netcdf_err(error, 'WRITING Z0_WATER RECORD' )
    endif
 
    print*,"- CALL FieldGather FOR TARGET GRID MAX SNOW ALBEDO FOR TILE: ", tile
