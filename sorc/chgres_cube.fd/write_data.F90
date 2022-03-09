@@ -1827,6 +1827,7 @@
                                    seaice_fract_target_grid, &
                                    seaice_skin_temp_target_grid, &
                                    skin_temp_target_grid, &
+                                   sst_target_grid, &
                                    soil_temp_target_grid, &
                                    ice_temp_target_grid, &
                                    soilm_liq_target_grid, &
@@ -1893,7 +1894,7 @@
  integer                        :: id_x, id_y, id_lsoil
  integer                        :: id_slmsk, id_time
  integer                        :: id_lat, id_lon
- integer                        :: id_tsea, id_sheleg, id_sheleg_ice, id_tg3
+ integer                        :: id_tsfcl, id_tsea, id_sheleg, id_sheleg_ice, id_tg3
  integer                        :: id_zorl, id_zorl_ice, id_alvsf, id_alvwf
  integer                        :: id_zorl_water, id_alvsf_nl
  integer                        :: id_alvwf_nl, id_alnsf_nl, id_alnwf_nl
@@ -2053,6 +2054,15 @@
      call netcdf_err(error, 'DEFINING SLMSK UNITS' )
      error = nf90_put_att(ncid, id_slmsk, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SLMSK COORD' )
+
+     error = nf90_def_var(ncid, 'tsfcl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tsfcl)
+     call netcdf_err(error, 'DEFINING TSFCL' )
+     error = nf90_put_att(ncid, id_tsfcl, "long_name", "tsfcl")
+     call netcdf_err(error, 'DEFINING TSFCL LONG NAME' )
+     error = nf90_put_att(ncid, id_tsfcl, "units", "none")
+     call netcdf_err(error, 'DEFINING TSFCL UNITS' )
+     error = nf90_put_att(ncid, id_tsfcl, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING TSFCL COORD' )
 
      error = nf90_def_var(ncid, 'tsea', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tsea)
      call netcdf_err(error, 'DEFINING TSEA' )
@@ -3051,6 +3061,17 @@
 
    print*,"- CALL FieldGather FOR TARGET GRID SKIN TEMP FOR TILE: ", tile
    call ESMF_FieldGather(skin_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_tsfcl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+     call netcdf_err(error, 'WRITING TSFCL RECORD' )
+   endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID sst FOR TILE: ", tile
+   call ESMF_FieldGather(sst_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", error)
 

@@ -59,6 +59,8 @@
                                        !< sea ice skin temperature
  type(esmf_field), public   :: skin_temp_target_grid
                                        !< skin temperature/sst
+ type(esmf_field), public   :: sst_target_grid
+                                       !< sst at open water
  type(esmf_field), public   :: srflag_target_grid
                                        !< snow/rain flag
  type(esmf_field), public   :: snow_liq_equiv_target_grid
@@ -956,7 +958,7 @@
 
  print*,"- CALL FieldRegridStore for water fields."
  call ESMF_FieldRegridStore(skin_temp_input_grid, &
-                            skin_temp_target_grid, &
+                            sst_target_grid, &
                             srcmaskvalues=(/0/), &
                             dstmaskvalues=(/0/), &
                             polemethod=ESMF_POLEMETHOD_NONE, &
@@ -975,7 +977,7 @@
  bundle_water_input = ESMF_FieldBundleCreate(name="water input", rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
- call ESMF_FieldBundleAdd(bundle_water_target, (/skin_temp_target_grid, z0_water_target_grid/), rc=rc)
+ call ESMF_FieldBundleAdd(bundle_water_target, (/sst_target_grid, z0_water_target_grid/), rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
  call ESMF_FieldBundleAdd(bundle_water_input, (/skin_temp_input_grid, z0_input_grid/), rc=rc)  
@@ -2548,10 +2550,10 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) > 0.0) then
-     skint_ptr(i,j) = (fice_ptr(i,j) * seaice_skint_ptr(i,j)) +  &
-                      ( (1.0 - fice_ptr(i,j)) * frz_ice )
+!    skint_ptr(i,j) = (fice_ptr(i,j) * seaice_skint_ptr(i,j)) +  &
+!                     ( (1.0 - fice_ptr(i,j)) * frz_ice )
    else
-     seaice_skint_ptr(i,j) = skint_ptr(i,j)
+!    seaice_skint_ptr(i,j) = skint_ptr(i,j)
      hice_ptr(i,j) = 0.0
    endif
  enddo
@@ -2925,6 +2927,22 @@
 
  print*,"- INITIALIZE TARGET sea ice depth."
  call ESMF_FieldGet(seaice_depth_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET GRID sst."
+ sst_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="sst_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET sst."
+ call ESMF_FieldGet(sst_target_grid, &
                     farrayPtr=target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
