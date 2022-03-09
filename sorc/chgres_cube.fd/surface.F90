@@ -33,6 +33,14 @@
                                        !< are applied at these points.
 
 ! surface fields (not including nst)
+ type(esmf_field), public   :: alvsf_nl_target_grid
+                                       !< alvsf at non-land
+ type(esmf_field), public   :: alvwf_nl_target_grid
+                                       !< alvwf at non-land
+ type(esmf_field), public   :: alnsf_nl_target_grid
+                                       !< alnsf at non-land
+ type(esmf_field), public   :: alnwf_nl_target_grid
+                                       !< alnwf at non-land
  type(esmf_field), public   :: canopy_mc_target_grid
                                        !< canopy moisture content
  type(esmf_field), public   :: f10m_target_grid
@@ -2337,12 +2345,36 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+ enddo
+ enddo
+
+ print*,"- SET TARGET GRID ALVSF_NL AT NON-LAND."
+ call ESMF_FieldGet(alvsf_nl_target_grid, &
+                    farrayPtr=data_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
  enddo
  enddo
 
  print*,"- SET TARGET GRID ALVWF AT NON-LAND."
  call ESMF_FieldGet(alvwf_target_grid, &
+                    farrayPtr=data_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+ enddo
+ enddo
+
+ print*,"- SET TARGET GRID ALVWF_NL AT NON-LAND."
+ call ESMF_FieldGet(alvwf_nl_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
@@ -2361,6 +2393,18 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+ enddo
+ enddo
+
+ print*,"- SET TARGET GRID ALNSF_NL AT NON-LAND."
+ call ESMF_FieldGet(alnsf_nl_target_grid, &
+                    farrayPtr=data_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
  enddo
  enddo
@@ -2373,7 +2417,19 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
+   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+ enddo
+ enddo
+
+ print*,"- SET TARGET GRID ALNWF_NL AT NON-LAND."
+ call ESMF_FieldGet(alnwf_nl_target_grid, &
+                    farrayPtr=data_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06  ! gfs physics flag value
  enddo
  enddo
 
@@ -2881,6 +2937,70 @@
 
  print*,"- INITIALIZE TARGET grid skin temp."
  call ESMF_FieldGet(skin_temp_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET ALVSF AT NON-LAND."
+ alvsf_nl_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="alvsf_nl_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET ALVSF AT NON-LAND."
+ call ESMF_FieldGet(alvsf_nl_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET ALVWF AT NON-LAND."
+ alvwf_nl_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="alvwf_nl_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET ALVWF AT NON-LAND."
+ call ESMF_FieldGet(alvwf_nl_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET ALNSF AT NON-LAND."
+ alnsf_nl_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="alnsf_nl_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET ALNSF AT NON-LAND."
+ call ESMF_FieldGet(alnsf_nl_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET ALNWF AT NON-LAND."
+ alnwf_nl_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="alnwf_nl_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET ALNWF AT NON-LAND."
+ call ESMF_FieldGet(alnwf_nl_target_grid, &
                     farrayPtr=target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)

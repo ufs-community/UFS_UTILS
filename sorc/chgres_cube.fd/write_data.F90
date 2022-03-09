@@ -1858,7 +1858,11 @@
                                    xtts_target_grid, &
                                    xzts_target_grid, &
                                    z_c_target_grid, &
-                                   zm_target_grid
+                                   zm_target_grid, &
+                                   alvsf_nl_target_grid, &
+                                   alvwf_nl_target_grid, &
+                                   alnsf_nl_target_grid, &
+                                   alnwf_nl_target_grid
 
  use static_data, only           : alvsf_target_grid,   &
                                    alnsf_target_grid,   &
@@ -1889,7 +1893,8 @@
  integer                        :: id_lat, id_lon
  integer                        :: id_tsea, id_sheleg, id_tg3
  integer                        :: id_zorl, id_zorl_ice, id_alvsf, id_alvwf
- integer                        :: id_zorl_water
+ integer                        :: id_zorl_water, id_alvsf_nl
+ integer                        :: id_alvwf_nl, id_alnsf_nl, id_alnwf_nl
  integer                        :: id_alnsf, id_alnwf, id_vfrac
  integer                        :: id_canopy, id_f10m, id_t2m
  integer                        :: id_q2m, id_vtype, id_stype
@@ -2110,6 +2115,15 @@
      error = nf90_put_att(ncid, id_alvsf, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ALVSF COORD' )
 
+     error = nf90_def_var(ncid, 'alvsf_nl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alvsf_nl)
+     call netcdf_err(error, 'DEFINING ALVSF_NL' )
+     error = nf90_put_att(ncid, id_alvsf_nl, "long_name", "alvsf_nl")
+     call netcdf_err(error, 'DEFINING ALVSF_NL LONG NAME' )
+     error = nf90_put_att(ncid, id_alvsf_nl, "units", "none")
+     call netcdf_err(error, 'DEFINING ALVSF_NL UNITS' )
+     error = nf90_put_att(ncid, id_alvsf_nl, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ALVSF_NL COORD' )
+
      error = nf90_def_var(ncid, 'alvwf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alvwf)
      call netcdf_err(error, 'DEFINING ALVWF' )
      error = nf90_put_att(ncid, id_alvwf, "long_name", "alvwf")
@@ -2118,6 +2132,15 @@
      call netcdf_err(error, 'DEFINING ALVWF UNITS' )
      error = nf90_put_att(ncid, id_alvwf, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ALVWF COORD' )
+
+     error = nf90_def_var(ncid, 'alvwf_nl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alvwf_nl)
+     call netcdf_err(error, 'DEFINING ALVWF_NL' )
+     error = nf90_put_att(ncid, id_alvwf_nl, "long_name", "alvwf_nl")
+     call netcdf_err(error, 'DEFINING ALVWF_NL LONG NAME' )
+     error = nf90_put_att(ncid, id_alvwf_nl, "units", "none")
+     call netcdf_err(error, 'DEFINING ALVWF_NL UNITS' )
+     error = nf90_put_att(ncid, id_alvwf_nl, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ALVWF_NL COORD' )
 
      error = nf90_def_var(ncid, 'alnsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alnsf)
      call netcdf_err(error, 'DEFINING ALNSF' )
@@ -2128,6 +2151,15 @@
      error = nf90_put_att(ncid, id_alnsf, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ALNSF COORD' )
 
+     error = nf90_def_var(ncid, 'alnsf_nl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alnsf_nl)
+     call netcdf_err(error, 'DEFINING ALNSF_NL' )
+     error = nf90_put_att(ncid, id_alnsf_nl, "long_name", "alnsf_nl")
+     call netcdf_err(error, 'DEFINING ALNSF_NL LONG NAME' )
+     error = nf90_put_att(ncid, id_alnsf_nl, "units", "none")
+     call netcdf_err(error, 'DEFINING ALNSF_NL UNITS' )
+     error = nf90_put_att(ncid, id_alnsf_nl, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ALNSF_NL COORD' )
+
      error = nf90_def_var(ncid, 'alnwf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alnwf)
      call netcdf_err(error, 'DEFINING ALNWF' )
      error = nf90_put_att(ncid, id_alnwf, "long_name", "alnwf")
@@ -2136,6 +2168,15 @@
      call netcdf_err(error, 'DEFINING ALNWF UNITS' )
      error = nf90_put_att(ncid, id_alnwf, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ALNWF COORD' )
+
+     error = nf90_def_var(ncid, 'alnwf_nl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alnwf_nl)
+     call netcdf_err(error, 'DEFINING ALNWF_NL' )
+     error = nf90_put_att(ncid, id_alnwf_nl, "long_name", "alnwf_nl")
+     call netcdf_err(error, 'DEFINING ALNWF_NL LONG NAME' )
+     error = nf90_put_att(ncid, id_alnwf_nl, "units", "none")
+     call netcdf_err(error, 'DEFINING ALNWF_NL UNITS' )
+     error = nf90_put_att(ncid, id_alnwf_nl, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING ALNWF_NL COORD' )
 
      error = nf90_def_var(ncid, 'facsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_facsf)
      call netcdf_err(error, 'DEFINING FACSF' )
@@ -2754,6 +2795,17 @@
      call netcdf_err(error, 'WRITING ALNSF RECORD' )
    endif
 
+   print*,"- CALL FieldGather FOR TARGET GRID ALNSF_NL FOR TILE: ", tile
+   call ESMF_FieldGather(alnsf_nl_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_alnsf_nl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+     call netcdf_err(error, 'WRITING ALNSF_NL RECORD' )
+   endif
+
    print*,"- CALL FieldGather FOR TARGET GRID ALNWF FOR TILE: ", tile
    call ESMF_FieldGather(alnwf_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2763,6 +2815,17 @@
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
      error = nf90_put_var( ncid, id_alnwf, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING ALNWF RECORD' )
+   endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID ALNWF_NL FOR TILE: ", tile
+   call ESMF_FieldGather(alnwf_nl_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_alnwf_nl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+     call netcdf_err(error, 'WRITING ALNWF_NL RECORD' )
    endif
 
    print*,"- CALL FieldGather FOR TARGET GRID ALVSF FOR TILE: ", tile
@@ -2776,6 +2839,17 @@
      call netcdf_err(error, 'WRITING ALVSF RECORD' )
    endif
 
+   print*,"- CALL FieldGather FOR TARGET GRID ALVSF_NL FOR TILE: ", tile
+   call ESMF_FieldGather(alvsf_nl_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_alvsf_nl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+     call netcdf_err(error, 'WRITING ALVSF_NL RECORD' )
+   endif
+
    print*,"- CALL FieldGather FOR TARGET GRID ALVWF FOR TILE: ", tile
    call ESMF_FieldGather(alvwf_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2785,6 +2859,17 @@
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
      error = nf90_put_var( ncid, id_alvwf, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING ALVWF RECORD' )
+   endif
+
+   print*,"- CALL FieldGather FOR TARGET GRID ALVWF_NL FOR TILE: ", tile
+   call ESMF_FieldGather(alvwf_nl_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", error)
+
+   if (localpet == 0) then
+     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+     error = nf90_put_var( ncid, id_alvwf_nl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+     call netcdf_err(error, 'WRITING ALVWF_NL RECORD' )
    endif
 
    print*,"- CALL FieldGather FOR TARGET GRID MAX VEGETATION GREENNESS FOR TILE: ", tile
