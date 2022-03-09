@@ -65,6 +65,10 @@
                                        !< liquid equiv snow depth
  type(esmf_field), public   :: snow_depth_target_grid
                                        !< physical snow depth
+ type(esmf_field), public   :: snow_liq_equiv_at_ice_target_grid
+                                       !< liquid equiv snow depth at sea ice
+ type(esmf_field), public   :: snow_depth_at_ice_target_grid
+                                       !< physical snow depth at sea ice
  type(esmf_field), public   :: soil_temp_target_grid
                                        !< 3-d soil temperature
  type(esmf_field), public   :: ice_temp_target_grid
@@ -879,8 +883,8 @@
  bundle_seaice_input = ESMF_FieldBundleCreate(name="sea ice input", rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
- call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_target_grid, &
-                          snow_liq_equiv_target_grid, seaice_skin_temp_target_grid, &
+ call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_at_ice_target_grid, &
+                          snow_liq_equiv_at_ice_target_grid, seaice_skin_temp_target_grid, &
                           ice_temp_target_grid/), rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
@@ -2847,6 +2851,22 @@
 
  target_ptr = init_val
 
+ print*,"- CALL FieldCreate FOR TARGET GRID SNOW LIQ EQUIV AT SEA ICE."
+ snow_liq_equiv_at_ice_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="snow_liq_equiv_at_ice_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET grid snow liq equiv at sea ice."
+ call ESMF_FieldGet(snow_liq_equiv_at_ice_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
  print*,"- CALL FieldCreate FOR TARGET GRID SNOW DEPTH."
  snow_depth_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -2857,6 +2877,22 @@
 
  print*,"- INITIALIZE TARGET grid snow depth."
  call ESMF_FieldGet(snow_depth_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET GRID SNOW DEPTH AT SEA ICE."
+ snow_depth_at_ice_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="snow_depth_at_ice_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET grid snow depth at sea ice."
+ call ESMF_FieldGet(snow_depth_at_ice_target_grid, &
                     farrayPtr=target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
