@@ -7,10 +7,10 @@ prepend_path("MODULEPATH", "/apps/contrib/NCEP/libs/hpc-stack-gfsv16/modulefiles
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
 
-hpc_intel_ver=os.getenv("hpc_intel_ver") or "2022.1.2"
+hpc_intel_ver=os.getenv("hpc_intel_ver") or "2018.4"
 load(pathJoin("hpc-intel", hpc_intel_ver))
 
-hpc_intel_ver=os.getenv("hpc_impi_ver") or "2022.1.2"
+hpc_intel_ver=os.getenv("hpc_impi_ver") or "2018.4"
 load(pathJoin("hpc-impi", hpc_impi_ver))
 
 w3nco_ver=os.getenv("w3nco_ver") or "2.4.1"
