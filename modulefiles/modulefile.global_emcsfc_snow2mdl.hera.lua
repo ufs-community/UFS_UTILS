@@ -7,7 +7,7 @@ prepend_path("MODULEPATH", "/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack-gf
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
 
-hpc_ver=os.getenv("hpc_intel_ver") or "2022.1.2"
+hpc_ver=os.getenv("hpc_intel_ver") or "18.0.5.274"
 load(pathJoin("hpc-intel", hpc_intel_ver))
 
 ip_ver=os.getenv("ip_ver") or "3.3.3"
