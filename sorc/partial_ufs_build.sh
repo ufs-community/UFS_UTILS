@@ -1,8 +1,7 @@
 #
 # define the array of the name of build program
 #
- declare -a Build_prg=("Build_nems_util" \
-                       "Build_chgres" "Build_cycle" \
+ declare -a Build_prg=("Build_chgres" "Build_cycle" \
                        "Build_nst_tf_chg" \
                        "Build_orog" \
                        "Build_nctools" "Build_chgres_cube" \

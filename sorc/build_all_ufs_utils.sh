@@ -33,14 +33,6 @@ fi
 . ./partial_ufs_build.sh
 
 #------------------------------------
-# build NEMS util
-#------------------------------------
-$Build_nems_util && {
-echo " .... Building NEMS util .... "
-./build_nems_util.sh > $logs_dir/build_NEMS.log 2>&1
-}
-
-#------------------------------------
 # build chgres
 #------------------------------------
 $Build_chgres && {
