@@ -1817,7 +1817,8 @@
                                    i_target, j_target, lsoil_target
 
  use program_setup, only         : convert_nst, halo=>halo_bndy, &
-                                   regional, lai_from_climo
+                                   regional, lai_from_climo, &
+                                   fract_grid
 
  use surface, only               : canopy_mc_target_grid,  &
                                    f10m_target_grid, &
@@ -2082,6 +2083,7 @@
      error = nf90_put_att(ncid, id_sheleg, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SHELEG COORD' )
 
+     if(fract_grid)then
      error = nf90_def_var(ncid, 'sheleg_ice', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_sheleg_ice)
      call netcdf_err(error, 'DEFINING SHELEG AT ICE' )
      error = nf90_put_att(ncid, id_sheleg_ice, "long_name", "sheleg_ice")
@@ -2090,6 +2092,7 @@
      call netcdf_err(error, 'DEFINING SHELEG AT ICE UNITS' )
      error = nf90_put_att(ncid, id_sheleg_ice, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SHELEG AT ICE COORD' )
+     endif
 
      error = nf90_def_var(ncid, 'tg3', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tg3)
      call netcdf_err(error, 'DEFINING TG3' )
@@ -2361,6 +2364,7 @@
      error = nf90_put_att(ncid, id_snwdph, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SNWDPH COORD' )
 
+     if(fract_grid)then
      error = nf90_def_var(ncid, 'snwdph_ice', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_snwdph_ice)
      call netcdf_err(error, 'DEFINING SNWDPH AT ICE' )
      error = nf90_put_att(ncid, id_snwdph_ice, "long_name", "snwdph_ice")
@@ -2369,6 +2373,7 @@
      call netcdf_err(error, 'DEFINING SNWDPH AT ICE UNITS' )
      error = nf90_put_att(ncid, id_snwdph_ice, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SNWDPH AT ICE COORD' )
+     endif
 
      error = nf90_def_var(ncid, 'shdmin', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_shdmin)
      call netcdf_err(error, 'DEFINING SHDMIN' )
@@ -2669,6 +2674,7 @@
      call netcdf_err(error, 'WRITING SNOW LIQ EQUIV RECORD' )
    endif
 
+   if(fract_grid) then
    print*,"- CALL FieldGather FOR TARGET GRID SNOW LIQ EQUIV at ice FOR TILE: ", tile
    call ESMF_FieldGather(snow_liq_equiv_at_ice_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2678,6 +2684,7 @@
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
      error = nf90_put_var( ncid, id_sheleg_ice, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING SNOW LIQ EQUIV at ice RECORD' )
+   endif
    endif
 
    print*,"- CALL FieldGather FOR TARGET GRID SNOW DEPTH FOR TILE: ", tile
@@ -2691,6 +2698,7 @@
      call netcdf_err(error, 'WRITING SNWDPH RECORD' )
    endif
 
+   if (fract_grid)then
    print*,"- CALL FieldGather FOR TARGET GRID SNOW DEPTH at ice FOR TILE: ", tile
    call ESMF_FieldGather(snow_depth_at_ice_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2700,6 +2708,7 @@
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
      error = nf90_put_var( ncid, id_snwdph_ice, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING SNWDPH at ice RECORD' )
+   endif
    endif
 
    print*,"- CALL FieldGather FOR TARGET GRID SLOPE TYPE FOR TILE: ", tile

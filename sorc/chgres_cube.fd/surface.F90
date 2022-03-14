@@ -386,7 +386,8 @@
                                        vgfrc_from_climo, &
                                        minmax_vgfrc_from_climo, &
                                        lai_from_climo, &
-                                       tg3_from_soil
+                                       tg3_from_soil, &
+                                       fract_grid
                                        
  use static_data, only               : veg_type_target_grid, &
                                        soil_type_target_grid, &
@@ -901,12 +902,19 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
 
-!cfract Separate snow fields at ice is not needed?
- call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_at_ice_target_grid, &
+ if (fract_grid) then
+   call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_at_ice_target_grid, &
                           snow_liq_equiv_at_ice_target_grid, seaice_skin_temp_target_grid, &
                           ice_temp_target_grid/), rc=rc)
+ else
+   call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_target_grid, &
+                          snow_liq_equiv_target_grid, seaice_skin_temp_target_grid, &
+                          ice_temp_target_grid/), rc=rc)
+ endif
+
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
+
  call ESMF_FieldBundleAdd(bundle_seaice_input, (/seaice_depth_input_grid, snow_depth_input_grid, &
                           snow_liq_equiv_input_grid, seaice_skin_temp_input_grid, &
                           soil_temp_input_grid/), rc=rc)                          
@@ -2804,6 +2812,8 @@
 
  use model_grid, only         : target_grid, lsoil_target
 
+ use program_setup, only      : fract_grid
+
  implicit none
 
  integer                        :: rc
@@ -2923,6 +2933,7 @@
 
  target_ptr = init_val
 
+ if (fract_grid) then
  print*,"- CALL FieldCreate FOR TARGET GRID SNOW LIQ EQUIV AT SEA ICE."
  snow_liq_equiv_at_ice_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -2938,6 +2949,8 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
+
+ endif ! fractional grid
 
  print*,"- CALL FieldCreate FOR TARGET GRID SNOW DEPTH."
  snow_depth_target_grid = ESMF_FieldCreate(target_grid, &
@@ -2955,6 +2968,7 @@
 
  target_ptr = init_val
 
+ if (fract_grid) then
  print*,"- CALL FieldCreate FOR TARGET GRID SNOW DEPTH AT SEA ICE."
  snow_depth_at_ice_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -2970,6 +2984,7 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
+ endif
 
  print*,"- CALL FieldCreate FOR TARGET GRID SEA ICE FRACTION."
  seaice_fract_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3787,6 +3802,8 @@
  call ESMF_FieldDestroy(ustar_target_grid, rc=rc)
  call ESMF_FieldDestroy(snow_liq_equiv_target_grid, rc=rc)
  call ESMF_FieldDestroy(snow_depth_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(snow_liq_equiv_at_ice_target_grid)) call ESMF_FieldDestroy(snow_liq_equiv_at_ice_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(snow_depth_at_ice_target_grid)) call ESMF_FieldDestroy(snow_depth_at_ice_target_grid, rc=rc)
  call ESMF_FieldDestroy(seaice_fract_target_grid, rc=rc)
  call ESMF_FieldDestroy(seaice_depth_target_grid, rc=rc)
  call ESMF_FieldDestroy(seaice_skin_temp_target_grid, rc=rc)
