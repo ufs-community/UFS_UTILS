@@ -1007,9 +1007,16 @@
  bundle_water_input = ESMF_FieldBundleCreate(name="water input", rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
+
+ if(fract_grid)then
  call ESMF_FieldBundleAdd(bundle_water_target, (/sst_target_grid, z0_water_target_grid/), rc=rc)
+ else
+ call ESMF_FieldBundleAdd(bundle_water_target, (/sst_target_grid, z0_target_grid/), rc=rc)
+ endif
+
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
+
  call ESMF_FieldBundleAdd(bundle_water_input, (/skin_temp_input_grid, z0_input_grid/), rc=rc)  
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
@@ -2251,6 +2258,7 @@
 
  use model_grid, only                : landmask_target_grid
  use static_data, only               : veg_type_target_grid
+ use program_setup, only             : fract_grid
 
  implicit none
 
@@ -2287,23 +2295,38 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- CALL FieldGet FOR TARGET GRID Z0 ICE."
- call ESMF_FieldGet(z0_ice_target_grid, &
-                    farrayPtr=data_ptr2, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
+ if(fract_grid)then
+   print*,"- CALL FieldGet FOR TARGET GRID Z0 ICE."
+   call ESMF_FieldGet(z0_ice_target_grid, &
+                      farrayPtr=data_ptr2, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGet", rc)
 
 !cfract should check for fice instead? under fractional
 !cfract grids need to preserve original landmask_target.
- do j = clb(2), cub(2)
- do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 2) then
-     data_ptr2(i,j) = 1.0
-   elseif (landmask_ptr(i,j) == 1) then
-     data_ptr(i,j) = z0_igbp(nint(veg_type_ptr(i,j))) * 100.0
-   endif
- enddo
- enddo
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (landmask_ptr(i,j) == 2) then
+       data_ptr2(i,j) = 1.0
+     endif
+   enddo
+   enddo
+
+ else
+
+!cfract should check for fice instead? under fractional
+!cfract grids need to preserve original landmask_target.
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (landmask_ptr(i,j) == 2) then
+       data_ptr(i,j) = 1.0
+     elseif (landmask_ptr(i,j) == 1) then
+       data_ptr(i,j) = z0_igbp(nint(veg_type_ptr(i,j))) * 100.0
+     endif
+   enddo
+   enddo
+
+ endif
 
  end subroutine roughness
 
@@ -3210,6 +3233,7 @@
 
  target_ptr = init_val
 
+ if (fract_grid)then
  print*,"- CALL FieldCreate FOR TARGET GRID Z0_ICE."
  z0_ice_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -3241,6 +3265,7 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
+ endif
 
  print*,"- CALL FieldCreate FOR INTERPOLATED TARGET GRID TERRAIN."
  terrain_from_input_grid = ESMF_FieldCreate(target_grid, &
@@ -3828,6 +3853,8 @@
  call ESMF_FieldDestroy(canopy_mc_target_grid, rc=rc)
  call ESMF_FieldDestroy(lai_target_grid,rc=rc)
  call ESMF_FieldDestroy(z0_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(z0_ice_target_grid)) call ESMF_FieldDestroy(z0_ice_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(z0_water_target_grid)) call ESMF_FieldDestroy(z0_water_target_grid, rc=rc)
  call ESMF_FieldDestroy(terrain_from_input_grid, rc=rc)
  call ESMF_FieldDestroy(terrain_from_input_grid_land, rc=rc)
  call ESMF_FieldDestroy(soil_type_from_input_grid, rc=rc)
