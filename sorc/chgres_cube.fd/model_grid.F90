@@ -1110,7 +1110,7 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  use program_setup, only       : mosaic_file_target_grid, &
                                  orog_dir_target_grid,    &
                                  orog_files_target_grid,  &
-                                 nsoill_out
+                                 nsoill_out, fract_grid
 
  implicit none
 
@@ -1329,13 +1329,16 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
      call get_model_mask_terrain(trim(the_file), i_target, j_target, landmask_one_tile, &
                                  terrain_one_tile, land_frac_one_tile)
      
-!    seamask_one_tile = 0  ! all land
-!    where(floor(land_frac_one_tile) == 0) seamask_one_tile = 1  ! at least some water
-!    landmask_one_tile = 0 ! all water
-!    where(ceiling(land_frac_one_tile) == 1) landmask_one_tile = 1  ! at least some land
+     if (fract_grid) then
+!      seamask_one_tile = 0  ! all land
+!      where(floor(land_frac_one_tile) == 0) seamask_one_tile = 1  ! at least some water
+!      landmask_one_tile = 0 ! all water
+!      where(ceiling(land_frac_one_tile) == 1) landmask_one_tile = 1  ! at least some land
+     else
+       seamask_one_tile = 0  ! all land
+       where(landmask_one_tile == 0) seamask_one_tile=1
+     endif
 
-     seamask_one_tile = 0  ! all land
-     where(landmask_one_tile == 0) seamask_one_tile=1
      call get_model_latlons(mosaic_file_target_grid, orog_dir_target_grid, num_tiles_target_grid, tile, &
                             i_target, j_target, ip1_target, jp1_target, latitude_one_tile, &
                             latitude_s_one_tile, latitude_w_one_tile, longitude_one_tile, &

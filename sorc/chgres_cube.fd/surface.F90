@@ -717,6 +717,7 @@
    enddo
    nullify(veg_type_target_ptr) 
  endif
+
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_all_land, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -730,6 +731,10 @@
  mask_input_ptr = 1
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 0
  
+!cfract
+!cfract under fractional grid, seamask_target will be '1' if there is
+!cfract at least some water.
+
  mask_target_ptr = seamask_target_ptr
 
  method=ESMF_REGRIDMETHOD_CONSERVE
@@ -783,6 +788,10 @@
 
  do tile = 1, num_tiles_target_grid
 
+!cfract according to Shan, the ice fraction is not scaled for
+!cfract the fraction of non-land. So if a point is 50%
+!cfract land and non-land, an ice frac to 100% means the
+!cfract entire non-land portion is ice covered.
    print*,"- CALL FieldGather FOR TARGET GRID SEAICE FRACTION TILE: ", tile
    call ESMF_FieldGather(seaice_fract_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -826,6 +835,10 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
 
+!cfrac
+! under fractional grid, landmask_target_grid is '1' if there is at least some
+! land and '0' if all water. Updating to points to '2' will have consequences
+! later. Don't do this?
    print*,"- CALL FieldScatter FOR TARGET LANDMASK TILE: ", tile
    call ESMF_FieldScatter(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -854,6 +867,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract Instead, should I check if 'fice' is non-zero to set
+!cfract mask_target_ptr?
  mask_target_ptr = 0 
  do j = clb_target(2), cub_target(2)
  do i = clb_target(1), cub_target(1)
@@ -885,6 +900,8 @@
  bundle_seaice_input = ESMF_FieldBundleCreate(name="sea ice input", rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
+
+!cfract Separate snow fields at ice is not needed?
  call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_at_ice_target_grid, &
                           snow_liq_equiv_at_ice_target_grid, seaice_skin_temp_target_grid, &
                           ice_temp_target_grid/), rc=rc)
@@ -923,6 +940,7 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
+!cfract using ice flag of '2' here. cant do that.
    if (localpet == 0) then   
      where(mask_target_one_tile == 1) mask_target_one_tile = 0
      where(mask_target_one_tile == 2) mask_target_one_tile = 1
@@ -944,12 +962,16 @@
     call error_handler("IN FieldRegridRelease", rc)
 
 !---------------------------------------------------------------------------------------------
-! Now interpolate water fields. 
+! Now interpolate open water fields. 
 !---------------------------------------------------------------------------------------------
 
  mask_input_ptr = 0
  where (nint(landmask_input_ptr) == 0) mask_input_ptr = 1
 
+!cfract dont include any points with ice.
+!cfract use seamask_target, which is 1 if there is some water.
+!cfract then remove points where fice is > 0.
+!cfract We want points with at least some water, but no ice.
  mask_target_ptr = 0
  where (landmask_target_ptr == 0) mask_target_ptr = 1
 
@@ -1048,6 +1070,7 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
+!cfract - here mask must be points with some water, but no ice.
    if (localpet == 0) then
      allocate(water_target_one_tile(i_target,j_target))
      water_target_one_tile = 0
@@ -1079,6 +1102,7 @@
  mask_input_ptr = 0
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 1
 
+!cfract this logic should work for fractional grids.
  mask_target_ptr = 0
  where (landmask_target_ptr == 1) mask_target_ptr = 1
 
@@ -1139,6 +1163,7 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
+!cfract 0 - all water; 1 - some land.
    if (localpet == 0) then
      allocate(land_target_one_tile(i_target,j_target))
      land_target_one_tile = 0
@@ -1182,6 +1207,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract veg_type_target should contain a valid value at points with
+!cfract any land. So this logic should work with fractional grids.
  mask_target_ptr = 0
  where (nint(veg_type_target_ptr) == veg_type_landice_target) mask_target_ptr = 1
 
@@ -1267,6 +1294,8 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
+!cfract setting land_target_one_tile. this should work for fractional grids.
+
    if (localpet == 0) then
      land_target_one_tile = 0
      where(nint(veg_type_target_one_tile) == veg_type_landice_target) land_target_one_tile = 1
@@ -1302,6 +1331,7 @@
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 1
  where (nint(veg_type_input_ptr) == veg_type_landice_input) mask_input_ptr = 0
 
+!cfract This should work for fractional grid.
  mask_target_ptr = 0
  where (landmask_target_ptr == 1) mask_target_ptr = 1
  where (nint(veg_type_target_ptr) == veg_type_landice_target) mask_target_ptr = 0
@@ -1483,6 +1513,9 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
+!cfract Here mask_target_one_tile is 'landmask_target_grid'. it is
+!cfract then modified by veg_type_target_grid. so this should work for 
+!cfract grids.
    if (localpet == 0) then
      where(nint(veg_type_target_one_tile) == veg_type_landice_target) mask_target_one_tile = 0
    endif
@@ -1635,6 +1668,7 @@
 ! Check land points that are not permanent land ice.  
 !---------------------------------------------------------------------------------------------
 
+!cfract - 1 for at least some land.
      if (landmask_ptr(i,j) == 1 .and. nint(veg_type_ptr(i,j)) /= veg_type_landice_target) then
 
        soil_type = nint(soil_type_ptr(i,j))
@@ -1918,6 +1952,7 @@
 ! Check land points that are not permanent land ice.  
 !---------------------------------------------------------------------------------------------
 
+!cfract when '1' will contain some land.
      if (landmask_ptr(i,j) == 1 .and. nint(veg_type_ptr(i,j)) /= veg_type_landice_target) then
 
         soilt_target = nint(soil_type_target_ptr(i,j))
@@ -2064,6 +2099,7 @@
  
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
+!cfract at least some land when equal to '1'.
    if (landmask_ptr(i,j) == 1) then
      terrain_diff = abs(terrain_input_ptr(i,j) - terrain_target_ptr(i,j))
      if (terrain_diff > 100.0) then
@@ -2249,6 +2285,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract should check for fice instead? under fractional
+!cfract grids need to preserve original landmask_target.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 2) then
@@ -2313,6 +2351,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract Setting to flag value at water. With fractional grid,
+!cfract restrict this to points that are all water. i.e.,
+!cfract where landmask_ptr = 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2325,6 +2366,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract Setting to flag value at water. With fractional grid,
+!cfract restrict this to points that are all water. i.e.,
+!cfract where landmask_ptr = 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2337,6 +2381,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract Setting to flag value at water. With fractional grid,
+!cfract restrict this to points that are all water. i.e.,
+!cfract where landmask_ptr = 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) veg_type_ptr(i,j) = 0.0
@@ -2349,6 +2396,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract This array contains albedo at points with at least
+!cfract some land. At all other points set to flag value.
+!cfract That means points where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
@@ -2361,6 +2411,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract Setting to flag value at all non-land - ice and all water.
+!cfract for fractional grid, this is where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
@@ -2445,6 +2497,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract for fract grid, this is where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2457,6 +2510,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract for fract grid, this is where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2469,6 +2523,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract for fract grid, this is where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2481,6 +2536,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract for fract grid, this is where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2493,6 +2549,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract for fract grid, this is where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) veg_greenness_ptr(i,j) = 0.0
@@ -2505,6 +2562,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract for fract grid, this is where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2565,6 +2623,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract don't use the '2' flag for ice. Use fice instead?
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 2) then  ! sea ice
@@ -2581,6 +2640,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract this should work for fractional grids.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 0) then  ! open water
@@ -2595,6 +2655,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract this should work for fractional grids.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 0) then  ! open water
@@ -2615,6 +2676,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract replace check of '2' with fice?
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 2 .or. landmask_ptr(i,j) == 0 .or. &
@@ -2631,6 +2693,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+!cfract, is skint_ptr the new sst field? need to use new
+!cfract sst_target_grid here.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 0) then
@@ -2695,6 +2759,10 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
 
+!cfract Setting filler value for tref at ice and land points. 
+!cfract Under fractional grids use seamask_target, where =0
+!cfract is all land. And use fice field for ice.
+!cfrac where(seamask_target == 0) .and where (fice > 0) data_ptr=skint_ptr
  where(mask_ptr /= 0) data_ptr = skint_ptr
 
 ! xz
@@ -2705,6 +2773,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
 
+!cfract same as above.
  where(mask_ptr /= 0) data_ptr = xz_fill
 
  do i = 1,num_nst_fields_minus2
@@ -2717,6 +2786,7 @@
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
      call error_handler("IN FieldGet", rc)
      
+!cfract same as above.
    where(mask_ptr /= 0) data_ptr = nst_fill
 
  enddo

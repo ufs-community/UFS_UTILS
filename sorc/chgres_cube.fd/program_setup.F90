@@ -97,6 +97,9 @@
  logical, public                 :: convert_sfc = .false. !< Convert sfc data when true.
  logical, public                 :: wam_cold_start = .false. !< When true, cold start for whole atmosphere model.
  
+
+ logical, public :: fract_grid = .false.
+
  ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
  ! Default is to use climatology instead
  logical, public                 :: vgtyp_from_climo = .true. !<  If false, interpolate vegetation type from the input 
