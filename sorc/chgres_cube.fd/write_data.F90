@@ -2469,14 +2469,16 @@
      error = nf90_put_att(ncid, id_slc, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SLC COORD' )
 
-     error = nf90_def_var(ncid, 'stc_ice', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_stc_ice)
-     call netcdf_err(error, 'DEFINING STC_ICE' )
-     error = nf90_put_att(ncid, id_stc_ice, "long_name", "stc_ice")
-     call netcdf_err(error, 'DEFINING STC_ICE LONG NAME' )
-     error = nf90_put_att(ncid, id_stc_ice, "units", "none")
-     call netcdf_err(error, 'DEFINING STC_ICE UNITS' )
-     error = nf90_put_att(ncid, id_stc_ice, "coordinates", "geolon geolat")
-     call netcdf_err(error, 'DEFINING STC_ICE COORD' )
+     if(fract_grid)then
+       error = nf90_def_var(ncid, 'stc_ice', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_stc_ice)
+       call netcdf_err(error, 'DEFINING STC_ICE' )
+       error = nf90_put_att(ncid, id_stc_ice, "long_name", "stc_ice")
+       call netcdf_err(error, 'DEFINING STC_ICE LONG NAME' )
+       error = nf90_put_att(ncid, id_stc_ice, "units", "none")
+       call netcdf_err(error, 'DEFINING STC_ICE UNITS' )
+       error = nf90_put_att(ncid, id_stc_ice, "coordinates", "geolon geolat")
+       call netcdf_err(error, 'DEFINING STC_ICE COORD' )
+     endif
 
      if (convert_nst) then
 
@@ -3144,6 +3146,7 @@
 
 ! ice temperature 
 
+   if(fract_grid)then
    print*,"- CALL FieldGather FOR TARGET GRID sea ice TEMPERATURE FOR TILE: ", tile
    call ESMF_FieldGather(ice_temp_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -3153,6 +3156,7 @@
      dum3d(:,:,:) = data_one_tile_3d(istart:iend, jstart:jend,:)
      error = nf90_put_var( ncid, id_stc_ice, dum3d, start=(/1,1,1,1/), count=(/i_target_out,j_target_out,lsoil_target,1/))
      call netcdf_err(error, 'WRITING sea ice TEMP RECORD' )
+   endif
    endif
 
 ! soil temperature 

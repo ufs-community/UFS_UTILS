@@ -881,6 +881,7 @@
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for 3d seaice fields."
+ if(fract_grid)then
  call ESMF_FieldRegridStore(soil_temp_input_grid, &
                             ice_temp_target_grid, &
                             srcmaskvalues=(/0/), &
@@ -892,6 +893,19 @@
                             routehandle=regrid_seaice, &
                             regridmethod=method, &
                             unmappedDstList=unmapped_ptr, rc=rc)
+ else
+ call ESMF_FieldRegridStore(soil_temp_input_grid, &
+                            soil_temp_target_grid, &
+                            srcmaskvalues=(/0/), &
+                            dstmaskvalues=(/0/), &
+                            polemethod=ESMF_POLEMETHOD_NONE, &
+                            srctermprocessing=isrctermprocessing, &
+                            unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
+                            normtype=ESMF_NORMTYPE_FRACAREA, &
+                            routehandle=regrid_seaice, &
+                            regridmethod=method, &
+                            unmappedDstList=unmapped_ptr, rc=rc)
+ endif
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
 
@@ -909,7 +923,7 @@
  else
    call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_target_grid, &
                           snow_liq_equiv_target_grid, seaice_skin_temp_target_grid, &
-                          ice_temp_target_grid/), rc=rc)
+                          soil_temp_target_grid/), rc=rc)
  endif
 
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -3299,6 +3313,7 @@
 
  target_ptr = init_val
 
+ if(fract_grid)then
  print*,"- CALL FieldCreate FOR TARGET GRID sea ice column TEMPERATURE."
  ice_temp_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -3316,6 +3331,7 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr_3d = init_val
+ endif
 
  print*,"- CALL FieldCreate FOR TARGET GRID SOIL TEMPERATURE."
  soil_temp_target_grid = ESMF_FieldCreate(target_grid, &
