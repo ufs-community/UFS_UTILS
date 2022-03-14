@@ -2312,6 +2312,8 @@
 !! @author George Gayno NOAA/EMC
  subroutine qc_check
 
+ use program_setup, only             : fract_grid
+
  use model_grid, only                : landmask_target_grid
 
  use static_data, only               : alvsf_target_grid, &
@@ -2409,10 +2411,12 @@
 !cfract That means points where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
+   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
  enddo
  enddo
 
+ if(fract_grid)then
  print*,"- SET TARGET GRID ALVSF_NL AT NON-LAND."
  call ESMF_FieldGet(alvsf_nl_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
@@ -2426,6 +2430,7 @@
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
  enddo
  enddo
+ endif
 
  print*,"- SET TARGET GRID ALVWF AT NON-LAND."
  call ESMF_FieldGet(alvwf_target_grid, &
@@ -2435,10 +2440,12 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
+   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
  enddo
  enddo
 
+ if(fract_grid)then
  print*,"- SET TARGET GRID ALVWF_NL AT NON-LAND."
  call ESMF_FieldGet(alvwf_nl_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
@@ -2450,6 +2457,7 @@
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
  enddo
  enddo
+ endif
 
  print*,"- SET TARGET GRID ALNSF AT NON-LAND."
  call ESMF_FieldGet(alnsf_target_grid, &
@@ -2459,10 +2467,12 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
+   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
  enddo
  enddo
 
+ if(fract_grid)then
  print*,"- SET TARGET GRID ALNSF_NL AT NON-LAND."
  call ESMF_FieldGet(alnsf_nl_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
@@ -2474,6 +2484,7 @@
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
  enddo
  enddo
+ endif
 
  print*,"- SET TARGET GRID ALNWF AT NON-LAND."
  call ESMF_FieldGet(alnwf_target_grid, &
@@ -2483,10 +2494,12 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
+   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
  enddo
  enddo
 
+ if(fract_grid)then
  print*,"- SET TARGET GRID ALNWF_NL AT NON-LAND."
  call ESMF_FieldGet(alnwf_nl_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
@@ -2498,6 +2511,7 @@
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06  ! gfs physics flag value
  enddo
  enddo
+ endif
 
  print*,"- SET NON-LAND FLAG FOR TARGET GRID FACSF."
  call ESMF_FieldGet(facsf_target_grid, &
@@ -3082,6 +3096,7 @@
 
  target_ptr = init_val
 
+ if(fract_grid)then
  print*,"- CALL FieldCreate FOR TARGET ALVSF AT NON-LAND."
  alvsf_nl_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -3145,6 +3160,7 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
+ endif ! fract_grid
 
  print*,"- CALL FieldCreate FOR TARGET GRID CANOPY MOISTURE CONTENT."
  canopy_mc_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3818,6 +3834,10 @@
  call ESMF_FieldDestroy(soil_temp_target_grid, rc=rc)
  call ESMF_FieldDestroy(soilm_tot_target_grid, rc=rc)
  call ESMF_FieldDestroy(soilm_liq_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(alvsf_nl_target_grid)) call ESMF_FieldDestroy(alvsf_nl_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(alvwf_nl_target_grid)) call ESMF_FieldDestroy(alvwf_nl_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(alnsf_nl_target_grid)) call ESMF_FieldDestroy(alnsf_nl_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(alnwf_nl_target_grid)) call ESMF_FieldDestroy(alnwf_nl_target_grid, rc=rc)
 
  end subroutine cleanup_target_sfc_data
 
