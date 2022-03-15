@@ -862,18 +862,13 @@
  mask_input_ptr = 0
  where (nint(landmask_input_ptr) == 2) mask_input_ptr = 1
 
- print*,"- CALL FieldGet FOR TARGET land sea mask."
- call ESMF_FieldGet(landmask_target_grid, &
-                    farrayPtr=landmask_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
+!cfract Instead, check if 'fice' is non-zero to set
+!cfract mask_target_ptr.
 
-!cfract Instead, should I check if 'fice' is non-zero to set
-!cfract mask_target_ptr?
  mask_target_ptr = 0 
  do j = clb_target(2), cub_target(2)
  do i = clb_target(1), cub_target(1)
-   if (landmask_target_ptr(i,j) == 2) mask_target_ptr(i,j) = 1
+   if (seaice_fract_target_ptr(i,j) > 0.0) mask_target_ptr(i,j) = 1
  enddo
  enddo
 
@@ -994,8 +989,10 @@
 !cfract use seamask_target, which is 1 if there is some water.
 !cfract then remove points where fice is > 0.
 !cfract We want points with at least some water, but no ice.
+
  mask_target_ptr = 0
- where (landmask_target_ptr == 0) mask_target_ptr = 1
+ where (seamask_target_ptr == 1) mask_target_ptr = 1
+ where (seaice_fract_target_ptr  > 0.0) mask_target_ptr = 0
 
  method=ESMF_REGRIDMETHOD_CONSERVE
  isrctermprocessing = 1
