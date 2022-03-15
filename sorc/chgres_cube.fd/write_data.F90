@@ -2056,6 +2056,7 @@
      error = nf90_put_att(ncid, id_slmsk, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SLMSK COORD' )
 
+     if(fract_grid)then
      error = nf90_def_var(ncid, 'tsfcl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tsfcl)
      call netcdf_err(error, 'DEFINING TSFCL' )
      error = nf90_put_att(ncid, id_tsfcl, "long_name", "tsfcl")
@@ -2064,6 +2065,7 @@
      call netcdf_err(error, 'DEFINING TSFCL UNITS' )
      error = nf90_put_att(ncid, id_tsfcl, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING TSFCL COORD' )
+     endif
 
      error = nf90_def_var(ncid, 'tsea', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tsea)
      call netcdf_err(error, 'DEFINING TSEA' )
@@ -3107,10 +3109,16 @@
 
    if (localpet == 0) then
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
-     error = nf90_put_var( ncid, id_tsfcl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
-     call netcdf_err(error, 'WRITING TSFCL RECORD' )
+     if(fract_grid)then
+       error = nf90_put_var( ncid, id_tsfcl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING TSFCL RECORD' )
+     else
+       error = nf90_put_var( ncid, id_tsea, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING TSFC RECORD' )
+     endif
    endif
 
+   if(fract_grid)then
    print*,"- CALL FieldGather FOR TARGET GRID sst FOR TILE: ", tile
    call ESMF_FieldGather(sst_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -3120,6 +3128,7 @@
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
      error = nf90_put_var( ncid, id_tsea, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING TSEA RECORD' )
+   endif
    endif
 
    print*,"- CALL FieldGather FOR TARGET GRID LANDMASK FOR TILE: ", tile

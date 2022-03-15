@@ -1001,6 +1001,7 @@
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for water fields."
+ if(fract_grid)then
  call ESMF_FieldRegridStore(skin_temp_input_grid, &
                             sst_target_grid, &
                             srcmaskvalues=(/0/), &
@@ -1012,6 +1013,19 @@
                             routehandle=regrid_water, &
                             regridmethod=method, &
                             unmappedDstList=unmapped_ptr, rc=rc)
+ else
+ call ESMF_FieldRegridStore(skin_temp_input_grid, &
+                            skin_temp_target_grid, &
+                            srcmaskvalues=(/0/), &
+                            dstmaskvalues=(/0/), &
+                            polemethod=ESMF_POLEMETHOD_NONE, &
+                            srctermprocessing=isrctermprocessing, &
+                            unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
+                            normtype=ESMF_NORMTYPE_FRACAREA, &
+                            routehandle=regrid_water, &
+                            regridmethod=method, &
+                            unmappedDstList=unmapped_ptr, rc=rc)
+ endif
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
 
@@ -1025,7 +1039,7 @@
  if(fract_grid)then
  call ESMF_FieldBundleAdd(bundle_water_target, (/sst_target_grid, z0_water_target_grid/), rc=rc)
  else
- call ESMF_FieldBundleAdd(bundle_water_target, (/sst_target_grid, z0_target_grid/), rc=rc)
+ call ESMF_FieldBundleAdd(bundle_water_target, (/skin_temp_target_grid, z0_target_grid/), rc=rc)
  endif
 
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2664,6 +2678,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+ if(fract_grid)then
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) > 0.0) then
@@ -2675,6 +2690,19 @@
    endif
  enddo
  enddo
+ else
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (fice_ptr(i,j) > 0.0) then
+     skint_ptr(i,j) = (fice_ptr(i,j) * seaice_skint_ptr(i,j)) +  &
+                      ( (1.0 - fice_ptr(i,j)) * frz_ice )
+   else
+     seaice_skint_ptr(i,j) = skint_ptr(i,j)
+     hice_ptr(i,j) = 0.0
+   endif
+ enddo
+ enddo
+ endif
 
  print*,"- SET TARGET GRID SUBSTRATE TEMP AT ICE."
  call ESMF_FieldGet(substrate_temp_target_grid, &
@@ -3069,6 +3097,7 @@
 
  target_ptr = init_val
 
+ if(fract_grid)then
  print*,"- CALL FieldCreate FOR TARGET GRID sst."
  sst_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -3084,6 +3113,7 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
+ endif
 
  print*,"- CALL FieldCreate FOR TARGET GRID SEA ICE SKIN TEMP."
  seaice_skin_temp_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3866,6 +3896,7 @@
  call ESMF_FieldDestroy(seaice_skin_temp_target_grid, rc=rc)
  call ESMF_FieldDestroy(srflag_target_grid, rc=rc)
  call ESMF_FieldDestroy(skin_temp_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(sst_target_grid)) call ESMF_FieldDestroy(sst_target_grid, rc=rc)
  call ESMF_FieldDestroy(canopy_mc_target_grid, rc=rc)
  call ESMF_FieldDestroy(lai_target_grid,rc=rc)
  call ESMF_FieldDestroy(z0_target_grid, rc=rc)
