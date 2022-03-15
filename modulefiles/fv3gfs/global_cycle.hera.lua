@@ -10,7 +10,7 @@ load(pathJoin("hpc", hpc_ver))
 hpc_intel_ver=os.getenv("hpc_intel_ver") or "18.0.5.274"
 load(pathJoin("hpc-intel", hpc_intel_ver))
 
-hpc_intel_ver=os.getenv("hpc_impi_ver") or "2018.0.4"
+hpc_impi_ver=os.getenv("hpc_impi_ver") or "2018.0.4"
 load(pathJoin("hpc-impi", hpc_impi_ver))
 
 ip_ver=os.getenv("ip_ver") or "3.3.3"
