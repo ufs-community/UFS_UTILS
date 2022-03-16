@@ -2293,6 +2293,7 @@
  real                               :: z0_igbp(20)
  real(esmf_kind_r8), pointer        :: data_ptr(:,:)
  real(esmf_kind_r8), pointer        :: data_ptr2(:,:)
+ real(esmf_kind_r8), pointer        :: fice_ptr(:,:)
  real(esmf_kind_r8), pointer        :: veg_type_ptr(:,:)
 
  data z0_igbp /1.089, 2.653, 0.854, 0.826, 0.800, 0.050,  &
@@ -2305,6 +2306,12 @@
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=landmask_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID SEA ICE."
+ call ESMF_FieldGet(seaice_fract_target_grid, &
+                    farrayPtr=fice_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
@@ -2321,6 +2328,7 @@
     call error_handler("IN FieldGet", rc)
 
  if(fract_grid)then
+
    print*,"- CALL FieldGet FOR TARGET GRID Z0 ICE."
    call ESMF_FieldGet(z0_ice_target_grid, &
                       farrayPtr=data_ptr2, rc=rc)
@@ -2331,19 +2339,19 @@
 !cfract grids need to preserve original landmask_target.
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     if (landmask_ptr(i,j) == 2) then
+     if (fice_ptr(i,j) > 0.0) then
        data_ptr2(i,j) = 1.0
      endif
    enddo
    enddo
 
- else
+ else ! non-fractional grid
 
 !cfract should check for fice instead? under fractional
 !cfract grids need to preserve original landmask_target.
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     if (landmask_ptr(i,j) == 2) then
+     if (fice_ptr(i,j) > 0.0) then
        data_ptr(i,j) = 1.0
      elseif (landmask_ptr(i,j) == 1) then
        data_ptr(i,j) = z0_igbp(nint(veg_type_ptr(i,j))) * 100.0
@@ -2710,7 +2718,7 @@
 !cfract don't use the '2' flag for ice. Use fice instead?
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 2) then  ! sea ice
+   if (fice_ptr(i,j) > 0.0) then  ! sea ice
      data_ptr(i,j) = frz_ice
    elseif (landmask_ptr(i,j) == 0) then  ! open water flag value.
      data_ptr(i,j) = skint_ptr(i,j)
@@ -2763,7 +2771,7 @@
 !cfract replace check of '2' with fice?
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 2 .or. landmask_ptr(i,j) == 0 .or. &
+   if (fice_ptr(i,j) > 0.0 .or. landmask_ptr(i,j) == 0 .or. &
        nint(veg_type_ptr(i,j)) == veg_type_landice_target) then
      soilmt_ptr(i,j,:) = 1.0
      soilml_ptr(i,j,:) = 1.0
