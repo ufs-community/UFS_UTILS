@@ -422,6 +422,7 @@
  real(esmf_kind_r8), allocatable    :: data_one_tile2(:,:)
  real(esmf_kind_r8), allocatable    :: data_one_tile_3d(:,:,:)
  real(esmf_kind_r8), allocatable    :: latitude_one_tile(:,:)
+ real(esmf_kind_r8), allocatable    :: fice_target_one_tile(:,:)
  real(esmf_kind_r8), pointer        :: seaice_fract_target_ptr(:,:)
  real(esmf_kind_r8), pointer        :: srflag_target_ptr(:,:)
  real(esmf_kind_r8), pointer        :: terrain_from_input_ptr(:,:)
@@ -950,6 +951,12 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleDestroy", rc)
 
+ if (localpet == 0) then
+   allocate(fice_target_one_tile(i_target,j_target))
+ else
+   allocate(fice_target_one_tile(0,0))
+ endif
+
  do tile = 1, num_tiles_target_grid
 
    print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
@@ -957,18 +964,23 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
+   print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
+   call ESMF_FieldGather(seaice_fract_target_grid, fice_target_one_tile, rootPet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", rc)
+
 !cfract using ice flag of '2' here. cant do that.
    if (localpet == 0) then   
      where(mask_target_one_tile == 1) mask_target_one_tile = 0
-     where(mask_target_one_tile == 2) mask_target_one_tile = 1
+     where(fice_target_one_tile > 0.0) mask_target_one_tile = 1
    endif
-
 
    call search_many(num_fields,bundle_seaice_target,data_one_tile, mask_target_one_tile,tile,search_nums,localpet, &
                     field_data_3d=data_one_tile_3d)
  enddo
 
- deallocate(search_nums)
+ deallocate(search_nums, fice_target_one_tile)
+
  call ESMF_FieldBundleDestroy(bundle_seaice_target,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldBundleDestroy", rc)
