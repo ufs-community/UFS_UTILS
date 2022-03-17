@@ -827,7 +827,7 @@
          data_one_tile(i,j) = 1.0_esmf_kind_r8
        endif
        if (data_one_tile(i,j) < 0.15_esmf_kind_r8) data_one_tile(i,j) = 0.0_esmf_kind_r8
-       if (data_one_tile(i,j) >= 0.15_esmf_kind_r8) mask_target_one_tile(i,j) = 2
+!      if (data_one_tile(i,j) >= 0.15_esmf_kind_r8) mask_target_one_tile(i,j) = 2
      enddo
      enddo
    endif
@@ -979,7 +979,8 @@
                     field_data_3d=data_one_tile_3d)
  enddo
 
- deallocate(search_nums, fice_target_one_tile)
+ !deallocate(search_nums, fice_target_one_tile)
+ deallocate(search_nums)
 
  call ESMF_FieldBundleDestroy(bundle_seaice_target,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
@@ -1117,6 +1118,11 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
+   print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
+   call ESMF_FieldGather(seaice_fract_target_grid, fice_target_one_tile, rootPet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", rc)
+
    print*,"- CALL FieldGather FOR TARGET LATITUDE TILE: ", tile
    call ESMF_FieldGather(latitude_target_grid, latitude_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1127,6 +1133,7 @@
      allocate(water_target_one_tile(i_target,j_target))
      water_target_one_tile = 0
      where(mask_target_one_tile == 0) water_target_one_tile = 1
+     where(fice_target_one_tile > 0.0) water_target_one_tile = 0
    endif
 
    call search_many(num_fields,bundle_water_target,data_one_tile, water_target_one_tile,& 
@@ -1136,7 +1143,7 @@
 
  enddo
 
- deallocate(latitude_one_tile,search_nums)
+ deallocate(latitude_one_tile,search_nums,fice_target_one_tile)
  
  call ESMF_FieldBundleDestroy(bundle_water_target,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2423,6 +2430,12 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+ print*,"- CALL FieldGet FOR TARGET GRID SEA ICE FRACTION."
+ call ESMF_FieldGet(seaice_fract_target_grid, &
+                    farrayPtr=fice_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
  print*,"- SET NON-LAND FLAG FOR TARGET GRID SLOPE TYPE."
  call ESMF_FieldGet(slope_type_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
@@ -2683,12 +2696,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- CALL FieldGet FOR TARGET GRID SEA ICE FRACTION."
- call ESMF_FieldGet(seaice_fract_target_grid, &
-                    farrayPtr=fice_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
  print*,"- SET TARGET GRID SEA ICE DEPTH TO ZERO AT NON-ICE POINTS."
  call ESMF_FieldGet(seaice_depth_target_grid, &
                     farrayPtr=hice_ptr, rc=rc)
@@ -2747,7 +2754,7 @@
 !cfract this should work for fractional grids.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0) then  ! open water
+   if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then  ! open water
      data_ptr(i,j) = 0.0
    end if
  enddo
@@ -2762,7 +2769,7 @@
 !cfract this should work for fractional grids.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0) then  ! open water
+   if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then  ! open water
      data_ptr(i,j) = 0.0
    endif
  enddo
@@ -2801,7 +2808,7 @@
 !cfract sst_target_grid here.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0) then
+   if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then
      data3d_ptr(i,j,:) = skint_ptr(i,j)  ! open water flag value.
    endif
  enddo
@@ -2828,6 +2835,7 @@
  integer, PARAMETER                 :: nst_fill = 0.0
 
  real(esmf_kind_r8), pointer        :: data_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: fice_ptr(:,:)
  real(esmf_kind_r8), pointer        :: skint_ptr(:,:)
 
  type(esmf_field)                   :: temp_field
@@ -2836,6 +2844,12 @@
  print*,"- CALL FieldGet FOR TARGET GRID LANDMASK."
  call ESMF_FieldGet(landmask_target_grid, &
                     farrayPtr=mask_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID LANDMASK."
+ call ESMF_FieldGet(seaice_fract_target_grid, &
+                    farrayPtr=fice_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
     
@@ -2867,7 +2881,9 @@
 !cfract Under fractional grids use seamask_target, where =0
 !cfract is all land. And use fice field for ice.
 !cfrac where(seamask_target == 0) .and where (fice > 0) data_ptr=skint_ptr
- where(mask_ptr /= 0) data_ptr = skint_ptr
+
+ where(mask_ptr == 1) data_ptr = skint_ptr
+ where(fice_ptr > 0.0) data_ptr = skint_ptr
 
 ! xz
 
@@ -2878,7 +2894,8 @@
     call error_handler("IN FieldGet", rc)
 
 !cfract same as above.
- where(mask_ptr /= 0) data_ptr = xz_fill
+ where(mask_ptr == 1) data_ptr = xz_fill
+ where(fice_ptr > 0.0) data_ptr = xz_fill
 
  do i = 1,num_nst_fields_minus2
    
@@ -2891,7 +2908,8 @@
      call error_handler("IN FieldGet", rc)
      
 !cfract same as above.
-   where(mask_ptr /= 0) data_ptr = nst_fill
+   where(mask_ptr == 1) data_ptr = nst_fill
+   where(fice_ptr > 0.0) data_ptr = nst_fill
 
  enddo
 
