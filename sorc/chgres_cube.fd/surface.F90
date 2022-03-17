@@ -816,12 +816,6 @@
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 91, &
                  latitude=latitude_one_tile)
    endif
-
-   print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
-   call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", rc)
-   
    
    if (localpet == 0) then
      do j = 1, j_target
@@ -830,22 +824,12 @@
          data_one_tile(i,j) = 1.0_esmf_kind_r8
        endif
        if (data_one_tile(i,j) < 0.15_esmf_kind_r8) data_one_tile(i,j) = 0.0_esmf_kind_r8
-!      if (data_one_tile(i,j) >= 0.15_esmf_kind_r8) mask_target_one_tile(i,j) = 2
      enddo
      enddo
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SEAICE FRACTION TILE: ", tile
    call ESMF_FieldScatter(seaice_fract_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldScatter", rc)
-
-!cfrac
-! under fractional grid, landmask_target_grid is '1' if there is at least some
-! land and '0' if all water. Updating to points to '2' will have consequences
-! later. Don't do this?
-   print*,"- CALL FieldScatter FOR TARGET LANDMASK TILE: ", tile
-   call ESMF_FieldScatter(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
 
