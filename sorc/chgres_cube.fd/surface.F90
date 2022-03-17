@@ -297,6 +297,9 @@
 
  if (convert_nst) call cleanup_input_nst_data
 
+ 
+ call update_landmask
+
 !---------------------------------------------------------------------------------------------
 ! Write data to file.
 !---------------------------------------------------------------------------------------------
@@ -3610,6 +3613,48 @@
     call error_handler("IN FieldCreate", rc)
 
  end subroutine create_nst_esmf_fields
+
+!> Update landmask for sea ice.
+!!
+!! @author George Gayno
+ subroutine update_landmask
+
+ use model_grid, only : landmask_target_grid
+
+ use program_setup, only : fract_grid
+
+ implicit none
+
+ integer                        :: rc
+ integer(esmf_kind_i8), pointer :: mask_ptr(:,:)
+
+ real(esmf_kind_r8), pointer    :: ice_ptr(:,:)
+
+ print*,"- UPDATE TARGET LANDMASK WITH ICE RECORD."
+
+ print*,"- INITIALIZE TARGET grid sea ice fraction."
+ call ESMF_FieldGet(seaice_fract_target_grid, &
+                    farrayPtr=ice_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- INITIALIZE TARGET landmask."
+ call ESMF_FieldGet(landmask_target_grid, &
+                    farrayPtr=mask_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ if (.not.fract_grid) then
+
+   where(ice_ptr > 0.0) mask_ptr = 2
+
+ else
+
+   print*,'add mask logic for fractional grid'
+
+ endif
+
+ end subroutine update_landmask
 
 !> Convert 1d index to 2d indices.
 !!
