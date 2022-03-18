@@ -30,8 +30,8 @@ export HALO_BNDY=4
 export CDATE=2019080100
 export EXTERNAL_MODEL="RAP"
 export NSOILL_OUT=9
-export TRACERS_TARGET="NULL"
-export TRACERS_INPUT="NULL"
+export TRACERS_TARGET='"NULL"'
+export TRACERS_INPUT='"NULL"'
 export SOTYP_FROM_CLIMO=.false.
 export VGTYP_FROM_CLIMO=.false.
 export VGFRC_FROM_CLIMO=.true.
@@ -90,6 +90,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< 13-km CONUS RAP W/ GSD PHYSICS AND SFC FROM FILE GRIB2 TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $HOMEufs/reg_tests/update_baseline.sh $HOMEreg "13km_conus_rap_grib2" $commit_num
+  fi
 else
   echo "<<< 13-km CONUS RAP W/ GSD PHYSICS AND SFC FROM FILE GRIB2 TEST PASSED. >>>"
 fi

@@ -40,6 +40,13 @@ export DATA="${DATA}/reg-tests/snow2mdl"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 export WGRIB=/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.2/exec/wgrib
