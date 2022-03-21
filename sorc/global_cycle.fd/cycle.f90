@@ -522,7 +522,7 @@ ENDIF
 
  IF (DO_SFCCYCLE) THEN
    ALLOCATE(SLMASKL(LENSFC), SLMASKW(LENSFC))
-! for non-fractional grid
+! for running uncoupled (non-fractional grid)
    DO I=1,LENSFC
      IF(NINT(SLMASK(I)) == 1) THEN
        SLMASKL(I) = 1.0_KIND_io8
@@ -537,8 +537,6 @@ ENDIF
        min_ice(i) = 0.0_KIND_io8
      endif
    ENDDO  
-!  MIN_ICE=0.0 ! temporary until i know how to set this for
-!              ! a non-fractional grid.
    num_threads = num_parthds()
    PRINT*
    PRINT*,"CALL SFCCYCLE TO UPDATE SURFACE FIELDS."
