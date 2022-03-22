@@ -70,12 +70,12 @@ jobs:
           make install
         fi
 
-    - name: cache-netcdf
-      id: cache-netcdf
-      uses: actions/cache@v2
-      with:
-        path: ~/netcdf
-        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}-${{ matrix.mpi_type }}3
+#   - name: cache-netcdf
+#     id: cache-netcdf
+#     uses: actions/cache@v2
+#     with:
+#       path: ~/netcdf
+#       key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}-${{ matrix.mpi_type }}3
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
@@ -94,8 +94,8 @@ jobs:
         export CC=mpicc
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
-        wget https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-${{ matrix.netcdf_version }}.tar.gz &> /dev/null
-        tar -xzf netcdf-c-${{ matrix.netcdf_version }}.tar.gz
+        wget https://github.com/Unidata/netcdf-c/archive/refs/tags/v${{ matrix.netcdf_version }}.tar.gz &> /dev/null
+        tar -xzf v${{ matrix.netcdf_version }}.tar.gz
         cd netcdf-c-${{ matrix.netcdf_version }}
         ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities --disable-shared
         make -j2
