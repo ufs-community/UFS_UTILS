@@ -23,12 +23,12 @@ jobs:
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
 
-#   - name: cache-netcdf
-#     id: cache-netcdf
-#     uses: actions/cache@v2
-#     with:
-#       path: ~/netcdf
-#       key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}3
+    - name: cache-netcdf
+      id: cache-netcdf
+      uses: actions/cache@v2
+      with:
+        path: ~/netcdf
+        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}3
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'

@@ -32,12 +32,12 @@ jobs:
         sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
         echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
 
-#   - name: cache-netcdf
-#     id: cache-netcdf
-#     uses: actions/cache@v2
-#     with:
-#       path: ~/netcdf
-#       key: netcdf-c-$4.7.4-{{ runner.os }}-intel3
+    - name: cache-netcdf
+      id: cache-netcdf
+      uses: actions/cache@v2
+      with:
+        path: ~/netcdf
+        key: netcdf-c-$4.7.4-{{ runner.os }}-intel3
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
