@@ -52,7 +52,7 @@ load(pathJoin("sfcio", sfcio_ver))
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.2"
 load(pathJoin("nemsio", nemsio_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.1"
+g2_ver=os.getenv("g2_ver") or "3.4.3"
 load(pathJoin("g2", g2_ver))
 
 wgrib2_ver=os.getenv("wgrib2_ver") or "2.0.8"
