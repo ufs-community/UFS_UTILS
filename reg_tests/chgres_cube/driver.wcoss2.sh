@@ -155,7 +155,7 @@ TEST9=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime
 LOG_FILE=consistency.log10
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST10=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N 3km.conus.hrrr.gfssdf.grib2.conus -l select=1:ncpus=6:ompthreads=1:mem=40GB $PWD/3km.conus.hrrr.gfssdf.grib2.sh)
+        -N 3km.conus.hrrr.gfssdf.grib2.conus -l select=1:ncpus=6:ompthreads=1:mem=50GB $PWD/3km.conus.hrrr.gfssdf.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GSD PHYSICS AND SFC VARS FROM FILE.
@@ -164,7 +164,7 @@ TEST10=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
 LOG_FILE=consistency.log11
 export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
 TEST11=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N 3km.conus.hrrr.newsfc.grib2.conus -l select=1:ncpus=12:ompthreads=1:mem=50GB $PWD/3km.conus.hrrr.newsfc.grib2.sh)
+        -N 3km.conus.hrrr.newsfc.grib2.conus -l select=1:ncpus=12:ompthreads=1:mem=75GB $PWD/3km.conus.hrrr.newsfc.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM USING NAM GRIB2 file WITH GFS PHYSICS .
