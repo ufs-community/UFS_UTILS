@@ -1330,13 +1330,13 @@ print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
                                  terrain_one_tile, land_frac_one_tile)
      
      if (fract_grid) then
-!      seamask_one_tile = 0  ! all land
-!      where(floor(land_frac_one_tile) == 0) seamask_one_tile = 1  ! at least some water
-!      landmask_one_tile = 0 ! all water
-!      where(ceiling(land_frac_one_tile) == 1) landmask_one_tile = 1  ! at least some land
+       seamask_one_tile = 0  ! all land
+       where(floor(land_frac_one_tile) == 0) seamask_one_tile = 1  ! at least some non-land.
+       landmask_one_tile = 0 ! all non-land
+       where(ceiling(land_frac_one_tile) == 1) landmask_one_tile = 1  ! at least some land
      else
        seamask_one_tile = 0  ! all land
-       where(landmask_one_tile == 0) seamask_one_tile=1
+       where(landmask_one_tile == 0) seamask_one_tile=1 ! not land
      endif
 
      call get_model_latlons(mosaic_file_target_grid, orog_dir_target_grid, num_tiles_target_grid, tile, &

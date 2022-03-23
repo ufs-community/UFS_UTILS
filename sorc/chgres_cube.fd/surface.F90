@@ -730,15 +730,17 @@
     
 !-----------------------------------------------------------------------
 ! Next, determine the sea ice fraction on target grid.  
-! Interpolate.
+! For fractional grids, the ice fraction is not scaled for the
+! fraction of non-land. So if a point is 50% land and non-land,
+! an ice frac of 100% means the entire non-land portion is ice covered.
 !-----------------------------------------------------------------------
 
  mask_input_ptr = 1
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 0
  
-!cfract
-!cfract under fractional grid, seamask_target will be '1' if there is
-!cfract at least some water.
+! For non-fractional grids, 'seamask_target_ptr' is '1' for land points
+! and '0' for non-land points. For fractional grids, 'seamask_target_ptr'
+! will be '0' if all land and '1' is at least some non-land.
 
  mask_target_ptr = seamask_target_ptr
 
@@ -793,10 +795,6 @@
 
  do tile = 1, num_tiles_target_grid
 
-!cfract according to Shan, the ice fraction is not scaled for
-!cfract the fraction of non-land. So if a point is 50%
-!cfract land and non-land, an ice frac to 100% means the
-!cfract entire non-land portion is ice covered.
    print*,"- CALL FieldGather FOR TARGET GRID SEAICE FRACTION TILE: ", tile
    call ESMF_FieldGather(seaice_fract_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -849,9 +847,6 @@
 
  mask_input_ptr = 0
  where (nint(landmask_input_ptr) == 2) mask_input_ptr = 1
-
-!cfract Instead, check if 'fice' is non-zero to set
-!cfract mask_target_ptr.
 
  mask_target_ptr = 0 
  do j = clb_target(2), cub_target(2)
