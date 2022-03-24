@@ -17,8 +17,6 @@
 
  character(len=5), allocatable, public  :: tiles_target_grid(:)
                                            !< Tile names of target grid.
- character(len=10), public              :: inv_file = "chgres.inv"
-                                           !< wgrib2 inventory file
  character(len=50), public              :: input_grid_type = "latlon"
                                            !< map projection of input grid
 
@@ -617,7 +615,6 @@
  subroutine define_input_grid_grib2(localpet,npets)
 
  use netcdf
- use wgrib2api
  use mpi
  use grib_mod
  use gdswzd_mod
@@ -956,15 +953,6 @@
  enddo
 
  deallocate(latitude_corner, longitude_corner)
-
-! get rid of this?
- if (localpet == 0) then
-   print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
-   rc=grb2_mk_inv(the_file,inv_file)
-   if (rc /=0) call error_handler("OPENING GRIB2 FILE using wgrib2",rc)
- endif
-
- call MPI_BARRIER(MPI_COMM_WORLD, rc)
 
  end subroutine define_input_grid_grib2
 
