@@ -76,7 +76,7 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J chgres01 -W 0:05 -x
 
 LOG_FILE=consistency.log02
 export OMP_NUM_THREADS=1
-bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J chgres02 -W 0:07 -x -n 6 \
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J chgres02 -W 0:10 -x -n 6 \
         -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/3km.conus.hrrr.gfssdf.grib2.sh"
 
 #-----------------------------------------------------------------------------
@@ -103,7 +103,7 @@ bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J chgres04 -W 0:05 -x
 
 LOG_FILE=consistency.log05
 export OMP_NUM_THREADS=1
-bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J chgres05 -W 0:05 -x -n 6 \
+bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J chgres05 -W 0:10 -x -n 6 \
         -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/13km.conus.rap.grib2.sh"
 
 #-----------------------------------------------------------------------------

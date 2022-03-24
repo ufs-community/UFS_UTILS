@@ -957,6 +957,7 @@
 
  deallocate(latitude_corner, longitude_corner)
 
+! get rid of this?
  if (localpet == 0) then
    print*,'- OPEN AND INVENTORY GRIB2 FILE: ',trim(the_file)
    rc=grb2_mk_inv(the_file,inv_file)
