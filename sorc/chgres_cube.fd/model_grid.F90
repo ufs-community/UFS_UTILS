@@ -1511,16 +1511,16 @@
 
  end subroutine cleanup_input_target_grid_data
 
-!> Convert the grib2 grid description template to
-!! to the grib2 grid description sections.
+!> Convert the GRIB2 grid description template to
+!! to the GRIB1 grid description section.
 !!
-!! @param [in] igdtnum grib2 grid description template number
-!! @param [in] igdstmpl length of grib2 grid description template
-!! @param [in] igdtlen array of grib2 grid description template octets.
-!! @param [out] kgds array of grib1 grid description octets.
-!! @param [out] ni i-dimension of grid
-!! @param [out] nj j-dimension of grid
-!! @param [out] res resolution of grid in km
+!! @param [in] igdtnum GRIB2 grid description template number.
+!! @param [in] igdstmpl Length of grib2 grid description template.
+!! @param [in] igdtlen Array of GRIB2 grid description template octets.
+!! @param [out] kgds Array of GRIB1 grid description octets.
+!! @param [out] ni I-dimension of grid.
+!! @param [out] nj J-dimension of grid.
+!! @param [out] res Resolution of grid in km.
 !! @author George Gayno NCEP/EMC   
  subroutine gdt_to_gds(igdtnum, igdstmpl, igdtlen, kgds, ni, nj, res)
 
@@ -1615,13 +1615,12 @@
 
      iscale=igdstmpl(10)*igdstmpl(11)
      if (iscale == 0) iscale = 1e6
-     kgds(1)=0                   ! oct 6
+     kgds(1)=0                   ! oct 6, data representation type.
      kgds(2)=igdstmpl(8)         ! octs 7-8, Ni
      ni = kgds(2)
      kgds(3)=igdstmpl(9)         ! octs 9-10, Nj
      nj = kgds(3)
-!    kgds(4)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of 1st grid point
-     kgds(7)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of 1st grid point
+     kgds(4)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of 1st grid point
      kgds(5)=nint(float(igdstmpl(13))/float(iscale)*1000.)  ! octs 14-16, Lon of 1st grid point
 
      kgds(6)=0                   ! oct 17, resolution and component flags
@@ -1629,11 +1628,10 @@
      if ( btest(igdstmpl(14),4).OR.btest(igdstmpl(14),5) ) kgds(6)=kgds(6)+128
      if ( btest(igdstmpl(14),3) ) kgds(6)=kgds(6)+8
 
-!    kgds(7)=nint(float(igdstmpl(15))/float(iscale)*1000.)  ! octs 18-20, Lat of last grid point
-     kgds(4)=nint(float(igdstmpl(15))/float(iscale)*1000.)  ! octs 18-20, Lat of last grid point
+     kgds(7)=nint(float(igdstmpl(15))/float(iscale)*1000.)  ! octs 18-20, Lat of last grid point
      kgds(8)=nint(float(igdstmpl(16))/float(iscale)*1000.)  ! octs 21-23, Lon of last grid point
-     kgds(9)=nint(float(igdstmpl(17))/float(iscale)*1000.)  ! octs 24-25, di
-     kgds(10)=nint(float(igdstmpl(18))/float(iscale)*1000.) ! octs 26-27, dj
+     kgds(9)=nint(float(igdstmpl(17))/float(iscale)*1000.)  ! octs 24-25, "i" resolution.
+     kgds(10)=nint(float(igdstmpl(18))/float(iscale)*1000.) ! octs 26-27, "j" resolution.
 
      kgds(11) = 0              ! oct 28, scan mode
      if (btest(igdstmpl(19),7)) kgds(11) = 128
@@ -1645,10 +1643,8 @@
      kgds(20)=255    ! oct 5, used for thinned grids, set to 255
 
    else
-      print*,'grid not defined', igdtnum
-
-      call abort
-
+      
+     call error_handler("UNRECOGNIZED INPUT GRID TYPE ", 1)
 
  endif
 
