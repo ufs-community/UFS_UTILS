@@ -11,10 +11,10 @@
                         target_grid, num_tiles_target_grid, &
                         landmask_target_grid
 
- use surface, only : skin_temp_target_grid, &
-                     nst_land_fill, &
-                     create_nst_esmf_fields, &
-                     cleanup_target_nst_data, &
+ use surface, only : nst_land_fill, &
+                     create_nst_esmf_fields
+ 
+ use surface_target_data, only : skin_temp_target_grid, &
                      c_d_target_grid, &
                      c_0_target_grid, &
                      d_conv_target_grid, &
@@ -32,9 +32,9 @@
                      xtts_target_grid, &
                      xzts_target_grid, &
                      z_c_target_grid, &
-                     zm_target_grid
-                     
- 
+                     zm_target_grid, &
+                     cleanup_target_nst_data
+
  implicit none
 
  integer, parameter           :: IPTS_TARGET=4
