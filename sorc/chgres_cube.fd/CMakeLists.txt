@@ -5,12 +5,14 @@
 
 set(lib_src
     atmosphere.F90
+    atmosphere_target_data.F90
     grib2_util.F90
     input_data.F90
     model_grid.F90
     program_setup.F90
     search_util.F90
     static_data.F90
+    surface_target_data.F90
     surface.F90
     thompson_mp_climo_data.F90
     wam_climo_data.f90

@@ -1,3 +1,14 @@
+ module write_data
+
+ private
+
+ public :: write_fv3_atm_header_netcdf
+ public :: write_fv3_atm_bndy_data_netcdf
+ public :: write_fv3_atm_data_netcdf
+ public :: write_fv3_sfc_data_netcdf
+
+ contains
+
 !> @file
 !! @brief Writes the tiled and header files expected by the forecast
 !! model.
@@ -18,9 +29,9 @@
 
  use netcdf
 
- use atmosphere, only : nvcoord_target, &
-                        vcoord_target,  &
-                        levp1_target
+ use atmosphere_target_data, only : nvcoord_target, &
+                                    vcoord_target,  &
+                                    levp1_target
 
  use program_setup, only : num_tracers, use_thomp_mp_climo
 
@@ -105,18 +116,12 @@
  use esmf
  use netcdf
 
- use atmosphere, only            : lev_target, levp1_target, &
-                                   dzdt_target_grid, &
-                                   ps_target_grid, &
-                                   tracers_target_grid, &
-                                   u_s_target_grid, &
-                                   v_s_target_grid, &
-                                   u_w_target_grid, &
-                                   v_w_target_grid, &
-                                   temp_target_grid, &
-                                   zh_target_grid, &
-                                   qnifa_climo_target_grid, &
-                                   qnwfa_climo_target_grid
+ use atmosphere_target_data, only : lev_target, levp1_target, &
+                                    ps_target_grid, zh_target_grid, &
+                                    tracers_target_grid, dzdt_target_grid, &
+                                    temp_target_grid, qnifa_climo_target_grid, &
+                                    qnwfa_climo_target_grid, u_s_target_grid, &
+                                    v_s_target_grid, u_w_target_grid, v_w_target_grid
 
  use model_grid, only            : i_target, ip1_target, j_target, jp1_target
 
@@ -1201,20 +1206,13 @@
                                      use_thomp_mp_climo, &
                                      regional
 
- use atmosphere, only              : lev_target, &
-                                     levp1_target, &
-                                     ps_target_grid, &
-                                     zh_target_grid, &
-                                     dzdt_target_grid, &
-                                     qnifa_climo_target_grid, &
-                                     qnwfa_climo_target_grid, &
-                                     tracers_target_grid, &
-                                     temp_target_grid, &
-                                     delp_target_grid, &
-                                     u_s_target_grid,   &
-                                     v_s_target_grid,   &
-                                     u_w_target_grid,   &
-                                     v_w_target_grid
+ use atmosphere_target_data, only  : lev_target, levp1_target, &
+                                     ps_target_grid, zh_target_grid, &
+                                     dzdt_target_grid, delp_target_grid, &
+                                     temp_target_grid, tracers_target_grid, &
+                                     qnifa_climo_target_grid, qnwfa_climo_target_grid, &
+                                     u_s_target_grid, v_s_target_grid, &
+                                     u_w_target_grid, v_w_target_grid
 
  use model_grid, only              : num_tiles_target_grid, &
                                      i_target, j_target, &
@@ -1819,7 +1817,7 @@
  use program_setup, only         : convert_nst, halo=>halo_bndy, &
                                    regional, lai_from_climo
 
- use surface, only               : canopy_mc_target_grid,  &
+ use surface_target_data, only   : canopy_mc_target_grid,  &
                                    f10m_target_grid, &
                                    ffmm_target_grid, &
                                    q2m_target_grid,   &
@@ -3157,3 +3155,5 @@
  return
 
  end subroutine write_fv3_sfc_data_netcdf
+
+ end module write_data
