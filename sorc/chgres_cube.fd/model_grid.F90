@@ -634,12 +634,14 @@
  integer :: header_buffer_val = 16384
  integer :: id_gridlat, id_gridlon, id_gridrot
  integer :: id_gridlat_corners, id_gridlon_corners
+ integer :: id_gridlat_diff, id_gridlon_diff
 
  logical :: unpack
 
  real    :: res
  real, allocatable :: rlon(:,:),rlat(:,:),xpts(:,:),ypts(:,:)
  real, allocatable :: rlon_corner(:,:),rlat_corner(:,:)
+ real, allocatable :: rlon_diff(:,:),rlat_diff(:,:)
  real, allocatable :: xpts_corner(:,:),ypts_corner(:,:)
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
@@ -701,6 +703,8 @@
 
  allocate(rlat(i_input,j_input))
  allocate(rlon(i_input,j_input))
+ allocate(rlat_diff(i_input,j_input))
+ allocate(rlon_diff(i_input,j_input))
  allocate(xpts(i_input,j_input))
  allocate(ypts(i_input,j_input))
  allocate(rlat_corner(ip1_input,jp1_input))
@@ -761,6 +765,13 @@
    where(rlon_corner > 180.0) rlon_corner = rlon_corner -  360.0
  endif
 
+ do j = 1, j_input
+ do i = 1, i_input
+    rlat_diff(i,j) = rlat_corner(i,j) - rlat(i,j)
+    rlon_diff(i,j) = rlon_corner(i,j) - rlon(i,j)
+ enddo
+ enddo
+
    ncid = 34
    error = nf90_create("./latlon.nc", IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
                        ncid, initialsize=0, chunksize=fsize)
@@ -793,6 +804,12 @@
    error = nf90_def_var(ncid, 'gridlon_corners', NF90_FLOAT, (/dim_ip1,dim_jp1/), id_gridlon_corners)
    call netcdf_err(error, 'DEFINING gridlon_corners' )
 
+   error = nf90_def_var(ncid, 'gridlat_corner_minus_cent', NF90_FLOAT, (/dim_i,dim_j/), id_gridlat_diff)
+   call netcdf_err(error, 'DEFINING gridlat_corner_minus_cent' )
+
+   error = nf90_def_var(ncid, 'gridlon_corner_minus_cent', NF90_FLOAT, (/dim_i,dim_j/), id_gridlon_diff)
+   call netcdf_err(error, 'DEFINING gridlon_corner_minus_cent' )
+
    error = nf90_enddef(ncid, header_buffer_val,4,0,4)
    call netcdf_err(error, 'DEFINING HEADER' )
 
@@ -801,6 +818,12 @@
 
    error = nf90_put_var(ncid, id_gridlon, real(rlon,4) )
    call netcdf_err(error, 'writing gridlon' )
+
+   error = nf90_put_var(ncid, id_gridlat_diff, real(rlat_diff,4) )
+   call netcdf_err(error, 'writing gridlat_diff' )
+
+   error = nf90_put_var(ncid, id_gridlon_diff, real(rlon_diff,4) )
+   call netcdf_err(error, 'writing gridlon_diff' )
 
    error = nf90_put_var(ncid, id_gridlat_corners, real(rlat_corner,4) )
    call netcdf_err(error, 'writing gridlat_corner' )
