@@ -529,13 +529,22 @@
 !!
 !! @author  George Gayno org: w/np2 @date 2005-Dec-16
  subroutine readafwa
+ use grib_mod
+
  implicit none
 
- integer, parameter            :: iunit=11
+ integer, parameter            :: iunit=17
  integer                       :: jgds(200), jpds(200), kgds(200), kpds(200)
  integer                       :: istat
  integer                       :: lugi, lskip, numbytes, numpts, message_num
  integer                       :: isgrib
+
+ integer                       :: j, k, jdisc, jpdtn, jgdtn
+ integer                       :: jpdt(200), jgdt(200), jids(200)
+
+ logical                       :: unpack
+
+ type(gribfield) :: gfld
 
  bad_afwa_nh=.false.
  bad_afwa_sh=.false.
@@ -557,7 +566,7 @@
 
  if ( len_trim(afwa_snow_global_file) > 0 ) then
 
-   print*,"- OPEN AND READ AFWA SNOW FILE ", trim(afwa_snow_global_file)
+   print*,"- OPEN AND READ global AFWA SNOW FILE ", trim(afwa_snow_global_file)
    call baopenr (iunit, afwa_snow_global_file, istat)
    if (istat /= 0) then
      print*,'- FATAL ERROR: BAD OPEN OF FILE, ISTAT IS ', istat
@@ -565,48 +574,47 @@
      call errexit(60)
    end if
 
-!-----------------------------------------------------------------------
-! tell degribber to look for requested data.
-!-----------------------------------------------------------------------
+ call grib2_null(gfld)
 
-   lugi     = 0
-   lskip    = -1
-   jpds     = -1
-   jgds     = -1
-   jpds(5)  = 66     ! snow depth
-   kpds     = jpds
-   kgds     = jgds
+ jdisc    = 0      ! search for discipline; 0 - meteorological products
+ j        = 0      ! search at beginning of file.
+ lugi     = 0      ! no grib index file
+ jids     = -9999
+ jgdt     = -9999
+ jgdtn = -1
+ jpdtn = 0    ! Search for product def template 0 - analysis or forecast
+ jpdt     = -9999  ! array of values in product definition template 4.n
+ jpdt(1) = 1  ! parameter category - moisture Sec4 oct 10
+ jpdt(2) = 11 ! parameter - snow depth Sec4 oct 11
+ unpack   = .true. ! unpack data
 
-   print*,"- GET GRIB HEADER"
-   call getgbh(iunit, lugi, lskip, jpds, jgds, numbytes,  &
-               numpts, message_num, kpds, kgds, istat)
+ call getgb2(iunit, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, istat)
 
-   if (istat /= 0) then
-     print*,"- FATAL ERROR: BAD DEGRIB OF HEADER. ISTAT IS ", istat
-     call w3tage('SNOW2MDL')
-     call errexit(61)
-   end if
+ print*,'after getgb2 ',istat
+ if(istat /= 0)  stop
+ 
+ print*,'the data ',maxval(gfld%fld),minval(gfld%fld)
+ print*,'ipdtnum ', gfld%ipdtnum
+ print*,'ipdtmpl ', gfld%ipdtmpl
+ print*,'igdtnum ', gfld%igdtnum
+ print*,'igdtmpl ', gfld%igdtmpl
+ print*,'idsect  ', gfld%idsect
 
-   iafwa = kgds(2)
-   jafwa = kgds(3)
-   afwa_res = float(kgds(10))*0.001*111.0  ! in km.  
-
-   print*,"- DATA VALID AT (YYMMDDHH): ", kpds(8:11)
+   print*,"- DATA VALID AT (YYMMDDHH): ", gfld%idsect(6:9)
    print*,"- DEGRIB SNOW DEPTH."
+
+ call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds_afwa_global, &
+                 iafwa, jafwa, afwa_res)
+
+   print*,'afwares ',afwa_res
+   print*,'i/jafwa ',iafwa,jafwa
 
    allocate(bitmap_afwa_global(iafwa,jafwa))
    allocate(snow_dep_afwa_global(iafwa,jafwa))
 
-   call getgb(iunit, lugi, (iafwa*jafwa), lskip, jpds, jgds, &
-              numpts, lskip, kpds, kgds, bitmap_afwa_global, snow_dep_afwa_global, istat)
-
-   if (istat /= 0) then
-     print*,"- FATAL ERROR: BAD DEGRIB OF DATA. ISTAT IS ", istat
-     call w3tage('SNOW2MDL')
-     call errexit(61)
-   end if
-
-   kgds_afwa_global = kgds
+   snow_dep_afwa_global = reshape(gfld%fld, (/iafwa,jafwa/))
+   bitmap_afwa_global = reshape(gfld%bmap, (/iafwa,jafwa/))
 
    call baclose(iunit, istat) 
 
@@ -620,6 +628,8 @@
    use_nh_afwa=.false.   ! use global or hemispheric files. not both.
    use_sh_afwa=.false.
 
+    print*,'got here'
+    stop
    return  ! use global or hemispheric files. not both.
 
  else
@@ -1008,7 +1018,6 @@
    print*,"- WARNING: PROBLEM READING GRIB FILE ", iret
    print*,"- WILL NOT PERFORM QC."
    deallocate(rlon_data,rlat_data)
-   deallocate(climo, bitmap_clim)
    call baclose(lugb,iret)
    return
  endif
