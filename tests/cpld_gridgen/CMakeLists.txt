@@ -14,6 +14,8 @@ include_directories(${PROJECT_SOURCE_DIR})
 # Copy necessary test files from the source data directory to the
 # build data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/files.txt ${CMAKE_CURRENT_BINARY_DIR}/data/files.txt)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 
 add_executable(ftst_find_angq ftst_find_angq.F90)
