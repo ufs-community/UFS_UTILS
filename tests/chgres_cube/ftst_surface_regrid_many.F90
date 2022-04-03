@@ -20,10 +20,10 @@
  use input_data, only: t2m_input_grid, &
                        q2m_input_grid
  
- use surface, only : regrid_many, &
-                     t2m_target_grid, &
-                     q2m_target_grid
+ use surface, only : regrid_many
 
+ use surface_target_data, only : t2m_target_grid, &
+                                 q2m_target_grid
 
  implicit none
 
