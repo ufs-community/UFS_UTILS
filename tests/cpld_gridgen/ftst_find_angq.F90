@@ -7,7 +7,10 @@
 
   program ftst_find_angq
  
-  use grdvars,       only : x,y,xsgp1,ysgp1,angq
+  use netcdf
+  use grdvars,       only : ni,nj,nx,ny
+  use grdvars,       only : x,y,xsgp1,ysgp1,sg_maxlat
+  use grdvars,       only : angq
   use angles,        only : find_angq
 
   implicit none
@@ -18,26 +21,29 @@
   logical :: mastertask = .false.
   logical :: debug = .false.
 
-  ! reduced (output) grid dimensions
-  integer, parameter :: ni = 360, nj = 320
-  ! supergrid dimensions
-  integer, parameter :: nx = 2*ni, ny = 2*nj
-
   ! pole locations on SG
   integer :: ipolesg(2)
-  real(kind=8) :: delta(ni)
+  ! unit test values
+  real(kind=8) :: puny = 1.0e-12
+  real(kind=8) :: delta(15)
   real(kind=8) :: sumdelta
-  real(kind=8) :: sg_maxlat
+
+  print *,"Starting test of cpld_gridgen routine find_angq"
+
+  ! 1deg MOM6 dimensions
+  ni = 360
+  nj = 320
+  ! super grid dimensions
+  nx = 2*ni
+  ny = 2*nj
 
   ! supergrid x,y and angles on corners
   allocate (x(0:nx,0:ny), y(0:nx,0:ny), angq(0:nx,0:ny))
   ! supergrid "plus 1" arrays
   allocate (xsgp1(0:nx,0:ny+1), ysgp1(0:nx,0:ny+1))
 
-  print *,"Starting test of cpld_gridgen routine find_angq"
-
   !open the supergrid file and read the x,y coords
-  rc = nf90_open('data/ocean_hgrid.nc', nf90_nowrite, ncid)
+  rc = nf90_open('./data/ocean_hgrid.nc', nf90_nowrite, ncid)
   rc = nf90_inq_varid(ncid, 'x', id)  !lon
   rc = nf90_get_var(ncid,    id,  x)
 
@@ -64,7 +70,6 @@
   ! required for checking longitudes across seam
   where(xsgp1 .lt. 0.0)xsgp1 = xsgp1 + 360.0
 
-#ifdef test
   j = ny+1
   i1 = ipolesg(1); i2 = ipolesg(2)-(ipolesg(1)-i1)
   delta = 0.0
@@ -91,7 +96,7 @@
   sumdelta = 0.0
   sumdelta = sum(delta)
 
-  if (sumdelta == 0.0) then
+  if (sumdelta >= puny) then
     print *,'OK'
     print *,'SUCCESS!'
     deallocate(x,y,xsgp1,ysgp1,angq)
@@ -99,6 +104,5 @@
     print *,'ftst_find_angq failed'
     stop 1
   endif
-#endif
 
   end program ftst_find_angq
