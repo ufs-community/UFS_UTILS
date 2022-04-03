@@ -2,4 +2,5 @@ leak:ESMCI
 leak:ESMC
 leak:esmc
 leak:esmf
+leak:g2
 leak:std::vector
