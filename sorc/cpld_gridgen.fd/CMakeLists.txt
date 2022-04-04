@@ -45,7 +45,8 @@ target_link_libraries(
   cpld_gridgen_lib
   PUBLIC
   esmf
-  MPI::MPI_Fortran)
+  MPI::MPI_Fortran
+  NetCDF::NetCDF_Fortran)
 
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} PUBLIC OpenMP::OpenMP_Fortran)
@@ -57,5 +58,5 @@ install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)
-  add_subdirectory(docs)  
+  add_subdirectory(docs)
 endif()
