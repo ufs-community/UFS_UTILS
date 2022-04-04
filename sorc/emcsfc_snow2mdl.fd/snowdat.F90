@@ -519,7 +519,7 @@
 !!
 !! files:
 !!   input:
-!!     - global afwa data in grib 1 (if selected)
+!!     - global afwa data in grib 2 (if selected)
 !!     - nh afwa data in grib 1 (if selected)
 !!     - sh afwa data in grib 1 (if selected)
 !!
@@ -535,16 +535,14 @@
 
  integer, parameter            :: iunit=17
  integer                       :: jgds(200), jpds(200), kgds(200), kpds(200)
- integer                       :: istat
+ integer                       :: istat, isgrib
  integer                       :: lugi, lskip, numbytes, numpts, message_num
- integer                       :: isgrib
-
  integer                       :: j, k, jdisc, jpdtn, jgdtn
  integer                       :: jpdt(200), jgdt(200), jids(200)
 
  logical                       :: unpack
 
- type(gribfield) :: gfld
+ type(gribfield)               :: gfld
 
  bad_afwa_nh=.false.
  bad_afwa_sh=.false.
@@ -564,6 +562,10 @@
    return
  end if
 
+!-----------------------------------------------------------------------
+! If chosen, read global AFWA GRIB2 file.
+!-----------------------------------------------------------------------
+
  if ( len_trim(afwa_snow_global_file) > 0 ) then
 
    print*,"- OPEN AND READ global AFWA SNOW FILE ", trim(afwa_snow_global_file)
@@ -574,41 +576,35 @@
      call errexit(60)
    end if
 
- call grib2_null(gfld)
+   call grib2_null(gfld)
 
- jdisc    = 0      ! search for discipline; 0 - meteorological products
- j        = 0      ! search at beginning of file.
- lugi     = 0      ! no grib index file
- jids     = -9999
- jgdt     = -9999
- jgdtn = -1
- jpdtn = 0    ! Search for product def template 0 - analysis or forecast
- jpdt     = -9999  ! array of values in product definition template 4.n
- jpdt(1) = 1  ! parameter category - moisture Sec4 oct 10
- jpdt(2) = 11 ! parameter - snow depth Sec4 oct 11
- unpack   = .true. ! unpack data
+   jdisc    = 0      ! Search for discipline; 0 - meteorological products
+   j        = 0      ! Search at beginning of file.
+   lugi     = 0      ! No grib index file.
+   jids     = -9999  ! Identification section, set to wildcard.
+   jgdt     = -9999  ! Grid definition template, set to wildcard.
+   jgdtn    = -1     ! Grid definition template number, set to wildcard.
+   jpdtn    = 0      ! Search for product definition template number 0 - analysis or forecast
+   jpdt     = -9999  ! Product definition template (Sec 4), initialize to wildcard.
+   jpdt(1)  = 1      ! Search for parameter category 1 (Sec 4 oct 10) -
+                     ! moisture.
+   jpdt(2) = 11      ! Search for parameter 11 (Sec 4 oct 11) - snow depth.
+   unpack  = .true.  ! Unpack data.
 
- call getgb2(iunit, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, istat)
+   call getgb2(iunit, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+               unpack, k, gfld, istat)
 
- print*,'after getgb2 ',istat
- if(istat /= 0)  stop
+   if (istat /= 0) then
+     print*,"- FATAL ERROR: BAD DEGRIB OF GLOBAL DATA. ISTAT IS ", istat
+     call w3tage('SNOW2MDL')
+     call errexit(61)
+   end if
  
- print*,'the data ',maxval(gfld%fld),minval(gfld%fld)
- print*,'ipdtnum ', gfld%ipdtnum
- print*,'ipdtmpl ', gfld%ipdtmpl
- print*,'igdtnum ', gfld%igdtnum
- print*,'igdtmpl ', gfld%igdtmpl
- print*,'idsect  ', gfld%idsect
-
    print*,"- DATA VALID AT (YYMMDDHH): ", gfld%idsect(6:9)
    print*,"- DEGRIB SNOW DEPTH."
 
- call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds_afwa_global, &
+   call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds_afwa_global, &
                  iafwa, jafwa, afwa_res)
-
-   print*,'afwares ',afwa_res
-   print*,'i/jafwa ',iafwa,jafwa
 
    allocate(bitmap_afwa_global(iafwa,jafwa))
    allocate(snow_dep_afwa_global(iafwa,jafwa))
@@ -625,12 +621,10 @@
      use_global_afwa = .false.
    endif
 
-   use_nh_afwa=.false.   ! use global or hemispheric files. not both.
+   use_nh_afwa=.false.   ! Use global or hemispheric files. not both.
    use_sh_afwa=.false.
 
-    print*,'got here'
-    stop
-   return  ! use global or hemispheric files. not both.
+   return  ! Use global or hemispheric files. not both.
 
  else
 
