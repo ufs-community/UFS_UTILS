@@ -152,7 +152,7 @@ jobs:
        
     - name: checkout-ufs-utils
       uses: actions/checkout@v2
-      with: 
+      with:
         path: ufs_utils
 
     - name: build
@@ -172,5 +172,6 @@ jobs:
         cd ufs_utils/build/tests
         wget -i ./chgres_cube/data/files.txt -P ./chgres_cube/data
         wget -i ./sfc_climo_gen/data/files.txt -P ./sfc_climo_gen/data
+        wget -i ./cpld_gridgen/data/files.txt -P ./cpld_gridgen/data
         cd ../
         ctest --rerun-failed --output-on-failure
