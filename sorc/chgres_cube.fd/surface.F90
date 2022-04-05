@@ -738,8 +738,8 @@
  mask_input_ptr = 1
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 0
  
-! For non-fractional grids, 'seamask_target_ptr' is '1' for land points
-! and '0' for non-land points. For fractional grids, 'seamask_target_ptr'
+! For non-fractional grids, 'seamask_target_ptr' is '0' for land points
+! and '1' for non-land points. For fractional grids, 'seamask_target_ptr'
 ! will be '0' if all land and '1' is at least some non-land.
 
  mask_target_ptr = seamask_target_ptr
@@ -2336,12 +2336,20 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGet", rc)
 
-!cfract should check for fice instead? under fractional
-!cfract grids need to preserve original landmask_target.
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
      if (fice_ptr(i,j) > 0.0) then
        data_ptr2(i,j) = 1.0
+     endif
+   enddo
+   enddo
+
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (landmask_ptr(i,j) == 1) then
+       data_ptr(i,j) = z0_igbp(nint(veg_type_ptr(i,j))) * 100.0
+     else
+       data_ptr(i,j) = -9.
      endif
    enddo
    enddo
