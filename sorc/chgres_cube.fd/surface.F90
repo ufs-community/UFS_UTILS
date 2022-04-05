@@ -3598,26 +3598,27 @@
 !! @author George Gayno
  subroutine update_landmask
 
- use model_grid, only : landmask_target_grid
+ use model_grid, only : landmask_target_grid, land_frac_target_grid
 
  use program_setup, only : fract_grid
 
  implicit none
 
- integer                        :: rc
+ integer                        :: i, j, rc, clb(2), cub(2)
  integer(esmf_kind_i8), pointer :: mask_ptr(:,:)
 
  real(esmf_kind_r8), pointer    :: ice_ptr(:,:)
+ real(esmf_kind_r8), pointer    :: land_frac_ptr(:,:)
 
  print*,"- UPDATE TARGET LANDMASK WITH ICE RECORD."
 
- print*,"- INITIALIZE TARGET grid sea ice fraction."
+ print*,"- GET TARGET grid sea ice fraction."
  call ESMF_FieldGet(seaice_fract_target_grid, &
                     farrayPtr=ice_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- INITIALIZE TARGET landmask."
+ print*,"- GET TARGET landmask."
  call ESMF_FieldGet(landmask_target_grid, &
                     farrayPtr=mask_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -3629,7 +3630,25 @@
 
  else
 
-   print*,'add mask logic for fractional grid'
+   print*,"- GET TARGET land fraction."
+   call ESMF_FieldGet(land_frac_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=land_frac_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGet", rc)
+
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+
+     if(ice_ptr(i,j) > 0.0) then
+       mask_ptr(i,j) = 2
+     else
+       mask_ptr(i,j) = int(land_frac_ptr(i,j))
+     endif
+  
+   enddo
+   enddo
 
  endif
 
