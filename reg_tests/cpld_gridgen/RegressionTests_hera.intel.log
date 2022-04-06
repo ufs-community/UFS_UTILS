@@ -1,15 +1,15 @@
-Mon Apr  4 22:38:08 UTC 2022
+Wed Apr  6 18:12:39 UTC 2022
 Start Regression test
 
-Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_224971/025
-Baseline dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/UFS_UTILS_BASELINE/025
+Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_199536/025
+Baseline dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/BASELINE/025
 
 Checking test 025 results ....
 Comparing Bu.mx025_SCRIP.nc........OK
 Comparing C384.mx025.tile1.nc........OK
 Comparing C384.mx025.tile2.nc........OK
 Comparing C384.mx025.tile3.nc........OK
-Comparing C384.mx025.tile4.nc........MISSING file
+Comparing C384.mx025.tile4.nc........OK
 Comparing C384.mx025.tile5.nc........OK
 Comparing C384.mx025.tile6.nc........OK
 Comparing Ct.mx025_SCRIP_land.nc........OK
@@ -22,8 +22,8 @@ Comparing kmtu_cice_NEMS_mx025.nc........OK
 Comparing mesh.mx025.nc........OK
 Comparing tripole.mx025.nc........OK
 
-Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_224971/050
-Baseline dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/UFS_UTILS_BASELINE/050
+Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_199536/050
+Baseline dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/BASELINE/050
 
 Checking test 050 results ....
 Comparing Bu.mx050_SCRIP.nc........OK
@@ -45,8 +45,8 @@ Comparing mesh.mx050.nc........OK
 Comparing tripole.mx025.Ct.to.mx050.Ct.neareststod.nc........OK
 Comparing tripole.mx050.nc........OK
 
-Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_224971/100
-Baseline dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/UFS_UTILS_BASELINE/100
+Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_199536/100
+Baseline dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/BASELINE/100
 
 Checking test 100 results ....
 Comparing Bu.mx100_SCRIP.nc........OK
@@ -69,7 +69,5 @@ Comparing tripole.mx025.Ct.to.mx100.Ct.neareststod.nc........OK
 Comparing tripole.mx100.nc........OK
 Comparing ufs.topo_edits_011818.nc........OK
 
-025 failed
-
-REGRESSION TEST FAILED
-Mon Apr  4 22:41:48 UTC 2022
+REGRESSION TEST WAS SUCCESSFUL
+Wed Apr  6 18:16:38 UTC 2022
