@@ -3,3 +3,4 @@ https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/chgre
 https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/chgres_cube/gfs.v16.atm.history.nc
 https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/chgres_cube/gfs.v14.sfc.history.nemsio
 https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/chgres_cube/gfs.v15.sfc.history.nemsio
+https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/chgres_cube/gfs.t00z.pgrb2.0p50.f000
