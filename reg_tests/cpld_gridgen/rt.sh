@@ -1,10 +1,34 @@
 #!/bin/bash
-set -eux
+set -eu
 
-#cleanup() {
-#}
-#usage() {
-#}
+error() {
+  echo
+  echo "$@" 1>&2
+  exit 1
+}
+
+usage() {
+  echo
+  echo "Usage: $program [-c] [-m] [-h]"
+  echo
+  echo "  -c create a new baseline"
+  echo
+  echo "  -m compare against the new baseline"
+  echo
+  echo "  -h display this help and exit"
+  echo
+  echo "  Examples"
+  echo
+  echo "    './rt.sh'    compare against the existing baseline"
+  echo "    './rt.sh -c' create a new baseline"
+  echo "    './rt.sh -m' compare against the new baseline"
+  echo
+}
+
+usage_and_exit() {
+  usage
+  exit $1
+}
 
 check_results() {
 
@@ -67,6 +91,7 @@ check_results() {
   fi
 }
 
+readonly program=$(basename $0)
 # PATHRT - Path to regression tests directory
 readonly PATHRT="$(cd $(dirname $0) && pwd -P)"
 # PATHTR - Path to the UFS UTILS directory
@@ -77,11 +102,8 @@ export TEST_NAME=
 cd $PATHRT
 export compiler=${compiler:-intel}
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
-echo $target
-echo $compiler
-module use $PATHTR/modulefiles
-module load build.$target.$compiler
-module list
+echo "Machine: $target"
+echo "Compiler: $compiler"
 
 COMPILE_LOG=compile.log
 RUNTEST_LOG=run.log
@@ -100,7 +122,7 @@ elif [[ $target = jet ]]; then
 fi
 
 CREATE_BASELINE=false
-while getopts :cm opt; do
+while getopts :cmh opt; do
   case $opt in
     c)
       CREATE_BASELINE=true
@@ -108,19 +130,29 @@ while getopts :cm opt; do
     m)
       BASELINE_ROOT=$NEW_BASELINE_ROOT
       ;;
+    h)
+      usage_and_exit 0
+      ;;
+    '?')
+      error "$program: invalid option"
+      ;;
   esac
 done
 
 # Build the executable file
 cd $PATHTR
+rm -rf $PATHTR/build $PATHTR/exec $PATHTR/lib
 ./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1
+sleep 30
 if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
-  echo "Build was not able to generate the cpld_gridgen executable file."
-  echo "Check where"
-  exit 1
+  error "Build did not generate the cpld_gridgen exe file. Check $PATHTR/build/"
 else
   echo "Build was successful. cpld_gridgen executable file is in $PATHTR/exec/"
 fi
+
+module use $PATHTR/modulefiles
+module load build.$target.$compiler
+module list
 
 if [[ $CREATE_BASELINE = true ]]; then
   rm -rf $NEW_BASELINE_ROOT
@@ -149,13 +181,11 @@ while read -r line || [ "$line" ]; do
   DEPDIR=$RUNDIR_ROOT/$DEP_NAME
   mkdir -p $RUNDIR
   export OUTDIR_PATH=$RUNDIR
-  echo "OUTDIR_PATH is $OUTDIR_PATH"
 
   if [[ -n $DEP_NAME ]]; then
     cp $DEPDIR/Ct.mx025_SCRIP.nc $RUNDIR >/dev/null 2>&1 && d=$? || d=$?
     if [[ $d -eq 1 ]]; then    
-      echo "DEPDIR does not exist"
-      exit 1
+      error "DEPDIR does not exist. Dependency not met"
     fi
   fi
 
@@ -170,7 +200,7 @@ while read -r line || [ "$line" ]; do
 
 done <$TESTS_FILE
 if [[ $? -ne 0 ]]; then
-  exit 1
+  error "Run test while loop did not finish properly"
 fi
 
 cd $PATHRT
