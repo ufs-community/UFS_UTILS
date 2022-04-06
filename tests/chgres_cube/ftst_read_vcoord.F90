@@ -18,11 +18,12 @@
 !
 ! @author George Gayno
 
- use atmosphere, only : read_vcoord_info, &
-                        vcoord_target, &
-                        nvcoord_target, &
-                        lev_target, &
-                        levp1_target
+ use atmosphere_target_data, only : vcoord_target, &
+                             nvcoord_target, &
+                             lev_target, &
+                             levp1_target
+
+ use atmosphere, only : read_vcoord_info
 
  use program_setup, only : vcoord_file_target_grid
 
