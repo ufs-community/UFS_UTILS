@@ -2777,22 +2777,33 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract replace check of '2' with fice?
- do j = clb(2), cub(2)
- do i = clb(1), cub(1)
-   if (fice_ptr(i,j) > 0.0 .or. landmask_ptr(i,j) == 0 .or. &
-       nint(veg_type_ptr(i,j)) == veg_type_landice_target) then
-     soilmt_ptr(i,j,:) = 1.0
-     soilml_ptr(i,j,:) = 1.0
-   endif
- enddo
- enddo
+ if (fract_grid) then
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (landmask_ptr(i,j) == 0 .or. &
+         nint(veg_type_ptr(i,j)) == veg_type_landice_target) then
+       soilmt_ptr(i,j,:) = 1.0
+       soilml_ptr(i,j,:) = 1.0
+     endif
+   enddo
+   enddo
+ else
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (fice_ptr(i,j) > 0.0 .or. landmask_ptr(i,j) == 0 .or. &
+         nint(veg_type_ptr(i,j)) == veg_type_landice_target) then
+       soilmt_ptr(i,j,:) = 1.0
+       soilml_ptr(i,j,:) = 1.0
+     endif
+   enddo
+   enddo
+ endif
 
  print*,"- SET OPEN WATER FLAG FOR TARGET GRID SOIL TEMPERATURE."
  call ESMF_FieldGet(soil_temp_target_grid, &
                     farrayPtr=data3d_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
+   call error_handler("IN FieldGet", rc)
 
 !cfract, is skint_ptr the new sst field? need to use new
 !cfract sst_target_grid here.
