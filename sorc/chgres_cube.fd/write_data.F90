@@ -1827,6 +1827,7 @@
                                    seaice_depth_target_grid, &
                                    seaice_fract_target_grid, &
                                    seaice_skin_temp_target_grid, &
+                                   seaice_substrate_temp_target_grid, &
                                    skin_temp_target_grid, &
                                    sst_target_grid, &
                                    soil_temp_target_grid, &
@@ -1894,7 +1895,7 @@
  integer                        :: error, i, ncid, tile
  integer                        :: id_x, id_y, id_lsoil
  integer                        :: id_slmsk, id_time
- integer                        :: id_lat, id_lon
+ integer                        :: id_lat, id_lon, id_tg3_ice
  integer                        :: id_tsfcl, id_tsea, id_sheleg, id_sheleg_ice, id_tg3
  integer                        :: id_zorl, id_zorl_ice, id_alvsf, id_alvwf
  integer                        :: id_zorl_water, id_alvsf_nl
@@ -2104,6 +2105,17 @@
      call netcdf_err(error, 'DEFINING TG3 UNITS' )
      error = nf90_put_att(ncid, id_tg3, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING TG3 COORD' )
+
+     if(fract_grid)then
+     error = nf90_def_var(ncid, 'tg3_ice', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tg3_ice)
+     call netcdf_err(error, 'DEFINING TG3_ICE' )
+     error = nf90_put_att(ncid, id_tg3_ice, "long_name", "tg3_ice")
+     call netcdf_err(error, 'DEFINING TG3_ICE LONG NAME' )
+     error = nf90_put_att(ncid, id_tg3_ice, "units", "none")
+     call netcdf_err(error, 'DEFINING TG3_ICE UNITS' )
+     error = nf90_put_att(ncid, id_tg3_ice, "coordinates", "geolon geolat")
+     call netcdf_err(error, 'DEFINING TG3_ICE COORD' )
+     endif
 
      if(.not.fract_grid)then
      error = nf90_def_var(ncid, 'zorl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl)
@@ -2847,6 +2859,21 @@
      dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
      error = nf90_put_var( ncid, id_tg3, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
      call netcdf_err(error, 'WRITING SUBSTRATE TEMPERATURE RECORD' )
+   endif
+
+   if(fract_grid) then
+
+     print*,"- CALL FieldGather FOR TARGET GRID SEAICE SUBSTRATE TEMPERATURE FOR TILE: ", tile
+     call ESMF_FieldGather(seaice_substrate_temp_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldGather", error)
+
+     if (localpet == 0) then
+       dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+       error = nf90_put_var( ncid, id_tg3_ice, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+       call netcdf_err(error, 'WRITING SEAICE SUBSTRATE TEMPERATURE RECORD' )
+     endif
+
    endif
 
    print*,"- CALL FieldGather FOR TARGET GRID FACSF FOR TILE: ", tile

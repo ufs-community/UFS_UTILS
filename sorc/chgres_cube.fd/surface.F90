@@ -57,6 +57,8 @@
                                        !< sea ice fraction
  type(esmf_field), public   :: seaice_skin_temp_target_grid
                                        !< sea ice skin temperature
+ type(esmf_field), public   :: seaice_substrate_temp_target_grid
+                                       !< sea ice substrate temperature
  type(esmf_field), public   :: skin_temp_target_grid
                                        !< skin temperature/sst
  type(esmf_field), public   :: sst_target_grid
@@ -2719,12 +2721,29 @@
  endif
 
  print*,"- SET TARGET GRID SUBSTRATE TEMP AT ICE."
+
+ if (fract_grid) then
+
+   call ESMF_FieldGet(seaice_substrate_temp_target_grid, &
+                    farrayPtr=data_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (fice_ptr(i,j) > 0.0) then  ! sea ice
+       data_ptr(i,j) = frz_ice
+     endif
+   enddo
+   enddo
+
+ else
+
  call ESMF_FieldGet(substrate_temp_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract don't use the '2' flag for ice. Use fice instead?
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) > 0.0) then  ! sea ice
@@ -2734,6 +2753,8 @@
    endif
  enddo
  enddo
+
+ endif
 
  print*,"- ZERO OUT TARGET GRID SNOW DEPTH AT OPEN WATER."
  call ESMF_FieldGet(snow_depth_target_grid, &
@@ -3166,6 +3187,26 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
+
+ if (fract_grid) then
+
+   print*,"- CALL FieldCreate FOR TARGET GRID SEA ICE SUBSTRATE TEMP."
+   seaice_substrate_temp_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="seaice_substrate_temp_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldCreate", rc)
+
+   print*,"- INITIALIZE TARGET sea ice substrate temp."
+   call ESMF_FieldGet(seaice_substrate_temp_target_grid, &
+                      farrayPtr=target_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGet", rc)
+
+   target_ptr = init_val
+
+ endif
 
  print*,"- CALL FieldCreate FOR TARGET GRID SRFLAG."
  srflag_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3991,6 +4032,7 @@
  call ESMF_FieldDestroy(seaice_fract_target_grid, rc=rc)
  call ESMF_FieldDestroy(seaice_depth_target_grid, rc=rc)
  call ESMF_FieldDestroy(seaice_skin_temp_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(seaice_substrate_temp_target_grid)) call ESMF_FieldDestroy(seaice_substrate_temp_target_grid, rc=rc)
  call ESMF_FieldDestroy(srflag_target_grid, rc=rc)
  call ESMF_FieldDestroy(skin_temp_target_grid, rc=rc)
  if (ESMF_FieldIsCreated(sst_target_grid)) call ESMF_FieldDestroy(sst_target_grid, rc=rc)
