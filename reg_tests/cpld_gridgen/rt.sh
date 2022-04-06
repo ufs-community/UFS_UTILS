@@ -84,6 +84,7 @@ module load build.$target.$compiler
 module list
 
 COMPILE_LOG=compile.log
+RUNTEST_LOG=run.log
 REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.log
 rm -f fail_test* $COMPILE_LOG
 
@@ -163,7 +164,7 @@ while read -r line || [ "$line" ]; do
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cd $RUNDIR
 
-  ./cpld_gridgen.sh $TEST_NAME
+  ./cpld_gridgen.sh $TEST_NAME >$PATHRT/$RUNTEST_LOG 2>&1
 
   check_results
 

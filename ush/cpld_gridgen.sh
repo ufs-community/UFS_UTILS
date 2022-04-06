@@ -95,7 +95,6 @@ fi
 
 edit_namelist < grid.nml.IN > grid.nml
 ./cpld_gridgen
-#/scratch1/NCEPDEV/stmp4/Minsuk.Ji/UFS_UTILS_RT/exec/cpld_gridgen
 
 # generate ice mesh
 export FSRC=${OUTDIR_PATH}/Ct.mx${RESNAME}_SCRIP_land.nc
@@ -108,5 +107,4 @@ export FDST=${OUTDIR_PATH}/kmtu_cice_NEMS_mx${RESNAME}.nc
 ncks -O -v kmt ${FSRC} ${FDST}
 
 # clean up
-#make clean
 rm grid.nml
