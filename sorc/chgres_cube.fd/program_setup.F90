@@ -198,7 +198,8 @@
                    halo_blend, &
                    fix_dir_input_grid, &
                    nsoill_out, &
-                   thomp_mp_climo_file
+                   thomp_mp_climo_file, &
+                   fract_grid
 
  print*,"- READ SETUP NAMELIST"
 
@@ -350,6 +351,12 @@
    print*,"- WILL PROCESS CLIMO THOMPSON MP TRACERS FROM FILE: ", trim(thomp_mp_climo_file)
  endif
 
+ if (fract_grid) then
+   print*,'WILL PROCESS A FRACTIONAL GRID.'
+ else
+   print*,'WILL PROCESS A NON-FRACTIONAL GRID.'
+ endif
+  
  return
 
  end subroutine read_setup_namelist
