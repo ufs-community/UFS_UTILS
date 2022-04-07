@@ -143,7 +143,6 @@ done
 cd $PATHTR
 rm -rf $PATHTR/build $PATHTR/exec $PATHTR/lib
 ./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1
-sleep 30
 if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
   error "Build did not generate the cpld_gridgen exe file. Check $PATHTR/build/"
 else
