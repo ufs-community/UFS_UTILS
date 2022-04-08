@@ -61,13 +61,14 @@ check_results() {
         fi
       fi
     done
+    echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
   # baseline creation run
   else
 
     echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
     echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-    echo "Moving baseline files...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+    echo "Moving baseline files to $NEW_BASELINE ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
     echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
     mkdir -p $NEW_BASELINE
@@ -83,6 +84,7 @@ check_results() {
         echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
       fi
     done
+    echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
   fi
 
@@ -106,15 +108,16 @@ echo "Machine: $target"
 echo "Compiler: $compiler"
 
 COMPILE_LOG=compile.log
-RUNTEST_LOG=run.log
 REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.log
-rm -f fail_test* $COMPILE_LOG
+rm -f fail_test* $COMPILE_LOG run*.log
 
 if [[ $target = hera ]]; then
   STMP=/scratch1/NCEPDEV/stmp4
   BASELINE_ROOT=$STMP/$USER/UFS_UTILS_BASELINE
   NEW_BASELINE_ROOT=$STMP/$USER/CPLD_GRIDGEN/BASELINE
   RUNDIR_ROOT=$STMP/$USER/CPLD_GRIDGEN/rt_$$
+  ACCOUNT=${ACCOUNT:-nems}
+  QUEUE=${QUEUE:-batch}
 elif [[ $target = orion ]]; then
   STMP=
 elif [[ $target = jet ]]; then
@@ -179,12 +182,15 @@ while read -r line || [ "$line" ]; do
   NEW_BASELINE=$NEW_BASELINE_ROOT/$TEST_NAME
   DEPDIR=$RUNDIR_ROOT/$DEP_NAME
   mkdir -p $RUNDIR
+
+  # OUTDIR_PATH is passed down to $PATHTR/ush/cpld_gridgen.sh
+  # It MUST be set
   export OUTDIR_PATH=$RUNDIR
 
   if [[ -n $DEP_NAME ]]; then
     cp $DEPDIR/Ct.mx025_SCRIP.nc $RUNDIR >/dev/null 2>&1 && d=$? || d=$?
     if [[ $d -eq 1 ]]; then    
-      error "DEPDIR does not exist. Dependency not met"
+      error "DEPDIR $DEPDIR does not exist. Dependency not met"
     fi
   fi
 
@@ -193,7 +199,13 @@ while read -r line || [ "$line" ]; do
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cd $RUNDIR
 
-  ./cpld_gridgen.sh $TEST_NAME >$PATHRT/$RUNTEST_LOG 2>&1
+  sbatch --wait --ntasks-per-node=1 --nodes=1 -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+         -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
+         ./cpld_gridgen.sh $TEST_NAME
+
+  if [[ $? -ne 0 ]]; then
+    error "Test $TEST_NAME did not finish successfully"
+  fi
 
   check_results
 

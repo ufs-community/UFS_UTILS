@@ -105,6 +105,3 @@ ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
 export FSRC=${OUTDIR_PATH}/grid_cice_NEMS_mx${RESNAME}.nc
 export FDST=${OUTDIR_PATH}/kmtu_cice_NEMS_mx${RESNAME}.nc
 ncks -O -v kmt ${FSRC} ${FDST}
-
-# clean up
-rm grid.nml
