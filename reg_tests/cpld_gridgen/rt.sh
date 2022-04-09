@@ -204,7 +204,7 @@ while read -r line || [ "$line" ]; do
          ./cpld_gridgen.sh $TEST_NAME
 
   if [[ $? -ne 0 ]]; then
-    error "Test $TEST_NAME did not finish successfully"
+    error "Batch job for test $TEST_NAME did not finish successfully"
   fi
 
   check_results
