@@ -2302,7 +2302,8 @@
 
  use program_setup, only             : fract_grid
 
- use model_grid, only                : landmask_target_grid
+ use model_grid, only                : landmask_target_grid, &
+                                       seamask_target_grid
 
  use static_data, only               : alvsf_target_grid, &
                                        alvwf_target_grid, &
@@ -2323,6 +2324,7 @@
 
  integer                            :: clb(2), cub(2), i, j, rc
  integer(esmf_kind_i8), pointer     :: landmask_ptr(:,:)
+ integer(esmf_kind_i8), pointer     :: seamask_ptr(:,:)
 
  real(esmf_kind_r8), pointer        :: data_ptr(:,:)
  real(esmf_kind_r8), pointer        :: data3d_ptr(:,:,:)
@@ -2342,6 +2344,14 @@
                     farrayPtr=landmask_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
+
+ if (fract_grid) then
+   print*,"- CALL FieldGet FOR TARGET GRID SEA MASK."
+   call ESMF_FieldGet(seamask_target_grid, &
+                      farrayPtr=seamask_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+ endif
 
  print*,"- CALL FieldGet FOR TARGET GRID SEA ICE FRACTION."
  call ESMF_FieldGet(seaice_fract_target_grid, &
@@ -2411,19 +2421,16 @@
  enddo
 
  if(fract_grid)then
- print*,"- SET TARGET GRID ALVSF_NL AT NON-LAND."
- call ESMF_FieldGet(alvsf_nl_target_grid, &
-                    farrayPtr=data_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   print*,"- SET TARGET GRID ALVSF_NL AT NON-LAND."
+   call ESMF_FieldGet(alvsf_nl_target_grid, &
+                      farrayPtr=data_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-
-!cfract Setting to flag value at all non-land - ice and all water.
-!cfract for fractional grid, this is where landmask_ptr is 0.
- do j = clb(2), cub(2)
- do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
- enddo
- enddo
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (seamask_ptr(i,j) == 1) data_ptr(i,j) = 0.06 ! gfs flag value at any non-land
+   enddo
+   enddo
  endif
 
  print*,"- SET TARGET GRID ALVWF AT NON-LAND."
@@ -2440,17 +2447,16 @@
  enddo
 
  if(fract_grid)then
- print*,"- SET TARGET GRID ALVWF_NL AT NON-LAND."
- call ESMF_FieldGet(alvwf_nl_target_grid, &
-                    farrayPtr=data_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   print*,"- SET TARGET GRID ALVWF_NL AT NON-LAND."
+   call ESMF_FieldGet(alvwf_nl_target_grid, &
+                      farrayPtr=data_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-
- do j = clb(2), cub(2)
- do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
- enddo
- enddo
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (seamask_ptr(i,j) == 1) data_ptr(i,j) = 0.06 ! gfs flag value at any non-land
+   enddo
+   enddo
  endif
 
  print*,"- SET TARGET GRID ALNSF AT NON-LAND."
@@ -2467,17 +2473,16 @@
  enddo
 
  if(fract_grid)then
- print*,"- SET TARGET GRID ALNSF_NL AT NON-LAND."
- call ESMF_FieldGet(alnsf_nl_target_grid, &
+   print*,"- SET TARGET GRID ALNSF_NL AT NON-LAND."
+   call ESMF_FieldGet(alnsf_nl_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-
- do j = clb(2), cub(2)
- do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
- enddo
- enddo
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (seamask_ptr(i,j) == 1) data_ptr(i,j) = 0.06 ! gfs flag value at any non-land
+   enddo
+   enddo
  endif
 
  print*,"- SET TARGET GRID ALNWF AT NON-LAND."
@@ -2494,17 +2499,16 @@
  enddo
 
  if(fract_grid)then
- print*,"- SET TARGET GRID ALNWF_NL AT NON-LAND."
- call ESMF_FieldGet(alnwf_nl_target_grid, &
+   print*,"- SET TARGET GRID ALNWF_NL AT NON-LAND."
+   call ESMF_FieldGet(alnwf_nl_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- do j = clb(2), cub(2)
- do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06  ! gfs physics flag value
- enddo
- enddo
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGet", rc)
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (seamask_ptr(i,j) == 1) data_ptr(i,j) = 0.06  ! gfs flag value at any non-land.
+   enddo
+   enddo
  endif
 
  print*,"- SET NON-LAND FLAG FOR TARGET GRID FACSF."
