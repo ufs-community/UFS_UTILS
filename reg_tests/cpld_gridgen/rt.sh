@@ -113,7 +113,7 @@ rm -f fail_test* $COMPILE_LOG run*.log
 
 if [[ $target = hera ]]; then
   STMP=/scratch1/NCEPDEV/stmp4
-  BASELINE_ROOT=$STMP/$USER/UFS_UTILS_BASELINE
+  BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   NEW_BASELINE_ROOT=$STMP/$USER/CPLD_GRIDGEN/BASELINE
   RUNDIR_ROOT=$STMP/$USER/CPLD_GRIDGEN/rt_$$
   ACCOUNT=${ACCOUNT:-nems}

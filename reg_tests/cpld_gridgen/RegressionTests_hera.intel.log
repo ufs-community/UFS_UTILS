@@ -1,8 +1,8 @@
-Wed Apr  6 18:12:39 UTC 2022
+Fri Apr 15 18:54:42 UTC 2022
 Start Regression test
 
-Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_199536/025
-Baseline dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/BASELINE/025
+Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_182880/025
+Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/025
 
 Checking test 025 results ....
 Comparing Bu.mx025_SCRIP.nc........OK
@@ -22,8 +22,9 @@ Comparing kmtu_cice_NEMS_mx025.nc........OK
 Comparing mesh.mx025.nc........OK
 Comparing tripole.mx025.nc........OK
 
-Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_199536/050
-Baseline dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/BASELINE/050
+
+Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_182880/050
+Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/050
 
 Checking test 050 results ....
 Comparing Bu.mx050_SCRIP.nc........OK
@@ -45,8 +46,9 @@ Comparing mesh.mx050.nc........OK
 Comparing tripole.mx025.Ct.to.mx050.Ct.neareststod.nc........OK
 Comparing tripole.mx050.nc........OK
 
-Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_199536/100
-Baseline dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/BASELINE/100
+
+Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_182880/100
+Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/100
 
 Checking test 100 results ....
 Comparing Bu.mx100_SCRIP.nc........OK
@@ -69,5 +71,6 @@ Comparing tripole.mx025.Ct.to.mx100.Ct.neareststod.nc........OK
 Comparing tripole.mx100.nc........OK
 Comparing ufs.topo_edits_011818.nc........OK
 
+
 REGRESSION TEST WAS SUCCESSFUL
-Wed Apr  6 18:16:38 UTC 2022
+Fri Apr 15 19:00:48 UTC 2022
