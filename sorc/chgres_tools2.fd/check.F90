@@ -21,8 +21,10 @@
  character(len=150) :: file_floor, file_frac, file_orog_frac
 
  character(len=15) :: varname(num_var), varname3d(num_var3d)
+ character(len=16) :: the_files(6)
+ character(len=21) :: oro_files(6)
 
- integer :: error, id_dim, idim, jdim
+ integer :: error, id_dim, idim, jdim, tiles
  integer :: varid, varid_floor, varid_frac, var
  integer :: i, j, n, ncid_floor, ncid_orog_frac, ncid_frac
 
@@ -35,9 +37,17 @@
 
  data varname3d /'stc', 'slc', 'smc'/
 
- file_frac="/gpfs/dell1/stmp/George.Gayno/chgres_fractional/out.sfc.tile1.nc"
- file_orog_frac="/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/chgres_cube.fractional/my_grids_fract/C96/C96_oro_data.tile1.nc"
- file_floor="/gpfs/dell1/stmp/George.Gayno/chgres_floor/out.sfc.tile1.nc"
+ data the_files /'out.sfc.tile1.nc', 'out.sfc.tile2.nc', 'out.sfc.tile3.nc', &
+                 'out.sfc.tile4.nc', 'out.sfc.tile5.nc', 'out.sfc.tile6.nc'/
+ 
+ data oro_files /'C96_oro_data.tile1.nc', 'C96_oro_data.tile2.nc', 'C96_oro_data.tile3.nc', &
+                 'C96_oro_data.tile4.nc', 'C96_oro_data.tile5.nc', 'C96_oro_data.tile6.nc' /
+
+ do tiles = 2, 2
+
+ file_frac="/gpfs/dell1/stmp/George.Gayno/chgres_fractional/" // the_files(tiles)
+ file_orog_frac="/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/chgres_cube.fractional/my_grids_fract/C96/" // oro_files(tiles)
+ file_floor="/gpfs/dell1/stmp/George.Gayno/chgres_floor/" // the_files(tiles)
 
 ! Open the file created using the non-fractional logic, but with
 ! slmsk modified to be floor of the land fraction.
@@ -55,7 +65,7 @@
  error=nf90_inquire_dimension(ncid_floor,id_dim,len=jdim)
  call netcdf_err(error, 'reading yaxis' )
 
- allocate(slmsk(idim,jdim))
+ if (.not. allocated(slmsk)) allocate(slmsk(idim,jdim))
 
  error=nf90_inq_varid(ncid_floor,"slmsk",varid)
  call netcdf_err(error, 'reading slmsk id' )
@@ -70,7 +80,7 @@
  error=nf90_open(trim(file_orog_frac),nf90_nowrite,ncid_orog_frac)
  call netcdf_err(error, 'opening file_orog_frac' )
 
- allocate(land_frac(idim,jdim))
+ if (.not. allocated(land_frac)) allocate(land_frac(idim,jdim))
 
  error=nf90_inq_varid(ncid_orog_frac,"land_frac",varid_frac)
  call netcdf_err(error, 'reading land_frac id' )
@@ -85,14 +95,14 @@
 
  do j = 1, jdim
  do i = 1, idim
-   if (nint(slmsk(i,j)) == 0) then
+   if (nint(slmsk(i,j)) == 0 .or. nint(slmsk(i,j)) == 2) then
      if(floor(land_frac(i,j)) /= 0.0_8) then
        print*,'bad mask point 1', i,j,slmsk(i,j),floor(land_frac(i,j))
        stop
      endif
    endif
    if (floor(land_frac(i,j)) == 0.0_8) then
-     if (nint(slmsk(i,j)) /= 0) then
+     if (nint(slmsk(i,j)) == 1) then
        print*,'bad mask point 2', i,j,slmsk(i,j),floor(land_frac(i,j))
        stop
      endif
@@ -133,7 +143,7 @@
    do j = 1, jdim
    do i = 1, idim
 
-     if (nint(slmsk(i,j)) == 0) then
+     if (nint(slmsk(i,j)) == 0 .or. nint(slmsk(i,j)) == 2) then
        if (dummy_floor(i,j) /= dummy_frac(i,j)) then
          print*,'bad pt ',i,j,dummy_floor(i,j),dummy_frac(i,j)
          stop
@@ -145,7 +155,7 @@
 
  enddo
 
- stop
+ goto 33
 
  allocate(dummy_frac3d(idim,jdim,4))
  allocate(dummy_floor3d(idim,jdim,4))
@@ -182,6 +192,14 @@
      enddo
 
    enddo
+
+ enddo
+
+ 33 continue
+
+ error=nf90_close(ncid_floor)
+ error=nf90_close(ncid_orog_frac)
+ error=nf90_close(ncid_frac)
 
  enddo
 
