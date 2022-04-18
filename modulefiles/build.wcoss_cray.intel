@@ -18,7 +18,6 @@ module load cray-hdf5/1.8.14
 
 module use /usrx/local/nceplibs/NCEPLIBS/cmake/install/NCEPLIBS-v1.3.0/modules
 module load bacio/2.4.1
-module load g2/3.4.1
 module load ip/3.3.3
 module load nemsio/2.5.2
 module load sp/2.3.3
@@ -31,9 +30,11 @@ setenv ZLIB_ROOT /usrx/local/prod/zlib/1.2.7/intel/haswell
 setenv PNG_ROOT /usrx/local/prod/png/1.2.49/intel/haswell
 setenv Jasper_ROOT /usrx/local/prod/jasper/1.900.1/intel/haswell
 
-module use /gpfs/hps3/emc/nems/noscrub/emc.nemspara/soft/modulefiles
-#module load esmf/8.0.0
-setenv ESMFMKFILE /gpfs/hps3/emc/nems/noscrub/emc.nemspara/soft/esmf/8.0.0/lib/esmf.mk
+module use /usrx/local/nceplibs/NCEPLIBS/cmake/install/NCEPLIBS-v1.4.0/modules
+module load g2/3.4.5
+
+module load esmf/820
+
 setenv NETCDF /opt/cray/netcdf/4.3.3.1/INTEL/14.0
 module rm gcc
 module load gcc/6.3.0

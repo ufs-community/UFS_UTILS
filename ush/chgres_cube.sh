@@ -272,8 +272,8 @@ cat << EOF > ./fort.41
   convert_sfc=$CONVERT_SFC
   convert_nst=$CONVERT_NST
   input_type="${INPUT_TYPE}"
-  tracers=$TRACERS_TARGET
-  tracers_input=$TRACERS_INPUT
+  tracers=${TRACERS_TARGET}
+  tracers_input=${TRACERS_INPUT}
   regional=$REGIONAL
   halo_bndy=$HALO_BNDY
   halo_blend=$HALO_BLEND

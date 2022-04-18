@@ -39,6 +39,13 @@ PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
 export home_dir=$PWD/../..

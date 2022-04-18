@@ -55,6 +55,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< C96 UNIFORM TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $home_dir/reg_tests/update_baseline.sh "${HOMEreg}/.." "c96.uniform" $commit_num
+  fi
 else
   echo "<<< C96 UNIFORM TEST PASSED. >>>"
 fi

@@ -700,8 +700,12 @@
    longitude(i,:) = real(lon4(i,:),kind=esmf_kind_r8) 
  enddo
 
+! Flip the poles, to be consistent with how the g2lib degribs
+! gfs data.
+
  do i = 1, j_input
-   latitude(:,i) = real(lat4(:,i),kind=esmf_kind_r8) 
+   latitude(:,i) = real(lat4(:,j_input-i+1),kind=esmf_kind_r8) 
+!  if (localpet == 0) print*,'gfs lat ',i,latitude(1,i)
  enddo
 
  deallocate(lat4, lon4)
@@ -783,11 +787,11 @@
      lon_corner_src_ptr(i,j) = longitude(i,1) - (0.5_esmf_kind_r8*deltalon)
      if (lon_corner_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_src_ptr(i,j) = lon_corner_src_ptr(i,j) - 360.0_esmf_kind_r8
      if (j == 1) then 
-       lat_corner_src_ptr(i,j) = -90.0_esmf_kind_r8
+       lat_corner_src_ptr(i,j) = +90.0_esmf_kind_r8
        cycle
      endif
      if (j == jp1_input) then
-       lat_corner_src_ptr(i,j) = +90.0_esmf_kind_r8
+       lat_corner_src_ptr(i,j) = -90.0_esmf_kind_r8
        cycle
      endif
      lat_corner_src_ptr(i,j) = 0.5_esmf_kind_r8 * (latitude(i,j-1)+ latitude(i,j))

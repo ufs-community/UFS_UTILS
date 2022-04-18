@@ -208,15 +208,15 @@ module module_nwp
 !        If the data type does not match one of the known types, exit.
 
          else
-            write(*,*) 'Unknown data type:', itype
+            write(6,*) 'Unknown data type:', itype
             stop 1234
          end if
 
          this%head => NULL()
          this%tail => NULL()
 
-         write(*,*) 'Finished initial_nwp'
-         write(*,*) ' '
+         write(6,*) 'Finished initial_nwp'
+         write(6,*) ' '
 
       end subroutine initial_nwp
 
@@ -231,18 +231,18 @@ module module_nwp
 
          integer :: k
 
-         write(*,*) 'List initial setup for ', this%datatype
-         write(*,*) 'number of variables ', this%numvar
-         write(*,*) 'variable index: mask, sst, ice, sfcT, sfcTl'
-         write(*,'(15x,10I3)') this%i_mask, this%i_sst, this%i_ice, &
+         write(6,*) 'List initial setup for ', this%datatype
+         write(6,*) 'number of variables ', this%numvar
+         write(6,*) 'variable index: mask, sst, ice, sfcT, sfcTl'
+         write(6,'(15x,10I3)') this%i_mask, this%i_sst, this%i_ice, &
       &      this%i_sfcT, this%i_sfcTl
-         write(*,*) 'variable name:'
+         write(6,*) 'variable name:'
          do k=1,this%numvar
-            write(*,*) k,trim(this%varnames(k))
+            write(6,*) k,trim(this%varnames(k))
          enddo
 
-         write(*,*) 'Finished list_initial_nwp'
-         write(*,*) ' '
+         write(6,*) 'Finished list_initial_nwp'
+         write(6,*) ' '
 
       end subroutine list_initial_nwp
 
@@ -265,9 +265,11 @@ module module_nwp
       !! @param[inout] sfcTl Skin Temperature in restart file
       !! @param[inout] zorl Surface roughness length
       !! @param[inout] hice Ice thickness
+      !! @param[in]    ybegin Start grid point in Y direction for the domain
+      !! @param[in]    yend   End grid point in Y direction for the domain
       !!
       !! @author David Wright, University of Michigan and GLERL
-      subroutine read_nwp(this,filename,itype,wcstart,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT,sfcTl,zorl,hice)
+      subroutine read_nwp(this,filename,itype,wcstart,numlon,numlat,numtimes,time_to_get,mask,sst,ice,sfcT,iceT,sfcTl,zorl,hice,ybegin,yend)
 
          class(fcst_nwp) :: this
 
@@ -276,11 +278,13 @@ module module_nwp
          character(len=4), intent(in) :: wcstart
 
          integer, intent(in) :: time_to_get
+         integer, intent(in) :: ybegin,yend
          integer, intent(inout) :: numlon, numlat, numtimes
 !         real(r_single), intent(inout) :: mask(:,:), sst(:,:), ice(:,:), sfcT(:,:)
          real(r_kind), intent(inout) :: mask(:,:),sst(:,:),ice(:,:),sfcT(:,:) &
                                         ,iceT(:,:),sfcTl(:,:),zorl(:,:),hice(:,:)
 
+!
 !        Open the file using module_ncio.f90 code, and find the number of
 !        lat/lon points
 
@@ -289,12 +293,14 @@ module module_nwp
          call ncdata%get_dim(this%dimnameNS,this%xlat)
          call ncdata%get_dim(this%dimnameTIME,this%xtime)
 
-         write(*,*) 'number of longitudes for file ', filename, this%xlon
+         write(6,*) 'number of longitudes for file ', filename, this%xlon
          numlon = this%xlon
-         write(*,*) 'number of latitudes for file ', filename, this%xlat
-         numlat = this%xlat
-         write(*,*) 'number of times for file ', filename, this%xtime
+         write(6,*) 'number of latitudes for file ', filename, this%xlat
+         !numlat = this%xlat
+         numlat = yend-ybegin+1
+         write(6,*) 'number of times for file ', filename, this%xtime
          numtimes = this%xtime
+         write(6,*) 'the range of Y for this domain is=',ybegin,yend
 
 !        Allocate all the arrays to receive data
          if (wcstart == 'cold' .OR. itype == ' FVCOM') then
@@ -309,47 +315,47 @@ module module_nwp
 !        Get variables from the data file, but only if the variable is
 !        defined for that data type.
 
-            write(*,*) 'itype = ', itype
-            write(*,*) 'wcstart = ', wcstart
-            write(*,*) 'xlat = ', this%xlat
-            write(*,*) 'xlon = ', this%xlon
-            write(*,*) 'xtime = ', this%xtime
+            write(6,*) 'itype = ', itype
+            write(6,*) 'wcstart = ', wcstart
+            write(6,*) 'xlat = ', this%xlat
+            write(6,*) 'xlon = ', this%xlon
+            write(6,*) 'xtime = ', this%xtime
 
             if (this%i_mask .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_mask),this%xlon,  &
                                    this%xlat,this%nwp_mask_c)
-               mask = this%nwp_mask_c(:,:)
+               mask = this%nwp_mask_c(:,ybegin:yend)
             end if
             if (this%i_sst .gt. 0) then
-               write(*,*) 'get sst for cold or FVCOM'
+               write(6,*) 'get sst for cold or FVCOM'
                call ncdata%get_var(this%varnames(this%i_sst),this%xlon,  &
                                    this%xlat,this%xtime,this%nwp_sst_c)
-               sst = this%nwp_sst_c(:,:,time_to_get)
+               sst = this%nwp_sst_c(:,ybegin:yend,time_to_get)
             end if
             if (this%i_ice .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_ice),this%xlon,  &
                                    this%xlat,this%xtime,this%nwp_ice_c)
-               ice = this%nwp_ice_c(:,:,time_to_get)
+               ice = this%nwp_ice_c(:,ybegin:yend,time_to_get)
             end if
             if (this%i_sfcT .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_sfcT),this%xlon,  &
                                    this%xlat,this%xtime,this%nwp_sfcT_c)
-               sfcT = this%nwp_sfcT_c(:,:,time_to_get)
+               sfcT = this%nwp_sfcT_c(:,ybegin:yend,time_to_get)
             end if
             if (this%i_iceT .gt. 0) then
                 call ncdata%get_var(this%varnames(this%i_iceT),this%xlon,  &
                                     this%xlat,this%xtime,this%nwp_iceT_c)
-                iceT = this%nwp_iceT_c(:,:,time_to_get)
+                iceT = this%nwp_iceT_c(:,ybegin:yend,time_to_get)
             end if
             if (this%i_zorl .gt. 0) then
                 call ncdata%get_var(this%varnames(this%i_zorl),this%xlon,  &
                                     this%xlat,this%xtime,this%nwp_zorl_c)
-                zorl = this%nwp_zorl_c(:,:,time_to_get)
+                zorl = this%nwp_zorl_c(:,ybegin:yend,time_to_get)
             end if 
             if (this%i_hice .gt. 0) then
                 call ncdata%get_var(this%varnames(this%i_hice),this%xlon,  &
                                     this%xlat,this%xtime,this%nwp_hice_c)
-                hice = this%nwp_hice_c(:,:,time_to_get)
+                hice = this%nwp_hice_c(:,ybegin:yend,time_to_get)
             end if 
  
          else if (wcstart == 'warm') then
@@ -364,63 +370,63 @@ module module_nwp
 !        Get variables from the data file, but only if the variable is
 !        defined for that data type.
       
-            write(*,*) 'itype = ', itype
-            write(*,*) 'wcstart =', wcstart
-            write(*,*) 'xlat = ', this%xlat
-            write(*,*) 'xlon = ', this%xlon
-            write(*,*) 'xtime = ', this%xtime
+            write(6,*) 'itype = ', itype
+            write(6,*) 'wcstart =', wcstart
+            write(6,*) 'xlat = ', this%xlat
+            write(6,*) 'xlon = ', this%xlon
+            write(6,*) 'xtime = ', this%xtime
 
             if (this%i_mask .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_mask),this%xlon,  &
                                    this%xlat,this%nwp_mask_w)
-               mask = this%nwp_mask_w(:,:)
+               mask = this%nwp_mask_w(:,ybegin:yend)
             end if
             if (this%i_sst .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_sst),this%xlon,  &
                                    this%xlat,this%nwp_sst_w)
-               sst = this%nwp_sst_w(:,:)
+               sst = this%nwp_sst_w(:,ybegin:yend)
             end if
             if (this%i_ice .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_ice),this%xlon,  &
                                    this%xlat,this%nwp_ice_w)
-               ice = this%nwp_ice_w(:,:)
+               ice = this%nwp_ice_w(:,ybegin:yend)
             end if
             if (this%i_sfcT .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_sfcT),this%xlon,  &
                                    this%xlat,this%nwp_sfcT_w)
-               sfcT = this%nwp_sfcT_w(:,:)
+               sfcT = this%nwp_sfcT_w(:,ybegin:yend)
             end if
             if (this%i_iceT .gt. 0) then
                 call ncdata%get_var(this%varnames(this%i_iceT),this%xlon,  &
                                     this%xlat,this%nwp_iceT_w)
-                iceT = this%nwp_iceT_w(:,:)
+                iceT = this%nwp_iceT_w(:,ybegin:yend)
             end if 
             if (this%i_sfcTl .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_sfcTl),this%xlon,  &
                                    this%xlat,this%nwp_sfcTl_w)
-               sfcTl = this%nwp_sfcTl_w(:,:)
+               sfcTl = this%nwp_sfcTl_w(:,ybegin:yend)
             end if
             if (this%i_zorl .gt. 0) then
                 call ncdata%get_var(this%varnames(this%i_zorl),this%xlon,  &
                                     this%xlat,this%nwp_zorl_w)
-                zorl = this%nwp_zorl_w(:,:)
+                zorl = this%nwp_zorl_w(:,ybegin:yend)
             end if 
             if (this%i_hice .gt. 0) then
                 call ncdata%get_var(this%varnames(this%i_hice),this%xlon,  &
                                     this%xlat,this%nwp_hice_w)
-                hice = this%nwp_hice_w(:,:)
+                hice = this%nwp_hice_w(:,ybegin:yend)
             end if 
 
          else
-            write(*,*) 'Choose either "warm" or "cold" for file'
+            write(6,*) 'Choose either "warm" or "cold" for file'
             stop 'Error in wcstart. Check spelling or if variable was assigned'
          end if
 !        Close the netCDF file.
 
          call ncdata%close
 
-         write(*,*) 'Finished read_nwp'
-         write(*,*) ' '
+         write(6,*) 'Finished read_nwp'
+         write(6,*) ' '
 
       end subroutine read_nwp
 
@@ -452,33 +458,34 @@ module module_nwp
             deallocate(this%nwp_iceT_c)
             deallocate(this%nwp_zorl_c)
             deallocate(this%nwp_hice_c)
+            if (itype==' FVCOM') deallocate(this%dimnameDATE)
          else if (wcstart == 'warm') then
             deallocate(this%nwp_mask_w)
             deallocate(this%nwp_sst_w)
             deallocate(this%nwp_ice_w)
             deallocate(this%nwp_sfcT_w)
             deallocate(this%nwp_iceT_w)
+            deallocate(this%nwp_sfcTl_w)
             deallocate(this%nwp_zorl_w)
             deallocate(this%nwp_hice_w)
          else
-            write(*,*) 'no deallocation'
+            write(6,*) 'no deallocation'
          end if
 
          thisobs => this%head
          if(.NOT.associated(thisobs)) then
-            write(*,*) 'No memory to release'
+            write(6,*) 'No memory to release'
             return
          endif
          do while(associated(thisobs))
-!            write(*,*) 'destroy ==',thisobs%name
 
             thisobsnext => thisobs%next
             call thisobs%destroy()
             thisobs => thisobsnext
          enddo
 
-         write(*,*) 'Finished finish_nwp'
-         write(*,*) ' '
+         write(6,*) 'Finished finish_nwp'
+         write(6,*) ' '
 
       end subroutine finish_nwp
 
@@ -508,8 +515,8 @@ module module_nwp
          call ncdata%open(trim(filename),'r',200)
          call ncdata%get_dim(this%dimnameTIME,this%xtime)
          call ncdata%get_dim(this%dimnameDATE,this%datelen)
-         write(*,*) 'xtime = ', this%xtime
-         write(*,*) 'datelen = ', this%datelen
+         write(6,*) 'xtime = ', this%xtime
+         write(6,*) 'datelen = ', this%datelen
          allocate(this%times(this%datelen,this%xtime))
          call ncdata%get_var('Times',this%datelen,this%xtime,this%times)
 
@@ -528,8 +535,8 @@ module module_nwp
             outindex = -999
             deallocate(this%times)
             call ncdata%close
-            write(*,*) 'WARNING: Supplied time not found in file: ', trim(instr)
-            write(*,*) 'Stoppping fvcom_to_FV3 and proceeding without using FVCOM data'
+            write(6,*) 'WARNING: Supplied time not found in file: ', trim(instr)
+            write(6,*) 'Stoppping fvcom_to_FV3 and proceeding without using FVCOM data'
             stop
          end if
 
