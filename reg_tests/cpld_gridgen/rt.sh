@@ -96,8 +96,10 @@ check_results() {
 readonly program=$(basename $0)
 # PATHRT - Path to regression tests directory
 readonly PATHRT="$(cd $(dirname $0) && pwd -P)"
+export PATHRT
 # PATHTR - Path to the UFS UTILS directory
 readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
+export PATHTR
 TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
@@ -113,16 +115,25 @@ rm -f fail_test* $COMPILE_LOG run*.log
 
 if [[ $target = hera ]]; then
   STMP=/scratch1/NCEPDEV/stmp4
+  export MOM6_FIXDIR=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-  NEW_BASELINE_ROOT=$STMP/$USER/CPLD_GRIDGEN/BASELINE
-  RUNDIR_ROOT=$STMP/$USER/CPLD_GRIDGEN/rt_$$
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
 elif [[ $target = orion ]]; then
   STMP=
+  FIXDIR_PATH=
+  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  ACCOUNT=${ACCOUNT:-nems}
+  QUEUE=${QUEUE:-batch}
 elif [[ $target = jet ]]; then
   STMP=
+  FIXDIR_PATH=
+  BASELINE_ROOT=
+  ACCOUNT=${ACCOUNT:-nems}
+  QUEUE=${QUEUE:-batch}
 fi
+NEW_BASELINE_ROOT=$STMP/$USER/CPLD_GRIDGEN/BASELINE
+RUNDIR_ROOT=$STMP/$USER/CPLD_GRIDGEN/rt_$$
 
 CREATE_BASELINE=false
 while getopts :cmh opt; do
@@ -201,10 +212,10 @@ while read -r line || [ "$line" ]; do
 
   sbatch --wait --ntasks-per-node=1 --nodes=1 -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
          -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-         ./cpld_gridgen.sh $TEST_NAME
+         ./cpld_gridgen.sh $TEST_NAME  && d=$? || d=$?
 
-  if [[ $? -ne 0 ]]; then
-    error "Batch job for test $TEST_NAME did not finish successfully"
+  if [[ d -ne 0 ]]; then
+    error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
   fi
 
   check_results
