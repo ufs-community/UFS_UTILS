@@ -15,8 +15,8 @@
 
  implicit none
 
- integer, parameter :: num_var=7
- integer, parameter :: num_var3d=3
+ integer, parameter :: num_var=15
+ integer, parameter :: num_var3d=1
 
  character(len=150) :: file_floor, file_frac, file_orog_frac
 
@@ -33,9 +33,11 @@
  real*8, allocatable :: dummy_frac3d(:,:,:), dummy_floor3d(:,:,:)
 
  data varname /'alvsf_nl', 'alvwf_nl', 'alnsf_nl', 'alnwf_nl', &
-               'f10m',  'ffhh', 'ffmm'  /
+               'f10m',  'ffhh', 'ffmm', 'fice', 'hice', &
+               'q2m', 'sheleg_ice', 'snwdph_ice', 'srflag', &
+               't2m', 'tg3_ice'  /
 
- data varname3d /'stc', 'slc', 'smc'/
+ data varname3d /'stc_ice'/
 
  data the_files /'out.sfc.tile1.nc', 'out.sfc.tile2.nc', 'out.sfc.tile3.nc', &
                  'out.sfc.tile4.nc', 'out.sfc.tile5.nc', 'out.sfc.tile6.nc'/
@@ -133,6 +135,9 @@
    if (trim(varname(var)) == 'alvwf_nl') varname(var) = 'alvwf'
    if (trim(varname(var)) == 'alnsf_nl') varname(var) = 'alnsf'
    if (trim(varname(var)) == 'alnwf_nl') varname(var) = 'alnwf'
+   if (trim(varname(var)) == 'sheleg_ice') varname(var) = 'sheleg'
+   if (trim(varname(var)) == 'snwdph_ice') varname(var) = 'snwdph'
+   if (trim(varname(var)) == 'tg3_ice') varname(var) = 'tg3'
    error=nf90_inq_varid(ncid_floor, varname(var), varid_floor)
    call netcdf_err(error, 'reading floor id' )
    error=nf90_get_var(ncid_floor,varid_floor,dummy_floor)
@@ -140,25 +145,34 @@
 
    print*,'floor field ',maxval(dummy_floor),minval(dummy_floor)
 
-   do j = 1, jdim
-   do i = 1, idim
-
-     if (nint(slmsk(i,j)) == 0 .or. nint(slmsk(i,j)) == 2) then
-       if (dummy_floor(i,j) /= dummy_frac(i,j)) then
-         print*,'bad pt ',i,j,dummy_floor(i,j),dummy_frac(i,j)
-         stop
+   if (trim(varname(var)) == 'tg3') then
+     do j = 1, jdim
+     do i = 1, idim
+       if (nint(slmsk(i,j)) == 2) then
+         if (dummy_floor(i,j) /= dummy_frac(i,j)) then
+           print*,'bad pt ',i,j,dummy_floor(i,j),dummy_frac(i,j)
+           stop
+         endif
        endif
-     endif
-
-   enddo
-   enddo
+     enddo
+     enddo
+   else
+     do j = 1, jdim
+     do i = 1, idim
+       if (nint(slmsk(i,j)) == 0 .or. nint(slmsk(i,j)) == 2) then
+         if (dummy_floor(i,j) /= dummy_frac(i,j)) then
+           print*,'bad pt ',i,j,dummy_floor(i,j),dummy_frac(i,j)
+           stop
+         endif
+       endif
+     enddo
+     enddo
+   endif
 
  enddo
 
- goto 33
-
- allocate(dummy_frac3d(idim,jdim,4))
- allocate(dummy_floor3d(idim,jdim,4))
+ if(.not.allocated(dummy_frac3d)) allocate(dummy_frac3d(idim,jdim,4))
+ if(.not.allocated(dummy_floor3d)) allocate(dummy_floor3d(idim,jdim,4))
 
  do var = 1, num_var3d
    
@@ -169,6 +183,7 @@
    error=nf90_get_var(ncid_frac,varid_frac,dummy_frac3d)
    call netcdf_err(error, 'reading frac field' )
 
+   if (trim(varname3d(var)) == 'stc_ice') varname3d(var) = 'stc'
    error=nf90_inq_varid(ncid_floor, varname3d(var), varid_floor)
    call netcdf_err(error, 'reading floor id' )
    error=nf90_get_var(ncid_floor,varid_floor,dummy_floor3d)
@@ -182,7 +197,7 @@
      do j = 1, jdim
      do i = 1, idim
 
-       if (nint(slmsk(i,j)) == 1) then
+       if (nint(slmsk(i,j)) == 2) then
          if (dummy_floor3d(i,j,n) /= dummy_frac3d(i,j,n)) then
            print*,'bad pt ',i,j,n,dummy_floor3d(i,j,n),dummy_frac3d(i,j,n)
          endif
@@ -194,8 +209,6 @@
    enddo
 
  enddo
-
- 33 continue
 
  error=nf90_close(ncid_floor)
  error=nf90_close(ncid_orog_frac)
