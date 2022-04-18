@@ -120,8 +120,8 @@ if [[ $target = hera ]]; then
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
 elif [[ $target = orion ]]; then
-  STMP=
-  FIXDIR_PATH=
+  STMP=/work/noaa/stmp
+  export MOM6_FIXDIR=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
@@ -156,9 +156,13 @@ done
 # Build the executable file
 cd $PATHTR
 rm -rf $PATHTR/build $PATHTR/exec $PATHTR/lib
-./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1
+./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1 && d=$? || d=$?
+if [[ d -ne 0 ]]; then
+  error "Build did not finish successfully. Check $COMPILE_LOG"
+fi
+
 if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
-  error "Build did not generate the cpld_gridgen exe file. Check $PATHTR/build/"
+  error "Build did not generate the cpld_gridgen exe file. Check $COMPILE_LOG"
 else
   echo "Build was successful. cpld_gridgen executable file is in $PATHTR/exec/"
 fi
