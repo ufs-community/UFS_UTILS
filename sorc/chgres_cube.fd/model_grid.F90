@@ -614,35 +614,27 @@
 !! @author George Gayno
  subroutine define_input_grid_grib2(localpet,npets)
 
- use netcdf
- use mpi
  use grib_mod
  use gdswzd_mod
  use program_setup, only       : grib2_file_input_grid, data_dir_input_grid
 
  implicit none
 
- integer, intent(in)          :: localpet, npets
+ integer, intent(in)              :: localpet, npets
 
- character(len=500)           :: the_file
+ character(len=500)               :: the_file
 
- integer :: i, j, k, jdisc, jgdtn, jpdtn, lugb, lugi
- integer :: jids(200), jgdt(200), jpdt(200), rc
- integer :: kgds(200), nret, clb(2), cub(2)
- integer :: error, ncid, dim_i, dim_ip1, dim_j, dim_jp1
- integer :: fsize=65536
- integer :: header_buffer_val = 16384
- integer :: id_gridlat, id_gridlon, id_gridrot
- integer :: id_gridlat_corners, id_gridlon_corners
- integer :: id_gridlat_diff, id_gridlon_diff
+ integer                          :: i, j, k, jdisc, jgdtn, jpdtn, lugb, lugi
+ integer                          :: jids(200), jgdt(200), jpdt(200), rc
+ integer                          :: kgds(200), nret, clb(2), cub(2)
 
- logical :: unpack
+ logical                          :: unpack
 
- real    :: res
- real, allocatable :: rlon(:,:),rlat(:,:),xpts(:,:),ypts(:,:)
- real, allocatable :: rlon_corner(:,:),rlat_corner(:,:)
- real, allocatable :: rlon_diff(:,:),rlat_diff(:,:)
- real, allocatable :: xpts_corner(:,:),ypts_corner(:,:)
+ real                             :: res
+ real, allocatable                :: rlon(:,:),rlat(:,:),xpts(:,:),ypts(:,:)
+ real, allocatable                :: rlon_corner(:,:),rlat_corner(:,:)
+ real, allocatable                :: rlon_diff(:,:),rlat_diff(:,:)
+ real, allocatable                :: xpts_corner(:,:),ypts_corner(:,:)
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
  real(esmf_kind_r8), allocatable  :: latitude_corner(:,:)
@@ -728,14 +720,6 @@
 
  deallocate(xpts, ypts)
 
- if (localpet == 0) then
-   print*,'after gdswzd lat/lon 11', rlat(1,1),rlon(1,1)
-   print*,'after gdswzd lat/lon ni/11', rlat(i_input,1),rlon(i_input,1)
-   print*,'after gdswzd lat/lon 11/nj', rlat(1,j_input),rlon(1,j_input)
-   print*,'after gdswzd lat/lon ni/nj', rlat(i_input,j_input),rlon(i_input,j_input)
-   print*,'after gdswzd lat/lon mid  ', rlat(i_input/2,j_input/2),rlon(i_input/2,j_input/2)
- endif
-
  do j = 1, jp1_input
  do i = 1, ip1_input
    xpts_corner(i,j) = float(i) - 0.5
@@ -751,89 +735,6 @@
  endif
 
  deallocate(xpts_corner, ypts_corner)
-
- if (localpet == 0) then
-   print*,'after gdswzd lat/lon corner 11', rlat_corner(1,1),rlon_corner(1,1)
-   print*,'after gdswzd lat/lon corner ni/11', rlat_corner(ip1_input,1),rlon_corner(ip1_input,1)
-   print*,'after gdswzd lat/lon corner 11/nj', rlat_corner(1,jp1_input),rlon_corner(1,jp1_input)
-   print*,'after gdswzd lat/lon corner ni/nj', rlat_corner(ip1_input,jp1_input),rlon_corner(ip1_input,jp1_input)
-   print*,'after gdswzd lat/lon corner mid  ', rlat_corner(i_input/2,j_input/2),rlon_corner(i_input/2,j_input/2)
-   print*,'after gdswzd max/min corner ',maxval(rlat_corner),minval(rlat_corner),maxval(rlon_corner),minval(rlon_corner)
-
- if (gfld%igdtnum == 32769) then
-   where(rlon > 180.0) rlon = rlon - 360.0
-   where(rlon_corner > 180.0) rlon_corner = rlon_corner -  360.0
- endif
-
- do j = 1, j_input
- do i = 1, i_input
-    rlat_diff(i,j) = rlat_corner(i,j) - rlat(i,j)
-    rlon_diff(i,j) = rlon_corner(i,j) - rlon(i,j)
- enddo
- enddo
-
-   ncid = 34
-   error = nf90_create("./latlon.nc", IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
-                       ncid, initialsize=0, chunksize=fsize)
-   call netcdf_err(error, 'CREATING FILE=latlon.nc' )
-
-   error = nf90_def_dim(ncid, 'ny', j_input, dim_j)
-   call netcdf_err(error, 'DEFINING j DIMENSION' )
-
-   error = nf90_def_dim(ncid, 'nx', i_input, dim_i)
-   call netcdf_err(error, 'DEFINING i DIMENSION' )
-
-   error = nf90_def_dim(ncid, 'ny_stag', jp1_input, dim_jp1)
-   call netcdf_err(error, 'DEFINING jp1 DIMENSION' )
-
-   error = nf90_def_dim(ncid, 'nx_stag', ip1_input, dim_ip1)
-   call netcdf_err(error, 'DEFINING ip1 DIMENSION' )
-
-   error = nf90_def_var(ncid, 'gridlat', NF90_FLOAT, (/dim_i,dim_j/), id_gridlat)
-   call netcdf_err(error, 'DEFINING gridlat' )
-
-   error = nf90_def_var(ncid, 'gridlon', NF90_FLOAT, (/dim_i,dim_j/), id_gridlon)
-   call netcdf_err(error, 'DEFINING gridlon' )
-
-   error = nf90_def_var(ncid, 'gridrot', NF90_FLOAT, (/dim_i,dim_j/), id_gridrot)
-   call netcdf_err(error, 'DEFINING gridrot' )
-
-   error = nf90_def_var(ncid, 'gridlat_corners', NF90_FLOAT, (/dim_ip1,dim_jp1/), id_gridlat_corners)
-   call netcdf_err(error, 'DEFINING gridlat_corners' )
-
-   error = nf90_def_var(ncid, 'gridlon_corners', NF90_FLOAT, (/dim_ip1,dim_jp1/), id_gridlon_corners)
-   call netcdf_err(error, 'DEFINING gridlon_corners' )
-
-   error = nf90_def_var(ncid, 'gridlat_corner_minus_cent', NF90_FLOAT, (/dim_i,dim_j/), id_gridlat_diff)
-   call netcdf_err(error, 'DEFINING gridlat_corner_minus_cent' )
-
-   error = nf90_def_var(ncid, 'gridlon_corner_minus_cent', NF90_FLOAT, (/dim_i,dim_j/), id_gridlon_diff)
-   call netcdf_err(error, 'DEFINING gridlon_corner_minus_cent' )
-
-   error = nf90_enddef(ncid, header_buffer_val,4,0,4)
-   call netcdf_err(error, 'DEFINING HEADER' )
-
-   error = nf90_put_var(ncid, id_gridlat, real(rlat,4) )
-   call netcdf_err(error, 'writing gridlat' )
-
-   error = nf90_put_var(ncid, id_gridlon, real(rlon,4) )
-   call netcdf_err(error, 'writing gridlon' )
-
-   error = nf90_put_var(ncid, id_gridlat_diff, real(rlat_diff,4) )
-   call netcdf_err(error, 'writing gridlat_diff' )
-
-   error = nf90_put_var(ncid, id_gridlon_diff, real(rlon_diff,4) )
-   call netcdf_err(error, 'writing gridlon_diff' )
-
-   error = nf90_put_var(ncid, id_gridlat_corners, real(rlat_corner,4) )
-   call netcdf_err(error, 'writing gridlat_corner' )
-
-   error = nf90_put_var(ncid, id_gridlon_corners, real(rlon_corner,4) )
-   call netcdf_err(error, 'writing gridlon_corner' )
-
-   error = nf90_close(ncid)
-
- endif
 
  if (gfld%igdtnum == 0) then ! gfs lat/lon data
 
