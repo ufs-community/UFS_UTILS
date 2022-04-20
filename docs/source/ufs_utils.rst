@@ -258,6 +258,49 @@ Orography files - one for each tile - oro.CRES.tile#.nc (NetCDF).  Contains thes
       * sigma - slope of orography (unitless)
       * elvmax - maximum height above mean (meters)
 
+orog_gsl
+========
+
+Introduction
+------------
+
+This program computes orographics statistics fields required for the orographic drag suite developed by NOAA's Global Systems Laboratory (GSL). The fields are a subset of the ones calculated by "orog" except that they are calculated in a different manner. The fields are:
+
+      * stddev - Standard deviation of subgrid topography
+      * convexity - Convexity of subgrid topography
+      * oa1 - Orographic asymmetry of subgrid topography - westerly
+      * oa2 - Orographic asymmetry of subgrid topography - southerly
+      * oa3 - Orographic asymmetry of subgrid topography - southwesterly
+      * oa4 - Orographic asymmetry of subgrid topography - northwesterly
+      * ol1 - Orographic effective length of subgrid topography - westerly
+      * ol2 - Orographic effective length of subgrid topography - southerly
+      * ol3 - Orographic effective length of subgrid topography - southwesterly
+      * ol4 - Orographic effective length of subgrid topography - northwesterly
+
+Code structure
+--------------
+
+Location of source code: ./sorc/orog_mask_tools.fd/orog_gsl.fd.
+
+Program inputs and outputs
+--------------------------
+
+The program reads the tile number (1-6 for global, 7 for stand-alone regional) and grid resolution (e.g., 768) from standard input.
+
+**Input data:**
+
+All in NetCDF.
+
+      * geo_em.d01.lat-lon.2.5m.HGT_M.nc - global topographic data on 2.5-minute lat-lon grid (interpolated from GMTED2010 30-second topographic data).
+      * HGT.Beljaars_filtered.lat-lon.30s_res.nc - global topographic data on 30-second lat-lon grid (GMTED2010 data smoothed according to Beljaars et al. (QJRMS, 2004))
+
+**Output data:**
+
+One for each tile. All in NetCDF.
+
+      * CRES_oro_data_ls.tile#.nc - Large-scale file for the gravity wave drag and blocking schemes of Kim and Doyle (QJRMS, 2005)
+      * CRES_oro_data.ss.tile#.nc - Small-scale file for the gravity wave dray scheme of Tsiringakis et al. (QJRMS, 2017) and the turbulent orographic from drag (TOFD) schemem of Beljaars et al. (QJRMS, 2004).
+
 filter_topo
 ===========
 
