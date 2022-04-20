@@ -349,7 +349,7 @@ Namelist variables with “input” in their name refer to data input to chgres_
       * minmax_vgfrc_from_climo - Use min/max vegetation fraction from climatology. Valid options: .true. or .false. (Default: .true.)
       * tg3_from_soil - Use tg3 from input soil. Valid options: .true. or .false. . Default: .false.
       * thomp_mp_climo_file - Location of Thompson aerosol climatology file. Provide only if you wish to use these aerosol variables.
-      * wam_cold_start - When true, cold start for the Whole Atmosphere Model.
+      * wam_cold_start - Cold start for the Whole Atmosphere Model. Valid Options: .true. or .false. (Default: .false.)
 
 Variable Mapping (VARMAP) table
 -------------------------------
