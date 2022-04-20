@@ -402,7 +402,10 @@ The global surface climatological data is located in ./fix/fix_sfc_climo.  All N
       * Global 2.6 x 1.5-degree soil substrate temperature - substrate_temperature.2.6x1.5.nc
       * Global 0.05-degree four component monthly snow-free albedo - snowfree_albedo.4comp.0.05.nc
       * Global 1.0-degree categorical slope type - slope_type.1.0.nc
-      * Global 0.05-degree categorical STATSGO soil type - soil_type.statsgo.0.05.nc
+      * Categorical STATSGO soil type
+             * Global 0.03-degree - soil_type.statsgo.0.03.nc
+             * Global 0.05-degree - soil_type.statsgo.0.05.nc
+             * CONUS 0.01-degree - soil_type.statsgo.conus.0.01.nc
       * Categorical IGBP vegetation type
              * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
              * MODIS-based global 0.05-degree - vegetation_type.modis.igbp.0.05.nc
