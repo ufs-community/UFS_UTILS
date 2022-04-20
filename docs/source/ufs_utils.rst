@@ -477,3 +477,47 @@ All files with and without halo (all NetCDF).
       * Soil type - CRES_soil_type.tile#.halo#.nc
       * Vegetation type - CRES_vegetation_type.tile#.halo#.nc
       * Vegetation greenness - CRES_vegetation_greenness.tile#.halo#.nc
+
+
+vcoord_gen   
+==========
+
+Introduction
+------------
+
+This program generates hybrid coordinate parameters from fields such as surface pressure, model top and the number of vertical levels. Outputs the 'ak' and 'bk' parameters used by the forecast model and chgres_cube to define the hybrid levels as follows:
+
+      * pressure = ak + surface_pressure * bk
+
+Code structure
+--------------
+
+Location of the source code: ./sorc/vcoord_gen.fd.
+
+Program inputs
+--------------
+
+The following user-defined parameters are read in from standard input.
+
+     * levs - Integer number of levels
+     * lupp - Integer number of levels below pupp
+     * pbot - Real nominal surface pressure (Pa)
+     * psig - Real nominal pressure where coordinate changes from pure sigma (Pa)
+     * ppre - Real nominal pressure where coordinate changes from pure pressure (Pa)
+     * pupp - Real nominal pressure where coordinate changes to upper atmospheric profile (Pa)
+     * ptop - Real pressure at top (Pa)
+     * dpbot - Real coordinate thickness at bottom (Pa)
+     * dpsig - Real thickness of zone within which coordinate changes to pure sigma (Pa)
+     * dppre - Real thickness of zone within which coordinate changes to pure pressure (Pa)
+     * dpupp - Real coordinate thickness at pupp (Pa)
+     * dptop - Real coordinate thickness at top (Pa)
+
+Program outputs
+---------------
+
+A text file is output containing the 'ak' and 'bk' values. To use it in chgres_cube, set namelist variable "vcoord_target_grid" to the path/name of this file.
+
+Run script
+----------
+
+To run, use script ./util/vcoord_gen/run.sh
