@@ -403,7 +403,14 @@ The global surface climatological data is located in ./fix/fix_sfc_climo.  All N
       * Global 0.05-degree four component monthly snow-free albedo - snowfree_albedo.4comp.0.05.nc
       * Global 1.0-degree categorical slope type - slope_type.1.0.nc
       * Global 0.05-degree categorical STATSGO soil type - soil_type.statsgo.0.05.nc
-      * Global 0.05-degree categorical IGBP vegetation type - vegetation_type.igbp.0.05.nc
+      * Categorical IGBP vegetation type
+             * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
+             * MODIS-based global 0.05-degree - vegetation_type.modis.igbp.0.05.nc
+             * MODIS-based CONUS 0.01-degree - vegetation_type.modis.igbp.conus.0.01.nc
+             * NESDIS VIIRS-based global 0.03-degree - vegetation_type.viirs.igbp.0.03.nc
+             * NESDIS VIIRS-based global 0.05-degree - vegetation_type.viirs.igbp.0.05.nc
+             * NESDIS VIIRS-based global 0.1-degree - vegetation_type.viirs.igbp.0.1.nc
+             * NESDIS VIIRS-based CONUS 0.01-degree - vegetation_type.viirs.igbp.conus.0.01.nc
       * Global 0.144-degree monthly vegetation greenness in percent - vegetation_greenness.0.144.nc
       * Model mosaic file - CRES_mosaic.nc (NetCDF)
       * Model orography files including halo - CRES_oro_data.tile#.halo#.nc (NetCDF)
