@@ -298,8 +298,8 @@ All in NetCDF.
 
 One for each tile. All in NetCDF.
 
-      * CRES_oro_data_ls.tile#.nc - Large-scale file for the gravity wave drag and blocking schemes of Kim and Doyle (QJRMS, 2005)
-      * CRES_oro_data.ss.tile#.nc - Small-scale file for the gravity wave dray scheme of Tsiringakis et al. (QJRMS, 2017) and the turbulent orographic from drag (TOFD) schemem of Beljaars et al. (QJRMS, 2004).
+      * CRES_oro_data_ls.tile#.nc - Large-scale file for the gravity wave drag and blocking schemes of Kim and Doyle (2005) (https://doi.org/10.1256/qj.04.160)
+      * CRES_oro_data.ss.tile#.nc - Small-scale file for the gravity wave dray scheme of Tsiringakis et al. (2017) (https://doi.org/10.1002/qj.3021). And the turbulent orographic from drag (TOFD) schemem of Beljaars et al. (QJRMS, 2004).
 
 filter_topo
 ===========
@@ -487,7 +487,7 @@ Introduction
 
 This program generates hybrid coordinate parameters from fields such as surface pressure, model top and the number of vertical levels. Outputs the 'ak' and 'bk' parameters used by the forecast model and chgres_cube to define the hybrid levels as follows:
 
-      * pressure = ak + surface_pressure * bk
+      * pressure = ak + (surface_pressure * bk)
 
 Code structure
 --------------
