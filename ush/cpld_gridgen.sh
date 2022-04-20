@@ -18,34 +18,20 @@ function edit_namelist {
       -e "s/DO_POSTWGTS/$DO_POSTWGTS/g"
 }
 
-
-RESNAME=${RESNAME:-100}
-srcdir=/scratch2/NCEPDEV/climate/Denise.Worthen/WORK/UFS_UTILS
-workdir=/scratch2/NCEPDEV/climate/Denise.Worthen/WORK/cpld_gridgen
-
-module use $srcdir/modulefiles
-#module load build.$target.$compiler
-module load build.hera.intel
-
-mkdir -p $workdir
-cd $workdir
-
-cp $srcdir/sorc/cpld_gridgen.fd/grid.nml.IN $workdir
-
 export RESNAME=$1
 export DEBUG=.false.
 export MASKEDIT=.false.
 export DO_POSTWGTS=.false.
-#export OUTDIR_PATH=/scratch2/NCEPDEV/climate/Denise.Worthen/grids-20210727/
-#export OUTDIR_PATH=/scratch2/NCEPDEV/climate/Denise.Worthen/grids-esmf-20210822/
-#export OUTDIR_PATH=/scratch2/NCEPDEV/climate/Denise.Worthen/grids-esmf-20211107
-export OUTDIR_PATH=/scratch2/NCEPDEV/climate/Denise.Worthen/grids-esmf-test
-export MOSAICDIR_PATH=/scratch1/NCEPDEV/global/glopara/fix/fix_fv3_gmted2010
+export OUTDIR_PATH=${OUTDIR_PATH:-/scratch2/NCEPDEV/climate/Denise.Worthen/grids-20220116}
+export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/fix_fv3_gmted2010}
 
 if [ $RESNAME = 400 ]; then
-  export FIXDIR_PATH=/scratch2/NCEPDEV/climate/Denise.Worthen/soca/test/Data/72x35x25/INPUT
+  echo "The 4 degree resolution is not implemented yet"
+  exit 1
+  #export FIXDIR_PATH=/scratch2/NCEPDEV/climate/Denise.Worthen/soca/test/Data/72x35x25/INPUT
 else
-  export FIXDIR_PATH=/scratch2/NCEPDEV/climate/climpara/S2S/FIX/fix_UFSp4/fix_mom6/${RESNAME}
+  export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
+  #export FIXDIR_PATH=/scratch2/NCEPDEV/climate/climpara/S2S/FIX/fix_UFSp4/fix_mom6/${RESNAME}
 fi
 
 if [ $RESNAME = 400 ]; then
@@ -111,7 +97,7 @@ if [ ! -d ${OUTDIR_PATH} ]; then
 fi
 
 edit_namelist < grid.nml.IN > grid.nml
-$srcdir/exec/cpld_gridgen
+./cpld_gridgen
 
 # generate ice mesh
 export FSRC=${OUTDIR_PATH}/Ct.mx${RESNAME}_SCRIP_land.nc
@@ -122,6 +108,3 @@ ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
 export FSRC=${OUTDIR_PATH}/grid_cice_NEMS_mx${RESNAME}.nc
 export FDST=${OUTDIR_PATH}/kmtu_cice_NEMS_mx${RESNAME}.nc
 ncks -O -v kmt ${FSRC} ${FDST}
-
-# clean up
-rm grid.nml
