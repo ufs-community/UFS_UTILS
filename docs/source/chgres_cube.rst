@@ -22,14 +22,16 @@ The program assumes Noah/Noah-MP LSM coefficients for certain soil thresholds. I
       * static_data.F90 - Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type).  Time interpolates time-varying fields, such as monthly plant greenness, to the model run time.  Data for each target FV3 resolution resides in the ‘fixed’ directory.  Set path via the fix_dir_target_grid namelist variable.
       * write_data.F90 - Writes the tiled and header files expected by the forecast model.
       * input_data.F90 - Contains routines to read atmospheric and surface data from GRIB2, NEMSIO and NetCDF files.
-      * utils.f90 - Contains utility routines, such as error handling.
+      * utils.F90 - Contains utility routines, such as error handling.
       * grib2_util.F90 -  Routines to (1) convert from RH to specific humidity; (2) convert from omega to dzdt.  Required for GRIB2 input data.
       * atmosphere.F90 - Process atmospheric fields.  Horizontally interpolate from input to target FV3 grid using ESMF regridding.  Adjust surface pressure according to terrain differences between input and target grid.  Vertically interpolate to target FV3 grid vertical levels.  Description of main routines:
 
             * read_vcoord_info - Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid).
-            * newps - computes adjusted surface pressure given a new terrain height.
-            * newpr1 - computes 3-D pressure given an adjusted surface pressure.
+            * newps - Computes adjusted surface pressure given a new terrain height.
+            * newpr1 - Computes 3-D pressure given an adjusted surface pressure.
             * vintg - vertically interpolate atmospheric fields to target FV3 grid.
+            * vintg_wam - vertically interpolate atmospheric fields to the thermosphere. Supports the Whole Atmosphere Model.
+      * atmosphere_target_data.F90 - Holds the target grid atmospheric ESMF fields.
       * surface.F90 - process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields.  NSST fields are not available when using GRIB2 input data.  Description of main routines:
 
             * interp - horizontally interpolate fields from input to target FV3 grid.
@@ -38,7 +40,10 @@ The program assumes Noah/Noah-MP LSM coefficients for certain soil thresholds. I
             * rescale_soil_moisture - adjust total soil moisture for differences between soil type on input and target FV3 grids.  Required to preserve latent/sensible heat fluxes.
             * roughness - set roughness length at land and sea/lake ice.  At land, a vegetation type-based lookup table is used.
             * qc_check - some consistency checks.
-      * search_util.f90 - searches for the nearest valid land/non-land data where the input and target fv3 land-mask differ.  Example: when the target FV3 grid depicts an island that is not resolved by the input data.  If nearby valid data is not found, a default value is used.
+      * surface_target_data.F90 - Holds the target grid surface ESMF fields.
+      * search_util.F90 - searches for the nearest valid land/non-land data where the input and target fv3 land-mask differ.  Example: when the target FV3 grid depicts an island that is not resolved by the input data.  If nearby valid data is not found, a default value is used.
+      * thompson_mp_climo_data.F90 - Processes climatological Thompson micro-physics fields.
+      * wam_climo_data.f90 - Process vertical profile climatological data for the Whole Atmosphere Model.
 
 Configuring and using chgres_cube for global applications
 ---------------------------------------------------------
@@ -344,6 +349,7 @@ Namelist variables with “input” in their name refer to data input to chgres_
       * minmax_vgfrc_from_climo - Use min/max vegetation fraction from climatology. Valid options: .true. or .false. (Default: .true.)
       * tg3_from_soil - Use tg3 from input soil. Valid options: .true. or .false. . Default: .false.
       * thomp_mp_climo_file - Location of Thompson aerosol climatology file. Provide only if you wish to use these aerosol variables.
+      * wam_cold_start - When true, cold start for the Whole Atmosphere Model.
 
 Variable Mapping (VARMAP) table
 -------------------------------
