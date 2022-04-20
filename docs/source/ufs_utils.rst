@@ -395,7 +395,7 @@ Program inputs and outputs
 
 **Input data:** 
 
-The global surface climatological data is located in ./fix/fix_sfc_climo.  All NetCDF.
+The surface climatological data is located in ./fix/fix_sfc_climo.  All NetCDF.
 
       * Global 1-degree fractional coverage strong/weak zenith angle albedo - facsf.1.0.nc
       * Global 0.05-degree maximum snow albedo - maximum_snow_albedo.0.05.nc
@@ -415,9 +415,12 @@ The global surface climatological data is located in ./fix/fix_sfc_climo.  All N
              * NESDIS VIIRS-based global 0.1-degree - vegetation_type.viirs.igbp.0.1.nc
              * NESDIS VIIRS-based CONUS 0.01-degree - vegetation_type.viirs.igbp.conus.0.01.nc
       * Global 0.144-degree monthly vegetation greenness in percent - vegetation_greenness.0.144.nc
-      * Model mosaic file - CRES_mosaic.nc (NetCDF)
-      * Model orography files including halo - CRES_oro_data.tile#.halo#.nc (NetCDF)
-      * Model grid files including halo - CRES_grid.tile#.halo#.nc (NetCDF)
+
+The files that define the model grid. All NetCDF.
+
+      * Model mosaic file - CRES_mosaic.nc
+      * Model orography files including halo - CRES_oro_data.tile#.halo#.nc
+      * Model grid files including halo - CRES_grid.tile#.halo#.nc
 
 **Output files:** 
 
