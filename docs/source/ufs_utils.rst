@@ -17,7 +17,8 @@ The following programs are used to create a grid.
       * regional_grid_esg
       * make_solo_mosaic
       * orog or orog_gsl
-      * inland
+      * inland (optional)
+      * lakefrac (optional)
       * global_equiv_resol
       * shave
       * filter_topo
@@ -336,6 +337,42 @@ Program inputs and outputs
 **Output data:**
 
       * orography file - The input file, but containing an 'inland' record - '1' inland, '0' coastal.
+
+lakefrac
+========
+
+Introduction
+------------
+
+This program sets freshwater lake fraction and lake depth on the model grid.
+
+Code structure
+--------------
+
+Location of source code: ./sorc/orog_mask_tools.fd/lake.fd.
+
+Program control options
+-----------------------
+
+The program reads the following parameters from standard input: 
+      * The tile number.
+      * The resolution. Ex: '96' for C96.
+      * The path to the global lake data.
+      * Minimum lake fraction in percent.
+
+Program inputs and outputs
+--------------------------
+
+**Input data:**
+
+      * grid file - the "grid" file from the make_hgrid or regional_esg programs  - CRES_grid.tile#.nc - (NetCDF)
+      * orography file - the orography file including the 'inland' flag record from the inland program - oro.CRES.tile#.nc (NetCDF)
+      * lake status code file - GlobalLakeStatus.dat (located in ./fix/fix_orog). See GlobalLakeStatus.txt for the defintion of each code.
+      * lake depth file - GlobalLakeDepth.dat (located in ./fix/fix_orog)
+
+**Output data:**
+
+      * orography file - the orography file including records of lake fraction and lake depth - oro.CRES.tile#.nc (NetCDF)
 
 filter_topo
 ===========
