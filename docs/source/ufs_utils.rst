@@ -16,7 +16,8 @@ The following programs are used to create a grid.
       * make_hgrid
       * regional_grid_esg
       * make_solo_mosaic
-      * orog
+      * orog or orog_gsl
+      * inland
       * global_equiv_resol
       * shave
       * filter_topo
@@ -26,7 +27,9 @@ The grid generation process is run by these scripts (located under ./ush)
 
       * fv3gfs_grid_driver.sh  (driver script)
       * fv3gfs_make_grid.sh (creates the geo-referencing for the grid)
-      * fv3gfs_make_orog.sh (creates the land-sea mask and terrain)
+      * fv3gfs_make_orog.sh (creates the land-sea mask, terrain and gravity wave drag fields)
+      * fv3gfs_make_orog_gsl.sh (creates the land-sea mask, terrain and GSL gravity wave drag fields)
+      * fv3gfs_make_lake.sh (adds lakes and lake depth. optional)
       * fv3gfs_filter_topo.sh (filters the orography) 
       * sfc_climo_gen.sh (creates climatological surface fields, such as soil type)
 
@@ -300,6 +303,39 @@ One for each tile. All in NetCDF.
 
       * CRES_oro_data_ls.tile#.nc - Large-scale file for the gravity wave drag and blocking schemes of Kim and Doyle (2005) (https://doi.org/10.1256/qj.04.160)
       * CRES_oro_data.ss.tile#.nc - Small-scale file for the gravity wave dray scheme of Tsiringakis et al. (2017) (https://doi.org/10.1002/qj.3021). And the turbulent orographic from drag (TOFD) schemem of Beljaars et al. (QJRMS, 2004).
+
+inland
+======
+
+Introduction
+------------
+
+This program reads an orography file, determines which points are inland from water, then writes out a mask record that identifies these points.
+
+Code structure
+--------------
+
+Location of source code: ./sorc/orog_mask_tools.fd/inland.fd.
+
+Program control options
+-----------------------
+
+The program reads the following parameters from standard input: 
+      * The resolution. Ex: '96' for C96.
+      * Nonland cutoff fraction. Default is '0.99'.
+      * Maximum recursive depth. Default is '7'.
+      * Grid type flag - 'g' for global, 'r' for regional.
+
+Program inputs and outputs
+--------------------------
+
+**Input data:**
+
+      * orography file - the orography file from the orog or orog_gsl programs - oro.CRES.tile#.nc (NetCDF)
+
+**Output data:**
+
+      * orography file - The input file, but containing an 'inland' record - '1' inland, '0' coastal.
 
 filter_topo
 ===========
