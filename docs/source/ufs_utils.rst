@@ -511,7 +511,7 @@ Program inputs and outputs
 
 **Input data:** 
 
-The surface climatological data is located in ./fix/fix_sfc_climo.  All NetCDF.
+The surface climatological data is located in https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v1p0/fix/fix_sfc_climo.  All NetCDF.
 
       * Global 1-degree fractional coverage strong/weak zenith angle albedo - facsf.1.0.nc
       * Global 0.05-degree maximum snow albedo - maximum_snow_albedo.0.05.nc
