@@ -254,19 +254,19 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **FV3GFS**
 
-      * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory gfs.YYYYMMDD/HH `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
+      * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
-      * 0.5-degree data - Use the **gfs_4_YYYYMMDD_00HH_000.grb2** file, under **GFS Forecasts 004 (0.5-deg)** here: `NCDC - Global Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>`__.  Note: *Tests were not done with the AVN, MRF or analysis data*.
+      * 0.5-degree data - Use the **gfs_4_YYYYMMDD_HHHH_000.grb2** file, under **GFS Forecasts 004 (0.5-deg)** here: `NCEI - Global Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast>`_.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
-      * 1.0-degree data - Use the **gfs_3_YYYYMMDD_00HH_000.grb2 file**, under **GFS Forecasts 003 (1-deg)** here: `NCDC - Global Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>`__.  Note: *Tests were not done with the AVN, MRF or analysis data*.
+      * 1.0-degree data - Use the **gfs_3_YYYYMMDD_HHHH_000.grb2 file**, under **GFS Forecasts 003 (1.0-deg)** here: `NCEI - Global Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast>`_.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
 **NAM**
 
-     * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfFH.tmHH.grib2** files in subdirectory nam.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`__.
+     * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfFH.tmHH.grib2** files in subdirectory nam.YYYYMMDD on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`_.
 
-     * 12-km data from previous 6 months - Use the **nam_218_YYYYMMDD_00HH_000.grb2 file**,   under **NAM Forecasts NAM-NMM 218 (12km) Domain** here: `NCDC - North American Mesoscale Forecast System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/north-american-mesoscale-forecast-system-nam>`__.
+     * 12-km data from previous 6 months - Use the **nam_218_YYYYMMDD_HHHH_000.grb2 file**, under **NAM Forecasts NAM-NMM 218 (12km) Domain** here: `NCEI - North American Mesoscale Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/north-american-mesoscale>`_.
 
-     * 12-km archived data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`__.
+     * 12-km archived data prior to 2020 can be requested through the Archive Information Request System `here <https://www.ncei.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`__.
 
 **HRRR**
  
