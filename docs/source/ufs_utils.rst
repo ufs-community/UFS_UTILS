@@ -237,11 +237,11 @@ Program inputs and outputs
 
       * The "grid" files (CRES_grid.tile#.nc) containing the geo-reference records for the grid - (NetCDF).  Created by the make_hgrid or regional_esg_grid programs.
       * Global 30-arc-second University of Maryland land cover data.  Used to create the land-sea mask.
-             * ./fix/fix_orog/landcover30.fixed (unformatted binary)
+             * landcover30.fixed (unformatted binary). Located in `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v1p0/fix/fix_orog>`_.
       * Global 30-arc-second USGS GMTED2010 orography data.
-             * ./fix/fix_orog/gmted2010.30sec.int (unformatted binary)
+             * gmted2010.30sec.int (unformatted binary). Located in `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v1p0/fix/fix_orog>`_.
       * 30-arc-second RAMP Antarctic terrain data (Radarsat Antarctic Mapping Project)
-             * ./fix/fix_orog/thirty.second.antarctic.new.bin (unformatted binary)
+             * thirty.second.antarctic.new.bin (unformatted binary). Located in `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v1p0/fix/fix_orog>`_.
 
 **Output data:**  
 
