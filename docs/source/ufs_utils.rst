@@ -16,7 +16,8 @@ The following programs are used to create a grid.
       * make_hgrid
       * regional_grid_esg
       * make_solo_mosaic
-      * orog or orog_gsl
+      * orog
+      * orog_gsl
       * inland (optional)
       * lakefrac (optional)
       * global_equiv_resol
@@ -28,8 +29,8 @@ The grid generation process is run by these scripts (located under ./ush)
 
       * fv3gfs_grid_driver.sh  (driver script)
       * fv3gfs_make_grid.sh (creates the geo-referencing for the grid)
-      * fv3gfs_make_orog.sh (creates the land-sea mask, terrain and gravity wave drag fields)
-      * fv3gfs_make_orog_gsl.sh (creates the land-sea mask, terrain and GSL gravity wave drag fields)
+      * fv3gfs_make_orog.sh (creates the land-sea mask, terrain and EMC gravity wave drag fields)
+      * fv3gfs_make_orog_gsl.sh (creates GSL gravity wave drag fields)
       * fv3gfs_make_lake.sh (adds lakes and lake depth. optional)
       * fv3gfs_filter_topo.sh (filters the orography) 
       * sfc_climo_gen.sh (creates climatological surface fields, such as soil type)
@@ -268,18 +269,7 @@ orog_gsl
 Introduction
 ------------
 
-This program computes orographics statistics fields required for the orographic drag suite developed by NOAA's Global Systems Laboratory (GSL). The fields are a subset of the ones calculated by "orog" except that they are calculated in a different manner. The fields are:
-
-      * stddev - Standard deviation of subgrid topography
-      * convexity - Convexity of subgrid topography
-      * oa1 - Orographic asymmetry of subgrid topography - westerly
-      * oa2 - Orographic asymmetry of subgrid topography - southerly
-      * oa3 - Orographic asymmetry of subgrid topography - southwesterly
-      * oa4 - Orographic asymmetry of subgrid topography - northwesterly
-      * ol1 - Orographic effective length of subgrid topography - westerly
-      * ol2 - Orographic effective length of subgrid topography - southerly
-      * ol3 - Orographic effective length of subgrid topography - southwesterly
-      * ol4 - Orographic effective length of subgrid topography - northwesterly
+This program computes orographics statistics fields required for the orographic drag suite developed by NOAA's Global Systems Laboratory (GSL). The fields are a subset of the ones calculated by "orog" and are calculated in a different manner.
 
 Code structure
 --------------
@@ -303,7 +293,22 @@ All in NetCDF.
 One for each tile. All in NetCDF.
 
       * CRES_oro_data_ls.tile#.nc - Large-scale file for the gravity wave drag and blocking schemes of Kim and Doyle (2005) (https://doi.org/10.1256/qj.04.160)
-      * CRES_oro_data.ss.tile#.nc - Small-scale file for the gravity wave dray scheme of Tsiringakis et al. (2017) (https://doi.org/10.1002/qj.3021). And the turbulent orographic from drag (TOFD) schemem of Beljaars et al. (QJRMS, 2004).
+      * CRES_oro_data.ss.tile#.nc - Small-scale file for the gravity wave drag scheme of Tsiringakis et al. (2017) (https://doi.org/10.1002/qj.3021). And the turbulent orographic from drag (TOFD) schemem of Beljaars et al. (QJRMS, 2004).
+
+Each file contains the following records:
+
+      * geolon - longitude (degrees east)
+      * geolat - latitude (degrees north)
+      * stddev - Standard deviation of subgrid topography
+      * convexity - Convexity of subgrid topography
+      * oa1 - Orographic asymmetry of subgrid topography - westerly
+      * oa2 - Orographic asymmetry of subgrid topography - southerly
+      * oa3 - Orographic asymmetry of subgrid topography - southwesterly
+      * oa4 - Orographic asymmetry of subgrid topography - northwesterly
+      * ol1 - Orographic effective length of subgrid topography - westerly
+      * ol2 - Orographic effective length of subgrid topography - southerly
+      * ol3 - Orographic effective length of subgrid topography - southwesterly
+      * ol4 - Orographic effective length of subgrid topography - northwesterly
 
 inland
 ======
@@ -332,11 +337,11 @@ Program inputs and outputs
 
 **Input data:**
 
-      * orography file - the orography file from the orog or orog_gsl programs - oro.CRES.tile#.nc (NetCDF)
+      * orography file - The orography file from the orog program - oro.CRES.tile#.nc (NetCDF)
 
 **Output data:**
 
-      * orography file - The input file, but containing an 'inland' record - '1' inland, '0' coastal.
+      * orography file - The input file, but containing an additional 'inland' record - '1' inland, '0' coastal.
 
 lakefrac
 ========
