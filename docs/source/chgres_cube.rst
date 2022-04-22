@@ -262,15 +262,15 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **NAM**
 
-     * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfFH.tmHH.grib2** files in subdirectory nam.YYYYMMDD on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`_.
+     * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfHH.tmHH.grib2** files in subdirectory nam.YYYYMMDD on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`_.
 
-     * 12-km data from previous 6 months - Use the **nam_218_YYYYMMDD_HHHH_000.grb2 file**, under **NAM Forecasts NAM-NMM 218 (12km) Domain** here: `NCEI - North American Mesoscale Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/north-american-mesoscale>`_.
+     * 12-km data starting 2020 - Use the **nam_218_YYYYMMDD_HHHH_000.grb2 file**, under **NAM Forecasts NAM-NMM 218 (12km) Domain** here: `NCEI - North American Mesoscale Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/north-american-mesoscale>`_.
 
-     * 12-km archived data prior to 2020 can be requested through the Archive Information Request System `here <https://www.ncei.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`__.
+     * 12-km archived data prior to 2020 can be requested through the Archive Information Request System `here <https://www.ncei.noaa.gov/has/HAS.FileAppRouter?datasetname=NAM218&subqueryby=STATION&applname=&outdest=FILE>`_.
 
 **HRRR**
  
-      * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfFH.grib2** files in the subdirectory hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`__.
+      * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfHH.grib2** files in the subdirectory ./hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`_.
 
       * 3-km operational data from 2015 to present (AWS S3): Go `here <https://registry.opendata.aws/noaa-hrrr-pds/>`__ and click “Browse Bucket.” Type "YYYYMMDD" in to the Search bar. Use the **hrrr.t00z.wrfnatf00.grib2** files in the directory hrrr.YYYYMMDD/conus/.
 
@@ -280,13 +280,11 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **RAP**
 
+      * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfHH.grib2** files in the subdirectory ./rap.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/rap/prod/>`_.
 
-      * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfFH.grib2** files in the subdirectory rap.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/rap/prod/>`__.
+      * 13-km isobaric level data from previous 6 months : Use the **rap_130_YYYYMMDD_HHHH_0FF.grb2** files from **RAP Forecasts - RAP 130 (13km) - Domain** at NCEI `here <https://www.ncei.noaa.gov/products/weather-climate-models/rapid-refresh-update>`_.
 
-      * 13-km isobaric level data from previous 6 months : Use the **rap_130_YYYYMMDD_00HH_0FF.grb2** files from the HTTPS option under **RAP Forecasts - RAP 130 (13km) - Domain** at NCEI `here <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/rapid-refresh-rap>`__.
-
-      * 13-km archived isobaric data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncdc.noaa.gov/has/HAS.FileAppRouter?datasetname=RAP130&subqueryby=STATION&applname=&outdest=FILE>`__.
-
+      * 13-km archived isobaric data older than 6 months can be requested through the Archive Information Request System `here <https://www.ncei.noaa.gov/has/HAS.FileAppRouter?datasetname=RAP130&subqueryby=STATION&applname=&outdest=FILE>`_.
 
 
 Initializing regional domains with GRIB2 data - some caveats
