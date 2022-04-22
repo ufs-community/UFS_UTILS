@@ -19,7 +19,7 @@ The program assumes Noah/Noah-MP LSM coefficients for certain soil thresholds. I
             * Computes required soil parameters
             * Reads the variable mapping (VARMAP) table.
       * model_grid.F90 - Sets up the ESMF grid objects for the input data grid and target FV3 grid.
-      * static_data.F90 - Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type).  Time interpolates time-varying fields, such as monthly plant greenness, to the model run time.  Data for each target FV3 resolution resides in the ‘fixed’ directory.  Set path via the fix_dir_target_grid namelist variable.
+      * static_data.F90 - Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type).  Time interpolates time-varying fields, such as monthly plant greenness, to the model run time. Set path to these files via the fix_dir_target_grid namelist variable.
       * write_data.F90 - Writes the tiled and header files expected by the forecast model.
       * input_data.F90 - Contains routines to read atmospheric and surface data from GRIB2, NEMSIO and NetCDF files.
       * utils.F90 - Contains utility routines, such as error handling.
@@ -53,7 +53,7 @@ Program inputs and outputs for global applications
 
 **Inputs**
 
-The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/
+Users may create their own global grids, or use the pre-defined files are located `here: <https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/>`_.
 
       * FV3 mosaic file - (NetCDF format)
 	      * CRES_mosaic.nc
@@ -74,7 +74,7 @@ The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov
 	      * CRES_oro_data.tile5.nc
 	      * CRES_oro_data.tile6.nc
 
-      * FV3 surface climatological files - Located under the ./fix_sfc sub-directory.  One file for each tile.  NetCDF format.
+      * FV3 surface climatological files - Located under the `./fix_sfc <https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/C48/fix_sfc>`_ sub-directory.  One file for each tile.  NetCDF format.
 	      * CRES.facsf.tileX.nc (fractional coverage for strong/weak zenith angle dependent albedo)
 	      * CRES.maximum_snow_albedo.tileX.nc (maximum snow albedo)
 	      * CRES.slope_type.tileX.nc (slope type)
@@ -84,7 +84,7 @@ The following four sets of files are located here: https://ftp.emc.ncep.noaa.gov
 	      * CRES.vegetation_greenness.tileX.nc (vegetation greenness)
 	      * CRES.vegetation_type.tileX.nc (vegetation type)
 
-      * FV3 vertical coordinate file.  Text file.  Located here: https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_am.v20191213/
+      * FV3 vertical coordinate file.  Text file.  `Located here. <https://ftp.emc.ncep.noaa.gov/EIB/SRW/v1p0/fix/fix_am/>`_
 	      * global_hyblev.l$LEVS.txt
 
       * Input data files.  GRIB2, NEMSIO or NetCDF.  See the next section for how to find this data.
@@ -240,7 +240,7 @@ The following four sets of files/directories should all be located in the same d
 	      * CRES.vegetation_greenness.tile7.halo4.nc (vegetation greenness)
 	      * CRES.vegetation_type.tile7.halo4.nc (vegetation type)
 
-      * FV3 vertical coordinate file.  Text file. Located in ./fix_am directory.
+      * FV3 vertical coordinate file.  Text file. Located in `./fix_am <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v1p0/fix/fix_am>`_ directory.
 	      * global_hyblev.l$LEVS.txt
 
       * Input data files. GRIB2 only.  See the next section for how to find this data.
@@ -317,7 +317,6 @@ Namelist variables with “input” in their name refer to data input to chgres_
 **Required Entries**
 
       * fix_dir_target_grid - Path to the FV3-LAM surface climatological files (such as albedo).
-      * fix_dir_input_grid - Directory containing RAP lat/lon file. On NOAA HPC machines, typically the “fix/fix_am” directory of the UFS_UTILS directory. 
       * mosaic_file_target_grid - Path and name of the FV3-LAM mosaic file.
       * orog_dir_target_grid - Directory containing the FV3-LAM orography and grid files (NetCDF).
       * orog_files_target_grid - Names of the FV3-LAM orography file.
