@@ -292,8 +292,8 @@ All in NetCDF.
 
 One for each tile. All in NetCDF.
 
-      * CRES_oro_data_ls.tile#.nc - Large-scale file for the gravity wave drag and blocking schemes of Kim and Doyle (2005) (https://doi.org/10.1256/qj.04.160)
-      * CRES_oro_data.ss.tile#.nc - Small-scale file for the gravity wave drag scheme of Tsiringakis et al. (2017) (https://doi.org/10.1002/qj.3021). And the turbulent orographic from drag (TOFD) schemem of Beljaars et al. (QJRMS, 2004).
+      * CRES_oro_data_ls.tile#.nc - Large-scale file for the gravity wave drag and blocking schemes of `Kim and Doyle (2005) <https://doi.org/10.1256/qj.04.160>`_
+      * CRES_oro_data.ss.tile#.nc - Small-scale file for the gravity wave drag scheme of `Tsiringakis et al. (2017) <https://doi.org/10.1002/qj.3021>`_. And the turbulent orographic from drag (TOFD) schemem of Beljaars et al. (QJRMS, 2004).
 
 Each file contains the following records:
 
