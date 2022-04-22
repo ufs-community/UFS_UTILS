@@ -53,7 +53,7 @@ Program inputs and outputs for global applications
 
 **Inputs**
 
-Users may create their own global grids, or use the pre-defined files are located `here: <https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/>`_.
+Users may create their own global grids, or use the pre-defined files are located `here <https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/>`_.
 
       * FV3 mosaic file - (NetCDF format)
 	      * CRES_mosaic.nc
@@ -84,7 +84,7 @@ Users may create their own global grids, or use the pre-defined files are locate
 	      * CRES.vegetation_greenness.tileX.nc (vegetation greenness)
 	      * CRES.vegetation_type.tileX.nc (vegetation type)
 
-      * FV3 vertical coordinate file.  Text file.  `Located here. <https://ftp.emc.ncep.noaa.gov/EIB/SRW/v1p0/fix/fix_am/>`_
+      * FV3 vertical coordinate file.  Text file.  `Located here. <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v1p0/fix/fix_am/>`_
 	      * global_hyblev.l$LEVS.txt
 
       * Input data files.  GRIB2, NEMSIO or NetCDF.  See the next section for how to find this data.
