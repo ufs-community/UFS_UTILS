@@ -119,18 +119,23 @@ if [[ $target = hera ]]; then
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
+  SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = orion ]]; then
   STMP=/work/noaa/stmp
   export MOM6_FIXDIR=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
+  ulimit -s unlimited
+  SBATCH_COMMAND="srun -n 1 ./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
-  STMP=
-  FIXDIR_PATH=
-  BASELINE_ROOT=
-  ACCOUNT=${ACCOUNT:-nems}
+  STMP=/lfs4/HFIP/h-nems/
+  export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
+  BASELINE_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  ACCOUNT=${ACCOUNT:-h-nems}
   QUEUE=${QUEUE:-batch}
+  ulimit -s unlimited
+  SBATCH_COMMAND="./cpld_gridgen.sh"
 fi
 NEW_BASELINE_ROOT=$STMP/$USER/CPLD_GRIDGEN/BASELINE
 RUNDIR_ROOT=$STMP/$USER/CPLD_GRIDGEN/rt_$$
@@ -214,10 +219,9 @@ while read -r line || [ "$line" ]; do
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cd $RUNDIR
 
-  ulimit -s unlimited
-  sbatch --wait --ntasks-per-node=1 --nodes=1 --propagate=STACK -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+  sbatch --wait --ntasks-per-node=4 --nodes=1 -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
          -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-         --wrap "srun -n 1 ./cpld_gridgen.sh $TEST_NAME" && d=$? || d=$?
+         --wrap "$SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
 
   if [[ d -ne 0 ]]; then
     error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
