@@ -214,9 +214,10 @@ while read -r line || [ "$line" ]; do
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cd $RUNDIR
 
-  sbatch --wait --ntasks-per-node=1 --nodes=1 -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+  ulimit -s unlimited
+  sbatch --wait --ntasks-per-node=1 --nodes=1 --propagate=STACK -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
          -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-         ./cpld_gridgen.sh $TEST_NAME  && d=$? || d=$?
+         --wrap "srun -n 1 ./cpld_gridgen.sh $TEST_NAME" && d=$? || d=$?
 
   if [[ d -ne 0 ]]; then
     error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
