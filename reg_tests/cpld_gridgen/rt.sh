@@ -52,7 +52,7 @@ check_results() {
         echo "....MISSING file" | tee -a $PATHRT/$REGRESSIONTEST_LOG
         test_status=FAIL
       else
-        nccmp -dmfqS $(basename ${file}) $file && d=$? || d=$?
+        nccmp -dmfqS $(basename ${file}) $file &>nccmp_${TEST_NAME}.log && d=$? || d=$?
         if [[ $d -ne 0 ]]; then
           echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
           test_status=FAIL
@@ -111,7 +111,7 @@ echo "Compiler: $compiler"
 
 COMPILE_LOG=compile.log
 REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.log
-rm -f fail_test* $COMPILE_LOG run*.log
+rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log
 
 if [[ $target = hera ]]; then
   STMP=/scratch1/NCEPDEV/stmp4
