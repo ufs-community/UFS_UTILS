@@ -55,9 +55,6 @@ load(pathJoin("nemsio", nemsio_ver))
 g2_ver=os.getenv("g2_ver") or "3.4.3"
 load(pathJoin("g2", g2_ver))
 
-wgrib2_ver=os.getenv("wgrib2_ver") or "2.0.8"
-load(pathJoin("wgrib2", wgrib2_ver))
-
 prod_util_ver=os.getenv("prod_util_ver") or "1.2.2"
 load(pathJoin("prod_util", prod_util_ver))
 
