@@ -155,7 +155,7 @@ TEST9=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime
 LOG_FILE=consistency.log10
 export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
 TEST10=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N 3km.conus.hrrr.gfssdf.grib2.conus -l select=1:ncpus=6:ompthreads=1:mem=50GB $PWD/3km.conus.hrrr.gfssdf.grib2.sh)
+        -N 3km.conus.hrrr.gfssdf.grib2.conus -l select=1:ncpus=6:ompthreads=1:mem=75GB $PWD/3km.conus.hrrr.gfssdf.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 3-KM USING HRRR GRIB2 file WITH GSD PHYSICS AND SFC VARS FROM FILE.
@@ -221,7 +221,7 @@ qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:
         -W depend=afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14:$TEST15:$TEST16 << EOF
 #!/bin/bash
 cd ${this_dir}
-grep -a '<<<' ${LOG_FILE}??  > $SUM_FILE
+grep -a '<<<' ${LOG_FILE}?? | grep -v echo > $SUM_FILE
 EOF
 
 exit 0
