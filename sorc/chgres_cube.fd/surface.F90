@@ -323,7 +323,7 @@
  integer                            :: clb_target(2), cub_target(2)
  integer                            :: isrctermprocessing
  integer                            :: num_fields
- integer                            :: sotyp_ind, vgfrc_ind, mmvg_ind, lai_ind
+ integer                            :: vgfrc_ind, mmvg_ind, lai_ind
  integer, allocatable               :: search_nums(:)
  integer(esmf_kind_i4), pointer     :: unmapped_ptr(:)
  integer(esmf_kind_i4), pointer     :: mask_input_ptr(:,:)
