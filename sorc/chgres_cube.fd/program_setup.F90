@@ -53,10 +53,6 @@
 !!                                    gfs sigio/sfcio files.
  character(len=20),  public      :: external_model="GFS"  !< The model that the input data is derived from. Current supported options are: "GFS", "HRRR", "NAM", "RAP". Default: "GFS"
  
- character(len=500), public      :: fix_dir_input_grid = "NULL" !< Directory containing files of latitude and
-                                                                !! and longitude for certain GRIB2 input data.
-                                                          
-
  integer, parameter, public      :: max_tracers=100 !< Maximum number of atmospheric tracers processed.
  integer, public                 :: num_tracers !< Number of atmospheric tracers to be processed.
  integer, public                 :: num_tracers_input !< Number of atmospheric tracers in input file.
@@ -193,7 +189,6 @@
                    tracers_input, &
                    halo_bndy, & 
                    halo_blend, &
-                   fix_dir_input_grid, &
                    nsoill_out, &
                    thomp_mp_climo_file
 
