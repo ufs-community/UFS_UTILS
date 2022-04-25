@@ -214,11 +214,8 @@ jobs:
         export CC=mpicc
         export CXX=mpicxx
         export FC=mpifort
-        # Findwgrib2 in module form does not search <libname>-version
-        # as NCEPLIBS installs it
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
         export DYLD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        export wgrib2_ROOT=`find ~/nceplibs -type d -maxdepth 1 -iname "wgrib2*"`
         cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf'
         make -j2
 
