@@ -9,7 +9,9 @@ error() {
 
 usage() {
   echo
-  echo "Usage: $program [-c] [-m] [-h]"
+  echo "Usage: $program [-c] [-m] [-h] [-b]"
+  echo
+  echo "  -b build the executable"
   echo
   echo "  -c create a new baseline"
   echo
@@ -19,9 +21,9 @@ usage() {
   echo
   echo "  Examples"
   echo
-  echo "    './rt.sh'    compare against the existing baseline"
-  echo "    './rt.sh -c' create a new baseline"
-  echo "    './rt.sh -m' compare against the new baseline"
+  echo "    './rt.sh -b'  build exe file. compare against the existing baseline"
+  echo "    './rt.sh -bc' build exe file. create a new baseline"
+  echo "    './rt.sh -m'  do not build exe file. compare against the new baseline"
   echo
 }
 
@@ -140,9 +142,13 @@ fi
 NEW_BASELINE_ROOT=$STMP/$USER/CPLD_GRIDGEN/BASELINE
 RUNDIR_ROOT=$STMP/$USER/CPLD_GRIDGEN/rt_$$
 
+BUILD_EXE=false
 CREATE_BASELINE=false
-while getopts :cmh opt; do
+while getopts :bcmh opt; do
   case $opt in
+    b)
+      BUILD_EXE=true
+      ;;
     c)
       CREATE_BASELINE=true
       ;;
@@ -159,17 +165,21 @@ while getopts :cmh opt; do
 done
 
 # Build the executable file
-cd $PATHTR
-rm -rf $PATHTR/build $PATHTR/exec $PATHTR/lib
-./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1 && d=$? || d=$?
-if [[ d -ne 0 ]]; then
-  error "Build did not finish successfully. Check $COMPILE_LOG"
+if [[ $BUILD_EXE = true ]]; then
+  cd $PATHTR
+  rm -rf $PATHTR/build $PATHTR/exec $PATHTR/lib
+  ./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1 && d=$? || d=$?
+  if [[ d -ne 0 ]]; then
+    error "Build did not finish successfully. Check $COMPILE_LOG"
+  else
+    echo "Build was successful"
+  fi
 fi
 
 if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
-  error "Build did not generate the cpld_gridgen exe file. Check $COMPILE_LOG"
+  error "cpld_gridgen exe file is not found in $PATHTR/exe/. Try -b to build or -h for help."
 else
-  echo "Build was successful. cpld_gridgen executable file is in $PATHTR/exec/"
+  echo "cpld_gridgen exe file is found in $PATHTR/exec/"
 fi
 
 module use $PATHTR/modulefiles
