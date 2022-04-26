@@ -20,7 +20,8 @@
 
  character(len=150) :: file_floor, file_frac, file_orog_frac
 
- character(len=15) :: varname(num_var), varname3d(num_var3d)
+ character(len=15) :: varname_frac(num_var), varname3d_frac(num_var3d)
+ character(len=15) :: varname_floor(num_var), varname3d_floor(num_var3d)
  character(len=16) :: the_files(6)
  character(len=21) :: oro_files(6)
 
@@ -32,12 +33,19 @@
  real*8, allocatable :: dummy_floor(:,:)
  real*8, allocatable :: dummy_frac3d(:,:,:), dummy_floor3d(:,:,:)
 
- data varname /'alvsf_nl', 'alvwf_nl', 'alnsf_nl', 'alnwf_nl', &
+ data varname_frac /'alvsf_nl', 'alvwf_nl', 'alnsf_nl', 'alnwf_nl', &
                'f10m',  'ffhh', 'ffmm', 'fice', 'hice', &
                'q2m', 'sheleg_ice', 'snwdph_ice', 'srflag', &
                't2m', 'tg3_ice'  /
 
- data varname3d /'stc_ice'/
+ data varname_floor /'alvsf', 'alvwf', 'alnsf', 'alnwf', &
+               'f10m',  'ffhh', 'ffmm', 'fice', 'hice', &
+               'q2m', 'sheleg', 'snwdph', 'srflag', &
+               't2m', 'tg3'  /
+
+ data varname3d_frac /'stc_ice'/
+
+ data varname3d_floor /'stc'/
 
  data the_files /'out.sfc.tile1.nc', 'out.sfc.tile2.nc', 'out.sfc.tile3.nc', &
                  'out.sfc.tile4.nc', 'out.sfc.tile5.nc', 'out.sfc.tile6.nc'/
@@ -45,7 +53,7 @@
  data oro_files /'C96_oro_data.tile1.nc', 'C96_oro_data.tile2.nc', 'C96_oro_data.tile3.nc', &
                  'C96_oro_data.tile4.nc', 'C96_oro_data.tile5.nc', 'C96_oro_data.tile6.nc' /
 
- do tiles = 2, 2
+ do tiles = 1, 2
 
  file_frac="/gpfs/dell1/stmp/George.Gayno/chgres_fractional/" // the_files(tiles)
  file_orog_frac="/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/chgres_cube.fractional/my_grids_fract/C96/" // oro_files(tiles)
@@ -54,6 +62,7 @@
 ! Open the file created using the non-fractional logic, but with
 ! slmsk modified to be floor of the land fraction.
 
+ print*,'- OPEN FILE ',trim(file_floor)
  error=nf90_open(trim(file_floor),nf90_nowrite,ncid_floor)
  call netcdf_err(error, 'opening file_floor' )
 
@@ -79,6 +88,7 @@
 ! Open the fractional grid orography file. Read the
 ! land fraction.
 
+ print*,'- OPEN FILE ',trim(file_orog_frac)
  error=nf90_open(trim(file_orog_frac),nf90_nowrite,ncid_orog_frac)
  call netcdf_err(error, 'opening file_orog_frac' )
 
@@ -114,43 +124,39 @@
 
 ! Check data.
 
- allocate(dummy_frac(idim,jdim))
- allocate(dummy_floor(idim,jdim))
+ if(.not.allocated(dummy_frac)) allocate(dummy_frac(idim,jdim))
+ if(.not.allocated(dummy_floor)) allocate(dummy_floor(idim,jdim))
 
+ print*,'- OPEN FILE ',trim(file_frac)
  error=nf90_open(trim(file_frac),nf90_nowrite,ncid_frac)
  call netcdf_err(error, 'opening file_frac' )
 
+ print*,'process tile number ',tiles
+
  do var = 1, num_var
    
-   print*,'CHECK FIELD ', trim(varname(var))
+   print*,'CHECK FIELD ', trim(varname_frac(var))
 
-   error=nf90_inq_varid(ncid_frac, varname(var), varid_frac)
+   error=nf90_inq_varid(ncid_frac, varname_frac(var), varid_frac)
    call netcdf_err(error, 'reading frac id' )
    error=nf90_get_var(ncid_frac,varid_frac,dummy_frac)
    call netcdf_err(error, 'reading frac field' )
 
    print*,'frac field ',maxval(dummy_frac),minval(dummy_frac)
 
-   if (trim(varname(var)) == 'alvsf_nl') varname(var) = 'alvsf'
-   if (trim(varname(var)) == 'alvwf_nl') varname(var) = 'alvwf'
-   if (trim(varname(var)) == 'alnsf_nl') varname(var) = 'alnsf'
-   if (trim(varname(var)) == 'alnwf_nl') varname(var) = 'alnwf'
-   if (trim(varname(var)) == 'sheleg_ice') varname(var) = 'sheleg'
-   if (trim(varname(var)) == 'snwdph_ice') varname(var) = 'snwdph'
-   if (trim(varname(var)) == 'tg3_ice') varname(var) = 'tg3'
-   error=nf90_inq_varid(ncid_floor, varname(var), varid_floor)
+   error=nf90_inq_varid(ncid_floor, varname_floor(var), varid_floor)
    call netcdf_err(error, 'reading floor id' )
    error=nf90_get_var(ncid_floor,varid_floor,dummy_floor)
    call netcdf_err(error, 'reading floor field' )
 
    print*,'floor field ',maxval(dummy_floor),minval(dummy_floor)
 
-   if (trim(varname(var)) == 'tg3') then
+   if (trim(varname_floor(var)) == 'tg3') then
      do j = 1, jdim
      do i = 1, idim
        if (nint(slmsk(i,j)) == 2) then
          if (dummy_floor(i,j) /= dummy_frac(i,j)) then
-           print*,'bad pt ',i,j,dummy_floor(i,j),dummy_frac(i,j)
+           print*,'bad tg3 pt ',i,j,dummy_floor(i,j),dummy_frac(i,j)
            stop
          endif
        endif
@@ -176,15 +182,14 @@
 
  do var = 1, num_var3d
    
-   print*,'CHECK FIELD ', trim(varname3d(var))
+   print*,'CHECK FIELD ', trim(varname3d_frac(var))
 
-   error=nf90_inq_varid(ncid_frac, varname3d(var), varid_frac)
+   error=nf90_inq_varid(ncid_frac, varname3d_frac(var), varid_frac)
    call netcdf_err(error, 'reading frac id' )
    error=nf90_get_var(ncid_frac,varid_frac,dummy_frac3d)
    call netcdf_err(error, 'reading frac field' )
 
-   if (trim(varname3d(var)) == 'stc_ice') varname3d(var) = 'stc'
-   error=nf90_inq_varid(ncid_floor, varname3d(var), varid_floor)
+   error=nf90_inq_varid(ncid_floor, varname3d_floor(var), varid_floor)
    call netcdf_err(error, 'reading floor id' )
    error=nf90_get_var(ncid_floor,varid_floor,dummy_floor3d)
    call netcdf_err(error, 'reading floor field' )
@@ -199,7 +204,8 @@
 
        if (nint(slmsk(i,j)) == 2) then
          if (dummy_floor3d(i,j,n) /= dummy_frac3d(i,j,n)) then
-           print*,'bad pt ',i,j,n,dummy_floor3d(i,j,n),dummy_frac3d(i,j,n)
+           print*,'bad 3d pt ',i,j,n,dummy_floor3d(i,j,n),dummy_frac3d(i,j,n)
+           stop
          endif
        endif
 
