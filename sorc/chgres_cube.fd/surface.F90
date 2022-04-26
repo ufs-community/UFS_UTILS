@@ -1018,8 +1018,8 @@
 
  do tile = 1, num_tiles_target_grid
 
-   print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
-   call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
+   print*,"- CALL FieldGather FOR TARGET SEAMASK TILE: ", tile
+   call ESMF_FieldGather(seamask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
@@ -1037,7 +1037,7 @@
    if (localpet == 0) then
      allocate(water_target_one_tile(i_target,j_target))
      water_target_one_tile = 0
-     where(mask_target_one_tile == 0) water_target_one_tile = 1
+     where(mask_target_one_tile == 1) water_target_one_tile = 1
      where(fice_target_one_tile > 0.0) water_target_one_tile = 0
    endif
 
