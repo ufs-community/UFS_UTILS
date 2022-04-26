@@ -8,14 +8,14 @@
 ! updated to be 'floor(land fraction)'. Here chgres is run
 ! in non-fractional mode.
 !
-! 3) Compare the fields at land from (2) to the fields with at least
-! some non-land from (1). They should match.
+! 3) Compare the fields at non-land from (2) to the fields with some
+! non-land from (1). They should match.
 
  use netcdf
 
  implicit none
 
- integer, parameter :: num_var=19
+ integer, parameter :: num_var=21
  integer, parameter :: num_var3d=1
 
  character(len=150) :: file_floor, file_frac, file_orog_frac
@@ -37,13 +37,13 @@
                'f10m',  'ffhh', 'ffmm', 'fice', 'hice', &
                'q2m', 'sheleg_ice', 'snwdph_ice', 'srflag', &
                't2m', 'tg3_ice', 'tisfc', 'tprcp',         & 
-               'uustar', 'zorl_ice' /
+               'tsea', 'uustar', 'zorl_ice', 'zorl' /
 
  data varname_floor /'alvsf', 'alvwf', 'alnsf', 'alnwf', &
                'f10m',  'ffhh', 'ffmm', 'fice', 'hice', &
                'q2m', 'sheleg', 'snwdph', 'srflag', &
                't2m', 'tg3', 'tisfc', 'tprcp',         &
-               'uustar', 'zorl'  /
+               'tsea', 'uustar', 'zorl', 'zorl'  /
 
  data varname3d_frac /'stc_ice'/
 
@@ -55,7 +55,7 @@
  data oro_files /'C96_oro_data.tile1.nc', 'C96_oro_data.tile2.nc', 'C96_oro_data.tile3.nc', &
                  'C96_oro_data.tile4.nc', 'C96_oro_data.tile5.nc', 'C96_oro_data.tile6.nc' /
 
- do tiles = 3, 3
+ do tiles = 1, 6
 
  file_frac="/gpfs/dell1/stmp/George.Gayno/chgres_fractional/" // the_files(tiles)
  file_orog_frac="/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/chgres_cube.fractional/my_grids_fract/C96/" // oro_files(tiles)
@@ -155,12 +155,24 @@
 
    if (trim(varname_frac(var)) == 'tg3_ice' .or. &
        trim(varname_frac(var)) == 'tisfc' .or. &
-       trim(varname_frac(var)) == 'zorl_ice') then
+       trim(varname_frac(var)) == 'zorl_ice') then ! check at ice only.
      do j = 1, jdim
      do i = 1, idim
        if (nint(slmsk(i,j)) == 2) then
          if (dummy_floor(i,j) /= dummy_frac(i,j)) then
            print*,'bad tg3 pt ',i,j,dummy_floor(i,j),dummy_frac(i,j)
+           stop
+         endif
+       endif
+     enddo
+     enddo
+   elseif (trim(varname_frac(var)) == 'zorl' .or. &
+           trim(varname_frac(var)) == 'tsea') then ! check at open water only.
+     do j = 1, jdim
+     do i = 1, idim
+       if (nint(slmsk(i,j)) == 0) then
+         if (dummy_floor(i,j) /= dummy_frac(i,j)) then
+           print*,'bad water pt ',i,j,dummy_floor(i,j),dummy_frac(i,j)
            stop
          endif
        endif
