@@ -2524,7 +2524,7 @@
  enddo
  enddo
 
- print*,"- SET NON-LAND FLAG FOR TARGET GRID FACSF."
+ print*,"- SET NON-LAND FLAG FOR TARGET GRID FACWF."
  call ESMF_FieldGet(facwf_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
