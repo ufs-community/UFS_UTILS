@@ -9,11 +9,13 @@
  
  use model_grid, only : i_target, j_target, &
                         target_grid, num_tiles_target_grid, &
-                        landmask_target_grid
+                        seamask_target_grid
 
  use surface, only : nst_land_fill, &
                      create_nst_esmf_fields
  
+ use program_setup, only : fract_grid
+
  use surface_target_data, only : skin_temp_target_grid, &
                      c_d_target_grid, &
                      c_0_target_grid, &
@@ -79,6 +81,8 @@
  !---------------- Setup Target Grid & Coordinates -------------------!
  !--------------------------------------------------------------------!
  
+ fract_grid = .false.
+
  i_target = IPTS_TARGET
  j_target = JPTS_TARGET
 
@@ -91,10 +95,10 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN GridAddCoord", rc)
 
- landmask_target_grid = ESMF_FieldCreate(target_grid, &
+ seamask_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_I8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   name="target_grid_landmask", &
+                                   name="target_grid_seamask", &
                                    rc=rc)
 
  skin_temp_target_grid = ESMF_FieldCreate(target_grid, &
@@ -111,12 +115,12 @@
  allocate(tref_correct(i_target,j_target))
  allocate(xz_correct(i_target,j_target))
 
- mask = reshape((/0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0/),(/i_target,j_target/))
+ mask = reshape((/1,1,1,1,1,0,0,1,1,0,0,1,1,1,1,1/),(/i_target,j_target/))
  skin_temp = reshape((/280., 280., 280., 280., &
                        280., 290., 290., 280., &
                        280., 290., 290., 280., &
                        280., 280., 280., 280./),(/i_target,j_target/))
- call ESMF_FieldScatter(landmask_target_grid, mask, rootpet=0, rc=rc)
+ call ESMF_FieldScatter(seamask_target_grid, mask, rootpet=0, rc=rc)
  call ESMF_FieldScatter(skin_temp_target_grid, skin_temp, rootpet=0, rc=rc)
  deallocate(mask, skin_temp)
 
@@ -215,7 +219,7 @@
 
  deallocate(tmp_array_2d,nst_field_correct,tref_correct,xz_correct)
 
- call ESMF_FieldDestroy(landmask_target_grid,rc=rc)
+ call ESMF_FieldDestroy(seamask_target_grid,rc=rc)
  call ESMF_FieldDestroy(skin_temp_target_grid,rc=rc)
  call cleanup_target_nst_data
  call ESMF_GridDestroy(target_grid,rc=rc)
