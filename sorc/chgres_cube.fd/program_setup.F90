@@ -85,8 +85,10 @@
  integer, public                 :: regional = 0 !<  For regional target grids.  When '1' remove boundary halo region from atmospheric/surface data and
                                                  !! output atmospheric boundary file. When '2' output boundary file only. Default is '0' (global grids).
  integer, public                 :: halo_bndy = 0 !< Number of row/cols of lateral halo, where pure lateral bndy conditions are applied (regional target grids).
- integer, public                 :: halo_blend = 0 !< Number of row/cols of blending halo, where model tendencies and lateral boundary tendencies are applied. Regional target grids only.
- integer, public                 :: nsoill_out = 4 !<  Number of soil levels desired in the output data. chgres_cube can interpolate from 9 input to 4 output levels. DEFAULT: 4.
+ integer, public                 :: halo_blend = 0 !< Number of row/cols of blending halo, where model 
+                                                   !! tendencies and lateral boundary tendencies are applied. Regional target grids only.
+ integer, public                 :: nsoill_out = 4 !< Number of soil levels desired in the output data. 
+                                                   !! chgres_cube can interpolate from 9 input to 4 output levels. DEFAULT: 4.
 
  logical, public                 :: convert_atm = .false. !< Convert atmospheric data when true.
  logical, public                 :: convert_nst = .false. !< Convert nst data when true.
@@ -94,7 +96,8 @@
  logical, public                 :: wam_cold_start = .false. !< When true, cold start for whole atmosphere model.
  
 
- logical, public :: fract_grid = .false.
+ logical, public                 :: fract_grid = .false.  !< When true, run for coupled grids (where model 
+                                                          !! points can be both land and non-land.
 
  ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
  ! Default is to use climatology instead
