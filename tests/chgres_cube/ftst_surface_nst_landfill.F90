@@ -17,6 +17,7 @@
  use program_setup, only : fract_grid
 
  use surface_target_data, only : skin_temp_target_grid, &
+                     seaice_fract_target_grid, &
                      c_d_target_grid, &
                      c_0_target_grid, &
                      d_conv_target_grid, &
@@ -51,13 +52,12 @@
 
  character(len=50)            :: fname
 
- integer(esmf_kind_i8), pointer     :: mask_target_ptr(:,:)
  integer(esmf_kind_i8), allocatable :: mask(:,:)
  
- real(esmf_kind_r8), pointer        :: skin_temp_ptr(:,:), &
-                                       tmp_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: tmp_ptr(:,:)
                     
  real(esmf_kind_r8), allocatable    :: skin_temp(:,:), &
+                                       ice(:,:), &
                                        tmp_array_2d(:,:), &
                                        nst_field_correct(:,:), &
                                        tref_correct(:,:),&
@@ -107,14 +107,22 @@
                                    name="target_grid_skin_temp", &
                                    rc=rc)
 
+ seaice_fract_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="target_grid_ice_fract", &
+                                   rc=rc)
+
  call create_nst_esmf_fields
 
  allocate(mask(i_target,j_target))
+ allocate(ice(i_target,j_target))
  allocate(skin_temp(i_target,j_target))
  allocate(nst_field_correct(i_target,j_target))
  allocate(tref_correct(i_target,j_target))
  allocate(xz_correct(i_target,j_target))
 
+ ice = 0 ! ice free
  mask = reshape((/1,1,1,1,1,0,0,1,1,0,0,1,1,1,1,1/),(/i_target,j_target/))
  skin_temp = reshape((/280., 280., 280., 280., &
                        280., 290., 290., 280., &
@@ -122,7 +130,9 @@
                        280., 280., 280., 280./),(/i_target,j_target/))
  call ESMF_FieldScatter(seamask_target_grid, mask, rootpet=0, rc=rc)
  call ESMF_FieldScatter(skin_temp_target_grid, skin_temp, rootpet=0, rc=rc)
- deallocate(mask, skin_temp)
+ call ESMF_FieldScatter(seaice_fract_target_grid, ice, rootpet=0, rc=rc)
+
+ deallocate(mask, skin_temp, ice)
 
  nst_field_correct = reshape((/-999.9, -999.9, -999.9, -999.9, &
                                -999.9,     0.,     0., -999.9, &

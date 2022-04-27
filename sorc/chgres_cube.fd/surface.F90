@@ -2796,7 +2796,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
 
- print*,"- CALL FieldGet FOR TARGET GRID LANDMASK."
+ print*,"- CALL FieldGet FOR TARGET GRID SEAICE FRACT."
  call ESMF_FieldGet(seaice_fract_target_grid, &
                     farrayPtr=fice_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
