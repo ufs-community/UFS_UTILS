@@ -2771,7 +2771,9 @@
 !! @author George Gayno NOAA/EMC
  subroutine nst_land_fill
 
- use model_grid, only         : landmask_target_grid
+ use model_grid, only         : seamask_target_grid
+
+ use program_setup, only      : fract_grid
 
  implicit none
 
@@ -2788,8 +2790,8 @@
  type(esmf_field)                   :: temp_field
  type(esmf_fieldbundle)             :: nst_bundle
 
- print*,"- CALL FieldGet FOR TARGET GRID LANDMASK."
- call ESMF_FieldGet(landmask_target_grid, &
+ print*,"- CALL FieldGet FOR TARGET GRID SEAMASK."
+ call ESMF_FieldGet(seamask_target_grid, &
                     farrayPtr=mask_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
@@ -2825,12 +2827,15 @@
     call error_handler("IN FieldGet", rc)
 
 !cfract Setting filler value for tref at ice and land points. 
-!cfract Under fractional grids use seamask_target, where =0
-!cfract is all land. And use fice field for ice.
-!cfrac where(seamask_target == 0) .and where (fice > 0) data_ptr=skint_ptr
+!cfract Under fractional grids skin t is not currently defined.
+!cfract So, set to ice temp.
 
- where(mask_ptr == 1) data_ptr = skint_ptr
- where(fice_ptr > 0.0) data_ptr = skint_ptr
+ where(mask_ptr == 0) data_ptr = skint_ptr
+ if (fract_grid) then
+   where(fice_ptr > 0.0) data_ptr = frz_ice
+ else
+   where(fice_ptr > 0.0) data_ptr = skint_ptr
+ endif
 
 ! xz
 
@@ -2841,7 +2846,7 @@
     call error_handler("IN FieldGet", rc)
 
 !cfract same as above.
- where(mask_ptr == 1) data_ptr = xz_fill
+ where(mask_ptr == 0) data_ptr = xz_fill
  where(fice_ptr > 0.0) data_ptr = xz_fill
 
  do i = 1,num_nst_fields_minus2
@@ -2855,7 +2860,7 @@
      call error_handler("IN FieldGet", rc)
      
 !cfract same as above.
-   where(mask_ptr == 1) data_ptr = nst_fill
+   where(mask_ptr == 0) data_ptr = nst_fill
    where(fice_ptr > 0.0) data_ptr = nst_fill
 
  enddo

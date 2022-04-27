@@ -15,7 +15,7 @@
 
  implicit none
 
- integer, parameter :: num_var=21
+ integer, parameter :: num_var=39
  integer, parameter :: num_var3d=1
 
  character(len=150) :: file_floor, file_frac, file_orog_frac
@@ -37,13 +37,21 @@
                'f10m',  'ffhh', 'ffmm', 'fice', 'hice', &
                'q2m', 'sheleg_ice', 'snwdph_ice', 'srflag', &
                't2m', 'tg3_ice', 'tisfc', 'tprcp',         & 
-               'tsea', 'uustar', 'zorl_ice', 'zorl' /
+               'tsea', 'uustar', 'zorl_ice', 'zorl', &
+               'c_0',  'c_d', 'd_conv', 'dt_cool', 'ifd', &
+               'qrain', 'tref', 'w_0', 'w_d', 'xs', &
+               'xt',  'xtts', 'xu', 'xv', 'xz', &
+               'xzts', 'z_c', 'zm'/ 
 
  data varname_floor /'alvsf', 'alvwf', 'alnsf', 'alnwf', &
                'f10m',  'ffhh', 'ffmm', 'fice', 'hice', &
                'q2m', 'sheleg', 'snwdph', 'srflag', &
                't2m', 'tg3', 'tisfc', 'tprcp',         &
-               'tsea', 'uustar', 'zorl', 'zorl'  /
+               'tsea', 'uustar', 'zorl', 'zorl', &
+               'c_0',  'c_d', 'd_conv', 'dt_cool', 'ifd', &
+               'qrain', 'tref', 'w_0', 'w_d', 'xs', &
+               'xt',  'xtts', 'xu', 'xv', 'xz', &
+               'xzts', 'z_c', 'zm'/ 
 
  data varname3d_frac /'stc_ice'/
 
@@ -167,7 +175,24 @@
      enddo
      enddo
    elseif (trim(varname_frac(var)) == 'zorl' .or. &
-           trim(varname_frac(var)) == 'tsea') then ! check at open water only.
+           trim(varname_frac(var)) == 'tsea'  .or. &
+           trim(varname_frac(var)) == 'c_0'  .or. &
+           trim(varname_frac(var)) == 'c_d'  .or. &
+           trim(varname_frac(var)) == 'd_conv'  .or. &
+           trim(varname_frac(var)) == 'dt_cool'  .or. &
+           trim(varname_frac(var)) == 'qrain'  .or. &
+           trim(varname_frac(var)) == 'w_0'  .or. &
+           trim(varname_frac(var)) == 'w_d'  .or. &
+           trim(varname_frac(var)) == 'xs'  .or. &
+           trim(varname_frac(var)) == 'xt'  .or. &
+           trim(varname_frac(var)) == 'xtts'  .or. &
+           trim(varname_frac(var)) == 'xu'  .or. &
+           trim(varname_frac(var)) == 'xv'  .or. &
+           trim(varname_frac(var)) == 'xz'  .or. &
+           trim(varname_frac(var)) == 'xzts'  .or. &
+           trim(varname_frac(var)) == 'z_c'  .or. &
+           trim(varname_frac(var)) == 'zm'  .or. &
+           trim(varname_frac(var)) == 'tref') then ! check at open water only.
      do j = 1, jdim
      do i = 1, idim
        if (nint(slmsk(i,j)) == 0) then
@@ -178,7 +203,7 @@
        endif
      enddo
      enddo
-   else
+   else      ! Check at ice and open water.
      do j = 1, jdim
      do i = 1, idim
        if (nint(slmsk(i,j)) == 0 .or. nint(slmsk(i,j)) == 2) then
