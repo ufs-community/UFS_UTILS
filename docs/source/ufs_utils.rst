@@ -240,7 +240,7 @@ Program inputs and outputs
       * Global 30-arc-second University of Maryland land cover data.  Used to create the land-sea mask.
              * landcover30.fixed (unformatted binary). Located here `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_orog>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
       * Global 30-arc-second USGS GMTED2010 orography data.
-             * gmted2010.30sec.int (unformatted binary). Located here `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_orog>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_..
+             * gmted2010.30sec.int (unformatted binary). Located here `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_orog>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
       * 30-arc-second RAMP Antarctic terrain data (Radarsat Antarctic Mapping Project)
              * thirty.second.antarctic.new.bin (unformatted binary). Located here `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_orog>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
 
