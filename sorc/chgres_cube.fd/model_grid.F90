@@ -1350,6 +1350,7 @@
 !! @param [in] jdim  "j" dimension of tile
 !! @param [out] mask  land mask of tile
 !! @param [out] terrain  terrain height of tile
+!! @param [out] land_frac  The fraction of the grid point that is land.
 !! @author George Gayno NCEP/EMC   
  subroutine get_model_mask_terrain(orog_file, idim, jdim, mask, terrain, land_frac)
 

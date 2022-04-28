@@ -97,7 +97,7 @@
  
 
  logical, public                 :: fract_grid = .false.  !< When true, run for coupled grids (where model 
-                                                          !! points can be both land and non-land.
+                                                          !! points can be both land and non-land).
 
  ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
  ! Default is to use climatology instead
