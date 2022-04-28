@@ -84,7 +84,7 @@ Users may create their own global grids, or use the pre-defined files are locate
 	      * CRES.vegetation_greenness.tileX.nc (vegetation greenness)
 	      * CRES.vegetation_type.tileX.nc (vegetation type)
 
-      * FV3 vertical coordinate file.  Text file.  `Located here. <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_am/>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
+      * FV3 vertical coordinate file.  Text file.  `Located here <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_am/>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
 	      * global_hyblev.l$LEVS.txt
 
       * Input data files.  GRIB2, NEMSIO or NetCDF.  See the next section for how to find this data.
