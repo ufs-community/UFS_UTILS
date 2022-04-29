@@ -17,7 +17,7 @@ The following programs are used to create a grid.
       * regional_grid_esg
       * make_solo_mosaic
       * orog
-      * orog_gsl
+      * orog_gsl (optional)
       * inland (optional)
       * lakefrac (optional)
       * global_equiv_resol
