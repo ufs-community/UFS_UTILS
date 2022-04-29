@@ -285,7 +285,7 @@ The program reads the tile number (1-6 for global, 7 for stand-alone regional) a
 
 All in NetCDF.
 
-      * The tiled "grid" files (CRES_grid.tile#.nc) created by the make_hgrid or regional_esg_grid programs - (NetCDF)
+      * The tiled "grid" files (CRES_grid.tile#.nc) created by the make_hgrid or regional_esg_grid programs.
       * geo_em.d01.lat-lon.2.5m.HGT_M.nc - global topographic data on 2.5-minute lat-lon grid (interpolated from GMTED2010 30-second topographic data). `Located here <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_am>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
       * HGT.Beljaars_filtered.lat-lon.30s_res.nc - global topographic data on 30-second lat-lon grid (GMTED2010 data smoothed according to Beljaars et al. (QJRMS, 2004)). `Located here <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_am>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
 
