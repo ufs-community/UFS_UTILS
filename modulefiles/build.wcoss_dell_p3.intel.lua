@@ -43,7 +43,7 @@ load(pathJoin("esmf", esmf_ver))
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.2"
+g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
 
 ip_ver=os.getenv("ip_ver") or "3.3.3"
@@ -63,9 +63,6 @@ load(pathJoin("sfcio", sfcio_ver))
 
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
-
-wgrib2_ver=os.getenv("wgrib2_ver") or "2.0.8"
-load(pathJoin("wgrib2", wgrib2_ver))
 
 prepend_path("MODULEPATH", "/usrx/local/dev/modulefiles")
 

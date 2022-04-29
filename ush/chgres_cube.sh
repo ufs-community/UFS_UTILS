@@ -24,8 +24,7 @@ CRES=${CRES:-96}
 # FIXufs  - Location of ufs_utils root fixed data directory.
 # FIXfv3  - Location of target grid orography and 'grid' files.
 # FIXsfc  - Location of target grid surface climatological files.
-# FIXam   - Location of vertical coordinate definition file for target grid 
-#           and RAP grib2 input grid lat/lon definition file.
+# FIXam   - Location of vertical coordinate definition file for target grid.
 #----------------------------------------------------------------------------
 
 ufs_ver=${ufs_ver:-v1.0.0}
@@ -249,7 +248,6 @@ cat << EOF > ./fort.41
   mosaic_file_target_grid="${MOSAIC_FILE_TARGET_GRID}"
   fix_dir_target_grid="${FIXsfc}"
   orog_dir_target_grid="${FIXfv3}"
-  fix_dir_input_grid="${FIXam}"
   orog_files_target_grid="${OROG_FILES_TARGET_GRID}"
   vcoord_file_target_grid="${VCOORD_FILE}"
   mosaic_file_input_grid="${MOSAIC_FILE_INPUT_GRID}"
@@ -272,8 +270,8 @@ cat << EOF > ./fort.41
   convert_sfc=$CONVERT_SFC
   convert_nst=$CONVERT_NST
   input_type="${INPUT_TYPE}"
-  tracers=$TRACERS_TARGET
-  tracers_input=$TRACERS_INPUT
+  tracers=${TRACERS_TARGET}
+  tracers_input=${TRACERS_INPUT}
   regional=$REGIONAL
   halo_bndy=$HALO_BNDY
   halo_blend=$HALO_BLEND
