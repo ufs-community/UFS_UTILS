@@ -1,0 +1,188 @@
+.TH "module_nwp" 3 "Mon May 2 2022" "Version 1.5.0" "fvcom_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+module_nwp \- 
+.PP
+This module defines FV3LAM and FVCOM forecast data structure and the method to read and write observations from and to those data structures\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "type \fBfcst_nwp\fP"
+.br
+.ti -1c
+.RI "type \fBnwp_type\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBfinish_nwp\fP (this)"
+.br
+.RI "\fIFinish and deallocate\&. \fP"
+.ti -1c
+.RI "subroutine \fBinitial_nwp\fP (this, itype)"
+.br
+.RI "\fIThis subroutine defines the number of variables and their names for each NWP data type\&. \fP"
+.ti -1c
+.RI "subroutine \fBlist_initial_nwp\fP (this)"
+.br
+.RI "\fIThis subroutine lists the setup for NWP data that was done by the initial_nwp subroutine\&. \fP"
+.ti -1c
+.RI "subroutine \fBread_nwp\fP (this, filename, itype, numlon, numlat, numtimes, time_to_get, mask, sst, ice, sfcT, iceT)"
+.br
+.RI "\fIThis subroutine initializes arrays to receive the NWP data, and opens the file and gets the data\&. \fP"
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "type(ncio) \fBncdata\fP"
+.br
+.RI "\fIWrapper object for netCDF data file\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+This module defines FV3LAM and FVCOM forecast data structure and the method to read and write observations from and to those data structures\&. 
+
+It is used by ingest_FVCOM\&.f90\&.
+.PP
+This script is strongly based upon Eric James' (ESRL/GSL) work with HRRR/WRF to get FVCOM data into the model\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL, 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+17 Aug 2020 
+.RE
+.PP
+
+.PP
+Definition at line 15 of file module_nwp\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine module_nwp::finish_nwp (class(\fBfcst_nwp\fP)this)\fC [private]\fP"
+
+.PP
+Finish and deallocate\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP \fBfcst_nwp\fP object 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL 
+.RE
+.PP
+
+.PP
+Definition at line 279 of file module_nwp\&.f90\&.
+.PP
+Referenced by module_nwp::fcst_nwp::finish()\&.
+.SS "subroutine module_nwp::initial_nwp (class(\fBfcst_nwp\fP)this, character(len=6), intent(in)itype)\fC [private]\fP"
+
+.PP
+This subroutine defines the number of variables and their names for each NWP data type\&. The indices of the variables are also defined for later reference\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP \fBfcst_nwp\fP object 
+.br
+\fIitype\fP either ' FVCOM' or 'FV3LAM'\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL 
+.RE
+.PP
+
+.PP
+Definition at line 79 of file module_nwp\&.f90\&.
+.PP
+Referenced by module_nwp::fcst_nwp::initial()\&.
+.SS "subroutine module_nwp::list_initial_nwp (class(\fBfcst_nwp\fP)this)\fC [private]\fP"
+
+.PP
+This subroutine lists the setup for NWP data that was done by the initial_nwp subroutine\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP \fBfcst_nwp\fP object 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL 
+.RE
+.PP
+
+.PP
+Definition at line 163 of file module_nwp\&.f90\&.
+.PP
+Referenced by module_nwp::fcst_nwp::list_initial()\&.
+.SS "subroutine module_nwp::read_nwp (class(\fBfcst_nwp\fP)this, character(len=*), intent(in)filename, character(len=5), intent(in)itype, integer, intent(inout)numlon, integer, intent(inout)numlat, integer, intent(inout)numtimes, integer, intent(in)time_to_get, real(r_kind), dimension(:,:), intent(inout)mask, real(r_kind), dimension(:,:), intent(inout)sst, real(r_kind), dimension(:,:), intent(inout)ice, real(r_kind), dimension(:,:), intent(inout)sfcT, real(r_kind), dimension(:,:), intent(inout)iceT)\fC [private]\fP"
+
+.PP
+This subroutine initializes arrays to receive the NWP data, and opens the file and gets the data\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP \fBfcst_nwp\fP ojbect 
+.br
+\fIfilename\fP netcdf file name 
+.br
+\fIitype\fP either ' FVCOM' or 'FV3LAM' 
+.br
+\fInumlon\fP number of grid points in x-direction 
+.br
+\fInumlat\fP number of grid poinst in y-direction 
+.br
+\fInumtimes\fP length of time dimension 
+.br
+\fItime_to_get\fP integer of time dimension to read in 
+.br
+\fImask\fP Water points mask 
+.br
+\fIsst\fP Water surface temperature 
+.br
+\fIice\fP Ice concentration (%) 
+.br
+\fIsfcT\fP Skin Temperature 
+.br
+\fIiceT\fP Ice Skin Temperature
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL 
+.RE
+.PP
+
+.PP
+Definition at line 201 of file module_nwp\&.f90\&.
+.PP
+Referenced by module_nwp::fcst_nwp::read_n()\&.
+.SH "Field Documentation"
+.PP 
+.SS "type(ncio) module_nwp::ncdata\fC [private]\fP"
+
+.PP
+Wrapper object for netCDF data file\&. 
+.PP
+Definition at line 67 of file module_nwp\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fvcom_tools from the source code\&.

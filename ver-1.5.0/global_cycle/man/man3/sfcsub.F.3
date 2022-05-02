@@ -1,0 +1,2756 @@
+.TH "/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/sfcsub.F" 3 "Mon May 2 2022" "Version 1.5.0" "global_cycle" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/sfcsub.F \- 
+.PP
+This is a limited point version of surface program\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "module \fBsfccyc_module\fP"
+.br
+.RI "\fIThis program runs in two different modes: \fP"
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBalbocn\fP (albclm, slmask, albomx, len)"
+.br
+.RI "\fISet the albedo at open water points\&. \fP"
+.ti -1c
+.RI "subroutine \fBanaly\fP (lugb, iy, im, id, ih, fh, len, lsoil, slmask, fntsfa, fnweta, fnsnoa, fnzora, fnalba, fnaisa, fntg3a, fnscva, fnsmca, fnstca, fnacna, fnvega, fnveta, fnsota, fnvmna, fnvmxa, fnslpa, fnabsa, tsfanl, wetanl, snoanl, zoranl, albanl, aisanl, tg3anl, cvanl, cvbanl, cvtanl, smcanl, stcanl, slianl, scvanl, acnanl, veganl, vetanl, sotanl, alfanl, tsfan0, vmnanl, vmxanl, slpanl, absanl, kpdtsf, kpdwet, kpdsno, kpdsnd, kpdzor, kpdalb, kpdais, kpdtg3, kpdscv, kpdacn, kpdsmc, kpdstc, kpdveg, kprvet, kpdsot, kpdalf, kpdvmn, kpdvmx, kpdslp, kpdabs, irttsf, irtwet, irtsno, irtzor, irtalb, irtais, irttg3, irtscv, irtacn, irtsmc, irtstc, irtveg, irtvet, irtsot, irtalf, irtvmn, irtvmx, irtslp, irtabs, imsk, jmsk, slmskh, outlat, outlon, gaus, blno, blto, me, lanom)"
+.br
+.RI "\fIRead analysis fields\&. \fP"
+.ti -1c
+.RI "subroutine \fBanomint\fP (tsfan0, tsfclm, tsfcl0, tsfanl, len)"
+.br
+.RI "\fIAdd initial SST anomaly to date interpolated climatology\&. \fP"
+.ti -1c
+.RI "subroutine \fBclima\fP (lugb, iy, im, id, ih, fh, len, lsoil, slmask, fntsfc, fnwetc, fnsnoc, fnzorc, fnalbc, fnaisc, fntg3c, fnscvc, fnsmcc, fnstcc, fnacnc, fnvegc, fnvetc, fnsotc, fnvmnc, fnvmxc, fnslpc, fnabsc, tsfclm, tsfcl2, wetclm, snoclm, zorclm, albclm, aisclm, tg3clm, cvclm, cvbclm, cvtclm, cnpclm, smcclm, stcclm, sliclm, scvclm, acnclm, vegclm, vetclm, sotclm, alfclm, vmnclm, vmxclm, slpclm, absclm, kpdtsf, kpdwet, kpdsno, kpdzor, kpdalb, kpdais, kpdtg3, kpdscv, kpdacn, kpdsmc, kpdstc, kpdveg, kpdvet, kpdsot, kpdalf, tsfcl0, kpdvmn, kpdvmx, kpdslp, kpdabs, deltsfc, lanom, imsk, jmsk, slmskh, outlat, outlon, gaus, blno, blto, me, lprnt, iprnt, fnalbc2, ialb, tile_num_ch, i_index, j_index)"
+.br
+.RI "\fIDriver routine that reads in climatological data for a given time, and, if necessary, interpolates it to the model grid\&. \fP"
+.ti -1c
+.RI "subroutine \fBcount\fP (slimsk, sno, ijmax)"
+.br
+.RI "\fICounts the number of model points that are snow covered land, snow-free land, open water, sea ice, and snow covered sea ice\&. \fP"
+.ti -1c
+.RI "subroutine \fBdayoyr\fP (iyr, imo, idy, ldy)"
+.br
+.RI "\fICompute day of the year based on month and day\&. \fP"
+.ti -1c
+.RI "subroutine \fBfilanl\fP (tsfanl, tsfan2, wetanl, snoanl, zoranl, albanl, aisanl, tg3anl, cvanl, cvbanl, cvtanl, cnpanl, smcanl, stcanl, slianl, scvanl, veganl, vetanl, sotanl, alfanl, sihanl, sicanl, vmnanl, vmxanl, slpanl, absanl, tsfclm, tsfcl2, wetclm, snoclm, zorclm, albclm, aisclm, tg3clm, cvclm, cvbclm, cvtclm, cnpclm, smcclm, stcclm, sliclm, scvclm, vegclm, vetclm, sotclm, alfclm, sihclm, sicclm, vmnclm, vmxclm, slpclm, absclm, len, lsoil)"
+.br
+.RI "\fIFill in analysis arrays with climatology before reading analysis data\&. \fP"
+.ti -1c
+.RI "subroutine \fBfilfcs\fP (tsffcs, wetfcs, snofcs, zorfcs, albfcs, tg3fcs, cvfcs, cvbfcs, cvtfcs, cnpfcs, smcfcs, stcfcs, slifcs, aisfcs, vegfcs, vetfcs, sotfcs, alffcs, sihfcs, sicfcs, vmnfcs, vmxfcs, slpfcs, absfcs, tsfanl, wetanl, snoanl, zoranl, albanl, tg3anl, cvanl, cvbanl, cvtanl, cnpanl, smcanl, stcanl, slianl, aisanl, veganl, vetanl, sotanl, alfanl, sihanl, sicanl, vmnanl, vmxanl, slpanl, absanl, len, lsoil)"
+.br
+.RI "\fIFill in model grid guess arrays with analysis values if this is a dead start\&. \fP"
+.ti -1c
+.RI "subroutine \fBfixrda\fP (lugb, fngrib, kpds5, slmask, iy, im, id, ih, fh, gdata, len, iret, imsk, jmsk, slmskh, gaus, blno, blto, outlat, outlon, me)"
+.br
+.RI "\fIRead in grib1 analysis data for the requested date and horizontally interpolate to the model grid\&. \fP"
+.ti -1c
+.RI "subroutine \fBfixrdc\fP (lugb, fngrib, kpds5, kpds7, mon, slmask, gdata, len, iret, imsk, jmsk, slmskh, gaus, blno, blto, outlat, outlon, me)"
+.br
+.RI "\fIRead in grib1 climatology data for a specific month and and horizontally interpolate to the model grid\&. \fP"
+.ti -1c
+.RI "subroutine \fBfixrdc_tile\fP (filename_raw, tile_num_ch, i_index, j_index, kpds, var, mon, npts, me)"
+.br
+.RI "\fIReads in climatological data on the model grid tile for a given month\&. \fP"
+.ti -1c
+.RI "subroutine \fBfixrdg\fP (lugb, idim, jdim, fngrib, kpds5, gdata, gaus, blno, blto, me)"
+.br
+.RI "\fIRead a GRIB1 file\&. \fP"
+.ti -1c
+.RI "subroutine \fBga2la\fP (gauin, imxin, jmxin, regout, imxout, jmxout, wlon, rnlat, rlnout, rltout, gaus, blno, blto)"
+.br
+.RI "\fIInterpolation from lat/lon or gaussian grid to a lat/lon grid\&. \fP"
+.ti -1c
+.RI "subroutine \fBgaulat\fP (gaul, k)"
+.br
+.RI "\fICalculate gaussian latitudes\&. \fP"
+.ti -1c
+.RI "subroutine \fBgetarea\fP (kgds, dlat, dlon, rslat, rnlat, wlon, elon, ijordr, me)"
+.br
+.RI "\fIFor a given GRIB1 grid description section array, determine some grid specifications\&. \fP"
+.ti -1c
+.RI "subroutine \fBgetscv\fP (snofld, scvfld, len)"
+.br
+.RI "\fISet snow cover flag based on snow depth\&. \fP"
+.ti -1c
+.RI "subroutine \fBgetsmc\fP (wetfld, len, lsoil, smcfld, me)"
+.br
+.RI "\fISet soil moisture from soil wetness\&. \fP"
+.ti -1c
+.RI "subroutine \fBgetstc\fP (tsffld, tg3fld, slifld, len, lsoil, stcfld, tsfimx)"
+.br
+.RI "\fISet soil temperature and sea ice column temperature\&. \fP"
+.ti -1c
+.RI "subroutine \fBhmskrd\fP (lugb, imsk, jmsk, fnmskh, kpds5, slmskh, gausm, blnmsk, bltmsk, me)"
+.br
+.RI "\fIRead a high-resolution land mask\&. \fP"
+.ti -1c
+.RI "subroutine \fBla2ga\fP (regin, imxin, jmxin, rinlon, rinlat, rlon, rlat, inttyp, gauout, len, lmask, rslmsk, slmask, outlat, outlon, me)"
+.br
+.RI "\fIInterpolate data from a lat/lon grid to the model grid\&. \fP"
+.ti -1c
+.RI "subroutine \fBlandtyp\fP (vegtype, soiltype, slptype, slmask, len)"
+.br
+.RI "\fISet vegetation, soil and slope type at undefined model points\&. \fP"
+.ti -1c
+.RI "subroutine \fBmaxmin\fP (f, imax, kmax)"
+.br
+.RI "\fICompute the maxmimum and minimum of a field\&. \fP"
+.ti -1c
+.RI "subroutine \fBmerge\fP (len, lsoil, iy, im, id, ih, fh, deltsfc, sihfcs, sicfcs, vmnfcs, vmxfcs, slpfcs, absfcs, tsffcs, wetfcs, snofcs, zorfcs, albfcs, aisfcs, cvfcs, cvbfcs, cvtfcs, cnpfcs, smcfcs, stcfcs, slifcs, vegfcs, vetfcs, sotfcs, alffcs, sihanl, sicanl, vmnanl, vmxanl, slpanl, absanl, tsfanl, tsfan2, wetanl, snoanl, zoranl, albanl, aisanl, cvanl, cvbanl, cvtanl, cnpanl, smcanl, stcanl, slianl, veganl, vetanl, sotanl, alfanl, ctsfl, calbl, caisl, csnol, csmcl, czorl, cstcl, cvegl, ctsfs, calbs, caiss, csnos, csmcs, czors, cstcs, cvegs, ccv, ccvb, ccvt, ccnp, cvetl, cvets, csotl, csots, calfl, calfs, csihl, csihs, csicl, csics, cvmnl, cvmns, cvmxl, cvmxs, cslpl, cslps, cabsl, cabss, irttsf, irtwet, irtsno, irtzor, irtalb, irtais, irttg3, irtscv, irtacn, irtsmc, irtstc, irtveg, irtvmn, irtvmx, irtslp, irtabs, irtvet, irtsot, irtalf, landice, me)"
+.br
+.RI "\fIBlend the model forecast (or first guess) fields with the analysis/climatology\&. \fP"
+.ti -1c
+.RI "subroutine \fBmonitr\fP (lfld, fld, slimsk, sno, ijmax)"
+.br
+.RI "\fIDetermine the maximum and minimum values of a surface field at snow-free and snow covered land, open water, and snow-free and snow covered sea ice\&. \fP"
+.ti -1c
+.RI "subroutine \fBnetcdf_err\fP (error)"
+.br
+.RI "\fIPrint the error message for a given netCDF return code\&. \fP"
+.ti -1c
+.RI "subroutine \fBnewice\fP (slianl, slifcs, tsfanl, tsffcs, len, lsoil, sihnew, sicnew, sihanl, sicanl, albanl, snoanl, zoranl, smcanl, stcanl, albsea, snosea, zorsea, smcsea, smcice, tsfmin, tsfice, albice, zorice, tgice, rla, rlo, me)"
+.br
+.RI "\fIAdjust surface fields when ice melts or forms\&. \fP"
+.ti -1c
+.RI "subroutine \fBqcbyfc\fP (tsffcs, snofcs, qctsfs, qcsnos, qctsfi, len, lsoil, snoanl, aisanl, slianl, tsfanl, albanl, zoranl, smcanl, smcclm, tsfsmx, albomx, zoromx, me)"
+.br
+.RI "\fIQuality control analysis fields using the first guess\&. \fP"
+.ti -1c
+.RI "subroutine \fBqcmxice\fP (glacir, amxice, len, me)"
+.br
+.RI "\fIQuality control maximum ice extent\&. \fP"
+.ti -1c
+.RI "subroutine \fBqcmxmn\fP (ttl, fld, slimsk, sno, iceflg, fldlmx, fldlmn, fldomx, fldomn, fldimx, fldimn, fldjmx, fldjmn, fldsmx, fldsmn, epsfld, rla, rlo, len, mode, percrit, lgchek, me)"
+.br
+.RI "\fIRange check a field\&. \fP"
+.ti -1c
+.RI "subroutine \fBqcsice\fP (ais, glacir, amxice, aicice, aicsea, sllnd, slmask, rla, rlo, len, me)"
+.br
+.RI "\fICheck the sea ice cover mask against the land-sea mask\&. \fP"
+.ti -1c
+.RI "subroutine \fBqcsli\fP (slianl, slifcs, len, me)"
+.br
+.RI "\fICheck consistency between the forecast and analysis land-sea-ice mask\&. \fP"
+.ti -1c
+.RI "subroutine \fBqcsnow\fP (snoanl, slmask, aisanl, glacir, len, snoval, landice, me)"
+.br
+.RI "\fIQuality control snow at the model points\&. \fP"
+.ti -1c
+.RI "subroutine \fBrof01\fP (aisfld, len, op, crit)"
+.br
+.RI "\fIRound a field up to one or down to zero\&. \fP"
+.ti -1c
+.RI "subroutine \fBscale\fP (fld, len, scl)"
+.br
+.RI "\fIMultiply a field by a scaling factor\&. \fP"
+.ti -1c
+.RI "subroutine \fBsetlsi\fP (slmask, aisfld, len, aicice, slifld)"
+.br
+.RI "\fISet land-sea-ice mask at sea ice\&. \fP"
+.ti -1c
+.RI "subroutine \fBsetrmsk\fP (kpds5, slmask, igaul, jgaul, wlon, rnlat, data, imax, jmax, rlnout, rltout, lmask, rslmsk, gaus, blno, blto, kgds1, kpds4, lbms)"
+.br
+.RI "\fISet the mask for the input data\&. \fP"
+.ti -1c
+.RI "subroutine \fBsetzro\fP (fld, eps, len)"
+.br
+.RI "\fISet a field to zero if it is less than a threshold\&. \fP"
+.ti -1c
+.RI "subroutine \fBsfccycle\fP (lugb, len, lsoil, sig1t, deltsfc, iy, im, id, ih, fh, rla, rlo, slmask, orog, orog_uf, use_ufo, nst_anl, sihfcs, sicfcs, sitfcs, swdfcs, slcfcs, vmnfcs, vmxfcs, slpfcs, absfcs, tsffcs, snofcs, zorfcs, albfcs, tg3fcs, cnpfcs, smcfcs, stcfcs, slifcs, aisfcs, vegfcs, vetfcs, sotfcs, alffcs, cvfcs, cvbfcs, cvtfcs, me, nlunit, sz_nml, input_nml_file, ialb, isot, ivegsrc, tile_num_ch, i_index, j_index)"
+.br
+.RI "\fISurface cycling driver routine\&. \fP"
+.ti -1c
+.RI "subroutine \fBsnodpth\fP (scvanl, slianl, tsfanl, snoclm, glacir, snwmax, snwmin, landice, len, snoanl, me)"
+.br
+.RI "\fIEstimate snow depth at glacial, land and sea ice points\&. \fP"
+.ti -1c
+.RI "subroutine \fBsnodpth2\fP (glacir, snwmax, snoanl, len, me)"
+.br
+.RI "\fIEnsure deep snow pack at permanent glacial points\&. \fP"
+.ti -1c
+.RI "subroutine \fBsnosfc\fP (snoanl, tsfanl, tsfsmx, len, me)"
+.br
+.RI "\fICheck skin temperature at points with snow\&. \fP"
+.ti -1c
+.RI "subroutine \fBsubst\fP (data, imax, jmax, dlon, dlat, ijordr)"
+.br
+.RI "\fITake an array of data on a lat/lon based grid and rearrange it so the corner point is in the 'lower left' and adjacent points in the 'i' direction are consecutive\&. \fP"
+.ti -1c
+.RI "subroutine \fBtsfcor\fP (tsfc, orog, slmask, umask, len, rlapse)"
+.br
+.RI "\fIAdjust skin temperature or SST for terrain\&. \fP"
+.ti -1c
+.RI "subroutine \fBusesgt\fP (sig1t, slianl, tg3anl, len, lsoil, tsfanl, stcanl, tsfimx)"
+.br
+.RI "\fISet soil temperature and sea ice column temperature for a dead start\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is a limited point version of surface program\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi Mark Iredell NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBsfcsub\&.F\fP\&.
+.SH "Data Type Documentation"
+.PP 
+.SH "module sfccyc_module"
+.PP 
+This program runs in two different modes: 
+
+
+.IP "1." 4
+analysis mode (fh=0\&.) this program merges climatology, analysis and forecast guess to create new surface fields\&. if analysis file is given, the program uses it if date of the analysis matches with iy,im,id,ih (see note below)\&.
+.IP "2." 4
+forecast mode (fh\&.gt\&.0\&.) this program interpolates climatology to the date corresponding to the forecast hour\&. if surface analysis file is given, for the corresponding dates, the program will use it\&.
+.PP
+.PP
+if the date of the analysis does not match given iy,im,id,ih, (and fh), the program searches an old analysis by going back 6 hours, then 12 hours, then one day upto nrepmx days (parameter statement in the subrotine fixrd\&. now defined as 8)\&. this allows the user to provide non-daily analysis to be used\&. if matching field is not found, the forecast guess will be used\&.
+.PP
+use of a combined earlier surface analyses and current analysis is not allowed (as was done in the old version for snow analysis in which old snow analysis is used in combination with initial guess), except for sea surface temperature\&. for sst anolmaly interpolation, you need to set lanom=\&.true\&. and must provide sst analysis at initial time\&.
+.PP
+if you want to do complex merging of past and present surface field analysis, you need to create a separate file that contains daily surface field\&.
+.PP
+for a dead start, do not supply fnbgsi or set fnbgsi=' '
+.PP
+.IP "\(bu" 2
+lugb is the unit number used in this subprogram
+.IP "\(bu" 2
+len \&.\&.\&. number of points on which sfccyc operates
+.IP "\(bu" 2
+lsoil \&.\&. number of soil layers (2 as of april, 1994)
+.IP "\(bu" 2
+iy,im,id,ih \&.\&. year, month, day, and hour of initial state\&.
+.IP "\(bu" 2
+fh \&.\&. forecast hour
+.IP "\(bu" 2
+rla, rlo -- latitude and longitudes of the len points
+.IP "\(bu" 2
+sig1t \&.\&. sigma level 1 temperature for dead start\&. should be on gaussian grid\&. if not dead start, no need for dimension but set to zero as in the example below\&.
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+M\&. Iredell, xuli, Hang Lei, George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 46 of file sfcsub\&.F\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+integer \fIkpdabs\fP GRIB1 parameter number of maximum snow albedo\&. 
+.br
+.PP
+integer \fIkpdabs_0\fP GRIB1 parameter number of legacy maximum snow albedo\&. 
+.br
+.PP
+integer \fIkpdabs_1\fP GRIB1 parameter number of modis-based maximum snow albedo\&. 
+.br
+.PP
+integer \fIkpdacn\fP GRIB1 parameter number of sea ice concentration\&. 
+.br
+.PP
+integer \fIkpdais\fP GRIB1 parameter number of roughness length\&. 
+.br
+.PP
+integer, dimension(4) \fIkpdalb\fP GRIB1 parameter number of 4-component snow-free albedo\&. 
+.br
+.PP
+integer, dimension(4), parameter \fIkpdalb_0\fP GRIB1 parameter numbers for brigleb snow-free albedo\&. 
+.br
+.PP
+integer, dimension(4), parameter \fIkpdalb_1\fP GRIB1 parameter numbers for modis snow-free albedo\&. 
+.br
+.PP
+integer, dimension(2), parameter \fIkpdalf\fP GRIB1 parameter numbers of fraction for strongly/weakly zenith angle dependent albedo\&. 
+.br
+.PP
+integer \fIkpdgla\fP GRIB1 parameter number of glacial ice\&. 
+.br
+.PP
+integer \fIkpdmsk\fP GRIB1 parameter number of land mask\&. 
+.br
+.PP
+integer \fIkpdmxi\fP GRIB1 parameter number of maximum ice extent\&. 
+.br
+.PP
+integer \fIkpdoro\fP GRIB1 parameter number of orography\&. 
+.br
+.PP
+integer \fIkpdplr\fP GRIB1 parameter number of plant resistance\&. 
+.br
+.PP
+integer \fIkpdscv\fP GRIB1 parameter number of snow cover\&. 
+.br
+.PP
+integer \fIkpdslp\fP GRIB1 parameter number of slope type\&. 
+.br
+.PP
+integer \fIkpdsmc\fP GRIB1 parameter number of soil moisture\&. 
+.br
+.PP
+integer \fIkpdsnd\fP GRIB1 parameter number of physical snow depth\&. 
+.br
+.PP
+integer \fIkpdsno\fP GRIB1 parameter number of liquid equivalent snow depth\&. 
+.br
+.PP
+integer \fIkpdsot\fP GRIB1 parameter number of soil type\&. 
+.br
+.PP
+integer \fIkpdstc\fP GRIB1 parameter number of soil temperature\&. 
+.br
+.PP
+integer \fIkpdtg3\fP GRIB1 parameter number of soil substrate temperature\&. 
+.br
+.PP
+integer \fIkpdtsf\fP GRIB1 parameter number of skin temperature/SST\&. 
+.br
+.PP
+integer \fIkpdveg\fP GRIB1 parameter number of vegetation greenness\&. 
+.br
+.PP
+integer \fIkpdvet\fP GRIB1 parameter number of vegetation type\&. 
+.br
+.PP
+integer \fIkpdvmn\fP GRIB1 parameter number of minimum vegetation greenness\&. 
+.br
+.PP
+integer \fIkpdvmx\fP GRIB1 parameter number of maximum vegetation greenness\&. 
+.br
+.PP
+integer \fIkpdwet\fP GRIB1 parameter number of soil wetness\&. 
+.br
+.PP
+integer \fIkpdzor\fP GRIB1 parameter number of physical snow depth\&. 
+.br
+.PP
+integer, parameter \fImdata\fP Maximum number of input data points\&. 
+.br
+.PP
+integer \fIsoil_type_landice\fP Soil type category at permanent land-ice points\&. 
+.br
+.PP
+integer \fIveg_type_landice\fP Vegetation type category at permanent land-ice points\&. 
+.br
+.PP
+integer, parameter \fIxdata\fP Maximum 'i' dimension of input data\&. 
+.br
+.PP
+integer, parameter \fIydata\fP Maximum 'j' dimension of input data\&. 
+.br
+.PP
+.RE
+.PP
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine albocn (real (kind=kind_io8), dimension(len,4)albclm, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8)albomx, integerlen)"
+
+.PP
+Set the albedo at open water points\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalbclm\fP Albedo\&. 
+.br
+\fIslmask\fP The land-sea-ice mask\&. 
+.br
+\fIalbomx\fP The albedo at open water\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 6625 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine analy (lugb, iy, im, id, ih, real (kind=kind_io8)fh, len, lsoil, real (kind=kind_io8), dimension(len)slmask, character*500fntsfa, character*500fnweta, character*500fnsnoa, character*500fnzora, character*500fnalba, character*500fnaisa, character*500fntg3a, character*500fnscva, character*500fnsmca, character*500fnstca, character*500fnacna, character*500fnvega, character*500fnveta, character*500fnsota, fnvmna, fnvmxa, fnslpa, fnabsa, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)wetanl, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension(len)tg3anl, real (kind=kind_io8), dimension (len)cvanl, real (kind=kind_io8), dimension(len)cvbanl, real (kind=kind_io8), dimension(len)cvtanl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)scvanl, real (kind=kind_io8), dimension(len)acnanl, real (kind=kind_io8), dimension(len)veganl, real (kind=kind_io8), dimension(len)vetanl, real (kind=kind_io8), dimension(len)sotanl, real (kind=kind_io8), dimension(len,2)alfanl, real (kind=kind_io8), dimension(len)tsfan0, vmnanl, vmxanl, slpanl, absanl, kpdtsf, kpdwet, kpdsno, kpdsnd, kpdzor, integer, dimension(4)kpdalb, kpdais, kpdtg3, kpdscv, kpdacn, kpdsmc, kpdstc, kpdveg, kprvet, kpdsot, integer, dimension(2)kpdalf, kpdvmn, kpdvmx, kpdslp, kpdabs, irttsf, irtwet, integerirtsno, integerirtzor, integerirtalb, integerirtais, integerirttg3, integerirtscv, integerirtacn, integerirtsmc, integerirtstc, integerirtveg, integerirtvet, integerirtsot, integerirtalf, irtvmn, irtvmx, irtslp, irtabs, imsk, jmsk, real (kind=kind_io8), dimension(imsk,jmsk)slmskh, real (kind=kind_io8), dimension(len)outlat, real (kind=kind_io8), dimension(len)outlon, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, integerme, logicallanom)"
+
+.PP
+Read analysis fields\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlugb\fP Fortran unit number for analysis files\&. 
+.br
+\fIiy\fP Cycle year\&. 
+.br
+\fIim\fP Cycle month\&. 
+.br
+\fIid\fP Cycle day\&. 
+.br
+\fIih\fP Cycle hour\&. 
+.br
+\fIfh\fP Forecast hour\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.br
+\fIslmask\fP Model land-sea mask\&. 
+.br
+\fIfntsfa\fP SST analysis file\&. 
+.br
+\fIfnweta\fP Soil wetness analysis file\&. 
+.br
+\fIfnsnoa\fP Snow analysis file 
+.br
+\fIfnzora\fP Roughness length analysis file\&. 
+.br
+\fIfnalba\fP Snow-free albedo analysis file\&. 
+.br
+\fIfnaisa\fP Sea ice mask analysis file\&. 
+.br
+\fIfntg3a\fP Soil substrate analysis file\&. 
+.br
+\fIfnscva\fP Snow cover analysis file\&. 
+.br
+\fIfnsmca\fP Soil moisture analysis file\&. 
+.br
+\fIfnstca\fP Soil temperature analysis file\&. 
+.br
+\fIfnacna\fP Sea ice concentration analysis file\&. 
+.br
+\fIfnvega\fP Vegetation greenness analysis file\&. 
+.br
+\fIfnveta\fP Vegetation type analysis file\&. 
+.br
+\fIfnsota\fP Soil type analysis file\&. 
+.br
+\fIfnvmna\fP Minimum vegetation greenness analysis file\&. 
+.br
+\fIfnvmxa\fP Maximum vegetation greenness analysis file\&. 
+.br
+\fIfnslpa\fP Slope type analysis file\&. 
+.br
+\fIfnabsa\fP Maximum snow albedo analysis file\&. 
+.br
+\fItsfanl\fP Skin temperature/SST analysis on model grid\&. 
+.br
+\fIwetanl\fP Soil wetness analysis on model grid\&. 
+.br
+\fIsnoanl\fP Snow analysis on model grid\&. 
+.br
+\fIzoranl\fP Roughness length analysis on model grid\&. 
+.br
+\fIalbanl\fP Snow-free albedo analysis on model grid\&. 
+.br
+\fIaisanl\fP Sea ice mask analysis on model grid\&. 
+.br
+\fItg3anl\fP Soil substrate analysis on model grid\&. 
+.br
+\fIcvanl\fP Convective cloud cover analysis on model grid\&. 
+.br
+\fIcvbanl\fP Convective cloud base analysis on model grid\&. 
+.br
+\fIcvtanl\fP Convective cloud top analysis on model grid\&. 
+.br
+\fIsmcanl\fP Soil moisture analysis on model grid\&. 
+.br
+\fIstcanl\fP Soil temperature analysis on model grid\&. 
+.br
+\fIslianl\fP Not used\&. 
+.br
+\fIscvanl\fP Snow cover analysis on model grid\&. 
+.br
+\fIacnanl\fP Sea ice concentration analysis on model grid\&. 
+.br
+\fIveganl\fP Vegetation greenness analysis on model grid\&. 
+.br
+\fIvetanl\fP Vegetation type analysis on model grid\&. 
+.br
+\fIsotanl\fP Soil type analysis on model grid\&. 
+.br
+\fIalfanl\fP Analysis of fraction for strongly and weakly zenith angle dependent albedo on model grid\&. 
+.br
+\fItsfan0\fP SST analysis at forecast hour 0 on model grid\&. 
+.br
+\fIvmnanl\fP Minimum vegetation greenness analysis on model grid\&. 
+.br
+\fIvmxanl\fP Maximum vegetation greenness analysis on model grid\&. 
+.br
+\fIslpanl\fP Slope type analysis on model grid\&. 
+.br
+\fIabsanl\fP Maximum snow albedo analysis on model grid\&. 
+.br
+\fIkpdtsf\fP Grib parameter number of skin temperature/SST\&. 
+.br
+\fIkpdwet\fP Grib parameter number of soil wetness\&. 
+.br
+\fIkpdsno\fP Grib parameter number of liquid equivalent snow depth\&. 
+.br
+\fIkpdsnd\fP Grib parameter number of physical snow depth\&. 
+.br
+\fIkpdzor\fP Grib parameter number of roughness length\&. 
+.br
+\fIkpdalb\fP Grib parameter number of snow-free albedo\&. 
+.br
+\fIkpdais\fP Grib parameter number of sea ice mask\&. 
+.br
+\fIkpdtg3\fP Grib parameter number of soil substrate temperature\&. 
+.br
+\fIkpdscv\fP Grib parameter number of snow cover\&. 
+.br
+\fIkpdacn\fP Grib parameter number of sea ice concentration\&. 
+.br
+\fIkpdsmc\fP Grib parameter number of soil moisture\&. 
+.br
+\fIkpdstc\fP Grib parameter number of soil temperature\&. 
+.br
+\fIkpdveg\fP Grib parameter number of vegetation greenness\&. 
+.br
+\fIkprvet\fP Grib parameter number of vegetation type\&. 
+.br
+\fIkpdsot\fP Grib parameter number of soil type\&. 
+.br
+\fIkpdalf\fP Grib parameter number for fraction for strongly and weakly zenith angle dependent albedo\&. 
+.br
+\fIkpdvmn\fP Grib parameter number of minimum vegetation greenness\&. 
+.br
+\fIkpdvmx\fP Grib parameter number of maximum vegetation greenness\&. 
+.br
+\fIkpdslp\fP Grib parameter number of slope type\&. 
+.br
+\fIkpdabs\fP Grib parameter number of maximum snow albedo\&. 
+.br
+\fIirttsf\fP Return code from read of skin temperature/SST analysis file\&. 
+.br
+\fIirtwet\fP Return code from read of soil wetness analysis file\&. 
+.br
+\fIirtsno\fP Return code from read of snow analysis file\&. 
+.br
+\fIirtzor\fP Return code from read of roughness length file\&. 
+.br
+\fIirtalb\fP Return code from read of snow-free albedo analysis file\&. 
+.br
+\fIirtais\fP Return code from read of ice mask analysis file\&. 
+.br
+\fIirttg3\fP Return code from read of soil substrate temperature analysis file\&. 
+.br
+\fIirtscv\fP Return code from read of snow cover analysis file\&. 
+.br
+\fIirtacn\fP Return code from read of sea ice concentration analysis file\&. 
+.br
+\fIirtsmc\fP Return code from read of soil moisture analysis file\&. 
+.br
+\fIirtstc\fP Return code from read of soil temperature analysis file\&. 
+.br
+\fIirtveg\fP Return code from read of vegetation greenness analysis file\&. 
+.br
+\fIirtvet\fP Return code from read of vegetation type analysis file\&. 
+.br
+\fIirtsot\fP Return code from read of soil type analysis file\&. 
+.br
+\fIirtalf\fP Return code from read of file containing fraction for strongly and weakly zenith angle dependent albedo\&. 
+.br
+\fIirtvmn\fP Return code from read of minimum vegetation greenness analysis file\&. 
+.br
+\fIirtvmx\fP Return code from read of maximum vegetation greenness analysis file\&. 
+.br
+\fIirtslp\fP Return code from read of slope type analysis file\&. 
+.br
+\fIirtabs\fP Return code from read of maximum snow albedo analysis file\&. 
+.br
+\fIimsk\fP 'i' dimension of the high-res mask used for analysis data without a bitmap\&. 
+.br
+\fIjmsk\fP 'j' dimension of the high-res mask used for analysis data without a bitmap\&. 
+.br
+\fIslmskh\fP The high-resolution mask used for analysis data without a bitmap\&. 
+.br
+\fIoutlat\fP Model latitudes 
+.br
+\fIoutlon\fP Model longitudes 
+.br
+\fIgaus\fP When true, the high-res mask is on a gaussian grid\&. 
+.br
+\fIblno\fP Corner point longitude of the high-res mask\&. 
+.br
+\fIblto\fP Corner point latitude of the high-res mask\&. 
+.br
+\fIme\fP MPI task number\&. 
+.br
+\fIlanom\fP When true, do sst anomaly interpolation\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 4072 of file sfcsub\&.F\&.
+.PP
+References fixrda()\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine anomint (real (kind=kind_io8), dimension(len)tsfan0, real (kind=kind_io8), dimension(len)tsfclm, real (kind=kind_io8), dimension(len)tsfcl0, real (kind=kind_io8), dimension(len)tsfanl, integerlen)"
+
+.PP
+Add initial SST anomaly to date interpolated climatology\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItsfan0\fP Skin temperature/SST analysis at initial time\&. 
+.br
+\fItsfclm\fP Skin temperature/SST climatology\&. 
+.br
+\fItsfcl0\fP Skin temperature/SST climatology at initial time\&. 
+.br
+\fItsfanl\fP Updated skin temperature/SST\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 7699 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine clima (integerlugb, integeriy, integerim, integerid, integerih, real (kind=kind_io8)fh, integerlen, integerlsoil, real (kind=kind_io8), dimension(len)slmask, character*500fntsfc, character*500fnwetc, character*500fnsnoc, character*500fnzorc, character*500fnalbc, character*500fnaisc, character*500fntg3c, character*500fnscvc, character*500fnsmcc, character*500fnstcc, character*500fnacnc, character*500fnvegc, character*500fnvetc, character*500fnsotc, character*500fnvmnc, character*500fnvmxc, character*500fnslpc, character*500fnabsc, real (kind=kind_io8), dimension(len)tsfclm, real (kind=kind_io8), dimension(len)tsfcl2, real (kind=kind_io8), dimension(len)wetclm, real (kind=kind_io8), dimension(len)snoclm, real (kind=kind_io8), dimension(len)zorclm, real (kind=kind_io8), dimension(len,4)albclm, real (kind=kind_io8), dimension(len)aisclm, real (kind=kind_io8), dimension(len)tg3clm, real (kind=kind_io8), dimension (len)cvclm, real (kind=kind_io8), dimension(len)cvbclm, real (kind=kind_io8), dimension(len)cvtclm, real (kind=kind_io8), dimension(len)cnpclm, real (kind=kind_io8), dimension(len,lsoil)smcclm, real (kind=kind_io8), dimension(len,lsoil)stcclm, real (kind=kind_io8), dimension(len)sliclm, real (kind=kind_io8), dimension(len)scvclm, real (kind=kind_io8), dimension(len)acnclm, real (kind=kind_io8), dimension(len)vegclm, real (kind=kind_io8), dimension(len)vetclm, real (kind=kind_io8), dimension(len)sotclm, real (kind=kind_io8), dimension(len,2)alfclm, real (kind=kind_io8), dimension(len)vmnclm, real (kind=kind_io8), dimension(len)vmxclm, real (kind=kind_io8), dimension(len)slpclm, real (kind=kind_io8), dimension(len)absclm, integerkpdtsf, integerkpdwet, integerkpdsno, integerkpdzor, integer, dimension(4)kpdalb, integerkpdais, integerkpdtg3, integerkpdscv, integerkpdacn, integerkpdsmc, integerkpdstc, integerkpdveg, integerkpdvet, integerkpdsot, integer, dimension(2)kpdalf, real (kind=kind_io8), dimension(len)tsfcl0, integerkpdvmn, integerkpdvmx, integerkpdslp, integerkpdabs, real (kind=kind_io8)deltsfc, logicallanom, integerimsk, integerjmsk, real (kind=kind_io8), dimension(imsk,jmsk)slmskh, real (kind=kind_io8), dimension(len)outlat, real (kind=kind_io8), dimension(len)outlon, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, integerme, logicallprnt, integeriprnt, character*500fnalbc2, integerialb, character(len=*), intent(in)tile_num_ch, integer, dimension(len), intent(in)i_index, integer, dimension(len), intent(in)j_index)"
+
+.PP
+Driver routine that reads in climatological data for a given time, and, if necessary, interpolates it to the model grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlugb\fP Fortran unit number of GRIB1 climatological data\&. 
+.br
+\fIiy\fP Cycle year\&. 
+.br
+\fIim\fP Cycle month\&. 
+.br
+\fIid\fP Cycle day\&. 
+.br
+\fIih\fP Cycle hour\&. 
+.br
+\fIfh\fP Forecast hour\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.br
+\fIslmask\fP Model land-sea-ice mask\&. 
+.br
+\fIfntsfc\fP Climatological SST file\&. 
+.br
+\fIfnwetc\fP Climatological soil wetness file\&. 
+.br
+\fIfnsnoc\fP Climatological snow depth file\&. 
+.br
+\fIfnzorc\fP Climatological roughness length file\&. Or 'igbp' to use igbp vegetation type lookup table\&. Or 'sib' to use sib vegeation type lookup table\&. 
+.br
+\fIfnalbc\fP Climatological snow-free albedo file\&. 
+.br
+\fIfnaisc\fP Climatological sea ice mask file\&. 
+.br
+\fIfntg3c\fP Climatological soil substrate temperature file\&. 
+.br
+\fIfnscvc\fP Climatological snow cover file\&. 
+.br
+\fIfnsmcc\fP Climatological soil moisture file\&. 
+.br
+\fIfnstcc\fP Climatological soil temperature file\&. 
+.br
+\fIfnacnc\fP Climatological sea ice concentration file\&. 
+.br
+\fIfnvegc\fP Climatological vegetation greenness file\&. 
+.br
+\fIfnvetc\fP Climatological vegetation type file\&. 
+.br
+\fIfnsotc\fP Climatological soil type file\&. 
+.br
+\fIfnvmnc\fP Climatological minimum vegetation greenness file\&. 
+.br
+\fIfnvmxc\fP Climatological maximum vegetation greenness file\&. 
+.br
+\fIfnslpc\fP Climatological slope type file\&. 
+.br
+\fIfnabsc\fP Climatological maximum snow albedo file\&. 
+.br
+\fItsfclm\fP Climatological skin temperature/SST on model grid\&. 
+.br
+\fItsfcl2\fP Climatological skin temperature/SST on model grid at time minus deltsfc\&. 
+.br
+\fIwetclm\fP Climatological soil wetness on model grid\&. 
+.br
+\fIsnoclm\fP Climatological liquid equivalent snow depth on model grid\&. 
+.br
+\fIzorclm\fP Climatological roughness length on model grid\&. 
+.br
+\fIalbclm\fP Climatological snow-free albedo on model grid\&. 
+.br
+\fIaisclm\fP Climatological sea ice mask on model grid\&. 
+.br
+\fItg3clm\fP Climatological soil substrate temperature on model grid\&. 
+.br
+\fIcvclm\fP Climatological convective cloud cover on model grid\&. 
+.br
+\fIcvbclm\fP Climatological convective cloud base on model grid\&. 
+.br
+\fIcvtclm\fP Climatological convective cloud top on model grid\&. 
+.br
+\fIcnpclm\fP Climatological canopy water content on model grid\&. 
+.br
+\fIsmcclm\fP Climatological soil moisture on model grid\&. 
+.br
+\fIstcclm\fP Climatologcial soil temperature on model grid\&. 
+.br
+\fIsliclm\fP Climatological model land-sea-ice mask\&. 
+.br
+\fIscvclm\fP Climatological snow cover on model grid\&. 
+.br
+\fIacnclm\fP Climatological sea ice concentration on model grid\&. 
+.br
+\fIvegclm\fP Climatological vegetation greenness on model grid\&. 
+.br
+\fIvetclm\fP Climatological vegetation type on model grid\&. 
+.br
+\fIsotclm\fP Climatological soil type on model grid\&. 
+.br
+\fIalfclm\fP Climatological fraction for strongly and weakly zenith angle dependent albedo on model grid\&. 
+.br
+\fIvmnclm\fP Climatological minimum vegetation greenness on model grid\&. 
+.br
+\fIvmxclm\fP Climatological maximum vegetation greenness on model grid\&. 
+.br
+\fIslpclm\fP Climatological slope type on model grid\&. 
+.br
+\fIabsclm\fP Climatological maximum snow albedo on model grid\&. 
+.br
+\fIkpdtsf\fP Grib parameter number of skin temperature/SST\&. 
+.br
+\fIkpdwet\fP Grib parameter number of soil wetness\&. 
+.br
+\fIkpdsno\fP Grib parameter number of liquid equivalent snow depth\&. 
+.br
+\fIkpdzor\fP Grib parameter number of roughness length\&. 
+.br
+\fIkpdalb\fP Grib parameter number of snow-free albedo\&. 
+.br
+\fIkpdais\fP Grib parameter number of sea ice mask\&. 
+.br
+\fIkpdtg3\fP Grib parameter number of soil substrate temperature\&. 
+.br
+\fIkpdscv\fP Grib parameter number of snow cover\&. 
+.br
+\fIkpdacn\fP Grib parameter number of sea ice concentration\&. 
+.br
+\fIkpdsmc\fP Grib parameter number of soil moisture\&. 
+.br
+\fIkpdstc\fP Grib parameter number of soil temperature\&. 
+.br
+\fIkpdveg\fP Grib parameter number of vegetation greenness\&. 
+.br
+\fIkpdvet\fP Grib parameter number of vegetation type\&. 
+.br
+\fIkpdsot\fP Grib parameter number of soil type\&. 
+.br
+\fIkpdalf\fP Grib parameter number for fraction for strongly and weakly zenith angle dependent albedo\&. 
+.br
+\fItsfcl0\fP Climatological SST at forecast hour 0\&. 
+.br
+\fIkpdvmn\fP Grib parameter number of minimum vegetation greenness\&. 
+.br
+\fIkpdvmx\fP Grib parameter number of maximum vegetation greenness\&. 
+.br
+\fIkpdslp\fP Grib parameter number of slope type\&. 
+.br
+\fIkpdabs\fP Grib parameter number of maximum snow albedo\&. 
+.br
+\fIdeltsfc\fP Cycling frequency in hours\&. 
+.br
+\fIlanom\fP When true, do sst anomaly interpolation\&. 
+.br
+\fIimsk\fP 'i' dimension of the high-res mask used for climatological data without a bitmap\&. 
+.br
+\fIjmsk\fP 'j' dimension of the high-res mask used for climatological data without a bitmap\&. 
+.br
+\fIslmskh\fP The high-resolution mask used for climatological data without a bitmap\&. 
+.br
+\fIoutlat\fP Model latitudes 
+.br
+\fIoutlon\fP Model longitudes 
+.br
+\fIgaus\fP When true, the high-res mask is on a gaussian grid\&. 
+.br
+\fIblno\fP Corner point longitude of the high-res mask\&. 
+.br
+\fIblto\fP Corner point latitude of the high-res mask\&. 
+.br
+\fIme\fP MPI task number\&. 
+.br
+\fIlprnt\fP Turn of diagnostic print\&. 
+.br
+\fIiprnt\fP Index of diagnotic print point\&. 
+.br
+\fIfnalbc2\fP File containing climatological fraction for strongly and weakly zenith angle dependent albedo\&. 
+.br
+\fIialb\fP Use modis albedo when '1'\&. Use brigleb when '0'\&. 
+.br
+\fItile_num_ch\fP Model tile number to process\&. 
+.br
+\fIi_index\fP The 'i' indices of the model grid to process\&. 
+.br
+\fIj_index\fP The 'j' indices of the model grid to process\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 7828 of file sfcsub\&.F\&.
+.PP
+References fixrdc(), and fixrdc_tile()\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine count (real (kind=kind_io8), dimension(1)slimsk, real (kind=kind_io8), dimension(1)sno, integerijmax)"
+
+.PP
+Counts the number of model points that are snow covered land, snow-free land, open water, sea ice, and snow covered sea ice\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIslimsk\fP The land-sea-ice mask\&. 
+.br
+\fIsno\fP Snow 
+.br
+\fIijmax\fP Number of model points to process\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 2626 of file sfcsub\&.F\&.
+.PP
+Referenced by fixrdc_tile(), and read_write_data::read_salclm_gfs_nc()\&.
+.SS "subroutine dayoyr (integeriyr, integerimo, integeridy, integerldy)"
+
+.PP
+Compute day of the year based on month and day\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIiyr\fP Year\&. 
+.br
+\fIimo\fP Month\&. 
+.br
+\fIidy\fP Day\&. 
+.br
+\fIldy\fP Day of the year\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Mark Iredell NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 2761 of file sfcsub\&.F\&.
+.SS "subroutine filanl (real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)tsfan2, real (kind=kind_io8), dimension(len)wetanl, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension(len)tg3anl, real (kind=kind_io8), dimension (len)cvanl, real (kind=kind_io8), dimension(len)cvbanl, real (kind=kind_io8), dimension(len)cvtanl, real (kind=kind_io8), dimension(len)cnpanl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)scvanl, real (kind=kind_io8), dimension(len)veganl, real (kind=kind_io8), dimension(len)vetanl, real (kind=kind_io8), dimension(len)sotanl, real (kind=kind_io8), dimension(len,2)alfanl, sihanl, sicanl, vmnanl, vmxanl, slpanl, absanl, real (kind=kind_io8), dimension(len)tsfclm, real (kind=kind_io8), dimension(len)tsfcl2, real (kind=kind_io8), dimension(len)wetclm, real (kind=kind_io8), dimension(len)snoclm, real (kind=kind_io8), dimension(len)zorclm, real (kind=kind_io8), dimension(len,4)albclm, real (kind=kind_io8), dimension(len)aisclm, real (kind=kind_io8), dimension(len)tg3clm, real (kind=kind_io8), dimension (len)cvclm, real (kind=kind_io8), dimension(len)cvbclm, real (kind=kind_io8), dimension(len)cvtclm, real (kind=kind_io8), dimension(len)cnpclm, real (kind=kind_io8), dimension(len,lsoil)smcclm, real (kind=kind_io8), dimension(len,lsoil)stcclm, real (kind=kind_io8), dimension(len)sliclm, real (kind=kind_io8), dimension(len)scvclm, real (kind=kind_io8), dimension(len)vegclm, real (kind=kind_io8), dimension(len)vetclm, real (kind=kind_io8), dimension(len)sotclm, real (kind=kind_io8), dimension(len,2)alfclm, sihclm, sicclm, vmnclm, vmxclm, slpclm, absclm, integerlen, integerlsoil)"
+
+.PP
+Fill in analysis arrays with climatology before reading analysis data\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItsfanl\fP Skin temperature/SST analysis on model grid\&. 
+.br
+\fItsfan2\fP Skin temperature/SST analysis on model grid at time minus deltsfc\&. 
+.br
+\fIwetanl\fP Soil wetness analysis on model grid\&. 
+.br
+\fIsnoanl\fP Liquid equivalent snow depth analysis on model grid\&. 
+.br
+\fIzoranl\fP Roughness length analysis on model grid\&. 
+.br
+\fIalbanl\fP Snow-free albedo analysis on model grid\&. 
+.br
+\fIaisanl\fP Sea ice mask analysis on model grid\&. 
+.br
+\fItg3anl\fP Soil substrate temperature analysis on model grid\&. 
+.br
+\fIcvanl\fP Convective cloud cover analysis on model grid\&. 
+.br
+\fIcvbanl\fP Convective cloud base analysis on model grid\&. 
+.br
+\fIcvtanl\fP Convective cloud top analysis on model grid\&. 
+.br
+\fIcnpanl\fP Canopy water content analysis on model grid\&. 
+.br
+\fIsmcanl\fP Soil moisture analysis on model grid\&. 
+.br
+\fIstcanl\fP Soil temperature analysis on model grid\&. 
+.br
+\fIslianl\fP Land-sea-ice mask analysis on model grid\&. 
+.br
+\fIscvanl\fP Snow cover analysis on model grid\&. 
+.br
+\fIveganl\fP Vegetation greenness analysis on model grid\&. 
+.br
+\fIvetanl\fP Vegetation type analysis on model grid\&. 
+.br
+\fIsotanl\fP Soil type analysis on model grid\&. 
+.br
+\fIalfanl\fP Fraction for strongly and weakly zenith angle dependent albedo analysis on model grid\&. 
+.br
+\fIsihanl\fP Sea ice depth analysis on model grid\&. 
+.br
+\fIsicanl\fP Sea ice concentration analysis on model grid\&. 
+.br
+\fIvmnanl\fP Minimum vegetation greenness analysis on model grid\&. 
+.br
+\fIvmxanl\fP Maximum vegetation greenness analysis on model grid\&. 
+.br
+\fIslpanl\fP Slope type analysis on model grid\&. 
+.br
+\fIabsanl\fP Maximum snow albedo analysis on model grid\&. 
+.br
+\fItsfclm\fP Climatological skin temperature/SST on model grid\&. 
+.br
+\fItsfcl2\fP Climatological skin temperature/SST on model grid at time minus deltsfc\&. 
+.br
+\fIwetclm\fP Climatological soil wetness on model grid\&. 
+.br
+\fIsnoclm\fP Climatological liquid equivalent snow depth on model grid\&. 
+.br
+\fIzorclm\fP Climatological roughness length on model grid\&. 
+.br
+\fIalbclm\fP Climatological snow-free albedo on model grid\&. 
+.br
+\fIaisclm\fP Climatological sea ice mask on model grid\&. 
+.br
+\fItg3clm\fP Climatological soil substrate temperature on model grid\&. 
+.br
+\fIcvclm\fP Climatological convective cloud cover on model grid\&. 
+.br
+\fIcvbclm\fP Climatological convective cloud base on model grid\&. 
+.br
+\fIcvtclm\fP Climatological convective cloud top on model grid\&. 
+.br
+\fIcnpclm\fP Climatological canopy water content on model grid\&. 
+.br
+\fIsmcclm\fP Climatological soil moisture on model grid\&. 
+.br
+\fIstcclm\fP Climatologcial soil temperature on model grid\&. 
+.br
+\fIsliclm\fP Climatological model land-sea-ice mask\&. 
+.br
+\fIscvclm\fP Climatological snow cover on model grid\&. 
+.br
+\fIvegclm\fP Climatological vegetation greenness on model grid\&. 
+.br
+\fIvetclm\fP Climatological vegetation type on model grid\&. 
+.br
+\fIsotclm\fP Climatological soil type on model grid\&. 
+.br
+\fIalfclm\fP Climatological fraction for strongly and weakly zenith angle dependent albedo on model grid\&. 
+.br
+\fIsihclm\fP Climatological sea ice depth on the model grid\&. 
+.br
+\fIsicclm\fP Climatological sea ice concentration on the model grid\&. 
+.br
+\fIvmnclm\fP Climatological minimum vegetation greenness on model grid\&. 
+.br
+\fIvmxclm\fP Climatological maximum vegetation greenness on model grid\&. 
+.br
+\fIslpclm\fP Climatological slope type on model grid\&. 
+.br
+\fIabsclm\fP Climatological maximum snow albedo on model grid\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 3852 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine filfcs (real (kind=kind_io8), dimension(len)tsffcs, real (kind=kind_io8), dimension(len)wetfcs, real (kind=kind_io8), dimension(len)snofcs, real (kind=kind_io8), dimension(len)zorfcs, real (kind=kind_io8), dimension(len,4)albfcs, real (kind=kind_io8), dimension(len)tg3fcs, real (kind=kind_io8), dimension (len)cvfcs, real (kind=kind_io8), dimension(len)cvbfcs, real (kind=kind_io8), dimension(len)cvtfcs, real (kind=kind_io8), dimension(len)cnpfcs, real (kind=kind_io8), dimension(len,lsoil)smcfcs, real (kind=kind_io8), dimension(len,lsoil)stcfcs, real (kind=kind_io8), dimension(len)slifcs, real (kind=kind_io8), dimension(len)aisfcs, real (kind=kind_io8), dimension(len)vegfcs, real (kind=kind_io8), dimension(len)vetfcs, real (kind=kind_io8), dimension(len)sotfcs, real (kind=kind_io8), dimension(len,2)alffcs, sihfcs, sicfcs, vmnfcs, vmxfcs, slpfcs, absfcs, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)wetanl, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)tg3anl, real (kind=kind_io8), dimension (len)cvanl, real (kind=kind_io8), dimension(len)cvbanl, real (kind=kind_io8), dimension(len)cvtanl, real (kind=kind_io8), dimension(len)cnpanl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension(len)veganl, real (kind=kind_io8), dimension(len)vetanl, real (kind=kind_io8), dimension(len)sotanl, real (kind=kind_io8), dimension(len,2)alfanl, sihanl, sicanl, vmnanl, vmxanl, slpanl, absanl, integerlen, integerlsoil)"
+
+.PP
+Fill in model grid guess arrays with analysis values if this is a dead start\&. All fields are on the model grid\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fItsffcs\fP First guess skin temperature/SST analysis\&. 
+.br
+\fIwetfcs\fP First guess soil wetness\&. 
+.br
+\fIsnofcs\fP First guess liquid equivalent snow depth\&. 
+.br
+\fIzorfcs\fP First guess roughness length\&. 
+.br
+\fIalbfcs\fP First guess snow-free albedo\&. 
+.br
+\fItg3fcs\fP First guess soil substrate temperature\&. 
+.br
+\fIcvfcs\fP First guess cloud cover\&. 
+.br
+\fIcvbfcs\fP First guess convective cloud bottom\&. 
+.br
+\fIcvtfcs\fP First guess convective cloud top\&. 
+.br
+\fIcnpfcs\fP First guess canopy water content\&. 
+.br
+\fIsmcfcs\fP First guess soil moisture\&. 
+.br
+\fIstcfcs\fP First guess soil temperature\&. 
+.br
+\fIslifcs\fP First guess land-sea-ice mask\&. 
+.br
+\fIaisfcs\fP First guess sea ice mask\&. 
+.br
+\fIvegfcs\fP First guess vegetation greenness\&. 
+.br
+\fIvetfcs\fP First guess vegetation type\&. 
+.br
+\fIsotfcs\fP First guess soil type\&. 
+.br
+\fIalffcs\fP First guess of fraction for strongly and weakly zenith angle dependent albedo\&. 
+.br
+\fIsihfcs\fP First guess sea ice depth\&. 
+.br
+\fIsicfcs\fP First guess sea ice concentration\&. 
+.br
+\fIvmnfcs\fP First guess minimum greenness fraction\&. 
+.br
+\fIvmxfcs\fP First guess maximum greenness fraction\&. 
+.br
+\fIslpfcs\fP First guess slope type\&. 
+.br
+\fIabsfcs\fP First guess maximum snow albedo analysis\&. 
+.br
+\fItsfanl\fP Skin temperature/SST analysis\&. 
+.br
+\fIwetanl\fP Soil wetness analysis\&. 
+.br
+\fIsnoanl\fP Liquid equivalent snow depth analysis\&. 
+.br
+\fIzoranl\fP Roughness length analysis\&. 
+.br
+\fIalbanl\fP Snow-free albedo analysis\&. 
+.br
+\fItg3anl\fP Soil substrate temperature analysis\&. 
+.br
+\fIcvanl\fP Convective cloud cover analysis\&. 
+.br
+\fIcvbanl\fP Convective cloud base analysis\&. 
+.br
+\fIcvtanl\fP Convective cloud top analysis\&. 
+.br
+\fIcnpanl\fP Canopy water content analysis\&. 
+.br
+\fIsmcanl\fP Soil moisture analysis\&. 
+.br
+\fIstcanl\fP Soil temperature analysis\&. 
+.br
+\fIslianl\fP Land-sea-ice mask analysis\&. 
+.br
+\fIaisanl\fP Sea ice mask analysis\&. 
+.br
+\fIveganl\fP Vegetation greenness analysis\&. 
+.br
+\fIvetanl\fP Vegetation type analysis\&. 
+.br
+\fIsotanl\fP Soil type analysis\&. 
+.br
+\fIalfanl\fP Analysis of fraction for strongly and weakly zenith angle dependent albedo\&. 
+.br
+\fIsihanl\fP Sea ice depth analysis\&. 
+.br
+\fIsicanl\fP Sea ice concentration analysis\&. 
+.br
+\fIvmnanl\fP Minimum greenness fraction analysis\&. 
+.br
+\fIvmxanl\fP Maximum greenness fraction analysis\&. 
+.br
+\fIslpanl\fP Slope type analysis\&. 
+.br
+\fIabsanl\fP Maximum snow albedo analysis\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 4793 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine fixrda (integerlugb, character*500fngrib, integerkpds5, real (kind=kind_io8), dimension(len)slmask, integeriy, integerim, integerid, integerih, real (kind=kind_io8)fh, real (kind=kind_io8), dimension(len)gdata, integerlen, integeriret, integerimsk, integerjmsk, real (kind=kind_io8), dimension(imsk,jmsk)slmskh, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, real (kind=kind_io8), dimension(len)outlat, real (kind=kind_io8), dimension(len)outlon, integerme)"
+
+.PP
+Read in grib1 analysis data for the requested date and horizontally interpolate to the model grid\&. If data not found for the requested date, a backwards search is performed\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlugb\fP Fortran unit number of the grib1 analysis data file\&. 
+.br
+\fIfngrib\fP The name of the grib1 analysis data file\&. 
+.br
+\fIkpds5\fP The grib1 parameter number of the requested data\&. 
+.br
+\fIslmask\fP Model land-sea-ice mask\&. 
+.br
+\fIiy\fP Year\&. 
+.br
+\fIim\fP Month\&. 
+.br
+\fIid\fP Day\&. 
+.br
+\fIih\fP Hour\&. 
+.br
+\fIfh\fP Forecast hour\&. 
+.br
+\fIgdata\fP The analysis data interpolated to the model grid\&. 
+.br
+\fIlen\fP The number of model points to process\&. 
+.br
+\fIiret\fP Return code\&. '0' is success\&. 
+.br
+\fIimsk\fP 'i' dimension of the high-res mask used for input analysis data without a bitmap\&. 
+.br
+\fIjmsk\fP 'j' dimension of the high-res mask used for input analysis data without a bitmap\&. 
+.br
+\fIslmskh\fP The high-resolution mask used for input analysis data witouth a bitmap\&. 
+.br
+\fIgaus\fP When true, the high-res mask is on a gaussian grid\&. 
+.br
+\fIblno\fP Corner point longitude of the high-res mask\&. 
+.br
+\fIblto\fP Corner point latitude of the high-res mask\&. 
+.br
+\fIoutlat\fP Model latitudes\&. 
+.br
+\fIoutlon\fP Model longitudes\&. 
+.br
+\fIme\fP MPI task number 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 9406 of file sfcsub\&.F\&.
+.PP
+References getarea(), la2ga(), setrmsk(), and subst()\&.
+.PP
+Referenced by analy()\&.
+.SS "subroutine fixrdc (integerlugb, character*500fngrib, integerkpds5, integer, intent(in)kpds7, integermon, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)gdata, integerlen, integeriret, integerimsk, integerjmsk, real (kind=kind_io8), dimension(imsk,jmsk)slmskh, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, real (kind=kind_io8), dimension(len)outlat, real (kind=kind_io8), dimension(len)outlon, integerme)"
+
+.PP
+Read in grib1 climatology data for a specific month and and horizontally interpolate to the model grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlugb\fP Fortran unit number of the grib1 climatology data file\&. 
+.br
+\fIfngrib\fP The name of the grib1 climatology data file\&. 
+.br
+\fIkpds5\fP The grib1 parameter number of the requested data\&. 
+.br
+\fIkpds7\fP The grib1 level indicator of the requested data\&. 
+.br
+\fImon\fP The requested month\&. 
+.br
+\fIslmask\fP Model land-sea-ice mask\&. 
+.br
+\fIgdata\fP The climatology data interpolated to the model grid\&. 
+.br
+\fIlen\fP The number of model points to process\&. 
+.br
+\fIiret\fP Return code\&. '0' is success\&. 
+.br
+\fIimsk\fP 'i' dimension of the high-res mask used for input data without a bitmap\&. 
+.br
+\fIjmsk\fP 'j' dimension of the high-res mask used for input data without a bitmap\&. 
+.br
+\fIslmskh\fP The high-resolution mask used for input data witouth a bitmap\&. 
+.br
+\fIgaus\fP When true, the high-res mask is on a gaussian grid\&. 
+.br
+\fIblno\fP Corner point longitude of the high-res mask\&. 
+.br
+\fIblto\fP Corner point latitude of the high-res mask\&. 
+.br
+\fIoutlat\fP Model latitudes\&. 
+.br
+\fIoutlon\fP Model longitudes\&. 
+.br
+\fIme\fP MPI task number 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 9205 of file sfcsub\&.F\&.
+.PP
+References getarea(), la2ga(), setrmsk(), and subst()\&.
+.PP
+Referenced by clima(), and sfccycle()\&.
+.SS "subroutine fixrdc_tile (character(len=*), intent(in)filename_raw, character(len=*), intent(in)tile_num_ch, integer, dimension(npts), intent(in)i_index, integer, dimension(npts), intent(in)j_index, integer, intent(in)kpds, real(kind_io8), dimension(npts), intent(out)var, integer, intent(in)mon, integer, intent(in)npts, integer, intent(in)me)"
+
+.PP
+Reads in climatological data on the model grid tile for a given month\&. Unlike fixrdc, this routine assumes the input data is already interpolated to the model tile\&. The climatological data must be NetCDF\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfilename_raw\fP The name of the climatological file\&. 
+.br
+\fItile_num_ch\fP The tile number to be processed\&. 
+.br
+\fIi_index\fP The 'i' indices of the model grid to process\&. 
+.br
+\fIj_index\fP The 'j' indices of the model grid to process\&. 
+.br
+\fIkpds\fP Parameter code for the data\&. 
+.br
+\fIvar\fP The climatological data on the model grid\&. 
+.br
+\fImon\fP Which month of data to read\&. 
+.br
+\fInpts\fP Number of model points to process\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 9024 of file sfcsub\&.F\&.
+.PP
+References count(), and netcdf_err()\&.
+.PP
+Referenced by clima()\&.
+.SS "subroutine fixrdg (integerlugb, integeridim, integerjdim, character*(*)fngrib, integerkpds5, real (kind=kind_io8), dimension(idim*jdim)gdata, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, integerme)"
+
+.PP
+Read a GRIB1 file\&. Return the requested data record and some grid specifications\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlugb\fP Fortran unit number of the grib file\&. 
+.br
+\fIidim\fP 'i' dimension of the data\&. 
+.br
+\fIjdim\fP 'j' dimension of the data\&. 
+.br
+\fIfngrib\fP Name of the grib file\&. 
+.br
+\fIkpds5\fP The grib1 parameter number for the requested field\&. 
+.br
+\fIgdata\fP The requested data\&. 
+.br
+\fIgaus\fP When true, grid is gaussian\&. 
+.br
+\fIblno\fP Corner point longitude of grid\&. 
+.br
+\fIblto\fP Corner point latitude of grid\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 2840 of file sfcsub\&.F\&.
+.PP
+Referenced by hmskrd()\&.
+.SS "subroutine ga2la (real (kind=kind_io8), dimension (imxin,jmxin)gauin, integerimxin, integerjmxin, real (kind=kind_io8), dimension(imxout,jmxout)regout, integerimxout, integerjmxout, real (kind=kind_io8)wlon, real (kind=kind_io8)rnlat, real (kind=kind_io8), dimension(imxout)rlnout, real (kind=kind_io8), dimension(jmxout)rltout, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto)"
+
+.PP
+Interpolation from lat/lon or gaussian grid to a lat/lon grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIgauin\fP Input data\&. 
+.br
+\fIimxin\fP 'i' dimension of input data\&. 
+.br
+\fIjmxin\fP 'j' dimension of input data\&. 
+.br
+\fIregout\fP Output data\&. 
+.br
+\fIimxout\fP 'i' dimension of output data\&. 
+.br
+\fIjmxout\fP 'j' dimension of output data\&. 
+.br
+\fIwlon\fP Longitude of west boundary of input data\&. 
+.br
+\fIrnlat\fP Latitude of north row of input data\&. 
+.br
+\fIrlnout\fP Longitudes on output data grid\&. 
+.br
+\fIrltout\fP Latitudes on output data grid\&. 
+.br
+\fIgaus\fP Is input data on gaussian grid? 
+.br
+\fIblno\fP Corner point longitude of input data\&. 
+.br
+\fIblto\fP Corner point latitude of input data\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 7388 of file sfcsub\&.F\&.
+.PP
+References num_parthds()\&.
+.PP
+Referenced by setrmsk()\&.
+.SS "subroutine gaulat (real (kind=kind_io8), dimension(k)gaul, integerk)"
+
+.PP
+Calculate gaussian latitudes\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIgaul\fP Gaussian latitudes 
+.br
+\fIk\fP Number of latitudes 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 7667 of file sfcsub\&.F\&.
+.SS "subroutine getarea (integer, dimension(22)kgds, real (kind=kind_io8)dlat, real (kind=kind_io8)dlon, real (kind=kind_io8)rslat, real (kind=kind_io8)rnlat, real (kind=kind_io8)wlon, real (kind=kind_io8)elon, logicalijordr, integerme)"
+
+.PP
+For a given GRIB1 grid description section array, determine some grid specifications\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIkgds\fP GRIB1 grid description section array\&. 
+.br
+\fIdlat\fP Grid resolution in the 'j' direction\&. 
+.br
+\fIdlon\fP Grid resolution in the 'i' direction\&. 
+.br
+\fIrslat\fP Latitude of the southern row of data\&. 
+.br
+\fIrnlat\fP Latitude of the northern row of data\&. 
+.br
+\fIwlon\fP Longitude of the western column of data\&. 
+.br
+\fIelon\fP Longitude of the eastern column of data\&. 
+.br
+\fIijordr\fP When false, adjacent points in the 'i' direction are consecutive\&. Otherwise, 'j' points are consecutive\&. 
+.br
+\fIme\fP MPI rank number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 2970 of file sfcsub\&.F\&.
+.PP
+Referenced by fixrda(), and fixrdc()\&.
+.SS "subroutine getscv (real (kind=kind_io8), dimension(len)snofld, real (kind=kind_io8), dimension(len)scvfld, integerlen)"
+
+.PP
+Set snow cover flag based on snow depth\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsnofld\fP Snow depth\&. 
+.br
+\fIscvfld\fP Snow cover\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 6463 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine getsmc (real (kind=kind_io8), dimension(len)wetfld, integerlen, integerlsoil, real (kind=kind_io8), dimension(len,lsoil)smcfld, integerme)"
+
+.PP
+Set soil moisture from soil wetness\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIwetfld\fP Soil wetness 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.br
+\fIsmcfld\fP Soil moisture\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 6529 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine getstc (real (kind=kind_io8), dimension(len)tsffld, real (kind=kind_io8), dimension(len)tg3fld, real (kind=kind_io8), dimension(len)slifld, integerlen, integerlsoil, real (kind=kind_io8), dimension(len,lsoil)stcfld, real (kind=kind_io8)tsfimx)"
+
+.PP
+Set soil temperature and sea ice column temperature\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItsffld\fP Skin temperature/SST\&. 
+.br
+\fItg3fld\fP Soil substrate temperature\&. 
+.br
+\fIslifld\fP Land-sea-ice mask\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.br
+\fIstcfld\fP Soil/sea ice column temperature\&. 
+.br
+\fItsfimx\fP Freezing point of sea water\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 6487 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle(), and usesgt()\&.
+.SS "subroutine hmskrd (integerlugb, integerimsk, integerjmsk, character*500fnmskh, integerkpds5, real (kind=kind_io8), dimension(mdata)slmskh, logicalgausm, real (kind=kind_io8)blnmsk, real (kind=kind_io8)bltmsk, integerme)"
+
+.PP
+Read a high-resolution land mask\&. It will be used as a surrogate for GRIB input data without a bitmap\&. This is NOT the model land mask\&. This mask file is GRIB1\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlugb\fP Fortran unit number of the mask file\&. 
+.br
+\fIimsk\fP 'i' dimension of the mask\&. 
+.br
+\fIjmsk\fP 'j' dimension of the mask\&. 
+.br
+\fIfnmskh\fP Name of the mask file\&. 
+.br
+\fIkpds5\fP GRIB1 parameter number for mask\&. 
+.br
+\fIslmskh\fP The high-resolution mask\&. 
+.br
+\fIgausm\fP When true, mask is on a gaussian grid\&. 
+.br
+\fIblnmsk\fP Corner point longitude of the mask grid\&. 
+.br
+\fIbltmsk\fP Corner point latitude of the mask grid\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 2792 of file sfcsub\&.F\&.
+.PP
+References fixrdg()\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine la2ga (real (kind=kind_io8), dimension (imxin,jmxin)regin, integerimxin, integerjmxin, real (kind=kind_io8), dimension(imxin)rinlon, real (kind=kind_io8), dimension(jmxin)rinlat, real (kind=kind_io8)rlon, real (kind=kind_io8)rlat, integerinttyp, real (kind=kind_io8), dimension(len)gauout, integerlen, logicallmask, real (kind=kind_io8), dimension(imxin,jmxin)rslmsk, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)outlat, real (kind=kind_io8), dimension(len)outlon, integerme)"
+
+.PP
+Interpolate data from a lat/lon grid to the model grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIregin\fP Input data\&. 
+.br
+\fIimxin\fP 'i' dimension of input data\&. 
+.br
+\fIjmxin\fP 'j' dimension of input data\&. 
+.br
+\fIrinlon\fP 
+.br
+\fIrinlat\fP 
+.br
+\fIrlon\fP 
+.br
+\fIrlat\fP 
+.br
+\fIinttyp\fP 
+.br
+\fIgauout\fP The interpolated data on the model grid\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlmask\fP 
+.br
+\fIrslmsk\fP 
+.br
+\fIslmask\fP Model land-sea-ice mask\&. 
+.br
+\fIoutlat\fP Latitudes on the model grid\&. 
+.br
+\fIoutlon\fP Longitudes on the model grid\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorth 
+.RE
+.PP
+
+.PP
+Definition at line 3210 of file sfcsub\&.F\&.
+.PP
+References num_parthds()\&.
+.PP
+Referenced by fixrda(), and fixrdc()\&.
+.SS "subroutine landtyp (real (kind=kind_io8), dimension(len)vegtype, real (kind=kind_io8), dimension(len)soiltype, real (kind=kind_io8), dimension(len)slptype, real (kind=kind_io8), dimension(len)slmask, integerlen)"
+
+.PP
+Set vegetation, soil and slope type at undefined model points\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIvegtype\fP Vegetation type 
+.br
+\fIsoiltype\fP Soil type 
+.br
+\fIslptype\fP Slope type 
+.br
+\fIslmask\fP Land-sea-ice mask\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 7643 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine maxmin (real (kind=kind_io8), dimension(imax,kmax)f, integerimax, integerkmax)"
+
+.PP
+Compute the maxmimum and minimum of a field\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIf\fP The field to check\&. 
+.br
+\fIimax\fP The horizontal dimension of the field\&. 
+.br
+\fIkmax\fP Number of vertical levels of the field\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 3752 of file sfcsub\&.F\&.
+.SS "subroutine merge (integerlen, integerlsoil, integeriy, integerim, integerid, integerih, real (kind=kind_io8)fh, real (kind=kind_io8)deltsfc, real (kind=kind_io8), dimension(len)sihfcs, real (kind=kind_io8), dimension(len)sicfcs, real (kind=kind_io8), dimension(len)vmnfcs, real (kind=kind_io8), dimension(len)vmxfcs, real (kind=kind_io8), dimension(len)slpfcs, real (kind=kind_io8), dimension(len)absfcs, real (kind=kind_io8), dimension(len)tsffcs, real (kind=kind_io8), dimension(len)wetfcs, real (kind=kind_io8), dimension(len)snofcs, real (kind=kind_io8), dimension(len)zorfcs, real (kind=kind_io8), dimension(len,4)albfcs, real (kind=kind_io8), dimension(len)aisfcs, real (kind=kind_io8), dimension (len)cvfcs, real (kind=kind_io8), dimension(len)cvbfcs, real (kind=kind_io8), dimension(len)cvtfcs, real (kind=kind_io8), dimension(len)cnpfcs, real (kind=kind_io8), dimension(len,lsoil)smcfcs, real (kind=kind_io8), dimension(len,lsoil)stcfcs, real (kind=kind_io8), dimension(len)slifcs, real (kind=kind_io8), dimension(len)vegfcs, real (kind=kind_io8), dimension(len)vetfcs, real (kind=kind_io8), dimension(len)sotfcs, real (kind=kind_io8), dimension(len,2)alffcs, real (kind=kind_io8), dimension(len)sihanl, real (kind=kind_io8), dimension(len)sicanl, real (kind=kind_io8), dimension(len)vmnanl, real (kind=kind_io8), dimension(len)vmxanl, real (kind=kind_io8), dimension(len)slpanl, real (kind=kind_io8), dimension(len)absanl, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)tsfan2, real (kind=kind_io8), dimension(len)wetanl, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension (len)cvanl, real (kind=kind_io8), dimension(len)cvbanl, real (kind=kind_io8), dimension(len)cvtanl, real (kind=kind_io8), dimension(len)cnpanl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)veganl, real (kind=kind_io8), dimension(len)vetanl, real (kind=kind_io8), dimension(len)sotanl, real (kind=kind_io8), dimension(len,2)alfanl, real (kind=kind_io8)ctsfl, real (kind=kind_io8)calbl, real (kind=kind_io8)caisl, real (kind=kind_io8)csnol, real (kind=kind_io8), dimension(lsoil)csmcl, real (kind=kind_io8)czorl, real (kind=kind_io8), dimension(lsoil)cstcl, real (kind=kind_io8)cvegl, real (kind=kind_io8)ctsfs, real (kind=kind_io8)calbs, real (kind=kind_io8)caiss, real (kind=kind_io8)csnos, real (kind=kind_io8), dimension(lsoil)csmcs, real (kind=kind_io8)czors, real (kind=kind_io8), dimension(lsoil)cstcs, real (kind=kind_io8)cvegs, real (kind=kind_io8)ccv, real (kind=kind_io8)ccvb, real (kind=kind_io8)ccvt, real (kind=kind_io8)ccnp, real (kind=kind_io8)cvetl, real (kind=kind_io8)cvets, real (kind=kind_io8)csotl, real (kind=kind_io8)csots, real (kind=kind_io8)calfl, real (kind=kind_io8)calfs, real (kind=kind_io8)csihl, real (kind=kind_io8)csihs, real (kind=kind_io8)csicl, real (kind=kind_io8)csics, real (kind=kind_io8)cvmnl, real (kind=kind_io8)cvmns, real (kind=kind_io8)cvmxl, real (kind=kind_io8)cvmxs, real (kind=kind_io8)cslpl, real (kind=kind_io8)cslps, real (kind=kind_io8)cabsl, real (kind=kind_io8)cabss, integerirttsf, integerirtwet, integerirtsno, integerirtzor, integerirtalb, integerirtais, integerirttg3, integerirtscv, integerirtacn, integerirtsmc, integerirtstc, integerirtveg, integerirtvmn, integerirtvmx, integerirtslp, integerirtabs, integerirtvet, integerirtsot, integerirtalf, logical, intent(in)landice, integerme)"
+
+.PP
+Blend the model forecast (or first guess) fields with the analysis/climatology\&. The forecast/first guess variables are named with 'fcs'\&. The analysis/climatology variables are named with 'anl'\&. On output, the blended fields are stored in the 'anl' variables\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.br
+\fIiy\fP Cycle year\&. 
+.br
+\fIim\fP Cycle month\&. 
+.br
+\fIid\fP Cycle day\&. 
+.br
+\fIih\fP Cycle hour\&. 
+.br
+\fIfh\fP Forecast hour\&. 
+.br
+\fIdeltsfc\fP Cycling frequency in hours\&. 
+.br
+\fIsihfcs\fP First guess sea ice depth\&. 
+.br
+\fIsicfcs\fP First guess sea ice concentration\&. 
+.br
+\fIvmnfcs\fP First guess minimum vegetation greenness\&. 
+.br
+\fIvmxfcs\fP First guess maximum vegetation greenness\&. 
+.br
+\fIslpfcs\fP First guess slope type\&. 
+.br
+\fIabsfcs\fP First guess maximum snow albedo\&. 
+.br
+\fItsffcs\fP First guess skin temperature/SST\&. 
+.br
+\fIwetfcs\fP First guess soil wetness\&. 
+.br
+\fIsnofcs\fP First guess liquid equivalent snow depth\&. 
+.br
+\fIzorfcs\fP First guess roughness length\&. 
+.br
+\fIalbfcs\fP First guess snow free albedo\&. 
+.br
+\fIaisfcs\fP First guess ice\&. 
+.br
+\fIcvfcs\fP First guess convective cloud cover\&. 
+.br
+\fIcvbfcs\fP First guess convective cloud bottom\&. 
+.br
+\fIcvtfcs\fP First guess convective cloud top\&. 
+.br
+\fIcnpfcs\fP First guess canopy water content\&. 
+.br
+\fIsmcfcs\fP First guess soil moisture\&. 
+.br
+\fIstcfcs\fP First guess soil/ice temperature\&. 
+.br
+\fIslifcs\fP First guess land-sea-ice mask\&. 
+.br
+\fIvegfcs\fP First guess vegetation greenness\&. 
+.br
+\fIvetfcs\fP First guess vegetation type\&. 
+.br
+\fIsotfcs\fP First guess soil type\&. 
+.br
+\fIalffcs\fP First guess strong/weak zenith angle dependent albedo\&. 
+.br
+\fIsihanl\fP Blended sea ice depth\&. 
+.br
+\fIsicanl\fP Blended sea ice concentration\&. 
+.br
+\fIvmnanl\fP Blended minimum vegetation greenness\&. 
+.br
+\fIvmxanl\fP Blended maximum vegetation greenness\&. 
+.br
+\fIslpanl\fP Blended slope type\&. 
+.br
+\fIabsanl\fP Blended maximum snow albedo\&. 
+.br
+\fItsfanl\fP Blended skin temperature/SST\&. 
+.br
+\fItsfan2\fP Not used\&. 
+.br
+\fIwetanl\fP Blended soil wetness\&. 
+.br
+\fIsnoanl\fP Blended liquid equivalent snow depth\&. 
+.br
+\fIzoranl\fP Blended roughness length\&. 
+.br
+\fIalbanl\fP Blended snow-free albedo\&. 
+.br
+\fIaisanl\fP Blended ice\&. 
+.br
+\fIcvanl\fP Blended convective cloud cover\&. 
+.br
+\fIcvbanl\fP Blended convective cloud base\&. 
+.br
+\fIcvtanl\fP Blended convective cloud top\&. 
+.br
+\fIcnpanl\fP Blended canopy moisture content\&. 
+.br
+\fIsmcanl\fP Blended soil moisture\&. 
+.br
+\fIstcanl\fP Blended soil/ice temperature\&. 
+.br
+\fIslianl\fP Blended land-sea-ice mask\&. 
+.br
+\fIveganl\fP Blended vegetation greenness\&. 
+.br
+\fIvetanl\fP Blended vegetation type\&. 
+.br
+\fIsotanl\fP Blended soil type\&. 
+.br
+\fIalfanl\fP Blended strong/weak zenith angle dependent albedo\&. 
+.br
+\fIctsfl\fP Merging coefficient for skin temperature\&. 
+.br
+\fIcalbl\fP Merging coefficient for snow-free albedo at land points\&. 
+.br
+\fIcaisl\fP Merging coefficient for sea ice at land points\&. 
+.br
+\fIcsnol\fP Merging coefficient for snow at land points\&. 
+.br
+\fIcsmcl\fP Merging coefficient for soil moisture at land points\&. 
+.br
+\fIczorl\fP Merging coefficient for roughness length at land points\&. 
+.br
+\fIcstcl\fP Merging coefficient for soil temperature at land points\&. 
+.br
+\fIcvegl\fP Merging coefficient for vegetation greenness at land points\&. 
+.br
+\fIctsfs\fP Merging coefficient for SST\&. 
+.br
+\fIcalbs\fP Merging coefficient for snow-free albedo at water points\&. 
+.br
+\fIcaiss\fP Merging coefficient for sea ice at water points\&. 
+.br
+\fIcsnos\fP Merging coefficient for snow at water points\&. 
+.br
+\fIcsmcs\fP Merging coefficient for soil moisture at water points\&. 
+.br
+\fIczors\fP Merging coefficient for roughness length at water points\&. 
+.br
+\fIcstcs\fP Merging coefficient for sea ice temperature at water points\&. 
+.br
+\fIcvegs\fP Merging coefficient for vegetation greenness at water points\&. 
+.br
+\fIccv\fP Merging coefficient for convective cloud cover\&. 
+.br
+\fIccvb\fP Merging coefficient for covective cloud bottom\&. 
+.br
+\fIccvt\fP Merging coefficient for covective cloud top\&. 
+.br
+\fIccnp\fP Merging coefficient for canopy moisture\&. 
+.br
+\fIcvetl\fP Merging coefficient for vegetation type at land points\&. 
+.br
+\fIcvets\fP Merging coefficient for vegetation type at water points\&. 
+.br
+\fIcsotl\fP Merging coefficient for soil type at land points\&. 
+.br
+\fIcsots\fP Merging coefficient for soil type at water points\&. 
+.br
+\fIcalfl\fP Merging coefficient for strong/weak zenith angle dependent albedo at land points\&. 
+.br
+\fIcalfs\fP Merging coefficient for strong/weak zenith angle dependent albedo at water points\&. 
+.br
+\fIcsihl\fP Merging coefficient for sea ice depth at land points\&. 
+.br
+\fIcsihs\fP Merging coefficient for sea ice depth at water points\&. 
+.br
+\fIcsicl\fP Merging coefficient for sea ice concentration at land points\&. 
+.br
+\fIcsics\fP Merging coefficient for sea ice concentration at water points\&. 
+.br
+\fIcvmnl\fP Merging coefficient for minimum vegetation greenness at land points\&. 
+.br
+\fIcvmns\fP Merging coefficient for minimum vegetation greenness at water points\&. 
+.br
+\fIcvmxl\fP Merging coefficient for maximum vegetation greenness at land points\&. 
+.br
+\fIcvmxs\fP Merging coefficient for maximum vegetation greenness at water points\&. 
+.br
+\fIcslpl\fP Merging coefficient for slope type at land points\&. 
+.br
+\fIcslps\fP Merging coefficient for slope type at water points\&. 
+.br
+\fIcabsl\fP Merging coefficient for maximum snow albedo at land points\&. 
+.br
+\fIcabss\fP Merging coefficient for maximum snow albedo at water points\&. 
+.br
+\fIirttsf\fP Return code from read of skin temperature/SST analysis file\&. 
+.br
+\fIirtwet\fP Return code from read of soil wetness analysis file\&. 
+.br
+\fIirtsno\fP Return code from read of snow analysis file\&. 
+.br
+\fIirtzor\fP Return code from read of roughness length file\&. 
+.br
+\fIirtalb\fP Return code from read of snow-free albedo analysis file\&. 
+.br
+\fIirtais\fP Return code from read of ice mask analysis file\&. 
+.br
+\fIirttg3\fP Return code from read of soil substrate temperature analysis file\&. 
+.br
+\fIirtscv\fP Return code from read of snow cover analysis file\&. 
+.br
+\fIirtacn\fP Return code from read of sea ice concentration analysis file\&. 
+.br
+\fIirtsmc\fP Return code from read of soil moisture analysis file\&. 
+.br
+\fIirtstc\fP Return code from read of soil temperature analysis file\&. 
+.br
+\fIirtveg\fP Return code from read of vegetation greenness analysis file\&. 
+.br
+\fIirtvmn\fP Return code from read of minimum vegetation greenness analysis file\&. 
+.br
+\fIirtvmx\fP Return code from read of maximum vegetation greenness analysis file\&. 
+.br
+\fIirtslp\fP Return code from read of slope type analysis file\&. 
+.br
+\fIirtabs\fP Return code from read of maximum snow albedo analysis file\&. 
+.br
+\fIirtvet\fP Return code from read of vegetation type analysis file\&. 
+.br
+\fIirtsot\fP Return code from read of soil type analysis file\&. 
+.br
+\fIirtalf\fP Return code from read of file containing fraction for strongly and weakly zenith angle dependent albedo\&. 
+.br
+\fIlandice\fP Permanent land ice flag\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 5192 of file sfcsub\&.F\&.
+.PP
+References num_parthds()\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine monitr (character(len=*)lfld, real (kind=kind_io8), dimension(ijmax)fld, real (kind=kind_io8), dimension(ijmax)slimsk, real (kind=kind_io8), dimension(ijmax)sno, integerijmax)"
+
+.PP
+Determine the maximum and minimum values of a surface field at snow-free and snow covered land, open water, and snow-free and snow covered sea ice\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlfld\fP The name of the surface field to monitory\&. 
+.br
+\fIfld\fP The surface field to monitor\&. 
+.br
+\fIslimsk\fP Land-sea-ice mask\&. 
+.br
+\fIsno\fP Snow\&. 
+.br
+\fIijmax\fP Number of model points to process\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 2689 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine netcdf_err (integer, intent(in)error)"
+
+.PP
+Print the error message for a given netCDF return code\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIerror\fP 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 9166 of file sfcsub\&.F\&.
+.PP
+Referenced by fixrdc_tile(), read_write_data::read_data(), read_write_data::read_gsi_data(), read_write_data::read_lat_lon_orog(), and read_write_data::write_data()\&.
+.SS "subroutine newice (real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)slifcs, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)tsffcs, integerlen, integerlsoil, sihnew, sicnew, real (kind=kind_io8), dimension(len)sihanl, real (kind=kind_io8), dimension(len)sicanl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8)albsea, real (kind=kind_io8)snosea, real (kind=kind_io8)zorsea, real (kind=kind_io8)smcsea, real (kind=kind_io8)smcice, real (kind=kind_io8)tsfmin, real (kind=kind_io8)tsfice, real (kind=kind_io8)albice, real (kind=kind_io8)zorice, real (kind=kind_io8)tgice, real (kind=kind_io8), dimension(len)rla, real (kind=kind_io8), dimension(len)rlo, integerme)"
+
+.PP
+Adjust surface fields when ice melts or forms\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIslianl\fP Land-sea-ice mask\&. 
+.br
+\fIslifcs\fP First guess land-sea-ice mask\&. 
+.br
+\fItsfanl\fP Skin temperature/SST\&. 
+.br
+\fItsffcs\fP First guess skin temperature/SST\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.br
+\fIsihnew\fP Sea ice depth for new ice\&. 
+.br
+\fIsicnew\fP Sea ice concentration for new ice\&. 
+.br
+\fIsihanl\fP Sea ice depth\&. 
+.br
+\fIsicanl\fP Sea ice concentration\&. 
+.br
+\fIalbanl\fP Snow-free albedo\&. 
+.br
+\fIsnoanl\fP Liquid equivalent snow depth\&. 
+.br
+\fIzoranl\fP Roughness length\&. 
+.br
+\fIsmcanl\fP Soil moisture 
+.br
+\fIstcanl\fP Soil temperature 
+.br
+\fIalbsea\fP Albedo at open water\&. 
+.br
+\fIsnosea\fP Snow at open water\&. 
+.br
+\fIzorsea\fP Roughness length at open water\&. 
+.br
+\fIsmcsea\fP Soil moisture at open water\&. 
+.br
+\fIsmcice\fP Soil moisture at ice\&. 
+.br
+\fItsfmin\fP SST at open water\&. 
+.br
+\fItsfice\fP Skin temperature at ice\&. 
+.br
+\fIalbice\fP Ice albedo\&. 
+.br
+\fIzorice\fP Roughness length of ice\&. 
+.br
+\fItgice\fP Freezing point of salt water\&. 
+.br
+\fIrla\fP Model latitudes\&. 
+.br
+\fIrlo\fP Model longitudes\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.PP
+Xingen Wu 
+.RE
+.PP
+
+.PP
+Definition at line 5676 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine qcbyfc (real (kind=kind_io8), dimension(len)tsffcs, real (kind=kind_io8), dimension(len)snofcs, real (kind=kind_io8)qctsfs, real (kind=kind_io8)qcsnos, real (kind=kind_io8)qctsfi, integerlen, integerlsoil, real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len,4)albanl, real (kind=kind_io8), dimension(len)zoranl, real (kind=kind_io8), dimension(len,lsoil)smcanl, real (kind=kind_io8), dimension(len,lsoil)smcclm, real (kind=kind_io8)tsfsmx, real (kind=kind_io8)albomx, real (kind=kind_io8)zoromx, integerme)"
+
+.PP
+Quality control analysis fields using the first guess\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItsffcs\fP First guess skin temperature/SST\&. 
+.br
+\fIsnofcs\fP First guess snow\&. 
+.br
+\fIqctsfs\fP Surface temperature above which no snow allowed\&. 
+.br
+\fIqcsnos\fP Snow depth above which snow must exits\&. 
+.br
+\fIqctsfi\fP SST above which sea ice is not allowed\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.br
+\fIsnoanl\fP Snow analysis\&. 
+.br
+\fIaisanl\fP Ice mask\&. 
+.br
+\fIslianl\fP Land-sea-ice mask\&. 
+.br
+\fItsfanl\fP Skin temperature/SST analysis\&. 
+.br
+\fIalbanl\fP Snow-free albedo analysis\&. 
+.br
+\fIzoranl\fP Roughness length analysis\&. 
+.br
+\fIsmcanl\fP Soil moisture analysis\&. 
+.br
+\fIsmcclm\fP Soil moisture climatology\&. 
+.br
+\fItsfsmx\fP Not used\&. 
+.br
+\fIalbomx\fP Snow-free albedo at open water\&. 
+.br
+\fIzoromx\fP Roughness length at open water\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 6766 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine qcmxice (real (kind=kind_io8), dimension(len)glacir, real (kind=kind_io8), dimension(len)amxice, integerlen, integerme)"
+
+.PP
+Quality control maximum ice extent\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIglacir\fP Glacial flag 
+.br
+\fIamxice\fP Maximum ice extent\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 6649 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine qcmxmn (character*8ttl, real (kind=kind_io8), dimension(len)fld, real (kind=kind_io8), dimension(len)slimsk, real (kind=kind_io8), dimension(len)sno, logical, dimension(len)iceflg, real (kind=kind_io8)fldlmx, real (kind=kind_io8)fldlmn, real (kind=kind_io8)fldomx, real (kind=kind_io8)fldomn, real (kind=kind_io8)fldimx, real (kind=kind_io8)fldimn, real (kind=kind_io8)fldjmx, real (kind=kind_io8)fldjmn, real (kind=kind_io8)fldsmx, real (kind=kind_io8)fldsmn, real (kind=kind_io8)epsfld, real (kind=kind_io8), dimension(len)rla, real (kind=kind_io8), dimension(len)rlo, integerlen, integermode, real (kind=kind_io8)percrit, logicallgchek, integerme)"
+
+.PP
+Range check a field\&. The check is a function of whether the point is land, water or ice\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIttl\fP Name of field\&. 
+.br
+\fIfld\fP The field array to be ranged checked\&. 
+.br
+\fIslimsk\fP The land-sea-ice mask\&. 
+.br
+\fIsno\fP Snow\&. 
+.br
+\fIiceflg\fP When true, check ice points\&. 
+.br
+\fIfldlmx\fP Maximum allowable value at snow-free land\&. 
+.br
+\fIfldlmn\fP Minimum allowable value at snow-free land\&. 
+.br
+\fIfldomx\fP Maximum allowable value at open water\&. 
+.br
+\fIfldomn\fP Minimum allowable value at open water\&. 
+.br
+\fIfldimx\fP Maximum allowable value at snow-free ice\&. 
+.br
+\fIfldimn\fP Minimum allowable value at snow-free ice\&. 
+.br
+\fIfldjmx\fP Maximum allowable value at snow covered ice\&. 
+.br
+\fIfldjmn\fP Minimum allowable value at snow covered ice\&. 
+.br
+\fIfldsmx\fP Maximum allowable value at snow covered land\&. 
+.br
+\fIfldsmn\fP Minimum allowable value at snow covered land\&. 
+.br
+\fIepsfld\fP Difference from the max/min allowable value at which the field is updated\&. 
+.br
+\fIrla\fP Latitude of the points to process\&. 
+.br
+\fIrlo\fP Longitude of the points to process\&. 
+.br
+\fIlen\fP Number of points to process\&. 
+.br
+\fImode\fP When '1', update the field\&. When not '1', run routine in diagnostic mode\&. 
+.br
+\fIpercrit\fP Critical percentage of 'bad' points required for abort\&. 
+.br
+\fIlgchek\fP When true, abort when a critical percentage of points are outside acceptable range\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 6021 of file sfcsub\&.F\&.
+.PP
+References num_parthds()\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine qcsice (real (kind=kind_io8), dimension(len)ais, real (kind=kind_io8), dimension(len)glacir, real (kind=kind_io8), dimension(len)amxice, real (kind=kind_io8)aicice, real (kind=kind_io8)aicsea, real (kind=kind_io8)sllnd, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)rla, real (kind=kind_io8), dimension(len)rlo, integerlen, integerme)"
+
+.PP
+Check the sea ice cover mask against the land-sea mask\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIais\fP Sea ice cover mask\&. 
+.br
+\fIglacir\fP Glacial flag 
+.br
+\fIamxice\fP Maximum ice extent\&. 
+.br
+\fIaicice\fP Ice indicator\&. 
+.br
+\fIaicsea\fP Open water indicator\&. 
+.br
+\fIsllnd\fP Land indicator\&. 
+.br
+\fIslmask\fP Land-sea-ice mask\&. 
+.br
+\fIrla\fP Model latitudes 
+.br
+\fIrlo\fP Model longitudes 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 5844 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine qcsli (real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)slifcs, integerlen, integerme)"
+
+.PP
+Check consistency between the forecast and analysis land-sea-ice mask\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIslianl\fP Analysis mask\&. 
+.br
+\fIslifcs\fP Forecast mask\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 6678 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine qcsnow (real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)aisanl, real (kind=kind_io8), dimension(len)glacir, integerlen, real (kind=kind_io8)snoval, logical, intent(in)landice, integerme)"
+
+.PP
+Quality control snow at the model points\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsnoanl\fP Model snow to be qc'd\&. 
+.br
+\fIslmask\fP Land-sea-ice mask\&. 
+.br
+\fIaisanl\fP Ice mask\&. 
+.br
+\fIglacir\fP Permanent glacial point when '1'\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIsnoval\fP Minimum snow depth at glacial points\&. 
+.br
+\fIlandice\fP Is the point permanent land ice? 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 5783 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine rof01 (real (kind=kind_io8), dimension(len)aisfld, integerlen, character*2op, real (kind=kind_io8)crit)"
+
+.PP
+Round a field up to one or down to zero\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIaisfld\fP The field to adjust\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIop\fP Operation on field\&. 
+.br
+\fIcrit\fP Critical value above/below the field is rounded\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 4890 of file sfcsub\&.F\&.
+.PP
+Referenced by setrmsk(), and sfccycle()\&.
+.SS "subroutine scale (real (kind=kind_io8), dimension(len)fld, integerlen, real (kind=kind_io8)scl)"
+
+.PP
+Multiply a field by a scaling factor\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfld\fP The field to scale\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIscl\fP Scaling factor\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 5978 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine setlsi (real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)aisfld, integerlen, real (kind=kind_io8)aicice, real (kind=kind_io8), dimension(len)slifld)"
+
+.PP
+Set land-sea-ice mask at sea ice\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIslmask\fP The model mask on input\&. 
+.br
+\fIaisfld\fP The ice mask on the model grid\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIaicice\fP Ice concentration theshold for an ice point\&. 
+.br
+\fIslifld\fP The model mask with sea ice added\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 5953 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine setrmsk (integerkpds5, real (kind=kind_io8), dimension(igaul,jgaul)slmask, integerigaul, integerjgaul, real (kind=kind_io8)wlon, real (kind=kind_io8)rnlat, real (kind=kind_io8), dimension(imax,jmax)data, integerimax, integerjmax, real (kind=kind_io8), dimension(imax)rlnout, real (kind=kind_io8), dimension(jmax)rltout, logicallmask, real (kind=kind_io8), dimension(imax,jmax)rslmsk, logicalgaus, real (kind=kind_io8)blno, real (kind=kind_io8)blto, integerkgds1, integer, intent(in)kpds4, logical*1, dimension(imax,jmax), intent(in)lbms)"
+
+.PP
+Set the mask for the input data\&. (Not the model mask)\&. The mask is determined from the input data bitmap or by interpolating a high-resolution mask to the input data grid\&. Note: not all data has a mask\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIkpds5\fP Grib parameter number\&. 
+.br
+\fIslmask\fP High-resolution mask\&. 
+.br
+\fIigaul\fP 'i' dimension of the high-res mask\&. 
+.br
+\fIjgaul\fP 'j' dimension of the high-res mask\&. 
+.br
+\fIwlon\fP Longitude of 'west' boundary of input data\&. 
+.br
+\fIrnlat\fP Latitude of north row of input data\&. 
+.br
+\fIdata\fP The input data\&. 
+.br
+\fIimax\fP 'i' dimension of input grid\&. 
+.br
+\fIjmax\fP 'j' dimension of input grid\&. 
+.br
+\fIrlnout\fP Longitudes on input data grid\&. 
+.br
+\fIrltout\fP Latitudes on input data grid\&. 
+.br
+\fIlmask\fP True, when input data has a mask\&. 
+.br
+\fIrslmsk\fP The mask of the input data grid\&. 
+.br
+\fIgaus\fP Is high-resolution mask on a gaussian grid\&. 
+.br
+\fIblno\fP Corner point longitude of the high-res mask\&. 
+.br
+\fIblto\fP Corner point longitude of the high-res mask\&. 
+.br
+\fIkgds1\fP Grib indicator for grid type\&. 
+.br
+\fIkpds4\fP Grib indicator for bitmap\&. 
+.br
+\fIlbms\fP Bitmap of input data\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 6888 of file sfcsub\&.F\&.
+.PP
+References ga2la(), and rof01()\&.
+.PP
+Referenced by fixrda(), and fixrdc()\&.
+.SS "subroutine setzro (real (kind=kind_io8), dimension(len)fld, real (kind=kind_io8)eps, integerlen)"
+
+.PP
+Set a field to zero if it is less than a threshold\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfld\fP Field to set\&. 
+.br
+\fIeps\fP Threshold\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 6445 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine sfccycle (integerlugb, integerlen, integerlsoil, real (kind=kind_io8), dimension(len)sig1t, real (kind=kind_io8)deltsfc, integeriy, integerim, integerid, integerih, real (kind=kind_io8)fh, real (kind=kind_io8), dimension(len)rla, real (kind=kind_io8), dimension(len)rlo, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8), dimension(len)orog, real (kind=kind_io8), dimension(len)orog_uf, logicaluse_ufo, logicalnst_anl, real (kind=kind_io8), dimension(len)sihfcs, real (kind=kind_io8), dimension(len)sicfcs, real (kind=kind_io8), dimension(len)sitfcs, real (kind=kind_io8), dimension(len)swdfcs, real (kind=kind_io8), dimension(len,lsoil)slcfcs, real (kind=kind_io8), dimension(len)vmnfcs, real (kind=kind_io8), dimension(len)vmxfcs, real (kind=kind_io8), dimension(len)slpfcs, real (kind=kind_io8), dimension(len)absfcs, real (kind=kind_io8), dimension(len)tsffcs, real (kind=kind_io8), dimension(len)snofcs, real (kind=kind_io8), dimension(len)zorfcs, real (kind=kind_io8), dimension(len,4)albfcs, real (kind=kind_io8), dimension(len)tg3fcs, real (kind=kind_io8), dimension(len)cnpfcs, real (kind=kind_io8), dimension(len,lsoil)smcfcs, real (kind=kind_io8), dimension(len,lsoil)stcfcs, real (kind=kind_io8), dimension(len)slifcs, real (kind=kind_io8), dimension(len)aisfcs, real (kind=kind_io8), dimension(len)vegfcs, real (kind=kind_io8), dimension(len)vetfcs, real (kind=kind_io8), dimension(len)sotfcs, real (kind=kind_io8), dimension(len,2)alffcs, real (kind=kind_io8), dimension (len)cvfcs, real (kind=kind_io8), dimension(len)cvbfcs, real (kind=kind_io8), dimension(len)cvtfcs, integerme, integernlunit, integersz_nml, character(len=*), dimension(sz_nml), intent(in)input_nml_file, integerialb, integerisot, integerivegsrc, character(len=*), intent(in)tile_num_ch, integer, dimension(len), intent(in)i_index, integer, dimension(len), intent(in)j_index)"
+
+.PP
+Surface cycling driver routine\&. Update 'first guess' surface fields with either analysis or climatological data\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlugb\fP Fortran unit number used to read data files\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.br
+\fIsig1t\fP Sigma level 1 temperature for dead start\&. 
+.br
+\fIdeltsfc\fP Cycling frequency in hours\&. 
+.br
+\fIiy\fP Year of initial state\&. 
+.br
+\fIim\fP Month of initial state\&. 
+.br
+\fIid\fP Day of initial state\&. 
+.br
+\fIih\fP Hour of initial state\&. 
+.br
+\fIfh\fP Forecast hour\&. 
+.br
+\fIrla\fP Latitude of model points\&. 
+.br
+\fIrlo\fP Longitude of model points\&. 
+.br
+\fIslmask\fP Model land-sea mask without ice flag\&. 
+.br
+\fIorog\fP Filtered orography on model grid\&. 
+.br
+\fIorog_uf\fP Unfiltered orography on model grid\&. 
+.br
+\fIuse_ufo\fP When true, adjust sst and soil substrate temperature for differences between filtered and unfiltered terrain\&. 
+.br
+\fInst_anl\fP Set to true when using nst model\&. 
+.br
+\fIsihfcs\fP Sea ice thickness on model grid\&. 
+.br
+\fIsicfcs\fP Sea ice concentration on model grid\&. 
+.br
+\fIsitfcs\fP Sea ice skin temperature on model grid\&. 
+.br
+\fIswdfcs\fP Physical snow depth on model grid\&. 
+.br
+\fIslcfcs\fP Liquid portion of volumentric soil moisture on model grid\&. 
+.br
+\fIvmnfcs\fP Minimum greenness fraction of model grid\&. 
+.br
+\fIvmxfcs\fP Maximum greenness fraction of model grid\&. 
+.br
+\fIslpfcs\fP Slope type on model grid\&. 
+.br
+\fIabsfcs\fP Maximum snow albedo on model grid\&. 
+.br
+\fItsffcs\fP Skin temperature/SST on model grid\&. 
+.br
+\fIsnofcs\fP Liquid equivalent snow depth on model grid\&. 
+.br
+\fIzorfcs\fP Roughness length on model grid\&. 
+.br
+\fIalbfcs\fP Snow-free albedo on model grid\&. 
+.br
+\fItg3fcs\fP Soil substrate temperature on model grid\&. 
+.br
+\fIcnpfcs\fP Canopy moisture content on model grid\&. 
+.br
+\fIsmcfcs\fP Total volumetric soil moisture on model grid\&. 
+.br
+\fIstcfcs\fP Soil/ice depth temperature on model grid\&. 
+.br
+\fIslifcs\fP Model land-sea mask including ice flag\&. 
+.br
+\fIaisfcs\fP Model ice mask\&. 
+.br
+\fIvegfcs\fP Vegetation greenness on model grid\&. 
+.br
+\fIvetfcs\fP Vegetation type on model grid\&. 
+.br
+\fIsotfcs\fP Soil type on model grid\&. 
+.br
+\fIalffcs\fP Fraction for strongly and weakly zenith angle dependent albedo on model grid\&. 
+.br
+\fIcvfcs\fP Convective cloud cover on model grid\&. 
+.br
+\fIcvbfcs\fP Convective cloud base on model grid\&. 
+.br
+\fIcvtfcs\fP Convective cloud top on model grid\&. 
+.br
+\fIme\fP MPI task number\&. 
+.br
+\fInlunit\fP Program namelist unit number\&. 
+.br
+\fIsz_nml\fP Dimension of input_nml_file\&. 
+.br
+\fIinput_nml_file\fP Name of program namelist file\&. 
+.br
+\fIialb\fP Use modis albedo when '1'\&. Use brigleb when '0'\&. 
+.br
+\fIisot\fP When '1', use statsgo soil type\&. When '0' use zobler soil type\&. 
+.br
+\fIivegsrc\fP When '1', use igbp vegetation type\&. When '2' use sib vegetation type\&. 
+.br
+\fItile_num_ch\fP Model tile number to process\&. 
+.br
+\fIi_index\fP The 'i' indices of the model grid to process\&. 
+.br
+\fIj_index\fP The 'j' indices of the model grid to process\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 175 of file sfcsub\&.F\&.
+.PP
+References albocn(), analy(), anomint(), clima(), filanl(), filfcs(), fixrdc(), getscv(), getsmc(), getstc(), hmskrd(), landtyp(), merge(), monitr(), newice(), qcbyfc(), qcmxice(), qcmxmn(), qcsice(), qcsli(), qcsnow(), rof01(), scale(), setlsi(), setzro(), snodpth(), snodpth2(), snosfc(), tsfcor(), and usesgt()\&.
+.PP
+Referenced by sfcdrv()\&.
+.SS "subroutine snodpth (real (kind=kind_io8), dimension(len)scvanl, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len)snoclm, real (kind=kind_io8), dimension(len)glacir, real (kind=kind_io8)snwmax, real (kind=kind_io8)snwmin, logical, intent(in)landice, integerlen, real (kind=kind_io8), dimension(len)snoanl, integerme)"
+
+.PP
+Estimate snow depth at glacial, land and sea ice points\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIscvanl\fP Snow cover\&. 
+.br
+\fIslianl\fP Land-sea-ice mask\&. 
+.br
+\fItsfanl\fP Skin temperature\&. 
+.br
+\fIsnoclm\fP Climatological snow depth\&. 
+.br
+\fIglacir\fP Permanent glacial point when '1'\&. 
+.br
+\fIsnwmax\fP Maximum snow depth\&. 
+.br
+\fIsnwmin\fP Minimum snow depth\&. 
+.br
+\fIlandice\fP When true, point is permanent land ice\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIsnoanl\fP Snow depth\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 4978 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine snodpth2 (real (kind=kind_io8), dimension(len)glacir, real (kind=kind_io8)snwmax, real (kind=kind_io8), dimension(len)snoanl, integerlen, integerme)"
+
+.PP
+Ensure deep snow pack at permanent glacial points\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIglacir\fP Glacial flag 
+.br
+\fIsnwmax\fP Deep snow pack depth 
+.br
+\fIsnoanl\fP Model snow 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIme\fP MPI task number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 9730 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine snosfc (real (kind=kind_io8), dimension(len)snoanl, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8)tsfsmx, integerlen, integerme)"
+
+.PP
+Check skin temperature at points with snow\&. If it is above a threshold, reset it to that value\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsnoanl\fP Snow\&. 
+.br
+\fItsfanl\fP Skin temperature at the model points\&. 
+.br
+\fItsfsmx\fP Maximum allowable skin temperature at snow points\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIme\fP MPI rank 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 6593 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine subst (real (kind=kind_io8), dimension(imax,jmax)data, integerimax, integerjmax, real (kind=kind_io8)dlon, real (kind=kind_io8)dlat, logicalijordr)"
+
+.PP
+Take an array of data on a lat/lon based grid and rearrange it so the corner point is in the 'lower left' and adjacent points in the 'i' direction are consecutive\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdata\fP The data to be adjusted\&. 
+.br
+\fIimax\fP 'i' dimension of data\&. 
+.br
+\fIjmax\fP 'j' dimension of data\&. 
+.br
+\fIdlon\fP Delta longitude of the data\&. 
+.br
+\fIdlat\fP Delta latitude of the data\&. 
+.br
+\fIijordr\fP When false, adjacent points in the 'i' direction are consecutive\&. Otherwise, 'j' points are consecutive\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 3130 of file sfcsub\&.F\&.
+.PP
+Referenced by fixrda(), and fixrdc()\&.
+.SS "subroutine tsfcor (real (kind=kind_io8), dimension(len)tsfc, real (kind=kind_io8), dimension(len)orog, real (kind=kind_io8), dimension(len)slmask, real (kind=kind_io8)umask, integerlen, real (kind=kind_io8)rlapse)"
+
+.PP
+Adjust skin temperature or SST for terrain\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItsfc\fP Skin temperature/SST 
+.br
+\fIorog\fP Orography height\&. 
+.br
+\fIslmask\fP Model land-sea mask\&. 
+.br
+\fIumask\fP When '0' adjust SST, when '1' adjust skin temperature\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIrlapse\fP Standard atmospheric lapse rate\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 4948 of file sfcsub\&.F\&.
+.PP
+Referenced by sfccycle()\&.
+.SS "subroutine usesgt (real (kind=kind_io8), dimension(len)sig1t, real (kind=kind_io8), dimension(len)slianl, real (kind=kind_io8), dimension(len)tg3anl, integerlen, integerlsoil, real (kind=kind_io8), dimension(len)tsfanl, real (kind=kind_io8), dimension(len,lsoil)stcanl, real (kind=kind_io8)tsfimx)"
+
+.PP
+Set soil temperature and sea ice column temperature for a dead start\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsig1t\fP Sigma level 1 temperature for dead start\&. 
+.br
+\fIslianl\fP Land-sea-ice mask\&. 
+.br
+\fItg3anl\fP Soil substrate temperature\&. 
+.br
+\fIlen\fP Number of model points to process\&. 
+.br
+\fIlsoil\fP Number of soil layers\&. 
+.br
+\fItsfanl\fP Skin temperature\&. 
+.br
+\fIstcanl\fP Soil/sea ice column temperature\&. 
+.br
+\fItsfimx\fP Freezing point of sea water\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shrinivas Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 6560 of file sfcsub\&.F\&.
+.PP
+References getstc()\&.
+.PP
+Referenced by sfccycle()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for global_cycle from the source code\&.
