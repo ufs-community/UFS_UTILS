@@ -1,0 +1,245 @@
+.TH "module_nwp::nwp_type" 3 "Mon May 2 2022" "Version 1.4.0" "fvcom_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+module_nwp::nwp_type \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherited by \fBmodule_nwp::fcst_nwp\fP\&.
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "character(len=6) \fBdatatype\fP"
+.br
+.RI "\fIData type\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBdimnameew\fP"
+.br
+.RI "\fIEast/West dimension name\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBdimnamens\fP"
+.br
+.RI "\fINorth/South dimension name\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBdimnametime\fP"
+.br
+.RI "\fITime dimension name\&. \fP"
+.ti -1c
+.RI "integer \fBi_ice\fP"
+.br
+.RI "\fIIndex of ice var\&. \fP"
+.ti -1c
+.RI "integer \fBi_icet\fP"
+.br
+.RI "\fIIndex of ice temp var\&. \fP"
+.ti -1c
+.RI "integer \fBi_mask\fP"
+.br
+.RI "\fIIs var visible (always 1)\&. \fP"
+.ti -1c
+.RI "integer \fBi_sfct\fP"
+.br
+.RI "\fIIndex of sst temp var\&. \fP"
+.ti -1c
+.RI "integer \fBi_sst\fP"
+.br
+.RI "\fIIndex of sst var\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBlatname\fP"
+.br
+.RI "\fILatitude name\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBlonname\fP"
+.br
+.RI "\fILongitude name\&. \fP"
+.ti -1c
+.RI "integer \fBnumvar\fP"
+.br
+.RI "\fINumber of variabls\&. \fP"
+.ti -1c
+.RI "real(r_kind), dimension(:,:,:), 
+.br
+allocatable \fBnwp_ice\fP"
+.br
+.RI "\fIOver water ice concentration 3D array\&. \fP"
+.ti -1c
+.RI "real(r_kind), dimension(:,:,:), 
+.br
+allocatable \fBnwp_icet\fP"
+.br
+.RI "\fIIce skin temperature 3D array\&. \fP"
+.ti -1c
+.RI "real(r_kind), dimension(:,:,:), 
+.br
+allocatable \fBnwp_mask\fP"
+.br
+.RI "\fILand/water mask 3D array\&. \fP"
+.ti -1c
+.RI "real(r_kind), dimension(:,:,:), 
+.br
+allocatable \fBnwp_sfct\fP"
+.br
+.RI "\fISkin temperature 3D array\&. \fP"
+.ti -1c
+.RI "real(r_kind), dimension(:,:,:), 
+.br
+allocatable \fBnwp_sst\fP"
+.br
+.RI "\fISST 3D array\&. \fP"
+.ti -1c
+.RI "character(len=20), dimension(:), 
+.br
+allocatable \fBvarnames\fP"
+.br
+.RI "\fIVariable names\&. \fP"
+.ti -1c
+.RI "integer \fBxlat\fP"
+.br
+.RI "\fINumber of latitudes\&. \fP"
+.ti -1c
+.RI "integer \fBxlon\fP"
+.br
+.RI "\fINumber of longitudes\&. \fP"
+.ti -1c
+.RI "integer \fBxtime\fP"
+.br
+.RI "\fINumber of times\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 28 of file module_nwp\&.f90\&.
+.SH "Field Documentation"
+.PP 
+.SS "character(len=6) module_nwp::nwp_type::datatype\fC [private]\fP"
+
+.PP
+Data type\&. 
+.PP
+Definition at line 29 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::nwp_type::dimnameew\fC [private]\fP"
+
+.PP
+East/West dimension name\&. 
+.PP
+Definition at line 42 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::nwp_type::dimnamens\fC [private]\fP"
+
+.PP
+North/South dimension name\&. 
+.PP
+Definition at line 43 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::nwp_type::dimnametime\fC [private]\fP"
+
+.PP
+Time dimension name\&. 
+.PP
+Definition at line 44 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::nwp_type::i_ice\fC [private]\fP"
+
+.PP
+Index of ice var\&. 
+.PP
+Definition at line 36 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::nwp_type::i_icet\fC [private]\fP"
+
+.PP
+Index of ice temp var\&. 
+.PP
+Definition at line 38 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::nwp_type::i_mask\fC [private]\fP"
+
+.PP
+Is var visible (always 1)\&. 
+.PP
+Definition at line 34 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::nwp_type::i_sfct\fC [private]\fP"
+
+.PP
+Index of sst temp var\&. 
+.PP
+Definition at line 37 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::nwp_type::i_sst\fC [private]\fP"
+
+.PP
+Index of sst var\&. 
+.PP
+Definition at line 35 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::nwp_type::latname\fC [private]\fP"
+
+.PP
+Latitude name\&. 
+.PP
+Definition at line 40 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::nwp_type::lonname\fC [private]\fP"
+
+.PP
+Longitude name\&. 
+.PP
+Definition at line 41 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::nwp_type::numvar\fC [private]\fP"
+
+.PP
+Number of variabls\&. 
+.PP
+Definition at line 30 of file module_nwp\&.f90\&.
+.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_ice\fC [private]\fP"
+
+.PP
+Over water ice concentration 3D array\&. 
+.PP
+Definition at line 48 of file module_nwp\&.f90\&.
+.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_icet\fC [private]\fP"
+
+.PP
+Ice skin temperature 3D array\&. 
+.PP
+Definition at line 50 of file module_nwp\&.f90\&.
+.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_mask\fC [private]\fP"
+
+.PP
+Land/water mask 3D array\&. 
+.PP
+Definition at line 46 of file module_nwp\&.f90\&.
+.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_sfct\fC [private]\fP"
+
+.PP
+Skin temperature 3D array\&. 
+.PP
+Definition at line 49 of file module_nwp\&.f90\&.
+.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_sst\fC [private]\fP"
+
+.PP
+SST 3D array\&. 
+.PP
+Definition at line 47 of file module_nwp\&.f90\&.
+.SS "character(len=20), dimension(:), allocatable module_nwp::nwp_type::varnames\fC [private]\fP"
+
+.PP
+Variable names\&. 
+.PP
+Definition at line 39 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::nwp_type::xlat\fC [private]\fP"
+
+.PP
+Number of latitudes\&. 
+.PP
+Definition at line 31 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::nwp_type::xlon\fC [private]\fP"
+
+.PP
+Number of longitudes\&. 
+.PP
+Definition at line 32 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::nwp_type::xtime\fC [private]\fP"
+
+.PP
+Number of times\&. 
+.PP
+Definition at line 33 of file module_nwp\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fvcom_tools from the source code\&.
