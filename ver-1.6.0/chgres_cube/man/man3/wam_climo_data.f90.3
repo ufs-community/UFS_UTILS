@@ -1,0 +1,1280 @@
+.TH "/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/wam_climo_data.f90" 3 "Mon May 2 2022" "Version 1.6.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/wam_climo_data.f90 \- 
+.PP
+Process vertical profile climatologic data for WAM\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "module \fBgettemp_mod\fP"
+.br
+.RI "\fIUse moduke for common blocks\&. \fP"
+.ti -1c
+.RI "module \fBwam_gtd7bk_mod\fP"
+.br
+.RI "\fIUse moduke for blockdata gtd7bk\&. \fP"
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "function \fBccor\fP (alt, r, h1, zh)"
+.br
+.RI "\fIChemistry/dissociation correction\&. \fP"
+.ti -1c
+.RI "function \fBccor2\fP (alt, r, h1, zh, h2)"
+.br
+.RI "\fIO and O2 chemistry/dissociation correction\&. \fP"
+.ti -1c
+.RI "function \fBdensm\fP (alt, d0, xm, tz, mn3, zn3, tn3, tgn3, mn2, zn2, tn2, tgn2)"
+.br
+.RI "\fICalculate temperature and density profiles for lower atmos\&. \fP"
+.ti -1c
+.RI "function \fBdensu\fP (alt, dlb, tinf, tlb, xm, alpha, tz, zlb, s2, mn1, zn1, tn1, tgn1)"
+.br
+.RI "\fICalculate temperature and density profiles\&. \fP"
+.ti -1c
+.RI "function \fBdnet\fP (dd, dm, zhm, xmm, xm)"
+.br
+.RI "\fITurbopause correction\&. \fP"
+.ti -1c
+.RI "subroutine \fBgettemp\fP (iday, nday, xlat, nlat, pr, np, temp, n_o, n_o2, n_n2)"
+.br
+.RI "\fIEntry routine to get WAM needed temperature and composition profiles\&. \fP"
+.ti -1c
+.RI "subroutine \fBghp7\fP (iyd, sec, alt, glat, glong, stl, f107a, f107, ap, d, t, press)"
+.br
+.RI "\fIFind altitude of pressure surface (press) from gtd7\&. \fP"
+.ti -1c
+.RI "subroutine \fBglatf\fP (lat, gv, reff)"
+.br
+.RI "\fICalculate latitude variable\&. \fP"
+.ti -1c
+.RI "function \fBglob7s\fP (p)"
+.br
+.RI "\fIVersion of globe for lower atmosphere\&. \fP"
+.ti -1c
+.RI "function \fBglobe7\fP (yrd, sec, lat, long, tloc, f107a, f107, ap, p)"
+.br
+.RI "\fICalculate g(l) function for upper thermosphere parameters\&. \fP"
+.ti -1c
+.RI "subroutine \fBgtd7\fP (iyd, sec, alt, glat, glong, stl, f107a, f107, ap, mass, d, t)"
+.br
+.RI "\fIThe nrlmsise-00 subroutine gtd7\&. \fP"
+.ti -1c
+.RI "subroutine \fBgtd7d\fP (iyd, sec, alt, glat, glong, stl, f107a, f107, ap, mass, d, t)"
+.br
+.RI "\fIThe nrlmsise-00 subroutine gtd7d\&. \fP"
+.ti -1c
+.RI "subroutine \fBgts7\fP (iyd, sec, alt, glat, glong, stl, f107a, f107, ap, mass, d, t)"
+.br
+.RI "\fIThermospheric portion of nrlmsise-00\&. \fP"
+.ti -1c
+.RI "subroutine \fBmeters\fP (meter)"
+.br
+.RI "\fIConvert outputs to kg & meters if meter true\&. \fP"
+.ti -1c
+.RI "function \fBscalh\fP (alt, xm, temp)"
+.br
+.RI "\fICalculate scale height (km) \fP"
+.ti -1c
+.RI "subroutine \fBspline\fP (x, y, n, yp1, ypn, y2)"
+.br
+.RI "\fICalculate 2nd derivatives of cubic spline interp function\&. \fP"
+.ti -1c
+.RI "subroutine \fBsplini\fP (xa, ya, y2a, n, x, yi)"
+.br
+.RI "\fIIntegrate cubic spline function\&. \fP"
+.ti -1c
+.RI "subroutine \fBsplint\fP (xa, ya, y2a, n, x, y)"
+.br
+.RI "\fICalculate cubic spline interp value\&. \fP"
+.ti -1c
+.RI "subroutine \fBtselec\fP (sv)"
+.br
+.RI "\fISet switches\&. \fP"
+.ti -1c
+.RI "function \fBvtst7\fP (iyd, sec, glat, glong, stl, f107a, f107, ap, ic)"
+.br
+.RI "\fITest variable condition\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Process vertical profile climatologic data for WAM\&. 
+
+This file contains all data need to form exosphere and used whole atmsopheric modeling (WAM)\&. it has two modules and some routines to compute the temperature and compositions of neutral density in specific values\&. the original package contains fortran 77 blockdata and common statement they are all recoded to use modules and use-statements\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBwam_climo_data\&.f90\fP\&.
+.SH "Data Type Documentation"
+.PP 
+.SH "module gettemp_mod"
+.PP 
+Use moduke for common blocks\&. 
+
+All variables under this module are originalyl in common block used for subroutine gettemp and others in this package\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 879 of file wam_climo_data\&.f90\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+real \fIapd\fP parameter calcumate for magnetic activity 
+.br
+.PP
+real \fIapdf\fP the same as apd 
+.br
+.PP
+real, dimension(4) \fIapt\fP daily magnetic activity 
+.br
+.PP
+real \fIc2tloc\fP cosine of 2 time location 
+.br
+.PP
+real \fIc3tloc\fP cosine of 3 time location 
+.br
+.PP
+real \fIctloc\fP cosine of the location 
+.br
+.PP
+real \fIday\fP day in a year 
+.br
+.PP
+real \fIdb01\fP diffusive density at zlb for g01 
+.br
+.PP
+real \fIdb04\fP diffusive density at zlb for g4 
+.br
+.PP
+real \fIdb14\fP diffusive density at zlb for g14 
+.br
+.PP
+real \fIdb16\fP diffusive density at zlb for g18 
+.br
+.PP
+real \fIdb28\fP diffusive density at zlb for g28 
+.br
+.PP
+real \fIdb32\fP diffusive density at zlb for g32 
+.br
+.PP
+real \fIdb40\fP diffusive density at zlb for g40 
+.br
+.PP
+real \fIdb48\fP diffusive density at zlb for g48 
+.br
+.PP
+real \fIdd\fP diffusive density at alt 
+.br
+.PP
+real \fIdf\fP the difference of f10\&.7 effect 
+.br
+.PP
+real \fIdfa\fP the difference to reference value 
+.br
+.PP
+real \fIdm01\fP mixed density at alt01 
+.br
+.PP
+real \fIdm04\fP mixed density at alt04 
+.br
+.PP
+real \fIdm14\fP mixed density at alt14 
+.br
+.PP
+real \fIdm16\fP mixed density at alt16 
+.br
+.PP
+real \fIdm28\fP mixed density at alt28 
+.br
+.PP
+real \fIdm32\fP mixed density at alt32 
+.br
+.PP
+real \fIdm40\fP mixed density at alt40 
+.br
+.PP
+real \fIg0\fP initial gradient variations 
+.br
+.PP
+real \fIgsurf\fP surface gravitation force at given latitude 
+.br
+.PP
+integer \fIisw\fP indix for sw 
+.br
+.PP
+integer \fIiyr\fP integer for a given year 
+.br
+.PP
+real, dimension(150, 9) \fIpd\fP he density 
+.br
+.PP
+real, dimension(25, 2) \fIpdl\fP turbo 
+.br
+.PP
+real, dimension(9, 4) \fIplg\fP Legendre polynomial points\&. 
+.br
+.PP
+real, dimension(100, 10) \fIpma\fP middle and low temperature 
+.br
+.PP
+real, dimension(150) \fIps\fP s parameter 
+.br
+.PP
+real, dimension(150) \fIpt\fP temperature 
+.br
+.PP
+real, dimension(100, 4) \fIptl\fP upper temperature 
+.br
+.PP
+real \fIre\fP referenced height related to gsurf 
+.br
+.PP
+real \fIrl\fP correction to specified mixing ratio at ground 
+.br
+.PP
+real \fIs\fP scale inverse to temperature difference 
+.br
+.PP
+real \fIs2tloc\fP sine of 2 time location 
+.br
+.PP
+real \fIs3tloc\fP sine of 3 time location 
+.br
+.PP
+real, dimension(100) \fIsam\fP semiannual mult sam 
+.br
+.PP
+real \fIstloc\fP sine of the location 
+.br
+.PP
+real, dimension(25) \fIsw\fP weighting 
+.br
+.PP
+real, dimension(25) \fIswc\fP weighting 
+.br
+.PP
+real \fIt0\fP initial temperature 
+.br
+.PP
+real, dimension(2) \fItgn1\fP temperature gradient at node 1 (~mesosphere) 
+.br
+.PP
+real, dimension(2) \fItgn2\fP temperature gradient at node 2 (~stratosphere) 
+.br
+.PP
+real, dimension(2) \fItgn3\fP temperature gradient at node 3 (~troposphere) 
+.br
+.PP
+real \fItinfg\fP startinf referenced point for tt 
+.br
+.PP
+real \fItlb\fP labeled temperature 
+.br
+.PP
+real, dimension(5) \fItn1\fP temperature at node 1 (~mesosphere) 
+.br
+.PP
+real, dimension(4) \fItn2\fP temperature at node 2 (~stratosphere) 
+.br
+.PP
+real, dimension(5) \fItn3\fP temperature at node 3 (~troposphere) 
+.br
+.PP
+real \fItr12\fP try factor 1 or 2 
+.br
+.PP
+real, dimension(15) \fItt\fP referenced temperature 
+.br
+.PP
+real \fIxlong\fP a given longitude 
+.br
+.PP
+real \fIz0\fP initial height 
+.br
+.PP
+real \fIza\fP joining altitude of bates and spline 
+.br
+.PP
+.RE
+.PP
+.SH "module wam_gtd7bk_mod"
+.PP 
+Use moduke for blockdata gtd7bk\&. 
+
+All variables originalyl in blockdata used for this packahe are getting from NRLMSISE-00\&. NRLMSISE-00 is an empirical, global reference atmospheric model of the Earth from ground to space\&. It models the temperatures and densities of the atmosphere's components\&. NRL stands for the US Naval Research Laboratory\&. MSIS stands for mass spectrometer and incoherent scatter radar, the two primary data sources for development of earlier versions of the model\&. E indicates that the model extends from the ground through exosphere and 00 is the year of release in 2000\&. Over the years since introduction, NRLMSISE-00 has become the standard for international space research\&. (wikipedia)
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 29 of file wam_climo_data\&.f90\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+integer \fIimr\fP define version 
+.br
+.PP
+character *4, dimension(3) \fIisdate\fP define date 
+.br
+.PP
+character *4, dimension(2) \fIistime\fP define time 
+.br
+.PP
+character *4, dimension(2) \fIname\fP define data name 
+.br
+.PP
+real, dimension(50) \fIpa1\fP block space data for he denisity 
+.br
+.PP
+real, dimension(50) \fIpa2\fP block space data for he denisity 
+.br
+.PP
+real, dimension(50) \fIpa3\fP block space data for he denisity 
+.br
+.PP
+real, dimension(50) \fIpaa1\fP block space data for semiannual mult sam 
+.br
+.PP
+real, dimension(50) \fIpaa2\fP block space data for semiannual mult sam 
+.br
+.PP
+real, dimension(10) \fIpavgm\fP block space data for middle atmosphere averages 
+.br
+.PP
+real, dimension(50) \fIpb1\fP block space data for o density 
+.br
+.PP
+real, dimension(50) \fIpb2\fP block space data for o density 
+.br
+.PP
+real, dimension(50) \fIpb3\fP block space data for o density 
+.br
+.PP
+real, dimension(50) \fIpc1\fP block space data for n2 density 
+.br
+.PP
+real, dimension(50) \fIpc2\fP block space data for n2 density 
+.br
+.PP
+real, dimension(50) \fIpc3\fP block space data for n2 density 
+.br
+.PP
+real, dimension(50) \fIpd1\fP block space data for tlb 
+.br
+.PP
+real, dimension(50) \fIpd2\fP block space data for tlb 
+.br
+.PP
+real, dimension(50) \fIpd3\fP block space data for tlb 
+.br
+.PP
+real, dimension(10, 8) \fIpdm\fP block space data for lower boundary 
+.br
+.PP
+real, dimension(50) \fIpe1\fP block space data for o2 density 
+.br
+.PP
+real, dimension(50) \fIpe2\fP block space data for o2 density 
+.br
+.PP
+real, dimension(50) \fIpe3\fP block space data for o2 density 
+.br
+.PP
+real, dimension(50) \fIpf1\fP block space data for ar density 
+.br
+.PP
+real, dimension(50) \fIpf2\fP block space data for ar density 
+.br
+.PP
+real, dimension(50) \fIpf3\fP block space data for ar density 
+.br
+.PP
+real, dimension(50) \fIpg1\fP block space data for h density 
+.br
+.PP
+real, dimension(50) \fIpg2\fP block space data for h density 
+.br
+.PP
+real, dimension(50) \fIpg3\fP block space data for h density 
+.br
+.PP
+real, dimension(50) \fIph1\fP block space data for n density 
+.br
+.PP
+real, dimension(50) \fIph2\fP block space data for n density 
+.br
+.PP
+real, dimension(50) \fIph3\fP block space data for n density 
+.br
+.PP
+real, dimension(50) \fIpi1\fP block space data for hot o density 
+.br
+.PP
+real, dimension(50) \fIpi2\fP block space data for hot o density 
+.br
+.PP
+real, dimension(50) \fIpi3\fP block space data for hot o density 
+.br
+.PP
+real, dimension(50) \fIpj1\fP block space data for s param 
+.br
+.PP
+real, dimension(50) \fIpj2\fP block space data for s param 
+.br
+.PP
+real, dimension(50) \fIpj3\fP block space data for s param 
+.br
+.PP
+real, dimension(50) \fIpk1\fP block space data for turbo 
+.br
+.PP
+real, dimension(50) \fIpl1\fP block space data for tn1(2) 
+.br
+.PP
+real, dimension(50) \fIpl2\fP block space data for tn1(2) 
+.br
+.PP
+real, dimension(50) \fIpm1\fP block space data for tn1(3) 
+.br
+.PP
+real, dimension(50) \fIpm2\fP block space data for tn1(3) 
+.br
+.PP
+real, dimension(50) \fIpn1\fP block space data for tn1(4) 
+.br
+.PP
+real, dimension(50) \fIpn2\fP block space data for tn1(4) 
+.br
+.PP
+real, dimension(50) \fIpo1\fP block space data for tn1(5) tn2(1) 
+.br
+.PP
+real, dimension(50) \fIpo2\fP block space data for tn1(5) tn2(1) 
+.br
+.PP
+real, dimension(50) \fIpp1\fP block space data for tn2(2) 
+.br
+.PP
+real, dimension(50) \fIpp2\fP block space data for tn2(2) 
+.br
+.PP
+real, dimension(50) \fIpq1\fP block space data for tn2(3) 
+.br
+.PP
+real, dimension(50) \fIpq2\fP block space data for tn2(3) 
+.br
+.PP
+real, dimension(50) \fIpr1\fP block space data for tn2(4) tn3(1) 
+.br
+.PP
+real, dimension(2, 151) \fIpr151\fP define pressures 
+.br
+.PP
+real, dimension(50) \fIpr2\fP block space data for tn2(4) tn3(1) 
+.br
+.PP
+real, dimension(2, 65) \fIpr65\fP define pressures 
+.br
+.PP
+real, dimension(50) \fIps1\fP block space data for tn3(2) 
+.br
+.PP
+real, dimension(50) \fIps2\fP block space data for tn3(2) 
+.br
+.PP
+real, dimension(50) \fIpt1\fP block space data for temperature 
+.br
+.PP
+real, dimension(50) \fIpt2\fP block space data for temperature 
+.br
+.PP
+real, dimension(50) \fIpt3\fP block space data for temperature 
+.br
+.PP
+real, dimension(10) \fIptm\fP block space data for lower boundary 
+.br
+.PP
+real, dimension(50) \fIpu1\fP block space data for tn3(3) 
+.br
+.PP
+real, dimension(50) \fIpu2\fP block space data for tn3(3) 
+.br
+.PP
+real, dimension(50) \fIpv1\fP block space data for tn3(4) 
+.br
+.PP
+real, dimension(50) \fIpv2\fP block space data for tn3(4) 
+.br
+.PP
+real, dimension(50) \fIpw1\fP block space data for tn3(5) surface temperature tsl 
+.br
+.PP
+real, dimension(50) \fIpw2\fP block space data for tn3(5) surface temperature tsl 
+.br
+.PP
+real, dimension(50) \fIpx1\fP block space data for tgn3(2) surface grad tslg 
+.br
+.PP
+real, dimension(50) \fIpx2\fP block space data for tgn3(2) surface grad tslg 
+.br
+.PP
+real, dimension(50) \fIpy1\fP block space data for tgn2(1) tgn1(2) 
+.br
+.PP
+real, dimension(50) \fIpy2\fP block space data for tgn2(1) tgn1(2) 
+.br
+.PP
+real, dimension(50) \fIpz1\fP block space data for tgn3(1) tgn2(2) 
+.br
+.PP
+real, dimension(50) \fIpz2\fP block space data for tgn3(1) tgn2(2) 
+.br
+.PP
+.RE
+.PP
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "function ccor (alt, r, h1, zh)"
+
+.PP
+Chemistry/dissociation correction\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalt\fP altitude 
+.br
+\fIr\fP target ratio 
+.br
+\fIh1\fP transition scale length 
+.br
+\fIzh\fP altitude of 1/2 r 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+ccor correction
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2754 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "function ccor2 (alt, r, h1, zh, h2)"
+
+.PP
+O and O2 chemistry/dissociation correction\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalt\fP altitude 
+.br
+\fIr\fP target ratio 
+.br
+\fIh1\fP transition scale length 1 
+.br
+\fIzh\fP altitude of 1/2 r 
+.br
+\fIh2\fP transition scale length 2 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+ccor2 correction
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2782 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "function densm (alt, d0, xm, tz, mn3, dimension(mn3)zn3, dimension(mn3)tn3, dimension(2)tgn3, mn2, dimension(mn2)zn2, dimension(mn2)tn2, dimension(2)tgn2)"
+
+.PP
+Calculate temperature and density profiles for lower atmos\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalt\fP altitude (km) 
+.br
+\fId0\fP initial guess 
+.br
+\fIxm\fP molecular weight 
+.br
+\fItz\fP temperature 
+.br
+\fImn3\fP size of array zn3 amd tn3 
+.br
+\fIzn3\fP altitude (km) 
+.br
+\fItn3\fP temperature 
+.br
+\fItgn3\fP altitude (km) 
+.br
+\fImn2\fP size of array zn2 and tn2 
+.br
+\fIzn2\fP altitude (km) 
+.br
+\fItn2\fP temperature 
+.br
+\fItgn2\fP end point temperature 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+densm density
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2504 of file wam_climo_data\&.f90\&.
+.PP
+References spline(), splini(), and splint()\&.
+.PP
+Referenced by gtd7()\&.
+.SS "function densu (alt, dlb, tinf, tlb, xm, alpha, tz, zlb, s2, mn1, dimension(mn1)zn1, dimension(mn1)tn1, dimension(2)tgn1)"
+
+.PP
+Calculate temperature and density profiles\&. New lower thermo polynomial 10/30/89
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalt\fP altitude (km) 
+.br
+\fIdlb\fP altitude (km) 
+.br
+\fItinf\fP initial guess 
+.br
+\fItlb\fP molecular weight 
+.br
+\fIxm\fP molecular weight 
+.br
+\fIalpha\fP initial guess 
+.br
+\fItz\fP temperature 
+.br
+\fIzlb\fP altitude (km) 
+.br
+\fIs2\fP altitude (km) 
+.br
+\fImn1\fP size of array zn2 and tn2 
+.br
+\fIzn1\fP altitude (km) 
+.br
+\fItn1\fP temperature 
+.br
+\fItgn1\fP end point temperature 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+densu density
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2404 of file wam_climo_data\&.f90\&.
+.PP
+References spline(), splini(), and splint()\&.
+.PP
+Referenced by gts7()\&.
+.SS "function dnet (dd, dm, zhm, xmm, xm)"
+
+.PP
+Turbopause correction\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdd\fP diffusive density 
+.br
+\fIdm\fP full mixed density 
+.br
+\fIzhm\fP transition scale length 
+.br
+\fIxmm\fP full mixed molecular weight 
+.br
+\fIxm\fP species molecular weight 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+dnet combined density
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2720 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "subroutine gettemp (integer, dimension(nday), intent(in)iday, integer, intent(in)nday, real, dimension(nlat), intent(in)xlat, integer, intent(in)nlat, real, dimension(np), intent(in)pr, integer, intent(in)np, real, dimension(np,nlat,nday), intent(out)temp, real, dimension(np,nlat,nday), intent(out)n_o, real, dimension(np,nlat,nday), intent(out)n_o2, real, dimension(np,nlat,nday), intent(out)n_n2)"
+
+.PP
+Entry routine to get WAM needed temperature and composition profiles\&. Calculate temperature at each grid point useing nrlmsise00_sub 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIiday\fP calendat date with array dimension of nday 
+.br
+\fInday\fP dimension length of iday 
+.br
+\fIxlat\fP latitudes with dimension nlat 
+.br
+\fInlat\fP dimension length of xlat 
+.br
+\fIpr\fP pressure in vertical with dimension of np 
+.br
+\fInp\fP dimension length of pr 
+.br
+\fItemp\fP temperature 
+.br
+\fIn_o\fP single oxygen number 
+.br
+\fIn_o2\fP oxygen number 
+.br
+\fIn_n2\fP nitrogen number
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 967 of file wam_climo_data\&.f90\&.
+.PP
+References ghp7(), and tselec()\&.
+.PP
+Referenced by atmosphere::vintg_wam()\&.
+.SS "subroutine ghp7 (iyd, sec, alt, glat, glong, stl, f107a, f107, dimension(7)ap, dimension(9)d, dimension(2)t, press)"
+
+.PP
+Find altitude of pressure surface (press) from gtd7\&. input: 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIiyd\fP year and day as yyddd 
+.br
+\fIsec\fP ut(sec) 
+.br
+\fIglat\fP geodetic latitude(deg) 
+.br
+\fIglong\fP geodetic longitude(deg) 
+.br
+\fIstl\fP local apparent solar time(hrs) 
+.br
+\fIf107a\fP 3 month average of f10\&.7 flux 
+.br
+\fIf107\fP daily f10\&.7 flux for previous day 
+.br
+\fIap\fP magnetic index(daily) or when sw(9)=-1\&. : array containing: ap(1) daily ap ap(2) 3 hr ap index for current time ap(3) 3 hr ap index for 3 hrs before current time ap(4) 3 hr ap index for 6 hrs before current time ap(5) 3 hr ap index for 9 hrs before current time ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr to current time ap(7) average of eight 3 hr ap indicies from 36 to 59 hrs pr to current time 
+.br
+\fIpress\fP pressure level(mb) output: 
+.br
+\fIalt\fP altitude(km) 
+.br
+\fId\fP density array with length of 8 d(1) he number density(cm-3) d(2) o number density(cm-3) d(3) n2 number density(cm-3) d(4) o2 number density(cm-3) d(5) ar number density(cm-3) d(6) total mass density(gm/cm3) d(7) h number density(cm-3) d(8) n number density(cm-3) d(9) hot o number density(cm-3) 
+.br
+\fIt\fP temperature array with length of 2 t(1) exospheric temperature t(2) temperature at alt
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 1412 of file wam_climo_data\&.f90\&.
+.PP
+References gtd7()\&.
+.PP
+Referenced by gettemp()\&.
+.SS "subroutine glatf (reallat, gv, reff)"
+
+.PP
+Calculate latitude variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlat\fP latitude in degree 
+.br
+\fIgv\fP gravity 
+.br
+\fIreff\fP effective radius
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 1479 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7()\&.
+.SS "function glob7s (dimension(*)p)"
+
+.PP
+Version of globe for lower atmosphere\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIp\fP pressure (mb) 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+glob7s version of global
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2292 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "function globe7 (yrd, sec, reallat, reallong, tloc, f107a, f107, dimension(*)ap, dimension(*)p)"
+
+.PP
+Calculate g(l) function for upper thermosphere parameters\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIyrd\fP year and day as yyddd 
+.br
+\fIsec\fP ut(sec) 
+.br
+\fIlat\fP geodetic latitude(deg) 
+.br
+\fIlong\fP geodetic longitude(deg) 
+.br
+\fItloc\fP local apparent solar time(hrs) 
+.br
+\fIf107a\fP 3 month average of f10\&.7 flux 
+.br
+\fIf107\fP daily f10\&.7 flux for previous day 
+.br
+\fIap\fP magnetic index(daily) or when sw(9)=-1\&. : array containing: ap(1) daily ap ap(2) 3 hr ap index for current time ap(3) 3 hr ap index for 3 hrs before current time ap(4) 3 hr ap index for 6 hrs before current time ap(5) 3 hr ap index for 9 hrs before current time ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr to current time ap(7) average of eight 3 hr ap indicies from 36 to 59 hrs pr to current time 
+.br
+\fIp\fP pressure level(mb) 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+globe7 version of global
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2029 of file wam_climo_data\&.f90\&.
+.PP
+References tselec()\&.
+.PP
+Referenced by gts7()\&.
+.SS "subroutine gtd7 (iyd, sec, alt, glat, glong, stl, f107a, f107, dimension(7)ap, mass, dimension(9)d, dimension(2)t)"
+
+.PP
+The nrlmsise-00 subroutine gtd7\&. Neutral atmosphere empirical model from the surface to lower exosphere\&.
+.PP
+New features: Extensive satellite drag database used in model generation Revised o2 (and o) in lower thermosphere Additional nonlinear solar activity term 'anomalous oxygen' number density, output d(9) at high altitudes (> 500 km), hot atomic oxygen or ionized oxygen can become appreciable for some ranges of subroutine inputs, thereby affecting drag on satellites and debris\&. we group these species under the term 'anomalous oxygen,' since their individual variations are not presently separable with the drag data used to define this model component\&. And d(6) is the sum of the mass densities of t species labeled by indices 1-5 and 7-8 in output variable d\&. this includes he, o, n2, o2, ar, h, and n but does not includ anomalous oxygen (species index 9)\&.
+.PP
+Notes on input variables: ut, local time, and longitude are used independently in the model and are not of equal importance for every situation\&. for the most physically realistic calculation these three variables should be consistent (stl=sec/3600+glong/15)\&. the equation of time departures from the above formula for apparent local time can be included if available but are of minor importance\&.
+.PP
+f107 and f107a values used to generate the model correspond to the 10\&.7 cm radio flux at the actual distance of the earth from the sun rather than the radio flux at 1 au\&. the following site provides both classes of values: ftp://ftp.ngdc.noaa.gov/stp/solar_data/solar_radio/flux/
+.PP
+f107, f107a, and ap effects are neither large nor well established below 80 km and these parameters should be set to 150\&., 150\&., and 4\&. respectively\&.
+.PP
+Subroutines for special outputs: High altitude drag: effective total mass density (subroutine gtd7d, output d(6)) for atmospheric drag calculations at altitudes above 500 km, call subroutine gtd7d to compute the 'effective total mass  
+          density' by including contributions from 'anomalous oxygen\&.' see 'notes on output variables' below on d(6)\&. Pressure grid (subroutine ghp7) see subroutine ghp7 to specify outputs at a pressure level rather than at an altitude\&. Output in m-3 and kg/m3: call meters(\&.true\&.)
+.PP
+Notes on output variables: To get output in m-3 and kg/m3: call meters(\&.true\&.) o, h, and n are set to zero below 72\&.5 km t(1), exospheric temperature, is set to global average for altitudes below 120 km\&. the 120 km gradient is left at global average value for altitudes below 72 km\&. d(6), total mass density, is not the same for subroutines gtd7 and gtd7d
+.PP
+Switches: the following is for test and special purposes: To turn on and off particular variations call tselec(sw), where sw is a 25 element array containing 0\&. for off, 1\&. for on, or 2\&. for main effects off but cross terms on for the following variations 1 f10\&.7 effect on mean 2 time independent 3 symmetrical annual 4 symmetrical semiannual 5 asymmetrical annual 6 asymmetrical semiannual 7 diurnal 8 semidiurnal 9 daily ap 10 all ut/long effects 11 longitudinal 12 ut and mixed ut/long 13 mixed ap/ut/long 14 terdiurnal 15 departures from diffusive equilibrium 16 all tinf var 17 all tlb var 18 all tn1 var 19 all s var 20 all tn2 var 21 all nlb var 22 all tn3 var 23 turbo scale height var
+.PP
+\fBParameters:\fP
+.RS 4
+\fIiyd\fP year and day as yyddd (day of year from 1 to 365 or 366) 
+.br
+\fIsec\fP ut(sec) 
+.br
+\fIalt\fP altitude(km) 
+.br
+\fIglat\fP geodetic latitude(deg) 
+.br
+\fIglong\fP geodetic longitude(deg) 
+.br
+\fIstl\fP local apparent solar time(hrs; see note below) 
+.br
+\fIf107a\fP 81 day average of f10\&.7 flux (centered on day ddd) 
+.br
+\fIf107\fP daily f10\&.7 flux for previous day 
+.br
+\fIap\fP magnetic index(daily) or when sw(9)=-1\&. : array containing: ap(1) daily ap ap(2) 3 hr ap index for current time ap(3) 3 hr ap index for 3 hrs before current time ap(4) 3 hr ap index for 6 hrs before current time ap(5) 3 hr ap index for 9 hrs before current time ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr to current time ap(7) average of eight 3 hr ap indicies from 36 to 57 hrs pr to current time 
+.br
+\fImass\fP mass number (only density for selected gas is calculated\&. mass 0 is temperature\&. mass 48 for all\&. mass 17 is anomalous o only\&.)
+.br
+\fId\fP size of 9 with following definition\&. d(1) he number density(cm-3) d(2) o number density(cm-3) d(3) n2 number density(cm-3) d(4) o2 number density(cm-3) d(5) ar number density(cm-3) d(6) total mass density(gm/cm3) d(7) h number density(cm-3) d(8) n number density(cm-3) d(9) anomalous oxygen number density(cm-3) 
+.br
+\fIt\fP - size of 2 array with following definition\&. t(1) exospheric temperature t(2) temperature at alt
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 1143 of file wam_climo_data\&.f90\&.
+.PP
+References densm(), glatf(), glob7s(), gts7(), tselec(), and vtst7()\&.
+.PP
+Referenced by ghp7(), and gtd7d()\&.
+.SS "subroutine gtd7d (iyd, sec, alt, glat, glong, stl, f107a, f107, dimension(7)ap, mass, dimension(9)d, dimension(2)t)"
+
+.PP
+The nrlmsise-00 subroutine gtd7d\&. This subroutine provides effective total mass density for output d(6) which includes contributions from 'anomalous       
+ oxygen' which can affect satellite drag above 500 km\&. this subroutine is part of the distribution package for the neutral atmosphere empirical model from the surface to lower exosphere\&. see subroutine gtd7 for more extensive comments\&. And d(6) is the 'effective total mass density
+ for drag' and is the sum of the mass densities of all species in this model, including anomalous oxygen\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIiyd\fP year and day as yyddd (day of year from 1 to 365 (or 366) 
+.br
+\fIsec\fP ut(sec) 
+.br
+\fIalt\fP altitude(km) 
+.br
+\fIglat\fP geodetic latitude(deg) 
+.br
+\fIglong\fP geodetic longitude(deg) 
+.br
+\fIstl\fP local apparent solar time(hrs; see note below) 
+.br
+\fIf107a\fP 81 day average of f10\&.7 flux (centered on day ddd) 
+.br
+\fIf107\fP daily f10\&.7 flux for previous day 
+.br
+\fIap\fP magnetic index(daily) or when sw(9)=-1\&. : ap array containing: ap(1) daily ap ap(2) 3 hr ap index for current time ap(3) 3 hr ap index for 3 hrs before current time ap(4) 3 hr ap index for 6 hrs before current time ap(5) 3 hr ap index for 9 hrs before current time ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr to current time ap(7) average of eight 3 hr ap indicies from 36 to 57 hrs pr to current time 
+.br
+\fImass\fP mass number (only density for selected gas is calculated\&. mass 0 is temperature\&. mass 48 for all\&. mass 17 is anomalous o only\&.)
+.br
+\fId\fP density array with length of 9 
+.br
+\fIt\fP temperature array with length of 2 d array contains: d(1) he number density(cm-3) d(2) o number density(cm-3) d(3) n2 number density(cm-3) d(4) o2 number density(cm-3) d(5) ar number density(cm-3) d(6) total mass density(gm/cm3) [includes anomalous oxygen] d(7) h number density(cm-3) d(8) n number density(cm-3) d(9) anomalous oxygen number density(cm-3) t array conyains: t(1) exospheric temperature t(2) temperature at alt
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 1357 of file wam_climo_data\&.f90\&.
+.PP
+References gtd7()\&.
+.SS "subroutine gts7 (iyd, sec, alt, glat, glong, stl, f107a, f107, dimension(*)ap, mass, dimension(9)d, dimension(2)t)"
+
+.PP
+Thermospheric portion of nrlmsise-00\&. See gtd7 for more extensive comments Output in m-3 and kg/m3: call meters(\&.true\&.)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIiyd\fP year and day as yyddd (day of year from 1 to 365 or 366 
+.br
+\fIsec\fP ut(sec) 
+.br
+\fIalt\fP altitude(km) (>72\&.5 km) 
+.br
+\fIglat\fP geodetic latitude(deg) 
+.br
+\fIglong\fP geodetic longitude(deg) 
+.br
+\fIstl\fP local apparent solar time(hrs) 
+.br
+\fIf107a\fP 3 month average of f10\&.7 flux 
+.br
+\fIf107\fP daily f10\&.7 flux for previous day 
+.br
+\fIap\fP magnetic index(daily) or when sw(9)=-1\&. : array containing: ap(1) daily ap ap(2) 3 hr ap index for current time ap(3) 3 hr ap index for 3 hrs before current time ap(4) 3 hr ap index for 6 hrs before current time ap(5) 3 hr ap index for 9 hrs before current time ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr to current time ap(7) average of eight 3 hr ap indicies from 36 to 59 hrs pr to current time 
+.br
+\fImass\fP - mass number (only density for selected gas is calculated\&. mass 0 is temperature\&. mass 48 for all\&. mass 17 is anomalous o only\&.) 
+.br
+\fId\fP density array with length of 8 d(1) he number density(cm-3) d(2) o number density(cm-3) d(3) n2 number density(cm-3) d(4) o2 number density(cm-3) d(5) ar number density(cm-3) d(6) total mass density(gm/cm3) d(7) h number density(cm-3) d(8) n number density(cm-3) d(9) anomalous oxygen number density(cm-3) 
+.br
+\fIt\fP temperature array with length of 2 t(1) exospheric temperature t(2) temperature at alt
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 1606 of file wam_climo_data\&.f90\&.
+.PP
+References ccor(), ccor2(), densu(), dnet(), glob7s(), globe7(), scalh(), and vtst7()\&.
+.PP
+Referenced by gtd7()\&.
+.SS "subroutine meters (logicalmeter)"
+
+.PP
+Convert outputs to kg & meters if meter true\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImeter\fP logical true or false 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 1978 of file wam_climo_data\&.f90\&.
+.SS "function scalh (alt, xm, temp)"
+
+.PP
+Calculate scale height (km) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalt\fP altitude [km] 
+.br
+\fIxm\fP molecular weihjt 
+.br
+\fItemp\fP temperature 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+scalh scale height
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 1995 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "subroutine spline (dimension(n)x, dimension(n)y, n, yp1, ypn, dimension(n)y2)"
+
+.PP
+Calculate 2nd derivatives of cubic spline interp function\&. Adapted from numerical recipes by press et al\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP arrays of tabulated function in ascending order by x 
+.br
+\fIy\fP arrays of tabulated function in ascending order by x 
+.br
+\fIn\fP size of arrays x,y 
+.br
+\fIyp1\fP specified derivatives at x(1) 
+.br
+\fIypn\fP specified derivatives at x(n) values >= 1e30 signal signal second derivative zero\&. 
+.br
+\fIy2\fP output array of second derivatives
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2605 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by densm(), and densu()\&.
+.SS "subroutine splini (dimension(n)xa, dimension(n)ya, dimension(n)y2a, n, x, yi)"
+
+.PP
+Integrate cubic spline function\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxa\fP arrays of tabulated function in ascending order by x 
+.br
+\fIya\fP arrays of tabulated function in ascending order by x 
+.br
+\fIy2a\fP array of second derivatives 
+.br
+\fIn\fP size of arrays xa,ya,y2a 
+.br
+\fIx\fP abscissa endpoint for integration 
+.br
+\fIyi\fP output value
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2684 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by densm(), and densu()\&.
+.SS "subroutine splint (dimension(n)xa, dimension(n)ya, dimension(n)y2a, n, x, y)"
+
+.PP
+Calculate cubic spline interp value\&. Adapted from numerical recipes by press et al\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxa\fP arrays of tabulated function in ascending order by x 
+.br
+\fIya\fP arrays of tabulated function in ascending order by x 
+.br
+\fIy2a\fP array of second derivatives 
+.br
+\fIn\fP size of arrays xa,ya,y2a 
+.br
+\fIx\fP abscissa for interpolation 
+.br
+\fIy\fP output value
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2649 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by densm(), and densu()\&.
+.SS "subroutine tselec (dimension(*)sv)"
+
+.PP
+Set switches\&. Output in sw(25),isw,swc(25) The sw for main terms, swc for cross terms To turn on and off particular variations call tselec(sv), where sv is a 25 element array containing 0\&. for off, 1\&. for on, or 2\&. for main effects off but cross terms on To get current values of sw: call tretrv(sw) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsv\fP array contains switches\&.
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 2263 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gettemp(), globe7(), and gtd7()\&.
+.SS "function vtst7 (iyd, sec, glat, glong, stl, f107a, f107, dimension(7)ap, ic)"
+
+.PP
+Test variable condition\&. Test if geophysical variables or switches changed and save return 0 if unchanged and 1 if changed
+.PP
+\fBParameters:\fP
+.RS 4
+\fIiyd\fP year and day as yyddd 
+.br
+\fIsec\fP ut(sec) 
+.br
+\fIglat\fP geodetic latitude(deg) 
+.br
+\fIglong\fP geodetic longitude(deg) 
+.br
+\fIstl\fP local apparent solar time(hrs) 
+.br
+\fIf107a\fP 3 month average of f10\&.7 flux 
+.br
+\fIf107\fP daily f10\&.7 flux for previous day 
+.br
+\fIap\fP magnetic index(daily) or when sw(9)=-1\&. : array containing: ap(1) daily ap ap(2) 3 hr ap index for current time ap(3) 3 hr ap index for 3 hrs before current time ap(4) 3 hr ap index for 6 hrs before current time ap(5) 3 hr ap index for 9 hrs before current time ap(6) average of eight 3 hr ap indicies from 12 to 33 hrs pr to current time ap(7) average of eight 3 hr ap indicies from 36 to 59 hrs pr to current time 
+.br
+\fIic\fP initial point 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+vtst7 tested value
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.PP
+Definition at line 1518 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

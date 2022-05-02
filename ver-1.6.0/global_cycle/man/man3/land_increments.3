@@ -1,0 +1,160 @@
+.TH "land_increments" 3 "Mon May 2 2022" "Version 1.6.0" "global_cycle" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+land_increments \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBadd_increment_soil\fP (rla, rlo, stc_state, soilsnow_tile, soilsnow_fg_tile, lensfc, lsoil, idim, jdim, myrank)"
+.br
+.RI "\fIRead in gsi file with soil state increments (on the gaussian grid), interpolate increments to the cubed-sphere tile, and add to the soil states\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBapply_land_da_adjustments\fP (update_type, lsm, isot, ivegsrc, lensfc, lsoil, rsoiltype, smc_bck, slc_bck, stc_bck, smc_anl, slc_anl, stc_anl)"
+.br
+.RI "\fIMake adjustments to dependent variables after applying land increments\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBcalculate_soilsnowmask\fP (smc, swe, lensfc, mask)"
+.br
+.RI "\fICalculate soil mask for land on model grid\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 5 of file land_increments\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public land_increments::add_increment_soil (real, dimension(lensfc), intent(inout)rla, real, dimension(lensfc), intent(inout)rlo, real, dimension(lensfc, lsoil), intent(inout)stc_state, integer, dimension(lensfc), intent(in)soilsnow_tile, integer, dimension(lensfc), intent(in)soilsnow_fg_tile, integer, intent(in)lensfc, integer, intent(in)lsoil, integer, intent(in)idim, integer, intent(in)jdim, integer, intent(in)myrank)"
+
+.PP
+Read in gsi file with soil state increments (on the gaussian grid), interpolate increments to the cubed-sphere tile, and add to the soil states\&. Adapted from adjust_nsst\&. Currently only coded for soil temperature\&. Soil moisture will need the model soil moisture paramaters for regridding\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIRLA\fP Latitude on the cubed-sphere tile 
+.br
+\fIRLO\fP Longitude on the cubed-sphere tile 
+.br
+\fISTC_STATE\fP 
+.br
+\fISOILSNOW_TILE\fP Snow mask for land on the cubed-sphere tile 
+.br
+\fISOILSNOW_FG_TILE\fP First guess snow mask for land on the cubed-sphere tile 
+.br
+\fILENSFC\fP Number of points on a tile 
+.br
+\fILSOIL\fP Number of soil layers 
+.br
+\fIIDIM\fP 'I' dimension of a tile 
+.br
+\fIJDIM\fP 'J' dimension of a tile 
+.br
+\fIMYRANK\fP MPI rank number
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Clara Draper\&. 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+March 2021 
+.RE
+.PP
+
+.PP
+Definition at line 34 of file land_increments\&.f90\&.
+.PP
+References utils::remap_coef()\&.
+.PP
+Referenced by sfcdrv()\&.
+.SS "subroutine, public land_increments::apply_land_da_adjustments (character(len=3), intent(in)update_type, integer, intent(in)lsm, integer, intent(in)isot, integer, intent(in)ivegsrc, integer, intent(in)lensfc, integer, intent(in)lsoil, real, dimension(lensfc), intent(in)rsoiltype, real, dimension(lensfc,lsoil), intent(in)smc_bck, real, dimension(lensfc,lsoil), intent(in)slc_bck, real, dimension(lensfc, lsoil), intent(in)stc_bck, real, dimension(lensfc,lsoil), intent(inout)smc_anl, real, dimension(lensfc,lsoil), intent(inout)slc_anl, real, dimension(lensfc, lsoil), intent(inout)stc_anl)"
+
+.PP
+Make adjustments to dependent variables after applying land increments\&. These adjustments are model-dependent, and are currently only coded for Noah LSM\&. For Noah LSM, copy relevent code blocks from model code (same as has been done in sfc_sub)\&. For Noah-MP, will call into the model code to use same routines / code as in the model\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIupdate_type\fP Code for variable being updated (options: 'stc' - soil temperature) 
+.br
+\fIlsm\fP Integer code for the LSM 
+.br
+\fIisot\fP Integer code for the soil type data set 
+.br
+\fIivegsrc\fP Integer code for the vegetation type data set 
+.br
+\fIlensfc\fP Length of land state vector 
+.br
+\fIlsoil\fP Number of soil layers 
+.br
+\fIrsoiltype\fP rsoiltype Array of input soil types 
+.br
+\fIsmc_bck\fP Background soil moisture states 
+.br
+\fIslc_bck\fP Background liquid soil moisture states 
+.br
+\fIstc_bck\fP Background soil temperature states 
+.br
+\fIsmc_anl\fP Analysis soil moisture states 
+.br
+\fIslc_anl\fP Analysis liquid soil moisture states 
+.br
+\fIstc_anl\fP Analysis soil temperature states 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Clara Draper 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+April 2021 
+.RE
+.PP
+
+.PP
+Definition at line 352 of file land_increments\&.f90\&.
+.PP
+References tfreez()\&.
+.PP
+Referenced by sfcdrv()\&.
+.SS "subroutine, public land_increments::calculate_soilsnowmask (real, dimension(lensfc), intent(in)smc, real, dimension(lensfc), intent(in)swe, integer, intent(in)lensfc, integer, dimension(lensfc), intent(out)mask)"
+
+.PP
+Calculate soil mask for land on model grid\&. Output is 1 - soil, 2 - snow-covered, 0 - land ice or not land\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlensfc\fP Total numberof points for the cubed-sphere tile\&. 
+.br
+\fIsmc\fP Model soil moisture\&. 
+.br
+\fIswe\fP Model snow water equivalent 
+.br
+\fImask\fP Output mask: 1 - soil, 2 - snow-covered, 0 - land ice or not land\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Clara Draper 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+March 2021 
+.RE
+.PP
+
+.PP
+Definition at line 305 of file land_increments\&.f90\&.
+.PP
+Referenced by sfcdrv()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for global_cycle from the source code\&.

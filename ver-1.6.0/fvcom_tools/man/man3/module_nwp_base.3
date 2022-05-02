@@ -1,0 +1,143 @@
+.TH "module_nwp_base" 3 "Mon May 2 2022" "Version 1.6.0" "fvcom_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+module_nwp_base \- 
+.PP
+This module defines nwp observation data structure and the method to read and write observations from and to those data structures\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "type \fBnwpbase\fP"
+.br
+.ti -1c
+.RI "type \fBnwplocation\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBalloc_obsbase\fP (this, numvar, ifquality)"
+.br
+.RI "\fIThis subroutine allocates memory for base nwp observation variables\&. \fP"
+.ti -1c
+.RI "subroutine \fBdestroy_obsbase\fP (this)"
+.br
+.RI "\fIThis subroutine releases memory associated with nwp observations\&. \fP"
+.ti -1c
+.RI "subroutine \fBlist_obsbase\fP (this)"
+.br
+.RI "\fIThis subroutine lists the contents of a base nwp observation\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+This module defines nwp observation data structure and the method to read and write observations from and to those data structures\&. 
+
+It is used by ingest_FVCOM\&.f90\&.
+.PP
+This script is strongly based upon Eric James' (ESRL/GSL) work with HRRR/WRF\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+17 Aug 2020 
+.RE
+.PP
+
+.PP
+Definition at line 14 of file module_nwp_base\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine module_nwp_base::alloc_obsbase (class(\fBnwpbase\fP)this, integer, intent(in)numvar, logical, intent(in), optionalifquality)\fC [private]\fP"
+
+.PP
+This subroutine allocates memory for base nwp observation variables\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP the base nwp obervation 
+.br
+\fInumvar\fP number of variables in this ob type 
+.br
+\fIifquality\fP does this observation include quality information? 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+17 Aug 2020 
+.RE
+.PP
+
+.PP
+Definition at line 88 of file module_nwp_base\&.f90\&.
+.PP
+Referenced by module_nwp_base::nwpbase::alloc()\&.
+.SS "subroutine module_nwp_base::destroy_obsbase (class(\fBnwpbase\fP)this)\fC [private]\fP"
+
+.PP
+This subroutine releases memory associated with nwp observations\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP the base nwp obervation 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+17 Aug 2020 
+.RE
+.PP
+
+.PP
+Definition at line 119 of file module_nwp_base\&.f90\&.
+.PP
+Referenced by module_nwp_base::nwpbase::destroy()\&.
+.SS "subroutine module_nwp_base::list_obsbase (class(\fBnwpbase\fP)this)\fC [private]\fP"
+
+.PP
+This subroutine lists the contents of a base nwp observation\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP the base nwp obervation 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+17 Aug 2020 
+.RE
+.PP
+
+.PP
+Definition at line 56 of file module_nwp_base\&.f90\&.
+.PP
+Referenced by module_nwp_base::nwpbase::list()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fvcom_tools from the source code\&.

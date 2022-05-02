@@ -1,0 +1,126 @@
+.TH "/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/utils.F90" 3 "Mon May 2 2022" "Version 1.6.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/utils.F90 \- 
+.PP
+Contains utility routines\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBerror_handler\fP (string, rc)"
+.br
+.RI "\fIGeneral error handler\&. \fP"
+.ti -1c
+.RI "subroutine \fBnetcdf_err\fP (err, string)"
+.br
+.RI "\fIError handler for netcdf\&. \fP"
+.ti -1c
+.RI "subroutine \fBto_lower\fP (strIn)"
+.br
+.RI "\fIConvert from upper to lowercase\&. \fP"
+.ti -1c
+.RI "character(len=len(strin)) function \fBto_upper\fP (strIn)"
+.br
+.RI "\fIConvert string from lower to uppercase\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Contains utility routines\&. 
+
+
+.PP
+Definition in file \fButils\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine error_handler (character(len=*), intent(in)string, integer, intent(in)rc)"
+
+.PP
+General error handler\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstring\fP error message 
+.br
+\fIrc\fP error status code 
+.RE
+.PP
+
+.PP
+Definition at line 9 of file utils\&.F90\&.
+.PP
+Referenced by surface::adjust_soil_levels(), surface::adjust_soilt_for_terrain(), atmosphere::atmosphere_driver(), surface::calc_liq_soil_moisture(), chgres(), atmosphere::compute_zh(), atmosphere::convert_winds(), input_data::convert_winds(), atmosphere::create_atm_b4adj_esmf_fields(), atmosphere::create_atm_esmf_fields(), surface::create_nst_esmf_fields(), static_data::create_static_fields(), surface::create_surface_esmf_fields(), model_grid::define_input_grid_gaussian(), model_grid::define_input_grid_gfs_grib2(), model_grid::define_input_grid_grib2(), model_grid::define_input_grid_mosaic(), model_grid::define_target_grid(), model_grid::get_model_latlons(), model_grid::get_model_mask_terrain(), static_data::get_static_fields(), input_data::handle_grib_error(), atmosphere::horiz_interp_thomp_mp_climo(), input_data::init_atm_esmf_fields(), input_data::init_sfc_esmf_fields(), surface::interp(), atmosphere::newpr1(), atmosphere::newps(), surface::nst_land_fill(), surface::qc_check(), input_data::read_grib_soil(), input_data::read_input_atm_gaussian_nemsio_file(), input_data::read_input_atm_gaussian_netcdf_file(), input_data::read_input_atm_gfs_gaussian_nemsio_file(), input_data::read_input_atm_gfs_sigio_file(), input_data::read_input_atm_grib2_file(), input_data::read_input_atm_restart_file(), input_data::read_input_atm_tiled_history_file(), input_data::read_input_nst_data(), input_data::read_input_nst_nemsio_file(), input_data::read_input_nst_netcdf_file(), input_data::read_input_sfc_gaussian_nemsio_file(), input_data::read_input_sfc_gfs_gaussian_nemsio_file(), input_data::read_input_sfc_gfs_sfcio_file(), input_data::read_input_sfc_grib2_file(), input_data::read_input_sfc_netcdf_file(), input_data::read_input_sfc_restart_file(), program_setup::read_setup_namelist(), thompson_mp_climo_data::read_thomp_mp_climo_data(), program_setup::read_varmap(), atmosphere::read_vcoord_info(), input_data::read_winds(), surface::rescale_soil_moisture(), surface::roughness(), atmosphere::vintg(), atmosphere::vintg_thomp_mp_climo(), atmosphere::vintg_wam(), write_fv3_atm_bndy_data_netcdf(), write_fv3_atm_data_netcdf(), and write_fv3_sfc_data_netcdf()\&.
+.SS "subroutine netcdf_err (integer, intent(in)err, character(len=*), intent(in)string)"
+
+.PP
+Error handler for netcdf\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIerr\fP error status code 
+.br
+\fIstring\fP error message 
+.RE
+.PP
+
+.PP
+Definition at line 31 of file utils\&.F90\&.
+.PP
+Referenced by model_grid::define_input_grid_gaussian(), model_grid::define_input_grid_grib2(), model_grid::define_input_grid_mosaic(), model_grid::define_target_grid(), model_grid::get_model_latlons(), model_grid::get_model_mask_terrain(), input_data::read_fv3_grid_data_netcdf(), input_data::read_input_atm_gaussian_netcdf_file(), input_data::read_input_atm_restart_file(), input_data::read_input_atm_tiled_history_file(), input_data::read_input_sfc_grib2_file(), input_data::read_input_sfc_netcdf_file(), input_data::read_input_sfc_restart_file(), static_data::read_static_file(), thompson_mp_climo_data::read_thomp_mp_climo_data(), write_fv3_atm_bndy_data_netcdf(), write_fv3_atm_data_netcdf(), write_fv3_atm_header_netcdf(), and write_fv3_sfc_data_netcdf()\&.
+.SS "subroutine to_lower (character(len=*), intent(inout)strIn)"
+
+.PP
+Convert from upper to lowercase\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Clive Page
+.RE
+.PP
+Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstrIn\fP string to convert 
+.RE
+.PP
+
+.PP
+Definition at line 84 of file utils\&.F90\&.
+.PP
+Referenced by program_setup::read_setup_namelist()\&.
+.SS "character(len=len(strin)) function to_upper (character(len=*), intent(in)strIn)"
+
+.PP
+Convert string from lower to uppercase\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Clive Page
+.RE
+.PP
+Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstrIn\fP string to convert 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+strOut string in uppercase 
+.RE
+.PP
+
+.PP
+Definition at line 59 of file utils\&.F90\&.
+.PP
+Referenced by input_data::read_input_sfc_grib2_file()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

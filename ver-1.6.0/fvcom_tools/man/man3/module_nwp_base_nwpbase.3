@@ -1,0 +1,148 @@
+.TH "module_nwp_base::nwpbase" 3 "Mon May 2 2022" "Version 1.6.0" "fvcom_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+module_nwp_base::nwpbase \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBmodule_nwp_base::nwplocation\fP\&.
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "procedure \fBalloc\fP => \fBalloc_obsbase\fP"
+.br
+.RI "\fIAllocate memory for observations\&. \fP"
+.ti -1c
+.RI "procedure \fBdestroy\fP => \fBdestroy_obsbase\fP"
+.br
+.RI "\fIRelease memory\&. \fP"
+.ti -1c
+.RI "procedure \fBlist\fP => \fBlist_obsbase\fP"
+.br
+.RI "\fIList contents of obs\&. \fP"
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "logical \fBifquality\fP"
+.br
+.RI "\fIdo these obs include quality info? GLM has flash_quality_flag\&. \fP"
+.ti -1c
+.RI "type(\fBnwpbase\fP), pointer \fBnext\fP => NULL()"
+.br
+.RI "\fIPointer\&. \fP"
+.ti -1c
+.RI "integer \fBnumvar\fP"
+.br
+.RI "\fInumber of variables in this obs type\&. \fP"
+.ti -1c
+.RI "real(r_kind), dimension(:), 
+.br
+allocatable \fBobs\fP"
+.br
+.RI "\fIObservations\&. \fP"
+.ti -1c
+.RI "integer, dimension(:), allocatable \fBquality\fP"
+.br
+.RI "\fIif so, quality flags\&. \fP"
+.ti -1c
+.RI "real(r_single) \fBtime\fP"
+.br
+.RI "\fIobservation time\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 34 of file module_nwp_base\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "procedure module_nwp_base::nwpbase::alloc ()\fC [private]\fP"
+
+.PP
+Allocate memory for observations\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 45 of file module_nwp_base\&.f90\&.
+.PP
+References module_nwp_base::alloc_obsbase()\&.
+.SS "procedure module_nwp_base::nwpbase::destroy ()\fC [private]\fP"
+
+.PP
+Release memory\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 46 of file module_nwp_base\&.f90\&.
+.PP
+References module_nwp_base::destroy_obsbase()\&.
+.SS "procedure module_nwp_base::nwpbase::list ()\fC [private]\fP"
+
+.PP
+List contents of obs\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 44 of file module_nwp_base\&.f90\&.
+.PP
+References module_nwp_base::list_obsbase()\&.
+.SH "Field Documentation"
+.PP 
+.SS "logical module_nwp_base::nwpbase::ifquality\fC [private]\fP"
+
+.PP
+do these obs include quality info? GLM has flash_quality_flag\&. 
+.PP
+Definition at line 41 of file module_nwp_base\&.f90\&.
+.SS "type(\fBnwpbase\fP), pointer module_nwp_base::nwpbase::next => NULL()\fC [private]\fP"
+
+.PP
+Pointer\&. 
+.PP
+Definition at line 36 of file module_nwp_base\&.f90\&.
+.SS "integer module_nwp_base::nwpbase::numvar\fC [private]\fP"
+
+.PP
+number of variables in this obs type\&. 
+.PP
+Definition at line 38 of file module_nwp_base\&.f90\&.
+.SS "real(r_kind), dimension(:), allocatable module_nwp_base::nwpbase::obs\fC [private]\fP"
+
+.PP
+Observations\&. 
+.PP
+Definition at line 40 of file module_nwp_base\&.f90\&.
+.SS "integer, dimension(:), allocatable module_nwp_base::nwpbase::quality\fC [private]\fP"
+
+.PP
+if so, quality flags\&. 
+.PP
+Definition at line 42 of file module_nwp_base\&.f90\&.
+.SS "real(r_single) module_nwp_base::nwpbase::time\fC [private]\fP"
+
+.PP
+observation time\&. 
+.PP
+Definition at line 37 of file module_nwp_base\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fvcom_tools from the source code\&.
