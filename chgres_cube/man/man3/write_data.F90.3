@@ -1,33 +1,20 @@
-.TH "/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/chgres_cube.fd/write_data.F90" 3 "Fri Oct 22 2021" "Version 1.6.0" "chgres_cube" \" -*- nroff -*-
+.TH "/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/write_data.F90" 3 "Tue May 3 2022" "Version 1.6.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/chgres_cube.fd/write_data.F90 \- 
+/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/write_data.F90 \- 
 .PP
 Writes the tiled and header files expected by the forecast model\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Functions/Subroutines"
+.SS "Data Types"
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBwrite_fv3_atm_bndy_data_netcdf\fP (localpet)"
+.RI "module \fBwrite_data\fP"
 .br
-.RI "\fIWrites atmospheric fields along the lateral boundary\&. \fP"
-.ti -1c
-.RI "subroutine \fBwrite_fv3_atm_data_netcdf\fP (localpet)"
-.br
-.RI "\fIWrite atmospheric coldstart files (netcdf format)\&. \fP"
-.ti -1c
-.RI "subroutine \fBwrite_fv3_atm_header_netcdf\fP (localpet)"
-.br
-.RI "\fIWrites atmospheric header file in netcdf format\&. \fP"
-.ti -1c
-.RI "subroutine \fBwrite_fv3_sfc_data_netcdf\fP (localpet)"
-.br
-.RI "\fIWrites surface and nst data into a 'coldstart' file (netcdf)\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -43,96 +30,6 @@ George Gayno NCEP/EMC
 Write out target grid data into appropriate files for the forecast model\&. 
 .PP
 Definition in file \fBwrite_data\&.F90\fP\&.
-.SH "Function/Subroutine Documentation"
-.PP 
-.SS "subroutine write_fv3_atm_bndy_data_netcdf (integer, intent(in)localpet)"
-
-.PP
-Writes atmospheric fields along the lateral boundary\&. For regional grids only\&. Output in netcdf format\&.
-.PP
-\fBParameters:\fP
-.RS 4
-\fIlocalpet\fP ESMF local persistent execution thread 
-.RE
-.PP
-\fBAuthor:\fP
-.RS 4
-George Gayno NCEP/EMC 
-.RE
-.PP
-
-.PP
-Definition at line 88 of file write_data\&.F90\&.
-.PP
-References error_handler(), and netcdf_err()\&.
-.PP
-Referenced by atmosphere::atmosphere_driver()\&.
-.SS "subroutine write_fv3_atm_data_netcdf (integer, intent(in)localpet)"
-
-.PP
-Write atmospheric coldstart files (netcdf format)\&. Routine writes tiled files in parallel\&. Tile 1 is written by localpet 0; tile 2 by localpet 1, etc\&. The number of pets must be equal to or greater than the number of tiled files\&.
-.PP
-\fBParameters:\fP
-.RS 4
-\fIlocalpet\fP ESMF local persistent execution thread 
-.RE
-.PP
-\fBAuthor:\fP
-.RS 4
-George Gayno NCEP/EMC 
-.RE
-.PP
-
-.PP
-Definition at line 1194 of file write_data\&.F90\&.
-.PP
-References error_handler(), and netcdf_err()\&.
-.PP
-Referenced by atmosphere::atmosphere_driver()\&.
-.SS "subroutine write_fv3_atm_header_netcdf (integer, intent(in)localpet)"
-
-.PP
-Writes atmospheric header file in netcdf format\&. 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIlocalpet\fP ESMF local persistent execution thread 
-.RE
-.PP
-\fBAuthor:\fP
-.RS 4
-George Gayno NCEP/EMC 
-.RE
-.PP
-
-.PP
-Definition at line 15 of file write_data\&.F90\&.
-.PP
-References netcdf_err()\&.
-.PP
-Referenced by atmosphere::atmosphere_driver()\&.
-.SS "subroutine write_fv3_sfc_data_netcdf (integer, intent(in)localpet)"
-
-.PP
-Writes surface and nst data into a 'coldstart' file (netcdf)\&. 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIlocalpet\fP ESMF local persistent execution thread 
-.RE
-.PP
-\fBAuthor:\fP
-.RS 4
-George Gayno NCEP/EMC 
-.RE
-.PP
-
-.PP
-Definition at line 1808 of file write_data\&.F90\&.
-.PP
-References error_handler(), and netcdf_err()\&.
-.PP
-Referenced by surface::surface_driver()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

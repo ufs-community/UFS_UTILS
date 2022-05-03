@@ -1,4 +1,4 @@
-.TH "module_nwp" 3 "Fri Oct 22 2021" "Version 1.6.0" "fvcom_tools" \" -*- nroff -*-
+.TH "module_nwp" 3 "Tue May 3 2022" "Version 1.6.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -23,11 +23,15 @@ This module defines FV3LAM and FVCOM forecast data structure and the method to r
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBfinish_nwp\fP (this)"
+.RI "subroutine \fBfinish_nwp\fP (this, itype, wcstart)"
 .br
 .RI "\fIFinish and deallocate\&. \fP"
 .ti -1c
-.RI "subroutine \fBinitial_nwp\fP (this, itype)"
+.RI "subroutine \fBget_time_ind_nwp\fP (this, filename, instr, outindex)"
+.br
+.RI "\fIThis subroutine searches the FVCOM 'Times' variable and returns the matching index\&. \fP"
+.ti -1c
+.RI "subroutine \fBinitial_nwp\fP (this, itype, wcstart)"
 .br
 .RI "\fIThis subroutine defines the number of variables and their names for each NWP data type\&. \fP"
 .ti -1c
@@ -35,7 +39,7 @@ This module defines FV3LAM and FVCOM forecast data structure and the method to r
 .br
 .RI "\fIThis subroutine lists the setup for NWP data that was done by the initial_nwp subroutine\&. \fP"
 .ti -1c
-.RI "subroutine \fBread_nwp\fP (this, filename, itype, numlon, numlat, numtimes, time_to_get, mask, sst, ice, sfcT, iceT)"
+.RI "subroutine \fBread_nwp\fP (this, filename, itype, wcstart, numlon, numlat, numtimes, time_to_get, mask, sst, ice, sfcT, iceT, sfcTl, zorl, hice, ybegin, yend)"
 .br
 .RI "\fIThis subroutine initializes arrays to receive the NWP data, and opens the file and gets the data\&. \fP"
 .in -1c
@@ -70,7 +74,7 @@ David Wright, University of Michigan and GLERL,
 Definition at line 15 of file module_nwp\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine module_nwp::finish_nwp (class(\fBfcst_nwp\fP)this)\fC [private]\fP"
+.SS "subroutine module_nwp::finish_nwp (class(\fBfcst_nwp\fP)this, character(len=6), intent(in)itype, character(len=4), intent(in)wcstart)\fC [private]\fP"
 
 .PP
 Finish and deallocate\&. 
@@ -78,6 +82,10 @@ Finish and deallocate\&.
 \fBParameters:\fP
 .RS 4
 \fIthis\fP \fBfcst_nwp\fP object 
+.br
+\fIitype\fP either ' FVCOM' or 'FV3LAM' 
+.br
+\fIwcstart\fP either 'warm' or 'cold'\&. 
 .RE
 .PP
 \fBAuthor:\fP
@@ -87,10 +95,36 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 279 of file module_nwp\&.f90\&.
+Definition at line 439 of file module_nwp\&.f90\&.
 .PP
 Referenced by module_nwp::fcst_nwp::finish()\&.
-.SS "subroutine module_nwp::initial_nwp (class(\fBfcst_nwp\fP)this, character(len=6), intent(in)itype)\fC [private]\fP"
+.SS "subroutine module_nwp::get_time_ind_nwp (class(\fBfcst_nwp\fP)this, character(len=*), intent(in)filename, character(len=*), intent(in)instr, integer, intent(out)outindex)\fC [private]\fP"
+
+.PP
+This subroutine searches the FVCOM 'Times' variable and returns the matching index\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP \fBfcst_nwp\fP ojbect 
+.br
+\fIfilename\fP netcdf file name 
+.br
+\fIinstr\fP string of requested time 
+.br
+\fIoutindex\fP int index that matches instr
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL 
+.RE
+.PP
+
+.PP
+Definition at line 501 of file module_nwp\&.f90\&.
+.PP
+Referenced by module_nwp::fcst_nwp::get_time_ind()\&.
+.SS "subroutine module_nwp::initial_nwp (class(\fBfcst_nwp\fP)this, character(len=6), intent(in)itype, character(len=4), intent(in)wcstart)\fC [private]\fP"
 
 .PP
 This subroutine defines the number of variables and their names for each NWP data type\&. The indices of the variables are also defined for later reference\&.
@@ -100,6 +134,8 @@ This subroutine defines the number of variables and their names for each NWP dat
 \fIthis\fP \fBfcst_nwp\fP object 
 .br
 \fIitype\fP either ' FVCOM' or 'FV3LAM'\&. 
+.br
+\fIwcstart\fP either 'warm' or 'cold'\&. 
 .RE
 .PP
 \fBAuthor:\fP
@@ -109,7 +145,7 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 79 of file module_nwp\&.f90\&.
+Definition at line 99 of file module_nwp\&.f90\&.
 .PP
 Referenced by module_nwp::fcst_nwp::initial()\&.
 .SS "subroutine module_nwp::list_initial_nwp (class(\fBfcst_nwp\fP)this)\fC [private]\fP"
@@ -129,10 +165,10 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 163 of file module_nwp\&.f90\&.
+Definition at line 228 of file module_nwp\&.f90\&.
 .PP
 Referenced by module_nwp::fcst_nwp::list_initial()\&.
-.SS "subroutine module_nwp::read_nwp (class(\fBfcst_nwp\fP)this, character(len=*), intent(in)filename, character(len=5), intent(in)itype, integer, intent(inout)numlon, integer, intent(inout)numlat, integer, intent(inout)numtimes, integer, intent(in)time_to_get, real(r_kind), dimension(:,:), intent(inout)mask, real(r_kind), dimension(:,:), intent(inout)sst, real(r_kind), dimension(:,:), intent(inout)ice, real(r_kind), dimension(:,:), intent(inout)sfcT, real(r_kind), dimension(:,:), intent(inout)iceT)\fC [private]\fP"
+.SS "subroutine module_nwp::read_nwp (class(\fBfcst_nwp\fP)this, character(len=*), intent(in)filename, character(len=6), intent(in)itype, character(len=4), intent(in)wcstart, integer, intent(inout)numlon, integer, intent(inout)numlat, integer, intent(inout)numtimes, integer, intent(in)time_to_get, real(r_kind), dimension(:,:), intent(inout)mask, real(r_kind), dimension(:,:), intent(inout)sst, real(r_kind), dimension(:,:), intent(inout)ice, real(r_kind), dimension(:,:), intent(inout)sfcT, real(r_kind), dimension(:,:), intent(inout)iceT, real(r_kind), dimension(:,:), intent(inout)sfcTl, real(r_kind), dimension(:,:), intent(inout)zorl, real(r_kind), dimension(:,:), intent(inout)hice, integer, intent(in)ybegin, integer, intent(in)yend)\fC [private]\fP"
 
 .PP
 This subroutine initializes arrays to receive the NWP data, and opens the file and gets the data\&. 
@@ -144,6 +180,8 @@ This subroutine initializes arrays to receive the NWP data, and opens the file a
 \fIfilename\fP netcdf file name 
 .br
 \fIitype\fP either ' FVCOM' or 'FV3LAM' 
+.br
+\fIwcstart\fP either 'warm' or 'cold'\&. 
 .br
 \fInumlon\fP number of grid points in x-direction 
 .br
@@ -161,7 +199,17 @@ This subroutine initializes arrays to receive the NWP data, and opens the file a
 .br
 \fIsfcT\fP Skin Temperature 
 .br
-\fIiceT\fP Ice Skin Temperature
+\fIiceT\fP Ice Skin Temperature 
+.br
+\fIsfcTl\fP Skin Temperature in restart file 
+.br
+\fIzorl\fP Surface roughness length 
+.br
+\fIhice\fP Ice thickness 
+.br
+\fIybegin\fP Start grid point in Y direction for the domain 
+.br
+\fIyend\fP End grid point in Y direction for the domain
 .RE
 .PP
 \fBAuthor:\fP
@@ -171,7 +219,7 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 201 of file module_nwp\&.f90\&.
+Definition at line 272 of file module_nwp\&.f90\&.
 .PP
 Referenced by module_nwp::fcst_nwp::read_n()\&.
 .SH "Field Documentation"
@@ -181,7 +229,7 @@ Referenced by module_nwp::fcst_nwp::read_n()\&.
 .PP
 Wrapper object for netCDF data file\&. 
 .PP
-Definition at line 67 of file module_nwp\&.f90\&.
+Definition at line 86 of file module_nwp\&.f90\&.
 
 .SH "Author"
 .PP 

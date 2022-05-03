@@ -1,7 +1,7 @@
 var NAVTREE =
 [
   [ "UFS_UTILS", "index.html", [
-    [ "user_guide", "md__gpfs_dell2_emc_modeling_noscrub_George_8Gayno_ufs_utils_8git_UFS_UTILS_8upstream_UFS_UTILS_docs_user_guide.html", null ]
+    [ "user_guide", "md__gpfs_dell2_emc_modeling_noscrub_George_8Gayno_ufs_utils_8git_UFS_UTILS_8upstream_docs_user_guide.html", null ]
   ] ]
 ];
 

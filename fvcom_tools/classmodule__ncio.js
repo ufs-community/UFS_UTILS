@@ -1,6 +1,7 @@
 var classmodule__ncio =
 [
     [ "ncio", "structmodule__ncio_1_1ncio.html", "structmodule__ncio_1_1ncio" ],
+    [ "add_new_var_2d", "classmodule__ncio.html#adc7a72cbb289615f38c41d1f80cc9133", null ],
     [ "add_new_var_3d", "classmodule__ncio.html#a2e91a5bae5bae5e63dded42effc7fc58", null ],
     [ "close_nc", "classmodule__ncio.html#a61ba2044f4a26a3fee7c6f7e25b4d4c3", null ],
     [ "convert_theta2t_2dgrid", "classmodule__ncio.html#ab234b47224611d258c57578d613a1d2b", null ],

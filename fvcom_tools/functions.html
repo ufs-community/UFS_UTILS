@@ -45,7 +45,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Data&#160;Types&#160;List</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -121,7 +120,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -135,10 +134,15 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
 <li>add_new_var()
-: <a class="el" href="structmodule__ncio_1_1ncio.html#a189c6b4afd9b9c27573aa61d25ff7d3a">module_ncio::ncio</a>
+: <a class="el" href="structmodule__ncio_1_1ncio.html#afe876caa85c71d53f8ee5f87f12054e7">module_ncio::ncio</a>
+</li>
+<li>add_new_var_2d()
+: <a class="el" href="structmodule__ncio_1_1ncio.html#a3436a66b0d823559d365992916b7832c">module_ncio::ncio</a>
+, <a class="el" href="classmodule__ncio.html#adc7a72cbb289615f38c41d1f80cc9133">module_ncio</a>
 </li>
 <li>add_new_var_3d()
 : <a class="el" href="classmodule__ncio.html#a2e91a5bae5bae5e63dded42effc7fc58">module_ncio</a>
+, <a class="el" href="structmodule__ncio_1_1ncio.html#ab8dbeffbba653826686bb5ed1795149e">module_ncio::ncio</a>
 </li>
 <li>alloc()
 : <a class="el" href="structmodule__nwp__base_1_1nwpbase.html#a260f3062f14ea3566b5c81595cdcaf60">module_nwp_base::nwpbase</a>
@@ -167,6 +171,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>datatype
 : <a class="el" href="structmodule__nwp_1_1nwp__type.html#a7a85768bfe82998b8fb059d4c13a3e81">module_nwp::nwp_type</a>
 </li>
+<li>datelen
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a29e49d23a2454e13a965e4232dcf222a">module_nwp::nwp_type</a>
+</li>
 <li>debug_level
 : <a class="el" href="structmodule__ncio_1_1ncio.html#a165db4f542055f0a16fe0b1bf8f02da7">module_ncio::ncio</a>
 </li>
@@ -178,6 +185,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </li>
 <li>dimname
 : <a class="el" href="structmodule__ncio_1_1ncio.html#aa93d9e0ed76f3170ad15db0bfbd9d99c">module_ncio::ncio</a>
+</li>
+<li>dimnamedate
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#ae804ab5a9ae3f373055c35a6c5e50388">module_nwp::nwp_type</a>
 </li>
 <li>dimnameew
 : <a class="el" href="structmodule__nwp_1_1nwp__type.html#a8225868ceeabcddc918e4706f14ba0e2">module_nwp::nwp_type</a>
@@ -209,7 +219,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="structmodule__nwp_1_1fcst__nwp.html#a102b90122aaaa595a8e9121ecbfa392a">module_nwp::fcst_nwp</a>
 </li>
 <li>finish_nwp()
-: <a class="el" href="classmodule__nwp.html#af5d5b105c92eb2611a1ac884e7ddf651">module_nwp</a>
+: <a class="el" href="classmodule__nwp.html#ad98dc62d45549b7716f3f62b59c63474">module_nwp</a>
 </li>
 </ul>
 
@@ -236,6 +246,12 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>get_dim_nc()
 : <a class="el" href="classmodule__ncio.html#aaa941aaa7fff66951506b34e126efc94">module_ncio</a>
 </li>
+<li>get_time_ind()
+: <a class="el" href="structmodule__nwp_1_1fcst__nwp.html#a7612bb24ce8b8e3326ceee2593dd2739">module_nwp::fcst_nwp</a>
+</li>
+<li>get_time_ind_nwp()
+: <a class="el" href="classmodule__nwp.html#aaae0ecd9fdd67b6c0fd661f5034e183a">module_nwp</a>
+</li>
 <li>get_var()
 : <a class="el" href="structmodule__ncio_1_1ncio.html#a1bbaeafe7f2a5f28b14179ab506db7a5">module_ncio::ncio</a>
 </li>
@@ -244,12 +260,12 @@ $(document).ready(function(){initNavTree('functions.html','');});
 , <a class="el" href="classmodule__ncio.html#a37faa5d6ec80c3dc0e7cacda8f5b579c">module_ncio</a>
 </li>
 <li>get_var_nc_char_1d()
-: <a class="el" href="structmodule__ncio_1_1ncio.html#a8e16f9f8cd6e097afb735eb856dd9097">module_ncio::ncio</a>
-, <a class="el" href="classmodule__ncio.html#aadf4411fb333fe1b2ad4191e11d93b5a">module_ncio</a>
+: <a class="el" href="classmodule__ncio.html#aadf4411fb333fe1b2ad4191e11d93b5a">module_ncio</a>
+, <a class="el" href="structmodule__ncio_1_1ncio.html#a8e16f9f8cd6e097afb735eb856dd9097">module_ncio::ncio</a>
 </li>
 <li>get_var_nc_char_2d()
-: <a class="el" href="classmodule__ncio.html#a395da74b11c6bea87f1ec19435d0caa6">module_ncio</a>
-, <a class="el" href="structmodule__ncio_1_1ncio.html#a8d9f4efe9eddb77a5d3ae75d2f5e5596">module_ncio::ncio</a>
+: <a class="el" href="structmodule__ncio_1_1ncio.html#a8d9f4efe9eddb77a5d3ae75d2f5e5596">module_ncio::ncio</a>
+, <a class="el" href="classmodule__ncio.html#a395da74b11c6bea87f1ec19435d0caa6">module_ncio</a>
 </li>
 <li>get_var_nc_char_3d()
 : <a class="el" href="structmodule__ncio_1_1ncio.html#afd958dc5c2186870a896c812b3e25ce5">module_ncio::ncio</a>
@@ -276,12 +292,12 @@ $(document).ready(function(){initNavTree('functions.html','');});
 , <a class="el" href="classmodule__ncio.html#a1431a7935b2021fd2339ffce497ef6a9">module_ncio</a>
 </li>
 <li>get_var_nc_int_1d()
-: <a class="el" href="structmodule__ncio_1_1ncio.html#a79cab7ab4e7bf5a006f86e7832435cc0">module_ncio::ncio</a>
-, <a class="el" href="classmodule__ncio.html#a58b95b5efe6f468982852b1b1fe19847">module_ncio</a>
+: <a class="el" href="classmodule__ncio.html#a58b95b5efe6f468982852b1b1fe19847">module_ncio</a>
+, <a class="el" href="structmodule__ncio_1_1ncio.html#a79cab7ab4e7bf5a006f86e7832435cc0">module_ncio::ncio</a>
 </li>
 <li>get_var_nc_int_2d()
-: <a class="el" href="classmodule__ncio.html#af1b2922f691a13497ad9b896d4be3bfa">module_ncio</a>
-, <a class="el" href="structmodule__ncio_1_1ncio.html#a4584cce0696fb57e1871367d76642cd9">module_ncio::ncio</a>
+: <a class="el" href="structmodule__ncio_1_1ncio.html#a4584cce0696fb57e1871367d76642cd9">module_ncio::ncio</a>
+, <a class="el" href="classmodule__ncio.html#af1b2922f691a13497ad9b896d4be3bfa">module_ncio</a>
 </li>
 <li>get_var_nc_int_3d()
 : <a class="el" href="structmodule__ncio_1_1ncio.html#ab3e4a6c96d4c78749018e0854380c87c">module_ncio::ncio</a>
@@ -292,8 +308,8 @@ $(document).ready(function(){initNavTree('functions.html','');});
 , <a class="el" href="structmodule__ncio_1_1ncio.html#a72beeb8eb55cfc17cbff1583723e8284">module_ncio::ncio</a>
 </li>
 <li>get_var_nc_real_1d()
-: <a class="el" href="structmodule__ncio_1_1ncio.html#a35e0ecdb13ee55830a4e53d833a7301c">module_ncio::ncio</a>
-, <a class="el" href="classmodule__ncio.html#ac864bbfce29e8d61c5b953da69d6cfc0">module_ncio</a>
+: <a class="el" href="classmodule__ncio.html#ac864bbfce29e8d61c5b953da69d6cfc0">module_ncio</a>
+, <a class="el" href="structmodule__ncio_1_1ncio.html#a35e0ecdb13ee55830a4e53d833a7301c">module_ncio::ncio</a>
 </li>
 <li>get_var_nc_real_2d()
 : <a class="el" href="structmodule__ncio_1_1ncio.html#ac6c87eb3e35db224ac910768b1745ed5">module_ncio::ncio</a>
@@ -304,8 +320,8 @@ $(document).ready(function(){initNavTree('functions.html','');});
 , <a class="el" href="structmodule__ncio_1_1ncio.html#afe2489df6db1724090aae015c0209e96">module_ncio::ncio</a>
 </li>
 <li>get_var_nc_short()
-: <a class="el" href="structmodule__ncio_1_1ncio.html#acfdd2f4a9e1a6beb6ecbe96e60fb6cb9">module_ncio::ncio</a>
-, <a class="el" href="classmodule__ncio.html#a6169988ed61eaed28a960889df99bd14">module_ncio</a>
+: <a class="el" href="classmodule__ncio.html#a6169988ed61eaed28a960889df99bd14">module_ncio</a>
+, <a class="el" href="structmodule__ncio_1_1ncio.html#acfdd2f4a9e1a6beb6ecbe96e60fb6cb9">module_ncio::ncio</a>
 </li>
 <li>get_var_nc_short_1d()
 : <a class="el" href="classmodule__ncio.html#a06d93e176941656f77e431bc682b4d01">module_ncio</a>
@@ -333,6 +349,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>i_byte
 : <a class="el" href="kinds_8f90.html#a5dfbd654e549ff3a80c6e1bc2d7d5661">kinds</a>
 </li>
+<li>i_hice
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#ac79328e4db6682dfb84b53da4d49944a">module_nwp::nwp_type</a>
+</li>
 <li>i_ice
 : <a class="el" href="structmodule__nwp_1_1nwp__type.html#a64e67207efec8b64b45dcd4d0e725688">module_nwp::nwp_type</a>
 </li>
@@ -348,11 +367,17 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>i_sfct
 : <a class="el" href="structmodule__nwp_1_1nwp__type.html#a51d8dc91080c8a11f88a11ecbc83060d">module_nwp::nwp_type</a>
 </li>
+<li>i_sfctl
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a4c572a2073f7a0679f29ea3d4d9f0df2">module_nwp::nwp_type</a>
+</li>
 <li>i_short
 : <a class="el" href="kinds_8f90.html#a7294b1421464f1c39e4ed41245ea44f7">kinds</a>
 </li>
 <li>i_sst
 : <a class="el" href="structmodule__nwp_1_1nwp__type.html#ad70ffa4a61cf523c739bbf7bb5cefab3">module_nwp::nwp_type</a>
+</li>
+<li>i_zorl
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#ad054cb465280fab8847fbecd1b758d42">module_nwp::nwp_type</a>
 </li>
 <li>ifquality
 : <a class="el" href="structmodule__nwp__base_1_1nwpbase.html#af029cb3269d16025fbcd4a35641296f8">module_nwp_base::nwpbase</a>
@@ -364,7 +389,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="structmodule__nwp_1_1fcst__nwp.html#aa1f5e76c7e78037362680bea3111be2c">module_nwp::fcst_nwp</a>
 </li>
 <li>initial_nwp()
-: <a class="el" href="classmodule__nwp.html#aceba924c5bf6d026ebe56a7f7eb5de48">module_nwp</a>
+: <a class="el" href="classmodule__nwp.html#ae8abd781460c305e506ef99e82e54dfb">module_nwp</a>
 </li>
 </ul>
 
@@ -417,20 +442,50 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="structmodule__nwp_1_1nwp__type.html#aec83fb1190fbf09c9bb32b728492464e">module_nwp::nwp_type</a>
 , <a class="el" href="structmodule__nwp__base_1_1nwpbase.html#abfe860b05ad51f71db88248a4ef34a22">module_nwp_base::nwpbase</a>
 </li>
-<li>nwp_ice
-: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a96fe904cb957a96c81ecac76e7863258">module_nwp::nwp_type</a>
+<li>nwp_hice_c
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a78666b6fc8c7887554c37bbc9af1a452">module_nwp::nwp_type</a>
 </li>
-<li>nwp_icet
-: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a517f91e31f8dee9d0ee40ab31ad41a32">module_nwp::nwp_type</a>
+<li>nwp_hice_w
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a2fed779770af47c125a1a6d444fb19a3">module_nwp::nwp_type</a>
 </li>
-<li>nwp_mask
-: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a75cdbdd73cb903b24f23053aa60549ae">module_nwp::nwp_type</a>
+<li>nwp_ice_c
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a73619d12a92b343b204c2d357b3e1093">module_nwp::nwp_type</a>
 </li>
-<li>nwp_sfct
-: <a class="el" href="structmodule__nwp_1_1nwp__type.html#afcbb1ada63a2d9144d8efd0014f39280">module_nwp::nwp_type</a>
+<li>nwp_ice_w
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a6a96466c9759eaacab8f8aa94dae8362">module_nwp::nwp_type</a>
 </li>
-<li>nwp_sst
-: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a0abd5dd1ed18d98992ff287ebe01387a">module_nwp::nwp_type</a>
+<li>nwp_icet_c
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a77edc247b0217b97b4c17266a2b4a376">module_nwp::nwp_type</a>
+</li>
+<li>nwp_icet_w
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#adadca6d952b790545f47597506fe8285">module_nwp::nwp_type</a>
+</li>
+<li>nwp_mask_c
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a7a2399bf399f83ad3e4f5f5faf597c14">module_nwp::nwp_type</a>
+</li>
+<li>nwp_mask_w
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a296beded0c7e85e8fdc24f3138f16aa0">module_nwp::nwp_type</a>
+</li>
+<li>nwp_sfct_c
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a6ed60944e3f03e7c44a0c985536d98c1">module_nwp::nwp_type</a>
+</li>
+<li>nwp_sfct_w
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#acc7198239530a868a284bdb032b46815">module_nwp::nwp_type</a>
+</li>
+<li>nwp_sfctl_w
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a5c78322430bdb0ad946fa74bffeffae8">module_nwp::nwp_type</a>
+</li>
+<li>nwp_sst_c
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a0afb70eac5aac03201203d651231aa54">module_nwp::nwp_type</a>
+</li>
+<li>nwp_sst_w
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a246dee85dd280a9c747d1a95591c164b">module_nwp::nwp_type</a>
+</li>
+<li>nwp_zorl_c
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a0535e99112bc29d631dc874de9b97002">module_nwp::nwp_type</a>
+</li>
+<li>nwp_zorl_w
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#ae621940c6f25ceaabed57a50935f6662">module_nwp::nwp_type</a>
 </li>
 </ul>
 
@@ -466,7 +521,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="structmodule__nwp_1_1fcst__nwp.html#ae01e5bb75ed1d59e452951f96ab7ebff">module_nwp::fcst_nwp</a>
 </li>
 <li>read_nwp()
-: <a class="el" href="classmodule__nwp.html#a9b8f57e80b9444f54731f26d7f64c64a">module_nwp</a>
+: <a class="el" href="classmodule__nwp.html#af30f01266f32c2c1cacd7062e6148289">module_nwp</a>
 </li>
 <li>replace_var()
 : <a class="el" href="structmodule__ncio_1_1ncio.html#a74bcbe353891d196b9be4293a7300101">module_ncio::ncio</a>
@@ -554,6 +609,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 </li>
 <li>time
 : <a class="el" href="structmodule__nwp__base_1_1nwpbase.html#a7f2ebf0dcadf32a2a1a2768518ad504c">module_nwp_base::nwpbase</a>
+</li>
+<li>times
+: <a class="el" href="structmodule__nwp_1_1nwp__type.html#a036e8f4588437f1bdfd9f48b90f247a3">module_nwp::nwp_type</a>
 </li>
 </ul>
 

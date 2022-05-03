@@ -1,4 +1,4 @@
-.TH "module_ncio" 3 "Fri Oct 22 2021" "Version 1.6.0" "fvcom_tools" \" -*- nroff -*-
+.TH "module_ncio" 3 "Tue May 3 2022" "Version 1.6.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -168,6 +168,10 @@ Functions to read and write netcdf files\&.
 
 .in +1c
 .ti -1c
+.RI "subroutine \fBadd_new_var_2d\fP (this, varname, dname1, dname2, lname, units)"
+.br
+.RI "\fIAdd a new variable to sfc_data\&.nc with dimensions (yaxis_1, xaxis_1)\&. \fP"
+.ti -1c
 .RI "subroutine \fBadd_new_var_3d\fP (this, varname, dname1, dname2, dname3, lname, units)"
 .br
 .RI "\fIAdd a new variable to sfc_data\&.nc with dimensions (Time, yaxis_1, xaxis_1)\&. \fP"
@@ -221,6 +225,39 @@ Ming Hu
 Definition at line 7 of file module_ncio\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
+.SS "subroutine module_ncio::add_new_var_2d (class(\fBncio\fP)this, character(len=*), intent(in)varname, character(len=*), intent(in)dname1, character(len=*), intent(in)dname2, character(len=*), intent(in)lname, character(len=*), intent(in)units)\fC [private]\fP"
+
+.PP
+Add a new variable to sfc_data\&.nc with dimensions (yaxis_1, xaxis_1)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP Name of variable to be created in netcdf file 
+.br
+\fIdname1\fP 1st dimension name 
+.br
+\fIdname2\fP 2nd dimension name 
+.br
+\fIlname\fP long name output for netcdf variable 
+.br
+\fIunits\fP units to use in netcdf variable
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David\&.M\&.Wright org: UM/GLERL 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2021-10-07 
+.RE
+.PP
+
+.PP
+Definition at line 2560 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::add_new_var_3d (class(\fBncio\fP)this, character(len=*), intent(in)varname, character(len=*), intent(in)dname1, character(len=*), intent(in)dname2, character(len=*), intent(in)dname3, character(len=*), intent(in)lname, character(len=*), intent(in)units)\fC [private]\fP"
 
 .PP
@@ -255,9 +292,7 @@ David\&.M\&.Wright org: UM/GLERL
 .PP
 
 .PP
-Definition at line 2512 of file module_ncio\&.f90\&.
-.PP
-Referenced by module_ncio::ncio::add_new_var()\&.
+Definition at line 2516 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::close_nc (class(\fBncio\fP)this)\fC [private]\fP"
 
 .PP
@@ -280,7 +315,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 137 of file module_ncio\&.f90\&.
+Definition at line 140 of file module_ncio\&.f90\&.
 .PP
 Referenced by module_ncio::ncio::close()\&.
 .SS "subroutine module_ncio::convert_theta2t_2dgrid (class(\fBncio\fP)this, integernx, integerny, real, dimension(nx,ny), intent(in)ps, real, dimension(nx,ny), intent(inout)t2)"
@@ -313,7 +348,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 2476 of file module_ncio\&.f90\&.
+Definition at line 2480 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_att_nc_int (class(\fBncio\fP)this, character(len=*), intent(in)attname, integer, intent(out)ival)\fC [private]\fP"
 
 .PP
@@ -340,7 +375,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 183 of file module_ncio\&.f90\&.
+Definition at line 186 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_att_nc_real (class(\fBncio\fP)this, character(len=*), intent(in)attname, real, intent(out)rval)\fC [private]\fP"
 
 .PP
@@ -367,7 +402,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 159 of file module_ncio\&.f90\&.
+Definition at line 162 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_att_nc_string (class(\fBncio\fP)this, character(len=*), intent(in)attname, character(len=*), intent(out)string)\fC [private]\fP"
 
 .PP
@@ -394,7 +429,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 207 of file module_ncio\&.f90\&.
+Definition at line 210 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_dim_nc (class(\fBncio\fP)this, character(len=*), intent(in)dimname, integer, intent(out)dimvalue)\fC [private]\fP"
 
 .PP
@@ -421,7 +456,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 232 of file module_ncio\&.f90\&.
+Definition at line 235 of file module_ncio\&.f90\&.
 .PP
 Referenced by module_ncio::ncio::get_dim()\&.
 .SS "subroutine module_ncio::get_var_nc_char (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)ilength, character, dimension(ilength), intent(out)field)"
@@ -452,7 +487,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 2349 of file module_ncio\&.f90\&.
+Definition at line 2353 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_char_1d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, character, dimension(nd1), intent(out)field)"
 
 .PP
@@ -481,7 +516,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 2205 of file module_ncio\&.f90\&.
+Definition at line 2209 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_char_2d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, character, dimension(nd1,nd2), intent(out)field)"
 
 .PP
@@ -512,7 +547,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 2243 of file module_ncio\&.f90\&.
+Definition at line 2247 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_char_3d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer, intent(in)nd3, character, dimension(nd1,nd2,nd3), intent(out)field)"
 
 .PP
@@ -545,7 +580,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 2295 of file module_ncio\&.f90\&.
+Definition at line 2299 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_double (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)ilength, real(8), dimension(ilength), intent(out)field)"
 
 .PP
@@ -574,7 +609,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1386 of file module_ncio\&.f90\&.
+Definition at line 1389 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_double_1d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, real(8), dimension(nd1), intent(out)field)"
 
 .PP
@@ -603,7 +638,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1240 of file module_ncio\&.f90\&.
+Definition at line 1243 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_double_2d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, real(8), dimension(nd1,nd2), intent(out)field)"
 
 .PP
@@ -634,7 +669,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1278 of file module_ncio\&.f90\&.
+Definition at line 1281 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_double_3d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer, intent(in)nd3, real(8), dimension(nd1,nd2,nd3), intent(out)field)"
 
 .PP
@@ -667,7 +702,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1330 of file module_ncio\&.f90\&.
+Definition at line 1333 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_int (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)ilength, integer, dimension(ilength), intent(out)field)"
 
 .PP
@@ -696,7 +731,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1899 of file module_ncio\&.f90\&.
+Definition at line 1903 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_int_1d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, dimension(nd1), intent(out)field)"
 
 .PP
@@ -725,7 +760,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1750 of file module_ncio\&.f90\&.
+Definition at line 1754 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_int_2d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer, dimension(nd1,nd2), intent(out)field)"
 
 .PP
@@ -756,7 +791,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1788 of file module_ncio\&.f90\&.
+Definition at line 1792 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_int_3d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer, intent(in)nd3, integer, dimension(nd1,nd2,nd3), intent(out)field)"
 
 .PP
@@ -789,7 +824,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1843 of file module_ncio\&.f90\&.
+Definition at line 1847 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_real (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)ilength, real(4), dimension(ilength), intent(out)field)"
 
 .PP
@@ -818,7 +853,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1641 of file module_ncio\&.f90\&.
+Definition at line 1645 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_real_1d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, real(4), dimension(nd1), intent(out)field)"
 
 .PP
@@ -847,7 +882,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1492 of file module_ncio\&.f90\&.
+Definition at line 1496 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_real_2d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, real(4), dimension(nd1,nd2), intent(out)field)"
 
 .PP
@@ -878,7 +913,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1530 of file module_ncio\&.f90\&.
+Definition at line 1534 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_real_3d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer, intent(in)nd3, real(4), dimension(nd1,nd2,nd3), intent(out)field)"
 
 .PP
@@ -911,7 +946,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1585 of file module_ncio\&.f90\&.
+Definition at line 1589 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_short (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)ilength, integer(2), dimension(ilength), intent(out)field)"
 
 .PP
@@ -940,7 +975,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 2099 of file module_ncio\&.f90\&.
+Definition at line 2103 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_short_1d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer(2), dimension(nd1), intent(out)field)"
 
 .PP
@@ -969,7 +1004,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 2008 of file module_ncio\&.f90\&.
+Definition at line 2012 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::get_var_nc_short_2d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer(2), dimension(nd1,nd2), intent(out)field)"
 
 .PP
@@ -1000,7 +1035,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 2046 of file module_ncio\&.f90\&.
+Definition at line 2050 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::handle_err (class(\fBncio\fP)this, integer, intent(in)status)"
 
 .PP
@@ -1025,7 +1060,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 2456 of file module_ncio\&.f90\&.
+Definition at line 2460 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::open_nc (class(\fBncio\fP)this, character(len=*), intent(in)filename, character(len=1), intent(in)action, integer, intent(in), optionaldebug_level)\fC [private]\fP"
 
 .PP
@@ -1054,7 +1089,7 @@ Ming Hu
 .PP
 
 .PP
-Definition at line 100 of file module_ncio\&.f90\&.
+Definition at line 103 of file module_ncio\&.f90\&.
 .PP
 Referenced by module_ncio::ncio::open()\&.
 .SS "subroutine module_ncio::replace_var_nc_char (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)ilength, character, dimension(ilength), intent(in)field)"
@@ -1085,7 +1120,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 394 of file module_ncio\&.f90\&.
+Definition at line 397 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_char_1d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, character, dimension(nd1), intent(in)field)\fC [private]\fP"
 
 .PP
@@ -1114,7 +1149,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 260 of file module_ncio\&.f90\&.
+Definition at line 263 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_char_2d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, character, dimension(nd1,nd2), intent(in)field)"
 
 .PP
@@ -1145,7 +1180,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 296 of file module_ncio\&.f90\&.
+Definition at line 299 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_char_3d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer, intent(in)nd3, character, dimension(nd1,nd2,nd3), intent(in)field)"
 
 .PP
@@ -1178,7 +1213,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 344 of file module_ncio\&.f90\&.
+Definition at line 347 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_double (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)ilength, real(8), dimension(ilength), intent(in)field)"
 
 .PP
@@ -1207,7 +1242,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 890 of file module_ncio\&.f90\&.
+Definition at line 893 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_double_1d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, real(8), dimension(nd1), intent(in)field)"
 
 .PP
@@ -1236,7 +1271,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 745 of file module_ncio\&.f90\&.
+Definition at line 748 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_double_2d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, real(8), dimension(nd1,nd2), intent(in)field)"
 
 .PP
@@ -1267,7 +1302,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 783 of file module_ncio\&.f90\&.
+Definition at line 786 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_double_3d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer, intent(in)nd3, real(8), dimension(nd1,nd2,nd3), intent(in)field)"
 
 .PP
@@ -1300,7 +1335,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 834 of file module_ncio\&.f90\&.
+Definition at line 837 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_int (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)ilength, integer, dimension(ilength), intent(in)field)"
 
 .PP
@@ -1329,7 +1364,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1134 of file module_ncio\&.f90\&.
+Definition at line 1137 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_int_1d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, dimension(nd1), intent(in)field)"
 
 .PP
@@ -1358,7 +1393,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 996 of file module_ncio\&.f90\&.
+Definition at line 999 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_int_2d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer, dimension(nd1,nd2), intent(in)field)"
 
 .PP
@@ -1389,7 +1424,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1031 of file module_ncio\&.f90\&.
+Definition at line 1034 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_int_3d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer, intent(in)nd3, integer, dimension(nd1,nd2,nd3), intent(in)field)"
 
 .PP
@@ -1422,7 +1457,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 1082 of file module_ncio\&.f90\&.
+Definition at line 1085 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_real (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)ilength, real(4), dimension(ilength), intent(in)field)"
 
 .PP
@@ -1451,7 +1486,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 639 of file module_ncio\&.f90\&.
+Definition at line 642 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_real_1d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, real(4), dimension(nd1), intent(in)field)"
 
 .PP
@@ -1480,7 +1515,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 501 of file module_ncio\&.f90\&.
+Definition at line 504 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_real_2d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, real(4), dimension(nd1,nd2), intent(in)field)"
 
 .PP
@@ -1511,7 +1546,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 536 of file module_ncio\&.f90\&.
+Definition at line 539 of file module_ncio\&.f90\&.
 .SS "subroutine module_ncio::replace_var_nc_real_3d (class(\fBncio\fP)this, character(len=*), intent(in)varname, integer, intent(in)nd1, integer, intent(in)nd2, integer, intent(in)nd3, real(4), dimension(nd1,nd2,nd3), intent(in)field)"
 
 .PP
@@ -1544,7 +1579,7 @@ Ming Hu org: GSD/AMB
 .PP
 
 .PP
-Definition at line 584 of file module_ncio\&.f90\&.
+Definition at line 587 of file module_ncio\&.f90\&.
 
 .SH "Author"
 .PP 

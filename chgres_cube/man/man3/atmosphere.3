@@ -1,4 +1,4 @@
-.TH "atmosphere" 3 "Fri Oct 22 2021" "Version 1.6.0" "chgres_cube" \" -*- nroff -*-
+.TH "atmosphere" 3 "Tue May 3 2022" "Version 1.6.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,89 +29,17 @@ Process atmospheric fields\&.
 .br
 .RI "\fICubically interpolate in one dimension\&. \fP"
 .in -1c
-.SS "Data Fields"
-
-.in +1c
-.ti -1c
-.RI "type(esmf_field), public \fBdelp_target_grid\fP"
-.br
-.RI "\fIpressure thickness \fP"
-.ti -1c
-.RI "type(esmf_field), public \fBdzdt_target_grid\fP"
-.br
-.RI "\fIvertical velocity \fP"
-.ti -1c
-.RI "integer, public \fBlev_target\fP"
-.br
-.RI "\fInum vertical levels \fP"
-.ti -1c
-.RI "integer, public \fBlevp1_target\fP"
-.br
-.RI "\fInum levels plus 1 \fP"
-.ti -1c
-.RI "integer, public \fBnvcoord_target\fP"
-.br
-.RI "\fInum vertical coordinate variables \fP"
-.ti -1c
-.RI "type(esmf_field), public \fBps_target_grid\fP"
-.br
-.RI "\fIsurface pressure \fP"
-.ti -1c
-.RI "type(esmf_field), public \fBqnifa_climo_target_grid\fP"
-.br
-.RI "\fInumber concentration of ice friendly aerosols on target horiz/vert grid\&. \fP"
-.ti -1c
-.RI "type(esmf_field), public \fBqnwfa_climo_target_grid\fP"
-.br
-.RI "\fInumber concentration of water friendly aerosols on target horiz/vert grid\&. \fP"
-.ti -1c
-.RI "type(esmf_field), public \fBtemp_target_grid\fP"
-.br
-.RI "\fItemperautre \fP"
-.ti -1c
-.RI "type(esmf_field), dimension(:), 
-.br
-allocatable, public \fBtracers_target_grid\fP"
-.br
-.RI "\fItracers \fP"
-.ti -1c
-.RI "type(esmf_field), public \fBu_s_target_grid\fP"
-.br
-.RI "\fIu-wind, 'south' edge \fP"
-.ti -1c
-.RI "type(esmf_field), public \fBu_w_target_grid\fP"
-.br
-.RI "\fIu-wind, 'west' edge \fP"
-.ti -1c
-.RI "type(esmf_field), public \fBv_s_target_grid\fP"
-.br
-.RI "\fIv-wind, 'south' edge \fP"
-.ti -1c
-.RI "type(esmf_field), public \fBv_w_target_grid\fP"
-.br
-.RI "\fIv-wind, 'west' edge \fP"
-.ti -1c
-.RI "real(esmf_kind_r8), dimension(:,:), 
-.br
-allocatable, public \fBvcoord_target\fP"
-.br
-.RI "\fIvertical coordinate \fP"
-.ti -1c
-.RI "type(esmf_field), public \fBzh_target_grid\fP"
-.br
-.RI "\fI3-d height \fP"
-.in -1c
 .SS "Private Member Functions"
 
 .in +1c
 .ti -1c
+.RI "subroutine \fBcleanup_all_target_atm_data\fP"
+.br
+.RI "\fICleanup target grid atmospheric field objects\&. \fP"
+.ti -1c
 .RI "subroutine \fBcleanup_target_atm_b4adj_data\fP"
 .br
 .RI "\fICleanup atmospheric field (before adjustment) objects\&. \fP"
-.ti -1c
-.RI "subroutine \fBcleanup_target_atm_data\fP"
-.br
-.RI "\fICleanup target grid atmospheric field objects\&. \fP"
 .ti -1c
 .RI "subroutine \fBcompute_zh\fP"
 .br
@@ -250,11 +178,28 @@ George Gayno
 .PP
 
 .PP
-Definition at line 115 of file atmosphere\&.F90\&.
+Definition at line 106 of file atmosphere\&.F90\&.
 .PP
-References input_data::cleanup_input_atm_data(), cleanup_target_atm_b4adj_data(), cleanup_target_atm_data(), compute_zh(), convert_winds(), create_atm_b4adj_esmf_fields(), create_atm_esmf_fields(), error_handler(), horiz_interp_thomp_mp_climo(), newpr1(), newps(), input_data::read_input_atm_data(), thompson_mp_climo_data::read_thomp_mp_climo_data(), read_vcoord_info(), vintg(), vintg_thomp_mp_climo(), vintg_wam(), write_fv3_atm_bndy_data_netcdf(), write_fv3_atm_data_netcdf(), and write_fv3_atm_header_netcdf()\&.
+References cleanup_all_target_atm_data(), input_data::cleanup_input_atm_data(), cleanup_target_atm_b4adj_data(), compute_zh(), convert_winds(), create_atm_b4adj_esmf_fields(), create_atm_esmf_fields(), error_handler(), horiz_interp_thomp_mp_climo(), newpr1(), newps(), input_data::read_input_atm_data(), thompson_mp_climo_data::read_thomp_mp_climo_data(), read_vcoord_info(), vintg(), vintg_thomp_mp_climo(), vintg_wam(), write_data::write_fv3_atm_bndy_data_netcdf(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_atm_header_netcdf()\&.
 .PP
 Referenced by chgres()\&.
+.SS "subroutine atmosphere::cleanup_all_target_atm_data ()\fC [private]\fP"
+
+.PP
+Cleanup target grid atmospheric field objects\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 2183 of file atmosphere\&.F90\&.
+.PP
+References atmosphere_target_data::cleanup_atmosphere_target_data()\&.
+.PP
+Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::cleanup_target_atm_b4adj_data ()\fC [private]\fP"
 
 .PP
@@ -267,22 +212,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 2167 of file atmosphere\&.F90\&.
-.PP
-Referenced by atmosphere_driver()\&.
-.SS "subroutine atmosphere::cleanup_target_atm_data ()\fC [private]\fP"
-
-.PP
-Cleanup target grid atmospheric field objects\&. 
-.PP
-\fBAuthor:\fP
-.RS 4
-George Gayno 
-.RE
-.PP
-
-.PP
-Definition at line 2192 of file atmosphere\&.F90\&.
+Definition at line 2158 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::compute_zh ()\fC [private]\fP"
@@ -297,7 +227,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 2077 of file atmosphere\&.F90\&.
+Definition at line 2068 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -314,7 +244,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 654 of file atmosphere\&.F90\&.
+Definition at line 645 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -331,7 +261,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 441 of file atmosphere\&.F90\&.
+Definition at line 432 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -348,7 +278,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 515 of file atmosphere\&.F90\&.
+Definition at line 506 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -365,7 +295,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1141 of file atmosphere\&.F90\&.
+Definition at line 1132 of file atmosphere\&.F90\&.
 .PP
 References thompson_mp_climo_data::cleanup_thomp_mp_climo_input_data(), and error_handler()\&.
 .PP
@@ -398,7 +328,7 @@ Hann Ming Henry Juang, Juang, Fanglin Yang, S\&. Moorthi
 .PP
 
 .PP
-Definition at line 798 of file atmosphere\&.F90\&.
+Definition at line 789 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -432,7 +362,7 @@ Mark Iredell, George Gayno
 .PP
 
 .PP
-Definition at line 909 of file atmosphere\&.F90\&.
+Definition at line 900 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -449,7 +379,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1106 of file atmosphere\&.F90\&.
+Definition at line 1097 of file atmosphere\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -506,7 +436,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 2029 of file atmosphere\&.F90\&.
+Definition at line 2020 of file atmosphere\&.F90\&.
 .PP
 Referenced by terp3()\&.
 .SS "subroutine atmosphere::terp3 (integerIM, integerIXZ1, integerIXQ1, integerIXZ2, integerIXQ2, integerNM, integerNXQ1, integerNXQ2, integerKM1, integerKXZ1, integerKXQ1, real(esmf_kind_r8), dimension(1+(im-1)*ixz1+(km1-1)*kxz1)Z1, real(esmf_kind_r8), dimension(1+(im-1)*ixq1+(km1-1)*kxq1+(nm-1)*nxq1)Q1, integerKM2, integerKXZ2, integerKXQ2, real(esmf_kind_r8), dimension(1+(im-1)*ixz2+(km2-1)*kxz2)Z2, real(esmf_kind_r8), dimension(1+(im-1)*ixq2+(km2-1)*kxq2+(nm-1)*nxq2)Q2)"
@@ -572,7 +502,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 1835 of file atmosphere\&.F90\&.
+Definition at line 1826 of file atmosphere\&.F90\&.
 .PP
 References rsearch()\&.
 .PP
@@ -594,7 +524,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 1602 of file atmosphere\&.F90\&.
+Definition at line 1593 of file atmosphere\&.F90\&.
 .PP
 References error_handler(), and terp3()\&.
 .PP
@@ -611,7 +541,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1253 of file atmosphere\&.F90\&.
+Definition at line 1244 of file atmosphere\&.F90\&.
 .PP
 References error_handler(), and terp3()\&.
 .PP
@@ -639,163 +569,73 @@ Hann-Ming Henry Juang NCEP/EMC
 .PP
 
 .PP
-Definition at line 1376 of file atmosphere\&.F90\&.
+Definition at line 1367 of file atmosphere\&.F90\&.
 .PP
 References error_handler(), and gettemp()\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SH "Field Documentation"
 .PP 
-.SS "type(esmf_field), public atmosphere::delp_target_grid"
-
-.PP
-pressure thickness 
-.PP
-Definition at line 69 of file atmosphere\&.F90\&.
 .SS "type(esmf_field) atmosphere::dzdt_b4adj_target_grid\fC [private]\fP"
 
 .PP
 vertical vel before vert adj 
 .PP
-Definition at line 71 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), public atmosphere::dzdt_target_grid"
-
-.PP
-vertical velocity 
-.PP
-Definition at line 70 of file atmosphere\&.F90\&.
-.SS "integer, public atmosphere::lev_target"
-
-.PP
-num vertical levels 
-.PP
-Definition at line 63 of file atmosphere\&.F90\&.
-.SS "integer, public atmosphere::levp1_target"
-
-.PP
-num levels plus 1 
-.PP
-Definition at line 64 of file atmosphere\&.F90\&.
-.SS "integer, public atmosphere::nvcoord_target"
-
-.PP
-num vertical coordinate variables 
-.PP
-Definition at line 65 of file atmosphere\&.F90\&.
+Definition at line 76 of file atmosphere\&.F90\&.
 .SS "type(esmf_field) atmosphere::pres_b4adj_target_grid\fC [private]\fP"
 
 .PP
 3-d pres before terrain adj 
 .PP
-Definition at line 77 of file atmosphere\&.F90\&.
+Definition at line 80 of file atmosphere\&.F90\&.
 .SS "type(esmf_field) atmosphere::pres_target_grid\fC [private]\fP"
 
 .PP
 3-d pressure 
 .PP
-Definition at line 76 of file atmosphere\&.F90\&.
+Definition at line 79 of file atmosphere\&.F90\&.
 .SS "type(esmf_field) atmosphere::ps_b4adj_target_grid\fC [private]\fP"
 
 .PP
 sfc pres before terrain adj 
 .PP
-Definition at line 75 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), public atmosphere::ps_target_grid"
-
-.PP
-surface pressure 
-.PP
-Definition at line 74 of file atmosphere\&.F90\&.
+Definition at line 78 of file atmosphere\&.F90\&.
 .SS "type(esmf_field) atmosphere::qnifa_climo_b4adj_target_grid\fC [private]\fP"
 
 .PP
 number concentration of ice friendly aerosols before vert adj 
 .PP
-Definition at line 93 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), public atmosphere::qnifa_climo_target_grid"
-
-.PP
-number concentration of ice friendly aerosols on target horiz/vert grid\&. 
-.PP
-Definition at line 95 of file atmosphere\&.F90\&.
+Definition at line 90 of file atmosphere\&.F90\&.
 .SS "type(esmf_field) atmosphere::qnwfa_climo_b4adj_target_grid\fC [private]\fP"
 
 .PP
 number concentration of water friendly aerosols before vert adj 
 .PP
-Definition at line 98 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), public atmosphere::qnwfa_climo_target_grid"
-
-.PP
-number concentration of water friendly aerosols on target horiz/vert grid\&. 
-.PP
-Definition at line 100 of file atmosphere\&.F90\&.
+Definition at line 92 of file atmosphere\&.F90\&.
 .SS "type(esmf_field) atmosphere::temp_b4adj_target_grid\fC [private]\fP"
 
 .PP
 temp before vert adj 
 .PP
-Definition at line 79 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), public atmosphere::temp_target_grid"
-
-.PP
-temperautre 
-.PP
-Definition at line 78 of file atmosphere\&.F90\&.
+Definition at line 81 of file atmosphere\&.F90\&.
 .SS "type(esmf_field) atmosphere::terrain_interp_to_target_grid\fC [private]\fP"
 
 .PP
 Input grid terrain interpolated to target grid\&. 
 .PP
-Definition at line 80 of file atmosphere\&.F90\&.
+Definition at line 82 of file atmosphere\&.F90\&.
 .SS "type(esmf_field) atmosphere::thomp_pres_climo_b4adj_target_grid\fC [private]\fP"
 
 .PP
 pressure of each level on target grid 
 .PP
-Definition at line 103 of file atmosphere\&.F90\&.
+Definition at line 94 of file atmosphere\&.F90\&.
 .SS "type(esmf_field), dimension(:), allocatable atmosphere::tracers_b4adj_target_grid\fC [private]\fP"
 
 .PP
 tracers before vert adj 
 .PP
-Definition at line 73 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), dimension(:), allocatable, public atmosphere::tracers_target_grid"
-
-.PP
-tracers 
-.PP
-Definition at line 72 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), public atmosphere::u_s_target_grid"
-
-.PP
-u-wind, 'south' edge 
-.PP
-Definition at line 81 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), public atmosphere::u_w_target_grid"
-
-.PP
-u-wind, 'west' edge 
-.PP
-Definition at line 86 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), public atmosphere::v_s_target_grid"
-
-.PP
-v-wind, 'south' edge 
-.PP
-Definition at line 82 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), public atmosphere::v_w_target_grid"
-
-.PP
-v-wind, 'west' edge 
-.PP
-Definition at line 87 of file atmosphere\&.F90\&.
-.SS "real(esmf_kind_r8), dimension(:,:), allocatable, public atmosphere::vcoord_target"
-
-.PP
-vertical coordinate 
-.PP
-Definition at line 67 of file atmosphere\&.F90\&.
+Definition at line 77 of file atmosphere\&.F90\&.
 .SS "type(esmf_field) atmosphere::wind_b4adj_target_grid\fC [private]\fP"
 
 .PP
@@ -819,13 +659,7 @@ Definition at line 83 of file atmosphere\&.F90\&.
 .PP
 3-d wind, 'west' edge 
 .PP
-Definition at line 88 of file atmosphere\&.F90\&.
-.SS "type(esmf_field), public atmosphere::zh_target_grid"
-
-.PP
-3-d height 
-.PP
-Definition at line 89 of file atmosphere\&.F90\&.
+Definition at line 86 of file atmosphere\&.F90\&.
 
 .SH "Author"
 .PP 

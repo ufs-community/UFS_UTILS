@@ -45,7 +45,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Data&#160;Types&#160;List</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -93,7 +92,7 @@ $(document).ready(function(){initNavTree('structmodule__nwp_1_1nwp__type.html','
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -124,6 +123,12 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a7a85768bfe82998b8fb059d4c13a3e81"><td class="memItemLeft" align="right" valign="top">character(len=6)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a7a85768bfe82998b8fb059d4c13a3e81">datatype</a></td></tr>
 <tr class="memdesc:a7a85768bfe82998b8fb059d4c13a3e81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data type.  <a href="#a7a85768bfe82998b8fb059d4c13a3e81">More...</a><br/></td></tr>
 <tr class="separator:a7a85768bfe82998b8fb059d4c13a3e81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29e49d23a2454e13a965e4232dcf222a"><td class="memItemLeft" align="right" valign="top">integer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a29e49d23a2454e13a965e4232dcf222a">datelen</a></td></tr>
+<tr class="memdesc:a29e49d23a2454e13a965e4232dcf222a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Length of date string.  <a href="#a29e49d23a2454e13a965e4232dcf222a">More...</a><br/></td></tr>
+<tr class="separator:a29e49d23a2454e13a965e4232dcf222a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae804ab5a9ae3f373055c35a6c5e50388"><td class="memItemLeft" align="right" valign="top">character(len=20), allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#ae804ab5a9ae3f373055c35a6c5e50388">dimnamedate</a></td></tr>
+<tr class="memdesc:ae804ab5a9ae3f373055c35a6c5e50388"><td class="mdescLeft">&#160;</td><td class="mdescRight">String dimension name.  <a href="#ae804ab5a9ae3f373055c35a6c5e50388">More...</a><br/></td></tr>
+<tr class="separator:ae804ab5a9ae3f373055c35a6c5e50388"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8225868ceeabcddc918e4706f14ba0e2"><td class="memItemLeft" align="right" valign="top">character(len=20), allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a8225868ceeabcddc918e4706f14ba0e2">dimnameew</a></td></tr>
 <tr class="memdesc:a8225868ceeabcddc918e4706f14ba0e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">East/West dimension name.  <a href="#a8225868ceeabcddc918e4706f14ba0e2">More...</a><br/></td></tr>
 <tr class="separator:a8225868ceeabcddc918e4706f14ba0e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,6 +138,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:aaf68ebad6dd1f26c92868f946c562a3d"><td class="memItemLeft" align="right" valign="top">character(len=20), allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#aaf68ebad6dd1f26c92868f946c562a3d">dimnametime</a></td></tr>
 <tr class="memdesc:aaf68ebad6dd1f26c92868f946c562a3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time dimension name.  <a href="#aaf68ebad6dd1f26c92868f946c562a3d">More...</a><br/></td></tr>
 <tr class="separator:aaf68ebad6dd1f26c92868f946c562a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac79328e4db6682dfb84b53da4d49944a"><td class="memItemLeft" align="right" valign="top">integer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#ac79328e4db6682dfb84b53da4d49944a">i_hice</a></td></tr>
+<tr class="memdesc:ac79328e4db6682dfb84b53da4d49944a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of ice thickness.  <a href="#ac79328e4db6682dfb84b53da4d49944a">More...</a><br/></td></tr>
+<tr class="separator:ac79328e4db6682dfb84b53da4d49944a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64e67207efec8b64b45dcd4d0e725688"><td class="memItemLeft" align="right" valign="top">integer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a64e67207efec8b64b45dcd4d0e725688">i_ice</a></td></tr>
 <tr class="memdesc:a64e67207efec8b64b45dcd4d0e725688"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of ice var.  <a href="#a64e67207efec8b64b45dcd4d0e725688">More...</a><br/></td></tr>
 <tr class="separator:a64e67207efec8b64b45dcd4d0e725688"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,9 +153,15 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a51d8dc91080c8a11f88a11ecbc83060d"><td class="memItemLeft" align="right" valign="top">integer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a51d8dc91080c8a11f88a11ecbc83060d">i_sfct</a></td></tr>
 <tr class="memdesc:a51d8dc91080c8a11f88a11ecbc83060d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of sst temp var.  <a href="#a51d8dc91080c8a11f88a11ecbc83060d">More...</a><br/></td></tr>
 <tr class="separator:a51d8dc91080c8a11f88a11ecbc83060d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c572a2073f7a0679f29ea3d4d9f0df2"><td class="memItemLeft" align="right" valign="top">integer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a4c572a2073f7a0679f29ea3d4d9f0df2">i_sfctl</a></td></tr>
+<tr class="memdesc:a4c572a2073f7a0679f29ea3d4d9f0df2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of sfcTl.  <a href="#a4c572a2073f7a0679f29ea3d4d9f0df2">More...</a><br/></td></tr>
+<tr class="separator:a4c572a2073f7a0679f29ea3d4d9f0df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad70ffa4a61cf523c739bbf7bb5cefab3"><td class="memItemLeft" align="right" valign="top">integer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#ad70ffa4a61cf523c739bbf7bb5cefab3">i_sst</a></td></tr>
 <tr class="memdesc:ad70ffa4a61cf523c739bbf7bb5cefab3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of sst var.  <a href="#ad70ffa4a61cf523c739bbf7bb5cefab3">More...</a><br/></td></tr>
 <tr class="separator:ad70ffa4a61cf523c739bbf7bb5cefab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad054cb465280fab8847fbecd1b758d42"><td class="memItemLeft" align="right" valign="top">integer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#ad054cb465280fab8847fbecd1b758d42">i_zorl</a></td></tr>
+<tr class="memdesc:ad054cb465280fab8847fbecd1b758d42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of surface roughness.  <a href="#ad054cb465280fab8847fbecd1b758d42">More...</a><br/></td></tr>
+<tr class="separator:ad054cb465280fab8847fbecd1b758d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ea896569fe9e8b9665ba1035ea2a880"><td class="memItemLeft" align="right" valign="top">character(len=20), allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a3ea896569fe9e8b9665ba1035ea2a880">latname</a></td></tr>
 <tr class="memdesc:a3ea896569fe9e8b9665ba1035ea2a880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Latitude name.  <a href="#a3ea896569fe9e8b9665ba1035ea2a880">More...</a><br/></td></tr>
 <tr class="separator:a3ea896569fe9e8b9665ba1035ea2a880"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,26 +171,70 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:aec83fb1190fbf09c9bb32b728492464e"><td class="memItemLeft" align="right" valign="top">integer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#aec83fb1190fbf09c9bb32b728492464e">numvar</a></td></tr>
 <tr class="memdesc:aec83fb1190fbf09c9bb32b728492464e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of variabls.  <a href="#aec83fb1190fbf09c9bb32b728492464e">More...</a><br/></td></tr>
 <tr class="separator:aec83fb1190fbf09c9bb32b728492464e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96fe904cb957a96c81ecac76e7863258"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
-allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a96fe904cb957a96c81ecac76e7863258">nwp_ice</a></td></tr>
-<tr class="memdesc:a96fe904cb957a96c81ecac76e7863258"><td class="mdescLeft">&#160;</td><td class="mdescRight">Over water ice concentration 3D array.  <a href="#a96fe904cb957a96c81ecac76e7863258">More...</a><br/></td></tr>
-<tr class="separator:a96fe904cb957a96c81ecac76e7863258"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a517f91e31f8dee9d0ee40ab31ad41a32"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
-allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a517f91e31f8dee9d0ee40ab31ad41a32">nwp_icet</a></td></tr>
-<tr class="memdesc:a517f91e31f8dee9d0ee40ab31ad41a32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ice skin temperature 3D array.  <a href="#a517f91e31f8dee9d0ee40ab31ad41a32">More...</a><br/></td></tr>
-<tr class="separator:a517f91e31f8dee9d0ee40ab31ad41a32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75cdbdd73cb903b24f23053aa60549ae"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
-allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a75cdbdd73cb903b24f23053aa60549ae">nwp_mask</a></td></tr>
-<tr class="memdesc:a75cdbdd73cb903b24f23053aa60549ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Land/water mask 3D array.  <a href="#a75cdbdd73cb903b24f23053aa60549ae">More...</a><br/></td></tr>
-<tr class="separator:a75cdbdd73cb903b24f23053aa60549ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcbb1ada63a2d9144d8efd0014f39280"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
-allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#afcbb1ada63a2d9144d8efd0014f39280">nwp_sfct</a></td></tr>
-<tr class="memdesc:afcbb1ada63a2d9144d8efd0014f39280"><td class="mdescLeft">&#160;</td><td class="mdescRight">Skin temperature 3D array.  <a href="#afcbb1ada63a2d9144d8efd0014f39280">More...</a><br/></td></tr>
-<tr class="separator:afcbb1ada63a2d9144d8efd0014f39280"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0abd5dd1ed18d98992ff287ebe01387a"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
-allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a0abd5dd1ed18d98992ff287ebe01387a">nwp_sst</a></td></tr>
-<tr class="memdesc:a0abd5dd1ed18d98992ff287ebe01387a"><td class="mdescLeft">&#160;</td><td class="mdescRight">SST 3D array.  <a href="#a0abd5dd1ed18d98992ff287ebe01387a">More...</a><br/></td></tr>
-<tr class="separator:a0abd5dd1ed18d98992ff287ebe01387a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78666b6fc8c7887554c37bbc9af1a452"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a78666b6fc8c7887554c37bbc9af1a452">nwp_hice_c</a></td></tr>
+<tr class="memdesc:a78666b6fc8c7887554c37bbc9af1a452"><td class="mdescLeft">&#160;</td><td class="mdescRight">cold start ice thickness  <a href="#a78666b6fc8c7887554c37bbc9af1a452">More...</a><br/></td></tr>
+<tr class="separator:a78666b6fc8c7887554c37bbc9af1a452"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fed779770af47c125a1a6d444fb19a3"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a2fed779770af47c125a1a6d444fb19a3">nwp_hice_w</a></td></tr>
+<tr class="memdesc:a2fed779770af47c125a1a6d444fb19a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">warm start ice thickness  <a href="#a2fed779770af47c125a1a6d444fb19a3">More...</a><br/></td></tr>
+<tr class="separator:a2fed779770af47c125a1a6d444fb19a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73619d12a92b343b204c2d357b3e1093"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a73619d12a92b343b204c2d357b3e1093">nwp_ice_c</a></td></tr>
+<tr class="memdesc:a73619d12a92b343b204c2d357b3e1093"><td class="mdescLeft">&#160;</td><td class="mdescRight">cold start over water ice concentration 3d array  <a href="#a73619d12a92b343b204c2d357b3e1093">More...</a><br/></td></tr>
+<tr class="separator:a73619d12a92b343b204c2d357b3e1093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a96466c9759eaacab8f8aa94dae8362"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a6a96466c9759eaacab8f8aa94dae8362">nwp_ice_w</a></td></tr>
+<tr class="memdesc:a6a96466c9759eaacab8f8aa94dae8362"><td class="mdescLeft">&#160;</td><td class="mdescRight">warm start over water ice concentration 3d array  <a href="#a6a96466c9759eaacab8f8aa94dae8362">More...</a><br/></td></tr>
+<tr class="separator:a6a96466c9759eaacab8f8aa94dae8362"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77edc247b0217b97b4c17266a2b4a376"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a77edc247b0217b97b4c17266a2b4a376">nwp_icet_c</a></td></tr>
+<tr class="memdesc:a77edc247b0217b97b4c17266a2b4a376"><td class="mdescLeft">&#160;</td><td class="mdescRight">cold start ice skin temperature 3d array  <a href="#a77edc247b0217b97b4c17266a2b4a376">More...</a><br/></td></tr>
+<tr class="separator:a77edc247b0217b97b4c17266a2b4a376"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adadca6d952b790545f47597506fe8285"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#adadca6d952b790545f47597506fe8285">nwp_icet_w</a></td></tr>
+<tr class="memdesc:adadca6d952b790545f47597506fe8285"><td class="mdescLeft">&#160;</td><td class="mdescRight">warm start ice skin temperature 3d array  <a href="#adadca6d952b790545f47597506fe8285">More...</a><br/></td></tr>
+<tr class="separator:adadca6d952b790545f47597506fe8285"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a2399bf399f83ad3e4f5f5faf597c14"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a7a2399bf399f83ad3e4f5f5faf597c14">nwp_mask_c</a></td></tr>
+<tr class="memdesc:a7a2399bf399f83ad3e4f5f5faf597c14"><td class="mdescLeft">&#160;</td><td class="mdescRight">cold start land/water mask 3d array  <a href="#a7a2399bf399f83ad3e4f5f5faf597c14">More...</a><br/></td></tr>
+<tr class="separator:a7a2399bf399f83ad3e4f5f5faf597c14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a296beded0c7e85e8fdc24f3138f16aa0"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a296beded0c7e85e8fdc24f3138f16aa0">nwp_mask_w</a></td></tr>
+<tr class="memdesc:a296beded0c7e85e8fdc24f3138f16aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">warm start land/water mask 3d array  <a href="#a296beded0c7e85e8fdc24f3138f16aa0">More...</a><br/></td></tr>
+<tr class="separator:a296beded0c7e85e8fdc24f3138f16aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ed60944e3f03e7c44a0c985536d98c1"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a6ed60944e3f03e7c44a0c985536d98c1">nwp_sfct_c</a></td></tr>
+<tr class="memdesc:a6ed60944e3f03e7c44a0c985536d98c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">cold start skin temperature 3d array  <a href="#a6ed60944e3f03e7c44a0c985536d98c1">More...</a><br/></td></tr>
+<tr class="separator:a6ed60944e3f03e7c44a0c985536d98c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc7198239530a868a284bdb032b46815"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#acc7198239530a868a284bdb032b46815">nwp_sfct_w</a></td></tr>
+<tr class="memdesc:acc7198239530a868a284bdb032b46815"><td class="mdescLeft">&#160;</td><td class="mdescRight">warm start skin temperature 3d array  <a href="#acc7198239530a868a284bdb032b46815">More...</a><br/></td></tr>
+<tr class="separator:acc7198239530a868a284bdb032b46815"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c78322430bdb0ad946fa74bffeffae8"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a5c78322430bdb0ad946fa74bffeffae8">nwp_sfctl_w</a></td></tr>
+<tr class="memdesc:a5c78322430bdb0ad946fa74bffeffae8"><td class="mdescLeft">&#160;</td><td class="mdescRight">warm start skin temperature 3d array  <a href="#a5c78322430bdb0ad946fa74bffeffae8">More...</a><br/></td></tr>
+<tr class="separator:a5c78322430bdb0ad946fa74bffeffae8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0afb70eac5aac03201203d651231aa54"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a0afb70eac5aac03201203d651231aa54">nwp_sst_c</a></td></tr>
+<tr class="memdesc:a0afb70eac5aac03201203d651231aa54"><td class="mdescLeft">&#160;</td><td class="mdescRight">cold start sst 3d array  <a href="#a0afb70eac5aac03201203d651231aa54">More...</a><br/></td></tr>
+<tr class="separator:a0afb70eac5aac03201203d651231aa54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a246dee85dd280a9c747d1a95591c164b"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a246dee85dd280a9c747d1a95591c164b">nwp_sst_w</a></td></tr>
+<tr class="memdesc:a246dee85dd280a9c747d1a95591c164b"><td class="mdescLeft">&#160;</td><td class="mdescRight">warm start sst 3d array  <a href="#a246dee85dd280a9c747d1a95591c164b">More...</a><br/></td></tr>
+<tr class="separator:a246dee85dd280a9c747d1a95591c164b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0535e99112bc29d631dc874de9b97002"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a0535e99112bc29d631dc874de9b97002">nwp_zorl_c</a></td></tr>
+<tr class="memdesc:a0535e99112bc29d631dc874de9b97002"><td class="mdescLeft">&#160;</td><td class="mdescRight">cold start surface roughness  <a href="#a0535e99112bc29d631dc874de9b97002">More...</a><br/></td></tr>
+<tr class="separator:a0535e99112bc29d631dc874de9b97002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae621940c6f25ceaabed57a50935f6662"><td class="memItemLeft" align="right" valign="top">real(r_kind), dimension(:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#ae621940c6f25ceaabed57a50935f6662">nwp_zorl_w</a></td></tr>
+<tr class="memdesc:ae621940c6f25ceaabed57a50935f6662"><td class="mdescLeft">&#160;</td><td class="mdescRight">warm start surface roughness  <a href="#ae621940c6f25ceaabed57a50935f6662">More...</a><br/></td></tr>
+<tr class="separator:ae621940c6f25ceaabed57a50935f6662"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a036e8f4588437f1bdfd9f48b90f247a3"><td class="memItemLeft" align="right" valign="top">character(len=1), dimension(:,:), <br class="typebreak"/>
+allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a036e8f4588437f1bdfd9f48b90f247a3">times</a></td></tr>
+<tr class="memdesc:a036e8f4588437f1bdfd9f48b90f247a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of times in FVCOM.  <a href="#a036e8f4588437f1bdfd9f48b90f247a3">More...</a><br/></td></tr>
+<tr class="separator:a036e8f4588437f1bdfd9f48b90f247a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9900408b0a7a63fb03593706fa75e9b2"><td class="memItemLeft" align="right" valign="top">character(len=20), dimension(:), <br class="typebreak"/>
 allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__nwp_1_1nwp__type.html#a9900408b0a7a63fb03593706fa75e9b2">varnames</a></td></tr>
 <tr class="memdesc:a9900408b0a7a63fb03593706fa75e9b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable names.  <a href="#a9900408b0a7a63fb03593706fa75e9b2">More...</a><br/></td></tr>
@@ -219,6 +277,54 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 </div>
 </div>
+<a class="anchor" id="a29e49d23a2454e13a965e4232dcf222a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer module_nwp::nwp_type::datelen</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Length of date string. </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00034">34</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae804ab5a9ae3f373055c35a6c5e50388"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">character(len=20), allocatable module_nwp::nwp_type::dimnamedate</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>String dimension name. </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00049">49</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a8225868ceeabcddc918e4706f14ba0e2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -239,7 +345,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>East/West dimension name. </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00042">42</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00046">46</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -263,7 +369,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>North/South dimension name. </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00043">43</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00047">47</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -287,7 +393,31 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Time dimension name. </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00044">44</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00048">48</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac79328e4db6682dfb84b53da4d49944a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer module_nwp::nwp_type::i_hice</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Index of ice thickness. </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00042">42</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -311,7 +441,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Index of ice var. </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00036">36</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00037">37</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -335,7 +465,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Index of ice temp var. </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00038">38</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00039">39</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -359,7 +489,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Is var visible (always 1). </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00034">34</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00035">35</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -383,7 +513,31 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Index of sst temp var. </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00037">37</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00038">38</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4c572a2073f7a0679f29ea3d4d9f0df2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer module_nwp::nwp_type::i_sfctl</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Index of sfcTl. </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00040">40</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -407,7 +561,31 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Index of sst var. </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00035">35</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00036">36</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad054cb465280fab8847fbecd1b758d42"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer module_nwp::nwp_type::i_zorl</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Index of surface roughness. </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00041">41</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -431,7 +609,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Latitude name. </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00040">40</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00044">44</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -455,7 +633,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Longitude name. </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00041">41</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00045">45</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -483,7 +661,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 </div>
 </div>
-<a class="anchor" id="a96fe904cb957a96c81ecac76e7863258"></a>
+<a class="anchor" id="a78666b6fc8c7887554c37bbc9af1a452"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -491,7 +669,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_ice</td>
+          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_hice_c</td>
         </tr>
       </table>
   </td>
@@ -501,13 +679,13 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </table>
 </div><div class="memdoc">
 
-<p>Over water ice concentration 3D array. </p>
+<p>cold start ice thickness </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00048">48</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00058">58</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a517f91e31f8dee9d0ee40ab31ad41a32"></a>
+<a class="anchor" id="a2fed779770af47c125a1a6d444fb19a3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -515,7 +693,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_icet</td>
+          <td class="memname">real(r_kind), dimension(:,:), allocatable module_nwp::nwp_type::nwp_hice_w</td>
         </tr>
       </table>
   </td>
@@ -525,81 +703,345 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </table>
 </div><div class="memdoc">
 
-<p>Ice skin temperature 3D array. </p>
+<p>warm start ice thickness </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00067">67</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a73619d12a92b343b204c2d357b3e1093"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_ice_c</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>cold start over water ice concentration 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00054">54</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6a96466c9759eaacab8f8aa94dae8362"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:), allocatable module_nwp::nwp_type::nwp_ice_w</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>warm start over water ice concentration 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00062">62</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a77edc247b0217b97b4c17266a2b4a376"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_icet_c</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>cold start ice skin temperature 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00056">56</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adadca6d952b790545f47597506fe8285"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:), allocatable module_nwp::nwp_type::nwp_icet_w</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>warm start ice skin temperature 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00064">64</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7a2399bf399f83ad3e4f5f5faf597c14"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:), allocatable module_nwp::nwp_type::nwp_mask_c</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>cold start land/water mask 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00052">52</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a296beded0c7e85e8fdc24f3138f16aa0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:), allocatable module_nwp::nwp_type::nwp_mask_w</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>warm start land/water mask 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00060">60</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6ed60944e3f03e7c44a0c985536d98c1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_sfct_c</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>cold start skin temperature 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00055">55</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acc7198239530a868a284bdb032b46815"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:), allocatable module_nwp::nwp_type::nwp_sfct_w</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>warm start skin temperature 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00063">63</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5c78322430bdb0ad946fa74bffeffae8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:), allocatable module_nwp::nwp_type::nwp_sfctl_w</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>warm start skin temperature 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00065">65</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0afb70eac5aac03201203d651231aa54"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_sst_c</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>cold start sst 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00053">53</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a246dee85dd280a9c747d1a95591c164b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:), allocatable module_nwp::nwp_type::nwp_sst_w</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>warm start sst 3d array </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00061">61</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0535e99112bc29d631dc874de9b97002"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_zorl_c</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>cold start surface roughness </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00057">57</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae621940c6f25ceaabed57a50935f6662"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">real(r_kind), dimension(:,:), allocatable module_nwp::nwp_type::nwp_zorl_w</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>warm start surface roughness </p>
+
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00066">66</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a036e8f4588437f1bdfd9f48b90f247a3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">character(len=1), dimension(:,:), allocatable module_nwp::nwp_type::times</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Array of times in FVCOM. </p>
 
 <p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00050">50</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a75cdbdd73cb903b24f23053aa60549ae"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_mask</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Land/water mask 3D array. </p>
-
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00046">46</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="afcbb1ada63a2d9144d8efd0014f39280"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_sfct</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Skin temperature 3D array. </p>
-
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00049">49</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a0abd5dd1ed18d98992ff287ebe01387a"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">real(r_kind), dimension(:,:,:), allocatable module_nwp::nwp_type::nwp_sst</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>SST 3D array. </p>
-
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00047">47</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -623,7 +1065,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Variable names. </p>
 
-<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00039">39</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__nwp_8f90_source.html#l00043">43</a> of file <a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a>.</p>
 
 </div>
 </div>
@@ -700,7 +1142,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </div>
 </div>
 <hr/>The documentation for this type was generated from the following file:<ul>
-<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/fvcom_tools.fd/<a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a></li>
+<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/<a class="el" href="module__nwp_8f90_source.html">module_nwp.f90</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

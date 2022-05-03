@@ -103,7 +103,6 @@ $(document).ready(function(){initNavTree('classatmosphere.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Data Fields</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
@@ -129,67 +128,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:acc4e65688bda454688a6f571d6939ae7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cubically interpolate in one dimension.  <a href="#acc4e65688bda454688a6f571d6939ae7">More...</a><br/></td></tr>
 <tr class="separator:acc4e65688bda454688a6f571d6939ae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Data Fields</h2></td></tr>
-<tr class="memitem:a4a01d8bf9dd536519d66ccad87491d16"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#a4a01d8bf9dd536519d66ccad87491d16">delp_target_grid</a></td></tr>
-<tr class="memdesc:a4a01d8bf9dd536519d66ccad87491d16"><td class="mdescLeft">&#160;</td><td class="mdescRight">pressure thickness  <a href="#a4a01d8bf9dd536519d66ccad87491d16">More...</a><br/></td></tr>
-<tr class="separator:a4a01d8bf9dd536519d66ccad87491d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e7960fcc8046a86169b581701361286"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#a2e7960fcc8046a86169b581701361286">dzdt_target_grid</a></td></tr>
-<tr class="memdesc:a2e7960fcc8046a86169b581701361286"><td class="mdescLeft">&#160;</td><td class="mdescRight">vertical velocity  <a href="#a2e7960fcc8046a86169b581701361286">More...</a><br/></td></tr>
-<tr class="separator:a2e7960fcc8046a86169b581701361286"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a087a3df78b64c3c342198f2bcc6c8d11"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#a087a3df78b64c3c342198f2bcc6c8d11">lev_target</a></td></tr>
-<tr class="memdesc:a087a3df78b64c3c342198f2bcc6c8d11"><td class="mdescLeft">&#160;</td><td class="mdescRight">num vertical levels  <a href="#a087a3df78b64c3c342198f2bcc6c8d11">More...</a><br/></td></tr>
-<tr class="separator:a087a3df78b64c3c342198f2bcc6c8d11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa66c8009b3d057d7bf4da5fb449a7756"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#aa66c8009b3d057d7bf4da5fb449a7756">levp1_target</a></td></tr>
-<tr class="memdesc:aa66c8009b3d057d7bf4da5fb449a7756"><td class="mdescLeft">&#160;</td><td class="mdescRight">num levels plus 1  <a href="#aa66c8009b3d057d7bf4da5fb449a7756">More...</a><br/></td></tr>
-<tr class="separator:aa66c8009b3d057d7bf4da5fb449a7756"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cf84436050173b6a0dd926861128428"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#a5cf84436050173b6a0dd926861128428">nvcoord_target</a></td></tr>
-<tr class="memdesc:a5cf84436050173b6a0dd926861128428"><td class="mdescLeft">&#160;</td><td class="mdescRight">num vertical coordinate variables  <a href="#a5cf84436050173b6a0dd926861128428">More...</a><br/></td></tr>
-<tr class="separator:a5cf84436050173b6a0dd926861128428"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00c34f9bbee9f30bff72a84d6731c319"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#a00c34f9bbee9f30bff72a84d6731c319">ps_target_grid</a></td></tr>
-<tr class="memdesc:a00c34f9bbee9f30bff72a84d6731c319"><td class="mdescLeft">&#160;</td><td class="mdescRight">surface pressure  <a href="#a00c34f9bbee9f30bff72a84d6731c319">More...</a><br/></td></tr>
-<tr class="separator:a00c34f9bbee9f30bff72a84d6731c319"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacc1ee6ac118bc90757b0ec7648ee589"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#aacc1ee6ac118bc90757b0ec7648ee589">qnifa_climo_target_grid</a></td></tr>
-<tr class="memdesc:aacc1ee6ac118bc90757b0ec7648ee589"><td class="mdescLeft">&#160;</td><td class="mdescRight">number concentration of ice friendly aerosols on target horiz/vert grid.  <a href="#aacc1ee6ac118bc90757b0ec7648ee589">More...</a><br/></td></tr>
-<tr class="separator:aacc1ee6ac118bc90757b0ec7648ee589"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c1486c0b773de210a46bbd6807442c7"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#a1c1486c0b773de210a46bbd6807442c7">qnwfa_climo_target_grid</a></td></tr>
-<tr class="memdesc:a1c1486c0b773de210a46bbd6807442c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">number concentration of water friendly aerosols on target horiz/vert grid.  <a href="#a1c1486c0b773de210a46bbd6807442c7">More...</a><br/></td></tr>
-<tr class="separator:a1c1486c0b773de210a46bbd6807442c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7872ff8ebbd056093f8fd346af5a9b00"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#a7872ff8ebbd056093f8fd346af5a9b00">temp_target_grid</a></td></tr>
-<tr class="memdesc:a7872ff8ebbd056093f8fd346af5a9b00"><td class="mdescLeft">&#160;</td><td class="mdescRight">temperautre  <a href="#a7872ff8ebbd056093f8fd346af5a9b00">More...</a><br/></td></tr>
-<tr class="separator:a7872ff8ebbd056093f8fd346af5a9b00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa755c536f41d9db969c6e6b6fe4d4578"><td class="memItemLeft" align="right" valign="top">type(esmf_field), dimension(:), <br class="typebreak"/>
-allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#aa755c536f41d9db969c6e6b6fe4d4578">tracers_target_grid</a></td></tr>
-<tr class="memdesc:aa755c536f41d9db969c6e6b6fe4d4578"><td class="mdescLeft">&#160;</td><td class="mdescRight">tracers  <a href="#aa755c536f41d9db969c6e6b6fe4d4578">More...</a><br/></td></tr>
-<tr class="separator:aa755c536f41d9db969c6e6b6fe4d4578"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f4e2ff9ea5fbdc485a8306cf58c1422"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#a4f4e2ff9ea5fbdc485a8306cf58c1422">u_s_target_grid</a></td></tr>
-<tr class="memdesc:a4f4e2ff9ea5fbdc485a8306cf58c1422"><td class="mdescLeft">&#160;</td><td class="mdescRight">u-wind, 'south' edge  <a href="#a4f4e2ff9ea5fbdc485a8306cf58c1422">More...</a><br/></td></tr>
-<tr class="separator:a4f4e2ff9ea5fbdc485a8306cf58c1422"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd2b58a77e1d7a74861bd36dd5fd6ad2"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#acd2b58a77e1d7a74861bd36dd5fd6ad2">u_w_target_grid</a></td></tr>
-<tr class="memdesc:acd2b58a77e1d7a74861bd36dd5fd6ad2"><td class="mdescLeft">&#160;</td><td class="mdescRight">u-wind, 'west' edge  <a href="#acd2b58a77e1d7a74861bd36dd5fd6ad2">More...</a><br/></td></tr>
-<tr class="separator:acd2b58a77e1d7a74861bd36dd5fd6ad2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af47c3ae05903afacbaf5c705551fae8a"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#af47c3ae05903afacbaf5c705551fae8a">v_s_target_grid</a></td></tr>
-<tr class="memdesc:af47c3ae05903afacbaf5c705551fae8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">v-wind, 'south' edge  <a href="#af47c3ae05903afacbaf5c705551fae8a">More...</a><br/></td></tr>
-<tr class="separator:af47c3ae05903afacbaf5c705551fae8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff36363895fec1b345aea78549594628"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#aff36363895fec1b345aea78549594628">v_w_target_grid</a></td></tr>
-<tr class="memdesc:aff36363895fec1b345aea78549594628"><td class="mdescLeft">&#160;</td><td class="mdescRight">v-wind, 'west' edge  <a href="#aff36363895fec1b345aea78549594628">More...</a><br/></td></tr>
-<tr class="separator:aff36363895fec1b345aea78549594628"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5bfa0946475301f0de866a20a0c9af6"><td class="memItemLeft" align="right" valign="top">real(esmf_kind_r8), dimension(:,:), <br class="typebreak"/>
-allocatable, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#ae5bfa0946475301f0de866a20a0c9af6">vcoord_target</a></td></tr>
-<tr class="memdesc:ae5bfa0946475301f0de866a20a0c9af6"><td class="mdescLeft">&#160;</td><td class="mdescRight">vertical coordinate  <a href="#ae5bfa0946475301f0de866a20a0c9af6">More...</a><br/></td></tr>
-<tr class="separator:ae5bfa0946475301f0de866a20a0c9af6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2cceb8cd4b47bc9907ef667342c31b8"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#ae2cceb8cd4b47bc9907ef667342c31b8">zh_target_grid</a></td></tr>
-<tr class="memdesc:ae2cceb8cd4b47bc9907ef667342c31b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">3-d height  <a href="#ae2cceb8cd4b47bc9907ef667342c31b8">More...</a><br/></td></tr>
-<tr class="separator:ae2cceb8cd4b47bc9907ef667342c31b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:aef1da0871469093e31a1e0d7a2174151"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#aef1da0871469093e31a1e0d7a2174151">cleanup_all_target_atm_data</a></td></tr>
+<tr class="memdesc:aef1da0871469093e31a1e0d7a2174151"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup target grid atmospheric field objects.  <a href="#aef1da0871469093e31a1e0d7a2174151">More...</a><br/></td></tr>
+<tr class="separator:aef1da0871469093e31a1e0d7a2174151"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c8ce1e6155790ac7638002aa96a6076"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#a5c8ce1e6155790ac7638002aa96a6076">cleanup_target_atm_b4adj_data</a></td></tr>
 <tr class="memdesc:a5c8ce1e6155790ac7638002aa96a6076"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup atmospheric field (before adjustment) objects.  <a href="#a5c8ce1e6155790ac7638002aa96a6076">More...</a><br/></td></tr>
 <tr class="separator:a5c8ce1e6155790ac7638002aa96a6076"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af460dc358b216030584f4789eb4b59c2"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#af460dc358b216030584f4789eb4b59c2">cleanup_target_atm_data</a></td></tr>
-<tr class="memdesc:af460dc358b216030584f4789eb4b59c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup target grid atmospheric field objects.  <a href="#af460dc358b216030584f4789eb4b59c2">More...</a><br/></td></tr>
-<tr class="separator:af460dc358b216030584f4789eb4b59c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70694e8d634701fdfea61d171f1204e3"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classatmosphere.html#a70694e8d634701fdfea61d171f1204e3">compute_zh</a></td></tr>
 <tr class="memdesc:a70694e8d634701fdfea61d171f1204e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute vertical level height.  <a href="#a70694e8d634701fdfea61d171f1204e3">More...</a><br/></td></tr>
 <tr class="separator:a70694e8d634701fdfea61d171f1204e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -298,11 +244,43 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00115">115</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00106">106</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
-<p>References <a class="el" href="input__data_8F90_source.html#l06596">input_data::cleanup_input_atm_data()</a>, <a class="el" href="atmosphere_8F90_source.html#l02167">cleanup_target_atm_b4adj_data()</a>, <a class="el" href="atmosphere_8F90_source.html#l02192">cleanup_target_atm_data()</a>, <a class="el" href="atmosphere_8F90_source.html#l02077">compute_zh()</a>, <a class="el" href="atmosphere_8F90_source.html#l00654">convert_winds()</a>, <a class="el" href="atmosphere_8F90_source.html#l00441">create_atm_b4adj_esmf_fields()</a>, <a class="el" href="atmosphere_8F90_source.html#l00515">create_atm_esmf_fields()</a>, <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, <a class="el" href="atmosphere_8F90_source.html#l01141">horiz_interp_thomp_mp_climo()</a>, <a class="el" href="atmosphere_8F90_source.html#l00798">newpr1()</a>, <a class="el" href="atmosphere_8F90_source.html#l00909">newps()</a>, <a class="el" href="input__data_8F90_source.html#l00149">input_data::read_input_atm_data()</a>, <a class="el" href="thompson__mp__climo__data_8F90_source.html#l00049">thompson_mp_climo_data::read_thomp_mp_climo_data()</a>, <a class="el" href="atmosphere_8F90_source.html#l01106">read_vcoord_info()</a>, <a class="el" href="atmosphere_8F90_source.html#l01602">vintg()</a>, <a class="el" href="atmosphere_8F90_source.html#l01253">vintg_thomp_mp_climo()</a>, <a class="el" href="atmosphere_8F90_source.html#l01376">vintg_wam()</a>, <a class="el" href="write__data_8F90_source.html#l00088">write_fv3_atm_bndy_data_netcdf()</a>, <a class="el" href="write__data_8F90_source.html#l01194">write_fv3_atm_data_netcdf()</a>, and <a class="el" href="write__data_8F90_source.html#l00015">write_fv3_atm_header_netcdf()</a>.</p>
+<p>References <a class="el" href="atmosphere_8F90_source.html#l02183">cleanup_all_target_atm_data()</a>, <a class="el" href="input__data_8F90_source.html#l07287">input_data::cleanup_input_atm_data()</a>, <a class="el" href="atmosphere_8F90_source.html#l02158">cleanup_target_atm_b4adj_data()</a>, <a class="el" href="atmosphere_8F90_source.html#l02068">compute_zh()</a>, <a class="el" href="atmosphere_8F90_source.html#l00645">convert_winds()</a>, <a class="el" href="atmosphere_8F90_source.html#l00432">create_atm_b4adj_esmf_fields()</a>, <a class="el" href="atmosphere_8F90_source.html#l00506">create_atm_esmf_fields()</a>, <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, <a class="el" href="atmosphere_8F90_source.html#l01132">horiz_interp_thomp_mp_climo()</a>, <a class="el" href="atmosphere_8F90_source.html#l00789">newpr1()</a>, <a class="el" href="atmosphere_8F90_source.html#l00900">newps()</a>, <a class="el" href="input__data_8F90_source.html#l00148">input_data::read_input_atm_data()</a>, <a class="el" href="thompson__mp__climo__data_8F90_source.html#l00049">thompson_mp_climo_data::read_thomp_mp_climo_data()</a>, <a class="el" href="atmosphere_8F90_source.html#l01097">read_vcoord_info()</a>, <a class="el" href="atmosphere_8F90_source.html#l01593">vintg()</a>, <a class="el" href="atmosphere_8F90_source.html#l01244">vintg_thomp_mp_climo()</a>, <a class="el" href="atmosphere_8F90_source.html#l01367">vintg_wam()</a>, <a class="el" href="write__data_8F90_source.html#l00099">write_data::write_fv3_atm_bndy_data_netcdf()</a>, <a class="el" href="write__data_8F90_source.html#l01199">write_data::write_fv3_atm_data_netcdf()</a>, and <a class="el" href="write__data_8F90_source.html#l00026">write_data::write_fv3_atm_header_netcdf()</a>.</p>
 
 <p>Referenced by <a class="el" href="chgres_8F90_source.html#l00024">chgres()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aef1da0871469093e31a1e0d7a2174151"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">subroutine atmosphere::cleanup_all_target_atm_data </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cleanup target grid atmospheric field objects. </p>
+<dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
+
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l02183">2183</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+
+<p>References <a class="el" href="atmosphere__target__data_8F90_source.html#l00045">atmosphere_target_data::cleanup_atmosphere_target_data()</a>.</p>
+
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -330,39 +308,9 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Cleanup atmospheric field (before adjustment) objects. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l02167">2167</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l02158">2158</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="af460dc358b216030584f4789eb4b59c2"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine atmosphere::cleanup_target_atm_data </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Cleanup target grid atmospheric field objects. </p>
-<dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l02192">2192</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -390,11 +338,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Compute vertical level height. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l02077">2077</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l02068">2068</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -422,11 +370,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Convert 3-d component winds to u and v. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00654">654</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00645">645</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>, <a class="el" href="input__data_8F90_source.html#l01241">input_data::read_input_atm_gaussian_nemsio_file()</a>, <a class="el" href="input__data_8F90_source.html#l01783">input_data::read_input_atm_gaussian_netcdf_file()</a>, <a class="el" href="input__data_8F90_source.html#l00988">input_data::read_input_atm_gfs_gaussian_nemsio_file()</a>, <a class="el" href="input__data_8F90_source.html#l00749">input_data::read_input_atm_gfs_sigio_file()</a>, <a class="el" href="input__data_8F90_source.html#l02458">input_data::read_input_atm_grib2_file()</a>, <a class="el" href="input__data_8F90_source.html#l01524">input_data::read_input_atm_restart_file()</a>, and <a class="el" href="input__data_8F90_source.html#l02167">input_data::read_input_atm_tiled_history_file()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>, <a class="el" href="input__data_8F90_source.html#l01238">input_data::read_input_atm_gaussian_nemsio_file()</a>, <a class="el" href="input__data_8F90_source.html#l01780">input_data::read_input_atm_gaussian_netcdf_file()</a>, <a class="el" href="input__data_8F90_source.html#l00985">input_data::read_input_atm_gfs_gaussian_nemsio_file()</a>, <a class="el" href="input__data_8F90_source.html#l00746">input_data::read_input_atm_gfs_sigio_file()</a>, <a class="el" href="input__data_8F90_source.html#l02455">input_data::read_input_atm_grib2_file()</a>, <a class="el" href="input__data_8F90_source.html#l01521">input_data::read_input_atm_restart_file()</a>, and <a class="el" href="input__data_8F90_source.html#l02164">input_data::read_input_atm_tiled_history_file()</a>.</p>
 
 </div>
 </div>
@@ -447,11 +395,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>These will be defined with the same number of vertical levels as the input grid.</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00441">441</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00432">432</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -479,11 +427,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Create target grid field objects. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00515">515</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00506">506</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -511,11 +459,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Horizontally interpolate thompson microphysics data to the target model grid. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01141">1141</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01132">1132</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 <p>References <a class="el" href="thompson__mp__climo__data_8F90_source.html#l00327">thompson_mp_climo_data::cleanup_thomp_mp_climo_input_data()</a>, and <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -559,11 +507,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Hann Ming Henry Juang, Juang, Fanglin Yang, S. Moorthi </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00798">798</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00789">789</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -605,11 +553,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <dl class="section author"><dt>Author</dt><dd>Mark Iredell, George Gayno </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>92-10-31 </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00909">909</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00900">900</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -629,11 +577,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid). </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01106">1106</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01097">1097</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -755,9 +703,9 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <dl class="section author"><dt>Author</dt><dd>Mark Iredell </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>98-05-01 </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l02029">2029</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l02020">2020</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l01835">terp3()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l01826">terp3()</a>.</p>
 
 </div>
 </div>
@@ -914,11 +862,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <dl class="section author"><dt>Author</dt><dd>Mark Iredell </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>98-05-01 </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01835">1835</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01826">1826</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
-<p>References <a class="el" href="atmosphere_8F90_source.html#l02029">rsearch()</a>.</p>
+<p>References <a class="el" href="atmosphere_8F90_source.html#l02020">rsearch()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l01602">vintg()</a>, and <a class="el" href="atmosphere_8F90_source.html#l01253">vintg_thomp_mp_climo()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l01593">vintg()</a>, and <a class="el" href="atmosphere_8F90_source.html#l01244">vintg_thomp_mp_climo()</a>.</p>
 
 </div>
 </div>
@@ -948,11 +896,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <dl class="section author"><dt>Author</dt><dd>Mark Iredell </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>92-10-31 </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01602">1602</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01593">1593</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
-<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="atmosphere_8F90_source.html#l01835">terp3()</a>.</p>
+<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="atmosphere_8F90_source.html#l01826">terp3()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -981,11 +929,11 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Vertically interpolate thompson microphysics climo tracers to the target model levels.</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01253">1253</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01244">1244</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
-<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="atmosphere_8F90_source.html#l01835">terp3()</a>.</p>
+<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="atmosphere_8F90_source.html#l01826">terp3()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
@@ -1046,31 +994,15 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Hann-Ming Henry Juang NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01376">1376</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l01367">1367</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="wam__climo__data_8f90_source.html#l00967">gettemp()</a>.</p>
 
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere_driver()</a>.</p>
+<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00106">atmosphere_driver()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Field Documentation</h2>
-<a class="anchor" id="a4a01d8bf9dd536519d66ccad87491d16"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::delp_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>pressure thickness </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00069">69</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="aa2ebcdf275c5929227a4ab39e5580b34"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1091,71 +1023,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>vertical vel before vert adj </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00071">71</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a2e7960fcc8046a86169b581701361286"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::dzdt_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>vertical velocity </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00070">70</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a087a3df78b64c3c342198f2bcc6c8d11"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">integer, public atmosphere::lev_target</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>num vertical levels </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00063">63</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa66c8009b3d057d7bf4da5fb449a7756"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">integer, public atmosphere::levp1_target</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>num levels plus 1 </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00064">64</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a5cf84436050173b6a0dd926861128428"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">integer, public atmosphere::nvcoord_target</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>num vertical coordinate variables </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00065">65</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00076">76</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
@@ -1179,7 +1047,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>3-d pres before terrain adj </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00077">77</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00080">80</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
@@ -1203,7 +1071,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>3-d pressure </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00076">76</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00079">79</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
@@ -1227,23 +1095,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>sfc pres before terrain adj </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00075">75</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a00c34f9bbee9f30bff72a84d6731c319"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::ps_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>surface pressure </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00074">74</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00078">78</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
@@ -1267,23 +1119,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>number concentration of ice friendly aerosols before vert adj </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00093">93</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aacc1ee6ac118bc90757b0ec7648ee589"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::qnifa_climo_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>number concentration of ice friendly aerosols on target horiz/vert grid. </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00095">95</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00090">90</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
@@ -1307,23 +1143,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>number concentration of water friendly aerosols before vert adj </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00098">98</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a1c1486c0b773de210a46bbd6807442c7"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::qnwfa_climo_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>number concentration of water friendly aerosols on target horiz/vert grid. </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00100">100</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00092">92</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
@@ -1347,23 +1167,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>temp before vert adj </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00079">79</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a7872ff8ebbd056093f8fd346af5a9b00"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::temp_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>temperautre </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00078">78</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00081">81</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
@@ -1387,7 +1191,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Input grid terrain interpolated to target grid. </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00080">80</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00082">82</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
@@ -1411,7 +1215,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>pressure of each level on target grid </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00103">103</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00094">94</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
@@ -1435,103 +1239,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>tracers before vert adj </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00073">73</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa755c536f41d9db969c6e6b6fe4d4578"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), dimension(:), allocatable, public atmosphere::tracers_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>tracers </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00072">72</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a4f4e2ff9ea5fbdc485a8306cf58c1422"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::u_s_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>u-wind, 'south' edge </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00081">81</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="acd2b58a77e1d7a74861bd36dd5fd6ad2"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::u_w_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>u-wind, 'west' edge </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00086">86</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="af47c3ae05903afacbaf5c705551fae8a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::v_s_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>v-wind, 'south' edge </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00082">82</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aff36363895fec1b345aea78549594628"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::v_w_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>v-wind, 'west' edge </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00087">87</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae5bfa0946475301f0de866a20a0c9af6"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">real(esmf_kind_r8), dimension(:,:), allocatable, public atmosphere::vcoord_target</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>vertical coordinate </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00067">67</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00077">77</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
@@ -1627,28 +1335,12 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>3-d wind, 'west' edge </p>
 
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00088">88</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ae2cceb8cd4b47bc9907ef667342c31b8"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">type(esmf_field), public atmosphere::zh_target_grid</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>3-d height </p>
-
-<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00089">89</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
+<p>Definition at line <a class="el" href="atmosphere_8F90_source.html#l00086">86</a> of file <a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this module was generated from the following file:<ul>
-<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/chgres_cube.fd/<a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a></li>
+<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/<a class="el" href="atmosphere_8F90_source.html">atmosphere.F90</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

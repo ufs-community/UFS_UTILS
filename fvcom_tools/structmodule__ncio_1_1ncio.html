@@ -45,7 +45,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Data&#160;Types&#160;List</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -93,7 +92,7 @@ $(document).ready(function(){initNavTree('structmodule__ncio_1_1ncio.html','');}
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -113,9 +112,15 @@ $(document).ready(function(){initNavTree('structmodule__ncio_1_1ncio.html','');}
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a189c6b4afd9b9c27573aa61d25ff7d3a"><td class="memItemLeft" align="right" valign="top">procedure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__ncio_1_1ncio.html#a189c6b4afd9b9c27573aa61d25ff7d3a">add_new_var</a> =&gt; <a class="el" href="classmodule__ncio.html#a2e91a5bae5bae5e63dded42effc7fc58">add_new_var_3d</a></td></tr>
-<tr class="memdesc:a189c6b4afd9b9c27573aa61d25ff7d3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new 3d variable to output file.  <a href="#a189c6b4afd9b9c27573aa61d25ff7d3a">More...</a><br/></td></tr>
-<tr class="separator:a189c6b4afd9b9c27573aa61d25ff7d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe876caa85c71d53f8ee5f87f12054e7"><td class="memItemLeft" align="right" valign="top">generic&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__ncio_1_1ncio.html#afe876caa85c71d53f8ee5f87f12054e7">add_new_var</a> =&gt; <a class="el" href="structmodule__ncio_1_1ncio.html#a3436a66b0d823559d365992916b7832c">add_new_var_2d</a>,<a class="el" href="structmodule__ncio_1_1ncio.html#ab8dbeffbba653826686bb5ed1795149e">add_new_var_3d</a></td></tr>
+<tr class="memdesc:afe876caa85c71d53f8ee5f87f12054e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new 2d or 3d variable to ouput file.  <a href="#afe876caa85c71d53f8ee5f87f12054e7">More...</a><br/></td></tr>
+<tr class="separator:afe876caa85c71d53f8ee5f87f12054e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3436a66b0d823559d365992916b7832c"><td class="memItemLeft" align="right" valign="top">procedure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__ncio_1_1ncio.html#a3436a66b0d823559d365992916b7832c">add_new_var_2d</a></td></tr>
+<tr class="memdesc:a3436a66b0d823559d365992916b7832c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new 2d variable to output file.  <a href="#a3436a66b0d823559d365992916b7832c">More...</a><br/></td></tr>
+<tr class="separator:a3436a66b0d823559d365992916b7832c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8dbeffbba653826686bb5ed1795149e"><td class="memItemLeft" align="right" valign="top">procedure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__ncio_1_1ncio.html#ab8dbeffbba653826686bb5ed1795149e">add_new_var_3d</a></td></tr>
+<tr class="memdesc:ab8dbeffbba653826686bb5ed1795149e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new 3d variable to output file.  <a href="#ab8dbeffbba653826686bb5ed1795149e">More...</a><br/></td></tr>
+<tr class="separator:ab8dbeffbba653826686bb5ed1795149e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a782798cda1e2777d0a7d8998fc264ed9"><td class="memItemLeft" align="right" valign="top">procedure&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmodule__ncio_1_1ncio.html#a782798cda1e2777d0a7d8998fc264ed9">close</a> =&gt; <a class="el" href="classmodule__ncio.html#a61ba2044f4a26a3fee7c6f7e25b4d4c3">close_nc</a></td></tr>
 <tr class="memdesc:a782798cda1e2777d0a7d8998fc264ed9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Close netCDF file.  <a href="#a782798cda1e2777d0a7d8998fc264ed9">More...</a><br/></td></tr>
 <tr class="separator:a782798cda1e2777d0a7d8998fc264ed9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -286,7 +291,7 @@ Private Attributes</h2></td></tr>
 <div class="textblock">
 <p>Definition at line <a class="el" href="module__ncio_8f90_source.html#l00016">16</a> of file <a class="el" href="module__ncio_8f90_source.html">module_ncio.f90</a>.</p>
 </div><h2 class="groupheader">Member Function/Subroutine Documentation</h2>
-<a class="anchor" id="a189c6b4afd9b9c27573aa61d25ff7d3a"></a>
+<a class="anchor" id="afe876caa85c71d53f8ee5f87f12054e7"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -294,7 +299,67 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">procedure module_ncio::ncio::add_new_var </td>
+          <td class="memname">generic module_ncio::ncio::add_new_var </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add a new 2d or 3d variable to ouput file. </p>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p>Definition at line <a class="el" href="module__ncio_8f90_source.html#l00088">88</a> of file <a class="el" href="module__ncio_8f90_source.html">module_ncio.f90</a>.</p>
+
+<p>References <a class="el" href="module__ncio_8f90_source.html#l00090">add_new_var_2d()</a>, and <a class="el" href="module__ncio_8f90_source.html#l00091">add_new_var_3d()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3436a66b0d823559d365992916b7832c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">procedure module_ncio::ncio::add_new_var_2d </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add a new 2d variable to output file. </p>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p>Definition at line <a class="el" href="module__ncio_8f90_source.html#l00090">90</a> of file <a class="el" href="module__ncio_8f90_source.html">module_ncio.f90</a>.</p>
+
+<p>Referenced by <a class="el" href="module__ncio_8f90_source.html#l00088">add_new_var()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab8dbeffbba653826686bb5ed1795149e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">procedure module_ncio::ncio::add_new_var_3d </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -310,9 +375,9 @@ Private Attributes</h2></td></tr>
 <p>Add a new 3d variable to output file. </p>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p>Definition at line <a class="el" href="module__ncio_8f90_source.html#l00088">88</a> of file <a class="el" href="module__ncio_8f90_source.html">module_ncio.f90</a>.</p>
+<p>Definition at line <a class="el" href="module__ncio_8f90_source.html#l00091">91</a> of file <a class="el" href="module__ncio_8f90_source.html">module_ncio.f90</a>.</p>
 
-<p>References <a class="el" href="module__ncio_8f90_source.html#l02512">module_ncio::add_new_var_3d()</a>.</p>
+<p>Referenced by <a class="el" href="module__ncio_8f90_source.html#l00088">add_new_var()</a>.</p>
 
 </div>
 </div>
@@ -342,7 +407,7 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="module__ncio_8f90_source.html#l00028">28</a> of file <a class="el" href="module__ncio_8f90_source.html">module_ncio.f90</a>.</p>
 
-<p>References <a class="el" href="module__ncio_8f90_source.html#l00137">module_ncio::close_nc()</a>.</p>
+<p>References <a class="el" href="module__ncio_8f90_source.html#l00140">module_ncio::close_nc()</a>.</p>
 
 </div>
 </div>
@@ -520,7 +585,7 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="module__ncio_8f90_source.html#l00029">29</a> of file <a class="el" href="module__ncio_8f90_source.html">module_ncio.f90</a>.</p>
 
-<p>References <a class="el" href="module__ncio_8f90_source.html#l00232">module_ncio::get_dim_nc()</a>.</p>
+<p>References <a class="el" href="module__ncio_8f90_source.html#l00235">module_ncio::get_dim_nc()</a>.</p>
 
 </div>
 </div>
@@ -1168,7 +1233,7 @@ Private Attributes</h2></td></tr>
 
 <p>Definition at line <a class="el" href="module__ncio_8f90_source.html#l00027">27</a> of file <a class="el" href="module__ncio_8f90_source.html">module_ncio.f90</a>.</p>
 
-<p>References <a class="el" href="module__ncio_8f90_source.html#l00100">module_ncio::open_nc()</a>.</p>
+<p>References <a class="el" href="module__ncio_8f90_source.html#l00103">module_ncio::open_nc()</a>.</p>
 
 </div>
 </div>
@@ -1868,7 +1933,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this type was generated from the following file:<ul>
-<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/fvcom_tools.fd/<a class="el" href="module__ncio_8f90_source.html">module_ncio.f90</a></li>
+<li>/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/<a class="el" href="module__ncio_8f90_source.html">module_ncio.f90</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

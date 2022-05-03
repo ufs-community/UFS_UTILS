@@ -7,5 +7,5 @@ var searchData=
   ['num_5ftiles_5ftarget_5fgrid',['num_tiles_target_grid',['../classmodel__grid.html#a3ef9fce75c3c775bfbc0f3758adc9ab5',1,'model_grid']]],
   ['num_5ftracers',['num_tracers',['../classprogram__setup.html#a539f60d15e53a303d938db95e8d8a98b',1,'program_setup']]],
   ['num_5ftracers_5finput',['num_tracers_input',['../classprogram__setup.html#a1aca4bf2de945568e4968338e2e51426',1,'program_setup']]],
-  ['nvcoord_5ftarget',['nvcoord_target',['../classatmosphere.html#a5cf84436050173b6a0dd926861128428',1,'atmosphere']]]
+  ['nvcoord_5ftarget',['nvcoord_target',['../classatmosphere__target__data.html#a9948156fdd760009a18825699e798d17',1,'atmosphere_target_data']]]
 ];

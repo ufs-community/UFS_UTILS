@@ -1,4 +1,4 @@
-.TH "input_data" 3 "Fri Oct 22 2021" "Version 1.6.0" "chgres_cube" \" -*- nroff -*-
+.TH "input_data" 3 "Tue May 3 2022" "Version 1.6.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -339,7 +339,7 @@ allocatable, public \fBtracers_input_grid\fP"
 .br
 .RI "\fIRead a record from a netcdf file\&. \fP"
 .ti -1c
-.RI "subroutine \fBread_grib_soil\fP (the_file, inv_file, vname, vname_file, dummy3d, rc)"
+.RI "subroutine \fBread_grib_soil\fP (vname, vname_file, lugb, dummy3d)"
 .br
 .RI "\fIRead soil temperature and soil moisture fields from a GRIB2 file\&. \fP"
 .ti -1c
@@ -379,7 +379,7 @@ allocatable, public \fBtracers_input_grid\fP"
 .br
 .RI "\fIRead input grid surface data from fv3 tiled warm 'restart' files\&. \fP"
 .ti -1c
-.RI "subroutine \fBread_winds\fP (file, inv, u, v, localpet)"
+.RI "subroutine \fBread_winds\fP (u, v, localpet, isnative, rlevs, lugb)"
 .br
 .RI "\fIRead winds from a grib2 file\&. \fP"
 .in -1c
@@ -444,10 +444,10 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6419 of file input_data\&.F90\&.
+Definition at line 7073 of file input_data\&.F90\&.
 .PP
 Referenced by read_winds()\&.
-.SS "subroutine, public input_data::check_cnwat (real(esmf_kind_r4), dimension(i_input,j_input), intent(inout)cnwat)"
+.SS "subroutine, public input_data::check_cnwat (real(esmf_kind_r8), dimension(i_input,j_input), intent(inout)cnwat)"
 
 .PP
 When using GEFS data, some points on the target grid have unreasonable canpy moisture content, so zero out any locations with unrealistic canopy moisture values (>0\&.5)\&. 
@@ -464,7 +464,7 @@ Larissa Reames CIMMS/NSSL
 .PP
 
 .PP
-Definition at line 6774 of file input_data\&.F90\&.
+Definition at line 7465 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_sfc_grib2_file()\&.
 .SS "subroutine, public input_data::check_soilt (real(esmf_kind_r8), dimension(i_input,j_input,\fBlsoil_input\fP), intent(inout)soilt, integer(esmf_kind_i4), dimension(i_input,j_input), intent(in)landmask, real(esmf_kind_r8), dimension(i_input,j_input), intent(in)skint)"
@@ -488,7 +488,7 @@ Larissa Reames CIMMS/NSSL
 .PP
 
 .PP
-Definition at line 6744 of file input_data\&.F90\&.
+Definition at line 7435 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_sfc_grib2_file()\&.
 .SS "subroutine, public input_data::cleanup_input_atm_data ()"
@@ -503,7 +503,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6596 of file input_data\&.F90\&.
+Definition at line 7287 of file input_data\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver()\&.
 .SS "subroutine, public input_data::cleanup_input_nst_data ()"
@@ -518,7 +518,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6621 of file input_data\&.F90\&.
+Definition at line 7312 of file input_data\&.F90\&.
 .PP
 Referenced by surface::surface_driver()\&.
 .SS "subroutine, public input_data::cleanup_input_sfc_data ()"
@@ -533,7 +533,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6654 of file input_data\&.F90\&.
+Definition at line 7345 of file input_data\&.F90\&.
 .PP
 Referenced by surface::surface_driver()\&.
 .SS "subroutine, public input_data::convert_winds ()"
@@ -548,7 +548,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6302 of file input_data\&.F90\&.
+Definition at line 6956 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .SS "subroutine, public input_data::dint2p (real*8, dimension(npin)PPIN, real*8, dimension(npin)XXIN, integerNPIN, real*8, dimension(npout)PPOUT, real*8, dimension(npout)XXOUT, integerNPOUT, integerLINLOG, real*8XMSG, integerIER)"
@@ -589,7 +589,7 @@ Jili Dong NCEP/EMC
 .PP
 
 .PP
-Definition at line 6811 of file input_data\&.F90\&.
+Definition at line 7502 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_atm_grib2_file()\&.
 .SS "subroutine input_data::gridrot (real(esmf_kind_r4), intent(in)lov, real(esmf_kind_r4), intent(in)latin1, real(esmf_kind_r4), intent(in)latin2, real(esmf_kind_r8), dimension(i_input,j_input), intent(in)lon, real(esmf_kind_r4), dimension(i_input,j_input), intent(inout)rot)\fC [private]\fP"
@@ -622,7 +622,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6378 of file input_data\&.F90\&.
+Definition at line 7032 of file input_data\&.F90\&.
 .PP
 Referenced by read_winds()\&.
 .SS "subroutine input_data::handle_grib_error (character(len=20), intent(in)vname, character(len=20), intent(in)lev, character(len=20), intent(in)method, real(esmf_kind_r4), intent(in)value, integer, intent(in)varnum, integer, intent(inout)iret, real(esmf_kind_r4), dimension(:,:), intent(inout), optionalvar, real(esmf_kind_r8), dimension(:,:), intent(inout), optionalvar8, real(esmf_kind_r8), dimension(:,:,:), intent(inout), optionalvar3d)"
@@ -658,7 +658,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6468 of file input_data\&.F90\&.
+Definition at line 7122 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -675,7 +675,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 447 of file input_data\&.F90\&.
+Definition at line 444 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -692,7 +692,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 541 of file input_data\&.F90\&.
+Definition at line 538 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -718,7 +718,7 @@ Jili Dong NOAA/EMC
 .PP
 
 .PP
-Definition at line 6705 of file input_data\&.F90\&.
+Definition at line 7396 of file input_data\&.F90\&.
 .PP
 Referenced by read_input_atm_grib2_file()\&.
 .SS "subroutine input_data::read_fv3_grid_data_netcdf (character(len=*), intent(in)FIELD, integer, intent(in)TILE_NUM, integer, intent(in)IMO, integer, intent(in)JMO, integer, intent(in)LMO, real(esmf_kind_r8), dimension(imo,jmo), intent(out), optionalSFCDATA, real(esmf_kind_r8), dimension(imo,jmo,lmo), intent(out), optionalSFCDATA_3D)\fC [private]\fP"
@@ -750,29 +750,25 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6096 of file input_data\&.F90\&.
+Definition at line 6727 of file input_data\&.F90\&.
 .PP
 References netcdf_err()\&.
 .PP
 Referenced by read_input_nst_netcdf_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
-.SS "subroutine input_data::read_grib_soil (character(len=*), intent(in)the_file, character(len=*), intent(in)inv_file, character(len=20), intent(in)vname, character(len=20), intent(in)vname_file, real(esmf_kind_r8), dimension(:,:,:), intent(inout)dummy3d, integer, intent(out)rc)\fC [private]\fP"
+.SS "subroutine input_data::read_grib_soil (character(len=20), intent(in)vname, character(len=20), intent(in)vname_file, integer, intent(in)lugb, real(esmf_kind_r8), dimension(:,:,:), intent(inout)dummy3d)\fC [private]\fP"
 
 .PP
 Read soil temperature and soil moisture fields from a GRIB2 file\&. 
 .PP
 \fBParameters:\fP
 .RS 4
-\fIthe_file\fP grib2 file name 
-.br
-\fIinv_file\fP grib2 inventory file name 
-.br
 \fIvname\fP variable name in varmap table 
 .br
 \fIvname_file\fP variable name in grib2 file 
 .br
-\fIdummy3d\fP array of soil data 
+\fIlugb\fP logical unit number for surface grib2 file 
 .br
-\fIrc\fP read error status code 
+\fIdummy3d\fP array of soil data 
 .RE
 .PP
 \fBAuthor:\fP
@@ -782,7 +778,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 6534 of file input_data\&.F90\&.
+Definition at line 7186 of file input_data\&.F90\&.
 .PP
 References error_handler(), program_setup::get_var_cond(), and handle_grib_error()\&.
 .PP
@@ -804,7 +800,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 149 of file input_data\&.F90\&.
+Definition at line 148 of file input_data\&.F90\&.
 .PP
 References read_input_atm_gaussian_nemsio_file(), read_input_atm_gaussian_netcdf_file(), read_input_atm_gfs_gaussian_nemsio_file(), read_input_atm_gfs_sigio_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
 .PP
@@ -826,7 +822,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1241 of file input_data\&.F90\&.
+Definition at line 1238 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), and init_atm_esmf_fields()\&.
 .PP
@@ -848,7 +844,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1783 of file input_data\&.F90\&.
+Definition at line 1780 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), init_atm_esmf_fields(), and netcdf_err()\&.
 .PP
@@ -870,7 +866,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 988 of file input_data\&.F90\&.
+Definition at line 985 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), and init_atm_esmf_fields()\&.
 .PP
@@ -897,7 +893,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 749 of file input_data\&.F90\&.
+Definition at line 746 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), and init_atm_esmf_fields()\&.
 .PP
@@ -919,7 +915,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 2458 of file input_data\&.F90\&.
+Definition at line 2455 of file input_data\&.F90\&.
 .PP
 References grib2_util::convert_omega(), atmosphere::convert_winds(), dint2p(), error_handler(), program_setup::get_var_cond(), handle_grib_error(), init_atm_esmf_fields(), quicksort(), read_winds(), grib2_util::rh2spfh(), and grib2_util::rh2spfh_gfs()\&.
 .PP
@@ -946,7 +942,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1524 of file input_data\&.F90\&.
+Definition at line 1521 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), init_atm_esmf_fields(), and netcdf_err()\&.
 .PP
@@ -973,7 +969,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 2167 of file input_data\&.F90\&.
+Definition at line 2164 of file input_data\&.F90\&.
 .PP
 References atmosphere::convert_winds(), error_handler(), init_atm_esmf_fields(), and netcdf_err()\&.
 .PP
@@ -995,7 +991,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 219 of file input_data\&.F90\&.
+Definition at line 218 of file input_data\&.F90\&.
 .PP
 References error_handler(), read_input_nst_nemsio_file(), and read_input_nst_netcdf_file()\&.
 .PP
@@ -1022,7 +1018,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 5821 of file input_data\&.F90\&.
+Definition at line 6452 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -1044,7 +1040,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 5537 of file input_data\&.F90\&.
+Definition at line 6168 of file input_data\&.F90\&.
 .PP
 References error_handler(), and read_fv3_grid_data_netcdf()\&.
 .PP
@@ -1066,7 +1062,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 381 of file input_data\&.F90\&.
+Definition at line 380 of file input_data\&.F90\&.
 .PP
 References init_sfc_esmf_fields(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
 .PP
@@ -1088,7 +1084,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 3671 of file input_data\&.F90\&.
+Definition at line 3972 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -1115,7 +1111,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 3322 of file input_data\&.F90\&.
+Definition at line 3623 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -1142,7 +1138,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 3098 of file input_data\&.F90\&.
+Definition at line 3399 of file input_data\&.F90\&.
 .PP
 References error_handler()\&.
 .PP
@@ -1164,7 +1160,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 4698 of file input_data\&.F90\&.
+Definition at line 4999 of file input_data\&.F90\&.
 .PP
 References check_cnwat(), check_soilt(), error_handler(), program_setup::get_var_cond(), handle_grib_error(), netcdf_err(), read_grib_soil(), search_util::search(), and to_upper()\&.
 .PP
@@ -1186,7 +1182,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 4337 of file input_data\&.F90\&.
+Definition at line 4638 of file input_data\&.F90\&.
 .PP
 References error_handler(), netcdf_err(), and read_fv3_grid_data_netcdf()\&.
 .PP
@@ -1208,27 +1204,29 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 4020 of file input_data\&.F90\&.
+Definition at line 4321 of file input_data\&.F90\&.
 .PP
 References error_handler(), netcdf_err(), and read_fv3_grid_data_netcdf()\&.
 .PP
 Referenced by read_input_sfc_data()\&.
-.SS "subroutine input_data::read_winds (character(len=250), intent(in)file, character(len=10), intent(in)inv, real(esmf_kind_r8), dimension(:,:,:), intent(inout), allocatableu, real(esmf_kind_r8), dimension(:,:,:), intent(inout), allocatablev, integer, intent(in)localpet)\fC [private]\fP"
+.SS "subroutine input_data::read_winds (real(esmf_kind_r8), dimension(:,:,:), intent(inout), allocatableu, real(esmf_kind_r8), dimension(:,:,:), intent(inout), allocatablev, integer, intent(in)localpet, logical, intent(in)isnative, real(esmf_kind_r8), dimension(\fBlev_input\fP), intent(in)rlevs, integer, intent(in)lugb)\fC [private]\fP"
 
 .PP
 Read winds from a grib2 file\&. Rotate winds to be earth relative if necessary\&.
 .PP
 \fBParameters:\fP
 .RS 4
-\fIfile\fP grib2 file to be read 
-.br
-\fIinv\fP grib2 inventory file 
-.br
 \fIu\fP u-component wind 
 .br
 \fIv\fP v-component wind 
 .br
 \fIlocalpet\fP ESMF local persistent execution thread 
+.br
+\fIisnative\fP When true, data on hybrid levels\&. Otherwise data is on isobaric levels\&. 
+.br
+\fIrlevs\fP Array of atmospheric level values 
+.br
+\fIlugb\fP Logical unit number of GRIB2 file\&. 
 .RE
 .PP
 \fBAuthor:\fP
@@ -1238,7 +1236,7 @@ Larissa Reames
 .PP
 
 .PP
-Definition at line 6143 of file input_data\&.F90\&.
+Definition at line 6776 of file input_data\&.F90\&.
 .PP
 References calcalpha_rotlatlon(), error_handler(), program_setup::get_var_cond(), gridrot(), and handle_grib_error()\&.
 .PP
@@ -1250,355 +1248,355 @@ Referenced by read_input_atm_grib2_file()\&.
 .PP
 Coefficient 1 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 111 of file input_data\&.F90\&.
+Definition at line 110 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::c_d_input_grid"
 
 .PP
 Coefficient 2 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 110 of file input_data\&.F90\&.
+Definition at line 109 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::canopy_mc_input_grid"
 
 .PP
 canopy moist content 
 .PP
-Definition at line 75 of file input_data\&.F90\&.
+Definition at line 74 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::d_conv_input_grid"
 
 .PP
 Thickness of free convection layer\&. 
 .PP
-Definition at line 112 of file input_data\&.F90\&.
+Definition at line 111 of file input_data\&.F90\&.
 .SS "type(esmf_field) input_data::dpres_input_grid\fC [private]\fP"
 
 .PP
 pressure thickness 
 .PP
-Definition at line 54 of file input_data\&.F90\&.
+Definition at line 53 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::dt_cool_input_grid"
 
 .PP
 Sub-layer cooling amount\&. 
 .PP
-Definition at line 113 of file input_data\&.F90\&.
+Definition at line 112 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::dzdt_input_grid"
 
 .PP
 vert velocity 
 .PP
-Definition at line 53 of file input_data\&.F90\&.
+Definition at line 52 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::f10m_input_grid"
 
 .PP
 log((z0+10)*1/z0) 
 .PP
-Definition at line 76 of file input_data\&.F90\&.
+Definition at line 75 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::ffmm_input_grid"
 
 .PP
 log((z0+z1)*1/z0) See sfc_diff\&.f for details\&. 
 .PP
-Definition at line 77 of file input_data\&.F90\&.
+Definition at line 76 of file input_data\&.F90\&.
 .SS "integer, parameter input_data::icet_default = 265\&.0\fC [private]\fP"
 
 .PP
 Default value of soil and skin temperature (K) over ice\&. 
 .PP
-Definition at line 73 of file input_data\&.F90\&.
+Definition at line 72 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::ifd_input_grid"
 
 .PP
 Model mode index\&. 0-diurnal model not started; 1-diurnal model started\&. 
 .PP
-Definition at line 114 of file input_data\&.F90\&.
+Definition at line 113 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::lai_input_grid"
 
 .PP
 leaf area index 
 .PP
-Definition at line 99 of file input_data\&.F90\&.
+Definition at line 98 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::landsea_mask_input_grid"
 
 .PP
 land sea mask; 0-water, 1-land, 2-ice 
 .PP
-Definition at line 79 of file input_data\&.F90\&.
+Definition at line 78 of file input_data\&.F90\&.
 .SS "integer, public input_data::lev_input"
 
 .PP
 number of atmospheric layers 
 .PP
-Definition at line 65 of file input_data\&.F90\&.
+Definition at line 64 of file input_data\&.F90\&.
 .SS "integer, public input_data::levp1_input"
 
 .PP
 number of atmos layer interfaces 
 .PP
-Definition at line 66 of file input_data\&.F90\&.
+Definition at line 65 of file input_data\&.F90\&.
 .SS "integer, public input_data::lsoil_input =4"
 
 .PP
 number of soil layers, no longer hardwired to allow for 7 layers of soil for the RUC LSM 
 .PP
-Definition at line 103 of file input_data\&.F90\&.
+Definition at line 102 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::max_veg_greenness_input_grid"
 
 .PP
 shdmax 
 .PP
-Definition at line 100 of file input_data\&.F90\&.
+Definition at line 99 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::min_veg_greenness_input_grid"
 
 .PP
 shdmin 
 .PP
-Definition at line 101 of file input_data\&.F90\&.
+Definition at line 100 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::pres_input_grid"
 
 .PP
 3-d pressure 
 .PP
-Definition at line 55 of file input_data\&.F90\&.
+Definition at line 54 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::ps_input_grid"
 
 .PP
 surface pressure 
 .PP
-Definition at line 56 of file input_data\&.F90\&.
+Definition at line 55 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::q2m_input_grid"
 
 .PP
 2-m spec hum 
 .PP
-Definition at line 81 of file input_data\&.F90\&.
+Definition at line 80 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::qrain_input_grid"
 
 .PP
 Sensible heat flux due to rainfall\&. 
 .PP
-Definition at line 116 of file input_data\&.F90\&.
+Definition at line 115 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::seaice_depth_input_grid"
 
 .PP
 sea ice depth 
 .PP
-Definition at line 82 of file input_data\&.F90\&.
+Definition at line 81 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::seaice_fract_input_grid"
 
 .PP
 sea ice fraction 
 .PP
-Definition at line 83 of file input_data\&.F90\&.
+Definition at line 82 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::seaice_skin_temp_input_grid"
 
 .PP
 sea ice skin temp 
 .PP
-Definition at line 84 of file input_data\&.F90\&.
+Definition at line 83 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::skin_temp_input_grid"
 
 .PP
 skin temp/sst 
 .PP
-Definition at line 85 of file input_data\&.F90\&.
+Definition at line 84 of file input_data\&.F90\&.
 .SS "character(len=50), dimension(:), allocatable, private input_data::slevs\fC [private]\fP"
 
 .PP
 The atmospheric levels in the GRIB2 input file\&. 
 .PP
-Definition at line 106 of file input_data\&.F90\&.
+Definition at line 105 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::snow_depth_input_grid"
 
 .PP
 snow dpeth 
 .PP
-Definition at line 86 of file input_data\&.F90\&.
+Definition at line 85 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::snow_liq_equiv_input_grid"
 
 .PP
 snow liq equiv depth 
 .PP
-Definition at line 87 of file input_data\&.F90\&.
+Definition at line 86 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::soil_temp_input_grid"
 
 .PP
 3-d soil temp 
 .PP
-Definition at line 88 of file input_data\&.F90\&.
+Definition at line 87 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::soil_type_input_grid"
 
 .PP
 soil type 
 .PP
-Definition at line 89 of file input_data\&.F90\&.
+Definition at line 88 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::soilm_liq_input_grid"
 
 .PP
 3-d liquid soil moisture 
 .PP
-Definition at line 90 of file input_data\&.F90\&.
+Definition at line 89 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::soilm_tot_input_grid"
 
 .PP
 3-d total soil moisture 
 .PP
-Definition at line 91 of file input_data\&.F90\&.
+Definition at line 90 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::srflag_input_grid"
 
 .PP
 snow/rain flag 
 .PP
-Definition at line 92 of file input_data\&.F90\&.
+Definition at line 91 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::t2m_input_grid"
 
 .PP
 2-m temperature 
 .PP
-Definition at line 93 of file input_data\&.F90\&.
+Definition at line 92 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::temp_input_grid"
 
 .PP
 temperature 
 .PP
-Definition at line 58 of file input_data\&.F90\&.
+Definition at line 57 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::terrain_input_grid"
 
 .PP
 terrain height 
 .PP
-Definition at line 57 of file input_data\&.F90\&.
+Definition at line 56 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::tprcp_input_grid"
 
 .PP
 precip 
 .PP
-Definition at line 94 of file input_data\&.F90\&.
+Definition at line 93 of file input_data\&.F90\&.
 .SS "type(esmf_field), dimension(:), allocatable, public input_data::tracers_input_grid"
 
 .PP
 tracers 
 .PP
-Definition at line 63 of file input_data\&.F90\&.
+Definition at line 62 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::tref_input_grid"
 
 .PP
 Reference temperature\&. 
 .PP
-Definition at line 117 of file input_data\&.F90\&.
+Definition at line 116 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::u_input_grid"
 
 .PP
 u/v wind at grid 
 .PP
-Definition at line 60 of file input_data\&.F90\&.
+Definition at line 59 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::ustar_input_grid"
 
 .PP
 fric velocity 
 .PP
-Definition at line 95 of file input_data\&.F90\&.
+Definition at line 94 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::v_input_grid"
 
 .PP
 box center 
 .PP
-Definition at line 61 of file input_data\&.F90\&.
+Definition at line 60 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::veg_greenness_input_grid"
 
 .PP
 vegetation fraction 
 .PP
-Definition at line 98 of file input_data\&.F90\&.
+Definition at line 97 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::veg_type_input_grid"
 
 .PP
 vegetation type 
 .PP
-Definition at line 96 of file input_data\&.F90\&.
+Definition at line 95 of file input_data\&.F90\&.
 .SS "integer, public input_data::veg_type_landice_input = 15"
 
 .PP
 NOAH land ice option defined at this veg type\&. Default is igbp\&. 
 .PP
-Definition at line 70 of file input_data\&.F90\&.
+Definition at line 69 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::w_0_input_grid"
 
 .PP
 Coefficient 3 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 119 of file input_data\&.F90\&.
+Definition at line 118 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::w_d_input_grid"
 
 .PP
 Coefficient 4 to calculate d(tz)/d(ts) 
 .PP
-Definition at line 118 of file input_data\&.F90\&.
+Definition at line 117 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::wind_input_grid"
 
 .PP
 3-component wind 
 .PP
-Definition at line 62 of file input_data\&.F90\&.
+Definition at line 61 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::xs_input_grid"
 
 .PP
 Salinity content in diurnal thermocline layer\&. 
 .PP
-Definition at line 120 of file input_data\&.F90\&.
+Definition at line 119 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::xt_input_grid"
 
 .PP
 Heat content in diurnal thermocline layer\&. 
 .PP
-Definition at line 121 of file input_data\&.F90\&.
+Definition at line 120 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::xtts_input_grid"
 
 .PP
 d(xt)/d(ts) 
 .PP
-Definition at line 125 of file input_data\&.F90\&.
+Definition at line 124 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::xu_input_grid"
 
 .PP
 u-current content in diurnal thermocline layer 
 .PP
-Definition at line 122 of file input_data\&.F90\&.
+Definition at line 121 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::xv_input_grid"
 
 .PP
 v-current content in diurnal thermocline layer 
 .PP
-Definition at line 123 of file input_data\&.F90\&.
+Definition at line 122 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::xz_input_grid"
 
 .PP
 Diurnal thermocline layer thickness\&. 
 .PP
-Definition at line 124 of file input_data\&.F90\&.
+Definition at line 123 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::xzts_input_grid"
 
 .PP
 d(xz)/d(ts) 
 .PP
-Definition at line 126 of file input_data\&.F90\&.
+Definition at line 125 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::z0_input_grid"
 
 .PP
 roughness length 
 .PP
-Definition at line 97 of file input_data\&.F90\&.
+Definition at line 96 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::z_c_input_grid"
 
 .PP
 Sub-layer cooling thickness\&. 
 .PP
-Definition at line 127 of file input_data\&.F90\&.
+Definition at line 126 of file input_data\&.F90\&.
 .SS "type(esmf_field), public input_data::zm_input_grid"
 
 .PP
 Oceanic mixed layer depth\&. 
 .PP
-Definition at line 128 of file input_data\&.F90\&.
+Definition at line 127 of file input_data\&.F90\&.
 
 .SH "Author"
 .PP 

@@ -24,7 +24,6 @@ var classprogram__setup =
     [ "drysmc_target", "classprogram__setup.html#abcd1bcc5c560893e6524aff26bbb54a4", null ],
     [ "external_model", "classprogram__setup.html#aeb876c8fe55456458771ff3cbc86ad14", null ],
     [ "field_var_names", "classprogram__setup.html#a628f7be5aa35f0a20cd4e84598bfa7e7", null ],
-    [ "fix_dir_input_grid", "classprogram__setup.html#af5e02810f29d6e3dec556592cb0ad5cc", null ],
     [ "fix_dir_target_grid", "classprogram__setup.html#ad68e3574b23454ea791501813c6063f7", null ],
     [ "geogrid_file_input_grid", "classprogram__setup.html#a0c9b8f64a9bc2872a5cf70ee0c97c5f5", null ],
     [ "grib2_file_input_grid", "classprogram__setup.html#a3060fbdb680807d9360c64ccd2d9855a", null ],

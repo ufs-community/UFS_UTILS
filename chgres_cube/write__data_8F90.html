@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.5"/>
-<title>chgres_cube: /gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/chgres_cube.fd/write_data.F90 File Reference</title>
+<title>chgres_cube: /gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/write_data.F90 File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('write__data_8F90.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#func-members">Functions/Subroutines</a>  </div>
+<a href="#nested-classes">Data Types</a>  </div>
   <div class="headertitle">
 <div class="title">write_data.F90 File Reference</div>  </div>
 </div><!--header-->
@@ -113,20 +113,10 @@ $(document).ready(function(){initNavTree('write__data_8F90.html','');});
 
 <p><a href="write__data_8F90_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions/Subroutines</h2></td></tr>
-<tr class="memitem:a5444b28ff73771c629f9246a7ab8c689"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="write__data_8F90.html#a5444b28ff73771c629f9246a7ab8c689">write_fv3_atm_bndy_data_netcdf</a> (localpet)</td></tr>
-<tr class="memdesc:a5444b28ff73771c629f9246a7ab8c689"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes atmospheric fields along the lateral boundary.  <a href="#a5444b28ff73771c629f9246a7ab8c689">More...</a><br/></td></tr>
-<tr class="separator:a5444b28ff73771c629f9246a7ab8c689"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d32984d1e12f6fefe37f9b7e75de5d9"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="write__data_8F90.html#a0d32984d1e12f6fefe37f9b7e75de5d9">write_fv3_atm_data_netcdf</a> (localpet)</td></tr>
-<tr class="memdesc:a0d32984d1e12f6fefe37f9b7e75de5d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write atmospheric coldstart files (netcdf format).  <a href="#a0d32984d1e12f6fefe37f9b7e75de5d9">More...</a><br/></td></tr>
-<tr class="separator:a0d32984d1e12f6fefe37f9b7e75de5d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b255517030a7f64aee71d4ff16863dd"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="write__data_8F90.html#a7b255517030a7f64aee71d4ff16863dd">write_fv3_atm_header_netcdf</a> (localpet)</td></tr>
-<tr class="memdesc:a7b255517030a7f64aee71d4ff16863dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes atmospheric header file in netcdf format.  <a href="#a7b255517030a7f64aee71d4ff16863dd">More...</a><br/></td></tr>
-<tr class="separator:a7b255517030a7f64aee71d4ff16863dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1faad24408e51c017b7300054efdcc7e"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="write__data_8F90.html#a1faad24408e51c017b7300054efdcc7e">write_fv3_sfc_data_netcdf</a> (localpet)</td></tr>
-<tr class="memdesc:a1faad24408e51c017b7300054efdcc7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes surface and nst data into a 'coldstart' file (netcdf).  <a href="#a1faad24408e51c017b7300054efdcc7e">More...</a><br/></td></tr>
-<tr class="separator:a1faad24408e51c017b7300054efdcc7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Data Types</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">module &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwrite__data.html">write_data</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Writes the tiled and header files expected by the forecast model. </p>
@@ -134,134 +124,7 @@ Functions/Subroutines</h2></td></tr>
 <p>Write out target grid data into appropriate files for the forecast model. </p>
 
 <p>Definition in file <a class="el" href="write__data_8F90_source.html">write_data.F90</a>.</p>
-</div><h2 class="groupheader">Function/Subroutine Documentation</h2>
-<a class="anchor" id="a5444b28ff73771c629f9246a7ab8c689"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine write_fv3_atm_bndy_data_netcdf </td>
-          <td>(</td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>localpet</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Writes atmospheric fields along the lateral boundary. </p>
-<p>For regional grids only. Output in netcdf format.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">localpet</td><td>ESMF local persistent execution thread </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
-
-<p>Definition at line <a class="el" href="write__data_8F90_source.html#l00088">88</a> of file <a class="el" href="write__data_8F90_source.html">write_data.F90</a>.</p>
-
-<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="utils_8F90_source.html#l00031">netcdf_err()</a>.</p>
-
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere::atmosphere_driver()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a0d32984d1e12f6fefe37f9b7e75de5d9"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine write_fv3_atm_data_netcdf </td>
-          <td>(</td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>localpet</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Write atmospheric coldstart files (netcdf format). </p>
-<p>Routine writes tiled files in parallel. Tile 1 is written by localpet 0; tile 2 by localpet 1, etc. The number of pets must be equal to or greater than the number of tiled files.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">localpet</td><td>ESMF local persistent execution thread </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
-
-<p>Definition at line <a class="el" href="write__data_8F90_source.html#l01194">1194</a> of file <a class="el" href="write__data_8F90_source.html">write_data.F90</a>.</p>
-
-<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="utils_8F90_source.html#l00031">netcdf_err()</a>.</p>
-
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere::atmosphere_driver()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a7b255517030a7f64aee71d4ff16863dd"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine write_fv3_atm_header_netcdf </td>
-          <td>(</td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>localpet</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Writes atmospheric header file in netcdf format. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">localpet</td><td>ESMF local persistent execution thread </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
-
-<p>Definition at line <a class="el" href="write__data_8F90_source.html#l00015">15</a> of file <a class="el" href="write__data_8F90_source.html">write_data.F90</a>.</p>
-
-<p>References <a class="el" href="utils_8F90_source.html#l00031">netcdf_err()</a>.</p>
-
-<p>Referenced by <a class="el" href="atmosphere_8F90_source.html#l00115">atmosphere::atmosphere_driver()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a1faad24408e51c017b7300054efdcc7e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">subroutine write_fv3_sfc_data_netcdf </td>
-          <td>(</td>
-          <td class="paramtype">integer, intent(in)&#160;</td>
-          <td class="paramname"><em>localpet</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Writes surface and nst data into a 'coldstart' file (netcdf). </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">localpet</td><td>ESMF local persistent execution thread </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
-
-<p>Definition at line <a class="el" href="write__data_8F90_source.html#l01808">1808</a> of file <a class="el" href="write__data_8F90_source.html">write_data.F90</a>.</p>
-
-<p>References <a class="el" href="utils_8F90_source.html#l00009">error_handler()</a>, and <a class="el" href="utils_8F90_source.html#l00031">netcdf_err()</a>.</p>
-
-<p>Referenced by <a class="el" href="surface_8F90_source.html#l00170">surface::surface_driver()</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

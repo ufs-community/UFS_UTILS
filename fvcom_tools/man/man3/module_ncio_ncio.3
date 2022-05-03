@@ -1,4 +1,4 @@
-.TH "module_ncio::ncio" 3 "Fri Oct 22 2021" "Version 1.6.0" "fvcom_tools" \" -*- nroff -*-
+.TH "module_ncio::ncio" 3 "Tue May 3 2022" "Version 1.6.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,7 +10,15 @@ module_ncio::ncio \-
 
 .in +1c
 .ti -1c
-.RI "procedure \fBadd_new_var\fP => \fBadd_new_var_3d\fP"
+.RI "generic \fBadd_new_var\fP => \fBadd_new_var_2d\fP,\fBadd_new_var_3d\fP"
+.br
+.RI "\fIAdd a new 2d or 3d variable to ouput file\&. \fP"
+.ti -1c
+.RI "procedure \fBadd_new_var_2d\fP"
+.br
+.RI "\fIAdd a new 2d variable to output file\&. \fP"
+.ti -1c
+.RI "procedure \fBadd_new_var_3d\fP"
 .br
 .RI "\fIAdd a new 3d variable to output file\&. \fP"
 .ti -1c
@@ -239,7 +247,37 @@ module_ncio::ncio \-
 Definition at line 16 of file module_ncio\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "procedure module_ncio::ncio::add_new_var ()\fC [private]\fP"
+.SS "generic module_ncio::ncio::add_new_var ()\fC [private]\fP"
+
+.PP
+Add a new 2d or 3d variable to ouput file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 88 of file module_ncio\&.f90\&.
+.PP
+References add_new_var_2d(), and add_new_var_3d()\&.
+.SS "procedure module_ncio::ncio::add_new_var_2d ()\fC [private]\fP"
+
+.PP
+Add a new 2d variable to output file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 90 of file module_ncio\&.f90\&.
+.PP
+Referenced by add_new_var()\&.
+.SS "procedure module_ncio::ncio::add_new_var_3d ()\fC [private]\fP"
 
 .PP
 Add a new 3d variable to output file\&. 
@@ -251,9 +289,9 @@ Add a new 3d variable to output file\&.
 .PP
 
 .PP
-Definition at line 88 of file module_ncio\&.f90\&.
+Definition at line 91 of file module_ncio\&.f90\&.
 .PP
-References module_ncio::add_new_var_3d()\&.
+Referenced by add_new_var()\&.
 .SS "procedure module_ncio::ncio::close ()\fC [private]\fP"
 
 .PP

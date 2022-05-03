@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.5"/>
-<title>fvcom_tools: /gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/UFS_UTILS/sorc/fvcom_tools.fd/process_FVCOM.f90 File Reference</title>
+<title>fvcom_tools: /gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/process_FVCOM.f90 File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -45,7 +45,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Types&#160;List</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -92,7 +91,7 @@ $(document).ready(function(){initNavTree('process__FVCOM_8f90.html','');});
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Pages</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -139,18 +138,18 @@ Functions/Subroutines</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data.nc. </p>
-<p>This script will take two variables from the command line:</p>
+<p>This script will take four variables from the command line:</p>
 <ol type="1">
 <li>Name of FV3 sfc data file (e.g. sfc_data.tile7.halo0.nc)</li>
 <li>Name of FVCOM data file (e.g. fvcom.nc)</li>
+<li>"warm" or "cold" start. "warm" start will read in sfc_data.nc files generated from a restart of UFS-SRW. "cold" start will read in sfc_data.nc files generated from chgres_cube.</li>
+<li>String of time slice to use in the fvcom.nc file. This string should match exactly what is in the Times variable of the .nc file. To run the script, use the following example, modifying file names as needed: ./fvcom_to_FV3 sfc_data.tile7.halo0.nc fvcom.nc cold \ 2020-01-31T18:00:00.000000 Code is strongly based upon Eric James' (ESRL/GSL) work to update HRRR/WRF Great Lakes' temperature data with FVCOM. Code also relies heavily on Ming Hu's ncio module.</li>
 </ol>
-<p>To run the script, use the following example, modifying file names as needed: ./fvcom_to_FV3 sfc_data.tile7.halo0.nc fvcom.nc</p>
-<p>Code is strongly based upon Eric James' (ESRL/GSL) work to update HRRR/WRF Great Lakes' temperature data with FVCOM. Code also relies heavily on Ming Hu's ncio module.</p>
 <dl class="section author"><dt>Author</dt><dd>David Wright, University of Michigan and GLERL </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>17 Aug 2020 </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>0 for success, error code otherwise </dd></dl>
 
-<p>Definition at line <a class="el" href="process__FVCOM_8f90_source.html#l00027">27</a> of file <a class="el" href="process__FVCOM_8f90_source.html">process_FVCOM.f90</a>.</p>
+<p>Definition at line <a class="el" href="process__FVCOM_8f90_source.html#l00032">32</a> of file <a class="el" href="process__FVCOM_8f90_source.html">process_FVCOM.f90</a>.</p>
 
 </div>
 </div>

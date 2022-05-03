@@ -1,6 +1,8 @@
 var structmodule__ncio_1_1ncio =
 [
-    [ "add_new_var", "structmodule__ncio_1_1ncio.html#a189c6b4afd9b9c27573aa61d25ff7d3a", null ],
+    [ "add_new_var", "structmodule__ncio_1_1ncio.html#afe876caa85c71d53f8ee5f87f12054e7", null ],
+    [ "add_new_var_2d", "structmodule__ncio_1_1ncio.html#a3436a66b0d823559d365992916b7832c", null ],
+    [ "add_new_var_3d", "structmodule__ncio_1_1ncio.html#ab8dbeffbba653826686bb5ed1795149e", null ],
     [ "close", "structmodule__ncio_1_1ncio.html#a782798cda1e2777d0a7d8998fc264ed9", null ],
     [ "convert_theta2t_2dgrid", "structmodule__ncio_1_1ncio.html#a8028124b918efde884e98d2edab4b8d4", null ],
     [ "get_att", "structmodule__ncio_1_1ncio.html#ac210738461dd6d73ded7aa9140677de0", null ],
