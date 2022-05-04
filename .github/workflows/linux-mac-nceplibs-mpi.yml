@@ -214,20 +214,14 @@ jobs:
         export CC=mpicc
         export CXX=mpicxx
         export FC=mpifort
-        # Findwgrib2 in module form does not search <libname>-version
-        # as NCEPLIBS installs it
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
         export DYLD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        export wgrib2_ROOT=`find ~/nceplibs -type d -maxdepth 1 -iname "wgrib2*"`
         cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf'
         make -j2
 
     - name: test
       run: |
-        cd ufs_utils/build/tests
-        wget -i ./chgres_cube/data/files.txt -P ./chgres_cube/data
-        wget -i ./sfc_climo_gen/data/files.txt -P ./sfc_climo_gen/data
-        cd ../
+        cd ufs_utils/build
         # Oversubscribe for OpenMPI to run more processes than CPUs
         export OMPI_MCA_rmaps_base_oversubscribe=1
         ctest --rerun-failed --output-on-failure

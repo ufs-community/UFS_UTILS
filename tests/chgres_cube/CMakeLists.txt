@@ -3,7 +3,19 @@
 #
 # George Gayno, Lin Gan, Ed Hartnett, Larissa Reames
 
-# Include cmake to allow parallel I/O tests.
+set(CHGRES_URL "https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/chgres_cube")
+
+set(V16SFC_FILE "gfs.v16.sfc.history.nc")
+set(V16SFC_FILE2 "gfs.v16.sfc2.history.nc")
+set(V16ATM_FILE "gfs.v16.atm.history.nc")
+set(V14SFC_FILE "gfs.v14.sfc.history.nemsio")
+set(V15SFC_FILE "gfs.v15.sfc.history.nemsio")
+set(GFS_GRIB_FILE "gfs.t00z.pgrb2.0p50.f000")
+
+foreach(THE_FILE IN LISTS V16SFC_FILE V16SFC_FILE2 V16ATM_FILE V14SFC_FILE V15SFC_FILE GFS_GRIB_FILE) 
+  PULL_DATA(${CHGRES_URL} ${THE_FILE})
+endforeach()
+
 include (LibMPI)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
@@ -16,8 +28,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 # Copy necessary test files from the source data directory to the
 # build data directory.
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/data/files.txt ${CMAKE_CURRENT_BINARY_DIR}/data/files.txt)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy

@@ -49,9 +49,6 @@ load(pathJoin("sfcio", sfcio_ver))
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
 
-wgrib2_ver=os.getenv("wgrib2_ver") or "2.0.8"
-load(pathJoin("wgrib2", wgrib2_ver))
-
 nccmp_ver=os.getenv("nccmp_ver") or "1.8.7.0"
 load(pathJoin("nccmp", nccmp_ver))
 
