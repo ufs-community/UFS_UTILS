@@ -40,7 +40,6 @@ This package uses the [hpc-stack](https://github.com/NOAA-EMC/hpc-stack) for the
  - [NCEPLIBS-sp](https://github.com/NOAA-EMC/NCEPLIBS-sp)
  - [NCEPLIBS-ip](https://github.com/NOAA-EMC/NCEPLIBS-ip)
  - [NCEPLIBS-g2](https://github.com/NOAA-EMC/NCEPLIBS-g2)
- - [NCEPLIBS-wgrib2](https://github.com/NOAA-EMC/NCEPLIBS-wgrib2)
 
 And for the following third party libraries:
 

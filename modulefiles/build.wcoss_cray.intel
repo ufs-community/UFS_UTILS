@@ -24,7 +24,6 @@ module load sp/2.3.3
 module load w3nco/2.4.1
 module load sfcio/1.4.1
 module load sigio/2.3.2
-module load wgrib2/2.0.8
 
 setenv ZLIB_ROOT /usrx/local/prod/zlib/1.2.7/intel/haswell
 setenv PNG_ROOT /usrx/local/prod/png/1.2.49/intel/haswell
