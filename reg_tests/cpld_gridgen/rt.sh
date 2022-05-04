@@ -9,7 +9,9 @@ error() {
 
 usage() {
   echo
-  echo "Usage: $program [-c] [-m] [-h]"
+  echo "Usage: $program [-c] [-m] [-h] [-b]"
+  echo
+  echo "  -b build the executable"
   echo
   echo "  -c create a new baseline"
   echo
@@ -19,9 +21,9 @@ usage() {
   echo
   echo "  Examples"
   echo
-  echo "    './rt.sh'    compare against the existing baseline"
-  echo "    './rt.sh -c' create a new baseline"
-  echo "    './rt.sh -m' compare against the new baseline"
+  echo "    './rt.sh -b'  build exe file. compare against the existing baseline"
+  echo "    './rt.sh -bc' build exe file. create a new baseline"
+  echo "    './rt.sh -m'  do not build exe file. compare against the new baseline"
   echo
 }
 
@@ -52,7 +54,7 @@ check_results() {
         echo "....MISSING file" | tee -a $PATHRT/$REGRESSIONTEST_LOG
         test_status=FAIL
       else
-        nccmp -dmfqS $(basename ${file}) $file && d=$? || d=$?
+        nccmp -dmfqS $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
         if [[ $d -ne 0 ]]; then
           echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
           test_status=FAIL
@@ -111,7 +113,7 @@ echo "Compiler: $compiler"
 
 COMPILE_LOG=compile.log
 REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.log
-rm -f fail_test* $COMPILE_LOG run*.log
+rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log
 
 if [[ $target = hera ]]; then
   STMP=/scratch1/NCEPDEV/stmp4
@@ -119,25 +121,34 @@ if [[ $target = hera ]]; then
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
+  SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = orion ]]; then
   STMP=/work/noaa/stmp
   export MOM6_FIXDIR=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
+  ulimit -s unlimited
+  SBATCH_COMMAND="srun -n 1 ./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
-  STMP=
-  FIXDIR_PATH=
-  BASELINE_ROOT=
-  ACCOUNT=${ACCOUNT:-nems}
+  STMP=/lfs4/HFIP/h-nems/
+  export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
+  BASELINE_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  ACCOUNT=${ACCOUNT:-h-nems}
   QUEUE=${QUEUE:-batch}
+  ulimit -s unlimited
+  SBATCH_COMMAND="./cpld_gridgen.sh"
 fi
 NEW_BASELINE_ROOT=$STMP/$USER/CPLD_GRIDGEN/BASELINE
 RUNDIR_ROOT=$STMP/$USER/CPLD_GRIDGEN/rt_$$
 
+BUILD_EXE=false
 CREATE_BASELINE=false
-while getopts :cmh opt; do
+while getopts :bcmh opt; do
   case $opt in
+    b)
+      BUILD_EXE=true
+      ;;
     c)
       CREATE_BASELINE=true
       ;;
@@ -154,17 +165,21 @@ while getopts :cmh opt; do
 done
 
 # Build the executable file
-cd $PATHTR
-rm -rf $PATHTR/build $PATHTR/exec $PATHTR/lib
-./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1 && d=$? || d=$?
-if [[ d -ne 0 ]]; then
-  error "Build did not finish successfully. Check $COMPILE_LOG"
+if [[ $BUILD_EXE = true ]]; then
+  cd $PATHTR
+  rm -rf $PATHTR/build $PATHTR/exec $PATHTR/lib
+  ./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1 && d=$? || d=$?
+  if [[ d -ne 0 ]]; then
+    error "Build did not finish successfully. Check $COMPILE_LOG"
+  else
+    echo "Build was successful"
+  fi
 fi
 
 if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
-  error "Build did not generate the cpld_gridgen exe file. Check $COMPILE_LOG"
+  error "cpld_gridgen exe file is not found in $PATHTR/exe/. Try -b to build or -h for help."
 else
-  echo "Build was successful. cpld_gridgen executable file is in $PATHTR/exec/"
+  echo "cpld_gridgen exe file is found in $PATHTR/exec/"
 fi
 
 module use $PATHTR/modulefiles
@@ -214,9 +229,9 @@ while read -r line || [ "$line" ]; do
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cd $RUNDIR
 
-  sbatch --wait --ntasks-per-node=1 --nodes=1 -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+  sbatch --wait --ntasks-per-node=4 --nodes=1 -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
          -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-         ./cpld_gridgen.sh $TEST_NAME  && d=$? || d=$?
+         --wrap "$SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
 
   if [[ d -ne 0 ]]; then
     error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
