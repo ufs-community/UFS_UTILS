@@ -13,6 +13,8 @@ endif()
 # build data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
    ${CMAKE_CURRENT_SOURCE_DIR}/data/config.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 
 add_executable(ftst_program_setup_snow ftst_program_setup.F90)
 target_link_libraries(ftst_program_setup_snow snow2mdl_lib)
