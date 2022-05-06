@@ -113,7 +113,7 @@ echo "Compiler: $compiler"
 
 COMPILE_LOG=compile.log
 REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.log
-rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log
+rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
 
 if [[ $target = hera ]]; then
   STMP=/scratch1/NCEPDEV/stmp4
@@ -256,6 +256,7 @@ if [[ -e fail_test ]]; then
   echo | tee -a $REGRESSIONTEST_LOG
   for file in fail_test_*; do
     cat $file >>$REGRESSIONTEST_LOG 
+    cat $file >>summary.log
   done
 
   echo | tee -a $REGRESSIONTEST_LOG
@@ -263,5 +264,6 @@ if [[ -e fail_test ]]; then
 else
   echo | tee -a $REGRESSIONTEST_LOG
   echo "REGRESSION TEST WAS SUCCESSFUL" | tee -a $REGRESSIONTEST_LOG
+  echo "All tests passed" >>summary.log
 fi
 date >> $REGRESSIONTEST_LOG
