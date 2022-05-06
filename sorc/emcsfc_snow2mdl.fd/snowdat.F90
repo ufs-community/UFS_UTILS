@@ -509,7 +509,7 @@
 
 !>  Read snow depth data and masks.
 !!
-!! @note Read nh and sh afwa snow depth data and
+!! @note Read afwa snow depth data and
 !!   land sea mask. 
 !!
 !! program history log:
