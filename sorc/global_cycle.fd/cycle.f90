@@ -518,6 +518,10 @@ ENDIF
 
 !--------------------------------------------------------------------------------
 ! UPDATE SURFACE FIELDS.
+!
+! FIRST, SET WATER AND LAND MASKS - SLMASKW/SLMASKL. FOR UNCOUPLED
+! (NON-FRACTIONAL) MODE, THESE ARE IDENTICAL TO THE CURRENT
+! MASK - '0' WATER; '1' LAND.
 !--------------------------------------------------------------------------------
 
  IF (DO_SFCCYCLE) THEN
