@@ -16,8 +16,10 @@ cd ${WORK_DIR}
 rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
-git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
+#git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
+git clone --recursive https://github.com/DeniseWorthen/UFS_UTILS.git
 cd UFS_UTILS
+git checkout feature/cpld_gridgen2
 
 source sorc/machine-setup.sh
 
@@ -67,6 +69,29 @@ cd fix
 
 cd ../reg_tests
 
+if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] ; then
+
+  cd cpld_gridgen
+  export ACCOUNT=$PROJECT_CODE
+
+  ./rt.sh 2>/dev/null &
+
+  set -x
+
+  sleep_time=0
+  while [ ! -f "summary.log" ]; do
+    sleep 10
+    sleep_time=$((sleep_time+10))
+    if (( sleep_time > TIMEOUT_LIMIT )); then
+       kill -9 %1
+       mail -s "UFS_UTILS Consistency Tests timed out on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
+       exit 1
+    fi
+  done
+  cd ..
+
+fi
+
 sleep_time=0
 for dir in global_cycle chgres_cube grid_gen; do
     cd $dir
@@ -115,7 +140,7 @@ done
 echo "Commit hash: ${current_hash}" >> ${WORK_DIR}/reg_test_results.txt
 echo "" >> ${WORK_DIR}/reg_test_results.txt
 
-for dir in chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
+for dir in cpld_gridgen chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
     success=true
     if grep -qi "FAILED" ${dir}/summary.log; then
         success=false
