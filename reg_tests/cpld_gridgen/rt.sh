@@ -128,7 +128,7 @@ elif [[ $target = orion ]]; then
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
-  ulimit -s unlimited
+# ulimit -s unlimited
   SBATCH_COMMAND="srun -n 1 ./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
   STMP=/lfs4/HFIP/h-nems/
