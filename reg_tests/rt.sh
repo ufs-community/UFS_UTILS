@@ -140,8 +140,8 @@ done
 echo "Commit hash: ${current_hash}" >> ${WORK_DIR}/reg_test_results.txt
 echo "" >> ${WORK_DIR}/reg_test_results.txt
 
+success=true
 for dir in cpld_gridgen chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
-    success=true
     if grep -qi "FAILED" ${dir}/summary.log; then
         success=false
         echo "${dir} consistency tests FAILED" >> ${WORK_DIR}/reg_test_results.txt
