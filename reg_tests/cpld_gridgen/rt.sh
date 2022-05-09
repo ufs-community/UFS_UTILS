@@ -116,14 +116,14 @@ REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.log
 rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
 
 if [[ $target = hera ]]; then
-  STMP=/scratch1/NCEPDEV/stmp4
+  STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
   export MOM6_FIXDIR=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
   SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = orion ]]; then
-  STMP=/work/noaa/stmp
+  STMP=${STMP:-/work/noaa/stmp/$USER}
   export MOM6_FIXDIR=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
