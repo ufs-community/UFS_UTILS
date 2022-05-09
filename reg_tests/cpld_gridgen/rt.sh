@@ -131,7 +131,7 @@ elif [[ $target = orion ]]; then
 # ulimit -s unlimited
   SBATCH_COMMAND="srun -n 1 ./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
-  STMP=/lfs4/HFIP/h-nems/
+  STMP=${STMP:-/lfs4/HFIP/h-nems/}
   export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
   BASELINE_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-h-nems}
