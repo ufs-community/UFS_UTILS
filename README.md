@@ -15,6 +15,7 @@ https://ufs-community.github.io/UFS_UTILS/.
 Utility | Programmer(s)
 --------|----------
 chgres_cube | George Gayno, Jeff Beck, Larissa Reames
+cpld_gridgen | Denise Worthen, Minsuk Ji
 emcsfc_ice_blend | George Gayno
 emcsfc_snow2mdl | George Gayno
 fre-nctools | GFDL progammer
@@ -66,6 +67,7 @@ make install
 The UFS_UTILS package contains the following utilities (under the sorc
 directory):
 - chgres_cube
+- cpld_gridgen
 - emcsfc_ice_blend
 - emcsfc_snow2mdl
 - fre-nctools
