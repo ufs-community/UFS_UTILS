@@ -2205,7 +2205,8 @@
 !! @author George Gayno NOAA/EMC
  subroutine roughness
 
- use model_grid, only                : landmask_target_grid
+ use model_grid, only                : landmask_target_grid, &
+                                       seamask_target_grid
  use static_data, only               : veg_type_target_grid
  use program_setup, only             : fract_grid
 
@@ -2213,10 +2214,12 @@
 
  integer                            :: clb(2), cub(2), i, j, rc
  integer(esmf_kind_i8), pointer     :: landmask_ptr(:,:)
+ integer(esmf_kind_i8), pointer     :: seamask_ptr(:,:)
 
  real                               :: z0_igbp(20)
  real(esmf_kind_r8), pointer        :: data_ptr(:,:)
  real(esmf_kind_r8), pointer        :: data_ptr2(:,:)
+ real(esmf_kind_r8), pointer        :: data_ptr3(:,:)
  real(esmf_kind_r8), pointer        :: fice_ptr(:,:)
  real(esmf_kind_r8), pointer        :: veg_type_ptr(:,:)
 
@@ -2263,6 +2266,8 @@
    do i = clb(1), cub(1)
      if (fice_ptr(i,j) > 0.0) then
        data_ptr2(i,j) = 1.0
+     else
+       data_ptr2(i,j) = -1.e20
      endif
    enddo
    enddo
@@ -2272,7 +2277,27 @@
      if (landmask_ptr(i,j) == 1) then
        data_ptr(i,j) = z0_igbp(nint(veg_type_ptr(i,j))) * 100.0
      else
-       data_ptr(i,j) = -9.
+       data_ptr(i,j) = -1.e20
+     endif
+   enddo
+   enddo
+
+   print*,"- CALL FieldGet FOR TARGET GRID Z0 WATER."
+   call ESMF_FieldGet(z0_water_target_grid, &
+                      farrayPtr=data_ptr3, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGet", rc)
+
+   print*,"- CALL FieldGet FOR TARGET SEA MASK."
+   call ESMF_FieldGet(seamask_target_grid, &
+                      farrayPtr=seamask_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGet", rc)
+
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (fice_ptr(i,j) > 0.0 .or. seamask_ptr(i,j) == 0) then
+       data_ptr3(i,j) = -1.e20
      endif
    enddo
    enddo
@@ -2328,6 +2353,7 @@
 
  real(esmf_kind_r8), pointer        :: data_ptr(:,:)
  real(esmf_kind_r8), pointer        :: data3d_ptr(:,:,:)
+ real(esmf_kind_r8), pointer        :: ice_ptr(:,:,:)
  real(esmf_kind_r8), pointer        :: soilmt_ptr(:,:,:)
  real(esmf_kind_r8), pointer        :: soilml_ptr(:,:,:)
  real(esmf_kind_r8), pointer        :: veg_greenness_ptr(:,:)
@@ -2416,7 +2442,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
-   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
@@ -2442,7 +2468,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
-   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
@@ -2468,7 +2494,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
-   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
@@ -2494,7 +2520,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
-   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -9. ! gfs physics flag value
+   if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
@@ -2626,7 +2652,7 @@
 !    skint_ptr(i,j) = (fice_ptr(i,j) * seaice_skint_ptr(i,j)) +  &
 !                     ( (1.0 - fice_ptr(i,j)) * frz_ice )
    else
-!    seaice_skint_ptr(i,j) = skint_ptr(i,j)
+     seaice_skint_ptr(i,j) = -1.e20
      hice_ptr(i,j) = 0.0
    endif
  enddo
@@ -2751,8 +2777,32 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
    call error_handler("IN FieldGet", rc)
 
-!cfract, is skint_ptr the new sst field? need to use new
-!cfract sst_target_grid here.
+ if (fract_grid) then
+
+  do j = clb(2), cub(2)
+  do i = clb(1), cub(1)
+    if (landmask_ptr(i,j) == 0) then
+      data3d_ptr(i,j,:) = -1.e20
+    endif
+  enddo
+  enddo
+
+  print*,"- SET FLAG FOR TARGET GRID ICE TEMPERATURE."
+  call ESMF_FieldGet(ice_temp_target_grid, &
+                     farrayPtr=ice_ptr, rc=rc)
+  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+  do j = clb(2), cub(2)
+  do i = clb(1), cub(1)
+    if (fice_ptr(i,j) == 0.0) then
+      ice_ptr(i,j,:) = -1.e20
+    endif
+  enddo
+  enddo
+
+ else
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then
@@ -2760,6 +2810,18 @@
    endif
  enddo
  enddo
+
+ endif
+
+ if (fract_grid) then ! set flag value at non-land
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (landmask_ptr(i,j) == 0) then
+       skint_ptr(i,j) = -1.e20
+     endif
+   enddo
+   enddo
+ endif
 
  return
 
@@ -3185,7 +3247,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- target_ptr = init_val
+ target_ptr = -1.e20
 
  print*,"- CALL FieldCreate FOR TARGET ALVWF AT NON-LAND."
  alvwf_nl_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3201,7 +3263,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- target_ptr = init_val
+ target_ptr = -1.e20
 
  print*,"- CALL FieldCreate FOR TARGET ALNSF AT NON-LAND."
  alnsf_nl_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3217,7 +3279,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- target_ptr = init_val
+ target_ptr = -1.e20
 
  print*,"- CALL FieldCreate FOR TARGET ALNWF AT NON-LAND."
  alnwf_nl_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3233,7 +3295,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- target_ptr = init_val
+ target_ptr = -1.e20
  endif ! fract_grid
 
  print*,"- CALL FieldCreate FOR TARGET GRID CANOPY MOISTURE CONTENT."
