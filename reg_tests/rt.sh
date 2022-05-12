@@ -96,6 +96,8 @@ for dir in snow2mdl ice_blend; do
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
         cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
+    elif [[ $target == "wcoss2" ]] ; then
+        qsub ./driver.$target.sh
     fi
     
     # Wait for job to complete
@@ -115,8 +117,8 @@ done
 echo "Commit hash: ${current_hash}" >> ${WORK_DIR}/reg_test_results.txt
 echo "" >> ${WORK_DIR}/reg_test_results.txt
 
+success=true
 for dir in chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
-    success=true
     if grep -qi "FAILED" ${dir}/summary.log; then
         success=false
         echo "${dir} consistency tests FAILED" >> ${WORK_DIR}/reg_test_results.txt
