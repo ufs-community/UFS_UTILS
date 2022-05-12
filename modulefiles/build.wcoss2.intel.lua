@@ -59,9 +59,6 @@ load(pathJoin("ip", ip_ver))
 g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
 
-wgrib2_ver=os.getenv("wgrib2_ver") or "2.0.8"
-load(pathJoin("wgrib2", wgrib2_ver))
-
 -- for mpiexec command
 cray_pals_ver=os.getenv("cray_pals_ver") or "1.0.12"
 load(pathJoin("cray-pals", cray_pals_ver))
