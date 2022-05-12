@@ -107,5 +107,5 @@ qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:
         -N grid_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST5 << EOF
 #!/bin/bash
 cd ${this_dir}
-grep -a '<<<' $LOG_FILE  > $SUM_FILE
+grep -a '<<<' $LOG_FILE | grep -v echo > $SUM_FILE
 EOF

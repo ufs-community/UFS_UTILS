@@ -32,6 +32,7 @@ source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.intel
 module load grib_util/1.2.3
+module load wgrib2/2.0.8
 module list
 
 set -x

@@ -80,7 +80,7 @@ qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:
         -N cycle_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST1:$TEST2:$TEST3 << EOF
 #!/bin/bash
 cd $reg_dir
-grep -a '<<<' ${LOG_FILE}??  > summary.log
+grep -a '<<<' ${LOG_FILE}?? | grep -v echo > summary.log
 EOF
 
 exit
