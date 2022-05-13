@@ -2684,6 +2684,8 @@
    do i = clb(1), cub(1)
      if (fice_ptr(i,j) > 0.0) then  ! sea ice
        data_ptr(i,j) = frz_ice
+     else
+       data_ptr(i,j) = -1.e20
      endif
    enddo
    enddo
