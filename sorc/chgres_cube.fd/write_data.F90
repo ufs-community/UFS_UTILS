@@ -1889,9 +1889,9 @@
 
  integer                        :: fsize=65536, initial = 0
  integer                        :: header_buffer_val = 16384
- integer                        :: dim_x, dim_y, dim_lsoil, dim_time
+ integer                        :: dim_x, dim_y, dim_lsoil, dim_ice, dim_time
  integer                        :: error, i, ncid, tile
- integer                        :: id_x, id_y, id_lsoil
+ integer                        :: id_x, id_y, id_lsoil, id_ice
  integer                        :: id_slmsk, id_time
  integer                        :: id_lat, id_lon, id_tg3_ice
  integer                        :: id_tsfcl, id_tsea, id_sheleg, id_sheleg_ice, id_tg3
@@ -1992,6 +1992,10 @@
      call netcdf_err(error, 'DEFINING YAXIS DIMENSION' )
      error = nf90_def_dim(ncid, 'zaxis_1', lsoil_target, dim_lsoil)
      call netcdf_err(error, 'DEFINING ZAXIS DIMENSION' )
+     if (fract_grid) then
+       error = nf90_def_dim(ncid, 'zaxis_2', 2, dim_ice)
+       call netcdf_err(error, 'DEFINING ZAXIS2 DIMENSION' )
+     endif
      error = nf90_def_dim(ncid, 'Time', 1, dim_time)
      call netcdf_err(error, 'DEFINING TIME DIMENSION' )
 
@@ -2022,6 +2026,17 @@
      call netcdf_err(error, 'DEFINING ZAXIS_1 UNITS' )
      error = nf90_put_att(ncid, id_lsoil, "cartesian_axis", "Z")
      call netcdf_err(error, 'WRITING ZAXIS_1 FIELD' )
+
+     if (fract_grid) then
+       error = nf90_def_var(ncid, 'zaxis_2', NF90_FLOAT, (/dim_ice/), id_ice)
+       call netcdf_err(error, 'DEFINING ZAXIS_2 FIELD' )
+       error = nf90_put_att(ncid, id_ice, "long_name", "zaxis_2")
+       call netcdf_err(error, 'DEFINING ZAXIS_2 LONG NAME' )
+       error = nf90_put_att(ncid, id_ice, "units", "none")
+       call netcdf_err(error, 'DEFINING ZAXIS_2 UNITS' )
+       error = nf90_put_att(ncid, id_ice, "cartesian_axis", "Z")
+       call netcdf_err(error, 'WRITING ZAXIS_2 FIELD' )
+     endif
 
      error = nf90_def_var(ncid, 'Time', NF90_FLOAT, dim_time, id_time)
      call netcdf_err(error, 'DEFINING TIME FIELD' )
@@ -2482,7 +2497,7 @@
      call netcdf_err(error, 'DEFINING SLC COORD' )
 
      if(fract_grid)then
-       error = nf90_def_var(ncid, 'stc_ice', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_stc_ice)
+       error = nf90_def_var(ncid, 'stc_ice', NF90_DOUBLE, (/dim_x,dim_y,dim_ice,dim_time/), id_stc_ice)
        call netcdf_err(error, 'DEFINING STC_ICE' )
        error = nf90_put_att(ncid, id_stc_ice, "long_name", "stc_ice")
        call netcdf_err(error, 'DEFINING STC_ICE LONG NAME' )
@@ -2666,6 +2681,10 @@
    if (localpet == 0) then
      error = nf90_put_var( ncid, id_lsoil, lsoil_data)
      call netcdf_err(error, 'WRITING ZAXIS RECORD' )
+     if (fract_grid) then
+       error = nf90_put_var( ncid, id_ice, (/1,2/))
+       call netcdf_err(error, 'WRITING ZAXIS2 RECORD' )
+     endif
      error = nf90_put_var( ncid, id_x, x_data)
      call netcdf_err(error, 'WRITING XAXIS RECORD' )
      error = nf90_put_var( ncid, id_y, y_data)
@@ -3181,16 +3200,16 @@
 ! ice temperature 
 
    if(fract_grid)then
-   print*,"- CALL FieldGather FOR TARGET GRID sea ice TEMPERATURE FOR TILE: ", tile
-   call ESMF_FieldGather(ice_temp_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     print*,"- CALL FieldGather FOR TARGET GRID sea ice TEMPERATURE FOR TILE: ", tile
+     call ESMF_FieldGather(ice_temp_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=error)
+     if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", error)
 
-   if (localpet == 0) then
-     dum3d(:,:,:) = data_one_tile_3d(istart:iend, jstart:jend,:)
-     error = nf90_put_var( ncid, id_stc_ice, dum3d, start=(/1,1,1,1/), count=(/i_target_out,j_target_out,lsoil_target,1/))
-     call netcdf_err(error, 'WRITING sea ice TEMP RECORD' )
-   endif
+     if (localpet == 0) then
+       dum3d(:,:,:) = data_one_tile_3d(istart:iend, jstart:jend,:)
+       error = nf90_put_var( ncid, id_stc_ice, dum3d(:,:,1:2), start=(/1,1,1,1/), count=(/i_target_out,j_target_out,2,1/))
+       call netcdf_err(error, 'WRITING sea ice TEMP RECORD' )
+     endif
    endif
 
 ! soil temperature 

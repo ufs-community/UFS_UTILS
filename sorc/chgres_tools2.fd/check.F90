@@ -219,7 +219,7 @@
 
  enddo
 
- if(.not.allocated(dummy_frac3d)) allocate(dummy_frac3d(idim,jdim,4))
+ if(.not.allocated(dummy_frac3d)) allocate(dummy_frac3d(idim,jdim,2))
  if(.not.allocated(dummy_floor3d)) allocate(dummy_floor3d(idim,jdim,4))
 
  do var = 1, num_var3d
@@ -236,7 +236,7 @@
    error=nf90_get_var(ncid_floor,varid_floor,dummy_floor3d)
    call netcdf_err(error, 'reading floor field' )
 
-   do n = 1, 4
+   do n = 1, 2
 
      print*,'frac field level ',n,maxval(dummy_frac3d(:,:,n)),minval(dummy_frac3d(:,:,n))
      print*,'floor field level ',n,maxval(dummy_floor3d(:,:,n)),minval(dummy_floor3d(:,:,n))
