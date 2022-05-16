@@ -129,7 +129,7 @@ elif [[ $target = orion ]]; then
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
 # ulimit -s unlimited
-  SBATCH_COMMAND="srun -n 1 ./cpld_gridgen.sh"
+  SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
   STMP=${STMP:-/lfs4/HFIP/h-nems/$USER}
   export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/fix_mom6

@@ -24,14 +24,13 @@ export MASKEDIT=.false.
 export DO_POSTWGTS=.false.
 export OUTDIR_PATH=${OUTDIR_PATH:-/scratch2/NCEPDEV/climate/Denise.Worthen/grids-20220116}
 export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/fix_fv3_gmted2010}
+APRUN=${APRUN:-"srun"}
 
 if [ $RESNAME = 400 ]; then
   echo "The 4 degree resolution is not implemented yet"
   exit 1
-  #export FIXDIR_PATH=/scratch2/NCEPDEV/climate/Denise.Worthen/soca/test/Data/72x35x25/INPUT
 else
   export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
-  #export FIXDIR_PATH=/scratch2/NCEPDEV/climate/climpara/S2S/FIX/fix_UFSp4/fix_mom6/${RESNAME}
 fi
 
 if [ $RESNAME = 400 ]; then
@@ -97,12 +96,12 @@ if [ ! -d ${OUTDIR_PATH} ]; then
 fi
 
 edit_namelist < grid.nml.IN > grid.nml
-./cpld_gridgen
+$APRUN ./cpld_gridgen
 
 # generate ice mesh
 export FSRC=${OUTDIR_PATH}/Ct.mx${RESNAME}_SCRIP_land.nc
 export FDST=${OUTDIR_PATH}/mesh.mx${RESNAME}.nc
-ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+$APRUN ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
 
 # generate kmt file for CICE
 export FSRC=${OUTDIR_PATH}/grid_cice_NEMS_mx${RESNAME}.nc
