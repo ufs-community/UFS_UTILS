@@ -16,10 +16,8 @@ cd ${WORK_DIR}
 rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
-#git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
-git clone --recursive https://github.com/DeniseWorthen/UFS_UTILS.git
+git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
 cd UFS_UTILS
-git checkout feature/cpld_gridgen2
 
 source sorc/machine-setup.sh
 
