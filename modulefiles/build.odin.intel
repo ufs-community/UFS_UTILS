@@ -25,7 +25,6 @@ module load sigio
 module load sfcio
 module load nemsio
 module load g2
-module load wgrib2
 
 #module load esmf/8.0.0
 #setenv ESMFMKFILE /oldscratch/ywang/external/NCEPLIBS_SRW/lib64/esmf.mk
@@ -33,5 +32,3 @@ setenv ESMFMKFILE /oldscratch/ywang/external/NCEPLIBS_SRWv2.0/lib64/esmf.mk
 
 setenv CMAKE_Fortran_COMPILER ftn
 setenv CMAKE_C_COMPILER cc
-
-#setenv WGRIB2_ROOT /oldscratch/ywang/external/NCEPLIBS_SRWv2.0/wgrib2-2.0.8
