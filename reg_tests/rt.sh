@@ -49,6 +49,13 @@ if [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
     if [[ "${this_letter}" == "${prod_letter}" ]]; then
         exit 0
     fi
+elif [[ $target == "wcoss2" ]]; then
+    this_machine=`cat /etc/cluster_name`
+    prod_machine=`grep primary /lfs/h1/ops/prod/config/prodmachinefile`
+    prod_machine=`echo ${prod_machine/primary:}`
+    if [[ "${this_machine}" == "${prod_machine}" ]]; then
+        exit 0
+    fi
 fi
 
 # Set machine_id variable for running link_fixdirs
