@@ -2,13 +2,13 @@
 
 ulimit -s unlimited
 
-export MAILTO=
+export MAILTO="david.huber@noaa.gov"
 
 # Directory to download UFS_UTILS to and run the consistency tests
 export WORK_DIR=
 
-export PROJECT_CODE=
-export QUEUE=
+export PROJECT_CODE=s4
+export QUEUE=s4
 TIMEOUT_LIMIT=3600
 
 mkdir -p ${WORK_DIR}
@@ -16,7 +16,7 @@ cd ${WORK_DIR}
 rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
-git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
+git clone -b update_s4 --recursive https://github.com/davidhuber-noaa/UFS_UTILS.git
 cd UFS_UTILS
 
 source sorc/machine-setup.sh
@@ -92,7 +92,7 @@ fi
 
 for dir in snow2mdl ice_blend; do
     cd $dir
-    if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]]; then
+    if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] ; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
         cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
