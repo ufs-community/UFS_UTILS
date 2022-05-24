@@ -2598,6 +2598,7 @@
    lev_input = 0
    iret = 0
    j = 0
+   jpdtn = -1
    jpdt = -9999
 
    do
@@ -2674,6 +2675,7 @@
 
  if (localpet == 0) then
    
+   jpdtn = pdt_num
    jpdt = -9999
    jpdt(1) = 1  ! Sect4/oct 10 - param category - moisture
    jpdt(2) = 0  ! Sect4/oct 11 - param number - specific humidity
@@ -2740,6 +2742,7 @@
 
  if (localpet == 0) then
 
+   jpdtn = pdt_num
    jpdt = -9999
    if (isnative) then
      jpdt(10) = 105 ! Sect4/oct 23 - type of level - hybrid
