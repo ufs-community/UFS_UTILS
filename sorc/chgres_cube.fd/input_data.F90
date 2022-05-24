@@ -2476,7 +2476,7 @@
  integer                               :: i, j, k, n
  integer                               :: ii,jj
  integer                               :: rc, clb(3), cub(3)
- integer                               :: vlev, iret,varnum, o3n
+ integer                               :: vlev, iret,varnum, o3n, pdt_num
  integer                               :: intrp_ier, done_print
  integer                               :: trac_names_oct10(ntrac_max)
  integer                               :: tracers_input_oct10(num_tracers_input)
@@ -2545,12 +2545,29 @@
    jids    = -9999  ! Array of values in identification section, set to wildcard
    jgdt    = -9999  ! Array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! Search for any grid definition number.
-   jpdtn   =  0     ! Search for product def template number 0 - anl or fcst.
+   jpdtn   = -1  ! Search for product def template number 0 - anl or fcst.
+   unpack  =.false.
+
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+   if (iret == 0) then
+     if (gfld%idsect(1) == 7 .and. gfld%idsect(2) == 2) then
+       print*,'- THIS IS NCEP GEFS DATA.'
+       pdt_num = 1
+     else
+       pdt_num = 0
+     endif
+   else
+     call abort
+   endif
 
 ! First, check for the vertical coordinate. If temperture at the 10 hybrid
 ! level is found, hybrid coordinates are assumed. Otherwise, data is on
 ! isobaric levels.
 
+   j = 0
+   jpdtn   = pdt_num  ! Search for product def template number 0 - anl or fcst.
    jpdt(1) = 0      ! Sect4/oct 10 - param category - temperature field
    jpdt(2) = 0      ! Sect4/oct 11 - param number - temperature
    jpdt(10) = 105   ! Sect4/oct 23 - type of level - hybrid
@@ -2561,6 +2578,9 @@
              unpack, k, gfld, iret)
     
    if (iret == 0) then  ! data is on hybrid levels
+     print*,'hybrid temp found at ',j,k,maxval(gfld%fld),minval(gfld%fld)
+     print*,'hybrid temp pdt num ',gfld%ipdtnum
+     print*,'hybrid temp pdt ',gfld%ipdtmpl
      octet23 = 105
      octet29 = 255
      isnative=.true.
@@ -2568,6 +2588,8 @@
      octet23 = 100
      octet29 = 255
    endif
+   
+   print*,'cggg after check of temp ',iret, octet23,octet29,isnative
 
 ! Now count the number of vertical levels by searching for u-wind.
 ! Store the value of each level.
@@ -2582,10 +2604,15 @@
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
+!    print*,'in loop ',iret,j,k
+!    print*,'in loop2 ',gfld%ipdtmpl(1:13)
+     print*,'in loop idsect ',gfld%idsect
+
      if (iret /= 0) exit
 
+
      if (gfld%discipline == 0) then ! Discipline - meteorological products
-       if (gfld%ipdtnum == 0) then  ! Product definition template number -
+       if (gfld%ipdtnum == 0 .or. gfld%ipdtnum == 1) then  ! Product definition template number -
                                     ! analysis or forecast at single level.
          if (gfld%ipdtmpl(1) == 2 .and. gfld%ipdtmpl(2) == 2) then  ! u-wind
                                                                     ! Sect4/octs 10 and 11.
@@ -2608,6 +2635,7 @@
  call mpi_barrier(MPI_COMM_WORLD, iret)
  call MPI_BCAST(isnative,1,MPI_LOGICAL,0,MPI_COMM_WORLD,iret)
  call MPI_BCAST(lev_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,iret)
+ call MPI_BCAST(pdt_num,1,MPI_INTEGER,0,MPI_COMM_WORLD,iret)
  call MPI_BCAST(rlevs_hold, max_levs, MPI_INTEGER,0,MPI_COMM_WORLD,iret)
 
  allocate(slevs(lev_input))
@@ -2636,6 +2664,7 @@
  enddo
 
  if(localpet == 0) then
+    print*,'cggg found this number of levels ',lev_input
    do i = 1,lev_input
      print*, "- LEVEL AFTER SORT = ",trim(slevs(i))
    enddo
@@ -2869,7 +2898,7 @@
    jids    = -9999  ! array of values in identification section, set to wildcard
    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+   jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
    jpdt(1) = 0      ! Sect 4/oct 10 - param category - temperature
    jpdt(2) = 0      ! Sect 4/oct 11 - param number - temperature
 
@@ -2928,7 +2957,7 @@
      jids    = -9999  ! array of values in identification section, set to wildcard
      jgdt    = -9999  ! array of values in grid definition template, set to wildcard
      jgdtn   = -1     ! search for any grid definition number.
-     jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+     jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
      unpack = .false.
      if (isnative) then
        jpdt(10) = 105 ! Sect4/oct 23 - type of level - hybrid
@@ -3068,7 +3097,7 @@
  
  deallocate(dummy3d_col_in, dummy3d_col_out)
  
- call read_winds(u_tmp_3d,v_tmp_3d,localpet,isnative,rlevs,lugb)
+ call read_winds(u_tmp_3d,v_tmp_3d,localpet,isnative,rlevs,lugb,pdt_num)
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT U-WIND."
  call ESMF_FieldScatter(u_input_grid, u_tmp_3d, rootpet=0, rc=rc)
@@ -3089,7 +3118,7 @@
    jids    = -9999  ! array of values in identification section, set to wildcard
    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+   jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
    jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
    jpdt(2) = 0      ! Sect4/oct 11 - param number - pressure
    jpdt(10) = 1     ! Sect4/oct 23 - type of level - ground surface
@@ -3123,7 +3152,7 @@
    jids    = -9999  ! array of values in identification section, set to wildcard
    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+   jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
    jpdt(1) = 2      ! Sect4/oct 10 - param category - momentum
    jpdt(2) = 9      ! Sect4/oct 11 - param number - dzdt
 
@@ -3184,7 +3213,7 @@
    jids    = -9999  ! array of values in identification section, set to wildcard
    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+   jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
    jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
    jpdt(2) = 5      ! Sect4/oct 11 - param number - geopotential height
    jpdt(10) = 1     ! Sect4/oct 23 - type of level - ground surface
@@ -3304,7 +3333,7 @@ else ! is native coordinate (hybrid).
     jids    = -9999  ! array of values in identification section, set to wildcard
     jgdt    = -9999  ! array of values in grid definition template, set to wildcard
     jgdtn   = -1     ! search for any grid definition number.
-    jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+    jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
     jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
     jpdt(2) = 0      ! Sect4/oct 11 - param number - pressure
     jpdt(10) = 105   ! Sect4/oct 23 - type of level - hybrid
@@ -6772,8 +6801,9 @@ else ! is native coordinate (hybrid).
 !!            data is on isobaric levels.
 !! @param[in] rlevs Array of atmospheric level values
 !! @param[in] lugb Logical unit number of GRIB2 file.
+!! @param[in] pdt_num Product definition template number.
 !! @author Larissa Reames
- subroutine read_winds(u,v,localpet,isnative,rlevs,lugb)
+ subroutine read_winds(u,v,localpet,isnative,rlevs,lugb,pdt_num)
 
  use grib_mod
  use program_setup, only      : get_var_cond
@@ -6783,6 +6813,8 @@ else ! is native coordinate (hybrid).
  integer, intent(in)                                  :: localpet, lugb
 
  logical, intent(in)                                  :: isnative
+
+ integer, intent(in)                                  :: pdt_num
 
  real(esmf_kind_r8), intent(inout), allocatable       :: u(:,:,:),v(:,:,:)
  real(esmf_kind_r8), intent(in), dimension(lev_input) :: rlevs
@@ -6842,7 +6874,7 @@ else ! is native coordinate (hybrid).
    jids    = -9999  ! array of values in identification section, set to wildcard
    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  0     ! search for product def template number 0 - anl or fcst.
+   jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
    unpack=.false.
 
    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
