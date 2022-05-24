@@ -2605,12 +2605,7 @@
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
-!    print*,'in loop ',iret,j,k
-!    print*,'in loop2 ',gfld%ipdtmpl(1:13)
-     print*,'in loop idsect ',gfld%idsect
-
      if (iret /= 0) exit
-
 
      if (gfld%discipline == 0) then ! Discipline - meteorological products
        if (gfld%ipdtnum == pdt_num) then  ! Product definition template number -
