@@ -2,13 +2,13 @@
 
 ulimit -s unlimited
 
-export MAILTO="david.huber@noaa.gov"
+export MAILTO=
 
 # Directory to download UFS_UTILS to and run the consistency tests
-export WORK_DIR=/scratch/users/dhuber/ufs_rt
+export WORK_DIR=
 
-export PROJECT_CODE=star
-export QUEUE=s4
+export PROJECT_CODE=
+export QUEUE=
 TIMEOUT_LIMIT=3600
 
 mkdir -p ${WORK_DIR}
@@ -16,7 +16,7 @@ cd ${WORK_DIR}
 rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
-git clone -b update_s4 --recursive https://github.com/davidhuber-noaa/UFS_UTILS.git
+git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
 cd UFS_UTILS
 
 source sorc/machine-setup.sh
