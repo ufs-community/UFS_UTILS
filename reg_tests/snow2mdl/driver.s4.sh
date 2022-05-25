@@ -47,7 +47,7 @@ fi
 export HOMEreg=/data/users/dhuber/save/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 export WGRIB=/data/prod/hpc-stack/intel-2022.1/grib_util/1.2.2/bin/wgrib
-export WGRIB2=/data/prod/hpc-stack/intel-2022.1/impi-2022.1/wgrib2/2.0.8/bin/wgrib2
+export WGRIB2=/data/prod/hpc-stack/intel-2022.1/wgrib2/2.0.8/bin/wgrib2
 
 # The first test mimics GFS OPS.
 
