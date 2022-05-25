@@ -53,7 +53,7 @@ And for the following third party libraries:
 
 It also uses the following repositories:
 
- - [NCAR common community physics package] (https://github.com/NCAR/ccpp-physics)
+ - [NCAR common community physics package](https://github.com/NCAR/ccpp-physics)
 
 ## Installing
 
