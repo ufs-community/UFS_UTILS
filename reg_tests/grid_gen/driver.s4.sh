@@ -32,8 +32,8 @@ set -x
 
 export WORK_DIR="${WORK_DIR:-/scratch/short/users/$LOGNAME}"
 export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
-QUEUE="${QUEUE:-batch}"
-PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+QUEUE="${QUEUE:-s4}"
+PROJECT_CODE="${PROJECT_CODE:-star}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.

@@ -5,9 +5,9 @@ ulimit -s unlimited
 export MAILTO="david.huber@noaa.gov"
 
 # Directory to download UFS_UTILS to and run the consistency tests
-export WORK_DIR=
+export WORK_DIR=/scratch/users/dhuber/ufs_rt
 
-export PROJECT_CODE=s4
+export PROJECT_CODE=star
 export QUEUE=s4
 TIMEOUT_LIMIT=3600
 

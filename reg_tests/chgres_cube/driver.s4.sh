@@ -7,10 +7,11 @@
 # Set WORK_DIR to a general working location outside the UFS_UTILS directory.
 # The exact working directory (OUTDIR) will be WORK_DIR/reg_tests/chgres-cube. 
 # Set the PROJECT_CODE and QUEUE as appropriate.  To see which projects you 
-# are authorized to use, type "account_params".
+# are authorized to use, type
+# "sacctmgr show assoc Users=<USERNAME> format=account,user,qos"
 #
-# Invoke the script with no arguments.  A series of daily-chained
-# consistency tests will be submitted.  To check the queue, type:
+# Invoke the script with no arguments.  A series of daisy-chained
+# jobs will be submitted.  To check the queue, type:
 # "squeue -u USERNAME".
 #
 # The run output will be stored in OUTDIR.  Log output from the suite
@@ -35,8 +36,8 @@ module list
 export OUTDIR="${WORK_DIR:-/scratch/short/users/$LOGNAME}"
 export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
 
-PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-QUEUE="${QUEUE:-batch}"
+PROJECT_CODE="${PROJECT_CODE:-star}"
+QUEUE="${QUEUE:-s4}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root

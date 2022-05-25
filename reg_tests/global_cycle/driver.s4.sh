@@ -29,7 +29,7 @@ module list
 
 WORK_DIR="${WORK_DIR:-/scratch/short/users/$LOGNAME}"
 
-PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+PROJECT_CODE="${PROJECT_CODE:-star}"
 QUEUE="${QUEUE:-batch}"
 
 #-----------------------------------------------------------------------------
@@ -74,7 +74,7 @@ TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
      -o $LOG_FILE -e $LOG_FILE ./C768.lndincsnow.sh)
 
 LOG_FILE=consistency.log
-sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
+sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J summary -o $LOG_FILE -e $LOG_FILE \
       --open-mode=append -q $QUEUE -d\
       afterok:$TEST1:$TEST2:$TEST3 << EOF
 #!/bin/bash

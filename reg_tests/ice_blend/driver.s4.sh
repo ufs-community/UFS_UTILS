@@ -19,12 +19,12 @@
 #-----------------------------------------------------------------------------
 
 #SBATCH -J ice_blend
-#SBATCH -A fv3-cpu
+#SBATCH -A s4
 #SBATCH --open-mode=truncate
 #SBATCH -o consistency.log
 #SBATCH -e consistency.log
 #SBATCH --ntasks=1
-#SBATCH -q debug
+#SBATCH -q s4
 #SBATCH -t 00:03:00
 
 set -x
