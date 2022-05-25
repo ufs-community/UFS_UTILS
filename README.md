@@ -51,6 +51,10 @@ And for the following third party libraries:
  - [HDF5](https://www.hdfgroup.org/solutions/hdf5/)
  - [PNG](http://www.libpng.org/pub/png/)
 
+It also uses the following repositories:
+
+ - [NCAR common community physics package] (https://github.com/NCAR/ccpp-physics)
+
 ## Installing
 
 ```
