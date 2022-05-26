@@ -6,7 +6,8 @@
 #
 # Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
-# type "account_params".
+# type
+# "sacctmgr show assoc Users=<USERNAME> format=account,user,qos"
 #
 # Invoke the script with no arguments.  A series of daily-
 # chained jobs will be submitted.  To check the queue, type:
