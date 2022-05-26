@@ -7,7 +7,7 @@
 # Set $DATA_ROOT to your working directory.  Set the project code
 # and queue as appropriate.
 #
-# Invoke the script as follows:  sbatch $script
+# Invoke the script as follows:  ./$script
 #
 # Log output is placed in consistency.log.  A summary is
 # placed in summary.log
