@@ -1,5 +1,5 @@
 help([[
-Load environment to compile UFS_UTILS on Hera using Intel
+Load environment to compile UFS_UTILS on S4 using Intel
 ]])
 
 load(pathJoin("license_intel","S4"))
