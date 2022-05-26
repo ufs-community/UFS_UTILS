@@ -2,9 +2,9 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run snow2mdl consistency tests on Jet.
+# Run snow2mdl consistency test on S4.
 #
-# Set $DATA_ROOT to your working directory.  Set the project code and
+# Set $DATA_ROOT to your working directory.  Set the project code
 # and queue as appropriate.
 #
 # Invoke the script as follows:  ./$script
@@ -18,19 +18,20 @@
 #
 #-----------------------------------------------------------------------------
 
-
 set -x
+
+compiler=${compiler:-"intel"}
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
-module load build.$target.intel
+module load build.$target.$compiler
 module list
 
-DATA_ROOT="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+DATA_ROOT="${WORK_DIR:-/scratch/short/users/$LOGNAME}"
 DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
 
-PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
-QUEUE="${QUEUE:-batch}"
+PROJECT_CODE="${PROJECT_CODE:-star}"
+QUEUE="${QUEUE:-s4}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
@@ -43,30 +44,29 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/snow2mdl
+export HOMEreg=/data/users/dhuber/save/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
-export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
-export WGRIB2=/apps/wgrib2/0.1.9.6a/bin/wgrib2
+export WGRIB=/data/prod/hpc-stack/intel-2022.1/grib_util/1.2.2/bin/wgrib
+export WGRIB2=/data/prod/hpc-stack/intel-2022.1/wgrib2/2.0.8/bin/wgrib2
 
-rm -fr $DATA_ROOT
-
-# This tests the OPS GFS snow processing.
+# The first test mimics GFS OPS.
 
 export DATA="${DATA_ROOT}/test.ops"
-TEST1=$(sbatch --parsable --nodes=1 --partition=xjet --time 0:02 -J snow.ops -o consistency.log \
-        -e consistency.log -A $PROJECT_CODE -q $QUEUE ./snow2mdl.ops.sh)
+TEST1=$(sbatch --parsable -J snow.ops -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
+      --ntasks=1 -q ${QUEUE} -t 00:03:00 ./snow2mdl.ops.sh)
 
-# Test the new global afwa grib2 data.
+# The second test is for the new AFWA global GRIB2 data.
 
 export DATA="${DATA_ROOT}/test.global"
-TEST2=$(sbatch --parsable --nodes=1 --partition=xjet --time 0:02 -J snow.global -o consistency.log \
-        -e consistency.log -A $PROJECT_CODE -q $QUEUE -d afterok:$TEST1 ./snow2mdl.global.sh)
+TEST2=$(sbatch --parsable -J snow.global -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
+      --ntasks=1 -q ${QUEUE} -t 00:03:00 -d afterok:$TEST1 ./snow2mdl.global.sh)
 
 # Create summary file.
 
-sbatch --nodes=1 --partition=xjet -t 0:01:00 -A $PROJECT_CODE -J snow.summary -o consistency.log \
-       -e consistency.log --open-mode=append -q $QUEUE -d afterok:$TEST2 << EOF
+sbatch --nodes=1 -t 0:01:00 -A ${PROJECT_CODE} -J snow_summary -o consistency.log -e consistency.log \
+       --open-mode=append -q ${QUEUE} -d afterok:$TEST2 << EOF
 #!/bin/bash
 grep -a '<<<' consistency.log  > summary.log
 EOF
+
 exit 0
