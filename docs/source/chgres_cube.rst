@@ -343,7 +343,7 @@ Namelist variables with “input” in their name refer to data input to chgres_
       * tg3_from_soil - Use tg3 from input soil. Valid options: .true. or .false. . Default: .false.
       * thomp_mp_climo_file - Location of Thompson aerosol climatology file. Provide only if you wish to use these aerosol variables.
       * wam_cold_start - Cold start for the Whole Atmosphere Model. Valid Options: .true. or .false. (Default: .false.)
-      * use_rh - Use relative humidity instead of specific humidity when reading in grib2 files (Default: .false.)
+      * use_rh - Use relative humidity instead of specific humidity when reading in external model grib2 files (Default: .false.)
       * calrh - Type of relative humidity to specific humidity calculation to use (Default: 0; use existing calculation, or 1; use calculation consistent with GFSv15/v16)
 
 Variable Mapping (VARMAP) table
