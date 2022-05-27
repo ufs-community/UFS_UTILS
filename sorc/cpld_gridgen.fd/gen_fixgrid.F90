@@ -50,7 +50,7 @@ program gen_fixgrid
   integer :: rc,ncid,id,xtype
   integer :: i,j,k,i2,j2
   integer :: ii,jj
-  integer :: localPet
+  integer :: localPet, nPet
   logical :: fexist = .false.
 
   type(ESMF_RegridMethod_Flag) :: method
@@ -68,11 +68,15 @@ program gen_fixgrid
 
  call ESMF_VMGetGlobal(vm, rc=rc)
  call ESMF_Initialize(VM=vm, logkindflag=ESMF_LOGKIND_MULTI, rc=rc)
- call ESMF_VMGet(vm, localPet=localPet, rc=rc)
+ call ESMF_VMGet(vm, localPet=localPet, peCount=nPet, rc=rc)
  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
    line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
  mastertask = .false.
  if (localPet == 0) mastertask=.true.
+ if (nPet /= 0) then
+    print *,' More than one task specified; Aborting '
+    call ESMF_Finalize(endflag=ESMF_END_ABORT)
+ end if
 
 !---------------------------------------------------------------------
 !
@@ -385,6 +389,7 @@ program gen_fixgrid
   if(minval(lonCv_vert) .lt. -1.e3)stop
   if(minval(latBu_vert) .lt. -1.e3)stop
   if(minval(lonBu_vert) .lt. -1.e3)stop
+  deallocate(xlonCt, xlatCt, xlonCu, xlatCu, dlatBu, dlatCv)
 
 !---------------------------------------------------------------------
 ! write out grid file files
@@ -401,7 +406,7 @@ program gen_fixgrid
    ! write cice grid
    fdst = trim(dirout)//'/'//'grid_cice_NEMS_mx'//trim(res)//'.nc'
    call write_cicegrid(trim(fdst))
-
+   deallocate(ulon, ulat, htn, hte)
    ! write scrip grids; only the Ct is required, the remaining
    ! staggers are used only in the postweights generation
    do k = 1,nv
@@ -413,6 +418,9 @@ program gen_fixgrid
     end if
     call write_scripgrid(trim(fdst),trim(cstagger))
    end do
+   deallocate(latCv_vert, lonCv_vert)
+   deallocate(latCu_vert, lonCu_vert)
+   deallocate(latBu_vert, lonBu_vert)
 
    ! write SCRIP file with land mask, used for mapped ocean mask
    ! and  mesh creation
@@ -423,6 +431,7 @@ program gen_fixgrid
      print '(a)',trim(logmsg)
    end if
    call write_scripgrid(trim(fdst),trim(cstagger),imask=int(wet4))
+   deallocate(latCt_vert, lonCt_vert)
 
 !---------------------------------------------------------------------
 ! write lat,lon,depth and mask arrays required by ww3 in creating
@@ -461,6 +470,7 @@ program gen_fixgrid
 
   close(21); close(22); close(23); close(24); close(25)
   deallocate(ww3mask); deallocate(ww3dpth)
+  deallocate(wet4, wet8)
 
 !---------------------------------------------------------------------
 ! use ESMF regridding to produce mapped ocean mask; first generate
@@ -536,12 +546,9 @@ program gen_fixgrid
 
    deallocate(x,y, angq, dx, dy, xsgp1, ysgp1)
    deallocate(areaCt, anglet, angle)
-   deallocate(latCt, lonCt, latCt_vert, lonCt_vert)
-   deallocate(latCv, lonCv, latCv_vert, lonCv_vert)
-   deallocate(latCu, lonCu, latCu_vert, lonCu_vert)
-   deallocate(latBu, lonBu, latBu_vert, lonBu_vert)
-   deallocate(xlonCt, xlatCt, xlonCu, xlatCu, dlatBu, dlatCv)
-   deallocate(wet4, wet8)
-   deallocate(ulon, ulat, htn, hte)
+   deallocate(latCt, lonCt)
+   deallocate(latCv, lonCv)
+   deallocate(latCu, lonCu)
+   deallocate(latBu, lonBu)
 
 end program gen_fixgrid
