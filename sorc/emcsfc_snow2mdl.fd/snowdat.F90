@@ -509,7 +509,7 @@
 
 !>  Read snow depth data and masks.
 !!
-!! @note Read nh and sh afwa snow depth data and
+!! @note Read afwa snow depth data and
 !!   land sea mask. 
 !!
 !! program history log:
@@ -519,7 +519,7 @@
 !!
 !! files:
 !!   input:
-!!     - global afwa data in grib 1 (if selected)
+!!     - global afwa data in grib 2 (if selected)
 !!     - nh afwa data in grib 1 (if selected)
 !!     - sh afwa data in grib 1 (if selected)
 !!
@@ -529,13 +529,20 @@
 !!
 !! @author  George Gayno org: w/np2 @date 2005-Dec-16
  subroutine readafwa
+ use grib_mod
+
  implicit none
 
- integer, parameter            :: iunit=11
+ integer, parameter            :: iunit=17
  integer                       :: jgds(200), jpds(200), kgds(200), kpds(200)
- integer                       :: istat
+ integer                       :: istat, isgrib
  integer                       :: lugi, lskip, numbytes, numpts, message_num
- integer                       :: isgrib
+ integer                       :: j, k, jdisc, jpdtn, jgdtn
+ integer                       :: jpdt(200), jgdt(200), jids(200)
+
+ logical                       :: unpack
+
+ type(gribfield)               :: gfld
 
  bad_afwa_nh=.false.
  bad_afwa_sh=.false.
@@ -555,9 +562,13 @@
    return
  end if
 
+!-----------------------------------------------------------------------
+! If chosen, read global AFWA GRIB2 file.
+!-----------------------------------------------------------------------
+
  if ( len_trim(afwa_snow_global_file) > 0 ) then
 
-   print*,"- OPEN AND READ AFWA SNOW FILE ", trim(afwa_snow_global_file)
+   print*,"- OPEN AND READ global AFWA SNOW FILE ", trim(afwa_snow_global_file)
    call baopenr (iunit, afwa_snow_global_file, istat)
    if (istat /= 0) then
      print*,'- FATAL ERROR: BAD OPEN OF FILE, ISTAT IS ', istat
@@ -565,48 +576,41 @@
      call errexit(60)
    end if
 
-!-----------------------------------------------------------------------
-! tell degribber to look for requested data.
-!-----------------------------------------------------------------------
+   call grib2_null(gfld)
 
-   lugi     = 0
-   lskip    = -1
-   jpds     = -1
-   jgds     = -1
-   jpds(5)  = 66     ! snow depth
-   kpds     = jpds
-   kgds     = jgds
+   jdisc    = 0      ! Search for discipline; 0 - meteorological products
+   j        = 0      ! Search at beginning of file.
+   lugi     = 0      ! No grib index file.
+   jids     = -9999  ! Identification section, set to wildcard.
+   jgdt     = -9999  ! Grid definition template, set to wildcard.
+   jgdtn    = -1     ! Grid definition template number, set to wildcard.
+   jpdtn    = 0      ! Search for product definition template number 0 - analysis or forecast
+   jpdt     = -9999  ! Product definition template (Sec 4), initialize to wildcard.
+   jpdt(1)  = 1      ! Search for parameter category 1 (Sec 4 oct 10) -
+                     ! moisture.
+   jpdt(2) = 11      ! Search for parameter 11 (Sec 4 oct 11) - snow depth.
+   unpack  = .true.  ! Unpack data.
 
-   print*,"- GET GRIB HEADER"
-   call getgbh(iunit, lugi, lskip, jpds, jgds, numbytes,  &
-               numpts, message_num, kpds, kgds, istat)
+   call getgb2(iunit, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+               unpack, k, gfld, istat)
 
    if (istat /= 0) then
-     print*,"- FATAL ERROR: BAD DEGRIB OF HEADER. ISTAT IS ", istat
+     print*,"- FATAL ERROR: BAD DEGRIB OF GLOBAL DATA. ISTAT IS ", istat
      call w3tage('SNOW2MDL')
      call errexit(61)
    end if
-
-   iafwa = kgds(2)
-   jafwa = kgds(3)
-   afwa_res = float(kgds(10))*0.001*111.0  ! in km.  
-
-   print*,"- DATA VALID AT (YYMMDDHH): ", kpds(8:11)
+ 
+   print*,"- DATA VALID AT (YYMMDDHH): ", gfld%idsect(6:9)
    print*,"- DEGRIB SNOW DEPTH."
+
+   call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds_afwa_global, &
+                 iafwa, jafwa, afwa_res)
 
    allocate(bitmap_afwa_global(iafwa,jafwa))
    allocate(snow_dep_afwa_global(iafwa,jafwa))
 
-   call getgb(iunit, lugi, (iafwa*jafwa), lskip, jpds, jgds, &
-              numpts, lskip, kpds, kgds, bitmap_afwa_global, snow_dep_afwa_global, istat)
-
-   if (istat /= 0) then
-     print*,"- FATAL ERROR: BAD DEGRIB OF DATA. ISTAT IS ", istat
-     call w3tage('SNOW2MDL')
-     call errexit(61)
-   end if
-
-   kgds_afwa_global = kgds
+   snow_dep_afwa_global = reshape(gfld%fld, (/iafwa,jafwa/))
+   bitmap_afwa_global = reshape(gfld%bmap, (/iafwa,jafwa/))
 
    call baclose(iunit, istat) 
 
@@ -617,10 +621,10 @@
      use_global_afwa = .false.
    endif
 
-   use_nh_afwa=.false.   ! use global or hemispheric files. not both.
+   use_nh_afwa=.false.   ! Use global or hemispheric files. not both.
    use_sh_afwa=.false.
 
-   return  ! use global or hemispheric files. not both.
+   return  ! Use global or hemispheric files. not both.
 
  else
 
@@ -1008,7 +1012,6 @@
    print*,"- WARNING: PROBLEM READING GRIB FILE ", iret
    print*,"- WILL NOT PERFORM QC."
    deallocate(rlon_data,rlat_data)
-   deallocate(climo, bitmap_clim)
    call baclose(lugb,iret)
    return
  endif

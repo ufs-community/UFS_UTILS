@@ -92,7 +92,7 @@ if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]]
 fi
 
 sleep_time=0
-for dir in global_cycle chgres_cube grid_gen; do
+for dir in snow2mdl global_cycle chgres_cube grid_gen; do
     cd $dir
     ./driver.$target.sh
     # Wait for job to complete
@@ -113,10 +113,9 @@ elif [[ $target == "wcoss_cray" ]]; then
     module load xt-lsfhpc/9.1.3
 fi
 
-
-for dir in snow2mdl ice_blend; do
+for dir in ice_blend; do
     cd $dir
-    if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]]; then
+    if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] ; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
         cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
