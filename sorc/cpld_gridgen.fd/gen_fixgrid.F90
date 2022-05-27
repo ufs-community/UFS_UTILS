@@ -73,8 +73,8 @@ program gen_fixgrid
    line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
  mastertask = .false.
  if (localPet == 0) mastertask=.true.
- if (nPet /= 0) then
-    print *,' More than one task specified; Aborting '
+ if (nPet /= 1) then
+    print *,npet,' More than one task specified; Aborting '
     call ESMF_Finalize(endflag=ESMF_END_ABORT)
  end if
 

@@ -121,6 +121,7 @@ if [[ $target = hera ]]; then
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
+  PARTITION=hera
   SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = orion ]]; then
   STMP=${STMP:-/work/noaa/stmp/$USER}
@@ -128,7 +129,8 @@ elif [[ $target = orion ]]; then
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
-# ulimit -s unlimited
+  PARTITION=orion
+  ulimit -s unlimited
   SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
   STMP=${STMP:-/lfs4/HFIP/h-nems/$USER}
@@ -136,6 +138,7 @@ elif [[ $target = jet ]]; then
   BASELINE_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-h-nems}
   QUEUE=${QUEUE:-batch}
+  PARTITION=xjet
   ulimit -s unlimited
   SBATCH_COMMAND="./cpld_gridgen.sh"
 fi
@@ -219,7 +222,7 @@ while read -r line || [ "$line" ]; do
 
   if [[ -n $DEP_NAME ]]; then
     cp $DEPDIR/Ct.mx025_SCRIP.nc $RUNDIR >/dev/null 2>&1 && d=$? || d=$?
-    if [[ $d -eq 1 ]]; then    
+    if [[ $d -eq 1 ]]; then
       error "DEPDIR $DEPDIR does not exist. Dependency not met"
     fi
   fi
@@ -229,8 +232,8 @@ while read -r line || [ "$line" ]; do
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cd $RUNDIR
 
-  sbatch --wait --ntasks-per-node=4 --nodes=1 -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-         -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
+  sbatch --wait --ntasks-per-node=1 --nodes=1 --mem=4G -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+         --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
          --wrap "$SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
 
   if [[ d -ne 0 ]]; then
@@ -255,7 +258,7 @@ done
 if [[ -e fail_test ]]; then
   echo | tee -a $REGRESSIONTEST_LOG
   for file in fail_test_*; do
-    cat $file >>$REGRESSIONTEST_LOG 
+    cat $file >>$REGRESSIONTEST_LOG
     cat $file >>summary.log
   done
 
