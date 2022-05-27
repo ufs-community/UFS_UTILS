@@ -3,6 +3,12 @@
 #
 # George Gayno, Ed Hartnett
 
+set(CPLDGRIDGEN_URL "https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/cpld_gridgen")
+
+set(GRID_FILE "ocean_hgrid.nc")
+
+PULL_DATA(${CPLDGRIDGEN_URL} ${GRID_FILE})
+
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
@@ -13,8 +19,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 # Copy necessary test files from the source data directory to the
 # build data directory.
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/data/files.txt ${CMAKE_CURRENT_BINARY_DIR}/data/files.txt)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 

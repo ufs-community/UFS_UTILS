@@ -1,1 +1,0 @@
-https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/cpld_gridgen/ocean_hgrid.nc
