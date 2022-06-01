@@ -343,6 +343,8 @@ Namelist variables with “input” in their name refer to data input to chgres_
       * tg3_from_soil - Use tg3 from input soil. Valid options: .true. or .false. . Default: .false.
       * thomp_mp_climo_file - Location of Thompson aerosol climatology file. Provide only if you wish to use these aerosol variables.
       * wam_cold_start - Cold start for the Whole Atmosphere Model. Valid Options: .true. or .false. (Default: .false.)
+      * use_rh - Use relative humidity instead of specific humidity when reading in external model grib2 files (Default: .false.)
+      * calrh - Type of relative humidity to specific humidity calculation to use (Default: 0; use existing calculation, or 1; use calculation consistent with GFSv15/v16)
 
 Variable Mapping (VARMAP) table
 -------------------------------
@@ -381,7 +383,7 @@ Column 2: Name of the variable in the output “coldstart” files. Unimplemente
 Column 3: Behavior when the code can't find the variable in the input file. Options are:
 
       * "skip": Don't write to the output file.
-      * "intrp": LnP interpolation to missing levels. No extrapolation allowd.
+      * "intrp": Ln(pressure) interpolation to missing levels. Linear interpolation and extrapolation are possible, but require modifying the value of "LINLOG" in input_data.F90 to anything other than 2, or to a negative number, respectively.
       * "set_to_fill": Set to user-specified field value (see column 4).
       * "stop": Force an exception and stop code execution. Use this if you absolutely require a field to be present.
 
