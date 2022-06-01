@@ -1,4 +1,4 @@
-.TH "read_write_data" 3 "Tue May 3 2022" "Version 1.6.0" "global_cycle" \" -*- nroff -*-
+.TH "read_write_data" 3 "Wed Jun 1 2022" "Version 1.7.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -274,6 +274,8 @@ George Gayno NOAA/EMC
 
 .PP
 Definition at line 1054 of file read_write_data\&.f90\&.
+.PP
+Referenced by read_data(), read_gsi_data(), read_lat_lon_orog(), and write_data()\&.
 .SS "subroutine, public read_write_data::read_data (integer, intent(in)LSOIL, integer, intent(in)LENSFC, logical, intent(in)DO_NSST, logical, intent(in)INC_FILE, real, dimension(lensfc), intent(out), optionalTSFFCS, real, dimension(lensfc,lsoil), intent(out), optionalSMCFCS, real, dimension(lensfc), intent(out), optionalSWEFCS, real, dimension(lensfc,lsoil), intent(out), optionalSTCFCS, real, dimension(lensfc), intent(out), optionalTG3FCS, real, dimension(lensfc), intent(out), optionalZORFCS, real, dimension(lensfc), intent(out), optionalCVFCS, real, dimension(lensfc), intent(out), optionalCVBFCS, real, dimension(lensfc), intent(out), optionalCVTFCS, real, dimension(lensfc,4), intent(out), optionalALBFCS, real, dimension(lensfc), intent(out), optionalVEGFCS, real, dimension(lensfc), intent(out), optionalSLIFCS, real, dimension(lensfc), intent(out), optionalCNPFCS, real, dimension(lensfc), intent(out), optionalF10M, real, dimension(lensfc), intent(out), optionalVETFCS, real, dimension(lensfc), intent(out), optionalSOTFCS, real, dimension(lensfc,2), intent(out), optionalALFFCS, real, dimension(lensfc), intent(out), optionalUSTAR, real, dimension(lensfc), intent(out), optionalFMM, real, dimension(lensfc), intent(out), optionalFHH, real, dimension(lensfc), intent(out), optionalSIHFCS, real, dimension(lensfc), intent(out), optionalSICFCS, real, dimension(lensfc), intent(out), optionalSITFCS, real, dimension(lensfc), intent(out), optionalTPRCP, real, dimension(lensfc), intent(out), optionalSRFLAG, real, dimension(lensfc), intent(out), optionalSNDFCS, real, dimension(lensfc), intent(out), optionalVMNFCS, real, dimension(lensfc), intent(out), optionalVMXFCS, real, dimension(lensfc,lsoil), intent(out), optionalSLCFCS, real, dimension(lensfc), intent(out), optionalSLPFCS, real, dimension(lensfc), intent(out), optionalABSFCS, real, dimension(lensfc), intent(out), optionalT2M, real, dimension(lensfc), intent(out), optionalQ2M, real, dimension(lensfc), intent(out), optionalSLMASK, real(kind=4), dimension(lsoil), intent(out), optionalZSOIL, type(\fBnsst_data\fP), optionalNSST)"
 
 .PP
@@ -467,7 +469,7 @@ Xu Li NOAA/EMC
 .PP
 Definition at line 1953 of file read_write_data\&.f90\&.
 .PP
-References count(), and nc_check()\&.
+References nc_check()\&.
 .PP
 Referenced by get_sal_clm_ta()\&.
 .SS "subroutine, public read_write_data::read_tf_clim_grb (character(*), intent(in)file_sst, real, dimension(mlon_sst,mlat_sst), intent(out)sst, real, dimension(mlat_sst), intent(out)rlats_sst, real, dimension(mlon_sst), intent(out)rlons_sst, integer, intent(in)mlat_sst, integer, intent(in)mlon_sst, integer, intent(in)mon)"

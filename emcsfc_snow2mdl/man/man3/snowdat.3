@@ -1,4 +1,4 @@
-.TH "snowdat" 3 "Tue May 3 2022" "Version 1.6.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "snowdat" 3 "Wed Jun 1 2022" "Version 1.7.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -262,7 +262,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 1122 of file snowdat\&.F90\&.
+Definition at line 1125 of file snowdat\&.F90\&.
 .PP
 Referenced by readafwa()\&.
 .SS "subroutine snowdat::nh_climo_check (integer, dimension(200), intent(in)kgds_data, real, dimension(idata,jdata), intent(in)snow_data, logical*1, dimension(idata,jdata), intent(in)bitmap_data, integer, intent(in)idata, integer, intent(in)jdata, integer, intent(in)isrc, logical, intent(out)bad)"
@@ -311,7 +311,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 850 of file snowdat\&.F90\&.
+Definition at line 854 of file snowdat\&.F90\&.
 .PP
 References grib2_free(), and grib2_null()\&.
 .PP
@@ -352,7 +352,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 1230 of file snowdat\&.F90\&.
+Definition at line 1233 of file snowdat\&.F90\&.
 .PP
 Referenced by readafwa()\&.
 .SS "subroutine snowdat::read_afwa_mask (character*(*), intent(in)file_name, logical*1, dimension(\fBiafwa\fP,\fBjafwa\fP), intent(out)bitmap_afwa)"
@@ -386,7 +386,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 1313 of file snowdat\&.F90\&.
+Definition at line 1316 of file snowdat\&.F90\&.
 .PP
 Referenced by readafwa()\&.
 .SS "subroutine snowdat::readafwa ()"
@@ -396,7 +396,7 @@ Read snow depth data and masks\&.
 .PP
 \fBNote:\fP
 .RS 4
-Read nh and sh afwa snow depth data and land sea mask\&.
+Read afwa snow depth data and land sea mask\&.
 .RE
 .PP
 program history log:
@@ -405,7 +405,7 @@ program history log:
 .PP
 files: input:
 .IP "\(bu" 2
-global afwa data in grib 1 (if selected)
+global afwa data in grib 2 (if selected)
 .IP "\(bu" 2
 nh afwa data in grib 1 (if selected)
 .IP "\(bu" 2
@@ -428,7 +428,7 @@ George Gayno org: w/np2
 .PP
 Definition at line 531 of file snowdat\&.F90\&.
 .PP
-References afwa_check(), grib_check(), nh_climo_check(), read_afwa_binary(), and read_afwa_mask()\&.
+References afwa_check(), gdt_to_gds(), grib2_null(), grib_check(), nh_climo_check(), read_afwa_binary(), and read_afwa_mask()\&.
 .PP
 Referenced by driver()\&.
 .SS "subroutine snowdat::readautosnow ()"

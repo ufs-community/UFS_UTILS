@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">emcsfc_snow2mdl
-   &#160;<span id="projectnumber">1.6.0</span>
+   &#160;<span id="projectnumber">1.7.0</span>
    </div>
   </td>
  </tr>
@@ -300,7 +300,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <dl class="section author"><dt>Author</dt><dd>George Gayno org: w/np2 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2009-Jun-3 </dd></dl>
 
-<p>Definition at line <a class="el" href="snowdat_8F90_source.html#l01122">1122</a> of file <a class="el" href="snowdat_8F90_source.html">snowdat.F90</a>.</p>
+<p>Definition at line <a class="el" href="snowdat_8F90_source.html#l01125">1125</a> of file <a class="el" href="snowdat_8F90_source.html">snowdat.F90</a>.</p>
 
 <p>Referenced by <a class="el" href="snowdat_8F90_source.html#l00531">readafwa()</a>.</p>
 
@@ -382,7 +382,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <dl class="section author"><dt>Author</dt><dd>George Gayno org: w/np2 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2009-Jun-3 </dd></dl>
 
-<p>Definition at line <a class="el" href="snowdat_8F90_source.html#l00850">850</a> of file <a class="el" href="snowdat_8F90_source.html">snowdat.F90</a>.</p>
+<p>Definition at line <a class="el" href="snowdat_8F90_source.html#l00854">854</a> of file <a class="el" href="snowdat_8F90_source.html">snowdat.F90</a>.</p>
 
 <p>References <a class="el" href="grib__utils_8F90_source.html#l00635">grib2_free()</a>, and <a class="el" href="grib__utils_8F90_source.html#l00610">grib2_null()</a>.</p>
 
@@ -431,7 +431,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <dl class="section author"><dt>Author</dt><dd>George Gayno org: w/np2 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2007-Nov-28 </dd></dl>
 
-<p>Definition at line <a class="el" href="snowdat_8F90_source.html#l01230">1230</a> of file <a class="el" href="snowdat_8F90_source.html">snowdat.F90</a>.</p>
+<p>Definition at line <a class="el" href="snowdat_8F90_source.html#l01233">1233</a> of file <a class="el" href="snowdat_8F90_source.html">snowdat.F90</a>.</p>
 
 <p>Referenced by <a class="el" href="snowdat_8F90_source.html#l00531">readafwa()</a>.</p>
 
@@ -477,7 +477,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <dl class="section author"><dt>Author</dt><dd>George Gayno org: w/np2 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2007-Nov-28 </dd></dl>
 
-<p>Definition at line <a class="el" href="snowdat_8F90_source.html#l01313">1313</a> of file <a class="el" href="snowdat_8F90_source.html">snowdat.F90</a>.</p>
+<p>Definition at line <a class="el" href="snowdat_8F90_source.html#l01316">1316</a> of file <a class="el" href="snowdat_8F90_source.html">snowdat.F90</a>.</p>
 
 <p>Referenced by <a class="el" href="snowdat_8F90_source.html#l00531">readafwa()</a>.</p>
 
@@ -497,12 +497,12 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </div><div class="memdoc">
 
 <p>Read snow depth data and masks. </p>
-<dl class="section note"><dt>Note</dt><dd>Read nh and sh afwa snow depth data and land sea mask.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Read afwa snow depth data and land sea mask.</dd></dl>
 <p>program history log:</p>
 <p>2005-dec-16 gayno - initial version 2007-nov-28 gayno - read 16th mesh afwa data in grib format</p>
 <p>files: input:</p>
 <ul>
-<li>global afwa data in grib 1 (if selected)</li>
+<li>global afwa data in grib 2 (if selected)</li>
 <li>nh afwa data in grib 1 (if selected)</li>
 <li>sh afwa data in grib 1 (if selected)</li>
 </ul>
@@ -512,7 +512,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Definition at line <a class="el" href="snowdat_8F90_source.html#l00531">531</a> of file <a class="el" href="snowdat_8F90_source.html">snowdat.F90</a>.</p>
 
-<p>References <a class="el" href="snowdat_8F90_source.html#l01122">afwa_check()</a>, <a class="el" href="grib__utils_8F90_source.html#l00023">grib_check()</a>, <a class="el" href="snowdat_8F90_source.html#l00850">nh_climo_check()</a>, <a class="el" href="snowdat_8F90_source.html#l01230">read_afwa_binary()</a>, and <a class="el" href="snowdat_8F90_source.html#l01313">read_afwa_mask()</a>.</p>
+<p>References <a class="el" href="snowdat_8F90_source.html#l01125">afwa_check()</a>, <a class="el" href="grib__utils_8F90_source.html#l00139">gdt_to_gds()</a>, <a class="el" href="grib__utils_8F90_source.html#l00610">grib2_null()</a>, <a class="el" href="grib__utils_8F90_source.html#l00023">grib_check()</a>, <a class="el" href="snowdat_8F90_source.html#l00854">nh_climo_check()</a>, <a class="el" href="snowdat_8F90_source.html#l01233">read_afwa_binary()</a>, and <a class="el" href="snowdat_8F90_source.html#l01316">read_afwa_mask()</a>.</p>
 
 <p>Referenced by <a class="el" href="driver_8F90_source.html#l00144">driver()</a>.</p>
 
@@ -576,7 +576,7 @@ allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 <p>Definition at line <a class="el" href="snowdat_8F90_source.html#l00222">222</a> of file <a class="el" href="snowdat_8F90_source.html">snowdat.F90</a>.</p>
 
-<p>References <a class="el" href="grib__utils_8F90_source.html#l00139">gdt_to_gds()</a>, <a class="el" href="grib__utils_8F90_source.html#l00635">grib2_free()</a>, <a class="el" href="grib__utils_8F90_source.html#l00610">grib2_null()</a>, <a class="el" href="grib__utils_8F90_source.html#l00023">grib_check()</a>, and <a class="el" href="snowdat_8F90_source.html#l00850">nh_climo_check()</a>.</p>
+<p>References <a class="el" href="grib__utils_8F90_source.html#l00139">gdt_to_gds()</a>, <a class="el" href="grib__utils_8F90_source.html#l00635">grib2_free()</a>, <a class="el" href="grib__utils_8F90_source.html#l00610">grib2_null()</a>, <a class="el" href="grib__utils_8F90_source.html#l00023">grib_check()</a>, and <a class="el" href="snowdat_8F90_source.html#l00854">nh_climo_check()</a>.</p>
 
 <p>Referenced by <a class="el" href="driver_8F90_source.html#l00144">driver()</a>.</p>
 

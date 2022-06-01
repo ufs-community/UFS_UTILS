@@ -35,7 +35,6 @@ var dir_2639f2b978b79eb67637490d5ddd2bd6 =
       ] ],
       [ "read_write_data", "classread__write__data.html", "classread__write__data" ]
     ] ],
-    [ "sfcsub.F", "sfcsub_8F.html", "sfcsub_8F" ],
     [ "utils.F90", "utils_8F90.html", [
       [ "utils", "classutils.html", "classutils" ]
     ] ]
