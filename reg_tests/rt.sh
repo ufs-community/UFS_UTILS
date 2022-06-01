@@ -74,6 +74,30 @@ cd fix
 
 cd ../reg_tests
 
+if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] ; then
+
+  cd cpld_gridgen
+  export ACCOUNT=$PROJECT_CODE
+  export STMP=$WORK_DIR/reg-tests
+
+  ./rt.sh 2>/dev/null &
+
+  set -x
+
+  sleep_time=0
+  while [ ! -f "summary.log" ]; do
+    sleep 10
+    sleep_time=$((sleep_time+10))
+    if (( sleep_time > TIMEOUT_LIMIT )); then
+       kill -9 %1
+       mail -s "UFS_UTILS Consistency Tests timed out on ${target}" ${MAILTO} < ${WORK_DIR}/reg_test_results.txt
+       exit 1
+    fi
+  done
+  cd ..
+
+fi
+
 sleep_time=0
 for dir in snow2mdl global_cycle chgres_cube grid_gen; do
     cd $dir
@@ -98,7 +122,7 @@ fi
 
 for dir in ice_blend; do
     cd $dir
-    if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]]; then
+    if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] ; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
         cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
@@ -124,7 +148,7 @@ echo "Commit hash: ${current_hash}" >> ${WORK_DIR}/reg_test_results.txt
 echo "" >> ${WORK_DIR}/reg_test_results.txt
 
 success=true
-for dir in chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
+for dir in cpld_gridgen chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
     if grep -qi "FAILED" ${dir}/summary.log; then
         success=false
         echo "${dir} consistency tests FAILED" >> ${WORK_DIR}/reg_test_results.txt
