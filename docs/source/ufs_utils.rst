@@ -238,11 +238,11 @@ Program inputs and outputs
 
       * The "grid" files (CRES_grid.tile#.nc) containing the geo-reference records for the grid - (NetCDF).  Created by the make_hgrid or regional_esg_grid programs.
       * Global 30-arc-second University of Maryland land cover data.  Used to create the land-sea mask.
-             * landcover30.fixed (unformatted binary). Located here `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_orog>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
+             * landcover30.fixed (unformatted binary). Located here `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_.
       * Global 30-arc-second USGS GMTED2010 orography data.
-             * gmted2010.30sec.int (unformatted binary). Located here `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_orog>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
+             * gmted2010.30sec.int (unformatted binary). Located here `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_.
       * 30-arc-second RAMP Antarctic terrain data (Radarsat Antarctic Mapping Project)
-             * thirty.second.antarctic.new.bin (unformatted binary). Located here `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_orog>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
+             * thirty.second.antarctic.new.bin (unformatted binary). Located here `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_.
 
 **Output data:**  
 
@@ -286,8 +286,8 @@ The program reads the tile number (1-6 for global, 7 for stand-alone regional) a
 All in NetCDF.
 
       * The tiled "grid" files (CRES_grid.tile#.nc) created by the make_hgrid or regional_esg_grid programs.
-      * geo_em.d01.lat-lon.2.5m.HGT_M.nc - global topographic data on 2.5-minute lat-lon grid (interpolated from GMTED2010 30-second topographic data). `Located here <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_am>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
-      * HGT.Beljaars_filtered.lat-lon.30s_res.nc - global topographic data on 30-second lat-lon grid (GMTED2010 data smoothed according to Beljaars et al. (QJRMS, 2004)). `Located here <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_am>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.
+      * geo_em.d01.lat-lon.2.5m.HGT_M.nc - global topographic data on 2.5-minute lat-lon grid (interpolated from GMTED2010 30-second topographic data). `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_am/>`_.
+      * HGT.Beljaars_filtered.lat-lon.30s_res.nc - global topographic data on 30-second lat-lon grid (GMTED2010 data smoothed according to Beljaars et al. (QJRMS, 2004)). `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_am/>`_.
 
 **Output data:**
 
@@ -373,8 +373,8 @@ Program inputs and outputs
 
       * grid file - the "grid" file from the make_hgrid or regional_esg programs  - CRES_grid.tile#.nc - (NetCDF)
       * orography file - the orography file including the 'inland' flag record from the inland program - oro.CRES.tile#.nc (NetCDF)
-      * lake status code file - GlobalLakeStatus.dat (located in `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_orog>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_). See GlobalLakeStatus.txt for the defintion of each code.
-      * lake depth file - GlobalLakeDepth.dat (located in `./fix/fix_orog <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_orog>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_). See GlobalLakeDepth.txt for a description of this file.
+      * lake status code file - GlobalLakeStatus.dat (located in `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>_). See GlobalLakeStatus.txt for the defintion of each code.
+      * lake depth file - GlobalLakeDepth.dat (located in `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_). See GlobalLakeDepth.txt for a description of this file.
 
 **Output data:**
 
@@ -517,7 +517,7 @@ Program inputs and outputs
 
 **Input data:** 
 
-The surface climatological data is located here `./fix/fix_sfc_climo <https://ftp.emc.ncep.noaa.gov/EIB/UFS/SRW/v2p0/fix/fix_sfc_climo>`_ or at `AWS <https://ufs-data.s3.amazonaws.com/public_release/ufs-srweather-app-v2.0.0/fix/fix_files.tar.gz>`_.  All NetCDF.
+The surface climatological data is located here `./fix/fix_sfc_climo <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_sfc_climo/>`_.  All NetCDF.
 
       * Global 1-degree fractional coverage strong/weak zenith angle albedo - facsf.1.0.nc
       * Global 0.05-degree maximum snow albedo - maximum_snow_albedo.0.05.nc
