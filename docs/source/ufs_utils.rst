@@ -14,7 +14,7 @@ Grid Generation
 The following programs are used to create a grid.
 
       * make_hgrid
-      * regional_grid_esg
+      * regional_esg_grid
       * make_solo_mosaic
       * orog
       * orog_gsl (optional)
@@ -373,7 +373,7 @@ Program inputs and outputs
 
       * grid file - the "grid" file from the make_hgrid or regional_esg programs  - CRES_grid.tile#.nc - (NetCDF)
       * orography file - the orography file including the 'inland' flag record from the inland program - oro.CRES.tile#.nc (NetCDF)
-      * lake status code file - GlobalLakeStatus.dat (located in `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>_). See GlobalLakeStatus.txt for the defintion of each code.
+      * lake status code file - GlobalLakeStatus.dat (located in `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_). See GlobalLakeStatus.txt for the defintion of each code.
       * lake depth file - GlobalLakeDepth.dat (located in `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_). See GlobalLakeDepth.txt for a description of this file.
 
 **Output data:**
