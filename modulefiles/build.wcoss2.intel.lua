@@ -61,6 +61,15 @@ load(pathJoin("g2", g2_ver))
 cray_pals_ver=os.getenv("cray_pals_ver") or "1.0.12"
 load(pathJoin("cray-pals", cray_pals_ver))
 
+udunits_ver=os.getenv("udunits_ver") or "2.2.28"
+load(pathJoin("udunits", udunits_ver))
+
+gsl_ver=os.getenv("gsl_ver") or "2.7"
+load(pathJoin("gsl", gsl_ver))
+
+nco_ver=os.getenv("nco_ver") or "4.9.7"
+load(pathJoin("nco", nco_ver))
+
 setenv("HPC_OPT","/apps/ops/para/libs")
 prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/compiler/intel/19.1.3.304")
 prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/mpi/intel/19.1.3.304/cray-mpich/8.1.7")
