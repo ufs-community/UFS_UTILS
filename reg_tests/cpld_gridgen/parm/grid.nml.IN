@@ -1,0 +1,15 @@
+& grid_nml
+ni=NI_GLB
+nj=NJ_GLB
+dirsrc='FIXDIR'
+dirout='OUTDIR'
+fv3dir='MOSAICDIR'
+topofile=TOPOGFILE
+editsfile=EDITSFILE
+res=RESNAME
+atmres=MOSAICRES
+npx=NPX
+editmask=DO_MASKEDIT
+debug=DO_DEBUG
+do_postwgts=DO_POSTWGTS
+/
