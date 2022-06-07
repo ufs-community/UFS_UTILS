@@ -245,18 +245,30 @@ while read -r line || [ "$line" ]; do
   cd $RUNDIR
 
   if [[ $target = wcoss2 ]]; then
-    qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-         -Wblock=true -l walltime=00:05:00 -N $TEST_NAME -l select=1:ncpus=1:mem=8GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND
-    d=0
+
+#   rm -f $RUNDIR/bad.${TEST_NAME}
+
+    TEST=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
+          -Wblock=true -l walltime=00:05:00 -N $TEST_NAME -l select=1:ncpus=1:mem=8GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
+
+#   qsub -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
+#        -Wblock=true -l walltime=00:01:00 -N chgres_summary -l select=1:ncpus=1:mem=100MB -W depend=afternotok:$TEST << EOF
+#!/bin/bash
+#   touch $RUNDIR/bad.${TEST_NAME}
+#EOF
+#   if [[ -f $RUNDIR/bad.${TEST_NAME} ]]; then
+#     error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
+#   fi
 
   else
     sbatch --wait --ntasks-per-node=1 --nodes=1 --mem=4G -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
            --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
            --wrap "$SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
-  fi
 
-  if [[ d -ne 0 ]]; then
-    error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
+    if [[ d -ne 0 ]]; then
+      error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
+    fi
+
   fi
 
   check_results
