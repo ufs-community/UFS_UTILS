@@ -46,7 +46,7 @@ elif [ $machine = "jet" ]; then
 elif [ $machine = "orion" ]; then
     FIX_DIR="/work/noaa/global/glopara/fix"
 elif [ $machine = "wcoss2" ]; then
-    FIX_DIR="/lfs/h2/emc/global/noscrub/Kate.Friedman/glopara/FIX/fix"
+    FIX_DIR="/lfs/h2/emc/global/noscrub/kate.friedman/glopara/FIX/fix"
 elif [ $machine = "s4" ]; then
     FIX_DIR="/data/prod/glopara/fix"
 fi
