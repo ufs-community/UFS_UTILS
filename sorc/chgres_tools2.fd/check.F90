@@ -65,10 +65,15 @@
 
  do tiles = 1, 6
 
- file_frac="/gpfs/dell1/stmp/George.Gayno/chgres_fractional/" // the_files(tiles)
- file_orog_frac="/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/chgres_cube.fractional/my_grids_fract/C96/" &
+ file_frac="/scratch2/NCEPDEV/stmp1/George.Gayno/chgres_fractional/" // the_files(tiles)
+ file_orog_frac="/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/chgres_cube.fractional/my_grids_fract/C96/" &
                  // oro_files(tiles)
- file_floor="/gpfs/dell1/stmp/George.Gayno/chgres_floor/" // the_files(tiles)
+ file_floor="/scratch2/NCEPDEV/stmp1/George.Gayno/chgres_floor/" // the_files(tiles)
+
+!file_frac="/gpfs/dell1/stmp/George.Gayno/chgres_fractional/" // the_files(tiles)
+!file_orog_frac="/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/chgres_cube.fractional/my_grids_fract/C96/" &
+!                // oro_files(tiles)
+!file_floor="/gpfs/dell1/stmp/George.Gayno/chgres_floor/" // the_files(tiles)
 
 ! Open the file created using the non-fractional logic, but with
 ! slmsk modified to be floor of the land fraction.
