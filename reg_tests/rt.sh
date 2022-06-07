@@ -74,7 +74,7 @@ cd fix
 
 cd ../reg_tests
 
-if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] ; then
+if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] || [[ $target == "wcoss2" ]] ; then
 
   cd cpld_gridgen
   export ACCOUNT=$PROJECT_CODE
