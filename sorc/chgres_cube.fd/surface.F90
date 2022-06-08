@@ -2362,6 +2362,8 @@
  real(esmf_kind_r8), pointer        :: skint_ptr(:,:)
  real(esmf_kind_r8), pointer        :: fice_ptr(:,:)
  real(esmf_kind_r8), pointer        :: hice_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: tg3_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: tg3_ice_ptr(:,:)
 
  print*,"- CALL FieldGet FOR TARGET GRID LAND-SEA MASK."
  call ESMF_FieldGet(landmask_target_grid, &
@@ -2676,16 +2678,29 @@
  if (fract_grid) then
 
    call ESMF_FieldGet(seaice_substrate_temp_target_grid, &
-                    farrayPtr=data_ptr, rc=rc)
+                    farrayPtr=tg3_ice_ptr, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
      if (fice_ptr(i,j) > 0.0) then  ! sea ice
-       data_ptr(i,j) = frz_ice
+       tg3_ice_ptr(i,j) = frz_ice
      else
-       data_ptr(i,j) = -1.e20
+       tg3_ice_ptr(i,j) = -1.e20
+     endif
+   enddo
+   enddo
+
+   call ESMF_FieldGet(substrate_temp_target_grid, &
+                    farrayPtr=tg3_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGet", rc)
+
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (landmask_ptr(i,j) == 0.0) then  ! sea ice
+       tg3_ptr(i,j) = -1.e20
      endif
    enddo
    enddo
@@ -2693,16 +2708,16 @@
  else
 
  call ESMF_FieldGet(substrate_temp_target_grid, &
-                    farrayPtr=data_ptr, rc=rc)
+                    farrayPtr=tg3_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) > 0.0) then  ! sea ice
-     data_ptr(i,j) = frz_ice
+     tg3_ptr(i,j) = frz_ice
    elseif (landmask_ptr(i,j) == 0) then  ! open water flag value.
-     data_ptr(i,j) = skint_ptr(i,j)
+     tg3_ptr(i,j) = skint_ptr(i,j)
    endif
  enddo
  enddo
