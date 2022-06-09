@@ -169,12 +169,14 @@
 
    if (trim(varname_frac(var)) == 'tg3_ice' .or. &
        trim(varname_frac(var)) == 'tisfc' .or. &
+       trim(varname_frac(var)) == 'snwdph_ice' .or. &
+       trim(varname_frac(var)) == 'sheleg_ice' .or. &
        trim(varname_frac(var)) == 'zorl_ice') then ! check at ice only.
      do j = 1, jdim
      do i = 1, idim
        if (nint(slmsk(i,j)) == 2) then
          if (dummy_floor(i,j) /= dummy_frac(i,j)) then
-           print*,'bad tg3 pt ',i,j,dummy_floor(i,j),dummy_frac(i,j)
+           print*,'bad ice pt ',i,j,dummy_floor(i,j),dummy_frac(i,j)
            stop
          endif
        endif

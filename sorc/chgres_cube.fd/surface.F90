@@ -2364,6 +2364,8 @@
  real(esmf_kind_r8), pointer        :: hice_ptr(:,:)
  real(esmf_kind_r8), pointer        :: tg3_ptr(:,:)
  real(esmf_kind_r8), pointer        :: tg3_ice_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: snod_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: snol_ptr(:,:)
 
  print*,"- CALL FieldGet FOR TARGET GRID LAND-SEA MASK."
  call ESMF_FieldGet(landmask_target_grid, &
@@ -2721,6 +2723,31 @@
    endif
  enddo
  enddo
+
+ endif
+
+ if (fract_grid) then
+
+   print*,"- SET MISSING FLAG AT TARGET GRID SNOW DEPTH AT ICE."
+   call ESMF_FieldGet(snow_depth_at_ice_target_grid, &
+                    farrayPtr=snod_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGet", rc)
+
+   print*,"- SET MISSING FLAG AT TARGET GRID SNOW LIQ EQUIV AT ICE."
+   call ESMF_FieldGet(snow_liq_equiv_at_ice_target_grid, &
+                    farrayPtr=snol_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGet", rc)
+
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (fice_ptr(i,j) == 0.0) then
+       snol_ptr(i,j) = -1.e20
+       snod_ptr(i,j) = -1.e20
+     end if
+   enddo
+   enddo
 
  endif
 
