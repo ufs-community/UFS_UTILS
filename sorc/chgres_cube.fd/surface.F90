@@ -2730,14 +2730,23 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract this should work for fractional grids.
- do j = clb(2), cub(2)
- do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then  ! open water
-     data_ptr(i,j) = 0.0
-   end if
- enddo
- enddo
+ if (fract_grid) then
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (landmask_ptr(i,j) /= 1) then  ! not land
+       data_ptr(i,j) = -1.e20
+     end if
+   enddo
+   enddo
+ else
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then
+       data_ptr(i,j) = 0.0
+     end if
+   enddo
+   enddo
+ endif
 
  print*,"- ZERO OUT TARGET GRID SNOW LIQ AT OPEN WATER."
  call ESMF_FieldGet(snow_liq_equiv_target_grid, &
@@ -2745,14 +2754,23 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract this should work for fractional grids.
- do j = clb(2), cub(2)
- do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then  ! open water
-     data_ptr(i,j) = 0.0
-   endif
- enddo
- enddo
+ if (fract_grid) then
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (landmask_ptr(i,j) /= 1) then  ! not land
+       data_ptr(i,j) = -1.e20
+     end if
+   enddo
+   enddo
+ else
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then
+       data_ptr(i,j) = 0.0
+     end if
+   enddo
+   enddo
+ endif
 
  print*,"- SET NON-LAND FLAG VALUE FOR TARGET GRID TOTAL SOIL MOISTURE."
  call ESMF_FieldGet(soilm_tot_target_grid, &
