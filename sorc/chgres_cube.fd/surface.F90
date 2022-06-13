@@ -903,14 +903,18 @@
  mask_input_ptr = 0
  where (nint(landmask_input_ptr) == 0) mask_input_ptr = 1
 
-!cfract dont include any points with ice.
+!cfract include points that are fractional ice.
 !cfract use seamask_target, which is 1 if there is some water.
 !cfract then remove points where fice is > 0.
 !cfract We want points with at least some water, but no ice.
 
  mask_target_ptr = 0
  where (seamask_target_ptr == 1) mask_target_ptr = 1
- where (seaice_fract_target_ptr  > 0.0) mask_target_ptr = 0
+ if (fract_grid) then
+   where (seaice_fract_target_ptr  == 1.0_esmf_kind_r8) mask_target_ptr = 0
+ else
+   where (seaice_fract_target_ptr  > 0.0) mask_target_ptr = 0
+ endif
 
  method=ESMF_REGRIDMETHOD_CONSERVE
  isrctermprocessing = 1
@@ -1038,7 +1042,11 @@
      allocate(water_target_one_tile(i_target,j_target))
      water_target_one_tile = 0
      where(mask_target_one_tile == 1) water_target_one_tile = 1
-     where(fice_target_one_tile > 0.0) water_target_one_tile = 0
+     if(fract_grid) then
+       where(fice_target_one_tile == 1.0_esmf_kind_r8) water_target_one_tile = 0
+     else
+       where(fice_target_one_tile > 0.0) water_target_one_tile = 0
+     endif
    endif
 
    call search_many(num_fields,bundle_water_target,data_one_tile, water_target_one_tile,& 
@@ -2296,7 +2304,7 @@
 
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     if (fice_ptr(i,j) > 0.0 .or. seamask_ptr(i,j) == 0) then
+     if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0) then
        data_ptr3(i,j) = -1.e20
      endif
    enddo
@@ -2673,6 +2681,25 @@
    endif
  enddo
  enddo
+ endif
+
+ if (fract_grid) then
+
+   print*,"- SET TARGET GRID SST FLAG VALUE."
+
+   call ESMF_FieldGet(sst_target_grid, &
+                    farrayPtr=data_ptr, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+   do j = clb(2), cub(2)
+   do i = clb(1), cub(1)
+     if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0.0) then
+       data_ptr(i,j) = -1.e20
+     endif
+   enddo
+   enddo
+
  endif
 
  print*,"- SET TARGET GRID SUBSTRATE TEMP AT ICE."
