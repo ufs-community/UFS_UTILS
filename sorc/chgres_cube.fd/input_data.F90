@@ -2545,21 +2545,30 @@
    jids    = -9999  ! Array of values in identification section, set to wildcard
    jgdt    = -9999  ! Array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! Search for any grid definition number.
-   jpdtn   = -1  ! Search for product def template number 0 - anl or fcst.
+   jpdtn   = -1     ! Search for any product definition template number.
    unpack  =.false.
 
    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
+! Read first record and check if this is NCEP GEFS data. 
+! This will determine what product definition template number to
+! search for (Section 4/Octets 8-9).
+!
+! Section 1/Octets 6-7 is '7' (NCEP)
+! Section 1/Octets 8-9 is '2' (NCEP Ensemble products).
+  
    if (iret == 0) then
      if (gfld%idsect(1) == 7 .and. gfld%idsect(2) == 2) then
        print*,'- THIS IS NCEP GEFS DATA.'
-       pdt_num = 1
+       pdt_num = 1 ! Search for product definition template number 1.
+                   ! Individual ensember forecast.
      else
-       pdt_num = 0
+       pdt_num = 0 ! Search for product definition template number 0.
+                   ! Analysis or forecast.
      endif
    else
-     call abort
+     call error_handler("READING GRIB2 FILE", iret)
    endif
 
 ! First, check for the vertical coordinate. If temperture at the 10 hybrid
@@ -2567,7 +2576,7 @@
 ! isobaric levels.
 
    j = 0
-   jpdtn   = pdt_num  ! Search for product def template number 0 - anl or fcst.
+   jpdtn   = pdt_num  ! Search for the specific product definition template number.
    jpdt(1) = 0      ! Sect4/oct 10 - param category - temperature field
    jpdt(2) = 0      ! Sect4/oct 11 - param number - temperature
    jpdt(10) = 105   ! Sect4/oct 23 - type of level - hybrid
@@ -2577,19 +2586,17 @@
    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
     
-   if (iret == 0) then  ! data is on hybrid levels
-     print*,'hybrid temp found at ',j,k,maxval(gfld%fld),minval(gfld%fld)
-     print*,'hybrid temp pdt num ',gfld%ipdtnum
-     print*,'hybrid temp pdt ',gfld%ipdtmpl
-     octet23 = 105
-     octet29 = 255
+   if (iret == 0) then
+     print*,'- DATA IS ON HYBRID LEVELS.'
+     octet23 = 105 ! Section 4/Oct 23 - type of first fixed surface.
+     octet29 = 255 ! Section 4/Oct 29 - type of second fixed surface (N/A).
      isnative=.true.
-   else                 ! data is on isobaric levels
-     octet23 = 100
-     octet29 = 255
+   else
+     print*,'- DATA IS ON ISOBARIC LEVELS.'
+     octet23 = 100 ! Section 4/Oct 23 - type of first fixed surface.
+     octet29 = 255 ! Section 4/Oct 29 - type of second fixed surface (N/A).
+     isnative=.false.
    endif
-   
-   print*,'cggg after check of temp ',iret, octet23,octet29,isnative
 
 ! Now count the number of vertical levels by searching for u-wind.
 ! Store the value of each level.
