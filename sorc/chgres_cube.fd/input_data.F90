@@ -2483,7 +2483,7 @@
  integer                               :: trac_names_oct11(ntrac_max)
  integer                               :: tracers_input_oct11(num_tracers_input)
  integer                               :: lugb, lugi, jdisc, jpdt(200), jgdt(200), iscale
- integer                               :: jids(200), jpdtn, jgdtn, octet23, octet29
+ integer                               :: jids(200), jpdtn, jgdtn, octet_23, octet_29
  integer                               :: count_spfh, count_rh, count_icmr, count_scliwc
  integer                               :: count_cice, count_rwmr, count_scllwc, count
 
@@ -2551,12 +2551,14 @@
    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
+!----------------------------------------------------------------------
 ! Read first record and check if this is NCEP GEFS data. 
 ! This will determine what product definition template number to
 ! search for (Section 4/Octets 8-9).
 !
 ! Section 1/Octets 6-7 is '7' (NCEP)
 ! Section 1/Octets 8-9 is '2' (NCEP Ensemble products).
+!----------------------------------------------------------------------
   
    if (iret == 0) then
      if (gfld%idsect(1) == 7 .and. gfld%idsect(2) == 2) then
@@ -2571,16 +2573,18 @@
      call error_handler("READING GRIB2 FILE", iret)
    endif
 
+!----------------------------------------------------------------------
 ! First, check for the vertical coordinate. If temperture at the 10 hybrid
 ! level is found, hybrid coordinates are assumed. Otherwise, data is on
 ! isobaric levels.
+!----------------------------------------------------------------------
 
    j = 0
    jpdtn   = pdt_num  ! Search for the specific product definition template number.
-   jpdt(1) = 0      ! Sect4/oct 10 - param category - temperature field
-   jpdt(2) = 0      ! Sect4/oct 11 - param number - temperature
-   jpdt(10) = 105   ! Sect4/oct 23 - type of level - hybrid
-   jpdt(12) = 10    ! oct 23 - type of level - value of hybrid level
+   jpdt(1) = 0      ! Sect4/oct 10 - Parameter category - temperature field
+   jpdt(2) = 0      ! Sect4/oct 11 - Parameter number - temperature
+   jpdt(10) = 105   ! Sect4/oct 23 - Type of level - hybrid
+   jpdt(12) = 10    ! Sect4/octs 25/28 - Value of hybrid level
    unpack=.false.
 
    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
@@ -2588,13 +2592,13 @@
     
    if (iret == 0) then
      print*,'- DATA IS ON HYBRID LEVELS.'
-     octet23 = 105 ! Section 4/Oct 23 - type of first fixed surface.
-     octet29 = 255 ! Section 4/Oct 29 - type of second fixed surface (N/A).
+     octet_23 = 105 ! Section 4/Oct 23 - type of first fixed surface.
+     octet_29 = 255 ! Section 4/Oct 29 - type of second fixed surface (N/A).
      isnative=.true.
    else
      print*,'- DATA IS ON ISOBARIC LEVELS.'
-     octet23 = 100 ! Section 4/Oct 23 - type of first fixed surface.
-     octet29 = 255 ! Section 4/Oct 29 - type of second fixed surface (N/A).
+     octet_23 = 100 ! Section 4/Oct 23 - type of first fixed surface.
+     octet_29 = 255 ! Section 4/Oct 29 - type of second fixed surface (N/A).
      isnative=.false.
    endif
 
@@ -2615,11 +2619,10 @@
      if (iret /= 0) exit
 
      if (gfld%discipline == 0) then ! Discipline - meteorological products
-       if (gfld%ipdtnum == pdt_num) then  ! Product definition template number -
-                                    ! analysis or forecast at single level.
+       if (gfld%ipdtnum == pdt_num) then  ! Product definition template number.
          if (gfld%ipdtmpl(1) == 2 .and. gfld%ipdtmpl(2) == 2) then  ! u-wind
                                                                     ! Sect4/octs 10 and 11.
-           if (gfld%ipdtmpl(10) == octet23 .and. gfld%ipdtmpl(13) == octet29) then  
+           if (gfld%ipdtmpl(10) == octet_23 .and. gfld%ipdtmpl(13) == octet_29) then  
                                                                     ! Sect4 octs 23 and 29.
                                                                     ! Hybrid or isobaric.
              lev_input = lev_input + 1
@@ -2633,7 +2636,7 @@
      j = k
    enddo
 
- endif
+ endif ! read file on task 0.
 
  call mpi_barrier(MPI_COMM_WORLD, iret)
  call MPI_BCAST(isnative,1,MPI_LOGICAL,0,MPI_COMM_WORLD,iret)
@@ -2667,7 +2670,6 @@
  enddo
 
  if(localpet == 0) then
-    print*,'cggg found this number of levels ',lev_input
    do i = 1,lev_input
      print*, "- LEVEL AFTER SORT = ",trim(slevs(i))
    enddo
@@ -2677,15 +2679,11 @@
 
  if (localpet == 0) then
    
-   jpdtn = pdt_num
+   jpdtn = pdt_num ! Product definition template number.
    jpdt = -9999
-   jpdt(1) = 1  ! Sect4/oct 10 - param category - moisture
-   jpdt(2) = 0  ! Sect4/oct 11 - param number - specific humidity
-   if (isnative) then
-     jpdt(10) = 105 ! Sect4/oct 23 - type of level - hybrid
-   else
-     jpdt(10) = 100 ! Sect4/oct 23 - type of level - isobaric
-   endif
+   jpdt(1) = 1  ! Sect4/oct 10 - Parameter category - moisture
+   jpdt(2) = 0  ! Sect4/oct 11 - Parameter number - specific humidity
+   jpdt(10) =  octet_23 ! Sect4/oct 23 - type of level.
    unpack=.false.
 
    count_spfh=0
@@ -2700,11 +2698,10 @@
      if (iret == 0) then
        count_spfh = count_spfh + 1
      endif
-
    enddo
 
-   jpdt(1) = 1  ! Sec4/oct 10 - param category - moisture
-   jpdt(2) = 1  ! Sec4/oct 11 - param number - rel humidity
+   jpdt(1) = 1  ! Sec4/oct 10 - Parameter category - moisture
+   jpdt(2) = 1  ! Sec4/oct 11 - Parameter number - rel humidity
    count_rh=0
 
    do vlev = 1, lev_input
