@@ -3107,7 +3107,7 @@
    jids    = -9999  ! array of values in identification section, set to wildcard
    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
+   jpdtn   =  pdt_num  ! Search for the product definition template number.
    jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
    jpdt(2) = 0      ! Sect4/oct 11 - param number - pressure
    jpdt(10) = 1     ! Sect4/oct 23 - type of level - ground surface
@@ -3141,15 +3141,10 @@
    jids    = -9999  ! array of values in identification section, set to wildcard
    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
+   jpdtn   =  pdt_num ! Search for the product definition template number.
    jpdt(1) = 2      ! Sect4/oct 10 - param category - momentum
    jpdt(2) = 9      ! Sect4/oct 11 - param number - dzdt
-
-   if (isnative) then
-     jpdt(10) = 105 ! Sect4/oct 23 - type of level - hybrid
-   else
-     jpdt(10) = 100 ! Sect4/oct 23 - type of level - isobaric
-   endif
+   jpdt(10) = octet_23 ! Sect4/oct 23 - type of level
 
    unpack=.true.
 
@@ -3202,7 +3197,7 @@
    jids    = -9999  ! array of values in identification section, set to wildcard
    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
+   jpdtn   =  pdt_num  ! Search for the product definition template number.
    jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
    jpdt(2) = 5      ! Sect4/oct 11 - param number - geopotential height
    jpdt(10) = 1     ! Sect4/oct 23 - type of level - ground surface
@@ -3322,10 +3317,10 @@ else ! is native coordinate (hybrid).
     jids    = -9999  ! array of values in identification section, set to wildcard
     jgdt    = -9999  ! array of values in grid definition template, set to wildcard
     jgdtn   = -1     ! search for any grid definition number.
-    jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
-    jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
-    jpdt(2) = 0      ! Sect4/oct 11 - param number - pressure
-    jpdt(10) = 105   ! Sect4/oct 23 - type of level - hybrid
+    jpdtn   =  pdt_num ! Search for the product definition template number.
+    jpdt(1) = 3      ! Sect4/oct 10 - parameter category - mass
+    jpdt(2) = 0      ! Sect4/oct 11 - parameter number - pressure
+    jpdt(10) = octet_23 ! Sect4/oct 23 - type of level.
     unpack=.true.
 
     do vlev = 1, lev_input
