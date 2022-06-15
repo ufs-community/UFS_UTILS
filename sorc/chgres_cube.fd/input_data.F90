@@ -5082,7 +5082,7 @@ else ! is native coordinate (hybrid).
          pdt_num = 0
        endif
      else
-       call abort
+       if (rc /= 0) call error_handler("ERROR READING GRIB2 FILE.", rc)
      endif
 
      j = 0
