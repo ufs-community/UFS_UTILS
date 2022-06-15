@@ -5335,7 +5335,7 @@ else ! is native coordinate (hybrid).
 
      jdisc   = 0 ! Search for discipline - meteorological products
      j = 0       ! Search at beginning of file.
-     jpdtn   = pdt_num ! Search for product definition template number 0 - anl or fcst.
+     jpdtn   = pdt_num ! Search for the product definition template number.
      jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
      jpdt(1) = 1  ! Sec4/oct 10 - parameter category - moisture
      jpdt(2) = 13 ! Sec4/oct 11 - parameter number - liquid equiv snow depth
@@ -5369,7 +5369,7 @@ else ! is native coordinate (hybrid).
 
      jdisc   = 0  ! Search for discipline - meteorological products
      j = 0        ! Search at beginning of file.
-     jpdtn   = pdt_num  ! Search for product definition template number 0 - anl or fcst.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
      jpdt    = -9999 ! Initialize array of values in product definition template - Sec4
      jpdt(1) = 1  ! Sec4/oct 10 - parameter category - moisture
      jpdt(2) = 11 ! Sec4/oct 11 - parameter number - snow depth
@@ -5406,7 +5406,7 @@ else ! is native coordinate (hybrid).
 
      jdisc   = 0 ! Search for discipline - meteorological products
      j = 0       ! Search at beginning of file.
-     jpdtn   = pdt_num ! Search for product def template number 0 - anl or fcst.
+     jpdtn   = pdt_num ! Search for the product definition template number.
      jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
      jpdt(1) = 0    ! Sec4/oct 10 - parameter category - temperature
      jpdt(2) = 0    ! Sec4/oct 11 - parameter number - temperature
@@ -5435,7 +5435,7 @@ else ! is native coordinate (hybrid).
 
      jdisc   = 0  ! Search for discipline - meteorological products
      j = 0        ! Search at beginning of file.
-     jpdtn   = pdt_num  ! Search for product definition template number 0 - anl or fcst.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
      jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
      jpdt(1) = 1  ! Sec4/oct 10 - parameter category - moisture
      jpdt(2) = 0  ! Sec4/oct 11 - parameter number - specific humidity
@@ -5464,7 +5464,7 @@ else ! is native coordinate (hybrid).
 
      jdisc   = 0  ! Search for discipline - meteorological products
      j = 0        ! Search at beginning of file.
-     jpdtn   = pdt_num  ! Search for product definition template number 0 - anl or fcst.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
      jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
      jpdt(1) = 0  ! Sec4/oct 10 - parameter category - temperature
      jpdt(2) = 0  ! Sec4/oct 11 - parameter number - temperature
@@ -5516,7 +5516,7 @@ else ! is native coordinate (hybrid).
 
      jdisc   = 2  ! Search for discipline - land products
      j = 0        ! Search at beginning of file
-     jpdtn   = pdt_num  ! Search for product definition template number 0 - anl or fcst.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
      jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
      jpdt(1) = 3  ! Sec4/oct 10 - parameter category - soil products
      jpdt(2) = 0  ! Sec4/oct 11 - parameter number - soil type
@@ -5649,7 +5649,7 @@ else ! is native coordinate (hybrid).
 
        jdisc   = 2  ! Search for discipline - land products
        j = 0        ! Search at beginning of file.
-       jpdtn   = pdt_num  ! Search for product definition template number 0 - anl or fcst.
+       jpdtn   = pdt_num  ! Search for the product definition template number.
        jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
        jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
        jpdt(2) = 4  ! Sec4/oct 11 - parameter number - vegetation
@@ -5687,7 +5687,7 @@ else ! is native coordinate (hybrid).
        jdisc   = 2  ! Search for discipline - land products
        j = 1105 ! grib2 file does not distinguish between the various veg
                 ! fractions. Need to search using record number.
-       jpdtn   = pdt_num  ! Search for product definition template number 0 - anl or fcst.
+       jpdtn   = pdt_num  ! Search for the product definition template number.
        jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
        jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
        jpdt(2) = 4  ! Sec4/oct 11 - parameter number - vegetation
@@ -5727,7 +5727,7 @@ else ! is native coordinate (hybrid).
 
        jdisc   = 2  ! Search for discipline - land products
        j = 1106 ! Have to search by record number.
-       jpdtn   = pdt_num  ! Search for product def template number 0 - anl or fcst.
+       jpdtn   = pdt_num  ! Search for the product definition template number.
        jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
        jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
        jpdt(2) = 4  ! Sec4/oct 11 - parameter number - vegetation
@@ -5770,7 +5770,7 @@ else ! is native coordinate (hybrid).
 
        jdisc   = 0  ! Search for discipline - meteorological products
        j = 0        ! Search at beginning of file.
-       jpdtn   = pdt_num  ! Search for product def template number 0 - anl or fcst.
+       jpdtn   = pdt_num  ! Search for the product definition template number.
        jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
        jpdt(1) = 7   ! Sec4/oct 10 - parameter category - thermo stability indices
        jpdt(2) = 198 ! Sec4/oct 11 - parameter number - leaf area index
@@ -5805,7 +5805,7 @@ else ! is native coordinate (hybrid).
 
      jdisc   = 10  ! Search for discipline - ocean products
      j = 0         ! Search at beginning of file.
-     jpdtn   = pdt_num   ! Search for product def template number 0 - anl or fcst.
+     jpdtn   = pdt_num ! Search for the product definition template number.
      jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
      jpdt(1) = 2  ! Sec4/oct 10 - parameter category - ice
      jpdt(2) = 1  ! Sec4/oct 11 - parameter number - thickness
@@ -5901,7 +5901,7 @@ else ! is native coordinate (hybrid).
 
      jdisc   = 0  ! Search for discipline - meteorological products
      j = 0        ! Search at beginning of file.
-     jpdtn   = pdt_num  ! Search for product def template number 0 - anl or fcst.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
      jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
      jpdt(1) = 2  ! Sec4/oct 10 - parameter category - momentum
      jpdt(2) = 30 ! Sec4/oct 11 - parameter number - friction velocity
@@ -5973,7 +5973,7 @@ else ! is native coordinate (hybrid).
 
      jdisc   = 2  ! Search for discipline - land products
      j = 0        ! Search from beginning of file
-     jpdtn   = pdt_num  ! Search for product def template number 0 - anl or fcst.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
      jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
      jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
      jpdt(2) = 13 ! Sec4/oct 11 - parameter number - canopy water
@@ -6020,7 +6020,7 @@ else ! is native coordinate (hybrid).
 
      jdisc   = 2  ! Search for discipline - land products
      j = 0        ! Search from beginning of file.
-     jpdtn   = pdt_num  ! Search for product def template number 0 - anl or fcst.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
      jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
      jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
      jpdt(2) = 1  ! Sec4/oct 11 - parameter number - surface roughness
@@ -6093,7 +6093,7 @@ else ! is native coordinate (hybrid).
    
      jdisc   = 2  ! Search for discipline - land products
      j = 0        ! Search from beginning of file.
-     jpdtn   = pdt_num  ! Search for product def template number 0 - anl or fcst.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
      jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
      jpdt(1) = 0   ! Sec4/oct 10 - parameter category - veg/biomass
      jpdt(2) = 198 ! Sec4/oct 11 - parameter number - vegetation type
@@ -7259,16 +7259,16 @@ end subroutine handle_grib_error
  jids    = -9999  ! array of values in identification section, set to wildcard
  jgdt    = -9999  ! array of values in grid definition template 3.m
  jgdtn   = -1     ! search for any grid definition number.
- jpdtn   = pdt_num  ! search for product def template number 0 - anl or fcst.
- jpdt(1) = 0  ! oct 10 - param cat - veg/biomass
- if (trim(vname) == 'soilt') jpdt(2) = 2  ! oct 11 - param number - soil temp
- if (trim(vname) == 'soilw') jpdt(2) = 192  ! oct 11 - param number - total soilm
+ jpdtn   = pdt_num  ! Search for the product definition template number.
+ jpdt(1) = 0        ! Section 4/Octet 10 - parameter category - veg/biomass
+ if (trim(vname) == 'soilt') jpdt(2) = 2    ! Section 4/Octet 11 - parameter number - soil temp
+ if (trim(vname) == 'soilw') jpdt(2) = 192  ! Section 4/Octet 11 - parameter number - total soilm
  if (trim(vname) == 'soill') then
-   jpdt(1) = 3 ! oct 10 - soil products
-   jpdt(2) = 192  ! oct 11 - param number - liquid soilm
+   jpdt(1) = 3    ! Section 4/Octet 10 - soil products
+   jpdt(2) = 192  ! Section 4/Octet 11 - parameter number - liquid soilm
  endif
- jpdt(10) = 106 ! oct 23 - depth below ground 
- jpdt(13) = 106 ! oct 29 - depth below ground
+ jpdt(10) = 106 ! Section 4/Octet 23 - depth below ground 
+ jpdt(13) = 106 ! Section 4/Octet 29 - depth below ground
  unpack=.true.
 
  do i = 1,lsoil_input
