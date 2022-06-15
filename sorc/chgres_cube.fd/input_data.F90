@@ -2741,13 +2741,9 @@
 
  if (localpet == 0) then
 
-   jpdtn = pdt_num
+   jpdtn = pdt_num ! Product definition template number.
    jpdt = -9999
-   if (isnative) then
-     jpdt(10) = 105 ! Sect4/oct 23 - type of level - hybrid
-   else
-     jpdt(10) = 100 ! Sect4/oct 23 - type of level - isobaric
-   endif
+   jpdt(10) =  octet_23 ! Sect4/oct 23 - type of level.
    unpack=.false.
 
    count_icmr=0
@@ -2759,8 +2755,8 @@
    do vlev = 1, lev_input
 
      j = 0
-     jpdt(1) = 1  ! Sect4/oct 10 - param category - moisture
-     jpdt(2) = 23 ! Sect4/oct 11 - param number - ice water mixing ratio
+     jpdt(1) = 1  ! Sect4/oct 10 - Parameter category - moisture
+     jpdt(2) = 23 ! Sect4/oct 11 - Parameter number - ice water mixing ratio
      jpdt(12) = nint(rlevs(vlev))
 
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
@@ -2771,8 +2767,8 @@
      endif
 
      j = 0
-     jpdt(1) = 1  ! Sect4/oct 10 - param category - moisture
-     jpdt(2) = 84 ! Sect4/oct 11 - param number - cloud ice water content.
+     jpdt(1) = 1  ! Sect4/oct 10 - Parameter category - moisture
+     jpdt(2) = 84 ! Sect4/oct 11 - Parameter number - cloud ice water content.
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
            unpack, k, gfld, iret)
 
@@ -2781,8 +2777,8 @@
      endif
 
      j = 0
-     jpdt(1) = 6  ! Sect4/oct 10 - param category - clouds
-     jpdt(2) = 0  ! Sect4/oct 11 - param number - cloud ice
+     jpdt(1) = 6  ! Sect4/oct 10 - Parameter category - clouds
+     jpdt(2) = 0  ! Sect4/oct 11 - Parameter number - cloud ice
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
@@ -2791,8 +2787,8 @@
      endif
 
      j = 0
-     jpdt(1) = 1   ! Sect4/oct 10 - param category - moisture
-     jpdt(2) = 24  ! Sect4/oct 11 - param number - rain mixing ratio
+     jpdt(1) = 1   ! Sect4/oct 10 - Parameter category - moisture
+     jpdt(2) = 24  ! Sect4/oct 11 - Parameter number - rain mixing ratio
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
@@ -2801,9 +2797,9 @@
      endif
 
      j = 0
-     jpdt(1) = 1   ! Sect4/oct 10 - param category - moisture
-     jpdt(2) = 83  ! Sect4/oct 11 - param number - specific cloud liquid
-                   ! water content.
+     jpdt(1) = 1   ! Sect4/oct 10 - Parameter category - moisture
+     jpdt(2) = 83  ! Sect4/oct 11 - Parameter number - specific cloud liquid
+                                  ! water content.
      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, iret)
 
@@ -2818,13 +2814,13 @@
        if (count_cice == 0) then
          print*,'- FILE DOES NOT CONTAIN CICE.'
        else
-         trac_names_oct10(4) = 6 ! Sect4/oct 10 - param category - clouds
-         trac_names_oct11(4) = 0 ! Sect4/oct 11 - param number - cloud ice
+         trac_names_oct10(4) = 6 ! Sect4/oct 10 - Parameter category - clouds
+         trac_names_oct11(4) = 0 ! Sect4/oct 11 - Parameter number - cloud ice
          print*,"- FILE CONTAINS CICE."
        endif
      else
-       trac_names_oct10(4) = 1  ! Sect4/oct 10 - param category - moisture
-       trac_names_oct11(4) = 84 ! Sect4/oct 11 - param number - cloud ice water content.
+       trac_names_oct10(4) = 1  ! Sect4/oct 10 - Parameter category - moisture
+       trac_names_oct11(4) = 84 ! Sect4/oct 11 - Parameter number - cloud ice water content.
        print*,"- FILE CONTAINS SCLIWC."
      endif
    else
@@ -2835,8 +2831,8 @@
      if (count_scllwc == 0) then
        print*,"- FILE DOES NOT CONTAIN SCLLWC."
      else
-       trac_names_oct10(4) = 1  ! Sect4/oct 10 - param category - moisture
-       trac_names_oct11(4) = 83 ! Sect4/oct 11 - param number - specific cloud liquid
+       trac_names_oct10(4) = 1  ! Sect4/oct 10 - Parameter category - moisture
+       trac_names_oct11(4) = 83 ! Sect4/oct 11 - Parameter number - specific cloud liquid
                                 ! water content.
        print*,"- FILE CONTAINS SCLLWC."
      endif
@@ -2900,15 +2896,10 @@
    jids    = -9999  ! array of values in identification section, set to wildcard
    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
-   jpdt(1) = 0      ! Sect 4/oct 10 - param category - temperature
-   jpdt(2) = 0      ! Sect 4/oct 11 - param number - temperature
-
-   if (isnative) then
-     jpdt(10) = 105 ! Sect 4/oct 23 - type of level - hybrid
-   else
-     jpdt(10) = 100 ! Sect 4/oct 23 - type of level - isobaric
-   endif
+   jpdtn   =  pdt_num  ! Search for specific product definition template number.
+   jpdt(1) = 0      ! Sect 4/oct 10 - parameter category - temperature
+   jpdt(2) = 0      ! Sect 4/oct 11 - parameter number - temperature
+   jpdt(10) = octet_23 ! Sect4/oct 23 - type of level.
 
    unpack=.true.
 
@@ -2959,13 +2950,9 @@
      jids    = -9999  ! array of values in identification section, set to wildcard
      jgdt    = -9999  ! array of values in grid definition template, set to wildcard
      jgdtn   = -1     ! search for any grid definition number.
-     jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
+     jpdtn   =  pdt_num  ! Search for the product definition template number.
+     jpdt(10) = octet_23 ! Sect4/oct 23 - type of level.
      unpack = .false.
-     if (isnative) then
-       jpdt(10) = 105 ! Sect4/oct 23 - type of level - hybrid
-     else
-       jpdt(10) = 100 ! Sect4/oct 23 - type of level - isobaric
-     endif
 
      count = 0
 
