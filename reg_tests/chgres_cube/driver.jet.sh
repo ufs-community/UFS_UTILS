@@ -211,13 +211,22 @@ TEST16=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:0
       --exclusive -o $LOG_FILE -e $LOG_FILE ./25km.conus.gfs.pbgrib2.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize C96 using GEFS GRIB2 data.
+#-----------------------------------------------------------------------------
+
+LOG_FILE=consistency.log17
+export OMP_NUM_THREADS=1
+TEST17=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c96.gefs.grib2 \
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./c96.gefs.grib2.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 LOG_FILE=consistency.log
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d\
-       afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14:$TEST15:$TEST16 << EOF
+       afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14:$TEST15:$TEST16:$TEST17 << EOF
 #!/bin/bash
 grep -a '<<<' $LOG_FILE*  > $SUM_FILE
 EOF
