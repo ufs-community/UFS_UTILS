@@ -3086,7 +3086,7 @@
  
  deallocate(dummy3d_col_in, dummy3d_col_out)
  
- call read_winds(u_tmp_3d,v_tmp_3d,localpet,isnative,rlevs,lugb,pdt_num)
+ call read_winds(u_tmp_3d,v_tmp_3d,localpet,octet_23,rlevs,lugb,pdt_num)
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT U-WIND."
  call ESMF_FieldScatter(u_input_grid, u_tmp_3d, rootpet=0, rc=rc)
@@ -6802,13 +6802,12 @@ else ! is native coordinate (hybrid).
 !! @param [inout] u  u-component wind
 !! @param [inout] v  v-component wind
 !! @param[in] localpet  ESMF local persistent execution thread
-!! @param[in] isnative When true, data on hybrid levels. Otherwise
-!!            data is on isobaric levels.
+!! @param[in] octet_23 Section 4/Octet 23 - Type of first fixed surface.
 !! @param[in] rlevs Array of atmospheric level values
 !! @param[in] lugb Logical unit number of GRIB2 file.
 !! @param[in] pdt_num Product definition template number.
 !! @author Larissa Reames
- subroutine read_winds(u,v,localpet,isnative,rlevs,lugb,pdt_num)
+ subroutine read_winds(u,v,localpet,octet_23,rlevs,lugb,pdt_num)
 
  use grib_mod
  use program_setup, only      : get_var_cond
@@ -6816,10 +6815,7 @@ else ! is native coordinate (hybrid).
  implicit none
 
  integer, intent(in)                                  :: localpet, lugb
-
- logical, intent(in)                                  :: isnative
-
- integer, intent(in)                                  :: pdt_num
+ integer, intent(in)                                  :: pdt_num, octet_23
 
  real(esmf_kind_r8), intent(inout), allocatable       :: u(:,:,:),v(:,:,:)
  real(esmf_kind_r8), intent(in), dimension(lev_input) :: rlevs
@@ -6879,7 +6875,7 @@ else ! is native coordinate (hybrid).
    jids    = -9999  ! array of values in identification section, set to wildcard
    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
    jgdtn   = -1     ! search for any grid definition number.
-   jpdtn   =  pdt_num     ! search for product def template number 0 - anl or fcst.
+   jpdtn   =  pdt_num ! Search for the product definition template number.
    unpack=.false.
 
    call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
@@ -6906,11 +6902,7 @@ else ! is native coordinate (hybrid).
 
    endif
 
-   if (isnative) then
-     jpdt(10) = 105 ! Sec4/oct 23 - type of level - hybrid
-   else
-     jpdt(10) = 100 ! Sec4/oct 23 - type of level - isobaric
-   endif
+   jpdt(10) = octet_23 ! Sec4/oct 23 - type of level.
 
    unpack=.true.
 
