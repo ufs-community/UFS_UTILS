@@ -49,7 +49,7 @@ fi
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests.test/chgres_cube
+export HOMEreg=/gpfs/dell2/emc/modeling/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
 
 SUM_FILE=summary.log
 
@@ -204,15 +204,6 @@ LOG_FILE=consistency.log16
 export OMP_NUM_THREADS=1
 bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J chgres16 -W 0:05 -x -n 6 \
         -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/25km.conus.gfs.pbgrib2.sh"
-
-#-----------------------------------------------------------------------------
-# Initialize C96 USING GEFS GRIB2 files.
-#-----------------------------------------------------------------------------
-
-LOG_FILE=consistency.log17
-export OMP_NUM_THREADS=1
-bsub -e $LOG_FILE -o $LOG_FILE -q $QUEUE -P $PROJECT_CODE -J chgres17 -W 0:05 -x -n 6 \
-        -R "span[ptile=6]" -R "affinity[core(${OMP_NUM_THREADS}):distribute=balance]" "$PWD/c96.gefs.grib2.sh"
 
 #-----------------------------------------------------------------------------
 # Create summary log.
