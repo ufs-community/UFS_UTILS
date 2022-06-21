@@ -13,6 +13,7 @@ export machine=${machine:-"WCOSS_C"}
 export CASE=${CASE:-C768}                    # resolution of tile: 48, 96, 192, 384, 768, 1152, 3072
 export CDATE=${CDATE:-${cdate:-2017031900}}  # format yyyymmddhh yyyymmddhh ...
 export CDUMP=${CDUMP:-gfs}                   # gfs or gdas
+export COMPONENT=${COMPONENT:-atmos}
 
 pwd=$(pwd)
 export NWPROD=${NWPROD:-$pwd}
@@ -38,9 +39,9 @@ export DELTSFC=${DELTSFC:-6}
 PDY=$(echo $CDATE | cut -c1-8)
 cyc=$(echo $CDATE | cut -c9-10)
 
-export FNTSFA=${FNTSFA:-$DMPDIR/$CDATE/$CDUMP/${CDUMP}.t${cyc}z.rtgssthr.grb}
-export FNSNOA=${FNSNOA:-$DMPDIR/$CDATE/$CDUMP/${CDUMP}.t${cyc}z.snogrb_t1534.3072.1536}
-export FNACNA=${FNACNA:-$DMPDIR/$CDATE/$CDUMP/${CDUMP}.t${cyc}z.seaice.5min.blend.grb}
+export FNTSFA=${FNTSFA:-$DMPDIR/${CDUMP}.${PDY}/${cyc}/${COMPONENT}/${CDUMP}.t${cyc}z.rtgssthr.grb}
+export FNSNOA=${FNSNOA:-$DMPDIR/${CDUMP}.${PDY}/${cyc}/${COMPONENT}/${CDUMP}.t${cyc}z.snogrb_t1534.3072.1536}
+export FNACNA=${FNACNA:-$DMPDIR/${CDUMP}.${PDY}/${cyc}/${COMPONENT}/${CDUMP}.t${cyc}z.seaice.5min.blend.grb}
 
 export CYCLVARS=${CYCLVARS:-"FSNOL=-2.,FSNOS=99999.,"}
 
