@@ -165,6 +165,10 @@
    error=nf90_get_var(ncid_floor,varid_floor,dummy_floor)
    call netcdf_err(error, 'reading floor field' )
 
+   if (trim(varname_floor(var)) == 'fice') then
+     where(dummy_floor > 0.95) dummy_floor = 1.00
+   endif
+
    print*,'floor field ',maxval(dummy_floor),minval(dummy_floor)
 
    if (trim(varname_frac(var)) == 'tg3_ice' .or. &

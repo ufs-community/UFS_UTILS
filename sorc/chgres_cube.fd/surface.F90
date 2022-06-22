@@ -357,6 +357,7 @@
  real(esmf_kind_r8), pointer        :: landmask_input_ptr(:,:)
  real(esmf_kind_r8), pointer        :: veg_type_input_ptr(:,:)
  real(esmf_kind_r8), allocatable    :: veg_type_target_one_tile(:,:)
+ real(esmf_kind_r8)                 :: ice_lim
 
  type(esmf_regridmethod_flag)       :: method
  type(esmf_routehandle)             :: regrid_bl_no_mask
@@ -738,10 +739,19 @@
                  latitude=latitude_one_tile)
    endif
    
+! When running with fractional grids, to reduce the number of points with small amounts of open water, 
+! set any point with ice between 95-100% to 100%.
+
+   if (fract_grid) then
+     ice_lim = 0.95_esmf_kind_r8
+   else
+     ice_lim = 1.0_esmf_kind_r8
+   endif
+
    if (localpet == 0) then
      do j = 1, j_target
      do i = 1, i_target
-       if (data_one_tile(i,j) > 1.0_esmf_kind_r8) then
+       if (data_one_tile(i,j) > ice_lim) then
          data_one_tile(i,j) = 1.0_esmf_kind_r8
        endif
        if (data_one_tile(i,j) < 0.15_esmf_kind_r8) data_one_tile(i,j) = 0.0_esmf_kind_r8
