@@ -680,7 +680,7 @@
  elseif (gfld%igdtnum == 30) then
    print*,"- INPUT DATA ON LAMBERT CONFORMAL GRID."
    input_grid_type = 'lambert'
- elseif (gfld%igdtnum == 32769) then
+ elseif (gfld%igdtnum == 32769 .or. gfld%igdtnum == 1) then
    print*,"- INPUT DATA ON ROTATED LAT/LON GRID."
    input_grid_type = 'rotated_latlon'
  else
@@ -1502,6 +1502,40 @@
 
      res = ((float(kgds(9)) / 1000.0) + (float(kgds(10)) / 1000.0)) &
              * 0.5 * 111.0
+
+   elseif (igdtnum.eq.1) then        ! rot lat/lon b grid using standard wmo
+                                    ! template.
+
+     iscale=igdstmpl(10)*igdstmpl(11)
+     if (iscale == 0) iscale = 1e6
+     kgds(1)=205                    ! oct 6,     rotated lat/lon for Non-E
+                                    !            Stagger grid
+     kgds(2)=igdstmpl(8)            ! octs 7-8,  Ni
+     ni = kgds(2)
+     kgds(3)=igdstmpl(9)            ! octs 9-10, Nj
+     nj = kgds(3)
+
+     kgds(4)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of
+                                                            ! 1st grid point
+     kgds(5)=nint(float(igdstmpl(13))/float(iscale)*1000.)  ! octs 14-16, Lon of
+                                                            ! 1st grid point
+
+     kgds(6)=0                      ! oct 17, resolution and component flags
+     if (igdstmpl(1)==2 ) kgds(6)=64
+     if ( btest(igdstmpl(14),4).OR.btest(igdstmpl(14),5) )  kgds(6)=kgds(6)+128
+     if ( btest(igdstmpl(14),3) ) kgds(6)=kgds(6)+8
+
+     kgds(7)=nint(float(igdstmpl(20))/float(iscale)*1000.)       ! octs 18-20,
+                                                                 ! Lat of cent of rotation
+     kgds(8)=nint(float(igdstmpl(21))/float(iscale)*1000.)       ! octs 21-23,
+                                                                 ! Lon of cent of rotation
+     kgds(7) = kgds(7) + 90000.0
+
+
+     print*,'got here ',iscale,ni,nj,kgds(4),kgds(5),kgds(6)
+     print*,'got here2 ',kgds(7),kgds(8)
+
+     stop
 
    elseif(igdtnum==30) then
 
