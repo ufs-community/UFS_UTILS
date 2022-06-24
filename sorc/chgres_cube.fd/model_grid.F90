@@ -1456,6 +1456,10 @@
 
  real,    intent(  out)  :: res
 
+ real                    :: clatr, slatr, clonr, dpr, slat
+ real                    :: slat0, clat0, clat, clon, rlat
+ real                    :: rlon0, rlon, hs
+
  kgds=0
 
  if (igdtnum.eq.32769) then        ! rot lat/lon b grid
@@ -1535,6 +1539,59 @@
      print*,'got here ',iscale,ni,nj,kgds(4),kgds(5),kgds(6)
      print*,'got here2 ',kgds(7),kgds(8)
 
+     DPR = 180.0/3.1415
+     CLATR=COS((float(kgds(4))/1000.0)/DPR)
+     SLATR=SIN((float(kgds(4))/1000.0)/DPR)
+     CLONR=COS((float(kgds(5))/1000.0)/DPR)
+     SLAT0=SIN((float(kgds(7))/1000.0)/DPR)
+     CLAT0=COS((float(kgds(7))/1000.0)/DPR)
+
+     SLAT=CLAT0*SLATR+SLAT0*CLATR*CLONR
+     CLAT=SQRT(1-SLAT**2)
+     CLON=(CLAT0*CLATR*CLONR-SLAT0*SLATR)/CLAT
+     CLON=MIN(MAX(CLON,-1.0),1.0)
+
+     RLAT=DPR*ASIN(SLAT)
+ 
+     RLON0=float(kgds(8))/1000.0
+
+     if ((kgds(5)-kgds(8)) > 0) then
+       HS = -1.0
+     else
+       HS = 1.0
+     endif
+
+     RLON = MOD(RLON0+HS*DPR*ACOS(CLON)+3600,360.0)
+
+     print*,'got here3 clatr ',clatr, slatr, clonr, slat0, clat0, rlon0
+     print*,'got here4 rlat ', rlat, rlon
+
+     kgds(12)=nint(float(igdstmpl(15))/float(iscale)*1000.) ! octs 29-31, Lat of
+                                                            ! last grid point
+     kgds(13)=nint(float(igdstmpl(16))/float(iscale)*1000.) ! octs 32-34, Lon of
+                                                            ! last grid point
+
+     CLATR=COS((float(kgds(12))/1000.0)/DPR)
+     SLATR=SIN((float(kgds(12))/1000.0)/DPR)
+     CLONR=COS((float(kgds(13))/1000.0)/DPR)
+
+     SLAT=CLAT0*SLATR+SLAT0*CLATR*CLONR
+     RLAT=DPR*ASIN(SLAT)
+
+     CLAT=SQRT(1-SLAT**2)
+     CLON=(CLAT0*CLATR*CLONR-SLAT0*SLATR)/CLAT
+     CLON=MIN(MAX(CLON,-1.0),1.0)
+
+     if ((kgds(13)-kgds(8)) > 0) then
+       HS = -1.0
+     else
+       HS = 1.0
+     endif
+
+     RLON = MOD(RLON0+HS*DPR*ACOS(CLON)+3600,360.0)
+
+     print*,'got here last point ',kgds(12), kgds(13)
+     print*,'got here last point rotated ', rlat, rlon
      stop
 
    elseif(igdtnum==30) then
