@@ -688,6 +688,7 @@
  endif
 
  kgds = 0
+
  call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds, i_input, j_input, res)
 
  ip1_input = i_input + 1
@@ -720,6 +721,16 @@
 
  deallocate(xpts, ypts)
 
+ if (localpet == 0) then
+   print*,'cell center 11 ',rlat(1,1), rlon(1,1)
+   print*,'cell center im/1 ',rlat(i_input,1), rlon(i_input,1)
+   print*,'cell center 1/jm ',rlat(1,j_input), rlon(1,j_input)
+   print*,'cell center im/jm ',rlat(i_input,j_input), rlon(i_input,j_input)
+   print*,'cell center 2400/1800 ',rlat(2400,1800),rlon(2400,1800)
+ endif
+
+
+
  do j = 1, jp1_input
  do i = 1, ip1_input
    xpts_corner(i,j) = float(i) - 0.5
@@ -732,6 +743,14 @@
 
  if (nret /= (ip1_input*jp1_input)) then
    call error_handler("GDSWZD RETURNED WRONG NUMBER OF POINTS.", 2)
+ endif
+
+ if (localpet == 0) then
+   print*,'cell corner 11 ',rlat_corner(1,1), rlon_corner(1,1)
+   print*,'cell corner im/1 ',rlat_corner(i_input,1), rlon_corner(i_input,1)
+   print*,'cell corner 1/jm ',rlat_corner(1,j_input), rlon_corner(1,j_input)
+   print*,'cell corner im/jm ',rlat_corner(i_input,j_input), rlon_corner(i_input,j_input)
+   print*,'cell corner 2400 1800 ',rlat_corner(2400,1800),rlon_corner(2400,1800)
  endif
 
  deallocate(xpts_corner, ypts_corner)
@@ -1452,7 +1471,7 @@
 
  integer, intent(in   )  :: igdtnum, igdtlen, igdstmpl(igdtlen)
  integer, intent(  out)  :: kgds(200), ni, nj
- integer                 :: iscale
+ integer                 :: iscale, i
 
  real,    intent(  out)  :: res
 
@@ -1535,11 +1554,7 @@
                                                                  ! Lon of cent of rotation
      kgds(7) = kgds(7) + 90000.0
 
-
-     print*,'got here ',iscale,ni,nj,kgds(4),kgds(5),kgds(6)
-     print*,'got here2 ',kgds(7),kgds(8)
-
-     DPR = 180.0/3.1415
+     DPR = 180.0/3.1415926
      CLATR=COS((float(kgds(4))/1000.0)/DPR)
      SLATR=SIN((float(kgds(4))/1000.0)/DPR)
      CLONR=COS((float(kgds(5))/1000.0)/DPR)
@@ -1563,8 +1578,8 @@
 
      RLON = MOD(RLON0+HS*DPR*ACOS(CLON)+3600,360.0)
 
-     print*,'got here3 clatr ',clatr, slatr, clonr, slat0, clat0, rlon0
-     print*,'got here4 rlat ', rlat, rlon
+     kgds(4)=nint(rlat*1000.)  ! octs 11-13, Lat of
+     kgds(5)=nint(rlon*1000.)  ! octs 14-16, Lon of
 
      kgds(12)=nint(float(igdstmpl(15))/float(iscale)*1000.) ! octs 29-31, Lat of
                                                             ! last grid point
@@ -1592,7 +1607,28 @@
 
      print*,'got here last point ',kgds(12), kgds(13)
      print*,'got here last point rotated ', rlat, rlon
-     stop
+
+     kgds(12)=nint(rlat*1000.)  ! octs 11-13, Lat of
+     kgds(13)=nint(rlon*1000.)  ! octs 14-16, Lon of
+
+     kgds(9)=igdstmpl(17)
+     kgds(10)=igdstmpl(18)
+
+     kgds(11) = 0                   ! oct 28, scan mode
+     if (btest(igdstmpl(19),7)) kgds(11) = 128
+     if (btest(igdstmpl(19),6)) kgds(11) = kgds(11) +  64
+     if (btest(igdstmpl(19),5)) kgds(11) = kgds(11) +  32
+
+     kgds(19)=0    ! oct 4, # vert coordinate parameters
+     kgds(20)=255  ! oct 5, used for thinned grids, set to 255
+
+     res = ((float(kgds(9)) / 1.e6) + (float(kgds(10)) / 1.e6)) &
+             * 0.5 * 111.0
+
+
+     do i = 1, 25
+       print*,'final kgds ',i,kgds(i)
+     enddo
 
    elseif(igdtnum==30) then
 
