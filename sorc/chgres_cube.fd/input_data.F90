@@ -2601,6 +2601,7 @@
      endif
     
      j = k
+
    enddo
 
  endif
@@ -2609,6 +2610,9 @@
  call MPI_BCAST(isnative,1,MPI_LOGICAL,0,MPI_COMM_WORLD,iret)
  call MPI_BCAST(lev_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,iret)
  call MPI_BCAST(rlevs_hold, max_levs, MPI_INTEGER,0,MPI_COMM_WORLD,iret)
+
+ if(localpet == 0) print*,'number of grib2 records read ',k
+ stop
 
  allocate(slevs(lev_input))
  allocate(rlevs(lev_input))
