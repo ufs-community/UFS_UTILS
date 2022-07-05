@@ -6,7 +6,7 @@
 #PBS -N vcoord
 #PBS -q debug
 #PBS -A GFS-DEV
-#PBS -l select=1:ncpus=1:mem=20MB
+#PBS -l select=1:ncpus=1:mem=100MB
 
 #-------------------------------------------------------------------------------
 #
