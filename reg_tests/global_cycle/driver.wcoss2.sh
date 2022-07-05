@@ -64,7 +64,7 @@ rm -f ${LOG_FILE}*
 export DATA="${DATA_DIR}/test1"
 export COMOUT=$DATA
 TEST1=$(qsub -V -o ${LOG_FILE}01 -e ${LOG_FILE}01 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c768.fv3gfs -l select=1:ncpus=12:mem=8GB $PWD/C768.fv3gfs.sh)
+        -N c768.fv3gfs -l select=1:ncpus=12:mem=12GB $PWD/C768.fv3gfs.sh)
 
 export DATA="${DATA_DIR}/test2"
 export COMOUT=$DATA
