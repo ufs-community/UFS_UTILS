@@ -127,7 +127,7 @@ for dir in ice_blend; do
     elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
         cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
     elif [[ $target == "wcoss2" ]] ; then
-        qsub ./driver.$target.sh
+        qsub -v WORK_DIR ./driver.$target.sh
     fi
     
     # Wait for job to complete
