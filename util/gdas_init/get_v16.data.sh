@@ -32,7 +32,11 @@ if [ "$bundle" = "gdas" ] || [ "$bundle" = "gfs" ]; then
     file=com_gfs_prod_gdas.${yy}${mm}${dd}_${hh}.gdas_nc.tar
   else
     directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-    file=com_gfs_prod_gfs.${yy}${mm}${dd}_${hh}.gfs_nca.tar
+    if [ $yy$mm$dd$hh -ge 2022062700 ]; then
+      file=com_gfs_v16.2_gfs.${yy}${mm}${dd}_${hh}.gfs_nca.tar
+    else
+      file=com_gfs_prod_gfs.${yy}${mm}${dd}_${hh}.gfs_nca.tar
+    fi
   fi
 
   rm -f ./list.hires*
