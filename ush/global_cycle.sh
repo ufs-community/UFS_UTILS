@@ -72,7 +72,7 @@
 #     FNALBC2       Input 'facsf' and 'facwf' albedo climatology GRIB file.
 #                   Defaults to ${FIXam}/global_albedo4.1x1.grb
 #     FNAISC        Input sea ice climatology GRIB file.
-#                   Defaults to ${FIXam}/CFSR.SEAICE.1982.2012.monthly.clim.grb
+#                   Defaults to ${FIXam}/IMS-NIC.blended.ice.monthly.clim.grb
 #     FNTG3C        Input deep soil temperature climatology GRIB file.
 #                   Defaults to ${FIXam}/global_tg3clim.2.6x1.5.grb
 #     FNVEGC        Input vegetation fraction climatology GRIB file.
@@ -280,7 +280,7 @@ FNSALC=${FNSALC:-${FIXam}/global_salclm.t1534.3072.1536.nc}
 FNSNOC=${FNSNOC:-${FIXam}/global_snoclim.1.875.grb}
 FNZORC=${FNZORC:-igbp}
 FNALBC2=${FNALBC2:-${FIXam}/global_albedo4.1x1.grb}
-FNAISC=${FNAISC:-${FIXam}/CFSR.SEAICE.1982.2012.monthly.clim.grb}
+FNAISC=${FNAISC:-${FIXam}/IMS-NIC.blended.ice.monthly.clim.grb}
 FNTG3C=${FNTG3C:-${FIXam}/global_tg3clim.2.6x1.5.grb}
 FNVEGC=${FNVEGC:-${FIXam}/global_vegfrac.0.144.decpercent.grb}
 FNALBC=${FNALBC:-${FIXam}/global_snowfree_albedo.bosu.t$JCAP_CASE.$LONB_CASE.$LATB_CASE.rg.grb}
