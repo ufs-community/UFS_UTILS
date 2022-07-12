@@ -2,8 +2,7 @@
 
 #-------------------------------------------------------------------------------
 #
-# Generate a hybrid coordinate interface profile.  On WCOSS-Cray, use
-# 'run.cray.sh'.
+# Generate a hybrid coordinate interface profile.
 #
 # Build the repository using the ./build_all.sh script before running.
 #
