@@ -50,7 +50,6 @@ export home_dir=$PWD/../..
 export APRUN=time
 export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
-export machine=JET
 export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/grid_gen/baseline_data
 
 ulimit -a
