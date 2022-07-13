@@ -7,18 +7,16 @@ To run the consistency tests:
 
 1) Build chgres_cube program.  Go to ./sorc and
    invoke 'build_all.sh' with no arguments.
-2) Invoke driver script for your machine.  See script
-   prolog for details.  Supported machines are:
-   - Hera (driver.hera.sh)
-   - WCOSS-Cray (driver.cray.sh)
-   - WCOSS-Dell (driver.dell.sh)
-   - Jet (driver.jet.sh)
-   - Orion (driver.orion.sh)
+2) Set the fixed directories. Go to ./fix and
+   invoke the script.
+3) Invoke driver script for your machine.  See script
+   prolog for details.
 
-A series of daisy-chained tests will run.  A test fails 
-if the output files differ from the baseline set of files
-as determined by the 'nccmp' utility.
+A series of tests will run.  A test fails if the output
+files differ from the baseline set of files as determined
+by the 'nccmp' utility.
 
-Log output from the tests will be in "regression.log".
+Log output from each test will be placed in its own
+logfile - "consistency.log??".
 
 A summary of results will be in "summary.log".

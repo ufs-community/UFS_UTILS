@@ -54,7 +54,7 @@ check_results() {
         echo "....MISSING file" | tee -a $PATHRT/$REGRESSIONTEST_LOG
         test_status=FAIL
       else
-        nccmp -dmfqS $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
+        $NCCMP -dmfqS $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
         if [[ $d -ne 0 ]]; then
           echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
           test_status=FAIL
@@ -115,12 +115,22 @@ COMPILE_LOG=compile.log
 REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.log
 rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
 
-if [[ $target = hera ]]; then
+if [[ $target = wcoss2 ]]; then
+  STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
+  export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/cpld_gridgen/fix_mom6
+  BASELINE_ROOT=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/cpld_gridgen/baseline_data
+  ACCOUNT=${ACCOUNT:-GFS-DEV}
+  export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
+  QUEUE=${QUEUE:-dev}
+  SBATCH_COMMAND="./cpld_gridgen.sh"
+  NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
+elif [[ $target = hera ]]; then
   STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
   export MOM6_FIXDIR=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
+  NCCMP=nccmp
   PARTITION=hera
   SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = orion ]]; then
@@ -129,6 +139,7 @@ elif [[ $target = orion ]]; then
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-nems}
   QUEUE=${QUEUE:-batch}
+  NCCMP=nccmp
   PARTITION=orion
   ulimit -s unlimited
   SBATCH_COMMAND="./cpld_gridgen.sh"
@@ -138,6 +149,7 @@ elif [[ $target = jet ]]; then
   BASELINE_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-h-nems}
   QUEUE=${QUEUE:-batch}
+  NCCMP=nccmp
   PARTITION=xjet
   ulimit -s unlimited
   SBATCH_COMMAND="./cpld_gridgen.sh"
@@ -232,12 +244,31 @@ while read -r line || [ "$line" ]; do
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cd $RUNDIR
 
-  sbatch --wait --ntasks-per-node=1 --nodes=1 --mem=4G -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-         --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-         --wrap "$SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
+  if [[ $target = wcoss2 ]]; then
 
-  if [[ d -ne 0 ]]; then
-    error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
+#   rm -f $RUNDIR/bad.${TEST_NAME}
+
+    TEST=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
+          -Wblock=true -l walltime=00:05:00 -N $TEST_NAME -l select=1:ncpus=1:mem=8GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
+
+#   qsub -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
+#        -Wblock=true -l walltime=00:01:00 -N chgres_summary -l select=1:ncpus=1:mem=100MB -W depend=afternotok:$TEST << EOF
+#!/bin/bash
+#   touch $RUNDIR/bad.${TEST_NAME}
+#EOF
+#   if [[ -f $RUNDIR/bad.${TEST_NAME} ]]; then
+#     error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
+#   fi
+
+  else
+    sbatch --wait --ntasks-per-node=1 --nodes=1 --mem=4G -t 0:05:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+           --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
+           --wrap "$SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
+
+    if [[ d -ne 0 ]]; then
+      error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
+    fi
+
   fi
 
   check_results

@@ -18,7 +18,7 @@ function edit_namelist {
       -e "s/DO_POSTWGTS/$DO_POSTWGTS/g"
 }
 
-export RESNAME=$1
+export RESNAME=${RESNAME:-$1}
 export DEBUG=.false.
 export MASKEDIT=.false.
 export DO_POSTWGTS=.false.
@@ -94,6 +94,8 @@ fi
 if [ ! -d ${OUTDIR_PATH} ]; then
   mkdir -p ${OUTDIR_PATH}
 fi
+
+cd ${OUTDIR_PATH}
 
 edit_namelist < grid.nml.IN > grid.nml
 $APRUN ./cpld_gridgen
