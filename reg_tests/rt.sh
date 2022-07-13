@@ -49,6 +49,13 @@ if [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
     if [[ "${this_letter}" == "${prod_letter}" ]]; then
         exit 0
     fi
+elif [[ $target == "wcoss2" ]]; then
+    this_machine=`cat /etc/cluster_name`
+    prod_machine=`grep primary /lfs/h1/ops/prod/config/prodmachinefile`
+    prod_machine=`echo ${prod_machine/primary:}`
+    if [[ "${this_machine}" == "${prod_machine}" ]]; then
+        exit 0
+    fi
 fi
 
 # Set machine_id variable for running link_fixdirs
@@ -67,6 +74,7 @@ cd fix
 
 cd ../reg_tests
 
+#if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] || [[ $target == "wcoss2" ]] ; then
 if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] ; then
 
   cd cpld_gridgen
@@ -119,6 +127,8 @@ for dir in ice_blend; do
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
         cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
+    elif [[ $target == "wcoss2" ]] ; then
+        qsub -v WORK_DIR ./driver.$target.sh
     fi
     
     # Wait for job to complete

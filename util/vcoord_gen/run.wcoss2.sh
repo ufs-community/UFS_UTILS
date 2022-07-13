@@ -1,17 +1,33 @@
 #!/bin/bash
 
+#PBS -l walltime=00:02:00
+#PBS -o log
+#PBS -e log
+#PBS -N vcoord
+#PBS -q debug
+#PBS -A GFS-DEV
+#PBS -l select=1:ncpus=1:mem=100MB
+
 #-------------------------------------------------------------------------------
 #
-# Generate a hybrid coordinate interface profile.  On WCOSS-Cray, use
-# 'run.cray.sh'. On WCOSS2, use 'run.wcoss2.sh'.
+# Generate a hybrid coordinate interface profile on WCOSS2.
 #
 # Build the repository using the ./build_all.sh script before running.
 #
 # Output 'ak' and 'bk' values are placed in $outfile.
 #
+# To run this script, do: 'qsub $script'
+#
 #-------------------------------------------------------------------------------
 
+cd $PBS_O_WORKDIR
+
 set -x
+
+source ../../sorc/machine-setup.sh > /dev/null 2>&1
+module use ../../modulefiles
+module load build.$target.intel
+module list
 
 outfile="./global_hyblev.txt"
 

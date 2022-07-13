@@ -9,17 +9,17 @@ machine=${2}
 if [ $# -lt 2 ]; then
     set +x
     echo '***ERROR*** must specify two arguements: (1) RUN_ENVIR, (2) machine'
-    echo ' Syntax: link_fv3gfs.sh ( nco | emc ) ( cray | dell | hera  | jet | orion | s4 )'
+    echo ' Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 | cray | dell | hera  | jet | orion | s4 )'
     exit 1
 fi
 
 if [ $RUN_ENVIR != emc -a $RUN_ENVIR != nco ]; then
     set +x
     echo '***ERROR*** unsupported run environment'
-    echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( cray | dell | hera | jet | orion | s4 )'
+    echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 | cray | dell | hera | jet | orion | s4 )'
     exit 1
 fi
-if [ $machine != cray -a $machine != hera -a $machine != dell -a $machine != jet -a $machine != orion -a $machine != s4 ]; then
+if [ $machine != wcoss2 -a $machine != cray -a $machine != hera -a $machine != dell -a $machine != jet -a $machine != orion -a $machine != s4 ]; then
     set +x
     echo '***ERROR*** unsupported machine'
     echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( cray | dell | hera | jet | orion | s4 )'
@@ -45,6 +45,8 @@ elif [ $machine = "jet" ]; then
     FIX_DIR="/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix"
 elif [ $machine = "orion" ]; then
     FIX_DIR="/work/noaa/global/glopara/fix"
+elif [ $machine = "wcoss2" ]; then
+    FIX_DIR="/lfs/h2/emc/global/noscrub/kate.friedman/glopara/FIX/fix"
 elif [ $machine = "s4" ]; then
     FIX_DIR="/data/prod/glopara/fix"
 fi
