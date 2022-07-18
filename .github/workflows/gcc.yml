@@ -1,4 +1,4 @@
-name: Intel Linux Build
+name: GCC Linux Build
 on: [push, pull_request]
 
 # Use custom shell with -l so .bash_profile is sourced which loads intel/oneapi/setvars.sh
@@ -8,15 +8,13 @@ defaults:
     shell: bash -leo pipefail {0}
 
 env:
-  cache_key: intel5  # The number (#) following the cache_key "intel" is to flush Action cache.
-  CC: icc
-  FC: ifort
-  CXX: icpc
-  I_MPI_CC: icc
-  I_MPI_F90: ifort
+  cache_key: gcc5  # The number (#) following the cache_key "intel" is to flush Action cache.
+  CC: gcc-10
+  FC: gfortran-10
+  CXX: g++-10
 
 jobs:
-  intel-setup:
+  gcc-setup:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,29 +25,12 @@ jobs:
         path: |
           spack
           ~/.spack
-          /opt/intel
         key: spack-${{ runner.os }}-${{ env.cache_key }}
-
-    # See https://software.intel.com/content/www/us/en/develop/articles/oneapi-repo-instructions.html
-    - name: install-intel
-      if: steps.cache-env.outputs.cache-hit != 'true'
-      run: |
-        cd /tmp
-        wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
-        sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
-        rm GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
-        echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
-        sudo apt-get update
-        sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
 
     - name: checkout-ufs-utils
       uses: actions/checkout@v2
       with: 
         submodules: recursive
-
-    - name: setup-intel
-      run: |
-        echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
 
     # Install dependencies using Spack
     - name: install-dependencies-with-spack
@@ -60,26 +41,15 @@ jobs:
         spack env create ufs-utils-env ci/spack.yaml
         spack env activate ufs-utils-env
 
-        impi_ver=$(find /opt/intel/oneapi/mpi -maxdepth 1 -mindepth 1 -type d | xargs basename)
-        echo "" >> ${SPACK_ENV}/spack.yaml
-        echo "  packages:" >> ${SPACK_ENV}/spack.yaml
-        echo "    intel-oneapi-mpi:" >> ${SPACK_ENV}/spack.yaml
-        echo "      buildable: False" >> ${SPACK_ENV}/spack.yaml
-        echo "      externals:" >> ${SPACK_ENV}/spack.yaml
-        echo "      - spec: intel-oneapi-mpi@${impi_ver}" >> ${SPACK_ENV}/spack.yaml
-        echo "        prefix: /opt/intel/oneapi" >> ${SPACK_ENV}/spack.yaml
-
-        spack config add "packages:mpi:buildable:False"
-        spack config add "packages:all:providers:mpi:intel-oneapi-mpi"
-  
         spack compiler find
         spack external find
         spack external find python perl wget m4
+        spack add mpich@3.4.2
         spack concretize
         spack install
 
   build-and-test:
-    needs: intel-setup
+    needs: gcc-setup
     runs-on: ubuntu-latest
 
     steps:
@@ -102,6 +72,8 @@ jobs:
       run: |
         source spack/share/spack/setup-env.sh
         spack env activate ufs-utils-env
+        export CC=mpicc
+        export FC=mpif90
         mkdir build && cd build
         cmake .. -DCMAKE_BUILD_TYPE=Debug
         make -j2
