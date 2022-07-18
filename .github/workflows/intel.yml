@@ -69,6 +69,8 @@ jobs:
         echo "      - spec: intel-oneapi-mpi@${impi_ver}" >> ${SPACK_ENV}/spack.yaml
         echo "        prefix: /opt/intel/oneapi" >> ${SPACK_ENV}/spack.yaml
 
+        cat ${SPACK_ENV}/spack.yaml
+
         spack config add "packages:mpi:buildable:False"
         spack config add "packages:all:providers:mpi:intel-oneapi-mpi"
   
@@ -78,7 +80,7 @@ jobs:
         spack concretize
         spack install
 
-  build-and-test:
+  release-build-and-test:
     needs: intel-setup
     runs-on: ubuntu-latest
 
@@ -103,7 +105,7 @@ jobs:
         source spack/share/spack/setup-env.sh
         spack env activate ufs-utils-env
         mkdir build && cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Debug
+        cmake .. -DCMAKE_BUILD_TYPE=Release
         make -j2
 
     - name: test
