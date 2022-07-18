@@ -75,8 +75,8 @@ jobs:
         spack env activate ufs-utils-env
         export CC=mpicc
         export FC=mpif90
-        mkdir build && cd build
         cd ufs-utils
+        mkdir build && cd build
         cmake .. -DCMAKE_BUILD_TYPE=Debug
         make -j2
 
