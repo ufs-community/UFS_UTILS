@@ -16,7 +16,7 @@ env:
   I_MPI_F90: ifort
 
 jobs:
-  setup:
+  intel-setup:
     runs-on: ubuntu-latest
 
     steps:
@@ -71,13 +71,32 @@ jobs:
 
         spack config add "packages:mpi:buildable:False"
         spack config add "packages:all:providers:mpi:intel-oneapi-mpi"
-        spack config add "packages:all:compiler:intel"
   
         spack compiler find
         spack external find
         spack external find python perl wget m4
         spack concretize
         spack install
+
+  build-and-test:
+    needs: intel-setup
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: cache-env
+      id: cache-env
+      uses: actions/cache@v2
+      with:
+        path: |
+          spack
+          ~/.spack
+          /opt/intel
+        key: spack-${{ runner.os }}-${{ env.cache_key }}
+
+    - name: checkout-ufs-utils
+      uses: actions/checkout@v2
+      with: 
+        submodules: recursive
 
     - name: build
       run: |
@@ -86,7 +105,7 @@ jobs:
         mkdir build && cd build
         cmake .. -DCMAKE_BUILD_TYPE=Debug
         make -j2
-    
+
     - name: test
       run: |
         source spack/share/spack/setup-env.sh

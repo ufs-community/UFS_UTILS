@@ -1,5 +1,8 @@
 # Spack environment file to build GSI dependencies
 spack:
+  view: true
+  concretizer:
+    unify: true
   packages:
     all:
       compiler: [intel, gcc]
@@ -12,11 +15,8 @@ spack:
   - nemsio@2.5.2
   - sp@2.3.3
   - w3nco@2.4.1
+  - w3emc@2.9.2
   - sfcio@1.4.1
   - sigio@2.3.2
   - nccmp@1.9.0.1
   - esmf@8.2.0
-
-  view: true
-  concretizer:
-    unify: true
