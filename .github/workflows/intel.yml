@@ -63,10 +63,10 @@ jobs:
         impi_ver=$(find /opt/intel/oneapi/mpi -maxdepth 1 -mindepth 1 -type d | xargs basename)
         sed -i "s|packages:|packages:\n    intel-oneapi-mpi: {buildable: False, externals: [{spec: intel-oneapi-mpi@${impi_ver}, prefix: /opt/intel/oneapi}]}|" ${SPACK_ENV}/spack.yaml
 
-        cat ${SPACK_ENV}/spack.yaml
-
         spack config add "packages:mpi:buildable:False"
-        spack config add "packages:all:providers:mpi:intel-oneapi-mpi"
+        spack config add "packages:all:providers:mpi:[intel-oneapi-mpi]"
+
+        cat ${SPACK_ENV}/spack.yaml
   
         spack compiler find
         spack external find
