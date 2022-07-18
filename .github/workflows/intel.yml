@@ -66,7 +66,7 @@ jobs:
         spack config add "packages:mpi:buildable:False"
         spack config add "packages:all:providers:mpi:[intel-oneapi-mpi]"
         spack compiler add /opt/intel/oneapi/compiler/latest/linux/bin/intel64
-        sed -i 's#environment: {}#environment: {prepend_path: {LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin}}#g' envs/${{ inputs.name }}/spack.yaml
+        sed -i 's#environment: {}#environment: {prepend_path: {LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin}}#g' ${SPACK_ENV}/spack.yaml
         spack external find
         spack external find python perl wget m4
         spack concretize
