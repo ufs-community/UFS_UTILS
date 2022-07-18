@@ -61,13 +61,7 @@ jobs:
         spack env activate ufs-utils-env
 
         impi_ver=$(find /opt/intel/oneapi/mpi -maxdepth 1 -mindepth 1 -type d | xargs basename)
-        echo "" >> ${SPACK_ENV}/spack.yaml
-        echo "  packages:" >> ${SPACK_ENV}/spack.yaml
-        echo "    intel-oneapi-mpi:" >> ${SPACK_ENV}/spack.yaml
-        echo "      buildable: False" >> ${SPACK_ENV}/spack.yaml
-        echo "      externals:" >> ${SPACK_ENV}/spack.yaml
-        echo "      - spec: intel-oneapi-mpi@${impi_ver}" >> ${SPACK_ENV}/spack.yaml
-        echo "        prefix: /opt/intel/oneapi" >> ${SPACK_ENV}/spack.yaml
+        sed -i "s|packages:|packages:\n    intel-oneapi-mpi: {buildable: False, externals: [{spec: intel-oneapi-mpi@${impi_ver}, prefix: /opt/intel/oneapi}]}|" ${SPACK_ENV}/spack.yaml
 
         cat ${SPACK_ENV}/spack.yaml
 

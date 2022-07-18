@@ -60,7 +60,6 @@ jobs:
         path: |
           spack
           ~/.spack
-          /opt/intel
         key: spack-${{ runner.os }}-${{ env.cache_key }}
 
     - name: checkout-ufs-utils
