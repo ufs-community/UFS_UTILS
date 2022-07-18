@@ -83,7 +83,7 @@ jobs:
       run: |
         source spack/share/spack/setup-env.sh
         spack env activate ufs-utils-env
-      mkdir build && cd build
+        mkdir build && cd build
         cmake .. -DCMAKE_BUILD_TYPE=Debug
         make -j2
     
