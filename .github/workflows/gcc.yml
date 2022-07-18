@@ -18,6 +18,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: checkout-ufs-utils
+      uses: actions/checkout@v2
+      with: 
+        submodules: recursive
+        path: ufs-utils
+
     - name: cache-env
       id: cache-env
       uses: actions/cache@v2
@@ -25,13 +31,7 @@ jobs:
         path: |
           spack
           ~/.spack
-        key: spack-${{ runner.os }}-${{ env.cache_key }}
-
-    - name: checkout-ufs-utils
-      uses: actions/checkout@v2
-      with: 
-        submodules: recursive
-        path: ufs-utils
+        key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs-utils/ci/spack.yaml') }}
 
     # Install dependencies using Spack
     - name: install-dependencies-with-spack
@@ -54,6 +54,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: checkout-ufs-utils
+      uses: actions/checkout@v2
+      with: 
+        submodules: recursive
+        path: ufs-utils
+  
     - name: cache-env
       id: cache-env
       uses: actions/cache@v2
@@ -61,13 +67,7 @@ jobs:
         path: |
           spack
           ~/.spack
-        key: spack-${{ runner.os }}-${{ env.cache_key }}
-
-    - name: checkout-ufs-utils
-      uses: actions/checkout@v2
-      with: 
-        submodules: recursive
-        path: ufs-utils
+        key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs-utils/ci/spack.yaml') }}
 
     - name: build
       run: |

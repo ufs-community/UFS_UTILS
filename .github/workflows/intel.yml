@@ -20,6 +20,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: checkout-ufs-utils
+      uses: actions/checkout@v2
+      with: 
+        submodules: recursive
+
     - name: cache-env
       id: cache-env
       uses: actions/cache@v2
@@ -28,7 +33,7 @@ jobs:
           spack
           ~/.spack
           /opt/intel
-        key: spack-${{ runner.os }}-${{ env.cache_key }}
+        key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs-utils/ci/spack.yaml') }}
 
     # See https://software.intel.com/content/www/us/en/develop/articles/oneapi-repo-instructions.html
     - name: install-intel
@@ -41,11 +46,6 @@ jobs:
         echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
         sudo apt-get update
         sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
-
-    - name: checkout-ufs-utils
-      uses: actions/checkout@v2
-      with: 
-        submodules: recursive
 
     - name: setup-intel
       run: |
@@ -87,7 +87,7 @@ jobs:
           spack
           ~/.spack
           /opt/intel
-        key: spack-${{ runner.os }}-${{ env.cache_key }}
+        key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs-utils/ci/spack.yaml') }}
 
     - name: checkout-ufs-utils
       uses: actions/checkout@v2
