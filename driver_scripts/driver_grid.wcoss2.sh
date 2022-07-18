@@ -4,7 +4,7 @@
 #PBS -e log
 #PBS -q debug
 #PBS -A GFS-DEV
-#PBS -l walltime=00:05:00
+#PBS -l walltime=00:15:00
 #PBS -N make_grid
 #PBS -l select=1:ncpus=24:mem=100GB
 
@@ -145,7 +145,6 @@ export APRUN_SFC="mpiexec -n 24 -ppn 24 -cpu-bind core"
 export OMP_NUM_THREADS=24 # orog code worked best with 24 threads.
 export OMP_PLACES=cores
 export OMP_STACKSIZE=2048m
-export machine=WCOSS2_CRAY
 
 ulimit -a
 ulimit -s unlimited
