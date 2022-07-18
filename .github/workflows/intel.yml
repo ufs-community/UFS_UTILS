@@ -58,7 +58,7 @@ jobs:
       run: |
         git clone -c feature.manyFiles=true https://github.com/NOAA-EMC/spack.git
         source spack/share/spack/setup-env.sh
-        spack env create ufs-utils-env ci/spack.yaml
+        spack env create ufs-utils-env ufs-utils/ci/spack.yaml
         spack env activate ufs-utils-env
 
         impi_ver=$(find /opt/intel/oneapi/mpi -maxdepth 1 -mindepth 1 -type d | xargs basename)
