@@ -83,6 +83,6 @@ jobs:
     - name: test
       run: |
         source spack/share/spack/setup-env.sh
-        cd ufs-utils
         spack env activate ufs-utils-env
+        cd ufs-utils/build
         ctest --rerun-failed --output-on-failure

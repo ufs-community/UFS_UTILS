@@ -24,6 +24,7 @@ jobs:
       uses: actions/checkout@v2
       with: 
         submodules: recursive
+        path: ufs-utils
 
     - name: cache-env
       id: cache-env
@@ -77,6 +78,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: checkout-ufs-utils
+      uses: actions/checkout@v2
+      with: 
+        submodules: recursive
+        path: ufs-utils
+
     - name: cache-env
       id: cache-env
       uses: actions/cache@v2
@@ -87,15 +94,11 @@ jobs:
           /opt/intel
         key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs-utils/ci/spack.yaml') }}
 
-    - name: checkout-ufs-utils
-      uses: actions/checkout@v2
-      with: 
-        submodules: recursive
-
     - name: build
       run: |
         source spack/share/spack/setup-env.sh
         spack env activate ufs-utils-env
+        cd ufs-utils
         mkdir build && cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
         make -j2
