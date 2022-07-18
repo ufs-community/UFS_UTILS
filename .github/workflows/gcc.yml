@@ -31,6 +31,7 @@ jobs:
       uses: actions/checkout@v2
       with: 
         submodules: recursive
+        path: ufs-utils
 
     # Install dependencies using Spack
     - name: install-dependencies-with-spack
@@ -38,7 +39,7 @@ jobs:
       run: |
         git clone -c feature.manyFiles=true https://github.com/NOAA-EMC/spack.git
         source spack/share/spack/setup-env.sh
-        spack env create ufs-utils-env ci/spack.yaml
+        spack env create ufs-utils-env ufs-utils/ci/spack.yaml
         spack env activate ufs-utils-env
 
         spack compiler find
@@ -66,6 +67,7 @@ jobs:
       uses: actions/checkout@v2
       with: 
         submodules: recursive
+        path: ufs-utils
 
     - name: build
       run: |
@@ -74,12 +76,13 @@ jobs:
         export CC=mpicc
         export FC=mpif90
         mkdir build && cd build
+        cd ufs-utils
         cmake .. -DCMAKE_BUILD_TYPE=Debug
         make -j2
 
     - name: test
       run: |
         source spack/share/spack/setup-env.sh
+        cd ufs-utils
         spack env activate ufs-utils-env
-        cd ufs_utils/build
         ctest --rerun-failed --output-on-failure
