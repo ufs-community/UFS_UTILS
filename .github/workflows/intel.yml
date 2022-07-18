@@ -8,7 +8,7 @@ defaults:
     shell: bash -leo pipefail {0}
 
 env:
-  cache_key: intel3  # The number (#) following the cache_key "intel" is to flush Action cache.
+  cache_key: intel5  # The number (#) following the cache_key "intel" is to flush Action cache.
   CC: icc
   FC: ifort
   CXX: icpc
@@ -68,9 +68,14 @@ jobs:
         echo "      externals:" >> ${SPACK_ENV}/spack.yaml
         echo "      - spec: intel-oneapi-mpi@${impi_ver}" >> ${SPACK_ENV}/spack.yaml
         echo "        prefix: /opt/intel/oneapi" >> ${SPACK_ENV}/spack.yaml
+
+        spack config add "packages:mpi:buildable:False"
+        spack config add "packages:all:providers:mpi:intel-oneapi-mpi"
+        spack config add "packages:all:compiler:intel"
   
         spack compiler find
         spack external find
+        spack external find python perl wget m4
         spack concretize
         spack install
 
@@ -78,7 +83,7 @@ jobs:
       run: |
         source spack/share/spack/setup-env.sh
         spack env activate ufs-utils-env
-        mkdir build && cd build
+      mkdir build && cd build
         cmake .. -DCMAKE_BUILD_TYPE=Debug
         make -j2
     
