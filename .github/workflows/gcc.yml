@@ -104,6 +104,15 @@ jobs:
         submodules: recursive
         path: ufs-utils
   
+    - name: cache-env
+      id: cache-env
+      uses: actions/cache@v2
+      with:
+        path: |
+          spack
+          ~/.spack
+        key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs-utils/ci/spack.yaml') }}
+  
     - name: build
       run: |
         source spack/share/spack/setup-env.sh
@@ -137,6 +146,15 @@ jobs:
       with: 
         submodules: recursive
         path: ufs-utils
+
+    - name: cache-env
+      id: cache-env
+      uses: actions/cache@v2
+      with:
+        path: |
+          spack
+          ~/.spack
+        key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs-utils/ci/spack.yaml') }}
 
     - name: install-doxygen
       run: |
