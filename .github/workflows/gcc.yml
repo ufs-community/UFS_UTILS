@@ -91,7 +91,7 @@ jobs:
         spack env activate ${{ env.env_name }}
         cd ufs-utils/build
         export LSAN_OPTIONS=suppressions=LSanSuppress.supp
-        ctest --rerun-failed --output-on-failure
+        ctest --verbose
 
   test-coverage:
     needs: gcc-setup
@@ -128,7 +128,7 @@ jobs:
         spack env activate ${{ env.env_name }}
         cd ufs-utils/build
         export LSAN_OPTIONS=suppressions=LSanSuppress.supp
-        ctest --rerun-failed --output-on-failure
+        ctest --verbose
         gcovr -r .. --html-details -o test-coverage.html
 
     - uses: actions/upload-artifact@v2
