@@ -92,7 +92,7 @@ jobs:
         spack env activate ${{ env.env_name }}
         cd ufs-utils/build
         export LSAN_OPTIONS=suppressions=LSanSuppress.supp
-        ctest --verbose
+        ctest --rerun-failed --output-on-failure
 
   test-coverage:
     needs: gcc-setup
@@ -113,6 +113,10 @@ jobs:
           spack
           ~/.spack
         key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs-utils/ci/spack.yaml') }}
+
+    - name: install-gcovr
+      run: |
+        python3 -m pip install gcovr
   
     - name: build
       run: |
@@ -129,7 +133,9 @@ jobs:
         spack env activate ${{ env.env_name }}
         cd ufs-utils/build
         export LSAN_OPTIONS=suppressions=LSanSuppress.supp
-        ctest --verbose
+        ctest --rerun-failed --output-on-failure
+
+        export PATH="/home/runner/.local/bin:$PATH"
         gcovr -r .. --html-details -o test-coverage.html
 
     - uses: actions/upload-artifact@v2
