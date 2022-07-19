@@ -77,8 +77,8 @@ jobs:
         export FC=mpif90
         cd ufs-utils
         mkdir build && cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -GNinja
-        ninja
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+        make -j2
 
     - name: test
       run: |
