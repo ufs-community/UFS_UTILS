@@ -13,6 +13,7 @@ env:
   FC: gfortran-10
   CXX: g++-10
   env_name: ufs-utils-env
+  OMPI_MCA_rmaps_base_oversubscribe: '1' # Let's OpenMPI run with more processes than cores
 
 jobs:
   gcc-setup:
