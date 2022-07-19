@@ -45,8 +45,8 @@ if [[ "$VERBOSE" == YES ]]; then
 fi
  
 #-----------------------------------------------------------------------
-# the "postmsg", "startmsg" and "prep_step" utilities
-# are only used in ncep ops when the "prod_util" module is loaded.
+# The "startmsg" and "prep_step" utilities are only
+# used in ncep ops when the "prod_util" module is loaded.
 #-----------------------------------------------------------------------
 
 use_prod_util=`echo $UTILROOT`
@@ -121,10 +121,7 @@ then
   grid173="0 0 0 0 0 0 0 0 4320 2160 0 0 89958000 42000 48 -89958000 359958000 83000 83000 0"
   $COPYGB2 -x -i3 -g "$grid173" ims.icec.grib2 ims.icec.5min.grib2
 else
-  msg="WARNING in ${pgm}: IMS ice data missing. Can not run program."
-  if test "$use_prod_util" = "true" ; then
-    postmsg "$jlogfile" "$msg"
-  fi
+  echo "WARNING in ${pgm}: IMS ice data missing. Can not run program."
   exit 3
 fi
 
@@ -135,10 +132,7 @@ fi
 
 if [ ! -f ${FIVE_MIN_ICE_FILE} ]
 then
-  msg="WARNING in ${pgm}: MMAB ice data missing. Can not run program."
-  if test "$use_prod_util" = "true" ; then
-    postmsg "$jlogfile" "$msg"
-  fi
+  echo "WARNING in ${pgm}: MMAB ice data missing. Can not run program."
   exit 5
 fi
 
@@ -177,20 +171,14 @@ rc=$?
 
 if (( rc != 0 ))
 then
-  msg="WARNING: ${pgm} completed abnormally."
-  if test "$use_prod_util" = "true" ; then
-    postmsg "$jlogfile" "$msg"
-  fi
+  echo "WARNING: ${pgm} completed abnormally."
   exit $rc
 else
   $WGRIB2 -set_int 3 51 42000 ${BLENDED_ICE_FILE} -grib ${BLENDED_ICE_FILE}.corner
   $CNVGRIB -g21 ${BLENDED_ICE_FILE}.corner ${BLENDED_ICE_FILE}.bitmap
   rm $BLENDED_ICE_FILE
   $COPYGB -M "#1.57" -x ${BLENDED_ICE_FILE}.bitmap $BLENDED_ICE_FILE
-  msg="${pgm} completed normally."
-  if test "$use_prod_util" = "true" ; then
-    postmsg "$jlogfile" "$msg"
-  fi
+  echo "${pgm} completed normally."
   if [ "$SENDCOM" = "YES" ] ; then
     cp $BLENDED_ICE_FILE $COMOUT
   fi

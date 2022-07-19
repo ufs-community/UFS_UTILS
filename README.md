@@ -15,7 +15,7 @@ https://ufs-community.github.io/UFS_UTILS/.
 Utility | Programmer(s)
 --------|----------
 chgres_cube | George Gayno, Jeff Beck, Larissa Reames
-cpld_gridgen | Denise Worthen, Minsuk Ji
+cpld_gridgen | Denise Worthen
 emcsfc_ice_blend | George Gayno
 emcsfc_snow2mdl | George Gayno
 fre-nctools | GFDL progammer
@@ -57,6 +57,14 @@ It also uses the following repositories:
  - [NCAR common community physics package](https://github.com/NCAR/ccpp-physics)
 
 ## Installing
+
+On Orion, Jet, Hera and WCOSS2, invoke the build script:
+
+```
+./build_all.sh
+```
+
+Otherwise, do:
 
 ```
 mkdir build

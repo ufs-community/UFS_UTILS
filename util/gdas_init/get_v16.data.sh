@@ -4,6 +4,10 @@
 # Retrieve gfs v16 data.  v16 was officially implemented on 12 UTC
 # March 22, 2021.  However, the way the switch over was done,
 # the 'prod' v16 tarballs started March 21, 2021 06Z.
+#
+# Starting at June 27, 2022 00z, the tarball names were changed.
+# Older files had 'prod' in their name. Newer files has 'v16.2'
+# in their name.
 #----------------------------------------------------------------------
 
 bundle=$1
@@ -20,6 +24,23 @@ mm_m6=$(echo $date10_m6 | cut -c5-6)
 dd_m6=$(echo $date10_m6 | cut -c7-8)
 hh_m6=$(echo $date10_m6 | cut -c9-10)
 
+if [ $yy$mm$dd$hh -ge 2022062700 ]; then
+  version="v16.2"
+else
+  version="prod"
+fi
+
+#----------------------------------------------------------------------
+# Account for tarball file name changes starting at
+# June 27, 2022 at 00z.
+#----------------------------------------------------------------------
+
+if [ ${yy_m6}${mm_m6}${dd_m6}${hh_m6} -ge 2022062700 ]; then
+  version_enkf="v16.2"
+else
+  version_enkf="prod"
+fi
+
 #----------------------------------------------------------------------
 # Get the atm and sfc 'anl' netcdf files from the gfs or gdas
 # tarball.
@@ -29,10 +50,10 @@ if [ "$bundle" = "gdas" ] || [ "$bundle" = "gfs" ]; then
 
   if [ "$bundle" = "gdas" ] ; then
     directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-    file=com_gfs_prod_gdas.${yy}${mm}${dd}_${hh}.gdas_nc.tar
+    file=com_gfs_${version}_gdas.${yy}${mm}${dd}_${hh}.gdas_nc.tar
   else
     directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-    file=com_gfs_prod_gfs.${yy}${mm}${dd}_${hh}.gfs_nca.tar
+    file=com_gfs_${version}_gfs.${yy}${mm}${dd}_${hh}.gfs_nca.tar
   fi
 
   rm -f ./list.hires*
@@ -57,7 +78,7 @@ if [ "$bundle" = "gdas" ] || [ "$bundle" = "gfs" ]; then
   if [ "$bundle" = "gdas" ] ; then
 
     directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-    file=com_gfs_prod_gdas.${yy}${mm}${dd}_${hh}.gdas_restart.tar
+    file=com_gfs_${version}_gdas.${yy}${mm}${dd}_${hh}.gdas_restart.tar
 
     htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.abias
     rc=$?
@@ -88,7 +109,7 @@ else
   group=$bundle
 
   directory=/NCEPPROD/hpssprod/runhistory/5year/rh${yy_m6}/${yy_m6}${mm_m6}/${yy_m6}${mm_m6}${dd_m6}
-  file=com_gfs_prod_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_${group}.tar
+  file=com_gfs_${version_enkf}_enkfgdas.${yy_m6}${mm_m6}${dd_m6}_${hh_m6}.enkfgdas_${group}.tar
 
   rm -f ./list*.${group}
   htar -tvf  $directory/$file > ./list1.${group}
