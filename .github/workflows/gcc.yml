@@ -12,6 +12,7 @@ env:
   CC: gcc-10
   FC: gfortran-10
   CXX: g++-10
+  env_name: ufs-utils-env
 
 jobs:
   gcc-setup:
@@ -40,7 +41,7 @@ jobs:
         git clone -c feature.manyFiles=true https://github.com/NOAA-EMC/spack.git
         source spack/share/spack/setup-env.sh
         spack env create ufs-utils-env ufs-utils/ci/spack.yaml
-        spack env activate ufs-utils-env
+        spack env activate ${{ env.env_name }}
 
         spack compiler find
         spack external find
@@ -52,6 +53,10 @@ jobs:
   build-and-test:
     needs: gcc-setup
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        build_type: [Release, Debug]
 
     steps:
     - name: checkout-ufs-utils
@@ -72,17 +77,80 @@ jobs:
     - name: build
       run: |
         source spack/share/spack/setup-env.sh
-        spack env activate ufs-utils-env
+        spack env activate ${{ env.env_name }}
         export CC=mpicc
         export FC=mpif90
         cd ufs-utils
         mkdir build && cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release
+        cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         make -j2
 
     - name: test
       run: |
         source spack/share/spack/setup-env.sh
-        spack env activate ufs-utils-env
+        spack env activate ${{ env.env_name }}
         cd ufs-utils/build
+        export LSAN_OPTIONS=suppressions=LSanSuppress.supp
         ctest --rerun-failed --output-on-failure
+
+  test-coverage:
+    needs: gcc-setup
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout-ufs-utils
+      uses: actions/checkout@v2
+      with: 
+        submodules: recursive
+        path: ufs-utils
+  
+    - name: build
+      run: |
+        source spack/share/spack/setup-env.sh
+        spack env activate ${{ env.env_name }}
+        cd ufs-utils
+        mkdir build && cd build
+        cmake .. DCMAKE_BUILD_TYPE=Debug -DCMAKE_Fortran_FLAGS="-fprofile-arcs -ftest-coverage -O0"
+        make -j2
+    
+    - name: test
+        source spack/share/spack/setup-env.sh
+        spack env activate ${{ env.env_name }}
+        cd ufs-utils/build
+        export LSAN_OPTIONS=suppressions=LSanSuppress.supp
+        ctest --rerun-failed --output-on-failure
+        gcovr -r .. --html-details -o test-coverage.html
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: test-coverage
+        path: ufs-utils/build/*.html
+
+  docs:
+    needs: gcc-setup
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout-ufs-utils
+      uses: actions/checkout@v2
+      with: 
+        submodules: recursive
+        path: ufs-utils
+
+    - name: install-doxygen
+      run: |
+        sudo apt-get install doxygen
+  
+    - name: build-docs
+      run: |
+        source spack/share/spack/setup-env.sh
+        spack env activate ${{ env.env_name }}
+        cd ufs-utils
+        mkdir build && cd build
+        cmake .. -DENABLE_DOCS=ON
+        make doc
+    
+    - uses: actions/upload-artifact@v2
+      with:
+        name: docs
+        path: ufs-utils/build/*.html

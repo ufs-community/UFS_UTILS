@@ -73,9 +73,13 @@ jobs:
         spack concretize
         spack install
 
-  release-build-and-test:
+  build-and-test:
     needs: intel-setup
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        build_type: [Release, Debug]
 
     steps:
     - name: checkout-ufs-utils
@@ -101,7 +105,7 @@ jobs:
         spack env activate ufs-utils-env
         cd ufs-utils
         mkdir build && cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release
+        cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         make -j2
 
     - name: test
