@@ -114,6 +114,7 @@ jobs:
         make -j2
     
     - name: test
+      run: |
         source spack/share/spack/setup-env.sh
         spack env activate ${{ env.env_name }}
         cd ufs-utils/build
