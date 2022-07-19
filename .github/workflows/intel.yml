@@ -1,4 +1,4 @@
-name: intel
+name: Intel Linux Build
 on: [push, pull_request]
 
 # Use custom shell with -l so .bash_profile is sourced which loads intel/oneapi/setvars.sh
@@ -7,21 +7,38 @@ defaults:
   run:
     shell: bash -leo pipefail {0}
 
+env:
+  cache_key: intel5  # The number (#) following the cache_key "intel" is to flush Action cache.
+  CC: icc
+  FC: ifort
+  CXX: icpc
+  I_MPI_CC: icc
+  I_MPI_F90: ifort
+
 jobs:
-  intel-build-and-test:
-    runs-on: ${{ matrix.os }}
-    env:
-      CC: icc
-      FC: ifort
-      CXX: icpc
-    strategy:
-      matrix:
-        os: [ubuntu-20.04]
+  intel-setup:
+    runs-on: ubuntu-latest
 
     steps:
+    - name: checkout-ufs-utils
+      uses: actions/checkout@v2
+      with: 
+        submodules: recursive
+        path: ufs-utils
+
+    - name: cache-env
+      id: cache-env
+      uses: actions/cache@v2
+      with:
+        path: |
+          spack
+          ~/.spack
+          /opt/intel
+        key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs-utils/ci/spack.yaml') }}
 
     # See https://software.intel.com/content/www/us/en/develop/articles/oneapi-repo-instructions.html
     - name: install-intel
+      if: steps.cache-env.outputs.cache-hit != 'true'
       run: |
         cd /tmp
         wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
@@ -30,142 +47,71 @@ jobs:
         echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
         sudo apt-get update
         sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
+
+    - name: setup-intel
+      run: |
         echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
 
-    - name: cache-netcdf
-      id: cache-netcdf
-      uses: actions/cache@v2
-      with:
-        path: ~/netcdf
-        key: netcdf-c-$4.7.4-{{ runner.os }}-intel3
-
-    - name: build-hdf5
-      if: steps.cache-netcdf.outputs.cache-hit != 'true'
+    # Install dependencies using Spack
+    - name: install-dependencies-with-spack
+      if: steps.cache-env.outputs.cache-hit != 'true'
       run: |
-        export CC=mpiicc
-        wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
-        tar -xzf hdf5-1.10.7.tar.gz
-        pushd hdf5-1.10.7
-        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests --disable-shared --disable-shared --enable-static
-        make -j2
-        make install
-           
-    - name: build-netcdf-c
-      if: steps.cache-netcdf.outputs.cache-hit != 'true'
-      run: |
-        export CC=mpiicc
-        export CPPFLAGS=-I${HOME}/netcdf/include
-        export LDFLAGS=-L${HOME}/netcdf/lib
-        wget https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.7.4.tar.gz &> /dev/null
-        tar -xzf v4.7.4.tar.gz
-        pushd netcdf-c-4.7.4
-        ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities --disable-shared
-        make -j2
-        make install
+        git clone -c feature.manyFiles=true https://github.com/NOAA-EMC/spack.git
+        source spack/share/spack/setup-env.sh
+        spack env create ufs-utils-env ufs-utils/ci/spack.yaml
+        spack env activate ufs-utils-env
 
-    - name: build-netcdf-fortran
-      if: steps.cache-netcdf.outputs.cache-hit != 'true'
-      run: |
-        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${HOME}/netcdf/lib"
-        export PATH="${HOME}/netcdf/bin:$PATH"
-        export CC=mpiicc
-        export FC=mpiifort
-        export CPPFLAGS=-I${HOME}/netcdf/include
-        export LDFLAGS=-L${HOME}/netcdf/lib
-        export LIBS=`nc-config --libs`
-        wget https://github.com/Unidata/netcdf-fortran/archive/v4.5.3.tar.gz &> /dev/null
-        tar -xzf v4.5.3.tar.gz
-        pushd netcdf-fortran-4.5.3
-        ./configure --prefix=${HOME}/netcdf --disable-shared
-        make -j2
-        make install
+        impi_ver=$(find /opt/intel/oneapi/mpi -maxdepth 1 -mindepth 1 -type d | xargs basename)
+        sed -i "s|packages:|packages:\n    intel-oneapi-mpi: {buildable: False, externals: [{spec: intel-oneapi-mpi@${impi_ver}, prefix: /opt/intel/oneapi}]}|" ${SPACK_ENV}/spack.yaml
 
-    - name: cache-esmf
-      id: cache-esmf
-      uses: actions/cache@v2
-      with:
-        path: ~/esmf
-        key: esmf-8.2.0-${{ runner.os }}-intel3
+        spack config add "packages:mpi:buildable:False"
+        spack config add "packages:all:providers:mpi:[intel-oneapi-mpi]"
+        spack compiler add /opt/intel/oneapi/compiler/latest/linux/bin/intel64
+        sed -i 's#environment: {}#environment: {prepend_path: {LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin}}#g' ${SPACK_ENV}/spack.yaml
+        spack external find
+        spack external find python perl wget m4
+        spack concretize
+        spack install
 
-    - name: build-esmf
-      if: steps.cache-esmf.outputs.cache-hit != 'true'
-      run: |
-        pushd ~
-        export ESMF_DIR=~/esmf-ESMF_8_2_0
-        wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
-        tar zxf ESMF_8_2_0.tar.gz
-        cd esmf-ESMF_8_2_0
-        export ESMF_COMM=intelmpi
-        export ESMF_INSTALL_BINDIR=bin
-        export ESMF_INSTALL_LIBDIR=lib
-        export ESMF_INSTALL_MODDIR=mod
-        export ESMF_COMPILER=intel
-        export ESMF_INSTALL_PREFIX=~/esmf
-        export ESMF_NETCDF=split
-        export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
-        export ESMF_NETCDF_LIBPATH=${HOME}/netcdf/lib
-        export ESMF_NETCDF_LIBS="-lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lz"
-        make -j2
-        make install
+  build-and-test:
+    needs: intel-setup
+    runs-on: ubuntu-latest
 
-    - name: cache-jasper
-      id: cache-jasper
-      uses: actions/cache@v2
-      with:
-        path: ~/jasper
-        key: jasper-2.0.25-${{ runner.os }}-intel3
+    strategy:
+      matrix:
+        build_type: [Release, Debug]
 
-    - name: build-jasper
-      if: steps.cache-jasper.outputs.cache-hit != 'true'
-      run: |
-        wget https://github.com/jasper-software/jasper/archive/version-2.0.25.tar.gz &> /dev/null
-        tar zxf version-2.0.25.tar.gz
-        cd jasper-version-2.0.25
-        mkdir build-jasper && cd build-jasper
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper -DJAS_ENABLE_SHARED=OFF
-        make -j2
-        make install
-
-    - name: checkout-nceplibs
-      uses: actions/checkout@v2
-      with:
-        repository: NOAA-EMC/NCEPLIBS
-        path: nceplibs
-
-    - name: cache-nceplibs
-      id: cache-nceplibs
-      uses: actions/cache@v2
-      with:
-        path: ~/nceplibs
-        key: nceplibs-1.4.0-${{ runner.os }}-intel3
-
-    - name: build-nceplibs
-      if: steps.cache-nceplibs.outputs.cache-hit != 'true'
-      run: |
-        export ESMFMKFILE=~/esmf/lib/esmf.mk
-        wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.4.0.tar.gz &> /dev/null
-        tar zxf v1.4.0.tar.gz
-        cd NCEPLIBS-1.4.0
-        mkdir build && cd build
-        cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/netcdf' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
-        make -j2
-       
+    steps:
     - name: checkout-ufs-utils
       uses: actions/checkout@v2
       with: 
-        path: ufs_utils
         submodules: recursive
+        path: ufs-utils
+
+    - name: cache-env
+      id: cache-env
+      uses: actions/cache@v2
+      with:
+        path: |
+          spack
+          ~/.spack
+          /opt/intel
+        key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs-utils/ci/spack.yaml') }}
 
     - name: build
       run: |
-        export ESMFMKFILE=~/esmf/lib/esmf.mk
-        cd ufs_utils
+        source /opt/intel/oneapi/setvars.sh
+        source spack/share/spack/setup-env.sh
+        spack env activate ufs-utils-env
+        cd ufs-utils
         mkdir build && cd build
-        export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf'
+        cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         make -j2
-    
+
     - name: test
       run: |
-        cd ufs_utils/build
+        source /opt/intel/oneapi/setvars.sh
+        source spack/share/spack/setup-env.sh
+        spack env activate ufs-utils-env
+        cd ufs-utils/build
         ctest --rerun-failed --output-on-failure
