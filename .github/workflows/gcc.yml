@@ -8,7 +8,7 @@ defaults:
     shell: bash -leo pipefail {0}
 
 env:
-  cache_key: gcc5  # The number (#) following the cache_key "intel" is to flush Action cache.
+  cache_key: gcc6  # The number (#) following the cache_key "intel" is to flush Action cache.
   CC: gcc-10
   FC: gfortran-10
   CXX: g++-10
@@ -46,7 +46,7 @@ jobs:
         spack compiler find
         spack external find
         spack external find python perl wget m4
-        spack add mpich@3.4.2
+        spack add openmpi@4.1.3
         spack concretize
         spack install
 
