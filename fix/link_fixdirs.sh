@@ -52,6 +52,9 @@ elif [ $machine = "s4" ]; then
 fi
 
 for dir in fix_am fix_fv3 fix_orog fix_fv3_gmted2010 fix_sfc_climo fix_fv3_fracoro; do
+    if [ $machine = "wcoss2" ] && [ $dir = "fix_fv3" ]; then
+      continue
+    fi
     if [ -d $dir ]; then
       [[ $RUN_ENVIR = nco ]] && chmod -R 755 $dir
       rm -rf $dir
