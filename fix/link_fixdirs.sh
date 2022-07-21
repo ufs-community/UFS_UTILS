@@ -46,15 +46,12 @@ elif [ $machine = "jet" ]; then
 elif [ $machine = "orion" ]; then
     FIX_DIR="/work/noaa/global/glopara/fix_NEW"
 elif [ $machine = "wcoss2" ]; then
-    FIX_DIR="/lfs/h2/emc/global/noscrub/kate.friedman/glopara/FIX/fix_NEW"
+    FIX_DIR="/lfs/h2/emc/global/save/emc.global/FIX/fix_NEW"
 elif [ $machine = "s4" ]; then
     FIX_DIR="/data/prod/glopara/fix"
 fi
 
-for dir in fix_am fix_fv3 fix_orog fix_fv3_gmted2010 fix_sfc_climo fix_fv3_fracoro; do
-    if [ $machine = "wcoss2" ] && [ $dir = "fix_fv3" ]; then
-      continue
-    fi
+for dir in fix_am fix_orog fix_fv3_gmted2010 fix_sfc_climo fix_fv3_fracoro; do
     if [ -d $dir ]; then
       [[ $RUN_ENVIR = nco ]] && chmod -R 755 $dir
       rm -rf $dir
