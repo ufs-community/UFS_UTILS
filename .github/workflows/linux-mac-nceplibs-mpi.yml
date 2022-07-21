@@ -14,7 +14,7 @@ jobs:
       CXX: g++-9
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-20.04]
+        os: [macos-latest, ubuntu-latest]
         compiler: [gcc-9]
         nceplibs_version: [develop, 1.4.0]
         mpi_type: [mpich, openmpi]
@@ -25,7 +25,7 @@ jobs:
     - name: install-dependencies
       run: |
         echo "$HOME/mpi/bin" >> $GITHUB_PATH
-        if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
+        if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
           sudo apt-get update
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
@@ -61,7 +61,7 @@ jobs:
           wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.1.tar.gz &> /dev/null
           tar -xzf openmpi-4.1.1.tar.gz
           cd openmpi-4.1.1
-          if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
+          if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx
           elif [[ ${{ matrix.os }} == "macos-latest" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx --enable-two-level-namespace
