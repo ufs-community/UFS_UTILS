@@ -45,7 +45,6 @@ export APRUN=time
 export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export OMP_NUM_THREADS=24
-export machine=ORION
 
 export UPDATE_BASELINE="FALSE"
 #export UPDATE_BASELINE="TRUE"

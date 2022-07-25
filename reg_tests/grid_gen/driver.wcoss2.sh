@@ -56,7 +56,6 @@ export APRUN_SFC="mpiexec -n 30 -ppn 30 -cpu-bind core"
 export OMP_STACKSIZE=2048m
 export OMP_NUM_THREADS=30 # orog code uses threads
 export OMP_PLACES=cores
-export machine=WCOSS2
 export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
 this_dir=$PWD
 
