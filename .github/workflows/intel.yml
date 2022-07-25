@@ -16,7 +16,7 @@ jobs:
       CXX: icpc
     strategy:
       matrix:
-        os: [ubuntu-20.04]
+        os: [ubuntu-latest]
 
     steps:
 
