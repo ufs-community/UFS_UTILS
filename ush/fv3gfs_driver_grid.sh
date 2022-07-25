@@ -39,8 +39,6 @@
 
 set -eux
 
-export machine=${machine:?}
-
 #----------------------------------------------------------------------------------
 # Makes FV3 cubed-sphere grid
 #----------------------------------------------------------------------------------
@@ -171,67 +169,33 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
  
   echo "Begin uniform orography generation at `date`"
 
-#----------------------------------------------------------------------------------
-# On WCOSS_C use cfp to run multiple tiles simulatneously for the orography
-#----------------------------------------------------------------------------------
-
-  if [ $machine = WCOSS_C ]; then
-    touch $TEMP_DIR/orog.file1
-    if [ $make_gsl_orog = true ]; then
-      touch $TEMP_DIR/orog_gsl.file1
-    fi
-    tile=1
-    while [ $tile -le $ntiles ]; do
-      echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo " >>$TEMP_DIR/orog.file1
-      if [ $make_gsl_orog = true ]; then
-        export halo_tmp="-999"  # no halo
-        echo $script_dir/fv3gfs_make_orog_gsl.sh $res $tile $halo_tmp $grid_dir $orog_dir $topo_am >>$TEMP_DIR/orog_gsl.file1
-      fi
-      tile=$(( $tile + 1 ))
-    done
-    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TEMP_DIR/orog.file1
+  tile=1
+  while [ $tile -le $ntiles ]; do
+    set +x
+    echo
+    echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
+    echo
+    set -x
+    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo
     err=$?
     if [ $err != 0 ]; then
       exit $err
     fi
-    rm $TEMP_DIR/orog.file1
     if [ $make_gsl_orog = true ]; then
-      aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TEMP_DIR/orog_gsl.file1
-      err=$?
-      if [ $err != 0 ]; then
-        exit $err
-      fi
-      rm $TEMP_DIR/orog_gsl.file1
-    fi
-  else
-    tile=1
-    while [ $tile -le $ntiles ]; do
       set +x
       echo
-      echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
-      echo
+      echo "............ Execute fv3gfs_make_orog_gsl.sh for tile $tile .................."
+      echo 
       set -x
-      $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo
+      export halo_tmp="-999"  # no halo
+      $script_dir/fv3gfs_make_orog_gsl.sh $res $tile $halo_tmp $grid_dir $orog_dir $topo_am
       err=$?
       if [ $err != 0 ]; then
         exit $err
       fi
-      if [ $make_gsl_orog = true ]; then
-        set +x
-        echo
-        echo "............ Execute fv3gfs_make_orog_gsl.sh for tile $tile .................."
-        echo 
-        set -x
-        export halo_tmp="-999"  # no halo
-        $script_dir/fv3gfs_make_orog_gsl.sh $res $tile $halo_tmp $grid_dir $orog_dir $topo_am
-        err=$?
-        if [ $err != 0 ]; then
-          exit $err
-        fi
-      fi
-      tile=$(( $tile + 1 ))
-    done
-  fi
+    fi
+    tile=$(( $tile + 1 ))
+  done
 
   if [ $add_lake = true ]; then
     $script_dir/fv3gfs_make_lake.sh
@@ -385,29 +349,19 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
 
 #----------------------------------------------------------------------------------
 # Create orography.
-#
-# On WCOSS_C use cfp to run multiple tiles simulatneously for the orography.
-# For now we only have one tile but in the future we will have more.
 #----------------------------------------------------------------------------------
  
   echo "Begin orography generation at `date`"
 
-  if [ $machine = WCOSS_C ]; then
-    echo "$script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo " >>$TEMP_DIR/orog.file1
-    aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TEMP_DIR/orog.file1
-    err=$?
-    rm $TEMP_DIR/orog.file1
-  else
-    set +x
-    echo
-    echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
-    echo
-    set -x
-    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo
-    err=$?
-    if [ $err != 0 ]; then
-      exit $err
-    fi
+  set +x
+  echo
+  echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
+  echo
+  set -x
+  $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo
+  err=$?
+  if [ $err != 0 ]; then
+    exit $err
   fi
 
 # add lake data to the orography file, if $add_lake is true
@@ -498,22 +452,15 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   if [ $make_gsl_orog = true ]; then
     export halo_tmp="0"
     ln -sf $out_dir/C${res}_grid.tile${tile}.halo0.nc $grid_dir/
-    if [ $machine = WCOSS_C ]; then
-      echo $script_dir/fv3gfs_make_orog_gsl.sh $res $tile $halo_tmp $grid_dir $orog_dir $topo_am >>$TEMP_DIR/orog_gsl.file1
-      aprun -j 1 -n 4 -N 4 -d 6 -cc depth cfp $TEMP_DIR/orog_gsl.file1
-      err=$?
-      rm $TEMP_DIR/orog_gsl.file1
-    else
-      set +x 
-      echo
-      echo "............ Execute fv3gfs_make_orog_gsl.sh for tile $tile .................."
-      echo
-      set -x
-      $script_dir/fv3gfs_make_orog_gsl.sh $res $tile $halo_tmp $grid_dir $orog_dir $topo_am
-      err=$?
-      if [ $err != 0 ]; then
-        exit $err
-      fi
+    set +x 
+    echo
+    echo "............ Execute fv3gfs_make_orog_gsl.sh for tile $tile .................."
+    echo
+    set -x
+    $script_dir/fv3gfs_make_orog_gsl.sh $res $tile $halo_tmp $grid_dir $orog_dir $topo_am
+    err=$?
+    if [ $err != 0 ]; then
+      exit $err
     fi
     cp $orog_dir/C${res}_oro_data_*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
   fi

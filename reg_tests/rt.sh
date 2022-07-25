@@ -38,18 +38,7 @@ echo "Started on " `hostname -s` >> ${WORK_DIR}/reg_test_results.txt
 
 ./build_all.sh
 
-if [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
-    prod_machine=`cat /etc/prod`
-    prod_letter=${prod_machine:0:1}
-
-    this_machine=`hostname -s`
-    this_letter=${this_machine:0:1}
-
-    # Mars (m), Venus (v)
-    if [[ "${this_letter}" == "${prod_letter}" ]]; then
-        exit 0
-    fi
-elif [[ $target == "wcoss2" ]]; then
+if [[ $target == "wcoss2" ]]; then
     this_machine=`cat /etc/cluster_name`
     prod_machine=`grep primary /lfs/h1/ops/prod/config/prodmachinefile`
     prod_machine=`echo ${prod_machine/primary:}`
@@ -58,16 +47,7 @@ elif [[ $target == "wcoss2" ]]; then
     fi
 fi
 
-# Set machine_id variable for running link_fixdirs
-if [[ $target == "wcoss_dell_p3" ]]; then
-    machine_id=dell
-    module load lsf/10.1
-elif [[ $target == "wcoss_cray" ]]; then
-    machine_id=cray
-    module load xt-lsfhpc/9.1.3
-else
-    machine_id=$target
-fi
+machine_id=$target
 
 cd fix
 ./link_fixdirs.sh emc $machine_id
@@ -115,18 +95,10 @@ for dir in snow2mdl global_cycle chgres_cube grid_gen; do
     cd ..
 done
 
-if [[ $target == "wcoss_dell_p3" ]]; then
-    module load lsf/10.1
-elif [[ $target == "wcoss_cray" ]]; then
-    module load xt-lsfhpc/9.1.3
-fi
-
 for dir in ice_blend; do
     cd $dir
     if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] ; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
-    elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
-        cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
     elif [[ $target == "wcoss2" ]] ; then
         qsub -v WORK_DIR ./driver.$target.sh
     fi

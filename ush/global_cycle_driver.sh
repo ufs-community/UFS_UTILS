@@ -8,8 +8,6 @@ set -eux
 # Rahul Mahajan, 10/11/2017
 #-------------------------------------------------------------------------------------------------
 
-export machine=${machine:-"WCOSS_C"}
-
 export CASE=${CASE:-C768}                    # resolution of tile: 48, 96, 192, 384, 768, 1152, 3072
 export CDATE=${CDATE:-${cdate:-2017031900}}  # format yyyymmddhh yyyymmddhh ...
 export CDUMP=${CDUMP:-gfs}                   # gfs or gdas
