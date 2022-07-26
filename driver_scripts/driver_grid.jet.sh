@@ -142,7 +142,6 @@ export APRUN=time
 export APRUN_SFC=srun
 export OMP_NUM_THREADS=24
 export OMP_STACKSIZE=2048m
-export machine=JET
 
 ulimit -a
 ulimit -s unlimited
