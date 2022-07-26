@@ -1,10 +1,22 @@
- program scrip
+!> @file
+!! @brief Create "scrip" files for a gaussian grid.
+!!
+!! @author George Gayno NOAA/EMC
 
-!----------------------------------------------------------------------
-! Create "scrip" files that describes a gaussian grid.
-! Two files are created: the normal gaussian grid and one with
-! two extra rows for the N/S poles.
-!----------------------------------------------------------------------
+!> Create "scrip" files that describes a gaussian grid.
+!! These files are used to create ESMF weight files for
+!! interpolating from global FV3 grids to gaussian grids.
+!!
+!! The program expects one argument - the resolution of the
+!! FV3 grid. It then selects a gaussian grid of comparable
+!! resolution. 
+!! 
+!! Two files are created: the normal gaussian grid and one with
+!! two extra rows for the N/S poles. Both files are NetCDF.
+!!
+!! @return 0 for success.
+!! @author George Gayno NOAA/EMC
+ program scrip
 
  implicit none
 
