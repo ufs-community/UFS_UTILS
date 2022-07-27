@@ -11,7 +11,7 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   endif()
 endif()
 
-set(exe_name scrip.x)
+set(exe_name weight_gen)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}

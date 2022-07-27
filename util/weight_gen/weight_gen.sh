@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#------------------------------------------------------------
+# Run the weight_gen program to create  ESMF 'scrip'
+# files for a gaussian grid.
+#
+# Run this script using the driver script for your machine.
+#------------------------------------------------------------
+
 set -x
 
 CRES=${CRES:-"C48"}
@@ -12,6 +19,6 @@ rm -fr $WORK_DIR
 mkdir -p $WORK_DIR
 cd $WORK_DIR
 
-${UFS_DIR}/exec/scrip.x "$CRES"
+${UFS_DIR}/exec/weight_gen "$CRES"
 
 exit
