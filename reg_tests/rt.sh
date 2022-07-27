@@ -2,22 +2,23 @@
 
 ulimit -s unlimited
 
-export MAILTO=
+export MAILTO=george.gayno@noaa.gov
 
 # Directory to download UFS_UTILS to and run the consistency tests
-export WORK_DIR=
+export WORK_DIR=/lfs/h2/emc/stmp/george.gayno/reg.tests.branch
 
-export PROJECT_CODE=
-export QUEUE=
-TIMEOUT_LIMIT=3600
+export PROJECT_CODE=GFS-DEV
+export QUEUE=dev
+TIMEOUT_LIMIT=21600
 
 mkdir -p ${WORK_DIR}
 cd ${WORK_DIR}
 rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
-git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
+git clone --recursive https://github.com/GeorgeGayno-NOAA/UFS_UTILS.git
 cd UFS_UTILS
+git checkout feature/new_fix
 
 source sorc/machine-setup.sh
 
