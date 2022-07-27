@@ -29,7 +29,7 @@
  integer                        :: fsize=65536, inital = 0
  integer                        :: error, ncid
  integer                        :: i, j, idim, jdim, ijdim
- integer                        :: jdimp
+ integer                        :: jdimp, num_ch
  integer                        :: dim_size, dim_corners, dim_rank
  integer                        :: id_dims, id_center_lat, id_center_lon
  integer                        :: id_imask, id_corner_lat, id_corner_lon
@@ -230,7 +230,8 @@
  error = nf_put_att_text(ncid, id_corner_lat, "units", 7, "degrees")
  error = nf_def_var(ncid, 'grid_corner_lon', NF_DOUBLE, 2, (/dim_corners,dim_size/), id_corner_lon)
  error = nf_put_att_text(ncid, id_corner_lon, "units", 7, "degrees")
- error = nf_put_att_text(ncid, NF_GLOBAL, "title", 20, trim(title))
+ num_ch = len_trim(title)
+ error = nf_put_att_text(ncid, NF_GLOBAL, "title", num_ch, trim(title))
  error = nf__enddef(ncid, header_buffer_val,4,0,4)
 
 !--- set fields
@@ -327,7 +328,8 @@
  error = nf_put_att_text(ncid, id_corner_lat, "units", 7, "degrees")
  error = nf_def_var(ncid, 'grid_corner_lon', NF_DOUBLE, 2, (/dim_corners,dim_size/), id_corner_lon)
  error = nf_put_att_text(ncid, id_corner_lon, "units", 7, "degrees")
- error = nf_put_att_text(ncid, NF_GLOBAL, "title", 20, trim(title))
+ num_ch = len_trim(title)
+ error = nf_put_att_text(ncid, NF_GLOBAL, "title", num_ch, trim(title))
  error = nf__enddef(ncid, header_buffer_val,4,0,4)
  
 !--- set fields
