@@ -27,6 +27,7 @@ grid_tools | R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), G
 orog_mask_tools | Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
 sfc_climo_gen | George Gayno
 vcoord_gen | Fanglin Yang, Mark Iredell
+weight_gen | George Gayno
 
 UFS_UTILS Code managers: George Gayno, Kyle Gerheiser, Jeff Beck, Larissa Reames
 
