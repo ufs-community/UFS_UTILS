@@ -1,5 +1,5 @@
 !> @file
-!! @brief Create "scrip" files for a gaussian grid.
+!! @brief Create ESMF "scrip" files for a gaussian grid.
 !!
 !! @author George Gayno NOAA/EMC
 
@@ -11,7 +11,7 @@
 !! FV3 grid. It then selects a gaussian grid of comparable
 !! resolution. 
 !! 
-!! Two files are created: the normal gaussian grid and one with
+!! Two files are created: the normal gaussian grid, and one with
 !! two extra rows for the N/S poles. Both files are NetCDF.
 !!
 !! @return 0 for success.

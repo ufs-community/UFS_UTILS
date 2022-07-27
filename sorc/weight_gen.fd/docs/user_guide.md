@@ -3,7 +3,8 @@
 
 # Introduction
 
-Creates script files.
+Creates ESMF 'scrip' files for gaussian grids. These files
+may then be used to create ESMF interpolation weight files.
 
 This document is part of the <a href="../index.html">UFS_UTILS
 documentation</a>.
