@@ -15,14 +15,14 @@
 # Set WORK_DIR to your working directory.
 #
 # Set CRES to your desired resolution. Valid choices are:
-#  - C48
-#  - C96
-#  - C128
-#  - C192
-#  - C384
-#  - C768
-#  - C1152
-#  - C3072
+#  - C48  => 192x94 and 192x96 gaussian
+#  - C96  => 384x192 and 384x194 gaussian
+#  - C128 => 512x256 and 512x258 gaussian
+#  - C192 => 768x384 and 768x386 gaussian
+#  - C384 => 1536x768 and 1536x770 gaussian
+#  - C768 => 3072x1536 and 3072x1538 gaussian
+#  - C1152 => 4608x2304 and 4608x2406 gaussian
+#  - C3072 => 12288x6144 and 12288x6146 gaussian
 #
 # To run this script, do: 'sbatch $script'
 #
