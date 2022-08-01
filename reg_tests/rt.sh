@@ -95,7 +95,7 @@ for dir in snow2mdl global_cycle chgres_cube grid_gen; do
     cd ..
 done
 
-for dir in ice_blend; do
+for dir in weight_gen ice_blend; do
     cd $dir
     if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] ; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
@@ -121,7 +121,7 @@ echo "Commit hash: ${current_hash}" >> ${WORK_DIR}/reg_test_results.txt
 echo "" >> ${WORK_DIR}/reg_test_results.txt
 
 success=true
-for dir in cpld_gridgen chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
+for dir in weight_gen cpld_gridgen chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
     if grep -qi "FAILED" ${dir}/summary.log; then
         success=false
         echo "${dir} consistency tests FAILED" >> ${WORK_DIR}/reg_test_results.txt
