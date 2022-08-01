@@ -2,10 +2,10 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run weight_gen consistency test on Jet.
+# Run weight_gen consistency test on Orion.
 #
-# Set $DATA to your working directory.  Set the project code 
-# (SBATCH --account) as appropriate.
+# Set $DATA to your working directory.  Set the project code (SBATCH -A)
+# and queue (SBATCH -q) as appropriate.
 #
 # Invoke the script as follows:  sbatch $script
 #
@@ -18,13 +18,14 @@
 #
 #-----------------------------------------------------------------------------
 
-#SBATCH --nodes=1
-#SBATCH --partition=sjet
-#SBATCH --time 0:01
-#SBATCH --account=emcda
-#SBATCH --job-name=weight_gen
+#SBATCH -J weight_gen
+#SBATCH -A fv3-cpu
+#SBATCH --open-mode=truncate
 #SBATCH -o consistency.log
 #SBATCH -e consistency.log
+#SBATCH --ntasks=1
+#SBATCH -q debug
+#SBATCH -t 00:03:00
 
 set -x
 
@@ -35,7 +36,7 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-export DATA="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export DATA="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/weight_gen"
 
 #-----------------------------------------------------------------------------
@@ -49,7 +50,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/weight_gen
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/weight_gen
 export HOMEufs=$PWD/../..
 
 ./weight_gen.sh
