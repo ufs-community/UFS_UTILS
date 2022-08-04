@@ -5,7 +5,6 @@
 !> Set up program execution
 !!
 !! Public variables:
-!! -----------------
 !!
 !! Here 'input' indicates variables associated with the input source data 
 !! and 'mdl' indicates variables associated with the fv3 model grid.
