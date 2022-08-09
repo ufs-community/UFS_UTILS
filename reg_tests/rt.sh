@@ -30,6 +30,8 @@ else
     target=Jet
   elif [[ -d /lfs/h1 ]] ; then
     target=WCOSS2
+  elif [[ -d /scratch1 ]] ; then
+    target=Hera
   fi
   echo "Clone Failed" | mail -s "UFS_UTILS Consistency Tests failed on ${target}" ${MAILTO}
 fi
