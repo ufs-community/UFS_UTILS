@@ -17,6 +17,25 @@ rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
 git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
+rc=$?
+
+# Check to see if the clone was successful. Previously, it has
+# failed due to lack of disk space.
+
+if [[ $rc == 0 ]] && [[ -d UFS_UTILS ]];then
+  echo "Clone Successful"
+else
+  target=`hostname -s`
+  if [[ -d /lfs3 ]] ; then
+    target=Jet
+  elif [[ -d /lfs/h1 ]] ; then
+    target=WCOSS2
+  elif [[ -d /scratch1 ]] ; then
+    target=Hera
+  fi
+  echo "Clone Failed" | mail -s "UFS_UTILS Consistency Tests failed on ${target}" ${MAILTO}
+fi
+
 cd UFS_UTILS
 
 source sorc/machine-setup.sh
