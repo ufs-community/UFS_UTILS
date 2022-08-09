@@ -28,6 +28,8 @@ else
   target=`hostname -s`
   if [[ -d /lfs3 ]] ; then
     target=Jet
+  elif [[ -d /lfs/h1 ]] ; then
+    target=WCOSS2
   fi
   echo "Clone Failed" | mail -s "UFS_UTILS Consistency Tests failed on ${target}" ${MAILTO}
 fi
