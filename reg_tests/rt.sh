@@ -26,6 +26,9 @@ if [[ $rc == 0 ]] && [[ -d UFS_UTILS ]];then
   echo "Clone Successful"
 else
   target=`hostname -s`
+  if [[ -d /lfs3 ]] ; then
+    target=Jet
+  fi
   echo "Clone Failed" | mail -s "UFS_UTILS Consistency Tests failed on ${target}" ${MAILTO}
 fi
 
