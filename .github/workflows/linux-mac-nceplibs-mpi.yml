@@ -30,8 +30,9 @@ jobs:
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
         elif [[ ${{ matrix.os }} == "macos-latest" ]]; then
-            brew update
+          brew update
           brew install wget
+          brew install jpeg-turbo
           if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
             sudo ln -sf /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
           elif  [[ ${{ matrix.compiler }} == "gcc-10" ]]; then
