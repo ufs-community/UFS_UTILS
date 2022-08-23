@@ -70,8 +70,14 @@ export DATA=${DATA:-$pwd/rundir$$}
 rm -fr $DATA
 mkdir -p $DATA
 
+# Make a copy of the input restart file as fnbgso. For fractional grids,
+# only a few fields will be updated by sfcsub.F. Only these records
+# will be overwritten in fnbgso.
+
 for n in $(seq 1 $ntiles); do
   ln -fs $COMIN/$PDY.${cyc}0000.sfc_data.tile${n}.nc      $DATA/fnbgsi.00$n
+  cp $COMIN/$PDY.${cyc}0000.sfc_data.tile${n}.nc $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc
+  chmod 644 $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc
   ln -fs $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc  $DATA/fnbgso.00$n
   ln -fs $FIXfv3/C${CRES}/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
   ln -fs $FIXfv3/C${CRES}/C${CRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n

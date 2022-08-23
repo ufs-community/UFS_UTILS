@@ -58,10 +58,54 @@ MODULE READ_WRITE_DATA
  PUBLIC :: READ_GSI_DATA
  PUBLIC :: READ_LAT_LON_OROG
  PUBLIC :: WRITE_DATA
+ PUBLIC :: write_data_frac_grid
  public :: read_tf_clim_grb,get_tf_clm_dim
  public :: read_salclm_gfs_nc,get_dim_nc
 
  CONTAINS
+
+ subroutine write_data_frac_grid(vegfcs, lensfc,idim,jdim)
+
+ use mpi
+
+ implicit none
+
+ integer, intent(in)              :: lensfc
+ integer, intent(in)              :: idim, jdim
+
+ real, intent(in)                 :: vegfcs(lensfc)
+
+ real :: dum2d(idim,jdim)
+
+ character(len=50) :: fnbgso
+ character(len=3)  :: rankch
+
+ integer           :: myrank, error, ncid, id_var
+
+
+ call mpi_comm_rank(mpi_comm_world, myrank, error)
+
+ write(rankch, '(i3.3)') (myrank+1)
+
+ fnbgso = "./fnbgso." // rankch
+
+ print*
+ print*,"update OUTPUT SFC DATA TO: ",trim(fnbgso)
+
+ 
+ ERROR=NF90_OPEN(TRIM(fnbgso),NF90_WRITE,NCID)
+ CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(fnbgso) )
+
+ ERROR=NF90_INQ_VARID(NCID, "vfrac", ID_VAR)
+ CALL NETCDF_ERR(ERROR, 'READING vfrac ID' )
+
+ dum2d = reshape(vegfcs, (/idim,jdim/))
+ error = nf90_put_var( ncid, id_var, dum2d)
+ call netcdf_err(error, 'WRITING vegfcs RECORD' )
+
+ error = nf90_close(ncid)
+
+ end subroutine write_data_frac_grid
 
    !> Write out all surface records - and nsst records if selected -
    !! on a single cubed-sphere tile to a model restart file (in netcdf).
