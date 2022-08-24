@@ -50,7 +50,7 @@ endif()
 
 target_link_libraries(${exe_name} PRIVATE global_cycle_lib)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)

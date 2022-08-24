@@ -70,12 +70,6 @@ find_package(ip 3.3.3 REQUIRED)
 find_package(g2 3.4.3 REQUIRED)
 find_package(sigio 2.3.0 REQUIRED)
 
-# EMC requires executables in ./exec
-set(exec_dir bin)
-if(EMC_EXEC_DIR)
-  set(exec_dir exec)
-endif()
-
 # If doxygen documentation we enabled, build it. This must come before
 # adding the source code directories; the main documentation build
 # must happen before any of the utility document builds.
