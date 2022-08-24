@@ -64,6 +64,8 @@ MODULE READ_WRITE_DATA
 
  CONTAINS
 
+!> Write out surface records for fractional grids
+!! to a pre-existing model restart file (in netcdf).
  subroutine write_data_frac_grid(vegfcs, lensfc,idim,jdim)
 
  use mpi
