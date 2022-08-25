@@ -339,6 +339,8 @@
  INTEGER             :: IDUM(IDIM,JDIM)
  integer             :: num_parthds, num_threads
 
+ logical             :: frac_grid
+
  real(kind=kind_io8) :: min_ice(lensfc)
 
  REAL                :: SLMASK(LENSFC), OROG(LENSFC)
@@ -369,7 +371,7 @@
  REAL, ALLOCATABLE   :: SLIFCS_FG(:)
  INTEGER, ALLOCATABLE :: LANDINC_MASK_FG(:), LANDINC_MASK(:)
  REAL, ALLOCATABLE   :: SND_BCK(:), SND_INC(:), SWE_BCK(:)
- REAL(KIND=KIND_IO8), ALLOCATABLE :: SLMASKL(:), SLMASKW(:)
+ REAL(KIND=KIND_IO8), ALLOCATABLE :: SLMASKL(:), SLMASKW(:), LANDFRAC(:)
 
  TYPE(NSST_DATA)     :: NSST
  real, dimension(idim,jdim) :: tf_clm,tf_trd,sal_clm
@@ -390,6 +392,7 @@
  DO_SNO_INC = .FALSE.
  DO_SOI_INC = .FALSE.
  
+ frac_grid=.true.
 
  SIG1T = 0.0            ! Not a dead start!
 
@@ -405,7 +408,12 @@
 ! READ THE OROGRAPHY AND GRID POINT LAT/LONS FOR THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
- CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC)
+ IF(FRAC_GRID) THEN
+   ALLOCATE(LANDFRAC(LENSFC))
+   CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC,LANDFRAC=LANDFRAC)
+ ELSE
+   CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC)
+ ENDIF
 
  DO I = 1, IDIM
    IDUM(I,:) = I
@@ -485,6 +493,18 @@ ENDIF
                 VMNFCS=VMNFCS,VMXFCS=VMXFCS,SLCFCS=SLCFCS,SLPFCS=SLPFCS,  &
                 ABSFCS=ABSFCS,T2M=T2M      ,Q2M=Q2M      ,SLMASK=SLMASK,  &
                 ZSOIL=ZSOIL,   NSST=NSST)
+
+
+ print*,'vegfcs check ',maxval(vegfcs),minval(vegfcs)
+ do i=1,lensfc
+   if(landfrac(i) > 0.0 .and. vegfcs(i) == 0.0) then
+     print*,'bad point 1 ',i,landfrac(i),vegfcs(i)
+   endif
+   if(landfrac(i) == 0.0 .and. vegfcs(i) > 0.0) then
+     print*,'bad point 2 ',i,landfrac(i),vegfcs(i)
+   endif
+ enddo
+ stop
 
  IF (USE_UFO) THEN
    PRINT*
