@@ -25,6 +25,7 @@ else
  set -x
 fi
 
+
 # The unit test data download is part of the build system. Not all machines can
 # access the EMC ftp site, so turn off the build (-DBUILD_TESTING=OFF) of the units tests accordingly.
 # Those with access to the EMC ftp site are: Orion and Hera.
