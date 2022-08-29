@@ -35,23 +35,28 @@ pwd=$(pwd -P)
 #--model fix fields
 #------------------------------
 if [ $machine = "hera" ]; then
-    FIX_DIR="/scratch1/NCEPDEV/global/glopara/fix_NEW"
+    FIX_DIR="/scratch1/NCEPDEV/global/glopara/fix"
 elif [ $machine = "jet" ]; then
     FIX_DIR="/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix_NEW"
 elif [ $machine = "orion" ]; then
-    FIX_DIR="/work/noaa/global/glopara/fix_NEW"
+    FIX_DIR="/work/noaa/global/glopara/fix"
 elif [ $machine = "wcoss2" ]; then
-    FIX_DIR="/lfs/h2/emc/global/save/emc.global/FIX/fix_NEW"
+    FIX_DIR="/lfs/h2/emc/global/save/emc.global/FIX/fix"
 elif [ $machine = "s4" ]; then
     FIX_DIR="/data/prod/glopara/fix"
 fi
 
-for dir in fix_am fix_orog fix_fv3_gmted2010 fix_sfc_climo fix_fv3_fracoro; do
+am_ver=${am_ver:-20220805}
+orog_ver=${orog_ver:-20220805}
+sfc_climo_ver=${sfc_climo_ver:-20220805}
+
+for dir in am orog sfc_climo; do
     if [ -d $dir ]; then
       [[ $RUN_ENVIR = nco ]] && chmod -R 755 $dir
       rm -rf $dir
     fi
-    $LINK $FIX_DIR/$dir  .
+    fix_ver="${dir}_ver"
+    $LINK $FIX_DIR/$dir/${!fix_ver} ${dir}
 done
 
 exit 0

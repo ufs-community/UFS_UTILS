@@ -30,11 +30,11 @@
 #     HOMEgfs       Directory for gfs.  Default is 
 #                   $BASEDIR/gfs.v15.0.0.
 #     FIXSUBDA      Sub-directory where fixed climatology files reside.
-#                   Defaults to fix/fix_am.
+#                   Defaults to fix/am.
 #     FIXam        Directory for the global fixed climatology files.
-#                   Defaults to $HOMEgfs/fix/fix_am
+#                   Defaults to $HOMEgfs/fix/am
 #     FIXfv3        Directory for the model grid and orography netcdf
-#                   files.  Defaults to $HOMEgfs/fix/fix_fv3/${CASE}
+#                   files.  Defaults to $HOMEgfs/fix/orog/${CASE}
 #     EXECgfs       Directory of the program executable.  Defaults to
 #                   $HOMEgfs/exec
 #     DATA          Working directory
@@ -234,8 +234,8 @@ gfs_ver=${gfs_ver:-v15.0.0}
 BASEDIR=${BASEDIR:-${NWROOT:-/nwprod2}}
 HOMEgfs=${HOMEgfs:-$BASEDIR/gfs_ver.${gfs_ver}}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
-FIXfv3=${FIXfv3:-$HOMEgfs/fix/fix_fv3_gmted2010/$CASE}
-FIXam=${FIXam:-$HOMEgfs/fix/fix_am}
+FIXfv3=${FIXfv3:-$HOMEgfs/fix/orog/$CASE}
+FIXam=${FIXam:-$HOMEgfs/fix/am}
 DATA=${DATA:-$(pwd)}
 COMIN=${COMIN:-$(pwd)}
 COMOUT=${COMOUT:-$(pwd)}

@@ -33,9 +33,9 @@ NWROOT=${NWROOT:-/nw${envir}}
 HOMEufs=${HOMEufs:-${NWROOT}/ufs_util.${ufs_ver}}
 EXECufs=${EXECufs:-$HOMEufs/exec}
 FIXufs=${FIXufs:-$HOMEufs/fix}
-FIXfv3=${FIXfv3:-$FIXufs/fix_fv3_gmted2010/C${CRES}}
-FIXsfc=${FIXsfc:-$FIXfv3/fix_sfc}
-FIXam=${FIXam:-$FIXufs/fix_am}
+FIXfv3=${FIXfv3:-$FIXufs/orog/C${CRES}}
+FIXsfc=${FIXsfc:-$FIXfv3/sfc}
+FIXam=${FIXam:-$FIXufs/am}
 
 #----------------------------------------------------------------------------
 # CDATE - YYMMDDHH of your run.
