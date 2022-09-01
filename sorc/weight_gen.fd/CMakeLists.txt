@@ -18,7 +18,7 @@ target_link_libraries(
   sp::sp_d
   NetCDF::NetCDF_Fortran)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)

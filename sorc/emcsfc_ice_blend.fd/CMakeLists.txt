@@ -14,7 +14,7 @@ target_link_libraries(
   g2::g2_4
   w3nco::w3nco_4)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)
