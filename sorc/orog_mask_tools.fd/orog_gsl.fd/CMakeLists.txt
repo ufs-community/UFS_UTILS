@@ -28,4 +28,4 @@ target_link_libraries(
 
 target_link_libraries(${exe_name} PRIVATE orog_gsl_lib)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})

@@ -54,7 +54,7 @@ endif()
 
 target_link_libraries(${exe_name} PRIVATE cpld_gridgen_lib)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)

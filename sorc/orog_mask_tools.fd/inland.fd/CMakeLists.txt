@@ -21,4 +21,4 @@ target_link_libraries(
 
 target_link_libraries(inland PRIVATE inland_lib)
 
-install(TARGETS inland RUNTIME DESTINATION ${exec_dir})
+install(TARGETS inland)
