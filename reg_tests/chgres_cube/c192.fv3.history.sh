@@ -19,7 +19,7 @@ export COMIN=${HOMEreg}/input_data/fv3.history
 # Pay attention to the quotes.  Dont start/end with double quote.
 export ATM_FILES_INPUT='dynf000.tile1.nc","dynf000.tile2.nc","dynf000.tile3.nc","dynf000.tile4.nc","dynf000.tile5.nc","dynf000.tile6.nc'
 export SFC_FILES_INPUT='phyf000.tile1.nc","phyf000.tile2.nc","phyf000.tile3.nc","phyf000.tile4.nc","phyf000.tile5.nc","phyf000.tile6.nc'
-export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
+export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
 export INPUT_TYPE='history'
 export MOSAIC_FILE_INPUT_GRID="${HOMEreg}/fix/C96/C96_mosaic.nc"
 export OROG_DIR_INPUT_GRID=${HOMEreg}/fix/C96
