@@ -497,14 +497,13 @@ ENDIF
 
  print*,'vegfcs check ',maxval(vegfcs),minval(vegfcs)
  do i=1,lensfc
-   if(landfrac(i) > 0.0 .and. vegfcs(i) == 0.0) then
+   if(landfrac(i) > 0.0_kind_io8 .and. vegfcs(i) == 0.0) then
      print*,'bad point 1 ',i,landfrac(i),vegfcs(i)
    endif
-   if(landfrac(i) == 0.0 .and. vegfcs(i) > 0.0) then
+   if(landfrac(i) == 0.0_kind_io8 .and. vegfcs(i) > 0.0) then
      print*,'bad point 2 ',i,landfrac(i),vegfcs(i)
    endif
  enddo
- stop
 
  IF (USE_UFO) THEN
    PRINT*
@@ -546,6 +545,39 @@ ENDIF
 
  IF (DO_SFCCYCLE) THEN
    ALLOCATE(SLMASKL(LENSFC), SLMASKW(LENSFC))
+   IF (FRAC_GRID) THEN
+
+     DO I=1,LENSFC
+       IF(LANDFRAC(I) > 0.0_KIND_IO8) THEN
+         SLMASKL(I) = CEILING(LANDFRAC(I)-1.0E-6_KIND_IO8)
+         SLMASKW(I) =   FLOOR(LANDFRAC(I)+1.0E-6_KIND_IO8)
+       ELSE
+         IF(NINT(SLMASK(I)) == 1) THEN ! if landfrac is zero, this should not happen.
+                                       ! is this a band aid?
+            print*,'first if'
+           SLMASKL(I) = 1.0_KIND_io8
+           SLMASKW(I) = 1.0_KIND_io8
+         ELSE ! if landfrac is zero, this is expected.
+!           print*,'second if'
+           SLMASKL(I) = 0.0_KIND_io8
+           SLMASKW(I) = 0.0_KIND_io8
+         ENDIF
+       ENDIF
+
+       if(nint(slmaskl(i)) == 1 .and. vegfcs(i) == 0.0) then
+        print*,'bad point 3 ',i,landfrac(i),slmaskl(i),vegfcs(i)
+       endif
+       if(nint(slmaskl(i)) == 0 .and. vegfcs(i) > 0.0) then
+        print*,'bad point 4 ',i,landfrac(i),slmaskw(i),vegfcs(i)
+       endif
+
+
+     ENDDO
+
+     print*,'got here'
+     stop
+
+   ELSE
 ! for running uncoupled (non-fractional grid)
    DO I=1,LENSFC
      IF(NINT(SLMASK(I)) == 1) THEN
@@ -561,6 +593,8 @@ ENDIF
        min_ice(i) = 0.0_KIND_io8
      endif
    ENDDO  
+
+   ENDIF ! frac_grid
    num_threads = num_parthds()
    PRINT*
    PRINT*,"CALL SFCCYCLE TO UPDATE SURFACE FIELDS."
