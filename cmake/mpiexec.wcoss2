@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Arguments:
+#
+#   $1  - Number of MPI Tasks
+#   $2+ - Executable and its arguments
+#
+
+ACCOUNT=GFS-DEV
+QUEUE=dev
+
+NP=$1
+shift
+
+qsub -A $ACCOUNT -q $QUEUE -l select=1:ncpus=$NP:mem=1GB -l place=vscatter -l walltime=00:10:00 $@
