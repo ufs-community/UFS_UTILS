@@ -44,9 +44,16 @@ QUEUE="${QUEUE:-batch}"
 # and baseline data for each test.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube
+export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/chgres_cube
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
@@ -194,12 +201,30 @@ TEST15=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:15:00 -A $PROJECT
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.netcdf2wam.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize CONUS 25-KM USING  GFS PGRIB2+BGRIB2 files.
+#-----------------------------------------------------------------------------
+
+LOG_FILE=consistency.log16
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST16=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.pbgrib2.conus \
+      -o $LOG_FILE -e $LOG_FILE ./25km.conus.gfs.pbgrib2.sh)
+
+#-----------------------------------------------------------------------------
+# Initialize global C96 using GEFS GRIB2 files.
+#-----------------------------------------------------------------------------
+
+LOG_FILE=consistency.log17
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST17=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c96.gefs.grib2 \
+      -o $LOG_FILE -e $LOG_FILE ./c96.gefs.grib2.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 LOG_FILE=consistency.log
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
       --open-mode=append -q $QUEUE -d\
-      afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14:$TEST15 << EOF
+     afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14:$TEST15:$TEST16:$TEST17 << EOF
 #!/bin/bash
 grep -a '<<<' $LOG_FILE*  > $SUM_FILE
 EOF

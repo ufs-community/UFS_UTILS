@@ -60,7 +60,7 @@ module module_nwp_base
 
 !        Write out the lon, lat, and time of the ob
 
-         write(*,'(a,3f10.3)') 'LIGHTNING OB: longitude, latitude, time =', &
+         write(6,'(a,3f10.3)') 'LIGHTNING OB: longitude, latitude, time =', &
             this%lon, this%lat, this%time
 
 !        Loop through all variables and print out obs and quality
@@ -68,11 +68,11 @@ module module_nwp_base
          numvar = this%numvar
          if (numvar >= 1) then
 ! MULTI-DIMENSIONAL EXAMPLE IN  module_obs_base.f90
-            write(*,'(a4,10F12.2)') 'obs=', (this%obs(i),i=1,numvar)
+            write(6,'(a4,10F12.2)') 'obs=', (this%obs(i),i=1,numvar)
             if(this%ifquality) &
-            write(*,'(a4,10I12)') 'qul=', (this%quality(i),i=1,numvar)
+            write(6,'(a4,10I12)') 'qul=', (this%quality(i),i=1,numvar)
          else
-            write(*,*) 'No obs for this location'
+            write(6,*) 'No obs for this location'
          endif
 
       end subroutine list_obsbase
@@ -105,7 +105,7 @@ module module_nwp_base
             if(this%ifquality) allocate(this%quality(numvar))
 
          else
-            write(*,*) 'alloc_obsbase Error: dimension must be larger than 0:', numvar
+            write(6,*) 'alloc_obsbase Error: dimension must be larger than 0:', numvar
             stop 1234
          endif
 

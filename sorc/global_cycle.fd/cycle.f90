@@ -3,28 +3,32 @@
 !! @author Mark Iredell NCEP/EMC
   
 !>  Stand alone surface/NSST cycle driver for the cubed-sphere grid.
-!!  Each cubed-sphere tile runs independently on its own mpi task.  
+!!  Each cubed-sphere tile runs independently on its own mpi task.
 !!  The surface update component runs with threads.  The NSST
 !!  update component in not threaded.
 !!
-!!  There are three main options (which can be called in combination): 
-!!  1. Update the surface fields with sfccylce (do_sfccycle = .true.) 
-!!  2. Update the land states with increments read in from file (do_lndinc = .true.) 
-!!     Designed to work with a land increment file  created by the GSI on the Gaussian 
-!!     grid. The increments are interpolated here to the model grid, using the 
-!!     same method as for the NST increments. Initially implemented for
-!!     applying soil temperature increments calculated from the EnKF 
-!!     assimilation of T2m (but this is not a requirement -  any 
-!!     GSI-generated soil temperature increment file can be applied here). 
-!!  3. Update the NSST field, several options: 
+!!  There are three main options (which can be called in combination):
+!!  1. Update the surface fields with sfccylce (do_sfccycle = .true.)
+!!  2. Update the land states with increments read in from file (do_lndinc = .true.)
+!!     Designed to work with either: 
+!!   2a. A land increment file  created by the GSI on the Gaussian
+!!     grid. The increments are interpolated here to the model grid, using the
+!!     same method as for the NST increments. This is currently implemented for
+!!     applying soil temperature increments calculated from the EnKF
+!!     assimilation of T2m (but this is not a requirement -  any
+!!     GSI-generated soil temperature increment file can be applied here).
+!!   2b. A land increment file created by JEDI, on the native model grid 
+!!      (cube sphere tiles). This is currently implemented for snow depth 
+!!      updates for the Noah model. 
+!!  3. Update the NSST field, several options:
 !!
 !!  3a. Update the NSST TREF field using
 !!     GSI increments on the Gaussian grid.  All other NSST
 !!     fields are cycled.  Invoke this option by setting
-!!     namelist variable DONST=.true. and NST_FILE to 
+!!     namelist variable DONST=.true. and NST_FILE to
 !!     the name of the GSI increment file.
-!!  
-!!  3b. Run with NSST, but postpone the TREF update.  
+!!
+!!  3b. Run with NSST, but postpone the TREF update.
 !!     Here all NSST fields are cycled.  But the NSST IFD field is
 !!     used to flag points that flipped from ice to open water.
 !!     To invoke this option, set DONST=.true. and NST_FILE="NULL".
@@ -38,8 +42,11 @@
 !!                     file.
 !!  - $NST_FILE        Gaussian GSI file which contains NSST
 !!                     TREF increments
-!!  - $LND_SNO_FILE        Gaussian GSI file which contains soil state
+!!  - $LND_SOI_FILE    Gaussian GSI file which contains soil state
 !!                     increments
+!!  - xainc.$NNN       The cubed-sphere increment file (contains 
+!!                     increments calculated by JEDI on the native 
+!!                     model grid). 
 !!  
 !!  OUTPUT FILES:
 !!  - fnbgso.$NNN        The updated sfc/nsst restart file.
@@ -64,10 +71,12 @@
 !!  - USE_UFO      Adjust sst and soil substrate temperature for
 !!                 differences between the filtered and unfiltered
 !!                 terrain.
-!!  -DONST          Process NSST records.
-!!  -DO_SFCCYCLE    Call sfccycle routine to update surface fields 
-!!  -DO_LNDINC      Read in land increment files, and add increments to 
-!!                  soil states.
+!!  -DONST         Process NSST records.
+!!  -DO_SFCCYCLE   Call sfccycle routine to update surface fields
+!!  -DO_LNDINC     Read in land increment files, and add increments to
+!!                 relevant states.
+!!  -DO_SOI_INC     Do land increments to soil states.
+!!  -DO_SNO_INC     Do land increments to snow states.
 !!  - ISOT         Use statsgo soil type when '1'. Use zobler when '0'.
 !!  - IVEGSRC      Use igbp veg type when '1'.  Use sib when '2'.
 !!  - ZSEA1/2_MM   When running with NSST model, this is the lower/
@@ -81,7 +90,7 @@
 !!                 (max_tasks-1).
 !!  -NST_FILE       path/name of the gaussian GSI file which contains NSST
 !!                 TREF increments.
-!!  -LND_SOI_FILE       path/name of the gaussian GSI file which contains soil
+!!  -LND_SOI_FILE  path/name of the gaussian GSI file which contains soil
 !!                 state increments.
 !!
 !!  -2005-02-03:  Iredell   for global_analysis
@@ -133,14 +142,14 @@
  USE_UFO = .FALSE.
  DONST   = "NO"
  DO_LNDINC   = .FALSE.
- DO_SFCCYCLE = .TRUE. 
+ DO_SFCCYCLE = .TRUE.
 
  PRINT*
  PRINT*,"READ NAMCYC NAMELIST."
 
  CALL BAOPENR(36, "fort.36", IERR)
  READ(36, NML=NAMCYC)
- IF (MYRANK==0) WRITE(6,NAMCYC)
+ !IF (MYRANK==0) WRITE(6,NAMCYC)
 
  IF (MAX_TASKS < 99999 .AND. MYRANK > (MAX_TASKS - 1)) THEN
    PRINT*,"USER SPECIFIED MAX NUMBER OF TASKS: ", MAX_TASKS
@@ -210,7 +219,7 @@
  !!
  !!   - OROG .. Orography
  !!   - ALB  .. Snow-free albedo
- !!   - SNO  .. Liquid-equivalent snow depth (SWE) 
+ !!   - SWE  .. Snow water equivalent
  !!   - ZOR  .. Surface roughness length
  !!   - VET  .. Vegetation type
  !!   - TSF  .. Surface skin temperature.  Sea surface temp. over ocean.
@@ -227,7 +236,7 @@
  !!   - SOT  .. Soil type
  !!   - SIH  .. Sea ice thickness
  !!   - SIC  .. Sea ice concentration
- !!   - SWD  .. Actual snow depth
+ !!   - SND  .. Snow depth
  !!   - SLC  .. Liquid soil moisture (LSOIL layers)
  !!   - VMN  .. Vegetation cover minimum
  !!   - VMX  .. Vegetation cover maximum
@@ -283,7 +292,7 @@
  !! @param[in] DO_NSST When true, process NSST records.
  !! @param[in] DO_SFCCYCLE Call sfccycle routine to update surface fields
  !! @param[in] DO_LNDINC Read in land increment files, and add increments to
- !!            soil states.
+ !!            requested states.
  !! @param[in] ZSEA1 When running NSST model, this is the lower bound
  !!            of depth of sea temperature.  In whole mm.
  !! @param[in] ZSEA2 When running NSST model, this is the upper bound
@@ -298,10 +307,13 @@
                    ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
 !
  USE READ_WRITE_DATA
+ use machine
  USE MPI
- USE LAND_INCREMENTS, ONLY: ADD_INCREMENT_SOIL,        &
-                            CALCULATE_SOILSNOWMASK, &
-                            APPLY_LAND_DA_ADJUSTMENTS
+ USE LAND_INCREMENTS, ONLY: ADD_INCREMENT_SOIL,     &
+                            ADD_INCREMENT_SNOW,     &
+                            CALCULATE_LANDINC_MASK, &
+                            APPLY_LAND_DA_ADJUSTMENTS_STC, &
+                            APPLY_LAND_DA_ADJUSTMENTS_SND
 
  IMPLICIT NONE
 
@@ -325,11 +337,14 @@
  INTEGER             :: I, IERR
  INTEGER             :: I_INDEX(LENSFC), J_INDEX(LENSFC)
  INTEGER             :: IDUM(IDIM,JDIM)
+ integer             :: num_parthds, num_threads
+
+ real(kind=kind_io8) :: min_ice(lensfc)
 
  REAL                :: SLMASK(LENSFC), OROG(LENSFC)
  REAL                :: SIHFCS(LENSFC), SICFCS(LENSFC)
  REAL                :: SITFCS(LENSFC), TSFFCS(LENSFC)
- REAL                :: SNOFCS(LENSFC), ZORFCS(LENSFC)
+ REAL                :: SWEFCS(LENSFC), ZORFCS(LENSFC)
  REAL                :: ALBFCS(LENSFC,4), TG3FCS(LENSFC)
  REAL                :: CNPFCS(LENSFC), SMCFCS(LENSFC,LSOIL)
  REAL                :: STCFCS(LENSFC,LSOIL), SLIFCS(LENSFC)
@@ -338,7 +353,7 @@
  REAL                :: SOTFCS(LENSFC), ALFFCS(LENSFC,2)
  REAL                :: CVFCS(LENSFC), CVTFCS(LENSFC)
  REAL                :: CVBFCS(LENSFC), TPRCP(LENSFC)
- REAL                :: SRFLAG(LENSFC), SWDFCS(LENSFC)
+ REAL                :: SRFLAG(LENSFC), SNDFCS(LENSFC)
  REAL                :: SLCFCS(LENSFC,LSOIL), VMXFCS(LENSFC)
  REAL                :: VMNFCS(LENSFC), T2M(LENSFC)
  REAL                :: Q2M(LENSFC), SLPFCS(LENSFC)
@@ -352,22 +367,29 @@
                                       !! start.
  REAL, ALLOCATABLE   :: STC_BCK(:,:), SMC_BCK(:,:), SLC_BCK(:,:)
  REAL, ALLOCATABLE   :: SLIFCS_FG(:)
- INTEGER, ALLOCATABLE :: SOILSNOW_FG_MASK(:), SOILSNOW_MASK(:)
+ INTEGER, ALLOCATABLE :: LANDINC_MASK_FG(:), LANDINC_MASK(:)
+ REAL, ALLOCATABLE   :: SND_BCK(:), SND_INC(:), SWE_BCK(:)
+ REAL(KIND=KIND_IO8), ALLOCATABLE :: SLMASKL(:), SLMASKW(:)
 
  TYPE(NSST_DATA)     :: NSST
  real, dimension(idim,jdim) :: tf_clm,tf_trd,sal_clm
  real, dimension(lensfc)    :: tf_clm_tile,tf_trd_tile,sal_clm_tile
+ INTEGER             :: veg_type_landice
 
- logical :: file_exists
+ LOGICAL :: FILE_EXISTS, DO_SOI_INC, DO_SNO_INC
 !--------------------------------------------------------------------------------
 ! NST_FILE is the path/name of the gaussian GSI file which contains NSST
 ! increments.
 !--------------------------------------------------------------------------------
  
+ NAMELIST/NAMSFCD/ NST_FILE, LND_SOI_FILE, DO_SNO_INC
+
  DATA NST_FILE/'NULL'/
  DATA LND_SOI_FILE/'NULL'/
+
+ DO_SNO_INC = .FALSE.
+ DO_SOI_INC = .FALSE.
  
- NAMELIST/NAMSFCD/ NST_FILE, LND_SOI_FILE
 
  SIG1T = 0.0            ! Not a dead start!
 
@@ -375,7 +397,6 @@
 
  CALL BAOPENR(37, "fort.37", IERR)
  READ (37, NML=NAMSFCD)
- WRITE(6,NAMSFCD)
 
  PRINT*
  PRINT*,'IN ROUTINE SFCDRV,IDIM=',IDIM,'JDIM=',JDIM,'FH=',FH
@@ -423,26 +444,47 @@
    ALLOCATE(SLIFCS_FG(LENSFC))
  ENDIF
 
-IF (DO_LNDINC) THEN 
-  ! CSD-todo: here determine types of increments being applied
-   PRINT*
-   PRINT*," APPLYING LAND INCREMENTS FROM THE GSI" 
-   ALLOCATE(SOILSNOW_FG_MASK(LENSFC))
-   ALLOCATE(SOILSNOW_MASK(LENSFC))
-   ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
+IF (DO_LNDINC) THEN
+   ! identify variables to be updates, and allocate arrays.
+   IF  (TRIM(LND_SOI_FILE) .NE. "NULL") THEN
+       DO_SOI_INC = .TRUE.
+       PRINT*
+       PRINT*," APPLYING SOIL INCREMENTS FROM THE GSI"
+       ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
+       ALLOCATE(LANDINC_MASK_FG(LENSFC))
+   ENDIF
+   ! FOR NOW, CODE SO CAN DO BOTH, BUT MIGHT NEED TO THINK ABOUT THIS SOME MORE.
+   IF  (DO_SNO_INC) THEN
+       ! ideally, would check here that sfcsub snow DA update is not also requested
+       ! but latter is controlled by fnsol, which is read in within that routine.
+       ! should be done at script level.
+       PRINT*
+       PRINT*," APPLYING SNOW INCREMENTS FROM JEDI"
+       ALLOCATE(SND_BCK(LENSFC), SND_INC(LENSFC), SWE_BCK(LENSFC))
+   ENDIF
+   ! set-up land mask info
+   ALLOCATE(LANDINC_MASK(LENSFC))
+   if (ivegsrc == 2) then   ! sib
+      veg_type_landice=13
+   else
+      veg_type_landice=15
+   endif
 ENDIF
 
 !--------------------------------------------------------------------------------
 ! READ THE INPUT SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
- CALL READ_DATA(TSFFCS,SMCFCS,SNOFCS,STCFCS,TG3FCS,ZORFCS,  &
-                CVFCS,CVBFCS,CVTFCS,ALBFCS,SLIFCS,          &
-                VEGFCS,CNPFCS,F10M,VETFCS,SOTFCS,           &
-                ALFFCS,USTAR,FMM,FHH,SIHFCS,SICFCS,         &
-                SITFCS,TPRCP,SRFLAG,SWDFCS,VMNFCS,          &
-                VMXFCS,SLCFCS,SLPFCS,ABSFCS,T2M,Q2M,        &
-                SLMASK,ZSOIL,LSOIL,LENSFC,DO_NSST,NSST)
+ CALL READ_DATA(LSOIL,LENSFC,DO_NSST,.false.,TSFFCS=TSFFCS,SMCFCS=SMCFCS,   &
+                SWEFCS=SWEFCS,STCFCS=STCFCS,TG3FCS=TG3FCS,ZORFCS=ZORFCS,  &
+                CVFCS=CVFCS,  CVBFCS=CVBFCS,CVTFCS=CVTFCS,ALBFCS=ALBFCS,  &
+                VEGFCS=VEGFCS,SLIFCS=SLIFCS,CNPFCS=CNPFCS,F10M=F10M    ,  &
+                VETFCS=VETFCS,SOTFCS=SOTFCS,ALFFCS=ALFFCS,USTAR=USTAR  ,  &
+                FMM=FMM      ,FHH=FHH      ,SIHFCS=SIHFCS,SICFCS=SICFCS,  &
+                SITFCS=SITFCS,TPRCP=TPRCP  ,SRFLAG=SRFLAG,SNDFCS=SNDFCS,  &
+                VMNFCS=VMNFCS,VMXFCS=VMXFCS,SLCFCS=SLCFCS,SLPFCS=SLPFCS,  &
+                ABSFCS=ABSFCS,T2M=T2M      ,Q2M=Q2M      ,SLMASK=SLMASK,  &
+                ZSOIL=ZSOIL,   NSST=NSST)
 
  IF (USE_UFO) THEN
    PRINT*
@@ -470,27 +512,51 @@ ENDIF
  ENDIF
  
  ! CALCULATE MASK FOR LAND INCREMENTS
- IF (DO_LNDINC)  & 
-    CALL CALCULATE_SOILSNOWMASK(SLCFCS(:,1),SNOFCS, LENSFC, SOILSNOW_FG_MASK)
+ IF (DO_LNDINC)  &
+    CALL CALCULATE_LANDINC_MASK(SLCFCS(:,1),SWEFCS, VETFCS,  &
+                    LENSFC,VEG_TYPE_LANDICE,  LANDINC_MASK)
 
 !--------------------------------------------------------------------------------
 ! UPDATE SURFACE FIELDS.
+!
+! FIRST, SET WATER AND LAND MASKS - SLMASKW/SLMASKL. FOR UNCOUPLED
+! (NON-FRACTIONAL) MODE, THESE ARE IDENTICAL TO THE CURRENT
+! MASK - '0' WATER; '1' LAND.
 !--------------------------------------------------------------------------------
 
  IF (DO_SFCCYCLE) THEN
+   ALLOCATE(SLMASKL(LENSFC), SLMASKW(LENSFC))
+! for running uncoupled (non-fractional grid)
+   DO I=1,LENSFC
+     IF(NINT(SLMASK(I)) == 1) THEN
+       SLMASKL(I) = 1.0_KIND_io8
+       SLMASKW(I) = 1.0_KIND_io8
+     ELSE
+       SLMASKL(I) = 0.0_KIND_io8
+       SLMASKW(I) = 0.0_KIND_io8
+     ENDIF
+     if(nint(slmask(i)) == 0) then
+       min_ice(i) = 0.15_KIND_io8
+     else
+       min_ice(i) = 0.0_KIND_io8
+     endif
+   ENDDO  
+   num_threads = num_parthds()
    PRINT*
    PRINT*,"CALL SFCCYCLE TO UPDATE SURFACE FIELDS."
    CALL SFCCYCLE(LUGB,LENSFC,LSOIL,SIG1T,DELTSFC,          &
                IY,IM,ID,IH,FH,RLA,RLO,                   &
-               SLMASK,OROG, OROG_UF, USE_UFO, DO_NSST,   &
-               SIHFCS,SICFCS,SITFCS,SWDFCS,SLCFCS,       &
+               SLMASKL,SLMASKW, OROG, OROG_UF, USE_UFO, DO_NSST,   &
+               SIHFCS,SICFCS,SITFCS,SNDFCS,SLCFCS,       &
                VMNFCS,VMXFCS,SLPFCS,ABSFCS,              &
-               TSFFCS,SNOFCS,ZORFCS,ALBFCS,TG3FCS,       &
+               TSFFCS,SWEFCS,ZORFCS,ALBFCS,TG3FCS,       &
                CNPFCS,SMCFCS,STCFCS,SLIFCS,AISFCS,       &
                VEGFCS,VETFCS,SOTFCS,ALFFCS,              &
-               CVFCS,CVBFCS,CVTFCS,MYRANK,NLUNIT,        &
+               CVFCS,CVBFCS,CVTFCS,MYRANK,num_threads, NLUNIT,        &
                SZ_NML, INPUT_NML_FILE,                   &
+               min_ice, &
                IALB,ISOT,IVEGSRC,TILE_NUM,I_INDEX,J_INDEX)
+   DEALLOCATE(SLMASKL, SLMASKW)
  ENDIF
 
 !--------------------------------------------------------------------------------
@@ -537,76 +603,120 @@ ENDIF
  ENDIF
 
 !--------------------------------------------------------------------------------
-! READ IN AND APPLY LAND INCEREMENTS FROM THE GSI
+! READ IN AND APPLY LAND INCREMENTS FROM THE GSI
 !--------------------------------------------------------------------------------
 
- IF (DO_LNDINC) THEN 
+ IF (DO_LNDINC) THEN
 
-!--------------------------------------------------------------------------------
-! RE-CALCULATE SOILSNOW MASK AFTER SNOW UPDATE
-!--------------------------------------------------------------------------------
+    ! SNOW INCREMENTS
+    ! do snow first, as temperature updates will use snow analaysis
+    IF (DO_SNO_INC) THEN
+    ! updates are made to snow depth only over land (and not-land ice).
+    ! SWE is then updated from the snow depth analysis, using the model
+    ! forecast density
 
-    IF (DO_SFCCYCLE)  THEN ! should really make this a snow DA flag, but this will do
-        CALL CALCULATE_SOILSNOWMASK(SLCFCS(:,1),SNOFCS, LENSFC, SOILSNOW_MASK ) 
-    ELSE 
-        SOILSNOW_MASK = SOILSNOW_FG_MASK
-    ENDIF 
+       !--------------------------------------------------------------------------------
+       ! read increments in
+       !--------------------------------------------------------------------------------
 
-!--------------------------------------------------------------------------------
-! read increments in 
-!--------------------------------------------------------------------------------
+       ! Only coded for DA on native model grid (would always be the case for cycling DA)
+       CALL READ_DATA(LSOIL,LENSFC,.false.,.true.,SNDFCS=SND_INC)
 
-    INQUIRE(FILE=trim(LND_SOI_FILE), EXIST=file_exists)
-    IF (.not. file_exists) then 
-        print *, 'FATAL ERROR: land increment update requested, but file does not exist: ', & 
-                trim(lnd_soi_file)
-        call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+       !--------------------------------------------------------------------------------
+       ! add increments to state vars
+       !--------------------------------------------------------------------------------
+
+       ! store background states
+       SND_BCK = SNDFCS
+       SWE_BCK = SWEFCS
+
+       CALL ADD_INCREMENT_SNOW(SND_INC,LANDINC_MASK,LENSFC,SNDFCS)
+
+       !--------------------------------------------------------------------------------
+       ! make any necessary adjustments to dependent variables
+       !--------------------------------------------------------------------------------
+
+       CALL APPLY_LAND_DA_ADJUSTMENTS_SND(LSM, LENSFC, LANDINC_MASK, SWE_BCK, SND_BCK, &
+                        SNDFCS, SWEFCS)
+
     ENDIF
 
-    CALL READ_GSI_DATA(LND_SOI_FILE, 'LND', LSOIL=LSOIL)
+    ! SOIL INCREMENTS
+    IF (DO_SOI_INC) THEN
 
+       !--------------------------------------------------------------------------------
+       ! re-calculate soilsnow mask if snow has been updated.
+       !--------------------------------------------------------------------------------
 
-!--------------------------------------------------------------------------------
-! add increments to state vars
-!--------------------------------------------------------------------------------
-! when applying increments, will often need to adjust other land states in response  
-! to the changes made. Need to store bacground, apply the increments, then make 
-! secondart adjustments. When updating more than one state, be careful about the 
-! orfer if increments and secondary adjustments. 
+        LANDINC_MASK_FG = LANDINC_MASK
 
-! store background states 
-   STC_BCK = STCFCS
-   SMC_BCK = SMCFCS ! not used yet.
-   SLC_BCK = SLCFCS ! not used yet.
+        IF (DO_SFCCYCLE .OR. DO_SNO_INC)  THEN
+            CALL CALCULATE_LANDINC_MASK(SLCFCS(:,1),SWEFCS, VETFCS, LENSFC, &
+                                                        VEG_TYPE_LANDICE, LANDINC_MASK )
+        ENDIF
 
-   CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,SOILSNOW_MASK,SOILSNOW_FG_MASK,  & 
-        LENSFC,LSOIL,IDIM,JDIM, MYRANK)
+       !--------------------------------------------------------------------------------
+       ! read increments in
+       !--------------------------------------------------------------------------------
 
-!--------------------------------------------------------------------------------
-! make any necessary adjustments to dependent variables
-!--------------------------------------------------------------------------------
+        INQUIRE(FILE=trim(LND_SOI_FILE), EXIST=file_exists)
+        IF (.not. file_exists) then
+            print *, 'FATAL ERROR: land increment update requested, but file does not exist: ', &
+                    trim(lnd_soi_file)
+            call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+        ENDIF
 
-   CALL APPLY_LAND_DA_ADJUSTMENTS('stc', LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
-        SOTFCS,SMC_BCK, SLC_BCK,STC_BCK, SMCFCS, SLCFCS,STCFCS)
+        CALL READ_GSI_DATA(LND_SOI_FILE, 'LND', LSOIL=LSOIL)
+
+        !--------------------------------------------------------------------------------
+        ! add increments to state vars
+        !--------------------------------------------------------------------------------
+        ! when applying increments, will often need to adjust other land states in response
+        ! to the changes made. Need to store bacground, apply the increments, then make
+        ! secondart adjustments. When updating more than one state, be careful about the
+        ! order if increments and secondary adjustments.
+
+        ! store background states
+        STC_BCK = STCFCS
+        SMC_BCK = SMCFCS ! not used yet.
+        SLC_BCK = SLCFCS ! not used yet.
+
+        CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,LANDINC_MASK,LANDINC_MASK_FG,  &
+            LENSFC,LSOIL,IDIM,JDIM, MYRANK)
+
+        !--------------------------------------------------------------------------------
+        ! make any necessary adjustments to dependent variables
+        !--------------------------------------------------------------------------------
+
+        CALL APPLY_LAND_DA_ADJUSTMENTS_STC(LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
+            SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS)
+
+   ENDIF ! soil increments
 
 !--------------------------------------------------------------------------------
 ! clean up
 !--------------------------------------------------------------------------------
 
    ! to do - save and write out  STC_INC? (soil temperature increments)
-   DEALLOCATE(SOILSNOW_FG_MASK, SOILSNOW_MASK) 
-   DEALLOCATE(STC_BCK, SMC_BCK, SLC_BCK)
+   IF(ALLOCATED(LANDINC_MASK_FG)) DEALLOCATE(LANDINC_MASK_FG)
+   IF(ALLOCATED(LANDINC_MASK)) DEALLOCATE(LANDINC_MASK)
+   IF(ALLOCATED(STC_BCK)) DEALLOCATE(STC_BCK)
+   IF(ALLOCATED(SMC_BCK)) DEALLOCATE(SMC_BCK)
+   IF(ALLOCATED(SLC_BCK)) DEALLOCATE(SLC_BCK)
+   IF(ALLOCATED(SND_BCK)) DEALLOCATE(SND_BCK)
+   IF(ALLOCATED(SWE_BCK)) DEALLOCATE(SWE_BCK)
+   IF(ALLOCATED(SND_INC)) DEALLOCATE(SND_INC)
 
- ENDIF 
+ ENDIF
 !--------------------------------------------------------------------------------
 ! WRITE OUT UPDATED SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
- CALL WRITE_DATA(SLIFCS,TSFFCS,SNOFCS,TG3FCS,ZORFCS,         &
+ CALL WRITE_DATA(SLIFCS,TSFFCS,SWEFCS,TG3FCS,ZORFCS,         &
                  ALBFCS,ALFFCS,VEGFCS,CNPFCS,F10M,           &
                  T2M,Q2M,VETFCS,SOTFCS,USTAR,FMM,FHH,        &
                  SICFCS,SIHFCS,SITFCS,                       &
-                 TPRCP,SRFLAG,SWDFCS,                        &
+                 TPRCP,SRFLAG,SNDFCS,                        &
                  VMNFCS,VMXFCS,SLPFCS,ABSFCS,                &
                  SLCFCS,SMCFCS,STCFCS,                       &
                  IDIM,JDIM,LENSFC,LSOIL,DO_NSST,NSST)

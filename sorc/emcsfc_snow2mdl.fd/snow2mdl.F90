@@ -105,8 +105,7 @@
 !! @note The determination of cover and depth on the model
 !! grid depends on the input snow data selected.
 !!
-!!   nam grids:
-!!   ---------
+!!  nam grids:
 !!
 !!   1) nesdis/ims only - An analysis of snow cover on the
 !!      model grid is produced.  No depth analysis is
@@ -128,8 +127,7 @@
 !!      defined threshold, the depth is set to 0,
 !!      regardless of the afwa depth value.
 !!
-!!   gfs grid:
-!!   --------
+!!  gfs grid:
 !!
 !!   1) nesdis/ims and autosnow only - An analysis of snow
 !!      cover and depth on the model grid is produced.

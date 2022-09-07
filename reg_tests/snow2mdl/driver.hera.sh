@@ -2,12 +2,12 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run snow2mdl consistency test on Hera.
+# Run snow2mdl consistency tests on Hera.
 #
-# Set $DATA to your working directory.  Set the project code (SBATCH -A)
+# Set $DATA_ROOT to your working directory.  Set the project code (SBATCH -A)
 # and queue (SBATCH -q) as appropriate.
 #
-# Invoke the script as follows:  sbatch $script
+# Invoke the script from the command line as follows:  ./$script
 #
 # Log output is placed in consistency.log.  A summary is
 # placed in summary.log
@@ -18,15 +18,6 @@
 #
 #-----------------------------------------------------------------------------
 
-#SBATCH -J snow
-#SBATCH -A fv3-cpu
-#SBATCH --open-mode=truncate
-#SBATCH -o consistency.log
-#SBATCH -e consistency.log
-#SBATCH --ntasks=1
-#SBATCH -q debug
-#SBATCH -t 00:03:00
-
 set -x
 
 compiler=${compiler:-"intel"}
@@ -36,20 +27,48 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-export DATA="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
-export DATA="${DATA}/reg-tests/snow2mdl"
+DATA_ROOT="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
+
+rm -fr $DATA_ROOT
+
+PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+QUEUE="${QUEUE:-batch}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
-rm -fr $DATA
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
 
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/snow2mdl
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
+export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 export WGRIB=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/wgrib
 export WGRIB2=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/wgrib2
 
-./snow2mdl.sh
+# The first test mimics GFS OPS.
+
+export DATA="${DATA_ROOT}/test.ops"
+TEST1=$(sbatch --parsable -J snow.ops -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
+      --ntasks=1 -q ${QUEUE} -t 00:03:00 ./snow2mdl.ops.sh)
+
+# The second test is for the new AFWA global GRIB2 data.
+
+export DATA="${DATA_ROOT}/test.global"
+TEST2=$(sbatch --parsable -J snow.global -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
+      --ntasks=1 -q ${QUEUE} -t 00:03:00 -d afterok:$TEST1 ./snow2mdl.global.sh)
+
+# Create summary file.
+
+sbatch --nodes=1 -t 0:01:00 -A ${PROJECT_CODE} -J snow_summary -o consistency.log -e consistency.log \
+       --open-mode=append -q ${QUEUE} -d afterok:$TEST2 << EOF
+#!/bin/bash
+grep -a '<<<' consistency.log  > summary.log
+EOF
 
 exit 0

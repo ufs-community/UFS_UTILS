@@ -47,14 +47,14 @@
 #
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/gpfs/dell1/stmp/$USER/gdas.init/input
-EXTRACT_DATA=yes
+EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
+EXTRACT_DATA=no
 
 RUN_CHGRES=yes
 
-yy=2021
-mm=03
-dd=21
+yy=2022
+mm=05
+dd=06
 hh=06
 
 use_v16retro=no
@@ -68,7 +68,7 @@ CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
 
-OUTDIR=/gpfs/dell1/stmp/$USER/gdas.init/output
+OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
 
 #---------------------------------------------------------
 # Dont touch anything below here.

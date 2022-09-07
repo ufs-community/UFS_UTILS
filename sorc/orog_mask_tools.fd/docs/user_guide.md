@@ -11,7 +11,5 @@ The orog_mask_tools include:
 This document is part of the <a href="../index.html">UFS_UTILS
 documentation</a>.
 
-The orog_mask_tools programs are part of the [NCEPLIBS
-UFS_UTILS](https://github.com/NOAA-EMC/UFS_UTILS) project.
-
-
+The orog_mask_tools programs are part of the
+[UFS_UTILS](https://github.com/ufs-community/UFS_UTILS) project.

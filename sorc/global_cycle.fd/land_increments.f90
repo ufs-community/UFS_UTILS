@@ -2,28 +2,37 @@
 !! @brief Routines for applyng land DA increments
 !! @author Clara Draper ESRL/PSL
 
-module land_increments 
+module land_increments
 
-    private 
+    private
 
     public add_increment_soil
-    public calculate_soilsnowmask 
-    public apply_land_da_adjustments
+    public add_increment_snow
+    public calculate_landinc_mask
+    public apply_land_da_adjustments_stc
+    public apply_land_da_adjustments_snd
 
-contains 
+    integer, parameter            :: lsm_noah=1      !< flag for NOAH land surface model
+                                                     !! copied from GFS_typedefs.F90
+contains
 
  !> Read in gsi file with soil state  increments (on the gaussian
  !! grid), interpolate increments to the cubed-sphere tile, and
- !! add to the soil states. Adapted from adjust_nsst. 
- !! Currently only coded for soil temperature. Soil moisture will 
+ !! add to the soil states. Adapted from adjust_nsst.
+ !! Currently only coded for soil temperature. Soil moisture will
  !! need the model soil moisture paramaters for regridding.
+ !!
+ !!  Does not make a temperature update if snow differ
+ !!  between fg and anal (allow correction of snow to
+ !!  address temperature error first), or if snow is present 
+ !!  (will eventually updating of snow temperature in this case)
  !!
  !! @param[inout] RLA Latitude on the cubed-sphere tile
  !! @param[inout] RLO Longitude on the cubed-sphere tile
- !! @param[inout] STC_STATE 
- !! @param[in] SOILSNOW_TILE Snow mask for land on the cubed-sphere tile
- !! @param[in] SOILSNOW_FG_TILE First guess snow mask for land on the cubed-sphere tile
- !! @param[in] LENSFC Number of points on a tile
+ !! @param[inout] STC_STATE
+ !! @param[in] SOILSNOW_TILE Land mask for increments on the cubed-sphere tile
+ !! @param[in] SOILSNOW_FG_TILE First guess land mask for increments on the cubed-sphere tile
+ !! @param[in] LENSFC Number of land points on a tile
  !! @param[in] LSOIL Number of soil layers
  !! @param[in] IDIM 'I' dimension of a tile
  !! @param[in] JDIM 'J' dimension of a tile
@@ -31,13 +40,13 @@ contains
  !!
  !! @author Clara Draper. @date March 2021
 
-subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile, & 
-                        lensfc,lsoil,idim,jdim, myrank) 
+subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile, &
+                        lensfc,lsoil,idim,jdim, myrank)
 
     use utils
     use gdswzd_mod
     use read_write_data, only : idim_gaus, jdim_gaus, &
-                             stc_inc_gaus, soilsnow_gaus 
+                             stc_inc_gaus, soilsnow_gaus
     use mpi
 
     implicit none
@@ -58,7 +67,7 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
 
     integer, allocatable     :: id1(:,:), id2(:,:), jdc(:,:)
 
-    real                     :: wsum 
+    real                     :: wsum
     real                     :: stc_inc(lsoil)
     real, allocatable        :: xpts(:), ypts(:), lats(:), lons(:)
     real, allocatable        :: dum2d(:,:), lats_rad(:), lons_rad(:)
@@ -118,7 +127,7 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
     dum2d = reshape(lats, (/idim_gaus,jdim_gaus/) )
     deallocate(lats)
 
-    allocate(lats_rad(jdim_gaus)) 
+    allocate(lats_rad(jdim_gaus))
 
     do j = 1, jdim_gaus
     lats_rad(j) = dum2d(1,jdim_gaus-j+1) * 3.1415926 / 180.0
@@ -155,32 +164,27 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
     ! initialize variables for counts statitics to be zeros
     !
 
-    ! 
+    !
     nother = 0 ! grid cells not land
-    nsnowupd = 0  ! grid cells with snow (temperature not yet updated) 
-    nsnowchange = 0  ! grid cells where no temp upd made, because snow occurence changed 
-    nnosoilnear = 0 ! grid cells where model has soil, but 4 closest gaus grids don't 
+    nsnowupd = 0  ! grid cells with snow (temperature not yet updated)
+    nsnowchange = 0  ! grid cells where no temp upd made, because snow occurence changed
+    nnosoilnear = 0 ! grid cells where model has soil, but 4 closest gaus grids don't
                  ! (no update made here)
-    nsoilupd = 0 
+    nsoilupd = 0
 
 
     ij_loop : do ij = 1, lensfc
-
-        ! for now,  do not make a temperature update if snow differs  
-        ! between fg and anal (allow correction of snow to 
-        ! address temperature error first) 
-
 
         mask_tile    = soilsnow_tile(ij)
         mask_fg_tile = soilsnow_fg_tile(ij)
 
         !----------------------------------------------------------------------
-        ! mask: 1  - soil, 2 - snow, 0 - neither
+        ! mask: 1  - soil, 2 - snow, 0 - land-ice, -1 - not land
         !----------------------------------------------------------------------
 
-        if (mask_tile == 0) then ! skip if neither soil nor snow
+        if (mask_tile <= 0) then ! skip if neither soil nor snow
          nother = nother + 1
-         cycle ij_loop  
+         cycle ij_loop
         endif
 
 
@@ -191,18 +195,18 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
         if (itile==0) itile = idim
 
         !----------------------------------------------------------------------
-        ! if the snow analysis has chnaged to occurence of snow, skip the 
+        ! if the snow analysis has chnaged to occurence of snow, skip the
         ! temperature analysis
         !----------------------------------------------------------------------
 
-        if ((mask_fg_tile == 2 .and. mask_tile == 1) .or. & 
+        if ((mask_fg_tile == 2 .and. mask_tile == 1) .or. &
             (mask_fg_tile == 1 .and. mask_tile == 2) ) then
          nsnowchange = nsnowchange + 1
-         cycle ij_loop  
+         cycle ij_loop
         endif
 
         !----------------------------------------------------------------------
-        !  do update to soil temperature grid cells, using bilinear interp 
+        !  do update to soil temperature grid cells, using bilinear interp
         !----------------------------------------------------------------------
 
         if (mask_tile == 1) then
@@ -212,25 +216,25 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
            igausp1 = id2(itile,jtile)
            jgausp1 = jdc(itile,jtile)+1
 
-        ! make sure gaus grid has soil nearby 
+        ! make sure gaus grid has soil nearby
            gaus_has_soil = .false.
            if (soilsnow_gaus(igaus,jgaus)     == 1 .or. &
                soilsnow_gaus(igausp1,jgaus)   == 1 .or. &
                soilsnow_gaus(igausp1,jgausp1) == 1 .or. &
-               soilsnow_gaus(igaus,jgausp1)   == 1)  gaus_has_soil = .true. 
+               soilsnow_gaus(igaus,jgausp1)   == 1)  gaus_has_soil = .true.
            
            if (.not. gaus_has_soil) then
-             nnosoilnear = nnosoilnear + 1 
-             cycle ij_loop 
+             nnosoilnear = nnosoilnear + 1
+             cycle ij_loop
            endif
 
         ! calcualate weighted increment over nearby grid cells that have soil
 
-        ! Draper: to-do, code adding increments to soil moisture. 
-        !         will require converting to soil wetness index first 
+        ! Draper: to-do, code adding increments to soil moisture.
+        !         will require converting to soil wetness index first
         !         (need to add soil properties to the increment file)
 
-           nsoilupd = nsoilupd + 1 
+           nsoilupd = nsoilupd + 1
 
            stc_inc = 0.0
            wsum  = 0.0
@@ -270,20 +274,20 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
         ! todo, apply some bounds?
            enddo
 
+        ! don't update soil states if snow present.
         elseif(mask_tile==2) then
-           !print *,  'csd2', rlo(ij), rla(ij) 
-           nsnowupd = nsnowupd + 1 
+           nsnowupd = nsnowupd + 1
 
         endif ! if soil/snow point
 
     enddo ij_loop
 
     write(*,'(a,i2)') 'statistics of grids number processed for rank : ', myrank
-    write(*,'(a,i8)') ' soil grid cells updated = ',nsoilupd 
+    write(*,'(a,i8)') ' soil grid cells updated = ',nsoilupd
     write(*,'(a,i8)') ' (not updated) soil grid cells, no soil nearby on gsi grid = ',nnosoilnear
     write(*,'(a,i8)') ' (not updated) soil grid cells, change in presence of snow = ', nsnowchange
     write(*,'(a,i8)') ' (not updated yet) snow grid cells = ', nsnowupd
-    write(*,'(a,i8)') ' grid cells, without soil of snow = ', nother 
+    write(*,'(a,i8)') ' grid cells, without soil or snow = ', nother
 
     nother = 0 ! grid cells not land
     nsnowupd = 0  ! grid cells where no temp upd made, because snow occurence changed
@@ -295,62 +299,100 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
 
 end subroutine add_increment_soil
 
-!> Calculate soil mask for land on model grid. 
-!! Output is 1  - soil, 2 - snow-covered, 0 - land ice or not land.
-!! @param[in] lensfc  Total numberof points for the cubed-sphere tile.
+ !> Add snow depth increment to model snow depth state,
+ !! and limit output to be non-negative. JEDI increments are
+ !! calculated globally, so must be screened to land-only locations 
+ !! here.
+ !!
+ !! @param[in] lensfc Number of land points on this tile
+ !! @param[in] snd_inc Soil depth increments
+ !! @param[in] mask Land mask for increments
+ !! @param[inout] snd Soil depth background (in), and analysis (out) 
+ !! 
+ !! @author Clara Draper. @date August 2021
+
+subroutine add_increment_snow(snd_inc,mask,lensfc,snd)
+
+    implicit none
+
+    integer, intent(in)      :: lensfc
+    real, intent(in)         :: snd_inc(lensfc)
+    integer, intent(in)      :: mask(lensfc)
+    real, intent(inout)      :: snd(lensfc)
+
+    integer                  :: i
+
+
+    do i =1, lensfc
+        if (mask(i) > 0) then ! if land
+                snd(i) = max( snd(i) + snd_inc(i), 0.)
+        endif
+    enddo
+
+end subroutine add_increment_snow
+
+!> Calculate soil mask for land on model grid.
+!! Output is 1  - soil, 2 - snow-covered, 0 - land ice, -1  not land.
+!!
+!! @param[in] lensfc  Number of land points for this tile 
+!! @param[in] veg_type_landice Value of vegetion class that indicates land-ice
 !! @param[in] smc Model soil moisture.
 !! @param[in] swe Model snow water equivalent
-!! @param[out] mask Output mask: 1  - soil, 2 - snow-covered, 0 - land ice or not land.
+!! @param[in] vtype Model vegetation type
+!! @param[out] mask Land mask for increments
 !! @author Clara Draper @date March 2021
-subroutine calculate_soilsnowmask(smc,swe,lensfc,mask)
+subroutine calculate_landinc_mask(smc,swe,vtype,lensfc,veg_type_landice,mask)
  
-    implicit none 
+    implicit none
 
-    integer, intent(in)           :: lensfc
-    real, intent(in)              :: smc(lensfc), swe(lensfc) 
-    integer, intent(out)          :: mask(lensfc) 
+    integer, intent(in)           :: lensfc, veg_type_landice
+    real, intent(in)              :: smc(lensfc), swe(lensfc)
+    real, intent(in)              :: vtype(lensfc)
+    integer, intent(out)          :: mask(lensfc)
 
     integer :: i
 
-    mask = 0
+    mask = -1 ! not land
+
+    ! land (but not land-ice)
     do i=1,lensfc
         if (smc(i) .LT. 1.0) then
-        mask(i) = 1
+          if (swe(i) .GT. 0.001) then ! snow covered land
+                mask(i) = 2
+          else                        ! non-snow covered land
+                mask(i) = 1
+          endif
+        end if ! else should work here too
+        if ( nint(vtype(i)) ==  veg_type_landice  ) then ! land-ice
+                mask(i) = 0
         endif
     end do
 
-    do i=1,lensfc
-        if (swe(i) .GT. 0.001) then
-        mask(i) = 2
-        endif
-    end do
-
-end subroutine calculate_soilsnowmask
+end subroutine calculate_landinc_mask
 
 !> Make adjustments to dependent variables after applying land increments.
-!! These adjustments are model-dependent, and are currently only coded 
-!! for Noah LSM. 
-!! For Noah LSM, copy relevent code blocks from model code (same as has 
-!! been done in sfc_sub). For Noah-MP, will call into the model code 
-!! to use same routines / code as in the model. 
+!! These adjustments are model-dependent, and are currently only coded
+!! for Noah LSM.
+!! For Noah LSM, copy relevent code blocks from model code (same as has
+!! been done in sfc_sub).
+!! Here: adjust (frozen) soil moisture to be consistent with changes in
+!! soil temperature from DA
 
-!> @param[in] update_type Code for variable being updated (options: 'stc' - soil temperature)
-!! @param[in] lsm Integer code for the LSM
+!> @param[in] lsm Integer code for the LSM
 !! @param[in] isot Integer code for the soil type data set
 !! @param[in] ivegsrc Integer code for the vegetation type data set
-!! @param[in] lensfc Length of land state vector 
-!! @param[in] lsoil Number of soil layers 
-!! @param[in] rsoiltype rsoiltype Array of input soil types
-!! @param[in] smc_bck Background soil moisture states 
-!! @param[in] slc_bck Background liquid soil moisture states 
-!! @param[in] stc_bck Background soil temperature states 
-!! @param[inout] smc_anl Analysis soil moisture states 
-!! @param[inout] slc_anl Analysis liquid soil moisture states 
-!! @param[inout] stc_anl Analysis soil temperature states 
+!! @param[in] lensfc Number of land points for this tile
+!! @param[in] lsoil Number of soil layers
+!! @param[in] rsoiltype Array of input soil types
+!! @param[in] mask Mask indicating surface type
+!! @param[in] stc_bck Background soil temperature states
+!! @param[in] stc_anl Analysis soil temperature states
+!! @param[inout] smc_adj Soil moisture state to be adjusted
+!! @param[inout] slc_adj Liquid soil moisture states to be adjusted
 !! @author Clara Draper @date April 2021
 
-subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, & 
-                 lsoil, rsoiltype, smc_bck, slc_bck,stc_bck, smc_anl, slc_anl, stc_anl)
+subroutine apply_land_da_adjustments_stc(lsm, isot, ivegsrc,lensfc, &
+                 lsoil, rsoiltype, mask, stc_bck, stc_anl, smc_adj, slc_adj )
 
     use mpi
     use set_soilveg_snippet_mod, only: set_soilveg
@@ -358,27 +400,24 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, &
 
     implicit none
  
-    character(len=3), intent(in)  :: update_type
     integer, intent(in)           :: lsm, lensfc, lsoil, isot, ivegsrc
     real, intent(in)              :: rsoiltype(lensfc) ! soil types, as real
-    real, intent(in)              :: smc_bck(lensfc,lsoil), slc_bck(lensfc,lsoil)
-    real, intent(in)              :: stc_bck(lensfc, lsoil)
-    real, intent(inout)           :: smc_anl(lensfc,lsoil), slc_anl(lensfc,lsoil) 
-    real, intent(inout)           :: stc_anl(lensfc, lsoil) 
+    integer, intent(in)              :: mask(lensfc)
+    real, intent(in)              :: stc_bck(lensfc, lsoil) , stc_anl(lensfc, lsoil)
+    real, intent(inout)           :: smc_adj(lensfc,lsoil), slc_adj(lensfc,lsoil)
+    
 
     logical                       :: frzn_bck, frzn_anl
 
-    integer                       :: i, l, n_freeze, n_thaw, ierr 
+    integer                       :: i, l, n_freeze, n_thaw, ierr
     integer                       :: myrank, soiltype, iret
 
     real                          :: slc_new
 
-    integer, parameter            :: lsm_noah=1      !< flag for NOAH land surface model 
-                                                     !! copied from GFS_typedefs.F90
     real, parameter               :: tfreez=273.16 !< con_t0c  in physcons
     real, dimension(30)           :: maxsmc, bb, satpsi
 
-    call mpi_comm_rank(mpi_comm_world, myrank, ierr) 
+    call mpi_comm_rank(mpi_comm_world, myrank, ierr)
 
     if (lsm .NE. lsm_noah) then
         print *, 'FATAL ERROR: apply_land_da_adjustments not coded for models other than noah', lsm
@@ -386,52 +425,94 @@ subroutine apply_land_da_adjustments(update_type, lsm, isot, ivegsrc,lensfc, &
     endif
        
     ! initialise soil properties
-    call set_soilveg(isot, ivegsrc, maxsmc, bb, satpsi, iret) 
+    call set_soilveg(isot, ivegsrc, maxsmc, bb, satpsi, iret)
     if (iret < 0) then
         print *, 'FATAL ERROR: problem in set_soilveg'
         call mpi_abort(mpi_comm_world, 10, ierr)
     endif
 
-    select case (update_type) 
+    print *, 'Adjusting smc after stc DA update'
 
-    case ('stc') 
-        print *, 'Adjusting smc after stc DA update' 
+    n_freeze = 0
+    n_thaw = 0
+    
+    do i=1,lensfc
+      if (mask(i) > 0) then ! if soil location
+        do l = 1, lsoil
+           frzn_bck = (stc_bck(i,l) .LT. tfreez )
+           frzn_anl = (stc_anl(i,l) .LT. tfreez )
 
-        n_freeze = 0 
-        n_thaw = 0 
-        
-        do i=1,lensfc 
-          do l = 1, lsoil
-            if (smc_bck(i,l) < 1.0) then ! if soil location
-               frzn_bck = (stc_bck(i,l) .LT. tfreez ) 
-               frzn_anl = (stc_anl(i,l) .LT. tfreez ) 
+           if (frzn_bck .eqv. frzn_anl) then
+                cycle
+           elseif (frzn_bck .and. .not. frzn_anl) then
+                n_thaw = n_thaw + 1
+           else
+                n_freeze = n_freeze + 1
+           endif
 
-               if (frzn_bck .eqv. frzn_anl) then 
-                    cycle 
-               elseif (frzn_bck .and. .not. frzn_anl) then
-                    n_thaw = n_thaw + 1 
-               else 
-                    n_freeze = n_freeze + 1 
-               endif 
+           ! make adjustment (same routine for both)
+           soiltype = nint(rsoiltype(i))
+           ! bb and maxsmc are in the namelist_soilveg, need soiltype index
+           call frh2o(stc_anl(i,l), smc_adj(i,l),slc_adj(i,l), maxsmc(soiltype), &
+                      bb(soiltype), satpsi(soiltype),slc_new)
 
-               ! make adjustment (same routine for both)
-               soiltype = nint(rsoiltype(i))
-               ! bb and maxsmc are in the namelist_soilveg, need soiltype index
-               call frh2o(stc_anl(i,l), smc_anl(i,l),slc_anl(i,l), maxsmc(soiltype), & 
-                          bb(soiltype), satpsi(soiltype),slc_new)
+           slc_adj(i,l) = max( min( slc_new, smc_adj(i,l)), 0.0 )
+        enddo
+      endif
+    enddo
+    print *, 'adjusted: ', n_thaw,' thawed,', n_freeze, ' frozen'
 
-               slc_anl(i,l) = max( min( slc_new, smc_anl(i,l)), 0.0 )
-            endif 
-          enddo
-        enddo 
-        
-        print *, 'adjusted: ', n_thaw,' thawed,', n_freeze, ' frozen'
+end subroutine apply_land_da_adjustments_stc
 
-    case default 
-        print *, 'FATAL ERROR: apply_land_da_adjustments not code for variable', lsm
-        call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
-    end select 
+!> Make adjustments to dependent variables after applying land increments.
+!! These adjustments are model-dependent, and are currently only coded
+!! for Noah LSM.
+!! Here: adjust SWE to be consistent with updated SND, using snow density 
+!! from the forecast.
 
-end subroutine apply_land_da_adjustments 
+!> @param[in] lsm Integer code for the LSM
+!! @param[in] lensfc  Number of land points for this tile
+!! @param[in] mask Land mask for increments
+!! @param[in] swe_bck Background SWE 
+!! @param[in] snd_bck Background snow depth
+!! @param[in] snd_anl Analysis snow depth 
+!! @param[inout] swe_adj SWE to be adjusted 
+!! @author Clara Draper @date August 2021
+
+subroutine apply_land_da_adjustments_snd(lsm, lensfc, mask, swe_bck, snd_bck, snd_anl, swe_adj)
+
+    use mpi
+    use bulk_snow_module, only: calc_density
+
+    implicit none
+
+    integer, intent(in) :: lsm, lensfc
+    integer, intent(in) :: mask(lensfc)
+    real, intent(in)    :: swe_bck(lensfc), snd_bck(lensfc)
+    real, intent(in)    :: snd_anl(lensfc)
+    real, intent(inout)    :: swe_adj(lensfc)
+
+    integer  :: ierr, myrank, i
+
+    real     :: density(lensfc)
+
+    call mpi_comm_rank(mpi_comm_world, myrank, ierr)
+
+    if (lsm .NE. lsm_noah) then
+        print *, 'FATAL ERROR: apply_land_da_adjustments not coded for models other than noah', lsm
+        call mpi_abort(mpi_comm_world, 10, ierr)
+    endif
+
+   ! calculate snow density from forecasts
+   call calc_density(lensfc, mask, swe_bck, snd_bck, myrank, density)
+
+   do i =1, lensfc
+        if ( mask(i)>0 ) then
+                swe_adj(i) = snd_anl(i)*density(i)
+        endif
+   enddo
+   
+
+end subroutine apply_land_da_adjustments_snd
 
 end module land_increments

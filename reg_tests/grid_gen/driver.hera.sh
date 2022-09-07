@@ -39,14 +39,20 @@ PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
 export home_dir=$PWD/../..
 export APRUN=time
 export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
-export machine=HERA
-export HOMEreg=/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/grid_gen/baseline_data
+export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/grid_gen/baseline_data
 
 ulimit -a
 #ulimit -s unlimited

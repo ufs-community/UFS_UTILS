@@ -41,8 +41,7 @@
                                     ip1_input, jp1_input,  &
                                     num_tiles_input_grid, &
                                     latitude_input_grid, &
-                                    longitude_input_grid, &
-                                    inv_file
+                                    longitude_input_grid
 
  implicit none
 
@@ -72,33 +71,33 @@
                                                                 !< Default is igbp.
  integer, parameter              :: ICET_DEFAULT = 265.0    !< Default value of soil and skin
                                                             !< temperature (K) over ice.
- type(esmf_field), public        :: canopy_mc_input_grid    !< canopy moist content
- type(esmf_field), public        :: f10m_input_grid         !< log((z0+10)*1/z0)
- type(esmf_field), public        :: ffmm_input_grid         !< log((z0+z1)*1/z0)
+ type(esmf_field), public :: canopy_mc_input_grid    !< canopy moist content
+ type(esmf_field), public :: f10m_input_grid         !< log((z0+10)*1/z0)
+ type(esmf_field), public :: ffmm_input_grid         !< log((z0+z1)*1/z0)
                                                             !! See sfc_diff.f for details.
- type(esmf_field), public        :: landsea_mask_input_grid !< land sea mask;
+ type(esmf_field), public :: landsea_mask_input_grid !< land sea mask;
                                                             !! 0-water, 1-land, 2-ice
- type(esmf_field), public        :: q2m_input_grid          !< 2-m spec hum
- type(esmf_field), public        :: seaice_depth_input_grid !< sea ice depth
- type(esmf_field), public        :: seaice_fract_input_grid !< sea ice fraction
- type(esmf_field), public        :: seaice_skin_temp_input_grid  !< sea ice skin temp
- type(esmf_field), public        :: skin_temp_input_grid    !< skin temp/sst
- type(esmf_field), public        :: snow_depth_input_grid   !< snow dpeth
- type(esmf_field), public        :: snow_liq_equiv_input_grid !< snow liq equiv depth
- type(esmf_field), public        :: soil_temp_input_grid    !< 3-d soil temp
- type(esmf_field), public        :: soil_type_input_grid    !< soil type
- type(esmf_field), public        :: soilm_liq_input_grid    !< 3-d liquid soil moisture
- type(esmf_field), public        :: soilm_tot_input_grid    !< 3-d total soil moisture
- type(esmf_field), public        :: srflag_input_grid       !< snow/rain flag
- type(esmf_field), public        :: t2m_input_grid          !< 2-m temperature
- type(esmf_field), public        :: tprcp_input_grid        !< precip
- type(esmf_field), public        :: ustar_input_grid        !< fric velocity
- type(esmf_field), public        :: veg_type_input_grid     !< vegetation type
- type(esmf_field), public        :: z0_input_grid           !< roughness length
- type(esmf_field), public        :: veg_greenness_input_grid !< vegetation fraction
- type(esmf_field), public        :: lai_input_grid          !< leaf area index
- type(esmf_field), public        :: max_veg_greenness_input_grid !< shdmax
- type(esmf_field), public        :: min_veg_greenness_input_grid !< shdmin
+ type(esmf_field), public :: q2m_input_grid          !< 2-m spec hum
+ type(esmf_field), public :: seaice_depth_input_grid !< sea ice depth
+ type(esmf_field), public :: seaice_fract_input_grid !< sea ice fraction
+ type(esmf_field), public :: seaice_skin_temp_input_grid  !< sea ice skin temp
+ type(esmf_field), public :: skin_temp_input_grid    !< skin temp/sst
+ type(esmf_field), public :: snow_depth_input_grid   !< snow dpeth
+ type(esmf_field), public :: snow_liq_equiv_input_grid !< snow liq equiv depth
+ type(esmf_field), public :: soil_temp_input_grid    !< 3-d soil temp
+ type(esmf_field), public :: soil_type_input_grid    !< soil type
+ type(esmf_field), public :: soilm_liq_input_grid    !< 3-d liquid soil moisture
+ type(esmf_field), public :: soilm_tot_input_grid    !< 3-d total soil moisture
+ type(esmf_field), public :: srflag_input_grid       !< snow/rain flag
+ type(esmf_field), public :: t2m_input_grid          !< 2-m temperature
+ type(esmf_field), public :: tprcp_input_grid        !< precip
+ type(esmf_field), public :: ustar_input_grid        !< fric velocity
+ type(esmf_field), public :: veg_type_input_grid     !< vegetation type
+ type(esmf_field), public :: z0_input_grid           !< roughness length
+ type(esmf_field), public :: veg_greenness_input_grid !< vegetation fraction
+ type(esmf_field), public :: lai_input_grid          !< leaf area index
+ type(esmf_field), public :: max_veg_greenness_input_grid !< shdmax
+ type(esmf_field), public :: min_veg_greenness_input_grid !< shdmin
 
  integer, public      :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
                                         !! for 7 layers of soil for the RUC LSM
@@ -107,25 +106,25 @@
 
 ! Fields associated with the nst model.
 
- type(esmf_field), public        :: c_d_input_grid   !< Coefficient 2 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: c_0_input_grid   !< Coefficient 1 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: d_conv_input_grid   !< Thickness of free convection layer
- type(esmf_field), public        :: dt_cool_input_grid   !< Sub-layer cooling amount
- type(esmf_field), public        :: ifd_input_grid   !< Model mode index. 0-diurnal model not
+ type(esmf_field), public :: c_d_input_grid   !< Coefficient 2 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: c_0_input_grid   !< Coefficient 1 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: d_conv_input_grid   !< Thickness of free convection layer
+ type(esmf_field), public :: dt_cool_input_grid   !< Sub-layer cooling amount
+ type(esmf_field), public :: ifd_input_grid   !< Model mode index. 0-diurnal model not
                                                      !< started; 1-diurnal model started.
- type(esmf_field), public        :: qrain_input_grid   !< Sensible heat flux due to rainfall
- type(esmf_field), public        :: tref_input_grid  !< Reference temperature
- type(esmf_field), public        :: w_d_input_grid   !< Coefficient 4 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: w_0_input_grid   !< Coefficient 3 to calculate d(tz)/d(ts)
- type(esmf_field), public        :: xs_input_grid   !< Salinity content in diurnal thermocline layer
- type(esmf_field), public        :: xt_input_grid   !< Heat content in diurnal thermocline layer
- type(esmf_field), public        :: xu_input_grid   !< u-current content in diurnal thermocline layer
- type(esmf_field), public        :: xv_input_grid   !< v-current content in diurnal thermocline layer
- type(esmf_field), public        :: xz_input_grid   !< Diurnal thermocline layer thickness
- type(esmf_field), public        :: xtts_input_grid   !< d(xt)/d(ts)
- type(esmf_field), public        :: xzts_input_grid   !< d(xz)/d(ts)
- type(esmf_field), public        :: z_c_input_grid   !< Sub-layer cooling thickness
- type(esmf_field), public        :: zm_input_grid   !< Oceanic mixed layer depth
+ type(esmf_field), public :: qrain_input_grid   !< Sensible heat flux due to rainfall
+ type(esmf_field), public :: tref_input_grid  !< Reference temperature
+ type(esmf_field), public :: w_d_input_grid   !< Coefficient 4 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: w_0_input_grid   !< Coefficient 3 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: xs_input_grid   !< Salinity content in diurnal thermocline layer
+ type(esmf_field), public :: xt_input_grid   !< Heat content in diurnal thermocline layer
+ type(esmf_field), public :: xu_input_grid   !< u-current content in diurnal thermocline layer
+ type(esmf_field), public :: xv_input_grid   !< v-current content in diurnal thermocline layer
+ type(esmf_field), public :: xz_input_grid   !< Diurnal thermocline layer thickness
+ type(esmf_field), public :: xtts_input_grid   !< d(xt)/d(ts)
+ type(esmf_field), public :: xzts_input_grid   !< d(xz)/d(ts)
+ type(esmf_field), public :: z_c_input_grid   !< Sub-layer cooling thickness
+ type(esmf_field), public :: zm_input_grid   !< Oceanic mixed layer depth
 
  public :: read_input_atm_data
  public :: cleanup_input_atm_data
@@ -138,6 +137,7 @@
  public :: quicksort
  public :: convert_winds
  public :: init_sfc_esmf_fields
+ public :: dint2p
  
  contains
 
@@ -382,8 +382,6 @@
  implicit none
 
  integer, intent(in)             :: localpet
-
- integer                         :: rc
 
  call init_sfc_esmf_fields()
 
@@ -2456,39 +2454,49 @@
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_atm_grib2_file(localpet)
 
- use wgrib2api
+ use mpi
+ use grib_mod
  
- use grib2_util, only                   : rh2spfh, convert_omega
+ use grib2_util, only                   : rh2spfh, rh2spfh_gfs, convert_omega
 
  implicit none
 
  integer, intent(in)                   :: localpet
  
  integer, parameter                    :: ntrac_max=14
+ integer, parameter                    :: max_levs=1000
 
  character(len=300)                    :: the_file
- character(len=20)                     :: vlevtyp, vname, lvl_str,lvl_str_space, &
-                                          trac_names_grib_1(ntrac_max), &
-                                          trac_names_grib_2(ntrac_max), &
+ character(len=20)                     :: vname, &
                                           trac_names_vmap(ntrac_max), &
-                                          tracers_input_grib_1(num_tracers_input), &
-                                          tracers_input_grib_2(num_tracers_input), &
                                           tmpstr, & 
                                           method, tracers_input_vmap(num_tracers_input), &
-                                          tracers_default(ntrac_max), vname2
- character (len=500)                   :: metadata
+                                          tracers_default(ntrac_max)
 
- integer                               :: i, j, k, n, lvl_str_space_len
+ integer                               :: i, j, k, n
+ integer                               :: ii,jj
  integer                               :: rc, clb(3), cub(3)
- integer                               :: vlev, iret,varnum
-
- integer                               :: len_str
- logical                               :: lret
+ integer                               :: vlev, iret,varnum, o3n, pdt_num
+ integer                               :: intrp_ier, done_print
+ integer                               :: trac_names_oct10(ntrac_max)
+ integer                               :: tracers_input_oct10(num_tracers_input)
+ integer                               :: trac_names_oct11(ntrac_max)
+ integer                               :: tracers_input_oct11(num_tracers_input)
+ integer                               :: lugb, lugi, jdisc, jpdt(200), jgdt(200), iscale
+ integer                               :: jids(200), jpdtn, jgdtn, octet_23, octet_29
+ integer                               :: count_spfh, count_rh, count_icmr, count_scliwc
+ integer                               :: count_cice, count_rwmr, count_scllwc, count
 
  logical                               :: conv_omega=.false., &
                                           hasspfh=.true., &
-                                          isnative=.false.
+                                          isnative=.false., &
+                                          use_rh=.false. , unpack, &
+                                          all_empty, is_missing
 
+ real(esmf_kind_r8), allocatable       :: dum2d_1(:,:)
+                                          
+
+ real(esmf_kind_r8)                    :: rlevs_hold(max_levs)
  real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
  real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
@@ -2498,21 +2506,23 @@
                                           uptr(:,:,:), vptr(:,:,:)
  real(esmf_kind_r4)                    :: value
  real(esmf_kind_r8), parameter         :: p0 = 100000.0
- 
+ real(esmf_kind_r8), allocatable       :: dummy3d_col_in(:),dummy3d_col_out(:)
+ real(esmf_kind_r8), parameter         :: intrp_missing = -999.0 
+ real(esmf_kind_r4), parameter         :: lev_no_tr_fill = 20000.0
+ real(esmf_kind_r4), parameter         :: lev_no_o3_fill = 40000.0
+
+ type(gribfield)                       :: gfld
  
  tracers(:) = "NULL"
- !trac_names_grib = (/":SPFH:",":CLWR:", "O3MR",":CICE:", ":RWMR:",":SNMR:",":GRLE:", &
- !              ":TCDC:", ":NCCICE:",":SPNCR:", ":NCONCD:",":PMTF:",":PMTC:",":TKE:"/)
- trac_names_grib_1 = (/":var0_2", ":var0_2",  ":var0_2",  ":var0_2",  ":var0_2",":var0_2", \
-                       ":var0_2", ":var0_2", ":var0_2", ":var0_2", ":var0_2",":var0_2", \
-                       ":var0_2", ":var0_2"/)
- trac_names_grib_2 = (/"_1_0:   ", "_1_22:  ",  "_14_192:", "_1_23:  ", "_1_24:  ","_1_25:  ", \
-                       "_1_32:  ", "_6_1:   ",  "_6_29:  ", "_1_100: ", "_6_28:  ","_13_193:", \
-                       "_13_192:", "_2_2:   "/)
+ 
+ trac_names_oct10 = (/1,  1,  14,  1,  1,  1,  1, 6,  6,   1,  6,  13,  13, 2 /)
+ trac_names_oct11 = (/0, 22, 192, 23, 24, 25, 32, 1, 29, 100, 28, 193, 192, 2 /)
+
  trac_names_vmap = (/"sphum   ", "liq_wat ", "o3mr    ", "ice_wat ", &
                      "rainwat ", "snowwat ", "graupel ", "cld_amt ", "ice_nc  ", &
                      "rain_nc ", "water_nc", "liq_aero", "ice_aero", &
                      "sgs_tke "/)
+
  tracers_default = (/"sphum   ", "liq_wat ", "o3mr    ", "ice_wat ", &
                      "rainwat ", "snowwat ", "graupel ", "cld_amt ", "ice_nc  ", &
                      "rain_nc ", "water_nc", "liq_aero", "ice_aero", &
@@ -2521,138 +2531,321 @@
  the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
 
  print*,"- READ ATMOS DATA FROM GRIB2 FILE: ", trim(the_file)
- print*,"- USE INVENTORY FILE ", inv_file
 
- print*,"- OPEN FILE."
- inquire(file=the_file,exist=lret)
- if (.not.lret) call error_handler("OPENING GRIB2 ATM FILE.", iret)
+ if (localpet == 0) then
 
- print*,"- READ VERTICAL COORDINATE."
- iret = grb2_inq(the_file,inv_file,":var0_2","_0_0:",":10 hybrid level:")
+   lugb=14
+   lugi=0
+   call baopenr(lugb,the_file,iret)
+   if (iret /= 0) call error_handler("ERROR OPENING GRIB2 FILE.", iret)
+
+   jdisc   = 0     ! Search for discipline - meteorological products
+   j = 0           ! Search at beginning of file.
+   jpdt    = -9999  ! Array of values in product definition template, set to wildcard
+   jids    = -9999  ! Array of values in identification section, set to wildcard
+   jgdt    = -9999  ! Array of values in grid definition template, set to wildcard
+   jgdtn   = -1     ! Search for any grid definition number.
+   jpdtn   = -1     ! Search for any product definition template number.
+   unpack  =.false.
+
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+!----------------------------------------------------------------------
+! Read first record and check if this is NCEP GEFS data. 
+! This will determine what product definition template number to
+! search for (Section 4/Octets 8-9).
+!
+! Section 1/Octets 6-7 is '7' (NCEP)
+! Section 1/Octets 8-9 is '2' (NCEP Ensemble products).
+!----------------------------------------------------------------------
   
- if (iret <= 0) then
-   lvl_str = "mb:" 
-   lvl_str_space = " mb:"
-   lvl_str_space_len = 4
-   isnative = .false.
-   iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space)
-   lev_input=iret
-   if (localpet == 0) print*,"- DATA IS ON ", lev_input, " ISOBARIC LEVELS."
- else
-   lvl_str = " level:"
-   lvl_str_space = " hybrid "
-   lvl_str_space_len = 7
-   isnative = .true.
-   iret = grb2_inq(the_file,inv_file,":UGRD:",lvl_str_space, " level:")
-   if (iret < 0) call error_handler("READING VERTICAL LEVEL TYPE.", iret)
-   lev_input=iret
- endif
+   if (iret == 0) then
+     if (gfld%idsect(1) == 7 .and. gfld%idsect(2) == 2) then
+       print*,'- THIS IS NCEP GEFS DATA.'
+       pdt_num = 1 ! Search for product definition template number 1.
+                   ! Individual ensember forecast.
+     else
+       pdt_num = 0 ! Search for product definition template number 0.
+                   ! Analysis or forecast.
+     endif
+   else
+     call error_handler("READING GRIB2 FILE", iret)
+   endif
+
+!----------------------------------------------------------------------
+! First, check for the vertical coordinate. If temperture at the 10 hybrid
+! level is found, hybrid coordinates are assumed. Otherwise, data is on
+! isobaric levels.
+!----------------------------------------------------------------------
+
+   j = 0
+   jpdtn   = pdt_num  ! Search for the specific product definition template number.
+   jpdt(1) = 0      ! Sect4/oct 10 - Parameter category - temperature field
+   jpdt(2) = 0      ! Sect4/oct 11 - Parameter number - temperature
+   jpdt(10) = 105   ! Sect4/oct 23 - Type of level - hybrid
+   jpdt(12) = 10    ! Sect4/octs 25/28 - Value of hybrid level
+   unpack=.false.
+
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+    
+   if (iret == 0) then
+     print*,'- DATA IS ON HYBRID LEVELS.'
+     octet_23 = 105 ! Section 4/Oct 23 - type of first fixed surface.
+     octet_29 = 255 ! Section 4/Oct 29 - type of second fixed surface (N/A).
+     isnative=.true.
+   else
+     print*,'- DATA IS ON ISOBARIC LEVELS.'
+     octet_23 = 100 ! Section 4/Oct 23 - type of first fixed surface.
+     octet_29 = 255 ! Section 4/Oct 29 - type of second fixed surface (N/A).
+     isnative=.false.
+   endif
+
+! Now count the number of vertical levels by searching for u-wind.
+! Store the value of each level.
+
+   rlevs_hold = -999.9
+   lev_input = 0
+   iret = 0
+   j = 0
+   jpdtn = -1
+   jpdt = -9999
+
+   do
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret /= 0) exit
+
+     if (gfld%discipline == 0) then ! Discipline - meteorological products
+       if (gfld%ipdtnum == pdt_num) then  ! Product definition template number.
+         if (gfld%ipdtmpl(1) == 2 .and. gfld%ipdtmpl(2) == 2) then  ! u-wind
+                                                                    ! Sect4/octs 10 and 11.
+           if (gfld%ipdtmpl(10) == octet_23 .and. gfld%ipdtmpl(13) == octet_29) then  
+                                                                    ! Sect4 octs 23 and 29.
+                                                                    ! Hybrid or isobaric.
+             lev_input = lev_input + 1
+             iscale = 10 ** gfld%ipdtmpl(11)
+             rlevs_hold(lev_input) = float(gfld%ipdtmpl(12))/float(iscale)
+           endif
+         endif
+       endif
+     endif
+    
+     j = k
+   enddo
+
+ endif ! read file on task 0.
+
+ call mpi_barrier(MPI_COMM_WORLD, iret)
+ call MPI_BCAST(isnative,1,MPI_LOGICAL,0,MPI_COMM_WORLD,iret)
+ call MPI_BCAST(lev_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,iret)
+ call MPI_BCAST(pdt_num,1,MPI_INTEGER,0,MPI_COMM_WORLD,iret)
+ call MPI_BCAST(rlevs_hold, max_levs, MPI_INTEGER,0,MPI_COMM_WORLD,iret)
 
  allocate(slevs(lev_input))
  allocate(rlevs(lev_input))
+ allocate(dummy3d_col_in(lev_input))
+ allocate(dummy3d_col_out(lev_input))
+
  levp1_input = lev_input + 1
-    
-! Get the vertical levels, and search string by sequential reads
-
- do i = 1,lev_input
-   iret=grb2_inq(the_file,inv_file,':UGRD:',trim(lvl_str),sequential=i-1,desc=metadata)
-   if (iret.ne.1) call error_handler(" IN SEQUENTIAL FILE READ.", iret)
-    
-   j = index(metadata,':UGRD:') + len(':UGRD:')
-   k = index(metadata,trim(lvl_str_space)) + len(trim(lvl_str_space))-1
-
-   read(metadata(j:k),*) rlevs(i)
-
-   slevs(i) = metadata(j-1:k) 
-   if (.not. isnative) rlevs(i) = rlevs(i) * 100.0
-   if (localpet==0) print*, "- LEVEL = ", slevs(i)
- enddo
 
 ! Jili Dong add sort to re-order isobaric levels.
 
+ do i = 1, lev_input
+   rlevs(i) = rlevs_hold(i)
+ enddo
+
  call quicksort(rlevs,1,lev_input)
 
- if (.not. isnative) then
+ do i = 1, lev_input
+   if (isnative) then
+     write(slevs(i), '(i6)') nint(rlevs(i))
+     slevs(i) = trim(slevs(i)) // " hybrid"
+   else
+     write(slevs(i), '(f11.2)') rlevs(i)
+     slevs(i) = trim(slevs(i)) // " Pa"
+   endif
+ enddo
+
+ if(localpet == 0) then
    do i = 1,lev_input
-     write(slevs(i),"(F20.10)") rlevs(i)/100.0
-     len_str = len_trim(slevs(i))
-
-     do while (slevs(i)(len_str:len_str) .eq. '0')
-      slevs(i) = slevs(i)(:len_str-1)
-      len_str = len_str - 1
-     end do
-
-     if (slevs(i)(len_str:len_str) .eq. '.') then
-     slevs(i) = slevs(i)(:len_str-1)
-     len_str = len_str - 1
-     end if
-
-     slevs(i) = trim(slevs(i))
-
-     slevs(i) = ":"//trim(adjustl(slevs(i)))//" mb:"
-     if (localpet==0) print*, "- LEVEL AFTER SORT = ",slevs(i)
+     print*, "- LEVEL AFTER SORT = ",trim(slevs(i))
    enddo
  endif
- 
- if (localpet == 0) print*,"- FIND SPFH OR RH IN FILE"
- iret = grb2_inq(the_file,inv_file,trim(trac_names_grib_1(1)),trac_names_grib_2(1),lvl_str_space)
 
- if (iret <= 0) then
-   iret = grb2_inq(the_file,inv_file, ':var0_2','_1_1:',lvl_str_space)
-   if (iret <= 0) call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", iret)
-   hasspfh = .false.
-   trac_names_grib_2(1)='_1_1:'
-   if (localpet == 0) print*,"- FILE CONTAINS RH."
- else
-   if (localpet == 0) print*,"- FILE CONTAINS SPFH."
- endif
- 
- if (localpet == 0) print*,"- FIND ICMR, SCLIWC, OR CICE IN FILE"
- iret = grb2_inq(the_file,inv_file,trac_names_grib_1(4),trac_names_grib_2(4),lvl_str_space)
+! Check to see if specfic humidity exists at all the same levels as ugrd.
 
- if (iret <= 0) then
-   vname = trac_names_vmap(4)
-   print*, "vname = ", vname
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                       this_field_var_name=tmpstr,loc=varnum)
-   iret = grb2_inq(the_file,inv_file, ':var0_2','_1_84:',lvl_str_space)
-   if (iret <= 0) then
-     iret = grb2_inq(the_file,inv_file, ':var0_2','_6_0:',lvl_str_space)
-     if (iret <= 0 ) then 
-       call handle_grib_error(vname, slevs(1),method,value,varnum,rc,var=dummy2d)
-     else
-       trac_names_grib_2(4) = '_6_0'
-       if (localpet == 0) print*,"- FILE CONTAINS CICE."
-     endif     
-   else
-     trac_names_grib_2(4)='_1_84:'
-     if (localpet == 0) print*,"- FILE CONTAINS SCLIWC."
-   endif
- else
-   if (localpet == 0) print*,"- FILE CONTAINS ICMR."
- endif
- 
- if (localpet == 0) print*,"- FIND CLWMR or SCLLWC IN FILE"
- iret = grb2_inq(the_file,inv_file,trac_names_grib_1(5),trac_names_grib_2(5),lvl_str_space)
-
- if (iret <= 0) then
-   vname = trac_names_vmap(5)
-   print*, "vname = ", vname
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                       this_field_var_name=tmpstr,loc=varnum)
-   iret = grb2_inq(the_file,inv_file, ':var0_2','_1_83:',lvl_str_space)
-   if (iret <= 0) then 
-      call handle_grib_error(vname, slevs(1),method,value,varnum,rc,var=dummy2d)
-   elseif (iret <=0 .and. rc .ne. 1) then
-     call error_handler("READING CLOUD WATER VARIABLE.", iret)
-   else
-     trac_names_grib_2(4)='_1_83:'
-     if (localpet == 0) print*,"- FILE CONTAINS SCLLWC."
-   endif
- else
-   if (localpet == 0) print*,"- FILE CONTAINS CLWMR."
- endif
+ if (localpet == 0) then
    
+   jpdtn = pdt_num ! Product definition template number.
+   jpdt = -9999
+   jpdt(1) = 1  ! Sect4/oct 10 - Parameter category - moisture
+   jpdt(2) = 0  ! Sect4/oct 11 - Parameter number - specific humidity
+   jpdt(10) =  octet_23 ! Sect4/oct 23 - type of level.
+   unpack=.false.
+
+   count_spfh=0
+
+   do vlev = 1, lev_input
+     j = 0
+     jpdt(12) = nint(rlevs(vlev))
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret == 0) then
+       count_spfh = count_spfh + 1
+     endif
+   enddo
+
+   jpdt(1) = 1  ! Sec4/oct 10 - Parameter category - moisture
+   jpdt(2) = 1  ! Sec4/oct 11 - Parameter number - rel humidity
+   count_rh=0
+
+   do vlev = 1, lev_input
+     j = 0
+     jpdt(12) = nint(rlevs(vlev))
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret == 0) then
+       count_rh = count_rh + 1
+     endif
+   enddo
+
+   if (count_spfh /= lev_input) then
+     use_rh = .true.
+   endif
+
+   if (count_spfh == 0 .or. use_rh) then
+     if (count_rh == 0) then
+       call error_handler("READING ATMOSPHERIC WATER VAPOR VARIABLE.", 2)
+     endif
+     hasspfh = .false.  ! Will read rh and convert to specific humidity.
+     trac_names_oct10(1) = 1
+     trac_names_oct11(1) = 1
+     print*,"- FILE CONTAINS RH."
+   else
+     print*,"- FILE CONTAINS SPFH."
+   endif
+
+ endif
+
+ call MPI_BARRIER(MPI_COMM_WORLD, rc)
+ call MPI_BCAST(hasspfh,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
+ 
+! Search for and count the number of tracers in the file.
+
+ if (localpet == 0) then
+
+   jpdtn = pdt_num ! Product definition template number.
+   jpdt = -9999
+   jpdt(10) =  octet_23 ! Sect4/oct 23 - type of level.
+   unpack=.false.
+
+   count_icmr=0
+   count_scliwc=0
+   count_cice=0
+   count_rwmr=0
+   count_scllwc=0
+
+   do vlev = 1, lev_input
+
+     j = 0
+     jpdt(1) = 1  ! Sect4/oct 10 - Parameter category - moisture
+     jpdt(2) = 23 ! Sect4/oct 11 - Parameter number - ice water mixing ratio
+     jpdt(12) = nint(rlevs(vlev))
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret == 0) then
+       count_icmr = count_icmr + 1
+     endif
+
+     j = 0
+     jpdt(1) = 1  ! Sect4/oct 10 - Parameter category - moisture
+     jpdt(2) = 84 ! Sect4/oct 11 - Parameter number - cloud ice water content.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+           unpack, k, gfld, iret)
+
+     if (iret == 0) then
+       count_scliwc = count_scliwc + 1
+     endif
+
+     j = 0
+     jpdt(1) = 6  ! Sect4/oct 10 - Parameter category - clouds
+     jpdt(2) = 0  ! Sect4/oct 11 - Parameter number - cloud ice
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret == 0) then
+       count_cice = count_cice + 1
+     endif
+
+     j = 0
+     jpdt(1) = 1   ! Sect4/oct 10 - Parameter category - moisture
+     jpdt(2) = 24  ! Sect4/oct 11 - Parameter number - rain mixing ratio
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret == 0) then
+       count_rwmr = count_rwmr + 1
+     endif
+
+     j = 0
+     jpdt(1) = 1   ! Sect4/oct 10 - Parameter category - moisture
+     jpdt(2) = 83  ! Sect4/oct 11 - Parameter number - specific cloud liquid
+                                  ! water content.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret == 0) then
+       count_scllwc = count_scllwc + 1
+     endif
+
+   enddo
+
+   if (count_icmr == 0) then
+     if (count_scliwc == 0) then
+       if (count_cice == 0) then
+         print*,'- FILE DOES NOT CONTAIN CICE.'
+       else
+         trac_names_oct10(4) = 6 ! Sect4/oct 10 - Parameter category - clouds
+         trac_names_oct11(4) = 0 ! Sect4/oct 11 - Parameter number - cloud ice
+         print*,"- FILE CONTAINS CICE."
+       endif
+     else
+       trac_names_oct10(4) = 1  ! Sect4/oct 10 - Parameter category - moisture
+       trac_names_oct11(4) = 84 ! Sect4/oct 11 - Parameter number - cloud ice water content.
+       print*,"- FILE CONTAINS SCLIWC."
+     endif
+   else
+     print*,"- FILE CONTAINS ICMR."
+   endif ! count of icmr
+
+   if (count_rwmr == 0) then
+     if (count_scllwc == 0) then
+       print*,"- FILE DOES NOT CONTAIN SCLLWC."
+     else
+       trac_names_oct10(4) = 1  ! Sect4/oct 10 - Parameter category - moisture
+       trac_names_oct11(4) = 83 ! Sect4/oct 11 - Parameter number - specific cloud liquid
+                                ! water content.
+       print*,"- FILE CONTAINS SCLLWC."
+     endif
+   else
+     print*,"- FILE CONTAINS CLWMR."
+   endif
+
+ endif ! count of tracers/localpet = 0
+   
+ call MPI_BARRIER(MPI_COMM_WORLD, rc)
+ call MPI_BCAST(trac_names_oct10,ntrac_max,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
+ call MPI_BCAST(trac_names_oct11,ntrac_max,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
+ 
  print*,"- COUNT NUMBER OF TRACERS TO BE READ IN BASED ON PHYSICS SUITE TABLE"
  do n = 1, num_tracers_input
 
@@ -2660,16 +2853,14 @@
 
    i = maxloc(merge(1.,0.,trac_names_vmap == vname),dim=1)
 
-   tracers_input_grib_1(n) = trac_names_grib_1(i)
-   tracers_input_grib_2(n) = trac_names_grib_2(i)
    tracers_input_vmap(n)=trac_names_vmap(i)
    tracers(n)=tracers_default(i)
+   if(trim(tracers(n)) .eq. "o3mr") o3n = n
+
+   tracers_input_oct10(n) = trac_names_oct10(i)
+   tracers_input_oct11(n) = trac_names_oct11(i)
 
  enddo
-
- if (localpet==0) then
-    print*, "- NUMBER OF TRACERS IN THE INPUT FILE = ", num_tracers_input
- endif
 
 !---------------------------------------------------------------------------
 ! Initialize esmf atmospheric fields.
@@ -2681,10 +2872,12 @@
    allocate(dummy2d(i_input,j_input))
    allocate(dummy2d_8(i_input,j_input))
    allocate(dummy3d(i_input,j_input,lev_input))
+   allocate(dum2d_1(i_input,j_input))
  else
    allocate(dummy2d(0,0))
    allocate(dummy2d_8(0,0))
    allocate(dummy3d(0,0,0))
+   allocate(dum2d_1(0,0))
  endif
 
 !----------------------------------------------------------------------------------
@@ -2694,62 +2887,195 @@
 !----------------------------------------------------------------------------------
  
  if (localpet == 0) then
+
    print*,"- READ TEMPERATURE."
-   vname = ":TMP:"   
-    do vlev = 1, lev_input
-      iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
-      if (iret<=0) then 
-        call error_handler("READING IN TEMPERATURE AT LEVEL "//trim(slevs(vlev)),iret)
-      endif
-      dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-      print*,'temp check after read ',vlev, dummy3d(1,1,vlev)
-    enddo
- endif
+
+   jdisc   = 0     ! search for discipline - meteorological products
+   j = 0           ! search at beginning of file.
+   jpdt    = -9999  ! array of values in product definition template, set to wildcard
+   jids    = -9999  ! array of values in identification section, set to wildcard
+   jgdt    = -9999  ! array of values in grid definition template, set to wildcard
+   jgdtn   = -1     ! search for any grid definition number.
+   jpdtn   =  pdt_num  ! Search for specific product definition template number.
+   jpdt(1) = 0      ! Sect 4/oct 10 - parameter category - temperature
+   jpdt(2) = 0      ! Sect 4/oct 11 - parameter number - temperature
+   jpdt(10) = octet_23 ! Sect4/oct 23 - type of level.
+
+   unpack=.true.
+
+   do vlev = 1, lev_input
+
+     jpdt(12) = nint(rlevs(vlev))
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+     if (iret /= 0) then 
+       call error_handler("READING IN TEMPERATURE AT LEVEL "//trim(slevs(vlev)),iret)
+     endif
+
+     dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
+
+     dummy3d(:,:,vlev) = dum2d_1
+
+   enddo
+
+ endif ! Read of temperature
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT GRID TEMPERATURE."
  call ESMF_FieldScatter(temp_input_grid, dummy3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
+! Read tracers
+
  do n = 1, num_tracers_input
 
    if (localpet == 0) print*,"- READ ", trim(tracers_input_vmap(n))
+
    vname = tracers_input_vmap(n)
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                        this_field_var_name=tmpstr,loc=varnum)
+
    if (n==1 .and. .not. hasspfh) then 
-        print*,"- CALL FieldGather TEMPERATURE." 
-        call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
-        if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGet", rc) 
+     print*,"- CALL FieldGather TEMPERATURE." 
+     call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGet", rc) 
    endif
    
    if (localpet == 0) then
-     vname = trim(tracers_input_grib_1(n))
-     vname2 = trim(tracers_input_grib_2(n))
-     
+
+     jdisc   = 0     ! search for discipline - meteorological products
+     jpdt    = -9999  ! array of values in product definition template, set to wildcard
+     jids    = -9999  ! array of values in identification section, set to wildcard
+     jgdt    = -9999  ! array of values in grid definition template, set to wildcard
+     jgdtn   = -1     ! search for any grid definition number.
+     jpdtn   =  pdt_num  ! Search for the product definition template number.
+     jpdt(10) = octet_23 ! Sect4/oct 23 - type of level.
+     unpack = .false.
+
+     count = 0
+
      do vlev = 1, lev_input
-      iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),vname2,data2=dummy2d)
-     
-      if (iret <= 0) then
-        call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
-        if (iret==1) then ! missing_var_method == skip or no entry
-          if (trim(vname2)=="_1_0:" .or. trim(vname2) == "_1_1:" .or.  &
-              trim(vname2) == ":14:192:") then
-            call error_handler("READING IN "//trim(vname)//" AT LEVEL "//trim(slevs(vlev))&
-                      //". SET A FILL VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+
+       j = 0
+       jpdt(1) = tracers_input_oct10(n)
+       jpdt(2) = tracers_input_oct11(n)
+       jpdt(12) = nint(rlevs(vlev))
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then
+         count = count + 1
+       endif
+
+     enddo
+     iret=count
+
+     ! Check to see if file has any data for this tracer
+     if (iret == 0) then
+       all_empty = .true.
+     else
+       all_empty = .false.
+     endif
+ 
+     is_missing = .false.
+
+     do vlev = 1, lev_input
+
+       unpack=.true.
+       j = 0
+       jpdt(1) = tracers_input_oct10(n)
+       jpdt(2) = tracers_input_oct11(n)
+       jpdt(12) = nint(rlevs(vlev) )
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+       if (iret == 0) then ! found data
+         dummy2d = reshape(gfld%fld, (/i_input,j_input/) )
+       else ! did not find data.
+        if (trim(method) .eq. 'intrp' .and. .not.all_empty) then
+          dummy2d = intrp_missing 
+          is_missing = .true.
+        else
+          ! Abort if input data has some data for current tracer, but has
+          ! missing data below 200 mb/ above 400mb
+            if (.not.all_empty .and. n == o3n) then
+              if (rlevs(vlev) .lt. lev_no_o3_fill) &
+                call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev))//&
+                  ". SET MISSING VARIABLE CONDITION TO 'INTRP' TO AVOID THIS ERROR", 1)
+            elseif (.not.all_empty .and. n .ne. o3n) then 
+              if (rlevs(vlev) .gt. lev_no_tr_fill) &
+                call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev))//&
+                  ". SET MISSING VARIABLE CONDITION TO 'INTRP' TO AVOID THIS ERROR.", 1)
+            endif 
+          ! If entire array is empty and method is set to intrp, switch method to fill
+          if (trim(method) .eq. 'intrp' .and. all_empty) method='set_to_fill' 
+
+          call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
+          if (iret==1) then ! missing_var_method == skip or no entry
+            if ( (tracers_input_oct10(n) == 1 .and. tracers_input_oct11(n) == 0) .or. &  ! spec humidity
+                 (tracers_input_oct10(n) == 1 .and. tracers_input_oct11(n) == 1) .or. &  ! rel humidity
+                 (tracers_input_oct10(n) == 14 .and. tracers_input_oct11(n) == 192) ) then ! ozone
+              call error_handler("READING IN "//trim(tracers(n))//" AT LEVEL "//trim(slevs(vlev))&
+                        //". SET A FILL VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+            endif
           endif
-        endif
-      endif
-      
+        endif ! method intrp
+      endif !iret<=0
+
       if (n==1 .and. .not. hasspfh) then 
-        call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        if (trim(external_model) .eq. 'GFS') then
+          print *,'- CALL CALRH GFS'
+          call rh2spfh_gfs(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        else 
+          print *,'- CALL CALRH non-GFS'
+          call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
+        end if
       endif
 
-       print*,'tracer ',vlev, maxval(dummy2d),minval(dummy2d)
        dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-     enddo
-   endif
+
+     enddo !vlev
+
+! Jili Dong interpolation for missing levels 
+     if (is_missing .and. trim(method) .eq. 'intrp') then
+       print *,'- INTERPOLATE TRACER '//trim(tracers(n))
+       done_print = 0
+       do jj = 1, j_input
+         do ii = 1, i_input
+           dummy3d_col_in=dummy3d(ii,jj,:)
+           call dint2p(rlevs,dummy3d_col_in,lev_input,rlevs,dummy3d_col_out,    &
+                        lev_input, 2, intrp_missing, intrp_ier) 
+           if (intrp_ier .gt. 0) call error_handler("Interpolation failed.",intrp_ier)
+           dummy3d(ii,jj,:)=dummy3d_col_out
+         enddo
+       enddo
+       do vlev=1,lev_input
+         dummy2d = dummy3d(:,:,n) 
+         if (any(dummy2d .eq. intrp_missing)) then 
+           ! If we're outside the appropriate region, don't fill but error instead
+           if (n == o3n .and. rlevs(vlev) .lt. lev_no_o3_fill) then
+             call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev)),1)
+           elseif (n .ne. o3n .and. rlevs(vlev) .gt. lev_no_tr_fill) then
+             call error_handler("TRACER "//trim(tracers(n))//" HAS MISSING DATA AT "//trim(slevs(vlev)),1)
+           else ! we're okay to fill missing data with provided fill value
+             if (done_print .eq. 0) then
+               print*, "Pressure out of range of existing data. Defaulting to fill value."
+               done_print = 1
+             end if !done print
+             where(dummy2d .eq. intrp_missing) dummy2d = value
+             dummy3d(:,:,vlev) = dummy2d
+           end if !n & lev
+         endif ! intrp_missing
+         ! zero out negative tracers from interpolation/extrapolation
+         where(dummy3d(:,:,vlev) .lt. 0.0)  dummy3d(:,:,vlev) = 0.0
+!        print*,'tracer af intrp',vlev, maxval(dummy3d(:,:,vlev)),minval(dummy3d(:,:,vlev))
+       end do !nlevs do
+     end if !if intrp
+   endif !localpet == 0
 
    if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT ", trim(tracers_input_vmap(n))
    call ESMF_FieldScatter(tracers_input_grid(n), dummy3d, rootpet=0, rc=rc)
@@ -2758,7 +3084,9 @@
 
  enddo
  
-call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet)
+ deallocate(dummy3d_col_in, dummy3d_col_out)
+ 
+ call read_winds(u_tmp_3d,v_tmp_3d,localpet,octet_23,rlevs,lugb,pdt_num)
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT U-WIND."
  call ESMF_FieldScatter(u_input_grid, u_tmp_3d, rootpet=0, rc=rc)
@@ -2771,62 +3099,117 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet)
     call error_handler("IN FieldScatter", rc)
 
  if (localpet == 0) then
+
    print*,"- READ SURFACE PRESSURE."
-   vname = ":var0_2"
-   vname2 = "_3_0:"
-   vlevtyp = ":surface:"
-   iret = grb2_inq(the_file,inv_file,vname,vname2,vlevtyp,data2=dummy2d)
-   if (iret <= 0) call error_handler("READING SURFACE PRESSURE RECORD.", iret)
-   dummy2d_8 = real(dummy2d,esmf_kind_r8)
- endif
+   jdisc   = 0     ! search for discipline - meteorological products
+   j = 0           ! search at beginning of file.
+   jpdt    = -9999  ! array of values in product definition template, set to wildcard
+   jids    = -9999  ! array of values in identification section, set to wildcard
+   jgdt    = -9999  ! array of values in grid definition template, set to wildcard
+   jgdtn   = -1     ! search for any grid definition number.
+   jpdtn   =  pdt_num  ! Search for the product definition template number.
+   jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
+   jpdt(2) = 0      ! Sect4/oct 11 - param number - pressure
+   jpdt(10) = 1     ! Sect4/oct 23 - type of level - ground surface
+   unpack=.true.
+
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+   if (iret /= 0) call error_handler("READING SURFACE PRESSURE RECORD.", iret)
+
+   dummy2d_8 = reshape(gfld%fld, (/i_input,j_input/) )
+
+ endif ! Read surface pressure
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT GRID SURFACE PRESSURE."
  call ESMF_FieldScatter(ps_input_grid, dummy2d_8, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
+! Read dzdt.
+
  if (localpet == 0) then
+
    print*,"- READ DZDT."
    vname = "dzdt"
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                          loc=varnum)
-   vname = ":var0_2"
-   vname2 = "_2_9:"
+
+   jdisc   = 0     ! search for discipline - meteorological products
+   j = 0           ! search at beginning of file.
+   jpdt    = -9999  ! array of values in product definition template, set to wildcard
+   jids    = -9999  ! array of values in identification section, set to wildcard
+   jgdt    = -9999  ! array of values in grid definition template, set to wildcard
+   jgdtn   = -1     ! search for any grid definition number.
+   jpdtn   =  pdt_num ! Search for the product definition template number.
+   jpdt(1) = 2      ! Sect4/oct 10 - param category - momentum
+   jpdt(2) = 9      ! Sect4/oct 11 - param number - dzdt
+   jpdt(10) = octet_23 ! Sect4/oct 23 - type of level
+
+   unpack=.true.
+
    do vlev = 1, lev_input
-     iret = grb2_inq(the_file,inv_file,vname,vname2,slevs(vlev),data2=dummy2d)
-     if (iret <= 0 ) then
+
+     jpdt(12) = nint(rlevs(vlev))
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret /= 0) then ! dzdt not found, look for omega.
        print*,"DZDT not available at level ", trim(slevs(vlev)), " so checking for VVEL"
-       vname2 = "_2_8:"
-       iret = grb2_inq(the_file,inv_file,vname,vname2,slevs(vlev),data2=dummy2d)
-       if (iret <= 0) then
-        call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var=dummy2d)
-        if (iret==1) then ! missing_var_method == skip 
-          cycle
-        endif
+       jpdt(2) = 8  ! Sect4/oct 11 - parameter number - omega
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+       if (iret /= 0) then
+         call handle_grib_error(vname, slevs(vlev),method,value,varnum,iret,var8=dum2d_1)
+         if (iret==1) then ! missing_var_method == skip 
+           cycle
+         endif
        else
-        conv_omega = .true.
+         conv_omega = .true.
+         dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
        endif
-       
+     else ! found dzdt
+       dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
      endif
-     print*,'dzdt ',vlev, maxval(dummy2d),minval(dummy2d)
-     dummy3d(:,:,vlev) = dummy2d
+
+     dummy3d(:,:,vlev) = dum2d_1
+
    enddo
- endif
+
+ endif ! Read of dzdt
+
+ call mpi_bcast(conv_omega,1,MPI_LOGICAL,0,MPI_COMM_WORLD,rc)
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT DZDT."
  call ESMF_FieldScatter(dzdt_input_grid, dummy3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
 
+! Read terrain
+
  if (localpet == 0) then
+
    print*,"- READ TERRAIN."
-   vname = ":var0_2"
-    vname2 = "_3_5:"
-   vlevtyp = ":surface:"
-   iret = grb2_inq(the_file,inv_file,vname,vname2,vlevtyp,data2=dummy2d)
-   if (iret <= 0) call error_handler("READING TERRAIN HEIGHT RECORD.", iret)
-   dummy2d_8 = real(dummy2d,esmf_kind_r8)
- endif
+   jdisc   = 0     ! search for discipline - meteorological products
+   j = 0           ! search at beginning of file.
+   jpdt    = -9999  ! array of values in product definition template, set to wildcard
+   jids    = -9999  ! array of values in identification section, set to wildcard
+   jgdt    = -9999  ! array of values in grid definition template, set to wildcard
+   jgdtn   = -1     ! search for any grid definition number.
+   jpdtn   =  pdt_num  ! Search for the product definition template number.
+   jpdt(1) = 3      ! Sect4/oct 10 - param category - mass
+   jpdt(2) = 5      ! Sect4/oct 11 - param number - geopotential height
+   jpdt(10) = 1     ! Sect4/oct 23 - type of level - ground surface
+   unpack=.true.
+
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+   if (iret /= 0) call error_handler("READING TERRAIN HEIGHT RECORD.", iret)
+
+   dummy2d_8 = reshape(gfld%fld, (/i_input,j_input/) )
+
+ endif ! read of terrain.
 
  if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT GRID TERRAIN."
  call ESMF_FieldScatter(terrain_input_grid, dummy2d_8, rootpet=0, rc=rc)
@@ -2836,6 +3219,7 @@ call read_winds(the_file,inv_file,u_tmp_3d,v_tmp_3d, localpet)
  deallocate(dummy2d, dummy2d_8)
  
 if (.not. isnative) then
+
   !---------------------------------------------------------------------------
   ! Flip 'z' indices to all 3-d variables.  Data is read in from model
   ! top to surface.  This program expects surface to model top.
@@ -2919,27 +3303,51 @@ if (.not. isnative) then
         lev_input)),minval(presptr(clb(1):cub(1),clb(2):cub(2),lev_input))
    endif
  
-else
-   ! For native files, read in pressure field directly from file but don't flip levels
+else ! is native coordinate (hybrid).
+
+! For native files, read in pressure field directly from file but don't flip levels
+
    if (localpet == 0) then
+
     print*,"- READ PRESSURE."
-    vname = ":PRES:"
+
+    jdisc   = 0     ! search for discipline - meteorological products
+    j = 0           ! search at beginning of file.
+    jpdt    = -9999  ! array of values in product definition template, set to wildcard
+    jids    = -9999  ! array of values in identification section, set to wildcard
+    jgdt    = -9999  ! array of values in grid definition template, set to wildcard
+    jgdtn   = -1     ! search for any grid definition number.
+    jpdtn   =  pdt_num ! Search for the product definition template number.
+    jpdt(1) = 3      ! Sect4/oct 10 - parameter category - mass
+    jpdt(2) = 0      ! Sect4/oct 11 - parameter number - pressure
+    jpdt(10) = octet_23 ! Sect4/oct 23 - type of level.
+    unpack=.true.
+
     do vlev = 1, lev_input
-      iret = grb2_inq(the_file,inv_file,vname,slevs(vlev),data2=dummy2d)
-      if (iret<=0) then
+
+      jpdt(12) = nint(rlevs(vlev))
+      call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+      if (iret /= 0) then
         call error_handler("READING IN PRESSURE AT LEVEL "//trim(slevs(vlev)),iret)
       endif
-      dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
-      print*,'pres check after read ',vlev, dummy3d(1,1,vlev)
+
+      dum2d_1 = reshape(gfld%fld, (/i_input,j_input/) )
+
+      dummy3d(:,:,vlev) = dum2d_1
+
     enddo
-  endif
+
+  endif  ! localpet == 0
 
   if (localpet == 0) print*,"- CALL FieldScatter FOR INPUT GRID PRESSURE."
   call ESMF_FieldScatter(pres_input_grid, dummy3d, rootpet=0, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
+
  endif
- deallocate(dummy3d) 
+
+ deallocate(dummy3d, dum2d_1) 
  
 !---------------------------------------------------------------------------
 ! Convert from 2-d to 3-d component winds.
@@ -2985,11 +3393,13 @@ else
                     farrayPtr=presptr, rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-    
+
   call convert_omega(wptr,presptr,tptr,qptr,clb,cub)
   
  endif
  
+ if (localpet == 0) call baclose(lugb, rc)
+
  end subroutine read_input_atm_grib2_file
 
 !> Read input grid surface data from a spectral gfs gaussian sfcio
@@ -4601,11 +5011,11 @@ else
 !! @author Larissa Reames 
  subroutine read_input_sfc_grib2_file(localpet)
 
-   use wgrib2api
+   use mpi
+   use grib_mod
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
    use model_grid, only    : input_grid_type
    use search_util
-
 
    implicit none
 
@@ -4613,43 +5023,104 @@ else
 
    character(len=250)                    :: the_file
    character(len=250)                    :: geo_file
-   character(len=20)                     :: vname, vname_file,slev
+   character(len=20)                     :: vname, vname_file, slev
    character(len=50)                     :: method
    character(len=20)                     :: to_upper
  
    integer                               :: rc, varnum, iret, i, j,k
    integer                               :: ncid2d, varid, varsize
+   integer                               :: lugb, lugi
+   integer                               :: jdisc, jgdtn, jpdtn, pdt_num
+   integer                               :: jids(200), jgdt(200), jpdt(200)
 
-   logical                               :: exist, rap_latlon
+   logical                               :: rap_latlon, unpack
 
    real(esmf_kind_r4)                    :: value
-
-   real(esmf_kind_r4), allocatable       :: dummy2d(:,:),icec_save(:,:)
+   real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
+   real(esmf_kind_r8), allocatable       :: icec_save(:,:)
    real(esmf_kind_r4), allocatable       :: dummy1d(:)
    real(esmf_kind_r8), allocatable       :: dummy2d_8(:,:),dummy2d_82(:,:),tsk_save(:,:)
    real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy3d_stype(:,:,:)
    integer(esmf_kind_i4), allocatable    :: slmsk_save(:,:)
    integer(esmf_kind_i8), allocatable    :: dummy2d_i(:,:)
    
+   type(gribfield)                       :: gfld
     
    rap_latlon = trim(to_upper(external_model))=="RAP" .and. trim(input_grid_type) == "rotated_latlon"
 
    the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
    geo_file = trim(geogrid_file_input_grid)
    
-   
    print*,"- READ SFC DATA FROM GRIB2 FILE: ", trim(the_file)
-   inquire(file=the_file,exist=exist)
-   if (.not.exist) then
-     iret = 1
-     call error_handler("OPENING GRIB2 FILE.", iret)
-   end if
 
-   lsoil_input = grb2_inq(the_file, inv_file, ':TSOIL:',' below ground:')
-   print*, "- FILE HAS ", lsoil_input, " SOIL LEVELS"
-   if (lsoil_input <= 0) call error_handler("COUNTING SOIL LEVELS.", rc)
-   
- !We need to recreate the soil fields if we have something other than 4 levels
+! Determine the number of soil layers in file.
+
+   if (localpet == 0) then
+
+     lugb=12
+     call baopenr(lugb,the_file,rc)
+     if (rc /= 0) call error_handler("ERROR OPENING GRIB2 FILE.", rc)
+
+     j       = 0      ! search at beginning of file
+     lugi    = 0      ! no grib index file
+     jdisc   = -1     ! search for any discipline
+     jpdtn   = -1     ! search for any product definition template number
+     jgdtn   = -1     ! search for any grid definition template number
+     jids    = -9999  ! array of values in identification section, set to wildcard
+     jgdt    = -9999  ! array of values in grid definition template, set to wildcard
+     jpdt    = -9999  ! array of values in product definition template, set to wildcard
+     unpack  = .false. ! unpack data
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc == 0) then
+       if (gfld%idsect(1) == 7 .and. gfld%idsect(2) == 2) then
+         print*,'- THIS IS NCEP GEFS DATA.'
+         pdt_num = 1
+       else
+         pdt_num = 0
+       endif
+     else
+       if (rc /= 0) call error_handler("ERROR READING GRIB2 FILE.", rc)
+     endif
+
+     j = 0
+     lsoil_input = 0
+
+     do
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+       if (rc /= 0) exit
+
+       if (gfld%discipline == 2) then ! discipline - land products
+         if (gfld%ipdtnum == pdt_num) then  ! prod template number - analysis or forecast at single level.
+           if (gfld%ipdtmpl(1) == 0 .and. gfld%ipdtmpl(2) == 2) then  ! soil temp
+                                                                      ! Sect4/octs 10 and 11
+             if (gfld%ipdtmpl(10) == 106 .and. gfld%ipdtmpl(13) == 106) then  ! Sect4/octs 23/29.
+                                                                              ! Layer below ground.
+               lsoil_input = lsoil_input + 1
+             endif
+           endif
+         endif
+       endif
+    
+       j = k
+
+     enddo
+
+     print*, "- FILE HAS ", lsoil_input, " SOIL LEVELS."
+     if (lsoil_input == 0) call error_handler("COUNTING SOIL LEVELS.", rc)
+
+   endif ! localpet == 0
+
+   call MPI_BARRIER(MPI_COMM_WORLD, rc)
+   call MPI_BCAST(lsoil_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
+
+ ! We need to recreate the soil fields if we have something other than 4 levels
+
    if (lsoil_input /= 4) then
    
      call ESMF_FieldDestroy(soil_temp_input_grid, rc=rc)
@@ -4684,56 +5155,81 @@ else
         call error_handler("IN FieldCreate", rc)
    
    endif
-
- if (localpet == 0) then
-   allocate(dummy2d(i_input,j_input))
-   allocate(slmsk_save(i_input,j_input))
-   allocate(dummy2d_i(i_input,j_input))
-   allocate(tsk_save(i_input,j_input))
-   allocate(icec_save(i_input,j_input))
-   allocate(dummy2d_8(i_input,j_input))
-   allocate(dummy2d_82(i_input,j_input))
-   allocate(dummy3d(i_input,j_input,lsoil_input))
-   allocate(dummy3d_stype(i_input,j_input,16))
-   allocate(dummy1d(16))
- else
-   allocate(dummy3d(0,0,0))
-   allocate(dummy2d_8(0,0))
-   allocate(dummy2d_82(0,0))
-   allocate(dummy2d(0,0))
-
- endif
+ 
+   if (localpet == 0) then
+     allocate(dummy2d(i_input,j_input))
+     allocate(slmsk_save(i_input,j_input))
+     allocate(tsk_save(i_input,j_input))
+     allocate(icec_save(i_input,j_input))
+     allocate(dummy2d_8(i_input,j_input))
+     allocate(dummy2d_82(i_input,j_input))
+     allocate(dummy3d(i_input,j_input,lsoil_input))
+   else
+     allocate(dummy3d(0,0,0))
+     allocate(dummy2d_8(0,0))
+     allocate(dummy2d_82(0,0))
+     allocate(dummy2d(0,0))
+     allocate(slmsk_save(0,0))
+   endif
  
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  ! These variables are always in grib files, or are required, so no need to check for them 
  ! in the varmap table. If they can't be found in the input file, then stop the program.
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
- if (localpet == 0) then
-   print*,"- READ TERRAIN."
-   rc = grb2_inq(the_file, inv_file, ':HGT:',':surface:', data2=dummy2d)
-   if (rc /= 1) call error_handler("READING TERRAIN.", rc)
-   print*,'orog ',maxval(dummy2d),minval(dummy2d)
- endif
+   if (localpet == 0) then
 
- print*,"- CALL FieldScatter FOR INPUT TERRAIN."
- call ESMF_FieldScatter(terrain_input_grid, real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+     print*,"- READ TERRAIN."
+ 
+     j = 0
+     jdisc   = 0  ! Search for discipline 0 - meteorological products
+     jpdt    = -9999  ! array of values in product definition template, set to wildcard.
+     jpdtn   = pdt_num       ! search for product definition template number 0 - anl or fcst.
+     jpdt(1) = 3  ! Sec4/oct 10 - param cat - mass field
+     jpdt(2) = 5  ! Sec4/oct 11 - param number - geopotential height
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+               unpack, k, gfld, rc)
+     if (rc /= 0) call error_handler("READING TERRAIN.", rc)
+
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+!    print*,'orog ', maxval(dummy2d_8),minval(dummy2d_8)
+   
+   endif
+
+   print*,"- CALL FieldScatter FOR INPUT TERRAIN."
+   call ESMF_FieldScatter(terrain_input_grid, dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
-if (localpet == 0) then
-   print*,"- READ SEAICE FRACTION."
-   rc = grb2_inq(the_file, inv_file, ':ICEC:',':surface:', data2=dummy2d)
-   if (rc /= 1) call error_handler("READING SEAICE FRACTION.", rc)
-   !dummy2d = dummy2d(i_input:1:-1,j_input:1:-1)
-   print*,'icec ',maxval(dummy2d),minval(dummy2d)
-   icec_save = dummy2d
- endif
+   if (localpet == 0) then
 
- print*,"- CALL FieldScatter FOR INPUT GRID SEAICE FRACTION."
- call ESMF_FieldScatter(seaice_fract_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+     print*,"- READ SEAICE FRACTION."
+ 
+     jdisc   = 10 ! Search for discipline - ocean products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = pdt_num  ! Search for product def template number 0 - anl or fcst.
+     jpdt    = -9999  ! Array of values in Sec 4 product definition template;
+                      ! Initialize to wildcard.
+     jpdt(1) = 2  ! Sec4/oct 10 - parameter category - ice
+     jpdt(2) = 0  ! Sec4/oct 11 - parameter number - ice cover
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+               unpack, k, gfld, rc)
+     if (rc /= 0) call error_handler("READING SEAICE FRACTION.", rc)
+
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+!    print*,'icec ', maxval(dummy2d_8),minval(dummy2d_8)
+ 
+     icec_save = dummy2d_8
+
+   endif
+
+   print*,"- CALL FieldScatter FOR INPUT GRID SEAICE FRACTION."
+   call ESMF_FieldScatter(seaice_fract_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
 !----------------------------------------------------------------------------------
 ! GFS v14 and v15.2 grib data has two land masks.  LANDN is created by
@@ -4743,46 +5239,89 @@ if (localpet == 0) then
 ! '2' based on ice concentration.
 !----------------------------------------------------------------------------------
 
- if (localpet == 0) then
-   print*,"- READ LANDSEA MASK."
-   rc = grb2_inq(the_file, inv_file, ':LANDN:',':surface:', data2=dummy2d)
+   if (localpet == 0) then
 
-   if (rc /= 1) then 
-     rc = grb2_inq(the_file, inv_file, ':LAND:',':surface:', data2=dummy2d)
-     if (rc /= 1) call error_handler("READING LANDSEA MASK.", rc)
+     print*,"- READ LANDSEA MASK."
+
+     jdisc   = 2  ! Search for discipline - land products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = pdt_num  ! Search for product definition template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec 4.
+     jpdt(1) = 0      ! Sec4/oct 10 - parameter category - veg/biomass
+     jpdt(2) = 218    ! Sec4/oct 11 - parameter number - land nearest neighbor
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc == 0) then
+
+       print*,'landnn ', maxval(gfld%fld),minval(gfld%fld)
+
+     else
+
+       jdisc   = 2  ! Search for discipline - land products
+       j = 0        ! Search at beginning of file.
+       jpdtn   = pdt_num  ! Search for product def template number 0 - anl or fcst.
+       jpdt    = -9999  ! Initialize array of values in product definition template - Sec 4.
+       jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+       jpdt(2) = 0  ! Sec4/oct 11 - parameter number - land cover (fraction)
+       unpack=.true.
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+              unpack, k, gfld, rc)
+       if (rc /= 0) call error_handler("READING LANDSEA MASK.", rc)
+    
+!      print*,'land ', maxval(gfld%fld),minval(gfld%fld)
+
+     endif
+
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+ 
+     do j = 1, j_input
+       do i = 1, i_input
+         if(dummy2d_8(i,j) < 0.5_esmf_kind_r8) dummy2d_8(i,j)=0.0
+         if(icec_save(i,j) > 0.15_esmf_kind_r8) then 
+           dummy2d_8(i,j) = 2.0_esmf_kind_r8
+         endif
+       enddo
+     enddo
+
+     slmsk_save = nint(dummy2d_8)
+
+     deallocate(icec_save)
+
+   endif ! read land mask
+
+   print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
+   call ESMF_FieldScatter(landsea_mask_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+
+   if (localpet == 0) then
+
+     print*,"- READ SEAICE SKIN TEMPERATURE."
+
+     jdisc   = 0  ! Search for discipline - meteorological products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = pdt_num  ! Search for product definition template number 0 - anl or fcst.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 0  ! Sec4/oct 10 - parameter category - temperature
+     jpdt(2) = 0  ! Sec4/oct 11 - parameter number - temperature
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+     if (rc /= 0) call error_handler("READING SEAICE SKIN TEMP.", rc)
+
+!    print*,'ti ',maxval(gfld%fld),minval(gfld%fld)
+
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
    endif
 
-   do j = 1, j_input
-     do i = 1, i_input
-       if(dummy2d(i,j) < 0.5_esmf_kind_r4) dummy2d(i,j)=0.0_esmf_kind_r4
-       if(icec_save(i,j) > 0.15_esmf_kind_r4) then 
-         !if (dummy2d(i,j) == 0.0_esmf_kind_r4) print*, "CONVERTING WATER TO SEA/LAKE ICE AT ", i, j
-         dummy2d(i,j) = 2.0_esmf_kind_r4
-       endif
-     enddo
-   enddo
-
-   slmsk_save = nint(dummy2d)
-  
-   deallocate(icec_save)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
- call ESMF_FieldScatter(landsea_mask_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ SEAICE SKIN TEMPERATURE."
-   rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
-   if (rc /= 1) call error_handler("READING SEAICE SKIN TEMP.", rc)
-   print*,'ti ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID SEAICE SKIN TEMPERATURE."
- call ESMF_FieldScatter(seaice_skin_temp_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID SEAICE SKIN TEMPERATURE."
+   call ESMF_FieldScatter(seaice_skin_temp_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+     call error_handler("IN FieldScatter", rc)
 
 !----------------------------------------------------------------------------------
 ! Read snow fields.  Zero out at non-land points and undefined points (points
@@ -4790,145 +5329,250 @@ if (localpet == 0) then
 ! in mm.
 !----------------------------------------------------------------------------------
 
- if (localpet == 0) then
-   print*,"- READ SNOW LIQUID EQUIVALENT."
-   rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:',':anl:',data2=dummy2d)
-   if (rc /= 1) then 
-     rc = grb2_inq(the_file, inv_file, ':WEASD:',':surface:','hour fcst:',data2=dummy2d)
-     if (rc /= 1) call error_handler("READING SNOW LIQUID EQUIVALENT.", rc)
+   if (localpet == 0) then
+
+     print*,"- READ SNOW LIQUID EQUIVALENT."
+
+     jdisc   = 0 ! Search for discipline - meteorological products
+     j = 0       ! Search at beginning of file.
+     jpdtn   = pdt_num ! Search for the product definition template number.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 1  ! Sec4/oct 10 - parameter category - moisture
+     jpdt(2) = 13 ! Sec4/oct 11 - parameter number - liquid equiv snow depth
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+     if (rc /= 0) call error_handler("READING SNOW LIQUID EQUIVALENT.", rc)
+
+!    print*,'weasd ', maxval(gfld%fld),minval(gfld%fld)
+
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+     do j = 1, j_input
+       do i = 1, i_input
+         if(slmsk_save(i,j) == 0) dummy2d_8(i,j) = 0.0
+       enddo
+     enddo
+
    endif
-   do j = 1, j_input
+
+   print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
+   call ESMF_FieldScatter(snow_liq_equiv_input_grid, dummy2d_8 ,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+
+   if (localpet == 0) then
+
+     print*,"- READ SNOW DEPTH."
+
+     jdisc   = 0  ! Search for discipline - meteorological products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
+     jpdt    = -9999 ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 1  ! Sec4/oct 10 - parameter category - moisture
+     jpdt(2) = 11 ! Sec4/oct 11 - parameter number - snow depth
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0) then
+       call error_handler("READING SNOW DEPTH.", rc)
+     else
+       gfld%fld = gfld%fld * 1000.0
+!      print*,'snod ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     endif
+
+     do j = 1, j_input
      do i = 1, i_input
-       if(slmsk_save(i,j) == 0) dummy2d(i,j) = 0.0_esmf_kind_r4
-       if(dummy2d(i,j) == grb2_UNDEFINED) dummy2d(i,j) = 0.0_esmf_kind_r4
+       if(slmsk_save(i,j) == 0) dummy2d_8(i,j) = 0.0
      enddo
-   enddo
-  print*,'weasd ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID SNOW LIQUID EQUIVALENT."
- call ESMF_FieldScatter(snow_liq_equiv_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ SNOW DEPTH."
-   rc = grb2_inq(the_file, inv_file, ':SNOD:',':surface:', data2=dummy2d)
-   if (rc /= 1) call error_handler("READING SNOW DEPTH.", rc)
-   where(dummy2d == grb2_UNDEFINED) dummy2d = 0.0_esmf_kind_r4
-   dummy2d = dummy2d*1000.0 ! Grib2 files have snow depth in (m), fv3 expects it in mm
-   where(slmsk_save == 0) dummy2d = 0.0_esmf_kind_r4
-  print*,'snod ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID SNOW DEPTH."
- call ESMF_FieldScatter(snow_depth_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
-    
- if (localpet == 0) then
-   print*,"- READ T2M."
-   rc = grb2_inq(the_file, inv_file, ':TMP:',':2 m above ground:',data2=dummy2d)
-   if (rc <= 0) call error_handler("READING T2M.", rc)
-
-   print*,'t2m ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID T2M."
- call ESMF_FieldScatter(t2m_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0,rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
-
- if (localpet == 0) then
-   print*,"- READ Q2M."
-   rc = grb2_inq(the_file, inv_file, ':SPFH:',':2 m above ground:',data2=dummy2d)
-   if (rc <=0) call error_handler("READING Q2M.", rc)
-   print*,'q2m ',maxval(dummy2d),minval(dummy2d)
- endif
-
- print*,"- CALL FieldScatter FOR INPUT GRID Q2M."
- call ESMF_FieldScatter(q2m_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0,rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
-    
- if (localpet == 0) then
-   print*,"- READ SKIN TEMPERATURE."
-   rc = grb2_inq(the_file, inv_file, ':TMP:',':surface:', data2=dummy2d)
-   if (rc <= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
-   tsk_save(:,:) = real(dummy2d,esmf_kind_r8)
-   dummy2d_8 = real(dummy2d,esmf_kind_r8)
-   do j = 1, j_input
-     do i = 1, i_input
-       if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) < 271.2) then
-!        print*,'too cool SST ',i,j,dummy2d(i,j)
-         dummy2d(i,j) = 271.2
-       endif
-       if(slmsk_save(i,j) == 0 .and. dummy2d(i,j) > 310.) then
-!        print*,'too hot SST ',i,j,dummy2d(i,j)
-         dummy2d(i,j) = 310.0
-       endif
      enddo
-   enddo
- endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
- call ESMF_FieldScatter(skin_temp_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   endif
+
+   print*,"- CALL FieldScatter FOR INPUT GRID SNOW DEPTH."
+   call ESMF_FieldScatter(snow_depth_input_grid,dummy2d_8,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
- if (localpet == 0) dummy2d = 0.0
+   if (localpet == 0) then
+
+     print*,"- READ T2M."
+
+     jdisc   = 0 ! Search for discipline - meteorological products
+     j = 0       ! Search at beginning of file.
+     jpdtn   = pdt_num ! Search for the product definition template number.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 0    ! Sec4/oct 10 - parameter category - temperature
+     jpdt(2) = 0    ! Sec4/oct 11 - parameter number - temperature
+     jpdt(10) = 103 ! Sec4/oct 23 - type of level - height above ground surface
+     jpdt(12) = 2   ! Sec4/octs 25-28 - 2 meters above ground.
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0) call error_handler("READING T2M.", rc)
+!    print*,'t2m ', maxval(gfld%fld),minval(gfld%fld)
+
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+   endif
+
+   print*,"- CALL FieldScatter FOR INPUT GRID T2M."
+   call ESMF_FieldScatter(t2m_input_grid, dummy2d_8, rootpet=0,rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+
+   if (localpet == 0) then
+
+     print*,"- READ Q2M."
+
+     jdisc   = 0  ! Search for discipline - meteorological products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 1  ! Sec4/oct 10 - parameter category - moisture
+     jpdt(2) = 0  ! Sec4/oct 11 - parameter number - specific humidity
+     jpdt(10) = 103 ! Sec4/oct 23 - type of level - height above ground surface
+     jpdt(12) = 2 ! Sec4/octs 25-28 - 2 meters above ground.
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+     if (rc /=0) call error_handler("READING Q2M.", rc)
+
+!    print*,'q2m ',maxval(gfld%fld),minval(gfld%fld)
+
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+   endif
+
+   print*,"- CALL FieldScatter FOR INPUT GRID Q2M."
+   call ESMF_FieldScatter(q2m_input_grid,dummy2d_8, rootpet=0,rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+    
+   if (localpet == 0) then
+
+     print*,"- READ SKIN TEMPERATURE."
+
+     jdisc   = 0  ! Search for discipline - meteorological products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 0  ! Sec4/oct 10 - parameter category - temperature
+     jpdt(2) = 0  ! Sec4/oct 11 - parameter number - temperature
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0 ) call error_handler("READING SKIN TEMPERATURE.", rc)
+!    print*,'skint ', maxval(gfld%fld),minval(gfld%fld)
+
+     dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+     tsk_save(:,:) = dummy2d_8
+
+     do j = 1, j_input
+       do i = 1, i_input
+        if(slmsk_save(i,j) == 0 .and. dummy2d_8(i,j) < 271.2) then
+!         print*,'too cool SST ',i,j,dummy2d_8(i,j)
+          dummy2d_8(i,j) = 271.2
+        endif
+        if(slmsk_save(i,j) == 0 .and. dummy2d_8(i,j) > 310.) then
+!         print*,'too hot SST ',i,j,dummy2d_8(i,j)
+          dummy2d_8(i,j) = 310.0
+        endif
+       enddo
+     enddo
+
+   endif
+
+   print*,"- CALL FieldScatter FOR INPUT GRID SKIN TEMPERATURE"
+   call ESMF_FieldScatter(skin_temp_input_grid,dummy2d_8,rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+    
+! srflag not in files. Set to zero.
+
+   if (localpet == 0) dummy2d_8 = 0.0
  
- print*,"- CALL FieldScatter FOR INPUT GRID SRFLAG"
- call ESMF_FieldScatter(srflag_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0,rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID SRFLAG"
+   call ESMF_FieldScatter(srflag_input_grid,dummy2d_8, rootpet=0,rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
- if (localpet == 0) then
-   print*,"- READ SOIL TYPE."
-   slev=":surface:" 
-   vname=":SOTYP:"                                     
-   rc = grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-   !failed => rc = 0
-   if (rc <= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon) .and. geo_file .ne. "NULL")  then
+   if (localpet == 0) then
+
+     print*,"- READ SOIL TYPE."
+
+     jdisc   = 2  ! Search for discipline - land products
+     j = 0        ! Search at beginning of file
+     jpdtn   = pdt_num  ! Search for the product definition template number.
+     jpdt    = -9999  ! Initialize array of values in product definition template - Sec4
+     jpdt(1) = 3  ! Sec4/oct 10 - parameter category - soil products
+     jpdt(2) = 0  ! Sec4/oct 11 - parameter number - soil type
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc == 0 ) then
+!      print*,'soil type ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d = reshape(gfld%fld , (/i_input,j_input/))
+
+     endif
+
+     if (rc /= 0 .and. (trim(to_upper(external_model))=="HRRR" .or. rap_latlon) .and. geo_file .ne. "NULL")  then
      ! Some HRRR and RAP files don't have dominant soil type in the output, but the geogrid files
      ! do, so this gives users the option to provide the geogrid file and use input soil
      ! type 
-     print*, "OPEN GEOGRID FILE ", trim(geo_file)
-     rc = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
-     call netcdf_err(rc,"READING GEOGRID FILE")
+       print*, "OPEN GEOGRID FILE ", trim(geo_file)
+       rc = nf90_open(geo_file,NF90_NOWRITE,ncid2d)
+       call netcdf_err(rc,"READING GEOGRID FILE")
 
-     print*, "INQURE ABOUT DIM IDS"
-     rc = nf90_inq_dimid(ncid2d,"west_east",varid)
-     call netcdf_err(rc,"READING west_east DIMENSION FROM GEOGRID FILE")
+       print*, "INQURE ABOUT DIM IDS"
+       rc = nf90_inq_dimid(ncid2d,"west_east",varid)
+       call netcdf_err(rc,"READING west_east DIMENSION FROM GEOGRID FILE")
      
-     rc = nf90_inquire_dimension(ncid2d,varid,len=varsize)
-     call netcdf_err(rc,"READING west_east DIMENSION SIZE")
-     if (varsize .ne. i_input) call error_handler ("GEOGRID FILE GRID SIZE DIFFERS FROM INPUT DATA.", -1)
+       rc = nf90_inquire_dimension(ncid2d,varid,len=varsize)
+       call netcdf_err(rc,"READING west_east DIMENSION SIZE")
+       if (varsize .ne. i_input) call error_handler ("GEOGRID FILE GRID SIZE DIFFERS FROM INPUT DATA.", -1)
         
-     print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
-     rc = nf90_inq_varid(ncid2d,"SCT_DOM",varid)
-     call netcdf_err(rc,"FINDING SCT_DOM IN GEOGRID FILE")
+       print*, "INQUIRE ABOUT SOIL TYPE FROM GEOGRID FILE"
+       rc = nf90_inq_varid(ncid2d,"SCT_DOM",varid)
+       call netcdf_err(rc,"FINDING SCT_DOM IN GEOGRID FILE")
      
-     print*, "READ SOIL TYPE FROM GEOGRID FILE "
-     rc = nf90_get_var(ncid2d,varid,dummy2d)
-     call netcdf_err(rc,"READING SCT_DOM FROM FILE")
+       print*, "READ SOIL TYPE FROM GEOGRID FILE "
+       rc = nf90_get_var(ncid2d,varid,dummy2d)
+       call netcdf_err(rc,"READING SCT_DOM FROM FILE")
        
-     print*, "INQUIRE ABOUT SOIL TYPE FRACTIONS FROM GEOGRID FILE"
-     rc = nf90_inq_varid(ncid2d,"SOILCTOP",varid)
-     call netcdf_err(rc,"FINDING SOILCTOP IN GEOGRID FILE")
+       print*, "INQUIRE ABOUT SOIL TYPE FRACTIONS FROM GEOGRID FILE"
+       rc = nf90_inq_varid(ncid2d,"SOILCTOP",varid)
+       call netcdf_err(rc,"FINDING SOILCTOP IN GEOGRID FILE")
      
-     print*, "READ SOIL TYPE FRACTIONS FROM GEOGRID FILE "
-     rc = nf90_get_var(ncid2d,varid,dummy3d_stype)
-     call netcdf_err(rc,"READING SCT_DOM FROM FILE")
+       allocate(dummy3d_stype(i_input,j_input,16))
+       print*, "READ SOIL TYPE FRACTIONS FROM GEOGRID FILE "
+       rc = nf90_get_var(ncid2d,varid,dummy3d_stype)
+       call netcdf_err(rc,"READING SCT_DOM FROM FILE")
 
-     print*, "CLOSE GEOGRID FILE "
-     iret = nf90_close(ncid2d)
-   
+       print*, "CLOSE GEOGRID FILE "
+       iret = nf90_close(ncid2d)
      
      ! There's an issue with the geogrid file containing soil type water at land points. 
      ! This correction replaces the soil type at these points with the soil type with
      ! the next highest fractional coverage.
-     do j = 1, j_input
+       allocate(dummy1d(16))
+       do j = 1, j_input
        do i = 1, i_input
          if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
            dummy1d(:) = dummy3d_stype(i,j,:)
@@ -4936,395 +5580,501 @@ if (localpet == 0) then
            dummy2d(i,j) = real(MAXLOC(dummy1d, 1),esmf_kind_r4)
          endif
        enddo
-     enddo
-   endif
+       enddo
+       deallocate(dummy1d)
+       deallocate(dummy3d_stype)
+     endif ! failed
    
-   if ((rc <= 0 .and. trim(to_upper(external_model)) /= "HRRR" .and. .not. rap_latlon) & 
-     .or. (rc < 0 .and. (trim(to_upper(external_model)) == "HRRR" .or. rap_latlon))) then
-     if (.not. sotyp_from_climo) then
-       call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET SOTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
-     else
-       vname = "sotyp"
-       call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                           loc=varnum)  
-       call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-       if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
-          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL NOT "//&
-                     "SCALE SOIL MOISTURE FOR DIFFERENCES IN SOIL TYPE. "
-          dummy2d(:,:) = -99999.0_esmf_kind_r4
+     if ((rc /= 0 .and. trim(to_upper(external_model)) /= "HRRR" .and. .not. rap_latlon) & 
+       .or. (rc /= 0 .and. (trim(to_upper(external_model)) == "HRRR" .or. rap_latlon))) then
+       if (.not. sotyp_from_climo) then
+         call error_handler("COULD NOT FIND SOIL TYPE IN FILE. PLEASE SET SOTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
+       else
+         vname = "sotyp"
+         slev = "surface"
+         call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
+                             loc=varnum)  
+         call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+         if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
+            print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL NOT "//&
+                       "SCALE SOIL MOISTURE FOR DIFFERENCES IN SOIL TYPE. "
+            dummy2d(:,:) = -99999.0_esmf_kind_r4
+         endif
        endif
      endif
-   endif
    
    ! In the event that the soil type on the input grid still contains mismatches between 
    ! soil type and landmask, this correction is a last-ditch effort to replace these points
    ! with soil type from a nearby land point.
-   if (.not. sotyp_from_climo) then
-     do j = 1, j_input
-     do i = 1, i_input
-       if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9   
-     enddo
-     enddo
-   
-     dummy2d_8 = real(dummy2d,esmf_kind_r8)
-     dummy2d_i(:,:) = 0
-     where(slmsk_save == 1) dummy2d_i = 1
-   
-     call search(dummy2d_8,dummy2d_i,i_input,j_input,1,230)
-   else
-      dummy2d_8=real(dummy2d,esmf_kind_r8)
-   endif
-   
-   print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
-   deallocate(dummy2d_i)
-   deallocate(dummy3d_stype)
- endif
-  
 
- print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
- call ESMF_FieldScatter(soil_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+     if (.not. sotyp_from_climo) then
+       do j = 1, j_input
+       do i = 1, i_input
+         if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9   
+       enddo
+       enddo
+
+       allocate(dummy2d_i(i_input,j_input))
+       dummy2d_8 = real(dummy2d,esmf_kind_r8)
+       dummy2d_i(:,:) = 0
+       where(slmsk_save == 1) dummy2d_i = 1
+   
+       call search(dummy2d_8,dummy2d_i,i_input,j_input,1,230)
+       deallocate(dummy2d_i)
+     else
+       dummy2d_8=real(dummy2d,esmf_kind_r8)
+     endif
+   
+     print*,'sotype ',maxval(dummy2d_8),minval(dummy2d_8)
+
+   endif ! read of soil type
+  
+   print*,"- CALL FieldScatter FOR INPUT GRID SOIL TYPE."
+   call ESMF_FieldScatter(soil_type_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+
+   deallocate(dummy2d)
 
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     
  ! Begin variables whose presence in grib2 files varies, but no climatological
  ! data is available, so we have to account for values in the varmap table
  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  
- if (.not. vgfrc_from_climo) then  
-   if (localpet == 0) then
-     print*,"- READ VEG FRACTION."
-     vname="vfrac"
-     slev=":surface:" 
-     call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-               loc=varnum)                 
-     !! Changing these for GSD internal runs using new HRRR files
-     vname=":VEG:"
-     rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-     
-     if (rc > 1) then
-       rc= grb2_inq(the_file, inv_file, vname,slev,'n=1105:', data2=dummy2d)
-       if (rc <= 0) then
-         rc= grb2_inq(the_file, inv_file, vname,slev,'n=1101:', data2=dummy2d)
-         if (rc <= 0) then
-           rc= grb2_inq(the_file, inv_file, vname,slev,'n=1151:', data2=dummy2d)
-           if (rc <= 0) call error_handler("COULD NOT DETERMINE VEGETATION FRACTION IN FILE.  &
-             RECORD NUMBERS MAY HAVE CHANGED. PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
-         endif
-       endif
-     elseif (rc <= 0) then 
-       call error_handler("COULD NOT FIND VEGETATION FRACTION IN FILE.  &
+   if (.not. vgfrc_from_climo) then  
+
+     if (localpet == 0) then
+
+       print*,"- READ VEG FRACTION."
+
+       jdisc   = 2  ! Search for discipline - land products
+       j = 0        ! Search at beginning of file.
+       jpdtn   = pdt_num  ! Search for the product definition template number.
+       jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+       jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+       jpdt(2) = 4  ! Sec4/oct 11 - parameter number - vegetation
+       jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+       unpack=.true.
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+               unpack, k, gfld, rc)
+
+       if (rc /= 0 )then
+         call error_handler("COULD NOT FIND VEGETATION FRACTION IN FILE.  &
            PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
-     endif
-     if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
-      print*,'vfrac ',maxval(dummy2d),minval(dummy2d)   
+       else
+         if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
+!        print*,'vfrac ', maxval(gfld%fld),minval(gfld%fld)
+         dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+       endif
+
+     endif ! localpet 0
+
+     print*,"- CALL FieldScatter FOR INPUT GRID VEG GREENNESS."
+     call ESMF_FieldScatter(veg_greenness_input_grid,dummy2d_8, rootpet=0, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("IN FieldScatter", rc)
+
    endif
 
- 
-   print*,"- CALL FieldScatter FOR INPUT GRID VEG GREENNESS."
-   call ESMF_FieldScatter(veg_greenness_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldScatter", rc)
-  endif
+   if (.not. minmax_vgfrc_from_climo) then
 
-  if (.not. minmax_vgfrc_from_climo) then
-   if (localpet == 0) then
-     print*,"- READ MIN VEG FRACTION."
-     vname="vfrac_min"
-     slev=":surface:"
-     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
-               loc=varnum)
-     vname=":VEG:"
-     rc= grb2_inq(the_file, inv_file, vname,slev,'n=1106:',data2=dummy2d)
+     if (localpet == 0) then
 
-     if (rc <= 0) then
-       rc= grb2_inq(the_file, inv_file, vname,slev,'n=1102:',data2=dummy2d)
-       if (rc <= 0) then
-         rc= grb2_inq(the_file, inv_file, vname,slev,'n=1152:',data2=dummy2d)
-         if (rc<=0) call error_handler("COULD NOT FIND MIN VEGETATION FRACTION IN FILE. &
-           PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+       print*,"- READ MIN VEG FRACTION."
+
+       jdisc   = 2  ! Search for discipline - land products
+       j = 1105 ! grib2 file does not distinguish between the various veg
+                ! fractions. Need to search using record number.
+       jpdtn   = pdt_num  ! Search for the product definition template number.
+       jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+       jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+       jpdt(2) = 4  ! Sec4/oct 11 - parameter number - vegetation
+       jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+       unpack=.true.
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+               unpack, k, gfld, rc)
+
+       if (rc /= 0) then
+         j = 1101 ! Have to search by record number.
+         call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+                unpack, k, gfld, rc)
+         if (rc /= 0) then
+           j = 1151 ! Have to search by record number.
+           call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+                  unpack, k, gfld, rc)
+           if (rc/=0) call error_handler("COULD NOT FIND MIN VEGETATION FRACTION IN FILE. &
+             PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+         endif
        endif
-     endif
-     if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
-     print*,'vfrac min',maxval(dummy2d),minval(dummy2d)
+    
+       if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
+       print*,'vfrac min ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
 
-     endif
+     endif ! localpet == 0
 
-   print*,"- CALL FieldScatter FOR INPUT GRID MIN VEG GREENNESS."
-   call ESMF_FieldScatter(min_veg_greenness_input_grid,real(dummy2d,esmf_kind_r8), rootpet=0, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-      call error_handler("IN FieldScatter", rc)
+     print*,"- CALL FieldScatter FOR INPUT GRID MIN VEG GREENNESS."
+     call ESMF_FieldScatter(min_veg_greenness_input_grid,dummy2d_8, rootpet=0, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+        call error_handler("IN FieldScatter", rc)
    
-   if (localpet == 0) then
-     print*,"- READ MAX VEG FRACTION."
-     vname="vfrac_max"
-     slev=":surface:"
-     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
-               loc=varnum)
+     if (localpet == 0) then
 
-     vname=":VEG:"
-     rc= grb2_inq(the_file, inv_file, vname,slev,'n=1107:',data2=dummy2d)
-     if (rc <=0) then
-       rc= grb2_inq(the_file, inv_file, vname,slev,'n=1103:',data2=dummy2d)
-       if (rc <=0) then
-         rc= grb2_inq(the_file, inv_file, vname,slev,'n=1153:',data2=dummy2d)
-         if (rc <= 0) call error_handler("COULD NOT FIND MAX VEGETATION FRACTION IN FILE. &
-            PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+       print*,"- READ MAX VEG FRACTION."
+
+       jdisc   = 2  ! Search for discipline - land products
+       j = 1106 ! Have to search by record number.
+       jpdtn   = pdt_num  ! Search for the product definition template number.
+       jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+       jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+       jpdt(2) = 4  ! Sec4/oct 11 - parameter number - vegetation
+       jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+       unpack=.true.
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+               unpack, k, gfld, rc)
+       if (rc /= 0) then
+         j = 1102 ! Have to search by record number.
+         call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+              unpack, k, gfld, rc)
+         if (rc /= 0) then
+           j = 1152 ! Have to search by record number.
+           call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+                unpack, k, gfld, rc)
+           if (rc <= 0) call error_handler("COULD NOT FIND MAX VEGETATION FRACTION IN FILE. &
+             PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+         endif
        endif
-     endif
-     if(maxval(dummy2d) > 2.0) dummy2d = dummy2d / 100.0_esmf_kind_r4
-     print*,'vfrac max',maxval(dummy2d),minval(dummy2d)
+    
+       if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
+!      print*,'vfrac max ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
 
-   endif !localpet==0
+     endif !localpet==0
 
-   print*,"- CALL FieldScatter FOR INPUT GRID MAX VEG GREENNESS."
-   call ESMF_FieldScatter(max_veg_greenness_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-      call error_handler("IN FieldScatter", rc)
- endif !minmax_vgfrc_from_climo
+     print*,"- CALL FieldScatter FOR INPUT GRID MAX VEG GREENNESS."
+     call ESMF_FieldScatter(max_veg_greenness_input_grid,dummy2d_8,rootpet=0, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+        call error_handler("IN FieldScatter", rc)
+
+   endif !minmax_vgfrc_from_climo
  
- if (.not. lai_from_climo) then
+   if (.not. lai_from_climo) then
+
+     if (localpet == 0) then
+
+       print*,"- READ LAI."
+
+       jdisc   = 0  ! Search for discipline - meteorological products
+       j = 0        ! Search at beginning of file.
+       jpdtn   = pdt_num  ! Search for the product definition template number.
+       jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+       jpdt(1) = 7   ! Sec4/oct 10 - parameter category - thermo stability indices
+       jpdt(2) = 198 ! Sec4/oct 11 - parameter number - leaf area index
+       jpdt(10) = 1  ! Sec4/oct 23 - type of level - ground surface
+       unpack=.true.
+
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+       if (rc /= 0) call error_handler("COULD NOT FIND LAI IN FILE. &
+             PLEASE SET LAI_FROM_CLIMO=.TRUE. . EXITING",rc)
+
+!      print*,'lai ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+
+     endif !localpet==0
+
+     print*,"- CALL FieldScatter FOR INPUT GRID LAI."
+     call ESMF_FieldScatter(lai_input_grid,dummy2d_8,rootpet=0, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+        call error_handler("IN FieldScatter", rc)
+
+   endif ! lai
+
    if (localpet == 0) then
-     print*,"- READ LAI."
-     vname="lai"
-     slev=":surface:"
+
+     print*,"- READ SEAICE DEPTH."
+     vname="hice"
+     slev=":surface:" 
      call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
-               loc=varnum)
-     vname=":var0_7_198:"
-     rc= grb2_inq(the_file, inv_file, vname,slev,':n=1108:',data2=dummy2d)
-     if (rc <=0) then
-       rc= grb2_inq(the_file, inv_file, vname,slev,':n=1104:',data2=dummy2d)
-       if (rc <=0) then
-         rc= grb2_inq(the_file, inv_file, vname,slev,':n=1154:',data2=dummy2d)
-         if (rc <= 0) call error_handler("COULD NOT FIND LAI IN FILE. &
-            PLEASE SET LAI_FROM_CLIMO=.TRUE. . EXITING",rc)
-       endif
-     endif
-      print*,'lai',maxval(dummy2d),minval(dummy2d)
-   endif !localpet==0
-
-   print*,"- CALL FieldScatter FOR INPUT GRID LAI."
-   call ESMF_FieldScatter(lai_input_grid,real(dummy2d,esmf_kind_r8),rootpet=0, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-      call error_handler("IN FieldScatter", rc)
-
- endif
- if (localpet == 0) then
-   print*,"- READ SEAICE DEPTH."
-   vname="hice"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)                 
-   vname=":ICETK:"
-   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-   if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
+
+     jdisc   = 10  ! Search for discipline - ocean products
+     j = 0         ! Search at beginning of file.
+     jpdtn   = pdt_num ! Search for the product definition template number.
+     jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+     jpdt(1) = 2  ! Sec4/oct 10 - parameter category - ice
+     jpdt(2) = 1  ! Sec4/oct 11 - parameter number - thickness
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0 ) then
+       call handle_grib_error(vname, slev ,method,value,varnum,rc,var8=dummy2d_8)
+       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
-      endif
-    endif
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'hice ',maxval(dummy2d),minval(dummy2d)
+         dummy2d_8(:,:) = 0.0
+       endif
+     else
+!      print*,'hice ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     endif
 
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID SEAICE DEPTH."
- call ESMF_FieldScatter(seaice_depth_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID SEAICE DEPTH."
+   call ESMF_FieldScatter(seaice_depth_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
- if (localpet == 0) then
-   print*,"- READ TPRCP."
-   vname="tprcp"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
-                         loc=varnum)  
-    vname=":TPRCP:"              
-   rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-   if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
-                   " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
-                      "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
-      endif
-    endif
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'tprcp ',maxval(dummy2d),minval(dummy2d)
- endif
+   if (localpet == 0) then
 
- print*,"- CALL FieldScatter FOR INPUT GRID TPRCP."
- call ESMF_FieldScatter(tprcp_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+     print*,"- READ TPRCP."
+     vname="tprcp"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+                         loc=varnum)  
+
+! No test data contained this field. So could not test with g2 library.
+     rc = 1
+     if (rc /= 0) then
+        call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+        if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
+                     " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
+                        "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
+          dummy2d_8 = 0.0
+        endif
+     endif
+     print*,'tprcp ',maxval(dummy2d_8),minval(dummy2d_8)
+
+   endif ! tprcp
+
+   print*,"- CALL FieldScatter FOR INPUT GRID TPRCP."
+   call ESMF_FieldScatter(tprcp_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
  
- if (localpet == 0) then
-   print*,"- READ FFMM."
-   vname="ffmm"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+   if (localpet == 0) then
+
+     print*,"- READ FFMM."
+     vname="ffmm"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-    vname=":FFMM:"               
-    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-    if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
+
+! No sample data contained this field, so could not test g2lib.
+     rc = 1
+     if (rc /= 0) then
+       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
-      endif
-    endif
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'ffmm ',maxval(dummy2d),minval(dummy2d)
- endif
+         dummy2d_8(:,:) = 0.0
+       endif
+     endif
+     print*,'ffmm ',maxval(dummy2d_8),minval(dummy2d_8)
 
- print*,"- CALL FieldScatter FOR INPUT GRID FFMM"
- call ESMF_FieldScatter(ffmm_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   endif ! ffmm
+
+   print*,"- CALL FieldScatter FOR INPUT GRID FFMM"
+   call ESMF_FieldScatter(ffmm_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
- if (localpet == 0) then
-   print*,"- READ USTAR."
-   vname="fricv"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+   if (localpet == 0) then
+
+     print*,"- READ USTAR."
+     vname="fricv"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-    vname=":FRICV:"              
-    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-    if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL "//&
+
+     jdisc   = 0  ! Search for discipline - meteorological products
+     j = 0        ! Search at beginning of file.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
+     jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+     jpdt(1) = 2  ! Sec4/oct 10 - parameter category - momentum
+     jpdt(2) = 30 ! Sec4/oct 11 - parameter number - friction velocity
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+     if (rc /= 0) then
+       jpdt(2) = 197  ! oct 11 - param number - friction vel.
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+     endif
+
+     if (rc == 0) then
+!      print*,'fricv ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     else
+       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL "//&
                    "REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
-      endif
-    endif
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'fricv ',maxval(dummy2d),minval(dummy2d)
- endif
+         dummy2d_8(:,:) = 0.0
+       endif
+     endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID USTAR"
- call ESMF_FieldScatter(ustar_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   endif ! ustar
 
- if (localpet == 0) then
-   print*,"- READ F10M."
-   vname="f10m"
-   slev=":10 m above ground:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+   print*,"- CALL FieldScatter FOR INPUT GRID USTAR"
+   call ESMF_FieldScatter(ustar_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+     call error_handler("IN FieldScatter", rc)
+
+   if (localpet == 0) then
+
+     print*,"- READ F10M."
+     vname="f10m"
+     slev=":10 m above ground:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-    vname=":F10M:"               
-    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-    if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
+
+     rc = -1 ! None of the test cases have this record. Can't test with g2lib.
+     if (rc /= 0) then
+       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
-      endif
-    endif
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'f10m ',maxval(dummy2d),minval(dummy2d)
- endif
+         dummy2d_8(:,:) = 0.0
+       endif
+     endif
+     print*,'f10m ',maxval(dummy2d_8),minval(dummy2d_8)
 
- print*,"- CALL FieldScatter FOR INPUT GRID F10M."
- call ESMF_FieldScatter(f10m_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   endif
 
- if (localpet == 0) then
-   print*,"- READ CANOPY MOISTURE CONTENT."
-   vname="cnwat"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+   print*,"- CALL FieldScatter FOR INPUT GRID F10M."
+   call ESMF_FieldScatter(f10m_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+     call error_handler("IN FieldScatter", rc)
+
+   if (localpet == 0) then
+
+     print*,"- READ CANOPY MOISTURE CONTENT."
+     vname="cnwat"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-    vname=":CNWAT:"              
-    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-    if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL"//&
+
+     jdisc   = 2  ! Search for discipline - land products
+     j = 0        ! Search from beginning of file
+     jpdtn   = pdt_num  ! Search for the product definition template number.
+     jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+     jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+     jpdt(2) = 13 ! Sec4/oct 11 - parameter number - canopy water
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0 ) then
+       jpdt(2) = 196 ! Sec4/oct 11 - param number - canopy water
+       call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+     endif
+
+     if (rc == 0 ) then
+       print*,'cnwat ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+       call check_cnwat(dummy2d_8)
+     else
+       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
-      endif
-    endif
-   call check_cnwat(dummy2d)
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'cnwat ',maxval(dummy2d),minval(dummy2d)
- endif
+         dummy2d_8 = 0.0
+       endif
+     endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID CANOPY MOISTURE CONTENT."
- call ESMF_FieldScatter(canopy_mc_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   endif
 
- if (localpet == 0) then
-   print*,"- READ Z0."
-   vname="sfcr"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+   print*,"- CALL FieldScatter FOR INPUT GRID CANOPY MOISTURE CONTENT."
+   call ESMF_FieldScatter(canopy_mc_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+
+   if (localpet == 0) then
+
+     print*,"- READ Z0."
+     vname="sfcr"
+     slev=":surface:" 
+     call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)  
-    vname=":SFCR:"               
-    rc= grb2_inq(the_file, inv_file, vname,slev, data2=dummy2d)
-    if (rc <= 0) then
-      call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
-      if (rc==1) then ! missing_var_method == skip or no entry in varmap table
-        print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
+
+     jdisc   = 2  ! Search for discipline - land products
+     j = 0        ! Search from beginning of file.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
+     jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+     jpdt(1) = 0  ! Sec4/oct 10 - parameter category - veg/biomass
+     jpdt(2) = 1  ! Sec4/oct 11 - parameter number - surface roughness
+     jpdt(10) = 1 ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0 ) then
+       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8= dummy2d_8)
+       if (rc==1) then ! missing_var_method == skip or no entry in varmap table
+         print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
                       "VALUE IN THE VARMAP TABLE IF THIS IS NOT DESIRABLE."
-        dummy2d(:,:) = 0.0_esmf_kind_r4
-      endif
-    else
-      ! Grib files have z0 (m), but fv3 expects z0(cm)
-      dummy2d(:,:) = dummy2d(:,:)*10.0
-    endif
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'sfcr ',maxval(dummy2d),minval(dummy2d)
-   
- endif
+         dummy2d_8(:,:) = 0.0
+       endif
+     else
+       gfld%fld = gfld%fld * 10.0 ! Grib files have z0 (m), but fv3 expects z0(cm)
+!      print*,'sfcr ', maxval(gfld%fld),minval(gfld%fld)
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
+     endif
 
- print*,"- CALL FieldScatter FOR INPUT GRID Z0."
- call ESMF_FieldScatter(z0_input_grid,dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
-    
- 
- if (localpet == 0) then
-   print*,"- READ LIQUID SOIL MOISTURE."
-   vname = "soill"
-   vname_file = ":SOILL:"
-   call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc) !!! NEEDTO HANDLE 
-                                                                      !!! SOIL LEVELS
-   print*,'soill ',maxval(dummy3d),minval(dummy3d)
- endif
+   endif
 
- print*,"- CALL FieldScatter FOR INPUT LIQUID SOIL MOISTURE."
- call ESMF_FieldScatter(soilm_liq_input_grid, dummy3d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT GRID Z0."
+   call ESMF_FieldScatter(z0_input_grid,dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
  
- if (localpet == 0) then
-   print*,"- READ TOTAL SOIL MOISTURE."
-   vname = "soilw"
-   !vname_file = "var2_2_1_7_0_192"  !Some files don't recognize this as soilw,so use
-   vname_file = "var2_2_1_"         ! the var number instead
-   call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
-   print*,'soilm ',maxval(dummy3d),minval(dummy3d)
- endif
+   if (localpet == 0) then
+     print*,"- READ LIQUID SOIL MOISTURE."
+     vname = "soill"
+     vname_file = ":SOILL:"
+     call read_grib_soil(vname,vname_file,lugb, pdt_num,dummy3d) !!! NEED TO HANDLE 
+                                                         !!! SOIL LEVELS
+   endif
+
+   print*,"- CALL FieldScatter FOR INPUT LIQUID SOIL MOISTURE."
+   call ESMF_FieldScatter(soilm_liq_input_grid, dummy3d, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
  
- print*,"- CALL FieldScatter FOR INPUT TOTAL SOIL MOISTURE."
- call ESMF_FieldScatter(soilm_tot_input_grid, dummy3d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   if (localpet == 0) then
+     print*,"- READ TOTAL SOIL MOISTURE."
+     vname = "soilw"
+     vname_file = "var2_2_1_"         ! the var number instead
+     call read_grib_soil(vname,vname_file,lugb, pdt_num,dummy3d)
+   endif
+ 
+   print*,"- CALL FieldScatter FOR INPUT TOTAL SOIL MOISTURE."
+   call ESMF_FieldScatter(soilm_tot_input_grid, dummy3d, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
     
 !----------------------------------------------------------------------------------------
 ! Vegetation type is not available in some files.  However, it is needed to identify
@@ -5332,73 +6082,82 @@ if (localpet == 0) then
 ! '1'. Use this flag as a temporary solution.
 !----------------------------------------------------------------------------------------
 
- print*, "- CALL FieldGather for INPUT SOIL TYPE."
- call ESMF_FieldGather(soil_type_input_grid, dummy2d_82, rootPet=0, tile=1, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-   call error_handler("IN FieldGather", rc)
- if (localpet == 0) then
-   print*,"- READ VEG TYPE."
-   vname="vtype"
-   slev=":surface:" 
-   call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
-                         loc=varnum)
-   !Note: sometimes the grib files don't have this one named. Searching for this string
-   !      ensures that the data is found when it exists
-                 
-   vname="var2_2"   
-   rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,' hour fcst:', data2=dummy2d)
-   if (rc <= 0) then
-     rc= grb2_inq(the_file, inv_file, vname,"_0_198:",slev,':anl:', data2=dummy2d)
-     if (rc <= 0) then
+   print*, "- CALL FieldGather for INPUT SOIL TYPE."
+   call ESMF_FieldGather(soil_type_input_grid, dummy2d_82, rootPet=0, tile=1, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGather", rc)
+
+   if (localpet == 0) then
+
+     print*,"- READ VEG TYPE."
+   
+     jdisc   = 2  ! Search for discipline - land products
+     j = 0        ! Search from beginning of file.
+     jpdtn   = pdt_num  ! Search for the product definition template number.
+     jpdt    = -9999  ! Initialize array of values in product definition template Sec4.
+     jpdt(1) = 0   ! Sec4/oct 10 - parameter category - veg/biomass
+     jpdt(2) = 198 ! Sec4/oct 11 - parameter number - vegetation type
+     jpdt(10) = 1  ! Sec4/oct 23 - type of level - ground surface
+     unpack=.true.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc)
+
+     if (rc /= 0 ) then
        if (.not. vgtyp_from_climo) then
          call error_handler("COULD NOT FIND VEGETATION TYPE IN FILE. PLEASE SET VGTYP_FROM_CLIMO=.TRUE. . EXITING", rc)
-       else
-      do j = 1, j_input
-        do i = 1, i_input
-          dummy2d(i,j) = 0.0_esmf_kind_r4
-          if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &
-          dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
-      enddo
-      enddo    
-       endif ! replace_vgtyp
-     endif !not find :anl:
-   endif !not find hour fcst:
-   
-   if (trim(external_model) .ne. "GFS") then
-   do j = 1, j_input
-     do i = 1,i_input
-     if (dummy2d(i,j) == 15.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
-       if (dummy3d(i,j,1) < 0.6) then 
-       dummy2d(i,j) = real(veg_type_landice_input,esmf_kind_r4)
-       elseif (dummy3d(i,j,1) > 0.99) then
-          slmsk_save(i,j) = 0
-        dummy2d(i,j) = 0.0_esmf_kind_r4
-        dummy2d_82(i,j) = 0.0_esmf_kind_r8
+       else ! Set input veg type at land ice from soil moisture flag (1.0).
+         do j = 1, j_input
+          do i = 1, i_input
+            dummy2d_8(i,j) = 0.0
+            if(slmsk_save(i,j) == 1 .and. dummy3d(i,j,1) > 0.99) &  ! land ice indicated by
+                                                                    ! soil moisture flag of '1'.
+            dummy2d_8(i,j) = real(veg_type_landice_input,esmf_kind_r8)
+          enddo
+         enddo    
        endif
-     elseif (dummy2d(i,j) == 17.0_esmf_kind_r4 .and. slmsk_save(i,j)==0) then
-       dummy2d(i,j) = 0.0_esmf_kind_r4
+     else  ! found vtype in file.
+       dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
      endif
-     enddo
-   enddo
-   endif     
-   dummy2d_8= real(dummy2d,esmf_kind_r8)
-   print*,'vgtyp ',maxval(dummy2d),minval(dummy2d)
- endif !localpet
- deallocate(dummy2d)
- print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
- call ESMF_FieldScatter(veg_type_input_grid, dummy2d_8, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
 
- print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
- call ESMF_FieldScatter(soil_type_input_grid, dummy2d_82, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
-    
- print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
- call ESMF_FieldScatter(landsea_mask_input_grid,real(slmsk_save,esmf_kind_r8),rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+     if (trim(external_model) .ne. "GFS") then
+       do j = 1, j_input
+       do i = 1,i_input
+         if (dummy2d_8(i,j) == 15.0_esmf_kind_r8 .and. slmsk_save(i,j) == 1) then
+           if (dummy3d(i,j,1) < 0.6) then 
+             dummy2d_8(i,j) = real(veg_type_landice_input,esmf_kind_r8)
+           elseif (dummy3d(i,j,1) > 0.99) then
+             slmsk_save(i,j) = 0
+             dummy2d_8(i,j) = 0.0_esmf_kind_r8
+             dummy2d_82(i,j) = 0.0_esmf_kind_r8
+           endif
+         elseif (dummy2d_8(i,j) == 17.0_esmf_kind_r8 .and. slmsk_save(i,j)==0) then
+           dummy2d_8(i,j) = 0.0_esmf_kind_r8
+         endif
+       enddo
+       enddo
+     endif     
+
+!    print*,'vgtyp ',maxval(dummy2d_8),minval(dummy2d_8)
+
+   endif ! read veg type
+
+   print*,"- CALL FieldScatter FOR INPUT VEG TYPE."
+   call ESMF_FieldScatter(veg_type_input_grid, dummy2d_8, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+
+   print*,"- CALL FieldScatter FOR INPUT SOIL TYPE."
+   call ESMF_FieldScatter(soil_type_input_grid, dummy2d_82, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
+
+   deallocate(dummy2d_82)
+
+   print*,"- CALL FieldScatter FOR INPUT LANDSEA MASK."
+   call ESMF_FieldScatter(landsea_mask_input_grid,real(slmsk_save,esmf_kind_r8),rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
 !---------------------------------------------------------------------------------
 ! At open water (slmsk==0), the soil temperature array is not used and set
@@ -5407,25 +6166,27 @@ if (localpet == 0) then
 ! in the grib data, so set to a default value.
 !---------------------------------------------------------------------------------
 
- if (localpet == 0) then
-   print*,"- READ SOIL TEMPERATURE."
-   vname = "soilt"
-   vname_file = ":TSOIL:"
-   call read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
-   call check_soilt(dummy3d,slmsk_save,tsk_save)
-   print*,'soilt ',maxval(dummy3d),minval(dummy3d)
+   if (localpet == 0) then
+     print*,"- READ SOIL TEMPERATURE."
+     vname = "soilt"
+     vname_file = ":TSOIL:"
+     call read_grib_soil(vname,vname_file,lugb,pdt_num,dummy3d)
+     call check_soilt(dummy3d,slmsk_save,tsk_save)
+     deallocate(tsk_save)
+   endif
 
-   deallocate(tsk_save, slmsk_save)
- endif
+   deallocate(slmsk_save)
 
- print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
- call ESMF_FieldScatter(soil_temp_input_grid, dummy3d, rootpet=0, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
-    call error_handler("IN FieldScatter", rc)
+   print*,"- CALL FieldScatter FOR INPUT SOIL TEMPERATURE."
+   call ESMF_FieldScatter(soil_temp_input_grid, dummy3d, rootpet=0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldScatter", rc)
 
- deallocate(dummy3d)
- deallocate(dummy2d_8)
+   deallocate(dummy3d)
+   deallocate(dummy2d_8)
  
+   if (localpet == 0) call baclose(lugb, rc)
+
  end subroutine read_input_sfc_grib2_file
    
 !> Read nst data from these netcdf formatted fv3 files: tiled history,
@@ -6033,39 +6794,46 @@ if (localpet == 0) then
 !> Read winds from a grib2 file.  Rotate winds
 !! to be earth relative if necessary.
 !!
-!! @param [in] file  grib2 file to be read
-!! @param [in] inv   grib2 inventory file
 !! @param [inout] u  u-component wind
 !! @param [inout] v  v-component wind
 !! @param[in] localpet  ESMF local persistent execution thread
+!! @param[in] octet_23 Section 4/Octet 23 - Type of first fixed surface.
+!! @param[in] rlevs Array of atmospheric level values
+!! @param[in] lugb Logical unit number of GRIB2 file.
+!! @param[in] pdt_num Product definition template number.
 !! @author Larissa Reames
- subroutine read_winds(file,inv,u,v,localpet)
+ subroutine read_winds(u,v,localpet,octet_23,rlevs,lugb,pdt_num)
 
- use wgrib2api
- use netcdf
- use program_setup, only      : get_var_cond, fix_dir_input_grid
- use model_grid, only         : input_grid_type
+ use grib_mod
+ use program_setup, only      : get_var_cond
+
  implicit none
 
- character(len=250), intent(in)          :: file
- character(len=10), intent(in)            :: inv
- integer, intent(in)                     :: localpet
- real(esmf_kind_r8), intent(inout), allocatable :: u(:,:,:),v(:,:,:)
+ integer, intent(in)                                  :: localpet, lugb
+ integer, intent(in)                                  :: pdt_num, octet_23
+
+ real(esmf_kind_r8), intent(inout), allocatable       :: u(:,:,:),v(:,:,:)
+ real(esmf_kind_r8), intent(in), dimension(lev_input) :: rlevs
 
  real(esmf_kind_r4), dimension(i_input,j_input)  :: alpha
  real(esmf_kind_r8), dimension(i_input,j_input)  :: lon, lat
  real(esmf_kind_r4), allocatable                 :: u_tmp(:,:),v_tmp(:,:)
+ real(esmf_kind_r8), allocatable                 :: dum2d(:,:)
  real(esmf_kind_r4), dimension(i_input,j_input)  :: ws,wd
  real(esmf_kind_r4)                      :: value_u, value_v,lov,latin1,latin2
  real(esmf_kind_r8)                      :: d2r
 
- integer                                 :: varnum_u, varnum_v, vlev, & !ncid, id_var, &
-                                            error, iret, istr
+ integer                                 :: varnum_u, varnum_v, vlev, &
+                                            error, iret
+ integer                                 :: j, k, lugi, jgdtn, jpdtn
+ integer                                 :: jdisc, jids(200), jgdt(200), jpdt(200)
 
  character(len=20)                       :: vname
  character(len=50)                       :: method_u, method_v
- character(len=250)                      :: file_coord
- character(len=10000)                    :: temp_msg
+
+ logical                                 :: unpack
+
+ type(gribfield)                         :: gfld
 
  d2r=acos(-1.0_esmf_kind_r8) / 180.0_esmf_kind_r8
  if (localpet==0) then
@@ -6076,8 +6844,6 @@ if (localpet == 0) then
    allocate(v(0,0,0))
  endif
 
- file_coord = trim(fix_dir_input_grid)//"/latlon_grid3.32769.nc"
- 
  vname = "u"
  call get_var_cond(vname,this_miss_var_method=method_u, this_miss_var_value=value_u, &
                        loc=varnum_u)
@@ -6085,90 +6851,103 @@ if (localpet == 0) then
  call get_var_cond(vname,this_miss_var_method=method_v, this_miss_var_value=value_v, &
                        loc=varnum_v)
 
- if (trim(input_grid_type)=="rotated_latlon") then
-   print*,"- CALL FieldGather FOR INPUT GRID LONGITUDE"
-   call ESMF_FieldGather(longitude_input_grid, lon, rootPet=0, tile=1, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-        call error_handler("IN FieldGather", error)
-   print*,"- CALL FieldGather FOR INPUT GRID LATITUDE"
-   call ESMF_FieldGather(latitude_input_grid, lat, rootPet=0, tile=1, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ print*,"- CALL FieldGather FOR INPUT GRID LONGITUDE"
+ call ESMF_FieldGather(longitude_input_grid, lon, rootPet=0, tile=1, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather", error)
 
-   if (localpet==0) then
-     print*,"- CALCULATE ROTATION ANGLE FOR ROTATED_LATLON INPUT GRID"
-     error = grb2_inq(file, inv,grid_desc=temp_msg)
-     !1:0:grid_template=32769:winds(grid):
-     !   I am not an Arakawa E-grid.
-     !   I am rotated but have no rotation angle.
-     !   I am staggered. What am I?
-     !   (953 x 834) units 1e-06 input WE:SN output WE:SN res 56
-     !   lat0 -10.590603 lat-center 54.000000 dlat 121.813000
-     !   lon0 220.914154 lon-center 254.000000 dlon 121.813000 #points=794802
-
-      istr = index(temp_msg, "lat-center ") + len("lat_center ")
-      read(temp_msg(istr:istr+9),"(F8.5)") latin1
-      istr = index(temp_msg, "lon-center ") + len("lon-center ")
-      read(temp_msg(istr:istr+10),"(F9.6)") lov
-
-      print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
-      call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha)
-      print*, " alpha min/max = ",MINVAL(alpha),MAXVAL(alpha)
-   endif
- elseif (trim(input_grid_type) == "lambert") then
-   !# NG this has been edited to correctly calculate gridrot for Lambert grids
-   !  Previously was incorrectly using polar-stereographic formation
-   print*,"- CALL FieldGather FOR INPUT GRID LONGITUDE"
-   call ESMF_FieldGather(longitude_input_grid, lon, rootPet=0, tile=1, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ print*,"- CALL FieldGather FOR INPUT GRID LATITUDE"
+ call ESMF_FieldGather(latitude_input_grid, lat, rootPet=0, tile=1, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather", error)
 
-   if (localpet==0) then
-     error = grb2_inq(file, inv,grid_desc=temp_msg)
-     !1:0:grid_template=30:winds(grid):
-     !   Lambert Conformal: (1799 x 1059) input WE:SN output WE:SN res 8
-     !   Lat1 21.138123 Lon1 237.280472 LoV 262.500000
-     !   LatD 38.500000 Latin1 38.500000 Latin2 38.500000
-     !   LatSP 0.000000 LonSP 0.000000
-     !   North Pole (1799 x 1059) Dx 3000.000000 m Dy 3000.000000 m mode 8
+ if (localpet==0) then
 
-   istr = index(temp_msg, "LoV ") + len("LoV ")
-   read(temp_msg(istr:istr+10),"(F9.6)") lov
-   istr = index(temp_msg, "Latin1 ") + len("Latin1 ")
-   read(temp_msg(istr:istr+9),"(F8.5)") latin1
-   istr = index(temp_msg, "Latin2 ") + len("Latin2 ")
-   read(temp_msg(istr:istr+9),"(F8.5)") latin2
+   lugi    = 0     ! index file unit number
+   jdisc   = 0     ! search for discipline - meteorological products
+   j = 0           ! search at beginning of file.
+   jpdt    = -9999  ! array of values in product definition template, set to wildcard
+   jids    = -9999  ! array of values in identification section, set to wildcard
+   jgdt    = -9999  ! array of values in grid definition template, set to wildcard
+   jgdtn   = -1     ! search for any grid definition number.
+   jpdtn   =  pdt_num ! Search for the product definition template number.
+   unpack=.false.
+
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+    
+   if (iret /= 0) call error_handler("ERROR READING GRIB2 FILE.", iret)
+
+   if (gfld%igdtnum == 32769) then ! grid definition template number - rotated lat/lon grid
+
+     latin1 = float(gfld%igdtmpl(15))/1.0E6
+     lov = float(gfld%igdtmpl(16))/1.0E6
+
+     print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
+     call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha)
+
+   elseif (gfld%igdtnum == 30) then ! grid definition template number - lambert conformal grid.
+
+     lov = float(gfld%igdtmpl(14))/1.0E6
+     latin1 = float(gfld%igdtmpl(19))/1.0E6
+     latin2 = float(gfld%igdtmpl(20))/1.0E6
 
      print*, "- CALL GRIDROT for LC grid with lov,latin1/2 = ",lov,latin1,latin2
      call gridrot(lov,latin1,latin2,lon,alpha)
-     print*, " alpha min/max = ",MINVAL(alpha),MAXVAL(alpha)
-   endif
- endif
 
- if (localpet==0) then
+   endif
+
+   jpdt(10) = octet_23 ! Sec4/oct 23 - type of level.
+
+   unpack=.true.
+
+   allocate(dum2d(i_input,j_input))
+   allocate(u_tmp(i_input,j_input))
+   allocate(v_tmp(i_input,j_input))
+
    do vlev = 1, lev_input
 
      vname = ":UGRD:"
-     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=u_tmp)
-     if (iret <= 0) then
+
+     jpdt(1) = 2  ! Sec4/oct 10 - parameter category - momentum
+     jpdt(2) = 2  ! Sec4/oct 11 - parameter number - u-wind
+     jpdt(12) = nint(rlevs(vlev)) ! Sect4/octs 25-28 - scaled value of fixed surface.
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret /= 0) then
         call handle_grib_error(vname, slevs(vlev),method_u,value_u,varnum_u,iret,var=u_tmp)
         if (iret==1) then ! missing_var_method == skip
           call error_handler("READING IN U AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
                         "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
         endif
+     else
+       dum2d = reshape(gfld%fld, (/i_input,j_input/) )
+       u_tmp(:,:) = dum2d
      endif
 
      vname = ":VGRD:"
-     iret = grb2_inq(file,inv,vname,slevs(vlev),data2=v_tmp)
-     if (iret <= 0) then
+
+     jpdt(2) = 3  ! Sec4/oct 11 - parameter number - v-wind
+
+     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, iret)
+
+     if (iret /= 0) then
         call handle_grib_error(vname, slevs(vlev),method_v,value_v,varnum_v,iret,var=v_tmp)
         if (iret==1) then ! missing_var_method == skip
           call error_handler("READING IN V AT LEVEL "//trim(slevs(vlev))//". SET A FILL "// &
-                          "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
+                        "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",iret)
         endif
-      endif
+     else
+       dum2d = reshape(gfld%fld, (/i_input,j_input/) )
+       v_tmp(:,:) = dum2d
+     endif
 
-      if (trim(input_grid_type) == "latlon") then
+     deallocate(dum2d)
+
+      if (gfld%igdtnum == 0) then ! grid definition template number - lat/lon grid
         if (external_model == 'UKMET') then
           u(:,:,vlev) = u_tmp
           v(:,:,vlev) = (v_tmp(:,2:jp1_input) + v_tmp(:,1:j_input))/2
@@ -6176,7 +6955,7 @@ if (localpet == 0) then
           u(:,:,vlev) = u_tmp
           v(:,:,vlev) = v_tmp
         endif
-      else if (trim(input_grid_type) == "rotated_latlon") then
+      else if (gfld%igdtnum == 32769) then ! grid definition template number - rotated lat/lon grid
         ws = sqrt(u_tmp**2 + v_tmp**2)
         wd = atan2(-u_tmp,-v_tmp) / d2r ! calculate grid-relative wind direction
         wd = wd + alpha + 180.0 ! Rotate from grid- to earth-relative direction
@@ -6394,13 +7173,13 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
     read_from_input(varnum) = .false.
     iret = 1
   elseif (trim(method) == "set_to_fill") then
-    print*, "WARNING: ,", trim(vname), " NOT AVILABLE AT LEVEL ", trim(lev), &
+    print*, "WARNING: ,", trim(vname), " NOT AVAILABLE AT LEVEL ", trim(lev), &
            ". SETTING EQUAL TO FILL VALUE OF ", value
     if(present(var)) var(:,:) = value
     if(present(var8)) var8(:,:) = value
     if(present(var3d)) var3d(:,:,:) = value
   elseif (trim(method) == "set_to_NaN") then
-    print*, "WARNING: ,", trim(vname), " NOT AVILABLE AT LEVEL ", trim(lev), &
+    print*, "WARNING: ,", trim(vname), " NOT AVAILABLE AT LEVEL ", trim(lev), &
            ". SETTING EQUAL TO NaNs"
     if(present(var)) var(:,:) = ieee_value(var,IEEE_QUIET_NAN)
     if(present(var8)) var8(:,:) = ieee_value(var8,IEEE_QUIET_NAN)
@@ -6409,77 +7188,119 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
     call error_handler("READING "//trim(vname)// " at level "//lev//". TO MAKE THIS NON- &
                         FATAL, CHANGE STOP TO SKIP FOR THIS VARIABLE IN YOUR VARMAP &
                         FILE.", iret)
+  elseif (trim(method) == "intrp") then
+    print*, "WARNING: ,"//trim(vname)//" NOT AVAILABLE AT LEVEL "//trim(lev)// &
+          ". WILL INTERPOLATE INTERSPERSED MISSING LEVELS AND/OR FILL MISSING"//&
+          " LEVELS AT EDGES."
   else
     call error_handler("ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
                        " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN,"// &
-                       " , skip, or stop.", 1)
+                       " , intrp, skip, or stop.", 1)
   endif
 
 end subroutine handle_grib_error
 
 !> Read soil temperature and soil moisture fields from a GRIB2 file.
 !!
-!! @param [in] the_file      grib2 file name
-!! @param [in] inv_file      grib2 inventory file name
 !! @param [in] vname         variable name in varmap table
 !! @param [in] vname_file    variable name in grib2 file
+!! @param [in] lugb          logical unit number for surface grib2 file
+!! @param [in] pdt_num       product definition template number.
 !! @param [inout] dummy3d    array of soil data
-!! @param [out] rc           read error status code
 !! @author George Gayno NCEP/EMC   
-subroutine read_grib_soil(the_file,inv_file,vname,vname_file,dummy3d,rc)
+ subroutine read_grib_soil(vname, vname_file, lugb, pdt_num, dummy3d)
   
-  use wgrib2api
-  implicit none
-  
-  character(len=*), intent(in)            :: the_file, inv_file
-  character(len=20), intent(in)           :: vname,vname_file
-  
-  integer, intent(out)                    :: rc
-  
-  real(esmf_kind_r8), intent(inout)       :: dummy3d(:,:,:)
-  
-  real(esmf_kind_r4), allocatable         :: dummy2d(:,:)
-  real(esmf_kind_r4)                      :: value
-  integer                                 :: varnum,i
-  character(len=50)                       :: slevs(lsoil_input)
-  character(len=50)                       :: method
+ use grib_mod
 
-  allocate(dummy2d(i_input,j_input))
+ implicit none
+  
+ character(len=20), intent(in)           :: vname,vname_file
+  
+ integer, intent(in)                     :: lugb, pdt_num
 
-  if(lsoil_input == 4) then
+ real(esmf_kind_r8), intent(inout)       :: dummy3d(:,:,:)
+  
+ character(len=50)                       :: slevs(lsoil_input)
+ character(len=50)                       :: method
+
+ integer                                 :: varnum, i, j, k, rc, rc2
+ integer                                 :: jdisc, jgdtn, jpdtn, lugi
+ integer                                 :: jids(200), jgdt(200), jpdt(200)
+ integer                                 :: iscale1, iscale2
+
+ logical                                 :: unpack
+
+ real(esmf_kind_r4), allocatable         :: dummy2d(:,:)
+ real(esmf_kind_r4)                      :: value
+
+ type(gribfield)                         :: gfld
+
+ allocate(dummy2d(i_input,j_input))
+
+ if(lsoil_input == 4) then
     slevs = (/character(24)::':0-0.1 m below ground:', ':0.1-0.4 m below ground:', &
                              ':0.4-1 m below ground:', ':1-2 m below ground:'/)
-  elseif(lsoil_input == 9) then
+ elseif(lsoil_input == 9) then
     slevs = (/character(26)::':0-0 m below ground',':0.01-0.01 m below ground:',':0.04-0.04 m below ground:', &
         ':0.1-0.1 m below ground:',':0.3-0.3 m below ground:',':0.6-0.6 m below ground:', &
         ':1-1 m below ground:',':1.6-1.6 m below ground:',':3-3 m below ground:'/)
-  else
+ else
     rc = -1
     call error_handler("reading soil levels. File must have 4 or 9 soil levels.", rc)
-  endif
+ endif
  
-  call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
+ call get_var_cond(vname,this_miss_var_method=method,this_miss_var_value=value, &
                          loc=varnum)
-  do i = 1,lsoil_input
-    if (vname_file=="var2_2_1_") then
-      rc = grb2_inq(the_file,inv_file,vname_file,"_0_192:",slevs(i),data2=dummy2d)
-    else
-      rc = grb2_inq(the_file,inv_file,vname_file,slevs(i),data2=dummy2d)
-    endif
-    if (rc <= 0) then
-      call handle_grib_error(vname_file, slevs(i),method,value,varnum,rc,var=dummy2d)
-      if (rc==1 .and. trim(vname) /= "soill") then 
-        ! missing_var_method == skip or no entry in varmap table
-        call error_handler("READING IN "//trim(vname)//". SET A FILL "// &
-                      "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",rc)
-      elseif (rc==1) then
-        dummy3d(:,:,:) = 0.0_esmf_kind_r8
-        exit
-      endif
-    endif
 
-    dummy3d(:,:,i) = real(dummy2d,esmf_kind_r8)
-  end do    
+ lugi = 0        ! unit number for index file
+ jdisc   = 2     ! search for discipline - land products
+ j = 0           ! search at beginning of file.
+ jpdt    = -9999  ! array of values in product definition template 4.n
+ jids    = -9999  ! array of values in identification section, set to wildcard
+ jgdt    = -9999  ! array of values in grid definition template 3.m
+ jgdtn   = -1     ! search for any grid definition number.
+ jpdtn   = pdt_num  ! Search for the product definition template number.
+ jpdt(1) = 0        ! Section 4/Octet 10 - parameter category - veg/biomass
+ if (trim(vname) == 'soilt') jpdt(2) = 2    ! Section 4/Octet 11 - parameter number - soil temp
+ if (trim(vname) == 'soilw') jpdt(2) = 192  ! Section 4/Octet 11 - parameter number - total soilm
+ if (trim(vname) == 'soill') then
+   jpdt(1) = 3    ! Section 4/Octet 10 - soil products
+   jpdt(2) = 192  ! Section 4/Octet 11 - parameter number - liquid soilm
+ endif
+ jpdt(10) = 106 ! Section 4/Octet 23 - depth below ground 
+ jpdt(13) = 106 ! Section 4/Octet 29 - depth below ground
+ unpack=.true.
+
+ do i = 1,lsoil_input
+
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, k, gfld, rc2)
+
+   if (rc2 /= 0) then  ! record not found.
+     call handle_grib_error(vname_file, slevs(i),method,value,varnum,rc,var=dummy2d)
+     if (rc==1 .and. trim(vname) /= "soill") then 
+       ! missing_var_method == skip or no entry in varmap table
+       call error_handler("READING IN "//trim(vname)//". SET A FILL "// &
+                      "VALUE IN THE VARMAP TABLE IF THIS ERROR IS NOT DESIRABLE.",rc)
+     elseif (rc==1) then
+       dummy3d(:,:,:) = 0.0_esmf_kind_r8
+       return
+     endif
+   endif
+
+   if (rc2 == 0) then ! record found. 
+     iscale1 = 10 ** gfld%ipdtmpl(11)
+     iscale2 = 10 ** gfld%ipdtmpl(14)
+!    print*,'getgb2 top of soil layer in m ', float(gfld%ipdtmpl(12))/float(iscale1)
+!    print*,'getgb2 bot of soil layer in m ', float(gfld%ipdtmpl(15))/float(iscale2)
+     dummy2d = reshape(gfld%fld, (/i_input,j_input/) )
+   endif 
+
+   j = k
+
+   dummy3d(:,:,i) = real(dummy2d,esmf_kind_r8)
+
+ enddo
 
  deallocate(dummy2d)
 
@@ -6668,17 +7489,242 @@ end subroutine check_soilt
 
 subroutine check_cnwat(cnwat)
   implicit none 
-  real(esmf_kind_r4), intent(inout) :: cnwat(i_input,j_input)
+  real(esmf_kind_r8), intent(inout) :: cnwat(i_input,j_input)
   
-  real(esmf_kind_r4)                :: max_cnwat = 0.5
+  real(esmf_kind_r8)                :: max_cnwat = 0.5
   
   integer :: i, j
 
   do i = 1,i_input
     do j = 1,j_input
-      if (cnwat(i,j) .gt. max_cnwat) cnwat(i,j) = 0.0_esmf_kind_r4
+      if (cnwat(i,j) .gt. max_cnwat) cnwat(i,j) = 0.0_esmf_kind_r8
     enddo
   enddo
 end subroutine check_cnwat
+
+
+
+
+!> Pressure to presure vertical interpolation for tracers with linear or lnP
+!> interpolation. Input tracers on pres levels are interpolated 
+!> to the target output pressure levels. The matching levels of input and 
+!> output will keep the same. Extrapolation is also allowed but needs
+!> caution. The routine is mostly for GFSV16 combined grib2 input when spfh has
+!> missing levels in low and mid troposphere from U/T/HGT/DZDT. 
+!!
+!! @param [in] ppin  1d input pres levs
+!! @param [in] xxin  1d input tracer
+!! @param [in] npin  number of input levs 
+!! @param [in] ppout 1d target pres levs 
+!! @param [out] xxout 1d interpolated tracer
+!! @param [in] npout number of target levs 
+!! @param [in] linlog interp method.1:linear;not 1:log;neg:extrp allowed
+!! @param [in] xmsg  fill values of missing levels (-999.0)
+!! @param [out] ier  error status. non 0: failed interpolation
+!! @author Jili Dong NCEP/EMC  
+!! @date 2021/07/30
+
+SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
+                      ,LINLOG,XMSG,IER)
+      IMPLICIT NONE
+
+! NCL code for pressure level interpolation
+!
+! This code was designed for one simple task. It has since
+! been mangled and abused for assorted reasons. For example,
+! early gfortran compilers had some issues with automatic arrays.
+! Hence, the C-Wrapper was used to create 'work' arrays which
+! were then passed to this code.  The original focused (non-NCL) 
+! task was to handle PPIN & PPOUT that had the same 'monotonicity.' 
+! Extra code was added to handle the more general case. 
+! Blah-Blah:  Punch line: it is embarrassingly convoluted!!!
+!
+!                                                ! input types
+      INTEGER NPIN,NPOUT,LINLOG,IER
+      real*8 PPIN(NPIN),XXIN(NPIN),PPOUT(NPOUT),XMSG
+                                                ! output
+      real*8 XXOUT(NPOUT)
+                                                ! work
+      real*8 PIN(NPIN),XIN(NPIN),P(NPIN),X(NPIN)
+      real*8 POUT(NPOUT),XOUT(NPOUT)
+
+! local
+      INTEGER J1,NP,NL,NIN,NLMAX,NPLVL,NLSAVE,NP1,NO1,N1,N2,LOGLIN,   &
+             NLSTRT
+      real*8 SLOPE,PA,PB,PC
+
+      LOGLIN = ABS(LINLOG)
+
+! error check: enough points: pressures consistency?
+
+      IER = 0
+      IF (NPOUT.GT.0) THEN
+          DO NP = 1,NPOUT
+              XXOUT(NP) = XMSG
+          END DO
+      END IF
+! Jili Dong input levels have to be the same as output levels:
+! we only interpolate for levels with missing variables
+!      IF (.not. all(PPIN .eq. PPOUT)) IER = IER+1
+
+      IF (NPIN.LT.2 .OR. NPOUT.LT.1) IER = IER + 1
+
+      IF (IER.NE.0) THEN
+!          PRINT *,'INT2P: error exit: ier=',IER
+          RETURN
+      END IF
+
+! should *input arrays* be reordered? want p(1) > p(2) > p(3) etc
+! so that it will match order for which code was originally designed
+! copy to 'work'  arrays
+
+      NP1 = 0
+      NO1 = 0
+      IF (PPIN(1).LT.PPIN(2)) THEN
+          NP1 = NPIN + 1
+      END IF
+      IF (PPOUT(1).LT.PPOUT(2)) THEN
+          NO1 = NPOUT + 1
+      END IF
+
+      DO NP = 1,NPIN
+          PIN(NP) = PPIN(ABS(NP1-NP))
+          XIN(NP) = XXIN(ABS(NP1-NP))
+      END DO
+
+      DO NP = 1,NPOUT
+          POUT(NP) = PPOUT(ABS(NO1-NP))
+      END DO
+
+! eliminate XIN levels with missing data. 
+! .   This can happen with observational data.
+
+      NL = 0
+      DO NP = 1,NPIN
+          IF (XIN(NP).NE.XMSG .AND. PIN(NP).NE.XMSG) THEN
+              NL = NL + 1
+              P(NL) = PIN(NP)
+              X(NL) = XIN(NP)
+          END IF
+      END DO
+      NLMAX = NL
+
+                                                ! all missing data
+      IF (NLMAX.LT.2) THEN
+          IER = IER + 1000
+          PRINT *,'INT2P: ier=',IER
+          RETURN
+      END IF
+
+! ===============> pressure in decreasing order <================
+! perform the interpolation  [pin(1)>pin(2)>...>pin(npin)]
+!                                                      ( p ,x)
+! ------------------------- p(nl+1), x(nl+1)   example (200,5)
+! .
+! ------------------------- pout(np), xout(np)         (250,?)
+! .
+! ------------------------- p(nl)  , x(nl)             (300,10)
+
+
+! exact p-level matches
+      NLSTRT = 1
+      NLSAVE = 1
+      DO NP = 1,NPOUT
+          XOUT(NP) = XMSG
+          DO NL = NLSTRT,NLMAX
+              IF (POUT(NP).EQ.P(NL)) THEN
+                  XOUT(NP) = X(NL)
+                  NLSAVE = NL + 1
+                  GO TO 10
+              END IF
+          END DO
+   10     NLSTRT = NLSAVE
+      END DO
+
+      IF (LOGLIN.EQ.1) THEN
+          DO NP = 1,NPOUT
+              DO NL = 1,NLMAX - 1
+                  IF (POUT(NP).LT.P(NL) .AND. POUT(NP).GT.P(NL+1)) THEN
+                      SLOPE = (X(NL)-X(NL+1))/ (P(NL)-P(NL+1))
+                      XOUT(NP) = X(NL+1) + SLOPE* (POUT(NP)-P(NL+1))
+                  END IF
+              END DO
+          END DO
+      ELSE
+          DO NP = 1,NPOUT
+              DO NL = 1,NLMAX - 1
+                  IF (POUT(NP).LT.P(NL) .AND. POUT(NP).GT.P(NL+1)) THEN
+                      PA = LOG(P(NL))
+                      PB = LOG(POUT(NP))
+! special case: In case someome inadvertently enter p=0.
+                      if (p(nl+1).gt.0.d0) then
+                          PC = LOG(P(NL+1))
+                      else
+                          PC = LOG(1.d-4)
+                      end if
+
+                      SLOPE = (X(NL)-X(NL+1))/ (PA-PC)
+                      XOUT(NP) = X(NL+1) + SLOPE* (PB-PC)
+                  END IF
+              END DO
+          END DO
+      END IF
+
+! extrapolate?
+! . use the 'last' valid slope for extrapolating
+
+      IF (LINLOG.LT.0) THEN
+          DO NP = 1,NPOUT
+              DO NL = 1,NLMAX
+                  IF (POUT(NP).GT.P(1)) THEN
+                      IF (LOGLIN.EQ.1) THEN
+                          SLOPE = (X(2)-X(1))/ (P(2)-P(1))
+                          XOUT(NP) = X(1) + SLOPE* (POUT(NP)-P(1))
+                      ELSE
+                          PA = LOG(P(2))
+                          PB = LOG(POUT(NP))
+                          PC = LOG(P(1))
+                          SLOPE = (X(2)-X(1))/ (PA-PC)
+                          XOUT(NP) = X(1) + SLOPE* (PB-PC)
+                      END IF
+                  ELSE IF (POUT(NP).LT.P(NLMAX)) THEN
+                      N1 = NLMAX
+                      N2 = NLMAX - 1
+                      IF (LOGLIN.EQ.1) THEN
+                          SLOPE = (X(N1)-X(N2))/ (P(N1)-P(N2))
+                          XOUT(NP) = X(N1) + SLOPE* (POUT(NP)-P(N1))
+                      ELSE
+                          PA = LOG(P(N1))
+                          PB = LOG(POUT(NP))
+                          PC = LOG(P(N2))
+                          SLOPE = (X(N1)-X(N2))/ (PA-PC)
+                          !XOUT(NP) = X(N1) + SLOPE* (PB-PC) !bug fixed below
+                          XOUT(NP) = X(N1) + SLOPE* (PB-PA)
+                      END IF
+                  END IF
+              END DO
+          END DO
+      END IF
+
+! place results in the return array;
+! .   possibly .... reverse to original order
+
+      if (NO1.GT.0) THEN
+          DO NP = 1,NPOUT
+             n1 = ABS(NO1-NP)
+             PPOUT(NP) = POUT(n1)
+             XXOUT(NP) = XOUT(n1)
+          END DO
+      ELSE
+          DO NP = 1,NPOUT
+             PPOUT(NP) = POUT(NP)
+             XXOUT(NP) = XOUT(NP)
+          END DO
+      END IF
+
+
+      RETURN
+      END SUBROUTINE DINT2P
+
 
  end module input_data

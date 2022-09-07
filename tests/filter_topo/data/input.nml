@@ -1,0 +1,12 @@
+&filter_topo_nml
+  topo_file="/dir1/dir2/orography.nc"
+  topo_field="orog_filter"
+  mask_field="landmask"
+  grid_file="/dir1/dir2/dir3/mosaic.nc"
+  zero_ocean=.false.
+  stretch_fac=2.0
+  res=96.
+  nested=.true.
+  grid_type=1
+  regional=.true.
+ /

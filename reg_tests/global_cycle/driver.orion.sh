@@ -34,9 +34,16 @@ QUEUE="${QUEUE:-batch}"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
-export HOMEreg=/work/noaa/da/ggayno/save/ufs_utils.git/reg_tests/global_cycle
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/global_cycle
 
 export OMP_NUM_THREADS_CY=2
 
@@ -55,13 +62,19 @@ TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
 LOG_FILE=consistency.log02
 export DATA="${DATA_DIR}/test2"
 export COMOUT=$DATA
-TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c768.lndinc \
-      -o $LOG_FILE -e $LOG_FILE ./C768.lndinc.sh)
+TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c768.lndincsoil \
+      -o $LOG_FILE -e $LOG_FILE ./C768.lndincsoil.sh)
+
+LOG_FILE=consistency.log03
+export DATA="${DATA_DIR}/test3"
+export COMOUT=$DATA
+TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c768.lndincsnow \
+      -o $LOG_FILE -e $LOG_FILE ./C768.lndincsnow.sh)
 
 LOG_FILE=consistency.log
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
       --open-mode=append -q $QUEUE -d\
-      afterok:$TEST1:$TEST2 << EOF
+      afterok:$TEST1:$TEST2:$TEST3 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > summary.log
 EOF

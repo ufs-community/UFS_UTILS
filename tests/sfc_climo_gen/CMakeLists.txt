@@ -3,6 +3,20 @@
 #
 # George Gayno, Lin Gan, Ed Hartnett, Larissa Reames
 
+set(SFCGEN_URL "https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/sfc_climo_gen")
+set(MOSAIC_FILE "C450_mosaic.nc")
+set(GRID_FILE "C450_grid.tile7.nc")
+set(ORO_FILE "C450_oro_data.tile7.nc")
+
+foreach(THE_FILE IN LISTS MOSAIC_FILE GRID_FILE ORO_FILE)
+  PULL_DATA(${SFCGEN_URL} ${THE_FILE}) 
+endforeach()
+
+set(SFCGEN2_URL "https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/GFS/fix/fix_sfc_climo")
+set(VEG_FILE "vegetation_type.viirs.igbp.0.1.nc")
+
+PULL_DATA(${SFCGEN2_URL} ${VEG_FILE})
+
 # Include cmake to allow parallel I/O tests.
 include (LibMPI)
 
@@ -16,8 +30,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 # Copy necessary test files from the source data directory to the
 # build data directory.
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/data/files.txt ${CMAKE_CURRENT_BINARY_DIR}/data/files.txt)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 

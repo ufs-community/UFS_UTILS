@@ -83,35 +83,18 @@ fi
 
 # create lake data for FV3 grid and save it to the orography files
 
-if [ $machine = WCOSS_C ]; then
-  touch ./lake.txt
-  tile=$tile_beg
-  while [ $tile -le $tile_end ]; do
-    echo "$exe_add_lake ${tile} ${res} ${indir} ${lake_cutoff}" >> ./lake.txt
-    tile=$(( $tile + 1 ))
-  done
-  aprun -j 1 -n 6 -N 6 -d 1 -cc depth cfp ./lake.txt
+tile=$tile_beg
+while [ $tile -le $tile_end ]; do
+  outfile=oro.C${res}.tile${tile}.nc
+  $APRUN $exe_add_lake ${tile} ${res} ${indir} ${lake_cutoff}
   err=$?
   if [ $err != 0 ]; then
     set +x
-    echo ERROR CREATING LAKE FRACTION
+    echo ERROR CREATING LAKE FRACTION FOR TILE $tile
     exit $err
   fi
-  rm ./lake.txt
-else
-  tile=$tile_beg
-  while [ $tile -le $tile_end ]; do
-    outfile=oro.C${res}.tile${tile}.nc
-    $APRUN $exe_add_lake ${tile} ${res} ${indir} ${lake_cutoff}
-    err=$?
-    if [ $err != 0 ]; then
-      set +x
-      echo ERROR CREATING LAKE FRACTION FOR TILE $tile
-      exit $err
-    fi
-    echo "lake fraction is added to $outfile"
-    tile=$(( $tile + 1 ))
-  done
-fi
+  echo "lake fraction is added to $outfile"
+  tile=$(( $tile + 1 ))
+done
 
 exit 0

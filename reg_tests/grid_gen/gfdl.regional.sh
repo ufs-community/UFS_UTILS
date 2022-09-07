@@ -64,6 +64,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< GFDL REGIONAL TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $home_dir/reg_tests/update_baseline.sh "${HOMEreg}/.." "gfdl.regional" $commit_num
+  fi
 else
   echo "<<< GFDL REGIONAL TEST PASSED. >>>"
 fi

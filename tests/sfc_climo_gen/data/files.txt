@@ -1,4 +1,0 @@
-https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/sfc_climo_gen/C450_mosaic.nc
-https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/sfc_climo_gen/C450_grid.tile7.nc
-https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/sfc_climo_gen/C450_oro_data.tile7.nc
-https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/GFS/fix/fix_sfc_climo/vegetation_type.viirs.igbp.0.1.nc

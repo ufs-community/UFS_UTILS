@@ -18,7 +18,7 @@ if [ $iret -ne 0 ]; then
   exit $iret
 fi
 
-cmp ${DATA}/seaice.5min.blend $HOMEreg/baseline_data/seaice.5min.blend
+cmp ${DATA}/seaice.5min.blend $HOMEreg/baseline_data/t1534/seaice.5min.blend
 iret=$?
 test_failed=0
 if [ $iret -ne 0 ]; then
@@ -32,6 +32,10 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< ICE BLEND TEST FAILED. >>>"
   echo "*********************************"
   echo "<<< ICE BLEND TEST FAILED. >>>" > ./summary.log
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    cd $DATA
+    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "t1534" $commit_num
+  fi
 else
   echo
   echo "*********************************"

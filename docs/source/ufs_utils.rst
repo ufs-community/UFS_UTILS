@@ -5,7 +5,7 @@
 Introduction
 ****************************
 
-The Unified Forecast Systems (UFS) Utilities repository contains pre-processing programs for the UFS weather model.  These programs set up the model grid and create coldstart initial conditions. The repository is hosted on `Github <https://github.com/NOAA-EMC/UFS_UTILS>`_.  Information on checking out the code and making changes to it is available on the repository `wiki page <https://github.com/NOAA-EMC/UFS_UTILS/wiki>`_.
+The Unified Forecast Systems (UFS) Utilities repository contains pre-processing programs for the UFS weather model.  These programs set up the model grid and create coldstart initial conditions. The repository is hosted on `Github <https://github.com/ufs-community/UFS_UTILS>`_.  Information on checking out the code and making changes to it is available on the repository `wiki page <https://github.com/ufs-community/UFS_UTILS/wiki>`_.
 
 ***********************************
 Grid Generation
@@ -14,9 +14,12 @@ Grid Generation
 The following programs are used to create a grid.
 
       * make_hgrid
-      * regional_grid_esg
+      * regional_esg_grid
       * make_solo_mosaic
       * orog
+      * orog_gsl (optional)
+      * inland (optional)
+      * lakefrac (optional)
       * global_equiv_resol
       * shave
       * filter_topo
@@ -26,7 +29,9 @@ The grid generation process is run by these scripts (located under ./ush)
 
       * fv3gfs_grid_driver.sh  (driver script)
       * fv3gfs_make_grid.sh (creates the geo-referencing for the grid)
-      * fv3gfs_make_orog.sh (creates the land-sea mask and terrain)
+      * fv3gfs_make_orog.sh (creates the land-sea mask, terrain and EMC gravity wave drag fields)
+      * fv3gfs_make_orog_gsl.sh (creates GSL gravity wave drag fields)
+      * fv3gfs_make_lake.sh (adds lakes and lake depth. optional)
       * fv3gfs_filter_topo.sh (filters the orography) 
       * sfc_climo_gen.sh (creates climatological surface fields, such as soil type)
 
@@ -233,11 +238,11 @@ Program inputs and outputs
 
       * The "grid" files (CRES_grid.tile#.nc) containing the geo-reference records for the grid - (NetCDF).  Created by the make_hgrid or regional_esg_grid programs.
       * Global 30-arc-second University of Maryland land cover data.  Used to create the land-sea mask.
-             * ./fix/fix_orog/landcover30.fixed (unformatted binary)
+             * landcover30.fixed (unformatted binary). Located here `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_.
       * Global 30-arc-second USGS GMTED2010 orography data.
-             * ./fix/fix_orog/gmted2010.30sec.int (unformatted binary)
+             * gmted2010.30sec.int (unformatted binary). Located here `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_.
       * 30-arc-second RAMP Antarctic terrain data (Radarsat Antarctic Mapping Project)
-             * ./fix/fix_orog/thirty.second.antarctic.new.bin (unformatted binary)
+             * thirty.second.antarctic.new.bin (unformatted binary). Located here `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_.
 
 **Output data:**  
 
@@ -257,6 +262,123 @@ Orography files - one for each tile - oro.CRES.tile#.nc (NetCDF).  Contains thes
       * gamma - anisotropy (unitless)
       * sigma - slope of orography (unitless)
       * elvmax - maximum height above mean (meters)
+
+orog_gsl
+========
+
+Introduction
+------------
+
+This program computes orographics statistics fields required for the orographic drag suite developed by NOAA's Global Systems Laboratory (GSL). The fields are a subset of the ones calculated by "orog" and are calculated in a different manner.
+
+Code structure
+--------------
+
+Location of source code: ./sorc/orog_mask_tools.fd/orog_gsl.fd.
+
+Program inputs and outputs
+--------------------------
+
+The program reads the tile number (1-6 for global, 7 for stand-alone regional) and grid resolution (e.g., 768) from standard input.
+
+**Input data:**
+
+All in NetCDF.
+
+      * The tiled "grid" files (CRES_grid.tile#.nc) created by the make_hgrid or regional_esg_grid programs.
+      * geo_em.d01.lat-lon.2.5m.HGT_M.nc - global topographic data on 2.5-minute lat-lon grid (interpolated from GMTED2010 30-second topographic data). `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_am/>`_.
+      * HGT.Beljaars_filtered.lat-lon.30s_res.nc - global topographic data on 30-second lat-lon grid (GMTED2010 data smoothed according to Beljaars et al. (QJRMS, 2004)). `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_am/>`_.
+
+**Output data:**
+
+One for each tile. All in NetCDF.
+
+      * CRES_oro_data_ls.tile#.nc - Large-scale file for the gravity wave drag and blocking schemes of `Kim and Doyle (2005) <https://doi.org/10.1256/qj.04.160>`_
+      * CRES_oro_data.ss.tile#.nc - Small-scale file for the gravity wave drag scheme of `Tsiringakis et al. (2017) <https://doi.org/10.1002/qj.3021>`_. And the turbulent orographic from drag (TOFD) schemem of Beljaars et al. (QJRMS, 2004).
+
+Each file contains the following records:
+
+      * geolon - longitude (degrees east)
+      * geolat - latitude (degrees north)
+      * stddev - Standard deviation of subgrid topography
+      * convexity - Convexity of subgrid topography
+      * oa1 - Orographic asymmetry of subgrid topography - westerly
+      * oa2 - Orographic asymmetry of subgrid topography - southerly
+      * oa3 - Orographic asymmetry of subgrid topography - southwesterly
+      * oa4 - Orographic asymmetry of subgrid topography - northwesterly
+      * ol1 - Orographic effective length of subgrid topography - westerly
+      * ol2 - Orographic effective length of subgrid topography - southerly
+      * ol3 - Orographic effective length of subgrid topography - southwesterly
+      * ol4 - Orographic effective length of subgrid topography - northwesterly
+
+inland
+======
+
+Introduction
+------------
+
+This program reads an orography file, determines which points are inland from water, then writes out a mask record that identifies these points.
+
+Code structure
+--------------
+
+Location of source code: ./sorc/orog_mask_tools.fd/inland.fd.
+
+Program control options
+-----------------------
+
+The program reads the following parameters from standard input: 
+      * The resolution. Ex: '96' for C96.
+      * Nonland cutoff fraction. Default is '0.99'.
+      * Maximum recursive depth. Default is '7'.
+      * Grid type flag - 'g' for global, 'r' for regional.
+
+Program inputs and outputs
+--------------------------
+
+**Input data:**
+
+      * orography file - The orography file from the orog program - oro.CRES.tile#.nc (NetCDF)
+
+**Output data:**
+
+      * orography file - The input file, but containing an additional 'inland' record - '1' inland, '0' coastal.
+
+lakefrac
+========
+
+Introduction
+------------
+
+This program sets freshwater lake fraction and lake depth on the model grid.
+
+Code structure
+--------------
+
+Location of source code: ./sorc/orog_mask_tools.fd/lake.fd.
+
+Program control options
+-----------------------
+
+The program reads the following parameters from standard input: 
+      * The tile number.
+      * The resolution. Ex: '96' for C96.
+      * The path to the global lake data.
+      * Minimum lake fraction in percent.
+
+Program inputs and outputs
+--------------------------
+
+**Input data:**
+
+      * grid file - the "grid" file from the make_hgrid or regional_esg programs  - CRES_grid.tile#.nc - (NetCDF)
+      * orography file - the orography file including the 'inland' flag record from the inland program - oro.CRES.tile#.nc (NetCDF)
+      * lake status code file - GlobalLakeStatus.dat (located in `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_). See GlobalLakeStatus.txt for the defintion of each code.
+      * lake depth file - GlobalLakeDepth.dat (located in `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_). See GlobalLakeDepth.txt for a description of this file.
+
+**Output data:**
+
+      * orography file - the orography file including records of lake fraction and lake depth - oro.CRES.tile#.nc (NetCDF)
 
 filter_topo
 ===========
@@ -395,19 +517,32 @@ Program inputs and outputs
 
 **Input data:** 
 
-The global surface climatological data is located in ./fix/fix_sfc_climo.  All NetCDF.
+The surface climatological data is located here `./fix/fix_sfc_climo <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_sfc_climo/>`_.  All NetCDF.
 
       * Global 1-degree fractional coverage strong/weak zenith angle albedo - facsf.1.0.nc
       * Global 0.05-degree maximum snow albedo - maximum_snow_albedo.0.05.nc
       * Global 2.6 x 1.5-degree soil substrate temperature - substrate_temperature.2.6x1.5.nc
       * Global 0.05-degree four component monthly snow-free albedo - snowfree_albedo.4comp.0.05.nc
       * Global 1.0-degree categorical slope type - slope_type.1.0.nc
-      * Global 0.05-degree categorical STATSGO soil type - soil_type.statsgo.0.05.nc
-      * Global 0.05-degree categorical IGBP vegetation type - vegetation_type.igbp.0.05.nc
+      * Categorical STATSGO soil type
+             * Global 0.03-degree - soil_type.statsgo.0.03.nc
+             * Global 0.05-degree - soil_type.statsgo.0.05.nc
+             * CONUS 0.01-degree - soil_type.statsgo.conus.0.01.nc
+      * Categorical IGBP vegetation type
+             * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
+             * MODIS-based global 0.05-degree - vegetation_type.modis.igbp.0.05.nc
+             * MODIS-based CONUS 0.01-degree - vegetation_type.modis.igbp.conus.0.01.nc
+             * NESDIS VIIRS-based global 0.03-degree - vegetation_type.viirs.igbp.0.03.nc
+             * NESDIS VIIRS-based global 0.05-degree - vegetation_type.viirs.igbp.0.05.nc
+             * NESDIS VIIRS-based global 0.1-degree - vegetation_type.viirs.igbp.0.1.nc
+             * NESDIS VIIRS-based CONUS 0.01-degree - vegetation_type.viirs.igbp.conus.0.01.nc
       * Global 0.144-degree monthly vegetation greenness in percent - vegetation_greenness.0.144.nc
-      * Model mosaic file - CRES_mosaic.nc (NetCDF)
-      * Model orography files including halo - CRES_oro_data.tile#.halo#.nc (NetCDF)
-      * Model grid files including halo - CRES_grid.tile#.halo#.nc (NetCDF)
+
+The files that define the model grid. All NetCDF.
+
+      * Model mosaic file - CRES_mosaic.nc
+      * Model orography files including halo - CRES_oro_data.tile#.halo#.nc
+      * Model grid files including halo - CRES_grid.tile#.halo#.nc
 
 **Output files:** 
 
@@ -421,3 +556,95 @@ All files with and without halo (all NetCDF).
       * Soil type - CRES_soil_type.tile#.halo#.nc
       * Vegetation type - CRES_vegetation_type.tile#.halo#.nc
       * Vegetation greenness - CRES_vegetation_greenness.tile#.halo#.nc
+
+
+vcoord_gen   
+==========
+
+Introduction
+------------
+
+This program generates hybrid coordinate parameters from fields such as surface pressure, model top and the number of vertical levels. Outputs the 'ak' and 'bk' parameters used by the forecast model and chgres_cube to define the hybrid levels as follows:
+
+      * pressure = ak + (surface_pressure * bk)
+
+Code structure
+--------------
+
+Location of the source code: ./sorc/vcoord_gen.fd.
+
+Program inputs
+--------------
+
+The following user-defined parameters are read in from standard input.
+
+     * levs - Integer number of levels
+     * lupp - Integer number of levels below pupp
+     * pbot - Real nominal surface pressure (Pa)
+     * psig - Real nominal pressure where coordinate changes from pure sigma (Pa)
+     * ppre - Real nominal pressure where coordinate changes from pure pressure (Pa)
+     * pupp - Real nominal pressure where coordinate changes to upper atmospheric profile (Pa)
+     * ptop - Real pressure at top (Pa)
+     * dpbot - Real coordinate thickness at bottom (Pa)
+     * dpsig - Real thickness of zone within which coordinate changes to pure sigma (Pa)
+     * dppre - Real thickness of zone within which coordinate changes to pure pressure (Pa)
+     * dpupp - Real coordinate thickness at pupp (Pa)
+     * dptop - Real coordinate thickness at top (Pa)
+
+Program outputs
+---------------
+
+A text file is output containing the 'ak' and 'bk' values. To use it in chgres_cube, set namelist variable "vcoord_target_grid" to the path/name of this file.
+
+Run script
+----------
+
+To run, use script ./util/vcoord_gen/run.sh
+
+weight_gen   
+==========
+
+Introduction
+------------
+
+Creates ESMF 'scrip' files for gaussian grids. 
+
+Code structure
+--------------
+
+Location of the source code: ./sorc/weight_gen.fd.
+
+Program inputs
+--------------
+
+The global FV3 grid resolution from standard output. Valid choices are:
+
+     * C48
+     * C96
+     * C128
+     * C192
+     * C384
+     * C768
+     * C1152
+     * C3072
+
+Program outputs
+---------------
+
+Two gaussian grid 'scrip' files in NetCDF format. One includes two extra rows for the poles.
+
+     * C48  => 192x94 and 192x96 gaussian files
+     * C96  => 384x192 and 384x194 gaussian files
+     * C128 => 512x256 and 512x258 gaussian files
+     * C192 => 768x384 and 768x386 gaussian files
+     * C384 => 1536x768 and 1536x770 gaussian files
+     * C768 => 3072x1536 and 3072x1538 gaussian files
+     * C1152 => 4608x2304 and 4608x2406 gaussian files
+     * C3072 => 12288x6144 and 12288x6146 gaussian files
+
+Files contain center and corner point latitude and longitudes.
+
+Run script
+----------
+
+To run, use the machine-dependent script under ./util/weight_gen

@@ -79,6 +79,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< 13-KM NA GFS NCEI GRIB2 TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $HOMEufs/reg_tests/update_baseline.sh $HOMEreg "13km_na_gfs_ncei_grib2" $commit_num
+  fi
 else
   echo "<<< 13-KM NA GFS NCEI GRIB2 TEST PASSED. >>>"
 fi

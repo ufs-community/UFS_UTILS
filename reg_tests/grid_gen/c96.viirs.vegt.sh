@@ -57,6 +57,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< C96 VIIRS VEGT TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $home_dir/reg_tests/update_baseline.sh "${HOMEreg}/.." "c96.viirs.vegt" $commit_num
+  fi
 else
   echo "<<< C96 VIIRS VEGT TEST PASSED. >>>"
 fi

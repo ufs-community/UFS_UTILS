@@ -23,8 +23,6 @@ if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
       CACHE STRING "Choose the type of build." FORCE)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
                                                "MinSizeRel" "RelWithDebInfo")
-  message(STATUS "Set BUILD_TESTING to YES and build unit testing package under tests")
-  set(BUILD_TESTING "YES")
 endif()
 
 # Set compiler flags.
@@ -32,8 +30,17 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -g -traceback")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fp-model precise")
   set(CMAKE_Fortran_FLAGS_DEBUG "-O0 -check -check noarg_temp_created -check nopointer -fp-stack-check -fstack-protector-all -fpe0 -debug -ftrapuv")
+  if(APPLE)
+    # The linker on macOS does not include `common symbols` by default.
+    # Passing the -c flag includes them and fixes an error with undefined symbols.
+    set(CMAKE_Fortran_ARCHIVE_FINISH "<CMAKE_RANLIB> -c <TARGET>")
+    set(CMAKE_C_ARCHIVE_FINISH "<CMAKE_RANLIB> -c <TARGET>")
+  endif()
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -g -fbacktrace")
+  if(${CMAKE_Fortran_COMPILER_VERSION} VERSION_GREATER_EQUAL 10)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch -fallow-invalid-boz")
+  endif()
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
   set(CMAKE_Fortran_FLAGS_DEBUG "-O1 -ggdb -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans -ffpe-trap=invalid,zero,overflow -fbounds-check -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls")
 endif()
@@ -60,15 +67,8 @@ find_package(nemsio 2.5.0 REQUIRED)
 find_package(sigio 2.3.0 REQUIRED)
 find_package(sp 2.3.3 REQUIRED)
 find_package(ip 3.3.3 REQUIRED)
-find_package(g2 3.4.0 REQUIRED)
-find_package(wgrib2 2.0.8 REQUIRED)
+find_package(g2 3.4.3 REQUIRED)
 find_package(sigio 2.3.0 REQUIRED)
-
-# EMC requires executables in ./exec
-set(exec_dir bin)
-if(EMC_EXEC_DIR)
-  set(exec_dir exec)
-endif()
 
 # If doxygen documentation we enabled, build it. This must come before
 # adding the source code directories; the main documentation build
@@ -84,6 +84,6 @@ add_subdirectory(sorc)
 # Run unit tests.
 include(CTest)
 if(BUILD_TESTING)
+  message(STATUS "Set BUILD_TESTING to YES and build unit testing package under tests")
   add_subdirectory(tests)
 endif()
-

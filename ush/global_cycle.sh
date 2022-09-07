@@ -72,7 +72,7 @@
 #     FNALBC2       Input 'facsf' and 'facwf' albedo climatology GRIB file.
 #                   Defaults to ${FIXam}/global_albedo4.1x1.grb
 #     FNAISC        Input sea ice climatology GRIB file.
-#                   Defaults to ${FIXam}/CFSR.SEAICE.1982.2012.monthly.clim.grb
+#                   Defaults to ${FIXam}/IMS-NIC.blended.ice.monthly.clim.grb
 #     FNTG3C        Input deep soil temperature climatology GRIB file.
 #                   Defaults to ${FIXam}/global_tg3clim.2.6x1.5.grb
 #     FNVEGC        Input vegetation fraction climatology GRIB file.
@@ -145,6 +145,7 @@
 #     DONST         Process NST records when using NST model.  Default is 'no'.
 #     DO_SFCCYCLE   Call sfcsub routine 
 #     DO_LNDINC     Call routine to update soil states with increment files
+#     DO_SNO_INC    Call routine to update snow states with increment files
 #     zsea1/zsea2   When running with NST model, this is the lower/upper bound
 #                   of depth of sea temperature.  In whole mm.
 #     MAX_TASKS_CY  Normally, program should be run with a number of mpi tasks
@@ -267,6 +268,7 @@ use_ufo=${use_ufo:-.true.}
 DONST=${DONST:-"NO"}
 DO_SFCCYCLE=${DO_SFCCYCLE:-.true.}
 DO_LNDINC=${DO_LNDINC:-.false.}
+DO_SNO_INC=${DO_SNO_INC:-.false.}
 zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
 MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
@@ -278,7 +280,7 @@ FNSALC=${FNSALC:-${FIXam}/global_salclm.t1534.3072.1536.nc}
 FNSNOC=${FNSNOC:-${FIXam}/global_snoclim.1.875.grb}
 FNZORC=${FNZORC:-igbp}
 FNALBC2=${FNALBC2:-${FIXam}/global_albedo4.1x1.grb}
-FNAISC=${FNAISC:-${FIXam}/CFSR.SEAICE.1982.2012.monthly.clim.grb}
+FNAISC=${FNAISC:-${FIXam}/IMS-NIC.blended.ice.monthly.clim.grb}
 FNTG3C=${FNTG3C:-${FIXam}/global_tg3clim.2.6x1.5.grb}
 FNVEGC=${FNVEGC:-${FIXam}/global_vegfrac.0.144.decpercent.grb}
 FNALBC=${FNALBC:-${FIXam}/global_snowfree_albedo.bosu.t$JCAP_CASE.$LONB_CASE.$LATB_CASE.rg.grb}
@@ -389,7 +391,8 @@ EOF
 cat << EOF > fort.37
  &NAMSFCD
   NST_FILE="$NST_FILE",
-  LND_SOI_FILE="$LND_SOI_FILE" 
+  LND_SOI_FILE="$LND_SOI_FILE",
+  DO_SNO_INC=$DO_SNO_INC
  /
 EOF
 

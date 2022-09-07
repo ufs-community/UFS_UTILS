@@ -3,7 +3,19 @@
 #
 # George Gayno, Lin Gan, Ed Hartnett, Larissa Reames
 
-# Include cmake to allow parallel I/O tests.
+set(CHGRES_URL "https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/chgres_cube")
+
+set(V16SFC_FILE "gfs.v16.sfc.history.nc")
+set(V16SFC_FILE2 "gfs.v16.sfc2.history.nc")
+set(V16ATM_FILE "gfs.v16.atm.history.nc")
+set(V14SFC_FILE "gfs.v14.sfc.history.nemsio")
+set(V15SFC_FILE "gfs.v15.sfc.history.nemsio")
+set(GFS_GRIB_FILE "gfs.t00z.pgrb2.0p50.f000")
+
+foreach(THE_FILE IN LISTS V16SFC_FILE V16SFC_FILE2 V16ATM_FILE V14SFC_FILE V15SFC_FILE GFS_GRIB_FILE) 
+  PULL_DATA(${CHGRES_URL} ${THE_FILE})
+endforeach()
+
 include (LibMPI)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
@@ -17,8 +29,6 @@ include_directories(${PROJECT_SOURCE_DIR})
 # Copy necessary test files from the source data directory to the
 # build data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/data/files.txt ${CMAKE_CURRENT_BINARY_DIR}/data/files.txt)
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled_warm_restart.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled_warm_restart.nml)
@@ -26,6 +36,8 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gaussian_nemsio.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gfs_grib2.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gfs_grib2.nml)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/global_hyblev.l28.txt ${CMAKE_CURRENT_BINARY_DIR}/data/global_hyblev.l28.txt)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_spectral_sigio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_spectral_sigio.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
@@ -39,6 +51,18 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 add_executable(ftst_utils ftst_utils.F90)
 add_test(NAME chgres_cube-ftst_utils COMMAND ftst_utils)
 target_link_libraries(ftst_utils chgres_cube_lib)
+
+add_executable(ftst_read_atm_grib2 ftst_read_atm_grib2.F90)
+target_link_libraries(ftst_read_atm_grib2 chgres_cube_lib)
+add_mpi_test(chgres_cube-ftst_read_atm_grib2
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_atm_grib2
+  NUMPROCS 1 TIMEOUT 60)
+
+add_executable(ftst_read_sfc_grib2 ftst_read_sfc_grib2.F90)
+target_link_libraries(ftst_read_sfc_grib2 chgres_cube_lib)
+add_mpi_test(chgres_cube-ftst_read_sfc_grib2
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_read_sfc_grib2
+  NUMPROCS 1 TIMEOUT 60)
 
 add_executable(ftst_program_setup ftst_program_setup.F90)
 target_link_libraries(ftst_program_setup chgres_cube_lib)
@@ -75,6 +99,19 @@ add_mpi_test(chgres_cube-ftst_sfc_input_data
   NUMPROCS 4
   TIMEOUT 60)
 
+add_executable(ftst_dint2p ftst_dint2p.F90)
+target_link_libraries(ftst_dint2p
+  chgres_cube_lib)
+
+add_test(NAME chgres_cube-ftst_dint2p COMMAND ftst_dint2p)
+
+add_executable(ftst_rh2spfh_gfs ftst_rh2spfh_gfs.F90)
+target_link_libraries(ftst_rh2spfh_gfs
+  chgres_cube_lib)
+
+add_test(NAME chgres_cube-ftst_rh2spfh_gfs COMMAND ftst_rh2spfh_gfs)
+
+
 add_executable(ftst_quicksort ftst_quicksort.F90)
 target_link_libraries(ftst_quicksort
   chgres_cube_lib)
@@ -99,15 +136,15 @@ add_mpi_test(chgres_cube-ftst_read_sfc_gfs_nemsio
   NUMPROCS 1
   TIMEOUT 60)
 
-# Comment out this unit test until ESMF memory leaks are solved
-# add_executable(ftst_surface_interp ftst_surface_interp.F90)
-# target_link_libraries(ftst_surface_interp chgres_cube_lib)
-
-# Cause test to be run with MPI.
-# add_mpi_test(chgres_cube-ftst_surface_interp
-#  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_interp
-#  NUMPROCS 1
-#  TIMEOUT 60)
+## Comment out this unit test until ESMF memory leaks are solved
+## add_executable(ftst_surface_interp ftst_surface_interp.F90)
+## target_link_libraries(ftst_surface_interp chgres_cube_lib)
+##
+## Cause test to be run with MPI.
+## add_mpi_test(chgres_cube-ftst_surface_interp
+##  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_interp
+##  NUMPROCS 1
+##  TIMEOUT 60)
 
 add_executable(ftst_read_sfc_nemsio ftst_read_sfc_nemsio.F90)
 target_link_libraries(ftst_read_sfc_nemsio chgres_cube_lib)
@@ -162,3 +199,29 @@ add_mpi_test(chgres_cube-ftst_surface_nst_landfill
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_nst_landfill
   NUMPROCS 1
   TIMEOUT 60)
+
+add_executable(ftst_surface_regrid_many ftst_surface_regrid_many.F90)
+target_link_libraries(ftst_surface_regrid_many chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_surface_regrid_many
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_regrid_many
+  NUMPROCS 1
+  TIMEOUT 60)
+
+add_executable(ftst_surface_search_many ftst_surface_search_many.F90)
+target_link_libraries(ftst_surface_search_many chgres_cube_lib)
+
+# Cause test to be run with MPI.
+add_mpi_test(chgres_cube-ftst_surface_search_many
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_surface_search_many
+  NUMPROCS 1
+  TIMEOUT 60)
+
+add_executable(ftst_read_vcoord ftst_read_vcoord.F90)
+target_link_libraries(ftst_read_vcoord chgres_cube_lib)
+add_test(NAME chgres_cube-ftst_read_vcoord COMMAND ftst_read_vcoord)
+
+add_executable(ftst_example ftst_example.F90)
+target_link_libraries(ftst_example chgres_cube_lib)
+add_test(NAME chgres_cube-ftst_example COMMAND ftst_example)

@@ -40,13 +40,21 @@ export DATA="${DATA}/reg-tests/ice-blend"
 # Should not have to change anything below.
 #-----------------------------------------------------------------------------
 
+export UPDATE_BASELINE="FALSE"
+#export UPDATE_BASELINE="TRUE"
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
+fi
+
 export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
 export WGRIB2=/apps/wgrib2/0.1.9.6a/bin/wgrib2
-export COPYGB=/lfs4/HFIP/emcda/George.Gayno/ufs_utils.git/jet_port/grib_util/copygb
-export COPYGB2=/lfs4/HFIP/emcda/George.Gayno/ufs_utils.git/jet_port/grib_util/copygb2
+export COPYGB=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/grib_util/NCEPLIBS-grib_util/exec/bin/copygb
+export COPYGB2=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/grib_util/NCEPLIBS-grib_util/exec/bin/copygb2
 export CNVGRIB=/apps/cnvgrib/1.4.0/bin/cnvgrib
 
-export HOMEreg=/lfs4/HFIP/emcda/George.Gayno/reg_tests/ice_blend
+export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ice_blend
+
 export HOMEgfs=$PWD/../..
 
 rm -fr $DATA

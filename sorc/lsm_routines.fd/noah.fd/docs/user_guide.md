@@ -21,5 +21,5 @@ This document is part of the <a href="../index.html">UFS_UTILS documentation.</a
 
 The NOAH routines are included in the <a href="../lsm_routines/index.html">lsm_routines directory.</a>
 
-The NOAH library created here is used in the  [NCEPLIBS
-UFS_UTILS](https://github.com/NOAA-EMC/UFS_UTILS) project.
+The NOAH library created here is used in the
+[UFS_UTILS](https://github.com/ufs-community/UFS_UTILS) project.

@@ -74,7 +74,7 @@ MODULE READ_WRITE_DATA
    !!
    !! @param[in] slifcs Land-sea mask.
    !! @param[in] tsffcs Skin temperature.
-   !! @param[in] snofcs Liquid-equivalent snow depth.
+   !! @param[in] swefcs Snow water equivalent
    !! @param[in] tg3fcs Soil substrate temperature.
    !! @param[in] zorfcs Roughness length.
    !! @param[in] albfcs Snow-free albedo.
@@ -114,7 +114,7 @@ MODULE READ_WRITE_DATA
    !! @param[in] nsst Data structure containing nsst fields.
    !!
    !! @author George Gayno NOAA/EMC
- subroutine write_data(slifcs,tsffcs,snofcs,tg3fcs,zorfcs, &
+ subroutine write_data(slifcs,tsffcs,swefcs,tg3fcs,zorfcs, &
                        albfcs,alffcs,vegfcs,cnpfcs,f10m, &
                        t2m,q2m,vetfcs,sotfcs,ustar,fmm,fhh, &
                        sicfcs,sihfcs,sitfcs,tprcp,srflag, &
@@ -132,7 +132,7 @@ MODULE READ_WRITE_DATA
  logical, intent(in)         :: do_nsst
 
  real, intent(in)            :: slifcs(lensfc), tsffcs(lensfc)
- real, intent(in)            :: snofcs(lensfc), tg3fcs(lensfc)
+ real, intent(in)            :: swefcs(lensfc), tg3fcs(lensfc)
  real, intent(in)            :: vegfcs(lensfc), cnpfcs(lensfc)
  real, intent(in)            :: zorfcs(lensfc), albfcs(lensfc,4)
  real, intent(in)            :: f10m(lensfc), alffcs(lensfc,2)
@@ -676,7 +676,7 @@ MODULE READ_WRITE_DATA
  error = nf90_put_var( ncid, id_tsea, dum2d, dims_strt, dims_end)
  call netcdf_err(error, 'WRITING TSEA RECORD' )
 
- dum2d = reshape(snofcs, (/idim,jdim/))
+ dum2d = reshape(swefcs, (/idim,jdim/))
  error = nf90_put_var( ncid, id_sheleg, dum2d, dims_strt, dims_end)
  call netcdf_err(error, 'WRITING SHELEG RECORD' )
 
@@ -1200,9 +1200,11 @@ MODULE READ_WRITE_DATA
  !! @param[in] LSOIL Number of soil layers.
  !! @param[in] LENSFC Total number of points on a tile.
  !! @param[in] DO_NSST When true, nsst fields are read.
+ !! @param[in] INC_FILE When true, read from an increment file.
+ !!                     False reads from a restart file.
  !! @param[out] TSFFCS Skin Temperature.
  !! @param[out] SMCFCS Total volumetric soil moisture.
- !! @param[out] SNOFCS Liquid-equivalent snow depth.
+ !! @param[out] SWEFCS Snow water equivalent.
  !! @param[out] STCFCS Soil temperature.
  !! @param[out] TG3FCS Soil substrate temperature.
  !! @param[out] ZORFCS Roughness length.
@@ -1227,7 +1229,7 @@ MODULE READ_WRITE_DATA
  !! @param[out] SITFCS Sea ice temperature.
  !! @param[out] TPRCP Precipitation.
  !! @param[out] SRFLAG Snow/rain flag.
- !! @param[out] SWDFCS Physical snow depth.
+ !! @param[out] SNDFCS Snow depth.
  !! @param[out] VMNFCS Minimum vegetation greenness.
  !! @param[out] VMXFCS Maximum vegetation greenness.
  !! @param[out] SLCFCS Liquid portion of volumetric soil moisture.
@@ -1239,46 +1241,46 @@ MODULE READ_WRITE_DATA
  !! @param[out] ZSOIL Soil layer thickness.
  !! @param[out] NSST Data structure containing nsst fields.
  !! @author George Gayno NOAA/EMC
- SUBROUTINE READ_DATA(TSFFCS,SMCFCS,SNOFCS,STCFCS, &
+ SUBROUTINE READ_DATA(LSOIL,LENSFC,DO_NSST,INC_FILE,TSFFCS,SMCFCS,SWEFCS,STCFCS, &
                       TG3FCS,ZORFCS, &
                       CVFCS,CVBFCS,CVTFCS,ALBFCS, &
-                      SLIFCS,VEGFCS,CNPFCS,F10M, &
+                      VEGFCS,SLIFCS,CNPFCS,F10M, &
                       VETFCS,SOTFCS,ALFFCS, &
                       USTAR,FMM,FHH, &
                       SIHFCS,SICFCS,SITFCS, &
-                      TPRCP,SRFLAG,SWDFCS,  &
+                      TPRCP,SRFLAG,SNDFCS,  &
                       VMNFCS,VMXFCS,SLCFCS, &
                       SLPFCS,ABSFCS,T2M,Q2M,SLMASK, &
-                      ZSOIL,LSOIL,LENSFC,DO_NSST,NSST)
+                      ZSOIL,NSST)
  USE MPI
 
  IMPLICIT NONE
 
  INTEGER, INTENT(IN)       :: LSOIL, LENSFC
+ LOGICAL, INTENT(IN)       :: DO_NSST, INC_FILE
 
- LOGICAL, INTENT(IN)       :: DO_NSST
+ REAL, OPTIONAL, INTENT(OUT)         :: CVFCS(LENSFC), CVBFCS(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: CVTFCS(LENSFC), ALBFCS(LENSFC,4)
+ REAL, OPTIONAL, INTENT(OUT)         :: SLIFCS(LENSFC), CNPFCS(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: VEGFCS(LENSFC), F10M(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: VETFCS(LENSFC), SOTFCS(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: TSFFCS(LENSFC), SWEFCS(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: TG3FCS(LENSFC), ZORFCS(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: ALFFCS(LENSFC,2), USTAR(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: FMM(LENSFC), FHH(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: SIHFCS(LENSFC), SICFCS(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: SITFCS(LENSFC), TPRCP(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: SRFLAG(LENSFC), SNDFCS(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: VMNFCS(LENSFC), VMXFCS(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: SLPFCS(LENSFC), ABSFCS(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: T2M(LENSFC), Q2M(LENSFC), SLMASK(LENSFC)
+ REAL, OPTIONAL, INTENT(OUT)         :: SLCFCS(LENSFC,LSOIL)
+ REAL, OPTIONAL, INTENT(OUT)         :: SMCFCS(LENSFC,LSOIL)
+ REAL, OPTIONAL, INTENT(OUT)         :: STCFCS(LENSFC,LSOIL)
+ REAL(KIND=4), OPTIONAL, INTENT(OUT) :: ZSOIL(LSOIL)
 
- REAL, INTENT(OUT)         :: CVFCS(LENSFC), CVBFCS(LENSFC)
- REAL, INTENT(OUT)         :: CVTFCS(LENSFC), ALBFCS(LENSFC,4)
- REAL, INTENT(OUT)         :: SLIFCS(LENSFC), CNPFCS(LENSFC)
- REAL, INTENT(OUT)         :: VEGFCS(LENSFC), F10M(LENSFC)
- REAL, INTENT(OUT)         :: VETFCS(LENSFC), SOTFCS(LENSFC)
- REAL, INTENT(OUT)         :: TSFFCS(LENSFC), SNOFCS(LENSFC)
- REAL, INTENT(OUT)         :: TG3FCS(LENSFC), ZORFCS(LENSFC)
- REAL, INTENT(OUT)         :: ALFFCS(LENSFC,2), USTAR(LENSFC)
- REAL, INTENT(OUT)         :: FMM(LENSFC), FHH(LENSFC)
- REAL, INTENT(OUT)         :: SIHFCS(LENSFC), SICFCS(LENSFC)
- REAL, INTENT(OUT)         :: SITFCS(LENSFC), TPRCP(LENSFC)
- REAL, INTENT(OUT)         :: SRFLAG(LENSFC), SWDFCS(LENSFC)
- REAL, INTENT(OUT)         :: VMNFCS(LENSFC), VMXFCS(LENSFC)
- REAL, INTENT(OUT)         :: SLPFCS(LENSFC), ABSFCS(LENSFC)
- REAL, INTENT(OUT)         :: T2M(LENSFC), Q2M(LENSFC), SLMASK(LENSFC)
- REAL, INTENT(OUT)         :: SLCFCS(LENSFC,LSOIL)
- REAL, INTENT(OUT)         :: SMCFCS(LENSFC,LSOIL)
- REAL, INTENT(OUT)         :: STCFCS(LENSFC,LSOIL)
- REAL(KIND=4), INTENT(OUT) :: ZSOIL(LSOIL)
-
- TYPE(NSST_DATA)           :: NSST
+ TYPE(NSST_DATA), OPTIONAL           :: NSST ! intent(out) will crash 
+                                             ! because subtypes are allocated in main.
 
  CHARACTER(LEN=50)         :: FNBGSI
  CHARACTER(LEN=3)          :: RANKCH
@@ -1292,8 +1294,12 @@ MODULE READ_WRITE_DATA
  CALL MPI_COMM_RANK(MPI_COMM_WORLD, MYRANK, ERROR)
 
  WRITE(RANKCH, '(I3.3)') (MYRANK+1)
-
- FNBGSI = "./fnbgsi." // RANKCH
+ 
+ IF (INC_FILE) THEN
+        FNBGSI = "./xainc." // RANKCH
+ ELSE
+        FNBGSI = "./fnbgsi." // RANKCH
+ ENDIF
 
  PRINT*
  PRINT*, "READ INPUT SFC DATA FROM: "//TRIM(FNBGSI)
@@ -1318,29 +1324,39 @@ MODULE READ_WRITE_DATA
 
  ALLOCATE(DUMMY(IDIM,JDIM))
 
+ IF (PRESENT(TSFFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "tsea", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING tsea ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING tsea' )
  TSFFCS = RESHAPE(DUMMY, (/LENSFC/))
+ ENDIF
 
+ IF (PRESENT(SWEFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "sheleg", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING sheleg ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING sheleg' )
- SNOFCS = RESHAPE(DUMMY, (/LENSFC/))
+ SWEFCS = RESHAPE(DUMMY, (/LENSFC/))
+ ENDIF
 
+ IF (PRESENT(TG3FCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "tg3", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING tg3 ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING tg3' )
  TG3FCS = RESHAPE(DUMMY, (/LENSFC/))
+ ENDIF
 
+ IF (PRESENT(ZORFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "zorl", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING zorl ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING zorl' )
  ZORFCS = RESHAPE(DUMMY, (/LENSFC/))
+ ENDIF
+
+ IF (PRESENT(ALBFCS)) THEN
 
  ERROR=NF90_INQ_VARID(NCID, "alvsf", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING alvsf ID' )
@@ -1366,6 +1382,9 @@ MODULE READ_WRITE_DATA
  CALL NETCDF_ERR(ERROR, 'READING alnwf' )
  ALBFCS(:,4) = RESHAPE(DUMMY, (/LENSFC/))
   
+ ENDIF
+
+ IF (PRESENT(SLIFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "slmsk", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING slmsk ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
@@ -1373,37 +1392,49 @@ MODULE READ_WRITE_DATA
  SLIFCS = RESHAPE(DUMMY, (/LENSFC/))
  SLMASK = SLIFCS
  WHERE (SLMASK > 1.5) SLMASK=0.0  ! remove sea ice
-  
+ ENDIF
+
+ IF (PRESENT(CNPFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "canopy", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING canopy ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING canopy' )
  CNPFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(VEGFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "vfrac", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING vfrac ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING vfrac' )
  VEGFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(F10M)) THEN
  ERROR=NF90_INQ_VARID(NCID, "f10m", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING f10m ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING f10m' )
  F10M = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(VETFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "vtype", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING vtype ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING vtype' )
  VETFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(SOTFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "stype", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING stype ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING stype' )
  SOTFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(ALFFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "facsf", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING facsf ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
@@ -1415,96 +1446,127 @@ MODULE READ_WRITE_DATA
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING facwf' )
  ALFFCS(:,2) = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(USTAR)) THEN
  ERROR=NF90_INQ_VARID(NCID, "uustar", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING uustar ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING uustar' )
  USTAR = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(FMM)) THEN
  ERROR=NF90_INQ_VARID(NCID, "ffmm", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING ffmm ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING ffmm' )
  FMM = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(FHH)) THEN
  ERROR=NF90_INQ_VARID(NCID, "ffhh", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING ffhh ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING ffhh' )
  FHH = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(SIHFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "hice", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING hice ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING hice' )
  SIHFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(SICFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "fice", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING fice ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING fice' )
  SICFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(SITFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "tisfc", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING tisfc ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING tisfc' )
  SITFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(TPRCP)) THEN
  ERROR=NF90_INQ_VARID(NCID, "tprcp", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING tprcp ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING tprcp' )
  TPRCP = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(SRFLAG)) THEN
  ERROR=NF90_INQ_VARID(NCID, "srflag", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING srflag ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING srflag' )
  SRFLAG = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(SNDFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "snwdph", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING snwdph ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING snwdph' )
- SWDFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ SNDFCS = RESHAPE(DUMMY, (/LENSFC/))
+ ENDIF
+
+ IF (PRESENT(VMNFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "shdmin", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING shdmin ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING shdmin' )
  VMNFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(VMXFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "shdmax", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING shdmax ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING shdmax' )
  VMXFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(SLPFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "slope", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING slope ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING slope' )
  SLPFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(ABSFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "snoalb", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING snoalb ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING snoalb' )
  ABSFCS = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(T2M)) THEN
  ERROR=NF90_INQ_VARID(NCID, "t2m", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING t2m ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING t2m' )
  T2M = RESHAPE(DUMMY, (/LENSFC/))
-  
+ ENDIF
+
+ IF (PRESENT(Q2M)) THEN
  ERROR=NF90_INQ_VARID(NCID, "q2m", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING q2m ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy)
  CALL NETCDF_ERR(ERROR, 'READING q2m' )
  Q2M = RESHAPE(DUMMY, (/LENSFC/))
+ ENDIF
   
  NSST_READ : IF(DO_NSST) THEN
 
@@ -1625,39 +1687,47 @@ MODULE READ_WRITE_DATA
 
  ALLOCATE(DUMMY3D(IDIM,JDIM,LSOIL))
 
+ IF (PRESENT(SMCFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "smc", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING smc ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy3d)
  CALL NETCDF_ERR(ERROR, 'READING smc' )
  SMCFCS = RESHAPE(DUMMY3D, (/LENSFC,LSOIL/))
+ ENDIF
 
+ IF (PRESENT(SLCFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "slc", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING slc ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy3d)
  CALL NETCDF_ERR(ERROR, 'READING slc' )
  SLCFCS = RESHAPE(DUMMY3D, (/LENSFC,LSOIL/))
+ ENDIF
 
+ IF (PRESENT(STCFCS)) THEN
  ERROR=NF90_INQ_VARID(NCID, "stc", ID_VAR)
  CALL NETCDF_ERR(ERROR, 'READING stc ID' )
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy3d)
  CALL NETCDF_ERR(ERROR, 'READING stc' )
  STCFCS = RESHAPE(DUMMY3D, (/LENSFC,LSOIL/))
+ ENDIF
 
  DEALLOCATE(DUMMY3D)
 
 ! cloud fields not in warm restart files.  set to zero?
 
- CVFCS = 0.0
- CVTFCS = 0.0
- CVBFCS = 0.0
+ IF (PRESENT(CVFCS)) CVFCS = 0.0
+ IF (PRESENT(CVTFCS)) CVTFCS = 0.0
+ IF (PRESENT(CVBFCS)) CVBFCS = 0.0
 
 ! soil layer thicknesses not in warm restart files.  hardwire
 ! for now.
-
+ 
+ IF (PRESENT(ZSOIL)) THEN
  ZSOIL(1) = -0.1
  ZSOIL(2) = -0.4
  ZSOIL(3) = -1.0
  ZSOIL(4) = -2.0
+ ENDIF
 
  ERROR = NF90_CLOSE(NCID)
 

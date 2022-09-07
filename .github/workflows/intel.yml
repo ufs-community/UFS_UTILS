@@ -16,7 +16,7 @@ jobs:
       CXX: icpc
     strategy:
       matrix:
-        os: [ubuntu-20.04]
+        os: [ubuntu-latest]
 
     steps:
 
@@ -37,7 +37,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/netcdf
-        key: netcdf-c-$4.7.4-{{ runner.os }}-intel
+        key: netcdf-c-$4.7.4-{{ runner.os }}-intel3
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
@@ -46,7 +46,7 @@ jobs:
         wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
         tar -xzf hdf5-1.10.7.tar.gz
         pushd hdf5-1.10.7
-        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests
+        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests --disable-shared --disable-shared --enable-static
         make -j2
         make install
            
@@ -56,10 +56,10 @@ jobs:
         export CC=mpiicc
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
-        wget https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.7.4.tar.gz &> /dev/null
-        tar -xzf netcdf-c-4.7.4.tar.gz
+        wget https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.7.4.tar.gz &> /dev/null
+        tar -xzf v4.7.4.tar.gz
         pushd netcdf-c-4.7.4
-        ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities
+        ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities --disable-shared
         make -j2
         make install
 
@@ -72,10 +72,11 @@ jobs:
         export FC=mpiifort
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
+        export LIBS=`nc-config --libs`
         wget https://github.com/Unidata/netcdf-fortran/archive/v4.5.3.tar.gz &> /dev/null
         tar -xzf v4.5.3.tar.gz
         pushd netcdf-fortran-4.5.3
-        ./configure --prefix=${HOME}/netcdf
+        ./configure --prefix=${HOME}/netcdf --disable-shared
         make -j2
         make install
 
@@ -84,16 +85,16 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf-8.0.1-${{ runner.os }}-intel
+        key: esmf-8.2.0-${{ runner.os }}-intel3
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         pushd ~
-        export ESMF_DIR=~/esmf-ESMF_8_0_1
-        wget https://github.com/esmf-org/esmf/archive/ESMF_8_0_1.tar.gz &> /dev/null
-        tar zxf ESMF_8_0_1.tar.gz
-        cd esmf-ESMF_8_0_1
+        export ESMF_DIR=~/esmf-ESMF_8_2_0
+        wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
+        tar zxf ESMF_8_2_0.tar.gz
+        cd esmf-ESMF_8_2_0
         export ESMF_COMM=intelmpi
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
@@ -103,6 +104,7 @@ jobs:
         export ESMF_NETCDF=split
         export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
         export ESMF_NETCDF_LIBPATH=${HOME}/netcdf/lib
+        export ESMF_NETCDF_LIBS="-lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lz"
         make -j2
         make install
 
@@ -111,7 +113,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: jasper-2.0.25-${{ runner.os }}-intel
+        key: jasper-2.0.25-${{ runner.os }}-intel3
 
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
@@ -120,7 +122,7 @@ jobs:
         tar zxf version-2.0.25.tar.gz
         cd jasper-version-2.0.25
         mkdir build-jasper && cd build-jasper
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper -DJAS_ENABLE_SHARED=OFF
         make -j2
         make install
 
@@ -135,15 +137,15 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/nceplibs
-        key: nceplibs-1.3.0-${{ runner.os }}-intel
+        key: nceplibs-1.4.0-${{ runner.os }}-intel3
 
     - name: build-nceplibs
       if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
-        wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.3.0.tar.gz &> /dev/null
-        tar zxf v1.3.0.tar.gz
-        cd NCEPLIBS-1.3.0
+        wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.4.0.tar.gz &> /dev/null
+        tar zxf v1.4.0.tar.gz
+        cd NCEPLIBS-1.4.0
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/netcdf' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
         make -j2
@@ -152,19 +154,18 @@ jobs:
       uses: actions/checkout@v2
       with: 
         path: ufs_utils
+        submodules: recursive
 
     - name: build
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
+        export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
         cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf'
         make -j2
     
     - name: test
       run: |
-        cd ufs_utils/build/tests
-        wget -i ./chgres_cube/data/files.txt -P ./chgres_cube/data
-        wget -i ./sfc_climo_gen/data/files.txt -P ./sfc_climo_gen/data
-        cd ../
+        cd ufs_utils/build
         ctest --rerun-failed --output-on-failure

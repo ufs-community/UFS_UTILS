@@ -22,7 +22,7 @@
                                        soilt_updated(:,:,:), &
                                        soilt_correct(:,:,:)
  real(esmf_kind_r8), allocatable    :: skint(:,:)
- real(esmf_kind_r4), allocatable    :: cnwat_bad(:,:), &
+ real(esmf_kind_r8), allocatable    :: cnwat_bad(:,:), &
                                        cnwat_updated(:,:), &
                                        cnwat_correct(:,:)
 

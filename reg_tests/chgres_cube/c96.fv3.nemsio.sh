@@ -63,6 +63,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< C96 FV3 GAUSSIAN NEMSIO TEST FAILED. >>>"
+  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+    $HOMEufs/reg_tests/update_baseline.sh $HOMEreg "c96_fv3_nemsio" $commit_num
+  fi
 else
   echo "<<< C96 FV3 GAUSSIAN NEMSIO TEST PASSED. >>>"
 fi

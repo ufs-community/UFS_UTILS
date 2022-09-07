@@ -1,2 +1,5 @@
 leak:ESMCI
+leak:ESMC
+leak:esmc
 leak:esmf
+leak:std::vector

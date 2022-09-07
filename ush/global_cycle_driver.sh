@@ -8,11 +8,10 @@ set -eux
 # Rahul Mahajan, 10/11/2017
 #-------------------------------------------------------------------------------------------------
 
-export machine=${machine:-"WCOSS_C"}
-
 export CASE=${CASE:-C768}                    # resolution of tile: 48, 96, 192, 384, 768, 1152, 3072
 export CDATE=${CDATE:-${cdate:-2017031900}}  # format yyyymmddhh yyyymmddhh ...
 export CDUMP=${CDUMP:-gfs}                   # gfs or gdas
+export COMPONENT=${COMPONENT:-atmos}
 
 pwd=$(pwd)
 export NWPROD=${NWPROD:-$pwd}
@@ -38,9 +37,9 @@ export DELTSFC=${DELTSFC:-6}
 PDY=$(echo $CDATE | cut -c1-8)
 cyc=$(echo $CDATE | cut -c9-10)
 
-export FNTSFA=${FNTSFA:-$DMPDIR/$CDATE/$CDUMP/${CDUMP}.t${cyc}z.rtgssthr.grb}
-export FNSNOA=${FNSNOA:-$DMPDIR/$CDATE/$CDUMP/${CDUMP}.t${cyc}z.snogrb_t1534.3072.1536}
-export FNACNA=${FNACNA:-$DMPDIR/$CDATE/$CDUMP/${CDUMP}.t${cyc}z.seaice.5min.blend.grb}
+export FNTSFA=${FNTSFA:-$DMPDIR/${CDUMP}.${PDY}/${cyc}/${COMPONENT}/${CDUMP}.t${cyc}z.rtgssthr.grb}
+export FNSNOA=${FNSNOA:-$DMPDIR/${CDUMP}.${PDY}/${cyc}/${COMPONENT}/${CDUMP}.t${cyc}z.snogrb_t1534.3072.1536}
+export FNACNA=${FNACNA:-$DMPDIR/${CDUMP}.${PDY}/${cyc}/${COMPONENT}/${CDUMP}.t${cyc}z.seaice.5min.blend.grb}
 
 export CYCLVARS=${CYCLVARS:-"FSNOL=-2.,FSNOS=99999.,"}
 
@@ -53,6 +52,7 @@ fi
 export DO_SFCCYLE=${DO_SFCCYCLE:-".true."}
 export DO_LNDINC=${DO_LNDINC:-".false."}
 export LND_SOI_FILE=${LND_SOI_FILE:-"NULL"}
+export DO_SNO_INC=${DO_SNO_INC:-".false."}
 
 CRES=$(echo $CASE | cut -c 2-)
 JCAP_CASE=$((2*CRES-2))
@@ -75,6 +75,9 @@ for n in $(seq 1 $ntiles); do
   ln -fs $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc  $DATA/fnbgso.00$n
   ln -fs $FIXfv3/C${CRES}/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
   ln -fs $FIXfv3/C${CRES}/C${CRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
+  if [[ "$DO_SNO_INC" == ".true." ]] ; then  
+        ln -fs $COMIN/$PDY.${cyc}0000.xainc.tile${n}.nc      $DATA/xainc.00$n
+  fi
 done
 
 $CYCLESH

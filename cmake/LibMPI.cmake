@@ -45,40 +45,6 @@ function (platform_name RETURN_VARIABLE)
 
     set (${RETURN_VARIABLE} "hera" PARENT_SCOPE)
 
-  # wcoss_cray (Luna)
-  elseif (SITENAME MATCHES "^llogin1" OR
-      SITENAME MATCHES "^llogin2" OR
-      SITENAME MATCHES "^llogin3")
-
-    set (${RETURN_VARIABLE} "wcoss_cray" PARENT_SCOPE)
-    
-  # wcoss_cray (Surge)
-  elseif (SITENAME MATCHES "^slogin1" OR
-      SITENAME MATCHES "^slogin2" OR
-      SITENAME MATCHES "^slogin3")
-
-    set (${RETURN_VARIABLE} "wcoss_cray" PARENT_SCOPE)
-    
-  # wcoss_dell_p3 (Venus)
-  elseif (SITENAME MATCHES "^v71a1.ncep.noaa.gov" OR
-      SITENAME MATCHES "^v71a2.ncep.noaa.gov" OR
-      SITENAME MATCHES "^v71a3.ncep.noaa.gov" OR
-      SITENAME MATCHES "^v72a1.ncep.noaa.gov" OR
-      SITENAME MATCHES "^v72a2.ncep.noaa.gov" OR
-      SITENAME MATCHES "^v72a3.ncep.noaa.gov")
-
-    set (${RETURN_VARIABLE} "wcoss_dell_p3" PARENT_SCOPE)
-  
-  # wcoss_dell_p3 (Mars)
-  elseif (SITENAME MATCHES "^m71a1.ncep.noaa.gov" OR
-      SITENAME MATCHES "^m71a2.ncep.noaa.gov" OR
-      SITENAME MATCHES "^m71a3.ncep.noaa.gov" OR
-      SITENAME MATCHES "^m72a1.ncep.noaa.gov" OR
-      SITENAME MATCHES "^m72a2.ncep.noaa.gov" OR
-      SITENAME MATCHES "^m72a3.ncep.noaa.gov")
-
-    set (${RETURN_VARIABLE} "wcoss_dell_p3" PARENT_SCOPE)
-
   # wcoss2
   elseif (SITENAME MATCHES "^along01" OR
       SITENAME MATCHES "^alogin02")
@@ -154,7 +120,11 @@ function (platform_name RETURN_VARIABLE)
     
 
     set (${RETURN_VARIABLE} "stampede" PARENT_SCOPE)
-          
+
+  elseif (SITENAME MATCHES "^s4-submit.ssec.wisc.edu")
+
+    set (${RETURN_VARIABLE} "s4" PARENT_SCOPE)
+
   else ()
 
     set (${RETURN_VARIABLE} "unknown" PARENT_SCOPE)
