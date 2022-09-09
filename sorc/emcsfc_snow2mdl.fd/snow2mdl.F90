@@ -156,7 +156,9 @@
 !!  @author George Gayno org: w/np2  @date 2005-Dec-16
  subroutine interp
  use gdswzd_mod
- use ipolates_mod
+
+! To use v4.0 of the IP library, uncomment this line.
+! use ipolates_mod
 
  implicit none
 

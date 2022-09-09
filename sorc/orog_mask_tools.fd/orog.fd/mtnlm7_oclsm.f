@@ -3554,7 +3554,10 @@ C
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,
      3           is_south_pole,is_north_pole,IMI,JMI,OA_IN,OL_IN,
      4           slm_in,lon_in,lat_in)
-      use ipolates_mod
+
+! To use v4.0 of the ip library, uncomment this line.
+!     use ipolates_mod
+
       implicit none
       real, parameter :: MISSING_VALUE = -9999.
       real, parameter :: D2R = 3.14159265358979/180.

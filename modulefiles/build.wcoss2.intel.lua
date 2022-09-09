@@ -51,7 +51,9 @@ load(pathJoin("sigio", sigio_ver))
 sp_ver=os.getenv("sp_ver") or "2.3.3"
 load(pathJoin("sp", sp_ver))
 
-setenv("ip_DIR","/lfs/h2/emc/global/noscrub/George.Gayno/ip.git/lib64/cmake/ip")
+ip_ver=os.getenv("ip_ver") or "3.3.3"
+load(pathJoin("ip", ip_ver))
+-- setenv("ip_DIR","/lfs/h2/emc/global/noscrub/George.Gayno/ip.git/lib64/cmake/ip")
 
 g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
