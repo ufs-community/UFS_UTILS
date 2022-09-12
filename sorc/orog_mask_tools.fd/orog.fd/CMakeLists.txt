@@ -1,5 +1,5 @@
 set(lib_src netcdf_io.F90)
-set(exe_src mtnlm7_oclsm.f)
+set(exe_src mtnlm7_oclsm.F)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
@@ -13,7 +13,7 @@ endif()
 set(exe_name orog)
 
 add_library(orog_lib STATIC ${lib_src})
-add_executable(${exe_name} mtnlm7_oclsm.f)
+add_executable(${exe_name} mtnlm7_oclsm.F)
 
 set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
 set_target_properties(orog_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
