@@ -47,7 +47,9 @@ function (platform_name RETURN_VARIABLE)
 
   # wcoss2
   elseif (SITENAME MATCHES "^along01" OR
-      SITENAME MATCHES "^alogin02")
+      SITENAME MATCHES "^alogin02" OR
+      SITENAME MATCHES "^clogin" OR
+      SITENAME MATCHES "^dlogin")
 
     set (${RETURN_VARIABLE} "wcoss2" PARENT_SCOPE)
 
