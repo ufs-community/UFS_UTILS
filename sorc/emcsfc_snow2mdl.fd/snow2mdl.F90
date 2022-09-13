@@ -157,8 +157,10 @@
  subroutine interp
  use gdswzd_mod
 
-! To use v4.0 of the IP library, uncomment this line.
-! use ipolates_mod
+! Required when using iplib v4.0 or higher.
+#ifdef IP_V4
+ use ipolates_mod
+#endif
 
  implicit none
 

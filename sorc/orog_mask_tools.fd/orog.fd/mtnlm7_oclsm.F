@@ -3555,8 +3555,10 @@ C
      3           is_south_pole,is_north_pole,IMI,JMI,OA_IN,OL_IN,
      4           slm_in,lon_in,lat_in)
 
-! To use v4.0 of the ip library, uncomment this line.
-!     use ipolates_mod
+! Required when using iplib v4.0 or higher.
+#ifdef IP_V4
+      use ipolates_mod
+#endif
 
       implicit none
       real, parameter :: MISSING_VALUE = -9999.
