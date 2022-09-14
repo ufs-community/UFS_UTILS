@@ -571,30 +571,30 @@ ENDIF
         print*,'bad point 4 ',i,landfrac(i),slmaskw(i),vegfcs(i)
        endif
 
-
      ENDDO
-
-     print*,'got here'
-     stop
 
    ELSE
 ! for running uncoupled (non-fractional grid)
+     DO I=1,LENSFC
+       IF(NINT(SLMASK(I)) == 1) THEN
+         SLMASKL(I) = 1.0_KIND_io8
+         SLMASKW(I) = 1.0_KIND_io8
+       ELSE
+         SLMASKL(I) = 0.0_KIND_io8
+         SLMASKW(I) = 0.0_KIND_io8
+       ENDIF
+     ENDDO  
+
+   ENDIF ! frac_grid
+
    DO I=1,LENSFC
-     IF(NINT(SLMASK(I)) == 1) THEN
-       SLMASKL(I) = 1.0_KIND_io8
-       SLMASKW(I) = 1.0_KIND_io8
-     ELSE
-       SLMASKL(I) = 0.0_KIND_io8
-       SLMASKW(I) = 0.0_KIND_io8
-     ENDIF
      if(nint(slmask(i)) == 0) then
        min_ice(i) = 0.15_KIND_io8
      else
        min_ice(i) = 0.0_KIND_io8
      endif
-   ENDDO  
+   ENDDO
 
-   ENDIF ! frac_grid
    num_threads = num_parthds()
    PRINT*
    PRINT*,"CALL SFCCYCLE TO UPDATE SURFACE FIELDS."
@@ -610,6 +610,27 @@ ENDIF
                SZ_NML, INPUT_NML_FILE,                   &
                min_ice, &
                IALB,ISOT,IVEGSRC,TILE_NUM,I_INDEX,J_INDEX)
+
+   print*,'after call to sfccycle '
+
+     DO I=1,LENSFC
+
+       if(nint(slmaskl(i)) == 1 .and. vegfcs(i) == 0.0) then
+        print*,'bad point 5 ',i,landfrac(i),slmaskl(i),vegfcs(i)
+       endif
+       if(nint(slmaskl(i)) == 0 .and. vegfcs(i) > 0.0) then
+        print*,'bad point 6 ',i,landfrac(i),slmaskw(i),vegfcs(i)
+       endif
+
+       if(landfrac(i) > 0.0_kind_io8 .and. vegfcs(i) == 0.0) then
+        print*,'bad point 7 ',i,landfrac(i),vegfcs(i)
+       endif
+       if(landfrac(i) == 0.0_kind_io8 .and. vegfcs(i) > 0.0) then
+        print*,'bad point 8 ',i,landfrac(i),vegfcs(i)
+       endif
+
+     ENDDO
+
    DEALLOCATE(SLMASKL, SLMASKW)
  ENDIF
 
@@ -767,18 +788,21 @@ ENDIF
 !--------------------------------------------------------------------------------
 
 ! Will keep this for non-fractional grid. Comment out for now.
-!CALL WRITE_DATA(SLIFCS,TSFFCS,SWEFCS,TG3FCS,ZORFCS,         &
-!                ALBFCS,ALFFCS,VEGFCS,CNPFCS,F10M,           &
-!                T2M,Q2M,VETFCS,SOTFCS,USTAR,FMM,FHH,        &
-!                SICFCS,SIHFCS,SITFCS,                       &
-!                TPRCP,SRFLAG,SNDFCS,                        &
-!                VMNFCS,VMXFCS,SLPFCS,ABSFCS,                &
-!                SLCFCS,SMCFCS,STCFCS,                       &
-!                IDIM,JDIM,LENSFC,LSOIL,DO_NSST,NSST)
+ if (.not. frac_grid) then
+   CALL WRITE_DATA(SLIFCS,TSFFCS,SWEFCS,TG3FCS,ZORFCS,         &
+                 ALBFCS,ALFFCS,VEGFCS,CNPFCS,F10M,           &
+                 T2M,Q2M,VETFCS,SOTFCS,USTAR,FMM,FHH,        &
+                 SICFCS,SIHFCS,SITFCS,                       &
+                 TPRCP,SRFLAG,SNDFCS,                        &
+                 VMNFCS,VMXFCS,SLPFCS,ABSFCS,                &
+                 SLCFCS,SMCFCS,STCFCS,                       &
+                 IDIM,JDIM,LENSFC,LSOIL,DO_NSST,NSST)
 
+ else
 
-!vegfcs=99.
- call write_data_frac_grid(vegfcs,lensfc,idim,jdim)
+   print*,'write out fractional grid'
+   call write_data_frac_grid(vegfcs,lensfc,idim,jdim)
+ endif
 
  IF (DO_NSST) THEN
    DEALLOCATE(NSST%C_0)
