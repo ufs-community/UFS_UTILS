@@ -338,6 +338,7 @@
  INTEGER             :: I_INDEX(LENSFC), J_INDEX(LENSFC)
  INTEGER             :: IDUM(IDIM,JDIM)
  integer             :: num_parthds, num_threads
+ integer :: ichk, jchk, ijchk
 
  logical             :: frac_grid
 
@@ -494,6 +495,13 @@ ENDIF
                 ABSFCS=ABSFCS,T2M=T2M      ,Q2M=Q2M      ,SLMASK=SLMASK,  &
                 ZSOIL=ZSOIL,   NSST=NSST)
 
+ ALBFCS=-9.
+
+ ichk = 282
+ jchk = 362
+ ijchk = (jchk-1) * idim + ichk
+
+ print*,'chk point after read_data ',landfrac(ijchk),slmask(ijchk),vegfcs(ijchk)
 
  print*,'vegfcs check ',maxval(vegfcs),minval(vegfcs)
  do i=1,lensfc
@@ -613,6 +621,7 @@ ENDIF
 
    print*,'after call to sfccycle '
 
+   print*,'chk point after sfccycle ',landfrac(ijchk),slmask(ijchk),vegfcs(ijchk)
      DO I=1,LENSFC
 
        if(nint(slmaskl(i)) == 1 .and. vegfcs(i) == 0.0) then
@@ -801,7 +810,7 @@ ENDIF
  else
 
    print*,'write out fractional grid'
-   call write_data_frac_grid(vegfcs,lensfc,idim,jdim)
+   call write_data_frac_grid(vegfcs,albfcs,lensfc,idim,jdim)
  endif
 
  IF (DO_NSST) THEN
