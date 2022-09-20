@@ -82,7 +82,7 @@ envir=${envir:-"prod"}
 NWROOT=${NWROOT:-"/nw${envir}"}
 
 HOMEgfs=${HOMEgfs:-${NWPROD:-$NWROOT/gfs.${gfs_ver:?}}}
-FIXam=${FIXam:-$HOMEgfs/fix/fix_am}
+FIXam=${FIXam:-$HOMEgfs/fix/am}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
  
 # output com directory.

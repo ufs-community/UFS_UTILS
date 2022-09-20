@@ -9,8 +9,8 @@ set -x
 MEMBER=$1
 
 FIX_FV3=$UFS_DIR/fix
-FIX_ORO=${FIX_FV3}/fix_fv3_gmted2010
-FIX_AM=${FIX_FV3}/fix_am
+FIX_ORO=${FIX_FV3}/orog
+FIX_AM=${FIX_FV3}/am
 
 WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
