@@ -16,7 +16,7 @@ export FIXfv3=${HOMEreg}/fix/C96
 export COMIN=${HOMEreg}/input_data/fv3.netcdf
 export ATM_FILES_INPUT=gfs.t00z.atmf000.nc
 export SFC_FILES_INPUT=gfs.t00z.sfcf000.nc
-export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
+export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
 export INPUT_TYPE="gaussian_netcdf"
 
 export CDATE=2020020200

@@ -17,8 +17,8 @@ pwd=$(pwd)
 export NWPROD=${NWPROD:-$pwd}
 export DMPDIR=${DMPDIR:-$NWPROD}
 export HOMEgfs=${HOMEgfs:-$NWPROD/gfs.v15.0.0}
-export FIXam=${FIXam:-$HOMEgfs/fix/fix_am}   
-export FIXfv3=${FIXfv3:-$HOMEgfs/fix/fix_fv3_gmted2010}
+export FIXam=${FIXam:-$HOMEgfs/fix/am}   
+export FIXfv3=${FIXfv3:-$HOMEgfs/fix/orog}
 
 ntiles=${ntiles:-6}
 DONST=${DONST:-"NO"}

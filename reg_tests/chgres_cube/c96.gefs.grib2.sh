@@ -17,7 +17,7 @@ export FIXfv3=${HOMEreg}/fix/C96
 export COMIN=${HOMEreg}/input_data/gefs.grib2
 
 export GRIB2_FILE_INPUT=gec00.t06z.pgrb2abf00
-export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l65.txt
+export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l65.txt
 export VARMAP_FILE=${HOMEufs}/parm/varmap_tables/GFSphys_var_map.txt
 export INPUT_TYPE='grib2'
 export CONVERT_NST=".false."
