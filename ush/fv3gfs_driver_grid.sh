@@ -102,7 +102,7 @@ export out_dir=${out_dir:?}
 export home_dir=${home_dir:-"$PWD/../"}
 export script_dir=$home_dir/ush
 export exec_dir=${exec_dir:-"$home_dir/exec"}
-export topo=$home_dir/fix/fix_orog
+export topo=$home_dir/fix/orog
 
 export NCDUMP=${NCDUMP:-ncdump}
 
@@ -483,7 +483,7 @@ export WORK_DIR=$TEMP_DIR/sfcfields
 export SAVE_DIR=$out_dir/fix_sfc
 export BASE_DIR=$home_dir
 export FIX_FV3=$out_dir
-export input_sfc_climo_dir=$home_dir/fix/fix_sfc_climo
+export input_sfc_climo_dir=$home_dir/fix/sfc_climo
 
 if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   export HALO=$halop1

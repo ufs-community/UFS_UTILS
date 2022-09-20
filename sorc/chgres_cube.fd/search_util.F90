@@ -220,7 +220,7 @@
 !> Set default Sea Surface Temperature (SST) based on latitude.
 !!
 !! Based loosely on the average annual SST
-!! values from ./fix_am/cfs_oi2sst1x1monclim19822001.grb
+!! values from ./am/cfs_oi2sst1x1monclim19822001.grb
 !!
 !! The temperature in the polar and tropical regions
 !! is set to 273.16 and 300.0 Kelvin respectively. Polar 
