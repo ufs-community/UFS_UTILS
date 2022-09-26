@@ -27,7 +27,7 @@ target_include_directories(vcoord_gen_lib INTERFACE ${mod_dir})
 
 target_link_libraries(${exe_name} vcoord_gen_lib)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})
 
 
 # If doxygen documentation we enabled, build it.

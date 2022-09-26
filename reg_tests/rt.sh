@@ -17,6 +17,25 @@ rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
 git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
+rc=$?
+
+# Check to see if the clone was successful. Previously, it has
+# failed due to lack of disk space.
+
+if [[ $rc == 0 ]] && [[ -d UFS_UTILS ]];then
+  echo "Clone Successful"
+else
+  target=`hostname -s`
+  if [[ -d /lfs3 ]] ; then
+    target=Jet
+  elif [[ -d /lfs/h1 ]] ; then
+    target=WCOSS2
+  elif [[ -d /scratch1 ]] ; then
+    target=Hera
+  fi
+  echo "Clone Failed" | mail -s "UFS_UTILS Consistency Tests failed on ${target}" ${MAILTO}
+fi
+
 cd UFS_UTILS
 
 source sorc/machine-setup.sh
@@ -38,35 +57,23 @@ echo "Started on " `hostname -s` >> ${WORK_DIR}/reg_test_results.txt
 
 ./build_all.sh
 
-if [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
-    prod_machine=`cat /etc/prod`
-    prod_letter=${prod_machine:0:1}
-
-    this_machine=`hostname -s`
-    this_letter=${this_machine:0:1}
-
-    # Mars (m), Venus (v)
-    if [[ "${this_letter}" == "${prod_letter}" ]]; then
+if [[ $target == "wcoss2" ]]; then
+    this_machine=`cat /etc/cluster_name`
+    prod_machine=`grep primary /lfs/h1/ops/prod/config/prodmachinefile`
+    prod_machine=`echo ${prod_machine/primary:}`
+    if [[ "${this_machine}" == "${prod_machine}" ]]; then
         exit 0
     fi
 fi
 
-# Set machine_id variable for running link_fixdirs
-if [[ $target == "wcoss_dell_p3" ]]; then
-    machine_id=dell
-    module load lsf/10.1
-elif [[ $target == "wcoss_cray" ]]; then
-    machine_id=cray
-    module load xt-lsfhpc/9.1.3
-else
-    machine_id=$target
-fi
+machine_id=$target
 
 cd fix
 ./link_fixdirs.sh emc $machine_id
 
 cd ../reg_tests
 
+#if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] || [[ $target == "wcoss2" ]] ; then
 if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] ; then
 
   cd cpld_gridgen
@@ -107,18 +114,12 @@ for dir in snow2mdl global_cycle chgres_cube grid_gen; do
     cd ..
 done
 
-if [[ $target == "wcoss_dell_p3" ]]; then
-    module load lsf/10.1
-elif [[ $target == "wcoss_cray" ]]; then
-    module load xt-lsfhpc/9.1.3
-fi
-
-for dir in ice_blend; do
+for dir in weight_gen ice_blend; do
     cd $dir
     if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] ; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
-    elif [[ $target == "wcoss_dell_p3" ]] || [[ $target == "wcoss_cray" ]]; then
-        cat ./driver.$target.sh | bsub -P ${PROJECT_CODE}
+    elif [[ $target == "wcoss2" ]] ; then
+        qsub -v WORK_DIR ./driver.$target.sh
     fi
     
     # Wait for job to complete
@@ -139,7 +140,7 @@ echo "Commit hash: ${current_hash}" >> ${WORK_DIR}/reg_test_results.txt
 echo "" >> ${WORK_DIR}/reg_test_results.txt
 
 success=true
-for dir in cpld_gridgen chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
+for dir in weight_gen cpld_gridgen chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
     if grep -qi "FAILED" ${dir}/summary.log; then
         success=false
         echo "${dir} consistency tests FAILED" >> ${WORK_DIR}/reg_test_results.txt

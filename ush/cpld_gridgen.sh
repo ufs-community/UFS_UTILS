@@ -18,12 +18,12 @@ function edit_namelist {
       -e "s/DO_POSTWGTS/$DO_POSTWGTS/g"
 }
 
-export RESNAME=$1
+export RESNAME=${RESNAME:-$1}
 export DEBUG=.false.
 export MASKEDIT=.false.
 export DO_POSTWGTS=.false.
 export OUTDIR_PATH=${OUTDIR_PATH:-/scratch2/NCEPDEV/climate/Denise.Worthen/grids-20220116}
-export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/fix_fv3_gmted2010}
+export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
 APRUN=${APRUN:-"srun"}
 
 if [ $RESNAME = 400 ]; then
@@ -94,6 +94,8 @@ fi
 if [ ! -d ${OUTDIR_PATH} ]; then
   mkdir -p ${OUTDIR_PATH}
 fi
+
+cd ${OUTDIR_PATH}
 
 edit_namelist < grid.nml.IN > grid.nml
 $APRUN ./cpld_gridgen

@@ -15,4 +15,4 @@ target_link_libraries(make_solo_mosaic_lib
 
 target_link_libraries(make_solo_mosaic PRIVATE make_solo_mosaic_lib)
 
-install(TARGETS make_solo_mosaic RUNTIME DESTINATION ${exec_dir})
+install(TARGETS make_solo_mosaic)

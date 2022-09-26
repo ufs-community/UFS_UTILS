@@ -15,7 +15,7 @@ https://ufs-community.github.io/UFS_UTILS/.
 Utility | Programmer(s)
 --------|----------
 chgres_cube | George Gayno, Jeff Beck, Larissa Reames
-cpld_gridgen | Denise Worthen, Minsuk Ji
+cpld_gridgen | Denise Worthen
 emcsfc_ice_blend | George Gayno
 emcsfc_snow2mdl | George Gayno
 fre-nctools | GFDL progammer
@@ -27,6 +27,7 @@ grid_tools | R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), G
 orog_mask_tools | Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
 sfc_climo_gen | George Gayno
 vcoord_gen | Fanglin Yang, Mark Iredell
+weight_gen | George Gayno
 
 UFS_UTILS Code managers: George Gayno, Kyle Gerheiser, Jeff Beck, Larissa Reames
 
@@ -58,6 +59,14 @@ It also uses the following repositories:
 
 ## Installing
 
+On Orion, Jet, Hera and WCOSS2, invoke the build script:
+
+```
+./build_all.sh
+```
+
+Otherwise, do:
+
 ```
 mkdir build
 cd build
@@ -68,51 +77,36 @@ make install
 
 ## Contents
 
-The UFS_UTILS package contains the following utilities (under the sorc
-directory):
-- chgres_cube
-- cpld_gridgen
-- emcsfc_ice_blend
-- emcsfc_snow2mdl
-- fre-nctools
-- fvcom_tools
-- gblevents
-- global_cycle
-- grid_tools
-- orog_mask_tools
-- sfc_climo_gen
-- vcoord_gen
+The `sorc` directory contains the source code.
 
-The reg_tests directory contains the consistency test code.
+The `reg_tests` directory contains the consistency test code.
 
-The fix directory is where we set links to directories containing
+The `fix` directory contains links to directories containing
 large, static data files used by UFS_UTILS programs.
 
-The tests directory contains unit tests.
+The `tests` directory contains unit tests.
 
-The ush directory contains scripts to run UFS_UTILS programs.  Most
+The `ush` directory contains scripts to run UFS_UTILS programs.  Most
 are called from driver scripts.
 
-The util directory contains utility scripts to create coldstart
-initial conditions for GFS parallels, and to run the vertical
-coordinate generator.
+The `util` directory contains utility scripts.
 
-The parm directory contains variable mapping parameter tables used by
+The `parm` directory contains variable mapping parameter tables used by
 the chgres_cube program.
 
-The driver_scripts directory contains high-level driver scripts to
+The `driver_scripts` directory contains high-level driver scripts to
 create a model grid on officially supported HPC platforms.
 
-The modulefiles directory contains modules loaded when building
+The `modulefiles` directory contains modules loaded when building
 UFS_UTILS on supported HPC platforms.  They are also loaded at runtime
 by utility and consistency test scripts.
 
-The docs directory contains the control file for the doxygen
+The `docs` directory contains the control file for the doxygen
 documentation build, as well as some markdown files which are part of
 the documentation. It also contains (in the source subdirectory) the
 ReadTheDocs documentation files.
 
-The cmake directory contains CMake package find utilities, and utilities to
+The `cmake` directory contains CMake package find utilities, and utilities to
 run units tests on some supported HPC platforms.
 
 ## References

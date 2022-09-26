@@ -1,18 +1,15 @@
 #!/bin/bash
 
-#BSUB -oo log.grid.%J
-#BSUB -eo log.grid.%J
-#BSUB -q debug
-#BSUB -P GFS-DEV
-#BSUB -J grid_fv3
-#BSUB -W 0:30
-#BSUB -x                 # run not shared
-#BSUB -n 24              # total tasks
-#BSUB -R span[ptile=24]   # tasks per node
-#BSUB -R affinity[core(1):distribute=balance]
+#PBS -o log
+#PBS -e log
+#PBS -q debug
+#PBS -A GFS-DEV
+#PBS -l walltime=00:15:00
+#PBS -N make_grid
+#PBS -l select=1:ncpus=24:mem=100GB
 
 #-----------------------------------------------------------------------
-# Driver script to create a cubic-sphere based model grid on Dell.
+# Driver script to create a cubic-sphere based model grid on WCOSS2.
 #
 # Produces the following files (netcdf, each tile in separate file):
 #   1) 'mosaic' and 'grid' files containing lat/lon and other
@@ -60,6 +57,8 @@
 #  11) All files will be placed in "out_dir".
 #
 #-----------------------------------------------------------------------
+
+cd $PBS_O_WORKDIR
 
 source ../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../modulefiles
@@ -129,19 +128,23 @@ fi
 #   out_dir  - where files will be placed upon completion.
 #-----------------------------------------------------------------------
 
-export home_dir=$LS_SUBCWD/..
-export TEMP_DIR=/gpfs/dell1/stmp/$LOGNAME/fv3_grid.$gtype
-export out_dir=/gpfs/dell1/stmp/$LOGNAME/my_grids
+export home_dir=$PBS_O_WORKDIR/..
+export TEMP_DIR=/lfs/h2/emc/stmp/$LOGNAME/fv3_grid.$gtype
+export out_dir=/lfs/h2/emc/stmp/$LOGNAME/my_grids
 
 #-----------------------------------------------------------------------
-# Should not need to change anything below here.
+# Should not need to change anything below here unless you want to
+# to change the job card for the number of tasks to use. Then,
+# you will need to check APRUN_SFC and OMP_NUM_THREADS.
 #-----------------------------------------------------------------------
+
+set -x
 
 export APRUN=time
-export APRUN_SFC="mpirun -l"
+export APRUN_SFC="mpiexec -n 24 -ppn 24 -cpu-bind core"
 export OMP_NUM_THREADS=24 # orog code worked best with 24 threads.
+export OMP_PLACES=cores
 export OMP_STACKSIZE=2048m
-export machine=WCOSS_DELL_P3
 
 ulimit -a
 ulimit -s unlimited

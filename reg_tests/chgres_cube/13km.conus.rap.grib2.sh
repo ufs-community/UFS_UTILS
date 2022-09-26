@@ -19,7 +19,7 @@ export FIXsfc=${FIXfv3}/fix_sfc
 export COMIN=${HOMEreg}/input_data/rap.grib2
 
 export GRIB2_FILE_INPUT=1921221000900
-export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
+export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
 export VARMAP_FILE=${HOMEufs}/parm/varmap_tables/GSDphys_var_map.txt
 export INPUT_TYPE='grib2'
 export CONVERT_NST=".false."
@@ -38,7 +38,7 @@ export VGFRC_FROM_CLIMO=.true.
 export MINMAX_VGFRC_FROM_CLIMO=.true.
 export TG3_FROM_SOIL=.true.
 export LAI_FROM_CLIMO=.true.
-export GEOGRID_FILE_INPUT=${HOMEufs}/fix/fix_am/geo_em.d01.nc_RAPX
+export GEOGRID_FILE_INPUT=${HOMEufs}/fix/am/geo_em.d01.nc_RAPX
 
 export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
 

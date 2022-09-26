@@ -1,22 +1,26 @@
 #!/bin/bash
 
-#BSUB -W 0:01
-#BSUB -o log
-#BSUB -e log
-#BSUB -J vcoord
-#BSUB -q debug
-#BSUB -R "rusage[mem=100]"
-#BSUB -P GFS-DEV
+#PBS -l walltime=00:02:00
+#PBS -o log
+#PBS -e log
+#PBS -N vcoord
+#PBS -q debug
+#PBS -A GFS-DEV
+#PBS -l select=1:ncpus=1:mem=100MB
 
 #-------------------------------------------------------------------------------
 #
-# Generate a hybrid coordinate interface profile on WCOSS-Cray.
+# Generate a hybrid coordinate interface profile on WCOSS2.
 #
 # Build the repository using the ./build_all.sh script before running.
 #
 # Output 'ak' and 'bk' values are placed in $outfile.
 #
+# To run this script, do: 'qsub $script'
+#
 #-------------------------------------------------------------------------------
+
+cd $PBS_O_WORKDIR
 
 set -x
 
@@ -47,6 +51,6 @@ dptop=1.0              # real coordinate thickness at top (Pa)
 
 rm -f $outfile
 
-echo $levs $lupp $pbot $psig $ppre $pupp $ptop $dpbot $dpsig $dppre $dpupp $dptop | $PWD/../../exec/vcoord_gen > $outfile
+echo $levs $lupp $pbot $psig $ppre $pupp $ptop $dpbot $dpsig $dppre $dpupp $dptop | ../../exec/vcoord_gen > $outfile
 
 exit

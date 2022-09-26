@@ -22,7 +22,7 @@ tile=$2
 halo=$3
 griddir=$4
 outdir=$5
-topo_am=$6
+topo=$6
 workdir=$TEMP_DIR/C${res}/orog/tile$tile
 
 
@@ -46,8 +46,8 @@ fi
 cd $workdir
 
 ln -sf ${griddir}/$OUTGRID .
-ln -sf ${topo_am}/"HGT.Beljaars_filtered.lat-lon.30s_res.nc" .
-ln -sf ${topo_am}/"geo_em.d01.lat-lon.2.5m.HGT_M.nc" .
+ln -sf ${topo}/"HGT.Beljaars_filtered.lat-lon.30s_res.nc" .
+ln -sf ${topo}/"geo_em.d01.lat-lon.2.5m.HGT_M.nc" .
 
 cp $executable .
 

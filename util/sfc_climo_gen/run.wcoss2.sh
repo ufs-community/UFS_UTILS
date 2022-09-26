@@ -1,24 +1,26 @@
 #!/bin/bash
 
 #------------------------------------------------------------
-# Run the sfc_climo_gen program stand-alone on Dell using
+# Run the sfc_climo_gen program stand-alone on WCOSS2 using
 # pre-exiting 'grid' and 'orography files.
+#
+# To run, type: 'qsub $script'
 #------------------------------------------------------------
 
-#BSUB -oo log
-#BSUB -eo log
-#BSUB -q debug
-#BSUB -P GFS-DEV
-#BSUB -J grid_fv3
-#BSUB -W 0:10
-#BSUB -x                 # run not shared
-#BSUB -n 24              # total tasks
-#BSUB -R span[ptile=24]   # tasks per node
-#BSUB -R affinity[core(1):distribute=balance]
+#PBS -o log
+#PBS -e log
+#PBS -q debug
+#PBS -A GFS-DEV
+#PBS -N grid_fv3
+#PBS -l walltime=00:10:00
+#PBS -l select=1:ncpus=24:mem=75GB
 
 set -x
 
-export BASE_DIR=$LS_SUBCWD/../..
+# Adjust according to the PBS -l statement.
+export APRUN_SFC="mpiexec -n 24 -ppn 24 -cpu-bind core"
+
+export BASE_DIR=$PBS_O_WORKDIR/../..
 
 source ${BASE_DIR}/sorc/machine-setup.sh > /dev/null 2>&1
 module use ${BASE_DIR}/modulefiles
@@ -35,7 +37,7 @@ export res=384
 # Where the model "grid", "mosaic" and "oro" files reside.
 #-------------------------------------
 
-export FIX_FV3=${BASE_DIR}/fix/fix_fv3_gmted2010/C${res}
+export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 
 #-------------------------------------
 # Uncomment for regional grids.
@@ -58,8 +60,8 @@ export veg_type_src="viirs.igbp.0.05"    # Use global 0.05-degree viirs data
 # Set working directory and directory where output files will be saved.
 #-------------------------------------
 
-export WORK_DIR=/gpfs/dell1/stmp/$LOGNAME/work.sfc
-export SAVE_DIR=/gpfs/dell1/stmp/$LOGNAME/sfc.C${res}
+export WORK_DIR=/lfs/h2/emc/stmp/$LOGNAME/work.sfc
+export SAVE_DIR=/lfs/h2/emc/stmp/$LOGNAME/sfc.C${res}
 
 #-------------------------------------
 # Should not have to touch anything below here.
@@ -72,8 +74,7 @@ if [[ $GRIDTYPE = "regional" ]]; then
   ln -fs $FIX_FV3/C${res}_oro_data.tile7.halo${HALO}.nc $FIX_FV3/C${res}_oro_data.tile7.nc
 fi
 
-export input_sfc_climo_dir=${BASE_DIR}/fix/fix_sfc_climo
-export APRUN_SFC="mpirun -l"
+export input_sfc_climo_dir=${BASE_DIR}/fix/sfc_climo
 
 ulimit -a
 ulimit -s unlimited

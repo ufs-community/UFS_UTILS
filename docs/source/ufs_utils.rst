@@ -600,3 +600,51 @@ Run script
 ----------
 
 To run, use script ./util/vcoord_gen/run.sh
+
+weight_gen   
+==========
+
+Introduction
+------------
+
+Creates ESMF 'scrip' files for gaussian grids. 
+
+Code structure
+--------------
+
+Location of the source code: ./sorc/weight_gen.fd.
+
+Program inputs
+--------------
+
+The global FV3 grid resolution from standard output. Valid choices are:
+
+     * C48
+     * C96
+     * C128
+     * C192
+     * C384
+     * C768
+     * C1152
+     * C3072
+
+Program outputs
+---------------
+
+Two gaussian grid 'scrip' files in NetCDF format. One includes two extra rows for the poles.
+
+     * C48  => 192x94 and 192x96 gaussian files
+     * C96  => 384x192 and 384x194 gaussian files
+     * C128 => 512x256 and 512x258 gaussian files
+     * C192 => 768x384 and 768x386 gaussian files
+     * C384 => 1536x768 and 1536x770 gaussian files
+     * C768 => 3072x1536 and 3072x1538 gaussian files
+     * C1152 => 4608x2304 and 4608x2406 gaussian files
+     * C3072 => 12288x6144 and 12288x6146 gaussian files
+
+Files contain center and corner point latitude and longitudes.
+
+Run script
+----------
+
+To run, use the machine-dependent script under ./util/weight_gen

@@ -2,15 +2,15 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run ice_blend consistency test on WCOSS-Cray.
+# Run ice_blend consistency test on WCOSS2.
 #
-# Set $DATA to your working directory.  Set the project code (BSUB -P)
-# and queue (BSUB -q) as appropriate.
+# Set $DATA to your working directory.  Set the project code (PBS -A)
+# and queue (PBS -q) as appropriate.
 #
-# Invoke the script as follows:  cat $script | bsub
+# Invoke the script as follows:  qsub $script
 #
 # Log output is placed in consistency.log.  A summary is
-# placed in summary.log.
+# placed in summary.log
 #
 # The test fails when its output does not match the baseline file
 # as determined by the 'cmp' command.  The baseline file is
@@ -18,22 +18,26 @@
 #
 #-----------------------------------------------------------------------------
 
-#BSUB -W 0:02
-#BSUB -o consistency.log
-#BSUB -e consistency.log
-#BSUB -J iceb_regt
-#BSUB -q debug
-#BSUB -R "rusage[mem=2000]"
-#BSUB -P GFS-DEV
+#PBS -l walltime=00:02:00
+#PBS -o consistency.log
+#PBS -e consistency.log
+#PBS -N iceb_regt
+#PBS -q debug
+#PBS -A GFS-DEV
+#PBS -l select=1:ncpus=1:mem=2500MB
 
-set -x
+cd $PBS_O_WORKDIR
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.intel
+module load grib_util/1.2.3
+module load wgrib2/2.0.8
 module list
 
-export DATA="${WORK_DIR:-/gpfs/hps3/stmp/$LOGNAME}"
+set -x
+
+export DATA="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/ice-blend"
 
 #-----------------------------------------------------------------------------
@@ -47,14 +51,8 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export WGRIB=/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.5/exec/wgrib
-export WGRIB2=/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.5/exec/wgrib2
-export COPYGB2=/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.5/exec/copygb2
-export COPYGB=/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.5/exec/copygb
-export CNVGRIB=/gpfs/hps/nco/ops/nwprod/grib_util.v1.0.5/exec/cnvgrib
-
-export HOMEreg=/gpfs/hps3/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/ice_blend
-export HOMEgfs=$PWD/../..
+export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/ice_blend
+export HOMEgfs=$PBS_O_WORKDIR/../..
 
 rm -fr $DATA
 
