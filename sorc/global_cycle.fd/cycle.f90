@@ -501,15 +501,17 @@ ENDIF
  jchk = 362
  ijchk = (jchk-1) * idim + ichk
 
- print*,'chk point after read_data ',landfrac(ijchk),slmask(ijchk),vegfcs(ijchk)
+ ijchk=116571
+
+ print*,'chk point after read_data ',tile_num,landfrac(ijchk),slmask(ijchk),vetfcs(ijchk),vegfcs(ijchk)
 
  print*,'vegfcs check ',maxval(vegfcs),minval(vegfcs)
  do i=1,lensfc
    if(landfrac(i) > 0.0_kind_io8 .and. vegfcs(i) == 0.0) then
-     print*,'bad point 1 ',i,landfrac(i),vegfcs(i)
+     print*,'bad point 1 ',tile_num,i,landfrac(i),vegfcs(i)
    endif
    if(landfrac(i) == 0.0_kind_io8 .and. vegfcs(i) > 0.0) then
-     print*,'bad point 2 ',i,landfrac(i),vegfcs(i)
+     print*,'bad point 2 ',tile_num,i,landfrac(i),vegfcs(i)
    endif
  enddo
 
@@ -573,10 +575,10 @@ ENDIF
        ENDIF
 
        if(nint(slmaskl(i)) == 1 .and. vegfcs(i) == 0.0) then
-        print*,'bad point 3 ',i,landfrac(i),slmaskl(i),vegfcs(i)
+        print*,'bad point 3 ',tile_num,i,landfrac(i),slmaskl(i),vegfcs(i)
        endif
        if(nint(slmaskl(i)) == 0 .and. vegfcs(i) > 0.0) then
-        print*,'bad point 4 ',i,landfrac(i),slmaskw(i),vegfcs(i)
+        print*,'bad point 4 ',tile_num,i,landfrac(i),slmaskw(i),vegfcs(i)
        endif
 
      ENDDO
@@ -621,21 +623,25 @@ ENDIF
 
    print*,'after call to sfccycle '
 
-   print*,'chk point after sfccycle ',landfrac(ijchk),slmask(ijchk),vegfcs(ijchk)
+   print*,'chk point after sfccycle ',tile_num,landfrac(ijchk),slmask(ijchk),vetfcs(ijchk),vegfcs(ijchk)
      DO I=1,LENSFC
 
        if(nint(slmaskl(i)) == 1 .and. vegfcs(i) == 0.0) then
-        print*,'bad point 5 ',i,landfrac(i),slmaskl(i),vegfcs(i)
+          if (nint(vetfcs(i)) /= 15) then
+        print*,'bad point 5 ',tile_num,i,landfrac(i),slmaskl(i),vegfcs(i)
+          endif
        endif
        if(nint(slmaskl(i)) == 0 .and. vegfcs(i) > 0.0) then
-        print*,'bad point 6 ',i,landfrac(i),slmaskw(i),vegfcs(i)
+        print*,'bad point 6 ',tile_num,i,landfrac(i),slmaskw(i),vegfcs(i)
        endif
 
        if(landfrac(i) > 0.0_kind_io8 .and. vegfcs(i) == 0.0) then
-        print*,'bad point 7 ',i,landfrac(i),vegfcs(i)
+          if (nint(vetfcs(i)) /= 15) then
+        print*,'bad point 7 ',tile_num,i,landfrac(i),vegfcs(i)
+          endif
        endif
        if(landfrac(i) == 0.0_kind_io8 .and. vegfcs(i) > 0.0) then
-        print*,'bad point 8 ',i,landfrac(i),vegfcs(i)
+        print*,'bad point 8 ',tile_num,i,landfrac(i),vegfcs(i)
        endif
 
      ENDDO
@@ -810,7 +816,7 @@ ENDIF
  else
 
    print*,'write out fractional grid'
-   call write_data_frac_grid(vegfcs,albfcs,lensfc,idim,jdim)
+   call write_data_frac_grid(vegfcs,lensfc,idim,jdim)
  endif
 
  IF (DO_NSST) THEN

@@ -66,7 +66,7 @@ MODULE READ_WRITE_DATA
 
 !> Write out surface records for fractional grids
 !! to a pre-existing model restart file (in netcdf).
- subroutine write_data_frac_grid(vegfcs,albfcs, lensfc,idim,jdim)
+ subroutine write_data_frac_grid(vegfcs,lensfc,idim,jdim)
 
  use mpi
 
@@ -75,7 +75,6 @@ MODULE READ_WRITE_DATA
  integer, intent(in)              :: lensfc
  integer, intent(in)              :: idim, jdim
 
- real, intent(in)                 :: albfcs(lensfc,4)
  real, intent(in)                 :: vegfcs(lensfc)
 
  real :: dum2d(idim,jdim)
@@ -94,7 +93,6 @@ MODULE READ_WRITE_DATA
 
  print*
  print*,"update OUTPUT SFC DATA TO: ",trim(fnbgso)
-
  
  ERROR=NF90_OPEN(TRIM(fnbgso),NF90_WRITE,NCID)
  CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(fnbgso) )
@@ -105,34 +103,6 @@ MODULE READ_WRITE_DATA
  dum2d = reshape(vegfcs, (/idim,jdim/))
  error = nf90_put_var( ncid, id_var, dum2d)
  call netcdf_err(error, 'WRITING vegfcs RECORD' )
-
- ERROR=NF90_INQ_VARID(NCID, "alvsf", ID_VAR)
- CALL NETCDF_ERR(ERROR, 'READING alvsf ID' )
-
- dum2d = reshape(albfcs(:,1), (/idim,jdim/))
- error = nf90_put_var( ncid, id_var, dum2d)
- call netcdf_err(error, 'WRITING alvsf RECORD' )
-
- ERROR=NF90_INQ_VARID(NCID, "alvwf", ID_VAR)
- CALL NETCDF_ERR(ERROR, 'READING alvwf ID' )
-
- dum2d = reshape(albfcs(:,2), (/idim,jdim/))
- error = nf90_put_var( ncid, id_var, dum2d)
- call netcdf_err(error, 'WRITING alvwf RECORD' )
-
- ERROR=NF90_INQ_VARID(NCID, "alnsf", ID_VAR)
- CALL NETCDF_ERR(ERROR, 'READING alnsf ID' )
-
- dum2d = reshape(albfcs(:,3), (/idim,jdim/))
- error = nf90_put_var( ncid, id_var, dum2d)
- call netcdf_err(error, 'WRITING alnsf RECORD' )
-
- ERROR=NF90_INQ_VARID(NCID, "alnwf", ID_VAR)
- CALL NETCDF_ERR(ERROR, 'READING alnwf ID' )
-
- dum2d = reshape(albfcs(:,4), (/idim,jdim/))
- error = nf90_put_var( ncid, id_var, dum2d)
- call netcdf_err(error, 'WRITING alnwf RECORD' )
 
  error = nf90_close(ncid)
 
