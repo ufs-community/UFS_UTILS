@@ -81,13 +81,13 @@ export veg_type_src="modis.igbp.0.05" #  veg type data.
                                 # 1) "viirs.igbp.0.05" for global 5km data
                                 # 2) "viirs.igbp.0.1" for global 10km data
                                 # 3) "viirs.igbp.0.03" for global 3km data
-                                # 4) "viirs.igbp.0.01" for global 1km data
-                                # 5) "viirs.igbp.conus.0.01" for CONUS 1km data
-                                # 6) "viirs.igbp.nh.0.01" for NH 1km data
+                                # 4) "viirs.igbp.30s" for global 30s data
+                                # 5) "viirs.igbp.conus.30s" for CONUS 30s data
+                                # 6) "viirs.igbp.nh.30s" for NH 30s data
                                 # For the modis-based data, set to:
                                 # 1) "modis.igbp.0.05" for global 5km data
                                 # 2) "modis.igbp.0.03" for global 3km data
-                                # 3) "modis.igbp.conus.0.01" for regional 1km data
+                                # 3) "modis.igbp.conus.30s" for regional 30s data
 
 if [ $gtype = uniform ]; then
   export res=96

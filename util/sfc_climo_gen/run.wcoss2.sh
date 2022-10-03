@@ -53,10 +53,10 @@ export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 export veg_type_src="viirs.igbp.0.05"    # Use global 0.05-degree viirs data
 #export veg_type_src="viirs.igbp.0.1"     # Use global 0.1-degree viirs data
 #export veg_type_src="viirs.igbp.0.03"   # Use global 0.03-degree viirs data
-#export veg_type_src="viirs.igbp.0.01"   # Use global 0.01-degree viirs data
-#export veg_type_src="viirs.igbp.nh.0.01"     # Use NH 0.01-degree virrs data. Do not
+#export veg_type_src="viirs.igbp.30s"   # Use global 30s viirs data
+#export veg_type_src="viirs.igbp.nh.30s"     # Use NH 30s virrs data. Do not
                                               # use for global grids.
-#export veg_type_src="viirs.igbp.conus.0.01"   # Use CONUS 0.01-degree virrs data. Do not
+#export veg_type_src="viirs.igbp.conus.30s"   # Use CONUS 30s virrs data. Do not
                                                # use for global grids or N Amer grids.
 
 #-------------------------------------
