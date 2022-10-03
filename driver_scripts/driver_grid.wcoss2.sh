@@ -69,7 +69,7 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=uniform           # 'uniform', 'stretch', 'nest', 
+export gtype=regional_esg           # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
 export make_gsl_orog=false     # 'true' if user needs 'oro' files for GSL
                                # orographic drag suite
@@ -78,7 +78,9 @@ export veg_type_src="modis.igbp.0.05" #  veg type data.
                                 # 1) "viirs.igbp.0.05" for global 5km data
                                 # 2) "viirs.igbp.0.1" for global 10km data
                                 # 3) "viirs.igbp.0.03" for global 3km data
-                                # 4) "viirs.igbp.conus.0.01" for regional 1km data
+                                # 4) "viirs.igbp.0.01" for global 1km data
+                                # 5) "viirs.igbp.conus.0.01" for CONUS 1km data
+                                # 6) "viirs.igbp.nh.0.01" for NH 1km data
                                 # For the modis-based data, set to:
                                 # 1) "modis.igbp.0.05" for global 5km data
                                 # 2) "modis.igbp.0.03" for global 3km data
@@ -108,16 +110,16 @@ elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
   export halo=3                # Lateral boundary halo
 elif [ $gtype = regional_esg ] ; then
   export res=-999              # equivalent resolution is computed
-  export target_lon=-97.5      # Center longitude of grid
-  export target_lat=35.5       # Center latitude of grid
-  export idim=301              # Dimension of grid in 'i' direction
-  export jdim=200              # Dimension of grid in 'j' direction
-  export delx=0.0585           # Grid spacing (in degrees) in the 'i' direction
+  export target_lon=-112.5      # Center longitude of grid
+  export target_lat=55.0       # Center latitude of grid
+  export idim=3950             # Dimension of grid in 'i' direction
+  export jdim=2700             # Dimension of grid in 'j' direction
+  export delx=0.01296          # Grid spacing (in degrees) in the 'i' direction
                                # on the SUPERGRID (which has twice the resolution of
                                # the model grid).  The physical grid spacing in the 'i'
                                # direction is related to delx as follows:
                                #    distance = 2*delx*(circumf_Earth/360 deg)
-  export dely=0.0585           # Grid spacing (in degrees) in the 'j' direction.
+  export dely=0.01324          # Grid spacing (in degrees) in the 'j' direction.
   export halo=3                # number of row/cols for halo
 fi
 
