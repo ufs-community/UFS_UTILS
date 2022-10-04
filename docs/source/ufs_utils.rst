@@ -532,10 +532,12 @@ The surface climatological data is located here `./fix/fix_sfc_climo <https://no
              * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
              * MODIS-based global 0.05-degree - vegetation_type.modis.igbp.0.05.nc
              * MODIS-based CONUS 0.01-degree - vegetation_type.modis.igbp.conus.0.01.nc
+             * NESDIS VIIRS-based global 30-second - vegetation_type.viirs.igbp.30s.nc
              * NESDIS VIIRS-based global 0.03-degree - vegetation_type.viirs.igbp.0.03.nc
              * NESDIS VIIRS-based global 0.05-degree - vegetation_type.viirs.igbp.0.05.nc
              * NESDIS VIIRS-based global 0.1-degree - vegetation_type.viirs.igbp.0.1.nc
-             * NESDIS VIIRS-based CONUS 0.01-degree - vegetation_type.viirs.igbp.conus.0.01.nc
+             * NESDIS VIIRS-based N HEMIS 30-second - vegetation_type.viirs.igbp.nh.30s.nc
+             * NESDIS VIIRS-based CONUS 30-second - vegetation_type.viirs.igbp.conus.30s.nc
       * Global 0.144-degree monthly vegetation greenness in percent - vegetation_greenness.0.144.nc
 
 The files that define the model grid. All NetCDF.
