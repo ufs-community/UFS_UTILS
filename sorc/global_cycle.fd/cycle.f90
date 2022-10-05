@@ -644,6 +644,10 @@ ENDIF
         print*,'bad point 8 ',tile_num,i,landfrac(i),vegfcs(i)
        endif
 
+       if(nint(slmaskw(i)) == 1 .and. sicfcs(i) > 0.0) then
+        print*,'bad ice point ',tile_num,i,landfrac(i),sicfcs(i)
+       endif
+
      ENDDO
 
    DEALLOCATE(SLMASKL, SLMASKW)
@@ -816,7 +820,7 @@ ENDIF
  else
 
    print*,'write out fractional grid'
-   call write_data_frac_grid(vegfcs,lensfc,idim,jdim)
+   call write_data_frac_grid(vegfcs,sicfcs,lensfc,idim,jdim)
  endif
 
  IF (DO_NSST) THEN

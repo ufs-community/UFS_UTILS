@@ -66,7 +66,7 @@ MODULE READ_WRITE_DATA
 
 !> Write out surface records for fractional grids
 !! to a pre-existing model restart file (in netcdf).
- subroutine write_data_frac_grid(vegfcs,lensfc,idim,jdim)
+ subroutine write_data_frac_grid(vegfcs,sicfcs,lensfc,idim,jdim)
 
  use mpi
 
@@ -75,6 +75,7 @@ MODULE READ_WRITE_DATA
  integer, intent(in)              :: lensfc
  integer, intent(in)              :: idim, jdim
 
+ real, intent(in)                 :: sicfcs(lensfc)
  real, intent(in)                 :: vegfcs(lensfc)
 
  real :: dum2d(idim,jdim)
@@ -103,6 +104,13 @@ MODULE READ_WRITE_DATA
  dum2d = reshape(vegfcs, (/idim,jdim/))
  error = nf90_put_var( ncid, id_var, dum2d)
  call netcdf_err(error, 'WRITING vegfcs RECORD' )
+
+ ERROR=NF90_INQ_VARID(NCID, "fice", ID_VAR)
+ CALL NETCDF_ERR(ERROR, 'READING fice ID' )
+
+ dum2d = reshape(sicfcs, (/idim,jdim/))
+ error = nf90_put_var( ncid, id_var, dum2d)
+ call netcdf_err(error, 'WRITING fice RECORD' )
 
  error = nf90_close(ncid)
 
