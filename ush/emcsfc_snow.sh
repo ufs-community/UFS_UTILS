@@ -24,6 +24,7 @@
 #    $MODEL_LONGITUDE_FILE - model longitude (grib 1 or 2)
 #    $AFWA_NH_FILE         - nh afwa snow data (grib 1)
 #    $AFWA_SH_FILE         - sh afwa snow data (grib 1)
+#    $AFWA_GLOBAL_FILE     - global afwa snow data (grib 2)
 #    $IMS_FILE             - nh ims snow cover data (grib 2)
 #    $CLIMO_QC             - nh climatological snow cover (grib 2)
 #    fort.41               - program configuration namelist
@@ -76,7 +77,7 @@ envir=${envir:-"prod"}
 NWROOT=${NWROOT:-"/nw${envir}"}
 HOMEgfs=${HOMEgfs:-$NWROOT/gfs.${gfs_ver:?}}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
-FIXam=${FIXam:-$HOMEgfs/fix/fix_am}
+FIXam=${FIXam:-$HOMEgfs/fix/am}
 
 COMOUT=${COMOUT:-$PWD}
 
@@ -106,6 +107,7 @@ GFS_LONSPERLAT_FILE=${GFS_LONSPERLAT_FILE:-global_lonsperlat.t1534.3072.1536.txt
 
 AFWA_NH_FILE=${AFWA_NH_FILE:-"NPR.SNWN.SP.S1200.MESH16"}
 AFWA_SH_FILE=${AFWA_SH_FILE:-"NPR.SNWS.SP.S1200.MESH16"}
+AFWA_GLOBAL_FILE=${AFWA_GLOBAL_FILE:-""}
 IMS_FILE=${IMS_FILE:-"imssnow96.grb.grib2"}
 
 #------------------------------------------------------------------------
@@ -180,7 +182,7 @@ cat > ./fort.41 << !
   autosnow_file=""
   nesdis_snow_file="${IMS_FILE}"
   nesdis_lsmask_file=""
-  afwa_snow_global_file=""
+  afwa_snow_global_file="${AFWA_GLOBAL_FILE}"
   afwa_snow_nh_file="${AFWA_NH_FILE}"
   afwa_snow_sh_file="${AFWA_SH_FILE}"
   afwa_lsmask_nh_file=""

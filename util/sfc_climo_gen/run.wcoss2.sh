@@ -37,7 +37,7 @@ export res=384
 # Where the model "grid", "mosaic" and "oro" files reside.
 #-------------------------------------
 
-export FIX_FV3=${BASE_DIR}/fix/fix_fv3_gmted2010/C${res}
+export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 
 #-------------------------------------
 # Uncomment for regional grids.
@@ -74,7 +74,7 @@ if [[ $GRIDTYPE = "regional" ]]; then
   ln -fs $FIX_FV3/C${res}_oro_data.tile7.halo${HALO}.nc $FIX_FV3/C${res}_oro_data.tile7.nc
 fi
 
-export input_sfc_climo_dir=${BASE_DIR}/fix/fix_sfc_climo
+export input_sfc_climo_dir=${BASE_DIR}/fix/sfc_climo
 
 ulimit -a
 ulimit -s unlimited

@@ -139,6 +139,7 @@ jobs:
       uses: actions/checkout@v2
       with: 
         path: ufs_utils
+        submodules: recursive
 
     - name: build
       run: |

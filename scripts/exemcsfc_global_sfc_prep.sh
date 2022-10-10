@@ -72,7 +72,7 @@ RUN=${RUN:-"gfs"}
 export HOMEgfs=${HOMEgfs:-$NWROOT/gfs.${gfs_ver:?}}
 export USHgfs=${USHgfs:-$HOMEgfs/ush}
 export FIXgfs=${FIXgfs:-$HOMEgfs/fix}
-FIXgfs_am=${FIXgfs_am:-$HOMEgfs/fix/fix_am}
+FIXgfs_am=${FIXgfs_am:-$HOMEgfs/fix/am}
 export EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 
 # output com directory.

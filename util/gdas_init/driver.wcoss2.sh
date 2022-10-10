@@ -29,7 +29,7 @@ if [ $EXTRACT_DATA == yes ]; then
   mkdir -p $EXTRACT_DIR
 
   QUEUE=dev_transfer
-  MEM=500MB
+  MEM=2GB
   WALLT="02:00:00"
 
   case $gfs_ver in
@@ -125,7 +125,7 @@ if [ $RUN_CHGRES == yes ]; then
   WALLT="0:15:00"
   MEM=75GB
   if [ $CRES_HIRES == 'C768' ] ; then
-    MEM=175GB
+    MEM=250GB
   elif [ $CRES_HIRES == 'C1152' ] ; then
     MEM=350GB
     NODES=1

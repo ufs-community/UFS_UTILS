@@ -24,4 +24,4 @@ target_link_libraries(
 
 target_link_libraries(lakefrac PRIVATE lakefrac_lib)
 
-install(TARGETS lakefrac RUNTIME DESTINATION ${exec_dir})
+install(TARGETS lakefrac)

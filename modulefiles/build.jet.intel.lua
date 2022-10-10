@@ -58,4 +58,7 @@ load(pathJoin("g2", g2_ver))
 prod_util_ver=os.getenv("prod_util_ver") or "1.2.2"
 load(pathJoin("prod_util", prod_util_ver))
 
+nco_ver=os.getenv("nco_ver") or "4.9.3"
+load(pathJoin("nco", nco_ver))
+
 whatis("Description: UFS_UTILS build environment")

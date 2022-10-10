@@ -56,7 +56,6 @@ export APRUN_SFC="mpiexec -n 30 -ppn 30 -cpu-bind core"
 export OMP_STACKSIZE=2048m
 export OMP_NUM_THREADS=30 # orog code uses threads
 export OMP_PLACES=cores
-export machine=WCOSS2
 export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/grid_gen/baseline_data
 this_dir=$PWD
 
@@ -68,42 +67,42 @@ rm -fr $WORK_DIR
 # C96 uniform grid
 #-----------------------------------------------------------------------------
 
-TEST1=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:08:00 \
+TEST1=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:10:00 \
         -N c96.uniform -l select=1:ncpus=30:mem=40GB $PWD/c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
 # C96 uniform grid using viirs vegetation data.
 #-----------------------------------------------------------------------------
 
-TEST2=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:08:00 \
+TEST2=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:10:00 \
         -N c96.viirs.vegt -l select=1:ncpus=30:mem=40GB -W depend=afterok:$TEST1 $PWD/c96.viirs.vegt.sh)
 
 #-----------------------------------------------------------------------------
 # gfdl regional grid
 #-----------------------------------------------------------------------------
 
-TEST3=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:08:00 \
+TEST3=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:10:00 \
         -N gfdl.regional -l select=1:ncpus=30:mem=40GB -W depend=afterok:$TEST2 $PWD/gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
 # esg regional grid
 #-----------------------------------------------------------------------------
 
-TEST4=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:08:00 \
+TEST4=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:10:00 \
         -N esg.regional -l select=1:ncpus=30:mem=40GB -W depend=afterok:$TEST3 $PWD/esg.regional.sh)
 
 #-----------------------------------------------------------------------------
 # Regional GSL gravity wave drag test.
 #-----------------------------------------------------------------------------
 
-TEST5=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:08:00 \
+TEST5=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:10:00 \
         -N rsg.gsl.gwd -l select=1:ncpus=30:mem=40GB -W depend=afterok:$TEST4 $PWD/regional.gsl.gwd.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
-qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
+qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:02:00 \
         -N grid_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST5 << EOF
 #!/bin/bash
 cd ${this_dir}
