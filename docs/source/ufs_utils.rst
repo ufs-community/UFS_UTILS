@@ -525,16 +525,20 @@ The surface climatological data is located here `./fix/fix_sfc_climo <https://no
       * Global 0.05-degree four component monthly snow-free albedo - snowfree_albedo.4comp.0.05.nc
       * Global 1.0-degree categorical slope type - slope_type.1.0.nc
       * Categorical STATSGO soil type
-             * Global 0.03-degree - soil_type.statsgo.0.03.nc
              * Global 0.05-degree - soil_type.statsgo.0.05.nc
-             * CONUS 0.01-degree - soil_type.statsgo.conus.0.01.nc
+             * Global 0.03-degree - soil_type.statsgo.0.03.nc
+             * CONUS 30 sec - soil_type.statsgo.conus.30s.nc
+             * N Hemis 30 sec - soil_type.statsgo.nh.30s.nc
+             * Global 30 sec - soil_type.statsgo.30s.nc
       * Categorical IGBP vegetation type
-             * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
              * MODIS-based global 0.05-degree - vegetation_type.modis.igbp.0.05.nc
-             * MODIS-based CONUS 0.01-degree - vegetation_type.modis.igbp.conus.0.01.nc
-             * NESDIS VIIRS-based global 0.03-degree - vegetation_type.viirs.igbp.0.03.nc
-             * NESDIS VIIRS-based global 0.05-degree - vegetation_type.viirs.igbp.0.05.nc
+             * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
+             * MODIS-based CONUS 30 sec - vegetation_type.modis.igbp.conus.30s.nc
+             * MODIS-based N Hemis 30 sec - vegetation_type.modis.igbp.nh.30s.nc
+             * MODIS-based global 30 sec - vegetation_type.modis.igbp.30s.nc
              * NESDIS VIIRS-based global 0.1-degree - vegetation_type.viirs.igbp.0.1.nc
+             * NESDIS VIIRS-based global 0.05-degree - vegetation_type.viirs.igbp.0.05.nc
+             * NESDIS VIIRS-based global 0.03-degree - vegetation_type.viirs.igbp.0.03.nc
              * NESDIS VIIRS-based CONUS 0.01-degree - vegetation_type.viirs.igbp.conus.0.01.nc
       * Global 0.144-degree monthly vegetation greenness in percent - vegetation_greenness.0.144.nc
 
