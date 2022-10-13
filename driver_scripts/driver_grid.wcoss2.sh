@@ -6,7 +6,7 @@
 #PBS -A GFS-DEV
 #PBS -l walltime=00:15:00
 #PBS -N make_grid
-#PBS -l select=1:ncpus=24:mem=100GB
+#PBS -l select=1:ncpus=24:mem=200GB
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on WCOSS2.
@@ -110,16 +110,16 @@ elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
   export halo=3                # Lateral boundary halo
 elif [ $gtype = regional_esg ] ; then
   export res=-999              # equivalent resolution is computed
-  export target_lon=-112.5      # Center longitude of grid
-  export target_lat=55.0       # Center latitude of grid
-  export idim=3950             # Dimension of grid in 'i' direction
-  export jdim=2700             # Dimension of grid in 'j' direction
-  export delx=0.01296          # Grid spacing (in degrees) in the 'i' direction
+  export target_lon=-97.5      # Center longitude of grid
+  export target_lat=35.0       # Center latitude of grid
+  export idim=301              # Dimension of grid in 'i' direction
+  export jdim=200              # Dimension of grid in 'j' direction
+  export delx=0.0585           # Grid spacing (in degrees) in the 'i' direction
                                # on the SUPERGRID (which has twice the resolution of
                                # the model grid).  The physical grid spacing in the 'i'
                                # direction is related to delx as follows:
                                #    distance = 2*delx*(circumf_Earth/360 deg)
-  export dely=0.01324          # Grid spacing (in degrees) in the 'j' direction.
+  export dely=0.0585           # Grid spacing (in degrees) in the 'j' direction.
   export halo=3                # number of row/cols for halo
 fi
 
