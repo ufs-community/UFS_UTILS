@@ -50,16 +50,18 @@ export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 # Choose which soil type and vegetation type data to use.
 #
 # For viirs-based vegetation type data, set to:
-#   1) "viirs.igbp.0.1" for global 0.1-deg data
+#   1) "viirs.igbp.0.1" for global 0.10-deg data
 #   2) "viirs.igbp.0.05" for global 0.05-deg data
 #   3) "viirs.igbp.0.03" for global 0.03-deg data
-#   4) "viirs.igbp.conus.0.01" for regional 1km data
+#   4) "viirs.igbp.conus.30s" for CONUS 30s data
+#   4) "viirs.igbp.nh.30s" for NH 30s data
+#   4) "viirs.igbp.30s" for global 30s data
 #
 # For the modis-based vegetation data, set to:
 #   1) "modis.igbp.0.05" for global 0.05-deg data
 #   2) "modis.igbp.0.03" for global 0.03-deg data
 #   3) "modis.igbp.conus.30s" for CONUS 30s data
-#   4) "modis.igbp.nh.30s" for N Hemis 30s data
+#   4) "modis.igbp.nh.30s" for NH 30s data
 #   5) "modis.igbp.30s" for global 30s data
 #
 # Soil type data

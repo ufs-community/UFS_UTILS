@@ -78,10 +78,12 @@ export make_gsl_orog=false     # 'true' if user needs 'oro' files for GSL
                                # orographic drag suite
 export veg_type_src="modis.igbp.0.05" #  veg type data.
                                 # For viirs-based vegetation type data, set to:
-                                # 1) "viirs.igbp.0.05" for global 0.05-deg data
-                                # 2) "viirs.igbp.0.1" for global 0.1-deg data
+                                # 1) "viirs.igbp.0.1" for global 0.10-deg data
+                                # 2) "viirs.igbp.0.05" for global 0.05-deg data
                                 # 3) "viirs.igbp.0.03" for global 0.03-deg data
-                                # 4) "viirs.igbp.conus.0.01" for regional 1km data
+                                # 4) "viirs.igbp.conus.30s" for CONUS 30s data
+                                # 5) "viirs.igbp.nh.30s" for NH 30s data
+                                # 6) "viirs.igbp.30s" for global 30s data
                                 # For the modis-based data, set to:
                                 # 1) "modis.igbp.0.05" for global 0.05-deg data
                                 # 2) "modis.igbp.0.03" for global 0.03-deg data
@@ -90,8 +92,8 @@ export veg_type_src="modis.igbp.0.05" #  veg type data.
                                 # 5) "modis.igbp.30s" for global 30s data
 
 export soil_type_src="statsgo.0.05" #  Soil type data. Choices are:
-                                # 1) "statsgo.0.03" for global 0.03-deg data
-                                # 2) "statsgo.0.05" for global 0.05-deg data
+                                # 1) "statsgo.0.05" for global 0.05-deg data
+                                # 2) "statsgo.0.03" for global 0.03-deg data
                                 # 3) "statsgo.conus.30s" for CONUS 30s data
                                 # 4) "statsgo.nh.30s" for NH 30s data
                                 # 5) "statsgo.30s" for global 30s data
