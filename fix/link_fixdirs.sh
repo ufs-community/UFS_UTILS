@@ -16,6 +16,8 @@ fi
 if [ $RUN_ENVIR != emc -a $RUN_ENVIR != nco ]; then
     set +x
     echo '***ERROR*** unsupported run environment'
+    echo ' Must choose either "nco" or "emc".'
+    exit 1
 fi
 
 if [ $machine != wcoss2 -a $machine != hera -a $machine != jet -a $machine != orion -a $machine != s4 ]; then
@@ -27,7 +29,7 @@ fi
 
 LINK="ln -fs"
 SLINK="ln -fs"
-[[ $RUN_ENVIR = nco ]] && LINK="cp -rp"
+[[ $RUN_ENVIR = nco ]] && LINK="cp -rpL"
 
 pwd=$(pwd -P)
 
@@ -48,7 +50,7 @@ fi
 
 am_ver=${am_ver:-20220805}
 orog_ver=${orog_ver:-20220805}
-sfc_climo_ver=${sfc_climo_ver:-20220805}
+sfc_climo_ver=${sfc_climo_ver:-20221017}
 
 for dir in am orog sfc_climo; do
     if [ -d $dir ]; then
