@@ -7,16 +7,16 @@
 
  implicit none
 
- integer, parameter :: idim=43200
- integer, parameter :: jdim=21600
+ integer, parameter :: iglobal=43200
+ integer, parameter :: jglobal=21600
  integer, parameter :: itile=1200
  integer, parameter :: jtile=1200
 
- character(len=5) :: istart_ch, iend_ch, jstart_ch, jend_ch
- character(len=23) :: file_name
+ character(len=5)   :: istart_ch, iend_ch, jstart_ch, jend_ch
+ character(len=23)  :: file_name
  character(len=100) :: file_path
  character(len=140) :: raw_file
- character(len=9) :: filenetcdf
+ character(len=9)   :: filenetcdf
 
  integer         :: i, j, ierr, ncid, status
  integer         :: dim_lon, dim_lat, dim_time
@@ -24,9 +24,11 @@
  integer         :: id_data, id_lat, id_lon
  integer         :: id_lat_corner, id_lon_corner, id_times
  integer         :: istart, iend, jstart, jend
- integer         :: num_times
+ integer         :: istart_out, iend_out, jstart_out, jend_out
+ integer         :: lon, lat, num_times
  integer(kind=1) :: soil_tile(itile,jtile)
- integer(kind=1) :: soil(idim,jdim)
+ integer(kind=1) :: soil_global(iglobal,jglobal)
+ integer(kind=1), allocatable :: soil_out(:,:)
  integer(kind=1), parameter :: missing = -9
  integer, parameter :: water_flag = 14
  integer, parameter :: landice=16
@@ -35,14 +37,26 @@
  real(kind=8), allocatable :: lons(:), lons_corner(:)
  real(kind=8), allocatable :: lats(:), lats_corner(:)
 
+! NH (from 5S to the NP)
+!istart_out = 1
+!iend_out = 43200
+!jstart_out = 10200
+!jend_out   = 21600
+
+! Global
+ istart_out = 1
+ iend_out = 43200
+ jstart_out = 1
+ jend_out   = 21600
+
  file_path="/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/bnu.soil/orig_data/bnu_soiltype_top/"
 
 ! Loop to read the tile files.
 
- do i=1, idim, itile
+ do i=1, iglobal, itile
   istart=i
   iend=istart+itile-1
-  do j=1, jdim, jtile
+  do j=1, jglobal, jtile
 
     jstart=j
     jend=jstart+jtile-1
@@ -67,10 +81,21 @@
 
     where(soil_tile == water_flag) soil_tile = missing
 
-    soil(istart:iend,jstart:jend) = soil_tile
+    soil_global(istart:iend,jstart:jend) = soil_tile
 
    enddo
  enddo
+
+ allocate(soil_out(istart_out:iend_out,jstart_out:jend_out))
+
+ do j = jstart_out, jend_out
+ do i = istart_out, iend_out
+   soil_out(i,j) = soil_global(i,j)
+ enddo
+ enddo
+
+ lon = iend_out - istart_out + 1
+ lat = jend_out - jstart_out + 1
 
 ! Compute lat/lons of the grid.
 
@@ -80,32 +105,31 @@
  lat11 = -90.0_8 + dy*0.5_8
  lon11 = -180.0_8 + dx*0.5_8
 
- allocate(lons(idim))
- allocate(lats(jdim))
+ allocate(lons(istart_out:iend_out))
+ allocate(lats(jstart_out:jend_out))
 
- do i = 1, idim
+ do i = istart_out, iend_out
    lons(i) = real((i-1),8) * dx + lon11
    print*,'Lon of output grid ',i,lons(i)
  enddo
 
- do i = 1, jdim
-   lats(i) = real((i-1),8) * dy + lat11
-   print*,'Lat of output grid ',i,lats(i)
+ do j = jstart_out, jend_out
+   lats(j) = real((j-1),8) * dy + lat11
+   print*,'Lat of output grid ',j,lats(j)
  enddo
 
- allocate(lons_corner(idim+1))  ! required one extra corner
+ allocate(lons_corner(istart_out:iend_out+1))  ! required one extra corner
                                        ! for non-periodic grids.
- allocate(lats_corner(jdim+1))  ! requires one extra corner
+ allocate(lats_corner(jstart_out:jend_out+1))  ! requires one extra corner
 
- do i = 1, idim+1
+ do i = istart_out, iend_out+1
    lons_corner(i) = (real((i-1),8) * dx + lon11) - 0.5_8*dx
    print*,'Corner lon of output grid ',i,lons_corner(i)
-
  enddo
 
- do i = 1, jdim+1
-   lats_corner(i) = (real((i-1),8) * dy + lat11) - 0.5_8*dy
-   print*,'Corner lat of output grid ',i,lats_corner(i)
+ do j = jstart_out, jend_out+1
+   lats_corner(j) = (real((j-1),8) * dy + lat11) - 0.5_8*dy
+   print*,'Corner lat of output grid ',j,lats_corner(j)
  enddo
 
  filenetcdf="./soil.nc"
@@ -113,16 +137,16 @@
  status=nf90_create(filenetcdf, nf90_netcdf4, ncid)
  if (status /= nf90_noerr) stop 20
 
- status=nf90_def_dim(ncid, 'idim', idim, dim_lon)
+ status=nf90_def_dim(ncid, 'idim', lon, dim_lon)
  if (status /= nf90_noerr) stop 22
 
- status=nf90_def_dim(ncid, 'jdim', jdim, dim_lat)
+ status=nf90_def_dim(ncid, 'jdim', lat, dim_lat)
  if (status /= nf90_noerr) stop 24
  
- status=nf90_def_dim(ncid, 'idim_p1', (idim+1), dim_lon_p1)
+ status=nf90_def_dim(ncid, 'idim_p1', (lon+1), dim_lon_p1)
  if (status /= nf90_noerr) stop 26
 
- status=nf90_def_dim(ncid, 'jdim_p1', (jdim+1), dim_lat_p1)
+ status=nf90_def_dim(ncid, 'jdim_p1', (lat+1), dim_lat_p1)
  if (status /= nf90_noerr) stop 30
 
  num_times=1
@@ -240,7 +264,7 @@
  status=nf90_put_var(ncid, id_lat_corner, lats_corner)
  if (status /= nf90_noerr) stop 114
 
- status=nf90_put_var(ncid, id_data, soil, start=(/1,1,1/), count=(/idim,jdim,num_times/))
+ status=nf90_put_var(ncid, id_data, soil_out, start=(/1,1,1/), count=(/lon,lat,num_times/))
  if (status /= nf90_noerr) stop 117
  
  status=nf90_close(ncid)
