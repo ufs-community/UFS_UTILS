@@ -131,6 +131,19 @@ ncatted -h -a additional_documentation,global,d,,, soil_type.bnu.30s.nc
 ncatted -h -a units,lat,c,c,"degrees_north" soil_type.bnu.30s.nc
 ncatted -h -a units,lon,c,c,"degrees_east" soil_type.bnu.30s.nc
 
+ncatted -h -a class_01,soil_type,c,c,"sand" soil_type.bnu.30s.nc
+ncatted -h -a class_02,soil_type,c,c,"loamy sand" soil_type.bnu.30s.nc
+ncatted -h -a class_03,soil_type,c,c,"sandy loam" soil_type.bnu.30s.nc
+ncatted -h -a class_04,soil_type,c,c,"silt loam" soil_type.bnu.30s.nc
+ncatted -h -a class_05,soil_type,c,c,"silt" soil_type.bnu.30s.nc
+ncatted -h -a class_06,soil_type,c,c,"loam" soil_type.bnu.30s.nc
+ncatted -h -a class_07,soil_type,c,c,"sandy clay loam" soil_type.bnu.30s.nc
+ncatted -h -a class_08,soil_type,c,c,"silty clay loam" soil_type.bnu.30s.nc
+ncatted -h -a class_09,soil_type,c,c,"clay loam" soil_type.bnu.30s.nc
+ncatted -h -a class_10,soil_type,c,c,"sandy clay" soil_type.bnu.30s.nc
+ncatted -h -a class_11,soil_type,c,c,"silty clay" soil_type.bnu.30s.nc
+ncatted -h -a class_12,soil_type,c,c,"clay" soil_type.bnu.30s.nc
+
 c. replace soil type data from processed file into template file
 
 ncks -A -h -v soil_type bnu_soil.nc soil_type.bnu.30s.nc
