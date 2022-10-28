@@ -71,7 +71,7 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=uniform           # 'uniform', 'stretch', 'nest', 
+export gtype=uniform         # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
 export make_gsl_orog=false     # 'true' if user needs 'oro' files for GSL
                                # orographic drag suite
@@ -87,6 +87,9 @@ export veg_type_src="modis.igbp.0.05" #  veg type data.
                                 # 1) "modis.igbp.0.05" for global 5km data
                                 # 2) "modis.igbp.0.03" for global 3km data
                                 # 3) "modis.igbp.conus.30s" for regional 30s data
+
+export soil_type_src="bnu.30s"  # Soil type data. Choices are:
+                                # 1) "bnu.30s" for global 30s data.
 
 if [ $gtype = uniform ]; then
   export res=96
