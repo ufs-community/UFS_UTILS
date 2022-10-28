@@ -43,6 +43,7 @@
  real(esmf_kind_r4), allocatable    :: data_mdl_one_tile(:,:,:)
  real(esmf_kind_r4), allocatable    :: vegt_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: lat_mdl_one_tile(:,:)
+ real(esmf_kind_r4), allocatable    :: sum_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: lon_mdl_one_tile(:,:)
 
 !type(esmf_regridmethod_flag),intent(in) :: method
@@ -120,11 +121,13 @@
    allocate(data_mdl_one_tile(i_mdl,j_mdl,num_categories))
    allocate(mask_mdl_one_tile(i_mdl,j_mdl))
    allocate(lat_mdl_one_tile(i_mdl,j_mdl))
+   allocate(sum_mdl_one_tile(i_mdl,j_mdl))
    allocate(lon_mdl_one_tile(i_mdl,j_mdl))
  else
    allocate(data_mdl_one_tile(0,0,0))
    allocate(mask_mdl_one_tile(0,0))
    allocate(lat_mdl_one_tile(0,0))
+   allocate(sum_mdl_one_tile(0,0))
    allocate(lon_mdl_one_tile(0,0))
  endif
 
@@ -271,11 +274,11 @@
 
      if (localpet == 0) then
        print*,'- CALL SEARCH FOR TILE ',tile
-       lat_mdl_one_tile = sum(data_mdl_one_tile, dim=3) ! use unused variable to now.
+       sum_mdl_one_tile = sum(data_mdl_one_tile, dim=3) ! use unused variable to now.
        do j = 1, j_mdl
        do i = 1, i_mdl
  
-         if (mask_mdl_one_tile(i,j) == 1 .and. lat_mdl_one_tile(i,j) == 0.0) then
+         if (mask_mdl_one_tile(i,j) == 1 .and. sum_mdl_one_tile(i,j) == 0.0) then
            data_mdl_one_tile(i,j,:) = -9999.9
          endif
 
@@ -285,7 +288,7 @@
        call search2 (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, tile, field_names(n))
 !      where(mask_mdl_one_tile == 0) data_mdl_one_tile = missing
        print*,'after regrid ',data_mdl_one_tile(i_mdl/2,j_mdl/2,:)
-       call output2 (data_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile, record, t, n)
+       call output2 (data_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile, t, n)
      endif
 
    print*,'after output ', localpet
