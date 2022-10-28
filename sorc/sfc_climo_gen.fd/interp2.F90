@@ -31,7 +31,7 @@
  integer                            :: varid, record
  integer                            :: tile_num, pt_loc_this_tile
  integer                            :: isrctermprocessing
- integer :: category
+ integer :: category, num_categories
 
  integer(esmf_kind_i4), allocatable :: mask_mdl_one_tile(:,:)
  integer(esmf_kind_i4), pointer     :: unmapped_ptr(:)
@@ -52,13 +52,16 @@
  type(esmf_routehandle)                  :: regrid_data
  type(esmf_polemethod_flag)              :: pole
  
+! get this from file.
+ num_categories = 20
+
  print*,"- CALL FieldCreate FOR SOURCE GRID DATA."
  data_field_src = ESMF_FieldCreate(grid_src, &
                                   typekind=ESMF_TYPEKIND_R4, &
                                   indexflag=ESMF_INDEX_GLOBAL, &
                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
                                   ungriddedLBound=(/1/), &
-                                  ungriddedUBound=(/20/), &
+                                  ungriddedUBound=(/num_categories/), &
                                   name="source data", &
                                   rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -82,7 +85,7 @@
                                   indexflag=ESMF_INDEX_GLOBAL, &
                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
                                   ungriddedLBound=(/1/), &
-                                  ungriddedUBound=(/20/), &
+                                  ungriddedUBound=(/num_categories/), &
                                   name="mdl data", &
                                   rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -103,7 +106,7 @@
 
  if (localpet == 0) then
    allocate(data_src_global(i_src,j_src))
-   allocate(data_src_global2(i_src,j_src,20))
+   allocate(data_src_global2(i_src,j_src,num_categories))
  else
    allocate(data_src_global(0,0))
    allocate(data_src_global2(0,0,0))
@@ -114,7 +117,7 @@
  call netcdf_err(status, "IN ROUTINE INTERP OPENING SOURCE FILE")
 
  if (localpet == 0) then
-   allocate(data_mdl_one_tile(i_mdl,j_mdl,20))
+   allocate(data_mdl_one_tile(i_mdl,j_mdl,num_categories))
    allocate(mask_mdl_one_tile(i_mdl,j_mdl))
    allocate(lat_mdl_one_tile(i_mdl,j_mdl))
    allocate(lon_mdl_one_tile(i_mdl,j_mdl))
@@ -282,7 +285,7 @@
        call search2 (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, tile, field_names(n))
 !      where(mask_mdl_one_tile == 0) data_mdl_one_tile = missing
        print*,'after regrid ',data_mdl_one_tile(i_mdl/2,j_mdl/2,:)
-       call output2 (data_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, tile, record, t, n)
+       call output2 (data_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile, record, t, n)
      endif
 
    print*,'after output ', localpet
