@@ -81,7 +81,7 @@
 
  call define_source_grid(localpet, npets, input_vegetation_type_file)
  method=ESMF_REGRIDMETHOD_NEAREST_STOD
- call interp(localpet, method, input_vegetation_type_file)
+ call interp2(localpet, method, input_vegetation_type_file)
  call source_grid_cleanup
 
 ! Snow free albedo
