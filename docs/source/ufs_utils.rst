@@ -528,6 +528,8 @@ The surface climatological data is located here `./fix/fix_sfc_climo <https://no
              * Global 0.03-degree - soil_type.statsgo.0.03.nc
              * Global 0.05-degree - soil_type.statsgo.0.05.nc
              * CONUS 0.01-degree - soil_type.statsgo.conus.0.01.nc
+      * Categorical BNU soil type
+             * Global 30-second - soil_type.bnu.30s.nc
       * Categorical IGBP vegetation type
              * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
              * MODIS-based global 0.05-degree - vegetation_type.modis.igbp.0.05.nc

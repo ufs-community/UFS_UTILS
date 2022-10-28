@@ -59,6 +59,8 @@ export veg_type_src="viirs.igbp.0.05"    # Use global 0.05-degree viirs data
 #export veg_type_src="viirs.igbp.conus.30s"   # Use CONUS 30s virrs data. Do not
                                                # use for global grids or N Amer grids.
 
+#export soil_type_src="bnu.30s"     # Use global 30s BNU soil type data.
+
 #-------------------------------------
 # Set working directory and directory where output files will be saved.
 #-------------------------------------
