@@ -12,10 +12,9 @@
 !! @param[in] i_mdl i dimensions of tile.
 !! @param[in] j_mdl j dimensions of tile.
 !! @param[in] tile Tile number.
-!! @param[in] time Time period to be output.
 !! @author George Gayno @date 2018
  subroutine output2(data_one_tile, lat_one_tile, lon_one_tile, i_mdl, j_mdl, &
-                   num_categories, tile, time, field_idx)
+                   num_categories, tile)
 
  use mpi
  use esmf
@@ -29,7 +28,6 @@
  implicit none
 
  integer, intent(in)              :: i_mdl, j_mdl, tile, num_categories
- integer, intent(in)              :: time, field_idx
 
  real(esmf_kind_r4), intent(in)   :: data_one_tile(i_mdl,j_mdl,num_categories)
  real(esmf_kind_r4)               :: lat_one_tile(i_mdl,j_mdl)
@@ -40,12 +38,15 @@
  character(len=200)               :: out_file_with_halo
 
  integer                          :: error
+ integer                          :: field_idx
  integer                          :: dim_x, dim_y, dim_z, id_data
  integer                          :: dim_time, id_times, ierr
  integer                          :: header_buffer_val = 16384
  integer                          :: i_out, j_out, id_lat, id_lon, id_sum
  integer                          :: i_start, i_end, j_start, j_end
  integer, save                    :: ncid(6), ncid_with_halo
+
+ field_idx = 1
 
  select case (field_names(field_idx))
    case ('soil_type')
@@ -141,13 +142,13 @@
  error = nf90_inq_varid( ncid(tile), field_names(field_idx), id_data)
  call netcdf_err(error, 'IN NF90_INQ_VARID' )
  error = nf90_put_var( ncid(tile), id_data, data_one_tile(i_start:i_end,j_start:j_end,:),  &
-                            start=(/1,1,1,time/), count=(/i_out,j_out,num_categories,1/))
+                            start=(/1,1,1,1/), count=(/i_out,j_out,num_categories,1/))
  call netcdf_err(error, 'IN NF90_PUT_VAR' )
   
 ! Temporary output of sum of %.
  sum_one_tile = sum(data_one_tile, dim=3)
  error = nf90_put_var( ncid(tile), id_sum, sum_one_tile(i_start:i_end,j_start:j_end),  &
-                            start=(/1,1,time/), count=(/i_out,j_out,1/))
+                            start=(/1,1,1/), count=(/i_out,j_out,1/))
 
  error = nf90_close(ncid(tile))
 
@@ -219,7 +220,7 @@
  call netcdf_err(error, 'IN NF90_INQ_VARID' )
 
  error = nf90_put_var(ncid_with_halo, id_data, data_one_tile,  &
-                      start=(/1,1,1,time/), count=(/i_mdl,j_mdl,num_categories,1/))
+                      start=(/1,1,1,1/), count=(/i_mdl,j_mdl,num_categories,1/))
  call netcdf_err(error, 'IN NF90_PUT_VAR' )
   
  error = nf90_close(ncid_with_halo)
