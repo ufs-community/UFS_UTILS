@@ -285,7 +285,7 @@
        enddo
        enddo
 
-       call search2 (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, tile, field_names(n))
+       call search2 (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, num_categories, tile, field_names(n))
 !      where(mask_mdl_one_tile == 0) data_mdl_one_tile = missing
        print*,'after regrid ',data_mdl_one_tile(i_mdl/2,j_mdl/2,:)
        call output2 (data_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile, t, n)

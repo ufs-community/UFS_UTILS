@@ -1,7 +1,8 @@
 !> @file
 !! @brief Replace undefined values on the model grid with a valid
-!! value at a nearby neighbor.
-!! @author George Gayno @date 2018
+!! value at a nearby neighbor. This routine works for fractional
+!! categorical fields.
+!! @author George Gayno @date 2022
 
 !> Replace undefined values on the model grid with a valid
 !! value at a nearby neighbor. Undefined values are typically
@@ -12,15 +13,18 @@
 !! not consider valid values at adjacent faces. That is a future
 !! upgrade.
 !!
+!! @note This routine works for fractional categorical fields.
+!!
 !! @param[inout] field - input: field before missing values are replaced
 !!                     - output: field after missing values are replaced
 !! @param[in] mask field bitmap. Field defined where mask=1
-!! @param[inout] idim i dimension of tile
-!! @param[inout] jdim j dimension of tile
+!! @param[in] idim i dimension of tile
+!! @param[in] jdim j dimension of tile
+!! @param[in] num_categories number of veg/soil categories
 !! @param[in] tile tile number
 !! @param[in] field_name field name
-!! @author George Gayno @date 2018
- subroutine search2 (field, mask, idim, jdim, tile, field_name)
+!! @author George Gayno @date 2022
+ subroutine search2 (field, mask, idim, jdim, num_categories, tile, field_name)
 
  use mpi
  use esmf
@@ -29,51 +33,28 @@
 
  character(len=*)                  :: field_name
 
- integer, intent(in)               :: idim, jdim, tile
+ integer, intent(in)               :: idim, jdim, tile, num_categories
  integer(esmf_kind_i4), intent(in) :: mask(idim,jdim)
 
- real(esmf_kind_r4), intent(inout) :: field(idim,jdim,20)
+ real(esmf_kind_r4), intent(inout) :: field(idim,jdim,num_categories)
 
  integer                           :: i, j, krad, ii, jj
  integer                           :: istart, iend
  integer                           :: jstart, jend
  integer                           :: ierr
+ integer                              :: default_category
 
- real                              :: default_value
  real(esmf_kind_r4), allocatable   :: field_save(:,:,:)
 
 !-----------------------------------------------------------------------
-! Set default value.
+! Set default category.
 !-----------------------------------------------------------------------
 
-
  select case (field_name)
-   case ('substrate_temperature') ! soil substrate_temperature
-     default_value = 280.0
-   case ('vegetation_greenness') ! vegetation greenness
-     default_value = 0.5
-   case ('maximum_snow_albedo') ! maximum snow albedo
-     default_value = 0.5
-   case ('leaf_area_index') ! leaf area index
-     default_value = 1.0
-   case ('visible_black_sky_albedo') ! visible black sky albedo
-     default_value = 0.1
-   case ('visible_white_sky_albedo') ! visible white sky albedo
-     default_value = 0.1
-   case ('near_IR_black_sky_albedo') ! near IR black sky albedo
-     default_value = 0.2
-   case ('near_IR_white_sky_albedo') ! near IR white sky albedo
-     default_value = 0.2
-   case ('facsf') ! facsf
-     default_value = 0.5
-   case ('facwf') ! facwf
-     default_value = 0.5
-   case ('slope_type') ! slope type
-     default_value = float(1)
    case ('soil_type') ! soil type
-     default_value = float(2)
+     default_category = 3
    case ('vegetation_type') ! vegetation type
-     default_value = float(3)
+     default_category = 3
    case default
      print*,'- FATAL ERROR IN ROUTINE SEARCH.  UNIDENTIFIED FIELD : ', field
      call mpi_abort(mpi_comm_world, 77, ierr)
@@ -83,7 +64,7 @@
 ! Perform search and replace.
 !-----------------------------------------------------------------------
 
- allocate (field_save(idim,jdim,20))
+ allocate (field_save(idim,jdim,num_categories))
  field_save = field
 
  J_LOOP : do j = 1, jdim
@@ -126,9 +107,9 @@
        enddo KRAD_LOOP
 
        field(i,j,:) = 0.0
-       field(i,j,nint(default_value)) = 1.0  ! Search failed.  Use default value.
+       field(i,j,default_category) = 1.0  ! Search failed.  Use 100% of default category.
 
-       write(6,101) tile,i,j,default_value
+       write(6,101) tile,i,j,default_category
 
      endif
    enddo I_LOOP
