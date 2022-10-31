@@ -43,6 +43,9 @@
  integer, public              :: halo = 0 !< Number of row/cols defining the lateral
                                           !! boundary halo. Used for regional nests.
 
+ logical, public              :: fract_vegsoil_type = .true. !< When true, output the percentage of each soil
+                                                             !! and vegetation type category.
+
  public :: read_setup_namelist
 
  contains

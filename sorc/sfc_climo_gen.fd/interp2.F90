@@ -205,8 +205,4 @@
  print*,"- CALL FieldDestroy."
  call ESMF_FieldDestroy(data_field_src, rc=rc)
 
- print*,'after output ', localpet
- call mpi_barrier(mpi_comm_world, rc)
- stop
-
  end subroutine interp2

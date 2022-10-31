@@ -225,9 +225,6 @@
   
  error = nf90_close(ncid_with_halo)
 
- call mpi_barrier(mpi_comm_world, error)
- stop
-
  return
 
  end subroutine output2
