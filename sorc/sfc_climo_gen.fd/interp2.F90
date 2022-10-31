@@ -27,7 +27,6 @@
  integer                            :: i, j, ij, tile, n, ncid, status
  integer                            :: l(1), u(1), t
  integer                            :: clb_mdl(3), cub_mdl(3)
- integer                            :: clb_src(3), cub_src(3)
  integer                            :: varid, record
  integer                            :: tile_num, pt_loc_this_tile
  integer                            :: isrctermprocessing
@@ -37,7 +36,6 @@
  integer(esmf_kind_i4), pointer     :: unmapped_ptr(:)
 
  real(esmf_kind_r4), pointer        :: data_mdl_ptr(:,:,:)
- real(esmf_kind_r4), pointer        :: data_src_ptr(:,:,:)
  real(esmf_kind_r4), allocatable    :: data_src_global(:,:)
  real(esmf_kind_r4), allocatable    :: data_src_global2(:,:,:)
  real(esmf_kind_r4), allocatable    :: data_mdl_one_tile(:,:,:)
@@ -67,18 +65,6 @@
                                   rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
-
- print*,"- CALL FieldGet FOR SOURCE GRID DATA."
- nullify(data_src_ptr)
- call ESMF_FieldGet(data_field_src, &
-                    farrayPtr=data_src_ptr,  &
-                    computationalLBound=clb_src, &
-                    computationalUBound=cub_src, &
-                    rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- print*,'got here ',localpet,clb_src,cub_src
 
  print*,"- CALL FieldCreate FOR model GRID veg DATA."
  data_field_mdl2 = ESMF_FieldCreate(grid_mdl, &
@@ -321,90 +307,3 @@
  call ESMF_FieldDestroy(data_field_src, rc=rc)
 
  end subroutine interp2
-
-!> Ensure consistent fields at land ice points.
-!! Land ice is vegetation type 15 (variable landice).
-!! output is Model field.
-!!
-!! @param[in] field Model field before adjustments for land ice.
-!! @param[in] vegt Vegetation type on the model tile.
-!! @param[inout] idim i dimension of model tile.
-!! @param[inout] jdim j dimension of model tile.
-!! @param[in] field_ch Field name.
-!! @author George Gayno NCEP/EMC
- subroutine adjust_for_landice2(field, vegt, idim, jdim, field_ch)
-
- use esmf
- use mpi
-
- implicit none
-
- character(len=*), intent(in)      :: field_ch
-
- integer, intent(in)               :: idim, jdim
-
- real(esmf_kind_i4), intent(in)    :: vegt(idim,jdim)
- real(esmf_kind_r4), intent(inout) :: field(idim,jdim)
-
- integer, parameter                :: landice=15
-
- integer                           :: i, j, ierr
-
- real                              :: landice_value
-
- select case (field_ch)
-   case ('substrate_temperature') ! soil substrate temp
-     landice_value = 273.15
-     do j = 1, jdim
-     do i = 1, idim
-       if (nint(vegt(i,j)) == landice) then
-         field(i,j) = min(field(i,j), landice_value)
-       endif
-     enddo
-     enddo
-   case ('vegetation_greenness') ! vegetation greenness
-     landice_value = 0.01 ! 1.0% is bare ground
-     do j = 1, jdim
-     do i = 1, idim
-       if (nint(vegt(i,j)) == landice) then
-         field(i,j) = landice_value
-       endif
-     enddo
-     enddo
-   case ('leaf_area_index') ! leaf area index
-     landice_value = 0.0 ! bare ground
-     do j = 1, jdim
-     do i = 1, idim
-       if (nint(vegt(i,j)) == landice) then
-         field(i,j) = landice_value
-       endif
-     enddo
-     enddo
-   case ('slope_type') ! slope type
-     landice_value = 9.0
-     do j = 1, jdim
-     do i = 1, idim
-       if (nint(vegt(i,j)) == landice) then
-         field(i,j) = landice_value
-       else
-         if (nint(field(i,j)) == nint(landice_value)) field(i,j) = 2.0
-       endif
-     enddo
-     enddo
-   case ('soil_type') ! soil type
-     landice_value = 16.0
-     do j = 1, jdim
-     do i = 1, idim
-       if (nint(vegt(i,j)) == landice) then
-         field(i,j) = landice_value
-       else
-         if (nint(field(i,j)) == nint(landice_value)) field(i,j) = 6.0
-       endif
-     enddo
-     enddo
-   case default
-     print*,'- FATAL ERROR IN ROUTINE ADJUST_FOR_LANDICE.  UNIDENTIFIED FIELD : ', field_ch
-     call mpi_abort(mpi_comm_world, 57, ierr)
- end select
-
- end subroutine adjust_for_landice2
