@@ -7,10 +7,9 @@
 !! model grid.
 !!
 !! @param[in] localpet this mpi task
-!! @param[in] method interpolation method.defined where mask=1
 !! @param[in] input_file filename of input source data.
 !! @author George Gayno @date 2018
- subroutine interp2(localpet, method, input_file)
+ subroutine interp2(localpet, input_file)
 
  use esmf
  use netcdf
@@ -24,11 +23,10 @@
  character(len=*), intent(in)       :: input_file
 
  integer                            :: rc, localpet
- integer                            :: i, j, ij, tile, n, ncid, status
- integer                            :: l(1), u(1), t
+ integer                            :: i, j, tile, n, ncid, status
+ integer                            :: t
  integer                            :: clb_mdl(3), cub_mdl(3)
  integer                            :: varid, record
- integer                            :: tile_num, pt_loc_this_tile
  integer                            :: isrctermprocessing
  integer :: category, num_categories
 
@@ -44,7 +42,6 @@
  real(esmf_kind_r4), allocatable    :: sum_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: lon_mdl_one_tile(:,:)
 
-!type(esmf_regridmethod_flag),intent(in) :: method
  type(esmf_regridmethod_flag) :: method
  type(esmf_field)                        :: data_field_src
  type(esmf_field)                        :: data_field_mdl2
@@ -151,13 +148,7 @@
    if (record == 1) then
 
      method = ESMF_REGRIDMETHOD_CONSERVE
-
-     if (method == ESMF_REGRIDMETHOD_BILINEAR) then
-       pole = ESMF_POLEMETHOD_ALLAVG
-     else
-       pole = ESMF_POLEMETHOD_NONE
-     endif
-
+     pole = ESMF_POLEMETHOD_NONE
 
      print*,"- CALL FieldRegridStore."
      nullify(unmapped_ptr)
@@ -201,32 +192,6 @@
 ! Unmapped data points are given the flag value of -9999.9, which
 ! will be replaced in routine "search".
 !-----------------------------------------------------------------------
-
-   l = lbound(unmapped_ptr)
-   u = ubound(unmapped_ptr)
-!  do ij = l(1), u(1)
-
-!    tile_num = ((unmapped_ptr(ij)-1) / (i_mdl*j_mdl)) ! tile number minus 1
-!    pt_loc_this_tile = unmapped_ptr(ij) - (tile_num * i_mdl * j_mdl) 
-                                                  ! "ij" location of point within tile.
-
-!    j = (pt_loc_this_tile - 1) / i_mdl + 1
-!    i = mod(pt_loc_this_tile, i_mdl)
-!    if (i==0) i = i_mdl
-!    data_mdl_ptr(i,j,:) = -9999.9 
-                                 
-!  enddo
-
-! These fields are adjusted at landice.
-
-!  select case (trim(field_names(n)))
-!    case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type')
-!    if (localpet == 0) then
-!      allocate(vegt_mdl_one_tile(i_mdl,j_mdl))
-!    else
-!      allocate(vegt_mdl_one_tile(0,0))
-!    endif
-!  end select
 
    OUTPUT_LOOP : do tile = 1, num_tiles
 
