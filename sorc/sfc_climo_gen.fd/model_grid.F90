@@ -164,14 +164,16 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
- print*,"- CALL FieldCreate FOR VEGETATION TYPE INTERPOLATED TO MODEL GRID."
- vegt_field_mdl = ESMF_FieldCreate(grid_mdl, &
+ if (.not. fract_vegsoil_type) then
+   print*,"- CALL FieldCreate FOR VEGETATION TYPE INTERPOLATED TO MODEL GRID."
+   vegt_field_mdl = ESMF_FieldCreate(grid_mdl, &
                                    typekind=ESMF_TYPEKIND_R4, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
                                    name="veg type on model grid", &
                                    rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
+ endif
 
  print*,"- CALL FieldCreate FOR MODEL GRID LATITUDE."
  latitude_field_mdl = ESMF_FieldCreate(grid_mdl, &
@@ -399,8 +401,10 @@
  print*,"- CALL FieldDestroy FOR MODEL GRID DATA FIELD."
  call ESMF_FieldDestroy(data_field_mdl,rc=rc)
 
- print*,"- CALL FieldDestroy FOR MODEL GRID VEGETATION TYPE."
- call ESMF_FieldDestroy(vegt_field_mdl,rc=rc)
+ if (ESMF_FieldIsCreated(vegt_field_mdl)) then
+   print*,"- CALL FieldDestroy FOR MODEL GRID VEGETATION TYPE."
+   call ESMF_FieldDestroy(vegt_field_mdl,rc=rc)
+ endif
 
  print*,"- CALL FieldDestroy FOR MODEL GRID LATITUDE."
  call ESMF_FieldDestroy(latitude_field_mdl,rc=rc)
