@@ -81,8 +81,10 @@
 
  call define_source_grid(localpet, npets, input_vegetation_type_file)
  if (fract_vegsoil_type) then
+   print*,'- WILL OUTPUT VEGETATION TYPE FRACTION.'
    call interp2(localpet, input_vegetation_type_file)
  else
+   print*,'- WILL OUTPUT DOMINATE VEGETATION TYPE.'
    method=ESMF_REGRIDMETHOD_NEAREST_STOD
    call interp(localpet, method, input_vegetation_type_file)
  endif
@@ -141,8 +143,10 @@
  if (trim(input_soil_type_file) /= "NULL") then
    call define_source_grid(localpet, npets, input_soil_type_file)
    if (fract_vegsoil_type) then
+     print*,'- WILL OUTPUT SOIL TYPE FRACTION.'
      call interp2(localpet, input_soil_type_file)
    else
+     print*,'- WILL OUTPUT DOMINATE SOIL TYPE.'
      method=ESMF_REGRIDMETHOD_NEAREST_STOD
      call interp(localpet, method, input_soil_type_file)
    endif

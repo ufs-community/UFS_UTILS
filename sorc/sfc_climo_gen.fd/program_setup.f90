@@ -71,7 +71,8 @@
                    input_vegetation_greenness_file, mosaic_file_mdl, &
                    orog_dir_mdl, orog_files_mdl, halo, &
                    vegetation_greenness_method, leaf_area_index_method, &
-                   maximum_snow_albedo_method, snowfree_albedo_method
+                   maximum_snow_albedo_method, snowfree_albedo_method, &
+                   fract_vegsoil_type
 
  print*,"- READ SETUP NAMELIST, LOCALPET: ", localpet
 

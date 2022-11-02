@@ -39,6 +39,7 @@ mosaic_file=${mosaic_file:-$FIX_FV3/C${res}_mosaic.nc}
 HALO=${HALO:-0}
 veg_type_src=${veg_type_src:-"modis.igbp.0.05"}
 VEG_TYPE_FILE=${VEG_TYPE_FILE:-${input_sfc_climo_dir}/vegetation_type.${veg_type_src}.nc}
+vegsoilt_frac=${vegsoilt_frac:-.false.}
 
 if [ ! -d $SAVE_DIR ]; then
   mkdir -p $SAVE_DIR
@@ -75,6 +76,7 @@ halo=$HALO
 maximum_snow_albedo_method="bilinear"
 snowfree_albedo_method="bilinear"
 vegetation_greenness_method="bilinear"
+fract_vegsoil_type=${vegsoilt_frac}
 /
 EOF
 
