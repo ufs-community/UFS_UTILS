@@ -20,6 +20,15 @@
 
  use esmf
 
+ use atmosphere_target_data, only    : lev_target, levp1_target, nvcoord_target, &
+                                       vcoord_target, delp_target_grid, &
+                                       dzdt_target_grid, ps_target_grid, &
+                                       temp_target_grid, tracers_target_grid, &
+                                       u_s_target_grid, v_s_target_grid, &
+                                       u_w_target_grid, v_w_target_grid, &
+                                       zh_target_grid, qnwfa_climo_target_grid, &
+                                       qnifa_climo_target_grid
+
  use input_data, only                : lev_input, &
                                        levp1_input, &
                                        tracers_input_grid, &
@@ -58,30 +67,21 @@
                                        thomp_pres_climo_input_grid, &
                                        lev_thomp_mp_climo
 
+ use write_data, only                : write_fv3_atm_header_netcdf, &
+                                       write_fv3_atm_bndy_data_netcdf, &
+                                       write_fv3_atm_data_netcdf
+
  implicit none
 
  private
 
- integer, public                    :: lev_target       !< num vertical levels
- integer, public                    :: levp1_target     !< num levels plus 1
- integer, public                    :: nvcoord_target   !< num vertical coordinate variables
-
- real(esmf_kind_r8), allocatable, public :: vcoord_target(:,:)  !< vertical coordinate
-
- type(esmf_field), public               :: delp_target_grid !< pressure thickness
- type(esmf_field), public               :: dzdt_target_grid !< vertical velocity
  type(esmf_field)                       :: dzdt_b4adj_target_grid !< vertical vel before vert adj
- type(esmf_field), allocatable, public  :: tracers_target_grid(:) !< tracers
  type(esmf_field), allocatable          :: tracers_b4adj_target_grid(:) !< tracers before vert adj
- type(esmf_field), public               :: ps_target_grid !< surface pressure
  type(esmf_field)                       :: ps_b4adj_target_grid !< sfc pres before terrain adj
  type(esmf_field)                       :: pres_target_grid !< 3-d pressure
  type(esmf_field)                       :: pres_b4adj_target_grid !< 3-d pres before terrain adj
- type(esmf_field), public               :: temp_target_grid !< temperautre
  type(esmf_field)                       :: temp_b4adj_target_grid !< temp before vert adj
  type(esmf_field)                       :: terrain_interp_to_target_grid !< Input grid terrain interpolated to target grid.   
- type(esmf_field), public               :: u_s_target_grid !< u-wind, 'south' edge
- type(esmf_field), public               :: v_s_target_grid !< v-wind, 'south' edge
  type(esmf_field)                       :: wind_target_grid !< 3-d wind, grid box center
  type(esmf_field)                       :: xwind_target_grid !< 3-d wind, grid box center
  type(esmf_field)                       :: ywind_target_grid !< 3-d wind, grid box center
@@ -106,14 +106,8 @@
 
  type(esmf_field)                       :: qnifa_climo_b4adj_target_grid !< number concentration of ice
                                            !! friendly aerosols before vert adj
- type(esmf_field), public               :: qnifa_climo_target_grid !< number concentration of ice
-                                           !! friendly aerosols on target 
-                                           !! horiz/vert grid.
  type(esmf_field)                       :: qnwfa_climo_b4adj_target_grid !< number concentration of water
                                            !! friendly aerosols before vert adj
- type(esmf_field), public               :: qnwfa_climo_target_grid !< number concentration of water
-                                           !! friendly aerosols on target 
-                                           !! horiz/vert grid.
  type(esmf_field)                       :: thomp_pres_climo_b4adj_target_grid !< pressure of each level on
                                            !! target grid
 
@@ -519,7 +513,7 @@
 ! Free up memory.
 !-----------------------------------------------------------------------------------
 
- call cleanup_target_atm_data
+ call cleanup_all_target_atm_data
 
  end subroutine atmosphere_driver
 
@@ -2492,13 +2486,15 @@
 
 !> Cleanup target grid atmospheric field objects.
 !! @author George Gayno
- subroutine cleanup_target_atm_data
+ subroutine cleanup_all_target_atm_data
+
+ use atmosphere_target_data, only : cleanup_atmosphere_target_data
 
  implicit none
 
- integer                     :: i, rc
+ integer                     :: rc
 
- print*,"- DESTROY TARGET GRID ATMOSPHERIC FIELDS."
+ print*,"- DESTROY LOCAL TARGET GRID ATMOSPHERIC FIELDS."
 
  call ESMF_FieldDestroy(delp_target_grid, rc=rc)
  call ESMF_FieldDestroy(dzdt_target_grid, rc=rc)
@@ -2533,10 +2529,8 @@
    call ESMF_FieldDestroy(qnifa_climo_target_grid, rc=rc)
  endif
 
- if (ESMF_FieldIsCreated(qnwfa_climo_target_grid)) then
-   call ESMF_FieldDestroy(qnwfa_climo_target_grid, rc=rc)
- endif
+ call cleanup_atmosphere_target_data
 
- end subroutine cleanup_target_atm_data
+ end subroutine cleanup_all_target_atm_data
 
  end module atmosphere

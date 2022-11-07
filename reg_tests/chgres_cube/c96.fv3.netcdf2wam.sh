@@ -15,7 +15,7 @@ rm -fr $DATA
 export FIXfv3=${HOMEreg}/fix/C96
 export COMIN=${HOMEreg}/input_data/fv3.netcdf
 export ATM_FILES_INPUT=gfs.t00z.atmf000.nc
-export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
+export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
 export INPUT_TYPE="gaussian_netcdf"
 export CONVERT_SFC=".false."
 export CONVERT_NST=".false."
@@ -25,7 +25,7 @@ export CDATE=2020020200
 # export TRACERS_INPUT='"sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"'
 export TRACERS_TARGET='"sphum","liq_wat","spo3","ice_wat","rainwat","snowwat","graupel","spo","spo2"'
 
-export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l150.txt
+export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l150.txt
 export WAM_COLD_START=.true.
 
 export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}

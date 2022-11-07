@@ -1,0 +1,157 @@
+
+Steps to create soil texture class dataset from BNU sand/silt/clay data source
+
+All processing scripts and code are run on NOAA hera HPC
+
+=======================================
+
+1. download original sand,silt,clay data from here:
+	http://globalchange.bnu.edu.cn/research/soilw
+
+6 files needed:
+
+CLAY1.nc  SAND1.nc  SILT1.nc
+CLAY2.nc  SAND2.nc  SILT2.nc
+
+documentation: Shangguan, W., Dai, Y., Duan, Q., Liu, B. and Yuan, H., 2014. A Global Soil Data Set for Earth System Modeling. Journal of Advances in Modeling Earth Systems, 6: 249-263 .
+
+data notes: 
+- horizontal resolution is ~global 30", 84N -> 56S
+- vertical resolution: 8 layers to the depth of 2.3 m:
+    0     - 0.045 m
+    0.045 - 0.091 m
+    0.091 - 0.166 m
+    0.166 - 0.289 m
+    0.289 - 0.493 m
+    0.493 - 0.829 m
+    0.829 - 1.383 m
+    1.383 - 2.296 m
+
+store 6 files in a directory named original/
+
+=======================================
+
+2. convert to texture using NCL; based on USDA soil texture triangle
+
+NCL does not handle the large size of this data so the process is split into 30deg x 30deg tiles
+
+The code produces a texture class for layers 0-1m and 1-2m.
+
+create a directory name tiles/
+
+since there is no data at either pole, run three separate scripts:
+
+convert_to_texture.ncl       : create tiles from 30S to 60N
+convert_to_texture_Spole.ncl : create tile  from 30S to 60S
+convert_to_texture_Npole.ncl : create tile  from 60N to 90N
+
+Reduced lat organization in the BNU dataset:
+
+lat(beg) = 83.99578
+lat(end) = -55.99583
+
+That is, centroids of 84N - 56S, i.e., 90N-60N and 30S-60S are only partially covered.
+
+=======================================
+
+3. stitch tiles, fill missing and make consistent with viirs vegetation
+
+fill in missing value with these rules based on VIIRS land:
+
+where land is snow/ice, soil texture = 16
+where water           , soil texture = 14
+
+If missing, search an 11x11 region and use dominant of 12 categories.
+
+If still missing, search a 51x51 region and use dominant of 12 categories.
+
+If still missing, search a 201x201 region and use dominant of 12 categories.
+
+If still missing, set to loam.
+
+fortran code (soil_fill.f90) run on hera with:
+
+module load intel/2022.2.0 netcdf/4.7.0
+make
+./soil_fill
+
+output notes:
+
+ Num missing before fill:      2536964
+ Num missing after fill #1:      61684
+ Num missing after fill #2:      22021
+ Num missing after fill #3:      19103
+ Num missing after filling:          0
+
+The file dataset only uses the 0-1m texture class.
+
+output file will be named bnu_soil.nc
+
+=======================================
+
+4. final formatting to use in ufs_utils
+
+a. create 30s soil file template from viirs vegetation file
+
+cp VEG_LOCATION/vegetation_type.viirs.igbp.30s.nc soil_type.bnu.30s.nc
+
+b. run a bunch of nco commands to get the metadata and naming correct for soil type
+
+ncrename -O -h -v vegetation_type,soil_type soil_type.bnu.30s.nc 
+ncatted -h -a landice_category,soil_type,m,i,16 soil_type.bnu.30s.nc
+ncatted -h -a class_01,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_02,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_03,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_04,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_05,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_06,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_07,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_08,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_09,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_10,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_11,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_12,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_13,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_14,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_15,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_16,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_17,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_18,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_19,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a class_20,soil_type,d,,, soil_type.bnu.30s.nc
+ncatted -h -a source,global,m,c,"BNU SOIL TYPE" soil_type.bnu.30s.nc
+ncatted -h -a description,global,d,,, soil_type.bnu.30s.nc
+ncatted -h -a data_source,global,d,,, soil_type.bnu.30s.nc
+ncatted -h -a primary_developer,global,d,,, soil_type.bnu.30s.nc
+ncatted -h -a developer,global,d,,, soil_type.bnu.30s.nc
+ncatted -h -a nesdis_poc,global,d,,, soil_type.bnu.30s.nc
+ncatted -h -a contributor,global,d,,, soil_type.bnu.30s.nc
+ncatted -h -a primary_documentation,global,d,,, soil_type.bnu.30s.nc
+ncatted -h -a additional_documentation,global,d,,, soil_type.bnu.30s.nc
+ncatted -h -a units,lat,c,c,"degrees_north" soil_type.bnu.30s.nc
+ncatted -h -a units,lon,c,c,"degrees_east" soil_type.bnu.30s.nc
+
+ncatted -h -a class_01,soil_type,c,c,"sand" soil_type.bnu.30s.nc
+ncatted -h -a class_02,soil_type,c,c,"loamy sand" soil_type.bnu.30s.nc
+ncatted -h -a class_03,soil_type,c,c,"sandy loam" soil_type.bnu.30s.nc
+ncatted -h -a class_04,soil_type,c,c,"silt loam" soil_type.bnu.30s.nc
+ncatted -h -a class_05,soil_type,c,c,"silt" soil_type.bnu.30s.nc
+ncatted -h -a class_06,soil_type,c,c,"loam" soil_type.bnu.30s.nc
+ncatted -h -a class_07,soil_type,c,c,"sandy clay loam" soil_type.bnu.30s.nc
+ncatted -h -a class_08,soil_type,c,c,"silty clay loam" soil_type.bnu.30s.nc
+ncatted -h -a class_09,soil_type,c,c,"clay loam" soil_type.bnu.30s.nc
+ncatted -h -a class_10,soil_type,c,c,"sandy clay" soil_type.bnu.30s.nc
+ncatted -h -a class_11,soil_type,c,c,"silty clay" soil_type.bnu.30s.nc
+ncatted -h -a class_12,soil_type,c,c,"clay" soil_type.bnu.30s.nc
+
+c. replace soil type data from processed file into template file
+
+ncks -A -h -v soil_type bnu_soil.nc soil_type.bnu.30s.nc
+
+d. to save 90+% space compress
+
+ncks -O -h -4 -L 1 soil_type.bnu.30s.nc soil_type.bnu.30s.nc
+
+e. dataset is stored here
+
+hera:/scratch2/NCEPDEV/land/data/input_data/soil_type

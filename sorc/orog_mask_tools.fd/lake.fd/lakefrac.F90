@@ -101,7 +101,7 @@ PROGRAM lake_frac
     ENDDO
 
     ! read in lake data file
-!    sfcdata_path = '/scratch1/NCEPDEV/global/glopara/fix/fix_orog/'
+!    sfcdata_path = '/scratch1/NCEPDEV/global/glopara/fix/orog/'
     lakedata_path = trim(lakedata_path) // "/"
     ALLOCATE(lakestatus(nlon*nlat),lakedepth(nlon*nlat)) 
     PRINT*, 'Read in lake data file ...'

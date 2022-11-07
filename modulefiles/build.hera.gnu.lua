@@ -22,13 +22,13 @@ load(pathJoin("hpc-mpich", mpich_ver))
 netcdf_ver=os.getenv("netcdf_ver") or "4.7.4"
 load(pathJoin("netcdf", netcdf_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8_1_1"
+esmf_ver=os.getenv("esmf_ver") or "8.2.1b04"
 load(pathJoin("esmf", esmf_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.1"
+g2_ver=os.getenv("g2_ver") or "3.4.3"
 load(pathJoin("g2", g2_ver))
 
 ip_ver=os.getenv("ip_ver") or "3.3.3"
@@ -48,9 +48,6 @@ load(pathJoin("sfcio", sfcio_ver))
 
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
-
-wgrib2_ver=os.getenv("wgrib2_ver") or "2.0.8"
-load(pathJoin("wgrib2", wgrib2_ver))
 
 nccmp_ver=os.getenv("nccmp_ver") or "1.8.7.0"
 load(pathJoin("nccmp", nccmp_ver))

@@ -74,8 +74,8 @@
 
  print*,"Starting test of fvcom_tools."
 !Set default file names, cold start, and time str
- fv3file = 'sfcdata_unittest.nc'
- fvcomfile = 'fvcom_unittest.nc'
+ fv3file = './data/sfcdata_unittest.nc'
+ fvcomfile = './data/fvcom_unittest.nc'
  wcstart = 'cold'
  inputFVCOMselStr = '3333-44-55T66:77:88.000000'
  t1 = 1

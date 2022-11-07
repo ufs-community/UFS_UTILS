@@ -19,7 +19,7 @@ export FIXsfc=${FIXfv3}/fix_sfc
 export COMIN=${HOMEreg}/input_data/nam.grib2
 
 export GRIB2_FILE_INPUT=nam_218_20200801_0000_000.grb2
-export VCOORD_FILE=${HOMEufs}/fix/fix_am/global_hyblev.l64.txt
+export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
 export VARMAP_FILE=${HOMEufs}/parm/varmap_tables/GFSphys_var_map.txt
 export INPUT_TYPE='grib2'
 export CONVERT_NST=".false."

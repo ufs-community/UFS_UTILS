@@ -23,8 +23,6 @@ if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
       CACHE STRING "Choose the type of build." FORCE)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
                                                "MinSizeRel" "RelWithDebInfo")
-  message(STATUS "Set BUILD_TESTING to YES and build unit testing package under tests")
-  set(BUILD_TESTING "YES")
 endif()
 
 # Set compiler flags.
@@ -69,15 +67,8 @@ find_package(nemsio 2.5.0 REQUIRED)
 find_package(sigio 2.3.0 REQUIRED)
 find_package(sp 2.3.3 REQUIRED)
 find_package(ip 3.3.3 REQUIRED)
-find_package(g2 3.4.0 REQUIRED)
-find_package(wgrib2 2.0.8 REQUIRED)
+find_package(g2 3.4.3 REQUIRED)
 find_package(sigio 2.3.0 REQUIRED)
-
-# EMC requires executables in ./exec
-set(exec_dir bin)
-if(EMC_EXEC_DIR)
-  set(exec_dir exec)
-endif()
 
 # If doxygen documentation we enabled, build it. This must come before
 # adding the source code directories; the main documentation build
@@ -93,6 +84,6 @@ add_subdirectory(sorc)
 # Run unit tests.
 include(CTest)
 if(BUILD_TESTING)
+  message(STATUS "Set BUILD_TESTING to YES and build unit testing package under tests")
   add_subdirectory(tests)
 endif()
-

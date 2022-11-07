@@ -1,3 +1,14 @@
+ module write_data
+
+ private
+
+ public :: write_fv3_atm_header_netcdf
+ public :: write_fv3_atm_bndy_data_netcdf
+ public :: write_fv3_atm_data_netcdf
+ public :: write_fv3_sfc_data_netcdf
+
+ contains
+
 !> @file
 !! @brief Writes the tiled and header files expected by the forecast
 !! model.
@@ -18,9 +29,9 @@
 
  use netcdf
 
- use atmosphere, only : nvcoord_target, &
-                        vcoord_target,  &
-                        levp1_target
+ use atmosphere_target_data, only : nvcoord_target, &
+                                    vcoord_target,  &
+                                    levp1_target
 
  use program_setup, only : num_tracers, use_thomp_mp_climo
 
@@ -30,7 +41,6 @@
 
  character(len=13)   :: outfile
 
- integer             :: fsize=65536, initial = 0
  integer             :: header_buffer_val = 16384
  integer             :: error, ncid, dim_nvcoord
  integer             :: dim_levp1, id_ntrac, id_vcoord
@@ -44,8 +54,7 @@
 
  print*,"- WRITE ATMOSPHERIC HEADER FILE: ", trim(outfile)
 
- error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
-                     ncid, initialsize=initial, chunksize=fsize)
+ error = nf90_create(outfile, NF90_NETCDF4, ncid)
  call netcdf_err(error, 'CREATING FILE='//trim(outfile) )
 
  error = nf90_def_dim(ncid, 'nvcoord', nvcoord_target, dim_nvcoord)
@@ -105,18 +114,12 @@
  use esmf
  use netcdf
 
- use atmosphere, only            : lev_target, levp1_target, &
-                                   dzdt_target_grid, &
-                                   ps_target_grid, &
-                                   tracers_target_grid, &
-                                   u_s_target_grid, &
-                                   v_s_target_grid, &
-                                   u_w_target_grid, &
-                                   v_w_target_grid, &
-                                   temp_target_grid, &
-                                   zh_target_grid, &
-                                   qnifa_climo_target_grid, &
-                                   qnwfa_climo_target_grid
+ use atmosphere_target_data, only : lev_target, levp1_target, &
+                                    ps_target_grid, zh_target_grid, &
+                                    tracers_target_grid, dzdt_target_grid, &
+                                    temp_target_grid, qnifa_climo_target_grid, &
+                                    qnwfa_climo_target_grid, u_s_target_grid, &
+                                    v_s_target_grid, u_w_target_grid, v_w_target_grid
 
  use model_grid, only            : i_target, ip1_target, j_target, jp1_target
 
@@ -130,7 +133,6 @@
 
  character(len=50)              :: name
 
- integer                        :: fsize=65536, initial = 0
  integer                        :: header_buffer_val = 16384
  integer                        :: ncid, error, tile, i, n
  integer                        :: dim_lon, dim_lat
@@ -202,8 +204,7 @@
  if (localpet == 0) then
 
 !--- open the file
-   error = nf90_create("./gfs.bndy.nc", IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
-                     ncid, initialsize=initial, chunksize=fsize)
+   error = nf90_create("./gfs.bndy.nc", NF90_NETCDF4, ncid)
    call netcdf_err(error, 'CREATING BNDY FILE' )
 
    error = nf90_def_dim(ncid, 'lon', i_target, dim_lon)
@@ -1201,20 +1202,13 @@
                                      use_thomp_mp_climo, &
                                      regional
 
- use atmosphere, only              : lev_target, &
-                                     levp1_target, &
-                                     ps_target_grid, &
-                                     zh_target_grid, &
-                                     dzdt_target_grid, &
-                                     qnifa_climo_target_grid, &
-                                     qnwfa_climo_target_grid, &
-                                     tracers_target_grid, &
-                                     temp_target_grid, &
-                                     delp_target_grid, &
-                                     u_s_target_grid,   &
-                                     v_s_target_grid,   &
-                                     u_w_target_grid,   &
-                                     v_w_target_grid
+ use atmosphere_target_data, only  : lev_target, levp1_target, &
+                                     ps_target_grid, zh_target_grid, &
+                                     dzdt_target_grid, delp_target_grid, &
+                                     temp_target_grid, tracers_target_grid, &
+                                     qnifa_climo_target_grid, qnwfa_climo_target_grid, &
+                                     u_s_target_grid, v_s_target_grid, &
+                                     u_w_target_grid, v_w_target_grid
 
  use model_grid, only              : num_tiles_target_grid, &
                                      i_target, j_target, &
@@ -1233,7 +1227,6 @@
  character(len=128)               :: outfile
 
  integer                          :: error, ncid, tile, n
- integer                          :: fsize=65536, initial = 0
  integer                          :: header_buffer_val = 16384
  integer                          :: dim_lon, dim_lat
  integer                          :: dim_lonp, dim_latp
@@ -1291,8 +1284,7 @@
    endif
 
 !--- open the file
-   error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
-                       ncid, initialsize=initial, chunksize=fsize)
+   error = nf90_create(outfile, NF90_NETCDF4, ncid)
    call netcdf_err(error, 'CREATING FILE='//trim(outfile) )
 
 !--- define dimension
@@ -1819,7 +1811,7 @@
  use program_setup, only         : convert_nst, halo=>halo_bndy, &
                                    regional, lai_from_climo
 
- use surface, only               : canopy_mc_target_grid,  &
+ use surface_target_data, only   : canopy_mc_target_grid,  &
                                    f10m_target_grid, &
                                    ffmm_target_grid, &
                                    q2m_target_grid,   &
@@ -1877,7 +1869,6 @@
  integer, intent(in)            :: localpet
  character(len=128)             :: outfile
 
- integer                        :: fsize=65536, initial = 0
  integer                        :: header_buffer_val = 16384
  integer                        :: dim_x, dim_y, dim_lsoil, dim_time
  integer                        :: error, i, ncid, tile
@@ -1969,8 +1960,7 @@
      endif
 
 !--- open the file
-     error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
-                         ncid, initialsize=initial, chunksize=fsize)
+     error = nf90_create(outfile, NF90_NETCDF4, ncid)
      call netcdf_err(error, 'CREATING FILE='//trim(outfile) )
 
 !--- define dimensions
@@ -3157,3 +3147,5 @@
  return
 
  end subroutine write_fv3_sfc_data_netcdf
+
+ end module write_data

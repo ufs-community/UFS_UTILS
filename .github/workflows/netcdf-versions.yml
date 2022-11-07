@@ -47,8 +47,8 @@ jobs:
         export CC=mpicc
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
-        wget https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-${{ matrix.netcdf_version }}.tar.gz &> /dev/null
-        tar -xzf netcdf-c-${{ matrix.netcdf_version }}.tar.gz
+        wget https://github.com/Unidata/netcdf-c/archive/refs/tags/v${{ matrix.netcdf_version }}.tar.gz &> /dev/null
+        tar -xzf v${{ matrix.netcdf_version }}.tar.gz
         cd netcdf-c-${{ matrix.netcdf_version }}
         ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities --disable-shared
         make -j2
@@ -139,6 +139,7 @@ jobs:
       uses: actions/checkout@v2
       with: 
         path: ufs_utils
+        submodules: recursive
 
     - name: build
       run: |
@@ -148,18 +149,12 @@ jobs:
         export CC=mpicc
         export CXX=mpicxx
         export FC=mpifort
-        # Findwgrib2 in module form does not search <libname>-version
-        # as NCEPLIBS installs it
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        export wgrib2_ROOT=`find ~/nceplibs -type d -maxdepth 1 -iname "wgrib2*"`
         cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' -DCMAKE_BUILD_TYPE=Debug 
         make -j2
 
     - name: test
       run: |
-        cd ufs_utils/build/tests
-        wget -i ./chgres_cube/data/files.txt -P ./chgres_cube/data
-        wget -i ./sfc_climo_gen/data/files.txt -P ./sfc_climo_gen/data
-        cd ../
+        cd ufs_utils/build
         export LSAN_OPTIONS=suppressions=LSanSuppress.supp
         ctest --rerun-failed --output-on-failure

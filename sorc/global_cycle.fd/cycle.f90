@@ -307,6 +307,7 @@
                    ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
 !
  USE READ_WRITE_DATA
+ use machine
  USE MPI
  USE LAND_INCREMENTS, ONLY: ADD_INCREMENT_SOIL,     &
                             ADD_INCREMENT_SNOW,     &
@@ -336,6 +337,9 @@
  INTEGER             :: I, IERR
  INTEGER             :: I_INDEX(LENSFC), J_INDEX(LENSFC)
  INTEGER             :: IDUM(IDIM,JDIM)
+ integer             :: num_parthds, num_threads
+
+ real(kind=kind_io8) :: min_ice(lensfc)
 
  REAL                :: SLMASK(LENSFC), OROG(LENSFC)
  REAL                :: SIHFCS(LENSFC), SICFCS(LENSFC)
@@ -365,6 +369,7 @@
  REAL, ALLOCATABLE   :: SLIFCS_FG(:)
  INTEGER, ALLOCATABLE :: LANDINC_MASK_FG(:), LANDINC_MASK(:)
  REAL, ALLOCATABLE   :: SND_BCK(:), SND_INC(:), SWE_BCK(:)
+ REAL(KIND=KIND_IO8), ALLOCATABLE :: SLMASKL(:), SLMASKW(:)
 
  TYPE(NSST_DATA)     :: NSST
  real, dimension(idim,jdim) :: tf_clm,tf_trd,sal_clm
@@ -513,22 +518,45 @@ ENDIF
 
 !--------------------------------------------------------------------------------
 ! UPDATE SURFACE FIELDS.
+!
+! FIRST, SET WATER AND LAND MASKS - SLMASKW/SLMASKL. FOR UNCOUPLED
+! (NON-FRACTIONAL) MODE, THESE ARE IDENTICAL TO THE CURRENT
+! MASK - '0' WATER; '1' LAND.
 !--------------------------------------------------------------------------------
 
  IF (DO_SFCCYCLE) THEN
+   ALLOCATE(SLMASKL(LENSFC), SLMASKW(LENSFC))
+! for running uncoupled (non-fractional grid)
+   DO I=1,LENSFC
+     IF(NINT(SLMASK(I)) == 1) THEN
+       SLMASKL(I) = 1.0_KIND_io8
+       SLMASKW(I) = 1.0_KIND_io8
+     ELSE
+       SLMASKL(I) = 0.0_KIND_io8
+       SLMASKW(I) = 0.0_KIND_io8
+     ENDIF
+     if(nint(slmask(i)) == 0) then
+       min_ice(i) = 0.15_KIND_io8
+     else
+       min_ice(i) = 0.0_KIND_io8
+     endif
+   ENDDO  
+   num_threads = num_parthds()
    PRINT*
    PRINT*,"CALL SFCCYCLE TO UPDATE SURFACE FIELDS."
    CALL SFCCYCLE(LUGB,LENSFC,LSOIL,SIG1T,DELTSFC,          &
                IY,IM,ID,IH,FH,RLA,RLO,                   &
-               SLMASK,OROG, OROG_UF, USE_UFO, DO_NSST,   &
+               SLMASKL,SLMASKW, OROG, OROG_UF, USE_UFO, DO_NSST,   &
                SIHFCS,SICFCS,SITFCS,SNDFCS,SLCFCS,       &
                VMNFCS,VMXFCS,SLPFCS,ABSFCS,              &
                TSFFCS,SWEFCS,ZORFCS,ALBFCS,TG3FCS,       &
                CNPFCS,SMCFCS,STCFCS,SLIFCS,AISFCS,       &
                VEGFCS,VETFCS,SOTFCS,ALFFCS,              &
-               CVFCS,CVBFCS,CVTFCS,MYRANK,NLUNIT,        &
+               CVFCS,CVBFCS,CVTFCS,MYRANK,num_threads, NLUNIT,        &
                SZ_NML, INPUT_NML_FILE,                   &
+               min_ice, &
                IALB,ISOT,IVEGSRC,TILE_NUM,I_INDEX,J_INDEX)
+   DEALLOCATE(SLMASKL, SLMASKW)
  ENDIF
 
 !--------------------------------------------------------------------------------

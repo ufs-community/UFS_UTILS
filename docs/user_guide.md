@@ -8,6 +8,15 @@ Utilities for the NCEP models. This is part of the
 The UFS_UTILS code can be found here:
 https://github.com/ufs-community/UFS_UTILS.
 
+## Documentation for Previous Versions of UFS_UTILS
+
+* [UFS_UTILS Version 1.8.0](ver-1.8.0/index.html)
+* [UFS_UTILS Version 1.7.0](ver-1.7.0/index.html)
+* [UFS_UTILS Version 1.6.0](ver-1.6.0/index.html)
+* [UFS_UTILS Version 1.5.0](ver-1.5.0/index.html)
+* [UFS_UTILS Version 1.4.0](ver-1.4.0/index.html)
+* [UFS_UTILS Version 1.3.0](ver-1.3.0/index.html)
+
 ## The Utilities
 
 - <a href="chgres_cube/index.html">chgres_cube</a> - Creates cold
@@ -64,4 +73,9 @@ https://github.com/ufs-community/UFS_UTILS.
   Currently, contains the routines required by global_cycle to 
   perform data assimilation updates to land model states
 
+- <a href="cpld_gridgen/index.html">cpld_gridgen</a> - Utility to 
+  create the Fix and IC files for the S2SW and S2S applications 
 
+- <a href="weight_gen/index.html">weight_gen</a> - Utility to 
+  create gaussian grid ESMF 'scrip' files for use in creating
+  ESMF interpolation weight files.

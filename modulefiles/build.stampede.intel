@@ -32,7 +32,6 @@ module load sigio
 module load sfcio
 module load nemsio
 module load g2
-module load wgrib2
 
 #setenv ESMFMKFILE /work/00315/tg455890/stampede2/regional_fv3/NCEPLIBS_SRWv2.0/lib64/esmf.mk
 
