@@ -2492,7 +2492,7 @@
 
  implicit none
 
- integer                     :: rc
+ integer                     :: rc, i
 
  print*,"- DESTROY LOCAL TARGET GRID ATMOSPHERIC FIELDS."
 
