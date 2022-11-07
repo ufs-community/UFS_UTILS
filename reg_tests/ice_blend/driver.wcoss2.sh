@@ -22,7 +22,7 @@
 #PBS -o consistency.log
 #PBS -e consistency.log
 #PBS -N iceb_regt
-#PBS -q debug
+#PBS -q dev
 #PBS -A GFS-DEV
 #PBS -l select=1:ncpus=1:mem=2500MB
 
@@ -36,6 +36,8 @@ module load wgrib2/2.0.8
 module list
 
 set -x
+
+exit
 
 export DATA="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/ice-blend"
@@ -51,7 +53,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/ice_blend
+export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ice_blend
 export HOMEgfs=$PBS_O_WORKDIR/../..
 
 rm -fr $DATA
