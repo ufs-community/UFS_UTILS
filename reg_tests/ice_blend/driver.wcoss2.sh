@@ -37,8 +37,6 @@ module list
 
 set -x
 
-exit
-
 export DATA="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/ice-blend"
 
