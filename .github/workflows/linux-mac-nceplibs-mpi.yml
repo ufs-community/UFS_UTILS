@@ -14,7 +14,7 @@ jobs:
       CXX: g++-9
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-11, ubuntu-latest]
         compiler: [gcc-9]
         nceplibs_version: [develop, 1.4.0]
         mpi_type: [mpich, openmpi]
@@ -29,7 +29,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
-        elif [[ ${{ matrix.os }} == "macos-latest" ]]; then
+        elif [[ ${{ matrix.os }} == "macos-11" ]]; then
           brew update
           brew install wget
           brew install jpeg-turbo
@@ -39,6 +39,7 @@ jobs:
             sudo ln -sf /usr/local/bin/gfortran-10 /usr/local/bin/gfortran
           fi
         fi
+        python3 -m pip install gcovr
 
     - name: cache-mpi
       id: cache-mpi
@@ -63,7 +64,7 @@ jobs:
           cd openmpi-4.1.1
           if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx
-          elif [[ ${{ matrix.os }} == "macos-latest" ]]; then
+          elif [[ ${{ matrix.os }} == "macos-11" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx --enable-two-level-namespace
           fi
           make -j2
