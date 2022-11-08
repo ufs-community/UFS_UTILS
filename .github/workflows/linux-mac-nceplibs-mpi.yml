@@ -39,7 +39,6 @@ jobs:
             sudo ln -sf /usr/local/bin/gfortran-10 /usr/local/bin/gfortran
           fi
         fi
-        python3 -m pip install gcovr
 
     - name: cache-mpi
       id: cache-mpi
