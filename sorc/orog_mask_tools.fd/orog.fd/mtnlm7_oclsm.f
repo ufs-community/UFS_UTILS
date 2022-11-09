@@ -1884,7 +1884,7 @@ C
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
-      real, dimension(:), allocatable ::  hgt_1d
+      real, dimension(:), allocatable ::  hgt_1d, hgt_1d_all
       integer IM, JM, IMN, JMN
       real GLAT(JMN), GLON(IMN)
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
@@ -1896,9 +1896,11 @@ C
       LOGICAL FLAG, DEBUG
       real    LONO(4),LATO(4),LONI,LATI
       real    HEIGHT
-      integer JM1,i,j,nsum,ii,jj,i1,numx,i2
+      integer JM1,i,j,nsum,nsum_all,ii,jj,i1,numx,i2
       integer ilist(IMN)
       real    DELXN,XNSUM,XLAND,XWATR,XL1,XS1,XW1,XW2,XW4
+      real    XNSUM_ALL,XLAND_ALL,XWATR_ALL,HEIGHT_ALL
+      real    XL1_ALL,XS1_ALL,XW1_ALL,XW2_ALL,XW4_ALL
 !jaa
       real :: xnsum_j,xland_j,xwatr_j
       logical inside_a_polygon
@@ -1910,6 +1912,7 @@ C
 ! ---  mskocn=0 dont use Ocean model sea land mask, not OK, not present
       print *,' _____ SUBROUTINE MAKEMT2 '
       allocate(hgt_1d(MAXSUM))
+      allocate(hgt_1d_all(MAXSUM))
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
       JM1 = JM - 1
@@ -1960,6 +1963,23 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
             ii = ilist(i2)
             LONI = ii*DELXN
             LATI = -90 + jj*DELXN
+
+            XLAND_ALL = XLAND_ALL + FLOAT(ZSLM(ii,jj))
+            XWATR_ALL = XWATR_ALL + FLOAT(1-ZSLM(ii,jj))
+            XNSUM_ALL = XNSUM_ALL + 1.
+            HEIGHT_ALL = FLOAT(ZAVG(ii,jj)) 
+            nsum_all = nsum_all+1
+            if(nsum_all > MAXSUM) then
+              print*, "nsum_all is greater than MAXSUM, increase MAXSUM"
+              call ABORT()
+            endif
+            hgt_1d_all(nsum_all) = HEIGHT_ALL
+            IF(HEIGHT_ALL.LT.-990.) HEIGHT_ALL = 0.0
+            XL1_ALL = XL1_ALL + HEIGHT_ALL * FLOAT(ZSLM(ii,jj))
+            XS1_ALL = XS1_ALL + HEIGHT_ALL * FLOAT(1-ZSLM(ii,jj))
+            XW1_ALL = XW1_ALL + HEIGHT_ALL
+            XW2_ALL = XW2_ALL + HEIGHT_ALL ** 2
+
             if(inside_a_polygon(LONI*D2R,LATI*D2R,4,
      &          LONO*D2R,LATO*D2R))then
 
@@ -2001,13 +2021,33 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                IF(VAR(I,J).GT.1.) THEN
                   VAR4(I,J) = MIN(XW4/XNSUM/VAR(I,J) **4,10.)
                ENDIF
-            ENDIF
-         ENDDO
-      ENDDO
+         ELSEIF(XNSUM_ALL.GT.1.) THEN
+               land_frac(i,j) = XLAND_ALL/XNSUM _ALL 
+               SLM(I,J) = FLOAT(NINT(XLAND_ALL/XNSUM_ALL))
+               IF(SLM(I,J).NE.0.) THEN
+                  ORO(I,J)= XL1_ALL / XLAND_ALL
+               ELSE
+                  ORO(I,J)= XS1_ALL / XWATR_ALL
+               ENDIF
+               VAR(I,J)=SQRT(MAX(XW2_ALL/XNSUM_ALL-(XW1_ALL/XNSUM_ALL)**2,0.))
+               do I1 = 1, NSUM_ALL
+                  XW4_ALL = XW4_ALL + (hgt_1d_all(I1) - ORO(i,j)) ** 4
+               enddo   
+
+               IF(VAR(I,J).GT.1.) THEN
+                  VAR4(I,J) = MIN(XW4_ALL/XNSUM_ALL/VAR(I,J) **4,10.)
+               ENDIF
+         ELSE
+               print*, "no source points in MAKEMT2"
+               call ABORT()
+         ENDIF
+       ENDDO
+     ENDDO
 !$omp end parallel do
       WRITE(6,*) "! MAKEMT2 ORO SLM VAR VAR4 DONE"
 C
       deallocate(hgt_1d)
+      deallocate(hgt_1d_all)
       RETURN
       END
 
