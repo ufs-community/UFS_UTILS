@@ -52,18 +52,18 @@ EXTRACT_DATA=no
 
 RUN_CHGRES=yes
 
-yy=2022
-mm=05
-dd=06
-hh=06
+yy=2021
+mm=03
+dd=01
+hh=00
 
-use_v16retro=no
+use_v16retro=yes
 
-LEVS=65
+LEVS=128
 
-CDUMP=gdas
+CDUMP=gfs
 
-CRES_HIRES=C192
+CRES_HIRES=C3072
 CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
