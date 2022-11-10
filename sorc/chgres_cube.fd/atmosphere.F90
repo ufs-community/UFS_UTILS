@@ -100,7 +100,6 @@
  type(esmf_field)                       :: xwind_w_target_grid !< 3-d wind, 'west' edge
  type(esmf_field)                       :: ywind_w_target_grid !< 3-d wind, 'west' edge
  type(esmf_field)                       :: zwind_w_target_grid !< 3-d wind, 'west' edge
-!type(esmf_field), public               :: zh_target_grid !< 3-d height
 
 ! Fields associated with thompson microphysics climatological tracers.
 
@@ -2492,43 +2491,20 @@
 
  implicit none
 
-!integer                     :: rc, i
  integer                     :: rc
 
  print*,"- DESTROY LOCAL TARGET GRID ATMOSPHERIC FIELDS."
 
-!call ESMF_FieldDestroy(delp_target_grid, rc=rc)
-!call ESMF_FieldDestroy(dzdt_target_grid, rc=rc)
-!call ESMF_FieldDestroy(ps_target_grid, rc=rc)
  call ESMF_FieldDestroy(pres_target_grid, rc=rc)
-!call ESMF_FieldDestroy(temp_target_grid, rc=rc)
-!call ESMF_FieldDestroy(u_s_target_grid, rc=rc)
-!call ESMF_FieldDestroy(v_s_target_grid, rc=rc)
-!call ESMF_FieldDestroy(wind_target_grid, rc=rc)
  call ESMF_FieldDestroy(xwind_target_grid, rc=rc)
  call ESMF_FieldDestroy(ywind_target_grid, rc=rc)
  call ESMF_FieldDestroy(zwind_target_grid, rc=rc)
-!call ESMF_FieldDestroy(wind_s_target_grid, rc=rc)
  call ESMF_FieldDestroy(xwind_s_target_grid, rc=rc)
  call ESMF_FieldDestroy(ywind_s_target_grid, rc=rc)
  call ESMF_FieldDestroy(zwind_s_target_grid, rc=rc)
-!call ESMF_FieldDestroy(wind_w_target_grid, rc=rc)
  call ESMF_FieldDestroy(xwind_w_target_grid, rc=rc)
  call ESMF_FieldDestroy(ywind_w_target_grid, rc=rc)
  call ESMF_FieldDestroy(zwind_w_target_grid, rc=rc)
-!call ESMF_FieldDestroy(u_w_target_grid, rc=rc)
-!call ESMF_FieldDestroy(v_w_target_grid, rc=rc)
-!call ESMF_FieldDestroy(zh_target_grid, rc=rc)
-
-!do i = 1, num_tracers
-!  call ESMF_FieldDestroy(tracers_target_grid(i), rc=rc)
-!enddo
-
-!deallocate(tracers_target_grid)
-
-!if (ESMF_FieldIsCreated(qnifa_climo_target_grid)) then
-!  call ESMF_FieldDestroy(qnifa_climo_target_grid, rc=rc)
-!endif
 
  call cleanup_atmosphere_target_data
 
