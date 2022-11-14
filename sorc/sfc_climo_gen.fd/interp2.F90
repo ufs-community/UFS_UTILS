@@ -30,6 +30,9 @@
  integer                            :: isrctermprocessing
  integer :: category, num_categories
 
+!cggg need to read this from file.
+ integer, parameter :: water_category = 17
+
  integer(esmf_kind_i4), allocatable :: mask_mdl_one_tile(:,:)
  integer(esmf_kind_i4), pointer     :: unmapped_ptr(:)
 
@@ -192,6 +195,13 @@
      enddo
      call search2 (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, num_categories, tile, field_names(1))
      print*,'after regrid ',data_mdl_one_tile(i_mdl/2,j_mdl/2,:)
+     do j = 1, j_mdl
+     do i = 1, i_mdl
+       if (mask_mdl_one_tile(i,j) == 0) then
+         data_mdl_one_tile(i,j,water_category) = 1.0
+       endif
+     enddo
+     enddo
      dom_cat_mdl_one_tile = 0.0
      dom_cat_mdl_one_tile = maxloc(data_mdl_one_tile,dim=3)
      call output2 (data_mdl_one_tile, dom_cat_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile)
