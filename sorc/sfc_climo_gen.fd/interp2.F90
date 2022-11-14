@@ -36,6 +36,7 @@
  real(esmf_kind_r4), allocatable    :: data_src_global(:,:)
  real(esmf_kind_r4), allocatable    :: data_src_global2(:,:,:)
  real(esmf_kind_r4), allocatable    :: data_mdl_one_tile(:,:,:)
+ real(esmf_kind_r4), allocatable    :: dom_cat_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: lat_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: sum_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: lon_mdl_one_tile(:,:)
@@ -93,6 +94,7 @@
  if (localpet == 0) then
    allocate(data_src_global2(i_src,j_src,num_categories))
    allocate(data_mdl_one_tile(i_mdl,j_mdl,num_categories))
+   allocate(dom_cat_mdl_one_tile(i_mdl,j_mdl))
    allocate(mask_mdl_one_tile(i_mdl,j_mdl))
    allocate(lat_mdl_one_tile(i_mdl,j_mdl))
    allocate(sum_mdl_one_tile(i_mdl,j_mdl))
@@ -100,6 +102,7 @@
  else
    allocate(data_src_global2(0,0,0))
    allocate(data_mdl_one_tile(0,0,0))
+   allocate(dom_cat_mdl_one_tile(0,0))
    allocate(mask_mdl_one_tile(0,0))
    allocate(lat_mdl_one_tile(0,0))
    allocate(sum_mdl_one_tile(0,0))
@@ -189,14 +192,16 @@
      enddo
      call search2 (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, num_categories, tile, field_names(1))
      print*,'after regrid ',data_mdl_one_tile(i_mdl/2,j_mdl/2,:)
-     call output2 (data_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile)
+     dom_cat_mdl_one_tile = 0.0
+     dom_cat_mdl_one_tile = maxloc(data_mdl_one_tile,dim=3)
+     call output2 (data_mdl_one_tile, dom_cat_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile)
    endif
 
  enddo OUTPUT_LOOP
 
  status=nf90_close(ncid)
 
- deallocate(data_mdl_one_tile, mask_mdl_one_tile, data_src_global2)
+ deallocate(data_mdl_one_tile, dom_cat_mdl_one_tile, mask_mdl_one_tile, data_src_global2)
  deallocate(lat_mdl_one_tile, lon_mdl_one_tile, sum_mdl_one_tile)
 
  print*,"- CALL FieldRegridRelease."
