@@ -45,7 +45,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/mpi
-        key: mpi-${{ matrix.mpi_type }}-${{ runner.os }}-1
+        key: mpi-${{ matrix.mpi_type }}-${{ runner.os }}
 
     - name: build-mpi
       if: steps.cache-mpi.outputs.cache-hit != 'true'
@@ -75,7 +75,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/netcdf
-        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}-${{ matrix.mpi_type }}3
+        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}-${{ matrix.mpi_type }}-1
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
