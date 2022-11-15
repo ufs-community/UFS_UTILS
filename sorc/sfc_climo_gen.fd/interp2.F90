@@ -27,12 +27,9 @@
 
  integer                            :: rc, localpet
  integer                            :: i, j, tile, ncid, status
- integer                            :: varid
+ integer                            :: varid, water_category
  integer                            :: isrctermprocessing
  integer :: category, num_categories
-
-!cggg need to read this from file.
- integer, parameter :: water_category = 17
 
  integer(esmf_kind_i4), allocatable :: mask_mdl_one_tile(:,:)
  integer(esmf_kind_i4), pointer     :: unmapped_ptr(:)
@@ -52,6 +49,7 @@
  type(esmf_routehandle)                  :: regrid_data
  type(esmf_polemethod_flag)              :: pole
  
+
  if (localpet == 0) then
    allocate(data_src_global(i_src,j_src))
  else
@@ -68,6 +66,9 @@
    call netcdf_err(status, "IN ROUTINE INTERP READING FIELD")
    print*,'number of cats ',maxval(data_src_global)
    num_categories = nint(maxval(data_src_global))
+   status = nf90_get_att(ncid, varid, 'water_category', water_category)
+   call netcdf_err(status, "IN ROUTINE INTERP READING water_category")
+   print*,'water cat ',water_category
  endif
 
  call mpi_bcast(num_categories,1,MPI_INTEGER,0,MPI_COMM_WORLD,status)
