@@ -15,7 +15,8 @@
  use netcdf
  use model_grid,  only               : grid_mdl, i_mdl, j_mdl, &
                                        num_tiles, latitude_field_mdl, &
-                                       longitude_field_mdl, mask_field_mdl
+                                       longitude_field_mdl, mask_field_mdl, &
+                                       land_frac_field_mdl
  use source_grid
  use utils
  use mpi
@@ -43,6 +44,7 @@
  real(esmf_kind_r4), allocatable    :: lat_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: sum_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: lon_mdl_one_tile(:,:)
+ real(esmf_kind_r4), allocatable    :: land_frac_mdl_one_tile(:,:)
 
  type(esmf_regridmethod_flag) :: method
  type(esmf_field)                        :: data_field_src
@@ -99,6 +101,7 @@
    allocate(data_mdl_one_tile(i_mdl,j_mdl,num_categories))
    allocate(dom_cat_mdl_one_tile(i_mdl,j_mdl))
    allocate(mask_mdl_one_tile(i_mdl,j_mdl))
+   allocate(land_frac_mdl_one_tile(i_mdl,j_mdl))
    allocate(lat_mdl_one_tile(i_mdl,j_mdl))
    allocate(sum_mdl_one_tile(i_mdl,j_mdl))
    allocate(lon_mdl_one_tile(i_mdl,j_mdl))
@@ -107,6 +110,7 @@
    allocate(data_mdl_one_tile(0,0,0))
    allocate(dom_cat_mdl_one_tile(0,0))
    allocate(mask_mdl_one_tile(0,0))
+   allocate(land_frac_mdl_one_tile(0,0))
    allocate(lat_mdl_one_tile(0,0))
    allocate(sum_mdl_one_tile(0,0))
    allocate(lon_mdl_one_tile(0,0))
@@ -183,18 +187,28 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather.", rc)
 
+   print*,"- CALL FieldGather FOR MODEL GRID LAND FRACTION."
+   call ESMF_FieldGather(land_frac_field_mdl, land_frac_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather.", rc)
+
    if (localpet == 0) then
      print*,'- CALL SEARCH FOR TILE ',tile
-     sum_mdl_one_tile = sum(data_mdl_one_tile, dim=3) ! use unused variable to now.
+
+! Where sum is zero, the regridding did not find any input data for the model point
+! (ex. and isolated island). Call the search routine at these points.
+     sum_mdl_one_tile = sum(data_mdl_one_tile, dim=3)
      do j = 1, j_mdl
      do i = 1, i_mdl
        if (mask_mdl_one_tile(i,j) == 1 .and. sum_mdl_one_tile(i,j) == 0.0) then
-         data_mdl_one_tile(i,j,:) = -9999.9
+         data_mdl_one_tile(i,j,:) = -9999.9 ! flag to tell search routine to search.
        endif
      enddo
      enddo
      call search2 (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, num_categories, tile, field_names(1))
      print*,'after regrid ',data_mdl_one_tile(i_mdl/2,j_mdl/2,:)
+
+! These points are all non-land. Set to 100% of the water category.
      do j = 1, j_mdl
      do i = 1, i_mdl
        if (mask_mdl_one_tile(i,j) == 0) then
@@ -202,6 +216,27 @@
        endif
      enddo
      enddo
+
+! For fractional grids, need to rescale the category percentages by the
+! fraction of land in the model grid cell.
+
+! When running with fractional grids, the land_frac_mdl_one_tile array will 
+! contain a fraction between 0 and 1. When not running with fractional
+! grids, this array will contain negative fill values.
+
+     if (maxval(land_frac_mdl_one_tile) > 0.0) then
+       print*,'before rescale ',land_frac_mdl_one_tile(658,95),data_mdl_one_tile(658,95,:)
+       do j = 1, j_mdl
+       do i = 1, i_mdl
+         if (mask_mdl_one_tile(i,j) == 1) then
+           data_mdl_one_tile(i,j,:) = data_mdl_one_tile(i,j,:) * land_frac_mdl_one_tile(i,j)
+           data_mdl_one_tile(i,j,water_category) = 1.0 - land_frac_mdl_one_tile(i,j)
+         endif
+       enddo
+       enddo
+       print*,'after  rescale ',land_frac_mdl_one_tile(658,95),data_mdl_one_tile(658,95,:)
+     endif
+! under fractional grids, how do we define dominate category?
      dom_cat_mdl_one_tile = 0.0
      dom_cat_mdl_one_tile = maxloc(data_mdl_one_tile,dim=3)
      call output2 (data_mdl_one_tile, dom_cat_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile)
@@ -212,7 +247,7 @@
  status=nf90_close(ncid)
 
  deallocate(data_mdl_one_tile, dom_cat_mdl_one_tile, mask_mdl_one_tile, data_src_global2)
- deallocate(lat_mdl_one_tile, lon_mdl_one_tile, sum_mdl_one_tile)
+ deallocate(lat_mdl_one_tile, lon_mdl_one_tile, sum_mdl_one_tile, land_frac_mdl_one_tile)
 
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_data, rc=rc)

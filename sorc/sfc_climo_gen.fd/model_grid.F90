@@ -28,8 +28,16 @@
  type(esmf_grid),  public      :: grid_mdl !< ESMF grid object for the model grid.
  type(esmf_field), public      :: data_field_mdl !< ESMF field object that holds the
                                                  !! data interpolated to model grid.
+ type(esmf_field), public      :: land_frac_field_mdl !< ESMF field object that holds the
+                                                     !! model land fraction. When running
+                                                     !! with fractional grids, will be
+                                                     !! between zero and one. For non-
+                                                     !! fractional grids, will contain a
+                                                     !! fill value.
  type(esmf_field), public      :: mask_field_mdl !< ESMF field object that holds the
-                                                 !! model land mask.
+                                                 !! model land mask. Equal to '1' if
+                                                 !! point is partial or all land. Equal
+                                                 !! to zero is point is all non-land.
  type(esmf_field), public      :: latitude_field_mdl !< ESMF field object that holds the
                                                      !! model grid latitude.
  type(esmf_field), public      :: longitude_field_mdl !< ESMF field object that holds the
@@ -75,6 +83,7 @@
 
  real(esmf_kind_r4), allocatable  :: latitude_one_tile(:,:)
  real(esmf_kind_r4), allocatable  :: longitude_one_tile(:,:)
+ real(esmf_kind_r4), allocatable  :: land_frac_one_tile(:,:)
 
 !-----------------------------------------------------------------------
 ! Get the number of tiles from the mosaic file.
@@ -214,12 +223,23 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+ print*,"- CALL FieldCreate FOR MODEL GRID LAND FRACTION."
+ land_frac_field_mdl = ESMF_FieldCreate(grid_mdl, &
+                                   typekind=ESMF_TYPEKIND_R4, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="model grid land fraction", &
+                                   rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
  if (localpet == 0) then
    allocate(mask_mdl_one_tile(i_mdl,j_mdl))
+   allocate(land_frac_one_tile(i_mdl,j_mdl))
    allocate(latitude_one_tile(i_mdl,j_mdl))
    allocate(longitude_one_tile(i_mdl,j_mdl))
  else
    allocate(mask_mdl_one_tile(0,0))
+   allocate(land_frac_one_tile(0,0))
    allocate(latitude_one_tile(0,0))
    allocate(longitude_one_tile(0,0))
  endif
@@ -227,12 +247,17 @@
  do tile = 1, num_tiles
    if (localpet == 0) then
      the_file = trim(orog_dir_mdl) // trim(orog_files_mdl(tile))
-     call get_model_info(trim(the_file), mask_mdl_one_tile, & 
+     call get_model_info(trim(the_file), mask_mdl_one_tile, land_frac_one_tile, & 
                          latitude_one_tile, longitude_one_tile, i_mdl, j_mdl)
    endif
 
    print*,"- CALL FieldScatter FOR MODEL GRID MASK. TILE IS: ", tile
    call ESMF_FieldScatter(mask_field_mdl, mask_mdl_one_tile, rootpet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", rc)
+
+   print*,"- CALL FieldScatter FOR MODEL GRID LAND FRACTION. TILE IS: ", tile
+   call ESMF_FieldScatter(land_frac_field_mdl, land_frac_one_tile, rootpet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
 
@@ -282,7 +307,7 @@
 !! @param[in] idim i dimension of the model tile
 !! @param[in] jdim j dimension of the model tile
 !! @author George Gayno @date 2018
- subroutine get_model_info(orog_file, mask, lat2d, lon2d, idim, jdim)
+ subroutine get_model_info(orog_file, mask, land_frac, lat2d, lon2d, idim, jdim)
 
  use esmf
  use netcdf
@@ -297,6 +322,7 @@
 
  real(esmf_kind_r4), intent(out)    :: lat2d(idim,jdim)
  real(esmf_kind_r4), intent(out)    :: lon2d(idim,jdim)
+ real(esmf_kind_r4), intent(out)    :: land_frac(idim,jdim)
 
  integer                            :: error, lat, lon, i, j
  integer                            :: ncid, id_dim, id_var
@@ -330,11 +356,17 @@
  allocate(dummy(idim,jdim))
 
 !-----------------------------------------------------------------------
-! If the lake maker was used, there will be a 'lake_frac' record.
+! If the lake maker was used, we are running with a fractional
+! land/non-land grid and there will be a 'lake_frac' record.
 ! In that case, land/non-land is determined by 'land_frac'.
 !
 ! If the lake maker was not used, use 'slmsk', which is defined
 ! as the nint(land_frac).
+!
+! In summary, if 'mask' is one, the point is all land or
+! partial land and surface data will be mapped to it. Otherwise,
+! when 'mask' is zero, then the point is all non-land and
+! surface data will not be mapped to it.
 !-----------------------------------------------------------------------
 
  error=nf90_inq_varid(ncid, 'lake_frac', id_var)
@@ -345,16 +377,17 @@
    error=nf90_get_var(ncid, id_var, dummy)
    call netcdf_err(error, "READING SLMSK")
    mask = nint(dummy)
+   land_frac = -999.
  else
    print*,"- READ LAND FRACTION"
    error=nf90_inq_varid(ncid, 'land_frac', id_var)
    call netcdf_err(error, "READING LAND_FRAC ID")
-   error=nf90_get_var(ncid, id_var, dummy)
+   error=nf90_get_var(ncid, id_var, land_frac)
    call netcdf_err(error, "READING LAND_FRAC")
    mask = 0
    do j = 1, lat
    do i = 1, lon
-     if (dummy(i,j) > 0.0) then
+     if (land_frac(i,j) > 0.0) then
        mask(i,j) = 1
      endif
    enddo
@@ -397,6 +430,9 @@
 
  print*,"- CALL FieldDestroy FOR MODEL GRID LAND MASK."
  call ESMF_FieldDestroy(mask_field_mdl,rc=rc)
+
+ print*,"- CALL FieldDestroy FOR MODEL GRID LAND MASK."
+ call ESMF_FieldDestroy(land_frac_field_mdl,rc=rc)
 
  print*,"- CALL FieldDestroy FOR MODEL GRID DATA FIELD."
  call ESMF_FieldDestroy(data_field_mdl,rc=rc)
