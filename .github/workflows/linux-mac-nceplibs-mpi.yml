@@ -45,7 +45,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/mpi
-        key: mpi-${{ matrix.mpi_type }}-${{ runner.os }}
+        key: mpi-${{ matrix.mpi_type }}-${{ runner.os }}-1
 
     - name: build-mpi
       if: steps.cache-mpi.outputs.cache-hit != 'true'
