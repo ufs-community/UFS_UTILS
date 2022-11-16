@@ -46,7 +46,7 @@
  integer                          :: header_buffer_val = 16384
  integer                          :: i_out, j_out, id_lat, id_lon, id_sum
  integer                          :: i_start, i_end, j_start, j_end
- integer, save                    :: ncid(6), ncid_with_halo
+ integer                          :: ncid, ncid_with_halo
 
  field_idx = 1
 
@@ -83,89 +83,90 @@
  i_out = i_end - i_start + 1
  j_out = j_end - j_start + 1
 
- error = nf90_create(out_file, NF90_NETCDF4, ncid(tile))
+ error = nf90_create(out_file, NF90_NETCDF4, ncid)
+ print*,'ncid is ',ncid
  call netcdf_err(error, 'ERROR IN NF90_CREATE' )
- error = nf90_def_dim(ncid(tile), 'nx', i_out, dim_x)
+ error = nf90_def_dim(ncid, 'nx', i_out, dim_x)
  call netcdf_err(error, 'DEFINING NX DIMENSION' )
- error = nf90_def_dim(ncid(tile), 'ny', j_out, dim_y)
+ error = nf90_def_dim(ncid, 'ny', j_out, dim_y)
  call netcdf_err(error, 'DEFINING NY DIMENSION' )
- error = nf90_def_dim(ncid(tile), 'num_categories', num_categories, dim_z)
+ error = nf90_def_dim(ncid, 'num_categories', num_categories, dim_z)
  call netcdf_err(error, 'DEFINING NZ DIMENSION' )
- error = nf90_def_dim(ncid(tile), 'time', num_time_recs, dim_time)
+ error = nf90_def_dim(ncid, 'time', num_time_recs, dim_time)
  call netcdf_err(error, 'DEFINING TIME DIMENSION' )
- error = nf90_def_var(ncid(tile), 'time', NF90_FLOAT, dim_time, id_times)
+ error = nf90_def_var(ncid, 'time', NF90_FLOAT, dim_time, id_times)
  call netcdf_err(error, 'DEFINING TIME VARIABLE' )
- error = nf90_put_att(ncid(tile), id_times, "units", "days since 2015-1-1")
+ error = nf90_put_att(ncid, id_times, "units", "days since 2015-1-1")
  call netcdf_err(error, 'DEFINING TIME ATTRIBUTE' )
  if (len_trim(source) > 0) then
-   error = nf90_put_att(ncid(tile), nf90_global, 'source', source)
+   error = nf90_put_att(ncid, nf90_global, 'source', source)
    call netcdf_err(error, 'DEFINING GLOBAL SOURCE ATTRIBUTE' )
  endif
 
- error = nf90_def_var(ncid(tile), 'geolat', NF90_FLOAT, (/dim_x,dim_y/), id_lat)
+ error = nf90_def_var(ncid, 'geolat', NF90_FLOAT, (/dim_x,dim_y/), id_lat)
  call netcdf_err(error, 'DEFINING GEOLAT FIELD' )
- error = nf90_put_att(ncid(tile), id_lat, "long_name", "Latitude")
+ error = nf90_put_att(ncid, id_lat, "long_name", "Latitude")
  call netcdf_err(error, 'DEFINING GEOLAT NAME ATTRIBUTE' )
- error = nf90_put_att(ncid(tile), id_lat, "units", "degrees_north")
+ error = nf90_put_att(ncid, id_lat, "units", "degrees_north")
  call netcdf_err(error, 'DEFINING GEOLAT UNIT ATTRIBUTE' )
- error = nf90_def_var(ncid(tile), 'geolon', NF90_FLOAT, (/dim_x,dim_y/), id_lon)
+ error = nf90_def_var(ncid, 'geolon', NF90_FLOAT, (/dim_x,dim_y/), id_lon)
  call netcdf_err(error, 'DEFINING GEOLON FIELD' )
- error = nf90_put_att(ncid(tile), id_lon, "long_name", "Longitude")
+ error = nf90_put_att(ncid, id_lon, "long_name", "Longitude")
  call netcdf_err(error, 'DEFINING GEOLON NAME ATTRIBUTE' )
- error = nf90_put_att(ncid(tile), id_lon, "units", "degrees_east")
+ error = nf90_put_att(ncid, id_lon, "units", "degrees_east")
  call netcdf_err(error, 'DEFINING GEOLON UNIT ATTRIBUTE' )
 
  field_names_pct = trim(field_names(1)) // "_pct"
- error = nf90_def_var(ncid(tile), trim(field_names_pct), NF90_FLOAT, (/dim_x,dim_y,dim_z,dim_time/), id_data_pct)
+ error = nf90_def_var(ncid, trim(field_names_pct), NF90_FLOAT, (/dim_x,dim_y,dim_z,dim_time/), id_data_pct)
  call netcdf_err(error, 'DEFINING FIELD' )
- error = nf90_put_att(ncid(tile), id_data_pct, "units", "percent coverage each category")
+ error = nf90_put_att(ncid, id_data_pct, "units", "percent coverage each category")
  call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid(tile), id_data_pct, "missing_value", missing)
+ error = nf90_put_att(ncid, id_data_pct, "missing_value", missing)
  call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid(tile), id_data_pct, "coordinates", "geolon geolat")
+ error = nf90_put_att(ncid, id_data_pct, "coordinates", "geolon geolat")
  call netcdf_err(error, 'DEFINING COORD ATTRIBUTE' )
 
- error = nf90_def_var(ncid(tile), trim(field_names(1)), NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_data_dom_cat)
+ error = nf90_def_var(ncid, trim(field_names(1)), NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_data_dom_cat)
  call netcdf_err(error, 'DEFINING FIELD' )
- error = nf90_put_att(ncid(tile), id_data_dom_cat, "units", "dominate category")
+ error = nf90_put_att(ncid, id_data_dom_cat, "units", "dominate category")
  call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid(tile), id_data_dom_cat, "missing_value", missing)
+ error = nf90_put_att(ncid, id_data_dom_cat, "missing_value", missing)
  call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid(tile), id_data_dom_cat, "coordinates", "geolon geolat")
+ error = nf90_put_att(ncid, id_data_dom_cat, "coordinates", "geolon geolat")
  call netcdf_err(error, 'DEFINING COORD ATTRIBUTE' )
 
- error = nf90_def_var(ncid(tile), 'sum', NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_sum)
+ error = nf90_def_var(ncid, 'sum', NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_sum)
  call netcdf_err(error, 'DEFINING FIELD' )
 
- error = nf90_enddef(ncid(tile), header_buffer_val,4,0,4)
+ error = nf90_enddef(ncid, header_buffer_val,4,0,4)
  call netcdf_err(error, 'IN NF90_ENDDEF' )
 
- error = nf90_put_var( ncid(tile), id_times, day_of_rec) 
+ error = nf90_put_var( ncid, id_times, day_of_rec) 
  call netcdf_err(error, 'WRITING TIME FIELD' )
 
- error = nf90_put_var( ncid(tile), id_lat, lat_one_tile(i_start:i_end,j_start:j_end),  &
+ error = nf90_put_var( ncid, id_lat, lat_one_tile(i_start:i_end,j_start:j_end),  &
                          start=(/1,1/), count=(/i_out,j_out/))
  call netcdf_err(error, 'IN NF90_PUT_VAR FOR GEOLAT' )
 
- error = nf90_put_var( ncid(tile), id_lon, lon_one_tile(i_start:i_end,j_start:j_end),  &
+ error = nf90_put_var( ncid, id_lon, lon_one_tile(i_start:i_end,j_start:j_end),  &
                          start=(/1,1/), count=(/i_out,j_out/))
  call netcdf_err(error, 'IN NF90_PUT_VAR FOR GEOLON' )
 
  print*,'- WRITE DATA '
- error = nf90_put_var( ncid(tile), id_data_pct, data_one_tile(i_start:i_end,j_start:j_end,:),  &
+ error = nf90_put_var( ncid, id_data_pct, data_one_tile(i_start:i_end,j_start:j_end,:),  &
                             start=(/1,1,1,1/), count=(/i_out,j_out,num_categories,1/))
  call netcdf_err(error, 'IN NF90_PUT_VAR' )
   
- error = nf90_put_var( ncid(tile), id_data_dom_cat, dom_cat_one_tile(i_start:i_end,j_start:j_end),  &
+ error = nf90_put_var( ncid, id_data_dom_cat, dom_cat_one_tile(i_start:i_end,j_start:j_end),  &
                             start=(/1,1,1/), count=(/i_out,j_out,1/))
  call netcdf_err(error, 'IN NF90_PUT_VAR' )
 
 ! Temporary output of sum of %.
  sum_one_tile = sum(data_one_tile, dim=3)
- error = nf90_put_var( ncid(tile), id_sum, sum_one_tile(i_start:i_end,j_start:j_end),  &
+ error = nf90_put_var( ncid, id_sum, sum_one_tile(i_start:i_end,j_start:j_end),  &
                             start=(/1,1,1/), count=(/i_out,j_out,1/))
 
- error = nf90_close(ncid(tile))
+ error = nf90_close(ncid)
 
 !----------------------------------------------------------------------
 ! For regional nests, also output files including the halo
@@ -181,7 +182,7 @@
  call netcdf_err(error, 'DEFINING NX DIMENSION' )
  error = nf90_def_dim(ncid_with_halo, 'ny', j_mdl, dim_y)
  call netcdf_err(error, 'DEFINING NY DIMENSION' )
- error = nf90_def_dim(ncid(tile), 'num_categories', num_categories, dim_z)
+ error = nf90_def_dim(ncid_with_halo, 'num_categories', num_categories, dim_z)
  call netcdf_err(error, 'DEFINING NZ DIMENSION' )
  error = nf90_def_dim(ncid_with_halo, 'time', num_time_recs, dim_time)
  call netcdf_err(error, 'DEFINING TIME DIMENSION' )
@@ -216,13 +217,13 @@
  error = nf90_put_att(ncid_with_halo, id_data_pct, "coordinates", "geolon geolat")
  call netcdf_err(error, 'DEFINING COORD ATTRIBUTE' )
 
- error = nf90_def_var(ncid(tile), trim(field_names(1)), NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_data_dom_cat)
+ error = nf90_def_var(ncid_with_halo, trim(field_names(1)), NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_data_dom_cat)
  call netcdf_err(error, 'DEFINING FIELD' )
- error = nf90_put_att(ncid(tile), id_data_dom_cat, "units", "dominate category")
+ error = nf90_put_att(ncid_with_halo, id_data_dom_cat, "units", "dominate category")
  call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid(tile), id_data_dom_cat, "missing_value", missing)
+ error = nf90_put_att(ncid_with_halo, id_data_dom_cat, "missing_value", missing)
  call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid(tile), id_data_dom_cat, "coordinates", "geolon geolat")
+ error = nf90_put_att(ncid_with_halo, id_data_dom_cat, "coordinates", "geolon geolat")
  call netcdf_err(error, 'DEFINING COORD ATTRIBUTE' )
 
  error = nf90_enddef(ncid_with_halo, header_buffer_val,4,0,4)
