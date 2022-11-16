@@ -6,7 +6,7 @@
 #PBS -A GFS-DEV
 #PBS -l walltime=00:15:00
 #PBS -N make_grid
-#PBS -l select=1:ncpus=24:mem=200GB
+#PBS -l select=1:ncpus=24:mem=500GB
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on WCOSS2.
@@ -69,7 +69,13 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=regional_esg           # 'uniform', 'stretch', 'nest', 
+export vegsoilt_frac='.true.'  # When true, outputs percent of each
+                               # soil and veg type category and a 
+                               # dominate category. When false, only
+                               # outputs the dominate category. A
+                               # Fortran logical, so include the dots.
+
+export gtype=regional_esg      # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
 export make_gsl_orog=false     # 'true' if user needs 'oro' files for GSL
                                # orographic drag suite
