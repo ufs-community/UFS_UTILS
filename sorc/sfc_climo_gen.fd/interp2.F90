@@ -135,6 +135,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter.", rc)
 
+ deallocate(data_src_global2)
+
  isrctermprocessing = 1
 
  method = ESMF_REGRIDMETHOD_CONSERVE
@@ -165,6 +167,12 @@
                        rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid.", rc)
+
+ print*,"- CALL FieldRegridRelease."
+ call ESMF_FieldRegridRelease(routehandle=regrid_data, rc=rc)
+
+ print*,"- CALL FieldDestroy."
+ call ESMF_FieldDestroy(data_field_src, rc=rc)
 
  OUTPUT_LOOP : do tile = 1, num_tiles
 
@@ -247,13 +255,12 @@
 
  status=nf90_close(ncid)
 
- deallocate(data_mdl_one_tile, dom_cat_mdl_one_tile, mask_mdl_one_tile, data_src_global2)
+ deallocate(data_mdl_one_tile, dom_cat_mdl_one_tile, mask_mdl_one_tile)
  deallocate(lat_mdl_one_tile, lon_mdl_one_tile, sum_mdl_one_tile, land_frac_mdl_one_tile)
 
- print*,"- CALL FieldRegridRelease."
- call ESMF_FieldRegridRelease(routehandle=regrid_data, rc=rc)
-
  print*,"- CALL FieldDestroy."
- call ESMF_FieldDestroy(data_field_src, rc=rc)
+ call ESMF_FieldDestroy(data_field_mdl, rc=rc)
+
+ call mpi_barrier(mpi_comm_world, rc)
 
  end subroutine interp2
