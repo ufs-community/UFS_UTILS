@@ -53,7 +53,7 @@
 #      x/y grid spacing - "delx/y", and halo.
 #   8) Set working directory - TEMP_DIR - and path to the repository
 #      clone - home_dir.
-#   9) To use GFS orographic drag suite, set 'make_gsl_orog' to true.
+#   9) To use the GSL orographic drag suite, set 'make_gsl_orog' to true.
 #  10) Set 'soil_veg_src' and 'veg_type_src' to choose the
 #      soil type and vegetation type data.
 #  11) Submit script: "sbatch $script".
@@ -74,8 +74,8 @@ module list
 
 export gtype=uniform           # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
-export make_gsl_orog=false     # 'true' if user needs 'oro' files for GSL
-                               # orographic drag suite
+export make_gsl_orog=false     # When 'true' will output 'oro' files for
+                               # the GSL orographic drag suite.
 export veg_type_src="modis.igbp.0.05" #  veg type data.
                                 # For viirs-based vegetation type data, set to:
                                 # 1) "viirs.igbp.0.1" for global 0.10-deg data
