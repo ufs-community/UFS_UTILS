@@ -1,48 +1,45 @@
 !> @file
-!! @brief Replace undefined values on the model grid with a valid
-!! value at a nearby neighbor. This routine works for fractional
-!! categorical fields.
+!! @brief Replace undefined values on the model grid.
 !! @author George Gayno @date 2022
 
-!> Replace undefined values on the model grid with a valid
-!! value at a nearby neighbor. Undefined values are typically
+!> Replace undefined values on the model grid with valid
+!! values at a nearby neighbor. Undefined values are typically
 !! associated with isolated islands where there is no source data.
 !! Routine searches a neighborhood with a radius of 100 grid points.
-!! If no valid value is found, a default value is used. This
+!! If no valid values are found, a default value is used. This
 !! routine works for one tile of a cubed sphere grid. It does
-!! not consider valid values at adjacent faces. That is a future
-!! upgrade.
+!! not consider valid values at adjacent faces. This routine
+!! works for fractional categorical fields, such as soil
+!! type.
 !!
-!! @note This routine works for fractional categorical fields.
-!!
-!! @param[inout] field - input: field before missing values are replaced
-!!                     - output: field after missing values are replaced
-!! @param[in] mask field bitmap. Field defined where mask=1
-!! @param[in] idim i dimension of tile
-!! @param[in] jdim j dimension of tile
-!! @param[in] num_categories number of veg/soil categories
-!! @param[in] tile tile number
-!! @param[in] field_name field name
+!! @param[inout] field - input: Field before missing values are replaced.
+!!                     - output: Field after missing values are replaced.
+!! @param[in] mask Field bitmap. Field defined where mask=1.
+!! @param[in] idim i dimension of tile.
+!! @param[in] jdim j dimension of tile.
+!! @param[in] num_categories Number of veg/soil categories.
+!! @param[in] tile Tile number.
+!! @param[in] field_name Field name.
 !! @author George Gayno @date 2022
- subroutine search2 (field, mask, idim, jdim, num_categories, tile, field_name)
+ subroutine search_frac_cats (field, mask, idim, jdim, num_categories, tile, field_name)
 
  use mpi
  use esmf
 
  implicit none
 
- character(len=*)                  :: field_name
-
  integer, intent(in)               :: idim, jdim, tile, num_categories
  integer(esmf_kind_i4), intent(in) :: mask(idim,jdim)
 
  real(esmf_kind_r4), intent(inout) :: field(idim,jdim,num_categories)
 
+ character(len=*)                  :: field_name
+
  integer                           :: i, j, krad, ii, jj
  integer                           :: istart, iend
  integer                           :: jstart, jend
  integer                           :: ierr
- integer                              :: default_category
+ integer                           :: default_category
 
  real(esmf_kind_r4), allocatable   :: field_save(:,:,:)
 
@@ -92,10 +89,9 @@
              if (jj < 1 .or. jj > jdim) cycle JJ_LOOP
              if (ii < 1 .or. ii > idim) cycle II_LOOP
 
-               print*,'in search ',ii,jj,mask(ii,jj),maxval(field_save(ii,jj,:))
-               if (mask(ii,jj) == 1  .and. maxval(field_save(ii,jj,:)) > 0.0) then
+               if (mask(ii,jj) == 1 .and. maxval(field_save(ii,jj,:)) > 0.0) then
                  field(i,j,:) = field_save(ii,jj,:)
-                 write(6,100) tile,i,j,ii,jj,field(i,j,1)
+                 write(6,100) tile,i,j,ii,jj
                  cycle I_LOOP
                endif
 
@@ -115,13 +111,9 @@
    enddo I_LOOP
  enddo J_LOOP
 
- print*,'after search 59/166 ',field(59,166,:)
- print*,'after search 60/167 ',field(60,167,:)
- print*,'after search 55/168 ',field(55,168,:)
- print*,'after search 56/169 ',field(55,168,:)
  deallocate(field_save)
 
- 100 format(1x,"- MISSING2 POINT TILE: ",i2," I/J: ",i5,i5," SET TO VALUE AT: ",i5,i5,". NEW VALUE IS: ",f8.3)
- 101 format(1x,"- MISSING2 POINT TILE: ",i2," I/J: ",i5,i5," SET TO DEFAULT VALUE OF: ",f8.3)
+ 100 format(1x,"- MISSING POINT TILE: ",i2," I/J: ",i5,i5," SET TO VALUE AT: ",i5,i5)
+ 101 format(1x,"- MISSING POINT TILE: ",i2," I/J: ",i5,i5," SET TO DEFAULT VALUE OF: ",i3)
 
- end subroutine search2
+ end subroutine search_frac_cats

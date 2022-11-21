@@ -1,25 +1,39 @@
 !> @file
-!! @brief Output model data for a single tile and a single record.
-!! @author George Gayno @date 2018
+!! @brief Write model categorical data for a single tile.
+!! @author George Gayno NCEP/EMC @date 2022
 
-!> Output model data for a single tile and a single
-!! record in netcdf format.
+!> Output categorical data such as vegetation type. Include
+!! percentage of each category within a model grid box and
+!! the dominate category.
 !!
-!! @param[in] data_one_tile Data to be output (single tile).
-!! @param[in] lat_one_tile Latitude of tile.
-!! @param[in] lon_one_tile Longitude of tile.
-!! @param[in] field_idx Index of field within field name array.
-!! @param[in] i_mdl i dimensions of tile.
-!! @param[in] j_mdl j dimensions of tile.
+!! @author George Gayno NCEP/EMC @date 2022
+ module output_frac_cats
+
+ implicit none
+
+ private
+
+ public :: output_driver
+
+ contains
+
+!> Driver routine to output model categorical data.
+!!
+!! @param[in] data_one_tile The percentage of each category within a model grid cell.
+!! @param[in] dom_cat_one_tile The dominate category within a model grid cell.
+!! @param[in] lat_one_tile Latitude of each model grid cell.
+!! @param[in] lon_one_tile Longitude of each model grid cell.
+!! @param[in] i_mdl i dimension of model grid.
+!! @param[in] j_mdl j dimension of model grid.
+!! @param[in] num_categories Number of categories.
 !! @param[in] tile Tile number.
-!! @author George Gayno @date 2018
- subroutine output2(data_one_tile, dom_cat_one_tile, lat_one_tile, lon_one_tile, i_mdl, j_mdl, &
-                   num_categories, tile)
+!! @author George Gayno @date 2022
+ subroutine output_driver(data_one_tile, dom_cat_one_tile, lat_one_tile, lon_one_tile, &
+                          i_mdl, j_mdl, num_categories, tile)
 
  use mpi
  use esmf
- use source_grid, only             : field_names, &
-                                     num_time_recs
+ use source_grid, only             : field_names
  use model_grid, only              : grid_tiles
  use program_setup, only           : halo
 
@@ -29,7 +43,7 @@
 
  real(esmf_kind_r4), intent(in)   :: data_one_tile(i_mdl,j_mdl,num_categories)
  real(esmf_kind_r4), intent(in)   :: dom_cat_one_tile(i_mdl,j_mdl)
- real(esmf_kind_r4)               :: lat_one_tile(i_mdl,j_mdl)
+ real(esmf_kind_r4), intent(in)   :: lat_one_tile(i_mdl,j_mdl)
  real(esmf_kind_r4), intent(in)   :: lon_one_tile(i_mdl,j_mdl)
  
  character(len=200)               :: out_file
@@ -67,38 +81,48 @@
    j_end   = j_mdl - halo
    i_out   = i_end - i_start + 1
    j_out   = j_end - j_start + 1
-   call writeit(out_file, i_out, j_out, num_categories, num_time_recs, &
+   call writeit(out_file, i_out, j_out, num_categories, &
               lat_one_tile(i_start:i_end,j_start:j_end), &
               lon_one_tile(i_start:i_end,j_start:j_end), &
               data_one_tile(i_start:i_end,j_start:j_end,:), &
               dom_cat_one_tile(i_start:i_end,j_start:j_end) )
    print*,"- WILL WRITE FULL DOMAIN INCLUDING HALO."
-   call writeit(out_file_with_halo, i_mdl, j_mdl, num_categories, num_time_recs, &
+   call writeit(out_file_with_halo, i_mdl, j_mdl, num_categories, &
                 lat_one_tile, lon_one_tile, data_one_tile, dom_cat_one_tile)
  else
    print*,"- WILL WRITE DATA."
-   call writeit(out_file, i_mdl, j_mdl, num_categories, num_time_recs, &
+   call writeit(out_file, i_mdl, j_mdl, num_categories, &
                 lat_one_tile, lon_one_tile, data_one_tile, dom_cat_one_tile)
  endif
 
  return
 
- end subroutine output2
+ end subroutine output_driver
 
- subroutine writeit(out_file, iout, jout, num_categories, num_time_recs, &
+!> Write data to a netcdf file.
+!!
+!! @param[in] out_file Output file name.
+!! @param[in] iout i-dimension of data.
+!! @param[in] jout j-dimension of data.
+!! @param[in] num_categories Number of categories.
+!! @param[in] latitude Latitude of data.
+!! @param[in] latitude Longitude of data.
+!! @param[in] data_pct Percentage of each category in each model grid cell.
+!! @param[in] dominate_cat Dominate category in each model grid cell.
+ subroutine writeit(out_file, iout, jout, num_categories, &
                     latitude, longitude, data_pct, dominate_cat)
 
  use esmf
  use netcdf
  use utils
- use source_grid, only  : day_of_rec, source, field_names
+ use source_grid, only  : day_of_rec, source, field_names, num_time_recs
  use model_grid, only   : missing
 
  implicit none
 
  character(len=*), intent(in) :: out_file
 
- integer, intent(in) :: iout, jout, num_categories, num_time_recs
+ integer, intent(in) :: iout, jout, num_categories
 
  real(esmf_kind_r4), intent(in)  :: latitude(iout,jout)
  real(esmf_kind_r4), intent(in)  :: longitude(iout,jout)
@@ -194,3 +218,5 @@
  error = nf90_close(ncid)
 
  end subroutine writeit
+
+ end module output_frac_cats

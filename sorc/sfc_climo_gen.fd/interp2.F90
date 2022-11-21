@@ -18,6 +18,7 @@
                                        longitude_field_mdl, mask_field_mdl, &
                                        land_frac_field_mdl
  use source_grid
+ use output_frac_cats, only          : output_driver
  use utils
  use mpi
 
@@ -214,7 +215,7 @@
        endif
      enddo
      enddo
-     call search2 (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, num_categories, tile, field_names(1))
+     call search_frac_cats (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, num_categories, tile, field_names(1))
      print*,'after regrid ',data_mdl_one_tile(i_mdl/2,j_mdl/2,:)
 
 ! These points are all non-land. Set to 100% of the water category.
@@ -248,7 +249,7 @@
 ! under fractional grids, how do we define dominate category?
      dom_cat_mdl_one_tile = 0.0
      dom_cat_mdl_one_tile = maxloc(data_mdl_one_tile,dim=3)
-     call output2 (data_mdl_one_tile, dom_cat_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile)
+     call output_driver (data_mdl_one_tile, dom_cat_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile)
    endif
 
  enddo OUTPUT_LOOP
