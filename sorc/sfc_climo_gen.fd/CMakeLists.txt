@@ -8,17 +8,17 @@ set(lib_src
     interp2.F90
     model_grid.F90
     output.f90
-    output2.f90
+    output_frac_cats.F90
     program_setup.f90
     search.f90
-    search2.f90
+    search_frac_cats.f90
     source_grid.F90
     utils.f90)
 
 set(exe_src driver.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -warn unused")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8")
 endif()
