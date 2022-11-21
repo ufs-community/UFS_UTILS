@@ -18,11 +18,9 @@
 
  use mpi
  use esmf
- use netcdf
- use utils
- use source_grid, only             : field_names, source, &
-                                     num_time_recs, day_of_rec
- use model_grid, only              : missing, grid_tiles
+ use source_grid, only             : field_names, &
+                                     num_time_recs
+ use model_grid, only              : grid_tiles
  use program_setup, only           : halo
 
  implicit none
@@ -33,20 +31,14 @@
  real(esmf_kind_r4), intent(in)   :: dom_cat_one_tile(i_mdl,j_mdl)
  real(esmf_kind_r4)               :: lat_one_tile(i_mdl,j_mdl)
  real(esmf_kind_r4), intent(in)   :: lon_one_tile(i_mdl,j_mdl)
- real(esmf_kind_r4) :: sum_one_tile(i_mdl,j_mdl)
  
- character(len=200)               :: field_names_pct
  character(len=200)               :: out_file
  character(len=200)               :: out_file_with_halo
 
- integer                          :: error
  integer                          :: field_idx
- integer                          :: dim_x, dim_y, dim_z, id_data_pct, id_data_dom_cat
- integer                          :: dim_time, id_times, ierr
- integer                          :: header_buffer_val = 16384
- integer                          :: i_out, j_out, id_lat, id_lon, id_sum
+ integer                          :: ierr
+ integer                          :: i_out, j_out
  integer                          :: i_start, i_end, j_start, j_end
- integer                          :: ncid, ncid_with_halo
 
  field_idx = 1
 
@@ -68,32 +60,72 @@
 !----------------------------------------------------------------------
 
  if (halo > 0) then
-   print*,"- WILL REMOVE HALO REGION OF ", halo, " ROWS/COLS."
+   print*,"- WILL WRITE WITHOUT HALO REGION OF ", halo, " ROWS/COLS."
    i_start = 1 + halo
    i_end   = i_mdl - halo
    j_start = 1 + halo
    j_end   = j_mdl - halo
+   i_out   = i_end - i_start + 1
+   j_out   = j_end - j_start + 1
+   call writeit(out_file, i_out, j_out, num_categories, num_time_recs, &
+              lat_one_tile(i_start:i_end,j_start:j_end), &
+              lon_one_tile(i_start:i_end,j_start:j_end), &
+              data_one_tile(i_start:i_end,j_start:j_end,:), &
+              dom_cat_one_tile(i_start:i_end,j_start:j_end) )
+   print*,"- WILL WRITE FULL DOMAIN INCLUDING HALO."
+   call writeit(out_file_with_halo, i_mdl, j_mdl, num_categories, num_time_recs, &
+                lat_one_tile, lon_one_tile, data_one_tile, dom_cat_one_tile)
  else
-   i_start = 1
-   i_end   = i_mdl
-   j_start = 1
-   j_end   = j_mdl
+   print*,"- WILL WRITE DATA."
+   call writeit(out_file, i_mdl, j_mdl, num_categories, num_time_recs, &
+                lat_one_tile, lon_one_tile, data_one_tile, dom_cat_one_tile)
  endif
 
- i_out = i_end - i_start + 1
- j_out = j_end - j_start + 1
+ return
 
+ end subroutine output2
+
+ subroutine writeit(out_file, iout, jout, num_categories, num_time_recs, &
+                    latitude, longitude, data_pct, dominate_cat)
+
+ use esmf
+ use netcdf
+ use utils
+ use source_grid, only  : day_of_rec, source, field_names
+ use model_grid, only   : missing
+
+ implicit none
+
+ character(len=*), intent(in) :: out_file
+
+ integer, intent(in) :: iout, jout, num_categories, num_time_recs
+
+ real(esmf_kind_r4), intent(in)  :: latitude(iout,jout)
+ real(esmf_kind_r4), intent(in)  :: longitude(iout,jout)
+ real(esmf_kind_r4), intent(in)  :: data_pct(iout,jout,num_categories)
+ real(esmf_kind_r4), intent(in)  :: dominate_cat(iout,jout)
+
+ character(len=200)  :: field_names_pct
+ integer             :: header_buffer_val = 16384
+ integer             :: ncid, dim_x, dim_y, dim_z, dim_time
+ integer             :: id_times, id_lat, id_lon, id_data_pct
+ integer             :: id_data_dom_cat, id_sum
+ integer             :: error
+
+ real :: sum_all(iout,jout)
+
+ print*,"- OPEN AND WRITE: ",trim(out_file)
  error = nf90_create(out_file, NF90_NETCDF4, ncid)
- print*,'ncid is ',ncid
  call netcdf_err(error, 'ERROR IN NF90_CREATE' )
- error = nf90_def_dim(ncid, 'nx', i_out, dim_x)
+ error = nf90_def_dim(ncid, 'nx', iout, dim_x)
  call netcdf_err(error, 'DEFINING NX DIMENSION' )
- error = nf90_def_dim(ncid, 'ny', j_out, dim_y)
+ error = nf90_def_dim(ncid, 'ny', jout, dim_y)
  call netcdf_err(error, 'DEFINING NY DIMENSION' )
  error = nf90_def_dim(ncid, 'num_categories', num_categories, dim_z)
  call netcdf_err(error, 'DEFINING NZ DIMENSION' )
  error = nf90_def_dim(ncid, 'time', num_time_recs, dim_time)
  call netcdf_err(error, 'DEFINING TIME DIMENSION' )
+
  error = nf90_def_var(ncid, 'time', NF90_FLOAT, dim_time, id_times)
  call netcdf_err(error, 'DEFINING TIME VARIABLE' )
  error = nf90_put_att(ncid, id_times, "units", "days since 2015-1-1")
@@ -139,119 +171,26 @@
  call netcdf_err(error, 'DEFINING FIELD' )
 
  error = nf90_enddef(ncid, header_buffer_val,4,0,4)
- call netcdf_err(error, 'IN NF90_ENDDEF' )
 
  error = nf90_put_var( ncid, id_times, day_of_rec) 
  call netcdf_err(error, 'WRITING TIME FIELD' )
 
- error = nf90_put_var( ncid, id_lat, lat_one_tile(i_start:i_end,j_start:j_end),  &
-                         start=(/1,1/), count=(/i_out,j_out/))
+ error = nf90_put_var( ncid, id_lat, latitude)
  call netcdf_err(error, 'IN NF90_PUT_VAR FOR GEOLAT' )
 
- error = nf90_put_var( ncid, id_lon, lon_one_tile(i_start:i_end,j_start:j_end),  &
-                         start=(/1,1/), count=(/i_out,j_out/))
+ error = nf90_put_var( ncid, id_lon, longitude)
  call netcdf_err(error, 'IN NF90_PUT_VAR FOR GEOLON' )
 
- print*,'- WRITE DATA '
- error = nf90_put_var( ncid, id_data_pct, data_one_tile(i_start:i_end,j_start:j_end,:),  &
-                            start=(/1,1,1,1/), count=(/i_out,j_out,num_categories,1/))
+ error = nf90_put_var( ncid, id_data_pct, data_pct)
  call netcdf_err(error, 'IN NF90_PUT_VAR' )
   
- error = nf90_put_var( ncid, id_data_dom_cat, dom_cat_one_tile(i_start:i_end,j_start:j_end),  &
-                            start=(/1,1,1/), count=(/i_out,j_out,1/))
+ error = nf90_put_var( ncid, id_data_dom_cat, dominate_cat)
  call netcdf_err(error, 'IN NF90_PUT_VAR' )
 
 ! Temporary output of sum of %.
- sum_one_tile = sum(data_one_tile, dim=3)
- error = nf90_put_var( ncid, id_sum, sum_one_tile(i_start:i_end,j_start:j_end),  &
-                            start=(/1,1,1/), count=(/i_out,j_out,1/))
+ sum_all = sum(data_pct, dim=3)
+ error = nf90_put_var( ncid, id_sum, sum_all)
 
  error = nf90_close(ncid)
 
-!----------------------------------------------------------------------
-! For regional nests, also output files including the halo
-!----------------------------------------------------------------------
-
- if (halo == 0) return
-
- print*,"- WRITE OUT FILES THAT INCLUDE HALO REGION."
-
- error = nf90_create(out_file_with_halo, NF90_NETCDF4, ncid_with_halo)
- call netcdf_err(error, 'IN NF90_CREATE' )
- error = nf90_def_dim(ncid_with_halo, 'nx', i_mdl, dim_x)
- call netcdf_err(error, 'DEFINING NX DIMENSION' )
- error = nf90_def_dim(ncid_with_halo, 'ny', j_mdl, dim_y)
- call netcdf_err(error, 'DEFINING NY DIMENSION' )
- error = nf90_def_dim(ncid_with_halo, 'num_categories', num_categories, dim_z)
- call netcdf_err(error, 'DEFINING NZ DIMENSION' )
- error = nf90_def_dim(ncid_with_halo, 'time', num_time_recs, dim_time)
- call netcdf_err(error, 'DEFINING TIME DIMENSION' )
- error = nf90_def_var(ncid_with_halo, 'time', NF90_FLOAT, dim_time, id_times)
- call netcdf_err(error, 'DEFINING TIME VARIABLE' )
- error = nf90_put_att(ncid_with_halo, id_times, "units", "days since 2015-1-1")
- call netcdf_err(error, 'DEFINING TIME ATTRIBUTE' )
- if (len_trim(source) > 0) then
-   error = nf90_put_att(ncid_with_halo, nf90_global, 'source', source)
-   call netcdf_err(error, 'DEFINING GLOBAL SOURCE ATTRIBUTE' )
- endif
-
- error = nf90_def_var(ncid_with_halo, 'geolat', NF90_FLOAT, (/dim_x,dim_y/), id_lat)
- call netcdf_err(error, 'DEFINING GEOLAT FIELD' )
- error = nf90_put_att(ncid_with_halo, id_lat, "long_name", "Latitude")
- call netcdf_err(error, 'DEFINING GEOLAT NAME ATTRIBUTE' )
- error = nf90_put_att(ncid_with_halo, id_lat, "units", "degrees_north")
- call netcdf_err(error, 'DEFINING GEOLAT UNIT ATTRIBUTE' )
- error = nf90_def_var(ncid_with_halo, 'geolon', NF90_FLOAT, (/dim_x,dim_y/), id_lon)
- call netcdf_err(error, 'DEFINING GEOLON FIELD' )
- error = nf90_put_att(ncid_with_halo, id_lon, "long_name", "Longitude")
- call netcdf_err(error, 'DEFINING GEOLON NAME ATTRIBUTE' )
- error = nf90_put_att(ncid_with_halo, id_lon, "units", "degrees_east")
- call netcdf_err(error, 'DEFINING GEOLON UNIT ATTRIBUTE' )
-
- error = nf90_def_var(ncid_with_halo, field_names_pct, NF90_FLOAT, (/dim_x,dim_y,dim_z,dim_time/), id_data_pct)
- call netcdf_err(error, 'DEFINING FIELD VARIABLE' )
- error = nf90_put_att(ncid_with_halo, id_data_pct, "units", "percent coverage each category")
- call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid_with_halo, id_data_pct, "missing_value", missing)
- call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid_with_halo, id_data_pct, "coordinates", "geolon geolat")
- call netcdf_err(error, 'DEFINING COORD ATTRIBUTE' )
-
- error = nf90_def_var(ncid_with_halo, trim(field_names(1)), NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_data_dom_cat)
- call netcdf_err(error, 'DEFINING FIELD' )
- error = nf90_put_att(ncid_with_halo, id_data_dom_cat, "units", "dominate category")
- call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid_with_halo, id_data_dom_cat, "missing_value", missing)
- call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid_with_halo, id_data_dom_cat, "coordinates", "geolon geolat")
- call netcdf_err(error, 'DEFINING COORD ATTRIBUTE' )
-
- error = nf90_enddef(ncid_with_halo, header_buffer_val,4,0,4)
- call netcdf_err(error, 'WRITING HEADER ENDDEF' )
-
- error = nf90_put_var(ncid_with_halo, id_times, day_of_rec) 
- call netcdf_err(error, 'WRITING TIME VARIABLE' )
-
- error = nf90_put_var( ncid_with_halo, id_lat, lat_one_tile,  &
-                       start=(/1,1/), count=(/i_mdl,j_mdl/))
- call netcdf_err(error, 'IN NF90_PUT_VAR FOR GEOLAT' )
-
- error = nf90_put_var( ncid_with_halo, id_lon, lon_one_tile,  &
-                         start=(/1,1/), count=(/i_mdl,j_mdl/))
- call netcdf_err(error, 'IN NF90_PUT_VAR FOR GEOLON' )
-
- print*,'- WRITE DATA'
-
- error = nf90_put_var(ncid_with_halo, id_data_pct, data_one_tile,  &
-                      start=(/1,1,1,1/), count=(/i_mdl,j_mdl,num_categories,1/))
- call netcdf_err(error, 'IN NF90_PUT_VAR' )
-
- error = nf90_put_var(ncid_with_halo, id_data_dom_cat, dom_cat_one_tile,  &
-                      start=(/1,1,1/), count=(/i_mdl,j_mdl,1/))
- call netcdf_err(error, 'IN NF90_PUT_VAR' )
-
- error = nf90_close(ncid_with_halo)
-
- return
-
- end subroutine output2
+ end subroutine writeit
