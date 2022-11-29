@@ -51,8 +51,6 @@ load(pathJoin("sigio", sigio_ver))
 sp_ver=os.getenv("sp_ver") or "2.3.3"
 load(pathJoin("sp", sp_ver))
 
-ip_ver=os.getenv("ip_ver") or "3.3.3"
-load(pathJoin("ip", ip_ver))
 -- setenv("ip_DIR","/lfs/h2/emc/global/noscrub/George.Gayno/ip.git/lib64/cmake/ip")
 
 g2_ver=os.getenv("g2_ver") or "3.4.5"
@@ -76,5 +74,9 @@ prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/compiler/intel/19.1.
 prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/mpi/intel/19.1.3.304/cray-mpich/8.1.7")
 esmf_ver=os.getenv("esmf_ver") or "8.2.1b04"
 load(pathJoin("esmf", esmf_ver))
+
+prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/mpi/intel/19.1.3.304/cray-mpich/8.1.9")
+ip_ver=os.getenv("ip_ver") or "4.0.0"
+load(pathJoin("ip", ip_ver))
 
 whatis("Description: UFS_UTILS build environment")
