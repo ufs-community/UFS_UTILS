@@ -1,15 +1,16 @@
 !> @file
-!! @brief Read the input source data and interpolate it to the
-!! model grid.
-!! @author George Gayno @date 2018
+!! @brief Read the input cateogorical source data and 
+!! interpolate it to the model grid.
+!! @author George Gayno @date 2022
 
 !> Read the input source data and interpolate it to the
-!! model grid.
+!! model grid. Outputs the percentage of each category
+!! within a model grid box and the dominate category.
 !!
 !! @param[in] localpet this mpi task
 !! @param[in] input_file filename of input source data.
-!! @author George Gayno @date 2018
- subroutine interp2(localpet, input_file)
+!! @author George Gayno @date 2022
+ subroutine interp_frac_cats(localpet, input_file)
 
  use esmf
  use netcdf
@@ -26,11 +27,12 @@
 
  character(len=*), intent(in)       :: input_file
 
- integer                            :: rc, localpet
- integer                            :: i, j, tile, ncid, status
+ integer, intent(in)                :: localpet
+
+ integer                            :: i, j, tile, ncid, status, rc
  integer                            :: varid, water_category
  integer                            :: isrctermprocessing
- integer :: category, num_categories
+ integer                            :: category, num_categories
 
  integer(esmf_kind_i4), allocatable :: mask_mdl_one_tile(:,:)
  integer(esmf_kind_i4), pointer     :: unmapped_ptr(:)
@@ -44,12 +46,11 @@
  real(esmf_kind_r4), allocatable    :: lon_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: land_frac_mdl_one_tile(:,:)
 
- type(esmf_regridmethod_flag) :: method
+ type(esmf_regridmethod_flag)            :: method
  type(esmf_field)                        :: data_field_src
  type(esmf_field)                        :: data_field_mdl
  type(esmf_routehandle)                  :: regrid_data
  type(esmf_polemethod_flag)              :: pole
- 
 
  if (localpet == 0) then
    allocate(data_src_global(i_src,j_src))
@@ -264,4 +265,4 @@
 
  call mpi_barrier(mpi_comm_world, rc)
 
- end subroutine interp2
+ end subroutine interp_frac_cats
