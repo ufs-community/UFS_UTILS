@@ -51,7 +51,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/weight_gen
+export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/weight_gen
 export HOMEufs=$PBS_O_WORKDIR/../..
 
 export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
