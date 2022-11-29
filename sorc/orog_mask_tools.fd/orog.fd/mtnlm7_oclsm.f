@@ -2056,7 +2056,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                call ABORT()
          ENDIF
        ENDDO
-     ENDDO
+      ENDDO
 !$omp end parallel do
       WRITE(6,*) "! MAKEMT2 ORO SLM VAR VAR4 DONE"
 C
