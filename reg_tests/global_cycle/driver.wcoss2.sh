@@ -45,7 +45,7 @@ fi
 
 DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
-export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/global_cycle
+export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/global_cycle
 
 export OMP_NUM_THREADS_CY=2
 export OMP_PLACES=cores
