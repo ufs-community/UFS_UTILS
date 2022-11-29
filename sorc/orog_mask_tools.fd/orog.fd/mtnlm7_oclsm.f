@@ -2032,9 +2032,11 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                ELSE
                   ORO(I,J)= XS1_ALL / XWATR_ALL
                ENDIF
-               VAR(I,J)=SQRT(MAX(XW2_ALL/XNSUM_ALL-(XW1_ALL/XNSUM_ALL)**2,0.))
+               VAR(I,J)=SQRT(MAX(XW2_ALL/XNSUM_ALL-
+     &                         (XW1_ALL/XNSUM_ALL)**2,0.))
                do I1 = 1, NSUM_ALL
-                  XW4_ALL = XW4_ALL + (hgt_1d_all(I1) - ORO(i,j)) ** 4
+                  XW4_ALL = XW4_ALL + 
+     &                     (hgt_1d_all(I1) - ORO(i,j)) ** 4
                enddo   
 
                IF(VAR(I,J).GT.1.) THEN
