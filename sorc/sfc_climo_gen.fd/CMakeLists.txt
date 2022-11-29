@@ -5,7 +5,7 @@
 
 set(lib_src
     interp.F90
-    interp2.F90
+    interp_frac_cats.F90
     model_grid.F90
     output.f90
     output_frac_cats.F90
