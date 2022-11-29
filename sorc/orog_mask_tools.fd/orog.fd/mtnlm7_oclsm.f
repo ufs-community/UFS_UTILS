@@ -1952,6 +1952,15 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
          XW1 = 0.0
          XW2 = 0.0
          XW4 = 0.0
+         XNSUM_ALL = 0.0
+         XLAND_ALL = 0.0
+         XWATR_ALL = 0.0
+         nsum_all = 0
+         XL1_ALL = 0.0
+         XS1_ALL = 0.0
+         XW1_ALL = 0.0
+         XW2_ALL = 0.0
+         XW4_ALL = 0.0
          
          LONO(1) = lon_c(i,j) 
          LONO(2) = lon_c(i+1,j) 
