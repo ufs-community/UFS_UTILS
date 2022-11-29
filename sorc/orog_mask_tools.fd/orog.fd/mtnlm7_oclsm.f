@@ -1933,7 +1933,10 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 !$omp parallel do
 !$omp* private (j,i,xnsum,xland,xwatr,nsum,xl1,xs1,xw1,xw2,xw4,lono,
 !$omp*          lato,jst,jen,ilist,numx,jj,i2,ii,loni,lati,height,
-!$omp*          hgt_1d)
+!$omp*          hgt_1d,
+!$omp*          xnsum_all,xland_all,xwatr_all,nsum_all,
+!$omp*          xl1_all,xs1_all,xw1_all,xw2_all,xw4_all,
+!$omp*          height_all,hgt_1d_all)
       DO J=1,JM
 !       print*, "J=", J
        DO I=1,IM
