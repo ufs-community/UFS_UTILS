@@ -23,6 +23,8 @@
 # res                           Resolution of cubed-sphere grid
 # SAVE_DIR                      Directory where output is saved
 # WORK_DIR                      Temporary working directory
+# SOIL_TYPE_FILE                Path/name of input soil type data.
+# VEG_TYPE_FILE                 Path/name of input vegetation type data.
 #-------------------------------------------------------------------------
 
 set -eux
