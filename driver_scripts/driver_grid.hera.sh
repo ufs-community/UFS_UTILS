@@ -97,8 +97,8 @@ export soil_type_src="statsgo.0.05" #  Soil type data.
                                 # 1) "statsgo.0.05" for global 0.05-deg data
                                 # 2) "statsgo.0.03" for global 0.03-deg data
                                 # 3) "statsgo.conus.30s" for CONUS 30s data
-                                # 3) "statsgo.nh.30s" for NH 30s data
-                                # 3) "statsgo.30s" for global 30s data
+                                # 4) "statsgo.nh.30s" for NH 30s data
+                                # 5) "statsgo.30s" for global 30s data
                                 # For Beijing Norm. Univ. data
                                 # 1) "bnu.30s" for global 30s data.
 
