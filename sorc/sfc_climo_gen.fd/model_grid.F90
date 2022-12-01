@@ -4,7 +4,7 @@
 
 !> This module defines the model grid.
 !!
-!! Variables named with 'mdl' refer to the model grid.
+!! Variables named with '_mdl' refer to the model grid.
 !!
 !! @author George Gayno @date 2018
  module model_grid
@@ -273,7 +273,7 @@
 
  enddo
 
- deallocate(mask_mdl_one_tile, latitude_one_tile, longitude_one_tile)
+ deallocate(mask_mdl_one_tile, latitude_one_tile, longitude_one_tile, land_frac_one_tile)
 
  print*,"- CALL GridAddItem FOR MODEL GRID."
  call ESMF_GridAddItem(grid_mdl, &
@@ -298,10 +298,11 @@
 
 !> Get model information
 !!
-!! Read model land/sea mask and lat/lon from the orography file.
+!! Read model land/sea mask, land fraction and lat/lon from the orography file.
 !!
 !! @param[in] orog_file the orography file
-!! @param[out] mask land/sea mask
+!! @param[out] mask land/sea mask 0-all non-land; 1-some land.
+!! @param[out] land_frac land fraction between 0 and 1.
 !! @param[out] lat2d latitude
 !! @param[out] lon2d longitude
 !! @param[in] idim i dimension of the model tile
@@ -431,7 +432,7 @@
  print*,"- CALL FieldDestroy FOR MODEL GRID LAND MASK."
  call ESMF_FieldDestroy(mask_field_mdl,rc=rc)
 
- print*,"- CALL FieldDestroy FOR MODEL GRID LAND MASK."
+ print*,"- CALL FieldDestroy FOR MODEL GRID LAND FRACTION."
  call ESMF_FieldDestroy(land_frac_field_mdl,rc=rc)
 
  print*,"- CALL FieldDestroy FOR MODEL GRID DATA FIELD."
