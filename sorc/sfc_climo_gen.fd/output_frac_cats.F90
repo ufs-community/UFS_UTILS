@@ -106,7 +106,7 @@
 !! @param[in] jout j-dimension of data.
 !! @param[in] num_categories Number of categories.
 !! @param[in] latitude Latitude of data.
-!! @param[in] latitude Longitude of data.
+!! @param[in] longitude Longitude of data.
 !! @param[in] data_pct Percentage of each category in each model grid cell.
 !! @param[in] dominate_cat Dominate category in each model grid cell.
  subroutine writeit(out_file, iout, jout, num_categories, &
