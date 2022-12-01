@@ -186,7 +186,11 @@
                                  
    enddo
 
-! These fields are adjusted at landice.
+! Adjust some fields at permanent land ice points. These points are identified by the
+! 'permanent ice' vegetation type category.
+!
+! When outputting the fraction of each vegetation type, land ice points are
+! not defined. So don't do this adjustment.
 
    if (.not. fract_vegsoil_type) then
      select case (trim(field_names(n)))
