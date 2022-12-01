@@ -64,12 +64,15 @@ export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 #   4) "modis.igbp.nh.30s" for NH 30s data
 #   5) "modis.igbp.30s" for global 30s data
 #
-# Soil type data
+# For STATSGO soil type data
 #   1) "statsgo.0.05" for global 0.05-deg data
 #   2) "statsgo.0.03" for global 0.03-deg data
 #   3) "statsgo.conus.30s" for CONUS 30s data
 #   4) "statsgo.nh.30s" for NH 30s data
 #   5) "statsgo.30s" for global 30s data
+#
+# For Beijing Norm. Univ. soil type data
+#   1) "bnu.30s" for global 30s data
 #-------------------------------------------------------------
 
 export veg_type_src="modis.igbp.0.05"
