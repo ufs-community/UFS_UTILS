@@ -81,7 +81,7 @@
 
  call define_source_grid(localpet, npets, input_vegetation_type_file)
  if (fract_vegsoil_type) then
-   print*,'- WILL OUTPUT VEGETATION TYPE FRACTION.'
+   print*,'- WILL OUTPUT VEGETATION TYPE FRACTION AND DOMINATE CATEGORY.'
    call interp_frac_cats(localpet, input_vegetation_type_file)
  else
    print*,'- WILL OUTPUT DOMINATE VEGETATION TYPE.'
@@ -143,7 +143,7 @@
  if (trim(input_soil_type_file) /= "NULL") then
    call define_source_grid(localpet, npets, input_soil_type_file)
    if (fract_vegsoil_type) then
-     print*,'- WILL OUTPUT SOIL TYPE FRACTION.'
+     print*,'- WILL OUTPUT SOIL TYPE FRACTION AND DOMINATE CATEGORY.'
      call interp_frac_cats(localpet, input_soil_type_file)
    else
      print*,'- WILL OUTPUT DOMINATE SOIL TYPE.'
