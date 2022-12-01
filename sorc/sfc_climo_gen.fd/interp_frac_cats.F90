@@ -1,6 +1,7 @@
 !> @file
 !! @brief Read the input cateogorical source data and 
-!! interpolate it to the model grid.
+!! interpolate percent of each category to the model grid.
+!! 
 !! @author George Gayno @date 2022
 
 !> Read the input source data and interpolate it to the
