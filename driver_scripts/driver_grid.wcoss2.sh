@@ -6,7 +6,7 @@
 #PBS -A GFS-DEV
 #PBS -l walltime=00:15:00
 #PBS -N make_grid
-#PBS -l select=1:ncpus=24:mem=200GB
+#PBS -l select=1:ncpus=24:mem=500GB
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on WCOSS2.
