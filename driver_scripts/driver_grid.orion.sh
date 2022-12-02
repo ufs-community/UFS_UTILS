@@ -77,7 +77,7 @@ export gtype=regional_esg      # 'uniform', 'stretch', 'nest',
 export make_gsl_orog=false    # When 'true' will output 'oro' files for 
                               # the GSL orographic drag suite.
 
-export veg_type_src="modis.igbp.0.05" #  veg type data.
+export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:
                                 # 1) "viirs.igbp.0.1" for global 0.10-deg data
                                 # 2) "viirs.igbp.0.05" for global 0.05-deg data
@@ -92,12 +92,15 @@ export veg_type_src="modis.igbp.0.05" #  veg type data.
                                 # 4) "modis.igbp.nh.30s" for N Hemis 30s data
                                 # 5) "modis.igbp.30s" for global 30s data
 
-export soil_type_src="statsgo.0.05" #  Soil type data. Choices are:
+export soil_type_src="statsgo.0.05" #  Soil type data.
+                                # For STATSGO soil type data, set to:
                                 # 1) "statsgo.0.05" for global 0.05-deg data
                                 # 2) "statsgo.0.03" for global 0.03-deg data
                                 # 3) "statsgo.conus.30s" for CONUS 30s data
                                 # 4) "statsgo.nh.30s" for NH 30s data
                                 # 5) "statsgo.30s" for global 30s data
+                                # For Beijing Normal Univ. data, set to:
+                                # 1) "bnu.30s" for global 30s data.
 
 if [ $gtype = uniform ]; then
   export res=96
