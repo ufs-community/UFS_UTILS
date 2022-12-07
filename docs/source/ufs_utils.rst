@@ -511,6 +511,7 @@ Program execution is controlled via a namelist.  The namelist variables are:
       * maximum_snow_albedo_method - interpolation method for this field.  Bilinear or conservative.  Default is bilinear.
       * snowfree_albedo_method -  interpolation method for this field.  Bilinear or conservative.  Default is bilinear.
       * vegetation_greenness_method -  interpolation method for this field.  Bilinear or conservative.  Default is bilinear.
+      * vegsoilt_frac - When 'true', outputs the dominate soil and vegetation type, and the fraction of each category. When 'false', only outputs the dominate categories. Default is 'false'.
 
 Program inputs and outputs
 --------------------------
