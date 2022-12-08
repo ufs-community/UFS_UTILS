@@ -188,7 +188,7 @@
 ! These fields are adjusted at landice.
 
    select case (trim(field_names(n)))
-     case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type')
+     case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type','soil_color')
      if (localpet == 0) then
        allocate(vegt_mdl_one_tile(i_mdl,j_mdl))
      else
