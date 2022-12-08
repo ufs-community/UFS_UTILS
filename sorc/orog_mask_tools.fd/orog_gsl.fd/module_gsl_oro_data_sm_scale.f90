@@ -558,9 +558,15 @@ do j = 1,dimY_FV3
       nu = 0
       nd = 0
       do jj = 1,jj_m
-         do ii = 1,ii_m/2   ! left half of box
-            if ( zs(ii,jj) > zs_mean ) nu = nu + 1
-         end do
+         if(mod(ii_m,2).eq.0.) then
+           do ii = 1,ii_m/2   ! left half of box
+              if ( zs(ii,jj) > zs_mean ) nu = nu + 1
+           end do
+         else
+           do ii = 1,ii_m/2+1   ! left half of box
+              if ( zs(ii,jj) > zs_mean ) nu = nu + 1
+           end do
+         endif
          do ii = ii_m/2 + 1, ii_m  ! right half of box
             if ( zs(ii,jj) > zs_mean ) nd = nd + 1
          end do
@@ -575,11 +581,19 @@ do j = 1,dimY_FV3
       ! OA2 -- orographic asymmetry in South direction
       nu = 0
       nd = 0
-      do jj = 1,jj_m/2   ! bottom half of box
-         do ii = 1,ii_m
-            if ( zs(ii,jj) > zs_mean ) nu = nu + 1
-         end do
-      end do
+      if(mod(jj_m,2).eq.0.) then
+        do jj = 1,jj_m/2   ! bottom half of box
+           do ii = 1,ii_m
+              if ( zs(ii,jj) > zs_mean ) nu = nu + 1
+           end do
+        end do
+      else
+        do jj = 1,jj_m/2+1   ! bottom half of box
+           do ii = 1,ii_m
+              if ( zs(ii,jj) > zs_mean ) nu = nu + 1
+           end do
+        end do
+      endif
       do jj = jj_m/2 + 1,jj_m   ! top half of box
          do ii = 1, ii_m
             if ( zs(ii,jj) > zs_mean ) nd = nd + 1
@@ -598,10 +612,12 @@ do j = 1,dimY_FV3
       ratio = real(jj_m,real_kind)/real(ii_m,real_kind)
       do jj = 1,jj_m
          do ii = 1,ii_m
-            if ( nint(real(ii,real_kind)*ratio) < (jj_m - jj) ) then
+            if ( nint(real(ii,real_kind)*ratio) <= (jj_m - jj + 1) ) then
                ! south-west half of box
                if ( zs(ii,jj) > zs_mean ) nu = nu + 1
-            else      ! north-east half of box
+            endif
+            if ( nint(real(ii,real_kind)*ratio) >= (jj_m - jj + 1) ) then
+               ! north-east half of box
                if ( zs(ii,jj) > zs_mean ) nd = nd + 1
             end if
          end do
@@ -619,10 +635,12 @@ do j = 1,dimY_FV3
       ratio = real(jj_m,real_kind)/real(ii_m,real_kind)
       do jj = 1,jj_m
          do ii = 1,ii_m
-            if ( nint(real(ii,real_kind)*ratio) < jj ) then
+            if ( nint(real(ii,real_kind)*ratio) <= jj ) then
                ! north-west half of box
                if ( zs(ii,jj) > zs_mean ) nu = nu + 1
-            else      ! south-east half of box
+            end if
+            if ( nint(real(ii,real_kind)*ratio) >= jj ) then
+                ! south-east half of box
                if ( zs(ii,jj) > zs_mean ) nd = nd + 1
             end if
          end do
