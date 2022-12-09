@@ -1644,7 +1644,10 @@
  REAL(ESMF_KIND_R8), POINTER     :: QOPTR(:,:,:)       ! output tracer
  REAL(ESMF_KIND_R8), POINTER     :: O2PTR(:,:,:)       ! output tracer
  REAL(ESMF_KIND_R8), POINTER     :: O3PTR(:,:,:)       ! output tracer
- REAL(ESMF_KIND_R8), POINTER     :: WIND2PTR(:,:,:,:)  ! output wind (x,y,z components)
+!REAL(ESMF_KIND_R8), POINTER     :: WIND2PTR(:,:,:,:)  ! output wind (x,y,z components)
+ REAL(ESMF_KIND_R8), POINTER     :: xWIND2PTR(:,:,:)  ! output wind (x,y,z components)
+ REAL(ESMF_KIND_R8), POINTER     :: yWIND2PTR(:,:,:)  ! output wind (x,y,z components)
+ REAL(ESMF_KIND_R8), POINTER     :: zWIND2PTR(:,:,:)  ! output wind (x,y,z components)
  
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -1720,6 +1723,21 @@
 !if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
 !        call error_handler("IN FieldGet", rc)
 
+ call ESMF_FieldGet(xwind_target_grid, &
+                    farrayPtr=xWIND2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ call ESMF_FieldGet(ywind_target_grid, &
+                    farrayPtr=yWIND2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ call ESMF_FieldGet(zwind_target_grid, &
+                    farrayPtr=zWIND2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
 !
 ! determine vertical blending point and modified extrapolation values
 !
@@ -1737,9 +1755,12 @@
 !
      DO K=KREF,LEV_TARGET
        COE = P2PTR(I,J,K) / P2PTR(I,J,KREF)
-       WIND2PTR(I,J,K,1) = COE*WIND2PTR(I,J,K,1)
-       WIND2PTR(I,J,K,2) = COE*WIND2PTR(I,J,K,2)
-       WIND2PTR(I,J,K,3) = COE*WIND2PTR(I,J,K,3)
+       xWIND2PTR(I,J,K) = COE*xWIND2PTR(I,J,K)
+       yWIND2PTR(I,J,K) = COE*yWIND2PTR(I,J,K)
+       zWIND2PTR(I,J,K) = COE*zWIND2PTR(I,J,K)
+!      WIND2PTR(I,J,K,1) = COE*WIND2PTR(I,J,K,1)
+!      WIND2PTR(I,J,K,2) = COE*WIND2PTR(I,J,K,2)
+!      WIND2PTR(I,J,K,3) = COE*WIND2PTR(I,J,K,3)
        DZDT2PTR(I,J,K)   = COE*DZDT2PTR(I,J,K)
      ENDDO
 
