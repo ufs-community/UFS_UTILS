@@ -29,7 +29,7 @@ jobs:
     - name: install-dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libnetcdf-dev doxygen
+        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libnetcdf-dev libnetcdff-dev doxygen
         python3 -m pip install gcovr
 
     - name: checkout-bacio
@@ -60,7 +60,7 @@ jobs:
         cd w3emc
         mkdir build
         cd build
-        cmake .. -DCMAKE_PREFIX_PATH=~/bacio -DCMAKE_INSTALL_PREFIX=~/w3emc
+        cmake -DCMAKE_PREFIX_PATH=~/bacio -DCMAKE_INSTALL_PREFIX=~/w3emc ..
         make -j2
         make install
         
@@ -68,8 +68,8 @@ jobs:
       id: cache-jasper
       uses: actions/cache@v2
       with:
-        path: ~/Jasper
-        key: jasper-${{ runner.os }}-3.0.3
+        path: ~/jasper
+        key: jasper-${{ runner.os }}-3.0.3-1
 
     - name: checkout-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'    
@@ -84,7 +84,7 @@ jobs:
       run: |
         cd jasper
         mkdir build-jasper && cd build-jasper
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/Jasper
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
         make -j2
         make install
 
@@ -100,7 +100,7 @@ jobs:
         cd g2c
         mkdir build
         cd build
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/g2c -DJasper_ROOT=~/Jasper
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/g2c -DJasper_ROOT=~/jasper
         make -j2
         make install
         
@@ -116,7 +116,7 @@ jobs:
         mkdir build
         doxygen --version
         cd build
-        cmake .. -DFTP_TEST_FILES=ON -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DJasper_ROOT=~/Jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/w3emc" -DCMAKE_Fortran_FLAGS="-g -fprofile-abs-path -fprofile-arcs -ftest-coverage -O0 -Wall -fsanitize=address" -DCMAKE_C_FLAGS="-g -fprofile-abs-path -fprofile-arcs -ftest-coverage -O0 -Wall -fsanitize=address"  -DCMAKE_BUILD_TYPE=Debug 
+        cmake .. -DFTP_TEST_FILES=ON -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/w3emc" -DCMAKE_Fortran_FLAGS="-g -fprofile-abs-path -fprofile-arcs -ftest-coverage -O0 -Wall -fsanitize=address" -DCMAKE_C_FLAGS="-g -fprofile-abs-path -fprofile-arcs -ftest-coverage -O0 -Wall -fsanitize=address"  -DCMAKE_BUILD_TYPE=Debug 
         make -j2 VERBOSE=1
 
     - name: test
