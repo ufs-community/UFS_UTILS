@@ -1,5 +1,15 @@
 name: debug-docs-test_coverage
-on: [push, pull_request]
+on:
+  push:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
+  pull_request:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
 
 defaults:
   run:
