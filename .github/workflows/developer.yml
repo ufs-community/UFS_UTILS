@@ -32,6 +32,57 @@ jobs:
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libnetcdf-dev libnetcdff-dev doxygen openmpi-bin libopenmpi-dev 
         python3 -m pip install gcovr
 
+    - name: cache-esmf
+      id: cache-esmf
+      uses: actions/cache@v2
+      with:
+        path: ~/esmf
+        key: esmf-8.2.0-${{ runner.os }}3
+
+    - name: build-esmf
+      if: steps.cache-esmf.outputs.cache-hit != 'true'
+      run: |
+        pushd ~
+        export ESMF_DIR=~/esmf-ESMF_8_2_0
+        wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
+        tar zxf ESMF_8_2_0.tar.gz
+        cd esmf-ESMF_8_2_0
+        export ESMF_COMM=mpich3
+        export ESMF_INSTALL_BINDIR=bin
+        export ESMF_INSTALL_LIBDIR=lib
+        export ESMF_INSTALL_MODDIR=mod
+        export ESMF_COMPILER=gfortran
+        export ESMF_INSTALL_PREFIX=~/esmf
+        export ESMF_NETCDF=split
+        export ESMF_NETCDF_INCLUDE=/usr/include
+        export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
+        make -j2
+        make install
+
+    - name: cache-jasper
+      id: cache-jasper
+      uses: actions/cache@v2
+      with:
+        path: ~/jasper
+        key: jasper-${{ runner.os }}-3.0.3-1
+
+    - name: checkout-jasper
+      if: steps.cache-jasper.outputs.cache-hit != 'true'    
+      uses: actions/checkout@v2
+      with:
+        repository: jasper-software/jasper
+        path: jasper
+        ref: version-3.0.3
+
+    - name: build-jasper
+      if: steps.cache-jasper.outputs.cache-hit != 'true'
+      run: |
+        cd jasper
+        mkdir build-jasper && cd build-jasper
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
+        make -j2
+        make install
+
     - name: checkout-bacio
       uses: actions/checkout@v2
       with:
@@ -64,30 +115,6 @@ jobs:
         make -j2
         make install
         
-    - name: cache-jasper
-      id: cache-jasper
-      uses: actions/cache@v2
-      with:
-        path: ~/jasper
-        key: jasper-${{ runner.os }}-3.0.3-1
-
-    - name: checkout-jasper
-      if: steps.cache-jasper.outputs.cache-hit != 'true'    
-      uses: actions/checkout@v2
-      with:
-        repository: jasper-software/jasper
-        path: jasper
-        ref: version-3.0.3
-
-    - name: build-jasper
-      if: steps.cache-jasper.outputs.cache-hit != 'true'
-      run: |
-        cd jasper
-        mkdir build-jasper && cd build-jasper
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/jasper
-        make -j2
-        make install
-
     - name: checkout-g2c
       uses: actions/checkout@v2
       with:
