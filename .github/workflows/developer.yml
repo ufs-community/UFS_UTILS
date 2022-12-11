@@ -37,7 +37,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf-8.2.0-${{ runner.os }}3
+        key: developer-esmf-8.2.0-${{ runner.os }}3
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
@@ -64,7 +64,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: jasper-${{ runner.os }}-3.0.3-1
+        key: developer-jasper-${{ runner.os }}-3.0.3-1
 
     - name: checkout-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'    
@@ -83,22 +83,55 @@ jobs:
         make -j2
         make install
 
+    - name: cache-bacio
+      id: cache-bacio
+      uses: actions/cache@v2
+      with:
+        path: ~/bacio
+        key: developer-bacio-${{ runner.os }}-v2.4.1
+
     - name: checkout-bacio
+      if: steps.cache-bacio.outputs.cache-hit != 'true'
       uses: actions/checkout@v2
       with:
         repository: NOAA-EMC/NCEPLIBS-bacio
         path: bacio
-        ref: develop
-
+        ref: v2.4.1
+    
     - name: build-bacio
+      if: steps.cache-bacio.outputs.cache-hit != 'true'
       run: |
         cd bacio
-        mkdir build
-        cd build
+        mkdir build && cd build
         cmake .. -DCMAKE_INSTALL_PREFIX=~/bacio
         make -j2
         make install
-        
+
+    - name: cache-sp
+      id: cache-sp
+      uses: actions/cache@v2
+      with:
+        path: ~/sp
+        key: developer-sp-${{ runner.os }}-2.3.3-1
+
+    - name: checkout-sp
+      if: steps.cache-sp.outputs.cache-hit != 'true'
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS-sp
+        path: sp
+        ref: v2.3.3
+
+    - name: build-sp
+      if: steps.cache-sp.outputs.cache-hit != 'true'
+      run: |
+        cd sp
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/sp
+        make -j2
+        make install
+
     - name: checkout-w3emc
       uses: actions/checkout@v2
       with:
