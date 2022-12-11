@@ -1,0 +1,135 @@
+# UFS_UTILS test workflow.
+#
+# This workflow tests all developer options - address santizer,
+# warning check, documentation check, and test code coverage.
+#
+# Ed Hartnett 12/11/22
+name: developer 
+on:
+  push:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
+  pull_request:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
+
+jobs:
+  developer:
+    runs-on: ubuntu-latest
+    env:
+      FC: gfortran
+      CC: gcc
+
+    steps:
+
+    - name: install-dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libnetcdf-dev doxygen
+        python3 -m pip install gcovr
+
+    - name: checkout-bacio
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS-bacio
+        path: bacio
+        ref: develop
+
+    - name: build-bacio
+      run: |
+        cd bacio
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/bacio
+        make -j2
+        make install
+        
+    - name: checkout-w3emc
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS-w3emc
+        path: w3emc
+        ref: develop
+
+    - name: build-w3emc
+      run: |
+        cd w3emc
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_PREFIX_PATH=~/bacio -DCMAKE_INSTALL_PREFIX=~/w3emc
+        make -j2
+        make install
+        
+    - name: cache-jasper
+      id: cache-jasper
+      uses: actions/cache@v2
+      with:
+        path: ~/Jasper
+        key: jasper-${{ runner.os }}-3.0.3
+
+    - name: checkout-jasper
+      if: steps.cache-jasper.outputs.cache-hit != 'true'    
+      uses: actions/checkout@v2
+      with:
+        repository: jasper-software/jasper
+        path: jasper
+        ref: version-3.0.3
+
+    - name: build-jasper
+      if: steps.cache-jasper.outputs.cache-hit != 'true'
+      run: |
+        cd jasper
+        mkdir build-jasper && cd build-jasper
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/Jasper
+        make -j2
+        make install
+
+    - name: checkout-g2c
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS-g2c
+        path: g2c
+        ref: develop
+
+    - name: build-g2c
+      run: |
+        cd g2c
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/g2c -DJasper_ROOT=~/Jasper
+        make -j2
+        make install
+        
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        path: g2
+
+    - name:  build
+      run: |
+        set -x
+        cd g2
+        mkdir build
+        doxygen --version
+        cd build
+        cmake .. -DFTP_TEST_FILES=ON -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DJasper_ROOT=~/Jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/w3emc" -DCMAKE_Fortran_FLAGS="-g -fprofile-abs-path -fprofile-arcs -ftest-coverage -O0 -Wall -fsanitize=address" -DCMAKE_C_FLAGS="-g -fprofile-abs-path -fprofile-arcs -ftest-coverage -O0 -Wall -fsanitize=address"  -DCMAKE_BUILD_TYPE=Debug 
+        make -j2 VERBOSE=1
+
+    - name: test
+      run: |
+        cd $GITHUB_WORKSPACE/g2/build
+        ctest --verbose --output-on-failure --rerun-failed
+        gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html &> /dev/null
+
+    - name: upload-test-coverage
+      uses: actions/upload-artifact@v2
+      with:
+        name: g2-test-coverage
+        path: |
+          g2/build/*.html
+          g2/build/*.css
+
