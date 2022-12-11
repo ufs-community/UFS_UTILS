@@ -1,5 +1,4 @@
 name: intel
-name: developer 
 on:
   push:
     branches:

@@ -1,5 +1,4 @@
 name: netcdf-versions
-name: developer 
 on:
   push:
     branches:

@@ -1,5 +1,4 @@
 name: debug-docs-test_coverage
-name: developer 
 on:
   push:
     branches:

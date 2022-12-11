@@ -1,5 +1,4 @@
 name: linux-mac-mpi-nceplibs
-name: developer 
 on:
   push:
     branches:
