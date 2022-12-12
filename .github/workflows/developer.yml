@@ -361,6 +361,7 @@ jobs:
         ls -l ufs_utils/build
         ls -l ufs_utils/build/tests
         ls -l ufs_utils/build/tests/data
+        find . -name data
         cp ufs_utils/build/tests/data/* ~/data
         
     - name: upload-test-coverage
