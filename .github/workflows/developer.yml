@@ -17,6 +17,10 @@ on:
     paths-ignore:
     - README.md
 
+defaults:
+  run:
+    shell: bash -exo pipefail {0}
+
 jobs:
   developer:
     runs-on: ubuntu-latest
@@ -30,7 +34,8 @@ jobs:
     - name: install-dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libnetcdf-dev libnetcdff-dev doxygen openmpi-bin libopenmpi-dev 
+        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev doxygen libmpich-dev
+        sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config        
         python3 -m pip install gcovr
 
     - name: cache-esmf
