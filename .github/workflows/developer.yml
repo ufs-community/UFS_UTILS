@@ -195,6 +195,31 @@ jobs:
         make -j2
         make install
 
+    - name: cache-w3nco
+      id: cache-w3nco
+      uses: actions/cache@v2
+      with:
+        path: ~/w3nco
+        key: developer-w3nco-${{ runner.os }}-2.4.0
+
+    - name: checkout-w3nco
+      if: steps.cache-w3nco.outputs.cache-hit != 'true'
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS-w3nco
+        path: w3nco
+        ref: v2.4.0
+
+    - name: build-w3nco
+      if: steps.cache-w3nco.outputs.cache-hit != 'true'
+      run: |
+        cd w3nco
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/w3nco
+        make -j2
+        make install
+
     - name: cache-nemsio
       id: cache-nemsio
       uses: actions/cache@v2
@@ -216,7 +241,7 @@ jobs:
         cd nemsio
         mkdir build
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX=~/nemsio -DCMAKE_PREFIX_PATH=~/bacio ..
+        cmake -DCMAKE_INSTALL_PREFIX=~/nemsio -DCMAKE_PREFIX_PATH="~/bacio;~/w3nco ..
         make -j2
         make install
 
@@ -242,31 +267,6 @@ jobs:
         mkdir build
         cd build
         cmake .. -DCMAKE_INSTALL_PREFIX=~/sigio
-        make -j2
-        make install
-
-    - name: cache-w3nco
-      id: cache-w3nco
-      uses: actions/cache@v2
-      with:
-        path: ~/w3nco
-        key: developer-w3nco-${{ runner.os }}-2.4.0
-
-    - name: checkout-w3nco
-      if: steps.cache-w3nco.outputs.cache-hit != 'true'
-      uses: actions/checkout@v2
-      with:
-        repository: NOAA-EMC/NCEPLIBS-w3nco
-        path: w3nco
-        ref: v2.4.0
-
-    - name: build-w3nco
-      if: steps.cache-w3nco.outputs.cache-hit != 'true'
-      run: |
-        cd w3nco
-        mkdir build
-        cd build
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/w3nco
         make -j2
         make install
 
