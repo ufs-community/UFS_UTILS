@@ -356,12 +356,13 @@ jobs:
       run: |
         set -x
         mkdir ~/data
-        pwd
-        ls -l
-        ls -l ufs_utils/build
-        ls -l ufs_utils/build/tests
-        find . -name data
-        cp ufs_utils/build/tests/data/* ~/data
+        cp ufs_utils/build/tests/chgres_cube/data/* ~/data
+        cp ufs_utils/build/tests/sfc_climo_gen/data/* ~/data
+        cp ufs_utils/build/tests/cpld_gridgen/data/* ~/data
+        cp ufs_utils/tests/filter_topo/data/* ~/data
+        cp ufs_utils/tests/emcsfc_snow2mdl/data/* ~/data
+        cp ufs_utils/tests/chgres_cube/data/* ~/data
+        ls -l ~/data
         
     - name: upload-test-coverage
       uses: actions/upload-artifact@v2
