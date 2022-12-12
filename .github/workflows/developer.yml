@@ -216,7 +216,7 @@ jobs:
         cd nemsio
         mkdir build
         cd build
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/nemsio
+        cmake -DCMAKE_INSTALL_PREFIX=~/nemsio -DCMAKE_PREFIX_PATH=~/bacio ..
         make -j2
         make install
 
