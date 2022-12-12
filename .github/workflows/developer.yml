@@ -340,6 +340,7 @@ jobs:
         mkdir build
         doxygen --version
         export ESMFMKFILE=~/esmf/lib/esmf.mk
+        pwd
         cd build
         cmake .. -DFTP_TEST_FILES=ON -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0" -DCMAKE_C_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"  -DCMAKE_BUILD_TYPE=Debug 
         make -j2 VERBOSE=1
@@ -353,8 +354,11 @@ jobs:
     - name: cache-data
       if: steps.cache-data.outputs.cache-hit != 'true'
       run: |
+        set -x
         mkdir ~/data
-        cp $GITHUB_WORKSPACE/ufs_utils/build/tests/data/* ~/data
+        ls -l ~/ufs_utils/build/tests
+        ls -l ~/ufs_utils/build/tests/data
+        cp ~/ufs_utils/build/tests/data/* ~/data
         
     - name: upload-test-coverage
       uses: actions/upload-artifact@v2
