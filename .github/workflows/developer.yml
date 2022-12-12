@@ -356,9 +356,10 @@ jobs:
       run: |
         set -x
         mkdir ~/data
-        ls -l ~/ufs_utils/build/tests
-        ls -l ~/ufs_utils/build/tests/data
-        cp ~/ufs_utils/build/tests/data/* ~/data
+        ls -l
+        ls -l ufs_utils/build/tests
+        ls -l ufs_utils/build/tests/data
+        cp ufs_utils/build/tests/data/* ~/data
         
     - name: upload-test-coverage
       uses: actions/upload-artifact@v2
