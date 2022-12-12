@@ -169,7 +169,107 @@ jobs:
         cmake .. -DCMAKE_INSTALL_PREFIX=~/g2c -DJasper_ROOT=~/jasper
         make -j2
         make install
-        
+
+    - name: cache-sfcio
+      id: cache-sfcio
+      uses: actions/cache@v2
+      with:
+        path: ~/sfcio
+        key: developer-sfcio-${{ runner.os }}-1.4.0-1
+
+    - name: checkout-sfcio
+      if: steps.cache-sfcio.outputs.cache-hit != 'true'
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS-sfcio
+        path: sfcio
+        ref: v1.4.0
+
+    - name: build-sfcio
+      if: steps.cache-sfcio.outputs.cache-hit != 'true'
+      run: |
+        cd sfcio
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/sfcio
+        make -j2
+        make install
+
+    - name: cache-nemsio
+      id: cache-nemsio
+      uses: actions/cache@v2
+      with:
+        path: ~/nemsio
+        key: developer-nemsio-${{ runner.os }}-2.5.0-1
+
+    - name: checkout-nemsio
+      if: steps.cache-nemsio.outputs.cache-hit != 'true'
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS-nemsio
+        path: nemsio
+        ref: v2.5.0
+
+    - name: build-nemsio
+      if: steps.cache-nemsio.outputs.cache-hit != 'true'
+      run: |
+        cd nemsio
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/nemsio
+        make -j2
+        make install
+
+    - name: cache-sigio
+      id: cache-sigio
+      uses: actions/cache@v2
+      with:
+        path: ~/sigio
+        key: developer-sigio-${{ runner.os }}-2.3.0
+
+    - name: checkout-sigio
+      if: steps.cache-sigio.outputs.cache-hit != 'true'
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS-sigio
+        path: sigio
+        ref: v2.3.0
+
+    - name: build-sigio
+      if: steps.cache-sigio.outputs.cache-hit != 'true'
+      run: |
+        cd sigio
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/sigio
+        make -j2
+        make install
+
+    - name: cache-w3nco
+      id: cache-w3nco
+      uses: actions/cache@v2
+      with:
+        path: ~/w3nco
+        key: developer-w3nco-${{ runner.os }}-2.4.0
+
+    - name: checkout-w3nco
+      if: steps.cache-w3nco.outputs.cache-hit != 'true'
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS-w3nco
+        path: w3nco
+        ref: v2.4.0
+
+    - name: build-w3nco
+      if: steps.cache-w3nco.outputs.cache-hit != 'true'
+      run: |
+        cd w3nco
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/w3nco
+        make -j2
+        make install
+
     - name: checkout
       uses: actions/checkout@v2
       with:
