@@ -359,8 +359,9 @@ jobs:
         pwd
         ls -l
         ls -l ufs_utils/build
-        ls -l ufs_utils/build/data
-        cp ufs_utils/build/data/* ~/data
+        ls -l ufs_utils/build/tests
+        ls -l ufs_utils/build/tests/data
+        cp ufs_utils/build/tests/data/* ~/data
         
     - name: upload-test-coverage
       uses: actions/upload-artifact@v2
