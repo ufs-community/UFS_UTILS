@@ -23,6 +23,7 @@ jobs:
     env:
       FC: mpifort
       CC: mpicc
+      FCFLAGS: -fallow-argument-mismatch
 
     steps:
 
