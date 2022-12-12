@@ -70,7 +70,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: developer-jasper-${{ runner.os }}-3.0.3-1
+        key: developer-jasper-${{ runner.os }}-2.0.33-1
 
     - name: checkout-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'    
@@ -78,7 +78,7 @@ jobs:
       with:
         repository: jasper-software/jasper
         path: jasper
-        ref: version-3.0.3
+        ref: version-2.0.33
 
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
