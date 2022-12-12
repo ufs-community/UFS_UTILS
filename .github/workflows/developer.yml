@@ -326,6 +326,13 @@ jobs:
         path: ufs_utils
         submodules: true
 
+    - name: cache-data
+      id: cache-data
+      uses: actions/cache@v2
+      with:
+        path: ~/data
+        key: data-1
+
     - name:  build
       run: |
         set -x
@@ -343,6 +350,12 @@ jobs:
         ctest --verbose --rerun-failed --output-on-failure
         gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html &> /dev/null
 
+    - name: cache-data
+      if: steps.cache-data.outputs.cache-hit != 'true'
+      run: |
+        mkdir ~/data
+        cp $GITHUB_WORKSPACE/ufs_utils/build/tests/data/* ~/data
+        
     - name: upload-test-coverage
       uses: actions/upload-artifact@v2
       with:
