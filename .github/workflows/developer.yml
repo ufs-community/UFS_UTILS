@@ -204,21 +204,21 @@ jobs:
     #     make -j2
     #     make install
         
-    - name: checkout-g2c
-      uses: actions/checkout@v2
-      with:
-        repository: NOAA-EMC/NCEPLIBS-g2c
-        path: g2c
-        ref: develop
+    # - name: checkout-g2c
+    #   uses: actions/checkout@v2
+    #   with:
+    #     repository: NOAA-EMC/NCEPLIBS-g2c
+    #     path: g2c
+    #     ref: develop
 
-    - name: build-g2c
-      run: |
-        cd g2c
-        mkdir build
-        cd build
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/g2c -DJasper_ROOT=~/jasper
-        make -j2
-        make install
+    # - name: build-g2c
+    #   run: |
+    #     cd g2c
+    #     mkdir build
+    #     cd build
+    #     cmake .. -DCMAKE_INSTALL_PREFIX=~/g2c -DJasper_ROOT=~/jasper
+    #     make -j2
+    #     make install
 
     - name: cache-sfcio
       id: cache-sfcio
@@ -323,17 +323,18 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
       with:
-        path: g2
+        path: ufs_utils
+        submodules: recursive
 
     - name:  build
       run: |
         set -x
-        cd g2
+        cd ufs_utils
         mkdir build
         doxygen --version
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd build
-        cmake .. -DFTP_TEST_FILES=ON -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-abs-path -fprofile-arcs -ftest-coverage -O0 -Wall -fsanitize=address" -DCMAKE_C_FLAGS="-g -fprofile-abs-path -fprofile-arcs -ftest-coverage -O0 -Wall -fsanitize=address"  -DCMAKE_BUILD_TYPE=Debug 
-        make -j2 VERBOSE=1
+ #       cmake .. -DFTP_TEST_FILES=ON -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-abs-path -fprofile-arcs -ftest-coverage -O0 -Wall -fsanitize=address" -DCMAKE_C_FLAGS="-g -fprofile-abs-path -fprofile-arcs -ftest-coverage -O0 -Wall -fsanitize=address"  -DCMAKE_BUILD_TYPE=Debug 
+#        make -j2 VERBOSE=1
 
 
