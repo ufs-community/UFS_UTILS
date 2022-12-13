@@ -335,6 +335,7 @@ jobs:
 
     - name:  build
       run: |
+        pwd
         cd ufs_utils
         mkdir build
         doxygen --version
