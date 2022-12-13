@@ -335,7 +335,6 @@ jobs:
 
     - name:  build
       run: |
-        ls -l /home/runner/data
         cd ufs_utils
         mkdir build
         doxygen --version
