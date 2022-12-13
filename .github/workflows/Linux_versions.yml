@@ -20,6 +20,7 @@ defaults:
   run:
     shell: bash -exo pipefail {0}
 
+jobs:
   Linux_versions:
     runs-on: ubuntu-latest
     env:
