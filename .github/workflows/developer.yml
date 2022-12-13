@@ -335,8 +335,6 @@ jobs:
 
     - name:  build
       run: |
-        cd ~
-        pwd
         ls -l /home/runner/data
         cd ufs_utils
         mkdir build
