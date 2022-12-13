@@ -24,10 +24,17 @@ jobs:
   pick:
     runs-on: ubuntu-latest
     outputs:
-      bacio_OLD: 2.4.1
+      bacio_OLD: ${{ steps.OLD.outputs.test }}
       bacio_MID: 2.4.1
       bacio_NEW: 2.4.1
-      
+  steps:
+    - id: OLD
+      run: echo "2.4.1"
+    - id: MID
+      run: echo "test=world" >> $GITHUB_OUTPUT
+    - id: NEW
+      run: echo "test=world" >> $GITHUB_OUTPUT
+        
   Linux_versions:
     runs-on: ubuntu-latest
     env:
