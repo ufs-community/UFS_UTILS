@@ -102,7 +102,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/bacio
-        key: Linux_versions-bacio-${{ runner.os }}-${{ matrix.ver }}
+        key: Linux_versions-bacio-${{ runner.os }}-${{ matrix.ver }}-1
 
     - name: checkout-bacio
       if: steps.cache-bacio.outputs.cache-hit != 'true'
@@ -116,8 +116,7 @@ jobs:
       if: steps.cache-bacio.outputs.cache-hit != 'true'
       run: |
         cd bacio
-        echo "$bacio_VERSION"
-        echo "{{ env.$bacio_VERSION }}"
+        echo "{{ env.bacio_VERSION }}"
         mkdir build && cd build
         cmake .. -DCMAKE_INSTALL_PREFIX=~/bacio
         make -j2
