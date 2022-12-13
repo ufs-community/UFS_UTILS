@@ -234,7 +234,7 @@ jobs:
         export FC=mpifort
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
         export DYLD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        cmake -DTEST_FILE_DIR=~/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' ..
+        cmake -DTEST_FILE_DIR=/home/runner/work/UFS_UTILS/UFS_UTILS/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' ..
         make -j2
 
     - name: test
