@@ -1,10 +1,9 @@
 # UFS_UTILS test workflow.
 #
-# This workflow tests all developer options - address santizer,
-# warning check, documentation check, and test code coverage.
+# This workflow tests different versions of dependencies.
 #
-# Ed Hartnett 12/11/22
-name: developer 
+# Ed Hartnett 12/13/22
+name: Linux_versions
 on:
   push:
     branches:
@@ -22,7 +21,7 @@ defaults:
     shell: bash -exo pipefail {0}
 
 jobs:
-  developer:
+  Linux_versions:
     runs-on: ubuntu-latest
     env:
       FC: mpifort
@@ -34,16 +33,15 @@ jobs:
     - name: install-dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev doxygen libmpich-dev
+        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config        
-        python3 -m pip install gcovr
 
     - name: cache-esmf
       id: cache-esmf
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: developer-esmf-8.2.0-${{ runner.os }}3
+        key: Linux_versions-esmf-8.2.0-${{ runner.os }}3
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
@@ -70,7 +68,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: developer-jasper-${{ runner.os }}-2.0.33-1
+        key: Linux_versions-jasper-${{ runner.os }}-2.0.33-1
 
     - name: checkout-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'    
@@ -94,7 +92,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/bacio
-        key: developer-bacio-${{ runner.os }}-v2.4.1
+        key: Linux_versions-bacio-${{ runner.os }}-v2.4.1
 
     - name: checkout-bacio
       if: steps.cache-bacio.outputs.cache-hit != 'true'
@@ -118,7 +116,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/g2
-        key: developer-g2-${{ runner.os }}-3.4.3
+        key: Linux_versions-g2-${{ runner.os }}-3.4.3
 
     - name: checkout-g2
       if: steps.cache-g2.outputs.cache-hit != 'true'
@@ -143,7 +141,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/sp
-        key: developer-sp-${{ runner.os }}-2.3.3-1
+        key: Linux_versions-sp-${{ runner.os }}-2.3.3-1
 
     - name: checkout-sp
       if: steps.cache-sp.outputs.cache-hit != 'true'
@@ -168,7 +166,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/ip
-        key: developer-ip-${{ runner.os }}-3.3.3
+        key: Linux_versions-ip-${{ runner.os }}-3.3.3
 
     - name: checkout-ip
       if: steps.cache-ip.outputs.cache-hit != 'true'
@@ -225,7 +223,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/sfcio
-        key: developer-sfcio-${{ runner.os }}-1.4.0-1
+        key: Linux_versions-sfcio-${{ runner.os }}-1.4.0-1
 
     - name: checkout-sfcio
       if: steps.cache-sfcio.outputs.cache-hit != 'true'
@@ -250,7 +248,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/w3nco
-        key: developer-w3nco-${{ runner.os }}-2.4.0
+        key: Linux_versions-w3nco-${{ runner.os }}-2.4.0
 
     - name: checkout-w3nco
       if: steps.cache-w3nco.outputs.cache-hit != 'true'
@@ -275,7 +273,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/nemsio
-        key: developer-nemsio-${{ runner.os }}-2.5.0-1
+        key: Linux_versions-nemsio-${{ runner.os }}-2.5.0-1
 
     - name: checkout-nemsio
       if: steps.cache-nemsio.outputs.cache-hit != 'true'
@@ -300,7 +298,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/sigio
-        key: developer-sigio-${{ runner.os }}-2.3.0
+        key: Linux_versions-sigio-${{ runner.os }}-2.3.0
 
     - name: checkout-sigio
       if: steps.cache-sigio.outputs.cache-hit != 'true'
@@ -334,22 +332,13 @@ jobs:
         doxygen --version
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd build
-        cmake .. -DFTP_TEST_FILES=ON -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0" -DCMAKE_C_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"  -DCMAKE_BUILD_TYPE=Debug 
+        cmake -DTEST_FILE_DIR=/home/runner/data -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" ..
         make -j2 VERBOSE=1
 
     - name: test
       run: |
         cd ufs_utils/build
         ctest --verbose --rerun-failed --output-on-failure
-        gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html &> /dev/null
-
-    - name: upload-test-coverage
-      uses: actions/upload-artifact@v2
-      with:
-        name: ufs_utils-test-coverage
-        path: |
-          ufs_utils/build/*.html
-          ufs_utils/build/*.css
         
 
 
