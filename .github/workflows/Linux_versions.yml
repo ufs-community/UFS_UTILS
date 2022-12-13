@@ -27,7 +27,7 @@ jobs:
       FC: mpifort
       CC: mpicc
       FCFLAGS: -fallow-argument-mismatch
-      bacio_VERSION: [[ ${{ matrix.ver }} == "OLD" ]] && "2.4.1"
+      bacio_VERSION: "2.4.1"
     strategy:
       matrix:
         ver: [OLD, MED, NEW]
