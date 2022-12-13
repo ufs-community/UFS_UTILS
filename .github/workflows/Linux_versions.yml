@@ -329,16 +329,15 @@ jobs:
         set -x
         cd ufs_utils
         mkdir build
-        doxygen --version
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd build
-        cmake -DTEST_FILE_DIR=/home/runner/data -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" ..
-        make -j2 VERBOSE=1
+#        cmake -DTEST_FILE_DIR=/home/runner/data -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" ..
+#        make -j2 VERBOSE=1
 
-    - name: test
-      run: |
-        cd ufs_utils/build
-        ctest --verbose --rerun-failed --output-on-failure
+#    - name: test
+#      run: |
+#        cd ufs_utils/build
+#        ctest --verbose --rerun-failed --output-on-failure
         
 
 
