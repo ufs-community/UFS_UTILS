@@ -29,8 +29,8 @@ jobs:
       FCFLAGS: -fallow-argument-mismatch
       bacio_VERSION: "2.4.1"
     strategy:
+      fail-fast: true
       matrix:
-        fail-fast: true
         ver: [OLD, MED, NEW]
         
     steps:
