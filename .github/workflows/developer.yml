@@ -336,6 +336,7 @@ jobs:
     - name:  build
       run: |
         pwd
+        ls -l /home/runner/work/UFS_UTILS/UFS_UTILS/data
         cd ufs_utils
         mkdir build
         doxygen --version
