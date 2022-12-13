@@ -100,6 +100,13 @@ jobs:
         path: ufs_utils
         submodules: recursive
 
+    - name: cache-data
+      id: cache-data
+      uses: actions/cache@v2
+      with:
+        path: ~/data
+        key: data-1
+
     - name: build
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
