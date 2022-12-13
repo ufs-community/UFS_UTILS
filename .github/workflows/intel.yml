@@ -12,7 +12,7 @@ on:
     - README.md
 
 # Use custom shell with -l so .bash_profile is sourced which loads intel/oneapi/setvars.sh
-# without having to do it in manually every step
+# without having to do it in manually every step.
 defaults:
   run:
     shell: bash -leo pipefail {0}
