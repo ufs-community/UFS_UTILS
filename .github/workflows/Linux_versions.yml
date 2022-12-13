@@ -20,21 +20,6 @@ defaults:
   run:
     shell: bash -exo pipefail {0}
 
-jobs:
-  pick:
-    runs-on: ubuntu-latest
-    outputs:
-      bacio_OLD: ${{ steps.OLD.outputs.test }}
-      bacio_MID: 2.4.1
-      bacio_NEW: 2.4.1
-    steps:
-      - id: OLD
-        run: echo "2.4.1"
-      - id: MID
-        run: echo "test=world" >> $GITHUB_OUTPUT
-      - id: NEW
-        run: echo "test=world" >> $GITHUB_OUTPUT
-        
   Linux_versions:
     runs-on: ubuntu-latest
     env:
@@ -44,12 +29,11 @@ jobs:
 
     steps:
 
-    - name: debug
-      run: |
-        echo "bacio_OLD ${{needs.pick.outputs.bacio_OLD}} "
-        echo "bacio_MID ${{needs.pick.outputs.bacio_MID}} "
-        echo "bacio_NEW ${{needs.pick.outputs.bacio_NEW}} "
-      
+    strategy:
+      matrix:
+        ver: ["OLD", "MED", "NEW"]
+
+        
     - name: install-dependencies
       run: |
         sudo apt-get update
@@ -61,16 +45,23 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: Linux_versions-esmf-8.2.0-${{ runner.os }}3
+        key: Linux_versions-esmf-${{ runner.os }}_${{ matrix.ver }}
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
+        if [[ ${{ matrix.ver }} == "OLD" ]]; then
+          export EVER=8_2_0
+        elif [[ ${{ matrix.ver }} == "MID" ]]; then
+          export EVER=8_2_0
+        elif [[ ${{ matrix.ver }} == "NEW" ]]; then
+          export EVER=8_2_0
+        fi
         pushd ~
-        export ESMF_DIR=~/esmf-ESMF_8_2_0
-        wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
-        tar zxf ESMF_8_2_0.tar.gz
-        cd esmf-ESMF_8_2_0
+        export ESMF_DIR=~/esmf-ESMF_${EVER}
+        wget https://github.com/esmf-org/esmf/archive/ESMF_${EVER}.tar.gz &> /dev/null
+        tar zxf ESMF_${EVER}.tar.gz
+        cd esmf-ESMF_${EVER}
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
