@@ -27,13 +27,13 @@ jobs:
       bacio_OLD: ${{ steps.OLD.outputs.test }}
       bacio_MID: 2.4.1
       bacio_NEW: 2.4.1
-  steps:
-    - id: OLD
-      run: echo "2.4.1"
-    - id: MID
-      run: echo "test=world" >> $GITHUB_OUTPUT
-    - id: NEW
-      run: echo "test=world" >> $GITHUB_OUTPUT
+    steps:
+      - id: OLD
+        run: echo "2.4.1"
+      - id: MID
+        run: echo "test=world" >> $GITHUB_OUTPUT
+      - id: NEW
+        run: echo "test=world" >> $GITHUB_OUTPUT
         
   Linux_versions:
     runs-on: ubuntu-latest
@@ -162,7 +162,7 @@ jobs:
       with:
         path: ~/sp
         key: Linux_versions-sp-${{ runner.os }}-2.3.3-1
-
+        
     - name: checkout-sp
       if: steps.cache-sp.outputs.cache-hit != 'true'
       uses: actions/checkout@v2
