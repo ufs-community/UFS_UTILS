@@ -1,7 +1,7 @@
 # UFS_UTILS test workflow.
 #
-# This workflow tests all developer options - address santizer,
-# warning check, documentation check, and test code coverage.
+# This workflow tests all developer options including
+# documentation check, and test code coverage.
 #
 # Ed Hartnett 12/11/22
 name: developer 
@@ -340,7 +340,7 @@ jobs:
         doxygen --version
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd build
-        cmake .. -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DCMAKE_PREFIX_PATH="~/jasper;~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0" -DCMAKE_C_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"  -DCMAKE_BUILD_TYPE=Debug 
+        cmake -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DCMAKE_PREFIX_PATH="~/jasper;~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0" -DCMAKE_C_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"  -DCMAKE_BUILD_TYPE=Debug ..
         make -j2 VERBOSE=1
 
     - name: test
