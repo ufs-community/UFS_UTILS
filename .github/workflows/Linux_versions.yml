@@ -27,15 +27,24 @@ jobs:
       FC: mpifort
       CC: mpicc
       FCFLAGS: -fallow-argument-mismatch
-
+    strategy:
+      matrix:
+        ver: [OLD, MED, NEW]
+        
     steps:
 
     - name: install-dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev doxygen libmpich-dev
-        sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config        
-        python3 -m pip install gcovr
+        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
+        sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
+        if [[ ${{ matrix.ver }} == "OLD" ]]; then
+          export bacio_VERSION=2.4.1
+        elif [[ ${{ matrix.ver }} == "MED" ]]; then        
+          export bacio_VERSION=2.4.1
+        elif [[ ${{ matrix.ver }} == "NEW" ]]; then
+          export bacio_VERSION=2.4.1
+        fi
 
     - name: cache-esmf
       id: cache-esmf
@@ -107,6 +116,8 @@ jobs:
       if: steps.cache-bacio.outputs.cache-hit != 'true'
       run: |
         cd bacio
+        echo "$bacio_VERSION"
+        echo "{{ env.$bacio_VERSION }}"
         mkdir build && cd build
         cmake .. -DCMAKE_INSTALL_PREFIX=~/bacio
         make -j2
@@ -332,13 +343,13 @@ jobs:
         mkdir build
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd build
-    #     cmake .. -DTEST_FILE_DIR=/home/runner/data -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" ..
-    #     make -j2 VERBOSE=1
+        cmake .. -DTEST_FILE_DIR=/home/runner/data -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" ..
+        make -j2 VERBOSE=1
 
-    # - name: test
-    #   run: |
-    #     cd ufs_utils/build
-    #     ctest --verbose --rerun-failed --output-on-failure
+    - name: test
+      run: |
+        cd ufs_utils/build
+        ctest --verbose --rerun-failed --output-on-failure
 
         
 
