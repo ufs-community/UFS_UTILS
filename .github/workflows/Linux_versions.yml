@@ -102,7 +102,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/bacio
-        key: Linux_versions-bacio-${{ runner.os }}-v2.4.1
+        key: Linux_versions-bacio-${{ runner.os }}-${{ matrix.ver }}
 
     - name: checkout-bacio
       if: steps.cache-bacio.outputs.cache-hit != 'true'
