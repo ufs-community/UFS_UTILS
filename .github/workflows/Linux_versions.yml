@@ -33,10 +33,11 @@ jobs:
         bacio_version: [2.4.1]
         g2_version: [3.4.3]
         sp_version: [2.3.3]
-        ip_version: [3.3.3]
+        ip_version: [3.3.3, 4.0.0]
         w3nco_version: [2.4.0]
         nemsio_version: [2.5.0]
         sfcio_version: [1.4.0]
+        sigio_version: [2.3.0]
         
     steps:
 
@@ -308,7 +309,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/sigio
-        key: Linux_versions-sigio-${{ runner.os }}-2.3.0
+        key: Linux_versions-sigio-${{ runner.os }}-${{ matrix.sigio_version }}
 
     - name: checkout-sigio
       if: steps.cache-sigio.outputs.cache-hit != 'true'
@@ -316,7 +317,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-sigio
         path: sigio
-        ref: v2.3.0
+        ref: v${{ matrix.sigio_version }}
 
     - name: build-sigio
       if: steps.cache-sigio.outputs.cache-hit != 'true'
@@ -344,13 +345,11 @@ jobs:
     - name:  build
       run: |
         set -x
-        echo "${{ env.bacio_VERSION }}"
-        echo "$bacio_VERSION"
         cd ufs_utils
         mkdir build
-        export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd build
-        cmake .. -DTEST_FILE_DIR=/home/runner/data -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" ..
+        export ESMFMKFILE=~/esmf/lib/esmf.mk
+        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH="~/jasper;~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" ..
         make -j2 VERBOSE=1
 
     - name: test

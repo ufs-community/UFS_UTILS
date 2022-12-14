@@ -1,4 +1,4 @@
-name: debug-docs-test_coverage
+name: Linux_nceplibs
 on:
   push:
     branches:
@@ -16,7 +16,7 @@ defaults:
     shell: bash -exo pipefail {0}
 
 jobs:
-  debug-build-and-test:
+  Linux_nceplibs:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,11 +25,9 @@ jobs:
       run: |
           sudo apt-get update
           sudo apt-get install libmpich-dev
-          sudo apt-get install doxygen
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
           sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
-          python3 -m pip install gcovr
 
     - name: cache-esmf
       id: cache-esmf
@@ -116,7 +114,7 @@ jobs:
         export CXX=mpicxx
         export FC=mpifort
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DCMAKE_BUILD_TYPE=Debug -DENABLE_DOCS=On  ..
+        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' ..
         make -j2
     - name: test
       run: |
