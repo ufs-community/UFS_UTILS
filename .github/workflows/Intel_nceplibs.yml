@@ -1,4 +1,4 @@
-name: intel
+name: Intel_nceplibs
 on:
   push:
     branches:
@@ -18,15 +18,11 @@ defaults:
     shell: bash -leo pipefail {0}
 
 jobs:
-  intel-build-and-test:
-    runs-on: ${{ matrix.os }}
+  Intel_nceplibs:
+    runs-on: ubuntu-latest
     env:
       CC: icc
       FC: ifort
-      CXX: icpc
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
 
     steps:
 
