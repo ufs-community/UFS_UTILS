@@ -118,7 +118,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/g2
-        key: developer-g2-${{ runner.os }}-3.4.3
+        key: developer-g2-${{ runner.os }}-3.4.5
 
     - name: checkout-g2
       if: steps.cache-g2.outputs.cache-hit != 'true'
@@ -250,15 +250,15 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/w3nco
-        key: developer-w3nco-${{ runner.os }}-2.4.0
-
+        key: developer-w3nco-${{ runner.os }}-2.4.1
+n
     - name: checkout-w3nco
       if: steps.cache-w3nco.outputs.cache-hit != 'true'
       uses: actions/checkout@v2
       with:
         repository: NOAA-EMC/NCEPLIBS-w3nco
         path: w3nco
-        ref: v2.4.0
+        ref: v2.4.1
 
     - name: build-w3nco
       if: steps.cache-w3nco.outputs.cache-hit != 'true'
