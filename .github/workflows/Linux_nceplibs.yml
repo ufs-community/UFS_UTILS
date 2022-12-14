@@ -6,7 +6,6 @@
 name: Linux_nceplibs
 on:
   workflow_dispatch:
-    - develop
     paths-ignore:
     - README.md
   push:

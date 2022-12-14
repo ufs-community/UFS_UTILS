@@ -6,7 +6,6 @@
 name: Linux_versions 
 on:
   workflow_dispatch:
-    - develop
     paths-ignore:
     - README.md
   push:
