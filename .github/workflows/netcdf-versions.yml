@@ -89,7 +89,7 @@ jobs:
         key: esmf-8.2.0-${{ runner.os }}-netcdf-${{ matrix.netcdf_version }}3
 
     - name: build-esmf
-      #if: steps.cache-esmf.outputs.cache-hit != 'true'
+      if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         pushd ~
         export ESMF_DIR=~/esmf-ESMF_8_2_0
@@ -169,11 +169,9 @@ jobs:
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
         cmake -DTEST_FILE_DIR=/home/runner/work/UFS_UTILS/UFS_UTILS/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' -DCMAKE_BUILD_TYPE=Debug ..
         make -j2
-
     - name: test
       run: |
         cd ufs_utils/build
-#        export LSAN_OPTIONS=suppressions=LSanSuppress.supp
         ctest --rerun-failed --output-on-failure
 
     - name: cache-data
