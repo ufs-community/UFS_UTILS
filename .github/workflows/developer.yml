@@ -126,7 +126,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-g2
         path: g2
-        ref: v3.4.3
+        ref: v3.4.5
 
     - name: build-g2
       if: steps.cache-g2.outputs.cache-hit != 'true'
