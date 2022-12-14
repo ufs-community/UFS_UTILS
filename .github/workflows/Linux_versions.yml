@@ -33,7 +33,7 @@ jobs:
         bacio_version: [2.4.1]
         g2_version: [3.4.3]
         sp_version: [2.3.3]
-        ip_version: [3.3.3, 4.0.0]
+        ip_version: [3.3.3]
         w3nco_version: [2.4.0]
         nemsio_version: [2.5.0]
         sfcio_version: [1.4.0]
