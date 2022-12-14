@@ -30,6 +30,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
+        esmf_version: [8_2_0, 8_3_0]
         bacio_version: [2.4.1]
         g2_version: [3.4.3]
         sp_version: [2.3.3]
@@ -52,16 +53,16 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: Linux_versions-esmf-8.2.0-${{ runner.os }}3
+        key: Linux_versions-esmf-${{ matrix.esmf_version }}-${{ runner.os }}3
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         pushd ~
-        export ESMF_DIR=~/esmf-ESMF_8_2_0
-        wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
-        tar zxf ESMF_8_2_0.tar.gz
-        cd esmf-ESMF_8_2_0
+        export ESMF_DIR=~/esmf-ESMF_${{ matrix.esmf_version }}
+        wget https://github.com/esmf-org/esmf/archive/ESMF_${{ matrix.esmf_version }}.tar.gz &> /dev/null
+        tar zxf ESMF_${{ matrix.esmf_version }}.tar.gz
+        cd esmf-ESMF_${{ matrix.esmf_version }}
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
