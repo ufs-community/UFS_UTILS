@@ -5023,6 +5023,7 @@ else ! is native coordinate (hybrid).
 
    character(len=250)                    :: the_file
    character(len=250)                    :: geo_file
+   character(len=200)                    :: err_msg
    character(len=20)                     :: vname, vname_file, slev
    character(len=50)                     :: method
    character(len=20)                     :: to_upper
@@ -5660,8 +5661,8 @@ else ! is native coordinate (hybrid).
                unpack, k, gfld, rc)
 
        if (rc /= 0 )then
-         call error_handler("COULD NOT FIND VEGETATION FRACTION IN FILE.  &
-           PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
+         err_msg="COULD NOT FIND VEGETATION FRACTION IN FILE. PLEASE SET VGFRC_FROM_CLIMO=.TRUE."
+         call error_handler(err_msg, rc)
        else
          if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
 !        print*,'vfrac ', maxval(gfld%fld),minval(gfld%fld)
@@ -5705,8 +5706,8 @@ else ! is native coordinate (hybrid).
            j = 1151 ! Have to search by record number.
            call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
                   unpack, k, gfld, rc)
-           if (rc/=0) call error_handler("COULD NOT FIND MIN VEGETATION FRACTION IN FILE. &
-             PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+           err_msg="COULD NOT FIND MIN VEGETATION FRACTION IN FILE. SET MINMAX_VGFRC_FROM_CLIMO=.TRUE."
+           if (rc/=0) call error_handler(err_msg, rc)
          endif
        endif
     
@@ -5744,8 +5745,8 @@ else ! is native coordinate (hybrid).
            j = 1152 ! Have to search by record number.
            call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
                 unpack, k, gfld, rc)
-           if (rc <= 0) call error_handler("COULD NOT FIND MAX VEGETATION FRACTION IN FILE. &
-             PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+           err_msg="COULD NOT FIND MAX VEGETATION FRACTION IN FILE. SET MINMAX_VGFRC_FROM_CLIMO=.TRUE."
+           if (rc <= 0) call error_handler(err_msg, rc)
          endif
        endif
     
@@ -5780,10 +5781,8 @@ else ! is native coordinate (hybrid).
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-       if (rc /= 0) call error_handler("COULD NOT FIND LAI IN FILE. &
-             PLEASE SET LAI_FROM_CLIMO=.TRUE. . EXITING",rc)
-
-!      print*,'lai ', maxval(gfld%fld),minval(gfld%fld)
+       err_msg="COULD NOT FIND LAI IN FILE. SET LAI_FROM_CLIMO=.TRUE."
+       if (rc /= 0) call error_handler(err_msg, rc)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
 
      endif !localpet==0
@@ -7155,6 +7154,7 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
   real(esmf_kind_r8), intent(inout), optional  :: var3d(:,:,:)
   
   character(len=20), intent(in)     :: vname, lev, method
+  character(len=200)                :: err_msg
   
   integer, intent(in)               :: varnum 
   integer, intent(inout)            :: iret
@@ -7185,17 +7185,17 @@ subroutine handle_grib_error(vname,lev,method,value,varnum, iret,var,var8,var3d)
     if(present(var8)) var8(:,:) = ieee_value(var8,IEEE_QUIET_NAN)
     if(present(var3d)) var3d(:,:,:) = ieee_value(var3d,IEEE_QUIET_NAN)
   elseif (trim(method) == "stop") then
-    call error_handler("READING "//trim(vname)// " at level "//lev//". TO MAKE THIS NON- &
-                        FATAL, CHANGE STOP TO SKIP FOR THIS VARIABLE IN YOUR VARMAP &
-                        FILE.", iret)
+    err_msg="READING " // trim(vname) // " at level " //lev// ". TO MAKE THIS NON-" // &
+            "FATAL, CHANGE STOP TO SKIP FOR THIS VARIABLE IN YOUR VARMAP FILE."
+    call error_handler(err_msg, iret)
   elseif (trim(method) == "intrp") then
     print*, "WARNING: ,"//trim(vname)//" NOT AVAILABLE AT LEVEL "//trim(lev)// &
           ". WILL INTERPOLATE INTERSPERSED MISSING LEVELS AND/OR FILL MISSING"//&
           " LEVELS AT EDGES."
   else
-    call error_handler("ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
-                       " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN,"// &
-                       " , intrp, skip, or stop.", 1)
+    err_msg="ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
+            " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN, intrp, skip, or stop."
+    call error_handler(err_msg, 1)
   endif
 
 end subroutine handle_grib_error

@@ -18,7 +18,7 @@
 
  integer :: ierr
 
- print*,"- FATAL ERROR: ", string
+ print*,"- FATAL ERROR: ", trim(string)
  print*,"- IOSTAT IS: ", rc
  call mpi_abort(mpi_comm_world, 999, ierr)
 
