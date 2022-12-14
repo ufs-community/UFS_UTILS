@@ -100,6 +100,13 @@ jobs:
         path: ufs_utils
         submodules: recursive
 
+    - name: cache-data
+      id: cache-data
+      uses: actions/cache@v2
+      with:
+        path: ~/data
+        key: data-1
+
     - name: build
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
@@ -109,7 +116,7 @@ jobs:
         export CXX=mpicxx
         export FC=mpifort
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DCMAKE_BUILD_TYPE=Debug -DENABLE_DOCS=On -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"
+        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs' -DCMAKE_BUILD_TYPE=Debug -DENABLE_DOCS=On  ..
         make -j2
     - name: test
       run: |

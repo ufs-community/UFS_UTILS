@@ -1,7 +1,7 @@
 # UFS_UTILS test workflow.
 #
-# This workflow tests all developer options - address santizer,
-# warning check, documentation check, and test code coverage.
+# This workflow tests all developer options including
+# documentation check, and test code coverage.
 #
 # Ed Hartnett 12/11/22
 name: developer 
@@ -326,15 +326,21 @@ jobs:
         path: ufs_utils
         submodules: true
 
+    - name: cache-data
+      id: cache-data
+      uses: actions/cache@v2
+      with:
+        path: ~/data
+        key: data-1
+
     - name:  build
       run: |
-        set -x
         cd ufs_utils
         mkdir build
         doxygen --version
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd build
-        cmake .. -DFTP_TEST_FILES=ON -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DJasper_ROOT=~/jasper -DCMAKE_PREFIX_PATH="~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0" -DCMAKE_C_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"  -DCMAKE_BUILD_TYPE=Debug 
+        cmake -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DCMAKE_PREFIX_PATH="~/jasper;~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0" -DCMAKE_C_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"  -DCMAKE_BUILD_TYPE=Debug ..
         make -j2 VERBOSE=1
 
     - name: test
@@ -343,6 +349,18 @@ jobs:
         ctest --verbose --rerun-failed --output-on-failure
         gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html &> /dev/null
 
+    - name: cache-data
+      if: steps.cache-data.outputs.cache-hit != 'true'
+      run: |
+        mkdir ~/data
+        cp ufs_utils/build/tests/chgres_cube/data/* ~/data
+        cp ufs_utils/build/tests/sfc_climo_gen/data/* ~/data
+        cp ufs_utils/build/tests/cpld_gridgen/data/* ~/data
+        cp ufs_utils/tests/filter_topo/data/* ~/data
+        cp ufs_utils/tests/emcsfc_snow2mdl/data/* ~/data
+        cp ufs_utils/tests/chgres_cube/data/* ~/data
+        ls -l ~/data
+        
     - name: upload-test-coverage
       uses: actions/upload-artifact@v2
       with:
