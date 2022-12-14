@@ -190,14 +190,10 @@ jobs:
     - name: build-ip
       if: steps.cache-ip.outputs.cache-hit != 'true'
       run: |
-        pwd
-        ls -l ~
-        ls -l ~/sp
-        ls -l ~/sp/lib
         cd ip
         mkdir build
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX=~/ip -DCMAKE_PREFIX_PATH=~~/sp ..
+        cmake -DCMAKE_INSTALL_PREFIX=~/ip -DCMAKE_PREFIX_PATH=~/sp ..
         make -j2
         make install
 

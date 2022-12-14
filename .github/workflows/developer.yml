@@ -225,7 +225,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/sfcio
-        key: developer-sfcio-${{ runner.os }}-1.4.0-1
+        key: developer-sfcio-${{ runner.os }}-1.4.1
 
     - name: checkout-sfcio
       if: steps.cache-sfcio.outputs.cache-hit != 'true'
@@ -233,7 +233,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-sfcio
         path: sfcio
-        ref: v1.4.0
+        ref: v1.4.1
 
     - name: build-sfcio
       if: steps.cache-sfcio.outputs.cache-hit != 'true'
@@ -275,7 +275,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/nemsio
-        key: developer-nemsio-${{ runner.os }}-2.5.0-1
+        key: developer-nemsio-${{ runner.os }}-2.5.4
 
     - name: checkout-nemsio
       if: steps.cache-nemsio.outputs.cache-hit != 'true'
@@ -283,7 +283,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-nemsio
         path: nemsio
-        ref: v2.5.0
+        ref: v2.5.4
 
     - name: build-nemsio
       if: steps.cache-nemsio.outputs.cache-hit != 'true'
@@ -300,7 +300,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/sigio
-        key: developer-sigio-${{ runner.os }}-2.3.0
+        key: developer-sigio-${{ runner.os }}-2.3.2
 
     - name: checkout-sigio
       if: steps.cache-sigio.outputs.cache-hit != 'true'
@@ -308,7 +308,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-sigio
         path: sigio
-        ref: v2.3.0
+        ref: v2.3.2
 
     - name: build-sigio
       if: steps.cache-sigio.outputs.cache-hit != 'true'
