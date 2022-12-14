@@ -39,13 +39,13 @@ jobs:
         sudo apt-get update
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
-        # if [[ ${{ matrix.ver }} == "OLD" ]]; then
-        #   export bacio_VERSION=2.4.1
-        # elif [[ ${{ matrix.ver }} == "MED" ]]; then        
-        #   export bacio_VERSION=2.4.1
-        # elif [[ ${{ matrix.ver }} == "NEW" ]]; then
-        #   export bacio_VERSION=2.4.1
-        # fi
+        if [[ ${{ matrix.ver }} == "OLD" ]]; then
+          export bacio_VERSION=2.4.1
+        elif [[ ${{ matrix.ver }} == "MED" ]]; then        
+          export bacio_VERSION=2.4.1
+        elif [[ ${{ matrix.ver }} == "NEW" ]]; then
+          export bacio_VERSION=2.4.1
+        fi
 
     - name: cache-esmf
       id: cache-esmf
