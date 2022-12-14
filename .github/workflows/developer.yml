@@ -6,6 +6,11 @@
 # Ed Hartnett 12/11/22
 name: developer 
 on:
+  workflow_dispatch::
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
   push:
     branches:
     - develop

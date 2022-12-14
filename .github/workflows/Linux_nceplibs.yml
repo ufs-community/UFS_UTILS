@@ -5,6 +5,10 @@
 # Ed Hartnett 12/13/22
 name: Linux_nceplibs
 on:
+  workflow_dispatch:
+    - develop
+    paths-ignore:
+    - README.md
   push:
     branches:
     - develop

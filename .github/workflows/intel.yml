@@ -1,5 +1,10 @@
 name: intel
 on:
+  workflow_dispatch:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
   push:
     branches:
     - develop

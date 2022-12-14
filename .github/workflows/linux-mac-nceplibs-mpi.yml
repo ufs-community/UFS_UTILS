@@ -1,5 +1,9 @@
 name: linux-mac-mpi-nceplibs
 on:
+  workflow_dispatch:
+    - develop
+    paths-ignore:
+    - README.md
   push:
     branches:
     - develop
