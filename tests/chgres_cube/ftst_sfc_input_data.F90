@@ -10,7 +10,7 @@
 
  use mpi
  use esmf
- use input_data
+ use utilities
  use model_grid
 
  implicit none

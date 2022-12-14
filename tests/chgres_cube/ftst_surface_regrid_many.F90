@@ -17,7 +17,7 @@
                         latitude_target_grid, &
                         longitude_target_grid
 
- use input_data, only: t2m_input_grid, &
+ use sfc_input_data, only: t2m_input_grid, &
                        q2m_input_grid
  
  use surface, only : regrid_many

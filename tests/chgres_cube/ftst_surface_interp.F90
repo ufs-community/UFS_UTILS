@@ -32,11 +32,12 @@
                      interp, &
                      cleanup_target_sfc_data
  
- use input_data, only : init_sfc_esmf_fields, &
+ use atm_input_data, only : terrain_input_grid
+
+ use sfc_input_data, only : init_sfc_esmf_fields, &
                         soil_type_input_grid, &
                         veg_type_input_grid, &
                         landsea_mask_input_grid, &
-                        terrain_input_grid, &
                         t2m_input_grid, &
                         cleanup_input_sfc_data
 
