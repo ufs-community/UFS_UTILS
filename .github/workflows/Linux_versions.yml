@@ -27,7 +27,7 @@ jobs:
       FC: mpifort
       CC: mpicc
       FCFLAGS: -fallow-argument-mismatch
-      bacio_VERSION: "2.4.1"
+      bacio_VERSION: if [[ $${{ matrix.ver }} == 'NEW' ]] ; then echo "2.5.0"; else echo "2.4.1" ; fi
     strategy:
       fail-fast: true
       matrix:
