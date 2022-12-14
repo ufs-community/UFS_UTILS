@@ -1,3 +1,8 @@
+# UFS_UTILS test workflow.
+#
+# Check UFS_UTILS build based on the NCEPLIBS project (deprecated, but still works).
+#
+# Ed Hartnett 12/13/22
 name: Linux_nceplibs
 on:
   push:
@@ -24,9 +29,7 @@ jobs:
     - name: install-dependencies
       run: |
           sudo apt-get update
-          sudo apt-get install libmpich-dev
-          sudo apt-get install libpng-dev
-          sudo apt-get install libjpeg-dev
+          sudo apt-get install libmpich-dev libpng-dev libjpeg-dev
           sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
 
     - name: cache-esmf

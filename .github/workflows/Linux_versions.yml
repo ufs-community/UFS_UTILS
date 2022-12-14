@@ -1,6 +1,6 @@
 # UFS_UTILS test workflow.
 #
-# Check different versions of dependencies.
+# Check different versions of the NCEPLIBS libraries that are used by UFS_UTILS.
 #
 # Ed Hartnett 12/13/22
 name: Linux_versions 
@@ -190,6 +190,10 @@ jobs:
     - name: build-ip
       if: steps.cache-ip.outputs.cache-hit != 'true'
       run: |
+        pwd
+        ls -l ~
+        ls -l ~/sp
+        ls -l ~/sp/lib
         cd ip
         mkdir build
         cd build
