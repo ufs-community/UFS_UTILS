@@ -27,7 +27,6 @@ jobs:
       FC: mpifort
       CC: mpicc
       FCFLAGS: -fallow-argument-mismatch
-      bacio_VERSION: eval(if [[ $${{ matrix.ver }} == 'NEW' ]] ; then echo "2.5.0"; else echo "2.4.1" ; fi)
     strategy:
       fail-fast: true
       matrix:
@@ -37,8 +36,6 @@ jobs:
 
     - name: install-dependencies
       run: |
-        echo "${{ env.bacio_VERSION }}"
-        echo "$bacio_VERSION"
         sudo apt-get update
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
@@ -348,6 +345,8 @@ jobs:
     - name:  build
       run: |
         set -x
+        echo "${{ env.bacio_VERSION }}"
+        echo "$bacio_VERSION"
         cd ufs_utils
         mkdir build
         export ESMFMKFILE=~/esmf/lib/esmf.mk
