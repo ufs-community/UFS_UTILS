@@ -53,7 +53,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: Linux_versions-esmf-${{ matrix.esmf_version }}-${{ runner.os }}3
+        key: Linux_versions-esmf-${{ matrix.esmf_version }}-${{ runner.os }}
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
