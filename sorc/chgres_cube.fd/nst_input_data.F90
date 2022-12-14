@@ -12,22 +12,54 @@ module nst_input_data
 !! associated with the input grid.
 !!
 !! @author George Gayno NCEP/EMC
- module input_data
-
  use esmf
  use netcdf
  use nemsio_module
 
  use program_setup, only          : data_dir_input_grid, &
- 									nst_files_input_grid, &
- 									input_type
- 									
+                                    sfc_files_input_grid, &
+                                    nst_files_input_grid, &
+                                    input_type
+ 
  use model_grid, only             : input_grid,        &
                                     i_input, j_input,  &
                                     ip1_input, jp1_input,  &
                                     num_tiles_input_grid
-                                    
-                                    
+ 
+ use sfc_input_data, only         : lsoil_input, &
+                                    read_fv3_grid_data_netcdf, &
+                                    landsea_mask_input_grid
+
+ use utilities, only              : error_handler
+ implicit none 
+
+! Fields associated with the nst model.
+
+ type(esmf_field), public :: c_d_input_grid   !< Coefficient 2 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: c_0_input_grid   !< Coefficient 1 to calculate d(tz)/d(ts)
+ type(esmf_field), public :: d_conv_input_grid   !< Thickness of free convectionlayer
+ type(esmf_field), public :: dt_cool_input_grid   !< Sub-layer cooling amount
+ type(esmf_field), public :: ifd_input_grid   !< Model mode index. 0-diurnalmodel not
+                                                     !< started; 1-diurnal model
+                                                     !started.
+ type(esmf_field), public :: qrain_input_grid   !< Sensible heat flux due torainfall
+ type(esmf_field), public :: tref_input_grid  !< Reference temperature
+ type(esmf_field), public :: w_d_input_grid   !< Coefficient 4 to calculated(tz)/d(ts)
+ type(esmf_field), public :: w_0_input_grid   !< Coefficient 3 to calculated(tz)/d(ts)
+ type(esmf_field), public :: xs_input_grid   !< Salinity content in diurnalthermocline layer
+ type(esmf_field), public :: xt_input_grid   !< Heat content in diurnalthermocline layer
+ type(esmf_field), public :: xu_input_grid   !< u-current content in diurnalthermocline layer
+ type(esmf_field), public :: xv_input_grid   !< v-current content in diurnalthermocline layer
+ type(esmf_field), public :: xz_input_grid   !< Diurnal thermocline layerthickness
+ type(esmf_field), public :: xtts_input_grid   !< d(xt)/d(ts)
+ type(esmf_field), public :: xzts_input_grid   !< d(xz)/d(ts)
+ type(esmf_field), public :: z_c_input_grid   !< Sub-layer cooling thickness
+ type(esmf_field), public :: zm_input_grid   !< Oceanic mixed layer depth
+ 
+ public :: read_input_nst_data
+ public :: cleanup_input_nst_data
+                                   
+ contains                                    
 !> Driver to read input grid nst data.
 !!
 !! @param[in] localpet  ESMF local persistent execution thread 

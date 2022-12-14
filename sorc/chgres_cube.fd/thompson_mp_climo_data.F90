@@ -12,7 +12,7 @@
  use netcdf
  use program_setup, only      : cycle_mon, cycle_day, cycle_hour, &
                                 thomp_mp_climo_file
-
+ use utilities, only          : error_handler, netcdf_err
  implicit none
 
  private

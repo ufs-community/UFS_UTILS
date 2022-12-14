@@ -12,16 +12,14 @@ module sfc_input_data
 !! associated with the input grid.
 !!
 !! @author George Gayno NCEP/EMC
- module input_data
-
  use esmf
  use netcdf
  use nemsio_module
 
  use program_setup, only          : data_dir_input_grid, &
- 									sfc_files_input_grid, &
- 									grib2_file_input_grid, &
- 									convert_nst, &
+                                    sfc_files_input_grid, &
+                                    grib2_file_input_grid, &
+                                    convert_nst, &
                                     orog_dir_input_grid, &
                                     orog_files_input_grid, &
                                     input_type, &
@@ -30,19 +28,28 @@ module sfc_input_data
                                     external_model, &
                                     vgfrc_from_climo, &
                                     minmax_vgfrc_from_climo, &
-                                    lai_from_climo
+                                    lai_from_climo,&
+                                    read_from_input
                                     
  use model_grid, only             : input_grid,        &
                                     i_input, j_input,  &
                                     ip1_input, jp1_input,  &
                                     num_tiles_input_grid
+ use atm_input_data, only         : terrain_input_grid
+
+ use utilities, only              : error_handler, &
+                                    netcdf_err, &
+                                    handle_grib_error, &
+                                    to_upper, &
+                                    check_soilt, &
+                                    check_cnwat
                                     
 ! Fields associated with the land-surface model.
 
  integer, public                 :: veg_type_landice_input = 15 !< NOAH land ice option
                                                                 !< defined at this veg type.
                                                                 !< Default is igbp.
- integer, parameter              :: ICET_DEFAULT = 265.0    !< Default value of soil and skin
+ real                            :: ICET_DEFAULT = 265.0    !< Default value of soil and skin
                                                             !< temperature (K) over ice.
  type(esmf_field), public :: canopy_mc_input_grid    !< canopy moist content
  type(esmf_field), public :: f10m_input_grid         !< log((z0+10)*1/z0)
@@ -74,8 +81,6 @@ module sfc_input_data
 
  integer, public      :: lsoil_input=4  !< number of soil layers, no longer hardwired to allow
                                         !! for 7 layers of soil for the RUC LSM
- 
- character(len=50), private, allocatable :: slevs(:) !< The atmospheric levels in the GRIB2 input file.
  
  public :: read_input_sfc_data
  public :: cleanup_input_sfc_data
@@ -1771,7 +1776,7 @@ module sfc_input_data
    character(len=250)                    :: geo_file
    character(len=20)                     :: vname, vname_file, slev
    character(len=50)                     :: method
-   character(len=20)                     :: to_upper
+   !character(len=20)                     :: to_upper
  
    integer                               :: rc, varnum, iret, i, j,k
    integer                               :: ncid2d, varid, varsize
@@ -2340,7 +2345,7 @@ module sfc_input_data
          slev = "surface"
          call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                              loc=varnum)  
-         call handle_grib_error(vname, slev ,method,value,varnum,rc, var= dummy2d)
+         call handle_grib_error(vname, slev ,method,value,varnum,read_from_input,rc, var= dummy2d)
          if (rc == 1) then ! missing_var_method == skip or no entry in varmap table
             print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. WILL NOT "//&
                        "SCALE SOIL MOISTURE FOR DIFFERENCES IN SOIL TYPE. "
@@ -2562,7 +2567,7 @@ module sfc_input_data
              unpack, k, gfld, rc)
 
      if (rc /= 0 ) then
-       call handle_grib_error(vname, slev ,method,value,varnum,rc,var8=dummy2d_8)
+       call handle_grib_error(vname, slev ,method,value,varnum,read_from_input,rc,var8=dummy2d_8)
        if (rc==1) then ! missing_var_method == skip or no entry in varmap table
          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
@@ -2592,7 +2597,7 @@ module sfc_input_data
 ! No test data contained this field. So could not test with g2 library.
      rc = 1
      if (rc /= 0) then
-        call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+        call handle_grib_error(vname, slev ,method,value,varnum,read_from_input,rc, var8=dummy2d_8)
         if (rc==1) then ! missing_var_method == skip or no entry in varmap table
           print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                      " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
@@ -2620,7 +2625,7 @@ module sfc_input_data
 ! No sample data contained this field, so could not test g2lib.
      rc = 1
      if (rc /= 0) then
-       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       call handle_grib_error(vname, slev ,method,value,varnum,read_from_input,rc, var8=dummy2d_8)
        if (rc==1) then ! missing_var_method == skip or no entry in varmap table
          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
@@ -2666,7 +2671,7 @@ module sfc_input_data
 !      print*,'fricv ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
      else
-       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       call handle_grib_error(vname, slev ,method,value,varnum,read_from_input,rc, var8=dummy2d_8)
        if (rc==1) then ! missing_var_method == skip or no entry in varmap table
          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL "//&
                    "REPLACED WITH CLIMO. SET A FILL "// &
@@ -2692,7 +2697,7 @@ module sfc_input_data
 
      rc = -1 ! None of the test cases have this record. Can't test with g2lib.
      if (rc /= 0) then
-       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       call handle_grib_error(vname, slev ,method,value,varnum,read_from_input,rc, var8=dummy2d_8)
        if (rc==1) then ! missing_var_method == skip or no entry in varmap table
          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL NOT"//&
                    " BE WRITTEN TO THE INPUT FILE. SET A FILL "// &
@@ -2738,9 +2743,9 @@ module sfc_input_data
      if (rc == 0 ) then
        print*,'cnwat ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
-       call check_cnwat(dummy2d_8)
+       call check_cnwat(dummy2d_8,i_input,j_input)
      else
-       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8=dummy2d_8)
+       call handle_grib_error(vname, slev ,method,value,varnum,read_from_input,rc, var8=dummy2d_8)
        if (rc==1) then ! missing_var_method == skip or no entry in varmap table
          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
@@ -2777,7 +2782,7 @@ module sfc_input_data
              unpack, k, gfld, rc)
 
      if (rc /= 0 ) then
-       call handle_grib_error(vname, slev ,method,value,varnum,rc, var8= dummy2d_8)
+       call handle_grib_error(vname, slev ,method,value,varnum,read_from_input,rc, var8= dummy2d_8)
        if (rc==1) then ! missing_var_method == skip or no entry in varmap table
          print*, "WARNING: "//trim(vname)//" NOT AVAILABLE IN FILE. THIS FIELD WILL BE"//&
                    " REPLACED WITH CLIMO. SET A FILL "// &
@@ -2917,7 +2922,7 @@ module sfc_input_data
      vname = "soilt"
      vname_file = ":TSOIL:"
      call read_grib_soil(vname,vname_file,lugb,pdt_num,dummy3d)
-     call check_soilt(dummy3d,slmsk_save,tsk_save,ICET_DEFAULT)
+     call check_soilt(dummy3d,slmsk_save,tsk_save,ICET_DEFAULT,i_input,j_input,lsoil_input)
      deallocate(tsk_save)
    endif
 
@@ -3266,7 +3271,7 @@ module sfc_input_data
              unpack, k, gfld, rc2)
 
    if (rc2 /= 0) then  ! record not found.
-     call handle_grib_error(vname_file, slevs(i),method,value,varnum,rc,var=dummy2d)
+     call handle_grib_error(vname_file, slevs(i),method,value,varnum,read_from_input,rc,var=dummy2d)
      if (rc==1 .and. trim(vname) /= "soill") then 
        ! missing_var_method == skip or no entry in varmap table
        call error_handler("READING IN "//trim(vname)//". SET A FILL "// &
