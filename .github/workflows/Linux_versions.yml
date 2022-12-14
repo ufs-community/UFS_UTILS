@@ -5,9 +5,6 @@
 # Ed Hartnett 12/13/22
 name: Linux_versions 
 on:
-  workflow_dispatch:
-    paths-ignore:
-    - README.md
   push:
     branches:
     - develop
