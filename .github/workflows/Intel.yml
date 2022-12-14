@@ -1,4 +1,9 @@
-name: netcdf-versions
+# UFS_UTILS test workflow.
+#
+# This workflow tests UFS_UTILS with the Intel compiler.
+#
+# Ed Hartnett 12/14/22
+name: Intel
 on:
   push:
     branches:
@@ -11,52 +16,60 @@ on:
     paths-ignore:
     - README.md
 
+# Use custom shell with -l so .bash_profile is sourced which loads intel/oneapi/setvars.sh
+# without having to do it in manually every step. 
 defaults:
   run:
-    shell: bash -exo pipefail {0}
-    
-jobs:
-  netcdf-build-and-test:
-    runs-on: ubuntu-latest
+    shell: bash -leo pipefail {0}
 
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        netcdf_version: [4.8.0]
+jobs:
+  Intel:
+    runs-on: ubuntu-latest
+    env:
+      CC: icc
+      FC: ifort
 
     steps:
-    - name: install-dependencies
+
+    # See https://software.intel.com/content/www/us/en/develop/articles/oneapi-repo-instructions.html
+    - name: install-intel
       run: |
-          sudo apt-get update
-          sudo apt-get install libmpich-dev libpng-dev libjpeg-dev
+        cd /tmp
+        wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+        sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+        rm GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
+        echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+        sudo apt-get update
+        sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
+        echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
 
     - name: cache-netcdf
       id: cache-netcdf
       uses: actions/cache@v2
       with:
         path: ~/netcdf
-        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}4
+        key: Intel-netcdf-c-$4.7.4-{{ runner.os }}-intel3
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        export CC=mpicc
+        export CC=mpiicc
         wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
         tar -xzf hdf5-1.10.7.tar.gz
         pushd hdf5-1.10.7
-        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --disable-shared
+        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests --disable-shared --disable-shared --enable-static
         make -j2
         make install
            
     - name: build-netcdf-c
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        export CC=mpicc
+        export CC=mpiicc
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
-        wget https://github.com/Unidata/netcdf-c/archive/refs/tags/v${{ matrix.netcdf_version }}.tar.gz &> /dev/null
-        tar -xzf v${{ matrix.netcdf_version }}.tar.gz
-        cd netcdf-c-${{ matrix.netcdf_version }}
+        wget https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.7.4.tar.gz &> /dev/null
+        tar -xzf v4.7.4.tar.gz
+        pushd netcdf-c-4.7.4
         ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities --disable-shared
         make -j2
         make install
@@ -64,10 +77,10 @@ jobs:
     - name: build-netcdf-fortran
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        set -x
+        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${HOME}/netcdf/lib"
         export PATH="${HOME}/netcdf/bin:$PATH"
-        export CC=mpicc
-        export FC=mpifort
+        export CC=mpiicc
+        export FC=mpiifort
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
         export LIBS=`nc-config --libs`
@@ -83,7 +96,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf-8.2.0-${{ runner.os }}-netcdf-${{ matrix.netcdf_version }}3
+        key: Intel-esmf-8.2.0-${{ runner.os }}-intel3
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
@@ -93,11 +106,11 @@ jobs:
         wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
         tar zxf ESMF_8_2_0.tar.gz
         cd esmf-ESMF_8_2_0
-        export ESMF_COMM=mpich3
+        export ESMF_COMM=intelmpi
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
         export ESMF_INSTALL_MODDIR=mod
-        export ESMF_COMPILER=gfortran
+        export ESMF_COMPILER=intel
         export ESMF_INSTALL_PREFIX=~/esmf
         export ESMF_NETCDF=split
         export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
@@ -111,7 +124,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: jasper-2.0.25-${{ runner.os }}3
+        key: Intel-jasper-2.0.25-${{ runner.os }}-intel3
 
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
@@ -124,20 +137,26 @@ jobs:
         make -j2
         make install
 
-    - name: cache-nceplibs 
+    - name: checkout-nceplibs
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS
+        path: nceplibs
+
+    - name: cache-nceplibs
       id: cache-nceplibs
       uses: actions/cache@v2
       with:
         path: ~/nceplibs
-        key: nceplibs-1.4.0-${{ runner.os }}-netcdf-${{ matrix.netcdf_version }}3
+        key: Intel-nceplibs-1.4.0-${{ runner.os }}-intel3
 
     - name: build-nceplibs
       if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
+        export ESMFMKFILE=~/esmf/lib/esmf.mk
         wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.4.0.tar.gz &> /dev/null
         tar zxf v1.4.0.tar.gz
         cd NCEPLIBS-1.4.0
-        export ESMFMKFILE=~/esmf/lib/esmf.mk
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/netcdf' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
         make -j2
@@ -160,12 +179,10 @@ jobs:
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
-        export CC=mpicc
-        export CXX=mpicxx
-        export FC=mpifort
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        cmake -DTEST_FILE_DIR=/home/runner/work/UFS_UTILS/UFS_UTILS/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' ..
+        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf' ..
         make -j2
+    
     - name: test
       run: |
         cd ufs_utils/build
@@ -183,4 +200,3 @@ jobs:
         cp ufs_utils/tests/chgres_cube/data/* ~/data
         ls -l ~/data
         
-
