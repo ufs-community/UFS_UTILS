@@ -59,7 +59,7 @@ jobs:
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         pushd ~
-        if [[ ${{ matrix.esmf_version }} == "8_2_0 ]]; then
+        if [[ ${{ matrix.esmf_version }} == "8_2_0" ]]; then
           wget https://github.com/esmf-org/esmf/archive/ESMF_${{ matrix.esmf_version }}.tar.gz &> /dev/null
           tar zxf ESMF_${{ matrix.esmf_version }}.tar.gz
           cd esmf-ESMF_${{ matrix.esmf_version }}
