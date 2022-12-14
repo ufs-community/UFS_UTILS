@@ -59,15 +59,16 @@ jobs:
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         pushd ~
-        export ESMF_DIR=~/esmf-ESMF_${{ matrix.esmf_version }}
         if [[ ${{ matrix.esmf_version }} == "8_2_0 ]]; then
           wget https://github.com/esmf-org/esmf/archive/ESMF_${{ matrix.esmf_version }}.tar.gz &> /dev/null
           tar zxf ESMF_${{ matrix.esmf_version }}.tar.gz
           cd esmf-ESMF_${{ matrix.esmf_version }}
+          export ESMF_DIR=~/esmf-ESMF_${{ matrix.esmf_version }}
         else
           wget https://github.com/esmf-org/esmf/archive/refs/tags/v${{ matrix.esmf_version }}.tar.gz &> /dev/null
           tar zxf esmf-${{ matrix.esmf_version }}.tar.gz          
           cd esmf-${{ matrix.esmf_version }}
+          export ESMF_DIR=~/esmf-${{ matrix.esmf_version }}
         fi
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
