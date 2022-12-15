@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        esmf_version: [8_2_0, 8_2_0]
+        esmf_version: [8_2_0, 8.3.0]
         bacio_version: [2.4.1]
         g2_version: [3.4.3]
         sp_version: [2.3.3]
@@ -49,49 +49,49 @@ jobs:
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
         sudo apt-get install autoconf automake libtool
         
-    - name: cache-pnetcdf
-      id: cache-pnetcdf
-      uses: actions/cache@v2
-      with:
-        path: ~/pnetcdf
-        key: Linux_versions-pnetcdf-${{ runner.os }}-1.12.3
+    # - name: cache-pnetcdf
+    #   id: cache-pnetcdf
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ~/pnetcdf
+    #     key: Linux_versions-pnetcdf-${{ runner.os }}-1.12.3
 
-    - name: build-pnetcdf
-      if: steps.cache-pnetcdf.outputs.cache-hit != 'true'
-      run: |
-        pushd ~
-        wget https://github.com/Parallel-NetCDF/PnetCDF/archive/refs/tags/checkpoint.1.12.3.tar.gz &> /dev/null
-        tar zxf checkpoint.1.12.3.tar.gz
-        ls -l
-        cd PnetCDF-checkpoint.1.12.3
-        autoreconf -i
-        ls -l
-        ./configure --prefix=/home/runner/pnetcdf --enable-shared
-        make -j2
-        make install
+    # - name: build-pnetcdf
+    #   if: steps.cache-pnetcdf.outputs.cache-hit != 'true'
+    #   run: |
+    #     pushd ~
+    #     wget https://github.com/Parallel-NetCDF/PnetCDF/archive/refs/tags/checkpoint.1.12.3.tar.gz &> /dev/null
+    #     tar zxf checkpoint.1.12.3.tar.gz
+    #     ls -l
+    #     cd PnetCDF-checkpoint.1.12.3
+    #     autoreconf -i
+    #     ls -l
+    #     ./configure --prefix=/home/runner/pnetcdf --enable-shared
+    #     make -j2
+    #     make install
 
-    - name: cache-pio
-      id: cache-pio
-      uses: actions/cache@v2
-      with:
-        path: ~/pio
-        key: Linux_versions-pio-${{ runner.os }}-2.5.10
+    # - name: cache-pio
+    #   id: cache-pio
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ~/pio
+    #     key: Linux_versions-pio-${{ runner.os }}-2.5.10
 
-    - name: build-pio
-      if: steps.cache-pio.outputs.cache-hit != 'true'
-      run: |
-        pushd ~
-        wget  https://github.com/NCAR/ParallelIO/archive/refs/tags/pio2_5_10.tar.gz &> /dev/null
-        tar zxf pio2_5_10.tar.gz
-        ls -l
-        cd ParallelIO-pio2_5_10
-        autoreconf -i
-        ls -l
-        export CPPFLAGS=-I/home/runner/pnetcdf/include
-        export LDFLAGS=-L/home/runner/pnetcdf/lib
-        ./configure --prefix=/home/runner/pio
-        make -j2
-        make install
+    # - name: build-pio
+    #   if: steps.cache-pio.outputs.cache-hit != 'true'
+    #   run: |
+    #     pushd ~
+    #     wget  https://github.com/NCAR/ParallelIO/archive/refs/tags/pio2_5_10.tar.gz &> /dev/null
+    #     tar zxf pio2_5_10.tar.gz
+    #     ls -l
+    #     cd ParallelIO-pio2_5_10
+    #     autoreconf -i
+    #     ls -l
+    #     export CPPFLAGS=-I/home/runner/pnetcdf/include
+    #     export LDFLAGS=-L/home/runner/pnetcdf/lib
+    #     ./configure --prefix=/home/runner/pio
+    #     make -j2
+    #     make install
 
     - name: cache-esmf
       id: cache-esmf
@@ -128,11 +128,6 @@ jobs:
         export ESMF_PIO=OFF
         export ESMF_MOAB=OFF
         export ESMF_ARRAY_LITE=TRUE
-        ls -l /home/runner/pio
-        ls -l /home/runner/pio/include
-        ls -l /home/runner/pio/lib
-        export ESMF_PIO_INCLUDE=/home/runner/pio/include
-        export ESMF_PIO_LIBPATH=/home/runner/pio/lib
         make -j2
         make install
 
