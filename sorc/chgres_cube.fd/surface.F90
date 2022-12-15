@@ -647,7 +647,7 @@
  mask_input_ptr = 1
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 0
  
- mask_target_ptr = seamask_target_ptr
+ mask_target_ptr = int(seamask_target_ptr,kind=esmf_kind_i4)
 
  method=ESMF_REGRIDMETHOD_CONSERVE
 
