@@ -60,8 +60,10 @@ jobs:
       run: |
         pushd ~
         wget https://github.com/Parallel-NetCDF/PnetCDF/archive/refs/tags/checkpoint.1.12.3.tar.gz &> /dev/null
-        tar zxf PnetCDF-checkpoint.1.12.3.tar.gz
-        cd PnetCDF-checkpoint.1.12.3
+        ls -l
+        tar zxf checkpoint.1.12.3.tar.gz
+        ls -l
+        cd checkpoint.1.12.3
         ./configure --prefix=/home/runner/pnetcdf
         make -j2
         make install
