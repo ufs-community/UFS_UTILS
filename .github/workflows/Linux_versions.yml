@@ -47,6 +47,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
+        sudo apt-get install autoconf automake libtool
         
     - name: cache-pnetcdf
       id: cache-pnetcdf
@@ -63,6 +64,7 @@ jobs:
         tar zxf checkpoint.1.12.3.tar.gz
         ls -l
         cd PnetCDF-checkpoint.1.12.3
+        autoreconf -i
         ls -l
         ./configure --prefix=/home/runner/pnetcdf
         make -j2
