@@ -6879,17 +6879,17 @@ else ! is native coordinate (hybrid).
 
    if (gfld%igdtnum == 32769) then ! grid definition template number - rotated lat/lon grid
 
-     latin1 = float(gfld%igdtmpl(15))/1.0E6
-     lov = float(gfld%igdtmpl(16))/1.0E6
+     latin1 = real(float(gfld%igdtmpl(15))/1.0E6, kind=esmf_kind_r4)
+     lov = real(float(gfld%igdtmpl(16))/1.0E6, kind=esmf_kind_r4)
 
      print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
      call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha)
 
    elseif (gfld%igdtnum == 30) then ! grid definition template number - lambert conformal grid.
 
-     lov = float(gfld%igdtmpl(14))/1.0E6
-     latin1 = float(gfld%igdtmpl(19))/1.0E6
-     latin2 = float(gfld%igdtmpl(20))/1.0E6
+     lov = real(float(gfld%igdtmpl(14))/1.0E6, kind=esmf_kind_r4)
+     latin1 = real(float(gfld%igdtmpl(19))/1.0E6, kind=esmf_kind_r4)
+     latin2 = real(float(gfld%igdtmpl(20))/1.0E6, kind=esmf_kind_r4)
 
      print*, "- CALL GRIDROT for LC grid with lov,latin1/2 = ",lov,latin1,latin2
      call gridrot(lov,latin1,latin2,lon,alpha)
