@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        esmf_version: [8_2_0, 8.3.0]
+        esmf_version: [8_2_0, 8_2_0]
         bacio_version: [2.4.1]
         g2_version: [3.4.3]
         sp_version: [2.3.3]
@@ -47,6 +47,54 @@ jobs:
         sudo apt-get update
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
+        
+    - name: cache-pnetcdf
+      id: cache-pnetcdf
+      uses: actions/cache@v2
+      with:
+        path: ~/pnetcdf
+        key: Linux_versions-pnetcdf-${{ runner.os }}-1.10.0
+
+    - name: checkout-pnetcdf
+      if: steps.cache-pnetcdf.outputs.cache-hit != 'true'    
+      uses: actions/checkout@v2
+      with:
+        repository: Parallel-NetCDF/PnetCDF
+        path: pnetcdf
+        ref: tag.v1.10.0
+
+    - name: build-pnetcdf
+      if: steps.cache-pnetcdf.outputs.cache-hit != 'true'
+      run: |
+        cd pnetcdf
+        mkdir build && cd build
+        cmake -DCMAKE_INSTALL_PREFIX=~/pnetcdf ..
+        make -j2
+        make install
+
+    - name: cache-pio
+      id: cache-pio
+      uses: actions/cache@v2
+      with:
+        path: ~/pio
+        key: Linux_versions-pio-${{ runner.os }}-2.5.10
+
+    - name: checkout-pio
+      if: steps.cache-pio.outputs.cache-hit != 'true'    
+      uses: actions/checkout@v2
+      with:
+        repository: NCAR/ParallelIO
+        path: pio
+        ref: pio2_5_10
+
+    - name: build-pio
+      if: steps.cache-pio.outputs.cache-hit != 'true'
+      run: |
+        cd pio
+        mkdir build && cd build
+        cmake -DCMAKE_INSTALL_PREFIX=~/pio -DCMAKE_PREFIX_PATH=~/pnetcdf ..
+        make -j2
+        make install
 
     - name: cache-esmf
       id: cache-esmf
