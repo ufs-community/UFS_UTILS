@@ -115,6 +115,7 @@ end subroutine to_lower
 !! @param [inout] var   4-byte array of corrected data
 !! @param [inout] var8  8-byte array of corrected data
 !! @param [inout] var3d 3-d array of corrected data
+!! @param [inout] read_from_input  logical array indicating if variable was read in 
 !! @author Larissa Reames
 subroutine handle_grib_error(vname,lev,method,value,varnum,read_from_input, iret,var,var8,var3d)
 
@@ -218,6 +219,9 @@ end subroutine quicksort
 !! @param soilt    [inout] 3-dimensional soil temperature arrray
 !! @param landmask [in]    landmask of the input grid
 !! @param skint    [in]    2-dimensional skin temperature array
+!! @param i_input  [in]    i-dimension of input grid
+!! @param j_input  [in]    j-dimension of input grid
+!! @param lsoil_input  [in]  soil layers dimension of input grid 
 !! @author Larissa Reames CIMMS/NSSL
 
 subroutine check_soilt(soilt, landmask, skint,ICET_DEFAULT,i_input,j_input,lsoil_input)
@@ -251,6 +255,8 @@ end subroutine check_soilt
 !> locations with unrealistic canopy moisture values (>0.5).
 !!
 !! @param cnwat [input] 2-dimensional canopy moisture content
+!! @param i_input [in]  i-dimension of input grid
+!! @param j_input  [in] j-dimension of input grid
 !! @author Larissa Reames CIMMS/NSSL
 
 subroutine check_cnwat(cnwat,i_input,j_input)
