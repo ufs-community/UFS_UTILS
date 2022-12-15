@@ -84,7 +84,7 @@ jobs:
         wget  https://github.com/NCAR/ParallelIO/archive/refs/tags/pio2_5_10.tar.gz &> /dev/null
         tar zxf pio2_5_10.tar.gz
         ls -l
-        cd pio2_5_10
+        cd ParallelIO-pio2_5_10
         autoreconf -i
         ls -l
         export CPPFLAGS=-I/home/runner/pnetcdf/include
