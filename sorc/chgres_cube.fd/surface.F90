@@ -2010,7 +2010,8 @@
                               soilm_liq_input_grid, soilm_tot_input_grid
  implicit none
  integer, intent(in)                   :: localpet
- character(len=1000)      :: msg
+ character(len=500)       :: msg
+ character(len=2)         :: lsoil_input_ch, lsoil_target_ch
  integer                  :: rc
  real(esmf_kind_r8)          :: tmp(i_input,j_input), &
                                 data_one_tile(i_input,j_input,lsoil_input), &
@@ -2105,12 +2106,11 @@
  
  elseif (lsoil_input /= lsoil_target) then
   rc = -1
-  
-  write(msg,'("NUMBER OF SOIL LEVELS IN INPUT (",I2,") and OUPUT &
-               (",I2,") MUST EITHER BE EQUAL OR 9 AND 4, RESPECTIVELY")') &
-               lsoil_input, lsoil_target
-
-  call error_handler(trim(msg), rc)
+  write(lsoil_input_ch, '(i2)') lsoil_input
+  write(lsoil_target_ch, '(i2)') lsoil_target
+  msg="NUMBER OF SOIL LEVELS IN INPUT " // lsoil_input_ch // " AND OUTPUT " &
+      // lsoil_target_ch // " MUST EITHER BE EQUAL OR 9 AND 4 RESPECTIVELY."
+  call error_handler(msg, rc)
  endif
  
  end subroutine adjust_soil_levels
