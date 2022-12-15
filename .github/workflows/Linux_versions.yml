@@ -77,20 +77,19 @@ jobs:
         path: ~/pio
         key: Linux_versions-pio-${{ runner.os }}-2.5.10
 
-    - name: checkout-pio
-      if: steps.cache-pio.outputs.cache-hit != 'true'    
-      uses: actions/checkout@v2
-      with:
-        repository: NCAR/ParallelIO
-        path: pio
-        ref: pio2_5_10
-
     - name: build-pio
       if: steps.cache-pio.outputs.cache-hit != 'true'
       run: |
-        cd pio
-        mkdir build && cd build
-        cmake -DCMAKE_INSTALL_PREFIX=~/pio -DCMAKE_PREFIX_PATH=~/pnetcdf ..
+        pushd ~
+        wget  https://github.com/NCAR/ParallelIO/archive/refs/tags/pio2_5_10.tar.gz &> /dev/null
+        tar zxf pio2_5_10.tar.gz
+        ls -l
+        cd pio2_5_10
+        autoreconf -i
+        ls -l
+        export CPPFLAGS=-I/home/runner/pnetcdf/include
+        export LDFLAGS=-I/home/runner/pnetcdf/lib
+        ./configure --prefix=/home/runner/pio
         make -j2
         make install
 
