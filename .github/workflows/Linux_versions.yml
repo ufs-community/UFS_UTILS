@@ -128,6 +128,8 @@ jobs:
         export ESMF_PIO=external
         export ESMF_MOAB=OFF
         export ESMF_ARRAY_LITE=TRUE
+        export ESMF_PIO_INCLUDE=/home/runner/pio/include
+        export ESMF_PIO_LIBPATH=/home/runner/pio/lib
         make -j2
         make install
 
