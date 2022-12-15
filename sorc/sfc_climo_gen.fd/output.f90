@@ -72,6 +72,9 @@
    case ('soil_type')
      out_file = "./soil_type." // grid_tiles(tile) // ".nc"
      out_file_with_halo = "./soil_type." // grid_tiles(tile) // ".halo.nc"
+   case ('soil_color')
+     out_file = "./soil_color." // grid_tiles(tile) // ".nc"
+     out_file_with_halo = "./soil_color." // grid_tiles(tile) // ".halo.nc"
    case ('vegetation_type')
      out_file = "./vegetation_type." // grid_tiles(tile) // ".nc"
      out_file_with_halo = "./vegetation_type." // grid_tiles(tile) // ".halo.nc"
