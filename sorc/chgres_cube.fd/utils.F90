@@ -103,6 +103,19 @@ subroutine to_lower(strIn)
   strIn(:) = strOut(:)
 end subroutine to_lower
 
+!> Handle GRIB2 read error based on the user selected
+!! method in the varmap file.
+!!
+!! @param [in] vname  grib2 variable name
+!! @param [in] lev    grib2 variable level
+!! @param [in] method  how missing data is handled
+!! @param [in] value   fill value for missing data
+!! @param [in] varnum  grib2 variable number
+!! @param [inout] iret  return status code
+!! @param [inout] var   4-byte array of corrected data
+!! @param [inout] var8  8-byte array of corrected data
+!! @param [inout] var3d 3-d array of corrected data
+!! @author Larissa Reames
 subroutine handle_grib_error(vname,lev,method,value,varnum,read_from_input, iret,var,var8,var3d)
 
   use, intrinsic :: ieee_arithmetic
@@ -162,6 +175,12 @@ subroutine handle_grib_error(vname,lev,method,value,varnum,read_from_input, iret
 
 end subroutine handle_grib_error
 
+!> Sort an array of values.
+!!
+!! @param a      the sorted array
+!! @param first  the first value of sorted array
+!! @param last   the last value of sorted array
+!! @author Jili Dong NOAA/EMC
 recursive subroutine quicksort(a, first, last)
   implicit none
   real*8  a(*), x, t
