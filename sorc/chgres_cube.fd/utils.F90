@@ -219,6 +219,7 @@ end subroutine quicksort
 !! @param soilt    [inout] 3-dimensional soil temperature arrray
 !! @param landmask [in]    landmask of the input grid
 !! @param skint    [in]    2-dimensional skin temperature array
+!! @param ICET_DEFAULT [in] Default temperature to apply at ice points
 !! @param i_input  [in]    i-dimension of input grid
 !! @param j_input  [in]    j-dimension of input grid
 !! @param lsoil_input  [in]  soil layers dimension of input grid 
@@ -294,8 +295,7 @@ end subroutine check_cnwat
 !! @param [out] ier  error status. non 0: failed interpolation
 !! @author Jili Dong NCEP/EMC  
 !! @date 2021/07/30
-SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
-                   
+SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &                   
    ,LINLOG,XMSG,IER)
       IMPLICIT NONE
 
