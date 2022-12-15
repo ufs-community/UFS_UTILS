@@ -53,22 +53,16 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/pnetcdf
-        key: Linux_versions-pnetcdf-${{ runner.os }}-1.10.0
-
-    - name: checkout-pnetcdf
-      if: steps.cache-pnetcdf.outputs.cache-hit != 'true'    
-      uses: actions/checkout@v2
-      with:
-        repository: Parallel-NetCDF/PnetCDF
-        path: pnetcdf
-        ref: tag.v1.10.0
+        key: Linux_versions-pnetcdf-${{ runner.os }}-1.12.3
 
     - name: build-pnetcdf
       if: steps.cache-pnetcdf.outputs.cache-hit != 'true'
       run: |
-        cd pnetcdf
-        mkdir build && cd build
-        cmake -DCMAKE_INSTALL_PREFIX=~/pnetcdf ..
+        pushd ~
+        wget https://github.com/Parallel-NetCDF/PnetCDF/archive/refs/tags/checkpoint.1.12.3.tar.gz &> /dev/null
+        tar zxf PnetCDF-checkpoint.1.12.3.tar.gz
+        cd PnetCDF-checkpoint.1.12.3
+        ./configure --prefix=/home/runner/pnetcdf
         make -j2
         make install
 
