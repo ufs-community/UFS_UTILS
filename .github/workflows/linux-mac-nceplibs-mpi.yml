@@ -23,6 +23,7 @@ jobs:
       FC: gfortran-9
       CXX: g++-9
     strategy:
+      fail-fast: true      
       matrix:
         os: [macos-11, ubuntu-latest]
         compiler: [gcc-9]
@@ -217,6 +218,13 @@ jobs:
         path: ufs_utils
         submodules: recursive
 
+    - name: cache-data
+      id: cache-data
+      uses: actions/cache@v2
+      with:
+        path: ~/data
+        key: data-2
+
     - name: build
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
@@ -227,7 +235,7 @@ jobs:
         export FC=mpifort
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
         export DYLD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf'
+        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' ..
         make -j2
 
     - name: test
@@ -236,3 +244,16 @@ jobs:
         # Oversubscribe for OpenMPI to run more processes than CPUs
         export OMPI_MCA_rmaps_base_oversubscribe=1
         ctest --rerun-failed --output-on-failure
+
+    - name: cache-data
+      if: steps.cache-data.outputs.cache-hit != 'true'
+      run: |
+        mkdir ~/data
+        cp ufs_utils/build/tests/chgres_cube/data/* ~/data
+        cp ufs_utils/build/tests/sfc_climo_gen/data/* ~/data
+        cp ufs_utils/build/tests/cpld_gridgen/data/* ~/data
+        cp ufs_utils/tests/filter_topo/data/* ~/data
+        cp ufs_utils/tests/emcsfc_snow2mdl/data/* ~/data
+        cp ufs_utils/tests/chgres_cube/data/* ~/data
+        ls -l ~/data
+        
