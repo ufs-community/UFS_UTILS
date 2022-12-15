@@ -3236,6 +3236,9 @@ subroutine calcalpha_rotlatlon(latgrid,longrid,cenlat,cenlon,alpha)
   ! returns alpha in degrees
 end subroutine calcalpha_rotlatlon
 
+!> Free up memory associated with atm data.
+!!
+!! @author George Gayno NCEP/EMC   
 subroutine cleanup_input_atm_data
 
  implicit none
