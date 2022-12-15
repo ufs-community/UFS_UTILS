@@ -1445,7 +1445,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum2d(:,:) = data_one_tile(i_start:i_end, j_start:j_end)
+   dum2d(:,:) = real(data_one_tile(i_start:i_end, j_start:j_end),kind=4)
    error = nf90_put_var( ncid, id_lon, dum2d)
    call netcdf_err(error, 'WRITING LONGITUDE RECORD' )
  endif
@@ -1460,7 +1460,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum2d(:,:) = data_one_tile(i_start:i_end, j_start:j_end)
+   dum2d(:,:) = real(data_one_tile(i_start:i_end, j_start:j_end),kind=4)
    error = nf90_put_var( ncid, id_lat, dum2d)
    call netcdf_err(error, 'WRITING LATITUDE RECORD' )
  endif
@@ -1475,7 +1475,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum2d(:,:) = data_one_tile(i_start:i_end, j_start:j_end)
+   dum2d(:,:) = real(data_one_tile(i_start:i_end, j_start:j_end),kind=4)
    error = nf90_put_var( ncid, id_ps, dum2d)
    call netcdf_err(error, 'WRITING SURFACE PRESSURE RECORD' )
  endif
@@ -1500,7 +1500,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+   dum3d(:,:,:) = real(data_one_tile_3d(i_start:i_end,j_start:j_end,:),kind=4)
    dum3d(:,:,1:levp1_target) = dum3d(:,:,levp1_target:1:-1)
    error = nf90_put_var( ncid, id_zh, dum3d)
    call netcdf_err(error, 'WRITING HEIGHT RECORD' )
@@ -1526,7 +1526,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+   dum3d(:,:,:) = real(data_one_tile_3d(i_start:i_end,j_start:j_end,:),kind=4)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
    print*,"MIN MAX W AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_w, dum3d)
@@ -1543,7 +1543,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+   dum3d(:,:,:) = real(data_one_tile_3d(i_start:i_end,j_start:j_end,:),kind=4)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
    error = nf90_put_var( ncid, id_delp, dum3d)
    call netcdf_err(error, 'WRITING DELP RECORD' )
@@ -1559,7 +1559,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+   dum3d(:,:,:) = real(data_one_tile_3d(i_start:i_end,j_start:j_end,:),kind=4)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
    error = nf90_put_var( ncid, id_t, dum3d)
    call netcdf_err(error, 'WRITING TEMPERTAURE RECORD' )
@@ -1577,7 +1577,7 @@
    enddo
 
    if (localpet < num_tiles_target_grid) then
-     dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+     dum3d(:,:,:) = real(data_one_tile_3d(i_start:i_end,j_start:j_end,:),kind=4)
      dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
      error = nf90_put_var( ncid, id_tracers(n), dum3d)
      call netcdf_err(error, 'WRITING TRACER RECORD' )
@@ -1596,7 +1596,7 @@
    enddo
 
    if (localpet < num_tiles_target_grid) then
-     dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+     dum3d(:,:,:) = real(data_one_tile_3d(i_start:i_end,j_start:j_end,:),kind=4)
      dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
      error = nf90_put_var( ncid, id_qnifa, dum3d)
      call netcdf_err(error, 'WRITING QNIFA RECORD' )
@@ -1612,7 +1612,7 @@
    enddo
 
    if (localpet < num_tiles_target_grid) then
-     dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:j_end,:)
+     dum3d(:,:,:) = real(data_one_tile_3d(i_start:i_end,j_start:j_end,:),kind=4)
      dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
      error = nf90_put_var( ncid, id_qnwfa, dum3d)
      call netcdf_err(error, 'WRITING QNWFA RECORD' )
@@ -1639,7 +1639,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum2d(:,:) = data_one_tile(i_start:i_end,j_start:jp1_end)
+   dum2d(:,:) = real(data_one_tile(i_start:i_end,j_start:jp1_end),kind=4)
    error = nf90_put_var( ncid, id_lon_s, dum2d)
    call netcdf_err(error, 'WRITING LON_S RECORD' )
  endif
@@ -1652,7 +1652,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum2d(:,:) = data_one_tile(i_start:i_end,j_start:jp1_end)
+   dum2d(:,:) = real(data_one_tile(i_start:i_end,j_start:jp1_end),kind=4)
    error = nf90_put_var( ncid, id_lat_s, dum2d)
    call netcdf_err(error, 'WRITING LAT_S RECORD' )
  endif
@@ -1677,7 +1677,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:jp1_end,:)
+   dum3d(:,:,:) = real(data_one_tile_3d(i_start:i_end,j_start:jp1_end,:),kind=4)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
    print*,"MIN MAX US AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_u_s, dum3d)
@@ -1694,7 +1694,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum3d(:,:,:) = data_one_tile_3d(i_start:i_end,j_start:jp1_end,:)
+   dum3d(:,:,:) = real(data_one_tile_3d(i_start:i_end,j_start:jp1_end,:),kind=4)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
    print*,"MIN MAX VS AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_v_s, dum3d)
@@ -1721,7 +1721,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum2d(:,:) = data_one_tile(i_start:ip1_end,j_start:j_end)
+   dum2d(:,:) = real(data_one_tile(i_start:ip1_end,j_start:j_end),kind=4)
    error = nf90_put_var( ncid, id_lon_w, dum2d)
    call netcdf_err(error, 'WRITING LON_W RECORD' )
  endif
@@ -1734,7 +1734,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum2d(:,:) = data_one_tile(i_start:ip1_end,j_start:j_end)
+   dum2d(:,:) = real(data_one_tile(i_start:ip1_end,j_start:j_end),kind=4)
    error = nf90_put_var( ncid, id_lat_w, dum2d)
    call netcdf_err(error, 'WRITING LAT_W RECORD' )
  endif
@@ -1759,7 +1759,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum3d(:,:,:) = data_one_tile_3d(i_start:ip1_end,j_start:j_end,:)
+   dum3d(:,:,:) = real(data_one_tile_3d(i_start:ip1_end,j_start:j_end,:),kind=4)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
    print*,"MIN MAX UW AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_u_w, dum3d)
@@ -1776,7 +1776,7 @@
  enddo
 
  if (localpet < num_tiles_target_grid) then
-   dum3d(:,:,:) = data_one_tile_3d(i_start:ip1_end,j_start:j_end,:)
+   dum3d(:,:,:) = real(data_one_tile_3d(i_start:ip1_end,j_start:j_end,:),kind=4)
    dum3d(:,:,1:lev_target) = dum3d(:,:,lev_target:1:-1)
    print*,"MIN MAX VW AT WRITE = ", minval(dum3d(:,:,:)), maxval(dum3d(:,:,:))
    error = nf90_put_var( ncid, id_v_w, dum3d)
@@ -1916,17 +1916,17 @@
 
  allocate(lsoil_data(lsoil_target))
  do i = 1, lsoil_target
-   lsoil_data(i) = float(i)
+   lsoil_data(i) = real(float(i),kind=4)
  enddo
 
  allocate(x_data(i_target_out))
  do i = 1, i_target_out
-   x_data(i) = float(i)
+   x_data(i) = real(float(i),kind=4)
  enddo
 
  allocate(y_data(j_target_out))
  do i = 1, j_target_out
-   y_data(i) = float(i)
+   y_data(i) = real(float(i),kind=4)
  enddo
 
  if (convert_nst) then
