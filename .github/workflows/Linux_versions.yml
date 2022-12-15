@@ -88,7 +88,7 @@ jobs:
         autoreconf -i
         ls -l
         export CPPFLAGS=-I/home/runner/pnetcdf/include
-        export LDFLAGS=-I/home/runner/pnetcdf/lib
+        export LDFLAGS=-L/home/runner/pnetcdf/lib
         ./configure --prefix=/home/runner/pio
         make -j2
         make install
