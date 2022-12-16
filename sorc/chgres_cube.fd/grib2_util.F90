@@ -169,7 +169,7 @@ end subroutine RH2SPFH_GFS
       c1xpvs=1.-xmin*c2xpvs
 !    xj=min(max(c1xpvs+c2xpvs*t,1.0),real(nxpvs,krealfp))
       xj=min(max(c1xpvs+c2xpvs*t,1.0),float(nxpvs))
-      jx=nint(min(xj,float(nxpvs)-1.0))
+      jx=int(min(xj,float(nxpvs)-1.0))
       x=xmin+(jx-1)*xinc
 
       tr=con_ttp/x
