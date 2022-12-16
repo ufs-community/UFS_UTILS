@@ -49,13 +49,3 @@ jobs:
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
         sudo apt-get install autoconf automake libtool
         
-      id: cache-esmf
-      uses: actions/cache@v2
-      with:
-        path: ~/esmf
-        key: Linux_versions-esmf-${{ matrix.esmf_version }}-${{ runner.os }}
-
-        
-
-
-
