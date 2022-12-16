@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        esmf_version: [8.4.0]
+        esmf_version: [8_2_0, 8.3.0, 8.4.0]
         bacio_version: [2.4.1]
         g2_version: [3.4.3]
         sp_version: [2.3.3]
