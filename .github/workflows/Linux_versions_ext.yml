@@ -48,6 +48,8 @@ jobs:
 
     - name: install-dependencies
       run: |
+        pwd
+        ls -l
         sudo apt-get update
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
         sudo apt-get install pkg-config

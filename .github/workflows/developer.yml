@@ -63,6 +63,9 @@ jobs:
         export ESMF_NETCDF=split
         export ESMF_NETCDF_INCLUDE=/usr/include
         export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
+        export ESMF_PIO=OFF
+        export ESMF_MOAB=OFF
+        export ESMF_ARRAY_LITE=TRUE
         make -j2
         make install
 
