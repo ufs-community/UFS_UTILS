@@ -2994,7 +2994,7 @@
              unpack, k, gfld, iret)
 
        if (iret == 0) then ! found data
-         dummy2d = reshape(gfld%fld, (/i_input,j_input/) )
+         dummy2d = real((reshape(gfld%fld, (/i_input,j_input/) )), kind=esmf_kind_r4)
        else ! did not find data.
         if (trim(method) .eq. 'intrp' .and. .not.all_empty) then
           dummy2d = intrp_missing 
@@ -3054,7 +3054,7 @@
          enddo
        enddo
        do vlev=1,lev_input
-         dummy2d = dummy3d(:,:,n) 
+         dummy2d = real(dummy3d(:,:,n) , kind=esmf_kind_r4)
          if (any(dummy2d .eq. intrp_missing)) then 
            ! If we're outside the appropriate region, don't fill but error instead
            if (n == o3n .and. rlevs(vlev) .lt. lev_no_o3_fill) then
@@ -5529,7 +5529,7 @@ else ! is native coordinate (hybrid).
 
      if (rc == 0 ) then
 !      print*,'soil type ', maxval(gfld%fld),minval(gfld%fld)
-       dummy2d = reshape(gfld%fld , (/i_input,j_input/))
+       dummy2d = reshape(real(gfld%fld,kind=esmf_kind_r4) , (/i_input,j_input/))
 
      endif
 
@@ -5576,7 +5576,7 @@ else ! is native coordinate (hybrid).
        do j = 1, j_input
        do i = 1, i_input
          if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
-           dummy1d(:) = dummy3d_stype(i,j,:)
+           dummy1d(:) = real(dummy3d_stype(i,j,:),kind=esmf_kind_r4)
            dummy1d(14) = 0.0_esmf_kind_r4
            dummy2d(i,j) = real(MAXLOC(dummy1d, 1),esmf_kind_r4)
          endif
@@ -7293,7 +7293,7 @@ end subroutine handle_grib_error
      iscale2 = 10 ** gfld%ipdtmpl(14)
 !    print*,'getgb2 top of soil layer in m ', float(gfld%ipdtmpl(12))/float(iscale1)
 !    print*,'getgb2 bot of soil layer in m ', float(gfld%ipdtmpl(15))/float(iscale2)
-     dummy2d = reshape(gfld%fld, (/i_input,j_input/) )
+     dummy2d = reshape(real(gfld%fld,kind=esmf_kind_r4), (/i_input,j_input/) )
    endif 
 
    j = k
