@@ -49,6 +49,7 @@ jobs:
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
         sudo apt-get install autoconf automake libtool
 
+    - name: checkout-esmf
       id: cache-esmf
       uses: actions/cache@v2
       with:
