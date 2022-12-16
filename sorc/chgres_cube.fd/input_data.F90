@@ -5611,7 +5611,7 @@ else ! is native coordinate (hybrid).
      if (.not. sotyp_from_climo) then
        do j = 1, j_input
        do i = 1, i_input
-         if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9   
+         if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9_esmf_kind_r4
        enddo
        enddo
 
@@ -7660,7 +7660,7 @@ SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
                       if (p(nl+1).gt.0.d0) then
                           PC = LOG(P(NL+1))
                       else
-                          PC = LOG(1.d-4)
+                          PC = LOG(1.E-4)
                       end if
 
                       SLOPE = (X(NL)-X(NL+1))/ (PA-PC)
