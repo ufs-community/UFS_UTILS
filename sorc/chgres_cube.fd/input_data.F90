@@ -6923,7 +6923,7 @@ else ! is native coordinate (hybrid).
         endif
      else
        dum2d = reshape(gfld%fld, (/i_input,j_input/) )
-       u_tmp(:,:) = dum2d
+       u_tmp(:,:) = real(dum2d, kind=esmf_kind_r4)
      endif
 
      vname = ":VGRD:"
@@ -6941,7 +6941,7 @@ else ! is native coordinate (hybrid).
         endif
      else
        dum2d = reshape(gfld%fld, (/i_input,j_input/) )
-       v_tmp(:,:) = dum2d
+       v_tmp(:,:) = real(dum2d, kind=esmf_kind_r4)
      endif
 
      deallocate(dum2d)
@@ -6956,9 +6956,9 @@ else ! is native coordinate (hybrid).
         endif
       else if (gfld%igdtnum == 32769) then ! grid definition template number - rotated lat/lon grid
         ws = sqrt(u_tmp**2 + v_tmp**2)
-        wd = atan2(-u_tmp,-v_tmp) / d2r ! calculate grid-relative wind direction
-        wd = wd + alpha + 180.0 ! Rotate from grid- to earth-relative direction
-        wd = 270.0 - wd ! Convert from meteorological (true N) to mathematical direction
+        wd = real((atan2(-u_tmp,-v_tmp) / d2r), kind=esmf_kind_r4) ! calculate grid-relative wind direction
+        wd = real((wd + alpha + 180.0), kind=esmf_kind_r4) ! Rotate from grid- to earth-relative direction
+        wd = real((270.0 - wd), kind=esmf_kind_r4) ! Convert from meteorological (true N) to mathematical direction
         u(:,:,vlev) = -ws*cos(wd*d2r)
         v(:,:,vlev) = -ws*sin(wd*d2r)
       else
