@@ -7077,7 +7077,7 @@ subroutine gridrot(lov,latin1,latin2,lon,rot)
              log( tan(dtor*(90.0-latin1)/2.) / tan(dtor*(90.0-latin2)/2.))
   end if
 
-  tlon = mod(lon - lov + 180. + 3600., 360.) - 180.
+  tlon = real((mod(lon - lov + 180. + 3600., 360.) - 180.), kind=esmf_kind_r4)
   trot = an * tlon
 
   rot = trot * dtor
@@ -7125,7 +7125,7 @@ subroutine calcalpha_rotlatlon(latgrid,longrid,cenlat,cenlon,alpha)
   tlon = -tlon + lon0_r
   tph  = asin(cphi0*sin(tlat) - sphi0*cos(tlat)*cos(tlon))
   sinalpha = sphi0 * sin(tlon) / cos(tph)
-  alpha = -asin(sinalpha)/D2R
+  alpha = real((-asin(sinalpha)/D2R), kind=esmf_kind_r4)
   ! returns alpha in degrees
 end subroutine calcalpha_rotlatlon
 
