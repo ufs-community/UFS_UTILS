@@ -7073,8 +7073,8 @@ subroutine gridrot(lov,latin1,latin2,lon,rot)
   if ( (latin1 - latin2) .lt. 0.000001 ) then
         an = sin(latin1*dtor)
   else
-        an = log( cos(latin1*dtor) / cos(latin2*dtor) ) / &
-             log( tan(dtor*(90.0-latin1)/2.) / tan(dtor*(90.0-latin2)/2.))
+        an = real(log( cos(latin1*dtor) / cos(latin2*dtor) ) / &
+             log( tan(dtor*(90.0-latin1)/2.) / tan(dtor*(90.0-latin2)/2.)), kind=esmf_kind_r4)
   end if
 
   tlon = real((mod(lon - lov + 180. + 3600., 360.) - 180.), kind=esmf_kind_r4)
