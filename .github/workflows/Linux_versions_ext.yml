@@ -1,8 +1,8 @@
 # UFS_UTILS test workflow.
 #
-# Check different versions of the NCEPLIBS libraries that are used by UFS_UTILS.
+# Check different versions of the external libraries that are used by UFS_UTILS.
 #
-# Ed Hartnett 12/13/22
+# Ed Hartnett 12/16/22
 name: Linux_versions 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        esmf_version: [8.4.0]
+        esmf_version: [8_2_0, 8.3.0, 8.4.0]
         bacio_version: [2.4.1]
         g2_version: [3.4.3]
         sp_version: [2.3.3]
