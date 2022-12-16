@@ -70,6 +70,7 @@ input_maximum_snow_albedo_file="${input_sfc_climo_dir}/maximum_snow_albedo.0.05.
 input_snowfree_albedo_file="${input_sfc_climo_dir}/snowfree_albedo.4comp.0.05.nc"
 input_slope_type_file="${input_sfc_climo_dir}/slope_type.1.0.nc"
 input_soil_type_file="${SOIL_TYPE_FILE}"
+input_soil_color_file="${input_sfc_climo_dir}/soil_color.clm.0.05.nc"
 input_vegetation_type_file="${VEG_TYPE_FILE}"
 input_vegetation_greenness_file="${input_sfc_climo_dir}/vegetation_greenness.0.144.nc"
 mosaic_file_mdl="$mosaic_file"
