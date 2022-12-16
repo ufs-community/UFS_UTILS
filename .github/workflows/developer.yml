@@ -43,16 +43,17 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: developer-esmf-8.2.0-${{ runner.os }}3
+        key: developer-esmf-8.4.0-${{ runner.os }}
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         pushd ~
-        export ESMF_DIR=~/esmf-ESMF_8_2_0
-        wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
-        tar zxf ESMF_8_2_0.tar.gz
-        cd esmf-ESMF_8_2_0
+        wget https://github.com/esmf-org/esmf/archive/refs/tags/v8.4.0.tar.gz &> /dev/null
+        ls -l
+        tar zxf v8.4.0.tar.gz
+        cd esmf-8.4.0
+        export ESMF_DIR=~/esmf-8.4.0
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib

@@ -34,7 +34,7 @@ jobs:
       fail-fast: true
       matrix:
         netcdf-version: [4.7.4]
-        esmf_version: [8_2_0, 8.3.1, 8.4.0]
+        esmf_version: [8_2_0, 8.3.1]
         bacio_version: [2.4.1]
         g2_version: [3.4.3]
         sp_version: [2.3.3]
