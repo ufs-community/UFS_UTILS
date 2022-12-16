@@ -7063,7 +7063,7 @@ subroutine gridrot(lov,latin1,latin2,lon,rot)
   real(esmf_kind_r8), intent(in)      :: lon(i_input,j_input)
 
   real(esmf_kind_r4)                  :: trot(i_input,j_input), tlon(i_input,j_input)
-  real(esmf_kind_r4)                  :: dtor = 3.14159265359/180.0_esmf_kind_r4
+  real(esmf_kind_r4)                  :: dtor = 3.14159265359_esmf_kind_r4/180.0_esmf_kind_r4
   real(esmf_kind_r4)                  :: an
   !trot_tmp = real(lon,esmf_kind_r4)-lov
   !trot = trot_tmp
