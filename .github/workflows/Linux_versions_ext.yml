@@ -3,7 +3,7 @@
 # Check different versions of the external libraries that are used by UFS_UTILS.
 #
 # Ed Hartnett 12/16/22
-name: Linux_versions 
+name: Linux_versions_ext
 on:
   push:
     branches:
@@ -21,7 +21,7 @@ defaults:
     shell: bash -exo pipefail {0}
 
 jobs:
-  Linux_versions:
+  Linux_versions_ext:
     runs-on: ubuntu-latest
     env:
       FC: mpifort
