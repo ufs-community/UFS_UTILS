@@ -39,7 +39,7 @@ jobs:
         nemsio_version: [2.5.0]
         sfcio_version: [1.4.0]
         sigio_version: [2.3.0]
-        
+
     steps:
 
     - name: install-dependencies
@@ -48,7 +48,7 @@ jobs:
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
         sudo apt-get install autoconf automake libtool
-        
+
       id: cache-esmf
       uses: actions/cache@v2
       with:
@@ -67,7 +67,7 @@ jobs:
         else
           wget https://github.com/esmf-org/esmf/archive/refs/tags/v${{ matrix.esmf_version }}.tar.gz &> /dev/null
           ls -l
-          tar zxf v${{ matrix.esmf_version }}.tar.gz          
+          tar zxf v${{ matrix.esmf_version }}.tar.gz
           cd esmf-${{ matrix.esmf_version }}
           export ESMF_DIR=~/esmf-${{ matrix.esmf_version }}
         fi
@@ -94,7 +94,7 @@ jobs:
         key: Linux_versions-jasper-${{ runner.os }}-2.0.33-1
 
     - name: checkout-jasper
-      if: steps.cache-jasper.outputs.cache-hit != 'true'    
+      if: steps.cache-jasper.outputs.cache-hit != 'true'
       uses: actions/checkout@v2
       with:
         repository: jasper-software/jasper
@@ -124,7 +124,7 @@ jobs:
         repository: NOAA-EMC/NCEPLIBS-bacio
         path: bacio
         ref: v${{ matrix.bacio_version }}
-    
+
     - name: build-bacio
       if: steps.cache-bacio.outputs.cache-hit != 'true'
       run: |
@@ -224,7 +224,7 @@ jobs:
     #     cmake -DCMAKE_PREFIX_PATH=~/bacio -DCMAKE_INSTALL_PREFIX=~/w3emc ..
     #     make -j2
     #     make install
-        
+
     # - name: checkout-g2c
     #   uses: actions/checkout@v2
     #   with:
@@ -380,8 +380,3 @@ jobs:
         cp ufs_utils/tests/emcsfc_snow2mdl/data/* ~/data
         cp ufs_utils/tests/chgres_cube/data/* ~/data
         ls -l ~/data
-        
-        
-
-
-
