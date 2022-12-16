@@ -47,7 +47,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
-        sudo apt-get install autoconf automake libtool
         
     - name: checkout-esmf
       id: cache-esmf

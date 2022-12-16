@@ -27,9 +27,13 @@ jobs:
       FC: mpifort
       CC: mpicc
       FCFLAGS: -fallow-argument-mismatch
+      CPPFLAGS: -I/home/runner/netcdf/include
+      LDFLAGS: -L/home/runner/netcdf/lib
+      PATH: "/home/runner/netcdf/bin:$PATH"      
     strategy:
       fail-fast: true
       matrix:
+        netcdf-version: [4.7.4]
         esmf_version: [8_2_0, 8.3.1, 8.4.0]
         bacio_version: [2.4.1]
         g2_version: [3.4.3]
@@ -46,8 +50,46 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
-        sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
-        sudo apt-get install autoconf automake libtool
+        sudo apt-get install pkg-config
+
+    - name: cache-netcdf
+      id: cache-netcdf
+      uses: actions/cache@v2
+      with:
+        path: ~/netcdf
+        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}4
+
+    - name: build-hdf5
+      if: steps.cache-netcdf.outputs.cache-hit != 'true'
+      run: |
+        wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
+        tar -xzf hdf5-1.10.7.tar.gz
+        pushd hdf5-1.10.7
+        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --disable-shared
+        make -j2
+        make install
+           
+    - name: build-netcdf-c
+      if: steps.cache-netcdf.outputs.cache-hit != 'true'
+      run: |
+        wget https://github.com/Unidata/netcdf-c/archive/refs/tags/v${{ matrix.netcdf_version }}.tar.gz &> /dev/null
+        tar -xzf v${{ matrix.netcdf_version }}.tar.gz
+        cd netcdf-c-${{ matrix.netcdf_version }}
+        ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities --disable-shared
+        make -j2
+        make install
+
+    - name: build-netcdf-fortran
+      if: steps.cache-netcdf.outputs.cache-hit != 'true'
+      run: |
+        set -x
+        export LIBS=`nc-config --libs`
+        wget https://github.com/Unidata/netcdf-fortran/archive/v4.5.3.tar.gz &> /dev/null
+        tar -xzf v4.5.3.tar.gz
+        pushd netcdf-fortran-4.5.3
+        ./configure --prefix=${HOME}/netcdf --disable-shared
+        make -j2
+        make install
 
     - name: checkout-esmf
       id: cache-esmf
