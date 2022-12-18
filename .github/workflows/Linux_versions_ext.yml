@@ -124,8 +124,8 @@ jobs:
         export ESMF_COMPILER=gfortran
         export ESMF_INSTALL_PREFIX=~/esmf
         export ESMF_NETCDF=split
-        export ESMF_NETCDF_INCLUDE=/usr/include
-        export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
+        export ESMF_NETCDF_INCLUDE=~/netcdf/include
+        export ESMF_NETCDF_LIBPATH=~/netcdf/lib
         export ESMF_PIO=OFF
         export ESMF_MOAB=OFF
         export ESMF_ARRAY_LITE=TRUE
