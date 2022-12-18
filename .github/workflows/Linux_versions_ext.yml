@@ -84,6 +84,7 @@ jobs:
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
         set -x
+        export PATH="/home/runner/netcdf/bin:$PATH"      
         export LIBS=`nc-config --libs`
         wget https://github.com/Unidata/netcdf-fortran/archive/v4.5.3.tar.gz &> /dev/null
         tar -xzf v4.5.3.tar.gz
