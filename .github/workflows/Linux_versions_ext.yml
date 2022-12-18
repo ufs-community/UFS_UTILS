@@ -119,7 +119,6 @@ jobs:
         fi
         export PATH="/home/runner/netcdf/bin:$PATH"      
         export LIBS=`nc-config --libs`
-        export "$LIBS"
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
