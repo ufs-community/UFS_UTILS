@@ -32,7 +32,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        netcdf_version: [4.7.4]
+        netcdf_version: [4.7.4, 4.9.0]
         esmf_version: [8_2_0, 8.3.1]
         bacio_version: [2.4.1]
         g2_version: [3.4.3]
@@ -98,7 +98,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: Linux_versions-esmf-${{ matrix.esmf_version }}-${{ runner.os }}
+        key: Linux_versions-esmf-${{ matrix.esmf_version }}-${{ matrix.netcdf_version }}-${{ runner.os }}
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
