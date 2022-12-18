@@ -116,6 +116,7 @@ jobs:
           cd esmf-${{ matrix.esmf_version }}
           export ESMF_DIR=~/esmf-${{ matrix.esmf_version }}
         fi
+        export LIBS=`nc-config --libs`
         export PATH="/home/runner/netcdf/bin:$PATH"      
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
