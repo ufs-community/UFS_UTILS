@@ -103,6 +103,7 @@ jobs:
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
+        set -x
         pushd ~
         if [[ ${{ matrix.esmf_version }} == "8_2_0" ]]; then
           wget https://github.com/esmf-org/esmf/archive/ESMF_${{ matrix.esmf_version }}.tar.gz &> /dev/null
@@ -117,6 +118,7 @@ jobs:
           export ESMF_DIR=~/esmf-${{ matrix.esmf_version }}
         fi
         export LIBS=`nc-config --libs`
+        export "$LIBS"
         export PATH="/home/runner/netcdf/bin:$PATH"      
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
