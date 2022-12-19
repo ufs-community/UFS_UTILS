@@ -22,7 +22,7 @@ defaults:
     shell: bash -leo pipefail {0}
 
 env:
-  cache_key: gcc2  # The number (#) following the cache_key "gcc" is to flush Action cache.
+  cache_key: gcc0  # The number (#) following the cache_key "gcc" is to flush Action cache.
   CC: gcc-10
   FC: gfortran-10
   CXX: g++-10
@@ -75,6 +75,7 @@ jobs:
           spack add mpich@3.4.2
           spack concretize
           spack install -v --fail-fast --dirty
+          spack clean -a
 
   build:
     needs: setup
