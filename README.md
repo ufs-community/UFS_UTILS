@@ -2,7 +2,7 @@
 # UFS_UTILS
 
 Utilities for the NCEP models. This is part of the
-[NCEPLIBS](https://github.com/NOAA-EMC/NCEPLIBS) project.
+[Unified Forecast System](https://github.com/ufs-community) project.
 
 Documentation for chgres_cube and other utilities can be found at
 https://noaa-emcufs-utils.readthedocs.io/en/latest/.
@@ -22,14 +22,14 @@ fre-nctools | GFDL progammer
 fvcom_tools | David Wright, University of Michigan, Ming Hu, GSD/AMB
 gblevents | Hang Lei
 gdas_init | George Gayno
-global_cycle | George Gayno, Shrinivas Moorthi, Mark Iredell, Xu Li, Hang Lei
-grid_tools | R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), Tsukasa Fujita, JMA (pmat2), GFDL programmer (topo filtering code).
+global_cycle | George Gayno, Shrinivas Moorthi, Xu Li
+grid_tools | R. J. Purser (regional_esg_grid), Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), Tsukasa Fujita, JMA (pmat2), GFDL programmer (topo filtering code).
 orog_mask_tools | Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
 sfc_climo_gen | George Gayno
-vcoord_gen | Fanglin Yang, Mark Iredell
+vcoord_gen | Fanglin Yang
 weight_gen | George Gayno
 
-UFS_UTILS Code managers: George Gayno, Kyle Gerheiser, Jeff Beck, Larissa Reames
+UFS_UTILS Code managers: George Gayno, Jeff Beck, Larissa Reames
 
 ## Prerequisites
 

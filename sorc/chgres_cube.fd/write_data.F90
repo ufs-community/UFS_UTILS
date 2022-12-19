@@ -41,7 +41,6 @@
 
  character(len=13)   :: outfile
 
- integer             :: fsize=65536, initial = 0
  integer             :: header_buffer_val = 16384
  integer             :: error, ncid, dim_nvcoord
  integer             :: dim_levp1, id_ntrac, id_vcoord
@@ -55,8 +54,7 @@
 
  print*,"- WRITE ATMOSPHERIC HEADER FILE: ", trim(outfile)
 
- error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
-                     ncid, initialsize=initial, chunksize=fsize)
+ error = nf90_create(outfile, NF90_NETCDF4, ncid)
  call netcdf_err(error, 'CREATING FILE='//trim(outfile) )
 
  error = nf90_def_dim(ncid, 'nvcoord', nvcoord_target, dim_nvcoord)
@@ -135,7 +133,6 @@
 
  character(len=50)              :: name
 
- integer                        :: fsize=65536, initial = 0
  integer                        :: header_buffer_val = 16384
  integer                        :: ncid, error, tile, i, n
  integer                        :: dim_lon, dim_lat
@@ -207,8 +204,7 @@
  if (localpet == 0) then
 
 !--- open the file
-   error = nf90_create("./gfs.bndy.nc", IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
-                     ncid, initialsize=initial, chunksize=fsize)
+   error = nf90_create("./gfs.bndy.nc", NF90_NETCDF4, ncid)
    call netcdf_err(error, 'CREATING BNDY FILE' )
 
    error = nf90_def_dim(ncid, 'lon', i_target, dim_lon)
@@ -1231,7 +1227,6 @@
  character(len=128)               :: outfile
 
  integer                          :: error, ncid, tile, n
- integer                          :: fsize=65536, initial = 0
  integer                          :: header_buffer_val = 16384
  integer                          :: dim_lon, dim_lat
  integer                          :: dim_lonp, dim_latp
@@ -1289,8 +1284,7 @@
    endif
 
 !--- open the file
-   error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
-                       ncid, initialsize=initial, chunksize=fsize)
+   error = nf90_create(outfile, NF90_NETCDF4, ncid)
    call netcdf_err(error, 'CREATING FILE='//trim(outfile) )
 
 !--- define dimension
@@ -1875,7 +1869,6 @@
  integer, intent(in)            :: localpet
  character(len=128)             :: outfile
 
- integer                        :: fsize=65536, initial = 0
  integer                        :: header_buffer_val = 16384
  integer                        :: dim_x, dim_y, dim_lsoil, dim_time
  integer                        :: error, i, ncid, tile
@@ -1967,8 +1960,7 @@
      endif
 
 !--- open the file
-     error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), &
-                         ncid, initialsize=initial, chunksize=fsize)
+     error = nf90_create(outfile, NF90_NETCDF4, ncid)
      call netcdf_err(error, 'CREATING FILE='//trim(outfile) )
 
 !--- define dimensions

@@ -117,8 +117,8 @@ rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
 
 if [[ $target = wcoss2 ]]; then
   STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
-  export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/cpld_gridgen/fix_mom6
-  BASELINE_ROOT=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/cpld_gridgen/baseline_data
+  export MOM6_FIXDIR=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/fix_mom6
+  BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-GFS-DEV}
   export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
   QUEUE=${QUEUE:-dev}
