@@ -502,6 +502,7 @@ Program execution is controlled via a namelist.  The namelist variables are:
       * input_snowfree_albedo_file - path/name of input snow-free albedo data
       * input_slope_type_file - path/name of input global slope type data
       * input_soil_type_file - path/name of input soil type data
+      * input_soil_color_file - path/name of input soil color data
       * input_vegetation_type_file - path/name of vegetation type data
       * input_vegetation_greenness_file - path/name of monthly vegetation greenness data
       * mosaic_file_mdl - path/name of the model mosaic file
@@ -524,18 +525,27 @@ The surface climatological data is located here `./fix/fix_sfc_climo <https://no
       * Global 2.6 x 1.5-degree soil substrate temperature - substrate_temperature.2.6x1.5.nc
       * Global 0.05-degree four component monthly snow-free albedo - snowfree_albedo.4comp.0.05.nc
       * Global 1.0-degree categorical slope type - slope_type.1.0.nc
+      * Global 0.05-degree CLM soil color (Lawrence and Chase, 2007 JGR) - soil_color.clm.0.05.nc
       * Categorical STATSGO soil type
-             * Global 0.03-degree - soil_type.statsgo.0.03.nc
              * Global 0.05-degree - soil_type.statsgo.0.05.nc
-             * CONUS 0.01-degree - soil_type.statsgo.conus.0.01.nc
+             * Global 0.03-degree - soil_type.statsgo.0.03.nc
+             * CONUS 30 sec - soil_type.statsgo.conus.30s.nc
+             * N Hemis 30 sec - soil_type.statsgo.nh.30s.nc
+             * Global 30 sec - soil_type.statsgo.30s.nc
+      * Categorical BNU soil type
+             * Global 30-second - soil_type.bnu.30s.nc
       * Categorical IGBP vegetation type
-             * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
              * MODIS-based global 0.05-degree - vegetation_type.modis.igbp.0.05.nc
-             * MODIS-based CONUS 0.01-degree - vegetation_type.modis.igbp.conus.0.01.nc
-             * NESDIS VIIRS-based global 0.03-degree - vegetation_type.viirs.igbp.0.03.nc
+             * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
+             * MODIS-based CONUS 30 sec - vegetation_type.modis.igbp.conus.30s.nc
+             * MODIS-based N Hemis 30 sec - vegetation_type.modis.igbp.nh.30s.nc
+             * MODIS-based global 30 sec - vegetation_type.modis.igbp.30s.nc
+             * NESDIS VIIRS-based global 0.10-degree - vegetation_type.viirs.igbp.0.1.nc
              * NESDIS VIIRS-based global 0.05-degree - vegetation_type.viirs.igbp.0.05.nc
-             * NESDIS VIIRS-based global 0.1-degree - vegetation_type.viirs.igbp.0.1.nc
-             * NESDIS VIIRS-based CONUS 0.01-degree - vegetation_type.viirs.igbp.conus.0.01.nc
+             * NESDIS VIIRS-based global 0.03-degree - vegetation_type.viirs.igbp.0.03.nc
+             * NESDIS VIIRS-based CONUS 30-second - vegetation_type.viirs.igbp.conus.30s.nc
+             * NESDIS VIIRS-based N HEMIS 30-second - vegetation_type.viirs.igbp.nh.30s.nc
+             * NESDIS VIIRS-based global 30-second - vegetation_type.viirs.igbp.30s.nc
       * Global 0.144-degree monthly vegetation greenness in percent - vegetation_greenness.0.144.nc
 
 The files that define the model grid. All NetCDF.
@@ -554,6 +564,7 @@ All files with and without halo (all NetCDF).
       * Snow free albedo - CRES_snowfree_albedo.tile#.halo#.nc
       * Slope type - CRES_slope_type.tile#.halo#.nc
       * Soil type - CRES_soil_type.tile#.halo#.nc
+      * Soil color - CRES_soil_color.tile#.halo#.nc
       * Vegetation type - CRES_vegetation_type.tile#.halo#.nc
       * Vegetation greenness - CRES_vegetation_greenness.tile#.halo#.nc
 
