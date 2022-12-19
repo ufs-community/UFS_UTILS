@@ -79,7 +79,7 @@ export veg_type_src="modis.igbp.0.05"
 
 export soil_type_src="statsgo.0.05"
 
-export vegsoilt_frac='.true.'  # When true, outputs percent of each
+export vegsoilt_frac='.false.'  # When true, outputs percent of each
                                # soil and veg type category and a 
                                # dominate category. When false, only
                                # outputs the dominate category. A

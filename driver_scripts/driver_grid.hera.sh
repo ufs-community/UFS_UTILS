@@ -8,7 +8,7 @@
 #SBATCH --nodes=1 --ntasks-per-node=24
 ##SBATCH --partition=bigmem
 #SBATCH -q debug
-#SBATCH -t 00:30:00
+#SBATCH -t 00:10:00
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on Hera.
@@ -79,9 +79,11 @@ export gtype=uniform           # 'uniform', 'stretch', 'nest',
 export make_gsl_orog=false     # When 'true' will output 'oro' files for
                                # the GSL orographic drag suite.
 
-export vegsoilt_frac='.true.' # When .false., output dominate soil and 
+export vegsoilt_frac='.false.' # When .false., output dominate soil and 
                                # vegetation type category. When .true.,
-                               # output fraction of each category.
+                               # output fraction of each category and
+                               # the dominate category. A Fortran logical,
+                               # so include the dots.
 
 export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:

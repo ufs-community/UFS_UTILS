@@ -76,7 +76,7 @@ export gtype=regional_esg      # 'uniform', 'stretch', 'nest',
 export make_gsl_orog=false     # When 'true' will output 'oro' files for
                                # the GSL orographic drag suite.
 
-export vegsoilt_frac='.true.'  # When true, outputs percent of each
+export vegsoilt_frac='.false.'  # When true, outputs percent of each
                                # soil and veg type category and a 
                                # dominate category. When false, only
                                # outputs the dominate category. A
