@@ -85,6 +85,7 @@ jobs:
         uses: actions/checkout@v2
         with:
             path: ufs_utils
+            submodules: true
 
       - name: cache-env
         id: cache-env
