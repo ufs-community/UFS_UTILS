@@ -1,10 +1,9 @@
 # UFS_UTILS test workflow.
 #
-# This workflow tests all developer options including
-# documentation check, and test code coverage. 
+# Check different versions of the external libraries that are used by UFS_UTILS.
 #
-# Ed Hartnett 12/11/22
-name: developer 
+# Ed Hartnett 12/16/22
+name: Linux_versions_ext
 on:
   push:
     branches:
@@ -22,37 +21,57 @@ defaults:
     shell: bash -exo pipefail {0}
 
 jobs:
-  developer:
+  Linux_versions_ext:
     runs-on: ubuntu-latest
     env:
       FC: mpifort
       CC: mpicc
       FCFLAGS: -fallow-argument-mismatch
+    strategy:
+      fail-fast: true
+      matrix:
+        esmf_version: [8_2_0, 8.3.1, 8.4.0]
+        bacio_version: [2.4.1]
+        g2_version: [3.4.3]
+        sp_version: [2.3.3]
+        ip_version: [3.3.3]
+        w3nco_version: [2.4.0]
+        nemsio_version: [2.5.0]
+        sfcio_version: [1.4.0]
+        sigio_version: [2.3.0]
 
     steps:
 
     - name: install-dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev doxygen libmpich-dev
-        sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config        
-        python3 -m pip install gcovr
+        sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev libmpich-dev
+        sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config
+        sudo apt-get install autoconf automake libtool
 
-    - name: cache-esmf
+    - name: checkout-esmf
       id: cache-esmf
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: developer-esmf-8.2.0-${{ runner.os }}3
+        key: Linux_versions-esmf-${{ matrix.esmf_version }}-${{ runner.os }}
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         pushd ~
-        export ESMF_DIR=~/esmf-ESMF_8_2_0
-        wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
-        tar zxf ESMF_8_2_0.tar.gz
-        cd esmf-ESMF_8_2_0
+        if [[ ${{ matrix.esmf_version }} == "8_2_0" ]]; then
+          wget https://github.com/esmf-org/esmf/archive/ESMF_${{ matrix.esmf_version }}.tar.gz &> /dev/null
+          tar zxf ESMF_${{ matrix.esmf_version }}.tar.gz
+          cd esmf-ESMF_${{ matrix.esmf_version }}
+          export ESMF_DIR=~/esmf-ESMF_${{ matrix.esmf_version }}
+        else
+          wget https://github.com/esmf-org/esmf/archive/refs/tags/v${{ matrix.esmf_version }}.tar.gz &> /dev/null
+          ls -l
+          tar zxf v${{ matrix.esmf_version }}.tar.gz
+          cd esmf-${{ matrix.esmf_version }}
+          export ESMF_DIR=~/esmf-${{ matrix.esmf_version }}
+        fi
         export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
@@ -62,6 +81,9 @@ jobs:
         export ESMF_NETCDF=split
         export ESMF_NETCDF_INCLUDE=/usr/include
         export ESMF_NETCDF_LIBPATH=/usr/x86_64-linux-gnu
+        export ESMF_PIO=OFF
+        export ESMF_MOAB=OFF
+        export ESMF_ARRAY_LITE=TRUE
         make -j2
         make install
 
@@ -70,10 +92,10 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: developer-jasper-${{ runner.os }}-2.0.33-1
+        key: Linux_versions-jasper-${{ runner.os }}-2.0.33-1
 
     - name: checkout-jasper
-      if: steps.cache-jasper.outputs.cache-hit != 'true'    
+      if: steps.cache-jasper.outputs.cache-hit != 'true'
       uses: actions/checkout@v2
       with:
         repository: jasper-software/jasper
@@ -94,7 +116,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/bacio
-        key: developer-bacio-${{ runner.os }}-v2.4.1
+        key: Linux_versions-bacio-${{ runner.os }}-${{ matrix.bacio_version }}
 
     - name: checkout-bacio
       if: steps.cache-bacio.outputs.cache-hit != 'true'
@@ -102,8 +124,8 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-bacio
         path: bacio
-        ref: v2.4.1
-    
+        ref: v${{ matrix.bacio_version }}
+
     - name: build-bacio
       if: steps.cache-bacio.outputs.cache-hit != 'true'
       run: |
@@ -118,7 +140,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/g2
-        key: developer-g2-${{ runner.os }}-3.4.5
+        key: Linux_versions-g2-${{ runner.os }}-${{ matrix.g2_version }}
 
     - name: checkout-g2
       if: steps.cache-g2.outputs.cache-hit != 'true'
@@ -126,7 +148,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-g2
         path: g2
-        ref: v3.4.5
+        ref: v${{ matrix.g2_version }}
 
     - name: build-g2
       if: steps.cache-g2.outputs.cache-hit != 'true'
@@ -143,7 +165,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/sp
-        key: developer-sp-${{ runner.os }}-2.3.3-1
+        key: Linux_versions-sp-${{ runner.os }}-${{ matrix.sp_version }}
 
     - name: checkout-sp
       if: steps.cache-sp.outputs.cache-hit != 'true'
@@ -151,7 +173,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-sp
         path: sp
-        ref: v2.3.3
+        ref: v${{ matrix.sp_version }}
 
     - name: build-sp
       if: steps.cache-sp.outputs.cache-hit != 'true'
@@ -168,7 +190,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/ip
-        key: developer-ip-${{ runner.os }}-3.3.3
+        key: Linux_versions-ip-${{ runner.os }}-${{ matrix.ip_version }}
 
     - name: checkout-ip
       if: steps.cache-ip.outputs.cache-hit != 'true'
@@ -176,7 +198,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-ip
         path: ip
-        ref: v3.3.3
+        ref: v${{ matrix.ip_version }}
 
     - name: build-ip
       if: steps.cache-ip.outputs.cache-hit != 'true'
@@ -184,26 +206,26 @@ jobs:
         cd ip
         mkdir build
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX=~/ip -DCMAKE_PREFIX_PATH=~~/sp ..
+        cmake -DCMAKE_INSTALL_PREFIX=~/ip -DCMAKE_PREFIX_PATH=~/sp ..
         make -j2
         make install
 
-    - name: checkout-w3emc
-      uses: actions/checkout@v2
-      with:
-        repository: NOAA-EMC/NCEPLIBS-w3emc
-        path: w3emc
-        ref: v2.9.0
+    # - name: checkout-w3emc
+    #   uses: actions/checkout@v2
+    #   with:
+    #     repository: NOAA-EMC/NCEPLIBS-w3emc
+    #     path: w3emc
+    #     ref: develop
 
-    - name: build-w3emc
-      run: |
-        cd w3emc
-        mkdir build
-        cd build
-        cmake -DCMAKE_PREFIX_PATH=~/bacio -DCMAKE_INSTALL_PREFIX=~/w3emc ..
-        make -j2
-        make install
-        
+    # - name: build-w3emc
+    #   run: |
+    #     cd w3emc
+    #     mkdir build
+    #     cd build
+    #     cmake -DCMAKE_PREFIX_PATH=~/bacio -DCMAKE_INSTALL_PREFIX=~/w3emc ..
+    #     make -j2
+    #     make install
+
     # - name: checkout-g2c
     #   uses: actions/checkout@v2
     #   with:
@@ -225,7 +247,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/sfcio
-        key: developer-sfcio-${{ runner.os }}-1.4.1
+        key: Linux_versions-sfcio-${{ runner.os }}-${{ matrix.sfcio_version }}
 
     - name: checkout-sfcio
       if: steps.cache-sfcio.outputs.cache-hit != 'true'
@@ -233,7 +255,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-sfcio
         path: sfcio
-        ref: v1.4.1
+        ref: v${{ matrix.sfcio_version }}
 
     - name: build-sfcio
       if: steps.cache-sfcio.outputs.cache-hit != 'true'
@@ -250,7 +272,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/w3nco
-        key: developer-w3nco-${{ runner.os }}-2.4.1
+        key: Linux_versions-w3nco-${{ runner.os }}-${{ matrix.w3nco_version }}
 
     - name: checkout-w3nco
       if: steps.cache-w3nco.outputs.cache-hit != 'true'
@@ -258,7 +280,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-w3nco
         path: w3nco
-        ref: v2.4.1
+        ref: v${{ matrix.w3nco_version }}
 
     - name: build-w3nco
       if: steps.cache-w3nco.outputs.cache-hit != 'true'
@@ -275,7 +297,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/nemsio
-        key: developer-nemsio-${{ runner.os }}-2.5.4
+        key: Linux_versions-nemsio-${{ runner.os }}-${{ matrix.nemsio_version }}
 
     - name: checkout-nemsio
       if: steps.cache-nemsio.outputs.cache-hit != 'true'
@@ -283,7 +305,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-nemsio
         path: nemsio
-        ref: v2.5.4
+        ref: v${{ matrix.nemsio_version }}
 
     - name: build-nemsio
       if: steps.cache-nemsio.outputs.cache-hit != 'true'
@@ -291,7 +313,7 @@ jobs:
         cd nemsio
         mkdir build
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX=~/nemsio -DCMAKE_PREFIX_PATH="~/bacio;~/w3emc" ..
+        cmake -DCMAKE_INSTALL_PREFIX=~/nemsio -DCMAKE_PREFIX_PATH="~/bacio;~/w3nco" ..
         make -j2
         make install
 
@@ -300,7 +322,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/sigio
-        key: developer-sigio-${{ runner.os }}-2.3.2
+        key: Linux_versions-sigio-${{ runner.os }}-${{ matrix.sigio_version }}
 
     - name: checkout-sigio
       if: steps.cache-sigio.outputs.cache-hit != 'true'
@@ -308,7 +330,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-sigio
         path: sigio
-        ref: v2.3.2
+        ref: v${{ matrix.sigio_version }}
 
     - name: build-sigio
       if: steps.cache-sigio.outputs.cache-hit != 'true'
@@ -335,19 +357,18 @@ jobs:
 
     - name:  build
       run: |
+        set -x
         cd ufs_utils
         mkdir build
-        doxygen --version
-        export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd build
-        cmake -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DCMAKE_PREFIX_PATH="~/jasper;~/g2c;~/bacio;~/g2;~/w3emc;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0" -DCMAKE_C_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"  -DCMAKE_BUILD_TYPE=Debug ..
+        export ESMFMKFILE=~/esmf/lib/esmf.mk
+        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH="~/jasper;~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" ..
         make -j2 VERBOSE=1
 
     - name: test
       run: |
         cd ufs_utils/build
         ctest --verbose --rerun-failed --output-on-failure
-        gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html &> /dev/null
 
     - name: cache-data
       if: steps.cache-data.outputs.cache-hit != 'true'
@@ -360,15 +381,3 @@ jobs:
         cp ufs_utils/tests/emcsfc_snow2mdl/data/* ~/data
         cp ufs_utils/tests/chgres_cube/data/* ~/data
         ls -l ~/data
-        
-    - name: upload-test-coverage
-      uses: actions/upload-artifact@v2
-      with:
-        name: ufs_utils-test-coverage
-        path: |
-          ufs_utils/build/*.html
-          ufs_utils/build/*.css
-        
-
-
-
