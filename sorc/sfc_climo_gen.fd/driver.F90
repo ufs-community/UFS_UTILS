@@ -153,6 +153,16 @@
    call source_grid_cleanup
  endif
 
+! Soil color
+
+ if (trim(input_soil_color_file) /= "NULL") then
+   call define_source_grid(localpet, npets, input_soil_color_file)
+   method=ESMF_REGRIDMETHOD_NEAREST_STOD
+   call interp(localpet, method, input_soil_color_file)
+   call source_grid_cleanup
+ endif
+
+
 ! Vegetation greenness
 
  if (trim(input_vegetation_greenness_file) /= "NULL") then

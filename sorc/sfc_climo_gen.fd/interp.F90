@@ -194,7 +194,7 @@
 
    if (.not. fract_vegsoil_type) then
      select case (trim(field_names(n)))
-       case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type')
+       case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type','soil_color')
        if (localpet == 0) then
          allocate(vegt_mdl_one_tile(i_mdl,j_mdl))
        else
@@ -227,7 +227,7 @@
 
      if (.not. fract_vegsoil_type) then
        select case (trim(field_names(n)))
-         case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type')
+         case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type','soil_color')
            print*,"- CALL FieldGather FOR MODEL GRID VEG TYPE."
            call ESMF_FieldGather(vegt_field_mdl, vegt_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
            if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -240,8 +240,7 @@
        call search (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, tile, field_names(n))
        if (.not. fract_vegsoil_type) then
          select case (field_names(n))
-           case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type')
-             print*,'before adjust ice ',maxval(vegt_mdl_one_tile),minval(vegt_mdl_one_tile)
+           case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type','soil_color')
              call adjust_for_landice (data_mdl_one_tile, vegt_mdl_one_tile, i_mdl, j_mdl, field_names(n))
          end select
        endif
@@ -355,6 +354,15 @@
          field(i,j) = landice_value
        else
          if (nint(field(i,j)) == nint(landice_value)) field(i,j) = 6.0
+       endif
+     enddo
+     enddo
+   case ('soil_color') ! soil color
+     landice_value = 10.0
+     do j = 1, jdim
+     do i = 1, idim
+       if (nint(vegt(i,j)) == landice) then
+         field(i,j) = landice_value
        endif
      enddo
      enddo
