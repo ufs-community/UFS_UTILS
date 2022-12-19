@@ -15,7 +15,9 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # User options.
 option(OPENMP "use OpenMP threading" ON)
 option(ENABLE_DOCS "Enable generation of doxygen-based documentation." OFF)
+SET(TEST_FILE_DIR "." CACHE STRING "Check this directory for test files before using FTP.")
 
+# Set the build type.
 if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
   message(STATUS "Setting build type to 'Release' as none was specified.")
   set(CMAKE_BUILD_TYPE
@@ -42,7 +44,9 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch -fallow-invalid-boz")
   endif()
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
-  set(CMAKE_Fortran_FLAGS_DEBUG "-O1 -ggdb -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans -ffpe-trap=invalid,zero,overflow -fbounds-check -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+#  set(CMAKE_Fortran_FLAGS_DEBUG "-ggdb -Wall")
+  set(CMAKE_Fortran_FLAGS_DEBUG "-O1 -ggdb -Wall -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans -ffpe-trap=invalid,zero,overflow -fbounds-check -fno-omit-frame-pointer -fno-optimize-sibling-calls")
+#  set(CMAKE_Fortran_FLAGS_DEBUG "-ggdb -Wall -fno-unsafe-math-optimizations -frounding-math -fsignaling-nans -ffpe-trap=invalid,zero,overflow -fbounds-check -fno-omit-frame-pointer -fno-optimize-sibling-calls")
 endif()
 
 if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
