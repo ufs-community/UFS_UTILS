@@ -3,8 +3,17 @@
 #
 # Ed Hartnett, 12/19/22
 name: GCC Linux Build
-on: [push, pull_request, workflow_dispatch]
-
+on:
+  push:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
+  pull_request:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
 
 # Use custom shell with -l so .bash_profile is sourced
 # without having to do it in manually every step
@@ -41,7 +50,7 @@ jobs:
       - name: checkout-ufs_utils  # This is for getting spack.yaml
         uses: actions/checkout@v2
         with:
-            path: UFS_UTILS
+            path: ufs_utils
 
       # Cache spack, compiler and dependencies
       - name: cache-env
@@ -51,7 +60,7 @@ jobs:
           path: |
             spack
             ~/.spack
-          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('UFS_UTILS/ci/spack.yaml') }}
+          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack.yaml') }}
 
       # Install dependencies using Spack
       - name: install-dependencies-with-spack
@@ -59,7 +68,7 @@ jobs:
         run: |
           git clone -c feature.manyFiles=true https://github.com/NOAA-EMC/spack.git
           source spack/share/spack/setup-env.sh
-          spack env create ufs_utils-env UFS_UTILS/ci/spack.yaml
+          spack env create ufs_utils-env ufs_utils/ci/spack.yaml
           spack env activate ufs_utils-env
           sudo apt install cmake
           spack external find
@@ -75,7 +84,7 @@ jobs:
       - name: checkout-ufs_utils
         uses: actions/checkout@v2
         with:
-            path: UFS_UTILS
+            path: ufs_utils
 
       - name: cache-env
         id: cache-env
@@ -84,7 +93,7 @@ jobs:
           path: |
             spack
             ~/.spack
-          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('UFS_UTILS/ci/spack.yaml') }}
+          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack.yaml') }}
 
       - name: build-ufs_utils
         run: |
@@ -92,7 +101,7 @@ jobs:
           spack env activate ufs_utils-env
           export CC=mpicc
           export FC=mpif90
-          cd UFS_UTILS
+          cd ufs_utils
           mkdir -p build && cd build
           cmake -DCMAKE_INSTALL_PREFIX=../install ..
           make -j2 VERBOSE=1
