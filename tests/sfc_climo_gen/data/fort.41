@@ -17,4 +17,5 @@
   snowfree_albedo_method="bilinear"
   vegetation_greenness_method="conserve"
   halo=4
+  fract_vegsoil_type=.true.
  /

@@ -37,6 +37,7 @@ program ftst_pgm_setup
   if (trim(maximum_snow_albedo_method) /= "conserve") stop 40
   if (trim(snowfree_albedo_method) /= "bilinear") stop 42
   if (trim(vegetation_greenness_method) /= "conserve") stop 44
+  if (.not. fract_vegsoil_type) stop 46
   if (halo /= 4) stop 46
 
   if (my_rank .eq. 0) print*, "OK"
