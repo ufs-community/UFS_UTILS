@@ -70,7 +70,7 @@ jobs:
           source spack/share/spack/setup-env.sh
           spack env create ufs_utils-env ufs_utils/ci/spack.yaml
           spack env activate ufs_utils-env
-          sudo apt install cmake
+          sudo apt install cmake libxerces-c-dev
           spack external find
           spack add mpich@3.4.2
           spack concretize
