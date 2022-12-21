@@ -30,8 +30,8 @@
 
  integer, intent(in)                :: localpet
 
- integer                            :: i, j, tile, ncid, status, rc
- integer                            :: varid, water_category
+ integer                            :: i, j, tile, cat, ncid, status, rc
+ integer                            :: varid, water_category, max_cat
  integer                            :: isrctermprocessing
  integer                            :: category, num_categories
 
@@ -46,6 +46,7 @@
  real(esmf_kind_r4), allocatable    :: sum_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: lon_mdl_one_tile(:,:)
  real(esmf_kind_r4), allocatable    :: land_frac_mdl_one_tile(:,:)
+ real(esmf_kind_r4)                 :: max_frac
 
  type(esmf_regridmethod_flag)            :: method
  type(esmf_field)                        :: data_field_src
@@ -237,20 +238,33 @@
 ! grids, this array will contain negative fill values.
 
      if (maxval(land_frac_mdl_one_tile) > 0.0) then
-       print*,'before rescale ',land_frac_mdl_one_tile(658,95),data_mdl_one_tile(658,95,:)
+       print*,'before rescale ',tile,land_frac_mdl_one_tile(42,82),data_mdl_one_tile(42,82,:)
        do j = 1, j_mdl
        do i = 1, i_mdl
          if (mask_mdl_one_tile(i,j) == 1) then
            data_mdl_one_tile(i,j,:) = data_mdl_one_tile(i,j,:) * land_frac_mdl_one_tile(i,j)
            data_mdl_one_tile(i,j,water_category) = 1.0 - land_frac_mdl_one_tile(i,j)
+           max_frac = 0.0
+           max_cat = -9
+           do cat = 1, num_categories
+             if (cat == water_category) cycle
+             if(data_mdl_one_tile(i,j,cat) > max_frac) then
+               max_frac = data_mdl_one_tile(i,j,cat)
+               max_cat = cat
+             endif
+           enddo
+           dom_cat_mdl_one_tile(i,j) = max_cat
+         else
+           dom_cat_mdl_one_tile(i,j) = water_category
          endif
        enddo
        enddo
-       print*,'after  rescale ',land_frac_mdl_one_tile(658,95),data_mdl_one_tile(658,95,:)
+       print*,'after  rescale ',tile,land_frac_mdl_one_tile(42,82),data_mdl_one_tile(42,82,:)
+     else ! non-fractonal grids.
+       dom_cat_mdl_one_tile = 0.0
+       dom_cat_mdl_one_tile = maxloc(data_mdl_one_tile,dim=3)
      endif
-! under fractional grids, how do we define dominate category?
-     dom_cat_mdl_one_tile = 0.0
-     dom_cat_mdl_one_tile = maxloc(data_mdl_one_tile,dim=3)
+     print*,'dominate cat ',tile,dom_cat_mdl_one_tile(42,82)
      call output_driver (data_mdl_one_tile, dom_cat_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile)
    endif
 
