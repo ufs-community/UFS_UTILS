@@ -58,7 +58,9 @@ load(pathJoin("netcdf", netcdf_ver))
 nccmp_ver=os.getenv("nccmp_ver") or "1.8.9.0"
 load(pathJoin("nccmp", nccmp_ver))
 
-setenv("ESMFMKFILE","/scratch1/NCEPDEV/da/George.Gayno/noscrub/esmf.git/esmf/lib/libO/Linux.intel.64.intelmpi.default/esmf.mk")
+-- setenv("ESMFMKFILE","/scratch1/NCEPDEV/da/George.Gayno/noscrub/esmf.git/esmf/lib/libO/Linux.intel.64.intelmpi.default/esmf.mk")
+nccmp_ver=os.getenv("esmf_ver") or "8.2.1b04"
+load(pathJoin("esmf", esmf_ver))
 
 nco_ver=os.getenv("nco_ver") or "4.9.1"
 load(pathJoin("nco", nco_ver))
