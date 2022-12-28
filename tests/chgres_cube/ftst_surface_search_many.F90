@@ -17,6 +17,8 @@
 
  use surface, only : search_many
 
+ use utilities, only : error_handler
+
  implicit none
 
  integer, parameter           :: IPTS_TARGET=3

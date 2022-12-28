@@ -16,7 +16,7 @@
                         input_grid, &
                         num_tiles_input_grid
 
- use input_data, only : read_input_nst_data, &
+ use nst_input_data, only : read_input_nst_data, &
                         c_d_input_grid, &
                         c_0_input_grid, &
                         d_conv_input_grid, &
