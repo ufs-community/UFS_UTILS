@@ -133,10 +133,11 @@
  integer             :: header_buffer_val = 16384
  integer             :: ncid, dim_x, dim_y, dim_z, dim_time
  integer             :: id_times, id_lat, id_lon, id_data_pct
- integer             :: id_data_dom_cat, id_sum
+ integer             :: id_data_dom_cat
+!integer             :: id_sum
  integer             :: error
 
- real :: sum_all(iout,jout)
+!real :: sum_all(iout,jout)
 
  print*,"- OPEN AND WRITE: ",trim(out_file)
  error = nf90_create(out_file, NF90_NETCDF4, ncid)
@@ -191,8 +192,8 @@
  error = nf90_put_att(ncid, id_data_dom_cat, "coordinates", "geolon geolat")
  call netcdf_err(error, 'DEFINING COORD ATTRIBUTE' )
 
- error = nf90_def_var(ncid, 'sum', NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_sum)
- call netcdf_err(error, 'DEFINING FIELD' )
+!error = nf90_def_var(ncid, 'sum', NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_sum)
+!call netcdf_err(error, 'DEFINING FIELD' )
 
  error = nf90_enddef(ncid, header_buffer_val,4,0,4)
 
@@ -212,8 +213,8 @@
  call netcdf_err(error, 'IN NF90_PUT_VAR' )
 
 ! Temporary output of sum of %.
- sum_all = sum(data_pct, dim=3)
- error = nf90_put_var( ncid, id_sum, sum_all)
+!sum_all = sum(data_pct, dim=3)
+!error = nf90_put_var( ncid, id_sum, sum_all)
 
  error = nf90_close(ncid)
 
