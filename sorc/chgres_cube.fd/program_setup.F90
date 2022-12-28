@@ -9,6 +9,7 @@
  module program_setup
 
  use esmf
+ use utilities, only                    : error_handler, to_lower
 
  implicit none
 

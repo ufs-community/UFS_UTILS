@@ -45,7 +45,6 @@ program ftst_program_setup_varmaps
      if (trim(chgres_var_names(i)) .ne. trim(expected_var_names(i))) stop 3
      if (trim(field_var_names(i)) .ne. trim(expected_field_names(i))) stop 4
      if (trim(missing_var_methods(i)) .ne. trim(expected_missing_var_methods(i))) stop 5
-     print*,'in loop ',i,missing_var_values(i),expected_missing_var_values(i)
      if (missing_var_values(i) .ne. expected_missing_var_values(i)) stop 6
      if (read_from_input(i) .neqv. .true.) stop 7
   end do

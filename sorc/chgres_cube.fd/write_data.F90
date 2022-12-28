@@ -1,5 +1,7 @@
  module write_data
 
+ use utilities, only              : error_handler, netcdf_err
+
  private
 
  public :: write_fv3_atm_header_netcdf
