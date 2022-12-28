@@ -14,6 +14,8 @@
 
  use esmf
 
+ use utilities, only              : error_handler, netcdf_err
+
  implicit none
 
  private

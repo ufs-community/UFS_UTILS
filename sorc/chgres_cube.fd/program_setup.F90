@@ -8,6 +8,8 @@
 !! @author George Gayno NCEP/EMC
  module program_setup
 
+ use utilities, only                    : error_handler, to_lower
+
  implicit none
 
  private

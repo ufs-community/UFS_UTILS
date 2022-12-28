@@ -11,6 +11,7 @@
  use esmf
  use ESMF_LogPublicMod
 
+ use utilities, only                    : error_handler, netcdf_err
  implicit none
 
  private

@@ -21,7 +21,9 @@ The program assumes Noah/Noah-MP LSM coefficients for certain soil thresholds. I
       * model_grid.F90 - Sets up the ESMF grid objects for the input data grid and target FV3 grid.
       * static_data.F90 - Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type).  Time interpolates time-varying fields, such as monthly plant greenness, to the model run time. Set path to these files via the fix_dir_target_grid namelist variable.
       * write_data.F90 - Writes the tiled and header files expected by the forecast model.
-      * input_data.F90 - Contains routines to read atmospheric and surface data from GRIB2, NEMSIO and NetCDF files.
+      * atm_input_data.F90 - Contains routines to read input atmospheric data from GRIB2, NEMSIO and NetCDF files.
+      * nst_input_data.F90 - Contains routines to read input NSST data from NEMSIO and NetCDF files.
+      * sfc_input_data.F90 - Contains routines to read input surface data from GRIB2, NEMSIO and NetCDF files.
       * utils.F90 - Contains utility routines, such as error handling.
       * grib2_util.F90 -  Routines to (1) convert from RH to specific humidity; (2) convert from omega to dzdt.  Required for GRIB2 input data.
       * atmosphere.F90 - Process atmospheric fields.  Horizontally interpolate from input to target FV3 grid using ESMF regridding.  Adjust surface pressure according to terrain differences between input and target grid.  Vertically interpolate to target FV3 grid vertical levels.  Description of main routines:
