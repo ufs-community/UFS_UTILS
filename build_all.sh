@@ -48,8 +48,7 @@ cmake .. ${CMAKE_FLAGS}
 make -j 8 VERBOSE=1
 make install
 
-#make test
-ctest
+#ctest
 #ctest -I 4,5
 
 exit
