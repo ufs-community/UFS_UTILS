@@ -52,7 +52,7 @@ fi
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/reg_tests/chgres_cube
+export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/chgres_cube
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log

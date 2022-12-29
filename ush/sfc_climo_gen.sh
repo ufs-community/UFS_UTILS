@@ -23,6 +23,8 @@
 # res                           Resolution of cubed-sphere grid
 # SAVE_DIR                      Directory where output is saved
 # WORK_DIR                      Temporary working directory
+# SOIL_TYPE_FILE                Path/name of input soil type data.
+# VEG_TYPE_FILE                 Path/name of input vegetation type data.
 #-------------------------------------------------------------------------
 
 set -eux
@@ -39,6 +41,8 @@ mosaic_file=${mosaic_file:-$FIX_FV3/C${res}_mosaic.nc}
 HALO=${HALO:-0}
 veg_type_src=${veg_type_src:-"modis.igbp.0.05"}
 VEG_TYPE_FILE=${VEG_TYPE_FILE:-${input_sfc_climo_dir}/vegetation_type.${veg_type_src}.nc}
+soil_type_src=${soil_type_src:-"statsgo.0.05"}
+SOIL_TYPE_FILE=${SOIL_TYPE_FILE:-${input_sfc_climo_dir}/soil_type.${soil_type_src}.nc}
 
 if [ ! -d $SAVE_DIR ]; then
   mkdir -p $SAVE_DIR
@@ -65,7 +69,8 @@ input_substrate_temperature_file="${input_sfc_climo_dir}/substrate_temperature.2
 input_maximum_snow_albedo_file="${input_sfc_climo_dir}/maximum_snow_albedo.0.05.nc"
 input_snowfree_albedo_file="${input_sfc_climo_dir}/snowfree_albedo.4comp.0.05.nc"
 input_slope_type_file="${input_sfc_climo_dir}/slope_type.1.0.nc"
-input_soil_type_file="${input_sfc_climo_dir}/soil_type.statsgo.0.05.nc"
+input_soil_type_file="${SOIL_TYPE_FILE}"
+input_soil_color_file="${input_sfc_climo_dir}/soil_color.clm.0.05.nc"
 input_vegetation_type_file="${VEG_TYPE_FILE}"
 input_vegetation_greenness_file="${input_sfc_climo_dir}/vegetation_greenness.0.144.nc"
 mosaic_file_mdl="$mosaic_file"

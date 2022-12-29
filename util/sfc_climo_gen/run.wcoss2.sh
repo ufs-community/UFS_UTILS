@@ -46,18 +46,38 @@ export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 ##HALO=3
 ##export GRIDTYPE=regional
 
-#-------------------------------------
-# Choose which virrs data to use.
-#-------------------------------------
+#-------------------------------------------------------------
+# Choose which soil type and vegetation type data to use.
+#
+# For viirs-based vegetation type data, set to:
+#   1) "viirs.igbp.0.1" for global 0.10-deg data
+#   2) "viirs.igbp.0.05" for global 0.05-deg data
+#   3) "viirs.igbp.0.03" for global 0.03-deg data
+#   4) "viirs.igbp.conus.30s" for CONUS 30s data
+#   4) "viirs.igbp.nh.30s" for NH 30s data
+#   4) "viirs.igbp.30s" for global 30s data
+#
+# For the modis-based vegetation data, set to:
+#   1) "modis.igbp.0.05" for global 0.05-deg data
+#   2) "modis.igbp.0.03" for global 0.03-deg data
+#   3) "modis.igbp.conus.30s" for CONUS 30s data
+#   4) "modis.igbp.nh.30s" for NH 30s data
+#   5) "modis.igbp.30s" for global 30s data
+#
+# For STATSGO soil type data
+#   1) "statsgo.0.05" for global 0.05-deg data
+#   2) "statsgo.0.03" for global 0.03-deg data
+#   3) "statsgo.conus.30s" for CONUS 30s data
+#   4) "statsgo.nh.30s" for NH 30s data
+#   5) "statsgo.30s" for global 30s data
+#
+# For Beijing Norm. Univ. soil type data
+#   1) "bnu.30s" for global 30s data
+#-------------------------------------------------------------
 
-export veg_type_src="viirs.igbp.0.05"    # Use global 0.05-degree viirs data
-#export veg_type_src="viirs.igbp.0.1"     # Use global 0.1-degree viirs data
-#export veg_type_src="viirs.igbp.0.03"   # Use global 0.03-degree viirs data
-#export veg_type_src="viirs.igbp.30s"   # Use global 30s viirs data
-#export veg_type_src="viirs.igbp.nh.30s"     # Use NH 30s virrs data. Do not
-                                              # use for global grids.
-#export veg_type_src="viirs.igbp.conus.30s"   # Use CONUS 30s virrs data. Do not
-                                               # use for global grids or N Amer grids.
+export veg_type_src="modis.igbp.0.05"
+
+export soil_type_src="statsgo.0.05"
 
 #-------------------------------------
 # Set working directory and directory where output files will be saved.

@@ -1,5 +1,15 @@
 name: netcdf-versions
-on: [push, pull_request]
+on:
+  push:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
+  pull_request:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
 
 defaults:
   run:
@@ -18,17 +28,14 @@ jobs:
     - name: install-dependencies
       run: |
           sudo apt-get update
-          sudo apt-get install libmpich-dev
-          sudo apt-get install doxygen
-          sudo apt-get install libpng-dev
-          sudo apt-get install libjpeg-dev
+          sudo apt-get install libmpich-dev libpng-dev libjpeg-dev
 
     - name: cache-netcdf
       id: cache-netcdf
       uses: actions/cache@v2
       with:
         path: ~/netcdf
-        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}3
+        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}4
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
@@ -37,7 +44,7 @@ jobs:
         wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
         tar -xzf hdf5-1.10.7.tar.gz
         pushd hdf5-1.10.7
-        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests --disable-shared --enable-static
+        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --disable-shared
         make -j2
         make install
            
@@ -79,7 +86,7 @@ jobs:
         key: esmf-8.2.0-${{ runner.os }}-netcdf-${{ matrix.netcdf_version }}3
 
     - name: build-esmf
-      #if: steps.cache-esmf.outputs.cache-hit != 'true'
+      if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
         pushd ~
         export ESMF_DIR=~/esmf-ESMF_8_2_0
@@ -141,6 +148,13 @@ jobs:
         path: ufs_utils
         submodules: recursive
 
+    - name: cache-data
+      id: cache-data
+      uses: actions/cache@v2
+      with:
+        path: ~/data
+        key: data-1
+
     - name: build
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
@@ -150,11 +164,23 @@ jobs:
         export CXX=mpicxx
         export FC=mpifort
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' -DCMAKE_BUILD_TYPE=Debug 
+        cmake -DTEST_FILE_DIR=/home/runner/work/UFS_UTILS/UFS_UTILS/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' ..
         make -j2
-
     - name: test
       run: |
         cd ufs_utils/build
-        export LSAN_OPTIONS=suppressions=LSanSuppress.supp
         ctest --rerun-failed --output-on-failure
+
+    - name: cache-data
+      if: steps.cache-data.outputs.cache-hit != 'true'
+      run: |
+        mkdir ~/data
+        cp ufs_utils/build/tests/chgres_cube/data/* ~/data
+        cp ufs_utils/build/tests/sfc_climo_gen/data/* ~/data
+        cp ufs_utils/build/tests/cpld_gridgen/data/* ~/data
+        cp ufs_utils/tests/filter_topo/data/* ~/data
+        cp ufs_utils/tests/emcsfc_snow2mdl/data/* ~/data
+        cp ufs_utils/tests/chgres_cube/data/* ~/data
+        ls -l ~/data
+        
+
