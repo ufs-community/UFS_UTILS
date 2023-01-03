@@ -8,10 +8,9 @@
 ! Author George Gayno
 
  use esmf
-
- use input_data, only      : read_input_sfc_data, &
+ use atm_input_data, only  : terrain_input_grid
+ use sfc_input_data, only  : read_input_sfc_data, &
                              lsoil_input, &
-                             terrain_input_grid, &
                              soilm_liq_input_grid, &
                              soilm_tot_input_grid, &
                              soil_temp_input_grid, &
