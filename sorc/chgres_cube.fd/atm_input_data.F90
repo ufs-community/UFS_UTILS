@@ -2489,7 +2489,7 @@ implicit none
              unpack, k, gfld, iret)
 
        if (iret == 0) then ! found data
-         dummy2d = reshape(gfld%fld, (/i_input,j_input/) )
+         dummy2d = real((reshape(gfld%fld, (/i_input,j_input/) )), kind=esmf_kind_r4)
        else ! did not find data.
         if (trim(method) .eq. 'intrp' .and. .not.all_empty) then
           dummy2d = intrp_missing 
@@ -2549,7 +2549,7 @@ implicit none
          enddo
        enddo
        do vlev=1,lev_input
-         dummy2d = dummy3d(:,:,n) 
+         dummy2d = real(dummy3d(:,:,n) , kind=esmf_kind_r4)
          if (any(dummy2d .eq. intrp_missing)) then 
            ! If we're outside the appropriate region, don't fill but error instead
            if (n == o3n .and. rlevs(vlev) .lt. lev_no_o3_fill) then
@@ -2986,17 +2986,17 @@ else ! is native coordinate (hybrid).
 
    if (gfld%igdtnum == 32769) then ! grid definition template number - rotated lat/lon grid
 
-     latin1 = float(gfld%igdtmpl(15))/1.0E6
-     lov = float(gfld%igdtmpl(16))/1.0E6
+     latin1 = real(float(gfld%igdtmpl(15))/1.0E6, kind=esmf_kind_r4)
+     lov = real(float(gfld%igdtmpl(16))/1.0E6, kind=esmf_kind_r4)
 
      print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
      call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha)
 
    elseif (gfld%igdtnum == 30) then ! grid definition template number - lambert conformal grid.
 
-     lov = float(gfld%igdtmpl(14))/1.0E6
-     latin1 = float(gfld%igdtmpl(19))/1.0E6
-     latin2 = float(gfld%igdtmpl(20))/1.0E6
+     lov = real(float(gfld%igdtmpl(14))/1.0E6, kind=esmf_kind_r4)
+     latin1 = real(float(gfld%igdtmpl(19))/1.0E6, kind=esmf_kind_r4)
+     latin2 = real(float(gfld%igdtmpl(20))/1.0E6, kind=esmf_kind_r4)
 
      print*, "- CALL GRIDROT for LC grid with lov,latin1/2 = ",lov,latin1,latin2
      call gridrot(lov,latin1,latin2,lon,alpha)
@@ -3030,7 +3030,7 @@ else ! is native coordinate (hybrid).
         endif
      else
        dum2d = reshape(gfld%fld, (/i_input,j_input/) )
-       u_tmp(:,:) = dum2d
+       u_tmp(:,:) = real(dum2d, kind=esmf_kind_r4)
      endif
 
      vname = ":VGRD:"
@@ -3048,7 +3048,7 @@ else ! is native coordinate (hybrid).
         endif
      else
        dum2d = reshape(gfld%fld, (/i_input,j_input/) )
-       v_tmp(:,:) = dum2d
+       v_tmp(:,:) = real(dum2d, kind=esmf_kind_r4)
      endif
 
      deallocate(dum2d)
@@ -3063,9 +3063,9 @@ else ! is native coordinate (hybrid).
         endif
       else if (gfld%igdtnum == 32769) then ! grid definition template number - rotated lat/lon grid
         ws = sqrt(u_tmp**2 + v_tmp**2)
-        wd = atan2(-u_tmp,-v_tmp) / d2r ! calculate grid-relative wind direction
-        wd = wd + alpha + 180.0 ! Rotate from grid- to earth-relative direction
-        wd = 270.0 - wd ! Convert from meteorological (true N) to mathematical direction
+        wd = real((atan2(-u_tmp,-v_tmp) / d2r), kind=esmf_kind_r4) ! calculate grid-relative wind direction
+        wd = real((wd + alpha + 180.0), kind=esmf_kind_r4) ! Rotate from grid- to earth-relative direction
+        wd = real((270.0 - wd), kind=esmf_kind_r4) ! Convert from meteorological (true N) to mathematical direction
         u(:,:,vlev) = -ws*cos(wd*d2r)
         v(:,:,vlev) = -ws*sin(wd*d2r)
       else
@@ -3170,7 +3170,7 @@ subroutine gridrot(lov,latin1,latin2,lon,rot)
   real(esmf_kind_r8), intent(in)      :: lon(i_input,j_input)
 
   real(esmf_kind_r4)                  :: trot(i_input,j_input), tlon(i_input,j_input)
-  real(esmf_kind_r4)                  :: dtor = 3.14159265359/180.0_esmf_kind_r4
+  real(esmf_kind_r4)                  :: dtor = 3.14159265359_esmf_kind_r4/180.0_esmf_kind_r4
   real(esmf_kind_r4)                  :: an
   !trot_tmp = real(lon,esmf_kind_r4)-lov
   !trot = trot_tmp
@@ -3180,11 +3180,11 @@ subroutine gridrot(lov,latin1,latin2,lon,rot)
   if ( (latin1 - latin2) .lt. 0.000001 ) then
         an = sin(latin1*dtor)
   else
-        an = log( cos(latin1*dtor) / cos(latin2*dtor) ) / &
-             log( tan(dtor*(90.0-latin1)/2.) / tan(dtor*(90.0-latin2)/2.))
+        an = real(log( cos(latin1*dtor) / cos(latin2*dtor) ) / &
+             log( tan(dtor*(90.0-latin1)/2.) / tan(dtor*(90.0-latin2)/2.)), kind=esmf_kind_r4)
   end if
 
-  tlon = mod(lon - lov + 180. + 3600., 360.) - 180.
+  tlon = real((mod(lon - lov + 180. + 3600., 360.) - 180.), kind=esmf_kind_r4)
   trot = an * tlon
 
   rot = trot * dtor
@@ -3232,7 +3232,7 @@ subroutine calcalpha_rotlatlon(latgrid,longrid,cenlat,cenlon,alpha)
   tlon = -tlon + lon0_r
   tph  = asin(cphi0*sin(tlat) - sphi0*cos(tlat)*cos(tlon))
   sinalpha = sphi0 * sin(tlon) / cos(tph)
-  alpha = -asin(sinalpha)/D2R
+  alpha = real((-asin(sinalpha)/D2R), kind=esmf_kind_r4)
   ! returns alpha in degrees
 end subroutine calcalpha_rotlatlon
 
