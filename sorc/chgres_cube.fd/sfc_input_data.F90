@@ -1774,9 +1774,9 @@ module sfc_input_data
 
    character(len=250)                    :: the_file
    character(len=250)                    :: geo_file
+   character(len=200)                    :: err_msg
    character(len=20)                     :: vname, vname_file, slev
    character(len=50)                     :: method
-   !character(len=20)                     :: to_upper
  
    integer                               :: rc, varnum, iret, i, j,k
    integer                               :: ncid2d, varid, varsize
@@ -2279,7 +2279,7 @@ module sfc_input_data
 
      if (rc == 0 ) then
 !      print*,'soil type ', maxval(gfld%fld),minval(gfld%fld)
-       dummy2d = reshape(gfld%fld , (/i_input,j_input/))
+       dummy2d = reshape(real(gfld%fld,kind=esmf_kind_r4) , (/i_input,j_input/))
 
      endif
 
@@ -2326,7 +2326,7 @@ module sfc_input_data
        do j = 1, j_input
        do i = 1, i_input
          if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) then
-           dummy1d(:) = dummy3d_stype(i,j,:)
+           dummy1d(:) = real(dummy3d_stype(i,j,:),kind=esmf_kind_r4)
            dummy1d(14) = 0.0_esmf_kind_r4
            dummy2d(i,j) = real(MAXLOC(dummy1d, 1),esmf_kind_r4)
          endif
@@ -2361,7 +2361,7 @@ module sfc_input_data
      if (.not. sotyp_from_climo) then
        do j = 1, j_input
        do i = 1, i_input
-         if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9   
+         if(dummy2d(i,j) == 14.0_esmf_kind_r4 .and. slmsk_save(i,j) == 1) dummy2d(i,j) = -99999.9_esmf_kind_r4
        enddo
        enddo
 
@@ -2411,8 +2411,8 @@ module sfc_input_data
                unpack, k, gfld, rc)
 
        if (rc /= 0 )then
-         call error_handler("COULD NOT FIND VEGETATION FRACTION IN FILE.  &
-           PLEASE SET VGFRC_FROM_CLIMO=.TRUE. EXITING", rc)
+         err_msg="COULD NOT FIND VEGETATION FRACTION IN FILE. PLEASE SET VGFRC_FROM_CLIMO=.TRUE."
+         call error_handler(err_msg, rc)
        else
          if (maxval(gfld%fld) > 2.0) gfld%fld = gfld%fld / 100.0
 !        print*,'vfrac ', maxval(gfld%fld),minval(gfld%fld)
@@ -2456,8 +2456,8 @@ module sfc_input_data
            j = 1151 ! Have to search by record number.
            call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
                   unpack, k, gfld, rc)
-           if (rc/=0) call error_handler("COULD NOT FIND MIN VEGETATION FRACTION IN FILE. &
-             PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+           err_msg="COULD NOT FIND MIN VEGETATION FRACTION IN FILE. SET MINMAX_VGFRC_FROM_CLIMO=.TRUE."
+           if (rc/=0) call error_handler(err_msg, rc)
          endif
        endif
     
@@ -2495,8 +2495,8 @@ module sfc_input_data
            j = 1152 ! Have to search by record number.
            call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
                 unpack, k, gfld, rc)
-           if (rc <= 0) call error_handler("COULD NOT FIND MAX VEGETATION FRACTION IN FILE. &
-             PLEASE SET MINMAX_VGFRC_FROM_CLIMO=.TRUE. . EXITING",rc)
+           err_msg="COULD NOT FIND MAX VEGETATION FRACTION IN FILE. SET MINMAX_VGFRC_FROM_CLIMO=.TRUE."
+           if (rc <= 0) call error_handler(err_msg, rc)
          endif
        endif
     
@@ -2531,8 +2531,8 @@ module sfc_input_data
        call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
 
-       if (rc /= 0) call error_handler("COULD NOT FIND LAI IN FILE. &
-             PLEASE SET LAI_FROM_CLIMO=.TRUE. . EXITING",rc)
+       err_msg="COULD NOT FIND LAI IN FILE. SET LAI_FROM_CLIMO=.TRUE."
+       if (rc /= 0) call error_handler(err_msg, rc)
 
 !      print*,'lai ', maxval(gfld%fld),minval(gfld%fld)
        dummy2d_8 = reshape(gfld%fld , (/i_input,j_input/))
@@ -3287,7 +3287,7 @@ module sfc_input_data
      iscale2 = 10 ** gfld%ipdtmpl(14)
 !    print*,'getgb2 top of soil layer in m ', float(gfld%ipdtmpl(12))/float(iscale1)
 !    print*,'getgb2 bot of soil layer in m ', float(gfld%ipdtmpl(15))/float(iscale2)
-     dummy2d = reshape(gfld%fld, (/i_input,j_input/) )
+     dummy2d = reshape(real(gfld%fld,kind=esmf_kind_r4), (/i_input,j_input/) )
    endif 
 
    j = k

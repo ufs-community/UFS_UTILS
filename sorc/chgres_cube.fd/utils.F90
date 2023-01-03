@@ -21,7 +21,7 @@ contains
 
  integer :: ierr
 
- print*,"- FATAL ERROR: ", string
+ print*,"- FATAL ERROR: ", trim(string)
  print*,"- IOSTAT IS: ", rc
  call mpi_abort(mpi_comm_world, 999, ierr)
 
@@ -131,6 +131,7 @@ subroutine handle_grib_error(vname,lev,method,value,varnum,read_from_input, iret
   real(esmf_kind_r8), intent(inout), optional  :: var3d(:,:,:)
   
   character(len=20), intent(in)     :: vname, lev, method
+  character(len=200)                :: err_msg
   
   integer, intent(in)               :: varnum 
   integer, intent(inout)            :: iret
@@ -161,17 +162,17 @@ subroutine handle_grib_error(vname,lev,method,value,varnum,read_from_input, iret
     if(present(var8)) var8(:,:) = ieee_value(var8,IEEE_QUIET_NAN)
     if(present(var3d)) var3d(:,:,:) = ieee_value(var3d,IEEE_QUIET_NAN)
   elseif (trim(method) == "stop") then
-    call error_handler("READING "//trim(vname)// " at level "//lev//". TO MAKE THIS NON- &
-                        FATAL, CHANGE STOP TO SKIP FOR THIS VARIABLE IN YOUR VARMAP &
-                        FILE.", iret)
+    err_msg="READING " // trim(vname) // " at level " //lev// ". TO MAKE THIS NON-" // &
+            "FATAL, CHANGE STOP TO SKIP FOR THIS VARIABLE IN YOUR VARMAP FILE."
+    call error_handler(err_msg, iret)
   elseif (trim(method) == "intrp") then
     print*, "WARNING: ,"//trim(vname)//" NOT AVAILABLE AT LEVEL "//trim(lev)// &
           ". WILL INTERPOLATE INTERSPERSED MISSING LEVELS AND/OR FILL MISSING"//&
           " LEVELS AT EDGES."
   else
-    call error_handler("ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
-                       " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN,"// &
-                       " , intrp, skip, or stop.", 1)
+    err_msg="ERROR USING MISSING_VAR_METHOD. PLEASE SET VALUES IN" // &
+            " VARMAP TABLE TO ONE OF: set_to_fill, set_to_NaN, intrp, skip, or stop."
+    call error_handler(err_msg, 1)
   endif
 
 end subroutine handle_grib_error
@@ -320,7 +321,7 @@ SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
       real*8 POUT(NPOUT),XOUT(NPOUT)
 
 ! local
-      INTEGER J1,NP,NL,NIN,NLMAX,NPLVL,NLSAVE,NP1,NO1,N1,N2,LOGLIN,   &
+      INTEGER NP,NL,NLMAX,NLSAVE,NP1,NO1,N1,N2,LOGLIN,   &
              NLSTRT
       real*8 SLOPE,PA,PB,PC
 
@@ -431,7 +432,7 @@ SUBROUTINE DINT2P(PPIN,XXIN,NPIN,PPOUT,XXOUT,NPOUT   &
                       if (p(nl+1).gt.0.d0) then
                           PC = LOG(P(NL+1))
                       else
-                          PC = LOG(1.d-4)
+                          PC = LOG(1.E-4)
                       end if
 
                       SLOPE = (X(NL)-X(NL+1))/ (PA-PC)
