@@ -120,7 +120,8 @@
 
  use surface_target_data, only       : cleanup_target_nst_data
 
- use utilities, only                    : error_handler
+ use utilities, only                 : error_handler
+
  implicit none
 
  integer, intent(in)                :: localpet
@@ -293,6 +294,7 @@
                                        xzts_input_grid, &
                                        z_c_input_grid, &
                                        zm_input_grid
+
  use atm_input_data, only            : terrain_input_grid
 
  use model_grid, only                : input_grid, target_grid, &
@@ -653,7 +655,7 @@
  mask_input_ptr = 1
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 0
  
- mask_target_ptr = seamask_target_ptr
+ mask_target_ptr = int(seamask_target_ptr,kind=esmf_kind_i4)
 
  method=ESMF_REGRIDMETHOD_CONSERVE
 
@@ -2016,7 +2018,8 @@
                               soilm_liq_input_grid, soilm_tot_input_grid
  implicit none
  integer, intent(in)                   :: localpet
- character(len=1000)      :: msg
+ character(len=500)       :: msg
+ character(len=2)         :: lsoil_input_ch, lsoil_target_ch
  integer                  :: rc
  real(esmf_kind_r8)          :: tmp(i_input,j_input), &
                                 data_one_tile(i_input,j_input,lsoil_input), &
@@ -2111,12 +2114,11 @@
  
  elseif (lsoil_input /= lsoil_target) then
   rc = -1
-  
-  write(msg,'("NUMBER OF SOIL LEVELS IN INPUT (",I2,") and OUPUT &
-               (",I2,") MUST EITHER BE EQUAL OR 9 AND 4, RESPECTIVELY")') &
-               lsoil_input, lsoil_target
-
-  call error_handler(trim(msg), rc)
+  write(lsoil_input_ch, '(i2)') lsoil_input
+  write(lsoil_target_ch, '(i2)') lsoil_target
+  msg="NUMBER OF SOIL LEVELS IN INPUT " // lsoil_input_ch // " AND OUTPUT " &
+      // lsoil_target_ch // " MUST EITHER BE EQUAL OR 9 AND 4 RESPECTIVELY."
+  call error_handler(msg, rc)
  endif
  
  end subroutine adjust_soil_levels
