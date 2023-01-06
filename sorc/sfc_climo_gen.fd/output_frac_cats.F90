@@ -116,7 +116,6 @@
  use netcdf
  use utils
  use source_grid, only  : day_of_rec, source, field_names, num_time_recs
- use model_grid, only   : missing
 
  implicit none
 
@@ -178,16 +177,12 @@
  call netcdf_err(error, 'DEFINING FIELD' )
  error = nf90_put_att(ncid, id_data_pct, "units", "percent coverage each category")
  call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid, id_data_pct, "missing_value", missing)
- call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
  error = nf90_put_att(ncid, id_data_pct, "coordinates", "geolon geolat")
  call netcdf_err(error, 'DEFINING COORD ATTRIBUTE' )
 
  error = nf90_def_var(ncid, trim(field_names(1)), NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_data_dom_cat)
  call netcdf_err(error, 'DEFINING FIELD' )
  error = nf90_put_att(ncid, id_data_dom_cat, "units", "dominate category")
- call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
- error = nf90_put_att(ncid, id_data_dom_cat, "missing_value", missing)
  call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
  error = nf90_put_att(ncid, id_data_dom_cat, "coordinates", "geolon geolat")
  call netcdf_err(error, 'DEFINING COORD ATTRIBUTE' )
