@@ -65,8 +65,41 @@ int mpp_open(const char *file, int action) {
   char curfile[STRING];
   char errmsg[512];  
   int ncid, status, istat, n, fid;
-/* size_t blksz=65536; */
-  size_t blksz=1048576;
+  static int first_call = 1;
+  static size_t blksz=1048576;
+
+  /* read the blksz from environment variable for the first_call */
+  if(first_call) {
+    char *blkstr;
+    int len;
+    first_call = 0;
+    blkstr=getenv ("NC_BLKSZ");
+    if(blkstr) {
+      len=strlen(blkstr);
+      /* check to make sure each character is either number of 'K' or 'M' */
+      for(n=0; n<len; n++) {
+	if( n == len-1 ) { /* the last character might be K or M */
+	  if( (blkstr[n]  > '9' || blkstr[n] < '0') && blkstr[n] != 'K' &&  blkstr[n] != 'M'  ) {
+	    sprintf( errmsg, "mpp_io(mpp_open): the last charactor of environment variable NC_BLKSZ = %s "
+		     "should be digit, 'K' or 'M'", blkstr);
+	    mpp_error(errmsg);
+	  }
+	}
+	else if( blkstr[n] > '9' || blkstr[n] < '0' ) {
+	    sprintf( errmsg, "mpp_io(mpp_open): environment variable NC_BLKSZ = %s "
+		     "should only contain digit except the last character", blkstr);
+	    printf("error 2 = %s\n", errmsg);
+	    mpp_error(errmsg);
+	}
+      }
+      blksz = atoi(blkstr);
+      if( blkstr[len-1] == 'K' )
+	blksz *= 1024;
+      else if( blkstr[len-1] == 'M' )
+        blksz *= (1024*1024);
+    }
+
+  }      
   
   /* write only from root pe. */
   if(action != MPP_READ && mpp_pe() != mpp_root_pe() ) return -1;
@@ -209,7 +242,35 @@ void mpp_get_varname(int fid, int varid, char *name)
   }  
  
 }
+
+int mpp_get_record_name(int fid, char *name)
+{
+  int dimid, status;
+  char errmsg[512];
+  int record_exist;
+  if(fid<0 || fid >=nfiles) mpp_error("mpp_io(mpp_get_record_name): invalid id number, id should be "
+				    "a nonnegative integer that less than nfiles");    
+  status = nc_inq_unlimdim(files[fid].ncid, &dimid);
+  if(status != NC_NOERR) {
+    sprintf(errmsg, "mpp_io(mpp_get_record_name): error in get record id from file %s", files[fid].name);
+    netcdf_error(errmsg, status);
+  }  
+  if(dimid >=0) {
+    record_exist = 1;
+    status = nc_inq_dimname(files[fid].ncid, dimid, name);
+    if(status != NC_NOERR) {
+      sprintf(errmsg, "mpp_io(mpp_get_record_name): error in get record name from file %s", files[fid].name);
+      netcdf_error(errmsg, status);
+    }
+  }
+  else {
+    record_exist = 0;
+  }
+  return record_exist;
+}
+
   
+
 /*******************************************************************************/
 /*                                                                             */
 /*           The following are routines that retrieve information              */
@@ -665,12 +726,13 @@ char mpp_get_var_cart(int fid, int vid)
   fldid = files[fid].var[vid].fldid;
   status = nc_get_att_text(ncid, fldid, "cartesian_axis", &cart);
   if(status != NC_NOERR)status = nc_get_att_text(ncid, fldid, "axis", &cart);
+  /*
   if(status != NC_NOERR){
     sprintf(errmsg, "mpp_io(mpp_get_var_cart): Error in getting attribute cartesian_axis/axis of "
 	    "dimension variable %s from file %s", files[fid].var[vid].name, files[fid].name );
     netcdf_error(errmsg, status);
   }
-    
+  */
   return cart;
 }
 
@@ -938,6 +1000,63 @@ void mpp_def_var_att_double(int fid, int vid, const char *attname, double attval
 
 
 /**********************************************************************
+ * void mpp_set_deflation(fid_in, fid_out, deflation, shuffle)        *
+ * Sets netcdf4 deflation on the output file. If NetCDF3, exits.      *
+ * If user requests deflation and shuffle settings, applies those     *
+ * settings. If user doesn't specify (set to -1), the settings        *
+ * of the input file are applied                                      *
+ * ********************************************************************/
+void mpp_set_deflation(int fid_in, int fid_out, int deflation, int shuffle) {
+    // return if deflation set to zero
+    if (deflation == 0) {
+        printf("Not compressing due to option\n");
+        return;
+    }
+
+    // return if netcdf3
+    int format;
+    char errmsg[512];
+    int status;
+    status = nc_inq_format(files[fid_in].ncid, &format);
+    if (status != NC_NOERR) {
+        sprintf(errmsg, "mpp_io(mpp_set_deflation): Error in getting determining netcdf version");
+        netcdf_error(errmsg, status);
+    }
+    printf("Input: filename=%s, nvar=%i, format=%i\n", files[fid_in].name, files[fid_in].nvar, format);
+    if (format == NC_FORMAT_CLASSIC || format == NC_FORMAT_64BIT) {
+        printf("Not compressing because input file is NetCDF3\n");
+        return;
+    }
+
+    int v, shuffle2, deflate2, deflation2;
+
+    // loop thru vars
+    for (v = 0; v < files[fid_in].nvar; ++v) {
+        // get existing compression settings
+        status = nc_inq_var_deflate(files[fid_in].ncid, files[fid_in].var[v].fldid, &shuffle2, &deflate2, &deflation2);
+        if (status != NC_NOERR) {
+            sprintf(errmsg, "mpp_io(mpp_set_deflation): Error in getting deflation level");
+            netcdf_error(errmsg, status);
+        }
+        printf("Input: var=%s, shuffle=%i, deflate=%i, deflation=%i\n", files[fid_in].var[v].name, shuffle2, deflate2, deflation2);
+
+        // apply overrides
+        if (deflation == -1)
+            deflation = deflation2;
+        if (shuffle == -1)
+            shuffle = shuffle2;
+
+        // set compression level
+        status = nc_def_var_deflate(files[fid_out].ncid, files[fid_out].var[v].fldid, shuffle, deflation, deflation);
+        if (status != NC_NOERR) {
+            sprintf(errmsg, "mpp_io(mpp_set_deflation): Error in setting deflation level");
+            netcdf_error(errmsg, status);
+        }
+        printf("Output: var=%s, shuffle=%i, deflation=%i\n", files[fid_in].var[v].name, shuffle, deflation);
+    }
+}
+
+/**********************************************************************
   void mpp_copy_var_att(fid_in, fid_out)
   copy all the field attribute from infile to outfile
 **********************************************************************/
@@ -981,9 +1100,55 @@ void mpp_copy_var_att(int fid_in, int vid_in, int fid_out, int vid_out)
     }
   }
 
-}; /* mpp_copy_field_att */
+} /* mpp_copy_field_att */
 
+/**********************************************************************
+  void mpp_copy_var(fid_in, vid_in, fid_out)
+  copy one field from fid_in to fid_out
+**********************************************************************/
+void mpp_copy_data(int fid_in, int vid_in, int fid_out, int vid_out)
+{
+  int status;
+  int ndim, dims[5], i;
+  size_t dsize, size;
+  char errmsg[512];
+  double *data=NULL;
+  if( mpp_pe() != mpp_root_pe() ) return;
+  
+  if(fid_in<0 || fid_in >=nfiles) mpp_error("mpp_io(mpp_copy_var): invalid fid_in number, fid should be "
+				      "a nonnegative integer that less than nfiles");
+  if(fid_out<0 || fid_out >=nfiles) mpp_error("mpp_io(mpp_copy_var): invalid fid_out number, fid should be "
+				      "a nonnegative integer that less than nfiles");
+  /*
+  ncid_in   = files[fid_in].ncid;
+  ncid_out  = files[fid_out].ncid;  
+  fldid_in  = files[fid_in].var[vid_in].fldid;
+  fldid_out = files[fid_out].var[vid_out].fldid;
+  */
+  ndim = mpp_get_var_ndim(fid_in, vid_in);
+  status = nc_inq_vardimid(files[fid_in].ncid, files[fid_in].var[vid_in].fldid,dims);
+  if(status != NC_NOERR) {
+    sprintf(errmsg, "mpp_io(mpp_copy_data): Error in getting dimid of var %s from file %s",
+	    files[fid_in].var[vid_in].name, files[vid_in].name );
+    netcdf_error(errmsg, status);
+  }
+  dsize = 1;
+  for(i=0; i<ndim; i++) {
+    status = nc_inq_dimlen(files[fid_in].ncid, dims[i], &size);
+    if(status != NC_NOERR) {
+      sprintf(errmsg, "mpp_io(mpp_copy_data): error in inquiring dimlen from file %s", files[fid_in].name);
+      netcdf_error(errmsg, status);
+    }
+    dsize *= size;
+  }
+  
+  data = (void *)malloc(dsize*sizeof(double));
 
+  mpp_get_var_value(fid_in, vid_in, data);
+  mpp_put_var_value(fid_out, vid_out, data);
+  free(data);
+}
+  
 int mpp_get_var_natts(int fid, int vid)
 {
   int natts, ncid, fldid, status;
@@ -1316,5 +1481,42 @@ int get_great_circle_algorithm(int fid)
   }
 
   return  great_circle_algorithm;
+}
+
+void set_in_format(char *format)
+{
+  char errmsg[128];
+
+
+  if(!format) return;
+  if(!strcmp(format, "netcdf4")) 
+    in_format = NC_FORMAT_NETCDF4;
+  else if(!strcmp(format, "netcdf4_classic")) 
+    in_format = NC_FORMAT_NETCDF4_CLASSIC;
+  else if(!strcmp(format, "64bit_offset")) 
+    in_format = NC_FORMAT_64BIT;
+  else if(!strcmp(format, "classic"))
+    in_format = NC_FORMAT_CLASSIC;
+  else {
+    sprintf(errmsg, "mpp_io(mpp_open): format = %s is not a valid option", format);
+    mpp_error(errmsg);
+    }
+}
+
+/**
+void reset_in_format(int format) 
+     Checks for validity of "format", prints a warning if needed, otherwise
+     resets the global variable in_format to the input argument "format".
+ **/
+void reset_in_format(int format) {
+  char errmsg[128];
+
+  if ((format != NC_FORMAT_NETCDF4) && (format != NC_FORMAT_NETCDF4_CLASSIC) && (format != NC_FORMAT_64BIT) &&
+      (format != NC_FORMAT_CLASSIC)) {
+    sprintf(errmsg, "mpp_io(reset_in_format): format = %d is not a valid format", format);
+    mpp_error(errmsg);
+  } else {
+    in_format = format;
+  }
 }
 
