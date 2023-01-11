@@ -3,13 +3,9 @@ on:
   push:
     branches:
     - develop
-    paths-ignore:
-    - README.md
   pull_request:
     branches:
     - develop
-    paths-ignore:
-    - README.md
 
 defaults:
   run:
@@ -19,13 +15,13 @@ jobs:
   matrix-build-and-test:
     runs-on: ${{ matrix.os }}
     env:
-      CC: gcc-9
-      FC: gfortran-9
-      CXX: g++-9
+      CC: gcc-10
+      FC: gfortran-10
+      CXX: g++-10
     strategy:
       fail-fast: true      
       matrix:
-        os: [macos-11, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest]
         compiler: [gcc-9]
         nceplibs_version: [develop, 1.4.0]
         mpi_type: [mpich, openmpi]
