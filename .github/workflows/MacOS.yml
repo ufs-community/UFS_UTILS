@@ -28,7 +28,6 @@ jobs:
         brew update
         brew install libpng sbtn open-mpi
         brew install jpeg-turbo
-        mpicc --version
 
     - name: cache-netcdf
       id: cache-netcdf
@@ -40,6 +39,7 @@ jobs:
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
+        mpicc --version
         wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
         tar -xzf hdf5-1.10.7.tar.gz
         pushd hdf5-1.10.7
