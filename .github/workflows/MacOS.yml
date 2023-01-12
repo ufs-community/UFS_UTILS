@@ -16,8 +16,8 @@ jobs:
   MacOS:
     runs-on: macos-latest
     env:
-      FC: gfortran-12
-      CC: gcc
+      FC: mpifort
+      CC: mpicc
 
     steps:
     - name: install-dependencies
@@ -25,7 +25,7 @@ jobs:
         find /Library/Frameworks/ -name "png*"
         sudo rm -rf /Library/Frameworks/Mono.framework
         brew update
-        brew install libpng
+        brew install libpng openmpi
         brew install jpeg-turbo
 
     - name: cache-netcdf
