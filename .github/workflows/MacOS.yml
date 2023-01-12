@@ -26,7 +26,7 @@ jobs:
         find /Library/Frameworks/ -name "png*"
         sudo rm -rf /Library/Frameworks/Mono.framework
         brew update
-        brew install libpng sbtn open-mpi
+        brew install libpng sbtn mpich
         brew install jpeg-turbo
 
     - name: cache-netcdf
