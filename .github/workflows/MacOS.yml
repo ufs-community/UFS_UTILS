@@ -1,4 +1,9 @@
-name: linux-mac-mpi-nceplibs
+# UFS_UTILS test workflow.
+#
+# This workflow tests UFS_UTILS on MacOS.
+#
+# Ed Hartnett 1/12/23
+name: MacOS
 on:
   push:
     branches:
@@ -7,103 +12,49 @@ on:
     branches:
     - develop
 
-defaults:
-  run:
-    shell: bash -exo pipefail {0}
-
 jobs:
-  matrix-build-and-test:
-    runs-on: ${{ matrix.os }}
+  MacOS:
+    runs-on: macos-latest
     env:
-      CC: gcc-10
-      FC: gfortran-10
-      CXX: g++-10
-    strategy:
-      fail-fast: true      
-      matrix:
-        os: [ubuntu-latest]
-        compiler: [gcc-10]
-        nceplibs_version: [develop, 1.4.0]
-        mpi_type: [mpich, openmpi]
-        netcdf_version: [4.7.4]
+      FC: gfortran-12
+      CC: gcc
 
     steps:
-
     - name: install-dependencies
       run: |
-        echo "$HOME/mpi/bin" >> $GITHUB_PATH
-        if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
-          sudo apt-get update
-          sudo apt-get install libpng-dev
-          sudo apt-get install libjpeg-dev
-        elif [[ ${{ matrix.os }} == "macos-11" ]]; then
-          brew update
-          brew install wget
-          brew install jpeg-turbo
-          if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
-            sudo ln -sf /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
-          elif  [[ ${{ matrix.compiler }} == "gcc-10" ]]; then
-            sudo ln -sf /usr/local/bin/gfortran-10 /usr/local/bin/gfortran
-          fi
-        fi
-
-    - name: cache-mpi
-      id: cache-mpi
-      uses: actions/cache@v2
-      with:
-        path: ~/mpi
-        key: mpi-${{ matrix.mpi_type }}-${{ runner.os }}
-
-    - name: build-mpi
-      if: steps.cache-mpi.outputs.cache-hit != 'true'
-      run: |
-        if [[ ${{ matrix.mpi_type}} == "mpich" ]]; then
-          wget http://www.mpich.org/static/downloads/3.3.2/mpich-3.3.2.tar.gz &> /dev/null
-          tar -xzf mpich-3.3.2.tar.gz
-          cd mpich-3.3.2
-          ./configure --prefix=$HOME/mpi --enable-fortran --enable-cxx
-          make -j2
-          make install
-        elif [[ ${{ matrix.mpi_type }} == "openmpi" ]]; then
-          wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.1.tar.gz &> /dev/null
-          tar -xzf openmpi-4.1.1.tar.gz
-          cd openmpi-4.1.1
-          if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
-            ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx
-          elif [[ ${{ matrix.os }} == "macos-11" ]]; then
-            ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx --enable-two-level-namespace
-          fi
-          make -j2
-          make install
-        fi
+        find /Library/Frameworks/ -name "png*"
+        sudo rm -rf /Library/Frameworks/Mono.framework
+        brew update
+        brew install libpng
+        brew install jpeg-turbo
 
     - name: cache-netcdf
       id: cache-netcdf
       uses: actions/cache@v2
       with:
         path: ~/netcdf
-        key: netcdf-c-${{ matrix.netcdf_version }}-${{ runner.os }}-${{ matrix.mpi_type }}3
+        key: MacOS-netcdf-c-$4.7.4-{{ runner.os }}
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        export CC=mpicc
+        export CC=mpiicc
         wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
         tar -xzf hdf5-1.10.7.tar.gz
         pushd hdf5-1.10.7
-        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests --disable-shared --enable-static
+        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests --disable-shared --disable-shared --enable-static
         make -j2
         make install
            
     - name: build-netcdf-c
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        export CC=mpicc
+        export CC=mpiicc
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
-        wget https://github.com/Unidata/netcdf-c/archive/refs/tags/v${{ matrix.netcdf_version }}.tar.gz &> /dev/null
-        tar -xzf v${{ matrix.netcdf_version }}.tar.gz
-        cd netcdf-c-${{ matrix.netcdf_version }}
+        wget https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.7.4.tar.gz &> /dev/null
+        tar -xzf v4.7.4.tar.gz
+        pushd netcdf-c-4.7.4
         ./configure --prefix=${HOME}/netcdf --disable-dap --disable-utilities --disable-shared
         make -j2
         make install
@@ -111,10 +62,10 @@ jobs:
     - name: build-netcdf-fortran
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        set -x
+        export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${HOME}/netcdf/lib"
         export PATH="${HOME}/netcdf/bin:$PATH"
-        export CC=mpicc
-        export FC=mpifort
+        export CC=mpiicc
+        export FC=mpiifort
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
         export LIBS=`nc-config --libs`
@@ -130,26 +81,21 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf--8.2.0-${{ runner.os }}-${{ matrix.mpi_type }}-netcdf-${{ matrix.netcdf_version }}3
+        key: MacOS-esmf-8.2.0-${{ runner.os }}
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
       run: |
-        set -x
         pushd ~
         export ESMF_DIR=~/esmf-ESMF_8_2_0
         wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
         tar zxf ESMF_8_2_0.tar.gz
         cd esmf-ESMF_8_2_0
-        if [[ ${{ matrix.mpi_type}} == "mpich" ]]; then
-          export ESMF_COMM=mpich3
-        elif [[ ${{ matrix.mpi_type}} == "openmpi" ]]; then
-          export ESMF_COMM=openmpi
-        fi
+        export ESMF_COMM=mpich
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
         export ESMF_INSTALL_MODDIR=mod
-        export ESMF_COMPILER=gfortran
+        export ESMF_COMPILER=intel
         export ESMF_INSTALL_PREFIX=~/esmf
         export ESMF_NETCDF=split
         export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
@@ -163,13 +109,11 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: jasper-2.0.25-${{ runner.os }}3
+        key: MacOS-jasper-2.0.25-${{ runner.os }}-intel3
 
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
       run: |
-        set -x
-        pwd
         wget https://github.com/jasper-software/jasper/archive/version-2.0.25.tar.gz &> /dev/null
         tar zxf version-2.0.25.tar.gz
         cd jasper-version-2.0.25
@@ -179,31 +123,25 @@ jobs:
         make install
 
     - name: checkout-nceplibs
-      run: |
-        git clone https://github.com/NOAA-EMC/NCEPLIBS.git nceplibs
-        cd nceplibs
-        if [[ ${{ matrix.nceplibs_version }} == "1.4.0" ]]; then
-          git checkout v1.4.0
-        fi
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS
+        path: nceplibs
 
-    - name: get-git-hash
-      run: |
-        cd nceplibs
-        git rev-parse HEAD > hash.txt
-        
-    - name: cache-nceplibs 
+    - name: cache-nceplibs
       id: cache-nceplibs
       uses: actions/cache@v2
       with:
         path: ~/nceplibs
-        key: nceplibs-${{ matrix.nceplibs_version }}-${{ runner.os }}-${{ matrix.mpi_type }}-${{ hashFiles('nceplibs/hash.txt') }}3
+        key: MacOS-nceplibs-1.4.0-${{ runner.os }}-intel3
 
     - name: build-nceplibs
       if: steps.cache-nceplibs.outputs.cache-hit != 'true'
       run: |
-        set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk
-        cd nceplibs
+        wget https://github.com/NOAA-EMC/NCEPLIBS/archive/v1.4.0.tar.gz &> /dev/null
+        tar zxf v1.4.0.tar.gz
+        cd NCEPLIBS-1.4.0
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/netcdf' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
         make -j2
@@ -219,26 +157,20 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/data
-        key: data-2
+        key: data-1
 
     - name: build
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
-        export CC=mpicc
-        export CXX=mpicxx
-        export FC=mpifort
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        export DYLD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' ..
+        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf' ..
         make -j2
-
+    
     - name: test
       run: |
         cd ufs_utils/build
-        # Oversubscribe for OpenMPI to run more processes than CPUs
-        export OMPI_MCA_rmaps_base_oversubscribe=1
         ctest --rerun-failed --output-on-failure
 
     - name: cache-data
