@@ -28,6 +28,7 @@ jobs:
         brew update
         brew install libpng sbtn open-mpi
         brew install jpeg-turbo
+        mpicc --version
 
     - name: cache-netcdf
       id: cache-netcdf
@@ -39,18 +40,16 @@ jobs:
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        export CC=mpiicc
         wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
         tar -xzf hdf5-1.10.7.tar.gz
         pushd hdf5-1.10.7
-        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --enable-parallel-tests --disable-shared --disable-shared --enable-static
+        ./configure --prefix=${HOME}/netcdf --enable-parallel --disable-tools --disable-fortran --disable-cxx --disable-shared --enable-static
         make -j2
         make install
            
     - name: build-netcdf-c
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
-        export CC=mpiicc
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
         wget https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.7.4.tar.gz &> /dev/null
@@ -65,8 +64,6 @@ jobs:
       run: |
         export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${HOME}/netcdf/lib"
         export PATH="${HOME}/netcdf/bin:$PATH"
-        export CC=mpiicc
-        export FC=mpiifort
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
         export LIBS=`nc-config --libs`
@@ -92,7 +89,7 @@ jobs:
         wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
         tar zxf ESMF_8_2_0.tar.gz
         cd esmf-ESMF_8_2_0
-        export ESMF_COMM=mpich
+        export ESMF_COMM=openmpi
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
         export ESMF_INSTALL_MODDIR=mod
