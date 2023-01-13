@@ -66,6 +66,8 @@ jobs:
           ./configure --prefix=$HOME/mpi --enable-fortran --enable-cxx
           make -j2
           make install
+          ls -l $HOME/mpi
+          ls -l $HOME/mpi/bin
         elif [[ ${{ matrix.mpi_type }} == "openmpi" ]]; then
           wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.1.tar.gz &> /dev/null
           tar -xzf openmpi-4.1.1.tar.gz
