@@ -21,6 +21,7 @@ jobs:
       CC: gcc-10
       FC: gfortran-10
       CXX: g++-10
+      FCFLAGS: -fallow-argument-mismatch
     strategy:
       fail-fast: true      
       matrix:
