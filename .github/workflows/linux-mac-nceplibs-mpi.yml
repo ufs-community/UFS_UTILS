@@ -62,6 +62,8 @@ jobs:
         if [[ ${{ matrix.mpi_type}} == "mpich" ]]; then
           which gcc
           gcc --version
+          export FCFLAGS=-fallow-argument-mismatch        
+          export FFLAGS=-fallow-argument-mismatch        
           wget http://www.mpich.org/static/downloads/3.3.2/mpich-3.3.2.tar.gz &> /dev/null
           tar -xzf mpich-3.3.2.tar.gz
           cd mpich-3.3.2
