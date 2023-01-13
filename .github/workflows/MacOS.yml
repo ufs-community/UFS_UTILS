@@ -25,8 +25,9 @@ jobs:
       run: |
         find /Library/Frameworks/ -name "png*"
         sudo rm -rf /Library/Frameworks/Mono.framework
-        brew update
-        brew install --verbose libpng sbtn mpich jpeg-turbo
+        brew install --verbose libpng 
+        brew install --verbose mpich
+        brew install --verbose jpeg-turbo
         sudo ln -sf /usr/local/bin/gfortran-10 /usr/local/bin/gfortran        
 
     - name: cache-netcdf
