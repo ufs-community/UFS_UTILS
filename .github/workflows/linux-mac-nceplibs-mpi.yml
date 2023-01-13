@@ -36,7 +36,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
-        elif [[ ${{ matrix.os }} == "macos-11" ]]; then
+        elif [[ ${{ matrix.os }} == "macos-latest" ]]; then
           brew install wget
           brew install jpeg-turbo
           if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
