@@ -95,6 +95,8 @@ jobs:
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
       run: |
         export CC=mpicc
+        export FC=mpifort
+        export FCFLAGS=-fallow-argument-mismatch        
         wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
         tar -xzf hdf5-1.10.7.tar.gz
         pushd hdf5-1.10.7
@@ -122,6 +124,7 @@ jobs:
         export PATH="${HOME}/netcdf/bin:$PATH"
         export CC=mpicc
         export FC=mpifort
+        export FCFLAGS=-fallow-argument-mismatch        
         export CPPFLAGS=-I${HOME}/netcdf/include
         export LDFLAGS=-L${HOME}/netcdf/lib
         export LIBS=`nc-config --libs`
@@ -153,6 +156,9 @@ jobs:
         elif [[ ${{ matrix.mpi_type}} == "openmpi" ]]; then
           export ESMF_COMM=openmpi
         fi
+        export CC=mpicc
+        export FC=mpifort
+        export FCFLAGS=-fallow-argument-mismatch        
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
         export ESMF_INSTALL_MODDIR=mod
@@ -211,6 +217,9 @@ jobs:
         set -x
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd nceplibs
+        export CC=mpicc
+        export FC=mpifort
+        export FCFLAGS=-fallow-argument-mismatch        
         mkdir build && cd build
         cmake .. -DCMAKE_PREFIX_PATH='~;~/jasper;~/netcdf' -DCMAKE_INSTALL_PREFIX='~/nceplibs' -DFLAT=ON
         make -j2
@@ -236,6 +245,7 @@ jobs:
         export CC=mpicc
         export CXX=mpicxx
         export FC=mpifort
+        export FCFLAGS=-fallow-argument-mismatch        
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
         export DYLD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
         cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' ..
