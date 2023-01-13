@@ -29,7 +29,7 @@
                                        zh_target_grid, qnwfa_climo_target_grid, &
                                        qnifa_climo_target_grid
 
- use input_data, only                : lev_input, &
+ use atm_input_data, only            : lev_input, &
                                        levp1_input, &
                                        tracers_input_grid, &
                                        dzdt_input_grid, &
@@ -71,6 +71,7 @@
                                        write_fv3_atm_bndy_data_netcdf, &
                                        write_fv3_atm_data_netcdf
 
+ use utilities, only                 : error_handler
  implicit none
 
  private

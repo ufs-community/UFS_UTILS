@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <complex.h>
+#include <string.h>
 #include <math.h>
 #include "mpp.h"
 #include "mosaic_util.h"
@@ -43,19 +44,19 @@ void create_conformal_cubic_grid( int *npts, int *nratio, char *method, char *or
   ny  = nx;
   nxp = nx+1;
   nyp = nxp;
-  
+
   /*calculate geographic coordinates. */
   if(strcmp(orientation, "center_pole") == 0)
     calc_geocoords_centerpole(nx, ny, x, y);
   else
-    mpp_error("create_cubic_grid: only center pole orientation is implemented");  
+    mpp_error("create_cubic_grid: only center pole orientation is implemented");
 
   /* calculate cell length and area */
-  calc_fvgrid(nx, ny, *nratio, dx, dy, area);  
+  calc_fvgrid(nx, ny, *nratio, dx, dy, area);
 
   /*calculate rotation angle, just some workaround, will modify this in the future. */
   calc_rotation_angle(nxp, nyp, x, y, angle_dx, angle_dy );
-  
+
 }; /* create_conformal_cubic_grid */
 
 /***********************************************************************
@@ -71,8 +72,8 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
   nxp = nx+1;
   nyp = ny+1;
   nxh = (nxp+1)/2;
-  nyh = (nyp+1)/2;  
-  
+  nyh = (nyp+1)/2;
+
   lx = (double *)malloc(nxh*nyh*sizeof(double));
   ly = (double *)malloc(nxh*nyh*sizeof(double));
 
@@ -82,7 +83,7 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
       lx[n] = -1. + 2.0*i/(nxp-1);
       ly[n++] = -1. + 2.0*j/(nyp-1);
     }
-  } 
+  }
 
   X = (double *)malloc(nxh*nyh*sizeof(double));
   Y = (double *)malloc(nxh*nyh*sizeof(double));
@@ -95,7 +96,7 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
   latP = (double *) malloc(nxp*nyp*sizeof(double));
   lonE = (double *) malloc(nxp*nyp*sizeof(double));
   latE = (double *) malloc(nxp*nyp*sizeof(double));
-  
+
   /* map 3D coordinates to geographical coordinates. */
   map_xyz2lonlat( nxh, nyh, X, Y, Z, lx, ly );
 
@@ -113,7 +114,7 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
       if( i<j )
 	latP[j*nxp+i] = 0.5*(latP[j*nxp+i] + latP[i*nxp+j]);
       else
-	latP[j*nxp+i] = latP[i*nxp+j];       
+	latP[j*nxp+i] = latP[i*nxp+j];
       if(lonP[j*nxp+i] >= M_PI ) lonP[j*nxp+i] -= 2*M_PI;
     }
   }
@@ -123,7 +124,7 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
   for(j=0; j<nyh; j++)
     for(i=0; i<nxh; i++) tmp[n++] = lonP[j*nxp+i];
 
-  for(j=0;j<nyh;j++) {  
+  for(j=0;j<nyh;j++) {
     for(i=0; i<nxh; i++) {
       lonP[j*nxp+i] = (tmp[j*nxh+i]-3./2.*M_PI-tmp[i*nxh+j])*0.5;
       if(i==j) lonP[j*nxp+i] = -3.0/4.0*M_PI;
@@ -131,7 +132,7 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
   }
 
   free(tmp);
-  
+
   /*use symmetry to expand to full cubic */
   for(j=0;j<nyh;j++) {
     for(i=nxh;i<nxp; i++) {
@@ -145,9 +146,9 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
       lonP[j*nxp+i] = -lonP[(nyp-j-1)*nxp+i];
       latP[j*nxp+i] = latP[(nyp-j-1)*nxp+i];
     }
-  }       
+  }
 
-  rotate_about_xaxis(nxh, nyh, X, Y, Z, M_PI/2);   
+  rotate_about_xaxis(nxh, nyh, X, Y, Z, M_PI/2);
 
   map_xyz2lonlat( nxh, nyh, X, Y, Z, lx, ly );
 
@@ -158,10 +159,10 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
       latE[j*nxp+i] = ly[j*nxh+i];
     }
   }
-  
+
   free(lx);
   free(ly);
-  
+
   /* enforce symmetry */
   for(j=0;j<nyh;j++) lonE[j*nxp] = -3./4.*M_PI;
   for(i=0;i<nxh;i++) {
@@ -181,12 +182,12 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
       lonE[j*nxp+i] = lonE[(nyp-j-1)*nxp+i];
       latE[j*nxp+i] = -latE[(nyp-j-1)*nxp+i];
     }
-  }      
+  }
 
   /*convert to geographic grid */
   n = 0;
   /* tile 1 */
-  for(m = 0; m < nxp*nyp; m++) { 
+  for(m = 0; m < nxp*nyp; m++) {
     x[n] = lonE[m]*R2D-90.;
     if(x[n]<=-180.) x[n] += 360.;
     y[n++] = latE[m]*R2D;
@@ -203,7 +204,7 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
     x[n] = lonP[m]*R2D;
     y[n++] = latP[m]*R2D;
   }
-    
+
   /* tile 4 */
   for(j=0; j<nyp; j++) {
     for(i=0; i<nxp; i++) {
@@ -236,12 +237,12 @@ void calc_geocoords_centerpole(int nx, int ny, double *x, double *y)
 /*************************************************************************
   void conformal_map_coords2xyz ( double *lx, double * ly, double *X, double *Y, double *Z )
   Conformal mapping of a cube onto a sphere maps (lx, ly) on the north-pole face of a cube
-  to (X,Y,Z) coordinates in physical space. 
+  to (X,Y,Z) coordinates in physical space.
   Face is oriented normal to Z-axis with  X and Y increasing with lx and ly
   valid ranges:  -1 < lx < 1   -1 < ly < 1
-  Based on matlab scripts from Alistair  ???? 
+  Based on matlab scripts from Alistair  ????
 **************************************************************************/
-  
+
 void conformal_map_coords2xyz ( int ni, int nj, double *lx, double *ly,
      				   double *X, double *Y, double *Z )
 {
@@ -304,7 +305,7 @@ void conformal_map_coords2xyz ( int ni, int nj, double *lx, double *ly,
     for(m=order; m>=0; m--) w = ( w + A[m] ) * zc;
     if( w != 0. ) w =  cpow(I,THRD) * cpow( w*I, THRD);
     w = (w-RA)/(CB+CC*w);
-    X[n] = creal(w);  
+    X[n] = creal(w);
     Y[n] = cimag(w);
     h    = 2./(1+cpow(X[n],2)+cpow(Y[n],2));
     X[n] = X[n]*h;
@@ -337,7 +338,7 @@ void conformal_map_coords2xyz ( int ni, int nj, double *lx, double *ly,
 
 ************************************************************/
 
-void map_xyz2lonlat(int ni, int nj, double *X, double *Y, double *Z, 
+void map_xyz2lonlat(int ni, int nj, double *X, double *Y, double *Z,
 		    double *lon, double *lat )
 {
   int i, j, n;
@@ -363,19 +364,19 @@ void map_xyz2lonlat(int ni, int nj, double *X, double *Y, double *Z,
     if(X[n]<0 && Y[n] >=0) lon[n] += M_PI;
     if(X[n]<=0 && Y[n] < 0) lon[n] -= M_PI;
   }
-  
+
 };  /* map_xyz2lonlat */
 
 
 /**************************************************************
-   void rotate_about_xaxis(int ni, int nj, double *X, double *Y, 
+   void rotate_about_xaxis(int ni, int nj, double *X, double *Y,
 	              	   double *Z, double angle)
 
    Rotate about X axis by "angle"
 
 ***************************************************************/
 
-void rotate_about_xaxis(int ni, int nj, double *X, double *Y, 
+void rotate_about_xaxis(int ni, int nj, double *X, double *Y,
 	          	double *Z, double angle) {
   int i, j, n;
   double s,c,old;
@@ -414,7 +415,7 @@ void permutiles(int ni, int nj, double *b, int num) {
   int i, j, k, n;
   int ntiles = 6;
   double *c=NULL;
-  
+
   c = (double *)malloc(ni*nj*ntiles*sizeof(double));
 
   for(k=0; k<num; k++) {
@@ -439,7 +440,7 @@ void permutiles(int ni, int nj, double *b, int num) {
 
      calc_fvgrid( lx, vector ly, vector dxl, vector dyl, vector areal)
 
-     Calculates finite volume grid info (dxl,dyl,areal) for conformal cubic grid 
+     Calculates finite volume grid info (dxl,dyl,areal) for conformal cubic grid
      with 3-D coordinates (X, Y, Z)
      Meant to be used for single quadrant of tile but does work for full tile
 
@@ -451,14 +452,14 @@ void calc_fvgrid(int nx, int ny, int nratio, double *dx, double *dy, double *are
   double ar;
   double *lx, *ly, *X, *Y, *Z, *vec1, *vec2, *vec3, *vec4, *dxl, *dyl, *areal;
   size_t *dims;
-  
+
   nxp = nx+1;
   nyp = ny+1;
   nxh = (nxp+1)/2;
   nyh = (nyp+1)/2;
 
   nxf = nx*nratio+1;
-  nyf = nxf; 
+  nyf = nxf;
   nif = (nxf+1)/2;
   njf = nif;
 
@@ -471,7 +472,7 @@ void calc_fvgrid(int nx, int ny, int nratio, double *dx, double *dy, double *are
       lx[n] = -1. + 2.0*i/(nxf-1);
       ly[n++] = -1. + 2.0*j/(nyf-1);
     }
-  } 
+  }
 
   X = (double *)malloc(nif*njf*sizeof(double));
   Y = (double *)malloc(nif*njf*sizeof(double));
@@ -494,7 +495,7 @@ void calc_fvgrid(int nx, int ny, int nratio, double *dx, double *dy, double *are
       vec2[2*(nif-1)*njf+n] = Z[j*nif+i+1];
     }
   }
-  
+
   dxl = angle_between_vectors( nif-1, njf, vec1, vec2);
 
   free(vec1);
@@ -513,17 +514,17 @@ void calc_fvgrid(int nx, int ny, int nratio, double *dx, double *dy, double *are
       vec1[2*nif*(njf-1)+n] = Z[j*nif+i];
       vec2[2*nif*(njf-1)+n] = Z[(j+1)*nif+i];
     }
-  }  
+  }
 
   dyl = angle_between_vectors( nif, njf-1, vec1, vec2);
-  
+
   free(vec1);
   free(vec2);
 
   vec1  = (double *)malloc((nif-1)*(njf-1)*3*sizeof(double));
-  vec2  = (double *)malloc((nif-1)*(njf-1)*3*sizeof(double)); 
+  vec2  = (double *)malloc((nif-1)*(njf-1)*3*sizeof(double));
   vec3  = (double *)malloc((nif-1)*(njf-1)*3*sizeof(double));
-  vec4  = (double *)malloc((nif-1)*(njf-1)*3*sizeof(double)); 
+  vec4  = (double *)malloc((nif-1)*(njf-1)*3*sizeof(double));
 
   for(j=0;j<njf-1;j++) {
     for(i=0;i<nif-1;i++) {
@@ -541,13 +542,13 @@ void calc_fvgrid(int nx, int ny, int nratio, double *dx, double *dy, double *are
       vec3[2*(nif-1)*(njf-1)+n] = Z[(j+1)*nif+i+1];
       vec4[2*(nif-1)*(njf-1)+n] = Z[(j+1)*nif+i];
     }
-  }  
+  }
 
   areal = excess_of_quad( nif-1, njf-1, vec1, vec2, vec3, vec4);
   free(vec1);
   free(vec2);
   free(vec3);
-  free(vec4);  
+  free(vec4);
 
   /*Force some symmetry (probably does nothing) */
   for(j=0; j<njf; j++) {
@@ -560,7 +561,7 @@ void calc_fvgrid(int nx, int ny, int nratio, double *dx, double *dy, double *are
 
   for(j=0; j<njf-1; j++) {
     for(i=0; i<nif-1; i++) {
-      if(j<i) 
+      if(j<i)
 	areal[j*(nif-1)+i] = (areal[j*(nif-1)+i]+areal[i*(nif-1)+j])*0.5;
       else if(j>i)
         areal[j*(nif-1)+i] = areal[i*(nif-1)+j];
@@ -581,7 +582,7 @@ void calc_fvgrid(int nx, int ny, int nratio, double *dx, double *dy, double *are
   }
 
   /* copy data from fine grid to super grid. */
-  
+
   for(j=0;j<nyh;j++) {
     for(i=0;i<nxh-1;i++) {
       ar = 0;
@@ -589,16 +590,16 @@ void calc_fvgrid(int nx, int ny, int nratio, double *dx, double *dy, double *are
       dx[j*nx+i] = ar*RADIUS;
     }
   }
-    
+
   for(j=0;j<nyh-1;j++) {
     for(i=0;i<nxh-1;i++) {
       ar = 0;
-      for(n=0; n<nratio; n++) 
+      for(n=0; n<nratio; n++)
 	for(m=0; m<nratio; m++) ar += areal[(j*nratio+n)*(nif-1)+i*nratio+m];
       area[j*nx+i] = ar*RADIUS*RADIUS;
     }
   }
-  
+
   /*use reflection symmetry of quadrants to fill face. */
   for(j=0;j<nyh; j++) {
     for(i=nxh-1; i<nx; i++) {
@@ -625,13 +626,13 @@ void calc_fvgrid(int nx, int ny, int nratio, double *dx, double *dy, double *are
   }
 
   /* copy dx to dy */
-  for(j=0;j<ny;j++) 
+  for(j=0;j<ny;j++)
     for(i=0;i<nxp;i++) dy[j*nxp+i] =  dx[i*nx+j] ;
 
 }; /* calc_fvgrid */
 
 
-/******************************************************************************* 
+/*******************************************************************************
    array<double>* angle_between_vectors(array<double> vec1, array<double> vec2)
 *******************************************************************************/
 
@@ -639,7 +640,7 @@ double* angle_between_vectors(int ni, int nj, double *vec1, double *vec2) {
   int n;
   double vector_prod, nrm1, nrm2;
   double *angle;
-  
+
   angle = (double *)malloc(ni*nj*sizeof(double));
 
   for(n=0; n<ni*nj; n++) {
@@ -652,7 +653,7 @@ double* angle_between_vectors(int ni, int nj, double *vec1, double *vec2) {
 }; /* angle_between_vectors */
 
 /*****************************************************************
-   double* excess_of_quad(int ni, int nj, double *vec1, double *vec2, 
+   double* excess_of_quad(int ni, int nj, double *vec1, double *vec2,
                           double *vec3, double *vec4 )
 *******************************************************************/
 double* excess_of_quad(int ni, int nj, double *vec1, double *vec2, double *vec3, double *vec4 )
@@ -661,7 +662,7 @@ double* excess_of_quad(int ni, int nj, double *vec1, double *vec2, double *vec3,
   double ang12, ang23, ang34, ang41;
   double *excess, *plane1, *plane2, *plane3, *plane4;
   double *angle12, *angle23, *angle34, *angle41;
-  
+
   excess = (double *)malloc(ni*nj*sizeof(double));
 
   plane1=plane_normal(ni, nj, vec1, vec2);
@@ -689,7 +690,7 @@ double* excess_of_quad(int ni, int nj, double *vec1, double *vec2, double *vec3,
   free(angle23);
   free(angle34);
   free(angle41);
-  
+
   return excess;
 
 }; /* excess_of_quad */
@@ -703,7 +704,7 @@ double* plane_normal(int ni, int nj, double *P1, double *P2)
   int i, j, n;
   double p1, p2, p3, mag;
   double *plane;
-  
+
   plane = (double *)malloc(ni*nj*3*sizeof(double));
 
   for(j=0;j<nj;j++) {
@@ -759,7 +760,7 @@ void calc_rotation_angle(int nxp, int nyp, double *x, double *y, double *angle_d
 	    ip1 = ny-j-1;
 	    jp1 = 0;
 	  }
-	}        
+	}
         if(im1 < 0) {  /* find the neighbor tile. */
 	  if(n % 2 == 0) { /* tile 1, 3, 5 */
 	    tm1 = n-2;
@@ -793,7 +794,7 @@ void calc_rotation_angle(int nxp, int nyp, double *x, double *y, double *angle_d
 	    if(tp1 >= ntiles) tp1 -= ntiles;
 	    jp1 = 0;
 	  }
-	}        
+	}
         if(jm1 < 0) {  /* find the neighbor tile. */
 	  if(n % 2 == 0) { /* tile 1, 3, 5 */
 	    tm1 = n-1;
@@ -806,7 +807,7 @@ void calc_rotation_angle(int nxp, int nyp, double *x, double *y, double *angle_d
 	    im1 = nx;
 	    jm1 = nx-i;
 	  }
-	}	
+	}
 
 	angle_dy[n*nxp*nyp+j*nxp+i] = atan2(y[tp1*nxp*nyp+jp1*nxp+ip1]-y[tm1*nxp*nyp+jm1*nxp+im1],
 					    (x[tp1*nxp*nyp+jp1*nxp+ip1]-x[tm1*nxp*nyp+jm1*nxp+im1])*lon_scale )*R2D;
@@ -815,4 +816,3 @@ void calc_rotation_angle(int nxp, int nyp, double *x, double *y, double *angle_d
   }
 
 }; /* calc_rotation_angle */
- 
