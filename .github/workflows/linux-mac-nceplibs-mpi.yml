@@ -18,15 +18,14 @@ jobs:
   matrix-build-and-test:
     runs-on: ${{ matrix.os }}
     env:
-      CC: gcc-10
-      FC: gfortran-10
-      CXX: g++-10
+      CC: gcc-11
+      FC: gfortran-11
       FCFLAGS: -fallow-argument-mismatch
     strategy:
       fail-fast: true      
       matrix:
         os: [ubuntu-latest, macos-latest]
-        compiler: [gcc-10]
+        compiler: [gcc-11]
         nceplibs_version: [develop, 1.4.0]
         mpi_type: [mpich, openmpi]
         netcdf_version: [4.7.4]
@@ -45,8 +44,8 @@ jobs:
           brew install jpeg-turbo
           if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
             sudo ln -sf /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
-          elif  [[ ${{ matrix.compiler }} == "gcc-10" ]]; then
-            sudo ln -sf /usr/local/bin/gfortran-10 /usr/local/bin/gfortran
+          elif  [[ ${{ matrix.compiler }} == "gcc-11" ]]; then
+            sudo ln -sf /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
           fi
         fi
 

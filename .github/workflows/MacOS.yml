@@ -16,8 +16,8 @@ jobs:
   MacOS:
     runs-on: macos-latest
     env:
-      FC: gfortran-10
-      CC: gcc-10
+      FC: gfortran-11
+      CC: gcc-11
       HOMEBREW_NO_INSTALL_CLEANUP: 1
 
     steps:
@@ -28,7 +28,7 @@ jobs:
         brew install --verbose libpng 
         brew install --verbose mpich
         brew install --verbose jpeg-turbo
-        sudo ln -sf /usr/local/bin/gfortran-10 /usr/local/bin/gfortran        
+        sudo ln -sf /usr/local/bin/gfortran-11 /usr/local/bin/gfortran        
 
     - name: cache-netcdf
       id: cache-netcdf
