@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: true      
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
         compiler: [gcc-10]
         nceplibs_version: [develop, 1.4.0]
         mpi_type: [mpich, openmpi]
@@ -37,7 +37,6 @@ jobs:
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
         elif [[ ${{ matrix.os }} == "macos-11" ]]; then
-          brew update
           brew install wget
           brew install jpeg-turbo
           if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
