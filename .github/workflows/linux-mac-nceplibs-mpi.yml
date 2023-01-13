@@ -51,7 +51,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/mpi
-        key: mpi-${{ matrix.mpi_type }}-${{ runner.os }}
+        key: mpi-${{ matrix.mpi_type }}-${{ runner.os }}-1
 
     - name: build-mpi
       if: steps.cache-mpi.outputs.cache-hit != 'true'
@@ -69,7 +69,7 @@ jobs:
           cd openmpi-4.1.1
           if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx
-          elif [[ ${{ matrix.os }} == "macos-11" ]]; then
+          elif [[ ${{ matrix.os }} == "macos-latest" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx --enable-two-level-namespace
           fi
           make -j2
