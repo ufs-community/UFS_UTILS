@@ -60,29 +60,17 @@ jobs:
       if: steps.cache-mpi.outputs.cache-hit != 'true'
       run: |
         if [[ ${{ matrix.mpi_type}} == "mpich" ]]; then
-          which gcc
-          gcc --version
-          export FCFLAGS=-fallow-argument-mismatch        
-          export FFLAGS=-fallow-argument-mismatch        
-          wget http://www.mpich.org/static/downloads/3.3.2/mpich-3.3.2.tar.gz &> /dev/null
-          tar -xzf mpich-3.3.2.tar.gz
-          cd mpich-3.3.2
-          ./configure --prefix=$HOME/mpi --enable-fortran --enable-cxx
-          make -j2
-          make install
-          ls -l $HOME/mpi
-          ls -l $HOME/mpi/bin
-        elif [[ ${{ matrix.mpi_type }} == "openmpi" ]]; then
-          wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.1.tar.gz &> /dev/null
-          tar -xzf openmpi-4.1.1.tar.gz
-          cd openmpi-4.1.1
           if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
-            ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx
+            apt-get install mpich
           elif [[ ${{ matrix.os }} == "macos-latest" ]]; then
-            ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx --enable-two-level-namespace
+            brew install mpich
           fi
-          make -j2
-          make install
+        elif [[ ${{ matrix.mpi_type }} == "openmpi" ]]; then
+          if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
+            apt-get install openmpi
+          elif [[ ${{ matrix.os }} == "macos-latest" ]]; then
+            brew install openmpi
+          fi
         fi
 
     - name: cache-netcdf
