@@ -8,6 +8,7 @@ var searchData=
   ['input_5fmaximum_5fsnow_5falbedo_5ffile',['input_maximum_snow_albedo_file',['../namespaceprogram__setup.html#a425bbfa3819160d2c46dc38f8a0dabcf',1,'program_setup']]],
   ['input_5fslope_5ftype_5ffile',['input_slope_type_file',['../namespaceprogram__setup.html#a9d5adfcf85bd33a9c9491cf1228928f3',1,'program_setup']]],
   ['input_5fsnowfree_5falbedo_5ffile',['input_snowfree_albedo_file',['../namespaceprogram__setup.html#a9771a7e124798f3820e57bdc41091a42',1,'program_setup']]],
+  ['input_5fsoil_5fcolor_5ffile',['input_soil_color_file',['../namespaceprogram__setup.html#ad95bb6acecc8d8a9b7c27cc9a69a9f48',1,'program_setup']]],
   ['input_5fsoil_5ftype_5ffile',['input_soil_type_file',['../namespaceprogram__setup.html#ab66e25e5c1328dd8117c9534aaec6519',1,'program_setup']]],
   ['input_5fsubstrate_5ftemperature_5ffile',['input_substrate_temperature_file',['../namespaceprogram__setup.html#a15e2f29dff889e5ca20bf2731637055b',1,'program_setup']]],
   ['input_5fvegetation_5fgreenness_5ffile',['input_vegetation_greenness_file',['../namespaceprogram__setup.html#a7e4bd2eac63bdd417abaf32a46c066ec',1,'program_setup']]],

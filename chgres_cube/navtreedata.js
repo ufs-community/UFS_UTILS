@@ -53,8 +53,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"namespacemembers_vars_q.html",
-"wam__climo__data_8f90.html#a4bc10e310f10e49b7441b7faa588b5ab"
+"program__setup_8F90.html#a49d72c7fb6a118e7f558cb5543b76ccf",
+"wam__climo__data_8f90.html#a4a56580f674e55cf836135bbd298df26"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

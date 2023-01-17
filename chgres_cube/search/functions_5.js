@@ -10,7 +10,7 @@ var searchData=
   ['glatf',['glatf',['../wam__climo__data_8f90.html#af31b30db375901862eeea72409fb9819',1,'wam_climo_data.f90']]],
   ['glob7s',['glob7s',['../wam__climo__data_8f90.html#a30d74005ccf0ceeb38686a5c76aba44b',1,'wam_climo_data.f90']]],
   ['globe7',['globe7',['../wam__climo__data_8f90.html#ad36d149f05c56c9cdbf741e8e0ba7a7d',1,'wam_climo_data.f90']]],
-  ['gridrot',['gridrot',['../namespaceinput__data.html#a55b92f16c0f91d452b090abaec08f1c4',1,'input_data']]],
+  ['gridrot',['gridrot',['../namespaceatm__input__data.html#a955d043afabaa621cebd6e0bb1851f48',1,'atm_input_data']]],
   ['gtd7',['gtd7',['../wam__climo__data_8f90.html#a5eab284e1b4e83aab3214164cdf5856a',1,'wam_climo_data.f90']]],
   ['gtd7d',['gtd7d',['../wam__climo__data_8f90.html#a39552597198e3fb66b4294c3b6df73cf',1,'wam_climo_data.f90']]],
   ['gts7',['gts7',['../wam__climo__data_8f90.html#aec43d1f2f40e71be25e82a6f52ddd56c',1,'wam_climo_data.f90']]]

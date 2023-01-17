@@ -1,4 +1,4 @@
-.TH "search_util" 3 "Thu Aug 4 2022" "Version 1.8.0" "chgres_cube" \" -*- nroff -*-
+.TH "search_util" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -76,11 +76,11 @@ Definition at line 47 of file search_util\&.F90\&.
 .PP
 References sst_guess()\&.
 .PP
-Referenced by surface::interp(), input_data::read_input_sfc_grib2_file(), and surface::search_many()\&.
+Referenced by surface::interp(), sfc_input_data::read_input_sfc_grib2_file(), and surface::search_many()\&.
 .SS "subroutine search_util::sst_guess (real(esmf_kind_r8), intent(in) latitude, real(esmf_kind_r8), intent(out) sst)"
 
 .PP
-Set default Sea Surface Temperature (SST) based on latitude\&. Based loosely on the average annual SST values from \&./fix_am/cfs_oi2sst1x1monclim19822001\&.grb
+Set default Sea Surface Temperature (SST) based on latitude\&. Based loosely on the average annual SST values from \&./am/cfs_oi2sst1x1monclim19822001\&.grb
 .PP
 The temperature in the polar and tropical regions is set to 273\&.16 and 300\&.0 Kelvin respectively\&. Polar regions are poleward of 60 degrees\&. Tropical regions are within 30 degrees of the equator\&. In mid-latitudes, a linear change with latitude is used\&.
 .PP

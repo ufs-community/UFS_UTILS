@@ -1,4 +1,4 @@
-.TH "grib2_util" 3 "Thu Aug 4 2022" "Version 1.8.0" "chgres_cube" \" -*- nroff -*-
+.TH "grib2_util" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -72,7 +72,7 @@ Jeff Beck
 .PP
 Definition at line 218 of file grib2_util\&.F90\&.
 .PP
-Referenced by input_data::read_input_atm_grib2_file()\&.
+Referenced by atm_input_data::read_input_atm_grib2_file()\&.
 .SS "elemental real function, public grib2_util::fpvsnew (real(esmf_kind_r8), intent(in) t)"
 
 .PP
@@ -130,7 +130,7 @@ Jeff Beck
 .PP
 Definition at line 38 of file grib2_util\&.F90\&.
 .PP
-Referenced by input_data::read_input_atm_grib2_file()\&.
+Referenced by atm_input_data::read_input_atm_grib2_file()\&.
 .SS "subroutine, public grib2_util::rh2spfh_gfs (real(esmf_kind_r4), dimension(i_input,j_input), intent(inout) rh_sphum, real(esmf_kind_r8), intent(in) p, real(esmf_kind_r8), dimension(i_input,j_input), intent(in) t)"
 
 .PP
@@ -156,7 +156,7 @@ Definition at line 81 of file grib2_util\&.F90\&.
 .PP
 References fpvsnew(), model_grid::i_input, and model_grid::j_input\&.
 .PP
-Referenced by input_data::read_input_atm_grib2_file()\&.
+Referenced by atm_input_data::read_input_atm_grib2_file()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

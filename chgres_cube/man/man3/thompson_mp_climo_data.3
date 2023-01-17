@@ -1,4 +1,4 @@
-.TH "thompson_mp_climo_data" 3 "Thu Aug 4 2022" "Version 1.8.0" "chgres_cube" \" -*- nroff -*-
+.TH "thompson_mp_climo_data" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -77,7 +77,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 328 of file thompson_mp_climo_data\&.F90\&.
+Definition at line 329 of file thompson_mp_climo_data\&.F90\&.
 .PP
 References qnifa_climo_input_grid, qnwfa_climo_input_grid, thomp_mp_climo_grid, and thomp_pres_climo_input_grid\&.
 .PP
@@ -94,9 +94,9 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 50 of file thompson_mp_climo_data\&.F90\&.
+Definition at line 51 of file thompson_mp_climo_data\&.F90\&.
 .PP
-References program_setup::cycle_day, program_setup::cycle_hour, program_setup::cycle_mon, error_handler(), i_thomp_mp_climo, j_thomp_mp_climo, lev_thomp_mp_climo, netcdf_err(), qnifa_climo_input_grid, qnwfa_climo_input_grid, program_setup::thomp_mp_climo_file, thomp_mp_climo_grid, and thomp_pres_climo_input_grid\&.
+References program_setup::cycle_day, program_setup::cycle_hour, program_setup::cycle_mon, i_thomp_mp_climo, j_thomp_mp_climo, lev_thomp_mp_climo, qnifa_climo_input_grid, qnwfa_climo_input_grid, program_setup::thomp_mp_climo_file, thomp_mp_climo_grid, and thomp_pres_climo_input_grid\&.
 .PP
 Referenced by atmosphere::atmosphere_driver()\&.
 .SH "Variable Documentation"
@@ -106,7 +106,7 @@ Referenced by atmosphere::atmosphere_driver()\&.
 .PP
 i-dimension of Thompson climo data 
 .PP
-Definition at line 20 of file thompson_mp_climo_data\&.F90\&.
+Definition at line 21 of file thompson_mp_climo_data\&.F90\&.
 .PP
 Referenced by read_thomp_mp_climo_data()\&.
 .SS "integer thompson_mp_climo_data::j_thomp_mp_climo\fC [private]\fP"
@@ -114,7 +114,7 @@ Referenced by read_thomp_mp_climo_data()\&.
 .PP
 j-dimension of Thompson climo data 
 .PP
-Definition at line 22 of file thompson_mp_climo_data\&.F90\&.
+Definition at line 23 of file thompson_mp_climo_data\&.F90\&.
 .PP
 Referenced by read_thomp_mp_climo_data()\&.
 .SS "integer, public thompson_mp_climo_data::lev_thomp_mp_climo"
@@ -122,7 +122,7 @@ Referenced by read_thomp_mp_climo_data()\&.
 .PP
 number of vert lvls of Thompson climo data 
 .PP
-Definition at line 24 of file thompson_mp_climo_data\&.F90\&.
+Definition at line 25 of file thompson_mp_climo_data\&.F90\&.
 .PP
 Referenced by atmosphere::horiz_interp_thomp_mp_climo(), read_thomp_mp_climo_data(), and atmosphere::VINTG_THOMP_MP_CLIMO()\&.
 .SS "type(esmf_field), public thompson_mp_climo_data::qnifa_climo_input_grid"
@@ -130,7 +130,7 @@ Referenced by atmosphere::horiz_interp_thomp_mp_climo(), read_thomp_mp_climo_dat
 .PP
 number concentration of ice friendly nuclei\&. 
 .PP
-Definition at line 30 of file thompson_mp_climo_data\&.F90\&.
+Definition at line 31 of file thompson_mp_climo_data\&.F90\&.
 .PP
 Referenced by cleanup_thomp_mp_climo_input_data(), atmosphere::horiz_interp_thomp_mp_climo(), and read_thomp_mp_climo_data()\&.
 .SS "type(esmf_field), public thompson_mp_climo_data::qnwfa_climo_input_grid"
@@ -138,7 +138,7 @@ Referenced by cleanup_thomp_mp_climo_input_data(), atmosphere::horiz_interp_thom
 .PP
 number concentration of water friendly nuclei\&. 
 .PP
-Definition at line 33 of file thompson_mp_climo_data\&.F90\&.
+Definition at line 34 of file thompson_mp_climo_data\&.F90\&.
 .PP
 Referenced by cleanup_thomp_mp_climo_input_data(), atmosphere::horiz_interp_thomp_mp_climo(), and read_thomp_mp_climo_data()\&.
 .SS "type(esmf_grid) thompson_mp_climo_data::thomp_mp_climo_grid\fC [private]\fP"
@@ -146,7 +146,7 @@ Referenced by cleanup_thomp_mp_climo_input_data(), atmosphere::horiz_interp_thom
 .PP
 esmf grid object for Thompson data grid 
 .PP
-Definition at line 27 of file thompson_mp_climo_data\&.F90\&.
+Definition at line 28 of file thompson_mp_climo_data\&.F90\&.
 .PP
 Referenced by cleanup_thomp_mp_climo_input_data(), and read_thomp_mp_climo_data()\&.
 .SS "type(esmf_field), public thompson_mp_climo_data::thomp_pres_climo_input_grid"
@@ -154,7 +154,7 @@ Referenced by cleanup_thomp_mp_climo_input_data(), and read_thomp_mp_climo_data(
 .PP
 3-d pressure of the Thompson climo data points 
 .PP
-Definition at line 36 of file thompson_mp_climo_data\&.F90\&.
+Definition at line 37 of file thompson_mp_climo_data\&.F90\&.
 .PP
 Referenced by cleanup_thomp_mp_climo_input_data(), atmosphere::horiz_interp_thomp_mp_climo(), and read_thomp_mp_climo_data()\&.
 .SH "Author"

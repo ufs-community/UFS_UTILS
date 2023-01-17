@@ -2,8 +2,8 @@ var model__grid_8F90 =
 [
     [ "cleanup_input_target_grid_data", "model__grid_8F90.html#a200bf9a04e0664c70a004ef2e4684f68", null ],
     [ "define_input_grid", "model__grid_8F90.html#a36c0033acb111e2ec5c8132ed0fa0199", null ],
-    [ "define_input_grid_gaussian", "model__grid_8F90.html#a9aaec5943197589ca89c5661f9e9ded8", null ],
-    [ "define_input_grid_grib2", "model__grid_8F90.html#a53676e1725dd8f953f1fe9f6300e8b24", null ],
+    [ "define_input_grid_gaussian", "model__grid_8F90.html#a38100494e868340aac0afcac251e7ff4", null ],
+    [ "define_input_grid_grib2", "model__grid_8F90.html#a86f8d9a686ecf5e7170e441a7e41a641", null ],
     [ "define_input_grid_mosaic", "model__grid_8F90.html#a805584a781fcc2ac74c551e72c787a05", null ],
     [ "define_target_grid", "model__grid_8F90.html#a0d0ed99ee8dd8353bf13ab47074eebb1", null ],
     [ "gdt_to_gds", "model__grid_8F90.html#ac6b71e97768b663de2fcce75426b499e", null ],

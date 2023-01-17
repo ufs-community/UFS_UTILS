@@ -17,7 +17,7 @@ var searchData=
   ['grib2_5ffile_5finput_5fgrid',['grib2_file_input_grid',['../namespaceprogram__setup.html#a3060fbdb680807d9360c64ccd2d9855a',1,'program_setup']]],
   ['grib2_5futil',['grib2_util',['../namespacegrib2__util.html',1,'']]],
   ['grib2_5futil_2ef90',['grib2_util.F90',['../grib2__util_8F90.html',1,'']]],
-  ['gridrot',['gridrot',['../namespaceinput__data.html#a55b92f16c0f91d452b090abaec08f1c4',1,'input_data']]],
+  ['gridrot',['gridrot',['../namespaceatm__input__data.html#a955d043afabaa621cebd6e0bb1851f48',1,'atm_input_data']]],
   ['gsurf',['gsurf',['../namespacegettemp__mod.html#a4a9e22ae55870e400b5867e77f390f6d',1,'gettemp_mod']]],
   ['gtd7',['gtd7',['../wam__climo__data_8f90.html#a5eab284e1b4e83aab3214164cdf5856a',1,'wam_climo_data.f90']]],
   ['gtd7d',['gtd7d',['../wam__climo__data_8f90.html#a39552597198e3fb66b4294c3b6df73cf',1,'wam_climo_data.f90']]],

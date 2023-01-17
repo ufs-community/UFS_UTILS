@@ -1,4 +1,4 @@
-.TH "program_setup" 3 "Thu Aug 4 2022" "Version 1.8.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "program_setup" 3 "Tue Jan 17 2023" "Version 1.9.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -42,6 +42,10 @@ program_setup \- Set up program execution\&.
 .RI "character(len=500), public \fBinput_snowfree_albedo_file\fP = 'NULL'"
 .br
 .RI "File containing input snow-free albedo data\&. "
+.ti -1c
+.RI "character(len=500), public \fBinput_soil_color_file\fP = 'NULL'"
+.br
+.RI "File containing input soil color data\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_soil_type_file\fP = 'NULL'"
 .br
@@ -132,9 +136,9 @@ George Gayno
 .PP
 
 .PP
-Definition at line 55 of file program_setup\&.f90\&.
+Definition at line 56 of file program_setup\&.f90\&.
 .PP
-References halo, input_facsf_file, input_leaf_area_index_file, input_maximum_snow_albedo_file, input_slope_type_file, input_snowfree_albedo_file, input_soil_type_file, input_substrate_temperature_file, input_vegetation_greenness_file, input_vegetation_type_file, leaf_area_index_method, maximum_snow_albedo_method, mosaic_file_mdl, orog_dir_mdl, orog_files_mdl, snowfree_albedo_method, and vegetation_greenness_method\&.
+References halo, input_facsf_file, input_leaf_area_index_file, input_maximum_snow_albedo_file, input_slope_type_file, input_snowfree_albedo_file, input_soil_color_file, input_soil_type_file, input_substrate_temperature_file, input_vegetation_greenness_file, input_vegetation_type_file, leaf_area_index_method, maximum_snow_albedo_method, mosaic_file_mdl, orog_dir_mdl, orog_files_mdl, snowfree_albedo_method, and vegetation_greenness_method\&.
 .PP
 Referenced by driver()\&.
 .SH "Variable Documentation"
@@ -144,7 +148,7 @@ Referenced by driver()\&.
 .PP
 Number of row/cols defining the lateral boundary halo\&. Used for regional nests\&. 
 .PP
-Definition at line 43 of file program_setup\&.f90\&.
+Definition at line 44 of file program_setup\&.f90\&.
 .PP
 Referenced by output(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_facsf_file = 'NULL'"
@@ -187,6 +191,14 @@ File containing input snow-free albedo data\&.
 Definition at line 29 of file program_setup\&.f90\&.
 .PP
 Referenced by driver(), and read_setup_namelist()\&.
+.SS "character(len=500), public program_setup::input_soil_color_file = 'NULL'"
+
+.PP
+File containing input soil color data\&. 
+.PP
+Definition at line 32 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_soil_type_file = 'NULL'"
 
 .PP
@@ -208,7 +220,7 @@ Referenced by driver(), and read_setup_namelist()\&.
 .PP
 File containing input vegetation greenness data\&. 
 .PP
-Definition at line 33 of file program_setup\&.f90\&.
+Definition at line 34 of file program_setup\&.f90\&.
 .PP
 Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_vegetation_type_file = 'NULL'"
@@ -216,7 +228,7 @@ Referenced by driver(), and read_setup_namelist()\&.
 .PP
 File containing input vegetation type data\&. 
 .PP
-Definition at line 32 of file program_setup\&.f90\&.
+Definition at line 33 of file program_setup\&.f90\&.
 .PP
 Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=50), public program_setup::leaf_area_index_method ='bilinear'"
@@ -224,7 +236,7 @@ Referenced by driver(), and read_setup_namelist()\&.
 .PP
 Interpolation method for leaf area index\&. Conservative or bilinear (default)\&. 
 .PP
-Definition at line 38 of file program_setup\&.f90\&.
+Definition at line 39 of file program_setup\&.f90\&.
 .PP
 Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=50), public program_setup::maximum_snow_albedo_method ='bilinear'"
@@ -232,7 +244,7 @@ Referenced by driver(), and read_setup_namelist()\&.
 .PP
 Interpolation method for max snow albedo\&. Conservative or bilinear (default)\&. 
 .PP
-Definition at line 39 of file program_setup\&.f90\&.
+Definition at line 40 of file program_setup\&.f90\&.
 .PP
 Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::mosaic_file_mdl = 'NULL'"
@@ -240,7 +252,7 @@ Referenced by driver(), and read_setup_namelist()\&.
 .PP
 Model grid mosaic file\&. 
 .PP
-Definition at line 34 of file program_setup\&.f90\&.
+Definition at line 35 of file program_setup\&.f90\&.
 .PP
 Referenced by model_grid::define_model_grid(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::orog_dir_mdl = 'NULL'"
@@ -248,7 +260,7 @@ Referenced by model_grid::define_model_grid(), and read_setup_namelist()\&.
 .PP
 Directory containing the model grid orography files\&. 
 .PP
-Definition at line 35 of file program_setup\&.f90\&.
+Definition at line 36 of file program_setup\&.f90\&.
 .PP
 Referenced by model_grid::define_model_grid(), and read_setup_namelist()\&.
 .SS "character(len=500), dimension(6), public program_setup::orog_files_mdl = 'NULL'"
@@ -256,7 +268,7 @@ Referenced by model_grid::define_model_grid(), and read_setup_namelist()\&.
 .PP
 Model grid orography filenames\&. 
 .PP
-Definition at line 36 of file program_setup\&.f90\&.
+Definition at line 37 of file program_setup\&.f90\&.
 .PP
 Referenced by model_grid::define_model_grid(), and read_setup_namelist()\&.
 .SS "character(len=50), public program_setup::snowfree_albedo_method ='bilinear'"
@@ -264,7 +276,7 @@ Referenced by model_grid::define_model_grid(), and read_setup_namelist()\&.
 .PP
 Interpolation method for snowfree albedo\&. Conservative or bilinear (default)\&. 
 .PP
-Definition at line 40 of file program_setup\&.f90\&.
+Definition at line 41 of file program_setup\&.f90\&.
 .PP
 Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=50), public program_setup::vegetation_greenness_method ='bilinear'"
@@ -272,7 +284,7 @@ Referenced by driver(), and read_setup_namelist()\&.
 .PP
 Interpolation method for vegetation greenness\&. Conservative or bilinear (default)\&. 
 .PP
-Definition at line 41 of file program_setup\&.f90\&.
+Definition at line 42 of file program_setup\&.f90\&.
 .PP
 Referenced by driver(), and read_setup_namelist()\&.
 .SH "Author"

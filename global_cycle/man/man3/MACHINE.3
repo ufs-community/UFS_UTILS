@@ -1,4 +1,4 @@
-.TH "MACHINE" 3 "Thu Aug 4 2022" "Version 1.8.0" "global_cycle" \" -*- nroff -*-
+.TH "MACHINE" 3 "Tue Jan 17 2023" "Version 1.9.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -11,13 +11,21 @@ MACHINE \- Holds machine dependent constants for global_cycle\&.
 
 .in +1c
 .ti -1c
-.RI "integer, parameter \fBkind_io4\fP = 4"
+.RI "integer, parameter \fBkind_dbl_prec\fP = 8"
+.br
+.RI "Kind type for 8-byte float point variables\&. "
+.ti -1c
+.RI "integer, parameter \fBkind_io4\fP = \fBkind_sngl_prec\fP"
 .br
 .RI "Kind type for 4-byte float point variables\&. "
 .ti -1c
-.RI "integer, parameter \fBkind_io8\fP = 8"
+.RI "integer, parameter \fBkind_io8\fP = \fBkind_dbl_prec\fP"
 .br
 .RI "Kind type for 8-byte float point variables\&. "
+.ti -1c
+.RI "integer, parameter \fBkind_sngl_prec\fP = 4"
+.br
+.RI "Kind type for 4-byte float point variables\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -33,18 +41,30 @@ Mark Iredell NOAA/EMC
 
 .SH "Variable Documentation"
 .PP 
-.SS "integer, parameter MACHINE::kind_io4 = 4"
+.SS "integer, parameter MACHINE::kind_dbl_prec = 8"
+
+.PP
+Kind type for 8-byte float point variables\&. 
+.PP
+Definition at line 15 of file machine\&.f90\&.
+.SS "integer, parameter MACHINE::kind_io4 = \fBkind_sngl_prec\fP"
+
+.PP
+Kind type for 4-byte float point variables\&. 
+.PP
+Definition at line 13 of file machine\&.f90\&.
+.SS "integer, parameter MACHINE::kind_io8 = \fBkind_dbl_prec\fP"
+
+.PP
+Kind type for 8-byte float point variables\&. 
+.PP
+Definition at line 17 of file machine\&.f90\&.
+.SS "integer, parameter MACHINE::kind_sngl_prec = 4"
 
 .PP
 Kind type for 4-byte float point variables\&. 
 .PP
 Definition at line 11 of file machine\&.f90\&.
-.SS "integer, parameter MACHINE::kind_io8 = 8"
-
-.PP
-Kind type for 8-byte float point variables\&. 
-.PP
-Definition at line 13 of file machine\&.f90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for global_cycle from the source code\&.

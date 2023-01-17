@@ -1,4 +1,4 @@
-.TH "atmosphere" 3 "Thu Aug 4 2022" "Version 1.8.0" "chgres_cube" \" -*- nroff -*-
+.TH "atmosphere" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -168,9 +168,9 @@ George Gayno
 .PP
 
 .PP
-Definition at line 107 of file atmosphere\&.F90\&.
+Definition at line 108 of file atmosphere\&.F90\&.
 .PP
-References program_setup::atm_weight_file, cleanup_all_target_atm_data(), input_data::cleanup_input_atm_data(), cleanup_target_atm_b4adj_data(), compute_zh(), convert_winds(), create_atm_b4adj_esmf_fields(), create_atm_esmf_fields(), program_setup::cycle_day, program_setup::cycle_hour, program_setup::cycle_mon, program_setup::cycle_year, dzdt_b4adj_target_grid, input_data::dzdt_input_grid, error_handler(), horiz_interp_thomp_mp_climo(), newpr1(), newps(), program_setup::num_tracers_input, pres_b4adj_target_grid, input_data::pres_input_grid, ps_b4adj_target_grid, input_data::ps_input_grid, input_data::read_input_atm_data(), thompson_mp_climo_data::read_thomp_mp_climo_data(), read_vcoord_info(), program_setup::regional, temp_b4adj_target_grid, input_data::temp_input_grid, input_data::terrain_input_grid, terrain_interp_to_target_grid, program_setup::tracers, tracers_b4adj_target_grid, input_data::tracers_input_grid, program_setup::use_thomp_mp_climo, program_setup::wam_cold_start, wind_b4adj_target_grid, input_data::wind_input_grid, wind_s_target_grid, wind_target_grid, and wind_w_target_grid\&.
+References program_setup::atm_weight_file, cleanup_all_target_atm_data(), atm_input_data::cleanup_input_atm_data(), cleanup_target_atm_b4adj_data(), compute_zh(), convert_winds(), create_atm_b4adj_esmf_fields(), create_atm_esmf_fields(), program_setup::cycle_day, program_setup::cycle_hour, program_setup::cycle_mon, program_setup::cycle_year, dzdt_b4adj_target_grid, atm_input_data::dzdt_input_grid, horiz_interp_thomp_mp_climo(), newpr1(), newps(), program_setup::num_tracers_input, pres_b4adj_target_grid, atm_input_data::pres_input_grid, ps_b4adj_target_grid, atm_input_data::ps_input_grid, atm_input_data::read_input_atm_data(), thompson_mp_climo_data::read_thomp_mp_climo_data(), read_vcoord_info(), program_setup::regional, temp_b4adj_target_grid, atm_input_data::temp_input_grid, atm_input_data::terrain_input_grid, terrain_interp_to_target_grid, program_setup::tracers, tracers_b4adj_target_grid, atm_input_data::tracers_input_grid, program_setup::use_thomp_mp_climo, program_setup::wam_cold_start, wind_b4adj_target_grid, atm_input_data::wind_input_grid, wind_s_target_grid, wind_target_grid, and wind_w_target_grid\&.
 .PP
 Referenced by chgres()\&.
 .SS "subroutine atmosphere::cleanup_all_target_atm_data ()\fC [private]\fP"
@@ -185,7 +185,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 2184 of file atmosphere\&.F90\&.
+Definition at line 2185 of file atmosphere\&.F90\&.
 .PP
 References atmosphere_target_data::cleanup_atmosphere_target_data(), pres_target_grid, wind_s_target_grid, wind_target_grid, and wind_w_target_grid\&.
 .PP
@@ -202,7 +202,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 2159 of file atmosphere\&.F90\&.
+Definition at line 2160 of file atmosphere\&.F90\&.
 .PP
 References dzdt_b4adj_target_grid, program_setup::num_tracers_input, pres_b4adj_target_grid, ps_b4adj_target_grid, temp_b4adj_target_grid, terrain_interp_to_target_grid, tracers_b4adj_target_grid, and wind_b4adj_target_grid\&.
 .PP
@@ -219,9 +219,9 @@ George Gayno
 .PP
 
 .PP
-Definition at line 2069 of file atmosphere\&.F90\&.
+Definition at line 2070 of file atmosphere\&.F90\&.
 .PP
-References error_handler(), atmosphere_target_data::levp1_target, program_setup::num_tracers, atmosphere_target_data::ps_target_grid, atmosphere_target_data::temp_target_grid, model_grid::terrain_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, atmosphere_target_data::vcoord_target, and atmosphere_target_data::zh_target_grid\&.
+References atmosphere_target_data::levp1_target, program_setup::num_tracers, atmosphere_target_data::ps_target_grid, atmosphere_target_data::temp_target_grid, model_grid::terrain_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, atmosphere_target_data::vcoord_target, and atmosphere_target_data::zh_target_grid\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::convert_winds ()\fC [private]\fP"
@@ -236,9 +236,9 @@ George Gayno
 .PP
 
 .PP
-Definition at line 646 of file atmosphere\&.F90\&.
+Definition at line 647 of file atmosphere\&.F90\&.
 .PP
-References error_handler(), model_grid::latitude_s_target_grid, model_grid::latitude_w_target_grid, model_grid::longitude_s_target_grid, model_grid::longitude_w_target_grid, atmosphere_target_data::u_s_target_grid, atmosphere_target_data::u_w_target_grid, atmosphere_target_data::v_s_target_grid, atmosphere_target_data::v_w_target_grid, wind_s_target_grid, and wind_w_target_grid\&.
+References model_grid::latitude_s_target_grid, model_grid::latitude_w_target_grid, model_grid::longitude_s_target_grid, model_grid::longitude_w_target_grid, atmosphere_target_data::u_s_target_grid, atmosphere_target_data::u_w_target_grid, atmosphere_target_data::v_s_target_grid, atmosphere_target_data::v_w_target_grid, wind_s_target_grid, and wind_w_target_grid\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::create_atm_b4adj_esmf_fields ()"
@@ -253,9 +253,9 @@ George Gayno
 .PP
 
 .PP
-Definition at line 433 of file atmosphere\&.F90\&.
+Definition at line 434 of file atmosphere\&.F90\&.
 .PP
-References dzdt_b4adj_target_grid, error_handler(), input_data::lev_input, program_setup::num_tracers_input, pres_b4adj_target_grid, ps_b4adj_target_grid, model_grid::target_grid, temp_b4adj_target_grid, terrain_interp_to_target_grid, program_setup::tracers, tracers_b4adj_target_grid, and wind_b4adj_target_grid\&.
+References dzdt_b4adj_target_grid, atm_input_data::lev_input, program_setup::num_tracers_input, pres_b4adj_target_grid, ps_b4adj_target_grid, model_grid::target_grid, temp_b4adj_target_grid, terrain_interp_to_target_grid, program_setup::tracers, tracers_b4adj_target_grid, and wind_b4adj_target_grid\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::create_atm_esmf_fields ()\fC [private]\fP"
@@ -270,9 +270,9 @@ George Gayno
 .PP
 
 .PP
-Definition at line 507 of file atmosphere\&.F90\&.
+Definition at line 508 of file atmosphere\&.F90\&.
 .PP
-References atmosphere_target_data::delp_target_grid, atmosphere_target_data::dzdt_target_grid, error_handler(), atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, program_setup::num_tracers, pres_target_grid, atmosphere_target_data::ps_target_grid, model_grid::target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, atmosphere_target_data::u_s_target_grid, atmosphere_target_data::u_w_target_grid, atmosphere_target_data::v_s_target_grid, atmosphere_target_data::v_w_target_grid, wind_s_target_grid, wind_target_grid, wind_w_target_grid, and atmosphere_target_data::zh_target_grid\&.
+References atmosphere_target_data::delp_target_grid, atmosphere_target_data::dzdt_target_grid, atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, program_setup::num_tracers, pres_target_grid, atmosphere_target_data::ps_target_grid, model_grid::target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, atmosphere_target_data::u_s_target_grid, atmosphere_target_data::u_w_target_grid, atmosphere_target_data::v_s_target_grid, atmosphere_target_data::v_w_target_grid, wind_s_target_grid, wind_target_grid, wind_w_target_grid, and atmosphere_target_data::zh_target_grid\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::horiz_interp_thomp_mp_climo ()\fC [private]\fP"
@@ -287,9 +287,9 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1133 of file atmosphere\&.F90\&.
+Definition at line 1134 of file atmosphere\&.F90\&.
 .PP
-References thompson_mp_climo_data::cleanup_thomp_mp_climo_input_data(), error_handler(), atmosphere_target_data::lev_target, thompson_mp_climo_data::lev_thomp_mp_climo, qnifa_climo_b4adj_target_grid, thompson_mp_climo_data::qnifa_climo_input_grid, atmosphere_target_data::qnifa_climo_target_grid, qnwfa_climo_b4adj_target_grid, thompson_mp_climo_data::qnwfa_climo_input_grid, atmosphere_target_data::qnwfa_climo_target_grid, model_grid::target_grid, thomp_pres_climo_b4adj_target_grid, and thompson_mp_climo_data::thomp_pres_climo_input_grid\&.
+References thompson_mp_climo_data::cleanup_thomp_mp_climo_input_data(), atmosphere_target_data::lev_target, thompson_mp_climo_data::lev_thomp_mp_climo, qnifa_climo_b4adj_target_grid, thompson_mp_climo_data::qnifa_climo_input_grid, atmosphere_target_data::qnifa_climo_target_grid, qnwfa_climo_b4adj_target_grid, thompson_mp_climo_data::qnwfa_climo_input_grid, atmosphere_target_data::qnwfa_climo_target_grid, model_grid::target_grid, thomp_pres_climo_b4adj_target_grid, and thompson_mp_climo_data::thomp_pres_climo_input_grid\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::newpr1 (integer, intent(in) localpet)\fC [private]\fP"
@@ -356,9 +356,9 @@ Hann Ming Henry Juang, Juang, Fanglin Yang, S\&. Moorthi
 .PP
 
 .PP
-Definition at line 790 of file atmosphere\&.F90\&.
+Definition at line 791 of file atmosphere\&.F90\&.
 .PP
-References atmosphere_target_data::delp_target_grid, error_handler(), atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, pres_target_grid, atmosphere_target_data::ps_target_grid, and atmosphere_target_data::vcoord_target\&.
+References atmosphere_target_data::delp_target_grid, atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, pres_target_grid, atmosphere_target_data::ps_target_grid, and atmosphere_target_data::vcoord_target\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::newps (integer, intent(in) localpet)\fC [private]\fP"
@@ -390,9 +390,9 @@ Mark Iredell, George Gayno
 .PP
 
 .PP
-Definition at line 901 of file atmosphere\&.F90\&.
+Definition at line 902 of file atmosphere\&.F90\&.
 .PP
-References error_handler(), program_setup::num_tracers, pres_b4adj_target_grid, ps_b4adj_target_grid, atmosphere_target_data::ps_target_grid, temp_b4adj_target_grid, terrain_interp_to_target_grid, model_grid::terrain_target_grid, program_setup::tracers, and tracers_b4adj_target_grid\&.
+References program_setup::num_tracers, pres_b4adj_target_grid, ps_b4adj_target_grid, atmosphere_target_data::ps_target_grid, temp_b4adj_target_grid, terrain_interp_to_target_grid, model_grid::terrain_target_grid, program_setup::tracers, and tracers_b4adj_target_grid\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine, public atmosphere::read_vcoord_info ()"
@@ -407,9 +407,9 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1098 of file atmosphere\&.F90\&.
+Definition at line 1099 of file atmosphere\&.F90\&.
 .PP
-References error_handler(), atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, atmosphere_target_data::nvcoord_target, program_setup::vcoord_file_target_grid, and atmosphere_target_data::vcoord_target\&.
+References atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, atmosphere_target_data::nvcoord_target, program_setup::vcoord_file_target_grid, and atmosphere_target_data::vcoord_target\&.
 .PP
 Referenced by atmosphere_driver()\&.
 .SS "subroutine atmosphere::RSEARCH (integer, intent(in) IM, integer, intent(in) KM1, integer, intent(in) IXZ1, integer, intent(in) KXZ1, real(esmf_kind_r8), dimension(1+(im\-1)*ixz1+(km1\-1)*kxz1), intent(in) Z1, integer, intent(in) KM2, integer, intent(in) IXZ2, integer, intent(in) KXZ2, real(esmf_kind_r8), dimension(1+(im\-1)*ixz2+(km2\-1)*kxz2), intent(in) Z2, integer, intent(in) IXL2, integer, intent(in) KXL2, integer, dimension(1+(im\-1)*ixl2+(km2\-1)*kxl2), intent(out) L2)\fC [private]\fP"
@@ -494,7 +494,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 2021 of file atmosphere\&.F90\&.
+Definition at line 2022 of file atmosphere\&.F90\&.
 .SS "subroutine atmosphere::TERP3 (integer IM, integer IXZ1, integer IXQ1, integer IXZ2, integer IXQ2, integer NM, integer NXQ1, integer NXQ2, integer KM1, integer KXZ1, integer KXQ1, real(esmf_kind_r8), dimension(1+(im\-1)*ixz1+(km1\-1)*kxz1) Z1, real(esmf_kind_r8), dimension(1+(im\-1)*ixq1+(km1\-1)*kxq1+(nm\-1)*nxq1) Q1, integer KM2, integer KXZ2, integer KXQ2, real(esmf_kind_r8), dimension(1+(im\-1)*ixz2+(km2\-1)*kxz2) Z2, real(esmf_kind_r8), dimension(1+(im\-1)*ixq2+(km2\-1)*kxq2+(nm\-1)*nxq2) Q2)"
 
 .PP
@@ -590,7 +590,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 1828 of file atmosphere\&.F90\&.
+Definition at line 1829 of file atmosphere\&.F90\&.
 .SS "subroutine atmosphere::VINTG ()\fC [private]\fP"
 
 .PP
@@ -608,9 +608,9 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 1594 of file atmosphere\&.F90\&.
+Definition at line 1595 of file atmosphere\&.F90\&.
 .PP
-References dzdt_b4adj_target_grid, atmosphere_target_data::dzdt_target_grid, error_handler(), input_data::lev_input, atmosphere_target_data::lev_target, program_setup::num_tracers_input, pres_b4adj_target_grid, pres_target_grid, temp_b4adj_target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, tracers_b4adj_target_grid, atmosphere_target_data::tracers_target_grid, wind_b4adj_target_grid, and wind_target_grid\&.
+References dzdt_b4adj_target_grid, atmosphere_target_data::dzdt_target_grid, atm_input_data::lev_input, atmosphere_target_data::lev_target, program_setup::num_tracers_input, pres_b4adj_target_grid, pres_target_grid, temp_b4adj_target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, tracers_b4adj_target_grid, atmosphere_target_data::tracers_target_grid, wind_b4adj_target_grid, and wind_target_grid\&.
 .SS "subroutine atmosphere::VINTG_THOMP_MP_CLIMO ()\fC [private]\fP"
 
 .PP
@@ -623,9 +623,9 @@ George Gayno
 .PP
 
 .PP
-Definition at line 1245 of file atmosphere\&.F90\&.
+Definition at line 1246 of file atmosphere\&.F90\&.
 .PP
-References error_handler(), atmosphere_target_data::lev_target, thompson_mp_climo_data::lev_thomp_mp_climo, pres_target_grid, qnifa_climo_b4adj_target_grid, atmosphere_target_data::qnifa_climo_target_grid, qnwfa_climo_b4adj_target_grid, atmosphere_target_data::qnwfa_climo_target_grid, and thomp_pres_climo_b4adj_target_grid\&.
+References atmosphere_target_data::lev_target, thompson_mp_climo_data::lev_thomp_mp_climo, pres_target_grid, qnifa_climo_b4adj_target_grid, atmosphere_target_data::qnifa_climo_target_grid, qnwfa_climo_b4adj_target_grid, atmosphere_target_data::qnwfa_climo_target_grid, and thomp_pres_climo_b4adj_target_grid\&.
 .SS "subroutine atmosphere::VINTG_WAM (integer, intent(in) YEAR, integer, intent(in) MONTH, integer, intent(in) DAY, integer, intent(in) HOUR)\fC [private]\fP"
 
 .PP
@@ -649,9 +649,9 @@ Hann-Ming Henry Juang NCEP/EMC
 .PP
 
 .PP
-Definition at line 1368 of file atmosphere\&.F90\&.
+Definition at line 1369 of file atmosphere\&.F90\&.
 .PP
-References atmosphere_target_data::dzdt_target_grid, error_handler(), gettemp(), model_grid::latitude_s_target_grid, input_data::lev_input, atmosphere_target_data::lev_target, program_setup::num_tracers, pres_b4adj_target_grid, pres_target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, and wind_target_grid\&.
+References atmosphere_target_data::dzdt_target_grid, gettemp(), model_grid::latitude_s_target_grid, atm_input_data::lev_input, atmosphere_target_data::lev_target, program_setup::num_tracers, pres_b4adj_target_grid, pres_target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, and wind_target_grid\&.
 .SH "Variable Documentation"
 .PP 
 .SS "type(esmf_field) atmosphere::dzdt_b4adj_target_grid\fC [private]\fP"
@@ -659,7 +659,7 @@ References atmosphere_target_data::dzdt_target_grid, error_handler(), gettemp(),
 .PP
 vertical vel before vert adj 
 .PP
-Definition at line 76 of file atmosphere\&.F90\&.
+Definition at line 77 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), and VINTG()\&.
 .SS "type(esmf_field) atmosphere::pres_b4adj_target_grid\fC [private]\fP"
@@ -667,7 +667,7 @@ Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b
 .PP
 3-d pres before terrain adj 
 .PP
-Definition at line 80 of file atmosphere\&.F90\&.
+Definition at line 81 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), newps(), VINTG(), and VINTG_WAM()\&.
 .SS "type(esmf_field) atmosphere::pres_target_grid\fC [private]\fP"
@@ -675,7 +675,7 @@ Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b
 .PP
 3-d pressure 
 .PP
-Definition at line 79 of file atmosphere\&.F90\&.
+Definition at line 80 of file atmosphere\&.F90\&.
 .PP
 Referenced by cleanup_all_target_atm_data(), create_atm_esmf_fields(), newpr1(), VINTG(), VINTG_THOMP_MP_CLIMO(), and VINTG_WAM()\&.
 .SS "type(esmf_field) atmosphere::ps_b4adj_target_grid\fC [private]\fP"
@@ -683,7 +683,7 @@ Referenced by cleanup_all_target_atm_data(), create_atm_esmf_fields(), newpr1(),
 .PP
 sfc pres before terrain adj 
 .PP
-Definition at line 78 of file atmosphere\&.F90\&.
+Definition at line 79 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), and newps()\&.
 .SS "type(esmf_field) atmosphere::qnifa_climo_b4adj_target_grid\fC [private]\fP"
@@ -691,7 +691,7 @@ Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b
 .PP
 number concentration of ice friendly aerosols before vert adj 
 .PP
-Definition at line 90 of file atmosphere\&.F90\&.
+Definition at line 91 of file atmosphere\&.F90\&.
 .PP
 Referenced by horiz_interp_thomp_mp_climo(), and VINTG_THOMP_MP_CLIMO()\&.
 .SS "type(esmf_field) atmosphere::qnwfa_climo_b4adj_target_grid\fC [private]\fP"
@@ -699,7 +699,7 @@ Referenced by horiz_interp_thomp_mp_climo(), and VINTG_THOMP_MP_CLIMO()\&.
 .PP
 number concentration of water friendly aerosols before vert adj 
 .PP
-Definition at line 92 of file atmosphere\&.F90\&.
+Definition at line 93 of file atmosphere\&.F90\&.
 .PP
 Referenced by horiz_interp_thomp_mp_climo(), and VINTG_THOMP_MP_CLIMO()\&.
 .SS "type(esmf_field) atmosphere::temp_b4adj_target_grid\fC [private]\fP"
@@ -707,7 +707,7 @@ Referenced by horiz_interp_thomp_mp_climo(), and VINTG_THOMP_MP_CLIMO()\&.
 .PP
 temp before vert adj 
 .PP
-Definition at line 81 of file atmosphere\&.F90\&.
+Definition at line 82 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), newps(), and VINTG()\&.
 .SS "type(esmf_field) atmosphere::terrain_interp_to_target_grid\fC [private]\fP"
@@ -715,7 +715,7 @@ Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b
 .PP
 Input grid terrain interpolated to target grid\&. 
 .PP
-Definition at line 82 of file atmosphere\&.F90\&.
+Definition at line 83 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), and newps()\&.
 .SS "type(esmf_field) atmosphere::thomp_pres_climo_b4adj_target_grid\fC [private]\fP"
@@ -723,7 +723,7 @@ Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b
 .PP
 pressure of each level on target grid 
 .PP
-Definition at line 94 of file atmosphere\&.F90\&.
+Definition at line 95 of file atmosphere\&.F90\&.
 .PP
 Referenced by horiz_interp_thomp_mp_climo(), and VINTG_THOMP_MP_CLIMO()\&.
 .SS "type(esmf_field), dimension(:), allocatable atmosphere::tracers_b4adj_target_grid\fC [private]\fP"
@@ -731,7 +731,7 @@ Referenced by horiz_interp_thomp_mp_climo(), and VINTG_THOMP_MP_CLIMO()\&.
 .PP
 tracers before vert adj 
 .PP
-Definition at line 77 of file atmosphere\&.F90\&.
+Definition at line 78 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), newps(), and VINTG()\&.
 .SS "type(esmf_field) atmosphere::wind_b4adj_target_grid\fC [private]\fP"
@@ -739,7 +739,7 @@ Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b
 .PP
 3-d wind before vert adj 
 .PP
-Definition at line 84 of file atmosphere\&.F90\&.
+Definition at line 85 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), and VINTG()\&.
 .SS "type(esmf_field) atmosphere::wind_s_target_grid\fC [private]\fP"
@@ -747,7 +747,7 @@ Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b
 .PP
 3-d wind, 'south' edge 
 .PP
-Definition at line 85 of file atmosphere\&.F90\&.
+Definition at line 86 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), convert_winds(), and create_atm_esmf_fields()\&.
 .SS "type(esmf_field) atmosphere::wind_target_grid\fC [private]\fP"
@@ -755,7 +755,7 @@ Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), convert_winds(
 .PP
 3-d wind, grid box center 
 .PP
-Definition at line 83 of file atmosphere\&.F90\&.
+Definition at line 84 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), create_atm_esmf_fields(), VINTG(), and VINTG_WAM()\&.
 .SS "type(esmf_field) atmosphere::wind_w_target_grid\fC [private]\fP"
@@ -763,7 +763,7 @@ Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), create_atm_esm
 .PP
 3-d wind, 'west' edge 
 .PP
-Definition at line 86 of file atmosphere\&.F90\&.
+Definition at line 87 of file atmosphere\&.F90\&.
 .PP
 Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), convert_winds(), and create_atm_esmf_fields()\&.
 .SH "Author"

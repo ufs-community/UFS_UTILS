@@ -1,8 +1,8 @@
-.TH "/lfs/h2/emc/stmp/george.gayno/UFS_UTILS.tag/sorc/chgres_cube.fd/write_data.F90" 3 "Thu Aug 4 2022" "Version 1.8.0" "chgres_cube" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/write_data.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/stmp/george.gayno/UFS_UTILS.tag/sorc/chgres_cube.fd/write_data.F90 \- Writes the tiled and header files expected by the forecast model\&.  
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/write_data.F90 \- Writes the tiled and header files expected by the forecast model\&.  
 
 .SH SYNOPSIS
 .br
@@ -62,7 +62,7 @@ George Gayno NCEP/EMC
 .PP
 Definition at line 100 of file write_data\&.F90\&.
 .PP
-References atmosphere_target_data::dzdt_target_grid, error_handler(), program_setup::halo_blend, program_setup::halo_bndy, model_grid::i_target, program_setup::input_type, model_grid::ip1_target, model_grid::j_target, model_grid::jp1_target, atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, netcdf_err(), program_setup::num_tracers, atmosphere_target_data::ps_target_grid, atmosphere_target_data::qnifa_climo_target_grid, atmosphere_target_data::qnwfa_climo_target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, atmosphere_target_data::u_s_target_grid, atmosphere_target_data::u_w_target_grid, program_setup::use_thomp_mp_climo, atmosphere_target_data::v_s_target_grid, atmosphere_target_data::v_w_target_grid, and atmosphere_target_data::zh_target_grid\&.
+References atmosphere_target_data::dzdt_target_grid, program_setup::halo_blend, program_setup::halo_bndy, model_grid::i_target, program_setup::input_type, model_grid::ip1_target, model_grid::j_target, model_grid::jp1_target, atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, program_setup::num_tracers, atmosphere_target_data::ps_target_grid, atmosphere_target_data::qnifa_climo_target_grid, atmosphere_target_data::qnwfa_climo_target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, atmosphere_target_data::u_s_target_grid, atmosphere_target_data::u_w_target_grid, program_setup::use_thomp_mp_climo, atmosphere_target_data::v_s_target_grid, atmosphere_target_data::v_w_target_grid, and atmosphere_target_data::zh_target_grid\&.
 .SS "subroutine, public write_data::write_fv3_atm_data_netcdf (integer, intent(in) localpet)"
 
 .PP
@@ -80,9 +80,9 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1200 of file write_data\&.F90\&.
+Definition at line 1198 of file write_data\&.F90\&.
 .PP
-References atmosphere_target_data::delp_target_grid, atmosphere_target_data::dzdt_target_grid, error_handler(), program_setup::halo_bndy, model_grid::i_target, program_setup::input_type, model_grid::ip1_target, model_grid::j_target, model_grid::jp1_target, model_grid::latitude_s_target_grid, model_grid::latitude_target_grid, model_grid::latitude_w_target_grid, atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, model_grid::longitude_s_target_grid, model_grid::longitude_target_grid, model_grid::longitude_w_target_grid, netcdf_err(), model_grid::num_tiles_target_grid, program_setup::num_tracers, atmosphere_target_data::ps_target_grid, atmosphere_target_data::qnifa_climo_target_grid, atmosphere_target_data::qnwfa_climo_target_grid, program_setup::regional, atmosphere_target_data::temp_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, atmosphere_target_data::u_s_target_grid, atmosphere_target_data::u_w_target_grid, program_setup::use_thomp_mp_climo, atmosphere_target_data::v_s_target_grid, atmosphere_target_data::v_w_target_grid, and atmosphere_target_data::zh_target_grid\&.
+References atmosphere_target_data::delp_target_grid, atmosphere_target_data::dzdt_target_grid, program_setup::halo_bndy, model_grid::i_target, program_setup::input_type, model_grid::ip1_target, model_grid::j_target, model_grid::jp1_target, model_grid::latitude_s_target_grid, model_grid::latitude_target_grid, model_grid::latitude_w_target_grid, atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, model_grid::longitude_s_target_grid, model_grid::longitude_target_grid, model_grid::longitude_w_target_grid, model_grid::num_tiles_target_grid, program_setup::num_tracers, atmosphere_target_data::ps_target_grid, atmosphere_target_data::qnifa_climo_target_grid, atmosphere_target_data::qnwfa_climo_target_grid, program_setup::regional, atmosphere_target_data::temp_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, atmosphere_target_data::u_s_target_grid, atmosphere_target_data::u_w_target_grid, program_setup::use_thomp_mp_climo, atmosphere_target_data::v_s_target_grid, atmosphere_target_data::v_w_target_grid, and atmosphere_target_data::zh_target_grid\&.
 .SS "subroutine, public write_data::write_fv3_atm_header_netcdf (integer, intent(in) localpet)"
 
 .PP
@@ -100,9 +100,9 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 27 of file write_data\&.F90\&.
+Definition at line 29 of file write_data\&.F90\&.
 .PP
-References atmosphere_target_data::levp1_target, netcdf_err(), program_setup::num_tracers, atmosphere_target_data::nvcoord_target, program_setup::use_thomp_mp_climo, and atmosphere_target_data::vcoord_target\&.
+References atmosphere_target_data::levp1_target, program_setup::num_tracers, atmosphere_target_data::nvcoord_target, program_setup::use_thomp_mp_climo, and atmosphere_target_data::vcoord_target\&.
 .SS "subroutine, public write_data::write_fv3_sfc_data_netcdf (integer, intent(in) localpet)"
 
 .PP
@@ -120,9 +120,9 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1807 of file write_data\&.F90\&.
+Definition at line 1803 of file write_data\&.F90\&.
 .PP
-References static_data::alnsf_target_grid, static_data::alnwf_target_grid, static_data::alvsf_target_grid, static_data::alvwf_target_grid, surface_target_data::c_0_target_grid, surface_target_data::c_d_target_grid, surface_target_data::canopy_mc_target_grid, program_setup::convert_nst, surface_target_data::d_conv_target_grid, surface_target_data::dt_cool_target_grid, error_handler(), surface_target_data::f10m_target_grid, static_data::facsf_target_grid, static_data::facwf_target_grid, surface_target_data::ffmm_target_grid, program_setup::halo_bndy, model_grid::i_target, surface_target_data::ifd_target_grid, model_grid::j_target, program_setup::lai_from_climo, surface_target_data::lai_target_grid, model_grid::landmask_target_grid, model_grid::latitude_target_grid, model_grid::longitude_target_grid, model_grid::lsoil_target, static_data::max_veg_greenness_target_grid, static_data::min_veg_greenness_target_grid, static_data::mxsno_albedo_target_grid, netcdf_err(), model_grid::num_tiles_target_grid, surface_target_data::q2m_target_grid, surface_target_data::qrain_target_grid, program_setup::regional, surface_target_data::seaice_depth_target_grid, surface_target_data::seaice_fract_target_grid, surface_target_data::seaice_skin_temp_target_grid, surface_target_data::skin_temp_target_grid, static_data::slope_type_target_grid, surface_target_data::snow_depth_target_grid, surface_target_data::snow_liq_equiv_target_grid, surface_target_data::soil_temp_target_grid, static_data::soil_type_target_grid, surface_target_data::soilm_liq_target_grid, surface_target_data::soilm_tot_target_grid, surface_target_data::srflag_target_grid, static_data::substrate_temp_target_grid, surface_target_data::t2m_target_grid, surface_target_data::tprcp_target_grid, surface_target_data::tref_target_grid, surface_target_data::ustar_target_grid, static_data::veg_greenness_target_grid, static_data::veg_type_target_grid, surface_target_data::w_0_target_grid, surface_target_data::w_d_target_grid, surface_target_data::xs_target_grid, surface_target_data::xt_target_grid, surface_target_data::xtts_target_grid, surface_target_data::xu_target_grid, surface_target_data::xv_target_grid, surface_target_data::xz_target_grid, surface_target_data::xzts_target_grid, surface_target_data::z0_target_grid, surface_target_data::z_c_target_grid, and surface_target_data::zm_target_grid\&.
+References static_data::alnsf_target_grid, static_data::alnwf_target_grid, static_data::alvsf_target_grid, static_data::alvwf_target_grid, surface_target_data::c_0_target_grid, surface_target_data::c_d_target_grid, surface_target_data::canopy_mc_target_grid, program_setup::convert_nst, surface_target_data::d_conv_target_grid, surface_target_data::dt_cool_target_grid, surface_target_data::f10m_target_grid, static_data::facsf_target_grid, static_data::facwf_target_grid, surface_target_data::ffmm_target_grid, program_setup::halo_bndy, model_grid::i_target, surface_target_data::ifd_target_grid, model_grid::j_target, program_setup::lai_from_climo, surface_target_data::lai_target_grid, model_grid::landmask_target_grid, model_grid::latitude_target_grid, model_grid::longitude_target_grid, model_grid::lsoil_target, static_data::max_veg_greenness_target_grid, static_data::min_veg_greenness_target_grid, static_data::mxsno_albedo_target_grid, model_grid::num_tiles_target_grid, surface_target_data::q2m_target_grid, surface_target_data::qrain_target_grid, program_setup::regional, surface_target_data::seaice_depth_target_grid, surface_target_data::seaice_fract_target_grid, surface_target_data::seaice_skin_temp_target_grid, surface_target_data::skin_temp_target_grid, static_data::slope_type_target_grid, surface_target_data::snow_depth_target_grid, surface_target_data::snow_liq_equiv_target_grid, surface_target_data::soil_temp_target_grid, static_data::soil_type_target_grid, surface_target_data::soilm_liq_target_grid, surface_target_data::soilm_tot_target_grid, surface_target_data::srflag_target_grid, static_data::substrate_temp_target_grid, surface_target_data::t2m_target_grid, surface_target_data::tprcp_target_grid, surface_target_data::tref_target_grid, surface_target_data::ustar_target_grid, static_data::veg_greenness_target_grid, static_data::veg_type_target_grid, surface_target_data::w_0_target_grid, surface_target_data::w_d_target_grid, surface_target_data::xs_target_grid, surface_target_data::xt_target_grid, surface_target_data::xtts_target_grid, surface_target_data::xu_target_grid, surface_target_data::xv_target_grid, surface_target_data::xz_target_grid, surface_target_data::xzts_target_grid, surface_target_data::z0_target_grid, surface_target_data::z_c_target_grid, and surface_target_data::zm_target_grid\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.
